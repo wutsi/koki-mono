@@ -7,6 +7,6 @@ data class Member(
     val partyId: Long = -1,
     val parentPartyId: Long = -1,
     val role: MemberRole = MemberRole(),
-    val memberAttributes: List<MemberAttribute> = emptyList()
+    val memberAttributes: List<MemberAttribute> = emptyList(),
     val createdAt: Date = Date(),
 )

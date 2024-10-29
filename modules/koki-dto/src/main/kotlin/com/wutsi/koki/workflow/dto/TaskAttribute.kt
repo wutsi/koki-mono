@@ -2,7 +2,7 @@ package org.example.com.wutsi.koki.tenant.dto
 
 import java.util.Date
 
-data class MemberAttribute(
+data class TaskAttribute(
     val id: Long = -1,
     val attribute: Attribute = Attribute(),
     val value: String = "",
