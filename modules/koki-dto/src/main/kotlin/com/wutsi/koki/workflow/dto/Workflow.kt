@@ -9,5 +9,4 @@ data class Workflow(
     val active: Boolean = true,
     val createdAt: Date = Date(),
     val activities: List<Activity> = emptyList(),
-    val attributeNames: List<String> = emptyList(),
 )
