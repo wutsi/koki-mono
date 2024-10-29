@@ -1,0 +1,36 @@
+name: wutsi-blog-client
+
+on:
+    push:
+        branches:
+            - master
+        paths:
+            - 'modules/koki-dto/**'
+            - '.github/workflows/koki-dto-master.yml'
+
+jobs:
+    build:
+
+        runs-on: ubuntu-latest
+
+        steps:
+            -   uses: actions/checkout@v4
+            -   name: JDK
+                uses: actions/setup-java@v4
+                with:
+                    distribution: 'zulu'
+                    java-version: 17
+            -   name: Set up Maven
+                uses: stCarolas/setup-maven@v4.5
+                with:
+                    maven-version: 3.8.2
+            -   name: Build
+                env:
+                    GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+                run: |
+                    mvn -s settings.xml --non-recursive install
+                    cd modules/koki-dto
+                    git config user.email "actions@github.com"
+                    git config user.name "GitHub Actions"
+                    git pull
+                    mvn -q -B -X release:prepare release:perform
