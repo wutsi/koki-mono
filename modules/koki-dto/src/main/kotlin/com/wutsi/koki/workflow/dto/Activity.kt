@@ -13,4 +13,5 @@ data class Activity(
     val requiresApproval: Boolean = true,
     val createdAt: Date = Date(),
     val files: List<File> = emptyList(),
+    val tags: List<Tag> = emptyList()
 )
