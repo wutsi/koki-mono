@@ -12,6 +12,7 @@ data class Task(
     val dueAt: Date? = null,
     val approval: ApprovalStatus = ApprovalStatus.UNKNOWN,
     val approvedAt: Date? = null,
-    val taskAttributes: List<TaskAttribute> = emptyList(),
-    val files: List<File> = emptyList()
+    val taskAttributes: List<AttributeNVP> = emptyList(),
+    val inputDocumentFiles: List<DocumentFile> = emptyList(),
+    val outputFiles: List<File> = emptyList(),
 )

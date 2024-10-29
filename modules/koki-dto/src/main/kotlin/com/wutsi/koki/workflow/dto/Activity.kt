@@ -10,5 +10,6 @@ data class Activity(
     val description: String = "",
     val active: Boolean = true,
     val createdAt: Date = Date(),
-    val documents: List<Document> = emptyList()
+    val documents: List<Document> = emptyList(),
+    val attributeNames: List<String> = emptyList(),
 )

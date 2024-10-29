@@ -4,7 +4,7 @@ import java.util.Date
 
 data class File(
     val id: Long = -1,
-    val documentId: Long = -1,
+    val memberId: Long? = null,
     val url: String = "",
     val contentType: String = "",
     val contentLength: Long = -1,

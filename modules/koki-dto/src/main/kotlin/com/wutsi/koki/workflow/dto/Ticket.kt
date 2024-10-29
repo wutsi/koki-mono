@@ -13,4 +13,5 @@ data class Ticket(
     val createdAt: Date = Date(),
     val createdByUserId: Long = -1,
     val dueAt: Date? = null,
+    val ticketAttributes: List<AttributeNVP> = emptyList(),
 )

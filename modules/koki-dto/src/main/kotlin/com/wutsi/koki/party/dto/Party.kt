@@ -6,6 +6,7 @@ data class Party(
     val id: Long = -1,
     val userId: Long = -1,
     val name: String = "",
+    val language: String = "",
     val type: PartyType = PartyType.UNKNOWN,
     val createdAt: Date = Date(),
 )
