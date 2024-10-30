@@ -1,4 +1,4 @@
-name: wutsi-blog-client-pr
+name: koki-dto-pr
 
 on:
     pull_request:
