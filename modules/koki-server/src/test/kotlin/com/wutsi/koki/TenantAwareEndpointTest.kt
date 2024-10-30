@@ -22,7 +22,7 @@ abstract class TenantAwareEndpointTest : ClientHttpRequestInterceptor {
         body: ByteArray,
         execution: ClientHttpRequestExecution
     ): ClientHttpResponse {
-        request.headers.add(HttpHeader.TENANT_ID, getTenantId().toString())
+        request.headers.add("X-Tenant-ID", getTenantId().toString())
         return execution.execute(request, body)
     }
 

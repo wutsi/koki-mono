@@ -50,6 +50,12 @@ spring:
             max-file-size: 10240KB
             max-request-size: 10240KB
 
+springdoc:
+    packages-to-scan: com.wutsi.koki.tenant.server.endpoint
+    show-actuator: true
+    swagger-ui:
+        path: /api.html
+
 server:
     port: 8080
     compression:

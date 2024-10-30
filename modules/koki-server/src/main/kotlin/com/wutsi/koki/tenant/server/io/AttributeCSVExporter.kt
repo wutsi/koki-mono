@@ -27,10 +27,10 @@ class AttributeCSVExporter(
                 val attributes = service.search(tenantId)
                 attributes.forEach {
                     printer.printRecord(
-                        it.id,
                         it.name,
                         it.type.name,
                         it.active,
+                        it.choices?.replace('\n', '|'),
                         it.label,
                         it.description
                     )

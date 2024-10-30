@@ -20,8 +20,8 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/ImportCSVAttributeEndpoint.sql"])
-class ImportCSVAttributeEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/ImportAttributeCSVEndpoint.sql"])
+class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var dao: AttributeRepository
 

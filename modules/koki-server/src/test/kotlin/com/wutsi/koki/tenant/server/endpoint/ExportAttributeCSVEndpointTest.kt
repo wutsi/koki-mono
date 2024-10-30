@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/ExportCSVAttributeEndpoint.sql"])
-class ExportCSVAttributeEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/ExportAttributeCSVEndpoint.sql"])
+class ExportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
     override fun getTenantId() = 1L
 
     @Test
@@ -23,10 +23,10 @@ class ExportCSVAttributeEndpointTest : TenantAwareEndpointTest() {
         assertEquals(
             """
                name,type,active,choices,label,description
-               1,a,TEXT,true,label-a,description-a
-               2,b,LONGTEXT,true,label-b,
-               3,c,EMAIL,false,,
-           """.trimIndent(),
+               a,TEXT,true,P1|P2,label-a,description-a
+               b,LONGTEXT,true,,label-b,
+               c,EMAIL,false,,,
+            """.trimIndent(),
             response.body?.trimIndent()
         )
     }
