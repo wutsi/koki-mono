@@ -29,14 +29,14 @@
     <distributionManagement>
         <repository>
             <id>github</id>
-            <url>https://maven.pkg.github.com/koki/koki-mono</url>
+            <url>https://maven.pkg.github.com/wutsi/koki-mono</url>
         </repository>
     </distributionManagement>
 
     <repositories>
         <repository>
             <id>github</id>
-            <url>https://maven.pkg.github.com/koki/koki-mono</url>
+            <url>https://maven.pkg.github.com/wutsi/koki-mono</url>
         </repository>
     </repositories>
 
@@ -119,7 +119,7 @@
 
         <wutsi-platform-core.version>3.0.31</wutsi-platform-core.version>
         <wutsi-platform-payment.version>3.0.24</wutsi-platform-payment.version>
-        <wutsi-dto.version>0.0.1-SNAPSHOT</wutsi-dto.version>
+        <wutsi-dto.version>0.0.1</wutsi-dto.version>
     </properties>
 
 

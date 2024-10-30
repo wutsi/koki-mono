@@ -1,10 +1,12 @@
-name: koki-server-pr
+name: master
 
 on:
-    pull_request:
+    push:
+        branches:
+            - master
         paths:
-            - 'server/koki-server/**'
-            - '.github/workflows/koki-server-pr.yml'
+            - 'pom.xml'
+            - '.github/workflows/_master.yml'
 
 jobs:
     build:
@@ -20,25 +22,27 @@ jobs:
                     MYSQL_DATABASE: koki
                 ports:
                     - 3306:3306
-            redis:
-                image: redis
-                options: >-
-                    --health-cmd "redis-cli ping"
-                    --health-interval 10s
-                    --health-timeout 5s
-                    --health-retries 5
 
         steps:
             -   uses: actions/checkout@v4
+
             -   name: JDK
                 uses: actions/setup-java@v4
                 with:
                     distribution: 'zulu'
                     java-version: 17
+
             -   name: Build
                 env:
                     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
                 run: |
-                    mvn -q -s settings.xml --non-recursive install
-                    cd modules/koki-server
-                    mvn -Dspring.datasource.username=root -Dlogging.level.root=ERROR -Dlogging.level.org.springframework=ERROR -Dlogging.com.wutsi=ERROR  -Dspring.datasource.password=root -q -s ../../settings.xml package
+                    mvn -s settings.xml validate
+                    mvn -s settings.xml --non-recursive install
+                    mvn -Dspring.datasource.username=root -Dspring.datasource.password=root -Dheadless=true -T1C -q -s settings.xml --fail-at-end package
+
+            -   uses: codecov/codecov-action@v4
+                name: Code Coverage
+                with:
+                    token: ${{ secrets.CODECOV_TOKEN }}
+                    fail_ci_if_error: false
+                    verbose: true
