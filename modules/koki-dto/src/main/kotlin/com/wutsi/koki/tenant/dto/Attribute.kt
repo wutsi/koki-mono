@@ -1,14 +1,16 @@
-package org.example.com.wutsi.koki.tenant.dto
+package com.wutsi.koki.tenant.dto
 
+import java.util.Collections.emptyList
 import java.util.Date
 
 data class Attribute(
     val id: Long = -1,
     val name: String = "",
-    val label: String = "",
-    val description: String = "",
     val type: AttributeType = AttributeType.UNKNOWN,
+    val active: Boolean = true,
+    val label: String? = null,
+    val description: String? = null,
     val choices: List<String> = emptyList(),
     val createdAt: Date = Date(),
-    val active: Boolean = true,
+    val modifiedAt: Date = Date(),
 )

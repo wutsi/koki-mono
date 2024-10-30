@@ -1,4 +1,4 @@
-package org.example.com.wutsi.koki.tenant.dto
+package com.wutsi.koki.party.dto
 
 import java.util.Date
 

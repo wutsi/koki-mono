@@ -1,7 +1,8 @@
-package org.example.com.wutsi.koki.tenant.dto
+package com.wutsi.koki.tenant.dto
 
 import java.util.Date
 
+@Deprecated("")
 data class AttributeNVP(
     val id: Long = -1,
     val name: String = "",

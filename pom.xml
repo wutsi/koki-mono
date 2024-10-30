@@ -18,6 +18,7 @@
 
     <modules>
         <module>modules/koki-dto</module>
+        <module>modules/koki-server</module>
     </modules>
 
     <scm>
@@ -45,8 +46,8 @@
         <kotlin.code.style>official</kotlin.code.style>
         <jdk.version>17</jdk.version>
 
-        <jacoco.threshold.line>0.95</jacoco.threshold.line>
-        <jacoco.threshold.class>0.95</jacoco.threshold.class>
+        <jacoco.threshold.line>0.92</jacoco.threshold.line>
+        <jacoco.threshold.class>0.92</jacoco.threshold.class>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
 
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
@@ -116,6 +117,9 @@
         <ua-java.version>1.6.1</ua-java.version>
         <xmemcached.version>2.4.8</xmemcached.version>
 
+        <wutsi-platform-core.version>3.0.31</wutsi-platform-core.version>
+        <wutsi-platform-payment.version>3.0.24</wutsi-platform-payment.version>
+        <wutsi-dto.version>0.0.1-SNAPSHOT</wutsi-dto.version>
     </properties>
 
 

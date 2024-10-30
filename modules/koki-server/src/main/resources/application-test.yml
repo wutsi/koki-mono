@@ -1,0 +1,26 @@
+spring:
+    flyway:
+        clean-disabled: true
+    jpa:
+        show-sql: false
+    datasource:
+        url: ${SPRING_DATABASE_URL}
+        username: ${SPRING_DATABASE_USERNAME}
+        password: ${SPRING_DATABASE_PASSWORD}
+
+swagger:
+    protocol: https
+
+wutsi:
+    platform:
+        cache:
+            type: memcached
+            memcached:
+                aws-elastic-cache: false
+                username: ${MEMCACHIER_USERNAME}
+                password: ${MEMCACHIER_PASSWORD}
+                servers: ${MEMCACHIER_SERVERS}
+        stream:
+            type: rabbitmq
+            rabbitmq:
+                url: ${CLOUDAMQP_URL}

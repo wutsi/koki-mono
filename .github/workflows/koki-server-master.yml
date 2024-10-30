@@ -1,0 +1,53 @@
+name: koki-server
+
+on:
+    push:
+        branches:
+            - master
+        paths:
+            - 'server/koki-server/**'
+            - '.github/workflows/koki-server-master.yml'
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        services:
+            mysql:
+                image: mysql:9.0
+                env:
+                    MYSQL_USER: admin
+                    MYSQL_PASSWORD: admin
+                    MYSQL_ROOT_PASSWORD: root
+                    MYSQL_DATABASE: koki
+                ports:
+                    - 3306:3306
+            redis:
+                image: redis
+                options: >-
+                    --health-cmd "redis-cli ping"
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+
+        steps:
+            -   uses: actions/checkout@v4
+            -   name: JDK
+                uses: actions/setup-java@v4
+                with:
+                    distribution: 'zulu'
+                    java-version: 17
+
+            -   name: Build
+                env:
+                    GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+                run: |
+                    mvn -q -s settings.xml --non-recursive install
+                    cd modules/koki-server
+                    mvn -Dspring.datasource.username=root -Dspring.datasource.password=root -q -s ../../settings.xml install
+
+            -   name: Upload app bundle
+                uses: actions/upload-artifact@v4
+                with:
+                    name: appbundle
+                    path: modules/koki-server/target/*.jar
