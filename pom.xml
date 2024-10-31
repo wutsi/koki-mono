@@ -38,6 +38,10 @@
             <id>github</id>
             <url>https://maven.pkg.github.com/wutsi/koki-mono</url>
         </repository>
+        <repository>
+            <id>wutsi</id>
+            <url>https://maven.pkg.github.com/wutsi/wutsi-mono</url>
+        </repository>
     </repositories>
 
     <properties>
@@ -121,7 +125,7 @@
         <wutsi-platform-core.version>3.0.31</wutsi-platform-core.version>
         <wutsi-platform-payment.version>3.0.24</wutsi-platform-payment.version>
 
-        <wutsi-dto.version>0.0.4</wutsi-dto.version>
+        <wutsi-dto.version>0.0.7</wutsi-dto.version>
     </properties>
 
 

@@ -1,6 +1,5 @@
 package com.wutsi.koki.tenant.server.endpoint
 
-import com.wutsi.koki.common.dto.HttpHeader
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -12,10 +11,14 @@ import org.springframework.http.client.ClientHttpResponse
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 abstract class TenantAwareEndpointTest : ClientHttpRequestInterceptor {
+    companion object {
+        const val TENANT_ID = 1L
+    }
+
     @Autowired
     protected lateinit var rest: TestRestTemplate
 
-    protected abstract fun getTenantId(): Long
+    protected open fun getTenantId() = TENANT_ID
 
     override fun intercept(
         request: HttpRequest,

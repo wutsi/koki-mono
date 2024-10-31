@@ -14,6 +14,5 @@ class TenantMapper {
         status = entity.status,
         currency = entity.currency,
         createdAt = entity.createdAt,
-        ownerUserId = entity.owner.id ?: -1,
     )
 }

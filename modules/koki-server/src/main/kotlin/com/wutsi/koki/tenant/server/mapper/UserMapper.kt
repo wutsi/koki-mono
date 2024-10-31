@@ -1,17 +1,18 @@
 package com.wutsi.koki.tenant.server.mapper
 
-import com.wutsi.koki.tenant.dto.Role
-import com.wutsi.koki.tenant.server.domain.RoleEntity
+import com.wutsi.koki.tenant.dto.User
+import com.wutsi.koki.tenant.server.domain.UserEntity
 import org.springframework.stereotype.Service
 
 @Service
-class RoleMapper {
-    fun toRole(entity: RoleEntity) = Role(
+class UserMapper(private val roleMapper: RoleMapper) {
+    fun toUser(entity: UserEntity) = User(
         id = entity.id ?: -1,
-        name = entity.name,
-        description = entity.description,
-        active = entity.active,
+        displayName = entity.displayName,
+        email = entity.email,
+        status = entity.status,
         createdAt = entity.createdAt,
-        modifiedAt = entity.modifiedAt
+        modifiedAt = entity.modifiedAt,
+        roles = entity.roles.map { role -> roleMapper.toRole(role) },
     )
 }

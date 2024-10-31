@@ -1,7 +1,6 @@
 package com.wutsi.koki.tenant.server.endpoint
 
-import com.wutsi.koki.tenant.dto.AttributeType
-import com.wutsi.koki.tenant.dto.SearchAttributeResponse
+import com.wutsi.koki.tenant.dto.SearchRoleResponse
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
@@ -10,72 +9,57 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/SearchAttributeEndpoint.sql"])
-class SearchAttributeEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/SearchRoleEndpoint.sql"])
+class SearchRoleEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun all() {
-        val result = rest.getForEntity("/v1/attributes", SearchAttributeResponse::class.java)
+        val result = rest.getForEntity("/v1/roles", SearchRoleResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val attributes = result.body!!.attributes
-        assertEquals(3, attributes.size)
+        val roles = result.body!!.roles
+        assertEquals(3, roles.size)
 
-        assertEquals("a", attributes[0].name)
-        assertEquals("label-a", attributes[0].label)
-        assertEquals("description-a", attributes[0].description)
-        assertEquals(AttributeType.TEXT, attributes[0].type)
-        assertTrue(attributes[0].active)
-        assertEquals(listOf("P1", "P2"), attributes[0].choices)
+        assertEquals("a", roles[0].name)
+        assertTrue(roles[0].active)
+        assertEquals("description-a", roles[0].description)
 
-        assertEquals("b", attributes[1].name)
-        assertNull(attributes[1].label)
-        assertNull(attributes[1].description)
-        assertEquals(AttributeType.LONGTEXT, attributes[1].type)
-        assertTrue(attributes[1].active)
-        assertTrue(attributes[1].choices.isEmpty())
+        assertEquals("b", roles[1].name)
+        assertNull(roles[1].description)
+        assertTrue(roles[1].active)
 
-        assertEquals("c", attributes[2].name)
-        assertNull(attributes[2].label)
-        assertNull(attributes[2].description)
-        assertEquals(AttributeType.EMAIL, attributes[2].type)
-        assertFalse(attributes[2].active)
-        assertTrue(attributes[2].choices.isEmpty())
+        assertEquals("c", roles[2].name)
+        assertNull(roles[2].description)
+        assertFalse(roles[2].active)
     }
 
     @Test
     fun filter() {
         val result =
-            rest.getForEntity("/v1/attributes?name=a&name=b", SearchAttributeResponse::class.java)
+            rest.getForEntity("/v1/roles?name=a&name=b", SearchRoleResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val attributes = result.body!!.attributes
-        assertEquals(2, attributes.size)
+        val roles = result.body!!.roles
+        assertEquals(2, roles.size)
 
-        assertEquals("a", attributes[0].name)
-        assertEquals("label-a", attributes[0].label)
-        assertEquals("description-a", attributes[0].description)
-        assertEquals(AttributeType.TEXT, attributes[0].type)
-        assertTrue(attributes[0].active)
-        assertEquals(listOf("P1", "P2"), attributes[0].choices)
+        assertEquals("a", roles[0].name)
+        assertEquals("description-a", roles[0].description)
+        assertTrue(roles[0].active)
 
-        assertEquals("b", attributes[1].name)
-        assertNull(attributes[1].label)
-        assertNull(attributes[1].description)
-        assertEquals(AttributeType.LONGTEXT, attributes[1].type)
-        assertTrue(attributes[1].active)
-        assertTrue(attributes[1].choices.isEmpty())
+        assertEquals("b", roles[1].name)
+        assertNull(roles[1].description)
+        assertTrue(roles[1].active)
     }
 
     @Test
     fun `search attribute from another tenant`() {
         val result =
-            rest.getForEntity("/v1/attributes?name=aa", SearchAttributeResponse::class.java)
+            rest.getForEntity("/v1/roles?name=aa", SearchRoleResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val attributes = result.body!!.attributes
-        assertEquals(0, attributes.size)
+        val roles = result.body!!.roles
+        assertEquals(0, roles.size)
     }
 }

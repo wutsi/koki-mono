@@ -1,7 +1,7 @@
 package com.wutsi.koki.tenant.server.endpoint
 
 import com.wutsi.koki.common.dto.ImportResponse
-import com.wutsi.koki.tenant.server.io.AttributeCSVImporter
+import com.wutsi.koki.tenant.server.io.RoleCSVImporter
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
@@ -11,10 +11,10 @@ import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping
-class ImportAttributeCSVEndpoint(
-    private val importer: AttributeCSVImporter,
+class ImportRoleCSVEndpoint(
+    private val importer: RoleCSVImporter,
 ) {
-    @PostMapping("/v1/attributes/csv")
+    @PostMapping("/v1/roles/csv")
     fun get(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam file: MultipartFile

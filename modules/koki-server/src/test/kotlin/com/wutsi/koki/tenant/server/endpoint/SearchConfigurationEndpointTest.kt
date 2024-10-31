@@ -1,79 +1,52 @@
 package com.wutsi.koki.tenant.server.endpoint
 
-import com.wutsi.koki.tenant.dto.AttributeType
 import com.wutsi.koki.tenant.dto.SearchAttributeResponse
+import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
-import java.text.SimpleDateFormat
-import java.util.TimeZone
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/SearchAttributeEndpoint.sql"])
-class SearchAttributeEndpointTest : TenantAwareEndpointTest() {
-    override fun getTenantId() = 1L
-
+@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/SearchConfigurationEndpoint.sql"])
+class SearchConfigurationEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun all() {
-        val result = rest.getForEntity("/v1/attributes", SearchAttributeResponse::class.java)
+        val result = rest.getForEntity("/v1/configurations", SearchConfigurationResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val attributes = result.body!!.attributes
-        assertEquals(3, attributes.size)
+        val configurations = result.body!!.configurations
+        assertEquals(3, configurations.size)
 
-        assertEquals("a", attributes[0].name)
-        assertEquals("label-a", attributes[0].label)
-        assertEquals("description-a", attributes[0].description)
-        assertEquals(AttributeType.TEXT, attributes[0].type)
-        assertTrue(attributes[0].active)
-        assertEquals(listOf("P1", "P2"), attributes[0].choices)
+        assertEquals("a1", configurations[0].value)
+        assertEquals("a", configurations[0].attribute.name)
 
-        assertEquals("b", attributes[1].name)
-        assertNull(attributes[1].label)
-        assertNull(attributes[1].description)
-        assertEquals(AttributeType.LONGTEXT, attributes[1].type)
-        assertTrue(attributes[1].active)
-        assertTrue(attributes[1].choices.isEmpty())
+        assertEquals("b1", configurations[1].value)
+        assertEquals("b", configurations[1].attribute.name)
 
-        assertEquals("c", attributes[2].name)
-        assertNull(attributes[2].label)
-        assertNull(attributes[2].description)
-        assertEquals(AttributeType.EMAIL, attributes[2].type)
-        assertFalse(attributes[2].active)
-        assertTrue(attributes[2].choices.isEmpty())
+        assertEquals("c1", configurations[2].value)
+        assertEquals("c", configurations[2].attribute.name)
     }
 
     @Test
     fun filter() {
         val result =
-            rest.getForEntity("/v1/attributes?name=a&name=b", SearchAttributeResponse::class.java)
+            rest.getForEntity("/v1/configurations?name=a&name=b", SearchConfigurationResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val attributes = result.body!!.attributes
-        assertEquals(2, attributes.size)
+        val configurations = result.body!!.configurations
+        assertEquals(2, configurations.size)
 
-        assertEquals("a", attributes[0].name)
-        assertEquals("label-a", attributes[0].label)
-        assertEquals("description-a", attributes[0].description)
-        assertEquals(AttributeType.TEXT, attributes[0].type)
-        assertTrue(attributes[0].active)
-        assertEquals(listOf("P1", "P2"), attributes[0].choices)
+        assertEquals("a1", configurations[0].value)
+        assertEquals("a", configurations[0].attribute.name)
 
-        assertEquals("b", attributes[1].name)
-        assertNull(attributes[1].label)
-        assertNull(attributes[1].description)
-        assertEquals(AttributeType.LONGTEXT, attributes[1].type)
-        assertTrue(attributes[1].active)
-        assertTrue(attributes[1].choices.isEmpty())
+        assertEquals("b1", configurations[1].value)
+        assertEquals("b", configurations[1].attribute.name)
     }
 
     @Test
-    fun `search attribute from another tenant`() {
+    fun `search configuration from another tenant`() {
         val result =
             rest.getForEntity("/v1/attributes?name=aa", SearchAttributeResponse::class.java)
 

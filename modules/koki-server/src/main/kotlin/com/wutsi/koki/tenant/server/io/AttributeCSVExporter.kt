@@ -10,9 +10,7 @@ import java.io.OutputStream
 import java.io.OutputStreamWriter
 
 @Service
-class AttributeCSVExporter(
-    private val service: AttributeService,
-) {
+class AttributeCSVExporter(private val service: AttributeService) {
     fun export(tenantId: Long, output: OutputStream) {
         val writer = BufferedWriter(OutputStreamWriter(output))
         writer.use {

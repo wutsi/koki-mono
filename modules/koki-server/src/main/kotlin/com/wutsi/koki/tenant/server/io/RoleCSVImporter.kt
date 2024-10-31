@@ -3,17 +3,13 @@ package com.wutsi.koki.tenant.server.io
 import com.wutsi.koki.common.dto.ErrorCode
 import com.wutsi.koki.common.dto.ImportMessage
 import com.wutsi.koki.common.dto.ImportResponse
-import com.wutsi.koki.tenant.dto.AttributeType
-import com.wutsi.koki.tenant.server.domain.AttributeEntity
-import com.wutsi.koki.tenant.server.domain.AttributeEntity.Companion.CSV_HEADERS
-import com.wutsi.koki.tenant.server.domain.AttributeEntity.Companion.CSV_HEADER_ACTIVE
-import com.wutsi.koki.tenant.server.domain.AttributeEntity.Companion.CSV_HEADER_CHOICES
-import com.wutsi.koki.tenant.server.domain.AttributeEntity.Companion.CSV_HEADER_DESCRIPTION
-import com.wutsi.koki.tenant.server.domain.AttributeEntity.Companion.CSV_HEADER_LABEL
-import com.wutsi.koki.tenant.server.domain.AttributeEntity.Companion.CSV_HEADER_NAME
-import com.wutsi.koki.tenant.server.domain.AttributeEntity.Companion.CSV_HEADER_TYPE
+import com.wutsi.koki.tenant.server.domain.RoleEntity
+import com.wutsi.koki.tenant.server.domain.RoleEntity.Companion.CSV_HEADERS
+import com.wutsi.koki.tenant.server.domain.RoleEntity.Companion.CSV_HEADER_ACTIVE
+import com.wutsi.koki.tenant.server.domain.RoleEntity.Companion.CSV_HEADER_DESCRIPTION
+import com.wutsi.koki.tenant.server.domain.RoleEntity.Companion.CSV_HEADER_NAME
 import com.wutsi.koki.tenant.server.domain.TenantEntity
-import com.wutsi.koki.tenant.server.service.AttributeService
+import com.wutsi.koki.tenant.server.service.RoleService
 import com.wutsi.koki.tenant.server.service.TenantService
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.exception.BadRequestException
@@ -27,12 +23,12 @@ import org.springframework.stereotype.Service
 import java.io.InputStream
 
 @Service
-class AttributeCSVImporter(
-    private val service: AttributeService,
+class RoleCSVImporter(
+    private val service: RoleService,
     private val tenantService: TenantService,
 ) {
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(AttributeCSVImporter::class.java)
+        private val LOGGER = LoggerFactory.getLogger(RoleCSVImporter::class.java)
     }
 
     fun import(tenantId: Long, input: InputStream): ImportResponse {
@@ -58,14 +54,14 @@ class AttributeCSVImporter(
                 val name = record.get(CSV_HEADER_NAME)
                 try {
                     validate(record)
-                    val attribute = findAttribute(tenantId, record)
-                    if (attribute == null) {
+                    val role = findRole(tenantId, record)
+                    if (role == null) {
                         LOGGER.info("$row - Adding '$name'")
                         add(tenant, record)
                         added++
                     } else {
                         LOGGER.info("$row - Updating '$name'")
-                        update(attribute, record)
+                        update(role, record)
                         updated++
                     }
                 } catch (ex: WutsiException) {
@@ -88,21 +84,11 @@ class AttributeCSVImporter(
         // Name
         val name = record.get(CSV_HEADER_NAME)?.trim()
         if (name.isNullOrEmpty()) {
-            throw BadRequestException(error = Error(code = ErrorCode.ATTRIBUTE_NAME_MISSING))
-        }
-
-        // Type
-        try {
-            val type = AttributeType.valueOf(record.get(CSV_HEADER_TYPE).trim().uppercase())
-            if (type == AttributeType.UNKNOWN) {
-                throw BadRequestException(error = Error(code = ErrorCode.ATTRIBUTE_TYPE_INVALID))
-            }
-        } catch (ex: Exception) {
-            throw BadRequestException(error = Error(code = ErrorCode.ATTRIBUTE_TYPE_INVALID, message = ex.message))
+            throw BadRequestException(error = Error(code = ErrorCode.ROLE_NAME_MISSING))
         }
     }
 
-    private fun findAttribute(tenantId: Long, record: CSVRecord): AttributeEntity? {
+    private fun findRole(tenantId: Long, record: CSVRecord): RoleEntity? {
         try {
             val name = record.get(CSV_HEADER_NAME).trim()
             return service.findByName(tenantId, name)
@@ -113,25 +99,19 @@ class AttributeCSVImporter(
 
     private fun add(tenant: TenantEntity, record: CSVRecord) {
         service.save(
-            AttributeEntity(
+            RoleEntity(
                 tenant = tenant,
                 name = record.get(CSV_HEADER_NAME).trim(),
-                type = AttributeType.valueOf(record.get(CSV_HEADER_TYPE).trim().uppercase()),
-                label = record.get(CSV_HEADER_LABEL)?.ifEmpty { null },
                 description = record.get(CSV_HEADER_DESCRIPTION)?.ifEmpty { null },
                 active = record.get(CSV_HEADER_ACTIVE)?.trim()?.lowercase() == "yes",
-                choices = record.get(CSV_HEADER_CHOICES)?.trim()?.replace('|', '\n')?.ifEmpty { null },
             )
         )
     }
 
-    private fun update(attribute: AttributeEntity, record: CSVRecord) {
-        attribute.name = record.get(CSV_HEADER_NAME).trim()
-        attribute.type = AttributeType.valueOf(record.get(CSV_HEADER_TYPE).trim().uppercase())
-        attribute.label = record.get(CSV_HEADER_LABEL)?.ifEmpty { null }
-        attribute.description = record.get(CSV_HEADER_DESCRIPTION)?.ifEmpty { null }
-        attribute.active = record.get(CSV_HEADER_ACTIVE)?.trim()?.lowercase().equals("yes")
-        attribute.choices = record.get(CSV_HEADER_CHOICES)?.trim()?.replace('|', '\n')?.ifEmpty { null }
-        service.save(attribute)
+    private fun update(role: RoleEntity, record: CSVRecord) {
+        role.name = record.get(CSV_HEADER_NAME).trim()
+        role.description = record.get(CSV_HEADER_DESCRIPTION)?.ifEmpty { null }
+        role.active = record.get(CSV_HEADER_ACTIVE)?.trim()?.lowercase().equals("yes")
+        service.save(role)
     }
 }

@@ -1,8 +1,8 @@
 package com.wutsi.koki.tenant.server.service
 
 import com.wutsi.koki.common.dto.ErrorCode
-import com.wutsi.koki.tenant.server.dao.AttributeRepository
-import com.wutsi.koki.tenant.server.domain.AttributeEntity
+import com.wutsi.koki.tenant.server.dao.RoleRepository
+import com.wutsi.koki.tenant.server.domain.RoleEntity
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter
 import com.wutsi.platform.core.error.exception.NotFoundException
@@ -11,10 +11,10 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.Date
 
 @Service
-open class AttributeService(
-    private val dao: AttributeRepository
+open class RoleService(
+    private val dao: RoleRepository
 ) {
-    fun search(tenantId: Long, names: List<String> = emptyList()): List<AttributeEntity> {
+    fun search(tenantId: Long, names: List<String> = emptyList()): List<RoleEntity> {
         return if (names.isEmpty()) {
             dao.findByTenantId(tenantId)
         } else {
@@ -22,25 +22,25 @@ open class AttributeService(
         }
     }
 
-    fun findByName(tenantId: Long, name: String): AttributeEntity {
-        val attributes = search(tenantId, listOf(name))
-        if (attributes.isEmpty()) {
+    fun findByName(tenantId: Long, name: String): RoleEntity {
+        val roles = search(tenantId, listOf(name))
+        if (roles.isEmpty()) {
             throw NotFoundException(
                 error = Error(
-                    code = ErrorCode.ATTRIBUTE_NOT_FOUND,
+                    code = ErrorCode.ROLE_NOT_FOUND,
                     parameter = Parameter(
                         value = name
                     )
                 )
             )
         } else {
-            return attributes.first()
+            return roles.first()
         }
     }
 
     @Transactional
-    open fun save(attribute: AttributeEntity): AttributeEntity {
-        attribute.modifiedAt = Date()
-        return dao.save(attribute)
+    open fun save(role: RoleEntity): RoleEntity {
+        role.modifiedAt = Date()
+        return dao.save(role)
     }
 }

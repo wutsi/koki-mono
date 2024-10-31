@@ -22,7 +22,7 @@ spring:
     flyway:
         clean-disabled: false
     jpa:
-        show-sql: false
+        show-sql: true
         hibernate:
             ddl-auto: none
             naming:
@@ -55,6 +55,8 @@ springdoc:
     show-actuator: true
     swagger-ui:
         path: /api.html
+        operations-sorter: alpha
+        tags-sorter: alpha
 
 server:
     port: 8080

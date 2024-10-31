@@ -25,8 +25,6 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var dao: AttributeRepository
 
-    override fun getTenantId() = 1L
-
     private fun upload(body: String): ImportResponse {
         val headers = HttpHeaders()
         headers.contentType = MediaType.MULTIPART_FORM_DATA

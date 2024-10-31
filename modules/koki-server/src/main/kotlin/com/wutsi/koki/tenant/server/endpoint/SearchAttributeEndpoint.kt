@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping
-class SearchAttributesEndpoint(
+class SearchAttributeEndpoint(
     private val service: AttributeService,
     private val mapper: AttributeMapper,
 ) {

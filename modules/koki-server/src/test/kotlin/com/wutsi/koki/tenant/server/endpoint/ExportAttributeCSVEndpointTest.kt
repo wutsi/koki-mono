@@ -7,8 +7,6 @@ import kotlin.test.assertEquals
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/tenant/ExportAttributeCSVEndpoint.sql"])
 class ExportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
-    override fun getTenantId() = 1L
-
     @Test
     fun export() {
         val response = rest.getForEntity("/v1/attributes/csv", String::class.java)

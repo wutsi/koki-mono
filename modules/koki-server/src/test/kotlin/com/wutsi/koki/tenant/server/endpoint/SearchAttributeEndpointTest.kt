@@ -5,8 +5,6 @@ import com.wutsi.koki.tenant.dto.SearchAttributeResponse
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
-import java.text.SimpleDateFormat
-import java.util.TimeZone
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
@@ -14,13 +12,8 @@ import kotlin.test.assertTrue
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/tenant/SearchAttributeEndpoint.sql"])
 class SearchAttributeEndpointTest : TenantAwareEndpointTest() {
-    override fun getTenantId() = 1L
-
     @Test
     fun all() {
-        val fmt = SimpleDateFormat("yyyy-MM-dd")
-        fmt.timeZone = TimeZone.getTimeZone("UTC")
-
         val result = rest.getForEntity("/v1/attributes", SearchAttributeResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
@@ -52,11 +45,8 @@ class SearchAttributeEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun filter() {
-        val fmt = SimpleDateFormat("yyyy-MM-dd")
-        fmt.timeZone = TimeZone.getTimeZone("UTC")
-
         val result =
-            rest.getForEntity("/v1/attributes?name=a&name=b&name=aa", SearchAttributeResponse::class.java)
+            rest.getForEntity("/v1/attributes?name=a&name=b", SearchAttributeResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
@@ -76,5 +66,16 @@ class SearchAttributeEndpointTest : TenantAwareEndpointTest() {
         assertEquals(AttributeType.LONGTEXT, attributes[1].type)
         assertTrue(attributes[1].active)
         assertTrue(attributes[1].choices.isEmpty())
+    }
+
+    @Test
+    fun `search attribute from another tenant`() {
+        val result =
+            rest.getForEntity("/v1/attributes?name=aa", SearchAttributeResponse::class.java)
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val attributes = result.body!!.attributes
+        assertEquals(0, attributes.size)
     }
 }

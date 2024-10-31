@@ -1,46 +1,80 @@
 package com.wutsi.koki.tenant.server.service
 
-import com.wutsi.koki.common.dto.ErrorCode
-import com.wutsi.koki.tenant.server.dao.AttributeRepository
+import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
+import com.wutsi.koki.tenant.dto.SaveConfigurationResponse
+import com.wutsi.koki.tenant.server.dao.ConfigurationRepository
 import com.wutsi.koki.tenant.server.domain.AttributeEntity
-import com.wutsi.platform.core.error.Error
-import com.wutsi.platform.core.error.Parameter
-import com.wutsi.platform.core.error.exception.NotFoundException
+import com.wutsi.koki.tenant.server.domain.ConfigurationEntity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.Date
 
 @Service
-open class AttributeService(
-    private val dao: AttributeRepository
+open class ConfigurationService(
+    private val dao: ConfigurationRepository,
+    private val attributeService: AttributeService,
 ) {
-    fun search(tenantId: Long, names: List<String> = emptyList()): List<AttributeEntity> {
-        return if (names.isEmpty()) {
-            dao.findByTenantId(tenantId)
-        } else {
-            dao.findByTenantIdAndNameIn(tenantId, names)
-        }
-    }
-
-    fun findByName(tenantId: Long, name: String): AttributeEntity {
-        val attributes = search(tenantId, listOf(name))
-        if (attributes.isEmpty()) {
-            throw NotFoundException(
-                error = Error(
-                    code = ErrorCode.ATTRIBUTE_NOT_FOUND,
-                    parameter = Parameter(
-                        value = name
-                    )
-                )
-            )
-        } else {
-            return attributes.first()
-        }
+    fun search(attributes: List<AttributeEntity>): List<ConfigurationEntity> {
+        return dao.findByAttributeIn(attributes)
     }
 
     @Transactional
-    open fun save(attribute: AttributeEntity): AttributeEntity {
-        attribute.modifiedAt = Date()
-        return dao.save(attribute)
+    open fun save(tenantId: Long, request: SaveConfigurationRequest): SaveConfigurationResponse {
+        val names = request.values.keys
+        if (names.isEmpty()) {
+            return SaveConfigurationResponse()
+        }
+
+        // Update/Delete
+        val deletes = mutableListOf<ConfigurationEntity>()
+        val updates = mutableListOf<ConfigurationEntity>()
+        val attributes = attributeService.search(tenantId, names.toList())
+        val configurationMap = search(attributes).associateBy { it.attribute.name }
+        configurationMap.forEach { entry ->
+            val name = entry.key
+            val config = entry.value
+            val value = request.values[name]
+            if (value.isNullOrEmpty()) {
+                deletes.add(config)
+            } else {
+                config.value = value
+                config.modifiedAt = Date()
+                updates.add(config)
+            }
+        }
+
+        // New
+        val adds = mutableListOf<ConfigurationEntity>()
+        val xnames = names
+            .filter { !configurationMap.containsKey(it) }
+            .filter { !request.values[it].isNullOrEmpty() }
+        if (xnames.isNotEmpty()) {
+            val attributeMap = attributeService.search(tenantId, xnames).associateBy { it.name }
+            attributeMap.values.forEach { attr ->
+                adds.add(
+                    ConfigurationEntity(
+                        attribute = attr,
+                        value = request.values[attr.name]
+                    )
+                )
+            }
+        }
+
+        // Persist
+        if (deletes.isNotEmpty()) {
+            dao.deleteAll(deletes)
+        }
+        if (updates.isNotEmpty()) {
+            dao.saveAll(updates)
+        }
+        if (adds.isNotEmpty()) {
+            dao.saveAll(adds)
+        }
+
+        return SaveConfigurationResponse(
+            added = adds.size,
+            updated = updates.size,
+            deleted = deletes.size,
+        )
     }
 }

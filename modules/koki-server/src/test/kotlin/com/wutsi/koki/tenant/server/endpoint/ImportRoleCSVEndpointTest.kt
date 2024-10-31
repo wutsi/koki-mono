@@ -2,9 +2,8 @@ package com.wutsi.koki.tenant.server.endpoint
 
 import com.wutsi.koki.common.dto.ErrorCode
 import com.wutsi.koki.common.dto.ImportResponse
-import com.wutsi.koki.tenant.dto.AttributeType
-import com.wutsi.koki.tenant.server.dao.AttributeRepository
-import com.wutsi.koki.tenant.server.domain.AttributeEntity
+import com.wutsi.koki.tenant.server.dao.RoleRepository
+import com.wutsi.koki.tenant.server.domain.RoleEntity
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ContentDisposition
@@ -20,10 +19,10 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/ImportAttributeCSVEndpoint.sql"])
-class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/ImportRoleCSVEndpoint.sql"])
+class ImportRoleCSVEndpointTest : TenantAwareEndpointTest() {
     @Autowired
-    private lateinit var dao: AttributeRepository
+    private lateinit var dao: RoleRepository
 
     private fun upload(body: String): ImportResponse {
         val headers = HttpHeaders()
@@ -43,7 +42,7 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
 
         val requestEntity = HttpEntity<MultiValueMap<String, Any>>(body, headers)
         return rest.exchange(
-            "/v1/attributes/csv",
+            "/v1/roles/csv",
             HttpMethod.POST,
             requestEntity,
             ImportResponse::class.java,
@@ -54,11 +53,11 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
     fun import() {
         val response = upload(
             """
-                "name","type","active","choices","label","description"
-                "a","DECIMAL","Yes",,,
-                "b","TEXT","No","P1|P2|P3|P4","Priority","Priority of the ticket"
-                "c","FILE",,,,
-                "new","image","yes","","",""
+                "name","active","description"
+                "a","Yes",,,
+                "b","No","Priority of the ticket"
+                "c",,
+                "new","yes",""
             """.trimIndent()
         )
 
@@ -67,36 +66,24 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
         assertEquals(0, response.errors)
         assertTrue(response.errorMessages.isEmpty())
 
-        val attrA = findAttribute("a")
+        val attrA = findRole("a")
         assertEquals("a", attrA.name)
-        assertEquals(AttributeType.DECIMAL, attrA.type)
         assertTrue(attrA.active)
-        assertNull(attrA.choices)
-        assertNull(attrA.label)
         assertNull(attrA.description)
 
-        val attrB = findAttribute("b")
+        val attrB = findRole("b")
         assertEquals("b", attrB.name)
-        assertEquals(AttributeType.TEXT, attrB.type)
         assertFalse(attrB.active)
-        assertEquals("P1\nP2\nP3\nP4", attrB.choices)
-        assertEquals("Priority", attrB.label)
         assertEquals("Priority of the ticket", attrB.description)
 
-        val attrC = findAttribute("c")
+        val attrC = findRole("c")
         assertEquals("c", attrC.name)
-        assertEquals(AttributeType.FILE, attrC.type)
         assertFalse(attrC.active)
-        assertNull(attrC.choices)
-        assertNull(attrC.label)
         assertNull(attrC.description)
 
-        val attrNew = findAttribute("new")
+        val attrNew = findRole("new")
         assertEquals("new", attrNew.name)
-        assertEquals(AttributeType.IMAGE, attrNew.type)
         assertTrue(attrNew.active)
-        assertNull(attrNew.choices)
-        assertNull(attrNew.label)
         assertNull(attrNew.description)
     }
 
@@ -104,8 +91,8 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
     fun noName() {
         val response = upload(
             """
-                "name","type","active","choices","label","description"
-                "","TEXT","No","P1|P2|P3|P4","Priority","Priority of the ticket"
+                "name","active","description"
+                "","No","Priority of the ticket"
             """.trimIndent()
         )
 
@@ -113,40 +100,10 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
         assertEquals(0, response.added)
         assertEquals(1, response.errors)
         assertFalse(response.errorMessages.isEmpty())
-        assertEquals(ErrorCode.ATTRIBUTE_NAME_MISSING, response.errorMessages[0].code)
+        assertEquals(ErrorCode.ROLE_NAME_MISSING, response.errorMessages[0].code)
     }
 
-    @Test
-    fun noType() {
-        checkTypeInvalid("")
-    }
-
-    @Test
-    fun invalidType() {
-        checkTypeInvalid("\"xx\"")
-    }
-
-    @Test
-    fun unknownType() {
-        checkTypeInvalid("\"UNKNOWN\"")
-    }
-
-    private fun checkTypeInvalid(type: String) {
-        val response = upload(
-            """
-                "name","type","active","choices","label","description"
-                "a",$type,"No","P1|P2|P3|P4","Priority","Priority of the ticket"
-            """.trimIndent()
-        )
-
-        assertEquals(0, response.updated)
-        assertEquals(0, response.added)
-        assertEquals(1, response.errors)
-        assertFalse(response.errorMessages.isEmpty())
-        assertEquals(ErrorCode.ATTRIBUTE_TYPE_INVALID, response.errorMessages[0].code)
-    }
-
-    private fun findAttribute(name: String): AttributeEntity {
+    private fun findRole(name: String): RoleEntity {
         return dao.findByTenantIdAndNameIn(getTenantId(), listOf(name)).first()
     }
 }

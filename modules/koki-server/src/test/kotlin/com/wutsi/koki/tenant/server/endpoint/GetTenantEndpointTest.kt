@@ -34,7 +34,6 @@ class GetTenantEndpointTest {
         assertEquals("test.com", tenant.domainName)
         assertEquals("USD", tenant.currency)
         assertEquals("en_US", tenant.locale)
-        assertEquals(11L, tenant.ownerUserId)
         assertEquals("2020-01-22", fmt.format(tenant.createdAt))
     }
 
