@@ -4,7 +4,6 @@ import java.util.Date
 
 data class Tenant(
     val id: Long = -1,
-    val ownerUserId: Long = -1,
     val name: String = "",
     val domainName: String = "",
     val currency: String = "",
