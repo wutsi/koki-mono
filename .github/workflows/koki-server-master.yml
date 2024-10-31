@@ -5,7 +5,7 @@ on:
         branches:
             - master
         paths:
-            - 'server/koki-server/**'
+            - 'modules/koki-server/**'
             - '.github/workflows/koki-server-master.yml'
 
 jobs:

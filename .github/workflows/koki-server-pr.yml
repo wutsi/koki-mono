@@ -3,7 +3,7 @@ name: koki-server-pr
 on:
     pull_request:
         paths:
-            - 'server/koki-server/**'
+            - 'modules/koki-server/**'
             - '.github/workflows/koki-server-pr.yml'
 
 jobs:
