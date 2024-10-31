@@ -12,16 +12,17 @@
                     <url>https://repo1.maven.org/maven2</url>
                 </repository>
                 <repository>
-                    <id>koki</id>
-                    <url>https://maven.pkg.github.com/wutsi/koki-mono</url>
-                </repository>
-                <repository>
                     <id>github</id>
                     <url>https://maven.pkg.github.com/wutsi/wutsi-mono</url>
+                </repository>
+                <repository>
+                    <id>koki</id>
+                    <url>https://maven.pkg.github.com/wutsi/koki-mono</url>
                 </repository>
             </repositories>
         </profile>
     </profiles>
+    
     <servers>
         <server>
             <id>koki</id>
