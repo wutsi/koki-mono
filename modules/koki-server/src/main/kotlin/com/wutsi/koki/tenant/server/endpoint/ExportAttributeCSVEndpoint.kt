@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets
 @RequestMapping
 class ExportAttributeCSVEndpoint(private val exporter: AttributeCSVExporter) {
     @GetMapping("/v1/attributes/csv")
-    fun get(
+    fun export(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         response: HttpServletResponse
     ) {

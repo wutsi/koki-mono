@@ -35,11 +35,11 @@
 
     <repositories>
         <repository>
-            <id>github</id>
+            <id>koki</id>
             <url>https://maven.pkg.github.com/wutsi/koki-mono</url>
         </repository>
         <repository>
-            <id>wutsi</id>
+            <id>github</id>
             <url>https://maven.pkg.github.com/wutsi/wutsi-mono</url>
         </repository>
     </repositories>
@@ -50,8 +50,8 @@
         <kotlin.code.style>official</kotlin.code.style>
         <jdk.version>17</jdk.version>
 
-        <jacoco.threshold.line>0.92</jacoco.threshold.line>
-        <jacoco.threshold.class>0.92</jacoco.threshold.class>
+        <jacoco.threshold.line>0.98</jacoco.threshold.line>
+        <jacoco.threshold.class>0.95</jacoco.threshold.class>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
 
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
@@ -125,7 +125,7 @@
         <wutsi-platform-core.version>3.0.31</wutsi-platform-core.version>
         <wutsi-platform-payment.version>3.0.24</wutsi-platform-payment.version>
 
-        <wutsi-dto.version>0.0.7</wutsi-dto.version>
+        <wutsi-dto.version>0.0.8</wutsi-dto.version>
     </properties>
 
 

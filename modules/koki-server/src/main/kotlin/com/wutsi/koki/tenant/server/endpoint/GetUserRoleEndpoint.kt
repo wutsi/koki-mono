@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping
-class SearchUserRoleEndpoint(
+class GetUserRoleEndpoint(
     private val service: UserService,
     private val mapper: RoleMapper,
 ) {

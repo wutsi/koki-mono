@@ -48,7 +48,7 @@ class SearchConfigurationEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun `search configuration from another tenant`() {
         val result =
-            rest.getForEntity("/v1/attributes?name=aa", SearchAttributeResponse::class.java)
+            rest.getForEntity("/v1/configurations?name=aa", SearchAttributeResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 

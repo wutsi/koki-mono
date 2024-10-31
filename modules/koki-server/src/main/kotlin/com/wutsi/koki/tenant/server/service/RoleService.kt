@@ -14,7 +14,7 @@ import java.util.Date
 open class RoleService(
     private val dao: RoleRepository
 ) {
-    fun search(tenantId: Long, names: List<String> = emptyList()): List<RoleEntity> {
+    fun search(names: List<String> = emptyList(), tenantId: Long): List<RoleEntity> {
         return if (names.isEmpty()) {
             dao.findByTenantId(tenantId)
         } else {
@@ -22,8 +22,18 @@ open class RoleService(
         }
     }
 
-    fun findByName(tenantId: Long, name: String): RoleEntity {
-        val roles = search(tenantId, listOf(name))
+    fun get(id: Long, tenantId: Long): RoleEntity {
+        val role = dao.findById(id)
+            .orElseThrow { NotFoundException(Error(code = ErrorCode.ROLE_NOT_FOUND)) }
+
+        if (role.tenant.id != tenantId) {
+            throw NotFoundException(Error(code = ErrorCode.ROLE_NOT_FOUND))
+        }
+        return role
+    }
+
+    fun getByName(name: String, tenantId: Long): RoleEntity {
+        val roles = search(listOf(name), tenantId)
         if (roles.isEmpty()) {
             throw NotFoundException(
                 error = Error(

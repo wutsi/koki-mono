@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping
 class SaveConfigurationEndpoint(private val service: ConfigurationService) {
     @PostMapping("/v1/configurations")
-    fun get(
+    fun save(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestBody request: SaveConfigurationRequest
     ): SaveConfigurationResponse {
-        return service.save(tenantId, request)
+        return service.save(request, tenantId)
     }
 }

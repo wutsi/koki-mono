@@ -22,7 +22,7 @@ class AttributeCSVExporter(private val service: AttributeService) {
                     .build(),
             )
             printer.use {
-                val attributes = service.search(tenantId)
+                val attributes = service.search(emptyList(), tenantId)
                 attributes.forEach {
                     printer.printRecord(
                         it.name,

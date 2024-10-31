@@ -1,77 +1,85 @@
 package com.wutsi.koki.tenant.server.endpoint
 
-import com.wutsi.koki.common.dto.ErrorCode
-import com.wutsi.koki.tenant.dto.CreateUserRequest
-import com.wutsi.koki.tenant.dto.UpdateUserRequest
-import com.wutsi.koki.tenant.server.dao.UserRepository
-import com.wutsi.platform.core.error.ErrorResponse
+import com.wutsi.koki.tenant.dto.SearchUserResponse
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/UpdateUserEndpoint.sql"])
-class UpdateUserEndpointTest : TenantAwareEndpointTest() {
-    @Autowired
-    private lateinit var dao: UserRepository
-
+@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/SearchUserEndpoint.sql"])
+class SearchUserEndpointTest : TenantAwareEndpointTest() {
     @Test
-    fun update() {
-        val request = UpdateUserRequest(
-            email = "thomas.nkono@hotmail.com",
-            displayName = "Thomas Nkono",
-        )
-
-        val result = rest.postForEntity("/v1/users/11", request, Any::class.java)
+    fun `search by ids`() {
+        val result = rest.getForEntity("/v1/users?id=11&id=12&id=13&sort-by=id", SearchUserResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val userId = 11L
-        val user = dao.findById(userId).get()
-        assertEquals(request.displayName, user.displayName)
-        assertEquals(request.email, user.email)
+        val users = result.body!!.users
+
+        assertEquals(3, users.size)
+        assertEquals(listOf(11L, 12L, 13L), users.map { it.id })
     }
 
     @Test
-    fun `duplicate email`() {
-        val request = UpdateUserRequest(
-            email = "ray.sponsible@gmail.com",
-            displayName = "Duplicate",
-        )
+    fun `search by ids - never return user from other tenant`() {
+        val result = rest.getForEntity("/v1/users?id=11&id=12&id=13&id=22", SearchUserResponse::class.java)
 
-        val result = rest.postForEntity("/v1/users/12", request, ErrorResponse::class.java)
+        assertEquals(HttpStatus.OK, result.statusCode)
 
-        assertEquals(HttpStatus.CONFLICT, result.statusCode)
-        assertEquals(ErrorCode.USER_DUPLICATE_EMAIL, result.body!!.error.code)
+        val users = result.body!!.users
+
+        assertEquals(3, users.size)
+        assertFalse(users.map { it.id }.contains(22L))
     }
 
     @Test
-    fun `not found`() {
-        val request = UpdateUserRequest(
-            email = "foo.bar@gmail.com",
-            displayName = "Foo Bar",
-        )
+    fun `search display-name starts with`() {
+        val result = rest.getForEntity("/v1/users?q=peter&sort-by=displayName", SearchUserResponse::class.java)
 
-        val result = rest.postForEntity("/v1/users/99", request, ErrorResponse::class.java)
+        assertEquals(HttpStatus.OK, result.statusCode)
 
-        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.USER_NOT_FOUND, result.body!!.error.code)
+        val users = result.body!!.users
+
+        assertEquals(3, users.size)
+
+        assertEquals(17L, users[0].id)
+        assertEquals("Peter Fonda", users[0].displayName)
+
+        assertEquals(15L, users[1].id)
+        assertEquals("Peter Pan", users[1].displayName)
+
+        assertEquals(16L, users[2].id)
+        assertEquals("Peter Parker", users[2].displayName)
     }
 
     @Test
-    fun `update user of another tenant`() {
-        val request = CreateUserRequest(
-            email = "roger.milla@gmail.com",
-            displayName = "Roger Milla",
-            password = "secret"
-        )
+    fun `search display-name contains ignore case`() {
+        val result = rest.getForEntity("/v1/users?q=FONDA&sort-by=displayName", SearchUserResponse::class.java)
 
-        val result = rest.postForEntity("/v1/users/22", request, ErrorResponse::class.java)
+        assertEquals(HttpStatus.OK, result.statusCode)
 
-        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.USER_NOT_FOUND, result.body!!.error.code)
+        val users = result.body!!.users
+
+        assertEquals(2, users.size)
+
+        assertEquals(18L, users[0].id)
+        assertEquals("Henry Fonda", users[0].displayName)
+
+        assertEquals(17L, users[1].id)
+        assertEquals("Peter Fonda", users[1].displayName)
+    }
+
+    @Test
+    fun `search display-name of another tenant`() {
+        val result = rest.getForEntity("/v1/users?q=roger&sort-by=displayName", SearchUserResponse::class.java)
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val users = result.body!!.users
+
+        assertEquals(0, users.size)
     }
 }

@@ -1,29 +1,25 @@
 package com.wutsi.koki.tenant.server.endpoint
 
-import com.wutsi.koki.tenant.dto.GetUserResponse
-import com.wutsi.koki.tenant.server.mapper.UserMapper
+import com.wutsi.koki.tenant.dto.CreateUserRequest
+import com.wutsi.koki.tenant.dto.CreateUserResponse
 import com.wutsi.koki.tenant.server.service.UserService
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
+import jakarta.validation.Valid
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping
-class GetUserEndpoint(
-    private val service: UserService,
-    private val mapper: UserMapper,
-) {
-    @GetMapping("/v1/users/{id}")
-    fun get(
-        @PathVariable id: Long,
+class CreateUserEndpoint(private val service: UserService) {
+    @PostMapping("/v1/users")
+    fun create(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-    ): GetUserResponse {
-        return GetUserResponse(
-            user = mapper.toUser(
-                entity = service.get(id, tenantId)
-            )
+        @RequestBody @Valid request: CreateUserRequest
+    ): CreateUserResponse {
+        return CreateUserResponse(
+            userId = service.create(request, tenantId).id ?: -1
         )
     }
 }

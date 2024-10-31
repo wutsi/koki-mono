@@ -91,7 +91,7 @@ class RoleCSVImporter(
     private fun findRole(tenantId: Long, record: CSVRecord): RoleEntity? {
         try {
             val name = record.get(CSV_HEADER_NAME).trim()
-            return service.findByName(tenantId, name)
+            return service.getByName(name, tenantId)
         } catch (ex: NotFoundException) {
             return null
         }

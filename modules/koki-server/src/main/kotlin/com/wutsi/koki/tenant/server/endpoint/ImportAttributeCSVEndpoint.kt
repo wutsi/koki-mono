@@ -15,7 +15,7 @@ class ImportAttributeCSVEndpoint(
     private val importer: AttributeCSVImporter,
 ) {
     @PostMapping("/v1/attributes/csv")
-    fun get(
+    fun import(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam file: MultipartFile
     ): ImportResponse =

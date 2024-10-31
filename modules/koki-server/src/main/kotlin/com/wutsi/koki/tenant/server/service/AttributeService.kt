@@ -14,7 +14,7 @@ import java.util.Date
 open class AttributeService(
     private val dao: AttributeRepository
 ) {
-    fun search(tenantId: Long, names: List<String> = emptyList()): List<AttributeEntity> {
+    fun search(names: List<String>, tenantId: Long): List<AttributeEntity> {
         return if (names.isEmpty()) {
             dao.findByTenantId(tenantId)
         } else {
@@ -22,8 +22,8 @@ open class AttributeService(
         }
     }
 
-    fun findByName(tenantId: Long, name: String): AttributeEntity {
-        val attributes = search(tenantId, listOf(name))
+    fun getByName(name: String, tenantId: Long): AttributeEntity {
+        val attributes = search(listOf(name), tenantId)
         if (attributes.isEmpty()) {
             throw NotFoundException(
                 error = Error(

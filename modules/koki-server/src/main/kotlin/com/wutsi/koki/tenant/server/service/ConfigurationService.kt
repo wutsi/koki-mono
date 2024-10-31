@@ -19,7 +19,7 @@ open class ConfigurationService(
     }
 
     @Transactional
-    open fun save(tenantId: Long, request: SaveConfigurationRequest): SaveConfigurationResponse {
+    open fun save(request: SaveConfigurationRequest, tenantId: Long): SaveConfigurationResponse {
         val names = request.values.keys
         if (names.isEmpty()) {
             return SaveConfigurationResponse()
@@ -28,7 +28,7 @@ open class ConfigurationService(
         // Update/Delete
         val deletes = mutableListOf<ConfigurationEntity>()
         val updates = mutableListOf<ConfigurationEntity>()
-        val attributes = attributeService.search(tenantId, names.toList())
+        val attributes = attributeService.search(names.toList(), tenantId)
         val configurationMap = search(attributes).associateBy { it.attribute.name }
         configurationMap.forEach { entry ->
             val name = entry.key
@@ -49,7 +49,7 @@ open class ConfigurationService(
             .filter { !configurationMap.containsKey(it) }
             .filter { !request.values[it].isNullOrEmpty() }
         if (xnames.isNotEmpty()) {
-            val attributeMap = attributeService.search(tenantId, xnames).associateBy { it.name }
+            val attributeMap = attributeService.search(xnames, tenantId).associateBy { it.name }
             attributeMap.values.forEach { attr ->
                 adds.add(
                     ConfigurationEntity(

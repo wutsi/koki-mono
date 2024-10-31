@@ -12,8 +12,10 @@ INSERT INTO T_ROLE(id, tenant_fk, name)
 
 INSERT INTO T_USER(id, tenant_fk, email, password, display_name, status)
     VALUES (11, 1, 'ray.sponsible@gmail.com', '---', 'Ray Sponsible', 1),
+           (12, 1, 'john.smith@gmail.com', '---', 'John Smith', 1),
            (22, 2, 'roger.milla@gmail.com', '---', 'Roger Milla', 1);
 
 INSERT INTO T_USER_ROLE(user_fk, role_fk)
     VALUES (11, 10),
+           (12, 10),
            (22, 20);

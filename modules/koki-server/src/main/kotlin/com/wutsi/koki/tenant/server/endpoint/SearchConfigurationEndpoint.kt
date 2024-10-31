@@ -18,11 +18,11 @@ class SearchConfigurationEndpoint(
     private val attributeService: AttributeService,
 ) {
     @GetMapping("/v1/configurations")
-    fun get(
+    fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false) name: List<String> = emptyList()
     ): SearchConfigurationResponse {
-        val attributeMap = attributeService.search(tenantId, name).associateBy { it.id }
+        val attributeMap = attributeService.search(name, tenantId).associateBy { it.id }
         if (attributeMap.isEmpty()) {
             return SearchConfigurationResponse()
         }

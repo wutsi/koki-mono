@@ -16,12 +16,12 @@ class SearchAttributeEndpoint(
     private val mapper: AttributeMapper,
 ) {
     @GetMapping("/v1/attributes")
-    fun get(
+    fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false) name: List<String> = emptyList()
     ): SearchAttributeResponse =
         SearchAttributeResponse(
-            attributes = service.search(tenantId, name)
+            attributes = service.search(name, tenantId)
                 .map { attr -> mapper.toAttribute(attr) }
         )
 }

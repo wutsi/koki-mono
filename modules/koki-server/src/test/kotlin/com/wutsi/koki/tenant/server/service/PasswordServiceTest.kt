@@ -1,37 +1,35 @@
 package com.wutsi.koki.tenant.server.endpoint
 
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.common.dto.ErrorCode
-import com.wutsi.koki.common.dto.HttpHeader
-import com.wutsi.koki.common.service.TenantIdProvider
-import com.wutsi.platform.core.error.exception.BadRequestException
-import jakarta.servlet.http.HttpServletRequest
+import com.wutsi.koki.tenant.server.service.PasswordService
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
-class TenantIdProviderTest {
-    private val request = mock<HttpServletRequest>()
-    private val provider = TenantIdProvider(request)
+class PasswordServiceTest {
+    companion object {
+        const val SALT = "...143.,.."
+        const val CLEAR = "secret"
+    }
+
+    val service = PasswordService()
 
     @Test
-    fun get() {
-        doReturn("1").whenever(request).getHeader(HttpHeader.TENANT_ID)
-
-        val tenantId = provider.get()
-        assertEquals(1L, tenantId)
+    fun hash() {
+        val hashed = service.hash(CLEAR, SALT)
+        assertEquals("607e0b9e5496964b1385b7c10e3e2403", hashed)
+        assertEquals(32, hashed.length)
     }
 
     @Test
-    fun missingHeader() {
-        doReturn(null).whenever(request).getHeader(HttpHeader.TENANT_ID)
+    fun match() {
+        val hashed = "607e0b9e5496964b1385b7c10e3e2403"
+        assertTrue(service.matches(CLEAR, hashed, SALT))
+    }
 
-        val ex = assertThrows<BadRequestException> {
-            provider.get()
-        }
-
-        assertEquals(ErrorCode.TENANT_MISSING_FROM_HEADER, ex.error.code)
+    @Test
+    fun mismatch() {
+        val hashed = "xxx"
+        assertFalse(service.matches(CLEAR, hashed, SALT))
     }
 }

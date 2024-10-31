@@ -19,7 +19,8 @@ CREATE TABLE T_USER(
   tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
 
   email                   VARCHAR(255) NOT NULL,
-  password                VARCHAR(36) NOT NULL,
+  password                VARCHAR(32) NOT NULL,
+  salt                    VARCHAR(36) NOT NULL DEFAULT '',
   display_name            VARCHAR(255) NOT NULL,
   status                  INT NOT NULL DEFAULT 0,
   created_at              DATETIME DEFAULT NOW(),
@@ -78,6 +79,8 @@ CREATE TABLE T_ROLE(
 CREATE TABLE T_USER_ROLE(
   user_fk       BIGINT NOT NULL REFERENCES T_USER(id),
   role_fk       BIGINT NOT NULL REFERENCES T_ROLE(id),
+
+  created_at    DATETIME DEFAULT NOW(),
 
   PRIMARY KEY(user_fk, role_fk)
 ) ENGINE = InnoDB;

@@ -69,6 +69,7 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
 
         val attrA = findAttribute("a")
         assertEquals("a", attrA.name)
+        assertEquals(TENANT_ID, attrA.tenant.id)
         assertEquals(AttributeType.DECIMAL, attrA.type)
         assertTrue(attrA.active)
         assertNull(attrA.choices)
@@ -77,6 +78,7 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
 
         val attrB = findAttribute("b")
         assertEquals("b", attrB.name)
+        assertEquals(TENANT_ID, attrB.tenant.id)
         assertEquals(AttributeType.TEXT, attrB.type)
         assertFalse(attrB.active)
         assertEquals("P1\nP2\nP3\nP4", attrB.choices)
@@ -85,6 +87,7 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
 
         val attrC = findAttribute("c")
         assertEquals("c", attrC.name)
+        assertEquals(TENANT_ID, attrC.tenant.id)
         assertEquals(AttributeType.FILE, attrC.type)
         assertFalse(attrC.active)
         assertNull(attrC.choices)
@@ -93,6 +96,7 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
 
         val attrNew = findAttribute("new")
         assertEquals("new", attrNew.name)
+        assertEquals(TENANT_ID, attrNew.tenant.id)
         assertEquals(AttributeType.IMAGE, attrNew.type)
         assertTrue(attrNew.active)
         assertNull(attrNew.choices)

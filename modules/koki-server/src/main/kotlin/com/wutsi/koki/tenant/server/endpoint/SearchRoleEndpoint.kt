@@ -16,12 +16,12 @@ class SearchRoleEndpoint(
     private val mapper: RoleMapper,
 ) {
     @GetMapping("/v1/roles")
-    fun get(
+    fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false) name: List<String> = emptyList()
     ): SearchRoleResponse =
         SearchRoleResponse(
-            roles = service.search(tenantId, name)
+            roles = service.search(name, tenantId)
                 .map { attr -> mapper.toRole(attr) }
         )
 }

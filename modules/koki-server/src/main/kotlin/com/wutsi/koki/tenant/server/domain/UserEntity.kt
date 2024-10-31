@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import java.util.Date
+import kotlin.collections.mutableListOf
 
 @Entity
 @Table(name = "T_USER")
@@ -23,12 +24,13 @@ data class UserEntity(
     @JoinColumn(name = "tenant_fk")
     val tenant: TenantEntity = TenantEntity(),
 
-    val email: String = "",
+    var email: String = "",
     val password: String = "",
-    val status: UserStatus = UserStatus.ACTIVE,
-    val displayName: String = "",
+    val salt: String = "",
+    var status: UserStatus = UserStatus.ACTIVE,
+    var displayName: String = "",
     val createdAt: Date = Date(),
-    val modifiedAt: Date = Date(),
+    var modifiedAt: Date = Date(),
 
     @ManyToMany
     @JoinTable(
@@ -36,5 +38,5 @@ data class UserEntity(
         joinColumns = arrayOf(JoinColumn(name = "user_fk")),
         inverseJoinColumns = arrayOf(JoinColumn(name = "role_fk")),
     )
-    val roles: List<RoleEntity> = emptyList(),
+    val roles: MutableList<RoleEntity> = mutableListOf(),
 )
