@@ -14,4 +14,5 @@ object ErrorCode {
     val TENANT_MISSING_FROM_HEADER: String = "$PREFIX:tenant:missing-from-header"
 
     val USER_NOT_FOUND: String = "$PREFIX:user:not-found"
+    val USER_DUPLICATE_EMAIL: String = "$PREFIX:user:duplicate-email"
 }
