@@ -1,27 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
-    <activeProfiles>
-        <activeProfile>github</activeProfile>
-    </activeProfiles>
-    <profiles>
-        <profile>
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2</url>
+        </repository>
+        <repository>
+            <id>koki</id>
+            <url>https://maven.pkg.github.com/wutsi/koki-mono</url>
+        </repository>
+        <repository>
             <id>github</id>
-            <repositories>
-                <repository>
-                    <id>central</id>
-                    <url>https://repo1.maven.org/maven2</url>
-                </repository>
-                <repository>
-                    <id>koki</id>
-                    <url>https://maven.pkg.github.com/wutsi/koki-mono</url>
-                </repository>
-                <repository>
-                    <id>github</id>
-                    <url>https://maven.pkg.github.com/wutsi/wutsi-mono</url>
-                </repository>
-            </repositories>
-        </profile>
-    </profiles>
+            <url>https://maven.pkg.github.com/wutsi/wutsi-mono</url>
+        </repository>
+    </repositories>
     <servers>
         <server>
             <id>koki</id>
