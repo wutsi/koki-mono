@@ -4,6 +4,7 @@ on:
     pull_request:
         paths:
             - 'pom.xml'
+            - 'settings.xml'
             - '.github/workflows/_pr.yml'
 
 jobs:

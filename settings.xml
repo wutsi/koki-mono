@@ -34,5 +34,4 @@
             <password>${GITHUB_TOKEN}</password>
         </server>
     </servers>
-
 </settings>
