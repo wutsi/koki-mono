@@ -1,6 +1,7 @@
 package com.wutsi.koki.error.endpoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.koki.common.logger.KVLogger
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
@@ -33,11 +34,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 
 @RestControllerAdvice
-class ControllerErrorHandler(private val objectMapper: ObjectMapper) {
-//    companion object{
-//        private val LOGGER = LoggerFactory.getLogger(RestControllerErrorHandler::class.java)
-//    }
-
+class ControllerErrorHandler(
+    private val objectMapper: ObjectMapper,
+    private val logger: KVLogger
+) {
     @ExceptionHandler(FeignException::class)
     fun onFeignException(request: HttpServletRequest, ex: FeignException): ResponseEntity<ErrorResponse> {
         try {
@@ -249,18 +249,18 @@ class ControllerErrorHandler(private val objectMapper: ObjectMapper) {
     }
 
     private fun log(error: Error, e: Throwable) {
-//        logger.add("error_code", error.code)
-//        logger.add("error_message", error.message)
-//        logger.add("error_downstream_code", error.downstreamCode)
-//        logger.add("error_downstream_message", error.downstreamMessage)
-//        logger.add("error_parameter_name", error.parameter?.name)
-//        logger.add("error_parameter_value", error.parameter?.value)
-//        logger.add("error_parameter_type", error.parameter?.type)
-//        error.data?.forEach {
-//            logger.add("error_data_${it.key}", it.value)
-//        }
-//
-//        logger.setException(e)
+        logger.add("error_code", error.code)
+        logger.add("error_message", error.message)
+        logger.add("error_downstream_code", error.downstreamCode)
+        logger.add("error_downstream_message", error.downstreamMessage)
+        logger.add("error_parameter_name", error.parameter?.name)
+        logger.add("error_parameter_value", error.parameter?.value)
+        logger.add("error_parameter_type", error.parameter?.type)
+        error.data?.forEach {
+            logger.add("error_data_${it.key}", it.value)
+        }
+
+        logger.setException(e)
     }
 
     private fun status(e: Throwable): HttpStatus {
