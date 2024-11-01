@@ -80,7 +80,5 @@ CREATE TABLE T_USER_ROLE(
   user_fk       BIGINT NOT NULL REFERENCES T_USER(id),
   role_fk       BIGINT NOT NULL REFERENCES T_ROLE(id),
 
-  created_at    DATETIME DEFAULT NOW(),
-
   PRIMARY KEY(user_fk, role_fk)
 ) ENGINE = InnoDB;

@@ -19,11 +19,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
 @EntityScan(
     basePackages = [
         "com.wutsi.koki.tenant.server.domain",
+        "com.wutsi.koki.workflow.server.domain",
     ],
 )
 @EnableJpaRepositories(
     basePackages = [
         "com.wutsi.koki.tenant.server.dao",
+        "com.wutsi.koki.workflow.server.dao",
     ],
 )
 class Application
