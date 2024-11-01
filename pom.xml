@@ -78,6 +78,7 @@
         <epub4j.version>4.2.1</epub4j.version>
         <feign.version>13.4</feign.version>
         <flyway.version>10.18.0</flyway.version>
+        <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
         <greenmail.version>2.0.1</greenmail.version>
         <hibernate-types-60.version>2.21.1</hibernate-types-60.version>
         <hikari-cp.version>6.0.0</hikari-cp.version>
@@ -126,10 +127,7 @@
         <ua-java.version>1.6.1</ua-java.version>
         <xmemcached.version>2.4.8</xmemcached.version>
 
-        <wutsi-platform-core.version>3.0.31</wutsi-platform-core.version>
-        <wutsi-platform-payment.version>3.0.24</wutsi-platform-payment.version>
-
-        <wutsi-dto.version>0.0.8</wutsi-dto.version>
+        <wutsi-dto.version>0.0.9-SNAPSHOT</wutsi-dto.version>
     </properties>
 
 
@@ -183,11 +181,6 @@
             <artifactId>kotlin-test</artifactId>
             <version>${kotlin.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib-jdk8</artifactId>
-            <version>${kotlin.version}</version>
         </dependency>
     </dependencies>
 

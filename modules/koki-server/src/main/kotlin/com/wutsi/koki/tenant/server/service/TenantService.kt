@@ -1,10 +1,10 @@
 package com.wutsi.koki.tenant.server.service
 
-import com.wutsi.koki.common.dto.ErrorCode
+import com.wutsi.koki.error.dto.Error
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.tenant.server.dao.TenantRepository
 import com.wutsi.koki.tenant.server.domain.TenantEntity
-import com.wutsi.platform.core.error.Error
-import com.wutsi.platform.core.error.exception.NotFoundException
 import org.springframework.stereotype.Service
 
 @Service

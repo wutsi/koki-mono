@@ -1,11 +1,11 @@
 package com.wutsi.koki.tenant.server.service
 
-import com.wutsi.koki.common.dto.ErrorCode
+import com.wutsi.koki.error.dto.Error
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.Parameter
+import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.tenant.server.dao.AttributeRepository
 import com.wutsi.koki.tenant.server.domain.AttributeEntity
-import com.wutsi.platform.core.error.Error
-import com.wutsi.platform.core.error.Parameter
-import com.wutsi.platform.core.error.exception.NotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.Date

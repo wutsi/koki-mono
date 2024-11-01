@@ -1,9 +1,9 @@
 package com.wutsi.koki.common.service
 
-import com.wutsi.koki.common.dto.ErrorCode
 import com.wutsi.koki.common.dto.HttpHeader
-import com.wutsi.platform.core.error.Error
-import com.wutsi.platform.core.error.exception.BadRequestException
+import com.wutsi.koki.error.dto.Error
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.BadRequestException
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.stereotype.Service
 

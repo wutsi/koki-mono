@@ -26,7 +26,7 @@ spring:
         hibernate:
             ddl-auto: none
             naming:
-                physical-strategy: com.wutsi.platform.core.util.CustomPhysicalNamingStrategy
+                physical-strategy: com.wutsi.koki.common.util.CustomPhysicalNamingStrategy
         properties:
             hibernate:
                 dialect: org.hibernate.dialect.MySQLDialect
@@ -50,6 +50,13 @@ spring:
             max-file-size: 10240KB
             max-request-size: 10240KB
 
+server:
+    port: 8080
+    compression:
+        enabled: true
+        mime-types: application/json,application/xml,text/html,text/xml,text/plain
+        min-response-size: 512
+
 springdoc:
     packages-to-scan: com.wutsi.koki.tenant.server.endpoint
     show-actuator: true
@@ -57,13 +64,28 @@ springdoc:
         path: /api.html
         operations-sorter: alpha
         tags-sorter: alpha
+    group-configs:
+        -   group: attributes
+            display-name: Attribute API
+            paths-to-match: /v1/attributes, /v1/attributes/*
 
-server:
-    port: 8080
-    compression:
-        enabled: true
-        mime-types: application/json,application/xml,text/html,text/xml,text/plain
-        min-response-size: 512
+        -   group: configurations
+            display-name: Configuration API
+            paths-to-match: /v1/configurations, /v1/configurations/*
+
+        -   group: tenant
+            display-name: Tenant API
+            paths-to-match: /v1/tenants, /v1/tenants/*
+
+        -   group: roles
+            display-name: Role API
+            paths-to-match: /v1/roles, /v1/roles/*
+
+        -   group: users
+            display-name: User API
+            paths-to-match: /v1/users, /v1/users/*, /v1/users/**
+
+
 
 management:
     endpoint:

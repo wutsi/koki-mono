@@ -1,12 +1,11 @@
-package com.wutsi.koki.tenant.server.endpoint
+package com.wutsi.koki.common.service
 
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.common.dto.ErrorCode
 import com.wutsi.koki.common.dto.HttpHeader
-import com.wutsi.koki.common.service.TenantIdProvider
-import com.wutsi.platform.core.error.exception.BadRequestException
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.BadRequestException
 import jakarta.servlet.http.HttpServletRequest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

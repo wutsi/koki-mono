@@ -1,15 +1,15 @@
 package com.wutsi.koki.tenant.server.service
 
-import com.wutsi.koki.common.dto.ErrorCode
+import com.wutsi.koki.error.dto.Error
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.ConflictException
+import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.server.dao.UserRepository
 import com.wutsi.koki.tenant.server.domain.RoleEntity
 import com.wutsi.koki.tenant.server.domain.UserEntity
-import com.wutsi.platform.core.error.Error
-import com.wutsi.platform.core.error.exception.ConflictException
-import com.wutsi.platform.core.error.exception.NotFoundException
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort

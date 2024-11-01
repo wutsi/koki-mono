@@ -1,8 +1,8 @@
 package com.wutsi.koki.tenant.server.endpoint
 
-import com.wutsi.koki.common.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
-import com.wutsi.platform.core.error.ErrorResponse
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus

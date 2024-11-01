@@ -1,10 +1,10 @@
 package com.wutsi.koki.tenant.server.endpoint
 
-import com.wutsi.koki.common.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.server.dao.UserRepository
-import com.wutsi.platform.core.error.ErrorResponse
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
