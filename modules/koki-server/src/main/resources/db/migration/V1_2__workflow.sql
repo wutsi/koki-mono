@@ -1,5 +1,5 @@
 CREATE TABLE T_WORKFLOW(
-  id                      BIGINT NOT NULL,
+  id                      BIGINT NOT NULL AUTO_INCREMENT,
 
   tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
 
@@ -13,7 +13,7 @@ CREATE TABLE T_WORKFLOW(
 ) ENGINE = InnoDB;
 
 CREATE TABLE T_ACTIVITY(
-  id                      BIGINT NOT NULL,
+  id                      BIGINT NOT NULL AUTO_INCREMENT,
 
   workflow_fk             BIGINT NOT NULL REFERENCES T_WORKFLOW(id),
 
@@ -31,9 +31,9 @@ CREATE TABLE T_ACTIVITY(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
-CREATE TABLE T_ACTIVITY_PRECEDENT(
+CREATE TABLE T_ACTIVITY_PREDECESSOR(
     activity_fk         BIGINT NOT NULL REFERENCES T_ACTIVITY(id),
-    precedent_fk        BIGINT NOT NULL REFERENCES T_ACTIVITY(id),
+    predecessor_fk      BIGINT NOT NULL REFERENCES T_ACTIVITY(id),
 
-    PRIMARY KEY(activity_fk, precedent_fk)
+    PRIMARY KEY(activity_fk, predecessor_fk)
 ) ENGINE = InnoDB;

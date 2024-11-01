@@ -22,7 +22,7 @@ spring:
     flyway:
         clean-disabled: false
     jpa:
-        show-sql: true
+        show-sql: false
         hibernate:
             ddl-auto: none
             naming:
@@ -32,15 +32,15 @@ spring:
                 dialect: org.hibernate.dialect.MySQLDialect
 
     jackson:
-        read:
-            ALLOW_UNESCAPED_CONTROL_CHARS: true
+        default-property-inclusion: non_null
         deserialization:
             FAIL_ON_UNKNOWN_PROPERTIES: false
             ACCEPT_EMPTY_STRING_AS_NULL_OBJECT: true
         mapper:
             ACCEPT_CASE_INSENSITIVE_ENUMS: true
             ACCEPT_CASE_INSENSITIVE_PROPERTIES: true
-        default-property-inclusion: non_null
+        parser:
+            INCLUDE_SOURCE_IN_LOCATION: true
 
     mvc:
         pathmatch:
@@ -77,13 +77,17 @@ springdoc:
             display-name: Tenant API
             paths-to-match: /v1/tenants, /v1/tenants/*
 
-        -   group: roles
+        -   group: role
             display-name: Role API
             paths-to-match: /v1/roles, /v1/roles/*
 
-        -   group: users
+        -   group: user
             display-name: User API
             paths-to-match: /v1/users, /v1/users/*, /v1/users/**
+
+        -   group: workflow
+            display-name: Workflow API
+            paths-to-match: /v1/workflows, /v1/workflows/*, /v1/workflows/**
 
 
 

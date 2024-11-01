@@ -25,11 +25,11 @@ data class ActivityEntity(
 
     @ManyToMany
     @JoinTable(
-        name = "T_ACTIVITY_PRECEDENT",
+        name = "T_ACTIVITY_PREDECESSOR",
         joinColumns = arrayOf(JoinColumn(name = "activity_fk")),
-        inverseJoinColumns = arrayOf(JoinColumn(name = "precedent_fk")),
+        inverseJoinColumns = arrayOf(JoinColumn(name = "predecessor_fk")),
     )
-    val precedents: MutableList<ActivityEntity> = mutableListOf(),
+    val predecessors: MutableList<ActivityEntity> = mutableListOf(),
 
     val code: String = "",
     var name: String = "",

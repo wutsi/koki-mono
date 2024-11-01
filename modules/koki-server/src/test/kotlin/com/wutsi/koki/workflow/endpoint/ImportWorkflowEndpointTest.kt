@@ -1,156 +1,172 @@
 package com.wutsi.koki.tenant.server.endpoint
 
-import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.tenant.dto.AttributeType
-import com.wutsi.koki.tenant.server.dao.AttributeRepository
-import com.wutsi.koki.tenant.server.domain.AttributeEntity
+import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.workflow.dto.ActivityData
+import com.wutsi.koki.workflow.dto.ActivityType
+import com.wutsi.koki.workflow.dto.ImportWorkflowRequest
+import com.wutsi.koki.workflow.dto.ImportWorkflowResponse
+import com.wutsi.koki.workflow.dto.WorkflowData
+import com.wutsi.koki.workflow.server.dao.ActivityRepository
+import com.wutsi.koki.workflow.server.dao.WorkflowRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.ContentDisposition
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
-import org.springframework.http.MediaType
+import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
-import org.springframework.util.LinkedMultiValueMap
-import org.springframework.util.MultiValueMap
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/ImportAttributeCSVEndpoint.sql"])
-class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/workflow/ImportWorkflowEndpoint.sql"])
+class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
     @Autowired
-    private lateinit var dao: AttributeRepository
+    private lateinit var workflowDao: WorkflowRepository
 
-    private fun upload(body: String): ImportResponse {
-        val headers = HttpHeaders()
-        headers.contentType = MediaType.MULTIPART_FORM_DATA
-
-        val fileMap = LinkedMultiValueMap<String, String>()
-        val contentDisposition = ContentDisposition
-            .builder("form-data")
-            .name("file")
-            .filename("test.csv")
-            .build()
-        fileMap.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString())
-        val fileEntity = HttpEntity(body.toByteArray(), fileMap)
-
-        val body = LinkedMultiValueMap<String, Any>()
-        body.add("file", fileEntity)
-
-        val requestEntity = HttpEntity<MultiValueMap<String, Any>>(body, headers)
-        return rest.exchange(
-            "/v1/attributes/csv",
-            HttpMethod.POST,
-            requestEntity,
-            ImportResponse::class.java,
-        ).body!!
-    }
+    @Autowired
+    private lateinit var activityDao: ActivityRepository
 
     @Test
-    fun import() {
-        val response = upload(
-            """
-                "name","type","active","choices","label","description"
-                "a","DECIMAL","Yes",,,
-                "b","TEXT","No","P1|P2|P3|P4","Priority","Priority of the ticket"
-                "c","FILE",,,,
-                "new","image","yes","","",""
-            """.trimIndent()
+    fun create() {
+        val request = ImportWorkflowRequest(
+            workflow = WorkflowData(
+                name = "new",
+                description = "This is a new workflow",
+                activities = listOf(
+                    ActivityData(code = "START", name = "start", type = ActivityType.START),
+                    ActivityData(
+                        code = "INVOICE",
+                        name = "Create Invoice",
+                        description = "SAGE create an invoice",
+                        type = ActivityType.SERVICE,
+                        predecessors = listOf("START"),
+                        tags = mapOf("foo" to "bar", "a" to "b"),
+                        requiresApproval = true
+                    ),
+                    ActivityData(
+                        code = "STOP",
+                        name = "Stop",
+                        type = ActivityType.STOP,
+                        predecessors = listOf("INVOICE")
+                    ),
+                )
+            )
         )
+        val result = rest.postForEntity("/v1/workflows", request, ImportWorkflowResponse::class.java)
 
-        assertEquals(3, response.updated)
-        assertEquals(1, response.added)
-        assertEquals(0, response.errors)
-        assertTrue(response.errorMessages.isEmpty())
+        assertEquals(HttpStatus.OK, result.statusCode)
 
-        val attrA = findAttribute("a")
-        assertEquals("a", attrA.name)
-        assertEquals(TENANT_ID, attrA.tenant.id)
-        assertEquals(AttributeType.DECIMAL, attrA.type)
-        assertTrue(attrA.active)
-        assertNull(attrA.choices)
-        assertNull(attrA.label)
-        assertNull(attrA.description)
+        val workflowId = result.body!!.workflowId
 
-        val attrB = findAttribute("b")
-        assertEquals("b", attrB.name)
-        assertEquals(TENANT_ID, attrB.tenant.id)
-        assertEquals(AttributeType.TEXT, attrB.type)
-        assertFalse(attrB.active)
-        assertEquals("P1\nP2\nP3\nP4", attrB.choices)
-        assertEquals("Priority", attrB.label)
-        assertEquals("Priority of the ticket", attrB.description)
+        val workflow = workflowDao.findById(workflowId).get()
+        assertEquals(request.workflow.name, workflow.name)
+        assertEquals(request.workflow.description, workflow.description)
+        assertTrue(workflow.active)
 
-        val attrC = findAttribute("c")
-        assertEquals("c", attrC.name)
-        assertEquals(TENANT_ID, attrC.tenant.id)
-        assertEquals(AttributeType.FILE, attrC.type)
-        assertFalse(attrC.active)
-        assertNull(attrC.choices)
-        assertNull(attrC.label)
-        assertNull(attrC.description)
+        val activities = activityDao.findByWorkflow(workflow)
+        assertEquals(3, activities.size)
 
-        val attrNew = findAttribute("new")
-        assertEquals("new", attrNew.name)
-        assertEquals(TENANT_ID, attrNew.tenant.id)
-        assertEquals(AttributeType.IMAGE, attrNew.type)
-        assertTrue(attrNew.active)
-        assertNull(attrNew.choices)
-        assertNull(attrNew.label)
-        assertNull(attrNew.description)
+        val aStart = activityDao.findByCodeIgnoreCaseAndWorkflow("start", workflow)
+        assertEquals("START", aStart?.code)
+        assertEquals(request.workflow.activities[0].name, aStart?.name)
+        assertEquals(request.workflow.activities[0].type, aStart?.type)
+        assertEquals(true, aStart?.active)
+
+        val aInvoice = activityDao.findByCodeIgnoreCaseAndWorkflow("INVOICE", workflow)
+        assertEquals("INVOICE", aInvoice?.code)
+        assertEquals(request.workflow.activities[1].name, aInvoice?.name)
+        assertEquals(request.workflow.activities[1].description, aInvoice?.description)
+        assertEquals(request.workflow.activities[1].type, aInvoice?.type)
+        assertEquals("foo=bar\na=b", aInvoice?.tags)
+        assertEquals(true, aInvoice?.active)
+        assertEquals(request.workflow.activities[1].requiresApproval, aInvoice?.requiresApproval)
+
+        val aEnd = activityDao.findByCodeIgnoreCaseAndWorkflow("stop", workflow)
+        assertEquals("STOP", aEnd?.code)
+        assertEquals(request.workflow.activities[2].name, aEnd?.name)
+        assertEquals(request.workflow.activities[2].type, aEnd?.type)
+        assertEquals(true, aEnd?.active)
     }
 
     @Test
-    fun noName() {
-        val response = upload(
-            """
-                "name","type","active","choices","label","description"
-                "","TEXT","No","P1|P2|P3|P4","Priority","Priority of the ticket"
-            """.trimIndent()
+    fun update() {
+        val request = ImportWorkflowRequest(
+            workflow = WorkflowData(
+                name = "new",
+                description = "This is a new workflow",
+                activities = listOf(
+                    ActivityData(code = "START", name = "start", type = ActivityType.START),
+                    ActivityData(
+                        code = "INVOICE",
+                        name = "Create Invoice",
+                        description = "SAGE create an invoice",
+                        type = ActivityType.SERVICE,
+                        predecessors = listOf("START"),
+                        tags = mapOf("foo" to "bar", "a" to "b"),
+                        requiresApproval = true
+                    ),
+                    ActivityData(
+                        code = "STOP",
+                        name = "Stop",
+                        type = ActivityType.STOP,
+                        predecessors = listOf("INVOICE")
+                    ),
+                )
+            )
         )
+        val result = rest.postForEntity("/v1/workflows/100", request, ImportWorkflowResponse::class.java)
 
-        assertEquals(0, response.updated)
-        assertEquals(0, response.added)
-        assertEquals(1, response.errors)
-        assertFalse(response.errorMessages.isEmpty())
-        assertEquals(ErrorCode.ATTRIBUTE_NAME_MISSING, response.errorMessages[0].code)
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val workflowId = result.body!!.workflowId
+
+        val workflow = workflowDao.findById(workflowId).get()
+        assertEquals(request.workflow.name, workflow.name)
+        assertEquals(request.workflow.description, workflow.description)
+        assertTrue(workflow.active)
+
+        val activities = activityDao.findByWorkflow(workflow)
+        assertEquals(4, activities.size)
+
+        val aStart = activityDao.findByCodeIgnoreCaseAndWorkflow("start", workflow)
+        assertEquals("START", aStart?.code)
+        assertEquals(110L, aStart?.id)
+        assertEquals(request.workflow.activities[0].name, aStart?.name)
+        assertEquals(request.workflow.activities[0].type, aStart?.type)
+        assertEquals(true, aStart?.active)
+
+        val aInvoice = activityDao.findByCodeIgnoreCaseAndWorkflow("INVOICE", workflow)
+        assertEquals("INVOICE", aInvoice?.code)
+        assertEquals(request.workflow.activities[1].name, aInvoice?.name)
+        assertEquals(request.workflow.activities[1].description, aInvoice?.description)
+        assertEquals(request.workflow.activities[1].type, aInvoice?.type)
+        assertEquals("foo=bar\na=b", aInvoice?.tags)
+        assertEquals(true, aInvoice?.active)
+        assertEquals(request.workflow.activities[1].requiresApproval, aInvoice?.requiresApproval)
+
+        val aEnd = activityDao.findByCodeIgnoreCaseAndWorkflow("stop", workflow)
+        assertEquals(112L, aEnd?.id)
+        assertEquals("STOP", aEnd?.code)
+        assertEquals(request.workflow.activities[2].name, aEnd?.name)
+        assertEquals(request.workflow.activities[2].type, aEnd?.type)
+        assertEquals(true, aEnd?.active)
+
+        val aDeactivated = activityDao.findById(111L).get()
+        assertEquals(false, aDeactivated.active)
+        assertEquals(workflow.id, aDeactivated.workflow.id)
     }
 
     @Test
-    fun noType() {
-        checkTypeInvalid("")
+    fun `update workflow not found`() {
+        val result = rest.postForEntity("/v1/workflows/999", ImportWorkflowRequest(), ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
+        assertEquals(ErrorCode.WORKFLOW_NOT_FOUND, result.body?.error?.code)
     }
 
     @Test
-    fun invalidType() {
-        checkTypeInvalid("\"xx\"")
-    }
+    fun `update workflow of another tenant`() {
+        val result = rest.postForEntity("/v1/workflows/200", ImportWorkflowRequest(), ErrorResponse::class.java)
 
-    @Test
-    fun unknownType() {
-        checkTypeInvalid("\"UNKNOWN\"")
-    }
-
-    private fun checkTypeInvalid(type: String) {
-        val response = upload(
-            """
-                "name","type","active","choices","label","description"
-                "a",$type,"No","P1|P2|P3|P4","Priority","Priority of the ticket"
-            """.trimIndent()
-        )
-
-        assertEquals(0, response.updated)
-        assertEquals(0, response.added)
-        assertEquals(1, response.errors)
-        assertFalse(response.errorMessages.isEmpty())
-        assertEquals(ErrorCode.ATTRIBUTE_TYPE_INVALID, response.errorMessages[0].code)
-    }
-
-    private fun findAttribute(name: String): AttributeEntity {
-        return dao.findByTenantIdAndNameIn(getTenantId(), listOf(name)).first()
+        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
+        assertEquals(ErrorCode.WORKFLOW_NOT_FOUND, result.body?.error?.code)
     }
 }

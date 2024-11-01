@@ -1,50 +1,28 @@
 package com.wutsi.koki.workflow.server.endpoint
 
-import com.wutsi.koki.tenant.server.service.TenantService
-import com.wutsi.koki.workflow.dto.ImportWorkflowRequest
-import com.wutsi.koki.workflow.dto.ImportWorkflowResponse
-import com.wutsi.koki.workflow.server.domain.WorkflowEntity
-import com.wutsi.koki.workflow.server.io.WorkflowImporter
+import com.wutsi.koki.workflow.dto.GetWorkflowResponse
+import com.wutsi.koki.workflow.server.mapper.WorkflowMapper
 import com.wutsi.koki.workflow.server.service.WorkflowService
-import jakarta.validation.Valid
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping
-class ImportWorkflowEndpoint(
-    private val importer: WorkflowImporter,
+class GetWorkflowEndpoint(
     private val service: WorkflowService,
-    private val tenantService: TenantService,
+    private val mapper: WorkflowMapper,
 ) {
-    @PostMapping("/v1/workflows")
+    @GetMapping("/v1/workflows/{id}")
     fun create(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-        @RequestBody @Valid request: ImportWorkflowRequest
-    ): ImportWorkflowResponse {
-        val workflow = WorkflowEntity(
-            tenant = tenantService.get(tenantId)
-        )
-        importer.import(workflow, request.workflow)
-        return ImportWorkflowResponse(
-            workflowId = workflow.id ?: -1
-        )
-    }
-
-    @PostMapping("/v1/workflows/{id}")
-    fun update(
-        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
-        @RequestBody @Valid request: ImportWorkflowRequest
-    ): ImportWorkflowResponse {
+    ): GetWorkflowResponse {
         val workflow = service.get(id, tenantId)
-        importer.import(workflow, request.workflow)
-        return ImportWorkflowResponse(
-            workflowId = workflow.id ?: -1
+        return GetWorkflowResponse(
+            workflow = mapper.toWorkflow(workflow)
         )
     }
 }

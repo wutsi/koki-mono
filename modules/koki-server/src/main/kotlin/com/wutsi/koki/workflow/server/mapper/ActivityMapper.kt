@@ -25,13 +25,21 @@ class ActivityMapper {
             requiresApproval = entity.requiresApproval,
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
-            tags = entity.tags?.let { tags -> toMap(tags) } ?: emptyMap()
+            tags = entity.tags?.let { tags -> toMap(tags) } ?: emptyMap(),
+            predecessors = entity.predecessors.map { pred -> pred.code },
         )
     }
 
     private fun toMap(tags: String): Map<String, String> {
         try {
-            return Properties().load(StringReader(tags)) as Map<String, String>
+            val map = mutableMapOf<String, String>()
+            val properties: Properties = Properties()
+            properties.load(StringReader(tags))
+            properties.keys().toList().map { key ->
+                val name = key.toString()
+                map[name] = properties.getProperty(name)
+            }
+            return map
         } catch (ex: Exception) {
             LOGGER.warn("Unable to convert to Properties: $tags", ex)
             return emptyMap()

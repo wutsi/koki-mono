@@ -1,8 +1,8 @@
 package com.wutsi.koki.workflow.server.io
 
 import com.wutsi.koki.error.exception.NotFoundException
-import com.wutsi.koki.workflow.dto.JSONActivity
-import com.wutsi.koki.workflow.dto.JSONWorkflow
+import com.wutsi.koki.workflow.dto.ActivityData
+import com.wutsi.koki.workflow.dto.WorkflowData
 import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowEntity
 import com.wutsi.koki.workflow.server.service.ActivityService
@@ -11,79 +11,82 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
-class WorkflowJSONImporter(
+class WorkflowImporter(
     private val workflowService: WorkflowService,
     private val activityService: ActivityService,
 ) {
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(WorkflowJSONImporter::class.java)
+        private val LOGGER = LoggerFactory.getLogger(WorkflowImporter::class.java)
     }
 
-    fun import(workflow: WorkflowEntity, json: JSONWorkflow): WorkflowEntity {
-        val w = saveWorkflow(workflow, json)
-        saveActivities(workflow, json)
-        linkPrecedents(workflow, json)
-        deactivate(workflow, json)
+    fun import(workflow: WorkflowEntity, data: WorkflowData): WorkflowEntity {
+        val w = saveWorkflow(workflow, data)
+        saveActivities(w, data)
+        linkPredecessors(w, data)
+        deactivate(w, data)
         return w
     }
 
-    private fun saveActivities(workflow: WorkflowEntity, json: JSONWorkflow): List<ActivityEntity> {
-        return json.activities.map { activity -> saveActivity(workflow, activity) }
+    private fun saveActivities(workflow: WorkflowEntity, data: WorkflowData): List<ActivityEntity> {
+        return data.activities.map { activity -> saveActivity(workflow, activity) }
     }
 
-    private fun saveActivity(workflow: WorkflowEntity, json: JSONActivity): ActivityEntity {
+    private fun saveActivity(workflow: WorkflowEntity, data: ActivityData): ActivityEntity {
         try {
-            LOGGER.info(">>> Updating Activity#${json.code}")
+            val activity = activityService.getByCode(data.code, workflow)
 
-            val activity = activityService.getByCode(json.code, workflow)
-            activity.type = json.type
-            activity.name = json.name
-            activity.description = json.description
+            LOGGER.info(">>> Updating Activity#${data.code}")
+            activity.type = data.type
+            activity.name = data.name
+            activity.description = data.description
             activity.active = true
-            activity.requiresApproval = json.requiresApproval
-            activity.tags = toString(json.tags)
+            activity.requiresApproval = data.requiresApproval
+            activity.tags = toString(data.tags)
             return activityService.save(activity)
         } catch (ex: NotFoundException) {
-            LOGGER.info(">>> Adding Activity#${json.code}")
+            LOGGER.info(">>> Adding Activity#${data.code}")
 
             return activityService.save(
                 ActivityEntity(
-                    type = json.type,
-                    code = json.code.lowercase(),
-                    name = json.name,
-                    description = json.description,
+                    workflow = workflow,
+                    type = data.type,
+                    code = data.code.uppercase(),
+                    name = data.name,
+                    description = data.description,
                     active = true,
-                    requiresApproval = json.requiresApproval,
-                    tags = toString(json.tags)
+                    requiresApproval = data.requiresApproval,
+                    tags = toString(data.tags)
                 )
             )
         }
     }
 
-    private fun linkPrecedents(workflow: WorkflowEntity, json: JSONWorkflow) {
-        json.activities.map { activity -> linkPrecedent(workflow, activity) }
+    private fun linkPredecessors(workflow: WorkflowEntity, data: WorkflowData) {
+        data.activities.map { activity -> linkPredecessors(workflow, activity) }
     }
 
-    private fun linkPrecedent(workflow: WorkflowEntity, json: JSONActivity) {
-        val activity = activityService.getByCode(json.code, workflow)
-        LOGGER.info(">>> Linking Activity#${activity.code} with ${json.precedents}")
+    private fun linkPredecessors(workflow: WorkflowEntity, data: ActivityData) {
+        val activity = activityService.getByCode(data.code, workflow)
+        LOGGER.info(">>> Linking Activity#${activity.code} with ${data.predecessors}")
 
-        activity.precedents.clear()
-        activity.precedents.addAll(activityService.getByCodes(json.precedents, workflow))
+        activity.predecessors.clear()
+        activity.predecessors.addAll(activityService.getByCodes(data.predecessors, workflow))
+        activityService.save(activity)
     }
 
-    private fun saveWorkflow(workflow: WorkflowEntity, json: JSONWorkflow): WorkflowEntity {
-        workflow.name = json.name
-        workflow.description = json.description
-        workflowService.save(workflow)
+    private fun saveWorkflow(workflow: WorkflowEntity, data: WorkflowData): WorkflowEntity {
+        workflow.name = data.name
+        workflow.description = data.description
+        workflow.active = true
+        return workflowService.save(workflow)
     }
 
-    private fun deactivate(workflow: WorkflowEntity, json: JSONWorkflow) {
-        val codes = json.activities.map { activity -> activity.code.lowercase() }
+    private fun deactivate(workflow: WorkflowEntity, data: WorkflowData) {
+        val codes = data.activities.map { activity -> activity.code.uppercase() }
         val activities = activityService.getByWorkflow(workflow)
 
         activities.forEach { activity ->
-            if (!codes.contains(activity.code.lowercase())) {
+            if (!codes.contains(activity.code.uppercase())) {
                 LOGGER.info(">>> Deactivating Activity#${activity.code}")
 
                 activity.active = false
