@@ -2,7 +2,6 @@ package com.wutsi.koki.workflow.server.io
 
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.workflow.dto.JSONActivity
-import com.wutsi.koki.workflow.dto.ImportJSONWorkflowResponse
 import com.wutsi.koki.workflow.dto.JSONWorkflow
 import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowEntity
@@ -20,12 +19,12 @@ class WorkflowJSONImporter(
         private val LOGGER = LoggerFactory.getLogger(WorkflowJSONImporter::class.java)
     }
 
-    fun import(workflow: WorkflowEntity, json: JSONWorkflow): ImportJSONWorkflowResponse {
-        saveWorkflow(workflow, json)
+    fun import(workflow: WorkflowEntity, json: JSONWorkflow): WorkflowEntity {
+        val w = saveWorkflow(workflow, json)
         saveActivities(workflow, json)
         linkPrecedents(workflow, json)
         deactivate(workflow, json)
-        return ImportJSONWorkflowResponse()
+        return w
     }
 
     private fun saveActivities(workflow: WorkflowEntity, json: JSONWorkflow): List<ActivityEntity> {
@@ -73,7 +72,7 @@ class WorkflowJSONImporter(
         activity.precedents.addAll(activityService.getByCodes(json.precedents, workflow))
     }
 
-    private fun saveWorkflow(workflow: WorkflowEntity, json: JSONWorkflow) {
+    private fun saveWorkflow(workflow: WorkflowEntity, json: JSONWorkflow): WorkflowEntity {
         workflow.name = json.name
         workflow.description = json.description
         workflowService.save(workflow)
