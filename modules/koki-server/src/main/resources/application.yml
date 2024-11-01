@@ -58,7 +58,7 @@ server:
         min-response-size: 512
 
 springdoc:
-    packages-to-scan: com.wutsi.koki.tenant.server.endpoint
+    packages-to-scan: com.wutsi.koki
     show-actuator: true
     swagger-ui:
         path: /api.html
