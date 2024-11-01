@@ -24,4 +24,6 @@ object ErrorCode {
 
     val USER_NOT_FOUND: String = "$PREFIX:user:not-found"
     val USER_DUPLICATE_EMAIL: String = "$PREFIX:user:duplicate-email"
+
+    val WORKFLOW_ACTIVITY_NOT_FOUND: String = "$PREFIX:workflow:activity-not-found"
 }

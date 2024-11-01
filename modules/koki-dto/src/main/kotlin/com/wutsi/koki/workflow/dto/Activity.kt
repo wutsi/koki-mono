@@ -4,14 +4,14 @@ import java.util.Date
 
 data class Activity(
     val id: Long = -1,
-    val index: Int = -1,
+    val workflowId: Long = -1,
     val code: String = "",
     val type: ActivityType = ActivityType.UNKNOWN,
-    val title: String = "",
-    val description: String = "",
+    val name: String = "",
+    val description: String? = null,
     val active: Boolean = true,
     val requiresApproval: Boolean = true,
     val createdAt: Date = Date(),
-    val files: List<File> = emptyList(),
-    val tags: List<Tag> = emptyList()
+    val modifiedAt: Date = Date(),
+    val tags: Map<String, String> = emptyMap(),
 )
