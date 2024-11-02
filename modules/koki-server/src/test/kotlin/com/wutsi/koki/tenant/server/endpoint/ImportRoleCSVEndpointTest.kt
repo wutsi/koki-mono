@@ -1,5 +1,6 @@
 package com.wutsi.koki.tenant.server.endpoint
 
+import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.tenant.server.dao.RoleRepository
@@ -105,6 +106,24 @@ class ImportRoleCSVEndpointTest : TenantAwareEndpointTest() {
         assertEquals(1, response.errors)
         assertFalse(response.errorMessages.isEmpty())
         assertEquals(ErrorCode.ROLE_NAME_MISSING, response.errorMessages[0].code)
+    }
+
+    @Test
+    fun `malformed row`() {
+        val response = upload(
+            """
+                "name","active","description"
+                "b11"
+                "a11","Yes",,,
+            """.trimIndent()
+        )
+
+        assertEquals(0, response.updated)
+        assertEquals(1, response.added)
+        assertEquals(1, response.errors)
+
+        assertFalse(response.errorMessages.isEmpty())
+        assertEquals(ErrorCode.IMPORT_ERROR, response.errorMessages[0].code)
     }
 
     private fun findRole(name: String): RoleEntity {

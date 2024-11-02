@@ -1,4 +1,4 @@
-package com.wutsi.koki.workflow.server.io.validation
+package com.wutsi.koki.workflow.server.validation
 
 import com.wutsi.koki.workflow.dto.WorkflowData
 

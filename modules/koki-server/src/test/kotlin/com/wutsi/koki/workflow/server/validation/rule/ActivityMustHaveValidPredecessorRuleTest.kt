@@ -1,16 +1,13 @@
 package com.wutsi.koki.workflow.server.validation.rule
 
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
-import kotlin.test.Test
-import com.wutsi.koki.workflow.dto.WorkflowData
 import com.wutsi.koki.workflow.dto.ActivityData
-import com.wutsi.koki.workflow.server.validation.ValidationError
-import com.wutsi.koki.workflow.server.validation.ValidationRule
+import com.wutsi.koki.workflow.dto.WorkflowData
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
-class InvalidActivityPredecessorRuleTest {
-    private val rule = InvalidActivityPredecessorRule()
+class ActivityMustHaveValidPredecessorRuleTest {
+    private val rule = ActivityMustHaveValidPredecessorRule()
 
     @Test
     fun success() {
@@ -21,7 +18,7 @@ class InvalidActivityPredecessorRuleTest {
                 activities = listOf(
                     ActivityData(name = "start"),
                     ActivityData(name = "invoice", predecessors = listOf("start")),
-                    ActivityData(name = "stop", predecessors = listOf("stop")),
+                    ActivityData(name = "stop", predecessors = listOf("invoice")),
                 )
             )
         )

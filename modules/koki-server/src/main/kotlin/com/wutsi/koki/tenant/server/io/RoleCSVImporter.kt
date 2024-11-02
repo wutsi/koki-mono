@@ -69,6 +69,10 @@ class RoleCSVImporter(
                     errorMessages.add(
                         ImportMessage(row.toString(), ex.error.code, ex.error.message)
                     )
+                } catch (ex: Exception) {
+                    errorMessages.add(
+                        ImportMessage(row.toString(), ErrorCode.IMPORT_ERROR, ex.message)
+                    )
                 }
             }
         }

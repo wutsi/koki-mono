@@ -1,5 +1,6 @@
-package com.wutsi.koki.tenant.server.endpoint
+package com.wutsi.koki.tenant.server.server.endpoint
 
+import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.common.dto.HttpHeader
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
@@ -134,7 +135,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun `update workflow not found`() {
-        val result = rest.postForEntity("/v1/workflows/999", ImportWorkflowRequest(), ErrorResponse::class.java)
+        val result = rest.postForEntity("/v1/workflows/999", request, ErrorResponse::class.java)
 
         assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
         assertEquals(ErrorCode.WORKFLOW_NOT_FOUND, result.body?.error?.code)
@@ -142,7 +143,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun `update workflow of another tenant`() {
-        val result = rest.postForEntity("/v1/workflows/200", ImportWorkflowRequest(), ErrorResponse::class.java)
+        val result = rest.postForEntity("/v1/workflows/200", request, ErrorResponse::class.java)
 
         assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
         assertEquals(ErrorCode.WORKFLOW_NOT_FOUND, result.body?.error?.code)
@@ -150,7 +151,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun `update workflow of non numeric id`() {
-        val result = rest.postForEntity("/v1/workflows/xxx", ImportWorkflowRequest(), ErrorResponse::class.java)
+        val result = rest.postForEntity("/v1/workflows/xxx", request, ErrorResponse::class.java)
 
         assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
         assertEquals(ErrorCode.HTTP_INVALID_PARAMETER, result.body?.error?.code)
@@ -166,5 +167,17 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(ErrorCode.HTTP_MISSING_PARAMETER, result.body?.error?.code)
         assertEquals(HttpHeader.TENANT_ID, result.body?.error?.parameter?.name)
         assertEquals(ParameterType.PARAMETER_TYPE_HEADER, result.body?.error?.parameter?.type)
+    }
+
+    @Test
+    fun `invalid workflow`() {
+        val result = rest.postForEntity(
+            "/v1/workflows",
+            ImportWorkflowRequest(WorkflowData(name = "foo")),
+            ErrorResponse::class.java
+        )
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
+        assertEquals(ErrorCode.WORKFLOW_NOT_VALID, result.body?.error?.code)
     }
 }

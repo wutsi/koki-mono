@@ -1,5 +1,6 @@
 package com.wutsi.koki.tenant.server.endpoint
 
+import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.tenant.dto.AttributeType

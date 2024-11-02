@@ -1,5 +1,6 @@
 package com.wutsi.koki.tenant.server.endpoint
 
+import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.tenant.dto.SearchAttributeResponse
 import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
 import org.junit.jupiter.api.Test

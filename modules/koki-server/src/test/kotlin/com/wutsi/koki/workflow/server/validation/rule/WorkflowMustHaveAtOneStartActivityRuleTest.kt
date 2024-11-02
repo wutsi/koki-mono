@@ -1,14 +1,14 @@
 package com.wutsi.koki.workflow.server.validation.rule
 
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
-import kotlin.test.Test
+import com.wutsi.koki.workflow.dto.ActivityData
 import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.WorkflowData
-import com.wutsi.koki.workflow.dto.ActivityData
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
-class WorkflowMustHaveAtLeastOneStopActivityRuleTest {
-    private val rule = WorkflowMustHaveAtLeastOneStopActivityRule()
+class WorkflowMustHaveAtOneStartActivityRuleTest {
+    private val rule = WorkflowMustHaveOneStartActivityRule()
 
     @Test
     fun success() {
@@ -34,9 +34,9 @@ class WorkflowMustHaveAtLeastOneStopActivityRuleTest {
                 name = "test",
                 description = "This is a new workflow",
                 activities = listOf(
-                    ActivityData(name = "start", type = ActivityType.START),
+                    ActivityData(name = "start", type = ActivityType.SERVICE),
                     ActivityData(name = "invoice", type = ActivityType.MANUAL),
-                    ActivityData(name = "stop", type = ActivityType.SERVICE),
+                    ActivityData(name = "stop", type = ActivityType.STOP),
                 )
             )
         )

@@ -1,14 +1,17 @@
 package com.wutsi.koki.workflow.server.validation.rule
 
+import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.WorkflowData
 import com.wutsi.koki.workflow.server.validation.ValidationError
-import com.wutsi.koki.workflow.server.validation.ValidationRule
 
-class ActivityNameMustHavelLessThan100CharactersRule : AbstractWorkflowRule() {
+class WorkflowMustHaveAtLeastOneStopActivityRule : AbstractWorkflowRule() {
     override fun validate(workflow: WorkflowData): List<ValidationError> {
+        println(">>>> Workflow ${workflow.name}")
         val activities = workflow.activities.filter { activity -> activity.type == ActivityType.STOP }
-        if (activities.isEmpty()){
-            return listOf(createError(workflow))
+        return if (activities.isEmpty()) {
+            listOf(createError(workflow))
+        } else {
+            emptyList()
         }
     }
 }

@@ -22,6 +22,7 @@ open class SecurityConfiguration {
             .csrf { customizer ->
                 customizer.disable()
             }
+            .cors { cors -> cors.disable() }
             .sessionManagement { customizer ->
                 customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }

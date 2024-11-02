@@ -1,4 +1,4 @@
-package com.wutsi.koki.tenant.server.endpoint
+package com.wutsi.koki
 
 import com.wutsi.koki.common.dto.HttpHeader
 import org.junit.jupiter.api.BeforeEach

@@ -1,5 +1,6 @@
-package com.wutsi.koki.tenant.server.endpoint
+package com.wutsi.koki.tenant.server.server.endpoint
 
+import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.workflow.dto.ActivityType
