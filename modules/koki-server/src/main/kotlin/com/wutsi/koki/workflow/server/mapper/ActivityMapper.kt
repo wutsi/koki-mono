@@ -37,7 +37,10 @@ class ActivityMapper {
             properties.load(StringReader(tags))
             properties.keys().toList().map { key ->
                 val name = key.toString()
-                map[name] = properties.getProperty(name)
+                val value = properties.getProperty(name)
+                if (value.isNotEmpty()) {
+                    map[name] = value
+                }
             }
             return map
         } catch (ex: Exception) {
