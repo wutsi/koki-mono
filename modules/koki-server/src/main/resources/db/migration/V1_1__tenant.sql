@@ -35,7 +35,7 @@ CREATE TABLE T_ATTRIBUTE(
 
   tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
 
-  name                    VARCHAR(255) NOT NULL,
+  name                    VARCHAR(100) NOT NULL,
   label                   VARCHAR(100),
   description             TEXT,
   choices                 TEXT,

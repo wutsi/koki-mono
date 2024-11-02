@@ -32,6 +32,10 @@ open class RoleService(
         return role
     }
 
+    fun getAll(id: List<Long>, tenantId: Long): List<RoleEntity> {
+        return dao.findByIdInAndTenantId(id, tenantId)
+    }
+
     fun getByName(name: String, tenantId: Long): RoleEntity {
         val roles = search(listOf(name), tenantId)
         if (roles.isEmpty()) {

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/workflow/ImportWorkflowEndpoint.sql"])
@@ -24,32 +25,32 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var activityDao: ActivityRepository
 
-    @Test
-    fun create() {
-        val request = ImportWorkflowRequest(
-            workflow = WorkflowData(
-                name = "new",
-                description = "This is a new workflow",
-                activities = listOf(
-                    ActivityData(code = "START", name = "start", type = ActivityType.START),
-                    ActivityData(
-                        code = "INVOICE",
-                        name = "Create Invoice",
-                        description = "SAGE create an invoice",
-                        type = ActivityType.SERVICE,
-                        predecessors = listOf("START"),
-                        tags = mapOf("foo" to "bar", "a" to "b"),
-                        requiresApproval = true
-                    ),
-                    ActivityData(
-                        code = "STOP",
-                        name = "Stop",
-                        type = ActivityType.STOP,
-                        predecessors = listOf("INVOICE")
-                    ),
-                )
+    private val request = ImportWorkflowRequest(
+        workflow = WorkflowData(
+            name = "new",
+            description = "This is a new workflow",
+            activities = listOf(
+                ActivityData(name = "START", type = ActivityType.START),
+                ActivityData(
+                    name = "INVOICE",
+                    description = "SAGE create an invoice",
+                    type = ActivityType.SERVICE,
+                    predecessors = listOf("START"),
+                    tags = mapOf("foo" to "bar", "a" to "b"),
+                    requiresApproval = true,
+                    role = "accountant",
+                ),
+                ActivityData(
+                    name = "STOP",
+                    type = ActivityType.STOP,
+                    predecessors = listOf("INVOICE")
+                ),
             )
         )
+    )
+
+    @Test
+    fun create() {
         val result = rest.postForEntity("/v1/workflows", request, ImportWorkflowResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
@@ -64,54 +65,30 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         val activities = activityDao.findByWorkflow(workflow)
         assertEquals(3, activities.size)
 
-        val aStart = activityDao.findByCodeIgnoreCaseAndWorkflow("start", workflow)
-        assertEquals("START", aStart?.code)
-        assertEquals(request.workflow.activities[0].name, aStart?.name)
+        val aStart = activityDao.findByNameAndWorkflow("START", workflow)
+        assertEquals("START", aStart?.name)
         assertEquals(request.workflow.activities[0].type, aStart?.type)
         assertEquals(true, aStart?.active)
+        assertNull(aStart?.role)
 
-        val aInvoice = activityDao.findByCodeIgnoreCaseAndWorkflow("INVOICE", workflow)
-        assertEquals("INVOICE", aInvoice?.code)
-        assertEquals(request.workflow.activities[1].name, aInvoice?.name)
+        val aInvoice = activityDao.findByNameAndWorkflow("INVOICE", workflow)
+        assertEquals("INVOICE", aInvoice?.name)
         assertEquals(request.workflow.activities[1].description, aInvoice?.description)
         assertEquals(request.workflow.activities[1].type, aInvoice?.type)
         assertEquals("foo=bar\na=b", aInvoice?.tags)
         assertEquals(true, aInvoice?.active)
         assertEquals(request.workflow.activities[1].requiresApproval, aInvoice?.requiresApproval)
+        assertEquals(10L, aInvoice?.role?.id)
 
-        val aEnd = activityDao.findByCodeIgnoreCaseAndWorkflow("stop", workflow)
-        assertEquals("STOP", aEnd?.code)
-        assertEquals(request.workflow.activities[2].name, aEnd?.name)
+        val aEnd = activityDao.findByNameAndWorkflow("STOP", workflow)
+        assertEquals("STOP", aEnd?.name)
         assertEquals(request.workflow.activities[2].type, aEnd?.type)
         assertEquals(true, aEnd?.active)
+        assertNull(aEnd?.role)
     }
 
     @Test
     fun update() {
-        val request = ImportWorkflowRequest(
-            workflow = WorkflowData(
-                name = "new",
-                description = "This is a new workflow",
-                activities = listOf(
-                    ActivityData(code = "START", name = "start", type = ActivityType.START),
-                    ActivityData(
-                        code = "INVOICE",
-                        name = "Create Invoice",
-                        description = "SAGE create an invoice",
-                        type = ActivityType.SERVICE,
-                        predecessors = listOf("START"),
-                        tags = mapOf("foo" to "bar", "a" to "b"),
-                        requiresApproval = true
-                    ),
-                    ActivityData(
-                        code = "STOP",
-                        name = "Stop",
-                        type = ActivityType.STOP,
-                        predecessors = listOf("INVOICE")
-                    ),
-                )
-            )
-        )
         val result = rest.postForEntity("/v1/workflows/100", request, ImportWorkflowResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
@@ -126,32 +103,31 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         val activities = activityDao.findByWorkflow(workflow)
         assertEquals(4, activities.size)
 
-        val aStart = activityDao.findByCodeIgnoreCaseAndWorkflow("start", workflow)
-        assertEquals("START", aStart?.code)
-        assertEquals(110L, aStart?.id)
-        assertEquals(request.workflow.activities[0].name, aStart?.name)
+        val aStart = activityDao.findByNameAndWorkflow("START", workflow)
+        assertEquals("START", aStart?.name)
         assertEquals(request.workflow.activities[0].type, aStart?.type)
         assertEquals(true, aStart?.active)
+        assertNull(aStart?.role)
 
-        val aInvoice = activityDao.findByCodeIgnoreCaseAndWorkflow("INVOICE", workflow)
-        assertEquals("INVOICE", aInvoice?.code)
-        assertEquals(request.workflow.activities[1].name, aInvoice?.name)
+        val aInvoice = activityDao.findByNameAndWorkflow("INVOICE", workflow)
+        assertEquals("INVOICE", aInvoice?.name)
         assertEquals(request.workflow.activities[1].description, aInvoice?.description)
         assertEquals(request.workflow.activities[1].type, aInvoice?.type)
         assertEquals("foo=bar\na=b", aInvoice?.tags)
         assertEquals(true, aInvoice?.active)
         assertEquals(request.workflow.activities[1].requiresApproval, aInvoice?.requiresApproval)
+        assertEquals(10L, aInvoice?.role?.id)
 
-        val aEnd = activityDao.findByCodeIgnoreCaseAndWorkflow("stop", workflow)
-        assertEquals(112L, aEnd?.id)
-        assertEquals("STOP", aEnd?.code)
-        assertEquals(request.workflow.activities[2].name, aEnd?.name)
+        val aEnd = activityDao.findByNameAndWorkflow("STOP", workflow)
+        assertEquals("STOP", aEnd?.name)
         assertEquals(request.workflow.activities[2].type, aEnd?.type)
         assertEquals(true, aEnd?.active)
+        assertNull(aEnd?.role)
 
         val aDeactivated = activityDao.findById(111L).get()
         assertEquals(false, aDeactivated.active)
         assertEquals(workflow.id, aDeactivated.workflow.id)
+        assertEquals(11L, aDeactivated?.role?.id)
     }
 
     @Test

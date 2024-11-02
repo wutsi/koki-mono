@@ -20,8 +20,8 @@ class ExportWorkflowPNGEndpointTest : TenantAwareEndpointTest() {
 
     private val folder = File(File(System.getProperty("user.home")), "__wutsi")
 
-    private fun download(url: URL, filename: String, statusCode: Int): File? {
-        val cnn = url.openConnection() as HttpURLConnection
+    private fun download(url: String, statusCode: Int): File? {
+        val cnn = URL(url).openConnection() as HttpURLConnection
         try {
             cnn.connect()
 
@@ -58,28 +58,28 @@ class ExportWorkflowPNGEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun png() {
-        val url = URL("http://localhost:$port/v1/workflows/image/1-100.png")
-        val file = download(url, "workflow-1-100.png", 200)
+        val url = "http://localhost:$port/v1/workflows/image/1-100.png"
+        val file = download(url, 200)
         assertTrue(file!!.length() > 0L)
         ImageIO.read(file)
     }
 
     @Test
     fun empty() {
-        val url = URL("http://localhost:$port/v1/workflows/image/1-110.png")
-        val file = download(url, "workflow-1-110.png", 200)
+        val url = "http://localhost:$port/v1/workflows/image/1-110.png"
+        val file = download(url, 200)
         assertEquals(0L, file!!.length())
     }
 
     @Test
     fun `not found`() {
-        val url = URL("http://localhost:$port/v1/workflows/image/1-9999.png")
-        download(url, "workflow-1-9999.png", 404)
+        val url = "http://localhost:$port/v1/workflows/image/1-9999.png"
+        download(url, 404)
     }
 
     @Test
     fun `workflow of another tenant`() {
-        val url = URL("http://localhost:$port/v1/workflows/image/1-200.png")
-        download(url, "workflow-1-200.png.png", 404)
+        val url = "http://localhost:$port/v1/workflows/image/1-200.png"
+        download(url, 404)
     }
 }

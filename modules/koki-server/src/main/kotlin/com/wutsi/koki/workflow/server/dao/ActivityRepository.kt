@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository
 interface ActivityRepository : CrudRepository<ActivityEntity, Long> {
     fun findByWorkflow(workflow: WorkflowEntity): List<ActivityEntity>
 
-    fun findByCodeIgnoreCaseAndWorkflow(code: String, workflow: WorkflowEntity): ActivityEntity?
+    fun findByNameAndWorkflow(code: String, workflow: WorkflowEntity): ActivityEntity?
 
-    fun findByCodeIgnoreCaseInAndWorkflow(code: List<String>, workflow: WorkflowEntity): List<ActivityEntity>
+    fun findByNameInAndWorkflow(code: List<String>, workflow: WorkflowEntity): List<ActivityEntity>
 }

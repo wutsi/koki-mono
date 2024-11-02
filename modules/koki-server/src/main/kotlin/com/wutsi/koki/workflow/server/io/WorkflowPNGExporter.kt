@@ -25,7 +25,7 @@ class WorkflowPNGExporter {
         // Nodes
         workflow.activities
             .filter { it.active }
-            .forEach { activity -> graph.addVertex(activity.code) }
+            .forEach { activity -> graph.addVertex(activity.name) }
 
         // Edges
         workflow.activities
@@ -33,7 +33,7 @@ class WorkflowPNGExporter {
             .forEach { activity ->
                 activity.predecessors
                     .filter { it.active }
-                    .forEach { predecessor -> graph.addEdge(predecessor.code, activity.code) }
+                    .forEach { predecessor -> graph.addEdge(predecessor.name, activity.name) }
             }
 
         return graph

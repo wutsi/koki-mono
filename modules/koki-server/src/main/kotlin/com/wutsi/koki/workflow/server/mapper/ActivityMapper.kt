@@ -18,7 +18,6 @@ class ActivityMapper {
             id = entity.id ?: -1,
             workflowId = entity.workflow.id ?: -1,
             type = entity.type,
-            code = entity.code,
             name = entity.name,
             description = entity.description,
             active = entity.active,
@@ -26,7 +25,8 @@ class ActivityMapper {
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
             tags = entity.tags?.let { tags -> toMap(tags) } ?: emptyMap(),
-            predecessors = entity.predecessors.map { pred -> pred.code },
+            predecessorIds = entity.predecessors.mapNotNull { pred -> pred.id },
+            roleId = entity.role?.id
         )
     }
 

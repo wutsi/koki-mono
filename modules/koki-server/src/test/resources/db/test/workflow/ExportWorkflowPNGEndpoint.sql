@@ -7,12 +7,12 @@ INSERT INTO T_WORKFLOW(id, tenant_fk, name, description, active)
           (110, 1, 'empty', null, false),
           (200, 2, 'w2', 'description w2', true);
 
-INSERT INTO T_ACTIVITY(id, active, workflow_fk, code, type, name, description, tags, requires_approval)
-    VALUES (110, true, 100, 'START', 1, 'starting...', 'Start the process', 'a=p1\nb=p2', true),
-           (111, true, 100, 'WORKING', 3, 'working...', 'fill the taxes', null, false),
-           (112, true, 100, 'SEND', 6, 'sending...', null, null, false),
-           (113, true, 100, 'SUBMIT', 7, 'submitting...', null, null, false),
-           (114, true, 100, 'STOP', 2, 'done...', null, null, false);
+INSERT INTO T_ACTIVITY(id, active, workflow_fk, name, type, description, tags, requires_approval)
+    VALUES (110, true, 100, 'START', 1, 'Start the process', 'a=p1\nb=p2', true),
+           (111, true, 100, 'WORKING', 3, 'fill the taxes', null, false),
+           (112, true, 100, 'SEND', 6, null, null, false),
+           (113, true, 100, 'SUBMIT', 7, null, null, false),
+           (114, true, 100, 'STOP', 2, null, null, false);
 
 INSERT INTO T_ACTIVITY_PREDECESSOR(activity_fk, predecessor_fk)
     VALUES (111, 110),

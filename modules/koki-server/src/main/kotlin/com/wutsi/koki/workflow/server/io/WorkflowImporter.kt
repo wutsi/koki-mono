@@ -1,6 +1,8 @@
 package com.wutsi.koki.workflow.server.io
 
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.tenant.server.domain.RoleEntity
+import com.wutsi.koki.tenant.server.service.RoleService
 import com.wutsi.koki.workflow.dto.ActivityData
 import com.wutsi.koki.workflow.dto.WorkflowData
 import com.wutsi.koki.workflow.server.domain.ActivityEntity
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service
 class WorkflowImporter(
     private val workflowService: WorkflowService,
     private val activityService: ActivityService,
+    private val roleService: RoleService,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(WorkflowImporter::class.java)
@@ -21,9 +24,17 @@ class WorkflowImporter(
 
     fun import(workflow: WorkflowEntity, data: WorkflowData): WorkflowEntity {
         val w = saveWorkflow(workflow, data)
-        saveActivities(w, data)
-        linkPredecessors(w, data)
-        deactivate(w, data)
+
+        // Update activities
+        val activities = saveActivities(w, data)
+        linkPredecessors(w, activities, data)
+        linkRoles(w, activities, data)
+        activityService.saveAll(activities)
+
+        // Deactivate activities
+        val xactivities = deactivate(w, data)
+        activityService.saveAll(xactivities)
+
         return w
     }
 
@@ -33,24 +44,22 @@ class WorkflowImporter(
 
     private fun saveActivity(workflow: WorkflowEntity, data: ActivityData): ActivityEntity {
         try {
-            val activity = activityService.getByCode(data.code, workflow)
+            val activity = activityService.getByName(data.name, workflow)
 
-            LOGGER.info(">>> Updating Activity#${data.code}")
+            LOGGER.info(">>> Updating Activity#${data.name}")
             activity.type = data.type
-            activity.name = data.name
             activity.description = data.description
             activity.active = true
             activity.requiresApproval = data.requiresApproval
             activity.tags = toString(data.tags)
-            return activityService.save(activity)
+            return activity
         } catch (ex: NotFoundException) {
-            LOGGER.info(">>> Adding Activity#${data.code}")
+            LOGGER.info(">>> Adding Activity#${data.name}")
 
             return activityService.save(
                 ActivityEntity(
                     workflow = workflow,
                     type = data.type,
-                    code = data.code.uppercase(),
                     name = data.name,
                     description = data.description,
                     active = true,
@@ -61,17 +70,59 @@ class WorkflowImporter(
         }
     }
 
-    private fun linkPredecessors(workflow: WorkflowEntity, data: WorkflowData) {
-        data.activities.map { activity -> linkPredecessors(workflow, activity) }
+    private fun linkPredecessors(workflow: WorkflowEntity, activities: List<ActivityEntity>, data: WorkflowData) {
+        val predecessorNames = data.activities.flatMap { activity -> activity.predecessors }
+        val predecessorMap = if (predecessorNames.isEmpty()) {
+            emptyMap()
+        } else {
+            activityService.getByNames(predecessorNames, workflow)
+                .associateBy { activity -> activity.name }
+        }
+        activities.map { activity -> linkPredecessors(workflow, activity, predecessorMap, data) }
     }
 
-    private fun linkPredecessors(workflow: WorkflowEntity, data: ActivityData) {
-        val activity = activityService.getByCode(data.code, workflow)
-        LOGGER.info(">>> Linking Activity#${activity.code} with ${data.predecessors}")
+    private fun linkPredecessors(
+        workflow: WorkflowEntity,
+        activity: ActivityEntity,
+        predecessorMap: Map<String, ActivityEntity>,
+        data: WorkflowData
+    ) {
+        val predecessorNames: List<String> = data.activities
+            .find { act -> act.name.equals(activity.name, true) }
+            ?.predecessors
+            ?: emptyList()
+        LOGGER.info(">>> Linking Activity[${activity.name}] with Predecessors$predecessorNames")
+
+        val predecessors = predecessorNames.mapNotNull { name -> predecessorMap[name] }
 
         activity.predecessors.clear()
-        activity.predecessors.addAll(activityService.getByCodes(data.predecessors, workflow))
-        activityService.save(activity)
+        activity.predecessors.addAll(predecessors)
+    }
+
+    private fun linkRoles(workflow: WorkflowEntity, activities: List<ActivityEntity>, data: WorkflowData) {
+        val roleNames = data.activities.mapNotNull { activity -> activity.role?.ifEmpty { null } }
+        val roleMap = if (roleNames.isEmpty()) {
+            emptyMap()
+        } else {
+            roleService.search(roleNames, workflow.tenant.id ?: -1)
+                .associateBy { role -> role.name }
+        }
+
+        activities.map { activity -> linkRoles(workflow, activity, roleMap, data) }
+    }
+
+    private fun linkRoles(
+        workflow: WorkflowEntity,
+        activity: ActivityEntity,
+        roleMap: Map<String, RoleEntity>,
+        data: WorkflowData
+    ) {
+        val role: String? = data.activities
+            .find { act -> act.name.equals(activity.name, true) }
+            ?.role
+        LOGGER.info(">>> Linking Activity[${activity.name}] with Role[$role]")
+
+        activity.role = role?.let { roleMap[role] }
     }
 
     private fun saveWorkflow(workflow: WorkflowEntity, data: WorkflowData): WorkflowEntity {
@@ -81,18 +132,20 @@ class WorkflowImporter(
         return workflowService.save(workflow)
     }
 
-    private fun deactivate(workflow: WorkflowEntity, data: WorkflowData) {
-        val codes = data.activities.map { activity -> activity.code.uppercase() }
+    private fun deactivate(workflow: WorkflowEntity, data: WorkflowData): List<ActivityEntity> {
+        val codes = data.activities.map { activity -> activity.name }
         val activities = activityService.getByWorkflow(workflow)
 
+        val result = mutableListOf<ActivityEntity>()
         activities.forEach { activity ->
-            if (!codes.contains(activity.code.uppercase())) {
-                LOGGER.info(">>> Deactivating Activity#${activity.code}")
+            if (!codes.contains(activity.name)) {
+                LOGGER.info(">>> Deactivating Activity#${activity.name}")
 
                 activity.active = false
-                activityService.save(activity)
+                result.add(activity)
             }
         }
+        return result
     }
 
     private fun toString(tags: Map<String, String>): String {

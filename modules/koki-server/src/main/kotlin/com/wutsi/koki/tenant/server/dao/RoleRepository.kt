@@ -12,4 +12,6 @@ interface RoleRepository : CrudRepository<RoleEntity, Long> {
 
     @Query("SELECT R FROM RoleEntity R WHERE R.tenant.id=?1 AND R.name IN ?2")
     fun findByTenantIdAndNameIn(tenantId: Long, name: List<String>): List<RoleEntity>
+
+    fun findByIdInAndTenantId(id: List<Long>, tenantId: Long): List<RoleEntity>
 }

@@ -12,13 +12,13 @@ import java.util.Date
 
 @Service
 class ActivityService(private val dao: ActivityRepository) {
-    fun getByCode(code: String, workflow: WorkflowEntity): ActivityEntity {
-        return dao.findByCodeIgnoreCaseAndWorkflow(code, workflow)
+    fun getByName(name: String, workflow: WorkflowEntity): ActivityEntity {
+        return dao.findByNameAndWorkflow(name, workflow)
             ?: throw NotFoundException(Error(ErrorCode.WORKFLOW_ACTIVITY_NOT_FOUND))
     }
 
-    fun getByCodes(codes: List<String>, workflow: WorkflowEntity): List<ActivityEntity> {
-        return dao.findByCodeIgnoreCaseInAndWorkflow(codes, workflow)
+    fun getByNames(names: List<String>, workflow: WorkflowEntity): List<ActivityEntity> {
+        return dao.findByNameInAndWorkflow(names, workflow)
     }
 
     fun getByWorkflow(workflow: WorkflowEntity): List<ActivityEntity> {
@@ -29,5 +29,13 @@ class ActivityService(private val dao: ActivityRepository) {
     fun save(activity: ActivityEntity): ActivityEntity {
         activity.modifiedAt = Date()
         return dao.save(activity)
+    }
+
+    @Transactional
+    fun saveAll(activities: List<ActivityEntity>): List<ActivityEntity> {
+        val now = Date()
+        activities.forEach { activity -> activity.modifiedAt = now }
+        dao.saveAll(activities)
+        return activities
     }
 }

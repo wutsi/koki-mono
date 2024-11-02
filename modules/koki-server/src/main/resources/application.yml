@@ -52,6 +52,8 @@ spring:
 
 server:
     port: 8080
+    #    tomcat:
+    #        connection-timeout: 600000
     compression:
         enabled: true
         mime-types: application/json,application/xml,text/html,text/xml,text/plain

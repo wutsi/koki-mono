@@ -1,5 +1,6 @@
 package com.wutsi.koki.workflow.server.domain
 
+import com.wutsi.koki.tenant.server.domain.RoleEntity
 import com.wutsi.koki.workflow.dto.ActivityType
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -23,6 +24,10 @@ data class ActivityEntity(
     @JoinColumn(name = "workflow_fk")
     val workflow: WorkflowEntity = WorkflowEntity(),
 
+    @ManyToOne
+    @JoinColumn(name = "role_fk")
+    var role: RoleEntity? = null,
+
     @ManyToMany
     @JoinTable(
         name = "T_ACTIVITY_PREDECESSOR",
@@ -31,7 +36,9 @@ data class ActivityEntity(
     )
     val predecessors: MutableList<ActivityEntity> = mutableListOf(),
 
+    @Deprecated("")
     val code: String = "",
+
     var name: String = "",
     var description: String? = null,
     var active: Boolean = true,
