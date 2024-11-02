@@ -3,6 +3,8 @@ package com.wutsi.koki.error.dto
 object ErrorCode {
     private val PREFIX = "urn:wutsi:koki:error"
 
+    val IMPORT_ERROR = "$PREFIX:import-error"
+
     val ATTRIBUTE_NOT_FOUND: String = "$PREFIX:attribute:not-found"
     val ATTRIBUTE_NAME_MISSING: String = "$PREFIX:attribute:name-missing"
     val ATTRIBUTE_TYPE_INVALID: String = "$PREFIX:attribute:type-invalid"
@@ -25,6 +27,7 @@ object ErrorCode {
     val USER_NOT_FOUND: String = "$PREFIX:user:not-found"
     val USER_DUPLICATE_EMAIL: String = "$PREFIX:user:duplicate-email"
 
-    val WORKFLOW_NOT_FOUND: String = "$PREFIX:workflow:not-found"
     val WORKFLOW_ACTIVITY_NOT_FOUND: String = "$PREFIX:workflow:activity-not-found"
+    val WORKFLOW_NOT_FOUND: String = "$PREFIX:workflow:not-found"
+    val WORKFLOW_NOT_VALID: String = "$PREFIX:workflow:not-valid"
 }
