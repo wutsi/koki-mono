@@ -18,7 +18,6 @@ CREATE TABLE T_ACTIVITY(
   workflow_fk             BIGINT NOT NULL REFERENCES T_WORKFLOW(id),
   role_fk                 BIGINT REFERENCES T_ROLE(id),
 
-  code                    VARCHAR(100) DEFAULT '', /* IMPORTANT: deprecated */
   name                    VARCHAR(100) NOT NULL,
   active                  BOOLEAN NOT NULL DEFAULT false,
   type                    INT NOT NULL DEFAULT 0,

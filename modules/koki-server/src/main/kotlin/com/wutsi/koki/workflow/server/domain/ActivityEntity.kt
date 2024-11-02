@@ -36,9 +36,6 @@ data class ActivityEntity(
     )
     val predecessors: MutableList<ActivityEntity> = mutableListOf(),
 
-    @Deprecated("")
-    val code: String = "",
-
     var name: String = "",
     var description: String? = null,
     var active: Boolean = true,
