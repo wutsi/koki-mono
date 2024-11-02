@@ -1,7 +1,9 @@
 package com.wutsi.koki.tenant.server.endpoint
 
+import com.wutsi.koki.common.dto.HttpHeader
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.error.dto.ParameterType
 import com.wutsi.koki.workflow.dto.ActivityData
 import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.ImportWorkflowRequest
@@ -144,5 +146,25 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
 
         assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
         assertEquals(ErrorCode.WORKFLOW_NOT_FOUND, result.body?.error?.code)
+    }
+
+    @Test
+    fun `update workflow of non numeric id`() {
+        val result = rest.postForEntity("/v1/workflows/xxx", ImportWorkflowRequest(), ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
+        assertEquals(ErrorCode.HTTP_INVALID_PARAMETER, result.body?.error?.code)
+        assertEquals("id", result.body?.error?.parameter?.name)
+    }
+
+    @Test
+    fun `missing tenant-id header`() {
+        super.ignoreTenantIdHeader = true
+        val result = rest.postForEntity("/v1/workflows", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
+        assertEquals(ErrorCode.HTTP_MISSING_PARAMETER, result.body?.error?.code)
+        assertEquals(HttpHeader.TENANT_ID, result.body?.error?.parameter?.name)
+        assertEquals(ParameterType.PARAMETER_TYPE_HEADER, result.body?.error?.parameter?.type)
     }
 }

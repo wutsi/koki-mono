@@ -78,11 +78,10 @@ class WorkflowImporter(
             activityService.getByNames(predecessorNames, workflow)
                 .associateBy { activity -> activity.name }
         }
-        activities.map { activity -> linkPredecessors(workflow, activity, predecessorMap, data) }
+        activities.map { activity -> linkPredecessors(activity, predecessorMap, data) }
     }
 
     private fun linkPredecessors(
-        workflow: WorkflowEntity,
         activity: ActivityEntity,
         predecessorMap: Map<String, ActivityEntity>,
         data: WorkflowData
@@ -108,11 +107,10 @@ class WorkflowImporter(
                 .associateBy { role -> role.name }
         }
 
-        activities.map { activity -> linkRoles(workflow, activity, roleMap, data) }
+        activities.map { activity -> linkRoles(activity, roleMap, data) }
     }
 
     private fun linkRoles(
-        workflow: WorkflowEntity,
         activity: ActivityEntity,
         roleMap: Map<String, RoleEntity>,
         data: WorkflowData

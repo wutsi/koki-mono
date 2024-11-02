@@ -42,3 +42,12 @@ jobs:
                     mvn -q -s settings.xml --non-recursive install
                     cd modules/koki-server
                     mvn -Dspring.datasource.username=root -Dlogging.level.root=ERROR -Dlogging.level.org.springframework=ERROR -Dlogging.com.wutsi=ERROR  -Dspring.datasource.password=root -q -s ../../settings.xml package
+
+            -   name: Add coverage to PR
+                id: jacoco
+                uses: madrapps/jacoco-report@v1.3
+                with:
+                    paths: ${{ github.workspace }}/target/site/jacoco/jacoco.xml
+                    token: ${{ secrets.GITHUB_TOKEN }}
+                    min-coverage-overall: 90
+                    min-coverage-changed-files: 90
