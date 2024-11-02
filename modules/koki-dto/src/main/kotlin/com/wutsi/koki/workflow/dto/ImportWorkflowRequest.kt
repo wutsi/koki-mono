@@ -5,8 +5,6 @@ data class ImportWorkflowRequest(
 )
 
 data class ActivityData(
-    @Deprecated("")
-    val code: String = "",
     val type: ActivityType = ActivityType.UNKNOWN,
     val name: String = "",
     val description: String? = null,

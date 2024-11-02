@@ -5,7 +5,6 @@ import java.util.Date
 data class Activity(
     val id: Long = -1,
     val workflowId: Long = -1,
-    val code: String = "",
     val type: ActivityType = ActivityType.UNKNOWN,
     val name: String = "",
     val description: String? = null,
