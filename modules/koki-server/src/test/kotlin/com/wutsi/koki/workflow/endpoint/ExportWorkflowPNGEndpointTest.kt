@@ -20,8 +20,9 @@ class ExportWorkflowPNGEndpointTest : TenantAwareEndpointTest() {
 
     private val folder = File(File(System.getProperty("user.home")), "__wutsi")
 
-    private fun download(url: String, statusCode: Int): File? {
-        val cnn = URL(url).openConnection() as HttpURLConnection
+    private fun download(u: String, statusCode: Int): File? {
+        val url = URL(u)
+        val cnn = url.openConnection() as HttpURLConnection
         try {
             cnn.connect()
 
