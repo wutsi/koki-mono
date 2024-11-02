@@ -44,6 +44,7 @@ class AttributeCSVImporter(
                 .setSkipHeaderRecord(true)
                 .setDelimiter(",")
                 .setHeader(*CSV_HEADERS.toTypedArray())
+                .setTrim(true)
                 .build(),
         )
         mutableListOf<ImportMessage>()
@@ -86,14 +87,14 @@ class AttributeCSVImporter(
 
     private fun validate(record: CSVRecord) {
         // Name
-        val name = record.get(CSV_HEADER_NAME)?.trim()
-        if (name.isNullOrEmpty()) {
+        val name = record.get(CSV_HEADER_NAME)
+        if (name.isEmpty()) {
             throw BadRequestException(error = Error(code = ErrorCode.ATTRIBUTE_NAME_MISSING))
         }
 
         // Type
         try {
-            val type = AttributeType.valueOf(record.get(CSV_HEADER_TYPE).trim().uppercase())
+            val type = AttributeType.valueOf(record.get(CSV_HEADER_TYPE).uppercase())
             if (type == AttributeType.UNKNOWN) {
                 throw BadRequestException(error = Error(code = ErrorCode.ATTRIBUTE_TYPE_INVALID))
             }
@@ -104,7 +105,7 @@ class AttributeCSVImporter(
 
     private fun findAttribute(tenantId: Long, record: CSVRecord): AttributeEntity? {
         try {
-            val name = record.get(CSV_HEADER_NAME).trim()
+            val name = record.get(CSV_HEADER_NAME)
             return service.getByName(name, tenantId)
         } catch (ex: NotFoundException) {
             return null
@@ -115,23 +116,23 @@ class AttributeCSVImporter(
         service.save(
             AttributeEntity(
                 tenant = tenant,
-                name = record.get(CSV_HEADER_NAME).trim(),
-                type = AttributeType.valueOf(record.get(CSV_HEADER_TYPE).trim().uppercase()),
-                label = record.get(CSV_HEADER_LABEL)?.ifEmpty { null },
-                description = record.get(CSV_HEADER_DESCRIPTION)?.ifEmpty { null },
-                active = record.get(CSV_HEADER_ACTIVE)?.trim()?.lowercase() == "yes",
-                choices = record.get(CSV_HEADER_CHOICES)?.trim()?.replace('|', '\n')?.ifEmpty { null },
+                name = record.get(CSV_HEADER_NAME),
+                type = AttributeType.valueOf(record.get(CSV_HEADER_TYPE).uppercase()),
+                label = record.get(CSV_HEADER_LABEL).ifEmpty { null },
+                description = record.get(CSV_HEADER_DESCRIPTION).ifEmpty { null },
+                active = record.get(CSV_HEADER_ACTIVE).lowercase() == "yes",
+                choices = record.get(CSV_HEADER_CHOICES).replace('|', '\n').ifEmpty { null },
             )
         )
     }
 
     private fun update(attribute: AttributeEntity, record: CSVRecord) {
-        attribute.name = record.get(CSV_HEADER_NAME).trim()
-        attribute.type = AttributeType.valueOf(record.get(CSV_HEADER_TYPE).trim().uppercase())
-        attribute.label = record.get(CSV_HEADER_LABEL)?.ifEmpty { null }
-        attribute.description = record.get(CSV_HEADER_DESCRIPTION)?.ifEmpty { null }
-        attribute.active = record.get(CSV_HEADER_ACTIVE)?.trim()?.lowercase().equals("yes")
-        attribute.choices = record.get(CSV_HEADER_CHOICES)?.trim()?.replace('|', '\n')?.ifEmpty { null }
+        attribute.name = record.get(CSV_HEADER_NAME)
+        attribute.type = AttributeType.valueOf(record.get(CSV_HEADER_TYPE).uppercase())
+        attribute.label = record.get(CSV_HEADER_LABEL).ifEmpty { null }
+        attribute.description = record.get(CSV_HEADER_DESCRIPTION).ifEmpty { null }
+        attribute.active = record.get(CSV_HEADER_ACTIVE).lowercase().equals("yes")
+        attribute.choices = record.get(CSV_HEADER_CHOICES).replace('|', '\n').ifEmpty { null }
         service.save(attribute)
     }
 }

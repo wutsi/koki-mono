@@ -42,3 +42,17 @@ jobs:
                     mvn -q -s settings.xml --non-recursive install
                     cd modules/koki-server
                     mvn -Dspring.datasource.username=root -Dlogging.level.root=ERROR -Dlogging.level.org.springframework=ERROR -Dlogging.com.wutsi=ERROR  -Dspring.datasource.password=root -q -s ../../settings.xml package
+
+                # generates coverage-report.md and publishes as checkrun
+            -   name: JaCoCo Code Coverage Report
+                id: jacoco_reporter
+                uses: PavanMudigonda/jacoco-reporter@v5.0
+                with:
+                    coverage_results_path: modules/koki-server/target/site/jacoco/jacoco.xml
+                    coverage_report_name: Coverage
+                    coverage_report_title: JaCoCo
+                    github_token: ${{ secrets.GITHUB_TOKEN }}
+                    skip_check_run: false
+                    minimum_coverage: 90
+                    fail_below_threshold: true
+                    publish_only_summary: false
