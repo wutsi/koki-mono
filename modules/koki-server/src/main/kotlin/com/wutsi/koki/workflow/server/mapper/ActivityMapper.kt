@@ -31,21 +31,16 @@ class ActivityMapper {
     }
 
     private fun toMap(tags: String): Map<String, String> {
-        try {
-            val map = mutableMapOf<String, String>()
-            val properties: Properties = Properties()
-            properties.load(StringReader(tags))
-            properties.keys().toList().map { key ->
-                val name = key.toString()
-                val value = properties.getProperty(name)
-                if (value.isNotEmpty()) {
-                    map[name] = value
-                }
+        val map = mutableMapOf<String, String>()
+        val properties: Properties = Properties()
+        properties.load(StringReader(tags))
+        properties.keys().toList().map { key ->
+            val name = key.toString()
+            val value = properties.getProperty(name)
+            if (value.isNotEmpty()) {
+                map[name] = value
             }
-            return map
-        } catch (ex: Exception) {
-            LOGGER.warn("Unable to convert to Properties: $tags", ex)
-            return emptyMap()
         }
+        return map
     }
 }
