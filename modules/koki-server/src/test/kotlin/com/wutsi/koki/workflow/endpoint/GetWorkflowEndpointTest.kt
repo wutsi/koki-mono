@@ -96,4 +96,17 @@ class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
         assertEquals(ErrorCode.WORKFLOW_NOT_FOUND, result.body?.error?.code)
     }
+
+    @Test
+    fun `get workflow having activity with malformed tag`() {
+        val result = rest.getForEntity("/v1/workflows/300", GetWorkflowResponse::class.java)
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val workflow = result.body!!.workflow
+
+        assertEquals(1, workflow.activities.size)
+        val activities = workflow.activities
+        assertTrue(activities[0].tags.isEmpty())
+    }
 }

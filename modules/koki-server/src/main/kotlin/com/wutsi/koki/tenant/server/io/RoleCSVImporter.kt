@@ -40,6 +40,7 @@ class RoleCSVImporter(
                 .setSkipHeaderRecord(true)
                 .setDelimiter(",")
                 .setHeader(*CSV_HEADERS.toTypedArray())
+                .setTrim(true)
                 .build(),
         )
         mutableListOf<ImportMessage>()
@@ -82,7 +83,7 @@ class RoleCSVImporter(
 
     private fun validate(record: CSVRecord) {
         // Name
-        val name = record.get(CSV_HEADER_NAME)?.trim()
+        val name = record.get(CSV_HEADER_NAME)
         if (name.isNullOrEmpty()) {
             throw BadRequestException(error = Error(code = ErrorCode.ROLE_NAME_MISSING))
         }
@@ -90,7 +91,7 @@ class RoleCSVImporter(
 
     private fun findRole(tenantId: Long, record: CSVRecord): RoleEntity? {
         try {
-            val name = record.get(CSV_HEADER_NAME).trim()
+            val name = record.get(CSV_HEADER_NAME)
             return service.getByName(name, tenantId)
         } catch (ex: NotFoundException) {
             return null
@@ -101,17 +102,17 @@ class RoleCSVImporter(
         service.save(
             RoleEntity(
                 tenant = tenant,
-                name = record.get(CSV_HEADER_NAME).trim(),
-                description = record.get(CSV_HEADER_DESCRIPTION)?.ifEmpty { null },
-                active = record.get(CSV_HEADER_ACTIVE)?.trim()?.lowercase() == "yes",
+                name = record.get(CSV_HEADER_NAME),
+                description = record.get(CSV_HEADER_DESCRIPTION).ifEmpty { null },
+                active = record.get(CSV_HEADER_ACTIVE).lowercase() == "yes",
             )
         )
     }
 
     private fun update(role: RoleEntity, record: CSVRecord) {
-        role.name = record.get(CSV_HEADER_NAME).trim()
-        role.description = record.get(CSV_HEADER_DESCRIPTION)?.ifEmpty { null }
-        role.active = record.get(CSV_HEADER_ACTIVE)?.trim()?.lowercase().equals("yes")
+        role.name = record.get(CSV_HEADER_NAME)
+        role.description = record.get(CSV_HEADER_DESCRIPTION).ifEmpty { null }
+        role.active = record.get(CSV_HEADER_ACTIVE).equals("yes", true)
         service.save(role)
     }
 }

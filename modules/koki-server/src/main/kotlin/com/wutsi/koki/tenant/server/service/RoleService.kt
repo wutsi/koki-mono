@@ -14,7 +14,7 @@ import java.util.Date
 open class RoleService(
     private val dao: RoleRepository
 ) {
-    fun search(names: List<String> = emptyList(), tenantId: Long): List<RoleEntity> {
+    fun search(names: List<String>, tenantId: Long): List<RoleEntity> {
         return if (names.isEmpty()) {
             dao.findByTenantId(tenantId)
         } else {

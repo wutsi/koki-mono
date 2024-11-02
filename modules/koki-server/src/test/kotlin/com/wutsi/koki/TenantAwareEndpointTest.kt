@@ -1,5 +1,6 @@
 package com.wutsi.koki.tenant.server.endpoint
 
+import com.wutsi.koki.common.dto.HttpHeader
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -18,6 +19,8 @@ abstract class TenantAwareEndpointTest : ClientHttpRequestInterceptor {
     @Autowired
     protected lateinit var rest: TestRestTemplate
 
+    protected var ignoreTenantIdHeader: Boolean = false
+
     protected open fun getTenantId() = TENANT_ID
 
     override fun intercept(
@@ -25,7 +28,11 @@ abstract class TenantAwareEndpointTest : ClientHttpRequestInterceptor {
         body: ByteArray,
         execution: ClientHttpRequestExecution
     ): ClientHttpResponse {
-        request.headers.add("X-Tenant-ID", getTenantId().toString())
+        if (!ignoreTenantIdHeader) {
+            request.headers.add(HttpHeader.TENANT_ID, getTenantId().toString())
+        } else {
+            request.headers.remove(HttpHeader.TENANT_ID)
+        }
         return execution.execute(request, body)
     }
 

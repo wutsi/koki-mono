@@ -1,17 +1,15 @@
 package com.wutsi.koki.error.endpoint
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.koki.common.dto.HttpHeader
 import com.wutsi.koki.common.logger.KVLogger
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
-import com.wutsi.koki.error.dto.ParameterType.PARAMETER_TYPE_COOKIE
 import com.wutsi.koki.error.dto.ParameterType.PARAMETER_TYPE_HEADER
 import com.wutsi.koki.error.dto.ParameterType.PARAMETER_TYPE_PATH
 import com.wutsi.koki.error.dto.ParameterType.PARAMETER_TYPE_QUERY
 import com.wutsi.koki.error.exception.WutsiException
-import feign.FeignException
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.BAD_REQUEST
@@ -19,13 +17,11 @@ import org.springframework.http.HttpStatus.FORBIDDEN
 import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.http.ResponseEntity
-import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.AuthenticationException
 import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.MissingPathVariableException
-import org.springframework.web.bind.MissingRequestCookieException
 import org.springframework.web.bind.MissingRequestHeaderException
 import org.springframework.web.bind.MissingServletRequestParameterException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -35,30 +31,8 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 @RestControllerAdvice
 class ControllerErrorHandler(
-    private val objectMapper: ObjectMapper,
     private val logger: KVLogger
 ) {
-    @ExceptionHandler(FeignException::class)
-    fun onFeignException(request: HttpServletRequest, ex: FeignException): ResponseEntity<ErrorResponse> {
-        try {
-            val response = objectMapper.readValue(ex.contentUTF8(), ErrorResponse::class.java)
-            return handleException(
-                request = request,
-                status = HttpStatus.valueOf(ex.status()),
-                e = ex,
-                code = ErrorCode.HTTP_DOWNSTREAM_ERROR,
-                downstreamCode = response.error.code,
-            )
-        } catch (ex: FeignException) {
-            return handleException(
-                request = request,
-                status = HttpStatus.valueOf(ex.status()),
-                e = ex,
-                code = ErrorCode.HTTP_DOWNSTREAM_ERROR,
-            )
-        }
-    }
-
     @ExceptionHandler(Throwable::class)
     fun onException(request: HttpServletRequest, e: Throwable): ResponseEntity<ErrorResponse> {
         val error = if (e is WutsiException) e.error else null
@@ -110,13 +84,6 @@ class ControllerErrorHandler(
             message = e.message,
         )
 
-    @ExceptionHandler(HttpMessageNotReadableException::class)
-    fun onHttpMessageNotReadableException(
-        request: HttpServletRequest,
-        e: HttpMessageNotReadableException,
-    ): ResponseEntity<ErrorResponse> =
-        handleBadRequest(request, ErrorCode.HTTP_REQUEST_NOT_READABLE, e)
-
     @ExceptionHandler(MissingServletRequestParameterException::class)
     fun onMissingServletRequestParameterException(
         request: HttpServletRequest,
@@ -159,21 +126,6 @@ class ControllerErrorHandler(
             Parameter(
                 name = e.headerName,
                 type = PARAMETER_TYPE_HEADER,
-            ),
-        )
-
-    @ExceptionHandler(MissingRequestCookieException::class)
-    fun onMissingRequestCookieException(
-        request: HttpServletRequest,
-        e: MissingRequestCookieException,
-    ): ResponseEntity<ErrorResponse> =
-        handleBadRequest(
-            request,
-            ErrorCode.HTTP_MISSING_PARAMETER,
-            e,
-            Parameter(
-                name = e.cookieName,
-                type = PARAMETER_TYPE_COOKIE,
             ),
         )
 
@@ -234,7 +186,7 @@ class ControllerErrorHandler(
         val response = ErrorResponse(
             error = Error(
                 code = code,
-                // traceId = tracingContext.traceId(request),
+                traceId = request.getHeader(HttpHeader.TRACE_ID),
                 parameter = parameter,
                 message = message,
                 data = data,

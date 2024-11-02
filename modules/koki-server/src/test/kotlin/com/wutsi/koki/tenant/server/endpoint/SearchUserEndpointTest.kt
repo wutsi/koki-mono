@@ -82,4 +82,18 @@ class SearchUserEndpointTest : TenantAwareEndpointTest() {
 
         assertEquals(0, users.size)
     }
+
+    @Test
+    fun all() {
+        val result =
+            rest.getForEntity("/v1/users?limit=2&offset=4&sort-by=id&asc=false", SearchUserResponse::class.java)
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val users = result.body!!.users
+
+        assertEquals(2, users.size)
+        assertEquals(15L, users[0].id)
+        assertEquals(14L, users[1].id)
+    }
 }
