@@ -7,10 +7,10 @@ INSERT INTO T_ROLE(id, tenant_fk, name)
            (11, 1, 'technician'),
            (12, 1, 'boss');
 
-INSERT INTO T_WORKFLOW(id, tenant_fk, name, description, active)
-    VALUES(100, 1, 'w1', 'description w1', false),
-          (200, 2, 'w2', 'description w2', true),
-          (300, 1, 'w1', 'activity with malformed tag', false);
+INSERT INTO T_WORKFLOW(id, tenant_fk, name, description, active, parameters)
+    VALUES(100, 1, 'w1', 'description w1', false, 'PARAM_1, PARAM_2, PARAM_3'),
+          (200, 2, 'w2', 'description w2', true, null),
+          (300, 1, 'w1', 'activity with malformed tag', false, 'CLIENT_ID');
 ;
 
 INSERT INTO T_ACTIVITY(id, workflow_fk, role_fk, name, type, description, tags, requires_approval)

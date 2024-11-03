@@ -32,6 +32,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         workflow = WorkflowData(
             name = "new",
             description = "This is a new workflow",
+            parameters = listOf("PARAM_1 ", "PARAM_2"),
             activities = listOf(
                 ActivityData(name = "START", type = ActivityType.START),
                 ActivityData(
@@ -64,6 +65,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.workflow.name, workflow.name)
         assertEquals(request.workflow.description, workflow.description)
         assertTrue(workflow.active)
+        assertEquals("PARAM_1,PARAM_2", workflow.parameters)
 
         val activities = activityDao.findByWorkflow(workflow)
         assertEquals(3, activities.size)
@@ -102,6 +104,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.workflow.name, workflow.name)
         assertEquals(request.workflow.description, workflow.description)
         assertTrue(workflow.active)
+        assertEquals("PARAM_1,PARAM_2", workflow.parameters)
 
         val activities = activityDao.findByWorkflow(workflow)
         assertEquals(4, activities.size)

@@ -30,4 +30,5 @@ data class WorkflowEntity(
     var active: Boolean = true,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
+    var parameters: String? = null,
 )

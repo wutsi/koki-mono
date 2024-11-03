@@ -14,7 +14,8 @@ class WorkflowMapper(
     private val roleMapper: RoleMapper,
 ) {
     fun toWorkflow(entity: WorkflowEntity): Workflow {
-        val roles = getRoles(entity)
+        val roles = getRoles(entity).map { role -> roleMapper.toRole(role) }
+        val activities = entity.activities.map { activity -> activityMapper.toActivity(activity) }
         return Workflow(
             id = entity.id ?: -1,
             name = entity.name,
@@ -22,8 +23,10 @@ class WorkflowMapper(
             active = entity.active,
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
-            activities = entity.activities.map { activity -> activityMapper.toActivity(activity) },
-            roles = roles.map { role -> roleMapper.toRole(role) }
+            activities = activities,
+            roles = roles,
+            requiresApprover = activities.find { activity -> activity.requiresApproval } != null,
+            parameters = entity?.parameters?.split(",")?.map { param -> param.trim() } ?: emptyList()
         )
     }
 

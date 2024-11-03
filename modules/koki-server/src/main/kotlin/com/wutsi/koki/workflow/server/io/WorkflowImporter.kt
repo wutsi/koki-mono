@@ -64,7 +64,7 @@ class WorkflowImporter(
                     description = data.description,
                     active = true,
                     requiresApproval = data.requiresApproval,
-                    tags = toString(data.tags)
+                    tags = toString(data.tags),
                 )
             )
         }
@@ -127,6 +127,10 @@ class WorkflowImporter(
         workflow.name = data.name
         workflow.description = data.description
         workflow.active = true
+        workflow.parameters = data.parameters
+            .map { param -> param.trim() }
+            .joinToString(separator = ",")
+            .ifEmpty { null }
         return workflowService.save(workflow)
     }
 

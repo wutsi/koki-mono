@@ -6,6 +6,7 @@ CREATE TABLE T_WORKFLOW(
   name                    VARCHAR(100) NOT NULL,
   description             TEXT,
   active                  BOOLEAN NOT NULL DEFAULT false,
+  parameters              TEXT,
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
 

@@ -18,4 +18,5 @@ data class WorkflowData(
     val name: String = "",
     val description: String? = null,
     val activities: List<ActivityData> = emptyList(),
+    val parameters: List<String> = emptyList(),
 )

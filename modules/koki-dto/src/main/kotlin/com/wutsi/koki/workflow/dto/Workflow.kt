@@ -11,5 +11,7 @@ data class Workflow(
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
     val activities: List<Activity> = emptyList(),
-    val roles: List<Role> = emptyList()
+    val roles: List<Role> = emptyList(),
+    val parameters: List<String> = emptyList(),
+    val requiresApprover: Boolean = false,
 )
