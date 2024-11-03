@@ -2,6 +2,9 @@
   "workflow": {
     "name": "fill_taxes",
     "description": "This is a simple process for filling taxes",
+    "parameters": [
+      "CONTRACT_ID"
+    ],
     "activities": [
       {
         "name": "start",

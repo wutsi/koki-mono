@@ -7,6 +7,7 @@ import com.wutsi.koki.workflow.server.validation.rule.ActivityMustNotHaveSelfAsP
 import com.wutsi.koki.workflow.server.validation.rule.ActivityNameMustHavelLessThan100CharactersRule
 import com.wutsi.koki.workflow.server.validation.rule.WorkflowMustHaveAtLeastOneStopActivityRule
 import com.wutsi.koki.workflow.server.validation.rule.WorkflowMustHaveOneStartActivityRule
+import com.wutsi.koki.workflow.server.validation.rule.WorkflowMustNotHaveCycleRule
 import org.springframework.stereotype.Service
 
 @Service
@@ -19,6 +20,7 @@ class WorkflowValidator(
 
         WorkflowMustHaveAtLeastOneStopActivityRule(),
         WorkflowMustHaveOneStartActivityRule(),
+        WorkflowMustNotHaveCycleRule(), // MUST BE THE LAST
     )
 ) {
     fun validate(workflow: WorkflowData): List<ValidationError> {

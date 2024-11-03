@@ -89,7 +89,7 @@ springdoc:
 
         -   group: workflow
             display-name: Workflow API
-            paths-to-match: /v1/workflows, /v1/workflows/*, /v1/workflows/**
+            paths-to-match: /v1/workflows, /v1/workflows/*, /v1/workflows/**, /v1/workflow-instances, /v1/workflow-instances/**
 
 
 
