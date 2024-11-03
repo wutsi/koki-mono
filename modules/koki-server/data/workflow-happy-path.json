@@ -1,6 +1,6 @@
 {
   "workflow": {
-    "name": "fill_taxes",
+    "name": "workflow-000",
     "description": "This is a simple process for filling taxes",
     "parameters": [
       "CONTRACT_ID"
