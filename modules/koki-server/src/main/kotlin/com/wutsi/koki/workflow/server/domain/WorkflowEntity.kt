@@ -31,4 +31,8 @@ data class WorkflowEntity(
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
     var parameters: String? = null,
-)
+) {
+    fun parameterAsList(): List<String> {
+        return parameters?.let { params -> params.split(",").map { it.trim() } } ?: emptyList()
+    }
+}

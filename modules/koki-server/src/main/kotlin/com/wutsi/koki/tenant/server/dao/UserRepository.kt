@@ -18,4 +18,6 @@ interface UserRepository : CrudRepository<UserEntity, Long> {
         tenantId: Long,
         pageable: Pageable
     ): List<UserEntity>
+
+    fun findByIdInAndTenantId(id: List<Long>, tenantId: Long): List<UserEntity>
 }

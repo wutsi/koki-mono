@@ -26,7 +26,7 @@ class WorkflowMapper(
             activities = activities,
             roles = roles,
             requiresApprover = activities.find { activity -> activity.requiresApproval } != null,
-            parameters = entity?.parameters?.split(",")?.map { param -> param.trim() } ?: emptyList()
+            parameters = entity.parameterAsList()
         )
     }
 

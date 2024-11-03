@@ -38,3 +38,41 @@ CREATE TABLE T_ACTIVITY_PREDECESSOR(
 
     PRIMARY KEY(activity_fk, predecessor_fk)
 ) ENGINE = InnoDB;
+
+CREATE TABLE T_WORKFLOW_INSTANCE(
+    id                  VARCHAR(36) NOT NULL,
+
+    tenant_fk           BIGINT NOT NULL REFERENCES T_TENANT(id),
+    workflow_fk         BIGINT NOT NULL REFERENCES T_WORKFLOW(id),
+    approver_fk         BIGINT REFERENCES T_USER(id),
+
+    status              INT NOT NULL DEFAULT 0,
+    start_at            DATETIME NOT NULL,
+    due_at              DATETIME,
+    created_at          DATETIME DEFAULT NOW(),
+    modified_at         DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
+
+    PRIMARY KEY(id)
+) ENGINE = InnoDB;
+
+CREATE TABLE T_WI_PARTICIPANT(
+    id                  BIGINT NOT NULL AUTO_INCREMENT,
+
+    instance_fk         VARCHAR(36) NOT NULL REFERENCES T_WORKFLOW_INSTANCE(id),
+    user_fk             BIGINT NOT NULL REFERENCES T_USER(id),
+    role_fk             BIGINT NOT NULL REFERENCES T_ROLE(id),
+
+    UNIQUE(instance_fk, user_fk, role_fk),
+    PRIMARY KEY(id)
+) ENGINE = InnoDB;
+
+CREATE TABLE T_WI_PARAMETER(
+    id                  BIGINT NOT NULL AUTO_INCREMENT,
+
+    instance_fk         VARCHAR(36) NOT NULL REFERENCES T_WORKFLOW_INSTANCE(id),
+    name                VARCHAR(100) NOT NULL,
+    value               TEXT,
+
+    UNIQUE(instance_fk, name),
+    PRIMARY KEY(id)
+) ENGINE = InnoDB;

@@ -43,7 +43,6 @@ jobs:
                     cd modules/koki-server
                     mvn -Dspring.datasource.username=root -Dlogging.level.root=ERROR -Dlogging.level.org.springframework=ERROR -Dlogging.com.wutsi=ERROR  -Dspring.datasource.password=root -q -s ../../settings.xml package
 
-                # generates coverage-report.md and publishes as checkrun
             -   name: JaCoCo Code Coverage Report
                 id: jacoco_reporter
                 uses: PavanMudigonda/jacoco-reporter@v5.0

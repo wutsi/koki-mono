@@ -46,8 +46,6 @@ jobs:
                     cd modules/koki-server
                     mvn -Dspring.datasource.username=root -Dspring.datasource.password=root -q -s ../../settings.xml install
 
-
-                # generates coverage-report.md and publishes as checkrun
             -   name: JaCoCo Code Coverage Report
                 id: jacoco_reporter
                 uses: PavanMudigonda/jacoco-reporter@v5.0

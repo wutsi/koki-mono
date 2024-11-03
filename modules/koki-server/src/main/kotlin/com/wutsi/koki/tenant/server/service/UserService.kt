@@ -38,6 +38,10 @@ class UserService(
         return user
     }
 
+    fun getAll(id: List<Long>, tenantId: Long): List<UserEntity> {
+        return dao.findByIdInAndTenantId(id, tenantId)
+    }
+
     @Transactional
     fun create(request: CreateUserRequest, tenantId: Long): UserEntity {
         val email = request.email.lowercase()

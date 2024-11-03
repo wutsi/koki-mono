@@ -46,7 +46,7 @@ class WorkflowImporter(
         try {
             val activity = activityService.getByName(data.name, workflow)
 
-            LOGGER.info(">>> Updating Activity#${data.name}")
+            LOGGER.debug(">>> Updating Activity#${data.name}")
             activity.type = data.type
             activity.description = data.description
             activity.active = true
@@ -54,7 +54,7 @@ class WorkflowImporter(
             activity.tags = toString(data.tags)
             return activity
         } catch (ex: NotFoundException) {
-            LOGGER.info(">>> Adding Activity#${data.name}")
+            LOGGER.debug(">>> Adding Activity#${data.name}")
 
             return activityService.save(
                 ActivityEntity(
@@ -90,7 +90,7 @@ class WorkflowImporter(
             .find { act -> act.name.equals(activity.name, true) }
             ?.predecessors
             ?: emptyList()
-        LOGGER.info(">>> Linking Activity[${activity.name}] with Predecessors$predecessorNames")
+        LOGGER.debug(">>> Linking Activity[${activity.name}] with Predecessors$predecessorNames")
 
         val predecessors = predecessorNames.mapNotNull { name -> predecessorMap[name] }
 
@@ -118,7 +118,7 @@ class WorkflowImporter(
         val role: String? = data.activities
             .find { act -> act.name.equals(activity.name, true) }
             ?.role
-        LOGGER.info(">>> Linking Activity[${activity.name}] with Role[$role]")
+        LOGGER.debug(">>> Linking Activity[${activity.name}] with Role[$role]")
 
         activity.role = role?.let { roleMap[role] }
     }
@@ -141,7 +141,7 @@ class WorkflowImporter(
         val result = mutableListOf<ActivityEntity>()
         activities.forEach { activity ->
             if (!codes.contains(activity.name)) {
-                LOGGER.info(">>> Deactivating Activity#${activity.name}")
+                LOGGER.debug(">>> Deactivating Activity#${activity.name}")
 
                 activity.active = false
                 result.add(activity)
