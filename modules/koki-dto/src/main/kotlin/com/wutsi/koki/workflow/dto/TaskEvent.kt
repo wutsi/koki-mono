@@ -6,7 +6,7 @@ data class TaskEvent(
     val id: Long = -1,
     val taskId: Long = -1,
     val type: TaskEventType = TaskEventType.UNKNOWN,
-    val status: TicketStatus? = null,
+    val status: WorkflowStatus? = null,
     val approval: ApprovalStatus? = null,
     val comment: String = "",
     val createdAt: Date = Date(),

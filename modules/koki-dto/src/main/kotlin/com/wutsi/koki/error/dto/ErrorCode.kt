@@ -28,6 +28,13 @@ object ErrorCode {
     val USER_DUPLICATE_EMAIL: String = "$PREFIX:user:duplicate-email"
 
     val WORKFLOW_ACTIVITY_NOT_FOUND: String = "$PREFIX:workflow:activity-not-found"
+    val WORKFLOW_NOT_ACTIVE: String = "$PREFIX:workflow:not-active"
     val WORKFLOW_NOT_FOUND: String = "$PREFIX:workflow:not-found"
     val WORKFLOW_NOT_VALID: String = "$PREFIX:workflow:not-valid"
+
+    val WORKFLOW_INSTANCE_APPROVER_MISSING = "$PREFIX:workflow-instance:approver-missing"
+    val WORKFLOW_INSTANCE_PARTICIPANT_MISSING = "$PREFIX:workflow-instance:participant-missing"
+    val WORKFLOW_INSTANCE_PARTICIPANT_NOT_VALID = "$PREFIX:workflow-instance:participant-not-valid"
+    val WORKFLOW_INSTANCE_PARAMETER_MISSING = "$PREFIX:workflow-instance:parameter-missing"
+    val WORKFLOW_INSTANCE_PARAMETER_NOT_VALID = "$PREFIX:workflow-instance:parameter-not-valid"
 }

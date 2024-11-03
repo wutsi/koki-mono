@@ -7,7 +7,7 @@ data class Task(
     val activityId: Long = -1,
     val ticketId: Long = -1,
     val assigneeUserId: Long = -1,
-    val status: TicketStatus = TicketStatus.UNKNOWN,
+    val status: WorkflowStatus = WorkflowStatus.UNKNOWN,
     val createdAt: Date = Date(),
     val dueAt: Date? = null,
     val approval: ApprovalStatus = ApprovalStatus.UNKNOWN,
