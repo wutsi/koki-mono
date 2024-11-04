@@ -131,7 +131,6 @@
         <wutsi-dto.version>0.0.20</wutsi-dto.version>
     </properties>
 
-
     <dependencies>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
