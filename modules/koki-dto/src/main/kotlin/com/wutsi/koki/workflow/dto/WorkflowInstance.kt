@@ -10,6 +10,7 @@ data class WorkflowInstance(
     val status: WorkflowStatus = WorkflowStatus.UNKNOWN,
     val createdAt: Date = Date(),
     val startAt: Date = Date(),
+    var startedAt: Date = Date(),
     val dueAt: Date? = null,
     var parameters: Map<String, String> = emptyMap(),
 )
