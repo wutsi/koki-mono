@@ -1,0 +1,27 @@
+{
+  "workflow": {
+    "name": "workflow-simple",
+    "description": "This is a simple process for filling taxes",
+    "activities": [
+      {
+        "name": "start",
+        "type": "START"
+      },
+      {
+        "name": "receive_document",
+        "description": "Office Manager contacts client to get documents",
+        "type": "MANUAL",
+        "predecessors": [
+          "start"
+        ]
+      },
+      {
+        "name": "stop",
+        "type": "STOP",
+        "predecessors": [
+          "receive_document"
+        ]
+      }
+    ]
+  }
+}
