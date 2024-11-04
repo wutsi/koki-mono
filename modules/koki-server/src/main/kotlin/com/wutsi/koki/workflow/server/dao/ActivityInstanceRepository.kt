@@ -1,5 +1,6 @@
 package com.wutsi.koki.workflow.server.dao
 
+import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
@@ -11,4 +12,6 @@ interface ActivityInstanceRepository : CrudRepository<ActivityInstanceEntity, St
     fun findByInstance(intance: WorkflowInstanceEntity): List<ActivityInstanceEntity>
 
     fun findByActivityAndInstance(activity: ActivityEntity, instance: WorkflowInstanceEntity): ActivityInstanceEntity?
+
+    fun findByStatusAndInstance(status: WorkflowStatus, instance: WorkflowInstanceEntity): List<ActivityInstanceEntity>
 }

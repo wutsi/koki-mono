@@ -7,7 +7,6 @@ import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.workflow.dto.ApprovalStatus
-import com.wutsi.koki.workflow.dto.RunNextWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.dao.ActivityInstanceRepository
 import com.wutsi.koki.workflow.server.dao.WorkflowInstanceRepository
@@ -21,11 +20,11 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/workflow/RunNextWorkflowInstanceEndpoint.sql"])
-class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/workflow/CompleteActivityInstanceEndpoint.sql"])
+class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var instanceDao: WorkflowInstanceRepository
 
@@ -44,23 +43,19 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
-    fun run() {
+    fun complete() {
         val result =
             rest.postForEntity(
-                "/v1/workflow-instances/wi-100-01/run-next",
+                "/v1/workflow-instances/wi-100-01/activities/wi-100-01-working-running/complete",
                 emptyMap<String, String>(),
-                RunNextWorkflowInstanceResponse::class.java
+                Any::class.java
             )
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val activityInstanceIds = result.body!!.activityInstanceIds
-        assertEquals(1, activityInstanceIds.size)
-
-        val activityInstance = activityInstanceDao.findById(activityInstanceIds[0]).get()
-        assertEquals(WorkflowStatus.RUNNING, activityInstance.status)
-        assertEquals(101L, activityInstance.activity.id)
-        assertEquals(101L, activityInstance.assignee?.id)
+        val activityInstance = activityInstanceDao.findById("wi-100-01-working-running").get()
+        assertEquals(WorkflowStatus.DONE, activityInstance.status)
+        assertNotNull(activityInstance.doneAt)
         assertNull(activityInstance.approver)
         assertEquals(ApprovalStatus.UNKNOWN, activityInstance.approval)
 
@@ -70,67 +65,10 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
-    fun `spawn multiple activities`() {
+    fun `complete an activity already DONE`() {
         val result =
             rest.postForEntity(
-                "/v1/workflow-instances/wi-100-02/run-next",
-                emptyMap<String, String>(),
-                RunNextWorkflowInstanceResponse::class.java
-            )
-
-        assertEquals(HttpStatus.OK, result.statusCode)
-
-        val activityInstanceIds = result.body!!.activityInstanceIds
-        assertEquals(2, activityInstanceIds.size)
-
-        val activityInstances = activityInstanceDao.findAllById(activityInstanceIds).sortedBy { it.activity.id }
-        val activityInstance1 = activityInstances[0]
-        assertEquals(WorkflowStatus.RUNNING, activityInstance1.status)
-        assertEquals(102L, activityInstance1.activity.id)
-
-        val activityInstance2 = activityInstances[1]
-        assertEquals(WorkflowStatus.RUNNING, activityInstance2.status)
-        assertEquals(103L, activityInstance2.activity.id)
-
-        val workflowInstance = instanceDao.findById("wi-100-02").get()
-        assertEquals(4, activityInstanceDao.findByInstance(workflowInstance).size)
-    }
-
-    @Test
-    fun `current activity is RUNNING - with past activities DONE`() {
-        val result =
-            rest.postForEntity(
-                "/v1/workflow-instances/wi-100-03/run-next",
-                emptyMap<String, String>(),
-                RunNextWorkflowInstanceResponse::class.java
-            )
-
-        assertEquals(HttpStatus.OK, result.statusCode)
-
-        val activityInstanceIds = result.body!!.activityInstanceIds
-        assertTrue(activityInstanceIds.isEmpty())
-    }
-
-    @Test
-    fun `no activity is DONE`() {
-        val result =
-            rest.postForEntity(
-                "/v1/workflow-instances/wi-100-04/run-next",
-                emptyMap<String, String>(),
-                RunNextWorkflowInstanceResponse::class.java
-            )
-
-        assertEquals(HttpStatus.OK, result.statusCode)
-
-        val activityInstanceIds = result.body!!.activityInstanceIds
-        assertTrue(activityInstanceIds.isEmpty())
-    }
-
-    @Test
-    fun `workflow is not RUNNING`() {
-        val result =
-            rest.postForEntity(
-                "/v1/workflow-instances/wi-100-05/run-next",
+                "/v1/workflow-instances/wi-100-02/activities/wi-100-02-working-done/complete",
                 emptyMap<String, String>(),
                 ErrorResponse::class.java
             )
@@ -140,54 +78,37 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
-    fun `do not run inactive activities`() {
+    fun `complete an activity of workflow not running`() {
         val result =
             rest.postForEntity(
-                "/v1/workflow-instances/wi-110-01/run-next",
+                "/v1/workflow-instances/wi-100-03/activities/wi-100-03-working-running/complete",
                 emptyMap<String, String>(),
-                RunNextWorkflowInstanceResponse::class.java
+                ErrorResponse::class.java
+            )
+
+        assertEquals(HttpStatus.CONFLICT, result.statusCode)
+        assertEquals(ErrorCode.WORKFLOW_INSTANCE_STATUS_ERROR, result.body?.error?.code)
+    }
+
+    @Test
+    fun `start approval`() {
+        val result =
+            rest.postForEntity(
+                "/v1/workflow-instances/wi-110-01/activities/wi-110-01-working-running/complete",
+                emptyMap<String, String>(),
+                Any::class.java
             )
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val activityInstanceIds = result.body!!.activityInstanceIds
-        assertEquals(1, activityInstanceIds.size)
-
-        val activityInstances = activityInstanceDao.findAllById(activityInstanceIds).sortedBy { it.activity.id }
-        val activityInstance1 = activityInstances[0]
-        assertEquals(WorkflowStatus.RUNNING, activityInstance1.status)
-        assertEquals(112L, activityInstance1.activity.id)
-        assertNull(activityInstance1.assignee?.id)
-        assertNull(activityInstance1.approver)
-        assertEquals(ApprovalStatus.UNKNOWN, activityInstance1.approval)
+        val activityInstance = activityInstanceDao.findById("wi-110-01-working-running").get()
+        assertEquals(WorkflowStatus.RUNNING, activityInstance.status)
+        assertNull(activityInstance.doneAt)
+        assertEquals(100L, activityInstance.approver?.id)
+        assertEquals(ApprovalStatus.PENDING, activityInstance.approval)
 
         val workflowInstance = instanceDao.findById("wi-110-01").get()
-        assertEquals(3, activityInstanceDao.findByInstance(workflowInstance).size)
-    }
-
-    @Test
-    fun `workflow instance not found`() {
-        val result =
-            rest.postForEntity(
-                "/v1/workflow-instances/xxXXXxx/run-next",
-                emptyMap<String, String>(),
-                ErrorResponse::class.java
-            )
-
-        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.WORKFLOW_INSTANCE_NOT_FOUND, result.body?.error?.code)
-    }
-
-    @Test
-    fun `workflow instance of another tenant`() {
-        val result =
-            rest.postForEntity(
-                "/v1/workflow-instances/wi-200-01/run-next",
-                emptyMap<String, String>(),
-                ErrorResponse::class.java
-            )
-
-        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.WORKFLOW_INSTANCE_NOT_FOUND, result.body?.error?.code)
+        val activityInstances = activityInstanceDao.findByInstance(workflowInstance)
+        assertEquals(2, activityInstances.size)
     }
 }

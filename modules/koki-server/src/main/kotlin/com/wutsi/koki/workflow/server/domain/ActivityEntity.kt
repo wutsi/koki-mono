@@ -40,7 +40,7 @@ data class ActivityEntity(
     var description: String? = null,
     var active: Boolean = true,
     var type: ActivityType = ActivityType.UNKNOWN,
-    var requiresApproval: Boolean = true,
+    var requiresApproval: Boolean = false,
     var tags: String? = null,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),

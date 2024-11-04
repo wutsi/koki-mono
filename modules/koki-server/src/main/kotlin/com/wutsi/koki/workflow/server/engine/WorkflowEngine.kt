@@ -22,19 +22,21 @@ import java.util.UUID
 import kotlin.collections.flatMap
 
 @Service
-class DefaultWorkflowEngine(
+class WorkflowEngine(
     private val activityRepository: ActivityRepository,
     private val workflowInstanceDao: WorkflowInstanceRepository,
     private val activityInstanceDao: ActivityInstanceRepository,
     private val activityService: ActivityService,
     private val executorProvider: ActivityExecutorProvider,
-) : WorkflowEngine {
+) {
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(DefaultWorkflowEngine::class.java)
+        private val LOGGER = LoggerFactory.getLogger(WorkflowEngine::class.java)
     }
 
     @Transactional
-    override fun start(workflowInstance: WorkflowInstanceEntity): ActivityInstanceEntity? {
+    fun start(workflowInstance: WorkflowInstanceEntity): ActivityInstanceEntity? {
+        LOGGER.debug(">>> ${workflowInstance.id} - Starting")
+
         if (workflowInstance.status != WorkflowStatus.NEW) {
             throw ConflictException(
                 error = Error(
@@ -61,7 +63,10 @@ class DefaultWorkflowEngine(
     }
 
     @Transactional
-    override fun stop(workflowInstance: WorkflowInstanceEntity) {
+    fun stop(workflowInstance: WorkflowInstanceEntity) {
+        LOGGER.debug(">>> ${workflowInstance.id} - Stopping")
+
+        // Ensure that the workflow is not RUNNING
         if (workflowInstance.status != WorkflowStatus.RUNNING) {
             throw ConflictException(
                 error = Error(
@@ -71,7 +76,7 @@ class DefaultWorkflowEngine(
             )
         }
 
-        // Ensure there is no activity running
+        // Ensure there are no activity RUNNING
         val runningInstances = activityInstanceDao.findByStatusAndInstance(WorkflowStatus.RUNNING, workflowInstance)
         if (runningInstances.isNotEmpty()) {
             throw ConflictException(
@@ -89,7 +94,9 @@ class DefaultWorkflowEngine(
     }
 
     @Transactional
-    override fun next(workflowInstance: WorkflowInstanceEntity): List<ActivityInstanceEntity> {
+    fun next(workflowInstance: WorkflowInstanceEntity): List<ActivityInstanceEntity> {
+        LOGGER.debug(">>> ${workflowInstance.id} - Run Next Activity")
+
         if (workflowInstance.status != WorkflowStatus.RUNNING) {
             throw ConflictException(
                 error = Error(
@@ -123,7 +130,9 @@ class DefaultWorkflowEngine(
     }
 
     @Transactional
-    override fun done(activityInstance: ActivityInstanceEntity) {
+    fun done(activityInstance: ActivityInstanceEntity) {
+        LOGGER.debug(">>> ${activityInstance.instance.id} > ${activityInstance.id} - Done")
+
         if (activityInstance.status != WorkflowStatus.RUNNING) {
             throw ConflictException(
                 error = Error(
@@ -147,13 +156,23 @@ class DefaultWorkflowEngine(
             )
         }
 
-        // Update the status
-        activityInstance.status = WorkflowStatus.DONE
-        activityInstance.doneAt = Date()
+        if (activityInstance.activity.requiresApproval) {
+            LOGGER.debug(">>> ${activityInstance.instance.id} > ${activityInstance.id} - Starting approval...")
+
+            activityInstance.approver = activityInstance.instance.approver
+            activityInstance.approval = ApprovalStatus.PENDING
+            activityInstance.status = WorkflowStatus.RUNNING
+            activityInstance.doneAt = null
+        } else {
+            activityInstance.status = WorkflowStatus.DONE
+            activityInstance.doneAt = Date()
+        }
         activityInstanceDao.save(activityInstance)
 
         // Run the next
-        next(activityInstance.instance)
+        if (!activityInstance.activity.requiresApproval) {
+            next(activityInstance.instance)
+        }
     }
 
     private fun execute(activity: ActivityEntity, workflowInstance: WorkflowInstanceEntity): ActivityInstanceEntity? {

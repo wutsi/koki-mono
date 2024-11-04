@@ -1,7 +1,8 @@
 package com.wutsi.koki.tenant.server.server.endpoint
 
-import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
@@ -10,9 +11,10 @@ import com.wutsi.koki.workflow.dto.StartWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.dao.ActivityInstanceRepository
 import com.wutsi.koki.workflow.server.dao.WorkflowInstanceRepository
-import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
-import com.wutsi.koki.workflow.server.engine.WorkflowEngine
+import com.wutsi.koki.workflow.server.engine.ActivityExecutor
+import com.wutsi.koki.workflow.server.engine.ActivityExecutorProvider
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito.mock
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpStatus
@@ -20,6 +22,7 @@ import org.springframework.test.context.jdbc.Sql
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TimeZone
+import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -33,7 +36,15 @@ class StartWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
     private lateinit var activityInstanceDao: ActivityInstanceRepository
 
     @MockBean
-    private lateinit var engine: WorkflowEngine
+    private lateinit var activityExecutorProvider: ActivityExecutorProvider
+
+    @BeforeTest
+    override fun setUp() {
+        super.setUp()
+
+        val executor = mock(ActivityExecutor::class.java)
+        doReturn(executor).whenever(activityExecutorProvider).get(any())
+    }
 
     @Test
     fun start() {
@@ -62,10 +73,6 @@ class StartWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         assertNull(activityInstance.assignee)
         assertNull(activityInstance.approver)
         assertEquals(ApprovalStatus.UNKNOWN, activityInstance.approval)
-
-        val act = argumentCaptor<ActivityInstanceEntity>()
-        verify(engine).execute(act.capture())
-        assertEquals(activityInstance.id, act.firstValue.id)
     }
 
     @Test

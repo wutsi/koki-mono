@@ -16,7 +16,7 @@ class RunNextWorkflowInstanceEndpoint(
     private val engine: WorkflowEngine,
 ) {
     @PostMapping("/v1/workflow-instances/{id}/run-next")
-    fun next(
+    fun runNext(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: String
     ): RunNextWorkflowInstanceResponse {

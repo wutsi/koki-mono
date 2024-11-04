@@ -21,18 +21,18 @@ INSERT INTO T_WORKFLOW(id, tenant_fk, name, description, active, parameters)
           (200, 2, 'w200', null, true, null);
 ;
 
-INSERT INTO T_ACTIVITY(id, workflow_fk, role_fk, name, type, description, tags, requires_approval, active)
-    VALUES (100, 100, null, 'START',   1, 'Start the process', 'a=p1\nb=p2', true, true),
-           (101, 100, 11,   'WORKING', 3, 'fill the taxes', null, false, true),
-           (102, 100, 10,   'SEND',    4, null, null, false, true),
-           (103, 100, 10,   'SUBMIT',  4, null, null, false, true),
-           (104, 100, null, 'STOP',    2, null, null, false, true),
+INSERT INTO T_ACTIVITY(id, workflow_fk, role_fk, name, type, requires_approval)
+    VALUES (100, 100, null, 'START',   1, false),
+           (101, 100, 11,   'WORKING', 3, false),
+           (102, 100, 10,   'SEND',    4, false),
+           (103, 100, 10,   'SUBMIT',  4, false),
+           (104, 100, null, 'STOP',    2, false),
 
-           (110, 110, null, 'START',   1, null, null, false, true),
-           (111, 110, null, 'WORKING', 4, null, null, false, true),
-           (112, 110, null, 'SEND',    4, null, null, false, true),
-           (113, 110, null, 'SUBMIT',  4, null, null, false, false),
-           (114, 110, null, 'STOP',    2, null, null, false, true)
+           (110, 110, null, 'START',   1, false),
+           (111, 110, null, 'WORKING', 4, true),
+           (112, 110, null, 'SEND',    4, false),
+           (113, 110, null, 'SUBMIT',  4, false),
+           (114, 110, null, 'STOP',    2, false)
     ;
 
 INSERT INTO T_ACTIVITY_PREDECESSOR(activity_fk, predecessor_fk)
@@ -49,33 +49,21 @@ INSERT INTO T_ACTIVITY_PREDECESSOR(activity_fk, predecessor_fk)
            (114, 113);
 
 INSERT INTO T_WORKFLOW_INSTANCE(id, tenant_fk, workflow_fk, approver_fk, status, start_at)
-    VALUES ('wi-100-01', 1, 100, 100,  2, now()),
+    VALUES ('wi-100-01', 1, 100, null, 2, now()),
            ('wi-100-02', 1, 100, null, 2, now()),
-           ('wi-100-03', 1, 100, null, 2, now()),
-           ('wi-100-04', 1, 100, null, 2, now()),
-           ('wi-100-05', 1, 100, null, 1, now()),
-           ('wi-110-01', 1, 110, null, 2, now()),
-
-           ('wi-200-01', 2, 200, null, 2, now());
+           ('wi-100-03', 1, 100, null, 1, now()),
+           ('wi-110-01', 1, 110, 100,  2, now());
 
 INSERT INTO T_WI_ACTIVITY(id, instance_fk, activity_fk, assignee_fk, approver_fk, status, started_at, done_at)
-    VALUES ('wi-100-10-start-done',      'wi-100-01', 100, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
+    VALUES ('wi-100-01-start-done',      'wi-100-01', 100, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
+           ('wi-100-01-working-running', 'wi-100-01', 101, null, null, 2, '2020-01-10 12:30', null),
 
            ('wi-100-02-start-done',      'wi-100-02', 100, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
            ('wi-100-02-working-done',    'wi-100-02', 101, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
 
            ('wi-100-03-start-done',      'wi-100-03', 100, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
-           ('wi-100-03-working-running', 'wi-100-03', 101, null, null, 2, '2020-01-10 12:30', '2020-01-11 12:30'),
-
-           ('wi-100-05-start-running',   'wi-100-05', 100, null, null, 2, '2020-01-10 12:30', '2020-01-11 12:30'),
+           ('wi-100-03-working-running', 'wi-100-03', 101, null, null, 2, '2020-01-10 12:30', null),
 
            ('wi-110-01-start-done',      'wi-110-01', 110, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
-           ('wi-110-01-working-done',    'wi-110-01', 111, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30');
-
-INSERT INTO T_WI_PARTICIPANT(instance_fk, user_fk, role_fk)
-    VALUES ('wi-100-01', 100, 10),
-           ('wi-100-01', 101, 11),
-           ('wi-100-02', 100, 10),
-           ('wi-100-02', 101, 11),
-           ('wi-100-03', 100, 10),
-           ('wi-100-03', 101, 11);
+           ('wi-110-01-working-running', 'wi-110-01', 111, null, null, 2, '2020-01-10 12:30', null)
+    ;
