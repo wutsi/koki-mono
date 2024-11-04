@@ -60,28 +60,29 @@ class ExportWorkflowPNGEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun png() {
-        val url = "http://localhost:$port/v1/workflows/image/1-100.png"
+        val url = "http://localhost:$port/v1/workflows/images/1.100.png"
         val file = download(url, 200)
         assertTrue(file!!.length() > 0L)
+        assertTrue(file.length() > 0)
         ImageIO.read(file)
     }
 
     @Test
     fun empty() {
-        val url = "http://localhost:$port/v1/workflows/image/1-110.png"
+        val url = "http://localhost:$port/v1/workflows/images/1.110.png"
         val file = download(url, 200)
         assertEquals(0L, file!!.length())
     }
 
     @Test
     fun `not found`() {
-        val url = "http://localhost:$port/v1/workflows/image/1-9999.png"
+        val url = "http://localhost:$port/v1/workflows/images/1.9999.png"
         download(url, 404)
     }
 
     @Test
     fun `workflow of another tenant`() {
-        val url = "http://localhost:$port/v1/workflows/image/1-200.png"
+        val url = "http://localhost:$port/v1/workflows/images/1.200.png"
         download(url, 404)
     }
 }

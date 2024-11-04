@@ -111,4 +111,17 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         val activityInstances = activityInstanceDao.findByInstance(workflowInstance)
         assertEquals(2, activityInstances.size)
     }
+
+    @Test
+    fun `complete an activity under approval`() {
+        val result =
+            rest.postForEntity(
+                "/v1/workflow-instances/wi-110-02/activities/wi-110-02-working-running/complete",
+                emptyMap<String, String>(),
+                ErrorResponse::class.java
+            )
+
+        assertEquals(HttpStatus.CONFLICT, result.statusCode)
+        assertEquals(ErrorCode.WORKFLOW_INSTANCE_ACTIVITY_APPROVAL_PENDING, result.body?.error?.code)
+    }
 }

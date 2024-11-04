@@ -22,7 +22,7 @@ class ExportWorkflowPNGEndpoint(
         private val LOGGER = LoggerFactory.getLogger(ExportWorkflowPNGEndpoint::class.java)
     }
 
-    @GetMapping("/v1/workflows/image/{tenant-id}-{workflow-id}.png")
+    @GetMapping("/v1/workflows/images/{tenant-id}.{workflow-id}.png")
     fun update(
         @PathVariable("tenant-id") tenantId: Long,
         @PathVariable("workflow-id") id: Long,
@@ -31,7 +31,7 @@ class ExportWorkflowPNGEndpoint(
         response.contentType = "image/png"
         response.setHeader(
             HttpHeaders.CONTENT_DISPOSITION,
-            ContentDisposition.attachment().filename("$tenantId-$id.png").build().toString()
+            ContentDisposition.attachment().filename("$tenantId.$id.png").build().toString()
         )
 
         try {

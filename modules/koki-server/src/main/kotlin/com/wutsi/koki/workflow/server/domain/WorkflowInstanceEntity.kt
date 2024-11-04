@@ -26,6 +26,9 @@ data class WorkflowInstanceEntity(
     val workflow: WorkflowEntity = WorkflowEntity(),
 
     @OneToMany(mappedBy = "instance")
+    val activityInstances: List<ActivityInstanceEntity> = emptyList(),
+
+    @OneToMany(mappedBy = "instance")
     val participants: List<ParticipantEntity> = emptyList(),
 
     @OneToMany(mappedBy = "instance")

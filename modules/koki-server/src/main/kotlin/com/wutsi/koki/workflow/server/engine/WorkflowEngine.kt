@@ -155,6 +155,13 @@ class WorkflowEngine(
                 )
             )
         }
+        if (activityInstance.approval == ApprovalStatus.PENDING) {
+            throw ConflictException(
+                error = Error(
+                    code = ErrorCode.WORKFLOW_INSTANCE_ACTIVITY_APPROVAL_PENDING,
+                )
+            )
+        }
 
         if (activityInstance.activity.requiresApproval) {
             LOGGER.debug(">>> ${activityInstance.instance.id} > ${activityInstance.id} - Starting approval...")

@@ -1,6 +1,6 @@
 {
   "workflow": {
-    "name": "workflow-simple",
+    "name": "workflow-with-approval",
     "description": "This is a simple process for filling taxes",
     "activities": [
       {
@@ -11,6 +11,7 @@
         "name": "receive_document",
         "description": "Office Manager contacts client to get documents",
         "type": "MANUAL",
+        "requiresApproval": true,
         "predecessors": [
           "start"
         ]
