@@ -50,7 +50,7 @@ jobs:
                 uses: cicirello/jacoco-badge-generator@v2
                 with:
                     generate-branches-badge: false
-                    jacoco-csv-file: ${{ github.workspace }}/modules/koki-server/target/site/jacoco/jacoco.xml
+                    jacoco-csv-file: ${{ github.workspace }}/modules/koki-server/target/site/jacoco/jacoco.csv
                     coverage-badge-filename: koki-server-jococo.svg
 
             -   name: Commit the badge (if it changed)
