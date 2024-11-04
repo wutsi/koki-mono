@@ -46,10 +46,17 @@ jobs:
                     cd modules/koki-server
                     mvn -Dspring.datasource.username=root -Dspring.datasource.password=root -q -s ../../settings.xml install
 
+            -   name: Upload JaCoCo coverage report
+                uses: actions/upload-artifact@v2
+                with:
+                    name: jacoco-report
+                    path: target/site/jacoco/
+
             -   name: Generate JaCoCo Badge
                 uses: cicirello/jacoco-badge-generator@v2
                 with:
                     generate-branches-badge: true
+                    jacoco-csv-file: modules/koki-server/target/site/jacoco/jacoco.csv
 
             -   name: Commit the badge (if it changed)
                 run: |
