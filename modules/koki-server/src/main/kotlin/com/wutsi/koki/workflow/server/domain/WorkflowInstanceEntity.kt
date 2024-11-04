@@ -35,9 +35,11 @@ data class WorkflowInstanceEntity(
     @JoinColumn(name = "approver_fk")
     val approver: UserEntity? = null,
 
-    val status: WorkflowStatus = WorkflowStatus.UNKNOWN,
+    var status: WorkflowStatus = WorkflowStatus.UNKNOWN,
     val startAt: Date = Date(),
     val dueAt: Date? = null,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
+    var startedAt: Date? = null,
+    val doneAt: Date? = null
 )

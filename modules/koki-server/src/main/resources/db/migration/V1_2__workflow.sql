@@ -51,6 +51,8 @@ CREATE TABLE T_WORKFLOW_INSTANCE(
     due_at              DATETIME,
     created_at          DATETIME DEFAULT NOW(),
     modified_at         DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
+    started_at          DATETIME,
+    done_at             DATETIME,
 
     PRIMARY KEY(id)
 ) ENGINE = InnoDB;
@@ -74,5 +76,24 @@ CREATE TABLE T_WI_PARAMETER(
     value               TEXT,
 
     UNIQUE(instance_fk, name),
+    PRIMARY KEY(id)
+) ENGINE = InnoDB;
+
+CREATE TABLE T_WI_ACTIVITY(
+    id                  VARCHAR(36) NOT NULL,
+
+    instance_fk         VARCHAR(36) NOT NULL REFERENCES T_WORKFLOW_INSTANCE(id),
+    activity_fk         BIGINT NOT NULL REFERENCES T_ACTIVITY(id),
+    assignee_fk         BIGINT REFERENCES T_USER(id),
+    approver_fk         BIGINT REFERENCES T_USER(id),
+
+    status              INT NOT NULL DEFAULT 0,
+    approval            INT NOT NULL DEFAULT 0,
+    created_at          DATETIME DEFAULT NOW(),
+    approved_at         DATETIME,
+    started_at          DATETIME,
+    done_at             DATETIME,
+
+    UNIQUE(instance_fk, activity_fk),
     PRIMARY KEY(id)
 ) ENGINE = InnoDB;

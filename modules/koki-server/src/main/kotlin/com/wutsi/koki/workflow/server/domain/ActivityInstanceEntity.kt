@@ -1,47 +1,41 @@
 package com.wutsi.koki.workflow.server.domain
 
-import com.wutsi.koki.tenant.server.domain.RoleEntity
-import com.wutsi.koki.workflow.dto.ActivityType
+import com.wutsi.koki.tenant.server.domain.UserEntity
+import com.wutsi.koki.workflow.dto.ApprovalStatus
+import com.wutsi.koki.workflow.dto.WorkflowStatus
 import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
-import jakarta.persistence.JoinTable
-import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import java.util.Date
 
 @Entity
-@Table(name = "T_ACTIVITY")
-data class ActivityEntity(
+@Table(name = "T_WI_ACTIVITY")
+data class ActivityInstanceEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    val id: String? = null,
 
     @ManyToOne
-    @JoinColumn(name = "workflow_fk")
-    val workflow: WorkflowEntity = WorkflowEntity(),
+    @JoinColumn(name = "activity_fk")
+    val activity: ActivityEntity = ActivityEntity(),
 
     @ManyToOne
-    @JoinColumn(name = "role_fk")
-    var role: RoleEntity? = null,
+    @JoinColumn(name = "instance_fk")
+    val instance: WorkflowInstanceEntity = WorkflowInstanceEntity(),
 
-    @ManyToMany
-    @JoinTable(
-        name = "T_ACTIVITY_PREDECESSOR",
-        joinColumns = arrayOf(JoinColumn(name = "activity_fk")),
-        inverseJoinColumns = arrayOf(JoinColumn(name = "predecessor_fk")),
-    )
-    val predecessors: MutableList<ActivityEntity> = mutableListOf(),
+    @ManyToOne
+    @JoinColumn(name = "assignee_fk")
+    var assignee: UserEntity? = null,
 
-    var name: String = "",
-    var description: String? = null,
-    var active: Boolean = true,
-    var type: ActivityType = ActivityType.UNKNOWN,
-    var requiresApproval: Boolean = true,
-    var tags: String? = null,
+    @ManyToOne
+    @JoinColumn(name = "approver_fk")
+    var approver: UserEntity? = null,
+
+    var status: WorkflowStatus = WorkflowStatus.UNKNOWN,
+    var approval: ApprovalStatus = ApprovalStatus.UNKNOWN,
     val createdAt: Date = Date(),
-    var modifiedAt: Date = Date(),
+    var approvedAt: Date? = null,
+    var startedAt: Date? = null,
+    var doneAt: Date? = null
 )

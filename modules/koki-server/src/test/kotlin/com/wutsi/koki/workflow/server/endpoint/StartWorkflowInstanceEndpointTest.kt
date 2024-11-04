@@ -1,188 +1,112 @@
 package com.wutsi.koki.tenant.server.server.endpoint
 
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
-import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceResponse
-import com.wutsi.koki.workflow.dto.Participant
-import com.wutsi.koki.workflow.server.dao.ParameterRepository
-import com.wutsi.koki.workflow.server.dao.ParticipantRepository
+import com.wutsi.koki.workflow.dto.ApprovalStatus
+import com.wutsi.koki.workflow.dto.StartWorkflowInstanceResponse
+import com.wutsi.koki.workflow.dto.WorkflowStatus
+import com.wutsi.koki.workflow.server.dao.ActivityInstanceRepository
 import com.wutsi.koki.workflow.server.dao.WorkflowInstanceRepository
-import org.apache.commons.lang3.time.DateUtils
+import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
+import com.wutsi.koki.workflow.server.engine.WorkflowEngine
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TimeZone
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/workflow/CreateWorkflowInstanceEndpoint.sql"])
-class CreateWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/workflow/StartWorkflowInstanceEndpoint.sql"])
+class StartWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var instanceDao: WorkflowInstanceRepository
 
     @Autowired
-    private lateinit var participanDao: ParticipantRepository
+    private lateinit var activityInstanceDao: ActivityInstanceRepository
 
-    @Autowired
-    private lateinit var parameterDao: ParameterRepository
-
-    val request = CreateWorkflowInstanceRequest(
-        workflowId = 100L,
-        startAt = DateUtils.addDays(Date(), 7),
-        dueAt = DateUtils.addDays(Date(), 14),
-        approverUserId = 100L,
-        parameters = mapOf("PARAM_1" to "val1", "PARAM_2" to "val2"),
-        participants = listOf(
-            Participant(roleId = 10L, userId = 100L),
-            Participant(roleId = 11L, userId = 101L),
-        ),
-    )
+    @MockBean
+    private lateinit var engine: WorkflowEngine
 
     @Test
-    fun create() {
+    fun start() {
         val fmt = SimpleDateFormat("yyyy-MM-dd")
         fmt.timeZone = TimeZone.getTimeZone("UTC")
 
-        val result = rest.postForEntity("/v1/workflow-instances", request, CreateWorkflowInstanceResponse::class.java)
+        val result =
+            rest.postForEntity(
+                "/v1/workflow-instances/wi-100/start",
+                emptyMap<String, String>(),
+                StartWorkflowInstanceResponse::class.java
+            )
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val instanceId = result.body!!.workflowInstanceId
-        val instance = instanceDao.findById(instanceId).get()
-        assertEquals(request.workflowId, instance.workflow.id)
-        assertEquals(request.approverUserId, instance.approver?.id)
-        assertEquals(fmt.format(request.startAt), fmt.format(instance.startAt))
-        assertEquals(fmt.format(request.dueAt), fmt.format(instance.dueAt))
+        val workflowInstance = instanceDao.findById("wi-100").get()
+        assertNotNull(workflowInstance.startedAt)
+        assertEquals(WorkflowStatus.RUNNING, workflowInstance.status)
 
-        val parameters = parameterDao.findByInstance(instance).sortedBy { it.name }
-        assertEquals(2, parameters.size)
+        val activityInstanceId = result.body?.activityInstanceId
+        assertNotNull(activityInstanceId)
+        val activityInstance = activityInstanceDao.findById(activityInstanceId).get()
+        assertEquals(WorkflowStatus.RUNNING, activityInstance.status)
+        assertEquals(110L, activityInstance.activity.id)
+        assertNotNull(fmt.format(Date()), fmt.format(activityInstance.startedAt))
+        assertNull(activityInstance.assignee)
+        assertNull(activityInstance.approver)
+        assertEquals(ApprovalStatus.UNKNOWN, activityInstance.approval)
 
-        assertEquals("PARAM_1", parameters[0].name)
-        assertEquals("val1", parameters[0].value)
-
-        assertEquals("PARAM_2", parameters[1].name)
-        assertEquals("val2", parameters[1].value)
-
-        val participants = participanDao.findByInstance(instance).sortedBy { it.role.id }
-
-        assertEquals(2, participants.size)
-
-        assertEquals(10L, participants[0].role.id)
-        assertEquals(100L, participants[0].user.id)
-
-        assertEquals(11L, participants[1].role.id)
-        assertEquals(101L, participants[1].user.id)
+        val act = argumentCaptor<ActivityInstanceEntity>()
+        verify(engine).execute(act.capture())
+        assertEquals(activityInstance.id, act.firstValue.id)
     }
 
     @Test
-    fun `create with no approval an no roles`() {
-        val req = CreateWorkflowInstanceRequest(
-            workflowId = 200L,
-            startAt = DateUtils.addDays(Date(), 7),
-            dueAt = DateUtils.addDays(Date(), 14),
-            approverUserId = null,
-            parameters = emptyMap(),
-            participants = emptyList(),
-        )
-        val result = rest.postForEntity("/v1/workflow-instances", req, CreateWorkflowInstanceResponse::class.java)
+    fun `cannot start inactive START`() {
+        val result =
+            rest.postForEntity(
+                "/v1/workflow-instances/wi-inactive-start/start",
+                emptyMap<String, String>(),
+                StartWorkflowInstanceResponse::class.java
+            )
 
-        assertEquals(HttpStatus.OK, result.statusCode)
+        val instance = instanceDao.findById("wi-inactive-start").get()
+        assertEquals(WorkflowStatus.NEW, instance.status)
 
-        val instanceId = result.body!!.workflowInstanceId
-
-        val instance = instanceDao.findById(instanceId).get()
-        assertEquals(req.workflowId, instance.workflow.id)
-        assertNull(instance.approver)
-
-        val parameters = parameterDao.findByInstance(instance).sortedBy { it.name }
-        assertEquals(0, parameters.size)
-
-        val participants = participanDao.findByInstance(instance).sortedBy { it.role.id }
-        assertEquals(0, participants.size)
+        val activityInstanceId = result.body?.activityInstanceId
+        assertNull(activityInstanceId)
     }
 
     @Test
-    fun `missing approver`() {
-        val xrequest = request.copy(approverUserId = null)
-        val result = rest.postForEntity("/v1/workflow-instances", xrequest, ErrorResponse::class.java)
+    fun `cannot start RUNNING instance`() {
+        val result =
+            rest.postForEntity(
+                "/v1/workflow-instances/wi-running/start",
+                emptyMap<String, String>(),
+                ErrorResponse::class.java
+            )
 
-        assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
-        assertEquals(ErrorCode.WORKFLOW_INSTANCE_APPROVER_MISSING, result.body?.error?.code)
+        assertEquals(HttpStatus.CONFLICT, result.statusCode)
+        assertEquals(ErrorCode.WORKFLOW_INSTANCE_STATUS_ERROR, result.body?.error?.code)
     }
 
     @Test
-    fun `missing parameter`() {
-        val xrequest = request.copy(parameters = mapOf("PARAM_1" to "val1"))
-        val result = rest.postForEntity("/v1/workflow-instances", xrequest, ErrorResponse::class.java)
+    fun `cannot start DONE instance`() {
+        val result =
+            rest.postForEntity(
+                "/v1/workflow-instances/wi-done/start",
+                emptyMap<String, String>(),
+                ErrorResponse::class.java
+            )
 
-        assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
-        assertEquals(ErrorCode.WORKFLOW_INSTANCE_PARAMETER_MISSING, result.body?.error?.code)
-    }
-
-    @Test
-    fun `invalid parameter`() {
-        val xrequest = request.copy(parameters = mapOf("PARAM_1" to "val1", "PARAM_2" to "val2", "X" to "Y"))
-        val result = rest.postForEntity("/v1/workflow-instances", xrequest, ErrorResponse::class.java)
-
-        assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
-        assertEquals(ErrorCode.WORKFLOW_INSTANCE_PARAMETER_NOT_VALID, result.body?.error?.code)
-    }
-
-    @Test
-    fun `missing participant`() {
-        val xrequest = request.copy(participants = listOf(Participant(roleId = 10L, userId = 100L)))
-        val result = rest.postForEntity("/v1/workflow-instances", xrequest, ErrorResponse::class.java)
-
-        assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
-        assertEquals(ErrorCode.WORKFLOW_INSTANCE_PARTICIPANT_MISSING, result.body?.error?.code)
-    }
-
-    @Test
-    fun `invalid participant`() {
-        val xrequest = request.copy(
-            participants = listOf(
-                Participant(roleId = 10L, userId = 100L),
-                Participant(roleId = 11L, userId = 101L),
-                Participant(roleId = 12L, userId = 102L),
-            ),
-        )
-        val result = rest.postForEntity("/v1/workflow-instances", xrequest, ErrorResponse::class.java)
-
-        assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
-        assertEquals(ErrorCode.WORKFLOW_INSTANCE_PARTICIPANT_NOT_VALID, result.body?.error?.code)
-    }
-
-    @Test
-    fun `workflow not active`() {
-        val xrequest = request.copy(workflowId = 300L)
-        val result = rest.postForEntity("/v1/workflow-instances", xrequest, ErrorResponse::class.java)
-
-        assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
-        assertEquals(ErrorCode.WORKFLOW_NOT_ACTIVE, result.body?.error?.code)
-    }
-
-    @Test
-    fun `startAt in past`() {
-        val xrequest = request.copy(startAt = DateUtils.addDays(Date(), -7))
-        val result = rest.postForEntity("/v1/workflow-instances", xrequest, ErrorResponse::class.java)
-
-        assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
-    }
-
-    @Test
-    fun `no dueAt`() {
-        val xrequest = request.copy(dueAt = null)
-        val result = rest.postForEntity("/v1/workflow-instances", xrequest, CreateWorkflowInstanceResponse::class.java)
-
-        assertEquals(HttpStatus.OK, result.statusCode)
-
-        val instanceId = result.body!!.workflowInstanceId
-        val instance = instanceDao.findById(instanceId).get()
-        assertNull(instance.dueAt)
+        assertEquals(HttpStatus.CONFLICT, result.statusCode)
+        assertEquals(ErrorCode.WORKFLOW_INSTANCE_STATUS_ERROR, result.body?.error?.code)
     }
 }

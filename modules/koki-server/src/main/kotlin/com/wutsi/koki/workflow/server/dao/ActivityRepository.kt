@@ -1,5 +1,6 @@
 package com.wutsi.koki.workflow.server.dao
 
+import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowEntity
 import org.springframework.data.repository.CrudRepository
@@ -12,4 +13,12 @@ interface ActivityRepository : CrudRepository<ActivityEntity, Long> {
     fun findByNameAndWorkflow(code: String, workflow: WorkflowEntity): ActivityEntity?
 
     fun findByNameInAndWorkflow(code: List<String>, workflow: WorkflowEntity): List<ActivityEntity>
+
+    fun findByActiveAndWorkflow(active: Boolean, workflow: WorkflowEntity): List<ActivityEntity>
+
+    fun findByTypeAndActiveAndWorkflow(
+        type: ActivityType,
+        active: Boolean,
+        workflow: WorkflowEntity
+    ): List<ActivityEntity>
 }

@@ -1,14 +1,16 @@
-package com.wutsi.koki.workflow.server.service
+package com.wutsi.koki.workflow.server.engine
 
 import com.wutsi.koki.workflow.dto.ActivityType
+import com.wutsi.koki.workflow.server.service.StartExecutor
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.mockito.Mockito.mock
+import org.mockito.Mockito
 import java.lang.IllegalStateException
+import kotlin.jvm.java
 import kotlin.test.assertEquals
 
 class ActivityExecutorProviderTest {
-    private val start = mock(StartExecutor::class.java)
+    private val start = Mockito.mock(StartExecutor::class.java)
     private val provider = ActivityExecutorProvider(start)
 
     @Test

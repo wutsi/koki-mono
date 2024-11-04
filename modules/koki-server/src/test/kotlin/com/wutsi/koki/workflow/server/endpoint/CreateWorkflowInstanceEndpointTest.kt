@@ -58,6 +58,8 @@ class CreateWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.approverUserId, instance.approver?.id)
         assertEquals(fmt.format(request.startAt), fmt.format(instance.startAt))
         assertEquals(fmt.format(request.dueAt), fmt.format(instance.dueAt))
+        assertNull(instance.startedAt)
+        assertNull(instance.doneAt)
 
         val parameters = parameterDao.findByInstance(instance).sortedBy { it.name }
         assertEquals(2, parameters.size)
