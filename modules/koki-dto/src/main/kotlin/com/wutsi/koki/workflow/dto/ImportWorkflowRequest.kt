@@ -8,7 +8,7 @@ data class ActivityData(
     val type: ActivityType = ActivityType.UNKNOWN,
     val name: String = "",
     val description: String? = null,
-    val requiresApproval: Boolean = true,
+    val requiresApproval: Boolean = false,
     val tags: Map<String, String> = emptyMap(),
     val predecessors: List<String> = emptyList(),
     val role: String? = null,

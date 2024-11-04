@@ -33,6 +33,7 @@ object ErrorCode {
     val WORKFLOW_NOT_VALID: String = "$PREFIX:workflow:not-valid"
 
     val WORKFLOW_INSTANCE_ACTIVITY_NOT_FOUND = "$PREFIX:workflow-instance:activity-not-found"
+    val WORKFLOW_INSTANCE_ACTIVITY_STILL_RUNNING = "$PREFIX:workflow-instance:activity-still-running"
     val WORKFLOW_INSTANCE_APPROVER_MISSING = "$PREFIX:workflow-instance:approver-missing"
     val WORKFLOW_INSTANCE_ASSIGNEE_NOT_FOUND = "$PREFIX:workflow-instance:assignee-not-found"
     val WORKFLOW_INSTANCE_NOT_FOUND = "$PREFIX:workflow-instance:not-found"
