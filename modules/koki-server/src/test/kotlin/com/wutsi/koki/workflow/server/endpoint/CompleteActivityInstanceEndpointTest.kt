@@ -21,6 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.TimeZone
 import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -47,6 +50,9 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun complete() {
+        val fmt = SimpleDateFormat("yyyy-MM-dd")
+        fmt.timeZone = TimeZone.getTimeZone("UTC")
+
         val result =
             rest.postForEntity(
                 "/v1/workflow-instances/wi-100-01/activities/wi-100-01-working-running/complete",
@@ -61,6 +67,7 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         assertNotNull(activityInstance.doneAt)
         assertNull(activityInstance.approver)
         assertEquals(ApprovalStatus.UNKNOWN, activityInstance.approval)
+        assertEquals(fmt.format(Date()), fmt.format(activityInstance.doneAt))
 
         verify(activityExecutorProvider, times(2)).get(any())
 

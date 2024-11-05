@@ -63,7 +63,7 @@ class StartWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         assertEquals(HttpStatus.OK, result.statusCode)
 
         val workflowInstance = instanceDao.findById("wi-100").get()
-        assertNotNull(workflowInstance.startedAt)
+        assertEquals(fmt.format(Date()), fmt.format(workflowInstance.startedAt))
         assertEquals(WorkflowStatus.RUNNING, workflowInstance.status)
 
         verify(activityExecutorProvider).get(any())
@@ -73,7 +73,7 @@ class StartWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         val activityInstance = activityInstanceDao.findById(activityInstanceId).get()
         assertEquals(WorkflowStatus.RUNNING, activityInstance.status)
         assertEquals(110L, activityInstance.activity.id)
-        assertNotNull(fmt.format(Date()), fmt.format(activityInstance.startedAt))
+        assertEquals(fmt.format(Date()), fmt.format(activityInstance.startedAt))
         assertNull(activityInstance.assignee)
         assertNull(activityInstance.approver)
         assertEquals(ApprovalStatus.UNKNOWN, activityInstance.approval)
