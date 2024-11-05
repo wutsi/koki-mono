@@ -35,6 +35,7 @@ object ErrorCode {
     val WORKFLOW_INSTANCE_ACTIVITY_NOT_FOUND = "$PREFIX:workflow-instance:activity-not-found"
     val WORKFLOW_INSTANCE_ACTIVITY_STILL_RUNNING = "$PREFIX:workflow-instance:activity-still-running"
     val WORKFLOW_INSTANCE_ACTIVITY_APPROVAL_PENDING = "$PREFIX:workflow-instance:activity-approval-pending"
+    val WORKFLOW_INSTANCE_ACTIVITY_NO_APPROVAL_PENDING = "$PREFIX:workflow-instance:activity-no-approval-pending"
     val WORKFLOW_INSTANCE_APPROVER_MISSING = "$PREFIX:workflow-instance:approver-missing"
     val WORKFLOW_INSTANCE_ASSIGNEE_NOT_FOUND = "$PREFIX:workflow-instance:assignee-not-found"
     val WORKFLOW_INSTANCE_NOT_FOUND = "$PREFIX:workflow-instance:not-found"
