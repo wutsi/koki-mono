@@ -11,6 +11,7 @@ import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
+import org.hibernate.annotations.BatchSize
 import java.util.Date
 
 @Entity
@@ -28,6 +29,7 @@ data class ActivityEntity(
     @JoinColumn(name = "role_fk")
     var role: RoleEntity? = null,
 
+    @BatchSize(20)
     @ManyToMany
     @JoinTable(
         name = "T_ACTIVITY_PREDECESSOR",

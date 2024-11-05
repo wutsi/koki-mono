@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping
-class CompleteActivityInstanceEndpoint(
+class ApproveActivityInstanceEndpoint(
     private val service: WorkflowInstanceService,
     private val activityInstanceService: ActivityInstanceService,
     private val engine: WorkflowEngine,
 ) {
-    @PostMapping("/v1/workflow-instances/{id}/activities/{activityInstanceId}/approval")
+    @PostMapping("/v1/workflow-instances/{id}/activities/{activityInstanceId}/approvals")
     fun complete(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: String,

@@ -2,6 +2,8 @@ package com.wutsi.koki.tenant.server.server.endpoint
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
@@ -64,6 +66,8 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         assertNull(activityInstance.approver)
         assertEquals(ApprovalStatus.UNKNOWN, activityInstance.approval)
 
+        verify(activityExecutorProvider).get(any())
+
         val workflowInstance = instanceDao.findById("wi-100-01").get()
         val activityInstances = activityInstanceDao.findByInstance(workflowInstance)
         assertEquals(2, activityInstances.size)
@@ -91,6 +95,8 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         val activityInstance2 = activityInstances[1]
         assertEquals(WorkflowStatus.RUNNING, activityInstance2.status)
         assertEquals(103L, activityInstance2.activity.id)
+
+        verify(activityExecutorProvider, times(2)).get(any())
 
         val workflowInstance = instanceDao.findById("wi-100-02").get()
         assertEquals(4, activityInstanceDao.findByInstance(workflowInstance).size)

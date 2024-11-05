@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
+import org.hibernate.annotations.BatchSize
 import java.util.Date
 
 @Entity
@@ -25,9 +26,11 @@ data class WorkflowInstanceEntity(
     @JoinColumn(name = "workflow_fk")
     val workflow: WorkflowEntity = WorkflowEntity(),
 
+    @BatchSize(20)
     @OneToMany(mappedBy = "instance")
     val activityInstances: List<ActivityInstanceEntity> = emptyList(),
 
+    @BatchSize(20)
     @OneToMany(mappedBy = "instance")
     val participants: List<ParticipantEntity> = emptyList(),
 
