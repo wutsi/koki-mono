@@ -4,16 +4,18 @@ import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.tenant.server.domain.UserEntity
+import com.wutsi.koki.tenant.server.service.UserService
 import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.ApprovalStatus
+import com.wutsi.koki.workflow.dto.ApproveActivityInstanceRequest
 import com.wutsi.koki.workflow.dto.WorkflowStatus
-import com.wutsi.koki.workflow.server.dao.ActivityInstanceRepository
-import com.wutsi.koki.workflow.server.dao.ActivityRepository
-import com.wutsi.koki.workflow.server.dao.WorkflowInstanceRepository
 import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
+import com.wutsi.koki.workflow.server.domain.ApprovalEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
-import com.wutsi.koki.workflow.server.service.ActivityService
+import com.wutsi.koki.workflow.server.service.ActivityInstanceService
+import com.wutsi.koki.workflow.server.service.ApprovalService
+import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -23,10 +25,10 @@ import kotlin.collections.flatMap
 
 @Service
 class WorkflowEngine(
-    private val activityRepository: ActivityRepository,
-    private val workflowInstanceDao: WorkflowInstanceRepository,
-    private val activityInstanceDao: ActivityInstanceRepository,
-    private val activityService: ActivityService,
+    private val workflowInstanceService: WorkflowInstanceService,
+    private val activityInstanceService: ActivityInstanceService,
+    private val approvalService: ApprovalService,
+    private val userService: UserService,
     private val executorProvider: ActivityExecutorProvider,
 ) {
     companion object {
@@ -46,19 +48,19 @@ class WorkflowEngine(
             )
         }
 
-        val activities =
-            activityRepository.findByTypeAndActiveAndWorkflow(ActivityType.START, true, workflowInstance.workflow)
-        return if (activities.isEmpty()) {
+        val activity = workflowInstance.workflow.activities
+            .find { activity -> activity.type == ActivityType.START && activity.active }
+        return if (activity == null) {
             LOGGER.debug(">>> ${workflowInstance.id} - No START activity found")
             null
         } else {
             // Update workflow instance status
             workflowInstance.status = WorkflowStatus.RUNNING
             workflowInstance.startedAt = Date()
-            workflowInstanceDao.save(workflowInstance)
+            workflowInstanceService.save(workflowInstance)
 
             // Execute the activity
-            execute(activities.first(), workflowInstance)
+            execute(activity, workflowInstance)
         }
     }
 
@@ -66,7 +68,7 @@ class WorkflowEngine(
     fun stop(workflowInstance: WorkflowInstanceEntity) {
         LOGGER.debug(">>> ${workflowInstance.id} - Stopping")
 
-        // Ensure that the workflow is not RUNNING
+        // Ensure that the workflow is RUNNING
         if (workflowInstance.status != WorkflowStatus.RUNNING) {
             throw ConflictException(
                 error = Error(
@@ -76,8 +78,9 @@ class WorkflowEngine(
             )
         }
 
-        // Ensure there are no activity RUNNING
-        val runningInstances = activityInstanceDao.findByStatusAndInstance(WorkflowStatus.RUNNING, workflowInstance)
+        // Ensure there are no activity still RUNNING
+        val runningInstances = workflowInstance.activityInstances
+            .filter { activityInstance -> activityInstance.status == WorkflowStatus.RUNNING }
         if (runningInstances.isNotEmpty()) {
             throw ConflictException(
                 error = Error(
@@ -90,7 +93,7 @@ class WorkflowEngine(
         // Update workflowInstance status
         workflowInstance.status = WorkflowStatus.DONE
         workflowInstance.doneAt = Date()
-        workflowInstanceDao.save(workflowInstance)
+        workflowInstanceService.save(workflowInstance)
     }
 
     @Transactional
@@ -107,22 +110,22 @@ class WorkflowEngine(
         }
 
         // Get all the activities DONE
-        val activityInstances = activityInstanceDao.findByInstance(workflowInstance)
-        val doneActivityInstances = activityInstances.filter { act -> act.status == WorkflowStatus.DONE }
+        val doneActivityInstances =
+            workflowInstance.activityInstances.filter { act -> act.status == WorkflowStatus.DONE }
         if (doneActivityInstances.isEmpty()) {
             LOGGER.debug(">>> ${workflowInstance.id} - No activity is has been done")
             return emptyList()
         }
 
         // Find all successors
-        val activities = activityService.getByActive(true, workflowInstance.workflow)
-        val activityInstanceIds = activityInstances.map { done -> done.activity.id }
+        val activities = workflowInstance.workflow.activities.filter { activity -> activity.active }
+        val activityInstanceIds = workflowInstance.activityInstances.map { done -> done.activity.id }
         val successorActivities = doneActivityInstances.flatMap { done -> findSuccessors(done.activity, activities) }
             .distinctBy { it.id }
             .filter { successor -> !activityInstanceIds.contains(successor.id) }
         if (LOGGER.isDebugEnabled) {
-            val precedessorNames = doneActivityInstances.map { done -> done.activity.name }
-            LOGGER.debug(">>> ${workflowInstance.id} - $precedessorNames --> " + successorActivities.map { it.name })
+            val predecessorNames = doneActivityInstances.map { done -> done.activity.name }
+            LOGGER.debug(">>> ${workflowInstance.id} - $predecessorNames --> " + successorActivities.map { it.name })
         }
 
         // Execute all successors
@@ -174,7 +177,7 @@ class WorkflowEngine(
             activityInstance.status = WorkflowStatus.DONE
             activityInstance.doneAt = Date()
         }
-        activityInstanceDao.save(activityInstance)
+        activityInstanceService.save(activityInstance)
 
         // Run the next
         if (!activityInstance.activity.requiresApproval) {
@@ -182,11 +185,75 @@ class WorkflowEngine(
         }
     }
 
+    @Transactional
+    fun approve(activityInstance: ActivityInstanceEntity, request: ApproveActivityInstanceRequest): ApprovalEntity {
+        LOGGER.debug(">>> ${activityInstance.instance.id} > ${activityInstance.id} - Approve status=${request.status}")
+
+        if (activityInstance.status != WorkflowStatus.RUNNING) {
+            throw ConflictException(
+                error = Error(
+                    code = ErrorCode.WORKFLOW_INSTANCE_STATUS_ERROR,
+                    data = mapOf(
+                        "status" to activityInstance.status.name,
+                        "scope" to "activity"
+                    )
+                )
+            )
+        }
+        if (activityInstance.instance.status != WorkflowStatus.RUNNING) {
+            throw ConflictException(
+                error = Error(
+                    code = ErrorCode.WORKFLOW_INSTANCE_STATUS_ERROR,
+                    data = mapOf(
+                        "status" to activityInstance.instance.status.name,
+                        "scope" to "workflow"
+                    )
+                )
+            )
+        }
+        if (activityInstance.approval != ApprovalStatus.PENDING) {
+            throw ConflictException(
+                error = Error(
+                    code = ErrorCode.WORKFLOW_INSTANCE_ACTIVITY_NO_APPROVAL_PENDING,
+                )
+            )
+        }
+
+        // Save approval
+        val now = Date()
+        val tenantId = activityInstance.activity.workflow.tenant.id ?: -1
+        val approval = approvalService.save(
+            ApprovalEntity(
+                activityInstance = activityInstance,
+                approver = userService.get(request.approverUserId, tenantId),
+                approvedAt = now,
+                status = request.status,
+                comment = request.comment,
+            )
+        )
+
+        // Update activity
+        activityInstance.approval = approval.status
+        activityInstance.approvedAt = approval.approvedAt
+        if (request.status == ApprovalStatus.APPROVED) {
+            activityInstance.status = WorkflowStatus.DONE
+            activityInstance.doneAt = now
+        }
+        activityInstanceService.save(activityInstance)
+
+        // Execute Next
+        if (request.status == ApprovalStatus.APPROVED) {
+            next(activityInstance.instance)
+        }
+        return approval
+    }
+
     private fun execute(activity: ActivityEntity, workflowInstance: WorkflowInstanceEntity): ActivityInstanceEntity? {
         val now = Date()
-        var activityInstance = activityInstanceDao.findByActivityAndInstance(activity, workflowInstance)
+        var activityInstance = workflowInstance.activityInstances
+            .find { activityInstance -> activityInstance.activity.id == activity.id }
         if (activityInstance == null) {
-            activityInstance = activityInstanceDao.save(
+            activityInstance = activityInstanceService.save(
                 ActivityInstanceEntity(
                     id = UUID.randomUUID().toString(),
                     instance = workflowInstance,

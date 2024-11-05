@@ -19,4 +19,8 @@ class ActivityInstanceService(private val dao: ActivityInstanceRepository) {
         }
         return activityInstance
     }
+
+    fun save(activityInstance: ActivityInstanceEntity): ActivityInstanceEntity {
+        return dao.save(activityInstance)
+    }
 }

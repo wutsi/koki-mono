@@ -5,7 +5,7 @@ CREATE TABLE T_WORKFLOW(
 
   name                    VARCHAR(100) NOT NULL,
   description             TEXT,
-  active                  BOOLEAN NOT NULL DEFAULT false,
+  active                  BOOLEAN NOT NULL DEFAULT true,
   parameters              TEXT,
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
@@ -20,7 +20,7 @@ CREATE TABLE T_ACTIVITY(
   role_fk                 BIGINT REFERENCES T_ROLE(id),
 
   name                    VARCHAR(100) NOT NULL,
-  active                  BOOLEAN NOT NULL DEFAULT false,
+  active                  BOOLEAN NOT NULL DEFAULT true,
   type                    INT NOT NULL DEFAULT 0,
   requires_approval       BOOLEAN NOT NULL DEFAULT false,
   description             TEXT,
@@ -95,5 +95,18 @@ CREATE TABLE T_WI_ACTIVITY(
     done_at             DATETIME,
 
     UNIQUE(instance_fk, activity_fk),
+    PRIMARY KEY(id)
+) ENGINE = InnoDB;
+
+CREATE TABLE T_WI_APPROVAL(
+    id                      BIGINT NOT NULL AUTO_INCREMENT,
+
+    activity_instance_fk    VARCHAR(36) NOT NULL REFERENCES T_WI_ACTIVITY(id),
+    approver_fk             BIGINT NOT NULL REFERENCES T_USER(id),
+
+    status                  INT NOT NULL DEFAULT 0,
+    comment                 TEXT,
+    approved_at             DATETIME DEFAULT NOW(),
+
     PRIMARY KEY(id)
 ) ENGINE = InnoDB;

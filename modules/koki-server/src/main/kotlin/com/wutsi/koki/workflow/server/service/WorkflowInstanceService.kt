@@ -49,6 +49,11 @@ class WorkflowInstanceService(
         return instance
     }
 
+    @Transactional
+    fun save(workflowInstance: WorkflowInstanceEntity) {
+        instanceDao.save(workflowInstance)
+    }
+
     private fun createInstance(
         request: CreateWorkflowInstanceRequest,
         tenantId: Long
