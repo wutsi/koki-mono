@@ -100,71 +100,36 @@ class WorkflowEngine(
     fun next(workflowInstance: WorkflowInstanceEntity): List<ActivityInstanceEntity> {
         LOGGER.debug(">>> ${workflowInstance.id} - Run Next Activity")
 
-        if (workflowInstance.status != WorkflowStatus.RUNNING) {
-            throw ConflictException(
-                error = Error(
-                    code = ErrorCode.WORKFLOW_INSTANCE_STATUS_ERROR,
-                    data = mapOf("status" to workflowInstance.status.name)
-                )
-            )
-        }
+        ensureRunning(workflowInstance)
 
         // Get all the activities DONE
-        val doneActivityInstances =
-            workflowInstance.activityInstances.filter { act -> act.status == WorkflowStatus.DONE }
+        val doneActivityInstances = workflowInstance.activityInstances
+            .filter { act -> act.status == WorkflowStatus.DONE }
         if (doneActivityInstances.isEmpty()) {
             LOGGER.debug(">>> ${workflowInstance.id} - No activity is has been done")
             return emptyList()
         }
 
         // Find all successors
-        val activities = workflowInstance.workflow.activities.filter { activity -> activity.active }
-        val activityInstanceIds = workflowInstance.activityInstances.map { done -> done.activity.id }
-        val successorActivities = doneActivityInstances.flatMap { done -> findSuccessors(done.activity, activities) }
-            .distinctBy { it.id }
-            .filter { successor -> !activityInstanceIds.contains(successor.id) }
+        val successorActivities = findSuccessors(doneActivityInstances, workflowInstance)
         if (LOGGER.isDebugEnabled) {
             val predecessorNames = doneActivityInstances.map { done -> done.activity.name }
             LOGGER.debug(">>> ${workflowInstance.id} - $predecessorNames --> " + successorActivities.map { it.name })
         }
 
         // Execute all successors
-        return successorActivities.mapNotNull { successor -> execute(successor, workflowInstance) }
+        // For each successor, make sure that all its predecessors are DONE
+        return successorActivities
+            .filter { successor -> areAllPrecessecorDone(successor, workflowInstance) }
+            .mapNotNull { successor -> execute(successor, workflowInstance) }
     }
 
     @Transactional
     fun done(activityInstance: ActivityInstanceEntity) {
         LOGGER.debug(">>> ${activityInstance.instance.id} > ${activityInstance.id} - Done")
 
-        if (activityInstance.status != WorkflowStatus.RUNNING) {
-            throw ConflictException(
-                error = Error(
-                    code = ErrorCode.WORKFLOW_INSTANCE_STATUS_ERROR,
-                    data = mapOf(
-                        "status" to activityInstance.status.name,
-                        "scope" to "activity"
-                    )
-                )
-            )
-        }
-        if (activityInstance.instance.status != WorkflowStatus.RUNNING) {
-            throw ConflictException(
-                error = Error(
-                    code = ErrorCode.WORKFLOW_INSTANCE_STATUS_ERROR,
-                    data = mapOf(
-                        "status" to activityInstance.instance.status.name,
-                        "scope" to "workflow"
-                    )
-                )
-            )
-        }
-        if (activityInstance.approval == ApprovalStatus.PENDING) {
-            throw ConflictException(
-                error = Error(
-                    code = ErrorCode.WORKFLOW_INSTANCE_ACTIVITY_APPROVAL_PENDING,
-                )
-            )
-        }
+        ensureRunning(activityInstance)
+        ensureNoApprovalPending(activityInstance)
 
         if (activityInstance.activity.requiresApproval) {
             LOGGER.debug(">>> ${activityInstance.instance.id} > ${activityInstance.id} - Starting approval...")
@@ -189,35 +154,8 @@ class WorkflowEngine(
     fun approve(activityInstance: ActivityInstanceEntity, request: ApproveActivityInstanceRequest): ApprovalEntity {
         LOGGER.debug(">>> ${activityInstance.instance.id} > ${activityInstance.id} - Approve status=${request.status}")
 
-        if (activityInstance.status != WorkflowStatus.RUNNING) {
-            throw ConflictException(
-                error = Error(
-                    code = ErrorCode.WORKFLOW_INSTANCE_STATUS_ERROR,
-                    data = mapOf(
-                        "status" to activityInstance.status.name,
-                        "scope" to "activity"
-                    )
-                )
-            )
-        }
-        if (activityInstance.instance.status != WorkflowStatus.RUNNING) {
-            throw ConflictException(
-                error = Error(
-                    code = ErrorCode.WORKFLOW_INSTANCE_STATUS_ERROR,
-                    data = mapOf(
-                        "status" to activityInstance.instance.status.name,
-                        "scope" to "workflow"
-                    )
-                )
-            )
-        }
-        if (activityInstance.approval != ApprovalStatus.PENDING) {
-            throw ConflictException(
-                error = Error(
-                    code = ErrorCode.WORKFLOW_INSTANCE_ACTIVITY_NO_APPROVAL_PENDING,
-                )
-            )
-        }
+        ensureRunning(activityInstance)
+        ensureApprovalPending(activityInstance)
 
         // Save approval
         val now = Date()
@@ -285,10 +223,84 @@ class WorkflowEngine(
             ?.user
     }
 
+    private fun ensureRunning(activityInstance: ActivityInstanceEntity) {
+        if (activityInstance.status != WorkflowStatus.RUNNING) {
+            throw ConflictException(
+                error = Error(
+                    code = ErrorCode.WORKFLOW_INSTANCE_STATUS_ERROR,
+                    data = mapOf(
+                        "status" to activityInstance.status.name,
+                        "scope" to "activity"
+                    )
+                )
+            )
+        }
+        ensureRunning(activityInstance.instance)
+    }
+
+    private fun ensureRunning(workflowInstance: WorkflowInstanceEntity) {
+        if (workflowInstance.status != WorkflowStatus.RUNNING) {
+            throw ConflictException(
+                error = Error(
+                    code = ErrorCode.WORKFLOW_INSTANCE_STATUS_ERROR,
+                    data = mapOf(
+                        "status" to workflowInstance.status.name,
+                        "scope" to "workflow"
+                    )
+                )
+            )
+        }
+    }
+
+    private fun ensureNoApprovalPending(activityInstance: ActivityInstanceEntity) {
+        if (activityInstance.approval == ApprovalStatus.PENDING) {
+            throw ConflictException(
+                error = Error(
+                    code = ErrorCode.WORKFLOW_INSTANCE_ACTIVITY_APPROVAL_PENDING,
+                )
+            )
+        }
+    }
+
+    private fun ensureApprovalPending(activityInstance: ActivityInstanceEntity) {
+        if (activityInstance.approval != ApprovalStatus.PENDING) {
+            throw ConflictException(
+                error = Error(
+                    code = ErrorCode.WORKFLOW_INSTANCE_ACTIVITY_NO_APPROVAL_PENDING,
+                )
+            )
+        }
+    }
+
+    private fun findSuccessors(
+        activityInstances: List<ActivityInstanceEntity>,
+        workflowInstance: WorkflowInstanceEntity
+    ): List<ActivityEntity> {
+        val activeActivities = workflowInstance.workflow.activities.filter { activity -> activity.active }
+        val activityInstanceIds =
+            workflowInstance.activityInstances.map { activityInstance -> activityInstance.activity.id }
+        return activityInstances
+            .flatMap { activityInstance -> findSuccessors(activityInstance.activity, activeActivities) }
+            .distinctBy { it.id }
+            .filter { successor -> !activityInstanceIds.contains(successor.id) }
+    }
+
     private fun findSuccessors(predecessor: ActivityEntity, activities: List<ActivityEntity>): List<ActivityEntity> {
         return activities.filter { activity ->
             val predecessorIds = activity.predecessors.mapNotNull { pred -> pred.id }
             predecessorIds.contains(predecessor.id)
         }
+    }
+
+    private fun areAllPrecessecorDone(activity: ActivityEntity, workflowInstance: WorkflowInstanceEntity): Boolean {
+        val predecessorIds = activity.predecessors
+            .filter { predecessor -> predecessor.active }
+            .map { predecessor -> predecessor.id }
+
+        val doneActivityIds = workflowInstance.activityInstances
+            .filter { activityInstance -> activityInstance.status == WorkflowStatus.DONE }
+            .map { activityInstance -> activityInstance.activity.id }
+
+        return doneActivityIds.containsAll(predecessorIds)
     }
 }

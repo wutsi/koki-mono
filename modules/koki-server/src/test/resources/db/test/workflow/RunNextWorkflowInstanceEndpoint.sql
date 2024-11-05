@@ -54,12 +54,13 @@ INSERT INTO T_WORKFLOW_INSTANCE(id, tenant_fk, workflow_fk, approver_fk, status,
            ('wi-100-03', 1, 100, null, 2, now()),
            ('wi-100-04', 1, 100, null, 2, now()),
            ('wi-100-05', 1, 100, null, 1, now()),
+           ('wi-100-06', 1, 100, null, 2, now()),
            ('wi-110-01', 1, 110, null, 2, now()),
 
            ('wi-200-01', 2, 200, null, 2, now());
 
 INSERT INTO T_WI_ACTIVITY(id, instance_fk, activity_fk, assignee_fk, approver_fk, status, started_at, done_at)
-    VALUES ('wi-100-10-start-done',      'wi-100-01', 100, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
+    VALUES ('wi-100-01-start-done',      'wi-100-01', 100, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
 
            ('wi-100-02-start-done',      'wi-100-02', 100, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
            ('wi-100-02-working-done',    'wi-100-02', 101, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
@@ -68,6 +69,11 @@ INSERT INTO T_WI_ACTIVITY(id, instance_fk, activity_fk, assignee_fk, approver_fk
            ('wi-100-03-working-running', 'wi-100-03', 101, null, null, 2, '2020-01-10 12:30', '2020-01-11 12:30'),
 
            ('wi-100-05-start-running',   'wi-100-05', 100, null, null, 2, '2020-01-10 12:30', '2020-01-11 12:30'),
+
+           ('wi-100-06-start-done',      'wi-100-06', 100, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
+           ('wi-100-06-working-done',    'wi-100-06', 101, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
+           ('wi-100-06-send-done',       'wi-100-06', 102, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
+           ('wi-100-06-submit-working',  'wi-100-06', 103, null, null, 2, '2020-01-10 12:30', '2020-01-11 12:30'),
 
            ('wi-110-01-start-done',      'wi-110-01', 110, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
            ('wi-110-01-working-done',    'wi-110-01', 111, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30');

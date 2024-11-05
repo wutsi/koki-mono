@@ -47,12 +47,11 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun run() {
-        val result =
-            rest.postForEntity(
-                "/v1/workflow-instances/wi-100-01/run-next",
-                emptyMap<String, String>(),
-                RunNextWorkflowInstanceResponse::class.java
-            )
+        val result = rest.postForEntity(
+            "/v1/workflow-instances/wi-100-01/run-next",
+            emptyMap<String, String>(),
+            RunNextWorkflowInstanceResponse::class.java
+        )
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
@@ -75,12 +74,11 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun `spawn multiple activities`() {
-        val result =
-            rest.postForEntity(
-                "/v1/workflow-instances/wi-100-02/run-next",
-                emptyMap<String, String>(),
-                RunNextWorkflowInstanceResponse::class.java
-            )
+        val result = rest.postForEntity(
+            "/v1/workflow-instances/wi-100-02/run-next",
+            emptyMap<String, String>(),
+            RunNextWorkflowInstanceResponse::class.java
+        )
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
@@ -104,12 +102,11 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun `current activity is RUNNING - with past activities DONE`() {
-        val result =
-            rest.postForEntity(
-                "/v1/workflow-instances/wi-100-03/run-next",
-                emptyMap<String, String>(),
-                RunNextWorkflowInstanceResponse::class.java
-            )
+        val result = rest.postForEntity(
+            "/v1/workflow-instances/wi-100-03/run-next",
+            emptyMap<String, String>(),
+            RunNextWorkflowInstanceResponse::class.java
+        )
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
@@ -119,12 +116,11 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun `no activity is DONE`() {
-        val result =
-            rest.postForEntity(
-                "/v1/workflow-instances/wi-100-04/run-next",
-                emptyMap<String, String>(),
-                RunNextWorkflowInstanceResponse::class.java
-            )
+        val result = rest.postForEntity(
+            "/v1/workflow-instances/wi-100-04/run-next",
+            emptyMap<String, String>(),
+            RunNextWorkflowInstanceResponse::class.java
+        )
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
@@ -134,25 +130,35 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun `workflow is not RUNNING`() {
-        val result =
-            rest.postForEntity(
-                "/v1/workflow-instances/wi-100-05/run-next",
-                emptyMap<String, String>(),
-                ErrorResponse::class.java
-            )
+        val result = rest.postForEntity(
+            "/v1/workflow-instances/wi-100-05/run-next",
+            emptyMap<String, String>(),
+            ErrorResponse::class.java
+        )
 
         assertEquals(HttpStatus.CONFLICT, result.statusCode)
         assertEquals(ErrorCode.WORKFLOW_INSTANCE_STATUS_ERROR, result.body?.error?.code)
     }
 
     @Test
+    fun `all predecessors not DONE`() {
+        val result = rest.postForEntity(
+            "/v1/workflow-instances/wi-100-06/run-next",
+            emptyMap<String, String>(),
+            RunNextWorkflowInstanceResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+        assertEquals(true, result.body?.activityInstanceIds?.isEmpty())
+    }
+
+    @Test
     fun `do not run inactive activities`() {
-        val result =
-            rest.postForEntity(
-                "/v1/workflow-instances/wi-110-01/run-next",
-                emptyMap<String, String>(),
-                RunNextWorkflowInstanceResponse::class.java
-            )
+        val result = rest.postForEntity(
+            "/v1/workflow-instances/wi-110-01/run-next",
+            emptyMap<String, String>(),
+            RunNextWorkflowInstanceResponse::class.java
+        )
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
@@ -173,12 +179,11 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun `workflow instance not found`() {
-        val result =
-            rest.postForEntity(
-                "/v1/workflow-instances/xxXXXxx/run-next",
-                emptyMap<String, String>(),
-                ErrorResponse::class.java
-            )
+        val result = rest.postForEntity(
+            "/v1/workflow-instances/xxXXXxx/run-next",
+            emptyMap<String, String>(),
+            ErrorResponse::class.java
+        )
 
         assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
         assertEquals(ErrorCode.WORKFLOW_INSTANCE_NOT_FOUND, result.body?.error?.code)
@@ -186,12 +191,11 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun `workflow instance of another tenant`() {
-        val result =
-            rest.postForEntity(
-                "/v1/workflow-instances/wi-200-01/run-next",
-                emptyMap<String, String>(),
-                ErrorResponse::class.java
-            )
+        val result = rest.postForEntity(
+            "/v1/workflow-instances/wi-200-01/run-next",
+            emptyMap<String, String>(),
+            ErrorResponse::class.java
+        )
 
         assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
         assertEquals(ErrorCode.WORKFLOW_INSTANCE_NOT_FOUND, result.body?.error?.code)
