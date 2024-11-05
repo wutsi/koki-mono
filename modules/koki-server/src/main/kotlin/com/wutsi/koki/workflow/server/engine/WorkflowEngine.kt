@@ -162,7 +162,7 @@ class WorkflowEngine(
         approverUserId: Long,
         comment: String?,
     ): ApprovalEntity {
-        LOGGER.debug(">>> ${activityInstance.instance.id} > ${activityInstance.id} - Approve status=${status}")
+        LOGGER.debug(">>> ${activityInstance.instance.id} > ${activityInstance.id} - Approve status=$status")
 
         ensureRunning(activityInstance)
         ensureApprovalPending(activityInstance)
