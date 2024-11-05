@@ -79,6 +79,17 @@ CREATE TABLE T_WI_PARAMETER(
     PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
+CREATE TABLE T_WI_STATE(
+    id                  BIGINT NOT NULL AUTO_INCREMENT,
+
+    instance_fk         VARCHAR(36) NOT NULL REFERENCES T_WORKFLOW_INSTANCE(id),
+    name                VARCHAR(100) NOT NULL,
+    value               TEXT,
+
+    UNIQUE(instance_fk, name),
+    PRIMARY KEY(id)
+) ENGINE = InnoDB;
+
 CREATE TABLE T_WI_ACTIVITY(
     id                  VARCHAR(36) NOT NULL,
 

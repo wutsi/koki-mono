@@ -34,8 +34,13 @@ data class WorkflowInstanceEntity(
     @OneToMany(mappedBy = "instance")
     val participants: List<ParticipantEntity> = emptyList(),
 
+    @BatchSize(20)
     @OneToMany(mappedBy = "instance")
     val parameters: List<ParameterEntity> = emptyList(),
+
+    @BatchSize(20)
+    @OneToMany(mappedBy = "instance")
+    val state: List<StateEntity> = emptyList(),
 
     @ManyToOne
     @JoinColumn(name = "approver_fk")

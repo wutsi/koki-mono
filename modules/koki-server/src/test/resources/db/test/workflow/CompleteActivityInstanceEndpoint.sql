@@ -71,3 +71,7 @@ INSERT INTO T_WI_ACTIVITY(id, instance_fk, activity_fk, assignee_fk, approval, a
            ('wi-110-02-start-done',      'wi-110-02', 110, null, 0, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
            ('wi-110-02-working-running', 'wi-110-02', 111, null, 1, 100,  2, '2020-01-10 12:30', null)
     ;
+
+INSERT INTO T_WI_STATE(instance_fk, name, value)
+    VALUES ('wi-110-01', 'A', 'oldA'),
+           ('wi-110-01', 'C', 'cc');

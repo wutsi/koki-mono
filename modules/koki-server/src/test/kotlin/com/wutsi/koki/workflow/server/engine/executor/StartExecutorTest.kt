@@ -16,6 +16,6 @@ class StartExecutorTest {
     fun execute() {
         executor.execute(instance, engine)
 
-        verify(engine).done(instance)
+        verify(engine).done(instance, emptyMap())
     }
 }

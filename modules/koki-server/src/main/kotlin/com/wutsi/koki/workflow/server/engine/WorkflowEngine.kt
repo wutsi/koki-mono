@@ -7,7 +7,6 @@ import com.wutsi.koki.tenant.server.domain.UserEntity
 import com.wutsi.koki.tenant.server.service.UserService
 import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.ApprovalStatus
-import com.wutsi.koki.workflow.dto.ApproveActivityInstanceRequest
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
@@ -125,12 +124,18 @@ class WorkflowEngine(
     }
 
     @Transactional
-    fun done(activityInstance: ActivityInstanceEntity) {
+    fun done(activityInstance: ActivityInstanceEntity, state: Map<String, String>) {
         LOGGER.debug(">>> ${activityInstance.instance.id} > ${activityInstance.id} - Done")
 
         ensureRunning(activityInstance)
         ensureNoApprovalPending(activityInstance)
 
+        // Set the workflow state
+        state.map { entry ->
+            workflowInstanceService.setState(entry.key, entry.value, activityInstance.instance)
+        }
+
+        // Update the activity
         if (activityInstance.activity.requiresApproval) {
             LOGGER.debug(">>> ${activityInstance.instance.id} > ${activityInstance.id} - Starting approval...")
 
@@ -151,8 +156,13 @@ class WorkflowEngine(
     }
 
     @Transactional
-    fun approve(activityInstance: ActivityInstanceEntity, request: ApproveActivityInstanceRequest): ApprovalEntity {
-        LOGGER.debug(">>> ${activityInstance.instance.id} > ${activityInstance.id} - Approve status=${request.status}")
+    fun approve(
+        activityInstance: ActivityInstanceEntity,
+        status: ApprovalStatus,
+        approverUserId: Long,
+        comment: String?,
+    ): ApprovalEntity {
+        LOGGER.debug(">>> ${activityInstance.instance.id} > ${activityInstance.id} - Approve status=${status}")
 
         ensureRunning(activityInstance)
         ensureApprovalPending(activityInstance)
@@ -163,24 +173,24 @@ class WorkflowEngine(
         val approval = approvalService.save(
             ApprovalEntity(
                 activityInstance = activityInstance,
-                approver = userService.get(request.approverUserId, tenantId),
+                approver = userService.get(approverUserId, tenantId),
                 approvedAt = now,
-                status = request.status,
-                comment = request.comment,
+                status = status,
+                comment = comment,
             )
         )
 
         // Update activity
         activityInstance.approval = approval.status
         activityInstance.approvedAt = approval.approvedAt
-        if (request.status == ApprovalStatus.APPROVED) {
+        if (status == ApprovalStatus.APPROVED) {
             activityInstance.status = WorkflowStatus.DONE
             activityInstance.doneAt = now
         }
         activityInstanceService.save(activityInstance)
 
         // Execute Next
-        if (request.status == ApprovalStatus.APPROVED) {
+        if (status == ApprovalStatus.APPROVED) {
             next(activityInstance.instance)
         }
         return approval

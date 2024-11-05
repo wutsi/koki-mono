@@ -9,9 +9,11 @@ import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.dao.ParameterRepository
 import com.wutsi.koki.workflow.server.dao.ParticipantRepository
+import com.wutsi.koki.workflow.server.dao.StateRepository
 import com.wutsi.koki.workflow.server.dao.WorkflowInstanceRepository
 import com.wutsi.koki.workflow.server.domain.ParameterEntity
 import com.wutsi.koki.workflow.server.domain.ParticipantEntity
+import com.wutsi.koki.workflow.server.domain.StateEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -22,6 +24,7 @@ import java.util.UUID
 class WorkflowInstanceService(
     private val instanceDao: WorkflowInstanceRepository,
     private val participantDao: ParticipantRepository,
+    private val stateDao: StateRepository,
     private val parameterDao: ParameterRepository,
     private val workflowService: WorkflowService,
     private val userService: UserService,
@@ -52,6 +55,30 @@ class WorkflowInstanceService(
     @Transactional
     fun save(workflowInstance: WorkflowInstanceEntity) {
         instanceDao.save(workflowInstance)
+    }
+
+    @Transactional
+    fun setState(name: String, value: String?, workflowInstance: WorkflowInstanceEntity): StateEntity? {
+        val state = stateDao.findByNameAndInstance(name, workflowInstance)
+        if (state == null) {
+            if (!value.isNullOrEmpty()) {
+                return stateDao.save(
+                    StateEntity(
+                        name = name,
+                        value = value,
+                        instance = workflowInstance,
+                    )
+                )
+            }
+        } else {
+            if (value.isNullOrEmpty()) {
+                stateDao.delete(state)
+            } else {
+                state.value = value
+                return stateDao.save(state)
+            }
+        }
+        return null
     }
 
     private fun createInstance(

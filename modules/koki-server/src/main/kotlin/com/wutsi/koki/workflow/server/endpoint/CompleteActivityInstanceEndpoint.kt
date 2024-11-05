@@ -1,10 +1,13 @@
 package com.wutsi.koki.workflow.server.endpoint
 
+import com.wutsi.koki.workflow.dto.CompleteActivityInstanceRequest
 import com.wutsi.koki.workflow.server.engine.WorkflowEngine
 import com.wutsi.koki.workflow.server.service.ActivityInstanceService
 import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -21,9 +24,10 @@ class CompleteActivityInstanceEndpoint(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: String,
         @PathVariable activityInstanceId: String,
+        @RequestBody @Valid request: CompleteActivityInstanceRequest
     ) {
         val workflowInstance = service.get(id, tenantId)
         val activityInstance = activityInstanceService.getById(activityInstanceId, workflowInstance)
-        engine.done(activityInstance)
+        engine.done(activityInstance, request.state)
     }
 }

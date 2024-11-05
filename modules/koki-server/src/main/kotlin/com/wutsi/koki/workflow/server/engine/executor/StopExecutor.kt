@@ -16,7 +16,7 @@ class StopExecutor : ActivityExecutor {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(">>> ${activityInstance.instance.id} > ${activityInstance.id} executing")
         }
-        engine.done(activityInstance)
+        engine.done(activityInstance, emptyMap())
         engine.stop(activityInstance.instance)
     }
 }

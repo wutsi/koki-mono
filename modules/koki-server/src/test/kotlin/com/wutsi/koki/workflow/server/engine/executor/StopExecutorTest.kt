@@ -17,7 +17,7 @@ class StopExecutorTest {
     fun execute() {
         executor.execute(activityInstance, engine)
 
-        verify(engine).done(activityInstance)
+        verify(engine).done(activityInstance, emptyMap())
         verify(engine).stop(activityInstance.instance)
     }
 }

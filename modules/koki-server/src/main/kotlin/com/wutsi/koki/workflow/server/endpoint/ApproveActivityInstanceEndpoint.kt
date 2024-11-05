@@ -29,7 +29,7 @@ class ApproveActivityInstanceEndpoint(
     ): ApproveActivityInstanceResponse {
         val workflowInstance = service.get(id, tenantId)
         val activityInstance = activityInstanceService.getById(activityInstanceId, workflowInstance)
-        val approval = engine.approve(activityInstance, request)
+        val approval = engine.approve(activityInstance, request.status, request.approverUserId, request.comment)
         return ApproveActivityInstanceResponse(approval.id ?: -1)
     }
 }

@@ -10,8 +10,10 @@ import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.workflow.dto.ApprovalStatus
+import com.wutsi.koki.workflow.dto.CompleteActivityInstanceRequest
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.dao.ActivityInstanceRepository
+import com.wutsi.koki.workflow.server.dao.StateRepository
 import com.wutsi.koki.workflow.server.dao.WorkflowInstanceRepository
 import com.wutsi.koki.workflow.server.engine.ActivityExecutor
 import com.wutsi.koki.workflow.server.engine.ActivityExecutorProvider
@@ -37,6 +39,9 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var activityInstanceDao: ActivityInstanceRepository
 
+    @Autowired
+    private lateinit var stateDao: StateRepository
+
     @MockBean
     private lateinit var activityExecutorProvider: ActivityExecutorProvider
 
@@ -53,10 +58,16 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         val fmt = SimpleDateFormat("yyyy-MM-dd")
         fmt.timeZone = TimeZone.getTimeZone("UTC")
 
+        val request = CompleteActivityInstanceRequest(
+            state = mapOf(
+                "A" to "aa",
+                "B" to "bb"
+            )
+        )
         val result =
             rest.postForEntity(
                 "/v1/workflow-instances/wi-100-01/activities/wi-100-01-working-running/complete",
-                emptyMap<String, String>(),
+                request,
                 Any::class.java
             )
 
@@ -74,6 +85,11 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         val workflowInstance = instanceDao.findById("wi-100-01").get()
         val activityInstances = activityInstanceDao.findByInstance(workflowInstance)
         assertEquals(4, activityInstances.size)
+
+        val state = stateDao.findByInstance(workflowInstance).map { it.name to it.value }.toMap()
+        assertEquals(2, state.size)
+        assertEquals(request.state["A"], state["A"])
+        assertEquals(request.state["B"], state["B"])
     }
 
     @Test
@@ -81,7 +97,7 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         val result =
             rest.postForEntity(
                 "/v1/workflow-instances/wi-100-02/activities/wi-100-02-working-done/complete",
-                emptyMap<String, String>(),
+                CompleteActivityInstanceRequest(),
                 ErrorResponse::class.java
             )
 
@@ -94,7 +110,7 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         val result =
             rest.postForEntity(
                 "/v1/workflow-instances/wi-100-03/activities/wi-100-03-working-running/complete",
-                emptyMap<String, String>(),
+                CompleteActivityInstanceRequest(),
                 ErrorResponse::class.java
             )
 
@@ -104,10 +120,18 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun `start approval`() {
+        val request = CompleteActivityInstanceRequest(
+            state = mapOf(
+                "A" to "aa",
+                "B" to "bb",
+                "C" to "",
+                "D" to "",
+            )
+        )
         val result =
             rest.postForEntity(
                 "/v1/workflow-instances/wi-110-01/activities/wi-110-01-working-running/complete",
-                emptyMap<String, String>(),
+                request,
                 Any::class.java
             )
 
@@ -124,6 +148,11 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         val workflowInstance = instanceDao.findById("wi-110-01").get()
         val activityInstances = activityInstanceDao.findByInstance(workflowInstance)
         assertEquals(2, activityInstances.size)
+
+        val state = stateDao.findByInstance(workflowInstance).map { it.name to it.value }.toMap()
+        assertEquals(2, state.size)
+        assertEquals(request.state["A"], state["A"])
+        assertEquals(request.state["B"], state["B"])
     }
 
     @Test
@@ -131,7 +160,7 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         val result =
             rest.postForEntity(
                 "/v1/workflow-instances/wi-110-02/activities/wi-110-02-working-running/complete",
-                emptyMap<String, String>(),
+                CompleteActivityInstanceRequest(),
                 ErrorResponse::class.java
             )
 
