@@ -23,6 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.TimeZone
 import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -49,6 +52,9 @@ class ApproveActivityInstanceEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun approve() {
+        val fmt = SimpleDateFormat("yyyy-MM-dd")
+        fmt.timeZone = TimeZone.getTimeZone("UTC")
+
         val request = ApproveActivityInstanceRequest(
             status = ApprovalStatus.APPROVED,
             comment = "Yo man",
@@ -66,7 +72,7 @@ class ApproveActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         assertEquals(WorkflowStatus.DONE, activityInstance.status)
         assertNotNull(activityInstance.doneAt)
         assertEquals(request.status, activityInstance.approval)
-        assertNotNull(activityInstance.approvedAt)
+        assertEquals(fmt.format(Date()), fmt.format(activityInstance.approvedAt))
 
         val approvalId = result.body!!.approvalId
         val approval = approvalRepository.findById(approvalId).get()
@@ -80,6 +86,9 @@ class ApproveActivityInstanceEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun reject() {
+        val fmt = SimpleDateFormat("yyyy-MM-dd")
+        fmt.timeZone = TimeZone.getTimeZone("UTC")
+
         val request = ApproveActivityInstanceRequest(
             status = ApprovalStatus.REJECTED,
             comment = "Yo man",
@@ -97,7 +106,7 @@ class ApproveActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         assertEquals(WorkflowStatus.RUNNING, activityInstance.status)
         assertNull(activityInstance.doneAt)
         assertEquals(request.status, activityInstance.approval)
-        assertNotNull(activityInstance.approvedAt)
+        assertEquals(fmt.format(Date()), fmt.format(activityInstance.approvedAt))
 
         val approvalId = result.body!!.approvalId
         val approval = approvalRepository.findById(approvalId).get()
