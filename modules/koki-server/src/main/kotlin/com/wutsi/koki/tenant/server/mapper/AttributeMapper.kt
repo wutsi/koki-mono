@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 @Service
 class AttributeMapper {
     fun toAttribute(entity: AttributeEntity) = Attribute(
-        id = entity.id ?: -1,
+        id = entity.id!!,
         name = entity.name,
         type = entity.type,
         label = entity.label,

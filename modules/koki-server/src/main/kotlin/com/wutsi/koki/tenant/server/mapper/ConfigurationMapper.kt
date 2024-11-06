@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 @Service
 class ConfigurationMapper(private val attributeMapper: AttributeMapper) {
     fun toConfiguration(entity: ConfigurationEntity, attribute: AttributeEntity? = null) = Configuration(
-        id = entity.id ?: -1,
+        id = entity.id!!,
         attribute = attributeMapper.toAttribute(attribute ?: entity.attribute),
         value = entity.value,
         createdAt = entity.createdAt,

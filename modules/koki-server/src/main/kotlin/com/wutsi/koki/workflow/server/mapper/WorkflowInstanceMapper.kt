@@ -12,8 +12,8 @@ class WorkflowInstanceMapper(
 ) {
     fun toWorkflowInstance(entity: WorkflowInstanceEntity): WorkflowInstance {
         return WorkflowInstance(
-            id = entity.id ?: "",
-            workflowId = entity.workflow.id ?: -1,
+            id = entity.id!!,
+            workflowId = entity.workflow.id!!,
             approverUserId = entity.approver?.id,
             createdAt = entity.createdAt,
             startedAt = entity.startedAt,
@@ -24,8 +24,8 @@ class WorkflowInstanceMapper(
             parameters = entity.parameters.map { entry -> entry.name to entry.value }.toMap(),
             participants = entity.participants.map { participant ->
                 Participant(
-                    roleId = participant.role.id ?: -1,
-                    userId = participant.user.id ?: -1
+                    roleId = participant.role.id!!,
+                    userId = participant.user.id!!
                 )
             },
             activityInstances = entity.activityInstances.map { activityInstance ->

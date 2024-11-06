@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 @Service
 class TenantMapper {
     fun toTenant(entity: TenantEntity) = Tenant(
-        id = entity.id ?: -1,
+        id = entity.id!!,
         name = entity.name,
         domainName = entity.domainName,
         locale = entity.locale,

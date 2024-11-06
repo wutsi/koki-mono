@@ -16,7 +16,7 @@ class WorkflowMapper(
         val roles = getRoles(entity).map { role -> roleMapper.toRole(role) }
         val activities = entity.activities.map { activity -> activityMapper.toActivity(activity) }
         return Workflow(
-            id = entity.id ?: -1,
+            id = entity.id!!,
             name = entity.name,
             description = entity.description,
             active = entity.active,
@@ -31,7 +31,7 @@ class WorkflowMapper(
 
     fun toWorkflowSummary(entity: WorkflowEntity): WorkflowSummary {
         return WorkflowSummary(
-            id = entity.id ?: -1,
+            id = entity.id!!,
             name = entity.name,
             description = entity.description,
             active = entity.active,

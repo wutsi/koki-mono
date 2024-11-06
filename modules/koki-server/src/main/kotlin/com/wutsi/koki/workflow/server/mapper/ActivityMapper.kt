@@ -10,8 +10,8 @@ import java.util.Properties
 class ActivityMapper {
     fun toActivity(entity: ActivityEntity): Activity {
         return Activity(
-            id = entity.id ?: -1,
-            workflowId = entity.workflow.id ?: -1,
+            id = entity.id!!,
+            workflowId = entity.workflow.id!!,
             type = entity.type,
             name = entity.name,
             description = entity.description,
