@@ -50,16 +50,16 @@ class WorkflowInstanceService(
 
     fun search(
         ids: List<String>,
-        workflowIds: List<Long> = emptyList(),
-        participantUserId: Long? = null,
-        status: WorkflowStatus? = null,
-        startFrom: Date? = null,
-        startTo: Date? = null,
+        workflowIds: List<Long>,
+        participantUserId: Long?,
+        status: WorkflowStatus?,
+        startFrom: Date?,
+        startTo: Date?,
         tenantId: Long,
-        limit: Int = 20,
-        offset: Int = 0,
-        sortBy: WorkflowInstanceSortBy? = null,
-        ascending: Boolean = false,
+        limit: Int,
+        offset: Int,
+        sortBy: WorkflowInstanceSortBy?,
+        ascending: Boolean,
     ): List<WorkflowInstanceEntity> {
         val jql = StringBuilder("SELECT W FROM WorkflowInstanceEntity W")
         if (participantUserId != null) {

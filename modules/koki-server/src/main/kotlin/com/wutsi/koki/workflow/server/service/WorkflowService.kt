@@ -28,12 +28,12 @@ class WorkflowService(
 
     fun search(
         ids: List<Long>,
-        active: Boolean? = null,
+        active: Boolean?,
         tenantId: Long,
-        limit: Int = 20,
-        offset: Int = 0,
-        sortBy: WorkflowSortBy? = null,
-        ascending: Boolean = false,
+        limit: Int,
+        offset: Int,
+        sortBy: WorkflowSortBy?,
+        ascending: Boolean,
     ): List<WorkflowEntity> {
         val jql = StringBuilder("SELECT W FROM WorkflowEntity AS W WHERE W.tenant.id = :tenantId")
         if (ids.isNotEmpty()) {

@@ -23,7 +23,7 @@ class SearchWorkflowEndpoint(
         @RequestParam(required = false) active: Boolean? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
-        @RequestParam(required = false, name = "sort-by") sortBy: WorkflowSortBy = WorkflowSortBy.ID,
+        @RequestParam(required = false, name = "sort-by") sortBy: WorkflowSortBy? = null,
         @RequestParam(required = false, name = "asc") ascending: Boolean = true,
     ): SearchWorkflowResponse {
         val workflows = service.search(
