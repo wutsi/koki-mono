@@ -1,115 +1,90 @@
 package com.wutsi.koki.tenant.server.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
-import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.workflow.dto.ActivityType
-import com.wutsi.koki.workflow.dto.GetWorkflowResponse
+import com.wutsi.koki.workflow.dto.SearchWorkflowResponse
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/workflow/GetWorkflowEndpoint.sql"])
-class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/workflow/SearchWorkflowEndpoint.sql"])
+class SearchWorkflowEndpointTest : TenantAwareEndpointTest() {
     @Test
-    fun get() {
-        val result = rest.getForEntity("/v1/workflows/100", GetWorkflowResponse::class.java)
+    fun all() {
+        val result = rest.getForEntity("/v1/workflows", SearchWorkflowResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val workflow = result.body!!.workflow
-        assertEquals("w1", workflow.name)
-        assertEquals("description w1", workflow.description)
-        assertEquals(false, workflow.active)
-        assertEquals(true, workflow.requiresApprover)
-        assertEquals(listOf("PARAM_1", "PARAM_2", "PARAM_3"), workflow.parameters)
+        val workflows = result.body!!.workflows
+        assertEquals(4, workflows.size)
 
-        assertEquals(2, workflow.roles.size)
-        val roles = workflow.roles
-        assertEquals(10L, roles[0].id)
-        assertEquals("accountant", roles[0].name)
+        assertEquals(100L, workflows[0].id)
+        assertEquals("w100", workflows[0].name)
+        assertEquals("This is the description", workflows[0].description)
+        assertTrue(workflows[0].active)
 
-        assertEquals(11L, roles[1].id)
-        assertEquals("technician", roles[1].name)
+        assertEquals(110L, workflows[1].id)
+        assertEquals("w110", workflows[1].name)
+        assertNull(workflows[1].description)
+        assertTrue(workflows[1].active)
 
-        assertEquals(5, workflow.activities.size)
-        val activities = workflow.activities.sortedBy { it.id }
-        assertEquals(110L, activities[0].id)
-        assertEquals("START", activities[0].name)
-        assertEquals(ActivityType.START, activities[0].type)
-        assertEquals("Start the process", activities[0].description)
-        assertEquals(mapOf("a" to "p1", "b" to "p2"), activities[0].tags)
-        assertTrue(activities[0].requiresApproval)
-        assertTrue(activities[0].predecessorIds.isEmpty())
-        assertNull(activities[0].roleId)
+        assertEquals(120L, workflows[2].id)
+        assertEquals("w120", workflows[2].name)
+        assertNull(workflows[2].description)
+        assertFalse(workflows[2].active)
 
-        assertEquals(111L, activities[1].id)
-        assertEquals("WORKING", activities[1].name)
-        assertEquals(ActivityType.MANUAL, activities[1].type)
-        assertEquals("fill the taxes", activities[1].description)
-        assertTrue(activities[1].tags.isEmpty())
-        assertFalse(activities[1].requiresApproval)
-        assertEquals(listOf(110L), activities[1].predecessorIds)
-        assertEquals(11L, activities[1].roleId)
-
-        assertEquals(112L, activities[2].id)
-        assertEquals("SEND", activities[2].name)
-        assertEquals(ActivityType.SEND, activities[2].type)
-        assertNull(activities[2].description)
-        assertTrue(activities[2].tags.isEmpty())
-        assertFalse(activities[2].requiresApproval)
-        assertEquals(listOf(111L), activities[2].predecessorIds)
-        assertEquals(10L, activities[2].roleId)
-
-        assertEquals(113L, activities[3].id)
-        assertEquals("SUBMIT", activities[3].name)
-        assertEquals(ActivityType.SERVICE, activities[3].type)
-        assertNull(activities[3].description)
-        assertTrue(activities[3].tags.isEmpty())
-        assertFalse(activities[3].requiresApproval)
-        assertEquals(listOf(111L), activities[3].predecessorIds)
-        assertEquals(10L, activities[3].roleId)
-
-        assertEquals(114L, activities[4].id)
-        assertEquals("STOP", activities[4].name)
-        assertEquals(ActivityType.STOP, activities[4].type)
-        assertNull(activities[4].description)
-        assertTrue(activities[4].tags.isEmpty())
-        assertFalse(activities[4].requiresApproval)
-        assertEquals(listOf(112L, 113L), activities[4].predecessorIds)
-        assertNull(activities[4].roleId)
+        assertEquals(130L, workflows[3].id)
+        assertEquals("w130", workflows[3].name)
+        assertNull(workflows[3].description)
+        assertFalse(workflows[3].active)
     }
 
     @Test
-    fun `get workflow not found`() {
-        val result = rest.getForEntity("/v1/workflows/999", ErrorResponse::class.java)
-
-        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.WORKFLOW_NOT_FOUND, result.body?.error?.code)
-    }
-
-    @Test
-    fun `get workflow of another tenant`() {
-        val result = rest.getForEntity("/v1/workflows/200", ErrorResponse::class.java)
-
-        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.WORKFLOW_NOT_FOUND, result.body?.error?.code)
-    }
-
-    @Test
-    fun `get workflow having activity with malformed tag`() {
-        val result = rest.getForEntity("/v1/workflows/300", GetWorkflowResponse::class.java)
+    fun active() {
+        val result =
+            rest.getForEntity("/v1/workflows?active=true&sort-by=ID&asc=false", SearchWorkflowResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val workflow = result.body!!.workflow
+        val workflows = result.body!!.workflows
+        assertEquals(2, workflows.size)
 
-        assertEquals(1, workflow.activities.size)
-        val activities = workflow.activities
-        assertTrue(activities[0].tags.isEmpty())
+        assertEquals(110L, workflows[0].id)
+        assertEquals(100L, workflows[1].id)
+    }
+
+    @Test
+    fun ids() {
+        val result = rest.getForEntity(
+            "/v1/workflows?id=100&id=110&sort-by=NAME&asc=true",
+            SearchWorkflowResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val workflows = result.body!!.workflows
+        assertEquals(2, workflows.size)
+
+        assertEquals(100L, workflows[0].id)
+        assertEquals(110L, workflows[1].id)
+    }
+
+    @Test
+    fun `exclude workflow from other tenant`() {
+        val result = rest.getForEntity(
+            "/v1/workflows?id=100&id=110&id=200&sort-by=NAME&asc=true",
+            SearchWorkflowResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val workflows = result.body!!.workflows
+        assertEquals(2, workflows.size)
+
+        assertEquals(100L, workflows[0].id)
+        assertEquals(110L, workflows[1].id)
     }
 }

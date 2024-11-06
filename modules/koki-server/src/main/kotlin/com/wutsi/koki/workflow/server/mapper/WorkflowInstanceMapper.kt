@@ -2,6 +2,7 @@ package com.wutsi.koki.workflow.server.mapper
 
 import com.wutsi.koki.workflow.dto.Participant
 import com.wutsi.koki.workflow.dto.WorkflowInstance
+import com.wutsi.koki.workflow.dto.WorkflowInstanceSummary
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
 import org.springframework.stereotype.Service
 
@@ -30,6 +31,19 @@ class WorkflowInstanceMapper(
             activityInstances = entity.activityInstances.map { activityInstance ->
                 activityInstanceMapper.toActivityInstance(activityInstance)
             },
+        )
+    }
+
+    fun toWorkflowInstanceSummary(entity: WorkflowInstanceEntity): WorkflowInstanceSummary {
+        return WorkflowInstanceSummary(
+            id = entity.id ?: "",
+            workflowId = entity.workflow.id ?: -1,
+            approverUserId = entity.approver?.id,
+            createdAt = entity.createdAt,
+            startedAt = entity.startedAt,
+            status = entity.status,
+            dueAt = entity.dueAt,
+            startAt = entity.startAt,
         )
     }
 }

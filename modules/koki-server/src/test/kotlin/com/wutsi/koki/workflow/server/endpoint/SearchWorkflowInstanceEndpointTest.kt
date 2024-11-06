@@ -1,90 +1,102 @@
 package com.wutsi.koki.tenant.server.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
-import com.wutsi.koki.workflow.dto.SearchWorkflowResponse
-import org.junit.jupiter.api.Assertions.assertFalse
+import com.wutsi.koki.workflow.dto.SearchWorkflowInstanceResponse
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/workflow/SearchWorkflowEndpoint.sql"])
-class SearchWorkflowEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/workflow/SearchWorkflowInstanceEndpoint.sql"])
+class SearchWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun all() {
-        val result = rest.getForEntity("/v1/workflows", SearchWorkflowResponse::class.java)
+        val result = rest.getForEntity("/v1/workflow-instances", SearchWorkflowInstanceResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val workflows = result.body!!.workflows
-        assertEquals(4, workflows.size)
-
-        assertEquals(100L, workflows[0].id)
-        assertEquals("w100", workflows[0].name)
-        assertEquals("This is the description", workflows[0].description)
-        assertTrue(workflows[0].active)
-
-        assertEquals(110L, workflows[1].id)
-        assertEquals("w110", workflows[1].name)
-        assertNull(workflows[1].description)
-        assertTrue(workflows[1].active)
-
-        assertEquals(120L, workflows[2].id)
-        assertEquals("w120", workflows[2].name)
-        assertNull(workflows[2].description)
-        assertFalse(workflows[2].active)
-
-        assertEquals(130L, workflows[3].id)
-        assertEquals("w130", workflows[3].name)
-        assertNull(workflows[3].description)
-        assertFalse(workflows[3].active)
+        val workflows = result.body!!.workflowInstances
+        assertEquals(8, workflows.size)
     }
 
     @Test
-    fun active() {
-        val result =
-            rest.getForEntity("/v1/workflows?active=true&sort-by=ID&asc=false", SearchWorkflowResponse::class.java)
+    fun participant() {
+        val result = rest.getForEntity(
+            "/v1/workflow-instances?participant-user-id=100&sort-by=ID",
+            SearchWorkflowInstanceResponse::class.java
+        )
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val workflows = result.body!!.workflows
+        val workflows = result.body!!.workflowInstances
         assertEquals(2, workflows.size)
 
-        assertEquals(110L, workflows[0].id)
-        assertEquals(100L, workflows[1].id)
+        assertEquals("wi-100-01", workflows[0].id)
+        assertEquals("wi-100-02", workflows[1].id)
     }
 
     @Test
     fun ids() {
         val result = rest.getForEntity(
-            "/v1/workflows?id=100&id=110&sort-by=NAME&asc=true",
-            SearchWorkflowResponse::class.java
+            "/v1/workflow-instances?id=wi-100-01&id=wi-100-03&id=wi-110-01&sort-by=NAME&asc=false&limit=2",
+            SearchWorkflowInstanceResponse::class.java
         )
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val workflows = result.body!!.workflows
+        val workflows = result.body!!.workflowInstances
         assertEquals(2, workflows.size)
 
-        assertEquals(100L, workflows[0].id)
-        assertEquals(110L, workflows[1].id)
+        assertEquals("wi-110-01", workflows[0].id)
+        assertEquals("wi-100-01", workflows[1].id)
     }
 
     @Test
-    fun `exclude workflow from other tenant`() {
+    fun workflowIds() {
         val result = rest.getForEntity(
-            "/v1/workflows?id=100&id=110&id=200&sort-by=NAME&asc=true",
-            SearchWorkflowResponse::class.java
+            "/v1/workflow-instances?workflow-id=110&sort-by=ID&limit=2",
+            SearchWorkflowInstanceResponse::class.java
         )
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val workflows = result.body!!.workflows
-        assertEquals(2, workflows.size)
+        val workflows = result.body!!.workflowInstances
+        assertEquals(1, workflows.size)
 
-        assertEquals(100L, workflows[0].id)
-        assertEquals(110L, workflows[1].id)
+        assertEquals("wi-110-01", workflows[0].id)
+    }
+
+    @Test
+    fun status() {
+        val result = rest.getForEntity(
+            "/v1/workflow-instances?status=DONE",
+            SearchWorkflowInstanceResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val workflows = result.body!!.workflowInstances
+        assertEquals(3, workflows.size)
+
+        assertEquals("wi-100-01", workflows[0].id)
+        assertEquals("wi-110-01", workflows[1].id)
+        assertEquals("wi-120-01", workflows[2].id)
+    }
+
+    @Test
+    fun startedAt() {
+        val result = rest.getForEntity(
+            "/v1/workflow-instances?start-from=2020-01-01&start-to=2020-01-31",
+            SearchWorkflowInstanceResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val workflows = result.body!!.workflowInstances
+        assertEquals(3, workflows.size)
+
+        assertEquals("wi-100-02", workflows[0].id)
+        assertEquals("wi-100-04", workflows[1].id)
+        assertEquals("wi-100-05", workflows[2].id)
     }
 }

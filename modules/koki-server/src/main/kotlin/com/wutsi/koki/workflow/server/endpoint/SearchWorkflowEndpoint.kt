@@ -1,35 +1,42 @@
 package com.wutsi.koki.workflow.server.endpoint
 
-import com.wutsi.koki.workflow.dto.ApproveActivityInstanceRequest
-import com.wutsi.koki.workflow.dto.ApproveActivityInstanceResponse
-import com.wutsi.koki.workflow.server.engine.WorkflowEngine
-import com.wutsi.koki.workflow.server.service.ActivityInstanceService
-import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
-import jakarta.validation.Valid
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
+import com.wutsi.koki.workflow.dto.SearchWorkflowResponse
+import com.wutsi.koki.workflow.dto.WorkflowSortBy
+import com.wutsi.koki.workflow.server.mapper.WorkflowMapper
+import com.wutsi.koki.workflow.server.service.WorkflowService
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping
-class ApproveActivityInstanceEndpoint(
-    private val service: WorkflowInstanceService,
-    private val activityInstanceService: ActivityInstanceService,
-    private val engine: WorkflowEngine,
+class SearchWorkflowEndpoint(
+    private val service: WorkflowService,
+    private val mapper: WorkflowMapper
 ) {
-    @PostMapping("/v1/workflow-instances/{id}/activities/{activityInstanceId}/approvals")
-    fun complete(
+    @GetMapping("/v1/workflows")
+    fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-        @PathVariable id: String,
-        @PathVariable activityInstanceId: String,
-        @RequestBody @Valid request: ApproveActivityInstanceRequest
-    ): ApproveActivityInstanceResponse {
-        val workflowInstance = service.get(id, tenantId)
-        val activityInstance = activityInstanceService.getById(activityInstanceId, workflowInstance)
-        val approval = engine.approve(activityInstance, request.status, request.approverUserId, request.comment)
-        return ApproveActivityInstanceResponse(approval.id ?: -1)
+        @RequestParam(required = false, name = "id") ids: List<Long> = emptyList(),
+        @RequestParam(required = false) active: Boolean? = null,
+        @RequestParam(required = false) limit: Int = 20,
+        @RequestParam(required = false) offset: Int = 0,
+        @RequestParam(required = false, name = "sort-by") sortBy: WorkflowSortBy = WorkflowSortBy.ID,
+        @RequestParam(required = false, name = "asc") ascending: Boolean = true,
+    ): SearchWorkflowResponse {
+        val workflows = service.search(
+            ids = ids,
+            active = active,
+            tenantId = tenantId,
+            limit = limit,
+            offset = offset,
+            sortBy = sortBy,
+            ascending = ascending
+        )
+        return SearchWorkflowResponse(
+            workflows = workflows.map { workflow -> mapper.toWorkflowSummary(workflow) }
+        )
     }
 }

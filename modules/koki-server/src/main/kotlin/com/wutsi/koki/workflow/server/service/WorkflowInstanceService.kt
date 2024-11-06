@@ -6,6 +6,7 @@ import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.tenant.server.service.RoleService
 import com.wutsi.koki.tenant.server.service.UserService
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
+import com.wutsi.koki.workflow.dto.WorkflowInstanceSortBy
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.dao.ParameterRepository
 import com.wutsi.koki.workflow.server.dao.ParticipantRepository
@@ -15,9 +16,11 @@ import com.wutsi.koki.workflow.server.domain.ParameterEntity
 import com.wutsi.koki.workflow.server.domain.ParticipantEntity
 import com.wutsi.koki.workflow.server.domain.StateEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
+import jakarta.persistence.EntityManager
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.Date
 import java.util.UUID
 
 @Service
@@ -29,6 +32,7 @@ class WorkflowInstanceService(
     private val workflowService: WorkflowService,
     private val userService: UserService,
     private val roleService: RoleService,
+    private val em: EntityManager,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(WorkflowInstanceService::class.java)
@@ -42,6 +46,81 @@ class WorkflowInstanceService(
             throw NotFoundException(Error(code = ErrorCode.WORKFLOW_INSTANCE_NOT_FOUND))
         }
         return instance
+    }
+
+    fun search(
+        ids: List<String>,
+        workflowIds: List<Long> = emptyList(),
+        participantUserId: Long? = null,
+        status: WorkflowStatus? = null,
+        startFrom: Date? = null,
+        startTo: Date? = null,
+        tenantId: Long,
+        limit: Int = 20,
+        offset: Int = 0,
+        sortBy: WorkflowInstanceSortBy? = null,
+        ascending: Boolean = false,
+    ): List<WorkflowInstanceEntity> {
+        val jql = StringBuilder("SELECT W FROM WorkflowInstanceEntity W")
+        if (participantUserId != null) {
+            jql.append(" JOIN W.participants P")
+        }
+
+        jql.append(" WHERE W.tenant.id = :tenantId")
+        if (ids.isNotEmpty()) {
+            jql.append(" AND W.id IN :ids")
+        }
+        if (workflowIds.isNotEmpty()) {
+            jql.append(" AND W.workflow.id IN :workflowIds")
+        }
+        if (participantUserId != null) {
+            jql.append(" AND P.user.id = :participantUserId")
+        }
+        if (status != null) {
+            jql.append(" AND W.status IN :status")
+        }
+        if (startFrom != null) {
+            jql.append(" AND W.startAt >= :startFrom")
+        }
+        if (startTo != null) {
+            jql.append(" AND W.startAt <= :startTo")
+        }
+
+        if (sortBy != null) {
+            val column = when (sortBy) {
+                WorkflowInstanceSortBy.ID -> "id"
+                WorkflowInstanceSortBy.NAME -> "workflow.name"
+            }
+            jql.append(" ORDER BY W.$column")
+            if (!ascending) {
+                jql.append(" DESC")
+            }
+        }
+
+        val query = em.createQuery(jql.toString(), WorkflowInstanceEntity::class.java)
+        query.setParameter("tenantId", tenantId)
+        if (ids.isNotEmpty()) {
+            query.setParameter("ids", ids)
+        }
+        if (workflowIds.isNotEmpty()) {
+            query.setParameter("workflowIds", workflowIds)
+        }
+        if (participantUserId != null) {
+            query.setParameter("participantUserId", participantUserId)
+        }
+        if (status != null) {
+            query.setParameter("status", status)
+        }
+        if (startFrom != null) {
+            query.setParameter("startFrom", startFrom)
+        }
+        if (startTo != null) {
+            query.setParameter("startTo", startTo)
+        }
+
+        query.firstResult = offset
+        query.maxResults = limit
+        return query.resultList
     }
 
     @Transactional
