@@ -158,4 +158,16 @@ class ApproveActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         assertEquals(HttpStatus.CONFLICT, result.statusCode)
         assertEquals(ErrorCode.WORKFLOW_INSTANCE_ACTIVITY_NO_APPROVAL_PENDING, result.body?.error?.code)
     }
+
+    @Test
+    fun `approve an activity of another workflow`() {
+        val result = rest.postForEntity(
+            "/v1/workflow-instances/wi-110-01/activities/wi-100-05-working-running/approvals",
+            emptyMap<String, String>(),
+            ErrorResponse::class.java
+        )
+
+        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
+        assertEquals(ErrorCode.WORKFLOW_INSTANCE_ACTIVITY_NOT_FOUND, result.body?.error?.code)
+    }
 }

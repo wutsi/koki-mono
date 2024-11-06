@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service
 class ActivityInstanceMapper {
     fun toActivityInstance(entity: ActivityInstanceEntity): ActivityInstance {
         return ActivityInstance(
-            id = entity.id ?: "",
-            instanceId = entity.instance.id ?: "",
-            activityId = entity.activity.id ?: -1,
+            id = entity.id!!,
+            instanceId = entity.instance.id!!,
+            activityId = entity.activity.id!!,
             assigneeUserId = entity.assignee?.id,
-            approverUserId = entity.activity?.id,
+            approverUserId = entity.activity.id,
             approval = entity.approval,
             approvedAt = entity.approvedAt,
             createdAt = entity.createdAt,

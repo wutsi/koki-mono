@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 @Service
 class UserMapper {
     fun toUser(entity: UserEntity) = User(
-        id = entity.id ?: -1,
+        id = entity.id!!,
         displayName = entity.displayName,
         email = entity.email,
         status = entity.status,

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 @Service
 class RoleMapper {
     fun toRole(entity: RoleEntity) = Role(
-        id = entity.id ?: -1,
+        id = entity.id!!,
         name = entity.name,
         description = entity.description,
         active = entity.active,
