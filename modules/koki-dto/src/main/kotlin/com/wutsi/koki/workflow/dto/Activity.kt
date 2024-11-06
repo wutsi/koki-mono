@@ -7,6 +7,7 @@ data class Activity(
     val workflowId: Long = -1,
     val type: ActivityType = ActivityType.UNKNOWN,
     val name: String = "",
+    val title: String? = null,
     val description: String? = null,
     val active: Boolean = false,
     val requiresApproval: Boolean = false,

@@ -6,6 +6,7 @@ import java.util.Date
 data class Workflow(
     val id: Long = -1,
     val name: String = "",
+    val title: String? = null,
     val description: String? = null,
     val active: Boolean = false,
     val createdAt: Date = Date(),

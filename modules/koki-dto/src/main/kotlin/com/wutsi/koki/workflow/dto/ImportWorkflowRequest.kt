@@ -7,6 +7,7 @@ data class ImportWorkflowRequest(
 data class ActivityData(
     val type: ActivityType = ActivityType.UNKNOWN,
     val name: String = "",
+    val title: String? = null,
     val description: String? = null,
     val requiresApproval: Boolean = false,
     val tags: Map<String, String> = emptyMap(),
@@ -16,6 +17,7 @@ data class ActivityData(
 
 data class WorkflowData(
     val name: String = "",
+    val title: String? = null,
     val description: String? = null,
     val activities: List<ActivityData> = emptyList(),
     val parameters: List<String> = emptyList(),
