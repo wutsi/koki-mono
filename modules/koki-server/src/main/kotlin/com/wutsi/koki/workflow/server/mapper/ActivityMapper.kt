@@ -2,17 +2,12 @@ package com.wutsi.koki.workflow.server.mapper
 
 import com.wutsi.koki.workflow.dto.Activity
 import com.wutsi.koki.workflow.server.domain.ActivityEntity
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.StringReader
 import java.util.Properties
 
 @Service
 class ActivityMapper {
-    companion object {
-        private val LOGGER = LoggerFactory.getLogger(ActivityMapper::class.java)
-    }
-
     fun toActivity(entity: ActivityEntity): Activity {
         return Activity(
             id = entity.id ?: -1,

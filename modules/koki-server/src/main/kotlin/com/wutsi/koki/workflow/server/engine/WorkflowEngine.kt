@@ -214,6 +214,7 @@ class WorkflowEngine(
                     approver = null,
                 )
             )
+            workflowInstance.activityInstances.add(activityInstance)
 
             val executor = executorProvider.get(activity.type)
             executor.execute(activityInstance, this)

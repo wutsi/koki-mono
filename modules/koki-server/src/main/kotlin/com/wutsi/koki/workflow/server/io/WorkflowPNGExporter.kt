@@ -190,7 +190,6 @@ class WorkflowPNGExporter {
                 mxConstants.STYLE_SHAPE to mxConstants.SHAPE_RECTANGLE,
                 mxConstants.STYLE_FILLCOLOR to COLOR_RUNNING,
                 mxConstants.STYLE_STROKECOLOR to COLOR_BLACK,
-                mxConstants.STYLE_STROKEWIDTH to 2
             )
         )
 
