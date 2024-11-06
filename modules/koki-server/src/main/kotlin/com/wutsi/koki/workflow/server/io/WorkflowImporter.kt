@@ -48,6 +48,7 @@ class WorkflowImporter(
 
             LOGGER.debug(">>> Updating Activity#${data.name}")
             activity.type = data.type
+            activity.title = data.title
             activity.description = data.description
             activity.active = true
             activity.requiresApproval = data.requiresApproval
@@ -60,6 +61,7 @@ class WorkflowImporter(
                 ActivityEntity(
                     workflow = workflow,
                     type = data.type,
+                    title = data.title,
                     name = data.name,
                     description = data.description,
                     active = true,
@@ -125,6 +127,7 @@ class WorkflowImporter(
 
     private fun saveWorkflow(workflow: WorkflowEntity, data: WorkflowData): WorkflowEntity {
         workflow.name = data.name
+        workflow.title = data.title
         workflow.description = data.description
         workflow.active = true
         workflow.parameters = data.parameters

@@ -28,6 +28,7 @@ data class WorkflowEntity(
     val activities: List<ActivityEntity> = emptyList(),
 
     var name: String = "",
+    var title: String? = null,
     var description: String? = null,
     var active: Boolean = true,
     val createdAt: Date = Date(),

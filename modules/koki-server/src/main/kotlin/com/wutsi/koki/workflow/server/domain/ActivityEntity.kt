@@ -39,6 +39,7 @@ data class ActivityEntity(
     val predecessors: MutableList<ActivityEntity> = mutableListOf(),
 
     var name: String = "",
+    var title: String? = null,
     var description: String? = null,
     var active: Boolean = true,
     var type: ActivityType = ActivityType.UNKNOWN,

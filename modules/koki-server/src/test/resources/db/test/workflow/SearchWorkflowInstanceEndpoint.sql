@@ -22,18 +22,18 @@ INSERT INTO T_WORKFLOW(id, tenant_fk, name, description, active, parameters)
           (200, 2, 'w200', null, true, null);
 ;
 
-INSERT INTO T_ACTIVITY(id, workflow_fk, role_fk, name, type, description, tags, requires_approval, active)
-    VALUES (100, 100, null, 'START',   1, 'Start the process', 'a=p1\nb=p2', true, true),
-           (101, 100, 11,   'WORKING', 3, 'fill the taxes', null, false, true),
-           (102, 100, 10,   'SEND',    4, null, null, false, true),
-           (103, 100, 10,   'SUBMIT',  4, null, null, false, true),
-           (104, 100, null, 'STOP',    2, null, null, false, true),
+INSERT INTO T_ACTIVITY(id, workflow_fk, role_fk, name, type, title, description, tags, requires_approval, active)
+    VALUES (100, 100, null, 'START',   1, 'Workflow 100', 'Start the process', 'a=p1\nb=p2', true, true),
+           (101, 100, 11,   'WORKING', 3, 'Workflow 101', 'fill the taxes', null, false, true),
+           (102, 100, 10,   'SEND',    4, 'Workflow 102', null, null, false, true),
+           (103, 100, 10,   'SUBMIT',  4, 'Workflow 103', null, null, false, true),
+           (104, 100, null, 'STOP',    2, 'Workflow 104', null, null, false, true),
 
-           (110, 110, null, 'START',   1, null, null, false, true),
-           (111, 110, null, 'WORKING', 4, null, null, false, true),
-           (112, 110, null, 'SEND',    4, null, null, false, true),
-           (113, 110, null, 'SUBMIT',  4, null, null, false, false),
-           (114, 110, null, 'STOP',    2, null, null, false, true)
+           (110, 110, null, 'START',   1, 'Workflow 100', null, null, false, true),
+           (111, 110, null, 'WORKING', 4, 'Workflow 111', null, null, false, true),
+           (112, 110, null, 'SEND',    4, 'Workflow 112', null, null, false, true),
+           (113, 110, null, 'SUBMIT',  4, 'Workflow 113', null, null, false, false),
+           (114, 110, null, 'STOP',    2, 'Workflow 114', null, null, false, true)
     ;
 
 INSERT INTO T_ACTIVITY_PREDECESSOR(activity_fk, predecessor_fk)

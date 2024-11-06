@@ -14,6 +14,7 @@ class ActivityMapper {
             workflowId = entity.workflow.id!!,
             type = entity.type,
             name = entity.name,
+            title = entity.title,
             description = entity.description,
             active = entity.active,
             requiresApproval = entity.requiresApproval,

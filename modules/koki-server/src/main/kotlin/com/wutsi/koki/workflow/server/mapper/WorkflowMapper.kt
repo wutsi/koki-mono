@@ -18,6 +18,7 @@ class WorkflowMapper(
         return Workflow(
             id = entity.id!!,
             name = entity.name,
+            title = entity.title,
             description = entity.description,
             active = entity.active,
             createdAt = entity.createdAt,
@@ -33,7 +34,7 @@ class WorkflowMapper(
         return WorkflowSummary(
             id = entity.id!!,
             name = entity.name,
-            description = entity.description,
+            title = entity.title,
             active = entity.active,
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,

@@ -4,6 +4,7 @@ CREATE TABLE T_WORKFLOW(
   tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
 
   name                    VARCHAR(100) NOT NULL,
+  title                   VARCHAR(255),
   description             TEXT,
   active                  BOOLEAN NOT NULL DEFAULT true,
   parameters              TEXT,
@@ -20,6 +21,7 @@ CREATE TABLE T_ACTIVITY(
   role_fk                 BIGINT REFERENCES T_ROLE(id),
 
   name                    VARCHAR(100) NOT NULL,
+  title                   VARCHAR(255),
   active                  BOOLEAN NOT NULL DEFAULT true,
   type                    INT NOT NULL DEFAULT 0,
   requires_approval       BOOLEAN NOT NULL DEFAULT false,

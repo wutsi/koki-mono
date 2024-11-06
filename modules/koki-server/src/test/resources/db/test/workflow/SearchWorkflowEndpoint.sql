@@ -15,9 +15,9 @@ INSERT INTO T_USER(id, tenant_fk, email, password, salt, display_name)
 
            (200, 2, 'ray.sponsible200@gmail.com', '--', '--', 'Ray Sponsible200');
 
-INSERT INTO T_WORKFLOW(id, tenant_fk, name, description, active, parameters)
-    VALUES(100, 1, 'w100', 'This is the description', true, 'PARAM_1, PARAM_2'),
-          (110, 1, 'w110', null, true, null),
-          (120, 1, 'w120', null, false, null),
-          (130, 1, 'w130', null, false, null),
-          (200, 2, 'w200', null, true, null);
+INSERT INTO T_WORKFLOW(id, tenant_fk, name, title, description, active, parameters)
+    VALUES(100, 1, 'w100', 'Workflow 100',  'This is the description', true, 'PARAM_1, PARAM_2'),
+          (110, 1, 'w110', 'Workflow 110',   null, true, null),
+          (120, 1, 'w120', 'Workflow 120',   null, false, null),
+          (130, 1, 'w130', 'ZWorkflow 130',  null, false, null),
+          (200, 2, 'w200', 'Workflow 200',   null, true, null);

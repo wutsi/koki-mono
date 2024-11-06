@@ -22,7 +22,7 @@ class SearchWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun participant() {
         val result = rest.getForEntity(
-            "/v1/workflow-instances?participant-user-id=100&sort-by=ID",
+            "/v1/workflow-instances?participant-user-id=100&sort-by=TITLE",
             SearchWorkflowInstanceResponse::class.java
         )
 

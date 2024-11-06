@@ -46,6 +46,7 @@ class WorkflowService(
             val column = when (sortBy) {
                 WorkflowSortBy.ID -> "id"
                 WorkflowSortBy.NAME -> "name"
+                WorkflowSortBy.TITLE -> "title"
             }
             jql.append(" ORDER BY W.$column")
             if (!ascending) {

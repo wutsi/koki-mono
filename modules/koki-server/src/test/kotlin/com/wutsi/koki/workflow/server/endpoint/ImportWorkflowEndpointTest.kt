@@ -37,6 +37,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                 ActivityData(name = "START", type = ActivityType.START),
                 ActivityData(
                     name = "INVOICE",
+                    title = "Invoicing...",
                     description = "SAGE create an invoice",
                     type = ActivityType.SERVICE,
                     predecessors = listOf("START"),
@@ -72,12 +73,14 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
 
         val aStart = activityDao.findByNameAndWorkflow("START", workflow)
         assertEquals("START", aStart?.name)
+        assertNull(aStart?.title)
         assertEquals(request.workflow.activities[0].type, aStart?.type)
         assertEquals(true, aStart?.active)
         assertNull(aStart?.role)
 
         val aInvoice = activityDao.findByNameAndWorkflow("INVOICE", workflow)
         assertEquals("INVOICE", aInvoice?.name)
+        assertEquals(request.workflow.activities[1].title, aInvoice?.title)
         assertEquals(request.workflow.activities[1].description, aInvoice?.description)
         assertEquals(request.workflow.activities[1].type, aInvoice?.type)
         assertEquals("foo=bar\na=b", aInvoice?.tags)
@@ -87,6 +90,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
 
         val aEnd = activityDao.findByNameAndWorkflow("STOP", workflow)
         assertEquals("STOP", aEnd?.name)
+        assertNull(aEnd?.title)
         assertEquals(request.workflow.activities[2].type, aEnd?.type)
         assertEquals(true, aEnd?.active)
         assertNull(aEnd?.role)
