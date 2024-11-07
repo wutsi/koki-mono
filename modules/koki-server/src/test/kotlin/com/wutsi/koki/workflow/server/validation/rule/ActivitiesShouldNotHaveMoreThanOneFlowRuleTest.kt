@@ -1,28 +1,17 @@
 package com.wutsi.koki.workflow.server.validation.rule
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.doThrow
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.workflow.dto.ActivityData
 import com.wutsi.koki.workflow.dto.FlowData
 import com.wutsi.koki.workflow.dto.WorkflowData
-import com.wutsi.koki.workflow.server.service.ExpressionEvaluator
-import org.mockito.Mockito.mock
-import org.springframework.expression.ParseException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class FlowExpressionMustBeValidRuleTest {
-    private val evaluator = mock(ExpressionEvaluator::class.java)
-    private val rule = FlowExpressionMustBeValidRule(evaluator)
+class ActivitiesShouldNotHaveMoreThanOneFlowRuleTest {
+    private val rule = ActivitiesShouldNotHaveMoreThanOneFlowRule()
 
     @Test
     fun success() {
-        doReturn(true).whenever(evaluator).evaluate(any<String>(), any())
-
         val result = rule.validate(
             WorkflowData(
                 name = "new",
@@ -40,13 +29,10 @@ class FlowExpressionMustBeValidRuleTest {
         )
 
         assertTrue(result.isEmpty())
-        verify(evaluator).evaluate(any<String>(), any())
     }
 
     @Test
     fun error() {
-        doThrow(ParseException("expre", 1, "Yo man")).whenever(evaluator).evaluate(any<String>(), any())
-
         val result = rule.validate(
             WorkflowData(
                 name = "new",
@@ -59,12 +45,15 @@ class FlowExpressionMustBeValidRuleTest {
                 ),
                 flows = listOf(
                     FlowData(from = "start", to = "invoice"),
-                    FlowData(from = "invoice", to = "stop", expression = "fff"),
+                    FlowData(from = "invoice", to = "stop", expression = "value>0"),
+                    FlowData(from = "start", to = "invoice", expression = "value<0"),
+                    FlowData(from = "invoice", to = "stop"),
                 )
             )
         )
 
-        assertEquals(1, result.size)
-        assertEquals("flow: invoice -> stop", result[0].location)
+        assertEquals(2, result.size)
+        assertEquals("flow: start -> invoice", result[0].location)
+        assertEquals("flow: invoice -> stop", result[1].location)
     }
 }

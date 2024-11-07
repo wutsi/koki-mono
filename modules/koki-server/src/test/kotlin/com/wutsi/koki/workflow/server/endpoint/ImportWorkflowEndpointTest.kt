@@ -48,17 +48,15 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                     tags = mapOf("foo" to "bar", "a" to "b"),
                     requiresApproval = true,
                     role = "accountant",
-                    predecessors = listOf("START"),
                 ),
                 ActivityData(
                     name = "STOP",
                     type = ActivityType.STOP,
-                    predecessors = listOf("INVOICE")
                 ),
             ),
             flows = listOf(
                 FlowData(from = "START", to = "INVOICE"),
-                FlowData(from = "INVOICE", to = "STOP", expression = "A=true"),
+                FlowData(from = "INVOICE", to = "STOP", expression = "A==true"),
             )
         )
     )

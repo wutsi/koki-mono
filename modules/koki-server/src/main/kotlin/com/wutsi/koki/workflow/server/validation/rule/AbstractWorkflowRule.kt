@@ -6,4 +6,7 @@ import com.wutsi.koki.workflow.server.validation.ValidationError
 abstract class AbstractWorkflowRule : AbstractRule() {
     protected fun createError(workflow: WorkflowData, values: List<String> = emptyList()): ValidationError =
         createError("workflow", workflow.name, values)
+
+    protected fun createError(workflow: WorkflowData, ex: Exception): ValidationError =
+        createError("workflow", workflow.name, ex)
 }

@@ -1,18 +1,25 @@
 package com.wutsi.koki.workflow.server.validation.rule
 
 import com.wutsi.koki.workflow.dto.WorkflowData
+import com.wutsi.koki.workflow.server.service.ExpressionEvaluator
 import com.wutsi.koki.workflow.server.validation.ValidationError
+import org.springframework.expression.ParseException
 
-class FlowMustHaveValidFromRule : AbstractFlowRule() {
+class FlowExpressionMustBeValidRule(
+    private val expressionEvaluator: ExpressionEvaluator
+) : AbstractFlowRule() {
     override fun validate(workflow: WorkflowData): List<ValidationError> {
-        val names = workflow.activities.map { activity -> activity.name }
-        val result = mutableListOf<ValidationError>()
-        workflow.flows
-            .map { flow ->
-                if (!names.contains(flow.from)) {
-                    result.add(createError(flow))
+        return workflow.flows.mapNotNull { flow ->
+            if (!flow.expression.isNullOrEmpty()) {
+                try {
+                    expressionEvaluator.evaluate(flow.expression!!, emptyMap())
+                    null
+                } catch (ex: ParseException) {
+                    createError(flow, listOf("${ex.expressionString} - ${ex.message}"))
                 }
+            } else {
+                null
             }
-        return result
+        }
     }
 }
