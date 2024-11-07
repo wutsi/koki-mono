@@ -12,4 +12,8 @@ abstract class AbstractRule : ValidationRule {
         }
         return ValidationError("$type: $name", message)
     }
+
+    protected fun createError(type: String, name: String, ex: Exception): ValidationError {
+        return ValidationError("$type: $name", ex.message ?: "")
+    }
 }

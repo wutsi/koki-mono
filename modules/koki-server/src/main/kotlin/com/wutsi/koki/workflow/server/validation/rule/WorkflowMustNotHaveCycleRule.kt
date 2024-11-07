@@ -9,13 +9,17 @@ import org.jgrapht.graph.SimpleDirectedGraph
 
 class WorkflowMustNotHaveCycleRule : AbstractWorkflowRule() {
     override fun validate(workflow: WorkflowData): List<ValidationError> {
-        val graph = createGraph(workflow)
+        try {
+            val graph = createGraph(workflow)
 
-        val detector = CycleDetector<String, DefaultEdge>(graph)
-        return if (detector.detectCycles()) {
-            listOf(createError(workflow))
-        } else {
-            emptyList()
+            val detector = CycleDetector<String, DefaultEdge>(graph)
+            return if (detector.detectCycles()) {
+                listOf(createError(workflow))
+            } else {
+                emptyList()
+            }
+        } catch (ex: Exception) {
+            return listOf(createError(workflow, ex))
         }
     }
 

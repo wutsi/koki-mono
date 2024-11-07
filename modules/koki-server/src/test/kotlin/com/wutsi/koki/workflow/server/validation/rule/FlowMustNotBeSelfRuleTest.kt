@@ -39,9 +39,9 @@ class FlowMustNotBeSelfRuleTest {
                 description = "This is a new workflow",
                 activities = listOf(
                     ActivityData(name = "start"),
-                    ActivityData(name = "invoice", predecessors = listOf("start")),
-                    ActivityData(name = "stop", predecessors = listOf("invoice")),
-                    ActivityData(name = "self", predecessors = listOf("self")),
+                    ActivityData(name = "invoice"),
+                    ActivityData(name = "stop"),
+                    ActivityData(name = "self"),
                 ),
                 flows = listOf(
                     FlowData(from = "start", to = "invoice"),
@@ -52,6 +52,6 @@ class FlowMustNotBeSelfRuleTest {
         )
 
         assertEquals(1, result.size)
-        assertEquals("activity: self", result[0].location)
+        assertEquals("flow: self -> self", result[0].location)
     }
 }

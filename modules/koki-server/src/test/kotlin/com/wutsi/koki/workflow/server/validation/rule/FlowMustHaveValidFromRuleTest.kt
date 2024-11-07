@@ -39,8 +39,8 @@ class FlowMustHaveValidFromRuleTest {
                 description = "This is a new workflow",
                 activities = listOf(
                     ActivityData(name = "start"),
-                    ActivityData(name = "invoice", predecessors = listOf("start")),
-                    ActivityData(name = "stop", predecessors = listOf("invoice")),
+                    ActivityData(name = "invoice"),
+                    ActivityData(name = "stop"),
                     ActivityData(name = "bad-precessor-1"),
                     ActivityData(name = "bad-precessor-2"),
                 ),

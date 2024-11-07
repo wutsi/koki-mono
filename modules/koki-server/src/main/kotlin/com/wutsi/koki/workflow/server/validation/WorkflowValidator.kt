@@ -1,9 +1,12 @@
 package com.wutsi.koki.workflow.server.validation
 
 import com.wutsi.koki.workflow.dto.WorkflowData
+import com.wutsi.koki.workflow.server.service.ExpressionEvaluator
+import com.wutsi.koki.workflow.server.validation.rule.ActivitiesShouldNotHaveMoreThanOneFlowRule
 import com.wutsi.koki.workflow.server.validation.rule.ActivityMustNotBeOrphanRule
 import com.wutsi.koki.workflow.server.validation.rule.ActivityMustNotHaveSelfAsPredecessorRule
 import com.wutsi.koki.workflow.server.validation.rule.ActivityNameMustHavelLessThan100CharactersRule
+import com.wutsi.koki.workflow.server.validation.rule.FlowExpressionMustBeValidRule
 import com.wutsi.koki.workflow.server.validation.rule.FlowMustHaveValidFromRule
 import com.wutsi.koki.workflow.server.validation.rule.FlowMustHaveValidToRule
 import com.wutsi.koki.workflow.server.validation.rule.WorkflowMustHaveAtLeastOneStopActivityRule
@@ -13,19 +16,26 @@ import org.springframework.stereotype.Service
 
 @Service
 class WorkflowValidator(
+    private val expressionEvaluator: ExpressionEvaluator,
     private val rules: List<ValidationRule> = listOf(
+        ActivitiesShouldNotHaveMoreThanOneFlowRule(),
         ActivityMustNotBeOrphanRule(),
         ActivityMustNotHaveSelfAsPredecessorRule(),
         ActivityNameMustHavelLessThan100CharactersRule(),
 
         FlowMustHaveValidToRule(),
         FlowMustHaveValidFromRule(),
+        FlowExpressionMustBeValidRule(expressionEvaluator),
 
         WorkflowMustHaveAtLeastOneStopActivityRule(),
         WorkflowMustHaveOneStartActivityRule(),
         WorkflowMustNotHaveCycleRule(), // MUST BE THE LAST
     )
 ) {
+    fun ruleCount(): Int {
+        return rules.size
+    }
+
     fun validate(workflow: WorkflowData): List<ValidationError> {
         val errors = mutableListOf<ValidationError>()
         rules.forEach { rule -> errors.addAll(rule.validate(workflow)) }

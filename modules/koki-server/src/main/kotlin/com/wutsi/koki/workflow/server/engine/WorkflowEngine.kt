@@ -15,6 +15,7 @@ import com.wutsi.koki.workflow.server.domain.FlowEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
 import com.wutsi.koki.workflow.server.service.ActivityInstanceService
 import com.wutsi.koki.workflow.server.service.ApprovalService
+import com.wutsi.koki.workflow.server.service.ExpressionEvaluator
 import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -29,6 +30,7 @@ class WorkflowEngine(
     private val approvalService: ApprovalService,
     private val userService: UserService,
     private val executorProvider: ActivityExecutorProvider,
+    private val expressionEvaluator: ExpressionEvaluator,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(WorkflowEngine::class.java)
@@ -121,7 +123,7 @@ class WorkflowEngine(
         return successorFlows
             .filter { flow -> flow.to.active }
             .filter { flow -> allPrecessorAreDone(flow.to, workflowInstance) }
-            .mapNotNull { flow -> execute(flow.to, workflowInstance) }
+            .mapNotNull { flow -> execute(flow, workflowInstance) }
     }
 
     @Transactional
@@ -195,6 +197,23 @@ class WorkflowEngine(
             next(activityInstance.instance)
         }
         return approval
+    }
+
+    private fun execute(flow: FlowEntity, workflowInstance: WorkflowInstanceEntity): ActivityInstanceEntity? {
+        // Check expression
+        if (!flow.expression.isNullOrEmpty()) {
+            val evaluation = expressionEvaluator.evaluate(flow, workflowInstance)
+            if (LOGGER.isDebugEnabled) {
+                LOGGER.warn(">>>  ${workflowInstance.id} - ${flow.from.name} -> ${flow.to.name} : [${flow.expression}] evaluated to '$evaluation'")
+            }
+
+            if (!evaluation) {
+                return null
+            }
+        }
+
+        // Execute
+        return execute(flow.to, workflowInstance)
     }
 
     private fun execute(activity: ActivityEntity, workflowInstance: WorkflowInstanceEntity): ActivityInstanceEntity? {
