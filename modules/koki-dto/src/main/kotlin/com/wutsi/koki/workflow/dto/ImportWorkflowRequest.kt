@@ -12,9 +12,6 @@ data class ActivityData(
     val requiresApproval: Boolean = false,
     val role: String? = null,
     val tags: Map<String, String> = emptyMap(),
-
-    @Deprecated("use WorkflowData.flow")
-    val predecessors: List<String> = emptyList(),
 )
 
 data class WorkflowData(
