@@ -17,8 +17,8 @@ class ActivityNameMustHavelLessThan100CharactersRuleTest {
                 description = "This is a new workflow",
                 activities = listOf(
                     ActivityData(name = "start"),
-                    ActivityData(name = "invoice", predecessors = listOf("start")),
-                    ActivityData(name = "stop", predecessors = listOf("invoice")),
+                    ActivityData(name = "invoice"),
+                    ActivityData(name = "stop"),
                 )
             )
         )
@@ -35,8 +35,8 @@ class ActivityNameMustHavelLessThan100CharactersRuleTest {
                 description = "This is a new workflow",
                 activities = listOf(
                     ActivityData(name = "start"),
-                    ActivityData(name = nameTooLong, predecessors = listOf("start")),
-                    ActivityData(name = "stop", predecessors = listOf(nameTooLong)),
+                    ActivityData(name = nameTooLong),
+                    ActivityData(name = "stop"),
                 )
             )
         )

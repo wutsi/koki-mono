@@ -7,10 +7,12 @@ import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.ParameterType
 import com.wutsi.koki.workflow.dto.ActivityData
 import com.wutsi.koki.workflow.dto.ActivityType
+import com.wutsi.koki.workflow.dto.FlowData
 import com.wutsi.koki.workflow.dto.ImportWorkflowRequest
 import com.wutsi.koki.workflow.dto.ImportWorkflowResponse
 import com.wutsi.koki.workflow.dto.WorkflowData
 import com.wutsi.koki.workflow.server.dao.ActivityRepository
+import com.wutsi.koki.workflow.server.dao.FlowRepository
 import com.wutsi.koki.workflow.server.dao.WorkflowRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,6 +30,9 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var activityDao: ActivityRepository
 
+    @Autowired
+    private lateinit var flowDao: FlowRepository
+
     private val request = ImportWorkflowRequest(
         workflow = WorkflowData(
             name = "new",
@@ -40,16 +45,20 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                     title = "Invoicing...",
                     description = "SAGE create an invoice",
                     type = ActivityType.SERVICE,
-                    predecessors = listOf("START"),
                     tags = mapOf("foo" to "bar", "a" to "b"),
                     requiresApproval = true,
                     role = "accountant",
+                    predecessors = listOf("START"),
                 ),
                 ActivityData(
                     name = "STOP",
                     type = ActivityType.STOP,
                     predecessors = listOf("INVOICE")
                 ),
+            ),
+            flows = listOf(
+                FlowData(from = "START", to = "INVOICE"),
+                FlowData(from = "INVOICE", to = "STOP", expression = "A=true"),
             )
         )
     )
@@ -94,6 +103,17 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.workflow.activities[2].type, aEnd?.type)
         assertEquals(true, aEnd?.active)
         assertNull(aEnd?.role)
+
+        val flows = flowDao.findByWorkflow(workflow)
+        assertEquals(2, flows.size)
+
+        assertEquals(aStart?.id, flows[0].from.id)
+        assertEquals(aInvoice?.id, flows[0].to.id)
+        assertEquals(request.workflow.flows[0].expression, flows[0].expression)
+
+        assertEquals(aInvoice?.id, flows[1].from.id)
+        assertEquals(aEnd?.id, flows[1].to.id)
+        assertEquals(request.workflow.flows[1].expression, flows[1].expression)
     }
 
     @Test
@@ -138,6 +158,17 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(false, aDeactivated.active)
         assertEquals(workflow.id, aDeactivated.workflow.id)
         assertEquals(11L, aDeactivated?.role?.id)
+
+        val flows = flowDao.findByWorkflow(workflow).sortedBy { flow -> flow.from.id }
+        assertEquals(2, flows.size)
+
+        assertEquals(aStart?.id, flows[0].from.id)
+        assertEquals(aInvoice?.id, flows[0].to.id)
+        assertEquals(request.workflow.flows[0].expression, flows[0].expression)
+
+        assertEquals(aInvoice?.id, flows[1].from.id)
+        assertEquals(aEnd?.id, flows[1].to.id)
+        assertEquals(request.workflow.flows[1].expression, flows[1].expression)
     }
 
     @Test

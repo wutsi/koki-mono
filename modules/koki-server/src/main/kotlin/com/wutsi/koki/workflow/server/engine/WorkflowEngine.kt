@@ -11,6 +11,7 @@ import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.domain.ApprovalEntity
+import com.wutsi.koki.workflow.server.domain.FlowEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
 import com.wutsi.koki.workflow.server.service.ActivityInstanceService
 import com.wutsi.koki.workflow.server.service.ApprovalService
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.Date
 import java.util.UUID
-import kotlin.collections.flatMap
 
 @Service
 class WorkflowEngine(
@@ -110,17 +110,18 @@ class WorkflowEngine(
         }
 
         // Find all successors
-        val successorActivities = findSuccessors(doneActivityInstances, workflowInstance)
+        val successorFlows = findSuccessorFlows(doneActivityInstances, workflowInstance)
         if (LOGGER.isDebugEnabled) {
-            val predecessorNames = doneActivityInstances.map { done -> done.activity.name }
-            LOGGER.debug(">>> ${workflowInstance.id} - $predecessorNames --> " + successorActivities.map { it.name })
+            val from = doneActivityInstances.map { done -> done.activity.name }
+            val to = successorFlows.map { flow -> flow.to.name }
+            LOGGER.debug(">>> ${workflowInstance.id} - $from --> " + to)
         }
 
         // Execute all successors
-        // For each successor, make sure that all its predecessors are DONE
-        return successorActivities
-            .filter { successor -> areAllPrecessecorDone(successor, workflowInstance) }
-            .mapNotNull { successor -> execute(successor, workflowInstance) }
+        return successorFlows
+            .filter { flow -> flow.to.active }
+            .filter { flow -> allPrecessorAreDone(flow.to, workflowInstance) }
+            .mapNotNull { flow -> execute(flow.to, workflowInstance) }
     }
 
     @Transactional
@@ -283,35 +284,31 @@ class WorkflowEngine(
         }
     }
 
-    private fun findSuccessors(
+    private fun findSuccessorFlows(
         activityInstances: List<ActivityInstanceEntity>,
         workflowInstance: WorkflowInstanceEntity
-    ): List<ActivityEntity> {
-        val activeActivities = workflowInstance.workflow.activities.filter { activity -> activity.active }
-        val activityInstanceIds =
-            workflowInstance.activityInstances.map { activityInstance -> activityInstance.activity.id }
-        return activityInstances
-            .flatMap { activityInstance -> findSuccessors(activityInstance.activity, activeActivities) }
-            .distinctBy { it.id }
-            .filter { successor -> !activityInstanceIds.contains(successor.id) }
+    ): List<FlowEntity> {
+        val activityIds = activityInstances.map { activityInstance -> activityInstance.activity.id }
+
+        val flows = workflowInstance.workflow.flows
+            .filter { flow -> activityIds.contains(flow.from.id) }
+            .filter { flow -> flow.to.active }
+            .filter { flow -> !activityIds.contains(flow.to.id) }
+
+        return flows
     }
 
-    private fun findSuccessors(predecessor: ActivityEntity, activities: List<ActivityEntity>): List<ActivityEntity> {
-        return activities.filter { activity ->
-            val predecessorIds = activity.predecessors.mapNotNull { pred -> pred.id }
-            predecessorIds.contains(predecessor.id)
-        }
-    }
+    private fun allPrecessorAreDone(activity: ActivityEntity, workflowInstance: WorkflowInstanceEntity): Boolean {
+        val predecessorActivityIds = workflowInstance.workflow.flows
+            .filter { flow -> flow.to.id == activity.id }
+            .map { flow -> flow.from }
+            .filter { activity -> activity.active }
+            .map { activity -> activity.id }
 
-    private fun areAllPrecessecorDone(activity: ActivityEntity, workflowInstance: WorkflowInstanceEntity): Boolean {
-        val predecessorIds = activity.predecessors
-            .filter { predecessor -> predecessor.active }
-            .map { predecessor -> predecessor.id }
-
-        val doneActivityIds = workflowInstance.activityInstances
+        val runningActivityIds = workflowInstance.activityInstances
             .filter { activityInstance -> activityInstance.status == WorkflowStatus.DONE }
             .map { activityInstance -> activityInstance.activity.id }
 
-        return doneActivityIds.containsAll(predecessorIds)
+        return runningActivityIds.containsAll(predecessorActivityIds)
     }
 }

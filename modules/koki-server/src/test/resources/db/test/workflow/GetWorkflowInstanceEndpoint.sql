@@ -28,13 +28,6 @@ INSERT INTO T_ACTIVITY(id, workflow_fk, role_fk, name, type, requires_approval)
            (103, 100, 10,   'SUBMIT',  4, false),
            (104, 100, null, 'STOP',    2, false);
 
-INSERT INTO T_ACTIVITY_PREDECESSOR(activity_fk, predecessor_fk)
-    VALUES (101, 100),
-           (102, 101),
-           (103, 101),
-           (104, 102),
-           (104, 103);
-
 INSERT INTO T_WORKFLOW_INSTANCE(id, tenant_fk, workflow_fk, approver_fk, status, start_at)
     VALUES ('wi-100-01', 1, 100, 101, 2, now());
 

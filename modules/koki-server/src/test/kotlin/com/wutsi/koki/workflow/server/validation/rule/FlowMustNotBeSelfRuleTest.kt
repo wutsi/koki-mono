@@ -7,14 +7,14 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class WorkflowMustNotHaveCycleRuleTest {
-    private val rule = WorkflowMustNotHaveCycleRule()
+class FlowMustNotBeSelfRuleTest {
+    private val rule = ActivityMustNotHaveSelfAsPredecessorRule()
 
     @Test
     fun success() {
         val result = rule.validate(
             WorkflowData(
-                name = "test",
+                name = "new",
                 description = "This is a new workflow",
                 activities = listOf(
                     ActivityData(name = "start"),
@@ -24,7 +24,7 @@ class WorkflowMustNotHaveCycleRuleTest {
                 flows = listOf(
                     FlowData(from = "start", to = "invoice"),
                     FlowData(from = "invoice", to = "stop"),
-                ),
+                )
             )
         )
 
@@ -35,22 +35,23 @@ class WorkflowMustNotHaveCycleRuleTest {
     fun error() {
         val result = rule.validate(
             WorkflowData(
-                name = "test",
+                name = "new",
                 description = "This is a new workflow",
                 activities = listOf(
                     ActivityData(name = "start"),
-                    ActivityData(name = "invoice"),
-                    ActivityData(name = "stop"),
+                    ActivityData(name = "invoice", predecessors = listOf("start")),
+                    ActivityData(name = "stop", predecessors = listOf("invoice")),
+                    ActivityData(name = "self", predecessors = listOf("self")),
                 ),
                 flows = listOf(
                     FlowData(from = "start", to = "invoice"),
                     FlowData(from = "invoice", to = "stop"),
-                    FlowData(from = "stop", to = "start"),
-                ),
+                    FlowData(from = "self", to = "self"),
+                )
             )
         )
 
         assertEquals(1, result.size)
-        assertEquals("workflow: test", result[0].location)
+        assertEquals("activity: self", result[0].location)
     }
 }

@@ -22,9 +22,9 @@ INSERT INTO T_ACTIVITY(id, workflow_fk, role_fk, name, type, description, tags, 
 
            (310, 300, null, 'START', 1, 'malformed tag', 'a', true);
 
-INSERT INTO T_ACTIVITY_PREDECESSOR(activity_fk, predecessor_fk)
-    VALUES (111, 110),
-           (112, 111),
-           (113, 111),
-           (114, 112),
-           (114, 113);
+INSERT INTO T_FLOW(workflow_fk, from_fk, to_fk, expression)
+    VALUES (100, 110, 111, null),
+           (100, 111, 112, null),
+           (100, 111, 113, 'submit=true'),
+           (100, 112, 114, null),
+           (100, 113, 114, null);

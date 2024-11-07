@@ -12,12 +12,12 @@ INSERT INTO T_ACTIVITY(id, workflow_fk, name, type, active)
            (103, 100, 'SUBMIT',  4, true),
            (104, 100, 'STOP',    2, true);
 
-INSERT INTO T_ACTIVITY_PREDECESSOR(activity_fk, predecessor_fk)
-    VALUES (101, 100),
-           (102, 101),
-           (103, 101),
-           (104, 102),
-           (104, 103);
+INSERT INTO T_FLOW(workflow_fk, from_fk, to_fk, expression)
+    VALUES (100, 100, 101, null),
+           (100, 101, 102, null),
+           (100, 101, 103, 'submit=true'),
+           (100, 102, 104, null),
+           (100, 103, 104, null);
 
 INSERT INTO T_WORKFLOW_INSTANCE(id, tenant_fk, workflow_fk, approver_fk, status, start_at)
     VALUES ('wi-100-01', 1, 100, null, 2, now());

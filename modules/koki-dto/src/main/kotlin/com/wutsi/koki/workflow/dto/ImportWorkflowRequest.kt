@@ -10,15 +10,24 @@ data class ActivityData(
     val title: String? = null,
     val description: String? = null,
     val requiresApproval: Boolean = false,
-    val tags: Map<String, String> = emptyMap(),
-    val predecessors: List<String> = emptyList(),
     val role: String? = null,
+    val tags: Map<String, String> = emptyMap(),
+
+    @Deprecated("use WorkflowData.flow")
+    val predecessors: List<String> = emptyList(),
 )
 
 data class WorkflowData(
     val name: String = "",
     val title: String? = null,
     val description: String? = null,
-    val activities: List<ActivityData> = emptyList(),
     val parameters: List<String> = emptyList(),
+    val activities: List<ActivityData> = emptyList(),
+    val flows: List<FlowData> = emptyList(),
+)
+
+data class FlowData(
+    val from: String,
+    val to: String,
+    val expression: String? = null,
 )

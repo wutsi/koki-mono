@@ -21,8 +21,7 @@ class ActivityMapper {
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
             tags = entity.tags?.let { tags -> toMap(tags) } ?: emptyMap(),
-            predecessorIds = entity.predecessors.mapNotNull { pred -> pred.id },
-            roleId = entity.role?.id
+            roleId = entity.role?.id,
         )
     }
 

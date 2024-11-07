@@ -23,15 +23,10 @@ class WorkflowMustNotHaveCycleRule : AbstractWorkflowRule() {
         val graph = SimpleDirectedGraph<String, DefaultEdge>(DefaultEdge::class.java)
 
         // Nodes
-        workflow.activities
-            .forEach { activity -> graph.addVertex(activity.name) }
+        workflow.activities.forEach { activity -> graph.addVertex(activity.name) }
 
         // Edges
-        workflow.activities
-            .forEach { activity ->
-                activity.predecessors
-                    .forEach { predecessor -> graph.addEdge(predecessor, activity.name) }
-            }
+        workflow.flows.forEach { flow -> graph.addEdge(flow.from, flow.to) }
 
         return graph
     }

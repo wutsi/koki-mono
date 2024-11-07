@@ -60,13 +60,10 @@ class WorkflowPNGExporter {
             .forEach { activity -> graph.addVertex(activity.name) }
 
         // Edges
-        workflow.activities
-            .filter { it.active }
-            .forEach { activity ->
-                activity.predecessors
-                    .filter { it.active }
-                    .forEach { predecessor -> graph.addEdge(predecessor.name, activity.name) }
-            }
+        workflow.flows
+            .filter { flow -> flow.from.active }
+            .filter { flow -> flow.to.active }
+            .forEach { flow -> graph.addEdge(flow.from.name, flow.to.name) }
 
         return graph
     }
@@ -82,7 +79,7 @@ class WorkflowPNGExporter {
         val layout = mxCompactTreeLayout(adapter)
         layout.execute(adapter.getDefaultParent())
 
-        // Remove text from edges
+        // Remove text from flows
         adapter.edgeToCellMap.values.forEach { edgeCell -> edgeCell.value = null }
 
         // Apply style

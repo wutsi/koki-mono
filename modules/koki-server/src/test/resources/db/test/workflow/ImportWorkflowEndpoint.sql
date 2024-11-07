@@ -14,9 +14,10 @@ INSERT INTO T_WORKFLOW(id, tenant_fk, name)
 INSERT INTO T_ACTIVITY(id, workflow_fk, role_fk, name, type)
     VALUES (110, 100, null, 'START', 1),
            (111, 100, 11, 'OLD', 4),
-           (112, 100, null, 'STOP', 2)
-    ;
+           (112, 100, null, 'INVOICE', 7),
+           (113, 100, null, 'STOP', 2);
 
-INSERT INTO T_ACTIVITY_PREDECESSOR(activity_fk, predecessor_fk)
-    VALUES (111, 110),
-           (112, 111);
+INSERT INTO T_FLOW(workflow_fk, from_fk, to_fk, expression)
+    VALUES (100, 110, 111, 'client_status=false'),
+           (100, 111, 112, null),
+           (100, 112, 113, null);

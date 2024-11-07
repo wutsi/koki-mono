@@ -27,6 +27,10 @@ data class WorkflowEntity(
     @OneToMany(mappedBy = "workflow")
     val activities: List<ActivityEntity> = emptyList(),
 
+    @BatchSize(20)
+    @OneToMany(mappedBy = "workflow")
+    val flows: List<FlowEntity> = emptyList(),
+
     var name: String = "",
     var title: String? = null,
     var description: String? = null,

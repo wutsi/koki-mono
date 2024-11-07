@@ -27,14 +27,7 @@ class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(false, workflow.active)
         assertEquals(true, workflow.requiresApprover)
         assertEquals(listOf("PARAM_1", "PARAM_2", "PARAM_3"), workflow.parameters)
-
-        assertEquals(2, workflow.roles.size)
-        val roles = workflow.roles
-        assertEquals(10L, roles[0].id)
-        assertEquals("accountant", roles[0].name)
-
-        assertEquals(11L, roles[1].id)
-        assertEquals("technician", roles[1].name)
+        assertEquals(listOf(10L, 11L), workflow.roleIds)
 
         assertEquals(5, workflow.activities.size)
         val activities = workflow.activities.sortedBy { it.id }
@@ -44,7 +37,6 @@ class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals("Start the process", activities[0].description)
         assertEquals(mapOf("a" to "p1", "b" to "p2"), activities[0].tags)
         assertTrue(activities[0].requiresApproval)
-        assertTrue(activities[0].predecessorIds.isEmpty())
         assertNull(activities[0].roleId)
 
         assertEquals(111L, activities[1].id)
@@ -53,7 +45,6 @@ class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals("fill the taxes", activities[1].description)
         assertTrue(activities[1].tags.isEmpty())
         assertFalse(activities[1].requiresApproval)
-        assertEquals(listOf(110L), activities[1].predecessorIds)
         assertEquals(11L, activities[1].roleId)
 
         assertEquals(112L, activities[2].id)
@@ -62,7 +53,6 @@ class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertNull(activities[2].description)
         assertTrue(activities[2].tags.isEmpty())
         assertFalse(activities[2].requiresApproval)
-        assertEquals(listOf(111L), activities[2].predecessorIds)
         assertEquals(10L, activities[2].roleId)
 
         assertEquals(113L, activities[3].id)
@@ -71,7 +61,6 @@ class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertNull(activities[3].description)
         assertTrue(activities[3].tags.isEmpty())
         assertFalse(activities[3].requiresApproval)
-        assertEquals(listOf(111L), activities[3].predecessorIds)
         assertEquals(10L, activities[3].roleId)
 
         assertEquals(114L, activities[4].id)
@@ -80,8 +69,30 @@ class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertNull(activities[4].description)
         assertTrue(activities[4].tags.isEmpty())
         assertFalse(activities[4].requiresApproval)
-        assertEquals(listOf(112L, 113L), activities[4].predecessorIds)
         assertNull(activities[4].roleId)
+
+        val flows = workflow.flows
+        assertEquals(5, flows.size)
+
+        assertEquals(activities[0].id, flows[0].fromId)
+        assertEquals(activities[1].id, flows[0].toId)
+        assertNull(flows[0].expression)
+
+        assertEquals(activities[1].id, flows[1].fromId)
+        assertEquals(activities[2].id, flows[1].toId)
+        assertNull(flows[1].expression)
+
+        assertEquals(activities[1].id, flows[2].fromId)
+        assertEquals(activities[3].id, flows[2].toId)
+        assertEquals("submit=true", flows[2].expression)
+
+        assertEquals(activities[2].id, flows[3].fromId)
+        assertEquals(activities[4].id, flows[3].toId)
+        assertNull(flows[3].expression)
+
+        assertEquals(activities[3].id, flows[4].fromId)
+        assertEquals(activities[4].id, flows[4].toId)
+        assertNull(flows[4].expression)
     }
 
     @Test

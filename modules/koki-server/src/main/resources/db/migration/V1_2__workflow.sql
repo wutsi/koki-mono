@@ -41,6 +41,19 @@ CREATE TABLE T_ACTIVITY_PREDECESSOR(
     PRIMARY KEY(activity_fk, predecessor_fk)
 ) ENGINE = InnoDB;
 
+CREATE TABLE T_FLOW(
+  id                  BIGINT NOT NULL AUTO_INCREMENT,
+
+  workflow_fk         BIGINT NOT NULL REFERENCES T_WORKFLOW(id),
+  from_fk             BIGINT NOT NULL REFERENCES T_ACTIVITY(id),
+  to_fk               BIGINT NOT NULL REFERENCES T_ACTIVITY(id),
+
+  expression          TEXT DEFAULT null,
+
+  UNIQUE(from_fk, to_fk),
+  PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
 CREATE TABLE T_WORKFLOW_INSTANCE(
     id                  VARCHAR(36) NOT NULL,
 

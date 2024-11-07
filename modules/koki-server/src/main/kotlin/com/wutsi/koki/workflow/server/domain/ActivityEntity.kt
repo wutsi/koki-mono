@@ -29,6 +29,7 @@ data class ActivityEntity(
     @JoinColumn(name = "role_fk")
     var role: RoleEntity? = null,
 
+    @Deprecated("replaced by Workflow.flows")
     @BatchSize(20)
     @ManyToMany
     @JoinTable(

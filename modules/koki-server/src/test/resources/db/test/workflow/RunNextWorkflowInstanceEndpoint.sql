@@ -35,18 +35,18 @@ INSERT INTO T_ACTIVITY(id, workflow_fk, role_fk, name, type, description, tags, 
            (114, 110, null, 'STOP',    2, null, null, false, true)
     ;
 
-INSERT INTO T_ACTIVITY_PREDECESSOR(activity_fk, predecessor_fk)
-    VALUES (101, 100),
-           (102, 101),
-           (103, 101),
-           (104, 102),
-           (104, 103),
+INSERT INTO T_FLOW(workflow_fk, from_fk, to_fk, expression)
+    VALUES (100, 100, 101, null),
+           (100, 101, 102, null),
+           (100, 101, 103, 'submit=true'),
+           (100, 102, 104, null),
+           (100, 103, 104, null),
 
-           (111, 110),
-           (112, 111),
-           (113, 111),
-           (114, 112),
-           (114, 113);
+           (110, 110, 111, null),
+           (110, 111, 112, null),
+           (110, 111, 113, null),
+           (110, 112, 114, null),
+           (110, 113, 114, null);
 
 INSERT INTO T_WORKFLOW_INSTANCE(id, tenant_fk, workflow_fk, approver_fk, status, start_at)
     VALUES ('wi-100-01', 1, 100, 100,  2, now()),

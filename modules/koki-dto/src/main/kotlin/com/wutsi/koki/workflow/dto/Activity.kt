@@ -14,6 +14,8 @@ data class Activity(
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
     val tags: Map<String, String> = emptyMap(),
-    val predecessorIds: List<Long> = emptyList(),
     val roleId: Long? = null,
+
+    @Deprecated("replaced by Workflow.flows")
+    val predecessorIds: List<Long> = emptyList(),
 )

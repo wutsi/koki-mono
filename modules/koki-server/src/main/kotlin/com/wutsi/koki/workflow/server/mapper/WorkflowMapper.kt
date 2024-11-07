@@ -1,7 +1,6 @@
 package com.wutsi.koki.workflow.server.mapper
 
 import com.wutsi.koki.tenant.server.domain.RoleEntity
-import com.wutsi.koki.tenant.server.mapper.RoleMapper
 import com.wutsi.koki.workflow.dto.Workflow
 import com.wutsi.koki.workflow.dto.WorkflowSummary
 import com.wutsi.koki.workflow.server.domain.WorkflowEntity
@@ -10,10 +9,10 @@ import org.springframework.stereotype.Service
 @Service
 class WorkflowMapper(
     private val activityMapper: ActivityMapper,
-    private val roleMapper: RoleMapper,
+    private val flowMapper: FlowMapper
 ) {
     fun toWorkflow(entity: WorkflowEntity): Workflow {
-        val roles = getRoles(entity).map { role -> roleMapper.toRole(role) }
+        val roles = getRoles(entity)
         val activities = entity.activities.map { activity -> activityMapper.toActivity(activity) }
         return Workflow(
             id = entity.id!!,
@@ -24,9 +23,10 @@ class WorkflowMapper(
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
             activities = activities,
-            roles = roles,
+            roleIds = roles.map { role -> role.id ?: -1 },
             requiresApprover = activities.find { activity -> activity.requiresApproval } != null,
-            parameters = entity.parameterAsList()
+            parameters = entity.parameterAsList(),
+            flows = entity.flows.map { flow -> flowMapper.toFlow(flow) }
         )
     }
 

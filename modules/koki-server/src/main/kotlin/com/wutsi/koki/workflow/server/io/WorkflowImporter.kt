@@ -4,10 +4,13 @@ import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.tenant.server.domain.RoleEntity
 import com.wutsi.koki.tenant.server.service.RoleService
 import com.wutsi.koki.workflow.dto.ActivityData
+import com.wutsi.koki.workflow.dto.FlowData
 import com.wutsi.koki.workflow.dto.WorkflowData
 import com.wutsi.koki.workflow.server.domain.ActivityEntity
+import com.wutsi.koki.workflow.server.domain.FlowEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowEntity
 import com.wutsi.koki.workflow.server.service.ActivityService
+import com.wutsi.koki.workflow.server.service.FlowService
 import com.wutsi.koki.workflow.server.service.WorkflowService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service
 class WorkflowImporter(
     private val workflowService: WorkflowService,
     private val activityService: ActivityService,
+    private val flowService: FlowService,
     private val roleService: RoleService,
 ) {
     companion object {
@@ -27,11 +31,11 @@ class WorkflowImporter(
 
         // Update activities
         val activities = saveActivities(w, data)
-        linkPredecessors(w, activities, data)
+        addFlows(w, activities, data)
         linkRoles(w, activities, data)
         activityService.saveAll(activities)
 
-        // Deactivate activities
+        // Deactivate old activities
         val xactivities = deactivate(w, data)
         activityService.saveAll(xactivities)
 
@@ -46,7 +50,9 @@ class WorkflowImporter(
         try {
             val activity = activityService.getByName(data.name, workflow)
 
-            LOGGER.debug(">>> Updating Activity#${data.name}")
+            if (LOGGER.isDebugEnabled) {
+                LOGGER.debug(">>> Updating Activity#${data.name}")
+            }
             activity.type = data.type
             activity.title = data.title
             activity.description = data.description
@@ -55,8 +61,9 @@ class WorkflowImporter(
             activity.tags = toString(data.tags)
             return activity
         } catch (ex: NotFoundException) {
-            LOGGER.debug(">>> Adding Activity#${data.name}")
-
+            if (LOGGER.isDebugEnabled) {
+                LOGGER.debug(">>> Adding Activity#${data.name}")
+            }
             return activityService.save(
                 ActivityEntity(
                     workflow = workflow,
@@ -72,32 +79,52 @@ class WorkflowImporter(
         }
     }
 
-    private fun linkPredecessors(workflow: WorkflowEntity, activities: List<ActivityEntity>, data: WorkflowData) {
-        val predecessorNames = data.activities.flatMap { activity -> activity.predecessors }
-        val predecessorMap = if (predecessorNames.isEmpty()) {
-            emptyMap()
-        } else {
-            activityService.getByNames(predecessorNames, workflow)
-                .associateBy { activity -> activity.name }
+    private fun addFlows(
+        workflow: WorkflowEntity,
+        activities: List<ActivityEntity>,
+        data: WorkflowData
+    ): List<FlowEntity> {
+        // Add/Update
+        val flows = data.flows.mapNotNull { flow -> addFlow(workflow, activities, flow) }
+
+        // Delete un old flows
+        val flowIds = flows.mapNotNull { flow -> flow.id }
+        val flowToDelete = workflow.flows.filter { flow ->
+            if (LOGGER.isDebugEnabled) {
+                LOGGER.debug(">>> Deleting Activity[${flow.from.name}] -> Activity[${flow.to.name}]")
+            }
+            !flowIds.contains(flow.id)
         }
-        activities.map { activity -> linkPredecessors(activity, predecessorMap, data) }
+        flowService.deleteAll(flowToDelete)
+
+        return flows
     }
 
-    private fun linkPredecessors(
-        activity: ActivityEntity,
-        predecessorMap: Map<String, ActivityEntity>,
-        data: WorkflowData
-    ) {
-        val predecessorNames: List<String> = data.activities
-            .find { act -> act.name.equals(activity.name, true) }
-            ?.predecessors
-            ?: emptyList()
-        LOGGER.debug(">>> Linking Activity[${activity.name}] with Predecessors$predecessorNames")
+    private fun addFlow(workflow: WorkflowEntity, activities: List<ActivityEntity>, flow: FlowData): FlowEntity? {
+        val from = activities.find { activity -> activity.name == flow.from } ?: return null
+        val to = activities.find { activity -> activity.name == flow.to } ?: return null
 
-        val predecessors = predecessorNames.mapNotNull { name -> predecessorMap[name] }
-
-        activity.predecessors.clear()
-        activity.predecessors.addAll(predecessors)
+        try {
+            if (LOGGER.isDebugEnabled) {
+                LOGGER.debug(">>> Updating Activity[${flow.from}] -> Activity[${flow.to}]")
+            }
+            val entity = flowService.get(from, to)
+            entity.expression = flow.expression
+            flowService.save(entity)
+            return entity
+        } catch (ex: NotFoundException) {
+            if (LOGGER.isDebugEnabled) {
+                LOGGER.debug(">>> Adding Activity[${flow.from}] -> Activity[${flow.to}]")
+            }
+            return flowService.save(
+                FlowEntity(
+                    workflow = workflow,
+                    from = from,
+                    to = to,
+                    expression = flow.expression
+                )
+            )
+        }
     }
 
     private fun linkRoles(workflow: WorkflowEntity, activities: List<ActivityEntity>, data: WorkflowData) {
@@ -120,8 +147,9 @@ class WorkflowImporter(
         val role: String? = data.activities
             .find { act -> act.name.equals(activity.name, true) }
             ?.role
-        LOGGER.debug(">>> Linking Activity[${activity.name}] with Role[$role]")
-
+        if (LOGGER.isDebugEnabled) {
+            LOGGER.debug(">>> Linking Activity[${activity.name}] with Role[$role]")
+        }
         activity.role = role?.let { roleMap[role] }
     }
 
@@ -144,8 +172,9 @@ class WorkflowImporter(
         val result = mutableListOf<ActivityEntity>()
         activities.forEach { activity ->
             if (!codes.contains(activity.name)) {
-                LOGGER.debug(">>> Deactivating Activity#${activity.name}")
-
+                if (LOGGER.isDebugEnabled) {
+                    LOGGER.debug(">>> Deactivating Activity#${activity.name}")
+                }
                 activity.active = false
                 result.add(activity)
             }

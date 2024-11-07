@@ -5,10 +5,11 @@ import com.wutsi.koki.workflow.server.validation.ValidationError
 
 class ActivityMustNotBeOrphanRule : AbstractActivityRule() {
     override fun validate(workflow: WorkflowData): List<ValidationError> {
-        val predecessors = workflow.activities.flatMap { activity -> activity.predecessors }.toSet()
+        val froms = workflow.flows.map { flow -> flow.from }
+        val tos = workflow.flows.map { flow -> flow.to }
         return workflow.activities
-            .filter { activity -> activity.predecessors.isEmpty() }
-            .filter { activity -> !predecessors.contains(activity.name) }
+            .filter { activity -> !froms.contains(activity.name) }
+            .filter { activity -> !tos.contains(activity.name) }
             .map { activity -> createError(activity) }
     }
 }

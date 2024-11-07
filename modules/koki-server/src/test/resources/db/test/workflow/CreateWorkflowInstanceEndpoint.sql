@@ -33,13 +33,3 @@ INSERT INTO T_ACTIVITY(id, workflow_fk, role_fk, name, type, description, tags, 
            (212, 200, null, 'END', 2, null, null, false),
 
            (310, 300, null, 'START', 1, null, null, true);
-
-INSERT INTO T_ACTIVITY_PREDECESSOR(activity_fk, predecessor_fk)
-    VALUES (111, 110),
-           (112, 111),
-           (113, 111),
-           (114, 112),
-           (114, 113),
-
-           (211, 210),
-           (212, 211);
