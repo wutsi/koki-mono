@@ -34,13 +34,6 @@ CREATE TABLE T_ACTIVITY(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
-CREATE TABLE T_ACTIVITY_PREDECESSOR(
-    activity_fk         BIGINT NOT NULL REFERENCES T_ACTIVITY(id),
-    predecessor_fk      BIGINT NOT NULL REFERENCES T_ACTIVITY(id),
-
-    PRIMARY KEY(activity_fk, predecessor_fk)
-) ENGINE = InnoDB;
-
 CREATE TABLE T_FLOW(
   id                  BIGINT NOT NULL AUTO_INCREMENT,
 

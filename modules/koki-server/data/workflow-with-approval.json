@@ -23,6 +23,16 @@
           "receive_document"
         ]
       }
+    ],
+    "flows": [
+      {
+        "from": "start",
+        "to": "receive_document"
+      },
+      {
+        "from": "receive_document",
+        "to": "stop"
+      }
     ]
   }
 }
