@@ -3,10 +3,9 @@ CREATE TABLE T_FORM(
 
   tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
 
-  title                   VARCHAR(255),
-  description             TEXT,
+  title                   VARCHAR(255) NOT NULL,
+  content                 JSON NOT NULL,
   active                  BOOLEAN NOT NULL DEFAULT true,
-  content                 TEXT NOT NULL,
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
 

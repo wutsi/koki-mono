@@ -1,15 +1,11 @@
-package com.wutsi.koki.workflow.server.endpoint
+package com.wutsi.koki.form.server.endpoint
 
-import com.wutsi.koki.error.dto.Error
-import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.exception.BadRequestException
+import com.wutsi.koki.form.dto.ImportFormRequest
+import com.wutsi.koki.form.dto.ImportFormResponse
+import com.wutsi.koki.form.server.domain.FormEntity
+import com.wutsi.koki.form.server.io.FormImporter
+import com.wutsi.koki.form.server.service.FormService
 import com.wutsi.koki.tenant.server.service.TenantService
-import com.wutsi.koki.workflow.dto.ImportWorkflowRequest
-import com.wutsi.koki.workflow.dto.ImportWorkflowResponse
-import com.wutsi.koki.workflow.server.domain.WorkflowEntity
-import com.wutsi.koki.workflow.server.io.WorkflowImporter
-import com.wutsi.koki.workflow.server.service.WorkflowService
-import com.wutsi.koki.workflow.server.validation.WorkflowValidator
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -17,57 +13,40 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
 
 @RestController
 @RequestMapping
-class ImportWorkflowEndpoint(
-    private val importer: WorkflowImporter,
-    private val service: WorkflowService,
+class ImportFormEndpoint(
+    private val importer: FormImporter,
+    private val service: FormService,
     private val tenantService: TenantService,
-    private val validator: WorkflowValidator,
 ) {
-    @PostMapping("/v1/workflows")
+    @PostMapping("/v1/forms")
     fun create(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-        @RequestBody @Valid request: ImportWorkflowRequest
-    ): ImportWorkflowResponse {
-        validate(request)
-
-        val workflow = WorkflowEntity(tenant = tenantService.get(tenantId))
-        importer.import(workflow, request.workflow)
-        return ImportWorkflowResponse(
-            workflowId = workflow.id ?: -1
+        @RequestBody @Valid request: ImportFormRequest
+    ): ImportFormResponse {
+        val form = FormEntity(
+            id = UUID.randomUUID().toString(),
+            tenant = tenantService.get(tenantId)
+        )
+        importer.import(form, request.content)
+        return ImportFormResponse(
+            formId = form.id ?: ""
         )
     }
 
-    @PostMapping("/v1/workflows/{id}")
+    @PostMapping("/v1/forms/{id}")
     fun update(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-        @PathVariable id: Long,
-        @RequestBody @Valid request: ImportWorkflowRequest
-    ): ImportWorkflowResponse {
-        validate(request)
-
-        val workflow = service.get(id, tenantId)
-        importer.import(workflow, request.workflow)
-        return ImportWorkflowResponse(
-            workflowId = workflow.id ?: -1
+        @PathVariable id: String,
+        @RequestBody @Valid request: ImportFormRequest
+    ): ImportFormResponse {
+        val form = service.get(id, tenantId)
+        importer.import(form, request.content)
+        return ImportFormResponse(
+            formId = id,
         )
-    }
-
-    private fun validate(request: ImportWorkflowRequest) {
-        val errors = validator.validate(request.workflow)
-        if (errors.isNotEmpty()) {
-            var i = 0
-            val data = errors.map { error ->
-                "%04d".format(i++) to "${error.location} - ${error.message}"
-            }.toMap()
-            throw BadRequestException(
-                error = Error(
-                    code = ErrorCode.WORKFLOW_NOT_VALID,
-                    data = data
-                )
-            )
-        }
     }
 }

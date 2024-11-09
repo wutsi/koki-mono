@@ -75,6 +75,10 @@ springdoc:
             display-name: Configuration API
             paths-to-match: /v1/configurations, /v1/configurations/*
 
+        -   group: forms
+            display-name: Form API
+            paths-to-match: /v1/forms, /v1/forms/*
+
         -   group: tenant
             display-name: Tenant API
             paths-to-match: /v1/tenants, /v1/tenants/*

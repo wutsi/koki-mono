@@ -18,8 +18,7 @@ data class FormEntity(
     @JoinColumn(name = "tenant_fk")
     val tenant: TenantEntity = TenantEntity(),
 
-    var title: String? = null,
-    var description: String? = null,
+    var title: String = "",
     var active: Boolean = true,
     var content: String = "",
     val createdAt: Date = Date(),
