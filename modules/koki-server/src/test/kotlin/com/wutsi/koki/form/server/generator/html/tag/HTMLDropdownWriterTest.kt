@@ -3,38 +3,48 @@ package com.wutsi.koki.form.server.generator.html.tag
 import com.wutsi.koki.form.dto.FormAccessControl
 import com.wutsi.koki.form.dto.FormElement
 import com.wutsi.koki.form.dto.FormElementType
+import com.wutsi.koki.form.dto.FormOption
 import com.wutsi.koki.form.server.generator.html.Context
-import com.wutsi.koki.form.server.generator.html.HTMLParagraphWriter
+import com.wutsi.koki.form.server.generator.html.HTMLDropdownWriter
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.io.StringWriter
 import kotlin.test.assertEquals
 
-class HTMLParagraphWriterTest {
+class HTMLDropdownWriterTest {
     val context = Context(
         roleName = "accountant",
         data = mapOf("var1" to "value1")
     )
     val output = StringWriter()
-    val writer = HTMLParagraphWriter()
+    val writer = HTMLDropdownWriter()
 
     val elt = FormElement(
-        type = FormElementType.PARAGRAPH,
+        type = FormElementType.DROPDOWN,
         url = "https://www.google.com/img/1.png",
         name = "var1",
         title = "test",
         description = "This is the description",
+        options = listOf(
+            FormOption(value = "1"),
+            FormOption(value = "foo", text = "FOO"),
+            FormOption(value = "value1", text = "Value #1"),
+        )
     )
 
     @Test
-    fun paragraph() {
+    fun dropdown() {
         writer.write(elt, context, output)
 
         assertEquals(
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <TEXTAREA name='${elt.name}'>value1</TEXTAREA>
+                <SELECT name='${elt.name}' value='value1'>
+                  <OPTION value='1'>1</OPTION>
+                  <OPTION value='foo'>FOO</OPTION>
+                  <OPTION value='value1' selected>Value #1</OPTION>
+                </SELECT>
 
             """.trimIndent(),
             output.toString()
@@ -49,7 +59,11 @@ class HTMLParagraphWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <TEXTAREA name='${elt.name}'></TEXTAREA>
+                <SELECT name='${elt.name}'>
+                  <OPTION value='1'>1</OPTION>
+                  <OPTION value='foo'>FOO</OPTION>
+                  <OPTION value='value1'>Value #1</OPTION>
+                </SELECT>
 
             """.trimIndent(),
             output.toString()
@@ -59,12 +73,7 @@ class HTMLParagraphWriterTest {
     @Test
     fun `validation rules`() {
         val xelt = elt.copy(
-            min = "1",
-            max = "100",
-            minLength = 1,
-            maxLength = 10,
             required = true,
-            pattern = "xxxx"
         )
 
         writer.write(xelt, context, output)
@@ -73,7 +82,11 @@ class HTMLParagraphWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN><SPAN class='required'>*</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <TEXTAREA name='${elt.name}' required='required' min='1' max='100' minlength='1' maxlength='10' pattern='xxxx'>value1</TEXTAREA>
+                <SELECT name='${elt.name}' value='value1' required>
+                  <OPTION value='1'>1</OPTION>
+                  <OPTION value='foo'>FOO</OPTION>
+                  <OPTION value='value1' selected>Value #1</OPTION>
+                </SELECT>
 
             """.trimIndent(),
             output.toString()
@@ -107,7 +120,11 @@ class HTMLParagraphWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <TEXTAREA name='${elt.name}' readonly='readonly'>value1</TEXTAREA>
+                <SELECT name='${elt.name}' value='value1' readonly>
+                  <OPTION value='1'>1</OPTION>
+                  <OPTION value='foo'>FOO</OPTION>
+                  <OPTION value='value1' selected>Value #1</OPTION>
+                </SELECT>
 
             """.trimIndent(),
             output.toString()

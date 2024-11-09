@@ -4,7 +4,7 @@ import com.wutsi.koki.form.server.generator.html.video.VimeoEmbedder
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class VimoeEmbedderTest {
+class VimeoEmbedderTest {
     val embedder = VimeoEmbedder()
 
     @Test

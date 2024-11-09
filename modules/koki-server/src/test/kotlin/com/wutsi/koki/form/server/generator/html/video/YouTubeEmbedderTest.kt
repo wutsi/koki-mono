@@ -1,68 +1,41 @@
 package com.wutsi.koki.form.server.generator.html.tag
 
-import com.wutsi.koki.form.dto.FormAccessControl
-import com.wutsi.koki.form.dto.FormElement
-import com.wutsi.koki.form.dto.FormElementType
-import com.wutsi.koki.form.server.generator.html.Context
-import com.wutsi.koki.form.server.generator.html.HTMLSectionWriter
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Test
-import java.io.StringWriter
+import com.wutsi.koki.form.server.generator.html.video.YouTubeEmbedder
+import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
-class HTMLSectionWriterTest {
-    val context = Context()
-    val output = StringWriter()
-    val writer = HTMLSectionWriter()
-
-    val elt = FormElement(
-        type = FormElementType.SECTION,
-        title = "Personal Information",
-        description = "Enter the client personal information",
-        elements = listOf(
-            FormElement(
-                type = FormElementType.IMAGE,
-                url = "https://www.google.com/img/1.png",
-            ),
-            FormElement(
-                type = FormElementType.IMAGE,
-                url = "https://www.google.com/img/2.png",
-            ),
-        )
-    )
+class YouTubeEmbedderTest {
+    val embedder = YouTubeEmbedder()
 
     @Test
-    fun write() {
-        writer.write(elt, context, output)
-
-        val expected = """
-                <DIV class='section'>
-                  <H2 class='section-title'>Personal Information</H2>
-                  <DIV class='section-description'>Enter the client personal information</DIV>
-                  <DIV class='section-item'>
-                    <IMG src='https://www.google.com/img/1.png'/>
-                  </DIV>
-                  <DIV class='section-item'>
-                    <IMG src='https://www.google.com/img/2.png'/>
-                  </DIV>
-                </DIV>
-
-            """.trimIndent()
-        assertEquals(expected, output.toString())
+    fun url() {
+        assertEquals(
+            "https://www.youtube.com/embed/l9lLQLckJn4",
+            embedder.embedUrl("https://www.youtube.com/watch?v=l9lLQLckJn4")
+        )
     }
 
     @Test
-    fun `not viewer`() {
-        val elt = FormElement(
-            type = FormElementType.IMAGE,
-            url = "https://www.google.com/img/1.png",
-            accessControl = FormAccessControl(
-                viewerRoles = listOf("X", "Y", "Z")
-            )
+    fun `url with query params`() {
+        assertEquals(
+            "https://www.youtube.com/embed/XJwQ4UWUOmo",
+            embedder.embedUrl("https://www.youtube.com/watch?v=XJwQ4UWUOmo&list=WL&index=1")
         )
+    }
 
-        writer.write(elt, context, output)
+    @Test
+    fun `short url`() {
+        assertEquals(
+            "https://www.youtube.com/embed/XJwQ4UWUOmo",
+            embedder.embedUrl("https://youtu.be/XJwQ4UWUOmo?si=54Na32BWT-Q6PqUZ")
+        )
+    }
 
-        assertTrue(output.toString().isEmpty())
+    @Test
+    fun `bad url`() {
+        assertNull(
+            embedder.embedUrl("https://www.google.com")
+        )
     }
 }

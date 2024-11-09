@@ -3,7 +3,7 @@ package com.wutsi.koki.form.server.generator.html
 import com.wutsi.koki.form.dto.FormElement
 import java.io.StringWriter
 
-abstract class HTMLBaseElementWriter() : HTMLElementWriter {
+abstract class AbstractHTMLElementWriter() : HTMLElementWriter {
     protected abstract fun doWrite(
         element: FormElement,
         context: Context,
@@ -12,17 +12,17 @@ abstract class HTMLBaseElementWriter() : HTMLElementWriter {
     )
 
     protected fun canView(element: FormElement, context: Context): Boolean {
-        if (element.accessControl == null) {
+        if (element.accessControl == null || element.accessControl?.viewerRoles == null) {
             return true
         }
-        return element.accessControl!!.viewerRoles.contains(context.roleName)
+        return element.accessControl!!.viewerRoles?.contains(context.roleName) == true
     }
 
     protected fun canEdit(element: FormElement, context: Context): Boolean {
-        if (element.accessControl == null) {
+        if (element.accessControl == null || element.accessControl?.editorRoles == null) {
             return true
         }
-        return element.accessControl!!.editorRoles.contains(context.roleName)
+        return element.accessControl!!.editorRoles?.contains(context.roleName) == true
     }
 
     override fun write(element: FormElement, context: Context, writer: StringWriter) {
