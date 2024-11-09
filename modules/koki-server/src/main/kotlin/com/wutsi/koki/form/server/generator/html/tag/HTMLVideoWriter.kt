@@ -1,22 +1,25 @@
 package com.wutsi.koki.form.server.generator.html
 
 import com.wutsi.koki.form.dto.FormElement
-import org.apache.commons.text.StringEscapeUtils
+import com.wutsi.koki.form.server.generator.html.video.VideoEmbedder
+import com.wutsi.koki.form.server.generator.html.video.VimeoEmbedder
+import com.wutsi.koki.form.server.generator.html.video.YouTubeEmbedder
 import java.io.StringWriter
 
-class HTMLImageWriter : HTMLBaseElementWriter() {
+class HTMLVideoWriter(
+    private val embedders: List<VideoEmbedder> = listOf(
+        YouTubeEmbedder(),
+        VimeoEmbedder(),
+    )
+) : AbstractHTMLElementWriter() {
     override fun doWrite(element: FormElement, context: Context, writer: StringWriter, readOnly: Boolean) {
-        if (!canView(element, context)) {
-            return
+        if (element.url != null) {
+            val xurl = embedders
+                .mapNotNull { embedder -> embedder.embedUrl(element.url!!) }
+                .firstOrNull()
+            if (xurl != null) {
+                writer.write("<IFRAME src='$xurl'></IFRAME>\n")
+            }
         }
-
-        val buff = StringBuilder("<IMG src='${element.url}'")
-        if (!element.title.isNullOrEmpty()) {
-            buff.append(" alt='")
-                .append(StringEscapeUtils.escapeHtml4(element.title))
-                .append("'")
-        }
-        buff.append("/>\n")
-        writer.write(buff.toString())
     }
 }

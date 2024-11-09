@@ -1,9 +1,11 @@
 package com.wutsi.koki.form.server.generator.html
 
-import com.wutsi.koki.form.dto.Element
-import java.io.StringWriter
-
-
-interface HTMLElementWriter {
-    fun generate(element: Element, writer: StringWriter)
-}
+data class Context(
+    val language: String = "en",
+    val roleName: String? = null,
+    val data: Map<String, String> = emptyMap(),
+    val provider: HTMLElementWriterProvider = HTMLElementWriterProvider(),
+    val submitUrl: String = "",
+    val successUrl: String? = null,
+    val errorUrl: String? = null,
+)

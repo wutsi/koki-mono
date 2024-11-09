@@ -4,22 +4,22 @@ import com.wutsi.koki.form.dto.FormAccessControl
 import com.wutsi.koki.form.dto.FormElement
 import com.wutsi.koki.form.dto.FormElementType
 import com.wutsi.koki.form.server.generator.html.Context
-import com.wutsi.koki.form.server.generator.html.HTMLTextWriter
+import com.wutsi.koki.form.server.generator.html.HTMLParagraphWriter
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.io.StringWriter
 import kotlin.test.assertEquals
 
-class HTMLTextWriterTest {
+class HTMLParagraphWriterTest {
     val context = Context(
         roleName = "accountant",
         data = mapOf("var1" to "value1")
     )
     val output = StringWriter()
-    val writer = HTMLTextWriter()
+    val writer = HTMLParagraphWriter()
 
     val elt = FormElement(
-        type = FormElementType.TEXT,
+        type = FormElementType.PARAGRAPH,
         url = "https://www.google.com/img/1.png",
         name = "var1",
         title = "test",
@@ -27,84 +27,30 @@ class HTMLTextWriterTest {
     )
 
     @Test
-    fun text() {
+    fun paragraph() {
         writer.write(elt, context, output)
 
         assertEquals(
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <INPUT name='${elt.name}' value='value1'/>
+                <TEXTAREA name='${elt.name}'>value1</TEXTAREA>
+
             """.trimIndent(),
             output.toString()
         )
     }
 
     @Test
-    fun number() {
-        writer.write(elt.copy(type = FormElementType.NUMBER), context, output)
+    fun `paragraph without value`() {
+        writer.write(elt, context.copy(data = emptyMap()), output)
 
         assertEquals(
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <INPUT name='${elt.name}' type='number' value='value1'/>
-            """.trimIndent(),
-            output.toString()
-        )
-    }
+                <TEXTAREA name='${elt.name}'></TEXTAREA>
 
-    @Test
-    fun url() {
-        writer.write(elt.copy(type = FormElementType.URL), context, output)
-
-        assertEquals(
-            """
-                <LABEL class='title'><SPAN>test</SPAN></LABEL>
-                <DIV class='description'>This is the description</DIV>
-                <INPUT name='${elt.name}' type='url' value='value1'/>
-            """.trimIndent(),
-            output.toString()
-        )
-    }
-
-    @Test
-    fun email() {
-        writer.write(elt.copy(type = FormElementType.EMAIL), context, output)
-
-        assertEquals(
-            """
-                <LABEL class='title'><SPAN>test</SPAN></LABEL>
-                <DIV class='description'>This is the description</DIV>
-                <INPUT name='${elt.name}' type='email' value='value1'/>
-            """.trimIndent(),
-            output.toString()
-        )
-    }
-
-    @Test
-    fun date() {
-        writer.write(elt.copy(type = FormElementType.DATE), context, output)
-
-        assertEquals(
-            """
-                <LABEL class='title'><SPAN>test</SPAN></LABEL>
-                <DIV class='description'>This is the description</DIV>
-                <INPUT name='${elt.name}' type='date' value='value1'/>
-            """.trimIndent(),
-            output.toString()
-        )
-    }
-
-    @Test
-    fun time() {
-        writer.write(elt.copy(type = FormElementType.TIME), context, output)
-
-        assertEquals(
-            """
-                <LABEL class='title'><SPAN>test</SPAN></LABEL>
-                <DIV class='description'>This is the description</DIV>
-                <INPUT name='${elt.name}' type='time' value='value1'/>
             """.trimIndent(),
             output.toString()
         )
@@ -127,7 +73,8 @@ class HTMLTextWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN><SPAN class='required'>*</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <INPUT name='${elt.name}' value='value1' required='required' min='1' max='100' minlength='1' maxlength='10' pattern='xxxx'/>
+                <TEXTAREA name='${elt.name}' required min='1' max='100' minlength='1' maxlength='10' pattern='xxxx'>value1</TEXTAREA>
+
             """.trimIndent(),
             output.toString()
         )
@@ -160,7 +107,8 @@ class HTMLTextWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <INPUT name='${elt.name}' value='value1' readonly='readonly'/>
+                <TEXTAREA name='${elt.name}' readonly>value1</TEXTAREA>
+
             """.trimIndent(),
             output.toString()
         )
