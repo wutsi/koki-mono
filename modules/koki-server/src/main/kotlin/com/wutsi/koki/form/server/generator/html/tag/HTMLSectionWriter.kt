@@ -26,6 +26,5 @@ class HTMLSectionWriter() : AbstractHTMLElementWriter() {
             writer.write("  </DIV>\n")
         }
         writer.write("</DIV>\n")
-
     }
 }
