@@ -4,15 +4,28 @@ import com.wutsi.koki.form.dto.FormElement
 import org.apache.commons.text.StringEscapeUtils
 import java.io.StringWriter
 
-class HTMLImageWriter : HTMLElementWriter {
-    override fun write(element: FormElement, context: Context, writer: StringWriter) {
-        val buff = StringBuilder("<IMG src='${element.url}'")
+class HTMLSectionWriter() : AbstractHTMLElementWriter() {
+    override fun doWrite(element: FormElement, context: Context, writer: StringWriter, readOnly: Boolean) {
+        writer.write("<DIV class='section'>\n")
         if (!element.title.isNullOrEmpty()) {
-            buff.append(" alt='")
-                .append(StringEscapeUtils.escapeHtml4(element.title))
-                .append("'")
+            writer.write(
+                "  <H2 class='section-title'>" + StringEscapeUtils.escapeHtml4(element.title) + "</H2>\n"
+            )
         }
-        buff.append("/>\n")
-        writer.write(buff.toString())
+        if (!element.description.isNullOrEmpty()) {
+            writer.write(
+                "  <DIV class='section-description'>" + StringEscapeUtils.escapeHtml4(element.description) + "</DIV>\n"
+            )
+        }
+        element.elements?.forEach { elt ->
+            writer.write("  <DIV class='section-item'>\n")
+            writer.write("    ")
+            context.provider
+                .get(elt.type)
+                .write(elt, context, writer)
+            writer.write("  </DIV>\n")
+        }
+        writer.write("</DIV>\n")
+
     }
 }
