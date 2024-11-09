@@ -9,6 +9,8 @@ object ErrorCode {
     val ATTRIBUTE_NAME_MISSING: String = "$PREFIX:attribute:name-missing"
     val ATTRIBUTE_TYPE_INVALID: String = "$PREFIX:attribute:type-invalid"
 
+    val FORM_NOT_FOUND: String = "$PREFIX:form:not-found"
+
     val HTTP_REQUEST_NOT_READABLE = "$PREFIX:http:request-not-readable"
     val HTTP_MISSING_PARAMETER = "$PREFIX:http:missing-parameter"
     val HTTP_INVALID_PARAMETER = "$PREFIX:http:invalid-parameter"

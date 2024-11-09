@@ -20,7 +20,6 @@ class HTMLParagraphWriterTest {
 
     val elt = FormElement(
         type = FormElementType.PARAGRAPH,
-        url = "https://www.google.com/img/1.png",
         name = "var1",
         title = "test",
         description = "This is the description",
