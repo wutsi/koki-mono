@@ -4,6 +4,7 @@ import java.util.Date
 
 data class Form(
     val id: String = "",
+    val name: String = "",
     val title: String = "",
     val content: FormContent = FormContent(),
     val createdAt: Date = Date(),
