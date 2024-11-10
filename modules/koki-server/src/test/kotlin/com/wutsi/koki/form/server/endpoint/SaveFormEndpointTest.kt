@@ -8,8 +8,8 @@ import com.wutsi.koki.form.dto.FormContent
 import com.wutsi.koki.form.dto.FormElement
 import com.wutsi.koki.form.dto.FormElementType
 import com.wutsi.koki.form.dto.FormOption
-import com.wutsi.koki.form.dto.ImportFormRequest
 import com.wutsi.koki.form.dto.ImportFormResponse
+import com.wutsi.koki.form.dto.SaveFormRequest
 import com.wutsi.koki.form.server.dao.FormRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,15 +17,15 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/form/ImportFormEndpoint.sql"])
-class ImportFormEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/form/SaveFormEndpoint.sql"])
+class SaveFormEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var formDao: FormRepository
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
-    private val request = ImportFormRequest(
+    private val request = SaveFormRequest(
         content = FormContent(
             title = "Sample form",
             description = "This is an exempla of form",

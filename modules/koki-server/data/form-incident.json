@@ -7,27 +7,35 @@
         "type": "SECTION",
         "elements": [
           {
-            "name": "name",
+            "name": "incident_title",
             "type": "TEXT",
-            "title": "Employee Name",
+            "title": "Incident Title",
+            "description": "Short description of the incident",
             "required": true,
             "maxLength": 100
           },
           {
-            "name": "email",
+            "name": "employee_name",
+            "type": "TEXT",
+            "title": "Employee Name",
+            "required": true,
+            "maxLength": 50
+          },
+          {
+            "name": "employee_email",
             "type": "EMAIL",
             "title": "Employee Email",
             "required": true,
             "maxLength": 100
           },
           {
-            "name": "date",
+            "name": "incident_date",
             "type": "DATE",
             "title": "Incident Date",
             "description": "Enter the date of the incident"
           },
           {
-            "name": "type",
+            "name": "incident_type",
             "type": "DROPDOWN",
             "title": "Incident Type",
             "description": "Select the type of incident",

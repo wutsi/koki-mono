@@ -6,6 +6,7 @@ import com.wutsi.koki.form.server.domain.FormEntity
 import com.wutsi.koki.form.server.service.FormService
 import org.springframework.stereotype.Service
 
+@Deprecated("")
 @Service
 class FormImporter(
     private val service: FormService,

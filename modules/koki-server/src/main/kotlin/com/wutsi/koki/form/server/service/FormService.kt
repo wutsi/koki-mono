@@ -1,8 +1,10 @@
 package com.wutsi.koki.form.server.service
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.form.dto.FormContent
 import com.wutsi.koki.form.server.dao.FormRepository
 import com.wutsi.koki.form.server.domain.FormEntity
 import com.wutsi.koki.workflow.dto.FormSortBy
@@ -15,6 +17,7 @@ import java.util.Date
 class FormService(
     private val dao: FormRepository,
     private val em: EntityManager,
+    private val objectMapper: ObjectMapper
 ) {
     fun get(id: String, tenantId: Long): FormEntity {
         val form = dao.findById(id)
@@ -69,6 +72,14 @@ class FormService(
 
     @Transactional
     fun save(form: FormEntity): FormEntity {
+        form.modifiedAt = Date()
+        return dao.save(form)
+    }
+
+    @Transactional
+    fun import(form: FormEntity, content: FormContent): FormEntity {
+        form.title = content.title
+        form.content = objectMapper.writeValueAsString(content)
         form.modifiedAt = Date()
         return dao.save(form)
     }

@@ -9,8 +9,8 @@ import jakarta.persistence.Table
 import java.util.Date
 
 @Entity
-@Table(name = "T_FORM")
-data class FormEntity(
+@Table(name = "T_FORM_DATA")
+data class FormDataEntity(
     @Id
     val id: String? = null,
 
@@ -18,9 +18,11 @@ data class FormEntity(
     @JoinColumn(name = "tenant_fk")
     val tenant: TenantEntity = TenantEntity(),
 
-    var title: String = "",
-    var active: Boolean = true,
-    var content: String = "",
+    @ManyToOne
+    @JoinColumn(name = "form_fk")
+    val form: FormEntity = FormEntity(),
+
+    var data: String = "",
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
 )

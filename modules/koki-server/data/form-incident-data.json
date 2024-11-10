@@ -1,76 +1,10 @@
 {
-  "content": {
-    "title": "Incident Report",
-    "description": "Use this form to report incident",
-    "elements": [
-      {
-        "type": "SECTION",
-        "elements": [
-          {
-            "name": "name",
-            "type": "TEXT",
-            "title": "Employee Name",
-            "required": true,
-            "maxLength": 100
-          },
-          {
-            "name": "email",
-            "type": "EMAIL",
-            "title": "Employee Email",
-            "required": true,
-            "maxLength": 100
-          },
-          {
-            "name": "date",
-            "type": "DATE",
-            "title": "Incident Date",
-            "description": "Enter the date of the incident"
-          },
-          {
-            "name": "type",
-            "type": "DROPDOWN",
-            "title": "Incident Type",
-            "description": "Select the type of incident",
-            "otherOption": {
-              "value": "other",
-              "text": "Other"
-            },
-            "options": [
-              {
-                "value": "unsafe_act",
-                "text": "Unsafe Act"
-              },
-              {
-                "value": "minor_injury",
-                "text": "Minor Injury"
-              },
-              {
-                "value": "major_injury",
-                "text": "Major Injury"
-              },
-              {
-                "value": "fire_incident",
-                "text": "Fire Incident"
-              },
-              {
-                "value": "security_incident",
-                "text": "Security Incident"
-              },
-              {
-                "value": "harassement",
-                "text": "Harassement"
-              }
-            ]
-          },
-          {
-            "name": "description",
-            "type": "PARAGRAPH",
-            "title": "Incident Description",
-            "description": "Enter all the details about the incident. Please add as many information as possible to help us to process the case quickly",
-            "required": true
-          }
-        ]
-      }
-    ]
+  "data": {
+    "employee_name": "Ray Sponsible",
+    "employee_email": "ray.sponsible@gmail.com",
+    "incident_title": "Bad usage of machine Y",
+    "incident_date": "2023-11-15",
+    "incident_type": "unsafe_act",
+    "incident_description": "Employee X used machine Y without following the protocol, leading to an alarm being fired"
   }
 }

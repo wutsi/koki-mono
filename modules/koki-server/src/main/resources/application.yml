@@ -22,7 +22,7 @@ spring:
     flyway:
         clean-disabled: false
     jpa:
-        show-sql: false
+        show-sql: true
         hibernate:
             ddl-auto: none
             naming:
@@ -77,7 +77,7 @@ springdoc:
 
         -   group: forms
             display-name: Form API
-            paths-to-match: /v1/forms, /v1/forms/*
+            paths-to-match: /v1/forms, /v1/forms/*, /v1/forms/**, /v1/form-data, /v1/form-data/*
 
         -   group: tenant
             display-name: Tenant API
