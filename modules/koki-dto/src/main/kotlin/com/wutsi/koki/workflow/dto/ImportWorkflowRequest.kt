@@ -12,6 +12,7 @@ data class ActivityData(
     val requiresApproval: Boolean = false,
     val role: String? = null,
     val tags: Map<String, String> = emptyMap(),
+    val form: String? = null,
 )
 
 data class WorkflowData(

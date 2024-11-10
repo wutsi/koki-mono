@@ -15,4 +15,5 @@ data class Activity(
     val modifiedAt: Date = Date(),
     val tags: Map<String, String> = emptyMap(),
     val roleId: Long? = null,
+    val formId: String? = null,
 )

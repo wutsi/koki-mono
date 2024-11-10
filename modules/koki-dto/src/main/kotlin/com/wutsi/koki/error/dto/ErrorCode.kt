@@ -10,6 +10,7 @@ object ErrorCode {
     val ATTRIBUTE_TYPE_INVALID: String = "$PREFIX:attribute:type-invalid"
 
     val FORM_NOT_FOUND: String = "$PREFIX:form:not-found"
+    val FORM_DUPLICATE_NAME: String = "$PREFIX:form:duplicate-name"
     val FORM_DATA_NOT_FOUND: String = "$PREFIX:form-data:not-found"
     val FORM_DATA_FIELD_MISSING: String = "$PREFIX:form-data:field-missing"
     val FORM_DATA_FIELD_INVALID: String = "$PREFIX:form-data:field-invalid"
