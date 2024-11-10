@@ -1,15 +1,11 @@
 package com.wutsi.koki.tenant.server.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
-import org.apache.commons.io.IOUtils
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import java.io.File
-import java.io.FileOutputStream
-import java.net.HttpURLConnection
-import java.net.URL
 import javax.imageio.ImageIO
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -21,32 +17,16 @@ class ExportWorkflowPNGEndpointTest : TenantAwareEndpointTest() {
 
     private val folder = File(File(System.getProperty("user.home")), "__wutsi")
 
-    private fun download(u: String, statusCode: Int): File? {
-        val url = URL(u)
-        val cnn = url.openConnection() as HttpURLConnection
-        try {
-            cnn.connect()
+    private fun download(url: String, statusCode: Int): File? {
+        val i = url.lastIndexOf("/")
+        val filename = url.substring(i + 1)
 
-            val i = url.file.lastIndexOf("/")
-            val filename = url.file.substring(i + 1)
-
-            assertEquals("image/png", cnn.contentType)
-            assertEquals("attachment; filename=\"$filename\"", cnn.getHeaderField("Content-Disposition"))
-            assertEquals(statusCode, cnn.responseCode)
-
-            if (statusCode == 200) {
-                val file = File(folder, filename)
-                val output = FileOutputStream(file)
-                output.use {
-                    IOUtils.copy(cnn.inputStream, output)
-                }
-                return file
-            } else {
-                return null
-            }
-        } finally {
-            cnn.disconnect()
-        }
+        return super.download(
+            url,
+            expectedFileName = filename,
+            expectedStatusCode = statusCode,
+            expectedContentType = "image/png"
+        )
     }
 
     @BeforeEach

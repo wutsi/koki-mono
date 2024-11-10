@@ -1,6 +1,7 @@
 package com.wutsi.koki.workflow.server.io
 
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.form.server.service.FormService
 import com.wutsi.koki.tenant.server.domain.RoleEntity
 import com.wutsi.koki.tenant.server.service.RoleService
 import com.wutsi.koki.workflow.dto.ActivityData
@@ -21,6 +22,7 @@ class WorkflowImporter(
     private val activityService: ActivityService,
     private val flowService: FlowService,
     private val roleService: RoleService,
+    private val formService: FormService,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(WorkflowImporter::class.java)
@@ -33,6 +35,7 @@ class WorkflowImporter(
         val activities = saveActivities(w, data)
         addFlows(w, activities, data)
         linkRoles(w, activities, data)
+        linkForms(activities, data)
         activityService.saveAll(activities)
 
         // Deactivate old activities
@@ -151,6 +154,18 @@ class WorkflowImporter(
             LOGGER.debug(">>> Linking Activity[${activity.name}] with Role[$role]")
         }
         activity.role = role?.let { roleMap[role] }
+    }
+
+    private fun linkForms(activities: List<ActivityEntity>, data: WorkflowData) {
+        activities.map { activity -> linkForm(activity, data) }
+    }
+
+    private fun linkForm(activity: ActivityEntity, data: WorkflowData) {
+        val activityData = data.activities.find { act -> act.name == activity.name }
+        if (activityData?.form != null) {
+            LOGGER.debug(">>> Linking Activity[${activity.name}] with Form[${activityData.form}]")
+            activity.form = formService.getByName(activityData.form!!, activity.workflow.tenant.id ?: -1)
+        }
     }
 
     private fun saveWorkflow(workflow: WorkflowEntity, data: WorkflowData): WorkflowEntity {

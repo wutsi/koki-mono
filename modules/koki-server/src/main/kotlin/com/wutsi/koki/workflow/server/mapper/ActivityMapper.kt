@@ -22,6 +22,7 @@ class ActivityMapper {
             modifiedAt = entity.modifiedAt,
             tags = entity.tags?.let { tags -> toMap(tags) } ?: emptyMap(),
             roleId = entity.role?.id,
+            formId = entity.form?.id,
         )
     }
 

@@ -48,6 +48,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                     tags = mapOf("foo" to "bar", "a" to "b"),
                     requiresApproval = true,
                     role = "accountant",
+                    form = "f-100"
                 ),
                 ActivityData(
                     name = "STOP",
@@ -84,6 +85,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.workflow.activities[0].type, aStart?.type)
         assertEquals(true, aStart?.active)
         assertNull(aStart?.role)
+        assertNull(aStart?.form)
 
         val aInvoice = activityDao.findByNameAndWorkflow("INVOICE", workflow)
         assertEquals("INVOICE", aInvoice?.name)
@@ -94,6 +96,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(true, aInvoice?.active)
         assertEquals(request.workflow.activities[1].requiresApproval, aInvoice?.requiresApproval)
         assertEquals(10L, aInvoice?.role?.id)
+        assertEquals("100", aInvoice?.form?.id)
 
         val aEnd = activityDao.findByNameAndWorkflow("STOP", workflow)
         assertEquals("STOP", aEnd?.name)
@@ -101,6 +104,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.workflow.activities[2].type, aEnd?.type)
         assertEquals(true, aEnd?.active)
         assertNull(aEnd?.role)
+        assertNull(aEnd?.form)
 
         val flows = flowDao.findByWorkflow(workflow)
         assertEquals(2, flows.size)
@@ -136,6 +140,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.workflow.activities[0].type, aStart?.type)
         assertEquals(true, aStart?.active)
         assertNull(aStart?.role)
+        assertNull(aStart?.form)
 
         val aInvoice = activityDao.findByNameAndWorkflow("INVOICE", workflow)
         assertEquals("INVOICE", aInvoice?.name)
@@ -145,12 +150,14 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(true, aInvoice?.active)
         assertEquals(request.workflow.activities[1].requiresApproval, aInvoice?.requiresApproval)
         assertEquals(10L, aInvoice?.role?.id)
+        assertEquals("100", aInvoice?.form?.id)
 
         val aEnd = activityDao.findByNameAndWorkflow("STOP", workflow)
         assertEquals("STOP", aEnd?.name)
         assertEquals(request.workflow.activities[2].type, aEnd?.type)
         assertEquals(true, aEnd?.active)
         assertNull(aEnd?.role)
+        assertNull(aEnd?.form)
 
         val aDeactivated = activityDao.findById(111L).get()
         assertEquals(false, aDeactivated.active)
@@ -215,5 +222,87 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
 
         assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
         assertEquals(ErrorCode.WORKFLOW_NOT_VALID, result.body?.error?.code)
+    }
+
+    @Test
+    fun `invalid form`() {
+        val xrequest = ImportWorkflowRequest(
+            workflow = WorkflowData(
+                name = "new",
+                description = "This is a new workflow",
+                parameters = listOf("PARAM_1 ", "PARAM_2"),
+                activities = listOf(
+                    ActivityData(name = "START", type = ActivityType.START),
+                    ActivityData(
+                        name = "INVOICE",
+                        title = "Invoicing...",
+                        description = "SAGE create an invoice",
+                        type = ActivityType.SERVICE,
+                        tags = mapOf("foo" to "bar", "a" to "b"),
+                        requiresApproval = true,
+                        role = "accountant",
+                        form = "xxxx"
+                    ),
+                    ActivityData(
+                        name = "STOP",
+                        type = ActivityType.STOP,
+                    ),
+                ),
+                flows = listOf(
+                    FlowData(from = "START", to = "INVOICE"),
+                    FlowData(from = "INVOICE", to = "STOP", expression = "A==true"),
+                )
+            )
+        )
+
+        val result = rest.postForEntity(
+            "/v1/workflows",
+            xrequest,
+            ErrorResponse::class.java
+        )
+
+        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
+        assertEquals(ErrorCode.FORM_NOT_FOUND, result.body?.error?.code)
+    }
+
+    @Test
+    fun `form of another tenant`() {
+        val xrequest = ImportWorkflowRequest(
+            workflow = WorkflowData(
+                name = "new",
+                description = "This is a new workflow",
+                parameters = listOf("PARAM_1 ", "PARAM_2"),
+                activities = listOf(
+                    ActivityData(name = "START", type = ActivityType.START),
+                    ActivityData(
+                        name = "INVOICE",
+                        title = "Invoicing...",
+                        description = "SAGE create an invoice",
+                        type = ActivityType.SERVICE,
+                        tags = mapOf("foo" to "bar", "a" to "b"),
+                        requiresApproval = true,
+                        role = "accountant",
+                        form = "f-200"
+                    ),
+                    ActivityData(
+                        name = "STOP",
+                        type = ActivityType.STOP,
+                    ),
+                ),
+                flows = listOf(
+                    FlowData(from = "START", to = "INVOICE"),
+                    FlowData(from = "INVOICE", to = "STOP", expression = "A==true"),
+                )
+            )
+        )
+
+        val result = rest.postForEntity(
+            "/v1/workflows",
+            xrequest,
+            ErrorResponse::class.java
+        )
+
+        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
+        assertEquals(ErrorCode.FORM_NOT_FOUND, result.body?.error?.code)
     }
 }

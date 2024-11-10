@@ -28,7 +28,6 @@ abstract class AbstractHTMLImputElementWriter() : AbstractHTMLElementWriter() {
         if (!element.description.isNullOrEmpty()) {
             writer.write("<DIV class='description'>" + StringEscapeUtils.escapeHtml4(element.description) + "</DIV>\n")
         }
-
         doWriteInput(element, context, writer, readOnly)
     }
 

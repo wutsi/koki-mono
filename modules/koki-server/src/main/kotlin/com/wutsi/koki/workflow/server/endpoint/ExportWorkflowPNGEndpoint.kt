@@ -23,7 +23,7 @@ class ExportWorkflowPNGEndpoint(
     }
 
     @GetMapping("/v1/workflows/images/{tenant-id}.{workflow-id}.png")
-    fun update(
+    fun png(
         @PathVariable("tenant-id") tenantId: Long,
         @PathVariable("workflow-id") id: Long,
         response: HttpServletResponse

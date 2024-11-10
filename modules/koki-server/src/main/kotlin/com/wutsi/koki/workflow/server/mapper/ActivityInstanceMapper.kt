@@ -13,6 +13,7 @@ class ActivityInstanceMapper {
             activityId = entity.activity.id!!,
             assigneeUserId = entity.assignee?.id,
             approverUserId = entity.activity.id,
+            status = entity.status,
             approval = entity.approval,
             approvedAt = entity.approvedAt,
             createdAt = entity.createdAt,

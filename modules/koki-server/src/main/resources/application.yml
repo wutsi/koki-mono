@@ -22,7 +22,7 @@ spring:
     flyway:
         clean-disabled: false
     jpa:
-        show-sql: true
+        show-sql: false
         hibernate:
             ddl-auto: none
             naming:
@@ -97,7 +97,7 @@ springdoc:
 
         -   group: workflow-engine
             display-name: Workflow Engine
-            paths-to-match: /v1/workflow-instances, /v1/workflow-instances/**
+            paths-to-match: /v1/workflow-instances, /v1/workflow-instances/*, /v1/workflow-instances/**, /v1/activity-instances/**
 
 management:
     endpoint:
@@ -131,41 +131,3 @@ threadpool:
     minPoolSize: 16
     maxPoolSize: 16
     queueSize: 100
-
-wutsi:
-    client-id: koki-server
-    application:
-        name: koki-server
-    platform:
-        error:
-            controller-advice:
-                enabled: true
-        security:
-            type: none
-        cache:
-            name: ${wutsi.application.name}
-            type: local
-        messaging:
-            sms:
-                type: none
-            push:
-                type: none
-            url-shortener:
-                type: none
-            whatsapp:
-                type: none
-        storage:
-            type: local
-            local:
-                directory: "${user.home}/wutsi/storage"
-        stream:
-            name: ${wutsi.application.name}
-            type: local
-            consume: true
-            subscriptions:
-                - wutsi-blog-web
-            rabbitmq:
-                dlq:
-                    replay-cron: "0 */5 * * * *"  # Every 5 mins
-        tracing:
-            client-id: ${wutsi.application.name}

@@ -7,6 +7,10 @@ INSERT INTO T_ROLE(id, tenant_fk, name)
            (11, 1, 'technician'),
            (12, 1, 'boss');
 
+INSERT INTO T_FORM(id, tenant_fk, name, title, active, content)
+    VALUES (100, 1, 'f-100', 'Form 100', true, '{}'),
+           (200, 2, 'f-200', 'Form 200', true, '{}');
+
 INSERT INTO T_WORKFLOW(id, tenant_fk, name)
     VALUES(100, 1, 'w1'),
           (200, 2, 'w2');

@@ -61,7 +61,7 @@ class ApproveActivityInstanceEndpointTest : TenantAwareEndpointTest() {
             approverUserId = 100L
         )
         val result = rest.postForEntity(
-            "/v1/workflow-instances/wi-100-01/activities/wi-100-01-working-running/approvals",
+            "/v1/activity-instances/wi-100-01-working-running/approvals",
             request,
             ApproveActivityInstanceResponse::class.java
         )
@@ -95,7 +95,7 @@ class ApproveActivityInstanceEndpointTest : TenantAwareEndpointTest() {
             approverUserId = 100L
         )
         val result = rest.postForEntity(
-            "/v1/workflow-instances/wi-100-01/activities/wi-100-01-working-running/approvals",
+            "/v1/activity-instances/wi-100-01-working-running/approvals",
             request,
             ApproveActivityInstanceResponse::class.java
         )
@@ -126,7 +126,7 @@ class ApproveActivityInstanceEndpointTest : TenantAwareEndpointTest() {
             approverUserId = 100L
         )
         val result = rest.postForEntity(
-            "/v1/workflow-instances/wi-100-03/activities/wi-100-03-working-done/approvals",
+            "/v1/activity-instances/wi-100-03-working-done/approvals",
             request,
             ErrorResponse::class.java
         )
@@ -138,7 +138,7 @@ class ApproveActivityInstanceEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun `approve a workflow not RUNNING`() {
         val result = rest.postForEntity(
-            "/v1/workflow-instances/wi-100-04/activities/wi-100-04-working-running/approvals",
+            "/v1/activity-instances/wi-100-04-working-running/approvals",
             emptyMap<String, String>(),
             ErrorResponse::class.java
         )
@@ -150,24 +150,12 @@ class ApproveActivityInstanceEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun `approve an activity with approval not PENDING`() {
         val result = rest.postForEntity(
-            "/v1/workflow-instances/wi-100-05/activities/wi-100-05-working-running/approvals",
+            "/v1/activity-instances/wi-100-05-working-running/approvals",
             emptyMap<String, String>(),
             ErrorResponse::class.java
         )
 
         assertEquals(HttpStatus.CONFLICT, result.statusCode)
         assertEquals(ErrorCode.WORKFLOW_INSTANCE_ACTIVITY_NO_APPROVAL_PENDING, result.body?.error?.code)
-    }
-
-    @Test
-    fun `approve an activity of another workflow`() {
-        val result = rest.postForEntity(
-            "/v1/workflow-instances/wi-110-01/activities/wi-100-05-working-running/approvals",
-            emptyMap<String, String>(),
-            ErrorResponse::class.java
-        )
-
-        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.WORKFLOW_INSTANCE_ACTIVITY_NOT_FOUND, result.body?.error?.code)
     }
 }

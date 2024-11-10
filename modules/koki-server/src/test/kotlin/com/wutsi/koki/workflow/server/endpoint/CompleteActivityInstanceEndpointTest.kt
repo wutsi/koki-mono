@@ -66,7 +66,7 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         )
         val result =
             rest.postForEntity(
-                "/v1/workflow-instances/wi-100-01/activities/wi-100-01-working-running/complete",
+                "/v1/activity-instances/wi-100-01-working-running/complete",
                 request,
                 Any::class.java
             )
@@ -96,7 +96,7 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
     fun `complete an activity already DONE`() {
         val result =
             rest.postForEntity(
-                "/v1/workflow-instances/wi-100-02/activities/wi-100-02-working-done/complete",
+                "/v1/activity-instances/wi-100-02-working-done/complete",
                 CompleteActivityInstanceRequest(),
                 ErrorResponse::class.java
             )
@@ -109,7 +109,7 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
     fun `complete an activity of workflow not running`() {
         val result =
             rest.postForEntity(
-                "/v1/workflow-instances/wi-100-03/activities/wi-100-03-working-running/complete",
+                "/v1/activity-instances/wi-100-03-working-running/complete",
                 CompleteActivityInstanceRequest(),
                 ErrorResponse::class.java
             )
@@ -130,7 +130,7 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         )
         val result =
             rest.postForEntity(
-                "/v1/workflow-instances/wi-110-01/activities/wi-110-01-working-running/complete",
+                "/v1/activity-instances/wi-110-01-working-running/complete",
                 request,
                 Any::class.java
             )
@@ -160,7 +160,7 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
     fun `complete an activity under approval`() {
         val result =
             rest.postForEntity(
-                "/v1/workflow-instances/wi-110-02/activities/wi-110-02-working-running/complete",
+                "/v1/activity-instances/wi-110-02-working-running/complete",
                 CompleteActivityInstanceRequest(),
                 ErrorResponse::class.java
             )

@@ -22,15 +22,13 @@ class HTMLFormGeneratorTest {
     val context = Context(
         provider = provider,
         submitUrl = "https://f.com/submit",
-        successUrl = "https://f.com/success",
-        errorUrl = "https://f.com/error",
-        language = "fr"
     )
     val writer = StringWriter()
     private val generator = HTMLFormGenerator()
 
     val form = Form(
         content = FormContent(
+            name = "TEST",
             title = "Sample form",
             description = "This is an exempla of form",
             elements = listOf(
@@ -48,40 +46,19 @@ class HTMLFormGeneratorTest {
 
     @Test
     fun generate() {
-        generator.generate(form, context, writer)
+        generator.generate(form.content, context, writer)
 
         verify(elementWriter, times(3)).write(any(), eq(context), eq(writer))
         val expected = """
-                <FORM method='post' action='https://f.com/submit'>
-                  <INPUT type='hidden' name='__success_url' value'https://f.com/submit'/>
-                  <INPUT type='hidden' name='__error_url' value'https://f.com/error'/>
-                  <H1 class='form-title'>Sample form</H1>
-                  <DIV class='form-description'>This is an exempla of form</DIV>
-                  <DIV class='form-button-group'>
-                   <BUTTON type='submit>Submit</BUTTON>
-                  </DIV>
-                </FORM>
-            """.trimIndent()
-        assertEquals(expected, writer.toString())
-    }
-
-    @Test
-    fun empty() {
-        val xcontext = Context(
-            provider = provider,
-            language = "fr"
-        )
-
-        generator.generate(form, xcontext, writer)
-
-        val expected = """
-                <FORM method='post' action=''>
-                  <H1 class='form-title'>Sample form</H1>
-                  <DIV class='form-description'>This is an exempla of form</DIV>
-                  <DIV class='form-button-group'>
-                   <BUTTON type='submit>Submit</BUTTON>
-                  </DIV>
-                </FORM>
+                <DIV class='test'>
+                  <FORM method='post' action='https://f.com/submit'>
+                    <H1 class='form-title'>Sample form</H1>
+                    <DIV class='form-description'>This is an exempla of form</DIV>
+                    <DIV class='form-button-group'>
+                      <BUTTON type='submit'>Submit</BUTTON>
+                    </DIV>
+                  </FORM>
+                </DIV>
             """.trimIndent()
         assertEquals(expected, writer.toString())
     }

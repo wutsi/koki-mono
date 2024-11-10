@@ -1,5 +1,6 @@
 {
   "content": {
+    "name": "FRM-002",
     "title": "User Registration Form",
     "description": "This form is used for registering new users",
     "elements": [

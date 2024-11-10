@@ -3,6 +3,7 @@ package com.wutsi.koki.form.server.service
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.form.dto.FormContent
@@ -30,14 +31,34 @@ class FormService(
         return form
     }
 
+    fun getByName(name: String, tenantId: Long): FormEntity {
+        val form = dao.findByNameAndTenantId(name, tenantId)
+            ?: throw NotFoundException(
+                Error(
+                    ErrorCode.FORM_NOT_FOUND,
+                    parameter = Parameter(value = name),
+                )
+            )
+
+        if (form.tenant.id != tenantId) {
+            throw NotFoundException(
+                Error(
+                    ErrorCode.FORM_NOT_FOUND,
+                    parameter = Parameter(value = name),
+                )
+            )
+        }
+        return form
+    }
+
     fun search(
         tenantId: Long,
-        ids: List<String> = emptyList(),
-        active: Boolean? = null,
-        limit: Int = 20,
-        offset: Int = 0,
-        sortBy: FormSortBy? = null,
-        ascending: Boolean = true,
+        ids: List<String>,
+        active: Boolean?,
+        limit: Int,
+        offset: Int,
+        sortBy: FormSortBy?,
+        ascending: Boolean,
     ): List<FormEntity> {
         val jql = StringBuilder("SELECT F FROM FormEntity F")
         jql.append(" WHERE F.tenant.id = :tenantId")
@@ -69,12 +90,6 @@ class FormService(
         query.firstResult = offset
         query.maxResults = limit
         return query.resultList
-    }
-
-    @Transactional
-    fun save(form: FormEntity): FormEntity {
-        form.modifiedAt = Date()
-        return dao.save(form)
     }
 
     @Transactional

@@ -11,16 +11,3 @@ spring:
 swagger:
     protocol: https
 
-wutsi:
-    platform:
-        cache:
-            type: memcached
-            memcached:
-                aws-elastic-cache: false
-                username: ${MEMCACHIER_USERNAME}
-                password: ${MEMCACHIER_PASSWORD}
-                servers: ${MEMCACHIER_SERVERS}
-        stream:
-            type: rabbitmq
-            rabbitmq:
-                url: ${CLOUDAMQP_URL}
