@@ -27,6 +27,7 @@ class SaveFormEndpointTest : TenantAwareEndpointTest() {
 
     private val request = SaveFormRequest(
         content = FormContent(
+            name = "WFT-100",
             title = "Sample form",
             description = "This is an exempla of form",
             elements = listOf(
@@ -76,8 +77,20 @@ class SaveFormEndpointTest : TenantAwareEndpointTest() {
 
         val formId = result.body!!.formId
         val form = formDao.findById(formId).get()
+        assertEquals(request.content.name, form.name)
         assertEquals(request.content.title, form.title)
         assertEquals(request.content, form.content)
+    }
+
+    @Test
+    fun `create with duplicate name`() {
+        val xrequest = request.copy(
+            content = request.content.copy(name = "f-100")
+        )
+        val result = rest.postForEntity("/v1/forms", xrequest, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.CONFLICT, result.statusCode)
+        assertEquals(ErrorCode.FORM_DUPLICATE_NAME, result.body?.error?.code)
     }
 
     @Test
@@ -88,6 +101,7 @@ class SaveFormEndpointTest : TenantAwareEndpointTest() {
 
         val formId = result.body!!.formId
         val form = formDao.findById(formId).get()
+        assertEquals(request.content.name, form.name)
         assertEquals(request.content.title, form.title)
         assertEquals(request.content, form.content)
     }
@@ -106,5 +120,16 @@ class SaveFormEndpointTest : TenantAwareEndpointTest() {
 
         assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
         assertEquals(ErrorCode.FORM_NOT_FOUND, result.body?.error?.code)
+    }
+
+    @Test
+    fun `update with duplicate name`() {
+        val xrequest = request.copy(
+            content = request.content.copy(name = "f-100")
+        )
+        val result = rest.postForEntity("/v1/forms/110", xrequest, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.CONFLICT, result.statusCode)
+        assertEquals(ErrorCode.FORM_DUPLICATE_NAME, result.body?.error?.code)
     }
 }

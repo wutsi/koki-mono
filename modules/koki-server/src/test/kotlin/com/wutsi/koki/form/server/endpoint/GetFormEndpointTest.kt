@@ -12,18 +12,19 @@ import kotlin.test.assertEquals
 @Sql(value = ["/db/test/clean.sql", "/db/test/form/GetFormEndpoint.sql"])
 class GetFormEndpointTest : TenantAwareEndpointTest() {
     @Test
-    fun create() {
+    fun get() {
         val result = rest.getForEntity("/v1/forms/100", GetFormResponse::class.java)
         assertEquals(HttpStatus.OK, result.statusCode)
 
         val form = result.body!!.form
+        assertEquals("f-100", form.name)
         assertEquals("Form 100", form.title)
         assertEquals("Sample Form", form.content.title)
         assertEquals("Description of the form", form.content.description)
     }
 
     @Test
-    fun `update workflow not found`() {
+    fun `get form with invalid id`() {
         val result = rest.getForEntity("/v1/forms/999", ErrorResponse::class.java)
 
         assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
@@ -31,7 +32,7 @@ class GetFormEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
-    fun `update workflow of another tenant`() {
+    fun `get form of another tenant`() {
         val result = rest.getForEntity("/v1/forms/200", ErrorResponse::class.java)
 
         assertEquals(HttpStatus.NOT_FOUND, result.statusCode)

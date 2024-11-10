@@ -3,6 +3,7 @@ package com.wutsi.koki.form.server.service
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.form.dto.FormContent
 import com.wutsi.koki.form.server.dao.FormRepository
@@ -78,6 +79,14 @@ class FormService(
 
     @Transactional
     fun save(form: FormEntity, content: FormContent): FormEntity {
+        val duplicate = dao.findByNameAndTenant(content.name, form.tenant)
+        if (duplicate != null && duplicate.id != form.id) {
+            throw ConflictException(
+                error = Error(code = ErrorCode.FORM_DUPLICATE_NAME)
+            )
+        }
+
+        form.name = content.name
         form.title = content.title
         form.content = objectMapper.writeValueAsString(content)
         form.modifiedAt = Date()

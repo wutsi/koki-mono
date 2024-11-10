@@ -18,15 +18,19 @@ class SearchFormEndpointTest : TenantAwareEndpointTest() {
 
         assertEquals(4, forms.size)
         assertEquals("100", forms[0].id)
+        assertEquals("f-100", forms[0].name)
         assertEquals("Form 100", forms[0].title)
 
         assertEquals("110", forms[1].id)
+        assertEquals("f-110", forms[1].name)
         assertEquals("Form 110", forms[1].title)
 
         assertEquals("120", forms[2].id)
+        assertEquals("f-120", forms[2].name)
         assertEquals("Form 120", forms[2].title)
 
         assertEquals("130", forms[3].id)
+        assertEquals("f-130", forms[3].name)
         assertEquals("Form 130", forms[3].title)
     }
 

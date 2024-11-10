@@ -12,6 +12,7 @@ class FormMapper(private val objectMapper: ObjectMapper) {
     fun toForm(entity: FormEntity): Form {
         return Form(
             id = entity.id ?: "",
+            name = entity.name,
             title = entity.title,
             content = objectMapper.readValue(entity.content, FormContent::class.java),
             createdAt = entity.createdAt,
@@ -22,6 +23,7 @@ class FormMapper(private val objectMapper: ObjectMapper) {
     fun toFormSummary(entity: FormEntity): FormSummary {
         return FormSummary(
             id = entity.id ?: "",
+            name = entity.name,
             title = entity.title,
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
