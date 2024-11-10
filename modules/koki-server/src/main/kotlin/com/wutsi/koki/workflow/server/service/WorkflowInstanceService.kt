@@ -1,5 +1,6 @@
 package com.wutsi.koki.workflow.server.service
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
@@ -8,13 +9,9 @@ import com.wutsi.koki.tenant.server.service.UserService
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
 import com.wutsi.koki.workflow.dto.WorkflowInstanceSortBy
 import com.wutsi.koki.workflow.dto.WorkflowStatus
-import com.wutsi.koki.workflow.server.dao.ParameterRepository
 import com.wutsi.koki.workflow.server.dao.ParticipantRepository
-import com.wutsi.koki.workflow.server.dao.StateRepository
 import com.wutsi.koki.workflow.server.dao.WorkflowInstanceRepository
-import com.wutsi.koki.workflow.server.domain.ParameterEntity
 import com.wutsi.koki.workflow.server.domain.ParticipantEntity
-import com.wutsi.koki.workflow.server.domain.StateEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
 import jakarta.persistence.EntityManager
 import org.slf4j.LoggerFactory
@@ -27,12 +24,11 @@ import java.util.UUID
 class WorkflowInstanceService(
     private val instanceDao: WorkflowInstanceRepository,
     private val participantDao: ParticipantRepository,
-    private val stateDao: StateRepository,
-    private val parameterDao: ParameterRepository,
     private val workflowService: WorkflowService,
     private val userService: UserService,
     private val roleService: RoleService,
     private val em: EntityManager,
+    private val objectMapper: ObjectMapper,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(WorkflowInstanceService::class.java)
@@ -127,8 +123,12 @@ class WorkflowInstanceService(
     @Transactional
     fun create(request: CreateWorkflowInstanceRequest, tenantId: Long): WorkflowInstanceEntity {
         val instance = createInstance(request, tenantId)
+
+        instance.parameters = objectMapper.writeValueAsString(
+            request.parameters.filter { entry -> entry.value.isNotEmpty() }
+        )
+
         createParticipants(request, instance, tenantId)
-        createParameters(request, instance)
         return instance
     }
 
@@ -138,27 +138,21 @@ class WorkflowInstanceService(
     }
 
     @Transactional
-    fun setState(name: String, value: String?, workflowInstance: WorkflowInstanceEntity): StateEntity? {
-        val state = stateDao.findByNameAndInstance(name, workflowInstance)
-        if (state == null) {
-            if (!value.isNullOrEmpty()) {
-                return stateDao.save(
-                    StateEntity(
-                        name = name,
-                        value = value,
-                        instance = workflowInstance,
-                    )
-                )
-            }
-        } else {
-            if (value.isNullOrEmpty()) {
-                stateDao.delete(state)
-            } else {
-                state.value = value
-                return stateDao.save(state)
-            }
+    fun mergeState(data: Map<String, String>, workflowInstance: WorkflowInstanceEntity) {
+        // Merge
+        var merged = mutableMapOf<String, String>()
+        workflowInstance.state?.let { state ->
+            merged.putAll(
+                objectMapper.readValue(state, Map::class.java) as Map<String, String>
+            )
         }
-        return null
+        merged.putAll(data)
+
+        // Update the state - remove empty values
+        workflowInstance.state = objectMapper.writeValueAsString(
+            merged.filter { entry -> entry.value.isNotEmpty() }
+        )
+        save(workflowInstance)
     }
 
     private fun createInstance(
@@ -214,25 +208,5 @@ class WorkflowInstanceService(
             participantDao.saveAll(participants)
         }
         return participants
-    }
-
-    private fun createParameters(
-        request: CreateWorkflowInstanceRequest,
-        instance: WorkflowInstanceEntity,
-    ): List<ParameterEntity> {
-        val parameters = request.parameters
-            .map { entry ->
-                LOGGER.debug(">>> ${instance.id} - Adding Parameter[${entry.key}=${entry.value}]")
-                ParameterEntity(
-                    instance = instance,
-                    name = entry.key,
-                    value = entry.value
-                )
-            }
-
-        if (parameters.isNotEmpty()) {
-            parameterDao.saveAll(parameters)
-        }
-        return parameters
     }
 }

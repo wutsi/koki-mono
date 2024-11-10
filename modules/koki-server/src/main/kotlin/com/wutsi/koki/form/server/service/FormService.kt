@@ -77,7 +77,7 @@ class FormService(
     }
 
     @Transactional
-    fun import(form: FormEntity, content: FormContent): FormEntity {
+    fun save(form: FormEntity, content: FormContent): FormEntity {
         form.title = content.title
         form.content = objectMapper.writeValueAsString(content)
         form.modifiedAt = Date()

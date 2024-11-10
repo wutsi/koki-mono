@@ -48,12 +48,13 @@ INSERT INTO T_FLOW(workflow_fk, from_fk, to_fk, expression)
            (110, 112, 114, null),
            (110, 113, 114, null);
 
-INSERT INTO T_WORKFLOW_INSTANCE(id, tenant_fk, workflow_fk, approver_fk, status, start_at)
-    VALUES ('wi-100-01', 1, 100, null, 2, now()),
-           ('wi-100-02', 1, 100, null, 2, now()),
-           ('wi-100-03', 1, 100, null, 1, now()),
-           ('wi-110-01', 1, 110, 100,  2, now()),
-           ('wi-110-02', 1, 110, 100, 2, now());
+INSERT INTO T_WORKFLOW_INSTANCE(id, tenant_fk, workflow_fk, approver_fk, status, start_at, state)
+    VALUES ('wi-100-01', 1, 100, null, 2, now(), '{}'),
+           ('wi-100-02', 1, 100, null, 2, now(), '{}'),
+           ('wi-100-03', 1, 100, null, 1, now(), '{}'),
+           ('wi-110-01', 1, 110, 100,  2, now(), '{"A":"oldA", "C":"cc"}'),
+           ('wi-110-02', 1, 110, 100, 2, now(), '{}');
+
 
 INSERT INTO T_WI_ACTIVITY(id, instance_fk, activity_fk, assignee_fk, approval, approver_fk, status, started_at, done_at)
     VALUES ('wi-100-01-start-done',      'wi-100-01', 100, null, 0, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
@@ -72,6 +73,3 @@ INSERT INTO T_WI_ACTIVITY(id, instance_fk, activity_fk, assignee_fk, approval, a
            ('wi-110-02-working-running', 'wi-110-02', 111, null, 1, 100,  2, '2020-01-10 12:30', null)
     ;
 
-INSERT INTO T_WI_STATE(instance_fk, name, value)
-    VALUES ('wi-110-01', 'A', 'oldA'),
-           ('wi-110-01', 'C', 'cc');

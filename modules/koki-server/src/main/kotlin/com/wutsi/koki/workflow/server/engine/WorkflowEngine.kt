@@ -133,10 +133,8 @@ class WorkflowEngine(
         ensureRunning(activityInstance)
         ensureNoApprovalPending(activityInstance)
 
-        // Set the workflow state
-        state.map { entry ->
-            workflowInstanceService.setState(entry.key, entry.value, activityInstance.instance)
-        }
+        // Update the workflow state
+        workflowInstanceService.mergeState(state, activityInstance.instance)
 
         // Update the activity
         if (activityInstance.activity.requiresApproval) {

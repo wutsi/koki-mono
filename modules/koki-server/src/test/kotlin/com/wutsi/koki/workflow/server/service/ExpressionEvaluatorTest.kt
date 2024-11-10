@@ -1,8 +1,7 @@
 package com.wutsi.koki.workflow.server.service
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.workflow.server.domain.FlowEntity
-import com.wutsi.koki.workflow.server.domain.ParameterEntity
-import com.wutsi.koki.workflow.server.domain.StateEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.assertThrows
@@ -11,20 +10,23 @@ import kotlin.test.Test
 import kotlin.test.assertTrue
 
 class ExpressionEvaluatorTest {
-    private val evaluator = ExpressionEvaluator()
+    private val objectMapper = ObjectMapper()
+    private val evaluator = ExpressionEvaluator(objectMapper)
 
+    private val parameters = mapOf(
+        "WORK_TYPE" to "T1"
+    )
+    private val state = mapOf(
+        "client_name" to "Ray Sponsible",
+        "client_email" to "ray.sponsible@gmail.com",
+        "submit" to "true",
+        "amount" to "10000.0",
+        "client_id" to "5",
+        "new_client" to "false"
+    )
     private val workflowInstance = WorkflowInstanceEntity(
-        parameters = listOf(
-            ParameterEntity(name = "WORK_TYPE", value = "T1")
-        ),
-        state = listOf(
-            StateEntity(name = "client_name", value = "Ray Sponsible"),
-            StateEntity(name = "client_email", value = "ray.sponsible@gmail.com"),
-            StateEntity(name = "submit", value = "true"),
-            StateEntity(name = "amount", value = "10000.0"),
-            StateEntity(name = "client_id", value = "5"),
-            StateEntity(name = "new_client", value = "false")
-        )
+        parameters = objectMapper.writeValueAsString(parameters),
+        state = objectMapper.writeValueAsString(state)
     )
 
     @Test

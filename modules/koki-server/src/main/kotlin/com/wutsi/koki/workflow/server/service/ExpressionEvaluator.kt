@@ -1,5 +1,6 @@
 package com.wutsi.koki.workflow.server.service
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.workflow.server.domain.FlowEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
 import org.slf4j.LoggerFactory
@@ -11,7 +12,7 @@ import org.springframework.expression.spel.support.StandardEvaluationContext
 import org.springframework.stereotype.Service
 
 @Service
-class ExpressionEvaluator {
+class ExpressionEvaluator(private val objectMapper: ObjectMapper) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ExpressionEvaluator::class.java)
     }
@@ -23,8 +24,12 @@ class ExpressionEvaluator {
         }
 
         val data = mutableMapOf<String, String>()
-        data.putAll(workflowInstance.parameters.map { param -> param.name to param.value })
-        data.putAll(workflowInstance.state.map { state -> state.name to state.value })
+        workflowInstance.parameters?.let { parameters ->
+            data.putAll(objectMapper.readValue(parameters, Map::class.java) as Map<String, String>)
+        }
+        workflowInstance.state?.let { state ->
+            data.putAll(objectMapper.readValue(state, Map::class.java) as Map<String, String>)
+        }
         return evaluate(flow.expression!!, data)
     }
 

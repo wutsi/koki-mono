@@ -55,6 +55,8 @@ CREATE TABLE T_WORKFLOW_INSTANCE(
     approver_fk         BIGINT REFERENCES T_USER(id),
 
     status              INT NOT NULL DEFAULT 0,
+    state               JSON,
+    parameters          JSON,
     start_at            DATETIME NOT NULL,
     due_at              DATETIME,
     created_at          DATETIME DEFAULT NOW(),
@@ -73,28 +75,6 @@ CREATE TABLE T_WI_PARTICIPANT(
     role_fk             BIGINT NOT NULL REFERENCES T_ROLE(id),
 
     UNIQUE(instance_fk, user_fk, role_fk),
-    PRIMARY KEY(id)
-) ENGINE = InnoDB;
-
-CREATE TABLE T_WI_PARAMETER(
-    id                  BIGINT NOT NULL AUTO_INCREMENT,
-
-    instance_fk         VARCHAR(36) NOT NULL REFERENCES T_WORKFLOW_INSTANCE(id),
-    name                VARCHAR(100) NOT NULL,
-    value               TEXT,
-
-    UNIQUE(instance_fk, name),
-    PRIMARY KEY(id)
-) ENGINE = InnoDB;
-
-CREATE TABLE T_WI_STATE(
-    id                  BIGINT NOT NULL AUTO_INCREMENT,
-
-    instance_fk         VARCHAR(36) NOT NULL REFERENCES T_WORKFLOW_INSTANCE(id),
-    name                VARCHAR(100) NOT NULL,
-    value               TEXT,
-
-    UNIQUE(instance_fk, name),
     PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 

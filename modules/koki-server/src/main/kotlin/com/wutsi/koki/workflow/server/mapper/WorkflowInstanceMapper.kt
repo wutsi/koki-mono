@@ -1,5 +1,6 @@
 package com.wutsi.koki.workflow.server.mapper
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.workflow.dto.Participant
 import com.wutsi.koki.workflow.dto.WorkflowInstance
 import com.wutsi.koki.workflow.dto.WorkflowInstanceSummary
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service
 @Service
 class WorkflowInstanceMapper(
     private val activityInstanceMapper: ActivityInstanceMapper,
+    private val objectMapper: ObjectMapper,
 ) {
     fun toWorkflowInstance(entity: WorkflowInstanceEntity): WorkflowInstance {
         return WorkflowInstance(
@@ -20,8 +22,12 @@ class WorkflowInstanceMapper(
             status = entity.status,
             dueAt = entity.dueAt,
             startAt = entity.startAt,
-            state = entity.state.map { entry -> entry.name to entry.value }.toMap(),
-            parameters = entity.parameters.map { entry -> entry.name to entry.value }.toMap(),
+            state = entity.state?.let { state ->
+                objectMapper.readValue(state, Map::class.java) as Map<String, String>
+            } ?: emptyMap(),
+            parameters = entity.parameters?.let { parameters ->
+                objectMapper.readValue(parameters, Map::class.java) as Map<String, String>
+            } ?: emptyMap(),
             participants = entity.participants.map { participant ->
                 Participant(
                     roleId = participant.role.id!!,

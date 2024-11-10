@@ -3,7 +3,6 @@ package com.wutsi.koki.form.server.endpoint
 import com.wutsi.koki.form.dto.ImportFormResponse
 import com.wutsi.koki.form.dto.SaveFormRequest
 import com.wutsi.koki.form.server.domain.FormEntity
-import com.wutsi.koki.form.server.io.FormImporter
 import com.wutsi.koki.form.server.service.FormService
 import com.wutsi.koki.tenant.server.service.TenantService
 import jakarta.validation.Valid
@@ -18,7 +17,6 @@ import java.util.UUID
 @RestController
 @RequestMapping
 class SaveFormEndpoint(
-    private val importer: FormImporter,
     private val service: FormService,
     private val tenantService: TenantService,
 ) {
@@ -31,7 +29,7 @@ class SaveFormEndpoint(
             id = UUID.randomUUID().toString(),
             tenant = tenantService.get(tenantId)
         )
-        importer.import(form, request.content)
+        service.save(form, request.content)
         return ImportFormResponse(
             formId = form.id ?: ""
         )
@@ -44,7 +42,7 @@ class SaveFormEndpoint(
         @RequestBody @Valid request: SaveFormRequest
     ): ImportFormResponse {
         val form = service.get(id, tenantId)
-        importer.import(form, request.content)
+        service.save(form, request.content)
         return ImportFormResponse(
             formId = id,
         )

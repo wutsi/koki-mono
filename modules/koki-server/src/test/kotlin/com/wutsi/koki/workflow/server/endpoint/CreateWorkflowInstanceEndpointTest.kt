@@ -1,12 +1,12 @@
 package com.wutsi.koki.tenant.server.server.endpoint
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.Participant
-import com.wutsi.koki.workflow.server.dao.ParameterRepository
 import com.wutsi.koki.workflow.server.dao.ParticipantRepository
 import com.wutsi.koki.workflow.server.dao.WorkflowInstanceRepository
 import org.apache.commons.lang3.time.DateUtils
@@ -29,7 +29,7 @@ class CreateWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
     private lateinit var participanDao: ParticipantRepository
 
     @Autowired
-    private lateinit var parameterDao: ParameterRepository
+    private lateinit var objectMapper: ObjectMapper
 
     val request = CreateWorkflowInstanceRequest(
         workflowId = 100L,
@@ -61,14 +61,10 @@ class CreateWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         assertNull(instance.startedAt)
         assertNull(instance.doneAt)
 
-        val parameters = parameterDao.findByInstance(instance).sortedBy { it.name }
+        val parameters = objectMapper.readValue(instance.parameters, Map::class.java)
         assertEquals(2, parameters.size)
-
-        assertEquals("PARAM_1", parameters[0].name)
-        assertEquals("val1", parameters[0].value)
-
-        assertEquals("PARAM_2", parameters[1].name)
-        assertEquals("val2", parameters[1].value)
+        assertEquals("val1", parameters["PARAM_1"])
+        assertEquals("val2", parameters["PARAM_2"])
 
         val participants = participanDao.findByInstance(instance).sortedBy { it.role.id }
 
@@ -101,7 +97,7 @@ class CreateWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         assertEquals(req.workflowId, instance.workflow.id)
         assertNull(instance.approver)
 
-        val parameters = parameterDao.findByInstance(instance).sortedBy { it.name }
+        val parameters = objectMapper.readValue(instance.parameters, Map::class.java)
         assertEquals(0, parameters.size)
 
         val participants = participanDao.findByInstance(instance).sortedBy { it.role.id }
