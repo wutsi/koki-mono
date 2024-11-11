@@ -1,34 +1,16 @@
-name: koki-server
+name: koki-portal
 
 on:
     push:
         branches:
             - master
         paths:
-            - 'modules/koki-server/**'
-            - '.github/workflows/koki-server-master.yml'
+            - 'modules/koki-portal/**'
+            - '.github/workflows/koki-portal-master.yml'
 
 jobs:
     build:
         runs-on: ubuntu-latest
-
-        services:
-            mysql:
-                image: mysql:9.1
-                env:
-                    MYSQL_USER: admin
-                    MYSQL_PASSWORD: admin
-                    MYSQL_ROOT_PASSWORD: root
-                    MYSQL_DATABASE: koki
-                ports:
-                    - 3306:3306
-            redis:
-                image: redis
-                options: >-
-                    --health-cmd "redis-cli ping"
-                    --health-interval 10s
-                    --health-timeout 5s
-                    --health-retries 5
 
         steps:
             -   uses: actions/checkout@v4
@@ -43,15 +25,15 @@ jobs:
                     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
                 run: |
                     mvn -q -s settings.xml --non-recursive install
-                    cd modules/koki-server
-                    mvn -Dspring.datasource.username=root -Dspring.datasource.password=root -q -s ../../settings.xml install
+                    cd modules/koki-portal
+                    mvn -q -s ../../settings.xml install
 
             -   name: Generate JaCoCo Badge
                 uses: cicirello/jacoco-badge-generator@v2
                 with:
                     generate-branches-badge: false
-                    jacoco-csv-file: modules/koki-server/target/site/jacoco/jacoco.csv
-                    coverage-badge-filename: koki-server-jococo.svg
+                    jacoco-csv-file: modules/koki-portal/target/site/jacoco/jacoco.csv
+                    coverage-badge-filename: koki-portal-jococo.svg
 
             -   name: Commit the badge (if it changed)
                 run: |

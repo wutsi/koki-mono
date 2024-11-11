@@ -66,7 +66,7 @@ class ExportFormHTMLEndpointTest : TenantAwareEndpointTest() {
         val context = argumentCaptor<Context>()
         verify(generator).generate(any(), context.capture(), any())
 
-        assertEquals("https://localhost:8081/100/submit", context.firstValue.submitUrl)
+        assertEquals("http://localhost:8081/forms/100?aiid=wi-100-01-working", context.firstValue.submitUrl)
         assertEquals("accountant", context.firstValue.roleName)
         assertEquals(2, context.firstValue.data.size)
         assertEquals("Ray Sponsible", context.firstValue.data["customer_name"])
@@ -87,7 +87,7 @@ class ExportFormHTMLEndpointTest : TenantAwareEndpointTest() {
         val context = argumentCaptor<Context>()
         verify(generator).generate(any(), context.capture(), any())
 
-        assertEquals("https://localhost:8081/100/submit", context.firstValue.submitUrl)
+        assertEquals("http://localhost:8081/forms/100", context.firstValue.submitUrl)
         assertEquals("accountant", context.firstValue.roleName)
         assertEquals(0, context.firstValue.data.size)
     }

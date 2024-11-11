@@ -6,6 +6,8 @@
     "elements": [
       {
         "type": "SECTION",
+        "title": "General Information",
+        "description": "General information about the incident",
         "elements": [
           {
             "name": "incident_title",

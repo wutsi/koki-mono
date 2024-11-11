@@ -5,6 +5,24 @@
 </head>
 
 <body>
-<div th:utext="${form}"></div>
+<div class="form">
+    <div class="form-header">
+        <h1 th:text="${title}">TITLE</h1>
+    </div>
+    <div class="form-body">
+        <div class="section">
+            <div class="section-body">
+                <div th:if="${alreadyProcessed}">
+                    <div class="error">Your form have been rejected</div>
+                    <div>You've already submitted this form in the past!</div>
+                </div>
+                <div th:unless="${alreadyProcessed}">
+                    Your form have successfully been recorded.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

@@ -37,13 +37,17 @@ class HTMLSectionWriterTest {
 
         val expected = """
                 <DIV class='section'>
-                  <H2 class='section-title'>Personal Information</H2>
-                  <DIV class='section-description'>Enter the client personal information</DIV>
-                  <DIV class='section-item'>
-                    <IMG src='https://www.google.com/img/1.png'/>
+                  <DIV class='section-header'>
+                    <H2 class='section-title'>Personal Information</H2>
+                    <DIV class='section-description'>Enter the client personal information</DIV>
                   </DIV>
-                  <DIV class='section-item'>
-                    <IMG src='https://www.google.com/img/2.png'/>
+                  <DIV class='section-body'>
+                    <DIV class='section-item'>
+                      <IMG src='https://www.google.com/img/1.png'/>
+                    </DIV>
+                    <DIV class='section-item'>
+                      <IMG src='https://www.google.com/img/2.png'/>
+                    </DIV>
                   </DIV>
                 </DIV>
 
