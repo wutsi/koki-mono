@@ -17,6 +17,10 @@ jobs:
                 with:
                     distribution: 'zulu'
                     java-version: 17
+
+            -   name: Install Chromium
+                run: sudo apt-get install chromium-browser
+
             -   name: Build
                 env:
                     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

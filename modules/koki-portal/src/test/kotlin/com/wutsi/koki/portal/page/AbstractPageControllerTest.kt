@@ -95,10 +95,10 @@ abstract class AbstractPageControllerTest {
         driver.get("http://localhost:$port$path")
     }
 
-    protected fun createHttpClientErrorException(statusCode: Int, errorCode: String):HttpClientErrorException{
+    protected fun createHttpClientErrorException(statusCode: Int, errorCode: String): HttpClientErrorException {
         val charset = Charset.defaultCharset()
         val response = ErrorResponse(
-            error = Error(code=errorCode)
+            error = Error(code = errorCode)
         )
         return HttpClientErrorException(
             HttpStatusCode.valueOf(statusCode),
@@ -107,7 +107,6 @@ abstract class AbstractPageControllerTest {
             charset
         )
     }
-
 
     protected fun assertCurrentPageIs(page: String) {
         assertEquals(page, driver.findElement(By.cssSelector("meta[name=wutsi\\:page_name]"))?.getAttribute("content"))
@@ -155,23 +154,23 @@ abstract class AbstractPageControllerTest {
     }
 
     protected fun assertElementAttributeStartsWith(selector: String, name: String, value: String) {
-        assertTrue(driver.findElement(By.cssSelector(selector)).getAttribute(name).startsWith(value))
+        assertEquals(true, driver.findElement(By.cssSelector(selector)).getAttribute(name)?.startsWith(value))
     }
 
     protected fun assertElementAttributeEndsWith(selector: String, name: String, value: String) {
-        assertTrue(driver.findElement(By.cssSelector(selector)).getAttribute(name).endsWith(value))
+        assertEquals(true, driver.findElement(By.cssSelector(selector)).getAttribute(name)?.endsWith(value))
     }
 
     protected fun assertElementAttributeContains(selector: String, name: String, value: String) {
-        assertTrue(driver.findElement(By.cssSelector(selector)).getAttribute(name).contains(value))
+        assertEquals(true, driver.findElement(By.cssSelector(selector)).getAttribute(name)?.contains(value))
     }
 
     protected fun assertElementHasClass(selector: String, value: String) {
-        assertTrue(driver.findElement(By.cssSelector(selector)).getAttribute("class").contains(value))
+        assertEquals(true, driver.findElement(By.cssSelector(selector)).getAttribute("class")?.contains(value))
     }
 
     protected fun assertElementHasNotClass(selector: String, value: String) {
-        assertFalse(driver.findElement(By.cssSelector(selector)).getAttribute("class").contains(value))
+        assertEquals(true, driver.findElement(By.cssSelector(selector)).getAttribute("class")?.contains(value))
     }
 
     protected fun click(selector: String, delayMillis: Long? = null) {
