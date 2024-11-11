@@ -4,6 +4,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
@@ -42,12 +43,42 @@ class FormControllerTest : AbstractPageControllerTest() {
                   <DIV class='section'>
                     <DIV class='section-body'>
                       <DIV class='section-item'>
-                        <LABEL class='title'><SPAN>Customer Name</SPAN></LABEL>
-                        <INPUT name='customer_name' />
+                        <LABEL class='title'><SPAN>Customer Name</SPAN><SPAN class='required'>*</SPAN></LABEL>
+                        <INPUT name='customer_name' required/>
                       </DIV>
                       <DIV class='section-item'>
-                        <LABEL class='title'><SPAN>Customer Email</SPAN></LABEL>
-                        <INPUT name='customer_email' type='email'/>
+                        <LABEL class='title'><SPAN>Customer Email</SPAN><SPAN class='required'>*</SPAN></LABEL>
+                        <INPUT name='customer_email' type='email' required/>
+                      </DIV>
+                      <DIV class='section-item'>
+                        <LABEL class='title'><SPAN>Marial Status</SPAN></LABEL>
+                        <DIV class='radio-container' required>
+                          <DIV class='item'>
+                            <INPUT name='marital_status' type='radio' value='M'/>
+                            <LABEL>Married</LABEL>
+                          </DIV>
+                          <DIV class='item'>
+                            <INPUT name='marital_status' type='radio' value='S'/>
+                            <LABEL>Single</LABEL>
+                          </DIV>
+                        </DIV>
+                      </DIV>
+                      <DIV class='section-item'>
+                        <LABEL class='title'><SPAN>Case Type</SPAN><SPAN class='required'>*</SPAN></LABEL>
+                        <DIV class='checkbox-container' required>
+                          <DIV class='item'>
+                            <INPUT name='case_type' type='checkbox' value='T1'/>
+                            <LABEL>T1</LABEL>
+                          </DIV>
+                          <DIV class='item'>
+                            <INPUT name='case_type' type='checkbox' value='T4'/>
+                            <LABEL>T4</LABEL>
+                          </DIV>
+                          <DIV class='item'>
+                            <INPUT name='case_type' type='checkbox' value='IMM'/>
+                            <LABEL>IMM</LABEL>
+                          </DIV>
+                        </DIV>
                       </DIV>
                     </DIV>
                   </DIV>
@@ -73,18 +104,22 @@ class FormControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.FORM)
         input("INPUT[name=customer_name]", "Ray Sponsible")
         input("INPUT[name=customer_email]", "ray.sponsible@gmail.com")
+        click("INPUT[value=S]")
+        click("INPUT[value=IMM]")
         click("BUTTON")
-
-        assertCurrentPageIs(PageName.FORM_SAVED)
-        assertElementPresent(".success-message")
 
         verify(kokiWorkflowEngine).complete(
             activityInstanceId,
             mapOf(
                 "customer_name" to "Ray Sponsible",
-                "customer_email" to "ray.sponsible@gmail.com"
+                "customer_email" to "ray.sponsible@gmail.com",
+                "marital_status" to "S",
+                "case_type" to "IMM"
             )
         )
+
+        assertCurrentPageIs(PageName.FORM_SAVED)
+        assertElementPresent(".success-message")
     }
 
     @Test
@@ -99,6 +134,8 @@ class FormControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.FORM)
         input("INPUT[name=customer_name]", "Ray Sponsible")
         input("INPUT[name=customer_email]", "ray.sponsible@gmail.com")
+        click("INPUT[value=S]")
+        click("INPUT[value=IMM]")
         click("BUTTON")
 
         assertCurrentPageIs(PageName.FORM_SAVED)
@@ -107,8 +144,26 @@ class FormControllerTest : AbstractPageControllerTest() {
             activityInstanceId,
             mapOf(
                 "customer_name" to "Ray Sponsible",
-                "customer_email" to "ray.sponsible@gmail.com"
+                "customer_email" to "ray.sponsible@gmail.com",
+                "marital_status" to "S",
+                "case_type" to "IMM"
             )
         )
+    }
+
+    @Test
+    fun `client side validation`() {
+        // WHEN
+        navigateTo("/forms/$formId?aiid=$activityInstanceId")
+
+        // THEN
+        assertCurrentPageIs(PageName.FORM)
+        click("BUTTON")
+
+        verify(kokiWorkflowEngine, never()).complete(any(), any())
+
+        assertElementPresent("[name=customer_name]:user-invalid")
+        assertElementPresent("[name=customer_email]:user-invalid")
+        assertElementCount(".user-invalid", 2)
     }
 }

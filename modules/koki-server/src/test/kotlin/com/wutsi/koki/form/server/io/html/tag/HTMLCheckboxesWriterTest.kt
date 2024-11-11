@@ -40,7 +40,7 @@ class HTMLCheckboxesWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <DIV class='item-container'>
+                <DIV class='radio-container'>
                   <DIV class='item'>
                     <INPUT name='var1' type='radio' value='1'/>
                     <LABEL>1</LABEL>
@@ -72,7 +72,7 @@ class HTMLCheckboxesWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <DIV class='item-container'>
+                <DIV class='radio-container'>
                   <DIV class='item'>
                     <INPUT name='var1' type='radio' value='1' checked/>
                     <LABEL>1</LABEL>
@@ -100,7 +100,7 @@ class HTMLCheckboxesWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN><SPAN class='required'>*</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <DIV class='item-container' required>
+                <DIV class='checkbox-container' required>
                   <DIV class='item'>
                     <INPUT name='var1' type='checkbox' value='1'/>
                     <LABEL>1</LABEL>
@@ -134,7 +134,7 @@ class HTMLCheckboxesWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <DIV class='item-container'>
+                <DIV class='radio-container'>
                   <DIV class='item'>
                     <INPUT name='var1' type='radio' value='1'/>
                     <LABEL>1</LABEL>
@@ -177,7 +177,7 @@ class HTMLCheckboxesWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <DIV class='item-container'>
+                <DIV class='radio-container'>
                   <DIV class='item'>
                     <INPUT name='var1' type='radio' value='1'/>
                     <LABEL>1</LABEL>
@@ -217,7 +217,7 @@ class HTMLCheckboxesWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <DIV class='item-container'>
+                <DIV class='radio-container'>
                   <DIV class='item'>
                     <INPUT name='var1' type='radio' value='1'/>
                     <LABEL>1</LABEL>
@@ -268,7 +268,7 @@ class HTMLCheckboxesWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <DIV class='item-container'>
+                <DIV class='radio-container'>
                   <DIV class='item'>
                     <INPUT name='var1' type='radio' value='1' readonly/>
                     <LABEL>1</LABEL>

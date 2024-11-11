@@ -2,6 +2,19 @@ body {
     background: #f8f8f8;
 }
 
+*:user-invalid,
+.user-invalid {
+    border: 2px solid red !important;
+}
+
+@supports not selector(:user-invalid) {
+    input:invalid,
+    select:invalid,
+    textarea:invalid {
+        border: 2px solid red;
+    }
+}
+
 .error {
     color: red;
 }
@@ -44,10 +57,11 @@ body {
 }
 
 .section-header .section-title {
-    font-size: 1.25em;
+    font-size: 1em;
     font-weight: bold;
     margin: 0;
     padding: .5em .5em 0 .5em;
+    text-transform: uppercase;
 }
 
 .section-header .section-description {
@@ -66,7 +80,7 @@ body {
     margin-bottom: 0;
 }
 
-.section-item label {
+.section-item label.title {
     font-weight: bold;
     font-size: larger;
     display: block
@@ -90,10 +104,17 @@ body {
     width: 100%;
 }
 
+.checkbox-container,
+.radio-container {
+    display: flex;
+    justify-content: space-between;
+    padding: .5em;
+}
+
 @media only screen
 and (max-width: 480px)
 and (orientation: portrait) {
-    .form-container {
+    .form {
         width: 98%;
     }
 }

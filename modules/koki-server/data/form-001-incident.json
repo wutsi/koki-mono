@@ -32,6 +32,22 @@
             "maxLength": 100
           },
           {
+            "name": "employee_sex",
+            "type": "CHECKBOXES",
+            "title": "Employee Sex",
+            "required": true,
+            "options": [
+              {
+                "value": "M",
+                "text": "Male"
+              },
+              {
+                "value": "F",
+                "text": "Female"
+              }
+            ]
+          },
+          {
             "name": "incident_date",
             "type": "DATE",
             "title": "Incident Date",
@@ -70,6 +86,29 @@
               {
                 "value": "harassement",
                 "text": "Harassement"
+              }
+            ]
+          },
+          {
+            "name": "injury_type",
+            "type": "MULTIPLE_CHOICE",
+            "title": "Type of injury",
+            "options": [
+              {
+                "value": "burns",
+                "text": "Burns"
+              },
+              {
+                "value": "fracture",
+                "text": "Fractures"
+              },
+              {
+                "value": "sprain",
+                "text": "Sprain"
+              },
+              {
+                "value": "bruise",
+                "text": "Bruises"
               }
             ]
           },
