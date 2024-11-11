@@ -16,7 +16,8 @@ class HTMLCheckboxesWriter : AbstractHTMLImputElementWriter() {
             listOf(value.toString())
         }
 
-        writer.write("<DIV class='item-container'")
+        val type = getType(element)
+        writer.write("<DIV class='$type-container'")
         if (element.required) {
             writer.append(" required")
         }
