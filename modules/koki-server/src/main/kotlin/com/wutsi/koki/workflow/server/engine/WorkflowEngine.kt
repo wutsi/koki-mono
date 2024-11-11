@@ -127,7 +127,7 @@ class WorkflowEngine(
     }
 
     @Transactional
-    fun done(activityInstance: ActivityInstanceEntity, state: Map<String, String>) {
+    fun done(activityInstance: ActivityInstanceEntity, state: Map<String, Any>) {
         LOGGER.debug(">>> ${activityInstance.instance.id} > ${activityInstance.id} - Done")
 
         ensureRunning(activityInstance)

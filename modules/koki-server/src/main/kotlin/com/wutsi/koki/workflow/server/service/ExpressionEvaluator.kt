@@ -23,7 +23,7 @@ class ExpressionEvaluator(private val objectMapper: ObjectMapper) {
             return true
         }
 
-        val data = mutableMapOf<String, String>()
+        val data = mutableMapOf<String, Any>()
         workflowInstance.parameters?.let { parameters ->
             data.putAll(objectMapper.readValue(parameters, Map::class.java) as Map<String, String>)
         }
@@ -34,7 +34,7 @@ class ExpressionEvaluator(private val objectMapper: ObjectMapper) {
     }
 
     @Throws(ParseException::class)
-    fun evaluate(expression: String, data: Map<String, String>): Boolean {
+    fun evaluate(expression: String, data: Map<String, Any>): Boolean {
         try {
             val parser = SpelExpressionParser()
             val xdata = convertPrimitive(data)
@@ -47,15 +47,15 @@ class ExpressionEvaluator(private val objectMapper: ObjectMapper) {
         }
     }
 
-    private fun convertPrimitive(data: Map<String, String>): Map<String, Any> {
+    private fun convertPrimitive(data: Map<String, Any>): Map<String, Any> {
         val result = mutableMapOf<String, Any>()
         data.forEach { entry ->
             if (isBoolean(entry.value)) {
-                result[entry.key] = entry.value.toBoolean()
+                result[entry.key] = entry.value.toString().toBoolean()
             } else if (isNumeric(entry.value)) {
-                result[entry.key] = entry.value.toLong()
+                result[entry.key] = entry.value.toString().toLong()
             } else if (isDecimal(entry.value)) {
-                result[entry.key] = entry.value.toDouble()
+                result[entry.key] = entry.value.toString().toDouble()
             } else {
                 result[entry.key] = entry.value
             }
@@ -63,15 +63,16 @@ class ExpressionEvaluator(private val objectMapper: ObjectMapper) {
         return result
     }
 
-    private fun isBoolean(value: String): Boolean {
-        return value.equals("true", true) || value.equals("false", true)
+    private fun isBoolean(value: Any): Boolean {
+        return value is Boolean ||
+            (value is String && (value.equals("true", true) || value.equals("false", true)))
     }
 
-    private fun isDecimal(value: String): Boolean {
-        return value.toDoubleOrNull() != null
+    private fun isDecimal(value: Any): Boolean {
+        return value is Double || (value is String && value.toDoubleOrNull() != null)
     }
 
-    private fun isNumeric(value: String): Boolean {
-        return value.toLongOrNull() != null
+    private fun isNumeric(value: Any): Boolean {
+        return value is Long || (value is String && value.toLongOrNull() != null)
     }
 }

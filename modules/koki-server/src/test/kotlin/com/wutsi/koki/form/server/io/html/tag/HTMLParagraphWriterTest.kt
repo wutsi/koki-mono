@@ -33,7 +33,7 @@ class HTMLParagraphWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <TEXTAREA name='${elt.name}'>value1</TEXTAREA>
+                <TEXTAREA rows='3' name='${elt.name}'>value1</TEXTAREA>
 
             """.trimIndent(),
             output.toString()
@@ -48,7 +48,7 @@ class HTMLParagraphWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <TEXTAREA name='${elt.name}'></TEXTAREA>
+                <TEXTAREA rows='3' name='${elt.name}'></TEXTAREA>
 
             """.trimIndent(),
             output.toString()
@@ -72,7 +72,7 @@ class HTMLParagraphWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN><SPAN class='required'>*</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <TEXTAREA name='${elt.name}' required min='1' max='100' minlength='1' maxlength='10' pattern='xxxx'>value1</TEXTAREA>
+                <TEXTAREA rows='3' name='${elt.name}' required min='1' max='100' minlength='1' maxlength='10' pattern='xxxx'>value1</TEXTAREA>
 
             """.trimIndent(),
             output.toString()
@@ -106,7 +106,7 @@ class HTMLParagraphWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <TEXTAREA name='${elt.name}' readonly>value1</TEXTAREA>
+                <TEXTAREA rows='3' name='${elt.name}' readonly>value1</TEXTAREA>
 
             """.trimIndent(),
             output.toString()

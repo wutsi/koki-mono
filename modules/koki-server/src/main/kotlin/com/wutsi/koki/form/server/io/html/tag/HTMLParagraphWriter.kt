@@ -6,9 +6,9 @@ import java.io.StringWriter
 
 class HTMLParagraphWriter : HTMLTextWriter() {
     override fun doWriteInput(element: FormElement, context: Context, writer: StringWriter, readOnly: Boolean) {
-        val value = context.data[element.name]
+        val value = context.data[element.name]?.toString()
 
-        writer.write("<TEXTAREA name='${element.name}'")
+        writer.write("<TEXTAREA rows='3' name='${element.name}'")
         addValidationAttribute(element, writer, readOnly)
         writer.write(">")
 

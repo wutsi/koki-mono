@@ -29,7 +29,7 @@ class HTMLCheckboxesWriterTest {
             FormOption(value = "1"),
             FormOption(value = "foo", text = "FOO"),
             FormOption(value = "value1", text = "Value #1"),
-        ),
+        )
     )
 
     @Test
@@ -40,17 +40,51 @@ class HTMLCheckboxesWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='radio' value='1'/>
-                  <LABEL>1</LABEL>
+                <DIV class='item-container'>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='1'/>
+                    <LABEL>1</LABEL>
+                  </DIV>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='foo'/>
+                    <LABEL>FOO</LABEL>
+                  </DIV>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='value1' checked/>
+                    <LABEL>Value #1</LABEL>
+                  </DIV>
                 </DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='radio' value='foo'/>
-                  <LABEL>FOO</LABEL>
-                </DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='radio' value='value1' checked/>
-                  <LABEL>Value #1</LABEL>
+
+            """.trimIndent(),
+            output.toString()
+        )
+    }
+
+    @Test
+    fun `multiple values`() {
+        val xcontext = Context(
+            roleName = "accountant",
+            data = mapOf("var1" to listOf("value1", "1"))
+        )
+        writer.write(elt, xcontext, output)
+
+        assertEquals(
+            """
+                <LABEL class='title'><SPAN>test</SPAN></LABEL>
+                <DIV class='description'>This is the description</DIV>
+                <DIV class='item-container'>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='1' checked/>
+                    <LABEL>1</LABEL>
+                  </DIV>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='foo'/>
+                    <LABEL>FOO</LABEL>
+                  </DIV>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='value1' checked/>
+                    <LABEL>Value #1</LABEL>
+                  </DIV>
                 </DIV>
 
             """.trimIndent(),
@@ -60,23 +94,25 @@ class HTMLCheckboxesWriterTest {
 
     @Test
     fun radio() {
-        writer.write(elt.copy(type = FormElementType.MULTIPLE_CHOICE), context, output)
+        writer.write(elt.copy(type = FormElementType.MULTIPLE_CHOICE, required = true), context, output)
 
         assertEquals(
             """
-                <LABEL class='title'><SPAN>test</SPAN></LABEL>
+                <LABEL class='title'><SPAN>test</SPAN><SPAN class='required'>*</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='checkbox' value='1'/>
-                  <LABEL>1</LABEL>
-                </DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='checkbox' value='foo'/>
-                  <LABEL>FOO</LABEL>
-                </DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='checkbox' value='value1' checked/>
-                  <LABEL>Value #1</LABEL>
+                <DIV class='item-container' required>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='checkbox' value='1'/>
+                    <LABEL>1</LABEL>
+                  </DIV>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='checkbox' value='foo'/>
+                    <LABEL>FOO</LABEL>
+                  </DIV>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='checkbox' value='value1' checked/>
+                    <LABEL>Value #1</LABEL>
+                  </DIV>
                 </DIV>
 
             """.trimIndent(),
@@ -98,21 +134,23 @@ class HTMLCheckboxesWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='radio' value='1'/>
-                  <LABEL>1</LABEL>
-                </DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='radio' value='foo'/>
-                  <LABEL>FOO</LABEL>
-                </DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='radio' value='value1' checked/>
-                  <LABEL>Value #1</LABEL>
-                </DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='text' value='other-value'/>
-                  <LABEL>This is the other option</LABEL>
+                <DIV class='item-container'>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='1'/>
+                    <LABEL>1</LABEL>
+                  </DIV>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='foo'/>
+                    <LABEL>FOO</LABEL>
+                  </DIV>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='value1' checked/>
+                    <LABEL>Value #1</LABEL>
+                  </DIV>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='text' value='other-value'/>
+                    <LABEL>This is the other option</LABEL>
+                  </DIV>
                 </DIV>
 
             """.trimIndent(),
@@ -139,21 +177,23 @@ class HTMLCheckboxesWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='radio' value='1'/>
-                  <LABEL>1</LABEL>
-                </DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='radio' value='foo'/>
-                  <LABEL>FOO</LABEL>
-                </DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='radio' value='value1'/>
-                  <LABEL>Value #1</LABEL>
-                </DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='text' value='other-value' checked/>
-                  <LABEL>This is the other option</LABEL>
+                <DIV class='item-container'>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='1'/>
+                    <LABEL>1</LABEL>
+                  </DIV>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='foo'/>
+                    <LABEL>FOO</LABEL>
+                  </DIV>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='value1'/>
+                    <LABEL>Value #1</LABEL>
+                  </DIV>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='text' value='other-value' checked/>
+                    <LABEL>This is the other option</LABEL>
+                  </DIV>
                 </DIV>
 
             """.trimIndent(),
@@ -177,21 +217,23 @@ class HTMLCheckboxesWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='radio' value='1'/>
-                  <LABEL>1</LABEL>
-                </DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='radio' value='foo'/>
-                  <LABEL>FOO</LABEL>
-                </DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='radio' value='value1'/>
-                  <LABEL>Value #1</LABEL>
-                </DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='text' value='other-value'/>
-                  <LABEL>This is the other option</LABEL>
+                <DIV class='item-container'>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='1'/>
+                    <LABEL>1</LABEL>
+                  </DIV>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='foo'/>
+                    <LABEL>FOO</LABEL>
+                  </DIV>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='value1'/>
+                    <LABEL>Value #1</LABEL>
+                  </DIV>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='text' value='other-value'/>
+                    <LABEL>This is the other option</LABEL>
+                  </DIV>
                 </DIV>
 
             """.trimIndent(),
@@ -226,17 +268,19 @@ class HTMLCheckboxesWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='radio' value='1' readonly/>
-                  <LABEL>1</LABEL>
-                </DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='radio' value='foo' readonly/>
-                  <LABEL>FOO</LABEL>
-                </DIV>
-                <DIV class='item'>
-                  <INPUT name='var1' type='radio' value='value1' readonly checked/>
-                  <LABEL>Value #1</LABEL>
+                <DIV class='item-container'>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='1' readonly/>
+                    <LABEL>1</LABEL>
+                  </DIV>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='foo' readonly/>
+                    <LABEL>FOO</LABEL>
+                  </DIV>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='value1' readonly checked/>
+                    <LABEL>Value #1</LABEL>
+                  </DIV>
                 </DIV>
 
             """.trimIndent(),

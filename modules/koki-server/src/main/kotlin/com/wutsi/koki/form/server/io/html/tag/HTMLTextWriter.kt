@@ -7,7 +7,7 @@ import java.io.StringWriter
 
 open class HTMLTextWriter : AbstractHTMLImputElementWriter() {
     override fun doWriteInput(element: FormElement, context: Context, writer: StringWriter, readOnly: Boolean) {
-        val value = context.data[element.name]
+        val value = context.data[element.name]?.toString()
 
         writer.write("<INPUT name='${element.name}'")
 

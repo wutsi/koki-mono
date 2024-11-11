@@ -11,7 +11,7 @@ class KokiWorkflowEngine(
         private val ACTIVITY_PATH_PREFIX = "/v1/activity-instances"
     }
 
-    fun complete(activityInstanceId: String, data: Map<String, String>) {
+    fun complete(activityInstanceId: String, data: Map<String, Any>) {
         val url = urlBuilder.build("$ACTIVITY_PATH_PREFIX/$activityInstanceId/complete")
         val request = CompleteActivityInstanceRequest(
             state = data

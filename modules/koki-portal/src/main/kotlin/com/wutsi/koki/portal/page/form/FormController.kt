@@ -56,9 +56,15 @@ class FormController(
     ): String {
         val data = request.parameterMap
             .filter { entry -> entry.key != "aiid" }
-            .map { entry -> entry.key to entry.value[0] }
+            .map { entry ->
+                if (entry.value.size == 1) {
+                    entry.key to entry.value[0]
+                } else {
+                    entry.key to entry.value
+                }
+            }
             .toMap()
-            as Map<String, String>
+            as Map<String, Any>
 
         if (activityInstanceId != null) {
             try {

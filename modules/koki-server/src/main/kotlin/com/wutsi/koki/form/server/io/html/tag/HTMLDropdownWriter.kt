@@ -6,7 +6,7 @@ import java.io.StringWriter
 
 class HTMLDropdownWriter : AbstractHTMLImputElementWriter() {
     override fun doWriteInput(element: FormElement, context: Context, writer: StringWriter, readOnly: Boolean) {
-        val value = context.data[element.name]
+        val value = context.data[element.name]?.toString()
 
         writer.write("<SELECT name='${element.name}'")
         if (!value.isNullOrEmpty()) {

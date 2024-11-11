@@ -8,6 +8,19 @@ import java.io.StringWriter
 class HTMLCheckboxesWriter : AbstractHTMLImputElementWriter() {
     override fun doWriteInput(element: FormElement, context: Context, writer: StringWriter, readOnly: Boolean) {
         val value = context.data[element.name]
+        val values = if (value == null) {
+            emptyList<String>()
+        } else if (value is Collection<*>) {
+            value
+        } else {
+            listOf(value.toString())
+        }
+
+        writer.write("<DIV class='item-container'")
+        if (element.required) {
+            writer.append(" required")
+        }
+        writer.write(">\n")
 
         element.options.forEach { option ->
             input(
@@ -16,7 +29,7 @@ class HTMLCheckboxesWriter : AbstractHTMLImputElementWriter() {
                 text = (option.text ?: option.value),
                 type = getType(element),
                 readOnly = readOnly,
-                checked = (option.value == value),
+                checked = values.contains(option.value),
                 writer = writer
             )
         }
@@ -28,10 +41,12 @@ class HTMLCheckboxesWriter : AbstractHTMLImputElementWriter() {
                 text = (element.otherOption!!.text ?: element.otherOption!!.value),
                 type = "text",
                 readOnly = readOnly,
-                checked = (element.otherOption!!.value == value),
+                checked = values.contains(element.otherOption!!.value),
                 writer = writer
             )
         }
+
+        writer.write("</DIV>\n")
     }
 
     private fun input(
@@ -43,10 +58,10 @@ class HTMLCheckboxesWriter : AbstractHTMLImputElementWriter() {
         checked: Boolean,
         writer: StringWriter
     ) {
-        writer.write("<DIV class='item'>\n")
+        writer.write("  <DIV class='item'>\n")
 
         // Input
-        writer.write("  <INPUT name='$name' type='$type' value='${StringEscapeUtils.escapeHtml4(value)}'")
+        writer.write("    <INPUT name='$name' type='$type' value='${StringEscapeUtils.escapeHtml4(value)}'")
         if (readOnly) {
             writer.write(" readonly")
         }
@@ -56,9 +71,9 @@ class HTMLCheckboxesWriter : AbstractHTMLImputElementWriter() {
         writer.write("/>\n")
 
         // Text
-        writer.write("  <LABEL>${StringEscapeUtils.escapeHtml4(text)}</LABEL>\n")
+        writer.write("    <LABEL>${StringEscapeUtils.escapeHtml4(text)}</LABEL>\n")
 
-        writer.write("</DIV>\n")
+        writer.write("  </DIV>\n")
     }
 
     private fun getType(element: FormElement): String {

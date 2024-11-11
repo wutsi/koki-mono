@@ -61,7 +61,8 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         val request = CompleteActivityInstanceRequest(
             state = mapOf(
                 "A" to "aa",
-                "B" to "bb"
+                "B" to "bb",
+                "C" to listOf("cc1", "cc2")
             )
         )
         val result =
@@ -84,9 +85,10 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
 
         val workflowInstance = instanceDao.findById("wi-100-01").get()
         val state = objectMapper.readValue(workflowInstance.state, Map::class.java)
-        assertEquals(2, state.size)
+        assertEquals(3, state.size)
         assertEquals(request.state["A"], state["A"])
         assertEquals(request.state["B"], state["B"])
+        assertEquals(request.state["C"], state["C"])
 
         val activityInstances = activityInstanceDao.findByInstance(workflowInstance)
         assertEquals(4, activityInstances.size)

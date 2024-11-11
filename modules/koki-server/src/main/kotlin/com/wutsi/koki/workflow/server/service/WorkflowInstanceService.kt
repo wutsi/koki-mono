@@ -138,19 +138,25 @@ class WorkflowInstanceService(
     }
 
     @Transactional
-    fun mergeState(data: Map<String, String>, workflowInstance: WorkflowInstanceEntity) {
+    fun mergeState(data: Map<String, Any>, workflowInstance: WorkflowInstanceEntity) {
         // Merge
-        var merged = mutableMapOf<String, String>()
+        var merged = mutableMapOf<String, Any>()
         workflowInstance.state?.let { state ->
             merged.putAll(
-                objectMapper.readValue(state, Map::class.java) as Map<String, String>
+                objectMapper.readValue(state, Map::class.java) as Map<String, Any>
             )
         }
         merged.putAll(data)
 
         // Update the state - remove empty values
         workflowInstance.state = objectMapper.writeValueAsString(
-            merged.filter { entry -> entry.value.isNotEmpty() }
+            merged.filter { entry ->
+                if (entry.value is Collection<*>) {
+                    (entry.value as Collection<*>).isNotEmpty()
+                } else {
+                    entry.value.toString().isNotEmpty()
+                }
+            }
         )
         save(workflowInstance)
     }

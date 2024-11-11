@@ -21,8 +21,11 @@ class ExpressionEvaluatorTest {
         "client_email" to "ray.sponsible@gmail.com",
         "submit" to "true",
         "amount" to "10000.0",
+        "taxes" to 15.0,
         "client_id" to "5",
-        "new_client" to "false"
+        "age" to 30,
+        "new_client" to false,
+        "status" to listOf("M", "F"),
     )
     private val workflowInstance = WorkflowInstanceEntity(
         parameters = objectMapper.writeValueAsString(parameters),
