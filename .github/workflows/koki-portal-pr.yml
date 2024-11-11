@@ -17,13 +17,17 @@ jobs:
                 with:
                     distribution: 'zulu'
                     java-version: 17
+
+            -   name: Install Chromium
+                run: sudo apt-get install chromium-browser
+
             -   name: Build
                 env:
                     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
                 run: |
                     mvn -q -s settings.xml --non-recursive install
                     cd modules/koki-portal
-                    mvn -Dlogging.level.root=ERROR -Dlogging.level.org.springframework=ERROR -Dlogging.com.wutsi=ERROR  -q -s ../../settings.xml package
+                    mvn -s ../../settings.xml clean package -Dheadless=true
 
             -   name: Add coverage to PR
                 id: jacoco
