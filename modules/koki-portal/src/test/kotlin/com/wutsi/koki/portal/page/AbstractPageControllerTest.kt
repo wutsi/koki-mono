@@ -40,8 +40,6 @@ abstract class AbstractPageControllerTest {
     @LocalServerPort
     protected val port: Int = 0
 
-    protected var url: String = ""
-
     protected lateinit var driver: WebDriver
 
     @MockBean
@@ -55,8 +53,6 @@ abstract class AbstractPageControllerTest {
 
     @BeforeEach
     fun setUp() {
-        this.url = "http://localhost:$port"
-
         setupSelenium()
         setupDefaultApiResponses()
     }

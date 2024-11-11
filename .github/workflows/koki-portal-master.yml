@@ -29,7 +29,7 @@ jobs:
                 run: |
                     mvn -q -s settings.xml --non-recursive install
                     cd modules/koki-portal
-                    mvn -q -s ../../settings.xml install
+                    mvn -s ../../settings.xml install -Dheadless=true
 
             -   name: Generate JaCoCo Badge
                 uses: cicirello/jacoco-badge-generator@v2
