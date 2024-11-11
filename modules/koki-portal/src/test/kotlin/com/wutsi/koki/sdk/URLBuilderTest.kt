@@ -1,7 +1,8 @@
-package com.wutsi.koki.portal.rest
+package com.wutsi.koki.sdk
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.to
 
 class URLBuilderTest {
     private val builder = URLBuilder("http://localhost:8080")

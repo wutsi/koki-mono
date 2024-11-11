@@ -50,12 +50,18 @@ class HTMLFormGeneratorTest {
 
         verify(elementWriter, times(3)).write(any(), eq(context), eq(writer))
         val expected = """
-                <DIV class='test'>
+                <DIV class='form test'>
                   <FORM method='post' action='https://f.com/submit'>
-                    <H1 class='form-title'>Sample form</H1>
-                    <DIV class='form-description'>This is an exempla of form</DIV>
-                    <DIV class='form-button-group'>
-                      <BUTTON type='submit'>Submit</BUTTON>
+                    <DIV class='form-header'>
+                      <H1 class='form-title'>Sample form</H1>
+                      <DIV class='form-description'>This is an exempla of form</DIV>
+                    </DIV>
+                    <DIV class='form-body'>
+                    </DIV>
+                    <DIV class='form-footer'>
+                      <DIV class='form-button-group'>
+                        <BUTTON type='submit'>Submit</BUTTON>
+                      </DIV>
                     </DIV>
                   </FORM>
                 </DIV>

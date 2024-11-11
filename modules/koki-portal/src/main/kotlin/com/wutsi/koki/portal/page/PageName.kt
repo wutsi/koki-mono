@@ -1,4 +1,6 @@
 package com.wutsi.koki.portal.page
 
-class PageName {
+object PageName {
+    const val FORM = "page.form"
+    const val FORM_SAVED = "page.form.saved"
 }

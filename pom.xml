@@ -18,6 +18,7 @@
     <modules>
         <module>modules/koki-dto</module>
         <module>modules/koki-server</module>
+        <module>modules/koki-portal</module>
     </modules>
 
     <scm>

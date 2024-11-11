@@ -1,29 +1,21 @@
-package com.wutsi.koki.portal.rest
+package com.wutsi.koki.sdk
 
+import com.wutsi.koki.workflow.dto.CompleteActivityInstanceRequest
 import org.springframework.web.client.RestTemplate
 
-class KokiForms(
-    private val baseUrl: String,
+class KokiWorkflowEngine(
+    private val urlBuilder: URLBuilder,
     private val rest: RestTemplate,
 ) {
-    fun html(
-        formId: String,
-        submitUrl: String?,
-        activityInstanceId: String? = null,
-        roleName: String? = null,
-        tenantId: Long
-    ): String {
-        val prefix = "$baseUrl/v1/forms/html/${tenantId}.${formId}.html"
-        val suffix = listOf(
-            activityInstanceId?.let { "aiid=$it" },
-            submitUrl?.let { "submit-url=$it" },
-            roleName?.let { "role-name=$it" },
-        )
-            .filterNotNull()
-            .joinToString(separator = "&")
-            .ifEmpty { null }
+    companion object {
+        private val ACTIVITY_PATH_PREFIX = "/v1/activity-instances"
+    }
 
-        val url = listOf(prefix, suffix).filterNotNull().joinToString(separator = "?")
-        return rest.getForEntity(url, String::class.java).body
+    fun complete(activityInstanceId: String, data: Map<String, String>) {
+        val url = urlBuilder.build("$ACTIVITY_PATH_PREFIX/$activityInstanceId/complete")
+        val request = CompleteActivityInstanceRequest(
+            state = data
+        )
+        rest.postForEntity(url, request, Any::class.java)
     }
 }

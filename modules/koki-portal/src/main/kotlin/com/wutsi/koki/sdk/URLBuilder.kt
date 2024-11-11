@@ -1,29 +1,29 @@
-package com.wutsi.koki.portal.rest
+package com.wutsi.koki.sdk
 
-import org.springframework.web.client.RestTemplate
+import java.net.URLEncoder
 
-class KokiForms(
-    private val baseUrl: String,
-    private val rest: RestTemplate,
-) {
-    fun html(
-        formId: String,
-        submitUrl: String?,
-        activityInstanceId: String? = null,
-        roleName: String? = null,
-        tenantId: Long
+class URLBuilder(private val baseUrl: String) {
+    fun build(
+        path: String,
+        parameters: Map<String, Any?> = emptyMap()
     ): String {
-        val prefix = "$baseUrl/v1/forms/html/${tenantId}.${formId}.html"
-        val suffix = listOf(
-            activityInstanceId?.let { "aiid=$it" },
-            submitUrl?.let { "submit-url=$it" },
-            roleName?.let { "role-name=$it" },
-        )
-            .filterNotNull()
+        val address = "${baseUrl}$path"
+        val queryString = parameters
+            .filter { parameter -> parameter.value != null }
+            .map { parameter ->
+                val value = parameter.value
+                if (value is Collection<*>) {
+                    value.map { "${parameter.key}=" + URLEncoder.encode(it.toString(), "utf-8") }
+                        .joinToString(separator = "&")
+                } else {
+                    "${parameter.key}=" + URLEncoder.encode(parameter.value.toString(), "utf-8")
+                }
+            }
             .joinToString(separator = "&")
             .ifEmpty { null }
 
-        val url = listOf(prefix, suffix).filterNotNull().joinToString(separator = "?")
-        return rest.getForEntity(url, String::class.java).body
+        return listOf(address, queryString)
+            .filterNotNull()
+            .joinToString(separator = "?")
     }
 }
