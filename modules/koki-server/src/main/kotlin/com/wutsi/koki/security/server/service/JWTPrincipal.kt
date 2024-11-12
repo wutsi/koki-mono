@@ -1,12 +1,17 @@
 package com.wutsi.koki.security.server.service
 
 import com.auth0.jwt.interfaces.DecodedJWT
+import java.security.Principal
 import java.util.Date
 
-open class JWTPrincipal(private val jwt: DecodedJWT) {
+open class JWTPrincipal(private val jwt: DecodedJWT) : Principal {
     companion object {
         const val CLAIM_USER_ID = "userId"
         const val CLAIM_TENANT_ID = "tenantId"
+    }
+
+    override fun getName(): String? {
+        return getUserId().toString()
     }
 
     fun getUserId(): Long {

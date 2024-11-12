@@ -69,6 +69,10 @@ springdoc:
             display-name: Attribute API
             paths-to-match: /v1/attributes, /v1/attributes/*
 
+        -   group: authentication
+            display-name: Authentication API
+            paths-to-match: /v1/auth, /v1/auth/*
+
         -   group: configurations
             display-name: Configuration API
             paths-to-match: /v1/configurations, /v1/configurations/*

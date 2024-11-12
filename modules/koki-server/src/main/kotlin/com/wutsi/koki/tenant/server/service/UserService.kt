@@ -38,6 +38,11 @@ class UserService(
         return user
     }
 
+    fun getByEmail(email: String, tenantId: Long): UserEntity {
+        return dao.findByEmailAndTenantId(email, tenantId)
+            ?: throw NotFoundException(Error(ErrorCode.USER_NOT_FOUND))
+    }
+
     fun getAll(id: List<Long>, tenantId: Long): List<UserEntity> {
         return dao.findByIdInAndTenantId(id, tenantId)
     }

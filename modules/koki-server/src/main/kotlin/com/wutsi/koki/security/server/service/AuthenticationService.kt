@@ -28,29 +28,29 @@ open class AuthenticationService(
             if (!passwordService.matches(password, user.password, user.salt)) {
                 throw ConflictException(error = Error(ErrorCode.AUTHENTICATION_FAILED))
             }
-            return createToken(user)
+            return createAccessToken(user)
         } catch (ex: NotFoundException) {
             throw ConflictException(error = Error(ErrorCode.AUTHENTICATION_FAILED), ex)
         }
     }
 
-    fun decode(token: String): JWTPrincipal {
+    fun decodeAccessToken(token: String): JWTPrincipal {
         val verifier = JWT.require(getAlgorithm())
             .withIssuer(ISSUER)
             .build()
         return JWTPrincipal(verifier.verify(token))
     }
 
-    private fun createToken(user: UserEntity): String {
+    fun createAccessToken(user: UserEntity, ttlSeconds: Int = 86400): String {
         val algo = getAlgorithm()
         val now = Date()
         return JWT.create()
             .withIssuer(ISSUER)
             .withSubject(user.displayName)
             .withClaim(JWTPrincipal.CLAIM_USER_ID, user.id)
-            .withClaim(JWTPrincipal.CLAIM_USER_ID, user.tenant.id)
+            .withClaim(JWTPrincipal.CLAIM_TENANT_ID, user.tenant.id)
             .withIssuedAt(now)
-            .withExpiresAt(DateUtils.addDays(now, 1))
+            .withExpiresAt(DateUtils.addSeconds(now, ttlSeconds))
             .sign(algo)
     }
 

@@ -1,32 +1,36 @@
 package com.wutsi.koki.security.server.service
 
-import com.auth0.jwt.interfaces.DecodedJWT
-import java.security.Principal
-import java.util.Date
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.GrantedAuthority
 
-open class JWTPrincipal(private val jwt: DecodedJWT) : Principal {
-    companion object {
-        const val CLAIM_USER_ID = "userId"
-        const val CLAIM_TENANT_ID = "tenantId"
-    }
+class JWTAuthentication(private val jwtPrincipal: JWTPrincipal) : Authentication {
+    private var authenticated: Boolean = true
 
     override fun getName(): String? {
-        return getUserId().toString()
+        return jwtPrincipal.name
     }
 
-    fun getUserId(): Long {
-        return jwt.getClaim(CLAIM_USER_ID).`as`(Long::class.java)
+    override fun getPrincipal(): Any? {
+        return jwtPrincipal
     }
 
-    fun getTenantId(): Long {
-        return jwt.getClaim(CLAIM_TENANT_ID).`as`(Long::class.java)
+    override fun getCredentials(): Any? {
+        return null
     }
 
-    fun getSubject(): String {
-        return jwt.subject
+    override fun getDetails(): Any? {
+        return null
     }
 
-    fun expired(): Boolean {
-        return jwt.expiresAt.before(Date())
+    override fun getAuthorities(): Collection<GrantedAuthority?>? {
+        return emptyList()
+    }
+
+    override fun isAuthenticated(): Boolean {
+        return authenticated
+    }
+
+    override fun setAuthenticated(isAuthenticated: Boolean) {
+        authenticated = isAuthenticated
     }
 }
