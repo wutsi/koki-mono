@@ -9,6 +9,10 @@ object ErrorCode {
     val ATTRIBUTE_NAME_MISSING: String = "$PREFIX:attribute:name-missing"
     val ATTRIBUTE_TYPE_INVALID: String = "$PREFIX:attribute:type-invalid"
 
+    val AUTHENTICATION_FAILED: String = "$PREFIX:auth:failed"
+    val AUTHENTICATION_TENANT_NOT_VALID: String = "$PREFIX:auth:tenant-not-valid"
+    val AUTHENTICATION_TOKEN_EXPIRED: String = "$PREFIX:auth:token-expired"
+
     val FORM_NOT_FOUND: String = "$PREFIX:form:not-found"
     val FORM_DUPLICATE_NAME: String = "$PREFIX:form:duplicate-name"
     val FORM_DATA_NOT_FOUND: String = "$PREFIX:form-data:not-found"
