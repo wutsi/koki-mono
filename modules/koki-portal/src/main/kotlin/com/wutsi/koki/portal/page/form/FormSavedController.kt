@@ -17,14 +17,15 @@ class FormSavedController(
         @PathVariable id: String,
         model: Model
     ): String {
-        val forms = kokiForms.search(ids = listOf(id)).forms
-        val title = forms.firstOrNull()?.title
+        val form = kokiForms.get(id).form
+        val title = form.title
+
         model.addAttribute("title", title)
         model.addAttribute(
             "page",
             PageModel(
                 name = PageName.FORM_SAVED,
-                title = title ?: "",
+                title = title,
             )
         )
         return "forms/saved"

@@ -9,6 +9,7 @@ import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.form.dto.SearchFormResponse
 import com.wutsi.koki.portal.rest.AccessTokenHolder
+import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.sdk.KokiFormData
 import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiWorkflowEngine
@@ -58,15 +59,18 @@ abstract class AbstractPageControllerTest {
     protected lateinit var kokiWorkflowEngine: KokiWorkflowEngine
 
     @MockBean
+    protected lateinit var kokiAuthentication: KokiAuthentication
+
+    @MockBean
     protected lateinit var accessTokenHolder: AccessTokenHolder
 
     @Autowired
     protected lateinit var objectMapper: ObjectMapper
 
-    fun setUpLoggedInUser(userId: Long) {
-        val accessToken: String =
-            "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJpc3MiOiJLb2tpIiwic3ViIjoiSGVydmUgVGNoZXBhbm5vdSIsInVzZXJJZCI6MjA0LCJ0ZW5hbnRJZCI6MSwiaWF0IjoxNzMxNTA5MDM0LCJleHAiOjE3MzE1OTU0MzR9."
+    protected val accessToken: String =
+        "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJpc3MiOiJLb2tpIiwic3ViIjoiSGVydmUgVGNoZXBhbm5vdSIsInVzZXJJZCI6MjA0LCJ0ZW5hbnRJZCI6MSwiaWF0IjoxNzMxNTA5MDM0LCJleHAiOjE3MzE1OTU0MzR9."
 
+    fun setUpLoggedInUser() {
         doReturn(accessToken).whenever(accessTokenHolder).get(any())
     }
 
@@ -78,7 +82,7 @@ abstract class AbstractPageControllerTest {
     fun setUp() {
         setupSelenium()
         setupDefaultApiResponses()
-        setUpLoggedInUser(USER_ID)
+        setUpLoggedInUser()
     }
 
     private fun setupSelenium() {
