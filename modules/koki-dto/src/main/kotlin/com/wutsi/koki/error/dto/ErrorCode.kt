@@ -10,16 +10,17 @@ object ErrorCode {
     val ATTRIBUTE_TYPE_INVALID: String = "$PREFIX:attribute:type-invalid"
 
     val AUTHENTICATION_FAILED: String = "$PREFIX:auth:failed"
-    val AUTHENTICATION_TENANT_NOT_VALID: String = "$PREFIX:auth:tenant-not-valid"
-    val AUTHENTICATION_TOKEN_EXPIRED: String = "$PREFIX:auth:token-expired"
+
+    val AUTHORIZATION_PERMISSION_DENIED: String = "$PREFIX:auth:permission-denied"
+    val AUTHORIZATION_SCHEME_NOT_SUPPORTED: String = "$PREFIX:auth:scheme-not-supported"
+    val AUTHORIZATION_TENANT_MISMATCH: String = "$PREFIX:auth:tenant-mismatch"
+    val AUTHORIZATION_TOKEN_EXPIRED: String = "$PREFIX:auth:token-expired"
+    val AUTHORIZATION_UNAUTHENTICATED: String = "$PREFIX:auth:unauthenticated"
 
     val FORM_NOT_FOUND: String = "$PREFIX:form:not-found"
     val FORM_DUPLICATE_NAME: String = "$PREFIX:form:duplicate-name"
     val FORM_DATA_NOT_FOUND: String = "$PREFIX:form-data:not-found"
-    val FORM_DATA_FIELD_MISSING: String = "$PREFIX:form-data:field-missing"
-    val FORM_DATA_FIELD_INVALID: String = "$PREFIX:form-data:field-invalid"
 
-    val HTTP_REQUEST_NOT_READABLE = "$PREFIX:http:request-not-readable"
     val HTTP_MISSING_PARAMETER = "$PREFIX:http:missing-parameter"
     val HTTP_INVALID_PARAMETER = "$PREFIX:http:invalid-parameter"
     val HTTP_INTERNAL = "$PREFIX:http:unexpected-error"
