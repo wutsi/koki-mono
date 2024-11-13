@@ -2,35 +2,36 @@ package com.wutsi.koki.portal.page.form
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
+import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.form.dto.FormSummary
-import com.wutsi.koki.form.dto.SearchFormResponse
+import com.wutsi.koki.form.dto.Form
+import com.wutsi.koki.form.dto.GetFormResponse
 import com.wutsi.koki.portal.page.PageName
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
 class FormControllerTest : AbstractPageControllerTest() {
     private val formId = "1111"
 
-    private val forms = listOf(
-        FormSummary(
-            name = "FRM-001",
-            title = "Incident Report",
-        )
+    private val form = Form(
+        id = "309302",
+        name = "FRM-001",
+        title = "Incident Report",
     )
 
     @BeforeEach
     override fun setUp() {
         super.setUp()
 
-        doReturn(SearchFormResponse(forms)).whenever(kokiForms)
-            .search(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+        doReturn(GetFormResponse(form)).whenever(kokiForms).get(any())
 
         val html = generateFormHtml("http://localhost:$port/forms/$formId")
         doReturn(html).whenever(kokiForms)
@@ -109,18 +110,20 @@ class FormControllerTest : AbstractPageControllerTest() {
         input("INPUT[name=customer_name]", "Ray Sponsible")
         input("INPUT[name=customer_email]", "ray.sponsible@gmail.com")
         click("INPUT[value=S]")
+        click("INPUT[value=T1]")
         click("INPUT[value=IMM]")
         click("BUTTON")
 
-        verify(kokiFormData).update(
-            formDataId,
-            mapOf(
-                "customer_name" to "Ray Sponsible",
-                "customer_email" to "ray.sponsible@gmail.com",
-                "marital_status" to "S",
-                "case_type" to "IMM"
-            )
-        )
+        val dataArg = argumentCaptor<Map<String, Any>>()
+        verify(kokiFormData).update(eq(formDataId), dataArg.capture())
+        val data = dataArg.firstValue
+        assertEquals(4, data.size)
+        assertEquals("Ray Sponsible", data["customer_name"])
+        assertEquals("ray.sponsible@gmail.com", data["customer_email"])
+        assertEquals("S", data["marital_status"])
+        assertEquals(2, (data["case_type"] as Array<*>).size)
+        assertEquals("T1", (data["case_type"] as Array<*>)[0])
+        assertEquals("IMM", (data["case_type"] as Array<*>)[1])
 
         assertCurrentPageIs(PageName.FORM_SAVED)
     }

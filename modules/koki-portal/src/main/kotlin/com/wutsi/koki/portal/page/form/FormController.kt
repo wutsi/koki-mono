@@ -71,12 +71,12 @@ class FormController(
     }
 
     private fun addPageInfo(formId: String, model: Model) {
-        val forms = kokiForms.search(ids = listOf(formId)).forms
+        val form = kokiForms.get(formId).form
         model.addAttribute(
             "page",
             PageModel(
                 name = PageName.FORM,
-                title = forms.firstOrNull()?.title ?: "Form",
+                title = form.title,
             )
         )
     }
