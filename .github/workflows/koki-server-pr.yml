@@ -41,7 +41,7 @@ jobs:
                 run: |
                     mvn -q -s settings.xml --non-recursive install
                     cd modules/koki-server
-                    mvn -Dspring.datasource.username=root -Dlogging.level.root=ERROR -Dlogging.level.org.springframework=ERROR -Dlogging.com.wutsi=ERROR  -Dspring.datasource.password=root -q -s ../../settings.xml package
+                    mvn -Dspring.datasource.username=root -Dspring.datasource.password=root -q -s ../../settings.xml package
 
             -   name: Add coverage to PR
                 id: jacoco
