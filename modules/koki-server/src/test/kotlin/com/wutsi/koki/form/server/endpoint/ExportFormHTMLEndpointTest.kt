@@ -3,6 +3,7 @@ package com.wutsi.koki.tenant.server.server.endpoint
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doAnswer
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.TenantAwareEndpointTest
@@ -17,7 +18,6 @@ import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import java.io.File
 import java.io.StringWriter
-import java.net.URLEncoder
 import javax.imageio.ImageIO
 import kotlin.test.assertEquals
 
@@ -29,11 +29,7 @@ class ExportFormHTMLEndpointTest : TenantAwareEndpointTest() {
     @MockBean
     private lateinit var generator: HTMLFormGenerator
 
-    private fun download(url: String, statusCode: Int): File? {
-        val i = url.lastIndexOf("/")
-        val j = url.lastIndexOf("?")
-        val filename = if (j > 0) url.substring(i + 1, j) else url.substring(i + 1)
-
+    private fun download(url: String, statusCode: Int, filename: String? = null): File? {
         return super.download(
             url,
             expectedFileName = filename,
@@ -52,34 +48,10 @@ class ExportFormHTMLEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
-    fun `html from activity instance`() {
-        val url = "http://localhost:$port/v1/forms/html/1.100.html" +
-            "?aiid=wi-100-01-working" +
-            "&role-name=accountant" +
-            "&submit-url=" + URLEncoder.encode("https://localhost:8081/100/submit", "utf-8")
+    fun `empty form`() {
+        val url = "http://localhost:$port/v1/forms/html/1/100.html?&role-name=accountant"
 
-        val file = download(url, 200)
-        assertTrue(file!!.length() > 0L)
-        assertTrue(file.length() > 0)
-        ImageIO.read(file)
-
-        val context = argumentCaptor<Context>()
-        verify(generator).generate(any(), context.capture(), any())
-
-        assertEquals("http://localhost:8081/forms/100?aiid=wi-100-01-working", context.firstValue.submitUrl)
-        assertEquals("accountant", context.firstValue.roleName)
-        assertEquals(2, context.firstValue.data.size)
-        assertEquals("Ray Sponsible", context.firstValue.data["customer_name"])
-        assertEquals("ray.sponsible@gmail.com", context.firstValue.data["customer_email"])
-    }
-
-    @Test
-    fun `html without activity instance`() {
-        val url = "http://localhost:$port/v1/forms/html/1.100.html" +
-            "?role-name=accountant" +
-            "&submit-url=" + URLEncoder.encode("https://localhost:8081/100/submit", "utf-8")
-
-        val file = download(url, 200)
+        val file = download(url, 200, "100.html")
         assertTrue(file!!.length() > 0L)
         assertTrue(file.length() > 0)
         ImageIO.read(file)
@@ -90,5 +62,52 @@ class ExportFormHTMLEndpointTest : TenantAwareEndpointTest() {
         assertEquals("http://localhost:8081/forms/100", context.firstValue.submitUrl)
         assertEquals("accountant", context.firstValue.roleName)
         assertEquals(0, context.firstValue.data.size)
+//        assertEquals(2, context.firstValue.data.size)
+//        assertEquals("aa", context.firstValue.data["A"])
+//        assertEquals("bb", context.firstValue.data["B"])
+    }
+
+    @Test
+    fun `form wth data`() {
+        val url = "http://localhost:$port/v1/forms/html/1/100/10011.html?&role-name=accountant"
+
+        val file = download(url, 200, "10011.html")
+        assertTrue(file!!.length() > 0L)
+        assertTrue(file.length() > 0)
+        ImageIO.read(file)
+
+        val context = argumentCaptor<Context>()
+        verify(generator).generate(any(), context.capture(), any())
+
+        assertEquals("http://localhost:8081/forms/100/10011", context.firstValue.submitUrl)
+        assertEquals("accountant", context.firstValue.roleName)
+        assertEquals(2, context.firstValue.data.size)
+        assertEquals(2, context.firstValue.data.size)
+        assertEquals("aa", context.firstValue.data["A"])
+        assertEquals("bb", context.firstValue.data["B"])
+    }
+
+    @Test
+    fun `form data not found`() {
+        val url = "http://localhost:$port/v1/forms/html/1/100/xxxx.html?&role-name=accountant"
+
+        download(url, 404)
+        verify(generator, never()).generate(any(), any(), any())
+    }
+
+    @Test
+    fun `bad form data not found`() {
+        val url = "http://localhost:$port/v1/forms/html/1/100/xxxx.html?&role-name=accountant"
+
+        download(url, 404)
+        verify(generator, never()).generate(any(), any(), any())
+    }
+
+    @Test
+    fun `bad path`() {
+        val url = "http://localhost:$port/v1/forms/html/1/110/xxxx.html?&role-name=accountant"
+
+        download(url, 404)
+        verify(generator, never()).generate(any(), any(), any())
     }
 }

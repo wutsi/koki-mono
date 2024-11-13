@@ -5,54 +5,7 @@
 </head>
 
 <body>
-<div th:utext="${formHtml}"></div>
+HOME
 </body>
 
-<script>
-    // Form validation
-    const form = document.querySelector('form');
-    if (form) {
-        console.log('Registering the validation to ' + form);
-        form.noValidate = true;
-        form.addEventListener('submit', validateForm);
-    } else {
-        console.log('Oopsss... no form found!');
-    }
-
-    function validateForm(e) {
-        console.log('validating form...');
-
-        const form = e.target;
-        const success1 = form.checkValidity();
-        const success2 = validateAllCheckboxGroups();
-        if (!success1 || !success2) {
-            e.preventDefault();
-        }
-    }
-
-    function validateAllCheckboxGroups() {
-        let result = true;
-        document.querySelectorAll('.checkbox-container,.radio-container')
-            .forEach((group) => {
-                const name = group.querySelector('input').getAttribute('name');
-                if (group.hasAttribute('required')) {
-                    const size = group.querySelectorAll('input[type=checkbox]:checked,input[type=radio]:checked').length;
-                    if (size > 0) {
-                        console.log(name + ' - valid. ' + size + ' item(s) selected');
-                        group.classList.remove('user-invalid');
-                        group.removeEventListener('click', validateAllCheckboxGroups);
-                    } else {
-                        console.log(name + ' - NOT valid. ' + size + ' item(s) selected');
-                        group.classList.add('user-invalid');
-                        group.addEventListener('click', validateAllCheckboxGroups);
-                        result = false;
-                    }
-                }
-            });
-
-        console.log(' checkbox validation: ' + result);
-        return result;
-    }
-
-</script>
 </html>

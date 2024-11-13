@@ -4,11 +4,11 @@ import com.wutsi.koki.form.dto.GetFormResponse
 import com.wutsi.koki.form.dto.SearchFormResponse
 import com.wutsi.koki.workflow.dto.FormSortBy
 import org.springframework.web.client.RestTemplate
-import java.net.URLEncoder
 
 class KokiForms(
     private val urlBuilder: URLBuilder,
     private val rest: RestTemplate,
+    private val tenantProvider: TenantProvider,
 ) {
     companion object {
         private val PATH_PREFIX = "/v1/forms"
@@ -20,17 +20,20 @@ class KokiForms(
     }
 
     fun html(
-        id: String,
-        submitUrl: String?,
-        activityInstanceId: String? = null,
+        formId: String,
+        formDataId: String? = null,
         roleName: String? = null,
-        tenantId: Long
     ): String {
+        val tenantId = tenantProvider.id()
+        val path = if (formDataId == null) {
+            "$PATH_PREFIX/html/$tenantId/$formId.html"
+        } else {
+            "$PATH_PREFIX/html/$tenantId/$formId/$formDataId.html"
+        }
+
         val url = urlBuilder.build(
-            "$PATH_PREFIX/html/$tenantId.$id.html",
+            path,
             mapOf(
-                "aiid" to activityInstanceId,
-                "submit-url" to URLEncoder.encode(submitUrl, "utf-8"),
                 "role-name" to roleName
             )
         )

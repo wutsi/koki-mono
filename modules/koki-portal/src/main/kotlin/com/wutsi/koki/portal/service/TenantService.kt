@@ -1,8 +1,9 @@
 package com.wutsi.koki.portal.rest
 
+import com.wutsi.koki.sdk.TenantProvider
 import org.springframework.stereotype.Service
 
 @Service
-class TenantService {
-    fun id(): Long = 1
+class TenantService : TenantProvider {
+    override fun id(): Long = 1
 }

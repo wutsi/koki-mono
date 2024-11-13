@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.config
 
+import com.wutsi.koki.portal.rest.AuthorizationInterceptor
 import com.wutsi.koki.portal.rest.TenantRestInterceptor
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.client.RestTemplateBuilder
@@ -11,6 +12,7 @@ import java.time.Duration
 @Configuration
 class RestConfiguration(
     private val tenantRestInterceptor: TenantRestInterceptor,
+    private val authorizationInterceptor: AuthorizationInterceptor,
 
     @Value("\${koki.rest.connection-timeout}") private val connectionTimeout: Long,
     @Value("\${koki.rest.read-timeout}") private val readTimeout: Long,
@@ -21,7 +23,8 @@ class RestConfiguration(
             .setConnectTimeout(Duration.ofMillis(connectionTimeout))
             .setReadTimeout(Duration.ofMillis(readTimeout))
             .interceptors(
-                tenantRestInterceptor
+                tenantRestInterceptor,
+                authorizationInterceptor,
             )
             .build()
 }

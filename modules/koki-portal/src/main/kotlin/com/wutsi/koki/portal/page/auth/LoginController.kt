@@ -3,63 +3,52 @@ package com.wutsi.koki.portal.page.form
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.sdk.KokiFormData
-import com.wutsi.koki.sdk.KokiForms
-import jakarta.servlet.http.HttpServletRequest
+import com.wutsi.koki.portal.page.auth.LoginForm
+import com.wutsi.koki.portal.rest.AuthenticationService
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-class FormController(
-    private val kokiForms: KokiForms,
-    private val kokiFormData: KokiFormData,
+class LoginController(
+    private val authenticationService: AuthenticationService,
 ) : AbstractPageController() {
-    @GetMapping("/forms/{id}")
-    fun show(
-        @PathVariable id: String,
-        model: Model
-    ): String {
-        val formHtml = kokiForms.html(formId = id)
-        model.addAttribute("formHtml", formHtml)
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(LoginController::class.java)
+    }
 
-        val forms = kokiForms.search(ids = listOf(id)).forms
+    @GetMapping("/login")
+    fun show(model: Model): String {
+        model.addAttribute("form", LoginForm())
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.FORM,
-                title = forms.firstOrNull()?.title ?: "Form",
+                name = PageName.LOGIN,
+                title = "Login",
             )
         )
-        return "forms/index"
+        return "auth/login"
     }
 
-    @PostMapping("/forms/{id}")
-    fun submit(
-        @PathVariable id: String,
-        request: HttpServletRequest
-    ): String {
-        val data = request.parameterMap
-            .map { entry ->
-                if (entry.value.size == 1) {
-                    entry.key to entry.value[0]
-                } else {
-                    entry.key to entry.value
-                }
-            }
-            .toMap()
-            as Map<String, Any>
-
-        kokiFormData.submit(id, data)
-        return "redirect:/forms/$id/saved"
+    @PostMapping("/login/submit")
+    fun submit(@ModelAttribute form: LoginForm, model: Model): String {
+        try {
+            authenticationService.login(form)
+            return "redirect:/"
+        } catch (ex: HttpClientErrorException) {
+            LOGGER.warn("Authentication failed", ex)
+            model.addAttribute("failed", true)
+            return show(model)
+        }
     }
 
     @ModelAttribute("page")
     fun getPage() = PageModel(
-        name = PageName.FORM,
-        title = "Form",
+        name = PageName.LOGIN,
+        title = "Login",
     )
 }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping
-class CreateFormDataEndpoint(
+class SubmitFormDataEndpoint(
     private val service: FormDataService,
 ) {
     @PostMapping("/v1/form-data")
@@ -20,10 +20,9 @@ class CreateFormDataEndpoint(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestBody @Valid request: SubmitFormDataRequest
     ): SubmitFormDataResponse {
-        val formData = service.create(request, tenantId)
-        val response = SubmitFormDataResponse(
+        val formData = service.submit(request, tenantId)
+        return SubmitFormDataResponse(
             formDataId = formData.id!!
         )
-        return response
     }
 }

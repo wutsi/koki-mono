@@ -1,4 +1,6 @@
-package com.wutsi.koki.portal.page.login
+package com.wutsi.koki.portal.page.auth
 
-class LoginModel {
-}
+data class LoginForm(
+    val email: String = "",
+    val password: String = "",
+)

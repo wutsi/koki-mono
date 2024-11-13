@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.rest
 
-import com.wutsi.koki.common.dto.HttpHeader
+import jakarta.servlet.http.HttpServletRequest
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpRequest
 import org.springframework.http.client.ClientHttpRequestExecution
 import org.springframework.http.client.ClientHttpRequestInterceptor
@@ -8,13 +9,19 @@ import org.springframework.http.client.ClientHttpResponse
 import org.springframework.stereotype.Service
 
 @Service
-class TenantRestInterceptor(private val tenantService: TenantService) : ClientHttpRequestInterceptor {
+class AuthorizationInterceptor(
+    private val accessTokenHolder: AccessTokenHolder,
+    private val httpRequest: HttpServletRequest,
+) : ClientHttpRequestInterceptor {
     override fun intercept(
         request: HttpRequest,
         body: ByteArray,
         execution: ClientHttpRequestExecution
     ): ClientHttpResponse {
-        request.headers.add(HttpHeader.TENANT_ID, tenantService.id().toString())
+        val accessToken = accessTokenHolder.get(httpRequest)
+        if (accessToken != null) {
+            request.headers.add(HttpHeaders.AUTHORIZATION, "Bearer $accessToken")
+        }
         return execution.execute(request, body)
     }
 }

@@ -46,13 +46,14 @@ abstract class TenantAwareEndpointTest : ClientHttpRequestInterceptor {
 
     @BeforeEach
     fun setUp() {
+        ignoreTenantIdHeader = false
         rest.restTemplate.interceptors.add(this)
     }
 
     protected fun download(
         u: String,
         expectedStatusCode: Int,
-        expectedFileName: String,
+        expectedFileName: String?,
         expectedContentType: String,
     ): File? {
         val url = URL(u)
@@ -60,12 +61,13 @@ abstract class TenantAwareEndpointTest : ClientHttpRequestInterceptor {
         try {
             cnn.connect()
 
-            assertEquals(expectedContentType, cnn.contentType)
-            assertEquals("attachment; filename=\"$expectedFileName\"", cnn.getHeaderField("Content-Disposition"))
             assertEquals(expectedStatusCode, cnn.responseCode)
 
             if (expectedStatusCode == 200) {
-                val file = File(folder, expectedFileName)
+                assertEquals(expectedContentType, cnn.contentType)
+                assertEquals("attachment; filename=\"$expectedFileName\"", cnn.getHeaderField("Content-Disposition"))
+
+                val file = File(folder, expectedFileName ?: "")
                 val output = FileOutputStream(file)
                 output.use {
                     IOUtils.copy(cnn.inputStream, output)
