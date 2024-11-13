@@ -1,56 +1,51 @@
-package com.wutsi.koki.portal.rest
+package com.wutsi.koki.portal.security
 
-import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import jakarta.servlet.http.Cookie
+import com.wutsi.koki.portal.rest.AccessTokenHolder
+import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.security.core.context.SecurityContextHolder
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
-class AccessTokenHolderTest {
+class AccessTokenAuthenticationFilterTest {
     private val request = mock<HttpServletRequest>()
     private val response = mock<HttpServletResponse>()
+    private val chain = mock<FilterChain>()
 
+    private val holder = mock<AccessTokenHolder>()
+    private val filter = AccessTokenAuthenticationFilter(holder)
     private val accessToken = "111"
-    private val holder = AccessTokenHolder()
 
     @Test
-    fun get() {
-        val cookies = arrayOf<Cookie>(
-            Cookie("a", "aa"),
-            Cookie(AccessTokenHolder.COOKIE_ACCESS_TOKEN, accessToken)
-        )
-        doReturn(cookies).whenever(request).cookies
+    fun authenticated() {
+        doReturn(accessToken).whenever(holder).get(request)
 
-        assertEquals(accessToken, holder.get(request))
+        filter.doFilter(request, response, chain)
+
+        val auth = SecurityContextHolder.getContext().authentication
+        assertTrue(auth is AccessTokenAuthentication)
+        assertEquals(accessToken, auth.name)
+        assertTrue(auth.isAuthenticated)
+
+        verify(chain).doFilter(request, response)
     }
 
     @Test
-    fun none() {
-        val cookies = arrayOf<Cookie>(
-            Cookie("a", "aa"),
-            Cookie("x", "xx")
-        )
-        doReturn(cookies).whenever(request).cookies
+    fun anonymous() {
+        doReturn(null).whenever(holder).get(request)
 
-        assertNull(holder.get(request))
-    }
+        filter.doFilter(request, response, chain)
 
-    @Test
-    fun set() {
-        holder.set(accessToken, response)
+        val auth = SecurityContextHolder.getContext().authentication
+        assertNull(auth)
 
-        val cookie = argumentCaptor<Cookie>()
-        verify(response).addCookie(cookie.capture())
-
-        assertEquals(accessToken, cookie.firstValue.value)
-        assertEquals(AccessTokenHolder.COOKIE_ACCESS_TOKEN, cookie.firstValue.name)
-        assertEquals(AccessTokenHolder.TTL, cookie.firstValue.maxAge)
-        assertEquals("/", cookie.firstValue.path)
+        verify(chain).doFilter(request, response)
     }
 }

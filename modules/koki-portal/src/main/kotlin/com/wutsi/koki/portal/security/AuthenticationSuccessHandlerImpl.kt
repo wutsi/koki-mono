@@ -1,4 +1,4 @@
-package com.wutsi.blog.app.security.service
+package com.wutsi.koki.portal.security
 
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

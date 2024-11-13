@@ -17,7 +17,6 @@ import kotlin.test.Test
 
 class FormControllerTest : AbstractPageControllerTest() {
     private val formId = "1111"
-    private val activityInstanceId = "2222"
 
     private val forms = listOf(
         FormSummary(
@@ -33,9 +32,115 @@ class FormControllerTest : AbstractPageControllerTest() {
         doReturn(SearchFormResponse(forms)).whenever(kokiForms)
             .search(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
-        val html = """
+        val html = generateFormHtml("http://localhost:$port/forms/$formId")
+        doReturn(html).whenever(kokiForms)
+            .html(any(), anyOrNull(), anyOrNull())
+    }
+
+    @Test
+    fun submit() {
+        // WHEN
+        navigateTo("/forms/$formId")
+
+        // THEN
+        assertCurrentPageIs(PageName.FORM)
+        input("INPUT[name=customer_name]", "Ray Sponsible")
+        input("INPUT[name=customer_email]", "ray.sponsible@gmail.com")
+        click("INPUT[value=S]")
+        click("INPUT[value=IMM]")
+        click("BUTTON")
+
+        verify(kokiFormData).submit(
+            formId,
+            mapOf(
+                "customer_name" to "Ray Sponsible",
+                "customer_email" to "ray.sponsible@gmail.com",
+                "marital_status" to "S",
+                "case_type" to "IMM"
+            )
+        )
+
+        assertCurrentPageIs(PageName.FORM_SAVED)
+    }
+
+    @Test
+    fun `client side validation`() {
+        // WHEN
+        navigateTo("/forms/$formId")
+
+        // THEN
+        assertCurrentPageIs(PageName.FORM)
+        click("BUTTON")
+
+        verify(kokiWorkflowEngine, never()).complete(any(), any())
+
+        assertElementPresent("[name=customer_name]:user-invalid")
+        assertElementPresent("[name=customer_email]:user-invalid")
+        assertElementCount(".user-invalid", 2)
+    }
+
+    @Test
+    fun `form not found`() {
+        // GIVEN
+        val ex = createHttpClientErrorException(404, ErrorCode.FORM_NOT_FOUND)
+        doThrow(ex).whenever(kokiForms).html(any(), anyOrNull(), anyOrNull())
+
+        // WHEN
+        navigateTo("/forms/$formId")
+
+        // THEN
+        assertCurrentPageIs(PageName.ERROR)
+    }
+
+    @Test
+    fun update() {
+        // GIVEN
+        val formDataId = "4094509"
+
+        val html = generateFormHtml("http://localhost:$port/forms/$formId/$formDataId")
+        doReturn(html).whenever(kokiForms)
+            .html(any(), anyOrNull(), anyOrNull())
+
+        // WHEN
+        navigateTo("/forms/$formId/$formDataId")
+
+        // THEN
+        assertCurrentPageIs(PageName.FORM)
+        input("INPUT[name=customer_name]", "Ray Sponsible")
+        input("INPUT[name=customer_email]", "ray.sponsible@gmail.com")
+        click("INPUT[value=S]")
+        click("INPUT[value=IMM]")
+        click("BUTTON")
+
+        verify(kokiFormData).update(
+            formDataId,
+            mapOf(
+                "customer_name" to "Ray Sponsible",
+                "customer_email" to "ray.sponsible@gmail.com",
+                "marital_status" to "S",
+                "case_type" to "IMM"
+            )
+        )
+
+        assertCurrentPageIs(PageName.FORM_SAVED)
+    }
+
+    @Test
+    fun `login required`() {
+        // GIVEN
+        setUpAnonymousUser()
+
+        // WHEN
+        navigateTo("/forms/$formId")
+
+        // THEN
+        assertCurrentPageIs(PageName.LOGIN)
+    }
+
+    private fun generateFormHtml(submitUrl: String): String {
+        return """
             <DIV class='form test'>
-              <FORM method='post' action='http://localhost:$port/forms/$formId?aiid=$activityInstanceId'>
+              <FORM method='post' action='$submitUrl'>
                 <DIV class='form-header'>
                   <H1 class='form-title'>Incident Report</H1>
                 </DIV>
@@ -91,79 +196,5 @@ class FormControllerTest : AbstractPageControllerTest() {
               </FORM>
             </DIV>
         """.trimIndent()
-        doReturn(html).whenever(kokiForms)
-            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
-    }
-
-    @Test
-    fun `submit form`() {
-        // WHEN
-        navigateTo("/forms/$formId?aiid=$activityInstanceId")
-
-        // THEN
-        assertCurrentPageIs(PageName.FORM)
-        input("INPUT[name=customer_name]", "Ray Sponsible")
-        input("INPUT[name=customer_email]", "ray.sponsible@gmail.com")
-        click("INPUT[value=S]")
-        click("INPUT[value=IMM]")
-        click("BUTTON")
-
-        verify(kokiWorkflowEngine).complete(
-            activityInstanceId,
-            mapOf(
-                "customer_name" to "Ray Sponsible",
-                "customer_email" to "ray.sponsible@gmail.com",
-                "marital_status" to "S",
-                "case_type" to "IMM"
-            )
-        )
-
-        assertCurrentPageIs(PageName.FORM_SAVED)
-        assertElementPresent(".success-message")
-    }
-
-    @Test
-    fun `re-submit form`() {
-        // GIVEN
-        val ex = createHttpClientErrorException(400, ErrorCode.WORKFLOW_INSTANCE_STATUS_ERROR)
-        doThrow(ex).whenever(kokiWorkflowEngine).complete(any(), any())
-
-        // WHEN
-        navigateTo("/forms/$formId?aiid=$activityInstanceId")
-
-        assertCurrentPageIs(PageName.FORM)
-        input("INPUT[name=customer_name]", "Ray Sponsible")
-        input("INPUT[name=customer_email]", "ray.sponsible@gmail.com")
-        click("INPUT[value=S]")
-        click("INPUT[value=IMM]")
-        click("BUTTON")
-
-        assertCurrentPageIs(PageName.FORM_SAVED)
-
-        verify(kokiWorkflowEngine).complete(
-            activityInstanceId,
-            mapOf(
-                "customer_name" to "Ray Sponsible",
-                "customer_email" to "ray.sponsible@gmail.com",
-                "marital_status" to "S",
-                "case_type" to "IMM"
-            )
-        )
-    }
-
-    @Test
-    fun `client side validation`() {
-        // WHEN
-        navigateTo("/forms/$formId?aiid=$activityInstanceId")
-
-        // THEN
-        assertCurrentPageIs(PageName.FORM)
-        click("BUTTON")
-
-        verify(kokiWorkflowEngine, never()).complete(any(), any())
-
-        assertElementPresent("[name=customer_name]:user-invalid")
-        assertElementPresent("[name=customer_email]:user-invalid")
-        assertElementCount(".user-invalid", 2)
     }
 }

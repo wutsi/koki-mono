@@ -8,6 +8,8 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.form.dto.SearchFormResponse
+import com.wutsi.koki.portal.rest.AccessTokenHolder
+import com.wutsi.koki.sdk.KokiFormData
 import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiWorkflowEngine
 import org.junit.jupiter.api.AfterEach
@@ -37,6 +39,10 @@ import kotlin.test.assertTrue
 @DirtiesContext
 @ActiveProfiles("qa")
 abstract class AbstractPageControllerTest {
+    companion object {
+        const val USER_ID = 11L
+    }
+
     @LocalServerPort
     protected val port: Int = 0
 
@@ -46,15 +52,33 @@ abstract class AbstractPageControllerTest {
     protected lateinit var kokiForms: KokiForms
 
     @MockBean
+    protected lateinit var kokiFormData: KokiFormData
+
+    @MockBean
     protected lateinit var kokiWorkflowEngine: KokiWorkflowEngine
+
+    @MockBean
+    protected lateinit var accessTokenHolder: AccessTokenHolder
 
     @Autowired
     protected lateinit var objectMapper: ObjectMapper
+
+    fun setUpLoggedInUser(userId: Long) {
+        val accessToken: String =
+            "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJpc3MiOiJLb2tpIiwic3ViIjoiSGVydmUgVGNoZXBhbm5vdSIsInVzZXJJZCI6MjA0LCJ0ZW5hbnRJZCI6MSwiaWF0IjoxNzMxNTA5MDM0LCJleHAiOjE3MzE1OTU0MzR9."
+
+        doReturn(accessToken).whenever(accessTokenHolder).get(any())
+    }
+
+    fun setUpAnonymousUser() {
+        doReturn(null).whenever(accessTokenHolder).get(any())
+    }
 
     @BeforeEach
     fun setUp() {
         setupSelenium()
         setupDefaultApiResponses()
+        setUpLoggedInUser(USER_ID)
     }
 
     private fun setupSelenium() {

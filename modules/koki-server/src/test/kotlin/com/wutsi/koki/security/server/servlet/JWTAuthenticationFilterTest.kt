@@ -101,7 +101,7 @@ class JWTAuthenticationFilterTest {
         val ex = assertThrows<AccessDeniedException> {
             filter.doFilter(request, response, filterChain)
         }
-        assertEquals(ErrorCode.AUTHENTICATION_TENANT_NOT_VALID, ex.message)
+        assertEquals(ErrorCode.AUTHORIZATION_TENANT_MISMATCH, ex.message)
     }
 
     @Test
@@ -113,6 +113,6 @@ class JWTAuthenticationFilterTest {
         val ex = assertThrows<AccessDeniedException> {
             filter.doFilter(request, response, filterChain)
         }
-        assertEquals(ErrorCode.AUTHENTICATION_TOKEN_EXPIRED, ex.message)
+        assertEquals(ErrorCode.AUTHORIZATION_TOKEN_EXPIRED, ex.message)
     }
 }

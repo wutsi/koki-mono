@@ -1,31 +1,33 @@
 package com.wutsi.koki.portal.rest
 
-import com.wutsi.koki.portal.rest.AuthenticationService.Companion.COOKIE_ACCESS_TOKEN
+import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpRequest
-import org.springframework.http.client.ClientHttpRequestExecution
-import org.springframework.http.client.ClientHttpRequestInterceptor
-import org.springframework.http.client.ClientHttpResponse
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.stereotype.Service
 
 @Service
-class AuthorizationInterceptor(private val httpRequest: HttpServletRequest) : ClientHttpRequestInterceptor {
-    override fun intercept(
-        request: HttpRequest,
-        body: ByteArray,
-        execution: ClientHttpRequestExecution
-    ): ClientHttpResponse {
-        val accessToken = getAccessToken()
-        if (accessToken != null) {
-            request.headers.add(HttpHeaders.AUTHORIZATION, "Bearer $accessToken")
-        }
-        return execution.execute(request, body)
+class AccessTokenHolder {
+    companion object {
+        const val COOKIE_ACCESS_TOKEN = "__atk"
+        const val TTL = 86400
     }
 
-    fun getAccessToken(): String? {
-        val cookie = httpRequest.cookies.find { cookie -> cookie.name == COOKIE_ACCESS_TOKEN }
+    fun set(accessToken: String, request: HttpServletRequest, response: HttpServletResponse) {
+        val cookie = findCookie(request)
+            ?: Cookie(COOKIE_ACCESS_TOKEN, accessToken)
+
+        cookie.value = accessToken
+        cookie.maxAge = TTL
+        cookie.path = "/"
+        response.addCookie(cookie)
+    }
+
+    fun get(request: HttpServletRequest): String? {
+        val cookie = findCookie(request)
         return cookie?.value
     }
 
+    private fun findCookie(request: HttpServletRequest): Cookie? {
+        return request.cookies.find { cookie -> cookie.name == COOKIE_ACCESS_TOKEN }
+    }
 }

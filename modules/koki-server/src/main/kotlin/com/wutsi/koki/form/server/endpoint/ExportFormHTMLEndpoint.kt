@@ -1,13 +1,16 @@
 package com.wutsi.koki.form.server.endpoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.form.dto.FormContent
+import com.wutsi.koki.form.server.domain.FormEntity
 import com.wutsi.koki.form.server.generator.html.Context
 import com.wutsi.koki.form.server.generator.html.HTMLFormGenerator
+import com.wutsi.koki.form.server.service.FormDataService
 import com.wutsi.koki.form.server.service.FormService
-import com.wutsi.koki.workflow.server.service.ActivityInstanceService
 import jakarta.servlet.http.HttpServletResponse
 import org.apache.commons.io.IOUtils
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ContentDisposition
 import org.springframework.http.HttpHeaders
@@ -22,52 +25,69 @@ import java.io.StringWriter
 @RequestMapping
 class ExportFormHTMLEndpoint(
     private val service: FormService,
+    private val formDataService: FormDataService,
     private val generator: HTMLFormGenerator,
     private val objectMapper: ObjectMapper,
-    private val activityInstanceService: ActivityInstanceService,
 
     @Value("\${koki.portal-url}") private val portalUrl: String,
 ) {
-    @GetMapping("/v1/forms/html/{tenant-id}.{id}.html")
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(ExportFormHTMLEndpoint::class.java)
+    }
+
+    @GetMapping("/v1/forms/html/{tenant-id}/{form-id}.html")
     fun html(
         @PathVariable(name = "tenant-id") tenantId: Long,
-        @PathVariable id: String,
-        @RequestParam(required = false, name = "aiid") activityInstanceId: String? = null,
+        @PathVariable(name = "form-id") formId: String,
         @RequestParam(required = false, name = "role-name") roleName: String? = null,
         response: HttpServletResponse
     ) {
-        val context = createContext(id, activityInstanceId, roleName, tenantId)
-        val writer = StringWriter()
-        val form = service.get(id, tenantId)
-        val content = objectMapper.readValue(form.content, FormContent::class.java)
-        generator.generate(content, context, writer)
+        html(tenantId, formId, null, roleName, response)
+    }
 
+    @GetMapping("/v1/forms/html/{tenant-id}/{form-id}/{form-data-id}.html")
+    fun html(
+        @PathVariable(name = "tenant-id") tenantId: Long,
+        @PathVariable(name = "form-id") formId: String,
+        @PathVariable(name = "form-data-id") formDataId: String?,
+        @RequestParam(required = false, name = "role-name") roleName: String? = null,
+        response: HttpServletResponse
+    ) {
         response.contentType = "text/html"
-        response.setHeader(
-            HttpHeaders.CONTENT_DISPOSITION,
-            ContentDisposition.attachment().filename("$tenantId.$id.html").build().toString()
-        )
-        IOUtils.copy(writer.toString().byteInputStream(), response.outputStream)
+        try {
+            val form = service.get(formId, tenantId)
+            val context = createContext(form, formDataId, roleName)
+            val writer = StringWriter()
+            val content = objectMapper.readValue(form.content, FormContent::class.java)
+            generator.generate(content, context, writer)
+
+            val filename = formDataId ?: formId
+            response.setHeader(
+                HttpHeaders.CONTENT_DISPOSITION,
+                ContentDisposition.attachment().filename("$filename.html").build().toString()
+            )
+            IOUtils.copy(writer.toString().byteInputStream(), response.outputStream)
+        } catch (ex: NotFoundException) {
+            LOGGER.warn("Unable to generate html", ex)
+            response.status = 404
+        }
     }
 
     private fun createContext(
-        id: String,
-        activityInstanceId: String?,
+        form: FormEntity,
+        formDataId: String?,
         roleName: String?,
-        tenantId: Long
     ): Context {
-        val activityInstance = activityInstanceId?.let { id ->
-            activityInstanceService.get(id, tenantId)
-        }
-        val submitUrl = StringBuilder("$portalUrl/forms/$id")
-        if (activityInstanceId != null) {
-            submitUrl.append("?aiid=$activityInstanceId")
-        }
+        val data = formDataId?.let { formDataService.get(formDataId, form).data }
+
+        val submitUrl = StringBuilder("$portalUrl/forms/${form.id}")
+        formDataId?.let { submitUrl.append("/$formDataId") }
+
         return Context(
             submitUrl = submitUrl.toString(),
             roleName = roleName,
-            data = activityInstance?.instance?.state?.let { state ->
-                objectMapper.readValue(state, Map::class.java) as Map<String, String>
+            data = data?.let { data ->
+                objectMapper.readValue(data, Map::class.java) as Map<String, Any>
             } ?: emptyMap(),
         )
     }

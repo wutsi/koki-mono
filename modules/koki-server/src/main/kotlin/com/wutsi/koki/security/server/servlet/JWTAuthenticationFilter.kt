@@ -45,7 +45,7 @@ class JWTAuthenticationFilter(private val authenticationService: AuthenticationS
                 auth.isAuthenticated = true
                 SecurityContextHolder.setContext(SecurityContextImpl(auth))
             } catch (ex: TokenExpiredException) {
-                throw AccessDeniedException(ErrorCode.AUTHENTICATION_TOKEN_EXPIRED, ex)
+                throw AccessDeniedException(ErrorCode.AUTHORIZATION_TOKEN_EXPIRED, ex)
             }
         }
         filterChain.doFilter(request, response)
@@ -63,7 +63,7 @@ class JWTAuthenticationFilter(private val authenticationService: AuthenticationS
     private fun validate(principal: JWTPrincipal, request: HttpServletRequest) {
         val tenantId = request.getHeader(HttpHeader.TENANT_ID)
         if (tenantId != null && !tenantId.equals(principal.getTenantId().toString())) {
-            throw AccessDeniedException(ErrorCode.AUTHENTICATION_TENANT_NOT_VALID)
+            throw AccessDeniedException(ErrorCode.AUTHORIZATION_TENANT_MISMATCH)
         }
     }
 }

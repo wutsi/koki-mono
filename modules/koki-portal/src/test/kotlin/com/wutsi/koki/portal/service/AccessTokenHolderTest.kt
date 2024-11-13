@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.security
+package com.wutsi.koki.portal.service
 
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn

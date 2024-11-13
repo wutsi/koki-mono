@@ -5,54 +5,34 @@
 </head>
 
 <body>
-<div th:utext="${formHtml}"></div>
+
+<div>
+    <form class="form" method="post" th:action="@{/login/submit}" th:object="${form}">
+        <div class="form-body">
+            <div class="section">
+                <div class="section-body">
+                    <div class="section-item" th:if="${failed}">
+                        <div class="alert alert-danger">
+                            Authentication failed!
+                        </div>
+                    </div>
+                    <div class="section-item">
+                        <label class="title">Email</label>
+                        <input name="required" required th:field="*{email}" type="email"/>
+                    </div>
+                    <div class="section-item">
+                        <label class="title">Password</label>
+                        <input name="required" required th:field="*{password}" type="password"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-footer">
+            <button type="submit">Login</button>
+        </div>
+    </form>
+</div>
+
 </body>
 
-<script>
-    // Form validation
-    const form = document.querySelector('form');
-    if (form) {
-        console.log('Registering the validation to ' + form);
-        form.noValidate = true;
-        form.addEventListener('submit', validateForm);
-    } else {
-        console.log('Oopsss... no form found!');
-    }
-
-    function validateForm(e) {
-        console.log('validating form...');
-
-        const form = e.target;
-        const success1 = form.checkValidity();
-        const success2 = validateAllCheckboxGroups();
-        if (!success1 || !success2) {
-            e.preventDefault();
-        }
-    }
-
-    function validateAllCheckboxGroups() {
-        let result = true;
-        document.querySelectorAll('.checkbox-container,.radio-container')
-            .forEach((group) => {
-                const name = group.querySelector('input').getAttribute('name');
-                if (group.hasAttribute('required')) {
-                    const size = group.querySelectorAll('input[type=checkbox]:checked,input[type=radio]:checked').length;
-                    if (size > 0) {
-                        console.log(name + ' - valid. ' + size + ' item(s) selected');
-                        group.classList.remove('user-invalid');
-                        group.removeEventListener('click', validateAllCheckboxGroups);
-                    } else {
-                        console.log(name + ' - NOT valid. ' + size + ' item(s) selected');
-                        group.classList.add('user-invalid');
-                        group.addEventListener('click', validateAllCheckboxGroups);
-                        result = false;
-                    }
-                }
-            });
-
-        console.log(' checkbox validation: ' + result);
-        return result;
-    }
-
-</script>
 </html>
