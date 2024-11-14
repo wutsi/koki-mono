@@ -130,3 +130,7 @@ logging:
 
 koki:
     portal-url: http://localhost:8081
+    event-publisher:
+        spring:
+            thread-pool-size: 16
+
