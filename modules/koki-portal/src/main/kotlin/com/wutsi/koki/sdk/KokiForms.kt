@@ -23,6 +23,8 @@ class KokiForms(
         formId: String,
         formDataId: String? = null,
         roleName: String? = null,
+        workflowInstanceId: String? = null,
+        activityInstanceId: String? = null,
     ): String {
         val tenantId = tenantProvider.id()
         val path = if (formDataId == null) {
@@ -34,7 +36,9 @@ class KokiForms(
         val url = urlBuilder.build(
             path,
             mapOf(
-                "role-name" to roleName
+                "role-name" to roleName,
+                "workflow-instance-id" to workflowInstanceId,
+                "activity-instance-id" to activityInstanceId,
             )
         )
         return rest.getForEntity(url, String::class.java).body

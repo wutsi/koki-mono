@@ -35,7 +35,7 @@ class FormControllerTest : AbstractPageControllerTest() {
 
         val html = generateFormHtml("http://localhost:$port/forms/$formId")
         doReturn(html).whenever(kokiForms)
-            .html(any(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
     }
 
     @Test
@@ -84,7 +84,7 @@ class FormControllerTest : AbstractPageControllerTest() {
     fun `form not found`() {
         // GIVEN
         val ex = createHttpClientErrorException(404, ErrorCode.FORM_NOT_FOUND)
-        doThrow(ex).whenever(kokiForms).html(any(), anyOrNull(), anyOrNull())
+        doThrow(ex).whenever(kokiForms).html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         // WHEN
         navigateTo("/forms/$formId")
@@ -100,7 +100,7 @@ class FormControllerTest : AbstractPageControllerTest() {
 
         val html = generateFormHtml("http://localhost:$port/forms/$formId/$formDataId")
         doReturn(html).whenever(kokiForms)
-            .html(any(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         // WHEN
         navigateTo("/forms/$formId/$formDataId")

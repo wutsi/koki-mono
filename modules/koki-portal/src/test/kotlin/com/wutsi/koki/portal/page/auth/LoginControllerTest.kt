@@ -80,7 +80,7 @@ class LoginControllerTest : AbstractPageControllerTest() {
         doReturn(GetFormResponse(form)).whenever(kokiForms).get(any())
 
         val html = generateFormHtml()
-        doReturn(html).whenever(kokiForms).html(any(), anyOrNull(), anyOrNull())
+        doReturn(html).whenever(kokiForms).html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         // WHEN
         navigateTo("/forms/4304309")

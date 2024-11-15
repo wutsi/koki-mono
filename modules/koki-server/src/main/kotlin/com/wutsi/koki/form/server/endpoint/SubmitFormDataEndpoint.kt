@@ -29,7 +29,8 @@ class SubmitFormDataEndpoint(
         eventPublisher.publish(
             FormSubmittedEvent(
                 formId = request.formId,
-                formDataId = formData.id
+                formDataId = formData.id,
+                activityInstanceId = request.activityInstanceId,
             )
         )
         return response

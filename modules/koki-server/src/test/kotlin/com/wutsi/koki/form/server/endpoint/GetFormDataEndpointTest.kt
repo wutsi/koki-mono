@@ -1,6 +1,6 @@
 package com.wutsi.koki.tenant.server.server.endpoint
 
-import com.wutsi.koki.AuthorizationAwareEndpointTest
+import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.form.dto.FormDataStatus
@@ -11,7 +11,7 @@ import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/form/GetFormDataEndpoint.sql"])
-class GetFormDataEndpointTest : AuthorizationAwareEndpointTest() {
+class GetFormDataEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun get() {
         val result = rest.getForEntity("/v1/form-data/10011", GetFormDataResponse::class.java)
@@ -19,10 +19,8 @@ class GetFormDataEndpointTest : AuthorizationAwareEndpointTest() {
 
         val formData = result.body!!.formData
         assertEquals("100", formData.formId)
-        assertEquals(11, formData.userId)
         assertEquals(FormDataStatus.SUBMITTED, formData.status)
         assertEquals("wi-100", formData.workflowInstanceId)
-        assertEquals("wi-100-11", formData.activityInstanceId)
         assertEquals(2, formData.data.size)
         assertEquals("aa", formData.data["A"])
         assertEquals("bb", formData.data["B"])

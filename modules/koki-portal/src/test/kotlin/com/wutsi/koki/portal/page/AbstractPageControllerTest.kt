@@ -28,7 +28,6 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpStatusCode
 import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.context.ActiveProfiles
 import org.springframework.web.client.HttpClientErrorException
 import java.nio.charset.Charset
 import kotlin.test.assertEquals
@@ -36,9 +35,8 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext
-@ActiveProfiles("qa")
 abstract class AbstractPageControllerTest {
     companion object {
         const val USER_ID = 11L
