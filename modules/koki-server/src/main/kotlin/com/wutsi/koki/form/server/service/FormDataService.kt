@@ -43,35 +43,6 @@ class FormDataService(
         return formData
     }
 
-    fun search(
-        tenantId: Long,
-        ids: List<String>,
-        workflowInstanceId: String?,
-        limit: Int,
-        offset: Int,
-    ): List<FormDataEntity> {
-        val jql = StringBuilder("SELECT F FROM FormDataEntity F")
-        jql.append(" WHERE F.tenant.id = :tenantId")
-        if (ids.isNotEmpty()) {
-            jql.append(" AND F.id IN :ids")
-        }
-        if (workflowInstanceId != null) {
-            jql.append(" AND F.workflowInstanceId = :workflowInstanceId")
-        }
-
-        val query = em.createQuery(jql.toString(), FormDataEntity::class.java)
-        query.setParameter("tenantId", tenantId)
-        if (ids.isNotEmpty()) {
-            query.setParameter("ids", ids)
-        }
-        if (workflowInstanceId != null) {
-            query.setParameter("workflowInstanceId", workflowInstanceId)
-        }
-        query.firstResult = offset
-        query.maxResults = limit
-        return query.resultList
-    }
-
     @Transactional
     fun submit(request: SubmitFormDataRequest, tenantId: Long): FormDataEntity {
         val form = formService.get(request.formId, tenantId)
