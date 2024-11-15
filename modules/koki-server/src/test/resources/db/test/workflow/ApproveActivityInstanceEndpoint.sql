@@ -48,8 +48,8 @@ INSERT INTO T_WORKFLOW_INSTANCE(id, tenant_fk, workflow_fk, approver_fk, status,
            ('wi-100-03', 1, 100, null, 2, now()),
            ('wi-100-04', 1, 100, null, 1, now()),
            ('wi-100-05', 1, 100, null, 2, now()),
-           ('wi-110-01', 1, 110, 100,  2, now()),
-           ('wi-110-02', 1, 110, 100,  2, now());
+           ('wi-110-01', 1, 110, 10,  2, now()),
+           ('wi-110-02', 1, 110, 10,  2, now());
 
 INSERT INTO T_WI_ACTIVITY(id, tenant_fk, workflow_instance_fk, activity_fk, assignee_fk, approval, approver_fk, status, started_at, done_at)
     VALUES ('wi-100-01-start-done',      1, 'wi-100-01', 100, null, 0, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
