@@ -26,7 +26,8 @@ data class WorkflowInstanceEntity(
     val workflowId: Long = -1,
 
     @BatchSize(20)
-    @OneToMany(mappedBy = "workflowInstanceId")
+    @OneToMany
+    @JoinColumn(name = "workflow_instance_fk")
     val activityInstances: MutableList<ActivityInstanceEntity> = mutableListOf(),
 
     @BatchSize(20)

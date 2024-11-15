@@ -55,7 +55,7 @@ class LoginEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun `invalid password`() {
         val request = LoginRequest(
-            email = "ray.sponsible@hotmail.com",
+            email = "ray.sponsible@gmail.com",
             password = "xxxx"
         )
 

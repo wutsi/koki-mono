@@ -2,7 +2,6 @@ package com.wutsi.koki.security.server.service
 
 import com.auth0.jwt.interfaces.DecodedJWT
 import java.security.Principal
-import java.util.Date
 
 open class JWTPrincipal(private val jwt: DecodedJWT) : Principal {
     companion object {
@@ -24,9 +23,5 @@ open class JWTPrincipal(private val jwt: DecodedJWT) : Principal {
 
     fun getSubject(): String {
         return jwt.subject
-    }
-
-    fun expired(): Boolean {
-        return jwt.expiresAt.before(Date())
     }
 }

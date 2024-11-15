@@ -3,55 +3,45 @@ package com.wutsi.koki.tenant.server.server.endpoint
 import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.workflow.dto.GetWorkflowInstanceResponse
-import com.wutsi.koki.workflow.dto.Participant
+import com.wutsi.koki.workflow.dto.ApprovalStatus
+import com.wutsi.koki.workflow.dto.GetActivityInstanceResponse
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/workflow/GetWorkflowInstanceEndpoint.sql"])
-class GetWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/workflow/GetActivityInstanceEndpoint.sql"])
+class GetActivityInstanceEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun get() {
-        val result = rest.getForEntity("/v1/workflow-instances/wi-100-01", GetWorkflowInstanceResponse::class.java)
+        val result =
+            rest.getForEntity("/v1/activity-instances/wi-100-01-start-done", GetActivityInstanceResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val workflowInstance = result.body!!.workflowInstance
-        assertEquals(100L, workflowInstance.workflowId)
-        assertEquals(101L, workflowInstance.approverUserId)
-        assertEquals(WorkflowStatus.RUNNING, workflowInstance.status)
-        assertEquals(
-            mapOf(
-                "customer_name" to "Ray Sponsible",
-                "customer_email" to "ray.sponsible@gmail.com"
-            ),
-            workflowInstance.state,
-        )
-        assertEquals(
-            mapOf(
-                "order_id" to "123456",
-            ),
-            workflowInstance.parameters,
-        )
-        assertEquals(
-            listOf(
-                Participant(userId = 100, roleId = 10),
-                Participant(userId = 101, roleId = 11),
-            ),
-            workflowInstance.participants.sortedBy { it.userId },
-        )
-
-        assertEquals(2, workflowInstance.activityInstances.size)
+        val activityInstance = result.body!!.activityInstance
+        assertEquals(ApprovalStatus.PENDING, activityInstance.approval)
+        assertEquals(WorkflowStatus.DONE, activityInstance.status)
+        assertEquals(100L, activityInstance.assigneeUserId)
+        assertEquals(101L, activityInstance.approverUserId)
+        assertEquals("START", activityInstance.activity.name)
+        assertEquals("w100", activityInstance.workflow.name)
     }
 
     @Test
-    fun `get workflow not found`() {
-        val result = rest.getForEntity("/v1/workflow-instances/999", ErrorResponse::class.java)
+    fun `get activity not found`() {
+        val result = rest.getForEntity("/v1/activity-instances/999", ErrorResponse::class.java)
 
         assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.WORKFLOW_INSTANCE_NOT_FOUND, result.body?.error?.code)
+        assertEquals(ErrorCode.WORKFLOW_INSTANCE_ACTIVITY_NOT_FOUND, result.body?.error?.code)
+    }
+
+    @Test
+    fun `get activity from another tenant`() {
+        val result = rest.getForEntity("/v1/activity-instances/wi-200-01-start-done", ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
+        assertEquals(ErrorCode.WORKFLOW_INSTANCE_ACTIVITY_NOT_FOUND, result.body?.error?.code)
     }
 }
