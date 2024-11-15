@@ -1,10 +1,8 @@
 package com.wutsi.koki.form.server.domain
 
-import com.wutsi.koki.tenant.server.domain.TenantEntity
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import java.util.Date
 
@@ -14,9 +12,8 @@ data class FormEntity(
     @Id
     val id: String? = null,
 
-    @ManyToOne
-    @JoinColumn(name = "tenant_fk")
-    val tenant: TenantEntity = TenantEntity(),
+    @Column(name = "tenant_fk")
+    val tenantId: Long = -1,
 
     var name: String = "",
     var title: String = "",

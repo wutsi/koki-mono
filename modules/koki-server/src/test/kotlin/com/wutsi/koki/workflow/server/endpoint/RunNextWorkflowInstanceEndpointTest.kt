@@ -68,16 +68,16 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
 
         val activityInstance = activityInstanceDao.findById(activityInstanceIds[0]).get()
         assertEquals(WorkflowStatus.RUNNING, activityInstance.status)
-        assertEquals(101L, activityInstance.activity.id)
-        assertEquals(101L, activityInstance.assignee?.id)
-        assertNull(activityInstance.approver)
+        assertEquals(101L, activityInstance.activityId)
+        assertEquals(101L, activityInstance.assigneeId)
+        assertNull(activityInstance.approverId)
         assertEquals(ApprovalStatus.UNKNOWN, activityInstance.approval)
 
         verify(activityExecutorProvider).get(any())
         verify(expressionEvaluator, never()).evaluate(any<FlowEntity>(), any())
 
         val workflowInstance = instanceDao.findById("wi-100-01").get()
-        val activityInstances = activityInstanceDao.findByInstance(workflowInstance)
+        val activityInstances = activityInstanceDao.findByWorkflowInstanceId(workflowInstance.id!!)
         assertEquals(2, activityInstances.size)
     }
 
@@ -94,20 +94,20 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         val activityInstanceIds = result.body!!.activityInstanceIds
         assertEquals(2, activityInstanceIds.size)
 
-        val activityInstances = activityInstanceDao.findAllById(activityInstanceIds).sortedBy { it.activity.id }
+        val activityInstances = activityInstanceDao.findAllById(activityInstanceIds).sortedBy { it.activityId }
         val activityInstance1 = activityInstances[0]
         assertEquals(WorkflowStatus.RUNNING, activityInstance1.status)
-        assertEquals(102L, activityInstance1.activity.id)
+        assertEquals(102L, activityInstance1.activityId)
 
         val activityInstance2 = activityInstances[1]
         assertEquals(WorkflowStatus.RUNNING, activityInstance2.status)
-        assertEquals(103L, activityInstance2.activity.id)
+        assertEquals(103L, activityInstance2.activityId)
 
         verify(activityExecutorProvider, times(2)).get(any())
         verify(expressionEvaluator).evaluate(any<FlowEntity>(), any())
 
         val workflowInstance = instanceDao.findById("wi-100-02").get()
-        assertEquals(4, activityInstanceDao.findByInstance(workflowInstance).size)
+        assertEquals(4, activityInstanceDao.findByWorkflowInstanceId(workflowInstance.id!!).size)
     }
 
     @Test
@@ -175,16 +175,16 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         val activityInstanceIds = result.body!!.activityInstanceIds
         assertEquals(1, activityInstanceIds.size)
 
-        val activityInstances = activityInstanceDao.findAllById(activityInstanceIds).sortedBy { it.activity.id }
+        val activityInstances = activityInstanceDao.findAllById(activityInstanceIds).sortedBy { it.activityId }
         val activityInstance1 = activityInstances[0]
         assertEquals(WorkflowStatus.RUNNING, activityInstance1.status)
-        assertEquals(112L, activityInstance1.activity.id)
-        assertNull(activityInstance1.assignee?.id)
-        assertNull(activityInstance1.approver)
+        assertEquals(112L, activityInstance1.activityId)
+        assertNull(activityInstance1.assigneeId)
+        assertNull(activityInstance1.approverId)
         assertEquals(ApprovalStatus.UNKNOWN, activityInstance1.approval)
 
         val workflowInstance = instanceDao.findById("wi-110-01").get()
-        assertEquals(3, activityInstanceDao.findByInstance(workflowInstance).size)
+        assertEquals(3, activityInstanceDao.findByWorkflowInstanceId(workflowInstance.id!!).size)
     }
 
     @Test

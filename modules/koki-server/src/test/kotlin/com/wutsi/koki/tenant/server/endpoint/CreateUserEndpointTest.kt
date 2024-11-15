@@ -59,7 +59,7 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals(UserStatus.ACTIVE, user.status)
         assertEquals(36, user.salt.length)
         assertEquals(HASHED_PASSWORD, user.password)
-        assertEquals(TENANT_ID, user.tenant.id)
+        assertEquals(TENANT_ID, user.tenantId)
 
         verify(passwordService).hash(request.password, user.salt)
     }
@@ -114,7 +114,7 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals(UserStatus.ACTIVE, user.status)
         assertEquals(36, user.salt.length)
         assertEquals(HASHED_PASSWORD, user.password)
-        assertEquals(TENANT_ID, user.tenant.id)
+        assertEquals(TENANT_ID, user.tenantId)
 
         verify(passwordService).hash(request.password, user.salt)
     }

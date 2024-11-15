@@ -105,7 +105,7 @@ class RoleCSVImporter(
     private fun add(tenant: TenantEntity, record: CSVRecord) {
         service.save(
             RoleEntity(
-                tenant = tenant,
+                tenantId = tenant.id!!,
                 name = record.get(CSV_HEADER_NAME),
                 description = record.get(CSV_HEADER_DESCRIPTION).ifEmpty { null },
                 active = record.get(CSV_HEADER_ACTIVE).lowercase() == "yes",

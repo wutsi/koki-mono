@@ -44,7 +44,8 @@ class SubmitFormDataEndpointTest : TenantAwareEndpointTest() {
 
         val formDataId = result.body!!.formDataId
         val formData = dao.findById(formDataId).get()
-        assertEquals(request.formId, formData.form.id)
+        assertEquals(TENANT_ID, formData.tenantId)
+        assertEquals(request.formId, formData.formId)
         assertEquals(request.workflowInstanceId, formData.workflowInstanceId)
         assertEquals(FormDataStatus.SUBMITTED, formData.status)
         assertEquals("{\"A\": \"aa\", \"B\": \"bb\"}", formData.data)

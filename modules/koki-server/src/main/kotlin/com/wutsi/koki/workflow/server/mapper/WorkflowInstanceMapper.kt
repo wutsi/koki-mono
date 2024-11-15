@@ -12,11 +12,12 @@ class WorkflowInstanceMapper(
     private val activityInstanceMapper: ActivityInstanceMapper,
     private val objectMapper: ObjectMapper,
 ) {
+    @Suppress("UNCHECKED_CAST")
     fun toWorkflowInstance(entity: WorkflowInstanceEntity): WorkflowInstance {
         return WorkflowInstance(
             id = entity.id!!,
-            workflowId = entity.workflow.id!!,
-            approverUserId = entity.approver?.id,
+            workflowId = entity.workflowId,
+            approverUserId = entity.approverId,
             createdAt = entity.createdAt,
             startedAt = entity.startedAt,
             status = entity.status,
@@ -30,8 +31,8 @@ class WorkflowInstanceMapper(
             } ?: emptyMap(),
             participants = entity.participants.map { participant ->
                 Participant(
-                    roleId = participant.role.id!!,
-                    userId = participant.user.id!!
+                    roleId = participant.roleId,
+                    userId = participant.userId
                 )
             },
             activityInstances = entity.activityInstances.map { activityInstance ->
@@ -43,8 +44,8 @@ class WorkflowInstanceMapper(
     fun toWorkflowInstanceSummary(entity: WorkflowInstanceEntity): WorkflowInstanceSummary {
         return WorkflowInstanceSummary(
             id = entity.id ?: "",
-            workflowId = entity.workflow.id ?: -1,
-            approverUserId = entity.approver?.id,
+            workflowId = entity.workflowId,
+            approverUserId = entity.approverId,
             createdAt = entity.createdAt,
             startedAt = entity.startedAt,
             status = entity.status,

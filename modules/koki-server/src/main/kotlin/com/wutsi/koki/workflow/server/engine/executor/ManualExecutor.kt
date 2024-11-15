@@ -14,7 +14,7 @@ class ManualExecutor : ActivityExecutor {
 
     override fun execute(activityInstance: ActivityInstanceEntity, engine: WorkflowEngine) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(">>> ${activityInstance.instance.id} > ${activityInstance.id} executing")
+            LOGGER.debug(">>> ${activityInstance.workflowInstanceId} > ${activityInstance.id} executing")
         }
     }
 }

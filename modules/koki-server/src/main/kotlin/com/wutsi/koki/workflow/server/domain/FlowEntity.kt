@@ -1,5 +1,6 @@
 package com.wutsi.koki.workflow.server.domain
 
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -15,9 +16,8 @@ data class FlowEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    @ManyToOne
-    @JoinColumn(name = "workflow_fk")
-    val workflow: WorkflowEntity = WorkflowEntity(),
+    @Column(name = "workflow_fk")
+    val workflowId: Long = -1,
 
     @ManyToOne
     @JoinColumn(name = "from_fk")

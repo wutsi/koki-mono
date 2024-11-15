@@ -115,7 +115,7 @@ class AttributeCSVImporter(
     private fun add(tenant: TenantEntity, record: CSVRecord) {
         service.save(
             AttributeEntity(
-                tenant = tenant,
+                tenantId = tenant.id!!,
                 name = record.get(CSV_HEADER_NAME),
                 type = AttributeType.valueOf(record.get(CSV_HEADER_TYPE).uppercase()),
                 label = record.get(CSV_HEADER_LABEL).ifEmpty { null },

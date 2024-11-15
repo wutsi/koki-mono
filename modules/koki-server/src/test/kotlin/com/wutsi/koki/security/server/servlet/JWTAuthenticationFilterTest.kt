@@ -8,7 +8,6 @@ import com.wutsi.koki.common.dto.HttpHeader
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.security.server.service.AuthenticationService
 import com.wutsi.koki.security.server.service.JWTPrincipal
-import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import com.wutsi.koki.tenant.server.service.PasswordService
 import com.wutsi.koki.tenant.server.service.UserService
@@ -40,9 +39,7 @@ class JWTAuthenticationFilterTest {
         id = 11L,
         displayName = "Ray Sponsible",
         email = "ray.sponsible@gmail.com",
-        tenant = TenantEntity(
-            id = 1L
-        )
+        tenantId = 1L
     )
 
     private var accessToken: String? = null
@@ -58,7 +55,7 @@ class JWTAuthenticationFilterTest {
     fun authenticated() {
         accessToken = authenticationService.createAccessToken(user)
         doReturn("Bearer $accessToken").whenever(request).getHeader(HttpHeaders.AUTHORIZATION)
-        doReturn(user.tenant.id.toString()).whenever(request).getHeader(HttpHeader.TENANT_ID)
+        doReturn(user.tenantId.toString()).whenever(request).getHeader(HttpHeader.TENANT_ID)
 
         filter.doFilter(request, response, filterChain)
 
@@ -70,7 +67,7 @@ class JWTAuthenticationFilterTest {
 
         val principal = context.authentication.principal as JWTPrincipal
         assertEquals(user.id, principal.getUserId())
-        assertEquals(user.tenant.id, principal.getTenantId())
+        assertEquals(user.tenantId, principal.getTenantId())
         assertEquals(user.displayName, principal.getSubject())
     }
 

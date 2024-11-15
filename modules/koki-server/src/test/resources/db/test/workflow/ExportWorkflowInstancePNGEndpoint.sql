@@ -22,6 +22,6 @@ INSERT INTO T_FLOW(workflow_fk, from_fk, to_fk, expression)
 INSERT INTO T_WORKFLOW_INSTANCE(id, tenant_fk, workflow_fk, approver_fk, status, start_at)
     VALUES ('wi-100-01', 1, 100, null, 2, now());
 
-INSERT INTO T_WI_ACTIVITY(id, instance_fk, activity_fk, assignee_fk, approval, approver_fk, status, started_at, done_at)
-    VALUES ('wi-100-01-start-done',      'wi-100-01', 100, null, 0, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
-           ('wi-100-01-working-running', 'wi-100-01', 101, null, 0, null, 2, '2020-01-10 12:30', null);
+INSERT INTO T_WI_ACTIVITY(id, tenant_fk, workflow_instance_fk, activity_fk, assignee_fk, approval, approver_fk, status, started_at, done_at)
+    VALUES ('wi-100-01-start-done',      1, 'wi-100-01', 100, null, 0, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
+           ('wi-100-01-working-running', 1, 'wi-100-01', 101, null, 0, null, 2, '2020-01-10 12:30', null);

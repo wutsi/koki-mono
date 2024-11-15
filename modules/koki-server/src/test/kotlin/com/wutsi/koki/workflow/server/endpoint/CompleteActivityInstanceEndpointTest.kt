@@ -77,7 +77,7 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         val activityInstance = activityInstanceDao.findById("wi-100-01-working-running").get()
         assertEquals(WorkflowStatus.DONE, activityInstance.status)
         assertNotNull(activityInstance.doneAt)
-        assertNull(activityInstance.approver)
+        assertNull(activityInstance.approverId)
         assertEquals(ApprovalStatus.UNKNOWN, activityInstance.approval)
         assertEquals(fmt.format(Date()), fmt.format(activityInstance.doneAt))
 
@@ -90,7 +90,7 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.state["B"], state["B"])
         assertEquals(request.state["C"], state["C"])
 
-        val activityInstances = activityInstanceDao.findByInstance(workflowInstance)
+        val activityInstances = activityInstanceDao.findByWorkflowInstanceId(workflowInstance.id!!)
         assertEquals(4, activityInstances.size)
     }
 
@@ -142,7 +142,7 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         val activityInstance = activityInstanceDao.findById("wi-110-01-working-running").get()
         assertEquals(WorkflowStatus.RUNNING, activityInstance.status)
         assertNull(activityInstance.doneAt)
-        assertEquals(100L, activityInstance.approver?.id)
+        assertEquals(100L, activityInstance.approverId)
         assertEquals(ApprovalStatus.PENDING, activityInstance.approval)
 
         verify(activityExecutorProvider, never()).get(any())
@@ -154,7 +154,7 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.state["B"], state["B"])
         assertEquals(request.state["D"], state["D"])
 
-        val activityInstances = activityInstanceDao.findByInstance(workflowInstance)
+        val activityInstances = activityInstanceDao.findByWorkflowInstanceId(workflowInstance.id!!)
         assertEquals(2, activityInstances.size)
     }
 

@@ -20,7 +20,7 @@ class WorkflowService(
         val user = dao.findById(id)
             .orElseThrow { NotFoundException(Error(ErrorCode.WORKFLOW_NOT_FOUND)) }
 
-        if (user.tenant.id != tenantId) {
+        if (user.tenantId != tenantId) {
             throw NotFoundException(Error(ErrorCode.WORKFLOW_NOT_FOUND))
         }
         return user
@@ -35,7 +35,7 @@ class WorkflowService(
         sortBy: WorkflowSortBy?,
         ascending: Boolean,
     ): List<WorkflowEntity> {
-        val jql = StringBuilder("SELECT W FROM WorkflowEntity AS W WHERE W.tenant.id = :tenantId")
+        val jql = StringBuilder("SELECT W FROM WorkflowEntity AS W WHERE W.tenantId = :tenantId")
         if (ids.isNotEmpty()) {
             jql.append(" AND W.id IN :ids")
         }

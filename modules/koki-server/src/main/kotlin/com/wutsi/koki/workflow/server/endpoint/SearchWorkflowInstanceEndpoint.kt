@@ -1,7 +1,6 @@
 package com.wutsi.koki.workflow.server.endpoint
 
 import com.wutsi.koki.workflow.dto.SearchWorkflowInstanceResponse
-import com.wutsi.koki.workflow.dto.WorkflowInstanceSortBy
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.mapper.WorkflowInstanceMapper
 import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
@@ -37,8 +36,6 @@ class SearchWorkflowInstanceEndpoint(
 
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
-        @RequestParam(required = false, name = "sort-by") sortBy: WorkflowInstanceSortBy? = null,
-        @RequestParam(required = false, name = "asc") ascending: Boolean = true,
     ): SearchWorkflowInstanceResponse {
         val workflows = service.search(
             ids = ids,
@@ -50,8 +47,6 @@ class SearchWorkflowInstanceEndpoint(
             tenantId = tenantId,
             limit = limit,
             offset = offset,
-            sortBy = sortBy,
-            ascending = ascending
         )
         return SearchWorkflowInstanceResponse(
             workflowInstances = workflows.map { workflow -> mapper.toWorkflowInstanceSummary(workflow) }

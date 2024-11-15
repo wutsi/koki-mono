@@ -17,6 +17,7 @@ class ExpressionEvaluator(private val objectMapper: ObjectMapper) {
         private val LOGGER = LoggerFactory.getLogger(ExpressionEvaluator::class.java)
     }
 
+    @Suppress("UNCHECKED_CAST")
     @Throws(ParseException::class)
     fun evaluate(flow: FlowEntity, workflowInstance: WorkflowInstanceEntity): Boolean {
         if (flow.expression.isNullOrEmpty()) {

@@ -25,7 +25,7 @@ class FormService(
         val form = dao.findById(id)
             .orElseThrow { NotFoundException(Error(ErrorCode.FORM_NOT_FOUND)) }
 
-        if (form.tenant.id != tenantId) {
+        if (form.tenantId != tenantId) {
             throw NotFoundException(Error(ErrorCode.FORM_NOT_FOUND))
         }
         return form
@@ -40,7 +40,7 @@ class FormService(
                 )
             )
 
-        if (form.tenant.id != tenantId) {
+        if (form.tenantId != tenantId) {
             throw NotFoundException(
                 Error(
                     ErrorCode.FORM_NOT_FOUND,
@@ -61,7 +61,7 @@ class FormService(
         ascending: Boolean,
     ): List<FormEntity> {
         val jql = StringBuilder("SELECT F FROM FormEntity F")
-        jql.append(" WHERE F.tenant.id = :tenantId")
+        jql.append(" WHERE F.tenantId = :tenantId")
         if (ids.isNotEmpty()) {
             jql.append(" AND F.id IN :ids")
         }
@@ -94,7 +94,7 @@ class FormService(
 
     @Transactional
     fun save(form: FormEntity, content: FormContent): FormEntity {
-        val duplicate = dao.findByNameAndTenant(content.name, form.tenant)
+        val duplicate = dao.findByNameAndTenantId(content.name, form.tenantId)
         if (duplicate != null && duplicate.id != form.id) {
             throw ConflictException(
                 error = Error(code = ErrorCode.FORM_DUPLICATE_NAME)

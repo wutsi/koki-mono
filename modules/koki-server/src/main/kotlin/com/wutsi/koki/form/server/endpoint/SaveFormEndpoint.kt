@@ -27,7 +27,7 @@ class SaveFormEndpoint(
     ): ImportFormResponse {
         val form = FormEntity(
             id = UUID.randomUUID().toString(),
-            tenant = tenantService.get(tenantId)
+            tenantId = tenantService.get(tenantId).id!!
         )
         service.save(form, request.content)
         return ImportFormResponse(

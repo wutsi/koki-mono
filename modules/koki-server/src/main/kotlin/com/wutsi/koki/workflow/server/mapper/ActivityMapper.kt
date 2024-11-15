@@ -12,6 +12,8 @@ class ActivityMapper {
         return Activity(
             id = entity.id!!,
             workflowId = entity.workflow.id!!,
+            roleId = entity.roleId,
+            formId = entity.formId,
             type = entity.type,
             name = entity.name,
             title = entity.title,
@@ -21,8 +23,6 @@ class ActivityMapper {
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
             tags = entity.tags?.let { tags -> toMap(tags) } ?: emptyMap(),
-            roleId = entity.role?.id,
-            formId = entity.form?.id,
         )
     }
 

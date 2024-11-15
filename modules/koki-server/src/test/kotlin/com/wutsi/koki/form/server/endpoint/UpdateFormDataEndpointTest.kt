@@ -45,7 +45,7 @@ class UpdateFormDataEndpointTest : TenantAwareEndpointTest() {
 
         val event = argumentCaptor<FormUpdatedEvent>()
         verify(eventPublisher).publish(event.capture())
-        assertEquals(formData.form.id, event.firstValue.formId)
+        assertEquals(formData.formId, event.firstValue.formId)
         assertEquals(formData.id, event.firstValue.formDataId)
         assertEquals(request.activityInstanceId, event.firstValue.activityInstanceId)
     }

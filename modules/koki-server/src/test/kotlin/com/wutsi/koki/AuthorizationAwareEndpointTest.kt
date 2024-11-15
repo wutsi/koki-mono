@@ -1,7 +1,6 @@
 package com.wutsi.koki
 
 import com.wutsi.koki.security.server.service.AuthenticationService
-import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
@@ -44,7 +43,7 @@ abstract class AuthorizationAwareEndpointTest : TenantAwareEndpointTest() {
         return authenticationService.createAccessToken(
             UserEntity(
                 id = USER_ID,
-                tenant = TenantEntity(id = TENANT_ID)
+                tenantId = TENANT_ID,
             )
         )
     }

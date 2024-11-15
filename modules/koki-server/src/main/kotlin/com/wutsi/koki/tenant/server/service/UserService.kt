@@ -32,7 +32,7 @@ class UserService(
         val user = dao.findById(id)
             .orElseThrow { NotFoundException(Error(ErrorCode.USER_NOT_FOUND)) }
 
-        if (user.tenant.id != tenantId) {
+        if (user.tenantId != tenantId) {
             throw NotFoundException(Error(ErrorCode.USER_NOT_FOUND))
         }
         return user
@@ -59,6 +59,7 @@ class UserService(
             )
         }
 
+        val tenant = tenantService.get(tenantId)
         val salt = UUID.randomUUID().toString()
         return dao.save(
             UserEntity(
@@ -67,7 +68,7 @@ class UserService(
                 status = UserStatus.ACTIVE,
                 salt = salt,
                 password = passwordService.hash(request.password, salt),
-                tenant = tenantService.get(tenantId),
+                tenantId = tenant.id!!,
             )
         )
     }

@@ -33,7 +33,7 @@ class ImportWorkflowEndpoint(
     ): ImportWorkflowResponse {
         validate(request)
 
-        val workflow = WorkflowEntity(tenant = tenantService.get(tenantId))
+        val workflow = WorkflowEntity(tenantId = tenantService.get(tenantId).id!!)
         importer.import(workflow, request.workflow)
         return ImportWorkflowResponse(
             workflowId = workflow.id ?: -1

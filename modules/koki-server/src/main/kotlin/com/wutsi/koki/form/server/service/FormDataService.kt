@@ -10,7 +10,6 @@ import com.wutsi.koki.form.dto.UpdateFormDataRequest
 import com.wutsi.koki.form.server.dao.FormDataRepository
 import com.wutsi.koki.form.server.domain.FormDataEntity
 import com.wutsi.koki.form.server.domain.FormEntity
-import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.Date
@@ -21,13 +20,12 @@ class FormDataService(
     private val dao: FormDataRepository,
     private val formService: FormService,
     private val objectMapper: ObjectMapper,
-    private val em: EntityManager,
 ) {
     fun get(id: String, form: FormEntity): FormDataEntity {
         val formData = dao.findById(id)
             .orElseThrow { NotFoundException(Error(ErrorCode.FORM_DATA_NOT_FOUND)) }
 
-        if (formData.form.id != form.id) {
+        if (formData.formId != form.id) {
             throw NotFoundException(Error(ErrorCode.FORM_DATA_NOT_FOUND))
         }
         return formData
@@ -37,7 +35,7 @@ class FormDataService(
         val formData = dao.findById(id)
             .orElseThrow { NotFoundException(Error(ErrorCode.FORM_DATA_NOT_FOUND)) }
 
-        if (formData.tenant.id != tenantId) {
+        if (formData.tenantId != tenantId) {
             throw NotFoundException(Error(ErrorCode.FORM_DATA_NOT_FOUND))
         }
         return formData
@@ -49,8 +47,8 @@ class FormDataService(
         val now = Date()
         val formData = FormDataEntity(
             id = UUID.randomUUID().toString(),
-            tenant = form.tenant,
-            form = form,
+            tenantId = tenantId,
+            formId = form.id!!,
             workflowInstanceId = request.workflowInstanceId,
             data = objectMapper.writeValueAsString(request.data),
             status = FormDataStatus.SUBMITTED,

@@ -6,7 +6,7 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.TenantAwareEndpointTest
+import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.workflow.dto.ApprovalStatus
@@ -32,7 +32,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/workflow/ApproveActivityInstanceEndpoint.sql"])
-class ApproveActivityInstanceEndpointTest : TenantAwareEndpointTest() {
+class ApproveActivityInstanceEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var activityInstanceDao: ActivityInstanceRepository
 
@@ -58,7 +58,6 @@ class ApproveActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         val request = ApproveActivityInstanceRequest(
             status = ApprovalStatus.APPROVED,
             comment = "Yo man",
-            approverUserId = 100L
         )
         val result = rest.postForEntity(
             "/v1/activity-instances/wi-100-01-working-running/approvals",
@@ -77,7 +76,7 @@ class ApproveActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         val approvalId = result.body!!.approvalId
         val approval = approvalRepository.findById(approvalId).get()
         assertEquals(request.status, approval.status)
-        assertEquals(request.approverUserId, approval.approver.id)
+        assertEquals(USER_ID, approval.approverId)
         assertEquals(request.comment, approval.comment)
         assertEquals(activityInstance.approvedAt, approval.approvedAt)
 
@@ -92,7 +91,6 @@ class ApproveActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         val request = ApproveActivityInstanceRequest(
             status = ApprovalStatus.REJECTED,
             comment = "Yo man",
-            approverUserId = 100L
         )
         val result = rest.postForEntity(
             "/v1/activity-instances/wi-100-01-working-running/approvals",
@@ -111,7 +109,7 @@ class ApproveActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         val approvalId = result.body!!.approvalId
         val approval = approvalRepository.findById(approvalId).get()
         assertEquals(request.status, approval.status)
-        assertEquals(request.approverUserId, approval.approver.id)
+        assertEquals(USER_ID, approval.approverId)
         assertEquals(request.comment, approval.comment)
         assertEquals(activityInstance.approvedAt, approval.approvedAt)
 
@@ -123,7 +121,6 @@ class ApproveActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         val request = ApproveActivityInstanceRequest(
             status = ApprovalStatus.REJECTED,
             comment = "Yo man",
-            approverUserId = 100L
         )
         val result = rest.postForEntity(
             "/v1/activity-instances/wi-100-03-working-done/approvals",

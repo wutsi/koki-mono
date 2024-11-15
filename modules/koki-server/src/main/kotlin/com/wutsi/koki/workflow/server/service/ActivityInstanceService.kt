@@ -13,7 +13,7 @@ class ActivityInstanceService(private val dao: ActivityInstanceRepository) {
         val activityInstance = dao.findById(id)
             .orElseThrow { NotFoundException(Error(ErrorCode.WORKFLOW_INSTANCE_ACTIVITY_NOT_FOUND)) }
 
-        if (activityInstance.instance.tenant.id != tenantId) {
+        if (activityInstance.tenantId != tenantId) {
             throw NotFoundException(Error(ErrorCode.WORKFLOW_INSTANCE_ACTIVITY_NOT_FOUND))
         }
         return activityInstance
