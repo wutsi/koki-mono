@@ -19,10 +19,8 @@ CREATE TABLE T_FORM_DATA(
 
   tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
   form_fk                 VARCHAR(36) NOT NULL REFERENCES T_FORM(id),
-  user_fk                 BIGINT NOT NULL REFERENCES T_USER(id),
 
   workflow_instance_id    VARCHAR(36),
-  activity_instance_id    VARCHAR(36),
   status                  INT NOT NULL DEFAULT 0,
   data                    JSON NOT NULL,
   created_at              DATETIME DEFAULT NOW(),

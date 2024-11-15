@@ -49,7 +49,8 @@ class ExportFormHTMLEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun `empty form`() {
-        val url = "http://localhost:$port/v1/forms/html/1/100.html?&role-name=accountant"
+        val url =
+            "http://localhost:$port/v1/forms/html/1/100.html?&role-name=accountant&workflow-instance-id=xxx&activity-instance-id=yyy"
 
         val file = download(url, 200, "100.html")
         assertTrue(file!!.length() > 0L)
@@ -59,17 +60,17 @@ class ExportFormHTMLEndpointTest : TenantAwareEndpointTest() {
         val context = argumentCaptor<Context>()
         verify(generator).generate(any(), context.capture(), any())
 
-        assertEquals("http://localhost:8081/forms/100", context.firstValue.submitUrl)
+        assertEquals(
+            "http://localhost:8081/forms/100?workflow-instance-id=xxx&activity-instance-id=yyy",
+            context.firstValue.submitUrl
+        )
         assertEquals("accountant", context.firstValue.roleName)
         assertEquals(0, context.firstValue.data.size)
-//        assertEquals(2, context.firstValue.data.size)
-//        assertEquals("aa", context.firstValue.data["A"])
-//        assertEquals("bb", context.firstValue.data["B"])
     }
 
     @Test
-    fun `form wth data`() {
-        val url = "http://localhost:$port/v1/forms/html/1/100/10011.html?&role-name=accountant"
+    fun `form with data`() {
+        val url = "http://localhost:$port/v1/forms/html/1/100/10011.html?&role-name=accountant&activity-instance-id=yyy"
 
         val file = download(url, 200, "10011.html")
         assertTrue(file!!.length() > 0L)
@@ -79,7 +80,7 @@ class ExportFormHTMLEndpointTest : TenantAwareEndpointTest() {
         val context = argumentCaptor<Context>()
         verify(generator).generate(any(), context.capture(), any())
 
-        assertEquals("http://localhost:8081/forms/100/10011", context.firstValue.submitUrl)
+        assertEquals("http://localhost:8081/forms/100/10011?activity-instance-id=yyy", context.firstValue.submitUrl)
         assertEquals("accountant", context.firstValue.roleName)
         assertEquals(2, context.firstValue.data.size)
         assertEquals(2, context.firstValue.data.size)

@@ -2,7 +2,6 @@ package com.wutsi.koki.form.server.domain
 
 import com.wutsi.koki.form.dto.FormDataStatus
 import com.wutsi.koki.tenant.server.domain.TenantEntity
-import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
@@ -24,11 +23,7 @@ data class FormDataEntity(
     @JoinColumn(name = "form_fk")
     val form: FormEntity = FormEntity(),
 
-    @Column(name = "user_fk")
-    val userId: Long = -1,
-
     val workflowInstanceId: String? = null,
-    val activityInstanceId: String? = null,
     val status: FormDataStatus = FormDataStatus.UNKNOWN,
     var data: String? = null,
     val createdAt: Date = Date(),

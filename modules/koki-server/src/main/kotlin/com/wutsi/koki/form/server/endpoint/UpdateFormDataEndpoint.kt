@@ -30,6 +30,7 @@ class UpdateFormDataEndpoint(
             FormUpdatedEvent(
                 formId = formData.form.id!!,
                 formDataId = formData.id!!,
+                activityInstanceId = request.activityInstanceId
             )
         )
     }

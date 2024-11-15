@@ -4,7 +4,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
-import com.wutsi.koki.AuthorizationAwareEndpointTest
+import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.event.server.service.EventPublisher
@@ -16,10 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
+import java.util.UUID
 import kotlin.test.assertEquals
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/form/UpdateFormDataEndpoint.sql"])
-class UpdateFormDataEndpointTest : AuthorizationAwareEndpointTest() {
+class UpdateFormDataEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var dao: FormDataRepository
 
@@ -27,7 +28,8 @@ class UpdateFormDataEndpointTest : AuthorizationAwareEndpointTest() {
         data = mapOf(
             "A" to "aa1",
             "B" to "bb1"
-        )
+        ),
+        activityInstanceId = UUID.randomUUID().toString()
     )
 
     @MockBean
@@ -45,6 +47,7 @@ class UpdateFormDataEndpointTest : AuthorizationAwareEndpointTest() {
         verify(eventPublisher).publish(event.capture())
         assertEquals(formData.form.id, event.firstValue.formId)
         assertEquals(formData.id, event.firstValue.formDataId)
+        assertEquals(request.activityInstanceId, event.firstValue.activityInstanceId)
     }
 
     @Test
@@ -61,12 +64,5 @@ class UpdateFormDataEndpointTest : AuthorizationAwareEndpointTest() {
         val result = rest.postForEntity("/v1/form-data/20022", request, ErrorResponse::class.java)
         assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
         assertEquals(ErrorCode.FORM_DATA_NOT_FOUND, result.body?.error?.code)
-    }
-
-    @Test
-    fun `another user`() {
-        val result = rest.postForEntity("/v1/form-data/10012", request, ErrorResponse::class.java)
-        assertEquals(HttpStatus.FORBIDDEN, result.statusCode)
-        assertEquals(ErrorCode.AUTHORIZATION_PERMISSION_DENIED, result.body?.error?.code)
     }
 }

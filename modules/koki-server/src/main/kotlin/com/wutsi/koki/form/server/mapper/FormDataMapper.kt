@@ -11,13 +11,11 @@ class FormDataMapper(private val objectMapper: ObjectMapper) {
         return FormData(
             id = entity.id ?: "",
             formId = entity.form.id ?: "",
-            userId = entity.userId,
             data = objectMapper.readValue(entity.data, Map::class.java) as Map<String, Any>,
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
             status = entity.status,
             workflowInstanceId = entity.workflowInstanceId,
-            activityInstanceId = entity.activityInstanceId,
         )
     }
 }

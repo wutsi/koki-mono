@@ -1,11 +1,8 @@
 package com.wutsi.koki.tenant.server.server.endpoint
 
-import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
-import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.event.server.service.EventPublisher
 import com.wutsi.koki.form.dto.FormDataStatus
 import com.wutsi.koki.form.dto.SubmitFormDataRequest
@@ -23,7 +20,7 @@ import kotlin.test.assertEquals
 
 @Component
 @Sql(value = ["/db/test/clean.sql", "/db/test/form/SubmitFormDataEndpoint.sql"])
-class SubmitFormDataEndpointTest : AuthorizationAwareEndpointTest() {
+class SubmitFormDataEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var dao: FormDataRepository
 
@@ -47,9 +44,7 @@ class SubmitFormDataEndpointTest : AuthorizationAwareEndpointTest() {
 
         val formDataId = result.body!!.formDataId
         val formData = dao.findById(formDataId).get()
-        assertEquals(USER_ID, formData.userId)
         assertEquals(request.formId, formData.form.id)
-        assertEquals(request.activityInstanceId, formData.activityInstanceId)
         assertEquals(request.workflowInstanceId, formData.workflowInstanceId)
         assertEquals(FormDataStatus.SUBMITTED, formData.status)
         assertEquals("{\"A\": \"aa\", \"B\": \"bb\"}", formData.data)
@@ -58,15 +53,6 @@ class SubmitFormDataEndpointTest : AuthorizationAwareEndpointTest() {
         verify(eventPublisher).publish(event.capture())
         assertEquals(request.formId, event.firstValue.formId)
         assertEquals(formData.id, event.firstValue.formDataId)
-    }
-
-    @Test
-    fun `no user`() {
-        anonymousUser = true
-
-        val result = rest.postForEntity("/v1/form-data", request, ErrorResponse::class.java)
-        assertEquals(HttpStatus.UNAUTHORIZED, result.statusCode)
-
-        verify(eventPublisher, never()).publish(any())
+        assertEquals(request.activityInstanceId, event.firstValue.activityInstanceId)
     }
 }

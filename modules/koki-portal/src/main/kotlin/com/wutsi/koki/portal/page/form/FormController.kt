@@ -11,6 +11,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
 class FormController(
@@ -18,20 +19,29 @@ class FormController(
     private val kokiFormData: KokiFormData,
 ) : AbstractPageController() {
     @GetMapping("/forms/{form-id}")
-    fun show(
+    fun new(
         @PathVariable(name = "form-id") formId: String,
+        @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
+        @RequestParam(required = false, name = "activity-instance-id") activityInstanceId: String? = null,
         model: Model
     ): String {
-        return show(formId, null, model)
+        return edit(formId, null, workflowInstanceId, activityInstanceId, model)
     }
 
     @GetMapping("/forms/{form-id}/{form-data-id}")
-    fun show(
+    fun edit(
         @PathVariable(name = "form-id") formId: String,
         @PathVariable(name = "form-data-id") formDataId: String?,
+        @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
+        @RequestParam(required = false, name = "activity-instance-id") activityInstanceId: String? = null,
         model: Model
     ): String {
-        val formHtml = kokiForms.html(formId = formId, formDataId = formDataId)
+        val formHtml = kokiForms.html(
+            formId = formId,
+            formDataId = formDataId,
+            workflowInstanceId = workflowInstanceId,
+            activityInstanceId = activityInstanceId,
+        )
         model.addAttribute("formHtml", formHtml)
         addPageInfo(formId, model)
         return "forms/index"

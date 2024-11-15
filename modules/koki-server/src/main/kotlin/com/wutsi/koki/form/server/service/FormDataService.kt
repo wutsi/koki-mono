@@ -3,7 +3,6 @@ package com.wutsi.koki.form.server.service
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.exception.ForbiddenException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.form.dto.FormDataStatus
 import com.wutsi.koki.form.dto.SubmitFormDataRequest
@@ -11,7 +10,7 @@ import com.wutsi.koki.form.dto.UpdateFormDataRequest
 import com.wutsi.koki.form.server.dao.FormDataRepository
 import com.wutsi.koki.form.server.domain.FormDataEntity
 import com.wutsi.koki.form.server.domain.FormEntity
-import com.wutsi.koki.security.server.service.SecurityService
+import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.Date
@@ -22,7 +21,7 @@ class FormDataService(
     private val dao: FormDataRepository,
     private val formService: FormService,
     private val objectMapper: ObjectMapper,
-    private val securityService: SecurityService,
+    private val em: EntityManager,
 ) {
     fun get(id: String, form: FormEntity): FormDataEntity {
         val formData = dao.findById(id)
@@ -44,6 +43,35 @@ class FormDataService(
         return formData
     }
 
+    fun search(
+        tenantId: Long,
+        ids: List<String>,
+        workflowInstanceId: String?,
+        limit: Int,
+        offset: Int,
+    ): List<FormDataEntity> {
+        val jql = StringBuilder("SELECT F FROM FormDataEntity F")
+        jql.append(" WHERE F.tenant.id = :tenantId")
+        if (ids.isNotEmpty()) {
+            jql.append(" AND F.id IN :ids")
+        }
+        if (workflowInstanceId != null) {
+            jql.append(" AND F.workflowInstanceId = :workflowInstanceId")
+        }
+
+        val query = em.createQuery(jql.toString(), FormDataEntity::class.java)
+        query.setParameter("tenantId", tenantId)
+        if (ids.isNotEmpty()) {
+            query.setParameter("ids", ids)
+        }
+        if (workflowInstanceId != null) {
+            query.setParameter("workflowInstanceId", workflowInstanceId)
+        }
+        query.firstResult = offset
+        query.maxResults = limit
+        return query.resultList
+    }
+
     @Transactional
     fun submit(request: SubmitFormDataRequest, tenantId: Long): FormDataEntity {
         val form = formService.get(request.formId, tenantId)
@@ -53,10 +81,8 @@ class FormDataService(
             tenant = form.tenant,
             form = form,
             workflowInstanceId = request.workflowInstanceId,
-            activityInstanceId = request.activityInstanceId,
             data = objectMapper.writeValueAsString(request.data),
             status = FormDataStatus.SUBMITTED,
-            userId = securityService.getCurrentUserId(),
             createdAt = now,
             modifiedAt = now,
         )
@@ -66,15 +92,6 @@ class FormDataService(
     @Transactional
     fun update(formDataId: String, request: UpdateFormDataRequest, tenantId: Long): FormDataEntity {
         val formData = get(formDataId, tenantId)
-
-        // Check access
-        if (formData.userId != securityService.getCurrentUserId()) {
-            throw ForbiddenException(
-                error = Error(
-                    ErrorCode.AUTHORIZATION_PERMISSION_DENIED
-                )
-            )
-        }
 
         // Update
         formData.data = objectMapper.writeValueAsString(request.data)

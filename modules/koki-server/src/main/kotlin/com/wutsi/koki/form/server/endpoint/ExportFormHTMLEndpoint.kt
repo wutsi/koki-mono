@@ -36,27 +36,42 @@ class ExportFormHTMLEndpoint(
     }
 
     @GetMapping("/v1/forms/html/{tenant-id}/{form-id}.html")
-    fun html(
+    fun formHtml(
         @PathVariable(name = "tenant-id") tenantId: Long,
         @PathVariable(name = "form-id") formId: String,
         @RequestParam(required = false, name = "role-name") roleName: String? = null,
+        @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
+        @RequestParam(required = false, name = "activity-instance-id") activityInstanceId: String? = null,
         response: HttpServletResponse
     ) {
-        html(tenantId, formId, null, roleName, response)
+        generateHtml(tenantId, formId, null, roleName, workflowInstanceId, activityInstanceId, response)
     }
 
     @GetMapping("/v1/forms/html/{tenant-id}/{form-id}/{form-data-id}.html")
-    fun html(
+    fun formDataHtml(
         @PathVariable(name = "tenant-id") tenantId: Long,
         @PathVariable(name = "form-id") formId: String,
         @PathVariable(name = "form-data-id") formDataId: String?,
         @RequestParam(required = false, name = "role-name") roleName: String? = null,
+        @RequestParam(required = false, name = "activity-instance-id") activityInstanceId: String? = null,
+        response: HttpServletResponse
+    ) {
+        generateHtml(tenantId, formId, formDataId, roleName, null, activityInstanceId, response)
+    }
+
+    private fun generateHtml(
+        tenantId: Long,
+        formId: String,
+        formDataId: String?,
+        roleName: String?,
+        workflowInstanceId: String?,
+        activityInstanceId: String?,
         response: HttpServletResponse
     ) {
         response.contentType = "text/html"
         try {
             val form = service.get(formId, tenantId)
-            val context = createContext(form, formDataId, roleName)
+            val context = createContext(form, formDataId, roleName, workflowInstanceId, activityInstanceId)
             val writer = StringWriter()
             val content = objectMapper.readValue(form.content, FormContent::class.java)
             generator.generate(content, context, writer)
@@ -77,11 +92,22 @@ class ExportFormHTMLEndpoint(
         form: FormEntity,
         formDataId: String?,
         roleName: String?,
+        workflowInstanceId: String?,
+        activityInstanceId: String?,
     ): Context {
         val data = formDataId?.let { formDataService.get(formDataId, form).data }
 
         val submitUrl = StringBuilder("$portalUrl/forms/${form.id}")
         formDataId?.let { submitUrl.append("/$formDataId") }
+        workflowInstanceId?.let { submitUrl.append("?workflow-instance-id=$workflowInstanceId") }
+        activityInstanceId?.let {
+            if (workflowInstanceId != null) {
+                submitUrl.append("&")
+            } else {
+                submitUrl.append("?")
+            }
+            submitUrl.append("activity-instance-id=$activityInstanceId")
+        }
 
         return Context(
             submitUrl = submitUrl.toString(),
