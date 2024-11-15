@@ -1,9 +1,10 @@
 package com.wutsi.koki.workflow.server.endpoint
 
-import com.wutsi.koki.workflow.dto.SearchWorkflowInstanceResponse
+import com.wutsi.koki.workflow.dto.ApprovalStatus
+import com.wutsi.koki.workflow.dto.SearchActivityInstanceResponse
 import com.wutsi.koki.workflow.dto.WorkflowStatus
-import com.wutsi.koki.workflow.server.mapper.WorkflowInstanceMapper
-import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
+import com.wutsi.koki.workflow.server.mapper.ActivityInstanceMapper
+import com.wutsi.koki.workflow.server.service.ActivityInstanceService
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestHeader
@@ -14,42 +15,44 @@ import java.util.Date
 
 @RestController
 @RequestMapping
-class SearchWorkflowInstanceEndpoint(
-    private val service: WorkflowInstanceService,
-    private val mapper: WorkflowInstanceMapper
+class SearchActivityInstanceEndpoint(
+    private val service: ActivityInstanceService,
+    private val mapper: ActivityInstanceMapper,
 ) {
-    @GetMapping("/v1/workflow-instances")
+    @GetMapping("/v1/activity-instances")
     fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false, name = "id") ids: List<String> = emptyList(),
-        @RequestParam(required = false, name = "workflow-id") workflowIds: List<Long> = emptyList(),
-        @RequestParam(required = false, name = "participant-user-id") participantUserId: Long? = null,
+        @RequestParam(required = false, name = "assignee-id") assigneeIds: List<Long> = emptyList(),
+        @RequestParam(required = false, name = "approver-id") approverIds: List<Long> = emptyList(),
         @RequestParam(required = false) status: WorkflowStatus? = null,
+        @RequestParam(required = false) approval: ApprovalStatus? = null,
 
-        @RequestParam(required = false, name = "start-from")
+        @RequestParam(required = false, name = "started-from")
         @DateTimeFormat(pattern = "yyyy-MM-dd")
-        startFrom: Date? = null,
+        startedFrom: Date? = null,
 
-        @RequestParam(required = false, name = "start-to")
+        @RequestParam(required = false, name = "started-to")
         @DateTimeFormat(pattern = "yyyy-MM-dd")
-        startTo: Date? = null,
+        startedTo: Date? = null,
 
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
-    ): SearchWorkflowInstanceResponse {
-        val workflows = service.search(
+    ): SearchActivityInstanceResponse {
+        val activities = service.search(
             ids = ids,
-            workflowIds = workflowIds,
-            participantUserId = participantUserId,
+            assigneeIds = assigneeIds,
+            approverIds = approverIds,
             status = status,
-            startFrom = startFrom,
-            startTo = startTo,
+            approval = approval,
+            startedFrom = startedFrom,
+            startedTo = startedTo,
             tenantId = tenantId,
             limit = limit,
             offset = offset,
         )
-        return SearchWorkflowInstanceResponse(
-            workflowInstances = workflows.map { workflow -> mapper.toWorkflowInstanceSummary(workflow) }
+        return SearchActivityInstanceResponse(
+            activityInstances = activities.map { activity -> mapper.toActivityInstanceSummary(activity) }
         )
     }
 }

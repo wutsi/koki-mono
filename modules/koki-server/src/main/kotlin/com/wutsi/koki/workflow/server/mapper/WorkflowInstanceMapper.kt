@@ -36,7 +36,7 @@ class WorkflowInstanceMapper(
                 )
             },
             activityInstances = entity.activityInstances.map { activityInstance ->
-                activityInstanceMapper.toActivityInstance(activityInstance)
+                activityInstanceMapper.toActivityInstanceSummary(activityInstance)
             },
         )
     }

@@ -1,102 +1,104 @@
 package com.wutsi.koki.tenant.server.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
-import com.wutsi.koki.workflow.dto.SearchWorkflowInstanceResponse
+import com.wutsi.koki.workflow.dto.SearchActivityInstanceResponse
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/workflow/SearchWorkflowInstanceEndpoint.sql"])
-class SearchWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/workflow/SearchActivityInstanceEndpoint.sql"])
+class SearchActivityInstanceEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun all() {
-        val result = rest.getForEntity("/v1/workflow-instances", SearchWorkflowInstanceResponse::class.java)
+        val result = rest.getForEntity("/v1/activity-instances", SearchActivityInstanceResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val workflows = result.body!!.workflowInstances
-        assertEquals(8, workflows.size)
+        val activityInstances = result.body!!.activityInstances
+        assertEquals(12, activityInstances.size)
     }
 
     @Test
-    fun participant() {
+    fun `by assignee`() {
         val result = rest.getForEntity(
-            "/v1/workflow-instances?participant-user-id=100",
-            SearchWorkflowInstanceResponse::class.java
+            "/v1/activity-instances?assignee-id=100&assignee-id=101",
+            SearchActivityInstanceResponse::class.java
         )
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val workflows = result.body!!.workflowInstances
-        assertEquals(2, workflows.size)
-
-        assertEquals("wi-100-01", workflows[0].id)
-        assertEquals("wi-100-02", workflows[1].id)
+        val activityInstances = result.body!!.activityInstances
+        val activityInstanceIds = activityInstances.map { activityInstanceId -> activityInstanceId.id }
+        assertEquals(3, activityInstanceIds.size)
+        assertTrue(activityInstanceIds.contains("wi-100-03-working-running"))
+        assertTrue(activityInstanceIds.contains("wi-100-05-start-running"))
+        assertTrue(activityInstanceIds.contains("wi-100-06-submit-working"))
     }
 
     @Test
-    fun ids() {
+    fun `by approver`() {
         val result = rest.getForEntity(
-            "/v1/workflow-instances?id=wi-100-01&id=wi-100-03&id=wi-110-01&limit=2",
-            SearchWorkflowInstanceResponse::class.java
+            "/v1/activity-instances?approver-id=102&approval=PENDING",
+            SearchActivityInstanceResponse::class.java
         )
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val workflows = result.body!!.workflowInstances.sortedBy { it.id }
-        assertEquals(2, workflows.size)
-
-        assertEquals("wi-100-01", workflows[0].id)
-        assertEquals("wi-100-03", workflows[1].id)
+        val activityInstances = result.body!!.activityInstances
+        val activityInstanceIds = activityInstances.map { activityInstanceId -> activityInstanceId.id }
+        assertEquals(1, activityInstanceIds.size)
+        assertTrue(activityInstanceIds.contains("wi-100-03-working-running"))
     }
 
     @Test
-    fun workflowIds() {
+    fun `by status`() {
         val result = rest.getForEntity(
-            "/v1/workflow-instances?workflow-id=110&limit=2",
-            SearchWorkflowInstanceResponse::class.java
+            "/v1/activity-instances?status=RUNNING",
+            SearchActivityInstanceResponse::class.java
         )
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val workflows = result.body!!.workflowInstances
-        assertEquals(1, workflows.size)
-
-        assertEquals("wi-110-01", workflows[0].id)
+        val activityInstances = result.body!!.activityInstances
+        val activityInstanceIds = activityInstances.map { activityInstanceId -> activityInstanceId.id }
+        assertEquals(3, activityInstanceIds.size)
+        assertTrue(activityInstanceIds.contains("wi-100-03-working-running"))
+        assertTrue(activityInstanceIds.contains("wi-100-05-start-running"))
+        assertTrue(activityInstanceIds.contains("wi-100-06-submit-working"))
     }
 
     @Test
-    fun status() {
+    fun `by date`() {
         val result = rest.getForEntity(
-            "/v1/workflow-instances?status=DONE",
-            SearchWorkflowInstanceResponse::class.java
+            "/v1/activity-instances?started-from=2020-01-10&started-to=2020-01-12",
+            SearchActivityInstanceResponse::class.java
         )
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val workflows = result.body!!.workflowInstances
-        assertEquals(3, workflows.size)
-
-        assertEquals("wi-100-01", workflows[0].id)
-        assertEquals("wi-110-01", workflows[1].id)
-        assertEquals("wi-120-01", workflows[2].id)
+        val activityInstances = result.body!!.activityInstances
+        val activityInstanceIds = activityInstances.map { activityInstanceId -> activityInstanceId.id }
+        assertEquals(3, activityInstanceIds.size)
+        assertTrue(activityInstanceIds.contains("wi-100-01-start-done"))
+        assertTrue(activityInstanceIds.contains("wi-100-02-start-done"))
+        assertTrue(activityInstanceIds.contains("wi-100-02-working-done"))
     }
 
     @Test
-    fun startedAt() {
+    fun `by ids`() {
         val result = rest.getForEntity(
-            "/v1/workflow-instances?start-from=2020-01-01&start-to=2020-01-31",
-            SearchWorkflowInstanceResponse::class.java
+            "/v1/activity-instances?id=wi-100-01-start-done&id=wi-110-01-working-done",
+            SearchActivityInstanceResponse::class.java
         )
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val workflows = result.body!!.workflowInstances
-        assertEquals(3, workflows.size)
-
-        assertEquals("wi-100-02", workflows[0].id)
-        assertEquals("wi-100-04", workflows[1].id)
-        assertEquals("wi-100-05", workflows[2].id)
+        val activityInstances = result.body!!.activityInstances
+        val activityInstanceIds = activityInstances.map { activityInstanceId -> activityInstanceId.id }
+        assertEquals(2, activityInstanceIds.size)
+        assertTrue(activityInstanceIds.contains("wi-100-01-start-done"))
+        assertTrue(activityInstanceIds.contains("wi-110-01-working-done"))
     }
 }

@@ -28,12 +28,6 @@ INSERT INTO T_ACTIVITY(id, workflow_fk, role_fk, name, type, description, tags, 
            (103, 100, 10,   'SUBMIT',  4, null, null, false, true),
            (104, 100, null, 'STOP',    2, null, null, false, true),
 
-           (110, 110, null, 'START',   1, null, null, false, true),
-           (111, 110, null, 'WORKING', 4, null, null, false, true),
-           (112, 110, null, 'SEND',    4, null, null, false, true),
-           (113, 110, null, 'SUBMIT',  4, null, null, false, false),
-           (114, 110, null, 'STOP',    2, null, null, false, true),
-
            (200, 200, null, 'START',   1, null, null, false, true),
            (201, 200, null, 'WORKING', 4, null, null, false, true),
            (202, 200, null, 'SEND',    4, null, null, false, true),
@@ -41,48 +35,12 @@ INSERT INTO T_ACTIVITY(id, workflow_fk, role_fk, name, type, description, tags, 
            (204, 200, null, 'STOP',    2, null, null, false, true)
     ;
 
-INSERT INTO T_FLOW(workflow_fk, from_fk, to_fk, expression)
-    VALUES (100, 100, 101, null),
-           (100, 101, 102, null),
-           (100, 101, 103, 'submit=true'),
-           (100, 102, 104, null),
-           (100, 103, 104, null),
-
-           (110, 110, 111, null),
-           (110, 111, 112, null),
-           (110, 111, 113, null),
-           (110, 112, 114, null),
-           (110, 113, 114, null);
-
 INSERT INTO T_WORKFLOW_INSTANCE(id, tenant_fk, workflow_fk, approver_fk, status, start_at)
     VALUES ('wi-100-01', 1, 100, 100,  2, now()),
-           ('wi-100-02', 1, 100, null, 2, now()),
-           ('wi-100-03', 1, 100, null, 2, now()),
-           ('wi-100-04', 1, 100, null, 2, now()),
-           ('wi-100-05', 1, 100, null, 1, now()),
-           ('wi-100-06', 1, 100, null, 2, now()),
-           ('wi-110-01', 1, 110, null, 2, now()),
-
            ('wi-200-01', 2, 200, null, 2, now());
 
 INSERT INTO T_WI_ACTIVITY(id, tenant_fk, workflow_instance_fk, activity_fk, assignee_fk, approver_fk, status, approval, started_at, done_at)
-    VALUES ('wi-100-01-start-done',      1, 'wi-100-01', 100, null, null, 3, 0, '2020-01-10 12:30', '2020-01-11 12:30'),
-
-           ('wi-100-02-start-done',      1, 'wi-100-02', 100, null, null, 3, 0, '2020-01-11 12:30', '2020-01-11 12:30'),
-           ('wi-100-02-working-done',    1, 'wi-100-02', 101, null, null, 3, 0, '2020-01-11 12:30', '2020-01-11 12:30'),
-
-           ('wi-100-03-start-done',      1, 'wi-100-03', 100, null, null, 3, 0, '2020-01-12 12:30', '2020-01-11 12:30'),
-           ('wi-100-03-working-running', 1, 'wi-100-03', 101, 101,  102,  2, 1, '2020-01-12 12:30', '2020-01-11 12:30'),
-
-           ('wi-100-05-start-running',   1, 'wi-100-05', 100, 100,  null, 2, 0, '2020-01-13 12:30', '2020-01-11 12:30'),
-
-           ('wi-100-06-start-done',      1, 'wi-100-06', 100, null, null, 3, 0, '2020-01-14 12:30', '2020-01-11 12:30'),
-           ('wi-100-06-working-done',    1, 'wi-100-06', 101, null, null, 3, 0, '2020-01-14 12:30', '2020-01-11 12:30'),
-           ('wi-100-06-send-done',       1, 'wi-100-06', 102, null, null, 3, 0, '2020-01-14 12:30', '2020-01-11 12:30'),
-           ('wi-100-06-submit-working',  1, 'wi-100-06', 103, 100,  null, 2, 0, '2020-01-14 12:30', '2020-01-11 12:30'),
-
-           ('wi-110-01-start-done',      1, 'wi-110-01', 110, null, null, 3, 0, '2020-01-15 12:30', '2020-01-11 12:30'),
-           ('wi-110-01-working-done',    1, 'wi-110-01', 111, null, null, 3, 0, '2020-01-15 12:30', '2020-01-11 12:30'),
+    VALUES ('wi-100-01-start-done',      1, 'wi-100-01', 100, 100, 101, 3, 1, '2020-01-10 12:30', '2020-01-11 12:30'),
 
            ('wi-200-01-start-done',      2, 'wi-200-01', 200, null, null, 3, 0, '2020-01-10 12:30', '2020-01-11 12:30'),
            ('wi-200-01-working-working', 2, 'wi-200-01', 201, 101,  102,  2, 1, '2020-01-10 12:30', '2020-01-11 12:30');
