@@ -1,6 +1,7 @@
 package com.wutsi.koki.tenant.server.domain
 
 import com.wutsi.koki.tenant.dto.UserStatus
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -8,7 +9,6 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
-import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import java.util.Date
 import kotlin.collections.mutableListOf
@@ -20,9 +20,8 @@ data class UserEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    @ManyToOne
-    @JoinColumn(name = "tenant_fk")
-    val tenant: TenantEntity = TenantEntity(),
+    @Column(name = "tenant_fk")
+    val tenantId: Long = -1,
 
     var email: String = "",
     val password: String = "",

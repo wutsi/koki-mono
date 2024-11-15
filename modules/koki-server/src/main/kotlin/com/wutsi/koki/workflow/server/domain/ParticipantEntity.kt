@@ -1,13 +1,10 @@
 package com.wutsi.koki.workflow.server.domain
 
-import com.wutsi.koki.tenant.server.domain.RoleEntity
-import com.wutsi.koki.tenant.server.domain.UserEntity
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 
 @Entity
@@ -17,15 +14,12 @@ data class ParticipantEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    @ManyToOne
-    @JoinColumn(name = "instance_fk")
-    val instance: WorkflowInstanceEntity = WorkflowInstanceEntity(),
+    @Column(name = "workflow_instance_fk")
+    val workflowInstanceId: String = "",
 
-    @ManyToOne
-    @JoinColumn(name = "user_fk")
-    val user: UserEntity = UserEntity(),
+    @Column(name = "user_fk")
+    val userId: Long = -1,
 
-    @ManyToOne
-    @JoinColumn(name = "role_fk")
-    val role: RoleEntity = RoleEntity(),
+    @Column(name = "role_fk")
+    val roleId: Long = -1,
 )

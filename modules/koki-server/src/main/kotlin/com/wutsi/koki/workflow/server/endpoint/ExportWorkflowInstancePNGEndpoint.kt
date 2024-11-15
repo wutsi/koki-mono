@@ -4,7 +4,9 @@ import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
 import com.wutsi.koki.workflow.server.io.WorkflowPNGExporter
+import com.wutsi.koki.workflow.server.service.ActivityService
 import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
+import com.wutsi.koki.workflow.server.service.WorkflowService
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import org.springframework.http.ContentDisposition
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController
 class ExportWorkflowInstancePNGEndpoint(
     private val exporter: WorkflowPNGExporter,
     private val service: WorkflowInstanceService,
+    private val activityService: ActivityService,
+    private val workflowService: WorkflowService,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ExportWorkflowPNGEndpoint::class.java)
@@ -40,8 +44,9 @@ class ExportWorkflowInstancePNGEndpoint(
             val workflowInstance = service.get(id, tenantId)
             val runningActivityNames = filterActivityNames(WorkflowStatus.RUNNING, workflowInstance)
             val doneActivityNames = filterActivityNames(WorkflowStatus.DONE, workflowInstance)
+            val workflow = workflowService.get(workflowInstance.workflowId, tenantId)
 
-            exporter.export(workflowInstance.workflow, response.outputStream, runningActivityNames, doneActivityNames)
+            exporter.export(workflow, response.outputStream, runningActivityNames, doneActivityNames)
         } catch (ex: NotFoundException) {
             LOGGER.warn("workflow not found", ex)
             response.status = 404
@@ -49,8 +54,13 @@ class ExportWorkflowInstancePNGEndpoint(
     }
 
     private fun filterActivityNames(status: WorkflowStatus, workflowInstance: WorkflowInstanceEntity): List<String> {
-        return workflowInstance.activityInstances
+        val ids = workflowInstance.activityInstances
             .filter { activityInstance -> activityInstance.status == status }
-            .map { activityInstance -> activityInstance.activity.name }
+            .map { activityInstance -> activityInstance.activityId }
+        return if (ids.isEmpty()) {
+            emptyList()
+        } else {
+            activityService.getByIds(ids).map { activity -> activity.name }
+        }
     }
 }

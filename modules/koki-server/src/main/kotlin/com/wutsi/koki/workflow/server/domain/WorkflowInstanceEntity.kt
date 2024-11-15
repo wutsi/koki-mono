@@ -1,12 +1,10 @@
 package com.wutsi.koki.workflow.server.domain
 
-import com.wutsi.koki.tenant.server.domain.TenantEntity
-import com.wutsi.koki.tenant.server.domain.UserEntity
 import com.wutsi.koki.workflow.dto.WorkflowStatus
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import org.hibernate.annotations.BatchSize
@@ -18,25 +16,23 @@ data class WorkflowInstanceEntity(
     @Id
     val id: String? = null,
 
-    @ManyToOne
-    @JoinColumn(name = "tenant_fk")
-    val tenant: TenantEntity = TenantEntity(),
+    @Column(name = "tenant_fk")
+    val tenantId: Long = -1,
 
-    @ManyToOne
-    @JoinColumn(name = "workflow_fk")
-    val workflow: WorkflowEntity = WorkflowEntity(),
+    @Column(name = "approver_fk")
+    val approverId: Long? = null,
+
+    @Column(name = "workflow_fk")
+    val workflowId: Long = -1,
 
     @BatchSize(20)
-    @OneToMany(mappedBy = "instance")
+    @OneToMany(mappedBy = "workflowInstanceId")
     val activityInstances: MutableList<ActivityInstanceEntity> = mutableListOf(),
 
     @BatchSize(20)
-    @OneToMany(mappedBy = "instance")
+    @OneToMany
+    @JoinColumn(name = "workflow_instance_fk")
     val participants: List<ParticipantEntity> = emptyList(),
-
-    @ManyToOne
-    @JoinColumn(name = "approver_fk")
-    val approver: UserEntity? = null,
 
     var status: WorkflowStatus = WorkflowStatus.UNKNOWN,
     var state: String? = null,

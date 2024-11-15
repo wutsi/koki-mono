@@ -69,24 +69,24 @@ class ImportRoleCSVEndpointTest : TenantAwareEndpointTest() {
 
         val roleA = findRole("a")
         assertEquals("a", roleA.name)
-        assertEquals(TENANT_ID, roleA.tenant.id)
+        assertEquals(TENANT_ID, roleA.tenantId)
         assertTrue(roleA.active)
         assertNull(roleA.description)
 
         val roleB = findRole("b")
         assertEquals("b", roleB.name)
-        assertEquals(TENANT_ID, roleB.tenant.id)
+        assertEquals(TENANT_ID, roleB.tenantId)
         assertFalse(roleB.active)
         assertEquals("Priority of the ticket", roleB.description)
 
         val roleC = findRole("c")
-        assertEquals(TENANT_ID, roleC.tenant.id)
+        assertEquals(TENANT_ID, roleC.tenantId)
         assertEquals("c", roleC.name)
         assertFalse(roleC.active)
         assertNull(roleC.description)
 
         val roleNew = findRole("new")
-        assertEquals(TENANT_ID, roleC.tenant.id)
+        assertEquals(TENANT_ID, roleC.tenantId)
         assertEquals("new", roleNew.name)
         assertTrue(roleNew.active)
         assertNull(roleNew.description)

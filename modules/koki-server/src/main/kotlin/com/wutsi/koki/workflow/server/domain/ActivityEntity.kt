@@ -1,8 +1,7 @@
 package com.wutsi.koki.workflow.server.domain
 
-import com.wutsi.koki.form.server.domain.FormEntity
-import com.wutsi.koki.tenant.server.domain.RoleEntity
 import com.wutsi.koki.workflow.dto.ActivityType
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -23,13 +22,11 @@ data class ActivityEntity(
     @JoinColumn(name = "workflow_fk")
     val workflow: WorkflowEntity = WorkflowEntity(),
 
-    @ManyToOne
-    @JoinColumn(name = "role_fk")
-    var role: RoleEntity? = null,
+    @Column(name = "role_fk")
+    var roleId: Long? = null,
 
-    @ManyToOne
-    @JoinColumn(name = "form_fk")
-    var form: FormEntity? = null,
+    @Column(name = "form_fk")
+    var formId: String? = null,
 
     var name: String = "",
     var title: String? = null,

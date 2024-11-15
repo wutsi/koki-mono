@@ -48,7 +48,7 @@ open class AuthenticationService(
             .withIssuer(ISSUER)
             .withSubject(user.displayName)
             .withClaim(JWTPrincipal.CLAIM_USER_ID, user.id)
-            .withClaim(JWTPrincipal.CLAIM_TENANT_ID, user.tenant.id)
+            .withClaim(JWTPrincipal.CLAIM_TENANT_ID, user.tenantId)
             .withIssuedAt(now)
             .withExpiresAt(DateUtils.addSeconds(now, ttlSeconds))
             .sign(algo)

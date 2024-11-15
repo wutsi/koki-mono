@@ -48,7 +48,7 @@ INSERT INTO T_WORKFLOW_INSTANCE(id, tenant_fk, workflow_fk, approver_fk, status,
 
            ('wi-200-01', 2, 200, null, 2, now());
 
-INSERT INTO T_WI_PARTICIPANT(instance_fk, user_fk, role_fk)
+INSERT INTO T_WI_PARTICIPANT(workflow_instance_fk, user_fk, role_fk)
     VALUES ('wi-100-01', 100, 10),
            ('wi-100-01', 101, 11),
            ('wi-100-02', 100, 10),

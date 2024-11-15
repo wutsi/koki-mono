@@ -22,7 +22,7 @@ class SearchWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun participant() {
         val result = rest.getForEntity(
-            "/v1/workflow-instances?participant-user-id=100&sort-by=TITLE",
+            "/v1/workflow-instances?participant-user-id=100",
             SearchWorkflowInstanceResponse::class.java
         )
 
@@ -38,23 +38,23 @@ class SearchWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun ids() {
         val result = rest.getForEntity(
-            "/v1/workflow-instances?id=wi-100-01&id=wi-100-03&id=wi-110-01&sort-by=NAME&asc=false&limit=2",
+            "/v1/workflow-instances?id=wi-100-01&id=wi-100-03&id=wi-110-01&limit=2",
             SearchWorkflowInstanceResponse::class.java
         )
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val workflows = result.body!!.workflowInstances
+        val workflows = result.body!!.workflowInstances.sortedBy { it.id }
         assertEquals(2, workflows.size)
 
-        assertEquals("wi-110-01", workflows[0].id)
-        assertEquals("wi-100-01", workflows[1].id)
+        assertEquals("wi-100-01", workflows[0].id)
+        assertEquals("wi-100-03", workflows[1].id)
     }
 
     @Test
     fun workflowIds() {
         val result = rest.getForEntity(
-            "/v1/workflow-instances?workflow-id=110&sort-by=ID&limit=2",
+            "/v1/workflow-instances?workflow-id=110&limit=2",
             SearchWorkflowInstanceResponse::class.java
         )
 

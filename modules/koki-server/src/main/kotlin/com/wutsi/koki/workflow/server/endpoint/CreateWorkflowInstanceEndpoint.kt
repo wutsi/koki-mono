@@ -95,11 +95,11 @@ class CreateWorkflowInstanceEndpoint(
         workflow: WorkflowEntity,
         activities: List<ActivityEntity>
     ) {
-        val roleIds = activities.mapNotNull { activity -> activity.role?.id }.distinct()
+        val roleIds = activities.mapNotNull { activity -> activity.roleId }.distinct()
         if (roleIds.isEmpty()) {
             return
         }
-        val roles = roleService.getAll(roleIds, workflow.tenant.id ?: -1)
+        val roles = roleService.getAll(roleIds, workflow.tenantId)
 
         // Missing roles
         roles.forEach { role ->

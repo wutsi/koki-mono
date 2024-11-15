@@ -1,11 +1,9 @@
 package com.wutsi.koki.form.server.domain
 
 import com.wutsi.koki.form.dto.FormDataStatus
-import com.wutsi.koki.tenant.server.domain.TenantEntity
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import java.util.Date
 
@@ -15,13 +13,11 @@ data class FormDataEntity(
     @Id
     val id: String? = null,
 
-    @ManyToOne
-    @JoinColumn(name = "tenant_fk")
-    val tenant: TenantEntity = TenantEntity(),
+    @Column(name = "tenant_fk")
+    val tenantId: Long = -1,
 
-    @ManyToOne
-    @JoinColumn(name = "form_fk")
-    val form: FormEntity = FormEntity(),
+    @Column(name = "form_fk")
+    val formId: String = "",
 
     val workflowInstanceId: String? = null,
     val status: FormDataStatus = FormDataStatus.UNKNOWN,

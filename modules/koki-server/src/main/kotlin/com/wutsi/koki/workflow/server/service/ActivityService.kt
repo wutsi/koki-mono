@@ -12,13 +12,19 @@ import java.util.Date
 
 @Service
 class ActivityService(private val dao: ActivityRepository) {
+    fun get(id: Long): ActivityEntity {
+        return dao.findById(id).orElseThrow {
+            NotFoundException(Error(ErrorCode.WORKFLOW_ACTIVITY_NOT_FOUND))
+        }
+    }
+
     fun getByName(name: String, workflow: WorkflowEntity): ActivityEntity {
         return dao.findByNameAndWorkflow(name, workflow)
             ?: throw NotFoundException(Error(ErrorCode.WORKFLOW_ACTIVITY_NOT_FOUND))
     }
 
-    fun getByNames(names: List<String>, workflow: WorkflowEntity): List<ActivityEntity> {
-        return dao.findByNameInAndWorkflow(names, workflow)
+    fun getByIds(ids: List<Long>): List<ActivityEntity> {
+        return dao.findAllById(ids).toList()
     }
 
     fun getByWorkflow(workflow: WorkflowEntity): List<ActivityEntity> {

@@ -26,7 +26,7 @@ open class RoleService(
         val role = dao.findById(id)
             .orElseThrow { NotFoundException(Error(code = ErrorCode.ROLE_NOT_FOUND)) }
 
-        if (role.tenant.id != tenantId) {
+        if (role.tenantId != tenantId) {
             throw NotFoundException(Error(code = ErrorCode.ROLE_NOT_FOUND))
         }
         return role

@@ -121,7 +121,7 @@ class WorkflowImporter(
             }
             return flowService.save(
                 FlowEntity(
-                    workflow = workflow,
+                    workflowId = workflow.id!!,
                     from = from,
                     to = to,
                     expression = flow.expression
@@ -135,7 +135,7 @@ class WorkflowImporter(
         val roleMap = if (roleNames.isEmpty()) {
             emptyMap()
         } else {
-            roleService.search(roleNames, workflow.tenant.id ?: -1)
+            roleService.search(roleNames, workflow.tenantId)
                 .associateBy { role -> role.name }
         }
 
@@ -153,7 +153,7 @@ class WorkflowImporter(
         if (LOGGER.isDebugEnabled) {
             LOGGER.debug(">>> Linking Activity[${activity.name}] with Role[$role]")
         }
-        activity.role = role?.let { roleMap[role] }
+        activity.roleId = role?.let { roleMap[role]?.id }
     }
 
     private fun linkForms(activities: List<ActivityEntity>, data: WorkflowData) {
@@ -164,7 +164,9 @@ class WorkflowImporter(
         val activityData = data.activities.find { act -> act.name == activity.name }
         if (activityData?.form != null) {
             LOGGER.debug(">>> Linking Activity[${activity.name}] with Form[${activityData.form}]")
-            activity.form = formService.getByName(activityData.form!!, activity.workflow.tenant.id ?: -1)
+            activity.formId = formService.getByName(activityData.form!!, activity.workflow.tenantId).id
+        } else {
+            activity.formId = null
         }
     }
 

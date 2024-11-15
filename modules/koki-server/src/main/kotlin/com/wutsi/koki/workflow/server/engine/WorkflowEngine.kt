@@ -3,7 +3,6 @@ package com.wutsi.koki.workflow.server.engine
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
-import com.wutsi.koki.tenant.server.domain.UserEntity
 import com.wutsi.koki.tenant.server.service.UserService
 import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.ApprovalStatus
@@ -12,11 +11,14 @@ import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.domain.ApprovalEntity
 import com.wutsi.koki.workflow.server.domain.FlowEntity
+import com.wutsi.koki.workflow.server.domain.WorkflowEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
 import com.wutsi.koki.workflow.server.service.ActivityInstanceService
+import com.wutsi.koki.workflow.server.service.ActivityService
 import com.wutsi.koki.workflow.server.service.ApprovalService
 import com.wutsi.koki.workflow.server.service.ExpressionEvaluator
 import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
+import com.wutsi.koki.workflow.server.service.WorkflowService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -25,6 +27,8 @@ import java.util.UUID
 
 @Service
 class WorkflowEngine(
+    private val workflowService: WorkflowService,
+    private val activityService: ActivityService,
     private val workflowInstanceService: WorkflowInstanceService,
     private val activityInstanceService: ActivityInstanceService,
     private val approvalService: ApprovalService,
@@ -49,7 +53,8 @@ class WorkflowEngine(
             )
         }
 
-        val activity = workflowInstance.workflow.activities
+        val workflow = workflowService.get(workflowInstance.workflowId, workflowInstance.tenantId)
+        val activity = workflow.activities
             .find { activity -> activity.type == ActivityType.START && activity.active }
         return if (activity == null) {
             LOGGER.debug(">>> ${workflowInstance.id} - No START activity found")
@@ -112,9 +117,11 @@ class WorkflowEngine(
         }
 
         // Find all successors
-        val successorFlows = findSuccessorFlows(doneActivityInstances, workflowInstance)
+        val workflow = workflowService.get(workflowInstance.workflowId, workflowInstance.tenantId)
+        val successorFlows = findSuccessorFlows(doneActivityInstances, workflow)
         if (LOGGER.isDebugEnabled) {
-            val from = doneActivityInstances.map { done -> done.activity.name }
+            val fromIds = doneActivityInstances.map { activityInstance -> activityInstance.activityId }
+            val from = activityService.getByIds(fromIds).map { flow -> flow.name }
             val to = successorFlows.map { flow -> flow.to.name }
             LOGGER.debug(">>> ${workflowInstance.id} - $from --> " + to)
         }
@@ -122,25 +129,28 @@ class WorkflowEngine(
         // Execute all successors
         return successorFlows
             .filter { flow -> flow.to.active }
-            .filter { flow -> allPrecessorAreDone(flow.to, workflowInstance) }
+            .filter { flow -> allPredecessorsAreDone(flow.to, workflowInstance, workflow) }
             .mapNotNull { flow -> execute(flow, workflowInstance) }
     }
 
     @Transactional
     fun done(activityInstance: ActivityInstanceEntity, state: Map<String, Any>) {
-        LOGGER.debug(">>> ${activityInstance.instance.id} > ${activityInstance.id} - Done")
+        LOGGER.debug(">>> ${activityInstance.workflowInstanceId} > ${activityInstance.id} - Done")
 
-        ensureRunning(activityInstance)
+        val workflowInstance =
+            workflowInstanceService.get(activityInstance.workflowInstanceId, activityInstance.tenantId)
+        ensureRunning(activityInstance, workflowInstance)
         ensureNoApprovalPending(activityInstance)
 
         // Update the workflow state
-        workflowInstanceService.mergeState(state, activityInstance.instance)
+        workflowInstanceService.mergeState(state, workflowInstance)
 
         // Update the activity
-        if (activityInstance.activity.requiresApproval) {
-            LOGGER.debug(">>> ${activityInstance.instance.id} > ${activityInstance.id} - Starting approval...")
+        val activity = activityService.get(activityInstance.activityId)
+        if (activity.requiresApproval) {
+            LOGGER.debug(">>> ${activityInstance.workflowInstanceId} > ${activityInstance.id} - Starting approval...")
 
-            activityInstance.approver = activityInstance.instance.approver
+            activityInstance.approverId = workflowInstance.approverId
             activityInstance.approval = ApprovalStatus.PENDING
             activityInstance.status = WorkflowStatus.RUNNING
             activityInstance.doneAt = null
@@ -151,8 +161,8 @@ class WorkflowEngine(
         activityInstanceService.save(activityInstance)
 
         // Run the next
-        if (!activityInstance.activity.requiresApproval) {
-            next(activityInstance.instance)
+        if (!activity.requiresApproval) {
+            next(workflowInstance)
         }
     }
 
@@ -163,18 +173,21 @@ class WorkflowEngine(
         approverUserId: Long,
         comment: String?,
     ): ApprovalEntity {
-        LOGGER.debug(">>> ${activityInstance.instance.id} > ${activityInstance.id} - Approve status=$status")
+        LOGGER.debug(">>> ${activityInstance.workflowInstanceId} > ${activityInstance.id} - Approve status=$status")
 
-        ensureRunning(activityInstance)
+        val workflowInstance = workflowInstanceService.get(
+            activityInstance.workflowInstanceId,
+            activityInstance.tenantId
+        )
+        ensureRunning(activityInstance, workflowInstance)
         ensureApprovalPending(activityInstance)
 
         // Save approval
         val now = Date()
-        val tenantId = activityInstance.activity.workflow.tenant.id ?: -1
         val approval = approvalService.save(
             ApprovalEntity(
-                activityInstance = activityInstance,
-                approver = userService.get(approverUserId, tenantId),
+                activityInstanceId = activityInstance.id!!,
+                approverId = approverUserId,
                 approvedAt = now,
                 status = status,
                 comment = comment,
@@ -192,7 +205,7 @@ class WorkflowEngine(
 
         // Execute Next
         if (status == ApprovalStatus.APPROVED) {
-            next(activityInstance.instance)
+            next(workflowInstance)
         }
         return approval
     }
@@ -217,19 +230,20 @@ class WorkflowEngine(
     private fun execute(activity: ActivityEntity, workflowInstance: WorkflowInstanceEntity): ActivityInstanceEntity? {
         val now = Date()
         var activityInstance = workflowInstance.activityInstances
-            .find { activityInstance -> activityInstance.activity.id == activity.id }
+            .find { activityInstance -> activityInstance.activityId == activity.id }
         if (activityInstance == null) {
             activityInstance = activityInstanceService.save(
                 ActivityInstanceEntity(
                     id = UUID.randomUUID().toString(),
-                    instance = workflowInstance,
-                    activity = activity,
+                    tenantId = workflowInstance.tenantId,
+                    workflowInstanceId = workflowInstance.id!!,
+                    activityId = activity.id!!,
                     status = WorkflowStatus.RUNNING,
-                    assignee = findAssignee(activity, workflowInstance),
+                    assigneeId = findAssignee(activity, workflowInstance),
                     startedAt = now,
                     createdAt = now,
                     approval = ApprovalStatus.UNKNOWN,
-                    approver = null,
+                    approverId = null,
                 )
             )
             workflowInstance.activityInstances.add(activityInstance)
@@ -241,18 +255,18 @@ class WorkflowEngine(
         return null
     }
 
-    private fun findAssignee(activity: ActivityEntity, instance: WorkflowInstanceEntity): UserEntity? {
-        if (activity.role == null) {
+    private fun findAssignee(activity: ActivityEntity, instance: WorkflowInstanceEntity): Long? {
+        val roleId = activity.roleId
+        if (roleId == null) {
             return null
         }
 
-        val role = activity.role!!
         return instance.participants
-            .find { participant -> participant.role.id == role.id }
-            ?.user
+            .find { participant -> participant.roleId == roleId }
+            ?.userId
     }
 
-    private fun ensureRunning(activityInstance: ActivityInstanceEntity) {
+    private fun ensureRunning(activityInstance: ActivityInstanceEntity, workflowInstance: WorkflowInstanceEntity) {
         if (activityInstance.status != WorkflowStatus.RUNNING) {
             throw ConflictException(
                 error = Error(
@@ -264,7 +278,7 @@ class WorkflowEngine(
                 )
             )
         }
-        ensureRunning(activityInstance.instance)
+        ensureRunning(workflowInstance)
     }
 
     private fun ensureRunning(workflowInstance: WorkflowInstanceEntity) {
@@ -303,11 +317,11 @@ class WorkflowEngine(
 
     private fun findSuccessorFlows(
         activityInstances: List<ActivityInstanceEntity>,
-        workflowInstance: WorkflowInstanceEntity
+        workflow: WorkflowEntity,
     ): List<FlowEntity> {
-        val activityIds = activityInstances.map { activityInstance -> activityInstance.activity.id }
+        val activityIds = activityInstances.map { activityInstance -> activityInstance.activityId }
 
-        val flows = workflowInstance.workflow.flows
+        val flows = workflow.flows
             .filter { flow -> activityIds.contains(flow.from.id) }
             .filter { flow -> flow.to.active }
             .filter { flow -> !activityIds.contains(flow.to.id) }
@@ -315,8 +329,12 @@ class WorkflowEngine(
         return flows
     }
 
-    private fun allPrecessorAreDone(activity: ActivityEntity, workflowInstance: WorkflowInstanceEntity): Boolean {
-        val predecessorActivityIds = workflowInstance.workflow.flows
+    private fun allPredecessorsAreDone(
+        activity: ActivityEntity,
+        workflowInstance: WorkflowInstanceEntity,
+        workflow: WorkflowEntity,
+    ): Boolean {
+        val predecessorActivityIds = workflow.flows
             .filter { flow -> flow.to.id == activity.id }
             .map { flow -> flow.from }
             .filter { activity -> activity.active }
@@ -324,7 +342,7 @@ class WorkflowEngine(
 
         val runningActivityIds = workflowInstance.activityInstances
             .filter { activityInstance -> activityInstance.status == WorkflowStatus.DONE }
-            .map { activityInstance -> activityInstance.activity.id }
+            .map { activityInstance -> activityInstance.activityId }
 
         return runningActivityIds.containsAll(predecessorActivityIds)
     }

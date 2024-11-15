@@ -9,10 +9,10 @@ class ActivityInstanceMapper {
     fun toActivityInstance(entity: ActivityInstanceEntity): ActivityInstance {
         return ActivityInstance(
             id = entity.id!!,
-            instanceId = entity.instance.id!!,
-            activityId = entity.activity.id!!,
-            assigneeUserId = entity.assignee?.id,
-            approverUserId = entity.activity.id,
+            instanceId = entity.workflowInstanceId,
+            activityId = entity.activityId,
+            assigneeUserId = entity.assigneeId,
+            approverUserId = entity.approverId,
             status = entity.status,
             approval = entity.approval,
             approvedAt = entity.approvedAt,

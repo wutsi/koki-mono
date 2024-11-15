@@ -54,8 +54,8 @@ class CreateWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
 
         val instanceId = result.body!!.workflowInstanceId
         val instance = instanceDao.findById(instanceId).get()
-        assertEquals(request.workflowId, instance.workflow.id)
-        assertEquals(request.approverUserId, instance.approver?.id)
+        assertEquals(request.workflowId, instance.workflowId)
+        assertEquals(request.approverUserId, instance.approverId)
         assertEquals(fmt.format(request.startAt), fmt.format(instance.startAt))
         assertEquals(fmt.format(request.dueAt), fmt.format(instance.dueAt))
         assertNull(instance.startedAt)
@@ -66,15 +66,15 @@ class CreateWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         assertEquals("val1", parameters["PARAM_1"])
         assertEquals("val2", parameters["PARAM_2"])
 
-        val participants = participanDao.findByInstance(instance).sortedBy { it.role.id }
+        val participants = participanDao.findByWorkflowInstanceId(instanceId).sortedBy { it.roleId }
 
         assertEquals(2, participants.size)
 
-        assertEquals(10L, participants[0].role.id)
-        assertEquals(100L, participants[0].user.id)
+        assertEquals(10L, participants[0].roleId)
+        assertEquals(100L, participants[0].userId)
 
-        assertEquals(11L, participants[1].role.id)
-        assertEquals(101L, participants[1].user.id)
+        assertEquals(11L, participants[1].roleId)
+        assertEquals(101L, participants[1].userId)
     }
 
     @Test
@@ -94,13 +94,13 @@ class CreateWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         val instanceId = result.body!!.workflowInstanceId
 
         val instance = instanceDao.findById(instanceId).get()
-        assertEquals(req.workflowId, instance.workflow.id)
-        assertNull(instance.approver)
+        assertEquals(req.workflowId, instance.workflowId)
+        assertNull(instance.approverId)
 
         val parameters = objectMapper.readValue(instance.parameters, Map::class.java)
         assertEquals(0, parameters.size)
 
-        val participants = participanDao.findByInstance(instance).sortedBy { it.role.id }
+        val participants = participanDao.findByWorkflowInstanceId(instanceId).sortedBy { it.roleId }
         assertEquals(0, participants.size)
     }
 

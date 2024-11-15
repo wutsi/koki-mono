@@ -34,12 +34,12 @@ INSERT INTO T_WORKFLOW_INSTANCE(id, tenant_fk, workflow_fk, approver_fk, status,
            ('wi-100-02', 1, 100, 100, 2, now()),
            ('wi-100-03', 1, 100, 100, 1, now());
 
-INSERT INTO T_WI_ACTIVITY(id, instance_fk, activity_fk, assignee_fk, approver_fk, status, started_at, done_at)
-    VALUES ('wi-100-01-start-done',      'wi-100-01', 100, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
-           ('wi-100-01-working-done',    'wi-100-01', 101, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
-           ('wi-100-01-send-done',       'wi-100-01', 102, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
-           ('wi-100-01-submit-done',     'wi-100-01', 103, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
-           ('wi-100-01-stop-done',       'wi-100-01', 104, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
+INSERT INTO T_WI_ACTIVITY(id, tenant_fk, workflow_instance_fk, activity_fk, assignee_fk, approver_fk, status, started_at, done_at)
+    VALUES ('wi-100-01-start-done',      1, 'wi-100-01', 100, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
+           ('wi-100-01-working-done',    1, 'wi-100-01', 101, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
+           ('wi-100-01-send-done',       1, 'wi-100-01', 102, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
+           ('wi-100-01-submit-done',     1, 'wi-100-01', 103, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
+           ('wi-100-01-stop-done',       1, 'wi-100-01', 104, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
 
-           ('wi-100-02-start-done',      'wi-100-02', 100, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
-           ('wi-100-02-working-running', 'wi-100-02', 101, null, null, 2, '2020-01-10 12:30', '2020-01-11 12:30');
+           ('wi-100-02-start-done',      1, 'wi-100-02', 100, null, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
+           ('wi-100-02-working-running', 1, 'wi-100-02', 101, null, null, 2, '2020-01-10 12:30', '2020-01-11 12:30');

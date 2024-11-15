@@ -7,7 +7,6 @@ import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.tenant.server.service.RoleService
 import com.wutsi.koki.tenant.server.service.UserService
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
-import com.wutsi.koki.workflow.dto.WorkflowInstanceSortBy
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.dao.ParticipantRepository
 import com.wutsi.koki.workflow.server.dao.WorkflowInstanceRepository
@@ -38,7 +37,7 @@ class WorkflowInstanceService(
         val instance = instanceDao.findById(id)
             .orElseThrow { NotFoundException(Error(code = ErrorCode.WORKFLOW_INSTANCE_NOT_FOUND)) }
 
-        if (instance.tenant.id != tenantId) {
+        if (instance.tenantId != tenantId) {
             throw NotFoundException(Error(code = ErrorCode.WORKFLOW_INSTANCE_NOT_FOUND))
         }
         return instance
@@ -54,23 +53,21 @@ class WorkflowInstanceService(
         tenantId: Long,
         limit: Int,
         offset: Int,
-        sortBy: WorkflowInstanceSortBy?,
-        ascending: Boolean,
     ): List<WorkflowInstanceEntity> {
         val jql = StringBuilder("SELECT W FROM WorkflowInstanceEntity W")
         if (participantUserId != null) {
             jql.append(" JOIN W.participants P")
         }
 
-        jql.append(" WHERE W.tenant.id = :tenantId")
+        jql.append(" WHERE W.tenantId = :tenantId")
         if (ids.isNotEmpty()) {
             jql.append(" AND W.id IN :ids")
         }
         if (workflowIds.isNotEmpty()) {
-            jql.append(" AND W.workflow.id IN :workflowIds")
+            jql.append(" AND W.workflowId IN :workflowIds")
         }
         if (participantUserId != null) {
-            jql.append(" AND P.user.id = :participantUserId")
+            jql.append(" AND P.userId = :participantUserId")
         }
         if (status != null) {
             jql.append(" AND W.status IN :status")
@@ -80,18 +77,6 @@ class WorkflowInstanceService(
         }
         if (startTo != null) {
             jql.append(" AND W.startAt <= :startTo")
-        }
-
-        if (sortBy != null) {
-            val column = when (sortBy) {
-                WorkflowInstanceSortBy.ID -> "id"
-                WorkflowInstanceSortBy.NAME -> "workflow.name"
-                WorkflowInstanceSortBy.TITLE -> "workflow.title"
-            }
-            jql.append(" ORDER BY W.$column")
-            if (!ascending) {
-                jql.append(" DESC")
-            }
         }
 
         val query = em.createQuery(jql.toString(), WorkflowInstanceEntity::class.java)
@@ -138,6 +123,7 @@ class WorkflowInstanceService(
     }
 
     @Transactional
+    @Suppress("UNCHECKED_CAST")
     fun mergeState(data: Map<String, Any>, workflowInstance: WorkflowInstanceEntity) {
         // Merge
         var merged = mutableMapOf<String, Any>()
@@ -169,10 +155,10 @@ class WorkflowInstanceService(
         val instance = instanceDao.save(
             WorkflowInstanceEntity(
                 id = UUID.randomUUID().toString(),
-                tenant = workflow.tenant,
-                workflow = workflow,
+                tenantId = tenantId,
+                workflowId = workflow.id!!,
                 status = WorkflowStatus.NEW,
-                approver = request.approverUserId?.let { userId -> userService.get(userId, tenantId) },
+                approverId = request.approverUserId,
                 startAt = request.startAt,
                 dueAt = request.dueAt,
             )
@@ -204,9 +190,9 @@ class WorkflowInstanceService(
                 val user = userMap[participant.userId]!!
                 LOGGER.debug(">>> ${instance.id} - Adding Participant User[${user.id}] as Role[${role.name}]")
                 ParticipantEntity(
-                    instance = instance,
-                    role = role,
-                    user = user
+                    workflowInstanceId = instance.id!!,
+                    roleId = participant.roleId,
+                    userId = participant.userId
                 )
             }
 

@@ -1,12 +1,10 @@
 package com.wutsi.koki.workflow.server.domain
 
-import com.wutsi.koki.tenant.server.domain.TenantEntity
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import org.hibernate.annotations.BatchSize
@@ -19,16 +17,15 @@ data class WorkflowEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    @ManyToOne
-    @JoinColumn(name = "tenant_fk")
-    val tenant: TenantEntity = TenantEntity(),
+    @Column(name = "tenant_fk")
+    val tenantId: Long = -1,
 
     @BatchSize(20)
     @OneToMany(mappedBy = "workflow")
     val activities: List<ActivityEntity> = emptyList(),
 
     @BatchSize(20)
-    @OneToMany(mappedBy = "workflow")
+    @OneToMany(mappedBy = "workflowId")
     val flows: List<FlowEntity> = emptyList(),
 
     var name: String = "",
