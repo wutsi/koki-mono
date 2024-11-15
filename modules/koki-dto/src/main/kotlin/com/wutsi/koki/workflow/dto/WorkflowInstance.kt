@@ -1,6 +1,5 @@
 package com.wutsi.koki.workflow.dto
 
-import com.wutsi.koki.workflow.server.domain.ActivityInstance
 import java.util.Date
 
 data class WorkflowInstance(
@@ -15,5 +14,5 @@ data class WorkflowInstance(
     val dueAt: Date? = null,
     val parameters: Map<String, String> = emptyMap(),
     val state: Map<String, Any> = emptyMap(),
-    val activityInstances: List<ActivityInstance> = emptyList(),
+    val activityInstances: List<ActivityInstanceSummary> = emptyList(),
 )
