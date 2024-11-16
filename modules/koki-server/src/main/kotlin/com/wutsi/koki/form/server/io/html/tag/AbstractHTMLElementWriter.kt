@@ -15,14 +15,24 @@ abstract class AbstractHTMLElementWriter() : HTMLElementWriter {
         if (element.accessControl == null || element.accessControl?.viewerRoles == null) {
             return true
         }
-        return element.accessControl!!.viewerRoles?.contains(context.roleName) == true
+        element.accessControl!!.viewerRoles?.forEach { role ->
+            if (context.roleNames.contains(role)) {
+                return true
+            }
+        }
+        return false
     }
 
     protected fun canEdit(element: FormElement, context: Context): Boolean {
         if (element.accessControl == null || element.accessControl?.editorRoles == null) {
             return true
         }
-        return element.accessControl!!.editorRoles?.contains(context.roleName) == true
+        element.accessControl!!.editorRoles?.forEach { role ->
+            if (context.roleNames.contains(role)) {
+                return true
+            }
+        }
+        return false
     }
 
     override fun write(element: FormElement, context: Context, writer: StringWriter) {

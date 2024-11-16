@@ -7,12 +7,11 @@ import org.springframework.stereotype.Service
 
 @Service
 class FormDataMapper(private val objectMapper: ObjectMapper) {
-    @Suppress("UNCHECKED_CAST")
     fun toFormData(entity: FormDataEntity): FormData {
         return FormData(
             id = entity.id ?: "",
             formId = entity.formId,
-            data = objectMapper.readValue(entity.data, Map::class.java) as Map<String, Any>,
+            data = entity.dataAsMap(objectMapper),
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
             status = entity.status,

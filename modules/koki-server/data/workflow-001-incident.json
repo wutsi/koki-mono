@@ -1,17 +1,32 @@
 {
   "workflow": {
     "name": "WKF-001",
-    "description": "This is a simple process for filling taxes",
+    "description": "Process for managing incident report",
     "activities": [
       {
         "name": "start",
         "type": "START"
       },
       {
-        "name": "receive_document",
-        "description": "Office Manager contacts client to get documents",
+        "name": "submit",
+        "description": "Employee submit the form",
         "type": "MANUAL",
-        "form": "FRM-001"
+        "form": "FRM-001",
+        "role": "employee"
+      },
+      {
+        "name": "evaluate",
+        "description": "HR receives the incident form, evaluate the request and assess the reimbursement amount",
+        "type": "MANUAL",
+        "form": "FRM-001",
+        "role": "hr"
+      },
+      {
+        "name": "payment",
+        "description": "Finance receive the amount and initiate the reimbursement",
+        "type": "MANUAL",
+        "form": "FRM-001",
+        "role": "finance"
       },
       {
         "name": "stop",
@@ -21,10 +36,24 @@
     "flows": [
       {
         "from": "start",
-        "to": "receive_document"
+        "to": "submit"
       },
       {
-        "from": "receive_document",
+        "from": "submit",
+        "to": "evaluate"
+      },
+      {
+        "from": "evaluate",
+        "to": "payment",
+        "expression": "hr_approval=='approved'"
+      },
+      {
+        "from": "evaluate",
+        "to": "stop",
+        "expression": "hr_approval=='rejected'"
+      },
+      {
+        "from": "payment",
         "to": "stop"
       }
     ]

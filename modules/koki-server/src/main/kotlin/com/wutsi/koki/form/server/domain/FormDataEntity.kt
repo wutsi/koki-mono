@@ -1,5 +1,6 @@
 package com.wutsi.koki.form.server.domain
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.form.dto.FormDataStatus
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -24,4 +25,13 @@ data class FormDataEntity(
     var data: String? = null,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date()
-)
+) {
+    @Suppress("UNCHECKED_CAST")
+    fun dataAsMap(objectMapper: ObjectMapper): Map<String, Any> {
+        return if (data == null) {
+            return emptyMap()
+        } else {
+            objectMapper.readValue(data, Map::class.java) as Map<String, Any>
+        }
+    }
+}

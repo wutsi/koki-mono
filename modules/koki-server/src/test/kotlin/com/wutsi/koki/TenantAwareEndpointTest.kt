@@ -57,12 +57,16 @@ abstract class TenantAwareEndpointTest : ClientHttpRequestInterceptor {
         expectedStatusCode: Int,
         expectedFileName: String?,
         expectedContentType: String,
+        accessToken: String? = null,
     ): File? {
         val url = URL(u)
         val cnn = url.openConnection() as HttpURLConnection
         try {
+            if (accessToken != null) {
+                cnn.setRequestProperty("Authorization", "Bearer $accessToken")
+            }
             cnn.connect()
-
+            
             assertEquals(expectedStatusCode, cnn.responseCode)
 
             if (expectedStatusCode == 200) {

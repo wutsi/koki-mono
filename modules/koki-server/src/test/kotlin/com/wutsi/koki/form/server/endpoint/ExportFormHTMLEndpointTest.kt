@@ -6,7 +6,7 @@ import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.TenantAwareEndpointTest
+import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.form.dto.FormContent
 import com.wutsi.koki.form.server.generator.html.Context
 import com.wutsi.koki.form.server.generator.html.HTMLFormGenerator
@@ -22,7 +22,7 @@ import javax.imageio.ImageIO
 import kotlin.test.assertEquals
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/form/ExportFormHTMLDataEndpoint.sql"])
-class ExportFormHTMLEndpointTest : TenantAwareEndpointTest() {
+class ExportFormHTMLEndpointTest : AuthorizationAwareEndpointTest() {
     @LocalServerPort
     private lateinit var port: Integer
 
@@ -34,7 +34,8 @@ class ExportFormHTMLEndpointTest : TenantAwareEndpointTest() {
             url,
             expectedFileName = filename,
             expectedStatusCode = statusCode,
-            expectedContentType = "text/html"
+            expectedContentType = "text/html",
+            accessToken = createAccessToken()
         )
     }
 
@@ -50,7 +51,7 @@ class ExportFormHTMLEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun `empty form`() {
         val url =
-            "http://localhost:$port/v1/forms/html/1/100.html?&role-name=accountant&workflow-instance-id=xxx&activity-instance-id=yyy"
+            "http://localhost:$port/v1/forms/html/1/100.html?&workflow-instance-id=xxx&activity-instance-id=yyy"
 
         val file = download(url, 200, "100.html")
         assertTrue(file!!.length() > 0L)
@@ -64,13 +65,16 @@ class ExportFormHTMLEndpointTest : TenantAwareEndpointTest() {
             "http://localhost:8081/forms/100?workflow-instance-id=xxx&activity-instance-id=yyy",
             context.firstValue.submitUrl
         )
-        assertEquals("accountant", context.firstValue.roleName)
+        assertEquals(2, context.firstValue.roleNames.size)
+        assertTrue(context.firstValue.roleNames.contains("accountant"))
+        assertTrue(context.firstValue.roleNames.contains("technician"))
+
         assertEquals(0, context.firstValue.data.size)
     }
 
     @Test
     fun `form with data`() {
-        val url = "http://localhost:$port/v1/forms/html/1/100/10011.html?&role-name=accountant&activity-instance-id=yyy"
+        val url = "http://localhost:$port/v1/forms/html/1/100/10011.html?&activity-instance-id=yyy"
 
         val file = download(url, 200, "10011.html")
         assertTrue(file!!.length() > 0L)
@@ -81,7 +85,10 @@ class ExportFormHTMLEndpointTest : TenantAwareEndpointTest() {
         verify(generator).generate(any(), context.capture(), any())
 
         assertEquals("http://localhost:8081/forms/100/10011?activity-instance-id=yyy", context.firstValue.submitUrl)
-        assertEquals("accountant", context.firstValue.roleName)
+        assertEquals(2, context.firstValue.roleNames.size)
+        assertTrue(context.firstValue.roleNames.contains("accountant"))
+        assertTrue(context.firstValue.roleNames.contains("technician"))
+
         assertEquals(2, context.firstValue.data.size)
         assertEquals(2, context.firstValue.data.size)
         assertEquals("aa", context.firstValue.data["A"])

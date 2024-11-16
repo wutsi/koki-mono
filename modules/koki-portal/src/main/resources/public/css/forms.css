@@ -2,6 +2,11 @@ body {
     background: #f8f8f8;
 }
 
+textarea:read-only,
+input:read-only {
+    background: #f8f8f8;
+}
+
 *:user-invalid,
 .user-invalid {
     border: 2px solid red !important;

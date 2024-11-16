@@ -12,7 +12,7 @@ import kotlin.test.assertEquals
 
 class HTMLImageWriterTest {
     val context = Context(
-        roleName = "accountant"
+        roleNames = listOf("accountant"),
     )
     val output = StringWriter()
     val writer = HTMLImageWriter()

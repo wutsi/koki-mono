@@ -24,15 +24,30 @@ class HTMLSectionWriter() : AbstractHTMLElementWriter() {
         }
 
         writer.write("  <DIV class='section-body'>\n")
-        element.elements?.forEach { elt ->
+        element.elements?.forEach { child ->
             writer.write("    <DIV class='section-item'>\n")
             writer.write("      ")
             context.provider
-                .get(elt.type)
-                .write(elt, context, writer)
+                .get(child.type)
+                .write(
+                    element = inheritAccessControl(element, child),
+                    context = context,
+                    writer = writer
+                )
             writer.write("    </DIV>\n")
         }
         writer.write("  </DIV>\n")
         writer.write("</DIV>\n")
+    }
+
+    private fun inheritAccessControl(parent: FormElement, child: FormElement): FormElement {
+        return if (child.accessControl == null && parent.accessControl != null) {
+            child.copy(
+                accessControl = parent.accessControl!!.copy()
+            )
+        } else {
+            child
+        }
+
     }
 }

@@ -24,7 +24,8 @@ class ExportWorkflowInstancePNGEndpointTest : TenantAwareEndpointTest() {
             url,
             expectedFileName = filename,
             expectedStatusCode = statusCode,
-            expectedContentType = "image/png"
+            expectedContentType = "image/png",
+            accessToken = null
         )
     }
 

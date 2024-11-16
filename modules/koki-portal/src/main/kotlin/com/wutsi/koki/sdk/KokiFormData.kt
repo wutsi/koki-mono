@@ -13,21 +13,33 @@ class KokiFormData(
         private val PATH_PREFIX = "/v1/form-data"
     }
 
-    fun submit(formId: String, data: Map<String, Any>): SubmitFormDataResponse {
+    fun submit(
+        formId: String,
+        workflowInstanceId: String?,
+        activityInstanceId: String?,
+        data: Map<String, Any>
+    ): SubmitFormDataResponse {
         val request = SubmitFormDataRequest(
             formId = formId,
-            data = data
+            data = data,
+            workflowInstanceId = workflowInstanceId,
+            activityInstanceId = activityInstanceId,
         )
         val path = PATH_PREFIX
         val url = urlBuilder.build(path)
         return rest.postForEntity(url, request, SubmitFormDataResponse::class.java).body
     }
 
-    fun update(formDataId: String, data: Map<String, Any>) {
+    fun update(
+        formDataId: String,
+        activityInstanceId: String?,
+        data: Map<String, Any>
+    ) {
         val request = UpdateFormDataRequest(
-            data = data
+            data = data,
+            activityInstanceId = activityInstanceId
         )
-        val url = urlBuilder.build("PATH_PREFIX/$formDataId")
+        val url = urlBuilder.build("$PATH_PREFIX/$formDataId")
         rest.postForEntity(url, request, Any::class.java)
     }
 }

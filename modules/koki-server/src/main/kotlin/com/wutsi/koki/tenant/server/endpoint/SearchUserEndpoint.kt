@@ -27,7 +27,7 @@ class SearchUserEndpoint(
     ): SearchUserResponse {
         val users = service.search(keyword, id, tenantId, limit, offset, sortBy, ascending)
         return SearchUserResponse(
-            users = users.map { user -> mapper.toUser(user) }
+            users = users.map { user -> mapper.toUserSummary(user) }
         )
     }
 }

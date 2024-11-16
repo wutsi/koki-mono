@@ -8,6 +8,16 @@
         "type": "SECTION",
         "title": "General Information",
         "description": "General information about the incident",
+        "accessControl": {
+          "viewerRoles": [
+            "employee",
+            "hr",
+            "finance"
+          ],
+          "editorRoles": [
+            "employee"
+          ]
+        },
         "elements": [
           {
             "name": "incident_title",
@@ -117,6 +127,79 @@
             "type": "PARAGRAPH",
             "title": "Incident Description",
             "description": "Enter all the details about the incident. Please add as many information as possible to help us to process the case quickly",
+            "required": true
+          }
+        ]
+      },
+      {
+        "type": "SECTION",
+        "title": "HR Approval",
+        "description": "This section is reserved to Human Resource for approving the claim",
+        "accessControl": {
+          "viewerRoles": [
+            "hr",
+            "finance"
+          ],
+          "editorRoles": [
+            "hr"
+          ]
+        },
+        "elements": [
+          {
+            "name": "hr_approval",
+            "type": "CHECKBOXES",
+            "title": "Approval",
+            "required": true,
+            "options": [
+              {
+                "value": "approved",
+                "text": "Approved"
+              },
+              {
+                "value": "rejected",
+                "text": "Rejected"
+              }
+            ]
+          },
+          {
+            "name": "hr_comment",
+            "type": "PARAGRAPH",
+            "title": "Justification",
+            "required": true,
+            "description": "Justify your decision"
+          },
+          {
+            "name": "reimbursement_amount",
+            "type": "NUMBER",
+            "title": "Reimbursement amount",
+            "required": true,
+            "description": "Enter the payment to reimburse to the employee, for 0 if you reject the claim"
+          }
+        ]
+      },
+      {
+        "type": "SECTION",
+        "title": "Payment Information",
+        "description": "This section is reserved to Finance team",
+        "accessControl": {
+          "viewerRoles": [
+            "finance"
+          ],
+          "editorRoles": [
+            "finance"
+          ]
+        },
+        "elements": [
+          {
+            "name": "payment_date",
+            "type": "DATE",
+            "title": "Payment Date",
+            "required": true
+          },
+          {
+            "name": "transaction_number",
+            "type": "TEXT",
+            "title": "Transaction Number",
             "required": true
           }
         ]

@@ -39,7 +39,7 @@ abstract class AuthorizationAwareEndpointTest : TenantAwareEndpointTest() {
         return super.intercept(request, body, execution)
     }
 
-    private fun createAccessToken(): String {
+    protected fun createAccessToken(): String {
         return authenticationService.createAccessToken(
             UserEntity(
                 id = USER_ID,

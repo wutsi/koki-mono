@@ -19,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
+import javax.sql.DataSource
 import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -34,10 +35,29 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
     @MockBean
     private lateinit var passwordService: PasswordService
 
+    @Autowired
+    protected lateinit var ds: DataSource
+
     @BeforeEach
     override fun setUp() {
         super.setUp()
         doReturn(HASHED_PASSWORD).whenever(passwordService).hash(any(), any())
+    }
+
+    private fun roleCount(userId: Long): Int {
+        val cnn = ds.connection
+        cnn.use {
+            val stmt = cnn.createStatement()
+            stmt.use {
+                val rs = stmt.executeQuery("SELECT count(*) FROM T_USER_ROLE where user_fk=$userId")
+                rs.use {
+                    if (rs.next()) {
+                        return rs.getInt(1)
+                    }
+                }
+            }
+        }
+        return -1
     }
 
     @Test
@@ -45,7 +65,8 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
         val request = CreateUserRequest(
             email = "thomas.nkono@hotmail.com",
             displayName = "Thomas Nkono",
-            password = "secret"
+            password = "secret",
+            roleIds = listOf(11L, 12L)
         )
 
         val result = rest.postForEntity("/v1/users", request, CreateUserResponse::class.java)
@@ -60,6 +81,7 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals(36, user.salt.length)
         assertEquals(HASHED_PASSWORD, user.password)
         assertEquals(TENANT_ID, user.tenantId)
+        assertEquals(request.roleIds.size, roleCount(userId))
 
         verify(passwordService).hash(request.password, user.salt)
     }

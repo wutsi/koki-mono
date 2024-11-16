@@ -53,6 +53,42 @@ class FormControllerTest : AbstractPageControllerTest() {
 
         verify(kokiFormData).submit(
             formId,
+            null,
+            null,
+            mapOf(
+                "customer_name" to "Ray Sponsible",
+                "customer_email" to "ray.sponsible@gmail.com",
+                "marital_status" to "S",
+                "case_type" to "IMM"
+            )
+        )
+
+        assertCurrentPageIs(PageName.FORM_SAVED)
+    }
+
+
+    @Test
+    fun `submit with workflow`() {
+        val html =
+            generateFormHtml("http://localhost:$port/forms/$formId?workflow-instance-id=111&activity-instance-id=222")
+        doReturn(html).whenever(kokiForms)
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+
+        // WHEN
+        navigateTo("/forms/$formId?workflow-instance-id=111&activity-instance-id=222")
+
+        // THEN
+        assertCurrentPageIs(PageName.FORM)
+        input("INPUT[name=customer_name]", "Ray Sponsible")
+        input("INPUT[name=customer_email]", "ray.sponsible@gmail.com")
+        click("INPUT[value=S]")
+        click("INPUT[value=IMM]")
+        click("BUTTON")
+
+        verify(kokiFormData).submit(
+            formId,
+            "111",
+            "222",
             mapOf(
                 "customer_name" to "Ray Sponsible",
                 "customer_email" to "ray.sponsible@gmail.com",
@@ -103,7 +139,7 @@ class FormControllerTest : AbstractPageControllerTest() {
             .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         // WHEN
-        navigateTo("/forms/$formId/$formDataId")
+        navigateTo("/forms/$formId/$formDataId?activity-instance-id=222")
 
         // THEN
         assertCurrentPageIs(PageName.FORM)
@@ -115,7 +151,45 @@ class FormControllerTest : AbstractPageControllerTest() {
         click("BUTTON")
 
         val dataArg = argumentCaptor<Map<String, Any>>()
-        verify(kokiFormData).update(eq(formDataId), dataArg.capture())
+        verify(kokiFormData).update(eq(formDataId), eq(null), dataArg.capture())
+        val data = dataArg.firstValue
+        assertEquals(4, data.size)
+        assertEquals("Ray Sponsible", data["customer_name"])
+        assertEquals("ray.sponsible@gmail.com", data["customer_email"])
+        assertEquals("S", data["marital_status"])
+        assertEquals(2, (data["case_type"] as Array<*>).size)
+        assertEquals("T1", (data["case_type"] as Array<*>)[0])
+        assertEquals("IMM", (data["case_type"] as Array<*>)[1])
+
+        assertCurrentPageIs(PageName.FORM_SAVED)
+    }
+
+    @Test
+    fun `update with workflow`() {
+        // GIVEN
+        val formDataId = "4094509"
+
+        val html = generateFormHtml("http://localhost:$port/forms/$formId/$formDataId?activity-instance-id=222")
+        doReturn(html).whenever(kokiForms)
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+
+        doReturn(html).whenever(kokiForms)
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+
+        // WHEN
+        navigateTo("/forms/$formId/$formDataId?activity-instance-id=222")
+
+        // THEN
+        assertCurrentPageIs(PageName.FORM)
+        input("INPUT[name=customer_name]", "Ray Sponsible")
+        input("INPUT[name=customer_email]", "ray.sponsible@gmail.com")
+        click("INPUT[value=S]")
+        click("INPUT[value=T1]")
+        click("INPUT[value=IMM]")
+        click("BUTTON")
+
+        val dataArg = argumentCaptor<Map<String, Any>>()
+        verify(kokiFormData).update(eq(formDataId), eq("222"), dataArg.capture())
         val data = dataArg.firstValue
         assertEquals(4, data.size)
         assertEquals("Ray Sponsible", data["customer_name"])

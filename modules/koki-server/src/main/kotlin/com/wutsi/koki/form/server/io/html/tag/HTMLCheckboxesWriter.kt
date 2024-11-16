@@ -64,7 +64,7 @@ class HTMLCheckboxesWriter : AbstractHTMLImputElementWriter() {
         // Input
         writer.write("    <INPUT name='$name' type='$type' value='${StringEscapeUtils.escapeHtml4(value)}'")
         if (readOnly) {
-            writer.write(" readonly")
+            writer.write(" onclick='return false;'")
         }
         if (checked) {
             writer.write(" checked")

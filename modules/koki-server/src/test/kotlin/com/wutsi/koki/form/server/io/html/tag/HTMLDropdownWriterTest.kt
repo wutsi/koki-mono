@@ -13,7 +13,7 @@ import kotlin.test.assertEquals
 
 class HTMLDropdownWriterTest {
     val context = Context(
-        roleName = "accountant",
+        roleNames = listOf("accountant"),
         data = mapOf("var1" to "value1")
     )
     val output = StringWriter()
@@ -121,8 +121,8 @@ class HTMLDropdownWriterTest {
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
                 <SELECT name='${elt.name}' value='value1' readonly>
-                  <OPTION value='1'>1</OPTION>
-                  <OPTION value='foo'>FOO</OPTION>
+                  <OPTION value='1' disabled>1</OPTION>
+                  <OPTION value='foo' disabled>FOO</OPTION>
                   <OPTION value='value1' selected>Value #1</OPTION>
                 </SELECT>
 

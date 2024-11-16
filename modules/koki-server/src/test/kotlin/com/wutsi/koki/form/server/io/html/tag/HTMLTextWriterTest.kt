@@ -12,7 +12,7 @@ import kotlin.test.assertEquals
 
 class HTMLTextWriterTest {
     val context = Context(
-        roleName = "accountant",
+        roleNames = listOf("accountant"),
         data = mapOf("var1" to "value1")
     )
     val output = StringWriter()

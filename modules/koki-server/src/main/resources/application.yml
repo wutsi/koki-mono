@@ -65,17 +65,9 @@ springdoc:
         operations-sorter: alpha
         tags-sorter: alpha
     group-configs:
-        -   group: attributes
-            display-name: Attribute API
-            paths-to-match: /v1/attributes, /v1/attributes/*
-
         -   group: authentication
             display-name: Authentication API
             paths-to-match: /v1/auth, /v1/auth/*
-
-        -   group: configurations
-            display-name: Configuration API
-            paths-to-match: /v1/configurations, /v1/configurations/*
 
         -   group: forms
             display-name: Form API
@@ -83,15 +75,11 @@ springdoc:
 
         -   group: tenant
             display-name: Tenant API
-            paths-to-match: /v1/tenants, /v1/tenants/*
-
-        -   group: role
-            display-name: Role API
-            paths-to-match: /v1/roles, /v1/roles/*
+            paths-to-match: /v1/tenants, /v1/tenants/*, /v1/configurations, /v1/configurations/*
 
         -   group: user
             display-name: User API
-            paths-to-match: /v1/users, /v1/users/*, /v1/users/**
+            paths-to-match: /v1/users, /v1/users/*, /v1/users/**, /v1/roles, /v1/roles/*
 
         -   group: workflow
             display-name: Workflow API
