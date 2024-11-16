@@ -66,7 +66,7 @@ abstract class TenantAwareEndpointTest : ClientHttpRequestInterceptor {
                 cnn.setRequestProperty("Authorization", "Bearer $accessToken")
             }
             cnn.connect()
-            
+
             assertEquals(expectedStatusCode, cnn.responseCode)
 
             if (expectedStatusCode == 200) {

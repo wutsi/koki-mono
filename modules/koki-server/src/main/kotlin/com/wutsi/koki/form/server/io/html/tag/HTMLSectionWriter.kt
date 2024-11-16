@@ -48,6 +48,5 @@ class HTMLSectionWriter() : AbstractHTMLElementWriter() {
         } else {
             child
         }
-
     }
 }

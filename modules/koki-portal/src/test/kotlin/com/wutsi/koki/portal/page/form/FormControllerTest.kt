@@ -66,7 +66,6 @@ class FormControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.FORM_SAVED)
     }
 
-
     @Test
     fun `submit with workflow`() {
         val html =
