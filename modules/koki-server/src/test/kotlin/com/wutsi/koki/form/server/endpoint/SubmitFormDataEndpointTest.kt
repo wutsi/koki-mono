@@ -55,5 +55,6 @@ class SubmitFormDataEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.formId, event.firstValue.formId)
         assertEquals(formData.id, event.firstValue.formDataId)
         assertEquals(request.activityInstanceId, event.firstValue.activityInstanceId)
+        assertEquals(TENANT_ID, event.firstValue.tenantId)
     }
 }

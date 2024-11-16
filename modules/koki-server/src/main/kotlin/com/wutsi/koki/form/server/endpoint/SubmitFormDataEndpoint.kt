@@ -28,6 +28,7 @@ class SubmitFormDataEndpoint(
 
         eventPublisher.publish(
             FormSubmittedEvent(
+                tenantId = tenantId,
                 formId = request.formId,
                 formDataId = formData.id,
                 activityInstanceId = request.activityInstanceId,

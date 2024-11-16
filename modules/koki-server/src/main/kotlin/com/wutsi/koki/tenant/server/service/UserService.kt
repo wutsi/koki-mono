@@ -23,6 +23,7 @@ class UserService(
     private val dao: UserRepository,
     private val passwordService: PasswordService,
     private val tenantService: TenantService,
+    private val roleService: RoleService,
 ) {
     companion object {
         const val PAGE_SIZE = 20
@@ -50,8 +51,8 @@ class UserService(
     @Transactional
     fun create(request: CreateUserRequest, tenantId: Long): UserEntity {
         val email = request.email.lowercase()
-        val user = dao.findByEmailAndTenantId(email, tenantId)
-        if (user != null) {
+        val duplicate = dao.findByEmailAndTenantId(email, tenantId)
+        if (duplicate != null) {
             throw ConflictException(
                 error = Error(
                     code = ErrorCode.USER_DUPLICATE_EMAIL
@@ -61,7 +62,7 @@ class UserService(
 
         val tenant = tenantService.get(tenantId)
         val salt = UUID.randomUUID().toString()
-        return dao.save(
+        val user = dao.save(
             UserEntity(
                 email = email,
                 displayName = request.displayName,
@@ -71,6 +72,12 @@ class UserService(
                 tenantId = tenant.id!!,
             )
         )
+
+        request.roleIds.forEach { roleId ->
+            val role = roleService.get(roleId, tenantId)
+            grant(user, role)
+        }
+        return user
     }
 
     @Transactional
@@ -95,6 +102,10 @@ class UserService(
     @Transactional
     fun grant(id: Long, role: RoleEntity, tenantId: Long): Boolean {
         val user = get(id, tenantId)
+        return grant(user, role)
+    }
+
+    fun grant(user: UserEntity, role: RoleEntity): Boolean {
         if (!user.roles.contains(role)) {
             user.roles.add(role)
             return false

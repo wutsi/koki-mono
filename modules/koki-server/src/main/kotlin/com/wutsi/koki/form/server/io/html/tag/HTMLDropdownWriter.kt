@@ -22,6 +22,8 @@ class HTMLDropdownWriter : AbstractHTMLImputElementWriter() {
                 writer.write("  <OPTION value='${StringEscapeUtils.escapeHtml4(option.value)}'")
                 if (value == option.value) {
                     writer.write(" selected")
+                } else if (readOnly) {
+                    writer.write(" disabled")
                 }
                 writer.write(">${StringEscapeUtils.escapeHtml4(optText)}</OPTION>\n")
             }

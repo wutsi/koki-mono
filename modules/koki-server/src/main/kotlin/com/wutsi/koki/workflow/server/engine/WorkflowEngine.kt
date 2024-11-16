@@ -3,7 +3,6 @@ package com.wutsi.koki.workflow.server.engine
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
-import com.wutsi.koki.tenant.server.service.UserService
 import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.ApprovalStatus
 import com.wutsi.koki.workflow.dto.WorkflowStatus
@@ -32,7 +31,6 @@ class WorkflowEngine(
     private val workflowInstanceService: WorkflowInstanceService,
     private val activityInstanceService: ActivityInstanceService,
     private val approvalService: ApprovalService,
-    private val userService: UserService,
     private val executorProvider: ActivityExecutorProvider,
     private val expressionEvaluator: ExpressionEvaluator,
 ) {
@@ -134,7 +132,10 @@ class WorkflowEngine(
     }
 
     @Transactional
-    fun done(activityInstance: ActivityInstanceEntity, state: Map<String, Any>) {
+    fun done(
+        activityInstance: ActivityInstanceEntity,
+        state: Map<String, Any>
+    ) {
         LOGGER.debug(">>> ${activityInstance.workflowInstanceId} > ${activityInstance.id} - Done")
 
         val workflowInstance =

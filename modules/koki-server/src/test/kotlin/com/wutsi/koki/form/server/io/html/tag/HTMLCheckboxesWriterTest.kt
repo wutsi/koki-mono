@@ -13,7 +13,7 @@ import kotlin.test.assertEquals
 
 class HTMLCheckboxesWriterTest {
     val context = Context(
-        roleName = "accountant",
+        roleNames = listOf("accountant"),
         data = mapOf("var1" to "value1")
     )
     val output = StringWriter()
@@ -63,7 +63,7 @@ class HTMLCheckboxesWriterTest {
     @Test
     fun `multiple values`() {
         val xcontext = Context(
-            roleName = "accountant",
+            roleNames = listOf("accountant"),
             data = mapOf("var1" to listOf("value1", "1"))
         )
         writer.write(elt, xcontext, output)
@@ -270,15 +270,15 @@ class HTMLCheckboxesWriterTest {
                 <DIV class='description'>This is the description</DIV>
                 <DIV class='radio-container'>
                   <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='1' readonly/>
+                    <INPUT name='var1' type='radio' value='1' onclick='return false;'/>
                     <LABEL>1</LABEL>
                   </DIV>
                   <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='foo' readonly/>
+                    <INPUT name='var1' type='radio' value='foo' onclick='return false;'/>
                     <LABEL>FOO</LABEL>
                   </DIV>
                   <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='value1' readonly checked/>
+                    <INPUT name='var1' type='radio' value='value1' onclick='return false;' checked/>
                     <LABEL>Value #1</LABEL>
                   </DIV>
                 </DIV>

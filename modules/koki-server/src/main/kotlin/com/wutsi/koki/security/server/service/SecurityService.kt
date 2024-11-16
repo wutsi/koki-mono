@@ -9,15 +9,20 @@ import org.springframework.stereotype.Service
 @Service
 open class SecurityService {
     fun getCurrentUserId(): Long {
+        return getCurrentUserIdOrNull()
+            ?: throw UnauthorizedException(Error(ErrorCode.AUTHORIZATION_UNAUTHENTICATED))
+    }
+
+    fun getCurrentUserIdOrNull(): Long? {
         val auth = SecurityContextHolder.getContext().authentication
-        if (auth == null || !auth.isAuthenticated) {
-            throw UnauthorizedException(Error(ErrorCode.AUTHORIZATION_UNAUTHENTICATED))
+        return if (auth == null || !auth.isAuthenticated) {
+            null
         } else {
             val principal = auth.principal
             if (principal is JWTPrincipal) {
-                return principal.getUserId()
+                principal.getUserId()
             } else {
-                throw UnauthorizedException(Error(ErrorCode.AUTHORIZATION_SCHEME_NOT_SUPPORTED))
+                null
             }
         }
     }

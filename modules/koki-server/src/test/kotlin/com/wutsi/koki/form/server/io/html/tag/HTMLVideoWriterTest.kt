@@ -22,7 +22,7 @@ class HTMLVideoWriterTest {
     val embedder3 = mock<VideoEmbedder>()
 
     val context = Context(
-        roleName = "accountant"
+        roleNames = listOf("accountant"),
     )
     val output = StringWriter()
     val writer = HTMLVideoWriter(listOf(embedder1, embedder2, embedder3))

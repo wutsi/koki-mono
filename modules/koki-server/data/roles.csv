@@ -1,5 +1,4 @@
 name,active,description
-accountant,true,Accountant review tax report and send them to clients
-technician,true,Technician fill tax report
-office_manager,true,Office Manager handle all administrative task
-client,true,$$$
+employee,yes,
+hr,yes,
+finance,yes,

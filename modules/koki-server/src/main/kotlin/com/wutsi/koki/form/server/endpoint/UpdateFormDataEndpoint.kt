@@ -28,6 +28,7 @@ class UpdateFormDataEndpoint(
 
         eventPublisher.publish(
             FormUpdatedEvent(
+                tenantId = tenantId,
                 formId = formData.formId,
                 formDataId = formData.id!!,
                 activityInstanceId = request.activityInstanceId

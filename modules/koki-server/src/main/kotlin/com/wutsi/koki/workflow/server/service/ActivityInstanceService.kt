@@ -28,16 +28,16 @@ class ActivityInstanceService(
     }
 
     fun search(
-        ids: List<String>,
-        assigneeIds: List<Long>,
-        approverIds: List<Long>,
-        status: WorkflowStatus?,
-        approval: ApprovalStatus?,
-        startedFrom: Date?,
-        startedTo: Date?,
         tenantId: Long,
-        limit: Int,
-        offset: Int,
+        ids: List<String> = emptyList(),
+        assigneeIds: List<Long> = emptyList(),
+        approverIds: List<Long> = emptyList(),
+        status: WorkflowStatus? = null,
+        approval: ApprovalStatus? = null,
+        startedFrom: Date? = null,
+        startedTo: Date? = null,
+        limit: Int = 20,
+        offset: Int = 0,
     ): List<ActivityInstanceEntity> {
         val jql = StringBuilder("SELECT A FROM ActivityInstanceEntity A WHERE A.tenantId = :tenantId")
 
