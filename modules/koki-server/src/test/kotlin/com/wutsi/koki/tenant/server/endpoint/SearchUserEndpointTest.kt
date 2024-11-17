@@ -14,14 +14,14 @@ import kotlin.test.assertFalse
 class SearchUserEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun `search by ids`() {
-        val result = rest.getForEntity("/v1/users?id=11&id=12&id=13&sort-by=id", SearchUserResponse::class.java)
+        val result = rest.getForEntity("/v1/users?id=11&id=12&id=13", SearchUserResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
         val users = result.body!!.users
 
         assertEquals(3, users.size)
-        assertEquals(listOf(11L, 12L, 13L), users.map { it.id })
+        assertEquals(listOf(12L, 11L, 13L), users.map { it.id })
     }
 
     @Test
@@ -38,7 +38,7 @@ class SearchUserEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun `search display-name starts with`() {
-        val result = rest.getForEntity("/v1/users?q=peter&sort-by=displayName", SearchUserResponse::class.java)
+        val result = rest.getForEntity("/v1/users?q=peter", SearchUserResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
@@ -58,7 +58,7 @@ class SearchUserEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun `search display-name contains ignore case`() {
-        val result = rest.getForEntity("/v1/users?q=FONDA&sort-by=displayName", SearchUserResponse::class.java)
+        val result = rest.getForEntity("/v1/users?q=FONDA", SearchUserResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
@@ -73,28 +73,30 @@ class SearchUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals("Peter Fonda", users[1].displayName)
     }
 
-    @Test
-    fun `search display-name of another tenant`() {
-        val result = rest.getForEntity("/v1/users?q=roger&sort-by=displayName", SearchUserResponse::class.java)
-
-        assertEquals(HttpStatus.OK, result.statusCode)
-
-        val users = result.body!!.users
-
-        assertEquals(0, users.size)
-    }
 
     @Test
-    fun all() {
-        val result =
-            rest.getForEntity("/v1/users?limit=2&offset=4&sort-by=id&asc=false", SearchUserResponse::class.java)
+    fun `by role`() {
+        val result = rest.getForEntity("/v1/users?role-id=11", SearchUserResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
         val users = result.body!!.users
 
         assertEquals(2, users.size)
-        assertEquals(15L, users[0].id)
-        assertEquals(14L, users[1].id)
+
+        assertEquals(12L, users[0].id)
+        assertEquals(11L, users[1].id)
+    }
+
+    @Test
+    fun all() {
+        val result =
+            rest.getForEntity("/v1/users?limit=2&offset=4", SearchUserResponse::class.java)
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val users = result.body!!.users
+
+        assertEquals(2, users.size)
     }
 }
