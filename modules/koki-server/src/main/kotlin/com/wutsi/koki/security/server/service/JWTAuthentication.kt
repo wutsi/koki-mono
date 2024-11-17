@@ -1,5 +1,6 @@
 package com.wutsi.koki.security.server.service
 
+import com.wutsi.koki.security.dto.JWTPrincipal
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 

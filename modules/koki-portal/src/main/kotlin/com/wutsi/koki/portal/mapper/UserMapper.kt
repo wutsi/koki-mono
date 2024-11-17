@@ -1,27 +1,28 @@
 package com.wutsi.koki.portal.mapper
 
-import com.wutsi.koki.portal.model.ActivityInstanceModel
-import com.wutsi.koki.workflow.dto.ActivityInstanceSummary
-import com.wutsi.koki.workflow.dto.ActivitySummary
+import com.wutsi.koki.portal.model.RoleModel
+import com.wutsi.koki.portal.model.UserModel
+import com.wutsi.koki.tenant.dto.Role
+import com.wutsi.koki.tenant.dto.User
 import org.springframework.stereotype.Service
 
 @Service
-class WorkflowInstanceMapper(
-    private val workflowMapper: WorkflowMapper
-) {
-    fun toActivityInstanceModel(
-        entity: ActivityInstanceSummary,
-        activity: ActivitySummary,
-    ): ActivityInstanceModel {
-        return ActivityInstanceModel(
+class UserMapper {
+    fun toUserModel(entity: User): UserModel {
+        return UserModel(
             id = entity.id,
-            activity = workflowMapper.toActivityModel(activity),
+            email = entity.email,
+            displayName = entity.displayName,
+            roles = entity.roles.map { role -> toRoleModel(role) },
             status = entity.status,
-            approval = entity.approval,
-            createdAt = entity.createdAt,
-            approvedAt = entity.approvedAt,
-            startedAt =   entity.startedAt,
-            doneAt = entity.doneAt,
+        )
+    }
+
+    fun toRoleModel(role: Role): RoleModel {
+        return RoleModel(
+            id = role.id,
+            name = role.name,
+            title = role.title ?: "",
         )
     }
 }

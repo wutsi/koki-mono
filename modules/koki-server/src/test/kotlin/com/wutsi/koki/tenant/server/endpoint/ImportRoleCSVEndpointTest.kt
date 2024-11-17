@@ -54,11 +54,11 @@ class ImportRoleCSVEndpointTest : TenantAwareEndpointTest() {
     fun import() {
         val response = upload(
             """
-                "name","active","description"
-                "a","Yes",,,
-                "b","No","Priority of the ticket"
-                "c",,
-                "new","yes",""
+                "name","title","active","description"
+                "a","RoleA","Yes",,,
+                "b","RoleB","No","Priority of the ticket"
+                "c",,,
+                "new",,"yes",""
             """.trimIndent()
         )
 
@@ -69,12 +69,14 @@ class ImportRoleCSVEndpointTest : TenantAwareEndpointTest() {
 
         val roleA = findRole("a")
         assertEquals("a", roleA.name)
+        assertEquals("RoleA", roleA.title)
         assertEquals(TENANT_ID, roleA.tenantId)
         assertTrue(roleA.active)
         assertNull(roleA.description)
 
         val roleB = findRole("b")
         assertEquals("b", roleB.name)
+        assertEquals("RoleB", roleB.title)
         assertEquals(TENANT_ID, roleB.tenantId)
         assertFalse(roleB.active)
         assertEquals("Priority of the ticket", roleB.description)
@@ -82,12 +84,14 @@ class ImportRoleCSVEndpointTest : TenantAwareEndpointTest() {
         val roleC = findRole("c")
         assertEquals(TENANT_ID, roleC.tenantId)
         assertEquals("c", roleC.name)
+        assertNull(roleC.title)
         assertFalse(roleC.active)
         assertNull(roleC.description)
 
         val roleNew = findRole("new")
-        assertEquals(TENANT_ID, roleC.tenantId)
+        assertEquals(TENANT_ID, roleNew.tenantId)
         assertEquals("new", roleNew.name)
+        assertNull(roleNew.title)
         assertTrue(roleNew.active)
         assertNull(roleNew.description)
     }

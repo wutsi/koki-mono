@@ -18,10 +18,20 @@ class SearchRoleEndpoint(
     @GetMapping("/v1/roles")
     fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-        @RequestParam(required = false) name: List<String> = emptyList()
+        @RequestParam(required = false) id: List<Long> = emptyList(),
+        @RequestParam(required = false) active: Boolean? = null,
+        @RequestParam(required = false) name: List<String> = emptyList(),
+        @RequestParam(required = false) limit: Int = 20,
+        @RequestParam(required = false) offset: Int = 0,
     ): SearchRoleResponse =
         SearchRoleResponse(
-            roles = service.search(name, tenantId)
-                .map { attr -> mapper.toRole(attr) }
+            roles = service.search(
+                ids = id,
+                names = name,
+                active = active,
+                tenantId = tenantId,
+                limit = limit,
+                offset = offset,
+            ).map { attr -> mapper.toRole(attr) }
         )
 }

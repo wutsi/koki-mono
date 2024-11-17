@@ -1,4 +1,4 @@
-name,active,description
-employee,yes,
-hr,yes,
-finance,yes,
+name,title,active,description
+employee,Employee,yes,
+hr,Human Resources,yes,
+finance,Finance,yes,

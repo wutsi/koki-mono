@@ -6,6 +6,8 @@ import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.security.dto.JWTDecoder
+import com.wutsi.koki.security.dto.JWTPrincipal
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import com.wutsi.koki.tenant.server.service.PasswordService
 import com.wutsi.koki.tenant.server.service.UserService
@@ -18,9 +20,7 @@ open class AuthenticationService(
     private val userService: UserService,
     private val passwordService: PasswordService,
 ) {
-    companion object {
-        const val ISSUER = "Koki"
-    }
+    private val jwtDecoder = JWTDecoder()
 
     fun authenticate(email: String, password: String, tenantId: Long): String {
         try {
@@ -34,18 +34,15 @@ open class AuthenticationService(
         }
     }
 
-    fun decodeAccessToken(token: String): JWTPrincipal {
-        val verifier = JWT.require(getAlgorithm())
-            .withIssuer(ISSUER)
-            .build()
-        return JWTPrincipal(verifier.verify(token))
+    fun decodeAccessToken(accessToken: String): JWTPrincipal {
+        return jwtDecoder.decode(accessToken)
     }
 
     fun createAccessToken(user: UserEntity, ttlSeconds: Int = 86400): String {
         val algo = getAlgorithm()
         val now = Date()
         return JWT.create()
-            .withIssuer(ISSUER)
+            .withIssuer(JWTDecoder.ISSUER)
             .withSubject(user.displayName)
             .withClaim(JWTPrincipal.CLAIM_USER_ID, user.id)
             .withClaim(JWTPrincipal.CLAIM_TENANT_ID, user.tenantId)

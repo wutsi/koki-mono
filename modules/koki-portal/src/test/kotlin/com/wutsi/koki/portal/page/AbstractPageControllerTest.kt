@@ -12,9 +12,19 @@ import com.wutsi.koki.portal.rest.AccessTokenHolder
 import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.sdk.KokiFormData
 import com.wutsi.koki.sdk.KokiForms
+import com.wutsi.koki.sdk.KokiUser
+import com.wutsi.koki.sdk.KokiWorkflow
 import com.wutsi.koki.sdk.KokiWorkflowEngine
+import com.wutsi.koki.security.dto.JWTDecoder
+import com.wutsi.koki.security.dto.JWTPrincipal
+import com.wutsi.koki.tenant.dto.GetUserResponse
+import com.wutsi.koki.tenant.dto.Role
+import com.wutsi.koki.tenant.dto.SearchRoleResponse
+import com.wutsi.koki.tenant.dto.User
+import com.wutsi.koki.workflow.dto.SearchWorkflowResponse
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
+import org.mockito.Mockito.mock
 import org.openqa.selenium.By
 import org.openqa.selenium.Dimension
 import org.openqa.selenium.JavascriptExecutor
@@ -48,28 +58,58 @@ abstract class AbstractPageControllerTest {
     protected lateinit var driver: WebDriver
 
     @MockBean
+    protected lateinit var kokiAuthentication: KokiAuthentication
+
+    @MockBean
     protected lateinit var kokiForms: KokiForms
 
     @MockBean
     protected lateinit var kokiFormData: KokiFormData
 
     @MockBean
-    protected lateinit var kokiWorkflowEngine: KokiWorkflowEngine
+    protected lateinit var kokiUser: KokiUser
 
     @MockBean
-    protected lateinit var kokiAuthentication: KokiAuthentication
+    protected lateinit var kokiWorkflow: KokiWorkflow
+
+    @MockBean
+    protected lateinit var kokiWorkflowEngine: KokiWorkflowEngine
 
     @MockBean
     protected lateinit var accessTokenHolder: AccessTokenHolder
 
+    @MockBean
+    protected lateinit var jwtDecoder: JWTDecoder
+
     @Autowired
     protected lateinit var objectMapper: ObjectMapper
+
+    private val roles = listOf(
+        Role(id = 1L, name = "accountant", title = "Accountant"),
+        Role(id = 2L, name = "hr", title = "Human Resource"),
+        Role(id = 3L, name = "client", title = "Client"),
+    )
+
+    private val user = User(
+        id = USER_ID,
+        email = "ray.sponsible@gmail.com",
+        displayName = "Ray Sponsible",
+        roles = listOf(
+            Role(id = 1L, name = "accountant", title = "Accountant"),
+        )
+    )
 
     protected val accessToken: String =
         "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJpc3MiOiJLb2tpIiwic3ViIjoiSGVydmUgVGNoZXBhbm5vdSIsInVzZXJJZCI6MjA0LCJ0ZW5hbnRJZCI6MSwiaWF0IjoxNzMxNTA5MDM0LCJleHAiOjE3MzE1OTU0MzR9."
 
     fun setUpLoggedInUser() {
         doReturn(accessToken).whenever(accessTokenHolder).get(any())
+        doReturn(GetUserResponse(user)).whenever(kokiUser).user(USER_ID)
+
+        val principal = mock<JWTPrincipal>()
+        doReturn(USER_ID).whenever(principal).getUserId()
+        doReturn(USER_ID.toString()).whenever(principal).name
+        doReturn(principal).whenever(jwtDecoder).decode(any())
     }
 
     fun setUpAnonymousUser() {
@@ -105,6 +145,12 @@ abstract class AbstractPageControllerTest {
     private fun setupDefaultApiResponses() {
         doReturn(SearchFormResponse()).whenever(kokiForms)
             .search(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+
+        doReturn(SearchRoleResponse(roles)).whenever(kokiUser)
+            .roles(anyOrNull())
+
+        doReturn(SearchWorkflowResponse()).whenever(kokiWorkflow)
+            .workflows(any(), anyOrNull(), anyOrNull())
     }
 
     @AfterEach

@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8 offset-md-2">
+            <div class="widget">
+                <div class="widget-body">
+
+                    <div class="workflow-image">
+                        <img th:src="${workflow.imageUrl}"/>
+                    </div>
+
+                    <h2>Workflow</h2>
+                    <table class="table table-striped">
+                        <tr>
+                            <td><b>Name</b></td>
+                            <td th:text="${workflow.name}">NAME</td>
+                        </tr>
+                        <tr>
+                            <td><b>Title</b></td>
+                            <td th:text="${workflow.title}">TITLE</td>
+                        </tr>
+                        <tr>
+                            <td><b>Description</b></td>
+                            <td th:text="${workflow.description}">DESCRIPTION</td>
+                        </tr>
+                        <tr>
+                            <td><b>Active?</b></td>
+                            <td>
+                                <span th:if="${workflow.active}">Yes</span>
+                                <span th:if="!${workflow.active}">No</span>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <h2>Activities</h2>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Type</th>
+                            <th>Name</th>
+                            <th>Title</th>
+                            <th>Role</th>
+                            <th>Approval?</th>
+                        </tr>
+                        <tr th:each="activity: ${workflow.activities}">
+                            <td th:text="${activity.type}">TYPE</td>
+                            <td th:text="${activity.name}">NAME</td>
+                            <td th:text="${activity.title}">TITLE</td>
+                            <td>
+                                <span th:if="${activity.role}" th:text="${activity.role.title}">ROLE</span>
+                            </td>
+                            <td>
+                                <span th:if="${activity.requiresApproval}">Yes</span>
+                                <span th:if="!${activity.requiresApproval}">No</span>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

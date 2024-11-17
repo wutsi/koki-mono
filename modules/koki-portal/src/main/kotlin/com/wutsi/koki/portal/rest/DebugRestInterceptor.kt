@@ -1,20 +1,29 @@
 package com.wutsi.koki.portal.rest
 
-import com.wutsi.koki.common.dto.HttpHeader
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpRequest
 import org.springframework.http.client.ClientHttpRequestExecution
 import org.springframework.http.client.ClientHttpRequestInterceptor
 import org.springframework.http.client.ClientHttpResponse
 import org.springframework.stereotype.Service
+import kotlin.system.measureTimeMillis
 
 @Service
-class TenantRestInterceptor(private val tenantService: TenantService) : ClientHttpRequestInterceptor {
+class DebugRestInterceptor : ClientHttpRequestInterceptor {
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(DebugRestInterceptor::class.java)
+    }
+
     override fun intercept(
         request: HttpRequest,
         body: ByteArray,
         execution: ClientHttpRequestExecution
     ): ClientHttpResponse {
-        request.headers.add(HttpHeader.TENANT_ID, tenantService.id().toString())
-        return execution.execute(request, body)
+        val response: ClientHttpResponse
+        val timeInMillis = measureTimeMillis {
+            response = execution.execute(request, body)
+        }
+        LOGGER.info("${request.method} ${request.uri} [${response.statusCode}] ${timeInMillis}ms")
+        return response
     }
 }

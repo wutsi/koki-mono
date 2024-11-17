@@ -1,9 +1,10 @@
 package com.wutsi.koki.portal.security
 
+import com.wutsi.koki.security.dto.JWTPrincipal
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 
-class AccessTokenAuthentication(private val principal: AccessTokenPrincipal) : Authentication {
+class JWTAuthentication(private val principal: JWTPrincipal) : Authentication {
     private var authenticated: Boolean = true
 
     override fun getName(): String? {

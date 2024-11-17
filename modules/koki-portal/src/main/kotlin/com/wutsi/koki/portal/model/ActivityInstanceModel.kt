@@ -1,8 +1,18 @@
 package com.wutsi.koki.portal.model
 
-data class PageModel(
-    val language: String = "en",
-    val name: String = "",
-    val title: String = "",
-    val description: String? = null
+import com.wutsi.koki.workflow.dto.ApprovalStatus
+import com.wutsi.koki.workflow.dto.WorkflowStatus
+import java.util.Date
+
+data class ActivityInstanceModel(
+    val id: String = "",
+    val activity: ActivityModel = ActivityModel(),
+    val assignee: UserModel? = null,
+    val approverId: Long? = null,
+    var status: WorkflowStatus = WorkflowStatus.UNKNOWN,
+    val approval: ApprovalStatus = ApprovalStatus.UNKNOWN,
+    val createdAt: Date = Date(),
+    val approvedAt: Date? = null,
+    val startedAt: Date? = null,
+    val doneAt: Date? = null
 )
