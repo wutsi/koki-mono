@@ -1,0 +1,126 @@
+body {
+    background: #f8f8f8;
+}
+
+textarea:read-only,
+input:read-only {
+    background: #f8f8f8;
+}
+
+*:user-invalid,
+.user-invalid {
+    border: 2px solid red !important;
+}
+
+@supports not selector(:user-invalid) {
+    input:invalid,
+    select:invalid,
+    textarea:invalid {
+        border: 2px solid red;
+    }
+}
+
+.error {
+    color: red;
+}
+
+.required {
+    color: darkred;
+}
+
+.form {
+    margin: 2em auto;
+    width: 60%;
+}
+
+.form-header {
+    background: white;
+    border-radius: 10px;
+    border: 1px solid gray;
+    padding: 1em;
+}
+
+.form-footer {
+    background: white;
+    border-radius: 10px;
+    border: 1px solid gray;
+    margin-top: 1em;
+    padding: 1em;
+}
+
+.section {
+    background: white;
+    border-radius: 10px;
+    border: 1px solid gray;
+    margin-top: 1em;
+}
+
+.section-header {
+    background: #f8f8f8;
+    border-radius: .6em .6em 0 0;
+    border-bottom: 1px solid gray;
+}
+
+.section-header .section-title {
+    font-size: 1em;
+    font-weight: bold;
+    margin: 0;
+    padding: .5em .5em 0 .5em;
+    text-transform: uppercase;
+}
+
+.section-header .section-description {
+    padding: 0 .5em .5em .5em;
+}
+
+.section-body {
+    padding: 1em
+}
+
+.section-item {
+    margin-bottom: 1em
+}
+
+.section-item:last-child {
+    margin-bottom: 0;
+}
+
+.section-item label.title {
+    font-weight: bold;
+    font-size: larger;
+    display: block
+}
+
+.section-item .description {
+    font-size: small;
+}
+
+.section-item textarea,
+.section-item input,
+.section-item select {
+    padding: .5em;
+}
+
+.section-item textarea,
+.section-item input:not([type]),
+.section-item input[type=text],
+.section-item input[type=email],
+.section-item input[type=url] {
+    width: 100%;
+}
+
+.checkbox-container,
+.radio-container {
+    display: flex;
+    justify-content: space-between;
+    padding: .5em;
+}
+
+@media only screen
+and (max-width: 480px)
+and (orientation: portrait) {
+    .form {
+        width: 98%;
+    }
+}
+

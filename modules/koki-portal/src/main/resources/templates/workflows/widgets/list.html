@@ -1,0 +1,17 @@
+<div class="widget" th:if="${workflows}">
+    <div class="widget-header">
+        <div class="title">Workflows</div>
+    </div>
+    <div class="widget-body">
+        <table class="table">
+            <tr>
+                <th width="10%">Name</th>
+                <th>Title</th>
+            </tr>
+            <tr th:each="workflow : ${workflows}">
+                <td th:text="${workflow.name}">NAME</td>
+                <td th:text="${workflow.title}">TITLE</td>
+            </tr>
+        </table>
+    </div>
+</div>

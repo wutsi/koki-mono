@@ -1,4 +1,4 @@
-package com.wutsi.koki.security.server.service
+package com.wutsi.koki.security.dto
 
 import com.auth0.jwt.interfaces.DecodedJWT
 import java.security.Principal

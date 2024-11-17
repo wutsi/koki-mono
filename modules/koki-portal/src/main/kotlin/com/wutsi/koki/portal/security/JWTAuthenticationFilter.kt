@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class AccessTokenAuthenticationFilter(private val accessTokenHolder: AccessTokenHolder) : Filter {
+    private val jwtDecoder = JWTDecoder()
+
     override fun doFilter(
         request: ServletRequest,
         response: ServletResponse,
@@ -30,6 +32,7 @@ class AccessTokenAuthenticationFilter(private val accessTokenHolder: AccessToken
         if (accessToken == null) {
             SecurityContextHolder.clearContext()
         } else {
+            JWTDe
             val auth = AccessTokenAuthentication(AccessTokenPrincipal(accessToken))
             auth.isAuthenticated = true
             SecurityContextHolder.setContext(SecurityContextImpl(auth))
