@@ -35,7 +35,7 @@ class SearchRoleEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
-    fun filter() {
+    fun `by name`() {
         val result =
             rest.getForEntity("/v1/roles?name=a&name=b", SearchRoleResponse::class.java)
 
@@ -51,6 +51,33 @@ class SearchRoleEndpointTest : TenantAwareEndpointTest() {
         assertEquals("b", roles[1].name)
         assertNull(roles[1].description)
         assertTrue(roles[1].active)
+    }
+
+    @Test
+    fun `by id`() {
+        val result =
+            rest.getForEntity("/v1/roles?id=10&id=11", SearchRoleResponse::class.java)
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val roles = result.body!!.roles
+        assertEquals(2, roles.size)
+
+        assertEquals(10L, roles[0].id)
+        assertEquals(11L, roles[1].id)
+    }
+
+    @Test
+    fun `by active`() {
+        val result =
+            rest.getForEntity("/v1/roles?active=false", SearchRoleResponse::class.java)
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val roles = result.body!!.roles
+        assertEquals(1, roles.size)
+
+        assertEquals(12L, roles[0].id)
     }
 
     @Test

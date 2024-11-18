@@ -3,6 +3,7 @@ package com.wutsi.koki.security.server.service
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.UnauthorizedException
+import com.wutsi.koki.security.dto.JWTPrincipal
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 

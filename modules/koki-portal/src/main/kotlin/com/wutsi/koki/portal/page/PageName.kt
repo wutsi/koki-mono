@@ -6,4 +6,5 @@ object PageName {
     const val FORM_SAVED = "page.form.saved"
     const val HOME = "page.home"
     const val LOGIN = "page.login"
+    const val WORKFLOW = "page.workflow"
 }

@@ -67,6 +67,7 @@ CREATE TABLE T_ROLE(
   tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
 
   name                    VARCHAR(100) NOT NULL,
+  title                   VARCHAR(255),
   description             TEXT,
   active                  BOOL NOT NULL DEFAULT true,
   created_at              DATETIME DEFAULT NOW(),

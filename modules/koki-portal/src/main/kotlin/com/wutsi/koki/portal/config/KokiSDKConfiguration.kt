@@ -4,7 +4,10 @@ import com.wutsi.koki.portal.rest.TenantService
 import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.sdk.KokiFormData
 import com.wutsi.koki.sdk.KokiForms
+import com.wutsi.koki.sdk.KokiUser
+import com.wutsi.koki.sdk.KokiWorkflow
 import com.wutsi.koki.sdk.KokiWorkflowEngine
+import com.wutsi.koki.sdk.KokiWorkflowInstance
 import com.wutsi.koki.sdk.URLBuilder
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -24,6 +27,11 @@ class KokiSDKConfiguration(
     }
 
     @Bean
+    fun kokiAuthentication(): KokiAuthentication {
+        return KokiAuthentication(urlBuilder(), rest)
+    }
+
+    @Bean
     fun kokiForms(): KokiForms {
         return KokiForms(urlBuilder(), rest, tenantService)
     }
@@ -34,8 +42,18 @@ class KokiSDKConfiguration(
     }
 
     @Bean
-    fun kokiAuthentication(): KokiAuthentication {
-        return KokiAuthentication(urlBuilder(), rest)
+    fun kokiUser(): KokiUser {
+        return KokiUser(urlBuilder(), rest)
+    }
+
+    @Bean
+    fun kokiWorkflow(): KokiWorkflow {
+        return KokiWorkflow(urlBuilder(), rest, tenantService)
+    }
+
+    @Bean
+    fun kokiWorkflowInstance(): KokiWorkflowInstance {
+        return KokiWorkflowInstance(urlBuilder(), rest)
     }
 
     @Bean

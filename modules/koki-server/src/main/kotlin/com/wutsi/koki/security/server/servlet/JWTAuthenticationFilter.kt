@@ -3,9 +3,9 @@ package com.wutsi.koki.security.server.servlet
 import com.auth0.jwt.exceptions.TokenExpiredException
 import com.wutsi.koki.common.dto.HttpHeader
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.security.dto.JWTPrincipal
 import com.wutsi.koki.security.server.service.AuthenticationService
 import com.wutsi.koki.security.server.service.JWTAuthentication
-import com.wutsi.koki.security.server.service.JWTPrincipal
 import jakarta.servlet.Filter
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletRequest

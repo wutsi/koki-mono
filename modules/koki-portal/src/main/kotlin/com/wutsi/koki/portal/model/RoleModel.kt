@@ -1,7 +1,7 @@
 package com.wutsi.koki.portal.model
 
-data class UserModel(
+data class RoleModel(
     val id: Long = -1,
-    val email: String = "",
-    val displayName: String = "",
+    val name: String = "",
+    val title: String = "",
 )

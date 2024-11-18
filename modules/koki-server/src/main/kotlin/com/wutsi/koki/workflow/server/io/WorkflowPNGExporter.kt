@@ -1,6 +1,6 @@
 package com.wutsi.koki.workflow.server.io
 
-import com.mxgraph.layout.mxCompactTreeLayout
+import com.mxgraph.layout.hierarchical.mxHierarchicalLayout
 import com.mxgraph.util.mxCellRenderer
 import com.mxgraph.util.mxConstants
 import com.wutsi.koki.workflow.dto.ActivityType
@@ -11,11 +11,12 @@ import com.wutsi.koki.workflow.server.io.WorkflowPNGExporter.Companion.SUFFIX_RU
 import org.jgrapht.Graph
 import org.jgrapht.ext.JGraphXAdapter
 import org.jgrapht.graph.DefaultEdge
-import org.jgrapht.graph.SimpleGraph
+import org.jgrapht.graph.SimpleDirectedGraph
 import org.springframework.stereotype.Service
 import java.awt.Color
 import java.io.OutputStream
 import javax.imageio.ImageIO
+import javax.swing.SwingConstants
 import kotlin.to
 
 @Service
@@ -52,7 +53,7 @@ class WorkflowPNGExporter {
     }
 
     private fun createGraph(workflow: WorkflowEntity): Graph<String, DefaultEdge> {
-        val graph = SimpleGraph<String, DefaultEdge>(DefaultEdge::class.java)
+        val graph = SimpleDirectedGraph<String, DefaultEdge>(DefaultEdge::class.java)
 
         // Nodes
         workflow.activities
@@ -76,7 +77,7 @@ class WorkflowPNGExporter {
         doneActivityNames: List<String>,
     ) {
         val adapter = JGraphXAdapter<String, DefaultEdge>(graph)
-        val layout = mxCompactTreeLayout(adapter)
+        val layout = mxHierarchicalLayout(adapter, SwingConstants.WEST)
         layout.execute(adapter.getDefaultParent())
 
         // Remove text from flows
@@ -120,6 +121,7 @@ class WorkflowPNGExporter {
             mapOf(
                 mxConstants.STYLE_SHAPE to mxConstants.SHAPE_ELLIPSE,
                 mxConstants.STYLE_FILLCOLOR to COLOR_WHITE,
+                mxConstants.STYLE_FONTCOLOR to COLOR_BLACK,
                 mxConstants.STYLE_STROKECOLOR to COLOR_BLACK,
             )
         )
@@ -145,6 +147,7 @@ class WorkflowPNGExporter {
             mapOf(
                 mxConstants.STYLE_SHAPE to mxConstants.SHAPE_DOUBLE_ELLIPSE,
                 mxConstants.STYLE_FILLCOLOR to COLOR_RUNNING,
+                mxConstants.STYLE_FONTCOLOR to COLOR_BLACK,
                 mxConstants.STYLE_STROKECOLOR to COLOR_BLACK,
             )
         )
@@ -159,9 +162,11 @@ class WorkflowPNGExporter {
         adapter.stylesheet.putCellStyle(
             STYLE_STOP,
             mapOf(
-                mxConstants.STYLE_SHAPE to mxConstants.SHAPE_DOUBLE_ELLIPSE,
+                mxConstants.STYLE_SHAPE to mxConstants.SHAPE_ELLIPSE,
                 mxConstants.STYLE_FILLCOLOR to COLOR_WHITE,
+                mxConstants.STYLE_FONTCOLOR to COLOR_BLACK,
                 mxConstants.STYLE_STROKECOLOR to COLOR_BLACK,
+                mxConstants.STYLE_STROKEWIDTH to 4,
             )
         )
 
@@ -170,6 +175,7 @@ class WorkflowPNGExporter {
             mapOf(
                 mxConstants.STYLE_SHAPE to mxConstants.SHAPE_RECTANGLE,
                 mxConstants.STYLE_FILLCOLOR to COLOR_WHITE,
+                mxConstants.STYLE_FONTCOLOR to COLOR_BLACK,
                 mxConstants.STYLE_STROKECOLOR to COLOR_BLACK,
             )
         )

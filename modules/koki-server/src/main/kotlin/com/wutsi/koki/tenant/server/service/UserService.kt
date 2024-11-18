@@ -10,6 +10,7 @@ import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.server.dao.UserRepository
 import com.wutsi.koki.tenant.server.domain.RoleEntity
 import com.wutsi.koki.tenant.server.domain.UserEntity
+import jakarta.persistence.EntityManager
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -24,6 +25,7 @@ class UserService(
     private val passwordService: PasswordService,
     private val tenantService: TenantService,
     private val roleService: RoleService,
+    private val em: EntityManager
 ) {
     companion object {
         const val PAGE_SIZE = 20
@@ -124,24 +126,45 @@ class UserService(
     }
 
     fun search(
-        keyword: String,
-        ids: List<Long>,
         tenantId: Long,
-        limit: Int,
-        offset: Int,
-        sortBy: String? = null,
-        ascending: Boolean = true,
+        keyword: String? = null,
+        ids: List<Long> = emptyList(),
+        roleIds: List<Long> = emptyList(),
+        limit: Int = 20,
+        offset: Int = 0,
     ): List<UserEntity> {
-        if (ids.isNotEmpty()) {
-            val pageable = createPageable(ids.size, offset, sortBy, ascending)
-            return dao.findByIdInAndTenantId(ids, tenantId, pageable).toList()
-        } else if (keyword.isNotEmpty()) {
-            val pageable = createPageable(limit, offset, sortBy, ascending)
-            return dao.findByDisplayNameLikeIgnoreCaseAndTenantId("%$keyword%", tenantId, pageable)
-        } else {
-            val pageable = createPageable(limit, offset, sortBy, ascending)
-            return dao.findByTenantId(tenantId, pageable)
+        val jql = StringBuilder("SELECT U FROM UserEntity U")
+        if (roleIds.isNotEmpty()) {
+            jql.append(" JOIN U.roles R")
         }
+
+        jql.append(" WHERE U.tenantId = :tenantId")
+        if (keyword != null) {
+            jql.append(" AND UPPER(U.displayName) LIKE :keyword")
+        }
+        if (ids.isNotEmpty()) {
+            jql.append(" AND U.id IN :ids")
+        }
+        if (roleIds.isNotEmpty()) {
+            jql.append(" AND R.id IN :roleIds")
+        }
+        jql.append(" ORDER BY U.displayName")
+
+        val query = em.createQuery(jql.toString(), UserEntity::class.java)
+        query.setParameter("tenantId", tenantId)
+        if (keyword != null) {
+            query.setParameter("keyword", "%${keyword.uppercase()}%")
+        }
+        if (ids.isNotEmpty()) {
+            query.setParameter("ids", ids)
+        }
+        if (roleIds.isNotEmpty()) {
+            query.setParameter("roleIds", roleIds)
+        }
+
+        query.firstResult = offset
+        query.maxResults = limit
+        return query.resultList
     }
 
     private fun createPageable(limit: Int, offset: Int, sortBy: String?, ascending: Boolean): Pageable {

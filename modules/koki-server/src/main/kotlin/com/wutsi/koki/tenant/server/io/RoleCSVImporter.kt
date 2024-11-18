@@ -12,6 +12,7 @@ import com.wutsi.koki.tenant.server.domain.RoleEntity.Companion.CSV_HEADERS
 import com.wutsi.koki.tenant.server.domain.RoleEntity.Companion.CSV_HEADER_ACTIVE
 import com.wutsi.koki.tenant.server.domain.RoleEntity.Companion.CSV_HEADER_DESCRIPTION
 import com.wutsi.koki.tenant.server.domain.RoleEntity.Companion.CSV_HEADER_NAME
+import com.wutsi.koki.tenant.server.domain.RoleEntity.Companion.CSV_HEADER_TITLE
 import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.service.RoleService
 import com.wutsi.koki.tenant.server.service.TenantService
@@ -107,6 +108,7 @@ class RoleCSVImporter(
             RoleEntity(
                 tenantId = tenant.id!!,
                 name = record.get(CSV_HEADER_NAME),
+                title = record.get(CSV_HEADER_TITLE).ifEmpty { null },
                 description = record.get(CSV_HEADER_DESCRIPTION).ifEmpty { null },
                 active = record.get(CSV_HEADER_ACTIVE).lowercase() == "yes",
             )
@@ -115,6 +117,7 @@ class RoleCSVImporter(
 
     private fun update(role: RoleEntity, record: CSVRecord) {
         role.name = record.get(CSV_HEADER_NAME)
+        role.title = record.get(CSV_HEADER_TITLE).ifEmpty { null }
         role.description = record.get(CSV_HEADER_DESCRIPTION).ifEmpty { null }
         role.active = record.get(CSV_HEADER_ACTIVE).equals("yes", true)
         service.save(role)

@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.security
 
 import com.wutsi.koki.portal.rest.AccessTokenHolder
+import com.wutsi.koki.security.dto.JWTDecoder
 import jakarta.servlet.Filter
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletRequest
@@ -9,11 +10,11 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.context.SecurityContextImpl
-import org.springframework.stereotype.Service
 
-@Service
-class AccessTokenAuthenticationFilter(private val accessTokenHolder: AccessTokenHolder) : Filter {
-    private val jwtDecoder = JWTDecoder()
+class JWTAuthenticationFilter(
+    private val accessTokenHolder: AccessTokenHolder,
+    private val jwtDecoder: JWTDecoder,
+) : Filter {
 
     override fun doFilter(
         request: ServletRequest,
@@ -32,8 +33,8 @@ class AccessTokenAuthenticationFilter(private val accessTokenHolder: AccessToken
         if (accessToken == null) {
             SecurityContextHolder.clearContext()
         } else {
-            JWTDe
-            val auth = AccessTokenAuthentication(AccessTokenPrincipal(accessToken))
+            val principal = jwtDecoder.decode(accessToken)
+            val auth = JWTAuthentication(principal)
             auth.isAuthenticated = true
             SecurityContextHolder.setContext(SecurityContextImpl(auth))
         }

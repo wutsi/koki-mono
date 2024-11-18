@@ -135,7 +135,7 @@ class WorkflowImporter(
         val roleMap = if (roleNames.isEmpty()) {
             emptyMap()
         } else {
-            roleService.search(roleNames, workflow.tenantId)
+            roleService.search(names = roleNames, tenantId = workflow.tenantId)
                 .associateBy { role -> role.name }
         }
 

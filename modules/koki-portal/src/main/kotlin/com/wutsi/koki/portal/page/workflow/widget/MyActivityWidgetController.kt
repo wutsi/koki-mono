@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page.form
+package com.wutsi.koki.portal.page.workflow.widget
 
 import com.wutsi.koki.portal.rest.WorkflowInstanceService
 import org.springframework.stereotype.Controller
@@ -12,7 +12,7 @@ class MyActivityWidgetController(
     @GetMapping("/workflows/widgets/my-activities")
     fun show(model: Model): String {
         val activityInstances = workflowInstanceService.myActivities()
-        if (activityInstances.isNotEmpty()){
+        if (activityInstances.isNotEmpty()) {
             model.addAttribute("activityInstances", activityInstances)
         }
         return "workflows/widgets/my-activities"

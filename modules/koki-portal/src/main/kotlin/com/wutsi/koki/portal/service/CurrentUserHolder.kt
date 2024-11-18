@@ -1,33 +1,37 @@
 package com.wutsi.koki.portal.rest
 
-import jakarta.servlet.http.Cookie
-import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletResponse
+import com.wutsi.koki.portal.model.UserModel
+import com.wutsi.koki.portal.security.JWTAuthentication
+import com.wutsi.koki.security.dto.JWTPrincipal
+import org.springframework.context.annotation.Scope
+import org.springframework.context.annotation.ScopedProxyMode
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 
 @Service
-class AccessTokenHolder {
-    companion object {
-        const val COOKIE_ACCESS_TOKEN = "__atk"
-        const val TTL = 86400
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
+class CurrentUserHolder(
+    private val service: UserService
+) {
+    private var model: UserModel? = null
+
+    fun id(): Long? {
+        val auth = SecurityContextHolder.getContext().authentication
+        if (auth is JWTAuthentication) {
+            return (auth.principal as JWTPrincipal).getUserId()
+        } else {
+            return null
+        }
     }
 
-    fun set(accessToken: String, request: HttpServletRequest, response: HttpServletResponse) {
-        val cookie = findCookie(request)
-            ?: Cookie(COOKIE_ACCESS_TOKEN, accessToken)
+    fun get(): UserModel? {
+        val id = id() ?: return null
 
-        cookie.value = accessToken
-        cookie.maxAge = TTL
-        cookie.path = "/"
-        response.addCookie(cookie)
-    }
+        if (model?.id == id) {
+            return model
+        }
 
-    fun get(request: HttpServletRequest): String? {
-        val cookie = findCookie(request)
-        return cookie?.value
-    }
-
-    private fun findCookie(request: HttpServletRequest): Cookie? {
-        return request.cookies.find { cookie -> cookie.name == COOKIE_ACCESS_TOKEN }
+        model = service.get(id)
+        return model
     }
 }

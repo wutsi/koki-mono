@@ -18,14 +18,20 @@ class SearchUserEndpoint(
     @GetMapping("/v1/users")
     fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-        @RequestParam(required = false, name = "q") keyword: String = "",
+        @RequestParam(required = false, name = "q") keyword: String? = null,
         @RequestParam(required = false) id: List<Long> = emptyList(),
+        @RequestParam(required = false, name = "role-id") roleId: List<Long> = emptyList(),
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
-        @RequestParam(required = false, name = "sort-by") sortBy: String? = null,
-        @RequestParam(required = false, name = "asc") ascending: Boolean = true,
     ): SearchUserResponse {
-        val users = service.search(keyword, id, tenantId, limit, offset, sortBy, ascending)
+        val users = service.search(
+            keyword = keyword,
+            ids = id,
+            roleIds = roleId,
+            tenantId = tenantId,
+            limit = limit,
+            offset = offset,
+        )
         return SearchUserResponse(
             users = users.map { user -> mapper.toUserSummary(user) }
         )

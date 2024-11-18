@@ -1,6 +1,7 @@
 {
   "workflow": {
     "name": "WKF-001",
+    "title": "Indicent Process",
     "description": "Process for managing incident report",
     "activities": [
       {
@@ -9,21 +10,21 @@
       },
       {
         "name": "submit",
-        "description": "Employee submit the form",
+        "title": "Employee submit the form",
         "type": "MANUAL",
         "form": "FRM-001",
         "role": "employee"
       },
       {
         "name": "evaluate",
-        "description": "HR receives the incident form, evaluate the request and assess the reimbursement amount",
+        "title": "HR review and approves the form",
         "type": "MANUAL",
         "form": "FRM-001",
         "role": "hr"
       },
       {
         "name": "payment",
-        "description": "Finance receive the amount and initiate the reimbursement",
+        "title": "Finance initiate the reimbursement",
         "type": "MANUAL",
         "form": "FRM-001",
         "role": "finance"

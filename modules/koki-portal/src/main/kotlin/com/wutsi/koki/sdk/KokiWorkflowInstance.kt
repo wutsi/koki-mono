@@ -7,15 +7,15 @@ import org.springframework.web.client.RestTemplate
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class KokiActivityInstance(
+class KokiWorkflowInstance(
     private val urlBuilder: URLBuilder,
     private val rest: RestTemplate,
 ) {
     companion object {
-        private val PATH_PREFIX = "/v1/activity-instances"
+        private val ACTIVITY_PATH_PREFIX = "/v1/activity-instances"
     }
 
-    fun searchActivities(
+    fun activityInstances(
         ids: List<String> = emptyList(),
         assigneeIds: List<Long> = emptyList(),
         approverIds: List<Long> = emptyList(),
@@ -28,7 +28,7 @@ class KokiActivityInstance(
     ): SearchActivityInstanceResponse {
         val fmt = SimpleDateFormat("yyyy-MM-dd")
         val url = urlBuilder.build(
-            PATH_PREFIX,
+            ACTIVITY_PATH_PREFIX,
             mapOf(
                 "id" to ids,
                 "assignee-id" to assigneeIds,

@@ -6,8 +6,8 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.common.dto.HttpHeader
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.security.dto.JWTPrincipal
 import com.wutsi.koki.security.server.service.AuthenticationService
-import com.wutsi.koki.security.server.service.JWTPrincipal
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import com.wutsi.koki.tenant.server.service.PasswordService
 import com.wutsi.koki.tenant.server.service.UserService

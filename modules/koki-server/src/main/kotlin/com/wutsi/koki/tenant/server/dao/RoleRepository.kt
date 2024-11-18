@@ -6,9 +6,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface RoleRepository : CrudRepository<RoleEntity, Long> {
-    fun findByTenantId(tenantId: Long): List<RoleEntity>
-
     fun findByTenantIdAndNameIn(tenantId: Long, name: List<String>): List<RoleEntity>
-
-    fun findByIdInAndTenantId(id: List<Long>, tenantId: Long): List<RoleEntity>
 }

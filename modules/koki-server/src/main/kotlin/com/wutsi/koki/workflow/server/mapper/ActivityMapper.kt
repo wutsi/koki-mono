@@ -1,6 +1,7 @@
 package com.wutsi.koki.workflow.server.mapper
 
 import com.wutsi.koki.workflow.dto.Activity
+import com.wutsi.koki.workflow.dto.ActivitySummary
 import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import org.springframework.stereotype.Service
 import java.io.StringReader
@@ -23,6 +24,20 @@ class ActivityMapper {
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
             tags = entity.tags?.let { tags -> toMap(tags) } ?: emptyMap(),
+        )
+    }
+
+    fun toActivitySummary(entity: ActivityEntity): ActivitySummary {
+        return ActivitySummary(
+            id = entity.id!!,
+            workflowId = entity.workflow.id!!,
+            roleId = entity.roleId,
+            formId = entity.formId,
+            type = entity.type,
+            name = entity.name,
+            title = entity.title,
+            active = entity.active,
+            requiresApproval = entity.requiresApproval,
         )
     }
 
