@@ -2,7 +2,7 @@
   "workflow": {
     "name": "WKF-001",
     "title": "Indicent Process",
-    "description": "This is the process for managing incident submitted by employees",
+    "description": "Process for managing incident report",
     "activities": [
       {
         "name": "start",

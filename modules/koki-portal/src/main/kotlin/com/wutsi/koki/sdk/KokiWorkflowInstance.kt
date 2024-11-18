@@ -13,6 +13,7 @@ class KokiWorkflowInstance(
 ) {
     companion object {
         private val ACTIVITY_PATH_PREFIX = "/v1/activity-instances"
+        private val WORKFLOW_PATH_PREFIX = "/v1/workflow-instances"
     }
 
     fun activityInstances(

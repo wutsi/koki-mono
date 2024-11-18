@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="widget">
+                <div class="widget-header">
+                    <h1>Workflows</h1>
+                </div>
+                <div class="widget-body">
+                    <div class="widget-toolbar">
+                        <a class="btn-create" href="/workflows/create">New Workflow</a>
+                    </div>
+
+                    <table class="table table-striped">
+                        <tr>
+                            <th width="20%">Name</th>
+                            <th width="60%">Title</th>
+                            <th></th>
+                        </tr>
+                        <tr class="workflow" th:each="workflow : ${workflows}">
+                            <td th:text="${workflow.name}">NAME</td>
+                            <td th:text="${workflow.title}">TITLE</td>
+                            <td>
+                                <a class="btn-view" th:href="${workflow.url}">View</a>
+                                <a class="btn-edit" th:href="${workflow.editUrl}">Edit</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

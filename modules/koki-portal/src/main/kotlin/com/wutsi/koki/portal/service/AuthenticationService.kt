@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.rest
 
-import com.wutsi.koki.portal.page.auth.LoginForm
+import com.wutsi.koki.portal.page.form.LoginForm
 import com.wutsi.koki.sdk.KokiAuthentication
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

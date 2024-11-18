@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.form.dto.SearchFormResponse
 import com.wutsi.koki.portal.rest.AccessTokenHolder
 import com.wutsi.koki.sdk.KokiAuthentication
@@ -22,6 +23,7 @@ import com.wutsi.koki.tenant.dto.Role
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
 import com.wutsi.koki.tenant.dto.User
 import com.wutsi.koki.workflow.dto.SearchWorkflowResponse
+import org.apache.commons.io.IOUtils
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
@@ -39,6 +41,7 @@ import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpStatusCode
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.web.client.HttpClientErrorException
+import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -84,6 +87,8 @@ abstract class AbstractPageControllerTest {
     @Autowired
     protected lateinit var objectMapper: ObjectMapper
 
+    protected val workflowPictureUrl = "https://picsum.photos/800/100"
+
     protected val user = User(
         id = USER_ID,
         email = "ray.sponsible@gmail.com",
@@ -108,6 +113,15 @@ abstract class AbstractPageControllerTest {
 
     fun setUpAnonymousUser() {
         doReturn(null).whenever(accessTokenHolder).get(any())
+    }
+
+    fun getResourceAsString(path: String): String {
+        val out = ByteArrayOutputStream()
+        IOUtils.copy(
+            AbstractPageControllerTest::class.java.getResourceAsStream(path),
+            out
+        )
+        return out.toString(Charsets.UTF_8)
     }
 
     @BeforeEach
@@ -140,11 +154,12 @@ abstract class AbstractPageControllerTest {
         doReturn(SearchFormResponse()).whenever(kokiForms)
             .search(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
-        doReturn(SearchRoleResponse()).whenever(kokiUser)
-            .roles(anyOrNull())
+        doReturn(SearchRoleResponse()).whenever(kokiUser).roles(anyOrNull())
 
         doReturn(SearchWorkflowResponse()).whenever(kokiWorkflow)
             .workflows(any(), anyOrNull(), anyOrNull())
+
+        doReturn(workflowPictureUrl).whenever(kokiWorkflow).imageUrl(any())
     }
 
     @AfterEach
@@ -157,11 +172,21 @@ abstract class AbstractPageControllerTest {
         driver.get("http://localhost:$port$path")
     }
 
-    protected fun createHttpClientErrorException(statusCode: Int, errorCode: String): HttpClientErrorException {
+    protected fun createHttpClientErrorException(
+        statusCode: Int,
+        errorCode: String,
+        param: String? = null,
+        data: Map<String, Any>? = null,
+    ): HttpClientErrorException {
         val charset = Charset.defaultCharset()
         val response = ErrorResponse(
-            error = Error(code = errorCode)
-        )
+            error = Error(
+                code = errorCode,
+                parameter = param?.let { Parameter(value = param) },
+                data = data
+            ),
+
+            )
         return HttpClientErrorException(
             HttpStatusCode.valueOf(statusCode),
             "Error",

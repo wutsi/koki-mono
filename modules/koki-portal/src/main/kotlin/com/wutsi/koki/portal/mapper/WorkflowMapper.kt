@@ -28,7 +28,9 @@ class WorkflowMapper(
             activities = entity.activities.map { activity ->
                 val role = activity.roleId?.let { id -> roleMap[id] }
                 toActivityModel(activity, role)
-            }
+            },
+            roles = roles.map { role -> userMapper.toRoleModel(role) },
+            parameters = entity.parameters,
         )
     }
 

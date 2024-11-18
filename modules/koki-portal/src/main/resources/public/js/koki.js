@@ -1,8 +1,8 @@
-function ready() {
-    _load_widgets();
+function koki_ready() {
+    _koki_load_widgets();
 }
 
-async function _load_widgets() {
+async function _koki_load_widgets() {
     const widgets = document.querySelectorAll('.widget-container');
     console.log(widgets.length + ' widget(s)');
     for (let i = 0; i < widgets.length; i++) {
@@ -20,4 +20,4 @@ async function _load_widgets() {
 
 }
 
-document.addEventListener('DOMContentLoaded', ready, false);
+document.addEventListener('DOMContentLoaded', koki_ready, false);

@@ -12,8 +12,20 @@ data class WorkflowModel(
     val imageUrl: String = "",
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
-    val activities: List<ActivityModel> = emptyList()
+    val activities: List<ActivityModel> = emptyList(),
+    val roles: List<RoleModel> = emptyList(),
+    val parameters: List<String> = emptyList(),
 ) {
+    val longTitle: String
+        get() = if (title.isEmpty()) {
+            name
+        } else {
+            "$name - $title"
+        }
+
     val url: String
         get() = "/workflows/$id"
+
+    val editUrl: String
+        get() = "/workflows/$id/edit"
 }

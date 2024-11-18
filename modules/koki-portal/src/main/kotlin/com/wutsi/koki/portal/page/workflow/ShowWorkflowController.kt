@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 
 @Controller
-class WorkflowController(
+class ShowWorkflowController(
     private val service: WorkflowService,
 ) : AbstractPageController() {
     @GetMapping("/workflows/{id}")
-    fun new(
+    fun show(
         @PathVariable id: Long,
         model: Model
     ): String {
@@ -24,9 +24,9 @@ class WorkflowController(
             "page",
             PageModel(
                 name = PageName.WORKFLOW,
-                title = "${workflow.name} - ${workflow.title}",
+                title = workflow.title,
             )
         )
-        return "workflows/index"
+        return "workflows/show"
     }
 }
