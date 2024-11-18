@@ -27,9 +27,6 @@ class UpdateWorkflowControllerTest : AbstractPageControllerTest() {
 
         doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).workflow(workflow.id)
         doReturn(ImportWorkflowResponse(workflow.id)).whenever(kokiWorkflow).import(any(), any())
-
-        val json = jsonContent()
-        doReturn(json).whenever(kokiWorkflow).json(any())
     }
 
     @Test
