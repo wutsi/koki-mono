@@ -73,7 +73,6 @@ class SearchUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals("Peter Fonda", users[1].displayName)
     }
 
-
     @Test
     fun `by role`() {
         val result = rest.getForEntity("/v1/users?role-id=11", SearchUserResponse::class.java)
