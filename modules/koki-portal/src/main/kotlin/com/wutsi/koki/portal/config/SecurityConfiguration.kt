@@ -25,6 +25,8 @@ class SecurityConfiguration(
                     .requestMatchers(AntPathRequestMatcher("/")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/forms")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/forms/**/*")).authenticated()
+                    .requestMatchers(AntPathRequestMatcher("/workflows")).authenticated()
+                    .requestMatchers(AntPathRequestMatcher("/workflows/**/*")).authenticated()
                     .anyRequest().permitAll()
             }
             .addFilterBefore(authorizationFilter(), AnonymousAuthenticationFilter::class.java)

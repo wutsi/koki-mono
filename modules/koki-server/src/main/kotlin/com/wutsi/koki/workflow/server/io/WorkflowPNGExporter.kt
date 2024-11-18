@@ -121,6 +121,7 @@ class WorkflowPNGExporter {
             mapOf(
                 mxConstants.STYLE_SHAPE to mxConstants.SHAPE_ELLIPSE,
                 mxConstants.STYLE_FILLCOLOR to COLOR_WHITE,
+                mxConstants.STYLE_FONTCOLOR to COLOR_BLACK,
                 mxConstants.STYLE_STROKECOLOR to COLOR_BLACK,
             )
         )
@@ -146,6 +147,7 @@ class WorkflowPNGExporter {
             mapOf(
                 mxConstants.STYLE_SHAPE to mxConstants.SHAPE_DOUBLE_ELLIPSE,
                 mxConstants.STYLE_FILLCOLOR to COLOR_RUNNING,
+                mxConstants.STYLE_FONTCOLOR to COLOR_BLACK,
                 mxConstants.STYLE_STROKECOLOR to COLOR_BLACK,
             )
         )
@@ -160,9 +162,11 @@ class WorkflowPNGExporter {
         adapter.stylesheet.putCellStyle(
             STYLE_STOP,
             mapOf(
-                mxConstants.STYLE_SHAPE to mxConstants.SHAPE_DOUBLE_ELLIPSE,
+                mxConstants.STYLE_SHAPE to mxConstants.SHAPE_ELLIPSE,
                 mxConstants.STYLE_FILLCOLOR to COLOR_WHITE,
+                mxConstants.STYLE_FONTCOLOR to COLOR_BLACK,
                 mxConstants.STYLE_STROKECOLOR to COLOR_BLACK,
+                mxConstants.STYLE_STROKEWIDTH to 4,
             )
         )
 
@@ -171,6 +175,7 @@ class WorkflowPNGExporter {
             mapOf(
                 mxConstants.STYLE_SHAPE to mxConstants.SHAPE_RECTANGLE,
                 mxConstants.STYLE_FILLCOLOR to COLOR_WHITE,
+                mxConstants.STYLE_FONTCOLOR to COLOR_BLACK,
                 mxConstants.STYLE_STROKECOLOR to COLOR_BLACK,
             )
         )

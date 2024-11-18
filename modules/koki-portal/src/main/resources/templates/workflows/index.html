@@ -7,12 +7,12 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-12 col-md-8 offset-md-2">
+        <div class="col-12 col-md-10 offset-md-1">
             <div class="widget">
                 <div class="widget-body">
 
                     <div class="workflow-image">
-                        <img th:src="${workflow.imageUrl}"/>
+                        <img th:alt="${workflow.title}" th:src="${workflow.imageUrl}"/>
                     </div>
 
                     <h2>Workflow</h2>
@@ -47,7 +47,7 @@
                             <th>Role</th>
                             <th>Approval?</th>
                         </tr>
-                        <tr th:each="activity: ${workflow.activities}">
+                        <tr class="activity" th:each="activity: ${workflow.activities}">
                             <td th:text="${activity.type}">TYPE</td>
                             <td th:text="${activity.name}">NAME</td>
                             <td th:text="${activity.title}">TITLE</td>

@@ -84,13 +84,7 @@ abstract class AbstractPageControllerTest {
     @Autowired
     protected lateinit var objectMapper: ObjectMapper
 
-    private val roles = listOf(
-        Role(id = 1L, name = "accountant", title = "Accountant"),
-        Role(id = 2L, name = "hr", title = "Human Resource"),
-        Role(id = 3L, name = "client", title = "Client"),
-    )
-
-    private val user = User(
+    protected val user = User(
         id = USER_ID,
         email = "ray.sponsible@gmail.com",
         displayName = "Ray Sponsible",
@@ -146,7 +140,7 @@ abstract class AbstractPageControllerTest {
         doReturn(SearchFormResponse()).whenever(kokiForms)
             .search(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
-        doReturn(SearchRoleResponse(roles)).whenever(kokiUser)
+        doReturn(SearchRoleResponse()).whenever(kokiUser)
             .roles(anyOrNull())
 
         doReturn(SearchWorkflowResponse()).whenever(kokiWorkflow)

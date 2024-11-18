@@ -17,7 +17,7 @@ class KokiWorkflow(
         private val WORKFLOW_PATH_PREFIX = "/v1/workflows"
     }
 
-    fun get(id: Long): GetWorkflowResponse {
+    fun workflow(id: Long): GetWorkflowResponse {
         val url = urlBuilder.build(
             "$WORKFLOW_PATH_PREFIX/$id",
         )

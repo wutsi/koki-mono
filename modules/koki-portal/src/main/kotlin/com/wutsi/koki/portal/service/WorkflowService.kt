@@ -13,7 +13,7 @@ class WorkflowService(
     private val mapper: WorkflowMapper,
 ) {
     fun workflow(id: Long): WorkflowModel {
-        val workflow = kokiWorkflow.get(id).workflow
+        val workflow = kokiWorkflow.workflow(id).workflow
         val roles = if (workflow.roleIds.isEmpty()) {
             emptyList()
         } else {
