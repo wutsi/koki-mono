@@ -14,7 +14,7 @@ import com.wutsi.koki.workflow.dto.Workflow
 import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
-class WorkflowControllerTest : AbstractPageControllerTest() {
+class ShowWorkflowControllerTest : AbstractPageControllerTest() {
     private val roles = listOf(
         Role(id = 1L, name = "accountant", title = "Accountant"),
         Role(id = 2L, name = "hr", title = "Human Resource"),
@@ -77,8 +77,6 @@ class WorkflowControllerTest : AbstractPageControllerTest() {
         ),
     )
 
-    private val pictureUrl = "https://picsum.photos/300/100"
-
     @BeforeEach
     override fun setUp() {
         super.setUp()
@@ -88,9 +86,6 @@ class WorkflowControllerTest : AbstractPageControllerTest() {
 
         doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow)
             .workflow(workflow.id)
-
-        doReturn(pictureUrl).whenever(kokiWorkflow)
-            .imageUrl(workflow.id)
     }
 
     @Test
@@ -98,7 +93,7 @@ class WorkflowControllerTest : AbstractPageControllerTest() {
         navigateTo("/workflows/${workflow.id}")
         assertCurrentPageIs(PageName.WORKFLOW)
 
-        assertElementAttribute(".workflow-image img", "src", pictureUrl)
+        assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
         assertElementCount("tr.activity", workflow.activities.size)
     }
 

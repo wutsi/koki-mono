@@ -2,6 +2,8 @@ package com.wutsi.koki.sdk
 
 import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.GetWorkflowResponse
+import com.wutsi.koki.workflow.dto.ImportWorkflowRequest
+import com.wutsi.koki.workflow.dto.ImportWorkflowResponse
 import com.wutsi.koki.workflow.dto.SearchActivityResponse
 import com.wutsi.koki.workflow.dto.SearchWorkflowResponse
 import com.wutsi.koki.workflow.dto.WorkflowSortBy
@@ -17,11 +19,14 @@ class KokiWorkflow(
         private val WORKFLOW_PATH_PREFIX = "/v1/workflows"
     }
 
-    fun workflow(id: Long): GetWorkflowResponse {
-        val url = urlBuilder.build(
-            "$WORKFLOW_PATH_PREFIX/$id",
-        )
-        return rest.getForEntity(url, GetWorkflowResponse::class.java).body!!
+    fun import(request: ImportWorkflowRequest): ImportWorkflowResponse {
+        val url = urlBuilder.build(WORKFLOW_PATH_PREFIX)
+        return rest.postForEntity(url, request, ImportWorkflowResponse::class.java).body!!
+    }
+
+    fun import(id: Long, request: ImportWorkflowRequest): ImportWorkflowResponse {
+        val url = urlBuilder.build("$WORKFLOW_PATH_PREFIX/$id")
+        return rest.postForEntity(url, request, ImportWorkflowResponse::class.java).body!!
     }
 
     fun imageUrl(id: Long): String {
@@ -29,6 +34,13 @@ class KokiWorkflow(
         return urlBuilder.build(
             "$WORKFLOW_PATH_PREFIX/images/$tenantId.$id.png",
         )
+    }
+
+    fun workflow(id: Long): GetWorkflowResponse {
+        val url = urlBuilder.build(
+            "$WORKFLOW_PATH_PREFIX/$id",
+        )
+        return rest.getForEntity(url, GetWorkflowResponse::class.java).body!!
     }
 
     fun workflows(

@@ -24,11 +24,6 @@ input:read-only {
     color: darkred;
 }
 
-.form {
-    margin: 2em auto;
-    width: 60%;
-}
-
 .form-header {
     background: white;
     border-radius: 10px;

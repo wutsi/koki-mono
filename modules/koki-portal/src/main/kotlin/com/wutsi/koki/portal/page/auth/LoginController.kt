@@ -3,7 +3,6 @@ package com.wutsi.koki.portal.page.form
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.portal.page.auth.LoginForm
 import com.wutsi.koki.portal.rest.AuthenticationService
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -61,3 +60,8 @@ class LoginController(
         }
     }
 }
+
+data class LoginForm(
+    val email: String = "",
+    val password: String = "",
+)
