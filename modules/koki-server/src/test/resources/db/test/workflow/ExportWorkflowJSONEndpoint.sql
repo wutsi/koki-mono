@@ -1,5 +1,6 @@
 INSERT INTO T_TENANT(id, name, domain_name, locale, currency)
-    VALUES (1, 'tenant-1', 'tenant-1.com', 'en_US', 'USD');
+    VALUES (1, 'tenant-1', 'tenant-1.com', 'en_US', 'USD'),
+           (2, 'tenant-2', 'tenant-2.com', 'en_US', 'USD');
 
 INSERT INTO T_FORM(id, tenant_fk, name, title, active, content)
     VALUES (100, 1, 'f-100', 'Form 100', true, '{}'),
@@ -10,7 +11,8 @@ INSERT INTO T_ROLE(id, tenant_fk, name)
            (11, 1, 'writer');
 
 INSERT INTO T_WORKFLOW(id, tenant_fk, name, description, active, parameters)
-    VALUES(100, 1, 'w100', null, true, 'PARAM_1, PARAM_2');
+    VALUES (100, 1, 'w100', null, true, 'PARAM_1, PARAM_2'),
+           (200, 2, 'w200', null, true, null);
 ;
 
 INSERT INTO T_ACTIVITY(id, workflow_fk, name, title, type, active, form_fk, role_fk, requires_approval)
