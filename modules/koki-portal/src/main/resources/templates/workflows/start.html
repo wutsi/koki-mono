@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8 offset-md-2">
+            <div class="form">
+                <form class="form" method="post" th:action="@{'/workflows/' + ${workflow.id} + '/start'}"
+                      th:object="${form}">
+
+                    <div class="form-header">
+                        <h1>Start Workflow</h1>
+                    </div>
+                    <div class="form-body">
+                        <div class="section" th:if="!${workflow.roles.isEmpty()}">
+                            <div class="section-item">
+                                <h2 th:text="${workflow.longTitle}">WORKFLOW_NAME</h2>
+                            </div>
+                            <div class="section-item">
+                                <div class="workflow-image">
+                                    <img th:alt="${workflow.title}" th:src="${workflow.imageUrl}"/>
+                                </div>
+                            </div>
+                            <div class="section-item">
+                                <label>
+                                    <span>Start Date</span>
+                                    <span class="required">*</span>
+                                </label>
+                                <input name="startsAt" required type="date"/>
+                            </div>
+                            <div class="section-item">
+                                <label>Due Dat</label>
+                                <input name="dueAt" type="date"/>
+                            </div>
+                        </div>
+
+                        <div class="section" th:if="!${workflow.roles.isEmpty()}">
+                            <div class="section-header">
+                                <h3>Participants</h3>
+                            </div>
+                            <div class="section-body">
+                                <div class="section-item" th:each="role : ${workflow.roles}">
+                                    <label>
+                                        <span th:text="${role.title}">ROLE</span>
+                                        <span class="required">*</span>
+                                    </label>
+                                    <select required th:name="'participant_' + ${role.id}">
+                                        <option></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section" th:if="!${workflow.parameters.isEmpty()}">
+                            <div class="section-header">
+                                <h3>Parameters</h3>
+                            </div>
+                            <div class="section-body">
+                                <div class="section-item" th:each="parameter : ${workflow.parameters}">
+                                    <label>
+                                        <span th:text="${parameter}">PARAM</span>
+                                        <span class="required">*</span>
+                                    </label>
+                                    <input required th:name="'parameter_' + ${parameter}"/>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-footer">
+                        <button type="submit">Submit</button>
+                        <a class="btn-cancel" th:href="${workflow.url}">Cancel</a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
