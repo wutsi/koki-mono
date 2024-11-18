@@ -48,8 +48,6 @@ class UpdateWorkflowControllerTest : AbstractPageControllerTest() {
     @Test
     fun cancel() {
         navigateTo("/workflows/${workflow.id}/update")
-
-        input("textarea[name=json]", jsonContent())
         scrollToBottom()
         click(".btn-cancel")
 
@@ -72,7 +70,7 @@ class UpdateWorkflowControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/workflows/${workflow.id}/update")
         input("textarea[name=json]", jsonContent())
-        scrollToMiddle()
+        scrollToBottom()
         click("button[type=submit]")
 
         assertCurrentPageIs(PageName.WORKFLOW_UPDATE)
@@ -83,7 +81,7 @@ class UpdateWorkflowControllerTest : AbstractPageControllerTest() {
     fun `json not valid`() {
         navigateTo("/workflows/${workflow.id}/update")
         input("textarea[name=json]", "Invalid content :-)")
-        scrollToMiddle()
+        scrollToBottom()
         click("button[type=submit]")
 
         assertCurrentPageIs(PageName.WORKFLOW_UPDATE)
@@ -93,7 +91,8 @@ class UpdateWorkflowControllerTest : AbstractPageControllerTest() {
     @Test
     fun `missing fields`() {
         navigateTo("/workflows/${workflow.id}/update")
-        scrollToMiddle()
+        input("textarea[name=json]", "")
+        scrollToBottom()
         click("button[type=submit]")
 
         assertCurrentPageIs(PageName.WORKFLOW_UPDATE)
