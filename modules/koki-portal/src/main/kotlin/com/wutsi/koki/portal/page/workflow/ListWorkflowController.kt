@@ -20,7 +20,9 @@ class ListWorkflowController(
         model: Model
     ): String {
         val workflows = service.workflows(limit, offset)
-        model.addAttribute("workflows", workflows)
+        if (workflows.isNotEmpty()) {
+            model.addAttribute("workflows", workflows)
+        }
         model.addAttribute(
             "page",
             PageModel(
