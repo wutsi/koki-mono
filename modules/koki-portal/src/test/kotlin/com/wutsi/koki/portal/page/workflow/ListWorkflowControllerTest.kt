@@ -134,7 +134,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
         navigateTo("/workflows")
         click("tr.workflow .btn-edit")
 
-        assertCurrentPageIs(PageName.WORKFLOW_EDIT)
+        assertCurrentPageIs(PageName.WORKFLOW_UPDATE)
     }
 
     @Test

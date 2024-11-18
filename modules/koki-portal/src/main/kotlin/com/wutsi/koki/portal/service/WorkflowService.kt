@@ -17,6 +17,10 @@ class WorkflowService(
     private val mapper: WorkflowMapper,
     private val objectMapper: ObjectMapper,
 ) {
+    fun json(id: Long): String {
+        return kokiWorkflow.json(id)
+    }
+
     fun workflow(id: Long): WorkflowModel {
         val workflow = kokiWorkflow.workflow(id).workflow
         val roles = if (workflow.roleIds.isEmpty()) {
