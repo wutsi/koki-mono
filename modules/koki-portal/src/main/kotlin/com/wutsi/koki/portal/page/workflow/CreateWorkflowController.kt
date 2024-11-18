@@ -23,7 +23,7 @@ class CreateWorkflowController(service: WorkflowService) : AbstractSaveWorkflowC
         return create(CreateWorkflowForm(), model)
     }
 
-    @PostMapping("/workflows/create/submit")
+    @PostMapping("/workflows/create")
     fun submit(
         @ModelAttribute form: CreateWorkflowForm,
         model: Model

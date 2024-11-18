@@ -1,5 +1,6 @@
 package com.wutsi.koki.sdk
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.GetWorkflowResponse
 import com.wutsi.koki.workflow.dto.ImportWorkflowRequest
@@ -8,11 +9,13 @@ import com.wutsi.koki.workflow.dto.SearchActivityResponse
 import com.wutsi.koki.workflow.dto.SearchWorkflowResponse
 import com.wutsi.koki.workflow.dto.WorkflowSortBy
 import org.springframework.web.client.RestTemplate
+import java.net.URL
 
 class KokiWorkflow(
     private val urlBuilder: URLBuilder,
     private val rest: RestTemplate,
-    private val tenantProvider: TenantProvider
+    private val tenantProvider: TenantProvider,
+    private val objectMapper: ObjectMapper,
 ) {
     companion object {
         private val ACTIVITY_PATH_PREFIX = "/v1/activities"
@@ -34,6 +37,20 @@ class KokiWorkflow(
         return urlBuilder.build(
             "$WORKFLOW_PATH_PREFIX/images/$tenantId.$id.png",
         )
+    }
+
+    fun json(id: Long): String {
+        val tenantId = tenantProvider.id()
+        val url = urlBuilder.build(
+            "$WORKFLOW_PATH_PREFIX/images/$tenantId.$id.png",
+        )
+        val json = URL(url).readText()
+        val data = objectMapper.readValue(json, Map::class.java)
+
+        return ObjectMapper()
+            .writer()
+            .withDefaultPrettyPrinter()
+            .writeValueAsString(data)
     }
 
     fun workflow(id: Long): GetWorkflowResponse {
