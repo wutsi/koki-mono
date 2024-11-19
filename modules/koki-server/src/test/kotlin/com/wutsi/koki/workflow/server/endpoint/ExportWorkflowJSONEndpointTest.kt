@@ -23,7 +23,6 @@ class ExportWorkflowJSONEndpointTest : TenantAwareEndpointTest() {
 
     private val folder = File(File(System.getProperty("user.home")), "__wutsi")
 
-
     private fun download(url: String, statusCode: Int): File? {
         val i = url.lastIndexOf("/")
         val filename = url.substring(i + 1)
