@@ -241,8 +241,6 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                         description = "SAGE create an invoice",
                         type = ActivityType.SERVICE,
                         tags = mapOf("foo" to "bar", "a" to "b"),
-                        requiresApproval = true,
-                        role = "accountant",
                         form = "xxxx"
                     ),
                     ActivityData(
@@ -252,7 +250,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                 ),
                 flows = listOf(
                     FlowData(from = "START", to = "INVOICE"),
-                    FlowData(from = "INVOICE", to = "STOP", expression = "A==true"),
+                    FlowData(from = "INVOICE", to = "STOP"),
                 )
             )
         )
@@ -282,8 +280,6 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                         description = "SAGE create an invoice",
                         type = ActivityType.SERVICE,
                         tags = mapOf("foo" to "bar", "a" to "b"),
-                        requiresApproval = true,
-                        role = "accountant",
                         form = "f-200"
                     ),
                     ActivityData(
@@ -293,7 +289,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                 ),
                 flows = listOf(
                     FlowData(from = "START", to = "INVOICE"),
-                    FlowData(from = "INVOICE", to = "STOP", expression = "A==true"),
+                    FlowData(from = "INVOICE", to = "STOP"),
                 )
             )
         )
