@@ -10,16 +10,16 @@ INSERT INTO T_ROLE(id, tenant_fk, name)
     VALUES (10, 1, 'admin'),
            (11, 1, 'writer');
 
-INSERT INTO T_WORKFLOW(id, tenant_fk, name, description, active, parameters)
-    VALUES (100, 1, 'w100', null, true, 'PARAM_1, PARAM_2'),
-           (200, 2, 'w200', null, true, null);
+INSERT INTO T_WORKFLOW(id, tenant_fk, name, title, description, active, parameters, approver_role_fk)
+    VALUES (100, 1, 'w100','workflow #100', 'Yo', true, 'PARAM_1, PARAM_2', 10),
+           (200, 2, 'w200','workflow #200', null, true, null, null);
 ;
 
-INSERT INTO T_ACTIVITY(id, workflow_fk, name, title, type, active, form_fk, role_fk, requires_approval)
-    VALUES (100, 100, 'START',   'Start',   1, true,  null, null, false),
-           (101, 100, 'WORKING', 'Work...', 3, true,  100,  10,   true),
-           (102, 100, 'OLD',     'old...',  3, false, null, 10,   true),
-           (103, 100, 'STOP',    'Done',    2, true,  null, null, false);
+INSERT INTO T_ACTIVITY(id, workflow_fk, name, title, type, active, form_fk, role_fk, requires_approval, description)
+    VALUES (100, 100, 'START',   'Start',   1, true,  null, null, false, 'Starting the process'),
+           (101, 100, 'WORKING', 'Work...', 3, true,  100,  10,   true, 'Performing the task'),
+           (102, 100, 'OLD',     'old...',  3, false, null, 10,   true, null),
+           (103, 100, 'STOP',    'Done',    2, true,  null, null, false, null);
 
 INSERT INTO T_FLOW(workflow_fk, from_fk, to_fk, expression)
     VALUES (100, 100, 101, null),

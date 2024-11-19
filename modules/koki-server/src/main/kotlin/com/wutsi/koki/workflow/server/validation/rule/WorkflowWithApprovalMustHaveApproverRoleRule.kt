@@ -1,13 +1,12 @@
 package com.wutsi.koki.workflow.server.validation.rule
 
-import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.WorkflowData
 import com.wutsi.koki.workflow.server.validation.ValidationError
 
-class WorkflowMustHaveOneStartActivityRule : AbstractWorkflowRule() {
+class WorkflowWithApprovalMustHaveApproverRoleRule : AbstractWorkflowRule() {
     override fun validate(workflow: WorkflowData): List<ValidationError> {
-        val activities = workflow.activities.filter { activity -> activity.type == ActivityType.START }
-        return if (activities.size != 1) {
+        val requiresApproval = workflow.activities.find { activity -> activity.requiresApproval } != null
+        return if (requiresApproval && workflow.approverRole?.ifEmpty { null } == null) {
             listOf(createError(workflow))
         } else {
             emptyList()

@@ -20,6 +20,9 @@ data class WorkflowEntity(
     @Column(name = "tenant_fk")
     val tenantId: Long = -1,
 
+    @Column(name = "approver_role_fk")
+    var approverRoleId: Long? = null,
+
     @BatchSize(20)
     @OneToMany(mappedBy = "workflow")
     val activities: List<ActivityEntity> = emptyList(),
@@ -35,6 +38,7 @@ data class WorkflowEntity(
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
     var parameters: String? = null,
+    var workflowInstanceCount: Long = 0,
 ) {
     fun parameterAsList(): List<String> {
         return parameters?.let { params -> params.split(",").map { it.trim() } } ?: emptyList()

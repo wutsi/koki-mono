@@ -3,12 +3,10 @@ package com.wutsi.koki.workflow.server.validation.rule
 import com.wutsi.koki.workflow.dto.WorkflowData
 import com.wutsi.koki.workflow.server.validation.ValidationError
 
-class WorkflowMustHaveANameRule : AbstractWorkflowRule() {
+class ActivityMustHaveANameRule : AbstractActivityRule() {
     override fun validate(workflow: WorkflowData): List<ValidationError> {
-        return if (workflow.name.trim().isEmpty()) {
-            listOf(createError(workflow))
-        } else {
-            emptyList()
-        }
+        return workflow.activities
+            .filter { activity -> activity.name.trim().isEmpty() }
+            .map { activity -> createError(activity) }
     }
 }

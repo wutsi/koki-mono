@@ -7,8 +7,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class WorkflowMustHaveAtLeastOneStopActivityRuleTest {
-    private val rule = WorkflowMustHaveAtLeastOneStopActivityRule()
+class WorkflowWithApprovalMustHaveApproverRoleRuleTest {
+    private val rule = WorkflowWithApprovalMustHaveApproverRoleRule()
 
     @Test
     fun success() {
@@ -16,9 +16,10 @@ class WorkflowMustHaveAtLeastOneStopActivityRuleTest {
             WorkflowData(
                 name = "test",
                 description = "This is a new workflow",
+                approverRole = "foo",
                 activities = listOf(
                     ActivityData(name = "start", type = ActivityType.START),
-                    ActivityData(name = "invoice", type = ActivityType.MANUAL),
+                    ActivityData(name = "invoice", type = ActivityType.MANUAL, requiresApproval = true),
                     ActivityData(name = "stop", type = ActivityType.STOP),
                 )
             )
@@ -28,15 +29,35 @@ class WorkflowMustHaveAtLeastOneStopActivityRuleTest {
     }
 
     @Test
-    fun error() {
+    fun `no role`() {
         val result = rule.validate(
             WorkflowData(
                 name = "test",
                 description = "This is a new workflow",
+                approverRole = null,
                 activities = listOf(
                     ActivityData(name = "start", type = ActivityType.START),
-                    ActivityData(name = "invoice", type = ActivityType.MANUAL),
-                    ActivityData(name = "stop", type = ActivityType.SERVICE),
+                    ActivityData(name = "invoice", type = ActivityType.MANUAL, requiresApproval = true),
+                    ActivityData(name = "stop", type = ActivityType.STOP),
+                )
+            )
+        )
+
+        assertEquals(1, result.size)
+        assertEquals("workflow: test", result[0].location)
+    }
+
+    @Test
+    fun `empty role`() {
+        val result = rule.validate(
+            WorkflowData(
+                name = "test",
+                description = "This is a new workflow",
+                approverRole = "",
+                activities = listOf(
+                    ActivityData(name = "start", type = ActivityType.START),
+                    ActivityData(name = "invoice", type = ActivityType.MANUAL, requiresApproval = true),
+                    ActivityData(name = "stop", type = ActivityType.STOP),
                 )
             )
         )

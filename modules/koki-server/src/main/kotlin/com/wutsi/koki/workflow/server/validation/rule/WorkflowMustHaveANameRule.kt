@@ -3,10 +3,9 @@ package com.wutsi.koki.workflow.server.validation.rule
 import com.wutsi.koki.workflow.dto.WorkflowData
 import com.wutsi.koki.workflow.server.validation.ValidationError
 
-class WorkflowWithApprovalMustHaveApproverRoleRule : AbstractWorkflowRule() {
+class WorkflowMustHaveANameRule : AbstractWorkflowRule() {
     override fun validate(workflow: WorkflowData): List<ValidationError> {
-        val requiresApproval = workflow.activities.find { activity -> activity.requiresApproval } != null
-        return if (requiresApproval && workflow.approverRole?.ifEmpty { null } == null) {
+        return if (workflow.name.trim().isEmpty()) {
             listOf(createError(workflow))
         } else {
             emptyList()
