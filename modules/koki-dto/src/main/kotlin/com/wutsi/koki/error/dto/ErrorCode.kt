@@ -39,7 +39,9 @@ object ErrorCode {
     val USER_DUPLICATE_EMAIL: String = "$PREFIX:user:duplicate-email"
 
     val WORKFLOW_ACTIVITY_NOT_FOUND: String = "$PREFIX:workflow:activity-not-found"
+    val WORKFLOW_DUPLICATE_NAME: String = "$PREFIX:workflow:duplicate-name"
     val WORKFLOW_FLOW_NOT_FOUND: String = "$PREFIX:workflow:flow-not-found"
+    val WORKFLOW_HAS_INSTANCES: String = "$PREFIX:workflow:has-instance"
     val WORKFLOW_NOT_ACTIVE: String = "$PREFIX:workflow:not-active"
     val WORKFLOW_NOT_FOUND: String = "$PREFIX:workflow:not-found"
     val WORKFLOW_NOT_VALID: String = "$PREFIX:workflow:not-valid"

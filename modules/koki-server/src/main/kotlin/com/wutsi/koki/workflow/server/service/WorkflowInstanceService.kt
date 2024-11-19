@@ -108,12 +108,9 @@ class WorkflowInstanceService(
     @Transactional
     fun create(request: CreateWorkflowInstanceRequest, tenantId: Long): WorkflowInstanceEntity {
         val instance = createInstance(request, tenantId)
-
-        instance.parameters = objectMapper.writeValueAsString(
-            request.parameters.filter { entry -> entry.value.isNotEmpty() }
-        )
-
         createParticipants(request, instance, tenantId)
+
+        workflowService.onCreated(instance)
         return instance
     }
 
@@ -161,6 +158,9 @@ class WorkflowInstanceService(
                 approverId = request.approverUserId,
                 startAt = request.startAt,
                 dueAt = request.dueAt,
+                parameters = objectMapper.writeValueAsString(
+                    request.parameters.filter { entry -> entry.value.isNotEmpty() }
+                )
             )
         )
         LOGGER.debug(">>> WorkflowInstance created: ${instance.id}")

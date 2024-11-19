@@ -28,6 +28,8 @@ class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(true, workflow.requiresApprover)
         assertEquals(listOf("PARAM_1", "PARAM_2", "PARAM_3"), workflow.parameters)
         assertEquals(listOf(10L, 11L), workflow.roleIds)
+        assertEquals(10L, workflow.approverRoleId)
+        assertEquals(11, workflow.workflowInstanceCount)
 
         assertEquals(5, workflow.activities.size)
         val activities = workflow.activities.sortedBy { it.id }

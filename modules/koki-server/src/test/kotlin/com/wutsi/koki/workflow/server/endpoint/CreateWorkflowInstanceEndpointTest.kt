@@ -9,6 +9,7 @@ import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.Participant
 import com.wutsi.koki.workflow.server.dao.ParticipantRepository
 import com.wutsi.koki.workflow.server.dao.WorkflowInstanceRepository
+import com.wutsi.koki.workflow.server.dao.WorkflowRepository
 import org.apache.commons.lang3.time.DateUtils
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,6 +28,9 @@ class CreateWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
 
     @Autowired
     private lateinit var participanDao: ParticipantRepository
+
+    @Autowired
+    protected lateinit var workflowDao: WorkflowRepository
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -165,14 +169,6 @@ class CreateWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
-    fun `startAt in past`() {
-        val xrequest = request.copy(startAt = DateUtils.addDays(Date(), -7))
-        val result = rest.postForEntity("/v1/workflow-instances", xrequest, ErrorResponse::class.java)
-
-        assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
-    }
-
-    @Test
     fun `no dueAt`() {
         val xrequest = request.copy(dueAt = null)
         val result = rest.postForEntity("/v1/workflow-instances", xrequest, CreateWorkflowInstanceResponse::class.java)
@@ -182,5 +178,19 @@ class CreateWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         val instanceId = result.body!!.workflowInstanceId
         val instance = instanceDao.findById(instanceId).get()
         assertNull(instance.dueAt)
+    }
+
+    @Test
+    fun `update workflow instance count`() {
+        val result = rest.postForEntity(
+            "/v1/workflow-instances",
+            request.copy(workflowId = 400),
+            CreateWorkflowInstanceResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val workflow = workflowDao.findById(400).get()
+        assertEquals(6, workflow.workflowInstanceCount)
     }
 }

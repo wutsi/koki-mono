@@ -8,6 +8,7 @@ data class Workflow(
     val title: String? = null,
     val description: String? = null,
     val requiresApprover: Boolean = false,
+    val approverRoleId: Long? = null,
     val active: Boolean = false,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
@@ -15,4 +16,5 @@ data class Workflow(
     val activities: List<Activity> = emptyList(),
     val flows: List<Flow> = emptyList(),
     val roleIds: List<Long> = emptyList(),
+    val workflowInstanceCount: Long = 0L,
 )

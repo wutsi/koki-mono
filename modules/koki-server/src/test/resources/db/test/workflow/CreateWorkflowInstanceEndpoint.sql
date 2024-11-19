@@ -18,7 +18,8 @@ INSERT INTO T_USER(id, tenant_fk, email, password, salt, display_name)
 INSERT INTO T_WORKFLOW(id, tenant_fk, name, description, active, parameters)
     VALUES(100, 1, 'w1', 'description w1', true, 'PARAM_1, PARAM_2'),
           (200, 1, 'w2', 'no approver, no role, no parameter', true, null),
-          (300, 1, 'w1', 'inactive', false, null);
+          (300, 1, 'w3', 'inactive', false, null),
+          (400, 1, 'w4', 'with instances', true, null);
 ;
 
 INSERT INTO T_ACTIVITY(id, workflow_fk, role_fk, name, type, description, tags, requires_approval)
@@ -33,3 +34,10 @@ INSERT INTO T_ACTIVITY(id, workflow_fk, role_fk, name, type, description, tags, 
            (212, 200, null, 'END', 2, null, null, false),
 
            (310, 300, null, 'START', 1, null, null, true);
+
+INSERT INTO T_WORKFLOW_INSTANCE(id, tenant_fk, workflow_fk, approver_fk, status, start_at, state)
+    VALUES ('wi-400-01', 1, 400, null, 2, now(), '{}'),
+           ('wi-400-02', 1, 400, null, 2, now(), '{}'),
+           ('wi-400-03', 1, 400, null, 1, now(), '{}'),
+           ('wi-410-01', 1, 400, 100,  2, now(), '{"A":"oldA", "C":"cc"}'),
+           ('wi-410-02', 1, 400, 100, 2, now(), '{}');

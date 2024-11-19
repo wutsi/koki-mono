@@ -38,6 +38,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
             name = "new",
             description = "This is a new workflow",
             parameters = listOf("PARAM_1 ", "PARAM_2"),
+            approverRole = "accountant",
             activities = listOf(
                 ActivityData(name = "START", type = ActivityType.START),
                 ActivityData(
@@ -74,6 +75,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.workflow.name, workflow.name)
         assertEquals(request.workflow.description, workflow.description)
         assertTrue(workflow.active)
+        assertEquals(10L, workflow.approverRoleId)
         assertEquals("PARAM_1,PARAM_2", workflow.parameters)
 
         val activities = activityDao.findByWorkflow(workflow)
@@ -239,8 +241,6 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                         description = "SAGE create an invoice",
                         type = ActivityType.SERVICE,
                         tags = mapOf("foo" to "bar", "a" to "b"),
-                        requiresApproval = true,
-                        role = "accountant",
                         form = "xxxx"
                     ),
                     ActivityData(
@@ -250,7 +250,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                 ),
                 flows = listOf(
                     FlowData(from = "START", to = "INVOICE"),
-                    FlowData(from = "INVOICE", to = "STOP", expression = "A==true"),
+                    FlowData(from = "INVOICE", to = "STOP"),
                 )
             )
         )
@@ -280,8 +280,6 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                         description = "SAGE create an invoice",
                         type = ActivityType.SERVICE,
                         tags = mapOf("foo" to "bar", "a" to "b"),
-                        requiresApproval = true,
-                        role = "accountant",
                         form = "f-200"
                     ),
                     ActivityData(
@@ -291,7 +289,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                 ),
                 flows = listOf(
                     FlowData(from = "START", to = "INVOICE"),
-                    FlowData(from = "INVOICE", to = "STOP", expression = "A==true"),
+                    FlowData(from = "INVOICE", to = "STOP"),
                 )
             )
         )
@@ -304,5 +302,31 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
 
         assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
         assertEquals(ErrorCode.FORM_NOT_FOUND, result.body?.error?.code)
+    }
+
+    @Test
+    fun `duplicate workflow name`() {
+        val result = rest.postForEntity(
+            "/v1/workflows",
+            request.copy(
+                workflow = request.workflow.copy(name = "W-110")
+            ),
+            ErrorResponse::class.java
+        )
+
+        assertEquals(HttpStatus.CONFLICT, result.statusCode)
+        assertEquals(ErrorCode.WORKFLOW_DUPLICATE_NAME, result.body?.error?.code)
+    }
+
+    @Test
+    fun `workflow with instances`() {
+        val result = rest.postForEntity(
+            "/v1/workflows/120",
+            request,
+            ErrorResponse::class.java
+        )
+
+        assertEquals(HttpStatus.CONFLICT, result.statusCode)
+        assertEquals(ErrorCode.WORKFLOW_HAS_INSTANCES, result.body?.error?.code)
     }
 }
