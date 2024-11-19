@@ -2,15 +2,18 @@ CREATE TABLE T_WORKFLOW(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
   tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
+  approver_role_fk        BIGINT REFERENCES T_ROLE(id),
 
   name                    VARCHAR(100) NOT NULL,
   title                   VARCHAR(255),
   description             TEXT,
   active                  BOOLEAN NOT NULL DEFAULT true,
   parameters              TEXT,
+  workflow_instance_count BIGINT NOT NULL DEFAULT 0,
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
 
+  UNIQUE(tenant_fk, name),
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 

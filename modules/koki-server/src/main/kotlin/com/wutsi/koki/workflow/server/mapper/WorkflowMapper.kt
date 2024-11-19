@@ -27,7 +27,9 @@ class WorkflowMapper(
                 .sorted(),
             requiresApprover = activities.find { activity -> activity.requiresApproval } != null,
             parameters = entity.parameterAsList(),
-            flows = entity.flows.map { flow -> flowMapper.toFlow(flow) }
+            flows = entity.flows.map { flow -> flowMapper.toFlow(flow) },
+            approverRoleId = entity.approverRoleId,
+            workflowInstanceCount = entity.workflowInstanceCount,
         )
     }
 

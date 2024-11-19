@@ -29,7 +29,10 @@ class WorkflowExporter(
                 .map { flow -> toFlowData(flow) },
             activities = workflow.activities
                 .filter { activty -> activty.active }
-                .map { activity -> toActivityData(activity, workflow.tenantId) }
+                .map { activity -> toActivityData(activity, workflow.tenantId) },
+            approverRole = workflow.approverRoleId?.let { roleId ->
+                roleService.get(roleId, workflow.tenantId)?.name
+            },
         )
         objectMapper.writeValue(output, data)
     }

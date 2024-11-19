@@ -11,9 +11,11 @@ INSERT INTO T_FORM(id, tenant_fk, name, title, active, content)
     VALUES (100, 1, 'f-100', 'Form 100', true, '{}'),
            (200, 2, 'f-200', 'Form 200', true, '{}');
 
-INSERT INTO T_WORKFLOW(id, tenant_fk, name)
-    VALUES(100, 1, 'w1'),
-          (200, 2, 'w2');
+INSERT INTO T_WORKFLOW(id, tenant_fk, name, workflow_instance_count)
+    VALUES(100, 1, 'w1', 0),
+          (110, 1, 'w-110', 0),
+          (120, 1, 'w-120', 10),
+          (200, 2, 'w2', 0);
 
 INSERT INTO T_ACTIVITY(id, workflow_fk, role_fk, name, type)
     VALUES (110, 100, null, 'START', 1),

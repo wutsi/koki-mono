@@ -1,5 +1,9 @@
 package com.wutsi.koki.workflow.server.io
 
+import com.wutsi.koki.error.dto.Error
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.Parameter
+import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.form.server.service.FormService
 import com.wutsi.koki.tenant.server.domain.RoleEntity
@@ -29,6 +33,9 @@ class WorkflowImporter(
     }
 
     fun import(workflow: WorkflowEntity, data: WorkflowData): WorkflowEntity {
+        ensureHasNoInstance(workflow)
+        ensureNameUnique(workflow, data)
+
         val w = saveWorkflow(workflow, data)
 
         // Update activities
@@ -179,7 +186,36 @@ class WorkflowImporter(
             .map { param -> param.trim() }
             .joinToString(separator = ",")
             .ifEmpty { null }
+        workflow.approverRoleId = data.approverRole?.ifEmpty { null }?.let { roleName ->
+            roleService.getByName(roleName, workflow.tenantId).id
+        }
         return workflowService.save(workflow)
+    }
+
+    private fun ensureHasNoInstance(workflow: WorkflowEntity) {
+        if (workflow.workflowInstanceCount > 0) {
+            throw ConflictException(
+                error = Error(
+                    code = ErrorCode.WORKFLOW_HAS_INSTANCES,
+                )
+            )
+        }
+    }
+
+    private fun ensureNameUnique(workflow: WorkflowEntity, data: WorkflowData) {
+        try {
+            val duplicate = workflowService.get(data.name, workflow.tenantId)
+            if (duplicate.id != workflow.id) {
+                throw ConflictException(
+                    error = Error(
+                        code = ErrorCode.WORKFLOW_DUPLICATE_NAME,
+                        parameter = Parameter(value = data.name)
+                    )
+                )
+            }
+        } catch (ex: NotFoundException) {
+            // Ignore
+        }
     }
 
     private fun deactivate(workflow: WorkflowEntity, data: WorkflowData): List<ActivityEntity> {

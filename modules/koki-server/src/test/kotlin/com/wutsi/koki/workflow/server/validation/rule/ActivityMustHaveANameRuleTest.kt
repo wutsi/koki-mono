@@ -7,8 +7,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class WorkflowMustHaveANameRuleTest {
-    private val rule = WorkflowMustHaveANameRule()
+class ActivityMustHaveANameRuleTest {
+    private val rule = ActivityMustHaveANameRule()
 
     @Test
     fun success() {
@@ -29,7 +29,7 @@ class WorkflowMustHaveANameRuleTest {
     }
 
     @Test
-    fun empty() {
+    fun failure() {
         val result = rule.validate(
             WorkflowData(
                 name = "",
@@ -37,31 +37,12 @@ class WorkflowMustHaveANameRuleTest {
                 approverRole = null,
                 activities = listOf(
                     ActivityData(name = "start", type = ActivityType.START),
-                    ActivityData(name = "invoice", type = ActivityType.MANUAL, requiresApproval = true),
-                    ActivityData(name = "stop", type = ActivityType.STOP),
+                    ActivityData(name = " ", type = ActivityType.MANUAL, requiresApproval = true),
+                    ActivityData(name = "", type = ActivityType.STOP),
                 )
             )
         )
 
-        assertEquals(1, result.size)
-        assertEquals("workflow: ", result[0].location)
-    }
-
-    @Test
-    fun blank() {
-        val result = rule.validate(
-            WorkflowData(
-                name = "    ",
-                description = "This is a new workflow",
-                approverRole = "",
-                activities = listOf(
-                    ActivityData(name = "start", type = ActivityType.START),
-                    ActivityData(name = "invoice", type = ActivityType.MANUAL, requiresApproval = true),
-                    ActivityData(name = "stop", type = ActivityType.STOP),
-                )
-            )
-        )
-
-        assertEquals(1, result.size)
+        assertEquals(2, result.size)
     }
 }

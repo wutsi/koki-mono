@@ -7,8 +7,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class WorkflowWithApprovalMustHaveApproverRoleRuleTest {
-    private val rule = WorkflowWithApprovalMustHaveApproverRoleRule()
+class WorkflowMustHaveANameRuleTest {
+    private val rule = WorkflowMustHaveANameRule()
 
     @Test
     fun success() {
@@ -29,10 +29,10 @@ class WorkflowWithApprovalMustHaveApproverRoleRuleTest {
     }
 
     @Test
-    fun `no role`() {
+    fun empty() {
         val result = rule.validate(
             WorkflowData(
-                name = "test",
+                name = "",
                 description = "This is a new workflow",
                 approverRole = null,
                 activities = listOf(
@@ -44,14 +44,14 @@ class WorkflowWithApprovalMustHaveApproverRoleRuleTest {
         )
 
         assertEquals(1, result.size)
-        assertEquals("workflow: test", result[0].location)
+        assertEquals("workflow: ", result[0].location)
     }
 
     @Test
-    fun `empty role`() {
+    fun blank() {
         val result = rule.validate(
             WorkflowData(
-                name = "test",
+                name = "    ",
                 description = "This is a new workflow",
                 approverRole = "",
                 activities = listOf(
@@ -63,6 +63,5 @@ class WorkflowWithApprovalMustHaveApproverRoleRuleTest {
         )
 
         assertEquals(1, result.size)
-        assertEquals("workflow: test", result[0].location)
     }
 }

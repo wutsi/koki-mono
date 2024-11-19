@@ -5,4 +5,6 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface WorkflowRepository : CrudRepository<WorkflowEntity, Long>
+interface WorkflowRepository : CrudRepository<WorkflowEntity, Long> {
+    fun findByNameIgnoreCaseAndTenantId(name: String, tenantId: Long): WorkflowEntity?
+}
