@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.config
 
-import com.wutsi.koki.portal.rest.TenantService
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.koki.portal.service.TenantService
 import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.sdk.KokiFormData
 import com.wutsi.koki.sdk.KokiForms
@@ -18,6 +19,7 @@ import org.springframework.web.client.RestTemplate
 class KokiSDKConfiguration(
     private val rest: RestTemplate,
     private val tenantService: TenantService,
+    private val objectMapper: ObjectMapper,
 
     @Value("\${koki.sdk.base-url}") private val baseUrl: String,
 ) {
@@ -48,7 +50,7 @@ class KokiSDKConfiguration(
 
     @Bean
     fun kokiWorkflow(): KokiWorkflow {
-        return KokiWorkflow(urlBuilder(), rest, tenantService)
+        return KokiWorkflow(urlBuilder(), rest, tenantService, objectMapper)
     }
 
     @Bean

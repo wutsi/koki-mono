@@ -5,52 +5,64 @@
 </head>
 
 <body>
+<div th:replace="~{__components/layout :: navbar}"></div>
 
 <div class="container">
     <div class="row">
         <div class="col-12 col-md-8 offset-md-2">
             <div class="form">
-                <form class="form" method="post" th:action="@{'/workflows/' + ${workflow.id} + '/start'}"
-                      th:object="${form}">
+                <form class="form" method="post" th:action="${workflow.startUrl}">
 
                     <div class="form-header">
                         <h1>Start Workflow</h1>
                     </div>
                     <div class="form-body">
-                        <div class="section" th:if="!${workflow.roles.isEmpty()}">
-                            <div class="section-item">
-                                <h2 th:text="${workflow.longTitle}">WORKFLOW_NAME</h2>
-                            </div>
-                            <div class="section-item">
-                                <div class="workflow-image">
-                                    <img th:alt="${workflow.title}" th:src="${workflow.imageUrl}"/>
+
+                        <div class="section">
+                            <div class="section-body">
+
+                                <div class="alert alert-danger" th:if="${error}" th:text="error">ERROR</div>
+
+                                <div class="section-item">
+                                    <h2 th:text="${workflow.longTitle}">WORKFLOW_NAME</h2>
                                 </div>
-                            </div>
-                            <div class="section-item">
-                                <label>
-                                    <span>Start Date</span>
-                                    <span class="required">*</span>
-                                </label>
-                                <input name="startsAt" required type="date"/>
-                            </div>
-                            <div class="section-item">
-                                <label>Due Dat</label>
-                                <input name="dueAt" type="date"/>
+                                <div class="section-item">
+                                    <div class="workflow-image">
+                                        <img th:alt="${workflow.title}" th:src="${workflow.imageUrl}"/>
+                                    </div>
+                                </div>
+                                <div class="section-item">
+                                    <label class="title">
+                                        <span>Start Date</span>
+                                        <span class="required">*</span>
+                                    </label>
+                                    <input name="startAt" required type="date"/>
+                                </div>
+                                <div class="section-item">
+                                    <label class="title">Due Dat</label>
+                                    <input name="dueAt" type="date"/>
+                                </div>
                             </div>
                         </div>
 
                         <div class="section" th:if="!${workflow.roles.isEmpty()}">
                             <div class="section-header">
-                                <h3>Participants</h3>
+                                <h3 class="section-title">Participants</h3>
                             </div>
                             <div class="section-body">
                                 <div class="section-item" th:each="role : ${workflow.roles}">
-                                    <label>
+                                    <label class="title">
                                         <span th:text="${role.title}">ROLE</span>
                                         <span class="required">*</span>
                                     </label>
-                                    <select required th:name="'participant_' + ${role.id}">
-                                        <option></option>
+                                    <select class="participant" placeholder="Select a user" required
+                                            th:name="'participant_' + ${role.id}">
+                                        <option th:if="${userMap[role.id].size() > 1}" value=""></option>
+                                        <option th:each="user : ${userMap[role.id]}"
+                                                th:text="${user.displayName}"
+                                                th:value="${user.id}">
+                                            USER
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -58,11 +70,11 @@
 
                         <div class="section" th:if="!${workflow.parameters.isEmpty()}">
                             <div class="section-header">
-                                <h3>Parameters</h3>
+                                <h3 class="section-title">Parameters</h3>
                             </div>
                             <div class="section-body">
                                 <div class="section-item" th:each="parameter : ${workflow.parameters}">
-                                    <label>
+                                    <label class="title">
                                         <span th:text="${parameter}">PARAM</span>
                                         <span class="required">*</span>
                                     </label>
@@ -70,8 +82,8 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
+
                     <div class="form-footer">
                         <button type="submit">Submit</button>
                         <a class="btn-cancel" th:href="${workflow.url}">Cancel</a>

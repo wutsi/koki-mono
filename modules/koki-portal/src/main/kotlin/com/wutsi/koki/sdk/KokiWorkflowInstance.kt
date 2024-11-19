@@ -1,6 +1,8 @@
 package com.wutsi.koki.sdk
 
 import com.wutsi.koki.workflow.dto.ApprovalStatus
+import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
+import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.SearchActivityInstanceResponse
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import org.springframework.web.client.RestTemplate
@@ -16,7 +18,12 @@ class KokiWorkflowInstance(
         private val WORKFLOW_PATH_PREFIX = "/v1/workflow-instances"
     }
 
-    fun activityInstances(
+    fun create(request: CreateWorkflowInstanceRequest): CreateWorkflowInstanceResponse {
+        val url = urlBuilder.build(WORKFLOW_PATH_PREFIX)
+        return rest.postForEntity(url, request, CreateWorkflowInstanceResponse::class.java).body!!
+    }
+
+    fun activities(
         ids: List<String> = emptyList(),
         assigneeIds: List<Long> = emptyList(),
         approverIds: List<Long> = emptyList(),

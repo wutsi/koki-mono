@@ -12,8 +12,10 @@ object PageName {
 
     const val WORKFLOW = "page.workflow"
     const val WORKFLOW_CREATE = "page.workflow.create"
-    const val WORKFLOW_EDIT = "page.workflow.edit"
+    const val WORKFLOW_CREATED = "page.workflow.created"
     const val WORKFLOW_LIST = "page.workflow.list"
-    const val WORKFLOW_SUCCESS = "page.workflow.success"
     const val WORKFLOW_START = "page.workflow.start"
+    const val WORKFLOW_STARTED = "page.workflow.started"
+    const val WORKFLOW_UPDATE = "page.workflow.update"
+    const val WORKFLOW_UPDATED = "page.workflow.updated"
 }

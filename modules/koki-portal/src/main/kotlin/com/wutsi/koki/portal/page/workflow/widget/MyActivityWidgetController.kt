@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.page.workflow.widget
 
-import com.wutsi.koki.portal.rest.WorkflowInstanceService
+import com.wutsi.koki.portal.service.WorkflowInstanceService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping

@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.rest
+package com.wutsi.koki.portal.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.portal.mapper.WorkflowMapper
@@ -17,6 +17,10 @@ class WorkflowService(
     private val mapper: WorkflowMapper,
     private val objectMapper: ObjectMapper,
 ) {
+    fun json(id: Long): String {
+        return kokiWorkflow.json(id)
+    }
+
     fun workflow(id: Long): WorkflowModel {
         val workflow = kokiWorkflow.workflow(id).workflow
         val roles = if (workflow.roleIds.isEmpty()) {

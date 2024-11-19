@@ -17,7 +17,6 @@ async function _koki_load_widgets() {
             }
         }
     }
-
 }
 
 document.addEventListener('DOMContentLoaded', koki_ready, false);

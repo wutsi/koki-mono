@@ -81,11 +81,8 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
     override fun setUp() {
         super.setUp()
 
-        doReturn(SearchRoleResponse(roles)).whenever(kokiUser)
-            .roles(any())
-
-        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow)
-            .workflow(workflow.id)
+        doReturn(SearchRoleResponse(roles)).whenever(kokiUser).roles(any())
+        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).workflow(workflow.id)
     }
 
     @Test

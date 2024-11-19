@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.rest
+package com.wutsi.koki.portal.service
 
 import com.wutsi.koki.portal.model.UserModel
 import com.wutsi.koki.portal.security.JWTAuthentication

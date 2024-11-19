@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="widget">
+                <div class="widget-header">
+                    <h1>Workflow Started</h1>
+                </div>
+                <div class="widget-body">
+
+                    <h2 class="text-center" th:text="${workflow.longTitle}">WORKFLOW</h2>
+
+                    <div class="workflow-image padding">
+                        <img th:alt="${workflow.title}" th:src="${workflow.imageUrl}"/>
+                    </div>
+
+                    <div class="text-center">
+                        <p>
+                            The workflow has been successfully started
+                        </p>
+                        <!--
+                        <p>
+                            <a class="btn btn-primary" th:href="${workflow.url}">Show Details</a>
+                        </p>
+                        -->
+                        <p>
+                            <a href="/workflows">
+                                <i class="fa-solid fa-arrow-left"></i>
+                                Back to Workflows
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
