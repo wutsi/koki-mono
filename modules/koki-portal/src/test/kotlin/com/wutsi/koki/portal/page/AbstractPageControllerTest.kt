@@ -151,7 +151,9 @@ abstract class AbstractPageControllerTest {
         doReturn(SearchFormResponse()).whenever(kokiForms)
             .search(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
-        doReturn(SearchRoleResponse()).whenever(kokiUser).roles(anyOrNull())
+        doReturn(SearchRoleResponse()).whenever(kokiUser)
+            .roles(anyOrNull(), anyOrNull(), anyOrNull())
+
         doReturn(SearchUserResponse()).whenever(kokiUser)
             .users(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 

@@ -42,12 +42,16 @@ class KokiUser(
     }
 
     fun roles(
-        ids: List<Long> = emptyList()
+        ids: List<Long> = emptyList(),
+        limit: Int = 20,
+        offset: Int = 0
     ): SearchRoleResponse {
         val url = urlBuilder.build(
             ROLE_PATH_PREFIX,
             mapOf(
                 "id" to ids,
+                "limit" to limit,
+                "offset" to offset
             )
         )
         return rest.getForEntity(url, SearchRoleResponse::class.java).body!!

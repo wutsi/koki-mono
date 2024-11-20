@@ -11,4 +11,11 @@ data class ActivityModel(
     val type: ActivityType = ActivityType.UNKNOWN,
     val requiresApproval: Boolean = false,
     val role: RoleModel? = null,
-)
+) {
+    val longTitle: String
+        get() = if (title.isEmpty()) {
+            name
+        } else {
+            "$name - $title"
+        }
+}

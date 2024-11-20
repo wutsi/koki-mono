@@ -13,4 +13,26 @@
     <i class="fa-solid fa-cloud-arrow-up" th:if="${activity.type.name == 'UPLOAD'}"></i>
 </span>
 
+<div th:fragment="workflow-status(status)" th:if="${status}">
+    <i class="fa-solid fa-circle-check status-done" th:if="${status.name == 'DONE'}"></i>
+    <span class="status-done" th:if="${status.name == 'DONE'}">Done</span>
+
+    <i class="fa-solid fa-play status-running" th:if="${status.name == 'RUNNING'}"></i>
+    <span class="status-running" th:if="${status.name == 'RUNNING'}">In Progress</span>
+
+    <i class="fa-solid fa-circle-xmark status-cancelled" th:if="${status.name == 'CANCELLED'}"></i>
+    <span class="status-cancelled" th:if="${status.name == 'CANCELLED'}">Cancelled</span>
+</div>
+
+<div th:fragment="approval-status(status)" th:if="${status}">
+    <i class="fa-solid fa-spinner fa-spin status-pending" th:if="${status.name == 'PENDING'}"></i>
+    <span class="status-pending" th:if="${status.name == 'PENDING'}">Pending</span>
+
+    <i class="fa-solid fa-check status-done" th:if="${status.name == 'APPROVED'}"></i>
+    <span class="status-done" th:if="${status.name == 'APPROVED'}">Approved</span>
+
+    <i class="fa-solid fa-xmark status-rejected" th:if="${status.name == 'REJECTED'}"></i>
+    <span class="status-rejected" th:if="${status.name == 'REJECTED'}">Rejected</span>
+</div>
+
 </body>

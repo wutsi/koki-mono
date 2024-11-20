@@ -24,7 +24,7 @@ class ShowWorkflowController(
             "page",
             PageModel(
                 name = PageName.WORKFLOW,
-                title = workflow.title,
+                title = workflow.longTitle,
             )
         )
         return "workflows/show"
