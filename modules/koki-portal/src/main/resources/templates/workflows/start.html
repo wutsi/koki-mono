@@ -36,11 +36,40 @@
                                         <span>Start Date</span>
                                         <span class="required">*</span>
                                     </label>
-                                    <input name="startAt" required th:min="${today}" th:value="${today}" type="date"/>
+                                    <div>
+                                        <div>
+                                            <input id="start-now-1" name="startNow" onclick="start_now(1)"
+                                                   th:attrappend="checked=${form.startNow} ? 'checked'"
+                                                   type="radio" value="1"/>
+                                            <span>Now</span>
+                                        </div>
+                                        <div>
+                                            <input id="start-now-0" name="startNow" onclick="start_now(0)"
+                                                   th:attrappend="checked=!${form.startNow} ? 'checked'"
+                                                   type="radio"
+                                                   when="0"/>
+                                            <input autocomplete="off" name="startAt"
+                                                   required
+                                                   th:attrappend="readonly=${form.startNow} ? 'readonly'"
+                                                   th:min="${today}"
+                                                   type="date"
+                                            />
+                                        </div>
+                                        <script>
+                                            function start_now(value) {
+                                                const input = document.querySelector('input[name=startAt]');
+                                                if (value === 1) {
+                                                    input.setAttribute('readonly', 'readonly');
+                                                } else {
+                                                    input.removeAttribute('readonly');
+                                                }
+                                            }
+                                        </script>
+                                    </div>
                                 </div>
                                 <div class="section-item">
                                     <label class="title">Due Dat</label>
-                                    <input name="dueAt" th:min="${today}" type="date"/>
+                                    <input autocomplete="off" name="dueAt" th:min="${today}" type="date"/>
                                 </div>
                             </div>
                         </div>

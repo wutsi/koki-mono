@@ -5,7 +5,6 @@ import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
-import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
@@ -28,11 +27,11 @@ import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.dto.WorkflowSummary
 import org.apache.commons.lang3.time.DateUtils
 import org.junit.jupiter.api.BeforeEach
-import org.openqa.selenium.By
 import java.text.SimpleDateFormat
 import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class StartWorkflowControllerTest : AbstractPageControllerTest() {
     private val roles = listOf(
@@ -89,51 +88,6 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun start() {
-        doReturn(GetWorkflowInstanceResponse(workflowInstance.copy(status = WorkflowStatus.NEW)))
-            .whenever(kokiWorkflowInstance)
-            .workflowInstance(workflowInstance.id)
-
-        doReturn(CreateWorkflowInstanceResponse(workflowInstance.id)).whenever(kokiWorkflowInstance).create(any())
-
-        navigateTo("/workflows/${workflow.id}/start")
-
-        assertCurrentPageIs(PageName.WORKFLOW_START)
-        assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
-
-        inputAllFieldsAndSubmit()
-
-        println(">>>>> " + startAt + " - " + driver.findElement(By.cssSelector("[name=startAt]")).getAttribute("value"))
-        assertElementNotPresent("[name=startAt]:user-invalid")
-        assertElementNotPresent("[name=dueAt]:user-invalid")
-        assertElementNotPresent("[name=approverId]:user-invalid")
-        assertElementNotPresent("[name=participant_1]:user-invalid")
-        assertElementNotPresent("[name=participant_2]:user-invalid")
-        assertElementNotPresent("[name=participant_3]:user-invalid")
-        assertElementNotPresent("[name=parameter_PARAM_1]:user-invalid")
-        assertElementNotPresent("[name=parameter_PARAM_2]:user-invalid")
-
-        assertCurrentPageIs(PageName.WORKFLOW_STARTED)
-        assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
-        assertElementNotPresent("#started-message")
-        assertElementPresent("#scheduled-message")
-        assertElementNotPresent(".alert-danger")
-
-        val request = argumentCaptor<CreateWorkflowInstanceRequest>()
-        verify(kokiWorkflowInstance).create(request.capture())
-        assertEquals(startAt, fmt.format(request.firstValue.startAt))
-        assertEquals(dueAt, fmt.format(request.firstValue.dueAt))
-        assertEquals(3, request.firstValue.participants.size)
-        assertEquals(11L, request.firstValue.approverUserId)
-        assertEquals(Participant(roleId = 1, userId = 11L), request.firstValue.participants[0])
-        assertEquals(Participant(roleId = 2, userId = 12L), request.firstValue.participants[1])
-        assertEquals(Participant(roleId = 3, userId = 13L), request.firstValue.participants[2])
-        assertEquals(mapOf("PARAM_1" to "1111", "PARAM_2" to "2222"), request.firstValue.parameters)
-
-        verify(kokiWorkflowInstance, never()).start(any())
-    }
-
-    @Test
     fun startNow() {
         doReturn(GetWorkflowInstanceResponse(workflowInstance.copy(status = WorkflowStatus.RUNNING)))
             .whenever(kokiWorkflowInstance)
@@ -147,9 +101,19 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.WORKFLOW_START)
         assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
 
-        inputAllFieldsAndSubmit(fmt.format(Date()))
+        inputAllFieldsAndSubmit()
 
-        verify(kokiWorkflowInstance).create(any())
+        val request = argumentCaptor<CreateWorkflowInstanceRequest>()
+        verify(kokiWorkflowInstance).create(request.capture())
+        assertEquals(fmt.format(Date()), fmt.format(request.firstValue.startAt))
+        assertNull(dueAt)
+        assertEquals(3, request.firstValue.participants.size)
+        assertEquals(11L, request.firstValue.approverUserId)
+        assertEquals(Participant(roleId = 1, userId = 11L), request.firstValue.participants[0])
+        assertEquals(Participant(roleId = 2, userId = 12L), request.firstValue.participants[1])
+        assertEquals(Participant(roleId = 3, userId = 13L), request.firstValue.participants[2])
+        assertEquals(mapOf("PARAM_1" to "1111", "PARAM_2" to "2222"), request.firstValue.parameters)
+
         verify(kokiWorkflowInstance).start(workflowInstance.id)
 
         assertCurrentPageIs(PageName.WORKFLOW_STARTED)
@@ -186,10 +150,12 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
     @Test
     fun `missing fields`() {
         navigateTo("/workflows/${workflow.id}/start")
+        click("#start-now-0")
         scrollToBottom()
         click("button[type=submit]")
 
         assertCurrentPageIs(PageName.WORKFLOW_START)
+        assertElementPresent("[name=startAt]:user-invalid")
         assertElementPresent("[name=approverId]:user-invalid")
         assertElementPresent("[name=participant_1]:user-invalid")
         assertElementPresent("[name=participant_2]:user-invalid")
@@ -206,9 +172,16 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.LOGIN)
     }
 
-    private fun inputAllFieldsAndSubmit(start: String = startAt) {
-        input("input[name=startAt]", toInputDate(start))
-        input("input[name=dueAt]", toInputDate(dueAt))
+    private fun inputAllFieldsAndSubmit(start: String? = null, due: String? = null) {
+        if (start == null) {
+            click("#start-now-1")
+        } else {
+            click("#start-now-0")
+            input("input[name=startAt]", toInputDate(start))
+        }
+        if (due != null) {
+            input("input[name=dueAt]", toInputDate(due))
+        }
         scrollToMiddle()
         select("select[name=approverId]", 1)
         select("select[name=participant_1]", 1)

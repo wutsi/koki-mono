@@ -33,12 +33,51 @@ class StartWorkflowController(
         model: Model
     ): String {
         val workflow = workflowService.workflow(id)
-        return start(workflow, model)
+        return start(workflow, StartWorkflowForm(), model)
     }
 
-    private fun start(workflow: WorkflowModel, model: Model): String {
+    @PostMapping("/workflows/{id}/start")
+    fun submit(
+        @PathVariable id: Long,
+        model: Model
+    ): String {
+        val workflow = workflowService.workflow(id)
+        val form = toStartWorkflowForm(workflow, request)
+        try {
+            val workflowInstanceId = workflowInstanceService.create(form)
+            return "redirect:/workflows/{id}/started?workflow-instance-id=$workflowInstanceId"
+        } catch (ex: HttpClientErrorException) {
+            val errorResponse = toErrorResponse(ex)
+            val error = errorResponse.error.code
+
+            model.addAttribute("error", error)
+            return start(workflow, form, model)
+        }
+    }
+
+    @GetMapping("/workflows/{id}/started")
+    fun started(
+        @PathVariable id: String,
+        @RequestParam(name = "workflow-instance-id") workflowInstanceId: String,
+        model: Model,
+    ): String {
+        val workflowInstance = workflowInstanceService.workflowInstance(workflowInstanceId)
+        model.addAttribute("workflowInstance", workflowInstance)
+        model.addAttribute("workflow", workflowInstance.workflow)
+        model.addAttribute(
+            "page",
+            PageModel(
+                name = PageName.WORKFLOW_STARTED,
+                title = workflowInstance.workflow.longTitle,
+            )
+        )
+        return "workflows/started"
+    }
+
+    private fun start(workflow: WorkflowModel, form: StartWorkflowForm, model: Model): String {
         val fmt = SimpleDateFormat("yyyy-MM-dd")
         model.addAttribute("today", fmt.format(Date()))
+        model.addAttribute("form", form)
         model.addAttribute("workflow", workflow)
         model.addAttribute(
             "page",
@@ -63,55 +102,28 @@ class StartWorkflowController(
         return "workflows/start"
     }
 
-    @PostMapping("/workflows/{id}/start")
-    fun submit(
-        @PathVariable id: Long,
-        model: Model
-    ): String {
-        val workflow = workflowService.workflow(id)
-        try {
-            val form = toStartWorkflowForm(workflow, request)
-            val workflowInstanceId = workflowInstanceService.create(form)
-            return "redirect:/workflows/{id}/started?workflow-instance-id=$workflowInstanceId"
-        } catch (ex: HttpClientErrorException) {
-            val errorResponse = toErrorResponse(ex)
-            val error = errorResponse.error.code
-
-            model.addAttribute("error", error)
-            return start(workflow, model)
-        }
-    }
-
-    @GetMapping("/workflows/{id}/started")
-    fun started(
-        @PathVariable id: String,
-        @RequestParam(name = "workflow-instance-id") workflowInstanceId: String,
-        model: Model,
-    ): String {
-        val workflowInstance = workflowInstanceService.workflowInstance(workflowInstanceId)
-        model.addAttribute("workflowInstance", workflowInstance)
-        model.addAttribute("workflow", workflowInstance.workflow)
-        model.addAttribute(
-            "page",
-            PageModel(
-                name = PageName.WORKFLOW_STARTED,
-                title = workflowInstance.workflow.longTitle,
-            )
-        )
-        return "workflows/started"
-    }
-
     private fun toStartWorkflowForm(workflow: WorkflowModel, request: HttpServletRequest): StartWorkflowForm {
         val fmt = SimpleDateFormat("yyyy-MM-dd")
         return StartWorkflowForm(
             workflowId = workflow.id,
-            startAt = fmt.parse(request.getParameter("startAt")),
-            dueAt = request.getParameter("dueAt")?.let { date -> fmt.parse(date) },
             approverUserId = request.getParameter("approverId")?.toLong(),
+            startNow = request.getParameter("startNow") == "1",
+
+            dueAt = request.getParameter("dueAt")
+                ?.ifEmpty { null }
+                ?.let { date -> fmt.parse(date) },
+
+            startAt = if (request.getParameter("startNow") == "1") {
+                Date()
+            } else {
+                fmt.parse(request.getParameter("startAt"))
+            },
+
             parameters = workflow.parameters
                 .map { param ->
                     param to request.getParameter("parameter_$param")
                 }.toMap(),
+
             participants = workflow.roles
                 .mapNotNull { role ->
                     request.getParameter("participant_${role.id}")
@@ -126,9 +138,10 @@ class StartWorkflowController(
 
 data class StartWorkflowForm(
     val workflowId: Long = -1,
+    val startNow: Boolean = true,
     val startAt: Date = Date(),
     val dueAt: Date? = null,
     val approverUserId: Long? = null,
-    val parameters: Map<String, String>,
+    val parameters: Map<String, String> = emptyMap(),
     val participants: List<Participant> = emptyList(),
 )

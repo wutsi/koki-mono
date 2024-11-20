@@ -10,8 +10,6 @@ import com.wutsi.koki.sdk.KokiWorkflowInstance
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import org.springframework.stereotype.Service
-import java.text.SimpleDateFormat
-import java.util.Date
 
 @Service
 class WorkflowInstanceService(
@@ -35,8 +33,7 @@ class WorkflowInstanceService(
         ).workflowInstanceId
 
         // Start Now
-        val fmt = SimpleDateFormat("yyyy-MM-dd")
-        if (fmt.format(form.startAt) == fmt.format(Date())) {
+        if (form.startNow) {
             kokiWorkflowInstance.start(workflowInstanceId)
         }
 

@@ -56,7 +56,7 @@ input:read-only {
     font-size: 1em;
     font-weight: bold;
     margin: 0;
-    padding: .5em .5em 0 .5em;
+    padding: .5em;
     text-transform: uppercase;
 }
 
