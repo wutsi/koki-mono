@@ -28,6 +28,7 @@ import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.dto.WorkflowSummary
 import org.apache.commons.lang3.time.DateUtils
 import org.junit.jupiter.api.BeforeEach
+import org.openqa.selenium.By
 import java.text.SimpleDateFormat
 import java.util.Date
 import kotlin.test.Test
@@ -102,6 +103,7 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
 
         inputAllFieldsAndSubmit()
 
+        println(">>>>> " + driver.findElement(By.cssSelector("[name=startAt]")).getAttribute("value"))
         assertElementNotPresent("[name=startAt]:user-invalid")
         assertElementNotPresent("[name=dueAt]:user-invalid")
         assertElementNotPresent("[name=approverId]:user-invalid")
@@ -145,7 +147,7 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.WORKFLOW_START)
         assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
 
-        inputAllFieldsAndSubmit(null, null)
+        inputAllFieldsAndSubmit(fmt.format(Date()))
 
         verify(kokiWorkflowInstance).create(any())
         verify(kokiWorkflowInstance).start(workflowInstance.id)
@@ -204,13 +206,9 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.LOGIN)
     }
 
-    private fun inputAllFieldsAndSubmit(start: String? = startAt, due: String? = dueAt) {
-        if (start != null) {
-            input("input[name=startAt]", toInputDate(start))
-        }
-        if (due != null) {
-            input("input[name=dueAt]", toInputDate(due))
-        }
+    private fun inputAllFieldsAndSubmit(start: String = startAt) {
+        input("input[name=startAt]", toInputDate(start))
+        input("input[name=dueAt]", toInputDate(dueAt))
         scrollToMiddle()
         select("select[name=approverId]", 1)
         select("select[name=participant_1]", 1)
