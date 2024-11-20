@@ -20,12 +20,16 @@
                     <h2 class="text-center" th:text="${workflow.longTitle}">WORKFLOW</h2>
 
                     <div class="workflow-image padding">
-                        <img th:alt="${workflow.title}" th:src="${workflow.imageUrl}"/>
+                        <img th:alt="${workflow.title}" th:src="${workflowInstance.imageUrl}"/>
                     </div>
 
                     <div class="text-center">
-                        <p>
-                            The workflow has been successfully started
+                        <p id="started-message" th:if="${workflowInstance.status.name() == 'RUNNING'}">
+                            The workflow has been successfully started!
+                        </p>
+                        <p id="scheduled-message" th:unless="${workflowInstance.status.name() == 'RUNNING'}">
+                            The workflow has been scheduled to start on <b
+                            th:text="${workflowInstance.startAtText}">DDD</b>
                         </p>
                         <!--
                         <p>

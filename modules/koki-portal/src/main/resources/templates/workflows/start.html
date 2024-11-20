@@ -21,7 +21,7 @@
                         <div class="section">
                             <div class="section-body">
 
-                                <div class="alert alert-danger" th:if="${error}" th:text="error">ERROR</div>
+                                <div class="alert alert-danger" th:if="${error}" th:text="${error}">ERROR</div>
 
                                 <div class="section-item">
                                     <h2 th:text="${workflow.longTitle}">WORKFLOW_NAME</h2>
@@ -36,11 +36,11 @@
                                         <span>Start Date</span>
                                         <span class="required">*</span>
                                     </label>
-                                    <input name="startAt" required type="date"/>
+                                    <input name="startAt" required th:min="${today}" th:value="${today}" type="date"/>
                                 </div>
                                 <div class="section-item">
                                     <label class="title">Due Dat</label>
-                                    <input name="dueAt" type="date"/>
+                                    <input name="dueAt" th:min="${today}" type="date"/>
                                 </div>
                             </div>
                         </div>
@@ -50,6 +50,22 @@
                                 <h3 class="section-title">Participants</h3>
                             </div>
                             <div class="section-body">
+                                <div class="section-item" th:if="${workflow.approverRole}">
+                                    <label class="title">
+                                        <span>Approver</span>
+                                        <span class="required">*</span>
+                                    </label>
+                                    <select class="participant" name="approverId" required>
+                                        <option th:if="${userMap[workflow.approverRole.id].size() > 1}"
+                                                value=""></option>
+                                        <option th:each="user : ${userMap[workflow.approverRole.id]}"
+                                                th:text="${user.displayName}"
+                                                th:value="${user.id}">
+                                            USER
+                                        </option>
+                                    </select>
+                                </div>
+
                                 <div class="section-item" th:each="role : ${workflow.roles}">
                                     <label class="title">
                                         <span th:text="${role.title}">ROLE</span>

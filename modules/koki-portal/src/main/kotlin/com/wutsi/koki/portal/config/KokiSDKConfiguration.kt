@@ -55,7 +55,7 @@ class KokiSDKConfiguration(
 
     @Bean
     fun kokiWorkflowInstance(): KokiWorkflowInstance {
-        return KokiWorkflowInstance(urlBuilder(), rest)
+        return KokiWorkflowInstance(urlBuilder(), rest, tenantService)
     }
 
     @Bean

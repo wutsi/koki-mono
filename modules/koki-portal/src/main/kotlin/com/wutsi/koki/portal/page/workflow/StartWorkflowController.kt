@@ -15,6 +15,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -36,6 +37,8 @@ class StartWorkflowController(
     }
 
     private fun start(workflow: WorkflowModel, model: Model): String {
+        val fmt = SimpleDateFormat("yyyy-MM-dd")
+        model.addAttribute("today", fmt.format(Date()))
         model.addAttribute("workflow", workflow)
         model.addAttribute(
             "page",
@@ -46,9 +49,14 @@ class StartWorkflowController(
         )
 
         val userMap = mutableMapOf<Long, List<UserModel>>()
-        workflow.roles.forEach { role ->
-            val users = userService.search(roleIds = listOf(role.id), limit = 50)
-            userMap[role.id] = users
+        val roleIds = mutableListOf<Long>()
+        roleIds.addAll(workflow.roles.map { role -> role.id })
+        if (workflow.approverRole != null) {
+            roleIds.add(workflow.approverRole.id)
+        }
+        roleIds.toSet().forEach { roleId ->
+            val users = userService.search(roleIds = listOf(roleId), limit = 50)
+            userMap[roleId] = users
         }
         model.addAttribute("userMap", userMap)
 
@@ -64,7 +72,7 @@ class StartWorkflowController(
         try {
             val form = toStartWorkflowForm(workflow, request)
             val workflowInstanceId = workflowInstanceService.create(form)
-            return "redirect:/workflows/{id}/started?instance-id=$workflowInstanceId"
+            return "redirect:/workflows/{id}/started?workflow-instance-id=$workflowInstanceId"
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             val error = errorResponse.error.code
@@ -75,20 +83,22 @@ class StartWorkflowController(
     }
 
     @GetMapping("/workflows/{id}/started")
-    fun create(
-        @PathVariable id: Long,
+    fun started(
+        @PathVariable id: String,
+        @RequestParam(name = "workflow-instance-id") workflowInstanceId: String,
         model: Model,
     ): String {
-        val workflow = workflowService.workflow(id)
-        model.addAttribute("workflow", workflow)
+        val workflowInstance = workflowInstanceService.workflowInstance(workflowInstanceId)
+        model.addAttribute("workflowInstance", workflowInstance)
+        model.addAttribute("workflow", workflowInstance.workflow)
         model.addAttribute(
             "page",
             PageModel(
                 name = PageName.WORKFLOW_STARTED,
-                title = workflow.longTitle,
+                title = workflowInstance.workflow.longTitle,
             )
         )
-        return "workflows/created"
+        return "workflows/started"
     }
 
     private fun toStartWorkflowForm(workflow: WorkflowModel, request: HttpServletRequest): StartWorkflowForm {

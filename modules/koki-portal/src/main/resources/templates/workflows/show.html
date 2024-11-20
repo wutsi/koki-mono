@@ -9,11 +9,13 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-12 col-md-10 offset-md-1">
+
+        <div class="col-12 col-md-8">
             <div class="widget">
                 <div class="widget-body">
                     <div class="widget-toolbar">
-                        <a th:href="${workflow.startUrl}">Start</a>
+                        <a class="btn-start" th:href="${workflow.startUrl}"
+                           th:if="${workflow.workflowInstanceCount == 0}">Start</a>
                     </div>
 
                     <div class="section-item">
@@ -35,6 +37,17 @@
                             <tr>
                                 <td><b>Description</b></td>
                                 <td th:text="${workflow.description}">DESCRIPTION</td>
+                            </tr>
+                            <tr>
+                                <td><b>Approval?</b></td>
+                                <td>
+                                    <span th:if="${workflow.requiresApprover}">Yes</span>
+                                    <span th:if="!${workflow.requiresApprover}">No</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${workflow.requiresApprover} AND ${workflow.approverRole}">
+                                <td><b>Approver Role</b></td>
+                                <td th:text="${workflow.approverRole.title}">APPROVER</td>
                             </tr>
                             <tr>
                                 <td><b>Active?</b></td>
@@ -75,6 +88,28 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-12 col-md-4">
+            <div class="widget">
+                <div class="widget-body">
+                    <table class="table">
+                        <tr>
+                            <td><b>Instances</b></td>
+                            <td th:text="${workflow.getWorkflowInstanceCount()}">0</td>
+                        </tr>
+                        <tr>
+                            <td><b>Created</b></td>
+                            <td th:text="${workflow.createdAtText}">CREATED</td>
+                        </tr>
+                        <tr>
+                            <td><b>Modified</b></td>
+                            <td th:text="${workflow.modifiedAtText}">CREATED</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 </body>

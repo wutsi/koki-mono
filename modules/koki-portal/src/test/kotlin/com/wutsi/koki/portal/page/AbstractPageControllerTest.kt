@@ -167,6 +167,8 @@ abstract class AbstractPageControllerTest {
 
         doReturn(workflowPictureUrl).whenever(kokiWorkflow).imageUrl(any())
 
+        doReturn(workflowPictureUrl).whenever(kokiWorkflowInstance).imageUrl(any())
+
         val json = getResourceAsString("/workflow-001.json")
         doReturn(json).whenever(kokiWorkflow).json(any())
     }
