@@ -102,6 +102,13 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
 
         inputAllFieldsAndSubmit()
 
+        assertElementNotPresent("[name=approverId]:user-invalid")
+        assertElementNotPresent("[name=participant_1]:user-invalid")
+        assertElementNotPresent("[name=participant_2]:user-invalid")
+        assertElementNotPresent("[name=participant_3]:user-invalid")
+        assertElementNotPresent("[name=parameter_PARAM_1]:user-invalid")
+        assertElementNotPresent("[name=parameter_PARAM_2]:user-invalid")
+
         assertCurrentPageIs(PageName.WORKFLOW_STARTED)
         assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
         assertElementNotPresent("#started-message")
