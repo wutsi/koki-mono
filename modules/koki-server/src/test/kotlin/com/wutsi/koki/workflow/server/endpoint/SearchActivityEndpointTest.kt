@@ -16,7 +16,7 @@ class SearchActivityEndpointTest : TenantAwareEndpointTest() {
         assertEquals(HttpStatus.OK, result.statusCode)
 
         val workflows = result.body!!.activities
-        assertEquals(10, workflows.size)
+        assertEquals(11, workflows.size)
     }
 
     @Test
@@ -44,6 +44,32 @@ class SearchActivityEndpointTest : TenantAwareEndpointTest() {
 
         val activities = result.body!!.activities
         assertEquals(3, activities.size)
+    }
+
+    @Test
+    fun `by workflow-id`() {
+        val result = rest.getForEntity(
+            "/v1/activities?workflow-id=100&workflow-id=110",
+            SearchActivityResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val activities = result.body!!.activities
+        assertEquals(11, activities.size)
+    }
+
+    @Test
+    fun `by active`() {
+        val result = rest.getForEntity(
+            "/v1/activities?active=false",
+            SearchActivityResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val activities = result.body!!.activities
+        assertEquals(1, activities.size)
     }
 
     @Test

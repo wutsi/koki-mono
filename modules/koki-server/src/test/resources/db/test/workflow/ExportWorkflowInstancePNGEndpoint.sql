@@ -5,12 +5,12 @@ INSERT INTO T_WORKFLOW(id, tenant_fk, name, description, active, parameters)
     VALUES(100, 1, 'w100', null, true, 'PARAM_1, PARAM_2');
 ;
 
-INSERT INTO T_ACTIVITY(id, workflow_fk, name, type, active)
-    VALUES (100, 100, 'START',   1, true),
-           (101, 100, 'WORKING', 3, true),
-           (102, 100, 'SEND',    4, true),
-           (103, 100, 'SUBMIT',  4, true),
-           (104, 100, 'STOP',    2, true);
+INSERT INTO T_ACTIVITY(id, tenant_fk, workflow_fk, name, type, active)
+    VALUES (100, 1, 100, 'START',   1, true),
+           (101, 1, 100, 'WORKING', 3, true),
+           (102, 1, 100, 'SEND',    4, true),
+           (103, 1, 100, 'SUBMIT',  4, true),
+           (104, 1, 100, 'STOP',    2, true);
 
 INSERT INTO T_FLOW(workflow_fk, from_fk, to_fk, expression)
     VALUES (100, 100, 101, null),

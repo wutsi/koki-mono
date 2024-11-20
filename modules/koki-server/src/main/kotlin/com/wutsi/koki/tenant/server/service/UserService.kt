@@ -11,9 +11,6 @@ import com.wutsi.koki.tenant.server.dao.UserRepository
 import com.wutsi.koki.tenant.server.domain.RoleEntity
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import jakarta.persistence.EntityManager
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.Date
@@ -165,13 +162,5 @@ class UserService(
         query.firstResult = offset
         query.maxResults = limit
         return query.resultList
-    }
-
-    private fun createPageable(limit: Int, offset: Int, sortBy: String?, ascending: Boolean): Pageable {
-        val direction = if (ascending) Sort.Direction.ASC else Sort.Direction.DESC
-        val property = sortBy ?: "displayName"
-        val pageSize = if (limit <= 0) PAGE_SIZE else limit
-
-        return PageRequest.of(offset / pageSize, pageSize, direction, property)
     }
 }
