@@ -17,11 +17,11 @@ INSERT INTO T_WORKFLOW(id, tenant_fk, name, workflow_instance_count)
           (120, 1, 'w-120', 10),
           (200, 2, 'w2', 0);
 
-INSERT INTO T_ACTIVITY(id, workflow_fk, role_fk, name, type)
-    VALUES (110, 100, null, 'START', 1),
-           (111, 100, 11, 'OLD', 4),
-           (112, 100, null, 'INVOICE', 7),
-           (113, 100, null, 'STOP', 2);
+INSERT INTO T_ACTIVITY(id, tenant_fk, workflow_fk, role_fk, name, type)
+    VALUES (110, 1, 100, null, 'START', 1),
+           (111, 1, 100, 11, 'OLD', 4),
+           (112, 1, 100, null, 'INVOICE', 7),
+           (113, 1, 100, null, 'STOP', 2);
 
 INSERT INTO T_FLOW(workflow_fk, from_fk, to_fk, expression)
     VALUES (100, 110, 111, 'client_status=false'),

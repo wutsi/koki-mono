@@ -6,8 +6,6 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import java.util.Date
 
@@ -18,9 +16,11 @@ data class ActivityEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    @ManyToOne
-    @JoinColumn(name = "workflow_fk")
-    val workflow: WorkflowEntity = WorkflowEntity(),
+    @Column(name = "tenant_fk")
+    val tenantId: Long = -1,
+
+    @Column(name = "workflow_fk")
+    val workflowId: Long = -1,
 
     @Column(name = "role_fk")
     var roleId: Long? = null,

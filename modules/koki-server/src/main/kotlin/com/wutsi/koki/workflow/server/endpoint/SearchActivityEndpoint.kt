@@ -22,6 +22,7 @@ class SearchActivityEndpoint(
         @RequestParam(required = false, name = "id") ids: List<Long> = emptyList(),
         @RequestParam(required = false, name = "workflow-id") workflowIds: List<Long> = emptyList(),
         @RequestParam(required = false) type: ActivityType? = null,
+        @RequestParam(required = false) active: Boolean? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
     ): SearchActivityResponse {
@@ -30,6 +31,7 @@ class SearchActivityEndpoint(
             workflowIds = workflowIds,
             tenantId = tenantId,
             type = type,
+            active = active,
             limit = limit,
             offset = offset,
         )

@@ -21,12 +21,12 @@ INSERT INTO T_WORKFLOW(id, tenant_fk, name, description, active, parameters)
           (300, 1, 'w3', 'inactive', false, null),
           (400, 1, 'w4', 'inactive-start', false, null);
 
-INSERT INTO T_ACTIVITY(id, workflow_fk, name, type)
-    VALUES (100, 100, 'START',   1),
-           (101, 100, 'WORKING', 3),
-           (102, 100, 'SEND',    6),
-           (103, 100, 'SUBMIT',  7),
-           (104, 100, 'STOP',    2);
+INSERT INTO T_ACTIVITY(id, tenant_fk, workflow_fk, name, type)
+    VALUES (100, 1, 100, 'START',   1),
+           (101, 1, 100, 'WORKING', 3),
+           (102, 1, 100, 'SEND',    6),
+           (103, 1, 100, 'SUBMIT',  7),
+           (104, 1, 100, 'STOP',    2);
 
 
 INSERT INTO T_WORKFLOW_INSTANCE(id, tenant_fk, workflow_fk, approver_fk, status, start_at)

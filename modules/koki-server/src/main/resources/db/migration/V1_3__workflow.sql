@@ -20,6 +20,7 @@ CREATE TABLE T_WORKFLOW(
 CREATE TABLE T_ACTIVITY(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
+  tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
   workflow_fk             BIGINT NOT NULL REFERENCES T_WORKFLOW(id),
   role_fk                 BIGINT REFERENCES T_ROLE(id),
   form_fk                 VARCHAR(36) REFERENCES T_FORM(id),

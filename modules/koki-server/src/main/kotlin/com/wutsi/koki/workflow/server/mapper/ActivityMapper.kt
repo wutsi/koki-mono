@@ -12,7 +12,7 @@ class ActivityMapper {
     fun toActivity(entity: ActivityEntity): Activity {
         return Activity(
             id = entity.id!!,
-            workflowId = entity.workflow.id!!,
+            workflowId = entity.workflowId,
             roleId = entity.roleId,
             formId = entity.formId,
             type = entity.type,
@@ -30,7 +30,7 @@ class ActivityMapper {
     fun toActivitySummary(entity: ActivityEntity): ActivitySummary {
         return ActivitySummary(
             id = entity.id!!,
-            workflowId = entity.workflow.id!!,
+            workflowId = entity.workflowId,
             roleId = entity.roleId,
             formId = entity.formId,
             type = entity.type,

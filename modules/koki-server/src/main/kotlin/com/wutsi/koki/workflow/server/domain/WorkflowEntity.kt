@@ -24,7 +24,7 @@ data class WorkflowEntity(
     var approverRoleId: Long? = null,
 
     @BatchSize(20)
-    @OneToMany(mappedBy = "workflow")
+    @OneToMany(mappedBy = "workflowId")
     val activities: List<ActivityEntity> = emptyList(),
 
     @BatchSize(20)

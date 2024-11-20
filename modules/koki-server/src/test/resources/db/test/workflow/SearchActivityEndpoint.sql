@@ -21,22 +21,23 @@ INSERT INTO T_WORKFLOW(id, tenant_fk, name, description, active, parameters)
           (200, 2, 'w200', null, true, null);
 ;
 
-INSERT INTO T_ACTIVITY(id, workflow_fk, role_fk, name, type, requires_approval)
-    VALUES (100, 100, null, 'START',   1, false),
-           (101, 100, 11,   'WORKING', 3, false),
-           (102, 100, 10,   'SEND',    4, false),
-           (103, 100, 10,   'SUBMIT',  4, false),
-           (104, 100, null, 'STOP',    2, false),
+INSERT INTO T_ACTIVITY(id, tenant_fk, workflow_fk, role_fk, name, type, requires_approval, active)
+    VALUES (100, 1, 100, null, 'START',   1, false, true),
+           (101, 1, 100, 11,   'WORKING', 3, false, true),
+           (102, 1, 100, 10,   'SEND',    4, false, true),
+           (103, 1, 100, 10,   'SUBMIT',  4, false, true),
+           (104, 1, 100, null, 'STOP',    2, false, true),
 
-           (110, 110, null, 'START',   1, false),
-           (111, 110, null, 'WORKING', 4, true),
-           (112, 110, null, 'SEND',    4, false),
-           (113, 110, null, 'SUBMIT',  4, false),
-           (114, 110, null, 'STOP',    2, false),
+           (110, 1, 110, null, 'START',   1, false, true),
+           (111, 1, 110, null, 'WORKING', 4, true,  true),
+           (112, 1, 110, null, 'SEND',    4, false, true),
+           (113, 1, 110, null, 'SUBMIT',  4, false, true),
+           (114, 1, 110, null, 'STOP',    2, false, true),
+           (115, 1, 110, null, 'STOP2',   2, false, false),
 
-           (200, 200, null, 'START',   1, false),
-           (201, 200, null, 'WORKING', 4, true),
-           (202, 200, null, 'SEND',    4, false),
-           (203, 200, null, 'SUBMIT',  4, false),
-           (204, 200, null, 'STOP',    2, false)
+           (200, 2, 200, null, 'START',   1, false, true),
+           (201, 2, 200, null, 'WORKING', 4, true,  true),
+           (202, 2, 200, null, 'SEND',    4, false, true),
+           (203, 2, 200, null, 'SUBMIT',  4, false, true),
+           (204, 2, 200, null, 'STOP',    2, false, true)
     ;

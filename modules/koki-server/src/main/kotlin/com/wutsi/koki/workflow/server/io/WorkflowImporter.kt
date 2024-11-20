@@ -42,7 +42,7 @@ class WorkflowImporter(
         val activities = saveActivities(w, data)
         addFlows(w, activities, data)
         linkRoles(w, activities, data)
-        linkForms(activities, data)
+        linkForms(w, activities, data)
         activityService.saveAll(activities)
 
         // Deactivate old activities
@@ -76,7 +76,8 @@ class WorkflowImporter(
             }
             return activityService.save(
                 ActivityEntity(
-                    workflow = workflow,
+                    workflowId = workflow.id!!,
+                    tenantId = workflow.tenantId,
                     type = data.type,
                     title = data.title,
                     name = data.name,
@@ -163,15 +164,15 @@ class WorkflowImporter(
         activity.roleId = role?.let { roleMap[role]?.id }
     }
 
-    private fun linkForms(activities: List<ActivityEntity>, data: WorkflowData) {
-        activities.map { activity -> linkForm(activity, data) }
+    private fun linkForms(workflow: WorkflowEntity, activities: List<ActivityEntity>, data: WorkflowData) {
+        activities.map { activity -> linkForm(workflow, activity, data) }
     }
 
-    private fun linkForm(activity: ActivityEntity, data: WorkflowData) {
+    private fun linkForm(workflow: WorkflowEntity, activity: ActivityEntity, data: WorkflowData) {
         val activityData = data.activities.find { act -> act.name == activity.name }
         if (activityData?.form != null) {
             LOGGER.debug(">>> Linking Activity[${activity.name}] with Form[${activityData.form}]")
-            activity.formId = formService.getByName(activityData.form!!, activity.workflow.tenantId).id
+            activity.formId = formService.getByName(activityData.form!!, workflow.tenantId).id
         } else {
             activity.formId = null
         }

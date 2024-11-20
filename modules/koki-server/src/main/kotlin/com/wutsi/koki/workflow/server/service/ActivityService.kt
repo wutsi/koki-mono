@@ -24,7 +24,7 @@ class ActivityService(
     }
 
     fun getByName(name: String, workflow: WorkflowEntity): ActivityEntity {
-        return dao.findByNameAndWorkflow(name, workflow)
+        return dao.findByNameAndWorkflowId(name, workflow.id!!)
             ?: throw NotFoundException(Error(ErrorCode.WORKFLOW_ACTIVITY_NOT_FOUND))
     }
 
@@ -33,7 +33,7 @@ class ActivityService(
     }
 
     fun getByWorkflow(workflow: WorkflowEntity): List<ActivityEntity> {
-        return dao.findByWorkflow(workflow)
+        return dao.findByWorkflowId(workflow.id!!)
     }
 
     fun search(
@@ -41,10 +41,11 @@ class ActivityService(
         ids: List<Long> = emptyList(),
         workflowIds: List<Long> = emptyList(),
         type: ActivityType? = null,
+        active: Boolean? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): List<ActivityEntity> {
-        val jql = StringBuilder("SELECT A FROM ActivityEntity A WHERE A.workflow.tenantId = :tenantId")
+        val jql = StringBuilder("SELECT A FROM ActivityEntity A WHERE A.tenantId=:tenantId")
 
         if (ids.isNotEmpty()) {
             jql.append(" AND A.id IN :ids")
@@ -54,6 +55,9 @@ class ActivityService(
         }
         if (type != null) {
             jql.append(" AND A.type = :type")
+        }
+        if (active != null) {
+            jql.append(" AND A.active = :active")
         }
         jql.append(" ORDER BY A.createdAt DESC")
 
@@ -67,6 +71,9 @@ class ActivityService(
         }
         if (type != null) {
             query.setParameter("type", type)
+        }
+        if (active != null) {
+            query.setParameter("active", active)
         }
 
         query.firstResult = offset
