@@ -109,15 +109,15 @@ class StartWorkflowController(
             approverUserId = request.getParameter("approverId")?.toLong(),
             startNow = request.getParameter("startNow") == "1",
 
-            dueAt = request.getParameter("dueAt")
-                ?.ifEmpty { null }
-                ?.let { date -> fmt.parse(date) },
-
             startAt = if (request.getParameter("startNow") == "1") {
                 Date()
             } else {
                 fmt.parse(request.getParameter("startAt"))
             },
+
+            dueAt = request.getParameter("dueAt")
+                ?.ifEmpty { null }
+                ?.let { date -> fmt.parse(date) },
 
             parameters = workflow.parameters
                 .map { param ->

@@ -106,7 +106,7 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
         val request = argumentCaptor<CreateWorkflowInstanceRequest>()
         verify(kokiWorkflowInstance).create(request.capture())
         assertEquals(fmt.format(Date()), fmt.format(request.firstValue.startAt))
-        assertNull(dueAt)
+        assertNull(request.firstValue.dueAt)
         assertEquals(3, request.firstValue.participants.size)
         assertEquals(11L, request.firstValue.approverUserId)
         assertEquals(Participant(roleId = 1, userId = 11L), request.firstValue.participants[0])
