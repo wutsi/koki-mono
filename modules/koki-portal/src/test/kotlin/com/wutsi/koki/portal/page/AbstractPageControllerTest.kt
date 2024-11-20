@@ -9,18 +9,20 @@ import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.form.dto.SearchFormResponse
-import com.wutsi.koki.portal.rest.AccessTokenHolder
+import com.wutsi.koki.portal.service.AccessTokenHolder
 import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.sdk.KokiFormData
 import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiUser
 import com.wutsi.koki.sdk.KokiWorkflow
 import com.wutsi.koki.sdk.KokiWorkflowEngine
+import com.wutsi.koki.sdk.KokiWorkflowInstance
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
 import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.Role
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
+import com.wutsi.koki.tenant.dto.SearchUserResponse
 import com.wutsi.koki.tenant.dto.User
 import com.wutsi.koki.workflow.dto.SearchWorkflowResponse
 import org.apache.commons.io.IOUtils
@@ -77,6 +79,9 @@ abstract class AbstractPageControllerTest {
 
     @MockBean
     protected lateinit var kokiWorkflowEngine: KokiWorkflowEngine
+
+    @MockBean
+    protected lateinit var kokiWorkflowInstance: KokiWorkflowInstance
 
     @MockBean
     protected lateinit var accessTokenHolder: AccessTokenHolder
@@ -155,11 +160,14 @@ abstract class AbstractPageControllerTest {
             .search(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(SearchRoleResponse()).whenever(kokiUser).roles(anyOrNull())
+        doReturn(SearchUserResponse()).whenever(kokiUser)
+            .users(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
-        doReturn(SearchWorkflowResponse()).whenever(kokiWorkflow)
-            .workflows(any(), anyOrNull(), anyOrNull())
+        doReturn(SearchWorkflowResponse()).whenever(kokiWorkflow).workflows(any(), anyOrNull(), anyOrNull())
 
         doReturn(workflowPictureUrl).whenever(kokiWorkflow).imageUrl(any())
+
+        doReturn(workflowPictureUrl).whenever(kokiWorkflowInstance).imageUrl(any())
 
         val json = getResourceAsString("/workflow-001.json")
         doReturn(json).whenever(kokiWorkflow).json(any())

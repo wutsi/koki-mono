@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.rest
 
 import com.wutsi.koki.common.dto.HttpHeader
+import com.wutsi.koki.portal.service.TenantService
 import org.springframework.http.HttpRequest
 import org.springframework.http.client.ClientHttpRequestExecution
 import org.springframework.http.client.ClientHttpRequestInterceptor

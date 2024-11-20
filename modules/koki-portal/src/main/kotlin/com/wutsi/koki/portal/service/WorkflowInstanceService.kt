@@ -1,10 +1,13 @@
-package com.wutsi.koki.portal.rest
+package com.wutsi.koki.portal.service
 
 import com.wutsi.koki.portal.mapper.WorkflowInstanceMapper
 import com.wutsi.koki.portal.mapper.WorkflowMapper
 import com.wutsi.koki.portal.model.ActivityInstanceModel
+import com.wutsi.koki.portal.model.WorkflowInstanceModel
+import com.wutsi.koki.portal.page.workflow.StartWorkflowForm
 import com.wutsi.koki.sdk.KokiWorkflow
 import com.wutsi.koki.sdk.KokiWorkflowInstance
+import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import org.springframework.stereotype.Service
 
@@ -16,11 +19,44 @@ class WorkflowInstanceService(
     private val workflowMapper: WorkflowMapper,
     private val workflowInstanceMapper: WorkflowInstanceMapper,
 ) {
+    fun create(form: StartWorkflowForm): String {
+        // Create the instance
+        val workflowInstanceId = kokiWorkflowInstance.create(
+            CreateWorkflowInstanceRequest(
+                workflowId = form.workflowId,
+                participants = form.participants,
+                approverUserId = form.approverUserId,
+                startAt = form.startAt,
+                dueAt = form.dueAt,
+                parameters = form.parameters,
+            )
+        ).workflowInstanceId
+
+        // Start Now
+        if (form.startNow) {
+            kokiWorkflowInstance.start(workflowInstanceId)
+        }
+
+        return workflowInstanceId
+    }
+
+    fun workflowInstance(id: String): WorkflowInstanceModel {
+        val workflowInstance = kokiWorkflowInstance.workflowInstance(id).workflowInstance
+        val workflow = kokiWorkflow.workflows(ids = listOf(workflowInstance.workflowId)).workflows.first()
+
+        return workflowInstanceMapper.toWorkflowInstanceModel(
+            entity = workflowInstance,
+            workflow = workflowMapper.toWorkflowModel(workflow),
+            approver = null,
+            imageUrl = kokiWorkflowInstance.imageUrl(id)
+        )
+    }
+
     fun myActivities(): List<ActivityInstanceModel> {
         val id = currentUserHolder.id() ?: return emptyList()
 
         // Activity Instances
-        val activityInstances = kokiWorkflowInstance.activityInstances(
+        val activityInstances = kokiWorkflowInstance.activities(
             assigneeIds = listOf(id),
             status = WorkflowStatus.RUNNING
         ).activityInstances

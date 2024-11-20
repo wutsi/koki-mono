@@ -1,7 +1,7 @@
 package com.wutsi.koki.portal.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.wutsi.koki.portal.rest.TenantService
+import com.wutsi.koki.portal.service.TenantService
 import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.sdk.KokiFormData
 import com.wutsi.koki.sdk.KokiForms
@@ -55,7 +55,7 @@ class KokiSDKConfiguration(
 
     @Bean
     fun kokiWorkflowInstance(): KokiWorkflowInstance {
-        return KokiWorkflowInstance(urlBuilder(), rest)
+        return KokiWorkflowInstance(urlBuilder(), rest, tenantService)
     }
 
     @Bean

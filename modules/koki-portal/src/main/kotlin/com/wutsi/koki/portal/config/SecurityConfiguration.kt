@@ -1,7 +1,7 @@
 package com.wutsi.koki.portal.config
 
-import com.wutsi.koki.portal.rest.AccessTokenHolder
 import com.wutsi.koki.portal.security.JWTAuthenticationFilter
+import com.wutsi.koki.portal.service.AccessTokenHolder
 import com.wutsi.koki.security.dto.JWTDecoder
 import jakarta.servlet.Filter
 import org.springframework.context.annotation.Bean

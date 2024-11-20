@@ -3,6 +3,7 @@ package com.wutsi.koki.sdk
 import com.wutsi.koki.workflow.dto.CompleteActivityInstanceRequest
 import org.springframework.web.client.RestTemplate
 
+@Deprecated("User koki workflow instead")
 class KokiWorkflowEngine(
     private val urlBuilder: URLBuilder,
     private val rest: RestTemplate,

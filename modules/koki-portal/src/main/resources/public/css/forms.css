@@ -56,7 +56,7 @@ input:read-only {
     font-size: 1em;
     font-weight: bold;
     margin: 0;
-    padding: .5em .5em 0 .5em;
+    padding: .5em;
     text-transform: uppercase;
 }
 
@@ -96,7 +96,8 @@ input:read-only {
 .section-item input:not([type]),
 .section-item input[type=text],
 .section-item input[type=email],
-.section-item input[type=url] {
+.section-item input[type=url],
+.section-item select {
     width: 100%;
 }
 

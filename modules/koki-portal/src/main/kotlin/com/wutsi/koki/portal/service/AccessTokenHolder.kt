@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.rest
+package com.wutsi.koki.portal.service
 
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest

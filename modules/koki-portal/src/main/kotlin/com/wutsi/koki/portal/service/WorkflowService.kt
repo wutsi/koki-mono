@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.rest
+package com.wutsi.koki.portal.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.portal.mapper.WorkflowMapper
@@ -28,8 +28,12 @@ class WorkflowService(
         } else {
             kokiUser.roles(workflow.roleIds).roles
         }
+        val approverRole = workflow.approverRoleId?.let { roleId ->
+            roles.find { role -> role.id == roleId }
+                ?: kokiUser.roles(listOf(roleId)).roles.firstOrNull()
+        }
         val imageUrl = kokiWorkflow.imageUrl(id)
-        return mapper.toWorkflowModel(workflow, roles, imageUrl)
+        return mapper.toWorkflowModel(workflow, approverRole, roles, imageUrl)
     }
 
     fun workflows(

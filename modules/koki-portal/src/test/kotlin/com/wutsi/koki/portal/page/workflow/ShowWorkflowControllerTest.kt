@@ -30,6 +30,7 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
         parameters = listOf("ORDER_ID"),
         active = true,
         requiresApprover = true,
+        approverRoleId = 2L,
         activities = listOf(
             Activity(
                 id = 11L,
@@ -81,11 +82,8 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
     override fun setUp() {
         super.setUp()
 
-        doReturn(SearchRoleResponse(roles)).whenever(kokiUser)
-            .roles(any())
-
-        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow)
-            .workflow(workflow.id)
+        doReturn(SearchRoleResponse(roles)).whenever(kokiUser).roles(any())
+        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).workflow(workflow.id)
     }
 
     @Test
@@ -93,8 +91,22 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
         navigateTo("/workflows/${workflow.id}")
         assertCurrentPageIs(PageName.WORKFLOW)
 
+        assertElementPresent(".btn-start")
+
         assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
         assertElementCount("tr.activity", workflow.activities.size)
+    }
+
+    @Test
+    fun `start button hidden when workflow has instances`() {
+        doReturn(
+            GetWorkflowResponse(workflow.copy(workflowInstanceCount = 11))
+        ).whenever(kokiWorkflow).workflow(workflow.id)
+
+        navigateTo("/workflows/${workflow.id}")
+        assertCurrentPageIs(PageName.WORKFLOW)
+
+        assertElementNotPresent(".btn-start")
     }
 
     @Test

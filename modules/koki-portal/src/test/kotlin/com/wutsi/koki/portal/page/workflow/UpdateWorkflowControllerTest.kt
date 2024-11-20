@@ -30,7 +30,7 @@ class UpdateWorkflowControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun success() {
+    fun update() {
         navigateTo("/workflows/${workflow.id}/update")
 
         assertCurrentPageIs(PageName.WORKFLOW_UPDATE)
@@ -40,7 +40,7 @@ class UpdateWorkflowControllerTest : AbstractPageControllerTest() {
         scrollToBottom()
         click("button[type=submit]")
 
-        assertCurrentPageIs(PageName.WORKFLOW_SUCCESS)
+        assertCurrentPageIs(PageName.WORKFLOW_UPDATED)
         assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
         assertElementNotPresent(".alert-danger")
     }

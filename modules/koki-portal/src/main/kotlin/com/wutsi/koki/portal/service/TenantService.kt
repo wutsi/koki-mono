@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.rest
+package com.wutsi.koki.portal.service
 
 import com.wutsi.koki.sdk.TenantProvider
 import org.springframework.stereotype.Service

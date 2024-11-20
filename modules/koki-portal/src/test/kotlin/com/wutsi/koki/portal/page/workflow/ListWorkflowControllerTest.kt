@@ -51,6 +51,19 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.WORKFLOW_LIST)
 
         assertElementCount("tr.workflow", workflows.size)
+        assertElementNotPresent(".empty")
+    }
+
+    @Test
+    fun empty() {
+        doReturn(SearchWorkflowResponse()).whenever(kokiWorkflow)
+            .workflows(any(), anyOrNull(), anyOrNull())
+
+        navigateTo("/workflows")
+        assertCurrentPageIs(PageName.WORKFLOW_LIST)
+
+        assertElementNotPresent("tr.workflow")
+        assertElementPresent(".empty")
     }
 
     @Test

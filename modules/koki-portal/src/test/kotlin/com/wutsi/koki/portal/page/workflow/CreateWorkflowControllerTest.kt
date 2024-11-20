@@ -31,7 +31,7 @@ class CreateWorkflowControllerTest : AbstractPageControllerTest() {
         input("textarea[name=json]", jsonContent())
         click("button[type=submit]")
 
-        assertCurrentPageIs(PageName.WORKFLOW_SUCCESS)
+        assertCurrentPageIs(PageName.WORKFLOW_CREATED)
         assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
         assertElementNotPresent(".alert-danger")
     }

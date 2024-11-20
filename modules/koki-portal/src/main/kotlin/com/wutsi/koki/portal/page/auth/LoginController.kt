@@ -3,7 +3,7 @@ package com.wutsi.koki.portal.page.form
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.portal.rest.AuthenticationService
+import com.wutsi.koki.portal.service.AuthenticationService
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory

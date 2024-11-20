@@ -1,7 +1,7 @@
 package com.wutsi.koki.portal.page.workflow
 
 import com.wutsi.koki.portal.page.AbstractPageController
-import com.wutsi.koki.portal.rest.WorkflowService
+import com.wutsi.koki.portal.service.WorkflowService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.client.HttpClientErrorException

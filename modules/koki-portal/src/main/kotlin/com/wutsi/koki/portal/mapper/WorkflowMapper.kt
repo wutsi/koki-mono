@@ -8,12 +8,34 @@ import com.wutsi.koki.workflow.dto.ActivitySummary
 import com.wutsi.koki.workflow.dto.Workflow
 import com.wutsi.koki.workflow.dto.WorkflowSummary
 import org.springframework.stereotype.Service
+import java.text.SimpleDateFormat
 
 @Service
 class WorkflowMapper(
     private val userMapper: UserMapper
 ) {
-    fun toWorkflowModel(entity: Workflow, roles: List<Role>, imageUrl: String): WorkflowModel {
+    fun toWorkflowModel(entity: WorkflowSummary): WorkflowModel {
+        val fmt = SimpleDateFormat("yyyy/MM/dd HH:mm")
+        return WorkflowModel(
+            id = entity.id,
+            name = entity.name,
+            title = entity.title ?: "",
+            active = entity.active,
+            createdAt = entity.createdAt,
+            modifiedAt = entity.modifiedAt,
+            requiresApprover = entity.requiresApprover,
+            createdAtText = fmt.format(entity.createdAt),
+            modifiedAtText = fmt.format(entity.modifiedAt),
+        )
+    }
+
+    fun toWorkflowModel(
+        entity: Workflow,
+        approverRole: Role?,
+        roles: List<Role>,
+        imageUrl: String
+    ): WorkflowModel {
+        val fmt = SimpleDateFormat("yyyy/MM/dd HH:mm")
         val roleMap = roles.associateBy { role -> role.id }
         return WorkflowModel(
             id = entity.id,
@@ -31,17 +53,10 @@ class WorkflowMapper(
             },
             roles = roles.map { role -> userMapper.toRoleModel(role) },
             parameters = entity.parameters,
-        )
-    }
-
-    fun toWorkflowModel(entity: WorkflowSummary): WorkflowModel {
-        return WorkflowModel(
-            id = entity.id,
-            name = entity.name,
-            title = entity.title ?: "",
-            createdAt = entity.createdAt,
-            modifiedAt = entity.modifiedAt,
-            requiresApprover = entity.requiresApprover,
+            approverRole = approverRole?.let { role -> userMapper.toRoleModel(role) },
+            workflowInstanceCount = entity.workflowInstanceCount,
+            createdAtText = fmt.format(entity.createdAt),
+            modifiedAtText = fmt.format(entity.modifiedAt),
         )
     }
 

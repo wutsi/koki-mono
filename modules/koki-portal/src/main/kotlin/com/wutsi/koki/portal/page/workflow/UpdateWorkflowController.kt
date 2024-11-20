@@ -3,7 +3,7 @@ package com.wutsi.koki.portal.page.workflow
 import com.fasterxml.jackson.core.JacksonException
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.portal.rest.WorkflowService
+import com.wutsi.koki.portal.service.WorkflowService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -38,7 +38,7 @@ class UpdateWorkflowController(service: WorkflowService) : AbstractSaveWorkflowC
     ): String {
         try {
             service.update(id, form)
-            return "redirect:/workflows/$id/success"
+            return "redirect:/workflows/$id/updated"
         } catch (ex: Exception) {
             LOGGER.error("Failed", ex)
 
@@ -50,6 +50,23 @@ class UpdateWorkflowController(service: WorkflowService) : AbstractSaveWorkflowC
             model.addAttribute("form", form)
             return edit(id, form, model)
         }
+    }
+
+    @GetMapping("/workflows/{id}/updated")
+    fun create(
+        @PathVariable id: Long,
+        model: Model,
+    ): String {
+        val workflow = service.workflow(id)
+        model.addAttribute("workflow", workflow)
+        model.addAttribute(
+            "page",
+            PageModel(
+                name = PageName.WORKFLOW_UPDATED,
+                title = workflow.longTitle
+            )
+        )
+        return "workflows/updated"
     }
 
     fun edit(

@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8 offset-md-2">
+            <div class="form">
+                <form class="form" method="post" th:action="${workflow.startUrl}">
+
+                    <div class="form-header">
+                        <h1>Start Workflow</h1>
+                    </div>
+                    <div class="form-body">
+
+                        <div class="section">
+                            <div class="section-body">
+
+                                <div class="alert alert-danger" th:if="${error}" th:text="${error}">ERROR</div>
+
+                                <div class="section-item">
+                                    <h2 th:text="${workflow.longTitle}">WORKFLOW_NAME</h2>
+                                </div>
+                                <div class="section-item">
+                                    <div class="workflow-image">
+                                        <img th:alt="${workflow.title}" th:src="${workflow.imageUrl}"/>
+                                    </div>
+                                </div>
+                                <div class="section-item">
+                                    <label class="title">
+                                        <span>Start Date</span>
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div>
+                                        <div>
+                                            <input id="start-now-1" name="startNow" onclick="start_now(1)"
+                                                   th:attrappend="checked=${form.startNow} ? 'checked'"
+                                                   type="radio" value="1"/>
+                                            <span>Now</span>
+                                        </div>
+                                        <div>
+                                            <input id="start-now-0" name="startNow" onclick="start_now(0)"
+                                                   th:attrappend="checked=!${form.startNow} ? 'checked'"
+                                                   type="radio"
+                                                   when="0"/>
+                                            <input autocomplete="off" name="startAt"
+                                                   required
+                                                   th:attrappend="readonly=${form.startNow} ? 'readonly'"
+                                                   th:min="${today}"
+                                                   type="date"
+                                            />
+                                        </div>
+                                        <script>
+                                            function start_now(value) {
+                                                const input = document.querySelector('input[name=startAt]');
+                                                if (value === 1) {
+                                                    input.setAttribute('readonly', 'readonly');
+                                                } else {
+                                                    input.removeAttribute('readonly');
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                                <div class="section-item">
+                                    <label class="title">Due Dat</label>
+                                    <input autocomplete="off" name="dueAt" th:min="${today}" type="date"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section" th:if="!${workflow.roles.isEmpty()}">
+                            <div class="section-header">
+                                <h3 class="section-title">Participants</h3>
+                            </div>
+                            <div class="section-body">
+                                <div class="section-item" th:if="${workflow.approverRole}">
+                                    <label class="title">
+                                        <span>Approver</span>
+                                        <span class="required">*</span>
+                                    </label>
+                                    <select class="participant" name="approverId" required>
+                                        <option th:if="${userMap[workflow.approverRole.id].size() > 1}"
+                                                value=""></option>
+                                        <option th:each="user : ${userMap[workflow.approverRole.id]}"
+                                                th:text="${user.displayName}"
+                                                th:value="${user.id}">
+                                            USER
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="section-item" th:each="role : ${workflow.roles}">
+                                    <label class="title">
+                                        <span th:text="${role.title}">ROLE</span>
+                                        <span class="required">*</span>
+                                    </label>
+                                    <select class="participant" placeholder="Select a user" required
+                                            th:name="'participant_' + ${role.id}">
+                                        <option th:if="${userMap[role.id].size() > 1}" value=""></option>
+                                        <option th:each="user : ${userMap[role.id]}"
+                                                th:text="${user.displayName}"
+                                                th:value="${user.id}">
+                                            USER
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section" th:if="!${workflow.parameters.isEmpty()}">
+                            <div class="section-header">
+                                <h3 class="section-title">Parameters</h3>
+                            </div>
+                            <div class="section-body">
+                                <div class="section-item" th:each="parameter : ${workflow.parameters}">
+                                    <label class="title">
+                                        <span th:text="${parameter}">PARAM</span>
+                                        <span class="required">*</span>
+                                    </label>
+                                    <input required th:name="'parameter_' + ${parameter}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-footer">
+                        <button type="submit">Submit</button>
+                        <a class="btn-cancel" th:href="${workflow.url}">Cancel</a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
