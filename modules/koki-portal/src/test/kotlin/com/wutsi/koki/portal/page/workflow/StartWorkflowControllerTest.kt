@@ -145,7 +145,7 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.WORKFLOW_START)
         assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
 
-        inputAllFieldsAndSubmit(fmt.format(Date()))
+        inputAllFieldsAndSubmit(null, null)
 
         verify(kokiWorkflowInstance).create(any())
         verify(kokiWorkflowInstance).start(workflowInstance.id)
@@ -204,9 +204,13 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.LOGIN)
     }
 
-    private fun inputAllFieldsAndSubmit(start: String = startAt) {
-        input("input[name=startAt]", toInputDate(start))
-        input("input[name=dueAt]", toInputDate(dueAt))
+    private fun inputAllFieldsAndSubmit(start: String? = startAt, due: String? = dueAt) {
+        if (start != null) {
+            input("input[name=startAt]", toInputDate(start))
+        }
+        if (due != null) {
+            input("input[name=dueAt]", toInputDate(due))
+        }
         scrollToMiddle()
         select("select[name=approverId]", 1)
         select("select[name=participant_1]", 1)
