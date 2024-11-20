@@ -19,13 +19,10 @@ import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.GetWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.GetWorkflowResponse
 import com.wutsi.koki.workflow.dto.Participant
-import com.wutsi.koki.workflow.dto.SearchWorkflowResponse
 import com.wutsi.koki.workflow.dto.StartWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.Workflow
 import com.wutsi.koki.workflow.dto.WorkflowInstance
 import com.wutsi.koki.workflow.dto.WorkflowStatus
-import com.wutsi.koki.workflow.dto.WorkflowSummary
-import org.apache.commons.lang3.time.DateUtils
 import org.junit.jupiter.api.BeforeEach
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -57,12 +54,6 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
         parameters = listOf("PARAM_1", "PARAM_2"),
     )
 
-    private val workflowSummary = WorkflowSummary(
-        id = workflow.id,
-        name = workflow.name,
-        title = workflow.title,
-    )
-
     private val workflowInstance = WorkflowInstance(
         id = "xxx",
         workflowId = workflow.id,
@@ -70,18 +61,15 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
     )
 
     private val fmt = SimpleDateFormat("yyyy-MM-dd")
-    private val startAt: String = fmt.format(DateUtils.addDays(Date(), 5))
-    private val dueAt: String = fmt.format(DateUtils.addDays(Date(), 14))
 
     @BeforeEach
     override fun setUp() {
         super.setUp()
 
-        doReturn(SearchRoleResponse(roles)).whenever(kokiUser).roles(any())
+        doReturn(SearchRoleResponse(roles)).whenever(kokiUser)
+            .roles(anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).workflow(workflow.id)
-        doReturn(SearchWorkflowResponse(listOf(workflowSummary))).whenever(kokiWorkflow)
-            .workflows(anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(SearchUserResponse(users)).whenever(kokiUser)
             .users(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())

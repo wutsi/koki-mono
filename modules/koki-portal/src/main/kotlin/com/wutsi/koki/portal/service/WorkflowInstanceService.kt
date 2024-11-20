@@ -1,10 +1,12 @@
 package com.wutsi.koki.portal.service
 
+import com.wutsi.koki.portal.mapper.UserMapper
 import com.wutsi.koki.portal.mapper.WorkflowInstanceMapper
 import com.wutsi.koki.portal.mapper.WorkflowMapper
 import com.wutsi.koki.portal.model.ActivityInstanceModel
 import com.wutsi.koki.portal.model.WorkflowInstanceModel
 import com.wutsi.koki.portal.page.workflow.StartWorkflowForm
+import com.wutsi.koki.sdk.KokiUser
 import com.wutsi.koki.sdk.KokiWorkflow
 import com.wutsi.koki.sdk.KokiWorkflowInstance
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
@@ -16,8 +18,11 @@ class WorkflowInstanceService(
     private val kokiWorkflow: KokiWorkflow,
     private val kokiWorkflowInstance: KokiWorkflowInstance,
     private val currentUserHolder: CurrentUserHolder,
+    private val kokiUser: KokiUser,
     private val workflowMapper: WorkflowMapper,
     private val workflowInstanceMapper: WorkflowInstanceMapper,
+    private val userMapper: UserMapper,
+    private val workflowService: WorkflowService,
 ) {
     fun create(form: StartWorkflowForm): String {
         // Create the instance
@@ -42,13 +47,36 @@ class WorkflowInstanceService(
 
     fun workflowInstance(id: String): WorkflowInstanceModel {
         val workflowInstance = kokiWorkflowInstance.workflowInstance(id).workflowInstance
-        val workflow = kokiWorkflow.workflows(ids = listOf(workflowInstance.workflowId)).workflows.first()
+        val workflow = workflowService.workflow(workflowInstance.workflowId)
+
+        val userIds = mutableSetOf<Long>()
+        userIds.addAll(
+            workflowInstance.participants.map { participant -> participant.userId }
+        )
+        workflowInstance.approverUserId?.let { userId ->
+            userIds.add(userId)
+        }
+        val userMap = kokiUser.users(
+            ids = userIds.toList(),
+            limit = userIds.size
+        ).users
+            .map { user -> userMapper.toUserModel(user) }
+            .associateBy { user -> user.id }
+
+        val roleIds = workflowInstance.participants.map { participant -> participant.roleId }.toSet()
+        val roleMap = kokiUser.roles(
+            ids = roleIds.toList(),
+            limit = roleIds.size
+        ).roles
+            .map { role -> userMapper.toRoleModel(role) }
+            .associateBy { role -> role.id }
 
         return workflowInstanceMapper.toWorkflowInstanceModel(
             entity = workflowInstance,
-            workflow = workflowMapper.toWorkflowModel(workflow),
-            approver = null,
-            imageUrl = kokiWorkflowInstance.imageUrl(id)
+            workflow = workflow,
+            imageUrl = kokiWorkflowInstance.imageUrl(id),
+            users = userMap,
+            roles = roleMap
         )
     }
 

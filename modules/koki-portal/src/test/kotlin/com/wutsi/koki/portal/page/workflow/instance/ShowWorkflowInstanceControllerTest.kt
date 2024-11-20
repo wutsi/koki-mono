@@ -7,18 +7,34 @@ import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.tenant.dto.Role
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
+import com.wutsi.koki.tenant.dto.SearchUserResponse
+import com.wutsi.koki.tenant.dto.UserSummary
 import com.wutsi.koki.workflow.dto.Activity
+import com.wutsi.koki.workflow.dto.ActivityInstanceSummary
 import com.wutsi.koki.workflow.dto.ActivityType
+import com.wutsi.koki.workflow.dto.ApprovalStatus
+import com.wutsi.koki.workflow.dto.GetWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.GetWorkflowResponse
+import com.wutsi.koki.workflow.dto.Participant
 import com.wutsi.koki.workflow.dto.Workflow
+import com.wutsi.koki.workflow.dto.WorkflowInstance
+import com.wutsi.koki.workflow.dto.WorkflowStatus
+import org.apache.commons.lang3.time.DateUtils
 import org.junit.jupiter.api.BeforeEach
+import java.util.Date
 import kotlin.test.Test
 
-class ShowWorkflowControllerTest : AbstractPageControllerTest() {
+class ShowWorkflowInstanceControllerTest : AbstractPageControllerTest() {
     private val roles = listOf(
         Role(id = 1L, name = "accountant", title = "Accountant"),
         Role(id = 2L, name = "hr", title = "Human Resource"),
         Role(id = 3L, name = "client", title = "Client"),
+    )
+
+    private val users = listOf(
+        UserSummary(id = 11L, displayName = "Ray Sponsible"),
+        UserSummary(id = 12L, displayName = "Roger Milla"),
+        UserSummary(id = 13L, displayName = "Omam Mbiyick"),
     )
 
     private val workflow = Workflow(
@@ -77,51 +93,59 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
             ),
         ),
     )
+    private val workflowInstance = WorkflowInstance(
+        id = "xxx",
+        workflowId = workflow.id,
+        status = WorkflowStatus.RUNNING,
+        approverUserId = 11L,
+        createdAt = Date(),
+        startAt = DateUtils.addDays(Date(), 3),
+        startedAt = Date(),
+        dueAt = DateUtils.addDays(Date(), 7),
+        participants = listOf(
+            Participant(roleId = 1, userId = 11),
+            Participant(roleId = 2, userId = 12),
+            Participant(roleId = 3, userId = 13),
+        ),
+        activityInstances = listOf(
+            ActivityInstanceSummary(
+                id = "111",
+                activityId = workflow.activities[0].id,
+                status = WorkflowStatus.DONE,
+            ),
+            ActivityInstanceSummary(
+                id = "222",
+                activityId = workflow.activities[1].id,
+                status = WorkflowStatus.RUNNING,
+                assigneeUserId = users[1].id,
+                approval = ApprovalStatus.PENDING,
+                approverUserId = 11L,
+            )
+        )
+    )
 
     @BeforeEach
     override fun setUp() {
         super.setUp()
 
-        doReturn(SearchRoleResponse(roles)).whenever(kokiUser).roles(anyOrNull(), anyOrNull(), anyOrNull())
+        doReturn(SearchRoleResponse(roles)).whenever(kokiUser)
+            .roles(anyOrNull(), anyOrNull(), anyOrNull())
+
         doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).workflow(workflow.id)
+
+        doReturn(SearchUserResponse(users)).whenever(kokiUser)
+            .users(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+
+        doReturn(GetWorkflowInstanceResponse(workflowInstance))
+            .whenever(kokiWorkflowInstance)
+            .workflowInstance(workflowInstance.id)
     }
 
     @Test
     fun show() {
-        navigateTo("/workflows/${workflow.id}")
-        assertCurrentPageIs(PageName.WORKFLOW)
+        navigateTo("/workflows/instances/${workflowInstance.id}")
 
-        assertElementPresent(".btn-start")
-
+        assertCurrentPageIs(PageName.WORKFLOW_INSTANCE)
         assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
-        assertElementCount("tr.activity", workflow.activities.size)
-    }
-
-    @Test
-    fun `start button hidden when workflow has instances`() {
-        doReturn(
-            GetWorkflowResponse(workflow.copy(workflowInstanceCount = 11))
-        ).whenever(kokiWorkflow).workflow(workflow.id)
-
-        navigateTo("/workflows/${workflow.id}")
-        assertCurrentPageIs(PageName.WORKFLOW)
-
-        assertElementNotPresent(".btn-start")
-    }
-
-    @Test
-    fun `login required`() {
-        setUpAnonymousUser()
-
-        navigateTo("/workflows/${workflow.id}")
-        assertCurrentPageIs(PageName.LOGIN)
-    }
-
-    @Test
-    fun `show to start`() {
-        navigateTo("/workflows/${workflow.id}")
-
-        click(".btn-start")
-        assertCurrentPageIs(PageName.WORKFLOW_START)
     }
 }

@@ -18,4 +18,6 @@ object PageName {
     const val WORKFLOW_STARTED = "page.workflow.started"
     const val WORKFLOW_UPDATE = "page.workflow.update"
     const val WORKFLOW_UPDATED = "page.workflow.updated"
+
+    const val WORKFLOW_INSTANCE = "page.workflow-instance"
 }
