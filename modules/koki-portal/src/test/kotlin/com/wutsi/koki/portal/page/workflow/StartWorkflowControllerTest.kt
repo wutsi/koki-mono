@@ -102,6 +102,8 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
 
         inputAllFieldsAndSubmit()
 
+        assertElementNotPresent("[name=startAt]:user-invalid")
+        assertElementNotPresent("[name=dueAt]:user-invalid")
         assertElementNotPresent("[name=approverId]:user-invalid")
         assertElementNotPresent("[name=participant_1]:user-invalid")
         assertElementNotPresent("[name=participant_2]:user-invalid")
