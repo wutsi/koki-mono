@@ -31,7 +31,7 @@ class FormControllerTest : AbstractPageControllerTest() {
     override fun setUp() {
         super.setUp()
 
-        doReturn(GetFormResponse(form)).whenever(kokiForms).get(any())
+        doReturn(GetFormResponse(form)).whenever(kokiForms).form(any())
 
         val html = generateFormHtml("http://localhost:$port/forms/$formId")
         doReturn(html).whenever(kokiForms)
@@ -51,7 +51,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         click("INPUT[value=IMM]")
         click("BUTTON")
 
-        verify(kokiFormData).submit(
+        verify(kokiForms).submitData(
             formId,
             null,
             null,
@@ -84,7 +84,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         click("INPUT[value=IMM]")
         click("BUTTON")
 
-        verify(kokiFormData).submit(
+        verify(kokiForms).submitData(
             formId,
             "111",
             "222",
@@ -108,7 +108,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.FORM)
         click("BUTTON")
 
-        verify(kokiWorkflowEngine, never()).complete(any(), any())
+        verify(kokiWorkflowInstance, never()).complete(any(), any())
 
         assertElementPresent("[name=customer_name]:user-invalid")
         assertElementPresent("[name=customer_email]:user-invalid")
@@ -150,7 +150,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         click("BUTTON")
 
         val dataArg = argumentCaptor<Map<String, Any>>()
-        verify(kokiFormData).update(eq(formDataId), eq(null), dataArg.capture())
+        verify(kokiForms).updateData(eq(formDataId), eq(null), dataArg.capture())
         val data = dataArg.firstValue
         assertEquals(4, data.size)
         assertEquals("Ray Sponsible", data["customer_name"])
@@ -188,7 +188,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         click("BUTTON")
 
         val dataArg = argumentCaptor<Map<String, Any>>()
-        verify(kokiFormData).update(eq(formDataId), eq("222"), dataArg.capture())
+        verify(kokiForms).updateData(eq(formDataId), eq("222"), dataArg.capture())
         val data = dataArg.firstValue
         assertEquals(4, data.size)
         assertEquals("Ray Sponsible", data["customer_name"])

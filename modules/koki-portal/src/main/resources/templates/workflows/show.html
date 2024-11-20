@@ -14,8 +14,10 @@
             <div class="widget">
                 <div class="widget-body">
                     <div class="widget-toolbar">
-                        <a class="btn-start" th:href="${workflow.startUrl}"
-                           th:if="${workflow.workflowInstanceCount == 0}">Start</a>
+                        <a class="btn-edit" th:href="${workflow.updateUrl}"
+                           th:if="${workflow.workflowInstanceCount == 0}">Edit</a>
+
+                        <a class="btn-start" th:href="${workflow.startUrl}">Start</a>
                     </div>
 
                     <div class="section-item">

@@ -11,21 +11,21 @@
       {
         "name": "submit",
         "title": "Employee submit the form",
-        "type": "MANUAL",
+        "type": "USER",
         "form": "FRM-001",
         "role": "employee"
       },
       {
         "name": "evaluate",
         "title": "HR review and approves the form",
-        "type": "MANUAL",
+        "type": "USER",
         "form": "FRM-001",
         "role": "hr"
       },
       {
         "name": "payment",
         "title": "Finance initiate the reimbursement",
-        "type": "MANUAL",
+        "type": "USER",
         "form": "FRM-001",
         "role": "finance"
       },

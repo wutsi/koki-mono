@@ -11,11 +11,9 @@ import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.form.dto.SearchFormResponse
 import com.wutsi.koki.portal.service.AccessTokenHolder
 import com.wutsi.koki.sdk.KokiAuthentication
-import com.wutsi.koki.sdk.KokiFormData
 import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiUser
 import com.wutsi.koki.sdk.KokiWorkflow
-import com.wutsi.koki.sdk.KokiWorkflowEngine
 import com.wutsi.koki.sdk.KokiWorkflowInstance
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
@@ -69,16 +67,10 @@ abstract class AbstractPageControllerTest {
     protected lateinit var kokiForms: KokiForms
 
     @MockBean
-    protected lateinit var kokiFormData: KokiFormData
-
-    @MockBean
     protected lateinit var kokiUser: KokiUser
 
     @MockBean
     protected lateinit var kokiWorkflow: KokiWorkflow
-
-    @MockBean
-    protected lateinit var kokiWorkflowEngine: KokiWorkflowEngine
 
     @MockBean
     protected lateinit var kokiWorkflowInstance: KokiWorkflowInstance

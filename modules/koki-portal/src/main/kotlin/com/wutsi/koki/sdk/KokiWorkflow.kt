@@ -42,7 +42,7 @@ class KokiWorkflow(
     fun json(id: Long): String {
         val tenantId = tenantProvider.id()
         val url = urlBuilder.build(
-            "$WORKFLOW_PATH_PREFIX/images/$tenantId.$id.png",
+            "$WORKFLOW_PATH_PREFIX/json/$tenantId.$id.json",
         )
         val json = URL(url).readText()
         val data = objectMapper.readValue(json, Map::class.java)

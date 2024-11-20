@@ -77,7 +77,7 @@ class LoginControllerTest : AbstractPageControllerTest() {
             name = "FRM-001",
             title = "Incident Report",
         )
-        doReturn(GetFormResponse(form)).whenever(kokiForms).get(any())
+        doReturn(GetFormResponse(form)).whenever(kokiForms).form(any())
 
         val html = generateFormHtml()
         doReturn(html).whenever(kokiForms).html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())

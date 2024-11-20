@@ -56,7 +56,7 @@ class WorkflowExporter(
             requiresApproval = activity.requiresApproval,
             form = form?.name,
             role = role?.name,
-            tags = activity.tags?.let { tags ->
+            tags = activity.tags?.ifEmpty { null }?.let { tags ->
                 objectMapper.readValue(tags, Map::class.java) as Map<String, String>
             } ?: emptyMap(),
         )

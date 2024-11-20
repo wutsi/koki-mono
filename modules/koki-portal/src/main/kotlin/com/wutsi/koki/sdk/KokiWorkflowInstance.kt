@@ -1,6 +1,7 @@
 package com.wutsi.koki.sdk
 
 import com.wutsi.koki.workflow.dto.ApprovalStatus
+import com.wutsi.koki.workflow.dto.CompleteActivityInstanceRequest
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.GetWorkflowInstanceResponse
@@ -40,6 +41,14 @@ class KokiWorkflowInstance(
             emptyMap<String, String>(),
             StartWorkflowInstanceResponse::class.java
         ).body
+    }
+
+    fun complete(activityInstanceId: String, data: Map<String, Any>) {
+        val url = urlBuilder.build("$ACTIVITY_PATH_PREFIX/$activityInstanceId/complete")
+        val request = CompleteActivityInstanceRequest(
+            state = data
+        )
+        rest.postForEntity(url, request, Any::class.java)
     }
 
     fun workflowInstance(id: String): GetWorkflowInstanceResponse {

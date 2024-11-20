@@ -3,7 +3,6 @@ package com.wutsi.koki.portal.page.form
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.sdk.KokiFormData
 import com.wutsi.koki.sdk.KokiForms
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.stereotype.Controller
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 class FormController(
     private val kokiForms: KokiForms,
-    private val kokiFormData: KokiFormData,
 ) : AbstractPageController() {
     @GetMapping("/forms/{form-id}")
     fun new(
@@ -85,15 +83,15 @@ class FormController(
             as Map<String, Any>
 
         if (formDataId != null) {
-            kokiFormData.update(formDataId, activityInstanceId, data)
+            kokiForms.updateData(formDataId, activityInstanceId, data)
         } else {
-            kokiFormData.submit(formId, workflowInstanceId, activityInstanceId, data)
+            kokiForms.submitData(formId, workflowInstanceId, activityInstanceId, data)
         }
         return "redirect:/forms/$formId/saved"
     }
 
     private fun addPageInfo(formId: String, model: Model) {
-        val form = kokiForms.get(formId).form
+        val form = kokiForms.form(formId).form
         model.addAttribute(
             "page",
             PageModel(
