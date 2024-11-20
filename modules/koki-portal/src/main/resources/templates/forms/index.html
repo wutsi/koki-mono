@@ -5,7 +5,17 @@
 </head>
 
 <body>
-<div th:utext="${formHtml}"></div>
-</body>
+<div th:replace="~{__components/layout :: navbar}"></div>
 
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-12 col-md-8 offset-md-4">
+            <div th:utext="${formHtml}"></div>
+        </div>
+
+    </div>
+</div>
+
+</body>
 </html>

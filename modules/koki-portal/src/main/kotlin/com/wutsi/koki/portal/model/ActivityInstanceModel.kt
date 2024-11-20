@@ -15,4 +15,7 @@ data class ActivityInstanceModel(
     val approvedAt: Date? = null,
     val startedAt: Date? = null,
     val doneAt: Date? = null
-)
+) {
+    val running: Boolean
+        get() = status == WorkflowStatus.RUNNING
+}

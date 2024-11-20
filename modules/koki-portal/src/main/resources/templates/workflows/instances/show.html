@@ -47,10 +47,13 @@
                                 <th>Title</th>
                                 <th>Status</th>
                                 <th>Assignee</th>
+                                <th>Form</th>
                                 <th>Approval</th>
                                 <td></td>
                             </tr>
-                            <tr class="activity" th:each="activity: ${workflowInstance.workflow.activities}">
+                            <tr class="activity"
+                                th:classappend="${activityInstances[activity.id]?.running} ? 'activity-running'"
+                                th:each="activity: ${workflowInstance.workflow.activities}">
                                 <td>
                                     <span
                                         th:replace="~{__components/workflow :: activity-type-icon(${activity})}"></span>
@@ -65,6 +68,9 @@
                                         th:text="${activityInstances[activity.id]?.assignee?.displayName}">ASSIGNEE</span>
                                 </td>
                                 <td>
+                                    <span th:if="${activity.form}" th:text="${activity.form.name}">FORM</span>
+                                </td>
+                                <td>
                                     <div
                                         th:replace="~{__components/workflow :: approval-status(${activityInstances[activity.id]?.approval})}"></div>
                                 </td>
@@ -74,6 +80,27 @@
                             </tr>
                         </table>
                     </div>
+
+                    <div class="section-item" th:if="!${workflowInstance.parameters.isEmpty()}">
+                        <h3>Parameter</h3>
+                        <table class="table table-striped">
+                            <tr th:each="parameter: ${workflowInstance.parameters}">
+                                <td th:text="${parameter.key}">KEY</td>
+                                <td th:text="${parameter.value}">VALUE</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="section-item" th:if="!${workflowInstance.state.isEmpty()}">
+                        <h3>State</h3>
+                        <table class="table table-striped">
+                            <tr th:each="entry: ${workflowInstance.state}">
+                                <td th:text="${entry.key}">KEY</td>
+                                <td th:text="${entry.value}">VALUE</td>
+                            </tr>
+                        </table>
+                    </div>
+
                 </div>
             </div>
         </div>

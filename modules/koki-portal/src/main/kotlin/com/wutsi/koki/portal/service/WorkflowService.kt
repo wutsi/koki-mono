@@ -1,10 +1,13 @@
 package com.wutsi.koki.portal.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.koki.portal.mapper.FormMapper
+import com.wutsi.koki.portal.mapper.UserMapper
 import com.wutsi.koki.portal.mapper.WorkflowMapper
 import com.wutsi.koki.portal.model.WorkflowModel
 import com.wutsi.koki.portal.page.workflow.CreateWorkflowForm
 import com.wutsi.koki.portal.page.workflow.UpdateFormWorkflow
+import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiUser
 import com.wutsi.koki.sdk.KokiWorkflow
 import com.wutsi.koki.workflow.dto.ImportWorkflowRequest
@@ -14,7 +17,10 @@ import org.springframework.stereotype.Service
 class WorkflowService(
     private val kokiWorkflow: KokiWorkflow,
     private val kokiUser: KokiUser,
+    private val kokiForms: KokiForms,
     private val mapper: WorkflowMapper,
+    private val userMapper: UserMapper,
+    private val formMapper: FormMapper,
     private val objectMapper: ObjectMapper,
 ) {
     fun json(id: Long): String {
@@ -23,17 +29,27 @@ class WorkflowService(
 
     fun workflow(id: Long): WorkflowModel {
         val workflow = kokiWorkflow.workflow(id).workflow
+
         val roles = if (workflow.roleIds.isEmpty()) {
             emptyList()
         } else {
             kokiUser.roles(workflow.roleIds).roles
+                .map { role -> userMapper.toRoleModel(role) }
         }
+
         val approverRole = workflow.approverRoleId?.let { roleId ->
             roles.find { role -> role.id == roleId }
-                ?: kokiUser.roles(listOf(roleId)).roles.firstOrNull()
+                ?: kokiUser.roles(listOf(roleId)).roles
+                    .firstOrNull()
+                    ?.let { role -> userMapper.toRoleModel(role) }
         }
+
+        val formIds = workflow.activities.mapNotNull { activity -> activity.formId }.toSet()
+        val forms = kokiForms.search(ids = formIds.toList(), limit = formIds.size).forms
+            .map { form -> formMapper.toFormModel(form) }
+
         val imageUrl = kokiWorkflow.imageUrl(id)
-        return mapper.toWorkflowModel(workflow, approverRole, roles, imageUrl)
+        return mapper.toWorkflowModel(workflow, approverRole, roles, forms, imageUrl)
     }
 
     fun workflows(
