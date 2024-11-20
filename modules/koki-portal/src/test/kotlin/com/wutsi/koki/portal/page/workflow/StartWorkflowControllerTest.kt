@@ -102,6 +102,12 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
 
         inputAllFieldsAndSubmit()
 
+        assertCurrentPageIs(PageName.WORKFLOW_STARTED)
+        assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
+        assertElementNotPresent("#started-message")
+        assertElementPresent("#scheduled-message")
+        assertElementNotPresent(".alert-danger")
+
         val request = argumentCaptor<CreateWorkflowInstanceRequest>()
         verify(kokiWorkflowInstance).create(request.capture())
         assertEquals(startAt, fmt.format(request.firstValue.startAt))
@@ -114,12 +120,6 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
         assertEquals(mapOf("PARAM_1" to "1111", "PARAM_2" to "2222"), request.firstValue.parameters)
 
         verify(kokiWorkflowInstance, never()).start(any())
-
-        assertCurrentPageIs(PageName.WORKFLOW_STARTED)
-        assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
-        assertElementNotPresent("#started-message")
-        assertElementPresent("#scheduled-message")
-        assertElementNotPresent(".alert-danger")
     }
 
     @Test
@@ -198,6 +198,7 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
     private fun inputAllFieldsAndSubmit(start: String = startAt) {
         input("input[name=startAt]", toInputDate(start))
         input("input[name=dueAt]", toInputDate(dueAt))
+        scrollToMiddle()
         select("select[name=approverId]", 1)
         select("select[name=participant_1]", 1)
         select("select[name=participant_2]", 2)
