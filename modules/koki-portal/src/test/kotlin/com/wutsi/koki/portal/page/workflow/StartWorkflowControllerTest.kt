@@ -103,7 +103,7 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
 
         inputAllFieldsAndSubmit()
 
-        println(">>>>> " + driver.findElement(By.cssSelector("[name=startAt]")).getAttribute("value"))
+        println(">>>>> " + startAt + " - " + driver.findElement(By.cssSelector("[name=startAt]")).getAttribute("value"))
         assertElementNotPresent("[name=startAt]:user-invalid")
         assertElementNotPresent("[name=dueAt]:user-invalid")
         assertElementNotPresent("[name=approverId]:user-invalid")
