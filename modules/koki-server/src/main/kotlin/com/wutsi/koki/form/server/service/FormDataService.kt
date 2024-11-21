@@ -10,6 +10,7 @@ import com.wutsi.koki.form.dto.UpdateFormDataRequest
 import com.wutsi.koki.form.server.dao.FormDataRepository
 import com.wutsi.koki.form.server.domain.FormDataEntity
 import com.wutsi.koki.form.server.domain.FormEntity
+import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.Date
@@ -20,6 +21,7 @@ class FormDataService(
     private val dao: FormDataRepository,
     private val formService: FormService,
     private val objectMapper: ObjectMapper,
+    private val em: EntityManager,
 ) {
     fun get(id: String, form: FormEntity): FormDataEntity {
         val formData = dao.findById(id)
@@ -39,6 +41,50 @@ class FormDataService(
             throw NotFoundException(Error(ErrorCode.FORM_DATA_NOT_FOUND))
         }
         return formData
+    }
+
+    fun search(
+        tenantId: Long,
+        ids: List<String> = emptyList(),
+        formIds: List<String> = emptyList(),
+        workflowInstanceIds: List<String> = emptyList(),
+        status: FormDataStatus? = null,
+        limit: Int = 200,
+        offset: Int = 0,
+    ): List<FormDataEntity> {
+        val jql = StringBuilder("SELECT F FROM FormDataEntity F")
+        jql.append(" WHERE F.tenantId = :tenantId")
+        if (ids.isNotEmpty()) {
+            jql.append(" AND F.id IN :ids")
+        }
+        if (formIds.isNotEmpty()) {
+            jql.append(" AND F.formId IN :formIds")
+        }
+        if (workflowInstanceIds.isNotEmpty()) {
+            jql.append(" AND F.workflowInstanceId IN :workflowInstanceIds")
+        }
+        if (status != null) {
+            jql.append(" AND F.status IN :status")
+        }
+
+        val query = em.createQuery(jql.toString(), FormDataEntity::class.java)
+        query.setParameter("tenantId", tenantId)
+        if (ids.isNotEmpty()) {
+            query.setParameter("ids", ids)
+        }
+        if (formIds.isNotEmpty()) {
+            query.setParameter("formIds", formIds)
+        }
+        if (workflowInstanceIds.isNotEmpty()) {
+            query.setParameter("workflowInstanceIds", workflowInstanceIds)
+        }
+        if (status != null) {
+            query.setParameter("status", status)
+        }
+
+        query.firstResult = offset
+        query.maxResults = limit
+        return query.resultList
     }
 
     @Transactional
