@@ -1,70 +1,56 @@
 package com.wutsi.koki.tenant.server.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
-import com.wutsi.koki.form.dto.SearchFormResponse
+import com.wutsi.koki.form.dto.SearchFormDataResponse
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/form/SearchFormEndpoint.sql"])
-class SearchFormEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/form/SearchFormDataEndpoint.sql"])
+class SearchFormDataEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun all() {
-        val result = rest.getForEntity("/v1/forms", SearchFormResponse::class.java)
+        val result = rest.getForEntity("/v1/form-data", SearchFormDataResponse::class.java)
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val forms = result.body!!.forms
+        val forms = result.body!!.formData
 
-        assertEquals(4, forms.size)
-        assertEquals("100", forms[0].id)
-        assertEquals("f-100", forms[0].name)
-        assertEquals("Form 100", forms[0].title)
-
-        assertEquals("110", forms[1].id)
-        assertEquals("f-110", forms[1].name)
-        assertEquals("Form 110", forms[1].title)
-
-        assertEquals("120", forms[2].id)
-        assertEquals("f-120", forms[2].name)
-        assertEquals("Form 120", forms[2].title)
-
-        assertEquals("130", forms[3].id)
-        assertEquals("f-130", forms[3].name)
-        assertEquals("Form 130", forms[3].title)
+        assertEquals(7, forms.size)
     }
 
     @Test
-    fun `filter by active`() {
-        val result =
-            rest.getForEntity("/v1/forms?active=false&sort-by=TITLE&asc=true", SearchFormResponse::class.java)
+    fun `by id`() {
+        val result = rest.getForEntity("/v1/form-data?id=10011&id=10012&id=11013", SearchFormDataResponse::class.java)
+        assertEquals(HttpStatus.OK, result.statusCode)
 
-        val forms = result.body!!.forms
-        assertEquals(1, forms.size)
-        assertEquals("120", forms[0].id)
+        val formData = result.body!!.formData
+        assertEquals(3, formData.size)
     }
 
     @Test
-    fun `filter by ids`() {
+    fun `filter by instance-id`() {
         val result =
-            rest.getForEntity(
-                "/v1/forms?id=100&id=120&id=130&sort-by=CREATED_AT&asc=false",
-                SearchFormResponse::class.java
-            )
+            rest.getForEntity("/v1/form-data?workflow-instance-id=wi-100", SearchFormDataResponse::class.java)
 
-        val forms = result.body!!.forms
-        assertEquals(3, forms.size)
-        assertEquals("130", forms[0].id)
-        assertEquals("120", forms[1].id)
-        assertEquals("100", forms[2].id)
+        val formData = result.body!!.formData
+        assertEquals(1, formData.size)
+    }
+
+    @Test
+    fun `by status`() {
+        val result =
+            rest.getForEntity("/v1/form-data?status=IN_PROGRESS", SearchFormDataResponse::class.java)
+
+        val formData = result.body!!.formData
+        assertEquals(3, formData.size)
     }
 
     @Test
     fun `form of another tenant`() {
         val result =
-            rest.getForEntity("/v1/forms?id=200", SearchFormResponse::class.java)
+            rest.getForEntity("/v1/forms?id=20022", SearchFormDataResponse::class.java)
 
-        val forms = result.body!!.forms
-        assertEquals(0, forms.size)
+        assertEquals(0, result.body!!.formData.size)
     }
 }

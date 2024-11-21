@@ -97,7 +97,16 @@ class ExportFormHTMLEndpoint(
         activityInstanceId: String?,
         tenantId: Long,
     ): Context {
-        val data = formDataId?.let { formDataService.get(formDataId, form).data }
+        val data = if (formDataId != null) {
+            formDataService.get(formDataId, tenantId).data
+        } else if (workflowInstanceId != null) {
+            formDataService.search(
+                tenantId = tenantId,
+                workflowInstanceIds = workflowInstanceId?.let { listOf(workflowInstanceId) } ?: emptyList()
+            ).firstOrNull()?.data
+        } else {
+            null
+        }
 
         val submitUrl = buildSubmitUrl(
             form = form,
