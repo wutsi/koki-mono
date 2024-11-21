@@ -11,6 +11,7 @@ data class ActivityModel(
     val type: ActivityType = ActivityType.UNKNOWN,
     val requiresApproval: Boolean = false,
     val role: RoleModel? = null,
+    val form: FormModel? = null,
 ) {
     val longTitle: String
         get() = if (title.isEmpty()) {

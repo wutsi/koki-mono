@@ -31,7 +31,7 @@ class FormController(
         )
         model.addAttribute("formHtml", formHtml)
         addPageInfo(formId, model)
-        return "forms/index"
+        return "forms/show"
     }
 
     @GetMapping("/forms/{form-id}/{form-data-id}")
@@ -49,7 +49,7 @@ class FormController(
         )
         model.addAttribute("formHtml", formHtml)
         addPageInfo(formId, model)
-        return "forms/index"
+        return "forms/show"
     }
 
     @PostMapping("/forms/{form-id}")
