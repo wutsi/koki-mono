@@ -133,6 +133,10 @@ nav {
     padding: 1em;
 }
 
+.widget-body .widget-toolbar a {
+    margin-right: 1em;
+}
+
 .workflow-image {
     margin: 0 auto;
     text-align: center;
@@ -157,4 +161,8 @@ nav {
 .status-cancelled,
 .status-rejected {
     color: darkred;
+}
+
+tr.activity-running {
+    border: 4px solid black;
 }

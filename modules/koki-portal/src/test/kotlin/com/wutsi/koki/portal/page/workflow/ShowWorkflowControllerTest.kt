@@ -92,13 +92,14 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.WORKFLOW)
 
         assertElementPresent(".btn-start")
+        assertElementPresent(".btn-edit")
 
         assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
         assertElementCount("tr.activity", workflow.activities.size)
     }
 
     @Test
-    fun `start button hidden when workflow has instances`() {
+    fun `edit button hidden when workflow has instances`() {
         doReturn(
             GetWorkflowResponse(workflow.copy(workflowInstanceCount = 11))
         ).whenever(kokiWorkflow).workflow(workflow.id)
@@ -106,7 +107,7 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
         navigateTo("/workflows/${workflow.id}")
         assertCurrentPageIs(PageName.WORKFLOW)
 
-        assertElementNotPresent(".btn-start")
+        assertElementNotPresent(".btn-edit")
     }
 
     @Test
@@ -115,6 +116,14 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/workflows/${workflow.id}")
         assertCurrentPageIs(PageName.LOGIN)
+    }
+
+    @Test
+    fun `show to edit`() {
+        navigateTo("/workflows/${workflow.id}")
+
+        click(".btn-edit")
+        assertCurrentPageIs(PageName.WORKFLOW_UPDATE)
     }
 
     @Test

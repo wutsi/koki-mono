@@ -49,7 +49,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         input("INPUT[name=customer_email]", "ray.sponsible@gmail.com")
         click("INPUT[value=S]")
         click("INPUT[value=IMM]")
-        click("BUTTON")
+        click("button[type=submit]")
 
         verify(kokiForms).submitData(
             formId,
@@ -82,7 +82,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         input("INPUT[name=customer_email]", "ray.sponsible@gmail.com")
         click("INPUT[value=S]")
         click("INPUT[value=IMM]")
-        click("BUTTON")
+        click("button[type=submit]")
 
         verify(kokiForms).submitData(
             formId,
@@ -106,7 +106,7 @@ class FormControllerTest : AbstractPageControllerTest() {
 
         // THEN
         assertCurrentPageIs(PageName.FORM)
-        click("BUTTON")
+        click("button[type=submit]")
 
         verify(kokiWorkflowInstance, never()).complete(any(), any())
 
@@ -147,7 +147,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         click("INPUT[value=S]")
         click("INPUT[value=T1]")
         click("INPUT[value=IMM]")
-        click("BUTTON")
+        click("button[type=submit]")
 
         val dataArg = argumentCaptor<Map<String, Any>>()
         verify(kokiForms).updateData(eq(formDataId), eq(null), dataArg.capture())
@@ -185,7 +185,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         click("INPUT[value=S]")
         click("INPUT[value=T1]")
         click("INPUT[value=IMM]")
-        click("BUTTON")
+        click("button[type=submit]")
 
         val dataArg = argumentCaptor<Map<String, Any>>()
         verify(kokiForms).updateData(eq(formDataId), eq("222"), dataArg.capture())
