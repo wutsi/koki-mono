@@ -19,7 +19,7 @@ class ListWorkflowController(
         @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
-        val workflows = service.workflows(limit, offset)
+        val workflows = service.workflows(limit = limit, offset = offset)
         if (workflows.isNotEmpty()) {
             model.addAttribute("workflows", workflows)
         }

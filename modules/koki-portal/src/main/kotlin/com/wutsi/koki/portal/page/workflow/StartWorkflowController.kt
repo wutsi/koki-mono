@@ -61,7 +61,7 @@ class StartWorkflowController(
         @RequestParam(name = "workflow-instance-id") workflowInstanceId: String,
         model: Model,
     ): String {
-        val workflowInstance = workflowInstanceService.workflowInstance(workflowInstanceId)
+        val workflowInstance = workflowInstanceService.workflow(workflowInstanceId)
         model.addAttribute("workflowInstance", workflowInstance)
         model.addAttribute("workflow", workflowInstance.workflow)
         model.addAttribute(
@@ -94,7 +94,7 @@ class StartWorkflowController(
             roleIds.add(workflow.approverRole.id)
         }
         roleIds.toSet().forEach { roleId ->
-            val users = userService.search(roleIds = listOf(roleId), limit = 50)
+            val users = userService.users(roleIds = listOf(roleId), limit = 50)
             userMap[roleId] = users
         }
         model.addAttribute("userMap", userMap)

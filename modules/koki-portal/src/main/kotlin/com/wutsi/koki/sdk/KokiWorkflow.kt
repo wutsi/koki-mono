@@ -22,24 +22,24 @@ class KokiWorkflow(
         private val WORKFLOW_PATH_PREFIX = "/v1/workflows"
     }
 
-    fun import(request: ImportWorkflowRequest): ImportWorkflowResponse {
+    fun importWorkflow(request: ImportWorkflowRequest): ImportWorkflowResponse {
         val url = urlBuilder.build(WORKFLOW_PATH_PREFIX)
         return rest.postForEntity(url, request, ImportWorkflowResponse::class.java).body!!
     }
 
-    fun import(id: Long, request: ImportWorkflowRequest): ImportWorkflowResponse {
+    fun importWorkflow(id: Long, request: ImportWorkflowRequest): ImportWorkflowResponse {
         val url = urlBuilder.build("$WORKFLOW_PATH_PREFIX/$id")
         return rest.postForEntity(url, request, ImportWorkflowResponse::class.java).body!!
     }
 
-    fun imageUrl(id: Long): String {
+    fun getWorkflowImageUrl(id: Long): String {
         val tenantId = tenantProvider.id()
         return urlBuilder.build(
             "$WORKFLOW_PATH_PREFIX/images/$tenantId.$id.png",
         )
     }
 
-    fun json(id: Long): String {
+    fun getWorkflowJson(id: Long): String {
         val tenantId = tenantProvider.id()
         val url = urlBuilder.build(
             "$WORKFLOW_PATH_PREFIX/json/$tenantId.$id.json",
@@ -53,14 +53,14 @@ class KokiWorkflow(
             .writeValueAsString(data)
     }
 
-    fun workflow(id: Long): GetWorkflowResponse {
+    fun getWorkflow(id: Long): GetWorkflowResponse {
         val url = urlBuilder.build(
             "$WORKFLOW_PATH_PREFIX/$id",
         )
         return rest.getForEntity(url, GetWorkflowResponse::class.java).body!!
     }
 
-    fun workflows(
+    fun searchWorkflows(
         ids: List<Long> = emptyList(),
         limit: Int = 20,
         offset: Int = 0,
@@ -77,7 +77,7 @@ class KokiWorkflow(
         return rest.getForEntity(url, SearchWorkflowResponse::class.java).body!!
     }
 
-    fun activities(
+    fun searchActivities(
         ids: List<Long> = emptyList(),
         workflowIds: List<Long> = emptyList(),
         type: ActivityType? = null,

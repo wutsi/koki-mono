@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-12 col-md-9">
+            <div class="widget">
+                <div class="widget-body">
+                    <div class="section-item">
+                        <table class="table">
+                            <tr>
+                                <td><b>Workflow</b></td>
+                                <td>
+                                    <a th:href="${activityInstance.workflowInstance.url}"
+                                       th:text="${activityInstance.workflowInstance.workflow.longTitle}">WORKFLOW</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Activity</b></td>
+                                <td th:text="${activityInstance.activity.longTitle}">ACTIVITY</td>
+                            </tr>
+                            <tr>
+                                <td><b>Type</b></td>
+                                <td>
+                                    <span
+                                        th:replace="~{__components/workflow :: activity-type-icon(${activityInstance.activity.type})}"></span>
+                                    <span th:text="${activityInstance.activity.type.name()}">TYPE</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${activityInstance.activity.form}">
+                                <td><b>Form</b></td>
+                                <td>
+                                    <a th:href="${activityInstance.activity.form.viewUrl}"
+                                       th:text="${activityInstance.activity.form.longTitle}">FORM</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Status</b></td>
+                                <td>
+                                    <div
+                                        th:replace="~{__components/workflow :: workflow-status(${activityInstance.status})}"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Description</b></td>
+                                <td th:text="${activityInstance.activity.description}">DESCRIPTION</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="section-item">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-3">
+            <div class="widget">
+                <div class="widget-body">
+                    <table class="table">
+                        <tr th:if="${activityInstance.activity.requiresApproval}">
+                            <td><b>Approver</b></td>
+                            <td th:if="${activityInstance.approver}"
+                                th:text="${activityInstance.approver.displayName}">
+                                APPROVER
+                            </td>
+                        </tr>
+                        <tr th:if="${activityInstance.activity.requiresApproval}">
+                            <td><b>Approval</b></td>
+                            <td>
+                                <div
+                                    th:replace="~{__components/workflow :: approval-status(${activityInstance.approval})}"></div>
+                            </td>
+                        </tr>
+                        <tr th:if="${activityInstance.activity.requiresApproval}">
+                            <td><b>Approved</b></td>
+                            <td th:text="${activityInstance.approvedAt}">APPROVED</td>
+                        </tr>
+
+                        <tr th:if="${activityInstance.running}">
+                            <td><b>Started</b></td>
+                            <td th:text="${activityInstance.startedAtText}">STARTED</td>
+                        </tr>
+                        <tr th:if="${activityInstance.doneAt}">
+                            <td><b>Done</b></td>
+                            <td th:text="${activityInstance.doneAtText}">DONE</td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

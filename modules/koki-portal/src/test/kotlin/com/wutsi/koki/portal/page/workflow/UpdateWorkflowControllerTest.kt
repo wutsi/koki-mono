@@ -25,8 +25,8 @@ class UpdateWorkflowControllerTest : AbstractPageControllerTest() {
     override fun setUp() {
         super.setUp()
 
-        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).workflow(workflow.id)
-        doReturn(ImportWorkflowResponse(workflow.id)).whenever(kokiWorkflow).import(any(), any())
+        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).getWorkflow(workflow.id)
+        doReturn(ImportWorkflowResponse(workflow.id)).whenever(kokiWorkflow).importWorkflow(any(), any())
     }
 
     @Test
@@ -66,7 +66,7 @@ class UpdateWorkflowControllerTest : AbstractPageControllerTest() {
                 "0001" to "Error 3",
             )
         )
-        doThrow(ex).whenever(kokiWorkflow).import(any(), any())
+        doThrow(ex).whenever(kokiWorkflow).importWorkflow(any(), any())
 
         navigateTo("/workflows/${workflow.id}/update")
         input("textarea[name=json]", jsonContent())

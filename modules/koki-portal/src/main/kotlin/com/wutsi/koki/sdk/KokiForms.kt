@@ -18,12 +18,12 @@ class KokiForms(
         private val FORM_DATA_PATH_PREFIX = "/v1/form-data"
     }
 
-    fun form(id: String): GetFormResponse {
+    fun getForm(id: String): GetFormResponse {
         val url = urlBuilder.build("$FORM_PATH_PREFIX/$id")
         return rest.getForEntity(url, GetFormResponse::class.java).body
     }
 
-    fun html(
+    fun getFormHtml(
         formId: String,
         formDataId: String? = null,
         roleName: String? = null,
@@ -48,7 +48,7 @@ class KokiForms(
         return rest.getForEntity(url, String::class.java).body
     }
 
-    fun search(
+    fun searchForms(
         ids: List<String> = emptyList(),
         active: Boolean? = null,
         limit: Int = 20,
