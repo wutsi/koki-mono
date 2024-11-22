@@ -17,7 +17,7 @@ class FormSavedController(
         @PathVariable id: String,
         model: Model
     ): String {
-        val form = kokiForms.form(id).form
+        val form = kokiForms.getForm(id).form
         val title = form.title
 
         model.addAttribute("title", title)

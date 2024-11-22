@@ -18,7 +18,7 @@ class SearchUserController(
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
     ): List<UserModel> {
-        return service.search(
+        return service.users(
             keyword = keyword,
             roleIds = roleId,
             limit = limit,

@@ -67,19 +67,19 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
         super.setUp()
 
         doReturn(SearchRoleResponse(roles)).whenever(kokiUser)
-            .roles(anyOrNull(), anyOrNull(), anyOrNull())
+            .searchRoles(anyOrNull(), anyOrNull(), anyOrNull())
 
-        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).workflow(workflow.id)
+        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).getWorkflow(workflow.id)
 
         doReturn(SearchUserResponse(users)).whenever(kokiUser)
-            .users(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .searchUsers(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
     }
 
     @Test
     fun startNow() {
         doReturn(GetWorkflowInstanceResponse(workflowInstance.copy(status = WorkflowStatus.RUNNING)))
             .whenever(kokiWorkflowInstance)
-            .workflowInstance(workflowInstance.id)
+            .get(workflowInstance.id)
 
         doReturn(CreateWorkflowInstanceResponse(workflowInstance.id)).whenever(kokiWorkflowInstance).create(any())
         doReturn(StartWorkflowInstanceResponse("yyy")).whenever(kokiWorkflowInstance).start(any())

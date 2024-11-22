@@ -31,7 +31,7 @@ class CurrentUserHolder(
             return model
         }
 
-        model = service.get(id)
+        model = service.user(id)
         return model
     }
 }

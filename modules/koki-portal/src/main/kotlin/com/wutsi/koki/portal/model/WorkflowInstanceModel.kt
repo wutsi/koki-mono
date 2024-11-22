@@ -16,7 +16,7 @@ data class WorkflowInstanceModel(
     val dueAt: Date? = null,
     val parameters: Map<String, String> = emptyMap(),
     val state: Map<String, Any> = emptyMap(),
-    val activityInstances: List<ActivityInstanceModel> = emptyList(),
+    var activityInstances: List<ActivityInstanceModel> = emptyList(),
     val createdAtText: String = "",
     val startAtText: String = "",
     val startedAtText: String? = null,

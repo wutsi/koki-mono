@@ -22,12 +22,12 @@ class CreateWorkflowControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun success() {
-        doReturn(ImportWorkflowResponse(workflow.id)).whenever(kokiWorkflow).import(any())
+        doReturn(ImportWorkflowResponse(workflow.id)).whenever(kokiWorkflow).importWorkflow(any())
         navigateTo("/workflows/create")
         assertCurrentPageIs(PageName.WORKFLOW_CREATE)
 
-        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).workflow(workflow.id)
-        doReturn(workflowPictureUrl).whenever(kokiWorkflow).imageUrl(workflow.id)
+        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).getWorkflow(workflow.id)
+        doReturn(workflowPictureUrl).whenever(kokiWorkflow).getWorkflowImageUrl(workflow.id)
         input("textarea[name=json]", jsonContent())
         click("button[type=submit]")
 
@@ -48,7 +48,7 @@ class CreateWorkflowControllerTest : AbstractPageControllerTest() {
                 "0001" to "Error 3",
             )
         )
-        doThrow(ex).whenever(kokiWorkflow).import(any())
+        doThrow(ex).whenever(kokiWorkflow).importWorkflow(any())
 
         navigateTo("/workflows/create")
         input("textarea[name=json]", jsonContent())
@@ -70,7 +70,7 @@ class CreateWorkflowControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `missing fields`() {
-        doReturn(ImportWorkflowResponse(workflow.id)).whenever(kokiWorkflow).import(any())
+        doReturn(ImportWorkflowResponse(workflow.id)).whenever(kokiWorkflow).importWorkflow(any())
         navigateTo("/workflows/create")
         click("button[type=submit]")
 

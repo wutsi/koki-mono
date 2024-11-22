@@ -1,6 +1,8 @@
 package com.wutsi.koki.portal.page
 
 object PageName {
+    const val ACTIVITY_INSTANCE = "page.activity-instance"
+
     const val ERROR = "page.error"
 
     const val FORM = "page.form"

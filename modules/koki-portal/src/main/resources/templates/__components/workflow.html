@@ -2,15 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<span th:fragment="activity-type-icon(activity)">
-    <i class="fa-regular fa-circle" th:if="${activity.type.name == 'START'}"></i>
-    <i class="fa-regular fa-circle-dot" th:if="${activity.type.name == 'STOP'}"></i>
-    <i class="fa-solid fa-user" th:if="${activity.type.name == 'USER'}"></i>
-    <i class="fa-solid fa-hand" th:if="${activity.type.name == 'MANUAL'}"></i>
-    <i class="fa-solid fa-gear" th:if="${activity.type.name == 'SERVICE'}"></i>
+<span th:fragment="activity-type-icon(type)" th:if="${type}">
+    <i class="fa-regular fa-circle" th:if="${type.name == 'START'}"></i>
+    <i class="fa-regular fa-circle-dot" th:if="${type.name == 'STOP'}"></i>
+    <i class="fa-solid fa-user" th:if="${type.name == 'USER'}"></i>
+    <i class="fa-solid fa-hand" th:if="${type.name == 'MANUAL'}"></i>
+    <i class="fa-solid fa-gear" th:if="${type.name == 'SERVICE'}"></i>
 
-    <i class="fa-solid fa-envelope" th:if="${activity.type.name == 'EMAIL'}"></i>
-    <i class="fa-solid fa-cloud-arrow-up" th:if="${activity.type.name == 'UPLOAD'}"></i>
+    <i class="fa-solid fa-envelope" th:if="${type.name == 'EMAIL'}"></i>
+    <i class="fa-solid fa-cloud-arrow-up" th:if="${type.name == 'UPLOAD'}"></i>
 </span>
 
 <div th:fragment="workflow-status(status)" th:if="${status}">
@@ -33,6 +33,12 @@
 
     <i class="fa-solid fa-xmark status-rejected" th:if="${status.name == 'REJECTED'}"></i>
     <span class="status-rejected" th:if="${status.name == 'REJECTED'}">Rejected</span>
+</div>
+
+<div class="widget" th:fragment="activity-widget-user(activityInstance, workflowInstance)">
+    <div class="widget-header">
+        <a class="btn btn-primary" th:href="${activityInstance.form}"></a>
+    </div>
 </div>
 
 </body>

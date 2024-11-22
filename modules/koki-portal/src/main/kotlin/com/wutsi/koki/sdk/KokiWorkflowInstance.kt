@@ -4,6 +4,7 @@ import com.wutsi.koki.workflow.dto.ApprovalStatus
 import com.wutsi.koki.workflow.dto.CompleteActivityInstanceRequest
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceResponse
+import com.wutsi.koki.workflow.dto.GetActivityInstanceResponse
 import com.wutsi.koki.workflow.dto.GetWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.SearchActivityInstanceResponse
 import com.wutsi.koki.workflow.dto.StartWorkflowInstanceResponse
@@ -51,7 +52,7 @@ class KokiWorkflowInstance(
         rest.postForEntity(url, request, Any::class.java)
     }
 
-    fun workflowInstance(id: String): GetWorkflowInstanceResponse {
+    fun get(id: String): GetWorkflowInstanceResponse {
         val url = urlBuilder.build("$WORKFLOW_PATH_PREFIX/$id")
         return rest.getForEntity(
             url,
@@ -59,7 +60,15 @@ class KokiWorkflowInstance(
         ).body
     }
 
-    fun activities(
+    fun activity(id: String): GetActivityInstanceResponse {
+        val url = urlBuilder.build("$ACTIVITY_PATH_PREFIX/$id")
+        return rest.getForEntity(
+            url,
+            GetActivityInstanceResponse::class.java
+        ).body
+    }
+
+    fun searchActivities(
         ids: List<String> = emptyList(),
         assigneeIds: List<Long> = emptyList(),
         approverIds: List<Long> = emptyList(),

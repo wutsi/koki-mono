@@ -14,10 +14,6 @@
             <div class="widget">
                 <div class="widget-body">
                     <div class="section-item">
-                        <h1 th:text="${workflowInstance.workflow.longTitle}">TITLE</h1>
-                    </div>
-
-                    <div class="section-item">
                         <div class="workflow-image">
                             <img th:alt="${workflowInstance.workflow.title}" th:src="${workflowInstance.imageUrl}"/>
                         </div>
@@ -25,6 +21,13 @@
 
                     <div class="section-item">
                         <table class="table">
+                            <tr>
+                                <td><b>Workflow</b></td>
+                                <td>
+                                    <a th:href="${workflowInstance.workflow.url}"
+                                       th:text="${workflowInstance.workflow.longTitle}">WORKFLOW</a>
+                                </td>
+                            </tr>
                             <tr>
                                 <td><b>Status</b></td>
                                 <td>
@@ -38,9 +41,14 @@
                             </tr>
                         </table>
                     </div>
-
+                </div>
+            </div>
+            <div class="widget">
+                <div class="widget-header">
+                    <h3 class="widget-title">Activities</h3>
+                </div>
+                <div class="widget-body">
                     <div class="section-item">
-                        <h2>Activities</h2>
                         <table class="table table-striped">
                             <tr>
                                 <th width="1%"></th>
@@ -56,9 +64,19 @@
                                 th:each="activity: ${workflowInstance.workflow.activities}">
                                 <td>
                                     <span
-                                        th:replace="~{__components/workflow :: activity-type-icon(${activity})}"></span>
+                                        th:replace="~{__components/workflow :: activity-type-icon(${activity.type})}"></span>
                                 </td>
-                                <td th:text="${activity.longTitle}">TITLE</td>
+                                <td>
+                                    <a th:href="${activityInstances[activity.id].url}"
+                                       th:if="${activityInstances[activity.id]}"
+                                       th:text="${activity.longTitle}">
+                                        TITLE
+                                    </a>
+                                    <span th:if="!${activityInstances[activity.id]}"
+                                          th:text="${activity.longTitle}">
+                                        TITLE
+                                    </span>
+                                </td>
                                 <td>
                                     <div
                                         th:replace="~{__components/workflow :: workflow-status(${activityInstances[activity.id]?.status})}"></div>
@@ -68,7 +86,8 @@
                                         th:text="${activityInstances[activity.id]?.assignee?.displayName}">ASSIGNEE</span>
                                 </td>
                                 <td>
-                                    <span th:if="${activity.form}" th:text="${activity.form.name}">FORM</span>
+                                    <a th:href="${activity.form.viewUrl}" th:if="${activity.form}">
+                                        <span th:if="${activity.form}" th:text="${activity.form.name}">FORM</span></a>
                                 </td>
                                 <td>
                                     <div

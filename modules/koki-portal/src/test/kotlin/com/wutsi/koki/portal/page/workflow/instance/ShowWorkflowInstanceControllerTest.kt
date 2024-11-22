@@ -4,6 +4,8 @@ import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.form.dto.FormSummary
+import com.wutsi.koki.form.dto.SearchFormResponse
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.tenant.dto.Role
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
@@ -37,6 +39,12 @@ class ShowWorkflowInstanceControllerTest : AbstractPageControllerTest() {
         UserSummary(id = 13L, displayName = "Omam Mbiyick"),
     )
 
+    private val form = FormSummary(
+        id = "ef00493-403911",
+        name = "FMR-001",
+        title = "Incident Form",
+    )
+
     private val workflow = Workflow(
         id = 1L,
         name = "WF-001",
@@ -63,7 +71,7 @@ class ShowWorkflowInstanceControllerTest : AbstractPageControllerTest() {
                 roleId = roles[0].id,
                 active = true,
                 requiresApproval = true,
-                formId = "109320392",
+                formId = form.id,
             ),
             Activity(
                 id = 13L,
@@ -74,7 +82,7 @@ class ShowWorkflowInstanceControllerTest : AbstractPageControllerTest() {
                 roleId = roles[0].id,
                 active = true,
                 requiresApproval = true,
-                formId = "109320392",
+                formId = form.id,
             ),
             Activity(
                 id = 13L,
@@ -84,7 +92,6 @@ class ShowWorkflowInstanceControllerTest : AbstractPageControllerTest() {
                 roleId = roles[0].id,
                 active = true,
                 requiresApproval = true,
-                formId = "109320392",
             ),
             Activity(
                 id = 99L,
@@ -129,16 +136,19 @@ class ShowWorkflowInstanceControllerTest : AbstractPageControllerTest() {
         super.setUp()
 
         doReturn(SearchRoleResponse(roles)).whenever(kokiUser)
-            .roles(anyOrNull(), anyOrNull(), anyOrNull())
+            .searchRoles(anyOrNull(), anyOrNull(), anyOrNull())
 
-        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).workflow(workflow.id)
+        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).getWorkflow(workflow.id)
 
         doReturn(SearchUserResponse(users)).whenever(kokiUser)
-            .users(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .searchUsers(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+
+        doReturn(SearchFormResponse(listOf(form))).whenever(kokiForms)
+            .searchForms(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(GetWorkflowInstanceResponse(workflowInstance))
             .whenever(kokiWorkflowInstance)
-            .workflowInstance(workflowInstance.id)
+            .get(workflowInstance.id)
     }
 
     @Test

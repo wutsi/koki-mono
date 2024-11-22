@@ -100,7 +100,7 @@ abstract class AbstractPageControllerTest {
 
     fun setUpLoggedInUser() {
         doReturn(accessToken).whenever(accessTokenHolder).get(any())
-        doReturn(GetUserResponse(user)).whenever(kokiUser).user(USER_ID)
+        doReturn(GetUserResponse(user)).whenever(kokiUser).getUser(USER_ID)
 
         val principal = mock<JWTPrincipal>()
         doReturn(USER_ID).whenever(principal).getUserId()
@@ -149,22 +149,22 @@ abstract class AbstractPageControllerTest {
 
     private fun setupDefaultApiResponses() {
         doReturn(SearchFormResponse()).whenever(kokiForms)
-            .search(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .searchForms(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(SearchRoleResponse()).whenever(kokiUser)
-            .roles(anyOrNull(), anyOrNull(), anyOrNull())
+            .searchRoles(anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(SearchUserResponse()).whenever(kokiUser)
-            .users(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .searchUsers(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
-        doReturn(SearchWorkflowResponse()).whenever(kokiWorkflow).workflows(any(), anyOrNull(), anyOrNull())
+        doReturn(SearchWorkflowResponse()).whenever(kokiWorkflow).searchWorkflows(any(), anyOrNull(), anyOrNull())
 
-        doReturn(workflowPictureUrl).whenever(kokiWorkflow).imageUrl(any())
+        doReturn(workflowPictureUrl).whenever(kokiWorkflow).getWorkflowImageUrl(any())
 
         doReturn(workflowPictureUrl).whenever(kokiWorkflowInstance).imageUrl(any())
 
         val json = getResourceAsString("/workflow-001.json")
-        doReturn(json).whenever(kokiWorkflow).json(any())
+        doReturn(json).whenever(kokiWorkflow).getWorkflowJson(any())
     }
 
     @AfterEach

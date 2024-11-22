@@ -4,6 +4,8 @@ import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.form.dto.FormSummary
+import com.wutsi.koki.form.dto.SearchFormResponse
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.tenant.dto.Role
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
@@ -19,6 +21,12 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
         Role(id = 1L, name = "accountant", title = "Accountant"),
         Role(id = 2L, name = "hr", title = "Human Resource"),
         Role(id = 3L, name = "client", title = "Client"),
+    )
+
+    private val form = FormSummary(
+        id = "ef00493-403911",
+        name = "FMR-001",
+        title = "Incident Form",
     )
 
     private val workflow = Workflow(
@@ -47,7 +55,7 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
                 roleId = roles[0].id,
                 active = true,
                 requiresApproval = true,
-                formId = "109320392",
+                formId = form.id,
             ),
             Activity(
                 id = 13L,
@@ -58,7 +66,7 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
                 roleId = roles[0].id,
                 active = true,
                 requiresApproval = true,
-                formId = "109320392",
+                formId = form.id,
             ),
             Activity(
                 id = 13L,
@@ -68,7 +76,6 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
                 roleId = roles[0].id,
                 active = true,
                 requiresApproval = true,
-                formId = "109320392",
             ),
             Activity(
                 id = 99L,
@@ -82,8 +89,14 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
     override fun setUp() {
         super.setUp()
 
-        doReturn(SearchRoleResponse(roles)).whenever(kokiUser).roles(anyOrNull(), anyOrNull(), anyOrNull())
-        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).workflow(workflow.id)
+        doReturn(SearchRoleResponse(roles)).whenever(kokiUser)
+            .searchRoles(anyOrNull(), anyOrNull(), anyOrNull())
+
+        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow)
+            .getWorkflow(anyOrNull())
+
+        doReturn(SearchFormResponse(listOf(form))).whenever(kokiForms)
+            .searchForms(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
     }
 
     @Test
@@ -102,7 +115,7 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
     fun `edit button hidden when workflow has instances`() {
         doReturn(
             GetWorkflowResponse(workflow.copy(workflowInstanceCount = 11))
-        ).whenever(kokiWorkflow).workflow(workflow.id)
+        ).whenever(kokiWorkflow).getWorkflow(workflow.id)
 
         navigateTo("/workflows/${workflow.id}")
         assertCurrentPageIs(PageName.WORKFLOW)

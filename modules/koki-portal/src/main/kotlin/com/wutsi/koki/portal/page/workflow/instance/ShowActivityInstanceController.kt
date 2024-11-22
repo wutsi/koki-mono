@@ -10,24 +10,23 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 
 @Controller
-class ShowWorkflowInstanceController(
-    private val service: WorkflowInstanceService,
+class ShowActivityInstanceController(
+    private val workflowInstanceService: WorkflowInstanceService,
 ) : AbstractPageController() {
-    @GetMapping("/workflows/instances/{id}")
+    @GetMapping("/workflows/instances/activities/{id}")
     fun show(
         @PathVariable id: String,
         model: Model
     ): String {
-        val workflowInstance = service.workflow(id)
-        model.addAttribute("workflowInstance", workflowInstance)
-        model.addAttribute("activityInstances", workflowInstance.activityInstances.map { it.activity.id to it }.toMap())
+        val activityInstance = workflowInstanceService.activity(id)
+        model.addAttribute("activityInstance", activityInstance)
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.WORKFLOW_INSTANCE,
-                title = workflowInstance.workflow.longTitle
+                name = PageName.ACTIVITY_INSTANCE,
+                title = activityInstance.activity.longTitle
             )
         )
-        return "workflows/instances/show"
+        return "workflows/instances/activity"
     }
 }

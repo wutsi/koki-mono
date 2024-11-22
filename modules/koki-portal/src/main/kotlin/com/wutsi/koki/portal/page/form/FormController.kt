@@ -23,7 +23,7 @@ class FormController(
         @RequestParam(required = false, name = "activity-instance-id") activityInstanceId: String? = null,
         model: Model
     ): String {
-        val formHtml = kokiForms.html(
+        val formHtml = kokiForms.getFormHtml(
             formId = formId,
             formDataId = null,
             workflowInstanceId = workflowInstanceId,
@@ -41,7 +41,7 @@ class FormController(
         @RequestParam(required = false, name = "activity-instance-id") activityInstanceId: String? = null,
         model: Model
     ): String {
-        val formHtml = kokiForms.html(
+        val formHtml = kokiForms.getFormHtml(
             formId = formId,
             formDataId = formDataId,
             workflowInstanceId = null,
@@ -91,7 +91,7 @@ class FormController(
     }
 
     private fun addPageInfo(formId: String, model: Model) {
-        val form = kokiForms.form(formId).form
+        val form = kokiForms.getForm(formId).form
         model.addAttribute(
             "page",
             PageModel(
