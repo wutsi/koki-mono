@@ -11,4 +11,5 @@ data class WorkflowInstanceSummary(
     val startAt: Date = Date(),
     val startedAt: Date? = null,
     val dueAt: Date? = null,
+    val creatorByUserId: Long? = null,
 )

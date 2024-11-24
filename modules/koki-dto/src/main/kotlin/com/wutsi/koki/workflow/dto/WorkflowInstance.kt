@@ -15,4 +15,5 @@ data class WorkflowInstance(
     val parameters: Map<String, String> = emptyMap(),
     val state: Map<String, Any> = emptyMap(),
     val activityInstances: List<ActivityInstanceSummary> = emptyList(),
+    val creatorByUserId: Long? = null,
 )
