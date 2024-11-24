@@ -1,7 +1,7 @@
 package com.wutsi.koki.tenant.server.server.endpoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.wutsi.koki.TenantAwareEndpointTest
+import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
@@ -22,7 +22,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/workflow/CreateWorkflowInstanceEndpoint.sql"])
-class CreateWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
+class CreateWorkflowInstanceEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var instanceDao: WorkflowInstanceRepository
 
@@ -64,6 +64,7 @@ class CreateWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         assertEquals(fmt.format(request.dueAt), fmt.format(instance.dueAt))
         assertNull(instance.startedAt)
         assertNull(instance.doneAt)
+        assertEquals(USER_ID, instance.createdById)
 
         val parameters = objectMapper.readValue(instance.parameters, Map::class.java)
         assertEquals(2, parameters.size)
@@ -82,7 +83,8 @@ class CreateWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
-    fun `create with no approval an no roles`() {
+    fun `create with no approval an no roles and anonymously`() {
+        anonymousUser = true
         val req = CreateWorkflowInstanceRequest(
             workflowId = 200L,
             startAt = DateUtils.addDays(Date(), 7),
@@ -100,6 +102,7 @@ class CreateWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         val instance = instanceDao.findById(instanceId).get()
         assertEquals(req.workflowId, instance.workflowId)
         assertNull(instance.approverId)
+        assertNull(instance.createdById)
 
         val parameters = objectMapper.readValue(instance.parameters, Map::class.java)
         assertEquals(0, parameters.size)

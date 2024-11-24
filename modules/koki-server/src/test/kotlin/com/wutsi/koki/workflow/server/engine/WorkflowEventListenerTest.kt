@@ -51,7 +51,6 @@ class WorkflowEventListenerTest {
     fun setUp() {
         doReturn(listOf(activityInstance)).whenever(activityInstanceService)
             .search(
-                any(),
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -60,7 +59,9 @@ class WorkflowEventListenerTest {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
-                anyOrNull()
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
             )
 
         doReturn(formData).whenever(formDataService).get(any<String>(), any<Long>())

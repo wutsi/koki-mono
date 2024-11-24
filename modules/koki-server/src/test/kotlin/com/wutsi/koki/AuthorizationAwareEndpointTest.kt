@@ -30,7 +30,7 @@ abstract class AuthorizationAwareEndpointTest : TenantAwareEndpointTest() {
         body: ByteArray,
         execution: ClientHttpRequestExecution
     ): ClientHttpResponse {
-        if (!anonymousUser) {
+        if (!this.anonymousUser) {
             val accessToken = createAccessToken()
             request.headers.add(HttpHeaders.AUTHORIZATION, "Bearer $accessToken")
         } else {

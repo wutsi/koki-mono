@@ -30,6 +30,7 @@ class ActivityInstanceService(
     fun search(
         tenantId: Long,
         ids: List<String> = emptyList(),
+        workflowInstanceIds: List<String> = emptyList(),
         assigneeIds: List<Long> = emptyList(),
         approverIds: List<Long> = emptyList(),
         status: WorkflowStatus? = null,
@@ -44,11 +45,22 @@ class ActivityInstanceService(
         if (ids.isNotEmpty()) {
             jql.append(" AND A.id IN :ids")
         }
+        if (workflowInstanceIds.isNotEmpty()) {
+            jql.append(" AND A.workflowInstanceId IN :workflowInstanceIds")
+        }
         if (assigneeIds.isNotEmpty()) {
-            jql.append(" AND A.assigneeId IN :assigneeIds")
+            if (isIdNull(assigneeIds)) {
+                jql.append(" AND A.assigneeId IS NULL")
+            } else {
+                jql.append(" AND A.assigneeId IN :assigneeIds")
+            }
         }
         if (approverIds.isNotEmpty()) {
-            jql.append(" AND A.approverId IN :approverIds")
+            if (isIdNull(approverIds)) {
+                jql.append(" AND A.approverId IS NULL")
+            } else {
+                jql.append(" AND A.approverId IN :approverIds")
+            }
         }
         if (status != null) {
             jql.append(" AND A.status IN :status")
@@ -69,10 +81,13 @@ class ActivityInstanceService(
         if (ids.isNotEmpty()) {
             query.setParameter("ids", ids)
         }
-        if (assigneeIds.isNotEmpty()) {
+        if (workflowInstanceIds.isNotEmpty()) {
+            query.setParameter("workflowInstanceIds", workflowInstanceIds)
+        }
+        if (assigneeIds.isNotEmpty() && !isIdNull(assigneeIds)) {
             query.setParameter("assigneeIds", assigneeIds)
         }
-        if (approverIds.isNotEmpty()) {
+        if (approverIds.isNotEmpty() && !isIdNull(approverIds)) {
             query.setParameter("approverIds", approverIds)
         }
         if (status != null) {
@@ -96,5 +111,9 @@ class ActivityInstanceService(
     @Transactional
     fun save(activityInstance: ActivityInstanceEntity): ActivityInstanceEntity {
         return dao.save(activityInstance)
+    }
+
+    private fun isIdNull(values: List<Long>): Boolean {
+        return values.size == 1 && values[0] == -1L
     }
 }

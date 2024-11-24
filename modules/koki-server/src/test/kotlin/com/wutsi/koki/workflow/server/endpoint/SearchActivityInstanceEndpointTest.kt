@@ -101,4 +101,46 @@ class SearchActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         assertTrue(activityInstanceIds.contains("wi-100-01-start-done"))
         assertTrue(activityInstanceIds.contains("wi-110-01-working-done"))
     }
+
+    @Test
+    fun `by workflow-instance-id`() {
+        val result = rest.getForEntity(
+            "/v1/activity-instances?workflow-instance-id=wi-100-06",
+            SearchActivityInstanceResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val activityInstances = result.body!!.activityInstances
+        val activityInstanceIds = activityInstances.map { activityInstanceId -> activityInstanceId.id }
+        assertEquals(4, activityInstanceIds.size)
+    }
+
+    @Test
+    fun `no assignee`() {
+        val result = rest.getForEntity(
+            "/v1/activity-instances?assignee-id=-1",
+            SearchActivityInstanceResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val activityInstances = result.body!!.activityInstances
+        val activityInstanceIds = activityInstances.map { activityInstanceId -> activityInstanceId.id }
+        assertEquals(9, activityInstanceIds.size)
+    }
+
+    @Test
+    fun `no approver`() {
+        val result = rest.getForEntity(
+            "/v1/activity-instances?approver-id=-1",
+            SearchActivityInstanceResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val activityInstances = result.body!!.activityInstances
+        val activityInstanceIds = activityInstances.map { activityInstanceId -> activityInstanceId.id }
+        assertEquals(11, activityInstanceIds.size)
+    }
 }
