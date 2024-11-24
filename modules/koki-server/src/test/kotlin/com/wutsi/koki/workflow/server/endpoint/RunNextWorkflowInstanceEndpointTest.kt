@@ -21,8 +21,8 @@ import com.wutsi.koki.workflow.server.service.ExpressionEvaluator
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpStatus
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
@@ -37,10 +37,10 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var activityInstanceDao: ActivityInstanceRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var activityExecutorProvider: ActivityExecutorProvider
 
-    @MockBean
+    @MockitoBean
     protected lateinit var expressionEvaluator: ExpressionEvaluator
 
     @BeforeTest

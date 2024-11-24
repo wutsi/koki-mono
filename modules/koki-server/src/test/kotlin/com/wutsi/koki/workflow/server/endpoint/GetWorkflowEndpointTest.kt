@@ -67,7 +67,7 @@ class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
 
         assertEquals(114L, activities[4].id)
         assertEquals("STOP", activities[4].name)
-        assertEquals(ActivityType.STOP, activities[4].type)
+        assertEquals(ActivityType.END, activities[4].type)
         assertNull(activities[4].description)
         assertTrue(activities[4].tags.isEmpty())
         assertFalse(activities[4].requiresApproval)

@@ -98,7 +98,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
                 ),
                 Activity(
                     id = 99L,
-                    type = ActivityType.STOP,
+                    type = ActivityType.END,
                     name = "STOP",
                 ),
             ),
@@ -136,7 +136,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
                 ),
                 Activity(
                     id = 99L,
-                    type = ActivityType.STOP,
+                    type = ActivityType.END,
                     name = "STOP",
                 ),
             ),

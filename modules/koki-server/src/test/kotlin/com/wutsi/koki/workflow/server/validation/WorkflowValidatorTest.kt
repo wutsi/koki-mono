@@ -24,7 +24,7 @@ class WorkflowValidatorTest {
             activities = listOf(
                 ActivityData(name = "start", type = ActivityType.START),
                 ActivityData(name = "invoice", type = ActivityType.MANUAL),
-                ActivityData(name = "stop", type = ActivityType.STOP),
+                ActivityData(name = "stop", type = ActivityType.END),
             ),
             flows = listOf(
                 FlowData(from = "start", to = "invoice"),
@@ -45,7 +45,7 @@ class WorkflowValidatorTest {
             activities = listOf(
                 ActivityData(name = "start", type = ActivityType.START),
                 ActivityData(name = "invoice", type = ActivityType.MANUAL),
-                ActivityData(name = "stop", type = ActivityType.STOP),
+                ActivityData(name = "stop", type = ActivityType.END),
                 ActivityData(name = "bad-precessor-1", type = ActivityType.RECEIVE),
                 ActivityData(name = "bad-precessor-2", type = ActivityType.RECEIVE),
             ),
@@ -62,6 +62,6 @@ class WorkflowValidatorTest {
 
     @Test
     fun `number of rules`() {
-        assertEquals(14, validator.ruleCount())
+        assertEquals(15, validator.ruleCount())
     }
 }

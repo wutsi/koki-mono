@@ -53,7 +53,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                 ),
                 ActivityData(
                     name = "STOP",
-                    type = ActivityType.STOP,
+                    type = ActivityType.END,
                 ),
             ),
             flows = listOf(
@@ -245,7 +245,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                     ),
                     ActivityData(
                         name = "STOP",
-                        type = ActivityType.STOP,
+                        type = ActivityType.END,
                     ),
                 ),
                 flows = listOf(
@@ -284,7 +284,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                     ),
                     ActivityData(
                         name = "STOP",
-                        type = ActivityType.STOP,
+                        type = ActivityType.END,
                     ),
                 ),
                 flows = listOf(

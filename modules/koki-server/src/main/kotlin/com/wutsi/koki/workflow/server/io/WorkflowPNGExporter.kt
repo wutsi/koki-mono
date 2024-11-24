@@ -201,7 +201,7 @@ class WorkflowPNGExporter {
             if (activity?.type == ActivityType.START) {
                 vertexCell.value = null
                 vertexCell.style = getStyleName(STYLE_START, activity, runningActivityNames, doneActivityNames)
-            } else if (activity?.type == ActivityType.STOP) {
+            } else if (activity?.type == ActivityType.END) {
                 vertexCell.value = null
                 vertexCell.style = getStyleName(STYLE_STOP, activity, runningActivityNames, doneActivityNames)
             } else {

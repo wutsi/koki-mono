@@ -30,8 +30,8 @@
         "role": "finance"
       },
       {
-        "name": "stop",
-        "type": "STOP"
+        "name": "end",
+        "type": "END"
       }
     ],
     "flows": [
