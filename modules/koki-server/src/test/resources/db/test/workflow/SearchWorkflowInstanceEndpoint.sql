@@ -8,7 +8,8 @@ INSERT INTO T_ROLE(id, tenant_fk, name)
            (12, 1, 'boss');
 
 INSERT INTO T_USER(id, tenant_fk, email, password, salt, display_name)
-    VALUES (100, 1, 'ray.sponsible100@gmail.com', '--', '--', 'Ray Sponsible100'),
+    VALUES (12,  1, 'ray.sponsible12@gmail.com', '--', '--',  'Ray Sponsible12'),
+           (100, 1, 'ray.sponsible100@gmail.com', '--', '--', 'Ray Sponsible100'),
            (101, 1, 'ray.sponsible101@gmail.com', '--', '--', 'Ray Sponsible102'),
            (102, 1, 'ray.sponsible102@gmail.com', '--', '--', 'Ray Sponsible103'),
            (103, 1, 'ray.sponsible103@gmail.com', '--', '--', 'Ray Sponsible104'),
@@ -36,20 +37,22 @@ INSERT INTO T_ACTIVITY(id, tenant_fk, workflow_fk, role_fk, name, type, title, d
            (114, 1, 110, null, 'STOP',    2, 'Workflow 114', null, null, false, true)
     ;
 
-INSERT INTO T_WORKFLOW_INSTANCE(id, tenant_fk, workflow_fk, approver_fk, status, start_at)
-    VALUES ('wi-100-01', 1, 100, 100,  3, now()),
-           ('wi-100-02', 1, 100, null, 2, '2020-01-05'),
-           ('wi-100-03', 1, 100, null, 2, now()),
-           ('wi-100-04', 1, 100, null, 2, '2020-01-11'),
-           ('wi-100-05', 1, 100, null, 1, '2020-01-20'),
-           ('wi-100-06', 1, 100, null, 2, now()),
-           ('wi-110-01', 1, 110, null, 3, now()),
-           ('wi-120-01', 1, 120, null, 3, now()),
+INSERT INTO T_WORKFLOW_INSTANCE(id, tenant_fk, workflow_fk, approver_fk, status, start_at, created_by_fk)
+    VALUES ('wi-100-01', 1, 100, 100,  3, now(),        null),
+           ('wi-100-02', 1, 100, null, 2, '2020-01-05', null),
+           ('wi-100-03', 1, 100, null, 2, now(),        null),
+           ('wi-100-04', 1, 100, null, 2, '2020-01-11', null),
+           ('wi-100-05', 1, 100, null, 1, '2020-01-20', null),
+           ('wi-100-06', 1, 100, null, 2, now(),        12),
+           ('wi-110-01', 1, 110, null, 3, now(),        12),
+           ('wi-120-01', 1, 120, null, 3, now(),        null),
 
-           ('wi-200-01', 2, 200, null, 2, now());
+           ('wi-200-01', 2, 200, null, 2, now(),        null);
 
 INSERT INTO T_WI_PARTICIPANT(workflow_instance_fk, user_fk, role_fk)
     VALUES ('wi-100-01', 100, 10),
            ('wi-100-01', 101, 11),
+           ('wi-100-02', 102, 12),
            ('wi-100-02', 100, 10),
-           ('wi-100-02', 101, 11);
+           ('wi-100-02', 101, 11),
+           ('wi-100-03', 102, 12);

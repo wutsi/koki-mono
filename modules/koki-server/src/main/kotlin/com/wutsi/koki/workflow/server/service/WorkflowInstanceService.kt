@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.server.service.RoleService
 import com.wutsi.koki.tenant.server.service.UserService
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
@@ -26,6 +27,7 @@ class WorkflowInstanceService(
     private val workflowService: WorkflowService,
     private val userService: UserService,
     private val roleService: RoleService,
+    private val securityService: SecurityService,
     private val em: EntityManager,
     private val objectMapper: ObjectMapper,
 ) {
@@ -46,8 +48,10 @@ class WorkflowInstanceService(
     fun search(
         ids: List<String>,
         workflowIds: List<Long>,
-        participantUserId: Long?,
-        status: WorkflowStatus?,
+        participantUserIds: List<Long> = emptyList(),
+        participantRoleIds: List<Long> = emptyList(),
+        createdById: Long? = null,
+        status: List<WorkflowStatus> = emptyList(),
         startFrom: Date?,
         startTo: Date?,
         tenantId: Long,
@@ -55,7 +59,7 @@ class WorkflowInstanceService(
         offset: Int,
     ): List<WorkflowInstanceEntity> {
         val jql = StringBuilder("SELECT W FROM WorkflowInstanceEntity W")
-        if (participantUserId != null) {
+        if (participantUserIds.isNotEmpty() || participantRoleIds.isNotEmpty()) {
             jql.append(" JOIN W.participants P")
         }
 
@@ -66,10 +70,16 @@ class WorkflowInstanceService(
         if (workflowIds.isNotEmpty()) {
             jql.append(" AND W.workflowId IN :workflowIds")
         }
-        if (participantUserId != null) {
-            jql.append(" AND P.userId = :participantUserId")
+        if (participantUserIds.isNotEmpty()) {
+            jql.append(" AND P.userId IN :participantUserIds")
         }
-        if (status != null) {
+        if (participantRoleIds.isNotEmpty()) {
+            jql.append(" AND P.roleId IN :participantRoleIds")
+        }
+        if (createdById != null) {
+            jql.append(" AND W.createdById IN :createdById")
+        }
+        if (status.isNotEmpty()) {
             jql.append(" AND W.status IN :status")
         }
         if (startFrom != null) {
@@ -87,10 +97,16 @@ class WorkflowInstanceService(
         if (workflowIds.isNotEmpty()) {
             query.setParameter("workflowIds", workflowIds)
         }
-        if (participantUserId != null) {
-            query.setParameter("participantUserId", participantUserId)
+        if (participantUserIds.isNotEmpty()) {
+            query.setParameter("participantUserIds", participantUserIds)
         }
-        if (status != null) {
+        if (participantRoleIds.isNotEmpty()) {
+            query.setParameter("participantRoleIds", participantRoleIds)
+        }
+        if (createdById != null) {
+            query.setParameter("createdById", createdById)
+        }
+        if (status.isNotEmpty()) {
             query.setParameter("status", status)
         }
         if (startFrom != null) {
@@ -154,6 +170,7 @@ class WorkflowInstanceService(
                 id = UUID.randomUUID().toString(),
                 tenantId = tenantId,
                 workflowId = workflow.id!!,
+                createdById = securityService.getCurrentUserIdOrNull(),
                 status = WorkflowStatus.NEW,
                 approverId = request.approverUserId,
                 startAt = request.startAt,
