@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.server.service.RoleService
 import com.wutsi.koki.tenant.server.service.UserService
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
@@ -26,6 +27,7 @@ class WorkflowInstanceService(
     private val workflowService: WorkflowService,
     private val userService: UserService,
     private val roleService: RoleService,
+    private val securityService: SecurityService,
     private val em: EntityManager,
     private val objectMapper: ObjectMapper,
 ) {
@@ -154,6 +156,7 @@ class WorkflowInstanceService(
                 id = UUID.randomUUID().toString(),
                 tenantId = tenantId,
                 workflowId = workflow.id!!,
+                createdById = securityService.getCurrentUserIdOrNull(),
                 status = WorkflowStatus.NEW,
                 approverId = request.approverUserId,
                 startAt = request.startAt,

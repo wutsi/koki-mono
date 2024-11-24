@@ -58,6 +58,7 @@ CREATE TABLE T_WORKFLOW_INSTANCE(
     tenant_fk           BIGINT NOT NULL REFERENCES T_TENANT(id),
     workflow_fk         BIGINT NOT NULL REFERENCES T_WORKFLOW(id),
     approver_fk         BIGINT REFERENCES T_USER(id),
+    created_by_fk       BIGINT REFERENCES T_USER(id),
 
     status              INT NOT NULL DEFAULT 0,
     state               JSON,

@@ -25,6 +25,9 @@ data class WorkflowInstanceEntity(
     @Column(name = "workflow_fk")
     val workflowId: Long = -1,
 
+    @Column(name = "created_by_fk")
+    val createdById: Long? = null,
+
     @BatchSize(20)
     @OneToMany
     @JoinColumn(name = "workflow_instance_fk")
