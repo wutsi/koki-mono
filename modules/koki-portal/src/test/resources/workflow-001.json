@@ -31,7 +31,7 @@
       },
       {
         "name": "stop",
-        "type": "STOP"
+        "type": "END"
       }
     ],
     "flows": [
