@@ -7,6 +7,7 @@ import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.GetActivityInstanceResponse
 import com.wutsi.koki.workflow.dto.GetWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.SearchActivityInstanceResponse
+import com.wutsi.koki.workflow.dto.SearchWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.StartWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import org.springframework.web.client.RestTemplate
@@ -95,5 +96,32 @@ class KokiWorkflowInstance(
             )
         )
         return rest.getForEntity(url, SearchActivityInstanceResponse::class.java).body!!
+    }
+
+    fun searchWorkflows(
+        ids: List<String> = emptyList(),
+        workflowIds: List<Long> = emptyList(),
+        participantUserId: Long? = null,
+        status: WorkflowStatus? = null,
+        startFrom: Date? = null,
+        startTo: Date? = null,
+        limit: Int = 20,
+        offset: Int = 0,
+    ): SearchWorkflowInstanceResponse {
+        val fmt = SimpleDateFormat("yyyy-MM-dd")
+        val url = urlBuilder.build(
+            WORKFLOW_PATH_PREFIX,
+            mapOf(
+                "id" to ids,
+                "workflow-id" to workflowIds,
+                "participant-user-id" to participantUserId,
+                "status" to status?.name,
+                "start-from" to startFrom?.let { date -> fmt.format(date) },
+                "start-to" to startTo?.let { date -> fmt.format(date) },
+                "limit" to limit,
+                "offset" to offset,
+            )
+        )
+        return rest.getForEntity(url, SearchWorkflowInstanceResponse::class.java).body!!
     }
 }

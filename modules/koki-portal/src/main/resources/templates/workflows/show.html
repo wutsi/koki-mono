@@ -8,9 +8,17 @@
 <div th:replace="~{__components/layout :: navbar}"></div>
 
 <div class="container-fluid">
+    <h2>Workflow</h2>
     <div class="row">
-
         <div class="col-12 col-md-8">
+            <div class="widget">
+                <div class="widget-body">
+                    <a href="/">Home</a>
+                    &gt;
+                    <a href="/workflows">Workflows</a>
+                </div>
+            </div>
+
             <div class="widget">
                 <div class="widget-body">
                     <div class="widget-toolbar">
@@ -18,10 +26,6 @@
                            th:if="${workflow.workflowInstanceCount == 0}">Edit</a>
 
                         <a class="btn-start" th:href="${workflow.startUrl}">Start</a>
-                    </div>
-
-                    <div class="section-item">
-                        <h1 th:text="${workflow.longTitle}">TITLE</h1>
                     </div>
 
                     <div class="section-item">
@@ -33,15 +37,16 @@
                     <div class="section-item">
                         <table class="table">
                             <tr>
-                                <td><b>Approval?</b></td>
-                                <td>
-                                    <span th:if="${workflow.requiresApprover}">Yes</span>
-                                    <span th:if="!${workflow.requiresApprover}">No</span>
-                                </td>
+                                <td><b>ID</b></td>
+                                <td th:text="${workflow.id}">ID</td>
                             </tr>
-                            <tr th:if="${workflow.requiresApprover} AND ${workflow.approverRole}">
-                                <td><b>Approver Role</b></td>
-                                <td th:text="${workflow.approverRole.title}">APPROVER</td>
+                            <tr>
+                                <td><b>Name</b></td>
+                                <td th:text="${workflow.name}">NAME</td>
+                            </tr>
+                            <tr>
+                                <td><b>Title</b></td>
+                                <td th:text="${workflow.title}">TITLE</td>
                             </tr>
                             <tr>
                                 <td><b>Description</b></td>
@@ -91,6 +96,26 @@
         </div>
 
         <div class="col-12 col-md-4">
+            <div class="widget" th:if="${workflow.approverRole} OR !${workflow.roles.isEmpty()}">
+                <div class="widget-header">
+                    <h4 class="widget-title">Participants</h4>
+                </div>
+                <div class="widget-body">
+                    <table class="table">
+                        <tr th:if=" ${workflow.approverRole}">
+                            <td><b>Approver</b></td>
+                            <td th:text="${workflow.approverRole.title}">APPROVER</td>
+                        </tr>
+                        <tr th:if="!${workflow.roles.isEmpty()}">
+                            <td><b>Assignees</b></td>
+                            <td>
+                                <div th:each="role : ${workflow.roles}" th:text="${role.title}">ROLE</div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
             <div class="widget">
                 <div class="widget-body">
                     <table class="table table-striped">

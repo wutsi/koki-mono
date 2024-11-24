@@ -23,7 +23,7 @@ class WorkflowInstanceMapper {
         users: Map<Long, UserModel>,
         roles: Map<Long, RoleModel>,
     ): WorkflowInstanceModel {
-        val fmt = SimpleDateFormat("yyyy/MM/dd HH:mm")
+        val fmt = SimpleDateFormat("yyyy/MM/dd")
 
         val workflowInstance = WorkflowInstanceModel(
             id = entity.id,
@@ -57,7 +57,8 @@ class WorkflowInstanceMapper {
                 workflowInstance = workflowInstance,
                 activity = workflow.activities.find { activity -> activity.id == activityInstance.activityId }
                     ?: ActivityModel(id = activityInstance.activityId),
-                assignee = activityInstance.approverUserId?.let { userId -> users[userId] },
+                assignee = activityInstance.assigneeUserId?.let { userId -> users[userId] },
+                approver = activityInstance.approverUserId?.let { userId -> users[userId] },
             )
         }
         return workflowInstance
@@ -69,7 +70,7 @@ class WorkflowInstanceMapper {
         workflow: WorkflowModel,
         users: Map<Long, UserModel>,
     ): WorkflowInstanceModel {
-        val fmt = SimpleDateFormat("yyyy/MM/dd HH:mm")
+        val fmt = SimpleDateFormat("yyyy/MM/dd")
 
         val workflowInstance = WorkflowInstanceModel(
             id = entity.id,
@@ -94,6 +95,7 @@ class WorkflowInstanceMapper {
         activity: ActivityModel,
         workflowInstance: WorkflowInstanceModel,
         assignee: UserModel?,
+        approver: UserModel?
     ): ActivityInstanceModel {
         val fmt = SimpleDateFormat("yyyy/MM/dd HH:mm")
         return ActivityInstanceModel(
@@ -101,6 +103,7 @@ class WorkflowInstanceMapper {
             activity = activity,
             workflowInstance = workflowInstance,
             assignee = assignee,
+            approver = approver,
             status = entity.status,
             approval = entity.approval,
             createdAt = entity.createdAt,
@@ -121,7 +124,7 @@ class WorkflowInstanceMapper {
         assignee: UserModel?,
         approver: UserModel?,
     ): ActivityInstanceModel {
-        val fmt = SimpleDateFormat("yyyy/MM/dd HH:mm")
+        val fmt = SimpleDateFormat("yyyy/MM/dd")
         return ActivityInstanceModel(
             id = entity.id,
             workflowInstance = workflowInstance,

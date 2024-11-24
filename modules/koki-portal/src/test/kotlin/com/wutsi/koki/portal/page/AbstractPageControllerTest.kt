@@ -22,6 +22,9 @@ import com.wutsi.koki.tenant.dto.Role
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
 import com.wutsi.koki.tenant.dto.User
+import com.wutsi.koki.workflow.dto.SearchActivityInstanceResponse
+import com.wutsi.koki.workflow.dto.SearchActivityResponse
+import com.wutsi.koki.workflow.dto.SearchWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.SearchWorkflowResponse
 import org.apache.commons.io.IOUtils
 import org.junit.jupiter.api.AfterEach
@@ -36,10 +39,10 @@ import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.support.ui.Select
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpStatusCode
 import org.springframework.test.annotation.DirtiesContext
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.web.client.HttpClientErrorException
 import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
@@ -60,25 +63,25 @@ abstract class AbstractPageControllerTest {
 
     protected lateinit var driver: WebDriver
 
-    @MockBean
+    @MockitoBean
     protected lateinit var kokiAuthentication: KokiAuthentication
 
-    @MockBean
+    @MockitoBean
     protected lateinit var kokiForms: KokiForms
 
-    @MockBean
+    @MockitoBean
     protected lateinit var kokiUser: KokiUser
 
-    @MockBean
+    @MockitoBean
     protected lateinit var kokiWorkflow: KokiWorkflow
 
-    @MockBean
+    @MockitoBean
     protected lateinit var kokiWorkflowInstance: KokiWorkflowInstance
 
-    @MockBean
+    @MockitoBean
     protected lateinit var accessTokenHolder: AccessTokenHolder
 
-    @MockBean
+    @MockitoBean
     protected lateinit var jwtDecoder: JWTDecoder
 
     @Autowired
@@ -157,7 +160,36 @@ abstract class AbstractPageControllerTest {
         doReturn(SearchUserResponse()).whenever(kokiUser)
             .searchUsers(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
-        doReturn(SearchWorkflowResponse()).whenever(kokiWorkflow).searchWorkflows(any(), anyOrNull(), anyOrNull())
+        doReturn(SearchWorkflowResponse()).whenever(kokiWorkflow)
+            .searchWorkflows(any(), anyOrNull(), anyOrNull())
+
+        doReturn(SearchActivityResponse()).whenever(kokiWorkflow)
+            .searchActivities(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+
+        doReturn(SearchWorkflowInstanceResponse()).whenever(kokiWorkflowInstance)
+            .searchWorkflows(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull()
+            )
+
+        doReturn(SearchActivityInstanceResponse()).whenever(kokiWorkflowInstance)
+            .searchActivities(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull()
+            )
 
         doReturn(workflowPictureUrl).whenever(kokiWorkflow).getWorkflowImageUrl(any())
 
