@@ -90,6 +90,18 @@ class FormDataService(
     @Transactional
     fun submit(request: SubmitFormDataRequest, tenantId: Long): FormDataEntity {
         val form = formService.get(request.formId, tenantId)
+
+        if (request.workflowInstanceId != null) {
+            val formData = search(
+                tenantId = tenantId,
+                workflowInstanceIds = listOf(request.workflowInstanceId!!),
+                limit = 1
+            )
+            if (formData.isNotEmpty()) {
+                return update(formData[0], request.data)
+            }
+        }
+
         val now = Date()
         val formData = FormDataEntity(
             id = UUID.randomUUID().toString(),
@@ -107,9 +119,11 @@ class FormDataService(
     @Transactional
     fun update(formDataId: String, request: UpdateFormDataRequest, tenantId: Long): FormDataEntity {
         val formData = get(formDataId, tenantId)
+        return update(formData, request.data)
+    }
 
-        // Update
-        formData.data = objectMapper.writeValueAsString(request.data)
+    fun update(formData: FormDataEntity, data: Map<String, Any>): FormDataEntity {
+        formData.data = objectMapper.writeValueAsString(data)
         formData.modifiedAt = Date()
         return dao.save(formData)
     }

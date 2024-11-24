@@ -62,6 +62,6 @@ class WorkflowValidatorTest {
 
     @Test
     fun `number of rules`() {
-        assertEquals(13, validator.ruleCount())
+        assertEquals(14, validator.ruleCount())
     }
 }

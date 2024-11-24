@@ -26,7 +26,6 @@ class HTMLSectionWriter() : AbstractHTMLElementWriter() {
         writer.write("  <DIV class='section-body'>\n")
         element.elements?.forEach { child ->
             writer.write("    <DIV class='section-item'>\n")
-            writer.write("      ")
             context.provider
                 .get(child.type)
                 .write(

@@ -45,9 +45,10 @@ class ExportFormHTMLEndpoint(
         @PathVariable(name = "form-id") formId: String,
         @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
         @RequestParam(required = false, name = "activity-instance-id") activityInstanceId: String? = null,
+        @RequestParam(required = false, name = "read-only") readOnly: Boolean = false,
         response: HttpServletResponse
     ) {
-        generateHtml(tenantId, formId, null, workflowInstanceId, activityInstanceId, response)
+        generateHtml(tenantId, formId, null, workflowInstanceId, activityInstanceId, readOnly, response)
     }
 
     @GetMapping("/v1/forms/html/{tenant-id}/{form-id}/{form-data-id}.html")
@@ -56,9 +57,10 @@ class ExportFormHTMLEndpoint(
         @PathVariable(name = "form-id") formId: String,
         @PathVariable(name = "form-data-id") formDataId: String?,
         @RequestParam(required = false, name = "activity-instance-id") activityInstanceId: String? = null,
+        @RequestParam(required = false, name = "read-only") readOnly: Boolean = false,
         response: HttpServletResponse
     ) {
-        generateHtml(tenantId, formId, formDataId, null, activityInstanceId, response)
+        generateHtml(tenantId, formId, formDataId, null, activityInstanceId, readOnly, response)
     }
 
     private fun generateHtml(
@@ -67,12 +69,13 @@ class ExportFormHTMLEndpoint(
         formDataId: String?,
         workflowInstanceId: String?,
         activityInstanceId: String?,
+        readOnly: Boolean,
         response: HttpServletResponse
     ) {
         response.contentType = "text/html"
         try {
             val form = service.get(formId, tenantId)
-            val context = createContext(form, formDataId, workflowInstanceId, activityInstanceId, tenantId)
+            val context = createContext(form, formDataId, workflowInstanceId, activityInstanceId, readOnly, tenantId)
             val writer = StringWriter()
             val content = objectMapper.readValue(form.content, FormContent::class.java)
             generator.generate(content, context, writer)
@@ -95,6 +98,7 @@ class ExportFormHTMLEndpoint(
         formDataId: String?,
         workflowInstanceId: String?,
         activityInstanceId: String?,
+        readOnly: Boolean,
         tenantId: Long,
     ): Context {
         val data = if (formDataId != null) {
@@ -118,6 +122,7 @@ class ExportFormHTMLEndpoint(
         return Context(
             submitUrl = submitUrl.toString(),
             roleNames = getRoleNames(tenantId),
+            readOnly = readOnly,
             data = data?.let { data ->
                 objectMapper.readValue(data, Map::class.java) as Map<String, Any>
             } ?: emptyMap(),

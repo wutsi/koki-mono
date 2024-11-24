@@ -4,7 +4,7 @@ import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.WorkflowData
 import com.wutsi.koki.workflow.server.validation.ValidationError
 
-class WorkflowMustHaveAtLeastOneStopActivityRule : AbstractWorkflowRule() {
+class WorkflowMustHaveAtLeastOneEndActivityRule : AbstractWorkflowRule() {
     override fun validate(workflow: WorkflowData): List<ValidationError> {
         val activities = workflow.activities.filter { activity -> activity.type == ActivityType.STOP }
         return if (activities.isEmpty()) {

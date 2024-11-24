@@ -5,4 +5,5 @@ data class Context(
     val provider: HTMLElementWriterProvider = HTMLElementWriterProvider(),
     val submitUrl: String = "",
     val roleNames: List<String> = emptyList(),
+    val readOnly: Boolean = false,
 )

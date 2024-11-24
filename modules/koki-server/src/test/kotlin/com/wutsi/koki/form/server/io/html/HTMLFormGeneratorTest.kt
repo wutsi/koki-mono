@@ -68,4 +68,23 @@ class HTMLFormGeneratorTest {
             """.trimIndent()
         assertEquals(expected, writer.toString())
     }
+
+    @Test
+    fun readOnly() {
+        val xcontext = context.copy(readOnly = true)
+        generator.generate(form.content, xcontext, writer)
+
+        verify(elementWriter, times(3)).write(any(), eq(xcontext), eq(writer))
+        val expected = """
+                <DIV class='form test'>
+                    <DIV class='form-header'>
+                      <H1 class='form-title'>Sample form</H1>
+                      <DIV class='form-description'>This is an exempla of form</DIV>
+                    </DIV>
+                    <DIV class='form-body'>
+                    </DIV>
+                </DIV>
+            """.trimIndent()
+        assertEquals(expected, writer.toString())
+    }
 }

@@ -3,7 +3,7 @@ package com.wutsi.koki.workflow.dto
 enum class ActivityType {
     UNKNOWN,
     START,
-    STOP,
+    END,
     MANUAL,
     RECEIVE,
     SCRIPT,

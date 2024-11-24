@@ -8,7 +8,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class WorkflowMustHaveAtLeastOneStopActivityRuleTest {
-    private val rule = WorkflowMustHaveAtLeastOneStopActivityRule()
+    private val rule = WorkflowMustHaveAtLeastOneEndActivityRule()
 
     @Test
     fun success() {

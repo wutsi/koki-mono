@@ -11,9 +11,9 @@ import com.wutsi.koki.form.event.FormSubmittedEvent
 import com.wutsi.koki.form.server.dao.FormDataRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
 import java.util.UUID
 import kotlin.test.assertEquals
@@ -24,7 +24,7 @@ class SubmitFormDataEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var dao: FormDataRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var eventPublisher: EventPublisher
 
     private val request = SubmitFormDataRequest(
@@ -55,6 +55,28 @@ class SubmitFormDataEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.formId, event.firstValue.formId)
         assertEquals(formData.id, event.firstValue.formDataId)
         assertEquals(request.activityInstanceId, event.firstValue.activityInstanceId)
+        assertEquals(TENANT_ID, event.firstValue.tenantId)
+    }
+
+    @Test
+    fun update() {
+        val xrequest = request.copy(workflowInstanceId = "wi-100")
+
+        val result = rest.postForEntity("/v1/form-data", xrequest, SubmitFormDataResponse::class.java)
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val formDataId = result.body!!.formDataId
+        assertEquals("10011", formDataId)
+
+        val formData = dao.findById(formDataId).get()
+        assertEquals(xrequest.workflowInstanceId, formData.workflowInstanceId)
+        assertEquals("{\"A\": \"aa\", \"B\": \"bb\"}", formData.data)
+
+        val event = argumentCaptor<FormSubmittedEvent>()
+        verify(eventPublisher).publish(event.capture())
+        assertEquals(request.formId, event.firstValue.formId)
+        assertEquals(formData.id, event.firstValue.formDataId)
+        assertEquals(xrequest.activityInstanceId, event.firstValue.activityInstanceId)
         assertEquals(TENANT_ID, event.firstValue.tenantId)
     }
 }

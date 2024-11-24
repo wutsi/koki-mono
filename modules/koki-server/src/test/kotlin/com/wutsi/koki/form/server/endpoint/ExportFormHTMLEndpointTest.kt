@@ -13,20 +13,21 @@ import com.wutsi.koki.form.server.generator.html.HTMLFormGenerator
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
 import java.io.File
 import java.io.StringWriter
 import javax.imageio.ImageIO
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/form/ExportFormHTMLDataEndpoint.sql"])
 class ExportFormHTMLEndpointTest : AuthorizationAwareEndpointTest() {
     @LocalServerPort
     private lateinit var port: Integer
 
-    @MockBean
+    @MockitoBean
     private lateinit var generator: HTMLFormGenerator
 
     private fun download(url: String, statusCode: Int, filename: String? = null): File? {
@@ -51,7 +52,7 @@ class ExportFormHTMLEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
     fun `empty form`() {
         val url =
-            "http://localhost:$port/v1/forms/html/1/100.html?&workflow-instance-id=xxx&activity-instance-id=yyy"
+            "http://localhost:$port/v1/forms/html/1/100.html?&workflow-instance-id=xxx&activity-instance-id=yyy&read-only=true"
 
         val file = download(url, 200, "100.html")
         assertTrue(file!!.length() > 0L)
@@ -68,6 +69,7 @@ class ExportFormHTMLEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(2, context.firstValue.roleNames.size)
         assertTrue(context.firstValue.roleNames.contains("accountant"))
         assertTrue(context.firstValue.roleNames.contains("technician"))
+        assertTrue(context.firstValue.readOnly)
 
         assertEquals(0, context.firstValue.data.size)
     }
@@ -88,6 +90,7 @@ class ExportFormHTMLEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(2, context.firstValue.roleNames.size)
         assertTrue(context.firstValue.roleNames.contains("accountant"))
         assertTrue(context.firstValue.roleNames.contains("technician"))
+        assertFalse(context.firstValue.readOnly)
 
         assertEquals(2, context.firstValue.data.size)
         assertEquals(2, context.firstValue.data.size)

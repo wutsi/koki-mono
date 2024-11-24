@@ -9,7 +9,10 @@ import java.io.StringWriter
 class HTMLFormGenerator {
     fun generate(content: FormContent, context: Context, writer: StringWriter) {
         writer.write("<DIV class='form ${content.name.lowercase()}'>\n")
-        writer.write("  <FORM method='post' action='${context.submitUrl}'>\n")
+
+        if (!context.readOnly) {
+            writer.write("  <FORM method='post' action='${context.submitUrl}'>\n")
+        }
 
         writer.write("    <DIV class='form-header'>\n")
         writer.write("      <H1 class='form-title'>${StringEscapeUtils.escapeHtml4(content.title)}</H1>\n")
@@ -26,12 +29,15 @@ class HTMLFormGenerator {
         }
         writer.write("    </DIV>\n")
 
-        writer.write("    <DIV class='form-footer'>\n")
-        writer.write("      <DIV class='form-button-group'>\n")
-        writer.write("        <BUTTON type='submit'>Submit</BUTTON>\n")
-        writer.write("      </DIV>\n")
-        writer.write("    </DIV>\n")
-        writer.write("  </FORM>\n")
+        if (!context.readOnly) {
+            writer.write("    <DIV class='form-footer'>\n")
+            writer.write("      <DIV class='form-button-group'>\n")
+            writer.write("        <BUTTON type='submit'>Submit</BUTTON>\n")
+            writer.write("      </DIV>\n")
+            writer.write("    </DIV>\n")
+            writer.write("  </FORM>\n")
+        }
+
         writer.write("</DIV>")
     }
 }
