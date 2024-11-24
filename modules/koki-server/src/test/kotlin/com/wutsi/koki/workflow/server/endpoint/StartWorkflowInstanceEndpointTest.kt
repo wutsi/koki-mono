@@ -18,8 +18,8 @@ import com.wutsi.koki.workflow.server.engine.ActivityExecutorProvider
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpStatus
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -37,7 +37,7 @@ class StartWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var activityInstanceDao: ActivityInstanceRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var activityExecutorProvider: ActivityExecutorProvider
 
     @BeforeTest

@@ -72,7 +72,7 @@ class ExportWorkflowJSONEndpointTest : TenantAwareEndpointTest() {
 
         assertEquals("STOP", activities[1].name)
         assertEquals("Done", activities[1].title)
-        assertEquals(ActivityType.STOP, activities[1].type)
+        assertEquals(ActivityType.END, activities[1].type)
         assertEquals(null, activities[1].form)
         assertEquals(null, activities[1].role)
         assertEquals(false, activities[1].requiresApproval)

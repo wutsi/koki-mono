@@ -13,8 +13,8 @@ import com.wutsi.koki.form.event.FormUpdatedEvent
 import com.wutsi.koki.form.server.dao.FormDataRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpStatus
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
 import java.util.UUID
 import kotlin.test.assertEquals
@@ -32,7 +32,7 @@ class UpdateFormDataEndpointTest : TenantAwareEndpointTest() {
         activityInstanceId = UUID.randomUUID().toString()
     )
 
-    @MockBean
+    @MockitoBean
     private lateinit var eventPublisher: EventPublisher
 
     @Test

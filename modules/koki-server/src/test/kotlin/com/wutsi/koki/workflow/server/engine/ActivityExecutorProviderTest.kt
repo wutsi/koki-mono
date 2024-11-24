@@ -1,9 +1,9 @@
 package com.wutsi.koki.workflow.server.engine
 
 import com.wutsi.koki.workflow.dto.ActivityType
+import com.wutsi.koki.workflow.server.service.EndExecutor
 import com.wutsi.koki.workflow.server.service.ManualExecutor
 import com.wutsi.koki.workflow.server.service.StartExecutor
-import com.wutsi.koki.workflow.server.service.StopExecutor
 import com.wutsi.koki.workflow.server.service.UserExecutor
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -14,7 +14,7 @@ import kotlin.test.assertEquals
 
 class ActivityExecutorProviderTest {
     private val start = Mockito.mock(StartExecutor::class.java)
-    private val stop = Mockito.mock(StopExecutor::class.java)
+    private val stop = Mockito.mock(EndExecutor::class.java)
     private val manual = Mockito.mock(ManualExecutor::class.java)
     private val user = Mockito.mock(UserExecutor::class.java)
     private val provider = ActivityExecutorProvider(start, stop, manual, user)
@@ -26,7 +26,7 @@ class ActivityExecutorProviderTest {
 
     @Test
     fun stop() {
-        assertEquals(stop, provider.get(ActivityType.STOP))
+        assertEquals(stop, provider.get(ActivityType.END))
     }
 
     @Test

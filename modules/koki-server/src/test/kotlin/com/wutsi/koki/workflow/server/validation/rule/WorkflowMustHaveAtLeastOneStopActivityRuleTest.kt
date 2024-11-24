@@ -19,7 +19,7 @@ class WorkflowMustHaveAtLeastOneStopActivityRuleTest {
                 activities = listOf(
                     ActivityData(name = "start", type = ActivityType.START),
                     ActivityData(name = "invoice", type = ActivityType.MANUAL),
-                    ActivityData(name = "stop", type = ActivityType.STOP),
+                    ActivityData(name = "stop", type = ActivityType.END),
                 )
             )
         )

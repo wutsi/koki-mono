@@ -16,8 +16,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpStatus
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
 import javax.sql.DataSource
 import kotlin.test.assertEquals
@@ -32,7 +32,7 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var dao: UserRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var passwordService: PasswordService
 
     @Autowired

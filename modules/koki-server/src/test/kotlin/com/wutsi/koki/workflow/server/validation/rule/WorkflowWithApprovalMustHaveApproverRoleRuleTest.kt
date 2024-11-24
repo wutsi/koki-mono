@@ -20,7 +20,7 @@ class WorkflowWithApprovalMustHaveApproverRoleRuleTest {
                 activities = listOf(
                     ActivityData(name = "start", type = ActivityType.START),
                     ActivityData(name = "invoice", type = ActivityType.MANUAL, requiresApproval = true),
-                    ActivityData(name = "stop", type = ActivityType.STOP),
+                    ActivityData(name = "stop", type = ActivityType.END),
                 )
             )
         )
@@ -38,7 +38,7 @@ class WorkflowWithApprovalMustHaveApproverRoleRuleTest {
                 activities = listOf(
                     ActivityData(name = "start", type = ActivityType.START),
                     ActivityData(name = "invoice", type = ActivityType.MANUAL, requiresApproval = true),
-                    ActivityData(name = "stop", type = ActivityType.STOP),
+                    ActivityData(name = "stop", type = ActivityType.END),
                 )
             )
         )
@@ -57,7 +57,7 @@ class WorkflowWithApprovalMustHaveApproverRoleRuleTest {
                 activities = listOf(
                     ActivityData(name = "start", type = ActivityType.START),
                     ActivityData(name = "invoice", type = ActivityType.MANUAL, requiresApproval = true),
-                    ActivityData(name = "stop", type = ActivityType.STOP),
+                    ActivityData(name = "stop", type = ActivityType.END),
                 )
             )
         )

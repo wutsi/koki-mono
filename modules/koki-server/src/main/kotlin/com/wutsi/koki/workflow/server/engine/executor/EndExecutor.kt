@@ -7,11 +7,11 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
-class StopExecutor(
+class EndExecutor(
     private val workflowInstanceService: WorkflowInstanceService
 ) : ActivityExecutor {
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(StopExecutor::class.java)
+        private val LOGGER = LoggerFactory.getLogger(EndExecutor::class.java)
     }
 
     override fun execute(activityInstance: ActivityInstanceEntity, engine: WorkflowEngine) {
