@@ -151,6 +151,7 @@ class MyTasksWidgetControllerTest : AbstractPageControllerTest() {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
+                anyOrNull(),
                 anyOrNull()
             )
     }
