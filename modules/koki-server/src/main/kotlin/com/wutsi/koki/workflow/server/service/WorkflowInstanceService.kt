@@ -51,7 +51,7 @@ class WorkflowInstanceService(
         participantUserIds: List<Long> = emptyList(),
         participantRoleIds: List<Long> = emptyList(),
         createdById: Long? = null,
-        status: WorkflowStatus?,
+        status: List<WorkflowStatus> = emptyList(),
         startFrom: Date?,
         startTo: Date?,
         tenantId: Long,
@@ -79,7 +79,7 @@ class WorkflowInstanceService(
         if (createdById != null) {
             jql.append(" AND W.createdById IN :createdById")
         }
-        if (status != null) {
+        if (status.isNotEmpty()) {
             jql.append(" AND W.status IN :status")
         }
         if (startFrom != null) {
@@ -106,7 +106,7 @@ class WorkflowInstanceService(
         if (createdById != null) {
             query.setParameter("createdById", createdById)
         }
-        if (status != null) {
+        if (status.isNotEmpty()) {
             query.setParameter("status", status)
         }
         if (startFrom != null) {

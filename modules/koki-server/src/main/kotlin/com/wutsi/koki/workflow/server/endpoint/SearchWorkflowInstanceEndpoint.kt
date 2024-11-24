@@ -26,7 +26,7 @@ class SearchWorkflowInstanceEndpoint(
         @RequestParam(required = false, name = "participant-user-id") participantUserIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "participant-role-id") participantRoleIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "created-by-id") createdById: Long? = null,
-        @RequestParam(required = false) status: WorkflowStatus? = null,
+        @RequestParam(required = false) status: List<WorkflowStatus> = emptyList(),
 
         @RequestParam(required = false, name = "start-from")
         @DateTimeFormat(pattern = "yyyy-MM-dd")

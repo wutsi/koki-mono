@@ -8,7 +8,8 @@ INSERT INTO T_ROLE(id, tenant_fk, name)
            (12, 1, 'boss');
 
 INSERT INTO T_USER(id, tenant_fk, email, password, salt, display_name)
-    VALUES (100, 1, 'ray.sponsible100@gmail.com', '--', '--', 'Ray Sponsible100'),
+    VALUES (12,  1, 'ray.sponsible12@gmail.com', '--', '--',  'Ray Sponsible12'),
+           (100, 1, 'ray.sponsible100@gmail.com', '--', '--', 'Ray Sponsible100'),
            (101, 1, 'ray.sponsible101@gmail.com', '--', '--', 'Ray Sponsible102'),
            (102, 1, 'ray.sponsible102@gmail.com', '--', '--', 'Ray Sponsible103'),
            (103, 1, 'ray.sponsible103@gmail.com', '--', '--', 'Ray Sponsible104'),
