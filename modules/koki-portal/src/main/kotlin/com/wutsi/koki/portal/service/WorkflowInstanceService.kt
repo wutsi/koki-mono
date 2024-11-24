@@ -83,7 +83,7 @@ class WorkflowInstanceService(
         participantUserIds: List<Long> = emptyList(),
         participantRoleIds: List<Long> = emptyList(),
         createdById: Long? = null,
-        status: WorkflowStatus? = null,
+        status: List<WorkflowStatus> = emptyList(),
         startFrom: Date? = null,
         startTo: Date? = null,
         limit: Int = 20,
