@@ -9,14 +9,19 @@ class URLBuilder(private val baseUrl: String) {
     ): String {
         val address = "${baseUrl}$path"
         val queryString = parameters
-            .filter { parameter -> parameter.value != null }
-            .map { parameter ->
+            .mapNotNull { parameter ->
                 val value = parameter.value
                 if (value is Collection<*>) {
-                    value.map { "${parameter.key}=" + URLEncoder.encode(it.toString(), "utf-8") }
-                        .joinToString(separator = "&")
-                } else {
+                    if (value.isNotEmpty()) {
+                        value.map { "${parameter.key}=" + URLEncoder.encode(it.toString(), "utf-8") }
+                            .joinToString(separator = "&")
+                    } else {
+                        null
+                    }
+                } else if (value != null) {
                     "${parameter.key}=" + URLEncoder.encode(parameter.value.toString(), "utf-8")
+                } else {
+                    null
                 }
             }
             .joinToString(separator = "&")
