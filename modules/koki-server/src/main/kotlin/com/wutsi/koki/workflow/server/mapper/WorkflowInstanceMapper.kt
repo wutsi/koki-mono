@@ -38,6 +38,7 @@ class WorkflowInstanceMapper(
             activityInstances = entity.activityInstances.map { activityInstance ->
                 activityInstanceMapper.toActivityInstanceSummary(activityInstance)
             },
+            createdById = entity.createdById,
         )
     }
 
@@ -51,6 +52,7 @@ class WorkflowInstanceMapper(
             status = entity.status,
             dueAt = entity.dueAt,
             startAt = entity.startAt,
+            createdById = entity.createdById,
         )
     }
 }
