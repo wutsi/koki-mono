@@ -20,7 +20,7 @@ class SearchWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
-    fun participant() {
+    fun participantUser() {
         val result = rest.getForEntity(
             "/v1/workflow-instances?participant-user-id=100",
             SearchWorkflowInstanceResponse::class.java
@@ -33,6 +33,39 @@ class SearchWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
 
         assertEquals("wi-100-01", workflows[0].id)
         assertEquals("wi-100-02", workflows[1].id)
+    }
+
+    @Test
+    fun participantRole() {
+        val result = rest.getForEntity(
+            "/v1/workflow-instances?participant-role-id=10&participant-role-id=12",
+            SearchWorkflowInstanceResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val workflows = result.body!!.workflowInstances
+        assertEquals(3, workflows.size)
+
+        assertEquals("wi-100-01", workflows[0].id)
+        assertEquals("wi-100-02", workflows[1].id)
+        assertEquals("wi-100-03", workflows[2].id)
+    }
+
+    @Test
+    fun creator() {
+        val result = rest.getForEntity(
+            "/v1/workflow-instances?created-by-id=12",
+            SearchWorkflowInstanceResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val workflows = result.body!!.workflowInstances
+        assertEquals(2, workflows.size)
+
+        assertEquals("wi-100-06", workflows[0].id)
+        assertEquals("wi-110-01", workflows[1].id)
     }
 
     @Test

@@ -48,7 +48,9 @@ class WorkflowInstanceService(
     fun search(
         ids: List<String>,
         workflowIds: List<Long>,
-        participantUserId: Long?,
+        participantUserIds: List<Long> = emptyList(),
+        participantRoleIds: List<Long> = emptyList(),
+        createdById: Long? = null,
         status: WorkflowStatus?,
         startFrom: Date?,
         startTo: Date?,
@@ -57,7 +59,7 @@ class WorkflowInstanceService(
         offset: Int,
     ): List<WorkflowInstanceEntity> {
         val jql = StringBuilder("SELECT W FROM WorkflowInstanceEntity W")
-        if (participantUserId != null) {
+        if (participantUserIds.isNotEmpty() || participantRoleIds.isNotEmpty()) {
             jql.append(" JOIN W.participants P")
         }
 
@@ -68,8 +70,14 @@ class WorkflowInstanceService(
         if (workflowIds.isNotEmpty()) {
             jql.append(" AND W.workflowId IN :workflowIds")
         }
-        if (participantUserId != null) {
-            jql.append(" AND P.userId = :participantUserId")
+        if (participantUserIds.isNotEmpty()) {
+            jql.append(" AND P.userId IN :participantUserIds")
+        }
+        if (participantRoleIds.isNotEmpty()) {
+            jql.append(" AND P.roleId IN :participantRoleIds")
+        }
+        if (createdById != null) {
+            jql.append(" AND W.createdById IN :createdById")
         }
         if (status != null) {
             jql.append(" AND W.status IN :status")
@@ -89,8 +97,14 @@ class WorkflowInstanceService(
         if (workflowIds.isNotEmpty()) {
             query.setParameter("workflowIds", workflowIds)
         }
-        if (participantUserId != null) {
-            query.setParameter("participantUserId", participantUserId)
+        if (participantUserIds.isNotEmpty()) {
+            query.setParameter("participantUserIds", participantUserIds)
+        }
+        if (participantRoleIds.isNotEmpty()) {
+            query.setParameter("participantRoleIds", participantRoleIds)
+        }
+        if (createdById != null) {
+            query.setParameter("createdById", createdById)
         }
         if (status != null) {
             query.setParameter("status", status)

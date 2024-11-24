@@ -23,7 +23,9 @@ class SearchWorkflowInstanceEndpoint(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false, name = "id") ids: List<String> = emptyList(),
         @RequestParam(required = false, name = "workflow-id") workflowIds: List<Long> = emptyList(),
-        @RequestParam(required = false, name = "participant-user-id") participantUserId: Long? = null,
+        @RequestParam(required = false, name = "participant-user-id") participantUserIds: List<Long> = emptyList(),
+        @RequestParam(required = false, name = "participant-role-id") participantRoleIds: List<Long> = emptyList(),
+        @RequestParam(required = false, name = "created-by-id") createdById: Long? = null,
         @RequestParam(required = false) status: WorkflowStatus? = null,
 
         @RequestParam(required = false, name = "start-from")
@@ -40,7 +42,9 @@ class SearchWorkflowInstanceEndpoint(
         val workflows = service.search(
             ids = ids,
             workflowIds = workflowIds,
-            participantUserId = participantUserId,
+            participantUserIds = participantUserIds,
+            participantRoleIds = participantRoleIds,
+            createdById = createdById,
             status = status,
             startFrom = startFrom,
             startTo = startTo,
