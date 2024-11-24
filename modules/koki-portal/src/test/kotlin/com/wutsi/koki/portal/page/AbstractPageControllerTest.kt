@@ -175,11 +175,13 @@ abstract class AbstractPageControllerTest {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
+                anyOrNull(),
                 anyOrNull()
             )
 
         doReturn(SearchActivityInstanceResponse()).whenever(kokiWorkflowInstance)
             .searchActivities(
+                anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),

@@ -80,7 +80,8 @@ class WorkflowInstanceService(
     fun workflows(
         ids: List<String> = emptyList(),
         workflowIds: List<Long> = emptyList(),
-        participantUserId: Long? = null,
+        participantUserIds: List<Long> = emptyList(),
+        participantRoleIds: List<Long> = emptyList(),
         status: WorkflowStatus? = null,
         startFrom: Date? = null,
         startTo: Date? = null,
@@ -90,7 +91,8 @@ class WorkflowInstanceService(
         val workflowInstances = kokiWorkflowInstance.searchWorkflows(
             ids = ids,
             workflowIds = workflowIds,
-            participantUserId = participantUserId,
+            participantUserIds = participantUserIds,
+            participantRoleIds = participantRoleIds,
             status = status,
             startFrom = startFrom,
             startTo = startTo,
@@ -177,6 +179,7 @@ class WorkflowInstanceService(
 
     fun activities(
         ids: List<String> = emptyList(),
+        workflowInstanceIds: List<String> = emptyList(),
         assigneeIds: List<Long> = emptyList(),
         approverIds: List<Long> = emptyList(),
         status: WorkflowStatus? = null,
@@ -191,6 +194,7 @@ class WorkflowInstanceService(
         // Activity Instances
         val activityInstances = kokiWorkflowInstance.searchActivities(
             ids = ids,
+            workflowInstanceIds = workflowInstanceIds,
             assigneeIds = assigneeIds,
             approverIds = approverIds,
             status = status,
