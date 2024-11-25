@@ -5,20 +5,28 @@
 </head>
 
 <body>
-<div class="form">
-    <div class="form-header">
-        <h1 th:text="${title}">TITLE</h1>
-    </div>
-    <div class="form-body">
-        <div class="section">
-            <div class="section-body">
-                <div class="success-message">
-                    Your form have successfully been recorded.
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-12 col-md-8 offset-md-2">
+            <div class="form">
+                <div class="form-header">
+                    <h1 th:text="${title}">TITLE</h1>
+                </div>
+                <div class="form-body">
+                    <div class="section">
+                        <div class="section-body">
+                            <div class="success-message">
+                                Your form have successfully been recorded.
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
+    </div>
 </body>
 </html>

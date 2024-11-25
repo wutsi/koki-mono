@@ -7,17 +7,23 @@
             <tr>
                 <th>Case</th>
                 <td>Status</td>
+                <td>Due</td>
+                <td>Created</td>
             </tr>
             <tr th:each="workflowInstance : ${workflowInstances}">
                 <td>
                     <a th:href="${workflowInstance.url}">
-                        <span th:text="${workflowInstance.workflowInstance.workflow.longTitle}">WORKFLOW</span>
+                        <span th:text="${workflowInstance.workflow.longTitle}">WORKFLOW</span>
                     </a>
                 </td>
                 <td>
                     <div
                         th:replace="~{__components/workflow :: workflow-status(${workflowInstance.status})}"></div>
                 </td>
+                <td>
+                    <span th:if="${workflowInstance.createdAt}" th:text="${workflowInstance.dueAtText}">DUE</span>
+                </td>
+                <td th:text="${workflowInstance.createdAtText}">CREATED</td>
             </tr>
         </table>
     </div>
