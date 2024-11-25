@@ -8,7 +8,6 @@ import com.wutsi.koki.error.exception.BadRequestException
 import com.wutsi.koki.tenant.server.service.RoleService
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceResponse
-import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowEntity
 import com.wutsi.koki.workflow.server.service.ActivityService
 import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
@@ -44,11 +43,7 @@ class CreateWorkflowInstanceEndpoint(
 
     private fun validate(request: CreateWorkflowInstanceRequest, workflow: WorkflowEntity) {
         checkWorkflowStatus(workflow)
-
-        val activities = activityService.getByWorkflow(workflow)
         checkParameters(request, workflow)
-        checkApprover(request, activities)
-        checkParticipants(request, workflow, activities)
     }
 
     private fun checkWorkflowStatus(workflow: WorkflowEntity) {
@@ -76,43 +71,6 @@ class CreateWorkflowInstanceEndpoint(
         request.parameters.keys.forEach { param ->
             if (!parameters.contains(param)) {
                 throw badRequest(ErrorCode.WORKFLOW_INSTANCE_PARAMETER_NOT_VALID, param)
-            }
-        }
-    }
-
-    private fun checkApprover(
-        request: CreateWorkflowInstanceRequest,
-        activities: List<ActivityEntity>
-    ) {
-        val requiresApprover = activities.find { activity -> activity.requiresApproval } != null
-        if (requiresApprover && request.approverUserId == null) {
-            throw badRequest(ErrorCode.WORKFLOW_INSTANCE_APPROVER_MISSING)
-        }
-    }
-
-    private fun checkParticipants(
-        request: CreateWorkflowInstanceRequest,
-        workflow: WorkflowEntity,
-        activities: List<ActivityEntity>
-    ) {
-        val roleIds = activities.mapNotNull { activity -> activity.roleId }.distinct()
-        if (roleIds.isEmpty()) {
-            return
-        }
-        val roles = roleService.getAll(roleIds, workflow.tenantId)
-
-        // Missing roles
-        roles.forEach { role ->
-            val participant = request.participants.find { participant -> participant.roleId == role.id }
-            if (participant == null) {
-                throw badRequest(ErrorCode.WORKFLOW_INSTANCE_PARTICIPANT_MISSING, role.name)
-            }
-        }
-
-        // Invalid participants
-        request.participants.forEach { participant ->
-            if (!roleIds.contains(participant.roleId)) {
-                throw badRequest(ErrorCode.WORKFLOW_INSTANCE_PARTICIPANT_NOT_VALID, participant.roleId.toString())
             }
         }
     }

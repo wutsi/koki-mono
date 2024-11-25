@@ -171,6 +171,10 @@
                             <td><b>Created</b></td>
                             <td th:text="${workflowInstance.createdAtText}">CREATED</td>
                         </tr>
+                        <tr th:if="${workflowInstance.doneAt}">
+                            <td><b>Done</b></td>
+                            <td th:text="${workflowInstance.doneAtText}">DONE</td>
+                        </tr>
                     </table>
                 </div>
             </div>
