@@ -28,19 +28,21 @@ class WorkflowInstanceMapper {
         val workflowInstance = WorkflowInstanceModel(
             id = entity.id,
             createdAt = entity.createdAt,
+            createdAtText = fmt.format(entity.createdAt),
+            doneAt = entity.doneAt,
+            doneAtText = entity.doneAt?.let { date -> fmt.format(date) },
             dueAt = entity.dueAt,
+            dueAtText = entity.dueAt?.let { date -> fmt.format(date) },
             startAt = entity.startAt,
+            startAtText = fmt.format(entity.startAt),
             startedAt = entity.startedAt,
+            startedAtText = entity.startedAt?.let { date -> fmt.format(date) },
             state = entity.state,
             parameters = entity.parameters,
             status = entity.status,
             approver = entity.approverUserId?.let { userId -> users[userId] },
             workflow = workflow,
             imageUrl = imageUrl,
-            createdAtText = fmt.format(entity.createdAt),
-            startAtText = fmt.format(entity.startAt),
-            dueAtText = entity.dueAt?.let { date -> fmt.format(date) },
-            startedAtText = entity.startedAt?.let { date -> fmt.format(date) },
             participants = entity.participants.mapNotNull { participant ->
                 val user = users[participant.userId]
                 val role = roles[participant.roleId]
@@ -75,17 +77,19 @@ class WorkflowInstanceMapper {
         val workflowInstance = WorkflowInstanceModel(
             id = entity.id,
             createdAt = entity.createdAt,
+            createdAtText = fmt.format(entity.createdAt),
             dueAt = entity.dueAt,
+            dueAtText = entity.dueAt?.let { date -> fmt.format(date) },
             startAt = entity.startAt,
+            startAtText = fmt.format(entity.startAt),
             startedAt = entity.startedAt,
+            startedAtText = entity.startedAt?.let { date -> fmt.format(date) },
             status = entity.status,
             approver = entity.approverUserId?.let { userId -> users[userId] },
             workflow = workflow,
             imageUrl = imageUrl,
-            createdAtText = fmt.format(entity.createdAt),
-            startAtText = fmt.format(entity.startAt),
-            dueAtText = entity.dueAt?.let { date -> fmt.format(date) },
-            startedAtText = entity.startedAt?.let { date -> fmt.format(date) },
+            doneAt = entity.doneAt,
+            doneAtText = entity.doneAt?.let { date -> fmt.format(date) },
         )
         return workflowInstance
     }

@@ -20,7 +20,7 @@ class WorkflowMapper(
     }
 
     fun toWorkflow(entity: WorkflowEntity): Workflow {
-        val activities = entity.activities.map { activity -> activityMapper.toActivity(activity) }
+        val activities = sortActivities(entity).map { activity -> activityMapper.toActivity(activity) }
         return Workflow(
             id = entity.id!!,
             name = entity.name,
@@ -34,7 +34,7 @@ class WorkflowMapper(
                 .mapNotNull { activity -> activity.roleId }
                 .distinctBy { roleId -> roleId }
                 .sorted(),
-            requiresApprover = sortActivities(entity).find { activity -> activity.requiresApproval } != null,
+            requiresApprover = entity.activities.find { activity -> activity.requiresApproval } != null,
             parameters = entity.parameterAsList(),
             flows = entity.flows.map { flow -> flowMapper.toFlow(flow) },
             approverRoleId = entity.approverRoleId,

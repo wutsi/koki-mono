@@ -21,6 +21,8 @@ data class WorkflowInstanceModel(
     val startAtText: String = "",
     val startedAtText: String? = null,
     val dueAtText: String? = null,
+    val doneAt: Date? = null,
+    val doneAtText: String? = null,
 ) {
     val url: String
         get() = "/workflows/instances/$id"

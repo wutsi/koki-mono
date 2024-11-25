@@ -23,6 +23,7 @@ class WorkflowInstanceMapper(
             status = entity.status,
             dueAt = entity.dueAt,
             startAt = entity.startAt,
+            doneAt = entity.doneAt,
             state = entity.state?.let { state ->
                 objectMapper.readValue(state, Map::class.java) as Map<String, Any>
             } ?: emptyMap(),
@@ -53,6 +54,7 @@ class WorkflowInstanceMapper(
             dueAt = entity.dueAt,
             startAt = entity.startAt,
             createdById = entity.createdById,
+            doneAt = entity.doneAt,
         )
     }
 }
