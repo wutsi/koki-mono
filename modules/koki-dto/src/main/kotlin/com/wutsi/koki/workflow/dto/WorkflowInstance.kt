@@ -16,4 +16,5 @@ data class WorkflowInstance(
     val state: Map<String, Any> = emptyMap(),
     val activityInstances: List<ActivityInstanceSummary> = emptyList(),
     val createdById: Long? = null,
+    val doneAt: Date? = null,
 )
