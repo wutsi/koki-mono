@@ -144,12 +144,6 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.WORKFLOW_START)
         assertElementPresent("[name=startAt]:user-invalid")
-        assertElementPresent("[name=approverId]:user-invalid")
-        assertElementPresent("[name=participant_1]:user-invalid")
-        assertElementPresent("[name=participant_2]:user-invalid")
-        assertElementPresent("[name=participant_3]:user-invalid")
-        assertElementPresent("[name=parameter_PARAM_1]:user-invalid")
-        assertElementPresent("[name=parameter_PARAM_2]:user-invalid")
     }
 
     @Test

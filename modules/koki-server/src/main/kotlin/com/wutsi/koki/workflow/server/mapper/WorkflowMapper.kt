@@ -69,5 +69,4 @@ class WorkflowMapper(
             return workflow.activities
         }
     }
-
 }
