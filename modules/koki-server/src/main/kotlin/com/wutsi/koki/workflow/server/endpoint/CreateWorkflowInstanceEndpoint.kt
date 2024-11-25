@@ -48,7 +48,7 @@ class CreateWorkflowInstanceEndpoint(
         val activities = activityService.getByWorkflow(workflow)
         checkParameters(request, workflow)
         checkApprover(request, activities)
-        checkParticipants(request, workflow, activities)
+        checkParticipants(request, activities)
     }
 
     private fun checkWorkflowStatus(workflow: WorkflowEntity) {
@@ -92,21 +92,11 @@ class CreateWorkflowInstanceEndpoint(
 
     private fun checkParticipants(
         request: CreateWorkflowInstanceRequest,
-        workflow: WorkflowEntity,
         activities: List<ActivityEntity>
     ) {
         val roleIds = activities.mapNotNull { activity -> activity.roleId }.distinct()
         if (roleIds.isEmpty()) {
             return
-        }
-        val roles = roleService.getAll(roleIds, workflow.tenantId)
-
-        // Missing roles
-        roles.forEach { role ->
-            val participant = request.participants.find { participant -> participant.roleId == role.id }
-            if (participant == null) {
-                throw badRequest(ErrorCode.WORKFLOW_INSTANCE_PARTICIPANT_MISSING, role.name)
-            }
         }
 
         // Invalid participants

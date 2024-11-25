@@ -139,12 +139,18 @@ class CreateWorkflowInstanceEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `missing participant`() {
-        val xrequest = request.copy(participants = listOf(Participant(roleId = 10L, userId = 100L)))
-        val result = rest.postForEntity("/v1/workflow-instances", xrequest, ErrorResponse::class.java)
+    fun `no participant`() {
+        val xrequest = request.copy(participants = emptyList())
+        val result = rest.postForEntity("/v1/workflow-instances", xrequest, CreateWorkflowInstanceResponse::class.java)
 
-        assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
-        assertEquals(ErrorCode.WORKFLOW_INSTANCE_PARTICIPANT_MISSING, result.body?.error?.code)
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val instanceId = result.body!!.workflowInstanceId
+        val instance = instanceDao.findById(instanceId).get()
+        assertEquals(xrequest.workflowId, instance.workflowId)
+
+        val participants = participanDao.findByWorkflowInstanceId(instanceId).sortedBy { it.roleId }
+        assertEquals(0, participants.size)
     }
 
     @Test
