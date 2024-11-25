@@ -68,7 +68,6 @@
                                 <th width="1%"></th>
                                 <th>Title</th>
                                 <th>Role</th>
-                                <th>Form</th>
                                 <th>Approval?</th>
                             </tr>
                             <tr class="activity" th:each="activity: ${workflow.activities}">
@@ -79,10 +78,6 @@
                                 <td th:text="${activity.longTitle}">TITLE</td>
                                 <td>
                                     <span th:if="${activity.role}" th:text="${activity.role.title}">ROLE</span>
-                                </td>
-                                <td>
-                                    <a th:href="${activity.form.viewUrl}" th:if="${activity.form}">
-                                        <span th:if="${activity.form}" th:text="${activity.form.name}">FORM</span></a>
                                 </td>
                                 <td>
                                     <span th:if="${activity.requiresApproval}">Yes</span>

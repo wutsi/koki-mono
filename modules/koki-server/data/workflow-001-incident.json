@@ -50,12 +50,12 @@
       },
       {
         "from": "evaluate",
-        "to": "stop",
+        "to": "end",
         "expression": "hr_approval=='rejected'"
       },
       {
         "from": "payment",
-        "to": "stop"
+        "to": "end"
       }
     ]
   }

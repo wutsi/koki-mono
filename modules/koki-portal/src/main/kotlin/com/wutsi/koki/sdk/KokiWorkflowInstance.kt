@@ -71,6 +71,7 @@ class KokiWorkflowInstance(
 
     fun searchActivities(
         ids: List<String> = emptyList(),
+        workflowInstanceIds: List<String> = emptyList(),
         assigneeIds: List<Long> = emptyList(),
         approverIds: List<Long> = emptyList(),
         status: WorkflowStatus? = null,
@@ -85,6 +86,7 @@ class KokiWorkflowInstance(
             ACTIVITY_PATH_PREFIX,
             mapOf(
                 "id" to ids,
+                "workflow-instance-id" to workflowInstanceIds,
                 "assignee-id" to assigneeIds,
                 "approver-id" to approverIds,
                 "status" to status?.name,
@@ -101,8 +103,10 @@ class KokiWorkflowInstance(
     fun searchWorkflows(
         ids: List<String> = emptyList(),
         workflowIds: List<Long> = emptyList(),
-        participantUserId: Long? = null,
-        status: WorkflowStatus? = null,
+        participantUserIds: List<Long> = emptyList(),
+        participantRoleIds: List<Long> = emptyList(),
+        createdById: Long? = null,
+        status: List<WorkflowStatus> = emptyList(),
         startFrom: Date? = null,
         startTo: Date? = null,
         limit: Int = 20,
@@ -114,8 +118,10 @@ class KokiWorkflowInstance(
             mapOf(
                 "id" to ids,
                 "workflow-id" to workflowIds,
-                "participant-user-id" to participantUserId,
-                "status" to status?.name,
+                "participant-user-id" to participantUserIds,
+                "participant-role-id" to participantRoleIds,
+                "created-by-id" to createdById,
+                "status" to status,
                 "start-from" to startFrom?.let { date -> fmt.format(date) },
                 "start-to" to startTo?.let { date -> fmt.format(date) },
                 "limit" to limit,

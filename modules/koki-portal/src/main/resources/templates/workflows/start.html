@@ -80,11 +80,8 @@
                             </div>
                             <div class="section-body">
                                 <div class="section-item" th:if="${workflow.approverRole}">
-                                    <label class="title">
-                                        <span>Approver</span>
-                                        <span class="required">*</span>
-                                    </label>
-                                    <select class="participant" name="approverId" required>
+                                    <label class="title">Approver</label>
+                                    <select class="participant" name="approverId">
                                         <option th:if="${userMap[workflow.approverRole.id].size() > 1}"
                                                 value=""></option>
                                         <option th:each="user : ${userMap[workflow.approverRole.id]}"
@@ -96,11 +93,8 @@
                                 </div>
 
                                 <div class="section-item" th:each="role : ${workflow.roles}">
-                                    <label class="title">
-                                        <span th:text="${role.title}">ROLE</span>
-                                        <span class="required">*</span>
-                                    </label>
-                                    <select class="participant" placeholder="Select a user" required
+                                    <label class="title" th:text="${role.title}">ROLE</label>
+                                    <select class="participant" placeholder="Select a user"
                                             th:name="'participant_' + ${role.id}">
                                         <option th:if="${userMap[role.id].size() > 1}" value=""></option>
                                         <option th:each="user : ${userMap[role.id]}"

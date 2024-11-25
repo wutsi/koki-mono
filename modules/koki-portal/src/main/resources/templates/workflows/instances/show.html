@@ -64,7 +64,6 @@
                                 <th>Title</th>
                                 <th>Status</th>
                                 <th>Assignee</th>
-                                <th>Form</th>
                                 <th>Approval</th>
                                 <td></td>
                             </tr>
@@ -93,10 +92,6 @@
                                 <td>
                                     <span
                                         th:text="${activityInstances[activity.id]?.assignee?.displayName}">ASSIGNEE</span>
-                                </td>
-                                <td>
-                                    <a th:href="${activity.form.viewUrl}" th:if="${activity.form}">
-                                        <span th:if="${activity.form}" th:text="${activity.form.name}">FORM</span></a>
                                 </td>
                                 <td>
                                     <div

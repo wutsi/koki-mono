@@ -29,6 +29,7 @@ class KokiForms(
         roleName: String? = null,
         workflowInstanceId: String? = null,
         activityInstanceId: String? = null,
+        readOnly: Boolean = false
     ): String {
         val tenantId = tenantProvider.id()
         val path = if (formDataId == null) {
@@ -43,6 +44,7 @@ class KokiForms(
                 "role-name" to roleName,
                 "workflow-instance-id" to workflowInstanceId,
                 "activity-instance-id" to activityInstanceId,
+                "read-only" to readOnly,
             )
         )
         return rest.getForEntity(url, String::class.java).body

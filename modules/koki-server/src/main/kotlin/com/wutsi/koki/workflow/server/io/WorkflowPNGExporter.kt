@@ -8,10 +8,10 @@ import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowEntity
 import com.wutsi.koki.workflow.server.io.WorkflowPNGExporter.Companion.SUFFIX_DONE
 import com.wutsi.koki.workflow.server.io.WorkflowPNGExporter.Companion.SUFFIX_RUNNING
+import com.wutsi.koki.workflow.server.util.JGraphtUtil
 import org.jgrapht.Graph
 import org.jgrapht.ext.JGraphXAdapter
 import org.jgrapht.graph.DefaultEdge
-import org.jgrapht.graph.SimpleDirectedGraph
 import org.springframework.stereotype.Service
 import java.awt.Color
 import java.io.OutputStream
@@ -48,25 +48,8 @@ class WorkflowPNGExporter {
         runningActivityNames: List<String> = emptyList(),
         doneActivityNames: List<String> = emptyList(),
     ) {
-        val graph = createGraph(workflow)
+        val graph = JGraphtUtil.createGraph(workflow)
         generatePNG(graph, workflow, output, runningActivityNames, doneActivityNames)
-    }
-
-    private fun createGraph(workflow: WorkflowEntity): Graph<String, DefaultEdge> {
-        val graph = SimpleDirectedGraph<String, DefaultEdge>(DefaultEdge::class.java)
-
-        // Nodes
-        workflow.activities
-            .filter { it.active }
-            .forEach { activity -> graph.addVertex(activity.name) }
-
-        // Edges
-        workflow.flows
-            .filter { flow -> flow.from.active }
-            .filter { flow -> flow.to.active }
-            .forEach { flow -> graph.addEdge(flow.from.name, flow.to.name) }
-
-        return graph
     }
 
     private fun generatePNG(

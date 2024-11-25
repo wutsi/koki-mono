@@ -21,6 +21,7 @@ class FormController(
         @PathVariable(name = "form-id") formId: String,
         @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
         @RequestParam(required = false, name = "activity-instance-id") activityInstanceId: String? = null,
+        @RequestParam(required = false, name = "read-only") readOnly: Boolean = false,
         model: Model
     ): String {
         val formHtml = kokiForms.getFormHtml(
@@ -28,6 +29,7 @@ class FormController(
             formDataId = null,
             workflowInstanceId = workflowInstanceId,
             activityInstanceId = activityInstanceId,
+            readOnly = readOnly
         )
         model.addAttribute("formHtml", formHtml)
         addPageInfo(formId, model)

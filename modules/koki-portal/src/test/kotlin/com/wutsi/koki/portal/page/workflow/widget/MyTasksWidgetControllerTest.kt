@@ -128,6 +128,7 @@ class MyTasksWidgetControllerTest : AbstractPageControllerTest() {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
+                anyOrNull(),
                 anyOrNull()
             )
 
@@ -142,6 +143,8 @@ class MyTasksWidgetControllerTest : AbstractPageControllerTest() {
 
         doReturn(SearchWorkflowInstanceResponse(workflowInstances)).whenever(kokiWorkflowInstance)
             .searchWorkflows(
+                anyOrNull(),
+                anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -165,6 +168,7 @@ class MyTasksWidgetControllerTest : AbstractPageControllerTest() {
     fun empty() {
         doReturn(SearchActivityInstanceResponse()).whenever(kokiWorkflowInstance)
             .searchActivities(
+                anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
