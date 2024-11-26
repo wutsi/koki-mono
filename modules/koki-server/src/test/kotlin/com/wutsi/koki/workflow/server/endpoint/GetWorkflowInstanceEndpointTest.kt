@@ -22,6 +22,7 @@ class GetWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         val workflowInstance = result.body!!.workflowInstance
         assertEquals(100L, workflowInstance.workflowId)
         assertEquals(101L, workflowInstance.approverUserId)
+        assertEquals("2025", workflowInstance.title)
         assertEquals(WorkflowStatus.RUNNING, workflowInstance.status)
         assertEquals(
             mapOf(

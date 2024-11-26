@@ -60,6 +60,7 @@ CREATE TABLE T_WORKFLOW_INSTANCE(
     approver_fk         BIGINT REFERENCES T_USER(id),
     created_by_fk       BIGINT REFERENCES T_USER(id),
 
+    title               VARCHAR(255),
     status              INT NOT NULL DEFAULT 0,
     state               JSON,
     parameters          JSON,

@@ -30,13 +30,14 @@ class CreateWorkflowInstanceEndpointTest : AuthorizationAwareEndpointTest() {
     private lateinit var participanDao: ParticipantRepository
 
     @Autowired
-    protected lateinit var workflowDao: WorkflowRepository
+    private lateinit var workflowDao: WorkflowRepository
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
     val request = CreateWorkflowInstanceRequest(
         workflowId = 100L,
+        title = "2025",
         startAt = DateUtils.addDays(Date(), 7),
         dueAt = DateUtils.addDays(Date(), 14),
         approverUserId = 100L,
@@ -60,6 +61,7 @@ class CreateWorkflowInstanceEndpointTest : AuthorizationAwareEndpointTest() {
         val instance = instanceDao.findById(instanceId).get()
         assertEquals(request.workflowId, instance.workflowId)
         assertEquals(request.approverUserId, instance.approverId)
+        assertEquals(request.title, instance.title)
         assertEquals(fmt.format(request.startAt), fmt.format(instance.startAt))
         assertEquals(fmt.format(request.dueAt), fmt.format(instance.dueAt))
         assertNull(instance.startedAt)

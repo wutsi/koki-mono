@@ -18,23 +18,23 @@ INSERT INTO T_USER(id, tenant_fk, email, password, salt, display_name)
 INSERT INTO T_WORKFLOW(id, tenant_fk, name, description, active, parameters)
     VALUES(100, 1, 'w100', null, true, 'PARAM_1, PARAM_2'),
           (110, 1, 'w110', null, true, null),
-          (200, 2, 'w200', null, true, null);
+          (200, 2, 'w200', null, true, null)
 ;
 
 INSERT INTO T_ACTIVITY(id, tenant_fk, workflow_fk, role_fk, name, type, requires_approval)
     VALUES (100, 1, 100, null, 'START',   1, false),
            (101, 1, 100, 11,   'WORKING', 3, false),
            (102, 1, 100, 10,   'SEND',    4, false),
-           (103, 1, 100, 10,   'SUBMIT',  4, false),
+           (103, 1, 100, 12,   'SUBMIT',  4, false),
            (104, 1, 100, null, 'STOP',    2, false);
 
-INSERT INTO T_WORKFLOW_INSTANCE(id, tenant_fk, workflow_fk, approver_fk, status, start_at, title, state, parameters)
-    VALUES ('wi-100-01', 1, 100, 101, 2, now(), '2025', '{"customer_name":"Ray Sponsible", "customer_email":"ray.sponsible@gmail.com"}', '{"order_id": "123456"}');
+INSERT INTO T_WORKFLOW_INSTANCE(id, tenant_fk, workflow_fk, approver_fk, status, start_at, state, parameters)
+    VALUES ('wi-100-01', 1, 100, 101, 2, now(), '{"customer_name":"Ray Sponsible", "customer_email":"ray.sponsible@gmail.com"}', '{"order_id": "123456"}');
 
 INSERT INTO T_WI_ACTIVITY(id, tenant_fk, workflow_instance_fk, activity_fk, assignee_fk, approval, approver_fk, status, started_at, done_at)
     VALUES ('wi-100-01-start-done',      1, 'wi-100-01', 100, null, 0, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),
-           ('wi-100-01-working-running', 1, 'wi-100-01', 101, null, 0, null, 2, '2020-01-10 12:30', null);
+           ('wi-100-01-working-running', 1, 'wi-100-01', 101, 100,  0, null, 2, '2020-01-10 12:30', null),
+           ('wi-100-01-send-running',    1, 'wi-100-01', 102, null, 0, null, 2, '2020-01-10 12:30', null);
 
 INSERT INTO T_WI_PARTICIPANT(workflow_instance_fk, user_fk, role_fk)
-    VALUES ('wi-100-01', 100, 10),
-           ('wi-100-01', 101, 11);
+    VALUES ('wi-100-01', 100, 10);

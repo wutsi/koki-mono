@@ -4,9 +4,13 @@ import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.workflow.dto.ApprovalStatus
+import com.wutsi.koki.workflow.dto.SetActivityInstanceApproverRequest
+import com.wutsi.koki.workflow.dto.SetActivityInstanceAssigneeRequest
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.dao.ActivityInstanceRepository
+import com.wutsi.koki.workflow.server.dao.ParticipantRepository
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
+import com.wutsi.koki.workflow.server.domain.ParticipantEntity
 import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -15,6 +19,9 @@ import java.util.Date
 @Service
 class ActivityInstanceService(
     private val dao: ActivityInstanceRepository,
+    private val participantDao: ParticipantRepository,
+    private val activityService: ActivityService,
+    private val workflowService: WorkflowService,
     private val em: EntityManager,
 ) {
     fun get(id: String, tenantId: Long): ActivityInstanceEntity {
@@ -111,6 +118,51 @@ class ActivityInstanceService(
     @Transactional
     fun save(activityInstance: ActivityInstanceEntity): ActivityInstanceEntity {
         return dao.save(activityInstance)
+    }
+
+    @Transactional
+    fun setAssignee(request: SetActivityInstanceAssigneeRequest, tenantId: Long): List<ActivityInstanceEntity> {
+        // Set Assignee
+        val activityInstances = dao.findByIdInAndTenantId(request.activityInstanceIds, tenantId)
+        if (!activityInstances.isEmpty()) {
+            activityInstances.forEach { activityInstance -> activityInstance.assigneeId = request.userId }
+            dao.saveAll(activityInstances)
+        }
+
+        // Update participants
+        activityInstances.forEach { activityInstance ->
+            val activity = activityService.get(activityInstance.activityId)
+            val roleId = activity.roleId
+            if (roleId != null) {
+                val participant = participantDao.findByWorkflowInstanceIdAndRoleId(
+                    activityInstance.workflowInstanceId,
+                    roleId
+                )
+                if (participant == null) {
+                    participantDao.save(
+                        ParticipantEntity(
+                            workflowInstanceId = activityInstance.workflowInstanceId,
+                            roleId = roleId,
+                            userId = request.userId,
+                        )
+                    )
+                } else {
+                    participant.userId = request.userId
+                    participantDao.save(participant)
+                }
+            }
+        }
+        return activityInstances
+    }
+
+    @Transactional
+    fun setApprover(request: SetActivityInstanceApproverRequest, tenantId: Long): List<ActivityInstanceEntity> {
+        val activityInstances = dao.findByIdInAndTenantId(request.activityInstanceIds, tenantId)
+        if (!activityInstances.isEmpty()) {
+            activityInstances.forEach { activityInstance -> activityInstance.approverId = request.userId }
+            dao.saveAll(activityInstances)
+        }
+        return activityInstances
     }
 
     private fun isIdNull(values: List<Long>): Boolean {
