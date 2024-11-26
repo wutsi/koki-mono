@@ -143,6 +143,7 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
         click("button[type=submit]")
 
         assertCurrentPageIs(PageName.WORKFLOW_START)
+        assertElementPresent("[name=title]:user-invalid")
         assertElementPresent("[name=startAt]:user-invalid")
     }
 
@@ -155,6 +156,7 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
     }
 
     private fun inputAllFieldsAndSubmit(start: String? = null, due: String? = null) {
+        input("input[name=title]", "Sample")
         if (start == null) {
             click("#start-now-1")
         } else {

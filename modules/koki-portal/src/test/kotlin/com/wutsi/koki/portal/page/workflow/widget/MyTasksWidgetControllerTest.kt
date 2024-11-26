@@ -202,7 +202,7 @@ class MyTasksWidgetControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/workflows/widgets/my-tasks")
 
-        assertElementNotPresent(".my-tasks-widget")
+        assertElementNotPresent(".my-tasks-widget table")
     }
 
     @Test
