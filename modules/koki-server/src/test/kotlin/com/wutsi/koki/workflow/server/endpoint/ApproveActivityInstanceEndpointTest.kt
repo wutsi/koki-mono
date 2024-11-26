@@ -1,6 +1,7 @@
 package com.wutsi.koki.tenant.server.server.endpoint
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.times
@@ -15,8 +16,9 @@ import com.wutsi.koki.workflow.dto.ApproveActivityInstanceResponse
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.dao.ActivityInstanceRepository
 import com.wutsi.koki.workflow.server.dao.ApprovalRepository
-import com.wutsi.koki.workflow.server.engine.ActivityExecutor
-import com.wutsi.koki.workflow.server.engine.ActivityExecutorProvider
+import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
+import com.wutsi.koki.workflow.server.engine.ActivityRunner
+import com.wutsi.koki.workflow.server.engine.ActivityRunnerProvider
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
 import org.springframework.beans.factory.annotation.Autowired
@@ -40,14 +42,15 @@ class ApproveActivityInstanceEndpointTest : AuthorizationAwareEndpointTest() {
     private lateinit var approvalRepository: ApprovalRepository
 
     @MockitoBean
-    private lateinit var activityExecutorProvider: ActivityExecutorProvider
+    private lateinit var activityExecutorProvider: ActivityRunnerProvider
+
+    private val activityRunner = mock<ActivityRunner>()
 
     @BeforeTest
     override fun setUp() {
         super.setUp()
 
-        val executor = mock(ActivityExecutor::class.java)
-        doReturn(executor).whenever(activityExecutorProvider).get(any())
+        doReturn(activityRunner).whenever(activityExecutorProvider).get(any())
     }
 
     @Test
@@ -80,7 +83,9 @@ class ApproveActivityInstanceEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.comment, approval.comment)
         assertEquals(activityInstance.approvedAt, approval.approvedAt)
 
-        verify(activityExecutorProvider, times(2)).get(any())
+        Thread.sleep(1000)
+        val instance = argumentCaptor<ActivityInstanceEntity>()
+        verify(activityRunner, times(2)).run(instance.capture(), any())
     }
 
     @Test
@@ -113,6 +118,7 @@ class ApproveActivityInstanceEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.comment, approval.comment)
         assertEquals(activityInstance.approvedAt, approval.approvedAt)
 
+        Thread.sleep(1000)
         verify(activityExecutorProvider, never()).get(any())
     }
 

@@ -131,8 +131,8 @@ class WorkflowInstanceService(
     }
 
     @Transactional
-    fun save(workflowInstance: WorkflowInstanceEntity) {
-        instanceDao.save(workflowInstance)
+    fun save(workflowInstance: WorkflowInstanceEntity): WorkflowInstanceEntity {
+        return instanceDao.save(workflowInstance)
     }
 
     @Transactional

@@ -15,8 +15,8 @@ import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.dao.ActivityInstanceRepository
 import com.wutsi.koki.workflow.server.dao.WorkflowInstanceRepository
 import com.wutsi.koki.workflow.server.domain.FlowEntity
-import com.wutsi.koki.workflow.server.engine.ActivityExecutor
-import com.wutsi.koki.workflow.server.engine.ActivityExecutorProvider
+import com.wutsi.koki.workflow.server.engine.ActivityRunner
+import com.wutsi.koki.workflow.server.engine.ActivityRunnerProvider
 import com.wutsi.koki.workflow.server.service.ExpressionEvaluator
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
@@ -38,7 +38,7 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
     private lateinit var activityInstanceDao: ActivityInstanceRepository
 
     @MockitoBean
-    private lateinit var activityExecutorProvider: ActivityExecutorProvider
+    private lateinit var activityExecutorProvider: ActivityRunnerProvider
 
     @MockitoBean
     protected lateinit var expressionEvaluator: ExpressionEvaluator
@@ -47,7 +47,7 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
     override fun setUp() {
         super.setUp()
 
-        val executor = mock(ActivityExecutor::class.java)
+        val executor = mock(ActivityRunner::class.java)
         doReturn(executor).whenever(activityExecutorProvider).get(any())
 
         doReturn(true).whenever(expressionEvaluator).evaluate(any<FlowEntity>(), any())
