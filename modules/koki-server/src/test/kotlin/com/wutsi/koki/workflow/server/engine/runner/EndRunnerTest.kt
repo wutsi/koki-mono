@@ -25,7 +25,7 @@ class EndWorkerTest {
 
         executor.run(activityInstance, engine)
 
-        verify(engine).done(activityInstance, emptyMap())
+        verify(engine).done(activityInstance.id!!, emptyMap(), activityInstance.tenantId)
         verify(engine).done(workflowInstance)
     }
 }

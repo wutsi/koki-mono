@@ -1,0 +1,26 @@
+<div class="widget my-tasks-widget" th:if="${activityInstances}">
+    <div class="widget-header">
+        <div class="title">My Tasks</div>
+    </div>
+    <div class="widget-body">
+        <table class="table table-striped">
+            <tr>
+                <th>Task</th>
+                <td>Status</td>
+            </tr>
+            <tr th:each="activityInstance : ${activityInstances}">
+                <td>
+                    <a th:href="${activityInstance.url}">
+                        <span th:text="${activityInstance.workflowInstance.workflow.longTitle}">WORKFLOW</span>
+                        &gt;
+                        <span th:text="${activityInstance.activity.title}">ACTIVITY</span>
+                    </a>
+                </td>
+                <td>
+                    <div
+                        th:replace="~{__components/workflow :: workflow-status(${activityInstance.status})}"></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

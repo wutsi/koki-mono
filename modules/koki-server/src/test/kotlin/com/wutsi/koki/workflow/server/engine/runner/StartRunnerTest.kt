@@ -17,6 +17,6 @@ class StartWorkerTest {
     fun run() {
         executor.run(instance, engine)
 
-        verify(engine).done(instance, emptyMap())
+        verify(engine).done(instance.id!!, emptyMap(), instance.tenantId)
     }
 }
