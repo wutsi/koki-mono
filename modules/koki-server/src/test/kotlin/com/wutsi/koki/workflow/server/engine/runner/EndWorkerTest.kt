@@ -5,15 +5,15 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
-import com.wutsi.koki.workflow.server.service.EndExecutor
+import com.wutsi.koki.workflow.server.service.EndWorker
 import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
 
-class EndExecutorTest {
+class EndWorkerTest {
     private val engine = mock<WorkflowEngine>()
     private val workflowInstanceService = mock<WorkflowInstanceService>()
-    private val executor = EndExecutor(workflowInstanceService)
+    private val executor = EndWorker(workflowInstanceService)
     private val activityInstance = ActivityInstanceEntity(workflowInstanceId = "1111", tenantId = 555)
 
     @Test
@@ -25,6 +25,6 @@ class EndExecutorTest {
         executor.execute(activityInstance, engine)
 
         verify(engine).done(activityInstance, emptyMap())
-        verify(engine).stop(workflowInstance)
+        verify(engine).done(workflowInstance)
     }
 }

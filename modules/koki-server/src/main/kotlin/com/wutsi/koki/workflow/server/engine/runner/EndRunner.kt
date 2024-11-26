@@ -1,17 +1,17 @@
 package com.wutsi.koki.workflow.server.service
 
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
-import com.wutsi.koki.workflow.server.engine.ActivityExecutor
+import com.wutsi.koki.workflow.server.engine.ActivityWorker
 import com.wutsi.koki.workflow.server.engine.WorkflowEngine
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
-class EndExecutor(
+class EndWorker(
     private val workflowInstanceService: WorkflowInstanceService
-) : ActivityExecutor {
+) : ActivityWorker {
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(EndExecutor::class.java)
+        private val LOGGER = LoggerFactory.getLogger(EndWorker::class.java)
     }
 
     override fun execute(activityInstance: ActivityInstanceEntity, engine: WorkflowEngine) {
@@ -24,6 +24,6 @@ class EndExecutor(
             activityInstance.workflowInstanceId,
             activityInstance.tenantId
         )
-        engine.stop(workflowInstance)
+        engine.done(workflowInstance)
     }
 }

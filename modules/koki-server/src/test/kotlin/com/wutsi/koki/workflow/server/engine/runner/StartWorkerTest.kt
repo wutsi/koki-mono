@@ -2,14 +2,14 @@ package com.wutsi.koki.workflow.server.engine
 
 import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
-import com.wutsi.koki.workflow.server.service.StartExecutor
+import com.wutsi.koki.workflow.server.service.StartWorker
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import kotlin.jvm.java
 
-class StartExecutorTest {
+class StartWorkerTest {
     private val engine = Mockito.mock(WorkflowEngine::class.java)
-    private val executor = StartExecutor()
+    private val executor = StartWorker()
     private val instance = ActivityInstanceEntity()
 
     @Test
