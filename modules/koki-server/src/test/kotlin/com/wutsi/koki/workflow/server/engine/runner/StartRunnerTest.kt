@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import kotlin.jvm.java
 
-class StartWorkerTest {
+class StartRunnerTest {
     private val engine = Mockito.mock(WorkflowEngine::class.java)
     private val executor = StartRunner()
-    private val instance = ActivityInstanceEntity()
+    private val instance = ActivityInstanceEntity(id = "111", tenantId = 555L)
 
     @Test
     fun run() {

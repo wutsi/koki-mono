@@ -42,7 +42,17 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
         super.setUp()
 
         doReturn(SearchWorkflowResponse(workflows)).whenever(kokiWorkflow)
-            .searchWorkflows(any(), anyOrNull(), anyOrNull())
+            .searchWorkflows(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
     }
 
     @Test
@@ -57,7 +67,17 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
     @Test
     fun empty() {
         doReturn(SearchWorkflowResponse()).whenever(kokiWorkflow)
-            .searchWorkflows(any(), anyOrNull(), anyOrNull())
+            .searchWorkflows(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
 
         navigateTo("/workflows")
         assertCurrentPageIs(PageName.WORKFLOW_LIST)

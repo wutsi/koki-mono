@@ -11,11 +11,11 @@ import com.wutsi.koki.workflow.server.service.runner.EndRunner
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
 
-class EndWorkerTest {
+class EndRunnerTest {
     private val engine = mock<WorkflowEngine>()
     private val workflowInstanceService = mock<WorkflowInstanceService>()
-    private val executor = EndRunner(workflowInstanceService)
-    private val activityInstance = ActivityInstanceEntity(workflowInstanceId = "1111", tenantId = 555)
+    private val executor = EndRunner()
+    private val activityInstance = ActivityInstanceEntity(id = "111", workflowInstanceId = "1111", tenantId = 555)
 
     @Test
     fun run() {
@@ -26,6 +26,6 @@ class EndWorkerTest {
         executor.run(activityInstance, engine)
 
         verify(engine).done(activityInstance.id!!, emptyMap(), activityInstance.tenantId)
-        verify(engine).done(workflowInstance)
+        verify(engine).done(activityInstance.workflowInstanceId, activityInstance.tenantId)
     }
 }

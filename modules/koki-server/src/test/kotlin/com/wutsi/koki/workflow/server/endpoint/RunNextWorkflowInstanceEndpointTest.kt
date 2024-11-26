@@ -43,12 +43,13 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
     @MockitoBean
     protected lateinit var expressionEvaluator: ExpressionEvaluator
 
+    private val activityRunner = mock<ActivityRunner>()
+
     @BeforeTest
     override fun setUp() {
         super.setUp()
 
-        val executor = mock(ActivityRunner::class.java)
-        doReturn(executor).whenever(activityExecutorProvider).get(any())
+        doReturn(activityRunner).whenever(activityExecutorProvider).get(any())
 
         doReturn(true).whenever(expressionEvaluator).evaluate(any<FlowEntity>(), any())
     }
@@ -73,7 +74,8 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         assertNull(activityInstance.approverId)
         assertEquals(ApprovalStatus.UNKNOWN, activityInstance.approval)
 
-        verify(activityExecutorProvider).get(any())
+        Thread.sleep(1000)
+        verify(activityRunner).run(any(), any())
         verify(expressionEvaluator, never()).evaluate(any<FlowEntity>(), any())
 
         val workflowInstance = instanceDao.findById("wi-100-01").get()
@@ -103,7 +105,8 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         assertEquals(WorkflowStatus.RUNNING, activityInstance2.status)
         assertEquals(103L, activityInstance2.activityId)
 
-        verify(activityExecutorProvider, times(2)).get(any())
+        Thread.sleep(1000)
+        verify(activityRunner, times(2)).run(any(), any())
         verify(expressionEvaluator).evaluate(any<FlowEntity>(), any())
 
         val workflowInstance = instanceDao.findById("wi-100-02").get()

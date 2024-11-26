@@ -1,26 +1,31 @@
-<div class="widget my-tasks-widget" th:if="${activityInstances}">
+<div class="widget task-queue-widget">
     <div class="widget-header">
-        <div class="title">My Tasks</div>
+        <div class="widget-title">Task Queue</div>
     </div>
     <div class="widget-body">
-        <table class="table table-striped">
+        <table class="table table-striped" th:if="${activityInstances}">
             <tr>
                 <th>Task</th>
-                <td>Status</td>
+                <th>Case</th>
+                <td></td>
             </tr>
             <tr th:each="activityInstance : ${activityInstances}">
                 <td>
-                    <a th:href="${activityInstance.url}">
-                        <span th:text="${activityInstance.workflowInstance.workflow.longTitle}">WORKFLOW</span>
-                        &gt;
-                        <span th:text="${activityInstance.activity.title}">ACTIVITY</span>
+                    <a th:alt="${activityInstance.activity.title}"
+                       th:href="${activityInstance.url}"
+                       th:text="${activityInstance.activity.title}">
+                        ACTIVITY
                     </a>
                 </td>
-                <td>
-                    <div
-                        th:replace="~{__components/workflow :: workflow-status(${activityInstance.status})}"></div>
+                <td th:text="${activityInstance.workflowInstance.title}">WORKFLOW</td>
+                <td class="toolbar">
+                    <a th:href="'/workflows/widgets/task-queue/assign?activity-instance-id=' + ${activityInstance.id}">
+                        Assign to Me
+                    </a>
                 </td>
             </tr>
         </table>
+
+        <div class="text-center" th:if="!${activityInstances}">The queue is empty</div>
     </div>
 </div>

@@ -7,12 +7,12 @@
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
 
-<div class="container">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-3">
-
+        <div class="col-4">
+            <div class="widget-container" data-url="workflows/widgets/task-queue"></div>
         </div>
-        <div class="col-9">
+        <div class="col-8">
             <div class="widget-container" data-url="workflows/widgets/my-tasks"></div>
 
             <div class="widget-container" data-url="workflows/widgets/my-cases"></div>

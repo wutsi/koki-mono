@@ -11,7 +11,6 @@ import com.wutsi.koki.workflow.server.engine.command.RunActivityCommand
 import com.wutsi.koki.workflow.server.service.ActivityInstanceService
 import com.wutsi.koki.workflow.server.service.ActivityService
 import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
-import jakarta.transaction.Transactional
 import org.slf4j.LoggerFactory
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
@@ -31,7 +30,6 @@ class WorkflowEventListener(
         private val LOGGER = LoggerFactory.getLogger(WorkflowEventListener::class.java)
     }
 
-    @Transactional
     @EventListener
     fun onFormSubmitted(event: FormSubmittedEvent) {
         if (LOGGER.isDebugEnabled) {
@@ -46,7 +44,6 @@ class WorkflowEventListener(
         }
     }
 
-    @Transactional
     @EventListener
     fun onFormUpdated(event: FormUpdatedEvent) {
         if (LOGGER.isDebugEnabled) {
@@ -61,7 +58,6 @@ class WorkflowEventListener(
         }
     }
 
-    @Transactional
     @EventListener
     fun onActivityDone(event: ActivityDoneEvent) {
         if (LOGGER.isDebugEnabled) {
@@ -70,7 +66,7 @@ class WorkflowEventListener(
 
         val activityInstance = activityInstanceService.get(event.activityInstanceId, event.tenantId)
         val workflowInstance = workflowInstanceService.get(activityInstance.workflowInstanceId, event.tenantId)
-        val activityInstances = workflowEngine.next(workflowInstance)
+        val activityInstances = workflowEngine.next(workflowInstance.id!!, workflowInstance.tenantId)
         if (activityInstances.isEmpty()) {
             return
         }
@@ -85,7 +81,6 @@ class WorkflowEventListener(
         }
     }
 
-    @Transactional
     @EventListener
     fun onRunActivityCommand(command: RunActivityCommand) {
         if (LOGGER.isDebugEnabled) {
@@ -108,6 +103,6 @@ class WorkflowEventListener(
         // Complete the activity
         val formData = formDataService.get(formDataId, tenantId)
         val state = formData.dataAsMap(objectMapper)
-        workflowEngine.done(activityInstance, state)
+        workflowEngine.done(activityInstance.id!!, state, tenantId)
     }
 }

@@ -6,6 +6,7 @@ import java.util.Date
 data class WorkflowInstanceModel(
     val id: String = "",
     val imageUrl: String = "",
+    val title: String = "",
     val workflow: WorkflowModel = WorkflowModel(),
     val participants: List<ParticipantModel> = emptyList(),
     val approver: UserModel? = null,

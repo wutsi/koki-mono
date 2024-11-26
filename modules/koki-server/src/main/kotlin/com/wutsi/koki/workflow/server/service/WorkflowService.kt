@@ -35,20 +35,37 @@ class WorkflowService(
     }
 
     fun search(
-        ids: List<Long>,
-        active: Boolean?,
         tenantId: Long,
-        limit: Int,
-        offset: Int,
-        sortBy: WorkflowSortBy?,
-        ascending: Boolean,
+        ids: List<Long> = emptyList(),
+        active: Boolean? = null,
+        activityRoleIds: List<Long> = emptyList(),
+        approverRoleIds: List<Long> = emptyList(),
+        minWorkflowInstanceCount: Long? = null,
+        limit: Int = 20,
+        offset: Int = 0,
+        sortBy: WorkflowSortBy? = null,
+        ascending: Boolean = false,
     ): List<WorkflowEntity> {
-        val jql = StringBuilder("SELECT W FROM WorkflowEntity AS W WHERE W.tenantId = :tenantId")
+        val jql = StringBuilder("SELECT W FROM WorkflowEntity AS W ")
+        if (activityRoleIds.isNotEmpty()) {
+            jql.append(" JOIN W.activities AS A")
+        }
+
+        jql.append(" WHERE W.tenantId = :tenantId")
         if (ids.isNotEmpty()) {
             jql.append(" AND W.id IN :ids")
         }
         if (active != null) {
             jql.append(" AND W.active IN :active")
+        }
+        if (approverRoleIds.isNotEmpty()) {
+            jql.append(" AND W.approverRoleId IN :approverRoleIds")
+        }
+        if (activityRoleIds.isNotEmpty()) {
+            jql.append(" AND A.roleId IN :activityRoleIds")
+        }
+        if (minWorkflowInstanceCount != null) {
+            jql.append(" AND A.workflowInstanceCount >= :minWorkflowInstanceCount")
         }
         if (sortBy != null) {
             val column = when (sortBy) {
@@ -69,6 +86,15 @@ class WorkflowService(
         }
         if (active != null) {
             query.setParameter("active", active)
+        }
+        if (approverRoleIds.isNotEmpty()) {
+            query.setParameter("approverRoleIds", approverRoleIds)
+        }
+        if (activityRoleIds.isNotEmpty()) {
+            query.setParameter("activityRoleIds", activityRoleIds)
+        }
+        if (minWorkflowInstanceCount != null) {
+            query.setParameter("minWorkflowInstanceCount", minWorkflowInstanceCount)
         }
 
         query.firstResult = offset

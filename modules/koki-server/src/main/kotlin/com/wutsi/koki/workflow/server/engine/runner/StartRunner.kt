@@ -16,6 +16,6 @@ class StartRunner : ActivityRunner {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(">>> ${activityInstance.workflowInstanceId} > ${activityInstance.id} executing")
         }
-        engine.done(activityInstance, emptyMap())
+        engine.done(activityInstance.id!!, emptyMap(), activityInstance.tenantId)
     }
 }

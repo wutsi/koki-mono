@@ -9,15 +9,14 @@ import com.wutsi.koki.workflow.dto.ApprovalStatus
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.domain.ApprovalEntity
-import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
 import com.wutsi.koki.workflow.server.engine.command.RunActivityCommand
-import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
+import com.wutsi.koki.workflow.server.service.ActivityInstanceService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
 class WorkflowEngine(
-    private val workflowInstanceService: WorkflowInstanceService,
+    private val activityInstanceService: ActivityInstanceService,
     private val workflowWorker: WorkflowEngineWorker,
     private val eventPublisher: EventPublisher,
 ) {
@@ -25,10 +24,10 @@ class WorkflowEngine(
         private val LOGGER = LoggerFactory.getLogger(WorkflowEngine::class.java)
     }
 
-    fun start(workflowInstance: WorkflowInstanceEntity): ActivityInstanceEntity? {
-        LOGGER.debug(">>> ${workflowInstance.id} - Starting")
+    fun start(workflowInstanceId: String, tenantId: Long): ActivityInstanceEntity? {
+        LOGGER.debug(">>> $workflowInstanceId - Starting")
 
-        val activityInstance = workflowWorker.start(workflowInstance)
+        val activityInstance = workflowWorker.start(workflowInstanceId, tenantId)
         if (activityInstance != null) {
             eventPublisher.publish(
                 RunActivityCommand(
@@ -38,32 +37,32 @@ class WorkflowEngine(
             )
             eventPublisher.publish(
                 WorkflowStartedEvent(
-                    workflowInstanceId = activityInstance.workflowInstanceId,
-                    tenantId = workflowInstance.tenantId,
+                    workflowInstanceId = workflowInstanceId,
+                    tenantId = tenantId,
                 )
             )
         }
         return activityInstance
     }
 
-    fun done(activityInstance: ActivityInstanceEntity, state: Map<String, Any>) {
-        LOGGER.debug(">>> ${activityInstance.workflowInstanceId} > ${activityInstance.id} - Activity Done")
+    fun done(activityInstanceId: String, state: Map<String, Any>, tenantId: Long) {
+        LOGGER.debug(">>> $activityInstanceId - Activity Done")
 
-        val activityInstances = workflowWorker.done(activityInstance, state)
+        val activityInstances = workflowWorker.done(activityInstanceId, state, tenantId)
         activityInstances.forEach { instance ->
-            if (instance.id == activityInstance.id) {
+            if (instance.id == activityInstanceId) {
                 if (instance.status == WorkflowStatus.DONE) {
                     eventPublisher.publish(
                         ActivityDoneEvent(
-                            activityInstanceId = instance.id!!,
-                            tenantId = activityInstance.tenantId,
+                            activityInstanceId = activityInstanceId,
+                            tenantId = tenantId,
                         )
                     )
                 } else if (instance.approval == ApprovalStatus.PENDING) {
                     eventPublisher.publish(
                         ActivityDoneEvent(
-                            activityInstanceId = instance.id!!,
-                            tenantId = activityInstance.tenantId,
+                            activityInstanceId = activityInstanceId,
+                            tenantId = tenantId,
                         )
                     )
                 }
@@ -71,15 +70,17 @@ class WorkflowEngine(
                 eventPublisher.publish(
                     RunActivityCommand(
                         activityInstanceId = instance.id!!,
-                        tenantId = activityInstance.tenantId,
+                        tenantId = tenantId,
                     )
                 )
             }
         }
     }
 
-    fun next(workflowInstance: WorkflowInstanceEntity): List<ActivityInstanceEntity> {
-        val activityInstances = workflowWorker.next(workflowInstance)
+    fun next(workflowInstanceId: String, tenantId: Long): List<ActivityInstanceEntity> {
+        LOGGER.debug(">>> $workflowInstanceId - Next")
+
+        val activityInstances = workflowWorker.next(workflowInstanceId, tenantId)
         activityInstances.forEach { activityInstance ->
             eventPublisher.publish(
                 RunActivityCommand(
@@ -92,43 +93,41 @@ class WorkflowEngine(
     }
 
     fun approve(
-        activityInstance: ActivityInstanceEntity,
+        activityInstanceId: String,
         status: ApprovalStatus,
         approverUserId: Long,
         comment: String?,
+        tenantId: Long,
     ): ApprovalEntity {
-        LOGGER.debug(">>> ${activityInstance.workflowInstanceId} > ${activityInstance.id} - Approve status=$status")
+        LOGGER.debug(">>>  $activityInstanceId - Approve status=$status")
 
-        val approval = workflowWorker.approve(activityInstance, status, approverUserId, comment)
+        val approval = workflowWorker.approve(activityInstanceId, status, approverUserId, comment, tenantId)
         if (approval.status == ApprovalStatus.APPROVED || approval.status == ApprovalStatus.REJECTED) {
             eventPublisher.publish(
                 ApprovalCompletedEvent(
                     approvalId = approval.id!!,
-                    activityInstanceId = activityInstance.id!!,
-                    tenantId = activityInstance.tenantId,
+                    activityInstanceId = activityInstanceId,
+                    tenantId = tenantId,
                 )
             )
 
             if (approval.status == ApprovalStatus.APPROVED) {
-                val workflowInstance = workflowInstanceService.get(
-                    activityInstance.workflowInstanceId,
-                    activityInstance.tenantId
-                )
-                next(workflowInstance)
+                val activityInstance = activityInstanceService.get(activityInstanceId, tenantId)
+                next(activityInstance.workflowInstanceId, tenantId)
             }
         }
 
         return approval
     }
 
-    fun done(workflowInstance: WorkflowInstanceEntity) {
-        LOGGER.debug(">>> ${workflowInstance.id} - Workflow Done")
+    fun done(workflowInstanceId: String, tenantId: Long) {
+        LOGGER.debug(">>> $workflowInstanceId - Workflow Done")
 
-        workflowWorker.done(workflowInstance)
+        workflowWorker.done(workflowInstanceId, tenantId)
         eventPublisher.publish(
             WorkflowDoneEvent(
-                workflowInstanceId = workflowInstance.id!!,
-                tenantId = workflowInstance.tenantId,
+                workflowInstanceId = workflowInstanceId,
+                tenantId = tenantId,
             )
         )
     }

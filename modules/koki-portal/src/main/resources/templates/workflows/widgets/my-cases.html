@@ -1,21 +1,20 @@
-<div class="widget my-tasks-widget" th:if="${workflowInstances}">
+<div class="widget my-tasks-widget">
     <div class="widget-header">
-        <div class="title">My Cases</div>
+        <div class="widget-title">My Cases</div>
     </div>
     <div class="widget-body">
-        <table class="table table-striped">
+        <table class="table table-striped" th:if="${workflowInstances}">
             <tr>
-                <th>Case</th>
-                <td>Status</td>
-                <td>Due</td>
-                <td>Created</td>
+                <th>Title</th>
+                <th>Workflow</th>
+                <th>Status</th>
+                <th>Due</th>
             </tr>
             <tr th:each="workflowInstance : ${workflowInstances}">
                 <td>
-                    <a th:href="${workflowInstance.url}">
-                        <span th:text="${workflowInstance.workflow.longTitle}">WORKFLOW</span>
-                    </a>
+                    <a th:href="${workflowInstance.url}" th:text="${workflowInstance.title}">TITLE</a>
                 </td>
+                <td th:text="${workflowInstance.workflow.name}">WORKFLOW</td>
                 <td>
                     <div
                         th:replace="~{__components/workflow :: workflow-status(${workflowInstance.status})}"></div>
@@ -23,8 +22,9 @@
                 <td>
                     <span th:if="${workflowInstance.createdAt}" th:text="${workflowInstance.dueAtText}">DUE</span>
                 </td>
-                <td th:text="${workflowInstance.createdAtText}">CREATED</td>
             </tr>
         </table>
+
+        <div class="text-center" th:if="!${workflowInstances}">No case</div>
     </div>
 </div>

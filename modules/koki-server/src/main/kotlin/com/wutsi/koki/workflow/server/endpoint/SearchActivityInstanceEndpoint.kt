@@ -23,6 +23,7 @@ class SearchActivityInstanceEndpoint(
     fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false, name = "id") ids: List<String> = emptyList(),
+        @RequestParam(required = false, name = "activity-id") activityIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceIds: List<String> = emptyList(),
         @RequestParam(required = false, name = "assignee-id") assigneeIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "approver-id") approverIds: List<Long> = emptyList(),
@@ -44,6 +45,7 @@ class SearchActivityInstanceEndpoint(
             ids = ids,
             assigneeIds = assigneeIds,
             approverIds = approverIds,
+            activityIds = activityIds,
             workflowInstanceIds = workflowInstanceIds,
             status = status,
             approval = approval,

@@ -27,6 +27,7 @@ class WorkflowInstanceMapper {
 
         val workflowInstance = WorkflowInstanceModel(
             id = entity.id,
+            title = entity.title,
             createdAt = entity.createdAt,
             createdAtText = fmt.format(entity.createdAt),
             doneAt = entity.doneAt,
@@ -76,6 +77,7 @@ class WorkflowInstanceMapper {
 
         val workflowInstance = WorkflowInstanceModel(
             id = entity.id,
+            title = entity.title,
             createdAt = entity.createdAt,
             createdAtText = fmt.format(entity.createdAt),
             dueAt = entity.dueAt,

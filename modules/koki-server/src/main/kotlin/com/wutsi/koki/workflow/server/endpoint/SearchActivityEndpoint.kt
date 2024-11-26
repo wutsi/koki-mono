@@ -21,6 +21,7 @@ class SearchActivityEndpoint(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false, name = "id") ids: List<Long> = emptyList(),
         @RequestParam(required = false, name = "workflow-id") workflowIds: List<Long> = emptyList(),
+        @RequestParam(required = false, name = "role-id") roleIds: List<Long> = emptyList(),
         @RequestParam(required = false) type: ActivityType? = null,
         @RequestParam(required = false) active: Boolean? = null,
         @RequestParam(required = false) limit: Int = 20,
@@ -29,6 +30,7 @@ class SearchActivityEndpoint(
         val activities = service.search(
             ids = ids,
             workflowIds = workflowIds,
+            roleIds = roleIds,
             tenantId = tenantId,
             type = type,
             active = active,

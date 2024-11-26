@@ -129,17 +129,36 @@ class MyTasksWidgetControllerTest : AbstractPageControllerTest() {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
+                anyOrNull(),
                 anyOrNull()
             )
 
         doReturn(SearchActivityResponse(activities)).whenever(kokiWorkflow)
-            .searchActivities(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .searchActivities(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
 
         doReturn(SearchUserResponse(users)).whenever(kokiUser)
             .searchUsers(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(SearchWorkflowResponse(workflows)).whenever(kokiWorkflow)
-            .searchWorkflows(anyOrNull(), anyOrNull(), anyOrNull())
+            .searchWorkflows(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
 
         doReturn(SearchWorkflowInstanceResponse(workflowInstances)).whenever(kokiWorkflowInstance)
             .searchWorkflows(
@@ -168,6 +187,7 @@ class MyTasksWidgetControllerTest : AbstractPageControllerTest() {
     fun empty() {
         doReturn(SearchActivityInstanceResponse()).whenever(kokiWorkflowInstance)
             .searchActivities(
+                anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),

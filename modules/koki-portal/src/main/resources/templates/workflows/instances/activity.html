@@ -15,13 +15,12 @@
                 <div class="widget-body">
                     <a href="/">Home</a>
                     &gt;
-                    <a href="/workflows">Workflows</a>
-                    &gt;
-                    <a th:href="${activityInstance.workflowInstance.workflow.url}"
-                       th:text="${activityInstance.workflowInstance.workflow.longTitle}">WORKFLOW</a>
+                    <a href="/workflows/instances">Instances</a>
                     &gt;
                     <a th:href="${activityInstance.workflowInstance.url}"
-                       th:text="${activityInstance.workflowInstance.id}">INSTANCE</a>
+                       th:text="${activityInstance.workflowInstance.title}">INSTANCE</a>
+                    &gt;
+                    <span th:text="${activityInstance.activity.longTitle}">TITLE</span>
                 </div>
             </div>
 

@@ -21,6 +21,9 @@ class SearchWorkflowEndpoint(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false, name = "id") ids: List<Long> = emptyList(),
         @RequestParam(required = false) active: Boolean? = null,
+        @RequestParam(required = false, name = "activity-role-id") activityRoleIds: List<Long> = emptyList(),
+        @RequestParam(required = false, name = "approver-role-id") approverRoleIds: List<Long> = emptyList(),
+        @RequestParam(required = false, name = "min-workflow-instance-count") minWorkflowInstanceCount: Long? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         @RequestParam(required = false, name = "sort-by") sortBy: WorkflowSortBy? = null,
@@ -29,6 +32,8 @@ class SearchWorkflowEndpoint(
         val workflows = service.search(
             ids = ids,
             active = active,
+            activityRoleIds = activityRoleIds,
+            approverRoleIds = approverRoleIds,
             tenantId = tenantId,
             limit = limit,
             offset = offset,

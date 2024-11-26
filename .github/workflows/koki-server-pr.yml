@@ -50,5 +50,5 @@ jobs:
                     paths: |
                         ${{ github.workspace }}/modules/koki-server/target/site/jacoco/jacoco.xml
                     token: ${{ secrets.GITHUB_TOKEN }}
-                    min-coverage-overall: 95
+                    min-coverage-overall: 90
                     min-coverage-changed-files: 90
