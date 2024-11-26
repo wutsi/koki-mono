@@ -38,7 +38,8 @@ class WorkflowEngineWorker(
     }
 
     @Transactional
-    fun start(workflowInstance: WorkflowInstanceEntity): ActivityInstanceEntity? {
+    fun start(workflowInstanceId: String, tenantId: Long): ActivityInstanceEntity? {
+        val workflowInstance = workflowInstanceService.get(workflowInstanceId, tenantId)
         if (workflowInstance.status != WorkflowStatus.NEW) {
             throw ConflictException(
                 error = Error(
@@ -66,9 +67,9 @@ class WorkflowEngineWorker(
     }
 
     @Transactional
-    fun done(activityInstance: ActivityInstanceEntity, state: Map<String, Any>): List<ActivityInstanceEntity> {
-        val workflowInstance =
-            workflowInstanceService.get(activityInstance.workflowInstanceId, activityInstance.tenantId)
+    fun done(activityInstanceId: String, state: Map<String, Any>, tenantId: Long): List<ActivityInstanceEntity> {
+        val activityInstance = activityInstanceService.get(activityInstanceId, tenantId)
+        val workflowInstance = workflowInstanceService.get(activityInstance.workflowInstanceId, tenantId)
         ensureRunning(activityInstance, workflowInstance)
         ensureNoApprovalPending(activityInstance)
 
@@ -87,12 +88,12 @@ class WorkflowEngineWorker(
             activityInstance.status = WorkflowStatus.DONE
             activityInstance.doneAt = Date()
         }
-        val activityInstance = activityInstanceService.save(activityInstance)
+        activityInstanceService.save(activityInstance)
         result.add(activityInstance)
 
         // Next activities
         if (!activity.requiresApproval) {
-            val nextActivityInstances = next(workflowInstance)
+            val nextActivityInstances = next(workflowInstance.id!!, workflowInstance.tenantId)
             result.addAll(nextActivityInstances)
         }
         return result
@@ -100,11 +101,13 @@ class WorkflowEngineWorker(
 
     @Transactional
     fun approve(
-        activityInstance: ActivityInstanceEntity,
+        activityInstanceId: String,
         status: ApprovalStatus,
         approverUserId: Long,
         comment: String?,
+        tenantId: Long
     ): ApprovalEntity {
+        val activityInstance = activityInstanceService.get(activityInstanceId, tenantId)
         val workflowInstance = workflowInstanceService.get(
             activityInstance.workflowInstanceId,
             activityInstance.tenantId
@@ -136,7 +139,9 @@ class WorkflowEngineWorker(
     }
 
     @Transactional
-    fun done(workflowInstance: WorkflowInstanceEntity): WorkflowInstanceEntity {
+    fun done(workflowInstanceId: String, tenantId: Long): WorkflowInstanceEntity {
+        val workflowInstance = workflowInstanceService.get(workflowInstanceId, tenantId)
+
         // Ensure that the workflow is RUNNING
         if (workflowInstance.status != WorkflowStatus.RUNNING) {
             throw ConflictException(
@@ -166,7 +171,8 @@ class WorkflowEngineWorker(
     }
 
     @Transactional
-    fun next(workflowInstance: WorkflowInstanceEntity): List<ActivityInstanceEntity> {
+    fun next(workflowInstanceId: String, tenantId: Long): List<ActivityInstanceEntity> {
+        val workflowInstance = workflowInstanceService.get(workflowInstanceId, tenantId)
         ensureRunning(workflowInstance)
 
         // Get all the activities DONE

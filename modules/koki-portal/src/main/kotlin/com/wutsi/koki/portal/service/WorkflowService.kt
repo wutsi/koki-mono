@@ -2,11 +2,14 @@ package com.wutsi.koki.portal.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.portal.mapper.WorkflowMapper
+import com.wutsi.koki.portal.model.ActivityModel
 import com.wutsi.koki.portal.model.WorkflowModel
 import com.wutsi.koki.portal.page.workflow.CreateWorkflowForm
 import com.wutsi.koki.portal.page.workflow.UpdateFormWorkflow
 import com.wutsi.koki.sdk.KokiWorkflow
+import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.ImportWorkflowRequest
+import com.wutsi.koki.workflow.dto.WorkflowSortBy
 import org.springframework.stereotype.Service
 
 @Service
@@ -46,15 +49,50 @@ class WorkflowService(
         return mapper.toWorkflowModel(workflow, approverRole, roles, forms, imageUrl)
     }
 
-    fun workflows(
+    fun activities(
         ids: List<Long> = emptyList(),
+        workflowIds: List<Long> = emptyList(),
+        roleIds: List<Long> = emptyList(),
+        type: ActivityType? = null,
+        active: Boolean = true,
         limit: Int = 20,
         offset: Int = 0,
+    ): List<ActivityModel> {
+        val activities = kokiWorkflow.searchActivities(
+            ids = ids,
+            workflowIds = workflowIds,
+            roleIds = roleIds,
+            type = type,
+            active = active,
+            limit = limit,
+            offset = offset
+        ).activities
+        return activities.map { activity ->
+            mapper.toActivityModel(activity)
+        }
+    }
+
+    fun workflows(
+        ids: List<Long> = emptyList(),
+        active: Boolean? = true,
+        activityRoleIds: List<Long> = emptyList(),
+        approverRoleIds: List<Long> = emptyList(),
+        minWorkflowInstanceCount: Long? = null,
+        limit: Int = 20,
+        offset: Int = 0,
+        sortBy: WorkflowSortBy? = WorkflowSortBy.TITLE,
+        ascending: Boolean = false,
     ): List<WorkflowModel> {
         val workflows = kokiWorkflow.searchWorkflows(
             ids = ids,
+            active = active,
+            activityRoleIds = activityRoleIds,
+            approverRoleIds = approverRoleIds,
+            minWorkflowInstanceCount = minWorkflowInstanceCount,
             limit = limit,
             offset = offset,
+            sortBy = sortBy,
+            ascending = ascending,
         ).workflows
         return workflows.map { workflow -> mapper.toWorkflowModel(workflow) }
     }

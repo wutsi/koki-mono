@@ -62,16 +62,27 @@ class KokiWorkflow(
 
     fun searchWorkflows(
         ids: List<Long> = emptyList(),
+        active: Boolean? = null,
+        activityRoleIds: List<Long> = emptyList(),
+        approverRoleIds: List<Long> = emptyList(),
+        minWorkflowInstanceCount: Long? = null,
         limit: Int = 20,
         offset: Int = 0,
+        sortBy: WorkflowSortBy? = WorkflowSortBy.TITLE,
+        ascending: Boolean = false,
     ): SearchWorkflowResponse {
         val url = urlBuilder.build(
             WORKFLOW_PATH_PREFIX,
             mapOf(
                 "id" to ids,
+                "active" to active,
+                "activity-role-id" to activityRoleIds,
+                "approver-role-id" to approverRoleIds,
+                "min-workflow-instance-count" to minWorkflowInstanceCount,
                 "limit" to limit,
                 "offset" to offset,
-                "sort-by" to WorkflowSortBy.TITLE,
+                "sort-by" to sortBy,
+                "asc" to ascending,
             )
         )
         return rest.getForEntity(url, SearchWorkflowResponse::class.java).body!!
@@ -80,7 +91,9 @@ class KokiWorkflow(
     fun searchActivities(
         ids: List<Long> = emptyList(),
         workflowIds: List<Long> = emptyList(),
+        roleIds: List<Long> = emptyList(),
         type: ActivityType? = null,
+        active: Boolean? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): SearchActivityResponse {
@@ -89,7 +102,9 @@ class KokiWorkflow(
             mapOf(
                 "id" to ids,
                 "workflow-id" to workflowIds,
-                "type" to type?.name,
+                "role-id" to roleIds,
+                "type" to type,
+                "active" to active,
                 "limit" to limit,
                 "offset" to offset,
             )

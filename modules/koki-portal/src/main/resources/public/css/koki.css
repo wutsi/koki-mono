@@ -133,7 +133,8 @@ nav {
     padding: 1em;
 }
 
-.widget-body .widget-toolbar a {
+.widget-toolbar a,
+.toolbar a {
     margin-right: 1em;
 }
 

@@ -26,7 +26,7 @@ INSERT INTO T_ACTIVITY(id, tenant_fk, workflow_fk, role_fk, name, type, requires
            (101, 1, 100, 11,   'WORKING', 3, false, true),
            (102, 1, 100, 10,   'SEND',    4, false, true),
            (103, 1, 100, 10,   'SUBMIT',  4, false, true),
-           (104, 1, 100, null, 'STOP',    2, false, true),
+           (104, 1, 100, 11, 'STOP',    2, false, true),
 
            (110, 1, 110, null, 'START',   1, false, true),
            (111, 1, 110, null, 'WORKING', 4, true,  true),

@@ -161,10 +161,28 @@ abstract class AbstractPageControllerTest {
             .searchUsers(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(SearchWorkflowResponse()).whenever(kokiWorkflow)
-            .searchWorkflows(any(), anyOrNull(), anyOrNull())
+            .searchWorkflows(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
 
         doReturn(SearchActivityResponse()).whenever(kokiWorkflow)
-            .searchActivities(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .searchActivities(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
 
         doReturn(SearchWorkflowInstanceResponse()).whenever(kokiWorkflowInstance)
             .searchWorkflows(
@@ -182,6 +200,7 @@ abstract class AbstractPageControllerTest {
 
         doReturn(SearchActivityInstanceResponse()).whenever(kokiWorkflowInstance)
             .searchActivities(
+                anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),

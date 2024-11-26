@@ -21,7 +21,6 @@ class ActivityInstanceService(
     private val dao: ActivityInstanceRepository,
     private val participantDao: ParticipantRepository,
     private val activityService: ActivityService,
-    private val workflowService: WorkflowService,
     private val em: EntityManager,
 ) {
     fun get(id: String, tenantId: Long): ActivityInstanceEntity {
@@ -38,6 +37,7 @@ class ActivityInstanceService(
         tenantId: Long,
         ids: List<String> = emptyList(),
         workflowInstanceIds: List<String> = emptyList(),
+        activityIds: List<Long> = emptyList(),
         assigneeIds: List<Long> = emptyList(),
         approverIds: List<Long> = emptyList(),
         status: WorkflowStatus? = null,
@@ -54,6 +54,9 @@ class ActivityInstanceService(
         }
         if (workflowInstanceIds.isNotEmpty()) {
             jql.append(" AND A.workflowInstanceId IN :workflowInstanceIds")
+        }
+        if (activityIds.isNotEmpty()) {
+            jql.append(" AND A.activityId IN :activityIds")
         }
         if (assigneeIds.isNotEmpty()) {
             if (isIdNull(assigneeIds)) {
@@ -90,6 +93,9 @@ class ActivityInstanceService(
         }
         if (workflowInstanceIds.isNotEmpty()) {
             query.setParameter("workflowInstanceIds", workflowInstanceIds)
+        }
+        if (activityIds.isNotEmpty()) {
+            query.setParameter("activityIds", activityIds)
         }
         if (assigneeIds.isNotEmpty() && !isIdNull(assigneeIds)) {
             query.setParameter("assigneeIds", assigneeIds)

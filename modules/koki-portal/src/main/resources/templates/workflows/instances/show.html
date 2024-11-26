@@ -15,10 +15,9 @@
                 <div class="widget-body">
                     <a href="/">Home</a>
                     &gt;
-                    <a href="/workflows">Workflows</a>
+                    <a href="/workflows/instances">Instances</a>
                     &gt;
-                    <a th:href="${workflowInstance.workflow.url}"
-                       th:text="${workflowInstance.workflow.longTitle}">WORKFLOW</a>
+                    <span th:text="${workflowInstance.title}">TITLE</span>
                 </div>
             </div>
 
@@ -35,6 +34,10 @@
                             <tr>
                                 <td><b>ID</b></td>
                                 <td th:text="${workflowInstance.id}">ID</td>
+                            </tr>
+                            <tr>
+                                <td><b>Title</b></td>
+                                <td th:text="${workflowInstance.title}">TITLE</td>
                             </tr>
                             <tr>
                                 <td><b>Status</b></td>
@@ -147,6 +150,15 @@
                                 <b th:text="${participant.role.title}">ROLE</b>
                             </td>
                             <td th:text="${participant.user.displayName}">USER</td>
+                        </tr>
+                        <tr>
+                            <td><b>Workflow</b></td>
+                            <td>
+                                <a th:href="${workflowInstance.workflow.url}"
+                                   th:text="${workflowInstance.workflow.name}">
+                                    WORKFLOW
+                                </a>
+                            </td>
                         </tr>
                     </table>
                 </div>

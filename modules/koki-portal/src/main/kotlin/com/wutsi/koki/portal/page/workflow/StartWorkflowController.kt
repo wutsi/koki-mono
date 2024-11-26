@@ -106,6 +106,7 @@ class StartWorkflowController(
         val fmt = SimpleDateFormat("yyyy-MM-dd")
         return StartWorkflowForm(
             workflowId = workflow.id,
+            title = request.getParameter("title").trim(),
             approverUserId = request.getParameter("approverId")?.toLong(),
             startNow = request.getParameter("startNow") == "1",
 
@@ -138,6 +139,7 @@ class StartWorkflowController(
 
 data class StartWorkflowForm(
     val workflowId: Long = -1,
+    val title: String = "",
     val startNow: Boolean = true,
     val startAt: Date = Date(),
     val dueAt: Date? = null,

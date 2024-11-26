@@ -88,6 +88,7 @@ class WorkflowInstanceService(
         if (startTo != null) {
             jql.append(" AND W.startAt <= :startTo")
         }
+        jql.append(" ORDER BY W.createdAt DESC")
 
         val query = em.createQuery(jql.toString(), WorkflowInstanceEntity::class.java)
         query.setParameter("tenantId", tenantId)

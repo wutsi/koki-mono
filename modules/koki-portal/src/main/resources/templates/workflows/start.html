@@ -33,6 +33,14 @@
                                 </div>
                                 <div class="section-item">
                                     <label class="title">
+                                        <span>Title</span>
+                                        <span class="required">*</span>
+                                    </label>
+                                    <input maxlength="50" name="title" required/>
+                                </div>
+
+                                <div class="section-item">
+                                    <label class="title">
                                         <span>Start Date</span>
                                         <span class="required">*</span>
                                     </label>
@@ -82,8 +90,7 @@
                                 <div class="section-item" th:if="${workflow.approverRole}">
                                     <label class="title">Approver</label>
                                     <select class="participant" name="approverId">
-                                        <option th:if="${userMap[workflow.approverRole.id].size() > 1}"
-                                                value=""></option>
+                                        <option value="-1"></option>
                                         <option th:each="user : ${userMap[workflow.approverRole.id]}"
                                                 th:text="${user.displayName}"
                                                 th:value="${user.id}">
@@ -96,7 +103,7 @@
                                     <label class="title" th:text="${role.title}">ROLE</label>
                                     <select class="participant" placeholder="Select a user"
                                             th:name="'participant_' + ${role.id}">
-                                        <option th:if="${userMap[role.id].size() > 1}" value=""></option>
+                                        <option value="-1"></option>
                                         <option th:each="user : ${userMap[role.id]}"
                                                 th:text="${user.displayName}"
                                                 th:value="${user.id}">

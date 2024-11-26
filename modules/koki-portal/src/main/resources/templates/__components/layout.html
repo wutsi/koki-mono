@@ -28,7 +28,8 @@
         <li>
             <button aria-expanded="false" class="nav-link user btn btn-primary dropdown-toggle"
                     data-bs-toggle="dropdown"
-                    id="navbarDropdown" type="button">
+                    id="navbarDropdown" th:if="${user}"
+                    type="button">
                 <i class="fa-solid fa-bars"></i>
             </button>
             <ul class="dropdown-menu" th:if="${user}">

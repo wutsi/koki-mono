@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import kotlin.jvm.java
 
-class UserWorkerTest {
+class UserRunnerTest {
     private val engine = Mockito.mock(WorkflowEngine::class.java)
     private val executor = UserRunner()
     private val instance = ActivityInstanceEntity()

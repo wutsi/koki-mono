@@ -1,0 +1,31 @@
+<div class="widget task-queue-widget">
+    <div class="widget-header">
+        <div class="widget-title">Task Queue</div>
+    </div>
+    <div class="widget-body">
+        <table class="table table-striped" th:if="${activityInstances}">
+            <tr>
+                <th>Task</th>
+                <th>Case</th>
+                <td></td>
+            </tr>
+            <tr th:each="activityInstance : ${activityInstances}">
+                <td>
+                    <a th:alt="${activityInstance.activity.title}"
+                       th:href="${activityInstance.url}"
+                       th:text="${activityInstance.activity.title}">
+                        ACTIVITY
+                    </a>
+                </td>
+                <td th:text="${activityInstance.workflowInstance.title}">WORKFLOW</td>
+                <td class="toolbar">
+                    <a th:href="'/workflows/widgets/task-queue/assign?activity-instance-id=' + ${activityInstance.id}">
+                        Assign to Me
+                    </a>
+                </td>
+            </tr>
+        </table>
+
+        <div class="text-center" th:if="!${activityInstances}">The queue is empty</div>
+    </div>
+</div>

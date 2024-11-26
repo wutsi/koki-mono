@@ -143,4 +143,18 @@ class SearchActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         val activityInstanceIds = activityInstances.map { activityInstanceId -> activityInstanceId.id }
         assertEquals(11, activityInstanceIds.size)
     }
+
+    @Test
+    fun `by activity-id`() {
+        val result = rest.getForEntity(
+            "/v1/activity-instances?activity-id=100",
+            SearchActivityInstanceResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val activityInstances = result.body!!.activityInstances
+        val activityInstanceIds = activityInstances.map { activityInstanceId -> activityInstanceId.id }
+        assertEquals(5, activityInstanceIds.size)
+    }
 }

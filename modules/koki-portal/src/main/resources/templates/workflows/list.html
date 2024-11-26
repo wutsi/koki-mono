@@ -8,13 +8,10 @@
 <div th:replace="~{__components/layout :: navbar}"></div>
 
 <div class="container">
+    <h2>Workflows</h2>
     <div class="row">
         <div class="col-12">
-
             <div class="widget">
-                <div class="widget-header">
-                    <h1>Workflows</h1>
-                </div>
                 <div class="widget-body">
                     <div class="widget-toolbar">
                         <a class="btn-create" href="/workflows/create">New Workflow</a>
@@ -29,7 +26,7 @@
                         <tr class="workflow" th:each="workflow : ${workflows}">
                             <td th:text="${workflow.name}">NAME</td>
                             <td th:text="${workflow.title}">TITLE</td>
-                            <td>
+                            <td class="toolbar">
                                 <a class="btn-view" th:href="${workflow.url}">View</a>
                                 <a class="btn-edit" th:href="${workflow.updateUrl}">Edit</a>
                             </td>

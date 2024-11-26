@@ -11,6 +11,7 @@ import com.wutsi.koki.sdk.KokiWorkflowInstance
 import com.wutsi.koki.workflow.dto.Activity
 import com.wutsi.koki.workflow.dto.ApprovalStatus
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
+import com.wutsi.koki.workflow.dto.SetActivityInstanceAssigneeRequest
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import org.springframework.stereotype.Service
 import java.util.Date
@@ -32,8 +33,9 @@ class WorkflowInstanceService(
         val workflowInstanceId = kokiWorkflowInstance.create(
             CreateWorkflowInstanceRequest(
                 workflowId = form.workflowId,
-                participants = form.participants,
-                approverUserId = form.approverUserId,
+                title = form.title,
+                participants = form.participants.filter { participant -> participant.userId != -1L },
+                approverUserId = if (form.approverUserId != -1L) form.approverUserId else null,
                 startAt = form.startAt,
                 dueAt = form.dueAt,
                 parameters = form.parameters,
@@ -181,6 +183,7 @@ class WorkflowInstanceService(
 
     fun activities(
         ids: List<String> = emptyList(),
+        activityIds: List<Long> = emptyList(),
         workflowInstanceIds: List<String> = emptyList(),
         assigneeIds: List<Long> = emptyList(),
         approverIds: List<Long> = emptyList(),
@@ -196,6 +199,7 @@ class WorkflowInstanceService(
         // Activity Instances
         val activityInstances = kokiWorkflowInstance.searchActivities(
             ids = ids,
+            activityIds = activityIds,
             workflowInstanceIds = workflowInstanceIds,
             assigneeIds = assigneeIds,
             approverIds = approverIds,
@@ -250,5 +254,14 @@ class WorkflowInstanceService(
                 workflowInstance = workflowInstanceMap[activityInstance.workflowInstanceId]!!,
             )
         }
+    }
+
+    fun setAssignee(activityInstanceId: String, userId: Long) {
+        kokiWorkflowInstance.setAssignee(
+            SetActivityInstanceAssigneeRequest(
+                userId = userId,
+                activityInstanceIds = listOf(activityInstanceId)
+            )
+        )
     }
 }

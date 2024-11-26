@@ -1,20 +1,22 @@
 package com.wutsi.koki.workflow.server.engine.runner
 
+import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.engine.WorkflowEngine
-import com.wutsi.koki.workflow.server.service.runner.ManualRunner
+import com.wutsi.koki.workflow.server.service.runner.StartRunner
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import kotlin.jvm.java
 
-class ManualWorkerTest {
+class StartRunnerTest {
     private val engine = Mockito.mock(WorkflowEngine::class.java)
-    private val executor = ManualRunner()
-    private val instance = ActivityInstanceEntity()
+    private val executor = StartRunner()
+    private val instance = ActivityInstanceEntity(id = "111", tenantId = 555L)
 
     @Test
     fun run() {
         executor.run(instance, engine)
-        // Nothing happends
+
+        verify(engine).done(instance.id!!, emptyMap(), instance.tenantId)
     }
 }

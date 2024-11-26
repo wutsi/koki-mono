@@ -84,4 +84,17 @@ class SearchActivityEndpointTest : TenantAwareEndpointTest() {
         val activities = result.body!!.activities
         assertEquals(2, activities.size)
     }
+
+    @Test
+    fun `by role-id`() {
+        val result = rest.getForEntity(
+            "/v1/activities?role-id=11&role-id=10",
+            SearchActivityResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val activities = result.body!!.activities
+        assertEquals(4, activities.size)
+    }
 }

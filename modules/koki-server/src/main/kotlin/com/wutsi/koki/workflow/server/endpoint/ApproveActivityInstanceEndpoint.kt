@@ -4,7 +4,6 @@ import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.workflow.dto.ApproveActivityInstanceRequest
 import com.wutsi.koki.workflow.dto.ApproveActivityInstanceResponse
 import com.wutsi.koki.workflow.server.engine.WorkflowEngine
-import com.wutsi.koki.workflow.server.service.ActivityInstanceService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping
 class ApproveActivityInstanceEndpoint(
-    private val service: ActivityInstanceService,
     private val engine: WorkflowEngine,
     private val securityService: SecurityService,
 ) {
@@ -27,8 +25,7 @@ class ApproveActivityInstanceEndpoint(
         @RequestBody @Valid request: ApproveActivityInstanceRequest
     ): ApproveActivityInstanceResponse {
         val approverId = securityService.getCurrentUserId()
-        val activityInstance = service.get(id, tenantId)
-        val approval = engine.approve(activityInstance, request.status, approverId, request.comment)
+        val approval = engine.approve(id, request.status, approverId, request.comment, tenantId)
         return ApproveActivityInstanceResponse(approval.id ?: -1)
     }
 }

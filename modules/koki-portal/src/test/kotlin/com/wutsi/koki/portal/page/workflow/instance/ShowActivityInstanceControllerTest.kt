@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.page.form
 
-import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
@@ -85,7 +84,17 @@ class ShowActivityInstanceControllerTest : AbstractPageControllerTest() {
             .searchRoles(anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(SearchWorkflowResponse(listOf(workflow))).whenever(kokiWorkflow)
-            .searchWorkflows(any(), anyOrNull(), anyOrNull())
+            .searchWorkflows(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
 
         doReturn(SearchUserResponse(users)).whenever(kokiUser)
             .searchUsers(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())

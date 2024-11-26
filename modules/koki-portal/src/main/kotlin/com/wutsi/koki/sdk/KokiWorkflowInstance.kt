@@ -8,6 +8,7 @@ import com.wutsi.koki.workflow.dto.GetActivityInstanceResponse
 import com.wutsi.koki.workflow.dto.GetWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.SearchActivityInstanceResponse
 import com.wutsi.koki.workflow.dto.SearchWorkflowInstanceResponse
+import com.wutsi.koki.workflow.dto.SetActivityInstanceAssigneeRequest
 import com.wutsi.koki.workflow.dto.StartWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import org.springframework.web.client.RestTemplate
@@ -71,6 +72,7 @@ class KokiWorkflowInstance(
 
     fun searchActivities(
         ids: List<String> = emptyList(),
+        activityIds: List<Long> = emptyList(),
         workflowInstanceIds: List<String> = emptyList(),
         assigneeIds: List<Long> = emptyList(),
         approverIds: List<Long> = emptyList(),
@@ -87,6 +89,7 @@ class KokiWorkflowInstance(
             mapOf(
                 "id" to ids,
                 "workflow-instance-id" to workflowInstanceIds,
+                "activity-id" to activityIds,
                 "assignee-id" to assigneeIds,
                 "approver-id" to approverIds,
                 "status" to status?.name,
@@ -98,6 +101,11 @@ class KokiWorkflowInstance(
             )
         )
         return rest.getForEntity(url, SearchActivityInstanceResponse::class.java).body!!
+    }
+
+    fun setAssignee(request: SetActivityInstanceAssigneeRequest) {
+        val url = urlBuilder.build("$ACTIVITY_PATH_PREFIX/assignee")
+        rest.postForEntity(url, request, Any::class.java)
     }
 
     fun searchWorkflows(

@@ -40,6 +40,7 @@ class ActivityService(
         tenantId: Long,
         ids: List<Long> = emptyList(),
         workflowIds: List<Long> = emptyList(),
+        roleIds: List<Long> = emptyList(),
         type: ActivityType? = null,
         active: Boolean? = null,
         limit: Int = 20,
@@ -52,6 +53,9 @@ class ActivityService(
         }
         if (workflowIds.isNotEmpty()) {
             jql.append(" AND A.workflowId IN :workflowIds")
+        }
+        if (roleIds.isNotEmpty()) {
+            jql.append(" AND A.roleId IN :roleIds")
         }
         if (type != null) {
             jql.append(" AND A.type = :type")
@@ -68,6 +72,9 @@ class ActivityService(
         }
         if (workflowIds.isNotEmpty()) {
             query.setParameter("workflowIds", workflowIds)
+        }
+        if (roleIds.isNotEmpty()) {
+            query.setParameter("roleIds", roleIds)
         }
         if (type != null) {
             query.setParameter("type", type)
