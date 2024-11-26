@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface ParticipantRepository : CrudRepository<ParticipantEntity, Long> {
     fun findByWorkflowInstanceId(workflowInstanceId: String): List<ParticipantEntity>
+
+    fun findByWorkflowInstanceIdAndRoleId(workflowInstanceId: String, roleId: Long): ParticipantEntity?
 }

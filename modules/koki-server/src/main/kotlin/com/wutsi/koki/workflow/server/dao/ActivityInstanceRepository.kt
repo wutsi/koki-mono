@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface ActivityInstanceRepository : CrudRepository<ActivityInstanceEntity, String> {
     fun findByWorkflowInstanceId(workflowInstanceId: String): List<ActivityInstanceEntity>
+
+    fun findByIdInAndTenantId(ids: List<String>, tenantId: Long): List<ActivityInstanceEntity>
 }

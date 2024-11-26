@@ -5,11 +5,9 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.error.dto.ParameterType
 import com.wutsi.koki.error.exception.BadRequestException
-import com.wutsi.koki.tenant.server.service.RoleService
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceResponse
 import com.wutsi.koki.workflow.server.domain.WorkflowEntity
-import com.wutsi.koki.workflow.server.service.ActivityService
 import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
 import com.wutsi.koki.workflow.server.service.WorkflowService
 import jakarta.validation.Valid
@@ -24,8 +22,6 @@ import org.springframework.web.bind.annotation.RestController
 class CreateWorkflowInstanceEndpoint(
     private val service: WorkflowInstanceService,
     private val workflowService: WorkflowService,
-    private val activityService: ActivityService,
-    private val roleService: RoleService,
 ) {
     @PostMapping("/v1/workflow-instances")
     fun create(

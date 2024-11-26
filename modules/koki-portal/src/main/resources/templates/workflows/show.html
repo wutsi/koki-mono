@@ -68,7 +68,7 @@
                                 <th width="1%"></th>
                                 <th>Title</th>
                                 <th>Role</th>
-                                <th>Approval?</th>
+                                <th th:if="${workflow.requiresApprover}">Approval?</th>
                             </tr>
                             <tr class="activity" th:each="activity: ${workflow.activities}">
                                 <td>
@@ -79,7 +79,7 @@
                                 <td>
                                     <span th:if="${activity.role}" th:text="${activity.role.title}">ROLE</span>
                                 </td>
-                                <td>
+                                <td th:if="${workflow.requiresApprover}">
                                     <span th:if="${activity.requiresApproval}">Yes</span>
                                     <span th:if="!${activity.requiresApproval}">No</span>
                                 </td>

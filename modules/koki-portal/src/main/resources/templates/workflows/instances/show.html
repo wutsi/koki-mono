@@ -64,7 +64,7 @@
                                 <th>Title</th>
                                 <th>Status</th>
                                 <th>Assignee</th>
-                                <th>Approval</th>
+                                <th th:if="${workflowInstance.workflow.requiresApprover}">Approval</th>
                                 <td></td>
                             </tr>
                             <tr class="activity"
@@ -93,7 +93,7 @@
                                     <span
                                         th:text="${activityInstances[activity.id]?.assignee?.displayName}">ASSIGNEE</span>
                                 </td>
-                                <td>
+                                <td th:if="${workflowInstance.workflow.requiresApprover}">
                                     <div
                                         th:replace="~{__components/workflow :: approval-status(${activityInstances[activity.id]?.approval})}"></div>
                                 </td>

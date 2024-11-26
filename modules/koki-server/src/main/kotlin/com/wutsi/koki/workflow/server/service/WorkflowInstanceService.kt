@@ -171,6 +171,7 @@ class WorkflowInstanceService(
                 tenantId = tenantId,
                 workflowId = workflow.id!!,
                 createdById = securityService.getCurrentUserIdOrNull(),
+                title = request.title,
                 status = WorkflowStatus.NEW,
                 approverId = request.approverUserId,
                 startAt = request.startAt,

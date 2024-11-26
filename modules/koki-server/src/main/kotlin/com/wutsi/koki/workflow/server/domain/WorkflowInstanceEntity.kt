@@ -38,6 +38,7 @@ data class WorkflowInstanceEntity(
     @JoinColumn(name = "workflow_instance_fk")
     val participants: List<ParticipantEntity> = emptyList(),
 
+    var title: String? = null,
     var status: WorkflowStatus = WorkflowStatus.UNKNOWN,
     var state: String? = null,
     var parameters: String? = null,

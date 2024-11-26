@@ -18,7 +18,7 @@ data class ParticipantEntity(
     val workflowInstanceId: String = "",
 
     @Column(name = "user_fk")
-    val userId: Long = -1,
+    var userId: Long = -1,
 
     @Column(name = "role_fk")
     val roleId: Long = -1,

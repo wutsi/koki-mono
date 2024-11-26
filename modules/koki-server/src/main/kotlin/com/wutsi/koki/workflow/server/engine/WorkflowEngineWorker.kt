@@ -190,7 +190,7 @@ class WorkflowEngineWorker(
         // Execute all successors
         return successorFlows
             .filter { flow -> flow.to.active }
-            .filter { flow -> allPredecessorsAreDone(flow.to, workflowInstance, workflow) }
+            .filter { flow -> noPredecessorsIsRunning(flow.to, workflowInstance, workflow) }
             .filter { flow -> evaluate(flow, workflowInstance) }
             .mapNotNull { flow -> createActivityInstance(flow.to, workflowInstance) }
     }
@@ -310,21 +310,22 @@ class WorkflowEngineWorker(
         return flows
     }
 
-    private fun allPredecessorsAreDone(
+    private fun noPredecessorsIsRunning(
         activity: ActivityEntity,
         workflowInstance: WorkflowInstanceEntity,
         workflow: WorkflowEntity,
     ): Boolean {
-        val predecessorActivityIds = workflow.flows
+        val runningActivityIds = workflowInstance.activityInstances
+            .filter { activityInstance -> activityInstance.status == WorkflowStatus.RUNNING }
+            .map { activityInstance -> activityInstance.activityId }
+
+        val runningPredecessorActivityIds = workflow.flows
             .filter { flow -> flow.to.id == activity.id }
             .map { flow -> flow.from }
             .filter { activity -> activity.active }
+            .filter { activity -> runningActivityIds.contains(activity.id) }
             .map { activity -> activity.id }
 
-        val runningActivityIds = workflowInstance.activityInstances
-            .filter { activityInstance -> activityInstance.status == WorkflowStatus.DONE }
-            .map { activityInstance -> activityInstance.activityId }
-
-        return runningActivityIds.containsAll(predecessorActivityIds)
+        return runningPredecessorActivityIds.isEmpty()
     }
 }
