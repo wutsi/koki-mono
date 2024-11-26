@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 import java.lang.IllegalStateException
 
 @Service
-class ActivityWorkerProvider(
+class ActivityRunnerProvider(
     private val start: StartRunner,
     private val end: EndRunner,
     private val manual: ManualRunner,

@@ -2,6 +2,7 @@ package com.wutsi.koki.tenant.server.server.endpoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.times
@@ -15,8 +16,9 @@ import com.wutsi.koki.workflow.dto.CompleteActivityInstanceRequest
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.dao.ActivityInstanceRepository
 import com.wutsi.koki.workflow.server.dao.WorkflowInstanceRepository
-import com.wutsi.koki.workflow.server.engine.ActivityExecutor
-import com.wutsi.koki.workflow.server.engine.ActivityExecutorProvider
+import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
+import com.wutsi.koki.workflow.server.engine.ActivityRunner
+import com.wutsi.koki.workflow.server.engine.ActivityRunnerProvider
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
 import org.springframework.beans.factory.annotation.Autowired
@@ -43,14 +45,15 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
     private lateinit var objectMapper: ObjectMapper
 
     @MockitoBean
-    private lateinit var activityExecutorProvider: ActivityExecutorProvider
+    private lateinit var activityExecutorProvider: ActivityRunnerProvider
+
+    private val activityRunner = mock<ActivityRunner>()
 
     @BeforeTest
     override fun setUp() {
         super.setUp()
 
-        val executor = mock(ActivityExecutor::class.java)
-        doReturn(executor).whenever(activityExecutorProvider).get(any())
+        doReturn(activityRunner).whenever(activityExecutorProvider).get(any())
     }
 
     @Test
@@ -81,8 +84,6 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         assertEquals(ApprovalStatus.UNKNOWN, activityInstance.approval)
         assertEquals(fmt.format(Date()), fmt.format(activityInstance.doneAt))
 
-        verify(activityExecutorProvider, times(2)).get(any())
-
         val workflowInstance = instanceDao.findById("wi-100-01").get()
         val state = objectMapper.readValue(workflowInstance.state, Map::class.java)
         assertEquals(3, state.size)
@@ -90,8 +91,12 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.state["B"], state["B"])
         assertEquals(request.state["C"], state["C"])
 
+        Thread.sleep(1000)
         val activityInstances = activityInstanceDao.findByWorkflowInstanceId(workflowInstance.id!!)
         assertEquals(4, activityInstances.size)
+
+        val instance = argumentCaptor<ActivityInstanceEntity>()
+        verify(activityRunner, times(2)).run(instance.capture(), any())
     }
 
     @Test

@@ -20,6 +20,6 @@ class StopWorkflowInstanceEndpoint(
         @PathVariable id: String
     ) {
         val workflowInstance = service.get(id, tenantId)
-        engine.stop(workflowInstance)
+        engine.done(workflowInstance)
     }
 }
