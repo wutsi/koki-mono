@@ -1,4 +1,4 @@
-package com.wutsi.koki.document.server.domain
+package com.wutsi.koki.file.server.domain
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -16,9 +16,10 @@ data class FileEntity(
     val tenantId: Long = -1,
 
     @Column(name = "created_by_fk")
-    val createById: Long? = null,
+    val createdById: Long? = null,
 
     val workflowInstanceId: String? = null,
+    val formId: String? = null,
     val name: String = "",
     val contentType: String = "",
     val contentLength: Long = -1,

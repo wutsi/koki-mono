@@ -1,32 +1,22 @@
-CREATE TABLE T_FORM(
+CREATE TABLE T_FILE(
   id                      VARCHAR(36) NOT NULL,
 
   tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
-
-  name                    VARCHAR(100) NOT NULL,
-  title                   VARCHAR(255) NOT NULL,
-  content                 JSON NOT NULL,
-  active                  BOOLEAN NOT NULL DEFAULT true,
-  created_at              DATETIME DEFAULT NOW(),
-  modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
-
-  UNIQUE(tenant_fk, name),
-  PRIMARY KEY(id)
-) ENGINE = InnoDB;
-
-CREATE TABLE T_FORM_DATA(
-  id                      VARCHAR(36) NOT NULL,
-
-  tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
-  form_fk                 VARCHAR(36) NOT NULL REFERENCES T_FORM(id),
+  created_by_fk           BIGINT REFERENCES T_USER(id),
 
   workflow_instance_id    VARCHAR(36),
-  status                  INT NOT NULL DEFAULT 0,
-  data                    JSON NOT NULL,
+  form_id                 VARCHAR(36),
+  name                    VARCHAR(100) NOT NULL,
+  content_type            VARCHAR(255) NOT NULL,
+  content_length          LONG NOT NULL,
+  url                     TEXT NOT NULL,
+  deleted                 BOOL NOT NULL DEFAULT false,
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
+  deleted_at              DATETIME,
 
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
-CREATE INDEX I_FORM_DATA_WORKFLOW ON T_FORM_DATA(workflow_instance_id);
+CREATE INDEX I_FILE_WORKFLOW ON T_FILE(workflow_instance_id);
+CREATE INDEX I_FILE_FORM ON T_FILE(form_id);
