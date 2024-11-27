@@ -1,44 +1,51 @@
 package com.wutsi.koki.file.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.file.dto.GetFileResponse
+import com.wutsi.koki.file.dto.SearchFileResponse
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/file/GetFileEndpoint.sql"])
-class GetFileEndpointTest : AuthorizationAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/file/SearchFileEndpoint.sql"])
+class SearchFileEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
-    fun get() {
-        val response = rest.getForEntity("/v1/files/100", GetFileResponse::class.java)
+    fun all() {
+        val response = rest.getForEntity("/v1/files", SearchFileResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val file = response.body!!.file
-        assertEquals("foo.pdf", file.name)
-        assertEquals("https://www.file.com/foo.pdf", file.url)
-        assertEquals("application/pdf", file.contentType)
-        assertEquals(1000L, file.contentLength)
-        assertEquals("wi-100", file.workflowInstanceId)
-        assertEquals(USER_ID, file.createById)
+        val files = response.body!!.files
+        assertEquals(5, files.size)
     }
 
     @Test
-    fun `not found`() {
-        val response = rest.getForEntity("/v1/files/999", ErrorResponse::class.java)
+    fun `by workflow`() {
+        val response = rest.getForEntity("/v1/files?workflow-instance-id=wi-100", SearchFileResponse::class.java)
 
-        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
-        assertEquals(ErrorCode.FILE_NOT_FOUND, response.body!!.error.code)
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val files = response.body!!.files
+        assertEquals(2, files.size)
     }
 
     @Test
-    fun `another tenant`() {
-        val response = rest.getForEntity("/v1/files/200", ErrorResponse::class.java)
+    fun `by form`() {
+        val response = rest.getForEntity("/v1/files?form-id=f-100&form-id=f-110", SearchFileResponse::class.java)
 
-        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
-        assertEquals(ErrorCode.FILE_NOT_FOUND, response.body!!.error.code)
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val files = response.body!!.files
+        assertEquals(3, files.size)
+    }
+
+    @Test
+    fun `by id`() {
+        val response = rest.getForEntity("/v1/files?id=100&id=101&id=103", SearchFileResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val files = response.body!!.files
+        assertEquals(3, files.size)
     }
 }

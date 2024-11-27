@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
 @EnableCaching
 @EntityScan(
     basePackages = [
+        "com.wutsi.koki.file.server.domain",
         "com.wutsi.koki.form.server.domain",
         "com.wutsi.koki.tenant.server.domain",
         "com.wutsi.koki.workflow.server.domain",
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
 )
 @EnableJpaRepositories(
     basePackages = [
+        "com.wutsi.koki.file.server.dao",
         "com.wutsi.koki.form.server.dao",
         "com.wutsi.koki.tenant.server.dao",
         "com.wutsi.koki.workflow.server.dao",

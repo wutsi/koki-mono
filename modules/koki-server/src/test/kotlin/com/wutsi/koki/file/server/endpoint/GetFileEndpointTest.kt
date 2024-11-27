@@ -1,67 +1,45 @@
 package com.wutsi.koki.file.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.file.dto.CreateFileRequest
-import com.wutsi.koki.file.dto.CreateFileResponse
-import com.wutsi.koki.file.server.dao.FileRepository
-import org.springframework.beans.factory.annotation.Autowired
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.file.dto.GetFileResponse
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
-import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/file/CreateFileEndpoint.sql"])
-class CreateFileEndpointTest : AuthorizationAwareEndpointTest() {
-    @Autowired
-    private lateinit var dao: FileRepository
-
+@Sql(value = ["/db/test/clean.sql", "/db/test/file/GetFileEndpoint.sql"])
+class GetFileEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
-    fun create() {
-        val request = CreateFileRequest(
-            name = "foo.pdf",
-            url = "https://www.files.com/foo.pdf",
-            contentLength = 1024 * 1024L,
-            contentType = "application/pdf",
-            workflowInstanceId = UUID.randomUUID().toString()
-        )
-        val response = rest.postForEntity("/v1/files", request, CreateFileResponse::class.java)
+    fun get() {
+        val response = rest.getForEntity("/v1/files/100", GetFileResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val fileId = response.body!!.fileId
-
-        val file = dao.findById(fileId).get()
-        assertEquals(request.name, file.name)
-        assertEquals(request.url, file.url)
-        assertEquals(request.contentType, file.contentType)
-        assertEquals(request.contentLength, file.contentLength)
-        assertEquals(request.workflowInstanceId, file.workflowInstanceId)
+        val file = response.body!!.file
+        assertEquals("foo.pdf", file.name)
+        assertEquals("https://www.file.com/foo.pdf", file.url)
+        assertEquals("application/pdf", file.contentType)
+        assertEquals(1000L, file.contentLength)
+        assertEquals("wi-100", file.workflowInstanceId)
+        assertEquals("f-100", file.formId)
         assertEquals(USER_ID, file.createdById)
     }
 
     @Test
-    fun anonymous() {
-        anonymousUser = true
-        val request = CreateFileRequest(
-            name = "foo.pdf",
-            url = "https://www.files.com/foo.pdf",
-            contentLength = 1024 * 1024L,
-            contentType = "application/pdf",
-            workflowInstanceId = null
-        )
-        val response = rest.postForEntity("/v1/files", request, CreateFileResponse::class.java)
+    fun `not found`() {
+        val response = rest.getForEntity("/v1/files/999", ErrorResponse::class.java)
 
-        assertEquals(HttpStatus.OK, response.statusCode)
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertEquals(ErrorCode.FILE_NOT_FOUND, response.body!!.error.code)
+    }
 
-        val fileId = response.body!!.fileId
+    @Test
+    fun `another tenant`() {
+        val response = rest.getForEntity("/v1/files/200", ErrorResponse::class.java)
 
-        val file = dao.findById(fileId).get()
-        assertEquals(request.name, file.name)
-        assertEquals(request.url, file.url)
-        assertEquals(request.contentType, file.contentType)
-        assertEquals(request.contentLength, file.contentLength)
-        assertEquals(request.workflowInstanceId, file.workflowInstanceId)
-        assertEquals(null, file.createdById)
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertEquals(ErrorCode.FILE_NOT_FOUND, response.body!!.error.code)
     }
 }

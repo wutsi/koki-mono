@@ -1,8 +1,8 @@
-package com.wutsi.koki.document.server.endpoint
+package com.wutsi.koki.file.server.endpoint
 
-import com.wutsi.koki.document.dto.CreateFileRequest
-import com.wutsi.koki.document.dto.CreateFileResponse
-import com.wutsi.koki.document.server.service.FileService
+import com.wutsi.koki.file.dto.CreateFileRequest
+import com.wutsi.koki.file.dto.CreateFileResponse
+import com.wutsi.koki.file.server.service.FileService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

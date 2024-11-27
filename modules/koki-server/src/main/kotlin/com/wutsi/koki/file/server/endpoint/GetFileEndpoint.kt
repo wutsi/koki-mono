@@ -1,26 +1,28 @@
 package com.wutsi.koki.file.server.endpoint
 
-import com.wutsi.koki.file.dto.CreateFileRequest
-import com.wutsi.koki.file.dto.CreateFileResponse
+import com.wutsi.koki.file.dto.GetFileResponse
+import com.wutsi.koki.file.server.mapper.FileMapper
 import com.wutsi.koki.file.server.service.FileService
-import jakarta.validation.Valid
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping
-class CreateFileEndpoint(
-    private val service: FileService
+class GetFileEndpoint(
+    private val service: FileService,
+    private val mapper: FileMapper,
 ) {
-    @PostMapping("/v1/files")
-    fun create(
+    @GetMapping("/v1/files/{id}")
+    fun get(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-        @RequestBody @Valid request: CreateFileRequest
-    ): CreateFileResponse {
-        val file = service.create(request, tenantId)
-        return CreateFileResponse(fileId = file.id!!)
+        @PathVariable id: String,
+    ): GetFileResponse {
+        val file = service.get(id, tenantId)
+        return GetFileResponse(
+            file = mapper.toFile(file)
+        )
     }
 }
