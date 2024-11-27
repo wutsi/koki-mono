@@ -17,6 +17,8 @@ object ErrorCode {
     val AUTHORIZATION_TOKEN_EXPIRED: String = "$PREFIX:auth:token-expired"
     val AUTHORIZATION_UNAUTHENTICATED: String = "$PREFIX:auth:unauthenticated"
 
+    val FILE_NOT_FOUND: String = "$PREFIX:file:not-found"
+
     val FORM_NOT_FOUND: String = "$PREFIX:form:not-found"
     val FORM_DUPLICATE_NAME: String = "$PREFIX:form:duplicate-name"
     val FORM_DATA_NOT_FOUND: String = "$PREFIX:form-data:not-found"
