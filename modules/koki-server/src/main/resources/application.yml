@@ -69,6 +69,10 @@ springdoc:
             display-name: Authentication API
             paths-to-match: /v1/auth, /v1/auth/*
 
+        -   group: file
+            display-name: File API
+            paths-to-match: /v1/files, /v1/files/*
+
         -   group: forms
             display-name: Form API
             paths-to-match: /v1/forms, /v1/forms/*, /v1/forms/**, /v1/form-data, /v1/form-data/*
