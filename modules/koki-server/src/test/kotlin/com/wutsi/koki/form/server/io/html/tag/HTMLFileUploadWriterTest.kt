@@ -3,56 +3,59 @@ package com.wutsi.koki.form.server.generator.html.tag
 import com.wutsi.koki.form.dto.FormAccessControl
 import com.wutsi.koki.form.dto.FormElement
 import com.wutsi.koki.form.dto.FormElementType
-import com.wutsi.koki.form.dto.FormOption
 import com.wutsi.koki.form.server.generator.html.Context
-import com.wutsi.koki.form.server.generator.html.HTMLCheckboxesWriter
-import org.junit.jupiter.api.Assertions.assertTrue
+import com.wutsi.koki.form.server.generator.html.File
+import com.wutsi.koki.form.server.generator.html.FileResolver
+import com.wutsi.koki.form.server.generator.html.HTMLFileUploadWriter
 import org.junit.jupiter.api.Test
 import java.io.StringWriter
 import kotlin.test.assertEquals
 
-class HTMLCheckboxesWriterTest {
+class HTMLFileUploadWriterTest : FileResolver {
+    var file: File? = File(
+        name = "foo.txt",
+        contentLength = 100000,
+        contentType = "text/plain"
+    )
+
     val context = Context(
         roleNames = listOf("accountant"),
-        data = mapOf("var1" to "value1")
+        data = mapOf("var1" to "11111"),
+        fileResolver = this,
+        downloadUrl = "https://foo.com/storage/download",
+        uploadUrl = "https://foo.com/storage/upload"
     )
     val output = StringWriter()
-    val writer = HTMLCheckboxesWriter()
+    val writer = HTMLFileUploadWriter()
 
     val elt = FormElement(
-        type = FormElementType.CHECKBOXES,
+        type = FormElementType.FILE_UPLOAD,
         url = "https://www.google.com/img/1.png",
         name = "var1",
         title = "test",
         description = "This is the description",
-        options = listOf(
-            FormOption(value = "1"),
-            FormOption(value = "foo", text = "FOO"),
-            FormOption(value = "value1", text = "Value #1"),
-        )
     )
 
+    override fun resolve(id: String, tenantId: Long): File? {
+        return file
+    }
+
     @Test
-    fun checkboxes() {
+    fun file() {
         writer.write(elt, context, output)
 
         assertEquals(
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <DIV class='radio-container'>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='1'/>
-                    <LABEL>1</LABEL>
-                  </DIV>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='foo'/>
-                    <LABEL>FOO</LABEL>
-                  </DIV>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='value1' checked/>
-                    <LABEL>Value #1</LABEL>
-                  </DIV>
+                <DIV class='file-upload-container'>
+                  <INPUT type='hidden' name='var1' value='11111'/>
+                  <BUTTON type='button' class='btn-upload' rel='var1'>Upload File</BUTTON>
+                  <INPUT type='file' name='var1-file' rel='var1' data-upload-url='https://foo.com/storage/upload'/>
+                  <SPAN data-name='var1-filename'>
+                    <A class='filename' href='https://foo.com/storage/download/11111/foo.txt'>foo.txt</A>
+                    <button class='btn-close' type='button' name='var1-close' rel='var1'></button>
+                  </SPAN>
                 </DIV>
 
             """.trimIndent(),
@@ -61,58 +64,21 @@ class HTMLCheckboxesWriterTest {
     }
 
     @Test
-    fun `multiple values`() {
-        val xcontext = Context(
-            roleNames = listOf("accountant"),
-            data = mapOf("var1" to listOf("value1", "1"))
-        )
-        writer.write(elt, xcontext, output)
-
-        assertEquals(
-            """
-                <LABEL class='title'><SPAN>test</SPAN></LABEL>
-                <DIV class='description'>This is the description</DIV>
-                <DIV class='radio-container'>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='1' checked/>
-                    <LABEL>1</LABEL>
-                  </DIV>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='foo'/>
-                    <LABEL>FOO</LABEL>
-                  </DIV>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='value1' checked/>
-                    <LABEL>Value #1</LABEL>
-                  </DIV>
-                </DIV>
-
-            """.trimIndent(),
-            output.toString()
-        )
-    }
-
-    @Test
-    fun radio() {
-        writer.write(elt.copy(type = FormElementType.MULTIPLE_CHOICE, required = true), context, output)
+    fun required() {
+        writer.write(elt.copy(required = true), context, output)
 
         assertEquals(
             """
                 <LABEL class='title'><SPAN>test</SPAN><SPAN class='required'>*</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <DIV class='checkbox-container' required>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='checkbox' value='1'/>
-                    <LABEL>1</LABEL>
-                  </DIV>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='checkbox' value='foo'/>
-                    <LABEL>FOO</LABEL>
-                  </DIV>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='checkbox' value='value1' checked/>
-                    <LABEL>Value #1</LABEL>
-                  </DIV>
+                <DIV class='file-upload-container'>
+                  <INPUT type='hidden' name='var1' value='11111' required/>
+                  <BUTTON type='button' class='btn-upload' rel='var1'>Upload File</BUTTON>
+                  <INPUT type='file' name='var1-file' rel='var1' data-upload-url='https://foo.com/storage/upload'/>
+                  <SPAN data-name='var1-filename'>
+                    <A class='filename' href='https://foo.com/storage/download/11111/foo.txt'>foo.txt</A>
+                    <button class='btn-close' type='button' name='var1-close' rel='var1'></button>
+                  </SPAN>
                 </DIV>
 
             """.trimIndent(),
@@ -121,36 +87,23 @@ class HTMLCheckboxesWriterTest {
     }
 
     @Test
-    fun `other option`() {
-        writer.write(
-            elt.copy(
-                otherOption = FormOption(value = "other-value", text = "This is the other option")
-            ),
-            context,
-            output
+    fun `read only`() {
+        val xelt = elt.copy(
+            accessControl = FormAccessControl(
+                editorRoles = listOf("X", "Y", "Z")
+            )
         )
+        writer.write(xelt, context, output)
 
         assertEquals(
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <DIV class='radio-container'>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='1'/>
-                    <LABEL>1</LABEL>
-                  </DIV>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='foo'/>
-                    <LABEL>FOO</LABEL>
-                  </DIV>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='value1' checked/>
-                    <LABEL>Value #1</LABEL>
-                  </DIV>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='text' value='other-value'/>
-                    <LABEL>This is the other option</LABEL>
-                  </DIV>
+                <DIV class='file-upload-container'>
+                  <INPUT type='hidden' name='var1' value='11111'/>
+                  <SPAN data-name='var1-filename'>
+                    <A class='filename' href='https://foo.com/storage/download/11111/foo.txt'>foo.txt</A>
+                  </SPAN>
                 </DIV>
 
             """.trimIndent(),
@@ -159,41 +112,21 @@ class HTMLCheckboxesWriterTest {
     }
 
     @Test
-    fun `other option value`() {
-        writer.write(
-            elt.copy(
-                otherOption = FormOption(value = "other-value", text = "This is the other option")
-            ),
-            context.copy(
-                data = mapOf(
-                    "var1" to "other-value",
-                    "var1_other" to "This is the other text",
-                )
-            ),
-            output
-        )
+    fun `file not found`() {
+        file = null
+
+        writer.write(elt, context, output)
 
         assertEquals(
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <DIV class='radio-container'>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='1'/>
-                    <LABEL>1</LABEL>
-                  </DIV>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='foo'/>
-                    <LABEL>FOO</LABEL>
-                  </DIV>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='value1'/>
-                    <LABEL>Value #1</LABEL>
-                  </DIV>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='text' value='other-value' checked/>
-                    <LABEL>This is the other option</LABEL>
-                  </DIV>
+                <DIV class='file-upload-container'>
+                  <INPUT type='hidden' name='var1' value='11111'/>
+                  <BUTTON type='button' class='btn-upload' rel='var1'>Upload File</BUTTON>
+                  <INPUT type='file' name='var1-file' rel='var1' data-upload-url='https://foo.com/storage/upload'/>
+                  <SPAN data-name='var1-filename'>
+                  </SPAN>
                 </DIV>
 
             """.trimIndent(),
@@ -203,84 +136,20 @@ class HTMLCheckboxesWriterTest {
 
     @Test
     fun `no value`() {
-        writer.write(
-            elt.copy(
-                otherOption = FormOption(value = "other-value", text = "This is the other option")
-            ),
-            context.copy(
-                data = emptyMap()
-            ),
-            output
-        )
+        file = null
+
+        writer.write(elt, context.copy(data = emptyMap()), output)
 
         assertEquals(
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <DIV class='radio-container'>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='1'/>
-                    <LABEL>1</LABEL>
-                  </DIV>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='foo'/>
-                    <LABEL>FOO</LABEL>
-                  </DIV>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='value1'/>
-                    <LABEL>Value #1</LABEL>
-                  </DIV>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='text' value='other-value'/>
-                    <LABEL>This is the other option</LABEL>
-                  </DIV>
-                </DIV>
-
-            """.trimIndent(),
-            output.toString()
-        )
-    }
-
-    @Test
-    fun `not viewer`() {
-        val xelt = elt.copy(
-            accessControl = FormAccessControl(
-                viewerRoles = listOf("X", "Y", "Z")
-            )
-        )
-
-        writer.write(xelt, context, output)
-
-        assertTrue(output.toString().isEmpty())
-    }
-
-    @Test
-    fun `not editor`() {
-        val xelt = elt.copy(
-            accessControl = FormAccessControl(
-                editorRoles = listOf("X", "Y", "Z")
-            )
-        )
-
-        writer.write(xelt, context, output)
-
-        assertEquals(
-            """
-                <LABEL class='title'><SPAN>test</SPAN></LABEL>
-                <DIV class='description'>This is the description</DIV>
-                <DIV class='radio-container'>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='1' onclick='return false;'/>
-                    <LABEL>1</LABEL>
-                  </DIV>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='foo' onclick='return false;'/>
-                    <LABEL>FOO</LABEL>
-                  </DIV>
-                  <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='value1' onclick='return false;' checked/>
-                    <LABEL>Value #1</LABEL>
-                  </DIV>
+                <DIV class='file-upload-container'>
+                  <INPUT type='hidden' name='var1'/>
+                  <BUTTON type='button' class='btn-upload' rel='var1'>Upload File</BUTTON>
+                  <INPUT type='file' name='var1-file' rel='var1' data-upload-url='https://foo.com/storage/upload'/>
+                  <SPAN data-name='var1-filename'>
+                  </SPAN>
                 </DIV>
 
             """.trimIndent(),

@@ -18,6 +18,7 @@ class HTMLElementWriterProvider(
         FormElementType.DROPDOWN to HTMLDropdownWriter(),
         FormElementType.CHECKBOXES to HTMLCheckboxesWriter(),
         FormElementType.MULTIPLE_CHOICE to HTMLCheckboxesWriter(),
+        FormElementType.FILE_UPLOAD to HTMLFileUploadWriter(),
     )
 ) {
     fun get(type: FormElementType): HTMLElementWriter {

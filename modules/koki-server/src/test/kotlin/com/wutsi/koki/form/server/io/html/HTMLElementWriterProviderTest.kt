@@ -24,8 +24,8 @@ class HTMLElementWriterProviderTest {
         assertTrue(provider.get(FormElementType.DROPDOWN) is HTMLDropdownWriter)
         assertTrue(provider.get(FormElementType.MULTIPLE_CHOICE) is HTMLCheckboxesWriter)
         assertTrue(provider.get(FormElementType.CHECKBOXES) is HTMLCheckboxesWriter)
+        assertTrue(provider.get(FormElementType.FILE_UPLOAD) is HTMLFileUploadWriter)
 
-        assertThrows<IllegalStateException> { provider.get(FormElementType.FILE_UPLOAD) }
         assertThrows<IllegalStateException> { provider.get(FormElementType.LINEAR_SCALE) }
         assertThrows<IllegalStateException> { provider.get(FormElementType.CHECKBOX_GRID) }
         assertThrows<IllegalStateException> { provider.get(FormElementType.MULTIPLE_CHOICE_GRID) }

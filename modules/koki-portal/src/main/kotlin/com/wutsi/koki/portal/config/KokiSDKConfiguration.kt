@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.config
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.portal.service.TenantService
 import com.wutsi.koki.sdk.KokiAuthentication
+import com.wutsi.koki.sdk.KokiFile
 import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiUser
 import com.wutsi.koki.sdk.KokiWorkflow
@@ -29,6 +30,11 @@ class KokiSDKConfiguration(
     @Bean
     fun kokiAuthentication(): KokiAuthentication {
         return KokiAuthentication(urlBuilder(), rest)
+    }
+
+    @Bean
+    fun kokiFile(): KokiFile {
+        return KokiFile(urlBuilder(), rest)
     }
 
     @Bean
