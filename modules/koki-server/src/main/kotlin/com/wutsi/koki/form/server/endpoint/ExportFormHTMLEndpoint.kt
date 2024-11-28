@@ -5,6 +5,7 @@ import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.form.dto.FormContent
 import com.wutsi.koki.form.server.domain.FormEntity
 import com.wutsi.koki.form.server.generator.html.Context
+import com.wutsi.koki.form.server.generator.html.FileResolver
 import com.wutsi.koki.form.server.generator.html.HTMLFormGenerator
 import com.wutsi.koki.form.server.service.FormDataService
 import com.wutsi.koki.form.server.service.FormService
@@ -32,6 +33,7 @@ class ExportFormHTMLEndpoint(
     private val objectMapper: ObjectMapper,
     private val securityService: SecurityService,
     private val userService: UserService,
+    private val fileResolver: FileResolver,
 
     @Value("\${koki.portal-url}") private val portalUrl: String,
 ) {
@@ -106,26 +108,31 @@ class ExportFormHTMLEndpoint(
         } else if (workflowInstanceId != null) {
             formDataService.search(
                 tenantId = tenantId,
-                workflowInstanceIds = workflowInstanceId?.let { listOf(workflowInstanceId) } ?: emptyList()
+                workflowInstanceIds = listOf(workflowInstanceId)
             ).firstOrNull()?.data
         } else {
             null
         }
 
-        val submitUrl = buildSubmitUrl(
-            form = form,
-            formDataId = formDataId,
-            workflowInstanceId = workflowInstanceId,
-            activityInstanceId = activityInstanceId
-        )
-
         return Context(
-            submitUrl = submitUrl.toString(),
+            tenantId = tenantId,
             roleNames = getRoleNames(tenantId),
             readOnly = readOnly,
+            fileResolver = fileResolver,
             data = data?.let { data ->
                 objectMapper.readValue(data, Map::class.java) as Map<String, Any>
             } ?: emptyMap(),
+            submitUrl = buildSubmitUrl(
+                form = form,
+                formDataId = formDataId,
+                workflowInstanceId = workflowInstanceId,
+                activityInstanceId = activityInstanceId
+            ),
+            uploadUrl = buildUploadUrl(
+                form = form,
+                workflowInstanceId = workflowInstanceId,
+            ),
+            downloadUrl = getStorageUrl()
         )
     }
 
@@ -135,18 +142,31 @@ class ExportFormHTMLEndpoint(
         workflowInstanceId: String?,
         activityInstanceId: String?,
     ): String {
-        val submitUrl = StringBuilder("$portalUrl/forms/${form.id}")
-        formDataId?.let { submitUrl.append("/$formDataId") }
-        workflowInstanceId?.let { submitUrl.append("?workflow-instance-id=$workflowInstanceId") }
+        val url = StringBuilder("$portalUrl/forms/${form.id}")
+        formDataId?.let { url.append("/$formDataId") }
+        workflowInstanceId?.let { url.append("?workflow-instance-id=$workflowInstanceId") }
         activityInstanceId?.let {
             if (workflowInstanceId != null) {
-                submitUrl.append("&")
+                url.append("&")
             } else {
-                submitUrl.append("?")
+                url.append("?")
             }
-            submitUrl.append("activity-instance-id=$activityInstanceId")
+            url.append("activity-instance-id=$activityInstanceId")
         }
-        return submitUrl.toString()
+        return url.toString()
+    }
+
+    private fun buildUploadUrl(
+        form: FormEntity,
+        workflowInstanceId: String?,
+    ): String {
+        val url = StringBuilder(getStorageUrl() + "?form-id=${form.id}")
+        workflowInstanceId?.let { url.append("&workflow-instance-id=$workflowInstanceId") }
+        return url.toString()
+    }
+
+    private fun getStorageUrl(): String {
+        return "$portalUrl/storage"
     }
 
     private fun getRoleNames(tenantId: Long): List<String> {

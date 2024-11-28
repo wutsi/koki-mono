@@ -23,16 +23,6 @@ class FormDataService(
     private val objectMapper: ObjectMapper,
     private val em: EntityManager,
 ) {
-    fun get(id: String, form: FormEntity): FormDataEntity {
-        val formData = dao.findById(id)
-            .orElseThrow { NotFoundException(Error(ErrorCode.FORM_DATA_NOT_FOUND)) }
-
-        if (formData.formId != form.id) {
-            throw NotFoundException(Error(ErrorCode.FORM_DATA_NOT_FOUND))
-        }
-        return formData
-    }
-
     fun get(id: String, tenantId: Long): FormDataEntity {
         val formData = dao.findById(id)
             .orElseThrow { NotFoundException(Error(ErrorCode.FORM_DATA_NOT_FOUND)) }

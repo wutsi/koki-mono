@@ -8,9 +8,11 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
+import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.form.dto.SearchFormResponse
 import com.wutsi.koki.portal.service.AccessTokenHolder
 import com.wutsi.koki.sdk.KokiAuthentication
+import com.wutsi.koki.sdk.KokiFile
 import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiUser
 import com.wutsi.koki.sdk.KokiWorkflow
@@ -65,6 +67,9 @@ abstract class AbstractPageControllerTest {
 
     @MockitoBean
     protected lateinit var kokiAuthentication: KokiAuthentication
+
+    @MockitoBean
+    protected lateinit var kokiFile: KokiFile
 
     @MockitoBean
     protected lateinit var kokiForms: KokiForms
@@ -158,7 +163,22 @@ abstract class AbstractPageControllerTest {
             .searchRoles(anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(SearchUserResponse()).whenever(kokiUser)
-            .searchUsers(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .searchUsers(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
+
+        doReturn(SearchFileResponse()).whenever(kokiFile)
+            .search(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
 
         doReturn(SearchWorkflowResponse()).whenever(kokiWorkflow)
             .searchWorkflows(

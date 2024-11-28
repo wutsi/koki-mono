@@ -9,7 +9,7 @@ class KokiAuthentication(
     private val rest: RestTemplate,
 ) {
     companion object {
-        private val PATH_PREFIX = "/v1/auth"
+        private const val PATH_PREFIX = "/v1/auth"
     }
 
     fun login(email: String, password: String): LoginResponse {

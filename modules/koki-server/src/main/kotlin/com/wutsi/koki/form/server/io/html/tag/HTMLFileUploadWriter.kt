@@ -1,89 +1,42 @@
 package com.wutsi.koki.form.server.generator.html
 
 import com.wutsi.koki.form.dto.FormElement
-import com.wutsi.koki.form.dto.FormElementType
 import org.apache.commons.text.StringEscapeUtils
 import java.io.StringWriter
 
-class HTMLCheckboxesWriter : AbstractHTMLImputElementWriter() {
+class HTMLFileUploadWriter : AbstractHTMLImputElementWriter() {
     override fun doWriteInput(element: FormElement, context: Context, writer: StringWriter, readOnly: Boolean) {
-        val value = context.data[element.name]
-        val values = if (value == null) {
-            emptyList<String>()
-        } else if (value is Collection<*>) {
-            value
-        } else {
-            listOf(value.toString())
-        }
+        val value = context.data[element.name]?.toString()
 
-        val type = getType(element)
-        writer.write("<DIV class='$type-container'")
+        writer.write("<DIV class='file-upload-container'>\n")
+
+        writer.write("  <INPUT type='hidden' name='${element.name}'")
+        if (!value.isNullOrEmpty()) {
+            writer.write(" value='$value'")
+        }
         if (element.required) {
-            writer.append(" required")
-        }
-        writer.write(">\n")
-
-        element.options.forEach { option ->
-            input(
-                name = element.name,
-                value = option.value,
-                text = (option.text ?: option.value),
-                type = getType(element),
-                readOnly = readOnly,
-                checked = values.contains(option.value),
-                writer = writer
-            )
-        }
-
-        if (element.otherOption != null) {
-            input(
-                name = element.name,
-                value = element.otherOption!!.value,
-                text = (element.otherOption!!.text ?: element.otherOption!!.value),
-                type = "text",
-                readOnly = readOnly,
-                checked = values.contains(element.otherOption!!.value),
-                writer = writer
-            )
-        }
-
-        writer.write("</DIV>\n")
-    }
-
-    private fun input(
-        name: String,
-        value: String,
-        text: String,
-        type: String,
-        readOnly: Boolean,
-        checked: Boolean,
-        writer: StringWriter
-    ) {
-        writer.write("  <DIV class='item'>\n")
-
-        // Input
-        writer.write("    <INPUT name='$name' type='$type' value='${StringEscapeUtils.escapeHtml4(value)}'")
-        if (readOnly) {
-            writer.write(" onclick='return false;'")
-        }
-        if (checked) {
-            writer.write(" checked")
+            writer.write(" required")
         }
         writer.write("/>\n")
 
-        // Text
-        writer.write("    <LABEL>${StringEscapeUtils.escapeHtml4(text)}</LABEL>\n")
-
-        writer.write("  </DIV>\n")
-    }
-
-    private fun getType(element: FormElement): String {
-        return if (element.type == FormElementType.CHECKBOXES) {
-            "radio"
-        } else if (element.type == FormElementType.MULTIPLE_CHOICE) {
-            "checkbox"
-        } else {
-            ""
+        if (!readOnly) {
+            writer.write("  <BUTTON type='button' class='btn-upload' rel='${element.name}'>Upload File</BUTTON>\n")
+            writer.write("  <INPUT type='file' name='${element.name}-file' rel='${element.name}' data-upload-url='${context.uploadUrl}'/>\n")
         }
+
+        writer.write("  <SPAN data-name='${element.name}-filename'>\n")
+        if (!value.isNullOrEmpty()) {
+            val file = context.fileResolver.resolve(value, context.tenantId)
+            if (file != null) {
+                val filename = StringEscapeUtils.escapeHtml4((file.name))
+                writer.write("    <A class='filename' href='${context.downloadUrl}/$value/$filename'>$filename</A>\n")
+                if (!readOnly) {
+                    writer.write("    <button class='btn-close' type='button' name='${element.name}-close' rel='${element.name}'></button>\n")
+                }
+            }
+        }
+        writer.write("  </SPAN>\n")
+
+        writer.write("</DIV>\n")
     }
 }

@@ -1,104 +1,47 @@
 package com.wutsi.koki.sdk
 
-import com.wutsi.koki.form.dto.GetFormResponse
-import com.wutsi.koki.form.dto.SearchFormResponse
-import com.wutsi.koki.form.dto.SubmitFormDataRequest
-import com.wutsi.koki.form.dto.SubmitFormDataResponse
-import com.wutsi.koki.form.dto.UpdateFormDataRequest
-import com.wutsi.koki.workflow.dto.FormSortBy
+import com.wutsi.koki.file.dto.CreateFileRequest
+import com.wutsi.koki.file.dto.CreateFileResponse
+import com.wutsi.koki.file.dto.GetFileResponse
+import com.wutsi.koki.file.dto.SearchFileResponse
 import org.springframework.web.client.RestTemplate
 
-class KokiForms(
+class KokiFile(
     private val urlBuilder: URLBuilder,
     private val rest: RestTemplate,
-    private val tenantProvider: TenantProvider,
 ) {
     companion object {
-        private val FORM_PATH_PREFIX = "/v1/forms"
-        private val FORM_DATA_PATH_PREFIX = "/v1/form-data"
+        private const val PATH_PREFIX = "/v1/files"
     }
 
-    fun getForm(id: String): GetFormResponse {
-        val url = urlBuilder.build("$FORM_PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetFormResponse::class.java).body
+    fun create(request: CreateFileRequest): CreateFileResponse {
+        val url = urlBuilder.build(PATH_PREFIX)
+        return rest.postForEntity(url, request, CreateFileResponse::class.java).body
     }
 
-    fun getFormHtml(
-        formId: String,
-        formDataId: String? = null,
-        roleName: String? = null,
-        workflowInstanceId: String? = null,
-        activityInstanceId: String? = null,
-        readOnly: Boolean = false
-    ): String {
-        val tenantId = tenantProvider.id()
-        val path = if (formDataId == null) {
-            "$FORM_PATH_PREFIX/html/$tenantId/$formId.html"
-        } else {
-            "$FORM_PATH_PREFIX/html/$tenantId/$formId/$formDataId.html"
-        }
+    fun get(id: String): GetFileResponse {
+        val url = urlBuilder.build("$PATH_PREFIX/$id")
+        return rest.getForEntity(url, GetFileResponse::class.java).body
+    }
 
+    fun search(
+        ids: List<String>,
+        workflowInstanceIds: List<String>,
+        formIds: List<String>,
+        limit: Int,
+        offset: Int,
+    ): SearchFileResponse {
         val url = urlBuilder.build(
-            path,
-            mapOf(
-                "role-name" to roleName,
-                "workflow-instance-id" to workflowInstanceId,
-                "activity-instance-id" to activityInstanceId,
-                "read-only" to readOnly,
-            )
-        )
-        return rest.getForEntity(url, String::class.java).body
-    }
-
-    fun searchForms(
-        ids: List<String> = emptyList(),
-        active: Boolean? = null,
-        limit: Int = 20,
-        offset: Int = 0,
-        sortBy: FormSortBy? = null,
-        ascending: Boolean = true,
-    ): SearchFormResponse {
-        val url = urlBuilder.build(
-            FORM_PATH_PREFIX,
+            PATH_PREFIX,
             mapOf(
                 "id" to ids,
-                "active" to active,
+                "workflow-instance-id" to workflowInstanceIds,
+                "form-id" to formIds,
                 "limit" to limit,
                 "offset" to offset,
-                "sort-by" to sortBy,
-                "asc" to ascending
             )
         )
-        return rest.getForEntity(url, SearchFormResponse::class.java).body
-    }
+        return rest.getForEntity(url, SearchFileResponse::class.java).body
 
-    fun submitData(
-        formId: String,
-        workflowInstanceId: String?,
-        activityInstanceId: String?,
-        data: Map<String, Any>
-    ): SubmitFormDataResponse {
-        val request = SubmitFormDataRequest(
-            formId = formId,
-            data = data,
-            workflowInstanceId = workflowInstanceId,
-            activityInstanceId = activityInstanceId,
-        )
-        val path = FORM_DATA_PATH_PREFIX
-        val url = urlBuilder.build(path)
-        return rest.postForEntity(url, request, SubmitFormDataResponse::class.java).body
-    }
-
-    fun updateData(
-        formDataId: String,
-        activityInstanceId: String?,
-        data: Map<String, Any>
-    ) {
-        val request = UpdateFormDataRequest(
-            data = data,
-            activityInstanceId = activityInstanceId
-        )
-        val url = urlBuilder.build("$FORM_DATA_PATH_PREFIX/$formDataId")
-        rest.postForEntity(url, request, Any::class.java)
     }
 }

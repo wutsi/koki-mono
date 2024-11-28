@@ -13,6 +13,7 @@ import com.wutsi.koki.form.server.generator.html.HTMLFormGenerator
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
@@ -29,6 +30,9 @@ class ExportFormHTMLEndpointTest : AuthorizationAwareEndpointTest() {
 
     @MockitoBean
     private lateinit var generator: HTMLFormGenerator
+
+    @Value("\${koki.portal-url}")
+    private lateinit var portalUrl: String
 
     private fun download(url: String, statusCode: Int, filename: String? = null): File? {
         return super.download(
@@ -70,6 +74,12 @@ class ExportFormHTMLEndpointTest : AuthorizationAwareEndpointTest() {
         assertTrue(context.firstValue.roleNames.contains("accountant"))
         assertTrue(context.firstValue.roleNames.contains("technician"))
         assertTrue(context.firstValue.readOnly)
+        assertEquals(
+            "$portalUrl/forms/100?workflow-instance-id=xxx&activity-instance-id=yyy",
+            context.firstValue.submitUrl
+        )
+        assertEquals("$portalUrl/storage", context.firstValue.downloadUrl)
+        assertEquals("$portalUrl/storage?form-id=100&workflow-instance-id=xxx", context.firstValue.uploadUrl)
 
         assertEquals(0, context.firstValue.data.size)
     }
@@ -91,6 +101,10 @@ class ExportFormHTMLEndpointTest : AuthorizationAwareEndpointTest() {
         assertTrue(context.firstValue.roleNames.contains("accountant"))
         assertTrue(context.firstValue.roleNames.contains("technician"))
         assertFalse(context.firstValue.readOnly)
+        assertEquals(TENANT_ID, context.firstValue.tenantId)
+        assertEquals("$portalUrl/forms/100/10011?activity-instance-id=yyy", context.firstValue.submitUrl)
+        assertEquals("$portalUrl/storage", context.firstValue.downloadUrl)
+        assertEquals("$portalUrl/storage?form-id=100", context.firstValue.uploadUrl)
 
         assertEquals(2, context.firstValue.data.size)
         assertEquals(2, context.firstValue.data.size)

@@ -47,7 +47,7 @@ class FileService(
         if (formIds.isNotEmpty()) {
             jql.append(" AND F.formId IN :formIds")
         }
-        jql.append(" ORDER BY F.name")
+        jql.append(" ORDER BY LOWER(F.name)")
 
         val query = em.createQuery(jql.toString(), FileEntity::class.java)
         query.setParameter("tenantId", tenantId)

@@ -21,8 +21,8 @@ class KokiWorkflowInstance(
     private val tenantProvider: TenantProvider,
 ) {
     companion object {
-        private val ACTIVITY_PATH_PREFIX = "/v1/activity-instances"
-        private val WORKFLOW_PATH_PREFIX = "/v1/workflow-instances"
+        private const val ACTIVITY_PATH_PREFIX = "/v1/activity-instances"
+        private const val WORKFLOW_PATH_PREFIX = "/v1/workflow-instances"
     }
 
     fun imageUrl(id: String): String {

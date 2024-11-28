@@ -10,8 +10,8 @@ class KokiUser(
     private val rest: RestTemplate,
 ) {
     companion object {
-        private val USER_PATH_PREFIX = "/v1/users"
-        private val ROLE_PATH_PREFIX = "/v1/roles"
+        private const val USER_PATH_PREFIX = "/v1/users"
+        private const val ROLE_PATH_PREFIX = "/v1/roles"
     }
 
     fun getUser(id: Long): GetUserResponse {

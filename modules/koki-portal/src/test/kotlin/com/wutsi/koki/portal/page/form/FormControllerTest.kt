@@ -27,6 +27,8 @@ class FormControllerTest : AbstractPageControllerTest() {
         title = "Incident Report",
     )
 
+    private val fileId = "32093209"
+
     @BeforeEach
     override fun setUp() {
         super.setUp()
@@ -101,6 +103,16 @@ class FormControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `client side validation`() {
+        // GIVEN
+        val html = generateFormHtmlWithFileUpload(
+            "http://localhost:$port/forms/$formId",
+            "http://localhost:$port/storage",
+            true,
+            false
+        )
+        doReturn(html).whenever(kokiForms)
+            .getFormHtml(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+
         // WHEN
         navigateTo("/forms/$formId")
 
@@ -112,7 +124,31 @@ class FormControllerTest : AbstractPageControllerTest() {
 
         assertElementPresent("[name=customer_name]:user-invalid")
         assertElementPresent("[name=customer_email]:user-invalid")
-        assertElementCount(".user-invalid", 2)
+        assertElementCount(".user-invalid", 3)
+    }
+
+    @Test
+    fun `clear form`() {
+        // GIVEN
+        val html = generateFormHtmlWithFileUpload(
+            "http://localhost:$port/forms/$formId",
+            "http://localhost:$port/storage",
+            true,
+            true
+        )
+        doReturn(html).whenever(kokiForms)
+            .getFormHtml(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+
+        // WHEN
+        navigateTo("/forms/$formId")
+
+        // THEN
+        assertCurrentPageIs(PageName.FORM)
+        assertElementAttribute("input[name=var1]", "value", fileId)
+
+        click(".btn-close")
+        assertElementAttribute("input[name=var1]", "value", "")
+        assertElementText("span[data-name=var1-filename]", "")
     }
 
     @Test
@@ -260,6 +296,95 @@ class FormControllerTest : AbstractPageControllerTest() {
                             <INPUT name='case_type' type='checkbox' value='IMM'/>
                             <LABEL>IMM</LABEL>
                           </DIV>
+                        </DIV>
+                      </DIV>
+                    </DIV>
+                  </DIV>
+                </DIV>
+                <DIV class='form-footer'>
+                  <DIV class='form-button-group'>
+                    <BUTTON type='submit'>Submit</BUTTON>
+                  </DIV>
+                </DIV>
+              </FORM>
+            </DIV>
+        """.trimIndent()
+    }
+
+    private fun generateFormHtmlWithFileUpload(
+        submitUrl: String,
+        downloadUrl: String,
+        required: Boolean = true,
+        withFile: Boolean = true
+    ): String {
+        val req = if (required) " required" else ""
+        val file = if (withFile) {
+            """
+                <A class='filename' href='$downloadUrl/11111/foo.txt'>foo.txt</A>
+                <button class='btn-close' type='button' name='var1-close' rel='var1'></button>
+            """.trimIndent()
+        } else {
+            ""
+        }
+        val value = if (withFile) fileId else ""
+
+        return """
+            <DIV class='form test'>
+              <FORM method='post' action='$submitUrl'>
+                <DIV class='form-header'>
+                  <H1 class='form-title'>Incident Report</H1>
+                </DIV>
+                <DIV class='form-body'>
+                  <DIV class='section'>
+                    <DIV class='section-body'>
+                      <DIV class='section-item'>
+                        <LABEL class='title'><SPAN>Customer Name</SPAN><SPAN class='required'>*</SPAN></LABEL>
+                        <INPUT name='customer_name' required/>
+                      </DIV>
+                      <DIV class='section-item'>
+                        <LABEL class='title'><SPAN>Customer Email</SPAN><SPAN class='required'>*</SPAN></LABEL>
+                        <INPUT name='customer_email' type='email' required/>
+                      </DIV>
+                      <DIV class='section-item'>
+                        <LABEL class='title'><SPAN>Marial Status</SPAN></LABEL>
+                        <DIV class='radio-container' required>
+                          <DIV class='item'>
+                            <INPUT name='marital_status' type='radio' value='M'/>
+                            <LABEL>Married</LABEL>
+                          </DIV>
+                          <DIV class='item'>
+                            <INPUT name='marital_status' type='radio' value='S'/>
+                            <LABEL>Single</LABEL>
+                          </DIV>
+                        </DIV>
+                      </DIV>
+                      <DIV class='section-item'>
+                        <LABEL class='title'><SPAN>Case Type</SPAN><SPAN class='required'>*</SPAN></LABEL>
+                        <DIV class='checkbox-container' required>
+                          <DIV class='item'>
+                            <INPUT name='case_type' type='checkbox' value='T1'/>
+                            <LABEL>T1</LABEL>
+                          </DIV>
+                          <DIV class='item'>
+                            <INPUT name='case_type' type='checkbox' value='T4'/>
+                            <LABEL>T4</LABEL>
+                          </DIV>
+                          <DIV class='item'>
+                            <INPUT name='case_type' type='checkbox' value='IMM'/>
+                            <LABEL>IMM</LABEL>
+                          </DIV>
+                        </DIV>
+                      </DIV>
+                      <DIV class='section-item'>
+                        <LABEL class='title'><SPAN>test</SPAN></LABEL>
+                        <DIV class='description'>This is the description</DIV>
+                        <DIV class='file-upload-container'>
+                          <INPUT type='hidden' name='var1' value="$value" $req/>
+                          <BUTTON type='button' class='btn-upload' rel='var1'>Upload File</BUTTON>
+                          <INPUT type='file' name='var1-file' rel='var1' data-upload-url='https://foo.com/storage/upload'/>
+                          <SPAN data-name='var1-filename'>
+                            $file
+                          </SPAN>
                         </DIV>
                       </DIV>
                     </DIV>

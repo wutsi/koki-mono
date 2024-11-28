@@ -1,58 +1,79 @@
 package com.wutsi.koki.portal.mapper
 
-import com.wutsi.koki.form.dto.Form
-import com.wutsi.koki.form.dto.FormSummary
-import com.wutsi.koki.portal.model.FormModel
+import com.wutsi.koki.file.dto.File
+import com.wutsi.koki.file.dto.FileSummary
+import com.wutsi.koki.portal.model.FileModel
+import com.wutsi.koki.portal.model.UserModel
 import org.springframework.stereotype.Service
-import kotlin.collections.listOf
+import java.text.DateFormat
+import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.text.StringCharacterIterator
 
 @Service
-class FormMapper {
-    fun toFormModel(
-        entity: FormSummary,
-        workflowInstanceId: String?,
-        activityInstanceId: String?
-    ): FormModel {
-        return FormModel(
+class FileMapper {
+    fun toFileModel(
+        entity: FileSummary,
+        createdBy: UserModel?,
+    ): FileModel {
+        val fmt = createDateFormat()
+
+        return FileModel(
             id = entity.id,
             name = entity.name,
-            title = entity.title,
+            contentUrl = entity.url,
+            contentType = entity.contentType,
+            contentLength = entity.contentLength,
+            contentLengthText = toFileSizeText(entity.contentLength),
             createdAt = entity.createdAt,
+            createdAtText = fmt.format(entity.createdAt),
             modifiedAt = entity.modifiedAt,
-            viewUrl = toUrl(entity.id, true, workflowInstanceId, activityInstanceId),
-            editUrl = toUrl(entity.id, false, workflowInstanceId, activityInstanceId),
+            modifiedAtText = fmt.format(entity.modifiedAt),
+            createdBy = createdBy,
         )
     }
 
-    fun toFormModel(
-        entity: Form,
-        workflowInstanceId: String?,
-        activityInstanceId: String?
-    ): FormModel {
-        return FormModel(
+    fun toFileModel(
+        entity: File,
+        createdBy: UserModel?,
+    ): FileModel {
+        val fmt = createDateFormat()
+
+        return FileModel(
             id = entity.id,
             name = entity.name,
-            title = entity.title,
+            contentUrl = entity.url,
+            contentType = entity.contentType,
+            contentLength = entity.contentLength,
+            contentLengthText = toFileSizeText(entity.contentLength),
             createdAt = entity.createdAt,
+            createdAtText = fmt.format(entity.createdAt),
             modifiedAt = entity.modifiedAt,
-            viewUrl = toUrl(entity.id, true, workflowInstanceId, activityInstanceId),
-            editUrl = toUrl(entity.id, false, workflowInstanceId, activityInstanceId),
+            modifiedAtText = fmt.format(entity.modifiedAt),
+            createdBy = createdBy,
+            formId = entity.formId,
+            workflowInstanceId = entity.workflowInstanceId,
         )
     }
 
-    private fun toUrl(
-        id: String,
-        readOnly: Boolean,
-        workflowInstanceId: String? = null,
-        activityInstanceId: String? = null
-    ): String {
-        return listOf(
-            "/forms/$id",
-            listOf(
-                workflowInstanceId?.let { wid -> "workflow-instance-id=$wid" },
-                activityInstanceId?.let { wid -> "activity-instance-id=$wid" },
-                if (readOnly) "read-only=true" else null
-            ).filterNotNull().joinToString(separator = "&")
-        ).joinToString(separator = "?")
+    private fun createDateFormat(): DateFormat {
+        return SimpleDateFormat("yyyy/MM/dd HH:mm")
+    }
+
+    private fun toFileSizeText(value: Long): String {
+        val fmt = DecimalFormat("#.#")
+        var bytes = value
+        if (bytes == 0L) {
+            return ""
+        } else if (-1000 < bytes && bytes < 1000) {
+            return bytes.toString()
+        }
+        val ci = StringCharacterIterator("KMGTPE")
+        while (bytes <= -999950 || bytes >= 999950) {
+            bytes /= 1000
+            ci.next()
+        }
+
+        return fmt.format(bytes / 1000.0) + " " + ci.current() + "b"
     }
 }

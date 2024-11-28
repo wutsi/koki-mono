@@ -1,11 +1,14 @@
-package com.wutsi.koki.portal.service.storage
+package com.wutsi.koki.portal.service.storage.local
 
+import com.wutsi.koki.portal.service.storage.StorageService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.net.URL
+import kotlin.io.copyTo
+import kotlin.io.use
 
 @Service
 class LocalStorageService(
@@ -19,7 +22,7 @@ class LocalStorageService(
     override fun store(
         path: String,
         content: InputStream,
-        contentType: String,
+        contentType: String?,
         contentLength: Long
     ): URL {
         val file = File("$directory/$path")

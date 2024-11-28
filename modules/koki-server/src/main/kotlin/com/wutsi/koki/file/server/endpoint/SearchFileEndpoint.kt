@@ -21,7 +21,7 @@ class SearchFileEndpoint(
         @RequestParam(required = false, name = "id") ids: List<String> = emptyList(),
         @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceIds: List<String> = emptyList(),
         @RequestParam(required = false, name = "form-id") formIds: List<String> = emptyList(),
-        @RequestParam(required = false) limit: Int = 200,
+        @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
     ): SearchFileResponse {
         val files = service.search(

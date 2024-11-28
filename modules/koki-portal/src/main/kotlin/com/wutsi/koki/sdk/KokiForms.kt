@@ -14,8 +14,8 @@ class KokiForms(
     private val tenantProvider: TenantProvider,
 ) {
     companion object {
-        private val FORM_PATH_PREFIX = "/v1/forms"
-        private val FORM_DATA_PATH_PREFIX = "/v1/form-data"
+        private const val FORM_PATH_PREFIX = "/v1/forms"
+        private const val FORM_DATA_PATH_PREFIX = "/v1/form-data"
     }
 
     fun getForm(id: String): GetFormResponse {

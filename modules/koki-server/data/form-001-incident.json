@@ -128,6 +128,20 @@
             "title": "Incident Description",
             "description": "Enter all the details about the incident. Please add as many information as possible to help us to process the case quickly",
             "required": true
+          },
+          {
+            "name": "doctor_note",
+            "type": "FILE_UPLOAD",
+            "title": "Doctor Note",
+            "description": "Upload the note from the doctor to prove your absence",
+            "required": true
+          },
+          {
+            "name": "prescription",
+            "type": "FILE_UPLOAD",
+            "title": "Prescription",
+            "description": "Upload the prescription to prove your expense",
+            "required": false
           }
         ]
       },

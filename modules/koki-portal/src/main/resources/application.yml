@@ -70,9 +70,17 @@ threadpool:
     queueSize: 100
 
 koki:
+    webapp:
+        base-url: http://localhost:${server.port}
+
     rest:
         connection-timeout: 15000
         read-timeout: 15000
 
     sdk:
         base-url: http://localhost:8080
+
+    storage:
+        local:
+            base-url: ${koki.sdk.base-url}/storage
+            directory: ${user.home}/__wutsi/koki

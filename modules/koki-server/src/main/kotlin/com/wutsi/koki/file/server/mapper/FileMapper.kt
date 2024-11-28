@@ -26,6 +26,7 @@ class FileMapper {
         return FileSummary(
             id = entity.id!!,
             name = entity.name,
+            url = entity.url,
             contentLength = entity.contentLength,
             contentType = entity.contentType,
             modifiedAt = entity.modifiedAt,

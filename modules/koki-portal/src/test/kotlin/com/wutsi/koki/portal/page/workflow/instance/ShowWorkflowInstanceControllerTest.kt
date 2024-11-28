@@ -1,9 +1,14 @@
 package com.wutsi.koki.portal.page.form
 
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.file.dto.File
+import com.wutsi.koki.file.dto.FileSummary
+import com.wutsi.koki.file.dto.GetFileResponse
+import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.form.dto.FormSummary
 import com.wutsi.koki.form.dto.SearchFormResponse
 import com.wutsi.koki.portal.page.PageName
@@ -22,7 +27,11 @@ import com.wutsi.koki.workflow.dto.Workflow
 import com.wutsi.koki.workflow.dto.WorkflowInstance
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import org.apache.commons.lang3.time.DateUtils
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
+import org.openqa.selenium.By
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.Date
 import kotlin.test.Test
 
@@ -131,12 +140,50 @@ class ShowWorkflowInstanceControllerTest : AbstractPageControllerTest() {
         )
     )
 
+    private val files = listOf(
+        FileSummary(
+            id = "f1",
+            name = "T1.pdf",
+            contentType = "application/pdf",
+            contentLength = 1024L * 1024,
+            createdAt = DateUtils.addDays(Date(), -5),
+            url = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+        ),
+        FileSummary(
+            id = "f2",
+            name = "Medical Notes.pdf",
+            contentType = "application/pdf",
+            contentLength = 11 * 1024L * 1024,
+            createdById = users[1].id,
+            createdAt = DateUtils.addDays(Date(), -5),
+            url = "https://pdfobject.com/pdf/sample.pdf",
+        ),
+        FileSummary(
+            id = "f3",
+            name = "Picture.png",
+            contentType = "image/png",
+            contentLength = 5 * 1024L * 1024,
+            createdById = users[0].id,
+            createdAt = DateUtils.addDays(Date(), -5),
+            url = "https://picsum.photos/800/100",
+        ),
+    )
+
     @BeforeEach
     override fun setUp() {
         super.setUp()
 
         doReturn(SearchRoleResponse(roles)).whenever(kokiUser)
             .searchRoles(anyOrNull(), anyOrNull(), anyOrNull())
+
+        doReturn(SearchFileResponse(files)).whenever(kokiFile)
+            .search(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
 
         doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).getWorkflow(workflow.id)
 
@@ -157,5 +204,38 @@ class ShowWorkflowInstanceControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.WORKFLOW_INSTANCE)
         assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
+        assertElementCount("tr.activity", workflow.activities.size)
+        assertElementCount("tr.file", files.size)
+    }
+
+    @Test
+    fun `download file`() {
+        val file = File(
+            id = "f1",
+            name = "T1.pdf",
+            contentType = "application/pdf",
+            contentLength = 1024L * 1024,
+            createdAt = DateUtils.addDays(Date(), -5),
+            url = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+            formId = "1111",
+            workflowInstanceId = "2222",
+        )
+        doReturn(GetFileResponse(file)).whenever(kokiFile).get(any())
+
+        navigateTo("/workflows/instances/${workflowInstance.id}")
+
+        val url = driver.findElement(By.cssSelector("a.file")).getAttribute("href")
+        val cnn = URL(url).openConnection() as HttpURLConnection
+        try {
+            cnn.connect()
+            assertEquals(200, cnn.responseCode)
+            assertEquals(files[0].contentType, cnn.contentType)
+            assertEquals("attachment; filename=\"${files[0].name}\"", cnn.getHeaderField("Content-Disposition"))
+        } finally {
+            cnn.disconnect()
+        }
+
+        scrollToBottom()
+        click("tr.file a.file")
     }
 }

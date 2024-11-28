@@ -18,8 +18,8 @@ class KokiWorkflow(
     private val objectMapper: ObjectMapper,
 ) {
     companion object {
-        private val ACTIVITY_PATH_PREFIX = "/v1/activities"
-        private val WORKFLOW_PATH_PREFIX = "/v1/workflows"
+        private const val ACTIVITY_PATH_PREFIX = "/v1/activities"
+        private const val WORKFLOW_PATH_PREFIX = "/v1/workflows"
     }
 
     fun importWorkflow(request: ImportWorkflowRequest): ImportWorkflowResponse {
