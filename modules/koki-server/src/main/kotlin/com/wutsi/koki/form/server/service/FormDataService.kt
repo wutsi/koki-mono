@@ -9,7 +9,6 @@ import com.wutsi.koki.form.dto.SubmitFormDataRequest
 import com.wutsi.koki.form.dto.UpdateFormDataRequest
 import com.wutsi.koki.form.server.dao.FormDataRepository
 import com.wutsi.koki.form.server.domain.FormDataEntity
-import com.wutsi.koki.form.server.domain.FormEntity
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service

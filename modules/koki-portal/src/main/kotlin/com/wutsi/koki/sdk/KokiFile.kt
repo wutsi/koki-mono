@@ -42,6 +42,5 @@ class KokiFile(
             )
         )
         return rest.getForEntity(url, SearchFileResponse::class.java).body
-
     }
 }
