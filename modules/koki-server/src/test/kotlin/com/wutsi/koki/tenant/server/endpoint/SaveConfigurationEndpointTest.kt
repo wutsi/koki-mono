@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import kotlin.test.assertNull
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/tenant/SaveConfigurationEndpoint.sql"])
 class SaveConfigurationEndpointTest : TenantAwareEndpointTest() {
@@ -29,8 +29,8 @@ class SaveConfigurationEndpointTest : TenantAwareEndpointTest() {
         assertEquals(0, result.body?.added)
         assertEquals(0, result.body?.deleted)
 
-        val configs = dao.findByTenantIdAndNameIn(TENANT_ID, listOf("update"))
-        assertEquals("updated-value", configs[0].value)
+        val config = dao.findByNameIgnoreCaseAndTenantId("update", TENANT_ID)
+        assertEquals("updated-value", config?.value)
     }
 
     @Test
@@ -46,8 +46,8 @@ class SaveConfigurationEndpointTest : TenantAwareEndpointTest() {
         assertEquals(0, result.body?.added)
         assertEquals(1, result.body?.deleted)
 
-        val configs = dao.findByTenantIdAndNameIn(TENANT_ID, listOf("delete"))
-        assertTrue(configs.isEmpty())
+        val config = dao.findByNameIgnoreCaseAndTenantId("delete", TENANT_ID)
+        assertNull(config)
     }
 
     @Test
@@ -63,8 +63,8 @@ class SaveConfigurationEndpointTest : TenantAwareEndpointTest() {
         assertEquals(1, result.body?.added)
         assertEquals(0, result.body?.deleted)
 
-        val configs = dao.findByTenantIdAndNameIn(TENANT_ID, listOf("new"))
-        assertEquals("hello", configs[0].value)
+        val config = dao.findByNameIgnoreCaseAndTenantId("new", TENANT_ID)
+        assertEquals("hello", config?.value)
     }
 
     @Test
@@ -82,26 +82,14 @@ class SaveConfigurationEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
-    fun `save another tenant config`() {
-        val request = SaveConfigurationRequest(
-            values = mapOf("other-tenant" to "hello")
-        )
-        val result = rest.postForEntity("/v1/configurations", request, SaveConfigurationResponse::class.java)
-
-        assertEquals(HttpStatus.OK, result.statusCode)
-
-        assertEquals(0, result.body?.updated)
-        assertEquals(0, result.body?.added)
-        assertEquals(0, result.body?.deleted)
-
-        assertTrue(dao.findByTenantIdAndNameIn(TENANT_ID, listOf("other-tenant")).isEmpty())
-        assertEquals("aa1", dao.findByTenantIdAndNameIn(2L, listOf("other-tenant"))[0].value)
-    }
-
-    @Test
     fun `save batch`() {
         val request = SaveConfigurationRequest(
-            values = mapOf("batch-0" to "0", "batch-1" to "1", "batch-2" to "", "batch-3" to "3")
+            values = mapOf(
+                "batch-0" to "0",
+                "batch-1" to "1",
+                "batch-2" to "",
+                "batch-3" to "3"
+            )
         )
         val result = rest.postForEntity("/v1/configurations", request, SaveConfigurationResponse::class.java)
 
@@ -111,9 +99,9 @@ class SaveConfigurationEndpointTest : TenantAwareEndpointTest() {
         assertEquals(1, result.body?.added)
         assertEquals(1, result.body?.deleted)
 
-        assertEquals("0", dao.findByTenantIdAndNameIn(TENANT_ID, listOf("batch-0"))[0].value)
-        assertEquals("1", dao.findByTenantIdAndNameIn(TENANT_ID, listOf("batch-1"))[0].value)
-        assertTrue(dao.findByTenantIdAndNameIn(TENANT_ID, listOf("batch-2")).isEmpty())
-        assertEquals("3", dao.findByTenantIdAndNameIn(TENANT_ID, listOf("batch-3"))[0].value)
+        assertEquals("0", dao.findByNameIgnoreCaseAndTenantId("batch-0", TENANT_ID)?.value)
+        assertEquals("1", dao.findByNameIgnoreCaseAndTenantId("batch-1", TENANT_ID)?.value)
+        assertNull(dao.findByNameIgnoreCaseAndTenantId("batch-2", TENANT_ID))
+        assertEquals("3", dao.findByNameIgnoreCaseAndTenantId("batch-3", TENANT_ID)?.value)
     }
 }

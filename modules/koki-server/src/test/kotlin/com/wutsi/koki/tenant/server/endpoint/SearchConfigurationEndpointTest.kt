@@ -1,7 +1,6 @@
 package com.wutsi.koki.tenant.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
-import com.wutsi.koki.tenant.dto.SearchAttributeResponse
 import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
@@ -17,20 +16,23 @@ class SearchConfigurationEndpointTest : TenantAwareEndpointTest() {
         assertEquals(HttpStatus.OK, result.statusCode)
 
         val configurations = result.body!!.configurations
-        assertEquals(3, configurations.size)
+        assertEquals(4, configurations.size)
 
         assertEquals("a1", configurations[0].value)
-        assertEquals("a", configurations[0].attribute.name)
+        assertEquals("a", configurations[0].name)
 
         assertEquals("b1", configurations[1].value)
-        assertEquals("b", configurations[1].attribute.name)
+        assertEquals("b", configurations[1].name)
 
         assertEquals("c1", configurations[2].value)
-        assertEquals("c", configurations[2].attribute.name)
+        assertEquals("c", configurations[2].name)
+
+        assertEquals("cd1", configurations[3].value)
+        assertEquals("c.d", configurations[3].name)
     }
 
     @Test
-    fun filter() {
+    fun `by names`() {
         val result =
             rest.getForEntity("/v1/configurations?name=a&name=b", SearchConfigurationResponse::class.java)
 
@@ -40,20 +42,37 @@ class SearchConfigurationEndpointTest : TenantAwareEndpointTest() {
         assertEquals(2, configurations.size)
 
         assertEquals("a1", configurations[0].value)
-        assertEquals("a", configurations[0].attribute.name)
+        assertEquals("a", configurations[0].name)
 
         assertEquals("b1", configurations[1].value)
-        assertEquals("b", configurations[1].attribute.name)
+        assertEquals("b", configurations[1].name)
+    }
+
+    @Test
+    fun `by keyword`() {
+        val result =
+            rest.getForEntity("/v1/configurations?q=c", SearchConfigurationResponse::class.java)
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val configurations = result.body!!.configurations
+        assertEquals(2, configurations.size)
+
+        assertEquals("c1", configurations[0].value)
+        assertEquals("c", configurations[0].name)
+
+        assertEquals("cd1", configurations[1].value)
+        assertEquals("c.d", configurations[1].name)
     }
 
     @Test
     fun `search configuration from another tenant`() {
         val result =
-            rest.getForEntity("/v1/configurations?name=aa", SearchAttributeResponse::class.java)
+            rest.getForEntity("/v1/configurations?name=aa", SearchConfigurationResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val attributes = result.body!!.attributes
+        val attributes = result.body!!.configurations
         assertEquals(0, attributes.size)
     }
 }
