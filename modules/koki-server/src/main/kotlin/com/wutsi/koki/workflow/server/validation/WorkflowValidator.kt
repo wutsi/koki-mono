@@ -4,6 +4,7 @@ import com.wutsi.koki.workflow.dto.WorkflowData
 import com.wutsi.koki.workflow.server.service.ExpressionEvaluator
 import com.wutsi.koki.workflow.server.validation.rule.ActivitiesShouldNotHaveMoreThanOneFlowRule
 import com.wutsi.koki.workflow.server.validation.rule.ActivityEndMustNotHaveSuccessorRule
+import com.wutsi.koki.workflow.server.validation.rule.ActivityManualMustHaveARoleRule
 import com.wutsi.koki.workflow.server.validation.rule.ActivityMustHaveANameRule
 import com.wutsi.koki.workflow.server.validation.rule.ActivityMustNotBeOrphanRule
 import com.wutsi.koki.workflow.server.validation.rule.ActivityMustNotHaveSelfAsPredecessorRule
@@ -30,8 +31,9 @@ class WorkflowValidator(
         ActivityMustNotBeOrphanRule(),
         ActivityMustNotHaveSelfAsPredecessorRule(),
         ActivityNameMustHavelLessThan100CharactersRule(),
-        ActivityStartMustNotHavePredecessorRule(),
         ActivityEndMustNotHaveSuccessorRule(),
+        ActivityManualMustHaveARoleRule(),
+        ActivityStartMustNotHavePredecessorRule(),
         ActivityUserMustHaveARoleRule(),
         ActivityUserMustHaveAFormRule(),
 
