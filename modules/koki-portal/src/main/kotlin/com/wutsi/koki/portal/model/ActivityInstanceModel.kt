@@ -26,4 +26,7 @@ data class ActivityInstanceModel(
 
     val url: String
         get() = "/workflows/instances/activities/$id"
+
+    val completeUrl: String
+        get() = "/workflows/instances/activities/$id/complete"
 }

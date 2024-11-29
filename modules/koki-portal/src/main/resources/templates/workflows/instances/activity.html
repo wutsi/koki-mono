@@ -12,25 +12,17 @@
 
     <div class="row">
         <div class="col-12">
-            <div class="widget">
-                <div class="widget-body">
-                    <a href="/">Home</a>
-                    &gt;
-                    <a href="/workflows/instances">Instances</a>
-                    &gt;
-                    <a th:href="${activityInstance.workflowInstance.url}"
-                       th:text="${activityInstance.workflowInstance.title}">INSTANCE</a>
-                    &gt;
-                    <span th:text="${activityInstance.activity.longTitle}">TITLE</span>
-                </div>
-            </div>
+            <div th:replace="~{__components/workflow :: activity-instance-breadcrumb(${activityInstance})}"></div>
         </div>
     </div>
     <div class="row">
         <div class="col-12 col-md-8">
             <div class="widget">
                 <div class="widget-body">
-                    <div th:replace="~{__components/workflow :: activity-toolbar(${activityInstance})}"></div>
+                    <div th:replace="~{__components/workflow :: activity-instance-toolbar(${activityInstance})}"></div>
+
+                    <div class="alert alert-danger" th:if="${error}" th:text="${error}">ERROR</div>
+
                     <table class="table">
                         <tr>
                             <td><b>ID</b></td>
@@ -74,7 +66,6 @@
                 </div>
             </div>
 
-
             <div class="widget">
                 <div class="widget-body">
                     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -107,7 +98,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
         <div class="col-12 col-md-4">

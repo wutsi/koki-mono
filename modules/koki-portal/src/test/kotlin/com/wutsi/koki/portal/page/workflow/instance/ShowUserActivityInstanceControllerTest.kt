@@ -1,10 +1,13 @@
 package com.wutsi.koki.portal.page.form
 
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.form.dto.Form
 import com.wutsi.koki.form.dto.FormSummary
+import com.wutsi.koki.form.dto.GetFormResponse
 import com.wutsi.koki.form.dto.SearchFormResponse
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.tenant.dto.Role
@@ -25,7 +28,7 @@ import org.junit.jupiter.api.BeforeEach
 import java.util.Date
 import kotlin.test.Test
 
-class ShowActivityInstanceControllerTest : AbstractPageControllerTest() {
+class ShowUserActivityInstanceControllerTest : AbstractPageControllerTest() {
     private val roles = listOf(
         Role(id = 1L, name = "accountant", title = "Accountant"),
         Role(id = 2L, name = "hr", title = "Human Resource"),
@@ -33,7 +36,7 @@ class ShowActivityInstanceControllerTest : AbstractPageControllerTest() {
     )
 
     private val users = listOf(
-        UserSummary(id = 11L, displayName = "Ray Sponsible"),
+        UserSummary(id = USER_ID, displayName = "Ray Sponsible"),
         UserSummary(id = 12L, displayName = "Roger Milla"),
     )
 
@@ -69,9 +72,8 @@ class ShowActivityInstanceControllerTest : AbstractPageControllerTest() {
             workflowId = workflow.id
         ),
         status = WorkflowStatus.RUNNING,
-        assigneeUserId = users[1].id,
+        assigneeUserId = USER_ID,
         approval = ApprovalStatus.UNKNOWN,
-        approverUserId = users[0].id,
         createdAt = DateUtils.addDays(Date(), -10),
         startedAt = DateUtils.addDays(Date(), -5),
     )
@@ -102,19 +104,56 @@ class ShowActivityInstanceControllerTest : AbstractPageControllerTest() {
         doReturn(SearchFormResponse(listOf(form))).whenever(kokiForms)
             .searchForms(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
-        doReturn(GetActivityInstanceResponse(activityInstance))
-            .whenever(kokiWorkflowInstance)
+        doReturn(GetActivityInstanceResponse(activityInstance)).whenever(kokiWorkflowInstance)
             .activity(activityInstance.id)
     }
 
     @Test
-    fun show() {
+    fun `show activity`() {
+        // GIVEN
+        val html = "<div class='form'>HELLO</div>"
+        doReturn(html).whenever(kokiForms)
+            .getFormHtml(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+
+        val form = Form(id = form.id, name = form.name, title = form.title)
+        doReturn(GetFormResponse(form)).whenever(kokiForms)
+            .getForm(any())
+
+        // WHEN
         navigateTo("/workflows/instances/activities/${activityInstance.id}")
 
+        // THEN
         assertCurrentPageIs(PageName.ACTIVITY_INSTANCE)
 
-        Thread.sleep(1000)
-        assertElementPresent(".files-widget")
-//        assertElementPresent(".forms-widget")
+        click(".btn-activity-user-edit-form")
+        assertCurrentPageIs(PageName.FORM)
+    }
+
+    @Test
+    fun `toolbar not available when activity not running`() {
+        // GIVEN
+        val instance = activityInstance.copy(status = WorkflowStatus.NEW)
+        doReturn(GetActivityInstanceResponse(instance)).whenever(kokiWorkflowInstance)
+            .activity(activityInstance.id)
+
+        // WHEN
+        navigateTo("/workflows/instances/activities/${activityInstance.id}")
+
+        // THEN
+        assertElementNotPresent(".btn-activity-user-edit-form")
+    }
+
+    @Test
+    fun `toolbar not available for another assignee`() {
+        // GIVEN
+        val instance = activityInstance.copy(assigneeUserId = 55L)
+        doReturn(GetActivityInstanceResponse(instance)).whenever(kokiWorkflowInstance)
+            .activity(activityInstance.id)
+
+        // WHEN
+        navigateTo("/workflows/instances/activities/${activityInstance.id}")
+
+        // THEN
+        assertElementNotPresent(".btn-activity-user-edit-form")
     }
 }

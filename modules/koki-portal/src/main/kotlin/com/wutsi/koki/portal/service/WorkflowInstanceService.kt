@@ -10,6 +10,7 @@ import com.wutsi.koki.sdk.KokiWorkflow
 import com.wutsi.koki.sdk.KokiWorkflowInstance
 import com.wutsi.koki.workflow.dto.Activity
 import com.wutsi.koki.workflow.dto.ApprovalStatus
+import com.wutsi.koki.workflow.dto.CompleteActivityInstanceRequest
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
 import com.wutsi.koki.workflow.dto.SetActivityInstanceAssigneeRequest
 import com.wutsi.koki.workflow.dto.WorkflowStatus
@@ -265,5 +266,9 @@ class WorkflowInstanceService(
                 activityInstanceIds = listOf(activityInstanceId)
             )
         )
+    }
+
+    fun completeActivity(id: String, state: Map<String, Any>) {
+        kokiWorkflowInstance.complete(id, CompleteActivityInstanceRequest(state))
     }
 }

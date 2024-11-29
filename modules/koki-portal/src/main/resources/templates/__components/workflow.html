@@ -35,14 +35,36 @@
     <span class="status-rejected" th:if="${status.name == 'REJECTED'}">Rejected</span>
 </div>
 
-<div class="widget-toolbar" id="activity-toolbar-widget" th:fragment="activity-toolbar(activityInstance)"
+<div class="widget-toolbar" id="activity-toolbar-widget" th:fragment="activity-instance-toolbar(activityInstance)"
      th:if="${activityInstance.running} AND ${user} AND ${activityInstance.assignee?.id == user?.id}">
-    <a class="btn btn-secondary"
+
+    <a class="btn btn-secondary btn-activity-user-edit-form"
        th:href="${activityInstance.activity.form.editUrl}"
-       th:if="${activityInstance.activity.form} AND ${activityInstance.activity.type.name() == 'USER'}"
+       th:if="${activityInstance.activity.form} AND ${activityInstance.activity.type.name == 'USER'}"
     >
         Edit Form
     </a>
+
+    <a class="btn btn-secondary btn-activity-manual-complete"
+       onclick="return confirm('Are you sure you have complete this activity?')"
+       th:href="${activityInstance.completeUrl}"
+       th:if="${activityInstance.activity.type.name == 'MANUAL'}"
+    >
+        Complete the Activity
+    </a>
+</div>
+
+<div class="widget" th:fragment="activity-instance-breadcrumb(activityInstance)">
+    <div class="widget-body">
+        <a href="/">Home</a>
+        &gt;
+        <a href="/workflows/instances">Instances</a>
+        &gt;
+        <a th:href="${activityInstance.workflowInstance.url}"
+           th:text="${activityInstance.workflowInstance.title}">INSTANCE</a>
+        &gt;
+        <span th:text="${activityInstance.activity.longTitle}">TITLE</span>
+    </div>
 </div>
 
 </body>
