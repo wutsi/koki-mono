@@ -81,6 +81,7 @@ class FormsWidgetControllerTest : AbstractPageControllerTest() {
             ),
         ),
     )
+
     private val workflowInstance = WorkflowInstance(
         id = "xxx",
         workflowId = workflow.id,
@@ -124,8 +125,17 @@ class FormsWidgetControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun show() {
+    fun `show by workflow instance`() {
         navigateTo("/workflows/widgets/forms?workflow-instance-id=${workflowInstance.id}")
+
+        assertElementPresent(".forms-widget")
+        assertElementCount(".forms-widget table tr", forms.size)
+        assertElementNotPresent(".empty-message")
+    }
+
+    @Test
+    fun `show by workflow`() {
+        navigateTo("/workflows/widgets/forms?workflow-id=${workflow.id}")
 
         assertElementPresent(".forms-widget")
         assertElementCount(".forms-widget table tr", forms.size)

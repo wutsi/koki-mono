@@ -21,17 +21,20 @@ class TaskQueueWidgetController(
         if (me != null) {
             val roleIds = me.roles.map { role -> role.id }
             if (roleIds.isNotEmpty()) {
+                // All unassigned activity instances
                 val activityInstances = workflowInstanceService.activities(
                     assigneeIds = listOf(-1),
                     status = WorkflowStatus.RUNNING,
                     limit = 50,
                 )
                 if (activityInstances.isNotEmpty()) {
+                    // All activities associated with my role
                     val activityIds = workflowService.activities(
                         ids = activityInstances.map { activityInstance -> activityInstance.activity.id },
                         roleIds = roleIds,
                     ).map { activity -> activity.id }
 
+                    // Filter unassigned activity instances associated with my role
                     val instances = activityInstances.filter { activityInstance ->
                         activityIds.contains(activityInstance.activity.id)
                     }

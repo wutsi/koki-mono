@@ -19,7 +19,7 @@
                 </td>
                 <td th:text="${activityInstance.workflowInstance.title}">WORKFLOW</td>
                 <td class="toolbar">
-                    <a th:href="'/workflows/widgets/task-queue/assign?activity-instance-id=' + ${activityInstance.id}">
+                    <a class="btn-assign" th:href="'/workflows/widgets/task-queue/assign?activity-instance-id=' + ${activityInstance.id}">
                         Assign to Me
                     </a>
                 </td>

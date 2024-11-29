@@ -30,63 +30,92 @@
                         <a class="btn-start" th:href="${workflow.startUrl}">Start</a>
                     </div>
 
-                    <div class="section-item">
-                        <div class="workflow-image">
-                            <img th:alt="${workflow.title}" th:src="${workflow.imageUrl}"/>
-                        </div>
-                    </div>
-
-                    <div class="section-item">
-                        <table class="table">
-                            <tr>
-                                <td><b>ID</b></td>
-                                <td th:text="${workflow.id}">ID</td>
-                            </tr>
-                            <tr>
-                                <td><b>Name</b></td>
-                                <td th:text="${workflow.name}">NAME</td>
-                            </tr>
-                            <tr>
-                                <td><b>Title</b></td>
-                                <td th:text="${workflow.title}">TITLE</td>
-                            </tr>
-                            <tr>
-                                <td><b>Description</b></td>
-                                <td th:text="${workflow.description}">DESCRIPTION</td>
-                            </tr>
-                        </table>
-                    </div>
+                    <table class="table">
+                        <tr>
+                            <td><b>ID</b></td>
+                            <td th:text="${workflow.id}">ID</td>
+                        </tr>
+                        <tr>
+                            <td><b>Name</b></td>
+                            <td th:text="${workflow.name}">NAME</td>
+                        </tr>
+                        <tr>
+                            <td><b>Title</b></td>
+                            <td th:text="${workflow.title}">TITLE</td>
+                        </tr>
+                        <tr>
+                            <td><b>Description</b></td>
+                            <td th:text="${workflow.description}">DESCRIPTION</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
 
             <div class="widget">
-                <div class="widget-header">
-                    <h3 class="widget-title">Activities</h3>
-                </div>
                 <div class="widget-body">
-                    <div class="section-item">
-                        <table class="table table-striped">
-                            <tr>
-                                <th width="1%"></th>
-                                <th>Title</th>
-                                <th>Role</th>
-                                <th th:if="${workflow.requiresApprover}">Approval?</th>
-                            </tr>
-                            <tr class="activity" th:each="activity: ${workflow.activities}">
-                                <td>
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-activities" aria-selected="true" class="nav-link active"
+                                    data-bs-target="#pills-activities" data-bs-toggle="pill" id="pills-activities-tab"
+                                    role="tab" type="button">
+                                Activities
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-forms" aria-selected="false" class="nav-link"
+                                    data-bs-target="#pills-forms" data-bs-toggle="pill" id="pills-forms-tab"
+                                    role="tab" type="button">
+                                Forms
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-process" aria-selected="false" class="nav-link"
+                                    data-bs-target="#pills-process" data-bs-toggle="pill" id="pills-process-tab"
+                                    role="tab" type="button">
+                                Process
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div aria-labelledby="pills-activities-tab" class="tab-pane fade show active"
+                             id="pills-activities"
+                             role="tabpanel">
+                            <table class="table table-striped">
+                                <tr>
+                                    <th width="1%"></th>
+                                    <th>Title</th>
+                                    <th>Role</th>
+                                    <th th:if="${workflow.requiresApprover}">Approval?</th>
+                                </tr>
+                                <tr class="activity" th:each="activity: ${workflow.activities}">
+                                    <td>
                                     <span
                                         th:replace="~{__components/workflow :: activity-type-icon(${activity.type})}"></span>
-                                </td>
-                                <td th:text="${activity.longTitle}">TITLE</td>
-                                <td>
-                                    <span th:if="${activity.role}" th:text="${activity.role.title}">ROLE</span>
-                                </td>
-                                <td th:if="${workflow.requiresApprover}">
-                                    <span th:if="${activity.requiresApproval}">Yes</span>
-                                    <span th:if="!${activity.requiresApproval}">No</span>
-                                </td>
-                            </tr>
-                        </table>
+                                    </td>
+                                    <td th:text="${activity.longTitle}">TITLE</td>
+                                    <td>
+                                        <span th:if="${activity.role}" th:text="${activity.role.title}">ROLE</span>
+                                    </td>
+                                    <td th:if="${workflow.requiresApprover}">
+                                        <span th:if="${activity.requiresApproval}">Yes</span>
+                                        <span th:if="!${activity.requiresApproval}">No</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div aria-labelledby="pills-forms-tab" class="tab-pane fade" id="pills-forms"
+                             role="tabpanel">
+                            <div class="widget-container"
+                                 th:data-url="'/workflows/widgets/forms?workflow-id=' + ${workflow.id}"></div>
+                        </div>
+
+                        <div aria-labelledby="pills-process-tab" class="tab-pane fade" id="pills-process"
+                             role="tabpanel">
+                            <div class="workflow-image">
+                                <img th:alt="${workflow.title}" th:src="${workflow.imageUrl}"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
