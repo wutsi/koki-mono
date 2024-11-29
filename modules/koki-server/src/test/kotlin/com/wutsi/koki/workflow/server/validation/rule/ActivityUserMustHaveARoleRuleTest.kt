@@ -2,14 +2,13 @@ package com.wutsi.koki.workflow.server.validation.rule
 
 import com.wutsi.koki.workflow.dto.ActivityData
 import com.wutsi.koki.workflow.dto.ActivityType
-import com.wutsi.koki.workflow.dto.FlowData
 import com.wutsi.koki.workflow.dto.WorkflowData
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class ActivityStartMustNotHavePredecessorRuleTest {
-    private val rule = ActivityStartMustNotHavePredecessorRule()
+class ActivityUserMustHaveARoleRuleTest {
+    private val rule = ActivityUserMustHaveARoleRule()
 
     @Test
     fun success() {
@@ -19,13 +18,9 @@ class ActivityStartMustNotHavePredecessorRuleTest {
                 description = "This is a new workflow",
                 activities = listOf(
                     ActivityData(name = "start", type = ActivityType.START),
-                    ActivityData(name = "invoice"),
+                    ActivityData(name = "invoice", type = ActivityType.USER, role = "employee"),
                     ActivityData(name = "stop"),
                 ),
-                flows = listOf(
-                    FlowData(from = "start", to = "invoice"),
-                    FlowData(from = "invoice", to = "stop"),
-                )
             )
         )
 
@@ -40,18 +35,15 @@ class ActivityStartMustNotHavePredecessorRuleTest {
                 description = "This is a new workflow",
                 activities = listOf(
                     ActivityData(name = "start", type = ActivityType.START),
-                    ActivityData(name = "invoice"),
+                    ActivityData(name = "invoice", type = ActivityType.USER, role = null),
+                    ActivityData(name = "quote", type = ActivityType.USER, role = ""),
                     ActivityData(name = "stop"),
                 ),
-                flows = listOf(
-                    FlowData(from = "start", to = "invoice"),
-                    FlowData(from = "invoice", to = "stop", expression = "value>0"),
-                    FlowData(from = "stop", to = "start"),
-                )
             )
         )
 
-        assertEquals(1, result.size)
-        assertEquals("activity: start", result[0].location)
+        assertEquals(2, result.size)
+        assertEquals("activity: invoice", result[0].location)
+        assertEquals("activity: quote", result[1].location)
     }
 }

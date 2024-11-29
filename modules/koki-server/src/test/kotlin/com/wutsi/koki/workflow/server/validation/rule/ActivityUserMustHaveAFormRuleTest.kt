@@ -7,8 +7,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class ActivityUserMustHaveARoleRuleTest {
-    private val rule = ActivityUserMustHaveARoleRule()
+class ActivityUserMustHaveAFormRuleTest {
+    private val rule = ActivityUserMustHaveAFormRule()
 
     @Test
     fun success() {
@@ -18,7 +18,7 @@ class ActivityUserMustHaveARoleRuleTest {
                 description = "This is a new workflow",
                 activities = listOf(
                     ActivityData(name = "start", type = ActivityType.START),
-                    ActivityData(name = "invoice", type = ActivityType.USER, role = "employee"),
+                    ActivityData(name = "invoice", type = ActivityType.USER, form = "F-001"),
                     ActivityData(name = "stop"),
                 ),
             )
@@ -35,8 +35,8 @@ class ActivityUserMustHaveARoleRuleTest {
                 description = "This is a new workflow",
                 activities = listOf(
                     ActivityData(name = "start", type = ActivityType.START),
-                    ActivityData(name = "invoice", type = ActivityType.USER, role = null),
-                    ActivityData(name = "quote", type = ActivityType.USER, role = ""),
+                    ActivityData(name = "invoice", type = ActivityType.USER, form = null),
+                    ActivityData(name = "quote", type = ActivityType.USER, form = ""),
                     ActivityData(name = "stop"),
                 ),
             )
