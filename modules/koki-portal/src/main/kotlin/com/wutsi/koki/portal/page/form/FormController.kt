@@ -4,7 +4,6 @@ import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.service.FormService
-import com.wutsi.koki.sdk.KokiForms
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -82,9 +81,7 @@ class FormController(
                     entry.key to entry.value
                 }
             }
-            .toMap()
-            as Map<String, Any>
-
+            .toMap() as Map<String, Any>
         if (formDataId != null) {
             service.updateData(formDataId, activityInstanceId, data)
         } else {

@@ -1,7 +1,6 @@
 package com.wutsi.koki.portal.service
 
 import com.wutsi.koki.form.dto.SubmitFormDataRequest
-import com.wutsi.koki.form.dto.SubmitFormDataResponse
 import com.wutsi.koki.form.dto.UpdateFormDataRequest
 import com.wutsi.koki.portal.mapper.FormMapper
 import com.wutsi.koki.portal.model.FormModel
@@ -89,5 +88,4 @@ class FormService(
             )
         )
     }
-
 }

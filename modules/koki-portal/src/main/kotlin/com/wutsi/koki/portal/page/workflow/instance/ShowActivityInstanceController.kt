@@ -39,7 +39,7 @@ class ShowActivityInstanceController(
         try {
             workflowInstanceService.completeActivity(id, emptyMap())
             return "redirect:/workflows/instances/activities/$id/completed"
-        } catch(ex: HttpClientErrorException){
+        } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)
             return show(id, model)
