@@ -51,13 +51,14 @@ CREATE TABLE T_ATTRIBUTE(
 CREATE TABLE T_CONFIGURATION(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
-  attribute_fk            BIGINT NOT NULL REFERENCES T_ATTRIBUTE(id),
+  tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
 
+  name                    VARCHAR(255),
   value                   TEXT,
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
 
-  UNIQUE(attribute_fk),
+  UNIQUE(tenant_fk, name),
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 

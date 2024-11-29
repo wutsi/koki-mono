@@ -24,10 +24,6 @@ class UserService(
     private val roleService: RoleService,
     private val em: EntityManager
 ) {
-    companion object {
-        const val PAGE_SIZE = 20
-    }
-
     fun get(id: Long, tenantId: Long): UserEntity {
         val user = dao.findById(id)
             .orElseThrow { NotFoundException(Error(ErrorCode.USER_NOT_FOUND)) }

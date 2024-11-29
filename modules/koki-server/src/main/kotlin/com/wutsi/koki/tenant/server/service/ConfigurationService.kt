@@ -3,8 +3,8 @@ package com.wutsi.koki.tenant.server.service
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import com.wutsi.koki.tenant.dto.SaveConfigurationResponse
 import com.wutsi.koki.tenant.server.dao.ConfigurationRepository
-import com.wutsi.koki.tenant.server.domain.AttributeEntity
 import com.wutsi.koki.tenant.server.domain.ConfigurationEntity
+import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.Date
@@ -12,10 +12,32 @@ import java.util.Date
 @Service
 open class ConfigurationService(
     private val dao: ConfigurationRepository,
-    private val attributeService: AttributeService,
+    private val em: EntityManager,
 ) {
-    fun search(attributes: List<AttributeEntity>): List<ConfigurationEntity> {
-        return dao.findByAttributeIn(attributes)
+    fun search(
+        tenantId: Long,
+        names: List<String> = emptyList(),
+        keyword: String? = null,
+    ): List<ConfigurationEntity> {
+        val jql = StringBuilder("SELECT C FROM ConfigurationEntity C  WHERE C.tenantId = :tenantId")
+
+        if (names.isNotEmpty()) {
+            jql.append(" AND UPPER(C.name) IN :names")
+        }
+        if (keyword != null) {
+            jql.append(" AND UPPER(C.name) LIKE :keyword")
+        }
+        jql.append(" ORDER BY C.name")
+
+        val query = em.createQuery(jql.toString(), ConfigurationEntity::class.java)
+        query.setParameter("tenantId", tenantId)
+        if (keyword != null) {
+            query.setParameter("keyword", "%${keyword.uppercase()}%")
+        }
+        if (names.isNotEmpty()) {
+            query.setParameter("names", names.map { name -> name.uppercase() })
+        }
+        return query.resultList
     }
 
     @Transactional
@@ -25,38 +47,30 @@ open class ConfigurationService(
             return SaveConfigurationResponse()
         }
 
-        // Update/Delete
+        val now = Date()
+        val adds = mutableListOf<ConfigurationEntity>()
         val deletes = mutableListOf<ConfigurationEntity>()
         val updates = mutableListOf<ConfigurationEntity>()
-        val attributes = attributeService.search(names.toList(), tenantId)
-        val configurationMap = search(attributes).associateBy { it.attribute.name }
-        configurationMap.forEach { entry ->
-            val name = entry.key
-            val config = entry.value
-            val value = request.values[name]
-            if (value.isNullOrEmpty()) {
-                deletes.add(config)
-            } else {
-                config.value = value
-                config.modifiedAt = Date()
-                updates.add(config)
-            }
-        }
-
-        // New
-        val adds = mutableListOf<ConfigurationEntity>()
-        val xnames = names
-            .filter { !configurationMap.containsKey(it) }
-            .filter { !request.values[it].isNullOrEmpty() }
-        if (xnames.isNotEmpty()) {
-            val attributeMap = attributeService.search(xnames, tenantId).associateBy { it.name }
-            attributeMap.values.forEach { attr ->
-                adds.add(
-                    ConfigurationEntity(
-                        attribute = attr,
-                        value = request.values[attr.name]
+        request.values.forEach { entry ->
+            val config = dao.findByNameIgnoreCaseAndTenantId(entry.key, tenantId)
+            if (config == null) {
+                if (entry.value.isNotEmpty()) {
+                    adds.add(
+                        ConfigurationEntity(
+                            name = entry.key,
+                            value = entry.value,
+                            tenantId = tenantId
+                        )
                     )
-                )
+                }
+            } else {
+                if (entry.value.isEmpty()) {
+                    deletes.add(config)
+                } else {
+                    config.value = entry.value
+                    config.modifiedAt = now
+                    updates.add(config)
+                }
             }
         }
 
