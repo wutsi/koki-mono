@@ -25,11 +25,11 @@ class KokiForms(
 
     fun getFormHtml(
         formId: String,
-        formDataId: String? = null,
-        roleName: String? = null,
-        workflowInstanceId: String? = null,
-        activityInstanceId: String? = null,
-        readOnly: Boolean = false
+        formDataId: String?,
+        roleName: String?,
+        workflowInstanceId: String?,
+        activityInstanceId: String?,
+        readOnly: Boolean
     ): String {
         val tenantId = tenantProvider.id()
         val path = if (formDataId == null) {
@@ -72,32 +72,13 @@ class KokiForms(
         return rest.getForEntity(url, SearchFormResponse::class.java).body
     }
 
-    fun submitData(
-        formId: String,
-        workflowInstanceId: String?,
-        activityInstanceId: String?,
-        data: Map<String, Any>
-    ): SubmitFormDataResponse {
-        val request = SubmitFormDataRequest(
-            formId = formId,
-            data = data,
-            workflowInstanceId = workflowInstanceId,
-            activityInstanceId = activityInstanceId,
-        )
+    fun submitData(request: SubmitFormDataRequest): SubmitFormDataResponse {
         val path = FORM_DATA_PATH_PREFIX
         val url = urlBuilder.build(path)
         return rest.postForEntity(url, request, SubmitFormDataResponse::class.java).body
     }
 
-    fun updateData(
-        formDataId: String,
-        activityInstanceId: String?,
-        data: Map<String, Any>
-    ) {
-        val request = UpdateFormDataRequest(
-            data = data,
-            activityInstanceId = activityInstanceId
-        )
+    fun updateData(formDataId: String, request: UpdateFormDataRequest) {
         val url = urlBuilder.build("$FORM_DATA_PATH_PREFIX/$formDataId")
         rest.postForEntity(url, request, Any::class.java)
     }

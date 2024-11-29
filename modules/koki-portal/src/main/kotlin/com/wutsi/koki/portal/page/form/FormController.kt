@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.page.form
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.service.FormService
 import com.wutsi.koki.sdk.KokiForms
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.stereotype.Controller
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
 class FormController(
-    private val kokiForms: KokiForms,
+    private val service: FormService,
 ) : AbstractPageController() {
     @GetMapping("/forms/{form-id}")
     fun new(
@@ -24,7 +25,7 @@ class FormController(
         @RequestParam(required = false, name = "read-only") readOnly: Boolean = false,
         model: Model
     ): String {
-        val formHtml = kokiForms.getFormHtml(
+        val formHtml = service.html(
             formId = formId,
             formDataId = null,
             workflowInstanceId = workflowInstanceId,
@@ -43,7 +44,7 @@ class FormController(
         @RequestParam(required = false, name = "activity-instance-id") activityInstanceId: String? = null,
         model: Model
     ): String {
-        val formHtml = kokiForms.getFormHtml(
+        val formHtml = service.html(
             formId = formId,
             formDataId = formDataId,
             workflowInstanceId = null,
@@ -85,20 +86,20 @@ class FormController(
             as Map<String, Any>
 
         if (formDataId != null) {
-            kokiForms.updateData(formDataId, activityInstanceId, data)
+            service.updateData(formDataId, activityInstanceId, data)
         } else {
-            kokiForms.submitData(formId, workflowInstanceId, activityInstanceId, data)
+            service.submitData(formId, workflowInstanceId, activityInstanceId, data)
         }
         return "redirect:/forms/$formId/saved"
     }
 
     private fun addPageInfo(formId: String, model: Model) {
-        val form = kokiForms.getForm(formId).form
+        val form = service.form(formId)
         model.addAttribute(
             "page",
             PageModel(
                 name = PageName.FORM,
-                title = form.title,
+                title = form.longTitle,
             )
         )
     }

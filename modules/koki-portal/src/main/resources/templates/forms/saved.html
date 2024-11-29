@@ -9,19 +9,21 @@
 
 <div class="container-fluid">
     <div class="row">
+        <div class="col-12 col-md-8 offset-md-2">
+            <div th:replace="~{__components/form :: form-breadcrumb(${form})}"></div>
+        </div>
 
         <div class="col-12 col-md-8 offset-md-2">
-            <div class="form">
-                <div class="form-header">
+            <div class="widget">
+                <div class="widget-header">
                     <h1 th:text="${title}">TITLE</h1>
                 </div>
-                <div class="form-body">
-                    <div class="section">
-                        <div class="section-body">
-                            <div class="section-item success-message">
-                                Your form have successfully been recorded.
-                            </div>
-                        </div>
+                <div class="widget-body">
+                    <div class="alert alert-success">
+                        Your form have successfully been recorded.
+                    </div>
+                    <div class="text-center">
+                        <a class="btn btn-secondary btn-ok" href="/">Back to Home</a>
                     </div>
                 </div>
             </div>
