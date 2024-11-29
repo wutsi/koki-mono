@@ -23,7 +23,7 @@ class WorkflowValidatorTest {
             description = "This is a new workflow",
             activities = listOf(
                 ActivityData(name = "start", type = ActivityType.START),
-                ActivityData(name = "invoice", type = ActivityType.MANUAL),
+                ActivityData(name = "invoice", type = ActivityType.MANUAL, role = "foo"),
                 ActivityData(name = "stop", type = ActivityType.END),
             ),
             flows = listOf(
@@ -62,6 +62,6 @@ class WorkflowValidatorTest {
 
     @Test
     fun `number of rules`() {
-        assertEquals(15, validator.ruleCount())
+        assertEquals(18, validator.ruleCount())
     }
 }
