@@ -2,14 +2,15 @@ package com.wutsi.koki.portal.service.storage.local
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import java.io.ByteArrayInputStream
-import kotlin.test.Test
 import jakarta.servlet.ServletOutputStream
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.mockito.Mockito.mock
+import java.io.ByteArrayInputStream
+import kotlin.test.Test
+
 
 class LocalStorageServletTest {
     private val directory = System.getProperty("user.home") + "/__wutsi/koki"
