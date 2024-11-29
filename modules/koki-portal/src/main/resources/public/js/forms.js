@@ -4,8 +4,6 @@ function _koki_configure_form() {
         console.log('Configuring form validation');
         form.noValidate = true;
         form.addEventListener('submit', _koki_validate_form);
-    } else {
-        console.log('Oopsss... no form found!');
     }
 }
 

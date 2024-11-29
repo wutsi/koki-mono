@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.model
 
+import java.net.URLEncoder
 import java.util.Date
 
 data class FileModel(
@@ -18,5 +19,5 @@ data class FileModel(
     val createdBy: UserModel? = null,
 ) {
     val url: String
-        get() = "/storage/$id/$name"
+        get() = "/storage/$id/" + URLEncoder.encode(name, "utf-8")
 }

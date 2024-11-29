@@ -12,10 +12,11 @@ import com.wutsi.koki.workflow.dto.WorkflowInstance
 import com.wutsi.koki.workflow.dto.WorkflowInstanceSummary
 import com.wutsi.koki.workflow.server.domain.ActivityInstance
 import org.springframework.stereotype.Service
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 
 @Service
-class WorkflowInstanceMapper {
+class WorkflowInstanceMapper(private val formMapper: FormMapper) {
     fun toWorkflowInstanceModel(
         entity: WorkflowInstance,
         imageUrl: String,
@@ -23,8 +24,7 @@ class WorkflowInstanceMapper {
         users: Map<Long, UserModel>,
         roles: Map<Long, RoleModel>,
     ): WorkflowInstanceModel {
-        val fmt = SimpleDateFormat("yyyy/MM/dd")
-
+        val fmt = createDateFormat()
         val workflowInstance = WorkflowInstanceModel(
             id = entity.id,
             title = entity.title,
@@ -52,19 +52,47 @@ class WorkflowInstanceMapper {
                 } else {
                     null
                 }
-            }
+            },
+            createdBy = entity.createdById?.let { id -> users[id] }
         )
-        workflowInstance.activityInstances = entity.activityInstances.map { activityInstance ->
-            toActivityInstanceModel(
-                entity = activityInstance,
-                workflowInstance = workflowInstance,
-                activity = workflow.activities.find { activity -> activity.id == activityInstance.activityId }
-                    ?: ActivityModel(id = activityInstance.activityId),
-                assignee = activityInstance.assigneeUserId?.let { userId -> users[userId] },
-                approver = activityInstance.approverUserId?.let { userId -> users[userId] },
-            )
-        }
+        workflowInstance.activityInstances = entity.activityInstances
+            .map { activityInstance ->
+                toActivityInstanceModel(
+                    entity = activityInstance,
+                    workflowInstance = workflowInstance,
+                    activity = toActivityModel(activityInstance, workflow),
+                    assignee = activityInstance.assigneeUserId?.let { userId -> users[userId] },
+                    approver = activityInstance.approverUserId?.let { userId -> users[userId] },
+                )
+            }
         return workflowInstance
+    }
+
+    private fun toActivityModel(activityInstance: ActivityInstanceSummary, workflow: WorkflowModel): ActivityModel {
+        val activity = workflow.activities
+            .find { activity -> activity.id == activityInstance.activityId }
+            ?: ActivityModel(id = activityInstance.activityId)
+
+        return if (activity.form != null) {
+            activity.copy(
+                form = activity.form.copy(
+                    editUrl = formMapper.toUrl(
+                        id = activity.form.id,
+                        readOnly = false,
+                        workflowInstanceId = activityInstance.workflowInstanceId,
+                        activityInstanceId = activityInstance.id
+                    ),
+                    viewUrl = formMapper.toUrl(
+                        id = activity.form.id,
+                        readOnly = true,
+                        workflowInstanceId = activityInstance.workflowInstanceId,
+                        activityInstanceId = activityInstance.id
+                    ),
+                )
+            )
+        } else {
+            activity
+        }
     }
 
     fun toWorkflowInstanceModel(
@@ -73,8 +101,7 @@ class WorkflowInstanceMapper {
         workflow: WorkflowModel,
         users: Map<Long, UserModel>,
     ): WorkflowInstanceModel {
-        val fmt = SimpleDateFormat("yyyy/MM/dd")
-
+        val fmt = createDateFormat()
         val workflowInstance = WorkflowInstanceModel(
             id = entity.id,
             title = entity.title,
@@ -92,6 +119,7 @@ class WorkflowInstanceMapper {
             imageUrl = imageUrl,
             doneAt = entity.doneAt,
             doneAtText = entity.doneAt?.let { date -> fmt.format(date) },
+            createdBy = entity.createdById?.let { id -> users[id] }
         )
         return workflowInstance
     }
@@ -103,7 +131,7 @@ class WorkflowInstanceMapper {
         assignee: UserModel?,
         approver: UserModel?
     ): ActivityInstanceModel {
-        val fmt = SimpleDateFormat("yyyy/MM/dd HH:mm")
+        val fmt = createDateFormat()
         return ActivityInstanceModel(
             id = entity.id,
             activity = activity,
@@ -130,7 +158,7 @@ class WorkflowInstanceMapper {
         assignee: UserModel?,
         approver: UserModel?,
     ): ActivityInstanceModel {
-        val fmt = SimpleDateFormat("yyyy/MM/dd")
+        val fmt = createDateFormat()
         return ActivityInstanceModel(
             id = entity.id,
             workflowInstance = workflowInstance,
@@ -148,5 +176,9 @@ class WorkflowInstanceMapper {
             startedAtText = entity.startedAt?.let { date -> fmt.format(date) },
             doneAtText = entity.doneAt?.let { date -> fmt.format(date) },
         )
+    }
+
+    private fun createDateFormat(): DateFormat {
+        return SimpleDateFormat("yyyy/MM/dd HH:mm")
     }
 }

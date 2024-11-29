@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.service.storage
 
 import java.io.InputStream
+import java.io.OutputStream
 import java.net.URL
 
 interface StorageService {
@@ -10,4 +11,6 @@ interface StorageService {
         contentType: String?,
         contentLength: Long
     ): URL
+
+    fun get(url: URL, os: OutputStream)
 }
