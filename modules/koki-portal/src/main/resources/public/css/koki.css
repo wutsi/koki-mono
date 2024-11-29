@@ -145,6 +145,18 @@ nav {
     margin-right: 1em;
 }
 
+.widget .tab-content .widget {
+    border: 0;
+}
+
+.widget .tab-content .widget-header {
+    display: none
+}
+
+.widget .tab-content .widget-body {
+    padding: 0;
+}
+
 .workflow-image {
     margin: 0 auto;
     text-align: center;

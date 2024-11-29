@@ -103,6 +103,7 @@ class ShowWorkflowInstanceControllerTest : AbstractPageControllerTest() {
     private val workflowInstance = WorkflowInstance(
         id = "xxx",
         workflowId = workflow.id,
+        title = "2024",
         status = WorkflowStatus.RUNNING,
         approverUserId = 11L,
         createdAt = Date(),

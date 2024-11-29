@@ -47,6 +47,24 @@ class ListFileWidgetControllerTest : AbstractPageControllerTest() {
             createdAt = DateUtils.addDays(Date(), -5),
             url = "https://picsum.photos/800/100",
         ),
+        FileSummary(
+            id = "f5",
+            name = "Picture2.png",
+            contentType = "image/png",
+            contentLength = 500,
+            createdById = users[0].id,
+            createdAt = DateUtils.addDays(Date(), -5),
+            url = "https://picsum.photos/800/100",
+        ),
+        FileSummary(
+            id = "f6",
+            name = "empty.txt",
+            contentType = "text/plain",
+            contentLength = 0,
+            createdById = null,
+            createdAt = DateUtils.addDays(Date(), -5),
+            url = "https://picsum.photos/800/100.txt",
+        ),
     )
 
     @BeforeEach
