@@ -1,7 +1,7 @@
 # Features
 
 - [x] Add support for Manual activities
-- [] Simplify tenant configuration API as Name/Value pair
+- [x] Simplify tenant configuration API as Name/Value pair
 - [] Configure Tenant SMTP
 - [] Add support for Send activities with Email
 - [] Add support for Service activities
