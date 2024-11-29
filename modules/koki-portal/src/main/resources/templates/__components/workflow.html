@@ -37,7 +37,7 @@
 
 <div class="widget-toolbar" id="activity-toolbar-widget" th:fragment="activity-toolbar(activityInstance)"
      th:if="${activityInstance.running} AND ${user} AND ${activityInstance.assignee?.id == user?.id}">
-    <a class="btn btn-primary"
+    <a class="btn btn-secondary"
        th:href="${activityInstance.activity.form.editUrl}"
        th:if="${activityInstance.activity.form} AND ${activityInstance.activity.type.name() == 'USER'}"
     >

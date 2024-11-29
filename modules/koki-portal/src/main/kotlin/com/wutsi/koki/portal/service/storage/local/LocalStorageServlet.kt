@@ -35,13 +35,15 @@ class LocalStorageServlet(private val directory: String) : HttpServlet() {
         resp.contentType = probeContentType(file)
 
         FileInputStream(file).use { input ->
-            input.copyTo(resp.outputStream)
+            val contentLength = input.copyTo(resp.outputStream)
+            resp.setContentLength(contentLength.toInt())
         }
     }
 
     private fun probeContentType(file: File): String {
-        return MediaTypeFactory.getMediaType(file.name).getOrNull()
-            ?.let { contentType -> contentType.toString() }
+        return MediaTypeFactory.getMediaType(file.name)
+            .getOrNull()
+            ?.toString()
             ?: "application/octet-stream"
     }
 }

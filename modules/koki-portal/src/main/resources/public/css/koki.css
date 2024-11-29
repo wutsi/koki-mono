@@ -137,7 +137,7 @@ nav {
 .widget-body .widget-toolbar {
     background: #f8f8f8;
     margin-bottom: 1em;
-    padding: 1em;
+    padding: 0.5em;
 }
 
 .widget-toolbar a,
