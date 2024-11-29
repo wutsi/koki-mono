@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.page
 
 object PageName {
     const val ACTIVITY_INSTANCE = "page.activity-instance"
+    const val ACTIVITY_INSTANCE_COMPLETED = "page.activity-instance.completed"
 
     const val ERROR = "page.error"
 

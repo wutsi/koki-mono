@@ -1,5 +1,7 @@
 package com.wutsi.koki.portal.service
 
+import com.wutsi.koki.form.dto.SubmitFormDataRequest
+import com.wutsi.koki.form.dto.UpdateFormDataRequest
 import com.wutsi.koki.portal.mapper.FormMapper
 import com.wutsi.koki.portal.model.FormModel
 import com.wutsi.koki.sdk.KokiForms
@@ -13,8 +15,8 @@ class FormService(
 ) {
     fun form(
         id: String,
-        workflowInstanceId: String?,
-        activityInstanceId: String?,
+        workflowInstanceId: String? = null,
+        activityInstanceId: String? = null,
     ): FormModel {
         return mapper.toFormModel(kokiForm.getForm(id).form, workflowInstanceId, activityInstanceId)
     }
@@ -37,5 +39,53 @@ class FormService(
             sortBy = sortBy,
             ascending = ascending,
         ).forms.map { form -> mapper.toFormModel(form, workflowInstanceId, activityInstanceId) }
+    }
+
+    fun html(
+        formId: String,
+        formDataId: String? = null,
+        roleName: String? = null,
+        workflowInstanceId: String? = null,
+        activityInstanceId: String? = null,
+        readOnly: Boolean = false
+    ): String {
+        return kokiForm.getFormHtml(
+            formId = formId,
+            formDataId = formDataId,
+            roleName = roleName,
+            workflowInstanceId = workflowInstanceId,
+            activityInstanceId = activityInstanceId,
+            readOnly = readOnly,
+        )
+    }
+
+    fun submitData(
+        formId: String,
+        workflowInstanceId: String?,
+        activityInstanceId: String?,
+        data: Map<String, Any>
+    ): String {
+        return kokiForm.submitData(
+            SubmitFormDataRequest(
+                formId = formId,
+                data = data,
+                workflowInstanceId = workflowInstanceId,
+                activityInstanceId = activityInstanceId,
+            )
+        ).formDataId
+    }
+
+    fun updateData(
+        formDataId: String,
+        activityInstanceId: String?,
+        data: Map<String, Any>
+    ) {
+        kokiForm.updateData(
+            formDataId,
+            UpdateFormDataRequest(
+                data = data,
+                activityInstanceId = activityInstanceId
+            )
+        )
     }
 }

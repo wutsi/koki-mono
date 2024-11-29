@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="widget" th:fragment="form-breadcrumb(form)">
+    <div class="widget-body">
+        <a href="/">Home</a>
+        &gt;
+        <span th:text="${form.longTitle}">TITLE</span>
+    </div>
+</div>
+
+</body>

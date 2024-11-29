@@ -10,17 +10,13 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 col-md-8 offset-md-2">
-            <div th:replace="~{__components/form :: form-breadcrumb(${form})}"></div>
+            <div th:replace="~{__components/workflow :: activity-instance-breadcrumb(${activityInstance})}"></div>
         </div>
-
         <div class="col-12 col-md-8 offset-md-2">
             <div class="widget">
-                <div class="widget-header">
-                    <h1 th:text="${title}">TITLE</h1>
-                </div>
                 <div class="widget-body">
                     <div class="alert alert-success">
-                        Your form have successfully been recorded.
+                        The task has been completed successfully.
                     </div>
                     <div class="text-center">
                         <a class="btn btn-secondary btn-ok" href="/">Back to Home</a>

@@ -46,11 +46,8 @@ class KokiWorkflowInstance(
         ).body
     }
 
-    fun complete(activityInstanceId: String, data: Map<String, Any>) {
+    fun complete(activityInstanceId: String, request: CompleteActivityInstanceRequest) {
         val url = urlBuilder.build("$ACTIVITY_PATH_PREFIX/$activityInstanceId/complete")
-        val request = CompleteActivityInstanceRequest(
-            state = data
-        )
         rest.postForEntity(url, request, Any::class.java)
     }
 

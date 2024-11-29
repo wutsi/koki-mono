@@ -13,6 +13,9 @@ import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.form.dto.Form
 import com.wutsi.koki.form.dto.GetFormResponse
+import com.wutsi.koki.form.dto.SubmitFormDataRequest
+import com.wutsi.koki.form.dto.SubmitFormDataResponse
+import com.wutsi.koki.form.dto.UpdateFormDataRequest
 import com.wutsi.koki.portal.page.PageName
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -38,6 +41,8 @@ class FormControllerTest : AbstractPageControllerTest() {
         val html = generateFormHtml("http://localhost:$port/forms/$formId")
         doReturn(html).whenever(kokiForms)
             .getFormHtml(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+
+        doReturn(SubmitFormDataResponse("1111")).whenever(kokiForms).submitData(any())
     }
 
     @Test
@@ -53,16 +58,20 @@ class FormControllerTest : AbstractPageControllerTest() {
         click("INPUT[value=IMM]")
         click("button[type=submit]")
 
-        verify(kokiForms).submitData(
-            formId,
-            null,
-            null,
+        val request = argumentCaptor<SubmitFormDataRequest>()
+        verify(kokiForms).submitData(request.capture())
+
+        assertEquals(formId, request.firstValue.formId)
+        assertEquals(null, request.firstValue.activityInstanceId)
+        assertEquals(null, request.firstValue.workflowInstanceId)
+        assertEquals(
             mapOf(
                 "customer_name" to "Ray Sponsible",
                 "customer_email" to "ray.sponsible@gmail.com",
                 "marital_status" to "S",
                 "case_type" to "IMM"
-            )
+            ),
+            request.firstValue.data
         )
 
         assertCurrentPageIs(PageName.FORM_SAVED)
@@ -86,16 +95,20 @@ class FormControllerTest : AbstractPageControllerTest() {
         click("INPUT[value=IMM]")
         click("button[type=submit]")
 
-        verify(kokiForms).submitData(
-            formId,
-            "111",
-            "222",
+        val request = argumentCaptor<SubmitFormDataRequest>()
+        verify(kokiForms).submitData(request.capture())
+
+        assertEquals(formId, request.firstValue.formId)
+        assertEquals("222", request.firstValue.activityInstanceId)
+        assertEquals("111", request.firstValue.workflowInstanceId)
+        assertEquals(
             mapOf(
                 "customer_name" to "Ray Sponsible",
                 "customer_email" to "ray.sponsible@gmail.com",
                 "marital_status" to "S",
                 "case_type" to "IMM"
-            )
+            ),
+            request.firstValue.data
         )
 
         assertCurrentPageIs(PageName.FORM_SAVED)
@@ -186,9 +199,11 @@ class FormControllerTest : AbstractPageControllerTest() {
         click("INPUT[value=IMM]")
         click("button[type=submit]")
 
-        val dataArg = argumentCaptor<Map<String, Any>>()
-        verify(kokiForms).updateData(eq(formDataId), eq(null), dataArg.capture())
-        val data = dataArg.firstValue
+        val request = argumentCaptor<UpdateFormDataRequest>()
+        verify(kokiForms).updateData(eq(formDataId), request.capture())
+        assertEquals(null, request.firstValue.activityInstanceId)
+
+        val data = request.firstValue.data
         assertEquals(4, data.size)
         assertEquals("Ray Sponsible", data["customer_name"])
         assertEquals("ray.sponsible@gmail.com", data["customer_email"])
@@ -198,6 +213,8 @@ class FormControllerTest : AbstractPageControllerTest() {
         assertEquals("IMM", (data["case_type"] as Array<*>)[1])
 
         assertCurrentPageIs(PageName.FORM_SAVED)
+        click(".btn-ok")
+        assertCurrentPageIs(PageName.HOME)
     }
 
     @Test
@@ -224,9 +241,11 @@ class FormControllerTest : AbstractPageControllerTest() {
         click("INPUT[value=IMM]")
         click("button[type=submit]")
 
-        val dataArg = argumentCaptor<Map<String, Any>>()
-        verify(kokiForms).updateData(eq(formDataId), eq("222"), dataArg.capture())
-        val data = dataArg.firstValue
+        val request = argumentCaptor<UpdateFormDataRequest>()
+        verify(kokiForms).updateData(eq(formDataId), request.capture())
+        assertEquals("222", request.firstValue.activityInstanceId)
+
+        val data = request.firstValue.data
         assertEquals(4, data.size)
         assertEquals("Ray Sponsible", data["customer_name"])
         assertEquals("ray.sponsible@gmail.com", data["customer_email"])
