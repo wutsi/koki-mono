@@ -11,7 +11,6 @@ import org.mockito.Mockito.mock
 import java.io.ByteArrayInputStream
 import kotlin.test.Test
 
-
 class LocalStorageServletTest {
     private val directory = System.getProperty("user.home") + "/__wutsi/koki"
     private val baseUrl = "http://localhost:8081/local-storage"
