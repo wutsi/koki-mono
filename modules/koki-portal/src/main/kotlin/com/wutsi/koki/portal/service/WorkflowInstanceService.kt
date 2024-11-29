@@ -112,9 +112,11 @@ class WorkflowInstanceService(
             limit = workflowIds.size,
         ).associateBy { workflow -> workflow.id }
 
-        val userIds = workflowInstances.mapNotNull { workflowInstance ->
-            workflowInstance.approverUserId
-        }.toSet()
+        val userIds = workflowInstances
+            .flatMap { workflowInstance -> listOf(workflowInstance.approverUserId, workflowInstance.createdById) }
+            .filterNotNull()
+            .toMutableSet()
+
         val userMap = if (userIds.isNotEmpty()) {
             userService.users(
                 ids = userIds.toList(),

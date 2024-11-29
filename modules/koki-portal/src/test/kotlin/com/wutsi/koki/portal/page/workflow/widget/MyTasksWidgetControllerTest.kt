@@ -201,7 +201,6 @@ class MyTasksWidgetControllerTest : AbstractPageControllerTest() {
             )
 
         navigateTo("/workflows/widgets/my-tasks")
-
         assertElementNotPresent(".my-tasks-widget table")
     }
 
@@ -210,7 +209,6 @@ class MyTasksWidgetControllerTest : AbstractPageControllerTest() {
         setUpAnonymousUser()
 
         navigateTo("/workflows/widgets/my-tasks")
-
         assertElementNotPresent(".my-tasks-widget")
     }
 }

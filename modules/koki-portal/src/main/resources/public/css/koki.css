@@ -124,11 +124,14 @@ nav {
     font-weight: bold;
     margin: 0;
     padding: 0;
-    text-transform: uppercase;
 }
 
 .widget-body {
     padding: 1em
+}
+
+.widget-body table.table:last-child {
+    margin-bottom: 0;
 }
 
 .widget-body .widget-toolbar {

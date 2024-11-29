@@ -8,8 +8,8 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class LocalStorageServiceTest {
-    private val directory = System.getProperty("user.home") + "/wutsi/koki"
-    private val baseUrl = "http://localhost:8081/storage"
+    private val directory = System.getProperty("user.home") + "/__wutsi/koki"
+    private val baseUrl = "http://localhost:8081/local-storage"
 
     private val storage = LocalStorageService(directory, baseUrl)
 

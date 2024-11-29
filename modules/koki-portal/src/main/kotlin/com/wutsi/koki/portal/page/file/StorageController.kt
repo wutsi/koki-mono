@@ -5,9 +5,6 @@ import com.wutsi.koki.portal.service.FileService
 import com.wutsi.koki.portal.service.storage.StorageService
 import com.wutsi.koki.sdk.TenantProvider
 import jakarta.servlet.http.HttpServletResponse
-import org.apache.commons.io.IOUtils
-import org.springframework.http.ContentDisposition
-import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -19,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import java.net.URL
+import java.net.URLEncoder
 
 @RestController
 @RequestMapping
@@ -65,16 +63,7 @@ class StorageController(
     ) {
         val file = fileService.file(id)
         response.contentType = file.contentType
-//        response.setContentLength(file.contentLength.toInt())
-        response.setHeader(
-            HttpHeaders.CONTENT_DISPOSITION,
-            ContentDisposition.attachment().filename(filename).build().toString()
-        )
-
-        val input = URL(file.contentUrl).openStream()
-        input.use {
-            IOUtils.copy(input, response.outputStream)
-        }
+        storage.get(URL(file.contentUrl), response.outputStream)
     }
 
     private fun toPath(file: MultipartFile, formId: String?, workflowInstanceId: String?): String {
@@ -85,7 +74,7 @@ class StorageController(
         if (workflowInstanceId != null) {
             path.append("/workflow-instance/$workflowInstanceId")
         }
-        path.append("/${file.originalFilename}")
+        path.append("/" + URLEncoder.encode(file.originalFilename, "utf-8"))
         return path.toString()
     }
 }

@@ -82,5 +82,5 @@ koki:
 
     storage:
         local:
-            base-url: ${koki.sdk.base-url}/storage
             directory: ${user.home}/__wutsi/koki
+            servlet-path: /local-storage

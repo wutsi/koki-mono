@@ -10,7 +10,7 @@
 <div class="container-fluid">
     <h2>Workflow Instance</h2>
     <div class="row">
-        <div class="col-12 col-md-9">
+        <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
                     <a href="/">Home</a>
@@ -20,7 +20,11 @@
                     <span th:text="${workflowInstance.title}">TITLE</span>
                 </div>
             </div>
+        </div>
+    </div>
 
+    <div class="row">
+        <div class="col-12 col-md-8">
             <div class="widget">
                 <div class="widget-body">
                     <div class="section-item">
@@ -60,108 +64,55 @@
                     <h3 class="widget-title">Activities</h3>
                 </div>
                 <div class="widget-body">
-                    <div class="section-item">
-                        <table class="table table-striped">
-                            <tr>
-                                <th width="1%"></th>
-                                <th>Title</th>
-                                <th>Status</th>
-                                <th>Assignee</th>
-                                <th th:if="${workflowInstance.workflow.requiresApprover}">Approval</th>
-                                <td></td>
-                            </tr>
-                            <tr class="activity"
-                                th:classappend="${activityInstances[activity.id]?.running} ? 'activity-running'"
-                                th:each="activity: ${workflowInstance.workflow.activities}">
-                                <td>
-                                    <span
-                                        th:replace="~{__components/workflow :: activity-type-icon(${activity.type})}"></span>
-                                </td>
-                                <td>
-                                    <a th:href="${activityInstances[activity.id].url}"
-                                       th:if="${activityInstances[activity.id]}"
-                                       th:text="${activity.longTitle}">
-                                        TITLE
-                                    </a>
-                                    <span th:if="!${activityInstances[activity.id]}"
-                                          th:text="${activity.longTitle}">
-                                        TITLE
-                                    </span>
-                                </td>
-                                <td>
-                                    <div
-                                        th:replace="~{__components/workflow :: workflow-status(${activityInstances[activity.id]?.status})}"></div>
-                                </td>
-                                <td>
-                                    <span
-                                        th:text="${activityInstances[activity.id]?.assignee?.displayName}">ASSIGNEE</span>
-                                </td>
-                                <td th:if="${workflowInstance.workflow.requiresApprover}">
-                                    <div
-                                        th:replace="~{__components/workflow :: approval-status(${activityInstances[activity.id]?.approval})}"></div>
-                                </td>
-                                <td>
-
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <div class="section-item" th:if="!${workflowInstance.parameters.isEmpty()}">
-                        <h3>Parameter</h3>
-                        <table class="table table-striped">
-                            <tr th:each="parameter: ${workflowInstance.parameters}">
-                                <td th:text="${parameter.key}">KEY</td>
-                                <td th:text="${parameter.value}">VALUE</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div class="widget" th:if="${files}">
-                <div class="widget-header">
-                    <h3 class="widget-title">Files</h3>
-                </div>
-                <div class="widget-body">
                     <table class="table table-striped">
                         <tr>
-                            <th>Name</th>
-                            <th>Date</th>
-                            <th>Created By</th>
-                            <th>Size</th>
+                            <th width="1%"></th>
+                            <th>Title</th>
+                            <th>Status</th>
+                            <th>Assignee</th>
+                            <th th:if="${workflowInstance.workflow.requiresApprover}">Approval</th>
+                            <td></td>
                         </tr>
-                        <tr class="file" th:each="file: ${files}">
+                        <tr class="activity"
+                            th:classappend="${activityInstances[activity.id]?.running} ? 'activity-running'"
+                            th:each="activity: ${workflowInstance.workflow.activities}">
                             <td>
-                                <a class="file" th:alt="${file.name}" th:href="${file.url}"
-                                   th:text="${file.name}">FILE</a>
+                                    <span
+                                        th:replace="~{__components/workflow :: activity-type-icon(${activity.type})}"></span>
                             </td>
-                            <td th:text="${file.createdAtText}">CREATED</td>
                             <td>
-                                <span th:if="${file.createdBy}" th:text="${file.createdBy.displayName}">CREATED</span>
+                                <a th:href="${activityInstances[activity.id].url}"
+                                   th:if="${activityInstances[activity.id]}"
+                                   th:text="${activity.longTitle}">
+                                    TITLE
+                                </a>
+                                <span th:if="!${activityInstances[activity.id]}"
+                                      th:text="${activity.longTitle}">
+                                        TITLE
+                                    </span>
                             </td>
-                            <td class="text-right" th:text="${file.contentLengthText}">SIZE</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+                            <td>
+                                <div
+                                    th:replace="~{__components/workflow :: workflow-status(${activityInstances[activity.id]?.status})}"></div>
+                            </td>
+                            <td>
+                                    <span
+                                        th:text="${activityInstances[activity.id]?.assignee?.displayName}">ASSIGNEE</span>
+                            </td>
+                            <td th:if="${workflowInstance.workflow.requiresApprover}">
+                                <div
+                                    th:replace="~{__components/workflow :: approval-status(${activityInstances[activity.id]?.approval})}"></div>
+                            </td>
+                            <td>
 
-            <div class="widget" th:if="!${workflowInstance.state.isEmpty()}">
-                <div class="widget-header">
-                    <h3 class="widget-title">State</h3>
-                </div>
-                <div class="widget-body">
-                    <table class="table table-striped">
-                        <tr th:each="entry: ${workflowInstance.state}">
-                            <td th:text="${entry.key}">KEY</td>
-                            <td th:text="${entry.value}">VALUE</td>
+                            </td>
                         </tr>
                     </table>
                 </div>
             </div>
         </div>
 
-        <div class="col-12 col-md-3">
+        <div class="col-12 col-md-4">
             <div class="widget" th:if="${workflowInstance.approver} OR !${workflowInstance.participants.isEmpty()}">
                 <div class="widget-header">
                     <h4 class="widget-title">Participants</h4>
@@ -169,17 +120,30 @@
                 <div class="widget-body">
                     <table class="table">
                         <tr th:if="${workflowInstance.approver}">
-                            <td><b>Approver</b></td>
+                            <td width="30%"><b>Approver</b></td>
                             <td th:text="${workflowInstance.approver.displayName}">APPROVER</td>
                         </tr>
                         <tr th:each="participant : ${workflowInstance.participants}">
-                            <td>
+                            <td width="30%">
                                 <b th:text="${participant.role.title}">ROLE</b>
                             </td>
                             <td th:text="${participant.user.displayName}">USER</td>
                         </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="widget-container"
+                 th:data-url="'/workflows/widgets/forms?workflow-instance-id=' + ${workflowInstance.id}"></div>
+
+            <div class="widget-container"
+                 th:data-url="'/files/widgets/list?layout=small&workflow-instance-id=' + ${workflowInstance.id}"></div>
+
+            <div class="widget">
+                <div class="widget-body">
+                    <table class="table">
                         <tr>
-                            <td><b>Workflow</b></td>
+                            <td width="30%"><b>Workflow</b></td>
                             <td>
                                 <a th:href="${workflowInstance.workflow.url}"
                                    th:text="${workflowInstance.workflow.name}">
@@ -187,15 +151,8 @@
                                 </a>
                             </td>
                         </tr>
-                    </table>
-                </div>
-            </div>
-
-            <div class="widget">
-                <div class="widget-body">
-                    <table class="table">
                         <tr th:if="${workflowInstance.status.name() != 'RUNNING'}">
-                            <td><b>Started</b></td>
+                            <td width="30%"><b>Started</b></td>
                             <td th:text="${workflowInstance.startAtText}">START</td>
                         </tr>
                         <tr th:if="${workflowInstance.status.name() == 'RUNNING'}">
@@ -206,13 +163,17 @@
                             <td><b>Due</b></td>
                             <td th:text="${workflowInstance.dueAtText}">START</td>
                         </tr>
+                        <tr th:if="${workflowInstance.doneAt}">
+                            <td><b>Done</b></td>
+                            <td th:text="${workflowInstance.doneAtText}">DONE</td>
+                        </tr>
                         <tr>
                             <td><b>Created</b></td>
                             <td th:text="${workflowInstance.createdAtText}">CREATED</td>
                         </tr>
-                        <tr th:if="${workflowInstance.doneAt}">
-                            <td><b>Done</b></td>
-                            <td th:text="${workflowInstance.doneAtText}">DONE</td>
+                        <tr th:if="${workflowInstance.createdBy}">
+                            <td><b>Created by</b></td>
+                            <td th:text="${workflowInstance.createdBy.displayName}">CREATED BY</td>
                         </tr>
                     </table>
                 </div>

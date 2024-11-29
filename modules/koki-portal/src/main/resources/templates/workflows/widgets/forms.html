@@ -1,0 +1,16 @@
+<div class="widget forms-widget">
+    <div class="widget-header">
+        <div class="widget-title">Forms</div>
+    </div>
+    <div class="widget-body">
+        <table class="table table-striped" th:if="${forms}">
+            <tr th:each="form : ${forms}">
+                <td>
+                    <a th:href="${form.viewUrl}" th:text="${form.longTitle}">TITLE</a>
+                </td>
+            </tr>
+        </table>
+
+        <div class="text-center empty-message" th:if="!${forms}">No form</div>
+    </div>
+</div>

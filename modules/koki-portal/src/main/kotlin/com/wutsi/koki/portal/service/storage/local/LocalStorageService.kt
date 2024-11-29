@@ -1,22 +1,21 @@
 package com.wutsi.koki.portal.service.storage.local
 
 import com.wutsi.koki.portal.service.storage.StorageService
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Service
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.InputStream
+import java.io.OutputStream
 import java.net.URL
 import kotlin.io.copyTo
 import kotlin.io.use
 
-@Service
 class LocalStorageService(
-    @Value("\${koki.storage.local.directory}") private val directory: String,
-    @Value("\${koki.storage.local.base-url}") private val baseUrl: String,
+    private val directory: String,
+    private val baseUrl: String,
 ) : StorageService {
     companion object {
-        const val BUF_SIZE = 1024
+        const val BUF_SIZE = 10024 // 10K
     }
 
     override fun store(
@@ -29,9 +28,18 @@ class LocalStorageService(
         file.parentFile.mkdirs()
 
         FileOutputStream(file)
-            .use {
-                content.copyTo(it, BUF_SIZE)
+            .use { output ->
+                content.copyTo(output, BUF_SIZE)
                 return URL("$baseUrl/$path")
             }
+    }
+
+    override fun get(url: URL, os: OutputStream) {
+        val path = url.toString().substring(this.baseUrl.length)
+        val file = File("$directory/$path")
+        val fis = FileInputStream(file)
+        fis.use {
+            fis.copyTo(os, BUF_SIZE)
+        }
     }
 }

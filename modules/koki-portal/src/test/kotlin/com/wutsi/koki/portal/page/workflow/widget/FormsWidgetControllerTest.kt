@@ -6,18 +6,11 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.form.dto.FormSummary
 import com.wutsi.koki.form.dto.SearchFormResponse
-import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.tenant.dto.Role
-import com.wutsi.koki.tenant.dto.SearchRoleResponse
-import com.wutsi.koki.tenant.dto.SearchUserResponse
-import com.wutsi.koki.tenant.dto.UserSummary
 import com.wutsi.koki.workflow.dto.Activity
 import com.wutsi.koki.workflow.dto.ActivityInstanceSummary
 import com.wutsi.koki.workflow.dto.ActivityType
-import com.wutsi.koki.workflow.dto.ApprovalStatus
 import com.wutsi.koki.workflow.dto.GetWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.GetWorkflowResponse
-import com.wutsi.koki.workflow.dto.Participant
 import com.wutsi.koki.workflow.dto.Workflow
 import com.wutsi.koki.workflow.dto.WorkflowInstance
 import com.wutsi.koki.workflow.dto.WorkflowStatus
@@ -26,23 +19,18 @@ import org.junit.jupiter.api.BeforeEach
 import java.util.Date
 import kotlin.test.Test
 
-class ShowWorkflowInstanceControllerTest : AbstractPageControllerTest() {
-    private val roles = listOf(
-        Role(id = 1L, name = "accountant", title = "Accountant"),
-        Role(id = 2L, name = "hr", title = "Human Resource"),
-        Role(id = 3L, name = "client", title = "Client"),
-    )
-
-    private val users = listOf(
-        UserSummary(id = 11L, displayName = "Ray Sponsible"),
-        UserSummary(id = 12L, displayName = "Roger Milla"),
-        UserSummary(id = 13L, displayName = "Omam Mbiyick"),
-    )
-
-    private val form = FormSummary(
-        id = "ef00493-403911",
-        name = "FMR-001",
-        title = "Incident Form",
+class FormsWidgetControllerTest : AbstractPageControllerTest() {
+    private val forms = listOf(
+        FormSummary(
+            id = "ef00493-403911",
+            name = "FMR-001",
+            title = "Incident Form",
+        ),
+        FormSummary(
+            id = "ef00493-5553911",
+            name = "FMR-002",
+            title = "Approval Form",
+        )
     )
 
     private val workflow = Workflow(
@@ -50,11 +38,9 @@ class ShowWorkflowInstanceControllerTest : AbstractPageControllerTest() {
         name = "WF-001",
         title = "Workflow #1",
         description = "This is an example of workflow",
-        roleIds = roles.map { role -> role.id },
         parameters = listOf("ORDER_ID"),
         active = true,
-        requiresApprover = true,
-        approverRoleId = 2L,
+        requiresApprover = false,
         activities = listOf(
             Activity(
                 id = 11L,
@@ -68,10 +54,9 @@ class ShowWorkflowInstanceControllerTest : AbstractPageControllerTest() {
                 name = "INPUT",
                 title = "Input Data",
                 description = "User input information about the case",
-                roleId = roles[0].id,
                 active = true,
                 requiresApproval = true,
-                formId = form.id,
+                formId = forms[0].id,
             ),
             Activity(
                 id = 13L,
@@ -79,19 +64,15 @@ class ShowWorkflowInstanceControllerTest : AbstractPageControllerTest() {
                 name = "INVOICE",
                 title = "Generate the invoice",
                 description = "Generate invoice using Service X",
-                roleId = roles[0].id,
                 active = true,
-                requiresApproval = true,
-                formId = form.id,
+                formId = forms[1].id,
             ),
             Activity(
                 id = 13L,
                 type = ActivityType.MANUAL,
                 name = "PERFORM_TASK",
                 title = "Perform the task",
-                roleId = roles[0].id,
                 active = true,
-                requiresApproval = true,
             ),
             Activity(
                 id = 99L,
@@ -109,11 +90,6 @@ class ShowWorkflowInstanceControllerTest : AbstractPageControllerTest() {
         startAt = DateUtils.addDays(Date(), 3),
         startedAt = Date(),
         dueAt = DateUtils.addDays(Date(), 7),
-        participants = listOf(
-            Participant(roleId = 1, userId = 11),
-            Participant(roleId = 2, userId = 12),
-            Participant(roleId = 3, userId = 13),
-        ),
         activityInstances = listOf(
             ActivityInstanceSummary(
                 id = "111",
@@ -124,9 +100,11 @@ class ShowWorkflowInstanceControllerTest : AbstractPageControllerTest() {
                 id = "222",
                 activityId = workflow.activities[1].id,
                 status = WorkflowStatus.RUNNING,
-                assigneeUserId = users[1].id,
-                approval = ApprovalStatus.PENDING,
-                approverUserId = 11L,
+            ),
+            ActivityInstanceSummary(
+                id = "333",
+                activityId = workflow.activities[2].id,
+                status = WorkflowStatus.RUNNING,
             )
         )
     )
@@ -135,15 +113,9 @@ class ShowWorkflowInstanceControllerTest : AbstractPageControllerTest() {
     override fun setUp() {
         super.setUp()
 
-        doReturn(SearchRoleResponse(roles)).whenever(kokiUser)
-            .searchRoles(anyOrNull(), anyOrNull(), anyOrNull())
-
         doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).getWorkflow(workflow.id)
 
-        doReturn(SearchUserResponse(users)).whenever(kokiUser)
-            .searchUsers(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
-
-        doReturn(SearchFormResponse(listOf(form))).whenever(kokiForms)
+        doReturn(SearchFormResponse(forms)).whenever(kokiForms)
             .searchForms(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(GetWorkflowInstanceResponse(workflowInstance))
@@ -153,14 +125,26 @@ class ShowWorkflowInstanceControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun show() {
-        navigateTo("/workflows/instances/${workflowInstance.id}")
+        navigateTo("/workflows/widgets/forms?workflow-instance-id=${workflowInstance.id}")
 
-        assertCurrentPageIs(PageName.WORKFLOW_INSTANCE)
-        assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
-        assertElementCount("tr.activity", workflow.activities.size)
-
-        Thread.sleep(1000)
-        assertElementPresent(".files-widget")
         assertElementPresent(".forms-widget")
+        assertElementCount(".forms-widget table tr", forms.size)
+        assertElementNotPresent(".empty-message")
+    }
+
+    @Test
+    fun empty() {
+        val xworkflow = workflow.copy(
+            activities = workflow.activities.map { activity -> activity.copy(formId = null) }
+        )
+        doReturn(GetWorkflowResponse(xworkflow)).whenever(kokiWorkflow).getWorkflow(workflow.id)
+
+        doReturn(SearchFormResponse()).whenever(kokiForms)
+            .searchForms(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+
+        navigateTo("/workflows/widgets/forms?workflow-instance-id=${workflowInstance.id}")
+
+        assertElementNotPresent(".forms-widget table")
+        assertElementPresent(".empty-message")
     }
 }

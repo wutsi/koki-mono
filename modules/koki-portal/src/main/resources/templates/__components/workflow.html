@@ -35,15 +35,14 @@
     <span class="status-rejected" th:if="${status.name == 'REJECTED'}">Rejected</span>
 </div>
 
-<div th:fragment="activity-widget(activityInstance)">
-    <div th:replace="~{__components/workflow :: activity-widget-user(${activityInstance})}"></div>
-</div>
-
-<div class="widget" id="activity-user-widget" th:fragment="activity-widget-user(activityInstance)"
-     th:if="${activityInstance.activity.type.name() == 'USER'} AND ${activityInstance.assignee?.id == user?.id} AND ${activityInstance.running}">
-    <div class="widget-body text-center">
-        <a class="btn btn-primary" th:href="${activityInstance.activity.form.editUrl}">Update Form</a>
-    </div>
+<div class="widget-toolbar" id="activity-toolbar-widget" th:fragment="activity-toolbar(activityInstance)"
+     th:if="${activityInstance.running} AND ${user} AND ${activityInstance.assignee?.id == user?.id}">
+    <a class="btn btn-primary"
+       th:href="${activityInstance.activity.form.editUrl}"
+       th:if="${activityInstance.activity.form} AND ${activityInstance.activity.type.name() == 'USER'}"
+    >
+        Edit Form
+    </a>
 </div>
 
 </body>

@@ -40,7 +40,7 @@ class FormMapper {
         )
     }
 
-    private fun toUrl(
+    fun toUrl(
         id: String,
         readOnly: Boolean,
         workflowInstanceId: String? = null,

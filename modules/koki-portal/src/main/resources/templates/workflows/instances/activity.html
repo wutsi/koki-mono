@@ -9,8 +9,9 @@
 
 <div class="container-fluid">
     <h2>Activity</h2>
+
     <div class="row">
-        <div class="col-12 col-md-9">
+        <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
                     <a href="/">Home</a>
@@ -23,10 +24,15 @@
                     <span th:text="${activityInstance.activity.longTitle}">TITLE</span>
                 </div>
             </div>
-
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-8">
             <div class="widget">
                 <div class="widget-body">
                     <div class="section-item">
+                        <div th:replace="~{__components/workflow :: activity-toolbar(${activityInstance})}"></div>
+
                         <table class="table">
                             <tr>
                                 <td><b>ID</b></td>
@@ -41,25 +47,18 @@
                                 <td th:text="${activityInstance.activity.title}">TITLE</td>
                             </tr>
                             <tr>
+                                <td><b>Status</b></td>
+                                <td>
+                                    <div
+                                        th:replace="~{__components/workflow :: workflow-status(${activityInstance.status})}"></div>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td><b>Type</b></td>
                                 <td>
                                     <span
                                         th:replace="~{__components/workflow :: activity-type-icon(${activityInstance.activity.type})}"></span>
                                     <span th:text="${activityInstance.activity.type.name()}">TYPE</span>
-                                </td>
-                            </tr>
-                            <tr th:if="${activityInstance.activity.form}">
-                                <td><b>Form</b></td>
-                                <td>
-                                    <a th:href="${activityInstance.activity.form.viewUrl}"
-                                       th:text="${activityInstance.activity.form.longTitle}">FORM</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><b>Status</b></td>
-                                <td>
-                                    <div
-                                        th:replace="~{__components/workflow :: workflow-status(${activityInstance.status})}"></div>
                                 </td>
                             </tr>
                             <tr th:if="${activityInstance.activity.requiresApproval}">
@@ -77,32 +76,34 @@
                     </div>
                 </div>
             </div>
-
-            <div th:replace="~{__components/workflow :: activity-widget(${activityInstance})}"></div>
         </div>
 
-        <div class="col-12 col-md-3">
-            <div class="widget" th:if="${activityInstance.assignee} OR ${activityInstance.approver}">
+        <div class="col-12 col-md-4">
+            <div class="widget">
                 <div class="widget-header">
                     <h3 class="widget-title">Participants</h3>
                 </div>
                 <div class="widget-body">
                     <table class="table">
-                        <tr th:if="${activityInstance.assignee}">
-                            <td><b>Assignee</b></td>
-                            <td th:text="${activityInstance.assignee.displayName}">
-                                ASSIGNEE
-                            </td>
+                        <tr>
+                            <td width="30%"><b>Assignee</b></td>
+                            <td th:text="${activityInstance.assignee?.displayName}">ASSIGNEE</td>
                         </tr>
                         <tr th:if="${activityInstance.approver}">
-                            <td><b>Approver</b></td>
-                            <td th:text="${activityInstance.approver.displayName}">
+                            <td width="30%"><b>Approver</b></td>
+                            <td th:text="${activityInstance.approver?.displayName}">
                                 APPROVER
                             </td>
                         </tr>
                     </table>
                 </div>
             </div>
+
+            <div class="widget-container"
+                 th:data-url="'/workflows/widgets/forms?workflow-instance-id=' + ${activityInstance.workflowInstance.id}"></div>
+
+            <div class="widget-container"
+                 th:data-url="'/files/widgets/list?layout=small&workflow-instance-id=' + ${activityInstance.workflowInstance.id}"></div>
 
             <div class="widget">
                 <div class="widget-body">
@@ -120,7 +121,7 @@
                             <td th:text="${activityInstance.doneAtText}">DONE</td>
                         </tr>
                         <tr>
-                            <td><b>Created</b></td>
+                            <td width="30%"><b>Created</b></td>
                             <td th:text="${activityInstance.createdAtText}">DONE</td>
                         </tr>
                     </table>

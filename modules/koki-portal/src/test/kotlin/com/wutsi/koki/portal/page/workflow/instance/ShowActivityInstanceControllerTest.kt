@@ -112,5 +112,9 @@ class ShowActivityInstanceControllerTest : AbstractPageControllerTest() {
         navigateTo("/workflows/instances/activities/${activityInstance.id}")
 
         assertCurrentPageIs(PageName.ACTIVITY_INSTANCE)
+
+        Thread.sleep(1000)
+        assertElementPresent(".files-widget")
+//        assertElementPresent(".forms-widget")
     }
 }
