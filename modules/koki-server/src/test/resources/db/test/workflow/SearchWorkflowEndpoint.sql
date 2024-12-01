@@ -39,7 +39,5 @@ INSERT INTO T_ACTIVITY(id, tenant_fk, workflow_fk, role_fk, name)
            (122, 1, 120, 12,   'SEND'),
            (121, 1, 120, null, 'WORKING'),
            (123, 1, 120, 12,   'SUBMIT'),
-           (124, 1, 120, null, 'STOP'),
-
-           (310, 1, 300, null, 'START');
+           (124, 1, 120, null, 'STOP');
 
