@@ -65,7 +65,7 @@ class WorkflowService(
             jql.append(" AND A.roleId IN :activityRoleIds")
         }
         if (minWorkflowInstanceCount != null) {
-            jql.append(" AND A.workflowInstanceCount >= :minWorkflowInstanceCount")
+            jql.append(" AND W.workflowInstanceCount >= :minWorkflowInstanceCount")
         }
         if (sortBy != null) {
             val column = when (sortBy) {
