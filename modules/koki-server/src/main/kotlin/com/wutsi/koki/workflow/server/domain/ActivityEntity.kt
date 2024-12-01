@@ -28,6 +28,9 @@ data class ActivityEntity(
     @Column(name = "form_fk")
     var formId: String? = null,
 
+    @Column(name = "message_fk")
+    var messageId: String? = null,
+
     var name: String = "",
     var title: String? = null,
     var description: String? = null,

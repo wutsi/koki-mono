@@ -24,6 +24,7 @@ CREATE TABLE T_ACTIVITY(
   workflow_fk             BIGINT NOT NULL REFERENCES T_WORKFLOW(id),
   role_fk                 BIGINT REFERENCES T_ROLE(id),
   form_fk                 VARCHAR(36) REFERENCES T_FORM(id),
+  message_fk              VARCHAR(36) REFERENCES T_MESSAGE(id),
 
   name                    VARCHAR(100) NOT NULL,
   title                   VARCHAR(255),

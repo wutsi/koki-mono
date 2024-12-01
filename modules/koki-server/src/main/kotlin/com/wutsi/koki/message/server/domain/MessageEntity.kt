@@ -1,4 +1,4 @@
-package com.wutsi.koki.form.server.domain
+package com.wutsi.koki.message.server.domain
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -7,8 +7,8 @@ import jakarta.persistence.Table
 import java.util.Date
 
 @Entity
-@Table(name = "T_FORM")
-data class FormEntity(
+@Table(name = "T_MESSAGE")
+data class MessageEntity(
     @Id
     val id: String? = null,
 
@@ -16,9 +16,11 @@ data class FormEntity(
     val tenantId: Long = -1,
 
     var name: String = "",
-    var title: String = "",
+    var subject: String = "",
+    var body: String = "",
     var active: Boolean = true,
-    var content: String = "",
+    var deleted: Boolean = false,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
+    var deletedAt: Date? = null,
 )

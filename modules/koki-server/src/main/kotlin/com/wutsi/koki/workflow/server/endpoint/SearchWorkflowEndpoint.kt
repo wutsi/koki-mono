@@ -34,6 +34,7 @@ class SearchWorkflowEndpoint(
             active = active,
             activityRoleIds = activityRoleIds,
             approverRoleIds = approverRoleIds,
+            minWorkflowInstanceCount = minWorkflowInstanceCount,
             tenantId = tenantId,
             limit = limit,
             offset = offset,

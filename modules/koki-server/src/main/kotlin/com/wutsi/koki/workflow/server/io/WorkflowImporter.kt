@@ -6,6 +6,7 @@ import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.form.server.service.FormService
+import com.wutsi.koki.message.server.service.MessageService
 import com.wutsi.koki.tenant.server.domain.RoleEntity
 import com.wutsi.koki.tenant.server.service.RoleService
 import com.wutsi.koki.workflow.dto.ActivityData
@@ -27,6 +28,7 @@ class WorkflowImporter(
     private val flowService: FlowService,
     private val roleService: RoleService,
     private val formService: FormService,
+    private val messageService: MessageService,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(WorkflowImporter::class.java)
@@ -43,6 +45,7 @@ class WorkflowImporter(
         addFlows(w, activities, data)
         linkRoles(w, activities, data)
         linkForms(w, activities, data)
+        linkMessages(w, activities, data)
         activityService.saveAll(activities)
 
         // Deactivate old activities
@@ -175,6 +178,20 @@ class WorkflowImporter(
             activity.formId = formService.getByName(activityData.form!!, workflow.tenantId).id
         } else {
             activity.formId = null
+        }
+    }
+
+    private fun linkMessages(workflow: WorkflowEntity, activities: List<ActivityEntity>, data: WorkflowData) {
+        activities.map { activity -> linkMessage(workflow, activity, data) }
+    }
+
+    private fun linkMessage(workflow: WorkflowEntity, activity: ActivityEntity, data: WorkflowData) {
+        val activityData = data.activities.find { act -> act.name == activity.name }
+        if (activityData?.message != null) {
+            LOGGER.debug(">>> Linking Activity[${activity.name}] with Messager[${activityData.message}]")
+            activity.messageId = messageService.getByName(activityData.message!!, workflow.tenantId).id
+        } else {
+            activity.messageId = null
         }
     }
 

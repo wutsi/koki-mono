@@ -26,7 +26,7 @@ spring:
         hibernate:
             ddl-auto: none
             naming:
-                physical-strategy: com.wutsi.koki.common.util.CustomPhysicalNamingStrategy
+                physical-strategy: com.wutsi.koki.platform.util.CustomPhysicalNamingStrategy
         properties:
             hibernate:
                 dialect: org.hibernate.dialect.MySQLDialect
@@ -76,6 +76,10 @@ springdoc:
         -   group: forms
             display-name: Form API
             paths-to-match: /v1/forms, /v1/forms/*, /v1/forms/**, /v1/form-data, /v1/form-data/*
+
+        -   group: messages
+            display-name: Message API
+            paths-to-match: /v1/messages, /v1/messages/*
 
         -   group: tenant
             display-name: Tenant API

@@ -1,8 +1,5 @@
-package com.wutsi.platform.core.messaging
+package com.wutsi.koki.platform.messaging
 
 enum class MessagingType {
     EMAIL,
-    SMS,
-    WHATSTAPP,
-    PUSH_NOTIFICATION,
 }

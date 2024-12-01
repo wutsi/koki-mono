@@ -1,7 +1,7 @@
-package com.wutsi.koki.common.logger.servlet
+package com.wutsi.koki.platform.logger.servlet
 
 import com.wutsi.koki.common.dto.HttpHeader
-import com.wutsi.koki.common.logger.KVLogger
+import com.wutsi.koki.platform.logger.KVLogger
 import jakarta.servlet.Filter
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException

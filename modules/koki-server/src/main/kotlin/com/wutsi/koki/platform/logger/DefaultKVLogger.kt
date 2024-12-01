@@ -1,4 +1,4 @@
-package com.wutsi.koki.common.logger
+package com.wutsi.koki.platform.logger
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

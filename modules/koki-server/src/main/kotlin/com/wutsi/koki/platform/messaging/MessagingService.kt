@@ -1,4 +1,4 @@
-package com.wutsi.platform.core.messaging
+package com.wutsi.koki.platform.messaging
 
 interface MessagingService {
     fun send(message: Message): String

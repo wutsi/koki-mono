@@ -1,9 +1,9 @@
-package com.wutsi.koki.common.logger.config
+package com.wutsi.koki.platform.config
 
-import com.wutsi.koki.common.logger.DefaultKVLogger
-import com.wutsi.koki.common.logger.DynamicKVLogger
-import com.wutsi.koki.common.logger.KVLogger
-import com.wutsi.koki.common.logger.servlet.KVLoggerFilter
+import com.wutsi.koki.platform.logger.DefaultKVLogger
+import com.wutsi.koki.platform.logger.DynamicKVLogger
+import com.wutsi.koki.platform.logger.KVLogger
+import com.wutsi.koki.platform.logger.servlet.KVLoggerFilter
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean

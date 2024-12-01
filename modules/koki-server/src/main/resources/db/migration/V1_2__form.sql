@@ -7,8 +7,10 @@ CREATE TABLE T_FORM(
   title                   VARCHAR(255) NOT NULL,
   content                 JSON NOT NULL,
   active                  BOOLEAN NOT NULL DEFAULT true,
+  deleted                 BOOLEAN NOT NULL DEFAULT false,
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
+  deleted_at              DATETIME,
 
   UNIQUE(tenant_fk, name),
   PRIMARY KEY(id)

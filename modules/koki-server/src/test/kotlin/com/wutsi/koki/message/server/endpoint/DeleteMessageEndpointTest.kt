@@ -1,50 +1,44 @@
 package com.wutsi.koki.message.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
-import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.message.dto.GetMessageResponse
-import org.springframework.http.HttpStatus
+import com.wutsi.koki.message.server.dao.MessageRepository
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/message/GetMessageEndpoint.sql"])
-class GetMessageEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/message/DeleteMessageEndpoint.sql"])
+class DeleteMessageEndpointTest : TenantAwareEndpointTest() {
+    @Autowired
+    private lateinit var dao: MessageRepository
+
     @Test
-    fun get() {
-        val result = rest.getForEntity("/v1/messages/100", GetMessageResponse::class.java)
+    fun delete() {
+        rest.delete("/v1/messages/100")
 
-        assertEquals(HttpStatus.OK, result.statusCode)
-
-        val message = result.body.message
-        assertEquals("M-100", message.name)
-        assertEquals("Subject", message.subject)
-        assertEquals("Hello", message.body)
-        assertEquals(false, message.active)
+        val message = dao.findById("100").get()
+        assertTrue(message.deleted)
+        assertNotNull(message.deletedAt)
     }
 
     @Test
-    fun `not found`() {
-        val result = rest.getForEntity("/v1/messages/999999", ErrorResponse::class.java)
+    fun `in use`() {
+        rest.delete("/v1/messages/110")
 
-        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.MESSAGE_NOT_FOUND, result.body!!.error.code)
-    }
-
-    @Test
-    fun deleted() {
-        val result = rest.getForEntity("/v1/messages/199", ErrorResponse::class.java)
-
-        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.MESSAGE_NOT_FOUND, result.body!!.error.code)
+        val message = dao.findById("110").get()
+        assertFalse(message.deleted)
+        assertNull(message.deletedAt)
     }
 
     @Test
     fun `other tenant`() {
-        val result = rest.getForEntity("/v1/messages/200", ErrorResponse::class.java)
+        rest.delete("/v1/messages/200")
 
-        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.MESSAGE_NOT_FOUND, result.body!!.error.code)
+        val message = dao.findById("200").get()
+        assertFalse(message.deleted)
+        assertNull(message.deletedAt)
     }
 }
