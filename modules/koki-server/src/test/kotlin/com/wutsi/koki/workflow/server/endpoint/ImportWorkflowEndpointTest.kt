@@ -49,7 +49,8 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                     tags = mapOf("foo" to "bar", "a" to "b"),
                     requiresApproval = true,
                     role = "accountant",
-                    form = "f-100"
+                    form = "f-100",
+                    message = "m-100",
                 ),
                 ActivityData(
                     name = "STOP",
@@ -88,6 +89,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(true, aStart?.active)
         assertNull(aStart?.roleId)
         assertNull(aStart?.formId)
+        assertNull(aStart?.messageId)
 
         val aInvoice = activityDao.findByNameAndWorkflowId("INVOICE", workflow.id)
         assertEquals("INVOICE", aInvoice?.name)
@@ -99,6 +101,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.workflow.activities[1].requiresApproval, aInvoice?.requiresApproval)
         assertEquals(10L, aInvoice?.roleId)
         assertEquals("100", aInvoice?.formId)
+        assertEquals("100", aInvoice?.messageId)
 
         val aEnd = activityDao.findByNameAndWorkflowId("STOP", workflow.id)
         assertEquals("STOP", aEnd?.name)
@@ -107,6 +110,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(true, aEnd?.active)
         assertNull(aEnd?.roleId)
         assertNull(aEnd?.formId)
+        assertNull(aEnd?.messageId)
 
         val flows = flowDao.findByWorkflowId(workflow.id!!)
         assertEquals(2, flows.size)
@@ -143,6 +147,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(true, aStart?.active)
         assertNull(aStart?.roleId)
         assertNull(aStart?.formId)
+        assertNull(aStart?.messageId)
 
         val aInvoice = activityDao.findByNameAndWorkflowId("INVOICE", workflow.id)
         assertEquals("INVOICE", aInvoice?.name)
@@ -153,6 +158,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.workflow.activities[1].requiresApproval, aInvoice?.requiresApproval)
         assertEquals(10L, aInvoice?.roleId)
         assertEquals("100", aInvoice?.formId)
+        assertEquals("100", aInvoice?.messageId)
 
         val aEnd = activityDao.findByNameAndWorkflowId("STOP", workflow.id!!)
         assertEquals("STOP", aEnd?.name)
@@ -160,6 +166,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(true, aEnd?.active)
         assertNull(aEnd?.roleId)
         assertNull(aEnd?.formId)
+        assertNull(aEnd?.messageId)
 
         val aDeactivated = activityDao.findById(111L).get()
         assertEquals(false, aDeactivated.active)

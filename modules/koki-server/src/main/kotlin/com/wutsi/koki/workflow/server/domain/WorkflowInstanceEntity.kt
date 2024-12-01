@@ -1,5 +1,6 @@
 package com.wutsi.koki.workflow.server.domain
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -48,4 +49,16 @@ data class WorkflowInstanceEntity(
     val modifiedAt: Date = Date(),
     var startedAt: Date? = null,
     var doneAt: Date? = null
-)
+) {
+    @Suppress("UNCHECKED_CAST")
+    fun stateAsMap(objectMapper: ObjectMapper): Map<String, Any> {
+        return state?.let { objectMapper.readValue(state, Map::class.java) as Map<String, Any> }
+            ?: emptyMap()
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun parametersAsMap(objectMapper: ObjectMapper): Map<String, String> {
+        return parameters?.let { objectMapper.readValue(parameters, Map::class.java) as Map<String, String> }
+            ?: emptyMap()
+    }
+}

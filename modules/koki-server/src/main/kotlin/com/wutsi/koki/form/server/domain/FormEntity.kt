@@ -21,4 +21,6 @@ data class FormEntity(
     var content: String = "",
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
+    var deleted: Boolean = false,
+    var deletedAt: Date? = null,
 )

@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
     basePackages = [
         "com.wutsi.koki.file.server.domain",
         "com.wutsi.koki.form.server.domain",
+        "com.wutsi.koki.message.server.domain",
         "com.wutsi.koki.tenant.server.domain",
         "com.wutsi.koki.workflow.server.domain",
     ],
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
     basePackages = [
         "com.wutsi.koki.file.server.dao",
         "com.wutsi.koki.form.server.dao",
+        "com.wutsi.koki.message.server.dao",
         "com.wutsi.koki.tenant.server.dao",
         "com.wutsi.koki.workflow.server.dao",
     ],

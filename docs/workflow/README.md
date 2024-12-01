@@ -33,24 +33,21 @@ Examples of Manual Activities are as follows:
 
 ## Send
 
-A Send Activity send message to external participants. Once the Message has been sent, the Activity is completed.
-Examples of a Send Activies are as follows:
+A Send Activity sends messages to participants. Once the Message has been sent, the Activity is completed.
+Examples of a Send Activities are as follows:
 
 - Send a email to a collaborator to inform that the process is finished
 - When the purchase is about to be delivered, send a SMS to the customer
 - When the article is published, send a slack message to inform the author
 
-In Koki, Send Activities used messaging infrastructure like Email, SMS, Messaging (Slack, WhatsApp etc.) for sending the
-messages.
+In Koki, Send Activities use Email, SMS or Messaging app (Slack, WhatsApp etc.) for delivering the messages.
 
-### Parameters for User
+### Parameters for Send Activity
 
-| Name         | Required | Description                                              |
-|--------------|----------|----------------------------------------------------------|
-| role         | Y        | Role of the recipient of the message                     |
-| send.type    | Y        | Type of message: EMAIL, SMS, SLACK                       |
-| send.subject |          | Subject of the message to send (required for email only) |
-| send.body    |          | Body of the message to send                              |
+| Name    | Required | Description                          |
+|---------|----------|--------------------------------------|
+| role    | Y        | Role of the recipient of the message |
+| message | Y        | Name of the message to send          |
 
 -----
 

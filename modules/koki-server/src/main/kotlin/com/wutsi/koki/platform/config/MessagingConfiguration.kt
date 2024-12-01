@@ -1,34 +1,29 @@
 package com.wutsi.koki.platform.config
 
-import com.wutsi.koki.platform.logger.DefaultKVLogger
-import com.wutsi.koki.platform.logger.DynamicKVLogger
-import com.wutsi.koki.platform.logger.KVLogger
-import com.wutsi.koki.platform.logger.servlet.KVLoggerFilter
-import org.springframework.boot.web.servlet.FilterRegistrationBean
-import org.springframework.context.ApplicationContext
+import com.github.mustachejava.DefaultMustacheFactory
+import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
+import com.wutsi.koki.platform.messaging.MessagingTemplateEngine
+import com.wutsi.koki.platform.messaging.mustache.MustacheMessagingTemplateEngine
+import com.wutsi.koki.platform.messaging.smtp.SMTPMessagingServiceBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Scope
-import org.springframework.context.annotation.ScopedProxyMode
-import org.springframework.core.Ordered
 
 @Configuration
-open class LoggingConfiguration(
-    private val context: ApplicationContext,
-) {
+open class MessagingConfiguration {
     @Bean
-    open fun loggingFilter(): FilterRegistrationBean<KVLoggerFilter> {
-        val filter = FilterRegistrationBean(KVLoggerFilter(logger()))
-        filter.order = Ordered.LOWEST_PRECEDENCE
-        return filter
+    open fun messagingServiceBuilder(): MessagingServiceBuilder {
+        return MessagingServiceBuilder(
+            smtpBuilder = smtpMessagingServiceBuilder()
+        )
     }
 
     @Bean
-    open fun logger(): KVLogger =
-        DynamicKVLogger(context)
+    open fun smtpMessagingServiceBuilder(): SMTPMessagingServiceBuilder {
+        return SMTPMessagingServiceBuilder()
+    }
 
     @Bean
-    @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
-    open fun requestLogger(): DefaultKVLogger =
-        DefaultKVLogger()
+    open fun messagingTemplateEngine(): MessagingTemplateEngine {
+        return MustacheMessagingTemplateEngine(DefaultMustacheFactory())
+    }
 }

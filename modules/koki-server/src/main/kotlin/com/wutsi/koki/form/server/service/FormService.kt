@@ -25,14 +25,14 @@ class FormService(
         val form = dao.findById(id)
             .orElseThrow { NotFoundException(Error(ErrorCode.FORM_NOT_FOUND)) }
 
-        if (form.tenantId != tenantId) {
+        if (form.tenantId != tenantId || form.deleted) {
             throw NotFoundException(Error(ErrorCode.FORM_NOT_FOUND))
         }
         return form
     }
 
     fun getByName(name: String, tenantId: Long): FormEntity {
-        val form = dao.findByNameAndTenantId(name, tenantId)
+        val form = dao.findByNameIgnoreCaseAndTenantId(name, tenantId)
             ?: throw NotFoundException(
                 Error(
                     ErrorCode.FORM_NOT_FOUND,
@@ -40,7 +40,7 @@ class FormService(
                 )
             )
 
-        if (form.tenantId != tenantId) {
+        if (form.tenantId != tenantId || form.deleted) {
             throw NotFoundException(
                 Error(
                     ErrorCode.FORM_NOT_FOUND,
@@ -61,7 +61,7 @@ class FormService(
         ascending: Boolean,
     ): List<FormEntity> {
         val jql = StringBuilder("SELECT F FROM FormEntity F")
-        jql.append(" WHERE F.tenantId = :tenantId")
+        jql.append(" WHERE F.deleted=false AND F.tenantId = :tenantId")
         if (ids.isNotEmpty()) {
             jql.append(" AND F.id IN :ids")
         }
@@ -70,8 +70,10 @@ class FormService(
         }
         if (sortBy != null) {
             val column = when (sortBy) {
+                FormSortBy.NAME -> "name"
                 FormSortBy.TITLE -> "title"
                 FormSortBy.CREATED_AT -> "createdAt"
+                FormSortBy.MODIFIED_AT -> "modifiedAt"
             }
             jql.append(" ORDER BY F.$column")
             if (!ascending) {
@@ -94,7 +96,7 @@ class FormService(
 
     @Transactional
     fun save(form: FormEntity, content: FormContent): FormEntity {
-        val duplicate = dao.findByNameAndTenantId(content.name, form.tenantId)
+        val duplicate = dao.findByNameIgnoreCaseAndTenantId(content.name, form.tenantId)
         if (duplicate != null && duplicate.id != form.id) {
             throw ConflictException(
                 error = Error(code = ErrorCode.FORM_DUPLICATE_NAME)
@@ -106,5 +108,13 @@ class FormService(
         form.content = objectMapper.writeValueAsString(content)
         form.modifiedAt = Date()
         return dao.save(form)
+    }
+
+    @Transactional
+    fun delete(id: String, tenantId: Long) {
+        val form = get(id, tenantId)
+        form.deleted = true
+        form.deletedAt = Date()
+        dao.save(form)
     }
 }

@@ -7,7 +7,7 @@ CREATE TABLE T_FILE(
   workflow_instance_id    VARCHAR(36),
   form_id                 VARCHAR(36),
   name                    VARCHAR(100) NOT NULL,
-  content_type            VARCHAR(255) NOT NULL,
+  content_type            VARCHAR(100) NOT NULL,
   content_length          LONG NOT NULL,
   url                     TEXT NOT NULL,
   deleted                 BOOL NOT NULL DEFAULT false,

@@ -1,4 +1,4 @@
-package com.wutsi.koki.common.logger
+package com.wutsi.koki.platform.logger
 
 import java.util.regex.Pattern
 

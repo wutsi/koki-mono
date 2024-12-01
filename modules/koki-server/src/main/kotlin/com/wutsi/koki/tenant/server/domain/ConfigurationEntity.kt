@@ -19,7 +19,7 @@ data class ConfigurationEntity(
     val tenantId: Long = -1,
 
     val name: String = "",
-    var value: String? = null,
+    var value: String = "",
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
 )

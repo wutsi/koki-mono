@@ -72,6 +72,48 @@ class SearchWorkflowEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
+    fun minInstanceCount() {
+        val result = rest.getForEntity(
+            "/v1/workflows?min-workflow-instance-count=1",
+            SearchWorkflowResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val workflows = result.body!!.workflows
+        assertEquals(2, workflows.size)
+        assertTrue(workflows.map { it.id }.containsAll(listOf(110L, 120L)))
+    }
+
+    @Test
+    fun approverRole() {
+        val result = rest.getForEntity(
+            "/v1/workflows?approver-role-id=11",
+            SearchWorkflowResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val workflows = result.body!!.workflows
+        assertEquals(2, workflows.size)
+        assertTrue(workflows.map { it.id }.containsAll(listOf(110L, 130L)))
+    }
+
+    @Test
+    fun activityRole() {
+        val result = rest.getForEntity(
+            "/v1/workflows?activity-role-id=10&activity-role-id=11",
+            SearchWorkflowResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val workflows = result.body!!.workflows
+        assertEquals(2, workflows.size)
+        assertTrue(workflows.map { it.id }.containsAll(listOf(100L, 110L)))
+    }
+
+    @Test
     fun `exclude workflow from other tenant`() {
         val result = rest.getForEntity(
             "/v1/workflows?id=100&id=130&id=200&sort-by=TITLE&asc=false",

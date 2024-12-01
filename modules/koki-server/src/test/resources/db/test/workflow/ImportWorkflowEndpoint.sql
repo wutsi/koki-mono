@@ -11,6 +11,10 @@ INSERT INTO T_FORM(id, tenant_fk, name, title, active, content)
     VALUES (100, 1, 'f-100', 'Form 100', true, '{}'),
            (200, 2, 'f-200', 'Form 200', true, '{}');
 
+INSERT INTO T_MESSAGE(id, tenant_fk, name, subject, body, active, deleted)
+    VALUES (100, 1, 'M-100', 'Subject', 'Hello', false, false),
+           (200, 2, 'M-200', 'Subject', 'Hello', true, false);
+
 INSERT INTO T_WORKFLOW(id, tenant_fk, name, workflow_instance_count)
     VALUES(100, 1, 'w1', 0),
           (110, 1, 'w-110', 0),

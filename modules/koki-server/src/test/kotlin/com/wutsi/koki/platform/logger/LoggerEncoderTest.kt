@@ -1,4 +1,4 @@
-package com.wutsi.koki.common.logger
+package com.wutsi.koki.platform.logger
 
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments

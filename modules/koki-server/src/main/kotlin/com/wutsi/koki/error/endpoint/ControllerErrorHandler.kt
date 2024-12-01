@@ -1,7 +1,6 @@
 package com.wutsi.koki.error.endpoint
 
 import com.wutsi.koki.common.dto.HttpHeader
-import com.wutsi.koki.common.logger.KVLogger
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
@@ -10,6 +9,7 @@ import com.wutsi.koki.error.dto.ParameterType.PARAMETER_TYPE_HEADER
 import com.wutsi.koki.error.dto.ParameterType.PARAMETER_TYPE_PATH
 import com.wutsi.koki.error.dto.ParameterType.PARAMETER_TYPE_QUERY
 import com.wutsi.koki.error.exception.WutsiException
+import com.wutsi.koki.platform.logger.KVLogger
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.BAD_REQUEST

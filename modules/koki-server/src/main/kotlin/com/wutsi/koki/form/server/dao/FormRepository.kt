@@ -4,5 +4,5 @@ import com.wutsi.koki.form.server.domain.FormEntity
 import org.springframework.data.repository.CrudRepository
 
 interface FormRepository : CrudRepository<FormEntity, String> {
-    fun findByNameAndTenantId(name: String, tenantId: Long): FormEntity?
+    fun findByNameIgnoreCaseAndTenantId(name: String, tenantId: Long): FormEntity?
 }

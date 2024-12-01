@@ -1,4 +1,4 @@
-package com.wutsi.koki.common.util
+package com.wutsi.koki.platform.util
 
 import com.nhaarman.mockitokotlin2.mock
 import org.hibernate.boot.model.naming.Identifier

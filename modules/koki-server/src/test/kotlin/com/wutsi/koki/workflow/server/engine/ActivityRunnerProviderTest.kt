@@ -3,6 +3,7 @@ package com.wutsi.koki.workflow.server.engine
 import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.server.service.runner.EndRunner
 import com.wutsi.koki.workflow.server.service.runner.ManualRunner
+import com.wutsi.koki.workflow.server.service.runner.SendRunner
 import com.wutsi.koki.workflow.server.service.runner.StartRunner
 import com.wutsi.koki.workflow.server.service.runner.UserRunner
 import org.junit.jupiter.api.Test
@@ -17,7 +18,8 @@ class ActivityRunnerProviderTest {
     private val stop = Mockito.mock(EndRunner::class.java)
     private val manual = Mockito.mock(ManualRunner::class.java)
     private val user = Mockito.mock(UserRunner::class.java)
-    private val provider = ActivityRunnerProvider(start, stop, manual, user)
+    private val send = Mockito.mock(SendRunner::class.java)
+    private val provider = ActivityRunnerProvider(start, stop, manual, user, send)
 
     @Test
     fun start() {
@@ -37,6 +39,11 @@ class ActivityRunnerProviderTest {
     @Test
     fun user() {
         assertEquals(user, provider.get(ActivityType.USER))
+    }
+
+    @Test
+    fun send() {
+        assertEquals(send, provider.get(ActivityType.SEND))
     }
 
     @Test

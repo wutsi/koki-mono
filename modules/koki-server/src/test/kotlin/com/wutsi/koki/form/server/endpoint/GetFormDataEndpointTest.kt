@@ -27,6 +27,13 @@ class GetFormDataEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
+    fun deleted() {
+        val result = rest.getForEntity("/v1/form-data/199", ErrorResponse::class.java)
+        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
+        assertEquals(ErrorCode.FORM_DATA_NOT_FOUND, result.body?.error?.code)
+    }
+
+    @Test
     fun `not found`() {
         val result = rest.getForEntity("/v1/form-data/xxx", ErrorResponse::class.java)
         assertEquals(HttpStatus.NOT_FOUND, result.statusCode)

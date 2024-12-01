@@ -12,7 +12,6 @@ class WorkflowInstanceMapper(
     private val activityInstanceMapper: ActivityInstanceMapper,
     private val objectMapper: ObjectMapper,
 ) {
-    @Suppress("UNCHECKED_CAST")
     fun toWorkflowInstance(entity: WorkflowInstanceEntity): WorkflowInstance {
         return WorkflowInstance(
             id = entity.id!!,
@@ -25,12 +24,8 @@ class WorkflowInstanceMapper(
             dueAt = entity.dueAt,
             startAt = entity.startAt,
             doneAt = entity.doneAt,
-            state = entity.state?.let { state ->
-                objectMapper.readValue(state, Map::class.java) as Map<String, Any>
-            } ?: emptyMap(),
-            parameters = entity.parameters?.let { parameters ->
-                objectMapper.readValue(parameters, Map::class.java) as Map<String, String>
-            } ?: emptyMap(),
+            state = entity.stateAsMap(objectMapper),
+            parameters = entity.parametersAsMap(objectMapper),
             participants = entity.participants.map { participant ->
                 Participant(
                     roleId = participant.roleId,

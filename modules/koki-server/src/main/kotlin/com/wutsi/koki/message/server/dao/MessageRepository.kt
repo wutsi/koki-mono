@@ -1,8 +1,8 @@
-package com.wutsi.koki.form.server.dao
+package com.wutsi.koki.message.server.dao
 
-import com.wutsi.koki.form.server.domain.FormEntity
+import com.wutsi.koki.message.server.domain.MessageEntity
 import org.springframework.data.repository.CrudRepository
 
-interface FormRepository : CrudRepository<FormEntity, String> {
-    fun findByNameAndTenantId(name: String, tenantId: Long): FormEntity?
+interface MessageRepository : CrudRepository<MessageEntity, String> {
+    fun findByNameIgnoreCaseAndTenantId(name: String, tenantId: Long): MessageEntity?
 }
