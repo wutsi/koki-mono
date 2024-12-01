@@ -19,8 +19,9 @@ object ErrorCode {
 
     val FILE_NOT_FOUND: String = "$PREFIX:file:not-found"
 
-    val FORM_NOT_FOUND: String = "$PREFIX:form:not-found"
     val FORM_DUPLICATE_NAME: String = "$PREFIX:form:duplicate-name"
+    val FORM_IN_USE: String = "$PREFIX:form:in-use"
+    val FORM_NOT_FOUND: String = "$PREFIX:form:not-found"
     val FORM_DATA_NOT_FOUND: String = "$PREFIX:form-data:not-found"
 
     val HTTP_MISSING_PARAMETER = "$PREFIX:http:missing-parameter"
@@ -30,6 +31,10 @@ object ErrorCode {
     val HTTP_ACCESS_DENIED = "$PREFIX:http:access-denied"
     val HTTP_AUTHENTICATION_FAILED = "$PREFIX:http:authetication-failed"
     val HTTP_DOWNSTREAM_ERROR = "$PREFIX:http:downstream-error"
+
+    val MESSAGE_DUPLICATE_NAME: String = "$PREFIX:message:duplicate-name"
+    val MESSAGE_IN_USE: String = "$PREFIX:message:in-use"
+    val MESSAGE_NOT_FOUND: String = "$PREFIX:message:not-found"
 
     val ROLE_NOT_FOUND: String = "$PREFIX:role:not-found"
     val ROLE_NAME_MISSING: String = "$PREFIX:role:name-missing"

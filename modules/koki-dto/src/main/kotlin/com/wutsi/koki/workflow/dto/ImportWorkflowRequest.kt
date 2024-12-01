@@ -13,6 +13,7 @@ data class ActivityData(
     val role: String? = null,
     val tags: Map<String, String> = emptyMap(),
     val form: String? = null,
+    val message: String? = null,
 )
 
 data class WorkflowData(

@@ -1,8 +1,8 @@
 package com.wutsi.koki.workflow.dto
 
-enum class FormSortBy {
+enum class MessageSortBy {
     NAME,
-    TITLE,
+    SUBJECT,
     CREATED_AT,
     MODIFIED_AT,
 }
