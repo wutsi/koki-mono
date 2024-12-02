@@ -13,18 +13,19 @@ import org.springframework.stereotype.Service
 
 @Service
 class WorkflowService(
-    private val kokiWorkflow: KokiWorkflow,
+    private val koki: KokiWorkflow,
     private val mapper: WorkflowMapper,
     private val objectMapper: ObjectMapper,
     private val formService: FormService,
+    private val messageService: MessageService,
     private val userService: UserService,
 ) {
     fun json(id: Long): String {
-        return kokiWorkflow.getWorkflowJson(id)
+        return koki.getWorkflowJson(id)
     }
 
     fun workflow(id: Long): WorkflowModel {
-        val workflow = kokiWorkflow.getWorkflow(id).workflow
+        val workflow = koki.getWorkflow(id).workflow
 
         val roles = if (workflow.roleIds.isEmpty()) {
             emptyList()
@@ -44,8 +45,16 @@ class WorkflowService(
             workflowInstanceId = null,
             activityInstanceId = null,
         )
-        val imageUrl = kokiWorkflow.getWorkflowImageUrl(id)
-        return mapper.toWorkflowModel(workflow, approverRole, roles, forms, imageUrl)
+
+        val messageIds = workflow.activities.mapNotNull { activity -> activity.messageId }.toSet()
+        val messages = messageService.messages(
+            ids = messageIds.toList(),
+            limit = messageIds.size,
+        )
+
+        val imageUrl = koki.getWorkflowImageUrl(id)
+
+        return mapper.toWorkflowModel(workflow, approverRole, roles, forms, messages, imageUrl)
     }
 
     fun activities(
@@ -59,7 +68,7 @@ class WorkflowService(
         limit: Int = 20,
         offset: Int = 0,
     ): List<ActivityModel> {
-        val activities = kokiWorkflow.searchActivities(
+        val activities = koki.searchActivities(
             ids = ids,
             workflowIds = workflowIds,
             roleIds = roleIds,
@@ -86,7 +95,7 @@ class WorkflowService(
         sortBy: WorkflowSortBy? = WorkflowSortBy.TITLE,
         ascending: Boolean = false,
     ): List<WorkflowModel> {
-        val workflows = kokiWorkflow.searchWorkflows(
+        val workflows = koki.searchWorkflows(
             ids = ids,
             active = active,
             activityRoleIds = activityRoleIds,
@@ -101,13 +110,13 @@ class WorkflowService(
     }
 
     fun create(form: SaveWorkflowForm): Long {
-        return kokiWorkflow.importWorkflow(
+        return koki.importWorkflow(
             request = objectMapper.readValue(form.json, ImportWorkflowRequest::class.java)
         ).workflowId
     }
 
     fun update(id: Long, form: SaveWorkflowForm): Long {
-        return kokiWorkflow.importWorkflow(
+        return koki.importWorkflow(
             id,
             request = objectMapper.readValue(form.json, ImportWorkflowRequest::class.java)
         ).workflowId

@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.mapper
 
 import com.wutsi.koki.portal.model.ActivityModel
 import com.wutsi.koki.portal.model.FormModel
+import com.wutsi.koki.portal.model.MessageModel
 import com.wutsi.koki.portal.model.RoleModel
 import com.wutsi.koki.portal.model.WorkflowModel
 import com.wutsi.koki.workflow.dto.Activity
@@ -33,11 +34,13 @@ class WorkflowMapper {
         approverRole: RoleModel?,
         roles: List<RoleModel>,
         forms: List<FormModel>,
+        messages: List<MessageModel>,
         imageUrl: String
     ): WorkflowModel {
         val fmt = SimpleDateFormat("yyyy/MM/dd HH:mm")
         val roleMap = roles.associateBy { role -> role.id }
         val formMap = forms.associateBy { form -> form.id }
+        val messageMap = messages.associateBy { message -> message.id }
         return WorkflowModel(
             id = entity.id,
             name = entity.name,
@@ -51,7 +54,8 @@ class WorkflowMapper {
             activities = entity.activities.map { activity ->
                 val role = activity.roleId?.let { id -> roleMap[id] }
                 val form = activity.formId?.let { id -> formMap[id] }
-                toActivityModel(activity, role, form)
+                val message = activity.messageId?.let { id -> messageMap[id] }
+                toActivityModel(activity, role, form, message)
             },
             roles = roles,
             parameters = entity.parameters,
@@ -66,6 +70,7 @@ class WorkflowMapper {
         entity: Activity,
         role: RoleModel?,
         form: FormModel?,
+        message: MessageModel?,
     ): ActivityModel {
         return ActivityModel(
             id = entity.id,
@@ -77,6 +82,7 @@ class WorkflowMapper {
             requiresApproval = entity.requiresApproval,
             role = role,
             form = form,
+            message = message,
         )
     }
 
@@ -89,6 +95,7 @@ class WorkflowMapper {
             type = entity.type,
             form = entity.formId?.let { id -> FormModel(id = id) },
             role = entity.roleId?.let { id -> RoleModel(id = id) },
+            message = entity.messageId?.let { id -> MessageModel(id = id) },
         )
     }
 }

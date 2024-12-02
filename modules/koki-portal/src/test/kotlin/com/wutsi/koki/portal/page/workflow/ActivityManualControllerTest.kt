@@ -182,6 +182,6 @@ class ActivityManualControllerTest : AbstractPageControllerTest() {
         navigateTo("/workflows/activities/${activityInstance.id}")
 
         // THEN
-        assertElementNotPresent(".btn-activity-manual-complete")
+        assertElementNotPresent(".widget-toolbar")
     }
 }
