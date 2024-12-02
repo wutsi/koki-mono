@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page.settings.message
+package com.wutsi.koki.portal.page.settings.form
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
@@ -8,71 +8,107 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.message.dto.CreateMessageRequest
-import com.wutsi.koki.message.dto.CreateMessageResponse
+import com.wutsi.koki.form.dto.SaveFormRequest
+import com.wutsi.koki.form.dto.SaveFormResponse
 import com.wutsi.koki.portal.page.PageName
 import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class CreateMessageControllerTest : AbstractPageControllerTest() {
+class CreateFormControllerTest : AbstractPageControllerTest() {
     @BeforeEach
     override fun setUp() {
         super.setUp()
 
-        doReturn(CreateMessageResponse("1111")).whenever(kokiMessages).create(any())
+        doReturn(SaveFormResponse("1111")).whenever(kokiForms).createForm(any())
     }
 
     @Test
     fun create() {
-        navigateTo("/settings/messages/create")
-        assertCurrentPageIs(PageName.MESSAGE_CREATE)
+        navigateTo("/settings/forms/create")
+        assertCurrentPageIs(PageName.FORM_CREATE)
 
         input("input[name=name]", "M-XXX")
-        input("input[name=subject]", "This is the new subject")
-        input("textarea[name=body]", "<p>Looks good :-)</p>")
+        input("input[name=title]", "This is the new subject")
+        input(
+            "textarea[name=elements]",
+            """
+                [
+                    {
+                        "name": "amount",
+                        "title": "Payment Amount",
+                        "type": "NUMBER",
+                        "required":true
+                    },
+                    {
+                        "name": "currency",
+                        "title": "Currency",
+                        "type": "TEXT",
+                        "required":false
+                    }
+                ]
+            """.trimIndent()
+        )
         scrollToBottom()
         select("select[name=active]", 1)
         click("button[type=submit]")
 
-        val request = argumentCaptor<CreateMessageRequest>()
-        verify(kokiMessages).create(request.capture())
+        val request = argumentCaptor<SaveFormRequest>()
+        verify(kokiForms).createForm(request.capture())
 
-        assertEquals("M-XXX", request.firstValue.name)
-        assertEquals("This is the new subject", request.firstValue.subject)
-        assertEquals("<p>Looks good :-)</p>", request.firstValue.body)
+        assertEquals("M-XXX", request.firstValue.content.name)
+        assertEquals("This is the new subject", request.firstValue.content.title)
+        assertEquals(2, request.firstValue.content.elements.size)
         assertEquals(false, request.firstValue.active)
 
-        assertCurrentPageIs(PageName.MESSAGE_SAVED)
+        assertCurrentPageIs(PageName.FORM_SAVED)
 
         click(".btn-ok")
-        assertCurrentPageIs(PageName.MESSAGE_LIST)
+        assertCurrentPageIs(PageName.FORM_LIST)
     }
 
     @Test
     fun cancel() {
-        navigateTo("/settings/messages/create")
+        navigateTo("/settings/forms/create")
 
         scrollToBottom()
         click(".btn-cancel")
-        assertCurrentPageIs(PageName.MESSAGE_LIST)
+        assertCurrentPageIs(PageName.FORM_LIST)
     }
 
     @Test
     fun error() {
-        val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.MESSAGE_IN_USE)
-        doThrow(ex).whenever(kokiMessages).create(any())
+        val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
+        doThrow(ex).whenever(kokiForms).createForm(any())
 
-        navigateTo("/settings/messages/create")
+        navigateTo("/settings/forms/create")
 
         input("input[name=name]", "M-XXX")
-        input("input[name=subject]", "This is the new subject")
-        input("textarea[name=body]", "<p>Looks good :-)</p>")
+        input("input[name=title]", "This is the new subject")
+        input(
+            "textarea[name=elements]",
+            """
+                [
+                    {
+                        "name": "amount",
+                        "title": "Payment Amount",
+                        "type": "NUMBER",
+                        "required":true
+                    },
+                    {
+                        "name": "currency",
+                        "title": "Currency",
+                        "type": "TEXT",
+                        "required":false
+                    }
+                ]
+            """.trimIndent()
+        )
         scrollToBottom()
         select("select[name=active]", 1)
         click("button[type=submit]")
 
-        assertCurrentPageIs(PageName.MESSAGE_CREATE)
+        assertCurrentPageIs(PageName.FORM_CREATE)
         assertElementPresent(".alert-danger")
     }
 
@@ -80,7 +116,7 @@ class CreateMessageControllerTest : AbstractPageControllerTest() {
     fun `login required`() {
         setUpAnonymousUser()
 
-        navigateTo("/settings/messages/create")
+        navigateTo("/settings/forms/create")
         assertCurrentPageIs(PageName.LOGIN)
     }
 }

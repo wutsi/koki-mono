@@ -28,6 +28,6 @@ class FormSavedController(
                 title = form.title,
             )
         )
-        return "forms/saved"
+        return "submitted"
     }
 }

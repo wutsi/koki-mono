@@ -1,7 +1,7 @@
 package com.wutsi.koki.form.server.endpoint
 
-import com.wutsi.koki.form.dto.ImportFormResponse
 import com.wutsi.koki.form.dto.SaveFormRequest
+import com.wutsi.koki.form.dto.SaveFormResponse
 import com.wutsi.koki.form.server.domain.FormEntity
 import com.wutsi.koki.form.server.service.FormService
 import com.wutsi.koki.tenant.server.service.TenantService
@@ -24,13 +24,13 @@ class SaveFormEndpoint(
     fun create(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestBody @Valid request: SaveFormRequest
-    ): ImportFormResponse {
+    ): SaveFormResponse {
         val form = FormEntity(
             id = UUID.randomUUID().toString(),
             tenantId = tenantService.get(tenantId).id!!
         )
-        service.save(form, request.content)
-        return ImportFormResponse(
+        service.save(form, request)
+        return SaveFormResponse(
             formId = form.id ?: ""
         )
     }
@@ -40,10 +40,10 @@ class SaveFormEndpoint(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: String,
         @RequestBody @Valid request: SaveFormRequest
-    ): ImportFormResponse {
+    ): SaveFormResponse {
         val form = service.get(id, tenantId)
-        service.save(form, request.content)
-        return ImportFormResponse(
+        service.save(form, request)
+        return SaveFormResponse(
             formId = id,
         )
     }

@@ -9,12 +9,12 @@
 
 <div class="container">
     <h1>
-        <img align="absmiddle" height="48" src="/image/message.png" width="48"/>
-        Message: <span th:text="${message.name}">NAME</span>
+        <img align="absmiddle" height="48" src="/image/form.png" width="48"/>
+        Message: <span th:text="${form.longTitle}">NAME</span>
     </h1>
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/message :: message-breadcrumb(${message})}"></div>
+            <div th:replace="~{__components/form :: form-breadcrumb(${form})}"></div>
         </div>
     </div>
 
@@ -25,10 +25,10 @@
                 <div class="widget-body">
                     <div class="widget-toolbar">
                         <a class="btn-edit btn btn-secondary"
-                           th:href="'/messages/' + ${message.id} + '/edit'">Edit</a>
+                           th:href="'/settings/forms/' + ${form.id} + '/edit'">Edit</a>
                         <a class="btn-delete btn btn-danger"
-                           onclick="return confirm('Are you sure you want to delete the message?')"
-                           th:href="'/settings/messages/' + ${message.id} + '/delete'">Delete</a>
+                           onclick="return confirm('Are you sure you want to delete the form?')"
+                           th:href="'/settings/forms/' + ${form.id} + '/delete'">Delete</a>
                     </div>
 
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
@@ -36,15 +36,15 @@
                     <table class="table">
                         <tr>
                             <td width="20%"><b>Name</b></td>
-                            <td th:text="${message.name}">NAME</td>
+                            <td th:text="${form.name}">NAME</td>
                         </tr>
                         <tr>
-                            <td><b>Subject</b></td>
-                            <td th:text="${message.subject}">TITLE</td>
+                            <td><b>Title</b></td>
+                            <td th:text="${form.title}">TITLE</td>
                         </tr>
                         <tr>
-                            <td><b>Body</b></td>
-                            <td th:utext="${message.body}">DESCRIPTION</td>
+                            <td><b>Content</b></td>
+                            <td th:utext="${form.content}">DESCRIPTION</td>
                         </tr>
                     </table>
                 </div>
@@ -58,17 +58,17 @@
                         <tr>
                             <td><b>Active</b></td>
                             <td>
-                                <span th:if="${message.active}">Yes</span>
-                                <span th:if="!${message.active}">No</span>
+                                <span th:if="${form.active}">Yes</span>
+                                <span th:if="!${form.active}">No</span>
                             </td>
                         </tr>
                         <tr>
                             <td><b>Created</b></td>
-                            <td th:text="${message.createdAtText}">CREATED</td>
+                            <td th:text="${form.createdAtText}">CREATED</td>
                         </tr>
                         <tr>
                             <td><b>Modified</b></td>
-                            <td th:text="${message.modifiedAtText}">CREATED</td>
+                            <td th:text="${form.modifiedAtText}">CREATED</td>
                         </tr>
                     </table>
                 </div>

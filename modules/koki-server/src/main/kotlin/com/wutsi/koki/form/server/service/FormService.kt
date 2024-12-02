@@ -6,7 +6,7 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
-import com.wutsi.koki.form.dto.FormContent
+import com.wutsi.koki.form.dto.SaveFormRequest
 import com.wutsi.koki.form.server.dao.FormRepository
 import com.wutsi.koki.form.server.domain.FormEntity
 import com.wutsi.koki.workflow.dto.FormSortBy
@@ -95,17 +95,18 @@ class FormService(
     }
 
     @Transactional
-    fun save(form: FormEntity, content: FormContent): FormEntity {
-        val duplicate = dao.findByNameIgnoreCaseAndTenantId(content.name, form.tenantId)
+    fun save(form: FormEntity, request: SaveFormRequest): FormEntity {
+        val duplicate = dao.findByNameIgnoreCaseAndTenantId(request.content.name, form.tenantId)
         if (duplicate != null && duplicate.id != form.id) {
             throw ConflictException(
                 error = Error(code = ErrorCode.FORM_DUPLICATE_NAME)
             )
         }
 
-        form.name = content.name
-        form.title = content.title
-        form.content = objectMapper.writeValueAsString(content)
+        form.name = request.content.name
+        form.title = request.content.title
+        form.content = objectMapper.writeValueAsString(request.content)
+        form.active = request.active
         form.modifiedAt = Date()
         return dao.save(form)
     }

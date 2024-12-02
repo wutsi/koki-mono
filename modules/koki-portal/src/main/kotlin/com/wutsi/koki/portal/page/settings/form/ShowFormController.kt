@@ -1,10 +1,10 @@
-package com.wutsi.koki.portal.page.settings.message
+package com.wutsi.koki.portal.page.settings.form
 
-import com.wutsi.koki.portal.model.MessageModel
+import com.wutsi.koki.portal.model.FormModel
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.portal.service.MessageService
+import com.wutsi.koki.portal.service.FormService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -12,51 +12,51 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-class ShowMessageController(private val service: MessageService) : AbstractPageController() {
-    @GetMapping("/settings/messages/{id}")
+class ShowFormController(private val service: FormService) : AbstractPageController() {
+    @GetMapping("/settings/forms/{id}")
     fun show(
         @PathVariable id: String,
-        model: Model
+        model: Model,
     ): String {
-        val message = service.message(id)
-        return show(message, model)
+        val form = service.form(id)
+        return show(form, model)
     }
 
-    private fun show(message: MessageModel, model: Model): String {
-        model.addAttribute("message", message)
+    private fun show(form: FormModel, model: Model): String {
+        model.addAttribute("form", form)
 
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.MESSAGE,
-                title = message.name
+                name = PageName.FORM,
+                title = form.name
             ),
         )
-        return "settings/messages/show"
+        return "settings/forms/show"
     }
 
-    @GetMapping("/settings/messages/{id}/delete")
+    @GetMapping("/settings/forms/{id}/delete")
     fun delete(
         @PathVariable id: String,
-        model: Model
+        model: Model,
     ): String {
-        val message = service.message(id)
+        val form = service.form(id)
         try {
             service.delete(id)
 
-            model.addAttribute("message", message)
+            model.addAttribute("form", form)
             model.addAttribute(
                 "page",
                 PageModel(
-                    name = PageName.MESSAGE_DELETED,
-                    title = message.name
+                    name = PageName.FORM_DELETED,
+                    title = form.name
                 ),
             )
-            return "settings/messages/deleted"
+            return "settings/forms/deleted"
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)
-            return show(message, model)
+            return show(form, model)
         }
     }
 }

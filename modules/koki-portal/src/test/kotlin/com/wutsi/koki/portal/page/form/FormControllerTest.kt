@@ -74,7 +74,7 @@ class FormControllerTest : AbstractPageControllerTest() {
             request.firstValue.data
         )
 
-        assertCurrentPageIs(PageName.FORM_SAVED)
+        assertCurrentPageIs(PageName.FORM_SUBMITTED)
     }
 
     @Test
@@ -111,7 +111,7 @@ class FormControllerTest : AbstractPageControllerTest() {
             request.firstValue.data
         )
 
-        assertCurrentPageIs(PageName.FORM_SAVED)
+        assertCurrentPageIs(PageName.FORM_SUBMITTED)
     }
 
     @Test
@@ -212,7 +212,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         assertEquals("T1", (data["case_type"] as Array<*>)[0])
         assertEquals("IMM", (data["case_type"] as Array<*>)[1])
 
-        assertCurrentPageIs(PageName.FORM_SAVED)
+        assertCurrentPageIs(PageName.FORM_SUBMITTED)
         click(".btn-ok")
         assertCurrentPageIs(PageName.HOME)
     }
@@ -254,7 +254,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         assertEquals("T1", (data["case_type"] as Array<*>)[0])
         assertEquals("IMM", (data["case_type"] as Array<*>)[1])
 
-        assertCurrentPageIs(PageName.FORM_SAVED)
+        assertCurrentPageIs(PageName.FORM_SUBMITTED)
     }
 
     @Test

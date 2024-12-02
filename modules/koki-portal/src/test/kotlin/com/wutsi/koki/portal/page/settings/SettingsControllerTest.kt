@@ -20,6 +20,13 @@ class SettingsControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun forms() {
+        navigateTo("/settings")
+        click(".btn-form")
+        assertCurrentPageIs(PageName.FORM_LIST)
+    }
+
+    @Test
     fun messages() {
         navigateTo("/settings")
         click(".btn-message")
