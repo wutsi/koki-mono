@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page.message
+package com.wutsi.koki.portal.page.settings.message
 
 import com.wutsi.koki.message.dto.Message
 import com.wutsi.koki.portal.model.PageModel
@@ -14,7 +14,7 @@ import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 class CreateMessageController(private val service: MessageService) : AbstractPageController() {
-    @GetMapping("/messages/create")
+    @GetMapping("/settings/messages/create")
     fun show(model: Model): String {
         return create(MessageForm(), model)
     }
@@ -29,10 +29,10 @@ class CreateMessageController(private val service: MessageService) : AbstractPag
                 title = "New Message"
             ),
         )
-        return "messages/create"
+        return "settings/messages/create"
     }
 
-    @PostMapping("/messages/add-new")
+    @PostMapping("/settings/messages/add-new")
     fun save(
         @ModelAttribute form: MessageForm,
         model: Model
@@ -48,7 +48,7 @@ class CreateMessageController(private val service: MessageService) : AbstractPag
                     title = form.name,
                 ),
             )
-            return "messages/saved"
+            return "settings/messages/saved"
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)

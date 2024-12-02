@@ -12,10 +12,4 @@ data class MessageModel(
     val modifiedAt: Date = Date(),
     val createdAtText: String = "",
     val modifiedAtText: String = "",
-) {
-    val url: String
-        get() = "/messages/$id"
-
-    val editUrl: String
-        get() = "/messages/$id/edit"
-}
+)

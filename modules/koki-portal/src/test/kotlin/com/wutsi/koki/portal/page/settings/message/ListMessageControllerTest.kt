@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page.message
+package com.wutsi.koki.portal.page.settings.message
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
@@ -53,7 +53,7 @@ class ListMessageControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun list() {
-        navigateTo("/messages")
+        navigateTo("/settings/messages")
         assertCurrentPageIs(PageName.MESSAGE_LIST)
 
         assertElementCount("tr.message", messages.size)
@@ -73,7 +73,7 @@ class ListMessageControllerTest : AbstractPageControllerTest() {
                 anyOrNull(),
             )
 
-        navigateTo("/messages")
+        navigateTo("/settings/messages")
         assertCurrentPageIs(PageName.MESSAGE_LIST)
 
         assertElementNotPresent("tr.message")
@@ -84,7 +84,7 @@ class ListMessageControllerTest : AbstractPageControllerTest() {
     fun `login required`() {
         setUpAnonymousUser()
 
-        navigateTo("/messages")
+        navigateTo("/settings/messages")
         assertCurrentPageIs(PageName.LOGIN)
     }
 
@@ -98,7 +98,7 @@ class ListMessageControllerTest : AbstractPageControllerTest() {
         )
         doReturn(GetMessageResponse(message)).whenever(kokiMessages).get(any())
 
-        navigateTo("/messages")
+        navigateTo("/settings/messages")
         click("tr.message .btn-view")
         assertCurrentPageIs(PageName.MESSAGE)
     }
@@ -113,14 +113,14 @@ class ListMessageControllerTest : AbstractPageControllerTest() {
         )
         doReturn(GetMessageResponse(message)).whenever(kokiMessages).get(any())
 
-        navigateTo("/messages")
+        navigateTo("/settings/messages")
         click("tr.message .btn-edit")
         assertCurrentPageIs(PageName.MESSAGE_EDIT)
     }
 
     @Test
     fun create() {
-        navigateTo("/messages")
+        navigateTo("/settings/messages")
         click(".btn-create")
         assertCurrentPageIs(PageName.MESSAGE_CREATE)
     }

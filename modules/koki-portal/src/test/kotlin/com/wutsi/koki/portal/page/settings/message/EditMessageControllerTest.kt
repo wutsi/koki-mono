@@ -1,32 +1,50 @@
-package com.wutsi.koki.portal.page.message
+package com.wutsi.koki.portal.page.settings.message
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.message.dto.CreateMessageRequest
-import com.wutsi.koki.message.dto.CreateMessageResponse
+import com.wutsi.koki.message.dto.GetMessageResponse
+import com.wutsi.koki.message.dto.Message
+import com.wutsi.koki.message.dto.UpdateMessageRequest
 import com.wutsi.koki.portal.page.PageName
 import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.text.trimIndent
 
-class CreateMessageControllerTest : AbstractPageControllerTest() {
+class EditMessageControllerTest : AbstractPageControllerTest() {
+    val message = Message(
+        id = "1",
+        name = "M-001",
+        subject = "Message #1",
+        active = true,
+        body = """
+            <p>
+                Hello <b>{{recipient}}</b>
+            </p>
+            <p>
+                Welcome to Koki!!!
+            </p>
+        """.trimIndent()
+    )
+
     @BeforeEach
     override fun setUp() {
         super.setUp()
 
-        doReturn(CreateMessageResponse("1111")).whenever(kokiMessages).create(any())
+        doReturn(GetMessageResponse(message)).whenever(kokiMessages).get(any())
     }
 
     @Test
-    fun create() {
-        navigateTo("/messages/create")
-        assertCurrentPageIs(PageName.MESSAGE_CREATE)
+    fun edit() {
+        navigateTo("/settings/messages/${message.id}/edit")
+        assertCurrentPageIs(PageName.MESSAGE_EDIT)
 
         input("input[name=name]", "M-XXX")
         input("input[name=subject]", "This is the new subject")
@@ -35,8 +53,8 @@ class CreateMessageControllerTest : AbstractPageControllerTest() {
         select("select[name=active]", 1)
         click("button[type=submit]")
 
-        val request = argumentCaptor<CreateMessageRequest>()
-        verify(kokiMessages).create(request.capture())
+        val request = argumentCaptor<UpdateMessageRequest>()
+        verify(kokiMessages).update(eq(message.id), request.capture())
 
         assertEquals("M-XXX", request.firstValue.name)
         assertEquals("This is the new subject", request.firstValue.subject)
@@ -51,7 +69,7 @@ class CreateMessageControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun cancel() {
-        navigateTo("/messages/create")
+        navigateTo("/settings/messages/${message.id}/edit")
 
         scrollToBottom()
         click(".btn-cancel")
@@ -61,18 +79,13 @@ class CreateMessageControllerTest : AbstractPageControllerTest() {
     @Test
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.MESSAGE_IN_USE)
-        doThrow(ex).whenever(kokiMessages).create(any())
+        doThrow(ex).whenever(kokiMessages).update(any(), any())
 
-        navigateTo("/messages/create")
+        navigateTo("/settings/messages/${message.id}/edit")
 
-        input("input[name=name]", "M-XXX")
-        input("input[name=subject]", "This is the new subject")
-        input("textarea[name=body]", "<p>Looks good :-)</p>")
         scrollToBottom()
-        select("select[name=active]", 1)
         click("button[type=submit]")
-
-        assertCurrentPageIs(PageName.MESSAGE_CREATE)
+        assertCurrentPageIs(PageName.MESSAGE_EDIT)
         assertElementPresent(".alert-danger")
     }
 
@@ -80,7 +93,7 @@ class CreateMessageControllerTest : AbstractPageControllerTest() {
     fun `login required`() {
         setUpAnonymousUser()
 
-        navigateTo("/messages/create")
+        navigateTo("/settings/messages/${message.id}/edit")
         assertCurrentPageIs(PageName.LOGIN)
     }
 }

@@ -7,7 +7,7 @@
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
 
-<div class="container-fluid">
+<div class="container">
     <h1>
         <img align="absmiddle" height="48" src="/image/message.png" width="48"/>
         Message: <span th:text="${message.name}">NAME</span>
@@ -24,10 +24,11 @@
             <div class="widget">
                 <div class="widget-body">
                     <div class="widget-toolbar">
-                        <a class="btn-edit btn btn-secondary" th:href="${message.editUrl}">Edit</a>
+                        <a class="btn-edit btn btn-secondary"
+                           th:href="'/messages/' + ${message.id} + '/edit'">Edit</a>
                         <a class="btn-delete btn btn-danger"
                            onclick="return confirm('Are you sure you want to delete the message?')"
-                           th:href="'/messages/' + ${message.id} + '/delete'">Delete</a>
+                           th:href="'/settings/messages/' + ${message.id} + '/delete'">Delete</a>
                     </div>
 
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>

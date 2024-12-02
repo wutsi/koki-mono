@@ -7,7 +7,7 @@
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
 
-<div class="container-fluid">
+<div class="container">
     <h1>
         <img align="absmiddle" height="48" src="/image/message.png" width="48"/>
         Message: <span th:text="${message.name}">NAME</span>
@@ -23,10 +23,10 @@
             <div class="widget">
                 <div class="widget-body">
                     <div class="alert alert-success">
-                        The message has been successfully saved.
+                        The message has been successfully deleted.
                     </div>
                     <div class="text-center">
-                        <a class="btn btn-secondary btn-ok" href="/messages">OK</a>
+                        <a class="btn btn-secondary btn-ok" href="/settings/messages">Back to Messages</a>
                     </div>
                 </div>
             </div>

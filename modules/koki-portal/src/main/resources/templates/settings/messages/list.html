@@ -22,7 +22,7 @@
             <div class="widget">
                 <div class="widget-body">
                     <div class="widget-toolbar">
-                        <a class="btn-create btn btn-secondary" href="/messages/create">New Message</a>
+                        <a class="btn-create btn btn-secondary" href="/settings/messages/create">New Message</a>
                     </div>
 
                     <table class="table table-striped" th:if="${messages}">
@@ -35,7 +35,7 @@
                         </tr>
                         <tr class="message" th:each="message : ${messages}">
                             <td>
-                                <a th:href="${message.url}" th:text="${message.name}">NAME</a>
+                                <a th:href="'/settings/messages/' + ${message.id}" th:text="${message.name}">NAME</a>
                             </td>
                             <td th:text="${message.subject}">SUBJECT</td>
                             <td th:text="${message.modifiedAtText}">MODIFIED</td>
@@ -44,8 +44,8 @@
                                 <span th:if="!${message.active}">No</span>
                             </td>
                             <td class="toolbar">
-                                <a class="btn-view" th:href="${message.url}">View</a>
-                                <a class="btn-edit" th:href="${message.editUrl}">Edit</a>
+                                <a class="btn-view" th:href="'/settings/messages/' + ${message.id}">View</a>
+                                <a class="btn-edit" th:href="'/settings/messages/' + ${message.id} + '/edit'">Edit</a>
                             </td>
                         </tr>
                     </table>

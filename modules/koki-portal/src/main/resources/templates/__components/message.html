@@ -8,7 +8,7 @@
         &gt;
         <a href="/settings">Settings</a>
         &gt;
-        <a href="/messages" th:if="${message}">Messages</a>
+        <a href="/settings/messages" th:if="${message}">Messages</a>
         <span th:if="${message}">&gt;</span>
         <span th:if="${message}" th:text="${message.name}">TITLE</span>
         <span th:if="!${message}">Messages</span>

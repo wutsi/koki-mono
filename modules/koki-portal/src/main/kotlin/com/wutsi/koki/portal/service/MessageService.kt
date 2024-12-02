@@ -4,7 +4,7 @@ import com.wutsi.koki.message.dto.CreateMessageRequest
 import com.wutsi.koki.message.dto.UpdateMessageRequest
 import com.wutsi.koki.portal.mapper.MessageMapper
 import com.wutsi.koki.portal.model.MessageModel
-import com.wutsi.koki.portal.page.message.MessageForm
+import com.wutsi.koki.portal.page.settings.message.MessageForm
 import com.wutsi.koki.sdk.KokiMessages
 import com.wutsi.koki.workflow.dto.MessageSortBy
 import org.springframework.stereotype.Service

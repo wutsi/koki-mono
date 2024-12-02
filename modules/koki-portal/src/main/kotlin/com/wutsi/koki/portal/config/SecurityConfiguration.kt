@@ -28,6 +28,7 @@ class SecurityConfiguration(
                     .requestMatchers(AntPathRequestMatcher("/messages")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/messages/**/*")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/settings")).authenticated()
+                    .requestMatchers(AntPathRequestMatcher("/settings/**/*")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/workflows")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/workflows/**/*")).authenticated()
                     .anyRequest().permitAll()

@@ -7,21 +7,22 @@
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
 
-<div class="container-fluid">
+<div class="container">
     <h1>
         <img align="absmiddle" height="48" src="/image/message.png" width="48"/>
-        Create New Message
+        Message: <span th:text="${message.name}">NAME</span>
     </h1>
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/message :: message-breadcrumb(null)}"></div>
+            <div th:replace="~{__components/message :: message-breadcrumb(${message})}"></div>
         </div>
     </div>
 
     <div class="row">
         <div class="col-12">
 
-            <form class="form" method="post" th:action="@{/messages/add-new}" th:object="${form}">
+            <form class="form" method="post" th:action="@{'/settings/messages/' + ${message.id} + '/update'}"
+                  th:object="${form}">
                 <div class="form-body">
                     <div class="section">
                         <div class="section-body">
@@ -52,7 +53,7 @@
                 </div>
                 <div class="form-footer">
                     <button type="submit">Submit</button>
-                    <a class="btn-cancel" href="/messages">Cancel</a>
+                    <a class="btn-cancel" href="/settings/messages">Cancel</a>
                 </div>
 
             </form>

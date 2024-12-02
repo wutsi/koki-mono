@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page.message
+package com.wutsi.koki.portal.page.settings.message
 
 data class MessageForm(
     val name: String = "",

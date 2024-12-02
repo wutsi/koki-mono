@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page.message
+package com.wutsi.koki.portal.page.settings.message
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
@@ -13,6 +13,7 @@ import com.wutsi.koki.message.dto.Message
 import com.wutsi.koki.portal.page.PageName
 import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
+import kotlin.text.trimIndent
 
 class ShowMessageControllerTest : AbstractPageControllerTest() {
     val message = Message(
@@ -39,7 +40,7 @@ class ShowMessageControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun show() {
-        navigateTo("/messages/${message.id}")
+        navigateTo("/settings/messages/${message.id}")
         assertCurrentPageIs(PageName.MESSAGE)
         assertElementNotPresent(".alert-danger")
     }
@@ -48,13 +49,13 @@ class ShowMessageControllerTest : AbstractPageControllerTest() {
     fun `login required`() {
         setUpAnonymousUser()
 
-        navigateTo("/messages/${message.id}")
+        navigateTo("/settings/messages/${message.id}")
         assertCurrentPageIs(PageName.LOGIN)
     }
 
     @Test
     fun delete() {
-        navigateTo("/messages/${message.id}")
+        navigateTo("/settings/messages/${message.id}")
         click(".btn-delete")
 
         val alert = driver.switchTo().alert()
@@ -70,7 +71,7 @@ class ShowMessageControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `dismiss delete`() {
-        navigateTo("/messages/${message.id}")
+        navigateTo("/settings/messages/${message.id}")
         click(".btn-delete")
 
         val alert = driver.switchTo().alert()
@@ -86,7 +87,7 @@ class ShowMessageControllerTest : AbstractPageControllerTest() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.MESSAGE_IN_USE)
         doThrow(ex).whenever(kokiMessages).delete(any())
 
-        navigateTo("/messages/${message.id}")
+        navigateTo("/settings/messages/${message.id}")
         click(".btn-delete")
 
         val alert = driver.switchTo().alert()
@@ -98,7 +99,7 @@ class ShowMessageControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun edit() {
-        navigateTo("/messages/${message.id}")
+        navigateTo("/settings/messages/${message.id}")
         click(".btn-edit")
 
         assertCurrentPageIs(PageName.MESSAGE_EDIT)
