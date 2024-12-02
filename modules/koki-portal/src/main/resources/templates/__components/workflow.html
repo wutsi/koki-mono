@@ -30,7 +30,7 @@
         &gt;
         <a href="/settings">Settings</a>
         &gt;
-        <a href="/workflows" th:if="${workflow}">Workflows</a>
+        <a href="/settings/workflows" th:if="${workflow}">Workflows</a>
         <span th:if="${workflow}">&gt;</span>
         <span th:if="${workflow}" th:text="${workflow.longTitle}">TITLE</span>
         <span th:if="!${workflow}">Workflows</span>

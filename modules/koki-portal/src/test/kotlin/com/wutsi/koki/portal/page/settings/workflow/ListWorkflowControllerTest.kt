@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page.form
+package com.wutsi.koki.portal.page.settings.workflow
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
@@ -57,7 +57,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun list() {
-        navigateTo("/workflows")
+        navigateTo("/settings/workflows")
         assertCurrentPageIs(PageName.WORKFLOW_LIST)
 
         assertElementCount("tr.workflow", workflows.size)
@@ -79,7 +79,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
                 anyOrNull(),
             )
 
-        navigateTo("/workflows")
+        navigateTo("/settings/workflows")
         assertCurrentPageIs(PageName.WORKFLOW_LIST)
 
         assertElementNotPresent("tr.workflow")
@@ -88,7 +88,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `listview to create`() {
-        navigateTo("/workflows")
+        navigateTo("/settings/workflows")
         click(".widget-toolbar .btn-create")
 
         assertCurrentPageIs(PageName.WORKFLOW_CREATE)
@@ -126,7 +126,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
         doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow)
             .getWorkflow(any())
 
-        navigateTo("/workflows")
+        navigateTo("/settings/workflows")
         click("tr.workflow .btn-view")
 
         assertCurrentPageIs(PageName.WORKFLOW)
@@ -164,7 +164,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
         doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow)
             .getWorkflow(any())
 
-        navigateTo("/workflows")
+        navigateTo("/settings/workflows")
         click("tr.workflow .btn-edit")
 
         assertCurrentPageIs(PageName.WORKFLOW_UPDATE)
@@ -174,7 +174,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
     fun `login required`() {
         setUpAnonymousUser()
 
-        navigateTo("/workflows")
+        navigateTo("/settings/workflows")
         assertCurrentPageIs(PageName.LOGIN)
     }
 }

@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page.workflow
+package com.wutsi.koki.portal.page.workflow.instance
 
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController

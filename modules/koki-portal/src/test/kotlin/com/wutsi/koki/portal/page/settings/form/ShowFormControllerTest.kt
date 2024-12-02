@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.page.settings.form
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.never
@@ -103,5 +104,80 @@ class ShowFormControllerTest : AbstractPageControllerTest() {
         click(".btn-edit")
 
         assertCurrentPageIs(PageName.FORM_EDIT)
+    }
+
+
+    @Test
+    fun preview() {
+        val html = generateFormHtml()
+        doReturn(html).whenever(kokiForms)
+            .getFormHtml(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+
+        navigateTo("/settings/forms/${form.id}")
+        click(".btn-preview")
+
+        val tabs = driver.getWindowHandles().toList()
+        driver.switchTo().window(tabs[1])
+        Thread.sleep(1000)
+        assertCurrentPageIs(PageName.FORM)
+    }
+
+    private fun generateFormHtml(): String {
+        return """
+            <DIV class='form test'>
+                <DIV class='form-header'>
+                  <H1 class='form-title'>Incident Report</H1>
+                </DIV>
+                <DIV class='form-body'>
+                  <DIV class='section'>
+                    <DIV class='section-body'>
+                      <DIV class='section-item'>
+                        <LABEL class='title'><SPAN>Customer Name</SPAN><SPAN class='required'>*</SPAN></LABEL>
+                        <INPUT name='customer_name' required/>
+                      </DIV>
+                      <DIV class='section-item'>
+                        <LABEL class='title'><SPAN>Customer Email</SPAN><SPAN class='required'>*</SPAN></LABEL>
+                        <INPUT name='customer_email' type='email' required/>
+                      </DIV>
+                      <DIV class='section-item'>
+                        <LABEL class='title'><SPAN>Marial Status</SPAN></LABEL>
+                        <DIV class='radio-container' required>
+                          <DIV class='item'>
+                            <INPUT name='marital_status' type='radio' value='M'/>
+                            <LABEL>Married</LABEL>
+                          </DIV>
+                          <DIV class='item'>
+                            <INPUT name='marital_status' type='radio' value='S'/>
+                            <LABEL>Single</LABEL>
+                          </DIV>
+                        </DIV>
+                      </DIV>
+                      <DIV class='section-item'>
+                        <LABEL class='title'><SPAN>Case Type</SPAN><SPAN class='required'>*</SPAN></LABEL>
+                        <DIV class='checkbox-container' required>
+                          <DIV class='item'>
+                            <INPUT name='case_type' type='checkbox' value='T1'/>
+                            <LABEL>T1</LABEL>
+                          </DIV>
+                          <DIV class='item'>
+                            <INPUT name='case_type' type='checkbox' value='T4'/>
+                            <LABEL>T4</LABEL>
+                          </DIV>
+                          <DIV class='item'>
+                            <INPUT name='case_type' type='checkbox' value='IMM'/>
+                            <LABEL>IMM</LABEL>
+                          </DIV>
+                        </DIV>
+                      </DIV>
+                    </DIV>
+                  </DIV>
+                </DIV>
+                <DIV class='form-footer'>
+                  <DIV class='form-button-group'>
+                    <BUTTON type='submit'>Submit</BUTTON>
+                  </DIV>
+                </DIV>
+            </DIV>
+        """.trimIndent()
     }
 }

@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page.form
+package com.wutsi.koki.portal.page.workflow.instance
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull

@@ -22,7 +22,7 @@
             <div class="widget">
                 <div class="widget-body">
                     <div class="widget-toolbar">
-                        <a class="btn-create btn btn-secondary" href="/workflows/create">New Workflow</a>
+                        <a class="btn-create btn btn-secondary" href="/settings/workflows/create">New Workflow</a>
                     </div>
 
                     <table class="table table-striped" th:if="${workflows}">
@@ -41,7 +41,7 @@
                             </td>
                             <td class="toolbar">
                                 <a class="btn-view" th:href="${workflow.url}">View</a>
-                                <a class="btn-edit" th:href="${workflow.updateUrl}">Edit</a>
+                                <a class="btn-edit" th:href="${workflow.editUrl}">Edit</a>
                             </td>
                         </tr>
                     </table>

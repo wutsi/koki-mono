@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page.workflow
+package com.wutsi.koki.portal.page.settings.workflow
 
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam
 class ListWorkflowController(
     private val service: WorkflowService,
 ) : AbstractPageController() {
-    @GetMapping("/workflows")
+    @GetMapping("/settings/workflows")
     fun list(
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
@@ -31,6 +31,6 @@ class ListWorkflowController(
             )
         )
 
-        return "workflows/list"
+        return "settings/workflows/list"
     }
 }

@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page.form
+package com.wutsi.koki.portal.page.workflow
 
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
