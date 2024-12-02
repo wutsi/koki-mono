@@ -28,7 +28,7 @@ class ShowFormController(private val service: FormService) : AbstractPageControl
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.FORM,
+                name = PageName.SETTINGS_FORM,
                 title = form.name
             ),
         )
@@ -48,7 +48,7 @@ class ShowFormController(private val service: FormService) : AbstractPageControl
             model.addAttribute(
                 "page",
                 PageModel(
-                    name = PageName.FORM_DELETED,
+                    name = PageName.SETTINGS_FORM_DELETED,
                     title = form.name
                 ),
             )

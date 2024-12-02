@@ -30,13 +30,36 @@
         &gt;
         <a href="/settings">Settings</a>
         &gt;
-        <a href="/workflows" th:if="${workflow}">Workflows</a>
+        <a href="/settings/workflows" th:if="${workflow}">Workflows</a>
         <span th:if="${workflow}">&gt;</span>
         <span th:if="${workflow}" th:text="${workflow.longTitle}">TITLE</span>
         <span th:if="!${workflow}">Workflows</span>
     </div>
 </div>
 
+<div class="widget" th:fragment="activity-breadcrumb(workflow, activity)">
+    <div class="widget-body">
+        <a href="/">Home</a>
+        &gt;
+        <a href="/settings">Settings</a>
+        &gt;
+        <a href="/settings/workflows" th:if="${workflow}">Workflows</a>
+        &gt;
+        <a href="/settings/workflows" th:text="${workflow.longTitle}">WORKFLOW</a>
+        &gt;
+        <span th:text="${activity.longTitle}">TITLE</span>
+    </div>
+</div>
+
+<div class="alert alert-danger margin" th:fragment="workflow-error(error)" th:if="${error}">
+    <h5>
+        <span th:text="${error}">ERROR</span>
+        <span th:if="${errorParam}" th:text="': ' + ${errorParam}">PARAM</span>
+    </h5>
+    <div th:each="item : ${errorDetails}" th:if="${errorDetails}" th:text="${item}">
+        ITEM
+    </div>
+</div>
 
 <div th:fragment="approval-status(status)" th:if="${status}">
     <i class="fa-solid fa-spinner fa-spin status-pending" th:if="${status.name == 'PENDING'}"></i>
@@ -72,12 +95,22 @@
     <div class="widget-body">
         <a href="/">Home</a>
         &gt;
-        <a href="/workflows/instances">Instances</a>
+        <a href="/workflows">Cases</a>
         &gt;
         <a th:href="${activityInstance.workflowInstance.url}"
            th:text="${activityInstance.workflowInstance.title}">INSTANCE</a>
         &gt;
         <span th:text="${activityInstance.activity.longTitle}">TITLE</span>
+    </div>
+</div>
+
+<div class="widget" th:fragment="workflow-instance-breadcrumb(workflowInstance)">
+    <div class="widget-body">
+        <a href="/">Home</a>
+        &gt;
+        <a href="/workflows">Cases</a>
+        &gt;
+        <span th:text="${workflowInstance.title}">TITLE</span>
     </div>
 </div>
 

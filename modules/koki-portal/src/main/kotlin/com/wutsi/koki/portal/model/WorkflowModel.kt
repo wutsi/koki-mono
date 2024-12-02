@@ -28,11 +28,11 @@ data class WorkflowModel(
         }
 
     val url: String
-        get() = "/workflows/$id"
+        get() = "/settings/workflows/$id"
 
-    val updateUrl: String
-        get() = "/workflows/$id/update"
+    val editUrl: String
+        get() = "/settings/workflows/$id/edit"
 
     val startUrl: String
-        get() = "/workflows/$id/start"
+        get() = "/settings/workflows/$id/start"
 }

@@ -1,10 +1,14 @@
 package com.wutsi.koki.portal.page.settings.form
 
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.form.dto.Form
+import com.wutsi.koki.form.dto.FormContent
 import com.wutsi.koki.form.dto.FormSummary
+import com.wutsi.koki.form.dto.GetFormResponse
 import com.wutsi.koki.form.dto.SearchFormResponse
 import com.wutsi.koki.portal.page.PageName
 import org.junit.jupiter.api.BeforeEach
@@ -50,7 +54,7 @@ class ListFormControllerTest : AbstractPageControllerTest() {
     @Test
     fun list() {
         navigateTo("/settings/forms")
-        assertCurrentPageIs(PageName.FORM_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_FORM_LIST)
 
         assertElementCount("tr.form", forms.size)
         assertElementNotPresent(".empty")
@@ -69,7 +73,7 @@ class ListFormControllerTest : AbstractPageControllerTest() {
             )
 
         navigateTo("/settings/forms")
-        assertCurrentPageIs(PageName.FORM_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_FORM_LIST)
 
         assertElementNotPresent("tr.form")
         assertElementPresent(".empty")
@@ -83,40 +87,70 @@ class ListFormControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.LOGIN)
     }
 
-//    @Test
-//    fun view() {
-//        val form = Message(
-//            id = "1",
-//            name = "M-001",
-//            subject = "Message #1",
-//            active = true,
-//        )
-//        doReturn(GetMessageResponse(form)).whenever(kokiMessages).get(any())
-//
-//        navigateTo("/settings/forms")
-//        click("tr.form .btn-view")
-//        assertCurrentPageIs(PageName.MESSAGE)
-//    }
-//
-//    @Test
-//    fun edit() {
-//        val form = Message(
-//            id = "1",
-//            name = "M-001",
-//            subject = "Message #1",
-//            active = true,
-//        )
-//        doReturn(GetMessageResponse(form)).whenever(kokiMessages).get(any())
-//
-//        navigateTo("/settings/forms")
-//        click("tr.form .btn-edit")
-//        assertCurrentPageIs(PageName.MESSAGE_EDIT)
-//    }
-//
-//    @Test
-//    fun create() {
-//        navigateTo("/settings/forms")
-//        click(".btn-create")
-//        assertCurrentPageIs(PageName.MESSAGE_CREATE)
-//    }
+    @Test
+    fun view() {
+        val form = Form(
+            id = "1",
+            name = "M-001",
+            title = "Message #1",
+            active = true,
+            content = FormContent(),
+        )
+        doReturn(GetFormResponse(form)).whenever(kokiForms).getForm(any())
+
+        navigateTo("/settings/forms")
+        click("tr.form .btn-view")
+        assertCurrentPageIs(PageName.SETTINGS_FORM)
+    }
+
+    @Test
+    fun edit() {
+        val form = Form(
+            id = "1",
+            name = "M-001",
+            title = "Message #1",
+            active = true,
+            content = FormContent(),
+        )
+        doReturn(GetFormResponse(form)).whenever(kokiForms).getForm(any())
+
+        navigateTo("/settings/forms")
+        click("tr.form .btn-edit")
+        assertCurrentPageIs(PageName.SETTINGS_FORM_EDIT)
+    }
+
+    @Test
+    fun create() {
+        navigateTo("/settings/forms")
+        click(".btn-create")
+        assertCurrentPageIs(PageName.SETTINGS_FORM_CREATE)
+    }
+
+    @Test
+    fun preview() {
+        val form = Form(
+            id = "1",
+            name = "M-001",
+            title = "Message #1",
+            active = true,
+            content = FormContent(),
+        )
+        doReturn(GetFormResponse(form)).whenever(kokiForms).getForm(any())
+
+        val html = generateFormHtml()
+        doReturn(html).whenever(kokiForms)
+            .getFormHtml(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+
+        navigateTo("/settings/forms")
+        click(".btn-preview")
+
+        val tabs = driver.getWindowHandles().toList()
+        driver.switchTo().window(tabs[1])
+        Thread.sleep(1000)
+        assertCurrentPageIs(PageName.FORM)
+    }
+
+    private fun generateFormHtml(): String {
+        return getResourceAsString("/form-readonly.html")
+    }
 }

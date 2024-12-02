@@ -25,7 +25,7 @@ class CreateFormController(private val service: FormService) : AbstractPageContr
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.FORM_CREATE,
+                name = PageName.SETTINGS_FORM_CREATE,
                 title = "New Form"
             ),
         )
@@ -45,7 +45,7 @@ class CreateFormController(private val service: FormService) : AbstractPageContr
             model.addAttribute(
                 "page",
                 PageModel(
-                    name = PageName.FORM_SAVED,
+                    name = PageName.SETTINGS_FORM_SAVED,
                     title = data.longTitle,
                 ),
             )

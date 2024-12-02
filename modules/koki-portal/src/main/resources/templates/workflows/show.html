@@ -8,44 +8,34 @@
 <div th:replace="~{__components/layout :: navbar}"></div>
 
 <div class="container-fluid">
-    <h2>Workflow</h2>
+    <h1>
+        Case: <span th:text="${workflowInstance.title}">TITLE</span>
+    </h1>
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/workflow :: workflow-instance-breadcrumb(${workflowInstance})}"></div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12 col-md-8">
             <div class="widget">
                 <div class="widget-body">
-                    <a href="/">Home</a>
-                    &gt;
-                    <a href="/workflows">Workflows</a>
-                    &gt;
-                    <span th:text="${workflow.longTitle}">TITLE</span>
-                </div>
-            </div>
-
-            <div class="widget">
-                <div class="widget-body">
-                    <div class="widget-toolbar">
-                        <a class="btn-edit" th:href="${workflow.updateUrl}"
-                           th:if="${workflow.workflowInstanceCount == 0}">Edit</a>
-
-                        <a class="btn-start" th:href="${workflow.startUrl}">Start</a>
-                    </div>
-
                     <table class="table">
                         <tr>
-                            <td><b>ID</b></td>
-                            <td th:text="${workflow.id}">ID</td>
+                            <td width="20%"><b>Title</b></td>
+                            <td th:text="${workflowInstance.title}">TITLE</td>
                         </tr>
                         <tr>
-                            <td><b>Name</b></td>
-                            <td th:text="${workflow.name}">NAME</td>
-                        </tr>
-                        <tr>
-                            <td><b>Title</b></td>
-                            <td th:text="${workflow.title}">TITLE</td>
+                            <td><b>Status</b></td>
+                            <td>
+                                <div
+                                    th:replace="~{__components/workflow :: workflow-status(${workflowInstance.status})}"></div>
+                            </td>
                         </tr>
                         <tr>
                             <td><b>Description</b></td>
-                            <td th:text="${workflow.description}">DESCRIPTION</td>
+                            <td th:text="${workflowInstance.workflow.description}">DESCRIPTION</td>
                         </tr>
                     </table>
                 </div>
@@ -59,6 +49,13 @@
                                     data-bs-target="#pills-activities" data-bs-toggle="pill" id="pills-activities-tab"
                                     role="tab" type="button">
                                 Activities
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-files" aria-selected="false" class="nav-link"
+                                    data-bs-target="#pills-files" data-bs-toggle="pill" id="pills-file-tab"
+                                    role="tab" type="button">
+                                Files
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -83,37 +80,61 @@
                             <table class="table table-striped">
                                 <tr>
                                     <th width="1%"></th>
-                                    <th>Title</th>
-                                    <th>Role</th>
-                                    <th th:if="${workflow.requiresApprover}">Approval?</th>
+                                    <th width="50%">Title</th>
+                                    <th>Status</th>
+                                    <th>Assignee</th>
+                                    <th th:if="${workflowInstance.workflow.requiresApprover}">Approval</th>
                                 </tr>
-                                <tr class="activity" th:each="activity: ${workflow.activities}">
+                                <tr class="activity"
+                                    th:classappend="${activityInstances[activity.id]?.running} ? 'activity-running'"
+                                    th:each="activity: ${workflowInstance.workflow.activities}">
                                     <td>
                                     <span
                                         th:replace="~{__components/workflow :: activity-type-icon(${activity.type})}"></span>
                                     </td>
-                                    <td th:text="${activity.longTitle}">TITLE</td>
                                     <td>
-                                        <span th:if="${activity.role}" th:text="${activity.role.title}">ROLE</span>
+                                        <a th:href="${activityInstances[activity.id].url}"
+                                           th:if="${activityInstances[activity.id]}"
+                                           th:text="${activity.longTitle}">
+                                            TITLE
+                                        </a>
+                                        <span th:if="!${activityInstances[activity.id]}"
+                                              th:text="${activity.longTitle}">
+                                        TITLE
+                                    </span>
                                     </td>
-                                    <td th:if="${workflow.requiresApprover}">
-                                        <span th:if="${activity.requiresApproval}">Yes</span>
-                                        <span th:if="!${activity.requiresApproval}">No</span>
+                                    <td>
+                                        <div
+                                            th:replace="~{__components/workflow :: workflow-status(${activityInstances[activity.id]?.status})}"></div>
+                                    </td>
+                                    <td>
+                                    <span
+                                        th:text="${activityInstances[activity.id]?.assignee?.displayName}">ASSIGNEE</span>
+                                    </td>
+                                    <td th:if="${workflowInstance.workflow.requiresApprover}">
+                                        <div
+                                            th:replace="~{__components/workflow :: approval-status(${activityInstances[activity.id]?.approval})}"></div>
                                     </td>
                                 </tr>
                             </table>
                         </div>
 
+                        <div aria-labelledby="pills-files-tab" class="tab-pane fade" id="pills-files"
+                             role="tabpanel">
+                            <div class="widget-container"
+                                 th:data-url="'/files/widgets/list?workflow-instance-id=' + ${workflowInstance.id}"></div>
+                        </div>
+
                         <div aria-labelledby="pills-forms-tab" class="tab-pane fade" id="pills-forms"
                              role="tabpanel">
                             <div class="widget-container"
-                                 th:data-url="'/workflows/widgets/forms?workflow-id=' + ${workflow.id}"></div>
+                                 th:data-url="'/workflows/widgets/forms?workflow-instance-id=' + ${workflowInstance.id}"></div>
                         </div>
 
                         <div aria-labelledby="pills-process-tab" class="tab-pane fade" id="pills-process"
                              role="tabpanel">
                             <div class="workflow-image">
-                                <img th:alt="${workflow.title}" th:src="${workflow.imageUrl}"/>
+                                <img th:alt="${workflowInstance.workflow.title}" th:src="${workflowInstance.imageUrl}"/>
                             </div>
                         </div>
                     </div>
@@ -122,21 +143,21 @@
         </div>
 
         <div class="col-12 col-md-4">
-            <div class="widget" th:if="${workflow.approverRole} OR !${workflow.roles.isEmpty()}">
+            <div class="widget" th:if="${workflowInstance.approver} OR !${workflowInstance.participants.isEmpty()}">
                 <div class="widget-header">
                     <h4 class="widget-title">Participants</h4>
                 </div>
                 <div class="widget-body">
                     <table class="table">
-                        <tr th:if=" ${workflow.approverRole}">
-                            <td><b>Approver</b></td>
-                            <td th:text="${workflow.approverRole.title}">APPROVER</td>
+                        <tr th:if="${workflowInstance.approver}">
+                            <td width="30%"><b>Approver</b></td>
+                            <td th:text="${workflowInstance.approver.displayName}">APPROVER</td>
                         </tr>
-                        <tr th:if="!${workflow.roles.isEmpty()}">
-                            <td><b>Assignees</b></td>
-                            <td>
-                                <div th:each="role : ${workflow.roles}" th:text="${role.title}">ROLE</div>
+                        <tr th:each="participant : ${workflowInstance.participants}">
+                            <td width="30%">
+                                <b th:text="${participant.role.title}">ROLE</b>
                             </td>
+                            <td th:text="${participant.user.displayName}">USER</td>
                         </tr>
                     </table>
                 </div>
@@ -144,25 +165,39 @@
 
             <div class="widget">
                 <div class="widget-body">
-                    <table class="table table-striped">
+                    <table class="table">
                         <tr>
-                            <td><b>Active?</b></td>
+                            <td width="30%"><b>Workflow</b></td>
                             <td>
-                                <span th:if="${workflow.active}">Yes</span>
-                                <span th:if="!${workflow.active}">No</span>
+                                <a class="workflow" th:href="${workflowInstance.workflow.url}"
+                                   th:text="${workflowInstance.workflow.name}">
+                                    WORKFLOW
+                                </a>
                             </td>
                         </tr>
-                        <tr>
-                            <td><b>Instances</b></td>
-                            <td th:text="${workflow.getWorkflowInstanceCount()}">0</td>
+                        <tr th:if="${workflowInstance.status.name() != 'RUNNING'}">
+                            <td width="30%"><b>Started</b></td>
+                            <td th:text="${workflowInstance.startAtText}">START</td>
+                        </tr>
+                        <tr th:if="${workflowInstance.status.name() == 'RUNNING'}">
+                            <td><b>Started</b></td>
+                            <td th:text="${workflowInstance.startedAtText}">START</td>
+                        </tr>
+                        <tr th:if="${workflowInstance.dueAt}">
+                            <td><b>Due</b></td>
+                            <td th:text="${workflowInstance.dueAtText}">START</td>
+                        </tr>
+                        <tr th:if="${workflowInstance.doneAt}">
+                            <td><b>Done</b></td>
+                            <td th:text="${workflowInstance.doneAtText}">DONE</td>
                         </tr>
                         <tr>
                             <td><b>Created</b></td>
-                            <td th:text="${workflow.createdAtText}">CREATED</td>
+                            <td th:text="${workflowInstance.createdAtText}">CREATED</td>
                         </tr>
-                        <tr>
-                            <td><b>Modified</b></td>
-                            <td th:text="${workflow.modifiedAtText}">CREATED</td>
+                        <tr th:if="${workflowInstance.createdBy}">
+                            <td><b>Created by</b></td>
+                            <td th:text="${workflowInstance.createdBy.displayName}">CREATED BY</td>
                         </tr>
                     </table>
                 </div>

@@ -63,7 +63,7 @@ class EditFormControllerTest : AbstractPageControllerTest() {
     @Test
     fun edit() {
         navigateTo("/settings/forms/${form.id}/edit")
-        assertCurrentPageIs(PageName.FORM_EDIT)
+        assertCurrentPageIs(PageName.SETTINGS_FORM_EDIT)
 
         input("input[name=name]", "M-XXX")
         input("input[name=title]", "This is the new subject")
@@ -98,10 +98,10 @@ class EditFormControllerTest : AbstractPageControllerTest() {
         assertEquals(2, request.firstValue.content.elements.size)
         assertEquals(false, request.firstValue.active)
 
-        assertCurrentPageIs(PageName.FORM_SAVED)
+        assertCurrentPageIs(PageName.SETTINGS_FORM_SAVED)
 
         click(".btn-ok")
-        assertCurrentPageIs(PageName.FORM_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_FORM_LIST)
     }
 
     @Test
@@ -110,7 +110,7 @@ class EditFormControllerTest : AbstractPageControllerTest() {
 
         scrollToBottom()
         click(".btn-cancel")
-        assertCurrentPageIs(PageName.FORM_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_FORM_LIST)
     }
 
     @Test
@@ -122,7 +122,7 @@ class EditFormControllerTest : AbstractPageControllerTest() {
 
         scrollToBottom()
         click("button[type=submit]")
-        assertCurrentPageIs(PageName.FORM_EDIT)
+        assertCurrentPageIs(PageName.SETTINGS_FORM_EDIT)
         assertElementPresent(".alert-danger")
     }
 

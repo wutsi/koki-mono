@@ -44,7 +44,9 @@
                         </tr>
                         <tr>
                             <td><b>Content</b></td>
-                            <td th:utext="${form.content}">DESCRIPTION</td>
+                            <td>
+                                <a class="btn-preview" target="_new" th:href="${form.viewUrl}">Preview</a>
+                            </td>
                         </tr>
                     </table>
                 </div>

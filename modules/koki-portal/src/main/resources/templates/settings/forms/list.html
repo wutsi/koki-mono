@@ -46,7 +46,7 @@
                             <td class="toolbar">
                                 <a class="btn-view" th:href="'/settings/forms/' + ${form.id}">View</a>
                                 <a class="btn-edit" th:href="'/settings/forms/' + ${form.id} + '/edit'">Edit</a>
-                                <a class="btn-preview" target="_new" th:href="${form.viewUrl} + '?read-only=true'">Preview</a>
+                                <a class="btn-preview" target="_new" th:href="${form.viewUrl}">Preview</a>
                             </td>
                         </tr>
                     </table>

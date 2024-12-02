@@ -4,8 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.portal.mapper.WorkflowMapper
 import com.wutsi.koki.portal.model.ActivityModel
 import com.wutsi.koki.portal.model.WorkflowModel
-import com.wutsi.koki.portal.page.workflow.CreateWorkflowForm
-import com.wutsi.koki.portal.page.workflow.UpdateFormWorkflow
+import com.wutsi.koki.portal.page.workflow.SaveWorkflowForm
 import com.wutsi.koki.sdk.KokiWorkflow
 import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.ImportWorkflowRequest
@@ -101,13 +100,13 @@ class WorkflowService(
         return workflows.map { workflow -> mapper.toWorkflowModel(workflow) }
     }
 
-    fun create(form: CreateWorkflowForm): Long {
+    fun create(form: SaveWorkflowForm): Long {
         return kokiWorkflow.importWorkflow(
             request = objectMapper.readValue(form.json, ImportWorkflowRequest::class.java)
         ).workflowId
     }
 
-    fun update(id: Long, form: UpdateFormWorkflow): Long {
+    fun update(id: Long, form: SaveWorkflowForm): Long {
         return kokiWorkflow.importWorkflow(
             id,
             request = objectMapper.readValue(form.json, ImportWorkflowRequest::class.java)

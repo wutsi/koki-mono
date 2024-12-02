@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.page.settings.form
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.never
@@ -41,7 +42,7 @@ class ShowFormControllerTest : AbstractPageControllerTest() {
     @Test
     fun show() {
         navigateTo("/settings/forms/${form.id}")
-        assertCurrentPageIs(PageName.FORM)
+        assertCurrentPageIs(PageName.SETTINGS_FORM)
         assertElementNotPresent(".alert-danger")
     }
 
@@ -63,10 +64,10 @@ class ShowFormControllerTest : AbstractPageControllerTest() {
         driver.switchTo().parentFrame()
 
         verify(kokiForms).deleteForm(form.id)
-        assertCurrentPageIs(PageName.FORM_DELETED)
+        assertCurrentPageIs(PageName.SETTINGS_FORM_DELETED)
 
         click(".btn-ok")
-        assertCurrentPageIs(PageName.FORM_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_FORM_LIST)
     }
 
     @Test
@@ -79,7 +80,7 @@ class ShowFormControllerTest : AbstractPageControllerTest() {
         driver.switchTo().parentFrame()
 
         verify(kokiForms, never()).deleteForm(any())
-        assertCurrentPageIs(PageName.FORM)
+        assertCurrentPageIs(PageName.SETTINGS_FORM)
     }
 
     @Test
@@ -93,7 +94,7 @@ class ShowFormControllerTest : AbstractPageControllerTest() {
         val alert = driver.switchTo().alert()
         alert.accept()
 
-        assertCurrentPageIs(PageName.FORM)
+        assertCurrentPageIs(PageName.SETTINGS_FORM)
         assertElementPresent(".alert-danger")
     }
 
@@ -102,6 +103,25 @@ class ShowFormControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/forms/${form.id}")
         click(".btn-edit")
 
-        assertCurrentPageIs(PageName.FORM_EDIT)
+        assertCurrentPageIs(PageName.SETTINGS_FORM_EDIT)
+    }
+
+    @Test
+    fun preview() {
+        val html = generateFormHtml()
+        doReturn(html).whenever(kokiForms)
+            .getFormHtml(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+
+        navigateTo("/settings/forms/${form.id}")
+        click(".btn-preview")
+
+        val tabs = driver.getWindowHandles().toList()
+        driver.switchTo().window(tabs[1])
+        Thread.sleep(1000)
+        assertCurrentPageIs(PageName.FORM)
+    }
+
+    private fun generateFormHtml(): String {
+        return getResourceAsString("/form-readonly.html")
     }
 }

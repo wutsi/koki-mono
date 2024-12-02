@@ -23,20 +23,20 @@ class SettingsControllerTest : AbstractPageControllerTest() {
     fun forms() {
         navigateTo("/settings")
         click(".btn-form")
-        assertCurrentPageIs(PageName.FORM_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_FORM_LIST)
     }
 
     @Test
     fun messages() {
         navigateTo("/settings")
         click(".btn-message")
-        assertCurrentPageIs(PageName.MESSAGE_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE_LIST)
     }
 
     @Test
     fun workflows() {
         navigateTo("/settings")
         click(".btn-workflow")
-        assertCurrentPageIs(PageName.WORKFLOW_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_LIST)
     }
 }

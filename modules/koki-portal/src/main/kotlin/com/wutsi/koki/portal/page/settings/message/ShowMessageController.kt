@@ -28,7 +28,7 @@ class ShowMessageController(private val service: MessageService) : AbstractPageC
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.MESSAGE,
+                name = PageName.SETTINGS_MESSAGE,
                 title = message.name
             ),
         )
@@ -48,7 +48,7 @@ class ShowMessageController(private val service: MessageService) : AbstractPageC
             model.addAttribute(
                 "page",
                 PageModel(
-                    name = PageName.MESSAGE_DELETED,
+                    name = PageName.SETTINGS_MESSAGE_DELETED,
                     title = message.name
                 ),
             )

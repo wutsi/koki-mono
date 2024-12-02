@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container-fluid">
+    <h1>
+        <img align="absmiddle" height="48" src="/image/workflow.png" width="48"/>
+        Activity: <span th:text="${activity.longTitle}">NAME</span>
+    </h1>
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/workflow :: activity-breadcrumb(${workflow}, ${activity})}"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <table class="table">
+                        <tr>
+                            <td width="20%"><b>Name</b></td>
+                            <td th:text="${activity.name}">NAME</td>
+                        </tr>
+                        <tr>
+                            <td><b>Title</b></td>
+                            <td th:text="${activity.title}">TITLE</td>
+                        </tr>
+                        <tr>
+                            <td><b>Type</b></td>
+                            <td>
+                                <span
+                                    th:replace="~{__components/workflow :: activity-type-icon(${activity.type})}"></span>
+                                <span th:text="${activity.type.name()}">TYPE</span>
+                            </td>
+                        </tr>
+                        <tr th:if="${activity.role}">
+                            <td><b>Assignee</b></td>
+                            <td th:text="${activity.role.title}">ASSIGNEE</td>
+                        </tr>
+                        <tr th:if="${activity.form}">
+                            <td><b>Form</b></td>
+                            <td>
+                                <a class="form" target="_new" th:href="${activity.form.viewUrl}"
+                                   th:text="${activity.longTitle}">FORM</a>
+                            </td>
+                        </tr>
+                        <tr th:if="!${activity.description.isEmpty()}">
+                            <td><b>Description</b></td>
+                            <td th:text="${activity.description}">DESCRIPTION</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
