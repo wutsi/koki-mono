@@ -13,6 +13,15 @@ object PageName {
 
     const val LOGIN = "page.login"
 
+    const val MESSAGE = "page.message"
+    const val MESSAGE_CREATE = "page.message.create"
+    const val MESSAGE_DELETED = "page.message.deleted"
+    const val MESSAGE_EDIT = "page.message.edit"
+    const val MESSAGE_SAVED = "page.message.saved"
+    const val MESSAGE_LIST = "page.message.list"
+
+    const val SETTINGS = "page.settings"
+
     const val WORKFLOW = "page.workflow"
     const val WORKFLOW_CREATE = "page.workflow.create"
     const val WORKFLOW_CREATED = "page.workflow.created"

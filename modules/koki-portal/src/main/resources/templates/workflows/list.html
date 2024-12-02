@@ -8,24 +8,37 @@
 <div th:replace="~{__components/layout :: navbar}"></div>
 
 <div class="container">
-    <h2>Workflows</h2>
+    <h1>
+        <img align="absmiddle" height="48" src="/image/workflow.png" width="48"/>
+        Workflows
+    </h1>
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/workflow :: workflow-breadcrumb(null)}"></div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
                     <div class="widget-toolbar">
-                        <a class="btn-create" href="/workflows/create">New Workflow</a>
+                        <a class="btn-create btn btn-secondary" href="/workflows/create">New Workflow</a>
                     </div>
 
-                    <table class="table table-striped">
+                    <table class="table table-striped" th:if="${workflows}">
                         <tr>
                             <th width="20%">Name</th>
-                            <th width="60%">Title</th>
+                            <th width="50%">Title</th>
+                            <th>Active</th>
                             <th></th>
                         </tr>
                         <tr class="workflow" th:each="workflow : ${workflows}">
                             <td th:text="${workflow.name}">NAME</td>
                             <td th:text="${workflow.title}">TITLE</td>
+                            <td>
+                                <span th:if="${workflow.active}">Yes</span>
+                                <span th:if="!${workflow.active}">No</span>
+                            </td>
                             <td class="toolbar">
                                 <a class="btn-view" th:href="${workflow.url}">View</a>
                                 <a class="btn-edit" th:href="${workflow.updateUrl}">Edit</a>
@@ -33,7 +46,7 @@
                         </tr>
                     </table>
 
-                    <div class="empty text-center padding-2x" th:if="!${workflows}">
+                    <div class="empty text-center" th:if="!${workflows}">
                         No workflow!
                     </div>
 

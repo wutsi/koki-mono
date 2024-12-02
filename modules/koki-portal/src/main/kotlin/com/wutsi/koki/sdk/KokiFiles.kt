@@ -6,7 +6,7 @@ import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.file.dto.SearchFileResponse
 import org.springframework.web.client.RestTemplate
 
-class KokiFile(
+class KokiFiles(
     private val urlBuilder: URLBuilder,
     private val rest: RestTemplate,
 ) {

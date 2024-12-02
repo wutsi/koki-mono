@@ -130,6 +130,8 @@ class TaskQueueWidgetControllerTest : AbstractPageControllerTest() {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
             )
 
         doReturn(SearchWorkflowResponse(workflows)).whenever(kokiWorkflow)
@@ -200,6 +202,8 @@ class TaskQueueWidgetControllerTest : AbstractPageControllerTest() {
     fun `no activity associated with my role`() {
         doReturn(SearchActivityResponse()).whenever(kokiWorkflow)
             .searchActivities(
+                anyOrNull(),
+                anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),

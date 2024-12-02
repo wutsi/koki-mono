@@ -3,14 +3,14 @@ package com.wutsi.koki.portal.service
 import com.wutsi.koki.file.dto.CreateFileRequest
 import com.wutsi.koki.portal.mapper.FileMapper
 import com.wutsi.koki.portal.model.FileModel
-import com.wutsi.koki.sdk.KokiFile
+import com.wutsi.koki.sdk.KokiFiles
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.net.URL
 
 @Service
 class FileService(
-    private val kokiFile: KokiFile,
+    private val kokiFiles: KokiFiles,
     private val userService: UserService,
     private val mapper: FileMapper,
 ) {
@@ -20,7 +20,7 @@ class FileService(
         workflowInstanceId: String?,
         formId: String?
     ): String {
-        return kokiFile.create(
+        return kokiFiles.create(
             CreateFileRequest(
                 url = url.toString(),
                 contentType = file.contentType ?: "application/octet-stream",
@@ -33,7 +33,7 @@ class FileService(
     }
 
     fun file(id: String): FileModel {
-        val file = kokiFile.get(id).file
+        val file = kokiFiles.get(id).file
         val createdBy = file.createdById?.let { id -> userService.user(id) }
 
         return mapper.toFileModel(
@@ -49,7 +49,7 @@ class FileService(
         limit: Int = 20,
         offset: Int = 0,
     ): List<FileModel> {
-        val files = kokiFile.search(
+        val files = kokiFiles.search(
             ids = ids,
             workflowInstanceIds = workflowInstanceIds,
             formIds = formIds,

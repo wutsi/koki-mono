@@ -10,10 +10,12 @@ import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.form.dto.SearchFormResponse
+import com.wutsi.koki.message.dto.SearchMessageResponse
 import com.wutsi.koki.portal.service.AccessTokenHolder
 import com.wutsi.koki.sdk.KokiAuthentication
-import com.wutsi.koki.sdk.KokiFile
+import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiForms
+import com.wutsi.koki.sdk.KokiMessages
 import com.wutsi.koki.sdk.KokiUser
 import com.wutsi.koki.sdk.KokiWorkflow
 import com.wutsi.koki.sdk.KokiWorkflowInstance
@@ -69,10 +71,13 @@ abstract class AbstractPageControllerTest {
     protected lateinit var kokiAuthentication: KokiAuthentication
 
     @MockitoBean
-    protected lateinit var kokiFile: KokiFile
+    protected lateinit var kokiFiles: KokiFiles
 
     @MockitoBean
     protected lateinit var kokiForms: KokiForms
+
+    @MockitoBean
+    protected lateinit var kokiMessages: KokiMessages
 
     @MockitoBean
     protected lateinit var kokiUser: KokiUser
@@ -171,8 +176,19 @@ abstract class AbstractPageControllerTest {
                 anyOrNull(),
             )
 
-        doReturn(SearchFileResponse()).whenever(kokiFile)
+        doReturn(SearchFileResponse()).whenever(kokiFiles)
             .search(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
+
+        doReturn(SearchMessageResponse()).whenever(kokiMessages)
+            .search(
+                anyOrNull(),
+                anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -195,6 +211,8 @@ abstract class AbstractPageControllerTest {
 
         doReturn(SearchActivityResponse()).whenever(kokiWorkflow)
             .searchActivities(
+                anyOrNull(),
+                anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
