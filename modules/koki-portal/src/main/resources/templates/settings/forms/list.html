@@ -9,12 +9,12 @@
 
 <div class="container">
     <h1>
-        <img align="absmiddle" height="48" src="/image/message.png" width="48"/>
+        <img align="absmiddle" height="48" src="/image/form.png" width="48"/>
         Messages
     </h1>
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/message :: message-breadcrumb(null)}"></div>
+            <div th:replace="~{__components/form :: form-breadcrumb(null)}"></div>
         </div>
     </div>
     <div class="row">
@@ -22,38 +22,38 @@
             <div class="widget">
                 <div class="widget-body">
                     <div class="widget-toolbar">
-                        <a class="btn-create btn btn-secondary" href="/settings/messages/create">New Message</a>
+                        <a class="btn-create btn btn-secondary" href="/settings/forms/create">New Form</a>
                     </div>
 
-                    <table class="table table-striped" th:if="${messages}">
+                    <table class="table table-striped" th:if="${forms}">
                         <tr>
                             <th width="10%">Name</th>
-                            <th width="50%">Subject</th>
+                            <th width="50%">Title</th>
                             <th>Modified</th>
                             <th>Active</th>
                             <th></th>
                         </tr>
-                        <tr class="message" th:each="message : ${messages}">
+                        <tr class="form" th:each="form : ${forms}">
                             <td>
-                                <a th:href="'/settings/messages/' + ${message.id}" th:text="${message.name}">NAME</a>
+                                <a th:href="'/settings/forms/' + ${form.id}" th:text="${form.name}">NAME</a>
                             </td>
-                            <td th:text="${message.subject}">SUBJECT</td>
-                            <td th:text="${message.modifiedAtText}">MODIFIED</td>
+                            <td th:text="${form.title}">TITLE</td>
+                            <td th:text="${form.modifiedAtText}">MODIFIED</td>
                             <td>
-                                <span th:if="${message.active}">Yes</span>
-                                <span th:if="!${message.active}">No</span>
+                                <span th:if="${form.active}">Yes</span>
+                                <span th:if="!${form.active}">No</span>
                             </td>
                             <td class="toolbar">
-                                <a class="btn-view" th:href="'/settings/messages/' + ${message.id}">View</a>
-                                <a class="btn-edit" th:href="'/settings/messages/' + ${message.id} + '/edit'">Edit</a>
+                                <a class="btn-view" th:href="'/settings/forms/' + ${form.id}">View</a>
+                                <a class="btn-edit" th:href="'/settings/forms/' + ${form.id} + '/edit'">Edit</a>
+                                <a class="btn-preview" target="_new" th:href="${form.viewUrl} + '?read-only=true'">Preview</a>
                             </td>
                         </tr>
                     </table>
 
-                    <div class="empty text-center" th:if="!${messages}">
-                        No message!
+                    <div class="empty text-center" th:if="!${forms}">
+                        No form!
                     </div>
-
                 </div>
             </div>
 

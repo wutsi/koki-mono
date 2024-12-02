@@ -1,6 +1,8 @@
 package com.wutsi.koki.sdk
 
 import com.wutsi.koki.form.dto.GetFormResponse
+import com.wutsi.koki.form.dto.SaveFormRequest
+import com.wutsi.koki.form.dto.SaveFormResponse
 import com.wutsi.koki.form.dto.SearchFormResponse
 import com.wutsi.koki.form.dto.SubmitFormDataRequest
 import com.wutsi.koki.form.dto.SubmitFormDataResponse
@@ -48,6 +50,21 @@ class KokiForms(
             )
         )
         return rest.getForEntity(url, String::class.java).body
+    }
+
+    fun deleteForm(formId: String) {
+        val url = urlBuilder.build("$FORM_PATH_PREFIX/$formId")
+        rest.delete(url)
+    }
+
+    fun createForm(request: SaveFormRequest): SaveFormResponse {
+        val url = urlBuilder.build(FORM_PATH_PREFIX)
+        return rest.postForEntity(url, request, SaveFormResponse::class.java).body!!
+    }
+
+    fun updateForm(formId: String, request: SaveFormRequest) {
+        val url = urlBuilder.build("$FORM_PATH_PREFIX/$formId")
+        rest.postForEntity(url, request, Any::class.java)
     }
 
     fun searchForms(

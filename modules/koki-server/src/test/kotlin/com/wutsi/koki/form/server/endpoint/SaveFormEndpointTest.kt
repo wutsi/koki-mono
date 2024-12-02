@@ -8,8 +8,8 @@ import com.wutsi.koki.form.dto.FormContent
 import com.wutsi.koki.form.dto.FormElement
 import com.wutsi.koki.form.dto.FormElementType
 import com.wutsi.koki.form.dto.FormOption
-import com.wutsi.koki.form.dto.ImportFormResponse
 import com.wutsi.koki.form.dto.SaveFormRequest
+import com.wutsi.koki.form.dto.SaveFormResponse
 import com.wutsi.koki.form.server.dao.FormRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -72,7 +72,7 @@ class SaveFormEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun create() {
-        val result = rest.postForEntity("/v1/forms", request, ImportFormResponse::class.java)
+        val result = rest.postForEntity("/v1/forms", request, SaveFormResponse::class.java)
         assertEquals(HttpStatus.OK, result.statusCode)
 
         val formId = result.body!!.formId
@@ -95,7 +95,7 @@ class SaveFormEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun update() {
-        val result = rest.postForEntity("/v1/forms/100", request, ImportFormResponse::class.java)
+        val result = rest.postForEntity("/v1/forms/100", request, SaveFormResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 

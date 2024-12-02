@@ -1,25 +1,25 @@
-package com.wutsi.koki.portal.page.settings.message
+package com.wutsi.koki.portal.page.settings.form
 
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.portal.service.MessageService
+import com.wutsi.koki.portal.service.FormService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import kotlin.collections.isNotEmpty
 
 @Controller
-class ListMessageController(private val service: MessageService) {
-    @GetMapping("/settings/messages")
+class ListFormController(private val service: FormService) {
+    @GetMapping("/settings/forms")
     fun list(model: Model): String {
-        val messages = service.messages()
-        if (messages.isNotEmpty()) {
-            model.addAttribute("messages", messages)
+        val forms = service.forms()
+        if (forms.isNotEmpty()) {
+            model.addAttribute("forms", forms)
         }
         model.addAttribute(
             "page",
-            PageModel(name = PageName.MESSAGE_LIST, title = "Messages"),
+            PageModel(name = PageName.FORM_LIST, title = "Forms"),
         )
-        return "settings/messages/list"
+        return "settings/forms/list"
     }
 }

@@ -7,7 +7,12 @@ object PageName {
     const val ERROR = "page.error"
 
     const val FORM = "page.form"
+    const val FORM_CREATE = "page.form.create"
+    const val FORM_DELETED = "page.form.deleted"
+    const val FORM_EDIT = "page.form.edit"
+    const val FORM_LIST = "page.form.list"
     const val FORM_SAVED = "page.form.saved"
+    const val FORM_SUBMITTED = "page.form.submitted"
 
     const val HOME = "page.home"
 
@@ -17,8 +22,8 @@ object PageName {
     const val MESSAGE_CREATE = "page.message.create"
     const val MESSAGE_DELETED = "page.message.deleted"
     const val MESSAGE_EDIT = "page.message.edit"
-    const val MESSAGE_SAVED = "page.message.saved"
     const val MESSAGE_LIST = "page.message.list"
+    const val MESSAGE_SAVED = "page.message.saved"
 
     const val SETTINGS = "page.settings"
 

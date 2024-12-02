@@ -7,8 +7,11 @@ data class FormModel(
     val name: String = "",
     val title: String = "",
     val content: String? = null,
+    val active: Boolean = true,
     val createdAt: Date = Date(),
+    val createdAtText: String = "",
     val modifiedAt: Date = Date(),
+    val modifiedAtText: String = "",
     val viewUrl: String = "",
     val editUrl: String = "",
 ) {

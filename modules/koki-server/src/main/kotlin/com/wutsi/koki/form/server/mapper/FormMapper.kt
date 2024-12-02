@@ -14,6 +14,7 @@ class FormMapper(private val objectMapper: ObjectMapper) {
             id = entity.id ?: "",
             name = entity.name,
             title = entity.title,
+            active = entity.active,
             content = objectMapper.readValue(entity.content, FormContent::class.java),
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
@@ -25,6 +26,7 @@ class FormMapper(private val objectMapper: ObjectMapper) {
             id = entity.id ?: "",
             name = entity.name,
             title = entity.title,
+            active = entity.active,
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
         )

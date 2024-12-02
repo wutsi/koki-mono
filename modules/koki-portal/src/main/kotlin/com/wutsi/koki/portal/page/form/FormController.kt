@@ -24,6 +24,7 @@ class FormController(
         @RequestParam(required = false, name = "read-only") readOnly: Boolean = false,
         model: Model
     ): String {
+        val form = service.form(formId)
         val formHtml = service.html(
             formId = formId,
             formDataId = null,
@@ -32,7 +33,13 @@ class FormController(
             readOnly = readOnly
         )
         model.addAttribute("formHtml", formHtml)
-        addPageInfo(formId, model)
+        model.addAttribute(
+            "page",
+            PageModel(
+                name = PageName.FORM,
+                title = form.longTitle,
+            )
+        )
         return "forms/show"
     }
 
@@ -43,6 +50,7 @@ class FormController(
         @RequestParam(required = false, name = "activity-instance-id") activityInstanceId: String? = null,
         model: Model
     ): String {
+        val form = service.form(formId)
         val formHtml = service.html(
             formId = formId,
             formDataId = formDataId,
@@ -50,7 +58,14 @@ class FormController(
             activityInstanceId = activityInstanceId,
         )
         model.addAttribute("formHtml", formHtml)
-        addPageInfo(formId, model)
+        model.addAttribute(
+            "page",
+            PageModel(
+                name = PageName.FORM,
+                title = form.longTitle,
+            )
+        )
+
         return "forms/show"
     }
 
@@ -87,17 +102,24 @@ class FormController(
         } else {
             service.submitData(formId, workflowInstanceId, activityInstanceId, data)
         }
-        return "redirect:/forms/$formId/saved"
+        return "redirect:/forms/$formId/submitted"
     }
 
-    private fun addPageInfo(formId: String, model: Model) {
-        val form = service.form(formId)
+    @GetMapping("/forms/{id}/submitted")
+    fun submitted(
+        @PathVariable id: String,
+        model: Model
+    ): String {
+        val form = service.form(id)
+
+        model.addAttribute("form", form)
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.FORM,
+                name = PageName.FORM_SUBMITTED,
                 title = form.longTitle,
             )
         )
+        return "forms/submitted"
     }
 }

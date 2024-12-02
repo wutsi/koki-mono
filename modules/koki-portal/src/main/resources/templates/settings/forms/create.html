@@ -10,19 +10,18 @@
 <div class="container">
     <h1>
         <img align="absmiddle" height="48" src="/image/form.png" width="48"/>
-        Form: <span th:text="${data.longTitle}">NAME</span>
+        Create New Form
     </h1>
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/form :: form-breadcrumb(${data})}"></div>
+            <div th:replace="~{__components/form :: form-breadcrumb(null)}"></div>
         </div>
     </div>
 
     <div class="row">
         <div class="col-12">
 
-            <form class="form" method="post" th:action="@{'/settings/forms/' + ${data.id} + '/update'}"
-                  th:object="${form}">
+            <form class="form" method="post" th:action="@{/settings/forms/add-new}" th:object="${form}">
                 <div class="form-body">
                     <div class="section">
                         <div class="section-body">
@@ -55,6 +54,7 @@
                     <button type="submit">Submit</button>
                     <a class="btn-cancel" href="/settings/forms">Cancel</a>
                 </div>
+
             </form>
         </div>
 
