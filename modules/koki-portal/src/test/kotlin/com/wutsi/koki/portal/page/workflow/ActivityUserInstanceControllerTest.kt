@@ -83,10 +83,10 @@ class ActivityUserInstanceControllerTest : AbstractPageControllerTest() {
         super.setUp()
 
         doReturn(SearchRoleResponse(roles)).whenever(kokiUser)
-            .searchRoles(anyOrNull(), anyOrNull(), anyOrNull())
+            .roles(anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(SearchWorkflowResponse(listOf(workflow))).whenever(kokiWorkflow)
-            .searchWorkflows(
+            .workflows(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -99,20 +99,20 @@ class ActivityUserInstanceControllerTest : AbstractPageControllerTest() {
             )
 
         doReturn(SearchUserResponse(users)).whenever(kokiUser)
-            .searchUsers(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .users(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
-        doReturn(GetFormResponse(form)).whenever(kokiForms).getForm(any())
+        doReturn(GetFormResponse(form)).whenever(kokiForms).form(any())
         doReturn(
             SearchFormResponse(listOf(FormSummary(id = form.id, name = form.name, title = form.title)))
         ).whenever(kokiForms)
-            .searchForms(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .forms(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(GetActivityInstanceResponse(activityInstance)).whenever(kokiWorkflowInstance)
             .activity(activityInstance.id)
 
         val html = generateFormHtml()
         doReturn(html).whenever(kokiForms)
-            .getFormHtml(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .html(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
     }
 
     @Test

@@ -137,19 +137,19 @@ class WorkflowControllerTest : AbstractPageControllerTest() {
         super.setUp()
 
         doReturn(SearchRoleResponse(roles)).whenever(kokiUser)
-            .searchRoles(anyOrNull(), anyOrNull(), anyOrNull())
+            .roles(anyOrNull(), anyOrNull(), anyOrNull())
 
-        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).getWorkflow(workflow.id)
+        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).workflow(workflow.id)
 
         doReturn(SearchUserResponse(users)).whenever(kokiUser)
-            .searchUsers(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .users(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(SearchFormResponse(listOf(form))).whenever(kokiForms)
-            .searchForms(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .forms(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(GetWorkflowInstanceResponse(workflowInstance))
             .whenever(kokiWorkflowInstance)
-            .get(workflowInstance.id)
+            .workflow(workflowInstance.id)
     }
 
     @Test

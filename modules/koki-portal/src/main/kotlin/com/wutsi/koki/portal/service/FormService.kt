@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class FormService(
-    private val mapper: FormMapper,
     private val koki: KokiForms,
+    private val mapper: FormMapper,
     private val objectMapper: ObjectMapper,
 ) {
     fun form(
@@ -24,15 +24,15 @@ class FormService(
         workflowInstanceId: String? = null,
         activityInstanceId: String? = null,
     ): FormModel {
-        return mapper.toFormModel(koki.getForm(id).form, workflowInstanceId, activityInstanceId)
+        return mapper.toFormModel(koki.form(id).form, workflowInstanceId, activityInstanceId)
     }
 
     fun delete(id: String) {
-        koki.deleteForm(id)
+        koki.delete(id)
     }
 
     fun create(form: FormForm): String {
-        return koki.createForm(
+        return koki.create(
             SaveFormRequest(
                 active = form.active,
                 content = FormContent(
@@ -45,7 +45,7 @@ class FormService(
     }
 
     fun update(id: String, form: FormForm) {
-        koki.updateForm(
+        koki.update(
             id,
             SaveFormRequest(
                 active = form.active,
@@ -68,7 +68,7 @@ class FormService(
         workflowInstanceId: String? = null,
         activityInstanceId: String? = null,
     ): List<FormModel> {
-        return koki.searchForms(
+        return koki.forms(
             ids = ids,
             active = active,
             limit = limit,
@@ -86,7 +86,7 @@ class FormService(
         activityInstanceId: String? = null,
         readOnly: Boolean = false
     ): String {
-        return koki.getFormHtml(
+        return koki.html(
             formId = formId,
             formDataId = formDataId,
             roleName = roleName,
@@ -96,13 +96,13 @@ class FormService(
         )
     }
 
-    fun submitData(
+    fun submit(
         formId: String,
         workflowInstanceId: String?,
         activityInstanceId: String?,
         data: Map<String, Any>
     ): String {
-        return koki.submitData(
+        return koki.submit(
             SubmitFormDataRequest(
                 formId = formId,
                 data = data,
@@ -112,12 +112,12 @@ class FormService(
         ).formDataId
     }
 
-    fun updateData(
+    fun submit(
         formDataId: String,
         activityInstanceId: String?,
         data: Map<String, Any>
     ) {
-        koki.updateData(
+        koki.submit(
             formDataId,
             UpdateFormDataRequest(
                 data = data,

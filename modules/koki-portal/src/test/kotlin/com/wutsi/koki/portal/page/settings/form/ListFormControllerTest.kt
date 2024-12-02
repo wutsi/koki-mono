@@ -41,7 +41,7 @@ class ListFormControllerTest : AbstractPageControllerTest() {
         super.setUp()
 
         doReturn(SearchFormResponse(forms)).whenever(kokiForms)
-            .searchForms(
+            .forms(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -63,7 +63,7 @@ class ListFormControllerTest : AbstractPageControllerTest() {
     @Test
     fun empty() {
         doReturn(SearchFormResponse()).whenever(kokiForms)
-            .searchForms(
+            .forms(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -96,7 +96,7 @@ class ListFormControllerTest : AbstractPageControllerTest() {
             active = true,
             content = FormContent(),
         )
-        doReturn(GetFormResponse(form)).whenever(kokiForms).getForm(any())
+        doReturn(GetFormResponse(form)).whenever(kokiForms).form(any())
 
         navigateTo("/settings/forms")
         click("tr.form .btn-view")
@@ -112,7 +112,7 @@ class ListFormControllerTest : AbstractPageControllerTest() {
             active = true,
             content = FormContent(),
         )
-        doReturn(GetFormResponse(form)).whenever(kokiForms).getForm(any())
+        doReturn(GetFormResponse(form)).whenever(kokiForms).form(any())
 
         navigateTo("/settings/forms")
         click("tr.form .btn-edit")
@@ -135,11 +135,11 @@ class ListFormControllerTest : AbstractPageControllerTest() {
             active = true,
             content = FormContent(),
         )
-        doReturn(GetFormResponse(form)).whenever(kokiForms).getForm(any())
+        doReturn(GetFormResponse(form)).whenever(kokiForms).form(any())
 
         val html = generateFormHtml()
         doReturn(html).whenever(kokiForms)
-            .getFormHtml(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         navigateTo("/settings/forms")
         click(".btn-preview")

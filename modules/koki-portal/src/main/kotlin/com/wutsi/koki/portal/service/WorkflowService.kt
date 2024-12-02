@@ -21,11 +21,11 @@ class WorkflowService(
     private val userService: UserService,
 ) {
     fun json(id: Long): String {
-        return koki.getWorkflowJson(id)
+        return koki.json(id)
     }
 
     fun workflow(id: Long): WorkflowModel {
-        val workflow = koki.getWorkflow(id).workflow
+        val workflow = koki.workflow(id).workflow
 
         val roles = if (workflow.roleIds.isEmpty()) {
             emptyList()
@@ -52,7 +52,7 @@ class WorkflowService(
             limit = messageIds.size,
         )
 
-        val imageUrl = koki.getWorkflowImageUrl(id)
+        val imageUrl = koki.imageUrl(id)
 
         return mapper.toWorkflowModel(workflow, approverRole, roles, forms, messages, imageUrl)
     }
@@ -68,7 +68,7 @@ class WorkflowService(
         limit: Int = 20,
         offset: Int = 0,
     ): List<ActivityModel> {
-        val activities = koki.searchActivities(
+        val activities = koki.activities(
             ids = ids,
             workflowIds = workflowIds,
             roleIds = roleIds,
@@ -95,7 +95,7 @@ class WorkflowService(
         sortBy: WorkflowSortBy? = WorkflowSortBy.TITLE,
         ascending: Boolean = false,
     ): List<WorkflowModel> {
-        val workflows = koki.searchWorkflows(
+        val workflows = koki.workflows(
             ids = ids,
             active = active,
             activityRoleIds = activityRoleIds,
@@ -110,13 +110,13 @@ class WorkflowService(
     }
 
     fun create(form: SaveWorkflowForm): Long {
-        return koki.importWorkflow(
+        return koki.import(
             request = objectMapper.readValue(form.json, ImportWorkflowRequest::class.java)
         ).workflowId
     }
 
     fun update(id: Long, form: SaveWorkflowForm): Long {
-        return koki.importWorkflow(
+        return koki.import(
             id,
             request = objectMapper.readValue(form.json, ImportWorkflowRequest::class.java)
         ).workflowId

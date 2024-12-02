@@ -13,6 +13,8 @@ import com.wutsi.koki.workflow.dto.StartWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import org.springframework.web.client.RestTemplate
 import java.text.SimpleDateFormat
+import java.util.Collections.emptyList
+import java.util.Collections.emptyMap
 import java.util.Date
 
 class KokiWorkflowInstance(
@@ -30,6 +32,11 @@ class KokiWorkflowInstance(
         return urlBuilder.build(
             "$WORKFLOW_PATH_PREFIX/images/$tenantId.$id.png",
         )
+    }
+
+    fun assignee(request: SetActivityInstanceAssigneeRequest) {
+        val url = urlBuilder.build("$ACTIVITY_PATH_PREFIX/assignee")
+        rest.postForEntity(url, request, Any::class.java)
     }
 
     fun create(request: CreateWorkflowInstanceRequest): CreateWorkflowInstanceResponse {
@@ -51,7 +58,7 @@ class KokiWorkflowInstance(
         rest.postForEntity(url, request, Any::class.java)
     }
 
-    fun get(id: String): GetWorkflowInstanceResponse {
+    fun workflow(id: String): GetWorkflowInstanceResponse {
         val url = urlBuilder.build("$WORKFLOW_PATH_PREFIX/$id")
         return rest.getForEntity(
             url,
@@ -67,7 +74,7 @@ class KokiWorkflowInstance(
         ).body
     }
 
-    fun searchActivities(
+    fun activities(
         ids: List<String> = emptyList(),
         activityIds: List<Long> = emptyList(),
         workflowInstanceIds: List<String> = emptyList(),
@@ -100,12 +107,7 @@ class KokiWorkflowInstance(
         return rest.getForEntity(url, SearchActivityInstanceResponse::class.java).body!!
     }
 
-    fun setAssignee(request: SetActivityInstanceAssigneeRequest) {
-        val url = urlBuilder.build("$ACTIVITY_PATH_PREFIX/assignee")
-        rest.postForEntity(url, request, Any::class.java)
-    }
-
-    fun searchWorkflows(
+    fun workflows(
         ids: List<String> = emptyList(),
         workflowIds: List<Long> = emptyList(),
         participantUserIds: List<Long> = emptyList(),

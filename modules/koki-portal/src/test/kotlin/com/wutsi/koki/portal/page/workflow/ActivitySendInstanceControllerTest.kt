@@ -84,10 +84,10 @@ class ActivitySendInstanceControllerTest : AbstractPageControllerTest() {
         super.setUp()
 
         doReturn(SearchRoleResponse(roles)).whenever(kokiUser)
-            .searchRoles(anyOrNull(), anyOrNull(), anyOrNull())
+            .roles(anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(SearchWorkflowResponse(listOf(workflow))).whenever(kokiWorkflow)
-            .searchWorkflows(
+            .workflows(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -100,15 +100,15 @@ class ActivitySendInstanceControllerTest : AbstractPageControllerTest() {
             )
 
         doReturn(SearchUserResponse(users)).whenever(kokiUser)
-            .searchUsers(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .users(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
-        doReturn(GetMessageResponse(message)).whenever(kokiMessages).get(any())
+        doReturn(GetMessageResponse(message)).whenever(kokiMessages).message(any())
         doReturn(
             SearchMessageResponse(
                 listOf(MessageSummary(id = message.id, name = message.name))
             )
         ).whenever(kokiMessages)
-            .search(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .messages(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(GetActivityInstanceResponse(activityInstance)).whenever(kokiWorkflowInstance)
             .activity(activityInstance.id)

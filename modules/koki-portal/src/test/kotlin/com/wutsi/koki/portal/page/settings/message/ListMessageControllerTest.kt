@@ -40,7 +40,7 @@ class ListMessageControllerTest : AbstractPageControllerTest() {
         super.setUp()
 
         doReturn(SearchMessageResponse(messages)).whenever(kokiMessages)
-            .search(
+            .messages(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -63,7 +63,7 @@ class ListMessageControllerTest : AbstractPageControllerTest() {
     @Test
     fun empty() {
         doReturn(SearchMessageResponse()).whenever(kokiMessages)
-            .search(
+            .messages(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -96,7 +96,7 @@ class ListMessageControllerTest : AbstractPageControllerTest() {
             subject = "Message #1",
             active = true,
         )
-        doReturn(GetMessageResponse(message)).whenever(kokiMessages).get(any())
+        doReturn(GetMessageResponse(message)).whenever(kokiMessages).message(any())
 
         navigateTo("/settings/messages")
         click("tr.message .btn-view")
@@ -111,7 +111,7 @@ class ListMessageControllerTest : AbstractPageControllerTest() {
             subject = "Message #1",
             active = true,
         )
-        doReturn(GetMessageResponse(message)).whenever(kokiMessages).get(any())
+        doReturn(GetMessageResponse(message)).whenever(kokiMessages).message(any())
 
         navigateTo("/settings/messages")
         click("tr.message .btn-edit")

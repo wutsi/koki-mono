@@ -22,24 +22,24 @@ class KokiWorkflow(
         private const val WORKFLOW_PATH_PREFIX = "/v1/workflows"
     }
 
-    fun importWorkflow(request: ImportWorkflowRequest): ImportWorkflowResponse {
+    fun import(request: ImportWorkflowRequest): ImportWorkflowResponse {
         val url = urlBuilder.build(WORKFLOW_PATH_PREFIX)
         return rest.postForEntity(url, request, ImportWorkflowResponse::class.java).body!!
     }
 
-    fun importWorkflow(id: Long, request: ImportWorkflowRequest): ImportWorkflowResponse {
+    fun import(id: Long, request: ImportWorkflowRequest): ImportWorkflowResponse {
         val url = urlBuilder.build("$WORKFLOW_PATH_PREFIX/$id")
         return rest.postForEntity(url, request, ImportWorkflowResponse::class.java).body!!
     }
 
-    fun getWorkflowImageUrl(id: Long): String {
+    fun imageUrl(id: Long): String {
         val tenantId = tenantProvider.id()
         return urlBuilder.build(
             "$WORKFLOW_PATH_PREFIX/images/$tenantId.$id.png",
         )
     }
 
-    fun getWorkflowJson(id: Long): String {
+    fun json(id: Long): String {
         val tenantId = tenantProvider.id()
         val url = urlBuilder.build(
             "$WORKFLOW_PATH_PREFIX/json/$tenantId.$id.json",
@@ -53,14 +53,14 @@ class KokiWorkflow(
             .writeValueAsString(data)
     }
 
-    fun getWorkflow(id: Long): GetWorkflowResponse {
+    fun workflow(id: Long): GetWorkflowResponse {
         val url = urlBuilder.build(
             "$WORKFLOW_PATH_PREFIX/$id",
         )
         return rest.getForEntity(url, GetWorkflowResponse::class.java).body!!
     }
 
-    fun searchWorkflows(
+    fun workflows(
         ids: List<Long> = emptyList(),
         active: Boolean? = null,
         activityRoleIds: List<Long> = emptyList(),
@@ -88,7 +88,7 @@ class KokiWorkflow(
         return rest.getForEntity(url, SearchWorkflowResponse::class.java).body!!
     }
 
-    fun searchActivities(
+    fun activities(
         ids: List<Long> = emptyList(),
         workflowIds: List<Long> = emptyList(),
         roleIds: List<Long> = emptyList(),

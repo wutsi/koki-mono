@@ -10,7 +10,7 @@ import java.net.URL
 
 @Service
 class FileService(
-    private val kokiFiles: KokiFiles,
+    private val koki: KokiFiles,
     private val userService: UserService,
     private val mapper: FileMapper,
 ) {
@@ -20,7 +20,7 @@ class FileService(
         workflowInstanceId: String?,
         formId: String?
     ): String {
-        return kokiFiles.create(
+        return koki.create(
             CreateFileRequest(
                 url = url.toString(),
                 contentType = file.contentType ?: "application/octet-stream",
@@ -33,7 +33,7 @@ class FileService(
     }
 
     fun file(id: String): FileModel {
-        val file = kokiFiles.get(id).file
+        val file = koki.file(id).file
         val createdBy = file.createdById?.let { id -> userService.user(id) }
 
         return mapper.toFileModel(
@@ -49,7 +49,7 @@ class FileService(
         limit: Int = 20,
         offset: Int = 0,
     ): List<FileModel> {
-        val files = kokiFiles.search(
+        val files = koki.files(
             ids = ids,
             workflowInstanceIds = workflowInstanceIds,
             formIds = formIds,

@@ -98,9 +98,9 @@ class FormController(
             }
             .toMap() as Map<String, Any>
         if (formDataId != null) {
-            service.updateData(formDataId, activityInstanceId, data)
+            service.submit(formDataId, activityInstanceId, data)
         } else {
-            service.submitData(formId, workflowInstanceId, activityInstanceId, data)
+            service.submit(formId, workflowInstanceId, activityInstanceId, data)
         }
         return "redirect:/forms/$formId/submitted"
     }

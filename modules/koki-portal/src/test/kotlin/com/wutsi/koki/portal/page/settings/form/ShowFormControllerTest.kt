@@ -36,7 +36,7 @@ class ShowFormControllerTest : AbstractPageControllerTest() {
     override fun setUp() {
         super.setUp()
 
-        doReturn(GetFormResponse(form)).whenever(kokiForms).getForm(any())
+        doReturn(GetFormResponse(form)).whenever(kokiForms).form(any())
     }
 
     @Test
@@ -63,7 +63,7 @@ class ShowFormControllerTest : AbstractPageControllerTest() {
         alert.accept()
         driver.switchTo().parentFrame()
 
-        verify(kokiForms).deleteForm(form.id)
+        verify(kokiForms).delete(form.id)
         assertCurrentPageIs(PageName.SETTINGS_FORM_DELETED)
 
         click(".btn-ok")
@@ -79,14 +79,14 @@ class ShowFormControllerTest : AbstractPageControllerTest() {
         alert.dismiss()
         driver.switchTo().parentFrame()
 
-        verify(kokiForms, never()).deleteForm(any())
+        verify(kokiForms, never()).delete(any())
         assertCurrentPageIs(PageName.SETTINGS_FORM)
     }
 
     @Test
     fun `error on delete`() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
-        doThrow(ex).whenever(kokiForms).deleteForm(any())
+        doThrow(ex).whenever(kokiForms).delete(any())
 
         navigateTo("/settings/forms/${form.id}")
         click(".btn-delete")
@@ -110,7 +110,7 @@ class ShowFormControllerTest : AbstractPageControllerTest() {
     fun preview() {
         val html = generateFormHtml()
         doReturn(html).whenever(kokiForms)
-            .getFormHtml(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         navigateTo("/settings/forms/${form.id}")
         click(".btn-preview")

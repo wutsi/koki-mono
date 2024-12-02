@@ -77,10 +77,10 @@ class ActivityManualControllerTest : AbstractPageControllerTest() {
         super.setUp()
 
         doReturn(SearchRoleResponse(roles)).whenever(kokiUser)
-            .searchRoles(anyOrNull(), anyOrNull(), anyOrNull())
+            .roles(anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(SearchWorkflowResponse(listOf(workflow))).whenever(kokiWorkflow)
-            .searchWorkflows(
+            .workflows(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -93,7 +93,7 @@ class ActivityManualControllerTest : AbstractPageControllerTest() {
             )
 
         doReturn(SearchUserResponse(users)).whenever(kokiUser)
-            .searchUsers(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .users(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(GetActivityInstanceResponse(activityInstance)).whenever(kokiWorkflowInstance)
             .activity(activityInstance.id)

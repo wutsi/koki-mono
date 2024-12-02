@@ -20,12 +20,34 @@ class KokiForms(
         private const val FORM_DATA_PATH_PREFIX = "/v1/form-data"
     }
 
-    fun getForm(id: String): GetFormResponse {
+    fun form(id: String): GetFormResponse {
         val url = urlBuilder.build("$FORM_PATH_PREFIX/$id")
         return rest.getForEntity(url, GetFormResponse::class.java).body
     }
 
-    fun getFormHtml(
+    fun forms(
+        ids: List<String> = emptyList(),
+        active: Boolean? = null,
+        limit: Int = 20,
+        offset: Int = 0,
+        sortBy: FormSortBy? = null,
+        ascending: Boolean = true,
+    ): SearchFormResponse {
+        val url = urlBuilder.build(
+            FORM_PATH_PREFIX,
+            mapOf(
+                "id" to ids,
+                "active" to active,
+                "limit" to limit,
+                "offset" to offset,
+                "sort-by" to sortBy,
+                "asc" to ascending
+            )
+        )
+        return rest.getForEntity(url, SearchFormResponse::class.java).body
+    }
+
+    fun html(
         formId: String,
         formDataId: String?,
         roleName: String?,
@@ -52,50 +74,28 @@ class KokiForms(
         return rest.getForEntity(url, String::class.java).body
     }
 
-    fun deleteForm(formId: String) {
+    fun delete(formId: String) {
         val url = urlBuilder.build("$FORM_PATH_PREFIX/$formId")
         rest.delete(url)
     }
 
-    fun createForm(request: SaveFormRequest): SaveFormResponse {
+    fun create(request: SaveFormRequest): SaveFormResponse {
         val url = urlBuilder.build(FORM_PATH_PREFIX)
         return rest.postForEntity(url, request, SaveFormResponse::class.java).body!!
     }
 
-    fun updateForm(formId: String, request: SaveFormRequest) {
+    fun update(formId: String, request: SaveFormRequest) {
         val url = urlBuilder.build("$FORM_PATH_PREFIX/$formId")
         rest.postForEntity(url, request, Any::class.java)
     }
 
-    fun searchForms(
-        ids: List<String> = emptyList(),
-        active: Boolean? = null,
-        limit: Int = 20,
-        offset: Int = 0,
-        sortBy: FormSortBy? = null,
-        ascending: Boolean = true,
-    ): SearchFormResponse {
-        val url = urlBuilder.build(
-            FORM_PATH_PREFIX,
-            mapOf(
-                "id" to ids,
-                "active" to active,
-                "limit" to limit,
-                "offset" to offset,
-                "sort-by" to sortBy,
-                "asc" to ascending
-            )
-        )
-        return rest.getForEntity(url, SearchFormResponse::class.java).body
-    }
-
-    fun submitData(request: SubmitFormDataRequest): SubmitFormDataResponse {
+    fun submit(request: SubmitFormDataRequest): SubmitFormDataResponse {
         val path = FORM_DATA_PATH_PREFIX
         val url = urlBuilder.build(path)
         return rest.postForEntity(url, request, SubmitFormDataResponse::class.java).body
     }
 
-    fun updateData(formDataId: String, request: UpdateFormDataRequest) {
+    fun submit(formDataId: String, request: UpdateFormDataRequest) {
         val url = urlBuilder.build("$FORM_DATA_PATH_PREFIX/$formDataId")
         rest.postForEntity(url, request, Any::class.java)
     }

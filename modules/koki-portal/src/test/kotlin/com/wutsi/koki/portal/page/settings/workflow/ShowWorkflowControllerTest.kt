@@ -91,13 +91,13 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
         super.setUp()
 
         doReturn(SearchRoleResponse(roles)).whenever(kokiUser)
-            .searchRoles(anyOrNull(), anyOrNull(), anyOrNull())
+            .roles(anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow)
-            .getWorkflow(anyOrNull())
+            .workflow(anyOrNull())
 
         doReturn(SearchFormResponse(listOf(form))).whenever(kokiForms)
-            .searchForms(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .forms(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
     }
 
     @Test
@@ -116,7 +116,7 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
     fun `edit button hidden when workflow has instances`() {
         doReturn(
             GetWorkflowResponse(workflow.copy(workflowInstanceCount = 11))
-        ).whenever(kokiWorkflow).getWorkflow(workflow.id)
+        ).whenever(kokiWorkflow).workflow(workflow.id)
 
         navigateTo("/settings/workflows/${workflow.id}")
         assertCurrentPageIs(PageName.SETTINGS_WORKFLOW)

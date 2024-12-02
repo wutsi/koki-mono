@@ -72,7 +72,7 @@ class ListFileWidgetControllerTest : AbstractPageControllerTest() {
         super.setUp()
 
         doReturn(SearchFileResponse(files)).whenever(kokiFiles)
-            .search(
+            .files(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -81,7 +81,7 @@ class ListFileWidgetControllerTest : AbstractPageControllerTest() {
             )
 
         doReturn(SearchUserResponse(users)).whenever(kokiUser)
-            .searchUsers(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .users(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
     }
 
     @Test
@@ -105,7 +105,7 @@ class ListFileWidgetControllerTest : AbstractPageControllerTest() {
     @Test
     fun empty() {
         doReturn(SearchFileResponse()).whenever(kokiFiles)
-            .search(
+            .files(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),

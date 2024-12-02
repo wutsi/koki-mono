@@ -114,14 +114,14 @@ class FormsWidgetControllerTest : AbstractPageControllerTest() {
     override fun setUp() {
         super.setUp()
 
-        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).getWorkflow(workflow.id)
+        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).workflow(workflow.id)
 
         doReturn(SearchFormResponse(forms)).whenever(kokiForms)
-            .searchForms(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .forms(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(GetWorkflowInstanceResponse(workflowInstance))
             .whenever(kokiWorkflowInstance)
-            .get(workflowInstance.id)
+            .workflow(workflowInstance.id)
     }
 
     @Test
@@ -147,10 +147,10 @@ class FormsWidgetControllerTest : AbstractPageControllerTest() {
         val xworkflow = workflow.copy(
             activities = workflow.activities.map { activity -> activity.copy(formId = null) }
         )
-        doReturn(GetWorkflowResponse(xworkflow)).whenever(kokiWorkflow).getWorkflow(workflow.id)
+        doReturn(GetWorkflowResponse(xworkflow)).whenever(kokiWorkflow).workflow(workflow.id)
 
         doReturn(SearchFormResponse()).whenever(kokiForms)
-            .searchForms(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .forms(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         navigateTo("/workflows/widgets/forms?workflow-instance-id=${workflowInstance.id}")
 

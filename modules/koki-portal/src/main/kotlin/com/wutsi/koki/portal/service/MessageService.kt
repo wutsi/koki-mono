@@ -15,7 +15,7 @@ class MessageService(
     private val mapper: MessageMapper,
 ) {
     fun message(id: String): MessageModel {
-        return mapper.toMessageModel(koki.get(id).message)
+        return mapper.toMessageModel(koki.message(id).message)
     }
 
     fun delete(id: String) {
@@ -53,7 +53,7 @@ class MessageService(
         sortBy: MessageSortBy? = null,
         ascending: Boolean = true
     ): List<MessageModel> {
-        val messages = koki.search(
+        val messages = koki.messages(
             ids = ids,
             names = names,
             active = active,
