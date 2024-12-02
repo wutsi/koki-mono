@@ -121,13 +121,13 @@ class ActivityUserInstanceControllerTest : AbstractPageControllerTest() {
 
         // WHEN
         navigateTo("/workflows/activities/${activityInstance.id}")
-        click(".btn-form")
+        click("a.form")
 
         // THEN
         val tabs = driver.getWindowHandles().toList()
         driver.switchTo().window(tabs[1])
         Thread.sleep(1000)
-        assertCurrentPageIs(PageName.SETTINGS_FORM)
+        assertCurrentPageIs(PageName.FORM)
     }
 
     @Test
@@ -144,7 +144,7 @@ class ActivityUserInstanceControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.WORKFLOW_ACTIVITY)
 
         click(".btn-activity-user-edit-form")
-        assertCurrentPageIs(PageName.SETTINGS_FORM)
+        assertCurrentPageIs(PageName.FORM)
     }
 
     @Test

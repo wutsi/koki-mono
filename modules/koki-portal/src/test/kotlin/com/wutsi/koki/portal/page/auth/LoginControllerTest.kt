@@ -99,7 +99,7 @@ class LoginControllerTest : AbstractPageControllerTest() {
         verify(accessTokenHolder).set(accessTokenArg.capture(), any(), any())
         assertEquals(accessToken, accessTokenArg.firstValue)
 
-        assertCurrentPageIs(PageName.SETTINGS_FORM)
+        assertCurrentPageIs(PageName.FORM)
     }
 
     private fun generateFormHtml(): String {
