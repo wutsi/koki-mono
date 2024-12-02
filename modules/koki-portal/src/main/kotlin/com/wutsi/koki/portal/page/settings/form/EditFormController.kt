@@ -41,7 +41,7 @@ class EditFormController(
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.FORM_EDIT,
+                name = PageName.SETTINGS_FORM_EDIT,
                 title = data.longTitle
             ),
         )
@@ -62,7 +62,7 @@ class EditFormController(
             model.addAttribute(
                 "page",
                 PageModel(
-                    name = PageName.FORM_SAVED,
+                    name = PageName.SETTINGS_FORM_SAVED,
                     title = form.name,
                 ),
             )

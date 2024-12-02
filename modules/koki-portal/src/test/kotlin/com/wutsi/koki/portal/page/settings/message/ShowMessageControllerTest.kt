@@ -41,7 +41,7 @@ class ShowMessageControllerTest : AbstractPageControllerTest() {
     @Test
     fun show() {
         navigateTo("/settings/messages/${message.id}")
-        assertCurrentPageIs(PageName.MESSAGE)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE)
         assertElementNotPresent(".alert-danger")
     }
 
@@ -63,10 +63,10 @@ class ShowMessageControllerTest : AbstractPageControllerTest() {
         driver.switchTo().parentFrame()
 
         verify(kokiMessages).delete(message.id)
-        assertCurrentPageIs(PageName.MESSAGE_DELETED)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE_DELETED)
 
         click(".btn-ok")
-        assertCurrentPageIs(PageName.MESSAGE_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE_LIST)
     }
 
     @Test
@@ -79,7 +79,7 @@ class ShowMessageControllerTest : AbstractPageControllerTest() {
         driver.switchTo().parentFrame()
 
         verify(kokiMessages, never()).delete(any())
-        assertCurrentPageIs(PageName.MESSAGE)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE)
     }
 
     @Test
@@ -93,7 +93,7 @@ class ShowMessageControllerTest : AbstractPageControllerTest() {
         val alert = driver.switchTo().alert()
         alert.accept()
 
-        assertCurrentPageIs(PageName.MESSAGE)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE)
         assertElementPresent(".alert-danger")
     }
 
@@ -102,6 +102,6 @@ class ShowMessageControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/messages/${message.id}")
         click(".btn-edit")
 
-        assertCurrentPageIs(PageName.MESSAGE_EDIT)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE_EDIT)
     }
 }

@@ -105,7 +105,7 @@ class ShowManualActivityInstanceControllerTest : AbstractPageControllerTest() {
         navigateTo("/workflows/instances/activities/${activityInstance.id}")
 
         // THEN
-        assertCurrentPageIs(PageName.ACTIVITY_INSTANCE)
+        assertCurrentPageIs(PageName.ACTIVITY)
 
         click(".btn-activity-manual-complete")
         val alert = driver.switchTo().alert()
@@ -113,7 +113,7 @@ class ShowManualActivityInstanceControllerTest : AbstractPageControllerTest() {
         driver.switchTo().parentFrame()
         verify(kokiWorkflowInstance).complete(activityInstance.id, CompleteActivityInstanceRequest())
 
-        assertCurrentPageIs(PageName.ACTIVITY_INSTANCE_COMPLETED)
+        assertCurrentPageIs(PageName.ACTIVITY_COMPLETED)
 
         click(".btn-ok")
         assertCurrentPageIs(PageName.HOME)
@@ -125,7 +125,7 @@ class ShowManualActivityInstanceControllerTest : AbstractPageControllerTest() {
         navigateTo("/workflows/instances/activities/${activityInstance.id}")
 
         // THEN
-        assertCurrentPageIs(PageName.ACTIVITY_INSTANCE)
+        assertCurrentPageIs(PageName.ACTIVITY)
 
         click(".btn-activity-manual-complete")
         val alert = driver.switchTo().alert()
@@ -133,7 +133,7 @@ class ShowManualActivityInstanceControllerTest : AbstractPageControllerTest() {
 
         verify(kokiWorkflowInstance, never()).complete(any(), any())
 
-        assertCurrentPageIs(PageName.ACTIVITY_INSTANCE)
+        assertCurrentPageIs(PageName.ACTIVITY)
         assertElementNotPresent(".alert-danger")
     }
 
@@ -147,13 +147,13 @@ class ShowManualActivityInstanceControllerTest : AbstractPageControllerTest() {
         navigateTo("/workflows/instances/activities/${activityInstance.id}")
 
         // THEN
-        assertCurrentPageIs(PageName.ACTIVITY_INSTANCE)
+        assertCurrentPageIs(PageName.ACTIVITY)
 
         click(".btn-activity-manual-complete")
         val alert = driver.switchTo().alert()
         alert.accept()
 
-        assertCurrentPageIs(PageName.ACTIVITY_INSTANCE)
+        assertCurrentPageIs(PageName.ACTIVITY)
         assertElementPresent(".alert-danger")
     }
 

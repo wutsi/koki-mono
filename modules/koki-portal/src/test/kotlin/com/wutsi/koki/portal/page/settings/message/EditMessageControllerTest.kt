@@ -44,7 +44,7 @@ class EditMessageControllerTest : AbstractPageControllerTest() {
     @Test
     fun edit() {
         navigateTo("/settings/messages/${message.id}/edit")
-        assertCurrentPageIs(PageName.MESSAGE_EDIT)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE_EDIT)
 
         input("input[name=name]", "M-XXX")
         input("input[name=subject]", "This is the new subject")
@@ -61,10 +61,10 @@ class EditMessageControllerTest : AbstractPageControllerTest() {
         assertEquals("<p>Looks good :-)</p>", request.firstValue.body)
         assertEquals(false, request.firstValue.active)
 
-        assertCurrentPageIs(PageName.MESSAGE_SAVED)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE_SAVED)
 
         click(".btn-ok")
-        assertCurrentPageIs(PageName.MESSAGE_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE_LIST)
     }
 
     @Test
@@ -73,7 +73,7 @@ class EditMessageControllerTest : AbstractPageControllerTest() {
 
         scrollToBottom()
         click(".btn-cancel")
-        assertCurrentPageIs(PageName.MESSAGE_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE_LIST)
     }
 
     @Test
@@ -85,7 +85,7 @@ class EditMessageControllerTest : AbstractPageControllerTest() {
 
         scrollToBottom()
         click("button[type=submit]")
-        assertCurrentPageIs(PageName.MESSAGE_EDIT)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE_EDIT)
         assertElementPresent(".alert-danger")
     }
 

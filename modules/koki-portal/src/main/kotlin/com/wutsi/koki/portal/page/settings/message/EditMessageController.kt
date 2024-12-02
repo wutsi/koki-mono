@@ -37,7 +37,7 @@ class EditMessageController(private val service: MessageService) : AbstractPageC
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.MESSAGE_EDIT,
+                name = PageName.SETTINGS_MESSAGE_EDIT,
                 title = message.name
             ),
         )
@@ -58,7 +58,7 @@ class EditMessageController(private val service: MessageService) : AbstractPageC
             model.addAttribute(
                 "page",
                 PageModel(
-                    name = PageName.MESSAGE_SAVED,
+                    name = PageName.SETTINGS_MESSAGE_SAVED,
                     title = form.name,
                 ),
             )

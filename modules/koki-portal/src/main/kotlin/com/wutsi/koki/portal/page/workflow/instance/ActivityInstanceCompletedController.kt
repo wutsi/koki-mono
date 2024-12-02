@@ -23,7 +23,7 @@ class ActivityInstanceCompletedController(
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.ACTIVITY_INSTANCE_COMPLETED,
+                name = PageName.ACTIVITY_COMPLETED,
                 title = activityInstance.activity.longTitle
             )
         )

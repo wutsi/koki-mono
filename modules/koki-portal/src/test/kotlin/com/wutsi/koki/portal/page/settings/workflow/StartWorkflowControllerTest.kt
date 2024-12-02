@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page.workflow
+package com.wutsi.koki.portal.page.settings.workflow
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
@@ -84,9 +84,9 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
         doReturn(CreateWorkflowInstanceResponse(workflowInstance.id)).whenever(kokiWorkflowInstance).create(any())
         doReturn(StartWorkflowInstanceResponse("yyy")).whenever(kokiWorkflowInstance).start(any())
 
-        navigateTo("/workflows/${workflow.id}/start")
+        navigateTo("/settings/workflows/${workflow.id}/start")
 
-        assertCurrentPageIs(PageName.WORKFLOW_START)
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_START)
         assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
 
         inputAllFieldsAndSubmit()
@@ -104,20 +104,23 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
 
         verify(kokiWorkflowInstance).start(workflowInstance.id)
 
-        assertCurrentPageIs(PageName.WORKFLOW_STARTED)
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_STARTED)
         assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
         assertElementPresent("#started-message")
         assertElementNotPresent("#scheduled-message")
         assertElementNotPresent(".alert-danger")
+
+        click(".btn-ok")
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_LIST)
     }
 
     @Test
     fun cancel() {
-        navigateTo("/workflows/${workflow.id}/start")
+        navigateTo("/settings/workflows/${workflow.id}/start")
         scrollToBottom()
         click(".btn-cancel")
 
-        assertCurrentPageIs(PageName.WORKFLOW)
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW)
     }
 
     @Test
@@ -128,21 +131,21 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
         )
         doThrow(ex).whenever(kokiWorkflowInstance).create(any())
 
-        navigateTo("/workflows/${workflow.id}/start")
+        navigateTo("/settings/workflows/${workflow.id}/start")
         inputAllFieldsAndSubmit()
 
-        assertCurrentPageIs(PageName.WORKFLOW_START)
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_START)
         assertElementPresent(".alert-danger")
     }
 
     @Test
     fun `missing fields`() {
-        navigateTo("/workflows/${workflow.id}/start")
+        navigateTo("/settings/workflows/${workflow.id}/start")
         click("#start-now-0")
         scrollToBottom()
         click("button[type=submit]")
 
-        assertCurrentPageIs(PageName.WORKFLOW_START)
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_START)
         assertElementPresent("[name=title]:user-invalid")
         assertElementPresent("[name=startAt]:user-invalid")
     }
@@ -151,7 +154,7 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
     fun `login required`() {
         setUpAnonymousUser()
 
-        navigateTo("/workflows/${workflow.id}/start")
+        navigateTo("/settings/workflows/${workflow.id}/start")
         assertCurrentPageIs(PageName.LOGIN)
     }
 

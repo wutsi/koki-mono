@@ -25,7 +25,7 @@ class CreateMessageController(private val service: MessageService) : AbstractPag
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.MESSAGE_CREATE,
+                name = PageName.SETTINGS_MESSAGE_CREATE,
                 title = "New Message"
             ),
         )
@@ -44,7 +44,7 @@ class CreateMessageController(private val service: MessageService) : AbstractPag
             model.addAttribute(
                 "page",
                 PageModel(
-                    name = PageName.MESSAGE_SAVED,
+                    name = PageName.SETTINGS_MESSAGE_SAVED,
                     title = form.name,
                 ),
             )

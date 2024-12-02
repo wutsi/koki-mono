@@ -42,7 +42,7 @@ class ShowFormControllerTest : AbstractPageControllerTest() {
     @Test
     fun show() {
         navigateTo("/settings/forms/${form.id}")
-        assertCurrentPageIs(PageName.FORM)
+        assertCurrentPageIs(PageName.SETTINGS_FORM)
         assertElementNotPresent(".alert-danger")
     }
 
@@ -64,10 +64,10 @@ class ShowFormControllerTest : AbstractPageControllerTest() {
         driver.switchTo().parentFrame()
 
         verify(kokiForms).deleteForm(form.id)
-        assertCurrentPageIs(PageName.FORM_DELETED)
+        assertCurrentPageIs(PageName.SETTINGS_FORM_DELETED)
 
         click(".btn-ok")
-        assertCurrentPageIs(PageName.FORM_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_FORM_LIST)
     }
 
     @Test
@@ -80,7 +80,7 @@ class ShowFormControllerTest : AbstractPageControllerTest() {
         driver.switchTo().parentFrame()
 
         verify(kokiForms, never()).deleteForm(any())
-        assertCurrentPageIs(PageName.FORM)
+        assertCurrentPageIs(PageName.SETTINGS_FORM)
     }
 
     @Test
@@ -94,7 +94,7 @@ class ShowFormControllerTest : AbstractPageControllerTest() {
         val alert = driver.switchTo().alert()
         alert.accept()
 
-        assertCurrentPageIs(PageName.FORM)
+        assertCurrentPageIs(PageName.SETTINGS_FORM)
         assertElementPresent(".alert-danger")
     }
 
@@ -103,9 +103,8 @@ class ShowFormControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/forms/${form.id}")
         click(".btn-edit")
 
-        assertCurrentPageIs(PageName.FORM_EDIT)
+        assertCurrentPageIs(PageName.SETTINGS_FORM_EDIT)
     }
-
 
     @Test
     fun preview() {
@@ -123,61 +122,6 @@ class ShowFormControllerTest : AbstractPageControllerTest() {
     }
 
     private fun generateFormHtml(): String {
-        return """
-            <DIV class='form test'>
-                <DIV class='form-header'>
-                  <H1 class='form-title'>Incident Report</H1>
-                </DIV>
-                <DIV class='form-body'>
-                  <DIV class='section'>
-                    <DIV class='section-body'>
-                      <DIV class='section-item'>
-                        <LABEL class='title'><SPAN>Customer Name</SPAN><SPAN class='required'>*</SPAN></LABEL>
-                        <INPUT name='customer_name' required/>
-                      </DIV>
-                      <DIV class='section-item'>
-                        <LABEL class='title'><SPAN>Customer Email</SPAN><SPAN class='required'>*</SPAN></LABEL>
-                        <INPUT name='customer_email' type='email' required/>
-                      </DIV>
-                      <DIV class='section-item'>
-                        <LABEL class='title'><SPAN>Marial Status</SPAN></LABEL>
-                        <DIV class='radio-container' required>
-                          <DIV class='item'>
-                            <INPUT name='marital_status' type='radio' value='M'/>
-                            <LABEL>Married</LABEL>
-                          </DIV>
-                          <DIV class='item'>
-                            <INPUT name='marital_status' type='radio' value='S'/>
-                            <LABEL>Single</LABEL>
-                          </DIV>
-                        </DIV>
-                      </DIV>
-                      <DIV class='section-item'>
-                        <LABEL class='title'><SPAN>Case Type</SPAN><SPAN class='required'>*</SPAN></LABEL>
-                        <DIV class='checkbox-container' required>
-                          <DIV class='item'>
-                            <INPUT name='case_type' type='checkbox' value='T1'/>
-                            <LABEL>T1</LABEL>
-                          </DIV>
-                          <DIV class='item'>
-                            <INPUT name='case_type' type='checkbox' value='T4'/>
-                            <LABEL>T4</LABEL>
-                          </DIV>
-                          <DIV class='item'>
-                            <INPUT name='case_type' type='checkbox' value='IMM'/>
-                            <LABEL>IMM</LABEL>
-                          </DIV>
-                        </DIV>
-                      </DIV>
-                    </DIV>
-                  </DIV>
-                </DIV>
-                <DIV class='form-footer'>
-                  <DIV class='form-button-group'>
-                    <BUTTON type='submit'>Submit</BUTTON>
-                  </DIV>
-                </DIV>
-            </DIV>
-        """.trimIndent()
+        return getResourceAsString("/form-readonly.html")
     }
 }

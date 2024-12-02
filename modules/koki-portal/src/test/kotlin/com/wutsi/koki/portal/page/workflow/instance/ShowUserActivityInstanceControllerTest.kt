@@ -106,15 +106,33 @@ class ShowUserActivityInstanceControllerTest : AbstractPageControllerTest() {
 
         doReturn(GetActivityInstanceResponse(activityInstance)).whenever(kokiWorkflowInstance)
             .activity(activityInstance.id)
+
+        val html = generateFormHtml()
+        doReturn(html).whenever(kokiForms)
+            .getFormHtml(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
     }
 
     @Test
     fun `show activity`() {
         // GIVEN
-        val html = "<div class='form'>HELLO</div>"
-        doReturn(html).whenever(kokiForms)
-            .getFormHtml(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+        val form = Form(id = form.id, name = form.name, title = form.title)
+        doReturn(GetFormResponse(form)).whenever(kokiForms)
+            .getForm(any())
 
+        // WHEN
+        navigateTo("/workflows/instances/activities/${activityInstance.id}")
+        click(".btn-form")
+
+        // THEN
+        val tabs = driver.getWindowHandles().toList()
+        driver.switchTo().window(tabs[1])
+        Thread.sleep(1000)
+        assertCurrentPageIs(PageName.SETTINGS_FORM)
+    }
+
+    @Test
+    fun `open form`() {
+        // GIVEN
         val form = Form(id = form.id, name = form.name, title = form.title)
         doReturn(GetFormResponse(form)).whenever(kokiForms)
             .getForm(any())
@@ -123,10 +141,10 @@ class ShowUserActivityInstanceControllerTest : AbstractPageControllerTest() {
         navigateTo("/workflows/instances/activities/${activityInstance.id}")
 
         // THEN
-        assertCurrentPageIs(PageName.ACTIVITY_INSTANCE)
+        assertCurrentPageIs(PageName.ACTIVITY)
 
         click(".btn-activity-user-edit-form")
-        assertCurrentPageIs(PageName.FORM)
+        assertCurrentPageIs(PageName.SETTINGS_FORM)
     }
 
     @Test
@@ -155,5 +173,9 @@ class ShowUserActivityInstanceControllerTest : AbstractPageControllerTest() {
 
         // THEN
         assertElementNotPresent(".btn-activity-user-edit-form")
+    }
+
+    private fun generateFormHtml(): String {
+        return getResourceAsString("/form-readonly.html")
     }
 }

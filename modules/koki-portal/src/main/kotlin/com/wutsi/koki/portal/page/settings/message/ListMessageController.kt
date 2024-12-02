@@ -18,7 +18,7 @@ class ListMessageController(private val service: MessageService) {
         }
         model.addAttribute(
             "page",
-            PageModel(name = PageName.MESSAGE_LIST, title = "Messages"),
+            PageModel(name = PageName.SETTINGS_MESSAGE_LIST, title = "Messages"),
         )
         return "settings/messages/list"
     }

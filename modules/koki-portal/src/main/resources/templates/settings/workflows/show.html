@@ -8,33 +8,27 @@
 <div th:replace="~{__components/layout :: navbar}"></div>
 
 <div class="container-fluid">
-    <h2>Workflow</h2>
+    <h1>
+        <img align="absmiddle" height="48" src="/image/workflow.png" width="48"/>
+        Workflow: <span th:text="${workflow.longTitle}">NAME</span>
+    </h1>
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/workflow :: workflow-breadcrumb(${workflow})}"></div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12 col-md-8">
             <div class="widget">
                 <div class="widget-body">
-                    <a href="/">Home</a>
-                    &gt;
-                    <a href="/workflows">Workflows</a>
-                    &gt;
-                    <span th:text="${workflow.longTitle}">TITLE</span>
-                </div>
-            </div>
-
-            <div class="widget">
-                <div class="widget-body">
                     <div class="widget-toolbar">
-                        <a class="btn-edit" th:href="${workflow.updateUrl}"
+                        <a class="btn-edit btn btn-secondary" th:href="${workflow.editUrl}"
                            th:if="${workflow.workflowInstanceCount == 0}">Edit</a>
 
-                        <a class="btn-start" th:href="${workflow.startUrl}">Start</a>
+                        <a class="btn-start btn btn-secondary" th:href="${workflow.startUrl}">Start</a>
                     </div>
 
                     <table class="table">
-                        <tr>
-                            <td><b>ID</b></td>
-                            <td th:text="${workflow.id}">ID</td>
-                        </tr>
                         <tr>
                             <td><b>Name</b></td>
                             <td th:text="${workflow.name}">NAME</td>
@@ -89,10 +83,12 @@
                                 </tr>
                                 <tr class="activity" th:each="activity: ${workflow.activities}">
                                     <td>
-                                    <span
-                                        th:replace="~{__components/workflow :: activity-type-icon(${activity.type})}"></span>
+                                        <span
+                                            th:replace="~{__components/workflow :: activity-type-icon(${activity.type})}"></span>
                                     </td>
-                                    <td th:text="${activity.longTitle}">TITLE</td>
+                                    <td>
+                                        <a th:href="${activity.url}" th:text="${activity.longTitle}">TITLE</a>
+                                    </td>
                                     <td>
                                         <span th:if="${activity.role}" th:text="${activity.role.title}">ROLE</span>
                                     </td>

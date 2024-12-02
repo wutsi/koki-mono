@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container">
+    <h1>
+        <img align="absmiddle" height="48" src="/image/workflow.png" width="48"/>
+        Create New Workflow
+    </h1>
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/workflow :: workflow-breadcrumb(null)}"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="form">
+                <form class="form" method="post" th:action="@{/settings/workflows/add-new}" th:object="${form}">
+                    <div class="form-body">
+                        <div class="section">
+                            <div class="section-body">
+                                <div th:replace="~{__components/workflow :: workflow-error(${error})}"></div>
+
+                                <div class="section-item">
+                                    <label class="title">
+                                        <span>Workflow JSON</span>
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="description">Describe the workflow using JSON format</div>
+                                    <textarea name="json" required rows="15" th:field="*{json}"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-footer">
+                        <div class="form-button-group">
+                            <button type="submit">Submit</button>
+                            <a class="btn-cancel" href="/settings/workflows">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

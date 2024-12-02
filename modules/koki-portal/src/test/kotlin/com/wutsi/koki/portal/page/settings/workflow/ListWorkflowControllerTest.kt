@@ -58,7 +58,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
     @Test
     fun list() {
         navigateTo("/settings/workflows")
-        assertCurrentPageIs(PageName.WORKFLOW_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_LIST)
 
         assertElementCount("tr.workflow", workflows.size)
         assertElementNotPresent(".empty")
@@ -80,7 +80,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
             )
 
         navigateTo("/settings/workflows")
-        assertCurrentPageIs(PageName.WORKFLOW_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_LIST)
 
         assertElementNotPresent("tr.workflow")
         assertElementPresent(".empty")
@@ -91,7 +91,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/workflows")
         click(".widget-toolbar .btn-create")
 
-        assertCurrentPageIs(PageName.WORKFLOW_CREATE)
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_CREATE)
     }
 
     @Test
@@ -129,7 +129,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/workflows")
         click("tr.workflow .btn-view")
 
-        assertCurrentPageIs(PageName.WORKFLOW)
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW)
     }
 
     @Test
@@ -167,7 +167,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/workflows")
         click("tr.workflow .btn-edit")
 
-        assertCurrentPageIs(PageName.WORKFLOW_UPDATE)
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_EDIT)
     }
 
     @Test

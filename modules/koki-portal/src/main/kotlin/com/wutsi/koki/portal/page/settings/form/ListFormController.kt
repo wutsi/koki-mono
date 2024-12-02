@@ -18,7 +18,7 @@ class ListFormController(private val service: FormService) {
         }
         model.addAttribute(
             "page",
-            PageModel(name = PageName.FORM_LIST, title = "Forms"),
+            PageModel(name = PageName.SETTINGS_FORM_LIST, title = "Forms"),
         )
         return "settings/forms/list"
     }

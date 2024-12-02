@@ -26,7 +26,6 @@
                     <div class="widget-toolbar">
                         <a class="btn-edit btn btn-secondary"
                            th:href="'/settings/forms/' + ${form.id} + '/edit'">Edit</a>
-                        <a class="btn-preview btn btn-secondary" target="_new" th:href="${form.viewUrl}">Preview</a>
                         <a class="btn-delete btn btn-danger"
                            onclick="return confirm('Are you sure you want to delete the form?')"
                            th:href="'/settings/forms/' + ${form.id} + '/delete'">Delete</a>
@@ -45,7 +44,9 @@
                         </tr>
                         <tr>
                             <td><b>Content</b></td>
-                            <td th:utext="${form.content}">DESCRIPTION</td>
+                            <td>
+                                <a class="btn-preview" target="_new" th:href="${form.viewUrl}">Preview</a>
+                            </td>
                         </tr>
                     </table>
                 </div>

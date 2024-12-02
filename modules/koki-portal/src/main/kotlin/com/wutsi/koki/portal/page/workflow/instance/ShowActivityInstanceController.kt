@@ -24,7 +24,7 @@ class ShowActivityInstanceController(
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.ACTIVITY_INSTANCE,
+                name = PageName.ACTIVITY,
                 title = activityInstance.activity.longTitle
             )
         )

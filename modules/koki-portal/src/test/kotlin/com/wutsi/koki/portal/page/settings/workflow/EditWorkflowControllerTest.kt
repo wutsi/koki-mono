@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page.workflow
+package com.wutsi.koki.portal.page.settings.workflow
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
@@ -13,7 +13,7 @@ import com.wutsi.koki.workflow.dto.Workflow
 import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
-class UpdateWorkflowControllerTest : AbstractPageControllerTest() {
+class EditWorkflowControllerTest : AbstractPageControllerTest() {
     private val workflow = Workflow(
         id = 1L,
         name = "WF-001",
@@ -31,27 +31,26 @@ class UpdateWorkflowControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun update() {
-        navigateTo("/workflows/${workflow.id}/update")
+        navigateTo("/settings/workflows/${workflow.id}/edit")
 
-        assertCurrentPageIs(PageName.WORKFLOW_UPDATE)
-        assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_EDIT)
 
         input("textarea[name=json]", jsonContent())
         scrollToBottom()
         click("button[type=submit]")
 
-        assertCurrentPageIs(PageName.WORKFLOW_UPDATED)
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_SAVED)
         assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
         assertElementNotPresent(".alert-danger")
     }
 
     @Test
     fun cancel() {
-        navigateTo("/workflows/${workflow.id}/update")
+        navigateTo("/settings/workflows/${workflow.id}/edit")
         scrollToBottom()
         click(".btn-cancel")
 
-        assertCurrentPageIs(PageName.WORKFLOW_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_LIST)
     }
 
     @Test
@@ -68,34 +67,34 @@ class UpdateWorkflowControllerTest : AbstractPageControllerTest() {
         )
         doThrow(ex).whenever(kokiWorkflow).importWorkflow(any(), any())
 
-        navigateTo("/workflows/${workflow.id}/update")
+        navigateTo("/settings/workflows/${workflow.id}/edit")
         input("textarea[name=json]", jsonContent())
         scrollToBottom()
         click("button[type=submit]")
 
-        assertCurrentPageIs(PageName.WORKFLOW_UPDATE)
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_EDIT)
         assertElementPresent(".alert-danger")
     }
 
     @Test
     fun `json not valid`() {
-        navigateTo("/workflows/${workflow.id}/update")
+        navigateTo("/settings/workflows/${workflow.id}/edit")
         input("textarea[name=json]", "Invalid content :-)")
         scrollToBottom()
         click("button[type=submit]")
 
-        assertCurrentPageIs(PageName.WORKFLOW_UPDATE)
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_EDIT)
         assertElementPresent(".alert-danger")
     }
 
     @Test
     fun `missing fields`() {
-        navigateTo("/workflows/${workflow.id}/update")
+        navigateTo("/settings/workflows/${workflow.id}/edit")
         input("textarea[name=json]", "")
         scrollToBottom()
         click("button[type=submit]")
 
-        assertCurrentPageIs(PageName.WORKFLOW_UPDATE)
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_EDIT)
         assertElementPresent("[name=json]:user-invalid")
     }
 
@@ -103,7 +102,7 @@ class UpdateWorkflowControllerTest : AbstractPageControllerTest() {
     fun `login required`() {
         setUpAnonymousUser()
 
-        navigateTo("/workflows/${workflow.id}/update")
+        navigateTo("/settings/workflows/${workflow.id}/edit")
         assertCurrentPageIs(PageName.LOGIN)
     }
 

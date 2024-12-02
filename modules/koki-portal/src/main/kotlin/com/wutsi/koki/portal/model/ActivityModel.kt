@@ -19,4 +19,7 @@ data class ActivityModel(
         } else {
             "$name - $title"
         }
+
+    val url: String
+        get() = "/settings/workflows/$workflowId/activities/$id"
 }

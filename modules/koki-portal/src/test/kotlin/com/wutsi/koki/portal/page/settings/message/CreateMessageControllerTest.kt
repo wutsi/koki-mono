@@ -26,7 +26,7 @@ class CreateMessageControllerTest : AbstractPageControllerTest() {
     @Test
     fun create() {
         navigateTo("/settings/messages/create")
-        assertCurrentPageIs(PageName.MESSAGE_CREATE)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE_CREATE)
 
         input("input[name=name]", "M-XXX")
         input("input[name=subject]", "This is the new subject")
@@ -43,10 +43,10 @@ class CreateMessageControllerTest : AbstractPageControllerTest() {
         assertEquals("<p>Looks good :-)</p>", request.firstValue.body)
         assertEquals(false, request.firstValue.active)
 
-        assertCurrentPageIs(PageName.MESSAGE_SAVED)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE_SAVED)
 
         click(".btn-ok")
-        assertCurrentPageIs(PageName.MESSAGE_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE_LIST)
     }
 
     @Test
@@ -55,7 +55,7 @@ class CreateMessageControllerTest : AbstractPageControllerTest() {
 
         scrollToBottom()
         click(".btn-cancel")
-        assertCurrentPageIs(PageName.MESSAGE_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE_LIST)
     }
 
     @Test
@@ -72,7 +72,7 @@ class CreateMessageControllerTest : AbstractPageControllerTest() {
         select("select[name=active]", 1)
         click("button[type=submit]")
 
-        assertCurrentPageIs(PageName.MESSAGE_CREATE)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE_CREATE)
         assertElementPresent(".alert-danger")
     }
 

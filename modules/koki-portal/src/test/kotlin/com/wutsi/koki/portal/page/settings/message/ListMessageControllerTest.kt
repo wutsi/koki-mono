@@ -54,7 +54,7 @@ class ListMessageControllerTest : AbstractPageControllerTest() {
     @Test
     fun list() {
         navigateTo("/settings/messages")
-        assertCurrentPageIs(PageName.MESSAGE_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE_LIST)
 
         assertElementCount("tr.message", messages.size)
         assertElementNotPresent(".empty")
@@ -74,7 +74,7 @@ class ListMessageControllerTest : AbstractPageControllerTest() {
             )
 
         navigateTo("/settings/messages")
-        assertCurrentPageIs(PageName.MESSAGE_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE_LIST)
 
         assertElementNotPresent("tr.message")
         assertElementPresent(".empty")
@@ -100,7 +100,7 @@ class ListMessageControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/settings/messages")
         click("tr.message .btn-view")
-        assertCurrentPageIs(PageName.MESSAGE)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE)
     }
 
     @Test
@@ -115,13 +115,13 @@ class ListMessageControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/settings/messages")
         click("tr.message .btn-edit")
-        assertCurrentPageIs(PageName.MESSAGE_EDIT)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE_EDIT)
     }
 
     @Test
     fun create() {
         navigateTo("/settings/messages")
         click(".btn-create")
-        assertCurrentPageIs(PageName.MESSAGE_CREATE)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE_CREATE)
     }
 }

@@ -26,7 +26,7 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
     @Test
     fun create() {
         navigateTo("/settings/forms/create")
-        assertCurrentPageIs(PageName.FORM_CREATE)
+        assertCurrentPageIs(PageName.SETTINGS_FORM_CREATE)
 
         input("input[name=name]", "M-XXX")
         input("input[name=title]", "This is the new subject")
@@ -61,10 +61,10 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
         assertEquals(2, request.firstValue.content.elements.size)
         assertEquals(false, request.firstValue.active)
 
-        assertCurrentPageIs(PageName.FORM_SAVED)
+        assertCurrentPageIs(PageName.SETTINGS_FORM_SAVED)
 
         click(".btn-ok")
-        assertCurrentPageIs(PageName.FORM_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_FORM_LIST)
     }
 
     @Test
@@ -73,7 +73,7 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
 
         scrollToBottom()
         click(".btn-cancel")
-        assertCurrentPageIs(PageName.FORM_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_FORM_LIST)
     }
 
     @Test
@@ -108,7 +108,7 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
         select("select[name=active]", 1)
         click("button[type=submit]")
 
-        assertCurrentPageIs(PageName.FORM_CREATE)
+        assertCurrentPageIs(PageName.SETTINGS_FORM_CREATE)
         assertElementPresent(".alert-danger")
     }
 

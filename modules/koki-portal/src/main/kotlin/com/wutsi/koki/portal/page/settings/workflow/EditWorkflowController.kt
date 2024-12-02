@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.page.workflow
 import com.fasterxml.jackson.core.JacksonException
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.page.settings.workflow.AbstractSaveWorkflowController
 import com.wutsi.koki.portal.service.WorkflowService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
@@ -14,31 +15,41 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-class UpdateWorkflowController(service: WorkflowService) : AbstractSaveWorkflowController(service) {
+class EditWorkflowController(service: WorkflowService) : AbstractSaveWorkflowController(service) {
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(UpdateWorkflowController::class.java)
+        private val LOGGER = LoggerFactory.getLogger(EditWorkflowController::class.java)
     }
 
-    @GetMapping("/workflows/{id}/update")
+    @GetMapping("/settings/workflows/{id}/edit")
     fun update(
         @PathVariable id: Long,
         model: Model
     ): String {
-        val form = UpdateFormWorkflow(
+        val form = SaveWorkflowForm(
             json = service.json(id)
         )
         return edit(id, form, model)
     }
 
-    @PostMapping("/workflows/{id}/update")
+    @PostMapping("/settings/workflows/{id}/update")
     fun submit(
         @PathVariable id: Long,
-        @ModelAttribute form: UpdateFormWorkflow,
+        @ModelAttribute form: SaveWorkflowForm,
         model: Model
     ): String {
         try {
             service.update(id, form)
-            return "redirect:/workflows/$id/updated"
+
+            val workflow = service.workflow(id)
+            model.addAttribute("workflow", workflow)
+            model.addAttribute(
+                "page",
+                PageModel(
+                    name = PageName.SETTINGS_WORKFLOW_SAVED,
+                    title = workflow.longTitle
+                )
+            )
+            return "settings/workflows/saved"
         } catch (ex: Exception) {
             LOGGER.error("Failed", ex)
 
@@ -52,26 +63,9 @@ class UpdateWorkflowController(service: WorkflowService) : AbstractSaveWorkflowC
         }
     }
 
-    @GetMapping("/workflows/{id}/updated")
-    fun create(
-        @PathVariable id: Long,
-        model: Model,
-    ): String {
-        val workflow = service.workflow(id)
-        model.addAttribute("workflow", workflow)
-        model.addAttribute(
-            "page",
-            PageModel(
-                name = PageName.WORKFLOW_UPDATED,
-                title = workflow.longTitle
-            )
-        )
-        return "workflows/updated"
-    }
-
     fun edit(
         id: Long,
-        form: UpdateFormWorkflow,
+        form: SaveWorkflowForm,
         model: Model
     ): String {
         val workflow = service.workflow(id)
@@ -81,12 +75,10 @@ class UpdateWorkflowController(service: WorkflowService) : AbstractSaveWorkflowC
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.WORKFLOW_UPDATE,
+                name = PageName.SETTINGS_WORKFLOW_EDIT,
                 title = workflow.longTitle,
             )
         )
-        return "workflows/update"
+        return "settings/workflows/edit"
     }
 }
-
-data class UpdateFormWorkflow(val json: String = "")

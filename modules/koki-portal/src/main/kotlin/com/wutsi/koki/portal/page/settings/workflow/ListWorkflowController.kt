@@ -26,7 +26,7 @@ class ListWorkflowController(
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.WORKFLOW_LIST,
+                name = PageName.SETTINGS_WORKFLOW_LIST,
                 title = "Workflows",
             )
         )

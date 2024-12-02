@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page.workflow
+package com.wutsi.koki.portal.page.settings.workflow
 
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.model.UserModel
@@ -15,7 +15,6 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -27,7 +26,7 @@ class StartWorkflowController(
     private val userService: UserService,
     private val request: HttpServletRequest,
 ) : AbstractPageController() {
-    @GetMapping("/workflows/{id}/start")
+    @GetMapping("/settings/workflows/{id}/start")
     fun start(
         @PathVariable id: Long,
         model: Model
@@ -36,7 +35,7 @@ class StartWorkflowController(
         return start(workflow, StartWorkflowForm(), model)
     }
 
-    @PostMapping("/workflows/{id}/start")
+    @PostMapping("/settings/workflows/{id}/start")
     fun submit(
         @PathVariable id: Long,
         model: Model
@@ -45,7 +44,18 @@ class StartWorkflowController(
         val form = toStartWorkflowForm(workflow, request)
         try {
             val workflowInstanceId = workflowInstanceService.create(form)
-            return "redirect:/workflows/{id}/started?workflow-instance-id=$workflowInstanceId"
+            val workflowInstance = workflowInstanceService.workflow(workflowInstanceId)
+            model.addAttribute("workflowInstance", workflowInstance)
+            model.addAttribute("workflow", workflowInstance.workflow)
+            model.addAttribute(
+                "page",
+                PageModel(
+                    name = PageName.SETTINGS_WORKFLOW_STARTED,
+                    title = workflowInstance.workflow.longTitle,
+                )
+            )
+
+            return "settings/workflows/started"
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             val error = errorResponse.error.code
@@ -53,25 +63,6 @@ class StartWorkflowController(
             model.addAttribute("error", error)
             return start(workflow, form, model)
         }
-    }
-
-    @GetMapping("/workflows/{id}/started")
-    fun started(
-        @PathVariable id: String,
-        @RequestParam(name = "workflow-instance-id") workflowInstanceId: String,
-        model: Model,
-    ): String {
-        val workflowInstance = workflowInstanceService.workflow(workflowInstanceId)
-        model.addAttribute("workflowInstance", workflowInstance)
-        model.addAttribute("workflow", workflowInstance.workflow)
-        model.addAttribute(
-            "page",
-            PageModel(
-                name = PageName.WORKFLOW_STARTED,
-                title = workflowInstance.workflow.longTitle,
-            )
-        )
-        return "workflows/started"
     }
 
     private fun start(workflow: WorkflowModel, form: StartWorkflowForm, model: Model): String {
@@ -82,7 +73,7 @@ class StartWorkflowController(
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.WORKFLOW_START,
+                name = PageName.SETTINGS_WORKFLOW_START,
                 title = workflow.longTitle,
             )
         )
@@ -99,7 +90,7 @@ class StartWorkflowController(
         }
         model.addAttribute("userMap", userMap)
 
-        return "workflows/start"
+        return "settings/workflows/start"
     }
 
     private fun toStartWorkflowForm(workflow: WorkflowModel, request: HttpServletRequest): StartWorkflowForm {
@@ -136,14 +127,3 @@ class StartWorkflowController(
         )
     }
 }
-
-data class StartWorkflowForm(
-    val workflowId: Long = -1,
-    val title: String = "",
-    val startNow: Boolean = true,
-    val startAt: Date = Date(),
-    val dueAt: Date? = null,
-    val approverUserId: Long? = null,
-    val parameters: Map<String, String> = emptyMap(),
-    val participants: List<Participant> = emptyList(),
-)

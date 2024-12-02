@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page.workflow
+package com.wutsi.koki.portal.page.settings.workflow
 
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
@@ -14,6 +14,7 @@ import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.GetWorkflowResponse
 import com.wutsi.koki.workflow.dto.Workflow
 import org.junit.jupiter.api.BeforeEach
+import kotlin.collections.map
 import kotlin.test.Test
 
 class ShowWorkflowControllerTest : AbstractPageControllerTest() {
@@ -101,8 +102,8 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun show() {
-        navigateTo("/workflows/${workflow.id}")
-        assertCurrentPageIs(PageName.WORKFLOW)
+        navigateTo("/settings/workflows/${workflow.id}")
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW)
 
         assertElementPresent(".btn-start")
         assertElementPresent(".btn-edit")
@@ -117,8 +118,8 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
             GetWorkflowResponse(workflow.copy(workflowInstanceCount = 11))
         ).whenever(kokiWorkflow).getWorkflow(workflow.id)
 
-        navigateTo("/workflows/${workflow.id}")
-        assertCurrentPageIs(PageName.WORKFLOW)
+        navigateTo("/settings/workflows/${workflow.id}")
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW)
 
         assertElementNotPresent(".btn-edit")
     }
@@ -127,23 +128,31 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
     fun `login required`() {
         setUpAnonymousUser()
 
-        navigateTo("/workflows/${workflow.id}")
+        navigateTo("/settings/workflows/${workflow.id}")
         assertCurrentPageIs(PageName.LOGIN)
     }
 
     @Test
-    fun `show to edit`() {
-        navigateTo("/workflows/${workflow.id}")
+    fun edit() {
+        navigateTo("/settings/workflows/${workflow.id}")
 
         click(".btn-edit")
-        assertCurrentPageIs(PageName.WORKFLOW_UPDATE)
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_EDIT)
     }
 
     @Test
-    fun `show to start`() {
-        navigateTo("/workflows/${workflow.id}")
+    fun start() {
+        navigateTo("/settings/workflows/${workflow.id}")
 
         click(".btn-start")
-        assertCurrentPageIs(PageName.WORKFLOW_START)
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_START)
+    }
+
+    @Test
+    fun activity(){
+        navigateTo("/settings/workflows/${workflow.id}")
+
+        click("tr.activity a")
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_ACTIVITY)
     }
 }

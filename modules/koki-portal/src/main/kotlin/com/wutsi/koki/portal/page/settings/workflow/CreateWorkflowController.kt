@@ -3,13 +3,13 @@ package com.wutsi.koki.portal.page.workflow
 import com.fasterxml.jackson.core.JacksonException
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.page.settings.workflow.AbstractSaveWorkflowController
 import com.wutsi.koki.portal.service.WorkflowService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
 
@@ -19,19 +19,29 @@ class CreateWorkflowController(service: WorkflowService) : AbstractSaveWorkflowC
         private val LOGGER = LoggerFactory.getLogger(CreateWorkflowController::class.java)
     }
 
-    @GetMapping("/workflows/create")
+    @GetMapping("/settings/workflows/create")
     fun create(model: Model): String {
-        return create(CreateWorkflowForm(), model)
+        return create(SaveWorkflowForm(), model)
     }
 
-    @PostMapping("/workflows/create")
-    fun submit(
-        @ModelAttribute form: CreateWorkflowForm,
+    @PostMapping("/settings/workflows/add-new")
+    fun addNew(
+        @ModelAttribute form: SaveWorkflowForm,
         model: Model
     ): String {
         try {
             val id = service.create(form)
-            return "redirect:/workflows/$id/created"
+            val workflow = service.workflow(id)
+            model.addAttribute("workflow", workflow)
+            model.addAttribute(
+                "page",
+                PageModel(
+                    name = PageName.SETTINGS_WORKFLOW_SAVED,
+                    title = workflow.longTitle
+                )
+            )
+
+            return "/settings/workflows/saved"
         } catch (ex: Exception) {
             LOGGER.error("Failed", ex)
 
@@ -45,34 +55,15 @@ class CreateWorkflowController(service: WorkflowService) : AbstractSaveWorkflowC
         }
     }
 
-    @GetMapping("/workflows/{id}/created")
-    fun create(
-        @PathVariable id: Long,
-        model: Model,
-    ): String {
-        val workflow = service.workflow(id)
-        model.addAttribute("workflow", workflow)
-        model.addAttribute(
-            "page",
-            PageModel(
-                name = PageName.WORKFLOW_CREATED,
-                title = workflow.longTitle
-            )
-        )
-        return "workflows/created"
-    }
-
-    private fun create(form: CreateWorkflowForm, model: Model): String {
+    private fun create(form: SaveWorkflowForm, model: Model): String {
         model.addAttribute("form", form)
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.WORKFLOW_CREATE,
+                name = PageName.SETTINGS_WORKFLOW_CREATE,
                 title = "Workflow",
             )
         )
-        return "workflows/create"
+        return "settings/workflows/create"
     }
 }
-
-data class CreateWorkflowForm(val json: String = "")
