@@ -25,8 +25,8 @@ data class ActivityInstanceModel(
         get() = status == WorkflowStatus.RUNNING
 
     val url: String
-        get() = "/workflows/instances/activities/$id"
+        get() = "/workflows/activities/$id"
 
     val completeUrl: String
-        get() = "/workflows/instances/activities/$id/complete"
+        get() = "/workflows/activities/$id/complete"
 }

@@ -149,7 +149,7 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun activity(){
+    fun activity() {
         navigateTo("/settings/workflows/${workflow.id}")
 
         click("tr.activity a")

@@ -8,8 +8,9 @@
 <div th:replace="~{__components/layout :: navbar}"></div>
 
 <div class="container-fluid">
-    <h2>Activity</h2>
-
+    <h1>
+        Task: <span th:text="${activityInstance.activity.longTitle}">TITLE</span>
+    </h1>
     <div class="row">
         <div class="col-12">
             <div th:replace="~{__components/workflow :: activity-instance-breadcrumb(${activityInstance})}"></div>
@@ -21,13 +22,9 @@
                 <div class="widget-body">
                     <div th:replace="~{__components/workflow :: activity-instance-toolbar(${activityInstance})}"></div>
 
-                    <div class="alert alert-danger" th:if="${error}" th:text="${error}">ERROR</div>
+                    <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
                     <table class="table">
-                        <tr>
-                            <td><b>ID</b></td>
-                            <td th:text="${activityInstance.id}">ID</td>
-                        </tr>
                         <tr>
                             <td><b>Name</b></td>
                             <td th:text="${activityInstance.activity.name}">NAME</td>
@@ -46,8 +43,8 @@
                         <tr>
                             <td><b>Type</b></td>
                             <td>
-                                    <span
-                                        th:replace="~{__components/workflow :: activity-type-icon(${activityInstance.activity.type})}"></span>
+                                <span
+                                    th:replace="~{__components/workflow :: activity-type-icon(${activityInstance.activity.type})}"></span>
                                 <span th:text="${activityInstance.activity.type.name()}">TYPE</span>
                             </td>
                         </tr>

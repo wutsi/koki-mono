@@ -28,7 +28,7 @@ import org.junit.jupiter.api.BeforeEach
 import java.util.Date
 import kotlin.test.Test
 
-class ShowUserActivityInstanceControllerTest : AbstractPageControllerTest() {
+class ActivityUserInstanceControllerTest : AbstractPageControllerTest() {
     private val roles = listOf(
         Role(id = 1L, name = "accountant", title = "Accountant"),
         Role(id = 2L, name = "hr", title = "Human Resource"),
@@ -120,7 +120,7 @@ class ShowUserActivityInstanceControllerTest : AbstractPageControllerTest() {
             .getForm(any())
 
         // WHEN
-        navigateTo("/workflows/instances/activities/${activityInstance.id}")
+        navigateTo("/workflows/activities/${activityInstance.id}")
         click(".btn-form")
 
         // THEN
@@ -138,10 +138,10 @@ class ShowUserActivityInstanceControllerTest : AbstractPageControllerTest() {
             .getForm(any())
 
         // WHEN
-        navigateTo("/workflows/instances/activities/${activityInstance.id}")
+        navigateTo("/workflows/activities/${activityInstance.id}")
 
         // THEN
-        assertCurrentPageIs(PageName.ACTIVITY)
+        assertCurrentPageIs(PageName.WORKFLOW_ACTIVITY)
 
         click(".btn-activity-user-edit-form")
         assertCurrentPageIs(PageName.SETTINGS_FORM)
@@ -155,7 +155,7 @@ class ShowUserActivityInstanceControllerTest : AbstractPageControllerTest() {
             .activity(activityInstance.id)
 
         // WHEN
-        navigateTo("/workflows/instances/activities/${activityInstance.id}")
+        navigateTo("/workflows/activities/${activityInstance.id}")
 
         // THEN
         assertElementNotPresent(".btn-activity-user-edit-form")
@@ -169,7 +169,7 @@ class ShowUserActivityInstanceControllerTest : AbstractPageControllerTest() {
             .activity(activityInstance.id)
 
         // WHEN
-        navigateTo("/workflows/instances/activities/${activityInstance.id}")
+        navigateTo("/workflows/activities/${activityInstance.id}")
 
         // THEN
         assertElementNotPresent(".btn-activity-user-edit-form")

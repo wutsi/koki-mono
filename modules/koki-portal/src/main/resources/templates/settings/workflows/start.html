@@ -25,12 +25,12 @@
 
                         <div class="section">
                             <div class="section-body">
+                                <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
-                                <div class="alert alert-danger" th:if="${error}" th:text="${error}">ERROR</div>
                                 <div class="workflow-image border-bottom">
                                     <img th:alt="${workflow.title}" th:src="${workflow.imageUrl}"/>
                                 </div>
-                                
+
                                 <div class="section-item">
                                     <label class="title">
                                         <span>Title</span>

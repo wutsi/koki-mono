@@ -10,23 +10,28 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 
 @Controller
-class ActivityInstanceCompletedController(
-    private val workflowInstanceService: WorkflowInstanceService,
+class WorkflowController(
+    private val service: WorkflowInstanceService
 ) : AbstractPageController() {
-    @GetMapping("/workflows/instances/activities/{id}/completed")
+    @GetMapping("/workflows/{id}")
     fun show(
         @PathVariable id: String,
         model: Model
     ): String {
-        val activityInstance = workflowInstanceService.activity(id)
-        model.addAttribute("activityInstance", activityInstance)
+        val workflowInstance = service.workflow(id)
+        model.addAttribute("workflowInstance", workflowInstance)
+        model.addAttribute(
+            "activityInstances",
+            workflowInstance.activityInstances.map { it.activity.id to it }.toMap()
+        )
+
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.ACTIVITY_COMPLETED,
-                title = activityInstance.activity.longTitle
+                name = PageName.WORKFLOW,
+                title = workflowInstance.workflow.longTitle
             )
         )
-        return "workflows/instances/activity-completed"
+        return "workflows/show"
     }
 }

@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-class ShowActivityInstanceController(
+class ActivityController(
     private val workflowInstanceService: WorkflowInstanceService,
 ) : AbstractPageController() {
-    @GetMapping("/workflows/instances/activities/{id}")
+    @GetMapping("/workflows/activities/{id}")
     fun show(
         @PathVariable id: String,
         model: Model
@@ -24,21 +24,31 @@ class ShowActivityInstanceController(
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.ACTIVITY,
+                name = PageName.WORKFLOW_ACTIVITY,
                 title = activityInstance.activity.longTitle
             )
         )
-        return "workflows/instances/activity"
+        return "workflows/activity"
     }
 
-    @GetMapping("/workflows/instances/activities/{id}/complete")
+    @GetMapping("/workflows/activities/{id}/complete")
     fun complete(
         @PathVariable id: String,
         model: Model
     ): String {
         try {
             workflowInstanceService.completeActivity(id, emptyMap())
-            return "redirect:/workflows/instances/activities/$id/completed"
+
+            val activityInstance = workflowInstanceService.activity(id)
+            model.addAttribute("activityInstance", activityInstance)
+            model.addAttribute(
+                "page",
+                PageModel(
+                    name = PageName.WORKFLOW_ACTIVITY_COMPLETED,
+                    title = activityInstance.activity.longTitle
+                )
+            )
+            return "workflows/activity-completed"
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)

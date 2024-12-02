@@ -8,18 +8,12 @@
 <div th:replace="~{__components/layout :: navbar}"></div>
 
 <div class="container-fluid">
-    <h2>Workflow Instance</h2>
+    <h1>
+        Case: <span th:text="${workflowInstance.title}">TITLE</span>
+    </h1>
     <div class="row">
         <div class="col-12">
-            <div class="widget">
-                <div class="widget-body">
-                    <a href="/">Home</a>
-                    &gt;
-                    <a href="/workflows/instances">Instances</a>
-                    &gt;
-                    <span th:text="${workflowInstance.title}">TITLE</span>
-                </div>
-            </div>
+            <div th:replace="~{__components/workflow :: workflow-instance-breadcrumb(${workflowInstance})}"></div>
         </div>
     </div>
 
@@ -29,11 +23,7 @@
                 <div class="widget-body">
                     <table class="table">
                         <tr>
-                            <td><b>ID</b></td>
-                            <td th:text="${workflowInstance.id}">ID</td>
-                        </tr>
-                        <tr>
-                            <td><b>Title</b></td>
+                            <td width="20%"><b>Title</b></td>
                             <td th:text="${workflowInstance.title}">TITLE</td>
                         </tr>
                         <tr>
@@ -90,11 +80,10 @@
                             <table class="table table-striped">
                                 <tr>
                                     <th width="1%"></th>
-                                    <th>Title</th>
+                                    <th width="50%">Title</th>
                                     <th>Status</th>
                                     <th>Assignee</th>
                                     <th th:if="${workflowInstance.workflow.requiresApprover}">Approval</th>
-                                    <td></td>
                                 </tr>
                                 <tr class="activity"
                                     th:classappend="${activityInstances[activity.id]?.running} ? 'activity-running'"
@@ -125,9 +114,6 @@
                                     <td th:if="${workflowInstance.workflow.requiresApprover}">
                                         <div
                                             th:replace="~{__components/workflow :: approval-status(${activityInstances[activity.id]?.approval})}"></div>
-                                    </td>
-                                    <td>
-
                                     </td>
                                 </tr>
                             </table>
@@ -183,7 +169,7 @@
                         <tr>
                             <td width="30%"><b>Workflow</b></td>
                             <td>
-                                <a th:href="${workflowInstance.workflow.url}"
+                                <a class="workflow" th:href="${workflowInstance.workflow.url}"
                                    th:text="${workflowInstance.workflow.name}">
                                     WORKFLOW
                                 </a>

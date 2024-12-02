@@ -26,7 +26,7 @@ import org.junit.jupiter.api.BeforeEach
 import java.util.Date
 import kotlin.test.Test
 
-class ShowWorkflowInstanceControllerTest : AbstractPageControllerTest() {
+class WorkflowControllerTest : AbstractPageControllerTest() {
     private val roles = listOf(
         Role(id = 1L, name = "accountant", title = "Accountant"),
         Role(id = 2L, name = "hr", title = "Human Resource"),
@@ -154,14 +154,21 @@ class ShowWorkflowInstanceControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun show() {
-        navigateTo("/workflows/instances/${workflowInstance.id}")
+        navigateTo("/workflows/${workflowInstance.id}")
 
-        assertCurrentPageIs(PageName.WORKFLOW_INSTANCE)
+        assertCurrentPageIs(PageName.WORKFLOW)
         assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
         assertElementCount("tr.activity", workflow.activities.size)
 
         Thread.sleep(1000)
         assertElementPresent(".files-widget")
         assertElementPresent(".forms-widget")
+    }
+
+    @Test
+    fun workflow() {
+        navigateTo("/workflows/${workflowInstance.id}")
+        click("a.workflow")
+        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW)
     }
 }

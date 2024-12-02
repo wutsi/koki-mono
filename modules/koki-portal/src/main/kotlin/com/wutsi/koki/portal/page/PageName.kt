@@ -1,9 +1,6 @@
 package com.wutsi.koki.portal.page
 
 object PageName {
-    const val ACTIVITY = "page.activity"
-    const val ACTIVITY_COMPLETED = "page.activity.completed"
-
     const val ERROR = "page.error"
 
     const val FORM = "page.form"
@@ -36,5 +33,7 @@ object PageName {
     const val SETTINGS_WORKFLOW_START = "page.settings.workflow.start"
     const val SETTINGS_WORKFLOW_STARTED = "page.settings.workflow.started"
 
-    const val WORKFLOW_INSTANCE = "page.workflow-instance"
+    const val WORKFLOW = "page.workflow"
+    const val WORKFLOW_ACTIVITY = "page.activity"
+    const val WORKFLOW_ACTIVITY_COMPLETED = "page.activity.completed"
 }

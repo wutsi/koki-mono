@@ -29,7 +29,7 @@ import org.junit.jupiter.api.BeforeEach
 import java.util.Date
 import kotlin.test.Test
 
-class ShowManualActivityInstanceControllerTest : AbstractPageControllerTest() {
+class ActivityManualControllerTest : AbstractPageControllerTest() {
     private val roles = listOf(
         Role(id = 1L, name = "accountant", title = "Accountant"),
         Role(id = 2L, name = "hr", title = "Human Resource"),
@@ -102,10 +102,10 @@ class ShowManualActivityInstanceControllerTest : AbstractPageControllerTest() {
     @Test
     fun `show activity and complete`() {
         // WHEN
-        navigateTo("/workflows/instances/activities/${activityInstance.id}")
+        navigateTo("/workflows/activities/${activityInstance.id}")
 
         // THEN
-        assertCurrentPageIs(PageName.ACTIVITY)
+        assertCurrentPageIs(PageName.WORKFLOW_ACTIVITY)
 
         click(".btn-activity-manual-complete")
         val alert = driver.switchTo().alert()
@@ -113,7 +113,7 @@ class ShowManualActivityInstanceControllerTest : AbstractPageControllerTest() {
         driver.switchTo().parentFrame()
         verify(kokiWorkflowInstance).complete(activityInstance.id, CompleteActivityInstanceRequest())
 
-        assertCurrentPageIs(PageName.ACTIVITY_COMPLETED)
+        assertCurrentPageIs(PageName.WORKFLOW_ACTIVITY_COMPLETED)
 
         click(".btn-ok")
         assertCurrentPageIs(PageName.HOME)
@@ -122,10 +122,10 @@ class ShowManualActivityInstanceControllerTest : AbstractPageControllerTest() {
     @Test
     fun `show activity and do not complete`() {
         // WHEN
-        navigateTo("/workflows/instances/activities/${activityInstance.id}")
+        navigateTo("/workflows/activities/${activityInstance.id}")
 
         // THEN
-        assertCurrentPageIs(PageName.ACTIVITY)
+        assertCurrentPageIs(PageName.WORKFLOW_ACTIVITY)
 
         click(".btn-activity-manual-complete")
         val alert = driver.switchTo().alert()
@@ -133,7 +133,7 @@ class ShowManualActivityInstanceControllerTest : AbstractPageControllerTest() {
 
         verify(kokiWorkflowInstance, never()).complete(any(), any())
 
-        assertCurrentPageIs(PageName.ACTIVITY)
+        assertCurrentPageIs(PageName.WORKFLOW_ACTIVITY)
         assertElementNotPresent(".alert-danger")
     }
 
@@ -144,16 +144,16 @@ class ShowManualActivityInstanceControllerTest : AbstractPageControllerTest() {
         doThrow(ex).whenever(kokiWorkflowInstance).complete(any(), any())
 
         // WHEN
-        navigateTo("/workflows/instances/activities/${activityInstance.id}")
+        navigateTo("/workflows/activities/${activityInstance.id}")
 
         // THEN
-        assertCurrentPageIs(PageName.ACTIVITY)
+        assertCurrentPageIs(PageName.WORKFLOW_ACTIVITY)
 
         click(".btn-activity-manual-complete")
         val alert = driver.switchTo().alert()
         alert.accept()
 
-        assertCurrentPageIs(PageName.ACTIVITY)
+        assertCurrentPageIs(PageName.WORKFLOW_ACTIVITY)
         assertElementPresent(".alert-danger")
     }
 
@@ -165,7 +165,7 @@ class ShowManualActivityInstanceControllerTest : AbstractPageControllerTest() {
             .activity(activityInstance.id)
 
         // WHEN
-        navigateTo("/workflows/instances/activities/${activityInstance.id}")
+        navigateTo("/workflows/activities/${activityInstance.id}")
 
         // THEN
         assertElementNotPresent(".btn-activity-manual-complete")
@@ -179,7 +179,7 @@ class ShowManualActivityInstanceControllerTest : AbstractPageControllerTest() {
             .activity(activityInstance.id)
 
         // WHEN
-        navigateTo("/workflows/instances/activities/${activityInstance.id}")
+        navigateTo("/workflows/activities/${activityInstance.id}")
 
         // THEN
         assertElementNotPresent(".btn-activity-manual-complete")
