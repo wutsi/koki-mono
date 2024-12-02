@@ -1,5 +1,5 @@
 package com.wutsi.koki.form.dto
 
-data class ImportFormResponse(
+data class SaveFormResponse(
     val formId: String = ""
 )
