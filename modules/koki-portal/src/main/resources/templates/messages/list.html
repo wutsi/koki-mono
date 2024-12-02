@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container">
+    <h1>
+        <img align="absmiddle" height="48" src="/image/message.png" width="48"/>
+        Messages
+    </h1>
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/message :: message-breadcrumb(null)}"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div class="widget-toolbar">
+                        <a class="btn-create btn btn-secondary" href="/messages/create">New Message</a>
+                    </div>
+
+                    <table class="table table-striped" th:if="${messages}">
+                        <tr>
+                            <th width="10%">Name</th>
+                            <th width="50%">Subject</th>
+                            <th>Modified</th>
+                            <th>Active</th>
+                            <th></th>
+                        </tr>
+                        <tr class="message" th:each="message : ${messages}">
+                            <td>
+                                <a th:href="${message.url}" th:text="${message.name}">NAME</a>
+                            </td>
+                            <td th:text="${message.subject}">SUBJECT</td>
+                            <td th:text="${message.modifiedAtText}">MODIFIED</td>
+                            <td>
+                                <span th:if="${message.active}">Yes</span>
+                                <span th:if="!${message.active}">No</span>
+                            </td>
+                            <td class="toolbar">
+                                <a class="btn-view" th:href="${message.url}">View</a>
+                                <a class="btn-edit" th:href="${message.editUrl}">Edit</a>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="empty text-center" th:if="!${messages}">
+                        No message!
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

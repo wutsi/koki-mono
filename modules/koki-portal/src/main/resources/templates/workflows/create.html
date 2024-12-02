@@ -8,14 +8,14 @@
 <div th:replace="~{__components/layout :: navbar}"></div>
 
 <div class="container">
+    <h1>
+        <img align="absmiddle" height="48" src="/image/workflow.png" width="48"/>
+        Create New Workflow
+    </h1>
     <div class="row">
-        <div class="col-12 col-md-8 offset-md-2">
+        <div class="col-12">
             <div class="form">
                 <form class="form" method="post" th:action="@{/workflows/create}" th:object="${form}">
-
-                    <div class="form-header">
-                        <h1>New Workflow</h1>
-                    </div>
                     <div class="form-body">
                         <div class="section">
                             <div class="section-body">
@@ -43,12 +43,11 @@
                     <div class="form-footer">
                         <div class="form-button-group">
                             <button type="submit">Submit</button>
+                            <a href="/workflows">Cancel</a>
                         </div>
                     </div>
-
                 </form>
             </div>
-
         </div>
     </div>
 </div>

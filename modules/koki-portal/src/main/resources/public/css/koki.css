@@ -7,6 +7,19 @@ nav {
     background: white;
 }
 
+.flex {
+    display: flex;
+}
+
+.flex-center {
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-space-between {
+    justify-content: space-between;
+}
+
 .text-center {
     text-align: center;
 }

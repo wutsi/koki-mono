@@ -142,6 +142,8 @@ class MyTasksWidgetControllerTest : AbstractPageControllerTest() {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
             )
 
         doReturn(SearchUserResponse(users)).whenever(kokiUser)

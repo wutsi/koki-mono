@@ -37,6 +37,12 @@
                     <span th:text="${user.displayName}">USER</span>
                 </li>
                 <li class="dropdown-divider"></li>
+                <li class="flex dropdown-item">
+                    <a class="dropdown-item" href="/settings">
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
                 <li>
                     <a class="dropdown-item" href="/logout">Logout</a>
                 </li>
@@ -45,9 +51,7 @@
     </ul>
 </nav>
 
-
-<div th:fragment="greetings">
-    <h1 th:if="${user}" th:text="${user.displayName}">HELLO</h1>
+<div class="alert alert-danger margin" th:fragment="error-message(error)" th:if="${error}" th:text="${error}">ERROR
 </div>
 
 </body>

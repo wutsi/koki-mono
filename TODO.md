@@ -4,8 +4,9 @@
 - [x] Simplify tenant configuration API as Name/Value pair
 - [x] Add message API
 - [x] Add support for Send activities with Email
-- [] UI for managing messages
+- [x] UI for managing messages
 - [] UI for configuring SMTP
+- [] UI for managing forms
 - [] Add support for S3 storage
 - [] UI for configuring S3 storage
 - [] Add support for Service activities

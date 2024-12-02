@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="widget" th:fragment="message-breadcrumb(message)">
+    <div class="widget-body">
+        <a href="/">Home</a>
+        &gt;
+        <a href="/settings">Settings</a>
+        &gt;
+        <a href="/messages" th:if="${message}">Messages</a>
+        <span th:if="${message}">&gt;</span>
+        <span th:if="${message}" th:text="${message.name}">TITLE</span>
+        <span th:if="!${message}">Messages</span>
+    </div>
+</div>
+
+</body>

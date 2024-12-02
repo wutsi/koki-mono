@@ -24,6 +24,20 @@
     <span class="status-cancelled" th:if="${status.name == 'CANCELLED'}">Cancelled</span>
 </div>
 
+<div class="widget" th:fragment="workflow-breadcrumb(workflow)">
+    <div class="widget-body">
+        <a href="/">Home</a>
+        &gt;
+        <a href="/settings">Settings</a>
+        &gt;
+        <a href="/workflows" th:if="${workflow}">Workflows</a>
+        <span th:if="${workflow}">&gt;</span>
+        <span th:if="${workflow}" th:text="${workflow.longTitle}">TITLE</span>
+        <span th:if="!${workflow}">Workflows</span>
+    </div>
+</div>
+
+
 <div th:fragment="approval-status(status)" th:if="${status}">
     <i class="fa-solid fa-spinner fa-spin status-pending" th:if="${status.name == 'PENDING'}"></i>
     <span class="status-pending" th:if="${status.name == 'PENDING'}">Pending</span>

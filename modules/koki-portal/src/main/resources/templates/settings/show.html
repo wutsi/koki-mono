@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container">
+    <h1>Settings</h1>
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <table width="100%">
+                    <tr>
+                        <td width="50%">
+                            <div class="padding flex">
+                                <img height="64" src="/image/workflow.png" width="64"/>
+                                <div class="padding-left">
+                                    <h4><a class="btn-workflow" href="/workflows">Workflows</a></h4>
+                                    <p>Manage the processes that power your business</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td width="50%">
+                            <div class="padding flex">
+                                <img height="64" src="/image/message.png" width="64"/>
+                                <div class="padding-left">
+                                    <h4><a class="btn-message" href="/messages">Messages</a></h4>
+                                    <p>Manage your business communication</p>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

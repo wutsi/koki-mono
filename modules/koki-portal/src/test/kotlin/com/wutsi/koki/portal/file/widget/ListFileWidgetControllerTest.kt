@@ -71,7 +71,7 @@ class ListFileWidgetControllerTest : AbstractPageControllerTest() {
     override fun setUp() {
         super.setUp()
 
-        doReturn(SearchFileResponse(files)).whenever(kokiFile)
+        doReturn(SearchFileResponse(files)).whenever(kokiFiles)
             .search(
                 anyOrNull(),
                 anyOrNull(),
@@ -104,7 +104,7 @@ class ListFileWidgetControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun empty() {
-        doReturn(SearchFileResponse()).whenever(kokiFile)
+        doReturn(SearchFileResponse()).whenever(kokiFiles)
             .search(
                 anyOrNull(),
                 anyOrNull(),
