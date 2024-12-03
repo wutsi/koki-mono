@@ -16,6 +16,7 @@ import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiMessages
+import com.wutsi.koki.sdk.KokiTenant
 import com.wutsi.koki.sdk.KokiUser
 import com.wutsi.koki.sdk.KokiWorkflow
 import com.wutsi.koki.sdk.KokiWorkflowInstance
@@ -23,6 +24,7 @@ import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
 import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.Role
+import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
 import com.wutsi.koki.tenant.dto.User
@@ -78,6 +80,9 @@ abstract class AbstractPageControllerTest {
 
     @MockitoBean
     protected lateinit var kokiMessages: KokiMessages
+
+    @MockitoBean
+    protected lateinit var kokiTenant: KokiTenant
 
     @MockitoBean
     protected lateinit var kokiUser: KokiUser
@@ -195,6 +200,8 @@ abstract class AbstractPageControllerTest {
                 anyOrNull(),
                 anyOrNull(),
             )
+
+        doReturn(SearchConfigurationResponse()).whenever(kokiTenant).configurations(anyOrNull(), anyOrNull())
 
         doReturn(SearchWorkflowResponse()).whenever(kokiWorkflow)
             .workflows(

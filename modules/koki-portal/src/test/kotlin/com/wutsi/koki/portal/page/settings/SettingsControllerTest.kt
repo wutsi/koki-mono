@@ -39,4 +39,11 @@ class SettingsControllerTest : AbstractPageControllerTest() {
         click(".btn-workflow")
         assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_LIST)
     }
+
+    @Test
+    fun smtp() {
+        navigateTo("/settings")
+        click(".btn-smtp")
+        assertCurrentPageIs(PageName.SETTINGS_SMTP)
+    }
 }
