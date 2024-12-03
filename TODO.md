@@ -18,3 +18,4 @@
 - [] Add support for Script activities
 - [] Add support for Send activities with Slack
 - [] Add support for Send activities with SMS
+- [] Add tenant healthcheck to validate connectivity with all resources
