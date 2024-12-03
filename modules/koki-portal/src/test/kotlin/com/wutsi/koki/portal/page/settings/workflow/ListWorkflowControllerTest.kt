@@ -42,7 +42,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
         super.setUp()
 
         doReturn(SearchWorkflowResponse(workflows)).whenever(kokiWorkflow)
-            .searchWorkflows(
+            .workflows(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -67,7 +67,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
     @Test
     fun empty() {
         doReturn(SearchWorkflowResponse()).whenever(kokiWorkflow)
-            .searchWorkflows(
+            .workflows(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -124,7 +124,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
             ),
         )
         doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow)
-            .getWorkflow(any())
+            .workflow(any())
 
         navigateTo("/settings/workflows")
         click("tr.workflow .btn-view")
@@ -162,7 +162,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
             ),
         )
         doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow)
-            .getWorkflow(any())
+            .workflow(any())
 
         navigateTo("/settings/workflows")
         click("tr.workflow .btn-edit")

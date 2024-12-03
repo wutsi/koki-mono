@@ -16,6 +16,7 @@ import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiMessages
+import com.wutsi.koki.sdk.KokiTenant
 import com.wutsi.koki.sdk.KokiUser
 import com.wutsi.koki.sdk.KokiWorkflow
 import com.wutsi.koki.sdk.KokiWorkflowInstance
@@ -23,6 +24,7 @@ import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
 import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.Role
+import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
 import com.wutsi.koki.tenant.dto.User
@@ -80,6 +82,9 @@ abstract class AbstractPageControllerTest {
     protected lateinit var kokiMessages: KokiMessages
 
     @MockitoBean
+    protected lateinit var kokiTenant: KokiTenant
+
+    @MockitoBean
     protected lateinit var kokiUser: KokiUser
 
     @MockitoBean
@@ -113,7 +118,7 @@ abstract class AbstractPageControllerTest {
 
     fun setUpLoggedInUser() {
         doReturn(accessToken).whenever(accessTokenHolder).get(any())
-        doReturn(GetUserResponse(user)).whenever(kokiUser).getUser(USER_ID)
+        doReturn(GetUserResponse(user)).whenever(kokiUser).user(USER_ID)
 
         val principal = mock<JWTPrincipal>()
         doReturn(USER_ID).whenever(principal).getUserId()
@@ -162,13 +167,13 @@ abstract class AbstractPageControllerTest {
 
     private fun setupDefaultApiResponses() {
         doReturn(SearchFormResponse()).whenever(kokiForms)
-            .searchForms(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .forms(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(SearchRoleResponse()).whenever(kokiUser)
-            .searchRoles(anyOrNull(), anyOrNull(), anyOrNull())
+            .roles(anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(SearchUserResponse()).whenever(kokiUser)
-            .searchUsers(
+            .users(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -177,7 +182,7 @@ abstract class AbstractPageControllerTest {
             )
 
         doReturn(SearchFileResponse()).whenever(kokiFiles)
-            .search(
+            .files(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -186,7 +191,7 @@ abstract class AbstractPageControllerTest {
             )
 
         doReturn(SearchMessageResponse()).whenever(kokiMessages)
-            .search(
+            .messages(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -196,8 +201,10 @@ abstract class AbstractPageControllerTest {
                 anyOrNull(),
             )
 
+        doReturn(SearchConfigurationResponse()).whenever(kokiTenant).configurations(anyOrNull(), anyOrNull())
+
         doReturn(SearchWorkflowResponse()).whenever(kokiWorkflow)
-            .searchWorkflows(
+            .workflows(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -210,7 +217,7 @@ abstract class AbstractPageControllerTest {
             )
 
         doReturn(SearchActivityResponse()).whenever(kokiWorkflow)
-            .searchActivities(
+            .activities(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -223,7 +230,7 @@ abstract class AbstractPageControllerTest {
             )
 
         doReturn(SearchWorkflowInstanceResponse()).whenever(kokiWorkflowInstance)
-            .searchWorkflows(
+            .workflows(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -237,7 +244,7 @@ abstract class AbstractPageControllerTest {
             )
 
         doReturn(SearchActivityInstanceResponse()).whenever(kokiWorkflowInstance)
-            .searchActivities(
+            .activities(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -251,12 +258,12 @@ abstract class AbstractPageControllerTest {
                 anyOrNull()
             )
 
-        doReturn(workflowPictureUrl).whenever(kokiWorkflow).getWorkflowImageUrl(any())
+        doReturn(workflowPictureUrl).whenever(kokiWorkflow).imageUrl(any())
 
         doReturn(workflowPictureUrl).whenever(kokiWorkflowInstance).imageUrl(any())
 
         val json = getResourceAsString("/workflow-001.json")
-        doReturn(json).whenever(kokiWorkflow).getWorkflowJson(any())
+        doReturn(json).whenever(kokiWorkflow).json(any())
     }
 
     @AfterEach

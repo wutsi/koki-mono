@@ -36,13 +36,13 @@ class FormControllerTest : AbstractPageControllerTest() {
     override fun setUp() {
         super.setUp()
 
-        doReturn(GetFormResponse(form)).whenever(kokiForms).getForm(any())
+        doReturn(GetFormResponse(form)).whenever(kokiForms).form(any())
 
         val html = generateFormHtml("http://localhost:$port/forms/$formId")
         doReturn(html).whenever(kokiForms)
-            .getFormHtml(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
-        doReturn(SubmitFormDataResponse("1111")).whenever(kokiForms).submitData(any())
+        doReturn(SubmitFormDataResponse("1111")).whenever(kokiForms).submit(any())
     }
 
     @Test
@@ -59,7 +59,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         click("button[type=submit]")
 
         val request = argumentCaptor<SubmitFormDataRequest>()
-        verify(kokiForms).submitData(request.capture())
+        verify(kokiForms).submit(request.capture())
 
         assertEquals(formId, request.firstValue.formId)
         assertEquals(null, request.firstValue.activityInstanceId)
@@ -82,7 +82,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         val html =
             generateFormHtml("http://localhost:$port/forms/$formId?workflow-instance-id=111&activity-instance-id=222")
         doReturn(html).whenever(kokiForms)
-            .getFormHtml(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         // WHEN
         navigateTo("/forms/$formId?workflow-instance-id=111&activity-instance-id=222")
@@ -96,7 +96,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         click("button[type=submit]")
 
         val request = argumentCaptor<SubmitFormDataRequest>()
-        verify(kokiForms).submitData(request.capture())
+        verify(kokiForms).submit(request.capture())
 
         assertEquals(formId, request.firstValue.formId)
         assertEquals("222", request.firstValue.activityInstanceId)
@@ -124,7 +124,7 @@ class FormControllerTest : AbstractPageControllerTest() {
             false
         )
         doReturn(html).whenever(kokiForms)
-            .getFormHtml(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         // WHEN
         navigateTo("/forms/$formId")
@@ -150,7 +150,7 @@ class FormControllerTest : AbstractPageControllerTest() {
             true
         )
         doReturn(html).whenever(kokiForms)
-            .getFormHtml(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         // WHEN
         navigateTo("/forms/$formId")
@@ -169,7 +169,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         // GIVEN
         val ex = createHttpClientErrorException(404, ErrorCode.FORM_NOT_FOUND)
         doThrow(ex).whenever(kokiForms)
-            .getFormHtml(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         // WHEN
         navigateTo("/forms/$formId")
@@ -185,7 +185,7 @@ class FormControllerTest : AbstractPageControllerTest() {
 
         val html = generateFormHtml("http://localhost:$port/forms/$formId/$formDataId")
         doReturn(html).whenever(kokiForms)
-            .getFormHtml(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         // WHEN
         navigateTo("/forms/$formId/$formDataId?activity-instance-id=222")
@@ -200,7 +200,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         click("button[type=submit]")
 
         val request = argumentCaptor<UpdateFormDataRequest>()
-        verify(kokiForms).updateData(eq(formDataId), request.capture())
+        verify(kokiForms).submit(eq(formDataId), request.capture())
         assertEquals(null, request.firstValue.activityInstanceId)
 
         val data = request.firstValue.data
@@ -224,10 +224,10 @@ class FormControllerTest : AbstractPageControllerTest() {
 
         val html = generateFormHtml("http://localhost:$port/forms/$formId/$formDataId?activity-instance-id=222")
         doReturn(html).whenever(kokiForms)
-            .getFormHtml(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(html).whenever(kokiForms)
-            .getFormHtml(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         // WHEN
         navigateTo("/forms/$formId/$formDataId?activity-instance-id=222")
@@ -242,7 +242,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         click("button[type=submit]")
 
         val request = argumentCaptor<UpdateFormDataRequest>()
-        verify(kokiForms).updateData(eq(formDataId), request.capture())
+        verify(kokiForms).submit(eq(formDataId), request.capture())
         assertEquals("222", request.firstValue.activityInstanceId)
 
         val data = request.firstValue.data

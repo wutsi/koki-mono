@@ -16,31 +16,12 @@ class KokiMessages(
         private const val PATH_PREFIX = "/v1/messages"
     }
 
-    fun create(request: CreateMessageRequest): CreateMessageResponse {
-        val url = urlBuilder.build(PATH_PREFIX)
-        return rest.postForEntity(url, request, CreateMessageResponse::class.java).body
-    }
-
-    fun update(id: String, request: UpdateMessageRequest) {
-        val url = urlBuilder.build(
-            PATH_PREFIX, mapOf(
-                "id" to id
-            )
-        )
-        rest.postForEntity(url, request, Any::class.java)
-    }
-
-    fun get(id: String): GetMessageResponse {
+    fun message(id: String): GetMessageResponse {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
         return rest.getForEntity(url, GetMessageResponse::class.java).body
     }
 
-    fun delete(id: String) {
-        val url = urlBuilder.build("$PATH_PREFIX/$id")
-        return rest.delete(url)
-    }
-
-    fun search(
+    fun messages(
         ids: List<String>,
         names: List<String>,
         active: Boolean?,
@@ -61,5 +42,24 @@ class KokiMessages(
             )
         )
         return rest.getForEntity(url, SearchMessageResponse::class.java).body
+    }
+
+    fun create(request: CreateMessageRequest): CreateMessageResponse {
+        val url = urlBuilder.build(PATH_PREFIX)
+        return rest.postForEntity(url, request, CreateMessageResponse::class.java).body
+    }
+
+    fun update(id: String, request: UpdateMessageRequest) {
+        val url = urlBuilder.build(
+            PATH_PREFIX, mapOf(
+                "id" to id
+            )
+        )
+        rest.postForEntity(url, request, Any::class.java)
+    }
+
+    fun delete(id: String) {
+        val url = urlBuilder.build("$PATH_PREFIX/$id")
+        return rest.delete(url)
     }
 }

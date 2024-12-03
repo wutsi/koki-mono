@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service
 
 @Service
 class UserService(
+    private val koki: KokiUser,
     private val mapper: UserMapper,
-    private val kokiUser: KokiUser
 ) {
     fun user(id: Long): UserModel {
-        return mapper.toUserModel(kokiUser.getUser(id).user)
+        return mapper.toUserModel(koki.user(id).user)
     }
 
     fun users(
@@ -22,7 +22,7 @@ class UserService(
         limit: Int = 20,
         offset: Int = 0
     ): List<UserModel> {
-        val users = kokiUser.searchUsers(
+        val users = koki.users(
             keyword = keyword,
             ids = ids,
             roleIds = roleIds,
@@ -42,7 +42,7 @@ class UserService(
         limit: Int = 20,
         offset: Int = 0
     ): List<RoleModel> {
-        val roles = kokiUser.searchRoles(
+        val roles = koki.roles(
             ids = ids,
             limit = limit,
             offset = offset

@@ -1,9 +1,37 @@
 package com.wutsi.koki.portal.service
 
-import com.wutsi.koki.sdk.TenantProvider
+import com.wutsi.koki.portal.page.settings.smtp.SMTPForm
+import com.wutsi.koki.sdk.KokiTenant
+import com.wutsi.koki.tenant.dto.ConfigurationName
+import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import org.springframework.stereotype.Service
 
 @Service
-class TenantService : TenantProvider {
-    override fun id(): Long = 1
+class TenantService(private val koki: KokiTenant) {
+    fun configurations(
+        names: List<String> = emptyList(),
+        keyword: String? = null,
+    ): Map<String, String> {
+        return koki.configurations(
+            names = names,
+            keyword = keyword,
+        ).configurations
+            .map { config -> config.name to config.value }
+            .toMap() as Map<String, String>
+    }
+
+    fun save(form: SMTPForm) {
+        koki.save(
+            SaveConfigurationRequest(
+                values = mapOf(
+                    ConfigurationName.SMTP_PORT to form.port.toString(),
+                    ConfigurationName.SMTP_HOST to form.host,
+                    ConfigurationName.SMTP_USERNAME to form.username,
+                    ConfigurationName.SMTP_PASSWORD to form.password,
+                    ConfigurationName.SMTP_FROM_ADDRESS to form.fromAddress,
+                    ConfigurationName.SMTP_FROM_PERSONAL to form.fromPersonal,
+                )
+            )
+        )
+    }
 }

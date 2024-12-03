@@ -96,6 +96,7 @@ input:read-only {
 .section-item input:not([type]),
 .section-item input[type=text],
 .section-item input[type=email],
+.section-item input[type=password],
 .section-item input[type=url],
 .section-item select {
     width: 100%;

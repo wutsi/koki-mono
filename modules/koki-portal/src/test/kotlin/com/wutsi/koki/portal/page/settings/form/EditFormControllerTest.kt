@@ -57,7 +57,7 @@ class EditFormControllerTest : AbstractPageControllerTest() {
     override fun setUp() {
         super.setUp()
 
-        doReturn(GetFormResponse(form)).whenever(kokiForms).getForm(any())
+        doReturn(GetFormResponse(form)).whenever(kokiForms).form(any())
     }
 
     @Test
@@ -91,7 +91,7 @@ class EditFormControllerTest : AbstractPageControllerTest() {
         click("button[type=submit]")
 
         val request = argumentCaptor<SaveFormRequest>()
-        verify(kokiForms).updateForm(eq(form.id), request.capture())
+        verify(kokiForms).update(eq(form.id), request.capture())
 
         assertEquals("M-XXX", request.firstValue.content.name)
         assertEquals("This is the new subject", request.firstValue.content.title)
@@ -116,7 +116,7 @@ class EditFormControllerTest : AbstractPageControllerTest() {
     @Test
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
-        doThrow(ex).whenever(kokiForms).updateForm(any(), any())
+        doThrow(ex).whenever(kokiForms).update(any(), any())
 
         navigateTo("/settings/forms/${form.id}/edit")
 

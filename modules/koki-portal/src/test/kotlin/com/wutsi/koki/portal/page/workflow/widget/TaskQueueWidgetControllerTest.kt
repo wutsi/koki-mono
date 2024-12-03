@@ -107,7 +107,7 @@ class TaskQueueWidgetControllerTest : AbstractPageControllerTest() {
         super.setUp()
 
         doReturn(SearchActivityInstanceResponse(activityInstances)).whenever(kokiWorkflowInstance)
-            .searchActivities(
+            .activities(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -122,7 +122,7 @@ class TaskQueueWidgetControllerTest : AbstractPageControllerTest() {
             )
 
         doReturn(SearchActivityResponse(activities)).whenever(kokiWorkflow)
-            .searchActivities(
+            .activities(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -135,7 +135,7 @@ class TaskQueueWidgetControllerTest : AbstractPageControllerTest() {
             )
 
         doReturn(SearchWorkflowResponse(workflows)).whenever(kokiWorkflow)
-            .searchWorkflows(
+            .workflows(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -148,7 +148,7 @@ class TaskQueueWidgetControllerTest : AbstractPageControllerTest() {
             )
 
         doReturn(SearchWorkflowInstanceResponse(workflowInstances)).whenever(kokiWorkflowInstance)
-            .searchWorkflows(
+            .workflows(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -172,7 +172,7 @@ class TaskQueueWidgetControllerTest : AbstractPageControllerTest() {
         click(".btn-assign")
 
         val request = argumentCaptor<SetActivityInstanceAssigneeRequest>()
-        verify(kokiWorkflowInstance).setAssignee(request.capture())
+        verify(kokiWorkflowInstance).assignee(request.capture())
         assertEquals(USER_ID, request.firstValue.userId)
         assertEquals(listOf(activityInstances[0].id), request.firstValue.activityInstanceIds)
     }
@@ -180,7 +180,7 @@ class TaskQueueWidgetControllerTest : AbstractPageControllerTest() {
     @Test
     fun `no unassigned activity instance`() {
         doReturn(SearchActivityInstanceResponse()).whenever(kokiWorkflowInstance)
-            .searchActivities(
+            .activities(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -201,7 +201,7 @@ class TaskQueueWidgetControllerTest : AbstractPageControllerTest() {
     @Test
     fun `no activity associated with my role`() {
         doReturn(SearchActivityResponse()).whenever(kokiWorkflow)
-            .searchActivities(
+            .activities(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),

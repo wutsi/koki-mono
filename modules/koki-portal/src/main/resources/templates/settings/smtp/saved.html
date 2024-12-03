@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8 offset-md-2">
+            <h1>
+                <img align="absmiddle" height="48" src="/image/smtp.jpg" width="48"/>
+                Mail Server
+            </h1>
+            <div class="widget">
+                <div class="widget-body">
+                    <a href="/">Home</a>
+                    &gt;
+                    <a href="/settings">Settings</a>
+                    &gt;
+                    Mail Server
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-8 offset-md-2">
+            <div class="widget">
+                <div class="widget-body">
+                    <div class="alert alert-success">Your Mail Server configuration has been saved</div>
+                    <div class="text-center">
+                        <a class="btn btn-secondary btn-ok" href="/settings">Back to Settings</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

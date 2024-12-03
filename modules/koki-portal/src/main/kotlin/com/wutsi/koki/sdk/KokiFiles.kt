@@ -19,12 +19,12 @@ class KokiFiles(
         return rest.postForEntity(url, request, CreateFileResponse::class.java).body
     }
 
-    fun get(id: String): GetFileResponse {
+    fun file(id: String): GetFileResponse {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
         return rest.getForEntity(url, GetFileResponse::class.java).body
     }
 
-    fun search(
+    fun files(
         ids: List<String>,
         workflowInstanceIds: List<String>,
         formIds: List<String>,

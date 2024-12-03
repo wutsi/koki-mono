@@ -20,7 +20,7 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
     override fun setUp() {
         super.setUp()
 
-        doReturn(SaveFormResponse("1111")).whenever(kokiForms).createForm(any())
+        doReturn(SaveFormResponse("1111")).whenever(kokiForms).create(any())
     }
 
     @Test
@@ -54,7 +54,7 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
         click("button[type=submit]")
 
         val request = argumentCaptor<SaveFormRequest>()
-        verify(kokiForms).createForm(request.capture())
+        verify(kokiForms).create(request.capture())
 
         assertEquals("M-XXX", request.firstValue.content.name)
         assertEquals("This is the new subject", request.firstValue.content.title)
@@ -79,7 +79,7 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
     @Test
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
-        doThrow(ex).whenever(kokiForms).createForm(any())
+        doThrow(ex).whenever(kokiForms).create(any())
 
         navigateTo("/settings/forms/create")
 

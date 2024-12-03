@@ -51,7 +51,7 @@ class TaskQueueWidgetController(
     fun assign(@RequestParam(name = "activity-instance-id") activityInstanceId: String): String {
         val userId = currentUserHolder.id()
         if (userId != null) {
-            workflowInstanceService.setAssignee(activityInstanceId, userId)
+            workflowInstanceService.assignee(activityInstanceId, userId)
         }
         return "redirect:/"
     }

@@ -17,7 +17,7 @@ class FormController(
     private val service: FormService,
 ) : AbstractPageController() {
     @GetMapping("/forms/{form-id}")
-    fun new(
+    fun show(
         @PathVariable(name = "form-id") formId: String,
         @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
         @RequestParam(required = false, name = "activity-instance-id") activityInstanceId: String? = null,
@@ -98,9 +98,9 @@ class FormController(
             }
             .toMap() as Map<String, Any>
         if (formDataId != null) {
-            service.updateData(formDataId, activityInstanceId, data)
+            service.submit(formDataId, activityInstanceId, data)
         } else {
-            service.submitData(formId, workflowInstanceId, activityInstanceId, data)
+            service.submit(formId, workflowInstanceId, activityInstanceId, data)
         }
         return "redirect:/forms/$formId/submitted"
     }

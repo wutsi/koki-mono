@@ -10,6 +10,10 @@ import com.wutsi.koki.form.dto.FormContent
 import com.wutsi.koki.form.dto.FormSummary
 import com.wutsi.koki.form.dto.GetFormResponse
 import com.wutsi.koki.form.dto.SearchFormResponse
+import com.wutsi.koki.message.dto.GetMessageResponse
+import com.wutsi.koki.message.dto.Message
+import com.wutsi.koki.message.dto.MessageSummary
+import com.wutsi.koki.message.dto.SearchMessageResponse
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.tenant.dto.Role
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
@@ -28,10 +32,20 @@ class ShowActivityControllerTest : AbstractPageControllerTest() {
         Role(id = 3L, name = "client", title = "Client"),
     )
 
-    private val form = FormSummary(
-        id = "ef00493-403911",
-        name = "FMR-001",
-        title = "Incident Form",
+    val form = Form(
+        id = "1",
+        name = "M-001",
+        title = "Form #1",
+        active = true,
+        content = FormContent(),
+    )
+
+    val message = Message(
+        id = "11",
+        name = "M-001",
+        subject = "Message #1",
+        active = true,
+        body = "Yo Man",
     )
 
     private val workflow = Workflow(
@@ -61,6 +75,7 @@ class ShowActivityControllerTest : AbstractPageControllerTest() {
                 active = true,
                 requiresApproval = true,
                 formId = form.id,
+                messageId = message.id,
             ),
             Activity(
                 id = 13L,
@@ -72,6 +87,7 @@ class ShowActivityControllerTest : AbstractPageControllerTest() {
                 active = true,
                 requiresApproval = true,
                 formId = form.id,
+                messageId = message.id,
             ),
             Activity(
                 id = 13L,
@@ -95,13 +111,39 @@ class ShowActivityControllerTest : AbstractPageControllerTest() {
         super.setUp()
 
         doReturn(SearchRoleResponse(roles)).whenever(kokiUser)
-            .searchRoles(anyOrNull(), anyOrNull(), anyOrNull())
+            .roles(anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow)
-            .getWorkflow(anyOrNull())
+            .workflow(anyOrNull())
 
-        doReturn(SearchFormResponse(listOf(form))).whenever(kokiForms)
-            .searchForms(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+        doReturn(GetFormResponse(form)).whenever(kokiForms).form(any())
+        doReturn(
+            SearchFormResponse(
+                listOf(FormSummary(id = form.id, name = form.name, title = form.title))
+            )
+        ).whenever(kokiForms).forms(
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+        )
+
+        doReturn(GetMessageResponse(message)).whenever(kokiMessages).message(any())
+        doReturn(
+            SearchMessageResponse(
+                listOf(MessageSummary(id = message.id, name = message.name))
+            )
+        ).whenever(kokiMessages).messages(
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+        )
     }
 
     @Test
@@ -112,18 +154,9 @@ class ShowActivityControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun form() {
-        val form = Form(
-            id = "1",
-            name = "M-001",
-            title = "Message #1",
-            active = true,
-            content = FormContent(),
-        )
-        doReturn(GetFormResponse(form)).whenever(kokiForms).getForm(any())
-
         val html = generateFormHtml()
         doReturn(html).whenever(kokiForms)
-            .getFormHtml(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         navigateTo("/settings/workflows/${workflow.id}/activities/${workflow.activities[1].id}")
         click("a.form")
@@ -132,6 +165,17 @@ class ShowActivityControllerTest : AbstractPageControllerTest() {
         driver.switchTo().window(tabs[1])
         Thread.sleep(1000)
         assertCurrentPageIs(PageName.FORM)
+    }
+
+    @Test
+    fun message() {
+        navigateTo("/settings/workflows/${workflow.id}/activities/${workflow.activities[1].id}")
+        click("a.message")
+
+        val tabs = driver.getWindowHandles().toList()
+        driver.switchTo().window(tabs[1])
+        Thread.sleep(1000)
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE)
     }
 
     private fun generateFormHtml(): String {

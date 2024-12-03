@@ -14,14 +14,14 @@ class KokiUser(
         private const val ROLE_PATH_PREFIX = "/v1/roles"
     }
 
-    fun getUser(id: Long): GetUserResponse {
+    fun user(id: Long): GetUserResponse {
         val url = urlBuilder.build(
             "$USER_PATH_PREFIX/$id"
         )
         return rest.getForEntity(url, GetUserResponse::class.java).body!!
     }
 
-    fun searchUsers(
+    fun users(
         keyword: String? = null,
         ids: List<Long> = emptyList(),
         roleIds: List<Long> = emptyList(),
@@ -41,7 +41,7 @@ class KokiUser(
         return rest.getForEntity(url, SearchUserResponse::class.java).body!!
     }
 
-    fun searchRoles(
+    fun roles(
         ids: List<Long> = emptyList(),
         limit: Int = 20,
         offset: Int = 0

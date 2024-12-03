@@ -37,7 +37,7 @@ class ActivityController(
         model: Model
     ): String {
         try {
-            workflowInstanceService.completeActivity(id, emptyMap())
+            workflowInstanceService.complete(id, emptyMap())
 
             val activityInstance = workflowInstanceService.activity(id)
             model.addAttribute("activityInstance", activityInstance)

@@ -6,7 +6,7 @@
 - [x] Add support for Send activities with Email
 - [x] UI for managing messages
 - [x] UI for managing forms
-- [] UI for configuring SMTP
+- [x] UI for configuring SMTP
 - [] Add support for S3 storage
 - [] UI for configuring S3 storage
 - [] Add support for Service activities
@@ -18,3 +18,4 @@
 - [] Add support for Script activities
 - [] Add support for Send activities with Slack
 - [] Add support for Send activities with SMS
+- [] Add tenant healthcheck to validate connectivity with all resources

@@ -67,10 +67,10 @@ class MyCasesWidgetControllerTest : AbstractPageControllerTest() {
         super.setUp()
 
         doReturn(SearchUserResponse(users)).whenever(kokiUser)
-            .searchUsers(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .users(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(SearchWorkflowResponse(workflows)).whenever(kokiWorkflow)
-            .searchWorkflows(
+            .workflows(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -83,7 +83,7 @@ class MyCasesWidgetControllerTest : AbstractPageControllerTest() {
             )
 
         doReturn(SearchWorkflowInstanceResponse(workflowInstances)).whenever(kokiWorkflowInstance)
-            .searchWorkflows(
+            .workflows(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -108,7 +108,7 @@ class MyCasesWidgetControllerTest : AbstractPageControllerTest() {
     @Test
     fun empty() {
         doReturn(SearchWorkflowInstanceResponse()).whenever(kokiWorkflowInstance)
-            .searchWorkflows(
+            .workflows(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),

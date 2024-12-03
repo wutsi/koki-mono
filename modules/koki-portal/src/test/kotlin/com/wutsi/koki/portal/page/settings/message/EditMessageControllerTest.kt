@@ -38,7 +38,7 @@ class EditMessageControllerTest : AbstractPageControllerTest() {
     override fun setUp() {
         super.setUp()
 
-        doReturn(GetMessageResponse(message)).whenever(kokiMessages).get(any())
+        doReturn(GetMessageResponse(message)).whenever(kokiMessages).message(any())
     }
 
     @Test

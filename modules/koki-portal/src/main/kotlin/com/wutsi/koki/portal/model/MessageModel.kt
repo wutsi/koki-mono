@@ -12,4 +12,7 @@ data class MessageModel(
     val modifiedAt: Date = Date(),
     val createdAtText: String = "",
     val modifiedAtText: String = "",
-)
+) {
+    val url: String
+        get() = "/settings/messages/$id"
+}

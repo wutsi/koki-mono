@@ -46,7 +46,14 @@
                             <td><b>Form</b></td>
                             <td>
                                 <a class="form" target="_new" th:href="${activity.form.viewUrl}"
-                                   th:text="${activity.longTitle}">FORM</a>
+                                   th:text="${activity.form.longTitle}">FORM</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${activity.message}">
+                            <td><b>Message</b></td>
+                            <td>
+                                <a class="message" target="_new" th:href="${activity.message.url}"
+                                   th:text="${activity.message.name}">NAME</a>
                             </td>
                         </tr>
                         <tr th:if="!${activity.description.isEmpty()}">

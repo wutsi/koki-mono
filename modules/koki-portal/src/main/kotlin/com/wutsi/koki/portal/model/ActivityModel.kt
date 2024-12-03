@@ -12,6 +12,7 @@ data class ActivityModel(
     val requiresApproval: Boolean = false,
     val role: RoleModel? = null,
     val form: FormModel? = null,
+    val message: MessageModel? = null,
 ) {
     val longTitle: String
         get() = if (title.isEmpty()) {
@@ -22,4 +23,8 @@ data class ActivityModel(
 
     val url: String
         get() = "/settings/workflows/$workflowId/activities/$id"
+
+    val requiresUserInput: Boolean
+        get() = (type == ActivityType.USER) ||
+            (type == ActivityType.MANUAL)
 }

@@ -5,10 +5,10 @@ import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
-import com.wutsi.koki.form.dto.Form
-import com.wutsi.koki.form.dto.FormSummary
-import com.wutsi.koki.form.dto.GetFormResponse
-import com.wutsi.koki.form.dto.SearchFormResponse
+import com.wutsi.koki.message.dto.GetMessageResponse
+import com.wutsi.koki.message.dto.Message
+import com.wutsi.koki.message.dto.MessageSummary
+import com.wutsi.koki.message.dto.SearchMessageResponse
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.tenant.dto.Role
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
@@ -28,7 +28,7 @@ import org.junit.jupiter.api.BeforeEach
 import java.util.Date
 import kotlin.test.Test
 
-class ActivityUserInstanceControllerTest : AbstractPageControllerTest() {
+class ActivitySendInstanceControllerTest : AbstractPageControllerTest() {
     private val roles = listOf(
         Role(id = 1L, name = "accountant", title = "Accountant"),
         Role(id = 2L, name = "hr", title = "Human Resource"),
@@ -48,24 +48,25 @@ class ActivityUserInstanceControllerTest : AbstractPageControllerTest() {
         requiresApprover = true,
     )
 
-    private val form = Form(
-        id = "FMR-001",
-        name = "FMR-001",
-        title = "Incident Form",
+    private val message = Message(
+        id = "M-001",
+        name = "M-001",
+        subject = "Incident Form",
+        body = "<p>Yo</p>"
     )
 
     private val activityInstance = ActivityInstance(
         id = "222",
         activity = Activity(
             id = 12L,
-            type = ActivityType.USER,
+            type = ActivityType.SEND,
             name = "INPUT",
             title = "Input Data",
             description = "User input information about the case",
             roleId = roles[0].id,
             active = true,
             requiresApproval = true,
-            formId = form.id,
+            messageId = message.id,
         ),
         workflowInstance = WorkflowInstanceSummary(
             id = "4304390-43094039",
@@ -101,74 +102,36 @@ class ActivityUserInstanceControllerTest : AbstractPageControllerTest() {
         doReturn(SearchUserResponse(users)).whenever(kokiUser)
             .users(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
-        doReturn(GetFormResponse(form)).whenever(kokiForms).form(any())
+        doReturn(GetMessageResponse(message)).whenever(kokiMessages).message(any())
         doReturn(
-            SearchFormResponse(listOf(FormSummary(id = form.id, name = form.name, title = form.title)))
-        ).whenever(kokiForms)
-            .forms(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            SearchMessageResponse(
+                listOf(MessageSummary(id = message.id, name = message.name))
+            )
+        ).whenever(kokiMessages)
+            .messages(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(GetActivityInstanceResponse(activityInstance)).whenever(kokiWorkflowInstance)
             .activity(activityInstance.id)
-
-        val html = generateFormHtml()
-        doReturn(html).whenever(kokiForms)
-            .html(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
     }
 
     @Test
-    fun `edit form`() {
-        // WHEN
+    fun show() {
         navigateTo("/workflows/activities/${activityInstance.id}")
 
-        // THEN
         assertCurrentPageIs(PageName.WORKFLOW_ACTIVITY)
-
-        click(".btn-activity-user-edit-form")
-        assertCurrentPageIs(PageName.FORM)
-    }
-
-    @Test
-    fun `toolbar not available when activity not running`() {
-        // GIVEN
-        val instance = activityInstance.copy(status = WorkflowStatus.NEW)
-        doReturn(GetActivityInstanceResponse(instance)).whenever(kokiWorkflowInstance)
-            .activity(activityInstance.id)
-
-        // WHEN
-        navigateTo("/workflows/activities/${activityInstance.id}")
-
-        // THEN
-        assertElementNotPresent(".btn-activity-user-edit-form")
-    }
-
-    @Test
-    fun `toolbar not available for another assignee`() {
-        // GIVEN
-        val instance = activityInstance.copy(assigneeUserId = 55L)
-        doReturn(GetActivityInstanceResponse(instance)).whenever(kokiWorkflowInstance)
-            .activity(activityInstance.id)
-
-        // WHEN
-        navigateTo("/workflows/activities/${activityInstance.id}")
-
-        // THEN
         assertElementNotPresent(".widget-toolbar")
     }
 
     @Test
-    fun `preview form`() {
+    fun `preview message`() {
         // WHEN
         navigateTo("/workflows/activities/${activityInstance.id}")
-        click("a.form")
+        click("a.message")
 
         // THEN
         val tabs = driver.getWindowHandles().toList()
         driver.switchTo().window(tabs[1])
         Thread.sleep(1000)
-        assertCurrentPageIs(PageName.FORM)
-    }
-
-    private fun generateFormHtml(): String {
-        return getResourceAsString("/form-readonly.html")
+        assertCurrentPageIs(PageName.SETTINGS_MESSAGE)
     }
 }

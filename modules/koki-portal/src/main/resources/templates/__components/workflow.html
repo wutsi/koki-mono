@@ -72,8 +72,8 @@
     <span class="status-rejected" th:if="${status.name == 'REJECTED'}">Rejected</span>
 </div>
 
-<div class="widget-toolbar" id="activity-toolbar-widget" th:fragment="activity-instance-toolbar(activityInstance)"
-     th:if="${activityInstance.running} AND ${user} AND ${activityInstance.assignee?.id == user?.id}">
+<div class="widget-toolbar" th:fragment="activity-instance-toolbar(activityInstance)"
+     th:if="${activityInstance.activity.requiresUserInput} AND ${activityInstance.running} AND ${user} AND ${activityInstance.assignee?.id == user?.id}">
 
     <a class="btn btn-secondary btn-activity-user-edit-form"
        th:href="${activityInstance.activity.form.editUrl}"

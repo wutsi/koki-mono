@@ -6,7 +6,6 @@ import com.wutsi.koki.portal.model.ActivityInstanceModel
 import com.wutsi.koki.portal.model.RoleModel
 import com.wutsi.koki.portal.model.WorkflowInstanceModel
 import com.wutsi.koki.portal.page.settings.workflow.StartWorkflowForm
-import com.wutsi.koki.sdk.KokiWorkflow
 import com.wutsi.koki.sdk.KokiWorkflowInstance
 import com.wutsi.koki.workflow.dto.Activity
 import com.wutsi.koki.workflow.dto.ApprovalStatus
@@ -20,18 +19,18 @@ import kotlin.collections.flatMap
 
 @Service
 class WorkflowInstanceService(
-    private val kokiWorkflow: KokiWorkflow,
-    private val kokiWorkflowInstance: KokiWorkflowInstance,
-    private val workflowMapper: WorkflowMapper,
+    private val koki: KokiWorkflowInstance,
     private val workflowInstanceMapper: WorkflowInstanceMapper,
+    private val workflowMapper: WorkflowMapper,
     private val workflowService: WorkflowService,
     private val userService: UserService,
     private val formService: FormService,
+    private val messageService: MessageService,
     private val currentUserHolder: CurrentUserHolder,
 ) {
     fun create(form: StartWorkflowForm): String {
         // Create the instance
-        val workflowInstanceId = kokiWorkflowInstance.create(
+        val workflowInstanceId = koki.create(
             CreateWorkflowInstanceRequest(
                 workflowId = form.workflowId,
                 title = form.title,
@@ -45,14 +44,14 @@ class WorkflowInstanceService(
 
         // Start Now
         if (form.startNow) {
-            kokiWorkflowInstance.start(workflowInstanceId)
+            koki.start(workflowInstanceId)
         }
 
         return workflowInstanceId
     }
 
     fun workflow(id: String): WorkflowInstanceModel {
-        val workflowInstance = kokiWorkflowInstance.get(id).workflowInstance
+        val workflowInstance = koki.workflow(id).workflowInstance
         val workflow = workflowService.workflow(workflowInstance.workflowId)
 
         val userIds = mutableSetOf<Long>()
@@ -74,7 +73,7 @@ class WorkflowInstanceService(
         return workflowInstanceMapper.toWorkflowInstanceModel(
             entity = workflowInstance,
             workflow = workflow,
-            imageUrl = kokiWorkflowInstance.imageUrl(id),
+            imageUrl = koki.imageUrl(id),
             users = userMap,
             roles = roleMap
         )
@@ -92,7 +91,7 @@ class WorkflowInstanceService(
         limit: Int = 20,
         offset: Int = 0,
     ): List<WorkflowInstanceModel> {
-        val workflowInstances = kokiWorkflowInstance.searchWorkflows(
+        val workflowInstances = koki.workflows(
             ids = ids,
             workflowIds = workflowIds,
             participantUserIds = participantUserIds,
@@ -130,7 +129,7 @@ class WorkflowInstanceService(
         return workflowInstances.map { workflowInstance ->
             workflowInstanceMapper.toWorkflowInstanceModel(
                 entity = workflowInstance,
-                imageUrl = kokiWorkflowInstance.imageUrl(workflowInstance.id),
+                imageUrl = koki.imageUrl(workflowInstance.id),
                 users = userMap,
                 workflow = workflowMap[workflowInstance.workflowId]!!,
             )
@@ -138,7 +137,7 @@ class WorkflowInstanceService(
     }
 
     fun activity(id: String): ActivityInstanceModel {
-        val activityInstance = kokiWorkflowInstance.activity(id).activityInstance
+        val activityInstance = koki.activity(id).activityInstance
         val activity: Activity = activityInstance.activity
 
         val userIds = listOf(activityInstance.assigneeUserId, activityInstance.approverUserId)
@@ -155,19 +154,19 @@ class WorkflowInstanceService(
 
         val role: RoleModel? = activity.roleId?.let { roleId -> userService.role(roleId) }
         val form = activity.formId?.let { id ->
-            formService.forms(
-                ids = listOf(id),
-                limit = 1,
+            formService.form(
+                id = id,
                 workflowInstanceId = activityInstance.workflowInstance.id,
                 activityInstanceId = activityInstance.id,
-            ).firstOrNull()
+            )
         }
+        val message = activity.messageId?.let { id -> messageService.message(id = id) }
 
         val workflow = workflowService.workflows(ids = listOf(activity.workflowId), limit = 1).first()
         val workflowInstance = workflowInstanceMapper.toWorkflowInstanceModel(
             entity = activityInstance.workflowInstance,
             workflow = workflow,
-            imageUrl = kokiWorkflowInstance.imageUrl(id),
+            imageUrl = koki.imageUrl(id),
             users = userMap,
         )
 
@@ -180,6 +179,7 @@ class WorkflowInstanceService(
                 entity = activity,
                 role = role,
                 form = form,
+                message = message,
             ),
         )
     }
@@ -200,7 +200,7 @@ class WorkflowInstanceService(
         currentUserHolder.get() ?: return emptyList()
 
         // Activity Instances
-        val activityInstances = kokiWorkflowInstance.searchActivities(
+        val activityInstances = koki.activities(
             ids = ids,
             activityIds = activityIds,
             workflowInstanceIds = workflowInstanceIds,
@@ -233,12 +233,10 @@ class WorkflowInstanceService(
         // Activities
         val activityIds = activityInstances.map { activityInstance -> activityInstance.activityId }
             .toSet()
-        val activityMap = kokiWorkflow.searchActivities(
+        val activityMap = workflowService.activities(
             ids = activityIds.toList(),
             limit = activityIds.size
-        ).activities
-            .map { activity -> workflowMapper.toActivityModel(activity) }
-            .associateBy { activity -> activity.id }
+        ).associateBy { activity -> activity.id }
 
         // Workflows
         val workflowInstanceIds = activityInstances.map { activityInstance -> activityInstance.workflowInstanceId }
@@ -259,8 +257,8 @@ class WorkflowInstanceService(
         }
     }
 
-    fun setAssignee(activityInstanceId: String, userId: Long) {
-        kokiWorkflowInstance.setAssignee(
+    fun assignee(activityInstanceId: String, userId: Long) {
+        koki.assignee(
             SetActivityInstanceAssigneeRequest(
                 userId = userId,
                 activityInstanceIds = listOf(activityInstanceId)
@@ -268,7 +266,7 @@ class WorkflowInstanceService(
         )
     }
 
-    fun completeActivity(id: String, state: Map<String, Any>) {
-        kokiWorkflowInstance.complete(id, CompleteActivityInstanceRequest(state))
+    fun complete(id: String, state: Map<String, Any>) {
+        koki.complete(id, CompleteActivityInstanceRequest(state))
     }
 }

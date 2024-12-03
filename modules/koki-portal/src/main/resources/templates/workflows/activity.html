@@ -62,6 +62,13 @@
                                    th:text="${activityInstance.activity.longTitle}">FORM</a>
                             </td>
                         </tr>
+                        <tr th:if="${activityInstance.activity.message}">
+                            <td><b>Message</b></td>
+                            <td>
+                                <a class="message" target="_new" th:href="${activityInstance.activity.message.url}"
+                                   th:text="${activityInstance.activity.message.name}">NAME</a>
+                            </td>
+                        </tr>
                         <tr th:if="!${activityInstance.activity.description.isEmpty()}">
                             <td><b>Description</b></td>
                             <td th:text="${activityInstance.activity.description}">DESCRIPTION</td>
