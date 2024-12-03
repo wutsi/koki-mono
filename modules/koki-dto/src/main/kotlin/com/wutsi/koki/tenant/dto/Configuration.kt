@@ -4,7 +4,7 @@ import java.util.Date
 
 data class Configuration(
     val name: String = "",
-    val value: String? = null,
+    val value: String = "",
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
 )

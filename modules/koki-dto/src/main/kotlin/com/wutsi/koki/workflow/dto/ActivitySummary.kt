@@ -10,4 +10,5 @@ data class ActivitySummary(
     val requiresApproval: Boolean = false,
     val roleId: Long? = null,
     val formId: String? = null,
+    val messageId: String? = null,
 )

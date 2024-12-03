@@ -16,4 +16,5 @@ data class Activity(
     val tags: Map<String, String> = emptyMap(),
     val roleId: Long? = null,
     val formId: String? = null,
+    val messageId: String? = null,
 )
