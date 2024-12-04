@@ -23,6 +23,20 @@
         "role": "hr"
       },
       {
+        "name": "send_approved",
+        "title": "Send message to employee when claims is approved",
+        "type": "SEND",
+        "message": "MSG-001",
+        "role": "employee"
+      },
+      {
+        "name": "send_rejected",
+        "title": "Send message to employee when claims is rejected",
+        "type": "SEND",
+        "message": "MSG-002",
+        "role": "employee"
+      },
+      {
         "name": "payment",
         "title": "Finance initiate the reimbursement",
         "type": "USER",
@@ -45,16 +59,24 @@
       },
       {
         "from": "evaluate",
-        "to": "payment",
+        "to": "send_approved",
         "expression": "hr_approval=='approved'"
       },
       {
-        "from": "evaluate",
-        "to": "end",
-        "expression": "hr_approval=='rejected'"
+        "from": "send_approved",
+        "to": "payment"
       },
       {
         "from": "payment",
+        "to": "end"
+      },
+      {
+        "from": "evaluate",
+        "to": "send_rejected",
+        "expression": "hr_approval=='rejected'"
+      },
+      {
+        "from": "send_rejected",
         "to": "end"
       }
     ]

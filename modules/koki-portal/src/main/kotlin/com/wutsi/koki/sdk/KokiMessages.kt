@@ -50,11 +50,7 @@ class KokiMessages(
     }
 
     fun update(id: String, request: UpdateMessageRequest) {
-        val url = urlBuilder.build(
-            PATH_PREFIX, mapOf(
-                "id" to id
-            )
-        )
+        val url = urlBuilder.build("$PATH_PREFIX/$id")
         rest.postForEntity(url, request, Any::class.java)
     }
 

@@ -1,7 +1,9 @@
 package com.wutsi.koki.workflow.server.service.runner
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.koki.message.server.domain.MessageEntity
 import com.wutsi.koki.message.server.service.MessageService
+import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.messaging.Message
 import com.wutsi.koki.platform.messaging.MessagingService
 import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
@@ -12,11 +14,9 @@ import com.wutsi.koki.platform.messaging.smtp.SMTPMessagingServiceBuilder
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import com.wutsi.koki.tenant.server.service.UserService
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
-import com.wutsi.koki.workflow.server.engine.ActivityRunner
 import com.wutsi.koki.workflow.server.engine.WorkflowEngine
 import com.wutsi.koki.workflow.server.service.ActivityService
 import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
@@ -29,24 +29,33 @@ class SendRunner(
     private val activityService: ActivityService,
     private val templateEngine: MessagingTemplateEngine,
     private val messageService: MessageService,
-) : ActivityRunner {
-    companion object {
-        private val LOGGER = LoggerFactory.getLogger(SendRunner::class.java)
-    }
-
-    override fun run(activityInstance: ActivityInstanceEntity, engine: WorkflowEngine) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(">>> ${activityInstance.workflowInstanceId} > ${activityInstance.id} executing")
-        }
-        if (send(activityInstance)) {
+) : AbstractActivityRunner() {
+    override fun run(activityInstance: ActivityInstanceEntity, engine: WorkflowEngine, logger: KVLogger) {
+        if (send(activityInstance, logger)) {
+            logger.add("sent", true)
             engine.done(activityInstance.id!!, emptyMap(), activityInstance.tenantId)
+        } else {
+            logger.add("sent", false)
         }
     }
 
-    private fun send(activityInstance: ActivityInstanceEntity): Boolean {
-        val msg = createMessage(activityInstance)
+    private fun send(activityInstance: ActivityInstanceEntity, logger: KVLogger): Boolean {
+        /* Activity */
+        val tenantId = activityInstance.tenantId
+        val activity = activityService.get(activityInstance.activityId)
+        logger.add("activity", activity.name)
+
+        /* Message */
+        val message = activity.messageId?.let { messageId -> messageService.get(messageId, tenantId) }
+        if (message == null) {
+            logger.add("message", "--")
+            return false
+        }
+        logger.add("message", message.name)
+
+        /* Send */
+        val msg = createMessage(activityInstance, message, logger)
         if (msg != null) {
-            LOGGER.debug(">>> ${activityInstance.workflowInstanceId} > ${activityInstance.id} Sending message to ${msg.recipient}")
             createMessagingService(activityInstance.tenantId).send(msg)
             return true
         } else {
@@ -54,22 +63,20 @@ class SendRunner(
         }
     }
 
-    private fun createMessage(activityInstance: ActivityInstanceEntity): Message? {
-        /* Message */
-        val tenantId = activityInstance.tenantId
-        val activity = activityService.get(activityInstance.activityId)
-        val message = activity.messageId?.let { messageId -> messageService.get(messageId, tenantId) }
-        if (message == null) {
-            LOGGER.debug(">>> ${activityInstance.workflowInstanceId} > ${activityInstance.id} No message")
-            return null
-        }
-
+    private fun createMessage(
+        activityInstance: ActivityInstanceEntity,
+        message: MessageEntity,
+        logger: KVLogger
+    ): Message? {
         /* Assignee */
+        val tenantId = message.tenantId
         val assignee = activityInstance.assigneeId?.let { id -> userService.get(id, tenantId) }
         if (assignee == null) {
-            LOGGER.debug(">>> ${activityInstance.workflowInstanceId} > ${activityInstance.id} No assignee")
+            logger.add("assignee", "--")
             return null
         }
+        logger.add("assignee", assignee.displayName)
+        logger.add("assignee_email", assignee.email)
 
         /* Template data */
         val workflowInstance = workflowInstanceService.get(activityInstance.workflowInstanceId, tenantId)

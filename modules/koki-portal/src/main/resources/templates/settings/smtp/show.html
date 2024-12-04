@@ -27,66 +27,39 @@
     </div>
     <div class="row">
         <div class="col-12 col-md-8 offset-md-2">
-            <div class="form">
-                <form class="form" method="post" th:action="@{'/settings/smtp/save'}" th:object="${form}">
-                    <div class="form-body">
-                        <div class="section">
-                            <div class="section-body">
-                                <div th:replace="~{__components/layout :: error-message(${error})}"></div>
-
-                                <div class="section-item">
-                                    <label class="title">
-                                        <span>Host</span>
-                                        <span class="required">*</span>
-                                    </label>
-                                    <div class="description">Describe the workflow using JSON format</div>
-                                    <input required th:field="*{host}"/>
-                                </div>
-                                <div class="section-item">
-                                    <label class="title">
-                                        <span>Port</span>
-                                        <span class="required">*</span>
-                                    </label>
-                                    <input required step="1" th:field="*{port}"/>
-                                </div>
-                                <div class="section-item">
-                                    <label class="title">
-                                        <span>Sender Email</span>
-                                        <span class="required">*</span>
-                                    </label>
-                                    <div class="description">Enter the email of the sender</div>
-                                    <input required th:field="*{fromAddress}" type="email"/>
-                                </div>
-                                <div class="section-item">
-                                    <label class="title">
-                                        <span>Sender Name</span>
-                                    </label>
-                                    <div class="description">Enter display name of the sender (Optional)</div>
-                                    <input th:field="*{fromPersonal}"/>
-                                </div>
-                                <div class="section-item">
-                                    <label class="title">
-                                        <span>Username</span>
-                                        <span class="required">*</span>
-                                    </label>
-                                    <input required th:field="*{username}"/>
-                                </div>
-                                <div class="section-item">
-                                    <label class="title">
-                                        <span>Password</span>
-                                        <span class="required">*</span>
-                                    </label>
-                                    <input required th:field="*{password}" type="password"/>
-                                </div>
-                            </div>
-                        </div>
+            <div class="widget">
+                <div class="widget-body">
+                    <div class="widget-toolbar">
+                        <a class="btn-edit btn btn-secondary" href="/settings/smtp/edit">Configure</a>
                     </div>
-                    <div class="form-footer">
-                        <button type="submit">Submit</button>
-                        <a class="btn-cancel" href="/settings">Cancel</a>
-                    </div>
-
-                </form>
+                    <table class="table" th:if="${form}">
+                        <tr>
+                            <td width="20%"><b>Host</b></td>
+                            <td th:text="${form.host}">HOST</td>
+                        </tr>
+                        <tr>
+                            <td><b>Port</b></td>
+                            <td th:text="${form.port}">PORT</td>
+                        </tr>
+                        <tr>
+                            <td><b>Username</b></td>
+                            <td th:text="${form.username}">USERNAME</td>
+                        </tr>
+                        <tr>
+                            <td><b>Password</b></td>
+                            <td>******</td>
+                        </tr>
+                        <tr>
+                            <td><b>Sender</b></td>
+                            <td>
+                                <span th:if="!${form.fromPersonal.isEmpty()}"
+                                      th:text="${form.fromPersonal} + ' <' + ${form.fromAddress} + '>'">SENDER</span>
+                                <span th:if="${form.fromPersonal.isEmpty()}" th:text="${form.fromAddress}">SENDER</span>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="empty text-center" th:if="!${form}">The Mail Server has not been configured</div>
+                </div>
             </div>
         </div>
     </div>
