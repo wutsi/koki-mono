@@ -173,6 +173,9 @@ class WorkflowEngineWorker(
     @Transactional
     fun next(workflowInstanceId: String, tenantId: Long): List<ActivityInstanceEntity> {
         val workflowInstance = workflowInstanceService.get(workflowInstanceId, tenantId)
+        if (workflowInstance.status == WorkflowStatus.DONE) {
+            return emptyList()
+        }
         ensureRunning(workflowInstance)
 
         // Get all the activities DONE

@@ -9,6 +9,7 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.service.SMTPValidator
 import com.wutsi.koki.tenant.dto.Configuration
@@ -21,7 +22,7 @@ import java.net.SocketException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class SMTPControllerTest : AbstractPageControllerTest() {
+class EditSMTPControllerTest : AbstractPageControllerTest() {
     private val config = mapOf(
         ConfigurationName.SMTP_PORT to "25",
         ConfigurationName.SMTP_HOST to "smtp.gmail.com",
@@ -47,18 +48,10 @@ class SMTPControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun save() {
-        navigateTo("/settings/smtp")
-        assertCurrentPageIs(PageName.SETTINGS_SMTP)
+        navigateTo("/settings/smtp/edit")
+        assertCurrentPageIs(PageName.SETTINGS_SMTP_EDIT)
 
-        input("[name=host]", "10.1.12.244")
-        input("[name=port]", "555")
-        input("[name=username]", "ray")
-        input("[name=password]", "ray234")
-        input("[name=fromAddress]", "no-reply@ray.com")
-        input("[name=fromPersonal]", "Ray Solutions")
-        scrollToBottom()
-        click("button[type=submit]")
-
+        inputFields()
         assertElementNotPresent(".alert-danger")
 
         verify(validator).validate("10.1.12.244", 555, "ray")
@@ -80,8 +73,8 @@ class SMTPControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun cancel() {
-        navigateTo("/settings/smtp")
-        assertCurrentPageIs(PageName.SETTINGS_SMTP)
+        navigateTo("/settings/smtp/edit")
+        assertCurrentPageIs(PageName.SETTINGS_SMTP_EDIT)
 
         scrollToBottom()
         click(".btn-cancel")
@@ -90,12 +83,35 @@ class SMTPControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun `validation error`() {
+    fun `SMTP validation error`() {
         doThrow(SocketException::class).whenever(validator).validate(any(), any(), any())
 
-        navigateTo("/settings/smtp")
-        assertCurrentPageIs(PageName.SETTINGS_SMTP)
+        navigateTo("/settings/smtp/edit")
+        assertCurrentPageIs(PageName.SETTINGS_SMTP_EDIT)
 
+        inputFields()
+        assertElementPresent(".alert-danger")
+
+        verify(kokiTenant, never()).save(any())
+        assertCurrentPageIs(PageName.SETTINGS_SMTP_EDIT)
+    }
+
+    @Test
+    fun `backend error`() {
+        val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.AUTHORIZATION_PERMISSION_DENIED)
+        doThrow(ex).whenever(validator).validate(any(), any(), any())
+
+        navigateTo("/settings/smtp/edit")
+        assertCurrentPageIs(PageName.SETTINGS_SMTP_EDIT)
+
+        inputFields()
+        assertElementPresent(".alert-danger")
+
+        verify(kokiTenant, never()).save(any())
+        assertCurrentPageIs(PageName.SETTINGS_SMTP_EDIT)
+    }
+
+    private fun inputFields() {
         input("[name=host]", "10.1.12.244")
         input("[name=port]", "555")
         input("[name=username]", "ray")
@@ -104,10 +120,5 @@ class SMTPControllerTest : AbstractPageControllerTest() {
         input("[name=fromPersonal]", "Ray Solutions")
         scrollToBottom()
         click("button[type=submit]")
-
-        assertElementPresent(".alert-danger")
-
-        verify(kokiTenant, never()).save(any())
-        assertCurrentPageIs(PageName.SETTINGS_SMTP)
     }
 }

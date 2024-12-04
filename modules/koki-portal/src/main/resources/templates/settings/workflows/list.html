@@ -33,7 +33,9 @@
                             <th></th>
                         </tr>
                         <tr class="workflow" th:each="workflow : ${workflows}">
-                            <td th:text="${workflow.name}">NAME</td>
+                            <td>
+                                <a th:href="${workflow.url}" th:text="${workflow.name}">NAME</a>
+                            </td>
                             <td th:text="${workflow.title}">TITLE</td>
                             <td>
                                 <span th:if="${workflow.active}">Yes</span>
