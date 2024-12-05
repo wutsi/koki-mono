@@ -126,7 +126,19 @@ logging:
 
 koki:
     portal-url: http://localhost:8081
+    executor:
+        thread-pool-size: 16
+    rabbitmq:
+        url: amqp://localhost
     event-publisher:
-        spring:
-            thread-pool-size: 16
-
+        type: rabbitmq # rabbitmq | spring
+        rabbitmq:
+            exchange-name: koki
+            max-retries: 24
+            ttl-seconds: 84600
+    workflow-engine:
+        rabbitmq:
+            queue: koki-workflow-queue
+            dlq: koki-workflow-dlq
+            dlq-cron: "0 */30 * * * *"  # Every 30 mins
+            consumer-delay-seconds: 1

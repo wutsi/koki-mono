@@ -7,15 +7,13 @@
 - [x] UI for managing messages
 - [x] UI for managing forms
 - [x] UI for configuring SMTP
-- [] Add support for S3 storage
-- [] UI for configuring S3 storage
+- [] Use RabbitMQ for workflow orchestration
 - [] Add support for Service activities
 - [] Add Workflow Log
-- [] Use RabbitMQ for workflow orchestration
 - [] Align webapp domain name with Tenant
 - [] Create Workflow Instance on form submission
 - [] Add support for Business Rule activities
 - [] Add support for Script activities
-- [] Add support for Send activities with Slack
-- [] Add support for Send activities with SMS
+- [] Add support for S3 storage
+- [] UI for configuring S3 storage
 - [] Add tenant healthcheck to validate connectivity with all resources

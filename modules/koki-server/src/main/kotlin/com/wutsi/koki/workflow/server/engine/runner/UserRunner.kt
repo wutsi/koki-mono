@@ -6,7 +6,7 @@ import com.wutsi.koki.workflow.server.engine.WorkflowEngine
 import org.springframework.stereotype.Service
 
 @Service
-class UserRunner : AbstractActivityRunner() {
-    override fun run(activityInstance: ActivityInstanceEntity, engine: WorkflowEngine, logger: KVLogger) {
+class UserRunner(logger: KVLogger) : AbstractActivityRunner(logger) {
+    override fun doRun(activityInstance: ActivityInstanceEntity, engine: WorkflowEngine) {
     }
 }

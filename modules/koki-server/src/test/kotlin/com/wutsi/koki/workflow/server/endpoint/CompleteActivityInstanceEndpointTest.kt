@@ -1,13 +1,6 @@
 package com.wutsi.koki.tenant.server.server.endpoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
@@ -16,19 +9,13 @@ import com.wutsi.koki.workflow.dto.CompleteActivityInstanceRequest
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.dao.ActivityInstanceRepository
 import com.wutsi.koki.workflow.server.dao.WorkflowInstanceRepository
-import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
-import com.wutsi.koki.workflow.server.engine.ActivityRunner
-import com.wutsi.koki.workflow.server.engine.ActivityRunnerProvider
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.mock
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
-import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TimeZone
-import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -43,18 +30,6 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
-
-    @MockitoBean
-    private lateinit var activityExecutorProvider: ActivityRunnerProvider
-
-    private val activityRunner = mock<ActivityRunner>()
-
-    @BeforeTest
-    override fun setUp() {
-        super.setUp()
-
-        doReturn(activityRunner).whenever(activityExecutorProvider).get(any())
-    }
 
     @Test
     fun complete() {
@@ -94,9 +69,6 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         Thread.sleep(1000)
         val activityInstances = activityInstanceDao.findByWorkflowInstanceId(workflowInstance.id!!)
         assertEquals(4, activityInstances.size)
-
-        val instance = argumentCaptor<ActivityInstanceEntity>()
-        verify(activityRunner, times(2)).run(instance.capture(), any())
     }
 
     @Test
@@ -149,8 +121,6 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         assertNull(activityInstance.doneAt)
         assertEquals(100L, activityInstance.approverId)
         assertEquals(ApprovalStatus.PENDING, activityInstance.approval)
-
-        verify(activityExecutorProvider, never()).get(any())
 
         val workflowInstance = instanceDao.findById("wi-110-01").get()
         val state = objectMapper.readValue(workflowInstance.state, Map::class.java)

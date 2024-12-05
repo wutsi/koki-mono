@@ -11,6 +11,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.message.server.domain.MessageEntity
 import com.wutsi.koki.message.server.service.MessageService
+import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.messaging.Message
 import com.wutsi.koki.platform.messaging.MessagingService
 import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
@@ -43,6 +44,7 @@ class SendRunnerTest {
     private val messageService = mock<MessageService>()
     private val messagingService = mock<MessagingService>()
     private val engine = mock<WorkflowEngine>()
+    private val logger = DefaultKVLogger()
 
     private val executor = SendRunner(
         objectMapper = objectMapper,
@@ -53,6 +55,7 @@ class SendRunnerTest {
         activityService = activityService,
         templateEngine = templateEngine,
         messageService = messageService,
+        logger = logger,
     )
 
     private val tenantId = 1L

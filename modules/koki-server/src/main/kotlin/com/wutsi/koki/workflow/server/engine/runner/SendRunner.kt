@@ -29,8 +29,9 @@ class SendRunner(
     private val activityService: ActivityService,
     private val templateEngine: MessagingTemplateEngine,
     private val messageService: MessageService,
-) : AbstractActivityRunner() {
-    override fun run(activityInstance: ActivityInstanceEntity, engine: WorkflowEngine, logger: KVLogger) {
+    logger: KVLogger
+) : AbstractActivityRunner(logger) {
+    override fun doRun(activityInstance: ActivityInstanceEntity, engine: WorkflowEngine) {
         if (send(activityInstance, logger)) {
             logger.add("sent", true)
             engine.done(activityInstance.id!!, emptyMap(), activityInstance.tenantId)
