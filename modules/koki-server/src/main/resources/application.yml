@@ -141,3 +141,4 @@ koki:
             queue: koki-workflow-queue
             dlq: koki-workflow-dlq
             dlq-cron: "0 */30 * * * *"  # Every 30 mins
+            consumer-delay-seconds: 1

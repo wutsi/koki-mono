@@ -3,23 +3,25 @@ package com.wutsi.koki.workflow.server.engine
 import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.server.service.runner.EndRunner
 import com.wutsi.koki.workflow.server.service.runner.ManualRunner
+import com.wutsi.koki.workflow.server.service.runner.ReceiveRunner
 import com.wutsi.koki.workflow.server.service.runner.SendRunner
 import com.wutsi.koki.workflow.server.service.runner.StartRunner
 import com.wutsi.koki.workflow.server.service.runner.UserRunner
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.mockito.Mockito
+import org.mockito.Mockito.mock
 import java.lang.IllegalStateException
 import kotlin.jvm.java
 import kotlin.test.assertEquals
 
 class ActivityRunnerProviderTest {
-    private val start = Mockito.mock(StartRunner::class.java)
-    private val stop = Mockito.mock(EndRunner::class.java)
-    private val manual = Mockito.mock(ManualRunner::class.java)
-    private val user = Mockito.mock(UserRunner::class.java)
-    private val send = Mockito.mock(SendRunner::class.java)
-    private val provider = ActivityRunnerProvider(start, stop, manual, user, send)
+    private val start = mock(StartRunner::class.java)
+    private val stop = mock(EndRunner::class.java)
+    private val manual = mock(ManualRunner::class.java)
+    private val user = mock(UserRunner::class.java)
+    private val send = mock(SendRunner::class.java)
+    private val receive = mock(ReceiveRunner::class.java)
+    private val provider = ActivityRunnerProvider(start, stop, manual, user, send, receive)
 
     @Test
     fun start() {
@@ -44,6 +46,11 @@ class ActivityRunnerProviderTest {
     @Test
     fun send() {
         assertEquals(send, provider.get(ActivityType.SEND))
+    }
+
+    @Test
+    fun receive() {
+        assertEquals(receive, provider.get(ActivityType.RECEIVE))
     }
 
     @Test

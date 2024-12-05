@@ -29,10 +29,10 @@ class RabbitMQWorkflowConfiguration(
     @Value("\${koki.event-publisher.rabbitmq.exchange-name}") private val exchangeName: String,
     @Value("\${koki.workflow-engine.rabbitmq.queue}") private val queue: String,
     @Value("\${koki.workflow-engine.rabbitmq.dlq}") private val dlq: String,
+    @Value("\${koki.workflow-engine.rabbitmq.consumer-delay-seconds}") private val consumerDelay: Int,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(RabbitMQWorkflowConfiguration::class.java)
-        private val CONSUMER_INTIAL_DELAY = 30L
     }
 
     @PostConstruct
@@ -89,7 +89,7 @@ class RabbitMQWorkflowConfiguration(
         then it dispatched the event using EventListener, but the event was lost because all the
         event listener was not yet setup by spring!
          */
-        LOGGER.info("Will setup queue consumer in $CONSUMER_INTIAL_DELAY seconds(s)")
+        LOGGER.info("Will setup queue consumer in $consumerDelay seconds(s)")
         val task = object : TimerTask() {
             override fun run() {
                 LOGGER.info("Registering queue consumer")
@@ -104,6 +104,6 @@ class RabbitMQWorkflowConfiguration(
                 )
             }
         }
-        Timer(queue, false).schedule(task, CONSUMER_INTIAL_DELAY * 1000)
+        Timer(queue, false).schedule(task, 1000L * consumerDelay)
     }
 }

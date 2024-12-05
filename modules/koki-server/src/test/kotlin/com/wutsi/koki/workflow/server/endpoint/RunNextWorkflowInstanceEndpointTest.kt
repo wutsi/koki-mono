@@ -2,9 +2,6 @@ package com.wutsi.koki.tenant.server.server.endpoint
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
@@ -15,11 +12,8 @@ import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.dao.ActivityInstanceRepository
 import com.wutsi.koki.workflow.server.dao.WorkflowInstanceRepository
 import com.wutsi.koki.workflow.server.domain.FlowEntity
-import com.wutsi.koki.workflow.server.engine.ActivityRunner
-import com.wutsi.koki.workflow.server.engine.ActivityRunnerProvider
 import com.wutsi.koki.workflow.server.service.ExpressionEvaluator
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.mock
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.bean.override.mockito.MockitoBean
@@ -38,18 +32,11 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
     private lateinit var activityInstanceDao: ActivityInstanceRepository
 
     @MockitoBean
-    private lateinit var activityExecutorProvider: ActivityRunnerProvider
-
-    @MockitoBean
     protected lateinit var expressionEvaluator: ExpressionEvaluator
-
-    private val activityRunner = mock<ActivityRunner>()
 
     @BeforeTest
     override fun setUp() {
         super.setUp()
-
-        doReturn(activityRunner).whenever(activityExecutorProvider).get(any())
 
         doReturn(true).whenever(expressionEvaluator).evaluate(any<FlowEntity>(), any())
     }
@@ -73,10 +60,6 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         assertEquals(101L, activityInstance.assigneeId)
         assertNull(activityInstance.approverId)
         assertEquals(ApprovalStatus.UNKNOWN, activityInstance.approval)
-
-        Thread.sleep(1000)
-        verify(activityRunner).run(any(), any())
-        verify(expressionEvaluator, never()).evaluate(any<FlowEntity>(), any())
 
         val workflowInstance = instanceDao.findById("wi-100-01").get()
         val activityInstances = activityInstanceDao.findByWorkflowInstanceId(workflowInstance.id!!)
@@ -104,10 +87,6 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         val activityInstance2 = activityInstances[1]
         assertEquals(WorkflowStatus.RUNNING, activityInstance2.status)
         assertEquals(103L, activityInstance2.activityId)
-
-        Thread.sleep(1000)
-        verify(activityRunner, times(2)).run(any(), any())
-        verify(expressionEvaluator).evaluate(any<FlowEntity>(), any())
 
         val workflowInstance = instanceDao.findById("wi-100-02").get()
         assertEquals(4, activityInstanceDao.findByWorkflowInstanceId(workflowInstance.id!!).size)

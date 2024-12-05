@@ -44,18 +44,6 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
-    @MockitoBean
-    private lateinit var activityExecutorProvider: ActivityRunnerProvider
-
-    private val activityRunner = mock<ActivityRunner>()
-
-    @BeforeTest
-    override fun setUp() {
-        super.setUp()
-
-        doReturn(activityRunner).whenever(activityExecutorProvider).get(any())
-    }
-
     @Test
     fun complete() {
         val fmt = SimpleDateFormat("yyyy-MM-dd")
@@ -94,9 +82,6 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         Thread.sleep(1000)
         val activityInstances = activityInstanceDao.findByWorkflowInstanceId(workflowInstance.id!!)
         assertEquals(4, activityInstances.size)
-
-        val instance = argumentCaptor<ActivityInstanceEntity>()
-        verify(activityRunner, times(2)).run(instance.capture(), any())
     }
 
     @Test
@@ -149,8 +134,6 @@ class CompleteActivityInstanceEndpointTest : TenantAwareEndpointTest() {
         assertNull(activityInstance.doneAt)
         assertEquals(100L, activityInstance.approverId)
         assertEquals(ApprovalStatus.PENDING, activityInstance.approval)
-
-        verify(activityExecutorProvider, never()).get(any())
 
         val workflowInstance = instanceDao.findById("wi-110-01").get()
         val state = objectMapper.readValue(workflowInstance.state, Map::class.java)

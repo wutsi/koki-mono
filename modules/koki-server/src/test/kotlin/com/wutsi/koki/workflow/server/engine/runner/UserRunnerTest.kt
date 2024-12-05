@@ -1,5 +1,6 @@
 package com.wutsi.koki.workflow.server.engine.runner
 
+import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.engine.WorkflowEngine
 import com.wutsi.koki.workflow.server.service.runner.UserRunner
@@ -9,7 +10,8 @@ import kotlin.jvm.java
 
 class UserRunnerTest {
     private val engine = Mockito.mock(WorkflowEngine::class.java)
-    private val executor = UserRunner()
+    private val logger = DefaultKVLogger()
+    private val executor = UserRunner(logger)
     private val instance = ActivityInstanceEntity()
 
     @Test

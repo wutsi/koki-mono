@@ -3,6 +3,7 @@ package com.wutsi.koki.workflow.server.engine.runner
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
 import com.wutsi.koki.workflow.server.engine.WorkflowEngine
@@ -14,7 +15,8 @@ import org.mockito.Mockito.mock
 class EndRunnerTest {
     private val engine = mock<WorkflowEngine>()
     private val workflowInstanceService = mock<WorkflowInstanceService>()
-    private val executor = EndRunner()
+    private val logger = DefaultKVLogger()
+    private val executor = EndRunner(logger)
     private val activityInstance = ActivityInstanceEntity(id = "111", workflowInstanceId = "1111", tenantId = 555)
 
     @Test
