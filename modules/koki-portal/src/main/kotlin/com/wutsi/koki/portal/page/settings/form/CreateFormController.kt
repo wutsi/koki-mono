@@ -1,5 +1,7 @@
 package com.wutsi.koki.portal.page.settings.form
 
+import com.fasterxml.jackson.core.JacksonException
+import com.wutsi.koki.form.dto.FormContent
 import com.wutsi.koki.portal.model.FormModel
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
@@ -39,8 +41,8 @@ class CreateFormController(private val service: FormService) : AbstractPageContr
     ): String {
         try {
             val formId = service.create(form)
-            val data = FormModel(id = formId, name = form.name, title = form.title)
 
+            val data = toFormModel(formId, form)
             model.addAttribute("data", data)
             model.addAttribute(
                 "page",
@@ -50,10 +52,21 @@ class CreateFormController(private val service: FormService) : AbstractPageContr
                 ),
             )
             return "settings/forms/saved"
-        } catch (ex: HttpClientErrorException) {
-            val errorResponse = toErrorResponse(ex)
-            model.addAttribute("error", errorResponse.error.code)
+        } catch (ex: Exception) {
+            if (ex is HttpClientErrorException) {
+                val errorResponse = toErrorResponse(ex)
+                model.addAttribute("error", errorResponse.error.code)
+            } else if (ex is JacksonException) {
+                model.addAttribute("error", "The JSON is not valid")
+            } else {
+                throw ex
+            }
             return create(form, model)
         }
+    }
+
+    private fun toFormModel(id: String, form: FormForm): FormModel {
+        val content = objectMapper.readValue(form.json, FormContent::class.java)
+        return FormModel(id=id, name=content.name, title=content.title)
     }
 }

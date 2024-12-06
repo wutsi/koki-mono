@@ -5,7 +5,6 @@ import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.page.settings.workflow.AbstractSaveWorkflowController
 import com.wutsi.koki.portal.service.WorkflowService
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,10 +15,6 @@ import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 class EditWorkflowController(service: WorkflowService) : AbstractSaveWorkflowController(service) {
-    companion object {
-        private val LOGGER = LoggerFactory.getLogger(EditWorkflowController::class.java)
-    }
-
     @GetMapping("/settings/workflows/{id}/edit")
     fun update(
         @PathVariable id: Long,
@@ -51,12 +46,12 @@ class EditWorkflowController(service: WorkflowService) : AbstractSaveWorkflowCon
             )
             return "settings/workflows/saved"
         } catch (ex: Exception) {
-            LOGGER.error("Failed", ex)
-
             if (ex is HttpClientErrorException) {
                 loadErrors(ex, model)
             } else if (ex is JacksonException) {
                 model.addAttribute("error", "The JSON is not valid")
+            } else {
+                throw ex
             }
             model.addAttribute("form", form)
             return edit(id, form, model)

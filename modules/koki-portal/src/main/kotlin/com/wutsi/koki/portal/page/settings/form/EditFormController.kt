@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.page.settings.form
 
+import com.fasterxml.jackson.core.JacksonException
 import com.wutsi.koki.form.dto.FormContent
 import com.wutsi.koki.portal.model.FormModel
 import com.wutsi.koki.portal.model.PageModel
@@ -26,9 +27,9 @@ class EditFormController(
         val data = service.form(id)
         val content = objectMapper.readValue(data.content, FormContent::class.java)
         val form = FormForm(
-            name = data.name,
-            title = data.title,
-            elements = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(content.elements),
+            json = objectMapper
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(content),
             active = data.active
         )
         return edit(form, data, model)
@@ -54,23 +55,34 @@ class EditFormController(
         @ModelAttribute form: FormForm,
         model: Model
     ): String {
-        val data = FormModel(id = id, name = form.name, title = form.title)
         try {
             service.update(id, form)
 
+            val data = toFormModel(id, form)
             model.addAttribute("data", data)
             model.addAttribute(
                 "page",
                 PageModel(
                     name = PageName.SETTINGS_FORM_SAVED,
-                    title = form.name,
+                    title = data.name,
                 ),
             )
             return "settings/forms/saved"
-        } catch (ex: HttpClientErrorException) {
-            val errorResponse = toErrorResponse(ex)
-            model.addAttribute("error", errorResponse.error.code)
-            return edit(form, data, model)
+        } catch (ex: Exception) {
+            if (ex is HttpClientErrorException) {
+                val errorResponse = toErrorResponse(ex)
+                model.addAttribute("error", errorResponse.error.code)
+            } else if (ex is JacksonException) {
+                model.addAttribute("error", "The JSON is not valid")
+            } else {
+                throw ex
+            }
+            return edit(form, FormModel(id = id), model)
         }
+    }
+
+    private fun toFormModel(id: String, form: FormForm): FormModel {
+        val content = objectMapper.readValue(form.json, FormContent::class.java)
+        return FormModel(id = id, name = content.name, title = content.title)
     }
 }

@@ -2,7 +2,6 @@ package com.wutsi.koki.portal.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.form.dto.FormContent
-import com.wutsi.koki.form.dto.FormElement
 import com.wutsi.koki.form.dto.SaveFormRequest
 import com.wutsi.koki.form.dto.SubmitFormDataRequest
 import com.wutsi.koki.form.dto.UpdateFormDataRequest
@@ -35,11 +34,7 @@ class FormService(
         return koki.create(
             SaveFormRequest(
                 active = form.active,
-                content = FormContent(
-                    title = form.title,
-                    name = form.name,
-                    elements = objectMapper.readValue(form.elements, Array<FormElement>::class.java).toList()
-                )
+                content = objectMapper.readValue(form.json, FormContent::class.java)
             )
         ).formId
     }
@@ -49,11 +44,7 @@ class FormService(
             id,
             SaveFormRequest(
                 active = form.active,
-                content = FormContent(
-                    title = form.title,
-                    name = form.name,
-                    elements = objectMapper.readValue(form.elements, Array<FormElement>::class.java).toList()
-                )
+                content = objectMapper.readValue(form.json, FormContent::class.java),
             )
         )
     }

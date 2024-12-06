@@ -65,25 +65,28 @@ class EditFormControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/forms/${form.id}/edit")
         assertCurrentPageIs(PageName.SETTINGS_FORM_EDIT)
 
-        input("input[name=name]", "M-XXX")
-        input("input[name=title]", "This is the new subject")
         input(
-            "textarea[name=elements]",
+            "textarea[name=json]",
             """
-                [
-                    {
-                        "name": "amount",
-                        "title": "Payment Amount",
-                        "type": "NUMBER",
-                        "required":true
-                    },
-                    {
-                        "name": "currency",
-                        "title": "Currency",
-                        "type": "TEXT",
-                        "required":false
-                    }
-                ]
+                {
+                    "name": "M-XXX",
+                    "title": "This is the new subject",
+                    "description": "This is the description",
+                    "elements": [
+                        {
+                            "name": "amount",
+                            "title": "Payment Amount",
+                            "type": "NUMBER",
+                            "required":true
+                        },
+                        {
+                            "name": "currency",
+                            "title": "Currency",
+                            "type": "TEXT",
+                            "required":false
+                        }
+                    ]
+                }
             """.trimIndent()
         )
         scrollToBottom()
@@ -122,6 +125,24 @@ class EditFormControllerTest : AbstractPageControllerTest() {
 
         scrollToBottom()
         click("button[type=submit]")
+        assertCurrentPageIs(PageName.SETTINGS_FORM_EDIT)
+        assertElementPresent(".alert-danger")
+    }
+
+    @Test
+    fun `json error`() {
+        navigateTo("/settings/forms/${form.id}/edit")
+
+        input(
+            "textarea[name=json]",
+            """
+                Hello world
+            """.trimIndent()
+        )
+        scrollToBottom()
+        select("select[name=active]", 1)
+        click("button[type=submit]")
+
         assertCurrentPageIs(PageName.SETTINGS_FORM_EDIT)
         assertElementPresent(".alert-danger")
     }

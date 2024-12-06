@@ -28,25 +28,28 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/forms/create")
         assertCurrentPageIs(PageName.SETTINGS_FORM_CREATE)
 
-        input("input[name=name]", "M-XXX")
-        input("input[name=title]", "This is the new subject")
         input(
-            "textarea[name=elements]",
+            "textarea[name=json]",
             """
-                [
-                    {
-                        "name": "amount",
-                        "title": "Payment Amount",
-                        "type": "NUMBER",
-                        "required":true
-                    },
-                    {
-                        "name": "currency",
-                        "title": "Currency",
-                        "type": "TEXT",
-                        "required":false
-                    }
-                ]
+                {
+                    "name": "M-XXX",
+                    "title": "This is the new subject",
+                    "description": "This is the description",
+                    "elements": [
+                        {
+                            "name": "amount",
+                            "title": "Payment Amount",
+                            "type": "NUMBER",
+                            "required":true
+                        },
+                        {
+                            "name": "currency",
+                            "title": "Currency",
+                            "type": "TEXT",
+                            "required":false
+                        }
+                    ]
+                }
             """.trimIndent()
         )
         scrollToBottom()
@@ -58,6 +61,7 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
 
         assertEquals("M-XXX", request.firstValue.content.name)
         assertEquals("This is the new subject", request.firstValue.content.title)
+        assertEquals("This is the description", request.firstValue.content.description)
         assertEquals(2, request.firstValue.content.elements.size)
         assertEquals(false, request.firstValue.active)
 
@@ -83,25 +87,46 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/settings/forms/create")
 
-        input("input[name=name]", "M-XXX")
-        input("input[name=title]", "This is the new subject")
         input(
-            "textarea[name=elements]",
+            "textarea[name=json]",
             """
-                [
-                    {
-                        "name": "amount",
-                        "title": "Payment Amount",
-                        "type": "NUMBER",
-                        "required":true
-                    },
-                    {
-                        "name": "currency",
-                        "title": "Currency",
-                        "type": "TEXT",
-                        "required":false
-                    }
-                ]
+                {
+                    "name": "M-XXX",
+                    "title": "This is the new subject",
+                    "description": "This is the description",
+                    "elements": [
+                        {
+                            "name": "amount",
+                            "title": "Payment Amount",
+                            "type": "NUMBER",
+                            "required":true
+                        },
+                        {
+                            "name": "currency",
+                            "title": "Currency",
+                            "type": "TEXT",
+                            "required":false
+                        }
+                    ]
+                }
+            """.trimIndent()
+        )
+        scrollToBottom()
+        select("select[name=active]", 1)
+        click("button[type=submit]")
+
+        assertCurrentPageIs(PageName.SETTINGS_FORM_CREATE)
+        assertElementPresent(".alert-danger")
+    }
+
+    @Test
+    fun `json error`() {
+        navigateTo("/settings/forms/create")
+
+        input(
+            "textarea[name=json]",
+            """
+                Hello world
             """.trimIndent()
         )
         scrollToBottom()
