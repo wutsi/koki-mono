@@ -19,5 +19,5 @@ data class FileModel(
     val createdBy: UserModel? = null,
 ) {
     val url: String
-        get() = "/storage/$id/" + URLEncoder.encode(name, "utf-8")
+        get() = "/files/$id/" + URLEncoder.encode(name, "utf-8")
 }

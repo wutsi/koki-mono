@@ -12,19 +12,23 @@ import com.rabbitmq.client.AMQP.BasicProperties
 import com.rabbitmq.client.Channel
 import com.rabbitmq.client.Envelope
 import com.rabbitmq.client.GetResponse
+import com.wutsi.koki.platform.storage.StorageService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
+import java.text.SimpleDateFormat
+import java.util.Date
 import kotlin.test.Test
 
 class RabbitMQEventPublisherTest {
+    private val storage = mock<StorageService>()
     private val channel = mock<Channel>()
     private val objectMapper: ObjectMapper = ObjectMapper()
     private val exchangeName: String = "koki"
     private val maxRetries: Int = 24
     private val ttl: Int = 86400
 
-    private val publisher = RabbitMQEventPublisher(channel, objectMapper, exchangeName, maxRetries, ttl)
+    private val publisher = RabbitMQEventPublisher(channel, objectMapper, storage, exchangeName, maxRetries, ttl)
     private val queue = "test-queue"
     private val dlq = "test-dlq"
 
@@ -32,17 +36,18 @@ class RabbitMQEventPublisherTest {
     private val enveloppe = mock<Envelope>()
     private val response = mock<GetResponse>()
     private val deliveryTag = 111L
-    private val body = "{\"foo\":\"bar\"}".toByteArray()
+    private val body = "{\"foo\":\"bar\"}"
 
     @BeforeEach()
     fun setUp() {
         doReturn(mapOf("x-retries" to 1)).whenever(properties).headers
+        doReturn("application/json").whenever(properties).contentType
         doReturn(properties).whenever(response).props
 
         doReturn(deliveryTag).whenever(enveloppe).deliveryTag
         doReturn(enveloppe).whenever(response).envelope
 
-        doReturn(body).whenever(response).body
+        doReturn(body.toByteArray()).whenever(response).body
     }
 
     @Test
@@ -93,7 +98,7 @@ class RabbitMQEventPublisherTest {
         verify(channel, never()).basicReject(any(), any())
 
         val props = argumentCaptor<BasicProperties>()
-        verify(channel).basicPublish(eq(""), eq(queue), props.capture(), eq(body))
+        verify(channel).basicPublish(eq(""), eq(queue), props.capture(), eq(body.toByteArray()))
         verify(channel).basicAck(deliveryTag, false)
 
         assertEquals(2, props.firstValue.headers["x-retries"])
@@ -112,5 +117,13 @@ class RabbitMQEventPublisherTest {
         verify(channel).basicReject(deliveryTag, false)
         verify(channel, never()).basicPublish(any(), any(), any(), any())
         verify(channel, never()).basicAck(any(), any())
+
+        val today = SimpleDateFormat("yyyy/MM/dd").format(Date())
+        verify(storage).store(
+            eq("rabbitmq/archive/$dlq/$today/$deliveryTag.json"),
+            any(),
+            eq("application/json"),
+            eq(body.length.toLong())
+        )
     }
 }

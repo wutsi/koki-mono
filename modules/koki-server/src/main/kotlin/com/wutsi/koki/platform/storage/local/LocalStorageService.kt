@@ -1,6 +1,6 @@
-package com.wutsi.koki.portal.service.storage.local
+package com.wutsi.koki.platform.storage.local
 
-import com.wutsi.koki.portal.service.storage.StorageService
+import com.wutsi.koki.platform.storage.StorageService
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream

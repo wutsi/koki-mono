@@ -35,6 +35,7 @@ class ExportFormHTMLEndpoint(
     private val userService: UserService,
     private val fileResolver: FileResolver,
 
+    @Value("\${koki.server-url}") private val serverUrl: String,
     @Value("\${koki.portal-url}") private val portalUrl: String,
 ) {
     companion object {
@@ -131,8 +132,9 @@ class ExportFormHTMLEndpoint(
             uploadUrl = buildUploadUrl(
                 form = form,
                 workflowInstanceId = workflowInstanceId,
+                tenantId = tenantId
             ),
-            downloadUrl = getStorageUrl()
+            downloadUrl = "$portalUrl/files"
         )
     }
 
@@ -159,14 +161,11 @@ class ExportFormHTMLEndpoint(
     private fun buildUploadUrl(
         form: FormEntity,
         workflowInstanceId: String?,
+        tenantId: Long,
     ): String {
-        val url = StringBuilder(getStorageUrl() + "?form-id=${form.id}")
-        workflowInstanceId?.let { url.append("&workflow-instance-id=$workflowInstanceId") }
+        val url = StringBuilder("$serverUrl/v1/files/upload?tenant-id=$tenantId&form-id=${form.id}")
+        workflowInstanceId?.let { id -> url.append("&workflow-instance-id=$id") }
         return url.toString()
-    }
-
-    private fun getStorageUrl(): String {
-        return "$portalUrl/storage"
     }
 
     private fun getRoleNames(tenantId: Long): List<String> {

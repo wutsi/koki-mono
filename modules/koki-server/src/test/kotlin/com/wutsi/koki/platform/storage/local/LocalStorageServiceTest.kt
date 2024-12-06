@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.service.storage.local
+package com.wutsi.koki.platform.storage.local
 
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream

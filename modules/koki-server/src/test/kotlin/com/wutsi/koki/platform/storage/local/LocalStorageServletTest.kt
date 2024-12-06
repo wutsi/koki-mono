@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.service.storage.local
+package com.wutsi.koki.platform.storage.local
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn

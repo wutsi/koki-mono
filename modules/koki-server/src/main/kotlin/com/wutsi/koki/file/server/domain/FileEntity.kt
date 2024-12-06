@@ -16,9 +16,9 @@ data class FileEntity(
     val tenantId: Long = -1,
 
     @Column(name = "created_by_fk")
-    val createdById: Long? = null,
+    var createdById: Long? = null,
 
-    val workflowInstanceId: String? = null,
+    var workflowInstanceId: String? = null,
     val formId: String? = null,
     val name: String = "",
     val contentType: String = "",

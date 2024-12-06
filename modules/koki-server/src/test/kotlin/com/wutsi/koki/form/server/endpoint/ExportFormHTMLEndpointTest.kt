@@ -34,6 +34,9 @@ class ExportFormHTMLEndpointTest : AuthorizationAwareEndpointTest() {
     @Value("\${koki.portal-url}")
     private lateinit var portalUrl: String
 
+    @Value("\${koki.server-url}")
+    private lateinit var serverUrl: String
+
     private fun download(url: String, statusCode: Int, filename: String? = null): File? {
         return super.download(
             url,
@@ -78,8 +81,11 @@ class ExportFormHTMLEndpointTest : AuthorizationAwareEndpointTest() {
             "$portalUrl/forms/100?workflow-instance-id=xxx&activity-instance-id=yyy",
             context.firstValue.submitUrl
         )
-        assertEquals("$portalUrl/storage", context.firstValue.downloadUrl)
-        assertEquals("$portalUrl/storage?form-id=100&workflow-instance-id=xxx", context.firstValue.uploadUrl)
+        assertEquals("$portalUrl/files", context.firstValue.downloadUrl)
+        assertEquals(
+            "$serverUrl/v1/files/upload?tenant-id=1&form-id=100&workflow-instance-id=xxx",
+            context.firstValue.uploadUrl
+        )
 
         assertEquals(0, context.firstValue.data.size)
     }
@@ -103,8 +109,8 @@ class ExportFormHTMLEndpointTest : AuthorizationAwareEndpointTest() {
         assertFalse(context.firstValue.readOnly)
         assertEquals(TENANT_ID, context.firstValue.tenantId)
         assertEquals("$portalUrl/forms/100/10011?activity-instance-id=yyy", context.firstValue.submitUrl)
-        assertEquals("$portalUrl/storage", context.firstValue.downloadUrl)
-        assertEquals("$portalUrl/storage?form-id=100", context.firstValue.uploadUrl)
+        assertEquals("$portalUrl/files", context.firstValue.downloadUrl)
+        assertEquals("$serverUrl/v1/files/upload?tenant-id=1&form-id=100", context.firstValue.uploadUrl)
 
         assertEquals(2, context.firstValue.data.size)
         assertEquals(2, context.firstValue.data.size)
