@@ -8,8 +8,8 @@
 - [x] UI for managing forms
 - [x] UI for configuring SMTP
 - [x] Use RabbitMQ for workflow orchestration
-- [] Add support for Service activities
 - [] Add Workflow Log
+- [] Add support for Service activities
 - [] Align webapp domain name with Tenant
 - [] Create Workflow Instance on form submission
 - [] Add support for Business Rule activities
