@@ -67,6 +67,6 @@ class CreateFormController(private val service: FormService) : AbstractPageContr
 
     private fun toFormModel(id: String, form: FormForm): FormModel {
         val content = objectMapper.readValue(form.json, FormContent::class.java)
-        return FormModel(id=id, name=content.name, title=content.title)
+        return FormModel(id = id, name = content.name, title = content.title)
     }
 }

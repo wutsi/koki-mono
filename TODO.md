@@ -7,7 +7,7 @@
 - [x] UI for managing messages
 - [x] UI for managing forms
 - [x] UI for configuring SMTP
-- [] Use RabbitMQ for workflow orchestration
+- [x] Use RabbitMQ for workflow orchestration
 - [] Add support for Service activities
 - [] Add Workflow Log
 - [] Align webapp domain name with Tenant
