@@ -32,6 +32,8 @@ object ErrorCode {
     val HTTP_AUTHENTICATION_FAILED = "$PREFIX:http:authetication-failed"
     val HTTP_DOWNSTREAM_ERROR = "$PREFIX:http:downstream-error"
 
+    val LOG_NOT_FOUND = "$PREFIX:log:not-found"
+
     val MESSAGE_DUPLICATE_NAME: String = "$PREFIX:message:duplicate-name"
     val MESSAGE_IN_USE: String = "$PREFIX:message:in-use"
     val MESSAGE_NOT_FOUND: String = "$PREFIX:message:not-found"
