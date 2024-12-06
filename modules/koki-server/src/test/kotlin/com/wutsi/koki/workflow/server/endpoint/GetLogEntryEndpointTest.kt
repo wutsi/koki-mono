@@ -26,8 +26,16 @@ class GetLogEntryEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
-    fun `get workflow not found`() {
+    fun `get log not found`() {
         val result = rest.getForEntity("/v1/logs/999", ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
+        assertEquals(ErrorCode.LOG_NOT_FOUND, result.body?.error?.code)
+    }
+
+    @Test
+    fun `get log from another tenant`() {
+        val result = rest.getForEntity("/v1/logs/200-001", ErrorResponse::class.java)
 
         assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
         assertEquals(ErrorCode.LOG_NOT_FOUND, result.body?.error?.code)
