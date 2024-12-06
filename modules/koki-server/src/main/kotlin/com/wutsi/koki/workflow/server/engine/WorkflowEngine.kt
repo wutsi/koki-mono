@@ -32,6 +32,7 @@ class WorkflowEngine(
             eventPublisher.publish(
                 RunActivityCommand(
                     activityInstanceId = activityInstance.id!!,
+                    workflowInstanceId = activityInstance.workflowInstanceId,
                     tenantId = activityInstance.tenantId,
                 )
             )
@@ -70,6 +71,7 @@ class WorkflowEngine(
                 eventPublisher.publish(
                     RunActivityCommand(
                         activityInstanceId = instance.id!!,
+                        workflowInstanceId = instance.workflowInstanceId,
                         tenantId = tenantId,
                     )
                 )
@@ -85,6 +87,7 @@ class WorkflowEngine(
             eventPublisher.publish(
                 RunActivityCommand(
                     activityInstanceId = activityInstance.id!!,
+                    workflowInstanceId = activityInstance.workflowInstanceId,
                     tenantId = activityInstance.tenantId
                 )
             )
@@ -101,18 +104,20 @@ class WorkflowEngine(
     ): ApprovalEntity {
         LOGGER.debug(">>>  $activityInstanceId - Approve status=$status")
 
+        val activityInstance = activityInstanceService.get(activityInstanceId, tenantId)
         val approval = workflowWorker.approve(activityInstanceId, status, approverUserId, comment, tenantId)
         if (approval.status == ApprovalStatus.APPROVED || approval.status == ApprovalStatus.REJECTED) {
             eventPublisher.publish(
                 ApprovalCompletedEvent(
                     approvalId = approval.id!!,
                     activityInstanceId = activityInstanceId,
+                    workflowInstanceId = activityInstance.workflowInstanceId,
+                    status = approval.status,
                     tenantId = tenantId,
                 )
             )
 
             if (approval.status == ApprovalStatus.APPROVED) {
-                val activityInstance = activityInstanceService.get(activityInstanceId, tenantId)
                 next(activityInstance.workflowInstanceId, tenantId)
             }
         }

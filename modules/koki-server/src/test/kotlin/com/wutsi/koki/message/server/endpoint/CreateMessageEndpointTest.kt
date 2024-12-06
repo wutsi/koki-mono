@@ -1,6 +1,8 @@
 package com.wutsi.koki.message.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.message.dto.CreateMessageRequest
 import com.wutsi.koki.message.dto.CreateMessageResponse
 import com.wutsi.koki.message.server.dao.MessageRepository
@@ -33,5 +35,19 @@ class CreateMessageEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.subject, message.subject)
         assertEquals(request.body, message.body)
         assertEquals(request.active, message.active)
+    }
+
+    @Test
+    fun duplicate() {
+        val request = CreateMessageRequest(
+            name = "M-100",
+            subject = "This is the subject",
+            body = "You have a nice body",
+            active = true,
+        )
+        val result = rest.postForEntity("/v1/messages", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.CONFLICT, result.statusCode)
+        assertEquals(ErrorCode.MESSAGE_DUPLICATE_NAME, result.body!!.error.code)
     }
 }

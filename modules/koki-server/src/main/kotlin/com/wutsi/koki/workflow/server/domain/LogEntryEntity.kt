@@ -1,43 +1,38 @@
 package com.wutsi.koki.workflow.server.domain
 
-import com.wutsi.koki.workflow.dto.ActivityType
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.koki.workflow.dto.LogEntryType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import java.util.Date
 
 @Entity
-@Table(name = "T_ACTIVITY")
-data class ActivityEntity(
+@Table(name = "T_WI_LOG_ENTRY")
+data class LogEntryEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    val id: String? = null,
 
     @Column(name = "tenant_fk")
     val tenantId: Long = -1,
 
-    @Column(name = "workflow_fk")
-    val workflowId: Long = -1,
+    @Column(name = "workflow_instance_fk")
+    val workflowInstanceId: String = "",
 
-    @Column(name = "role_fk")
-    var roleId: Long? = null,
+    @Column(name = "activity_instance_fk")
+    val activityInstanceId: String? = null,
 
-    @Column(name = "form_fk")
-    var formId: String? = null,
-
-    @Column(name = "message_fk")
-    var messageId: String? = null,
-
-    var name: String = "",
-    var title: String? = null,
-    var description: String? = null,
-    var active: Boolean = true,
-    var type: ActivityType = ActivityType.UNKNOWN,
-    var requiresApproval: Boolean = false,
-    var tags: String? = null,
+    val type: LogEntryType = LogEntryType.UNKNOWN,
+    val message: String = "",
+    val exception: String? = null,
+    val metadata: String? = null,
+    val stackTrace: String? = null,
     val createdAt: Date = Date(),
-    var modifiedAt: Date = Date(),
-)
+) {
+    @Suppress("UNCHECKED_CAST")
+    fun metadataAsMap(objectMapper: ObjectMapper): Map<String, Any> {
+        return metadata?.let { objectMapper.readValue(metadata, Map::class.java) as Map<String, Any> }
+            ?: emptyMap()
+    }
+}

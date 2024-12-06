@@ -54,7 +54,7 @@ class SearchMessageEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun `by active`() {
         val result = rest.getForEntity(
-            "/v1/messages?active=false",
+            "/v1/messages?active=false&sort-by=NAME",
             SearchMessageResponse::class.java
         )
 
@@ -68,7 +68,7 @@ class SearchMessageEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun `another tenant`() {
         val result = rest.getForEntity(
-            "/v1/messages?id=200",
+            "/v1/messages?id=200&sort-by=SUBJECT",
             SearchMessageResponse::class.java
         )
 

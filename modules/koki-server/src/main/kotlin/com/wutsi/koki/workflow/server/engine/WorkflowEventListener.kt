@@ -1,16 +1,19 @@
 package com.wutsi.koki.workflow.server.engine
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.koki.event.server.rabbitmq.RabbitMQHandler
 import com.wutsi.koki.event.server.service.EventPublisher
 import com.wutsi.koki.form.event.ActivityDoneEvent
 import com.wutsi.koki.form.event.FormSubmittedEvent
 import com.wutsi.koki.form.event.FormUpdatedEvent
 import com.wutsi.koki.form.server.service.FormDataService
+import com.wutsi.koki.workflow.dto.LogEntryType
 import com.wutsi.koki.workflow.dto.WorkflowStatus
+import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.engine.command.RunActivityCommand
 import com.wutsi.koki.workflow.server.service.ActivityInstanceService
 import com.wutsi.koki.workflow.server.service.ActivityService
-import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
+import com.wutsi.koki.workflow.server.service.LogService
 import org.slf4j.LoggerFactory
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
@@ -18,16 +21,28 @@ import org.springframework.stereotype.Service
 @Service
 class WorkflowEventListener(
     private val workflowEngine: WorkflowEngine,
-    private val workflowInstanceService: WorkflowInstanceService,
     private val activityInstanceService: ActivityInstanceService,
     private val activityService: ActivityService,
     private val formDataService: FormDataService,
     private val activityRunnerProvider: ActivityRunnerProvider,
     private val objectMapper: ObjectMapper,
     private val eventPublisher: EventPublisher,
-) {
+    private val logService: LogService,
+) : RabbitMQHandler {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(WorkflowEventListener::class.java)
+    }
+
+    override fun handle(event: Any) {
+        if (event is FormSubmittedEvent) {
+            onFormSubmitted(event)
+        } else if (event is FormUpdatedEvent) {
+            onFormUpdated(event)
+        } else if (event is ActivityDoneEvent) {
+            onActivityDone(event)
+        } else if (event is RunActivityCommand) {
+            onRunActivityCommand(event)
+        }
     }
 
     @EventListener
@@ -36,10 +51,7 @@ class WorkflowEventListener(
             LOGGER.debug("onFormSubmitted - $event")
         }
 
-        if (event.activityInstanceId == null) {
-            LOGGER.debug("Form[${event.formId}] is not associated with any workflow activity")
-        } else {
-            LOGGER.debug("Form[${event.formId}] is submitted, completing ActivityInstance[${event.activityInstanceId}]")
+        if (event.activityInstanceId != null) {
             completeActivity(event.formDataId, event.activityInstanceId!!, event.tenantId)
         }
     }
@@ -50,10 +62,7 @@ class WorkflowEventListener(
             LOGGER.debug("onFormUpdated - $event")
         }
 
-        if (event.activityInstanceId == null) {
-            LOGGER.debug("Form[${event.formId}] is not associated with any workflow activity")
-        } else {
-            LOGGER.debug("Form[${event.formId}] is submitted, completing ActivityInstance[${event.activityInstanceId}]")
+        if (event.activityInstanceId != null) {
             completeActivity(event.formDataId, event.activityInstanceId!!, event.tenantId)
         }
     }
@@ -64,9 +73,7 @@ class WorkflowEventListener(
             LOGGER.debug("onActivityDone - $event")
         }
 
-        val activityInstance = activityInstanceService.get(event.activityInstanceId, event.tenantId)
-        val workflowInstance = workflowInstanceService.get(activityInstance.workflowInstanceId, event.tenantId)
-        val activityInstances = workflowEngine.next(workflowInstance.id!!, workflowInstance.tenantId)
+        val activityInstances = workflowEngine.next(event.workflowInstanceId, event.tenantId)
         if (activityInstances.isEmpty()) {
             return
         }
@@ -75,6 +82,7 @@ class WorkflowEventListener(
             eventPublisher.publish(
                 RunActivityCommand(
                     activityInstanceId = activityInstance.id!!,
+                    workflowInstanceId = activityInstance.workflowInstanceId,
                     tenantId = activityInstance.tenantId
                 )
             )
@@ -84,12 +92,28 @@ class WorkflowEventListener(
     @EventListener
     fun onRunActivityCommand(command: RunActivityCommand) {
         if (LOGGER.isDebugEnabled) {
-            LOGGER.debug("onActivityDone - $command")
+            LOGGER.debug("onRunActivityCommand - $command")
         }
 
         val activityInstance = activityInstanceService.get(command.activityInstanceId, command.tenantId)
-        val activity = activityService.get(activityInstance.activityId)
-        activityRunnerProvider.get(activity.type).run(activityInstance, workflowEngine)
+        try {
+            val activity = activityService.get(activityInstance.activityId)
+            activityRunnerProvider.get(activity.type).run(activityInstance, workflowEngine)
+        } catch (ex: Throwable) {
+            error(ex.message ?: "Failed", activityInstance, ex)
+            throw ex
+        }
+    }
+
+    private fun error(message: String, activityInstance: ActivityInstanceEntity, ex: Throwable) {
+        logService.create(
+            tenantId = activityInstance.tenantId,
+            type = LogEntryType.ERROR,
+            message = message,
+            workflowInstanceId = activityInstance.workflowInstanceId,
+            activityInstanceId = activityInstance.id,
+            exception = ex,
+        )
     }
 
     private fun completeActivity(formDataId: String, activityInstanceId: String, tenantId: Long) {

@@ -1,7 +1,7 @@
 CREATE TABLE T_FORM(
   id                      VARCHAR(36) NOT NULL,
 
-  tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
+  tenant_fk               BIGINT NOT NULL,
 
   name                    VARCHAR(100) NOT NULL,
   title                   VARCHAR(255) NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE T_FORM(
 CREATE TABLE T_FORM_DATA(
   id                      VARCHAR(36) NOT NULL,
 
-  tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
+  tenant_fk               BIGINT NOT NULL,
   form_fk                 VARCHAR(36) NOT NULL REFERENCES T_FORM(id),
 
   workflow_instance_id    VARCHAR(36),

@@ -9,13 +9,12 @@ import com.wutsi.koki.form.event.WorkflowStartedEvent
 import com.wutsi.koki.workflow.dto.ApprovalStatus
 import com.wutsi.koki.workflow.dto.LogEntryType
 import com.wutsi.koki.workflow.server.engine.command.RunActivityCommand
-import com.wutsi.koki.workflow.server.service.ApprovalService
 import com.wutsi.koki.workflow.server.service.LogService
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 
 @Service
-class LogListener(private val logService: LogService) : RabbitMQHandler {
+class LogEventListener(private val logService: LogService) : RabbitMQHandler {
     override fun handle(event: Any) {
         if (event is WorkflowStartedEvent) {
             onWorkflowStarted(event)

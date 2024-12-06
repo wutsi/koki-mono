@@ -32,15 +32,12 @@ class MessageService(
     }
 
     fun getByName(name: String, tenantId: Long): MessageEntity {
-        val message = dao.findByNameIgnoreCaseAndTenantId(name, tenantId)
-            ?: throw NotFoundException(
-                Error(
-                    ErrorCode.MESSAGE_NOT_FOUND,
-                    parameter = Parameter(value = name),
-                )
-            )
-
-        if (message.tenantId != tenantId || message.deleted) {
+        val messages = search(
+            tenantId = tenantId,
+            names = listOf(name),
+            limit = 1
+        )
+        if (messages.isEmpty()) {
             throw NotFoundException(
                 Error(
                     ErrorCode.MESSAGE_NOT_FOUND,
@@ -48,7 +45,7 @@ class MessageService(
                 )
             )
         }
-        return message
+        return messages.first()
     }
 
     fun search(
