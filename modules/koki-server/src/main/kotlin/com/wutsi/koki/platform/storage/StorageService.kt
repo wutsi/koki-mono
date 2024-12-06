@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.service.storage
+package com.wutsi.koki.platform.storage
 
 import java.io.InputStream
 import java.io.OutputStream
