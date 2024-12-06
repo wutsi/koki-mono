@@ -1,8 +1,8 @@
 CREATE TABLE T_WORKFLOW(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
-  tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
-  approver_role_fk        BIGINT REFERENCES T_ROLE(id),
+  tenant_fk               BIGINT NOT NULL,
+  approver_role_fk        BIGINT,
 
   name                    VARCHAR(100) NOT NULL,
   title                   VARCHAR(255),
@@ -20,11 +20,11 @@ CREATE TABLE T_WORKFLOW(
 CREATE TABLE T_ACTIVITY(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
-  tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
+  tenant_fk               BIGINT NOT NULL,
   workflow_fk             BIGINT NOT NULL REFERENCES T_WORKFLOW(id),
-  role_fk                 BIGINT REFERENCES T_ROLE(id),
-  form_fk                 VARCHAR(36) REFERENCES T_FORM(id),
-  message_fk              VARCHAR(36) REFERENCES T_MESSAGE(id),
+  role_fk                 BIGINT,
+  form_fk                 VARCHAR(36),
+  message_fk              VARCHAR(36),
 
   name                    VARCHAR(100) NOT NULL,
   title                   VARCHAR(255),
@@ -56,10 +56,10 @@ CREATE TABLE T_FLOW(
 CREATE TABLE T_WORKFLOW_INSTANCE(
     id                  VARCHAR(36) NOT NULL,
 
-    tenant_fk           BIGINT NOT NULL REFERENCES T_TENANT(id),
+    tenant_fk           BIGINT NOT NULL,
     workflow_fk         BIGINT NOT NULL REFERENCES T_WORKFLOW(id),
-    approver_fk         BIGINT REFERENCES T_USER(id),
-    created_by_fk       BIGINT REFERENCES T_USER(id),
+    approver_fk         BIGINT,
+    created_by_fk       BIGINT,
 
     title               VARCHAR(255),
     status              INT NOT NULL DEFAULT 0,
@@ -79,8 +79,8 @@ CREATE TABLE T_WI_PARTICIPANT(
     id                      BIGINT NOT NULL AUTO_INCREMENT,
 
     workflow_instance_fk    VARCHAR(36) NOT NULL REFERENCES T_WORKFLOW_INSTANCE(id),
-    user_fk                 BIGINT NOT NULL REFERENCES T_USER(id),
-    role_fk                 BIGINT NOT NULL REFERENCES T_ROLE(id),
+    user_fk                 BIGINT NOT NULL,
+    role_fk                 BIGINT NOT NULL,
 
     UNIQUE(workflow_instance_fk, user_fk, role_fk),
     PRIMARY KEY(id)
@@ -89,11 +89,11 @@ CREATE TABLE T_WI_PARTICIPANT(
 CREATE TABLE T_WI_ACTIVITY(
     id                      VARCHAR(36) NOT NULL,
 
-    tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
+    tenant_fk               BIGINT NOT NULL,
     workflow_instance_fk    VARCHAR(36) NOT NULL REFERENCES T_WORKFLOW_INSTANCE(id),
     activity_fk             BIGINT NOT NULL REFERENCES T_ACTIVITY(id),
-    assignee_fk             BIGINT REFERENCES T_USER(id),
-    approver_fk             BIGINT REFERENCES T_USER(id),
+    assignee_fk             BIGINT,
+    approver_fk             BIGINT,
 
     status                  INT NOT NULL DEFAULT 0,
     approval                INT NOT NULL DEFAULT 0,
@@ -110,7 +110,7 @@ CREATE TABLE T_WI_APPROVAL(
     id                      BIGINT NOT NULL AUTO_INCREMENT,
 
     activity_instance_fk    VARCHAR(36) NOT NULL REFERENCES T_WI_ACTIVITY(id),
-    approver_fk             BIGINT NOT NULL REFERENCES T_USER(id),
+    approver_fk             BIGINT NOT NULL,
 
     status                  INT NOT NULL DEFAULT 0,
     comment                 TEXT,
@@ -118,3 +118,21 @@ CREATE TABLE T_WI_APPROVAL(
 
     PRIMARY KEY(id)
 ) ENGINE = InnoDB;
+
+CREATE TABLE T_WI_LOG_ENTRY(
+    id                      VARCHAR(36) NOT NULL,
+
+    tenant_fk               BIGINT NOT NULL,
+    workflow_instance_fk    VARCHAR(36) NOT NULL REFERENCES T_WORKFLOW_INSTANCE(id),
+    activity_instance_fk    VARCHAR(36) REFERENCES T_WI_ACTIVITY(id),
+
+    type                    INT NOT NULL DEFAULT 0,
+    message                 VARCHAR(255),
+    stack_trace             TEXT,
+    exception               TEXT,
+    metadata                JSON,
+
+    created_at              DATETIME DEFAULT NOW(),
+
+    PRIMARY KEY(id)
+)

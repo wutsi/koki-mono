@@ -1,8 +1,8 @@
 CREATE TABLE T_FILE(
   id                      VARCHAR(36) NOT NULL,
 
-  tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
-  created_by_fk           BIGINT REFERENCES T_USER(id),
+  tenant_fk               BIGINT NOT NULL,
+  created_by_fk           BIGINT,
 
   workflow_instance_id    VARCHAR(36),
   form_id                 VARCHAR(36),

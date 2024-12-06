@@ -6,12 +6,12 @@ import com.rabbitmq.client.Channel
 import com.rabbitmq.client.DefaultConsumer
 import com.rabbitmq.client.Envelope
 import com.wutsi.koki.platform.logger.DefaultKVLogger
+import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.logger.KVLoggerThreadLocal
-import org.springframework.context.ApplicationEventPublisher
 
 class RabbitMQConsumer(
     private val objectMapper: ObjectMapper,
-    private val applicationEventPublisher: ApplicationEventPublisher,
+    private val handler: RabbitMQHandler,
     channel: Channel,
 ) : DefaultConsumer(channel) {
     override fun handleDelivery(
@@ -30,8 +30,8 @@ class RabbitMQConsumer(
             val event = objectMapper.readValue(body, RabbitMQEvent::class.java)
 
             // Process the event
-            val payload = extractPayload(event)
-            applicationEventPublisher.publishEvent(payload)
+            val payload = extractPayload(event, logger)
+            handler.handle(payload)
             channel.basicAck(envelope.deliveryTag, false)
 
             logger.add("success", true)
@@ -49,8 +49,9 @@ class RabbitMQConsumer(
         }
     }
 
-    private fun extractPayload(event: RabbitMQEvent): Any {
+    private fun extractPayload(event: RabbitMQEvent, logger: KVLogger): Any {
         val clazz = Class.forName(event.classname)
+        logger.add("rabbitmq_event_classname", clazz.name)
         return objectMapper.readValue(event.payload, clazz)
     }
 }

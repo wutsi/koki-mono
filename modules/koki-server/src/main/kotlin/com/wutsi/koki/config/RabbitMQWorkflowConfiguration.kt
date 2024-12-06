@@ -4,12 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.client.Channel
 import com.wutsi.koki.event.server.rabbitmq.RabbitMQConsumer
 import com.wutsi.koki.event.server.rabbitmq.RabbitMQEventPublisher
+import com.wutsi.koki.event.server.rabbitmq.RabbitMQHandler
 import com.wutsi.koki.event.server.service.EventPublisher
+import com.wutsi.koki.workflow.server.engine.LogEventListener
+import com.wutsi.koki.workflow.server.engine.WorkflowEventListener
 import jakarta.annotation.PostConstruct
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
-import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.Scheduled
 import java.util.Timer
@@ -23,12 +25,15 @@ import java.util.TimerTask
 class RabbitMQWorkflowConfiguration(
     private val channel: Channel,
     private val objectMapper: ObjectMapper,
-    private val applicationEventPublisher: ApplicationEventPublisher,
+    private val workflowEngineListener: WorkflowEventListener,
+    private val logEventListener: LogEventListener,
     private val eventPublisher: EventPublisher,
 
     @Value("\${koki.event-publisher.rabbitmq.exchange-name}") private val exchangeName: String,
-    @Value("\${koki.workflow-engine.rabbitmq.queue}") private val queue: String,
-    @Value("\${koki.workflow-engine.rabbitmq.dlq}") private val dlq: String,
+    @Value("\${koki.workflow-engine.rabbitmq.workflow-queue}") private val workflowQueue: String,
+    @Value("\${koki.workflow-engine.rabbitmq.workflow-dlq}") private val workflowDlq: String,
+    @Value("\${koki.workflow-engine.rabbitmq.log-queue}") private val logQueue: String,
+    @Value("\${koki.workflow-engine.rabbitmq.log-dlq}") private val logDlq: String,
     @Value("\${koki.workflow-engine.rabbitmq.consumer-delay-seconds}") private val consumerDelay: Int,
 ) {
     companion object {
@@ -37,6 +42,49 @@ class RabbitMQWorkflowConfiguration(
 
     @PostConstruct
     fun init() {
+        setupQueues(workflowQueue, workflowDlq)
+        setupConsumer(workflowQueue, workflowEngineListener)
+
+        setupQueues(logQueue, logDlq)
+        setupConsumer(logQueue, logEventListener)
+    }
+
+    @Scheduled(cron = "\${koki.workflow-engine.rabbitmq.dlq-cron}")
+    fun processWorkflowDLQ() {
+        if (eventPublisher is RabbitMQEventPublisher) {
+            eventPublisher.processDlq(
+                queue = workflowQueue,
+                dlq = workflowDlq,
+            )
+        }
+    }
+
+    private fun setupConsumer(queue: String, handler: RabbitMQHandler) {
+        /*
+        Wait before registering the consumer, so that the server is completely UP.
+        With Spring, this caused by bug because the consumer was registered during the startup,
+        then it dispatched the event using EventListener, but the event was lost because all the
+        event listener was not yet setup by spring!
+         */
+        LOGGER.info("Will setup $queue consumer in $consumerDelay seconds(s)")
+        val task = object : TimerTask() {
+            override fun run() {
+                LOGGER.info("Registering queue consumer")
+                channel.basicConsume(
+                    queue,
+                    false, // auto-ack
+                    RabbitMQConsumer(
+                        objectMapper = objectMapper,
+                        handler = handler,
+                        channel = channel,
+                    ),
+                )
+            }
+        }
+        Timer(queue, false).schedule(task, 1000L * consumerDelay)
+    }
+
+    private fun setupQueues(queue: String, dlq: String) {
         // DLQ
         LOGGER.info("Setup DLQ: $dlq")
         channel.queueDeclare(
@@ -67,43 +115,5 @@ class RabbitMQWorkflowConfiguration(
             exchangeName,
             "",
         )
-
-        // Consumer
-        setupConsumer()
-    }
-
-    @Scheduled(cron = "\${koki.workflow-engine.rabbitmq.dlq-cron}")
-    fun processDLQ() {
-        if (eventPublisher is RabbitMQEventPublisher) {
-            eventPublisher.processDlq(
-                queue = queue,
-                dlq = dlq,
-            )
-        }
-    }
-
-    private fun setupConsumer() {
-        /*
-        Wait before registering the consumer, so that the server is completely UP.
-        With Spring, this caused by bug because the consumer was registered during the startup,
-        then it dispatched the event using EventListener, but the event was lost because all the
-        event listener was not yet setup by spring!
-         */
-        LOGGER.info("Will setup queue consumer in $consumerDelay seconds(s)")
-        val task = object : TimerTask() {
-            override fun run() {
-                LOGGER.info("Registering queue consumer")
-                channel.basicConsume(
-                    queue,
-                    false, // auto-ack
-                    RabbitMQConsumer(
-                        objectMapper = objectMapper,
-                        applicationEventPublisher = applicationEventPublisher,
-                        channel = channel,
-                    ),
-                )
-            }
-        }
-        Timer(queue, false).schedule(task, 1000L * consumerDelay)
     }
 }

@@ -16,7 +16,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TimeZone
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/workflow/StartWorkflowInstanceEndpoint.sql"])
@@ -45,10 +44,10 @@ class StartWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         assertEquals(fmt.format(Date()), fmt.format(workflowInstance.startedAt))
         assertEquals(WorkflowStatus.RUNNING, workflowInstance.status)
 
+        Thread.sleep(1000)
         val activityInstanceId = result.body?.activityInstanceId
-        assertNotNull(activityInstanceId)
-        val activityInstance = activityInstanceDao.findById(activityInstanceId).get()
-        assertEquals(WorkflowStatus.RUNNING, activityInstance.status)
+        val activityInstance = activityInstanceDao.findById(activityInstanceId!!).get()
+        assertEquals(WorkflowStatus.DONE, activityInstance.status)
         assertEquals(110L, activityInstance.activityId)
         assertEquals(fmt.format(Date()), fmt.format(activityInstance.startedAt))
         assertNull(activityInstance.assigneeId)
