@@ -4,7 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.file.server.service.FileService
+import com.wutsi.koki.form.dto.FormContent
 import com.wutsi.koki.form.dto.FormDataStatus
+import com.wutsi.koki.form.dto.FormElementType
 import com.wutsi.koki.form.dto.SubmitFormDataRequest
 import com.wutsi.koki.form.dto.UpdateFormDataRequest
 import com.wutsi.koki.form.server.dao.FormDataRepository
@@ -19,6 +22,7 @@ import java.util.UUID
 class FormDataService(
     private val dao: FormDataRepository,
     private val formService: FormService,
+    private val fileService: FileService,
     private val objectMapper: ObjectMapper,
     private val em: EntityManager,
 ) {
@@ -79,7 +83,6 @@ class FormDataService(
     @Transactional
     fun submit(request: SubmitFormDataRequest, tenantId: Long): FormDataEntity {
         val form = formService.get(request.formId, tenantId)
-
         if (request.workflowInstanceId != null) {
             val formData = search(
                 tenantId = tenantId,
@@ -102,7 +105,10 @@ class FormDataService(
             createdAt = now,
             modifiedAt = now,
         )
-        return dao.save(formData)
+        dao.save(formData)
+
+        linkFiles(formData, request.data)
+        return formData
     }
 
     @Transactional
@@ -114,6 +120,44 @@ class FormDataService(
     fun update(formData: FormDataEntity, data: Map<String, Any>): FormDataEntity {
         formData.data = objectMapper.writeValueAsString(data)
         formData.modifiedAt = Date()
-        return dao.save(formData)
+        dao.save(formData)
+
+        linkFiles(formData, data)
+        return formData
+    }
+
+    private fun linkFiles(formData: FormDataEntity, data: Map<String, Any>) {
+        if (formData.workflowInstanceId == null) {
+            return
+        }
+
+        /* File names */
+        val form = formService.get(formData.formId, formData.tenantId)
+        val content = objectMapper.readValue(form.content, FormContent::class.java)
+        val names = content.elements
+            .flatMap { element -> (element.elements ?: emptyList()) }
+            .filter { element -> element.type == FormElementType.FILE_UPLOAD }
+            .map { element -> element.name }
+        if (names.isEmpty()) {
+            return
+        }
+
+        /* Files */
+        val files = fileService.search(
+            tenantId = formData.tenantId,
+            workflowInstanceIds = listOf(formData.workflowInstanceId),
+            limit = 100,
+        )
+        if (files.isEmpty()) {
+            return
+        }
+
+        val fileIds = names.mapNotNull { name -> data[name] }
+        files.forEach { file ->
+            if (!fileIds.contains(file.id!!)) {
+                file.workflowInstanceId = null
+            }
+        }
+        fileService.save(files)
     }
 }

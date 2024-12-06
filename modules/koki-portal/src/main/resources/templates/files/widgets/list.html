@@ -6,17 +6,16 @@
         <table class="table table-striped" th:if="${files}">
             <tr th:if="${layout != 'small'}">
                 <th>Name</th>
+                <th>Size</th>
                 <th>Date</th>
                 <th>Created by</th>
             </tr>
             <tr class="file" th:each="file: ${files}">
                 <td>
-                    <div>
-                        <a class="file" target="_new" th:alt="${file.name}" th:href="${file.url}"
-                           th:text="${file.name}">FILE</a>
-                    </div>
-                    <div th:text="${file.contentLengthText}">SIZE</div>
+                    <a class="file" target="_new" th:alt="${file.name}" th:href="${file.url}"
+                       th:text="${file.name}">FILE</a>
                 </td>
+                <td th:if="${layout != 'small'}" th:text="${file.contentLengthText}">SIZE</td>
                 <td th:if="${layout != 'small'}" th:text="${file.createdAtText}">CREATED</td>
                 <td th:if="${layout != 'small'}">
                     <span th:if="${file.createdBy}" th:text="${file.createdBy.displayName}">CREATED</span>

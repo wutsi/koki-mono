@@ -19,28 +19,11 @@ open class SecurityConfiguration {
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         LOGGER.info(">>> Configuring HttpSecurity")
         return http
-            .csrf { customizer ->
-                customizer.disable()
-            }
-            .cors { cors -> cors.disable() }
-            .sessionManagement { customizer ->
-                customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            }
+            .csrf { customizer -> customizer.disable() }
+            .sessionManagement { customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests { customizer ->
                 customizer.anyRequest().permitAll()
             }
             .build()
     }
-
-//    @Bean
-//    open fun corsConfiguration(): CorsConfigurationSource {
-//        val configuration = CorsConfiguration()
-//        configuration.allowedOrigins = listOf("*")
-//        configuration.allowedMethods = listOf("GET", "OPTIONS", "HEAD", "PUT", "POST", "DELETE")
-//        configuration.allowedHeaders = listOf("*")
-//        configuration.exposedHeaders = listOf("*")
-//        val source = UrlBasedCorsConfigurationSource()
-//        source.registerCorsConfiguration("/**", configuration)
-//        return source
-//    }
 }

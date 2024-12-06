@@ -98,9 +98,13 @@ function _koki_configure_upload() {
 }
 
 async function _koki_upload(elt) {
-    const uploadUrl = elt.getAttribute("data-upload-url");
+    let uploadUrl = elt.getAttribute("data-upload-url");
     const rel = elt.getAttribute("rel");
 
+    const token = _koki_get_cookie("__atk");
+    if (token){
+        uploadUrl = uploadUrl + '&access-token=' + token;
+    }
     const data = new FormData();
     data.append('file', elt.files[0]);
     const response = await fetch(uploadUrl, {
@@ -108,11 +112,11 @@ async function _koki_upload(elt) {
         body: data
     });
 
-    if (response.status === 200) {
+    if (response.ok || response.status === 0) {
         const json = await response.json();
         document.querySelector("[name=" + rel + "]").setAttribute('value', json.id);
         document.querySelector("[data-name=" + rel + "-filename]").innerHTML =
-            "<a class='filename' href='" + json.url + "'>" + json.name + "</a>" +
+            "<a class='filename' href='/files/" + json.id + "/" + json.name + "'>" + json.name + "</a>" +
             "<button class='btn-close' type='button' rel='" + rel + "' name='" + rel + "-close'></button>";
 
         const close = document.querySelector("[name=" + rel + "-close]");
@@ -120,8 +124,16 @@ async function _koki_upload(elt) {
             _koki_remove_file(close);
         });
     } else {
+        console.log('FAILED', response.headers);
         alert('Upload failed!!');
     }
+
+}
+
+function _koki_get_cookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
 function _koki_remove_file(elt) {

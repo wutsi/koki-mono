@@ -28,6 +28,6 @@ class AccessTokenHolder {
     }
 
     private fun findCookie(request: HttpServletRequest): Cookie? {
-        return request.cookies.find { cookie -> cookie.name == COOKIE_ACCESS_TOKEN }
+        return request.cookies?.find { cookie -> cookie.name == COOKIE_ACCESS_TOKEN }
     }
 }

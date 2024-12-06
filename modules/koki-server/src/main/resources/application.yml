@@ -125,6 +125,7 @@ logging:
         file: "%d Type=%level Logger=%c Thread=%thread %m%n"
 
 koki:
+    server-url: http://localhost:${server.port}
     portal-url: http://localhost:8081
     executor:
         thread-pool-size: 16
@@ -136,6 +137,12 @@ koki:
             exchange-name: koki
             max-retries: 24
             ttl-seconds: 84600
+    storage:
+        type: local # local | s3
+        local:
+            directory: ${user.home}/__wutsi
+            base-url: http://localhost:${server.port}
+            servlet-path: /local-storage
     workflow-engine:
         rabbitmq:
             queue: koki-workflow-queue

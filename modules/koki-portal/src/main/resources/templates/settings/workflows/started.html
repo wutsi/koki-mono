@@ -21,23 +21,20 @@
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
-                    <div id="started-message" class="alert alert-success" th:if="${workflowInstance.status.name() == 'RUNNING'}">
+                    <div class="alert alert-success" id="started-message"
+                         th:if="${workflowInstance.status.name() == 'RUNNING'}">
                         The workflow has been successfully started!
                     </div>
-                    <p id="scheduled-message" class="alert alert-success" th:unless="${workflowInstance.status.name() == 'RUNNING'}">
+                    <p class="alert alert-success" id="scheduled-message"
+                       th:unless="${workflowInstance.status.name() == 'RUNNING'}">
                         The workflow has been scheduled to start on
                         <b th:text="${workflowInstance.startAtText}">DDD</b>
                     </p>
                     <div class="workflow-image">
                         <img th:alt="${workflow.title}" th:src="${workflow.imageUrl}"/>
                     </div>
-                    <div  class="text-center">
-                        <div>
-                            <a class="btn btn-primary" th:href="${workflowInstance.url}">See Details</a>
-                        </div>
-                        <div class="margin-top">
-                            <a class="btn btn-secondary btn-ok" href="/settings/workflows">Back to Workflows</a>
-                        </div>
+                    <div class="text-center">
+                        <a class="btn btn-secondary btn-ok" href="/settings/workflows">Back to Workflows</a>
                     </div>
                 </div>
             </div>
