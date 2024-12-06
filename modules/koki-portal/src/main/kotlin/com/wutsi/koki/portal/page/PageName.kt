@@ -8,6 +8,8 @@ object PageName {
 
     const val HOME = "page.home"
 
+    const val LOG = "page.log"
+
     const val LOGIN = "page.login"
 
     const val SETTINGS_MESSAGE = "page.settings.message"

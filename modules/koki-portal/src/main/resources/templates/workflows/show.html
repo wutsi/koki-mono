@@ -72,6 +72,13 @@
                                 Process
                             </button>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-logs" aria-selected="false" class="nav-link"
+                                    data-bs-target="#pills-logs" data-bs-toggle="pill" id="pills-logs-tab"
+                                    role="tab" type="button">
+                                Log
+                            </button>
+                        </li>
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
                         <div aria-labelledby="pills-activities-tab" class="tab-pane fade show active"
@@ -136,6 +143,12 @@
                             <div class="workflow-image">
                                 <img th:alt="${workflowInstance.workflow.title}" th:src="${workflowInstance.imageUrl}"/>
                             </div>
+                        </div>
+
+                        <div aria-labelledby="pills-process-tab" class="tab-pane fade" id="pills-logs"
+                             role="tabpanel">
+                            <div class="widget-container"
+                                 th:data-url="'/workflows/widgets/logs?workflow-instance-id=' + ${workflowInstance.id}"></div>
                         </div>
                     </div>
                 </div>

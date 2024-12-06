@@ -15,6 +15,7 @@ import com.wutsi.koki.portal.service.AccessTokenHolder
 import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiForms
+import com.wutsi.koki.sdk.KokiLogs
 import com.wutsi.koki.sdk.KokiMessages
 import com.wutsi.koki.sdk.KokiTenant
 import com.wutsi.koki.sdk.KokiUser
@@ -30,6 +31,7 @@ import com.wutsi.koki.tenant.dto.SearchUserResponse
 import com.wutsi.koki.tenant.dto.User
 import com.wutsi.koki.workflow.dto.SearchActivityInstanceResponse
 import com.wutsi.koki.workflow.dto.SearchActivityResponse
+import com.wutsi.koki.workflow.dto.SearchLogEntryResponse
 import com.wutsi.koki.workflow.dto.SearchWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.SearchWorkflowResponse
 import org.apache.commons.io.IOUtils
@@ -77,6 +79,9 @@ abstract class AbstractPageControllerTest {
 
     @MockitoBean
     protected lateinit var kokiForms: KokiForms
+
+    @MockitoBean
+    protected lateinit val kokiLogs: KokiLogs
 
     @MockitoBean
     protected lateinit var kokiMessages: KokiMessages
@@ -184,6 +189,14 @@ abstract class AbstractPageControllerTest {
         doReturn(SearchFileResponse()).whenever(kokiFiles)
             .files(
                 anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
+
+        doReturn(SearchLogEntryResponse()).whenever(kokiLogs)
+            .logs(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),

@@ -94,6 +94,13 @@
                                 Forms
                             </button>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-logs" aria-selected="false" class="nav-link"
+                                    data-bs-target="#pills-logs" data-bs-toggle="pill" id="pills-logs-tab"
+                                    role="tab" type="button">
+                                Log
+                            </button>
+                        </li>
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
                         <div aria-labelledby="pills-files-tab" class="tab-pane fade show active" id="pills-files"
@@ -105,6 +112,11 @@
                         <div aria-labelledby="pills-forms-tab" class="tab-pane fade" id="pills-forms" role="tabpanel">
                             <div class="widget-container"
                                  th:data-url="'/workflows/widgets/forms?workflow-instance-id=' + ${activityInstance.workflowInstance.id}"></div>
+                        </div>
+                        <div aria-labelledby="pills-process-tab" class="tab-pane fade" id="pills-logs"
+                             role="tabpanel">
+                            <div class="widget-container"
+                                 th:data-url="'/workflows/widgets/logs?activity-instance-id=' + ${activityInstance.id}"></div>
                         </div>
                     </div>
                 </div>
