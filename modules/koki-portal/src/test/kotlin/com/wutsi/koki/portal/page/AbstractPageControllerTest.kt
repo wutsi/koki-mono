@@ -11,7 +11,6 @@ import com.wutsi.koki.LogFixtures.logEntries
 import com.wutsi.koki.LogFixtures.logEntry
 import com.wutsi.koki.MessageFixtures
 import com.wutsi.koki.RoleFixtures.roles
-import com.wutsi.koki.UserFixtures
 import com.wutsi.koki.UserFixtures.user
 import com.wutsi.koki.UserFixtures.users
 import com.wutsi.koki.WorkflowFixtures.activities
@@ -43,11 +42,9 @@ import com.wutsi.koki.sdk.KokiWorkflowInstance
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
 import com.wutsi.koki.tenant.dto.GetUserResponse
-import com.wutsi.koki.tenant.dto.Role
 import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
-import com.wutsi.koki.tenant.dto.User
 import com.wutsi.koki.workflow.dto.GetActivityInstanceResponse
 import com.wutsi.koki.workflow.dto.GetLogEntryResponse
 import com.wutsi.koki.workflow.dto.GetWorkflowInstanceResponse
@@ -188,7 +185,7 @@ abstract class AbstractPageControllerTest {
             .roles(anyOrNull(), anyOrNull(), anyOrNull())
     }
 
-    private fun setupFiles(){
+    private fun setupFiles() {
         doReturn(SearchFileResponse(files)).whenever(kokiFiles)
             .files(
                 anyOrNull(),
@@ -198,6 +195,7 @@ abstract class AbstractPageControllerTest {
                 anyOrNull(),
             )
     }
+
     private fun setupForms() {
         doReturn(GetFormResponse(FormFixtures.form)).whenever(kokiForms).form(any())
 
@@ -294,7 +292,7 @@ abstract class AbstractPageControllerTest {
             )
     }
 
-    private fun setupUsers(){
+    private fun setupUsers() {
         doReturn(GetUserResponse(user)).whenever(kokiUser).user(USER_ID)
         doReturn(SearchUserResponse(users)).whenever(kokiUser)
             .users(
@@ -313,7 +311,7 @@ abstract class AbstractPageControllerTest {
         doReturn(principal).whenever(jwtDecoder).decode(any())
     }
 
-    private fun setupLogs(){
+    private fun setupLogs() {
         doReturn(GetLogEntryResponse(logEntry)).whenever(kokiLogs).log(any())
         doReturn(SearchLogEntryResponse(logEntries)).whenever(kokiLogs)
             .logs(

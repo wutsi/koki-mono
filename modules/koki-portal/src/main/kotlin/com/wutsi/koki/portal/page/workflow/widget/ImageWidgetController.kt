@@ -21,7 +21,7 @@ class ImageWidgetController(
     ): String {
         if (workflowInstanceId != null) {
             model.addAttribute("url", workflowInstanceService.imageUrl(workflowInstanceId))
-        } else if (workflowId != null){
+        } else if (workflowId != null) {
             model.addAttribute("url", workflowService.imageUrl(workflowId))
         }
         return "workflows/widgets/image"

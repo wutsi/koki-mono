@@ -3,7 +3,7 @@ package com.wutsi.koki.portal.model
 import com.wutsi.koki.workflow.dto.LogEntryType
 import java.util.Date
 
-data class LogEntryModel (
+data class LogEntryModel(
     val id: String = "",
     val activityInstance: ActivityInstanceModel? = null,
     val type: LogEntryType = LogEntryType.UNKNOWN,
@@ -12,7 +12,7 @@ data class LogEntryModel (
     val stackTrace: String? = null,
     val createdAt: Date = Date(),
     val createdAtText: String = "",
-){
+) {
     val url: String
         get() = "/workflows/logs/$id"
 }

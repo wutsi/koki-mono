@@ -42,5 +42,4 @@ object MessageFixtures {
             active = false,
         ),
     )
-
 }
