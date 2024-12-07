@@ -11,6 +11,7 @@
 - [x] Add Workflow Log
 - [] Add support for Business Rule activities
 - [] Add support for Service activities
+- [] Cancel workflow Instance
 - [] Align webapp domain name with Tenant
 - [] Create Workflow Instance on form submission
 - [] Add support for S3 storage
