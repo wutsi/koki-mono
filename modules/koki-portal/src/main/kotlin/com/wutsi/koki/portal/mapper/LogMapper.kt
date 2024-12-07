@@ -39,7 +39,6 @@ class LogMapper {
             message = entity.message,
             createdAt = entity.createdAt,
             createdAtText = fmt.format(entity.createdAt),
-            stackTrace = entity.stackTrace,
             type = entity.type,
             activityInstance = activityInstance,
         )
