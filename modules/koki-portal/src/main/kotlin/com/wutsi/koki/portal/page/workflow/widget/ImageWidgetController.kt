@@ -16,7 +16,7 @@ class ImageWidgetController(
     @GetMapping("/workflows/widgets/image")
     fun show(
         @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
-        @RequestParam(required = false, name = "activity-id") workflowId: Long? = null,
+        @RequestParam(required = false, name = "workflow-id") workflowId: Long? = null,
         model: Model
     ): String {
         if (workflowInstanceId != null) {

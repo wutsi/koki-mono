@@ -21,7 +21,6 @@ class LogsWidgetControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent(".empty-message")
 
         click(".logs-widget .btn-view")
-
         val tabs = driver.getWindowHandles().toList()
         driver.switchTo().window(tabs[1])
         Thread.sleep(1000)
@@ -36,6 +35,7 @@ class LogsWidgetControllerTest : AbstractPageControllerTest() {
         assertElementCount(".logs-widget table tr.log-entry", LogFixtures.logEntries.size)
         assertElementNotPresent(".empty-message")
 
+        click(".logs-widget .btn-view")
         val tabs = driver.getWindowHandles().toList()
         driver.switchTo().window(tabs[1])
         Thread.sleep(1000)

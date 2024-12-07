@@ -24,12 +24,8 @@ function _koki_tabs_lazyload() {
     const tabs = document.querySelectorAll('button[data-bs-toggle="pill"]');
     for (let i = 0; i < tabs.length; i++) {
         tabs[i].addEventListener('show.bs.tab', function (event) {
-            console.log('current tab', event.target); // newly activated tab
-            console.log('previous tab', event.relatedTarget); // previous active tab
-
             const content = document.querySelector(tabs[i].getAttribute('data-bs-target'));
             const url = content.getAttribute('data-url');
-            console.log('>>>', url);
             if (url) {
                 fetch(url)
                     .then(function (response) {
