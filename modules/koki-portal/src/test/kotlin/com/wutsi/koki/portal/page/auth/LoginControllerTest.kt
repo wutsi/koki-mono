@@ -22,7 +22,6 @@ class LoginControllerTest : AbstractPageControllerTest() {
     override fun setUp() {
         super.setUp()
 
-        setUpAnonymousUser()
         doReturn(LoginResponse(accessToken)).whenever(kokiAuthentication).login(any(), any())
     }
 
@@ -71,6 +70,8 @@ class LoginControllerTest : AbstractPageControllerTest() {
     @Test
     fun `redirect after login`() {
         // GIVEN
+        setUpAnonymousUser()
+
         val form = Form(
             id = "309302",
             name = "FRM-001",
@@ -84,6 +85,7 @@ class LoginControllerTest : AbstractPageControllerTest() {
 
         // WHEN
         navigateTo("/forms/4304309")
+        setupUsers()
 
         // THEN
         assertCurrentPageIs(PageName.LOGIN)

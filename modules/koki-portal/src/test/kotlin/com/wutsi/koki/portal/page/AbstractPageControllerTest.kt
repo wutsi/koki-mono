@@ -292,7 +292,7 @@ abstract class AbstractPageControllerTest {
             )
     }
 
-    private fun setupUsers() {
+    protected fun setupUsers() {
         doReturn(GetUserResponse(user)).whenever(kokiUser).user(USER_ID)
         doReturn(SearchUserResponse(users)).whenever(kokiUser)
             .users(
