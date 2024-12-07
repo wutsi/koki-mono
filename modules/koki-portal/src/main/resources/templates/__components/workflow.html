@@ -5,12 +5,10 @@
 <span th:fragment="activity-type-icon(type)" th:if="${type}">
     <i class="fa-regular fa-circle" th:if="${type.name == 'START'}"></i>
     <i class="fa-regular fa-circle-dot" th:if="${type.name == 'END'}"></i>
-    <i class="fa-solid fa-user" th:if="${type.name == 'USER'}"></i>
-    <i class="fa-solid fa-hand" th:if="${type.name == 'MANUAL'}"></i>
-    <i class="fa-solid fa-gear" th:if="${type.name == 'SERVICE'}"></i>
-
-    <i class="fa-solid fa-envelope" th:if="${type.name == 'EMAIL'}"></i>
-    <i class="fa-solid fa-cloud-arrow-up" th:if="${type.name == 'UPLOAD'}"></i>
+    <i class="fa-regular fa-user" th:if="${type.name == 'USER'}"></i>
+    <i class="fa-regular fa-hand" th:if="${type.name == 'MANUAL'}"></i>
+    <i class="fa-regular fa-gear" th:if="${type.name == 'SERVICE'}"></i>
+    <i class="fa-regular fa-envelope" th:if="${type.name == 'SEND'}"></i>
 </span>
 
 <div th:fragment="workflow-status(status)" th:if="${status}">

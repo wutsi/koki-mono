@@ -57,6 +57,10 @@ class WorkflowService(
         return mapper.toWorkflowModel(workflow, approverRole, roles, forms, messages, imageUrl)
     }
 
+    fun imageUrl(id: Long): String {
+        return koki.imageUrl(id)
+    }
+
     fun activities(
         ids: List<Long> = emptyList(),
         workflowIds: List<Long> = emptyList(),

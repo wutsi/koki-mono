@@ -10,9 +10,8 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.FormFixtures
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.form.dto.Form
-import com.wutsi.koki.form.dto.GetFormResponse
 import com.wutsi.koki.form.dto.SubmitFormDataRequest
 import com.wutsi.koki.form.dto.SubmitFormDataResponse
 import com.wutsi.koki.form.dto.UpdateFormDataRequest
@@ -22,21 +21,14 @@ import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
 class FormControllerTest : AbstractPageControllerTest() {
-    private val formId = "1111"
-
-    private val form = Form(
-        id = "309302",
-        name = "FRM-001",
-        title = "Incident Report",
-    )
+    private val formId = FormFixtures.form.id
+    private val form = FormFixtures.form
 
     private val fileId = "32093209"
 
     @BeforeEach
     override fun setUp() {
         super.setUp()
-
-        doReturn(GetFormResponse(form)).whenever(kokiForms).form(any())
 
         val html = generateFormHtml("http://localhost:$port/forms/$formId")
         doReturn(html).whenever(kokiForms)

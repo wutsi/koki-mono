@@ -7,7 +7,7 @@
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
 
-<div class="container-fluid">
+<div class="container">
     <h1>
         Case: <span th:text="${workflowInstance.title}">TITLE</span>
     </h1>
@@ -72,6 +72,13 @@
                                 Process
                             </button>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-logs" aria-selected="false" class="nav-link"
+                                    data-bs-target="#pills-logs" data-bs-toggle="pill" id="pills-logs-tab"
+                                    role="tab" type="button">
+                                Log
+                            </button>
+                        </li>
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
                         <div aria-labelledby="pills-activities-tab" class="tab-pane fade show active"
@@ -87,7 +94,8 @@
                                 </tr>
                                 <tr class="activity"
                                     th:classappend="${activityInstances[activity.id]?.running} ? 'activity-running'"
-                                    th:each="activity: ${workflowInstance.workflow.activities}">
+                                    th:each="activity: ${workflowInstance.workflow.activities}"
+                                    th:if="${activityInstances[activity.id]}">
                                     <td>
                                     <span
                                         th:replace="~{__components/workflow :: activity-type-icon(${activity.type})}"></span>
@@ -120,22 +128,23 @@
                         </div>
 
                         <div aria-labelledby="pills-files-tab" class="tab-pane fade" id="pills-files"
-                             role="tabpanel">
-                            <div class="widget-container"
-                                 th:data-url="'/files/widgets/list?workflow-instance-id=' + ${workflowInstance.id}"></div>
+                             role="tabpanel"
+                             th:data-url="'/files/widgets/list?workflow-instance-id=' + ${workflowInstance.id}">
                         </div>
 
                         <div aria-labelledby="pills-forms-tab" class="tab-pane fade" id="pills-forms"
-                             role="tabpanel">
-                            <div class="widget-container"
-                                 th:data-url="'/workflows/widgets/forms?workflow-instance-id=' + ${workflowInstance.id}"></div>
+                             role="tabpanel"
+                             th:data-url="'/workflows/widgets/forms?workflow-instance-id=' + ${workflowInstance.id}">
                         </div>
 
                         <div aria-labelledby="pills-process-tab" class="tab-pane fade" id="pills-process"
-                             role="tabpanel">
-                            <div class="workflow-image">
-                                <img th:alt="${workflowInstance.workflow.title}" th:src="${workflowInstance.imageUrl}"/>
-                            </div>
+                             role="tabpanel"
+                             th:data-url="'/workflows/widgets/image?workflow-instance-id=' + ${workflowInstance.id}">
+                        </div>
+
+                        <div aria-labelledby="pills-process-tab" class="tab-pane fade" id="pills-logs"
+                             role="tabpanel"
+                             th:data-url="'/workflows/widgets/logs?workflow-instance-id=' + ${workflowInstance.id}">
                         </div>
                     </div>
                 </div>

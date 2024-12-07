@@ -5,56 +5,16 @@ import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.WorkflowFixtures.workflows
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.workflow.dto.Activity
 import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.GetWorkflowResponse
 import com.wutsi.koki.workflow.dto.SearchWorkflowResponse
 import com.wutsi.koki.workflow.dto.Workflow
-import com.wutsi.koki.workflow.dto.WorkflowSummary
-import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
 class ListWorkflowControllerTest : AbstractPageControllerTest() {
-    private val workflows = listOf(
-        WorkflowSummary(
-            id = 1L,
-            name = "WF-001",
-            title = "Workflow #1",
-            active = true,
-        ),
-        WorkflowSummary(
-            id = 2L,
-            name = "WF-002",
-            title = "Workflow #2",
-            active = true,
-        ),
-        WorkflowSummary(
-            id = 3L,
-            name = "WF-003",
-            title = "Workflow #3",
-            active = false,
-        ),
-    )
-
-    @BeforeEach
-    override fun setUp() {
-        super.setUp()
-
-        doReturn(SearchWorkflowResponse(workflows)).whenever(kokiWorkflow)
-            .workflows(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-            )
-    }
-
     @Test
     fun list() {
         navigateTo("/settings/workflows")

@@ -8,32 +8,16 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.MessageFixtures.message
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.message.dto.GetMessageResponse
-import com.wutsi.koki.message.dto.Message
 import com.wutsi.koki.message.dto.UpdateMessageRequest
 import com.wutsi.koki.portal.page.PageName
 import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.text.trimIndent
 
 class EditMessageControllerTest : AbstractPageControllerTest() {
-    val message = Message(
-        id = "1",
-        name = "M-001",
-        subject = "Message #1",
-        active = true,
-        body = """
-            <p>
-                Hello <b>{{recipient}}</b>
-            </p>
-            <p>
-                Welcome to Koki!!!
-            </p>
-        """.trimIndent()
-    )
-
     @BeforeEach
     override fun setUp() {
         super.setUp()

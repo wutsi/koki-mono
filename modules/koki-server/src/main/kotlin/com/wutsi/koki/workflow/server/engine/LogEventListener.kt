@@ -34,7 +34,7 @@ class LogEventListener(private val logService: LogService) : RabbitMQHandler {
     @EventListener
     fun onWorkflowStarted(event: WorkflowStartedEvent) {
         info(
-            message = "Workflow starting",
+            message = "Workflow started",
             workflowInstanceId = event.workflowInstanceId,
             tenantId = event.tenantId,
             timestamp = event.timestamp,
@@ -65,7 +65,7 @@ class LogEventListener(private val logService: LogService) : RabbitMQHandler {
     @EventListener
     fun onApprovalStarted(event: ApprovalStartedEvent) {
         info(
-            message = "Activity approval starting",
+            message = "Activity approval started",
             workflowInstanceId = event.workflowInstanceId,
             activityInstanceId = event.activityInstanceId,
             tenantId = event.tenantId,
@@ -92,7 +92,7 @@ class LogEventListener(private val logService: LogService) : RabbitMQHandler {
     @EventListener
     fun onRunActivityCommand(command: RunActivityCommand) {
         info(
-            message = "Activity starting",
+            message = "Activity started",
             workflowInstanceId = command.workflowInstanceId,
             activityInstanceId = command.activityInstanceId,
             tenantId = command.tenantId,

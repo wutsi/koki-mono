@@ -5,16 +5,35 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.FileFixtures.files
+import com.wutsi.koki.FormFixtures
+import com.wutsi.koki.LogFixtures.logEntries
+import com.wutsi.koki.LogFixtures.logEntry
+import com.wutsi.koki.MessageFixtures
+import com.wutsi.koki.RoleFixtures.roles
+import com.wutsi.koki.UserFixtures.user
+import com.wutsi.koki.UserFixtures.users
+import com.wutsi.koki.WorkflowFixtures.activities
+import com.wutsi.koki.WorkflowFixtures.activityInstance
+import com.wutsi.koki.WorkflowFixtures.activityInstances
+import com.wutsi.koki.WorkflowFixtures.workflow
+import com.wutsi.koki.WorkflowFixtures.workflowInstance
+import com.wutsi.koki.WorkflowFixtures.workflowInstances
+import com.wutsi.koki.WorkflowFixtures.workflowPictureUrl
+import com.wutsi.koki.WorkflowFixtures.workflows
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.file.dto.SearchFileResponse
+import com.wutsi.koki.form.dto.GetFormResponse
 import com.wutsi.koki.form.dto.SearchFormResponse
+import com.wutsi.koki.message.dto.GetMessageResponse
 import com.wutsi.koki.message.dto.SearchMessageResponse
 import com.wutsi.koki.portal.service.AccessTokenHolder
 import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiForms
+import com.wutsi.koki.sdk.KokiLogs
 import com.wutsi.koki.sdk.KokiMessages
 import com.wutsi.koki.sdk.KokiTenant
 import com.wutsi.koki.sdk.KokiUser
@@ -23,13 +42,16 @@ import com.wutsi.koki.sdk.KokiWorkflowInstance
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
 import com.wutsi.koki.tenant.dto.GetUserResponse
-import com.wutsi.koki.tenant.dto.Role
 import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
-import com.wutsi.koki.tenant.dto.User
+import com.wutsi.koki.workflow.dto.GetActivityInstanceResponse
+import com.wutsi.koki.workflow.dto.GetLogEntryResponse
+import com.wutsi.koki.workflow.dto.GetWorkflowInstanceResponse
+import com.wutsi.koki.workflow.dto.GetWorkflowResponse
 import com.wutsi.koki.workflow.dto.SearchActivityInstanceResponse
 import com.wutsi.koki.workflow.dto.SearchActivityResponse
+import com.wutsi.koki.workflow.dto.SearchLogEntryResponse
 import com.wutsi.koki.workflow.dto.SearchWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.SearchWorkflowResponse
 import org.apache.commons.io.IOUtils
@@ -79,6 +101,9 @@ abstract class AbstractPageControllerTest {
     protected lateinit var kokiForms: KokiForms
 
     @MockitoBean
+    protected lateinit var kokiLogs: KokiLogs
+
+    @MockitoBean
     protected lateinit var kokiMessages: KokiMessages
 
     @MockitoBean
@@ -102,29 +127,8 @@ abstract class AbstractPageControllerTest {
     @Autowired
     protected lateinit var objectMapper: ObjectMapper
 
-    protected val workflowPictureUrl = "https://picsum.photos/800/100"
-
-    protected val user = User(
-        id = USER_ID,
-        email = "ray.sponsible@gmail.com",
-        displayName = "Ray Sponsible",
-        roles = listOf(
-            Role(id = 1L, name = "accountant", title = "Accountant"),
-        )
-    )
-
     protected val accessToken: String =
         "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJpc3MiOiJLb2tpIiwic3ViIjoiSGVydmUgVGNoZXBhbm5vdSIsInVzZXJJZCI6MjA0LCJ0ZW5hbnRJZCI6MSwiaWF0IjoxNzMxNTA5MDM0LCJleHAiOjE3MzE1OTU0MzR9."
-
-    fun setUpLoggedInUser() {
-        doReturn(accessToken).whenever(accessTokenHolder).get(any())
-        doReturn(GetUserResponse(user)).whenever(kokiUser).user(USER_ID)
-
-        val principal = mock<JWTPrincipal>()
-        doReturn(USER_ID).whenever(principal).getUserId()
-        doReturn(USER_ID.toString()).whenever(principal).name
-        doReturn(principal).whenever(jwtDecoder).decode(any())
-    }
 
     fun setUpAnonymousUser() {
         doReturn(null).whenever(accessTokenHolder).get(any())
@@ -143,7 +147,6 @@ abstract class AbstractPageControllerTest {
     fun setUp() {
         setupSelenium()
         setupDefaultApiResponses()
-        setUpLoggedInUser()
     }
 
     private fun setupSelenium() {
@@ -166,22 +169,24 @@ abstract class AbstractPageControllerTest {
     }
 
     private fun setupDefaultApiResponses() {
-        doReturn(SearchFormResponse()).whenever(kokiForms)
-            .forms(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+        setupRoles()
+        setupFiles()
+        setupForms()
+        setupLogs()
+        setupMessages()
+        setupWorkflows()
+        setupUsers()
 
-        doReturn(SearchRoleResponse()).whenever(kokiUser)
+        doReturn(SearchConfigurationResponse()).whenever(kokiTenant).configurations(anyOrNull(), anyOrNull())
+    }
+
+    private fun setupRoles() {
+        doReturn(SearchRoleResponse(roles)).whenever(kokiUser)
             .roles(anyOrNull(), anyOrNull(), anyOrNull())
+    }
 
-        doReturn(SearchUserResponse()).whenever(kokiUser)
-            .users(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-            )
-
-        doReturn(SearchFileResponse()).whenever(kokiFiles)
+    private fun setupFiles() {
+        doReturn(SearchFileResponse(files)).whenever(kokiFiles)
             .files(
                 anyOrNull(),
                 anyOrNull(),
@@ -189,8 +194,26 @@ abstract class AbstractPageControllerTest {
                 anyOrNull(),
                 anyOrNull(),
             )
+    }
 
-        doReturn(SearchMessageResponse()).whenever(kokiMessages)
+    private fun setupForms() {
+        doReturn(GetFormResponse(FormFixtures.form)).whenever(kokiForms).form(any())
+
+        doReturn(SearchFormResponse(FormFixtures.forms)).whenever(kokiForms)
+            .forms(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
+    }
+
+    private fun setupMessages() {
+        doReturn(GetMessageResponse(MessageFixtures.message)).whenever(kokiMessages).message(any())
+
+        doReturn(SearchMessageResponse(MessageFixtures.messages)).whenever(kokiMessages)
             .messages(
                 anyOrNull(),
                 anyOrNull(),
@@ -200,70 +223,103 @@ abstract class AbstractPageControllerTest {
                 anyOrNull(),
                 anyOrNull(),
             )
+    }
 
-        doReturn(SearchConfigurationResponse()).whenever(kokiTenant).configurations(anyOrNull(), anyOrNull())
-
-        doReturn(SearchWorkflowResponse()).whenever(kokiWorkflow)
-            .workflows(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-            )
-
-        doReturn(SearchActivityResponse()).whenever(kokiWorkflow)
-            .activities(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-            )
-
-        doReturn(SearchWorkflowInstanceResponse()).whenever(kokiWorkflowInstance)
-            .workflows(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull()
-            )
-
-        doReturn(SearchActivityInstanceResponse()).whenever(kokiWorkflowInstance)
-            .activities(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull()
-            )
-
+    private fun setupWorkflows() {
         doReturn(workflowPictureUrl).whenever(kokiWorkflow).imageUrl(any())
-
         doReturn(workflowPictureUrl).whenever(kokiWorkflowInstance).imageUrl(any())
 
         val json = getResourceAsString("/workflow-001.json")
         doReturn(json).whenever(kokiWorkflow).json(any())
+
+        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).workflow(anyOrNull())
+        doReturn(SearchWorkflowResponse(workflows)).whenever(kokiWorkflow)
+            .workflows(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
+
+        doReturn(SearchActivityResponse(activities)).whenever(kokiWorkflow)
+            .activities(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
+
+        doReturn(GetWorkflowInstanceResponse(workflowInstance)).whenever(kokiWorkflowInstance).workflow(any())
+        doReturn(SearchWorkflowInstanceResponse(workflowInstances)).whenever(kokiWorkflowInstance)
+            .workflows(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull()
+            )
+
+        doReturn(GetActivityInstanceResponse(activityInstance)).whenever(kokiWorkflowInstance)
+            .activity(activityInstance.id)
+        doReturn(SearchActivityInstanceResponse(activityInstances)).whenever(kokiWorkflowInstance)
+            .activities(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull()
+            )
+    }
+
+    protected fun setupUsers() {
+        doReturn(GetUserResponse(user)).whenever(kokiUser).user(USER_ID)
+        doReturn(SearchUserResponse(users)).whenever(kokiUser)
+            .users(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
+
+        doReturn(accessToken).whenever(accessTokenHolder).get(any())
+
+        val principal = mock<JWTPrincipal>()
+        doReturn(USER_ID).whenever(principal).getUserId()
+        doReturn(USER_ID.toString()).whenever(principal).name
+        doReturn(principal).whenever(jwtDecoder).decode(any())
+    }
+
+    private fun setupLogs() {
+        doReturn(GetLogEntryResponse(logEntry)).whenever(kokiLogs).log(any())
+        doReturn(SearchLogEntryResponse(logEntries)).whenever(kokiLogs)
+            .logs(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
     }
 
     @AfterEach
@@ -289,8 +345,7 @@ abstract class AbstractPageControllerTest {
                 parameter = param?.let { Parameter(value = param) },
                 data = data
             ),
-
-            )
+        )
         return HttpClientErrorException(
             HttpStatusCode.valueOf(statusCode),
             "Error",

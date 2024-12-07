@@ -56,6 +56,7 @@ class WorkflowEngine(
                     eventPublisher.publish(
                         ActivityDoneEvent(
                             activityInstanceId = activityInstanceId,
+                            workflowInstanceId = instance.workflowInstanceId,
                             tenantId = tenantId,
                         )
                     )
@@ -63,6 +64,7 @@ class WorkflowEngine(
                     eventPublisher.publish(
                         ActivityDoneEvent(
                             activityInstanceId = activityInstanceId,
+                            workflowInstanceId = instance.workflowInstanceId,
                             tenantId = tenantId,
                         )
                     )

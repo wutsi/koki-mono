@@ -5,52 +5,15 @@ import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.FormFixtures.forms
 import com.wutsi.koki.form.dto.Form
 import com.wutsi.koki.form.dto.FormContent
-import com.wutsi.koki.form.dto.FormSummary
 import com.wutsi.koki.form.dto.GetFormResponse
 import com.wutsi.koki.form.dto.SearchFormResponse
 import com.wutsi.koki.portal.page.PageName
-import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
 class ListFormControllerTest : AbstractPageControllerTest() {
-    private val forms = listOf(
-        FormSummary(
-            id = "1",
-            name = "FRM-001",
-            title = "Indicent Manager",
-            active = true,
-        ),
-        FormSummary(
-            id = "2",
-            name = "FRM-002",
-            title = "Reimbursement Form",
-            active = true,
-        ),
-        FormSummary(
-            id = "3",
-            name = "FRM-003",
-            title = "Receipt Submission",
-            active = false,
-        ),
-    )
-
-    @BeforeEach
-    override fun setUp() {
-        super.setUp()
-
-        doReturn(SearchFormResponse(forms)).whenever(kokiForms)
-            .forms(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-            )
-    }
-
     @Test
     fun list() {
         navigateTo("/settings/forms")

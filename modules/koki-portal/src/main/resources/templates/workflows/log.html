@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <table class="table">
+                        <tr>
+                            <td><b>Date</b></td>
+                            <td th:text="${log.createdAtText}">DATE</td>
+                        </tr>
+                        <tr>
+                            <td><b>Workflow</b></td>
+                            <td>
+                                <a th:href="${log.activityInstance.url}"
+                                   th:text="${log.activityInstance.workflowInstance.workflow.longTitle}"
+                                >WORKFLOW</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Activity</b></td>
+                            <td>
+                                <a target="_new"
+                                   th:href="${log.activityInstance.url}"
+                                   th:text="${log.activityInstance.activity.longTitle}"
+                                >ACTIVITY</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Statut</b></td>
+                            <td>
+                                <i class="fa-lg fa-solid fa-circle-info" th:if="${log.type.name == 'INFO'}"></i>
+                                <i class="fa-lg fa-solid fa-circle-exclamation error"
+                                   th:if="${log.type.name == 'ERROR'}"></i>
+                                <span th:text="${log.type}">TYPE</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Message</b></td>
+                            <td th:text="${log.message}">MESSAGE</td>
+                        </tr>
+                        <tr>
+                            <td><b>Metadata</b></td>
+                            <td th:text="${log.metadata}">METADATA</td>
+                        </tr>
+                        <tr th:if="${log.stackTrace}">
+                            <td><b>Exception</b></td>
+                            <td th:text="${log.stackTrace}">STACKTRACE</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

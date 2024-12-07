@@ -2,64 +2,19 @@ package com.wutsi.koki.portal.page.settings.form
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.FormFixtures.form
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.form.dto.Form
-import com.wutsi.koki.form.dto.FormContent
-import com.wutsi.koki.form.dto.FormElement
-import com.wutsi.koki.form.dto.FormElementType
-import com.wutsi.koki.form.dto.GetFormResponse
 import com.wutsi.koki.form.dto.SaveFormRequest
 import com.wutsi.koki.portal.page.PageName
-import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class EditFormControllerTest : AbstractPageControllerTest() {
-    val form = Form(
-        id = "1",
-        name = "M-001",
-        title = "Incident Form",
-        active = true,
-        content = FormContent(
-            name = "M-001",
-            title = "Incident Form",
-            elements = listOf(
-                FormElement(
-                    name = "section1",
-                    title = "Section #1",
-                    type = FormElementType.SECTION,
-                    elements = listOf(
-                        FormElement(
-                            name = "customer_name",
-                            title = "Customer Name",
-                            type = FormElementType.TEXT,
-                            required = true,
-                        ),
-                        FormElement(
-                            name = "customer_email",
-                            title = "Customer Email",
-                            type = FormElementType.EMAIL,
-                            required = true,
-                        ),
-                    )
-                ),
-            ),
-        )
-    )
-
-    @BeforeEach
-    override fun setUp() {
-        super.setUp()
-
-        doReturn(GetFormResponse(form)).whenever(kokiForms).form(any())
-    }
-
     @Test
     fun edit() {
         navigateTo("/settings/forms/${form.id}/edit")

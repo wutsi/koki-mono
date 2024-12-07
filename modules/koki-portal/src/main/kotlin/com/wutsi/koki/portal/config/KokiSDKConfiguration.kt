@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiForms
+import com.wutsi.koki.sdk.KokiLogs
 import com.wutsi.koki.sdk.KokiMessages
 import com.wutsi.koki.sdk.KokiTenant
 import com.wutsi.koki.sdk.KokiUser
@@ -42,6 +43,11 @@ class KokiSDKConfiguration(
     @Bean
     fun kokiForms(): KokiForms {
         return KokiForms(urlBuilder(), rest, tenantProvider)
+    }
+
+    @Bean
+    fun kokiLogs(): KokiLogs {
+        return KokiLogs(urlBuilder(), rest)
     }
 
     @Bean
