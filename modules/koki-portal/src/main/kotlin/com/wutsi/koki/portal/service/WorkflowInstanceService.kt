@@ -79,6 +79,10 @@ class WorkflowInstanceService(
         )
     }
 
+    fun imageUrl(id: String): String {
+        return koki.imageUrl(id)
+    }
+
     fun workflows(
         ids: List<String> = emptyList(),
         workflowIds: List<Long> = emptyList(),

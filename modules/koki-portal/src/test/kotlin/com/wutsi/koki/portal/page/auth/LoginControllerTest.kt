@@ -33,7 +33,6 @@ class LoginControllerTest : AbstractPageControllerTest() {
 
         // THEN
         assertCurrentPageIs(PageName.LOGIN)
-        setUpLoggedInUser()
         input("INPUT[name=email]", "ray.sponsible@gmail.com")
         input("INPUT[name=password]", "secret")
         click("BUTTON")
@@ -88,7 +87,6 @@ class LoginControllerTest : AbstractPageControllerTest() {
 
         // THEN
         assertCurrentPageIs(PageName.LOGIN)
-        setUpLoggedInUser()
         input("INPUT[name=email]", "ray.sponsible@gmail.com")
         input("INPUT[name=password]", "secret")
         click("BUTTON", 1000)

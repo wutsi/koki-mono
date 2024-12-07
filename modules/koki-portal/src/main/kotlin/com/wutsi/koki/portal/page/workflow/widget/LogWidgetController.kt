@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
-class WorkflowLogWidgetController(
+class LogWidgetController(
     private val logService: LogService
 ) : AbstractPageController() {
     @GetMapping("/workflows/widgets/logs")

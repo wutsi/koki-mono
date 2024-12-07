@@ -26,7 +26,7 @@
 
                     <table class="table">
                         <tr>
-                            <td><b>Name</b></td>
+                            <td width="20%"><b>Name</b></td>
                             <td th:text="${activityInstance.activity.name}">NAME</td>
                         </tr>
                         <tr>
@@ -109,14 +109,11 @@
                                  th:data-url="'/files/widgets/list?workflow-instance-id=' + ${activityInstance.workflowInstance.id}"></div>
                         </div>
 
-                        <div aria-labelledby="pills-forms-tab" class="tab-pane fade" id="pills-forms" role="tabpanel">
-                            <div class="widget-container"
-                                 th:data-url="'/workflows/widgets/forms?workflow-instance-id=' + ${activityInstance.workflowInstance.id}"></div>
+                        <div aria-labelledby="pills-forms-tab" class="tab-pane fade" id="pills-forms" role="tabpanel"
+                             th:data-url="'/workflows/widgets/forms?workflow-instance-id=' + ${activityInstance.workflowInstance.id}">
                         </div>
-                        <div aria-labelledby="pills-process-tab" class="tab-pane fade" id="pills-logs"
-                             role="tabpanel">
-                            <div class="widget-container"
-                                 th:data-url="'/workflows/widgets/logs?activity-instance-id=' + ${activityInstance.id}"></div>
+                        <div aria-labelledby="pills-process-tab" class="tab-pane fade" id="pills-logs" role="tabpanel"
+                             th:data-url="'/workflows/widgets/logs?activity-instance-id=' + ${activityInstance.id}">
                         </div>
                     </div>
                 </div>

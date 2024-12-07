@@ -14,5 +14,5 @@ data class LogEntryModel (
     val createdAtText: String = "",
 ){
     val url: String
-        get() = "/logs/$id"
+        get() = "/workflows/logs/$id"
 }

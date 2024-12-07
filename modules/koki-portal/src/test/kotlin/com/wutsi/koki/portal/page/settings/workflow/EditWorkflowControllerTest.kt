@@ -5,27 +5,19 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.WorkflowFixtures.workflow
+import com.wutsi.koki.WorkflowFixtures.workflowPictureUrl
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.workflow.dto.GetWorkflowResponse
 import com.wutsi.koki.workflow.dto.ImportWorkflowResponse
-import com.wutsi.koki.workflow.dto.Workflow
 import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
 class EditWorkflowControllerTest : AbstractPageControllerTest() {
-    private val workflow = Workflow(
-        id = 1L,
-        name = "WF-001",
-        title = "Workflow #1",
-        description = "This is an example of workflow",
-    )
-
     @BeforeEach
     override fun setUp() {
         super.setUp()
 
-        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).workflow(workflow.id)
         doReturn(ImportWorkflowResponse(workflow.id)).whenever(kokiWorkflow).import(any(), any())
     }
 

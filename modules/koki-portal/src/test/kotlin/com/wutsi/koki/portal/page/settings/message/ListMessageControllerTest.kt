@@ -5,36 +5,15 @@ import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.MessageFixtures.messages
 import com.wutsi.koki.message.dto.GetMessageResponse
 import com.wutsi.koki.message.dto.Message
-import com.wutsi.koki.message.dto.MessageSummary
 import com.wutsi.koki.message.dto.SearchMessageResponse
 import com.wutsi.koki.portal.page.PageName
 import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
 class ListMessageControllerTest : AbstractPageControllerTest() {
-    private val messages = listOf(
-        MessageSummary(
-            id = "1",
-            name = "M-001",
-            subject = "Message #1",
-            active = true,
-        ),
-        MessageSummary(
-            id = "2",
-            name = "M-002",
-            subject = "Message #3",
-            active = true,
-        ),
-        MessageSummary(
-            id = "3",
-            name = "M-003",
-            subject = "Message #3",
-            active = false,
-        ),
-    )
-
     @BeforeEach
     override fun setUp() {
         super.setUp()

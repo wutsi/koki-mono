@@ -8,6 +8,5 @@ data class LogEntrySummary(
     val activityInstanceId: String?,
     val type: LogEntryType = LogEntryType.UNKNOWN,
     val message: String = "",
-    val stackTrace: String = "",
     val createdAt: Date = Date(),
 )

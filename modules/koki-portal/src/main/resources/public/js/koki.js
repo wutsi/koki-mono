@@ -1,5 +1,6 @@
 function koki_ready() {
     _koki_load_widgets();
+    _koki_tabs_lazyload();
 }
 
 async function _koki_load_widgets() {
@@ -16,6 +17,29 @@ async function _koki_load_widgets() {
                 console.log('Error while loading ' + url + ' - status=' + response.status);
             }
         }
+    }
+}
+
+function _koki_tabs_lazyload() {
+    const tabs = document.querySelectorAll('button[data-bs-toggle="pill"]');
+    for (let i = 0; i < tabs.length; i++) {
+        tabs[i].addEventListener('show.bs.tab', function (event) {
+            console.log('current tab', event.target); // newly activated tab
+            console.log('previous tab', event.relatedTarget); // previous active tab
+
+            const content = document.querySelector(tabs[i].getAttribute('data-bs-target'));
+            const url = content.getAttribute('data-url');
+            console.log('>>>', url);
+            if (url) {
+                fetch(url)
+                    .then(function (response) {
+                        response.text()
+                            .then(function (text) {
+                                content.innerHTML = text
+                            });
+                    });
+            }
+        })
     }
 }
 

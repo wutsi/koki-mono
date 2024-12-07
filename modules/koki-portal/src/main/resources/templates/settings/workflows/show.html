@@ -101,16 +101,13 @@
                         </div>
 
                         <div aria-labelledby="pills-forms-tab" class="tab-pane fade" id="pills-forms"
-                             role="tabpanel">
-                            <div class="widget-container"
-                                 th:data-url="'/workflows/widgets/forms?workflow-id=' + ${workflow.id}"></div>
+                             role="tabpanel"
+                             th:data-url="'/workflows/widgets/forms?workflow-id=' + ${workflow.id}">
                         </div>
 
                         <div aria-labelledby="pills-process-tab" class="tab-pane fade" id="pills-process"
-                             role="tabpanel">
-                            <div class="workflow-image">
-                                <img th:alt="${workflow.title}" th:src="${workflow.imageUrl}"/>
-                            </div>
+                             role="tabpanel"
+                             th:data-url="'/workflows/widgets/image?workflow-id=' + ${workflow.id}">
                         </div>
                     </div>
                 </div>
