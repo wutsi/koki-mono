@@ -5,6 +5,7 @@ import java.util.Date
 data class Message(
     val id: String = "",
     val name: String = "",
+    val description: String? = null,
     val subject: String = "",
     val body: String = "",
     val active: Boolean = true,
