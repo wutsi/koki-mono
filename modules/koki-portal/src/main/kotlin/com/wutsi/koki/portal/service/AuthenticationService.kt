@@ -17,4 +17,8 @@ class AuthenticationService(
         val accessToken = kokiAuthentication.login(form.email, form.password).accessToken
         accessTokenHolder.set(accessToken, request, response)
     }
+
+    fun logout() {
+        accessTokenHolder.remove(request, response)
+    }
 }

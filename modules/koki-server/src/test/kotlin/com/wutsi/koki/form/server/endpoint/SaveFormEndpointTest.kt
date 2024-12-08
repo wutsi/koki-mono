@@ -79,6 +79,7 @@ class SaveFormEndpointTest : TenantAwareEndpointTest() {
         val form = formDao.findById(formId).get()
         assertEquals(request.content.name, form.name)
         assertEquals(request.content.title, form.title)
+        assertEquals(request.content.description, form.description)
         assertEquals(request.content, form.content)
     }
 
@@ -103,6 +104,7 @@ class SaveFormEndpointTest : TenantAwareEndpointTest() {
         val form = formDao.findById(formId).get()
         assertEquals(request.content.name, form.name)
         assertEquals(request.content.title, form.title)
+        assertEquals(request.content.description, form.description)
         assertEquals(request.content, form.content)
     }
 

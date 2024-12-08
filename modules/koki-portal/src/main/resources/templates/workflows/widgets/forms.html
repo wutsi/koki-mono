@@ -6,7 +6,7 @@
         <table class="table table-striped" th:if="${forms}">
             <tr th:each="form : ${forms}">
                 <td>
-                    <a th:href="${form.viewUrl}" th:text="${form.longTitle}">TITLE</a>
+                    <a target="_new" th:href="${form.viewUrl}" th:text="${form.longTitle}">TITLE</a>
                 </td>
             </tr>
         </table>

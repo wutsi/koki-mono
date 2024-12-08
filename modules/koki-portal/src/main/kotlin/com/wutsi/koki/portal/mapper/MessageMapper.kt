@@ -29,6 +29,7 @@ class MessageMapper {
             id = entity.id,
             name = entity.name,
             subject = entity.subject,
+            description = entity.description,
             body = entity.body,
             createdAt = entity.createdAt,
             createdAtText = fmt.format(entity.createdAt),

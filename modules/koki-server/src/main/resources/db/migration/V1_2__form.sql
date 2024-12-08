@@ -5,6 +5,7 @@ CREATE TABLE T_FORM(
 
   name                    VARCHAR(100) NOT NULL,
   title                   VARCHAR(255) NOT NULL,
+  description             TEXT,
   content                 JSON NOT NULL,
   active                  BOOLEAN NOT NULL DEFAULT true,
   deleted                 BOOLEAN NOT NULL DEFAULT false,

@@ -17,6 +17,7 @@ data class FormEntity(
 
     var name: String = "",
     var title: String = "",
+    var description: String? = null,
     var active: Boolean = true,
     var content: String = "",
     val createdAt: Date = Date(),

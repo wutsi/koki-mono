@@ -25,7 +25,8 @@ class EditMessageController(private val service: MessageService) : AbstractPageC
             name = message.name,
             subject = message.subject,
             body = message.body,
-            active = message.active
+            active = message.active,
+            description = message.description ?: "",
         )
         return edit(form, message, model)
     }

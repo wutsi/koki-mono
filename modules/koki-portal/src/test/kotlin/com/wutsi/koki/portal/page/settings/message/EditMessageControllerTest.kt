@@ -32,6 +32,7 @@ class EditMessageControllerTest : AbstractPageControllerTest() {
 
         input("input[name=name]", "M-XXX")
         input("input[name=subject]", "This is the new subject")
+        input("textarea[name=description]", "This is the description")
         input("textarea[name=body]", "<p>Looks good :-)</p>")
         scrollToBottom()
         select("select[name=active]", 1)
@@ -43,6 +44,7 @@ class EditMessageControllerTest : AbstractPageControllerTest() {
         assertEquals("M-XXX", request.firstValue.name)
         assertEquals("This is the new subject", request.firstValue.subject)
         assertEquals("<p>Looks good :-)</p>", request.firstValue.body)
+        assertEquals("This is the description", request.firstValue.description)
         assertEquals(false, request.firstValue.active)
 
         assertCurrentPageIs(PageName.SETTINGS_MESSAGE_SAVED)

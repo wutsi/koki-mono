@@ -5,6 +5,7 @@ CREATE TABLE T_MESSAGE(
 
   name                    VARCHAR(100) NOT NULL,
   subject                 VARCHAR(255) NOT NULL,
+  description             TEXT,
   body                    TEXT NOT NULL,
   active                  BOOLEAN NOT NULL DEFAULT true,
   deleted                 BOOLEAN NOT NULL DEFAULT false,

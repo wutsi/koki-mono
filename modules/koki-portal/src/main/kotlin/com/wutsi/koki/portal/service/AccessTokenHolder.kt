@@ -22,6 +22,16 @@ class AccessTokenHolder {
         response.addCookie(cookie)
     }
 
+    fun remove(request: HttpServletRequest, response: HttpServletResponse) {
+        val cookie = findCookie(request)
+        if (cookie != null) {
+            cookie.value = ""
+            cookie.maxAge = 0
+            cookie.path = "/"
+            response.addCookie(cookie)
+        }
+    }
+
     fun get(request: HttpServletRequest): String? {
         val cookie = findCookie(request)
         return cookie?.value
