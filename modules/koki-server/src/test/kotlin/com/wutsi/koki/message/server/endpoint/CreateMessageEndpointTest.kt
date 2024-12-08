@@ -23,6 +23,7 @@ class CreateMessageEndpointTest : TenantAwareEndpointTest() {
             name = "TEST-100",
             subject = "This is the subject",
             body = "You have a nice body",
+            description = "This is the descrtiption",
             active = true,
         )
         val result = rest.postForEntity("/v1/messages", request, CreateMessageResponse::class.java)
@@ -33,6 +34,7 @@ class CreateMessageEndpointTest : TenantAwareEndpointTest() {
         val message = dao.findById(messageId).get()
         assertEquals(request.name, message.name)
         assertEquals(request.subject, message.subject)
+        assertEquals(request.description, message.description)
         assertEquals(request.body, message.body)
         assertEquals(request.active, message.active)
     }

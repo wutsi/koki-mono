@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service
 @Service
 @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 class CurrentUserHolder(
-    private val service: UserService
+    private val service: UserService,
+    private val authenticationService: AuthenticationService,
 ) {
     private var model: UserModel? = null
 
@@ -30,8 +31,13 @@ class CurrentUserHolder(
         if (model?.id == id) {
             return model
         }
-
-        model = service.user(id)
-        return model
+        try {
+            model = service.user(id)
+            return model
+        } catch (ex: Exception) {
+            authenticationService.logout()
+            SecurityContextHolder.clearContext()
+            return null
+        }
     }
 }

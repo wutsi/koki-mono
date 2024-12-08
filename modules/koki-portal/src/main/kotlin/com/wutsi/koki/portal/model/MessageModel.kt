@@ -6,6 +6,7 @@ data class MessageModel(
     val id: String = "",
     val name: String = "",
     val subject: String = "",
+    val description: String? = null,
     val body: String = "",
     val active: Boolean = true,
     val createdAt: Date = Date(),

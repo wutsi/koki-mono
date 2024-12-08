@@ -105,6 +105,7 @@ class FormService(
 
         form.name = request.content.name
         form.title = request.content.title
+        form.description = request.content.description
         form.content = objectMapper.writeValueAsString(request.content)
         form.active = request.active
         form.modifiedAt = Date()

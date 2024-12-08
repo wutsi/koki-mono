@@ -116,6 +116,7 @@ class MessageService(
                 tenantId = tenantId,
                 name = request.name,
                 subject = request.subject,
+                description = request.description,
                 body = request.body,
                 active = request.active,
             )
@@ -137,6 +138,7 @@ class MessageService(
         val message = get(id, tenantId)
         message.name = request.name
         message.subject = request.subject
+        message.description = request.description
         message.body = request.body
         message.active = request.active
         dao.save(message)

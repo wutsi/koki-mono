@@ -29,6 +29,7 @@ class MessageService(
                 subject = form.subject,
                 body = form.body,
                 active = form.active,
+                description = form.description,
             )
         )
     }
@@ -40,6 +41,7 @@ class MessageService(
                 subject = form.subject,
                 body = form.body,
                 active = form.active,
+                description = form.description,
             )
         ).messageId
     }

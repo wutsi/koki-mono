@@ -16,6 +16,7 @@ data class MessageEntity(
     val tenantId: Long = -1,
 
     var name: String = "",
+    var description: String? = null,
     var subject: String = "",
     var body: String = "",
     var active: Boolean = true,

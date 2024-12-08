@@ -6,6 +6,7 @@ data class FormModel(
     val id: String = "",
     val name: String = "",
     val title: String = "",
+    val description: String? = null,
     val content: String? = null,
     val active: Boolean = true,
     val createdAt: Date = Date(),
@@ -21,4 +22,7 @@ data class FormModel(
         } else {
             "$name - $title"
         }
+
+    val url: String
+        get() = "/forms/$id"
 }
