@@ -22,20 +22,20 @@ INSERT INTO T_WORKFLOW(id, tenant_fk, name, description, active, parameters)
           (400, 1, 'w4', 'inactive-start', false, null);
 ;
 
-INSERT INTO T_ACTIVITY(id, tenant_fk, workflow_fk, role_fk, name, type, description, tags, requires_approval, active)
-    VALUES (110, 1, 100, null, 'START', 1, 'Start the process', 'a=p1\nb=p2', false, true),
-           (111, 1, 100, 11, 'WORKING', 3, 'fill the taxes', null, false, true),
-           (112, 1, 100, 10, 'SEND', 6, null, null, false, true),
-           (113, 1, 100, 10, 'SUBMIT', 7, null, null, false, true),
-           (114, 1, 100, null, 'STOP', 2, null, null, false, true),
+INSERT INTO T_ACTIVITY(id, tenant_fk, workflow_fk, role_fk, name, type, description, requires_approval, active)
+    VALUES (110, 1, 100, null, 'START', 1, 'Start the process', false, true),
+           (111, 1, 100, 11, 'WORKING', 3, 'fill the taxes', false, true),
+           (112, 1, 100, 10, 'SEND', 6, null, false, true),
+           (113, 1, 100, 10, 'SUBMIT', 7, null, false, true),
+           (114, 1, 100, null, 'STOP', 2, null, false, true),
 
-           (210, 1, 200, null, 'START', 1, null, null, false, true),
-           (211, 1, 200, null, 'WORKING', 3, null, null, false, true),
-           (212, 1, 200, null, 'END', 2, null, null, false, true),
+           (210, 1, 200, null, 'START', 1, null, false, true),
+           (211, 1, 200, null, 'WORKING', 3, null, false, true),
+           (212, 1, 200, null, 'END', 2, null, false, true),
 
-           (310, 1, 300, null, 'START', 1, null, null, true, true),
+           (310, 1, 300, null, 'START', 1, null, true, true),
 
-           (400, 1, 400, null, 'START', 1, null, null, true, false);
+           (400, 1, 400, null, 'START', 1, null, true, false);
 
 INSERT INTO T_FLOW(workflow_fk, from_fk, to_fk, expression)
     VALUES (100, 110, 111, null),

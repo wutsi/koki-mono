@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/script/DeleteScriptEndpoint.sql"])
@@ -26,10 +27,19 @@ class DeleteScriptEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun `another tenant`() {
-        val result = rest.delete("/v1/scripts/200")
+        rest.delete("/v1/scripts/200")
 
         val script = dao.findById("200").get()
         assertFalse(script.deleted)
         assertTrue(script.name.startsWith("S-200"))
+    }
+
+    @Test
+    fun `in use`() {
+        rest.delete("/v1/forms/110")
+
+        val script = dao.findById("110").get()
+        assertFalse(script.deleted)
+        assertNull(script.deletedAt)
     }
 }

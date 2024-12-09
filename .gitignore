@@ -34,3 +34,5 @@ chromedriver
 
 **/mnist_test.csv
 **/mnist_train.csv
+
+**/.jython_cache/

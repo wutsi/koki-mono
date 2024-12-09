@@ -1,5 +1,6 @@
 package com.wutsi.koki.workflow.server.io
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.Parameter
@@ -7,6 +8,7 @@ import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.form.server.service.FormService
 import com.wutsi.koki.message.server.service.MessageService
+import com.wutsi.koki.script.server.service.ScriptService
 import com.wutsi.koki.tenant.server.domain.RoleEntity
 import com.wutsi.koki.tenant.server.service.RoleService
 import com.wutsi.koki.workflow.dto.ActivityData
@@ -29,6 +31,8 @@ class WorkflowImporter(
     private val roleService: RoleService,
     private val formService: FormService,
     private val messageService: MessageService,
+    private val scriptService: ScriptService,
+    private val objectMapper: ObjectMapper,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(WorkflowImporter::class.java)
@@ -46,6 +50,7 @@ class WorkflowImporter(
         linkRoles(w, activities, data)
         linkForms(w, activities, data)
         linkMessages(w, activities, data)
+        linkScripts(w, activities, data)
         activityService.saveAll(activities)
 
         // Deactivate old activities
@@ -71,7 +76,8 @@ class WorkflowImporter(
             activity.description = data.description
             activity.active = true
             activity.requiresApproval = data.requiresApproval
-            activity.tags = toString(data.tags)
+            activity.input = toString(data.input)
+            activity.output = toString(data.output)
             return activity
         } catch (ex: NotFoundException) {
             if (LOGGER.isDebugEnabled) {
@@ -87,7 +93,8 @@ class WorkflowImporter(
                     description = data.description,
                     active = true,
                     requiresApproval = data.requiresApproval,
-                    tags = toString(data.tags),
+                    input = toString(data.input),
+                    output = toString(data.output),
                 )
             )
         }
@@ -188,10 +195,24 @@ class WorkflowImporter(
     private fun linkMessage(workflow: WorkflowEntity, activity: ActivityEntity, data: WorkflowData) {
         val activityData = data.activities.find { act -> act.name == activity.name }
         if (activityData?.message != null) {
-            LOGGER.debug(">>> Linking Activity[${activity.name}] with Messager[${activityData.message}]")
+            LOGGER.debug(">>> Linking Activity[${activity.name}] with Message[${activityData.message}]")
             activity.messageId = messageService.getByName(activityData.message!!, workflow.tenantId).id
         } else {
             activity.messageId = null
+        }
+    }
+
+    private fun linkScripts(workflow: WorkflowEntity, activities: List<ActivityEntity>, data: WorkflowData) {
+        activities.map { activity -> linkScript(workflow, activity, data) }
+    }
+
+    private fun linkScript(workflow: WorkflowEntity, activity: ActivityEntity, data: WorkflowData) {
+        val activityData = data.activities.find { act -> act.name == activity.name }
+        if (activityData?.script != null) {
+            LOGGER.debug(">>> Linking Activity[${activity.name}] with Script[${activityData.script}]")
+            activity.scriptId = scriptService.getByName(activityData.script!!, workflow.tenantId).id
+        } else {
+            activity.scriptId = null
         }
     }
 
@@ -253,7 +274,11 @@ class WorkflowImporter(
         return result
     }
 
-    private fun toString(tags: Map<String, String>): String {
-        return tags.entries.map { entry -> "${entry.key}=${entry.value}" }.joinToString(separator = "\n")
+    private fun toString(data: Map<String, Any>): String? {
+        return if (data.isEmpty()) {
+            null
+        } else {
+            objectMapper.writeValueAsString(data)
+        }
     }
 }

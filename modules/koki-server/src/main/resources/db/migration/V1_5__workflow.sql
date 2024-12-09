@@ -25,6 +25,7 @@ CREATE TABLE T_ACTIVITY(
   role_fk                 BIGINT,
   form_fk                 VARCHAR(36),
   message_fk              VARCHAR(36),
+  script_fk               VARCHAR(36),
 
   name                    VARCHAR(100) NOT NULL,
   title                   VARCHAR(255),
@@ -32,7 +33,8 @@ CREATE TABLE T_ACTIVITY(
   type                    INT NOT NULL DEFAULT 0,
   requires_approval       BOOLEAN NOT NULL DEFAULT false,
   description             TEXT,
-  tags                    TEXT,
+  input                   JSON,
+  output                  JSON,
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
 
@@ -127,7 +129,7 @@ CREATE TABLE T_WI_LOG_ENTRY(
     activity_instance_fk    VARCHAR(36) REFERENCES T_WI_ACTIVITY(id),
 
     type                    INT NOT NULL DEFAULT 0,
-    message                 VARCHAR(255),
+    message                 TEXT,
     stack_trace             TEXT,
     exception               TEXT,
     metadata                JSON,

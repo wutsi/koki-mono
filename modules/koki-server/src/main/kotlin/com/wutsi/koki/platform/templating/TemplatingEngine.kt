@@ -1,5 +1,5 @@
-package com.wutsi.koki.platform.messaging
+package com.wutsi.koki.platform.templating
 
-interface MessagingTemplateEngine {
+interface TemplatingEngine {
     fun apply(text: String, data: Map<String, Any>): String
 }

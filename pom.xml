@@ -86,7 +86,7 @@
         <hikari-cp.version>6.2.1</hikari-cp.version>
         <jackson.version>2.17.2</jackson.version>
         <firebase-admin.version>9.3.0</firebase-admin.version>
-        <qrcode-kotlin.version>4.2.0</qrcode-kotlin.version>
+        <graalvm.version>24.1.1</graalvm.version>
         <javax-activation.version>1.1.1</javax-activation.version>
         <javax-validation.version>2.0.1.Final</javax-validation.version>
         <javax.servlet.version>4.0.1</javax.servlet.version>
@@ -103,6 +103,7 @@
         <junit-platform-commons.version>1.10.0</junit-platform-commons.version>
         <java-jwt.version>4.4.0</java-jwt.version>
         <jgrapht.version>1.5.2</jgrapht.version>
+        <jython.version>2.7.4</jython.version>
         <kotlin.version>2.1.0</kotlin.version>
         <kotlin-jackson.version>2.18.2</kotlin-jackson.version>
         <kotlin-mockito.version>2.2.0</kotlin-mockito.version>
@@ -112,9 +113,10 @@
         <libphonenumber.version>8.13.51</libphonenumber.version>
         <mobiledetect.version>1.1.1</mobiledetect.version>
         <mustache.version>0.9.14</mustache.version>
+        <mysql.version>8.0.33</mysql.version>
         <pdfbox.vesion>3.0.3</pdfbox.vesion>
         <plexus-utils.version>4.0.2</plexus-utils.version>
-        <mysql.version>8.0.33</mysql.version>
+        <qrcode-kotlin.version>4.2.0</qrcode-kotlin.version>
         <rome.version>2.1.0</rome.version>
         <scribe.version>8.3.3</scribe.version>
         <selenium.version>4.27.0</selenium.version>
@@ -130,7 +132,7 @@
         <ua-java.version>1.6.1</ua-java.version>
         <xmemcached.version>2.4.8</xmemcached.version>
 
-        <wutsi-dto.version>0.0.66</wutsi-dto.version>
+        <wutsi-dto.version>0.0.67</wutsi-dto.version>
     </properties>
 
     <dependencies>

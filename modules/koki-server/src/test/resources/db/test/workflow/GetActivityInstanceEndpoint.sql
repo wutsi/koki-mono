@@ -21,8 +21,8 @@ INSERT INTO T_WORKFLOW(id, tenant_fk, name, description, active, parameters)
           (200, 2, 'w200', null, true, null);
 ;
 
-INSERT INTO T_ACTIVITY(id, tenant_fk, workflow_fk, role_fk, name, type, description, tags, requires_approval, active)
-    VALUES (100, 1, 100, null, 'START',   1, 'Start the process', 'a=p1\nb=p2', true, true),
+INSERT INTO T_ACTIVITY(id, tenant_fk, workflow_fk, role_fk, name, type, description, input, requires_approval, active)
+    VALUES (100, 1, 100, null, 'START',   1, 'Start the process', '{"a":"p1","b":"p2"}', true, true),
            (101, 1, 100, 11,   'WORKING', 3, 'fill the taxes', null, false, true),
            (102, 1, 100, 10,   'SEND',    4, null, null, false, true),
            (103, 1, 100, 10,   'SUBMIT',  4, null, null, false, true),

@@ -6,16 +6,19 @@ import com.wutsi.koki.form.event.ApprovalCompletedEvent
 import com.wutsi.koki.form.event.ApprovalStartedEvent
 import com.wutsi.koki.form.event.WorkflowDoneEvent
 import com.wutsi.koki.form.event.WorkflowStartedEvent
+import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.workflow.dto.ApprovalStatus
-import com.wutsi.koki.workflow.dto.LogEntryType
 import com.wutsi.koki.workflow.server.engine.command.RunActivityCommand
 import com.wutsi.koki.workflow.server.service.LogService
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 
 @Service
-class LogEventListener(private val logService: LogService) : RabbitMQHandler {
-    override fun handle(event: Any) {
+class LogEventListener(
+    private val logService: LogService,
+    private val logger: KVLogger,
+) : RabbitMQHandler {
+    override fun handle(event: Any): Boolean {
         if (event is WorkflowStartedEvent) {
             onWorkflowStarted(event)
         } else if (event is WorkflowDoneEvent) {
@@ -28,12 +31,18 @@ class LogEventListener(private val logService: LogService) : RabbitMQHandler {
             onActivityDone(event)
         } else if (event is RunActivityCommand) {
             onRunActivityCommand(event)
+        } else {
+            return false
         }
+
+        logger.add("event_classname", event::class.java.simpleName)
+        logger.add("listener", "LogEventListener")
+        return true
     }
 
     @EventListener
     fun onWorkflowStarted(event: WorkflowStartedEvent) {
-        info(
+        logService.info(
             message = "Workflow started",
             workflowInstanceId = event.workflowInstanceId,
             tenantId = event.tenantId,
@@ -43,7 +52,7 @@ class LogEventListener(private val logService: LogService) : RabbitMQHandler {
 
     @EventListener
     fun onWorkflowDone(event: WorkflowDoneEvent) {
-        info(
+        logService.info(
             message = "Workflow done",
             workflowInstanceId = event.workflowInstanceId,
             tenantId = event.tenantId,
@@ -53,7 +62,7 @@ class LogEventListener(private val logService: LogService) : RabbitMQHandler {
 
     @EventListener
     fun onActivityDone(event: ActivityDoneEvent) {
-        info(
+        logService.info(
             message = "Activity done",
             workflowInstanceId = event.workflowInstanceId,
             activityInstanceId = event.activityInstanceId,
@@ -64,7 +73,7 @@ class LogEventListener(private val logService: LogService) : RabbitMQHandler {
 
     @EventListener
     fun onApprovalStarted(event: ApprovalStartedEvent) {
-        info(
+        logService.info(
             message = "Activity approval started",
             workflowInstanceId = event.workflowInstanceId,
             activityInstanceId = event.activityInstanceId,
@@ -80,7 +89,7 @@ class LogEventListener(private val logService: LogService) : RabbitMQHandler {
         } else {
             "Activity rejected"
         }
-        info(
+        logService.info(
             message = message,
             workflowInstanceId = event.workflowInstanceId,
             activityInstanceId = event.activityInstanceId,
@@ -91,29 +100,12 @@ class LogEventListener(private val logService: LogService) : RabbitMQHandler {
 
     @EventListener
     fun onRunActivityCommand(command: RunActivityCommand) {
-        info(
+        logService.info(
             message = "Activity started",
             workflowInstanceId = command.workflowInstanceId,
             activityInstanceId = command.activityInstanceId,
             tenantId = command.tenantId,
             timestamp = command.timestamp,
-        )
-    }
-
-    private fun info(
-        message: String,
-        workflowInstanceId: String,
-        tenantId: Long,
-        timestamp: Long,
-        activityInstanceId: String? = null,
-    ) {
-        logService.create(
-            tenantId = tenantId,
-            type = LogEntryType.INFO,
-            message = message,
-            workflowInstanceId = workflowInstanceId,
-            activityInstanceId = activityInstanceId,
-            timestamp = timestamp,
         )
     }
 }

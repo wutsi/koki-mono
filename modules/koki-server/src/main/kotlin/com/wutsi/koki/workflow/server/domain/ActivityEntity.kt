@@ -1,5 +1,6 @@
 package com.wutsi.koki.workflow.server.domain
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.workflow.dto.ActivityType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -31,13 +32,31 @@ data class ActivityEntity(
     @Column(name = "message_fk")
     var messageId: String? = null,
 
+    @Column(name = "script_fk")
+    var scriptId: String? = null,
+
     var name: String = "",
     var title: String? = null,
     var description: String? = null,
     var active: Boolean = true,
     var type: ActivityType = ActivityType.UNKNOWN,
     var requiresApproval: Boolean = false,
-    var tags: String? = null,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
-)
+    var input: String? = null,
+    var output: String? = null,
+) {
+    fun inputAsMap(objectMapper: ObjectMapper): Map<String, Any> {
+        return toMap(input, objectMapper)
+    }
+
+    fun outputAsMap(objectMapper: ObjectMapper): Map<String, Any> {
+        return toMap(output, objectMapper)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun toMap(value: String?, objectMapper: ObjectMapper): Map<String, Any> {
+        return value?.let { objectMapper.readValue(value, Map::class.java) as Map<String, Any> }
+            ?: emptyMap()
+    }
+}

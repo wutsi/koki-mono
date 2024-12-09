@@ -15,7 +15,7 @@ import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.messaging.Message
 import com.wutsi.koki.platform.messaging.MessagingService
 import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
-import com.wutsi.koki.platform.messaging.mustache.MustacheMessagingTemplateEngine
+import com.wutsi.koki.platform.templating.MustacheTemplatingEngine
 import com.wutsi.koki.tenant.server.domain.ConfigurationEntity
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import com.wutsi.koki.tenant.server.service.ConfigurationService
@@ -25,17 +25,21 @@ import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
 import com.wutsi.koki.workflow.server.engine.WorkflowEngine
+import com.wutsi.koki.workflow.server.exception.NoAssigneeException
+import com.wutsi.koki.workflow.server.exception.NoMessageException
 import com.wutsi.koki.workflow.server.service.ActivityService
+import com.wutsi.koki.workflow.server.service.LogService
 import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
 import com.wutsi.koki.workflow.server.service.runner.SendRunner
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 
 class SendRunnerTest {
     private val objectMapper: ObjectMapper = ObjectMapper()
-    private val templateEngine = MustacheMessagingTemplateEngine(DefaultMustacheFactory())
+    private val templateEngine = MustacheTemplatingEngine(DefaultMustacheFactory())
     private val workflowInstanceService = mock<WorkflowInstanceService>()
     private val userService = mock<UserService>()
     private val messagingServiceBuilder = mock<MessagingServiceBuilder>()
@@ -43,6 +47,7 @@ class SendRunnerTest {
     private val activityService = mock<ActivityService>()
     private val messageService = mock<MessageService>()
     private val messagingService = mock<MessagingService>()
+    private val logService = mock<LogService>()
     private val engine = mock<WorkflowEngine>()
     private val logger = DefaultKVLogger()
 
@@ -55,6 +60,7 @@ class SendRunnerTest {
         activityService = activityService,
         templateEngine = templateEngine,
         messageService = messageService,
+        logService = logService,
         logger = logger,
     )
 
@@ -126,7 +132,9 @@ class SendRunnerTest {
     fun noMessage() {
         doReturn(activity.copy(messageId = null)).whenever(activityService).get(activity.id!!)
 
-        executor.run(activityInstance, engine)
+        assertThrows<NoMessageException> {
+            executor.run(activityInstance, engine)
+        }
 
         verify(messagingService, never()).send(any())
         verify(engine, never()).done(any(), any(), any())
@@ -134,7 +142,9 @@ class SendRunnerTest {
 
     @Test
     fun noRecipient() {
-        executor.run(activityInstance.copy(assigneeId = null), engine)
+        assertThrows<NoAssigneeException> {
+            executor.run(activityInstance.copy(assigneeId = null), engine)
+        }
 
         verify(messagingService, never()).send(any())
         verify(engine, never()).done(any(), any(), any())
