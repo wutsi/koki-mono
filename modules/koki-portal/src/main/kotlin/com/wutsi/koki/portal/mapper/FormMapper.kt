@@ -47,7 +47,7 @@ class FormMapper(private val objectMapper: ObjectMapper) {
             createdAtText = fmt.format(entity.createdAt),
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.modifiedAt),
-            content = objectMapper.writeValueAsString(entity.content),
+            content = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(entity.content),
             viewUrl = toUrl(entity.id, true, workflowInstanceId, activityInstanceId),
             editUrl = toUrl(entity.id, false, workflowInstanceId, activityInstanceId),
         )
