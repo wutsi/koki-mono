@@ -13,14 +13,14 @@ INSERT INTO T_WORKFLOW(id, tenant_fk, name, description, active, parameters, app
           (300, 1, 'w3', 'activity with malformed tag', false, 'CLIENT_ID', null, 0);
 ;
 
-INSERT INTO T_ACTIVITY(id, tenant_fk, workflow_fk, role_fk, name, type, description, tags, requires_approval)
-    VALUES (110, 1, 100, null, 'START', 1, 'Start the process', 'a=p1\nb=p2', true),
-           (112, 1, 100, 10, 'SEND', 6, null, null, false),
-           (111, 1, 100, 11, 'WORKING', 3, 'fill the taxes', null, false),
-           (113, 1, 100, 10, 'SUBMIT', 7, null, null, false),
-           (114, 1, 100, null, 'STOP', 2, null, null, false),
+INSERT INTO T_ACTIVITY(id, tenant_fk, workflow_fk, role_fk, name, type, description, input, output, requires_approval)
+    VALUES (110, 1, 100, null, 'START', 1, 'Start the process', '{"a":"p1","b":"p2"}', '{"x":"y"}', true),
+           (112, 1, 100, 10, 'SEND', 6, null, null, null, false),
+           (111, 1, 100, 11, 'WORKING', 3, 'fill the taxes', null, null, false),
+           (113, 1, 100, 10, 'SUBMIT', 7, null, null, null, false),
+           (114, 1, 100, null, 'STOP', 2, null, null, null, false),
 
-           (310, 1, 300, null, 'START', 1, 'malformed tag', 'a', true);
+           (310, 1, 300, null, 'START', 1, 'malformed tag', null, null, true);
 
 INSERT INTO T_FLOW(workflow_fk, from_fk, to_fk, expression)
     VALUES (100, 110, 111, null),

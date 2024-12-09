@@ -7,7 +7,6 @@ import com.wutsi.koki.form.event.ApprovalStartedEvent
 import com.wutsi.koki.form.event.WorkflowDoneEvent
 import com.wutsi.koki.form.event.WorkflowStartedEvent
 import com.wutsi.koki.workflow.dto.ApprovalStatus
-import com.wutsi.koki.workflow.dto.LogEntryType
 import com.wutsi.koki.workflow.server.engine.command.RunActivityCommand
 import com.wutsi.koki.workflow.server.service.LogService
 import org.springframework.context.event.EventListener
@@ -33,7 +32,7 @@ class LogEventListener(private val logService: LogService) : RabbitMQHandler {
 
     @EventListener
     fun onWorkflowStarted(event: WorkflowStartedEvent) {
-        info(
+        logService.info(
             message = "Workflow started",
             workflowInstanceId = event.workflowInstanceId,
             tenantId = event.tenantId,
@@ -43,7 +42,7 @@ class LogEventListener(private val logService: LogService) : RabbitMQHandler {
 
     @EventListener
     fun onWorkflowDone(event: WorkflowDoneEvent) {
-        info(
+        logService.info(
             message = "Workflow done",
             workflowInstanceId = event.workflowInstanceId,
             tenantId = event.tenantId,
@@ -53,7 +52,7 @@ class LogEventListener(private val logService: LogService) : RabbitMQHandler {
 
     @EventListener
     fun onActivityDone(event: ActivityDoneEvent) {
-        info(
+        logService.info(
             message = "Activity done",
             workflowInstanceId = event.workflowInstanceId,
             activityInstanceId = event.activityInstanceId,
@@ -64,7 +63,7 @@ class LogEventListener(private val logService: LogService) : RabbitMQHandler {
 
     @EventListener
     fun onApprovalStarted(event: ApprovalStartedEvent) {
-        info(
+        logService.info(
             message = "Activity approval started",
             workflowInstanceId = event.workflowInstanceId,
             activityInstanceId = event.activityInstanceId,
@@ -80,7 +79,7 @@ class LogEventListener(private val logService: LogService) : RabbitMQHandler {
         } else {
             "Activity rejected"
         }
-        info(
+        logService.info(
             message = message,
             workflowInstanceId = event.workflowInstanceId,
             activityInstanceId = event.activityInstanceId,
@@ -91,29 +90,12 @@ class LogEventListener(private val logService: LogService) : RabbitMQHandler {
 
     @EventListener
     fun onRunActivityCommand(command: RunActivityCommand) {
-        info(
+        logService.info(
             message = "Activity started",
             workflowInstanceId = command.workflowInstanceId,
             activityInstanceId = command.activityInstanceId,
             tenantId = command.tenantId,
             timestamp = command.timestamp,
-        )
-    }
-
-    private fun info(
-        message: String,
-        workflowInstanceId: String,
-        tenantId: Long,
-        timestamp: Long,
-        activityInstanceId: String? = null,
-    ) {
-        logService.create(
-            tenantId = tenantId,
-            type = LogEntryType.INFO,
-            message = message,
-            workflowInstanceId = workflowInstanceId,
-            activityInstanceId = activityInstanceId,
-            timestamp = timestamp,
         )
     }
 }

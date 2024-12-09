@@ -46,11 +46,13 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                     title = "Invoicing...",
                     description = "SAGE create an invoice",
                     type = ActivityType.SERVICE,
-                    tags = mapOf("foo" to "bar", "a" to "b"),
+                    input = mapOf("foo" to "bar", "a" to "b"),
+                    output = mapOf("x" to "y"),
                     requiresApproval = true,
                     role = "accountant",
                     form = "f-100",
                     message = "m-100",
+                    script = "s-100",
                 ),
                 ActivityData(
                     name = "STOP",
@@ -87,21 +89,26 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertNull(aStart?.title)
         assertEquals(request.workflow.activities[0].type, aStart?.type)
         assertEquals(true, aStart?.active)
+        assertNull(aStart?.input)
+        assertNull(aStart?.output)
         assertNull(aStart?.roleId)
         assertNull(aStart?.formId)
         assertNull(aStart?.messageId)
+        assertNull(aStart?.scriptId)
 
         val aInvoice = activityDao.findByNameAndWorkflowId("INVOICE", workflow.id)
         assertEquals("INVOICE", aInvoice?.name)
         assertEquals(request.workflow.activities[1].title, aInvoice?.title)
         assertEquals(request.workflow.activities[1].description, aInvoice?.description)
         assertEquals(request.workflow.activities[1].type, aInvoice?.type)
-        assertEquals("foo=bar\na=b", aInvoice?.tags)
+        assertEquals("{\"a\": \"b\", \"foo\": \"bar\"}", aInvoice?.input)
+        assertEquals("{\"x\": \"y\"}", aInvoice?.output)
         assertEquals(true, aInvoice?.active)
         assertEquals(request.workflow.activities[1].requiresApproval, aInvoice?.requiresApproval)
         assertEquals(10L, aInvoice?.roleId)
         assertEquals("100", aInvoice?.formId)
         assertEquals("100", aInvoice?.messageId)
+        assertEquals("100", aInvoice?.scriptId)
 
         val aEnd = activityDao.findByNameAndWorkflowId("STOP", workflow.id)
         assertEquals("STOP", aEnd?.name)
@@ -111,6 +118,9 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertNull(aEnd?.roleId)
         assertNull(aEnd?.formId)
         assertNull(aEnd?.messageId)
+        assertNull(aEnd?.scriptId)
+        assertNull(aEnd?.input)
+        assertNull(aEnd?.output)
 
         val flows = flowDao.findByWorkflowId(workflow.id!!)
         assertEquals(2, flows.size)
@@ -148,17 +158,22 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertNull(aStart?.roleId)
         assertNull(aStart?.formId)
         assertNull(aStart?.messageId)
+        assertNull(aStart?.scriptId)
+        assertNull(aStart?.input)
+        assertNull(aStart?.output)
 
         val aInvoice = activityDao.findByNameAndWorkflowId("INVOICE", workflow.id)
         assertEquals("INVOICE", aInvoice?.name)
         assertEquals(request.workflow.activities[1].description, aInvoice?.description)
         assertEquals(request.workflow.activities[1].type, aInvoice?.type)
-        assertEquals("foo=bar\na=b", aInvoice?.tags)
+        assertEquals("{\"a\": \"b\", \"foo\": \"bar\"}", aInvoice?.input)
+        assertEquals("{\"x\": \"y\"}", aInvoice?.output)
         assertEquals(true, aInvoice?.active)
         assertEquals(request.workflow.activities[1].requiresApproval, aInvoice?.requiresApproval)
         assertEquals(10L, aInvoice?.roleId)
         assertEquals("100", aInvoice?.formId)
         assertEquals("100", aInvoice?.messageId)
+        assertEquals("100", aInvoice?.scriptId)
 
         val aEnd = activityDao.findByNameAndWorkflowId("STOP", workflow.id!!)
         assertEquals("STOP", aEnd?.name)
@@ -167,6 +182,9 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertNull(aEnd?.roleId)
         assertNull(aEnd?.formId)
         assertNull(aEnd?.messageId)
+        assertNull(aEnd?.scriptId)
+        assertNull(aEnd?.input)
+        assertNull(aEnd?.output)
 
         val aDeactivated = activityDao.findById(111L).get()
         assertEquals(false, aDeactivated.active)
@@ -247,7 +265,8 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                         title = "Invoicing...",
                         description = "SAGE create an invoice",
                         type = ActivityType.SERVICE,
-                        tags = mapOf("foo" to "bar", "a" to "b"),
+                        input = mapOf("foo" to "bar", "a" to "b"),
+                        output = mapOf("x" to "y"),
                         form = "xxxx"
                     ),
                     ActivityData(
@@ -286,7 +305,7 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                         title = "Invoicing...",
                         description = "SAGE create an invoice",
                         type = ActivityType.SERVICE,
-                        tags = mapOf("foo" to "bar", "a" to "b"),
+                        input = mapOf("foo" to "bar", "a" to "b"),
                         form = "f-200"
                     ),
                     ActivityData(

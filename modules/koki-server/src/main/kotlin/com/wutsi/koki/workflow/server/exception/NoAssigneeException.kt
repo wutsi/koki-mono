@@ -1,4 +1,3 @@
 package com.wutsi.koki.workflow.server.exception
 
-class NoAssigneeException {
-}
+class NoAssigneeException(message: String) : Exception(message)

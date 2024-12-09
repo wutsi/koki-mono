@@ -7,8 +7,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class ActivitySendMustHaveARoleRuleTest {
-    private val rule = ActivitySendMustHaveARoleRule()
+class ActivityScriptMustHaveAScriptRuleTest {
+    private val rule = ActivityScriptMustHaveAScriptRule()
 
     @Test
     fun success() {
@@ -18,7 +18,7 @@ class ActivitySendMustHaveARoleRuleTest {
                 description = "This is a new workflow",
                 activities = listOf(
                     ActivityData(name = "start", type = ActivityType.START),
-                    ActivityData(name = "invoice", type = ActivityType.SEND, role = "employee"),
+                    ActivityData(name = "invoice", type = ActivityType.SCRIPT, script = "S-100"),
                     ActivityData(name = "stop"),
                 ),
             )
@@ -35,8 +35,8 @@ class ActivitySendMustHaveARoleRuleTest {
                 description = "This is a new workflow",
                 activities = listOf(
                     ActivityData(name = "start", type = ActivityType.START),
-                    ActivityData(name = "invoice", type = ActivityType.SEND, role = null),
-                    ActivityData(name = "quote", type = ActivityType.SEND, role = ""),
+                    ActivityData(name = "invoice", type = ActivityType.SCRIPT, script = null),
+                    ActivityData(name = "quote", type = ActivityType.SCRIPT, script = ""),
                     ActivityData(name = "stop"),
                 ),
             )

@@ -7,15 +7,18 @@ import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.messaging.Message
 import com.wutsi.koki.platform.messaging.MessagingService
 import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
-import com.wutsi.koki.platform.messaging.MessagingTemplateEngine
 import com.wutsi.koki.platform.messaging.MessagingType
 import com.wutsi.koki.platform.messaging.Party
 import com.wutsi.koki.platform.messaging.smtp.SMTPMessagingServiceBuilder
+import com.wutsi.koki.platform.templating.TemplatingEngine
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import com.wutsi.koki.tenant.server.service.UserService
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.engine.WorkflowEngine
+import com.wutsi.koki.workflow.server.exception.NoAssigneeException
+import com.wutsi.koki.workflow.server.exception.NoMessageException
 import com.wutsi.koki.workflow.server.service.ActivityService
+import com.wutsi.koki.workflow.server.service.LogService
 import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
 import org.springframework.stereotype.Service
 
@@ -27,8 +30,9 @@ class SendRunner(
     private val messagingServiceBuilder: MessagingServiceBuilder,
     private val configurationService: ConfigurationService,
     private val activityService: ActivityService,
-    private val templateEngine: MessagingTemplateEngine,
+    private val templateEngine: TemplatingEngine,
     private val messageService: MessageService,
+    private val logService: LogService,
     logger: KVLogger
 ) : AbstractActivityRunner(logger) {
     override fun doRun(activityInstance: ActivityInstanceEntity, engine: WorkflowEngine) {
@@ -44,37 +48,38 @@ class SendRunner(
         /* Activity */
         val tenantId = activityInstance.tenantId
         val activity = activityService.get(activityInstance.activityId)
-        logger.add("activity", activity.name)
+        logger.add("activity_name", activity.name)
 
         /* Message */
-        val message = activity.messageId?.let { messageId -> messageService.get(messageId, tenantId) }
-        if (message == null) {
-            logger.add("message", "--")
-            return false
-        }
-        logger.add("message", message.name)
+        val message = activity.messageId
+            ?.let { messageId -> messageService.get(messageId, tenantId) }
+            ?: throw NoMessageException("The activity has no message")
+        logger.add("message_name", message.name)
 
         /* Send */
         val msg = createMessage(activityInstance, message, logger)
-        if (msg != null) {
-            createMessagingService(activityInstance.tenantId).send(msg)
-            return true
-        } else {
-            return false
-        }
+        logger.add("recipient_name", msg.recipient.displayName)
+        logger.add("recipient_email", msg.recipient.email)
+        logService.info(
+            message = "Sending message to ${msg.recipient.displayName} <${msg.recipient.email}>",
+            tenantId = activityInstance.tenantId,
+            workflowInstanceId = activityInstance.workflowInstanceId,
+            activityInstanceId = activityInstance.id,
+        )
+        createMessagingService(activityInstance.tenantId).send(msg)
+        return true
     }
 
     private fun createMessage(
         activityInstance: ActivityInstanceEntity,
         message: MessageEntity,
         logger: KVLogger
-    ): Message? {
+    ): Message {
         /* Assignee */
         val tenantId = message.tenantId
         val assignee = activityInstance.assigneeId?.let { id -> userService.get(id, tenantId) }
         if (assignee == null) {
-            logger.add("assignee", "--")
-            return null
+            throw NoAssigneeException("The activity has no assignee")
         }
         logger.add("assignee", assignee.displayName)
         logger.add("assignee_email", assignee.email)

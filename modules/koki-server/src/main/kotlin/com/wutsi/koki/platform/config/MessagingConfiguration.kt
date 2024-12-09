@@ -1,9 +1,6 @@
 package com.wutsi.koki.platform.config
 
-import com.github.mustachejava.DefaultMustacheFactory
 import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
-import com.wutsi.koki.platform.messaging.MessagingTemplateEngine
-import com.wutsi.koki.platform.messaging.mustache.MustacheMessagingTemplateEngine
 import com.wutsi.koki.platform.messaging.smtp.SMTPMessagingServiceBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -20,10 +17,5 @@ open class MessagingConfiguration {
     @Bean
     open fun smtpMessagingServiceBuilder(): SMTPMessagingServiceBuilder {
         return SMTPMessagingServiceBuilder()
-    }
-
-    @Bean
-    open fun messagingTemplateEngine(): MessagingTemplateEngine {
-        return MustacheMessagingTemplateEngine(DefaultMustacheFactory())
     }
 }

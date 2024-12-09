@@ -30,6 +30,15 @@ class ScriptService(
         return script
     }
 
+    fun getByName(name: String, tenantId: Long): ScriptEntity {
+        return search(
+            tenantId = tenantId,
+            names = listOf(name),
+            limit = 1,
+        ).firstOrNull()
+            ?: throw NotFoundException(Error(ErrorCode.SCRIPT_NOT_FOUND))
+    }
+
     fun search(
         tenantId: Long,
         ids: List<String> = emptyList(),

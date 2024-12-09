@@ -1,11 +1,10 @@
-package com.wutsi.koki.platform.messaging.mustache
+package com.wutsi.koki.platform.templating
 
 import com.github.mustachejava.MustacheFactory
-import com.wutsi.koki.platform.messaging.MessagingTemplateEngine
 import java.io.StringReader
 import java.io.StringWriter
 
-class MustacheMessagingTemplateEngine(private val factory: MustacheFactory) : MessagingTemplateEngine {
+class MustacheTemplatingEngine(private val factory: MustacheFactory) : TemplatingEngine {
     override fun apply(text: String, data: Map<String, Any>): String {
         val reader = StringReader(text)
         val writer = StringWriter()

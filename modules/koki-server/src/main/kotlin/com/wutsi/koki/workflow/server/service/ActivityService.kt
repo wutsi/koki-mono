@@ -43,6 +43,7 @@ class ActivityService(
         roleIds: List<Long> = emptyList(),
         messageIds: List<String> = emptyList(),
         formIds: List<String> = emptyList(),
+        scriptIds: List<String> = emptyList(),
         type: ActivityType? = null,
         active: Boolean? = null,
         limit: Int = 20,
@@ -64,6 +65,9 @@ class ActivityService(
         }
         if (formIds.isNotEmpty()) {
             jql.append(" AND A.formId IN :formIds")
+        }
+        if (scriptIds.isNotEmpty()) {
+            jql.append(" AND A.scriptId IN :scriptIds")
         }
         if (type != null) {
             jql.append(" AND A.type = :type")
@@ -89,6 +93,9 @@ class ActivityService(
         }
         if (formIds.isNotEmpty()) {
             query.setParameter("formIds", formIds)
+        }
+        if (scriptIds.isNotEmpty()) {
+            query.setParameter("scriptIds", scriptIds)
         }
         if (type != null) {
             query.setParameter("type", type)

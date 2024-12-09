@@ -37,7 +37,8 @@ class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals("START", activities[0].name)
         assertEquals(ActivityType.START, activities[0].type)
         assertEquals("Start the process", activities[0].description)
-        assertEquals(mapOf("a" to "p1", "b" to "p2"), activities[0].tags)
+        assertEquals(mapOf("a" to "p1", "b" to "p2"), activities[0].input)
+        assertEquals(mapOf("x" to "y"), activities[0].output)
         assertTrue(activities[0].requiresApproval)
         assertNull(activities[0].roleId)
 
@@ -45,7 +46,8 @@ class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals("WORKING", activities[1].name)
         assertEquals(ActivityType.MANUAL, activities[1].type)
         assertEquals("fill the taxes", activities[1].description)
-        assertTrue(activities[1].tags.isEmpty())
+        assertTrue(activities[1].input.isEmpty())
+        assertTrue(activities[1].output.isEmpty())
         assertFalse(activities[1].requiresApproval)
         assertEquals(11L, activities[1].roleId)
 
@@ -53,7 +55,8 @@ class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals("SEND", activities[2].name)
         assertEquals(ActivityType.SEND, activities[2].type)
         assertNull(activities[2].description)
-        assertTrue(activities[2].tags.isEmpty())
+        assertTrue(activities[2].input.isEmpty())
+        assertTrue(activities[2].output.isEmpty())
         assertFalse(activities[2].requiresApproval)
         assertEquals(10L, activities[2].roleId)
 
@@ -61,7 +64,8 @@ class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals("SUBMIT", activities[3].name)
         assertEquals(ActivityType.SERVICE, activities[3].type)
         assertNull(activities[3].description)
-        assertTrue(activities[3].tags.isEmpty())
+        assertTrue(activities[3].input.isEmpty())
+        assertTrue(activities[3].output.isEmpty())
         assertFalse(activities[3].requiresApproval)
         assertEquals(10L, activities[3].roleId)
 
@@ -69,7 +73,8 @@ class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals("STOP", activities[4].name)
         assertEquals(ActivityType.END, activities[4].type)
         assertNull(activities[4].description)
-        assertTrue(activities[4].tags.isEmpty())
+        assertTrue(activities[4].input.isEmpty())
+        assertTrue(activities[4].output.isEmpty())
         assertFalse(activities[4].requiresApproval)
         assertNull(activities[4].roleId)
 
@@ -111,18 +116,5 @@ class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
 
         assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
         assertEquals(ErrorCode.WORKFLOW_NOT_FOUND, result.body?.error?.code)
-    }
-
-    @Test
-    fun `get workflow having activity with malformed tag`() {
-        val result = rest.getForEntity("/v1/workflows/300", GetWorkflowResponse::class.java)
-
-        assertEquals(HttpStatus.OK, result.statusCode)
-
-        val workflow = result.body!!.workflow
-
-        assertEquals(1, workflow.activities.size)
-        val activities = workflow.activities
-        assertTrue(activities[0].tags.isEmpty())
     }
 }

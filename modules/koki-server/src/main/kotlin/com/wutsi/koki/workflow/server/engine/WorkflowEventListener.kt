@@ -7,9 +7,7 @@ import com.wutsi.koki.form.event.ActivityDoneEvent
 import com.wutsi.koki.form.event.FormSubmittedEvent
 import com.wutsi.koki.form.event.FormUpdatedEvent
 import com.wutsi.koki.form.server.service.FormDataService
-import com.wutsi.koki.workflow.dto.LogEntryType
 import com.wutsi.koki.workflow.dto.WorkflowStatus
-import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.engine.command.RunActivityCommand
 import com.wutsi.koki.workflow.server.service.ActivityInstanceService
 import com.wutsi.koki.workflow.server.service.ActivityService
@@ -100,20 +98,16 @@ class WorkflowEventListener(
             val activity = activityService.get(activityInstance.activityId)
             activityRunnerProvider.get(activity.type).run(activityInstance, workflowEngine)
         } catch (ex: Throwable) {
-            error(ex.message ?: "Failed", activityInstance, ex)
+            logService.error(
+                message = ex.message ?: "Failed",
+                tenantId = activityInstance.tenantId,
+                activityInstanceId = activityInstance.id,
+                workflowInstanceId = activityInstance.workflowInstanceId,
+                timestamp = command.timestamp,
+                ex = ex,
+            )
             throw ex
         }
-    }
-
-    private fun error(message: String, activityInstance: ActivityInstanceEntity, ex: Throwable) {
-        logService.create(
-            tenantId = activityInstance.tenantId,
-            type = LogEntryType.ERROR,
-            message = message,
-            workflowInstanceId = activityInstance.workflowInstanceId,
-            activityInstanceId = activityInstance.id,
-            exception = ex,
-        )
     }
 
     private fun completeActivity(formDataId: String, activityInstanceId: String, tenantId: Long) {

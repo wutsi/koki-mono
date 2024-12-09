@@ -4,6 +4,7 @@ import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.server.service.runner.EndRunner
 import com.wutsi.koki.workflow.server.service.runner.ManualRunner
 import com.wutsi.koki.workflow.server.service.runner.ReceiveRunner
+import com.wutsi.koki.workflow.server.service.runner.ScriptRunner
 import com.wutsi.koki.workflow.server.service.runner.SendRunner
 import com.wutsi.koki.workflow.server.service.runner.StartRunner
 import com.wutsi.koki.workflow.server.service.runner.UserRunner
@@ -21,7 +22,8 @@ class ActivityRunnerProviderTest {
     private val user = mock(UserRunner::class.java)
     private val send = mock(SendRunner::class.java)
     private val receive = mock(ReceiveRunner::class.java)
-    private val provider = ActivityRunnerProvider(start, stop, manual, user, send, receive)
+    private val script = mock(ScriptRunner::class.java)
+    private val provider = ActivityRunnerProvider(start, stop, manual, user, send, receive, script)
 
     @Test
     fun start() {
@@ -51,6 +53,11 @@ class ActivityRunnerProviderTest {
     @Test
     fun receive() {
         assertEquals(receive, provider.get(ActivityType.RECEIVE))
+    }
+
+    @Test
+    fun script() {
+        assertEquals(script, provider.get(ActivityType.SCRIPT))
     }
 
     @Test

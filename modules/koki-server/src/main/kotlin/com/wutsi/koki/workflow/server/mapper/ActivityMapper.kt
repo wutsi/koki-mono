@@ -1,14 +1,13 @@
 package com.wutsi.koki.workflow.server.mapper
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.workflow.dto.Activity
 import com.wutsi.koki.workflow.dto.ActivitySummary
 import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import org.springframework.stereotype.Service
-import java.io.StringReader
-import java.util.Properties
 
 @Service
-class ActivityMapper {
+class ActivityMapper(private val objectMapper: ObjectMapper) {
     fun toActivity(entity: ActivityEntity): Activity {
         return Activity(
             id = entity.id!!,
@@ -16,6 +15,7 @@ class ActivityMapper {
             roleId = entity.roleId,
             formId = entity.formId,
             messageId = entity.messageId,
+            scriptId = entity.scriptId,
             type = entity.type,
             name = entity.name,
             title = entity.title,
@@ -24,7 +24,8 @@ class ActivityMapper {
             requiresApproval = entity.requiresApproval,
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
-            tags = entity.tags?.let { tags -> toMap(tags) } ?: emptyMap(),
+            input = entity.inputAsMap(objectMapper),
+            output = entity.outputAsMap(objectMapper),
         )
     }
 
@@ -35,25 +36,12 @@ class ActivityMapper {
             roleId = entity.roleId,
             formId = entity.formId,
             messageId = entity.messageId,
+            scriptId = entity.scriptId,
             type = entity.type,
             name = entity.name,
             title = entity.title,
             active = entity.active,
             requiresApproval = entity.requiresApproval,
         )
-    }
-
-    private fun toMap(tags: String): Map<String, String> {
-        val map = mutableMapOf<String, String>()
-        val properties: Properties = Properties()
-        properties.load(StringReader(tags))
-        properties.keys().toList().map { key ->
-            val name = key.toString()
-            val value = properties.getProperty(name)
-            if (value.isNotEmpty()) {
-                map[name] = value
-            }
-        }
-        return map
     }
 }

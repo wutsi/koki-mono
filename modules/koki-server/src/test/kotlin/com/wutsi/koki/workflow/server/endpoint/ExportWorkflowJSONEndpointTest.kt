@@ -68,6 +68,7 @@ class ExportWorkflowJSONEndpointTest : TenantAwareEndpointTest() {
         assertEquals(null, activities[0].form)
         assertEquals(null, activities[0].role)
         assertEquals(null, activities[0].message)
+        assertEquals(null, activities[0].script)
         assertEquals(false, activities[0].requiresApproval)
         assertEquals("Starting the process", activities[0].description)
 
@@ -77,6 +78,7 @@ class ExportWorkflowJSONEndpointTest : TenantAwareEndpointTest() {
         assertEquals(null, activities[1].form)
         assertEquals(null, activities[1].role)
         assertEquals(null, activities[1].message)
+        assertEquals(null, activities[1].script)
         assertEquals(false, activities[1].requiresApproval)
         assertEquals(null, activities[1].description)
 
@@ -86,6 +88,7 @@ class ExportWorkflowJSONEndpointTest : TenantAwareEndpointTest() {
         assertEquals("f-100", activities[2].form)
         assertEquals("admin", activities[2].role)
         assertEquals("M-100", activities[2].message)
+        assertEquals("S-100", activities[2].script)
         assertEquals(true, activities[2].requiresApproval)
         assertEquals("Performing the task", activities[2].description)
 

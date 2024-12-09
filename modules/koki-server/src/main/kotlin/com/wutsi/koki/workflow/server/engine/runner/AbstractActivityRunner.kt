@@ -14,6 +14,7 @@ abstract class AbstractActivityRunner(
         logger.add("runner", this::class.simpleName)
         logger.add("activity_instance_id", activityInstance.id)
         logger.add("workflow_instance_id", activityInstance.workflowInstanceId)
+
         doRun(activityInstance, engine)
     }
 }

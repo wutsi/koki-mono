@@ -32,6 +32,43 @@ class LogService(
         return log
     }
 
+    fun info(
+        message: String,
+        workflowInstanceId: String,
+        tenantId: Long,
+        timestamp: Long = System.currentTimeMillis(),
+        activityInstanceId: String? = null,
+    ) {
+        create(
+            tenantId = tenantId,
+            type = LogEntryType.INFO,
+            message = message,
+            workflowInstanceId = workflowInstanceId,
+            activityInstanceId = activityInstanceId,
+            timestamp = timestamp,
+        )
+    }
+
+    @Transactional
+    fun error(
+        message: String,
+        workflowInstanceId: String,
+        tenantId: Long,
+        timestamp: Long = System.currentTimeMillis(),
+        activityInstanceId: String? = null,
+        ex: Throwable
+    ) {
+        create(
+            tenantId = tenantId,
+            type = LogEntryType.ERROR,
+            message = message,
+            workflowInstanceId = workflowInstanceId,
+            activityInstanceId = activityInstanceId,
+            exception = ex,
+            timestamp = timestamp,
+        )
+    }
+
     @Transactional
     fun create(
         tenantId: Long,
