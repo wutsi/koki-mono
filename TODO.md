@@ -9,6 +9,7 @@
 - [x] UI for configuring SMTP
 - [x] Use RabbitMQ for workflow orchestration
 - [x] Add Workflow Log
+- [] Add support for Script activities
 - [] Add support for Business Rule activities
 - [] Add support for Service activities
 - [] Cancel workflow Instance
@@ -16,4 +17,3 @@
 - [] Create Workflow Instance on form submission
 - [] Add support for S3 storage
 - [] Add tenant healthcheck to validate connectivity with all resources
-- [] Add support for Script activities
