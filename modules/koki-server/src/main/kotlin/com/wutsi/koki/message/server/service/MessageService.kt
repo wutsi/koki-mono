@@ -6,10 +6,10 @@ import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.message.dto.CreateMessageRequest
+import com.wutsi.koki.message.dto.MessageSortBy
 import com.wutsi.koki.message.dto.UpdateMessageRequest
 import com.wutsi.koki.message.server.dao.MessageRepository
 import com.wutsi.koki.message.server.domain.MessageEntity
-import com.wutsi.koki.workflow.dto.MessageSortBy
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -147,6 +147,7 @@ class MessageService(
     @Transactional
     fun delete(id: String, tenantId: Long) {
         val message = get(id, tenantId)
+        message.name = "##-" + message.name + "-" + UUID.randomUUID().toString()
         message.deleted = true
         message.deletedAt = Date()
     }

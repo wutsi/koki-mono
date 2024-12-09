@@ -22,8 +22,8 @@ class RestConfiguration(
     @Bean
     fun restTemplate(): RestTemplate =
         RestTemplateBuilder()
-            .setConnectTimeout(Duration.ofMillis(connectionTimeout))
-            .setReadTimeout(Duration.ofMillis(readTimeout))
+            .connectTimeout(Duration.ofMillis(connectionTimeout))
+            .readTimeout(Duration.ofMillis(readTimeout))
             .interceptors(
                 debugRestInterceptor,
                 tenantRestInterceptor,

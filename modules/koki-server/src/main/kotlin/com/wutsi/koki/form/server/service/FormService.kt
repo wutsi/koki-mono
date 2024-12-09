@@ -14,6 +14,7 @@ import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.Date
+import java.util.UUID
 
 @Service
 class FormService(
@@ -115,6 +116,7 @@ class FormService(
     @Transactional
     fun delete(id: String, tenantId: Long) {
         val form = get(id, tenantId)
+        form.name = "##-" + form.name + "-" + UUID.randomUUID().toString()
         form.deleted = true
         form.deletedAt = Date()
         dao.save(form)

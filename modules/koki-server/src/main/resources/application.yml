@@ -81,6 +81,10 @@ springdoc:
             display-name: Message API
             paths-to-match: /v1/messages, /v1/messages/*
 
+        -   group: scripts
+            display-name: Script API
+            paths-to-match: /v1/scripts, /v1/scripts/*
+
         -   group: tenant
             display-name: Tenant API
             paths-to-match: /v1/tenants, /v1/tenants/*, /v1/configurations, /v1/configurations/*

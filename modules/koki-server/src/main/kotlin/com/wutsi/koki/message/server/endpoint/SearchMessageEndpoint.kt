@@ -1,9 +1,9 @@
 package com.wutsi.koki.message.server.endpoint
 
+import com.wutsi.koki.message.dto.MessageSortBy
 import com.wutsi.koki.message.dto.SearchMessageResponse
 import com.wutsi.koki.message.server.mapper.MessageMapper
 import com.wutsi.koki.message.server.service.MessageService
-import com.wutsi.koki.workflow.dto.MessageSortBy
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
