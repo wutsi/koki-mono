@@ -13,8 +13,10 @@ data class Activity(
     val requiresApproval: Boolean = false,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
-    val tags: Map<String, String> = emptyMap(),
     val roleId: Long? = null,
     val formId: String? = null,
     val messageId: String? = null,
+    val scriptId: String? = null,
+    val input: Map<String, Any> = emptyMap(),
+    val output: Map<String, Any> = emptyMap(),
 )

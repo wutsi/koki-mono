@@ -11,9 +11,11 @@ data class ActivityData(
     val description: String? = null,
     val requiresApproval: Boolean = false,
     val role: String? = null,
-    val tags: Map<String, String> = emptyMap(),
     val form: String? = null,
     val message: String? = null,
+    val script: String? = null,
+    val input: Map<String, Any> = emptyMap(),
+    val output: Map<String, Any> = emptyMap()
 )
 
 data class WorkflowData(
