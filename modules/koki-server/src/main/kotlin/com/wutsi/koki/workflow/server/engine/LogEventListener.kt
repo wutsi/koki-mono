@@ -6,6 +6,7 @@ import com.wutsi.koki.form.event.ApprovalCompletedEvent
 import com.wutsi.koki.form.event.ApprovalStartedEvent
 import com.wutsi.koki.form.event.WorkflowDoneEvent
 import com.wutsi.koki.form.event.WorkflowStartedEvent
+import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.workflow.dto.ApprovalStatus
 import com.wutsi.koki.workflow.server.engine.command.RunActivityCommand
 import com.wutsi.koki.workflow.server.service.LogService
@@ -13,8 +14,11 @@ import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 
 @Service
-class LogEventListener(private val logService: LogService) : RabbitMQHandler {
-    override fun handle(event: Any) {
+class LogEventListener(
+    private val logService: LogService,
+    private val logger: KVLogger,
+) : RabbitMQHandler {
+    override fun handle(event: Any): Boolean {
         if (event is WorkflowStartedEvent) {
             onWorkflowStarted(event)
         } else if (event is WorkflowDoneEvent) {
@@ -27,7 +31,13 @@ class LogEventListener(private val logService: LogService) : RabbitMQHandler {
             onActivityDone(event)
         } else if (event is RunActivityCommand) {
             onRunActivityCommand(event)
+        } else {
+            return false
         }
+
+        logger.add("event_classname", event::class.java.simpleName)
+        logger.add("listener", "LogEventListener")
+        return true
     }
 
     @EventListener

@@ -24,20 +24,18 @@ class RabbitMQConsumer(
         val logger = DefaultKVLogger()
         KVLoggerThreadLocal.set(logger)
 
-        logger.add("rabbitmq_consumer_tag", consumerTag)
         try {
             // Read the event...
             val event = objectMapper.readValue(body, RabbitMQEvent::class.java)
 
             // Process the event
             val payload = extractPayload(event, logger)
-            handler.handle(payload)
+            if (handler.handle(payload)) {
+                logger.add("rabbitmq_consumer_tag", consumerTag)
+            }
             channel.basicAck(envelope.deliveryTag, false)
-
-            logger.add("success", true)
         } catch (ex: Exception) {
             logger.setException(ex)
-            logger.add("success", false)
 
             channel.basicReject(
                 envelope.deliveryTag,
@@ -51,7 +49,6 @@ class RabbitMQConsumer(
 
     private fun extractPayload(event: RabbitMQEvent, logger: KVLogger): Any {
         val clazz = Class.forName(event.classname)
-        logger.add("rabbitmq_event_classname", clazz.name)
         return objectMapper.readValue(event.payload, clazz)
     }
 }

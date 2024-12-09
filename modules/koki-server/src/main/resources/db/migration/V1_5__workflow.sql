@@ -129,7 +129,7 @@ CREATE TABLE T_WI_LOG_ENTRY(
     activity_instance_fk    VARCHAR(36) REFERENCES T_WI_ACTIVITY(id),
 
     type                    INT NOT NULL DEFAULT 0,
-    message                 VARCHAR(255),
+    message                 TEXT,
     stack_trace             TEXT,
     exception               TEXT,
     metadata                JSON,

@@ -44,7 +44,7 @@ class StartWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
         assertEquals(fmt.format(Date()), fmt.format(workflowInstance.startedAt))
         assertEquals(WorkflowStatus.RUNNING, workflowInstance.status)
 
-        Thread.sleep(3000)
+        Thread.sleep(1000)
         val activityInstanceId = result.body?.activityInstanceId
         val activityInstance = activityInstanceDao.findById(activityInstanceId!!).get()
         assertEquals(WorkflowStatus.DONE, activityInstance.status)
