@@ -1,54 +1,85 @@
 package com.wutsi.koki.script.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
-import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.script.dto.GetScriptResponse
-import com.wutsi.koki.script.dto.Language
+import com.wutsi.koki.script.dto.SearchScriptResponse
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/script/GetScriptEndpoint.sql"])
-class GetScriptEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/script/SearchScriptEndpoint.sql"])
+class SearchScriptEndpointTest : TenantAwareEndpointTest() {
     @Test
-    fun get() {
-        val response = rest.getForEntity("/v1/scripts/100", GetScriptResponse::class.java)
+    fun all() {
+        val response = rest.getForEntity("/v1/scripts", SearchScriptResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val script = response.body!!.script
-        assertEquals("S-100", script.name)
-        assertEquals("Sample script", script.title)
-        assertEquals("description 100", script.description)
-        assertEquals(true, script.active)
-        assertEquals(Language.JAVASCRIPT, script.language)
-        assertEquals("console.log(a+b)", script.code)
-        assertEquals(listOf("a", "b"), script.parameters)
+        val scripts = response.body!!.scripts
+        assertEquals(4, scripts.size)
     }
 
     @Test
-    fun `invalid id`() {
-        val result = rest.getForEntity("/v1/scripts/99999", ErrorResponse::class.java)
+    fun `by id`() {
+        val response =
+            rest.getForEntity(
+                "/v1/scripts?id=100&id=110&id=120&sort-by=NAME&asc=false",
+                SearchScriptResponse::class.java
+            )
 
-        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.SCRIPT_NOT_FOUND, result.body!!.error.code)
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val scripts = response.body!!.scripts
+        assertEquals(3, scripts.size)
+        assertEquals("120", scripts[0].id)
+        assertEquals("110", scripts[1].id)
+        assertEquals("100", scripts[2].id)
     }
 
     @Test
-    fun deleted() {
-        val result = rest.getForEntity("/v1/scripts/199", ErrorResponse::class.java)
+    fun `by name`() {
+        val response =
+            rest.getForEntity(
+                "/v1/scripts?name=S-100&name=S-110&name=S-120&name=S-130&sort-by=TITLE",
+                SearchScriptResponse::class.java
+            )
 
-        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.SCRIPT_NOT_FOUND, result.body!!.error.code)
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val scripts = response.body!!.scripts
+        assertEquals(4, scripts.size)
+        assertEquals("100", scripts[0].id)
+        assertEquals("130", scripts[1].id)
+        assertEquals("110", scripts[2].id)
+        assertEquals("120", scripts[3].id)
     }
 
     @Test
-    fun `another tenant`() {
-        val result = rest.getForEntity("/v1/scripts/200", ErrorResponse::class.java)
+    fun `by active`() {
+        val response =
+            rest.getForEntity(
+                "/v1/scripts?active=false&sort-by=CREATED_AT",
+                SearchScriptResponse::class.java
+            )
 
-        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.SCRIPT_NOT_FOUND, result.body!!.error.code)
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val scripts = response.body!!.scripts
+        assertEquals(1, scripts.size)
+        assertEquals("110", scripts[0].id)
+    }
+
+    @Test
+    fun `from another tenant`() {
+        val response =
+            rest.getForEntity(
+                "/v1/scripts?id=200&sort-by=MODIFIED_AT",
+                SearchScriptResponse::class.java
+            )
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val scripts = response.body!!.scripts
+        assertEquals(0, scripts.size)
     }
 }

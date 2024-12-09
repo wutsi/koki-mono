@@ -3,9 +3,9 @@ package com.wutsi.koki.sdk
 import com.wutsi.koki.message.dto.CreateMessageRequest
 import com.wutsi.koki.message.dto.CreateMessageResponse
 import com.wutsi.koki.message.dto.GetMessageResponse
+import com.wutsi.koki.message.dto.MessageSortBy
 import com.wutsi.koki.message.dto.SearchMessageResponse
 import com.wutsi.koki.message.dto.UpdateMessageRequest
-import com.wutsi.koki.workflow.dto.MessageSortBy
 import org.springframework.web.client.RestTemplate
 
 class KokiMessages(
