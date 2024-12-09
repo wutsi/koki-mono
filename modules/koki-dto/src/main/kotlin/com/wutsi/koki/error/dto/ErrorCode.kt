@@ -41,6 +41,10 @@ object ErrorCode {
     val ROLE_NOT_FOUND: String = "$PREFIX:role:not-found"
     val ROLE_NAME_MISSING: String = "$PREFIX:role:name-missing"
 
+    val SCRIPT_DUPLICATE_NAME: String = "$PREFIX:script:duplicate-name"
+    val SCRIPT_IN_USE: String = "$PREFIX:script:in-use"
+    val SCRIPT_NOT_FOUND: String = "$PREFIX:script:not-found"
+
     val TENANT_NOT_FOUND: String = "$PREFIX:tenant:not-found"
     val TENANT_MISSING_FROM_HEADER: String = "$PREFIX:tenant:missing-from-header"
 

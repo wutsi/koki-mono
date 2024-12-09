@@ -1,4 +1,4 @@
-package com.wutsi.koki.workflow.dto
+package com.wutsi.koki.message.dto
 
 enum class MessageSortBy {
     NAME,
