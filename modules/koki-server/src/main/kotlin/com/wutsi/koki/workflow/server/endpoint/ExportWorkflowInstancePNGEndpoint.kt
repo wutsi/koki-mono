@@ -3,6 +3,7 @@ package com.wutsi.koki.workflow.server.endpoint
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
+import com.wutsi.koki.workflow.server.io.WorkflowExporter
 import com.wutsi.koki.workflow.server.io.WorkflowPNGExporter
 import com.wutsi.koki.workflow.server.service.ActivityService
 import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping
 class ExportWorkflowInstancePNGEndpoint(
     private val exporter: WorkflowPNGExporter,
+    private val jsonExporter: WorkflowExporter,
     private val service: WorkflowInstanceService,
     private val activityService: ActivityService,
     private val workflowService: WorkflowService,
@@ -45,8 +47,9 @@ class ExportWorkflowInstancePNGEndpoint(
             val runningActivityNames = filterActivityNames(WorkflowStatus.RUNNING, workflowInstance)
             val doneActivityNames = filterActivityNames(WorkflowStatus.DONE, workflowInstance)
             val workflow = workflowService.get(workflowInstance.workflowId, tenantId)
+            val data = jsonExporter.export(workflow)
 
-            exporter.export(workflow, response.outputStream, runningActivityNames, doneActivityNames)
+            exporter.export(data, response.outputStream, runningActivityNames, doneActivityNames)
         } catch (ex: NotFoundException) {
             LOGGER.warn("workflow not found", ex)
             response.status = 404
