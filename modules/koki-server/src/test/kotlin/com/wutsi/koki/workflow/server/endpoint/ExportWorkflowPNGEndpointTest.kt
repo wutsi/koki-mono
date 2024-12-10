@@ -121,7 +121,7 @@ class ExportWorkflowPNGEndpointTest : TenantAwareEndpointTest() {
         val cnn = url.openConnection() as HttpURLConnection
         try {
             cnn.requestMethod = "POST"
-            cnn.setRequestProperty("Content-Type", "application/json");
+            cnn.setRequestProperty("Content-Type", "application/json")
             cnn.doOutput = true
             val os = cnn.outputStream
             IOUtils.copy(ByteArrayInputStream(json.toByteArray()), os)
@@ -153,7 +153,7 @@ class ExportWorkflowPNGEndpointTest : TenantAwareEndpointTest() {
         val cnn = url.openConnection() as HttpURLConnection
         try {
             cnn.requestMethod = "POST"
-            cnn.setRequestProperty("Content-Type", "application/json");
+            cnn.setRequestProperty("Content-Type", "application/json")
             cnn.doOutput = true
             val os = cnn.outputStream
             IOUtils.copy(ByteArrayInputStream(json.toByteArray()), os)
