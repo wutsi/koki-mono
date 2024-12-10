@@ -1,7 +1,6 @@
 package com.wutsi.koki.portal.page.settings.message
 
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
@@ -9,19 +8,10 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.MessageFixtures.message
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.message.dto.GetMessageResponse
 import com.wutsi.koki.portal.page.PageName
-import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
 class ShowMessageControllerTest : AbstractPageControllerTest() {
-    @BeforeEach
-    override fun setUp() {
-        super.setUp()
-
-        doReturn(GetMessageResponse(message)).whenever(kokiMessages).message(any())
-    }
-
     @Test
     fun show() {
         navigateTo("/settings/messages/${message.id}")

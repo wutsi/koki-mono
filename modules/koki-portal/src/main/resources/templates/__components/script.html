@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="widget" th:fragment="script-breadcrumb(script)">
+    <div class="widget-body">
+        <a href="/">Home</a>
+        &gt;
+        <a href="/settings">Settings</a>
+        &gt;
+        <a href="/settings/scripts" th:if="${script}">Scripts</a>
+        <span th:if="${script}">&gt;</span>
+        <span th:if="${script}" th:text="${script.longTitle}">TITLE</span>
+        <span th:if="!${script}">Script</span>
+    </div>
+</div>
+
+<div th:fragment="script-language(language)">
+    <div th:if="${language.name == 'JAVASCRIPT'}">
+        <img align="absmiddle" height="32" src="/image/language/javascript.png" width="32"/>
+        Javascript
+    </div>
+    <div th:if="${language.name == 'PYTHON'}">
+        <img align="absmiddle" height="32" src="/image/language/python.png" width="32"/>
+        Python
+    </div>
+</div>
+
+</body>

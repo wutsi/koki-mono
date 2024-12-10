@@ -10,26 +10,9 @@ import com.wutsi.koki.message.dto.GetMessageResponse
 import com.wutsi.koki.message.dto.Message
 import com.wutsi.koki.message.dto.SearchMessageResponse
 import com.wutsi.koki.portal.page.PageName
-import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
 class ListMessageControllerTest : AbstractPageControllerTest() {
-    @BeforeEach
-    override fun setUp() {
-        super.setUp()
-
-        doReturn(SearchMessageResponse(messages)).whenever(kokiMessages)
-            .messages(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-            )
-    }
-
     @Test
     fun list() {
         navigateTo("/settings/messages")

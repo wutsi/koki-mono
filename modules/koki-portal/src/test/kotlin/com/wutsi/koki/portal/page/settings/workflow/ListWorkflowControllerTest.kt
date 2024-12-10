@@ -5,13 +5,11 @@ import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.WorkflowFixtures.workflow
 import com.wutsi.koki.WorkflowFixtures.workflows
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.workflow.dto.Activity
-import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.GetWorkflowResponse
 import com.wutsi.koki.workflow.dto.SearchWorkflowResponse
-import com.wutsi.koki.workflow.dto.Workflow
 import kotlin.test.Test
 
 class ListWorkflowControllerTest : AbstractPageControllerTest() {
@@ -56,33 +54,6 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `listview to show`() {
-        val workflow = Workflow(
-            id = 1L,
-            name = "WF-001",
-            title = "Workflow #1",
-            description = "This is an example of workflow",
-            active = true,
-            requiresApprover = false,
-            activities = listOf(
-                Activity(
-                    id = 11L,
-                    type = ActivityType.START,
-                    name = "START",
-                    title = "Start"
-                ),
-                Activity(
-                    id = 12L,
-                    type = ActivityType.USER,
-                    name = "INPUT",
-                    title = "Input Data",
-                ),
-                Activity(
-                    id = 99L,
-                    type = ActivityType.END,
-                    name = "STOP",
-                ),
-            ),
-        )
         doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow)
             .workflow(any())
 
@@ -94,33 +65,6 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `listview to edit`() {
-        val workflow = Workflow(
-            id = 1L,
-            name = "WF-001",
-            title = "Workflow #1",
-            description = "This is an example of workflow",
-            active = true,
-            requiresApprover = false,
-            activities = listOf(
-                Activity(
-                    id = 11L,
-                    type = ActivityType.START,
-                    name = "START",
-                    title = "Start"
-                ),
-                Activity(
-                    id = 12L,
-                    type = ActivityType.USER,
-                    name = "INPUT",
-                    title = "Input Data",
-                ),
-                Activity(
-                    id = 99L,
-                    type = ActivityType.END,
-                    name = "STOP",
-                ),
-            ),
-        )
         doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow)
             .workflow(any())
 

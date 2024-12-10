@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container">
+    <h1>
+        <img align="absmiddle" height="48" src="/image/script.png" width="48"/>
+        Script: <span th:text="${script.longTitle}">NAME</span>
+    </h1>
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/script :: script-breadcrumb(${script})}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-md-8">
+
+            <div class="widget">
+                <div class="widget-body">
+                    <div class="widget-toolbar">
+                        <a class="btn-edit btn btn-secondary"
+                           th:href="'/settings/scripts/' + ${script.id} + '/edit'">Edit</a>
+                        <a class="btn-delete btn btn-danger"
+                           onclick="return confirm('Are you sure you want to delete the script?')"
+                           th:href="'/settings/scripts/' + ${script.id} + '/delete'">Delete</a>
+                    </div>
+
+                    <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+
+                    <table class="table">
+                        <tr>
+                            <td width="20%"><b>Name</b></td>
+                            <td th:text="${script.name}">NAME</td>
+                        </tr>
+                        <tr>
+                            <td width="20%"><b>Title</b></td>
+                            <td th:text="${script.title}">TITLE</td>
+                        </tr>
+                        <tr>
+                            <td><b>Description</b></td>
+                            <td th:text="${script.description}">DESCRIPTION</td>
+                        </tr>
+                        <tr>
+                            <td><b>Parameters</b></td>
+                            <td th:text="${script.parameterText}">PARAMS</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="widget">
+                <div class="widget-header">
+                    <div class="widget-title">Code</div>
+                </div>
+                <div class="widget-body">
+                    <div th:replace="~{__components/script :: script-language(${script.language})}"></div>
+                    <pre>
+                        <code th:class="'language-' + ${script.language.name().toLowerCase()}" th:text="${script.code}">
+                            CODE
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <div class="widget">
+                <div class="widget-body">
+                    <table class="table table-striped">
+                        <tr>
+                            <td><b>Active</b></td>
+                            <td>
+                                <span th:if="${script.active}">Yes</span>
+                                <span th:if="!${script.active}">No</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Created</b></td>
+                            <td th:text="${script.createdAtText}">CREATED</td>
+                        </tr>
+                        <tr>
+                            <td><b>Modified</b></td>
+                            <td th:text="${script.modifiedAtText}">CREATED</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/default.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        hljs.highlightAll();
+    });
+</script>
+</body>
+</html>

@@ -49,7 +49,7 @@ class ShowFormController(private val service: FormService) : AbstractPageControl
                 "page",
                 PageModel(
                     name = PageName.SETTINGS_FORM_DELETED,
-                    title = form.name
+                    title = form.longTitle
                 ),
             )
             return "settings/forms/deleted"
