@@ -3,9 +3,9 @@ package com.wutsi.koki.workflow.server.io
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout
 import com.mxgraph.util.mxCellRenderer
 import com.mxgraph.util.mxConstants
+import com.wutsi.koki.workflow.dto.ActivityData
 import com.wutsi.koki.workflow.dto.ActivityType
-import com.wutsi.koki.workflow.server.domain.ActivityEntity
-import com.wutsi.koki.workflow.server.domain.WorkflowEntity
+import com.wutsi.koki.workflow.dto.WorkflowData
 import com.wutsi.koki.workflow.server.io.WorkflowPNGExporter.Companion.SUFFIX_DONE
 import com.wutsi.koki.workflow.server.io.WorkflowPNGExporter.Companion.SUFFIX_RUNNING
 import com.wutsi.koki.workflow.server.util.JGraphtUtil
@@ -43,7 +43,7 @@ class WorkflowPNGExporter {
     }
 
     fun export(
-        workflow: WorkflowEntity,
+        workflow: WorkflowData,
         output: OutputStream,
         runningActivityNames: List<String> = emptyList(),
         doneActivityNames: List<String> = emptyList(),
@@ -54,7 +54,7 @@ class WorkflowPNGExporter {
 
     private fun generatePNG(
         graph: Graph<String, DefaultEdge>,
-        workflow: WorkflowEntity,
+        workflow: WorkflowData,
         output: OutputStream,
         runningActivityNames: List<String>,
         doneActivityNames: List<String>,
@@ -93,7 +93,7 @@ class WorkflowPNGExporter {
 
     private fun applyVertexStyle(
         adapter: JGraphXAdapter<String, DefaultEdge>,
-        workflow: WorkflowEntity,
+        workflow: WorkflowData,
         runningActivityNames: List<String>,
         doneActivityNames: List<String>,
     ) {
@@ -187,7 +187,7 @@ class WorkflowPNGExporter {
             } else if (activity?.type == ActivityType.END) {
                 vertexCell.value = null
                 vertexCell.style = getStyleName(STYLE_STOP, activity, runningActivityNames, doneActivityNames)
-            } else {
+            } else if (activity != null) {
                 vertexCell.style = getStyleName(STYLE_ACTIVITY, activity, runningActivityNames, doneActivityNames)
             }
         }
@@ -196,13 +196,13 @@ class WorkflowPNGExporter {
 
 private fun getStyleName(
     baseStyleName: String,
-    activity: ActivityEntity?,
+    activity: ActivityData,
     runningActivityNames: List<String> = emptyList(),
     doneActivityNames: List<String> = emptyList(),
 ): String {
-    return if (doneActivityNames.contains(activity?.name)) {
+    return if (doneActivityNames.contains(activity.name)) {
         "${baseStyleName}_$SUFFIX_DONE"
-    } else if (runningActivityNames.contains(activity?.name)) {
+    } else if (runningActivityNames.contains(activity.name)) {
         "${baseStyleName}_$SUFFIX_RUNNING"
     } else {
         baseStyleName

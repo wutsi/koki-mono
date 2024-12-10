@@ -1,11 +1,22 @@
 package com.wutsi.koki.tenant.server.server.endpoint
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.TenantAwareEndpointTest
+import com.wutsi.koki.workflow.dto.ActivityData
+import com.wutsi.koki.workflow.dto.ActivityType
+import com.wutsi.koki.workflow.dto.FlowData
+import com.wutsi.koki.workflow.dto.ImportWorkflowRequest
+import com.wutsi.koki.workflow.dto.WorkflowData
+import org.apache.commons.io.IOUtils
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
+import java.io.ByteArrayInputStream
 import java.io.File
+import java.net.HttpURLConnection
+import java.net.URL
 import javax.imageio.ImageIO
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -14,6 +25,9 @@ import kotlin.test.assertTrue
 class ExportWorkflowPNGEndpointTest : TenantAwareEndpointTest() {
     @LocalServerPort
     private lateinit var port: Integer
+
+    @Autowired
+    private lateinit var objectMapper: ObjectMapper
 
     private val folder = File(File(System.getProperty("user.home")), "__wutsi")
 
@@ -65,5 +79,91 @@ class ExportWorkflowPNGEndpointTest : TenantAwareEndpointTest() {
     fun `workflow of another tenant`() {
         val url = "http://localhost:$port/v1/workflows/images/1.200.png"
         download(url, 404)
+    }
+
+    @Test
+    fun post() {
+        val request = ImportWorkflowRequest(
+            workflow = WorkflowData(
+                name = "new",
+                description = "This is a new workflow",
+                parameters = listOf("PARAM_1 ", "PARAM_2"),
+                approverRole = "accountant",
+                activities = listOf(
+                    ActivityData(name = "START", type = ActivityType.START),
+                    ActivityData(
+                        name = "INVOICE",
+                        title = "Invoicing...",
+                        description = "SAGE create an invoice",
+                        type = ActivityType.SERVICE,
+                        input = mapOf("foo" to "bar", "a" to "b"),
+                        output = mapOf("x" to "y"),
+                        requiresApproval = true,
+                        role = "accountant",
+                        form = "f-100",
+                        message = "m-100",
+                        script = "s-100",
+                    ),
+                    ActivityData(
+                        name = "STOP",
+                        type = ActivityType.END,
+                    ),
+                ),
+                flows = listOf(
+                    FlowData(from = "START", to = "INVOICE"),
+                    FlowData(from = "INVOICE", to = "STOP", expression = "A==true"),
+                )
+            )
+        )
+
+        val json = objectMapper.writeValueAsString(request)
+        val url = URL("http://localhost:$port/v1/workflows/images")
+        val cnn = url.openConnection() as HttpURLConnection
+        try {
+            cnn.requestMethod = "POST"
+            cnn.setRequestProperty("Content-Type", "application/json")
+            cnn.doOutput = true
+            val os = cnn.outputStream
+            IOUtils.copy(ByteArrayInputStream(json.toByteArray()), os)
+
+            cnn.connect()
+
+            assertEquals(200, cnn.responseCode)
+            assertEquals("image/png", cnn.contentType)
+        } finally {
+            cnn.disconnect()
+        }
+    }
+
+    @Test
+    fun postWithError() {
+        val request = ImportWorkflowRequest(
+            workflow = WorkflowData(
+                name = "new",
+                description = "This is a new workflow",
+                parameters = listOf("PARAM_1 ", "PARAM_2"),
+                approverRole = "accountant",
+                activities = listOf(),
+                flows = listOf()
+            )
+        )
+
+        val json = objectMapper.writeValueAsString(request)
+        val url = URL("http://localhost:$port/v1/workflows/images")
+        val cnn = url.openConnection() as HttpURLConnection
+        try {
+            cnn.requestMethod = "POST"
+            cnn.setRequestProperty("Content-Type", "application/json")
+            cnn.doOutput = true
+            val os = cnn.outputStream
+            IOUtils.copy(ByteArrayInputStream(json.toByteArray()), os)
+
+            cnn.connect()
+
+            assertEquals(400, cnn.responseCode)
+            assertEquals("application/json", cnn.contentType)
+        } finally {
+            cnn.disconnect()
+        }
     }
 }

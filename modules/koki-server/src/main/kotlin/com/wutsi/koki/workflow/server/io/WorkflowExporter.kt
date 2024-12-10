@@ -22,8 +22,8 @@ class WorkflowExporter(
     private val scriptService: ScriptService,
     private val objectMapper: ObjectMapper,
 ) {
-    fun export(workflow: WorkflowEntity, output: OutputStream) {
-        val data = WorkflowData(
+    fun export(workflow: WorkflowEntity): WorkflowData {
+        return WorkflowData(
             name = workflow.name,
             title = workflow.title,
             description = workflow.description,
@@ -38,6 +38,9 @@ class WorkflowExporter(
                 roleService.get(roleId, workflow.tenantId)?.name
             },
         )
+    }
+    fun export(workflow: WorkflowEntity, output: OutputStream) {
+        val data = export(workflow)
         objectMapper.writeValue(output, data)
     }
 
