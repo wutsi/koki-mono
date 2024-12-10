@@ -11,6 +11,7 @@ import com.wutsi.koki.LogFixtures.logEntries
 import com.wutsi.koki.LogFixtures.logEntry
 import com.wutsi.koki.MessageFixtures
 import com.wutsi.koki.RoleFixtures.roles
+import com.wutsi.koki.ScriptFixtures
 import com.wutsi.koki.UserFixtures.user
 import com.wutsi.koki.UserFixtures.users
 import com.wutsi.koki.WorkflowFixtures.activities
@@ -30,11 +31,14 @@ import com.wutsi.koki.form.dto.SearchFormResponse
 import com.wutsi.koki.message.dto.GetMessageResponse
 import com.wutsi.koki.message.dto.SearchMessageResponse
 import com.wutsi.koki.portal.service.AccessTokenHolder
+import com.wutsi.koki.script.dto.GetScriptResponse
+import com.wutsi.koki.script.dto.SearchScriptResponse
 import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiLogs
 import com.wutsi.koki.sdk.KokiMessages
+import com.wutsi.koki.sdk.KokiScripts
 import com.wutsi.koki.sdk.KokiTenant
 import com.wutsi.koki.sdk.KokiUser
 import com.wutsi.koki.sdk.KokiWorkflow
@@ -107,6 +111,9 @@ abstract class AbstractPageControllerTest {
     protected lateinit var kokiMessages: KokiMessages
 
     @MockitoBean
+    protected lateinit var kokiScripts: KokiScripts
+
+    @MockitoBean
     protected lateinit var kokiTenant: KokiTenant
 
     @MockitoBean
@@ -173,6 +180,7 @@ abstract class AbstractPageControllerTest {
         setupFiles()
         setupForms()
         setupLogs()
+        setupScripts()
         setupMessages()
         setupWorkflows()
         setupUsers()
@@ -201,6 +209,21 @@ abstract class AbstractPageControllerTest {
 
         doReturn(SearchFormResponse(FormFixtures.forms)).whenever(kokiForms)
             .forms(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
+    }
+
+    private fun setupScripts() {
+        doReturn(GetScriptResponse(ScriptFixtures.script)).whenever(kokiScripts).script(any())
+
+        doReturn(SearchScriptResponse(ScriptFixtures.scripts)).whenever(kokiScripts)
+            .scripts(
+                anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),

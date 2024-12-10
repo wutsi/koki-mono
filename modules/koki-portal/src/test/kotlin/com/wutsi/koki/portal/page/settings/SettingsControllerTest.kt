@@ -46,4 +46,11 @@ class SettingsControllerTest : AbstractPageControllerTest() {
         click(".btn-smtp")
         assertCurrentPageIs(PageName.SETTINGS_SMTP)
     }
+
+    @Test
+    fun scripts() {
+        navigateTo("/settings")
+        click(".btn-script")
+        assertCurrentPageIs(PageName.SETTINGS_SCRIPT_LIST)
+    }
 }
