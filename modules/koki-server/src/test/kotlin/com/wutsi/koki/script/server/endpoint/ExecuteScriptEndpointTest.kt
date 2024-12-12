@@ -23,6 +23,6 @@ class ExecuteScriptEndpointTest : TenantAwareEndpointTest() {
         assertEquals(HttpStatus.OK, response.statusCode)
 
         assertEquals(10, response.body!!.bindings["return"])
-        assertEquals("Hello", response.body!!.console)
+        assertEquals("Hello\n", response.body!!.console)
     }
 }

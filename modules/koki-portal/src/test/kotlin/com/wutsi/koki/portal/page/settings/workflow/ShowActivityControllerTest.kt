@@ -28,7 +28,7 @@ class ShowActivityControllerTest : AbstractPageControllerTest() {
         val tabs = driver.getWindowHandles().toList()
         driver.switchTo().window(tabs[1])
         Thread.sleep(1000)
-        assertCurrentPageIs(PageName.FORM)
+        assertCurrentPageIs(PageName.SETTINGS_FORM)
     }
 
     @Test
