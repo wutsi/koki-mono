@@ -2,6 +2,8 @@ package com.wutsi.koki.sdk
 
 import com.wutsi.koki.script.dto.CreateScriptRequest
 import com.wutsi.koki.script.dto.CreateScriptResponse
+import com.wutsi.koki.script.dto.ExecuteScriptRequest
+import com.wutsi.koki.script.dto.ExecuteScriptResponse
 import com.wutsi.koki.script.dto.GetScriptResponse
 import com.wutsi.koki.script.dto.ScriptSortBy
 import com.wutsi.koki.script.dto.SearchScriptResponse
@@ -58,5 +60,10 @@ class KokiScripts(
     fun update(id: String, request: UpdateScriptRequest) {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
         rest.postForEntity(url, request, Any::class.java)
+    }
+
+    fun execute(id: String, request: ExecuteScriptRequest): ExecuteScriptResponse {
+        val url = urlBuilder.build("$PATH_PREFIX/$id/execute")
+        return rest.postForEntity(url, request, ExecuteScriptResponse::class.java).body
     }
 }

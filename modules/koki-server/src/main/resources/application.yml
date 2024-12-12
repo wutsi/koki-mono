@@ -83,23 +83,23 @@ springdoc:
 
         -   group: scripts
             display-name: Script API
-            paths-to-match: /v1/scripts, /v1/scripts/*
+            paths-to-match: /v1/scripts, /v1/scripts/**
 
         -   group: tenant
             display-name: Tenant API
-            paths-to-match: /v1/tenants, /v1/tenants/*, /v1/configurations, /v1/configurations/*
+            paths-to-match: /v1/tenants, /v1/tenants/**, /v1/configurations, /v1/configurations/**
 
         -   group: user
             display-name: User API
-            paths-to-match: /v1/users, /v1/users/*, /v1/users/**, /v1/roles, /v1/roles/*
+            paths-to-match: /v1/users, /v1/users/**, /v1/roles, /v1/roles/**
 
         -   group: workflow
             display-name: Workflow API
-            paths-to-match: /v1/workflows, /v1/workflows/*, /v1/workflows/**
+            paths-to-match: /v1/workflows, /v1/workflows/**
 
         -   group: workflow-engine
             display-name: Workflow Engine
-            paths-to-match: /v1/workflow-instances, /v1/workflow-instances/*, /v1/workflow-instances/**, /v1/activity-instances/**, /v1/logs, /v1/logs/**
+            paths-to-match: /v1/workflow-instances, /v1/workflow-instances/**, /v1/activity-instances/**, /v1/logs, /v1/logs/**
 
 management:
     endpoint:

@@ -60,13 +60,20 @@ class SendRunner(
         val msg = createMessage(activityInstance, message, logger)
         logger.add("recipient_name", msg.recipient.displayName)
         logger.add("recipient_email", msg.recipient.email)
+        createMessagingService(activityInstance.tenantId).send(msg)
+
         logService.info(
-            message = "Sending message to ${msg.recipient.displayName} <${msg.recipient.email}>",
+            message = "Message sent to ${msg.recipient.email}",
             tenantId = activityInstance.tenantId,
             workflowInstanceId = activityInstance.workflowInstanceId,
             activityInstanceId = activityInstance.id,
+            metadata = mapOf(
+                "message_id" to (message.id ?: ""),
+                "message_name" to message.name,
+                "recipient_email" to msg.recipient.email,
+            )
         )
-        createMessagingService(activityInstance.tenantId).send(msg)
+
         return true
     }
 

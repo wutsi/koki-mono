@@ -19,9 +19,25 @@
       },
       "elements": [
         {
+          "name": "case_id",
+          "type": "TEXT",
+          "title": "Case ID",
+          "description": "The ID is auto-calculated, it cannot be modified",
+          "accessControl": {
+            "viewerRoles": [
+              "employee",
+              "hr",
+              "finance"
+            ],
+            "editorRoles": [
+              "xxx"
+            ]
+          }
+        },
+        {
           "name": "incident_title",
           "type": "TEXT",
-          "title": "Incident Title",
+          "title": "Title",
           "description": "Short description of the incident",
           "required": true,
           "maxLength": 100
@@ -73,27 +89,27 @@
           },
           "options": [
             {
-              "value": "unsafe_act",
+              "value": "UA",
               "text": "Unsafe Act"
             },
             {
-              "value": "minor_injury",
+              "value": "MI",
               "text": "Minor Injury"
             },
             {
-              "value": "major_injury",
+              "value": "MI",
               "text": "Major Injury"
             },
             {
-              "value": "fire_incident",
+              "value": "FI",
               "text": "Fire Incident"
             },
             {
-              "value": "security_incident",
+              "value": "SI",
               "text": "Security Incident"
             },
             {
-              "value": "harassement",
+              "value": "HR",
               "text": "Harassement"
             }
           ]

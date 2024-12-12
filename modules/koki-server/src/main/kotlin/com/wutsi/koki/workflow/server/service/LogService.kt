@@ -38,6 +38,7 @@ class LogService(
         tenantId: Long,
         timestamp: Long = System.currentTimeMillis(),
         activityInstanceId: String? = null,
+        metadata: Map<String, Any> = emptyMap(),
     ) {
         create(
             tenantId = tenantId,
@@ -46,6 +47,7 @@ class LogService(
             workflowInstanceId = workflowInstanceId,
             activityInstanceId = activityInstanceId,
             timestamp = timestamp,
+            metadata = metadata,
         )
     }
 
@@ -56,6 +58,7 @@ class LogService(
         tenantId: Long,
         timestamp: Long = System.currentTimeMillis(),
         activityInstanceId: String? = null,
+        metadata: Map<String, Any> = emptyMap(),
         ex: Throwable
     ) {
         create(
@@ -66,6 +69,7 @@ class LogService(
             activityInstanceId = activityInstanceId,
             exception = ex,
             timestamp = timestamp,
+            metadata = metadata,
         )
     }
 

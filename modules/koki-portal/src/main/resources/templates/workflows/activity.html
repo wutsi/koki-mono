@@ -66,7 +66,14 @@
                             <td><b>Message</b></td>
                             <td>
                                 <a class="message" target="_new" th:href="${activityInstance.activity.message.url}"
-                                   th:text="${activityInstance.activity.message.name}">NAME</a>
+                                   th:text="${activityInstance.activity.message.name}">MESSAGE</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${activityInstance.activity.script}">
+                            <td><b>Script</b></td>
+                            <td>
+                                <a class="message" target="_new" th:href="${activityInstance.activity.script.url}"
+                                   th:text="${activityInstance.activity.script.longTitle}">SCRIPT</a>
                             </td>
                         </tr>
                         <tr th:if="!${activityInstance.activity.description.isEmpty()}">

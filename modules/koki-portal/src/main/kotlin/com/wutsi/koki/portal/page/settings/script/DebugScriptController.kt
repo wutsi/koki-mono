@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.page.settings.script
 
 import com.wutsi.koki.portal.model.PageModel
+import com.wutsi.koki.portal.model.ScriptExecutionModel
 import com.wutsi.koki.portal.model.ScriptModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
@@ -15,15 +16,16 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-class EditScriptController(private val service: ScriptService) : AbstractPageController() {
-    @GetMapping("/settings/scripts/{id}/edit")
-    fun edit(@PathVariable id: String, model: Model): String {
+class DebugScriptController(private val service: ScriptService) : AbstractPageController() {
+    @GetMapping("/settings/scripts/{id}/debug")
+    fun debug(@PathVariable id: String, model: Model): String {
         val script = service.script(id)
-        return edit(script, model)
+        return debug(script, null, model)
     }
 
-    private fun edit(script: ScriptModel, model: Model): String {
+    private fun debug(script: ScriptModel, execution: ScriptExecutionModel?, model: Model): String {
         model.addAttribute("script", script)
+        execution?.let { model.addAttribute("execution", execution) }
         model.addAttribute(
             "form",
             ScriptForm(
@@ -31,44 +33,39 @@ class EditScriptController(private val service: ScriptService) : AbstractPageCon
                 title = script.title,
                 language = script.language.name.lowercase(),
                 code = script.code,
-                parameters = script.parameters.joinToString(separator = "\n"),
-                active = script.active,
-                description = script.description ?: "",
+                parameters = script.parameters
+                    .map { param -> "$param=1" }
+                    .joinToString(separator = "\n"),
             )
         )
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.SETTINGS_SCRIPT_EDIT,
+                name = PageName.SETTINGS_SCRIPT_DEBUG,
                 title = script.longTitle
             )
         )
-        return "settings/scripts/edit"
+        return "settings/scripts/debug"
     }
 
-    @PostMapping("/settings/scripts/{id}/update")
-    fun update(
+    @PostMapping("/settings/scripts/{id}/debug")
+    fun execute(
         @PathVariable id: String,
         @ModelAttribute form: ScriptForm,
         model: Model
     ): String {
         val script = service.script(id)
         try {
-            service.update(id, form)
-
-            model.addAttribute("script", ScriptModel(id = id, name = form.name, title = form.title))
-            model.addAttribute(
-                "page",
-                PageModel(
-                    name = PageName.SETTINGS_SCRIPT_SAVED,
-                    title = script.longTitle,
-                ),
-            )
-            return "settings/scripts/saved"
+            val execution = service.execute(id, form)
+            return debug(script, execution, model)
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
-            model.addAttribute("error", errorResponse.error.code)
-            return edit(script, model)
+            val execution = ScriptExecutionModel(
+                errorCode = errorResponse.error.code,
+                errorMessage = errorResponse.error.message,
+                console = errorResponse.error.data?.get("console")?.toString()
+            )
+            return debug(script, execution, model)
         }
     }
 }

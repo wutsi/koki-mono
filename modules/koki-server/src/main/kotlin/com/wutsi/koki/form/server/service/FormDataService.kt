@@ -81,6 +81,21 @@ class FormDataService(
     }
 
     @Transactional
+    fun merge(formData: FormDataEntity, newData: Map<String, Any>) {
+        val form = formService.get(formData.formId, formData.tenantId)
+        val names = formService.extractInputName(form)
+
+        val data = formData.dataAsMap(objectMapper).toMutableMap()
+        names.forEach { name ->
+            if (newData.containsKey(name)) {
+                newData[name]?.let { value -> data[name] = value }
+            }
+        }
+        formData.data = objectMapper.writeValueAsString(data)
+        dao.save(formData)
+    }
+
+    @Transactional
     fun submit(request: SubmitFormDataRequest, tenantId: Long): FormDataEntity {
         val form = formService.get(request.formId, tenantId)
         if (request.workflowInstanceId != null) {

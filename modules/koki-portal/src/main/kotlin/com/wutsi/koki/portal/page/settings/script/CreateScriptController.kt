@@ -16,7 +16,7 @@ import org.springframework.web.client.HttpClientErrorException
 @Controller
 class CreateScriptController(private val service: ScriptService) : AbstractPageController() {
     @GetMapping("/settings/scripts/create")
-    fun edit(model: Model): String {
+    fun create(model: Model): String {
         return create(ScriptForm(), model)
     }
 

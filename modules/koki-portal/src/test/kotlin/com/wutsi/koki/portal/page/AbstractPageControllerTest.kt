@@ -471,6 +471,12 @@ abstract class AbstractPageControllerTest {
         driver.findElement(by).sendKeys(value)
     }
 
+    protected fun inputCodeMiror(code: String) {
+        val cm = driver.findElement(By.cssSelector("div.CodeMirror"))
+        val js = driver as JavascriptExecutor
+        js.executeScript("arguments[0].CodeMirror.setValue('" + code + "');", cm)
+    }
+
     protected fun select(selector: String, index: Int) {
         val by = By.cssSelector(selector)
         val select = Select(driver.findElement(by))

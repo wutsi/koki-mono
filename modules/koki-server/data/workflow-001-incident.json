@@ -16,6 +16,18 @@
         "role": "employee"
       },
       {
+        "name": "generate_id",
+        "title": "Generate Case identifier",
+        "type": "SCRIPT",
+        "script": "SCR-001",
+        "input": {
+          "type": "{{incident_type}}"
+        },
+        "output": {
+          "id": "case_id"
+        }
+      },
+      {
         "name": "evaluate",
         "title": "HR review and approves the form",
         "type": "USER",
@@ -55,6 +67,10 @@
       },
       {
         "from": "submit",
+        "to": "generate_id"
+      },
+      {
+        "from": "generate_id",
         "to": "evaluate"
       },
       {

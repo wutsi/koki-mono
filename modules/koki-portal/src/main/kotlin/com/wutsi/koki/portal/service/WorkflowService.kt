@@ -19,6 +19,7 @@ class WorkflowService(
     private val formService: FormService,
     private val messageService: MessageService,
     private val userService: UserService,
+    private val scriptService: ScriptService,
 ) {
     fun json(id: Long): String {
         return koki.json(id)
@@ -52,9 +53,23 @@ class WorkflowService(
             limit = messageIds.size,
         )
 
+        val scriptIds = workflow.activities.mapNotNull { activity -> activity.scriptId }.toSet()
+        val scripts = scriptService.scripts(
+            ids = scriptIds.toList(),
+            limit = scriptIds.size,
+        )
+
         val imageUrl = koki.imageUrl(id)
 
-        return mapper.toWorkflowModel(workflow, approverRole, roles, forms, messages, imageUrl)
+        return mapper.toWorkflowModel(
+            entity = workflow,
+            approverRole = approverRole,
+            roles = roles,
+            forms = forms,
+            messages = messages,
+            scripts = scripts,
+            imageUrl = imageUrl,
+        )
     }
 
     fun imageUrl(id: Long): String {

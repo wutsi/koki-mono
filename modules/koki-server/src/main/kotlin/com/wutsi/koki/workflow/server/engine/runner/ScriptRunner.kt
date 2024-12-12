@@ -38,13 +38,6 @@ class ScriptRunner(
             ?: throw NoScriptException("Script not setup")
         logger.add("script_name", script.name)
 
-        logService.info(
-            tenantId = script.tenantId,
-            message = "Running script ${script.name}",
-            activityInstanceId = activityInstance.id,
-            workflowInstanceId = activityInstance.workflowInstanceId,
-        )
-
         val workflowInstance = workflowInstanceService.get(
             activityInstance.workflowInstanceId,
             activityInstance.tenantId
@@ -58,7 +51,6 @@ class ScriptRunner(
             code = script.code,
             language = script.language,
             inputs = inputs,
-            output = output.map { entry -> entry.key }.toList(),
             writer = writer,
         )
         result.forEach { entry -> logger.add("script_result_${entry.key}", entry.value) }
@@ -72,6 +64,20 @@ class ScriptRunner(
             }
         }.toMap()
         state.forEach { entry -> logger.add("state_${entry.key}", entry.value) }
+
+        logService.info(
+            tenantId = script.tenantId,
+            message = "Script ${script.name} executed",
+            activityInstanceId = activityInstance.id,
+            workflowInstanceId = activityInstance.workflowInstanceId,
+            metadata = mapOf(
+                "script_id" to (script.id ?: ""),
+                "script_name" to script.name,
+                "input" to inputs,
+                "output" to result,
+                "console" to writer.toString(),
+            )
+        )
         return state
     }
 

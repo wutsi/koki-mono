@@ -6,6 +6,8 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.form.dto.FormContent
+import com.wutsi.koki.form.dto.FormElement
 import com.wutsi.koki.form.dto.SaveFormRequest
 import com.wutsi.koki.form.server.dao.FormRepository
 import com.wutsi.koki.form.server.domain.FormEntity
@@ -50,6 +52,20 @@ class FormService(
             )
         }
         return form
+    }
+
+    fun extractInputName(form: FormEntity): List<String> {
+        val names = mutableListOf<String>()
+        val content = objectMapper.readValue(form.content, FormContent::class.java)
+        content.elements.forEach { elt -> extractInputName(elt, names) }
+        return names
+    }
+
+    fun extractInputName(element: FormElement, names: MutableList<String>) {
+        if (!element.name.isNullOrEmpty()) {
+            names.add(element.name)
+        }
+        element.elements?.forEach { elt -> extractInputName(elt, names) }
     }
 
     fun search(

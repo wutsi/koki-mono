@@ -25,7 +25,9 @@ class WorkflowEngine(
     }
 
     fun start(workflowInstanceId: String, tenantId: Long): ActivityInstanceEntity? {
-        LOGGER.debug(">>> $workflowInstanceId - Starting")
+        if (LOGGER.isDebugEnabled) {
+            LOGGER.debug("start (workflowInstanceId=$workflowInstanceId, tenantId=$tenantId)")
+        }
 
         val activityInstance = workflowWorker.start(workflowInstanceId, tenantId)
         if (activityInstance != null) {
@@ -47,7 +49,9 @@ class WorkflowEngine(
     }
 
     fun done(activityInstanceId: String, state: Map<String, Any>, tenantId: Long) {
-        LOGGER.debug(">>> $activityInstanceId - Activity Done")
+        if (LOGGER.isDebugEnabled) {
+            LOGGER.debug("done (activityInstanceId=$activityInstanceId, state=$state, tenantId=$tenantId)")
+        }
 
         val activityInstances = workflowWorker.done(activityInstanceId, state, tenantId)
         activityInstances.forEach { instance ->
@@ -82,7 +86,9 @@ class WorkflowEngine(
     }
 
     fun next(workflowInstanceId: String, tenantId: Long): List<ActivityInstanceEntity> {
-        LOGGER.debug(">>> $workflowInstanceId - Next")
+        if (LOGGER.isDebugEnabled) {
+            LOGGER.debug("next (workflowInstanceId=$workflowInstanceId, tenantId=$tenantId)")
+        }
 
         val activityInstances = workflowWorker.next(workflowInstanceId, tenantId)
         activityInstances.forEach { activityInstance ->
@@ -104,7 +110,9 @@ class WorkflowEngine(
         comment: String?,
         tenantId: Long,
     ): ApprovalEntity {
-        LOGGER.debug(">>>  $activityInstanceId - Approve status=$status")
+        if (LOGGER.isDebugEnabled) {
+            LOGGER.debug("approve (activityInstanceId=$activityInstanceId, status=$status, approverUserId=$approverUserId, tenantId=$tenantId)")
+        }
 
         val activityInstance = activityInstanceService.get(activityInstanceId, tenantId)
         val approval = workflowWorker.approve(activityInstanceId, status, approverUserId, comment, tenantId)
@@ -128,7 +136,9 @@ class WorkflowEngine(
     }
 
     fun done(workflowInstanceId: String, tenantId: Long) {
-        LOGGER.debug(">>> $workflowInstanceId - Workflow Done")
+        if (LOGGER.isDebugEnabled) {
+            LOGGER.debug("done (workflowInstanceId=$workflowInstanceId, tenantId=$tenantId)")
+        }
 
         workflowWorker.done(workflowInstanceId, tenantId)
         eventPublisher.publish(

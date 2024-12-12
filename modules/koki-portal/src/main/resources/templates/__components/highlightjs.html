@@ -2,26 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<div th:fragment="json-editor(name, code)">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/hint/show-hint.min.css" rel="stylesheet">
+<div th:fragment="prettity(language)">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/default.min.css" rel="stylesheet">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/hint/show-hint.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/hint/javascript-hint.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/javascript/javascript.min.js"></script>
-
-    <script th:inline="javascript">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+    <script
+        th:src="'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/' + ${language} + '.min.js'"></script>
+    <script>
         document.addEventListener('DOMContentLoaded', (event) => {
-            const textarea = document.querySelector('textarea[name=' + /*[[${name}]]*/ '' + ']');
-            CodeMirror.fromTextArea(textarea, {
-                lineNumbers: true,
-                indentUnit: 2,
-                value: /*[[${code}]]*/ '',
-                mode: 'application/json'
-            });
+            hljs.highlightAll();
+            hljs.initLineNumbersOnLoad();
         });
     </script>
+
 </div>
 
 </body>

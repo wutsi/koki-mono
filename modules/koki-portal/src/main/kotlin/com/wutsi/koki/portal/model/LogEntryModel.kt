@@ -9,6 +9,7 @@ data class LogEntryModel(
     val type: LogEntryType = LogEntryType.UNKNOWN,
     val message: String = "",
     val metadata: Map<String, Any> = emptyMap(),
+    val metadataJSON: String? = null,
     val stackTrace: String? = null,
     val createdAt: Date = Date(),
     val createdAtText: String = "",

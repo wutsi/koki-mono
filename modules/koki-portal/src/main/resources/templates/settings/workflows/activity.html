@@ -45,7 +45,7 @@
                         <tr th:if="${activity.form}">
                             <td><b>Form</b></td>
                             <td>
-                                <a class="form" target="_new" th:href="${activity.form.viewUrl}"
+                                <a class="form" target="_new" th:href="${activity.form.url}"
                                    th:text="${activity.form.longTitle}">FORM</a>
                             </td>
                         </tr>
@@ -54,6 +54,29 @@
                             <td>
                                 <a class="message" target="_new" th:href="${activity.message.url}"
                                    th:text="${activity.message.name}">NAME</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${activity.script}">
+                            <td><b>Script</b></td>
+                            <td>
+                                <a class="script" target="_new" th:href="${activity.script.url}"
+                                   th:text="${activity.script.longTitle}">SCRIPT</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${activity.inputJSON}">
+                            <td><b>Input</b></td>
+                            <td>
+                                <pre>
+                                    <code th:class="'language-json'" th:text="${activity.inputJSON}">CODE</code>
+                                </pre>
+                            </td>
+                        </tr>
+                        <tr th:if="${activity.outputJSON}">
+                            <td><b>Output</b></td>
+                            <td>
+                                <pre>
+                                    <code th:class="'language-json'" th:text="${activity.outputJSON}">CODE</code>
+                                </pre>
                             </td>
                         </tr>
                         <tr th:if="!${activity.description.isEmpty()}">
@@ -67,5 +90,7 @@
 
     </div>
 </div>
+
+<div th:replace="~{__components/highlightjs :: prettity('json')}"></div>
 </body>
 </html>

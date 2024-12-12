@@ -28,6 +28,7 @@ object PageName {
     const val SETTINGS_FORM_SAVED = "page.settings.form.saved"
     const val SETTINGS_SCRIPT = "page.settings.script"
     const val SETTINGS_SCRIPT_CREATE = "page.settings.script.create"
+    const val SETTINGS_SCRIPT_DEBUG = "page.settings.script.debug"
     const val SETTINGS_SCRIPT_DELETED = "page.settings.script.deleted"
     const val SETTINGS_SCRIPT_EDIT = "page.settings.script.edit"
     const val SETTINGS_SCRIPT_LIST = "page.settings.script.list"

@@ -26,6 +26,7 @@ class WorkflowInstanceService(
     private val userService: UserService,
     private val formService: FormService,
     private val messageService: MessageService,
+    private val scriptService: ScriptService,
     private val currentUserHolder: CurrentUserHolder,
 ) {
     fun create(form: StartWorkflowForm): String {
@@ -164,7 +165,8 @@ class WorkflowInstanceService(
                 activityInstanceId = activityInstance.id,
             )
         }
-        val message = activity.messageId?.let { id -> messageService.message(id = id) }
+        val message = activity.messageId?.let { id -> messageService.message(id) }
+        val script = activity.scriptId?.let { id -> scriptService.script(id) }
 
         val workflow = workflowService.workflows(ids = listOf(activity.workflowId), limit = 1).first()
         val workflowInstance = workflowInstanceMapper.toWorkflowInstanceModel(
@@ -184,6 +186,7 @@ class WorkflowInstanceService(
                 role = role,
                 form = form,
                 message = message,
+                script = script,
             ),
         )
     }

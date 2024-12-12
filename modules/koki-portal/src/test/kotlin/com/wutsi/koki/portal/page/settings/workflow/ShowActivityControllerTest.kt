@@ -28,7 +28,7 @@ class ShowActivityControllerTest : AbstractPageControllerTest() {
         val tabs = driver.getWindowHandles().toList()
         driver.switchTo().window(tabs[1])
         Thread.sleep(1000)
-        assertCurrentPageIs(PageName.FORM)
+        assertCurrentPageIs(PageName.SETTINGS_FORM)
     }
 
     @Test
@@ -40,6 +40,17 @@ class ShowActivityControllerTest : AbstractPageControllerTest() {
         driver.switchTo().window(tabs[1])
         Thread.sleep(1000)
         assertCurrentPageIs(PageName.SETTINGS_MESSAGE)
+    }
+
+    @Test
+    fun script() {
+        navigateTo("/settings/workflows/${workflow.id}/activities/${workflow.activities[1].id}")
+        click("a.script")
+
+        val tabs = driver.getWindowHandles().toList()
+        driver.switchTo().window(tabs[1])
+        Thread.sleep(1000)
+        assertCurrentPageIs(PageName.SETTINGS_SCRIPT)
     }
 
     private fun generateFormHtml(): String {
