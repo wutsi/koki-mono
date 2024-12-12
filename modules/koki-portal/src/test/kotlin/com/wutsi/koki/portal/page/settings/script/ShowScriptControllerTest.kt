@@ -78,4 +78,12 @@ class ShowScriptControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.SETTINGS_SCRIPT_EDIT)
     }
+
+    @Test
+    fun debug() {
+        navigateTo("/settings/scripts/${script.id}")
+        click(".btn-debug")
+
+        assertCurrentPageIs(PageName.SETTINGS_SCRIPT_DEBUG)
+    }
 }

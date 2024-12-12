@@ -28,7 +28,7 @@ class EditScriptControllerTest : AbstractPageControllerTest() {
         scrollToBottom()
         input("textarea[name=parameters]", "var1\nvar2")
         select("select[name=language]", 2)
-        input("textarea[name=code]", "print(var1+var2)")
+        inputCodeMiror("print(\"Hello\")")
         select("select[name=active]", 1)
         click("button[type=submit]")
 
@@ -40,7 +40,7 @@ class EditScriptControllerTest : AbstractPageControllerTest() {
         assertEquals("This is the description", request.firstValue.description)
         assertEquals(listOf("var1", "var2"), request.firstValue.parameters)
         assertEquals(Language.PYTHON, request.firstValue.language)
-        assertEquals("print(var1+var2)", request.firstValue.code)
+        assertEquals("print(\"Hello\")", request.firstValue.code)
         assertEquals(false, request.firstValue.active)
 
         assertCurrentPageIs(PageName.SETTINGS_SCRIPT_SAVED)

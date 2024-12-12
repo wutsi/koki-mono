@@ -20,6 +20,10 @@ input:read-only {
     color: red;
 }
 
+.success {
+    color: darkgreen;
+}
+
 .required {
     color: darkred;
 }

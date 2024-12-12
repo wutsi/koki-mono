@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-class CreateWorkflowController(service: WorkflowService) : AbstractSaveWorkflowController(service) {
+class CreateWorkflowController(
+    service: WorkflowService
+) : AbstractSaveWorkflowController(service) {
     @GetMapping("/settings/workflows/create")
     fun create(model: Model): String {
         return create(SaveWorkflowForm(), model)

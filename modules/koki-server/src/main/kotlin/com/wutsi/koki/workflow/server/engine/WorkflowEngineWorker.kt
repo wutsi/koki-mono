@@ -3,6 +3,7 @@ package com.wutsi.koki.workflow.server.engine
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
+import com.wutsi.koki.form.server.service.FormDataService
 import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.ApprovalStatus
 import com.wutsi.koki.workflow.dto.WorkflowStatus
@@ -32,6 +33,7 @@ class WorkflowEngineWorker(
     private val activityInstanceService: ActivityInstanceService,
     private val approvalService: ApprovalService,
     private val expressionEvaluator: ExpressionEvaluator,
+    private val formDataService: FormDataService,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(WorkflowEngineWorker::class.java)
@@ -75,6 +77,14 @@ class WorkflowEngineWorker(
 
         // Update the workflow state
         workflowInstanceService.mergeState(state, workflowInstance)
+
+        // Update the associate form data
+        formDataService.search(
+            tenantId = workflowInstance.tenantId,
+            workflowInstanceIds = listOf(workflowInstance.id!!),
+            limit = 1000
+        )
+            .forEach { formData -> formDataService.merge(formData, state) }
 
         // Update the activity
         val result = mutableListOf<ActivityInstanceEntity>()

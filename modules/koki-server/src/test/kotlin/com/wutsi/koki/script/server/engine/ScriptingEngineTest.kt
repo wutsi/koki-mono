@@ -25,18 +25,22 @@ class ScriptingEngineTest {
               return 2*a;
             }
 
+            function add(a){
+              return a+10;
+            }
+
             console.log('Hello world');
-            result = compute(input);
+            result = compute(input) + add(input);
             result
         """.trimIndent()
         val parameters = mapOf("input" to 10)
         val writer = StringWriter()
 
-        val result = engine.eval(code, Language.JAVASCRIPT, parameters, listOf("result"), writer)
+        val result = engine.eval(code, Language.JAVASCRIPT, parameters, writer)
 
         assertEquals("Hello world\n", writer.toString())
-        assertEquals(20, result["return"])
-        assertEquals(20, result["result"])
+        assertEquals(40, result["return"])
+        assertEquals(40, result["result"])
     }
 
     @Test
@@ -51,7 +55,7 @@ class ScriptingEngineTest {
         val parameters = mapOf("input" to 10)
         val writer = StringWriter()
 
-        val result = engine.eval(code, Language.PYTHON, parameters, listOf("result"), writer)
+        val result = engine.eval(code, Language.PYTHON, parameters, writer)
 
         assertEquals("Hello world\n", writer.toString())
         assertEquals(20, result["result"])
@@ -61,14 +65,14 @@ class ScriptingEngineTest {
     @Test
     fun `not supported`() {
         assertThrows<LanguageNotSupportedException> {
-            engine.eval("", Language.UNKNOWN, emptyMap(), emptyList(), StringWriter())
+            engine.eval("", Language.UNKNOWN, emptyMap(), StringWriter())
         }
     }
 
     @Test
     fun `syntax error`() {
         assertThrows<ScriptException> {
-            engine.eval("xxx???", Language.JAVASCRIPT, emptyMap(), emptyList(), StringWriter())
+            engine.eval("xxx???", Language.JAVASCRIPT, emptyMap(), StringWriter())
         }
     }
 }

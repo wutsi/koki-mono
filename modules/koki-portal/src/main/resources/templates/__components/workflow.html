@@ -7,6 +7,7 @@
     <i class="fa-regular fa-circle-dot" th:if="${type.name == 'END'}"></i>
     <i class="fa-regular fa-user" th:if="${type.name == 'USER'}"></i>
     <i class="fa-regular fa-hand" th:if="${type.name == 'MANUAL'}"></i>
+    <i class="fa-solid fa-code" th:if="${type.name == 'SCRIPT'}"></i>
     <i class="fa-regular fa-gear" th:if="${type.name == 'SERVICE'}"></i>
     <i class="fa-regular fa-envelope" th:if="${type.name == 'SEND'}"></i>
 </span>
@@ -43,7 +44,7 @@
         &gt;
         <a href="/settings/workflows" th:if="${workflow}">Workflows</a>
         &gt;
-        <a href="/settings/workflows" th:text="${workflow.longTitle}">WORKFLOW</a>
+        <a th:href="${workflow.url}" th:text="${workflow.longTitle}">WORKFLOW</a>
         &gt;
         <span th:text="${activity.longTitle}">TITLE</span>
     </div>

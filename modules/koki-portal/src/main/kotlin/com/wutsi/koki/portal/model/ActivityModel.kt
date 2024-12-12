@@ -13,6 +13,9 @@ data class ActivityModel(
     val role: RoleModel? = null,
     val form: FormModel? = null,
     val message: MessageModel? = null,
+    val script: ScriptModel? = null,
+    val inputJSON: String? = null,
+    val outputJSON: String? = null,
 ) {
     val longTitle: String
         get() = if (title.isEmpty()) {
