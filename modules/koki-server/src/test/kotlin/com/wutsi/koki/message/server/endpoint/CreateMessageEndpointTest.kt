@@ -23,7 +23,7 @@ class CreateMessageEndpointTest : TenantAwareEndpointTest() {
             name = "TEST-100",
             subject = "This is the subject",
             body = "You have a nice body",
-            description = "This is the descrtiption",
+            description = "This is the description",
             active = true,
         )
         val result = rest.postForEntity("/v1/messages", request, CreateMessageResponse::class.java)

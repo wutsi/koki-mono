@@ -25,7 +25,7 @@ data class ScriptModel(
         }
 
     val url: String
-        get() = "/scripts/$id"
+        get() = "/settings/scripts/$id"
 
     val parameterText: String
         get() = parameters.joinToString(separator = "\n")

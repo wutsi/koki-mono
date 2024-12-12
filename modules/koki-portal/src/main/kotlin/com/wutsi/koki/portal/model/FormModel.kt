@@ -24,5 +24,5 @@ data class FormModel(
         }
 
     val url: String
-        get() = "/forms/$id"
+        get() = "/settings/forms/$id"
 }

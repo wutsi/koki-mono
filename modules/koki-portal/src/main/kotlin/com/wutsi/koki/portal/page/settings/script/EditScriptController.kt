@@ -29,7 +29,7 @@ class EditScriptController(private val service: ScriptService) : AbstractPageCon
             ScriptForm(
                 name = script.name,
                 title = script.title,
-                language = script.language.name,
+                language = script.language.name.lowercase(),
                 code = script.code,
                 parameters = script.parameters.joinToString(separator = "\n"),
                 active = script.active,

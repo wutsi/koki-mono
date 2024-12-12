@@ -47,9 +47,13 @@
                             <td><b>Message</b></td>
                             <td th:text="${log.message}">MESSAGE</td>
                         </tr>
-                        <tr>
+                        <tr th:if="${log.metadataJSON}">
                             <td><b>Metadata</b></td>
-                            <td th:text="${log.metadata}">METADATA</td>
+                            <td>
+                                <pre>
+                                    <code class="language-json" th:text="${log.metadataJSON}"></code>
+                                </pre>
+                            </td>
                         </tr>
                         <tr th:if="${log.stackTrace}">
                             <td><b>Exception</b></td>
@@ -62,5 +66,6 @@
     </div>
 </div>
 
+<div th:replace="~{__components/highlightjs :: prettity('json')}"></div>
 </body>
 </html>

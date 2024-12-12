@@ -23,9 +23,9 @@ class CreateScriptEndpointTest : TenantAwareEndpointTest() {
         title = "ID Generator",
         description = "This is the description of the script",
         active = true,
-        language = Language.PYTHON,
+        language = Language.JAVASCRIPT,
         parameters = listOf("a", "b"),
-        code = "return a+b"
+        code = "a+b;"
     )
 
     @Test
@@ -52,5 +52,13 @@ class CreateScriptEndpointTest : TenantAwareEndpointTest() {
 
         assertEquals(HttpStatus.CONFLICT, result.statusCode)
         assertEquals(ErrorCode.SCRIPT_DUPLICATE_NAME, result.body!!.error.code)
+    }
+
+    @Test
+    fun `syntax error`() {
+        val result = rest.postForEntity("/v1/scripts", request.copy(code = "???"), ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
+        assertEquals(ErrorCode.SCRIPT_COMPILATION_FAILED, result.body!!.error.code)
     }
 }

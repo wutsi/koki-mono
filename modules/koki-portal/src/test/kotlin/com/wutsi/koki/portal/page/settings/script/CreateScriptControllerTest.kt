@@ -37,7 +37,7 @@ class CreateScriptControllerTest : AbstractPageControllerTest() {
         input("textarea[name=parameters]", "var1\nvar2")
         scrollToBottom()
         select("select[name=language]", 2)
-        input("textarea[name=code]", "print(var1+var2)")
+        inputCodeMiror("print(var1+var2)")
         select("select[name=active]", 1)
         click("button[type=submit]")
 
@@ -80,7 +80,7 @@ class CreateScriptControllerTest : AbstractPageControllerTest() {
         input("textarea[name=parameters]", "var1\nvar2")
         scrollToBottom()
         select("select[name=language]", 2)
-        input("textarea[name=code]", "print(var1+var2)")
+        inputCodeMiror("print(var1+var2)")
         select("select[name=active]", 1)
         click("button[type=submit]")
 

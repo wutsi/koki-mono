@@ -6,6 +6,8 @@ import jakarta.annotation.PostConstruct
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.Writer
+import javax.script.Compilable
+import javax.script.CompiledScript
 import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
 
@@ -22,6 +24,11 @@ class ScriptingEngine {
     fun init() {
         registerEngine(Language.JAVASCRIPT, "js")
         registerEngine(Language.PYTHON, "python")
+    }
+
+    fun compile(code: String, language: Language): CompiledScript {
+        val engine = getEngine(language)
+        return (engine as Compilable).compile(code)
     }
 
     /**
@@ -42,9 +49,9 @@ class ScriptingEngine {
         code: String,
         language: Language,
         inputs: Map<String, Any>,
-        output: List<String>,
         writer: Writer
-    ): Map<String, Any?> {
+    ): Map<String, Any> {
+        val result = mutableMapOf<String, Any>()
         val engine = getEngine(language)
 
         val bindings = engine.createBindings()
@@ -54,10 +61,13 @@ class ScriptingEngine {
         engine.getContext().errorWriter = writer
 
         val value = engine.eval(code, bindings)
+        result.putAll(
+            bindings
+                .filter { entry -> entry.value != null } // Filter out null value
+                .filter { entry -> !inputs.keys.contains(entry.key) } // Filter out inputs
+        )
 
-        val result = mutableMapOf<String, Any?>()
-        result.putAll(output.map { name -> name to bindings.get(name) }.toMap())
-        result.put("return", value)
+        value?.let { result["return"] = value }
         return result
     }
 

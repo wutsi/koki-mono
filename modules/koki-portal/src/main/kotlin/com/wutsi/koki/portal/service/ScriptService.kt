@@ -53,7 +53,7 @@ class ScriptService(
                 description = form.description,
                 parameters = form.parameters.split("\n").toList().map { param -> param.trim() },
                 active = form.active,
-                language = Language.valueOf(form.language),
+                language = Language.valueOf(form.language.uppercase()),
                 code = form.code,
             )
         ).scriptId
@@ -68,7 +68,7 @@ class ScriptService(
                 description = form.description,
                 parameters = form.parameters.split("\n").toList().map { param -> param.trim() },
                 active = form.active,
-                language = Language.valueOf(form.language),
+                language = Language.valueOf(form.language.uppercase()),
                 code = form.code,
             )
         )

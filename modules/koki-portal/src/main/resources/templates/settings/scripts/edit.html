@@ -45,8 +45,8 @@
                                 <label class="title">Language <span class="required">*</span></label>
                                 <select required th:field="*{language}">
                                     <option value=""></option>
-                                    <option value="JAVASCRIPT">Javascript</option>
-                                    <option value="PYTHON">Python</option>
+                                    <option value="javascript">Javascript</option>
+                                    <option value="python">Python</option>
                                 </select>
                             </div>
                             <div class="section-item">
@@ -60,7 +60,7 @@
                             <div class="section-item">
                                 <label class="title">Code <span class="required">*</span></label>
                                 <div class="description">Enter the code of the script in the selected language</div>
-                                <textarea required rows="10" th:field="*{code}"></textarea>
+                                <textarea rows="15" th:field="*{code}"></textarea>
                             </div>
                             <div class="section-item">
                                 <label class="title">Active</label>
@@ -82,5 +82,8 @@
 
     </div>
 </div>
+
+<div th:replace="~{__components/script :: editor(${form.code}, ${form.language})}"></div>
+
 </body>
 </html>

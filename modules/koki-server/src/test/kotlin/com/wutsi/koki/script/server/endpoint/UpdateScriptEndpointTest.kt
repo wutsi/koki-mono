@@ -25,7 +25,7 @@ class UpdateScriptEndpointTest : TenantAwareEndpointTest() {
         active = true,
         language = Language.PYTHON,
         parameters = listOf(),
-        code = "return a+b"
+        code = "a+b;"
     )
 
     @Test
@@ -74,5 +74,13 @@ class UpdateScriptEndpointTest : TenantAwareEndpointTest() {
 
         assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
         assertEquals(ErrorCode.SCRIPT_NOT_FOUND, result.body!!.error.code)
+    }
+
+    @Test
+    fun `syntax error`() {
+        val result = rest.postForEntity("/v1/scripts/100", request.copy(code = "???"), ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
+        assertEquals(ErrorCode.SCRIPT_COMPILATION_FAILED, result.body!!.error.code)
     }
 }
