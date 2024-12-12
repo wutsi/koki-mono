@@ -44,6 +44,8 @@ object ErrorCode {
     val SCRIPT_DUPLICATE_NAME: String = "$PREFIX:script:duplicate-name"
     val SCRIPT_IN_USE: String = "$PREFIX:script:in-use"
     val SCRIPT_NOT_FOUND: String = "$PREFIX:script:not-found"
+    val SCRIPT_COMPILATION_FAILED: String = "$PREFIX:script:compilation-failed"
+    val SCRIPT_EXECUTION_FAILED: String = "$PREFIX:script:execution-failed"
 
     val TENANT_NOT_FOUND: String = "$PREFIX:tenant:not-found"
     val TENANT_MISSING_FROM_HEADER: String = "$PREFIX:tenant:missing-from-header"
