@@ -26,6 +26,8 @@
                     <div class="widget-toolbar">
                         <a class="btn-edit btn btn-secondary"
                            th:href="'/settings/scripts/' + ${script.id} + '/edit'">Edit</a>
+                        <a class="btn-debug btn btn-secondary"
+                           th:href="'/settings/scripts/' + ${script.id} + '/debug'">Debug your Script</a>
                         <a class="btn-delete btn btn-danger"
                            onclick="return confirm('Are you sure you want to delete the script?')"
                            th:href="'/settings/scripts/' + ${script.id} + '/delete'">Delete</a>

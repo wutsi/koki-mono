@@ -1,9 +1,12 @@
 package com.wutsi.koki.portal.service
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.portal.mapper.ScriptMapper
+import com.wutsi.koki.portal.model.ScriptExecutionModel
 import com.wutsi.koki.portal.model.ScriptModel
 import com.wutsi.koki.portal.script.ScriptForm
 import com.wutsi.koki.script.dto.CreateScriptRequest
+import com.wutsi.koki.script.dto.ExecuteScriptRequest
 import com.wutsi.koki.script.dto.Language
 import com.wutsi.koki.script.dto.ScriptSortBy
 import com.wutsi.koki.script.dto.UpdateScriptRequest
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service
 class ScriptService(
     private val koki: KokiScripts,
     private val mapper: ScriptMapper,
+    private val objectMapper: ObjectMapper,
 ) {
     fun script(id: String): ScriptModel {
         val script = koki.script(id).script
@@ -71,6 +75,32 @@ class ScriptService(
                 language = Language.valueOf(form.language.uppercase()),
                 code = form.code,
             )
+        )
+    }
+
+    fun execute(id: String, form: ScriptForm): ScriptExecutionModel {
+        val response = koki.execute(
+            id = id,
+            request = ExecuteScriptRequest(
+                parameters = form.parameters
+                    .split("\n").toList()
+                    .mapNotNull { param ->
+                        val parts = param.split("=")
+                        if (parts.size > 0) {
+                            parts[0].trim() to parts[1].trim()
+                        } else {
+                            null
+                        }
+                    }.toMap()
+            )
+        )
+        return ScriptExecutionModel(
+            bindingsJSON = if (response.bindings.isEmpty()) {
+                null
+            } else {
+                objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response.bindings)
+            },
+            console = response.console,
         )
     }
 }

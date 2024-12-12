@@ -3,6 +3,7 @@ package com.wutsi.koki
 import com.wutsi.koki.FormFixtures.forms
 import com.wutsi.koki.MessageFixtures.messages
 import com.wutsi.koki.RoleFixtures.roles
+import com.wutsi.koki.ScriptFixtures.scripts
 import com.wutsi.koki.UserFixtures.USER_ID
 import com.wutsi.koki.UserFixtures.users
 import com.wutsi.koki.workflow.dto.Activity
@@ -55,6 +56,7 @@ object WorkflowFixtures {
                 requiresApproval = true,
                 formId = forms[0].id,
                 messageId = messages[0].id,
+                scriptId = scripts[0].id,
             ),
             Activity(
                 id = 13L,
