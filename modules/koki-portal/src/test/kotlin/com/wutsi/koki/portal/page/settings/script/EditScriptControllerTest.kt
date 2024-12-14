@@ -66,6 +66,7 @@ class EditScriptControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/scripts/${script.id}/edit")
 
         scrollToBottom()
+        Thread.sleep(1000)
         click("button[type=submit]")
         assertCurrentPageIs(PageName.SETTINGS_SCRIPT_EDIT)
         assertElementPresent(".alert-danger")

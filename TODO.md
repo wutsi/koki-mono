@@ -9,7 +9,7 @@
 - [x] UI for configuring SMTP
 - [x] Use RabbitMQ for workflow orchestration
 - [x] Add Workflow Log
-- [] Add support for Script activities
+- [x] Add support for Script activities
 - [] Add support for Service activities
 - [] Add support for Business Rule activities
 - [] Cancel workflow Instance
