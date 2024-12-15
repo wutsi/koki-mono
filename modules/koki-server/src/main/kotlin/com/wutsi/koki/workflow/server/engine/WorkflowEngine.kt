@@ -32,16 +32,17 @@ class WorkflowEngine(
         val activityInstance = workflowWorker.start(workflowInstanceId, tenantId)
         if (activityInstance != null) {
             eventPublisher.publish(
+                WorkflowStartedEvent(
+                    workflowInstanceId = workflowInstanceId,
+                    tenantId = tenantId,
+                )
+            )
+
+            eventPublisher.publish(
                 RunActivityCommand(
                     activityInstanceId = activityInstance.id!!,
                     workflowInstanceId = activityInstance.workflowInstanceId,
                     tenantId = activityInstance.tenantId,
-                )
-            )
-            eventPublisher.publish(
-                WorkflowStartedEvent(
-                    workflowInstanceId = workflowInstanceId,
-                    tenantId = tenantId,
                 )
             )
         }

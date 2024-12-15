@@ -196,13 +196,6 @@
           "title": "Justification",
           "required": true,
           "description": "Justify your decision"
-        },
-        {
-          "name": "reimbursement_amount",
-          "type": "NUMBER",
-          "title": "Reimbursement amount",
-          "required": true,
-          "description": "Enter the payment to reimburse to the employee, for 0 if you reject the claim"
         }
       ]
     },
@@ -230,6 +223,13 @@
           "type": "TEXT",
           "title": "Transaction Number",
           "required": true
+        },
+        {
+          "name": "reimbursement_amount",
+          "type": "NUMBER",
+          "title": "Reimbursement amount",
+          "required": true,
+          "description": "Enter the payment to reimburse to the employee"
         }
       ]
     }

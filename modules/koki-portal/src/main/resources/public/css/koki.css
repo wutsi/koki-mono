@@ -158,6 +158,11 @@ nav {
     margin-right: 1em;
 }
 
+.widget-toolbar a:last-child,
+.toolbar a:last-child {
+    margin-right: 0;
+}
+
 .widget .tab-content .widget {
     border: 0;
 }

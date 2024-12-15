@@ -14,6 +14,7 @@ import java.io.PrintWriter
 import java.io.StringWriter
 import java.util.Date
 import java.util.UUID
+import java.util.concurrent.atomic.AtomicLong
 
 @Service
 class LogService(
@@ -21,6 +22,8 @@ class LogService(
     private val objectMapper: ObjectMapper,
     private val em: EntityManager,
 ) {
+    private val sequenceNumber: AtomicLong = AtomicLong(1L)
+
     fun get(id: String, tenantId: Long): LogEntryEntity {
         val log = dao.findById(id)
             .orElseThrow {
@@ -88,6 +91,7 @@ class LogService(
             LogEntryEntity(
                 id = UUID.randomUUID().toString(),
                 tenantId = tenantId,
+                sequenceNumber = sequenceNumber.addAndGet(1),
                 type = type,
                 message = message,
                 workflowInstanceId = workflowInstanceId,
@@ -114,7 +118,7 @@ class LogService(
         if (activityInstanceId != null) {
             jql.append(" AND L.activityInstanceId IN :activityInstanceId")
         }
-        jql.append(" ORDER BY L.createdAt DESC")
+        jql.append(" ORDER BY L.createdAt DESC, L.sequenceNumber DESC")
 
         val query = em.createQuery(jql.toString(), LogEntryEntity::class.java)
         query.setParameter("tenantId", tenantId)

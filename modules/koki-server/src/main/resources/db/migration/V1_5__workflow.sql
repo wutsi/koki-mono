@@ -128,6 +128,7 @@ CREATE TABLE T_WI_LOG_ENTRY(
     workflow_instance_fk    VARCHAR(36) NOT NULL REFERENCES T_WORKFLOW_INSTANCE(id),
     activity_instance_fk    VARCHAR(36) REFERENCES T_WI_ACTIVITY(id),
 
+    sequence_number         BIGINT NOT NULL DEFAULT 0,
     type                    INT NOT NULL DEFAULT 0,
     message                 TEXT,
     stack_trace             TEXT,

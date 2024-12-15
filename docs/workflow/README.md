@@ -93,22 +93,28 @@ Koki will support the following language: `Javascript`, `Phython`
 
 ### Parameters for Script
 
-| Name            | Required | Description                                  |
-|-----------------|----------|----------------------------------------------|
-| script.language | Y        | Programming language: `javacript`, `phython` |
-| script.code     | Y        | Code to execute                              |
+| Name   | Required | Description                   |
+|--------|----------|-------------------------------|
+| script | Y        | Name of the script to execute |
 
 -----
 
 ## Receive
 
 The Receive Activity is the opposite of the Send Task.
-It represents a simple Activity that is designed to wait for a Message to arrive from an external Participant.
+It represents a simple Activity that is designed to wait for an event to arrive from an external Participant.
 Once the Message has been received, the Task is completed.
 Examples of a Receive Task are as follows:
 • Wait for author’s approval before continuing with the publishing process
 • Wait for customer information to resolve an open issue
 • Begin with the delivery process as soon the shipping address is approved.
+
+### Parameters for Receive
+
+| Name              | Required | Description                                                 |
+|-------------------|----------|-------------------------------------------------------------|
+| event             | Y        | Name of the event to receive                                |
+| correlation_field | Y        | Name of the process field to match the event correlation ID |
 
 -----
 

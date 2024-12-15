@@ -14,6 +14,8 @@ data class LogEntryEntity(
     @Id
     val id: String? = null,
 
+    val sequenceNumber: Long = -1,
+
     @Column(name = "tenant_fk")
     val tenantId: Long = -1,
 

@@ -10,4 +10,5 @@ function generate_case_id(type) {
     return now + "-" + type + "-" + pad(random, 3);
 }
 
-let id = generate_case_id(type);
+var id = generate_case_id(type);
+id
