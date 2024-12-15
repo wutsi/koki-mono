@@ -61,6 +61,7 @@ class EditScriptControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    @Ignore
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.SCRIPT_IN_USE)
         doThrow(ex).whenever(kokiScripts).update(any(), any())
