@@ -32,6 +32,7 @@ import com.wutsi.koki.message.dto.GetMessageResponse
 import com.wutsi.koki.message.dto.SearchMessageResponse
 import com.wutsi.koki.portal.service.AccessTokenHolder
 import com.wutsi.koki.script.dto.GetScriptResponse
+import com.wutsi.koki.script.dto.RunScriptResponse
 import com.wutsi.koki.script.dto.SearchScriptResponse
 import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.sdk.KokiFiles
@@ -231,6 +232,19 @@ abstract class AbstractPageControllerTest {
                 anyOrNull(),
                 anyOrNull(),
             )
+
+        doReturn(
+            RunScriptResponse(
+                bindings = mapOf(
+                    "return" to "122",
+                    "var1" to "11"
+                ),
+                console = """
+                Hello world
+                Computing the results...
+            """.trimIndent()
+            )
+        ).whenever(kokiScripts).run(any())
     }
 
     private fun setupMessages() {
@@ -358,6 +372,7 @@ abstract class AbstractPageControllerTest {
     protected fun createHttpClientErrorException(
         statusCode: Int,
         errorCode: String,
+        message: String? = null,
         param: String? = null,
         data: Map<String, Any>? = null,
     ): HttpClientErrorException {
@@ -365,6 +380,7 @@ abstract class AbstractPageControllerTest {
         val response = ErrorResponse(
             error = Error(
                 code = errorCode,
+                message = message,
                 parameter = param?.let { Parameter(value = param) },
                 data = data
             ),

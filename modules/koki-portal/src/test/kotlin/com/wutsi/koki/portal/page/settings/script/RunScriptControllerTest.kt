@@ -11,72 +11,96 @@ import com.wutsi.koki.ScriptFixtures.script
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.script.dto.Language
+import com.wutsi.koki.script.dto.RunScriptRequest
 import com.wutsi.koki.script.dto.UpdateScriptRequest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class EditScriptControllerTest : AbstractPageControllerTest() {
+class RunScriptControllerTest : AbstractPageControllerTest() {
     @Test
-    fun edit() {
-        navigateTo("/settings/scripts/${script.id}/edit")
-        assertCurrentPageIs(PageName.SETTINGS_SCRIPT_EDIT)
-        assertElementNotPresent(".alert-danger")
+    fun run() {
+        navigateTo("/settings/scripts/${script.id}/run")
+        assertCurrentPageIs(PageName.SETTINGS_SCRIPT_RUN)
 
-        input("input[name=name]", "M-XXX")
-        input("input[name=title]", "This is the new subject")
-        input("textarea[name=description]", "This is the description")
-        scrollToBottom()
-        input("textarea[name=parameters]", "var1\nvar2")
-        select("select[name=language]", 2)
+        assertElementNotPresent("#exec")
+        input("textarea[name=parameters]", "var1=100\nvar3=1\n\n")
+        select("select[name=language]", 1)
         inputCodeMiror("print(\"Hello\")")
-        select("select[name=active]", 1)
+        scrollToBottom()
         click("button[type=submit]")
 
-        val request = argumentCaptor<UpdateScriptRequest>()
-        verify(kokiScripts).update(eq(script.id), request.capture())
+        val request = argumentCaptor<RunScriptRequest>()
+        verify(kokiScripts).run(request.capture())
 
-        assertEquals("M-XXX", request.firstValue.name)
-        assertEquals("This is the new subject", request.firstValue.title)
-        assertEquals("This is the description", request.firstValue.description)
-        assertEquals(listOf("var1", "var2"), request.firstValue.parameters)
+        assertEquals(
+            mapOf(
+                "var1" to "100",
+                "var3" to "1"
+            ), request.firstValue.parameters
+        )
         assertEquals(Language.PYTHON, request.firstValue.language)
         assertEquals("print(\"Hello\")", request.firstValue.code)
-        assertEquals(false, request.firstValue.active)
 
-        assertCurrentPageIs(PageName.SETTINGS_SCRIPT_SAVED)
-
-        click(".btn-ok")
-        assertCurrentPageIs(PageName.SETTINGS_SCRIPT_LIST)
-    }
-
-    @Test
-    fun cancel() {
-        navigateTo("/settings/scripts/${script.id}/edit")
-
-        scrollToBottom()
-        click(".btn-cancel")
-        assertCurrentPageIs(PageName.SETTINGS_SCRIPT_LIST)
+        assertCurrentPageIs(PageName.SETTINGS_SCRIPT_RUN)
+        assertElementPresent("#exec")
+        assertElementNotPresent("#exec .error")
     }
 
     @Test
     fun error() {
-        val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.SCRIPT_IN_USE)
-        doThrow(ex).whenever(kokiScripts).update(any(), any())
+        val ex = createHttpClientErrorException(
+            statusCode = 409,
+            errorCode = ErrorCode.SCRIPT_EXECUTION_FAILED,
+            message = "Failed",
+            data = mapOf(
+                "console" to ">> Hello world"
+            )
+        )
+        doThrow(ex).whenever(kokiScripts).run(any())
 
-        navigateTo("/settings/scripts/${script.id}/edit")
+        navigateTo("/settings/scripts/${script.id}/run")
 
         scrollToBottom()
-        Thread.sleep(1000)
         click("button[type=submit]")
-        assertCurrentPageIs(PageName.SETTINGS_SCRIPT_EDIT)
-        assertElementPresent(".alert-danger")
+
+        assertCurrentPageIs(PageName.SETTINGS_SCRIPT_RUN)
+        assertElementPresent("#exec")
+        assertElementPresent("#exec .error")
     }
 
     @Test
-    fun `login required`() {
-        setUpAnonymousUser()
+    fun cancel() {
+        navigateTo("/settings/scripts/${script.id}/run")
+        scrollToBottom()
+        click(".btn-cancel")
 
-        navigateTo("/settings/scripts/${script.id}/edit")
-        assertCurrentPageIs(PageName.LOGIN)
+        assertCurrentPageIs(PageName.SETTINGS_SCRIPT)
+    }
+
+    @Test
+    fun update() {
+        navigateTo("/settings/scripts/${script.id}/run")
+        assertCurrentPageIs(PageName.SETTINGS_SCRIPT_RUN)
+
+        assertElementNotPresent("#exec")
+        input("textarea[name=parameters]", "var1=100\nvar3=1\n\n")
+        select("select[name=language]", 1)
+        inputCodeMiror("print(\"Hello\")")
+        scrollToBottom()
+        click(".btn-update")
+
+        Thread.sleep(1000)
+        val request = argumentCaptor<UpdateScriptRequest>()
+        verify(kokiScripts).update(eq(script.id), request.capture())
+
+        assertEquals(script.name, request.firstValue.name)
+        assertEquals(script.title, request.firstValue.title)
+        assertEquals(script.description, request.firstValue.description)
+        assertEquals(listOf("var1", "var3"), request.firstValue.parameters)
+        assertEquals(Language.PYTHON, request.firstValue.language)
+//        assertEquals("print(\"Hello\")", request.firstValue.code)
+        assertEquals(script.active, request.firstValue.active)
+
+        assertCurrentPageIs(PageName.SETTINGS_SCRIPT)
     }
 }

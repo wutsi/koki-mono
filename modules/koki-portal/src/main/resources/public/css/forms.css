@@ -43,6 +43,10 @@ input:read-only {
     padding: 1em;
 }
 
+.float-right {
+    float: right;
+}
+
 .section {
     background: white;
     border-radius: 10px;

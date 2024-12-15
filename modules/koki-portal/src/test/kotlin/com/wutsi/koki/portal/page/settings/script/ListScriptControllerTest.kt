@@ -48,7 +48,7 @@ class ListScriptControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun `listview to show`() {
+    fun show() {
         navigateTo("/settings/scripts")
         click("tr.script .btn-view")
 
@@ -56,11 +56,19 @@ class ListScriptControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun `listview to edit`() {
+    fun edit() {
         navigateTo("/settings/scripts")
         click("tr.script .btn-edit")
 
         assertCurrentPageIs(PageName.SETTINGS_SCRIPT_EDIT)
+    }
+
+    @Test
+    fun run() {
+        navigateTo("/settings/scripts")
+        click("tr.script .btn-run")
+
+        assertCurrentPageIs(PageName.SETTINGS_SCRIPT_RUN)
     }
 
     @Test

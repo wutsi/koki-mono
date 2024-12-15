@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 
-class ExecuteScriptEndpointTest : TenantAwareEndpointTest() {
+class RunScriptEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun execute() {
         val request = RunScriptRequest(
