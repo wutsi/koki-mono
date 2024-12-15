@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-class DebugScriptController(private val service: ScriptService) : AbstractPageController() {
+class RunScriptController(private val service: ScriptService) : AbstractPageController() {
     @GetMapping("/settings/scripts/{id}/debug")
     fun debug(@PathVariable id: String, model: Model): String {
         val script = service.script(id)

@@ -1,6 +1,6 @@
 package com.wutsi.koki.script.dto
 
-data class ExecuteScriptResponse(
+data class RunScriptResponse(
     val bindings: Map<String, Any> = emptyMap(),
     val console: String = "",
 )
