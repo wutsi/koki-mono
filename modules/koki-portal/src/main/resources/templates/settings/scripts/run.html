@@ -10,7 +10,7 @@
 <div class="container">
     <h1>
         <img align="absmiddle" height="48" src="/image/script.png" width="48"/>
-        Script Debugger
+        Script Runner
     </h1>
     <div class="row">
         <div class="col-12">
@@ -21,7 +21,7 @@
     <div class="row">
         <div class="col-12">
 
-            <form class="form" method="post" th:action="@{'/settings/scripts/' + ${script.id} + '/debug'}"
+            <form class="form" id="form" method="post" th:action="@{'/settings/scripts/' + ${script.id} + '/run'}"
                   th:object="${form}">
 
                 <div class="form-body">
@@ -30,7 +30,6 @@
                             <div class="section-item">
                                 <label class="title">Language <span class="required">*</span></label>
                                 <select required th:field="*{language}">
-                                    <option value=""></option>
                                     <option value="javascript">Javascript</option>
                                     <option value="python">Python</option>
                                 </select>
@@ -41,7 +40,7 @@
                                     Enter the parameters required by the code - one parameter per line.<br/>
                                     Leave this field empty if the code has no input parameter.
                                 </div>
-                                <textarea rows="3" th:field="*{parameters}"></textarea>
+                                <textarea rows="2" th:field="*{parameters}"></textarea>
                             </div>
                             <div class="section-item">
                                 <label class="title">Code <span class="required">*</span></label>
@@ -54,6 +53,32 @@
                 <div class="form-footer">
                     <button type="submit" value="submit">Run</button>
                     <a class="btn-cancel" th:href="${script.url}">Cancel</a>
+
+                    <a class="btn btn-primary float-right btn-update" href="javascript: update()">Save</a>
+                    <script th:inline="javascript">
+                        function update() {
+                            id = /*[[${script.id}]]*/ '';
+                            const form = document.getElementById('form');
+
+                            fetch('/settings/scripts/' + id + '/run/update', {
+                                method: 'post',
+                                body: new FormData(form),
+                                headers: {
+                                    'Accept': 'application/json'
+                                }
+                            }).then(response => {
+                                if (response.ok) {
+                                    window.location.href = '/settings/scripts/' + id;
+                                } else {
+                                    console.log('Error while submitting the form', response);
+                                    alert('Oops! There was a problem submitting your form');
+                                }
+                            }).catch(error => {
+                                console.log('Error while submitting the form', error);
+                                alert('Oops! There was a problem submitting your form');
+                            });
+                        }
+                    </script>
                 </div>
 
             </form>
@@ -61,7 +86,7 @@
 
     </div>
 
-    <div class="row" th:if="${execution}">
+    <div class="row" id="exec" th:if="${execution}">
         <div class="widget">
             <div class="widget-body">
                 <table class="table">
@@ -74,14 +99,15 @@
                         </td>
                     </tr>
                     <tr th:if="${execution.console}">
+                        <td width="20%"><b>Console</b></td>
                         <td colspan="2">
                             <pre>
-                                <code th:text="${execution.console}"> CONSOLE</code>
+                                <code th:text="${execution.console}">CONSOLE</code>
                             </pre>
                         </td>
                     </tr>
                     <tr th:if="${execution.bindingsJSON}">
-                        <td><b>Bindings</b></td>
+                        <td width="20%"><b>Bindings</b></td>
                         <td>
                             <pre>
                                 <code th:class="'language-json'" th:text="${execution.bindingsJSON}">CODE</code>

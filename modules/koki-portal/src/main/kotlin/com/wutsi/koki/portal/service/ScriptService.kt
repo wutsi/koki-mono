@@ -6,8 +6,8 @@ import com.wutsi.koki.portal.model.ScriptExecutionModel
 import com.wutsi.koki.portal.model.ScriptModel
 import com.wutsi.koki.portal.script.ScriptForm
 import com.wutsi.koki.script.dto.CreateScriptRequest
-import com.wutsi.koki.script.dto.ExecuteScriptRequest
 import com.wutsi.koki.script.dto.Language
+import com.wutsi.koki.script.dto.RunScriptRequest
 import com.wutsi.koki.script.dto.ScriptSortBy
 import com.wutsi.koki.script.dto.UpdateScriptRequest
 import com.wutsi.koki.sdk.KokiScripts
@@ -78,12 +78,13 @@ class ScriptService(
         )
     }
 
-    fun execute(id: String, form: ScriptForm): ScriptExecutionModel {
-        val response = koki.execute(
-            id = id,
-            request = ExecuteScriptRequest(
+    fun run(form: ScriptForm): ScriptExecutionModel {
+        val response = koki.run(
+            request = RunScriptRequest(
                 parameters = form.parameters
                     .split("\n").toList()
+                    .map { param -> param.trim() }
+                    .filter { param -> param.isNotEmpty() }
                     .mapNotNull { param ->
                         val parts = param.split("=")
                         if (parts.size > 0) {
@@ -91,7 +92,9 @@ class ScriptService(
                         } else {
                             null
                         }
-                    }.toMap()
+                    }.toMap(),
+                language = Language.valueOf(form.language.uppercase()),
+                code = form.code,
             )
         )
         return ScriptExecutionModel(
@@ -100,7 +103,7 @@ class ScriptService(
             } else {
                 objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response.bindings)
             },
-            console = response.console,
+            console = response.console.ifEmpty { null },
         )
     }
 }

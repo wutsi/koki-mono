@@ -26,9 +26,7 @@
                     <div class="widget-toolbar">
                         <a class="btn-edit btn btn-secondary"
                            th:href="'/settings/scripts/' + ${script.id} + '/edit'">Edit</a>
-                        <a class="btn-debug btn btn-secondary"
-                           th:href="'/settings/scripts/' + ${script.id} + '/debug'">Debug your Script</a>
-                        <a class="btn-delete btn btn-danger"
+                        <a class="btn-delete btn btn-danger float-right"
                            onclick="return confirm('Are you sure you want to delete the script?')"
                            th:href="'/settings/scripts/' + ${script.id} + '/delete'">Delete</a>
                     </div>
@@ -60,7 +58,14 @@
                     <div class="widget-title">Code</div>
                 </div>
                 <div class="widget-body">
-                    <div th:replace="~{__components/script :: script-language(${script.language})}"></div>
+                    <div class="flex">
+                        <div th:replace="~{__components/script :: script-language(${script.language})}"></div>
+                        <div class="margin-left">
+                            <a class="btn-run btn btn-secondary"
+                               th:href="'/settings/scripts/' + ${script.id} + '/run'">Run</a>
+                        </div>
+                    </div>
+
                     <pre>
                         <code th:class="'language-' + ${script.language.name().toLowerCase()}" th:text="${script.code}">
                             CODE
