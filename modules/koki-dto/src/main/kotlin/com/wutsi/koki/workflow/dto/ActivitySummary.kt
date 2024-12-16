@@ -12,4 +12,5 @@ data class ActivitySummary(
     val formId: String? = null,
     val messageId: String? = null,
     val scriptId: String? = null,
+    val event: String? = null,
 )
