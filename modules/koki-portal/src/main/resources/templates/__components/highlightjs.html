@@ -3,13 +3,13 @@
 <body>
 
 <div th:fragment="prettity(language)">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/default.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.0/styles/default.min.css" rel="stylesheet">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.0/highlight.min.js"></script>
     <script
         src="https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
     <script
-        th:src="'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/' + ${language} + '.min.js'"></script>
+        th:src="'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.0/languages/' + ${language} + '.min.js'"></script>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             hljs.highlightAll();
