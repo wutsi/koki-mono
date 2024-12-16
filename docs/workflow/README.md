@@ -93,9 +93,11 @@ Koki will support the following language: `Javascript`, `Phython`
 
 ### Parameters for Script
 
-| Name   | Required | Description                   |
-|--------|----------|-------------------------------|
-| script | Y        | Name of the script to execute |
+| Name   | Required | Description                                                                    |
+|--------|----------|--------------------------------------------------------------------------------|
+| script | Y        | Name of the script to execute                                                  |
+| input  |          | Mapping of the input data to send as input parameter when executing the script |
+| output |          | Mapping of script execution output with the workflow instance state            |
 
 -----
 
@@ -111,10 +113,11 @@ Examples of a Receive Task are as follows:
 
 ### Parameters for Receive
 
-| Name              | Required | Description                                                 |
-|-------------------|----------|-------------------------------------------------------------|
-| event             | Y        | Name of the event to receive                                |
-| correlation_field | Y        | Name of the process field to match the event correlation ID |
+| Name              | Required | Description                                                           |
+|-------------------|----------|-----------------------------------------------------------------------|
+| event             | Y        | Name of the event to receive                                          |
+| correlation_field | Y        | Correlation field in the event, that matches the activity instance ID |
+| input             |          | Mapping between event and state                                       |
 
 -----
 

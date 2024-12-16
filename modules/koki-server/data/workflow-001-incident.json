@@ -49,11 +49,20 @@
         "role": "employee"
       },
       {
-        "name": "payment",
+        "name": "submit_payment",
         "title": "Finance initiate the reimbursement",
         "type": "USER",
         "form": "FRM-001",
         "role": "finance"
+      },
+      {
+        "name": "wait_payment",
+        "title": "Waiting for payment to be complete",
+        "type": "RECEIVE",
+        "event": "payment-successful",
+        "input": {
+          "transaction_id": "transaction_number"
+        }
       },
       {
         "name": "end",
@@ -80,10 +89,14 @@
       },
       {
         "from": "send_approved",
-        "to": "payment"
+        "to": "submit_payment"
       },
       {
-        "from": "payment",
+        "from": "submit_payment",
+        "to": "wait_payment"
+      },
+      {
+        "from": "wait_payment",
         "to": "end"
       },
       {

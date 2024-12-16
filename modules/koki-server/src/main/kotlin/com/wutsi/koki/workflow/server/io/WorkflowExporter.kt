@@ -39,6 +39,7 @@ class WorkflowExporter(
             },
         )
     }
+
     fun export(workflow: WorkflowEntity, output: OutputStream) {
         val data = export(workflow)
         objectMapper.writeValue(output, data)
@@ -68,6 +69,7 @@ class WorkflowExporter(
             role = role?.name,
             message = message?.name,
             script = script?.name,
+            event = activity.event,
             input = activity.inputAsMap(objectMapper),
             output = activity.outputAsMap(objectMapper),
         )

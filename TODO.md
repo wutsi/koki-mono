@@ -10,7 +10,7 @@
 - [x] Use RabbitMQ for workflow orchestration
 - [x] Add Workflow Log
 - [x] Add support for Script activities
-- [] Add support for Receive activities
+- [x] Add support for Receive activities
 - [] Add support for Service activities
 - [] Add support for Business Rule activities
 - [] Cancel workflow Instance

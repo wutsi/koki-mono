@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.event.server.rabbitmq.RabbitMQHandler
 import com.wutsi.koki.event.server.service.EventPublisher
 import com.wutsi.koki.form.event.ActivityDoneEvent
+import com.wutsi.koki.form.event.ExternalEvent
 import com.wutsi.koki.form.event.FormSubmittedEvent
 import com.wutsi.koki.form.event.FormUpdatedEvent
 import com.wutsi.koki.form.server.service.FormDataService
@@ -42,6 +43,8 @@ class WorkflowEventListener(
             onActivityDone(event)
         } else if (event is RunActivityCommand) {
             onRunActivityCommand(event)
+        } else if (event is ExternalEvent) {
+            onExternalEventReceived(event)
         } else {
             return false
         }
@@ -49,6 +52,11 @@ class WorkflowEventListener(
         logger.add("event_classname", event::class.java.simpleName)
         logger.add("listener", "WorkflowEventListener")
         return true
+    }
+
+    @EventListener
+    fun onExternalEventReceived(event: ExternalEvent) {
+        workflowEngine.received(event)
     }
 
     @EventListener

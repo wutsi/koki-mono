@@ -4,6 +4,7 @@ import com.wutsi.koki.event.server.rabbitmq.RabbitMQHandler
 import com.wutsi.koki.form.event.ActivityDoneEvent
 import com.wutsi.koki.form.event.ApprovalCompletedEvent
 import com.wutsi.koki.form.event.ApprovalStartedEvent
+import com.wutsi.koki.form.event.ExternalEvent
 import com.wutsi.koki.form.event.WorkflowDoneEvent
 import com.wutsi.koki.form.event.WorkflowStartedEvent
 import com.wutsi.koki.platform.logger.KVLogger
