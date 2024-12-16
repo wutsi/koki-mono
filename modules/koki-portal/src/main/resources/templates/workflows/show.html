@@ -87,7 +87,8 @@
                             <table class="table table-striped">
                                 <tr>
                                     <th width="1%"></th>
-                                    <th width="50%">Title</th>
+                                    <th>Name</th>
+                                    <th>Title</th>
                                     <th>Status</th>
                                     <th>Assignee</th>
                                     <th th:if="${workflowInstance.workflow.requiresApprover}">Approval</th>
@@ -103,14 +104,11 @@
                                     <td>
                                         <a th:href="${activityInstances[activity.id].url}"
                                            th:if="${activityInstances[activity.id]}"
-                                           th:text="${activity.longTitle}">
-                                            TITLE
+                                           th:text="${activity.name}">
+                                            NAME
                                         </a>
-                                        <span th:if="!${activityInstances[activity.id]}"
-                                              th:text="${activity.longTitle}">
-                                        TITLE
-                                    </span>
                                     </td>
+                                    <td th:text="${activity.TITLE}">TITLE</td>
                                     <td>
                                         <div
                                             th:replace="~{__components/workflow :: workflow-status(${activityInstances[activity.id]?.status})}"></div>
