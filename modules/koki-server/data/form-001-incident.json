@@ -30,7 +30,7 @@
               "finance"
             ],
             "editorRoles": [
-              "xxx"
+              "-"
             ]
           }
         },
@@ -205,6 +205,7 @@
       "description": "This section is reserved to Finance team",
       "accessControl": {
         "viewerRoles": [
+          "hr",
           "finance"
         ],
         "editorRoles": [
@@ -219,17 +220,27 @@
           "required": true
         },
         {
-          "name": "transaction_number",
-          "type": "TEXT",
-          "title": "Transaction Number",
-          "required": true
-        },
-        {
           "name": "reimbursement_amount",
           "type": "NUMBER",
           "title": "Reimbursement amount",
           "required": true,
           "description": "Enter the payment to reimburse to the employee"
+        },
+        {
+          "name": "transaction_number",
+          "type": "TEXT",
+          "title": "Transaction Number",
+          "description": "This field will be auto-generated",
+          "accessControl": {
+            "viewerRoles": [
+              "employee",
+              "hr",
+              "finance"
+            ],
+            "editorRoles": [
+              "---"
+            ]
+          }
         }
       ]
     }

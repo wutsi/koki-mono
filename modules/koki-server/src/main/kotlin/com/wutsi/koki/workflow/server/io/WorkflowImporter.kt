@@ -78,6 +78,7 @@ class WorkflowImporter(
             activity.requiresApproval = data.requiresApproval
             activity.input = toString(data.input)
             activity.output = toString(data.output)
+            activity.event = data.event
             return activity
         } catch (ex: NotFoundException) {
             if (LOGGER.isDebugEnabled) {
@@ -93,6 +94,7 @@ class WorkflowImporter(
                     description = data.description,
                     active = true,
                     requiresApproval = data.requiresApproval,
+                    event = data.event,
                     input = toString(data.input),
                     output = toString(data.output),
                 )

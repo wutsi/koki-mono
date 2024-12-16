@@ -43,6 +43,7 @@ data class ActivityEntity(
     var requiresApproval: Boolean = false,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
+    var event: String? = null,
     var input: String? = null,
     var output: String? = null,
 ) {

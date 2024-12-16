@@ -77,6 +77,7 @@
                             <table class="table table-striped">
                                 <tr>
                                     <th width="1%"></th>
+                                    <th>Name</th>
                                     <th>Title</th>
                                     <th>Role</th>
                                     <th th:if="${workflow.requiresApprover}">Approval?</th>
@@ -87,8 +88,9 @@
                                             th:replace="~{__components/workflow :: activity-type-icon(${activity.type})}"></span>
                                     </td>
                                     <td>
-                                        <a th:href="${activity.url}" th:text="${activity.longTitle}">TITLE</a>
+                                        <a th:href="${activity.url}" th:text="${activity.name}">NAME</a>
                                     </td>
+                                    <td th:text="${activity.title}">TITLE</td>
                                     <td>
                                         <span th:if="${activity.role}" th:text="${activity.role.title}">ROLE</span>
                                     </td>

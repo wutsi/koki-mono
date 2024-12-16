@@ -10,6 +10,7 @@
     <i class="fa-solid fa-code" th:if="${type.name == 'SCRIPT'}"></i>
     <i class="fa-regular fa-gear" th:if="${type.name == 'SERVICE'}"></i>
     <i class="fa-regular fa-envelope" th:if="${type.name == 'SEND'}"></i>
+    <i class="fa-solid fa-envelope" th:if="${type.name == 'RECEIVE'}"></i>
 </span>
 
 <div th:fragment="workflow-status(status)" th:if="${status}">

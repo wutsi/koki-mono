@@ -11,6 +11,7 @@ import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import java.io.File
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/workflow/ExportWorkflowJSONEndpoint.sql"])
@@ -71,6 +72,7 @@ class ExportWorkflowJSONEndpointTest : TenantAwareEndpointTest() {
         assertEquals(null, activities[0].script)
         assertEquals(false, activities[0].requiresApproval)
         assertEquals("Starting the process", activities[0].description)
+        assertNull(activities[0].event)
 
         assertEquals("STOP", activities[1].name)
         assertEquals("Done", activities[1].title)
@@ -81,6 +83,7 @@ class ExportWorkflowJSONEndpointTest : TenantAwareEndpointTest() {
         assertEquals(null, activities[1].script)
         assertEquals(false, activities[1].requiresApproval)
         assertEquals(null, activities[1].description)
+        assertNull(activities[1].event)
 
         assertEquals("WORKING", activities[2].name)
         assertEquals("Work...", activities[2].title)
@@ -91,6 +94,7 @@ class ExportWorkflowJSONEndpointTest : TenantAwareEndpointTest() {
         assertEquals("S-100", activities[2].script)
         assertEquals(true, activities[2].requiresApproval)
         assertEquals("Performing the task", activities[2].description)
+        assertEquals("order-received", activities[2].event)
 
         assertEquals(2, workflow.flows.size)
         assertEquals("START", workflow.flows[0].from)

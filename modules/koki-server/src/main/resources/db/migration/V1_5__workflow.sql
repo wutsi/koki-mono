@@ -33,6 +33,7 @@ CREATE TABLE T_ACTIVITY(
   type                    INT NOT NULL DEFAULT 0,
   requires_approval       BOOLEAN NOT NULL DEFAULT false,
   description             TEXT,
+  event                   VARCHAR(255),
   input                   JSON,
   output                  JSON,
   created_at              DATETIME DEFAULT NOW(),

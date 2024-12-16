@@ -38,7 +38,7 @@ abstract class AbstractHTMLImputElementWriter() : AbstractHTMLElementWriter() {
         }
 
         // Required
-        if (element.required) {
+        if (!readOnly && element.required) {
             writer.write(" required")
         }
 
