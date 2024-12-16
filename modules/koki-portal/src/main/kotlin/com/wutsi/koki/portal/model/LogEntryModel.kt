@@ -6,6 +6,7 @@ import java.util.Date
 data class LogEntryModel(
     val id: String = "",
     val activityInstance: ActivityInstanceModel? = null,
+    val workflowInstance: WorkflowInstanceModel? = null,
     val type: LogEntryType = LogEntryType.UNKNOWN,
     val message: String = "",
     val metadata: Map<String, Any> = emptyMap(),

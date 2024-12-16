@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.mapper
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.portal.model.ActivityInstanceModel
 import com.wutsi.koki.portal.model.LogEntryModel
+import com.wutsi.koki.portal.model.WorkflowInstanceModel
 import com.wutsi.koki.workflow.dto.LogEntry
 import com.wutsi.koki.workflow.dto.LogEntrySummary
 import org.springframework.stereotype.Service
@@ -13,7 +14,8 @@ import java.text.SimpleDateFormat
 class LogMapper(private val objectMapper: ObjectMapper) {
     fun toLogEntryModel(
         entity: LogEntry,
-        activityInstance: ActivityInstanceModel?
+        activityInstance: ActivityInstanceModel?,
+        workflowInstance: WorkflowInstanceModel,
     ): LogEntryModel {
         val fmt = createDateFormat()
 
@@ -31,6 +33,7 @@ class LogMapper(private val objectMapper: ObjectMapper) {
             },
             type = entity.type,
             activityInstance = activityInstance,
+            workflowInstance = workflowInstance,
         )
     }
 

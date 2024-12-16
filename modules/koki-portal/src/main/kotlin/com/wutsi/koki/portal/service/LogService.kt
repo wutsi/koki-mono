@@ -56,9 +56,19 @@ class LogService(
             null
         }
 
+        val workflowInstance = if (activityInstance != null) {
+            activityInstance.workflowInstance
+        } else {
+            workflowInstanceService.workflows(
+                ids = listOf(entry.workflowInstanceId),
+                limit = 1,
+            ).first()
+        }
+
         return mapper.toLogEntryModel(
             entity = entry,
             activityInstance = activityInstance,
+            workflowInstance = workflowInstance,
         )
     }
 }

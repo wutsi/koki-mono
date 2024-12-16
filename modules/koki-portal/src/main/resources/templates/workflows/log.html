@@ -20,12 +20,12 @@
                         <tr>
                             <td><b>Workflow</b></td>
                             <td>
-                                <a th:href="${log.activityInstance.url}"
-                                   th:text="${log.activityInstance.workflowInstance.workflow.longTitle}"
+                                <a th:href="${log.workflowInstance.url}"
+                                   th:text="${log.workflowInstance.workflow.longTitle}"
                                 >WORKFLOW</a>
                             </td>
                         </tr>
-                        <tr>
+                        <tr th:if="${log.activityInstance}">
                             <td><b>Activity</b></td>
                             <td>
                                 <a target="_new"
@@ -37,8 +37,8 @@
                         <tr>
                             <td><b>Statut</b></td>
                             <td>
-                                <i class="fa-lg fa-solid fa-circle-info" th:if="${log.type.name == 'INFO'}"></i>
-                                <i class="fa-lg fa-solid fa-circle-exclamation error"
+                                <i class="fa-xl fa-solid fa-circle-info info" th:if="${log.type.name == 'INFO'}"></i>
+                                <i class="fa-xl fa-solid fa-circle-exclamation error"
                                    th:if="${log.type.name == 'ERROR'}"></i>
                                 <span th:text="${log.type}">TYPE</span>
                             </td>

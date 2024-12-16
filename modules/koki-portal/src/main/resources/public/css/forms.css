@@ -24,6 +24,10 @@ input:read-only {
     color: darkgreen;
 }
 
+.info {
+    color: blue;
+}
+
 .required {
     color: darkred;
 }

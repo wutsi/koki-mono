@@ -17,8 +17,8 @@
                     >ACTIVITY</a>
                 </td>
                 <td class="text-center">
-                    <i class="fa-lg fa-solid fa-circle-info" th:if="${log.type.name == 'INFO'}"></i>
-                    <i class="fa-lg fa-solid fa-circle-exclamation error" th:if="${log.type.name == 'ERROR'}"></i>
+                    <i class="fa-xl fa-solid fa-circle-info info" th:if="${log.type.name == 'INFO'}"></i>
+                    <i class="fa-xl fa-solid fa-circle-exclamation error" th:if="${log.type.name == 'ERROR'}"></i>
                 </td>
                 <td th:text="${log.message}">MESSAGE</td>
                 <td>
