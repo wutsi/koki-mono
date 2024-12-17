@@ -23,7 +23,7 @@ class DeleteScriptEndpoint(
         @PathVariable id: String,
     ) {
         /** Check if in used */
-        val activities = activityService.search(tenantId = tenantId, formIds = listOf(id))
+        val activities = activityService.search(tenantId = tenantId, scriptIds = listOf(id))
         if (activities.isNotEmpty()) {
             throw ConflictException(
                 error = Error(

@@ -2,6 +2,7 @@ package com.wutsi.koki.service.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.service.server.dao.ServiceRepository
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
@@ -30,5 +31,14 @@ class DeleteServiceEndpointTest : TenantAwareEndpointTest() {
         val service = dao.findById("100").get()
         assertEquals(false, service.deleted)
         assertNull(service.deletedAt)
+    }
+
+    @Test
+    fun `in use`() {
+        rest.delete("/v1/services/110")
+
+        val script = dao.findById("110").get()
+        assertFalse(script.deleted)
+        assertNull(script.deletedAt)
     }
 }
