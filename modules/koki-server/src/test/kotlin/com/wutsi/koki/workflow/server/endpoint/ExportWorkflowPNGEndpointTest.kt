@@ -95,7 +95,7 @@ class ExportWorkflowPNGEndpointTest : TenantAwareEndpointTest() {
                         name = "INVOICE",
                         title = "Invoicing...",
                         description = "SAGE create an invoice",
-                        type = ActivityType.SERVICE,
+                        type = ActivityType.MANUAL,
                         input = mapOf("foo" to "bar", "a" to "b"),
                         output = mapOf("x" to "y"),
                         requiresApproval = true,

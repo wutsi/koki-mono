@@ -69,8 +69,8 @@ Koki will provide the ability to send/receive message to external web services (
 | Name    | Required | Description                                                                     |
 |---------|----------|---------------------------------------------------------------------------------|
 | service | Y        | Name of the service to call                                                     |
-| path    | Y        | Path of the service endpoint                                                    |
 | method  | Y        | HTTP Method: GET, POST, DELETE, PUT                                             |
+| path    |          | Path of the service endpoint                                                    |
 | input   |          | Mapping of the input data to send as input parameter when executing the service |
 | output  |          | Mapping of script execution output with the workflow instance state             |
 

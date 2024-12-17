@@ -292,10 +292,11 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                         name = "INVOICE",
                         title = "Invoicing...",
                         description = "SAGE create an invoice",
-                        type = ActivityType.SERVICE,
+                        type = ActivityType.USER,
                         input = mapOf("foo" to "bar", "a" to "b"),
                         output = mapOf("x" to "y"),
-                        form = "xxxx"
+                        form = "xxxx",
+                        role = "accountant",
                     ),
                     ActivityData(
                         name = "STOP",
@@ -332,9 +333,10 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                         name = "INVOICE",
                         title = "Invoicing...",
                         description = "SAGE create an invoice",
-                        type = ActivityType.SERVICE,
+                        type = ActivityType.USER,
                         input = mapOf("foo" to "bar", "a" to "b"),
-                        form = "f-200"
+                        form = "f-200",
+                        role = "accountant",
                     ),
                     ActivityData(
                         name = "STOP",
