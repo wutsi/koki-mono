@@ -122,7 +122,7 @@ class ScriptService(
             )
         }
 
-        val script = get(id, tenantId)
+        val script = duplicate ?: get(id, tenantId)
         script.name = request.name
         script.title = request.title
         script.description = request.description
@@ -139,6 +139,7 @@ class ScriptService(
         script.name = "##-" + script.name + "-" + UUID.randomUUID().toString()
         script.deleted = true
         script.deletedAt = Date()
+        dao.save(script)
     }
 
     private fun toParameterString(parameters: List<String>): String? {

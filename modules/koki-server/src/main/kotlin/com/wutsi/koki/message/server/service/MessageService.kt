@@ -135,7 +135,7 @@ class MessageService(
             )
         }
 
-        val message = get(id, tenantId)
+        val message = duplicate ?: get(id, tenantId)
         message.name = request.name
         message.subject = request.subject
         message.description = request.description
@@ -150,5 +150,6 @@ class MessageService(
         message.name = "##-" + message.name + "-" + UUID.randomUUID().toString()
         message.deleted = true
         message.deletedAt = Date()
+        dao.save(message)
     }
 }

@@ -1,9 +1,9 @@
 package com.wutsi.koki.service.server.endpoint
 
-import com.wutsi.koki.service.dto.CreateServiceRequest
-import com.wutsi.koki.service.dto.CreateServiceResponse
+import com.wutsi.koki.service.dto.UpdateServiceRequest
 import com.wutsi.koki.service.server.service.ServiceService
 import jakarta.validation.Valid
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping
-class CreateServiceEndpoint(
+class UpdateServiceEndpoint(
     private val service: ServiceService
 ) {
-    @PostMapping("/v1/services")
-    fun create(
+    @PostMapping("/v1/services/{id}")
+    fun update(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-        @Valid @RequestBody request: CreateServiceRequest,
-    ): CreateServiceResponse {
-        val service = service.create(request, tenantId)
-        return CreateServiceResponse(service.id!!)
+        @PathVariable id: String,
+        @Valid @RequestBody request: UpdateServiceRequest,
+    ) {
+        service.update(id, request, tenantId)
     }
 }

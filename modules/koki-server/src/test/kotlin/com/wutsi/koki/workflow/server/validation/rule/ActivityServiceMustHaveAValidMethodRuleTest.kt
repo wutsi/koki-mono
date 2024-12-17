@@ -7,8 +7,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class ActivityServiceMustHaveAServiceRuleTest {
-    private val rule = ActivityServiceMustHaveAServiceRule()
+class ActivityServiceMustHaveAValidMethodRuleTest {
+    private val rule = ActivityServiceMustHaveAValidMethodRule()
 
     @Test
     fun success() {
@@ -18,7 +18,7 @@ class ActivityServiceMustHaveAServiceRuleTest {
                 description = "This is a new workflow",
                 activities = listOf(
                     ActivityData(name = "start", type = ActivityType.START),
-                    ActivityData(name = "invoice", type = ActivityType.SERVICE, service = "C1"),
+                    ActivityData(name = "invoice", type = ActivityType.SERVICE, method = "post"),
                     ActivityData(name = "stop"),
                 ),
             )
@@ -35,8 +35,8 @@ class ActivityServiceMustHaveAServiceRuleTest {
                 description = "This is a new workflow",
                 activities = listOf(
                     ActivityData(name = "start", type = ActivityType.START),
-                    ActivityData(name = "invoice", type = ActivityType.SERVICE, service = null),
-                    ActivityData(name = "quote", type = ActivityType.SERVICE, service = ""),
+                    ActivityData(name = "invoice", type = ActivityType.SERVICE, method = null),
+                    ActivityData(name = "quote", type = ActivityType.SERVICE, method = "??"),
                     ActivityData(name = "stop"),
                 ),
             )

@@ -41,6 +41,10 @@ class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals(mapOf("x" to "y"), activities[0].output)
         assertTrue(activities[0].requiresApproval)
         assertNull(activities[0].roleId)
+        assertNull(activities[0].serviceId)
+        assertNull(activities[0].method)
+        assertNull(activities[0].path)
+        assertNull(activities[0].messageId)
 
         assertEquals(111L, activities[1].id)
         assertEquals("WORKING", activities[1].name)
@@ -50,6 +54,10 @@ class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertTrue(activities[1].output.isEmpty())
         assertFalse(activities[1].requiresApproval)
         assertEquals(11L, activities[1].roleId)
+        assertNull(activities[1].serviceId)
+        assertNull(activities[1].method)
+        assertNull(activities[1].path)
+        assertNull(activities[1].messageId)
 
         assertEquals(112L, activities[2].id)
         assertEquals("SEND", activities[2].name)
@@ -59,6 +67,10 @@ class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertTrue(activities[2].output.isEmpty())
         assertFalse(activities[2].requiresApproval)
         assertEquals(10L, activities[2].roleId)
+        assertNull(activities[2].serviceId)
+        assertNull(activities[2].method)
+        assertNull(activities[2].path)
+        assertEquals("100", activities[2].messageId)
 
         assertEquals(113L, activities[3].id)
         assertEquals("SUBMIT", activities[3].name)
@@ -68,6 +80,10 @@ class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertTrue(activities[3].output.isEmpty())
         assertFalse(activities[3].requiresApproval)
         assertEquals(10L, activities[3].roleId)
+        assertEquals("100", activities[3].serviceId)
+        assertEquals("POST", activities[3].method)
+        assertEquals("/activities", activities[3].path)
+        assertNull(activities[3].messageId)
 
         assertEquals(114L, activities[4].id)
         assertEquals("STOP", activities[4].name)
@@ -77,6 +93,10 @@ class GetWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertTrue(activities[4].output.isEmpty())
         assertFalse(activities[4].requiresApproval)
         assertNull(activities[4].roleId)
+        assertNull(activities[4].serviceId)
+        assertNull(activities[4].method)
+        assertNull(activities[4].path)
+        assertNull(activities[4].messageId)
 
         val flows = workflow.flows
         assertEquals(5, flows.size)

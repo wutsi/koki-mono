@@ -5,7 +5,6 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.service.dto.AuthenticationType
 import com.wutsi.koki.service.dto.CreateServiceRequest
-import com.wutsi.koki.service.dto.CreateServiceResponse
 import com.wutsi.koki.service.server.dao.ServiceRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -13,8 +12,8 @@ import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/service/CreateServiceEndpoint.sql"])
-class CreateServiceEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/service/UpdateServiceEndpoint.sql"])
+class UpdateServiceEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var dao: ServiceRepository
 
@@ -31,13 +30,12 @@ class CreateServiceEndpointTest : TenantAwareEndpointTest() {
     )
 
     @Test
-    fun create() {
-        val response = rest.postForEntity("/v1/services", request, CreateServiceResponse::class.java)
+    fun update() {
+        val response = rest.postForEntity("/v1/services/100", request, Any::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val serviceId = response.body!!.serviceId
-        val service = dao.findById(serviceId).get()
+        val service = dao.findById("100").get()
 
         assertEquals(TENANT_ID, service.tenantId)
         assertEquals(request.name, service.name)
@@ -53,9 +51,33 @@ class CreateServiceEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun duplicate() {
-        val result = rest.postForEntity("/v1/services", request.copy(name = "SRV-100"), ErrorResponse::class.java)
+        val result = rest.postForEntity("/v1/services/110", request.copy(name = "SRV-120"), ErrorResponse::class.java)
 
         assertEquals(HttpStatus.CONFLICT, result.statusCode)
         assertEquals(ErrorCode.SERVICE_DUPLICATE_NAME, result.body!!.error.code)
+    }
+
+    @Test
+    fun deleted() {
+        val result = rest.postForEntity("/v1/services/199", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
+        assertEquals(ErrorCode.SERVICE_NOT_FOUND, result.body!!.error.code)
+    }
+
+    @Test
+    fun notFound() {
+        val result = rest.postForEntity("/v1/services/999999", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
+        assertEquals(ErrorCode.SERVICE_NOT_FOUND, result.body!!.error.code)
+    }
+
+    @Test
+    fun `another tenant`() {
+        val result = rest.postForEntity("/v1/services/200", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
+        assertEquals(ErrorCode.SERVICE_NOT_FOUND, result.body!!.error.code)
     }
 }

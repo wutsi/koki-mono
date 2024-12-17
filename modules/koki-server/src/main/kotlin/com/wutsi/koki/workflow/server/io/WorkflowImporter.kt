@@ -9,6 +9,7 @@ import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.form.server.service.FormService
 import com.wutsi.koki.message.server.service.MessageService
 import com.wutsi.koki.script.server.service.ScriptService
+import com.wutsi.koki.service.server.service.ServiceService
 import com.wutsi.koki.tenant.server.domain.RoleEntity
 import com.wutsi.koki.tenant.server.service.RoleService
 import com.wutsi.koki.workflow.dto.ActivityData
@@ -32,6 +33,7 @@ class WorkflowImporter(
     private val formService: FormService,
     private val messageService: MessageService,
     private val scriptService: ScriptService,
+    private val serviceService: ServiceService,
     private val objectMapper: ObjectMapper,
 ) {
     companion object {
@@ -51,6 +53,7 @@ class WorkflowImporter(
         linkForms(w, activities, data)
         linkMessages(w, activities, data)
         linkScripts(w, activities, data)
+        linkServices(w, activities, data)
         activityService.saveAll(activities)
 
         // Deactivate old activities
@@ -215,6 +218,24 @@ class WorkflowImporter(
             activity.scriptId = scriptService.getByName(activityData.script!!, workflow.tenantId).id
         } else {
             activity.scriptId = null
+        }
+    }
+
+    private fun linkServices(workflow: WorkflowEntity, activities: List<ActivityEntity>, data: WorkflowData) {
+        activities.map { activity -> linkService(workflow, activity, data) }
+    }
+
+    private fun linkService(workflow: WorkflowEntity, activity: ActivityEntity, data: WorkflowData) {
+        val activityData = data.activities.find { act -> act.name == activity.name }
+        if (activityData?.service != null) {
+            LOGGER.debug(">>> Linking Activity[${activity.name}] with Service[${activityData.service}]")
+            activity.serviceId = serviceService.getByName(activityData.service!!, workflow.tenantId).id
+            activity.path = activityData.path
+            activity.method = activityData.method
+        } else {
+            activity.serviceId = null
+            activity.path = null
+            activity.method = null
         }
     }
 
