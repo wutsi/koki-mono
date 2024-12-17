@@ -15,6 +15,9 @@ data class ActivityData(
     val message: String? = null,
     val script: String? = null,
     val event: String? = null,
+    val service: String? = null,
+    val path: String? = null,
+    val method: String? = null,
     val input: Map<String, Any> = emptyMap(),
     val output: Map<String, Any> = emptyMap()
 )
