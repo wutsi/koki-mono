@@ -45,6 +45,7 @@ class ActivityService(
         formIds: List<String> = emptyList(),
         scriptIds: List<String> = emptyList(),
         events: List<String> = emptyList(),
+        serviceIds: List<String> = emptyList(),
         type: ActivityType? = null,
         active: Boolean? = null,
         limit: Int = 20,
@@ -69,6 +70,9 @@ class ActivityService(
         }
         if (scriptIds.isNotEmpty()) {
             jql.append(" AND A.scriptId IN :scriptIds")
+        }
+        if (serviceIds.isNotEmpty()) {
+            jql.append(" AND A.serviceId IN :serviceIds")
         }
         if (events.isNotEmpty()) {
             jql.append(" AND UPPER(A.event) IN :events")
@@ -100,6 +104,9 @@ class ActivityService(
         }
         if (scriptIds.isNotEmpty()) {
             query.setParameter("scriptIds", scriptIds)
+        }
+        if (serviceIds.isNotEmpty()) {
+            query.setParameter("serviceIds", serviceIds)
         }
         if (events.isNotEmpty()) {
             query.setParameter("events", events.map { event -> event.uppercase() })

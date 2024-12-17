@@ -12,7 +12,6 @@ INSERT INTO T_SCRIPT(id, tenant_fk, name, title, language, code, deleted)
 
 INSERT INTO T_WORKFLOW(id, tenant_fk, name)
     VALUES(100, 1, 'w1');
-;
 
 INSERT INTO T_ACTIVITY(id, tenant_fk, workflow_fk, name, script_fk)
     VALUES (110, 1, 100, 'START', 110);

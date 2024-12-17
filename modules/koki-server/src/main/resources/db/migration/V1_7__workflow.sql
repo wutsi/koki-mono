@@ -26,6 +26,7 @@ CREATE TABLE T_ACTIVITY(
   form_fk                 VARCHAR(36),
   message_fk              VARCHAR(36),
   script_fk               VARCHAR(36),
+  service_fk              VARCHAR(36),
 
   name                    VARCHAR(100) NOT NULL,
   title                   VARCHAR(255),
@@ -34,6 +35,8 @@ CREATE TABLE T_ACTIVITY(
   requires_approval       BOOLEAN NOT NULL DEFAULT false,
   description             TEXT,
   event                   VARCHAR(255),
+  path                    VARCHAR(100),
+  method                  VARCHAR(10),
   input                   JSON,
   output                  JSON,
   created_at              DATETIME DEFAULT NOW(),

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.form.server.service.FormService
 import com.wutsi.koki.message.server.service.MessageService
 import com.wutsi.koki.script.server.service.ScriptService
+import com.wutsi.koki.service.server.service.ServiceService
 import com.wutsi.koki.tenant.server.service.RoleService
 import com.wutsi.koki.workflow.dto.ActivityData
 import com.wutsi.koki.workflow.dto.FlowData
@@ -20,6 +21,7 @@ class WorkflowExporter(
     private val formService: FormService,
     private val messageService: MessageService,
     private val scriptService: ScriptService,
+    private val serviceService: ServiceService,
     private val objectMapper: ObjectMapper,
 ) {
     fun export(workflow: WorkflowEntity): WorkflowData {
@@ -59,6 +61,7 @@ class WorkflowExporter(
         val role = activity.roleId?.let { id -> roleService.get(id, tenantId) }
         val message = activity.messageId?.let { id -> messageService.get(id, tenantId) }
         val script = activity.scriptId?.let { id -> scriptService.get(id, tenantId) }
+        val service = activity.serviceId?.let { id -> serviceService.get(id, tenantId) }
         return ActivityData(
             name = activity.name,
             type = activity.type,
@@ -72,6 +75,9 @@ class WorkflowExporter(
             event = activity.event,
             input = activity.inputAsMap(objectMapper),
             output = activity.outputAsMap(objectMapper),
+            service = service?.name,
+            path = activity.path,
+            method = activity.method,
         )
     }
 }

@@ -17,7 +17,7 @@ class SearchScriptEndpoint(
     private val mapper: ScriptMapper,
 ) {
     @GetMapping("/v1/scripts")
-    fun delete(
+    fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false, name = "id") ids: List<String> = emptyList(),
         @RequestParam(required = false, name = "name") names: List<String> = emptyList(),

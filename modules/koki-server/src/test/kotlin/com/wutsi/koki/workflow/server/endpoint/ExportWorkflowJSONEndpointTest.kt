@@ -73,6 +73,9 @@ class ExportWorkflowJSONEndpointTest : TenantAwareEndpointTest() {
         assertEquals(false, activities[0].requiresApproval)
         assertEquals("Starting the process", activities[0].description)
         assertNull(activities[0].event)
+        assertNull(activities[0].service)
+        assertNull(activities[0].path)
+        assertNull(activities[0].method)
 
         assertEquals("STOP", activities[1].name)
         assertEquals("Done", activities[1].title)
@@ -84,6 +87,9 @@ class ExportWorkflowJSONEndpointTest : TenantAwareEndpointTest() {
         assertEquals(false, activities[1].requiresApproval)
         assertEquals(null, activities[1].description)
         assertNull(activities[1].event)
+        assertNull(activities[1].service)
+        assertNull(activities[1].path)
+        assertNull(activities[1].method)
 
         assertEquals("WORKING", activities[2].name)
         assertEquals("Work...", activities[2].title)
@@ -95,6 +101,9 @@ class ExportWorkflowJSONEndpointTest : TenantAwareEndpointTest() {
         assertEquals(true, activities[2].requiresApproval)
         assertEquals("Performing the task", activities[2].description)
         assertEquals("order-received", activities[2].event)
+        assertEquals("SRV-100", activities[2].service)
+        assertEquals("/activities", activities[2].path)
+        assertEquals("POST", activities[2].method)
 
         assertEquals(2, workflow.flows.size)
         assertEquals("START", workflow.flows[0].from)

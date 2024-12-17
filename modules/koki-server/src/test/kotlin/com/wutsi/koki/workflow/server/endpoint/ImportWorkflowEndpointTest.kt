@@ -53,7 +53,10 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                     form = "f-100",
                     message = "m-100",
                     script = "s-100",
+                    service = "srv-100",
                     event = "order-received",
+                    path = "/activities",
+                    method = "POST"
                 ),
                 ActivityData(
                     name = "STOP",
@@ -96,6 +99,9 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertNull(aStart?.formId)
         assertNull(aStart?.messageId)
         assertNull(aStart?.scriptId)
+        assertNull(aStart?.serviceId)
+        assertNull(aStart?.path)
+        assertNull(aStart?.method)
         assertNull(aStart?.event)
 
         val aInvoice = activityDao.findByNameAndWorkflowId("INVOICE", workflow.id)
@@ -112,6 +118,9 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals("100", aInvoice?.messageId)
         assertEquals("100", aInvoice?.scriptId)
         assertEquals("order-received", aInvoice?.event)
+        assertEquals("100", aInvoice?.serviceId)
+        assertEquals("/activities", aInvoice?.path)
+        assertEquals("POST", aInvoice?.method)
 
         val aEnd = activityDao.findByNameAndWorkflowId("STOP", workflow.id)
         assertEquals("STOP", aEnd?.name)
@@ -125,6 +134,9 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertNull(aEnd?.input)
         assertNull(aEnd?.output)
         assertNull(aEnd?.event)
+        assertNull(aEnd?.serviceId)
+        assertNull(aEnd?.path)
+        assertNull(aEnd?.method)
 
         val flows = flowDao.findByWorkflowId(workflow.id!!)
         assertEquals(2, flows.size)
@@ -166,6 +178,9 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertNull(aStart?.input)
         assertNull(aStart?.output)
         assertNull(aStart?.event)
+        assertNull(aStart?.path)
+        assertNull(aStart?.method)
+        assertNull(aStart?.event)
 
         val aInvoice = activityDao.findByNameAndWorkflowId("INVOICE", workflow.id)
         assertEquals("INVOICE", aInvoice?.name)
@@ -180,6 +195,9 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals("100", aInvoice?.messageId)
         assertEquals("100", aInvoice?.scriptId)
         assertEquals("order-received", aInvoice?.event)
+        assertEquals("100", aInvoice?.serviceId)
+        assertEquals("/activities", aInvoice?.path)
+        assertEquals("POST", aInvoice?.method)
 
         val aEnd = activityDao.findByNameAndWorkflowId("STOP", workflow.id!!)
         assertEquals("STOP", aEnd?.name)
@@ -192,6 +210,9 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertNull(aEnd?.input)
         assertNull(aEnd?.output)
         assertNull(aEnd?.event)
+        assertNull(aEnd?.serviceId)
+        assertNull(aEnd?.path)
+        assertNull(aEnd?.method)
 
         val aDeactivated = activityDao.findById(111L).get()
         assertEquals(false, aDeactivated.active)
@@ -271,10 +292,11 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                         name = "INVOICE",
                         title = "Invoicing...",
                         description = "SAGE create an invoice",
-                        type = ActivityType.SERVICE,
+                        type = ActivityType.USER,
                         input = mapOf("foo" to "bar", "a" to "b"),
                         output = mapOf("x" to "y"),
-                        form = "xxxx"
+                        form = "xxxx",
+                        role = "accountant",
                     ),
                     ActivityData(
                         name = "STOP",
@@ -311,9 +333,10 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                         name = "INVOICE",
                         title = "Invoicing...",
                         description = "SAGE create an invoice",
-                        type = ActivityType.SERVICE,
+                        type = ActivityType.USER,
                         input = mapOf("foo" to "bar", "a" to "b"),
-                        form = "f-200"
+                        form = "f-200",
+                        role = "accountant",
                     ),
                     ActivityData(
                         name = "STOP",

@@ -1,57 +1,60 @@
 package com.wutsi.koki.service.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
-import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.service.dto.AuthenticationType
-import com.wutsi.koki.service.dto.GetServiceResponse
+import com.wutsi.koki.service.dto.SearchServiceResponse
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/service/GetServiceEndpoint.sql"])
-class GetServiceEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/service/SearchServiceEndpoint.sql"])
+class SearchServiceEndpointTest : TenantAwareEndpointTest() {
     @Test
-    fun get() {
-        val response = rest.getForEntity("/v1/services/100", GetServiceResponse::class.java)
+    fun all() {
+        val response = rest.getForEntity("/v1/services", SearchServiceResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val service = response.body!!.service
-
-        assertEquals("SRV-100", service.name)
-        assertEquals("Service #100", service.title)
-        assertEquals("Description of service", service.description)
-        assertEquals(AuthenticationType.BASIC_AUTHENTICATION, service.authenticationType)
-        assertEquals("admin", service.username)
-        assertEquals("secret", service.password)
-        assertEquals("api-key-00000", service.apiKey)
-        assertEquals(true, service.active)
-        assertEquals("https://localhost:7555", service.baseUrl)
+        val services = response.body!!.services
+        assertEquals(4, services.size)
     }
 
     @Test
-    fun notFound() {
-        val result = rest.getForEntity("/v1/services/99999", ErrorResponse::class.java)
+    fun `by names`() {
+        val response = rest.getForEntity(
+            "/v1/services?name=SRV-100&name=SRV-110&name=SRV-120&sort-by=NAME&asc=true",
+            SearchServiceResponse::class.java
+        )
 
-        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.SERVICE_NOT_FOUND, result.body!!.error.code)
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val services = response.body!!.services
+        assertEquals(3, services.size)
     }
 
     @Test
-    fun deleted() {
-        val result = rest.getForEntity("/v1/services/199", ErrorResponse::class.java)
+    fun `by id`() {
+        val response = rest.getForEntity(
+            "/v1/services?id=100&id=110&id=120&sort-by=CREATED_AT",
+            SearchServiceResponse::class.java
+        )
 
-        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.SERVICE_NOT_FOUND, result.body!!.error.code)
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val services = response.body!!.services
+        assertEquals(3, services.size)
     }
 
     @Test
-    fun `another tenant`() {
-        val result = rest.getForEntity("/v1/services/200", ErrorResponse::class.java)
+    fun active() {
+        val response = rest.getForEntity(
+            "/v1/services?active=false&sort-by=MODIFIED_AT",
+            SearchServiceResponse::class.java
+        )
 
-        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.SERVICE_NOT_FOUND, result.body!!.error.code)
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val services = response.body!!.services
+        assertEquals(1, services.size)
     }
 }

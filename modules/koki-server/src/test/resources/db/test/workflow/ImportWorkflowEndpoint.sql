@@ -18,6 +18,9 @@ INSERT INTO T_MESSAGE(id, tenant_fk, name, subject, body, active, deleted)
 INSERT INTO T_SCRIPT(id, tenant_fk, name, title, language, code, deleted, active)
     VALUES (100, 1, 'S-100', 'Create',        1, 'console.log(10+10)', false, true);
 
+INSERT INTO T_SERVICE(id, tenant_fk, name, title)
+    VALUES (100, 1, 'SRV-100', 'Sample script');
+
 INSERT INTO T_WORKFLOW(id, tenant_fk, name, workflow_instance_count)
     VALUES(100, 1, 'w1', 0),
           (110, 1, 'w-110', 0),

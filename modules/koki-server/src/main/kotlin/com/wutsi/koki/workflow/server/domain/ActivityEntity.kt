@@ -35,6 +35,9 @@ data class ActivityEntity(
     @Column(name = "script_fk")
     var scriptId: String? = null,
 
+    @Column(name = "service_fk")
+    var serviceId: String? = null,
+
     var name: String = "",
     var title: String? = null,
     var description: String? = null,
@@ -44,6 +47,8 @@ data class ActivityEntity(
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
     var event: String? = null,
+    var path: String? = null,
+    var method: String? = null,
     var input: String? = null,
     var output: String? = null,
 ) {

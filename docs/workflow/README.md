@@ -66,11 +66,13 @@ Koki will provide the ability to send/receive message to external web services (
 
 ### Parameters for Service
 
-| Name                | Required | Description                           |
-|---------------------|----------|---------------------------------------|
-| service             | Y        | Name of the service to call           |
-| service.contentType | Y        | `application/xml` or `text/xml`       |
-| service.request     |          | Request to send in JSON or XML format |
+| Name    | Required | Description                                                                     |
+|---------|----------|---------------------------------------------------------------------------------|
+| service | Y        | Name of the service to call                                                     |
+| method  | Y        | HTTP Method: GET, POST, DELETE, PUT                                             |
+| path    |          | Path of the service endpoint                                                    |
+| input   |          | Mapping of the input data to send as input parameter when executing the service |
+| output  |          | Mapping of script execution output with the workflow instance state             |
 
 -----
 
@@ -113,11 +115,10 @@ Examples of a Receive Task are as follows:
 
 ### Parameters for Receive
 
-| Name              | Required | Description                                                           |
-|-------------------|----------|-----------------------------------------------------------------------|
-| event             | Y        | Name of the event to receive                                          |
-| correlation_field | Y        | Correlation field in the event, that matches the activity instance ID |
-| input             |          | Mapping between event and state                                       |
+| Name  | Required | Description                     |
+|-------|----------|---------------------------------|
+| event | Y        | Name of the event to receive    |
+| input |          | Mapping between event and state |
 
 -----
 
