@@ -37,11 +37,9 @@ abstract class AbstractActivityRunner(
     }
 
     protected fun bindOutput(
-        activity: ActivityEntity,
-        result: Map<String, Any>?,
-        objectMapper: ObjectMapper
+        activity: ActivityEntity, result: Map<String, Any>?, objectMapper: ObjectMapper
     ): Map<String, Any> {
-        if (result == null){
+        if (result == null) {
             return emptyMap()
         }
 
