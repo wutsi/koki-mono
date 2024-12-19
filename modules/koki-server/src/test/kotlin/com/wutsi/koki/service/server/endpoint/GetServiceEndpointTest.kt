@@ -3,7 +3,7 @@ package com.wutsi.koki.service.server.endpoint
 import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.service.dto.AuthenticationType
+import com.wutsi.koki.service.dto.AuthorizationType
 import com.wutsi.koki.service.dto.GetServiceResponse
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
@@ -23,7 +23,7 @@ class GetServiceEndpointTest : TenantAwareEndpointTest() {
         assertEquals("SRV-100", service.name)
         assertEquals("Service #100", service.title)
         assertEquals("Description of service", service.description)
-        assertEquals(AuthenticationType.BASIC_AUTHENTICATION, service.authenticationType)
+        assertEquals(AuthorizationType.BASIC, service.authorizationType)
         assertEquals("admin", service.username)
         assertEquals("secret", service.password)
         assertEquals("api-key-00000", service.apiKey)

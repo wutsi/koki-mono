@@ -1,4 +1,8 @@
 package com.wutsi.koki.service.server.service
 
-class ServiceResponse {
-}
+import org.springframework.http.HttpStatusCode
+
+data class ServiceResponse (
+    val statusCode: HttpStatusCode,
+    val body: Map<String, Any>?,
+)

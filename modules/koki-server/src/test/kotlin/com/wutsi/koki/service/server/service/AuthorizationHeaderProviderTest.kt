@@ -1,7 +1,6 @@
-package com.wutsi.koki.service.server
+package com.wutsi.koki.service.server.service
 
 import com.wutsi.koki.service.dto.AuthorizationType
-import com.wutsi.koki.service.server.service.AuthorizationHeaderProvider
 import com.wutsi.koki.service.server.service.auth.ApiKeyAuthorizationHeader
 import com.wutsi.koki.service.server.service.auth.BasicAuthorizationHeader
 import com.wutsi.koki.service.server.service.auth.NoAuthorizationHeader

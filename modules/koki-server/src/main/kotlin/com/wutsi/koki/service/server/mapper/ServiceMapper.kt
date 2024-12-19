@@ -14,7 +14,7 @@ class ServiceMapper {
             description = entity.description,
             baseUrl = entity.baseUrl,
             active = entity.active,
-            authenticationType = entity.authenticationType,
+            authorizationType = entity.authorizationType,
             username = entity.username,
             password = entity.password,
             apiKey = entity.apiKey,

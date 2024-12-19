@@ -1,4 +1,4 @@
-package com.wutsi.koki.script.server.engine
+package com.wutsi.koki.script.server.service
 
 import com.wutsi.koki.script.dto.Language
 import com.wutsi.koki.script.server.exception.LanguageNotSupportedException
@@ -36,7 +36,7 @@ class ScriptingEngine {
      *
      * @param code - Code to execute
      * @param language - Programming language
-     * @param inputs - Map of input to inject into the script
+     * @param input - Map of input to inject into the script
      * @param output - List of output to collect after the execution of the script
      *
      * @return Map containing the value of all the output. This map has the following keys:
@@ -48,14 +48,14 @@ class ScriptingEngine {
     fun eval(
         code: String,
         language: Language,
-        inputs: Map<String, Any>,
+        input: Map<String, Any>,
         writer: Writer
     ): Map<String, Any> {
         val result = mutableMapOf<String, Any>()
         val engine = getEngine(language)
 
         val bindings = engine.createBindings()
-        bindings.putAll(inputs)
+        bindings.putAll(input)
 
         engine.getContext().writer = writer
         engine.getContext().errorWriter = writer
@@ -64,7 +64,7 @@ class ScriptingEngine {
         result.putAll(
             bindings
                 .filter { entry -> entry.value != null } // Filter out null value
-                .filter { entry -> !inputs.keys.contains(entry.key) } // Filter out inputs
+                .filter { entry -> !input.keys.contains(entry.key) } // Filter out inputs
         )
 
         value?.let { result["return"] = value }

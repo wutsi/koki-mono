@@ -5,18 +5,18 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-class ApiKeyAuthorizationHeaderProviderTest {
-    val provider = BasicAuthorizationHeaderProvider()
+class ApiKeyAuthorizationHeaderTest {
+    val valueProvider = ApiKeyAuthorizationHeader()
 
     @Test
     fun `no credentials`() {
         val service = ServiceEntity(apiKey = null)
-        assertNull(provider.get(service))
+        assertNull(valueProvider.value(service))
     }
 
     @Test
     fun apiKey() {
         val service = ServiceEntity(apiKey = "1111")
-        assertEquals("Bearer 1111", provider.get(service))
+        assertEquals("Bearer 1111", valueProvider.value(service))
     }
 }

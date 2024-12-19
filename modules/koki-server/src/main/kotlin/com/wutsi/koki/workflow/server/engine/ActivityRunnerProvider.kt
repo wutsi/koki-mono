@@ -1,6 +1,7 @@
 package com.wutsi.koki.workflow.server.engine
 
 import com.wutsi.koki.workflow.dto.ActivityType
+import com.wutsi.koki.workflow.server.engine.runner.ServiceRunner
 import com.wutsi.koki.workflow.server.service.runner.EndRunner
 import com.wutsi.koki.workflow.server.service.runner.ManualRunner
 import com.wutsi.koki.workflow.server.service.runner.ReceiveRunner
@@ -20,6 +21,7 @@ class ActivityRunnerProvider(
     private val send: SendRunner,
     private val receive: ReceiveRunner,
     private val script: ScriptRunner,
+    private val service: ServiceRunner,
 ) {
     fun get(type: ActivityType): ActivityRunner {
         return when (type) {
@@ -30,6 +32,7 @@ class ActivityRunnerProvider(
             ActivityType.SEND -> send
             ActivityType.RECEIVE -> receive
             ActivityType.SCRIPT -> script
+            ActivityType.SERVICE -> service
             else -> throw IllegalStateException("Not supported: $type")
         }
     }

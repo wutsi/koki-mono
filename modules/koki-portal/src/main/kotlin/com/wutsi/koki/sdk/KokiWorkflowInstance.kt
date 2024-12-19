@@ -6,6 +6,7 @@ import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.GetActivityInstanceResponse
 import com.wutsi.koki.workflow.dto.GetWorkflowInstanceResponse
+import com.wutsi.koki.workflow.dto.ReceiveExternalEventRequest
 import com.wutsi.koki.workflow.dto.SearchActivityInstanceResponse
 import com.wutsi.koki.workflow.dto.SearchWorkflowInstanceResponse
 import com.wutsi.koki.workflow.dto.SetActivityInstanceAssigneeRequest
@@ -51,6 +52,11 @@ class KokiWorkflowInstance(
             emptyMap<String, String>(),
             StartWorkflowInstanceResponse::class.java
         ).body
+    }
+
+    fun received(workflowInstanceId: String, request: ReceiveExternalEventRequest) {
+        val url = urlBuilder.build("$WORKFLOW_PATH_PREFIX/$workflowInstanceId/events")
+        rest.postForEntity(url, request, Any::class.java)
     }
 
     fun complete(activityInstanceId: String, request: CompleteActivityInstanceRequest) {

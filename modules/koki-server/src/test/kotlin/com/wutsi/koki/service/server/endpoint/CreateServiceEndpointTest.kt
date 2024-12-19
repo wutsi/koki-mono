@@ -3,7 +3,7 @@ package com.wutsi.koki.service.server.endpoint
 import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.service.dto.AuthenticationType
+import com.wutsi.koki.service.dto.AuthorizationType
 import com.wutsi.koki.service.dto.CreateServiceRequest
 import com.wutsi.koki.service.dto.CreateServiceResponse
 import com.wutsi.koki.service.server.dao.ServiceRepository
@@ -22,7 +22,7 @@ class CreateServiceEndpointTest : TenantAwareEndpointTest() {
         name = "SRV-555",
         title = "Test Service",
         description = "This is the description of a service",
-        authenticationType = AuthenticationType.BASIC_AUTHENTICATION,
+        authorizationType = AuthorizationType.BASIC,
         username = "srv-user",
         password = "secret",
         apiKey = "flkfd-fdoifdkfd0039209",
@@ -43,7 +43,7 @@ class CreateServiceEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.name, service.name)
         assertEquals(request.title, service.title)
         assertEquals(request.description, service.description)
-        assertEquals(request.authenticationType, service.authenticationType)
+        assertEquals(request.authorizationType, service.authorizationType)
         assertEquals(request.username, service.username)
         assertEquals(request.password, service.password)
         assertEquals(request.apiKey, service.apiKey)

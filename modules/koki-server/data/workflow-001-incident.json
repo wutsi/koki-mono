@@ -56,6 +56,17 @@
         "role": "finance"
       },
       {
+        "name": "process_payment",
+        "title": "System perform the payment",
+        "type": "SERVICE",
+        "service": "SVR-001",
+        "input": {
+          "amount": "{{reimbursement_amount}}",
+          "employee": "{{employee_name}}",
+          "email": "{{employee_email}}"
+        }
+      },
+      {
         "name": "wait_payment",
         "title": "Waiting for payment to be complete",
         "type": "RECEIVE",
@@ -93,6 +104,10 @@
       },
       {
         "from": "submit_payment",
+        "to": "process_payment"
+      },
+      {
+        "from": "process_payment",
         "to": "wait_payment"
       },
       {

@@ -5,8 +5,8 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.script.dto.RunScriptRequest
 import com.wutsi.koki.script.dto.RunScriptResponse
-import com.wutsi.koki.script.server.engine.ScriptingEngine
 import com.wutsi.koki.script.server.service.ScriptService
+import com.wutsi.koki.script.server.service.ScriptingEngine
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -28,7 +28,7 @@ class RunScriptEndpoint(
             val bindings = engine.eval(
                 code = request.code,
                 language = request.language,
-                inputs = request.parameters,
+                input = request.parameters,
                 writer = writer,
             )
             return RunScriptResponse(
