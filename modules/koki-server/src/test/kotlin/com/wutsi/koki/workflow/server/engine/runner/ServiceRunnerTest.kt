@@ -21,11 +21,13 @@ import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
 import com.wutsi.koki.workflow.server.engine.WorkflowEngine
+import com.wutsi.koki.workflow.server.exception.NoServiceException
 import com.wutsi.koki.workflow.server.service.ActivityService
 import com.wutsi.koki.workflow.server.service.LogService
 import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatusCode
@@ -121,5 +123,12 @@ class ServiceRunnerTest {
         val state = argumentCaptor<Map<String, Any>>()
         verify(engine).done(eq(activityInstance.id!!), state.capture(), eq(tenantId))
         assertEquals(mapOf("case_id" to "11111"), state.firstValue)
+    }
+
+    @Test
+    fun `no service`() {
+        doReturn(activity.copy(serviceId = null)).whenever(activityService).get(activity.id!!)
+
+        assertThrows<NoServiceException> { executor.run(activityInstance, engine) }
     }
 }

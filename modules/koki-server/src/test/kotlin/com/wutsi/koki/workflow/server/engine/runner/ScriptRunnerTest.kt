@@ -18,12 +18,14 @@ import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
 import com.wutsi.koki.workflow.server.engine.WorkflowEngine
+import com.wutsi.koki.workflow.server.exception.NoScriptException
 import com.wutsi.koki.workflow.server.service.ActivityService
 import com.wutsi.koki.workflow.server.service.LogService
 import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
 import com.wutsi.koki.workflow.server.service.runner.ScriptRunner
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 import kotlin.test.assertEquals
 
@@ -103,5 +105,12 @@ class ScriptRunnerTest {
         val state = argumentCaptor<Map<String, Any>>()
         verify(engine).done(eq(activityInstance.id!!), state.capture(), eq(tenantId))
         assertEquals("T1-1111-0000", state.firstValue["case_id"])
+    }
+
+    @Test
+    fun `no script`() {
+        doReturn(activity.copy(scriptId = null)).whenever(activityService).get(activity.id!!)
+
+        assertThrows<NoScriptException> {executor.run(activityInstance, engine)  }
     }
 }
