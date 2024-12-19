@@ -1,7 +1,7 @@
 package com.wutsi.koki.service.server.endpoint
 
-import com.wutsi.koki.script.dto.ServiceSortBy
 import com.wutsi.koki.service.dto.SearchServiceResponse
+import com.wutsi.koki.service.dto.ServiceSortBy
 import com.wutsi.koki.service.server.mapper.ServiceMapper
 import com.wutsi.koki.service.server.service.ServiceService
 import org.springframework.web.bind.annotation.GetMapping
