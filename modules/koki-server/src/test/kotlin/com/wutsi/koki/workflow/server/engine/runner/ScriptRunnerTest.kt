@@ -111,6 +111,6 @@ class ScriptRunnerTest {
     fun `no script`() {
         doReturn(activity.copy(scriptId = null)).whenever(activityService).get(activity.id!!)
 
-        assertThrows<NoScriptException> {executor.run(activityInstance, engine)  }
+        assertThrows<NoScriptException> { executor.run(activityInstance, engine) }
     }
 }
