@@ -8,7 +8,7 @@ data class Service(
     val title: String? = null,
     val description: String? = null,
     val baseUrl: String = "",
-    val authenticationType: AuthenticationType = AuthenticationType.UNKNOWN,
+    val authorizationType: AuthorizationType = AuthorizationType.UNKNOWN,
     val username: String? = null,
     val password: String? = null,
     val apiKey: String? = null,

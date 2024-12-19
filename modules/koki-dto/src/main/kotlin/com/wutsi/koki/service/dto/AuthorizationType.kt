@@ -1,8 +1,8 @@
 package com.wutsi.koki.service.dto
 
-enum class AuthenticationType {
+enum class AuthorizationType {
     UNKNOWN,
     NONE,
-    BASIC_AUTHENTICATION,
+    BASIC,
     API_KEY,
 }

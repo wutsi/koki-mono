@@ -7,7 +7,7 @@ data class UpdateServiceRequest(
     @get:NotEmpty val baseUrl: String = "",
     val title: String? = null,
     val description: String? = null,
-    val authenticationType: AuthenticationType = AuthenticationType.UNKNOWN,
+    val authorizationType: AuthorizationType = AuthorizationType.UNKNOWN,
     val username: String? = null,
     val password: String? = null,
     val apiKey: String? = null,
