@@ -7,7 +7,7 @@ CREATE TABLE T_SERVICE(
   title                   VARCHAR(255),
   description             TEXT,
   base_url                TEXT,
-  authentication_type     INT NOT NULL DEFAULT 0,
+  authorization_type      INT NOT NULL DEFAULT 0,
   username                TEXT,
   password                TEXT,
   api_key                 TEXT,

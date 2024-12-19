@@ -1,10 +1,9 @@
-package com.wutsi.koki.script.server.validation
+package com.wutsi.koki.script.server.service
 
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.BadRequestException
 import com.wutsi.koki.script.dto.Language
-import com.wutsi.koki.script.server.engine.ScriptingEngine
 import org.springframework.stereotype.Service
 import javax.script.ScriptException
 

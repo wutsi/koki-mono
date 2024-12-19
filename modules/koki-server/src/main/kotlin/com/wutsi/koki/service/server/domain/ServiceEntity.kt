@@ -1,6 +1,6 @@
 package com.wutsi.koki.service.server.domain
 
-import com.wutsi.koki.service.dto.AuthenticationType
+import com.wutsi.koki.service.dto.AuthorizationType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
@@ -20,7 +20,7 @@ data class ServiceEntity(
     var title: String? = null,
     var description: String? = null,
     var baseUrl: String = "",
-    var authenticationType: AuthenticationType = AuthenticationType.UNKNOWN,
+    var authorizationType: AuthorizationType = AuthorizationType.UNKNOWN,
     var username: String? = null,
     var password: String? = null,
     var apiKey: String? = null,

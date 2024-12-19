@@ -103,7 +103,7 @@ class ServiceService(
                 title = request.title,
                 description = request.description,
                 baseUrl = request.baseUrl,
-                authenticationType = request.authenticationType,
+                authorizationType = request.authorizationType,
                 active = request.active,
                 username = request.username,
                 password = request.password,
@@ -126,7 +126,7 @@ class ServiceService(
         service.title = request.title
         service.description = request.description
         service.baseUrl = request.baseUrl
-        service.authenticationType = request.authenticationType
+        service.authorizationType = request.authorizationType
         service.active = request.active
         service.username = request.username
         service.password = request.password

@@ -1,11 +1,13 @@
 package com.wutsi.koki.service.server.service.auth
 
 import com.wutsi.koki.service.server.domain.ServiceEntity
-import com.wutsi.koki.service.server.service.AuthorizationHeaderProvider
+import com.wutsi.koki.service.server.service.AuthorizationHeader
+import org.springframework.stereotype.Service
 import java.util.Base64
 
-class BasicAuthorizationHeaderProvider : AuthorizationHeaderProvider {
-    override fun get(service: ServiceEntity): String? {
+@Service
+class BasicAuthorizationHeader : AuthorizationHeader {
+    override fun value(service: ServiceEntity): String? {
         if (service.username.isNullOrEmpty() && service.password.isNullOrEmpty()) {
             return null
         }

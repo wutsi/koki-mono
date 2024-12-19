@@ -3,7 +3,7 @@ package com.wutsi.koki.script.server.endpoint
 import com.wutsi.koki.script.dto.CreateScriptRequest
 import com.wutsi.koki.script.dto.CreateScriptResponse
 import com.wutsi.koki.script.server.service.ScriptService
-import com.wutsi.koki.script.server.validation.ScriptValidator
+import com.wutsi.koki.script.server.service.ScriptValidator
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

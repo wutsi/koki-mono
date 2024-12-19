@@ -1,4 +1,4 @@
-package com.wutsi.koki.script.server.engine
+package com.wutsi.koki.script.server.service
 
 import com.wutsi.koki.script.dto.Language
 import com.wutsi.koki.script.server.exception.LanguageNotSupportedException
