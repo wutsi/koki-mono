@@ -1,4 +1,4 @@
-package com.wutsi.koki.script.dto
+package com.wutsi.koki.service.dto
 
 enum class ServiceSortBy {
     NAME,
