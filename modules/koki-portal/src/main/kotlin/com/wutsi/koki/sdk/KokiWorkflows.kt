@@ -11,7 +11,7 @@ import com.wutsi.koki.workflow.dto.WorkflowSortBy
 import org.springframework.web.client.RestTemplate
 import java.net.URL
 
-class KokiWorkflow(
+class KokiWorkflows(
     private val urlBuilder: URLBuilder,
     private val rest: RestTemplate,
     private val tenantProvider: TenantProvider,
@@ -94,6 +94,8 @@ class KokiWorkflow(
         roleIds: List<Long> = emptyList(),
         messageIds: List<String> = emptyList(),
         formIds: List<String> = emptyList(),
+        scriptIds: List<String> = emptyList(),
+        serviceIds: List<String> = emptyList(),
         type: ActivityType? = null,
         active: Boolean? = null,
         limit: Int = 20,

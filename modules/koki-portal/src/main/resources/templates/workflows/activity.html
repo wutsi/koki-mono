@@ -76,6 +76,13 @@
                                    th:text="${activityInstance.activity.script.longTitle}">SCRIPT</a>
                             </td>
                         </tr>
+                        <tr th:if="${activityInstance.activity.service}">
+                            <td><b>Service</b></td>
+                            <td>
+                                <a class="script" target="_new" th:href="${activityInstance.activity.service.url}"
+                                   th:text="${activityInstance.activity.service.longTitle}">SCRIPT</a>
+                            </td>
+                        </tr>
                         <tr th:if="!${activityInstance.activity.description.isEmpty()}">
                             <td><b>Description</b></td>
                             <td th:text="${activityInstance.activity.description}">DESCRIPTION</td>

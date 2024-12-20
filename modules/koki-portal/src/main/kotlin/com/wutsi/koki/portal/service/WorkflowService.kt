@@ -5,7 +5,7 @@ import com.wutsi.koki.portal.mapper.WorkflowMapper
 import com.wutsi.koki.portal.model.ActivityModel
 import com.wutsi.koki.portal.model.WorkflowModel
 import com.wutsi.koki.portal.page.workflow.SaveWorkflowForm
-import com.wutsi.koki.sdk.KokiWorkflow
+import com.wutsi.koki.sdk.KokiWorkflows
 import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.ImportWorkflowRequest
 import com.wutsi.koki.workflow.dto.WorkflowSortBy
@@ -13,13 +13,14 @@ import org.springframework.stereotype.Service
 
 @Service
 class WorkflowService(
-    private val koki: KokiWorkflow,
+    private val koki: KokiWorkflows,
     private val mapper: WorkflowMapper,
     private val objectMapper: ObjectMapper,
     private val formService: FormService,
     private val messageService: MessageService,
     private val userService: UserService,
     private val scriptService: ScriptService,
+    private val serviceService: ServiceService,
 ) {
     fun json(id: Long): String {
         return koki.json(id)
@@ -40,24 +41,46 @@ class WorkflowService(
         }
 
         val formIds = workflow.activities.mapNotNull { activity -> activity.formId }.toSet()
-        val forms = formService.forms(
-            ids = formIds.toList(),
-            limit = formIds.size,
-            workflowInstanceId = null,
-            activityInstanceId = null,
-        )
+        val forms = if (formIds.isNotEmpty()) {
+            formService.forms(
+                ids = formIds.toList(),
+                limit = formIds.size,
+                workflowInstanceId = null,
+                activityInstanceId = null,
+            )
+        } else {
+            emptyList()
+        }
 
         val messageIds = workflow.activities.mapNotNull { activity -> activity.messageId }.toSet()
-        val messages = messageService.messages(
-            ids = messageIds.toList(),
-            limit = messageIds.size,
-        )
+        val messages = if (messageIds.isNotEmpty()) {
+            messageService.messages(
+                ids = messageIds.toList(),
+                limit = messageIds.size,
+            )
+        } else {
+            emptyList()
+        }
 
         val scriptIds = workflow.activities.mapNotNull { activity -> activity.scriptId }.toSet()
-        val scripts = scriptService.scripts(
-            ids = scriptIds.toList(),
-            limit = scriptIds.size,
-        )
+        val scripts = if (scriptIds.isNotEmpty()) {
+            scriptService.scripts(
+                ids = scriptIds.toList(),
+                limit = scriptIds.size,
+            )
+        } else {
+            emptyList()
+        }
+
+        val serviceIds = workflow.activities.mapNotNull { activity -> activity.serviceId }.toSet()
+        val services = if (serviceIds.isNotEmpty()) {
+            serviceService.services(
+                ids = serviceIds.toList(),
+                limit = serviceIds.size,
+            )
+        } else {
+            emptyList()
+        }
 
         val imageUrl = koki.imageUrl(id)
 
@@ -68,6 +91,7 @@ class WorkflowService(
             forms = forms,
             messages = messages,
             scripts = scripts,
+            services = services,
             imageUrl = imageUrl,
         )
     }
@@ -82,6 +106,8 @@ class WorkflowService(
         roleIds: List<Long> = emptyList(),
         formIds: List<String> = emptyList(),
         messageIds: List<String> = emptyList(),
+        scriptIds: List<String> = emptyList(),
+        serviceIds: List<String> = emptyList(),
         type: ActivityType? = null,
         active: Boolean = true,
         limit: Int = 20,
@@ -93,6 +119,8 @@ class WorkflowService(
             roleIds = roleIds,
             formIds = formIds,
             messageIds = messageIds,
+            scriptIds = scriptIds,
+            serviceIds = serviceIds,
             type = type,
             active = active,
             limit = limit,

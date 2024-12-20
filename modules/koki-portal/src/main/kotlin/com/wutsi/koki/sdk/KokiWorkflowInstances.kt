@@ -18,7 +18,7 @@ import java.util.Collections.emptyList
 import java.util.Collections.emptyMap
 import java.util.Date
 
-class KokiWorkflowInstance(
+class KokiWorkflowInstances(
     private val urlBuilder: URLBuilder,
     private val rest: RestTemplate,
     private val tenantProvider: TenantProvider,

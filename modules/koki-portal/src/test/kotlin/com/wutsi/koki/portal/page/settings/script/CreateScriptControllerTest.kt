@@ -2,7 +2,6 @@ package com.wutsi.koki.portal.page.settings.script
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -11,20 +10,11 @@ import com.wutsi.koki.ScriptFixtures.script
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.script.dto.CreateScriptRequest
-import com.wutsi.koki.script.dto.CreateScriptResponse
 import com.wutsi.koki.script.dto.Language
-import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class CreateScriptControllerTest : AbstractPageControllerTest() {
-    @BeforeEach
-    override fun setUp() {
-        super.setUp()
-
-        doReturn(CreateScriptResponse("1111")).whenever(kokiScripts).create(any())
-    }
-
     @Test
     fun create() {
         navigateTo("/settings/scripts/create")

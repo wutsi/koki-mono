@@ -21,7 +21,7 @@ class ActivitySendInstanceControllerTest : AbstractPageControllerTest() {
                     activity = activityInstance.activity.copy(type = ActivityType.SEND)
                 )
             )
-        ).whenever(kokiWorkflowInstance)
+        ).whenever(kokiWorkflowInstances)
             .activity(activityInstance.id)
     }
 

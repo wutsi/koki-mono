@@ -12,6 +12,9 @@ import com.wutsi.koki.LogFixtures.logEntry
 import com.wutsi.koki.MessageFixtures
 import com.wutsi.koki.RoleFixtures.roles
 import com.wutsi.koki.ScriptFixtures
+import com.wutsi.koki.ServiceFixtures.SERVICE_ID
+import com.wutsi.koki.ServiceFixtures.service
+import com.wutsi.koki.ServiceFixtures.services
 import com.wutsi.koki.UserFixtures.user
 import com.wutsi.koki.UserFixtures.users
 import com.wutsi.koki.WorkflowFixtures.activities
@@ -27,10 +30,12 @@ import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.form.dto.GetFormResponse
+import com.wutsi.koki.form.dto.SaveFormResponse
 import com.wutsi.koki.form.dto.SearchFormResponse
 import com.wutsi.koki.message.dto.GetMessageResponse
 import com.wutsi.koki.message.dto.SearchMessageResponse
 import com.wutsi.koki.portal.service.AccessTokenHolder
+import com.wutsi.koki.script.dto.CreateScriptResponse
 import com.wutsi.koki.script.dto.GetScriptResponse
 import com.wutsi.koki.script.dto.RunScriptResponse
 import com.wutsi.koki.script.dto.SearchScriptResponse
@@ -40,12 +45,16 @@ import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiLogs
 import com.wutsi.koki.sdk.KokiMessages
 import com.wutsi.koki.sdk.KokiScripts
-import com.wutsi.koki.sdk.KokiTenant
-import com.wutsi.koki.sdk.KokiUser
-import com.wutsi.koki.sdk.KokiWorkflow
-import com.wutsi.koki.sdk.KokiWorkflowInstance
+import com.wutsi.koki.sdk.KokiServices
+import com.wutsi.koki.sdk.KokiTenants
+import com.wutsi.koki.sdk.KokiUsers
+import com.wutsi.koki.sdk.KokiWorkflowInstances
+import com.wutsi.koki.sdk.KokiWorkflows
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
+import com.wutsi.koki.service.dto.CreateServiceResponse
+import com.wutsi.koki.service.dto.GetServiceResponse
+import com.wutsi.koki.service.dto.SearchServiceResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
@@ -115,16 +124,19 @@ abstract class AbstractPageControllerTest {
     protected lateinit var kokiScripts: KokiScripts
 
     @MockitoBean
-    protected lateinit var kokiTenant: KokiTenant
+    protected lateinit var kokiServices: KokiServices
 
     @MockitoBean
-    protected lateinit var kokiUser: KokiUser
+    protected lateinit var kokiTenants: KokiTenants
 
     @MockitoBean
-    protected lateinit var kokiWorkflow: KokiWorkflow
+    protected lateinit var kokiUsers: KokiUsers
 
     @MockitoBean
-    protected lateinit var kokiWorkflowInstance: KokiWorkflowInstance
+    protected lateinit var kokiWorkflows: KokiWorkflows
+
+    @MockitoBean
+    protected lateinit var kokiWorkflowInstances: KokiWorkflowInstances
 
     @MockitoBean
     protected lateinit var accessTokenHolder: AccessTokenHolder
@@ -182,15 +194,16 @@ abstract class AbstractPageControllerTest {
         setupForms()
         setupLogs()
         setupScripts()
+        setupServices()
         setupMessages()
         setupWorkflows()
         setupUsers()
 
-        doReturn(SearchConfigurationResponse()).whenever(kokiTenant).configurations(anyOrNull(), anyOrNull())
+        doReturn(SearchConfigurationResponse()).whenever(kokiTenants).configurations(anyOrNull(), anyOrNull())
     }
 
     private fun setupRoles() {
-        doReturn(SearchRoleResponse(roles)).whenever(kokiUser)
+        doReturn(SearchRoleResponse(roles)).whenever(kokiUsers)
             .roles(anyOrNull(), anyOrNull(), anyOrNull())
     }
 
@@ -206,6 +219,8 @@ abstract class AbstractPageControllerTest {
     }
 
     private fun setupForms() {
+        doReturn(SaveFormResponse(FormFixtures.FORM_ID)).whenever(kokiForms).create(any())
+
         doReturn(GetFormResponse(FormFixtures.form)).whenever(kokiForms).form(any())
 
         doReturn(SearchFormResponse(FormFixtures.forms)).whenever(kokiForms)
@@ -220,6 +235,8 @@ abstract class AbstractPageControllerTest {
     }
 
     private fun setupScripts() {
+        doReturn(CreateScriptResponse(ScriptFixtures.SCRIPT_ID)).whenever(kokiScripts).create(any())
+
         doReturn(GetScriptResponse(ScriptFixtures.script)).whenever(kokiScripts).script(any())
 
         doReturn(SearchScriptResponse(ScriptFixtures.scripts)).whenever(kokiScripts)
@@ -247,6 +264,23 @@ abstract class AbstractPageControllerTest {
         ).whenever(kokiScripts).run(any())
     }
 
+    private fun setupServices() {
+        doReturn(CreateServiceResponse(SERVICE_ID)).whenever(kokiServices).create(any())
+
+        doReturn(GetServiceResponse(service)).whenever(kokiServices).service(any())
+
+        doReturn(SearchServiceResponse(services)).whenever(kokiServices)
+            .services(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
+    }
+
     private fun setupMessages() {
         doReturn(GetMessageResponse(MessageFixtures.message)).whenever(kokiMessages).message(any())
 
@@ -263,14 +297,14 @@ abstract class AbstractPageControllerTest {
     }
 
     private fun setupWorkflows() {
-        doReturn(workflowPictureUrl).whenever(kokiWorkflow).imageUrl(any())
-        doReturn(workflowPictureUrl).whenever(kokiWorkflowInstance).imageUrl(any())
+        doReturn(workflowPictureUrl).whenever(kokiWorkflows).imageUrl(any())
+        doReturn(workflowPictureUrl).whenever(kokiWorkflowInstances).imageUrl(any())
 
         val json = getResourceAsString("/workflow-001.json")
-        doReturn(json).whenever(kokiWorkflow).json(any())
+        doReturn(json).whenever(kokiWorkflows).json(any())
 
-        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow).workflow(anyOrNull())
-        doReturn(SearchWorkflowResponse(workflows)).whenever(kokiWorkflow)
+        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflows).workflow(anyOrNull())
+        doReturn(SearchWorkflowResponse(workflows)).whenever(kokiWorkflows)
             .workflows(
                 anyOrNull(),
                 anyOrNull(),
@@ -283,8 +317,10 @@ abstract class AbstractPageControllerTest {
                 anyOrNull(),
             )
 
-        doReturn(SearchActivityResponse(activities)).whenever(kokiWorkflow)
+        doReturn(SearchActivityResponse(activities)).whenever(kokiWorkflows)
             .activities(
+                anyOrNull(),
+                anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -296,8 +332,8 @@ abstract class AbstractPageControllerTest {
                 anyOrNull(),
             )
 
-        doReturn(GetWorkflowInstanceResponse(workflowInstance)).whenever(kokiWorkflowInstance).workflow(any())
-        doReturn(SearchWorkflowInstanceResponse(workflowInstances)).whenever(kokiWorkflowInstance)
+        doReturn(GetWorkflowInstanceResponse(workflowInstance)).whenever(kokiWorkflowInstances).workflow(any())
+        doReturn(SearchWorkflowInstanceResponse(workflowInstances)).whenever(kokiWorkflowInstances)
             .workflows(
                 anyOrNull(),
                 anyOrNull(),
@@ -311,9 +347,9 @@ abstract class AbstractPageControllerTest {
                 anyOrNull()
             )
 
-        doReturn(GetActivityInstanceResponse(activityInstance)).whenever(kokiWorkflowInstance)
+        doReturn(GetActivityInstanceResponse(activityInstance)).whenever(kokiWorkflowInstances)
             .activity(activityInstance.id)
-        doReturn(SearchActivityInstanceResponse(activityInstances)).whenever(kokiWorkflowInstance)
+        doReturn(SearchActivityInstanceResponse(activityInstances)).whenever(kokiWorkflowInstances)
             .activities(
                 anyOrNull(),
                 anyOrNull(),
@@ -330,8 +366,8 @@ abstract class AbstractPageControllerTest {
     }
 
     protected fun setupUsers() {
-        doReturn(GetUserResponse(user)).whenever(kokiUser).user(USER_ID)
-        doReturn(SearchUserResponse(users)).whenever(kokiUser)
+        doReturn(GetUserResponse(user)).whenever(kokiUsers).user(USER_ID)
+        doReturn(SearchUserResponse(users)).whenever(kokiUsers)
             .users(
                 anyOrNull(),
                 anyOrNull(),

@@ -3,12 +3,12 @@ package com.wutsi.koki.portal.service
 import com.wutsi.koki.portal.mapper.UserMapper
 import com.wutsi.koki.portal.model.RoleModel
 import com.wutsi.koki.portal.model.UserModel
-import com.wutsi.koki.sdk.KokiUser
+import com.wutsi.koki.sdk.KokiUsers
 import org.springframework.stereotype.Service
 
 @Service
 class UserService(
-    private val koki: KokiUser,
+    private val koki: KokiUsers,
     private val mapper: UserMapper,
 ) {
     fun user(id: Long): UserModel {

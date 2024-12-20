@@ -7,10 +7,11 @@ import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiLogs
 import com.wutsi.koki.sdk.KokiMessages
 import com.wutsi.koki.sdk.KokiScripts
-import com.wutsi.koki.sdk.KokiTenant
-import com.wutsi.koki.sdk.KokiUser
-import com.wutsi.koki.sdk.KokiWorkflow
-import com.wutsi.koki.sdk.KokiWorkflowInstance
+import com.wutsi.koki.sdk.KokiServices
+import com.wutsi.koki.sdk.KokiTenants
+import com.wutsi.koki.sdk.KokiUsers
+import com.wutsi.koki.sdk.KokiWorkflowInstances
+import com.wutsi.koki.sdk.KokiWorkflows
 import com.wutsi.koki.sdk.TenantProvider
 import com.wutsi.koki.sdk.URLBuilder
 import org.springframework.beans.factory.annotation.Value
@@ -62,22 +63,27 @@ class KokiSDKConfiguration(
     }
 
     @Bean
-    fun kokiTenant(): KokiTenant {
-        return KokiTenant(urlBuilder(), rest)
+    fun kokiServices(): KokiServices {
+        return KokiServices(urlBuilder(), rest)
     }
 
     @Bean
-    fun kokiUser(): KokiUser {
-        return KokiUser(urlBuilder(), rest)
+    fun kokiTenant(): KokiTenants {
+        return KokiTenants(urlBuilder(), rest)
     }
 
     @Bean
-    fun kokiWorkflow(): KokiWorkflow {
-        return KokiWorkflow(urlBuilder(), rest, tenantProvider, objectMapper)
+    fun kokiUser(): KokiUsers {
+        return KokiUsers(urlBuilder(), rest)
     }
 
     @Bean
-    fun kokiWorkflowInstance(): KokiWorkflowInstance {
-        return KokiWorkflowInstance(urlBuilder(), rest, tenantProvider)
+    fun kokiWorkflow(): KokiWorkflows {
+        return KokiWorkflows(urlBuilder(), rest, tenantProvider, objectMapper)
+    }
+
+    @Bean
+    fun kokiWorkflowInstance(): KokiWorkflowInstances {
+        return KokiWorkflowInstances(urlBuilder(), rest, tenantProvider)
     }
 }

@@ -1,37 +1,35 @@
 package com.wutsi.koki.sdk
 
-import com.wutsi.koki.script.dto.CreateScriptRequest
-import com.wutsi.koki.script.dto.CreateScriptResponse
-import com.wutsi.koki.script.dto.GetScriptResponse
-import com.wutsi.koki.script.dto.RunScriptRequest
-import com.wutsi.koki.script.dto.RunScriptResponse
-import com.wutsi.koki.script.dto.ScriptSortBy
-import com.wutsi.koki.script.dto.SearchScriptResponse
-import com.wutsi.koki.script.dto.UpdateScriptRequest
+import com.wutsi.koki.service.dto.CreateServiceRequest
+import com.wutsi.koki.service.dto.CreateServiceResponse
+import com.wutsi.koki.service.dto.GetServiceResponse
+import com.wutsi.koki.service.dto.SearchServiceResponse
+import com.wutsi.koki.service.dto.ServiceSortBy
+import com.wutsi.koki.service.dto.UpdateServiceRequest
 import org.springframework.web.client.RestTemplate
 
-class KokiScripts(
+class KokiServices(
     private val urlBuilder: URLBuilder,
     private val rest: RestTemplate,
 ) {
     companion object {
-        private const val PATH_PREFIX = "/v1/scripts"
+        private const val PATH_PREFIX = "/v1/services"
     }
 
-    fun script(id: String): GetScriptResponse {
+    fun service(id: String): GetServiceResponse {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetScriptResponse::class.java).body
+        return rest.getForEntity(url, GetServiceResponse::class.java).body
     }
 
-    fun scripts(
+    fun services(
         ids: List<String>,
         names: List<String>,
         active: Boolean?,
         limit: Int,
         offset: Int,
-        sortBy: ScriptSortBy?,
+        sortBy: ServiceSortBy?,
         ascending: Boolean,
-    ): SearchScriptResponse {
+    ): SearchServiceResponse {
         val url = urlBuilder.build(
             PATH_PREFIX,
             mapOf(
@@ -44,7 +42,7 @@ class KokiScripts(
                 "asc" to ascending
             )
         )
-        return rest.getForEntity(url, SearchScriptResponse::class.java).body
+        return rest.getForEntity(url, SearchServiceResponse::class.java).body
     }
 
     fun delete(id: String) {
@@ -52,18 +50,13 @@ class KokiScripts(
         rest.delete(url)
     }
 
-    fun create(request: CreateScriptRequest): CreateScriptResponse {
+    fun create(request: CreateServiceRequest): CreateServiceResponse {
         val url = urlBuilder.build(PATH_PREFIX)
-        return rest.postForEntity(url, request, CreateScriptResponse::class.java).body!!
+        return rest.postForEntity(url, request, CreateServiceResponse::class.java).body!!
     }
 
-    fun update(id: String, request: UpdateScriptRequest) {
+    fun update(id: String, request: UpdateServiceRequest) {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
         rest.postForEntity(url, request, Any::class.java)
-    }
-
-    fun run(request: RunScriptRequest): RunScriptResponse {
-        val url = urlBuilder.build("$PATH_PREFIX/run")
-        return rest.postForEntity(url, request, RunScriptResponse::class.java).body
     }
 }

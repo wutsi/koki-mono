@@ -5,7 +5,7 @@ import com.wutsi.koki.tenant.dto.SearchRoleResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
 import org.springframework.web.client.RestTemplate
 
-class KokiUser(
+class KokiUsers(
     private val urlBuilder: URLBuilder,
     private val rest: RestTemplate,
 ) {

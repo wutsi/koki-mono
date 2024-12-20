@@ -60,6 +60,8 @@
         "title": "System perform the payment",
         "type": "SERVICE",
         "service": "SVR-001",
+        "path": "/examples/payments",
+        "method": "POST",
         "input": {
           "amount": "{{reimbursement_amount}}",
           "employee": "{{employee_name}}",
@@ -67,7 +69,7 @@
         }
       },
       {
-        "name": "wait_payment",
+        "name": "receive_payment",
         "title": "Waiting for payment to be complete",
         "type": "RECEIVE",
         "event": "payment-successful",
@@ -108,10 +110,10 @@
       },
       {
         "from": "process_payment",
-        "to": "wait_payment"
+        "to": "receive_payment"
       },
       {
-        "from": "wait_payment",
+        "from": "receive_payment",
         "to": "end"
       },
       {

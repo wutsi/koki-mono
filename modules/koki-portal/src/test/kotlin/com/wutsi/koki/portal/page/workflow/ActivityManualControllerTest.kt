@@ -28,7 +28,7 @@ class ActivityManualControllerTest : AbstractPageControllerTest() {
                     activity = activityInstance.activity.copy(type = ActivityType.MANUAL)
                 )
             )
-        ).whenever(kokiWorkflowInstance)
+        ).whenever(kokiWorkflowInstances)
             .activity(activityInstance.id)
     }
 
@@ -44,7 +44,7 @@ class ActivityManualControllerTest : AbstractPageControllerTest() {
         val alert = driver.switchTo().alert()
         alert.accept()
         driver.switchTo().parentFrame()
-        verify(kokiWorkflowInstance).complete(activityInstance.id, CompleteActivityInstanceRequest())
+        verify(kokiWorkflowInstances).complete(activityInstance.id, CompleteActivityInstanceRequest())
 
         assertCurrentPageIs(PageName.WORKFLOW_ACTIVITY_COMPLETED)
 
@@ -64,7 +64,7 @@ class ActivityManualControllerTest : AbstractPageControllerTest() {
         val alert = driver.switchTo().alert()
         alert.dismiss()
 
-        verify(kokiWorkflowInstance, never()).complete(any(), any())
+        verify(kokiWorkflowInstances, never()).complete(any(), any())
 
         assertCurrentPageIs(PageName.WORKFLOW_ACTIVITY)
         assertElementNotPresent(".alert-danger")
@@ -74,7 +74,7 @@ class ActivityManualControllerTest : AbstractPageControllerTest() {
     fun `show error`() {
         // GIVEN
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.WORKFLOW_INSTANCE_STATUS_ERROR)
-        doThrow(ex).whenever(kokiWorkflowInstance).complete(any(), any())
+        doThrow(ex).whenever(kokiWorkflowInstances).complete(any(), any())
 
         // WHEN
         navigateTo("/workflows/activities/${activityInstance.id}")
@@ -94,7 +94,7 @@ class ActivityManualControllerTest : AbstractPageControllerTest() {
     fun `toolbar not available when activity not running`() {
         // GIVEN
         val instance = activityInstance.copy(status = WorkflowStatus.NEW)
-        doReturn(GetActivityInstanceResponse(instance)).whenever(kokiWorkflowInstance)
+        doReturn(GetActivityInstanceResponse(instance)).whenever(kokiWorkflowInstances)
             .activity(activityInstance.id)
 
         // WHEN
@@ -108,7 +108,7 @@ class ActivityManualControllerTest : AbstractPageControllerTest() {
     fun `toolbar not available for another assignee`() {
         // GIVEN
         val instance = activityInstance.copy(assigneeUserId = 55L)
-        doReturn(GetActivityInstanceResponse(instance)).whenever(kokiWorkflowInstance)
+        doReturn(GetActivityInstanceResponse(instance)).whenever(kokiWorkflowInstances)
             .activity(activityInstance.id)
 
         // WHEN

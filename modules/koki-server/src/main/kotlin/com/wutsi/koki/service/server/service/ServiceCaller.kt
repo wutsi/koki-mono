@@ -33,11 +33,11 @@ class ServiceCaller(
             URI(url),
             method,
             entity,
-            Map::class.java
+            Any::class.java
         )
         return ServiceResponse(
             statusCode = response.statusCode,
-            body = response.body as Map<String, Any>?
+            body = if (response.body is Map<*, *>) response.body as Map<String, Any>? else emptyMap<String, Any>()
         )
     }
 

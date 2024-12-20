@@ -21,6 +21,7 @@ import com.wutsi.koki.tenant.server.domain.UserEntity
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import com.wutsi.koki.tenant.server.service.UserService
 import com.wutsi.koki.workflow.dto.ActivityType
+import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
@@ -89,7 +90,8 @@ class SendRunnerTest {
         tenantId = tenantId,
         workflowInstanceId = "1111",
         activityId = activity.id!!,
-        assigneeId = user.id!!
+        assigneeId = user.id!!,
+        status = WorkflowStatus.RUNNING,
     )
     val workflowInstance = WorkflowInstanceEntity(
         id = activityInstance.workflowInstanceId,
@@ -145,6 +147,14 @@ class SendRunnerTest {
         assertThrows<NoAssigneeException> {
             executor.run(activityInstance.copy(assigneeId = null), engine)
         }
+
+        verify(messagingService, never()).send(any())
+        verify(engine, never()).done(any(), any(), any())
+    }
+
+    @Test
+    fun `not running`() {
+        executor.run(activityInstance.copy(status = WorkflowStatus.DONE), engine)
 
         verify(messagingService, never()).send(any())
         verify(engine, never()).done(any(), any(), any())

@@ -9,22 +9,9 @@
                 <th></th>
             </tr>
             <tr class="log-entry" th:each="log : ${logs}">
-                <td th:text="${log.createdAtText}">CREATED</td>
-                <td>
-                    <a th:href="${log.activityInstance.url}"
-                       th:if="${log.activityInstance}"
-                       th:text="${log.activityInstance.activity.name}"
-                    >ACTIVITY</a>
-                </td>
-                <td class="text-center">
-                    <i class="fa-xl fa-solid fa-circle-info info" th:if="${log.type.name == 'INFO'}"></i>
-                    <i class="fa-xl fa-solid fa-circle-exclamation error" th:if="${log.type.name == 'ERROR'}"></i>
-                </td>
-                <td th:text="${log.message}">MESSAGE</td>
-                <td>
-                    <a class="btn-view" target="_new" th:href="${log.url}">View</a>
-                </td>
+                <td th:replace="~{__components/log :: columns(${log})}"></td>
             </tr>
+            <tr th:replace="~{__components/log :: load-more(${moreUrl})}"></tr>
         </table>
 
         <div class="text-center empty-message" th:if="!${logs}">No Log</div>

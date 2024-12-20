@@ -80,7 +80,7 @@ class ListFileWidgetControllerTest : AbstractPageControllerTest() {
                 anyOrNull(),
             )
 
-        doReturn(SearchUserResponse(users)).whenever(kokiUser)
+        doReturn(SearchUserResponse(users)).whenever(kokiUsers)
             .users(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
     }
 

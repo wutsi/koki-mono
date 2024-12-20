@@ -15,7 +15,10 @@ function _koki_validate_form(e) {
     const valid2 = _koki_validate_all_checkbox_groups();
     const valid3 = _koki_validate_all_file();
     if (!valid1 || !valid2 || !valid3) {
+        console.log('form valid...');
         e.preventDefault();
+    } else {
+        console.log('form not valid...');
     }
 }
 
@@ -102,7 +105,7 @@ async function _koki_upload(elt) {
     const rel = elt.getAttribute("rel");
 
     const token = _koki_get_cookie("__atk");
-    if (token){
+    if (token) {
         uploadUrl = uploadUrl + '&access-token=' + token;
     }
     const data = new FormData();

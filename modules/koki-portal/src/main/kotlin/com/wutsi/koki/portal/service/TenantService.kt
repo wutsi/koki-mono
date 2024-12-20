@@ -1,13 +1,13 @@
 package com.wutsi.koki.portal.service
 
 import com.wutsi.koki.portal.page.settings.smtp.SMTPForm
-import com.wutsi.koki.sdk.KokiTenant
+import com.wutsi.koki.sdk.KokiTenants
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import org.springframework.stereotype.Service
 
 @Service
-class TenantService(private val koki: KokiTenant) {
+class TenantService(private val koki: KokiTenants) {
     fun configurations(
         names: List<String> = emptyList(),
         keyword: String? = null,

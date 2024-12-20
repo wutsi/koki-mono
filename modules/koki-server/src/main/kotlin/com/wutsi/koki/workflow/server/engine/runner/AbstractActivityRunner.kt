@@ -3,6 +3,7 @@ package com.wutsi.koki.workflow.server.service.runner
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.templating.TemplatingEngine
+import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
@@ -16,10 +17,13 @@ abstract class AbstractActivityRunner(
 
     override fun run(activityInstance: ActivityInstanceEntity, engine: WorkflowEngine) {
         logger.add("runner", this::class.simpleName)
-        logger.add("activity_instance_id", activityInstance.id)
         logger.add("workflow_instance_id", activityInstance.workflowInstanceId)
+        logger.add("activity_instance_id", activityInstance.id)
+        logger.add("workflow_instance_status", activityInstance.status)
 
-        doRun(activityInstance, engine)
+        if (activityInstance.status == WorkflowStatus.RUNNING) {
+            doRun(activityInstance, engine)
+        }
     }
 
     protected fun bindInput(
