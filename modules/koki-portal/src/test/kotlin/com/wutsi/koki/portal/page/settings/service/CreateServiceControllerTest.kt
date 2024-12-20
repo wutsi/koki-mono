@@ -139,7 +139,7 @@ class CreateServiceControllerTest : AbstractPageControllerTest() {
         input("input[name=title]", "This is the new subject")
         input("textarea[name=description]", "This is the description")
         input("input[name=baseUrl]", "https://prod.paypal.com")
-        select("select[name=authorizationType]", 3)
+        select("select[name=authorizationType]", 1)
         scrollToBottom()
         select("select[name=active]", 1)
         click("button[type=submit]")

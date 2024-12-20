@@ -39,7 +39,7 @@ class ServiceCallerTest {
 
         val response = ResponseEntity<Map<String, Any>>(body, HttpStatus.OK)
         doReturn(response).whenever(rest)
-            .exchange(any<URI>(), any<HttpMethod>(), any<HttpEntity<String>>(), eq(Map::class.java))
+            .exchange(any<URI>(), any<HttpMethod>(), any<HttpEntity<String>>(), eq(Any::class.java))
     }
 
     @Test
@@ -56,7 +56,7 @@ class ServiceCallerTest {
             eq(URI("https://api.paypal.com/v1/capture")),
             eq(HttpMethod.POST),
             entity.capture(),
-            eq(Map::class.java)
+            eq(Any::class.java)
         )
 
         assertEquals(MediaType.APPLICATION_JSON, entity.firstValue.headers.contentType)
@@ -80,7 +80,7 @@ class ServiceCallerTest {
             eq(URI("https://api.paypal.com")),
             eq(HttpMethod.GET),
             entity.capture(),
-            eq(Map::class.java)
+            eq(Any::class.java)
         )
 
         assertEquals(MediaType.APPLICATION_JSON, entity.firstValue.headers.contentType)
