@@ -9,6 +9,7 @@ data class WorkflowInstanceSummary(
     val title: String = "",
     val status: WorkflowStatus = WorkflowStatus.UNKNOWN,
     val createdAt: Date = Date(),
+    val modifiedAt: Date = Date(),
     val startAt: Date = Date(),
     val startedAt: Date? = null,
     val dueAt: Date? = null,

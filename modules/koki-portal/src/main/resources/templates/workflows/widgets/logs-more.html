@@ -1,4 +1,0 @@
-<tr class="log-entry" th:each="log : ${logs}">
-    <td th:replace="~{__components/log :: columns(${log})}"></td>
-</tr>
-<tr th:replace="~{__components/log :: load-more(${moreUrl})}"></tr>
