@@ -129,7 +129,6 @@ class EditServiceControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/services/${service.id}/edit")
 
         scrollToBottom()
-        Thread.sleep(2000)
         click("button[type=submit]")
         assertCurrentPageIs(PageName.SETTINGS_SERVICE_EDIT)
         assertElementPresent(".alert-danger")

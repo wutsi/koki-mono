@@ -17,9 +17,10 @@ class LogWidgetController(
         @RequestParam(required = false, name = "activity-instance-id") activityInstanceId: String? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
+        @RequestParam(required = false, name = "show-activity") showActivity: Boolean? = true,
         model: Model
     ): String {
-        more(workflowInstanceId, activityInstanceId, limit, offset, model)
+        more(workflowInstanceId, activityInstanceId, limit, offset, showActivity, model)
         return "workflows/widgets/logs"
     }
 
@@ -29,6 +30,7 @@ class LogWidgetController(
         @RequestParam(required = false, name = "activity-instance-id") activityInstanceId: String? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
+        @RequestParam(required = false, name = "show-activity") showActivity: Boolean? = true,
         model: Model
     ): String {
         val logs = logService.logs(
@@ -39,13 +41,15 @@ class LogWidgetController(
         )
         if (logs.isNotEmpty()) {
             model.addAttribute("logs", logs)
+            model.addAttribute("showActivity", showActivity)
 
             if (logs.size >= limit) {
                 val nextOffset = offset + limit
                 val url = listOf(
                     "/workflows/widgets/logs/more?limit=$limit&offset=$nextOffset",
                     workflowInstanceId?.let { "workflow-instance-id=$workflowInstanceId" },
-                    activityInstanceId?.let { "activity-instance-id=$activityInstanceId" }
+                    activityInstanceId?.let { "activity-instance-id=$activityInstanceId" },
+                    showActivity?.let { "show-activity=$showActivity" }
                 ).filterNotNull().joinToString(separator = "&")
                 model.addAttribute("moreUrl", url)
             }

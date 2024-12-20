@@ -3,15 +3,15 @@
         <table class="table table-striped" th:if="${logs}">
             <tr>
                 <th width="20%">Date</th>
-                <th>Activity</th>
+                <th th:if="${showActivity}">Activity</th>
                 <th width="1%"></th>
                 <th>Message</th>
                 <th></th>
             </tr>
             <tr class="log-entry" th:each="log : ${logs}">
-                <td th:replace="~{__components/log :: columns(${log})}"></td>
+                <td th:replace="~{__components/log :: columns(${log}, ${showActivity})}"></td>
             </tr>
-            <tr th:replace="~{__components/log :: load-more(${moreUrl})}"></tr>
+            <tr th:replace="~{__components/log :: load-more(${moreUrl}, ${showActivity})}"></tr>
         </table>
 
         <div class="text-center empty-message" th:if="!${logs}">No Log</div>
