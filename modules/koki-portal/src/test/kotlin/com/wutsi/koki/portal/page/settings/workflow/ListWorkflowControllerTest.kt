@@ -24,7 +24,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun empty() {
-        doReturn(SearchWorkflowResponse()).whenever(kokiWorkflow)
+        doReturn(SearchWorkflowResponse()).whenever(kokiWorkflows)
             .workflows(
                 anyOrNull(),
                 anyOrNull(),
@@ -54,7 +54,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `listview to show`() {
-        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow)
+        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflows)
             .workflow(any())
 
         navigateTo("/settings/workflows")
@@ -65,7 +65,7 @@ class ListWorkflowControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `listview to edit`() {
-        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflow)
+        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflows)
             .workflow(any())
 
         navigateTo("/settings/workflows")

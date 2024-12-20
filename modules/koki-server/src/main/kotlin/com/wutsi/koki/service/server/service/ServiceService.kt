@@ -4,8 +4,8 @@ import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
-import com.wutsi.koki.script.dto.ServiceSortBy
 import com.wutsi.koki.service.dto.CreateServiceRequest
+import com.wutsi.koki.service.dto.ServiceSortBy
 import com.wutsi.koki.service.dto.UpdateServiceRequest
 import com.wutsi.koki.service.server.dao.ServiceRepository
 import com.wutsi.koki.service.server.domain.ServiceEntity

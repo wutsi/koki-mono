@@ -2,9 +2,11 @@ package com.wutsi.koki.workflow.server.engine.runner
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.mustachejava.DefaultMustacheFactory
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.platform.logger.DefaultKVLogger
@@ -14,6 +16,7 @@ import com.wutsi.koki.script.server.domain.ScriptEntity
 import com.wutsi.koki.script.server.service.ScriptService
 import com.wutsi.koki.script.server.service.ScriptingEngine
 import com.wutsi.koki.workflow.dto.ActivityType
+import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
@@ -85,6 +88,7 @@ class ScriptRunnerTest {
         tenantId = tenantId,
         workflowInstanceId = workflowInstance.id!!,
         activityId = activity.id!!,
+        status = WorkflowStatus.RUNNING,
     )
 
     @BeforeEach
@@ -112,5 +116,12 @@ class ScriptRunnerTest {
         doReturn(activity.copy(scriptId = null)).whenever(activityService).get(activity.id!!)
 
         assertThrows<NoScriptException> { executor.run(activityInstance, engine) }
+    }
+
+    @Test
+    fun `not running`() {
+        executor.run(activityInstance.copy(status = WorkflowStatus.DONE), engine)
+
+        verify(engine, never()).done(any(), any(), any())
     }
 }

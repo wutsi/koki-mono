@@ -34,7 +34,7 @@ class FormsWidgetControllerTest : AbstractPageControllerTest() {
         val xworkflow = workflow.copy(
             activities = workflow.activities.map { activity -> activity.copy(formId = null) }
         )
-        doReturn(GetWorkflowResponse(xworkflow)).whenever(kokiWorkflow).workflow(workflow.id)
+        doReturn(GetWorkflowResponse(xworkflow)).whenever(kokiWorkflows).workflow(workflow.id)
 
         doReturn(SearchFormResponse()).whenever(kokiForms)
             .forms(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())

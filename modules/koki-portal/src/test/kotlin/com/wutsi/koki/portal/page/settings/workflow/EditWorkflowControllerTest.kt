@@ -18,7 +18,7 @@ class EditWorkflowControllerTest : AbstractPageControllerTest() {
     override fun setUp() {
         super.setUp()
 
-        doReturn(ImportWorkflowResponse(workflow.id)).whenever(kokiWorkflow).import(any(), any())
+        doReturn(ImportWorkflowResponse(workflow.id)).whenever(kokiWorkflows).import(any(), any())
     }
 
     @Test
@@ -57,7 +57,7 @@ class EditWorkflowControllerTest : AbstractPageControllerTest() {
                 "0001" to "Error 3",
             )
         )
-        doThrow(ex).whenever(kokiWorkflow).import(any(), any())
+        doThrow(ex).whenever(kokiWorkflows).import(any(), any())
 
         navigateTo("/settings/workflows/${workflow.id}/edit")
         input("textarea[name=json]", jsonContent())

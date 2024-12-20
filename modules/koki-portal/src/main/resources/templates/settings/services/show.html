@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container">
+    <h1>
+        <img align="absmiddle" height="48" src="/image/service.png" width="48"/>
+        <span th:text="${service.longTitle}">NAME</span>
+    </h1>
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/service :: service-breadcrumb(${service})}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-md-8">
+
+            <div class="widget">
+                <div class="widget-body">
+                    <div class="widget-toolbar">
+                        <a class="btn-edit btn btn-secondary"
+                           th:href="'/settings/services/' + ${service.id} + '/edit'">Edit</a>
+                        <a class="btn-delete btn btn-danger float-right"
+                           onclick="return confirm('Are you sure you want to delete the service?')"
+                           th:href="'/settings/services/' + ${service.id} + '/delete'">Delete</a>
+                    </div>
+
+                    <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+
+                    <table class="table">
+                        <tr>
+                            <td width="20%"><b>Name</b></td>
+                            <td th:text="${service.name}">NAME</td>
+                        </tr>
+                        <tr>
+                            <td width="20%"><b>Title</b></td>
+                            <td th:text="${service.title}">TITLE</td>
+                        </tr>
+                        <tr>
+                            <td><b>Description</b></td>
+                            <td th:text="${service.description}">DESCRIPTION</td>
+                        </tr>
+                        <tr>
+                            <td><b>URL</b></td>
+                            <td th:text="${service.baseUrl}">URL</td>
+                        </tr>
+                        <tr>
+                            <td><b>Authorization</b></td>
+                            <td th:text="${service.authorizationType}">AUTHORIZATION</td>
+                        </tr>
+                        <tr id="username" th:if="${service.authorizationType.name == 'BASIC'}">
+                            <td><b>Username</b></td>
+                            <td th:text="${service.username}">USERNAME</td>
+                        </tr>
+                        <tr id="password" th:if="${service.authorizationType.name == 'BASIC'}">
+                            <td><b>Password</b></td>
+                            <td>*****</td>
+                        </tr>
+                        <tr id="api-key" th:if="${service.authorizationType.name == 'API_KEY'}">
+                            <td><b>API Key</b></td>
+                            <td>*****</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <div class="widget">
+                <div class="widget-body">
+                    <table class="table table-striped">
+                        <tr>
+                            <td><b>Active</b></td>
+                            <td>
+                                <span th:if="${service.active}">Yes</span>
+                                <span th:if="!${service.active}">No</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Created</b></td>
+                            <td th:text="${service.createdAtText}">CREATED</td>
+                        </tr>
+                        <tr>
+                            <td><b>Modified</b></td>
+                            <td th:text="${service.modifiedAtText}">CREATED</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

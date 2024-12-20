@@ -3,9 +3,8 @@ package com.wutsi.koki.sdk
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.client.postForEntity
 
-class KokiTenant(
+class KokiTenants(
     private val urlBuilder: URLBuilder,
     private val rest: RestTemplate,
 ) {

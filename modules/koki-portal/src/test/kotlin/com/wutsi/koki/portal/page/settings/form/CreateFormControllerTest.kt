@@ -2,27 +2,17 @@ package com.wutsi.koki.portal.page.settings.form
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.form.dto.SaveFormRequest
-import com.wutsi.koki.form.dto.SaveFormResponse
 import com.wutsi.koki.portal.page.PageName
-import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class CreateFormControllerTest : AbstractPageControllerTest() {
-    @BeforeEach
-    override fun setUp() {
-        super.setUp()
-
-        doReturn(SaveFormResponse("1111")).whenever(kokiForms).create(any())
-    }
-
     @Test
     fun create() {
         navigateTo("/settings/forms/create")

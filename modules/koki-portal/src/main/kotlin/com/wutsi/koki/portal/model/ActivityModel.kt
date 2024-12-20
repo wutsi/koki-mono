@@ -14,6 +14,7 @@ data class ActivityModel(
     val form: FormModel? = null,
     val message: MessageModel? = null,
     val script: ScriptModel? = null,
+    val service: ServiceModel? = null,
     val inputJSON: String? = null,
     val outputJSON: String? = null,
 ) {

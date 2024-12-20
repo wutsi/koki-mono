@@ -6,6 +6,7 @@ import com.wutsi.koki.portal.model.FormModel
 import com.wutsi.koki.portal.model.MessageModel
 import com.wutsi.koki.portal.model.RoleModel
 import com.wutsi.koki.portal.model.ScriptModel
+import com.wutsi.koki.portal.model.ServiceModel
 import com.wutsi.koki.portal.model.WorkflowModel
 import com.wutsi.koki.workflow.dto.Activity
 import com.wutsi.koki.workflow.dto.ActivitySummary
@@ -38,6 +39,7 @@ class WorkflowMapper(private val objectMapper: ObjectMapper) {
         forms: List<FormModel>,
         messages: List<MessageModel>,
         scripts: List<ScriptModel>,
+        services: List<ServiceModel>,
         imageUrl: String
     ): WorkflowModel {
         val fmt = SimpleDateFormat("yyyy/MM/dd HH:mm")
@@ -45,6 +47,7 @@ class WorkflowMapper(private val objectMapper: ObjectMapper) {
         val formMap = forms.associateBy { form -> form.id }
         val messageMap = messages.associateBy { message -> message.id }
         val scriptMap = scripts.associateBy { script -> script.id }
+        val serviceMap = services.associateBy { service -> service.id }
         return WorkflowModel(
             id = entity.id,
             name = entity.name,
@@ -60,7 +63,8 @@ class WorkflowMapper(private val objectMapper: ObjectMapper) {
                 val form = activity.formId?.let { id -> formMap[id] }
                 val message = activity.messageId?.let { id -> messageMap[id] }
                 val script = activity.scriptId?.let { id -> scriptMap[id] }
-                toActivityModel(activity, role, form, message, script)
+                val service = activity.serviceId?.let { id -> serviceMap[id] }
+                toActivityModel(activity, role, form, message, script, service)
             },
             roles = roles,
             parameters = entity.parameters,
@@ -77,6 +81,7 @@ class WorkflowMapper(private val objectMapper: ObjectMapper) {
         form: FormModel?,
         message: MessageModel?,
         script: ScriptModel?,
+        service: ServiceModel?,
     ): ActivityModel {
         return ActivityModel(
             id = entity.id,
@@ -90,6 +95,7 @@ class WorkflowMapper(private val objectMapper: ObjectMapper) {
             form = form,
             message = message,
             script = script,
+            service = service,
             inputJSON = toJSON(entity.input),
             outputJSON = toJSON(entity.output)
         )

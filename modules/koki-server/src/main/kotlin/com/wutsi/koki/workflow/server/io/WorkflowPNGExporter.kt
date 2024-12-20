@@ -60,7 +60,7 @@ class WorkflowPNGExporter {
         doneActivityNames: List<String>,
     ) {
         val adapter = JGraphXAdapter<String, DefaultEdge>(graph)
-        val layout = mxHierarchicalLayout(adapter, SwingConstants.SOUTH)
+        val layout = mxHierarchicalLayout(adapter, SwingConstants.NORTH)
         layout.execute(adapter.getDefaultParent())
 
         // Remove text from flows

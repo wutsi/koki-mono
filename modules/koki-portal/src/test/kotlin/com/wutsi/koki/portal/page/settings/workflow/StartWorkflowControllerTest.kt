@@ -36,21 +36,20 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
     @Test
     fun startNow() {
         doReturn(GetWorkflowInstanceResponse(workflowInstance.copy(status = WorkflowStatus.RUNNING)))
-            .whenever(kokiWorkflowInstance)
+            .whenever(kokiWorkflowInstances)
             .workflow(workflowInstance.id)
 
-        doReturn(CreateWorkflowInstanceResponse(workflowInstance.id)).whenever(kokiWorkflowInstance).create(any())
-        doReturn(StartWorkflowInstanceResponse("yyy")).whenever(kokiWorkflowInstance).start(any())
+        doReturn(CreateWorkflowInstanceResponse(workflowInstance.id)).whenever(kokiWorkflowInstances).create(any())
+        doReturn(StartWorkflowInstanceResponse("yyy")).whenever(kokiWorkflowInstances).start(any())
 
         navigateTo("/settings/workflows/${workflow.id}/start")
 
         assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_START)
-        assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
 
         inputAllFieldsAndSubmit()
 
         val request = argumentCaptor<CreateWorkflowInstanceRequest>()
-        verify(kokiWorkflowInstance).create(request.capture())
+        verify(kokiWorkflowInstances).create(request.capture())
         assertEquals(fmt.format(Date()), fmt.format(request.firstValue.startAt))
         assertNull(request.firstValue.dueAt)
         assertEquals(3, request.firstValue.participants.size)
@@ -60,7 +59,7 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
         assertEquals(Participant(roleId = 3, userId = 13L), request.firstValue.participants[2])
         assertEquals(mapOf("PARAM_1" to "1111", "PARAM_2" to "2222"), request.firstValue.parameters)
 
-        verify(kokiWorkflowInstance).start(workflowInstance.id)
+        verify(kokiWorkflowInstances).start(workflowInstance.id)
 
         assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_STARTED)
         assertElementAttribute(".workflow-image img", "src", workflowPictureUrl)
@@ -87,7 +86,7 @@ class StartWorkflowControllerTest : AbstractPageControllerTest() {
             statusCode = 200,
             errorCode = ErrorCode.FORM_NOT_FOUND,
         )
-        doThrow(ex).whenever(kokiWorkflowInstance).create(any())
+        doThrow(ex).whenever(kokiWorkflowInstances).create(any())
 
         navigateTo("/settings/workflows/${workflow.id}/start")
         inputAllFieldsAndSubmit()

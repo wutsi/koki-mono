@@ -53,4 +53,11 @@ class SettingsControllerTest : AbstractPageControllerTest() {
         click(".btn-script")
         assertCurrentPageIs(PageName.SETTINGS_SCRIPT_LIST)
     }
+
+    @Test
+    fun services() {
+        navigateTo("/settings")
+        click(".btn-service")
+        assertCurrentPageIs(PageName.SETTINGS_SERVICE_LIST)
+    }
 }

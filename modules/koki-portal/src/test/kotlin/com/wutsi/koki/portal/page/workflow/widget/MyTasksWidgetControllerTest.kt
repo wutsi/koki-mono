@@ -19,7 +19,7 @@ class MyTasksWidgetControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun empty() {
-        doReturn(SearchActivityInstanceResponse()).whenever(kokiWorkflowInstance)
+        doReturn(SearchActivityInstanceResponse()).whenever(kokiWorkflowInstances)
             .activities(
                 anyOrNull(),
                 anyOrNull(),

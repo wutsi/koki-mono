@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<tr class="log-entry" th:fragment="columns(log, showActivity)" th:remove="tag">
+    <td th:text="${log.createdAtText}">CREATED</td>
+    <td th:if="${showActivity}">
+        <a th:href="${log.activityInstance.url}"
+           th:if="${log.activityInstance}"
+           th:text="${log.activityInstance.activity.name}"
+        >ACTIVITY</a>
+    </td>
+    <td class="text-center">
+        <i class="fa-xl fa-solid fa-circle-info info" th:if="${log.type.name == 'INFO'}"></i>
+        <i class="fa-xl fa-solid fa-circle-exclamation error" th:if="${log.type.name == 'ERROR'}"></i>
+    </td>
+    <td th:text="${log.message}">MESSAGE</td>
+    <td>
+        <a class="btn-view" target="_new" th:href="${log.url}">View</a>
+    </td>
+</tr>
+
+<tr id="log-load-more" th:fragment="load-more(moreUrl, showActivity)" th:if="${moreUrl}">
+    <td class="text-center" th:colspan="${showActivity} ? 5 : 4">
+        <a href="javascript: load_more()" th:data-url="${moreUrl}">Load more...</a>
+    </td>
+</tr>
+
+<script th:fragment="load-more-script()">
+    function load_more() {
+        const container = document.querySelector('#log-load-more');
+        const button = container.querySelector('a');
+        const url = button.getAttribute('data-url');
+
+        console.log('loading...');
+        container.innerHTML = '<i class="fas fa-spinner fa-spin">';
+        fetch(url).then(function (response) {
+            response.text().then(function (html) {
+                $('#log-load-more').replaceWith(html);
+            });
+        });
+    }
+</script>
+
+</body>

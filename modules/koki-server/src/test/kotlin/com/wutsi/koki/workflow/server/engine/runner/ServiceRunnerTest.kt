@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.platform.logger.DefaultKVLogger
@@ -17,6 +18,7 @@ import com.wutsi.koki.service.server.service.ServiceCaller
 import com.wutsi.koki.service.server.service.ServiceResponse
 import com.wutsi.koki.service.server.service.ServiceService
 import com.wutsi.koki.workflow.dto.ActivityType
+import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
@@ -84,6 +86,7 @@ class ServiceRunnerTest {
         tenantId = tenantId,
         workflowInstanceId = workflowInstance.id!!,
         activityId = activity.id!!,
+        status = WorkflowStatus.RUNNING,
     )
 
     @BeforeEach
@@ -130,5 +133,13 @@ class ServiceRunnerTest {
         doReturn(activity.copy(serviceId = null)).whenever(activityService).get(activity.id!!)
 
         assertThrows<NoServiceException> { executor.run(activityInstance, engine) }
+    }
+
+    @Test
+    fun `not running`() {
+        executor.run(activityInstance.copy(status = WorkflowStatus.DONE), engine)
+
+        verify(serviceCaller, never()).call(any(), any(), any(), any(), any())
+        verify(engine, never()).done(any(), any(), any())
     }
 }

@@ -29,7 +29,7 @@ class ShowSMTPControllerTest : AbstractPageControllerTest() {
             SearchConfigurationResponse(
                 config.map { cfg -> Configuration(name = cfg.key, value = cfg.value) }
             )
-        ).whenever(kokiTenant).configurations(anyOrNull(), anyOrNull())
+        ).whenever(kokiTenants).configurations(anyOrNull(), anyOrNull())
     }
 
     @Test
@@ -43,7 +43,7 @@ class ShowSMTPControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `not configured`() {
-        doReturn(SearchConfigurationResponse()).whenever(kokiTenant).configurations(anyOrNull(), anyOrNull())
+        doReturn(SearchConfigurationResponse()).whenever(kokiTenants).configurations(anyOrNull(), anyOrNull())
 
         navigateTo("/settings/smtp")
         assertCurrentPageIs(PageName.SETTINGS_SMTP)

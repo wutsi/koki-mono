@@ -6,7 +6,7 @@ import com.wutsi.koki.portal.model.ActivityInstanceModel
 import com.wutsi.koki.portal.model.RoleModel
 import com.wutsi.koki.portal.model.WorkflowInstanceModel
 import com.wutsi.koki.portal.page.settings.workflow.StartWorkflowForm
-import com.wutsi.koki.sdk.KokiWorkflowInstance
+import com.wutsi.koki.sdk.KokiWorkflowInstances
 import com.wutsi.koki.workflow.dto.Activity
 import com.wutsi.koki.workflow.dto.ApprovalStatus
 import com.wutsi.koki.workflow.dto.CompleteActivityInstanceRequest
@@ -19,7 +19,7 @@ import kotlin.collections.flatMap
 
 @Service
 class WorkflowInstanceService(
-    private val koki: KokiWorkflowInstance,
+    private val koki: KokiWorkflowInstances,
     private val workflowInstanceMapper: WorkflowInstanceMapper,
     private val workflowMapper: WorkflowMapper,
     private val workflowService: WorkflowService,
@@ -27,6 +27,7 @@ class WorkflowInstanceService(
     private val formService: FormService,
     private val messageService: MessageService,
     private val scriptService: ScriptService,
+    private val serviceService: ServiceService,
     private val currentUserHolder: CurrentUserHolder,
 ) {
     fun create(form: StartWorkflowForm): String {
@@ -167,6 +168,7 @@ class WorkflowInstanceService(
         }
         val message = activity.messageId?.let { id -> messageService.message(id) }
         val script = activity.scriptId?.let { id -> scriptService.script(id) }
+        val service = activity.serviceId?.let { id -> serviceService.service(id) }
 
         val workflow = workflowService.workflows(ids = listOf(activity.workflowId), limit = 1).first()
         val workflowInstance = workflowInstanceMapper.toWorkflowInstanceModel(
@@ -187,6 +189,7 @@ class WorkflowInstanceService(
                 form = form,
                 message = message,
                 script = script,
+                service = service,
             ),
         )
     }

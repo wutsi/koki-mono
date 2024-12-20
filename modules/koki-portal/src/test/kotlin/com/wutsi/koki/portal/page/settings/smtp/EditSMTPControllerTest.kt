@@ -43,7 +43,7 @@ class EditSMTPControllerTest : AbstractPageControllerTest() {
             SearchConfigurationResponse(
                 config.map { cfg -> Configuration(name = cfg.key, value = cfg.value) }
             )
-        ).whenever(kokiTenant).configurations(anyOrNull(), anyOrNull())
+        ).whenever(kokiTenants).configurations(anyOrNull(), anyOrNull())
     }
 
     @Test
@@ -57,7 +57,7 @@ class EditSMTPControllerTest : AbstractPageControllerTest() {
         verify(validator).validate("10.1.12.244", 555, "ray")
 
         val request = argumentCaptor<SaveConfigurationRequest>()
-        verify(kokiTenant).save(request.capture())
+        verify(kokiTenants).save(request.capture())
 
         assertEquals("10.1.12.244", request.firstValue.values[ConfigurationName.SMTP_HOST])
         assertEquals("555", request.firstValue.values[ConfigurationName.SMTP_PORT])
@@ -92,7 +92,7 @@ class EditSMTPControllerTest : AbstractPageControllerTest() {
         inputFields()
         assertElementPresent(".alert-danger")
 
-        verify(kokiTenant, never()).save(any())
+        verify(kokiTenants, never()).save(any())
         assertCurrentPageIs(PageName.SETTINGS_SMTP_EDIT)
     }
 
@@ -107,7 +107,7 @@ class EditSMTPControllerTest : AbstractPageControllerTest() {
         inputFields()
         assertElementPresent(".alert-danger")
 
-        verify(kokiTenant, never()).save(any())
+        verify(kokiTenants, never()).save(any())
         assertCurrentPageIs(PageName.SETTINGS_SMTP_EDIT)
     }
 

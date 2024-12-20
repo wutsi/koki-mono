@@ -24,14 +24,14 @@ class TaskQueueWidgetControllerTest : AbstractPageControllerTest() {
         click(".btn-assign")
 
         val request = argumentCaptor<SetActivityInstanceAssigneeRequest>()
-        verify(kokiWorkflowInstance).assignee(request.capture())
+        verify(kokiWorkflowInstances).assignee(request.capture())
         assertEquals(USER_ID, request.firstValue.userId)
         assertEquals(listOf(activityInstances[0].id), request.firstValue.activityInstanceIds)
     }
 
     @Test
     fun `no unassigned activity instance`() {
-        doReturn(SearchActivityInstanceResponse()).whenever(kokiWorkflowInstance)
+        doReturn(SearchActivityInstanceResponse()).whenever(kokiWorkflowInstances)
             .activities(
                 anyOrNull(),
                 anyOrNull(),
@@ -52,8 +52,10 @@ class TaskQueueWidgetControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `no activity associated with my role`() {
-        doReturn(SearchActivityResponse()).whenever(kokiWorkflow)
+        doReturn(SearchActivityResponse()).whenever(kokiWorkflows)
             .activities(
+                anyOrNull(),
+                anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),

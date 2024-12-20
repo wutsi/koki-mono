@@ -125,7 +125,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.FORM)
         click("button[type=submit]")
 
-        verify(kokiWorkflowInstance, never()).complete(any(), any())
+        verify(kokiWorkflowInstances, never()).complete(any(), any())
 
         assertElementPresent("[name=customer_name]:user-invalid")
         assertElementPresent("[name=customer_email]:user-invalid")

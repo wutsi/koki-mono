@@ -1,12 +1,14 @@
-package com.wutsi.koki.example.incident
+package com.wutsi.koki.portal.example.incident
 
-import com.wutsi.koki.sdk.KokiWorkflowInstance
+import com.wutsi.koki.sdk.KokiWorkflowInstances
 import com.wutsi.koki.workflow.dto.ReceiveExternalEventRequest
 import org.slf4j.LoggerFactory
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -15,13 +17,20 @@ import java.util.UUID
 @RestController
 @RequestMapping
 class PaymentController(
-    private val koki: KokiWorkflowInstance,
+    private val koki: KokiWorkflowInstances,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(PaymentController::class.java)
     }
 
-    @PostMapping("/payments")
+    @ResponseBody
+    @GetMapping("/examples/payments")
+    fun info(): Map<String, String> {
+        return mapOf("foo" to "bar")
+    }
+
+    @ResponseBody
+    @PostMapping("/examples/payments")
     fun pay(
         @RequestHeader(name = "X-Workflow-Instance-ID") workflowInstanceId: String,
         @RequestBody request: PaymentRequest

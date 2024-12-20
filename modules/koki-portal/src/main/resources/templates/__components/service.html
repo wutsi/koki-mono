@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="widget" th:fragment="service-breadcrumb(service)">
+    <div class="widget-body">
+        <a href="/">Home</a>
+        &gt;
+        <a href="/settings">Settings</a>
+        &gt;
+        <a href="/settings/services" th:if="${service}">Services</a>
+        <span th:if="${service}">&gt;</span>
+        <span th:if="${service}" th:text="${service.longTitle}">TITLE</span>
+        <span th:if="!${service}">Services</span>
+    </div>
+</div>
+
+<script th:fragment="service-script()">
+    function service_auth_changed() {
+        const select = document.querySelector('select[name=authorizationType]');
+        const basic = select.value === 'BASIC';
+        const apiKey = select.value === 'API_KEY';
+
+        document.querySelectorAll('.auth-basic')
+            .forEach(function (elt) {
+                elt.style.display = basic ? 'block' : 'none';
+                elt.querySelector('input').required = basic;
+            });
+        document.querySelectorAll('.auth-api-key')
+            .forEach(function (elt) {
+                elt.style.display = apiKey ? 'block' : 'none';
+                elt.querySelector('input').required = apiKey;
+            });
+    }
+
+    function service_doc_ready() {
+        document.querySelector('select[name=authorizationType]').addEventListener('change', service_auth_changed);
+        service_auth_changed();
+    }
+
+    document.addEventListener('DOMContentLoaded', service_doc_ready, false);
+</script>
+
+</body>

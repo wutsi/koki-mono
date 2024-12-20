@@ -19,7 +19,7 @@ class MyCasesWidgetControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun empty() {
-        doReturn(SearchWorkflowInstanceResponse()).whenever(kokiWorkflowInstance)
+        doReturn(SearchWorkflowInstanceResponse()).whenever(kokiWorkflowInstances)
             .workflows(
                 anyOrNull(),
                 anyOrNull(),

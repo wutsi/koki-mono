@@ -24,7 +24,7 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
     fun `edit button hidden when workflow has instances`() {
         doReturn(
             GetWorkflowResponse(workflow.copy(workflowInstanceCount = 11))
-        ).whenever(kokiWorkflow).workflow(workflow.id)
+        ).whenever(kokiWorkflows).workflow(workflow.id)
 
         navigateTo("/settings/workflows/${workflow.id}")
         assertCurrentPageIs(PageName.SETTINGS_WORKFLOW)

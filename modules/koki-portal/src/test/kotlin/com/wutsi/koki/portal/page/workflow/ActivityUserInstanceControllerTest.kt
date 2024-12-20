@@ -37,7 +37,7 @@ class ActivityUserInstanceControllerTest : AbstractPageControllerTest() {
     fun `toolbar not available when activity not running`() {
         // GIVEN
         val instance = activityInstance.copy(status = WorkflowStatus.NEW)
-        doReturn(GetActivityInstanceResponse(instance)).whenever(kokiWorkflowInstance)
+        doReturn(GetActivityInstanceResponse(instance)).whenever(kokiWorkflowInstances)
             .activity(activityInstance.id)
 
         // WHEN
@@ -51,7 +51,7 @@ class ActivityUserInstanceControllerTest : AbstractPageControllerTest() {
     fun `toolbar not available for another assignee`() {
         // GIVEN
         val instance = activityInstance.copy(assigneeUserId = 55L)
-        doReturn(GetActivityInstanceResponse(instance)).whenever(kokiWorkflowInstance)
+        doReturn(GetActivityInstanceResponse(instance)).whenever(kokiWorkflowInstances)
             .activity(activityInstance.id)
 
         // WHEN

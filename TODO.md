@@ -11,10 +11,16 @@
 - [x] Add Workflow Log
 - [x] Add support for Script activities
 - [x] Add support for Receive activities
-- [] Add support for Service activities
-- [] Add support for Business Rule activities
-- [] Cancel workflow Instance
+- [x] Add support for Service activities
+- [] Add to workflows "Service" and "Script" tabs
+- [] List workflow instances
+- [] Show file icons
+- [] Upload files
 - [] Align webapp domain name with Tenant
-- [] Create Workflow Instance on form submission
+- [] Cancel workflow Instance
 - [] Add support for S3 storage
+- [] Add support for jsonpath
+- [] Add support for external modules
+- [] Configure home page
 - [] Add tenant healthcheck to validate connectivity with all resources
+- [] Add support for Business Rule activities

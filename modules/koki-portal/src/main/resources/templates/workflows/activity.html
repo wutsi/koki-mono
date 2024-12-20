@@ -76,6 +76,13 @@
                                    th:text="${activityInstance.activity.script.longTitle}">SCRIPT</a>
                             </td>
                         </tr>
+                        <tr th:if="${activityInstance.activity.service}">
+                            <td><b>Service</b></td>
+                            <td>
+                                <a class="script" target="_new" th:href="${activityInstance.activity.service.url}"
+                                   th:text="${activityInstance.activity.service.longTitle}">SCRIPT</a>
+                            </td>
+                        </tr>
                         <tr th:if="!${activityInstance.activity.description.isEmpty()}">
                             <td><b>Description</b></td>
                             <td th:text="${activityInstance.activity.description}">DESCRIPTION</td>
@@ -120,7 +127,7 @@
                              th:data-url="'/workflows/widgets/forms?workflow-instance-id=' + ${activityInstance.workflowInstance.id}">
                         </div>
                         <div aria-labelledby="pills-process-tab" class="tab-pane fade" id="pills-logs" role="tabpanel"
-                             th:data-url="'/workflows/widgets/logs?activity-instance-id=' + ${activityInstance.id}">
+                             th:data-url="'/workflows/widgets/logs?show-activity=false&activity-instance-id=' + ${activityInstance.id}">
                         </div>
                     </div>
                 </div>
@@ -128,7 +135,7 @@
         </div>
 
         <div class="col-12 col-md-4">
-            <div class="widget">
+            <div class="widget" th:if="${activityInstance.assignee} OR ${activityInstance.approver}">
                 <div class="widget-header">
                     <h3 class="widget-title">Participants</h3>
                 </div>
