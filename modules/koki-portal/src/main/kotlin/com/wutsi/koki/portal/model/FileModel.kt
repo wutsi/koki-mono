@@ -17,6 +17,7 @@ data class FileModel(
     val createdAtText: String = "",
     val modifiedAtText: String = "",
     val createdBy: UserModel? = null,
+    val extension: String = "",
 ) {
     val url: String
         get() = "/files/$id/" + URLEncoder.encode(name, "utf-8")

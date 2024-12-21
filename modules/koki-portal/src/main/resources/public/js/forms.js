@@ -117,9 +117,15 @@ async function _koki_upload(elt) {
 
     if (response.ok || response.status === 0) {
         const json = await response.json();
+        const re = /(?:\.([^.]+))?$/;
+        const ext = re.exec(json.name)[1];
+
         document.querySelector("[name=" + rel + "]").setAttribute('value', json.id);
         document.querySelector("[data-name=" + rel + "-filename]").innerHTML =
-            "<a class='filename' href='/files/" + json.id + "/" + json.name + "'>" + json.name + "</a>" +
+            "<a class='filename' href='/files/" + json.id + "/" + json.name + "'>" +
+            "<span class='fiv-viv fiv-icon-" + ext + "'></span>&nbsp;" +
+            json.name +
+            "</a>" +
             "<button class='btn-close' type='button' rel='" + rel + "' name='" + rel + "-close'></button>";
 
         const close = document.querySelector("[name=" + rel + "-close]");
