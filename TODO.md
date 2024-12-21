@@ -12,8 +12,7 @@
 - [x] Add support for Script activities
 - [x] Add support for Receive activities
 - [x] Add support for Service activities
-- [] List workflow instances
-- [] Add to workflows "Service" and "Script" tabs
+- [x] List workflow instances
 - [] Show file icons
 - [] Upload files
 - [] Align webapp domain name with Tenant
