@@ -23,13 +23,16 @@ class WorkflowControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.WORKFLOW)
         assertElementCount("tr.activity", workflowInstance.activityInstances.size)
 
-        click("#pills-files-tab", 1000)
+        click("#pills-files-tab")
+        waitForPresenceOf(".files-widget tr.file")
         assertElementCount(".files-widget tr.file", files.size)
 
-        click("#pills-logs-tab", 1000)
+        click("#pills-logs-tab")
+        waitForPresenceOf(".logs-widget tr.log")
         assertElementCount(".logs-widget tr.log", logEntries.size)
 
-        click("#pills-process-tab", 1000)
+        click("#pills-process-tab")
+        waitForPresenceOf(".workflow-image")
         assertElementPresent(".workflow-image img")
     }
 
@@ -84,6 +87,7 @@ class WorkflowControllerTest : AbstractPageControllerTest() {
         navigateTo("/workflows/${workflowInstance.id}")
 
         click("#pills-files-tab", 1000)
+        waitForPresenceOf(".logs-widget tr.log")
         assertElementCount(".files-widget tr.file", entries.size)
 
         scrollToElement("#file-load-more a")

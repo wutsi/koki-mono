@@ -79,7 +79,9 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.interactions.Actions
+import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.Select
+import org.openqa.selenium.support.ui.WebDriverWait
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
@@ -89,6 +91,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.web.client.HttpClientErrorException
 import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
+import java.time.Duration
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
@@ -470,6 +473,14 @@ abstract class AbstractPageControllerTest {
         }
     }
 
+    protected fun waitForPresenceOf(selector: String, timeout: Long = 30, sleep: Long = 1) {
+        val wait = WebDriverWait(driver, Duration.ofSeconds(timeout), Duration.ofSeconds(sleep));
+        wait.until(
+            ExpectedConditions.presenceOfElementLocated(By.cssSelector(selector))
+        )
+    }
+
+
     protected fun assertElementAttributeNull(selector: String, name: String) {
         val value = driver.findElement(By.cssSelector(selector)).getAttribute(name)
         assertTrue(value.isNullOrEmpty())
@@ -506,6 +517,7 @@ abstract class AbstractPageControllerTest {
         actions.moveToElement(element)
         actions.perform()
     }
+
     protected fun scrollToBottom() {
         val js = driver as JavascriptExecutor
         js.executeScript("window.scrollBy(0,document.body.scrollHeight)")
