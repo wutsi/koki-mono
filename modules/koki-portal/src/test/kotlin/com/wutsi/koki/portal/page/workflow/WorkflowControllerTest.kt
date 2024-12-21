@@ -13,7 +13,6 @@ import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.workflow.dto.LogEntrySummary
 import com.wutsi.koki.workflow.dto.SearchLogEntryResponse
 import java.util.UUID
-import kotlin.test.Ignore
 import kotlin.test.Test
 
 class WorkflowControllerTest : AbstractPageControllerTest() {
@@ -28,14 +27,13 @@ class WorkflowControllerTest : AbstractPageControllerTest() {
         assertElementCount(".files-widget tr.file", files.size)
 
         click("#pills-logs-tab", 1000)
-//        assertElementCount(".logs-widget tr.log", logEntries.size)
+        assertElementCount(".logs-widget tr.log", logEntries.size)
 
         click("#pills-process-tab", 1000)
         assertElementPresent(".workflow-image img")
     }
 
     @Test
-    @Ignore("mute flaky test")
     fun `load more logs`() {
         var entries = mutableListOf<LogEntrySummary>()
         repeat(20) {
