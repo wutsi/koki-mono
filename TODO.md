@@ -16,6 +16,7 @@
 - [] Show file icons
 - [] Upload files
 - [] Align webapp domain name with Tenant
+- [] Run scheduled workflow instances
 - [] Cancel workflow Instance
 - [] Add support for S3 storage
 - [] Add support for jsonpath
