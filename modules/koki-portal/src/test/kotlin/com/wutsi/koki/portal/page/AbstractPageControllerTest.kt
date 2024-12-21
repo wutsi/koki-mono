@@ -502,19 +502,19 @@ abstract class AbstractPageControllerTest {
     protected fun scrollToBottom() {
         val js = driver as JavascriptExecutor
         js.executeScript("window.scrollBy(0,document.body.scrollHeight)")
-        Thread.sleep(5000)
+        Thread.sleep(1000)
     }
 
     protected fun scrollToMiddle() {
         val js = driver as JavascriptExecutor
         js.executeScript("window.scrollBy(0,document.body.scrollHeight/2)")
-        Thread.sleep(5000)
+        Thread.sleep(1000)
     }
 
     protected fun scroll(percent: Double) {
         val js = driver as JavascriptExecutor
         js.executeScript("window.scrollBy(0,document.body.scrollHeight*$percent)")
-        Thread.sleep(5000)
+        Thread.sleep(1000)
     }
 
     protected fun input(selector: String, value: String) {
