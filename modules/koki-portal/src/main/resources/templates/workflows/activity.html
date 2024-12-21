@@ -9,7 +9,8 @@
 
 <div class="container">
     <h1>
-        Task: <span th:text="${activityInstance.activity.longTitle}">TITLE</span>
+        <img align="absmiddle" height="48" src="/image/workflow-instance.png" width="48"/>
+        <span th:text="${activityInstance.activity.longTitle}">TITLE</span>
     </h1>
     <div class="row">
         <div class="col-12">
@@ -79,7 +80,7 @@
                         <tr th:if="${activityInstance.activity.service}">
                             <td><b>Service</b></td>
                             <td>
-                                <a class="script" target="_new" th:href="${activityInstance.activity.service.url}"
+                                <a class="service" target="_new" th:href="${activityInstance.activity.service.url}"
                                    th:text="${activityInstance.activity.service.longTitle}">SCRIPT</a>
                             </td>
                         </tr>
@@ -102,13 +103,6 @@
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button aria-controls="pills-forms" aria-selected="false" class="nav-link"
-                                    data-bs-target="#pills-forms" data-bs-toggle="pill" id="pills-forms-tab"
-                                    role="tab" type="button">
-                                Forms
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
                             <button aria-controls="pills-logs" aria-selected="false" class="nav-link"
                                     data-bs-target="#pills-logs" data-bs-toggle="pill" id="pills-logs-tab"
                                     role="tab" type="button">
@@ -122,12 +116,8 @@
                             <div class="widget-container"
                                  th:data-url="'/files/widgets/list?workflow-instance-id=' + ${activityInstance.workflowInstance.id}"></div>
                         </div>
-
-                        <div aria-labelledby="pills-forms-tab" class="tab-pane fade" id="pills-forms" role="tabpanel"
-                             th:data-url="'/workflows/widgets/forms?workflow-instance-id=' + ${activityInstance.workflowInstance.id}">
-                        </div>
                         <div aria-labelledby="pills-process-tab" class="tab-pane fade" id="pills-logs" role="tabpanel"
-                             th:data-url="'/workflows/widgets/logs?show-activity=false&activity-instance-id=' + ${activityInstance.id}">
+                             th:data-url="'/logs/widgets/list?show-activity=false&activity-instance-id=' + ${activityInstance.id}">
                         </div>
                     </div>
                 </div>

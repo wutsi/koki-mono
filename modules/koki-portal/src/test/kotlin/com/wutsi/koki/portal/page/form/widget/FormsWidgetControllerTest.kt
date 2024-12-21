@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page.workflow.widget
+package com.wutsi.koki.portal.page.form.widget
 
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
@@ -13,7 +13,7 @@ import kotlin.test.Test
 class FormsWidgetControllerTest : AbstractPageControllerTest() {
     @Test
     fun `show by workflow instance`() {
-        navigateTo("/workflows/widgets/forms?workflow-instance-id=${workflowInstance.id}")
+        navigateTo("/forms/widgets/list?workflow-instance-id=${workflowInstance.id}")
 
         assertElementPresent(".forms-widget")
         assertElementCount(".forms-widget table tr", 1)
@@ -22,7 +22,7 @@ class FormsWidgetControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show by workflow`() {
-        navigateTo("/workflows/widgets/forms?workflow-id=${workflow.id}")
+        navigateTo("/forms/widgets/list?workflow-id=${workflow.id}")
 
         assertElementPresent(".forms-widget")
         assertElementCount(".forms-widget table tr", 2)
@@ -39,7 +39,7 @@ class FormsWidgetControllerTest : AbstractPageControllerTest() {
         doReturn(SearchFormResponse()).whenever(kokiForms)
             .forms(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
-        navigateTo("/workflows/widgets/forms?workflow-instance-id=${workflowInstance.id}")
+        navigateTo("/forms/widgets/list?workflow-instance-id=${workflowInstance.id}")
 
         assertElementNotPresent(".forms-widget table")
         assertElementPresent(".empty-message")

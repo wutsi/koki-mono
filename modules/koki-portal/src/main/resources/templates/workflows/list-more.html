@@ -1,0 +1,4 @@
+<tr class="workflow-instance" th:each="workflowInstance : ${workflowInstances}">
+    <div th:replace="~{__components/workflow :: columns(${workflowInstance}, true)}"></div>
+</tr>
+<tr th:replace="~{__components/workflow :: load-more(${moreUrl}, true)}"></tr>

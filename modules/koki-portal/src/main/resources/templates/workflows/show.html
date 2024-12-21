@@ -9,7 +9,8 @@
 
 <div class="container">
     <h1>
-        Case: <span th:text="${workflowInstance.title}">TITLE</span>
+        <img align="absmiddle" height="48" src="/image/workflow-instance.png" width="48"/>
+        <span th:text="${workflowInstance.title}">TITLE</span>
     </h1>
     <div class="row">
         <div class="col-12">
@@ -53,23 +54,9 @@
                         </li>
                         <li class="nav-item" role="presentation">
                             <button aria-controls="pills-files" aria-selected="false" class="nav-link"
-                                    data-bs-target="#pills-files" data-bs-toggle="pill" id="pills-file-tab"
+                                    data-bs-target="#pills-files" data-bs-toggle="pill" id="pills-files-tab"
                                     role="tab" type="button">
                                 Files
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button aria-controls="pills-forms" aria-selected="false" class="nav-link"
-                                    data-bs-target="#pills-forms" data-bs-toggle="pill" id="pills-forms-tab"
-                                    role="tab" type="button">
-                                Forms
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button aria-controls="pills-process" aria-selected="false" class="nav-link"
-                                    data-bs-target="#pills-process" data-bs-toggle="pill" id="pills-process-tab"
-                                    role="tab" type="button">
-                                Process
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -77,6 +64,13 @@
                                     data-bs-target="#pills-logs" data-bs-toggle="pill" id="pills-logs-tab"
                                     role="tab" type="button">
                                 Log
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-process" aria-selected="false" class="nav-link"
+                                    data-bs-target="#pills-process" data-bs-toggle="pill" id="pills-process-tab"
+                                    role="tab" type="button">
+                                Process
                             </button>
                         </li>
                     </ul>
@@ -130,19 +124,14 @@
                              th:data-url="'/files/widgets/list?workflow-instance-id=' + ${workflowInstance.id}">
                         </div>
 
-                        <div aria-labelledby="pills-forms-tab" class="tab-pane fade" id="pills-forms"
+                        <div aria-labelledby="pills-process-tab" class="tab-pane fade" id="pills-logs"
                              role="tabpanel"
-                             th:data-url="'/workflows/widgets/forms?workflow-instance-id=' + ${workflowInstance.id}">
+                             th:data-url="'/logs/widgets/list?workflow-instance-id=' + ${workflowInstance.id}">
                         </div>
 
                         <div aria-labelledby="pills-process-tab" class="tab-pane fade" id="pills-process"
                              role="tabpanel"
                              th:data-url="'/workflows/widgets/image?workflow-instance-id=' + ${workflowInstance.id}">
-                        </div>
-
-                        <div aria-labelledby="pills-process-tab" class="tab-pane fade" id="pills-logs"
-                             role="tabpanel"
-                             th:data-url="'/workflows/widgets/logs?workflow-instance-id=' + ${workflowInstance.id}">
                         </div>
                     </div>
                 </div>
@@ -214,6 +203,5 @@
     </div>
 </div>
 
-<script th:replace="~{__components/log :: load-more-script()}"></script>
 </body>
 </html>

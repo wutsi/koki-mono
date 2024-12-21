@@ -13,7 +13,19 @@ class FileListWidgetController(
     @GetMapping("/files/widgets/list")
     fun show(
         @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
-        @RequestParam(required = false) layout: String? = null,
+        @RequestParam(required = false) limit: Int = 20,
+        @RequestParam(required = false) offset: Int = 0,
+        model: Model
+    ): String {
+        more(workflowInstanceId, limit, offset, model)
+        return "files/widgets/list"
+    }
+
+    @GetMapping("/files/widgets/list/more")
+    fun more(
+        @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
+        @RequestParam(required = false) limit: Int = 20,
+        @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
         val files = fileService.files(
@@ -21,9 +33,17 @@ class FileListWidgetController(
         )
         if (files.isNotEmpty()) {
             model.addAttribute("files", files)
-            model.addAttribute("layout", layout)
+
+            if (files.size >= limit) {
+                val nextOffset = offset + limit
+                val url = listOf(
+                    "/files/widgets/list/more?limit=$limit&offset=$nextOffset",
+                    workflowInstanceId?.let { "workflow-instance-id=$workflowInstanceId" },
+                ).filterNotNull().joinToString(separator = "&")
+                model.addAttribute("moreUrl", url)
+            }
         }
 
-        return "files/widgets/list"
+        return "files/widgets/list-more"
     }
 }

@@ -53,6 +53,17 @@ class ShowActivityControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.SETTINGS_SCRIPT)
     }
 
+    @Test
+    fun service() {
+        navigateTo("/settings/workflows/${workflow.id}/activities/${workflow.activities[1].id}")
+        click("a.service")
+
+        val tabs = driver.getWindowHandles().toList()
+        driver.switchTo().window(tabs[1])
+        Thread.sleep(1000)
+        assertCurrentPageIs(PageName.SETTINGS_SERVICE)
+    }
+
     private fun generateFormHtml(): String {
         return getResourceAsString("/form-readonly.html")
     }

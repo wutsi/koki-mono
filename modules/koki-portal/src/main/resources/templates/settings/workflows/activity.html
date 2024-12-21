@@ -10,7 +10,7 @@
 <div class="container">
     <h1>
         <img align="absmiddle" height="48" src="/image/workflow.png" width="48"/>
-        Activity: <span th:text="${activity.longTitle}">NAME</span>
+        <span th:text="${activity.longTitle}">NAME</span>
     </h1>
     <div class="row">
         <div class="col-12">
@@ -66,7 +66,7 @@
                         <tr th:if="${activity.service}">
                             <td><b>Service</b></td>
                             <td>
-                                <a class="script" target="_new" th:href="${activity.service.url}"
+                                <a class="service" target="_new" th:href="${activity.service.url}"
                                    th:text="${activity.service.longTitle}">SCRIPT</a>
                             </td>
                         </tr>

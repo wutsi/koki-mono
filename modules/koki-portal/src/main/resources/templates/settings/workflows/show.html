@@ -56,10 +56,10 @@
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button aria-controls="pills-forms" aria-selected="false" class="nav-link"
-                                    data-bs-target="#pills-forms" data-bs-toggle="pill" id="pills-forms-tab"
+                            <button aria-controls="pills-instances" aria-selected="false" class="nav-link"
+                                    data-bs-target="#pills-instances" data-bs-toggle="pill" id="pills-instances-tab"
                                     role="tab" type="button">
-                                Forms
+                                Instances
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -102,9 +102,9 @@
                             </table>
                         </div>
 
-                        <div aria-labelledby="pills-forms-tab" class="tab-pane fade" id="pills-forms"
+                        <div aria-labelledby="pills-instances-tab" class="tab-pane fade" id="pills-instances"
                              role="tabpanel"
-                             th:data-url="'/workflows/widgets/forms?workflow-id=' + ${workflow.id}">
+                             th:data-url="'/workflows/widgets/workflow-instances?show-workflow=false&workflow-id=' + ${workflow.id}">
                         </div>
 
                         <div aria-labelledby="pills-process-tab" class="tab-pane fade" id="pills-process"

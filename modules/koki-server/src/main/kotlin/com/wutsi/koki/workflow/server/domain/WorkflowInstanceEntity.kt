@@ -46,7 +46,7 @@ data class WorkflowInstanceEntity(
     val startAt: Date = Date(),
     val dueAt: Date? = null,
     val createdAt: Date = Date(),
-    val modifiedAt: Date = Date(),
+    var modifiedAt: Date = Date(),
     var startedAt: Date? = null,
     var doneAt: Date? = null
 ) {

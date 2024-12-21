@@ -122,7 +122,9 @@ class WorkflowInstanceService(
             .flatMap { workflowInstance -> listOf(workflowInstance.approverUserId, workflowInstance.createdById) }
             .filterNotNull()
             .toMutableSet()
-
+        userIds.addAll(
+            workflowInstances.mapNotNull { workflowInstance -> workflowInstance.createdById }
+        )
         val userMap = if (userIds.isNotEmpty()) {
             userService.users(
                 ids = userIds.toList(),

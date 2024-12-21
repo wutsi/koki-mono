@@ -14,6 +14,8 @@ data class WorkflowInstanceModel(
     val createdAt: Date = Date(),
     val createdAtText: String = "",
     val createdBy: UserModel? = null,
+    val modifiedAt: Date = Date(),
+    val modifiedAtText: String = "",
     val startAt: Date = Date(),
     val startedAt: Date? = null,
     val dueAt: Date? = null,

@@ -4,6 +4,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.WorkflowFixtures.workflow
+import com.wutsi.koki.WorkflowFixtures.workflowInstances
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.workflow.dto.GetWorkflowResponse
 import kotlin.test.Test
@@ -18,6 +19,12 @@ class ShowWorkflowControllerTest : AbstractPageControllerTest() {
         assertElementPresent(".btn-edit")
 
         assertElementCount("tr.activity", workflow.activities.size)
+
+        click("#pills-instances-tab", 1000)
+        assertElementCount(".workflow-instance-widget tr.workflow-instance", workflowInstances.size)
+
+        click("#pills-process-tab", 1000)
+        assertElementPresent(".workflow-image img")
     }
 
     @Test

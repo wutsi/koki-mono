@@ -55,4 +55,5 @@ object PageName {
     const val WORKFLOW = "page.workflow"
     const val WORKFLOW_ACTIVITY = "page.activity"
     const val WORKFLOW_ACTIVITY_COMPLETED = "page.activity.completed"
+    const val WORKFLOW_LIST = "page.workflow.list"
 }
