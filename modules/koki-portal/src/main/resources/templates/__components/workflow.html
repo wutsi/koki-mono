@@ -95,7 +95,7 @@
     <div class="widget-body">
         <a href="/">Home</a>
         &gt;
-        <a href="/workflows">Cases</a>
+        <a href="/workflows">Instances</a>
         &gt;
         <a th:href="${activityInstance.workflowInstance.url}"
            th:text="${activityInstance.workflowInstance.title}">INSTANCE</a>
@@ -108,10 +108,30 @@
     <div class="widget-body">
         <a href="/">Home</a>
         &gt;
-        <a href="/workflows">Cases</a>
-        &gt;
-        <span th:text="${workflowInstance.title}">TITLE</span>
+        <a href="/workflows" th:if="${workflowInstance}">Instances</a>
+        <span th:if="${workflowInstance}">&gt;</span>
+        <span th:if="${workflowInstance}" th:text="${workflowInstance.title}">TITLE</span>
+        <span th:if="!${workflowInstance}">Instances</span>
     </div>
 </div>
+
+<tr class="workflow-instance" th:fragment="columns(workflowInstance, showCreator)" th:remove="tag">
+    <td>
+        <a th:href="${workflowInstance.url}" th:text="${workflowInstance.title}">TITLE</a>
+    </td>
+    <td th:text="${workflowInstance.workflow.name}">WORKFLOW</td>
+    <td>
+        <div
+            th:replace="~{__components/workflow :: workflow-status(${workflowInstance.status})}"></div>
+    </td>
+    <td th:text="${workflowInstance.modifiedAtText}">MODIFIED</td>
+    <td th:if="${showCreator}" th:text="${workflowInstance.createdBy?.displayName}">CREATED BY</td>
+</tr>
+
+<tr id="workflow-instance-load-more" th:fragment="load-more(moreUrl, showCreator)" th:if="${moreUrl}">
+    <td class="text-center" th:colspan="${showCreator} ? 5 : 4">
+        <a href="javascript: koki_load_more('workflow-instance-load-more')" th:data-url="${moreUrl}">Load more...</a>
+    </td>
+</tr>
 
 </body>

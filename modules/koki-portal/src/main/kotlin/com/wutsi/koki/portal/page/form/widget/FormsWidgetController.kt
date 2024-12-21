@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page.workflow.widget
+package com.wutsi.koki.portal.page.form.widget
 
 import com.wutsi.koki.portal.model.FormModel
 import com.wutsi.koki.portal.service.WorkflowInstanceService
@@ -13,7 +13,7 @@ class FormsWidgetController(
     private val workflowService: WorkflowService,
     private val workflowInstanceService: WorkflowInstanceService,
 ) {
-    @GetMapping("/workflows/widgets/forms")
+    @GetMapping("/forms/widgets/list")
     fun show(
         @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
         @RequestParam(required = false, name = "workflow-id") workflowId: Long? = null,
@@ -30,7 +30,7 @@ class FormsWidgetController(
             model.addAttribute("forms", forms)
         }
 
-        return "workflows/widgets/forms"
+        return "forms/widgets/list"
     }
 
     private fun findByWorkflowInstance(workflowInstanceId: String): List<FormModel> {

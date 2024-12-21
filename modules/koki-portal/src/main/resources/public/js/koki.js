@@ -1,3 +1,17 @@
+function koki_load_more(containerId) {
+    const container = document.querySelector('#' + containerId);
+    const button = container.querySelector('a');
+    const url = button.getAttribute('data-url');
+
+    container.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></div>';
+    fetch(url).then(function (response) {
+        response.text().then(function (html) {
+            console.log('Replacing #' + containerId + ' with ', html);
+            $('#' + containerId).replaceWith(html);
+        });
+    });
+}
+
 function koki_ready() {
     _koki_load_widgets();
     _koki_tabs_lazyload();

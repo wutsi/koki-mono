@@ -12,7 +12,6 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.service.dto.AuthorizationType
 import com.wutsi.koki.service.dto.UpdateServiceRequest
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -114,7 +113,6 @@ class EditServiceControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    @Ignore("flaky test on GithubAction")
     fun cancel() {
         navigateTo("/settings/services/${service.id}/edit")
 
@@ -124,7 +122,6 @@ class EditServiceControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    @Ignore("flaky test on GithubAction")
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.SERVICE_IN_USE)
         doThrow(ex).whenever(kokiServices).update(any(), any())

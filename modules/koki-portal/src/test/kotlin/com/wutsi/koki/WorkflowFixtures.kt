@@ -4,6 +4,7 @@ import com.wutsi.koki.FormFixtures.forms
 import com.wutsi.koki.MessageFixtures.messages
 import com.wutsi.koki.RoleFixtures.roles
 import com.wutsi.koki.ScriptFixtures.scripts
+import com.wutsi.koki.ServiceFixtures.services
 import com.wutsi.koki.UserFixtures.USER_ID
 import com.wutsi.koki.UserFixtures.users
 import com.wutsi.koki.workflow.dto.Activity
@@ -57,6 +58,7 @@ object WorkflowFixtures {
                 formId = forms[0].id,
                 messageId = messages[0].id,
                 scriptId = scripts[0].id,
+                serviceId = services[0].id,
             ),
             Activity(
                 id = 13L,
@@ -167,6 +169,7 @@ object WorkflowFixtures {
     val workflowInstances = listOf(
         WorkflowInstanceSummary(
             id = WORKFLOW_INSTANCE_ID,
+            title = "2024.001",
             workflowId = workflows[0].id,
             status = WorkflowStatus.RUNNING,
             approverUserId = users[0].id,
@@ -174,9 +177,11 @@ object WorkflowFixtures {
             startAt = DateUtils.addDays(Date(), 3),
             startedAt = Date(),
             dueAt = DateUtils.addDays(Date(), 7),
+            createdById = users[0].id,
         ),
         WorkflowInstanceSummary(
             id = "bbb",
+            title = "2024.002",
             workflowId = workflows[1].id,
             status = WorkflowStatus.RUNNING,
             approverUserId = users[1].id,
@@ -184,6 +189,35 @@ object WorkflowFixtures {
             startAt = DateUtils.addDays(Date(), 3),
             startedAt = Date(),
             dueAt = DateUtils.addDays(Date(), 7),
+            createdById = users[1].id,
+        ),
+        WorkflowInstanceSummary(
+            id = "ccc",
+            title = "2024.003",
+            workflowId = workflows[1].id,
+            status = WorkflowStatus.DONE,
+            createdAt = Date(),
+            startAt = DateUtils.addDays(Date(), -3),
+            startedAt = DateUtils.addDays(Date(), -3),
+            doneAt = DateUtils.addDays(Date(), -1),
+        ),
+        WorkflowInstanceSummary(
+            id = "ddd",
+            title = "2024.004",
+            workflowId = workflows[1].id,
+            status = WorkflowStatus.DONE,
+            createdAt = Date(),
+            startAt = DateUtils.addDays(Date(), -3),
+            startedAt = DateUtils.addDays(Date(), -3),
+            doneAt = DateUtils.addDays(Date(), -1),
+        ),
+        WorkflowInstanceSummary(
+            id = "eee",
+            title = "2024.005",
+            workflowId = workflows[0].id,
+            status = WorkflowStatus.NEW,
+            createdAt = Date(),
+            startAt = DateUtils.addDays(Date(), -3),
         ),
     )
 
@@ -200,6 +234,7 @@ object WorkflowFixtures {
             requiresApproval = true,
             formId = forms[0].id,
             messageId = messages[0].id,
+            serviceId = services[0].id,
         ),
         workflowInstance = WorkflowInstanceSummary(
             id = "4304390-43094039",

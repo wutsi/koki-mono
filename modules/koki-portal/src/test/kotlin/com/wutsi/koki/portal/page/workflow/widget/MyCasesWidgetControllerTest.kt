@@ -13,8 +13,8 @@ class MyCasesWidgetControllerTest : AbstractPageControllerTest() {
     fun show() {
         navigateTo("/workflows/widgets/my-cases")
 
-        assertElementPresent(".my-cases-widget")
-        assertElementCount(".my-cases-widget table tr", workflowInstances.size + 1)
+        assertElementPresent(".workflow-instance-widget")
+        assertElementCount(".workflow-instance-widget tr.workflow-instance", workflowInstances.size)
     }
 
     @Test
@@ -34,7 +34,7 @@ class MyCasesWidgetControllerTest : AbstractPageControllerTest() {
             )
 
         navigateTo("/workflows/widgets/my-cases")
-        assertElementNotPresent(".my-cases-widget table")
+        assertElementNotPresent(".workflow-instance-widget table")
     }
 
     @Test
@@ -42,6 +42,6 @@ class MyCasesWidgetControllerTest : AbstractPageControllerTest() {
         setUpAnonymousUser()
 
         navigateTo("/workflows/widgets/my-cases")
-        assertElementNotPresent(".my-cases-widget table")
+        assertElementNotPresent(".workflow-instance-widget table")
     }
 }

@@ -88,6 +88,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.web.client.HttpClientErrorException
 import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
+import java.time.Duration
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
@@ -183,6 +184,7 @@ abstract class AbstractPageControllerTest {
         }
 
         this.driver = ChromeDriver(options)
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5))
         if (System.getProperty("headless") == "true") { // In headless mode, set a size that will not require vertical scrolling
             driver.manage().window().size = Dimension(1920, 1280)
         }
@@ -502,19 +504,19 @@ abstract class AbstractPageControllerTest {
     protected fun scrollToBottom() {
         val js = driver as JavascriptExecutor
         js.executeScript("window.scrollBy(0,document.body.scrollHeight)")
-        Thread.sleep(5000)
+        Thread.sleep(1000)
     }
 
     protected fun scrollToMiddle() {
         val js = driver as JavascriptExecutor
         js.executeScript("window.scrollBy(0,document.body.scrollHeight/2)")
-        Thread.sleep(5000)
+        Thread.sleep(1000)
     }
 
     protected fun scroll(percent: Double) {
         val js = driver as JavascriptExecutor
         js.executeScript("window.scrollBy(0,document.body.scrollHeight*$percent)")
-        Thread.sleep(5000)
+        Thread.sleep(1000)
     }
 
     protected fun input(selector: String, value: String) {

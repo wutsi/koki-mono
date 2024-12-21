@@ -24,6 +24,7 @@ class WorkflowInstanceMapper(
             dueAt = entity.dueAt,
             startAt = entity.startAt,
             doneAt = entity.doneAt,
+            modifiedAt = entity.modifiedAt,
             state = entity.stateAsMap(objectMapper),
             parameters = entity.parametersAsMap(objectMapper),
             participants = entity.participants.map { participant ->
@@ -46,6 +47,7 @@ class WorkflowInstanceMapper(
             approverUserId = entity.approverId,
             title = entity.title ?: "",
             createdAt = entity.createdAt,
+            modifiedAt = entity.modifiedAt,
             startedAt = entity.startedAt,
             status = entity.status,
             dueAt = entity.dueAt,

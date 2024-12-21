@@ -10,7 +10,7 @@ import com.wutsi.koki.workflow.dto.GetActivityInstanceResponse
 import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
-class ActivitySendInstanceControllerTest : AbstractPageControllerTest() {
+class ActivityServiceInstanceControllerTest : AbstractPageControllerTest() {
     @BeforeEach
     override fun setUp() {
         super.setUp()
@@ -18,7 +18,7 @@ class ActivitySendInstanceControllerTest : AbstractPageControllerTest() {
         doReturn(
             GetActivityInstanceResponse(
                 activityInstance.copy(
-                    activity = activityInstance.activity.copy(type = ActivityType.SEND)
+                    activity = activityInstance.activity.copy(type = ActivityType.SERVICE)
                 )
             )
         ).whenever(kokiWorkflowInstances)
@@ -31,18 +31,5 @@ class ActivitySendInstanceControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.WORKFLOW_ACTIVITY)
         assertElementNotPresent(".widget-toolbar")
-    }
-
-    @Test
-    fun `preview message`() {
-        // WHEN
-        navigateTo("/workflows/activities/${activityInstance.id}")
-        click("a.message")
-
-        // THEN
-        val tabs = driver.getWindowHandles().toList()
-        driver.switchTo().window(tabs[1])
-        Thread.sleep(1000)
-        assertCurrentPageIs(PageName.SETTINGS_MESSAGE)
     }
 }

@@ -1,6 +1,6 @@
-<div class="widget my-cases-widget">
+<div class="widget workflow-instance-widget">
     <div class="widget-header">
-        <div class="widget-title">My Cases</div>
+        <div class="widget-title" th:text="${title}">WORKFLOW INSTANCES</div>
     </div>
     <div class="widget-body">
         <table class="table table-striped" th:if="${workflowInstances}">
@@ -8,9 +8,9 @@
                 <th>Title</th>
                 <th>Workflow</th>
                 <th>Status</th>
-                <th>Due</th>
+                <th>Modified</th>
             </tr>
-            <tr th:each="workflowInstance : ${workflowInstances}">
+            <tr class="workflow-instance" th:each="workflowInstance : ${workflowInstances}">
                 <td>
                     <a th:href="${workflowInstance.url}" th:text="${workflowInstance.title}">TITLE</a>
                 </td>
@@ -19,12 +19,10 @@
                     <div
                         th:replace="~{__components/workflow :: workflow-status(${workflowInstance.status})}"></div>
                 </td>
-                <td>
-                    <span th:if="${workflowInstance.createdAt}" th:text="${workflowInstance.dueAtText}">DUE</span>
-                </td>
+                <td th:text="${workflowInstance.modifiedAtText}">MODIFIED</td>
             </tr>
         </table>
 
-        <div class="text-center" th:if="!${workflowInstances}">No case</div>
+        <div class="text-center" th:if="!${workflowInstances}">No workflow instances</div>
     </div>
 </div>

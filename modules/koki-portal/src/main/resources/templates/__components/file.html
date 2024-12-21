@@ -2,44 +2,22 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<tr class="log-entry" th:fragment="columns(log, showActivity)" th:remove="tag">
-    <td th:text="${log.createdAtText}">CREATED</td>
-    <td th:if="${showActivity}">
-        <a th:href="${log.activityInstance.url}"
-           th:if="${log.activityInstance}"
-           th:text="${log.activityInstance.activity.name}"
-        >ACTIVITY</a>
-    </td>
-    <td class="text-center">
-        <i class="fa-xl fa-solid fa-circle-info info" th:if="${log.type.name == 'INFO'}"></i>
-        <i class="fa-xl fa-solid fa-circle-exclamation error" th:if="${log.type.name == 'ERROR'}"></i>
-    </td>
-    <td th:text="${log.message}">MESSAGE</td>
+<tr class="file" th:fragment="columns(file)" th:remove="tag">
     <td>
-        <a class="btn-view" target="_new" th:href="${log.url}">View</a>
+        <a class="file" target="_new" th:alt="${file.name}" th:href="${file.url}"
+           th:text="${file.name}">FILE</a>
+    </td>
+    <td th:text="${file.contentLengthText}">SIZE</td>
+    <td th:text="${file.createdAtText}">CREATED</td>
+    <td>
+        <span th:if="${file.createdBy}" th:text="${file.createdBy.displayName}">CREATED</span>
     </td>
 </tr>
 
-<tr id="log-load-more" th:fragment="load-more(moreUrl, showActivity)" th:if="${moreUrl}">
-    <td class="text-center" th:colspan="${showActivity} ? 5 : 4">
-        <a href="javascript: load_more()" th:data-url="${moreUrl}">Load more...</a>
+<tr id="file-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
+    <td class="text-center" colspan="4">
+        <a href="javascript: koki_load_more('file-load-more')" th:data-url="${moreUrl}">Load more...</a>
     </td>
 </tr>
-
-<script th:fragment="load-more-script()">
-    function load_more() {
-        const container = document.querySelector('#log-load-more');
-        const button = container.querySelector('a');
-        const url = button.getAttribute('data-url');
-
-        console.log('loading...');
-        container.innerHTML = '<i class="fas fa-spinner fa-spin">';
-        fetch(url).then(function (response) {
-            response.text().then(function (html) {
-                $('#log-load-more').replaceWith(html);
-            });
-        });
-    }
-</script>
 
 </body>

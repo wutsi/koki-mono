@@ -12,11 +12,11 @@
 - [x] Add support for Script activities
 - [x] Add support for Receive activities
 - [x] Add support for Service activities
-- [] Add to workflows "Service" and "Script" tabs
-- [] List workflow instances
+- [x] List workflow instances
 - [] Show file icons
 - [] Upload files
 - [] Align webapp domain name with Tenant
+- [] Run scheduled workflow instances
 - [] Cancel workflow Instance
 - [] Add support for S3 storage
 - [] Add support for jsonpath

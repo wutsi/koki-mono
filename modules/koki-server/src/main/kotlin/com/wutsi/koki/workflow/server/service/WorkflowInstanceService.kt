@@ -133,6 +133,7 @@ class WorkflowInstanceService(
 
     @Transactional
     fun save(workflowInstance: WorkflowInstanceEntity): WorkflowInstanceEntity {
+        workflowInstance.modifiedAt = Date()
         return instanceDao.save(workflowInstance)
     }
 
