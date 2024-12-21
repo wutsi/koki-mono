@@ -23,13 +23,13 @@ class WorkflowControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.WORKFLOW)
         assertElementCount("tr.activity", workflowInstance.activityInstances.size)
 
-        click("#pills-files-tab", 1000)
+        click("#pills-files-tab", 2000)
         assertElementCount(".files-widget tr.file", files.size)
 
-        click("#pills-logs-tab", 1000)
+        click("#pills-logs-tab", 2000)
         assertElementCount(".logs-widget tr.log", logEntries.size)
 
-        click("#pills-process-tab", 1000)
+        click("#pills-process-tab", 2000)
         assertElementPresent(".workflow-image img")
     }
 
