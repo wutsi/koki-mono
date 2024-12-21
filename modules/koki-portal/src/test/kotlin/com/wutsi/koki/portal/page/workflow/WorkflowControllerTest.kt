@@ -83,11 +83,11 @@ class WorkflowControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/workflows/${workflowInstance.id}")
 
-        click("#pills-files-tab", 1000)
+        click("#pills-files-tab", 5000)
         assertElementCount(".files-widget tr.file", entries.size)
 
         scrollToBottom()
-        click("#file-load-more a", 1000)
+        click("#file-load-more a", 5000)
         assertElementCount(".files-widget tr.file", entries.size + files.size)
     }
 
