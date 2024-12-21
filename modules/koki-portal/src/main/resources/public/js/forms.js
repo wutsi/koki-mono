@@ -81,7 +81,7 @@ function _koki_configure_upload() {
 
             elt.addEventListener('click', () => {
                 console.log('Uploading file ' + rel);
-                document.getElementById("#" + rel + "-file]").click();
+                document.getElementById(rel + "-file").click();
             });
         });
 

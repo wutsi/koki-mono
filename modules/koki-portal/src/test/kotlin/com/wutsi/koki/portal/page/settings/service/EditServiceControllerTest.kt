@@ -116,7 +116,7 @@ class EditServiceControllerTest : AbstractPageControllerTest() {
     fun cancel() {
         navigateTo("/settings/services/${service.id}/edit")
 
-        scrollToBottom()
+        scrollToElement(".btn-cancel")
         click(".btn-cancel")
         assertCurrentPageIs(PageName.SETTINGS_SERVICE_LIST)
     }
@@ -128,7 +128,7 @@ class EditServiceControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/settings/services/${service.id}/edit")
 
-        scrollToBottom()
+        scrollToElement("button[type=submit]")
         click("button[type=submit]")
         assertCurrentPageIs(PageName.SETTINGS_SERVICE_EDIT)
         assertElementPresent(".alert-danger")

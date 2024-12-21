@@ -54,7 +54,7 @@ class WorkflowControllerTest : AbstractPageControllerTest() {
         click("#pills-logs-tab", 1000)
         assertElementCount(".logs-widget tr.log", entries.size)
 
-        scrollToBottom()
+        scrollToElement("#file-load-more a")
         click("#log-load-more a", 1000)
         assertElementCount(".logs-widget tr.log", entries.size + logEntries.size)
     }
@@ -86,7 +86,7 @@ class WorkflowControllerTest : AbstractPageControllerTest() {
         click("#pills-files-tab", 1000)
         assertElementCount(".files-widget tr.file", entries.size)
 
-        scrollToBottom()
+        scrollToElement("#file-load-more a")
         click("#file-load-more a", 1000)
         assertElementCount(".files-widget tr.file", entries.size + files.size)
     }
