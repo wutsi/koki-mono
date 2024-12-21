@@ -474,12 +474,11 @@ abstract class AbstractPageControllerTest {
     }
 
     protected fun waitForPresenceOf(selector: String, timeout: Long = 30, sleep: Long = 1) {
-        val wait = WebDriverWait(driver, Duration.ofSeconds(timeout), Duration.ofSeconds(sleep));
+        val wait = WebDriverWait(driver, Duration.ofSeconds(timeout), Duration.ofSeconds(sleep))
         wait.until(
             ExpectedConditions.presenceOfElementLocated(By.cssSelector(selector))
         )
     }
-
 
     protected fun assertElementAttributeNull(selector: String, name: String) {
         val value = driver.findElement(By.cssSelector(selector)).getAttribute(name)

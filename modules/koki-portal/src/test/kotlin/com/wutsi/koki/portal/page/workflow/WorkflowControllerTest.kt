@@ -86,7 +86,7 @@ class WorkflowControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/workflows/${workflowInstance.id}")
 
-        click("#pills-files-tab", 1000)
+        click("#pills-files-tab")
         waitForPresenceOf(".logs-widget tr.log")
         assertElementCount(".files-widget tr.file", entries.size)
 
