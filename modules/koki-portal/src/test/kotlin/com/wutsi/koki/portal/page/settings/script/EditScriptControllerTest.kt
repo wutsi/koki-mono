@@ -12,7 +12,6 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.script.dto.Language
 import com.wutsi.koki.script.dto.UpdateScriptRequest
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -51,7 +50,6 @@ class EditScriptControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    @Ignore
     fun cancel() {
         navigateTo("/settings/scripts/${script.id}/edit")
 
@@ -69,7 +67,6 @@ class EditScriptControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    @Ignore
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.SCRIPT_IN_USE)
         doThrow(ex).whenever(kokiScripts).update(any(), any())
