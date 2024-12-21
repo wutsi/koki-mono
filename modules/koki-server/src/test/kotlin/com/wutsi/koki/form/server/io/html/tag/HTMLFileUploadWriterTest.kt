@@ -51,9 +51,9 @@ class HTMLFileUploadWriterTest : FileResolver {
                 <DIV class='file-upload-container'>
                   <INPUT type='hidden' name='var1' value='11111'/>
                   <BUTTON type='button' class='btn-upload' rel='var1'>Upload File</BUTTON>
-                  <INPUT type='file' name='var1-file' rel='var1' data-upload-url='https://foo.com/storage/upload'/>
+                  <INPUT type='file' id='var1-file' name='var1-file' rel='var1' data-upload-url='https://foo.com/storage/upload'/>
                   <SPAN data-name='var1-filename'>
-                    <A class='filename' href='https://foo.com/storage/download/11111/foo.txt'>foo.txt</A>
+                    <A class='filename' href='https://foo.com/storage/download/11111/foo.txt'><SPAN class='fiv-viv fiv-icon-txt'></SPAN>&nbsp;foo.txt</A>
                     <button class='btn-close' type='button' name='var1-close' rel='var1'></button>
                   </SPAN>
                 </DIV>
@@ -74,9 +74,9 @@ class HTMLFileUploadWriterTest : FileResolver {
                 <DIV class='file-upload-container'>
                   <INPUT type='hidden' name='var1' value='11111' required/>
                   <BUTTON type='button' class='btn-upload' rel='var1'>Upload File</BUTTON>
-                  <INPUT type='file' name='var1-file' rel='var1' data-upload-url='https://foo.com/storage/upload'/>
+                  <INPUT type='file' id='var1-file' name='var1-file' rel='var1' data-upload-url='https://foo.com/storage/upload'/>
                   <SPAN data-name='var1-filename'>
-                    <A class='filename' href='https://foo.com/storage/download/11111/foo.txt'>foo.txt</A>
+                    <A class='filename' href='https://foo.com/storage/download/11111/foo.txt'><SPAN class='fiv-viv fiv-icon-txt'></SPAN>&nbsp;foo.txt</A>
                     <button class='btn-close' type='button' name='var1-close' rel='var1'></button>
                   </SPAN>
                 </DIV>
@@ -102,7 +102,7 @@ class HTMLFileUploadWriterTest : FileResolver {
                 <DIV class='file-upload-container'>
                   <INPUT type='hidden' name='var1' value='11111'/>
                   <SPAN data-name='var1-filename'>
-                    <A class='filename' href='https://foo.com/storage/download/11111/foo.txt'>foo.txt</A>
+                    <A class='filename' href='https://foo.com/storage/download/11111/foo.txt'><SPAN class='fiv-viv fiv-icon-txt'></SPAN>&nbsp;foo.txt</A>
                   </SPAN>
                 </DIV>
 
@@ -124,7 +124,7 @@ class HTMLFileUploadWriterTest : FileResolver {
                 <DIV class='file-upload-container'>
                   <INPUT type='hidden' name='var1' value='11111'/>
                   <BUTTON type='button' class='btn-upload' rel='var1'>Upload File</BUTTON>
-                  <INPUT type='file' name='var1-file' rel='var1' data-upload-url='https://foo.com/storage/upload'/>
+                  <INPUT type='file' id='var1-file' name='var1-file' rel='var1' data-upload-url='https://foo.com/storage/upload'/>
                   <SPAN data-name='var1-filename'>
                   </SPAN>
                 </DIV>
@@ -147,7 +147,7 @@ class HTMLFileUploadWriterTest : FileResolver {
                 <DIV class='file-upload-container'>
                   <INPUT type='hidden' name='var1'/>
                   <BUTTON type='button' class='btn-upload' rel='var1'>Upload File</BUTTON>
-                  <INPUT type='file' name='var1-file' rel='var1' data-upload-url='https://foo.com/storage/upload'/>
+                  <INPUT type='file' id='var1-file' name='var1-file' rel='var1' data-upload-url='https://foo.com/storage/upload'/>
                   <SPAN data-name='var1-filename'>
                   </SPAN>
                 </DIV>
