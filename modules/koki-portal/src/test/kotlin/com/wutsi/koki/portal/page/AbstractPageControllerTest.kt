@@ -78,7 +78,10 @@ import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
+import org.openqa.selenium.interactions.Actions
+import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.Select
+import org.openqa.selenium.support.ui.WebDriverWait
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
@@ -184,7 +187,6 @@ abstract class AbstractPageControllerTest {
         }
 
         this.driver = ChromeDriver(options)
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5))
         if (System.getProperty("headless") == "true") { // In headless mode, set a size that will not require vertical scrolling
             driver.manage().window().size = Dimension(1920, 1280)
         }
@@ -471,6 +473,13 @@ abstract class AbstractPageControllerTest {
         }
     }
 
+    protected fun waitForPresenceOf(selector: String, timeout: Long = 30, sleep: Long = 1) {
+        val wait = WebDriverWait(driver, Duration.ofSeconds(timeout), Duration.ofSeconds(sleep))
+        wait.until(
+            ExpectedConditions.presenceOfElementLocated(By.cssSelector(selector))
+        )
+    }
+
     protected fun assertElementAttributeNull(selector: String, name: String) {
         val value = driver.findElement(By.cssSelector(selector)).getAttribute(name)
         assertTrue(value.isNullOrEmpty())
@@ -499,6 +508,13 @@ abstract class AbstractPageControllerTest {
     protected fun click(selector: String, delayMillis: Long? = null) {
         driver.findElement(By.cssSelector(selector)).click()
         delayMillis?.let { Thread.sleep(delayMillis) }
+    }
+
+    protected fun scrollToElement(selector: String) {
+        val element = driver.findElement(By.cssSelector(selector))
+        val actions = Actions(driver)
+        actions.moveToElement(element)
+        actions.perform()
     }
 
     protected fun scrollToBottom() {

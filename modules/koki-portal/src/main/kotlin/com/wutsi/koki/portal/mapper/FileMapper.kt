@@ -4,6 +4,7 @@ import com.wutsi.koki.file.dto.File
 import com.wutsi.koki.file.dto.FileSummary
 import com.wutsi.koki.portal.model.FileModel
 import com.wutsi.koki.portal.model.UserModel
+import org.apache.commons.io.FilenameUtils
 import org.springframework.stereotype.Service
 import java.text.DateFormat
 import java.text.DecimalFormat
@@ -30,6 +31,7 @@ class FileMapper {
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.modifiedAt),
             createdBy = createdBy,
+            extension = FilenameUtils.getExtension(entity.name).lowercase(),
         )
     }
 
@@ -53,6 +55,7 @@ class FileMapper {
             createdBy = createdBy,
             formId = entity.formId,
             workflowInstanceId = entity.workflowInstanceId,
+            extension = FilenameUtils.getExtension(entity.name).lowercase(),
         )
     }
 
