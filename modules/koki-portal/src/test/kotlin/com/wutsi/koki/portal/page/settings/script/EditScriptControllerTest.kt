@@ -55,8 +55,16 @@ class EditScriptControllerTest : AbstractPageControllerTest() {
     fun cancel() {
         navigateTo("/settings/scripts/${script.id}/edit")
 
+        input("input[name=name]", "M-XXX")
+        input("input[name=title]", "This is the new subject")
+        input("textarea[name=description]", "This is the description")
         scrollToBottom()
+        input("textarea[name=parameters]", "var1\nvar2")
+        select("select[name=language]", 2)
+        inputCodeMiror("print(\"Hello\")")
+        select("select[name=active]", 1)
         click(".btn-cancel")
+
         assertCurrentPageIs(PageName.SETTINGS_SCRIPT_LIST)
     }
 
@@ -68,9 +76,16 @@ class EditScriptControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/settings/scripts/${script.id}/edit")
 
+        input("input[name=name]", "M-XXX")
+        input("input[name=title]", "This is the new subject")
+        input("textarea[name=description]", "This is the description")
         scrollToBottom()
-        Thread.sleep(2000)
+        input("textarea[name=parameters]", "var1\nvar2")
+        select("select[name=language]", 2)
+        inputCodeMiror("print(\"Hello\")")
+        select("select[name=active]", 1)
         click("button[type=submit]")
+
         assertCurrentPageIs(PageName.SETTINGS_SCRIPT_EDIT)
         assertElementPresent(".alert-danger")
     }

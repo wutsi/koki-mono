@@ -15,14 +15,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class EditFormControllerTest : AbstractPageControllerTest() {
-    @Test
-    fun edit() {
-        navigateTo("/settings/forms/${form.id}/edit")
-        assertCurrentPageIs(PageName.SETTINGS_FORM_EDIT)
-
-        input(
-            "textarea[name=json]",
-            """
+    private val json = """
                 {
                     "name": "M-XXX",
                     "title": "This is the new subject",
@@ -43,7 +36,13 @@ class EditFormControllerTest : AbstractPageControllerTest() {
                     ]
                 }
             """.trimIndent()
-        )
+
+    @Test
+    fun edit() {
+        navigateTo("/settings/forms/${form.id}/edit")
+        assertCurrentPageIs(PageName.SETTINGS_FORM_EDIT)
+
+        input("textarea[name=json]", json)
         scrollToBottom()
         select("select[name=active]", 1)
         click("button[type=submit]")
@@ -66,8 +65,11 @@ class EditFormControllerTest : AbstractPageControllerTest() {
     fun cancel() {
         navigateTo("/settings/forms/${form.id}/edit")
 
+        input("textarea[name=json]", json)
         scrollToBottom()
+        select("select[name=active]", 1)
         click(".btn-cancel")
+
         assertCurrentPageIs(PageName.SETTINGS_FORM_LIST)
     }
 
@@ -78,8 +80,11 @@ class EditFormControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/settings/forms/${form.id}/edit")
 
+        input("textarea[name=json]", json)
         scrollToBottom()
+        select("select[name=active]", 1)
         click("button[type=submit]")
+
         assertCurrentPageIs(PageName.SETTINGS_FORM_EDIT)
         assertElementPresent(".alert-danger")
     }
