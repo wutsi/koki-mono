@@ -188,4 +188,21 @@ class HTMLTextWriterTest {
             output.toString()
         )
     }
+
+    @Test
+    fun readOnly() {
+        val xelt = elt.copy(readOnly = true)
+
+        writer.write(xelt, context, output)
+
+        assertEquals(
+            """
+                <LABEL class='title'><SPAN>test</SPAN></LABEL>
+                <DIV class='description'>This is the description</DIV>
+                <INPUT name='${elt.name}' value='value1' readonly/>
+
+            """.trimIndent(),
+            output.toString()
+        )
+    }
 }

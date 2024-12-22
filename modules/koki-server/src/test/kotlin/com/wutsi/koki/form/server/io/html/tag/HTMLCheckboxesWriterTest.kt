@@ -287,4 +287,34 @@ class HTMLCheckboxesWriterTest {
             output.toString()
         )
     }
+
+    @Test
+    fun readOnly() {
+        val xelt = elt.copy(readOnly = true)
+
+        writer.write(xelt, context, output)
+
+        assertEquals(
+            """
+                <LABEL class='title'><SPAN>test</SPAN></LABEL>
+                <DIV class='description'>This is the description</DIV>
+                <DIV class='radio-container'>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='1' onclick='return false;'/>
+                    <LABEL>1</LABEL>
+                  </DIV>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='foo' onclick='return false;'/>
+                    <LABEL>FOO</LABEL>
+                  </DIV>
+                  <DIV class='item'>
+                    <INPUT name='var1' type='radio' value='value1' onclick='return false;' checked/>
+                    <LABEL>Value #1</LABEL>
+                  </DIV>
+                </DIV>
+
+            """.trimIndent(),
+            output.toString()
+        )
+    }
 }

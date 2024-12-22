@@ -112,4 +112,21 @@ class HTMLParagraphWriterTest {
             output.toString()
         )
     }
+
+    @Test
+    fun readOnly() {
+        val xelt = elt.copy(readOnly = true)
+
+        writer.write(xelt, context, output)
+
+        assertEquals(
+            """
+                <LABEL class='title'><SPAN>test</SPAN></LABEL>
+                <DIV class='description'>This is the description</DIV>
+                <TEXTAREA rows='3' name='${elt.name}' readonly>value1</TEXTAREA>
+
+            """.trimIndent(),
+            output.toString()
+        )
+    }
 }

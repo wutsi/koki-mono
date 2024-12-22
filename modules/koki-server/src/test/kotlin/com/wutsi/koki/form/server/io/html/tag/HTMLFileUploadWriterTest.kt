@@ -87,7 +87,32 @@ class HTMLFileUploadWriterTest : FileResolver {
     }
 
     @Test
-    fun `read only`() {
+    fun `not editor`() {
+        val xelt = elt.copy(
+            accessControl = FormAccessControl(
+                editorRoles = listOf("X", "Y", "Z")
+            )
+        )
+        writer.write(xelt, context, output)
+
+        assertEquals(
+            """
+                <LABEL class='title'><SPAN>test</SPAN></LABEL>
+                <DIV class='description'>This is the description</DIV>
+                <DIV class='file-upload-container'>
+                  <INPUT type='hidden' name='var1' value='11111'/>
+                  <SPAN data-name='var1-filename'>
+                    <A class='filename' href='https://foo.com/storage/download/11111/foo.txt'><SPAN class='fiv-viv fiv-icon-txt'></SPAN>&nbsp;foo.txt</A>
+                  </SPAN>
+                </DIV>
+
+            """.trimIndent(),
+            output.toString()
+        )
+    }
+
+    @Test
+    fun readOnly() {
         val xelt = elt.copy(
             accessControl = FormAccessControl(
                 editorRoles = listOf("X", "Y", "Z")

@@ -130,4 +130,25 @@ class HTMLDropdownWriterTest {
             output.toString()
         )
     }
+
+    @Test
+    fun readOnly() {
+        val xelt = elt.copy(readOnly = true)
+
+        writer.write(xelt, context, output)
+
+        assertEquals(
+            """
+                <LABEL class='title'><SPAN>test</SPAN></LABEL>
+                <DIV class='description'>This is the description</DIV>
+                <SELECT name='${elt.name}' value='value1' readonly>
+                  <OPTION value='1' disabled>1</OPTION>
+                  <OPTION value='foo' disabled>FOO</OPTION>
+                  <OPTION value='value1' selected>Value #1</OPTION>
+                </SELECT>
+
+            """.trimIndent(),
+            output.toString()
+        )
+    }
 }

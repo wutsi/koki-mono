@@ -38,7 +38,6 @@ class WorkflowControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    @Ignore("mute flaky test on GHA")
     fun `load more logs`() {
         var entries = mutableListOf<LogEntrySummary>()
         repeat(20) {
