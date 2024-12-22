@@ -7,11 +7,9 @@ import com.wutsi.koki.portal.model.WorkflowInstanceModel
 import com.wutsi.koki.workflow.dto.LogEntry
 import com.wutsi.koki.workflow.dto.LogEntrySummary
 import org.springframework.stereotype.Service
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 
 @Service
-class LogMapper(private val objectMapper: ObjectMapper) {
+class LogMapper(private val objectMapper: ObjectMapper) : TenantAwareMapper() {
     fun toLogEntryModel(
         entity: LogEntry,
         activityInstance: ActivityInstanceModel?,
@@ -51,9 +49,5 @@ class LogMapper(private val objectMapper: ObjectMapper) {
             type = entity.type,
             activityInstance = activityInstance,
         )
-    }
-
-    private fun createDateFormat(): DateFormat {
-        return SimpleDateFormat("yyyy/MM/dd HH:mm")
     }
 }

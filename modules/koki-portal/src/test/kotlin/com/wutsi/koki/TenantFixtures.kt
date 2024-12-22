@@ -1,55 +1,39 @@
 package com.wutsi.koki
 
-import com.wutsi.koki.UserFixtures.users
-import com.wutsi.koki.file.dto.FileSummary
-import org.apache.commons.lang3.time.DateUtils
-import java.util.Date
+import com.wutsi.koki.tenant.dto.Tenant
+import com.wutsi.koki.tenant.dto.TenantStatus
 
-object FileFixtures {
-    val files = listOf(
-        FileSummary(
-            id = "f1",
-            name = "T1.pdf",
-            contentType = "application/pdf",
-            contentLength = 1024L * 1024,
-            createdAt = DateUtils.addDays(Date(), -5),
-            url = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+object TenantFixtures {
+    val tenants = listOf(
+        Tenant(
+            id = 1,
+            name = "test",
+            domainName = "localhost",
+            locale = "en_CA",
+            currency = "CAD",
+            currencySymbol = "\$CA",
+            timeFormat = "hh:mm a",
+            dateFormat = "yyyy-MM-dd",
+            dateTimeFormat = "yyyy-MM-dd hh:mm a",
+            numberFormat = "#,###,###.#0",
+            monetaryFormat = "\$CA #,###,###.#0",
+            status = TenantStatus.ACTIVE,
+            logoUrl = "https://prod-wutsi.s3.amazonaws.com/static/wutsi-blog-web/assets/wutsi/img/logo/name-104x50.png",
+            iconUrl = "https://prod-wutsi.s3.amazonaws.com/static/wutsi-blog-web/assets/wutsi/img/logo/logo_512x512.png",
         ),
-        FileSummary(
-            id = "f2",
-            name = "Medical Notes.pdf",
-            contentType = "application/pdf",
-            contentLength = 11 * 1024L * 1024,
-            createdById = users[1].id,
-            createdAt = DateUtils.addDays(Date(), -5),
-            url = "https://pdfobject.com/pdf/sample.pdf",
-        ),
-        FileSummary(
-            id = "f3",
-            name = "Picture.png",
-            contentType = "image/png",
-            contentLength = 5 * 1024L * 1024,
-            createdById = users[0].id,
-            createdAt = DateUtils.addDays(Date(), -5),
-            url = "https://picsum.photos/800/100",
-        ),
-        FileSummary(
-            id = "f5",
-            name = "Picture2.png",
-            contentType = "image/png",
-            contentLength = 500,
-            createdById = users[0].id,
-            createdAt = DateUtils.addDays(Date(), -5),
-            url = "https://picsum.photos/800/100",
-        ),
-        FileSummary(
-            id = "f6",
-            name = "empty.txt",
-            contentType = "text/plain",
-            contentLength = 0,
-            createdById = null,
-            createdAt = DateUtils.addDays(Date(), -5),
-            url = "https://picsum.photos/800/100.txt",
+        Tenant(
+            id = 2,
+            name = "test.cm",
+            domainName = "test.cm",
+            locale = "fr_CM",
+            currency = "XAF",
+            currencySymbol = "FCFA",
+            timeFormat = "HH:mm",
+            dateFormat = "yyyy-MM-dd",
+            dateTimeFormat = "yyyy-MM-dd HH:mm",
+            numberFormat = "#,###,###.#0",
+            monetaryFormat = "#,###,### FCFA",
+            status = TenantStatus.ACTIVE,
         ),
     )
 }

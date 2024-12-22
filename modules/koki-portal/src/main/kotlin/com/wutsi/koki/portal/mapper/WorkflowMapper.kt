@@ -13,12 +13,11 @@ import com.wutsi.koki.workflow.dto.ActivitySummary
 import com.wutsi.koki.workflow.dto.Workflow
 import com.wutsi.koki.workflow.dto.WorkflowSummary
 import org.springframework.stereotype.Service
-import java.text.SimpleDateFormat
 
 @Service
-class WorkflowMapper(private val objectMapper: ObjectMapper) {
+class WorkflowMapper(private val objectMapper: ObjectMapper) : TenantAwareMapper() {
     fun toWorkflowModel(entity: WorkflowSummary): WorkflowModel {
-        val fmt = SimpleDateFormat("yyyy/MM/dd HH:mm")
+        val fmt = createDateFormat()
         return WorkflowModel(
             id = entity.id,
             name = entity.name,
@@ -42,7 +41,7 @@ class WorkflowMapper(private val objectMapper: ObjectMapper) {
         services: List<ServiceModel>,
         imageUrl: String
     ): WorkflowModel {
-        val fmt = SimpleDateFormat("yyyy/MM/dd HH:mm")
+        val fmt = createDateFormat()
         val roleMap = roles.associateBy { role -> role.id }
         val formMap = forms.associateBy { form -> form.id }
         val messageMap = messages.associateBy { message -> message.id }

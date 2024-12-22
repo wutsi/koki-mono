@@ -12,11 +12,9 @@ import com.wutsi.koki.workflow.dto.WorkflowInstance
 import com.wutsi.koki.workflow.dto.WorkflowInstanceSummary
 import com.wutsi.koki.workflow.server.domain.ActivityInstance
 import org.springframework.stereotype.Service
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 
 @Service
-class WorkflowInstanceMapper(private val formMapper: FormMapper) {
+class WorkflowInstanceMapper(private val formMapper: FormMapper) : TenantAwareMapper() {
     fun toWorkflowInstanceModel(
         entity: WorkflowInstance,
         imageUrl: String,
@@ -180,9 +178,5 @@ class WorkflowInstanceMapper(private val formMapper: FormMapper) {
             startedAtText = entity.startedAt?.let { date -> fmt.format(date) },
             doneAtText = entity.doneAt?.let { date -> fmt.format(date) },
         )
-    }
-
-    private fun createDateFormat(): DateFormat {
-        return SimpleDateFormat("yyyy/MM/dd HH:mm")
     }
 }

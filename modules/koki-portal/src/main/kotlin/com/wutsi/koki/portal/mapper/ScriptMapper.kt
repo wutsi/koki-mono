@@ -4,10 +4,9 @@ import com.wutsi.koki.portal.model.ScriptModel
 import com.wutsi.koki.script.dto.Script
 import com.wutsi.koki.script.dto.ScriptSummary
 import org.springframework.stereotype.Service
-import java.text.SimpleDateFormat
 
 @Service
-class ScriptMapper {
+class ScriptMapper : TenantAwareMapper() {
     fun toScriptModel(entity: ScriptSummary): ScriptModel {
         val fmt = createDateFormat()
         return ScriptModel(
@@ -39,9 +38,5 @@ class ScriptMapper {
             code = entity.code,
             parameters = entity.parameters,
         )
-    }
-
-    private fun createDateFormat(): SimpleDateFormat {
-        return SimpleDateFormat("yyyy/MM/dd HH:mm")
     }
 }

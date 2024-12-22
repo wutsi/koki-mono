@@ -19,11 +19,18 @@
     <link href="https://cdn.jsdelivr.net/npm/file-icon-vectors@1.0.0/dist/file-icon-vivid.min.css" rel="stylesheet">
     <link href="/css/koki.css" rel="stylesheet"/>
     <link href="/css/forms.css" rel="stylesheet"/>
+
+    <link rel="shortcut icon" th:href="${tenant.iconUrl}" th:if="${tenant?.iconUrl}"/>
 </div>
 
 <nav class="navbar navbar-expand navbar-light fixed-top" th:fragment="navbar">
     <a class="navbar-brand" href="/">
-        <span class="brand-name">KOKI</span>
+        <span class="brand-name" th:if="!${tenant?.logoUrl}">KOKI</span>
+        <img class="brand-logo" th:alt="${tenant.name}"
+             th:if="${tenant?.logoUrl}"
+             th:src="${tenant.logoUrl}"
+             th:title="${tenant.name}"
+        />
     </a>
     <ul class="navbar-nav ms-auto">
         <li>

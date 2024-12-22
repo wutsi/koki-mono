@@ -3,10 +3,9 @@ package com.wutsi.koki.portal.mapper
 import com.wutsi.koki.portal.model.ServiceModel
 import com.wutsi.koki.service.dto.Service
 import com.wutsi.koki.service.dto.ServiceSummary
-import java.text.SimpleDateFormat
 
 @org.springframework.stereotype.Service
-class ServiceMapper {
+class ServiceMapper : TenantAwareMapper() {
     fun toServiceModel(entity: ServiceSummary): ServiceModel {
         val fmt = createDateFormat()
         return ServiceModel(
@@ -39,9 +38,5 @@ class ServiceMapper {
             baseUrl = entity.baseUrl,
             authorizationType = entity.authorizationType,
         )
-    }
-
-    private fun createDateFormat(): SimpleDateFormat {
-        return SimpleDateFormat("yyyy/MM/dd HH:mm")
     }
 }

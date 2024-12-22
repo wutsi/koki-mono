@@ -2,6 +2,7 @@ package com.wutsi.koki.sdk
 
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
+import com.wutsi.koki.tenant.dto.SearchTenantResponse
 import org.springframework.web.client.RestTemplate
 
 class KokiTenants(
@@ -9,7 +10,13 @@ class KokiTenants(
     private val rest: RestTemplate,
 ) {
     companion object {
+        private const val TENANT_PATH_PREFIX = "/v1/tenants"
         private const val CONFIG_PATH_PREFIX = "/v1/configurations"
+    }
+
+    fun tenants(): SearchTenantResponse {
+        val url = urlBuilder.build(TENANT_PATH_PREFIX)
+        return rest.getForEntity(url, SearchTenantResponse::class.java).body
     }
 
     fun save(request: SaveConfigurationRequest) {

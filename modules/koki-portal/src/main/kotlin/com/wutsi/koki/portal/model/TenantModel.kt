@@ -2,7 +2,7 @@ package com.wutsi.koki.tenant.dto
 
 import java.util.Date
 
-data class Tenant(
+data class TenantModel(
     val id: Long = -1,
     val name: String = "",
     val domainName: String = "",
@@ -15,5 +15,7 @@ data class Tenant(
     val timeFormat: String = "",
     val dateTimeFormat: String = "",
     val status: TenantStatus = TenantStatus.ACTIVE,
+    val logoUrl: String? = null,
+    var iconUrl: String? = null,
     val createdAt: Date = Date(),
 )

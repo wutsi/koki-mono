@@ -13,11 +13,13 @@
 - [x] Add support for Receive activities
 - [x] Add support for Service activities
 - [x] List workflow instances
-- [] Show file icons
-- [] Upload files
-- [] Align webapp domain name with Tenant
+- [x] Show file icons
+- [x] Align webapp domain name with Tenant
+- [] Add checkbox grid field
+- [] Add radio grid field
 - [] Run scheduled workflow instances
 - [] Cancel workflow Instance
+- [] Upload files
 - [] Add support for S3 storage
 - [] Add support for jsonpath
 - [] Add support for external modules

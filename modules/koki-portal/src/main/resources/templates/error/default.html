@@ -5,10 +5,20 @@
 </head>
 
 <body>
-<h1 th:if="${code}" th:text="${code}">500</h1>
-<h1 th:unless="${code}">Error</h1>
 
-<div class="label label-danger" th:if="${message}" th:text="${message}">ERROR</div>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-6 offset-md-3 text-center margin-top-4x">
+            <h1 th:if="${code}" th:text="${code}">500</h1>
+            <h1 th:unless="${code}">Error</h1>
+
+            <div class="label label-danger" th:if="${message}" th:text="${message}">ERROR</div>
+        </div>
+    </div>
+</div>
+
 </body>
 
 </html>

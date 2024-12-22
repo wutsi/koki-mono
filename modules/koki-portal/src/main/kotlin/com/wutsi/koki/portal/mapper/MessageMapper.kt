@@ -4,11 +4,9 @@ import com.wutsi.koki.message.dto.Message
 import com.wutsi.koki.message.dto.MessageSummary
 import com.wutsi.koki.portal.model.MessageModel
 import org.springframework.stereotype.Service
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 
 @Service
-class MessageMapper {
+class MessageMapper : TenantAwareMapper() {
     fun toMessageModel(entity: MessageSummary): MessageModel {
         val fmt = createDateFormat()
         return MessageModel(
@@ -36,9 +34,5 @@ class MessageMapper {
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.modifiedAt),
         )
-    }
-
-    private fun createDateFormat(): DateFormat {
-        return SimpleDateFormat("yyyy/MM/dd HH:mm")
     }
 }
