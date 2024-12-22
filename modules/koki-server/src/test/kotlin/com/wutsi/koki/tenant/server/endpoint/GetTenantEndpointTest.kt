@@ -3,6 +3,7 @@ package com.wutsi.koki.tenant.server.endpoint
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.tenant.dto.GetTenantResponse
+import com.wutsi.koki.tenant.dto.TenantStatus
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -32,9 +33,24 @@ class GetTenantEndpointTest {
         assertEquals(1L, tenant.id)
         assertEquals("test", tenant.name)
         assertEquals("test.com", tenant.domainName)
-        assertEquals("USD", tenant.currency)
-        assertEquals("en_US", tenant.locale)
+        assertEquals("CAD", tenant.currency)
+        assertEquals("CA$", tenant.currencySymbol)
+        assertEquals("en_CA", tenant.locale)
         assertEquals("2020-01-22", fmt.format(tenant.createdAt))
+        assertEquals("#,###,###.#0", tenant.numberFormat)
+        assertEquals("CA$ #,###,###.#0", tenant.monetaryFormat)
+        assertEquals("yyyy-MM-dd", tenant.dateFormat)
+        assertEquals("HH:mm", tenant.timeFormat)
+        assertEquals("yyyy-MM-dd HH:mm", tenant.dateTimeFormat)
+        assertEquals(TenantStatus.ACTIVE, tenant.status)
+        assertEquals(
+            "https://prod-wutsi.s3.amazonaws.com/static/wutsi-blog-web/assets/wutsi/img/logo/name-104x50.png",
+            tenant.logoUrl
+        )
+        assertEquals(
+            "https://prod-wutsi.s3.amazonaws.com/static/wutsi-blog-web/assets/wutsi/img/logo/logo_512x512.png",
+            tenant.iconUrl
+        )
     }
 
     @Test

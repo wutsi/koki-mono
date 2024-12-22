@@ -1,43 +1,25 @@
 package com.wutsi.koki.portal.service
 
-import com.wutsi.koki.portal.model.UserModel
-import com.wutsi.koki.portal.security.JWTAuthentication
-import com.wutsi.koki.security.dto.JWTPrincipal
+import com.wutsi.koki.tenant.dto.TenantModel
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
+import java.net.URI
 
 @Service
 @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
-class CurrentUserHolder(
-    private val service: UserService,
-    private val authenticationService: AuthenticationService,
+class CurrentTenantHolder(
+    private val service: TenantService,
+    private val request: HttpServletRequest,
 ) {
-    private var model: UserModel? = null
+    private var model: TenantModel? = null
 
-    fun id(): Long? {
-        val auth = SecurityContextHolder.getContext().authentication
-        if (auth is JWTAuthentication) {
-            return (auth.principal as JWTPrincipal).getUserId()
-        } else {
-            return null
+    fun get(): TenantModel? {
+        if (model == null) {
+            val host = URI(request.requestURL.toString()).host
+            model = service.tenants().find { tenant -> tenant.domainName == host }
         }
-    }
-
-    fun get(): UserModel? {
-        val id = id() ?: return null
-
-        if (model?.id == id) {
-            return model
-        }
-        try {
-            model = service.user(id)
-            return model
-        } catch (ex: Exception) {
-            authenticationService.logout()
-            SecurityContextHolder.clearContext()
-            return null
-        }
+        return model!!
     }
 }

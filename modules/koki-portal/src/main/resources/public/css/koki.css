@@ -80,6 +80,14 @@ nav {
     margin-top: 1em;
 }
 
+.margin-top-2x {
+    margin-top: 2em;
+}
+
+.margin-top-4x {
+    margin-top: 4em;
+}
+
 .margin-bottom {
     margin-bottom: 1em;
 }
@@ -103,6 +111,11 @@ nav {
     font-weight: bold !important;
 }
 
+.navbar img.brand-logo {
+    margin-left: .5em !important;
+    height: 50px;
+}
+
 .navbar .nav-link {
     border: 1px solid gray;
     margin-right: .5em;
@@ -115,7 +128,12 @@ nav {
     width: 350px;
     right: 10px;
     border-radius: 0;
-    margin-top: -0.5em;
+    margin-top: -1em;
+}
+
+.navbar .dropdown-menu .user-hi {
+    font-weight: bold;
+    font-size: 1.2em;
 }
 
 .widget {

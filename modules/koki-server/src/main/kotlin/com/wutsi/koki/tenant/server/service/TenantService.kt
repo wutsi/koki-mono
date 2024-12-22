@@ -11,7 +11,13 @@ import org.springframework.stereotype.Service
 class TenantService(
     private val dao: TenantRepository
 ) {
-    fun get(id: Long): TenantEntity =
-        dao.findById(id)
+    fun get(id: Long): TenantEntity {
+        val tenant = dao.findById(id)
             .orElseThrow { NotFoundException(Error(ErrorCode.TENANT_NOT_FOUND)) }
+        return tenant
+    }
+
+    fun all(): List<TenantEntity> {
+        return dao.findAll().toList()
+    }
 }

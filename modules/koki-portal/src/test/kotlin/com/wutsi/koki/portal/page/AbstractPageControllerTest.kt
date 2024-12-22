@@ -15,6 +15,7 @@ import com.wutsi.koki.ScriptFixtures
 import com.wutsi.koki.ServiceFixtures.SERVICE_ID
 import com.wutsi.koki.ServiceFixtures.service
 import com.wutsi.koki.ServiceFixtures.services
+import com.wutsi.koki.TenantFixtures.tenants
 import com.wutsi.koki.UserFixtures.user
 import com.wutsi.koki.UserFixtures.users
 import com.wutsi.koki.WorkflowFixtures.activities
@@ -58,6 +59,7 @@ import com.wutsi.koki.service.dto.SearchServiceResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
+import com.wutsi.koki.tenant.dto.SearchTenantResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
 import com.wutsi.koki.workflow.dto.GetActivityInstanceResponse
 import com.wutsi.koki.workflow.dto.GetLogEntryResponse
@@ -200,10 +202,16 @@ abstract class AbstractPageControllerTest {
         setupScripts()
         setupServices()
         setupMessages()
-        setupWorkflows()
+        setupTenants()
         setupUsers()
+        setupWorkflows()
 
         doReturn(SearchConfigurationResponse()).whenever(kokiTenants).configurations(anyOrNull(), anyOrNull())
+    }
+
+    private fun setupTenants() {
+        doReturn(SearchTenantResponse(tenants)).whenever(kokiTenants)
+            .tenants()
     }
 
     private fun setupRoles() {

@@ -14,5 +14,13 @@ class TenantMapper {
         status = entity.status,
         currency = entity.currency,
         createdAt = entity.createdAt,
+        dateFormat = entity.dateFormat,
+        timeFormat = entity.timeFormat,
+        currencySymbol = entity.currencySymbol,
+        dateTimeFormat = entity.dateTimeFormat,
+        monetaryFormat = entity.monetaryFormat,
+        numberFormat = entity.numberFormat,
+        logoUrl = entity.logoUrl?.ifEmpty { null },
+        iconUrl = entity.iconUrl?.ifEmpty { null },
     )
 }
