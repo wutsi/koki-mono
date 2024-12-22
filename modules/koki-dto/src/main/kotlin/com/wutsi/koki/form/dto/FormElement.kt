@@ -11,6 +11,7 @@ data class FormElement(
     val minLength: Int? = null,
     val maxLength: Int? = null,
     val pattern: String? = null,
+    val readOnly: Boolean? = null,
 
     // For CHECKBOXES, MULTIPLE_CHOICE, DROPDOWN
     val options: List<FormOption> = emptyList(),
