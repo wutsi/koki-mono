@@ -47,8 +47,14 @@ class EditMessageControllerTest : AbstractPageControllerTest() {
     fun cancel() {
         navigateTo("/settings/messages/${message.id}/edit")
 
+        input("input[name=name]", "M-XXX")
+        input("input[name=subject]", "This is the new subject")
+        input("textarea[name=description]", "This is the description")
+        input("textarea[name=body]", "<p>Looks good :-)</p>")
         scrollToBottom()
+        select("select[name=active]", 1)
         click(".btn-cancel")
+
         assertCurrentPageIs(PageName.SETTINGS_MESSAGE_LIST)
     }
 
@@ -59,8 +65,14 @@ class EditMessageControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/settings/messages/${message.id}/edit")
 
+        input("input[name=name]", "M-XXX")
+        input("input[name=subject]", "This is the new subject")
+        input("textarea[name=description]", "This is the description")
+        input("textarea[name=body]", "<p>Looks good :-)</p>")
         scrollToBottom()
+        select("select[name=active]", 1)
         click("button[type=submit]")
+
         assertCurrentPageIs(PageName.SETTINGS_MESSAGE_EDIT)
         assertElementPresent(".alert-danger")
     }

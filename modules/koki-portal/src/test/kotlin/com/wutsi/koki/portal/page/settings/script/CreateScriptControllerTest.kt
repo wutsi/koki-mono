@@ -52,7 +52,14 @@ class CreateScriptControllerTest : AbstractPageControllerTest() {
     fun cancel() {
         navigateTo("/settings/scripts/create")
 
+        input("input[name=name]", "M-XXX")
+        input("input[name=title]", "This is the new subject")
+        input("textarea[name=description]", "This is the description")
+        input("textarea[name=parameters]", "var1\nvar2")
         scrollToBottom()
+        select("select[name=language]", 2)
+        inputCodeMiror("print(var1+var2)")
+        select("select[name=active]", 1)
         click(".btn-cancel")
         assertCurrentPageIs(PageName.SETTINGS_SCRIPT_LIST)
     }

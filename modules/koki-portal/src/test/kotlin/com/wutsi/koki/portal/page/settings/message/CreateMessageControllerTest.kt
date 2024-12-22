@@ -55,8 +55,14 @@ class CreateMessageControllerTest : AbstractPageControllerTest() {
     fun cancel() {
         navigateTo("/settings/messages/create")
 
+        input("input[name=name]", "M-XXX")
+        input("input[name=subject]", "This is the new subject")
+        input("textarea[name=description]", "This is the description")
+        input("textarea[name=body]", "<p>Looks good :-)</p>")
         scrollToBottom()
+        select("select[name=active]", 1)
         click(".btn-cancel")
+
         assertCurrentPageIs(PageName.SETTINGS_MESSAGE_LIST)
     }
 

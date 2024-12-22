@@ -12,7 +12,6 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.script.dto.Language
 import com.wutsi.koki.script.dto.UpdateScriptRequest
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -51,26 +50,39 @@ class EditScriptControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    @Ignore
     fun cancel() {
         navigateTo("/settings/scripts/${script.id}/edit")
 
+        input("input[name=name]", "M-XXX")
+        input("input[name=title]", "This is the new subject")
+        input("textarea[name=description]", "This is the description")
         scrollToBottom()
+        input("textarea[name=parameters]", "var1\nvar2")
+        select("select[name=language]", 2)
+        inputCodeMiror("print(\"Hello\")")
+        select("select[name=active]", 1)
         click(".btn-cancel")
+
         assertCurrentPageIs(PageName.SETTINGS_SCRIPT_LIST)
     }
 
     @Test
-    @Ignore
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.SCRIPT_IN_USE)
         doThrow(ex).whenever(kokiScripts).update(any(), any())
 
         navigateTo("/settings/scripts/${script.id}/edit")
 
+        input("input[name=name]", "M-XXX")
+        input("input[name=title]", "This is the new subject")
+        input("textarea[name=description]", "This is the description")
         scrollToBottom()
-        Thread.sleep(2000)
+        input("textarea[name=parameters]", "var1\nvar2")
+        select("select[name=language]", 2)
+        inputCodeMiror("print(\"Hello\")")
+        select("select[name=active]", 1)
         click("button[type=submit]")
+
         assertCurrentPageIs(PageName.SETTINGS_SCRIPT_EDIT)
         assertElementPresent(".alert-danger")
     }

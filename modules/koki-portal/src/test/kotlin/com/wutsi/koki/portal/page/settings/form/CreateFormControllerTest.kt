@@ -13,14 +13,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class CreateFormControllerTest : AbstractPageControllerTest() {
-    @Test
-    fun create() {
-        navigateTo("/settings/forms/create")
-        assertCurrentPageIs(PageName.SETTINGS_FORM_CREATE)
-
-        input(
-            "textarea[name=json]",
-            """
+    private val json = """
                 {
                     "name": "M-XXX",
                     "title": "This is the new subject",
@@ -41,7 +34,13 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
                     ]
                 }
             """.trimIndent()
-        )
+
+    @Test
+    fun create() {
+        navigateTo("/settings/forms/create")
+        assertCurrentPageIs(PageName.SETTINGS_FORM_CREATE)
+
+        input("textarea[name=json]", json)
         scrollToBottom()
         select("select[name=active]", 1)
         click("button[type=submit]")
@@ -65,8 +64,11 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
     fun cancel() {
         navigateTo("/settings/forms/create")
 
+        input("textarea[name=json]", json)
         scrollToBottom()
+        select("select[name=active]", 1)
         click(".btn-cancel")
+
         assertCurrentPageIs(PageName.SETTINGS_FORM_LIST)
     }
 
@@ -77,30 +79,7 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/settings/forms/create")
 
-        input(
-            "textarea[name=json]",
-            """
-                {
-                    "name": "M-XXX",
-                    "title": "This is the new subject",
-                    "description": "This is the description",
-                    "elements": [
-                        {
-                            "name": "amount",
-                            "title": "Payment Amount",
-                            "type": "NUMBER",
-                            "required":true
-                        },
-                        {
-                            "name": "currency",
-                            "title": "Currency",
-                            "type": "TEXT",
-                            "required":false
-                        }
-                    ]
-                }
-            """.trimIndent()
-        )
+        input("textarea[name=json]", json)
         scrollToBottom()
         select("select[name=active]", 1)
         click("button[type=submit]")
