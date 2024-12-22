@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<h1 th:if="${code}" th:text="${code}">500</h1>
+<h1 th:unless="${code}">Error</h1>
+
+<div class="label label-danger" th:if="${message}" th:text="${message}">ERROR</div>
+</body>
+
+</html>
