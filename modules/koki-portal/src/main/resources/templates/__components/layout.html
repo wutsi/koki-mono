@@ -41,16 +41,22 @@
                 <i class="fa-solid fa-bars"></i>
             </button>
             <ul class="dropdown-menu" th:if="${user}">
-                <li class="flex dropdown-item">
-                    <span th:text="${user.displayName}">USER</span>
+                <li>
+                    <div class="dropdown-item">
+                        <div class="user-hi">
+                            Hi <span th:text="${user.displayName}">USER</span>
+                        </div>
+                        <div th:text="${user.email}">EMAIL</div>
+                    </div>
                 </li>
                 <li class="dropdown-divider"></li>
-                <li class="flex dropdown-item">
-                    <a class="dropdown-item" href="/settings">
-                        <i class="fa-solid fa-gear"></i>
-                        <span>Settings</span>
-                    </a>
+                <li>
+                    <a class="dropdown-item" href="#">Account</a>
                 </li>
+                <li>
+                    <a class="dropdown-item" href="/settings">Settings</a>
+                </li>
+                <li class="dropdown-divider"></li>
                 <li>
                     <a class="dropdown-item" href="/logout">Logout</a>
                 </li>
