@@ -90,7 +90,29 @@
                         </div>
 
                         <div aria-labelledby="pills-share-tab" class="tab-pane fade" id="pills-share" role="tabpanel">
-                            SHARE
+                            <div class="share-panel">
+                                <div class="flex">
+                                    <div class="share-link" id="form-share"
+                                         th:data-url="${form.shareUrl}"
+                                         th:onclick="form_share_link()"
+                                         th:text="${form.shareUrl}"
+                                    >
+                                        SHARE
+                                    </div>
+                                    <div>
+                                        <a class="btn btn-primary btn-sm" href="javascript: form_share_link()">Copy</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <script>
+                                function form_share_link() {
+                                    const div = document.getElementById('form-share');
+                                    const url = div.getAttribute('data-url');
+
+                                    navigator.clipboard.writeText(url);
+                                    alert('Copied: ' + url);
+                                }
+                            </script>
                         </div>
                     </div>
                 </div>
