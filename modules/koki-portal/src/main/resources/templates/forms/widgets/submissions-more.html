@@ -1,0 +1,4 @@
+<tr class="submission" th:each="submission : ${submissions}">
+    <td th:replace="~{__components/form :: submission-columns(${submission})}"></td>
+</tr>
+<tr th:replace="~{__components/form :: submission-load-more(${moreUrl})}"></tr>
