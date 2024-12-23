@@ -23,16 +23,7 @@
           "type": "TEXT",
           "title": "Case ID",
           "description": "The ID is auto-calculated, it cannot be modified",
-          "accessControl": {
-            "viewerRoles": [
-              "employee",
-              "hr",
-              "finance"
-            ],
-            "editorRoles": [
-              "-"
-            ]
-          }
+          "readOnly": true
         },
         {
           "name": "incident_title",
@@ -231,16 +222,7 @@
           "type": "TEXT",
           "title": "Transaction Number",
           "description": "This field will be auto-generated",
-          "accessControl": {
-            "viewerRoles": [
-              "employee",
-              "hr",
-              "finance"
-            ],
-            "editorRoles": [
-              "---"
-            ]
-          }
+          "readOnly": true
         }
       ]
     }

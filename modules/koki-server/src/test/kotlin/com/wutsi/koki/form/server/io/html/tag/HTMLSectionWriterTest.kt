@@ -13,7 +13,6 @@ import com.wutsi.koki.form.dto.FormElementType
 import com.wutsi.koki.form.server.generator.html.Context
 import com.wutsi.koki.form.server.generator.html.HTMLElementWriter
 import com.wutsi.koki.form.server.generator.html.HTMLElementWriterProvider
-import com.wutsi.koki.form.server.generator.html.HTMLSectionWriter
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

@@ -1,6 +1,7 @@
-package com.wutsi.koki.form.server.generator.html
+package com.wutsi.koki.form.server.generator.html.tag
 
 import com.wutsi.koki.form.dto.FormElement
+import com.wutsi.koki.form.server.generator.html.Context
 import org.apache.commons.text.StringEscapeUtils
 import java.io.StringWriter
 
@@ -34,7 +35,7 @@ abstract class AbstractHTMLImputElementWriter() : AbstractHTMLElementWriter() {
     protected fun addValidationAttribute(element: FormElement, writer: StringWriter, readOnly: Boolean) {
         // Read only
         if (readOnly) {
-            writer.write(" readonly")
+            writer.write(" disabled")
         }
 
         // Required

@@ -4,7 +4,6 @@ import com.wutsi.koki.form.dto.FormAccessControl
 import com.wutsi.koki.form.dto.FormElement
 import com.wutsi.koki.form.dto.FormElementType
 import com.wutsi.koki.form.server.generator.html.Context
-import com.wutsi.koki.form.server.generator.html.HTMLParagraphWriter
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.io.StringWriter
@@ -106,7 +105,24 @@ class HTMLParagraphWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <TEXTAREA rows='3' name='${elt.name}' readonly>value1</TEXTAREA>
+                <TEXTAREA rows='3' name='${elt.name}' disabled>value1</TEXTAREA>
+
+            """.trimIndent(),
+            output.toString()
+        )
+    }
+
+    @Test
+    fun readOnly() {
+        val xelt = elt.copy(readOnly = true)
+
+        writer.write(xelt, context, output)
+
+        assertEquals(
+            """
+                <LABEL class='title'><SPAN>test</SPAN></LABEL>
+                <DIV class='description'>This is the description</DIV>
+                <TEXTAREA rows='3' name='${elt.name}' disabled>value1</TEXTAREA>
 
             """.trimIndent(),
             output.toString()

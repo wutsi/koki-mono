@@ -1,7 +1,8 @@
-package com.wutsi.koki.form.server.generator.html
+package com.wutsi.koki.form.server.generator.html.tag
 
 import com.wutsi.koki.form.dto.FormElement
 import com.wutsi.koki.form.dto.FormElementType
+import com.wutsi.koki.form.server.generator.html.Context
 import org.apache.commons.text.StringEscapeUtils
 import java.io.StringWriter
 
@@ -64,7 +65,7 @@ class HTMLCheckboxesWriter : AbstractHTMLImputElementWriter() {
         // Input
         writer.write("    <INPUT name='$name' type='$type' value='${StringEscapeUtils.escapeHtml4(value)}'")
         if (readOnly) {
-            writer.write(" onclick='return false;'")
+            writer.write(" disabled")
         }
         if (checked) {
             writer.write(" checked")

@@ -1,6 +1,8 @@
-package com.wutsi.koki.form.server.generator.html
+package com.wutsi.koki.form.server.generator.html.tag
 
 import com.wutsi.koki.form.dto.FormElement
+import com.wutsi.koki.form.server.generator.html.Context
+import com.wutsi.koki.form.server.generator.html.HTMLElementWriter
 import java.io.StringWriter
 
 abstract class AbstractHTMLElementWriter() : HTMLElementWriter {
@@ -24,7 +26,7 @@ abstract class AbstractHTMLElementWriter() : HTMLElementWriter {
     }
 
     protected fun canEdit(element: FormElement, context: Context): Boolean {
-        if (context.readOnly) {
+        if (element.readOnly == true || context.readOnly) {
             return false
         }
         if (element.accessControl == null || element.accessControl?.editorRoles == null) {
