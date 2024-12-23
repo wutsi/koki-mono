@@ -9,6 +9,7 @@ import com.wutsi.koki.form.dto.SubmitFormDataRequest
 import com.wutsi.koki.form.dto.SubmitFormDataResponse
 import com.wutsi.koki.form.event.FormSubmittedEvent
 import com.wutsi.koki.form.server.dao.FormDataRepository
+import com.wutsi.koki.form.server.dao.FormSubmissionRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -23,6 +24,9 @@ import kotlin.test.assertEquals
 class SubmitFormDataEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var dao: FormDataRepository
+
+    @Autowired
+    private lateinit var submissionDao: FormSubmissionRepository
 
     @MockitoBean
     private lateinit var eventPublisher: EventPublisher
@@ -50,6 +54,14 @@ class SubmitFormDataEndpointTest : TenantAwareEndpointTest() {
         assertEquals(FormDataStatus.SUBMITTED, formData.status)
         assertEquals("{\"A\": \"aa\", \"B\": \"bb\"}", formData.data)
 
+        val submissions = submissionDao.findByFormId(request.formId)
+        assertEquals(1, submissions.size)
+        assertEquals(TENANT_ID, submissions[0].tenantId)
+        assertEquals(request.formId, submissions[0].formId)
+        assertEquals(request.workflowInstanceId, submissions[0].workflowInstanceId)
+        assertEquals(request.activityInstanceId, submissions[0].activityInstanceId)
+        assertEquals("{\"A\": \"aa\", \"B\": \"bb\"}", submissions[0].data)
+
         val event = argumentCaptor<FormSubmittedEvent>()
         verify(eventPublisher).publish(event.capture())
         assertEquals(request.formId, event.firstValue.formId)
@@ -71,6 +83,14 @@ class SubmitFormDataEndpointTest : TenantAwareEndpointTest() {
         val formData = dao.findById(formDataId).get()
         assertEquals(xrequest.workflowInstanceId, formData.workflowInstanceId)
         assertEquals("{\"A\": \"aa\", \"B\": \"bb\"}", formData.data)
+
+        val submissions = submissionDao.findByFormId(formData.formId)
+        assertEquals(1, submissions.size)
+        assertEquals(TENANT_ID, submissions[0].tenantId)
+        assertEquals(xrequest.formId, submissions[0].formId)
+        assertEquals(xrequest.workflowInstanceId, submissions[0].workflowInstanceId)
+        assertEquals(xrequest.activityInstanceId, submissions[0].activityInstanceId)
+        assertEquals("{\"A\": \"aa\", \"B\": \"bb\"}", submissions[0].data)
 
         val event = argumentCaptor<FormSubmittedEvent>()
         verify(eventPublisher).publish(event.capture())

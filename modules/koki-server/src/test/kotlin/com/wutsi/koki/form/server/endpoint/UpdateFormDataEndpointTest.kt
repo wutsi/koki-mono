@@ -11,6 +11,7 @@ import com.wutsi.koki.event.server.service.EventPublisher
 import com.wutsi.koki.form.dto.UpdateFormDataRequest
 import com.wutsi.koki.form.event.FormUpdatedEvent
 import com.wutsi.koki.form.server.dao.FormDataRepository
+import com.wutsi.koki.form.server.dao.FormSubmissionRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -23,6 +24,9 @@ import kotlin.test.assertEquals
 class UpdateFormDataEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var dao: FormDataRepository
+
+    @Autowired
+    private lateinit var submissionDao: FormSubmissionRepository
 
     private val request = UpdateFormDataRequest(
         data = mapOf(
@@ -49,6 +53,14 @@ class UpdateFormDataEndpointTest : TenantAwareEndpointTest() {
         assertEquals(formData.id, event.firstValue.formDataId)
         assertEquals(request.activityInstanceId, event.firstValue.activityInstanceId)
         assertEquals(TENANT_ID, event.firstValue.tenantId)
+
+        val submissions = submissionDao.findByFormId(formData.formId)
+        assertEquals(1, submissions.size)
+        assertEquals(TENANT_ID, submissions[0].tenantId)
+        assertEquals(formData.formId, submissions[0].formId)
+        assertEquals(formData.workflowInstanceId, submissions[0].workflowInstanceId)
+        assertEquals(request.activityInstanceId, submissions[0].activityInstanceId)
+        assertEquals("{\"A\": \"aa1\", \"B\": \"bb1\"}", submissions[0].data)
     }
 
     @Test
