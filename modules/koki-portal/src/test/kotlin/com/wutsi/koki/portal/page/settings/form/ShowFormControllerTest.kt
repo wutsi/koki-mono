@@ -42,6 +42,17 @@ class ShowFormControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun share() {
+        navigateTo("/settings/forms/${form.id}")
+
+        click("#pills-share-tab")
+        click("#form-share")
+
+        val alert = driver.switchTo().alert()
+        alert.accept()
+    }
+
+    @Test
     fun `load more submissions`() {
         var entries = mutableListOf<FormSubmissionSummary>()
         repeat(20) {

@@ -15,6 +15,7 @@ data class FormModel(
     val modifiedAtText: String = "",
     val viewUrl: String = "",
     val editUrl: String = "",
+    val shareUrl: String = "",
 ) {
     val longTitle: String
         get() = if (title.isEmpty()) {

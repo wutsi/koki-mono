@@ -4,7 +4,7 @@
 
 - [x] Support ReadOnly fields
 - [x] Track Form submissions
-- [] Share Forms Link
+- [x] Share Forms Link
 - [] Start Workflow on form subscription
 - [] Add support for Stripe field
 - [] Add support for Paypal field

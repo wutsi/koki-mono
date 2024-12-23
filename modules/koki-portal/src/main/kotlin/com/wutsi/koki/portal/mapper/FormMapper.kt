@@ -8,13 +8,19 @@ import com.wutsi.koki.form.dto.FormSummary
 import com.wutsi.koki.portal.model.FormModel
 import com.wutsi.koki.portal.model.FormSubmissionModel
 import com.wutsi.koki.portal.model.UserModel
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import kotlin.collections.listOf
 
 @Service
-class FormMapper(private val objectMapper: ObjectMapper) : TenantAwareMapper() {
+class FormMapper(
+    private val objectMapper: ObjectMapper,
+    @Value("\${koki.webapp.base-url}") private val webappUrl: String,
+) : TenantAwareMapper() {
     fun toFormModel(
-        entity: FormSummary, workflowInstanceId: String?, activityInstanceId: String?
+        entity: FormSummary,
+        workflowInstanceId: String?,
+        activityInstanceId: String?,
     ): FormModel {
         val fmt = createDateFormat()
         return FormModel(
@@ -28,11 +34,14 @@ class FormMapper(private val objectMapper: ObjectMapper) : TenantAwareMapper() {
             modifiedAtText = fmt.format(entity.modifiedAt),
             viewUrl = toUrl(entity.id, true, workflowInstanceId, activityInstanceId),
             editUrl = toUrl(entity.id, false, workflowInstanceId, activityInstanceId),
+            shareUrl = toShareUrl(entity.id),
         )
     }
 
     fun toFormModel(
-        entity: Form, workflowInstanceId: String?, activityInstanceId: String?
+        entity: Form,
+        workflowInstanceId: String?,
+        activityInstanceId: String?,
     ): FormModel {
         val fmt = createDateFormat()
         return FormModel(
@@ -48,6 +57,7 @@ class FormMapper(private val objectMapper: ObjectMapper) : TenantAwareMapper() {
             content = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(entity.content),
             viewUrl = toUrl(entity.id, true, workflowInstanceId, activityInstanceId),
             editUrl = toUrl(entity.id, false, workflowInstanceId, activityInstanceId),
+            shareUrl = toShareUrl(entity.id),
         )
     }
 
@@ -61,6 +71,10 @@ class FormMapper(private val objectMapper: ObjectMapper) : TenantAwareMapper() {
                 if (readOnly) "read-only=true" else null
             ).filterNotNull().joinToString(separator = "&")
         ).joinToString(separator = "?")
+    }
+
+    private fun toShareUrl(id: String): String {
+        return "$webappUrl/forms/$id"
     }
 
     fun toFormSubmissionModel(
