@@ -23,8 +23,6 @@ hs_err_pid*
 .DS_Store
 
 # Other stuff
-log/
-logs/
 target/
 **/*.dump
 application.pid
