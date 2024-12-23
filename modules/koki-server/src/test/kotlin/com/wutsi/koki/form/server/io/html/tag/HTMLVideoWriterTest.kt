@@ -8,7 +8,6 @@ import com.wutsi.koki.form.dto.FormAccessControl
 import com.wutsi.koki.form.dto.FormElement
 import com.wutsi.koki.form.dto.FormElementType
 import com.wutsi.koki.form.server.generator.html.Context
-import com.wutsi.koki.form.server.generator.html.HTMLVideoWriter
 import com.wutsi.koki.form.server.generator.html.video.VideoEmbedder
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach

@@ -4,7 +4,6 @@ import com.wutsi.koki.form.dto.FormAccessControl
 import com.wutsi.koki.form.dto.FormElement
 import com.wutsi.koki.form.dto.FormElementType
 import com.wutsi.koki.form.server.generator.html.Context
-import com.wutsi.koki.form.server.generator.html.HTMLTextWriter
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.io.StringWriter
@@ -182,7 +181,7 @@ class HTMLTextWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <INPUT name='${elt.name}' value='value1' readonly/>
+                <INPUT name='${elt.name}' value='value1' disabled/>
 
             """.trimIndent(),
             output.toString()
@@ -199,7 +198,7 @@ class HTMLTextWriterTest {
             """
                 <LABEL class='title'><SPAN>test</SPAN></LABEL>
                 <DIV class='description'>This is the description</DIV>
-                <INPUT name='${elt.name}' value='value1' readonly/>
+                <INPUT name='${elt.name}' value='value1' disabled/>
 
             """.trimIndent(),
             output.toString()

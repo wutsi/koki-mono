@@ -4,7 +4,6 @@ import com.wutsi.koki.form.dto.FormAccessControl
 import com.wutsi.koki.form.dto.FormElement
 import com.wutsi.koki.form.dto.FormElementType
 import com.wutsi.koki.form.server.generator.html.Context
-import com.wutsi.koki.form.server.generator.html.HTMLImageWriter
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.io.StringWriter

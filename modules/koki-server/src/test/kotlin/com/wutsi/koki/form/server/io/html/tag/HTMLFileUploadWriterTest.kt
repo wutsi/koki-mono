@@ -6,7 +6,6 @@ import com.wutsi.koki.form.dto.FormElementType
 import com.wutsi.koki.form.server.generator.html.Context
 import com.wutsi.koki.form.server.generator.html.File
 import com.wutsi.koki.form.server.generator.html.FileResolver
-import com.wutsi.koki.form.server.generator.html.HTMLFileUploadWriter
 import org.junit.jupiter.api.Test
 import java.io.StringWriter
 import kotlin.test.assertEquals

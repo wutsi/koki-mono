@@ -5,7 +5,6 @@ import com.wutsi.koki.form.dto.FormElement
 import com.wutsi.koki.form.dto.FormElementType
 import com.wutsi.koki.form.dto.FormOption
 import com.wutsi.koki.form.server.generator.html.Context
-import com.wutsi.koki.form.server.generator.html.HTMLCheckboxesWriter
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.io.StringWriter
@@ -270,15 +269,15 @@ class HTMLCheckboxesWriterTest {
                 <DIV class='description'>This is the description</DIV>
                 <DIV class='radio-container'>
                   <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='1' onclick='return false;'/>
+                    <INPUT name='var1' type='radio' value='1' disabled/>
                     <LABEL>1</LABEL>
                   </DIV>
                   <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='foo' onclick='return false;'/>
+                    <INPUT name='var1' type='radio' value='foo' disabled/>
                     <LABEL>FOO</LABEL>
                   </DIV>
                   <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='value1' onclick='return false;' checked/>
+                    <INPUT name='var1' type='radio' value='value1' disabled checked/>
                     <LABEL>Value #1</LABEL>
                   </DIV>
                 </DIV>
@@ -300,15 +299,15 @@ class HTMLCheckboxesWriterTest {
                 <DIV class='description'>This is the description</DIV>
                 <DIV class='radio-container'>
                   <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='1' onclick='return false;'/>
+                    <INPUT name='var1' type='radio' value='1' disabled/>
                     <LABEL>1</LABEL>
                   </DIV>
                   <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='foo' onclick='return false;'/>
+                    <INPUT name='var1' type='radio' value='foo' disabled/>
                     <LABEL>FOO</LABEL>
                   </DIV>
                   <DIV class='item'>
-                    <INPUT name='var1' type='radio' value='value1' onclick='return false;' checked/>
+                    <INPUT name='var1' type='radio' value='value1' disabled checked/>
                     <LABEL>Value #1</LABEL>
                   </DIV>
                 </DIV>

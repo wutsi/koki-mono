@@ -1,6 +1,14 @@
 package com.wutsi.koki.form.server.generator.html
 
 import com.wutsi.koki.form.dto.FormElementType
+import com.wutsi.koki.form.server.generator.html.tag.HTMLCheckboxesWriter
+import com.wutsi.koki.form.server.generator.html.tag.HTMLDropdownWriter
+import com.wutsi.koki.form.server.generator.html.tag.HTMLFileUploadWriter
+import com.wutsi.koki.form.server.generator.html.tag.HTMLImageWriter
+import com.wutsi.koki.form.server.generator.html.tag.HTMLParagraphWriter
+import com.wutsi.koki.form.server.generator.html.tag.HTMLSectionWriter
+import com.wutsi.koki.form.server.generator.html.tag.HTMLTextWriter
+import com.wutsi.koki.form.server.generator.html.tag.HTMLVideoWriter
 import kotlin.to
 
 class HTMLElementWriterProvider(
