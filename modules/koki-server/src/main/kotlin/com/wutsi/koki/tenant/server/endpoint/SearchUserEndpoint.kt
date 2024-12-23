@@ -1,6 +1,7 @@
 package com.wutsi.koki.tenant.server.endpoint
 
 import com.wutsi.koki.tenant.dto.SearchUserResponse
+import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.server.mapper.UserMapper
 import com.wutsi.koki.tenant.server.service.UserService
 import org.springframework.web.bind.annotation.GetMapping
@@ -21,6 +22,7 @@ class SearchUserEndpoint(
         @RequestParam(required = false, name = "q") keyword: String? = null,
         @RequestParam(required = false) id: List<Long> = emptyList(),
         @RequestParam(required = false, name = "role-id") roleId: List<Long> = emptyList(),
+        @RequestParam(required = false) status: UserStatus? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
     ): SearchUserResponse {
@@ -29,6 +31,7 @@ class SearchUserEndpoint(
             ids = id,
             roleIds = roleId,
             tenantId = tenantId,
+            status = status,
             limit = limit,
             offset = offset,
         )

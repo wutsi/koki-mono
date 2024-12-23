@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface WorkflowInstanceRepository : CrudRepository<WorkflowInstanceEntity, String> {
     fun countByWorkflowId(workflowId: Long): Long?
+
+    fun findByWorkflowId(workflowId: Long): List<WorkflowInstanceEntity>
 }

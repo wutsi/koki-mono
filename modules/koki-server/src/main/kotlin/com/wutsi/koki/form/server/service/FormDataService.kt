@@ -140,6 +140,18 @@ class FormDataService(
         return formData
     }
 
+    @Transactional
+    fun linkWithWorkflowInstanceId(id: String, workflowInstanceId: String, tenantId: Long): FormDataEntity {
+        val formData = get(id, tenantId)
+        if (formData.workflowInstanceId == null) {
+            formData.workflowInstanceId = workflowInstanceId
+            dao.save(formData)
+        } else if (formData.workflowInstanceId != workflowInstanceId) {
+            throw IllegalStateException("FormData#$id already associated with a WorkflowInstance")
+        }
+        return formData
+    }
+
     fun update(formData: FormDataEntity, data: Map<String, Any>): FormDataEntity {
         formData.data = objectMapper.writeValueAsString(data)
         formData.modifiedAt = Date()
@@ -166,7 +178,7 @@ class FormDataService(
         /* Files */
         val files = fileService.search(
             tenantId = formData.tenantId,
-            workflowInstanceIds = listOf(formData.workflowInstanceId),
+            workflowInstanceIds = listOf(formData.workflowInstanceId!!),
             limit = 100,
         )
         if (files.isEmpty()) {

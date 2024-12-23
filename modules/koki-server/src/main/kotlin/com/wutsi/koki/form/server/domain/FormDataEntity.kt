@@ -20,7 +20,7 @@ data class FormDataEntity(
     @Column(name = "form_fk")
     val formId: String = "",
 
-    val workflowInstanceId: String? = null,
+    var workflowInstanceId: String? = null,
     val status: FormDataStatus = FormDataStatus.UNKNOWN,
     var data: String? = null,
     val createdAt: Date = Date(),

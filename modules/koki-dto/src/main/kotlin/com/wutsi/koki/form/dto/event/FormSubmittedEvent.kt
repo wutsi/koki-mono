@@ -5,5 +5,6 @@ data class FormSubmittedEvent(
     val formId: String = "",
     val formDataId: String = "",
     val activityInstanceId: String? = null,
+    val userId: Long? = null,
     val timestamp: Long = System.currentTimeMillis(),
 )
