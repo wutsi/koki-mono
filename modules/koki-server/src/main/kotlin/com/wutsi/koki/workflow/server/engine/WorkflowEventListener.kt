@@ -10,10 +10,12 @@ import com.wutsi.koki.form.event.FormUpdatedEvent
 import com.wutsi.koki.form.server.service.FormDataService
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.workflow.dto.WorkflowStatus
+import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.engine.command.RunActivityCommand
 import com.wutsi.koki.workflow.server.service.ActivityInstanceService
 import com.wutsi.koki.workflow.server.service.ActivityService
 import com.wutsi.koki.workflow.server.service.LogService
+import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
 import org.slf4j.LoggerFactory
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service
 class WorkflowEventListener(
     private val workflowEngine: WorkflowEngine,
     private val activityInstanceService: ActivityInstanceService,
+    private val workflowInstanceService: WorkflowInstanceService,
     private val activityService: ActivityService,
     private val formDataService: FormDataService,
     private val activityRunnerProvider: ActivityRunnerProvider,
@@ -61,8 +64,30 @@ class WorkflowEventListener(
 
     @EventListener
     fun onFormSubmitted(event: FormSubmittedEvent) {
+        logger.add("form_id", event.formId)
+        logger.add("form_data_id", event.formDataId)
+        logger.add("user_id", event.userId)
+        logger.add("tenant_id", event.tenantId)
+
         if (event.activityInstanceId != null) {
-            completeActivity(event.formDataId, event.activityInstanceId!!, event.tenantId)
+            logger.add("action", "activity_completed")
+
+            val activityInstance = completeActivity(event.formDataId, event.activityInstanceId!!, event.tenantId)
+            logger.add("activity_instance_id", activityInstance.id)
+        } else {
+            logger.add("action", "create_workflow_instance")
+
+            val workflowInstances = workflowInstanceService.create(event)
+            logger.add("workflow_instance_count", workflowInstances.size)
+
+            workflowInstances.forEach { workflowInstance ->
+                try {
+                    workflowEngine.start(workflowInstance.id!!, workflowInstance.tenantId)
+                    logger.add("workflow_instance_id", workflowInstance.id)
+                } catch (ex: Exception) {
+                    LOGGER.warn("Unable to start WorkflowInstance#${workflowInstance.id}", ex)
+                }
+            }
         }
     }
 
@@ -113,7 +138,11 @@ class WorkflowEventListener(
         }
     }
 
-    private fun completeActivity(formDataId: String, activityInstanceId: String, tenantId: Long) {
+    private fun completeActivity(
+        formDataId: String,
+        activityInstanceId: String,
+        tenantId: Long
+    ): ActivityInstanceEntity {
         // Find the workflow activity
         val activityInstance = activityInstanceService.search(
             tenantId = tenantId,
@@ -125,5 +154,7 @@ class WorkflowEventListener(
         val formData = formDataService.get(formDataId, tenantId)
         val state = formData.dataAsMap(objectMapper)
         workflowEngine.done(activityInstance.id!!, state, tenantId)
+
+        return activityInstance
     }
 }

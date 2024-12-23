@@ -123,6 +123,7 @@ class UserService(
         keyword: String? = null,
         ids: List<Long> = emptyList(),
         roleIds: List<Long> = emptyList(),
+        status: UserStatus? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): List<UserEntity> {
@@ -141,6 +142,9 @@ class UserService(
         if (roleIds.isNotEmpty()) {
             jql.append(" AND R.id IN :roleIds")
         }
+        if (status != null) {
+            jql.append(" AND U.status = :status")
+        }
         jql.append(" ORDER BY U.displayName")
 
         val query = em.createQuery(jql.toString(), UserEntity::class.java)
@@ -153,6 +157,9 @@ class UserService(
         }
         if (roleIds.isNotEmpty()) {
             query.setParameter("roleIds", roleIds)
+        }
+        if (status != null) {
+            query.setParameter("status", status)
         }
 
         query.firstResult = offset

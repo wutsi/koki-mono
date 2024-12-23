@@ -4,14 +4,19 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.form.event.FormSubmittedEvent
+import com.wutsi.koki.form.server.service.FormDataService
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.server.service.RoleService
 import com.wutsi.koki.tenant.server.service.UserService
+import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.CreateWorkflowInstanceRequest
+import com.wutsi.koki.workflow.dto.Participant
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.dao.ParticipantRepository
 import com.wutsi.koki.workflow.server.dao.WorkflowInstanceRepository
 import com.wutsi.koki.workflow.server.domain.ParticipantEntity
+import com.wutsi.koki.workflow.server.domain.WorkflowEntity
 import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
 import jakarta.persistence.EntityManager
 import org.slf4j.LoggerFactory
@@ -27,7 +32,10 @@ class WorkflowInstanceService(
     private val workflowService: WorkflowService,
     private val userService: UserService,
     private val roleService: RoleService,
+    private val formDataService: FormDataService,
     private val securityService: SecurityService,
+    private val activityService: ActivityService,
+    private val taskDispatcher: WorkflowTaskDispatcher,
     private val em: EntityManager,
     private val objectMapper: ObjectMapper,
 ) {
@@ -123,8 +131,70 @@ class WorkflowInstanceService(
     }
 
     @Transactional
-    fun create(request: CreateWorkflowInstanceRequest, tenantId: Long): WorkflowInstanceEntity {
-        val instance = createInstance(request, tenantId)
+    fun create(event: FormSubmittedEvent): List<WorkflowInstanceEntity> {
+        val tenantId = event.tenantId
+        val workflowIds = activityService.search(
+            tenantId = tenantId,
+            active = true,
+            type = ActivityType.START,
+            formIds = listOf(event.formId),
+            limit = Integer.MAX_VALUE
+        ).map { activity -> activity.workflowId }.toSet()
+        if (workflowIds.isEmpty()) {
+            return emptyList()
+        }
+
+        val workflows = workflowService.search(
+            ids = workflowIds.toList(),
+            active = true,
+            limit = workflowIds.size,
+            tenantId = tenantId,
+        )
+
+        return workflows.mapNotNull { workflow ->
+            try {
+                val roleIds = workflow.activities.mapNotNull { activity -> activity.roleId }.toSet()
+                create(workflow, roleIds, event)
+            } catch (ex: Exception) {
+                LOGGER.warn("Unable to create workflow instance", ex)
+                null
+            }
+        }
+    }
+
+    private fun create(
+        workflow: WorkflowEntity,
+        roleIds: Set<Long>,
+        event: FormSubmittedEvent,
+    ): WorkflowInstanceEntity {
+        val workflowInstance = create(
+            tenantId = workflow.tenantId,
+            userId = event.userId,
+            request = CreateWorkflowInstanceRequest(
+                workflowId = workflow.id!!,
+                startAt = Date(),
+                participants = roleIds.mapNotNull { roleId -> toParticipant(roleId, event.tenantId) },
+                approverUserId = workflow.approverRoleId?.let { roleId ->
+                    taskDispatcher.dispatch(roleId, event.tenantId)?.id
+                },
+            ),
+        )
+        formDataService.linkWithWorkflowInstanceId(
+            id = event.formDataId,
+            workflowInstanceId = workflowInstance.id!!,
+            tenantId = event.tenantId,
+        )
+        return workflowInstance
+    }
+
+    private fun toParticipant(roleId: Long, tenantId: Long): Participant? {
+        return taskDispatcher.dispatch(roleId, tenantId)
+            ?.let { user -> Participant(roleId = roleId, userId = (user.id ?: -1)) }
+    }
+
+    @Transactional
+    fun create(request: CreateWorkflowInstanceRequest, tenantId: Long, userId: Long? = null): WorkflowInstanceEntity {
+        val instance = createInstance(request, tenantId, userId)
         createParticipants(request, instance, tenantId)
 
         workflowService.onCreated(instance)
@@ -164,7 +234,8 @@ class WorkflowInstanceService(
 
     private fun createInstance(
         request: CreateWorkflowInstanceRequest,
-        tenantId: Long
+        tenantId: Long,
+        userId: Long?,
     ): WorkflowInstanceEntity {
         val workflow = workflowService.get(request.workflowId, tenantId)
         val instance = instanceDao.save(
@@ -172,7 +243,7 @@ class WorkflowInstanceService(
                 id = UUID.randomUUID().toString(),
                 tenantId = tenantId,
                 workflowId = workflow.id!!,
-                createdById = securityService.getCurrentUserIdOrNull(),
+                createdById = (userId ?: securityService.getCurrentUserIdOrNull()),
                 title = request.title,
                 status = WorkflowStatus.NEW,
                 approverId = request.approverUserId,

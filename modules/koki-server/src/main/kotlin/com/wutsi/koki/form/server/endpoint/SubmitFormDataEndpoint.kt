@@ -5,6 +5,7 @@ import com.wutsi.koki.form.dto.SubmitFormDataRequest
 import com.wutsi.koki.form.dto.SubmitFormDataResponse
 import com.wutsi.koki.form.event.FormSubmittedEvent
 import com.wutsi.koki.form.server.service.FormDataService
+import com.wutsi.koki.security.server.service.SecurityService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -17,11 +18,12 @@ import org.springframework.web.bind.annotation.RestController
 class SubmitFormDataEndpoint(
     private val service: FormDataService,
     private val eventPublisher: EventPublisher,
+    private val securityService: SecurityService,
 ) {
     @PostMapping("/v1/form-data")
     fun create(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-        @RequestBody @Valid request: SubmitFormDataRequest
+        @RequestBody @Valid request: SubmitFormDataRequest,
     ): SubmitFormDataResponse {
         val formData = service.submit(request, tenantId)
         val response = SubmitFormDataResponse(formData.id!!)
@@ -32,6 +34,7 @@ class SubmitFormDataEndpoint(
                 formId = request.formId,
                 formDataId = formData.id,
                 activityInstanceId = request.activityInstanceId,
+                userId = securityService.getCurrentUserIdOrNull(),
             )
         )
         return response

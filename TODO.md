@@ -16,6 +16,7 @@
 ## Workflow
 
 - [] Start Workflow on form submission
+- [] Add "recipient" field for SEND activity
 - [] Send email notification for each USER activity. It should include the link to the form
 - [] Cancel workflow Instance
 - [] Add support for jsonpath mapping
