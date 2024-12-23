@@ -29,7 +29,6 @@ nav {
 }
 
 .share-panel {
-    background: #808080;
     border-radius: 0.5em;
     border: 1px solid gray;
     padding: 0.5em;
@@ -40,7 +39,6 @@ nav {
     padding: 0.5em;
     overflow: clip;
     text-wrap: nowrap;
-    color: white;
 }
 
 .share-panel .btn {

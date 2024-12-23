@@ -20,6 +20,6 @@ class CurrentTenantHolder(
             val host = URI(request.requestURL.toString()).host
             model = service.tenants().find { tenant -> tenant.domainName == host }
         }
-        return model!!
+        return model
     }
 }

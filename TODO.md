@@ -5,7 +5,6 @@
 - [x] Support ReadOnly fields
 - [x] Track Form submissions
 - [x] Share Forms Link
-- [] Start Workflow on form subscription
 - [] Add support for Stripe field
 - [] Add support for Paypal field
 - [] Add checkbox grid field
@@ -14,15 +13,13 @@
 - [] Support customer form style
 - [] Support anonymous forms
 
-## Storage
-
-- [] Use S3 to file storage
-
 ## Workflow
 
+- [] Start Workflow on form submission
 - [] Send email notification for each USER activity. It should include the link to the form
-- [] Run scheduled workflow instances
 - [] Cancel workflow Instance
+- [] Add support for jsonpath mapping
+- [] Run scheduled workflow instances
 - [] Add support for Business Rule activities
 - [x] Add support for Manual activities
 - [x] Simplify tenant configuration API as Name/Value pair
@@ -38,6 +35,12 @@
 - [x] Add support for Service activities
 - [x] List workflow instances
 
+## Users
+
+- [] Signup user
+- [] Invite user
+- [] Manage roles
+
 ## Files
 
 - [] Upload files
@@ -46,11 +49,20 @@
 ## Portal
 
 - [x] Align webapp domain name with Tenant
+- [] Configure home page by role
+
+## Module
+
+### Storage
+
+- [] Support S3 storage
+
+### Messaging
+
+- [] Slack Notification
 
 ## Other
 
-- [] Add support for jsonpath
 - [] Add support for external modules
-- [] Configure home page
 - [] Add tenant healthcheck to validate connectivity with all resources
 
