@@ -1,5 +1,5 @@
 package com.wutsi.koki.form.dto
 
-data class GetSubmissionResponse(
+data class GetFormSubmissionResponse(
     val formSubmission: FormSubmission = FormSubmission()
 )
