@@ -58,6 +58,7 @@ class WorkflowControllerTest : AbstractPageControllerTest() {
         waitForPresenceOf(".logs-widget tr.log")
         assertElementCount(".logs-widget tr.log", entries.size)
 
+        scrollToBottom()
         click("#log-load-more a", 1000)
         assertElementCount(".logs-widget tr.log", entries.size + logEntries.size)
     }
@@ -86,10 +87,10 @@ class WorkflowControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/workflows/${workflowInstance.id}")
 
-        click("#pills-files-tab")
-        waitForPresenceOf(".logs-widget tr.file")
+        click("#pills-files-tab", 1000)
         assertElementCount(".files-widget tr.file", entries.size)
 
+        scrollToBottom()
         click("#file-load-more a", 1000)
         assertElementCount(".files-widget tr.file", entries.size + files.size)
     }
