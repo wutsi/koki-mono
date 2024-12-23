@@ -16,7 +16,7 @@ class GetFormDataEndpoint(
     private val mapper: FormDataMapper,
 ) {
     @GetMapping("/v1/form-data/{id}")
-    fun create(
+    fun get(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: String
     ): GetFormDataResponse {

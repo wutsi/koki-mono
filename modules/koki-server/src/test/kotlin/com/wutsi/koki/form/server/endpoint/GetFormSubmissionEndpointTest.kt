@@ -1,56 +1,44 @@
 package com.wutsi.koki.tenant.server.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
-import com.wutsi.koki.form.dto.SearchFormDataResponse
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.form.dto.GetFormSubmissionResponse
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/form/SearchFormDataEndpoint.sql"])
-class SearchFormDataEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/form/GetFormSubmissionEndpoint.sql"])
+class GetFormSubmissionEndpointTest : TenantAwareEndpointTest() {
     @Test
-    fun all() {
-        val result = rest.getForEntity("/v1/form-data", SearchFormDataResponse::class.java)
+    fun get() {
+        val result = rest.getForEntity("/v1/form-submissions/10011", GetFormSubmissionResponse::class.java)
+
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val forms = result.body!!.formData
-
-        assertEquals(7, forms.size)
+        val submission = result.body!!.formSubmission
+        assertEquals("100", submission.formId)
+        assertEquals("wi-100", submission.workflowInstanceId)
+        assertEquals("wi-100-01", submission.activityInstanceId)
+        assertEquals(11, submission.submittedById)
     }
 
     @Test
-    fun `by id`() {
-        val result = rest.getForEntity("/v1/form-data?id=10011&id=10012&id=11013", SearchFormDataResponse::class.java)
-        assertEquals(HttpStatus.OK, result.statusCode)
+    fun notFound() {
+        val result = rest.getForEntity("/v1/form-submissions/xxxx", ErrorResponse::class.java)
 
-        val formData = result.body!!.formData
-        assertEquals(3, formData.size)
-    }
+        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
 
-    @Test
-    fun `filter by instance-id`() {
-        val result =
-            rest.getForEntity("/v1/form-data?workflow-instance-id=wi-100", SearchFormDataResponse::class.java)
-
-        val formData = result.body!!.formData
-        assertEquals(1, formData.size)
-    }
-
-    @Test
-    fun `by status`() {
-        val result =
-            rest.getForEntity("/v1/form-data?status=IN_PROGRESS", SearchFormDataResponse::class.java)
-
-        val formData = result.body!!.formData
-        assertEquals(3, formData.size)
+        assertEquals(ErrorCode.FORM_SUBMISSION_NOT_FOUND, result.body!!.error.code)
     }
 
     @Test
     fun `form of another tenant`() {
-        val result =
-            rest.getForEntity("/v1/forms?id=20022", SearchFormDataResponse::class.java)
+        val result = rest.getForEntity("/v1/form-submissions/20011", ErrorResponse::class.java)
 
-        assertEquals(0, result.body!!.formData.size)
+        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
+
+        assertEquals(ErrorCode.FORM_SUBMISSION_NOT_FOUND, result.body!!.error.code)
     }
 }

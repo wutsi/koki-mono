@@ -1,33 +1,33 @@
 package com.wutsi.koki.form.server.mapper
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.wutsi.koki.form.dto.FormData
-import com.wutsi.koki.form.dto.FormDataSummary
-import com.wutsi.koki.form.server.domain.FormDataEntity
+import com.wutsi.koki.form.dto.FormSubmission
+import com.wutsi.koki.form.dto.FormSubmissionSummary
+import com.wutsi.koki.form.server.domain.FormSubmissionEntity
 import org.springframework.stereotype.Service
 
 @Service
-class FormDataMapper(private val objectMapper: ObjectMapper) {
-    fun toFormData(entity: FormDataEntity): FormData {
-        return FormData(
+class FormSubmissionMapper(private val objectMapper: ObjectMapper) {
+    fun toFormSubmission(entity: FormSubmissionEntity): FormSubmission {
+        return FormSubmission(
             id = entity.id ?: "",
             formId = entity.formId,
             data = entity.dataAsMap(objectMapper),
-            createdAt = entity.createdAt,
-            modifiedAt = entity.modifiedAt,
-            status = entity.status,
+            submittedAt = entity.submittedAt,
+            submittedById = entity.submittedById,
             workflowInstanceId = entity.workflowInstanceId,
+            activityInstanceId = entity.activityInstanceId,
         )
     }
 
-    fun toFormDataSummary(entity: FormDataEntity): FormDataSummary {
-        return FormDataSummary(
+    fun toFormSubmissionSummary(entity: FormSubmissionEntity): FormSubmissionSummary {
+        return FormSubmissionSummary(
             id = entity.id ?: "",
             formId = entity.formId,
-            createdAt = entity.createdAt,
-            modifiedAt = entity.modifiedAt,
-            status = entity.status,
+            submittedAt = entity.submittedAt,
+            submittedById = entity.submittedById,
             workflowInstanceId = entity.workflowInstanceId,
+            activityInstanceId = entity.activityInstanceId,
         )
     }
 }

@@ -23,6 +23,7 @@ class FormDataService(
     private val dao: FormDataRepository,
     private val formService: FormService,
     private val fileService: FileService,
+    private val formSubmissionService: FormSubmissionService,
     private val objectMapper: ObjectMapper,
     private val em: EntityManager,
 ) {
@@ -42,7 +43,7 @@ class FormDataService(
         formIds: List<String> = emptyList(),
         workflowInstanceIds: List<String> = emptyList(),
         status: FormDataStatus? = null,
-        limit: Int = 200,
+        limit: Int = 20,
         offset: Int = 0,
     ): List<FormDataEntity> {
         val jql = StringBuilder("SELECT F FROM FormDataEntity F")
@@ -105,22 +106,27 @@ class FormDataService(
                 limit = 1
             )
             if (formData.isNotEmpty()) {
-                return update(formData[0], request.data)
+                update(formData[0], request.data)
+                formSubmissionService.create(formData[0], request)
+                return formData[0]
             }
         }
 
         val now = Date()
-        val formData = FormDataEntity(
-            id = UUID.randomUUID().toString(),
-            tenantId = tenantId,
-            formId = form.id!!,
-            workflowInstanceId = request.workflowInstanceId,
-            data = objectMapper.writeValueAsString(request.data),
-            status = FormDataStatus.SUBMITTED,
-            createdAt = now,
-            modifiedAt = now,
+        val formData = dao.save(
+            FormDataEntity(
+                id = UUID.randomUUID().toString(),
+                tenantId = tenantId,
+                formId = form.id!!,
+                workflowInstanceId = request.workflowInstanceId,
+                data = objectMapper.writeValueAsString(request.data),
+                status = FormDataStatus.SUBMITTED,
+                createdAt = now,
+                modifiedAt = now,
+            )
         )
-        dao.save(formData)
+
+        formSubmissionService.create(formData, request)
 
         linkFiles(formData, request.data)
         return formData
@@ -129,7 +135,9 @@ class FormDataService(
     @Transactional
     fun update(formDataId: String, request: UpdateFormDataRequest, tenantId: Long): FormDataEntity {
         val formData = get(formDataId, tenantId)
-        return update(formData, request.data)
+        update(formData, request.data)
+        formSubmissionService.create(formData, request)
+        return formData
     }
 
     fun update(formData: FormDataEntity, data: Map<String, Any>): FormDataEntity {
@@ -142,9 +150,7 @@ class FormDataService(
     }
 
     private fun linkFiles(formData: FormDataEntity, data: Map<String, Any>) {
-        if (formData.workflowInstanceId == null) {
-            return
-        }
+        formData.workflowInstanceId ?: return
 
         /* File names */
         val form = formService.get(formData.formId, formData.tenantId)

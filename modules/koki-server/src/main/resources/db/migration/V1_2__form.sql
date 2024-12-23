@@ -25,7 +25,7 @@ CREATE TABLE T_FORM_DATA(
 
   workflow_instance_id    VARCHAR(36),
   status                  INT NOT NULL DEFAULT 0,
-  data                    JSON NOT NULL,
+  data                    JSON,
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
 
@@ -33,3 +33,18 @@ CREATE TABLE T_FORM_DATA(
 ) ENGINE = InnoDB;
 
 CREATE INDEX I_FORM_DATA_WORKFLOW ON T_FORM_DATA(workflow_instance_id);
+
+CREATE TABLE T_FORM_SUBMISSION(
+  id                      VARCHAR(36) NOT NULL,
+
+  tenant_fk               BIGINT NOT NULL,
+  form_fk                 VARCHAR(36) NOT NULL REFERENCES T_FORM(id),
+  submitted_by_fk         BIGINT,
+
+  workflow_instance_id    VARCHAR(36),
+  activity_instance_id    VARCHAR(36),
+  data                    JSON,
+  submitted_at            DATETIME DEFAULT NOW(),
+
+  PRIMARY KEY(id)
+) ENGINE = InnoDB;
