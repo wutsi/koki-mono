@@ -7,6 +7,7 @@ import com.wutsi.koki.form.dto.SubmitFormDataRequest
 import com.wutsi.koki.form.dto.UpdateFormDataRequest
 import com.wutsi.koki.portal.mapper.FormMapper
 import com.wutsi.koki.portal.model.FormModel
+import com.wutsi.koki.portal.model.FormSubmissionModel
 import com.wutsi.koki.portal.page.settings.form.FormForm
 import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.workflow.dto.FormSortBy
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service
 class FormService(
     private val koki: KokiForms,
     private val mapper: FormMapper,
+    private val userService: UserService,
     private val objectMapper: ObjectMapper,
 ) {
     fun form(
@@ -115,5 +117,45 @@ class FormService(
                 activityInstanceId = activityInstanceId
             )
         )
+    }
+
+    fun submission(id: String): FormSubmissionModel {
+        val entity = koki.submission(id).formSubmission
+        val user = entity.submittedById?.let { id -> userService.user(id) }
+        val form = forms(
+            limit = 1,
+            ids = listOf(entity.formId)
+        ).firstOrNull() ?: FormModel(id = entity.formId)
+
+        return mapper.toFormSubmissionModel(entity, form, user)
+    }
+
+    fun submissions(
+        formId: String,
+        limit: Int = 20,
+        offset: Int = 0
+    ): List<FormSubmissionModel> {
+        val submissions = koki.submissions(
+            formId = formId,
+            limit = limit,
+            offset = offset
+        ).formSubmissions
+
+        val userIds = submissions.mapNotNull { submission -> submission.submittedById }.toSet()
+        val userMap = if (userIds.isEmpty()) {
+            emptyMap()
+        } else {
+            userService.users(
+                ids = userIds.toList(),
+                limit = userIds.size
+            ).associateBy { user -> user.id }
+        }
+
+        return submissions.map { submission ->
+            mapper.toFormSubmissionModel(
+                entity = submission,
+                submittedBy = submission.submittedById?.let { id -> userMap[id] }
+            )
+        }
     }
 }

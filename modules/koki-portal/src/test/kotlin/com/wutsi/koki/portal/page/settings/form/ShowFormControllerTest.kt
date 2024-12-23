@@ -8,11 +8,16 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.FileFixtures.files
 import com.wutsi.koki.FormFixtures.form
+import com.wutsi.koki.FormFixtures.formSubmissions
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.form.dto.FormSubmissionSummary
 import com.wutsi.koki.form.dto.GetFormResponse
+import com.wutsi.koki.form.dto.SearchFormSubmissionResponse
 import com.wutsi.koki.portal.page.PageName
 import org.junit.jupiter.api.BeforeEach
+import java.util.UUID
 import kotlin.test.Test
 
 class ShowFormControllerTest : AbstractPageControllerTest() {
@@ -28,6 +33,52 @@ class ShowFormControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/forms/${form.id}")
         assertCurrentPageIs(PageName.SETTINGS_FORM)
         assertElementNotPresent(".alert-danger")
+
+        click("#pills-submissions-tab")
+        waitForPresenceOf(".submissions-widget tr.submission")
+        assertElementCount(".submissions-widget tr.submission", files.size)
+
+        click("#pills-share-tab")
+    }
+
+    @Test
+    fun `load more submissions`() {
+        var entries = mutableListOf<FormSubmissionSummary>()
+        repeat(20) {
+            entries.add(formSubmissions[0].copy(id = UUID.randomUUID().toString()))
+        }
+        doReturn(SearchFormSubmissionResponse(entries))
+            .doReturn(SearchFormSubmissionResponse(formSubmissions))
+            .whenever(kokiForms)
+            .submissions(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
+
+        navigateTo("/settings/forms/${form.id}")
+
+        click("#pills-submissions-tab")
+        waitForPresenceOf(".submissions-widget tr.submission")
+        assertElementCount(".submissions-widget tr.submission", entries.size)
+
+        scrollToBottom()
+        click("#submission-load-more a", 1000)
+        assertElementCount(".submissions-widget tr.submission", entries.size + formSubmissions.size)
+    }
+
+    @Test
+    fun submission() {
+        navigateTo("/settings/forms/${form.id}")
+        assertCurrentPageIs(PageName.SETTINGS_FORM)
+        assertElementNotPresent(".alert-danger")
+
+        click("#pills-submissions-tab")
+        waitForPresenceOf(".submissions-widget tr.submission")
+        click(".submissions-widget tr.submission .btn-view", 1000)
+
+        driver.switchTo().window(driver.getWindowHandles().toList()[1])
+        assertCurrentPageIs(PageName.SETTINGS_FORM_SUBMISSION)
     }
 
     @Test

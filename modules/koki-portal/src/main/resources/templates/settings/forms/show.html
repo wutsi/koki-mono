@@ -49,15 +49,50 @@
                     </table>
                 </div>
             </div>
+
             <div class="widget">
-                <div class="widget-header">
-                    <div class="widget-title">Content</div>
-                </div>
                 <div class="widget-body">
-                    <a class="btn-preview" target="_new" th:href="${form.viewUrl}">Preview</a>
-                    <pre>
-                        <code class="language-json" th:text="${form.content}"></code>
-                    </pre>
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-content" aria-selected="true" class="nav-link active"
+                                    data-bs-target="#pills-content" data-bs-toggle="pill" id="pills-content-tab"
+                                    role="tab" type="button">
+                                Content
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-submissions" aria-selected="false" class="nav-link"
+                                    data-bs-target="#pills-submissions" data-bs-toggle="pill" id="pills-submissions-tab"
+                                    role="tab" type="button">
+                                Submissions
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-share" aria-selected="false" class="nav-link"
+                                    data-bs-target="#pills-share" data-bs-toggle="pill" id="pills-share-tab"
+                                    role="tab" type="button">
+                                Share
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div aria-labelledby="pills-content-tab" class="tab-pane fade show active" id="pills-content"
+                             role="tabpanel">
+                            <a class="btn-preview" target="_new" th:href="${form.viewUrl}">Preview</a>
+                            <pre>
+                                <code class="language-json" th:text="${form.content}"></code>
+                            </pre>
+                        </div>
+
+                        <div aria-labelledby="pills-submissions-tab" class="tab-pane fade" id="pills-submissions"
+                             role="tabpanel"
+                             th:data-url="'/forms/widgets/submissions?form-id=' + ${form.id}">
+                        </div>
+
+                        <div aria-labelledby="pills-share-tab" class="tab-pane fade" id="pills-share" role="tabpanel">
+                            SHARE
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

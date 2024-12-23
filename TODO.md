@@ -3,7 +3,7 @@
 ## Form
 
 - [x] Support ReadOnly fields
-- [] Track Form submissions
+- [x] Track Form submissions
 - [] Share Forms Link
 - [] Start Workflow on form subscription
 - [] Add support for Stripe field

@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container">
+    <h1>Form Submission</h1>
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/form :: form-submission-breadcrumb(${submission})}"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <table class="table">
+                        <tr>
+                            <td><b>Form</b></td>
+                            <td>
+                                <a class="form" target="_new" th:href="${submission.form.url}"
+                                   th:text="${submission.form.longTitle}">FORM</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="20%"><b>Submission Date</b></td>
+                            <td th:text="${submission.submittedAtText}">SUBMITTED</td>
+                        </tr>
+                        <tr>
+                            <td><b>Submitted By</b></td>
+                            <td th:text="${submission.submittedBy?.displayName}">SUBMITTED BY</td>
+                        </tr>
+                        <tr>
+                            <td><b>Data</b></td>
+                            <td>
+                                <pre>
+                                    <code class="language-json" th:text="${submission.dataJSON}"></code>
+                                </pre>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{__components/highlightjs :: prettity('json')}"></div>
+</body>
+</html>

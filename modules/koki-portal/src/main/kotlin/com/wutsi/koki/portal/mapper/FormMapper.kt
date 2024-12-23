@@ -2,8 +2,12 @@ package com.wutsi.koki.portal.mapper
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.form.dto.Form
+import com.wutsi.koki.form.dto.FormSubmission
+import com.wutsi.koki.form.dto.FormSubmissionSummary
 import com.wutsi.koki.form.dto.FormSummary
 import com.wutsi.koki.portal.model.FormModel
+import com.wutsi.koki.portal.model.FormSubmissionModel
+import com.wutsi.koki.portal.model.UserModel
 import org.springframework.stereotype.Service
 import kotlin.collections.listOf
 
@@ -57,5 +61,40 @@ class FormMapper(private val objectMapper: ObjectMapper) : TenantAwareMapper() {
                 if (readOnly) "read-only=true" else null
             ).filterNotNull().joinToString(separator = "&")
         ).joinToString(separator = "?")
+    }
+
+    fun toFormSubmissionModel(
+        entity: FormSubmission,
+        form: FormModel,
+        submittedBy: UserModel? = null
+    ): FormSubmissionModel {
+        val fmt = createDateFormat()
+        return FormSubmissionModel(
+            id = entity.id,
+            data = entity.data,
+            dataJSON = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(entity.data),
+            form = form,
+            workflowInstanceId = entity.workflowInstanceId,
+            activityInstanceId = entity.activityInstanceId,
+            submittedAt = entity.submittedAt,
+            submittedBy = submittedBy,
+            submittedAtText = fmt.format(entity.submittedAt),
+        )
+    }
+
+    fun toFormSubmissionModel(
+        entity: FormSubmissionSummary,
+        submittedBy: UserModel? = null
+    ): FormSubmissionModel {
+        val fmt = createDateFormat()
+        return FormSubmissionModel(
+            id = entity.id,
+            workflowInstanceId = entity.workflowInstanceId,
+            activityInstanceId = entity.activityInstanceId,
+            submittedAt = entity.submittedAt,
+            submittedBy = submittedBy,
+            form = FormModel(entity.formId),
+            submittedAtText = fmt.format(entity.submittedAt),
+        )
     }
 }

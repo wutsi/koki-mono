@@ -31,8 +31,10 @@ import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.form.dto.GetFormResponse
+import com.wutsi.koki.form.dto.GetFormSubmissionResponse
 import com.wutsi.koki.form.dto.SaveFormResponse
 import com.wutsi.koki.form.dto.SearchFormResponse
+import com.wutsi.koki.form.dto.SearchFormSubmissionResponse
 import com.wutsi.koki.message.dto.GetMessageResponse
 import com.wutsi.koki.message.dto.SearchMessageResponse
 import com.wutsi.koki.portal.service.AccessTokenHolder
@@ -240,6 +242,15 @@ abstract class AbstractPageControllerTest {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
+
+        doReturn(GetFormSubmissionResponse(FormFixtures.formSubmission)).whenever(kokiForms).submission(any())
+
+        doReturn(SearchFormSubmissionResponse(FormFixtures.formSubmissions)).whenever(kokiForms)
+            .submissions(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),

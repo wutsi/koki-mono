@@ -1,9 +1,11 @@
 package com.wutsi.koki.sdk
 
 import com.wutsi.koki.form.dto.GetFormResponse
+import com.wutsi.koki.form.dto.GetFormSubmissionResponse
 import com.wutsi.koki.form.dto.SaveFormRequest
 import com.wutsi.koki.form.dto.SaveFormResponse
 import com.wutsi.koki.form.dto.SearchFormResponse
+import com.wutsi.koki.form.dto.SearchFormSubmissionResponse
 import com.wutsi.koki.form.dto.SubmitFormDataRequest
 import com.wutsi.koki.form.dto.SubmitFormDataResponse
 import com.wutsi.koki.form.dto.UpdateFormDataRequest
@@ -18,6 +20,7 @@ class KokiForms(
     companion object {
         private const val FORM_PATH_PREFIX = "/v1/forms"
         private const val FORM_DATA_PATH_PREFIX = "/v1/form-data"
+        private const val FORM_SUBMISSION_PATH_PREFIX = "/v1/form-submissions"
     }
 
     fun form(id: String): GetFormResponse {
@@ -26,12 +29,12 @@ class KokiForms(
     }
 
     fun forms(
-        ids: List<String> = emptyList(),
-        active: Boolean? = null,
-        limit: Int = 20,
-        offset: Int = 0,
-        sortBy: FormSortBy? = null,
-        ascending: Boolean = true,
+        ids: List<String>,
+        active: Boolean?,
+        limit: Int,
+        offset: Int,
+        sortBy: FormSortBy?,
+        ascending: Boolean,
     ): SearchFormResponse {
         val url = urlBuilder.build(
             FORM_PATH_PREFIX,
@@ -45,6 +48,27 @@ class KokiForms(
             )
         )
         return rest.getForEntity(url, SearchFormResponse::class.java).body
+    }
+
+    fun submission(id: String): GetFormSubmissionResponse {
+        val url = urlBuilder.build("$FORM_SUBMISSION_PATH_PREFIX/$id")
+        return rest.getForEntity(url, GetFormSubmissionResponse::class.java).body
+    }
+
+    fun submissions(
+        formId: String,
+        limit: Int,
+        offset: Int,
+    ): SearchFormSubmissionResponse {
+        val url = urlBuilder.build(
+            FORM_SUBMISSION_PATH_PREFIX,
+            mapOf(
+                "form-id" to formId,
+                "limit" to limit,
+                "offset" to offset,
+            )
+        )
+        return rest.getForEntity(url, SearchFormSubmissionResponse::class.java).body
     }
 
     fun html(

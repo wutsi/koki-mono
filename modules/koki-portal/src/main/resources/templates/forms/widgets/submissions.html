@@ -1,0 +1,21 @@
+<div class="widget submissions-widget">
+    <div class="widget-header">
+        <h3 class="widget-title">Submissions</h3>
+    </div>
+    <div class="widget-body">
+        <table class="table table-striped" th:if="${submissions}">
+            <tr>
+                <th>Date</th>
+                <th>Submitted By</th>
+                <th></th>
+            </tr>
+
+            <tr class="submission" th:each="submission : ${submissions}">
+                <td th:replace="~{__components/form :: submission-columns(${submission})}"></td>
+            </tr>
+            <tr th:replace="~{__components/form :: submission-load-more(${moreUrl})}"></tr>
+        </table>
+
+        <div class="text-center empty-message " th:if="!${submissions}">No submission!</div>
+    </div>
+</div>
