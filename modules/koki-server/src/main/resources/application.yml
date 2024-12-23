@@ -75,11 +75,11 @@ springdoc:
 
         -   group: forms
             display-name: Form API
-            paths-to-match: /v1/forms, /v1/forms/*, /v1/forms/**, /v1/form-data, /v1/form-data/*
+            paths-to-match: /v1/forms, /v1/forms/*, /v1/forms/**, /v1/form-data, /v1/form-data/**, /v1/form-submissions, /v1/form-submissions/**
 
         -   group: messages
             display-name: Message API
-            paths-to-match: /v1/messages, /v1/messages/*
+            paths-to-match: /v1/messages, /v1/messages/**
 
         -   group: scripts
             display-name: Script API
