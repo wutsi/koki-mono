@@ -39,6 +39,8 @@ CREATE TABLE T_ACTIVITY(
   method                  VARCHAR(10),
   input                   JSON,
   output                  JSON,
+  recipient_display_name  VARCHAR(100),
+  recipient_email         VARCHAR(255),
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
 
@@ -70,7 +72,6 @@ CREATE TABLE T_WORKFLOW_INSTANCE(
     title               VARCHAR(255),
     status              INT NOT NULL DEFAULT 0,
     state               JSON,
-    parameters          JSON,
     start_at            DATETIME NOT NULL,
     due_at              DATETIME,
     created_at          DATETIME DEFAULT NOW(),

@@ -9,8 +9,9 @@
 
 <div class="container">
     <h1>
-        <img align="absmiddle" height="48" src="/image/workflow.png" width="48"/>
-        <span th:text="${activity.longTitle}">NAME</span>
+        <span
+            th:replace="~{__components/workflow :: activity-type-icon(${activity.type})}"></span>
+        <span th:text="${activity.titleOrName}">NAME</span>
     </h1>
     <div class="row">
         <div class="col-12">
@@ -56,6 +57,13 @@
                                    th:text="${activity.message.name}">NAME</a>
                             </td>
                         </tr>
+                        <tr th:if="${activity.event}">
+                            <td><b>Event</b></td>
+                            <td>
+                                <span class="badge bg-dark rounded-pill margin-right"
+                                      th:text="${activity.event}">EVENT</span>
+                            </td>
+                        </tr>
                         <tr th:if="${activity.script}">
                             <td><b>Script</b></td>
                             <td>
@@ -86,7 +94,15 @@
                                 </pre>
                             </td>
                         </tr>
-                        <tr th:if="!${activity.description.isEmpty()}">
+                        <tr th:if="${activity.type.name == 'SEND'} AND ${activity.recipient}">
+                            <td><b>Recipient</b></td>
+                            <td th:text="${activity.recipient.emailAddress}">RECIPIENT</td>
+                        </tr>
+                        <tr th:if="${activity.type.name == 'SEND'} AND !${activity.recipient} AND ${activity.role}">
+                            <td><b>Recipient Role</b></td>
+                            <td th:text="${activity.role}">ROLE</td>
+                        </tr>
+                        <tr th:if="${activity.description}">
                             <td><b>Description</b></td>
                             <td th:text="${activity.description}">DESCRIPTION</td>
                         </tr>

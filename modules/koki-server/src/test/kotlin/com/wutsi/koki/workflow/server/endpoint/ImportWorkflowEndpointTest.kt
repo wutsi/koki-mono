@@ -10,6 +10,7 @@ import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.FlowData
 import com.wutsi.koki.workflow.dto.ImportWorkflowRequest
 import com.wutsi.koki.workflow.dto.ImportWorkflowResponse
+import com.wutsi.koki.workflow.dto.RecipientData
 import com.wutsi.koki.workflow.dto.WorkflowData
 import com.wutsi.koki.workflow.server.dao.ActivityRepository
 import com.wutsi.koki.workflow.server.dao.FlowRepository
@@ -56,7 +57,11 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
                     service = "srv-100",
                     event = "order-received",
                     path = "/activities",
-                    method = "POST"
+                    method = "POST",
+                    recipient = RecipientData(
+                        email = "ray.sponsible@gmail.com",
+                        displayName = "Ray Sponsible",
+                    )
                 ),
                 ActivityData(
                     name = "STOP",
@@ -103,6 +108,8 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertNull(aStart?.path)
         assertNull(aStart?.method)
         assertNull(aStart?.event)
+        assertNull(aStart?.recipientDisplayName)
+        assertNull(aStart?.recipientEmail)
 
         val aInvoice = activityDao.findByNameAndWorkflowId("INVOICE", workflow.id)
         assertEquals("INVOICE", aInvoice?.name)
@@ -121,6 +128,8 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals("100", aInvoice?.serviceId)
         assertEquals("/activities", aInvoice?.path)
         assertEquals("POST", aInvoice?.method)
+        assertEquals("Ray Sponsible", aInvoice?.recipientDisplayName)
+        assertEquals("ray.sponsible@gmail.com", aInvoice?.recipientEmail)
 
         val aEnd = activityDao.findByNameAndWorkflowId("STOP", workflow.id)
         assertEquals("STOP", aEnd?.name)
@@ -137,6 +146,8 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertNull(aEnd?.serviceId)
         assertNull(aEnd?.path)
         assertNull(aEnd?.method)
+        assertNull(aEnd?.recipientDisplayName)
+        assertNull(aEnd?.recipientEmail)
 
         val flows = flowDao.findByWorkflowId(workflow.id!!)
         assertEquals(2, flows.size)
@@ -181,6 +192,8 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertNull(aStart?.path)
         assertNull(aStart?.method)
         assertNull(aStart?.event)
+        assertNull(aStart?.recipientDisplayName)
+        assertNull(aStart?.recipientEmail)
 
         val aInvoice = activityDao.findByNameAndWorkflowId("INVOICE", workflow.id)
         assertEquals("INVOICE", aInvoice?.name)
@@ -198,6 +211,8 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertEquals("100", aInvoice?.serviceId)
         assertEquals("/activities", aInvoice?.path)
         assertEquals("POST", aInvoice?.method)
+        assertEquals("Ray Sponsible", aInvoice?.recipientDisplayName)
+        assertEquals("ray.sponsible@gmail.com", aInvoice?.recipientEmail)
 
         val aEnd = activityDao.findByNameAndWorkflowId("STOP", workflow.id!!)
         assertEquals("STOP", aEnd?.name)
@@ -213,6 +228,8 @@ class ImportWorkflowEndpointTest : TenantAwareEndpointTest() {
         assertNull(aEnd?.serviceId)
         assertNull(aEnd?.path)
         assertNull(aEnd?.method)
+        assertNull(aEnd?.recipientDisplayName)
+        assertNull(aEnd?.recipientEmail)
 
         val aDeactivated = activityDao.findById(111L).get()
         assertEquals(false, aDeactivated.active)

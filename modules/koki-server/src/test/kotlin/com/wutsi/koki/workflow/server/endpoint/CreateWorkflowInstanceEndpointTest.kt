@@ -68,10 +68,10 @@ class CreateWorkflowInstanceEndpointTest : AuthorizationAwareEndpointTest() {
         assertNull(instance.doneAt)
         assertEquals(USER_ID, instance.createdById)
 
-        val parameters = objectMapper.readValue(instance.parameters, Map::class.java)
-        assertEquals(2, parameters.size)
-        assertEquals("val1", parameters["PARAM_1"])
-        assertEquals("val2", parameters["PARAM_2"])
+        val state = objectMapper.readValue(instance.state, Map::class.java)
+        assertEquals(2, state.size)
+        assertEquals("val1", state["PARAM_1"])
+        assertEquals("val2", state["PARAM_2"])
 
         val participants = participanDao.findByWorkflowInstanceId(instanceId).sortedBy { it.roleId }
 
@@ -106,8 +106,8 @@ class CreateWorkflowInstanceEndpointTest : AuthorizationAwareEndpointTest() {
         assertNull(instance.approverId)
         assertNull(instance.createdById)
 
-        val parameters = objectMapper.readValue(instance.parameters, Map::class.java)
-        assertEquals(0, parameters.size)
+        val state = objectMapper.readValue(instance.state, Map::class.java)
+        assertEquals(0, state.size)
 
         val participants = participanDao.findByWorkflowInstanceId(instanceId).sortedBy { it.roleId }
         assertEquals(0, participants.size)
@@ -120,15 +120,6 @@ class CreateWorkflowInstanceEndpointTest : AuthorizationAwareEndpointTest() {
 
         assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
         assertEquals(ErrorCode.WORKFLOW_INSTANCE_PARAMETER_MISSING, result.body?.error?.code)
-    }
-
-    @Test
-    fun `invalid parameter`() {
-        val xrequest = request.copy(parameters = mapOf("PARAM_1" to "val1", "PARAM_2" to "val2", "X" to "Y"))
-        val result = rest.postForEntity("/v1/workflow-instances", xrequest, ErrorResponse::class.java)
-
-        assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
-        assertEquals(ErrorCode.WORKFLOW_INSTANCE_PARAMETER_NOT_VALID, result.body?.error?.code)
     }
 
     @Test

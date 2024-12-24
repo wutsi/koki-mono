@@ -32,12 +32,6 @@ class GetWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
             workflowInstance.state,
         )
         assertEquals(
-            mapOf(
-                "order_id" to "123456",
-            ),
-            workflowInstance.parameters,
-        )
-        assertEquals(
             listOf(
                 Participant(userId = 100, roleId = 10),
                 Participant(userId = 101, roleId = 11),

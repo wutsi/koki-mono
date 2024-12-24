@@ -16,7 +16,7 @@ class HTMLFileUploadWriter : AbstractHTMLImputElementWriter() {
         if (!value.isNullOrEmpty()) {
             writer.write(" value='$value'")
         }
-        if (element.required && !readOnly) {
+        if (element.required == true && !readOnly) {
             writer.write(" required")
         }
         writer.write("/>\n")

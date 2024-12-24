@@ -9,4 +9,6 @@ interface ParticipantRepository : CrudRepository<ParticipantEntity, Long> {
     fun findByWorkflowInstanceId(workflowInstanceId: String): List<ParticipantEntity>
 
     fun findByWorkflowInstanceIdAndRoleId(workflowInstanceId: String, roleId: Long): ParticipantEntity?
+
+    fun findByUserIdIn(userId: List<Long>): List<ParticipantEntity>
 }

@@ -10,7 +10,7 @@ import com.wutsi.koki.workflow.dto.GetActivityInstanceResponse
 import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
-class ActivityServiceInstanceControllerTest : AbstractPageControllerTest() {
+class ActivityReceiveInstanceControllerTest : AbstractPageControllerTest() {
     @BeforeEach
     override fun setUp() {
         super.setUp()
@@ -18,7 +18,7 @@ class ActivityServiceInstanceControllerTest : AbstractPageControllerTest() {
         doReturn(
             GetActivityInstanceResponse(
                 activityInstance.copy(
-                    activity = activityInstance.activity.copy(type = ActivityType.SERVICE)
+                    activity = activityInstance.activity.copy(type = ActivityType.RECEIVE)
                 )
             )
         ).whenever(kokiWorkflowInstances)

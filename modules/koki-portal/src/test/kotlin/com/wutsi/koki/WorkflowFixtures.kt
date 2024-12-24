@@ -59,6 +59,7 @@ object WorkflowFixtures {
                 messageId = messages[0].id,
                 scriptId = scripts[0].id,
                 serviceId = services[0].id,
+                event = "order-received",
             ),
             Activity(
                 id = 13L,
@@ -235,6 +236,7 @@ object WorkflowFixtures {
             formId = forms[0].id,
             messageId = messages[0].id,
             serviceId = services[0].id,
+            event = "order-received",
         ),
         workflowInstance = WorkflowInstanceSummary(
             id = "4304390-43094039",

@@ -6,14 +6,8 @@
     "activities": [
       {
         "name": "start",
-        "type": "START"
-      },
-      {
-        "name": "submit",
-        "title": "Employee submit the form",
-        "type": "USER",
-        "form": "FRM-001",
-        "role": "employee"
+        "type": "START",
+        "form": "FRM-001"
       },
       {
         "name": "generate_id",
@@ -39,14 +33,20 @@
         "title": "Send message to employee when claims is approved",
         "type": "SEND",
         "message": "MSG-001",
-        "role": "employee"
+        "recipient": {
+          "displayName": "{{employee_name}}",
+          "email": "{{employee_email}}"
+        }
       },
       {
         "name": "send_rejected",
         "title": "Send message to employee when claims is rejected",
         "type": "SEND",
         "message": "MSG-002",
-        "role": "employee"
+        "recipient": {
+          "displayName": "{{employee_name}}",
+          "email": "{{employee_email}}"
+        }
       },
       {
         "name": "submit_payment",
@@ -85,10 +85,6 @@
     "flows": [
       {
         "from": "start",
-        "to": "submit"
-      },
-      {
-        "from": "submit",
         "to": "generate_id"
       },
       {

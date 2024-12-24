@@ -4,11 +4,11 @@ import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.WorkflowData
 import com.wutsi.koki.workflow.server.validation.ValidationError
 
-class ActivitySendMustHaveARoleRule : AbstractActivityRule() {
+class ActivitySendMustHaveARoleOrRecipientRule : AbstractActivityRule() {
     override fun validate(workflow: WorkflowData): List<ValidationError> {
         return workflow.activities
             .filter { activity -> activity.type == ActivityType.SEND }
-            .filter { activity -> activity.role.isNullOrEmpty() }
+            .filter { activity -> activity.role.isNullOrEmpty() && activity.recipient == null }
             .map { activity -> createError(activity) }
     }
 }

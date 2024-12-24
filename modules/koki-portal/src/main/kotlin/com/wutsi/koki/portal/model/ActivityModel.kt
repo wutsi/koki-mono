@@ -7,7 +7,7 @@ data class ActivityModel(
     val workflowId: Long = -1,
     val name: String = "",
     val title: String = "",
-    val description: String = "",
+    val description: String? = null,
     val type: ActivityType = ActivityType.UNKNOWN,
     val requiresApproval: Boolean = false,
     val role: RoleModel? = null,
@@ -17,12 +17,21 @@ data class ActivityModel(
     val service: ServiceModel? = null,
     val inputJSON: String? = null,
     val outputJSON: String? = null,
+    val recipient: RecipientModel? = null,
+    val event: String? = null,
 ) {
     val longTitle: String
         get() = if (title.isEmpty()) {
             name
         } else {
             "$name - $title"
+        }
+
+    val titleOrName: String
+        get() = if (title.isEmpty()) {
+            name
+        } else {
+            title
         }
 
     val url: String

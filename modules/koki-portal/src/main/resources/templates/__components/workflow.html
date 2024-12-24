@@ -32,7 +32,7 @@
         &gt;
         <a href="/settings/workflows" th:if="${workflow}">Workflows</a>
         <span th:if="${workflow}">&gt;</span>
-        <span th:if="${workflow}" th:text="${workflow.longTitle}">TITLE</span>
+        <span th:if="${workflow}" th:text="${workflow.titleOrName}">TITLE</span>
         <span th:if="!${workflow}">Workflows</span>
     </div>
 </div>
@@ -45,9 +45,9 @@
         &gt;
         <a href="/settings/workflows" th:if="${workflow}">Workflows</a>
         &gt;
-        <a th:href="${workflow.url}" th:text="${workflow.longTitle}">WORKFLOW</a>
+        <a th:href="${workflow.url}" th:text="${workflow.titleOrName}">WORKFLOW</a>
         &gt;
-        <span th:text="${activity.longTitle}">TITLE</span>
+        <span th:text="${activity.titleOrName}">TITLE</span>
     </div>
 </div>
 
@@ -100,7 +100,7 @@
         <a th:href="${activityInstance.workflowInstance.url}"
            th:text="${activityInstance.workflowInstance.title}">INSTANCE</a>
         &gt;
-        <span th:text="${activityInstance.activity.longTitle}">TITLE</span>
+        <span th:text="${activityInstance.activity.titleOrName}">TITLE</span>
     </div>
 </div>
 

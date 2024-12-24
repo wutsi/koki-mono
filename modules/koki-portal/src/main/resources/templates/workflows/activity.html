@@ -9,7 +9,8 @@
 
 <div class="container">
     <h1>
-        <img align="absmiddle" height="48" src="/image/workflow-instance.png" width="48"/>
+        <span
+            th:replace="~{__components/workflow :: activity-type-icon(${activityInstance.activity.type})}"></span>
         <span th:text="${activityInstance.activity.longTitle}">TITLE</span>
     </h1>
     <div class="row">
@@ -70,6 +71,13 @@
                                    th:text="${activityInstance.activity.message.name}">MESSAGE</a>
                             </td>
                         </tr>
+                        <tr th:if="${activityInstance.activity.event}">
+                            <td><b>Event</b></td>
+                            <td>
+                                <span class="badge bg-dark rounded-pill margin-right"
+                                      th:text="${activityInstance.activity.event}">EVENT</span>
+                            </td>
+                        </tr>
                         <tr th:if="${activityInstance.activity.script}">
                             <td><b>Script</b></td>
                             <td>
@@ -84,7 +92,31 @@
                                    th:text="${activityInstance.activity.service.longTitle}">SCRIPT</a>
                             </td>
                         </tr>
-                        <tr th:if="!${activityInstance.activity.description.isEmpty()}">
+                        <tr th:if="${activityInstance.activity.inputJSON}">
+                            <td><b>Input</b></td>
+                            <td>
+                                <pre>
+                                    <code th:class="'language-json'" th:text="${activityInstance.activity.inputJSON}">CODE</code>
+                                </pre>
+                            </td>
+                        </tr>
+                        <tr th:if="${activityInstance.activity.outputJSON}">
+                            <td><b>Output</b></td>
+                            <td>
+                                <pre>
+                                    <code th:class="'language-json'" th:text="${activityInstance.activity.outputJSON}">CODE</code>
+                                </pre>
+                            </td>
+                        </tr>
+                        <tr th:if="${activityInstance.activity.type.name == 'SEND'} AND ${activityInstance.activity.recipient}">
+                            <td><b>Recipient</b></td>
+                            <td th:text="${activityInstance.activity.recipient.emailAddress}">RECIPIENT</td>
+                        </tr>
+                        <tr th:if="${activityInstance.activity.type.name == 'SEND'} AND !${activityInstance.activity.recipient} AND ${activityInstance.activity.role}">
+                            <td><b>Recipient Role</b></td>
+                            <td th:text="${activityInstance.activity.role}">ROLE</td>
+                        </tr>
+                        <tr th:if="${activityInstance.activity.description}">
                             <td><b>Description</b></td>
                             <td th:text="${activityInstance.activity.description}">DESCRIPTION</td>
                         </tr>
@@ -171,5 +203,7 @@
 
     </div>
 </div>
+
+<div th:replace="~{__components/highlightjs :: prettity('json')}"></div>
 </body>
 </html>

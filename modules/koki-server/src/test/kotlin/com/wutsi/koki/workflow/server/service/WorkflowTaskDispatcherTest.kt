@@ -5,7 +5,12 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import com.wutsi.koki.tenant.server.service.UserService
+import com.wutsi.koki.workflow.server.dao.ActivityInstanceRepository
+import com.wutsi.koki.workflow.server.dao.ParticipantRepository
+import com.wutsi.koki.workflow.server.dao.WorkflowInstanceRepository
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
+import com.wutsi.koki.workflow.server.domain.ParticipantEntity
+import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.mockito.Mockito.mock
 import kotlin.test.Test
@@ -13,8 +18,11 @@ import kotlin.test.assertNull
 
 class WorkflowTaskDispatcherTest {
     private val userService = mock<UserService>()
-    private val activityInstanceService = mock<ActivityInstanceService>()
-    private val dispatcher = WorkflowTaskDispatcher(userService, activityInstanceService)
+    private val activityInstanceDao = mock<ActivityInstanceRepository>()
+    private val participantDao = mock<ParticipantRepository>()
+    private val workflowInstanceDao = mock<WorkflowInstanceRepository>()
+    private val dispatcher =
+        WorkflowTaskDispatcher(userService, participantDao, activityInstanceDao, workflowInstanceDao)
 
     @Test
     fun `no user`() {
@@ -73,28 +81,19 @@ class WorkflowTaskDispatcherTest {
             )
 
         val instanceByAssignee = listOf(
-            ActivityInstanceEntity(assigneeId = 11L),
-            ActivityInstanceEntity(assigneeId = 11L),
-            ActivityInstanceEntity(assigneeId = 12L),
-            ActivityInstanceEntity(assigneeId = 12L),
-            ActivityInstanceEntity(assigneeId = 12L),
-            ActivityInstanceEntity(assigneeId = 11L),
-            ActivityInstanceEntity(assigneeId = 11L),
-            ActivityInstanceEntity(assigneeId = 14L),
-            ActivityInstanceEntity(assigneeId = 13L),
-            ActivityInstanceEntity(assigneeId = 13L),
+            WorkflowInstanceEntity(id = "aa", participants = listOf(ParticipantEntity(userId = 11L))),
+            WorkflowInstanceEntity(id = "bb", participants = listOf(ParticipantEntity(userId = 11L))),
+            WorkflowInstanceEntity(id = "cc", participants = listOf(ParticipantEntity(userId = 12L))),
+            WorkflowInstanceEntity(id = "dd", participants = listOf(ParticipantEntity(userId = 12L))),
+            WorkflowInstanceEntity(id = "ee", participants = listOf(ParticipantEntity(userId = 12L))),
+            WorkflowInstanceEntity(id = "ff", participants = listOf(ParticipantEntity(userId = 11L))),
+            WorkflowInstanceEntity(id = "gg", participants = listOf(ParticipantEntity(userId = 11L))),
+            WorkflowInstanceEntity(id = "gg", participants = listOf(ParticipantEntity(userId = 14L))),
+            WorkflowInstanceEntity(id = "hh", participants = listOf(ParticipantEntity(userId = 13L))),
+            WorkflowInstanceEntity(id = "ii", participants = listOf(ParticipantEntity(userId = 13L))),
         )
-        doReturn(instanceByAssignee).whenever(activityInstanceService)
-            .search(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
+        doReturn(instanceByAssignee).whenever(workflowInstanceDao)
+            .findByIdInAndStatusInAndTenantId(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -105,17 +104,8 @@ class WorkflowTaskDispatcherTest {
             ActivityInstanceEntity(approverId = 12L),
             ActivityInstanceEntity(approverId = 13L),
         )
-        doReturn(instanceByApprover).whenever(activityInstanceService)
-            .search(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
+        doReturn(instanceByApprover).whenever(activityInstanceDao)
+            .findByApproverIdInAndStatusInAndTenantId(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),

@@ -13,6 +13,7 @@ import com.wutsi.koki.platform.messaging.smtp.SMTPMessagingServiceBuilder
 import com.wutsi.koki.platform.templating.TemplatingEngine
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import com.wutsi.koki.tenant.server.service.UserService
+import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.engine.WorkflowEngine
 import com.wutsi.koki.workflow.server.exception.NoAssigneeException
@@ -84,25 +85,23 @@ class SendRunner(
     ): Message {
         /* Assignee */
         val tenantId = message.tenantId
-        val assignee = activityInstance.assigneeId?.let { id -> userService.get(id, tenantId) }
-        if (assignee == null) {
-            throw NoAssigneeException("The activity has no assignee")
-        }
-        logger.add("assignee", assignee.displayName)
-        logger.add("assignee_email", assignee.email)
+        val activity = activityService.get(activityInstance.activityId)
 
-        /* Template data */
         val workflowInstance = workflowInstanceService.get(activityInstance.workflowInstanceId, tenantId)
         val data = mutableMapOf<String, Any>()
-        data.putAll(workflowInstance.parametersAsMap(objectMapper))
         data.putAll(workflowInstance.stateAsMap(objectMapper))
-        data.put("recipient", assignee.displayName)
 
+        val recipient = getRecipient(activityInstance, activity, data)
+        if (recipient == null) {
+            throw NoAssigneeException("The activity has no assignee")
+        }
+        logger.add("recipient_display_name", recipient.displayName)
+        logger.add("recipient_email", recipient.email)
+
+        /* Template data */
+        data.put("recipient", recipient?.displayName ?: "")
         return Message(
-            recipient = Party(
-                displayName = assignee.displayName,
-                email = assignee.email,
-            ),
+            recipient = recipient,
             subject = templateEngine.apply(message.subject, data),
             body = templateEngine.apply(message.body, data)
         )
@@ -115,5 +114,28 @@ class SendRunner(
         ).map { cfg -> cfg.name to cfg.value }
             .toMap()
         return messagingServiceBuilder.build(MessagingType.EMAIL, config)
+    }
+
+    private fun getRecipient(
+        activityInstance: ActivityInstanceEntity,
+        activity: ActivityEntity,
+        data: Map<String, Any>
+    ): Party? {
+        if (!activity.recipientEmail.isNullOrEmpty()) {
+            return Party(
+                displayName = activity.recipientDisplayName?.let { displayName ->
+                    templateEngine.apply(displayName, data)
+                },
+                email = templateEngine.apply(activity.recipientEmail!!, data),
+            )
+        } else if (activityInstance.assigneeId != null) {
+            val assignee = userService.get(activityInstance.assigneeId!!, activityInstance.tenantId)
+            return Party(
+                displayName = assignee.displayName,
+                email = assignee.email
+            )
+        } else {
+            return null
+        }
     }
 }

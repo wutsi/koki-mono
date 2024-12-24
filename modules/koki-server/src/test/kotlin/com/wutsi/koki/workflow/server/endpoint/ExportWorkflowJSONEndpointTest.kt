@@ -76,6 +76,7 @@ class ExportWorkflowJSONEndpointTest : TenantAwareEndpointTest() {
         assertNull(activities[0].service)
         assertNull(activities[0].path)
         assertNull(activities[0].method)
+        assertNull(activities[0].recipient)
 
         assertEquals("STOP", activities[1].name)
         assertEquals("Done", activities[1].title)
@@ -90,6 +91,7 @@ class ExportWorkflowJSONEndpointTest : TenantAwareEndpointTest() {
         assertNull(activities[1].service)
         assertNull(activities[1].path)
         assertNull(activities[1].method)
+        assertNull(activities[1].recipient)
 
         assertEquals("WORKING", activities[2].name)
         assertEquals("Work...", activities[2].title)
@@ -104,6 +106,8 @@ class ExportWorkflowJSONEndpointTest : TenantAwareEndpointTest() {
         assertEquals("SRV-100", activities[2].service)
         assertEquals("/activities", activities[2].path)
         assertEquals("POST", activities[2].method)
+        assertEquals("Ray Sponsible", activities[2].recipient?.displayName)
+        assertEquals("ray.sponsible@gmail.com", activities[2].recipient?.email)
 
         assertEquals(2, workflow.flows.size)
         assertEquals("START", workflow.flows[0].from)

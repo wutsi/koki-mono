@@ -51,6 +51,8 @@ data class ActivityEntity(
     var method: String? = null,
     var input: String? = null,
     var output: String? = null,
+    var recipientEmail: String? = null,
+    var recipientDisplayName: String? = null,
 ) {
     fun inputAsMap(objectMapper: ObjectMapper): Map<String, Any> {
         return toMap(input, objectMapper)

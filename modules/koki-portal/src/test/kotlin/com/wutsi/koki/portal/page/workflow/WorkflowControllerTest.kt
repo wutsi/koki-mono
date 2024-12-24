@@ -34,6 +34,8 @@ class WorkflowControllerTest : AbstractPageControllerTest() {
         click("#pills-process-tab")
         waitForPresenceOf(".workflow-image")
         assertElementPresent(".workflow-image img")
+
+        click("#pills-state-tab")
     }
 
     @Test

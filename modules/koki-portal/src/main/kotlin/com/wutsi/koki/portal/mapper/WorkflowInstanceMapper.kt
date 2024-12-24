@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.mapper
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.portal.model.ActivityInstanceModel
 import com.wutsi.koki.portal.model.ActivityModel
 import com.wutsi.koki.portal.model.ParticipantModel
@@ -14,7 +15,10 @@ import com.wutsi.koki.workflow.server.domain.ActivityInstance
 import org.springframework.stereotype.Service
 
 @Service
-class WorkflowInstanceMapper(private val formMapper: FormMapper) : TenantAwareMapper() {
+class WorkflowInstanceMapper(
+    private val formMapper: FormMapper,
+    private val objectMapper: ObjectMapper,
+) : TenantAwareMapper() {
     fun toWorkflowInstanceModel(
         entity: WorkflowInstance,
         imageUrl: String,
@@ -39,7 +43,7 @@ class WorkflowInstanceMapper(private val formMapper: FormMapper) : TenantAwareMa
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.modifiedAt),
             state = entity.state,
-            parameters = entity.parameters,
+            stateJSON = toJSON(entity.state),
             status = entity.status,
             approver = entity.approverUserId?.let { userId -> users[userId] },
             workflow = workflow,
@@ -178,5 +182,13 @@ class WorkflowInstanceMapper(private val formMapper: FormMapper) : TenantAwareMa
             startedAtText = entity.startedAt?.let { date -> fmt.format(date) },
             doneAtText = entity.doneAt?.let { date -> fmt.format(date) },
         )
+    }
+
+    private fun toJSON(map: Map<String, Any>): String? {
+        return if (map.isEmpty()) {
+            null
+        } else {
+            objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(map)
+        }
     }
 }

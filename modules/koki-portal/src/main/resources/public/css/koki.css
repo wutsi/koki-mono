@@ -31,13 +31,17 @@ nav {
 .share-panel {
     border-radius: 0.5em;
     border: 1px solid gray;
-    padding: 0.5em;
     display: inline-block;
+    max-width: 100%;
+    padding: 0.5em;
 }
 
 .share-panel .share-link {
-    padding: 0.5em;
+    background: #f8f8f8;
+    margin-right: 0.5em;
+    max-width: 85%;
     overflow: clip;
+    padding: 0.5em;
     text-wrap: nowrap;
 }
 

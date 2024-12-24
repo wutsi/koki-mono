@@ -92,7 +92,9 @@ class FormDataService(
                 newData[name]?.let { value -> data[name] = value }
             }
         }
-        formData.data = objectMapper.writeValueAsString(data)
+        formData.data = objectMapper.writeValueAsString(
+            filterOutEmpties(data)
+        )
         dao.save(formData)
     }
 
@@ -119,7 +121,9 @@ class FormDataService(
                 tenantId = tenantId,
                 formId = form.id!!,
                 workflowInstanceId = request.workflowInstanceId,
-                data = objectMapper.writeValueAsString(request.data),
+                data = objectMapper.writeValueAsString(
+                    filterOutEmpties(request.data)
+                ),
                 status = FormDataStatus.SUBMITTED,
                 createdAt = now,
                 modifiedAt = now,
@@ -145,6 +149,7 @@ class FormDataService(
         val formData = get(id, tenantId)
         if (formData.workflowInstanceId == null) {
             formData.workflowInstanceId = workflowInstanceId
+            linkFiles(formData, formData.dataAsMap(objectMapper))
             dao.save(formData)
         } else if (formData.workflowInstanceId != workflowInstanceId) {
             throw IllegalStateException("FormData#$id already associated with a WorkflowInstance")
@@ -153,7 +158,9 @@ class FormDataService(
     }
 
     fun update(formData: FormDataEntity, data: Map<String, Any>): FormDataEntity {
-        formData.data = objectMapper.writeValueAsString(data)
+        formData.data = objectMapper.writeValueAsString(
+            filterOutEmpties(data)
+        )
         formData.modifiedAt = Date()
         dao.save(formData)
 
@@ -175,22 +182,40 @@ class FormDataService(
             return
         }
 
-        /* Files */
-        val files = fileService.search(
+        /* Unlink */
+        var files = fileService.search(
             tenantId = formData.tenantId,
             workflowInstanceIds = listOf(formData.workflowInstanceId!!),
-            limit = 100,
+            limit = Integer.MAX_VALUE,
         )
-        if (files.isEmpty()) {
-            return
+        if (files.isNotEmpty()) {
+            files.forEach { file -> file.workflowInstanceId = null }
+            fileService.save(files)
         }
 
-        val fileIds = names.mapNotNull { name -> data[name] }
-        files.forEach { file ->
-            if (!fileIds.contains(file.id!!)) {
-                file.workflowInstanceId = null
-            }
+        /* Link */
+        val fileIds = names.mapNotNull { name -> data[name]?.toString() }
+        if (fileIds.isNotEmpty()) {
+            files = fileService.search(
+                ids = fileIds,
+                limit = fileIds.size,
+                tenantId = formData.tenantId,
+            )
+            files.forEach { file -> file.workflowInstanceId = formData.workflowInstanceId }
+            fileService.save(files)
         }
-        fileService.save(files)
+    }
+
+    private fun filterOutEmpties(map: Map<String, Any>): Map<String, Any> {
+        return map.filter { entry -> !isEmpty(entry.value) }
+    }
+
+    private fun isEmpty(value: Any): Boolean {
+        if (value is String) {
+            return value.trim().isNullOrEmpty()
+        } else if (value is Collection<*>) {
+            return value.isEmpty()
+        }
+        return false
     }
 }

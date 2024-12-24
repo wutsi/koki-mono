@@ -62,13 +62,6 @@ class CreateWorkflowInstanceEndpoint(
                 throw badRequest(ErrorCode.WORKFLOW_INSTANCE_PARAMETER_MISSING, param)
             }
         }
-
-        // Bad parameters
-        request.parameters.keys.forEach { param ->
-            if (!parameters.contains(param)) {
-                throw badRequest(ErrorCode.WORKFLOW_INSTANCE_PARAMETER_NOT_VALID, param)
-            }
-        }
     }
 
     private fun badRequest(code: String, value: String? = null): BadRequestException {

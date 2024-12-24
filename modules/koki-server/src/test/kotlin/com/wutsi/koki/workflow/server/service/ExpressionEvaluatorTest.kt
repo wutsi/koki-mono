@@ -13,10 +13,8 @@ class ExpressionEvaluatorTest {
     private val objectMapper = ObjectMapper()
     private val evaluator = ExpressionEvaluator(objectMapper)
 
-    private val parameters = mapOf(
-        "WORK_TYPE" to "T1"
-    )
     private val state = mapOf(
+        "WORK_TYPE" to "T1",
         "client_name" to "Ray Sponsible",
         "client_email" to "ray.sponsible@gmail.com",
         "submit" to "true",
@@ -28,7 +26,6 @@ class ExpressionEvaluatorTest {
         "status" to listOf("M", "F"),
     )
     private val workflowInstance = WorkflowInstanceEntity(
-        parameters = objectMapper.writeValueAsString(parameters),
         state = objectMapper.writeValueAsString(state)
     )
 

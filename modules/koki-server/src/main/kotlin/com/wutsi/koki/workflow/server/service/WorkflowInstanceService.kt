@@ -6,6 +6,7 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.form.event.FormSubmittedEvent
 import com.wutsi.koki.form.server.service.FormDataService
+import com.wutsi.koki.form.server.service.FormService
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.server.service.RoleService
 import com.wutsi.koki.tenant.server.service.UserService
@@ -36,6 +37,7 @@ class WorkflowInstanceService(
     private val securityService: SecurityService,
     private val activityService: ActivityService,
     private val taskDispatcher: WorkflowTaskDispatcher,
+    private val formService: FormService,
     private val em: EntityManager,
     private val objectMapper: ObjectMapper,
 ) {
@@ -54,17 +56,17 @@ class WorkflowInstanceService(
     }
 
     fun search(
-        ids: List<String>,
-        workflowIds: List<Long>,
+        ids: List<String> = emptyList(),
+        workflowIds: List<Long> = emptyList(),
         participantUserIds: List<Long> = emptyList(),
         participantRoleIds: List<Long> = emptyList(),
         createdById: Long? = null,
         status: List<WorkflowStatus> = emptyList(),
-        startFrom: Date?,
-        startTo: Date?,
+        startFrom: Date? = null,
+        startTo: Date? = null,
         tenantId: Long,
-        limit: Int,
-        offset: Int,
+        limit: Int = 20,
+        offset: Int = 0,
     ): List<WorkflowInstanceEntity> {
         val jql = StringBuilder("SELECT W FROM WorkflowInstanceEntity W")
         if (participantUserIds.isNotEmpty() || participantRoleIds.isNotEmpty()) {
@@ -151,10 +153,11 @@ class WorkflowInstanceService(
             tenantId = tenantId,
         )
 
+        val parameters = formDataService.get(event.formDataId, event.tenantId).dataAsMap(objectMapper)
         return workflows.mapNotNull { workflow ->
             try {
                 val roleIds = workflow.activities.mapNotNull { activity -> activity.roleId }.toSet()
-                create(workflow, roleIds, event)
+                create(workflow, roleIds, parameters, event)
             } catch (ex: Exception) {
                 LOGGER.warn("Unable to create workflow instance", ex)
                 null
@@ -165,18 +168,22 @@ class WorkflowInstanceService(
     private fun create(
         workflow: WorkflowEntity,
         roleIds: Set<Long>,
+        parameters: Map<String, Any>,
         event: FormSubmittedEvent,
     ): WorkflowInstanceEntity {
+        val form = formService.get(event.formId, event.tenantId)
         val workflowInstance = create(
             tenantId = workflow.tenantId,
             userId = event.userId,
             request = CreateWorkflowInstanceRequest(
                 workflowId = workflow.id!!,
+                title = form.title,
                 startAt = Date(),
                 participants = roleIds.mapNotNull { roleId -> toParticipant(roleId, event.tenantId) },
                 approverUserId = workflow.approverRoleId?.let { roleId ->
                     taskDispatcher.dispatch(roleId, event.tenantId)?.id
                 },
+                parameters = parameters
             ),
         )
         formDataService.linkWithWorkflowInstanceId(
@@ -221,13 +228,7 @@ class WorkflowInstanceService(
 
         // Update the state - remove empty values
         workflowInstance.state = objectMapper.writeValueAsString(
-            merged.filter { entry ->
-                if (entry.value is Collection<*>) {
-                    (entry.value as Collection<*>).isNotEmpty()
-                } else {
-                    entry.value.toString().isNotEmpty()
-                }
-            }
+            filterOutEmpties(merged)
         )
         save(workflowInstance)
     }
@@ -249,13 +250,26 @@ class WorkflowInstanceService(
                 approverId = request.approverUserId,
                 startAt = request.startAt,
                 dueAt = request.dueAt,
-                parameters = objectMapper.writeValueAsString(
-                    request.parameters.filter { entry -> entry.value.isNotEmpty() }
+                state = objectMapper.writeValueAsString(
+                    filterOutEmpties(request.parameters)
                 )
             )
         )
         LOGGER.debug(">>> WorkflowInstance created: ${instance.id}")
         return instance
+    }
+
+    private fun filterOutEmpties(map: Map<String, Any>): Map<String, Any> {
+        return map.filter { entry -> !isEmpty(entry.value) }
+    }
+
+    private fun isEmpty(value: Any): Boolean {
+        if (value is String) {
+            return value.trim().isNullOrEmpty()
+        } else if (value is Collection<*>) {
+            return value.isEmpty()
+        }
+        return false
     }
 
     private fun createParticipants(

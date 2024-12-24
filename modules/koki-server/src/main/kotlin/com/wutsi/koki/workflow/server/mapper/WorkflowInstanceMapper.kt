@@ -26,7 +26,6 @@ class WorkflowInstanceMapper(
             doneAt = entity.doneAt,
             modifiedAt = entity.modifiedAt,
             state = entity.stateAsMap(objectMapper),
-            parameters = entity.parametersAsMap(objectMapper),
             participants = entity.participants.map { participant ->
                 Participant(
                     roleId = participant.roleId,

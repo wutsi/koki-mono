@@ -44,10 +44,14 @@ In Koki, Send Activities use Email, SMS or Messaging app (Slack, WhatsApp etc.) 
 
 ### Parameters for Send Activity
 
-| Name    | Required | Description                          |
-|---------|----------|--------------------------------------|
-| role    | Y        | Role of the recipient of the message |
-| message | Y        | Name of the message to send          |
+| Name                  | Required | Description                 |
+|-----------------------|----------|-----------------------------|
+| message               | Y        | Name of the message to send |
+| role                  |          | Role of the recipient       |
+| recipient.email       |          | Email of the recipient      |
+| recipient.displayName |          | Name of the recipients      |
+
+NOTE: Either `role` or `recipient.email` is required
 
 -----
 

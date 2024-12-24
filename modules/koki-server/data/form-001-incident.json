@@ -7,16 +7,6 @@
       "type": "SECTION",
       "title": "General Information",
       "description": "General information about the incident",
-      "accessControl": {
-        "viewerRoles": [
-          "employee",
-          "hr",
-          "finance"
-        ],
-        "editorRoles": [
-          "employee"
-        ]
-      },
       "elements": [
         {
           "name": "case_id",
