@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
-import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.form.dto.FormContent
 import com.wutsi.koki.form.dto.FormDataStatus
