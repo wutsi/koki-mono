@@ -12,16 +12,16 @@ class HTMLFileUploadWriter : AbstractHTMLImputElementWriter() {
 
         writer.write("<DIV class='file-upload-container'>\n")
 
-        writer.write("  <INPUT type='hidden' name='${element.name}'")
-        if (!value.isNullOrEmpty()) {
-            writer.write(" value='$value'")
-        }
-        if (element.required == true && !readOnly) {
-            writer.write(" required")
-        }
-        writer.write("/>\n")
-
         if (!readOnly) {
+            writer.write("  <INPUT type='hidden' name='${element.name}'")
+            if (!value.isNullOrEmpty()) {
+                writer.write(" value='$value'")
+            }
+            if (element.required == true && !readOnly) {
+                writer.write(" required")
+            }
+            writer.write("/>\n")
+
             writer.write("  <BUTTON type='button' class='btn-upload' rel='${element.name}'>Upload File</BUTTON>\n")
             writer.write("  <INPUT type='file' id='${element.name}-file' name='${element.name}-file' rel='${element.name}' data-upload-url='${context.uploadUrl}'/>\n")
         }

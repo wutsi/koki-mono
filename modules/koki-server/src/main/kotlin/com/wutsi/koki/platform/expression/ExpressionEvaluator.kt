@@ -1,8 +1,5 @@
-package com.wutsi.koki.workflow.server.service
+package com.wutsi.koki.platform.expression
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.wutsi.koki.workflow.server.domain.FlowEntity
-import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
 import org.slf4j.LoggerFactory
 import org.springframework.context.expression.MapAccessor
 import org.springframework.expression.EvaluationException
@@ -12,23 +9,9 @@ import org.springframework.expression.spel.support.StandardEvaluationContext
 import org.springframework.stereotype.Service
 
 @Service
-class WorkflowExpressionEvaluator(private val objectMapper: ObjectMapper) {
+class ExpressionEvaluator {
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(WorkflowExpressionEvaluator::class.java)
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    @Throws(ParseException::class)
-    fun evaluate(flow: FlowEntity, workflowInstance: WorkflowInstanceEntity): Boolean {
-        if (flow.expression.isNullOrEmpty()) {
-            return true
-        }
-
-        val data = mutableMapOf<String, Any>()
-        workflowInstance.state?.let { state ->
-            data.putAll(objectMapper.readValue(state, Map::class.java) as Map<String, String>)
-        }
-        return evaluate(flow.expression!!, data)
+        private val LOGGER = LoggerFactory.getLogger(ExpressionEvaluator::class.java)
     }
 
     @Throws(ParseException::class)

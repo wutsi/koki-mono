@@ -8,6 +8,7 @@ import com.wutsi.koki.form.server.generator.html.Context
 import com.wutsi.koki.form.server.generator.html.FileResolver
 import com.wutsi.koki.form.server.generator.html.HTMLFormGenerator
 import com.wutsi.koki.form.server.service.FormDataService
+import com.wutsi.koki.form.server.service.FormLogicEvaluator
 import com.wutsi.koki.form.server.service.FormService
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.server.service.UserService
@@ -34,6 +35,7 @@ class ExportFormHTMLEndpoint(
     private val securityService: SecurityService,
     private val userService: UserService,
     private val fileResolver: FileResolver,
+    private val formLogicEvaluator: FormLogicEvaluator,
 
     @Value("\${koki.server-url}") private val serverUrl: String,
     @Value("\${koki.portal-url}") private val portalUrl: String,
@@ -134,7 +136,8 @@ class ExportFormHTMLEndpoint(
                 workflowInstanceId = workflowInstanceId,
                 tenantId = tenantId
             ),
-            downloadUrl = "$portalUrl/files"
+            downloadUrl = "$portalUrl/files",
+            formLogicEvaluator = formLogicEvaluator,
         )
     }
 

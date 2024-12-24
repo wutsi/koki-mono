@@ -1,5 +1,9 @@
 package com.wutsi.koki.form.server.generator.html
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.koki.form.server.service.FormLogicEvaluator
+import com.wutsi.koki.platform.expression.ExpressionEvaluator
+
 data class Context(
     val tenantId: Long = -1,
     val data: Map<String, Any> = emptyMap(),
@@ -10,4 +14,5 @@ data class Context(
     val roleNames: List<String> = emptyList(),
     val readOnly: Boolean = false,
     val fileResolver: FileResolver = NullFileResolver(),
+    val formLogicEvaluator: FormLogicEvaluator = FormLogicEvaluator(ObjectMapper(), ExpressionEvaluator()),
 )

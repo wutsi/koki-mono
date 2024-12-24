@@ -12,7 +12,7 @@ import com.wutsi.koki.workflow.dto.WorkflowStatus
 import com.wutsi.koki.workflow.server.dao.ActivityInstanceRepository
 import com.wutsi.koki.workflow.server.dao.WorkflowInstanceRepository
 import com.wutsi.koki.workflow.server.domain.FlowEntity
-import com.wutsi.koki.workflow.server.service.ExpressionEvaluator
+import com.wutsi.koki.workflow.server.service.WorkflowExpressionEvaluator
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -32,7 +32,7 @@ class RunNextWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
     private lateinit var activityInstanceDao: ActivityInstanceRepository
 
     @MockitoBean
-    protected lateinit var expressionEvaluator: ExpressionEvaluator
+    protected lateinit var expressionEvaluator: WorkflowExpressionEvaluator
 
     @BeforeTest
     override fun setUp() {

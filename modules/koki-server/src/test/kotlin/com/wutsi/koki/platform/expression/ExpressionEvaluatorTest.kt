@@ -1,17 +1,13 @@
-package com.wutsi.koki.workflow.server.service
+package com.wutsi.koki.platform.expression
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.wutsi.koki.workflow.server.domain.FlowEntity
-import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.assertThrows
 import org.springframework.expression.ParseException
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-class WorkflowExpressionEvaluatorTest {
-    private val objectMapper = ObjectMapper()
-    private val evaluator = WorkflowExpressionEvaluator(objectMapper)
+class ExpressionEvaluatorTest {
+    private val evaluator = ExpressionEvaluator()
 
     private val state = mapOf(
         "WORK_TYPE" to "T1",
@@ -25,67 +21,52 @@ class WorkflowExpressionEvaluatorTest {
         "new_client" to false,
         "status" to listOf("M", "F"),
     )
-    private val workflowInstance = WorkflowInstanceEntity(
-        state = objectMapper.writeValueAsString(state)
-    )
 
     @Test
     fun `evaluate from state`() {
-        val flow = FlowEntity(expression = "client_email == 'ray.sponsible@gmail.com'")
-        assertTrue(evaluator.evaluate(flow, workflowInstance))
+        val expression = "client_email == 'ray.sponsible@gmail.com'"
+        assertTrue(evaluator.evaluate(expression, state))
     }
 
     @Test
     fun `evaluate from parameter`() {
-        val flow = FlowEntity(expression = "WORK_TYPE != 'T2'")
-        assertTrue(evaluator.evaluate(flow, workflowInstance))
+        val expression = "WORK_TYPE != 'T2'"
+        assertTrue(evaluator.evaluate(expression, state))
     }
 
     @Test
     fun `evaluate decimal`() {
-        val flow = FlowEntity(expression = "amount > 5000.0")
-        assertTrue(evaluator.evaluate(flow, workflowInstance))
+        val expression = "amount > 5000.0"
+        assertTrue(evaluator.evaluate(expression, state))
     }
 
     @Test
     fun `evaluate numeric`() {
-        val flow = FlowEntity(expression = "client_id > 1")
-        assertTrue(evaluator.evaluate(flow, workflowInstance))
+        val expression = "client_id > 1"
+        assertTrue(evaluator.evaluate(expression, state))
     }
 
     @Test
     fun `evaluate boolean - true`() {
-        val flow = FlowEntity(expression = "submit == true")
-        assertTrue(evaluator.evaluate(flow, workflowInstance))
+        val expression = "submit == true"
+        assertTrue(evaluator.evaluate(expression, state))
     }
 
     @Test
     fun `evaluate boolean - false`() {
-        val flow = FlowEntity(expression = "!new_client")
-        assertTrue(evaluator.evaluate(flow, workflowInstance))
-    }
-
-    @Test
-    fun `empty expression`() {
-        val flow = FlowEntity(expression = "")
-        assertTrue(evaluator.evaluate(flow, workflowInstance))
-    }
-
-    @Test
-    fun `null expression`() {
-        val flow = FlowEntity(expression = null)
-        assertTrue(evaluator.evaluate(flow, workflowInstance))
+        val expression = "amount > 50000"
+        assertFalse(evaluator.evaluate(expression, state))
     }
 
     @Test
     fun `malformed expression`() {
-        val flow = FlowEntity(expression = "|\\")
-        assertThrows<ParseException> { evaluator.evaluate(flow, workflowInstance) }
+        val expression = "|\\"
+        assertThrows<ParseException> { evaluator.evaluate(expression, state) }
     }
 
     @Test
     fun `unknown variable`() {
-        val flow = FlowEntity(expression = "unknown=5")
-        assertFalse(evaluator.evaluate(flow, workflowInstance))
+        val expression = "unknown=5"
+        assertFalse(evaluator.evaluate(expression, state))
     }
 }

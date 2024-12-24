@@ -1,18 +1,25 @@
 package com.wutsi.koki.form.server.generator.html.tag
 
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.form.dto.FormAccessControl
+import com.wutsi.koki.form.dto.FormAction
 import com.wutsi.koki.form.dto.FormElement
 import com.wutsi.koki.form.dto.FormElementType
+import com.wutsi.koki.form.dto.FormLogic
 import com.wutsi.koki.form.server.generator.html.Context
+import com.wutsi.koki.form.server.service.FormLogicEvaluator
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito.mock
 import java.io.StringWriter
 import kotlin.test.assertEquals
 
 class HTMLTextWriterTest {
     val context = Context(
         roleNames = listOf("accountant"),
-        data = mapOf("var1" to "value1")
+        data = mapOf("var1" to "value1"),
     )
     val output = StringWriter()
     val writer = HTMLTextWriter()
@@ -203,5 +210,49 @@ class HTMLTextWriterTest {
             """.trimIndent(),
             output.toString()
         )
+    }
+
+    @Test
+    fun `action disable`() {
+        val formLogicEvaluator = mock<FormLogicEvaluator>()
+        doReturn(FormAction.DISABLE).whenever(formLogicEvaluator).evaluate(any<FormLogic>(), any<Map<String, Any>>())
+
+        writer.write(
+            elt.copy(
+                logic = FormLogic(action = FormAction.DISABLE, expression = "var1")
+            ),
+            context.copy(
+                formLogicEvaluator = formLogicEvaluator
+            ),
+            output
+        )
+
+        assertEquals(
+            """
+                <LABEL class='title'><SPAN>test</SPAN></LABEL>
+                <DIV class='description'>This is the description</DIV>
+                <INPUT name='${elt.name}' value='value1' disabled/>
+
+            """.trimIndent(),
+            output.toString()
+        )
+    }
+
+    @Test
+    fun `action hide`() {
+        val formLogicEvaluator = mock<FormLogicEvaluator>()
+        doReturn(FormAction.HIDE).whenever(formLogicEvaluator).evaluate(any<FormLogic>(), any<Map<String, Any>>())
+
+        writer.write(
+            elt.copy(
+                logic = FormLogic(action = FormAction.HIDE, expression = "var1")
+            ),
+            context.copy(
+                formLogicEvaluator = formLogicEvaluator
+            ),
+            output
+        )
+
+        assertTrue(output.toString().isEmpty())
     }
 }
