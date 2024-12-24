@@ -23,4 +23,5 @@ data class Activity(
     val method: String? = null,
     val input: Map<String, Any> = emptyMap(),
     val output: Map<String, Any> = emptyMap(),
+    val recipient: Recipient? = null,
 )

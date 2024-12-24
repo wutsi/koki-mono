@@ -11,6 +11,7 @@ data class ActivityData(
     val description: String? = null,
     val requiresApproval: Boolean = false,
     val role: String? = null,
+    val recipient: RecipientData? = null,
     val form: String? = null,
     val message: String? = null,
     val script: String? = null,
@@ -33,7 +34,12 @@ data class WorkflowData(
 )
 
 data class FlowData(
-    val from: String,
-    val to: String,
+    val from: String = "",
+    val to: String = "",
     val expression: String? = null,
+)
+
+data class RecipientData(
+    val email: String = "",
+    val displayName: String? = null
 )

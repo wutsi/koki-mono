@@ -9,5 +9,5 @@ data class CreateWorkflowInstanceRequest(
     val approverUserId: Long? = null,
     val startAt: Date = Date(),
     val dueAt: Date? = null,
-    var parameters: Map<String, String> = emptyMap(),
+    var parameters: Map<String, Any> = emptyMap(),
 )

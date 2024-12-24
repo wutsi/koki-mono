@@ -77,5 +77,4 @@ object ErrorCode {
     val WORKFLOW_INSTANCE_PARTICIPANT_MISSING = "$PREFIX:workflow-instance:participant-missing"
     val WORKFLOW_INSTANCE_PARTICIPANT_NOT_VALID = "$PREFIX:workflow-instance:participant-not-valid"
     val WORKFLOW_INSTANCE_PARAMETER_MISSING = "$PREFIX:workflow-instance:parameter-missing"
-    val WORKFLOW_INSTANCE_PARAMETER_NOT_VALID = "$PREFIX:workflow-instance:parameter-not-valid"
 }

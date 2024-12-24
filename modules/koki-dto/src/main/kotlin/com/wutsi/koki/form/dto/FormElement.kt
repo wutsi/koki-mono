@@ -5,7 +5,7 @@ data class FormElement(
     val type: FormElementType = FormElementType.TEXT,
     val title: String? = null,
     val description: String? = null,
-    val required: Boolean = false,
+    val required: Boolean? = null,
     val min: String? = null,
     val max: String? = null,
     val minLength: Int? = null,
