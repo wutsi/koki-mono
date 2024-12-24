@@ -23,5 +23,6 @@ data class FormElement(
     val url: String? = null,
 
     val accessControl: FormAccessControl? = null,
+    val logic: FormLogic? = null,
     val elements: List<FormElement>? = null,
 )
