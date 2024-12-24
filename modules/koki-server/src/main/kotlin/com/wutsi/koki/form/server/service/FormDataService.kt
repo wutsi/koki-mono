@@ -127,15 +127,8 @@ class FormDataService(
     }
 
     fun merge(formData: FormDataEntity, newData: Map<String, Any>) {
-        val form = formService.get(formData.formId, formData.tenantId)
-        val names = formService.extractInputName(form)
-
         val data = formData.dataAsMap(objectMapper).toMutableMap()
-        names.forEach { name ->
-            if (newData.containsKey(name)) {
-                newData[name]?.let { value -> data[name] = value }
-            }
-        }
+        newData.forEach { entry -> data[entry.key] = entry.value }
         formData.data = MapUtils.toJsonString(data, objectMapper)
         formData.modifiedAt = Date()
         dao.save(formData)
