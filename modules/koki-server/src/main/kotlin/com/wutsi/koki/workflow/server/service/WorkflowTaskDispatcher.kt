@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service
 @Service
 class WorkflowTaskDispatcher(
     private val userService: UserService,
-    private val activityInstanceDao: ActivityInstanceRepository,
     private val participantDao: ParticipantRepository,
+    private val activityInstanceDao: ActivityInstanceRepository,
     private val workflowInstanceDao: WorkflowInstanceRepository,
 ) {
     fun dispatch(roleId: Long, tenantId: Long): UserEntity? {
