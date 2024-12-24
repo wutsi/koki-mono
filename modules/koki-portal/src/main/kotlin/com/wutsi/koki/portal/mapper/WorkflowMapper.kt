@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.portal.model.ActivityModel
 import com.wutsi.koki.portal.model.FormModel
 import com.wutsi.koki.portal.model.MessageModel
+import com.wutsi.koki.portal.model.RecipientModel
 import com.wutsi.koki.portal.model.RoleModel
 import com.wutsi.koki.portal.model.ScriptModel
 import com.wutsi.koki.portal.model.ServiceModel
@@ -51,7 +52,7 @@ class WorkflowMapper(private val objectMapper: ObjectMapper) : TenantAwareMapper
             id = entity.id,
             name = entity.name,
             title = entity.title ?: "",
-            description = entity.description ?: "",
+            description = entity.description?.trim()?.ifEmpty { null },
             active = entity.active,
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
@@ -88,15 +89,22 @@ class WorkflowMapper(private val objectMapper: ObjectMapper) : TenantAwareMapper
             name = entity.name,
             title = entity.title ?: "",
             type = entity.type,
-            description = entity.description ?: "",
+            description = entity.description?.trim()?.ifEmpty { null },
             requiresApproval = entity.requiresApproval,
             role = role,
             form = form,
             message = message,
             script = script,
             service = service,
+            event = entity.event,
             inputJSON = toJSON(entity.input),
-            outputJSON = toJSON(entity.output)
+            outputJSON = toJSON(entity.output),
+            recipient = entity.recipient?.let { recipient ->
+                RecipientModel(
+                    email = recipient.email,
+                    displayName = recipient.displayName
+                )
+            }
         )
     }
 
@@ -111,6 +119,7 @@ class WorkflowMapper(private val objectMapper: ObjectMapper) : TenantAwareMapper
             role = entity.roleId?.let { id -> RoleModel(id = id) },
             message = entity.messageId?.let { id -> MessageModel(id = id) },
             script = entity.messageId?.let { id -> ScriptModel(id = id) },
+            event = entity.event,
         )
     }
 

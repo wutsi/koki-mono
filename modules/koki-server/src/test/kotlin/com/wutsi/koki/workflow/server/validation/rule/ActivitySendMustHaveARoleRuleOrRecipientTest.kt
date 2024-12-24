@@ -2,13 +2,14 @@ package com.wutsi.koki.workflow.server.validation.rule
 
 import com.wutsi.koki.workflow.dto.ActivityData
 import com.wutsi.koki.workflow.dto.ActivityType
+import com.wutsi.koki.workflow.dto.RecipientData
 import com.wutsi.koki.workflow.dto.WorkflowData
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class ActivitySendMustHaveARoleRuleTest {
-    private val rule = ActivitySendMustHaveARoleRule()
+class ActivitySendMustHaveARoleRuleOrRecipientTest {
+    private val rule = ActivitySendMustHaveARoleOrRecipientRule()
 
     @Test
     fun success() {
@@ -19,6 +20,7 @@ class ActivitySendMustHaveARoleRuleTest {
                 activities = listOf(
                     ActivityData(name = "start", type = ActivityType.START),
                     ActivityData(name = "invoice", type = ActivityType.SEND, role = "employee"),
+                    ActivityData(name = "work", type = ActivityType.SEND, recipient = RecipientData()),
                     ActivityData(name = "stop"),
                 ),
             )

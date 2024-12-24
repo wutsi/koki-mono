@@ -25,9 +25,6 @@ class ExpressionEvaluator(private val objectMapper: ObjectMapper) {
         }
 
         val data = mutableMapOf<String, Any>()
-        workflowInstance.parameters?.let { parameters ->
-            data.putAll(objectMapper.readValue(parameters, Map::class.java) as Map<String, String>)
-        }
         workflowInstance.state?.let { state ->
             data.putAll(objectMapper.readValue(state, Map::class.java) as Map<String, String>)
         }

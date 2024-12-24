@@ -12,7 +12,8 @@ import com.wutsi.koki.workflow.server.validation.rule.ActivityNameMustHavelLessT
 import com.wutsi.koki.workflow.server.validation.rule.ActivityReceiveMustHaveAnEventRule
 import com.wutsi.koki.workflow.server.validation.rule.ActivityScriptMustHaveAScriptRule
 import com.wutsi.koki.workflow.server.validation.rule.ActivitySendMustHaveAMessageRule
-import com.wutsi.koki.workflow.server.validation.rule.ActivitySendMustHaveARoleRule
+import com.wutsi.koki.workflow.server.validation.rule.ActivitySendMustHaveARoleOrRecipientRule
+import com.wutsi.koki.workflow.server.validation.rule.ActivitySendRecipientMustHaveAnEmailRule
 import com.wutsi.koki.workflow.server.validation.rule.ActivityServiceMustHaveAServiceRule
 import com.wutsi.koki.workflow.server.validation.rule.ActivityServiceMustHaveAValidMethodRule
 import com.wutsi.koki.workflow.server.validation.rule.ActivityStartMustNotHavePredecessorRule
@@ -37,6 +38,7 @@ class WorkflowValidator(
         ActivityMustNotBeOrphanRule(),
         ActivityMustNotHaveSelfAsPredecessorRule(),
         ActivityNameMustHavelLessThan100CharactersRule(),
+        ActivitySendRecipientMustHaveAnEmailRule(),
         ActivityEndMustNotHaveSuccessorRule(),
         ActivityManualMustHaveARoleRule(),
         ActivityReceiveMustHaveAnEventRule(),
@@ -44,7 +46,7 @@ class WorkflowValidator(
         ActivityServiceMustHaveAValidMethodRule(),
         ActivityScriptMustHaveAScriptRule(),
         ActivitySendMustHaveAMessageRule(),
-        ActivitySendMustHaveARoleRule(),
+        ActivitySendMustHaveARoleOrRecipientRule(),
         ActivityStartMustNotHavePredecessorRule(),
         ActivityUserMustHaveARoleRule(),
         ActivityUserMustHaveAFormRule(),

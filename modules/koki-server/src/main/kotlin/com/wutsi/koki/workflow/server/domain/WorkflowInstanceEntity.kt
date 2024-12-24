@@ -42,7 +42,6 @@ data class WorkflowInstanceEntity(
     var title: String? = null,
     var status: WorkflowStatus = WorkflowStatus.UNKNOWN,
     var state: String? = null,
-    var parameters: String? = null,
     val startAt: Date = Date(),
     val dueAt: Date? = null,
     val createdAt: Date = Date(),
@@ -53,12 +52,6 @@ data class WorkflowInstanceEntity(
     @Suppress("UNCHECKED_CAST")
     fun stateAsMap(objectMapper: ObjectMapper): Map<String, Any> {
         return state?.let { objectMapper.readValue(state, Map::class.java) as Map<String, Any> }
-            ?: emptyMap()
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    fun parametersAsMap(objectMapper: ObjectMapper): Map<String, String> {
-        return parameters?.let { objectMapper.readValue(parameters, Map::class.java) as Map<String, String> }
             ?: emptyMap()
     }
 }

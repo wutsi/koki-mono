@@ -8,6 +8,7 @@ import com.wutsi.koki.service.server.service.ServiceService
 import com.wutsi.koki.tenant.server.service.RoleService
 import com.wutsi.koki.workflow.dto.ActivityData
 import com.wutsi.koki.workflow.dto.FlowData
+import com.wutsi.koki.workflow.dto.RecipientData
 import com.wutsi.koki.workflow.dto.WorkflowData
 import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import com.wutsi.koki.workflow.server.domain.FlowEntity
@@ -30,11 +31,9 @@ class WorkflowExporter(
             title = workflow.title,
             description = workflow.description,
             parameters = workflow.parameterAsList(),
-            flows = workflow.flows
-                .filter { flow -> flow.from.active && flow.to.active }
+            flows = workflow.flows.filter { flow -> flow.from.active && flow.to.active }
                 .map { flow -> toFlowData(flow) },
-            activities = workflow.activities
-                .filter { activty -> activty.active }
+            activities = workflow.activities.filter { activty -> activty.active }
                 .map { activity -> toActivityData(activity, workflow.tenantId) },
             approverRole = workflow.approverRoleId?.let { roleId ->
                 roleService.get(roleId, workflow.tenantId)?.name
@@ -62,8 +61,7 @@ class WorkflowExporter(
         val message = activity.messageId?.let { id -> messageService.get(id, tenantId) }
         val script = activity.scriptId?.let { id -> scriptService.get(id, tenantId) }
         val service = activity.serviceId?.let { id -> serviceService.get(id, tenantId) }
-        return ActivityData(
-            name = activity.name,
+        return ActivityData(name = activity.name,
             type = activity.type,
             title = activity.title,
             description = activity.description,
@@ -78,6 +76,8 @@ class WorkflowExporter(
             service = service?.name,
             path = activity.path,
             method = activity.method,
-        )
+            recipient = activity.recipientEmail?.ifEmpty { null }?.let { email ->
+                RecipientData(email = email, displayName = activity.recipientDisplayName)
+            })
     }
 }

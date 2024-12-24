@@ -6,7 +6,7 @@ data class WorkflowModel(
     val id: Long = -1,
     val name: String = "",
     val title: String = "",
-    val description: String = "",
+    val description: String? = null,
     val active: Boolean = true,
     val requiresApprover: Boolean = false,
     val approverRole: RoleModel? = null,
@@ -25,6 +25,13 @@ data class WorkflowModel(
             name
         } else {
             "$name - $title"
+        }
+
+    val titleOrName: String
+        get() = if (title.isEmpty()) {
+            name
+        } else {
+            title
         }
 
     val url: String

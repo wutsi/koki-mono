@@ -24,11 +24,11 @@ INSERT INTO T_WORKFLOW(id, tenant_fk, name, title, description, active, paramete
     VALUES (100, 1, 'w100','workflow #100', 'Yo', true, 'PARAM_1, PARAM_2', 10),
            (200, 2, 'w200','workflow #200', null, true, null, null);
 
-INSERT INTO T_ACTIVITY(id, tenant_fk, workflow_fk, name, title, type, active, form_fk, message_fk, script_fk, event, role_fk, requires_approval, description, service_fk, path, method)
-    VALUES (100, 1, 100, 'START',   'Start',   1, true,  null, null, null, null, null, false, 'Starting the process', null, null, null),
-           (101, 1, 100, 'WORKING', 'Work...', 3, true,  100,  100,  100,  'order-received', 10,   true, 'Performing the task', 100, '/activities', 'POST'),
-           (102, 1, 100, 'OLD',     'old...',  3, false, null, null, null, null, 10,   true, null, null, null, null),
-           (103, 1, 100, 'STOP',    'Done',    2, true,  null, null, null, null, null, false, null, null, null, null);
+INSERT INTO T_ACTIVITY(id, tenant_fk, workflow_fk, name, title, type, active, form_fk, message_fk, script_fk, event, role_fk, requires_approval, description, service_fk, path, method, recipient_email, recipient_display_name)
+    VALUES (100, 1, 100, 'START',   'Start',   1, true,  null, null, null, null, null, false, 'Starting the process', null, null, null, null, null),
+           (101, 1, 100, 'WORKING', 'Work...', 3, true,  100,  100,  100,  'order-received', 10,   true, 'Performing the task', 100, '/activities', 'POST', 'ray.sponsible@gmail.com', 'Ray Sponsible'),
+           (102, 1, 100, 'OLD',     'old...',  3, false, null, null, null, null, 10,   true, null, null, null, null, null, null),
+           (103, 1, 100, 'STOP',    'Done',    2, true,  null, null, null, null, null, false, null, null, null, null, '', '');
 
 INSERT INTO T_FLOW(workflow_fk, from_fk, to_fk, expression)
     VALUES (100, 100, 101, null),

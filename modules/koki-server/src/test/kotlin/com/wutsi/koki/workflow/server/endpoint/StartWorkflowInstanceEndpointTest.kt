@@ -123,6 +123,7 @@ class StartWorkflowInstanceEndpointTest : TenantAwareEndpointTest() {
 
         val formData = formDataDao.findById(event.formDataId).get()
         assertEquals(instances[0].id, formData.workflowInstanceId)
+        assertEquals(formData.data, instances[0].state)
     }
 
     @Test

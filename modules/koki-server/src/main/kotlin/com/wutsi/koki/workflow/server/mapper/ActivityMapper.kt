@@ -3,6 +3,7 @@ package com.wutsi.koki.workflow.server.mapper
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.workflow.dto.Activity
 import com.wutsi.koki.workflow.dto.ActivitySummary
+import com.wutsi.koki.workflow.dto.Recipient
 import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import org.springframework.stereotype.Service
 
@@ -17,6 +18,7 @@ class ActivityMapper(private val objectMapper: ObjectMapper) {
             messageId = entity.messageId,
             scriptId = entity.scriptId,
             serviceId = entity.serviceId,
+            event = entity.event,
             type = entity.type,
             name = entity.name,
             title = entity.title,
@@ -29,6 +31,11 @@ class ActivityMapper(private val objectMapper: ObjectMapper) {
             modifiedAt = entity.modifiedAt,
             input = entity.inputAsMap(objectMapper),
             output = entity.outputAsMap(objectMapper),
+            recipient = entity.recipientEmail?.ifEmpty { null }?.let { email ->
+                Recipient(
+                    email = email, displayName = entity.recipientDisplayName
+                )
+            }
         )
     }
 
@@ -41,6 +48,7 @@ class ActivityMapper(private val objectMapper: ObjectMapper) {
             messageId = entity.messageId,
             scriptId = entity.scriptId,
             serviceId = entity.serviceId,
+            event = entity.event,
             type = entity.type,
             name = entity.name,
             title = entity.title,

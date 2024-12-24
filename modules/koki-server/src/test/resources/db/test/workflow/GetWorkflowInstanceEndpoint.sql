@@ -28,8 +28,8 @@ INSERT INTO T_ACTIVITY(id, tenant_fk, workflow_fk, role_fk, name, type, requires
            (103, 1, 100, 10,   'SUBMIT',  4, false),
            (104, 1, 100, null, 'STOP',    2, false);
 
-INSERT INTO T_WORKFLOW_INSTANCE(id, tenant_fk, workflow_fk, approver_fk, status, start_at, title, state, parameters)
-    VALUES ('wi-100-01', 1, 100, 101, 2, now(), '2025', '{"customer_name":"Ray Sponsible", "customer_email":"ray.sponsible@gmail.com"}', '{"order_id": "123456"}');
+INSERT INTO T_WORKFLOW_INSTANCE(id, tenant_fk, workflow_fk, approver_fk, status, start_at, title, state)
+    VALUES ('wi-100-01', 1, 100, 101, 2, now(), '2025', '{"customer_name":"Ray Sponsible", "customer_email":"ray.sponsible@gmail.com"}');
 
 INSERT INTO T_WI_ACTIVITY(id, tenant_fk, workflow_instance_fk, activity_fk, assignee_fk, approval, approver_fk, status, started_at, done_at)
     VALUES ('wi-100-01-start-done',      1, 'wi-100-01', 100, null, 0, null, 3, '2020-01-10 12:30', '2020-01-11 12:30'),

@@ -37,7 +37,15 @@
                             <td><b>Title</b></td>
                             <td th:text="${workflow.title}">TITLE</td>
                         </tr>
-                        <tr>
+                        <tr th:if="!${workflow.parameters.isEmpty()}">
+                            <td><b>Parameters</b></td>
+                            <td>
+                                <span class="badge bg-dark rounded-pill margin-right"
+                                      th:each="parameter : ${workflow.parameters}"
+                                      th:text="${parameter}">PARAM</span>
+                            </td>
+                        </tr>
+                        <tr th:if="${workflow.description}">
                             <td><b>Description</b></td>
                             <td th:text="${workflow.description}">DESCRIPTION</td>
                         </tr>
@@ -166,5 +174,6 @@
 
     </div>
 </div>
+
 </body>
 </html>

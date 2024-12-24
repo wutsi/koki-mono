@@ -34,7 +34,7 @@
                                     th:replace="~{__components/workflow :: workflow-status(${workflowInstance.status})}"></div>
                             </td>
                         </tr>
-                        <tr>
+                        <tr th:if="${workflowInstance.workflow.description}">
                             <td><b>Description</b></td>
                             <td th:text="${workflowInstance.workflow.description}">DESCRIPTION</td>
                         </tr>
@@ -71,6 +71,13 @@
                                     data-bs-target="#pills-process" data-bs-toggle="pill" id="pills-process-tab"
                                     role="tab" type="button">
                                 Process
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-state" aria-selected="false" class="nav-link"
+                                    data-bs-target="#pills-state" data-bs-toggle="pill" id="pills-state-tab"
+                                    role="tab" type="button">
+                                State
                             </button>
                         </li>
                     </ul>
@@ -132,6 +139,12 @@
                         <div aria-labelledby="pills-process-tab" class="tab-pane fade" id="pills-process"
                              role="tabpanel"
                              th:data-url="'/workflows/widgets/image?workflow-instance-id=' + ${workflowInstance.id}">
+                        </div>
+
+                        <div aria-labelledby="pills-state-tab" class="tab-pane fade" id="pills-state" role="tabpanel">
+                            <pre th:if="${workflowInstance.stateJSON}">
+                                <code th:class="'language-json'" th:text="${workflowInstance.stateJSON}">CODE</code>
+                            </pre>
                         </div>
                     </div>
                 </div>
@@ -203,5 +216,6 @@
     </div>
 </div>
 
+<div th:replace="~{__components/highlightjs :: prettity('json')}"></div>
 </body>
 </html>

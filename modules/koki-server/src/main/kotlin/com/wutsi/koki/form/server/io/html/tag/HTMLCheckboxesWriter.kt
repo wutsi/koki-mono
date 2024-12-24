@@ -19,7 +19,7 @@ class HTMLCheckboxesWriter : AbstractHTMLImputElementWriter() {
 
         val type = getType(element)
         writer.write("<DIV class='$type-container'")
-        if (element.required) {
+        if (element.required == true) {
             writer.append(" required")
         }
         writer.write(">\n")

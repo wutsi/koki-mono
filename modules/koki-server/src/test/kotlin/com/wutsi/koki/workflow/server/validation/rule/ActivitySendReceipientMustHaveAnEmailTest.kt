@@ -8,8 +8,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class ActivitySendMustHaveARoleRuleOrRecipientTest {
-    private val rule = ActivitySendMustHaveARoleOrRecipientRule()
+class ActivitySendReceipientMustHaveAnEmailTest {
+    private val rule = ActivitySendRecipientMustHaveAnEmailRule()
 
     @Test
     fun success() {
@@ -19,8 +19,11 @@ class ActivitySendMustHaveARoleRuleOrRecipientTest {
                 description = "This is a new workflow",
                 activities = listOf(
                     ActivityData(name = "start", type = ActivityType.START),
-                    ActivityData(name = "invoice", type = ActivityType.SEND, role = "employee"),
-                    ActivityData(name = "work", type = ActivityType.SEND, recipient = RecipientData()),
+                    ActivityData(
+                        name = "invoice",
+                        type = ActivityType.SEND,
+                        recipient = RecipientData(email = "ray@spon.com")
+                    ),
                     ActivityData(name = "stop"),
                 ),
             )
@@ -37,8 +40,8 @@ class ActivitySendMustHaveARoleRuleOrRecipientTest {
                 description = "This is a new workflow",
                 activities = listOf(
                     ActivityData(name = "start", type = ActivityType.START),
-                    ActivityData(name = "invoice", type = ActivityType.SEND, role = null),
-                    ActivityData(name = "quote", type = ActivityType.SEND, role = ""),
+                    ActivityData(name = "invoice", type = ActivityType.SEND, recipient = RecipientData()),
+                    ActivityData(name = "quote", type = ActivityType.SEND, recipient = RecipientData(email = "")),
                     ActivityData(name = "stop"),
                 ),
             )

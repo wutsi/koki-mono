@@ -15,13 +15,14 @@
 
 ## Workflow
 
-- [] Start Workflow on form submission
-- [] Add "recipient" field for SEND activity
 - [] Send email notification for each USER activity. It should include the link to the form
 - [] Cancel workflow Instance
+- [] Start Workflow on event received
 - [] Add support for jsonpath mapping
 - [] Run scheduled workflow instances
 - [] Add support for Business Rule activities
+- [x] Start Workflow on form submission
+- [x] Add "recipient" field for SEND activity
 - [x] Add support for Manual activities
 - [x] Simplify tenant configuration API as Name/Value pair
 - [x] Add message API

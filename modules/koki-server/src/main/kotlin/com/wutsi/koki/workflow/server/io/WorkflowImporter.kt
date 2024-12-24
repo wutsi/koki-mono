@@ -82,6 +82,8 @@ class WorkflowImporter(
             activity.input = toString(data.input)
             activity.output = toString(data.output)
             activity.event = data.event
+            activity.recipientEmail = data.recipient?.email
+            activity.recipientDisplayName = data.recipient?.displayName
             return activity
         } catch (ex: NotFoundException) {
             if (LOGGER.isDebugEnabled) {
@@ -100,6 +102,8 @@ class WorkflowImporter(
                     event = data.event,
                     input = toString(data.input),
                     output = toString(data.output),
+                    recipientEmail = data.recipient?.email,
+                    recipientDisplayName = data.recipient?.displayName,
                 )
             )
         }

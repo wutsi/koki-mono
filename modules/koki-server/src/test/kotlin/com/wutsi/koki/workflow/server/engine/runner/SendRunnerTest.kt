@@ -96,7 +96,7 @@ class SendRunnerTest {
     val workflowInstance = WorkflowInstanceEntity(
         id = activityInstance.workflowInstanceId,
         tenantId = tenantId,
-        state = "{\"origin\":\"hell\"}"
+        state = "{\"origin\":\"hell\", \"employee_name\":\"Roger Milla\", \"employee_email\":\"roger.milla@gmail.com\"}"
     )
 
     @BeforeEach
@@ -117,7 +117,7 @@ class SendRunnerTest {
     }
 
     @Test
-    fun run() {
+    fun sendToRole() {
         executor.run(activityInstance, engine)
 
         val msg = argumentCaptor<Message>()
@@ -126,6 +126,28 @@ class SendRunnerTest {
         assertEquals("Hello Ray Sponsible. This is a message from hell", msg.firstValue.body)
         assertEquals(user.displayName, msg.firstValue.recipient.displayName)
         assertEquals(user.email, msg.firstValue.recipient.email)
+
+        verify(engine).done(activityInstance.id!!, emptyMap(), tenantId)
+    }
+
+    @Test
+    fun sendToRecipient() {
+        doReturn(
+            activity.copy(
+                recipientEmail = "{{employee_email}}",
+                recipientDisplayName = "{{employee_name}}",
+                roleId = null,
+            )
+        ).whenever(activityService).get(activity.id!!)
+
+        executor.run(activityInstance, engine)
+
+        val msg = argumentCaptor<Message>()
+        verify(messagingService).send(msg.capture())
+        assertEquals("Sample email", msg.firstValue.subject)
+        assertEquals("Hello Roger Milla. This is a message from hell", msg.firstValue.body)
+        assertEquals("Roger Milla", msg.firstValue.recipient.displayName)
+        assertEquals("roger.milla@gmail.com", msg.firstValue.recipient.email)
 
         verify(engine).done(activityInstance.id!!, emptyMap(), tenantId)
     }

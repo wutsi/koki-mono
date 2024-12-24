@@ -21,7 +21,7 @@ abstract class AbstractHTMLImputElementWriter() : AbstractHTMLElementWriter() {
     ) {
         if (!element.title.isNullOrEmpty()) {
             writer.write("<LABEL class='title'><SPAN>" + StringEscapeUtils.escapeHtml4(element.title) + "</SPAN>")
-            if (element.required) {
+            if (element.required == true) {
                 writer.write("<SPAN class='required'>*</SPAN>")
             }
             writer.write("</LABEL>\n")
@@ -39,7 +39,7 @@ abstract class AbstractHTMLImputElementWriter() : AbstractHTMLElementWriter() {
         }
 
         // Required
-        if (!readOnly && element.required) {
+        if (!readOnly && element.required == true) {
             writer.write(" required")
         }
 
