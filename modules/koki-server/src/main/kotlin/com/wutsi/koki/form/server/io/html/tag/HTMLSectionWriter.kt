@@ -9,7 +9,7 @@ class HTMLSectionWriter() : AbstractHTMLElementWriter() {
     override fun doWrite(element: FormElement, context: Context, writer: StringWriter, readOnly: Boolean) {
         writer.write("<DIV class='section")
         if (readOnly) {
-            writer.write(" read-only-section'")
+            writer.write(" section-read-only'")
         }
         writer.write(">\n")
 

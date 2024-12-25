@@ -31,8 +31,7 @@ class ExportFormHTMLEndpointTest : AuthorizationAwareEndpointTest() {
     @MockitoBean
     private lateinit var generator: HTMLFormGenerator
 
-    @Value("\${koki.portal-url}")
-    private lateinit var portalUrl: String
+    private val portalUrl: String = "http://localhost:8081"
 
     @Value("\${koki.server-url}")
     private lateinit var serverUrl: String

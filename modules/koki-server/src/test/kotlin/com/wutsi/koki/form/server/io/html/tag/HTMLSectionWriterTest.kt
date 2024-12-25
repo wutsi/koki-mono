@@ -64,7 +64,7 @@ class HTMLSectionWriterTest {
         writer.write(elt, context, output)
 
         val expected = """
-                <DIV class='section read-only-section'>
+                <DIV class='section'>
                   <DIV class='section-header'>
                     <H2 class='section-title'>Personal Information</H2>
                     <DIV class='section-description'>Enter the client personal information</DIV>
@@ -87,6 +87,34 @@ class HTMLSectionWriterTest {
 
         assertEquals(elt.elements?.get(1)?.accessControl?.viewerRoles, element.secondValue.accessControl?.viewerRoles)
         assertEquals(null, element.secondValue.accessControl?.editorRoles)
+        assertEquals(expected, output.toString())
+    }
+
+    @Test
+    fun `not editor`() {
+        val xelt = elt.copy(
+            accessControl = FormAccessControl(
+                editorRoles = listOf("X", "Y", "Z")
+            )
+        )
+
+        writer.write(xelt, context, output)
+
+        val expected = """
+                <DIV class='section section-read-only'>
+                  <DIV class='section-header'>
+                    <H2 class='section-title'>Personal Information</H2>
+                    <DIV class='section-description'>Enter the client personal information</DIV>
+                  </DIV>
+                  <DIV class='section-body'>
+                    <DIV class='section-item'>
+                    </DIV>
+                    <DIV class='section-item'>
+                    </DIV>
+                  </DIV>
+                </DIV>
+
+            """.trimIndent()
         assertEquals(expected, output.toString())
     }
 
