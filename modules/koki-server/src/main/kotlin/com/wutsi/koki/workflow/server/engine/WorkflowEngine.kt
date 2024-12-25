@@ -18,12 +18,14 @@ import com.wutsi.koki.workflow.server.engine.command.RunActivityCommand
 import com.wutsi.koki.workflow.server.service.ActivityInstanceService
 import com.wutsi.koki.workflow.server.service.ActivityService
 import com.wutsi.koki.workflow.server.service.LogService
+import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
 class WorkflowEngine(
     private val activityInstanceService: ActivityInstanceService,
+    private val workflowInstanceService: WorkflowInstanceService,
     private val activityService: ActivityService,
     private val workflowWorker: WorkflowEngineWorker,
     private val eventPublisher: EventPublisher,

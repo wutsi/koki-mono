@@ -18,6 +18,16 @@ class LogEventListener(
     private val logService: LogService,
     private val logger: KVLogger,
 ) : RabbitMQHandler {
+    companion object {
+        const val MESSAGE_WORKFLOW_STARTED = "Workflow started"
+        const val MESSAGE_WORKFLOW_DONE = "Workflow completed"
+        const val MESSAGE_ACTIVITY_STARTED = "Activity started"
+        const val MESSAGE_ACTIVITY_DONE = "Activity completed"
+        const val MESSAGE_APPROVAL_STARTED = "Approval started"
+        const val MESSAGE_APPROVAL_APPROVED = "Approved"
+        const val MESSAGE_APPROVAL_REJECTED = "Rejected"
+    }
+
     override fun handle(event: Any): Boolean {
         if (event is WorkflowStartedEvent) {
             onWorkflowStarted(event)
@@ -43,7 +53,7 @@ class LogEventListener(
     @EventListener
     fun onWorkflowStarted(event: WorkflowStartedEvent) {
         logService.info(
-            message = "Workflow started",
+            message = MESSAGE_WORKFLOW_STARTED,
             workflowInstanceId = event.workflowInstanceId,
             tenantId = event.tenantId,
             timestamp = event.timestamp,
@@ -53,7 +63,7 @@ class LogEventListener(
     @EventListener
     fun onWorkflowDone(event: WorkflowDoneEvent) {
         logService.info(
-            message = "Workflow done",
+            message = MESSAGE_WORKFLOW_DONE,
             workflowInstanceId = event.workflowInstanceId,
             tenantId = event.tenantId,
             timestamp = event.timestamp,
@@ -63,7 +73,7 @@ class LogEventListener(
     @EventListener
     fun onActivityDone(event: ActivityDoneEvent) {
         logService.info(
-            message = "Activity done",
+            message = MESSAGE_ACTIVITY_DONE,
             workflowInstanceId = event.workflowInstanceId,
             activityInstanceId = event.activityInstanceId,
             tenantId = event.tenantId,
@@ -74,7 +84,7 @@ class LogEventListener(
     @EventListener
     fun onApprovalStarted(event: ApprovalStartedEvent) {
         logService.info(
-            message = "Activity approval started",
+            message = MESSAGE_APPROVAL_STARTED,
             workflowInstanceId = event.workflowInstanceId,
             activityInstanceId = event.activityInstanceId,
             tenantId = event.tenantId,
@@ -85,9 +95,9 @@ class LogEventListener(
     @EventListener
     fun onApprovalDone(event: ApprovalDoneEvent) {
         val message = if (event.status == ApprovalStatus.APPROVED) {
-            "Activity approved"
+            MESSAGE_APPROVAL_APPROVED
         } else {
-            "Activity rejected"
+            MESSAGE_APPROVAL_REJECTED
         }
         logService.info(
             message = message,
@@ -99,13 +109,13 @@ class LogEventListener(
     }
 
     @EventListener
-    fun onActivityStartedEvent(command: ActivityStartedEvent) {
+    fun onActivityStartedEvent(event: ActivityStartedEvent) {
         logService.info(
-            message = "Activity started",
-            workflowInstanceId = command.workflowInstanceId,
-            activityInstanceId = command.activityInstanceId,
-            tenantId = command.tenantId,
-            timestamp = command.timestamp,
+            message = MESSAGE_ACTIVITY_STARTED,
+            workflowInstanceId = event.workflowInstanceId,
+            activityInstanceId = event.activityInstanceId,
+            tenantId = event.tenantId,
+            timestamp = event.timestamp,
         )
     }
 }

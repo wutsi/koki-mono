@@ -155,11 +155,13 @@ class WorkflowInstanceService(
             tenantId = tenantId,
         )
 
-        val parameters = formDataService.get(event.formDataId, event.tenantId).dataAsMap(objectMapper)
+        val data = formDataService.get(event.formDataId, event.tenantId)
+            .dataAsMap(objectMapper)
+
         return workflows.mapNotNull { workflow ->
             try {
                 val roleIds = workflow.activities.mapNotNull { activity -> activity.roleId }.toSet()
-                create(workflow, roleIds, parameters, event)
+                create(workflow, roleIds, data, event)
             } catch (ex: Exception) {
                 LOGGER.warn("Unable to create workflow instance", ex)
                 null

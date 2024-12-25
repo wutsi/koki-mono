@@ -63,7 +63,7 @@ class RabbitMQEventPublisher(
                 properties(), // basic-properties
                 objectMapper.writeValueAsString(rabbitMQEvent).toByteArray(Charset.forName("utf-8")),
             )
-        }catch(ex: Exception){
+        } catch (ex: Exception) {
             LOGGER.warn("Unnable to publish event: $event", ex)
         }
     }
