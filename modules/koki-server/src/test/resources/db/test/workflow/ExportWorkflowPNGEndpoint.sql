@@ -1,7 +1,3 @@
-INSERT INTO T_TENANT(id, name, domain_name, locale, currency)
-    VALUES (1, 'tenant-1', 'tenant-1.com', 'en_US', 'USD'),
-           (2, 'tenant-2', 'tenant-2.com', 'en_US', 'USD');
-
 INSERT INTO T_WORKFLOW(id, tenant_fk, name, description, active)
     VALUES(100, 1, 'w1', 'description w1', false),
           (110, 1, 'empty', null, false),

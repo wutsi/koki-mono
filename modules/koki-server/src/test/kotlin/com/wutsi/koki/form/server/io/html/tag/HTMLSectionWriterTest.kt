@@ -64,7 +64,7 @@ class HTMLSectionWriterTest {
         writer.write(elt, context, output)
 
         val expected = """
-                <DIV class='section'>
+                <DIV class='section read-only-section'>
                   <DIV class='section-header'>
                     <H2 class='section-title'>Personal Information</H2>
                     <DIV class='section-description'>Enter the client personal information</DIV>

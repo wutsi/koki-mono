@@ -7,7 +7,11 @@ import java.io.StringWriter
 
 class HTMLSectionWriter() : AbstractHTMLElementWriter() {
     override fun doWrite(element: FormElement, context: Context, writer: StringWriter, readOnly: Boolean) {
-        writer.write("<DIV class='section'>\n")
+        writer.write("<DIV class='section")
+        if (readOnly) {
+            writer.write(" read-only-section'")
+        }
+        writer.write(">\n")
 
         if (!element.title.isNullOrEmpty() || !element.description.isNullOrEmpty()) {
             writer.write("  <DIV class='section-header'>\n")

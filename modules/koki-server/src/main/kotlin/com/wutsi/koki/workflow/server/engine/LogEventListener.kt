@@ -1,14 +1,14 @@
 package com.wutsi.koki.workflow.server.engine
 
 import com.wutsi.koki.event.server.rabbitmq.RabbitMQHandler
-import com.wutsi.koki.form.event.ActivityDoneEvent
-import com.wutsi.koki.form.event.ApprovalCompletedEvent
-import com.wutsi.koki.form.event.ApprovalStartedEvent
-import com.wutsi.koki.form.event.WorkflowDoneEvent
-import com.wutsi.koki.form.event.WorkflowStartedEvent
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.workflow.dto.ApprovalStatus
-import com.wutsi.koki.workflow.server.engine.command.RunActivityCommand
+import com.wutsi.koki.workflow.dto.event.ActivityDoneEvent
+import com.wutsi.koki.workflow.dto.event.ActivityStartedEvent
+import com.wutsi.koki.workflow.dto.event.ApprovalDoneEvent
+import com.wutsi.koki.workflow.dto.event.ApprovalStartedEvent
+import com.wutsi.koki.workflow.dto.event.WorkflowDoneEvent
+import com.wutsi.koki.workflow.dto.event.WorkflowStartedEvent
 import com.wutsi.koki.workflow.server.service.LogService
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
@@ -25,12 +25,12 @@ class LogEventListener(
             onWorkflowDone(event)
         } else if (event is ApprovalStartedEvent) {
             onApprovalStarted(event)
-        } else if (event is ApprovalCompletedEvent) {
-            onApprovalCompleted(event)
+        } else if (event is ApprovalDoneEvent) {
+            onApprovalDone(event)
         } else if (event is ActivityDoneEvent) {
             onActivityDone(event)
-        } else if (event is RunActivityCommand) {
-            onRunActivityCommand(event)
+        } else if (event is ActivityStartedEvent) {
+            onActivityStartedEvent(event)
         } else {
             return false
         }
@@ -83,7 +83,7 @@ class LogEventListener(
     }
 
     @EventListener
-    fun onApprovalCompleted(event: ApprovalCompletedEvent) {
+    fun onApprovalDone(event: ApprovalDoneEvent) {
         val message = if (event.status == ApprovalStatus.APPROVED) {
             "Activity approved"
         } else {
@@ -99,7 +99,7 @@ class LogEventListener(
     }
 
     @EventListener
-    fun onRunActivityCommand(command: RunActivityCommand) {
+    fun onActivityStartedEvent(command: ActivityStartedEvent) {
         logService.info(
             message = "Activity started",
             workflowInstanceId = command.workflowInstanceId,

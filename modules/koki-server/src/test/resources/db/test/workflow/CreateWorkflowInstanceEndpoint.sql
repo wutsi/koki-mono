@@ -1,7 +1,3 @@
-INSERT INTO T_TENANT(id, name, domain_name, locale, currency)
-    VALUES (1, 'tenant-1', 'tenant-1.com', 'en_US', 'USD'),
-           (2, 'tenant-2', 'tenant-2.com', 'en_US', 'USD');
-
 INSERT INTO T_ROLE(id, tenant_fk, name)
     VALUES (10, 1, 'accountant'),
            (11, 1, 'technician'),

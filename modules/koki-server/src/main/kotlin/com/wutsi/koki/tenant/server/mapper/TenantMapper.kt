@@ -22,5 +22,6 @@ class TenantMapper {
         numberFormat = entity.numberFormat,
         logoUrl = entity.logoUrl?.ifEmpty { null },
         iconUrl = entity.iconUrl?.ifEmpty { null },
+        portalUrl = entity.portalUrl,
     )
 }

@@ -14,6 +14,7 @@ CREATE TABLE T_TENANT(
   status                  INT NOT NULL DEFAULT 0,
   logo_url                TEXT,
   icon_url                TEXT,
+  portal_url              TEXT NOT NULL,
   created_at              DATETIME DEFAULT NOW(),
 
   UNIQUE(name),

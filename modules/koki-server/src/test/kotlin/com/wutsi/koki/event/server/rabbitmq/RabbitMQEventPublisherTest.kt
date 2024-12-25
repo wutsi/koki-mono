@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
@@ -74,6 +75,14 @@ class RabbitMQEventPublisherTest {
         val evt = objectMapper.readValue(json, RabbitMQEvent::class.java)
         assertEquals(TestEvent::class.java.name, evt.classname)
         assertEquals("{\"name\":\"foo\",\"value\":11}", evt.payload)
+    }
+
+    @Test
+    fun `publish fails`() {
+        doThrow(IllegalStateException::class).whenever(channel).basicPublish(any(), any(), any(), any())
+
+        val event = TestEvent("foo", 11)
+        publisher.publish(event)
     }
 
     @Test

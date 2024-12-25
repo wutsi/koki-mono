@@ -55,13 +55,17 @@ class RabbitMQEventPublisher(
     }
 
     override fun publish(event: Any) {
-        val rabbitMQEvent = createRabbitMQEvent(event)
-        channel.basicPublish(
-            exchangeName,
-            "", // routing-key
-            properties(), // basic-properties
-            objectMapper.writeValueAsString(rabbitMQEvent).toByteArray(Charset.forName("utf-8")),
-        )
+        try {
+            val rabbitMQEvent = createRabbitMQEvent(event)
+            channel.basicPublish(
+                exchangeName,
+                "", // routing-key
+                properties(), // basic-properties
+                objectMapper.writeValueAsString(rabbitMQEvent).toByteArray(Charset.forName("utf-8")),
+            )
+        }catch(ex: Exception){
+            LOGGER.warn("Unnable to publish event: $event", ex)
+        }
     }
 
     private fun archive(dlq: String, response: GetResponse) {

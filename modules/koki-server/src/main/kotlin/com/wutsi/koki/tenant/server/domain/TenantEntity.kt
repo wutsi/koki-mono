@@ -26,4 +26,5 @@ data class TenantEntity(
     val iconUrl: String? = null,
     val status: TenantStatus = TenantStatus.ACTIVE,
     val createdAt: Date = Date(),
+    val portalUrl: String = "",
 )

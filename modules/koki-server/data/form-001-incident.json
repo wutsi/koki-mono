@@ -198,7 +198,6 @@
       },
       "accessControl": {
         "viewerRoles": [
-          "hr",
           "finance"
         ],
         "editorRoles": [

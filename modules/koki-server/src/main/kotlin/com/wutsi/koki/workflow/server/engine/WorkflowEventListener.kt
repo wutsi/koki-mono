@@ -3,13 +3,13 @@ package com.wutsi.koki.workflow.server.engine
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.event.server.rabbitmq.RabbitMQHandler
 import com.wutsi.koki.event.server.service.EventPublisher
-import com.wutsi.koki.form.event.ActivityDoneEvent
-import com.wutsi.koki.form.event.ExternalEvent
 import com.wutsi.koki.form.event.FormSubmittedEvent
 import com.wutsi.koki.form.event.FormUpdatedEvent
 import com.wutsi.koki.form.server.service.FormDataService
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.workflow.dto.WorkflowStatus
+import com.wutsi.koki.workflow.dto.event.ActivityDoneEvent
+import com.wutsi.koki.workflow.dto.event.ExternalEvent
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.engine.command.RunActivityCommand
 import com.wutsi.koki.workflow.server.service.ActivityInstanceService
@@ -25,9 +25,7 @@ class WorkflowEventListener(
     private val workflowEngine: WorkflowEngine,
     private val activityInstanceService: ActivityInstanceService,
     private val workflowInstanceService: WorkflowInstanceService,
-    private val activityService: ActivityService,
     private val formDataService: FormDataService,
-    private val activityRunnerProvider: ActivityRunnerProvider,
     private val objectMapper: ObjectMapper,
     private val eventPublisher: EventPublisher,
     private val logService: LogService,
@@ -59,15 +57,21 @@ class WorkflowEventListener(
 
     @EventListener
     fun onExternalEventReceived(event: ExternalEvent) {
+        logger.add("event_name", event.name)
+        logger.add("event_tenant_id", event.tenantId)
+        logger.add("event_workflow_instance_id", event.workflowInstanceId)
+        logger.add("event_timestamp", event.timestamp)
+
         workflowEngine.received(event)
     }
 
     @EventListener
     fun onFormSubmitted(event: FormSubmittedEvent) {
-        logger.add("form_id", event.formId)
-        logger.add("form_data_id", event.formDataId)
-        logger.add("user_id", event.userId)
-        logger.add("tenant_id", event.tenantId)
+        logger.add("event_form_id", event.formId)
+        logger.add("event_form_data_id", event.formDataId)
+        logger.add("event_user_id", event.userId)
+        logger.add("event_tenant_id", event.tenantId)
+        logger.add("event_timestamp", event.timestamp)
 
         if (event.activityInstanceId != null) {
             logger.add("action", "activity_completed")
@@ -118,19 +122,14 @@ class WorkflowEventListener(
 
     @EventListener
     fun onRunActivityCommand(command: RunActivityCommand) {
-        val activityInstance = activityInstanceService.get(command.activityInstanceId, command.tenantId)
         try {
-            val activity = activityService.get(activityInstance.activityId)
-            logger.add("activity_id", activity.id)
-            logger.add("activity_type", activity.type)
-
-            activityRunnerProvider.get(activity.type).run(activityInstance, workflowEngine)
+            workflowEngine.run(command.activityInstanceId, command.tenantId)
         } catch (ex: Throwable) {
             logService.error(
                 message = ex.message ?: "Failed",
-                tenantId = activityInstance.tenantId,
-                activityInstanceId = activityInstance.id,
-                workflowInstanceId = activityInstance.workflowInstanceId,
+                tenantId = command.tenantId,
+                activityInstanceId = command.activityInstanceId,
+                workflowInstanceId = command.workflowInstanceId,
                 timestamp = command.timestamp,
                 ex = ex,
             )

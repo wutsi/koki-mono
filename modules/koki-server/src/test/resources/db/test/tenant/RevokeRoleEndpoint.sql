@@ -1,7 +1,6 @@
-
-INSERT INTO T_TENANT(id, name, domain_name, locale, currency)
-    VALUES (1, 'tenant-1', 'tenant-1.com', 'en_US', 'USD'),
-           (2, 'tenant-2', 'tenant-2.com', 'en_US', 'USD');
+INSERT INTO T_TENANT(id, name, domain_name, locale, currency, portal_url)
+    VALUES (1, 'tenant-1', 'tenant-1.com', 'en_US', 'USD', 'https://tenant-1.com'),
+           (2, 'tenant-2', 'tenant-2.com', 'en_US', 'USD', 'https://tenant-1.com');
 
 INSERT INTO T_ROLE(id, tenant_fk, name)
     VALUES (10, 1, 'admin'),
