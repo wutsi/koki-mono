@@ -9,9 +9,9 @@ class HTMLSectionWriter() : AbstractHTMLElementWriter() {
     override fun doWrite(element: FormElement, context: Context, writer: StringWriter, readOnly: Boolean) {
         writer.write("<DIV class='section")
         if (readOnly) {
-            writer.write(" section-read-only'")
+            writer.write(" section-read-only")
         }
-        writer.write(">\n")
+        writer.write("'>\n")
 
         if (!element.title.isNullOrEmpty() || !element.description.isNullOrEmpty()) {
             writer.write("  <DIV class='section-header'>\n")
