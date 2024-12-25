@@ -1,4 +1,4 @@
-package com.wutsi.koki.message.server.endpoint
+package com.wutsi.koki.form.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.form.server.dao.FormRepository

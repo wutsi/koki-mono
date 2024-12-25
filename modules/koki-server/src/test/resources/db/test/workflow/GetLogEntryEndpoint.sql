@@ -1,7 +1,3 @@
-INSERT INTO T_TENANT(id, name, domain_name, locale, currency)
-    VALUES (1, 'tenant-1', 'tenant-1.com', 'en_US', 'USD'),
-           (2, 'tenant-2', 'tenant-2.com', 'en_US', 'USD');
-
 INSERT INTO T_USER(id, tenant_fk, email, password, salt, display_name)
     VALUES (100, 1, 'ray.sponsible100@gmail.com', '--', '--', 'Ray Sponsible100'),
            (101, 1, 'ray.sponsible101@gmail.com', '--', '--', 'Ray Sponsible102'),

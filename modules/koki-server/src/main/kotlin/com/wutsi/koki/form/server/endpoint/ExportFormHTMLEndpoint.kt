@@ -11,6 +11,8 @@ import com.wutsi.koki.form.server.service.FormDataService
 import com.wutsi.koki.form.server.service.FormLogicEvaluator
 import com.wutsi.koki.form.server.service.FormService
 import com.wutsi.koki.security.server.service.SecurityService
+import com.wutsi.koki.tenant.server.domain.TenantEntity
+import com.wutsi.koki.tenant.server.service.TenantService
 import com.wutsi.koki.tenant.server.service.UserService
 import jakarta.servlet.http.HttpServletResponse
 import org.apache.commons.io.IOUtils
@@ -36,9 +38,9 @@ class ExportFormHTMLEndpoint(
     private val userService: UserService,
     private val fileResolver: FileResolver,
     private val formLogicEvaluator: FormLogicEvaluator,
+    private val tenantService: TenantService,
 
     @Value("\${koki.server-url}") private val serverUrl: String,
-    @Value("\${koki.portal-url}") private val portalUrl: String,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ExportFormHTMLEndpoint::class.java)
@@ -106,6 +108,7 @@ class ExportFormHTMLEndpoint(
         readOnly: Boolean,
         tenantId: Long,
     ): Context {
+        val tenant = tenantService.get(tenantId)
         val data = if (formDataId != null) {
             formDataService.get(formDataId, tenantId).data
         } else if (workflowInstanceId != null) {
@@ -129,14 +132,15 @@ class ExportFormHTMLEndpoint(
                 form = form,
                 formDataId = formDataId,
                 workflowInstanceId = workflowInstanceId,
-                activityInstanceId = activityInstanceId
+                activityInstanceId = activityInstanceId,
+                tenant = tenant,
             ),
             uploadUrl = buildUploadUrl(
                 form = form,
                 workflowInstanceId = workflowInstanceId,
-                tenantId = tenantId
+                tenant = tenant
             ),
-            downloadUrl = "$portalUrl/files",
+            downloadUrl = "${tenant.portalUrl}/files",
             formLogicEvaluator = formLogicEvaluator,
         )
     }
@@ -146,8 +150,9 @@ class ExportFormHTMLEndpoint(
         formDataId: String?,
         workflowInstanceId: String?,
         activityInstanceId: String?,
+        tenant: TenantEntity,
     ): String {
-        val url = StringBuilder("$portalUrl/forms/${form.id}")
+        val url = StringBuilder("${tenant.portalUrl}/forms/${form.id}")
         formDataId?.let { url.append("/$formDataId") }
         workflowInstanceId?.let { url.append("?workflow-instance-id=$workflowInstanceId") }
         activityInstanceId?.let {
@@ -164,9 +169,9 @@ class ExportFormHTMLEndpoint(
     private fun buildUploadUrl(
         form: FormEntity,
         workflowInstanceId: String?,
-        tenantId: Long,
+        tenant: TenantEntity,
     ): String {
-        val url = StringBuilder("$serverUrl/v1/files/upload?tenant-id=$tenantId&form-id=${form.id}")
+        val url = StringBuilder("$serverUrl/v1/files/upload?tenant-id=${tenant.id}&form-id=${form.id}")
         workflowInstanceId?.let { id -> url.append("&workflow-instance-id=$id") }
         return url.toString()
     }

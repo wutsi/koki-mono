@@ -1,4 +1,4 @@
-package com.wutsi.koki.tenant.server.server.endpoint
+package com.wutsi.koki.workflow.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.workflow.dto.SearchWorkflowInstanceResponse

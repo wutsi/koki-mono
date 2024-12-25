@@ -2,14 +2,15 @@ package com.wutsi.koki.workflow.server.engine
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.event.server.service.EventPublisher
-import com.wutsi.koki.form.event.ActivityDoneEvent
-import com.wutsi.koki.form.event.ApprovalCompletedEvent
-import com.wutsi.koki.form.event.ExternalEvent
-import com.wutsi.koki.form.event.WorkflowDoneEvent
-import com.wutsi.koki.form.event.WorkflowStartedEvent
 import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.ApprovalStatus
 import com.wutsi.koki.workflow.dto.WorkflowStatus
+import com.wutsi.koki.workflow.dto.event.ActivityDoneEvent
+import com.wutsi.koki.workflow.dto.event.ActivityStartedEvent
+import com.wutsi.koki.workflow.dto.event.ApprovalDoneEvent
+import com.wutsi.koki.workflow.dto.event.ExternalEvent
+import com.wutsi.koki.workflow.dto.event.WorkflowDoneEvent
+import com.wutsi.koki.workflow.dto.event.WorkflowStartedEvent
 import com.wutsi.koki.workflow.server.domain.ActivityEntity
 import com.wutsi.koki.workflow.server.domain.ActivityInstanceEntity
 import com.wutsi.koki.workflow.server.domain.ApprovalEntity
@@ -17,17 +18,20 @@ import com.wutsi.koki.workflow.server.engine.command.RunActivityCommand
 import com.wutsi.koki.workflow.server.service.ActivityInstanceService
 import com.wutsi.koki.workflow.server.service.ActivityService
 import com.wutsi.koki.workflow.server.service.LogService
+import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
 class WorkflowEngine(
     private val activityInstanceService: ActivityInstanceService,
+    private val workflowInstanceService: WorkflowInstanceService,
     private val activityService: ActivityService,
     private val workflowWorker: WorkflowEngineWorker,
     private val eventPublisher: EventPublisher,
     private val objectMapper: ObjectMapper,
     private val logService: LogService,
+    private val activityRunnerProvider: ActivityRunnerProvider,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(WorkflowEngine::class.java)
@@ -191,7 +195,7 @@ class WorkflowEngine(
         val approval = workflowWorker.approve(activityInstanceId, status, approverUserId, comment, tenantId)
         if (approval.status == ApprovalStatus.APPROVED || approval.status == ApprovalStatus.REJECTED) {
             eventPublisher.publish(
-                ApprovalCompletedEvent(
+                ApprovalDoneEvent(
                     approvalId = approval.id!!,
                     activityInstanceId = activityInstanceId,
                     workflowInstanceId = activityInstance.workflowInstanceId,
@@ -217,6 +221,20 @@ class WorkflowEngine(
         eventPublisher.publish(
             WorkflowDoneEvent(
                 workflowInstanceId = workflowInstanceId,
+                tenantId = tenantId,
+            )
+        )
+    }
+
+    fun run(activityInstanceId: String, tenantId: Long) {
+        val activityInstance = activityInstanceService.get(activityInstanceId, tenantId)
+        val activity = activityService.get(activityInstance.activityId)
+        activityRunnerProvider.get(activity.type).run(activityInstance, this)
+
+        eventPublisher.publish(
+            ActivityStartedEvent(
+                activityInstanceId = activityInstanceId,
+                workflowInstanceId = activityInstance.workflowInstanceId,
                 tenantId = tenantId,
             )
         )

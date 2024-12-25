@@ -1,4 +1,4 @@
-package com.wutsi.koki.tenant.server.server.endpoint
+package com.wutsi.koki.form.server.endpoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.TenantAwareEndpointTest

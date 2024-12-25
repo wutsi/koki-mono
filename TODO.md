@@ -2,27 +2,28 @@
 
 ## Form
 
-- [x] Support ReadOnly fields
-- [x] Track Form submissions
-- [x] Share Forms Link
 - [] Show form in preview with all fields displayed
-- [] Add support for Stripe field
 - [] Add support for Paypal field
+- [] Add support for Stripe field
 - [] Add checkbox grid field
 - [] Add radio grid field
 - [] Embed form
 - [] Support customer form style
 - [] Support anonymous forms
+- [x] Support ReadOnly fields
+- [x] Track Form submissions
+- [x] Share Forms Link
 
 ## Workflow
 
-- [x] add modifiedAt to Activity Instance. Use it as default sort field
-- [] Send email notification for each USER activity. It should include the link to the form
+- [] Send email notification for each USER activity
+- [] Send email notification for each MANUAL activity
 - [] Cancel workflow Instance
+- [] Run scheduled workflow instances
 - [] Start Workflow on event received
 - [] Add support for jsonpath mapping
-- [] Run scheduled workflow instances
 - [] Add support for Business Rule activities
+- [x] add modifiedAt to Activity Instance. Use it as default sort field
 - [x] Start Workflow on form submission
 - [x] Add "recipient" field for SEND activity
 - [x] Add support for Manual activities

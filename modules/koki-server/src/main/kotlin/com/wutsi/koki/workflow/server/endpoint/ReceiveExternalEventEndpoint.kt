@@ -1,8 +1,8 @@
 package com.wutsi.koki.workflow.server.endpoint
 
 import com.wutsi.koki.event.server.service.EventPublisher
-import com.wutsi.koki.form.event.ExternalEvent
 import com.wutsi.koki.workflow.dto.ReceiveExternalEventRequest
+import com.wutsi.koki.workflow.dto.event.ExternalEvent
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping

@@ -14,6 +14,7 @@ CREATE TABLE T_TENANT(
   status                  INT NOT NULL DEFAULT 0,
   logo_url                TEXT,
   icon_url                TEXT,
+  portal_url              TEXT NOT NULL,
   created_at              DATETIME DEFAULT NOW(),
 
   UNIQUE(name),
@@ -24,7 +25,7 @@ CREATE TABLE T_TENANT(
 CREATE TABLE T_USER(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
-  tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
+  tenant_fk               BIGINT NOT NULL,
 
   email                   VARCHAR(255) NOT NULL,
   password                VARCHAR(32) NOT NULL,
@@ -41,7 +42,7 @@ CREATE TABLE T_USER(
 CREATE TABLE T_ATTRIBUTE(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
-  tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
+  tenant_fk               BIGINT NOT NULL,
 
   name                    VARCHAR(100) NOT NULL,
   label                   VARCHAR(100),
@@ -73,7 +74,7 @@ CREATE TABLE T_CONFIGURATION(
 CREATE TABLE T_ROLE(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
-  tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
+  tenant_fk               BIGINT NOT NULL,
 
   name                    VARCHAR(100) NOT NULL,
   title                   VARCHAR(255),

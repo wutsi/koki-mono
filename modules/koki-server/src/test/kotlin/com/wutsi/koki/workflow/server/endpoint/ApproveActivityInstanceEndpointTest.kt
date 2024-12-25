@@ -1,4 +1,4 @@
-package com.wutsi.koki.tenant.server.server.endpoint
+package com.wutsi.koki.workflow.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode

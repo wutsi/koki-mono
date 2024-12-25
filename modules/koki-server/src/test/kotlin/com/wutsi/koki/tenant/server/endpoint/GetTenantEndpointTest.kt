@@ -51,6 +51,7 @@ class GetTenantEndpointTest {
             "https://prod-wutsi.s3.amazonaws.com/static/wutsi-blog-web/assets/wutsi/img/logo/logo_512x512.png",
             tenant.iconUrl
         )
+        assertEquals("https://test.com", tenant.portalUrl)
     }
 
     @Test

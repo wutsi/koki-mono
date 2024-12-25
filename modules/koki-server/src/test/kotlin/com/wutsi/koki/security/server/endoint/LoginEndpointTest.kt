@@ -1,4 +1,4 @@
-package com.wutsi.koki.tenant.server.endpoint
+package com.wutsi.koki.security.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
