@@ -6,8 +6,9 @@
         <table class="table table-striped" th:if="${activityInstances}">
             <tr>
                 <th>Task</th>
-                <th>Case</th>
+                <th>Workflow</th>
                 <th>Status</th>
+                <th>Modified</th>
             </tr>
             <tr th:each="activityInstance : ${activityInstances}">
                 <td>
@@ -21,6 +22,7 @@
                     <div
                         th:replace="~{__components/workflow :: workflow-status(${activityInstance.status})}"></div>
                 </td>
+                <td th:text="${activityInstance.modifiedAtText}">MODIFIED</td>
             </tr>
         </table>
 

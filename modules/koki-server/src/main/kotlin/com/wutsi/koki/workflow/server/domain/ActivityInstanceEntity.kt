@@ -32,6 +32,7 @@ data class ActivityInstanceEntity(
     var status: WorkflowStatus = WorkflowStatus.UNKNOWN,
     var approval: ApprovalStatus = ApprovalStatus.UNKNOWN,
     val createdAt: Date = Date(),
+    var modifiedAt: Date = Date(),
     var approvedAt: Date? = null,
     var startedAt: Date? = null,
     var doneAt: Date? = null

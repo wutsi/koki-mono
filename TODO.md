@@ -16,7 +16,7 @@
 
 ## Workflow
 
-- [] add modifiedAt to Activity Instance. Use it as default sort field
+- [x] add modifiedAt to Activity Instance. Use it as default sort field
 - [] Send email notification for each USER activity. It should include the link to the form
 - [] Cancel workflow Instance
 - [] Start Workflow on event received

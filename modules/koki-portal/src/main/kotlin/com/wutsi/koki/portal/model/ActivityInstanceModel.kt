@@ -13,12 +13,14 @@ data class ActivityInstanceModel(
     var status: WorkflowStatus = WorkflowStatus.UNKNOWN,
     val approval: ApprovalStatus = ApprovalStatus.UNKNOWN,
     val createdAt: Date = Date(),
-    val approvedAt: Date? = null,
-    val startedAt: Date? = null,
-    val doneAt: Date? = null,
     val createdAtText: String = "",
+    val approvedAt: Date? = null,
     val approvedAtText: String? = null,
+    val startedAt: Date? = null,
     val startedAtText: String? = null,
+    val modifiedAt: Date = Date(),
+    val modifiedAtText: String = "",
+    val doneAt: Date? = null,
     val doneAtText: String? = null,
 ) {
     val running: Boolean
