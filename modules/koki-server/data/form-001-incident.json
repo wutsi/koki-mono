@@ -7,6 +7,10 @@
       "type": "SECTION",
       "title": "General Information",
       "description": "General information about the incident",
+      "logic": {
+        "action": "DISABLE",
+        "expression": "case_id.length > 0"
+      },
       "elements": [
         {
           "name": "case_id",
@@ -145,6 +149,10 @@
       "type": "SECTION",
       "title": "HR Approval",
       "description": "This section is reserved to Human Resource for approving the claim",
+      "logic": {
+        "action": "HIDE",
+        "expression": "case_id.length == 0"
+      },
       "accessControl": {
         "viewerRoles": [
           "hr",
@@ -184,6 +192,10 @@
       "type": "SECTION",
       "title": "Payment Information",
       "description": "This section is reserved to Finance team",
+      "logic": {
+        "action": "HIDE",
+        "expression": "case_id.length == 0"
+      },
       "accessControl": {
         "viewerRoles": [
           "hr",

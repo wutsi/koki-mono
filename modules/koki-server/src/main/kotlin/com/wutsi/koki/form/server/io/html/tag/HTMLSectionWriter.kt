@@ -30,7 +30,7 @@ class HTMLSectionWriter() : AbstractHTMLElementWriter() {
             context.provider
                 .get(child.type)
                 .write(
-                    element = inheritAccessControl(element, child),
+                    element = inheritPermissions(element, child),
                     context = context,
                     writer = writer
                 )
@@ -40,10 +40,23 @@ class HTMLSectionWriter() : AbstractHTMLElementWriter() {
         writer.write("</DIV>\n")
     }
 
-    private fun inheritAccessControl(parent: FormElement, child: FormElement): FormElement {
-        return if (child.accessControl == null && parent.accessControl != null) {
+    private fun inheritPermissions(parent: FormElement, child: FormElement): FormElement {
+        val accessControl = if (child.accessControl == null && parent.accessControl != null) {
+            parent.accessControl
+        } else {
+            null
+        }
+
+        val logic = if (child.logic == null && parent.logic != null) {
+            parent.logic
+        } else {
+            null
+        }
+
+        return if (logic != null || accessControl != null) {
             child.copy(
-                accessControl = parent.accessControl!!.copy()
+                accessControl = if (accessControl != null) accessControl else child.accessControl,
+                logic = if (logic != null) logic else child.logic,
             )
         } else {
             child

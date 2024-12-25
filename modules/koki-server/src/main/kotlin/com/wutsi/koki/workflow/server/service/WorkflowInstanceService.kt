@@ -7,6 +7,8 @@ import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.form.event.FormSubmittedEvent
 import com.wutsi.koki.form.server.service.FormDataService
 import com.wutsi.koki.form.server.service.FormService
+import com.wutsi.koki.platform.util.MapUtils
+import com.wutsi.koki.platform.util.MapUtils.filterOutEmpties
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.server.service.RoleService
 import com.wutsi.koki.tenant.server.service.UserService
@@ -227,9 +229,7 @@ class WorkflowInstanceService(
         merged.putAll(data)
 
         // Update the state - remove empty values
-        workflowInstance.state = objectMapper.writeValueAsString(
-            filterOutEmpties(merged)
-        )
+        workflowInstance.state = MapUtils.toJsonString(merged, objectMapper)
         save(workflowInstance)
     }
 
@@ -257,19 +257,6 @@ class WorkflowInstanceService(
         )
         LOGGER.debug(">>> WorkflowInstance created: ${instance.id}")
         return instance
-    }
-
-    private fun filterOutEmpties(map: Map<String, Any>): Map<String, Any> {
-        return map.filter { entry -> !isEmpty(entry.value) }
-    }
-
-    private fun isEmpty(value: Any): Boolean {
-        if (value is String) {
-            return value.trim().isNullOrEmpty()
-        } else if (value is Collection<*>) {
-            return value.isEmpty()
-        }
-        return false
     }
 
     private fun createParticipants(

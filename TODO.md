@@ -5,6 +5,7 @@
 - [x] Support ReadOnly fields
 - [x] Track Form submissions
 - [x] Share Forms Link
+- [] Show form in preview with all fields displayed
 - [] Add support for Stripe field
 - [] Add support for Paypal field
 - [] Add checkbox grid field
@@ -15,6 +16,7 @@
 
 ## Workflow
 
+- [] add modifiedAt to Activity Instance. Use it as default sort field
 - [] Send email notification for each USER activity. It should include the link to the form
 - [] Cancel workflow Instance
 - [] Start Workflow on event received

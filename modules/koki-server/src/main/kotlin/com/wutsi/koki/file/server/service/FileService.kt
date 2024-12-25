@@ -70,6 +70,33 @@ class FileService(
         return query.resultList
     }
 
+    fun link(fileIds: List<String>, workflowInstanceId: String, tenantId: Long) {
+        var files = search(
+            tenantId = tenantId,
+            workflowInstanceIds = listOf(workflowInstanceId),
+            limit = Integer.MAX_VALUE,
+        )
+        if (files.isNotEmpty()) {
+            files.forEach { file ->
+                file.workflowInstanceId = null
+            }
+            dao.saveAll(files)
+        }
+
+        /* Sync */
+        if (fileIds.isNotEmpty()) {
+            files = search(
+                tenantId = tenantId,
+                ids = fileIds,
+                limit = fileIds.size
+            )
+            if (files.isNotEmpty()) {
+                files.forEach { file -> file.workflowInstanceId = workflowInstanceId }
+                dao.saveAll(files)
+            }
+        }
+    }
+
     @Transactional
     fun create(
         request: CreateFileRequest,

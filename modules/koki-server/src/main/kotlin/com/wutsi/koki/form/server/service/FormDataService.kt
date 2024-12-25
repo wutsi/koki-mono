@@ -5,13 +5,13 @@ import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.file.server.service.FileService
-import com.wutsi.koki.form.dto.FormContent
 import com.wutsi.koki.form.dto.FormDataStatus
 import com.wutsi.koki.form.dto.FormElementType
 import com.wutsi.koki.form.dto.SubmitFormDataRequest
 import com.wutsi.koki.form.dto.UpdateFormDataRequest
 import com.wutsi.koki.form.server.dao.FormDataRepository
 import com.wutsi.koki.form.server.domain.FormDataEntity
+import com.wutsi.koki.platform.util.MapUtils
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -82,66 +82,56 @@ class FormDataService(
     }
 
     @Transactional
-    fun merge(formData: FormDataEntity, newData: Map<String, Any>) {
-        val form = formService.get(formData.formId, formData.tenantId)
-        val names = formService.extractInputName(form)
-
-        val data = formData.dataAsMap(objectMapper).toMutableMap()
-        names.forEach { name ->
-            if (newData.containsKey(name)) {
-                newData[name]?.let { value -> data[name] = value }
-            }
-        }
-        formData.data = objectMapper.writeValueAsString(
-            filterOutEmpties(data)
-        )
-        dao.save(formData)
-    }
-
-    @Transactional
     fun submit(request: SubmitFormDataRequest, tenantId: Long): FormDataEntity {
         val form = formService.get(request.formId, tenantId)
+        var formData: FormDataEntity? = null
         if (request.workflowInstanceId != null) {
-            val formData = search(
+            formData = search(
                 tenantId = tenantId,
                 workflowInstanceIds = listOf(request.workflowInstanceId!!),
                 limit = 1
-            )
-            if (formData.isNotEmpty()) {
-                update(formData[0], request.data)
-                formSubmissionService.create(formData[0], request)
-                return formData[0]
+            ).firstOrNull()
+            if (formData != null) {
+                merge(formData, request.data)
             }
         }
 
         val now = Date()
-        val formData = dao.save(
-            FormDataEntity(
-                id = UUID.randomUUID().toString(),
-                tenantId = tenantId,
-                formId = form.id!!,
-                workflowInstanceId = request.workflowInstanceId,
-                data = objectMapper.writeValueAsString(
-                    filterOutEmpties(request.data)
-                ),
-                status = FormDataStatus.SUBMITTED,
-                createdAt = now,
-                modifiedAt = now,
+        if (formData == null) {
+            formData = dao.save(
+                FormDataEntity(
+                    id = UUID.randomUUID().toString(),
+                    tenantId = tenantId,
+                    formId = form.id!!,
+                    workflowInstanceId = request.workflowInstanceId,
+                    data = MapUtils.toJsonString(request.data, objectMapper),
+                    status = FormDataStatus.SUBMITTED,
+                    createdAt = now,
+                    modifiedAt = now,
+                )
             )
-        )
+        }
 
+        linkFiles(formData)
         formSubmissionService.create(formData, request)
-
-        linkFiles(formData, request.data)
         return formData
     }
 
     @Transactional
     fun update(formDataId: String, request: UpdateFormDataRequest, tenantId: Long): FormDataEntity {
         val formData = get(formDataId, tenantId)
-        update(formData, request.data)
+        merge(formData, request.data)
+
         formSubmissionService.create(formData, request)
         return formData
+    }
+
+    fun merge(formData: FormDataEntity, newData: Map<String, Any>) {
+        val data = formData.dataAsMap(objectMapper).toMutableMap()
+        newData.forEach { entry -> data[entry.key] = entry.value }
+        formData.data = MapUtils.toJsonString(data, objectMapper)
+        formData.modifiedAt = Date()
+        dao.save(formData)
     }
 
     @Transactional
@@ -149,7 +139,7 @@ class FormDataService(
         val formData = get(id, tenantId)
         if (formData.workflowInstanceId == null) {
             formData.workflowInstanceId = workflowInstanceId
-            linkFiles(formData, formData.dataAsMap(objectMapper))
+            linkFiles(formData)
             dao.save(formData)
         } else if (formData.workflowInstanceId != workflowInstanceId) {
             throw IllegalStateException("FormData#$id already associated with a WorkflowInstance")
@@ -157,65 +147,17 @@ class FormDataService(
         return formData
     }
 
-    fun update(formData: FormDataEntity, data: Map<String, Any>): FormDataEntity {
-        formData.data = objectMapper.writeValueAsString(
-            filterOutEmpties(data)
-        )
-        formData.modifiedAt = Date()
-        dao.save(formData)
-
-        linkFiles(formData, data)
-        return formData
-    }
-
-    private fun linkFiles(formData: FormDataEntity, data: Map<String, Any>) {
+    private fun linkFiles(formData: FormDataEntity) {
         formData.workflowInstanceId ?: return
 
-        /* File names */
         val form = formService.get(formData.formId, formData.tenantId)
-        val content = objectMapper.readValue(form.content, FormContent::class.java)
-        val names = content.elements
-            .flatMap { element -> (element.elements ?: emptyList()) }
-            .filter { element -> element.type == FormElementType.FILE_UPLOAD }
-            .map { element -> element.name }
+        val names = formService.extractInputName(form, FormElementType.FILE_UPLOAD)
         if (names.isEmpty()) {
             return
         }
 
-        /* Unlink */
-        var files = fileService.search(
-            tenantId = formData.tenantId,
-            workflowInstanceIds = listOf(formData.workflowInstanceId!!),
-            limit = Integer.MAX_VALUE,
-        )
-        if (files.isNotEmpty()) {
-            files.forEach { file -> file.workflowInstanceId = null }
-            fileService.save(files)
-        }
-
-        /* Link */
+        val data = formData.dataAsMap(objectMapper)
         val fileIds = names.mapNotNull { name -> data[name]?.toString() }
-        if (fileIds.isNotEmpty()) {
-            files = fileService.search(
-                ids = fileIds,
-                limit = fileIds.size,
-                tenantId = formData.tenantId,
-            )
-            files.forEach { file -> file.workflowInstanceId = formData.workflowInstanceId }
-            fileService.save(files)
-        }
-    }
-
-    private fun filterOutEmpties(map: Map<String, Any>): Map<String, Any> {
-        return map.filter { entry -> !isEmpty(entry.value) }
-    }
-
-    private fun isEmpty(value: Any): Boolean {
-        if (value is String) {
-            return value.trim().isNullOrEmpty()
-        } else if (value is Collection<*>) {
-            return value.isEmpty()
-        }
-        return false
+        fileService.link(fileIds, formData.workflowInstanceId!!, formData.tenantId)
     }
 }

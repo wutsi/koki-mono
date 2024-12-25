@@ -8,7 +8,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.workflow.dto.ActivityData
 import com.wutsi.koki.workflow.dto.FlowData
 import com.wutsi.koki.workflow.dto.WorkflowData
-import com.wutsi.koki.workflow.server.service.ExpressionEvaluator
+import com.wutsi.koki.workflow.server.service.WorkflowExpressionEvaluator
 import org.mockito.Mockito.mock
 import org.springframework.expression.ParseException
 import kotlin.test.Test
@@ -16,7 +16,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class FlowExpressionMustBeValidRuleTest {
-    private val evaluator = mock(ExpressionEvaluator::class.java)
+    private val evaluator = mock(WorkflowExpressionEvaluator::class.java)
     private val rule = FlowExpressionMustBeValidRule(evaluator)
 
     @Test

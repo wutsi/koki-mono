@@ -1,7 +1,7 @@
 package com.wutsi.koki.workflow.server.validation
 
 import com.wutsi.koki.workflow.dto.WorkflowData
-import com.wutsi.koki.workflow.server.service.ExpressionEvaluator
+import com.wutsi.koki.workflow.server.service.WorkflowExpressionEvaluator
 import com.wutsi.koki.workflow.server.validation.rule.ActivitiesShouldNotHaveMoreThanOneFlowRule
 import com.wutsi.koki.workflow.server.validation.rule.ActivityEndMustNotHaveSuccessorRule
 import com.wutsi.koki.workflow.server.validation.rule.ActivityManualMustHaveARoleRule
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class WorkflowValidator(
-    private val expressionEvaluator: ExpressionEvaluator,
+    private val expressionEvaluator: WorkflowExpressionEvaluator,
     private val rules: List<ValidationRule> = listOf(
         ActivityMustHaveANameRule(),
         ActivitiesShouldNotHaveMoreThanOneFlowRule(),

@@ -16,7 +16,7 @@ import com.wutsi.koki.workflow.server.domain.WorkflowInstanceEntity
 import com.wutsi.koki.workflow.server.service.ActivityInstanceService
 import com.wutsi.koki.workflow.server.service.ActivityService
 import com.wutsi.koki.workflow.server.service.ApprovalService
-import com.wutsi.koki.workflow.server.service.ExpressionEvaluator
+import com.wutsi.koki.workflow.server.service.WorkflowExpressionEvaluator
 import com.wutsi.koki.workflow.server.service.WorkflowInstanceService
 import com.wutsi.koki.workflow.server.service.WorkflowService
 import org.slf4j.LoggerFactory
@@ -32,7 +32,7 @@ class WorkflowEngineWorker(
     private val workflowInstanceService: WorkflowInstanceService,
     private val activityInstanceService: ActivityInstanceService,
     private val approvalService: ApprovalService,
-    private val expressionEvaluator: ExpressionEvaluator,
+    private val expressionEvaluator: WorkflowExpressionEvaluator,
     private val formDataService: FormDataService,
 ) {
     companion object {
@@ -82,7 +82,7 @@ class WorkflowEngineWorker(
         formDataService.search(
             tenantId = workflowInstance.tenantId,
             workflowInstanceIds = listOf(workflowInstance.id!!),
-            limit = 1000
+            limit = Integer.MAX_VALUE,
         )
             .forEach { formData -> formDataService.merge(formData, state) }
 

@@ -9,6 +9,7 @@ import com.wutsi.koki.form.dto.UpdateFormDataRequest
 import com.wutsi.koki.form.server.dao.FormSubmissionRepository
 import com.wutsi.koki.form.server.domain.FormDataEntity
 import com.wutsi.koki.form.server.domain.FormSubmissionEntity
+import com.wutsi.koki.platform.util.MapUtils
 import com.wutsi.koki.security.server.service.SecurityService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
@@ -66,7 +67,7 @@ class FormSubmissionService(
                 formId = formData.formId,
                 workflowInstanceId = request.workflowInstanceId,
                 activityInstanceId = request.activityInstanceId,
-                data = if (request.data.isEmpty()) null else objectMapper.writeValueAsString(request.data),
+                data = MapUtils.toJsonString(request.data, objectMapper),
                 submittedAt = Date(),
                 submittedById = securityService.getCurrentUserIdOrNull(),
             )
@@ -82,7 +83,7 @@ class FormSubmissionService(
                 formId = formData.formId,
                 workflowInstanceId = formData.workflowInstanceId,
                 activityInstanceId = request.activityInstanceId,
-                data = if (request.data.isEmpty()) null else objectMapper.writeValueAsString(request.data),
+                data = MapUtils.toJsonString(request.data, objectMapper),
                 submittedAt = Date(),
                 submittedById = securityService.getCurrentUserIdOrNull(),
             )
