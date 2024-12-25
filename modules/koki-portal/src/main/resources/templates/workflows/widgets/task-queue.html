@@ -6,7 +6,6 @@
         <table class="table table-striped" th:if="${activityInstances}">
             <tr>
                 <th>Task</th>
-                <th>Case</th>
                 <td></td>
             </tr>
             <tr th:each="activityInstance : ${activityInstances}">
@@ -17,7 +16,6 @@
                         ACTIVITY
                     </a>
                 </td>
-                <td th:text="${activityInstance.workflowInstance.title}">WORKFLOW</td>
                 <td class="toolbar">
                     <a class="btn-assign" th:href="'/workflows/widgets/task-queue/assign?activity-instance-id=' + ${activityInstance.id}">
                         Assign to Me

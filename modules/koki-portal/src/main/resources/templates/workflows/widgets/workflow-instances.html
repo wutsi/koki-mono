@@ -9,6 +9,7 @@
                 <th>Workflow</th>
                 <th>Status</th>
                 <th>Modified</th>
+                <th>Created By</th>
             </tr>
             <tr class="workflow-instance" th:each="workflowInstance : ${workflowInstances}">
                 <td>
@@ -20,6 +21,7 @@
                         th:replace="~{__components/workflow :: workflow-status(${workflowInstance.status})}"></div>
                 </td>
                 <td th:text="${workflowInstance.modifiedAtText}">MODIFIED</td>
+                <td th:text="${workflowInstance.createdBy?.displayName}">CREATED BY</td>
             </tr>
         </table>
 

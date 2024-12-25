@@ -29,6 +29,7 @@ class ActivityInstanceMapper {
             createdAt = entity.createdAt,
             startedAt = entity.startedAt,
             doneAt = entity.doneAt,
+            modifiedAt = entity.modifiedAt,
         )
     }
 
@@ -45,6 +46,7 @@ class ActivityInstanceMapper {
             createdAt = entity.createdAt,
             startedAt = entity.startedAt,
             doneAt = entity.doneAt,
+            modifiedAt = entity.modifiedAt,
         )
     }
 }
