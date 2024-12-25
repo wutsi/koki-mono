@@ -19,5 +19,6 @@ data class ActivityInstance(
     val createdAt: Date = Date(),
     val approvedAt: Date? = null,
     val startedAt: Date? = null,
-    val doneAt: Date? = null
+    val doneAt: Date? = null,
+    val modifiedAt: Date = Date(),
 )
