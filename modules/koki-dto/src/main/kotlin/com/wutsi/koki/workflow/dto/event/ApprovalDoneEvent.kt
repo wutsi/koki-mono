@@ -1,8 +1,8 @@
-package com.wutsi.koki.form.event
+package com.wutsi.koki.workflow.dto.event
 
 import com.wutsi.koki.workflow.dto.ApprovalStatus
 
-data class ApprovalCompletedEvent(
+data class ApprovalDoneEvent(
     val tenantId: Long = -1,
     val approvalId: Long = -1,
     val activityInstanceId: String = "",

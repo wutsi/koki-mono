@@ -1,4 +1,4 @@
-package com.wutsi.koki.form.event
+package com.wutsi.koki.workflow.dto.event
 
 data class ApprovalStartedEvent(
     val tenantId: Long = -1,
