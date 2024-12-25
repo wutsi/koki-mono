@@ -108,6 +108,7 @@ CREATE TABLE T_WI_ACTIVITY(
     approved_at             DATETIME,
     started_at              DATETIME,
     done_at                 DATETIME,
+    modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
 
     UNIQUE(workflow_instance_fk, activity_fk),
     PRIMARY KEY(id)

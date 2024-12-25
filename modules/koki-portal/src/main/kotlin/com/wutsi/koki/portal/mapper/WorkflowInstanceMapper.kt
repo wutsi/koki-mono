@@ -154,6 +154,8 @@ class WorkflowInstanceMapper(
             approvedAtText = entity.approvedAt?.let { date -> fmt.format(date) },
             startedAtText = entity.startedAt?.let { date -> fmt.format(date) },
             doneAtText = entity.doneAt?.let { date -> fmt.format(date) },
+            modifiedAt = entity.modifiedAt,
+            modifiedAtText = fmt.format(entity.modifiedAt),
         )
     }
 
@@ -181,6 +183,8 @@ class WorkflowInstanceMapper(
             approvedAtText = entity.approvedAt?.let { date -> fmt.format(date) },
             startedAtText = entity.startedAt?.let { date -> fmt.format(date) },
             doneAtText = entity.doneAt?.let { date -> fmt.format(date) },
+            modifiedAt = entity.modifiedAt,
+            modifiedAtText = fmt.format(entity.modifiedAt),
         )
     }
 

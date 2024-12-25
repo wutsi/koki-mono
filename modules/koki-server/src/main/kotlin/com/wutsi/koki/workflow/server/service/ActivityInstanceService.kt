@@ -84,7 +84,7 @@ class ActivityInstanceService(
         if (startedTo != null) {
             jql.append(" AND A.startedAt <= :startedTo")
         }
-        jql.append(" ORDER BY A.createdAt DESC")
+        jql.append(" ORDER BY A.modifiedAt DESC")
 
         val query = em.createQuery(jql.toString(), ActivityInstanceEntity::class.java)
         query.setParameter("tenantId", tenantId)
@@ -123,6 +123,7 @@ class ActivityInstanceService(
 
     @Transactional
     fun save(activityInstance: ActivityInstanceEntity): ActivityInstanceEntity {
+        activityInstance.modifiedAt = Date()
         return dao.save(activityInstance)
     }
 
