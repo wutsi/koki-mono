@@ -2,7 +2,6 @@
 
 ## Form
 
-- [x] Show form in preview with all fields displayed
 - [] Add support for Paypal field
 - [] Add support for Stripe field
 - [] Add checkbox grid field
@@ -10,15 +9,16 @@
 - [] Embed form
 - [] Support customer form style
 - [] Support anonymous forms
+- [x] Show form in preview with all fields displayed
 - [x] Support ReadOnly fields
 - [x] Track Form submissions
 - [x] Share Forms Link
 
 ## Workflow
 
+- [-] Send email notification for each USER or MANUAL activity
 - [] Approve/Reject activity
-- [] Send email notification for each USER activity
-- [] Send email notification for each MANUAL activity
+- [] Send email notification for approval
 - [] Cancel workflow Instance
 - [] Run scheduled workflow instances
 - [] Start Workflow on event received
@@ -54,8 +54,9 @@
 
 ## Portal
 
-- [x] Align webapp domain name with Tenant
+- [] Add decorator to all emails that include logos
 - [] Configure home page by role
+- [x] Align webapp domain name with Tenant
 
 ## Module
 

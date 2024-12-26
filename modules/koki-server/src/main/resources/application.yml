@@ -152,5 +152,7 @@ koki:
             workflow-dlq: koki-workflow-dlq
             log-queue: koki-log-queue
             log-dlq: koki-log-dlq
+            notification-queue: koki-notification-queue
+            notification-dlq: koki-notification-dlq
             dlq-cron: "0 */30 * * * *"  # Every 30 mins
             consumer-delay-seconds: 1
