@@ -1,7 +1,6 @@
 package com.wutsi.koki.portal.page.auth
 
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
@@ -79,10 +78,6 @@ class LoginControllerTest : AbstractPageControllerTest() {
         )
         doReturn(GetFormResponse(form)).whenever(kokiForms).form(any())
 
-        val html = generateFormHtml()
-        doReturn(html).whenever(kokiForms)
-            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
-
         // WHEN
         navigateTo("/forms/4304309")
         setupUsers()
@@ -100,36 +95,5 @@ class LoginControllerTest : AbstractPageControllerTest() {
         assertEquals(accessToken, accessTokenArg.firstValue)
 
         assertCurrentPageIs(PageName.FORM)
-    }
-
-    private fun generateFormHtml(): String {
-        return """
-            <DIV class='form test'>
-              <FORM method='post' action=''>
-                <DIV class='form-header'>
-                  <H1 class='form-title'>Incident Report</H1>
-                </DIV>
-                <DIV class='form-body'>
-                  <DIV class='section'>
-                    <DIV class='section-body'>
-                      <DIV class='section-item'>
-                        <LABEL class='title'><SPAN>Customer Name</SPAN><SPAN class='required'>*</SPAN></LABEL>
-                        <INPUT name='customer_name' required/>
-                      </DIV>
-                      <DIV class='section-item'>
-                        <LABEL class='title'><SPAN>Customer Email</SPAN><SPAN class='required'>*</SPAN></LABEL>
-                        <INPUT name='customer_email' type='email' required/>
-                      </DIV>
-                    </DIV>
-                  </DIV>
-                </DIV>
-                <DIV class='form-footer'>
-                  <DIV class='form-button-group'>
-                    <BUTTON type='submit'>Submit</BUTTON>
-                  </DIV>
-                </DIV>
-              </FORM>
-            </DIV>
-        """.trimIndent()
     }
 }

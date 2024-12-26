@@ -20,6 +20,7 @@ class FormController(private val service: FormService) : AbstractPageController(
         @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
         @RequestParam(required = false, name = "activity-instance-id") activityInstanceId: String? = null,
         @RequestParam(required = false, name = "read-only") readOnly: Boolean = false,
+        @RequestParam(required = false, name = "preview") preview: Boolean = false,
         model: Model
     ): String {
         val form = service.form(formId)
@@ -28,7 +29,8 @@ class FormController(private val service: FormService) : AbstractPageController(
             formDataId = null,
             workflowInstanceId = workflowInstanceId,
             activityInstanceId = activityInstanceId,
-            readOnly = readOnly
+            readOnly = readOnly,
+            preview = preview,
         )
         model.addAttribute("formHtml", formHtml)
         model.addAttribute(

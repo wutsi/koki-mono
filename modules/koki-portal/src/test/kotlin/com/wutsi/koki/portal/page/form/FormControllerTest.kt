@@ -32,7 +32,7 @@ class FormControllerTest : AbstractPageControllerTest() {
 
         val html = generateFormHtml("http://localhost:$port/forms/$formId")
         doReturn(html).whenever(kokiForms)
-            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(SubmitFormDataResponse("1111")).whenever(kokiForms).submit(any())
     }
@@ -74,7 +74,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         val html =
             generateFormHtml("http://localhost:$port/forms/$formId?workflow-instance-id=111&activity-instance-id=222")
         doReturn(html).whenever(kokiForms)
-            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         // WHEN
         navigateTo("/forms/$formId?workflow-instance-id=111&activity-instance-id=222")
@@ -116,7 +116,7 @@ class FormControllerTest : AbstractPageControllerTest() {
             false
         )
         doReturn(html).whenever(kokiForms)
-            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         // WHEN
         navigateTo("/forms/$formId")
@@ -142,7 +142,7 @@ class FormControllerTest : AbstractPageControllerTest() {
             true
         )
         doReturn(html).whenever(kokiForms)
-            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         // WHEN
         navigateTo("/forms/$formId")
@@ -161,7 +161,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         // GIVEN
         val ex = createHttpClientErrorException(404, ErrorCode.FORM_NOT_FOUND)
         doThrow(ex).whenever(kokiForms)
-            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         // WHEN
         navigateTo("/forms/$formId")
@@ -177,7 +177,7 @@ class FormControllerTest : AbstractPageControllerTest() {
 
         val html = generateFormHtml("http://localhost:$port/forms/$formId/$formDataId")
         doReturn(html).whenever(kokiForms)
-            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         // WHEN
         navigateTo("/forms/$formId/$formDataId?activity-instance-id=222")
@@ -216,10 +216,10 @@ class FormControllerTest : AbstractPageControllerTest() {
 
         val html = generateFormHtml("http://localhost:$port/forms/$formId/$formDataId?activity-instance-id=222")
         doReturn(html).whenever(kokiForms)
-            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         doReturn(html).whenever(kokiForms)
-            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
 
         // WHEN
         navigateTo("/forms/$formId/$formDataId?activity-instance-id=222")

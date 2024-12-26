@@ -13,7 +13,7 @@ data class FormModel(
     val createdAtText: String = "",
     val modifiedAt: Date = Date(),
     val modifiedAtText: String = "",
-    val viewUrl: String = "",
+    val previewUrl: String = "",
     val editUrl: String = "",
     val shareUrl: String = "",
 ) {

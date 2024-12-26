@@ -16,6 +16,7 @@ data class TenantModel(
     val dateTimeFormat: String = "",
     val status: TenantStatus = TenantStatus.ACTIVE,
     val logoUrl: String? = null,
-    var iconUrl: String? = null,
+    val iconUrl: String? = null,
+    val portalUrl: String = "",
     val createdAt: Date = Date(),
 )

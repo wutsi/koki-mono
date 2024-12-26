@@ -13,6 +13,7 @@ data class Context(
     val provider: HTMLElementWriterProvider = HTMLElementWriterProvider(),
     val roleNames: List<String> = emptyList(),
     val readOnly: Boolean = false,
+    val preview: Boolean = false,
     val fileResolver: FileResolver = NullFileResolver(),
     val formLogicEvaluator: FormLogicEvaluator = FormLogicEvaluator(ObjectMapper(), ExpressionEvaluator()),
 )

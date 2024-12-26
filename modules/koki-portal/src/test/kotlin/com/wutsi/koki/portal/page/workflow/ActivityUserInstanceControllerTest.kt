@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.page.workflow.instance
 
-import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
@@ -8,19 +7,9 @@ import com.wutsi.koki.WorkflowFixtures.activityInstance
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.workflow.dto.GetActivityInstanceResponse
 import com.wutsi.koki.workflow.dto.WorkflowStatus
-import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
 class ActivityUserInstanceControllerTest : AbstractPageControllerTest() {
-    @BeforeEach
-    override fun setUp() {
-        super.setUp()
-
-        val html = generateFormHtml()
-        doReturn(html).whenever(kokiForms)
-            .html(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
-    }
-
     @Test
     fun `edit form`() {
         // WHEN
@@ -72,9 +61,5 @@ class ActivityUserInstanceControllerTest : AbstractPageControllerTest() {
         driver.switchTo().window(tabs[1])
         Thread.sleep(1000)
         assertCurrentPageIs(PageName.FORM)
-    }
-
-    private fun generateFormHtml(): String {
-        return getResourceAsString("/form-readonly.html")
     }
 }
