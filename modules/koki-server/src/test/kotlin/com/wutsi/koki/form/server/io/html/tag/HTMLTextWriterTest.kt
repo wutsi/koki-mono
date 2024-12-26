@@ -255,4 +255,27 @@ class HTMLTextWriterTest {
 
         assertTrue(output.toString().isEmpty())
     }
+
+    @Test
+    fun preview() {
+        writer.write(
+            elt.copy(
+                logic = FormLogic(action = FormAction.DISABLE, expression = "var1")
+            ),
+            context.copy(
+                preview = true
+            ),
+            output
+        )
+
+        assertEquals(
+            """
+                <LABEL class='title'><SPAN>test</SPAN></LABEL>
+                <DIV class='description'>This is the description</DIV>
+                <INPUT name='${elt.name}' value='value1' disabled/>
+
+            """.trimIndent(),
+            output.toString()
+        )
+    }
 }

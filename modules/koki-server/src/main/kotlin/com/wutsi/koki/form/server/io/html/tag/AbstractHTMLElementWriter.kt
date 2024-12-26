@@ -27,7 +27,7 @@ abstract class AbstractHTMLElementWriter() : HTMLElementWriter {
     }
 
     protected fun canEdit(element: FormElement, context: Context, action: FormAction): Boolean {
-        if (context.preview && action == FormAction.DISABLE || element.readOnly == true || context.readOnly) {
+        if (context.preview || action == FormAction.DISABLE || element.readOnly == true || context.readOnly) {
             return false
         } else if (element.accessControl == null || element.accessControl?.editorRoles == null) {
             return true
