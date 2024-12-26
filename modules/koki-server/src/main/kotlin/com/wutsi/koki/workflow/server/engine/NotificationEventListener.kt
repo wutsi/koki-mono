@@ -84,7 +84,7 @@ class NotificationEventListener(
         data.put("activity_id", activityInstance.id!!)
         data.put("activity_title", (activity.title ?: activity.name))
         data.put("workflow_title", (workflow.title ?: workflow.name))
-        data.put("action_url", "${tenant.portalUrl}/tasks/${activityInstance.id}/complete")
+        data.put("action_url", "${tenant.portalUrl}/tasks/${activityInstance.id}")
 
         val subject = "You've got a new task - {{activity_title}}"
         val body = """

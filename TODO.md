@@ -16,12 +16,14 @@
 
 ## Workflow
 
-- [-] Send email notification for each USER or MANUAL activity
+- [x] Send email notification for each USER or MANUAL activity
 - [] Approve/Reject activity
 - [] Send email notification for approval
+- [] Task approval should be only on USER or MANUAL tasks
 - [] Cancel workflow Instance
 - [] Run scheduled workflow instances
 - [] Start Workflow on event received
+- [] SEND activity to fire events
 - [] Add support for jsonpath mapping
 - [] Add support for Business Rule activities
 - [x] add modifiedAt to Activity Instance. Use it as default sort field

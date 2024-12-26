@@ -12,8 +12,7 @@
             </tr>
             <tr th:each="activityInstance : ${activityInstances}">
                 <td>
-                    <a th:href="${activityInstance.url}"
-                       th:text="${activityInstance.activity.title}">
+                    <a th:href="'/tasks/' + ${activityInstance.id}" th:text="${activityInstance.activity.title}">
                         ACTIVITY
                     </a>
                 </td>
