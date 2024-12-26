@@ -7,6 +7,7 @@ import com.wutsi.koki.event.server.rabbitmq.RabbitMQEventPublisher
 import com.wutsi.koki.event.server.rabbitmq.RabbitMQHandler
 import com.wutsi.koki.event.server.service.EventPublisher
 import com.wutsi.koki.workflow.server.engine.LogEventListener
+import com.wutsi.koki.workflow.server.engine.NotificationEventListener
 import com.wutsi.koki.workflow.server.engine.WorkflowEventListener
 import jakarta.annotation.PostConstruct
 import org.slf4j.LoggerFactory
@@ -27,6 +28,7 @@ class RabbitMQWorkflowConfiguration(
     private val objectMapper: ObjectMapper,
     private val workflowEngineListener: WorkflowEventListener,
     private val logEventListener: LogEventListener,
+    private val notificationEventListener: NotificationEventListener,
     private val eventPublisher: EventPublisher,
 
     @Value("\${koki.event-publisher.rabbitmq.exchange-name}") private val exchangeName: String,
@@ -34,6 +36,8 @@ class RabbitMQWorkflowConfiguration(
     @Value("\${koki.workflow-engine.rabbitmq.workflow-dlq}") private val workflowDlq: String,
     @Value("\${koki.workflow-engine.rabbitmq.log-queue}") private val logQueue: String,
     @Value("\${koki.workflow-engine.rabbitmq.log-dlq}") private val logDlq: String,
+    @Value("\${koki.workflow-engine.rabbitmq.notification-queue}") private val notificationQueue: String,
+    @Value("\${koki.workflow-engine.rabbitmq.notification-dlq}") private val notificationDlq: String,
     @Value("\${koki.workflow-engine.rabbitmq.consumer-delay-seconds}") private val consumerDelay: Int,
 ) {
     companion object {
@@ -47,15 +51,30 @@ class RabbitMQWorkflowConfiguration(
 
         setupQueues(logQueue, logDlq)
         setupConsumer(logQueue, logEventListener)
+
+        setupQueues(notificationQueue, notificationDlq)
+        setupConsumer(notificationQueue, notificationEventListener)
     }
 
     @Scheduled(cron = "\${koki.workflow-engine.rabbitmq.dlq-cron}")
     fun processWorkflowDLQ() {
+        processDlq(workflowQueue, workflowDlq)
+    }
+
+    @Scheduled(cron = "\${koki.workflow-engine.rabbitmq.dlq-cron}")
+    fun processLogDLQ() {
+        processDlq(logQueue, logDlq)
+    }
+
+    @Scheduled(cron = "\${koki.workflow-engine.rabbitmq.dlq-cron}")
+    fun processNotificationDLQ() {
+        processDlq(notificationQueue, notificationDlq)
+    }
+
+    private fun processDlq(queue: String, dlq: String) {
+        LOGGER.info("Processing DLQ: $dlq -> $queue")
         if (eventPublisher is RabbitMQEventPublisher) {
-            eventPublisher.processDlq(
-                queue = workflowQueue,
-                dlq = workflowDlq,
-            )
+            eventPublisher.processDlq(queue = queue, dlq = dlq)
         }
     }
 
