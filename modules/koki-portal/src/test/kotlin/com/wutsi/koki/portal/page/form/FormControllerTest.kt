@@ -5,7 +5,6 @@ import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
-import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -14,7 +13,6 @@ import com.wutsi.koki.FormFixtures
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.form.dto.SubmitFormDataRequest
 import com.wutsi.koki.form.dto.SubmitFormDataResponse
-import com.wutsi.koki.form.dto.UpdateFormDataRequest
 import com.wutsi.koki.portal.page.PageName
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -103,7 +101,7 @@ class FormControllerTest : AbstractPageControllerTest() {
             request.firstValue.data
         )
 
-        assertCurrentPageIs(PageName.FORM_SUBMITTED)
+        assertCurrentPageIs(PageName.TASK_COMPLETED)
     }
 
     @Test
@@ -168,85 +166,6 @@ class FormControllerTest : AbstractPageControllerTest() {
 
         // THEN
         assertCurrentPageIs(PageName.ERROR)
-    }
-
-    @Test
-    fun update() {
-        // GIVEN
-        val formDataId = "4094509"
-
-        val html = generateFormHtml("http://localhost:$port/forms/$formId/$formDataId")
-        doReturn(html).whenever(kokiForms)
-            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
-
-        // WHEN
-        navigateTo("/forms/$formId/$formDataId?activity-instance-id=222")
-
-        // THEN
-        assertCurrentPageIs(PageName.FORM)
-        input("INPUT[name=customer_name]", "Ray Sponsible")
-        input("INPUT[name=customer_email]", "ray.sponsible@gmail.com")
-        click("INPUT[value=S]")
-        click("INPUT[value=T1]")
-        click("INPUT[value=IMM]")
-        click("button[type=submit]")
-
-        val request = argumentCaptor<UpdateFormDataRequest>()
-        verify(kokiForms).submit(eq(formDataId), request.capture())
-        assertEquals(null, request.firstValue.activityInstanceId)
-
-        val data = request.firstValue.data
-        assertEquals(4, data.size)
-        assertEquals("Ray Sponsible", data["customer_name"])
-        assertEquals("ray.sponsible@gmail.com", data["customer_email"])
-        assertEquals("S", data["marital_status"])
-        assertEquals(2, (data["case_type"] as Array<*>).size)
-        assertEquals("T1", (data["case_type"] as Array<*>)[0])
-        assertEquals("IMM", (data["case_type"] as Array<*>)[1])
-
-        assertCurrentPageIs(PageName.FORM_SUBMITTED)
-        click(".btn-ok")
-        assertCurrentPageIs(PageName.HOME)
-    }
-
-    @Test
-    fun `update with workflow`() {
-        // GIVEN
-        val formDataId = "4094509"
-
-        val html = generateFormHtml("http://localhost:$port/forms/$formId/$formDataId?activity-instance-id=222")
-        doReturn(html).whenever(kokiForms)
-            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
-
-        doReturn(html).whenever(kokiForms)
-            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
-
-        // WHEN
-        navigateTo("/forms/$formId/$formDataId?activity-instance-id=222")
-
-        // THEN
-        assertCurrentPageIs(PageName.FORM)
-        input("INPUT[name=customer_name]", "Ray Sponsible")
-        input("INPUT[name=customer_email]", "ray.sponsible@gmail.com")
-        click("INPUT[value=S]")
-        click("INPUT[value=T1]")
-        click("INPUT[value=IMM]")
-        click("button[type=submit]")
-
-        val request = argumentCaptor<UpdateFormDataRequest>()
-        verify(kokiForms).submit(eq(formDataId), request.capture())
-        assertEquals("222", request.firstValue.activityInstanceId)
-
-        val data = request.firstValue.data
-        assertEquals(4, data.size)
-        assertEquals("Ray Sponsible", data["customer_name"])
-        assertEquals("ray.sponsible@gmail.com", data["customer_email"])
-        assertEquals("S", data["marital_status"])
-        assertEquals(2, (data["case_type"] as Array<*>).size)
-        assertEquals("T1", (data["case_type"] as Array<*>)[0])
-        assertEquals("IMM", (data["case_type"] as Array<*>)[1])
-
-        assertCurrentPageIs(PageName.FORM_SUBMITTED)
     }
 
     @Test

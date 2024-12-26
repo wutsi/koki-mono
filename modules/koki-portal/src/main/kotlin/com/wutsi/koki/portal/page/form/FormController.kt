@@ -43,46 +43,9 @@ class FormController(private val service: FormService) : AbstractPageController(
         return "forms/show"
     }
 
-    @GetMapping("/forms/{form-id}/{form-data-id}")
-    fun edit(
-        @PathVariable(name = "form-id") formId: String,
-        @PathVariable(name = "form-data-id") formDataId: String?,
-        @RequestParam(required = false, name = "activity-instance-id") activityInstanceId: String? = null,
-        model: Model
-    ): String {
-        val form = service.form(formId)
-        val formHtml = service.html(
-            formId = formId,
-            formDataId = formDataId,
-            workflowInstanceId = null,
-            activityInstanceId = activityInstanceId,
-        )
-        model.addAttribute("formHtml", formHtml)
-        model.addAttribute(
-            "page",
-            PageModel(
-                name = PageName.FORM,
-                title = form.longTitle,
-            )
-        )
-
-        return "forms/show"
-    }
-
     @PostMapping("/forms/{form-id}")
     fun submit(
         @PathVariable(name = "form-id") formId: String,
-        @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
-        @RequestParam(required = false, name = "activity-instance-id") activityInstanceId: String? = null,
-        request: HttpServletRequest
-    ): String {
-        return submit(formId, null, workflowInstanceId, activityInstanceId, request)
-    }
-
-    @PostMapping("/forms/{form-id}/{form-data-id}")
-    fun submit(
-        @PathVariable(name = "form-id") formId: String,
-        @PathVariable(name = "form-data-id") formDataId: String?,
         @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
         @RequestParam(required = false, name = "activity-instance-id") activityInstanceId: String? = null,
         request: HttpServletRequest
@@ -97,14 +60,10 @@ class FormController(private val service: FormService) : AbstractPageController(
                 }
             }
             .toMap() as Map<String, Any>
-        if (formDataId != null) {
-            service.submit(formDataId, activityInstanceId, data)
-        } else {
-            service.submit(formId, workflowInstanceId, activityInstanceId, data)
-        }
 
+        service.submit(formId, workflowInstanceId, activityInstanceId, data)
         if (activityInstanceId == null) {
-            return "redirect:/forms/$formId/sumitted"
+            return "redirect:/forms/$formId/submitted"
         } else {
             return "redirect:/tasks/$activityInstanceId/completed"
         }

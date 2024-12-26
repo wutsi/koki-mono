@@ -375,7 +375,7 @@ abstract class AbstractPageControllerTest {
             )
 
         doReturn(GetActivityInstanceResponse(activityInstance)).whenever(kokiWorkflowInstances)
-            .activity(activityInstance.id)
+            .activity(any())
         doReturn(SearchActivityInstanceResponse(activityInstances)).whenever(kokiWorkflowInstances)
             .activities(
                 anyOrNull(),
