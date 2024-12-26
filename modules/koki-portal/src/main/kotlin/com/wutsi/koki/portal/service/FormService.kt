@@ -77,7 +77,8 @@ class FormService(
         roleName: String? = null,
         workflowInstanceId: String? = null,
         activityInstanceId: String? = null,
-        readOnly: Boolean = false
+        readOnly: Boolean = false,
+        preview: Boolean = false,
     ): String {
         return koki.html(
             formId = formId,
@@ -86,6 +87,7 @@ class FormService(
             workflowInstanceId = workflowInstanceId,
             activityInstanceId = activityInstanceId,
             readOnly = readOnly,
+            preview = preview,
         )
     }
 

@@ -100,10 +100,6 @@ class ListFormControllerTest : AbstractPageControllerTest() {
         )
         doReturn(GetFormResponse(form)).whenever(kokiForms).form(any())
 
-        val html = generateFormHtml()
-        doReturn(html).whenever(kokiForms)
-            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
-
         navigateTo("/settings/forms")
         click(".btn-preview")
 
@@ -111,9 +107,5 @@ class ListFormControllerTest : AbstractPageControllerTest() {
         driver.switchTo().window(tabs[1])
         Thread.sleep(1000)
         assertCurrentPageIs(PageName.FORM)
-    }
-
-    private fun generateFormHtml(): String {
-        return getResourceAsString("/form-readonly.html")
     }
 }

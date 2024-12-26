@@ -255,6 +255,10 @@ abstract class AbstractPageControllerTest {
                 anyOrNull(),
                 anyOrNull(),
             )
+
+        val html = getResourceAsString("/form-readonly.html")
+        doReturn(html).whenever(kokiForms)
+            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
     }
 
     private fun setupScripts() {

@@ -32,8 +32,8 @@ class FormMapper(
             createdAtText = fmt.format(entity.createdAt),
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.modifiedAt),
-            viewUrl = toUrl(entity.id, true, workflowInstanceId, activityInstanceId),
-            editUrl = toUrl(entity.id, false, workflowInstanceId, activityInstanceId),
+            previewUrl = toUrl(entity.id, true, true, workflowInstanceId, activityInstanceId),
+            editUrl = toUrl(entity.id, false, false, workflowInstanceId, activityInstanceId),
             shareUrl = toShareUrl(entity.id),
         )
     }
@@ -55,20 +55,25 @@ class FormMapper(
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.modifiedAt),
             content = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(entity.content),
-            viewUrl = toUrl(entity.id, true, workflowInstanceId, activityInstanceId),
-            editUrl = toUrl(entity.id, false, workflowInstanceId, activityInstanceId),
+            previewUrl = toUrl(entity.id, true, true, workflowInstanceId, activityInstanceId),
+            editUrl = toUrl(entity.id, false, false, workflowInstanceId, activityInstanceId),
             shareUrl = toShareUrl(entity.id),
         )
     }
 
     fun toUrl(
-        id: String, readOnly: Boolean, workflowInstanceId: String? = null, activityInstanceId: String? = null
+        id: String,
+        readOnly: Boolean,
+        preview: Boolean,
+        workflowInstanceId: String? = null,
+        activityInstanceId: String? = null
     ): String {
         return listOf(
             "/forms/$id", listOf(
-                workflowInstanceId?.let { wid -> "workflow-instance-id=$wid" },
-                activityInstanceId?.let { wid -> "activity-instance-id=$wid" },
-                if (readOnly) "read-only=true" else null
+                workflowInstanceId?.let { id -> "workflow-instance-id=$id" },
+                activityInstanceId?.let { id -> "activity-instance-id=$id" },
+                if (preview) "preview=true" else null,
+                if (readOnly) "read-only=true" else null,
             ).filterNotNull().joinToString(separator = "&")
         ).joinToString(separator = "?")
     }

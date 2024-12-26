@@ -77,7 +77,8 @@ class KokiForms(
         roleName: String?,
         workflowInstanceId: String?,
         activityInstanceId: String?,
-        readOnly: Boolean
+        readOnly: Boolean,
+        preview: Boolean
     ): String {
         val tenantId = tenantProvider.id()
         val path = if (formDataId == null) {
@@ -93,6 +94,7 @@ class KokiForms(
                 "workflow-instance-id" to workflowInstanceId,
                 "activity-instance-id" to activityInstanceId,
                 "read-only" to readOnly,
+                "preview" to preview,
             )
         )
         return rest.getForEntity(url, String::class.java).body

@@ -15,30 +15,29 @@ abstract class AbstractHTMLElementWriter() : HTMLElementWriter {
     )
 
     protected fun canView(element: FormElement, context: Context, action: FormAction): Boolean {
-        if (action == FormAction.HIDE) {
-            return false
-        }
-        if (element.accessControl == null || element.accessControl?.viewerRoles == null) {
+        if (context.preview) {
             return true
+        } else if (action == FormAction.HIDE) {
+            return false
+        } else if (element.accessControl == null || element.accessControl?.viewerRoles == null) {
+            return true
+        } else {
+            return checkPermission(element.accessControl!!.viewerRoles!!, context)
         }
-
-        val role = element.accessControl!!
-            .viewerRoles!!
-            .find { role -> context.roleNames.contains(role) }
-        return role != null
     }
 
     protected fun canEdit(element: FormElement, context: Context, action: FormAction): Boolean {
-        if (action == FormAction.DISABLE || element.readOnly == true || context.readOnly) {
+        if (context.preview && action == FormAction.DISABLE || element.readOnly == true || context.readOnly) {
             return false
-        }
-        if (element.accessControl == null || element.accessControl?.editorRoles == null) {
+        } else if (element.accessControl == null || element.accessControl?.editorRoles == null) {
             return true
+        } else {
+            return checkPermission(element.accessControl!!.editorRoles!!, context)
         }
-        val role = element.accessControl!!
-            .editorRoles!!
-            .find { role -> context.roleNames.contains(role) }
-        return role != null
+    }
+
+    private fun checkPermission(roles: List<String>, context: Context): Boolean {
+        return roles.find { role -> context.roleNames.contains(role) } != null
     }
 
     override fun write(element: FormElement, context: Context, writer: StringWriter) {

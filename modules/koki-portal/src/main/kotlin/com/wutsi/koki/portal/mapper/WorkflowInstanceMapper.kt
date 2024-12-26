@@ -83,12 +83,14 @@ class WorkflowInstanceMapper(
                     editUrl = formMapper.toUrl(
                         id = activity.form.id,
                         readOnly = false,
+                        preview = false,
                         workflowInstanceId = activityInstance.workflowInstanceId,
                         activityInstanceId = activityInstance.id
                     ),
-                    viewUrl = formMapper.toUrl(
+                    previewUrl = formMapper.toUrl(
                         id = activity.form.id,
                         readOnly = true,
+                        preview = true,
                         workflowInstanceId = activityInstance.workflowInstanceId,
                         activityInstanceId = activityInstance.id
                     ),

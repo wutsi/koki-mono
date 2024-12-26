@@ -2,7 +2,7 @@
 
 ## Form
 
-- [] Show form in preview with all fields displayed
+- [x] Show form in preview with all fields displayed
 - [] Add support for Paypal field
 - [] Add support for Stripe field
 - [] Add checkbox grid field
@@ -16,6 +16,7 @@
 
 ## Workflow
 
+- [] Approve/Reject activity
 - [] Send email notification for each USER activity
 - [] Send email notification for each MANUAL activity
 - [] Cancel workflow Instance

@@ -154,10 +154,6 @@ class ShowFormControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun preview() {
-        val html = generateFormHtml()
-        doReturn(html).whenever(kokiForms)
-            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
-
         navigateTo("/settings/forms/${form.id}")
         click(".btn-preview")
 
@@ -165,9 +161,5 @@ class ShowFormControllerTest : AbstractPageControllerTest() {
         driver.switchTo().window(tabs[1])
         Thread.sleep(1000)
         assertCurrentPageIs(PageName.FORM)
-    }
-
-    private fun generateFormHtml(): String {
-        return getResourceAsString("/form-readonly.html")
     }
 }

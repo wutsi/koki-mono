@@ -53,9 +53,10 @@ class ExportFormHTMLEndpoint(
         @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
         @RequestParam(required = false, name = "activity-instance-id") activityInstanceId: String? = null,
         @RequestParam(required = false, name = "read-only") readOnly: Boolean = false,
+        @RequestParam(required = false, name = "preview") preview: Boolean = false,
         response: HttpServletResponse
     ) {
-        generateHtml(tenantId, formId, null, workflowInstanceId, activityInstanceId, readOnly, response)
+        generateHtml(tenantId, formId, null, workflowInstanceId, activityInstanceId, readOnly, preview, response)
     }
 
     @GetMapping("/v1/forms/html/{tenant-id}/{form-id}/{form-data-id}.html")
@@ -65,9 +66,10 @@ class ExportFormHTMLEndpoint(
         @PathVariable(name = "form-data-id") formDataId: String?,
         @RequestParam(required = false, name = "activity-instance-id") activityInstanceId: String? = null,
         @RequestParam(required = false, name = "read-only") readOnly: Boolean = false,
+        @RequestParam(required = false, name = "preview") preview: Boolean = false,
         response: HttpServletResponse
     ) {
-        generateHtml(tenantId, formId, formDataId, null, activityInstanceId, readOnly, response)
+        generateHtml(tenantId, formId, formDataId, null, activityInstanceId, readOnly, preview, response)
     }
 
     private fun generateHtml(
@@ -77,12 +79,13 @@ class ExportFormHTMLEndpoint(
         workflowInstanceId: String?,
         activityInstanceId: String?,
         readOnly: Boolean,
+        preview: Boolean,
         response: HttpServletResponse
     ) {
         response.contentType = "text/html"
         try {
             val form = service.get(formId, tenantId)
-            val context = createContext(form, formDataId, workflowInstanceId, activityInstanceId, readOnly, tenantId)
+            val context = createContext(form, formDataId, workflowInstanceId, activityInstanceId, readOnly, preview, tenantId)
             val writer = StringWriter()
             val content = objectMapper.readValue(form.content, FormContent::class.java)
             generator.generate(content, context, writer)
@@ -106,6 +109,7 @@ class ExportFormHTMLEndpoint(
         workflowInstanceId: String?,
         activityInstanceId: String?,
         readOnly: Boolean,
+        preview: Boolean,
         tenantId: Long,
     ): Context {
         val tenant = tenantService.get(tenantId)
@@ -124,6 +128,7 @@ class ExportFormHTMLEndpoint(
             tenantId = tenantId,
             roleNames = getRoleNames(tenantId),
             readOnly = readOnly,
+            preview = preview,
             fileResolver = fileResolver,
             data = data?.let { data ->
                 objectMapper.readValue(data, Map::class.java) as Map<String, Any>

@@ -23,6 +23,7 @@ class TenantMapper {
             domainName = entity.domainName,
             iconUrl = entity.iconUrl?.ifEmpty { null },
             logoUrl = entity.logoUrl?.ifEmpty { null },
+            portalUrl = entity.portalUrl,
         )
     }
 }
