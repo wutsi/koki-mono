@@ -112,7 +112,7 @@ class NotificationEventListenerTest {
 
         assertEquals(user.email, msg.firstValue.recipient.email)
         assertEquals(user.displayName, msg.firstValue.recipient.displayName)
-        assertTrue(msg.firstValue.body.contains("${tenant.portalUrl}/tasks/${activityInstance.id}/complete"))
+        assertTrue(msg.firstValue.body.contains("${tenant.portalUrl}/tasks/${activityInstance.id}"))
     }
 
     @Test

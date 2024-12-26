@@ -102,7 +102,12 @@ class FormController(private val service: FormService) : AbstractPageController(
         } else {
             service.submit(formId, workflowInstanceId, activityInstanceId, data)
         }
-        return "redirect:/forms/$formId/submitted"
+
+        if (activityInstanceId == null) {
+            return "redirect:/forms/$formId/sumitted"
+        } else {
+            return "redirect:/tasks/$activityInstanceId/completed"
+        }
     }
 
     @GetMapping("/forms/{id}/submitted")

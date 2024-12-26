@@ -31,6 +31,8 @@ class SecurityConfiguration(
                     .requestMatchers(AntPathRequestMatcher("/scripts/**/*")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/settings")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/settings/**/*")).authenticated()
+                    .requestMatchers(AntPathRequestMatcher("/tasks")).authenticated()
+                    .requestMatchers(AntPathRequestMatcher("/tasks/**/*")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/workflows")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/workflows/**/*")).authenticated()
                     .anyRequest().permitAll()
