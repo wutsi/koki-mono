@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.FileFixtures.files
 import com.wutsi.koki.FormFixtures.form
 import com.wutsi.koki.WorkflowFixtures.activityInstance
 import com.wutsi.koki.WorkflowFixtures.workflowInstance
@@ -55,6 +56,15 @@ class TaskControllerUserTest : AbstractPageControllerTest() {
         assertElementNotPresent("#alert-error")
         assertElementPresent("#form-container")
         assertElementNotPresent("#btn-complete")
+
+        click("#pills-files-tab")
+        waitForPresenceOf(".files-widget tr.file")
+        assertElementCount(".files-widget tr.file", files.size)
+
+        click("#pills-process-tab", 1000)
+        assertElementPresent(".workflow-image img")
+
+        click("#pills-task-tab", 1000)
 
         input("INPUT[name=customer_name]", "Ray Sponsible")
         input("INPUT[name=customer_email]", "ray.sponsible@gmail.com")

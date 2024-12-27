@@ -3,9 +3,11 @@ package com.wutsi.koki.portal.page.workflow.instance
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.FileFixtures.files
 import com.wutsi.koki.WorkflowFixtures.activityInstance
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
@@ -37,12 +39,42 @@ class TaskControllerManualTest : AbstractPageControllerTest() {
         assertElementNotPresent("#alert-not-assignee")
         assertElementPresent("#btn-complete")
 
+        click("#pills-files-tab")
+        waitForPresenceOf(".files-widget tr.file")
+        assertElementCount(".files-widget tr.file", files.size)
+
+        click("#pills-process-tab", 1000)
+        assertElementPresent(".workflow-image img")
+
+        click("#pills-task-tab", 1000)
         click("#btn-complete")
+
+        val alert = driver.switchTo().alert()
+        alert.accept()
+        driver.switchTo().parentFrame()
+
         verify(kokiWorkflowInstances).complete(activityInstance.id, CompleteActivityInstanceRequest())
 
         assertCurrentPageIs(PageName.TASK_COMPLETED)
         click("#btn-ok")
         assertCurrentPageIs(PageName.HOME)
+    }
+
+    @Test
+    fun cancel() {
+        // WHEN
+        navigateTo("/tasks/${activityInstance.id}")
+
+        // THEN
+        click("#btn-complete")
+
+        val alert = driver.switchTo().alert()
+        alert.dismiss()
+        driver.switchTo().parentFrame()
+
+        verify(kokiWorkflowInstances, never()).complete(any(), any())
+
+        assertCurrentPageIs(PageName.TASK)
     }
 
     @Test

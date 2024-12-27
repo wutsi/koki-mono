@@ -75,19 +75,8 @@
 <div class="widget-toolbar" th:fragment="activity-instance-toolbar(activityInstance)"
      th:if="${activityInstance.activity.requiresUserInput} AND ${activityInstance.running} AND ${user} AND ${activityInstance.assignee?.id == user?.id}">
 
-    <a class="btn btn-secondary btn-activity-user-edit-form"
-       th:href="${activityInstance.activity.form.editUrl}"
-       th:if="${activityInstance.activity.form} AND ${activityInstance.activity.type.name == 'USER'}"
-    >
-        Edit Form
-    </a>
-
-    <a class="btn btn-secondary btn-activity-manual-complete"
-       onclick="return confirm('Are you sure you have complete this activity?')"
-       th:href="${activityInstance.completeUrl}"
-       th:if="${activityInstance.activity.type.name == 'MANUAL'}"
-    >
-        Complete the Activity
+    <a class="btn btn-secondary btn-complete-task" th:href="'/tasks/' + ${activityInstance.id}">
+        Complete the Task
     </a>
 </div>
 

@@ -13,7 +13,8 @@
             <div class='alert alert-warning' id='alert-done' th:if='${task.status.name == "DONE"}'>
                 This task has already been completed
             </div>
-            <div class='alert alert-warning' id='alert-not-assignee' th:if='${task.assignee?.id != user?.id}'>
+            <div class='alert alert-warning' id='alert-not-assignee'
+                 th:if='${task.assignee?.id != user?.id} AND ${task.status.name == "RUNNING"}'>
                 This task has not been assigned to you
             </div>
 
@@ -78,7 +79,9 @@
                             <form method="post" th:action="'/tasks/' + ${task.id} + '/complete'"
                                   th:if="${task.activity.type.name == 'MANUAL'} AND ${canComplete}">
                                 <div class="padding d-grid gap-2">
-                                    <button class="btn btn-primary btn-lg" id="btn-complete" type="submit">
+                                    <button class="btn btn-primary btn-lg" id="btn-complete"
+                                            onclick="return confirm('Are you sure the task is completed?');"
+                                            type="submit">
                                         Complete the Task
                                     </button>
                                 </div>
