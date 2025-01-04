@@ -1,8 +1,5 @@
-INSERT INTO T_ATTRIBUTE(tenant_fk, name, label, description, choices, type, active)
-    VALUES (1, 'a', 'label-a', 'description-a', 'P1\nP2', 1, true),
-           (1, 'b', null, null, null, 2, true),
-           (1, 'c', null, null, '', 3, false),
-
-           (2, 'aa', null, null, '', 3, false),
-           (2, 'bb', null, null, '', 3, false)
+INSERT INTO T_ATTRIBUTE(id, tenant_fk, name, label, description, choices, type, active)
+    VALUES (100, 1, 'neq', 'NEQ', null, null, 1, true),
+           (101, 1, 'tps', 'TPS', null, null, 1, true),
+           (102, 1, 'tvq', 'TVQ', null, null, 1, false)
 ;

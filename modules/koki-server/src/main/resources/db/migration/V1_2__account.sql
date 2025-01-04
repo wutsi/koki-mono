@@ -18,15 +18,21 @@ CREATE TABLE T_ATTRIBUTE(
 ) ENGINE = InnoDB;
 
 CREATE TABLE T_ACCOUNT(
-  id                      VARCHAR(36) NOT NULL,
+  id                      BIGINT NOT NULL AUTO_INCREMENT,
 
   tenant_fk               BIGINT NOT NULL,
+  created_by_fk           BIGINT,
+  modified_by_fk          BIGINT,
+  deleted_by_fk           BIGINT,
+  managed_by_fk           BIGINT,
 
   name                    VARCHAR(100) NOT NULL,
   phone                   VARCHAR(30),
   mobile                  VARCHAR(30),
   email                   VARCHAR(255),
   website                 TEXT,
+  language                VARCHAR(2),
+  description             TEXT,
 
   deleted                 BOOLEAN NOT NULL DEFAULT false,
   created_at              DATETIME DEFAULT NOW(),
@@ -36,8 +42,21 @@ CREATE TABLE T_ACCOUNT(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
+CREATE TABLE T_ACCOUNT_ATTRIBUTE(
+  id                      BIGINT NOT NULL AUTO_INCREMENT,
+
+  attribute_fk            BIGINT NOT NULL REFERENCES T_ATTRIBUTE(id),
+  account_fk              BIGINT NOT NULL REFERENCES T_ACCOUNT(id),
+
+  value                   TEXT,
+  created_at              DATETIME DEFAULT NOW(),
+  modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
+
+  PRIMARY KEY(id)
+) ENGINE = InnoDB;
+
 CREATE TABLE T_CONTACT(
-  id                      VARCHAR(36) NOT NULL,
+  id                      BIGINT NOT NULL AUTO_INCREMENT,
 
   tenant_fk               BIGINT NOT NULL,
   account_fk              VARCHAR(36) NOT NULL REFERENCES T_ACCOUNT(id),

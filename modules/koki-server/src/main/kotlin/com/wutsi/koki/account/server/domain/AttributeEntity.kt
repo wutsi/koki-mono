@@ -1,5 +1,6 @@
-package com.wutsi.koki.tenant.server.domain
+package com.wutsi.koki.account.server.domain
 
+import com.wutsi.koki.account.dto.AttributeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -24,12 +25,14 @@ data class AttributeEntity(
     var choices: String? = null,
     var type: AttributeType = AttributeType.TEXT,
     var active: Boolean = true,
+    var required: Boolean = true,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
 ) {
     companion object {
         const val CSV_HEADER_NAME = "name"
         const val CSV_HEADER_TYPE = "type"
+        const val CSV_HEADER_REQUIRED = "required"
         const val CSV_HEADER_ACTIVE = "active"
         const val CSV_HEADER_CHOICES = "choices"
         const val CSV_HEADER_LABEL = "label"
@@ -38,6 +41,7 @@ data class AttributeEntity(
         val CSV_HEADERS = listOf(
             CSV_HEADER_NAME,
             CSV_HEADER_TYPE,
+            CSV_HEADER_REQUIRED,
             CSV_HEADER_ACTIVE,
             CSV_HEADER_CHOICES,
             CSV_HEADER_LABEL,

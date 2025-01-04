@@ -1,6 +1,9 @@
-package com.wutsi.koki.tenant.server.endpoint
+package com.wutsi.koki.account.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
+import com.wutsi.koki.account.dto.AttributeType
+import com.wutsi.koki.account.server.dao.AttributeRepository
+import com.wutsi.koki.account.server.domain.AttributeEntity
 import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.error.dto.ErrorCode
 import org.junit.jupiter.api.Test
@@ -52,11 +55,11 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
     fun import() {
         val response = upload(
             """
-                "name","type","active","choices","label","description"
-                "a","DECIMAL","Yes",,,
-                "b","TEXT","No","P1|P2|P3|P4","Priority","Priority of the ticket"
-                "c","FILE",,,,
-                "new","image","yes","","",""
+                "name","type","required","active","choices","label","description"
+                "a","DECIMAL",yes,"Yes",,,
+                "b","TEXT",,,"P1|P2|P3|P4","Priority","Priority of the ticket"
+                "c","LONGTEXT",,,,,
+                "new","EMAIL",,"yes","","",""
             """.trimIndent()
         )
 
@@ -69,6 +72,7 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
         assertEquals("a", attrA.name)
         assertEquals(TENANT_ID, attrA.tenantId)
         assertEquals(AttributeType.DECIMAL, attrA.type)
+        assertTrue(attrA.required)
         assertTrue(attrA.active)
         assertNull(attrA.choices)
         assertNull(attrA.label)
@@ -78,6 +82,7 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
         assertEquals("b", attrB.name)
         assertEquals(TENANT_ID, attrB.tenantId)
         assertEquals(AttributeType.TEXT, attrB.type)
+        assertFalse(attrB.required)
         assertFalse(attrB.active)
         assertEquals("P1\nP2\nP3\nP4", attrB.choices)
         assertEquals("Priority", attrB.label)
@@ -86,7 +91,8 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
         val attrC = findAttribute("c")
         assertEquals("c", attrC.name)
         assertEquals(TENANT_ID, attrC.tenantId)
-        assertEquals(AttributeType.FILE, attrC.type)
+        assertEquals(AttributeType.LONGTEXT, attrC.type)
+        assertFalse(attrC.required)
         assertFalse(attrC.active)
         assertNull(attrC.choices)
         assertNull(attrC.label)
@@ -95,7 +101,8 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
         val attrNew = findAttribute("new")
         assertEquals("new", attrNew.name)
         assertEquals(TENANT_ID, attrNew.tenantId)
-        assertEquals(AttributeType.IMAGE, attrNew.type)
+        assertEquals(AttributeType.EMAIL, attrNew.type)
+        assertFalse(attrNew.required)
         assertTrue(attrNew.active)
         assertNull(attrNew.choices)
         assertNull(attrNew.label)
@@ -106,8 +113,8 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
     fun noName() {
         val response = upload(
             """
-                "name","type","active","choices","label","description"
-                "","TEXT","No","P1|P2|P3|P4","Priority","Priority of the ticket"
+                "name","type","required","active","choices","label","description"
+                "","TEXT",,,"P1|P2|P3|P4","Priority","Priority of the ticket"
             """.trimIndent()
         )
 
@@ -136,8 +143,8 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
     private fun checkTypeInvalid(type: String) {
         val response = upload(
             """
-                "name","type","active","choices","label","description"
-                "a",$type,"No","P1|P2|P3|P4","Priority","Priority of the ticket"
+                "name","type","required","active","choices","label","description"
+                "a",$type,,,"P1|P2|P3|P4","Priority","Priority of the ticket"
             """.trimIndent()
         )
 
@@ -149,6 +156,6 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
     }
 
     private fun findAttribute(name: String): AttributeEntity {
-        return dao.findByTenantIdAndNameIn(getTenantId(), listOf(name)).first()
+        return dao.findByTenantIdAndName(getTenantId(), name)!!
     }
 }

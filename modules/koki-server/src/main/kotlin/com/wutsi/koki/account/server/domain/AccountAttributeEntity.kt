@@ -9,22 +9,19 @@ import jakarta.persistence.Table
 import java.util.Date
 
 @Entity
-@Table(name = "T_ACCOUNT")
-data class AccountEntity(
+@Table(name = "T_ACCOUNT_ATTRIBUTE")
+data class AccountAttributeEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    @Column(name = "tenant_fk")
-    val tenantId: Long = -1,
+    @Column(name = "account_fk")
+    val accountId: Long = -1,
 
-    var name: String = "",
-    var phone: String? = null,
-    var mobile: String? = null,
-    var email: String? = null,
+    @Column(name = "attribute_fk")
+    val attributeId: Long = -1,
 
-    var deleted: Boolean = false,
+    var value: String? = null,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
-    var deletedAt: Date? = null,
 )
