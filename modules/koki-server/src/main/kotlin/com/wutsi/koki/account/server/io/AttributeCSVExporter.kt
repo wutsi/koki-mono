@@ -1,6 +1,5 @@
 package com.wutsi.koki.tenant.server.io
 
-import com.wutsi.koki.tenant.server.domain.AttributeEntity.Companion.CSV_HEADERS
 import com.wutsi.koki.tenant.server.service.AttributeService
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVPrinter

@@ -3,9 +3,6 @@ package com.wutsi.koki.tenant.server.endpoint
 import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.tenant.dto.AttributeType
-import com.wutsi.koki.tenant.server.dao.AttributeRepository
-import com.wutsi.koki.tenant.server.domain.AttributeEntity
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ContentDisposition
@@ -21,7 +18,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/ImportAttributeCSVEndpoint.sql"])
+@Sql(value = ["/db/test/clean.sql", "/db/test/account/ImportAttributeCSVEndpoint.sql"])
 class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var dao: AttributeRepository

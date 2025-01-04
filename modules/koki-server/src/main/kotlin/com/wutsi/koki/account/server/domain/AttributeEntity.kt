@@ -1,6 +1,5 @@
 package com.wutsi.koki.tenant.server.domain
 
-import com.wutsi.koki.tenant.dto.AttributeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue

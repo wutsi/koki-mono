@@ -4,8 +4,6 @@ import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.error.exception.NotFoundException
-import com.wutsi.koki.tenant.server.dao.AttributeRepository
-import com.wutsi.koki.tenant.server.domain.AttributeEntity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.Date

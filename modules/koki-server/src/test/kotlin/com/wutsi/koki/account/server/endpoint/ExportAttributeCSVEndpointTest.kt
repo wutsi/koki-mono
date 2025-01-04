@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/ExportAttributeCSVEndpoint.sql"])
+@Sql(value = ["/db/test/clean.sql", "/db/test/account/ExportAttributeCSVEndpoint.sql"])
 class ExportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun export() {

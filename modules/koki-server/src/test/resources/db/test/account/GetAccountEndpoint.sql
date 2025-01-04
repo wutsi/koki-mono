@@ -1,0 +1,15 @@
+INSERT INTO T_ATTRIBUTE(id, tenant_fk, name, label, description, choices, type, active)
+    VALUES (100, 1, 'neq', 'NEQ', null, null, 1, true),
+           (101, 1, 'tps', 'TPS', null, null, 1, true),
+           (102, 1, 'tvq', 'TVQ', null, null, 1, false),
+           (103, 1, 'client_since', 'Client Since', null, null, 4, false)
+;
+
+INSERT INTO T_ACCOUNT(id, tenant_fk, name, deleted)
+    VALUES(1000, 1, 'Inc', false),
+          (1999, 1, 'Inc', true),
+          (2000, 2, 'Inc', false);
+
+INSERT INTO T_ACCOUNT_ATTRIBUTE(attribute_fk, account_fk, value)
+    VALUES (1000, 100, 'NE-00000'),
+           (1000, 103, '2024');

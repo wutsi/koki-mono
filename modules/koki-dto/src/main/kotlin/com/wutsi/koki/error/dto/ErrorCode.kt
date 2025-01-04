@@ -5,6 +5,8 @@ object ErrorCode {
 
     val IMPORT_ERROR = "$PREFIX:import-error"
 
+    val ACCOUNT_NOT_FOUND: String = "$PREFIX:account:not-found"
+
     val ATTRIBUTE_NOT_FOUND: String = "$PREFIX:attribute:not-found"
     val ATTRIBUTE_NAME_MISSING: String = "$PREFIX:attribute:name-missing"
     val ATTRIBUTE_TYPE_INVALID: String = "$PREFIX:attribute:type-invalid"

@@ -7,7 +7,6 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.BadRequestException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.error.exception.WutsiException
-import com.wutsi.koki.tenant.dto.AttributeType
 import com.wutsi.koki.tenant.server.domain.AttributeEntity
 import com.wutsi.koki.tenant.server.domain.AttributeEntity.Companion.CSV_HEADERS
 import com.wutsi.koki.tenant.server.domain.AttributeEntity.Companion.CSV_HEADER_ACTIVE

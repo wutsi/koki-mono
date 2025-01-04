@@ -1,7 +1,5 @@
 package com.wutsi.koki.tenant.server.mapper
 
-import com.wutsi.koki.tenant.dto.Attribute
-import com.wutsi.koki.tenant.server.domain.AttributeEntity
 import org.springframework.stereotype.Service
 
 @Service

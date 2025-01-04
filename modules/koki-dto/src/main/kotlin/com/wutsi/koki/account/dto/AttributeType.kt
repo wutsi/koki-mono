@@ -1,4 +1,4 @@
-package com.wutsi.koki.tenant.dto
+package com.wutsi.koki.account.dto
 
 enum class AttributeType {
     UNKNOWN,
@@ -11,6 +11,4 @@ enum class AttributeType {
     DATE,
     TIME,
     BOOLEAN,
-    FILE,
-    IMAGE,
 }
