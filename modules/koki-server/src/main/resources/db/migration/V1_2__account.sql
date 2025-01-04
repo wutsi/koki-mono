@@ -59,7 +59,7 @@ CREATE TABLE T_CONTACT(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
   tenant_fk               BIGINT NOT NULL,
-  account_fk              VARCHAR(36) NOT NULL REFERENCES T_ACCOUNT(id),
+  account_fk              BIGINT NOT NULL REFERENCES T_ACCOUNT(id),
   created_by_fk           BIGINT,
 
   first_name              VARCHAR(100),
