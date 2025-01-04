@@ -159,4 +159,4 @@ koki:
             notification-queue: koki-notification-queue
             notification-dlq: koki-notification-dlq
             dlq-cron: "0 */30 * * * *"  # Every 30 mins
-            consumer-delay-seconds: 1
+            consumer-delay-seconds: 10
