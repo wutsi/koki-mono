@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty
 
 data class UpdateAccountRequest(
     @get:NotEmpty val name: String = "",
+    val accountTypeId: Long? = null,
     val phone: String? = null,
     val mobile: String? = null,
     @get:Email val email: String? = null,

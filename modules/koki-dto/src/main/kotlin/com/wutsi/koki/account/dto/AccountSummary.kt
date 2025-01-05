@@ -4,6 +4,7 @@ import java.util.Date
 
 data class AccountSummary(
     val id: Long = -1,
+    val accountTypeId: Long? = null,
     val name: String = "",
     val phone: String? = null,
     val mobile: String? = null,
