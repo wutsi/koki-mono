@@ -7,9 +7,11 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AccountFixtures.NEW_ACCOUNT_ID
 import com.wutsi.koki.AccountFixtures.account
+import com.wutsi.koki.AccountFixtures.accountType
+import com.wutsi.koki.AccountFixtures.accountTypes
 import com.wutsi.koki.AccountFixtures.accounts
-import com.wutsi.koki.AttributeFixtures.attribute
-import com.wutsi.koki.AttributeFixtures.attributes
+import com.wutsi.koki.AccountFixtures.attribute
+import com.wutsi.koki.AccountFixtures.attributes
 import com.wutsi.koki.FileFixtures.files
 import com.wutsi.koki.FormFixtures
 import com.wutsi.koki.LogFixtures.logEntries
@@ -33,8 +35,10 @@ import com.wutsi.koki.WorkflowFixtures.workflowPictureUrl
 import com.wutsi.koki.WorkflowFixtures.workflows
 import com.wutsi.koki.account.dto.CreateAccountResponse
 import com.wutsi.koki.account.dto.GetAccountResponse
+import com.wutsi.koki.account.dto.GetAccountTypeResponse
 import com.wutsi.koki.account.dto.GetAttributeResponse
 import com.wutsi.koki.account.dto.SearchAccountResponse
+import com.wutsi.koki.account.dto.SearchAccountTypeResponse
 import com.wutsi.koki.account.dto.SearchAttributeResponse
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
@@ -53,7 +57,6 @@ import com.wutsi.koki.script.dto.GetScriptResponse
 import com.wutsi.koki.script.dto.RunScriptResponse
 import com.wutsi.koki.script.dto.SearchScriptResponse
 import com.wutsi.koki.sdk.KokiAccounts
-import com.wutsi.koki.sdk.KokiAttributes
 import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiForms
@@ -127,9 +130,6 @@ abstract class AbstractPageControllerTest {
 
     @MockitoBean
     protected lateinit var kokiAccounts: KokiAccounts
-
-    @MockitoBean
-    protected lateinit var kokiAttributes: KokiAttributes
 
     @MockitoBean
     protected lateinit var kokiAuthentication: KokiAuthentication
@@ -229,15 +229,26 @@ abstract class AbstractPageControllerTest {
     }
 
     private fun setupAccountModule() {
-        // AccountModel
-        doReturn(SearchAttributeResponse(attributes)).whenever(kokiAttributes).attributes(
+        // Attributes
+        doReturn(SearchAttributeResponse(attributes)).whenever(kokiAccounts).attributes(
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
         )
-        doReturn(GetAttributeResponse(attribute)).whenever(kokiAttributes).attribute(any())
+        doReturn(GetAttributeResponse(attribute)).whenever(kokiAccounts).attribute(any())
+
+        // Account Types
+        doReturn(SearchAccountTypeResponse(accountTypes)).whenever(kokiAccounts)
+            .types(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
+        doReturn(GetAccountTypeResponse(accountType)).whenever(kokiAccounts).type(any())
 
         // Accounts
         doReturn(SearchAccountResponse(accounts)).whenever(kokiAccounts).accounts(

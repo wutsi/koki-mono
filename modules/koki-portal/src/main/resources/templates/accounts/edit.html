@@ -28,6 +28,17 @@
                                 <label class="title">Name <span class="required">*</span></label>
                                 <input maxlength="100" required th:field="*{name}"/>
                             </div>
+                            <div class="section-item" th:if="${accountTypes}">
+                                <label class="title">Type</label>
+                                <select th:field="*{accountTypeId}">
+                                    <option value="-1"></option>
+                                    <option th:each="accountType : ${accountTypes}"
+                                            th:text="${accountType.title}"
+                                            th:value="${accountType.id}">
+                                        ACCOUNT TYPE
+                                    </option>
+                                </select>
+                            </div>
                             <div class="section-item">
                                 <label class="title">Account Manager</label>
                                 <select th:field="*{managedById}">
@@ -49,7 +60,7 @@
                                 <input maxlength="30" th:field="*{mobile}"/>
                             </div>
                             <div class="section-item">
-                                <label class="title">email</label>
+                                <label class="title">Email</label>
                                 <input maxlength="100" th:field="*{email}" type="email"/>
                             </div>
                             <div class="section-item">

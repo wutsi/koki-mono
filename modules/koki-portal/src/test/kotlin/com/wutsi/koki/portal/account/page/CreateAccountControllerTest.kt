@@ -6,7 +6,8 @@ import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
-import com.wutsi.koki.AttributeFixtures.attributes
+import com.wutsi.koki.AccountFixtures.accountTypes
+import com.wutsi.koki.AccountFixtures.attributes
 import com.wutsi.koki.UserFixtures.users
 import com.wutsi.koki.account.dto.CreateAccountRequest
 import com.wutsi.koki.error.dto.ErrorCode
@@ -21,6 +22,7 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.ACCOUNT_CREATE)
 
         input("#name", "Ray Construction Inc")
+        select("#accountTypeId", 2)
         select("#managedById", 2)
         input("#phone", "+5147580000")
         input("#mobile", "+5147580011")
@@ -39,6 +41,7 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
         val request = argumentCaptor<CreateAccountRequest>()
         verify(kokiAccounts).create(request.capture())
         assertEquals("Ray Construction Inc", request.firstValue.name)
+        assertEquals(accountTypes[1].id, request.firstValue.accountTypeId)
         assertEquals(users[1].id, request.firstValue.managedById)
         assertEquals("+5147580000", request.firstValue.phone)
         assertEquals("+5147580011", request.firstValue.mobile)
@@ -60,6 +63,7 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
         navigateTo("/accounts/create")
 
         input("#name", "Ray Construction Inc")
+        select("#accountTypeId", 2)
         select("#managedById", 2)
         input("#phone", "+5147580000")
         input("#mobile", "+5147580011")
@@ -84,6 +88,7 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
         navigateTo("/accounts/create")
 
         input("#name", "Ray Construction Inc")
+        select("#accountTypeId", 2)
         select("#managedById", 2)
         input("#phone", "+5147580000")
         input("#mobile", "+5147580011")
