@@ -19,6 +19,7 @@
     <td>
         <a th:href="'/accounts/' + ${account.id}" th:text="${account.name}">NAME</a>
     </td>
+    <td th:text="${account.accountType?.title}">ACCOUNT TYPE</td>
     <td th:text="${account.phone}">PHONE</td>
     <td th:text="${account.mobile}">MOBILE</td>
     <td th:text="${account.email}">EMAIL</td>
@@ -31,7 +32,7 @@
 </tr>
 
 <tr id="account-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
-    <td class="text-center" colspan="7">
+    <td class="text-center" colspan="8">
         <a href="javascript: koki_load_more('account-load-more')" th:data-url="${moreUrl}">Load more...</a>
     </td>
 </tr>

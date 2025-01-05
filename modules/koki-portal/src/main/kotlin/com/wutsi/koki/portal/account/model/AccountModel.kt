@@ -5,6 +5,7 @@ import java.util.Date
 
 data class AccountModel(
     val id: Long = -1,
+    val accountType: AccountTypeModel? = null,
     val name: String = "",
     val phone: String? = null,
     val mobile: String? = null,

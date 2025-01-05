@@ -5,12 +5,15 @@
 - [x] Attributes API
 - [x] Account API
 - [x] Account UI
+- [] Settings: Import Attributes from CSV
+- [] Settings: Import Account Types from CSV
+- [] Account/Contact addresses
+
+## Contact
+
 - [] Contact API
 - [] Contact UI
-- [] Manage attributes from settings
-- [] Account Types
-- [] Account/Contact addresses
-- [] Log an activity (email, notes, phone call, meeting notes etc.)
+- [] Settings: Import Contact Types from CSV
 
 ## Files
 

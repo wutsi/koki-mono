@@ -75,6 +75,10 @@
                         <div aria-labelledby="pills-details-tab" class="tab-pane fade show active" id="pills-details"
                              role="tabpanel">
                             <table class="table">
+                                <tr th:if="${account.accountType}">
+                                    <td width="20%"><b>Type</b></td>
+                                    <td th:text="${account.accountType?.title}">TYPE</td>
+                                </tr>
                                 <tr th:if="${account.website}">
                                     <td width="20%"><b>Website</b></td>
                                     <td>

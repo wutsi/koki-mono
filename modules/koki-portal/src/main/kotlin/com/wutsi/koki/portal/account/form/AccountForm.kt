@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.account.form
 
 data class AccountForm(
+    val accountTypeId: Long = -1,
     val name: String = "",
     val phone: String? = null,
     val mobile: String? = null,

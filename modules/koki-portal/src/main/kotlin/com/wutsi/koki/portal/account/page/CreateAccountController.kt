@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.account.page
 import com.wutsi.koki.portal.account.form.AccountForm
 import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.account.service.AccountService
+import com.wutsi.koki.portal.account.service.AccountTypeService
 import com.wutsi.koki.portal.account.service.AttributeService
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
@@ -23,6 +24,7 @@ import java.util.Locale
 class CreateAccountController(
     private val service: AccountService,
     private val attributeService: AttributeService,
+    private val accountTypeService: AccountTypeService,
     private val userService: UserService,
     private val currentUser: CurrentUserHolder,
     private val request: HttpServletRequest,
@@ -45,6 +47,14 @@ class CreateAccountController(
         )
         if (attributes.isNotEmpty()) {
             model.addAttribute("attributes", attributes)
+        }
+
+        val accountTypes = accountTypeService.accountTypes(
+            active = true,
+            limit = Integer.MAX_VALUE,
+        )
+        if (accountTypes.isNotEmpty()) {
+            model.addAttribute("accountTypes", accountTypes)
         }
 
         val languages = Locale.getISOLanguages()

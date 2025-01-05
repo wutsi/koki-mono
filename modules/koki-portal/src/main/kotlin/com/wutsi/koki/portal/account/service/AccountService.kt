@@ -16,6 +16,7 @@ class AccountService(
     private val mapper: AccountMapper,
     private val userService: UserService,
     private val attributeService: AttributeService,
+    private val accountTypeService: AccountTypeService,
 ) {
     fun account(id: Long): AccountModel {
         val account = koki.account(id).account
@@ -38,7 +39,16 @@ class AccountService(
                 .associateBy { attribute -> attribute.id }
         }
 
-        return mapper.toAccountModel(account, userMap, attributeMap)
+        val accountTypeMap = account.accountTypeId?.let { id ->
+            mapOf(id to accountTypeService.accountType(id))
+        } ?: emptyMap()
+
+        return mapper.toAccountModel(
+            entity = account,
+            accountTypes = accountTypeMap,
+            users = userMap,
+            attributes = attributeMap,
+        )
     }
 
     fun accounts(
@@ -63,15 +73,35 @@ class AccountService(
         }
             .filterNotNull()
             .toSet()
-
         val userMap = if (userIds.isEmpty()) {
             emptyMap()
         } else {
-            userService.users(ids = userIds.toList(), limit = userIds.size)
+            userService.users(
+                ids = userIds.toList(),
+                limit = userIds.size
+            )
                 .associateBy { user -> user.id }
         }
 
-        return accounts.map { account -> mapper.toAccountModel(account, userMap) }
+        val accountTypeIds = accounts.mapNotNull { account -> account.accountTypeId }
+            .toSet()
+        val accountTypeMap = if (accountTypeIds.isEmpty()) {
+            emptyMap()
+        } else {
+            accountTypeService.accountTypes(
+                ids = accountTypeIds.toList(),
+                limit = accountTypeIds.size,
+            )
+                .associateBy { accountType -> accountType.id }
+        }
+
+        return accounts.map { account ->
+            mapper.toAccountModel(
+                entity = account,
+                accountTypes = accountTypeMap,
+                users = userMap
+            )
+        }
     }
 
     fun delete(id: Long) {
@@ -80,6 +110,7 @@ class AccountService(
 
     fun create(form: AccountForm): Long {
         val request = CreateAccountRequest(
+            accountTypeId = if (form.accountTypeId == -1L) null else form.accountTypeId,
             name = form.name.trim(),
             description = form.description?.trim()?.ifEmpty { null },
             phone = form.phone?.trim()?.ifEmpty { null },
@@ -95,6 +126,7 @@ class AccountService(
 
     fun update(id: Long, form: AccountForm) {
         val request = UpdateAccountRequest(
+            accountTypeId = if (form.accountTypeId == -1L) null else form.accountTypeId,
             name = form.name.trim(),
             description = form.description?.trim()?.ifEmpty { null },
             phone = form.phone?.trim()?.ifEmpty { null },
