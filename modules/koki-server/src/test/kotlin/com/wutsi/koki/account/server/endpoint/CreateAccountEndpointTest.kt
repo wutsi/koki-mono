@@ -34,7 +34,8 @@ class CreateAccountEndpointTest : AuthorizationAwareEndpointTest() {
             attributes = mapOf(
                 100L to "NEQ-0000001",
                 101L to "40394039"
-            )
+            ),
+            accountTypeId = 100L,
         )
         val response = rest.postForEntity("/v1/accounts", request, CreateAccountResponse::class.java)
 
@@ -42,6 +43,7 @@ class CreateAccountEndpointTest : AuthorizationAwareEndpointTest() {
 
         val accountId = response.body!!.accountId
         val account = dao.findById(accountId).get()
+        assertEquals(request.accountTypeId, account.accountTypeId)
         assertEquals(request.name, account.name)
         assertEquals(request.description, account.description)
         assertEquals(request.phone, account.phone)

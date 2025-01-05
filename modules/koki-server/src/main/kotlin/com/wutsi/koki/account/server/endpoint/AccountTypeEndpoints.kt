@@ -2,6 +2,7 @@ package com.wutsi.koki.account.server.endpoint
 
 import com.wutsi.koki.account.dto.GetAccountTypeResponse
 import com.wutsi.koki.account.dto.SearchAccountTypeResponse
+import com.wutsi.koki.account.server.io.AccountTypeCSVImporter
 import com.wutsi.koki.account.server.mapper.AccountTypeMapper
 import com.wutsi.koki.account.server.service.AccountTypeService
 import com.wutsi.koki.common.dto.ImportResponse
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile
 class AccountTypeEndpoints(
     private val service: AccountTypeService,
     private val mapper: AccountTypeMapper,
+    private val importer: AccountTypeCSVImporter,
 ) {
     @GetMapping("/{id}")
     fun get(
@@ -58,6 +60,6 @@ class AccountTypeEndpoints(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestPart file: MultipartFile
     ): ImportResponse {
-        TODO()
+        return importer.import(file.inputStream, tenantId)
     }
 }

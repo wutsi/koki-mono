@@ -22,6 +22,7 @@ class UpdateAccountEndpointTest : AuthorizationAwareEndpointTest() {
     private lateinit var attrDao: AccountAttributeRepository
 
     private val request = UpdateAccountRequest(
+        accountTypeId = 100L,
         name = "Ray Sponsible Inc",
         phone = "+5141110000",
         mobile = "+5141110011",
@@ -45,6 +46,7 @@ class UpdateAccountEndpointTest : AuthorizationAwareEndpointTest() {
 
         val accountId = 1000L
         val account = dao.findById(accountId).get()
+        assertEquals(request.accountTypeId, account.accountTypeId)
         assertEquals(request.name, account.name)
         assertEquals(request.description, account.description)
         assertEquals(request.phone, account.phone)

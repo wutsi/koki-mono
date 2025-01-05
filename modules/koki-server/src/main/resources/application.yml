@@ -71,7 +71,7 @@ springdoc:
 
         -   group: account
             display-name: Account API
-            paths-to-match: /v1/attributes, /v1/attributes/**, /v1/accounts, /v1/accounts/**
+            paths-to-match: /v1/attributes, /v1/attributes/**, /v1/account-types, /v1/account-types/**, /v1/accounts, /v1/accounts/**
 
         -   group: file
             display-name: File API

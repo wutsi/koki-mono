@@ -19,6 +19,7 @@ class GetAccountEndpointTest : TenantAwareEndpointTest() {
 
         val account = result.body!!.account
         assertEquals("Inc", account.name)
+        assertEquals(101, account.accountTypeId)
         assertEquals("+5147580000", account.phone)
         assertEquals("+5147580011", account.mobile)
         assertEquals("info@inc.com", account.email)
