@@ -1,10 +1,15 @@
 body {
     background: #f8f8f8;
-    margin-top: 6em;
+    margin-top: 4.8em;
 }
 
-nav {
-    background: white;
+h1.entity-title {
+    font-size: 1.25em;
+}
+
+h1.entity-title img {
+    width: 32px;
+    height: 32px
 }
 
 .flex {
@@ -122,27 +127,28 @@ nav {
 }
 
 
-.navbar {
+#navbar {
     border-bottom: 1px solid gray;
+    background: white;
 }
 
-.navbar .brand-name {
+#navbar .brand-name {
     padding: .5em !important;
     font-size: .8em !important;
     font-weight: bold !important;
 }
 
-.navbar img.brand-logo {
+#navbar img.brand-logo {
     margin-left: .5em !important;
     height: 50px;
 }
 
-.navbar .nav-link {
+#navbar .nav-link {
     border: 1px solid gray;
     margin-right: .5em;
 }
 
-.navbar .dropdown-menu {
+#navbar .dropdown-menu {
     position: fixed;
     float: none;
     left: auto;
@@ -152,9 +158,27 @@ nav {
     margin-top: -1em;
 }
 
-.navbar .dropdown-menu .user-hi {
+#navbar .dropdown-menu .user-hi {
     font-weight: bold;
     font-size: 1.2em;
+}
+
+#menubar {
+    padding-top: 0;
+    padding-bottom: 0;
+    background: #1D7EDF;
+}
+
+#menubar ul.navbar-nav li a {
+    color: white;
+}
+
+#menubar ul.navbar-nav li.active {
+    background: #f8f8f8;
+}
+
+#menubar ul.navbar-nav li.active a {
+    color: black;
 }
 
 .widget {
@@ -194,7 +218,7 @@ nav {
 
 .widget-toolbar a,
 .toolbar a {
-    margin-right: 1em;
+    margin-right: .5em;
 }
 
 .widget-toolbar a:last-child,
@@ -242,6 +266,12 @@ nav {
 
 tr.activity-running {
     border: 4px solid black;
+}
+
+/* bootstrap */
+.widget-body ol.breadcrumb {
+    margin-bottom: 0;
+    padding-bottom: 0
 }
 
 /* highlightjs line-number*/

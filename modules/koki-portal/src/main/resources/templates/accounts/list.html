@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('accounts')}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/account :: account-breadcrumb(null)}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div class="btn-group margin-bottom">
+                        <button aria-expanded="false"
+                                class="btn btn-primary dropdown-toggle"
+                                data-bs-toggle="dropdown"
+                                type="button">
+                            <span th:if="${collection}">All Accounts</span>
+                            <span th:if="!${collection}">My Accounts</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li th:if="${collection}">
+                                <a class="dropdown-item" href="/accounts">My Accounts</a>
+                            </li>
+                            <li th:if="!${collection}">
+                                <a class="dropdown-item" href="/accounts?col=all">All Accounts</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="widget-toolbar">
+                        <a class="btn-create btn btn-secondary" href="/accounts/create">Create New Account</a>
+                    </div>
+
+                    <table class="table table-striped" th:if="${accounts}">
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Mobile</th>
+                            <th>Email</th>
+                            <th>Modified</th>
+                            <th>Manager</th>
+                            <td></td>
+                        </tr>
+                        <tr class="account" th:each="account : ${accounts}">
+                            <div th:replace="~{__components/account :: columns(${account})}"></div>
+                        </tr>
+                        <tr th:replace="~{__components/account :: load-more(${moreUrl})}"></tr>
+                    </table>
+
+                    <div class="text-center" th:if="!${accounts}">No account</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

@@ -1,6 +1,13 @@
 package com.wutsi.koki.portal.page
 
 object PageName {
+    const val ACCOUNT = "page.account"
+    const val ACCOUNT_LIST = "page.account.list"
+    const val ACCOUNT_EDIT = "page.account.edit"
+    const val ACCOUNT_CREATE = "page.account.create"
+    const val ACCOUNT_DELETED = "page.account.deleted"
+    const val ACCOUNT_SAVED = "page.account.saved"
+
     const val ERROR = "page.error"
     const val ERROR_SUSPENDED = "page.error.suspended"
 

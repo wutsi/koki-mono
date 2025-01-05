@@ -80,7 +80,7 @@ class LoginControllerTest : AbstractPageControllerTest() {
 
         // WHEN
         navigateTo("/forms/4304309")
-        setupUsers()
+        setupTenantModule()
 
         // THEN
         assertCurrentPageIs(PageName.LOGIN)

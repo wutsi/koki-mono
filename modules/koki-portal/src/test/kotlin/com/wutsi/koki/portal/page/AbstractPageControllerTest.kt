@@ -5,6 +5,11 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.AccountFixtures.NEW_ACCOUNT_ID
+import com.wutsi.koki.AccountFixtures.account
+import com.wutsi.koki.AccountFixtures.accounts
+import com.wutsi.koki.AttributeFixtures.attribute
+import com.wutsi.koki.AttributeFixtures.attributes
 import com.wutsi.koki.FileFixtures.files
 import com.wutsi.koki.FormFixtures
 import com.wutsi.koki.LogFixtures.logEntries
@@ -26,6 +31,11 @@ import com.wutsi.koki.WorkflowFixtures.workflowInstance
 import com.wutsi.koki.WorkflowFixtures.workflowInstances
 import com.wutsi.koki.WorkflowFixtures.workflowPictureUrl
 import com.wutsi.koki.WorkflowFixtures.workflows
+import com.wutsi.koki.account.dto.CreateAccountResponse
+import com.wutsi.koki.account.dto.GetAccountResponse
+import com.wutsi.koki.account.dto.GetAttributeResponse
+import com.wutsi.koki.account.dto.SearchAccountResponse
+import com.wutsi.koki.account.dto.SearchAttributeResponse
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
@@ -42,6 +52,8 @@ import com.wutsi.koki.script.dto.CreateScriptResponse
 import com.wutsi.koki.script.dto.GetScriptResponse
 import com.wutsi.koki.script.dto.RunScriptResponse
 import com.wutsi.koki.script.dto.SearchScriptResponse
+import com.wutsi.koki.sdk.KokiAccounts
+import com.wutsi.koki.sdk.KokiAttributes
 import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiForms
@@ -112,6 +124,12 @@ abstract class AbstractPageControllerTest {
     protected val port: Int = 0
 
     protected lateinit var driver: WebDriver
+
+    @MockitoBean
+    protected lateinit var kokiAccounts: KokiAccounts
+
+    @MockitoBean
+    protected lateinit var kokiAttributes: KokiAttributes
 
     @MockitoBean
     protected lateinit var kokiAuthentication: KokiAuthentication
@@ -197,28 +215,69 @@ abstract class AbstractPageControllerTest {
     }
 
     private fun setupDefaultApiResponses() {
-        setupRoles()
+        setupTenantModule()
+        setupAccountModule()
         setupFiles()
         setupForms()
         setupLogs()
         setupScripts()
         setupServices()
         setupMessages()
-        setupTenants()
-        setupUsers()
         setupWorkflows()
 
         doReturn(SearchConfigurationResponse()).whenever(kokiTenants).configurations(anyOrNull(), anyOrNull())
     }
 
-    private fun setupTenants() {
-        doReturn(SearchTenantResponse(tenants)).whenever(kokiTenants)
-            .tenants()
+    private fun setupAccountModule() {
+        // AccountModel
+        doReturn(SearchAttributeResponse(attributes)).whenever(kokiAttributes).attributes(
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+        )
+        doReturn(GetAttributeResponse(attribute)).whenever(kokiAttributes).attribute(any())
+
+        // Accounts
+        doReturn(SearchAccountResponse(accounts)).whenever(kokiAccounts).accounts(
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+        )
+        doReturn(GetAccountResponse(account)).whenever(kokiAccounts).account(any())
+        doReturn(CreateAccountResponse(NEW_ACCOUNT_ID)).whenever(kokiAccounts).create(any())
     }
 
-    private fun setupRoles() {
+    protected fun setupTenantModule() {
+        // Tenant
+        doReturn(SearchTenantResponse(tenants)).whenever(kokiTenants)
+            .tenants()
+
+        // Roles
         doReturn(SearchRoleResponse(roles)).whenever(kokiUsers)
             .roles(anyOrNull(), anyOrNull(), anyOrNull())
+
+        // Users
+        doReturn(GetUserResponse(user)).whenever(kokiUsers).user(USER_ID)
+        doReturn(SearchUserResponse(users)).whenever(kokiUsers)
+            .users(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
+
+        // Access Token
+        doReturn(accessToken).whenever(accessTokenHolder).get(any())
+        val principal = mock<JWTPrincipal>()
+        doReturn(USER_ID).whenever(principal).getUserId()
+        doReturn(USER_ID.toString()).whenever(principal).name
+        doReturn(principal).whenever(jwtDecoder).decode(any())
     }
 
     private fun setupFiles() {
@@ -390,25 +449,6 @@ abstract class AbstractPageControllerTest {
                 anyOrNull(),
                 anyOrNull()
             )
-    }
-
-    protected fun setupUsers() {
-        doReturn(GetUserResponse(user)).whenever(kokiUsers).user(USER_ID)
-        doReturn(SearchUserResponse(users)).whenever(kokiUsers)
-            .users(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-            )
-
-        doReturn(accessToken).whenever(accessTokenHolder).get(any())
-
-        val principal = mock<JWTPrincipal>()
-        doReturn(USER_ID).whenever(principal).getUserId()
-        doReturn(USER_ID.toString()).whenever(principal).name
-        doReturn(principal).whenever(jwtDecoder).decode(any())
     }
 
     private fun setupLogs() {

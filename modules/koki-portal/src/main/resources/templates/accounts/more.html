@@ -1,0 +1,4 @@
+<tr class="account" th:each="account : ${accounts}">
+    <div th:replace="~{__components/account :: columns(${account})}"></div>
+</tr>
+<tr th:replace="~{__components/account :: load-more(${moreUrl})}"></tr>

@@ -23,7 +23,7 @@
     <link rel="shortcut icon" th:href="${tenant.iconUrl}" th:if="${tenant?.iconUrl}"/>
 </div>
 
-<nav class="navbar navbar-expand navbar-light fixed-top" th:fragment="navbar">
+<nav class="navbar navbar-expand navbar-light fixed-top" id="navbar" th:fragment="navbar">
     <a class="navbar-brand" href="/">
         <span class="brand-name" th:if="!${tenant?.logoUrl}">KOKI</span>
         <img class="brand-logo" th:alt="${tenant.name}"
@@ -65,7 +65,30 @@
     </ul>
 </nav>
 
-<div id="alert-error" class="alert alert-danger margin" th:fragment="error-message(error)" th:if="${error}" th:text="${error}">ERROR
+<nav class="navbar navbar-expand-lg" id="menubar" th:fragment="menubar(current)">
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <ul class="navbar-nav">
+            <li class="nav-item" th:classappend="${current == 'home'} ? 'active'">
+                <a aria-current="page" class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item" th:classappend="${current == 'accounts'} ? 'active'">
+                <a aria-current="page" class="nav-link" href="/accounts">Accounts</a>
+            </li>
+            <li class="nav-item" th:classappend="${current == 'contacts'} ? 'active'">
+                <a aria-current="page" class="nav-link" href="/contacts">Contacts</a>
+            </li>
+            <li class="nav-item" th:classappend="${current == 'products'} ? 'active'">
+                <a aria-current="page" class="nav-link" href="/products">Products</a>
+            </li>
+            <li class="nav-item" th:classappend="${current == 'quotes'} ? 'active'">
+                <a aria-current="page" class="nav-link" href="/quotes">Quotes</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="alert alert-danger margin" id="alert-error" th:fragment="error-message(error)" th:if="${error}"
+     th:text="${error}">ERROR
 </div>
 
 </body>
