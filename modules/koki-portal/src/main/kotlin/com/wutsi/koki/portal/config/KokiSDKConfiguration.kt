@@ -1,6 +1,8 @@
 package com.wutsi.koki.portal.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.koki.sdk.KokiAccounts
+import com.wutsi.koki.sdk.KokiAttributes
 import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiForms
@@ -30,6 +32,16 @@ class KokiSDKConfiguration(
     @Bean
     fun urlBuilder(): URLBuilder {
         return URLBuilder(baseUrl)
+    }
+
+    @Bean
+    fun kokiAccounts(): KokiAccounts {
+        return KokiAccounts(urlBuilder(), rest)
+    }
+
+    @Bean
+    fun kokiAttributes(): KokiAttributes {
+        return KokiAttributes(urlBuilder(), rest)
     }
 
     @Bean

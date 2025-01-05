@@ -2,12 +2,14 @@
 
 ## Account
 
-- [] Attributes API
-- [] Account API
-- [] Account UI
+- [x] Attributes API
+- [x] Account API
+- [x] Account UI
 - [] Contact API
 - [] Contact UI
 - [] Manage attributes from settings
+- [] Account Types
+- [] Account/Contact addresses
 - [] Log an activity (email, notes, phone call, meeting notes etc.)
 
 ## Files

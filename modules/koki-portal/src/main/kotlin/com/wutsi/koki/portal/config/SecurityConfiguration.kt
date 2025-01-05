@@ -23,6 +23,8 @@ class SecurityConfiguration(
             .authorizeHttpRequests { customizer ->
                 customizer
                     .requestMatchers(AntPathRequestMatcher("/")).authenticated()
+                    .requestMatchers(AntPathRequestMatcher("/accounts")).authenticated()
+                    .requestMatchers(AntPathRequestMatcher("/accounts/**/*")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/forms")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/forms/**/*")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/messages")).authenticated()

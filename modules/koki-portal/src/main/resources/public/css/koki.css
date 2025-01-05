@@ -7,6 +7,15 @@ nav {
     background: white;
 }
 
+h1.entity-title {
+    font-size: 1.25em;
+}
+
+h1.entity-title img {
+    width: 32px;
+    height: 32px
+}
+
 .flex {
     display: flex;
 }
@@ -194,7 +203,7 @@ nav {
 
 .widget-toolbar a,
 .toolbar a {
-    margin-right: 1em;
+    margin-right: .5em;
 }
 
 .widget-toolbar a:last-child,
@@ -242,6 +251,12 @@ nav {
 
 tr.activity-running {
     border: 4px solid black;
+}
+
+/* bootstrap */
+.widget-body ol.breadcrumb {
+    margin-bottom: 0;
+    padding-bottom: 0
 }
 
 /* highlightjs line-number*/

@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/account :: account-breadcrumb(null)}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <form class="form" method="post" th:action="@{/accounts/add-new}" th:object="${form}">
+                <div class="form-body">
+                    <div class="section">
+                        <div class="section-body">
+                            <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+
+                            <div class="section-item">
+                                <label class="title">Name <span class="required">*</span></label>
+                                <input maxlength="100" required th:field="*{name}"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Account Manager</label>
+                                <select th:field="*{managedById}">
+                                    <option value="-1"></option>
+                                    <option th:each="manager : ${users}"
+                                            th:text="${manager.displayName}"
+                                            th:value="${manager.id}">
+                                        MANAGER
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title">Phone</label>
+                                <input maxlength="30" th:field="*{phone}"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Mobile</label>
+                                <input maxlength="30" th:field="*{mobile}"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">email</label>
+                                <input maxlength="100" th:field="*{email}" type="email"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Website</label>
+                                <input maxlength="100" placeholder="https://" th:field="*{website}" type="url"/>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title">Language</label>
+                                <select th:field="*{language}">
+                                    <option value=""></option>
+                                    <option th:each="language : ${languages}"
+                                            th:text="${language.displayName}"
+                                            th:value="${language.language}">
+                                        LANGUAGE
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title">Description</label>
+                                <textarea rows="3" th:field="*{description}"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section" th:if="${attributes}">
+                    <div class="section-body">
+                        <div class="section-item" th:each="attribute : ${attributes}">
+                            <label class="title">
+                                <span th:text="${attribute.label}">LABEL</span>
+                                <span class="required" th:if="${attribute.required}">*</span>
+                            </label>
+                            <div class="description"
+                                 th:if="${attribute.description}"
+                                 th:text="${attribute.description}">
+                                DESCRIPTION
+                            </div>
+                            <input
+                                th:required="${attribute.required} ? 'required': null"
+                                th:if="${attribute.htmlInput}"
+                                th:type="${attribute.htmlInputType}"
+                                th:id="'attribute-' + ${attribute.id}"
+                                th:name="'attribute-' + ${attribute.id}"
+                                th:value="${form.attributes[attribute.id]}"
+                                th:step="${attribute.type == 'NUMBER'} ? 1"
+                            />
+                            <textarea rows="3"
+                                  th:required="${attribute.required} ? 'required': null"
+                                th:if="${attribute.type.name == 'LONGTEXT'}"
+                                th:id="'attribute-' + ${attribute.id}"
+                                th:name="'attribute-' + ${attribute.id}"
+                                th:text="${form.attributes[attribute.id]}"
+                            /></textarea>
+                            <select
+                                th:required="${attribute.required} ? 'required': null"
+                                th:if="${attribute.type.name == 'BOOLEAN'}"
+                                th:id="'attribute-' + ${attribute.id}"
+                                th:name="'attribute-' + ${attribute.id}">
+                                <option value="false" th:attrappend="!${form.attributes[attribute.id]} ? 'selected'">No</option>
+                                <option value="true" th:attrappend="${form.attributes[attribute.id]} ? 'selected'">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit">Submit</button>
+                    <a class="btn-cancel" href="/accounts">Cancel</a>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
