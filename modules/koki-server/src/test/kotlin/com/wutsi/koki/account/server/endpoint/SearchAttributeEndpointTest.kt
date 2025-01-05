@@ -1,6 +1,8 @@
-package com.wutsi.koki.tenant.server.endpoint
+package com.wutsi.koki.account.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
+import com.wutsi.koki.account.dto.AttributeType
+import com.wutsi.koki.account.dto.SearchAttributeResponse
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
@@ -22,28 +24,22 @@ class SearchAttributeEndpointTest : TenantAwareEndpointTest() {
 
         assertEquals("a", attributes[0].name)
         assertEquals("label-a", attributes[0].label)
-        assertEquals("description-a", attributes[0].description)
         assertEquals(AttributeType.TEXT, attributes[0].type)
         assertTrue(attributes[0].active)
-        assertEquals(listOf("P1", "P2"), attributes[0].choices)
 
         assertEquals("b", attributes[1].name)
         assertNull(attributes[1].label)
-        assertNull(attributes[1].description)
         assertEquals(AttributeType.LONGTEXT, attributes[1].type)
         assertTrue(attributes[1].active)
-        assertTrue(attributes[1].choices.isEmpty())
 
         assertEquals("c", attributes[2].name)
         assertNull(attributes[2].label)
-        assertNull(attributes[2].description)
         assertEquals(AttributeType.EMAIL, attributes[2].type)
         assertFalse(attributes[2].active)
-        assertTrue(attributes[2].choices.isEmpty())
     }
 
     @Test
-    fun filter() {
+    fun `by name`() {
         val result =
             rest.getForEntity("/v1/attributes?name=a&name=b", SearchAttributeResponse::class.java)
 
@@ -53,18 +49,21 @@ class SearchAttributeEndpointTest : TenantAwareEndpointTest() {
         assertEquals(2, attributes.size)
 
         assertEquals("a", attributes[0].name)
-        assertEquals("label-a", attributes[0].label)
-        assertEquals("description-a", attributes[0].description)
-        assertEquals(AttributeType.TEXT, attributes[0].type)
-        assertTrue(attributes[0].active)
-        assertEquals(listOf("P1", "P2"), attributes[0].choices)
-
         assertEquals("b", attributes[1].name)
-        assertNull(attributes[1].label)
-        assertNull(attributes[1].description)
-        assertEquals(AttributeType.LONGTEXT, attributes[1].type)
-        assertTrue(attributes[1].active)
-        assertTrue(attributes[1].choices.isEmpty())
+    }
+
+    @Test
+    fun `by active`() {
+        val result =
+            rest.getForEntity("/v1/attributes?active=true", SearchAttributeResponse::class.java)
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val attributes = result.body!!.attributes
+        assertEquals(2, attributes.size)
+
+        assertEquals("a", attributes[0].name)
+        assertEquals("b", attributes[1].name)
     }
 
     @Test

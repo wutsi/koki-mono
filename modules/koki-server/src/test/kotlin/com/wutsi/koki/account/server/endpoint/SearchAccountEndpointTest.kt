@@ -1,79 +1,96 @@
 package com.wutsi.koki.account.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
-import com.wutsi.koki.account.dto.AttributeType
-import com.wutsi.koki.account.dto.SearchAttributeResponse
+import com.wutsi.koki.account.dto.SearchAccountResponse
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/account/SearchAttributeEndpoint.sql"])
-class SearchAttributeEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/account/SearchAccountEndpoint.sql"])
+class SearchAccountEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun all() {
-        val result = rest.getForEntity("/v1/attributes", SearchAttributeResponse::class.java)
+        val result = rest.getForEntity("/v1/accounts", SearchAccountResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val attributes = result.body!!.attributes
-        assertEquals(3, attributes.size)
+        val accounts = result.body!!.accounts
+        assertEquals(4, accounts.size)
+    }
 
-        assertEquals("a", attributes[0].name)
-        assertEquals("label-a", attributes[0].label)
-        assertEquals(AttributeType.TEXT, attributes[0].type)
-        assertTrue(attributes[0].active)
+    @Test
+    fun `by creator`() {
+        val result = rest.getForEntity("/v1/accounts?created-by-id=11", SearchAccountResponse::class.java)
 
-        assertEquals("b", attributes[1].name)
-        assertNull(attributes[1].label)
-        assertEquals(AttributeType.LONGTEXT, attributes[1].type)
-        assertTrue(attributes[1].active)
+        assertEquals(HttpStatus.OK, result.statusCode)
 
-        assertEquals("c", attributes[2].name)
-        assertNull(attributes[2].label)
-        assertEquals(AttributeType.EMAIL, attributes[2].type)
-        assertFalse(attributes[2].active)
+        val accounts = result.body!!.accounts
+        assertEquals(2, accounts.size)
+        assertEquals(1000L, accounts[0].id)
+        assertEquals(1001L, accounts[1].id)
+    }
+
+    @Test
+    fun `by manager`() {
+        val result = rest.getForEntity("/v1/accounts?managed-by-id=13", SearchAccountResponse::class.java)
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val accounts = result.body!!.accounts
+        assertEquals(3, accounts.size)
+        assertEquals(1002L, accounts[0].id)
+        assertEquals(1003L, accounts[1].id)
+        assertEquals(1001L, accounts[2].id)
     }
 
     @Test
     fun `by name`() {
-        val result =
-            rest.getForEntity("/v1/attributes?name=a&name=b", SearchAttributeResponse::class.java)
+        val result = rest.getForEntity("/v1/accounts?q=inc", SearchAccountResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val attributes = result.body!!.attributes
-        assertEquals(2, attributes.size)
-
-        assertEquals("a", attributes[0].name)
-        assertEquals("b", attributes[1].name)
+        val accounts = result.body!!.accounts
+        assertEquals(3, accounts.size)
+        assertEquals(1002L, accounts[0].id)
+        assertEquals(1000L, accounts[1].id)
+        assertEquals(1001L, accounts[2].id)
     }
 
     @Test
-    fun `by active`() {
-        val result =
-            rest.getForEntity("/v1/attributes?active=true", SearchAttributeResponse::class.java)
+    fun `by email`() {
+        val result = rest.getForEntity("/v1/accounts?q=info", SearchAccountResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val attributes = result.body!!.attributes
-        assertEquals(2, attributes.size)
-
-        assertEquals("a", attributes[0].name)
-        assertEquals("b", attributes[1].name)
+        val accounts = result.body!!.accounts
+        assertEquals(2, accounts.size)
+        assertEquals(1000L, accounts[0].id)
+        assertEquals(1001L, accounts[1].id)
     }
 
     @Test
-    fun `search attribute from another tenant`() {
-        val result =
-            rest.getForEntity("/v1/attributes?name=aa", SearchAttributeResponse::class.java)
+    fun `by phone`() {
+        val result = rest.getForEntity("/v1/accounts?q=758", SearchAccountResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val attributes = result.body!!.attributes
-        assertEquals(0, attributes.size)
+        val accounts = result.body!!.accounts
+        assertEquals(3, accounts.size)
+        assertEquals(1002L, accounts[0].id)
+        assertEquals(1000L, accounts[1].id)
+        assertEquals(1001L, accounts[2].id)
+    }
+
+    @Test
+    fun `by mobile`() {
+        val result = rest.getForEntity("/v1/accounts?q=931", SearchAccountResponse::class.java)
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val accounts = result.body!!.accounts
+        assertEquals(2, accounts.size)
+        assertEquals(1002L, accounts[0].id)
+        assertEquals(1001L, accounts[1].id)
     }
 }

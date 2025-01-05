@@ -1,4 +1,4 @@
-package com.wutsi.koki.tenant.server.endpoint
+package com.wutsi.koki.account.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
 import org.junit.jupiter.api.Test
@@ -21,10 +21,10 @@ class ExportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
         println(response.body)
         assertEquals(
             """
-               name,type,active,choices,label,description
-               a,TEXT,true,P1|P2,label-a,description-a
-               b,LONGTEXT,true,,label-b,
-               c,EMAIL,false,,,
+               name,type,required,active,choices,label,description
+               a,TEXT,yes,yes,P1|P2,label-a,description-a
+               b,LONGTEXT,,yes,,label-b,
+               c,EMAIL,,,,,
             """.trimIndent(),
             response.body?.trimIndent()
         )

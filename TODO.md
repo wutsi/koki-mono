@@ -1,5 +1,22 @@
 # Features
 
+## Account
+
+- [] Attributes API
+- [] Account API
+- [] Account UI
+- [] Contact API
+- [] Contact UI
+- [] Manage attributes from settings
+- [] Log an activity (email, notes, phone call, meeting notes etc.)
+
+## Files
+
+- [] Upload files
+- [x] Show file icons
+
+## Email
+
 ## Form
 
 - [] Add support for Paypal field
@@ -48,11 +65,6 @@
 - [] Signup user
 - [] Invite user
 - [] Manage roles
-
-## Files
-
-- [] Upload files
-- [x] Show file icons
 
 ## Portal
 

@@ -1,161 +1,69 @@
 package com.wutsi.koki.account.server.endpoint
 
-import com.wutsi.koki.TenantAwareEndpointTest
-import com.wutsi.koki.account.dto.AttributeType
-import com.wutsi.koki.account.server.dao.AttributeRepository
-import com.wutsi.koki.account.server.domain.AttributeEntity
-import com.wutsi.koki.common.dto.ImportResponse
-import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.AuthorizationAwareEndpointTest
+import com.wutsi.koki.account.dto.CreateAccountRequest
+import com.wutsi.koki.account.dto.CreateAccountResponse
+import com.wutsi.koki.account.server.dao.AccountAttributeRepository
+import com.wutsi.koki.account.server.dao.AccountRepository
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.ContentDisposition
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
-import org.springframework.http.MediaType
+import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
-import org.springframework.util.LinkedMultiValueMap
-import org.springframework.util.MultiValueMap
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/account/ImportAttributeCSVEndpoint.sql"])
-class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/account/CreateAccountEndpoint.sql"])
+class CreateAccountEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
-    private lateinit var dao: AttributeRepository
+    private lateinit var dao: AccountRepository
 
-    private fun upload(body: String): ImportResponse {
-        val headers = HttpHeaders()
-        headers.contentType = MediaType.MULTIPART_FORM_DATA
-
-        val fileMap = LinkedMultiValueMap<String, String>()
-        val contentDisposition = ContentDisposition
-            .builder("form-data")
-            .name("file")
-            .filename("test.csv")
-            .build()
-        fileMap.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString())
-        val fileEntity = HttpEntity(body.toByteArray(), fileMap)
-
-        val body = LinkedMultiValueMap<String, Any>()
-        body.add("file", fileEntity)
-
-        val requestEntity = HttpEntity<MultiValueMap<String, Any>>(body, headers)
-        return rest.exchange(
-            "/v1/attributes/csv",
-            HttpMethod.POST,
-            requestEntity,
-            ImportResponse::class.java,
-        ).body!!
-    }
+    @Autowired
+    private lateinit var attrDao: AccountAttributeRepository
 
     @Test
-    fun import() {
-        val response = upload(
-            """
-                "name","type","required","active","choices","label","description"
-                "a","DECIMAL",yes,"Yes",,,
-                "b","TEXT",,,"P1|P2|P3|P4","Priority","Priority of the ticket"
-                "c","LONGTEXT",,,,,
-                "new","EMAIL",,"yes","","",""
-            """.trimIndent()
+    fun create() {
+        val request = CreateAccountRequest(
+            name = "Ray Sponsible Inc",
+            phone = "+5141110000",
+            mobile = "+5141110011",
+            email = "info@ray-sponsible-inc.com",
+            website = "https://www.ray-sponsible-inc.com",
+            language = "en",
+            description = "Description of the account",
+            attributes = mapOf(
+                100L to "NEQ-0000001",
+                101L to "40394039"
+            )
         )
+        val response = rest.postForEntity("/v1/accounts", request, CreateAccountResponse::class.java)
 
-        assertEquals(3, response.updated)
-        assertEquals(1, response.added)
-        assertEquals(0, response.errors)
-        assertTrue(response.errorMessages.isEmpty())
+        assertEquals(HttpStatus.OK, response.statusCode)
 
-        val attrA = findAttribute("a")
-        assertEquals("a", attrA.name)
-        assertEquals(TENANT_ID, attrA.tenantId)
-        assertEquals(AttributeType.DECIMAL, attrA.type)
-        assertTrue(attrA.required)
-        assertTrue(attrA.active)
-        assertNull(attrA.choices)
-        assertNull(attrA.label)
-        assertNull(attrA.description)
+        val accountId = response.body!!.accountId
+        val account = dao.findById(accountId).get()
+        assertEquals(request.name, account.name)
+        assertEquals(request.description, account.description)
+        assertEquals(request.phone, account.phone)
+        assertEquals(request.mobile, account.mobile)
+        assertEquals(request.email, account.email)
+        assertEquals(request.website, account.website)
+        assertEquals(request.language, account.language)
+        assertEquals(USER_ID, account.createdById)
+        assertEquals(USER_ID, account.modifiedById)
+        assertFalse(account.deleted)
+        assertNull(account.deletedAt)
+        assertNull(account.deletedById)
 
-        val attrB = findAttribute("b")
-        assertEquals("b", attrB.name)
-        assertEquals(TENANT_ID, attrB.tenantId)
-        assertEquals(AttributeType.TEXT, attrB.type)
-        assertFalse(attrB.required)
-        assertFalse(attrB.active)
-        assertEquals("P1\nP2\nP3\nP4", attrB.choices)
-        assertEquals("Priority", attrB.label)
-        assertEquals("Priority of the ticket", attrB.description)
+        val attrs = attrDao.findByAccountId(accountId).sortedBy { it.attributeId }
+        assertEquals(2, attrs.size)
 
-        val attrC = findAttribute("c")
-        assertEquals("c", attrC.name)
-        assertEquals(TENANT_ID, attrC.tenantId)
-        assertEquals(AttributeType.LONGTEXT, attrC.type)
-        assertFalse(attrC.required)
-        assertFalse(attrC.active)
-        assertNull(attrC.choices)
-        assertNull(attrC.label)
-        assertNull(attrC.description)
+        assertEquals(accountId, attrs[0].accountId)
+        assertEquals(100L, attrs[0].attributeId)
+        assertEquals(request.attributes[100], attrs[0].value)
 
-        val attrNew = findAttribute("new")
-        assertEquals("new", attrNew.name)
-        assertEquals(TENANT_ID, attrNew.tenantId)
-        assertEquals(AttributeType.EMAIL, attrNew.type)
-        assertFalse(attrNew.required)
-        assertTrue(attrNew.active)
-        assertNull(attrNew.choices)
-        assertNull(attrNew.label)
-        assertNull(attrNew.description)
-    }
-
-    @Test
-    fun noName() {
-        val response = upload(
-            """
-                "name","type","required","active","choices","label","description"
-                "","TEXT",,,"P1|P2|P3|P4","Priority","Priority of the ticket"
-            """.trimIndent()
-        )
-
-        assertEquals(0, response.updated)
-        assertEquals(0, response.added)
-        assertEquals(1, response.errors)
-        assertFalse(response.errorMessages.isEmpty())
-        assertEquals(ErrorCode.ATTRIBUTE_NAME_MISSING, response.errorMessages[0].code)
-    }
-
-    @Test
-    fun noType() {
-        checkTypeInvalid("")
-    }
-
-    @Test
-    fun invalidType() {
-        checkTypeInvalid("\"xx\"")
-    }
-
-    @Test
-    fun unknownType() {
-        checkTypeInvalid("\"UNKNOWN\"")
-    }
-
-    private fun checkTypeInvalid(type: String) {
-        val response = upload(
-            """
-                "name","type","required","active","choices","label","description"
-                "a",$type,,,"P1|P2|P3|P4","Priority","Priority of the ticket"
-            """.trimIndent()
-        )
-
-        assertEquals(0, response.updated)
-        assertEquals(0, response.added)
-        assertEquals(1, response.errors)
-        assertFalse(response.errorMessages.isEmpty())
-        assertEquals(ErrorCode.ATTRIBUTE_TYPE_INVALID, response.errorMessages[0].code)
-    }
-
-    private fun findAttribute(name: String): AttributeEntity {
-        return dao.findByTenantIdAndName(getTenantId(), name)!!
+        assertEquals(accountId, attrs[1].accountId)
+        assertEquals(101L, attrs[1].attributeId)
+        assertEquals(request.attributes[101], attrs[1].value)
     }
 }

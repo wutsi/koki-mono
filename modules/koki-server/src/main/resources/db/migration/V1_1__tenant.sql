@@ -39,24 +39,6 @@ CREATE TABLE T_USER(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
-CREATE TABLE T_ATTRIBUTE(
-  id                      BIGINT NOT NULL AUTO_INCREMENT,
-
-  tenant_fk               BIGINT NOT NULL,
-
-  name                    VARCHAR(100) NOT NULL,
-  label                   VARCHAR(100),
-  description             TEXT,
-  choices                 TEXT,
-  type                    INT NOT NULL DEFAULT 0,
-  active                  BOOL NOT NULL DEFAULT true,
-  created_at              DATETIME DEFAULT NOW(),
-  modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
-
-  UNIQUE(tenant_fk, name),
-  PRIMARY KEY(id)
-) ENGINE = InnoDB;
-
 CREATE TABLE T_CONFIGURATION(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
