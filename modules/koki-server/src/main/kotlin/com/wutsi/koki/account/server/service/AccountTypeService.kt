@@ -3,10 +3,13 @@ package com.wutsi.koki.account.server.service
 import com.wutsi.koki.account.server.dao.AccountTypeRepository
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.tenant.server.domain.AccountTypeEntity
 import jakarta.persistence.EntityManager
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import java.util.Date
 
 @Service
 class AccountTypeService(
@@ -21,6 +24,26 @@ class AccountTypeService(
             throw NotFoundException(Error(ErrorCode.ACCOUNT_TYPE_NOT_FOUND))
         }
         return accountType
+    }
+
+    fun getByName(name: String, tenantId: Long): AccountTypeEntity {
+        val roles = search(
+            names = listOf(name),
+            tenantId = tenantId,
+            limit = 1
+        )
+        if (roles.isEmpty()) {
+            throw NotFoundException(
+                error = Error(
+                    code = ErrorCode.ACCOUNT_TYPE_NOT_FOUND,
+                    parameter = Parameter(
+                        value = name
+                    )
+                )
+            )
+        } else {
+            return roles.first()
+        }
     }
 
     fun search(
@@ -58,5 +81,11 @@ class AccountTypeService(
         query.firstResult = offset
         query.maxResults = limit
         return query.resultList
+    }
+
+    @Transactional
+    fun save(accountType: AccountTypeEntity) {
+        accountType.modifiedAt = Date()
+        dao.save(accountType)
     }
 }

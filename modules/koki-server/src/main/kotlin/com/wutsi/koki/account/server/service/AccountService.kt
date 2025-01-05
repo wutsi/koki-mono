@@ -38,6 +38,7 @@ class AccountService(
         val account = dao.save(
             AccountEntity(
                 tenantId = tenantId,
+                accountTypeId = request.accountTypeId,
                 name = request.name,
                 phone = request.phone,
                 email = request.email,
@@ -71,6 +72,7 @@ class AccountService(
         val account = get(id, tenantId)
         account.name = request.name
         account.phone = request.phone
+        account.accountTypeId = request.accountTypeId
         account.email = request.email
         account.mobile = request.mobile
         account.website = request.website

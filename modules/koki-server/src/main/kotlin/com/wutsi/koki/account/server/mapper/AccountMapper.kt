@@ -10,6 +10,7 @@ class AccountMapper {
     fun toAccount(entity: AccountEntity): Account {
         return Account(
             id = entity.id ?: -1,
+            accountTypeId = entity.accountTypeId,
             name = entity.name,
             description = entity.description,
             phone = entity.phone,
@@ -35,6 +36,7 @@ class AccountMapper {
     fun toAccountSummary(entity: AccountEntity): AccountSummary {
         return AccountSummary(
             id = entity.id ?: -1,
+            accountTypeId = entity.accountTypeId,
             name = entity.name,
             phone = entity.phone,
             email = entity.email,
