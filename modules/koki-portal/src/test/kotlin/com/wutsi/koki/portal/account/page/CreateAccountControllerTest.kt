@@ -29,7 +29,6 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
         input("#website", "https://www.ray-construction.com")
         select("#language", 3)
         input("#description", "This is the description")
-
         scrollToBottom()
         attributes.forEach { attribute ->
             input("#attribute-${attribute.id}", "${attribute.id}11111")
@@ -69,7 +68,6 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
         input("#website", "https://www.ray-construction.com")
         select("#language", 3)
         input("#description", "This is the description")
-
         scrollToBottom()
         attributes.forEach { attribute ->
             input("#attribute-${attribute.id}", "11111")
@@ -84,8 +82,19 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
     @Test
     fun cancel() {
         navigateTo("/accounts/create")
+
+        input("#name", "Ray Construction Inc")
+        select("#managedById", 2)
+        input("#phone", "+5147580000")
+        input("#mobile", "+5147580011")
+        input("#email", "info@ray-construction.com")
+        scrollToMiddle()
+        input("#website", "https://www.ray-construction.com")
+        select("#language", 3)
+        input("#description", "This is the description")
         scrollToBottom()
         click(".btn-cancel")
+
         assertCurrentPageIs(PageName.ACCOUNT_LIST)
     }
 
@@ -106,6 +115,9 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
         select("#language", 3)
         input("#description", "This is the description")
         scrollToBottom()
+        attributes.forEach { attribute ->
+            input("#attribute-${attribute.id}", "11111")
+        }
         click("button[type=submit]")
 
         assertCurrentPageIs(PageName.ACCOUNT_CREATE)

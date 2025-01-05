@@ -31,7 +31,6 @@ class EditAccountControllerTest : AbstractPageControllerTest() {
         input("#website", "https://www.ray-construction.com")
         select("#language", 3)
         input("#description", "This is the description")
-
         scrollToBottom()
         attributes.forEach { attribute ->
             input("#attribute-${attribute.id}", "${attribute.id}2222")
@@ -83,7 +82,20 @@ class EditAccountControllerTest : AbstractPageControllerTest() {
         doThrow(ex).whenever(kokiAccounts).update(any(), any())
 
         navigateTo("/accounts/${account.id}/edit")
+
+        input("#name", "Ray Construction Inc")
+        select("#managedById", 2)
+        input("#phone", "+5147580000")
+        input("#mobile", "+5147580011")
+        input("#email", "info@ray-construction.com")
+        scrollToMiddle()
+        input("#website", "https://www.ray-construction.com")
+        select("#language", 3)
+        input("#description", "This is the description")
         scrollToBottom()
+        attributes.forEach { attribute ->
+            input("#attribute-${attribute.id}", "${attribute.id}2222")
+        }
         click("button[type=submit]")
 
         assertCurrentPageIs(PageName.ACCOUNT_EDIT)
