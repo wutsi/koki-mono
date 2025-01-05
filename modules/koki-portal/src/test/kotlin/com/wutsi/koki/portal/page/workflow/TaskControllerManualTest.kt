@@ -91,6 +91,10 @@ class TaskControllerManualTest : AbstractPageControllerTest() {
         assertElementNotPresent("#alert-error")
 
         click("#btn-complete")
+        val alert = driver.switchTo().alert()
+        alert.accept()
+        driver.switchTo().parentFrame()
+
         assertCurrentPageIs(PageName.TASK)
         assertElementPresent("#alert-error")
     }
