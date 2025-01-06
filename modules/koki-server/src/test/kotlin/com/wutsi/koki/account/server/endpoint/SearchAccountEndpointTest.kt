@@ -93,4 +93,16 @@ class SearchAccountEndpointTest : TenantAwareEndpointTest() {
         assertEquals(1002L, accounts[0].id)
         assertEquals(1001L, accounts[1].id)
     }
+
+    @Test
+    fun `by account type`() {
+        val result = rest.getForEntity("/v1/accounts?account-type-id=101", SearchAccountResponse::class.java)
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val accounts = result.body!!.accounts
+        assertEquals(2, accounts.size)
+        assertEquals(1003L, accounts[0].id)
+        assertEquals(1001L, accounts[1].id)
+    }
 }

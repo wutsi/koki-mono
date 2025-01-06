@@ -36,6 +36,7 @@ class ListAccountControllerTest : AbstractPageControllerTest() {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
+                anyOrNull(),
             )
 
         navigateTo("/accounts")

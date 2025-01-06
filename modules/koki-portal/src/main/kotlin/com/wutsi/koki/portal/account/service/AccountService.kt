@@ -54,6 +54,7 @@ class AccountService(
     fun accounts(
         keyword: String? = null,
         ids: List<Long> = emptyList(),
+        accountTypeIds: List<Long> = emptyList(),
         managedByIds: List<Long> = emptyList(),
         createdByIds: List<Long> = emptyList(),
         limit: Int = 20,
@@ -62,6 +63,7 @@ class AccountService(
         val accounts = koki.accounts(
             keyword = keyword,
             ids = ids,
+            accountTypeIds = accountTypeIds,
             managedByIds = managedByIds,
             createdByIds = createdByIds,
             limit = limit,

@@ -44,6 +44,7 @@ class KokiAccounts(
     fun accounts(
         keyword: String?,
         ids: List<Long>,
+        accountTypeIds: List<Long>,
         managedByIds: List<Long>,
         createdByIds: List<Long>,
         limit: Int,
@@ -54,6 +55,7 @@ class KokiAccounts(
             mapOf(
                 "q" to keyword,
                 "id" to ids,
+                "account-type-id" to accountTypeIds,
                 "managed-by-id" to managedByIds,
                 "created-by-id" to createdByIds,
                 "limit" to limit,
