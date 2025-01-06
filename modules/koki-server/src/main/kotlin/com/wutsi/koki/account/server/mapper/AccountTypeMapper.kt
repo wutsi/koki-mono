@@ -2,7 +2,7 @@ package com.wutsi.koki.account.server.mapper
 
 import com.wutsi.koki.account.dto.AccountType
 import com.wutsi.koki.account.dto.AccountTypeSummary
-import com.wutsi.koki.tenant.server.domain.AccountTypeEntity
+import com.wutsi.koki.account.server.domain.AccountTypeEntity
 import org.springframework.stereotype.Service
 
 @Service

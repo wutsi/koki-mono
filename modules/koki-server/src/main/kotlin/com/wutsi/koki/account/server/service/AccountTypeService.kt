@@ -1,11 +1,11 @@
 package com.wutsi.koki.account.server.service
 
 import com.wutsi.koki.account.server.dao.AccountTypeRepository
+import com.wutsi.koki.account.server.domain.AccountTypeEntity
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.error.exception.NotFoundException
-import com.wutsi.koki.tenant.server.domain.AccountTypeEntity
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service

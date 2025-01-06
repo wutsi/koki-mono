@@ -2,9 +2,9 @@ package com.wutsi.koki.account.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.account.server.dao.AccountTypeRepository
+import com.wutsi.koki.account.server.domain.AccountTypeEntity
 import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.tenant.server.domain.AccountTypeEntity
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.beans.factory.annotation.Autowired

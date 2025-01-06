@@ -1,58 +1,58 @@
-package com.wutsi.koki.account.server.endpoint
+package com.wutsi.koki.contact.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
-import com.wutsi.koki.account.dto.SearchAccountTypeResponse
+import com.wutsi.koki.contact.dto.SearchContactTypeResponse
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/account/SearchAccountTypeEndpoint.sql"])
-class SearchAccountTypeEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/contact/SearchContactTypeEndpoint.sql"])
+class SearchContactTypeEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun all() {
-        val result = rest.getForEntity("/v1/account-types", SearchAccountTypeResponse::class.java)
+        val result = rest.getForEntity("/v1/contact-types", SearchContactTypeResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val accounts = result.body!!.accountTypes
-        assertEquals(4, accounts.size)
+        val contacts = result.body!!.contactTypes
+        assertEquals(4, contacts.size)
     }
 
     @Test
     fun `by name`() {
-        val result = rest.getForEntity("/v1/account-types?name=T1&name=T2", SearchAccountTypeResponse::class.java)
+        val result = rest.getForEntity("/v1/contact-types?name=T1&name=T2", SearchContactTypeResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val accounts = result.body!!.accountTypes
-        assertEquals(2, accounts.size)
-        assertEquals(100L, accounts[0].id)
-        assertEquals(101L, accounts[1].id)
+        val contacts = result.body!!.contactTypes
+        assertEquals(2, contacts.size)
+        assertEquals(100L, contacts[0].id)
+        assertEquals(101L, contacts[1].id)
     }
 
     @Test
     fun `by id`() {
         val result =
-            rest.getForEntity("/v1/account-types?id=103&id=100&id=101", SearchAccountTypeResponse::class.java)
+            rest.getForEntity("/v1/contact-types?id=103&id=100&id=101", SearchContactTypeResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val accounts = result.body!!.accountTypes
-        assertEquals(3, accounts.size)
-        assertEquals(100L, accounts[0].id)
-        assertEquals(101L, accounts[1].id)
-        assertEquals(103L, accounts[2].id)
+        val contacts = result.body!!.contactTypes
+        assertEquals(3, contacts.size)
+        assertEquals(100L, contacts[0].id)
+        assertEquals(101L, contacts[1].id)
+        assertEquals(103L, contacts[2].id)
     }
 
     @Test
     fun active() {
-        val result = rest.getForEntity("/v1/account-types?active=false", SearchAccountTypeResponse::class.java)
+        val result = rest.getForEntity("/v1/contact-types?active=false", SearchContactTypeResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val accounts = result.body!!.accountTypes
-        assertEquals(1, accounts.size)
-        assertEquals(103L, accounts[0].id)
+        val contacts = result.body!!.contactTypes
+        assertEquals(1, contacts.size)
+        assertEquals(103L, contacts[0].id)
     }
 }
