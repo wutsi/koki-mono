@@ -12,7 +12,7 @@
 
 ## Contact
 
-- [-] Contact API
+- [x] Contact API
 - [] Contact UI
 - [] Add address to Contact
 - [] Settings: Import Contact from CSV
