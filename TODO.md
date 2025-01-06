@@ -5,6 +5,7 @@
 - [x] Attributes API
 - [x] Account API
 - [x] Account UI
+- [] BUG: We should not be able to delete Account with Contacts
 - [] Add address to Account
 - [] Settings: Import Accounts from CSV
 - [] Settings: Import Attributes from CSV

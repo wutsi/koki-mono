@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.AccountFixtures.account
+import com.wutsi.koki.ContactFixtures
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import kotlin.test.Test
@@ -76,5 +77,13 @@ class AccountControllerTest : AbstractPageControllerTest() {
         navigateTo("/accounts/${account.id}")
         click(".btn-edit")
         assertCurrentPageIs(PageName.ACCOUNT_EDIT)
+    }
+
+    @Test
+    fun contacts() {
+        navigateTo("/accounts/${account.id}")
+
+        click("#pills-contacts-tab", 1000)
+        assertElementCount(".widget-contacts tr.contact", ContactFixtures.contacts.size)
     }
 }

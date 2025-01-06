@@ -2,38 +2,45 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<div class="widget" th:fragment="account-breadcrumb(account)">
+<div class="widget" th:fragment="contact-breadcrumb(contact)">
     <div class="widget-body">
         <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item" th:if="${account}"><a href="/accounts">Accounts</a></li>
-                <li class="breadcrumb-item active" th:if="${account}" th:text="${account.name}">ACCOUNT</li>
-                <li class="breadcrumb-item active" th:if="!${account}">Accounts</li>
+                <li class="breadcrumb-item" th:if="${contact}"><a href="/contacts">Contacts</a></li>
+                <li class="breadcrumb-item active" th:if="${contact}">
+                    <img align="absmiddle" height="24" src="/image/contact.png" width="24"/>
+                    <span th:text="${contact.name}">CONTACT</span>
+                </li>
+                <li class="breadcrumb-item active" th:if="!${contact}">Contacts</li>
             </ol>
         </nav>
     </div>
 </div>
 
-<tr class="account" th:fragment="columns(account)" th:remove="tag">
+<tr class="contact" th:fragment="columns(contact, showAccount)" th:remove="tag">
     <td>
-        <a th:href="'/accounts/' + ${account.id}" th:text="${account.name}">NAME</a>
+        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.name}">NAME</a>
     </td>
-    <td th:text="${account.accountType?.title}">ACCOUNT TYPE</td>
-    <td th:text="${account.phone}">PHONE</td>
-    <td th:text="${account.mobile}">MOBILE</td>
-    <td th:text="${account.email}">EMAIL</td>
-    <td th:text="${account.modifiedAtText}">MODIFIED</td>
-    <td th:text="${account.managedBy?.displayName}">MANAGER</td>
+    <td th:text="${contact.contactType?.title}">CONTACT TYPE</td>
+    <td th:text="${contact.phone}">PHONE</td>
+    <td th:text="${contact.mobile}">MOBILE</td>
+    <td th:text="${contact.email}">EMAIL</td>
+    <td th:text="${contact.modifiedAtText}">MODIFIED</td>
+    <td th:if="${showAccount}">
+        <a th:href="'/accounts/' + ${contact.account.id}"
+           th:if="${contact.account}"
+           th:text="${contact.account.name}">CONTACT</a>
+    </td>
     <td class="toolbar">
-        <a class="btn-view" th:href="'/accounts/' + ${account.id}">View</a>
-        <a class="btn-edit" th:href="'/accounts/' + ${account.id} + '/edit'">Edit</a>
+        <a class="btn-view" th:href="'/contacts/' + ${contact.id}">View</a>
+        <a class="btn-edit" th:href="'/contacts/' + ${contact.id} + '/edit'">Edit</a>
     </td>
 </tr>
 
-<tr id="account-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
-    <td class="text-center" colspan="8">
-        <a href="javascript: koki_load_more('account-load-more')" th:data-url="${moreUrl}">Load more...</a>
+<tr id="contact-load-more" th:fragment="load-more(moreUrl, showContact)" th:if="${moreUrl}">
+    <td class="text-center" th:colspan="${showContact} ? 8 : 7">
+        <a href="javascript: koki_load_more('contact-load-more')" th:data-url="${moreUrl}">Load more...</a>
     </td>
 </tr>
 

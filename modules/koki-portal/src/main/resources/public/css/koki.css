@@ -126,6 +126,10 @@ h1.entity-title img {
     margin-right: 1em;
 }
 
+.margin-right-2x {
+    margin-right: 2em;
+}
+
 
 #navbar {
     border-bottom: 1px solid gray;
@@ -269,6 +273,10 @@ tr.activity-running {
 }
 
 /* bootstrap */
+.border {
+    border: 1px solid gray !important;
+}
+
 .widget-body ol.breadcrumb {
     margin-bottom: 0;
     padding-bottom: 0

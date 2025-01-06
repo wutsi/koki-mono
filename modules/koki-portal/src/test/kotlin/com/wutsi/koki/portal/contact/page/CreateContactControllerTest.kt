@@ -3,25 +3,23 @@ package com.wutsi.koki.portal.contact.page
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doThrow
-import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
-import com.wutsi.koki.ContactFixtures.contact
 import com.wutsi.koki.ContactFixtures.contactTypes
+import com.wutsi.koki.contact.dto.CreateContactRequest
 import com.wutsi.koki.contact.dto.Gender
-import com.wutsi.koki.contact.dto.UpdateContactRequest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class EditContactControllerTest : AbstractPageControllerTest() {
+class CreateContactControllerTest : AbstractPageControllerTest() {
     @Test
-    fun edit() {
-        navigateTo("/contacts/${contact.id}/edit")
+    fun create() {
+        navigateTo("/contacts/create")
 
-        assertCurrentPageIs(PageName.CONTACT_EDIT)
+        assertCurrentPageIs(PageName.CONTACT_CREATE)
 
         select("#contactTypeId", 3)
         input("#firstName", "Yo")
@@ -36,8 +34,8 @@ class EditContactControllerTest : AbstractPageControllerTest() {
         input("#employer", "EG")
         click("button[type=submit]")
 
-        val request = argumentCaptor<UpdateContactRequest>()
-        verify(kokiContacts).update(eq(contact.id), request.capture())
+        val request = argumentCaptor<CreateContactRequest>()
+        verify(kokiContacts).create(request.capture())
         assertEquals(contactTypes[2].id, request.firstValue.contactTypeId)
         assertEquals("Yo", request.firstValue.firstName)
         assertEquals("Man", request.firstValue.lastName)
@@ -55,10 +53,32 @@ class EditContactControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun cancel() {
-        navigateTo("/contacts/${contact.id}/edit")
+    fun `create new`() {
+        navigateTo("/contacts/create")
 
-        assertCurrentPageIs(PageName.CONTACT_EDIT)
+        select("#contactTypeId", 3)
+        input("#firstName", "Yo")
+        input("#lastName", "Man")
+        select("#salutation", 2)
+        select("#gender", 2)
+        scrollToBottom()
+        input("#phone", "+5147580000")
+        input("#mobile", "+5147580011")
+        input("#email", "yo@gmail.com")
+        input("#profession", "XX")
+        input("#employer", "EG")
+        click("button[type=submit]")
+
+        assertCurrentPageIs(PageName.CONTACT_SAVED)
+        click(".btn-create")
+        assertCurrentPageIs(PageName.CONTACT_CREATE)
+    }
+
+    @Test
+    fun cancel() {
+        navigateTo("/contacts/create")
+
+        assertCurrentPageIs(PageName.CONTACT_CREATE)
 
         select("#contactTypeId", 3)
         input("#firstName", "Yo")
@@ -79,11 +99,11 @@ class EditContactControllerTest : AbstractPageControllerTest() {
     @Test
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
-        doThrow(ex).whenever(kokiContacts).update(any(), any())
+        doThrow(ex).whenever(kokiContacts).create(any())
 
-        navigateTo("/contacts/${contact.id}/edit")
+        navigateTo("/contacts/create")
 
-        assertCurrentPageIs(PageName.CONTACT_EDIT)
+        assertCurrentPageIs(PageName.CONTACT_CREATE)
 
         select("#contactTypeId", 3)
         input("#firstName", "Yo")
@@ -98,7 +118,7 @@ class EditContactControllerTest : AbstractPageControllerTest() {
         input("#employer", "EG")
         click("button[type=submit]")
 
-        assertCurrentPageIs(PageName.CONTACT_EDIT)
+        assertCurrentPageIs(PageName.CONTACT_CREATE)
         assertElementPresent(".alert-danger")
     }
 
@@ -106,7 +126,7 @@ class EditContactControllerTest : AbstractPageControllerTest() {
     fun `login required`() {
         setUpAnonymousUser()
 
-        navigateTo("/contacts/${contact.id}/edit")
+        navigateTo("/contacts/create")
         assertCurrentPageIs(PageName.LOGIN)
     }
 }

@@ -6,12 +6,12 @@
 
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
-<div th:replace="~{__components/layout :: menubar('accounts')}"></div>
+<div th:replace="~{__components/layout :: menubar('contacts')}"></div>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/account :: account-breadcrumb(${account})}"></div>
+            <div th:replace="~{__components/contact :: contact-breadcrumb(${contact})}"></div>
         </div>
     </div>
 
@@ -21,32 +21,39 @@
                 <div class="widget-body">
                     <div class="widget-toolbar">
                         <a class="btn-edit btn btn-secondary"
-                           th:href="'/accounts/' + ${account.id} + '/edit'">Edit</a>
+                           th:href="'/contacts/' + ${contact.id} + '/edit'">Edit</a>
                         <a class="btn-delete btn btn-danger float-right"
-                           onclick="return confirm('Are you sure you want to delete the account?')"
-                           th:href="'/accounts/' + ${account.id} + '/delete'">Delete</a>
+                           onclick="return confirm('Are you sure you want to delete the contact?')"
+                           th:href="'/contacts/' + ${contact.id} + '/delete'">Delete</a>
                     </div>
 
                     <h1 class="entity-title">
-                        <img align="absmiddle" src="/image/account.png"/>
-                        <span th:text="${account.name}">NAME</span>
+                        <img align="absmiddle" src="/image/contact.png"/>
+                        <span th:text="${contact.name}">NAME</span>
                     </h1>
-                    <div class="flex flex-space-between">
-                        <div class="margin-right" th:if="${account.phone}">
+                    <div class="flex">
+                        <div class="margin-right-2x" th:if="${contact.contactType}">
+                            <b>Contact Type</b><br/>
+                            <span th:text="${contact.contactType?.title}">CONTACT TYPE</span>
+                        </div>
+                        <div class="margin-right-2x" th:if="${contact.phone}">
                             <b>Phone</b><br/>
-                            <span th:text="${account.phone}">PHONE</span>
+                            <span th:text="${contact.phone}">PHONE</span>
                         </div>
-                        <div class="margin-right" th:if="${account.mobile}">
+                        <div class="margin-right-2x" th:if="${contact.mobile}">
                             <b>Mobile</b><br/>
-                            <span th:text="${account.mobile}">MOBILE</span>
+                            <span th:text="${contact.mobile}">MOBILE</span>
                         </div>
-                        <div class="margin-right" th:if="${account.email}">
+                        <div class="margin-right-2x" th:if="${contact.email}">
                             <b>Email</b><br/>
-                            <span th:text="${account.email}">EMAIL</span>
+                            <a th:href="'mailto:' + ${contact.email}" th:text="${contact.email}">EMAIL</a>
                         </div>
-                        <div class="margin-right" th:if="${account.managedBy}">
-                            <b>Account Manager</b><br/>
-                            <span th:text="${account.managedBy.displayName}">ACCOUNT MANAGER</span>
+                        <div class="margin-right-2x" th:if="${contact.account}">
+                            <b>Account</b><br/>
+                            <a th:href="'/accounts/' + ${contact.account.id}">
+                                <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
+                                <span th:text="${contact.account.name}">ACCOUNT</span>
+                            </a>
                         </div>
                     </div>
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
@@ -64,10 +71,10 @@
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button aria-controls="pills-contacts" aria-selected="false" class="nav-link"
-                                    data-bs-target="#pills-contacts" data-bs-toggle="pill" id="pills-contacts-tab"
+                            <button aria-controls="pills-files" aria-selected="false" class="nav-link"
+                                    data-bs-target="#pills-files" data-bs-toggle="pill" id="pills-files-tab"
                                     role="tab" type="button">
-                                Contacts
+                                Files
                             </button>
                         </li>
                     </ul>
@@ -75,48 +82,77 @@
                         <div aria-labelledby="pills-details-tab" class="tab-pane fade show active" id="pills-details"
                              role="tabpanel">
                             <table class="table">
-                                <tr th:if="${account.accountType}">
-                                    <td width="20%"><b>Type</b></td>
-                                    <td th:text="${account.accountType?.title}">TYPE</td>
-                                </tr>
-                                <tr th:if="${account.website}">
-                                    <td width="20%"><b>Website</b></td>
+                                <tr th:if="${contact.account}">
+                                    <td><b>Account</b></td>
                                     <td>
-                                        <a target="_blank" th:href="${account.website}" th:text="${account.website}">LINK</a>
+                                        <a th:href="'/accounts/' + ${contact.account.id}">
+                                            <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
+                                            <span th:text="${contact.account.name}">ACCOUNT</span>
+                                        </a>
                                     </td>
                                 </tr>
-                                <tr th:if="${account.language}">
-                                    <td width="20%"><b>Language</b></td>
-                                    <td th:text="${account.languageText}">LANGUAGE</td>
+                                <tr th:if="${contact.contactType}">
+                                    <td><b>Contact Type</b></td>
+                                    <td th:text="${contact.contactType?.title}">TYPE</td>
                                 </tr>
-                                <tr th:if="${account.description}">
-                                    <td width="20%"><b>Description</b></td>
-                                    <td th:text="${account.description}">DESCRIPTION</td>
-                                </tr>
-                                <tr th:each="attr : ${account.attributes}">
-                                    <td width="20%"><b th:text="${attr.attribute.label}">NAME</b></td>
-                                    <td th:text="${attr.value}">DESCRIPTION</td>
+                                <tr th:if="${contact.salutation}">
+                                    <td><b>Salutations</b></td>
+                                    <td th:text="${contact.salutation}">TYPE</td>
                                 </tr>
                                 <tr>
-                                    <td width="20%"><b>Created</b></td>
-                                    <td th:text="${account.createdAtText}">CREATED</td>
-                                </tr>
-                                <tr th:if="${account.createdBy}">
-                                    <td width="20%"><b>Created By</b></td>
-                                    <td th:text="${account.createdBy.displayName}">MODIFIED BY</td>
+                                    <td width="20%"><b>First Name</b></td>
+                                    <td th:text="${contact.firstName}">TYPE</td>
                                 </tr>
                                 <tr>
-                                    <td width="20%"><b>Modified</b></td>
-                                    <td th:text="${account.modifiedAtText}">CREATED</td>
+                                    <td width="20%"><b>Last Name</b></td>
+                                    <td th:text="${contact.lastName}">TYPE</td>
                                 </tr>
-                                <tr th:if="${account.modifiedBy}">
-                                    <td width="20%"><b>Modified By</b></td>
-                                    <td th:text="${account.modifiedBy.displayName}">MODIFIED BY</td>
+                                <tr th:if="${contact.gender}">
+                                    <td><b>Gender</b></td>
+                                    <td th:text="${contact.gender.name}">GENDER</td>
+                                </tr>
+                                <tr th:if="${contact.phone}">
+                                    <td><b>Phone</b></td>
+                                    <td th:text="${contact.phone}">PHONE</td>
+                                </tr>
+                                <tr th:if="${contact.mobile}">
+                                    <td><b>Mobile</b></td>
+                                    <td th:text="${contact.mobile}">MOBILE</td>
+                                </tr>
+                                <tr th:if="${contact.email}">
+                                    <td><b>Email</b></td>
+                                    <td>
+                                        <a th:href="'mailto:' + ${contact.email}" th:text="${contact.email}">EMAIL</a>
+                                    </td>
+                                </tr>
+                                <tr th:if="${contact.profession}">
+                                    <td><b>Profession</b></td>
+                                    <td th:text="${contact.profession}">PROFESSION</td>
+                                </tr>
+                                <tr th:if="${contact.employer}">
+                                    <td><b>Employer</b></td>
+                                    <td th:text="${contact.employer}">EMPLOYER</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Created</b></td>
+                                    <td th:text="${contact.createdAtText}">CREATED</td>
+                                </tr>
+                                <tr th:if="${contact.createdBy}">
+                                    <td><b>Created By</b></td>
+                                    <td th:text="${contact.createdBy.displayName}">MODIFIED BY</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Modified</b></td>
+                                    <td th:text="${contact.modifiedAtText}">CREATED</td>
+                                </tr>
+                                <tr th:if="${contact.modifiedBy}">
+                                    <td><b>Modified By</b></td>
+                                    <td th:text="${contact.modifiedBy.displayName}">MODIFIED BY</td>
                                 </tr>
                             </table>
                         </div>
 
-                        <div aria-labelledby="pills-contacts-tab" class="tab-pane fade" id="pills-contacts"
+                        <div aria-labelledby="pills-files-tab" class="tab-pane fade" id="pills-files"
                              role="tabpanel">
                         </div>
                     </div>

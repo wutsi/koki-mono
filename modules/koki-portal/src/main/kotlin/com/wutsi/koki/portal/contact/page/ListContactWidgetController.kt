@@ -1,43 +1,39 @@
 package com.wutsi.koki.portal.contact.page
 
 import com.wutsi.koki.portal.contact.service.ContactService
-import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.page.AbstractPageController
-import com.wutsi.koki.portal.page.PageName
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
-class ListContactController(
+@RequestMapping("/contacts/widgets/list")
+class ListContactWidgetController(
     private val service: ContactService
-) : AbstractPageController() {
-    @GetMapping("/contacts")
+) {
+    @GetMapping
     fun list(
+        @RequestParam(required = false, name = "account-id") accountId: Long? = null,
+        @RequestParam(required = false, name = "show-account") showAccount: Boolean = true,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
-        model.addAttribute(
-            "page",
-            PageModel(
-                name = PageName.CONTACT_LIST,
-                title = "Contacts",
-            )
-        )
-        more(true, limit, offset, model)
-        return "contacts/list"
+        more(accountId, showAccount, limit, offset, model)
+        return "contacts/widgets/list"
     }
 
-    @GetMapping("/contacts/more")
+    @GetMapping("/more")
     fun more(
+        @RequestParam(required = false, name = "account-id") accountId: Long? = null,
         @RequestParam(required = false, name = "show-account") showAccount: Boolean = true,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
         val contacts = service.contacts(
+            accountIds = accountId?.let { id -> listOf(id) } ?: emptyList(),
             limit = limit,
             offset = offset
         )
@@ -46,7 +42,10 @@ class ListContactController(
             model.addAttribute("showAccount", showAccount)
             if (contacts.size >= limit) {
                 val nextOffset = offset + limit
-                var url = "/contacts/more?show-account=$showAccount&limit=$limit&offset=$nextOffset"
+                var url = "/contacts/widgets/list/more?show-account=$showAccount&limit=$limit&offset=$nextOffset"
+                if (accountId != null) {
+                    url = "$url&account-id=$accountId"
+                }
                 model.addAttribute("moreUrl", url)
             }
         }

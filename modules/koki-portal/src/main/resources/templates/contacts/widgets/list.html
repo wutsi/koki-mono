@@ -1,0 +1,21 @@
+<div class="widget widget-contacts">
+    <div class="widget-body">
+        <table class="table table-striped" th:if="${contacts}">
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Phone</th>
+                <th>Mobile</th>
+                <th>Email</th>
+                <th>Modified</th>
+                <th th:if="${showAccount}">Account</th>
+                <td></td>
+            </tr>
+            <tr class="contact" th:each="contact : ${contacts}">
+                <div th:replace="~{__components/contact :: columns(${contact}, ${showAccount})}"></div>
+            </tr>
+            <tr th:replace="~{__components/contact :: load-more(${moreUrl}, ${showAccount})}"></tr>
+        </table>
+        <div class="text-center" th:if="!${contacts}">No contact</div>
+    </div>
+</div>

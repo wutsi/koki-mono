@@ -1,55 +1,61 @@
 package com.wutsi.koki.portal.contact.page
 
+import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.model.PageModel
+import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-class ListContactController(
+class ContactController(
     private val service: ContactService
-) {
-    @GetMapping("/contacts")
-    fun list(
-        @RequestParam(required = false) limit: Int = 20,
-        @RequestParam(required = false) offset: Int = 0,
+) : AbstractPageController() {
+    @GetMapping("/contacts/{id}")
+    fun show(
+        @PathVariable id: Long,
         model: Model
     ): String {
+        val contact = service.contact(id)
+        return show(contact, model)
+    }
+
+    private fun show(contact: ContactModel, model: Model): String {
+        model.addAttribute("contact", contact)
+
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.CONTACT_LIST,
+                name = PageName.CONTACT,
                 title = "Contacts",
             )
         )
-        more(true, limit, offset, model)
-        return "contacts/list"
+        return "contacts/show"
     }
 
-    @GetMapping("/contacts/more")
-    fun more(
-        @RequestParam(required = false, name = "show-account") showAccount: Boolean = true,
-        @RequestParam(required = false) limit: Int = 20,
-        @RequestParam(required = false) offset: Int = 0,
-        model: Model
-    ): String {
-        val contacts = service.contacts(
-            limit = limit,
-            offset = offset
-        )
-        if (contacts.isNotEmpty()) {
-            model.addAttribute("contacts", contacts)
-            model.addAttribute("showAccount", showAccount)
-            if (contacts.size >= limit) {
-                val nextOffset = offset + limit
-                var url = "/contacts/more?show-account=$showAccount&limit=$limit&offset=$nextOffset"
-                model.addAttribute("moreUrl", url)
-            }
-        }
+    @GetMapping("/contacts/{id}/delete")
+    fun delete(@PathVariable id: Long, model: Model): String {
+        val contact = service.contact(id)
+        try {
+            service.delete(id)
 
-        return "contacts/more"
+            model.addAttribute("contact", contact)
+            model.addAttribute(
+                "page",
+                PageModel(
+                    name = PageName.CONTACT_DELETED,
+                    title = contact.name,
+                )
+            )
+            return "contacts/deleted"
+        } catch (ex: HttpClientErrorException) {
+            val errorResponse = toErrorResponse(ex)
+            model.addAttribute("error", errorResponse.error.code)
+            return show(contact, model)
+        }
     }
 }

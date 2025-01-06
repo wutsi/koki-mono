@@ -6,16 +6,12 @@
 
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
-<div th:replace="~{__components/layout :: menubar('accounts')}"></div>
+<div th:replace="~{__components/layout :: menubar('contacts')}"></div>
 
 <div class="container">
-    <h1>
-        <img align="absmiddle" height="48" src="/image/account.png" width="48"/>
-        <span th:text="${account.name}">NAME</span>
-    </h1>
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/account :: account-breadcrumb(${account})}"></div>
+            <div th:replace="~{__components/contact :: contact-breadcrumb(${contact})}"></div>
         </div>
     </div>
 
@@ -24,10 +20,10 @@
             <div class="widget">
                 <div class="widget-body">
                     <div class="alert alert-success">
-                        The account has been successfully deleted.
+                        The contact has been successfully deleted.
                     </div>
                     <div class="text-center">
-                        <a class="btn btn-secondary btn-ok" href="/accounts">Back to Accounts</a>
+                        <a class="btn btn-secondary btn-ok" href="/contacts">Back to Contacts</a>
                     </div>
                 </div>
             </div>

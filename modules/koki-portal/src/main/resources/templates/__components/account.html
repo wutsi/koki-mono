@@ -8,7 +8,10 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
                 <li class="breadcrumb-item" th:if="${account}"><a href="/accounts">Accounts</a></li>
-                <li class="breadcrumb-item active" th:if="${account}" th:text="${account.name}">ACCOUNT</li>
+                <li class="breadcrumb-item active" th:if="${account}">
+                    <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
+                    <span th:text="${account.name}">ACCOUNT</span>
+                </li>
                 <li class="breadcrumb-item active" th:if="!${account}">Accounts</li>
             </ol>
         </nav>
@@ -36,5 +39,33 @@
         <a href="javascript: koki_load_more('account-load-more')" th:data-url="${moreUrl}">Load more...</a>
     </td>
 </tr>
+
+<script th:fragment="account-selector(id)" th:inline="javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        const selector = /*[[${id}]]*/ '';
+        $('#' + selector).select2({
+            ajax: {
+                url: '/accounts/selector/search',
+                dataType: 'json',
+                delay: 1000,
+                processResults: function (item) {
+                    const xitems = item.map(function (item) {
+                        return {
+                            id: item.id,
+                            text: item.name,
+                        }
+                    });
+                    return {
+                        results: xitems
+                    };
+                }
+            },
+            placeholder: 'Select an account',
+            allowClear: true,
+            tokenSeparators: [','],
+            minimumInputLength: 3,
+        });
+    });
+</script>
 
 </body>
