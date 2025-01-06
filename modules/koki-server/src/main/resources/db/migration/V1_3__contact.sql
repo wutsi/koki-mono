@@ -24,7 +24,7 @@ CREATE TABLE T_CONTACT(
   modified_by_fk          BIGINT,
   deleted_by_fk           BIGINT,
 
-  salutations             VARCHAR(10),
+  salutation              VARCHAR(10),
   first_name              VARCHAR(100) NOT NULL,
   last_name               VARCHAR(100) NOT NULL,
   profession              VARCHAR(100),

@@ -8,6 +8,13 @@ object PageName {
     const val ACCOUNT_DELETED = "page.account.deleted"
     const val ACCOUNT_SAVED = "page.account.saved"
 
+    const val CONTACT = "page.contact"
+    const val CONTACT_LIST = "page.contact.list"
+    const val CONTACT_EDIT = "page.contact.edit"
+    const val CONTACT_CREATE = "page.contact.create"
+    const val CONTACT_DELETED = "page.contact.deleted"
+    const val CONTACT_SAVED = "page.contact.saved"
+
     const val ERROR = "page.error"
     const val ERROR_SUSPENDED = "page.error.suspended"
 

@@ -8,7 +8,7 @@
 <div th:replace="~{__components/layout :: navbar}"></div>
 <div th:replace="~{__components/layout :: menubar('accounts')}"></div>
 
-<div class="container">
+<div class="container-fluid">
     <div class="row">
         <div class="col-12">
             <div th:replace="~{__components/account :: account-breadcrumb(null)}"></div>
@@ -19,9 +19,9 @@
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
-                    <div class="btn-group margin-bottom">
+                    <div class="btn-group border margin-bottom">
                         <button aria-expanded="false"
-                                class="btn btn-primary dropdown-toggle"
+                                class="btn dropdown-toggle"
                                 data-bs-toggle="dropdown"
                                 type="button">
                             <span th:if="${collection}">All Accounts</span>

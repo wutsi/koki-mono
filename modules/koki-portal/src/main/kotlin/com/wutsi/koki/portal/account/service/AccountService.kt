@@ -18,13 +18,13 @@ class AccountService(
     private val attributeService: AttributeService,
     private val accountTypeService: AccountTypeService,
 ) {
-    fun account(id: Long): AccountModel {
+    fun account(id: Long, fullGraph: Boolean = true): AccountModel {
         val account = koki.account(id).account
 
         val userIds = listOf(account.createdById, account.modifiedById, account.managedById)
             .filterNotNull()
             .toSet()
-        val userMap = if (userIds.isEmpty()) {
+        val userMap = if (userIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
             userService.users(ids = userIds.toList(), limit = userIds.size)
@@ -32,16 +32,19 @@ class AccountService(
         }
 
         val attributeIds = account.attributes.map { entry -> entry.key }
-        val attributeMap = if (attributeIds.isEmpty()) {
+        val attributeMap = if (attributeIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
             attributeService.attributes(ids = attributeIds, limit = attributeIds.size)
                 .associateBy { attribute -> attribute.id }
         }
 
-        val accountTypeMap = account.accountTypeId?.let { id ->
+        val accountTypeMap = if (account.accountTypeId == null || !fullGraph) {
+            emptyMap()
+        } else {
+            val id = account.accountTypeId!!
             mapOf(id to accountTypeService.accountType(id))
-        } ?: emptyMap()
+        }
 
         return mapper.toAccountModel(
             entity = account,
@@ -58,7 +61,8 @@ class AccountService(
         managedByIds: List<Long> = emptyList(),
         createdByIds: List<Long> = emptyList(),
         limit: Int = 20,
-        offset: Int = 0
+        offset: Int = 0,
+        fullGraph: Boolean = true,
     ): List<AccountModel> {
         val accounts = koki.accounts(
             keyword = keyword,
@@ -75,7 +79,7 @@ class AccountService(
         }
             .filterNotNull()
             .toSet()
-        val userMap = if (userIds.isEmpty()) {
+        val userMap = if (userIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
             userService.users(
@@ -87,7 +91,7 @@ class AccountService(
 
         val accountTypeIds = accounts.mapNotNull { account -> account.accountTypeId }
             .toSet()
-        val accountTypeMap = if (accountTypeIds.isEmpty()) {
+        val accountTypeMap = if (accountTypeIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
             accountTypeService.accountTypes(

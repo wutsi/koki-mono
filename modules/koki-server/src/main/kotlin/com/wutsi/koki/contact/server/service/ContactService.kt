@@ -40,7 +40,7 @@ class ContactService(
     ): List<ContactEntity> {
         val jql = StringBuilder("SELECT C FROM ContactEntity C WHERE C.deleted=false AND C.tenantId = :tenantId")
         if (keyword != null) {
-            jql.append(" AND ((UPPER(C.firstName) LIKE :keyword) OR (UPPER(C.lastName) LIKE :keyword) OR (UPPER(C.email) LIKE :keyword) OR (C.phone LIKE :keyword) OR (C.mobile LIKE :keyword))")
+            jql.append(" AND ( (UPPER(C.firstName) LIKE :keyword) OR (UPPER(C.lastName) LIKE :keyword) OR (UPPER(C.email) LIKE :keyword) )")
         }
         if (ids.isNotEmpty()) {
             jql.append(" AND C.id IN :ids")
@@ -84,7 +84,7 @@ class ContactService(
                 firstName = request.firstName,
                 lastName = request.lastName,
                 gender = request.gender,
-                salutations = request.salutations,
+                salutation = request.salutations,
                 phone = request.phone,
                 email = request.email,
                 mobile = request.mobile,
@@ -104,7 +104,7 @@ class ContactService(
         contact.firstName = request.firstName
         contact.lastName = request.lastName
         contact.gender = request.gender
-        contact.salutations = request.salutations
+        contact.salutation = request.salutations
         contact.phone = request.phone
         contact.email = request.email
         contact.mobile = request.mobile

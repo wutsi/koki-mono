@@ -5,26 +5,20 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.AccountFixtures.NEW_ACCOUNT_ID
-import com.wutsi.koki.AccountFixtures.account
-import com.wutsi.koki.AccountFixtures.accountType
-import com.wutsi.koki.AccountFixtures.accountTypes
-import com.wutsi.koki.AccountFixtures.accounts
-import com.wutsi.koki.AccountFixtures.attribute
-import com.wutsi.koki.AccountFixtures.attributes
+import com.wutsi.koki.AccountFixtures
+import com.wutsi.koki.ContactFixtures
 import com.wutsi.koki.FileFixtures.files
 import com.wutsi.koki.FormFixtures
 import com.wutsi.koki.LogFixtures.logEntries
 import com.wutsi.koki.LogFixtures.logEntry
 import com.wutsi.koki.MessageFixtures
-import com.wutsi.koki.RoleFixtures.roles
+import com.wutsi.koki.RoleFixtures
 import com.wutsi.koki.ScriptFixtures
 import com.wutsi.koki.ServiceFixtures.SERVICE_ID
 import com.wutsi.koki.ServiceFixtures.service
 import com.wutsi.koki.ServiceFixtures.services
-import com.wutsi.koki.TenantFixtures.tenants
-import com.wutsi.koki.UserFixtures.user
-import com.wutsi.koki.UserFixtures.users
+import com.wutsi.koki.TenantFixtures
+import com.wutsi.koki.UserFixtures
 import com.wutsi.koki.WorkflowFixtures.activities
 import com.wutsi.koki.WorkflowFixtures.activityInstance
 import com.wutsi.koki.WorkflowFixtures.activityInstances
@@ -40,6 +34,11 @@ import com.wutsi.koki.account.dto.GetAttributeResponse
 import com.wutsi.koki.account.dto.SearchAccountResponse
 import com.wutsi.koki.account.dto.SearchAccountTypeResponse
 import com.wutsi.koki.account.dto.SearchAttributeResponse
+import com.wutsi.koki.contact.dto.CreateContactResponse
+import com.wutsi.koki.contact.dto.GetContactResponse
+import com.wutsi.koki.contact.dto.GetContactTypeResponse
+import com.wutsi.koki.contact.dto.SearchContactResponse
+import com.wutsi.koki.contact.dto.SearchContactTypeResponse
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
@@ -58,6 +57,7 @@ import com.wutsi.koki.script.dto.RunScriptResponse
 import com.wutsi.koki.script.dto.SearchScriptResponse
 import com.wutsi.koki.sdk.KokiAccounts
 import com.wutsi.koki.sdk.KokiAuthentication
+import com.wutsi.koki.sdk.KokiContacts
 import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiLogs
@@ -133,6 +133,9 @@ abstract class AbstractPageControllerTest {
 
     @MockitoBean
     protected lateinit var kokiAuthentication: KokiAuthentication
+
+    @MockitoBean
+    protected lateinit var kokiContacts: KokiContacts
 
     @MockitoBean
     protected lateinit var kokiFiles: KokiFiles
@@ -217,6 +220,8 @@ abstract class AbstractPageControllerTest {
     private fun setupDefaultApiResponses() {
         setupTenantModule()
         setupAccountModule()
+        setupContactModule()
+
         setupFiles()
         setupForms()
         setupLogs()
@@ -230,17 +235,17 @@ abstract class AbstractPageControllerTest {
 
     private fun setupAccountModule() {
         // Attributes
-        doReturn(SearchAttributeResponse(attributes)).whenever(kokiAccounts).attributes(
+        doReturn(SearchAttributeResponse(AccountFixtures.attributes)).whenever(kokiAccounts).attributes(
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
         )
-        doReturn(GetAttributeResponse(attribute)).whenever(kokiAccounts).attribute(any())
+        doReturn(GetAttributeResponse(AccountFixtures.attribute)).whenever(kokiAccounts).attribute(any())
 
         // Account Types
-        doReturn(SearchAccountTypeResponse(accountTypes)).whenever(kokiAccounts)
+        doReturn(SearchAccountTypeResponse(AccountFixtures.accountTypes)).whenever(kokiAccounts)
             .types(
                 anyOrNull(),
                 anyOrNull(),
@@ -248,10 +253,10 @@ abstract class AbstractPageControllerTest {
                 anyOrNull(),
                 anyOrNull(),
             )
-        doReturn(GetAccountTypeResponse(accountType)).whenever(kokiAccounts).type(any())
+        doReturn(GetAccountTypeResponse(AccountFixtures.accountType)).whenever(kokiAccounts).type(any())
 
         // Accounts
-        doReturn(SearchAccountResponse(accounts)).whenever(kokiAccounts).accounts(
+        doReturn(SearchAccountResponse(AccountFixtures.accounts)).whenever(kokiAccounts).accounts(
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
@@ -260,22 +265,47 @@ abstract class AbstractPageControllerTest {
             anyOrNull(),
             anyOrNull(),
         )
-        doReturn(GetAccountResponse(account)).whenever(kokiAccounts).account(any())
-        doReturn(CreateAccountResponse(NEW_ACCOUNT_ID)).whenever(kokiAccounts).create(any())
+        doReturn(GetAccountResponse(AccountFixtures.account)).whenever(kokiAccounts).account(any())
+        doReturn(CreateAccountResponse(AccountFixtures.NEW_ACCOUNT_ID)).whenever(kokiAccounts).create(any())
+    }
+
+    private fun setupContactModule() {
+        // Contact Types
+        doReturn(SearchContactTypeResponse(ContactFixtures.contactTypes)).whenever(kokiContacts)
+            .types(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
+        doReturn(GetContactTypeResponse(ContactFixtures.contactType)).whenever(kokiContacts).type(any())
+
+        // Contacts
+        doReturn(SearchContactResponse(ContactFixtures.contacts)).whenever(kokiContacts).contacts(
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+        )
+        doReturn(GetContactResponse(ContactFixtures.contact)).whenever(kokiContacts).contact(any())
+        doReturn(CreateContactResponse(ContactFixtures.NEW_CONTACT_ID)).whenever(kokiContacts).create(any())
     }
 
     protected fun setupTenantModule() {
         // Tenant
-        doReturn(SearchTenantResponse(tenants)).whenever(kokiTenants)
+        doReturn(SearchTenantResponse(TenantFixtures.tenants)).whenever(kokiTenants)
             .tenants()
 
         // Roles
-        doReturn(SearchRoleResponse(roles)).whenever(kokiUsers)
+        doReturn(SearchRoleResponse(RoleFixtures.roles)).whenever(kokiUsers)
             .roles(anyOrNull(), anyOrNull(), anyOrNull())
 
         // Users
-        doReturn(GetUserResponse(user)).whenever(kokiUsers).user(USER_ID)
-        doReturn(SearchUserResponse(users)).whenever(kokiUsers)
+        doReturn(GetUserResponse(UserFixtures.user)).whenever(kokiUsers).user(USER_ID)
+        doReturn(SearchUserResponse(UserFixtures.users)).whenever(kokiUsers)
             .users(
                 anyOrNull(),
                 anyOrNull(),

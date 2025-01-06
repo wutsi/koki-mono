@@ -32,6 +32,7 @@ class EditAccountController(
         val account = service.account(id)
         val form = AccountForm(
             managedById = account.managedBy?.id ?: -1,
+            accountTypeId = account.accountType?.id ?: -1,
             language = account.language,
             phone = account.phone,
             description = account.description,
@@ -87,7 +88,10 @@ class EditAccountController(
 
     @PostMapping("/accounts/{id}/update")
     fun update(@PathVariable id: Long, @ModelAttribute form: AccountForm, model: Model): String {
-        val account = service.account(id)
+        val account = AccountModel(
+            id = id,
+            name = form.name
+        )
         try {
             val attributes = attributeService.attributes(
                 active = true,

@@ -34,7 +34,7 @@ data class ContactEntity(
     @Column(name = "account_fk")
     var accountId: Long? = null,
 
-    var salutations: String? = null,
+    var salutation: String? = null,
     var firstName: String = "",
     var lastName: String = "",
     var phone: String? = null,

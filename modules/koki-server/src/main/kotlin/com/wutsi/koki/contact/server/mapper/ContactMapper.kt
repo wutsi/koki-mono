@@ -24,7 +24,7 @@ class ContactMapper {
             modifiedAt = entity.modifiedAt,
             createdById = entity.createdById,
             modifiedById = entity.modifiedById,
-            salutations = entity.salutations
+            salutation = entity.salutation
         )
     }
 

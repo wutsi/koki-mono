@@ -8,7 +8,7 @@
 <div th:replace="~{__components/layout :: navbar}"></div>
 <div th:replace="~{__components/layout :: menubar('accounts')}"></div>
 
-<div class="container">
+<div class="container-fluid">
     <div class="row">
         <div class="col-12">
             <div th:replace="~{__components/account :: account-breadcrumb(${account})}"></div>
@@ -31,22 +31,26 @@
                         <img align="absmiddle" src="/image/account.png"/>
                         <span th:text="${account.name}">NAME</span>
                     </h1>
-                    <div class="flex flex-space-between">
-                        <div class="margin-right" th:if="${account.phone}">
+                    <div class="flex">
+                        <div class="margin-right-2x" th:if="${account.accountType}">
+                            <b>Type</b><br/>
+                            <span th:text="${account.accountType.title}">ACCOUNT TYPE</span>
+                        </div>
+                        <div class="margin-right-2x" th:if="${account.managedBy}">
+                            <b>Account Manager</b><br/>
+                            <span th:text="${account.managedBy.displayName}">ACCOUNT MANAGER</span>
+                        </div>
+                        <div class="margin-right-2x" th:if="${account.phone}">
                             <b>Phone</b><br/>
                             <span th:text="${account.phone}">PHONE</span>
                         </div>
-                        <div class="margin-right" th:if="${account.mobile}">
+                        <div class="margin-right-2x" th:if="${account.mobile}">
                             <b>Mobile</b><br/>
                             <span th:text="${account.mobile}">MOBILE</span>
                         </div>
-                        <div class="margin-right" th:if="${account.email}">
+                        <div class="margin-right-2x" th:if="${account.email}">
                             <b>Email</b><br/>
-                            <span th:text="${account.email}">EMAIL</span>
-                        </div>
-                        <div class="margin-right" th:if="${account.managedBy}">
-                            <b>Account Manager</b><br/>
-                            <span th:text="${account.managedBy.displayName}">ACCOUNT MANAGER</span>
+                            <a th:href="'mailto:' + ${account.email}" th:text="${account.email}">EMAIL</a>
                         </div>
                     </div>
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
@@ -70,14 +74,43 @@
                                 Contacts
                             </button>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-files" aria-selected="false" class="nav-link"
+                                    data-bs-target="#pills-files" data-bs-toggle="pill" id="pills-files-tab"
+                                    role="tab" type="button">
+                                Files
+                            </button>
+                        </li>
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
                         <div aria-labelledby="pills-details-tab" class="tab-pane fade show active" id="pills-details"
                              role="tabpanel">
                             <table class="table">
+                                <tr>
+                                    <td width="20%"><b>Name</b></td>
+                                    <td th:text="${account.name}">NAME</td>
+                                </tr>
                                 <tr th:if="${account.accountType}">
                                     <td width="20%"><b>Type</b></td>
                                     <td th:text="${account.accountType?.title}">TYPE</td>
+                                </tr>
+                                <tr th:if="${account.managedBy}">
+                                    <td width="20%"><b>Account Manager</b></td>
+                                    <td th:text="${account.managedBy?.displayName}">ACCOUNT MANAGER</td>
+                                </tr>
+                                <tr th:if="${account.phone}">
+                                    <td><b>Phone</b></td>
+                                    <td th:text="${account.phone}">PHONE</td>
+                                </tr>
+                                <tr th:if="${account.mobile}">
+                                    <td><b>Mobile</b></td>
+                                    <td th:text="${account.mobile}">MOBILE</td>
+                                </tr>
+                                <tr th:if="${account.email}">
+                                    <td><b>Email</b></td>
+                                    <td>
+                                        <a th:href="'mailto:' + ${account.email}" th:text="${account.email}">EMAIL</a>
+                                    </td>
                                 </tr>
                                 <tr th:if="${account.website}">
                                     <td width="20%"><b>Website</b></td>
@@ -117,7 +150,11 @@
                         </div>
 
                         <div aria-labelledby="pills-contacts-tab" class="tab-pane fade" id="pills-contacts"
-                             role="tabpanel">
+                             role="tabpanel"
+                             th:data-url="'/contacts/widgets/list?show-account=false&account-id=' + ${account.id}">
+                        </div>
+
+                        <div aria-labelledby="pills-files-tab" class="tab-pane fade" id="pills-files" role="tabpanel">
                         </div>
                     </div>
                 </div>

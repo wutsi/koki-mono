@@ -11,14 +11,13 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/contact :: contact-breadcrumb(${contact})}"></div>
+            <div th:replace="~{__components/contact :: contact-breadcrumb(null)}"></div>
         </div>
     </div>
 
     <div class="row">
         <div class="col-12">
-            <form class="form" method="post" th:action="@{'/contacts/' + ${contact.id} + '/update'}"
-                  th:object="${form}">
+            <form class="form" method="post" th:action="@{/contacts/add-new}" th:object="${form}">
                 <div class="form-body">
                     <div class="section">
                         <div class="section-body">
@@ -26,14 +25,8 @@
 
                             <div class="section-item" th:if="${contactTypes}">
                                 <label class="title">Account</label>
-                                <select th:field="*{accountId}">
-                                    <option value="-1"></option>
-                                    <option th:if="${contact.account}"
-                                            th:text="${contact.account.name}"
-                                            th:value="${contact.account?.id}"
-                                    >CONTACT
-                                    </option>
-                                </select>
+                                <select th:field="*{accountId}"></select>
+                                <script th:replace="~{__components/account :: account-selector('accountId')}"></script>
                             </div>
                             <div class="section-item" th:if="${contactTypes}">
                                 <label class="title">Contact Type <span class="required">*</span></label>

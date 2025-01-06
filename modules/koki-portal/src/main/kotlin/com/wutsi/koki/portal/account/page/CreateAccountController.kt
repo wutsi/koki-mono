@@ -92,7 +92,8 @@ class CreateAccountController(
                 )
             )
 
-            model.addAttribute("account", AccountModel(id = accountId, name = form.name))
+            val account = AccountModel(id = accountId, name = form.name)
+            model.addAttribute("account", account)
             model.addAttribute(
                 "page",
                 PageModel(

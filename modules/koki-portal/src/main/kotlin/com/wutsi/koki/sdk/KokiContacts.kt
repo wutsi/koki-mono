@@ -1,73 +1,68 @@
 package com.wutsi.koki.sdk
 
-import com.wutsi.koki.account.dto.CreateAccountRequest
-import com.wutsi.koki.account.dto.CreateAccountResponse
-import com.wutsi.koki.account.dto.GetAccountResponse
-import com.wutsi.koki.account.dto.GetAccountTypeResponse
-import com.wutsi.koki.account.dto.GetAttributeResponse
-import com.wutsi.koki.account.dto.SearchAccountResponse
-import com.wutsi.koki.account.dto.SearchAccountTypeResponse
-import com.wutsi.koki.account.dto.SearchAttributeResponse
-import com.wutsi.koki.account.dto.UpdateAccountRequest
+import com.wutsi.koki.contact.dto.CreateContactRequest
+import com.wutsi.koki.contact.dto.CreateContactResponse
+import com.wutsi.koki.contact.dto.GetContactResponse
+import com.wutsi.koki.contact.dto.GetContactTypeResponse
+import com.wutsi.koki.contact.dto.SearchContactResponse
+import com.wutsi.koki.contact.dto.SearchContactTypeResponse
+import com.wutsi.koki.contact.dto.UpdateContactRequest
 import org.springframework.web.client.RestTemplate
 
-class KokiAccounts(
+class KokiContacts(
     private val urlBuilder: URLBuilder,
     private val rest: RestTemplate,
 ) {
     companion object {
-        private const val ACCOUNT_PATH_PREFIX = "/v1/accounts"
-        private const val ACCOUNT_TYPE_PATH_PREFIX = "/v1/account-types"
-        private const val ATTRIBUTE_PATH_PREFIX = "/v1/attributes"
+        private const val CONTACT_PATH_PREFIX = "/v1/contacts"
+        private const val ACCOUNT_TYPE_PATH_PREFIX = "/v1/contact-types"
     }
 
-    fun create(request: CreateAccountRequest): CreateAccountResponse {
-        val url = urlBuilder.build(ACCOUNT_PATH_PREFIX)
-        return rest.postForEntity(url, request, CreateAccountResponse::class.java).body
+    fun create(request: CreateContactRequest): CreateContactResponse {
+        val url = urlBuilder.build(CONTACT_PATH_PREFIX)
+        return rest.postForEntity(url, request, CreateContactResponse::class.java).body
     }
 
-    fun update(id: Long, request: UpdateAccountRequest) {
-        val url = urlBuilder.build("$ACCOUNT_PATH_PREFIX/$id")
-        rest.postForEntity(url, request, CreateAccountResponse::class.java)
+    fun update(id: Long, request: UpdateContactRequest) {
+        val url = urlBuilder.build("$CONTACT_PATH_PREFIX/$id")
+        rest.postForEntity(url, request, CreateContactResponse::class.java)
     }
 
     fun delete(id: Long) {
-        val url = urlBuilder.build("$ACCOUNT_PATH_PREFIX/$id")
+        val url = urlBuilder.build("$CONTACT_PATH_PREFIX/$id")
         rest.delete(url)
     }
 
-    fun account(id: Long): GetAccountResponse {
-        val url = urlBuilder.build("$ACCOUNT_PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetAccountResponse::class.java).body
+    fun contact(id: Long): GetContactResponse {
+        val url = urlBuilder.build("$CONTACT_PATH_PREFIX/$id")
+        return rest.getForEntity(url, GetContactResponse::class.java).body
     }
 
-    fun accounts(
+    fun contacts(
         keyword: String?,
         ids: List<Long>,
-        accountTypeIds: List<Long>,
-        managedByIds: List<Long>,
-        createdByIds: List<Long>,
+        contactTypeIds: List<Long>,
+        accountIds: List<Long>,
         limit: Int,
         offset: Int,
-    ): SearchAccountResponse {
+    ): SearchContactResponse {
         val url = urlBuilder.build(
-            ACCOUNT_PATH_PREFIX,
+            CONTACT_PATH_PREFIX,
             mapOf(
                 "q" to keyword,
                 "id" to ids,
-                "account-type-id" to accountTypeIds,
-                "managed-by-id" to managedByIds,
-                "created-by-id" to createdByIds,
+                "contact-type-id" to contactTypeIds,
+                "account-id" to accountIds,
                 "limit" to limit,
                 "offset" to offset,
             )
         )
-        return rest.getForEntity(url, SearchAccountResponse::class.java).body
+        return rest.getForEntity(url, SearchContactResponse::class.java).body
     }
 
-    fun type(id: Long): GetAccountTypeResponse {
+    fun type(id: Long): GetContactTypeResponse {
         val url = urlBuilder.build("$ACCOUNT_TYPE_PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetAccountTypeResponse::class.java).body
+        return rest.getForEntity(url, GetContactTypeResponse::class.java).body
     }
 
     fun types(
@@ -76,7 +71,7 @@ class KokiAccounts(
         active: Boolean?,
         limit: Int,
         offset: Int,
-    ): SearchAccountTypeResponse {
+    ): SearchContactTypeResponse {
         val url = urlBuilder.build(
             ACCOUNT_TYPE_PATH_PREFIX,
             mapOf(
@@ -87,31 +82,6 @@ class KokiAccounts(
                 "offset" to offset,
             )
         )
-        return rest.getForEntity(url, SearchAccountTypeResponse::class.java).body
-    }
-
-    fun attribute(id: Long): GetAttributeResponse {
-        val url = urlBuilder.build("$ATTRIBUTE_PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetAttributeResponse::class.java).body
-    }
-
-    fun attributes(
-        ids: List<Long>,
-        names: List<String>,
-        active: Boolean?,
-        limit: Int,
-        offset: Int,
-    ): SearchAttributeResponse {
-        val url = urlBuilder.build(
-            ATTRIBUTE_PATH_PREFIX,
-            mapOf(
-                "id" to ids,
-                "name" to names,
-                "active" to active,
-                "limit" to limit,
-                "offset" to offset,
-            )
-        )
-        return rest.getForEntity(url, SearchAttributeResponse::class.java).body
+        return rest.getForEntity(url, SearchContactTypeResponse::class.java).body
     }
 }
