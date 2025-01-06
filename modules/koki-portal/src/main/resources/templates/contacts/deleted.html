@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('accounts')}"></div>
+
+<div class="container">
+    <h1>
+        <img align="absmiddle" height="48" src="/image/account.png" width="48"/>
+        <span th:text="${account.name}">NAME</span>
+    </h1>
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/account :: account-breadcrumb(${account})}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div class="alert alert-success">
+                        The account has been successfully deleted.
+                    </div>
+                    <div class="text-center">
+                        <a class="btn btn-secondary btn-ok" href="/accounts">Back to Accounts</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

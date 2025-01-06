@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="widget" th:fragment="account-breadcrumb(account)">
+    <div class="widget-body">
+        <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item" th:if="${account}"><a href="/accounts">Accounts</a></li>
+                <li class="breadcrumb-item active" th:if="${account}" th:text="${account.name}">ACCOUNT</li>
+                <li class="breadcrumb-item active" th:if="!${account}">Accounts</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<tr class="account" th:fragment="columns(account)" th:remove="tag">
+    <td>
+        <a th:href="'/accounts/' + ${account.id}" th:text="${account.name}">NAME</a>
+    </td>
+    <td th:text="${account.accountType?.title}">ACCOUNT TYPE</td>
+    <td th:text="${account.phone}">PHONE</td>
+    <td th:text="${account.mobile}">MOBILE</td>
+    <td th:text="${account.email}">EMAIL</td>
+    <td th:text="${account.modifiedAtText}">MODIFIED</td>
+    <td th:text="${account.managedBy?.displayName}">MANAGER</td>
+    <td class="toolbar">
+        <a class="btn-view" th:href="'/accounts/' + ${account.id}">View</a>
+        <a class="btn-edit" th:href="'/accounts/' + ${account.id} + '/edit'">Edit</a>
+    </td>
+</tr>
+
+<tr id="account-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
+    <td class="text-center" colspan="8">
+        <a href="javascript: koki_load_more('account-load-more')" th:data-url="${moreUrl}">Load more...</a>
+    </td>
+</tr>
+
+</body>

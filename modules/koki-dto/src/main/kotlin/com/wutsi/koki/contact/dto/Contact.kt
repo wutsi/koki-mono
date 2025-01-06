@@ -6,7 +6,7 @@ data class Contact(
     val id: Long = -1,
     val accountId: Long? = null,
     val contactTypeId: Long? = null,
-    val salutations: String? = null,
+    val salutation: String? = null,
     val firstName: String = "",
     val lastName: String = "",
     val phone: String? = null,

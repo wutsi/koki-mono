@@ -1,0 +1,133 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('accounts')}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/account :: account-breadcrumb(${account})}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div class="widget-toolbar">
+                        <a class="btn-edit btn btn-secondary"
+                           th:href="'/accounts/' + ${account.id} + '/edit'">Edit</a>
+                        <a class="btn-delete btn btn-danger float-right"
+                           onclick="return confirm('Are you sure you want to delete the account?')"
+                           th:href="'/accounts/' + ${account.id} + '/delete'">Delete</a>
+                    </div>
+
+                    <h1 class="entity-title">
+                        <img align="absmiddle" src="/image/account.png"/>
+                        <span th:text="${account.name}">NAME</span>
+                    </h1>
+                    <div class="flex flex-space-between">
+                        <div class="margin-right" th:if="${account.phone}">
+                            <b>Phone</b><br/>
+                            <span th:text="${account.phone}">PHONE</span>
+                        </div>
+                        <div class="margin-right" th:if="${account.mobile}">
+                            <b>Mobile</b><br/>
+                            <span th:text="${account.mobile}">MOBILE</span>
+                        </div>
+                        <div class="margin-right" th:if="${account.email}">
+                            <b>Email</b><br/>
+                            <span th:text="${account.email}">EMAIL</span>
+                        </div>
+                        <div class="margin-right" th:if="${account.managedBy}">
+                            <b>Account Manager</b><br/>
+                            <span th:text="${account.managedBy.displayName}">ACCOUNT MANAGER</span>
+                        </div>
+                    </div>
+                    <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+                </div>
+            </div>
+
+            <div class="widget">
+                <div class="widget-body">
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-content" aria-selected="true" class="nav-link active"
+                                    data-bs-target="#pills-details" data-bs-toggle="pill" id="pills-details-tab"
+                                    role="tab" type="button">
+                                Details
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-contacts" aria-selected="false" class="nav-link"
+                                    data-bs-target="#pills-contacts" data-bs-toggle="pill" id="pills-contacts-tab"
+                                    role="tab" type="button">
+                                Contacts
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div aria-labelledby="pills-details-tab" class="tab-pane fade show active" id="pills-details"
+                             role="tabpanel">
+                            <table class="table">
+                                <tr th:if="${account.accountType}">
+                                    <td width="20%"><b>Type</b></td>
+                                    <td th:text="${account.accountType?.title}">TYPE</td>
+                                </tr>
+                                <tr th:if="${account.website}">
+                                    <td width="20%"><b>Website</b></td>
+                                    <td>
+                                        <a target="_blank" th:href="${account.website}" th:text="${account.website}">LINK</a>
+                                    </td>
+                                </tr>
+                                <tr th:if="${account.language}">
+                                    <td width="20%"><b>Language</b></td>
+                                    <td th:text="${account.languageText}">LANGUAGE</td>
+                                </tr>
+                                <tr th:if="${account.description}">
+                                    <td width="20%"><b>Description</b></td>
+                                    <td th:text="${account.description}">DESCRIPTION</td>
+                                </tr>
+                                <tr th:each="attr : ${account.attributes}">
+                                    <td width="20%"><b th:text="${attr.attribute.label}">NAME</b></td>
+                                    <td th:text="${attr.value}">DESCRIPTION</td>
+                                </tr>
+                                <tr>
+                                    <td width="20%"><b>Created</b></td>
+                                    <td th:text="${account.createdAtText}">CREATED</td>
+                                </tr>
+                                <tr th:if="${account.createdBy}">
+                                    <td width="20%"><b>Created By</b></td>
+                                    <td th:text="${account.createdBy.displayName}">MODIFIED BY</td>
+                                </tr>
+                                <tr>
+                                    <td width="20%"><b>Modified</b></td>
+                                    <td th:text="${account.modifiedAtText}">CREATED</td>
+                                </tr>
+                                <tr th:if="${account.modifiedBy}">
+                                    <td width="20%"><b>Modified By</b></td>
+                                    <td th:text="${account.modifiedBy.displayName}">MODIFIED BY</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div aria-labelledby="pills-contacts-tab" class="tab-pane fade" id="pills-contacts"
+                             role="tabpanel">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div th:replace="~{__components/highlightjs :: prettity('json')}"></div>
+
+</body>
+</html>
