@@ -6,6 +6,7 @@ object ErrorCode {
     val IMPORT_ERROR = "$PREFIX:import-error"
 
     val ACCOUNT_NOT_FOUND: String = "$PREFIX:account:not-found"
+    val ACCOUNT_IN_USE: String = "$PREFIX:account:in-use"
 
     val ACCOUNT_TYPE_NOT_FOUND: String = "$PREFIX:account-type:not-found"
     val ACCOUNT_TYPE_NAME_MISSING: String = "$PREFIX:account-type:name-missing"
