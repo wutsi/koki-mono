@@ -19,7 +19,7 @@ CREATE TABLE T_CONTACT(
 
   tenant_fk               BIGINT NOT NULL,
   contact_type_fk         BIGINT REFERENCES T_CONTACT_TYPE(id),
-  account_fk              BIGINT,
+  account_fk              BIGINT NOT NULL,
   created_by_fk           BIGINT,
   modified_by_fk          BIGINT,
   deleted_by_fk           BIGINT,

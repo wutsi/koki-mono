@@ -1,5 +1,6 @@
 package com.wutsi.koki.account.server.io
 
+import com.wutsi.koki.account.server.domain.AccountTypeEntity
 import com.wutsi.koki.account.server.service.AccountTypeService
 import com.wutsi.koki.common.dto.ImportMessage
 import com.wutsi.koki.common.dto.ImportResponse
@@ -8,7 +9,6 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.BadRequestException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.error.exception.WutsiException
-import com.wutsi.koki.tenant.server.domain.AccountTypeEntity
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVRecord

@@ -1,9 +1,9 @@
-package com.wutsi.koki.account.server.endpoint
+package com.wutsi.koki.contact.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
-import com.wutsi.koki.account.server.dao.AccountTypeRepository
-import com.wutsi.koki.account.server.domain.AccountTypeEntity
 import com.wutsi.koki.common.dto.ImportResponse
+import com.wutsi.koki.contact.server.dao.ContactTypeRepository
+import com.wutsi.koki.contact.server.domain.ContactTypeEntity
 import com.wutsi.koki.error.dto.ErrorCode
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -20,10 +20,10 @@ import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/account/ImportAccountTypeCSVEndpoint.sql"])
-class ImportAccountTypeCSVEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/contact/ImportContactTypeCSVEndpoint.sql"])
+class ImportContactTypeCSVEndpointTest : TenantAwareEndpointTest() {
     @Autowired
-    private lateinit var dao: AccountTypeRepository
+    private lateinit var dao: ContactTypeRepository
 
     private fun upload(body: String): ImportResponse {
         val headers = HttpHeaders()
@@ -43,7 +43,7 @@ class ImportAccountTypeCSVEndpointTest : TenantAwareEndpointTest() {
 
         val requestEntity = HttpEntity<MultiValueMap<String, Any>>(body, headers)
         return rest.exchange(
-            "/v1/account-types/csv",
+            "/v1/contact-types/csv",
             HttpMethod.POST,
             requestEntity,
             ImportResponse::class.java,
@@ -67,28 +67,28 @@ class ImportAccountTypeCSVEndpointTest : TenantAwareEndpointTest() {
         assertEquals(0, response.errors)
         assertTrue(response.errorMessages.isEmpty())
 
-        val roleA = findAccountType("a")
+        val roleA = findContactType("a")
         assertEquals("a", roleA.name)
         assertEquals("RoleA", roleA.title)
         assertEquals(TENANT_ID, roleA.tenantId)
         assertTrue(roleA.active)
         assertNull(roleA.description)
 
-        val roleB = findAccountType("b")
+        val roleB = findContactType("b")
         assertEquals("b", roleB.name)
         assertEquals("RoleB", roleB.title)
         assertEquals(TENANT_ID, roleB.tenantId)
         assertFalse(roleB.active)
         assertEquals("Priority of the ticket", roleB.description)
 
-        val roleC = findAccountType("c")
+        val roleC = findContactType("c")
         assertEquals(TENANT_ID, roleC.tenantId)
         assertEquals("c", roleC.name)
         assertNull(roleC.title)
         assertFalse(roleC.active)
         assertNull(roleC.description)
 
-        val roleNew = findAccountType("new")
+        val roleNew = findContactType("new")
         assertEquals(TENANT_ID, roleNew.tenantId)
         assertEquals("new", roleNew.name)
         assertNull(roleNew.title)
@@ -109,7 +109,7 @@ class ImportAccountTypeCSVEndpointTest : TenantAwareEndpointTest() {
         assertEquals(0, response.added)
         assertEquals(1, response.errors)
         assertFalse(response.errorMessages.isEmpty())
-        assertEquals(ErrorCode.ACCOUNT_TYPE_NAME_MISSING, response.errorMessages[0].code)
+        assertEquals(ErrorCode.CONTACT_TYPE_NAME_MISSING, response.errorMessages[0].code)
     }
 
     @Test
@@ -130,7 +130,7 @@ class ImportAccountTypeCSVEndpointTest : TenantAwareEndpointTest() {
         assertEquals(ErrorCode.IMPORT_ERROR, response.errorMessages[0].code)
     }
 
-    private fun findAccountType(name: String): AccountTypeEntity {
+    private fun findContactType(name: String): ContactTypeEntity {
         return dao.findByNameIgnoreCaseAndTenantId(name, getTenantId())!!
     }
 }

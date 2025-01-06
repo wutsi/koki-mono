@@ -72,25 +72,3 @@ CREATE TABLE T_ACCOUNT_ATTRIBUTE(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
-CREATE TABLE T_CONTACT(
-  id                      BIGINT NOT NULL AUTO_INCREMENT,
-
-  tenant_fk               BIGINT NOT NULL,
-  account_fk              BIGINT NOT NULL REFERENCES T_ACCOUNT(id),
-  created_by_fk           BIGINT,
-
-  first_name              VARCHAR(100),
-  last_name               VARCHAR(100),
-  title                   VARCHAR(100),
-  sex                     INT NOT NULL DEFAULT 0,
-  phone                   VARCHAR(30),
-  mobile                  VARCHAR(30),
-  email                   VARCHAR(255),
-  deleted                 BOOLEAN NOT NULL DEFAULT false,
-  created_at              DATETIME DEFAULT NOW(),
-  modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
-  deleted_at              DATETIME,
-
-  PRIMARY KEY(id)
-) ENGINE = InnoDB;
-

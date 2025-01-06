@@ -5,15 +5,24 @@
 - [x] Attributes API
 - [x] Account API
 - [x] Account UI
+- [] Add address to Account
+- [] Settings: Import Accounts from CSV
 - [] Settings: Import Attributes from CSV
 - [] Settings: Import Account Types from CSV
-- [] Account/Contact addresses
 
 ## Contact
 
-- [] Contact API
+- [-] Contact API
 - [] Contact UI
+- [] Add address to Contact
+- [] Settings: Import Contact from CSV
 - [] Settings: Import Contact Types from CSV
+
+## Product
+
+- [] Product API
+- [] Product Pricing API
+- [] Product UI
 
 ## Files
 

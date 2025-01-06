@@ -1,4 +1,4 @@
-package com.wutsi.koki.tenant.server.domain
+package com.wutsi.koki.account.server.domain
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
