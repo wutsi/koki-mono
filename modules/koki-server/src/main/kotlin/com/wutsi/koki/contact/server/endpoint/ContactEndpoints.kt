@@ -5,6 +5,8 @@ import com.wutsi.koki.contact.dto.CreateContactResponse
 import com.wutsi.koki.contact.dto.GetContactResponse
 import com.wutsi.koki.contact.dto.SearchContactResponse
 import com.wutsi.koki.contact.dto.UpdateContactRequest
+import com.wutsi.koki.contact.server.mapper.ContactMapper
+import com.wutsi.koki.contact.server.service.ContactService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -18,13 +20,17 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/v1/contacts")
-class ContactEndpoints() {
+class ContactEndpoints(
+    private val service: ContactService,
+    private val mapper: ContactMapper,
+) {
     @PostMapping
     fun create(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @Valid @RequestBody request: CreateContactRequest,
     ): CreateContactResponse {
-        TODO()
+        val contact = service.create(request, tenantId)
+        return CreateContactResponse(contact.id!!)
     }
 
     @PostMapping("/{id}")
@@ -33,7 +39,7 @@ class ContactEndpoints() {
         @PathVariable id: Long,
         @Valid @RequestBody request: UpdateContactRequest,
     ) {
-        TODO()
+        service.update(id, request, tenantId)
     }
 
     @DeleteMapping("/{id}")
@@ -41,7 +47,7 @@ class ContactEndpoints() {
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
     ) {
-        TODO()
+        service.delete(id, tenantId)
     }
 
     @GetMapping("/{id}")
@@ -49,7 +55,10 @@ class ContactEndpoints() {
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
     ): GetContactResponse {
-        TODO()
+        val contact = service.get(id, tenantId)
+        return GetContactResponse(
+            contact = mapper.toContact(contact)
+        )
     }
 
     @GetMapping
@@ -58,9 +67,21 @@ class ContactEndpoints() {
         @RequestParam(required = false, name = "q") keyword: String? = null,
         @RequestParam(required = false, name = "id") ids: List<Long> = emptyList(),
         @RequestParam(required = false, name = "contact-type-id") contactTypeIds: List<Long> = emptyList(),
+        @RequestParam(required = false, name = "account-id") accountIds: List<Long> = emptyList(),
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0
     ): SearchContactResponse {
-        TODO()
+        val contacts = service.search(
+            tenantId = tenantId,
+            keyword = keyword,
+            ids = ids,
+            contactTypeIds = contactTypeIds,
+            accountIds = accountIds,
+            limit = limit,
+            offset = offset
+        )
+        return SearchContactResponse(
+            contacts = contacts.map { contact -> mapper.toContactSummary(contact) }
+        )
     }
 }

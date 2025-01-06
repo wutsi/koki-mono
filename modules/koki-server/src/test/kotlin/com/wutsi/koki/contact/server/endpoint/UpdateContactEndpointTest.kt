@@ -1,10 +1,11 @@
 package com.wutsi.koki.contact.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.contact.dto.CreateContactRequest
-import com.wutsi.koki.contact.dto.CreateContactResponse
 import com.wutsi.koki.contact.dto.Gender
+import com.wutsi.koki.contact.dto.UpdateContactRequest
 import com.wutsi.koki.contact.server.dao.ContactRepository
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -13,12 +14,12 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/contact/CreateContactEndpoint.sql"])
-class CreateContactEndpointTest : AuthorizationAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/contact/UpdateContactEndpoint.sql"])
+class UpdateContactEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var dao: ContactRepository
 
-    private val request = CreateContactRequest(
+    private val request = UpdateContactRequest(
         contactTypeId = 100L,
         accountId = 1000L,
         salutations = "Mr",
@@ -33,12 +34,12 @@ class CreateContactEndpointTest : AuthorizationAwareEndpointTest() {
     )
 
     @Test
-    fun create() {
-        val response = rest.postForEntity("/v1/contacts", request, CreateContactResponse::class.java)
+    fun update() {
+        val response = rest.postForEntity("/v1/contacts/100", request, UpdateContactRequest::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val contactId = response.body!!.contactId
+        val contactId = 100L
         val contact = dao.findById(contactId).get()
         assertEquals(request.contactTypeId, contact.contactTypeId)
         assertEquals(request.accountId, contact.accountId)
@@ -51,9 +52,32 @@ class CreateContactEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.profession, contact.profession)
         assertEquals(request.employer, contact.employer)
         assertEquals(request.gender, contact.gender)
-        assertEquals(USER_ID, contact.createdById)
         assertEquals(USER_ID, contact.modifiedById)
         assertFalse(contact.deleted)
         assertNull(contact.deletedById)
+    }
+
+    @Test
+    fun deleted() {
+        val response = rest.postForEntity("/v1/contacts/199", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertEquals(ErrorCode.CONTACT_NOT_FOUND, response.body?.error?.code)
+    }
+
+    @Test
+    fun `not found`() {
+        val response = rest.postForEntity("/v1/contacts/199", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertEquals(ErrorCode.CONTACT_NOT_FOUND, response.body?.error?.code)
+    }
+
+    @Test
+    fun `another tenant`() {
+        val response = rest.postForEntity("/v1/contacts/200", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertEquals(ErrorCode.CONTACT_NOT_FOUND, response.body?.error?.code)
     }
 }
