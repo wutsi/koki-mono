@@ -138,7 +138,7 @@ class AccountService(
     ): List<AccountEntity> {
         val jql = StringBuilder("SELECT A FROM AccountEntity A WHERE A.deleted=false AND A.tenantId = :tenantId")
         if (keyword != null) {
-            jql.append(" AND ((UPPER(A.name) LIKE :keyword) OR (UPPER(A.email) LIKE :keyword)")
+            jql.append(" AND ((UPPER(A.name) LIKE :keyword) OR (UPPER(A.email) LIKE :keyword))")
         }
         if (ids.isNotEmpty()) {
             jql.append(" AND A.id IN :ids")
