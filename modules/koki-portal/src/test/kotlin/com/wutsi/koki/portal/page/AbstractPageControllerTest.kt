@@ -258,6 +258,7 @@ abstract class AbstractPageControllerTest {
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
+            anyOrNull(),
         )
         doReturn(GetAccountResponse(account)).whenever(kokiAccounts).account(any())
         doReturn(CreateAccountResponse(NEW_ACCOUNT_ID)).whenever(kokiAccounts).create(any())

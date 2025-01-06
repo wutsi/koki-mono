@@ -130,6 +130,7 @@ class AccountService(
         tenantId: Long,
         keyword: String? = null,
         ids: List<Long> = emptyList(),
+        accountTypeIds: List<Long> = emptyList(),
         managedByIds: List<Long> = emptyList(),
         createdByIds: List<Long> = emptyList(),
         limit: Int = 20,
@@ -148,6 +149,9 @@ class AccountService(
         if (createdByIds.isNotEmpty()) {
             jql.append(" AND A.createdById IN :createdByIds")
         }
+        if (accountTypeIds.isNotEmpty()) {
+            jql.append(" AND A.accountTypeId IN :accountTypeIds")
+        }
         jql.append(" ORDER BY A.name")
 
         val query = em.createQuery(jql.toString(), AccountEntity::class.java)
@@ -163,6 +167,9 @@ class AccountService(
         }
         if (createdByIds.isNotEmpty()) {
             query.setParameter("createdByIds", createdByIds)
+        }
+        if (accountTypeIds.isNotEmpty()) {
+            query.setParameter("accountTypeIds", accountTypeIds)
         }
 
         query.firstResult = offset
