@@ -13,8 +13,7 @@ class ListFileWidgetControllerTest : AbstractPageControllerTest() {
     fun show() {
         navigateTo("/files/widgets/list?workflow-instance-id=111")
 
-        assertElementPresent(".files-widget")
-        assertElementCount(".files-widget table tr", files.size + 1)
+        assertElementCount(".widget-files tr.file", files.size)
         assertElementNotPresent(".empty-message")
     }
 
@@ -27,12 +26,13 @@ class ListFileWidgetControllerTest : AbstractPageControllerTest() {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
             )
 
         navigateTo("/files/widgets/list")
 
-        assertElementPresent(".files-widget")
-        assertElementNotPresent(".files-widget table")
-        assertElementPresent(".files-widget .empty-message")
+        assertElementNotPresent(".widget-files tr.file")
+        assertElementPresent(".widget-files .empty-message")
     }
 }

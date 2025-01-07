@@ -69,9 +69,10 @@ class WorkflowControllerTest : AbstractPageControllerTest() {
     fun `load more files`() {
         var entries = mutableListOf<FileSummary>()
         repeat(20) {
+            var seed = System.currentTimeMillis()
             entries.add(
                 files[(Math.random() * files.size).toInt()].copy(
-                    id = UUID.randomUUID().toString(),
+                    id = seed++,
                     contentLength = (Math.random() * 10 * 1024 * 1024).toLong(),
                 )
             )
@@ -80,6 +81,8 @@ class WorkflowControllerTest : AbstractPageControllerTest() {
             .doReturn(SearchFileResponse(files))
             .whenever(kokiFiles)
             .files(
+                anyOrNull(),
+                anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),

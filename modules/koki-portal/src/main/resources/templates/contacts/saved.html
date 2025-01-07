@@ -23,7 +23,9 @@
                         The contact has been successfully saved.
                     </div>
                     <div class="text-center">
-                        <a class="btn btn-secondary btn-create margin-right" href="/contacts/create">
+                        <a class="btn btn-secondary btn-create margin-right"
+                           th:href="${createUrl}"
+                           th:if="${createUrl}">
                             Create Another Contact
                         </a>
                         <a class="btn btn-secondary btn-ok" href="/contacts">Back to Contacts</a>

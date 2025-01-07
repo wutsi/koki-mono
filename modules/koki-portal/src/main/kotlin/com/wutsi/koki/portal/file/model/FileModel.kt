@@ -1,5 +1,6 @@
-package com.wutsi.koki.portal.model
+package com.wutsi.koki.portal.file.model
 
+import com.wutsi.koki.portal.model.UserModel
 import java.net.URLEncoder
 import java.util.Date
 

@@ -20,6 +20,7 @@ class ListContactWidgetController(
         @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
+        model.addAttribute("accountId", accountId)
         more(accountId, showAccount, limit, offset, model)
         return "contacts/widgets/list"
     }

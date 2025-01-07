@@ -70,6 +70,8 @@ object PageName {
     const val TASK = "page.task"
     const val TASK_COMPLETED = "page.task.completed"
 
+    const val UPLOAD = "upload"
+
     const val WORKFLOW = "page.workflow"
     const val WORKFLOW_ACTIVITY = "page.activity"
     const val WORKFLOW_ACTIVITY_COMPLETED = "page.activity.completed"

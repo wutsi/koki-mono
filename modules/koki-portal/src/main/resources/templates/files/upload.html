@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8 offset-md-2">
+            <div class="widget">
+                <div class="widget-body">
+                    <h1>Upload Files</h1>
+                    <div class="text-center">
+                        <button class="btn-upload btn btn-primary margin-top" onclick="start_upload()">
+                            Upload File
+                        </button>
+                        <input id="file-upload" style="display:none" th:data-upload-url="${uploadUrl}" type="file"/>
+                    </div>
+                    <div id="file-counter">No file uploaded</div>
+                    <div id="file-container"></div>
+                </div>
+            </div>
+            <div class="widget" th:if="${returnUrl}">
+                <div class="widget-body">
+                    <a class="btn btn-secondary" th:href="${returnUrl}">Close</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let uploaded = 0;
+
+    function start_upload() {
+        document.getElementById("file-upload").click();
+    }
+
+    document.getElementById("file-upload").addEventListener('change', async () => {
+        const containerDiv = document.getElementById("file-container");
+        const fileDiv = document.getElementById("file-upload");
+        const counterDiv = document.getElementById("file-counter");
+
+        let uploadUrl = fileDiv.getAttribute("data-upload-url");
+        console.log('upload-url', uploadUrl);
+
+        const data = new FormData();
+        data.append('file', fileDiv.files[0]);
+        const response = await fetch(uploadUrl, {
+            method: 'POST',
+            body: data
+        });
+
+        if (response.ok || response.status === 0) {
+            const json = await response.json();
+            // console.log('JSON', json);
+
+            const re = /(?:\.([^.]+))?$/;
+            const ext = re.exec(json.name)[1];
+
+            uploaded++;
+            counterDiv.innerText = uploaded === 1 ? '1 file uploaded' : uploaded + ' files uploaded';
+            containerDiv.innerHTML = containerDiv.innerHTML +
+                "<DIV class='padding-small margin-top border'>" +
+                "  <SPAN class='fiv-viv fiv-icon-" + ext + "'></SPAN>&nbsp;" +
+                "  <SPAN>" + json.name + "</SPAN>" +
+                "</DIV>"
+        } else {
+            containerDiv.innerHTML = containerDiv.innerHTML +
+                "<DIV class='padding-small margin-top border'>" +
+                "  <SPAN class='error'>" + FAILED + "</SPAN>&nbsp;" +
+                "  <SPAN>" + json.name + "</SPAN>" +
+                "</DIV>"
+        }
+    });
+
+</script>
+</body>
+
+
+</html>

@@ -1,6 +1,10 @@
 package com.wutsi.koki.portal.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.koki.portal.rest.AuthorizationInterceptor
+import com.wutsi.koki.portal.rest.DebugRestInterceptor
+import com.wutsi.koki.portal.rest.TenantRestInterceptor
+import com.wutsi.koki.sdk.AccessTokenProvider
 import com.wutsi.koki.sdk.KokiAccounts
 import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.sdk.KokiContacts
@@ -17,16 +21,23 @@ import com.wutsi.koki.sdk.KokiWorkflows
 import com.wutsi.koki.sdk.TenantProvider
 import com.wutsi.koki.sdk.URLBuilder
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.client.RestTemplate
+import java.time.Duration
 
 @Configuration
 class KokiSDKConfiguration(
-    private val rest: RestTemplate,
     private val tenantProvider: TenantProvider,
+    private val accessTokenProvider: AccessTokenProvider,
     private val objectMapper: ObjectMapper,
+    private val tenantRestInterceptor: TenantRestInterceptor,
+    private val authorizationInterceptor: AuthorizationInterceptor,
+    private val debugRestInterceptor: DebugRestInterceptor,
 
+    @Value("\${koki.rest.connection-timeout}") private val connectionTimeout: Long,
+    @Value("\${koki.rest.read-timeout}") private val readTimeout: Long,
     @Value("\${koki.sdk.base-url}") private val baseUrl: String,
 ) {
     @Bean
@@ -36,66 +47,88 @@ class KokiSDKConfiguration(
 
     @Bean
     fun kokiAccounts(): KokiAccounts {
-        return KokiAccounts(urlBuilder(), rest)
+        return KokiAccounts(urlBuilder(), rest())
     }
 
     @Bean
     fun kokiAuthentication(): KokiAuthentication {
-        return KokiAuthentication(urlBuilder(), rest)
+        return KokiAuthentication(urlBuilder(), rest())
     }
 
     @Bean
     fun kokiContact(): KokiContacts {
-        return KokiContacts(urlBuilder(), rest)
+        return KokiContacts(urlBuilder(), rest())
     }
 
     @Bean
     fun kokiFile(): KokiFiles {
-        return KokiFiles(urlBuilder(), rest)
+        return KokiFiles(urlBuilder(), rest(), tenantProvider, accessTokenProvider)
     }
 
     @Bean
     fun kokiForms(): KokiForms {
-        return KokiForms(urlBuilder(), rest, tenantProvider)
+        return KokiForms(urlBuilder(), rest(), tenantProvider)
     }
 
     @Bean
     fun kokiLogs(): KokiLogs {
-        return KokiLogs(urlBuilder(), rest)
+        return KokiLogs(urlBuilder(), rest())
     }
 
     @Bean
     fun kokiMessages(): KokiMessages {
-        return KokiMessages(urlBuilder(), rest)
+        return KokiMessages(urlBuilder(), rest())
     }
 
     @Bean
     fun kokiScripts(): KokiScripts {
-        return KokiScripts(urlBuilder(), rest)
+        return KokiScripts(urlBuilder(), rest())
     }
 
     @Bean
     fun kokiServices(): KokiServices {
-        return KokiServices(urlBuilder(), rest)
+        return KokiServices(urlBuilder(), rest())
     }
 
     @Bean
     fun kokiTenant(): KokiTenants {
-        return KokiTenants(urlBuilder(), rest)
+        return KokiTenants(urlBuilder(), restWithoutTenantHeader())
     }
 
     @Bean
     fun kokiUser(): KokiUsers {
-        return KokiUsers(urlBuilder(), rest)
+        return KokiUsers(urlBuilder(), rest())
     }
 
     @Bean
     fun kokiWorkflow(): KokiWorkflows {
-        return KokiWorkflows(urlBuilder(), rest, tenantProvider, objectMapper)
+        return KokiWorkflows(urlBuilder(), rest(), tenantProvider, objectMapper)
     }
 
     @Bean
     fun kokiWorkflowInstance(): KokiWorkflowInstances {
-        return KokiWorkflowInstances(urlBuilder(), rest, tenantProvider)
+        return KokiWorkflowInstances(urlBuilder(), rest(), tenantProvider)
     }
+
+    @Bean
+    fun rest(): RestTemplate =
+        RestTemplateBuilder()
+            .connectTimeout(Duration.ofMillis(connectionTimeout))
+            .readTimeout(Duration.ofMillis(readTimeout))
+            .interceptors(
+                debugRestInterceptor,
+                tenantRestInterceptor,
+                authorizationInterceptor,
+            )
+            .build()
+
+    private fun restWithoutTenantHeader(): RestTemplate =
+        RestTemplateBuilder()
+            .connectTimeout(Duration.ofMillis(connectionTimeout))
+            .readTimeout(Duration.ofMillis(readTimeout))
+            .interceptors(
+                debugRestInterceptor,
+                authorizationInterceptor,
+            )
+            .build()
 }

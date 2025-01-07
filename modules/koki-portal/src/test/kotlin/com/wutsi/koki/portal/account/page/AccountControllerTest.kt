@@ -8,6 +8,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.AccountFixtures.account
 import com.wutsi.koki.ContactFixtures
+import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import kotlin.test.Test
@@ -85,5 +86,16 @@ class AccountControllerTest : AbstractPageControllerTest() {
 
         click("#pills-contacts-tab", 1000)
         assertElementCount(".widget-contacts tr.contact", ContactFixtures.contacts.size)
+
+        click(".btn-add-contact")
+        assertCurrentPageIs(PageName.CONTACT_CREATE)
+    }
+
+    @Test
+    fun files() {
+        navigateTo("/accounts/${account.id}")
+
+        click("#pills-files-tab", 1000)
+        assertElementCount(".widget-files tr.file", FileFixtures.files.size)
     }
 }
