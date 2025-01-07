@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.FileFixtures.files
 import com.wutsi.koki.file.dto.SearchFileResponse
+import com.wutsi.koki.portal.page.PageName
 import kotlin.test.Test
 
 class ListFileWidgetControllerTest : AbstractPageControllerTest() {
@@ -13,8 +14,7 @@ class ListFileWidgetControllerTest : AbstractPageControllerTest() {
     fun show() {
         navigateTo("/files/widgets/list?workflow-instance-id=111")
 
-        assertElementPresent(".files-widget")
-        assertElementCount(".files-widget table tr", files.size + 1)
+        assertElementCount(".widget-files tr.file", files.size)
         assertElementNotPresent(".empty-message")
     }
 
@@ -27,12 +27,21 @@ class ListFileWidgetControllerTest : AbstractPageControllerTest() {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
             )
 
         navigateTo("/files/widgets/list")
 
-        assertElementPresent(".files-widget")
-        assertElementNotPresent(".files-widget table")
-        assertElementPresent(".files-widget .empty-message")
+        assertElementNotPresent(".widget-files tr.file")
+        assertElementPresent(".widget-files .empty-message")
+    }
+
+    @Test
+    fun upload() {
+        navigateTo("/files/widgets/list?workflow-instance-id=111")
+        click(".btn-upload")
+
+        assertCurrentPageIs(PageName.UPLOAD)
     }
 }

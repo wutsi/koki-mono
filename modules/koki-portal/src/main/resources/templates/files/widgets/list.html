@@ -1,15 +1,19 @@
-<div class="widget files-widget">
+<div class="widget widget-files">
     <div class="widget-header">
         <h3 class="widget-title">Files</h3>
     </div>
     <div class="widget-body">
+        <div class="margin-bottom">
+            <a class="btn-upload btn btn-secondary btn-sm" th:href="${uploadUrl}">Upload Files</a>
+        </div>
         <table class="table table-striped" th:if="${files}">
             <tr>
                 <th width="1%"></th>
                 <th>Name</th>
                 <th>Size</th>
                 <th>Date</th>
-                <th>Created by</th>
+                <th>Uploaded by</th>
+                <th></th>
             </tr>
 
             <tr class="file" th:each="file : ${files}">

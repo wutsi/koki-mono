@@ -2,6 +2,7 @@ package com.wutsi.koki.file.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.file.dto.UploadFileResponse
+import com.wutsi.koki.file.server.dao.FileOwnerRepository
 import com.wutsi.koki.file.server.dao.FileRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.ClassPathResource
@@ -19,6 +20,9 @@ import kotlin.test.assertEquals
 class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var dao: FileRepository
+
+    @Autowired
+    private lateinit var ownerDao: FileOwnerRepository
 
     @Test
     fun upload() {
@@ -42,6 +46,33 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("111", file.workflowInstanceId)
         assertEquals("222", file.formId)
         assertEquals(USER_ID, file.createdById)
+    }
+
+    @Test
+    fun `upload and link`() {
+        val entity = createEntity()
+        val response = rest.exchange(
+            "/v1/files/upload?tenant-id=1&owner-id=111&owner-type=account",
+            HttpMethod.POST,
+            entity,
+            UploadFileResponse::class.java,
+            "",
+        )
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+        assertEquals(listOf("*"), response.headers.get("Access-Control-Allow-Origin"))
+
+        val fileId = response.body!!.id
+        val file = dao.findById(fileId).get()
+        assertEquals("file.txt", file.name)
+        assertEquals("text/plain", file.contentType)
+        assertEquals(12, file.contentLength)
+        assertEquals(USER_ID, file.createdById)
+
+        val fileOwners = ownerDao.findByFileId(fileId)
+        assertEquals(1, fileOwners.size)
+        assertEquals(111L, fileOwners[0].ownerId)
+        assertEquals("ACCOUNT", fileOwners[0].ownerType)
     }
 
     @Test

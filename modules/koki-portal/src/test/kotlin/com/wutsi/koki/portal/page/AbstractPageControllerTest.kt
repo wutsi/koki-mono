@@ -221,8 +221,8 @@ abstract class AbstractPageControllerTest {
         setupTenantModule()
         setupAccountModule()
         setupContactModule()
+        setupFileModule()
 
-        setupFiles()
         setupForms()
         setupLogs()
         setupScripts()
@@ -322,10 +322,20 @@ abstract class AbstractPageControllerTest {
         doReturn(principal).whenever(jwtDecoder).decode(any())
     }
 
-    private fun setupFiles() {
+    private fun setupFileModule() {
         doReturn(SearchFileResponse(files)).whenever(kokiFiles)
             .files(
                 anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
+
+        doReturn("/v1/files/upload").whenever(kokiFiles)
+            .uploadUrl(
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),

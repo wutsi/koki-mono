@@ -154,7 +154,9 @@
                              th:data-url="'/contacts/widgets/list?show-account=false&account-id=' + ${account.id}">
                         </div>
 
-                        <div aria-labelledby="pills-files-tab" class="tab-pane fade" id="pills-files" role="tabpanel">
+                        <div th:with="returnUrl=@{'/accounts/' + ${account.id} + '?tab=files'}">
+                        <div aria-labelledby="pills-files-tab" class="tab-pane fade" id="pills-files" role="tabpanel"
+                             th:data-url="'/files/widgets/list?owner-id=' + ${account.id} + '&owner-type=ACCOUNT&return-url=' + ${returnUrl}">
                         </div>
                     </div>
                 </div>

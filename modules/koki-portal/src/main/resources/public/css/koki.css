@@ -16,6 +16,14 @@ h1.entity-title img {
     display: flex;
 }
 
+.background-lightgray {
+    background: #f8f8f8;
+}
+
+.background-white {
+    background: white;
+}
+
 .flex-center {
     align-items: center;
     justify-content: center;
@@ -96,6 +104,10 @@ h1.entity-title img {
 
 .margin {
     margin: 1em;
+}
+
+.margin-2x {
+    margin: 2em;
 }
 
 .margin-none {

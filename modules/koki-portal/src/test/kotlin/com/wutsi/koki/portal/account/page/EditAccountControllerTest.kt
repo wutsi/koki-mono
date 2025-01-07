@@ -61,27 +61,6 @@ class EditAccountControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun `update and create another account`() {
-        navigateTo("/accounts/${account.id}/edit")
-
-        input("#name", "Ray Construction Inc")
-        select("#accountTypeId", 3)
-        select("#managedById", 3)
-        input("#phone", "+5147580000")
-        input("#mobile", "+5147580011")
-        input("#email", "info@ray-construction.com")
-        scrollToMiddle()
-        input("#website", "https://www.ray-construction.com")
-        select("#language", 3)
-        input("#description", "This is the description")
-        scrollToBottom()
-        click("button[type=submit]")
-
-        click(".btn-create")
-        assertCurrentPageIs(PageName.ACCOUNT_CREATE)
-    }
-
-    @Test
     fun cancel() {
         navigateTo("/accounts/${account.id}/edit")
 

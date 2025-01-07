@@ -6,31 +6,19 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import java.util.Date
 
 @Entity
-@Table(name = "T_FILE")
-data class FileEntity(
+@Table(name = "T_FILE_OWNER")
+data class FileOwnerEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    @Column(name = "tenant_fk")
-    val tenantId: Long = -1,
+    @Column(name = "file_fk")
+    val fileId: Long = -1,
 
-    @Column(name = "created_by_fk")
-    var createdById: Long? = null,
+    @Column(name = "owner_fk")
+    val ownerId: Long = -1,
 
-    @Column(name = "deleted_by_fk")
-    var deletedById: Long? = null,
-
-    var workflowInstanceId: String? = null,
-    val formId: String? = null,
-    val name: String = "",
-    val contentType: String = "",
-    val contentLength: Long = -1,
-    val url: String = "",
-    var deleted: Boolean = false,
-    val createdAt: Date = Date(),
-    var deletedAt: Date? = null,
+    val ownerType: String = "",
 )

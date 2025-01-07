@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.mapper
+package com.wutsi.koki.portal.file.mapper
 
 import com.wutsi.koki.file.dto.File
 import com.wutsi.koki.file.dto.FileSummary
@@ -28,8 +28,6 @@ class FileMapper {
             contentLengthText = toFileSizeText(entity.contentLength),
             createdAt = entity.createdAt,
             createdAtText = fmt.format(entity.createdAt),
-            modifiedAt = entity.modifiedAt,
-            modifiedAtText = fmt.format(entity.modifiedAt),
             createdBy = createdBy,
             extension = FilenameUtils.getExtension(entity.name).lowercase(),
         )
@@ -50,8 +48,6 @@ class FileMapper {
             contentLengthText = toFileSizeText(entity.contentLength),
             createdAt = entity.createdAt,
             createdAtText = fmt.format(entity.createdAt),
-            modifiedAt = entity.modifiedAt,
-            modifiedAtText = fmt.format(entity.modifiedAt),
             createdBy = createdBy,
             formId = entity.formId,
             workflowInstanceId = entity.workflowInstanceId,

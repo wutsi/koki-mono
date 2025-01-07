@@ -1,6 +1,6 @@
-package com.wutsi.koki.portal.page.file
+package com.wutsi.koki.portal.file.page
 
-import com.wutsi.koki.portal.service.FileService
+import com.wutsi.koki.portal.file.service.FileService
 import jakarta.servlet.http.HttpServletResponse
 import org.apache.commons.io.IOUtils
 import org.springframework.web.bind.annotation.GetMapping
@@ -11,7 +11,7 @@ import java.net.URL
 
 @RestController
 @RequestMapping
-class FileController(
+class DownloadFileController(
     private val fileService: FileService,
     private val response: HttpServletResponse,
 ) {

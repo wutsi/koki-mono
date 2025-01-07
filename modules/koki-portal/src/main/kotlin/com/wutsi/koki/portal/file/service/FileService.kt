@@ -1,12 +1,10 @@
-package com.wutsi.koki.portal.service
+package com.wutsi.koki.portal.file.service
 
-import com.wutsi.koki.file.dto.CreateFileRequest
-import com.wutsi.koki.portal.mapper.FileMapper
+import com.wutsi.koki.portal.file.mapper.FileMapper
 import com.wutsi.koki.portal.model.FileModel
+import com.wutsi.koki.portal.service.UserService
 import com.wutsi.koki.sdk.KokiFiles
 import org.springframework.stereotype.Service
-import org.springframework.web.multipart.MultipartFile
-import java.net.URL
 
 @Service
 class FileService(
@@ -14,24 +12,6 @@ class FileService(
     private val userService: UserService,
     private val mapper: FileMapper,
 ) {
-    fun create(
-        file: MultipartFile,
-        url: URL,
-        workflowInstanceId: String?,
-        formId: String?
-    ): String {
-        return koki.create(
-            CreateFileRequest(
-                url = url.toString(),
-                contentType = file.contentType ?: "application/octet-stream",
-                contentLength = file.size,
-                name = file.originalFilename!!,
-                workflowInstanceId = workflowInstanceId,
-                formId = formId,
-            )
-        ).fileId
-    }
-
     fun file(id: String): FileModel {
         val file = koki.file(id).file
         val createdBy = file.createdById?.let { id -> userService.user(id) }
@@ -46,6 +26,8 @@ class FileService(
         ids: List<String> = emptyList(),
         workflowInstanceIds: List<String> = emptyList(),
         formIds: List<String> = emptyList(),
+        ownerId: Long? = null,
+        ownerType: String? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): List<FileModel> {
@@ -53,6 +35,8 @@ class FileService(
             ids = ids,
             workflowInstanceIds = workflowInstanceIds,
             formIds = formIds,
+            ownerId = ownerId,
+            ownerType = ownerType,
             limit = limit,
             offset = offset
         ).files
@@ -76,5 +60,19 @@ class FileService(
                 createdBy = file.createdById?.let { id -> userMap[id] },
             )
         }
+    }
+
+    fun uploadUrl(
+        ownerId: Long? = null,
+        ownerType: String? = null,
+        workflowInstanceId: String? = null,
+        formId: String? = null,
+    ): String {
+        return koki.uploadUrl(
+            ownerId = ownerId,
+            ownerType = ownerType,
+            workflowInstanceId = workflowInstanceId,
+            formId = formId
+        )
     }
 }

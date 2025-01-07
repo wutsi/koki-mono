@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.contact.page
 
+import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.contact.form.ContactForm
 import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.contact.service.ContactService
@@ -18,6 +19,7 @@ import org.springframework.web.client.HttpClientErrorException
 @Controller
 class CreateContactController(
     private val service: ContactService,
+    private val accountService: AccountService,
     private val contactTypeService: ContactTypeService,
 ) : AbstractPageController() {
     @GetMapping("/contacts/create")
@@ -25,10 +27,12 @@ class CreateContactController(
         @RequestParam(required = false, name = "account-id") accountId: Long? = null,
         model: Model,
     ): String {
+        val account = accountId?.let { id -> accountService.account(id) }
+        model.addAttribute("account", account)
+
         val form = ContactForm(
             accountId = accountId ?: -1,
         )
-
         return create(form, model)
     }
 
@@ -46,7 +50,9 @@ class CreateContactController(
             active = true,
             limit = Integer.MAX_VALUE,
         )
-        model.addAttribute("contactTypes", contactTypes)
+        if (contactTypes.isNotEmpty()) {
+            model.addAttribute("contactTypes", contactTypes)
+        }
 
         return "contacts/create"
     }
@@ -68,6 +74,10 @@ class CreateContactController(
                 "page", PageModel(
                     name = PageName.CONTACT_SAVED, title = contact.name
                 )
+            )
+            model.addAttribute(
+                "createUrl",
+                "/contacts/create" + if (form.accountId == -1L) "" else "?account-id=${form.accountId}"
             )
             return "contacts/saved"
         } catch (ex: HttpClientErrorException) {

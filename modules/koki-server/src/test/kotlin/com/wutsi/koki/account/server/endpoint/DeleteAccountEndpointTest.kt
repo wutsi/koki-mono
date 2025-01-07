@@ -3,11 +3,13 @@ package com.wutsi.koki.account.server.endpoint
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.account.server.dao.AccountRepository
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/account/DeleteAccountEndpoint.sql"])
 class DeleteAccountEndpointTest : AuthorizationAwareEndpointTest() {
@@ -22,5 +24,15 @@ class DeleteAccountEndpointTest : AuthorizationAwareEndpointTest() {
         assertTrue(account.deleted)
         assertNotNull(account.deletedAt)
         assertEquals(USER_ID, account.deletedById)
+    }
+
+    @Test
+    fun `account in use`() {
+        rest.delete("/v1/accounts/1100")
+
+        val account = dao.findById(1100L).get()
+        assertFalse(account.deleted)
+        assertNull(account.deletedAt)
+        assertNull(account.deletedById)
     }
 }

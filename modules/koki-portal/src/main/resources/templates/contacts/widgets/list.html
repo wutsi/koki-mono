@@ -1,5 +1,11 @@
 <div class="widget widget-contacts">
     <div class="widget-body">
+        <div class="margin-bottom">
+            <a class="btn btn-secondary btn-sm btn-add-contact"
+               th:href="'/contacts/create?account-id=' + ${accountId}"
+               th:if="${accountId}"
+            >Add New Contact</a>
+        </div>
         <table class="table table-striped" th:if="${contacts}">
             <tr>
                 <th>Name</th>

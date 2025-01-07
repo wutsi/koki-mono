@@ -15,6 +15,7 @@ function koki_load_more(containerId) {
 function koki_ready() {
     _koki_load_widgets();
     _koki_tabs_lazyload();
+    _koki_activate_current_tab();
 }
 
 async function _koki_load_widgets() {
@@ -50,6 +51,18 @@ function _koki_tabs_lazyload() {
                     });
             }
         })
+    }
+}
+
+function _koki_activate_current_tab() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tab = urlParams.get('tab');
+    console.log('Current tab', tab);
+    if (tab) {
+        const tabDiv = document.getElementById("pills-" + tab + "-tab");
+        if (tabDiv) {
+            tabDiv.click();
+        }
     }
 }
 

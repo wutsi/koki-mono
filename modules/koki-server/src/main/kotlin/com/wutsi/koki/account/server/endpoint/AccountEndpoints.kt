@@ -7,6 +7,10 @@ import com.wutsi.koki.account.dto.SearchAccountResponse
 import com.wutsi.koki.account.dto.UpdateAccountRequest
 import com.wutsi.koki.account.server.mapper.AccountMapper
 import com.wutsi.koki.account.server.service.AccountService
+import com.wutsi.koki.contact.server.service.ContactService
+import com.wutsi.koki.error.dto.Error
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.ConflictException
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController
 class AccountEndpoints(
     private val service: AccountService,
     private val mapper: AccountMapper,
+    private val contactService: ContactService,
 ) {
     @PostMapping
     fun create(
@@ -47,7 +52,18 @@ class AccountEndpoints(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
     ) {
+        if (isUsed(id, tenantId)) {
+            throw ConflictException(error = Error(ErrorCode.ACCOUNT_IN_USE))
+        }
         service.delete(id, tenantId)
+    }
+
+    private fun isUsed(id: Long, tenantId: Long): Boolean {
+        return contactService.search(
+            tenantId = tenantId,
+            accountIds = listOf(id),
+            limit = 1
+        ).isNotEmpty()
     }
 
     @GetMapping("/{id}")

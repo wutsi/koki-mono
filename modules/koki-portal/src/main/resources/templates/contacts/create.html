@@ -23,9 +23,15 @@
                         <div class="section-body">
                             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
-                            <div class="section-item" th:if="${contactTypes}">
+                            <div class="section-item">
                                 <label class="title">Account</label>
-                                <select th:field="*{accountId}"></select>
+                                <select th:field="*{accountId}">
+                                    <option th:if="${account}"
+                                            th:text="${account.name}"
+                                            th:value="${account.id}">
+                                        ACCOUNT
+                                    </option>
+                                </select>
                                 <script th:replace="~{__components/account :: account-selector('accountId')}"></script>
                             </div>
                             <div class="section-item" th:if="${contactTypes}">

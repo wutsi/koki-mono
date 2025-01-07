@@ -22,6 +22,7 @@
                     <div class="widget-toolbar">
                         <a class="btn-edit btn btn-secondary"
                            th:href="'/contacts/' + ${contact.id} + '/edit'">Edit</a>
+
                         <a class="btn-delete btn btn-danger float-right"
                            onclick="return confirm('Are you sure you want to delete the contact?')"
                            th:href="'/contacts/' + ${contact.id} + '/delete'">Delete</a>
@@ -152,8 +153,9 @@
                             </table>
                         </div>
 
-                        <div aria-labelledby="pills-files-tab" class="tab-pane fade" id="pills-files"
-                             role="tabpanel">
+                        <div th:with="returnUrl=@{'/contacts/' + ${contact.id} + '?tab=files'}">
+                            <div aria-labelledby="pills-files-tab" class="tab-pane fade" id="pills-files" role="tabpanel"
+                             th:data-url="'/files/widgets/list?owner-id=' + ${contact.id} + '&owner-type=CONTACT&return-url=' + ${returnUrl}">
                         </div>
                     </div>
                 </div>

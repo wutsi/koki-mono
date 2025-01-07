@@ -23,8 +23,11 @@
                         The account has been successfully saved.
                     </div>
                     <div class="text-center">
-                        <a class="btn btn-secondary btn-create margin-right" href="/accounts/create">Create Another
-                            Account</a>
+                        <a class="btn btn-secondary btn-create margin-right"
+                           th:href="${createUrl}"
+                           th:if="${createUrl}">
+                            Create Another Account
+                        </a>
                         <a class="btn btn-secondary btn-ok" href="/accounts">Back to Accounts</a>
                     </div>
                 </div>

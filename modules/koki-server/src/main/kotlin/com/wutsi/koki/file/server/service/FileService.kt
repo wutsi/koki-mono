@@ -3,9 +3,10 @@ package com.wutsi.koki.file.server.service
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
-import com.wutsi.koki.file.dto.CreateFileRequest
+import com.wutsi.koki.file.server.dao.FileOwnerRepository
 import com.wutsi.koki.file.server.dao.FileRepository
 import com.wutsi.koki.file.server.domain.FileEntity
+import com.wutsi.koki.file.server.domain.FileOwnerEntity
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.security.server.service.SecurityService
 import jakarta.persistence.EntityManager
@@ -19,15 +20,15 @@ import java.util.UUID
 @Service
 class FileService(
     private val dao: FileRepository,
+    private val ownerDao: FileOwnerRepository,
     private val storage: StorageService,
     private val securityService: SecurityService,
     private val em: EntityManager,
 ) {
-    fun get(id: String, tenantId: Long): FileEntity {
-        val file = dao.findById(id)
-            .orElseThrow { NotFoundException(Error(ErrorCode.FILE_NOT_FOUND)) }
+    fun get(id: Long, tenantId: Long): FileEntity {
+        val file = dao.findById(id).orElseThrow { NotFoundException(Error(ErrorCode.FILE_NOT_FOUND)) }
 
-        if (file.tenantId != tenantId) {
+        if (file.tenantId != tenantId || file.deleted) {
             throw NotFoundException(Error(ErrorCode.FILE_NOT_FOUND))
         }
         return file
@@ -38,10 +39,17 @@ class FileService(
         ids: List<String> = emptyList(),
         workflowInstanceIds: List<String> = emptyList(),
         formIds: List<String> = emptyList(),
+        ownerId: Long? = null,
+        ownerType: String? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): List<FileEntity> {
-        val jql = StringBuilder("SELECT F FROM FileEntity AS F WHERE F.tenantId=:tenantId")
+        val jql = StringBuilder("SELECT F FROM FileEntity AS F")
+        if (ownerId != null || ownerType != null) {
+            jql.append(" JOIN F.fileOwners AS O")
+        }
+
+        jql.append(" WHERE F.deleted=false AND F.tenantId=:tenantId")
         if (ids.isNotEmpty()) {
             jql.append(" AND F.id IN :ids")
         }
@@ -50,6 +58,12 @@ class FileService(
         }
         if (formIds.isNotEmpty()) {
             jql.append(" AND F.formId IN :formIds")
+        }
+        if (ownerId != null) {
+            jql.append(" AND O.ownerId = :ownerId")
+        }
+        if (ownerType != null) {
+            jql.append(" AND O.ownerType = :ownerType")
         }
         jql.append(" ORDER BY LOWER(F.name)")
 
@@ -63,6 +77,12 @@ class FileService(
         }
         if (formIds.isNotEmpty()) {
             query.setParameter("formIds", formIds)
+        }
+        if (ownerId != null) {
+            query.setParameter("ownerId", ownerId)
+        }
+        if (ownerType != null) {
+            query.setParameter("ownerType", ownerType)
         }
 
         query.firstResult = offset
@@ -86,9 +106,7 @@ class FileService(
         /* Sync */
         if (fileIds.isNotEmpty()) {
             files = search(
-                tenantId = tenantId,
-                ids = fileIds,
-                limit = fileIds.size
+                tenantId = tenantId, ids = fileIds, limit = fileIds.size
             )
             if (files.isNotEmpty()) {
                 files.forEach { file -> file.workflowInstanceId = workflowInstanceId }
@@ -98,38 +116,16 @@ class FileService(
     }
 
     @Transactional
-    fun create(
-        request: CreateFileRequest,
-        tenantId: Long,
-        fileId: String? = null,
-        userId: Long? = null,
-    ): FileEntity {
-        val now = Date()
-        return dao.save(
-            FileEntity(
-                id = fileId ?: UUID.randomUUID().toString(),
-                createdById = userId ?: securityService.getCurrentUserIdOrNull(),
-                tenantId = tenantId,
-                name = request.name,
-                url = request.url,
-                workflowInstanceId = request.workflowInstanceId,
-                formId = request.formId,
-                contentType = request.contentType,
-                contentLength = request.contentLength,
-                createdAt = now,
-                modifiedAt = now,
-            )
-        )
-    }
-
-    @Transactional
     fun upload(
         workflowInstanceId: String?,
         formId: String?,
         userId: Long?,
         file: MultipartFile,
+        ownerId: Long?,
+        ownerType: String?,
         tenantId: Long,
     ): FileEntity {
+        // Store
         val fileId = UUID.randomUUID().toString()
         val path = toPath(file, formId, workflowInstanceId, fileId, tenantId)
         val url = storage.store(
@@ -139,19 +135,41 @@ class FileService(
             contentLength = file.size,
         )
 
-        return create(
-            request = CreateFileRequest(
+        // Create the file
+        val file = dao.save(
+            FileEntity(
+                createdById = userId ?: securityService.getCurrentUserIdOrNull(),
+                tenantId = tenantId,
+                name = file.originalFilename ?: fileId,
                 url = url.toString(),
                 workflowInstanceId = workflowInstanceId,
                 formId = formId,
-                name = file.originalFilename ?: fileId,
                 contentType = file.contentType ?: "application/octet-stream",
                 contentLength = file.size,
-            ),
-            tenantId = tenantId,
-            userId = userId,
-            fileId = fileId,
+                createdAt = Date(),
+            )
         )
+
+        // Link with owner
+        if (ownerId != null && ownerType != null) {
+            ownerDao.save(
+                FileOwnerEntity(
+                    fileId = file.id!!,
+                    ownerId = ownerId,
+                    ownerType = ownerType.uppercase(),
+                )
+            )
+        }
+        return file
+    }
+
+    @Transactional
+    fun delete(id: Long, tenantId: Long) {
+        val file = get(id, tenantId)
+        file.deleted = true
+        file.deletedAt = Date()
+        file.deletedById = securityService.getCurrentUserIdOrNull()
+        dao.save(file)
     }
 
     @Transactional

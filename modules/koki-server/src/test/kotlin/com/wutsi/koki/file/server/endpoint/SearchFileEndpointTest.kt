@@ -41,11 +41,23 @@ class SearchFileEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Test
     fun `by id`() {
-        val response = rest.getForEntity("/v1/files?id=100&id=101&id=103", SearchFileResponse::class.java)
+        val response = rest.getForEntity("/v1/files?id=100&id=101&id=103&id=199", SearchFileResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val files = response.body!!.files
         assertEquals(3, files.size)
+    }
+
+    @Test
+    fun `by owner`() {
+        val response = rest.getForEntity("/v1/files?owner-id=11&owner-type=ACCOUNT", SearchFileResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val files = response.body!!.files
+        assertEquals(2, files.size)
+        assertEquals(104L, files[0].id)
+        assertEquals(100L, files[1].id)
     }
 }

@@ -1,12 +1,15 @@
 package com.wutsi.koki.portal.contact.page
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.ContactFixtures.contact
+import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import kotlin.test.Test
@@ -68,5 +71,22 @@ class ContactControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.CONTACT)
         assertElementPresent(".alert-danger")
+    }
+
+    @Test
+    fun files() {
+        navigateTo("/contacts/${contact.id}?tab=files")
+
+        Thread.sleep(1000)
+        verify(kokiFiles).files(
+            anyOrNull(), // ids
+            anyOrNull(), // workflpw-instance-id
+            anyOrNull(), // form-id
+            eq(contact.id), // owner-id
+            eq("CONTACT"), // owner-type
+            eq(20), // limit
+            eq(0), // offset
+        )
+        assertElementCount(".widget-files tr.file", FileFixtures.files.size)
     }
 }

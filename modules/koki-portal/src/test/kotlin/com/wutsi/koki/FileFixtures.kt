@@ -8,7 +8,7 @@ import java.util.Date
 object FileFixtures {
     val files = listOf(
         FileSummary(
-            id = "f1",
+            id = 100,
             name = "T1.pdf",
             contentType = "application/pdf",
             contentLength = 1024L * 1024,
@@ -16,7 +16,7 @@ object FileFixtures {
             url = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
         ),
         FileSummary(
-            id = "f2",
+            id = 101,
             name = "Medical Notes.pdf",
             contentType = "application/pdf",
             contentLength = 11 * 1024L * 1024,
@@ -25,7 +25,7 @@ object FileFixtures {
             url = "https://pdfobject.com/pdf/sample.pdf",
         ),
         FileSummary(
-            id = "f3",
+            id = 103,
             name = "Picture.png",
             contentType = "image/png",
             contentLength = 5 * 1024L * 1024,
@@ -34,7 +34,7 @@ object FileFixtures {
             url = "https://picsum.photos/800/100",
         ),
         FileSummary(
-            id = "f5",
+            id = 104,
             name = "Picture2.png",
             contentType = "image/png",
             contentLength = 500,
@@ -43,7 +43,7 @@ object FileFixtures {
             url = "https://picsum.photos/800/100",
         ),
         FileSummary(
-            id = "f6",
+            id = 105,
             name = "empty.txt",
             contentType = "text/plain",
             contentLength = 0,

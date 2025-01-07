@@ -61,7 +61,9 @@ class EditContactController(
         ).filter { contactType ->
             contactType.active || (contactType.id == contact.contactType?.id)
         }
-        model.addAttribute("contactTypes", contactTypes)
+        if (contactTypes.isNotEmpty()) {
+            model.addAttribute("contactTypes", contactTypes)
+        }
 
         return "contacts/edit"
     }

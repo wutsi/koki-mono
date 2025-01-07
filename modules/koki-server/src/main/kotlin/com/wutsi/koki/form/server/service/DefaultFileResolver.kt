@@ -13,7 +13,7 @@ class DefaultFileResolver(private val fileService: FileService) : FileResolver {
 
     override fun resolve(id: String, tenantId: Long): File? {
         try {
-            val file = fileService.get(id, tenantId)
+            val file = fileService.get(id.toLong(), tenantId)
             return File(
                 name = file.name,
                 contentLength = file.contentLength,

@@ -94,6 +94,7 @@ class CreateAccountController(
 
             val account = AccountModel(id = accountId, name = form.name)
             model.addAttribute("account", account)
+            model.addAttribute("createUrl", "/accounts/create")
             model.addAttribute(
                 "page",
                 PageModel(

@@ -14,7 +14,6 @@ class FileMapper {
             url = entity.url,
             contentLength = entity.contentLength,
             contentType = entity.contentType,
-            modifiedAt = entity.modifiedAt,
             createdAt = entity.createdAt,
             createdById = entity.createdById,
             workflowInstanceId = entity.workflowInstanceId,
@@ -29,7 +28,6 @@ class FileMapper {
             url = entity.url,
             contentLength = entity.contentLength,
             contentType = entity.contentType,
-            modifiedAt = entity.modifiedAt,
             createdAt = entity.createdAt,
             createdById = entity.createdById,
         )
