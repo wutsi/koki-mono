@@ -25,7 +25,9 @@
     <td th:text="${contact.contactType?.title}">CONTACT TYPE</td>
     <td th:text="${contact.phone}">PHONE</td>
     <td th:text="${contact.mobile}">MOBILE</td>
-    <td th:text="${contact.email}">EMAIL</td>
+    <td>
+        <a th:href="'mailto:' + ${contact.email}" th:if="${contact.email}" th:text="${contact.email}">EMAIL</a>
+    </td>
     <td th:text="${contact.modifiedAtText}">MODIFIED</td>
     <td th:if="${showAccount}">
         <a th:href="'/accounts/' + ${contact.account.id}"
