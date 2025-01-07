@@ -44,7 +44,9 @@ class ListFileWidgetController(private val service: FileService) {
         model: Model
     ): String {
         val files = service.files(
-            workflowInstanceIds = workflowInstanceId?.let { id -> listOf(id) } ?: emptyList()
+            workflowInstanceIds = workflowInstanceId?.let { id -> listOf(id) } ?: emptyList(),
+            ownerId = ownerId,
+            ownerType = ownerType,
         )
         if (files.isNotEmpty()) {
             model.addAttribute("files", files)

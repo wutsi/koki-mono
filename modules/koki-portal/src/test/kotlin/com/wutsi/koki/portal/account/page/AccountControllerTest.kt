@@ -1,13 +1,16 @@
 package com.wutsi.koki.portal.account.page
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.AccountFixtures.account
 import com.wutsi.koki.ContactFixtures
+import com.wutsi.koki.ContactFixtures.contact
 import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
@@ -82,9 +85,16 @@ class AccountControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun contacts() {
-        navigateTo("/accounts/${account.id}")
+        navigateTo("/accounts/${account.id}?tab=contacts")
 
-        click("#pills-contacts-tab", 1000)
+        verify(kokiContacts).contacts(
+            anyOrNull(), // keywords
+            anyOrNull(), // ids
+            anyOrNull(), // contact-type-ids
+            eq(listOf(account.id)), // account-ids
+            eq(20), // limit
+            eq(0), // offset
+        )
         assertElementCount(".widget-contacts tr.contact", ContactFixtures.contacts.size)
 
         click(".btn-add-contact")
@@ -93,9 +103,17 @@ class AccountControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun files() {
-        navigateTo("/accounts/${account.id}")
+        navigateTo("/accounts/${account.id}?tab=files")
 
-        click("#pills-files-tab", 1000)
+        verify(kokiFiles).files(
+            anyOrNull(), // ids
+            anyOrNull(), // workflpw-instance-id
+            anyOrNull(), // form-id
+            eq(contact.id), // owner-id
+            eq("ACCOUNT"), // owner-type
+            eq(20), // limit
+            eq(0), // offset
+        )
         assertElementCount(".widget-files tr.file", FileFixtures.files.size)
     }
 }
