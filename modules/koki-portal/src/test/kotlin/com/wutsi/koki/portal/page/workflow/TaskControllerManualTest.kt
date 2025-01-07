@@ -40,8 +40,8 @@ class TaskControllerManualTest : AbstractPageControllerTest() {
         assertElementPresent("#btn-complete")
 
         click("#pills-files-tab")
-        waitForPresenceOf(".files-widget tr.file")
-        assertElementCount(".files-widget tr.file", files.size)
+        waitForPresenceOf(".widget-files tr.file")
+        assertElementCount(".widget-files tr.file", files.size)
 
         click("#pills-process-tab", 1000)
         assertElementPresent(".workflow-image img")

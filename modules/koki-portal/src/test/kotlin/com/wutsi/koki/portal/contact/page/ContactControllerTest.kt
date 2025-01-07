@@ -77,6 +77,7 @@ class ContactControllerTest : AbstractPageControllerTest() {
     fun files() {
         navigateTo("/contacts/${contact.id}?tab=files")
 
+        Thread.sleep(1000)
         verify(kokiFiles).files(
             anyOrNull(), // ids
             anyOrNull(), // workflpw-instance-id

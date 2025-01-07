@@ -87,6 +87,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
     fun contacts() {
         navigateTo("/accounts/${account.id}?tab=contacts")
 
+        Thread.sleep(1000)
         verify(kokiContacts).contacts(
             anyOrNull(), // keywords
             anyOrNull(), // ids
@@ -105,6 +106,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
     fun files() {
         navigateTo("/accounts/${account.id}?tab=files")
 
+        Thread.sleep(1000)
         verify(kokiFiles).files(
             anyOrNull(), // ids
             anyOrNull(), // workflpw-instance-id
