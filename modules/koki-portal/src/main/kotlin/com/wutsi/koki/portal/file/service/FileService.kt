@@ -12,7 +12,7 @@ class FileService(
     private val userService: UserService,
     private val mapper: FileMapper,
 ) {
-    fun file(id: String): FileModel {
+    fun file(id: Long): FileModel {
         val file = koki.file(id).file
         val createdBy = file.createdById?.let { id -> userService.user(id) }
 
@@ -74,5 +74,9 @@ class FileService(
             workflowInstanceId = workflowInstanceId,
             formId = formId
         )
+    }
+
+    fun delete(id: Long) {
+        koki.delete(id)
     }
 }

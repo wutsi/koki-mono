@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div class="alert alert-success">
+                        <div>
+                            <span th:class="'fiv-viv fiv-icon-' + ${file.extension}"></span>
+                            <span th:text="${file.name}">FILENAME</span>
+                        </div>
+                        <div>
+                            The file has been successfully deleted.
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <a class="btn btn-secondary btn-return" th:href="${returnUrl}" th:if="${returnUrl}">Close</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
