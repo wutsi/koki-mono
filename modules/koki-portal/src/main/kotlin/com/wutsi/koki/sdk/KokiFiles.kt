@@ -14,9 +14,14 @@ class KokiFiles(
         private const val PATH_PREFIX = "/v1/files"
     }
 
-    fun file(id: String): GetFileResponse {
+    fun file(id: Long): GetFileResponse {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
         return rest.getForEntity(url, GetFileResponse::class.java).body
+    }
+
+    fun delete(id: Long) {
+        val url = urlBuilder.build("$PATH_PREFIX/$id")
+        rest.delete(url)
     }
 
     fun uploadUrl(

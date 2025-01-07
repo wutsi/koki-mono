@@ -30,7 +30,7 @@ class ListFileWidgetController(private val service: FileService) {
             uploadUrl = "$uploadUrl&return-url=" + URLEncoder.encode(returnUrl, "utf-8")
         }
         model.addAttribute("uploadUrl", uploadUrl)
-        more(workflowInstanceId, ownerId, ownerType, limit, offset, model)
+        more(workflowInstanceId, ownerId, ownerType, returnUrl, limit, offset, model)
         return "files/widgets/list"
     }
 
@@ -39,6 +39,7 @@ class ListFileWidgetController(private val service: FileService) {
         @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
         @RequestParam(required = false, name = "owner-id") ownerId: Long? = null,
         @RequestParam(required = false, name = "owner-type") ownerType: String? = null,
+        @RequestParam(required = false, name = "return-url") returnUrl: String? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model
@@ -50,6 +51,7 @@ class ListFileWidgetController(private val service: FileService) {
         )
         if (files.isNotEmpty()) {
             model.addAttribute("files", files)
+            model.addAttribute("returnUrl", returnUrl)
 
             if (files.size >= limit) {
                 val nextOffset = offset + limit
@@ -57,6 +59,7 @@ class ListFileWidgetController(private val service: FileService) {
                     "/files/widgets/list/more?limit=$limit&offset=$nextOffset",
                     ownerId?.let { "owner-id=$ownerId" },
                     ownerType?.let { "owner-id=$ownerType" },
+                    ownerType?.let { "return-url=$ownerType" },
                     workflowInstanceId?.let { "workflow-instance-id=$workflowInstanceId" },
                 ).filterNotNull()
                     .joinToString(separator = "&")

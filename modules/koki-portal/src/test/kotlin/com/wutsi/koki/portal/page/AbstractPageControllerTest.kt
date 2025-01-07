@@ -7,7 +7,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AccountFixtures
 import com.wutsi.koki.ContactFixtures
-import com.wutsi.koki.FileFixtures.files
+import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.FormFixtures
 import com.wutsi.koki.LogFixtures.logEntries
 import com.wutsi.koki.LogFixtures.logEntry
@@ -42,6 +42,7 @@ import com.wutsi.koki.contact.dto.SearchContactTypeResponse
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
+import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.form.dto.GetFormResponse
 import com.wutsi.koki.form.dto.GetFormSubmissionResponse
@@ -323,7 +324,7 @@ abstract class AbstractPageControllerTest {
     }
 
     private fun setupFileModule() {
-        doReturn(SearchFileResponse(files)).whenever(kokiFiles)
+        doReturn(SearchFileResponse(FileFixtures.files)).whenever(kokiFiles)
             .files(
                 anyOrNull(),
                 anyOrNull(),
@@ -333,7 +334,7 @@ abstract class AbstractPageControllerTest {
                 anyOrNull(),
                 anyOrNull(),
             )
-
+        doReturn(GetFileResponse(FileFixtures.file)).whenever(kokiFiles).file(any())
         doReturn("/v1/files/upload").whenever(kokiFiles)
             .uploadUrl(
                 anyOrNull(),

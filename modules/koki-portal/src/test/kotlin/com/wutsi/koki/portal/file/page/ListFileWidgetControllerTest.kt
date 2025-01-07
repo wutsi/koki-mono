@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.file.widget
+package com.wutsi.koki.portal.file.page
 
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
@@ -11,7 +11,7 @@ import kotlin.test.Test
 
 class ListFileWidgetControllerTest : AbstractPageControllerTest() {
     @Test
-    fun show() {
+    fun list() {
         navigateTo("/files/widgets/list?workflow-instance-id=111")
 
         assertElementCount(".widget-files tr.file", files.size)
@@ -43,5 +43,13 @@ class ListFileWidgetControllerTest : AbstractPageControllerTest() {
         click(".btn-upload")
 
         assertCurrentPageIs(PageName.UPLOAD)
+    }
+
+    @Test
+    fun view() {
+        navigateTo("/files/widgets/list?workflow-instance-id=111")
+        click(".btn-view")
+
+        assertCurrentPageIs(PageName.FILE)
     }
 }

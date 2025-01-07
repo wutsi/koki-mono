@@ -6,7 +6,9 @@
 - [x] Account API
 - [x] Account UI
 - [x] BUG: We should not be able to delete Account with Contacts
-- [] Link files to account
+- [x] Link files to account
+- [] Filter accounts on UI
+- [] Add note to account
 - [] Add address to Account
 - [] Settings: Import Accounts from CSV
 - [] Settings: Import Attributes from CSV
@@ -16,23 +18,48 @@
 
 - [x] Contact API
 - [x] Contact UI
-- [] Link files to contacts
+- [x] Link files to contacts
+- [] Filter contacts on UI
 - [] Add address to Contact
 - [] Settings: Import Contact from CSV
 - [] Settings: Import Contact Types from CSV
+
+## Files
+
+- [x] Show file details
+- [x] Delete files
+- [x] Download files
+- [x] Upload files
+- [x] Show file icons
+
+## Personal Taxes
+
+- [] Personal tax API
+- [] Personal tax UI
+- [] Link files to taxes
+- [] Link personal taxes to account
+- [] Send email
+- [] Add a note
+
+## Email
+
+- [] Send email
+
+## Notes
+
+- [] Note API
+- [] Note UI
+
+## Event
+
+- [] Schedule an event
+- [] Show event calendar
 
 ## Product
 
 - [] Product API
 - [] Product Pricing API
 - [] Product UI
-
-## Files
-
-- [] Upload files
-- [x] Show file icons
-
-## Email
 
 ## Form
 

@@ -1,6 +1,7 @@
 package com.wutsi.koki
 
 import com.wutsi.koki.UserFixtures.users
+import com.wutsi.koki.file.dto.File
 import com.wutsi.koki.file.dto.FileSummary
 import org.apache.commons.lang3.time.DateUtils
 import java.util.Date
@@ -51,5 +52,15 @@ object FileFixtures {
             createdAt = DateUtils.addDays(Date(), -5),
             url = "https://picsum.photos/800/100.txt",
         ),
+    )
+
+    val file = File(
+        id = 100,
+        name = "T1.pdf",
+        contentType = "application/pdf",
+        contentLength = 1024L * 1024,
+        createdAt = DateUtils.addDays(Date(), -5),
+        createdById = users[0].id,
+        url = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
     )
 }

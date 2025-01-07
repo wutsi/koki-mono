@@ -2,17 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<tr class="file" th:fragment="columns(file)" th:remove="tag">
+<tr class="file" th:fragment="columns(file, returnUrl)" th:remove="tag">
     <td>
         <span th:class="'fiv-viv fiv-icon-' + ${file.extension}"></span>
     </td>
-    <td th:text="${file.name}">FILE</td>
+    <td>
+        <a th:href="${file.buildViewUrl(returnUrl)}" th:text="${file.name}">FILE</a>
+    </td>
     <td th:text="${file.contentLengthText}">SIZE</td>
     <td th:text="${file.createdAtText}">CREATED</td>
     <td>
         <span th:if="${file.createdBy}" th:text="${file.createdBy.displayName}">CREATED</span>
     </td>
     <td class="toolbar">
+        <a class="btn-view" th:href="${file.buildViewUrl(returnUrl)}">View</a>
+        <a class="btn-download" target="_blank" th:href="'/files/' + ${file.id} + '/download'">Download</a>
     </td>
 </tr>
 

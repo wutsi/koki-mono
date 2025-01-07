@@ -17,6 +17,22 @@ data class FileModel(
     val createdBy: UserModel? = null,
     val extension: String = "",
 ) {
+    fun buildViewUrl(returnUrl: String?): String {
+        return if (returnUrl.isNullOrEmpty()) {
+            url
+        } else {
+            "$url?return-url=" + URLEncoder.encode(returnUrl, "utf-8")
+        }
+    }
+
+    fun buildDeleteUrl(returnUrl: String?): String {
+        return if (returnUrl.isNullOrEmpty()) {
+            "$url/delete"
+        } else {
+            "$url/delete?return-url=" + URLEncoder.encode(returnUrl, "utf-8")
+        }
+    }
+
     val url: String
-        get() = "/files/$id/" + URLEncoder.encode(name, "utf-8")
+        get() = "/files/$id"
 }
