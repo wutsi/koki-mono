@@ -1,75 +1,66 @@
 package com.wutsi.koki.note.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.note.dto.CreateNoteRequest
-import com.wutsi.koki.note.dto.CreateNoteResponse
-import com.wutsi.koki.note.server.dao.NoteOwnerRepository
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.note.dto.UpdateNoteRequest
 import com.wutsi.koki.note.server.dao.NoteRepository
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
+import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-class CreateNoteEndpointTest : AuthorizationAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/note/UpdateNoteEndpoint.sql"])
+class UpdateNoteEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var dao: NoteRepository
 
-    @Autowired
-    private lateinit var ownerDao: NoteOwnerRepository
+    private val request = UpdateNoteRequest(
+        subject = "New note",
+        body = "<p>This is the body of the note</p>",
+    )
 
     @Test
-    fun create() {
-        val request = CreateNoteRequest(
-            subject = "New note",
-            body = "<p>This is the body of the note</p>",
-        )
-        val response = rest.postForEntity("/v1/notes", request, CreateNoteResponse::class.java)
+    fun update() {
+        val response = rest.postForEntity("/v1/notes/100", request, Any::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val noteId = response.body!!.noteId
+        val noteId = 100L
         val note = dao.findById(noteId).get()
         assertEquals(TENANT_ID, note.tenantId)
         assertEquals(request.subject, note.subject)
         assertEquals(request.body, note.body)
-        assertEquals(USER_ID, note.createdById)
         assertEquals(USER_ID, note.modifiedById)
         assertFalse(note.deleted)
         assertNull(note.deletedAt)
         assertNull(note.deletedById)
-
-        val owners = ownerDao.findByNoteId(noteId)
-        assertEquals(0, owners.size)
     }
 
     @Test
-    fun `create and link`() {
-        val request = CreateNoteRequest(
-            subject = "New note",
-            body = "<p>This is the body of the note</p>",
-            ownerId = 1111L,
-            ownerType = "xxxx"
-        )
-        val response = rest.postForEntity("/v1/notes", request, CreateNoteResponse::class.java)
+    fun notFound() {
+        val response = rest.postForEntity("/v1/notes/999", request, ErrorResponse::class.java)
 
-        assertEquals(HttpStatus.OK, response.statusCode)
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertEquals(ErrorCode.NOTE_NOT_FOUND, response.body!!.error.code)
+    }
 
-        val noteId = response.body!!.noteId
-        val note = dao.findById(noteId).get()
-        assertEquals(TENANT_ID, note.tenantId)
-        assertEquals(request.subject, note.subject)
-        assertEquals(request.body, note.body)
-        assertEquals(USER_ID, note.createdById)
-        assertEquals(USER_ID, note.modifiedById)
-        assertFalse(note.deleted)
-        assertNull(note.deletedAt)
-        assertNull(note.deletedById)
+    @Test
+    fun deleted() {
+        val response = rest.postForEntity("/v1/notes/199", request, ErrorResponse::class.java)
 
-        val owners = ownerDao.findByNoteId(noteId)
-        assertEquals(1, owners.size)
-        assertEquals(request.ownerId, owners[0].ownerId)
-        assertEquals(request.ownerType, owners[0].ownerType)
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertEquals(ErrorCode.NOTE_NOT_FOUND, response.body!!.error.code)
+    }
+
+    @Test
+    fun anotherTenant() {
+        val response = rest.postForEntity("/v1/notes/200", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertEquals(ErrorCode.NOTE_NOT_FOUND, response.body!!.error.code)
     }
 }
