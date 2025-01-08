@@ -13,13 +13,18 @@ import java.util.Date
 @Entity
 @Table(name = "T_FILE")
 data class FileEntity(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long? = null,
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long? = null,
 
-    @Column(name = "tenant_fk") val tenantId: Long = -1,
+    @Column(name = "tenant_fk")
+    val tenantId: Long = -1,
 
-    @Column(name = "created_by_fk") var createdById: Long? = null,
+    @Column(name = "created_by_fk")
+    var createdById: Long? = null,
 
-    @Column(name = "deleted_by_fk") var deletedById: Long? = null,
+    @Column(name = "deleted_by_fk")
+    var deletedById: Long? = null,
 
     @OneToMany()
     @JoinColumn(name = "file_fk")

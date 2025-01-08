@@ -1,48 +1,41 @@
 package com.wutsi.koki.note.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.note.dto.GetNoteResponse
+import com.wutsi.koki.note.dto.SearchNoteResponse
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/note/GetNoteEndpoint.sql"])
-class GetNoteEndpointTest : AuthorizationAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/note/SearchNoteEndpoint.sql"])
+class SearchNoteEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
-    fun get() {
-        val response = rest.getForEntity("/v1/notes/100", GetNoteResponse::class.java)
+    fun all() {
+        val response = rest.getForEntity("/v1/notes", SearchNoteResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val note = response.body!!.note
-        assertEquals("Yo", note.subject)
-        assertEquals("<p>Man</p>", note.body)
+        val notes = response.body!!.notes
+        assertEquals(5, notes.size)
     }
 
     @Test
-    fun notFound() {
-        val response = rest.getForEntity("/v1/notes/999", ErrorResponse::class.java)
+    fun `by owner`() {
+        val response = rest.getForEntity("/v1/notes?owner-id=11&owner-type=ACCOUNT", SearchNoteResponse::class.java)
 
-        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
-        assertEquals(ErrorCode.NOTE_NOT_FOUND, response.body!!.error.code)
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val notes = response.body!!.notes
+        assertEquals(2, notes.size)
     }
 
     @Test
-    fun deleted() {
-        val response = rest.getForEntity("/v1/notes/199", ErrorResponse::class.java)
+    fun `another tenant`() {
+        val response = rest.getForEntity("/v1/notes?id=200", SearchNoteResponse::class.java)
 
-        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
-        assertEquals(ErrorCode.NOTE_NOT_FOUND, response.body!!.error.code)
-    }
+        assertEquals(HttpStatus.OK, response.statusCode)
 
-    @Test
-    fun anotherTenant() {
-        val response = rest.getForEntity("/v1/notes/200", ErrorResponse::class.java)
-
-        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
-        assertEquals(ErrorCode.NOTE_NOT_FOUND, response.body!!.error.code)
+        val notes = response.body!!.notes
+        assertEquals(0, notes.size)
     }
 }
