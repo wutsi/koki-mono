@@ -23,13 +23,14 @@ class ListNoteWidgetControllerTest : AbstractPageControllerTest() {
     fun delete() {
         val id = notes[1].id
 
-        navigateTo("/notes/widgets/list?test-mode=1")
+        navigateTo("/notes/widgets/list?test-mode=1&owner-id=111&owner-type=ACCOUNT")
 
         click("#note-$id .btn-delete")
         val alert = driver.switchTo().alert()
         alert.accept()
         driver.switchTo().parentFrame()
 
+        Thread.sleep(1000)
         verify(kokiNotes).delete(id)
         assertElementNotPresent("#note-id")
     }
