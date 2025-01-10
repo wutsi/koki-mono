@@ -10,7 +10,7 @@ import java.net.URLEncoder
 @Controller
 class ListFileWidgetController(private val service: FileService) {
     @GetMapping("/files/widgets/list")
-    fun show(
+    fun list(
         @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
         @RequestParam(required = false, name = "owner-id") ownerId: Long? = null,
         @RequestParam(required = false, name = "owner-type") ownerType: String? = null,
@@ -59,7 +59,7 @@ class ListFileWidgetController(private val service: FileService) {
                     "/files/widgets/list/more?limit=$limit&offset=$nextOffset",
                     ownerId?.let { "owner-id=$ownerId" },
                     ownerType?.let { "owner-id=$ownerType" },
-                    ownerType?.let { "return-url=$ownerType" },
+                    returnUrl?.let { "return-url=$returnUrl" },
                     workflowInstanceId?.let { "workflow-instance-id=$workflowInstanceId" },
                 ).filterNotNull()
                     .joinToString(separator = "&")

@@ -2,27 +2,27 @@
 
 ## Account
 
+- [] Filter accounts on UI
+- [] Add address to Account
+- [] Settings: Import Accounts from CSV
+- [] Settings: Import Attributes from CSV
+- [] Settings: Import Account Types from CSV
 - [x] Attributes API
 - [x] Account API
 - [x] Account UI
 - [x] BUG: We should not be able to delete Account with Contacts
 - [x] Link files to account
-- [] Filter accounts on UI
-- [] Add note to account
-- [] Add address to Account
-- [] Settings: Import Accounts from CSV
-- [] Settings: Import Attributes from CSV
-- [] Settings: Import Account Types from CSV
+- [x] Add note to account
 
 ## Contact
 
+- [] Filter contacts on UI
+- [] Settings: Import Contact from CSV
+- [] Settings: Import Contact Types from CSV
 - [x] Contact API
 - [x] Contact UI
 - [x] Link files to contacts
-- [] Filter contacts on UI
-- [] Add address to Contact
-- [] Settings: Import Contact from CSV
-- [] Settings: Import Contact Types from CSV
+- [x] Add address to Contact
 
 ## Files
 

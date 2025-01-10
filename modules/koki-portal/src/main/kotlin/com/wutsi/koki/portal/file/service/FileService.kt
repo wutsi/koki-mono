@@ -1,7 +1,7 @@
 package com.wutsi.koki.portal.file.service
 
 import com.wutsi.koki.portal.file.mapper.FileMapper
-import com.wutsi.koki.portal.model.FileModel
+import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.service.UserService
 import com.wutsi.koki.sdk.KokiFiles
 import org.springframework.stereotype.Service

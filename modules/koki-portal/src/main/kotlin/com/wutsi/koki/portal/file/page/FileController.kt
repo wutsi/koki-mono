@@ -1,7 +1,7 @@
 package com.wutsi.koki.portal.file.page
 
+import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.file.service.FileService
-import com.wutsi.koki.portal.model.FileModel
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
@@ -82,6 +82,8 @@ class FileController(
     fun download(@PathVariable id: Long) {
         val file = service.file(id)
         response.contentType = file.contentType
+        response.setContentLength(file.contentLength.toInt())
+        response.setHeader("Content-Disposition", "attachment; filename=\"${file.name}\"")
         URL(file.contentUrl)
             .openStream()
             .use { inputStream ->

@@ -5,14 +5,25 @@
 <tr class="note" th:fragment="columns(note, returnUrl)" th:remove="tag">
     <td>
         <div>
-            <a th:href="${note.buildViewUrl(returnUrl)}" th:text="${note.name}">SUBJECT</a>
+            <b th:text="${note.subject}">SUBJECT</b>
         </div>
         <div class="text-smaller">
-            <span th:if="${note.modifiedBy}" th:text="${note.modifiedBy?.displayName}">DISPLAY NANME</span>
+            <small th:if="${note.modifiedBy}" th:text="${note.modifiedBy?.displayName}">DISPLAY NANME</small>
             <span th:if="${note.modifiedBy}">-</span>
-            <span th:text="${note.modifiedAtText}">DATE</span>
+            <small th:text="${note.modifiedAtText}">DATE</small>
         </div>
-        <div th:text="${note.summary}">BODY</div>
+        <div class="margin-top-small" th:utext="${note.body}">BODY</div>
+        <div>
+            <a class="btn-edit btn btn-light btn-sm margin-top"
+               th:href="'javascript: koki_notes_edit(' + ${note.id} + ')'">
+                Edit
+            </a>
+
+            <a class="btn-delete btn btn-light btn-sm margin-top"
+               th:href="'javascript: koki_notes_delete(' + ${note.id} + ')'">
+                Delete
+            </a>
+        </div>
     </td>
 </tr>
 
