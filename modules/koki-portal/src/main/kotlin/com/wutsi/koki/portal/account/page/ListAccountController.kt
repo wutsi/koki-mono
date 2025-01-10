@@ -15,6 +15,12 @@ class ListAccountController(
     private val service: AccountService,
     private val currentUser: CurrentUserHolder,
 ) : AbstractPageController() {
+    companion object {
+        const val COL_ALL = "1"
+        const val COL_MANAGED = "2"
+        const val COL_CREATED = "3"
+    }
+
     @GetMapping("/accounts")
     fun list(
         @RequestParam(required = false, name = "col") collection: String? = null,
@@ -29,7 +35,7 @@ class ListAccountController(
             model = model
         )
 
-        model.addAttribute("collection", collection)
+        model.addAttribute("collection", toCollection(collection))
         model.addAttribute(
             "page",
             PageModel(
@@ -47,9 +53,15 @@ class ListAccountController(
         @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
+        val col = toCollection(collection)
         val userId = currentUser.id()
         val accounts = service.accounts(
-            managedByIds = if (collection == null) {
+            managedByIds = if (col == COL_MANAGED) {
+                userId?.let { id -> listOf(id) } ?: emptyList()
+            } else {
+                emptyList()
+            },
+            createdByIds = if (col == COL_CREATED) {
                 userId?.let { id -> listOf(id) } ?: emptyList()
             } else {
                 emptyList()
@@ -71,5 +83,14 @@ class ListAccountController(
         }
 
         return "accounts/more"
+    }
+
+    private fun toCollection(collection: String?): String {
+        return when (collection) {
+            COL_ALL -> COL_ALL
+            COL_MANAGED -> COL_MANAGED
+            COL_CREATED -> COL_CREATED
+            else -> COL_ALL
+        }
     }
 }

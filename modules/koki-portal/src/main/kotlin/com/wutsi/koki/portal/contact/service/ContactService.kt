@@ -51,6 +51,7 @@ class ContactService(
         ids: List<Long> = emptyList(),
         contactTypeIds: List<Long> = emptyList(),
         accountIds: List<Long> = emptyList(),
+        createdByIds: List<Long> = emptyList(),
         limit: Int = 20,
         offset: Int = 0,
     ): List<ContactModel> {
@@ -60,6 +61,7 @@ class ContactService(
             ids = ids,
             contactTypeIds = contactTypeIds,
             accountIds = accountIds,
+            createdByIds = createdByIds,
             limit = limit,
             offset = offset,
         ).contacts
