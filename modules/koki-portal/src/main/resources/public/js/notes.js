@@ -30,6 +30,7 @@ function koki_notes_update(event) {
     console.log('Updating Note');
 
     const form = document.getElementById("note-form");
+    const id = form.getAttribute("data-id");
     const data = new FormData(form);
     fetch(
         form.action,
@@ -42,7 +43,7 @@ function koki_notes_update(event) {
         }).then(response => {
         if (response.ok) {
             _koki_notes_close_modal();
-            _koki_notes_refresh();
+            _koki_notes_refresh(id);
         } else {
             console.log('Error', response.text());
             alert('Failed');
@@ -89,11 +90,7 @@ function koki_notes_add_new(event) {
             }
         }).then(response => {
         if (response.ok) {
-            console.log('success...');
-
-            const ownerId = document.getElementById("note-owner-id").value;
-            const ownerType = document.getElementById("note-owner-type").value;
-            document.getElementById('note-editor').style.display = "none";
+            _koki_notes_close_modal();
             _koki_notes_refresh();
         } else {
             console.log('Error', response.text());
@@ -112,14 +109,27 @@ function koki_notes_on_change() {
     submit.disabled = (subject.value.size > 0 && body.value.size > 0);
 }
 
-function _koki_notes_refresh() {
-    fetch('/notes/widgets/list/more?owner-id=' + ownerId + '&owner-type=' + ownerType)
-        .then(response => {
-            response.text()
-                .then(html => {
-                    document.getElementById("note-list").innerHTML = html;
-                })
-        })
+function _koki_notes_refresh(id) {
+    if (id) {
+        fetch('/notes/' + id)
+            .then(response => {
+                response.text()
+                    .then(html => {
+                        document.getElementById("note-" + id).innerHTML = html;
+                    })
+            });
+    } else {
+        const container = document.getElementById('note-list');
+        const ownerId = container.getAttribute("data-owner-id");
+        const ownerType = container.getAttribute("data-owner-type");
+        fetch('/notes/widgets/list/more?owner-id=' + ownerId + '&owner-type=' + ownerType)
+            .then(response => {
+                response.text()
+                    .then(html => {
+                        container.innerHTML = html;
+                    })
+            });
+    }
 }
 
 function _koki_notes_open_modal(html, edit) {
@@ -147,8 +157,6 @@ function _koki_notes_setup_html_editor() {
         }
     );
     notesHtmlEditor.on('text-change', (delta, oldDelta, source) => {
-        console.log('>>> oldDelta', oldDelta);
-        console.log('>>> delta', delta)
         koki_notes_on_change();
     });
 }

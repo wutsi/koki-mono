@@ -1,4 +1,4 @@
-<form class="form" id="note-form" method="post" onsubmit="koki_notes_create()" th:action="@{'/notes/add-new'}"
+<form class="form" id="note-form" method="post" onsubmit="koki_notes_add_new(event)" th:action="@{'/notes/add-new'}"
       th:object="${form}">
     <input th:field="*{ownerId}" type="hidden"/>
     <input th:field="*{ownerType}" type="hidden"/>
@@ -13,7 +13,7 @@
         <tr>
             <td valign="top">Body</td>
             <td>
-                <div contenteditable="true" id="html-editor" style="height: 10em" th:text="${form.body}"></div>
+                <div id="html-editor" style="height: 10em" th:text="${form.body}"></div>
                 <textarea name="body" style="display: none" th:field="*{body}"></textarea>
             </td>
         </tr>

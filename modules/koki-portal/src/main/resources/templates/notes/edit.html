@@ -1,5 +1,6 @@
 <form class="form" id="note-form" method="post" onsubmit="koki_notes_update(event)"
       th:action="@{'/notes/' + ${note.id} + '/update'}"
+      th:data-id="${note.id}"
       th:object="${form}">
     <table class="table">
         <tr>
@@ -19,7 +20,7 @@
         <tr>
             <td valign="top">Body</td>
             <td>
-                <div contenteditable="true" id="html-editor" style="height: 10em" th:text="${form.body}"></div>
+                <div id="html-editor" style="height: 10em" th:utext="${form.body}"></div>
                 <textarea name="body" style="display: none" th:field="*{body}"></textarea>
             </td>
         </tr>

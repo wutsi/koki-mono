@@ -7,9 +7,10 @@
             </a>
         </div>
 
-        <table class="table table-striped" id="note-list" th:if="${notes}">
+        <table class="table table-striped" id="note-list" th:data-owner-id="${ownerId}" th:data-owner-type="${ownerType}"
+               th:if="${notes}">
             <tr class="border margin-top note" th:each="note : ${notes}" th:id="'note-' + ${note.id}">
-                <td th:replace="~{__components/note :: columns(${note}, ${returnUrl})}"></td>
+                <td th:replace="~{__components/note :: columns(${note})}"></td>
             </tr>
             <tr th:replace="~{__components/note :: load-more(${moreUrl})}"></tr>
         </table>

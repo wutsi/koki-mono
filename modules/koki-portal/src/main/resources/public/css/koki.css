@@ -321,7 +321,14 @@ tr.activity-running {
     padding-right: 5px;
 }
 
-/* for block of code */
 .hljs-ln-code {
     padding-left: 10px !important;
+}
+
+/* quill */
+
+/* Notes */
+.note-body p {
+    margin-bottom: 0;
+    padding-bottom: 0;
 }

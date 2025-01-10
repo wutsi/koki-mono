@@ -43,13 +43,13 @@ class ListNoteWidgetControllerTest : AbstractPageControllerTest() {
         assertElementVisible("#note-title-edit")
         assertElementNotVisible("#note-title-create")
         input("#subject", "Yo man")
-        input("#html-editor .ql-editor", "lllll")
+        input("#html-editor .ql-editor", "Hello man")
         click("#btn-note-submit", 1000)
 
         val request = argumentCaptor<UpdateNoteRequest>()
         verify(kokiNotes).update(any(), request.capture())
         assertEquals("Yo man", request.firstValue.subject)
-        assertEquals("<p>lllll</p>", request.firstValue.body)
+        assertEquals("<p>Hello man</p>", request.firstValue.body)
 
         assertElementNotVisible("#note-modal")
     }
@@ -72,13 +72,13 @@ class ListNoteWidgetControllerTest : AbstractPageControllerTest() {
         assertElementNotVisible("#note-title-edit")
         assertElementVisible("#note-title-create")
         input("#subject", "Yo man")
-        input("#html-editor .ql-editor", "lllll")
+        input("#html-editor .ql-editor", "Hello man")
         click("#btn-note-submit", 1000)
 
         val request = argumentCaptor<CreateNoteRequest>()
         verify(kokiNotes).create(request.capture())
         assertEquals("Yo man", request.firstValue.subject)
-        assertEquals("<p>lllll</p>", request.firstValue.body)
+        assertEquals("<p>Hello man</p>", request.firstValue.body)
         assertEquals("ACCOUNT", request.firstValue.ownerType)
         assertEquals(111L, request.firstValue.ownerId)
     }
@@ -86,7 +86,7 @@ class ListNoteWidgetControllerTest : AbstractPageControllerTest() {
     @Test
     fun `cancel add`() {
         navigateTo("/notes/widgets/list?owner-id=111&owner-type=ACCOUNT&test-mode=1")
-        click(".btn-create")
+        click(".btn-create", 100)
 
         click(".btn-cancel")
         assertElementNotVisible("#note-modal")
