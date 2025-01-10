@@ -35,6 +35,7 @@ class ContactService(
         ids: List<Long> = emptyList(),
         contactTypeIds: List<Long> = emptyList(),
         accountIds: List<Long> = emptyList(),
+        createdByIds: List<Long> = emptyList(),
         limit: Int = 20,
         offset: Int = 0
     ): List<ContactEntity> {
@@ -51,6 +52,9 @@ class ContactService(
         if (accountIds.isNotEmpty()) {
             jql.append(" AND C.accountId IN :accountIds")
         }
+        if (createdByIds.isNotEmpty()) {
+            jql.append(" AND C.createdById IN :createdByIds")
+        }
         jql.append(" ORDER BY C.firstName, C.lastName")
 
         val query = em.createQuery(jql.toString(), ContactEntity::class.java)
@@ -66,6 +70,9 @@ class ContactService(
         }
         if (accountIds.isNotEmpty()) {
             query.setParameter("accountIds", accountIds)
+        }
+        if (createdByIds.isNotEmpty()) {
+            query.setParameter("createdByIds", createdByIds)
         }
 
         query.firstResult = offset

@@ -36,6 +36,7 @@ class ListContactControllerTest : AbstractPageControllerTest() {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
+                anyOrNull(),
             )
 
         navigateTo("/contacts")

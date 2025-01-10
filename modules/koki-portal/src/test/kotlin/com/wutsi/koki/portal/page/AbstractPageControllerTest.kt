@@ -297,6 +297,7 @@ abstract class AbstractPageControllerTest {
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
+            anyOrNull(),
         )
         doReturn(GetContactResponse(ContactFixtures.contact)).whenever(kokiContacts).contact(any())
         doReturn(CreateContactResponse(ContactFixtures.NEW_CONTACT_ID)).whenever(kokiContacts).create(any())

@@ -12,6 +12,10 @@ h1.entity-title img {
     height: 32px
 }
 
+a.entity-title {
+    text-decoration: none;
+}
+
 .flex {
     display: flex;
 }
@@ -155,28 +159,28 @@ h1.entity-title img {
 }
 
 
-#navbar {
+.navbar {
     border-bottom: 1px solid gray;
     background: white;
 }
 
-#navbar .brand-name {
+.navbar .brand-name {
     padding: .5em !important;
     font-size: .8em !important;
     font-weight: bold !important;
 }
 
-#navbar img.brand-logo {
+.navbar img.brand-logo {
     margin-left: .5em !important;
     height: 50px;
 }
 
-#navbar .nav-link {
+.navbar .nav-link {
     border: 1px solid gray;
     margin-right: .5em;
 }
 
-#navbar .dropdown-menu {
+.navbar .dropdown-menu {
     position: fixed;
     float: none;
     left: auto;
@@ -186,7 +190,7 @@ h1.entity-title img {
     margin-top: -1em;
 }
 
-#navbar .dropdown-menu .user-hi {
+.navbar .dropdown-menu .user-hi {
     font-weight: bold;
     font-size: 1.2em;
 }
@@ -207,6 +211,11 @@ h1.entity-title img {
 
 #menubar ul.navbar-nav li.active a {
     color: black;
+}
+
+#menubar .nav-link {
+    border: 0;
+    margin-right: 0;
 }
 
 .widget {
@@ -296,7 +305,15 @@ tr.activity-running {
     border: 4px solid black;
 }
 
-/* bootstrap */
+/* Notes */
+.note-body p {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+/* ============================= */
+/* bootstrap                     */
+/* ============================= */
 .border {
     border: 1px solid gray !important;
 }
@@ -306,7 +323,9 @@ tr.activity-running {
     padding-bottom: 0
 }
 
-/* highlightjs line-number*/
+/* ============================= */
+/* highlightjs line-number       */
+/* ============================= */
 .hljs-ln-numbers {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -323,12 +342,4 @@ tr.activity-running {
 
 .hljs-ln-code {
     padding-left: 10px !important;
-}
-
-/* quill */
-
-/* Notes */
-.note-body p {
-    margin-bottom: 0;
-    padding-bottom: 0;
 }
