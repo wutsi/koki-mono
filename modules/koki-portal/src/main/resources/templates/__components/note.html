@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<tr class="note" th:fragment="columns(note, returnUrl)" th:remove="tag">
+    <td>
+        <div>
+            <a th:href="${note.buildViewUrl(returnUrl)}" th:text="${note.name}">SUBJECT</a>
+        </div>
+        <div class="text-smaller">
+            <span th:if="${note.modifiedBy}" th:text="${note.modifiedBy?.displayName}">DISPLAY NANME</span>
+            <span th:if="${note.modifiedBy}">-</span>
+            <span th:text="${note.modifiedAtText}">DATE</span>
+        </div>
+        <div th:text="${note.summary}">BODY</div>
+    </td>
+</tr>
+
+<tr id="note-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
+    <td class="text-center" colspan="6">
+        <a href="javascript: koki_load_more('note-load-more')" th:data-url="${moreUrl}">Load more...</a>
+    </td>
+</tr>
+
+</body>
