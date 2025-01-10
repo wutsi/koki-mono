@@ -35,7 +35,7 @@ class NoteMapper : TenantAwareMapper() {
         return NoteModel(
             id = entity.id,
             subject = entity.subject,
-            summary = entity.summary,
+            body = entity.body,
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.modifiedAt),
             modifiedBy = entity.modifiedById?.let { id -> users[id] },

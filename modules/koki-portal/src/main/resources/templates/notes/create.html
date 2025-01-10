@@ -1,29 +1,19 @@
-<form class="form" id="note-form" method="post" onsubmit="koki_notes_update(event)"
-      th:action="@{'/notes/' + ${note.id} + '/update'}"
+<form class="form" id="note-form" method="post" onsubmit="koki_notes_add_new(event)" th:action="@{'/notes/add-new'}"
       th:object="${form}">
+    <input th:field="*{ownerId}" type="hidden"/>
+    <input th:field="*{ownerType}" type="hidden"/>
+
     <table class="table">
         <tr>
-            <td width="20%">Created By</td>
-            <td th:text="${note.createdBy?.displayName}">CREATE BY</td>
-        </tr>
-        <tr>
-            <td width="1">Created</td>
-            <td th:text="${note.createdAtText}">CREATED</td>
-        </tr>
-        <tr>
-            <td width="1">Subject</td>
+            <td width="20%">Subject</td>
             <td>
-                <input name="subject" onchange="koki_notes_on_change();" required
-                       style="width:100%"
-                       th:field="*{subject}"/>
+                <input name="subject" onchange="koki_notes_on_change();" style="width:100%" th:field="*{subject}"/>
             </td>
         </tr>
         <tr>
             <td valign="top">Body</td>
             <td>
-                <div contenteditable="true" id="html-editor"
-                     style="height: 10em"
-                     th:text="${form.body}"></div>
+                <div id="html-editor" style="height: 10em" th:text="${form.body}"></div>
                 <textarea name="body" style="display: none" th:field="*{body}"></textarea>
             </td>
         </tr>

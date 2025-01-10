@@ -10,8 +10,8 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.AccountFixtures.account
 import com.wutsi.koki.ContactFixtures
-import com.wutsi.koki.ContactFixtures.contact
 import com.wutsi.koki.FileFixtures
+import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import kotlin.test.Test
@@ -111,11 +111,26 @@ class AccountControllerTest : AbstractPageControllerTest() {
             anyOrNull(), // ids
             anyOrNull(), // workflpw-instance-id
             anyOrNull(), // form-id
-            eq(contact.id), // owner-id
+            eq(account.id), // owner-id
             eq("ACCOUNT"), // owner-type
             eq(20), // limit
             eq(0), // offset
         )
         assertElementCount(".widget-files tr.file", FileFixtures.files.size)
+    }
+
+    @Test
+    fun notes() {
+        navigateTo("/accounts/${account.id}?tab=notes")
+
+        Thread.sleep(1000)
+        verify(kokiNotes).notes(
+            anyOrNull(), // ids
+            eq(account.id), // owner-id
+            eq("ACCOUNT"), // owner-type
+            eq(20), // limit
+            eq(0), // offset
+        )
+        assertElementCount(".widget-notes tr.note", NoteFixtures.notes.size)
     }
 }

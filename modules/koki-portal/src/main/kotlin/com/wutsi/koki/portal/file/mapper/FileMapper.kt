@@ -2,7 +2,7 @@ package com.wutsi.koki.portal.file.mapper
 
 import com.wutsi.koki.file.dto.File
 import com.wutsi.koki.file.dto.FileSummary
-import com.wutsi.koki.portal.model.FileModel
+import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.model.UserModel
 import org.apache.commons.io.FilenameUtils
 import org.springframework.stereotype.Service
@@ -18,7 +18,6 @@ class FileMapper {
         createdBy: UserModel?,
     ): FileModel {
         val fmt = createDateFormat()
-
         return FileModel(
             id = entity.id,
             name = entity.name,

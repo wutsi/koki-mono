@@ -10,6 +10,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.ContactFixtures.contact
 import com.wutsi.koki.FileFixtures
+import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import kotlin.test.Test
@@ -88,5 +89,20 @@ class ContactControllerTest : AbstractPageControllerTest() {
             eq(0), // offset
         )
         assertElementCount(".widget-files tr.file", FileFixtures.files.size)
+    }
+
+    @Test
+    fun notes() {
+        navigateTo("/contacts/${contact.id}?tab=notes")
+
+        Thread.sleep(1000)
+        verify(kokiNotes).notes(
+            anyOrNull(), // ids
+            eq(contact.id), // owner-id
+            eq("CONTACT"), // owner-type
+            eq(20), // limit
+            eq(0), // offset
+        )
+        assertElementCount(".widget-notes tr.note", NoteFixtures.notes.size)
     }
 }

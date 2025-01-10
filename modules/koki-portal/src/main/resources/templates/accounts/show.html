@@ -59,6 +59,8 @@
 
             <div class="widget">
                 <div class="widget-body">
+                    <div th:with="returnFileUrl=@{'/accounts/' + ${account.id} + '?tab=files'}">
+
                     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button aria-controls="pills-content" aria-selected="true" class="nav-link active"
@@ -79,6 +81,13 @@
                                     data-bs-target="#pills-files" data-bs-toggle="pill" id="pills-files-tab"
                                     role="tab" type="button">
                                 Files
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-notes" aria-selected="false" class="nav-link"
+                                    data-bs-target="#pills-notes" data-bs-toggle="pill" id="pills-notes-tab"
+                                    role="tab" type="button">
+                                Notes
                             </button>
                         </li>
                     </ul>
@@ -154,9 +163,12 @@
                              th:data-url="'/contacts/widgets/list?show-account=false&account-id=' + ${account.id}">
                         </div>
 
-                        <div th:with="returnUrl=@{'/accounts/' + ${account.id} + '?tab=files'}">
                         <div aria-labelledby="pills-files-tab" class="tab-pane fade" id="pills-files" role="tabpanel"
-                             th:data-url="'/files/widgets/list?owner-id=' + ${account.id} + '&owner-type=ACCOUNT&return-url=' + ${returnUrl}">
+                             th:data-url="'/files/widgets/list?owner-id=' + ${account.id} + '&owner-type=ACCOUNT&return-url=' + ${returnFileUrl}">
+                        </div>
+
+                        <div aria-labelledby="pills-notes-tab" class="tab-pane fade" id="pills-notes" role="tabpanel"
+                             th:data-url="'/notes/widgets/list?owner-id=' + ${account.id} + '&owner-type=ACCOUNT'">
                         </div>
                     </div>
                 </div>

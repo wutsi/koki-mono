@@ -6,7 +6,6 @@ import java.util.Date
 data class NoteModel(
     val id: Long = -1,
     val subject: String = "",
-    val summary: String = "",
     val body: String = "",
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
@@ -14,4 +13,7 @@ data class NoteModel(
     val modifiedAtText: String = "",
     val createdBy: UserModel? = null,
     val modifiedBy: UserModel? = null
-)
+) {
+    val url: String
+        get() = "/notes/$id"
+}

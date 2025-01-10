@@ -12,6 +12,7 @@ import com.wutsi.koki.FormFixtures
 import com.wutsi.koki.LogFixtures.logEntries
 import com.wutsi.koki.LogFixtures.logEntry
 import com.wutsi.koki.MessageFixtures
+import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.RoleFixtures
 import com.wutsi.koki.ScriptFixtures
 import com.wutsi.koki.ServiceFixtures.SERVICE_ID
@@ -51,6 +52,9 @@ import com.wutsi.koki.form.dto.SearchFormResponse
 import com.wutsi.koki.form.dto.SearchFormSubmissionResponse
 import com.wutsi.koki.message.dto.GetMessageResponse
 import com.wutsi.koki.message.dto.SearchMessageResponse
+import com.wutsi.koki.note.dto.CreateNoteResponse
+import com.wutsi.koki.note.dto.GetNoteResponse
+import com.wutsi.koki.note.dto.SearchNoteResponse
 import com.wutsi.koki.portal.service.AccessTokenHolder
 import com.wutsi.koki.script.dto.CreateScriptResponse
 import com.wutsi.koki.script.dto.GetScriptResponse
@@ -63,6 +67,7 @@ import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiLogs
 import com.wutsi.koki.sdk.KokiMessages
+import com.wutsi.koki.sdk.KokiNotes
 import com.wutsi.koki.sdk.KokiScripts
 import com.wutsi.koki.sdk.KokiServices
 import com.wutsi.koki.sdk.KokiTenants
@@ -121,7 +126,7 @@ import kotlin.test.assertTrue
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 abstract class AbstractPageControllerTest {
     companion object {
-        const val USER_ID = 11L
+        val USER_ID = UserFixtures.USER_ID
     }
 
     @LocalServerPort
@@ -149,6 +154,9 @@ abstract class AbstractPageControllerTest {
 
     @MockitoBean
     protected lateinit var kokiMessages: KokiMessages
+
+    @MockitoBean
+    protected lateinit var kokiNotes: KokiNotes
 
     @MockitoBean
     protected lateinit var kokiScripts: KokiScripts
@@ -223,6 +231,7 @@ abstract class AbstractPageControllerTest {
         setupAccountModule()
         setupContactModule()
         setupFileModule()
+        setupNoteModule()
 
         setupForms()
         setupLogs()
@@ -230,8 +239,6 @@ abstract class AbstractPageControllerTest {
         setupServices()
         setupMessages()
         setupWorkflows()
-
-        doReturn(SearchConfigurationResponse()).whenever(kokiTenants).configurations(anyOrNull(), anyOrNull())
     }
 
     private fun setupAccountModule() {
@@ -300,6 +307,10 @@ abstract class AbstractPageControllerTest {
         doReturn(SearchTenantResponse(TenantFixtures.tenants)).whenever(kokiTenants)
             .tenants()
 
+        // Configuration
+        doReturn(SearchConfigurationResponse()).whenever(kokiTenants)
+            .configurations(anyOrNull(), anyOrNull())
+
         // Roles
         doReturn(SearchRoleResponse(RoleFixtures.roles)).whenever(kokiUsers)
             .roles(anyOrNull(), anyOrNull(), anyOrNull())
@@ -342,6 +353,19 @@ abstract class AbstractPageControllerTest {
                 anyOrNull(),
                 anyOrNull(),
             )
+    }
+
+    private fun setupNoteModule() {
+        doReturn(SearchNoteResponse(NoteFixtures.notes)).whenever(kokiNotes)
+            .notes(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
+        doReturn(GetNoteResponse(NoteFixtures.note)).whenever(kokiNotes).note(any())
+        doReturn(CreateNoteResponse(NoteFixtures.NEW_NOTE_ID)).whenever(kokiNotes).create(any())
     }
 
     private fun setupForms() {

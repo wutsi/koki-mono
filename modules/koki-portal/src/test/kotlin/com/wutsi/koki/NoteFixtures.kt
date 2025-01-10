@@ -11,7 +11,7 @@ object NoteFixtures {
         NoteSummary(
             id = 100,
             subject = "Phone call",
-            summary = "This is the content of the note...",
+            body = "This is the <b>content</b> of the note",
             createdAt = DateUtils.addDays(Date(), -5),
             createdById = users[0].id,
             modifiedAt = DateUtils.addDays(Date(), -5),
@@ -20,37 +20,35 @@ object NoteFixtures {
         NoteSummary(
             id = 101,
             subject = "Email sent",
-            summary = "This is the content of the note...",
+            body = "This is the content of the note",
             createdById = users[0].id,
             modifiedById = users[1].id,
         ),
         NoteSummary(
             id = 103,
             subject = "Another note",
-            summary = "This is the content of another note note",
+            body = "This is the content of the note",
             createdById = users[0].id,
             modifiedById = users[1].id,
         ),
         NoteSummary(
             id = 104,
             subject = "Another note",
-            summary = "This is the content of another note note",
-            createdById = users[0].id,
+            body = "This is the content of the note",
+            createdById = users[1].id,
             modifiedById = users[1].id,
         ),
         NoteSummary(
             id = 105,
             subject = "Another note",
-            summary = "This is the content of another note note",
-            createdById = users[1].id,
-            modifiedById = users[2].id,
+            body = "This is the content of the note",
         ),
     )
 
     val note = Note(
         id = 100,
         subject = "Phone call",
-        body = "<p>This is the content of the note</b>",
+        body = "This is the content of the note",
         createdAt = DateUtils.addDays(Date(), -5),
         createdById = users[0].id,
         modifiedAt = DateUtils.addDays(Date(), -5),

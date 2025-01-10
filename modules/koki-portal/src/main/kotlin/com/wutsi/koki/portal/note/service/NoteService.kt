@@ -1,6 +1,8 @@
 package com.wutsi.koki.portal.note.service
 
-import com.wutsi.koki.note.dto.SearchNoteResponse
+import com.wutsi.koki.note.dto.CreateNoteRequest
+import com.wutsi.koki.note.dto.UpdateNoteRequest
+import com.wutsi.koki.portal.note.form.NoteForm
 import com.wutsi.koki.portal.note.mapper.NoteMapper
 import com.wutsi.koki.portal.note.model.NoteModel
 import com.wutsi.koki.portal.service.UserService
@@ -13,6 +15,29 @@ class NoteService(
     private val mapper: NoteMapper,
     private val userService: UserService,
 ) {
+    fun note(id: Long): NoteModel {
+        val note = koki.note(id).note
+
+        // Users
+        val userIds = listOf(note.createdById, note.modifiedById)
+            .filterNotNull()
+            .toSet()
+        val userMap = if (userIds.isEmpty()) {
+            emptyMap()
+        } else {
+            userService.users(
+                ids = userIds.toList(),
+                limit = userIds.size
+            )
+                .associateBy { user -> user.id }
+        }
+
+        return mapper.toNoteModel(
+            entity = note,
+            users = userMap
+        )
+    }
+
     fun notes(
         ids: List<Long> = emptyList(),
         ownerId: Long? = null,
@@ -50,5 +75,27 @@ class NoteService(
                 users = userMap,
             )
         }
+    }
+
+    fun create(form: NoteForm): Long {
+        val request = CreateNoteRequest(
+            subject = form.subject,
+            body = form.body,
+            ownerId = form.ownerId,
+            ownerType = form.ownerType,
+        )
+        return koki.create(request).noteId
+    }
+
+    fun update(id: Long, form: NoteForm) {
+        val request = UpdateNoteRequest(
+            subject = form.subject,
+            body = form.body,
+        )
+        return koki.update(id, request)
+    }
+
+    fun delete(id: Long) {
+        koki.delete(id)
     }
 }
