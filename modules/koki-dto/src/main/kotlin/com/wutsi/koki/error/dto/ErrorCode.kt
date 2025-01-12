@@ -16,6 +16,7 @@ object ErrorCode {
     val ATTRIBUTE_TYPE_INVALID: String = "$PREFIX:attribute:type-invalid"
 
     val AUTHENTICATION_FAILED: String = "$PREFIX:auth:failed"
+    val AUTHENTICATION_USER_NOT_ACTIVE: String = "$PREFIX:auth:user-not-active"
 
     val AUTHORIZATION_PERMISSION_DENIED: String = "$PREFIX:auth:permission-denied"
     val AUTHORIZATION_SCHEME_NOT_SUPPORTED: String = "$PREFIX:auth:scheme-not-supported"
@@ -64,6 +65,10 @@ object ErrorCode {
     val SCRIPT_NOT_FOUND: String = "$PREFIX:script:not-found"
     val SCRIPT_COMPILATION_FAILED: String = "$PREFIX:script:compilation-failed"
     val SCRIPT_EXECUTION_FAILED: String = "$PREFIX:script:execution-failed"
+
+    val TAX_NOT_FOUND: String = "$PREFIX:tax:not-found"
+    val TAX_TYPE_NOT_FOUND: String = "$PREFIX:tax-type:not-found"
+    val TAX_TYPE_NAME_MISSING: String = "$PREFIX:tax-type:name-missing"
 
     val TENANT_NOT_FOUND: String = "$PREFIX:tenant:not-found"
     val TENANT_MISSING_FROM_HEADER: String = "$PREFIX:tenant:missing-from-header"
