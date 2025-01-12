@@ -63,7 +63,7 @@ class TenantFilterTest {
 
     @Test
     fun `not active`() {
-        doReturn(tenant.copy(status = TenantStatus.UNKNOWN)).whenever(currentTenant).get()
+        doReturn(tenant.copy(status = TenantStatus.NEW)).whenever(currentTenant).get()
 
         filter.doFilter(request, response, chain)
 
