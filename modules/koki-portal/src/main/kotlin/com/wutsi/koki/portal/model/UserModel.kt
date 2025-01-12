@@ -6,6 +6,6 @@ data class UserModel(
     val id: Long = -1,
     val email: String = "",
     val displayName: String = "",
-    val status: UserStatus = UserStatus.UNKNOWN,
+    val status: UserStatus = UserStatus.ACTIVE,
     val roles: List<RoleModel> = emptyList()
 )

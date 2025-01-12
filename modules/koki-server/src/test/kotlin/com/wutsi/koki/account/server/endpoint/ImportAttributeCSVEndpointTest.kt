@@ -137,7 +137,7 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun unknownType() {
-        checkTypeInvalid("\"UNKNOWN\"")
+        checkTypeInvalid("\"NEW\"")
     }
 
     private fun checkTypeInvalid(type: String) {

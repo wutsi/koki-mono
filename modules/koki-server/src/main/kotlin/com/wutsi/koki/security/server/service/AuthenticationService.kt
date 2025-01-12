@@ -8,6 +8,7 @@ import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
+import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import com.wutsi.koki.tenant.server.service.PasswordService
 import com.wutsi.koki.tenant.server.service.UserService
@@ -27,6 +28,9 @@ open class AuthenticationService(
             val user = userService.getByEmail(email, tenantId)
             if (!passwordService.matches(password, user.password, user.salt)) {
                 throw ConflictException(error = Error(ErrorCode.AUTHENTICATION_FAILED))
+            }
+            if (user.status != UserStatus.ACTIVE) {
+                throw ConflictException(error = Error(ErrorCode.AUTHENTICATION_USER_NOT_ACTIVE))
             }
             return createAccessToken(user)
         } catch (ex: NotFoundException) {

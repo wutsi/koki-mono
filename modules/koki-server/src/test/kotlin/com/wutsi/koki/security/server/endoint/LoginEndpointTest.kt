@@ -66,6 +66,19 @@ class LoginEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
+    fun `not active`() {
+        val request = LoginRequest(
+            email = "not-active@gmail.com",
+            password = "secret"
+        )
+
+        val result = rest.postForEntity("/v1/auth/login", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.CONFLICT, result.statusCode)
+        assertEquals(ErrorCode.AUTHENTICATION_USER_NOT_ACTIVE, result.body?.error?.code)
+    }
+
+    @Test
     fun `user of another tenant`() {
         val request = LoginRequest(
             email = "roger.milla@gmail.com",
