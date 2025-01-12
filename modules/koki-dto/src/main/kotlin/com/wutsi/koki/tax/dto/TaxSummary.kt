@@ -11,8 +11,8 @@ data class TaxSummary(
     val accountantId: Long? = null,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
-    val createdAtId: Long? = null,
-    val modifiedAtId: Long? = null,
+    val createdById: Long? = null,
+    val modifiedById: Long? = null,
     val startAt: Date? = null,
     val dueAt: Date? = null,
 )
