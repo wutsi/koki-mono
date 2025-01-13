@@ -9,6 +9,8 @@ data class Tax(
     val taxTypeId: Long? = null,
     val accountId: Long = -1,
     val accountantId: Long? = null,
+    val technicianId: Long? = null,
+    val assigneeId: Long? = null,
     val status: TaxStatus = TaxStatus.NEW,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),

@@ -1,8 +1,6 @@
-package com.wutsi.koki.tax.dto
+package com.wutsi.koki.portal.tax.form
 
-import java.util.Date
-
-data class CreateTaxRequest(
+data class TaxForm(
     val fiscalYear: Int = -1,
     val description: String? = null,
     val taxTypeId: Long? = null,
@@ -10,6 +8,6 @@ data class CreateTaxRequest(
     val accountantId: Long? = null,
     val technicianId: Long? = null,
     val assigneeId: Long? = null,
-    val startAt: Date? = null,
-    val dueAt: Date? = null,
+    val startAt: String = "",
+    val dueAt: String = "",
 )

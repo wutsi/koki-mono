@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class SearchUserController(
+class UserSelectorController(
     private val service: UserService,
 ) : AbstractPageController() {
-    @GetMapping("/users/search")
+    @GetMapping("/users/selector/search")
     fun new(
         @RequestParam(required = false, name = "q") keyword: String? = null,
         @RequestParam(required = false, name = "role-id") roleId: List<Long> = emptyList(),
