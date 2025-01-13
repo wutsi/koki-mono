@@ -11,13 +11,13 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/tax :: tax-breadcrumb(null)}"></div>
+            <div th:replace="~{__components/tax :: tax-breadcrumb(${tax})}"></div>
         </div>
     </div>
 
     <div class="row">
         <div class="col-12">
-            <form class="form" method="post" th:action="@{/taxes/add-new}" th:object="${form}">
+            <form class="form" method="post" th:action="@{'/taxes/' + ${tax.id} + '/update'}" th:object="${form}">
                 <div class="form-body">
                     <div class="section">
                         <div class="section-body">
@@ -58,19 +58,28 @@
                             </div>
 
                             <div class="section-item">
-                                <label class="title">Assigned To</label>
-                                <select th:field="*{assigneeId}"></select>
-                                <script th:replace="~{__components/user :: user-selector('assigneeId', null)}"></script>
-                            </div>
-                            <div class="section-item">
                                 <label class="title">Accountant</label>
-                                <select th:field="*{accountantId}"></select>
+                                <select th:field="*{accountantId}">
+                                    <option selected
+                                            th:if="${accountant}"
+                                            th:text="${accountant.displayName}"
+                                            th:value="${accountant.id}">
+                                        ASSIGNEE
+                                    </option>
+                                </select>
                                 <script
                                     th:replace="~{__components/user :: user-selector('accountantId', null)}"></script>
                             </div>
                             <div class="section-item">
                                 <label class="title">Technician</label>
-                                <select th:field="*{technicianId}"></select>
+                                <select th:field="*{technicianId}">
+                                    <option selected
+                                            th:if="${technician}"
+                                            th:text="${technician.displayName}"
+                                            th:value="${technician.id}">
+                                        ASSIGNEE
+                                    </option>
+                                </select>
                                 <script
                                     th:replace="~{__components/user :: user-selector('technicianId', null)}"></script>
                             </div>

@@ -1,7 +1,7 @@
-package com.wutsi.koki.portal.mapper
+package com.wutsi.koki.portal.user.mapper
 
-import com.wutsi.koki.portal.model.RoleModel
-import com.wutsi.koki.portal.model.UserModel
+import com.wutsi.koki.portal.user.model.RoleModel
+import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.tenant.dto.Role
 import com.wutsi.koki.tenant.dto.User
 import com.wutsi.koki.tenant.dto.UserSummary

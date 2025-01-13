@@ -27,6 +27,8 @@ class GetTaxEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("2014-04-30", fmt.format(tax.dueAt))
         assertEquals("2014-03-01", fmt.format(tax.startAt))
         assertEquals(110, tax.accountantId)
+        assertEquals(111, tax.technicianId)
+        assertEquals(112, tax.assigneeId)
         assertEquals(TaxStatus.PREPARING, tax.status)
     }
 

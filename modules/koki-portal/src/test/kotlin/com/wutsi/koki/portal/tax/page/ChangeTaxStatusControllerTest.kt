@@ -8,80 +8,60 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.TaxFixtures.tax
-import com.wutsi.koki.TaxFixtures.taxTypes
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.tax.dto.UpdateTaxRequest
-import java.text.SimpleDateFormat
-import java.time.LocalDate
+import com.wutsi.koki.tax.dto.TaxStatus
+import com.wutsi.koki.tax.dto.UpdateTaxStatusRequest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class EditTaxControllerTest : AbstractPageControllerTest() {
+class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
     @Test
     fun edit() {
-        navigateTo("/taxes/${tax.id}/edit")
+        navigateTo("/taxes/${tax.id}/status")
 
-        assertCurrentPageIs(PageName.TAX_EDIT)
+        assertCurrentPageIs(PageName.TAX_STATUS)
 
-        select("#fiscalYear", 2)
-        select("#taxTypeId", 3)
-        scrollToBottom()
-        input("#startAt", "2020\t1211")
-        input("#dueAt", "2020\t1221")
-        input("#description", "This is a nice description")
+        select("#status", 3)
+        input("#html-editor .ql-editor", "Hello man")
         click("button[type=submit]")
 
-        val fmt = SimpleDateFormat("yyyy-MM-dd")
-        val request = argumentCaptor<UpdateTaxRequest>()
-        verify(kokiTaxes).update(eq(tax.id), request.capture())
+        val request = argumentCaptor<UpdateTaxStatusRequest>()
+        verify(kokiTaxes).status(eq(tax.id), request.capture())
         val tax = request.firstValue
-        assertEquals(LocalDate.now().year - 2, tax.fiscalYear)
-        assertEquals(taxTypes[2].id, tax.taxTypeId)
-        assertEquals(fmt.parse("2020-12-11"), tax.startAt)
-        assertEquals(fmt.parse("2020-12-21"), tax.dueAt)
-        assertEquals("This is a nice description", tax.description)
+        assertEquals(TaxStatus.PROCESSING, tax.status)
+        assertEquals("<p>Hello man</p>", tax.notes)
 
-        assertCurrentPageIs(PageName.TAX_SAVED)
-        click(".btn-ok")
-        assertCurrentPageIs(PageName.TAX_LIST)
+        assertCurrentPageIs(PageName.TAX)
     }
 
     @Test
     fun cancel() {
-        navigateTo("/taxes/${tax.id}/edit")
+        navigateTo("/taxes/${tax.id}/status")
 
-        assertCurrentPageIs(PageName.TAX_EDIT)
+        assertCurrentPageIs(PageName.TAX_STATUS)
 
-        select("#fiscalYear", 2)
-        select("#taxTypeId", 3)
-        scrollToBottom()
-        input("#startAt", "2020\t1211")
-        input("#dueAt", "2020\t1221")
-        input("#description", "This is a nice description")
+        select("#status", 3)
+        input("#html-editor .ql-editor", "Hello man")
         click(".btn-cancel")
 
-        assertCurrentPageIs(PageName.TAX_LIST)
+        assertCurrentPageIs(PageName.TAX)
     }
 
     @Test
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
-        doThrow(ex).whenever(kokiTaxes).update(any(), any())
+        doThrow(ex).whenever(kokiTaxes).status(any(), any())
 
-        navigateTo("/taxes/${tax.id}/edit")
+        navigateTo("/taxes/${tax.id}/status")
 
-        assertCurrentPageIs(PageName.TAX_EDIT)
+        assertCurrentPageIs(PageName.TAX_STATUS)
 
-        select("#fiscalYear", 2)
-        select("#taxTypeId", 3)
-        scrollToBottom()
-        input("#startAt", "2020\t1211")
-        input("#dueAt", "2020\t1221")
-        input("#description", "This is a nice description")
+        select("#status", 3)
+        input("#html-editor .ql-editor", "Hello man")
         click("button[type=submit]")
 
-        assertCurrentPageIs(PageName.TAX_EDIT)
+        assertCurrentPageIs(PageName.TAX_STATUS)
         assertElementPresent(".alert-danger")
     }
 

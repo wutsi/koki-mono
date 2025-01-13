@@ -6,12 +6,12 @@
 
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
-<div th:replace="~{__components/layout :: menubar('accounts')}"></div>
+<div th:replace="~{__components/layout :: menubar('taxes')}"></div>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/account :: account-breadcrumb(${account})}"></div>
+            <div th:replace="~{__components/tax :: tax-breadcrumb(${tax})}"></div>
         </div>
     </div>
 
@@ -19,38 +19,44 @@
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
-                    <div class="widget-toolbar">
-                        <a class="btn-edit btn btn-secondary"
-                           th:href="'/accounts/' + ${account.id} + '/edit'">Edit</a>
-                        <a class="btn-delete btn btn-danger float-right"
-                           onclick="return confirm('Are you sure you want to delete the account?')"
-                           th:href="'/accounts/' + ${account.id} + '/delete'">Delete</a>
+                    <div class="flex flex-space-between">
+                        <h1 class="entity-title">
+                            <img align="absmiddle" src="/image/tax.png"/>
+                            <span th:text="${tax.name}">NAME</span>
+                        </h1>
+                        <div>
+                            <a class="btn-edit btn btn-light btn-sm"
+                               th:href="'/taxes/' + ${tax.id} + '/edit'">Edit</a>
+                            <a class="btn-status btn btn-light btn-sm"
+                               th:href="'/taxes/' + ${tax.id} + '/status'">Update Status</a>
+                            <a class="btn-delete btn btn-danger btn-sm"
+                               onclick="return confirm('Are you sure you want to delete the tax report?')"
+                               th:href="'/taxes/' + ${tax.id} + '/delete'">Delete</a>
+                        </div>
                     </div>
-
-                    <h1 class="entity-title">
-                        <img align="absmiddle" src="/image/account.png"/>
-                        <span th:text="${account.name}">NAME</span>
-                    </h1>
                     <div class="flex">
-                        <div class="margin-right-2x" th:if="${account.accountType}">
+                        <div class="margin-right-2x">
+                            <b>Fiscal Year</b><br/>
+                            <span th:text="${tax.fiscalYear}">FISCAL YEAR</span>
+                        </div>
+                        <div class="margin-right-2x" th:if="${tax.taxType}">
                             <b>Type</b><br/>
-                            <span th:text="${account.accountType.title}">ACCOUNT TYPE</span>
+                            <span th:text="${tax.taxType.title}">TAX TYPE</span>
                         </div>
-                        <div class="margin-right-2x" th:if="${account.managedBy}">
-                            <b>Account Manager</b><br/>
-                            <span th:text="${account.managedBy.displayName}">ACCOUNT MANAGER</span>
+                        <div class="margin-right-2x">
+                            <b>Status</b><br/>
+                            <span th:replace="~{__components/tax :: tax-status(${tax.status.name()})}">STATUS</span>
                         </div>
-                        <div class="margin-right-2x" th:if="${account.phone}">
-                            <b>Phone</b><br/>
-                            <span th:text="${account.phone}">PHONE</span>
+                        <div class="margin-right-2x">
+                            <b>Account</b><br/>
+                            <a class="entity-title" th:href="'/accounts/' + ${tax.account.id}">
+                                <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
+                                <span th:text="${tax.account.name}">ACCOUNT</span>
+                            </a>
                         </div>
-                        <div class="margin-right-2x" th:if="${account.mobile}">
-                            <b>Mobile</b><br/>
-                            <span th:text="${account.mobile}">MOBILE</span>
-                        </div>
-                        <div class="margin-right-2x" th:if="${account.email}">
-                            <b>Email</b><br/>
-                            <a th:href="'mailto:' + ${account.email}" th:text="${account.email}">EMAIL</a>
+                        <div class="margin-right-2x" th:if="${tax.assignee}">
+                            <b>Assigned To</b><br/>
+                            <span th:text="${tax.assignee.displayName}">ASSIGNEE</span>
                         </div>
                     </div>
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
@@ -59,126 +65,121 @@
 
             <div class="widget">
                 <div class="widget-body">
-                    <div th:with="returnFileUrl=@{'/accounts/' + ${account.id} + '?tab=files'}">
+                    <div th:with="returnFileUrl=@{'/taxes/' + ${tax.id} + '?tab=files'}">
 
-                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button aria-controls="pills-content" aria-selected="true" class="nav-link active"
-                                    data-bs-target="#pills-details" data-bs-toggle="pill" id="pills-details-tab"
-                                    role="tab" type="button">
-                                Details
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button aria-controls="pills-contacts" aria-selected="false" class="nav-link"
-                                    data-bs-target="#pills-contacts" data-bs-toggle="pill" id="pills-contacts-tab"
-                                    role="tab" type="button">
-                                Contacts
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button aria-controls="pills-files" aria-selected="false" class="nav-link"
-                                    data-bs-target="#pills-files" data-bs-toggle="pill" id="pills-files-tab"
-                                    role="tab" type="button">
-                                Files
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button aria-controls="pills-notes" aria-selected="false" class="nav-link"
-                                    data-bs-target="#pills-notes" data-bs-toggle="pill" id="pills-notes-tab"
-                                    role="tab" type="button">
-                                Notes
-                            </button>
-                        </li>
-                    </ul>
-                    <div class="tab-content" id="pills-tabContent">
-                        <div aria-labelledby="pills-details-tab" class="tab-pane fade show active" id="pills-details"
-                             role="tabpanel">
-                            <table class="table">
-                                <tr>
-                                    <td width="20%"><b>Name</b></td>
-                                    <td th:text="${account.name}">NAME</td>
-                                </tr>
-                                <tr th:if="${account.accountType}">
-                                    <td width="20%"><b>Type</b></td>
-                                    <td th:text="${account.accountType?.title}">TYPE</td>
-                                </tr>
-                                <tr th:if="${account.managedBy}">
-                                    <td width="20%"><b>Account Manager</b></td>
-                                    <td th:text="${account.managedBy?.displayName}">ACCOUNT MANAGER</td>
-                                </tr>
-                                <tr th:if="${account.phone}">
-                                    <td><b>Phone</b></td>
-                                    <td th:text="${account.phone}">PHONE</td>
-                                </tr>
-                                <tr th:if="${account.mobile}">
-                                    <td><b>Mobile</b></td>
-                                    <td th:text="${account.mobile}">MOBILE</td>
-                                </tr>
-                                <tr th:if="${account.email}">
-                                    <td><b>Email</b></td>
-                                    <td>
-                                        <a th:href="'mailto:' + ${account.email}" th:text="${account.email}">EMAIL</a>
-                                    </td>
-                                </tr>
-                                <tr th:if="${account.website}">
-                                    <td width="20%"><b>Website</b></td>
-                                    <td>
-                                        <a target="_blank" th:href="${account.website}" th:text="${account.website}">LINK</a>
-                                    </td>
-                                </tr>
-                                <tr th:if="${account.language}">
-                                    <td width="20%"><b>Language</b></td>
-                                    <td th:text="${account.languageText}">LANGUAGE</td>
-                                </tr>
-                                <tr th:if="${account.description}">
-                                    <td width="20%"><b>Description</b></td>
-                                    <td th:text="${account.description}">DESCRIPTION</td>
-                                </tr>
-                                <tr th:each="attr : ${account.attributes}">
-                                    <td width="20%"><b th:text="${attr.attribute.label}">NAME</b></td>
-                                    <td th:text="${attr.value}">DESCRIPTION</td>
-                                </tr>
-                                <tr>
-                                    <td width="20%"><b>Created</b></td>
-                                    <td th:text="${account.createdAtText}">CREATED</td>
-                                </tr>
-                                <tr th:if="${account.createdBy}">
-                                    <td width="20%"><b>Created By</b></td>
-                                    <td th:text="${account.createdBy.displayName}">MODIFIED BY</td>
-                                </tr>
-                                <tr>
-                                    <td width="20%"><b>Modified</b></td>
-                                    <td th:text="${account.modifiedAtText}">CREATED</td>
-                                </tr>
-                                <tr th:if="${account.modifiedBy}">
-                                    <td width="20%"><b>Modified By</b></td>
-                                    <td th:text="${account.modifiedBy.displayName}">MODIFIED BY</td>
-                                </tr>
-                            </table>
-                        </div>
+                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button aria-controls="pills-content" aria-selected="true" class="nav-link active"
+                                        data-bs-target="#pills-details" data-bs-toggle="pill" id="pills-details-tab"
+                                        role="tab" type="button">
+                                    Details
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button aria-controls="pills-files" aria-selected="false" class="nav-link"
+                                        data-bs-target="#pills-files" data-bs-toggle="pill" id="pills-files-tab"
+                                        role="tab" type="button">
+                                    Files
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button aria-controls="pills-notes" aria-selected="false" class="nav-link"
+                                        data-bs-target="#pills-notes" data-bs-toggle="pill" id="pills-notes-tab"
+                                        role="tab" type="button">
+                                    Notes
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="pills-tabContent">
+                            <div aria-labelledby="pills-details-tab" class="tab-pane fade show active"
+                                 id="pills-details"
+                                 role="tabpanel">
+                                <table class="table">
+                                    <tr>
+                                        <td width="20%"><b>Fiscal Year</b></td>
+                                        <td th:text="${tax.fiscalYear}">FISCAL YEAR</td>
+                                    </tr>
+                                    <tr th:if="${tax.taxType}">
+                                        <td><b>Type</b></td>
+                                        <td th:text="${tax.taxType?.title}">TYPE</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Status</b></td>
+                                        <td>
+                                            <span th:replace="~{__components/tax :: tax-status(${tax.status.name()})}">STATUS</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Account</b></td>
+                                        <td>
+                                            <a class="entity-title" th:href="'/accounts/' + ${tax.account.id}">
+                                                <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
+                                                <span th:text="${tax.account.name}">ACCOUNT</span>
+                                            </a>
+                                        </td>
+                                    </tr>
 
-                        <div aria-labelledby="pills-contacts-tab" class="tab-pane fade" id="pills-contacts"
-                             role="tabpanel"
-                             th:data-url="'/contacts/widgets/list?show-account=false&account-id=' + ${account.id}">
-                        </div>
+                                    <tr th:if="${tax.assignee}">
+                                        <td><b>Assigned To</b></td>
+                                        <td th:text="${tax.assignee.displayName}">ASSIGNED_TO</td>
+                                    </tr>
+                                    <tr th:if="${tax.accountant}">
+                                        <td><b>Accountant</b></td>
+                                        <td th:text="${tax.accountant.displayName}">ACCOUNTANT</td>
+                                    </tr>
+                                    <tr th:if="${tax.technician}">
+                                        <td><b>Technician</b></td>
+                                        <td th:text="${tax.technician.displayName}">TECHNICIAN</td>
+                                    </tr>
 
-                        <div aria-labelledby="pills-files-tab" class="tab-pane fade" id="pills-files" role="tabpanel"
-                             th:data-url="'/files/widgets/list?owner-id=' + ${account.id} + '&owner-type=ACCOUNT&return-url=' + ${returnFileUrl}">
-                        </div>
+                                    <tr th:if="${tax.description}">
+                                        <td><b>Description</b></td>
+                                        <td th:text="${tax.description}">DESCRIPTION</td>
+                                    </tr>
 
-                        <div aria-labelledby="pills-notes-tab" class="tab-pane fade" id="pills-notes" role="tabpanel"
-                             th:data-url="'/notes/widgets/list?owner-id=' + ${account.id} + '&owner-type=ACCOUNT'">
+                                    <tr th:if="${tax.startAt}">
+                                        <td><b>Start Date</b></td>
+                                        <td th:text="${tax.startAtText}">DUE</td>
+                                    </tr>
+                                    <tr th:if="${tax.dueAt}">
+                                        <td><b>Due Date</b></td>
+                                        <td th:text="${tax.dueAtText}">DUE</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Created</b></td>
+                                        <td>
+                                            <span th:text="${tax.createdAtText}">DATE</span>
+                                            <span th:if="${tax.createdBy}">by</span>
+                                            <span th:if="${tax.createdBy}" th:text="${tax.createdBy.displayName}">MODIFIED BY</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Modified</b></td>
+                                        <td>
+                                            <span th:text="${tax.modifiedAtText}">DATE</span>
+                                            <span th:if="${tax.modifiedBy}">by</span>
+                                            <span th:if="${tax.modifiedBy}" th:text="${tax.modifiedBy.displayName}">MODIFIED BY</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div aria-labelledby="pills-files-tab" class="tab-pane fade" id="pills-files"
+                                 role="tabpanel"
+                                 th:data-url="'/files/widgets/list?owner-id=' + ${tax.id} + '&owner-type=TAX&return-url=' + ${returnFileUrl}">
+                            </div>
+
+                            <div aria-labelledby="pills-notes-tab" class="tab-pane fade" id="pills-notes"
+                                 role="tabpanel"
+                                 th:data-url="'/notes/widgets/list?owner-id=' + ${tax.id} + '&owner-type=TAX'">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
-
-<div th:replace="~{__components/highlightjs :: prettity('json')}"></div>
 
 </body>
 </html>

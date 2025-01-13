@@ -1,9 +1,11 @@
 package com.wutsi.koki.tax.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
+import com.wutsi.koki.note.server.service.NoteService
 import com.wutsi.koki.tax.dto.TaxStatus
 import com.wutsi.koki.tax.dto.UpdateTaxStatusRequest
 import com.wutsi.koki.tax.server.dao.TaxRepository
+import com.wutsi.koki.tenant.dto.ObjectName
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -15,8 +17,13 @@ class UpdateTaxStatusEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var dao: TaxRepository
 
+    @Autowired
+    private lateinit var noteService: NoteService
+
     private val request = UpdateTaxStatusRequest(
-        status = TaxStatus.FINALIZING
+        status = TaxStatus.FINALIZING,
+        assigneeId = 888L,
+        notes = "Love it :-D"
     )
 
     @Test
@@ -28,6 +35,15 @@ class UpdateTaxStatusEndpointTest : AuthorizationAwareEndpointTest() {
         val taxId = 100L
         val tax = dao.findById(taxId).get()
         assertEquals(request.status, tax.status)
+        assertEquals(request.assigneeId, tax.assigneeId)
         assertEquals(USER_ID, tax.modifiedById)
+
+        val notes = noteService.search(
+            tenantId = TENANT_ID,
+            ownerId = tax.id,
+            ownerType = ObjectName.TAX
+        )
+        assertEquals(1, notes.size)
+        assertEquals(request.notes, notes[0].body)
     }
 }

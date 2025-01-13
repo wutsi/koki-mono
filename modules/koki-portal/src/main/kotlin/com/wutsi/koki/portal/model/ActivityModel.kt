@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.model
 
+import com.wutsi.koki.portal.user.model.RoleModel
 import com.wutsi.koki.workflow.dto.ActivityType
 
 data class ActivityModel(

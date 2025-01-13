@@ -24,6 +24,8 @@ CREATE TABLE T_TAX(
   modified_by_fk          BIGINT,
   deleted_by_fk           BIGINT,
   accountant_fk           BIGINT,
+  technician_fk           BIGINT,
+  assignee_fk             BIGINT,
 
   status                  INT NOT NULL DEFAULT 0,
   fiscal_year             INT,

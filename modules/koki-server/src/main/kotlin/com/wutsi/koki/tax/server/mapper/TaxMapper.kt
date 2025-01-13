@@ -10,7 +10,9 @@ class TaxMapper {
     fun toTax(entity: TaxEntity): Tax {
         return Tax(
             id = entity.id!!,
-            description = entity.description,
+            taxTypeId = entity.taxTypeId,
+            fiscalYear = entity.fiscalYear,
+            status = entity.status,
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
             startAt = entity.startAt,
@@ -18,25 +20,29 @@ class TaxMapper {
             createdById = entity.createdById,
             modifiedById = entity.modifiedById,
             accountantId = entity.accountantId,
+            technicianId = entity.technicianId,
+            assigneeId = entity.assigneeId,
             accountId = entity.accountId,
-            taxTypeId = entity.taxTypeId,
-            fiscalYear = entity.fiscalYear,
-            status = entity.status,
+            description = entity.description,
         )
     }
 
     fun toTaxSummary(entity: TaxEntity): TaxSummary {
         return TaxSummary(
             id = entity.id!!,
+            taxTypeId = entity.taxTypeId,
+            fiscalYear = entity.fiscalYear,
+            status = entity.status,
+            accountId = entity.accountId,
+            accountantId = entity.accountantId,
+            technicianId = entity.technicianId,
+            assigneeId = entity.assigneeId,
+            createdById = entity.createdById,
+            modifiedById = entity.modifiedById,
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
             startAt = entity.startAt,
             dueAt = entity.dueAt,
-            accountantId = entity.accountantId,
-            accountId = entity.accountId,
-            taxTypeId = entity.taxTypeId,
-            fiscalYear = entity.fiscalYear,
-            status = entity.status,
         )
     }
 }

@@ -1,9 +1,10 @@
 package com.wutsi.koki.tax.server.service
 
-import com.wutsi.koki.account.server.service.AccountService
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.note.dto.CreateNoteRequest
+import com.wutsi.koki.note.server.service.NoteService
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tax.dto.CreateTaxRequest
 import com.wutsi.koki.tax.dto.TaxStatus
@@ -11,6 +12,7 @@ import com.wutsi.koki.tax.dto.UpdateTaxRequest
 import com.wutsi.koki.tax.dto.UpdateTaxStatusRequest
 import com.wutsi.koki.tax.server.dao.TaxRepository
 import com.wutsi.koki.tax.server.domain.TaxEntity
+import com.wutsi.koki.tenant.dto.ObjectName
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -20,8 +22,8 @@ import java.util.Date
 class TaxService(
     private val dao: TaxRepository,
     private val securityService: SecurityService,
-    private val accountService: AccountService,
     private val em: EntityManager,
+    private val noteService: NoteService,
 ) {
     fun get(id: Long, tenantId: Long): TaxEntity {
         val tax = dao.findById(id)
@@ -38,7 +40,8 @@ class TaxService(
         ids: List<Long> = emptyList(),
         taxTypeIds: List<Long> = emptyList(),
         accountIds: List<Long> = emptyList(),
-        accountantIds: List<Long> = emptyList(),
+        assigneeIds: List<Long> = emptyList(),
+        participantIds: List<Long> = emptyList(),
         createdByIds: List<Long> = emptyList(),
         statuses: List<TaxStatus> = emptyList(),
         limit: Int = 20,
@@ -57,8 +60,11 @@ class TaxService(
         if (accountIds.isNotEmpty()) {
             jql.append(" AND T.accountId IN :accountIds")
         }
-        if (accountantIds.isNotEmpty()) {
-            jql.append(" AND T.accountantId IN :accountantIds")
+        if (assigneeIds.isNotEmpty()) {
+            jql.append(" AND T.assigneeId IN :assigneeIds")
+        }
+        if (participantIds.isNotEmpty()) {
+            jql.append(" AND (T.assigneeId IN :participantIds OR T.accountantId IN :participantIds OR T.technicianId IN :participantIds)")
         }
         if (statuses.isNotEmpty()) {
             jql.append(" AND T.status IN :statuses")
@@ -79,8 +85,11 @@ class TaxService(
         if (accountIds.isNotEmpty()) {
             query.setParameter("accountIds", accountIds)
         }
-        if (accountantIds.isNotEmpty()) {
-            query.setParameter("accountantIds", accountantIds)
+        if (assigneeIds.isNotEmpty()) {
+            query.setParameter("assigneeIds", assigneeIds)
+        }
+        if (participantIds.isNotEmpty()) {
+            query.setParameter("participantIds", participantIds)
         }
         if (statuses.isNotEmpty()) {
             query.setParameter("statuses", statuses)
@@ -94,14 +103,14 @@ class TaxService(
     @Transactional
     fun create(request: CreateTaxRequest, tenantId: Long): TaxEntity {
         val userId = securityService.getCurrentUserId()
-        val accountantId = request.accountantId
-            ?: accountService.get(request.accountId, tenantId).managedById
         return dao.save(
             TaxEntity(
                 tenantId = tenantId,
                 taxTypeId = request.taxTypeId,
                 accountId = request.accountId,
-                accountantId = accountantId,
+                accountantId = request.accountantId,
+                technicianId = request.technicianId,
+                assigneeId = request.assigneeId,
                 status = TaxStatus.NEW,
                 fiscalYear = request.fiscalYear,
                 description = request.description,
@@ -118,7 +127,9 @@ class TaxService(
         val tax = get(id, tenantId)
         tax.dueAt = request.dueAt
         tax.description = request.description
+        tax.accountId = request.accountId
         tax.accountantId = request.accountantId
+        tax.technicianId = request.technicianId
         tax.fiscalYear = request.fiscalYear
         tax.startAt = request.startAt
         tax.taxTypeId = request.taxTypeId
@@ -137,10 +148,25 @@ class TaxService(
 
     @Transactional
     fun status(id: Long, request: UpdateTaxStatusRequest, tenantId: Long) {
+        // Update
         val tax = get(id, tenantId)
         tax.status = request.status
-        tax.modifiedById = securityService.getCurrentUserId()
+        tax.assigneeId = request.assigneeId
         tax.modifiedAt = Date()
+        tax.modifiedById = securityService.getCurrentUserId()
         dao.save(tax)
+
+        // Notes
+        if (!request.notes?.trim().isNullOrEmpty()) {
+            noteService.create(
+                tenantId = tenantId,
+                request = CreateNoteRequest(
+                    subject = "",
+                    body = request.notes!!,
+                    ownerId = tax.id,
+                    ownerType = ObjectName.TAX,
+                )
+            )
+        }
     }
 }

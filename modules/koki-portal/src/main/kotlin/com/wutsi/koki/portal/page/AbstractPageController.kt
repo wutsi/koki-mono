@@ -2,9 +2,9 @@ package com.wutsi.koki.portal.page
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.portal.model.UserModel
 import com.wutsi.koki.portal.service.CurrentTenantHolder
 import com.wutsi.koki.portal.service.CurrentUserHolder
+import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.tenant.dto.TenantModel
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.ModelAttribute

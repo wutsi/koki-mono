@@ -32,8 +32,8 @@ class SearchTaxEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
-    fun `by accountant`() {
-        val result = rest.getForEntity("/v1/taxes?accountant-id=11", SearchTaxResponse::class.java)
+    fun `by participant`() {
+        val result = rest.getForEntity("/v1/taxes?participant-id=11", SearchTaxResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
@@ -42,6 +42,18 @@ class SearchTaxEndpointTest : TenantAwareEndpointTest() {
         assertEquals(111L, taxes[0].id)
         assertEquals(101L, taxes[1].id)
         assertEquals(100L, taxes[2].id)
+    }
+
+    @Test
+    fun `by assinee`() {
+        val result = rest.getForEntity("/v1/taxes?participant-id=110", SearchTaxResponse::class.java)
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val taxes = result.body!!.taxes
+        assertEquals(2, taxes.size)
+        assertEquals(102L, taxes[0].id)
+        assertEquals(100L, taxes[1].id)
     }
 
     @Test

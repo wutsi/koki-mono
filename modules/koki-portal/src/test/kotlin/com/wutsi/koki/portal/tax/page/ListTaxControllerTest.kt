@@ -1,35 +1,37 @@
-package com.wutsi.koki.portal.account.page
+package com.wutsi.koki.portal.tax.page
 
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
-import com.wutsi.koki.AccountFixtures.accounts
-import com.wutsi.koki.account.dto.AccountSummary
-import com.wutsi.koki.account.dto.SearchAccountResponse
+import com.wutsi.koki.TaxFixtures.taxes
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.tax.dto.SearchTaxResponse
+import com.wutsi.koki.tax.dto.TaxSummary
 import kotlin.test.Test
 
-class ListAccountControllerTest : AbstractPageControllerTest() {
+class ListTaxControllerTest : AbstractPageControllerTest() {
     @Test
     fun list() {
-        navigateTo("/accounts")
+        navigateTo("/taxes")
 
-        assertCurrentPageIs(PageName.ACCOUNT_LIST)
-        assertElementCount("tr.account", accounts.size)
+        assertCurrentPageIs(PageName.TAX_LIST)
+        assertElementCount("tr.tax", taxes.size)
     }
 
     @Test
     fun loadMore() {
-        var entries = mutableListOf<AccountSummary>()
+        var entries = mutableListOf<TaxSummary>()
         var seed = System.currentTimeMillis()
         repeat(20) {
-            entries.add(accounts[0].copy(id = ++seed))
+            entries.add(taxes[0].copy(id = ++seed))
         }
-        doReturn(SearchAccountResponse(entries))
-            .doReturn(SearchAccountResponse(accounts))
-            .whenever(kokiAccounts)
-            .accounts(
+        doReturn(SearchTaxResponse(entries))
+            .doReturn(SearchTaxResponse(taxes))
+            .whenever(kokiTaxes)
+            .taxes(
+                anyOrNull(),
+                anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -39,35 +41,42 @@ class ListAccountControllerTest : AbstractPageControllerTest() {
                 anyOrNull(),
             )
 
-        navigateTo("/accounts")
+        navigateTo("/taxes")
 
-        assertCurrentPageIs(PageName.ACCOUNT_LIST)
-        assertElementCount("tr.account", entries.size)
+        assertCurrentPageIs(PageName.TAX_LIST)
+        assertElementCount("tr.tax", entries.size)
 
         scrollToBottom()
-        click("#account-load-more a", 1000)
-        assertElementCount("tr.account", entries.size + accounts.size)
+        click("#tax-load-more a", 1000)
+        assertElementCount("tr.tax", entries.size + taxes.size)
     }
 
     @Test
     fun `login required`() {
         setUpAnonymousUser()
 
-        navigateTo("/accounts")
+        navigateTo("/taxes")
         assertCurrentPageIs(PageName.LOGIN)
     }
 
     @Test
+    fun show() {
+        navigateTo("/taxes")
+        click(".btn-view")
+        assertCurrentPageIs(PageName.TAX)
+    }
+
+    @Test
     fun create() {
-        navigateTo("/accounts")
+        navigateTo("/taxes")
         click(".btn-create")
-        assertCurrentPageIs(PageName.ACCOUNT_CREATE)
+        assertCurrentPageIs(PageName.TAX_CREATE)
     }
 
     @Test
     fun edit() {
-        navigateTo("/accounts")
+        navigateTo("/taxes")
         click(".btn-edit")
-        assertCurrentPageIs(PageName.ACCOUNT_EDIT)
+        assertCurrentPageIs(PageName.TAX_EDIT)
     }
 }

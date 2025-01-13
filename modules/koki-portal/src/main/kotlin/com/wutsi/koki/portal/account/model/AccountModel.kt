@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.account.model
 
-import com.wutsi.koki.portal.model.UserModel
+import com.wutsi.koki.portal.user.model.UserModel
 import java.util.Date
 
 data class AccountModel(

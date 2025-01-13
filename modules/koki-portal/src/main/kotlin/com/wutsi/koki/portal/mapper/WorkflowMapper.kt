@@ -5,10 +5,10 @@ import com.wutsi.koki.portal.model.ActivityModel
 import com.wutsi.koki.portal.model.FormModel
 import com.wutsi.koki.portal.model.MessageModel
 import com.wutsi.koki.portal.model.RecipientModel
-import com.wutsi.koki.portal.model.RoleModel
 import com.wutsi.koki.portal.model.ScriptModel
 import com.wutsi.koki.portal.model.ServiceModel
 import com.wutsi.koki.portal.model.WorkflowModel
+import com.wutsi.koki.portal.user.model.RoleModel
 import com.wutsi.koki.workflow.dto.Activity
 import com.wutsi.koki.workflow.dto.ActivitySummary
 import com.wutsi.koki.workflow.dto.Workflow

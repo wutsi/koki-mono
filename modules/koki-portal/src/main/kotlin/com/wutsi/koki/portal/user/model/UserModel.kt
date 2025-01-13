@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.model
+package com.wutsi.koki.portal.user.model
 
 import com.wutsi.koki.tenant.dto.UserStatus
 

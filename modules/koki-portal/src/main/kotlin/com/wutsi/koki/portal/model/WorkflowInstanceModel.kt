@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.model
 
+import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import java.util.Date
 

@@ -3,9 +3,10 @@ package com.wutsi.koki.portal.service
 import com.wutsi.koki.portal.mapper.WorkflowInstanceMapper
 import com.wutsi.koki.portal.mapper.WorkflowMapper
 import com.wutsi.koki.portal.model.ActivityInstanceModel
-import com.wutsi.koki.portal.model.RoleModel
 import com.wutsi.koki.portal.model.WorkflowInstanceModel
 import com.wutsi.koki.portal.page.settings.workflow.StartWorkflowForm
+import com.wutsi.koki.portal.user.model.RoleModel
+import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.sdk.KokiWorkflowInstances
 import com.wutsi.koki.workflow.dto.Activity
 import com.wutsi.koki.workflow.dto.ApprovalStatus

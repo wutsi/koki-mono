@@ -1,14 +1,12 @@
 package com.wutsi.koki.portal.tax.page
 
-import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.portal.tax.form.TaxForm
+import com.wutsi.koki.portal.tax.form.TaxStatusForm
 import com.wutsi.koki.portal.tax.model.TaxModel
 import com.wutsi.koki.portal.tax.service.TaxService
-import com.wutsi.koki.portal.tax.service.TaxTypeService
-import com.wutsi.koki.portal.user.service.UserService
+import com.wutsi.koki.tax.dto.TaxStatus
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,90 +14,47 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
-import java.text.SimpleDateFormat
-import java.time.LocalDate
 
 @Controller
-class EditTaxController(
+class ChangeTaxStatusController(
     private val service: TaxService,
-    private val accountService: AccountService,
-    private val taxTypeService: TaxTypeService,
-    private val userService: UserService,
 ) : AbstractPageController() {
-    @GetMapping("/taxes/{id}/edit")
+    @GetMapping("/taxes/{id}/status")
     fun edit(
         @PathVariable id: Long,
         model: Model
     ): String {
         val tax = service.tax(id)
-        val fmt = SimpleDateFormat("yyyy-MM-dd")
-        val form = TaxForm(
-            accountId = tax.account.id,
-            accountantId = tax.accountant?.id,
+        val form = TaxStatusForm(
             assigneeId = tax.assignee?.id,
-            technicianId = tax.technician?.id,
-            fiscalYear = tax.fiscalYear,
-            taxTypeId = tax.taxType?.id,
-            description = tax.description,
-            startAt = tax.startAt?.let { date -> fmt.format(date) } ?: "",
-            dueAt = tax.dueAt?.let { date -> fmt.format(date) } ?: "",
+            status = tax.status,
         )
         return edit(tax, form, model)
     }
 
-    private fun edit(tax: TaxModel, form: TaxForm, model: Model): String {
+    private fun edit(tax: TaxModel, form: TaxStatusForm, model: Model): String {
         model.addAttribute("tax", tax)
         model.addAttribute("form", form)
-        model.addAttribute("taxTypes", taxTypeService.taxTypes(active = true, limit = Integer.MAX_VALUE))
-        model.addAttribute("account", accountService.account(form.accountId))
-
-        val userIds = listOf(form.assigneeId, form.accountantId, form.technicianId)
-            .filterNotNull()
-            .toSet()
-        val users = if (userIds.isEmpty()) {
-            emptyMap()
-        } else {
-            userService.users(ids = userIds.toList(), limit = userIds.size)
-                .associateBy { user -> user.id }
-        }
-        form.accountantId?.let { id -> model.addAttribute("accountant", users[id]) }
-        form.technicianId?.let { id -> model.addAttribute("technician", users[id]) }
-        form.assigneeId?.let { id -> model.addAttribute("assignee", users[id]) }
-
+        model.addAttribute("statuses", TaxStatus.values())
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.TAX_EDIT,
-                title = "New Tax Report",
+                name = PageName.TAX_STATUS,
+                title = tax.name
             )
         )
-
-        val year2 = LocalDate.now().year
-        val year1 = year2 - 100
-        val years = (year2 downTo year1).toList()
-        model.addAttribute("years", years)
-        return "taxes/edit"
+        return "taxes/status"
     }
 
-    @PostMapping("/taxes/{id}/update")
+    @PostMapping("/taxes/{id}/status")
     fun update(
         @PathVariable id: Long,
-        @ModelAttribute form: TaxForm,
+        @ModelAttribute form: TaxStatusForm,
         model: Model
     ): String {
         try {
-            service.update(id, form)
-
-            val tax = service.tax(id)
-            model.addAttribute("tax", tax)
-            model.addAttribute(
-                "page",
-                PageModel(
-                    name = PageName.TAX_SAVED,
-                    title = tax.name
-                )
-            )
-            return "taxes/saved"
+            service.status(id, form)
+            return "redirect:/taxes/$id"
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)

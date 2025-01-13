@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.contact.page
+package com.wutsi.koki.portal.tax.page
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
@@ -6,119 +6,98 @@ import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
-import com.wutsi.koki.ContactFixtures.contactTypes
-import com.wutsi.koki.contact.dto.CreateContactRequest
-import com.wutsi.koki.contact.dto.Gender
+import com.wutsi.koki.AccountFixtures.account
+import com.wutsi.koki.TaxFixtures.taxTypes
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.tax.dto.CreateTaxRequest
+import java.text.SimpleDateFormat
+import java.time.LocalDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class CreateContactControllerTest : AbstractPageControllerTest() {
+class CreateTaxControllerTest : AbstractPageControllerTest() {
     @Test
     fun create() {
-        navigateTo("/contacts/create")
+        navigateTo("/taxes/create?account-id=${account.id}")
 
-        assertCurrentPageIs(PageName.CONTACT_CREATE)
+        assertCurrentPageIs(PageName.TAX_CREATE)
 
-        select("#contactTypeId", 3)
-        input("#firstName", "Yo")
-        input("#lastName", "Man")
-        select("#salutation", 2)
-        select("#gender", 2)
+        select("#fiscalYear", 2)
+        select("#taxTypeId", 3)
         scrollToBottom()
-        input("#phone", "+5147580000")
-        input("#mobile", "+5147580011")
-        input("#email", "yo@gmail.com")
-        input("#profession", "XX")
-        input("#employer", "EG")
+        input("#startAt", "2020\t1211")
+        input("#dueAt", "2020\t1221")
+        input("#description", "This is a nice description")
         click("button[type=submit]")
 
-        val request = argumentCaptor<CreateContactRequest>()
-        verify(kokiContacts).create(request.capture())
-        assertEquals(contactTypes[2].id, request.firstValue.contactTypeId)
-        assertEquals("Yo", request.firstValue.firstName)
-        assertEquals("Man", request.firstValue.lastName)
-        assertEquals("Ms.", request.firstValue.salutations)
-        assertEquals(Gender.FEMALE, request.firstValue.gender)
-        assertEquals("+5147580000", request.firstValue.phone)
-        assertEquals("+5147580011", request.firstValue.mobile)
-        assertEquals("yo@gmail.com", request.firstValue.email)
-        assertEquals("XX", request.firstValue.profession)
-        assertEquals("EG", request.firstValue.employer)
+        val fmt = SimpleDateFormat("yyyy-MM-dd")
+        val request = argumentCaptor<CreateTaxRequest>()
+        verify(kokiTaxes).create(request.capture())
+        val tax = request.firstValue
+        assertEquals(LocalDate.now().year - 2, tax.fiscalYear)
+        assertEquals(taxTypes[2].id, tax.taxTypeId)
+        assertEquals(fmt.parse("2020-12-11"), tax.startAt)
+        assertEquals(fmt.parse("2020-12-21"), tax.dueAt)
+        assertEquals("This is a nice description", tax.description)
 
-        assertCurrentPageIs(PageName.CONTACT_SAVED)
+        assertCurrentPageIs(PageName.TAX_SAVED)
         click(".btn-ok")
-        assertCurrentPageIs(PageName.CONTACT_LIST)
+        assertCurrentPageIs(PageName.TAX_LIST)
     }
 
     @Test
     fun `create new`() {
-        navigateTo("/contacts/create")
+        navigateTo("/taxes/create")
 
-        select("#contactTypeId", 3)
-        input("#firstName", "Yo")
-        input("#lastName", "Man")
-        select("#salutation", 2)
-        select("#gender", 2)
+        select("#fiscalYear", 2)
+        select("#taxTypeId", 3)
         scrollToBottom()
-        input("#phone", "+5147580000")
-        input("#mobile", "+5147580011")
-        input("#email", "yo@gmail.com")
-        input("#profession", "XX")
-        input("#employer", "EG")
+        input("#startAt", "2020\t1211")
+        input("#dueAt", "2020\t1221")
+        input("#description", "This is a nice description")
         click("button[type=submit]")
 
-        assertCurrentPageIs(PageName.CONTACT_SAVED)
+        assertCurrentPageIs(PageName.TAX_SAVED)
         click(".btn-create")
-        assertCurrentPageIs(PageName.CONTACT_CREATE)
+        assertCurrentPageIs(PageName.TAX_CREATE)
     }
 
     @Test
     fun cancel() {
-        navigateTo("/contacts/create")
+        navigateTo("/taxes/create")
 
-        assertCurrentPageIs(PageName.CONTACT_CREATE)
+        assertCurrentPageIs(PageName.TAX_CREATE)
 
-        select("#contactTypeId", 3)
-        input("#firstName", "Yo")
-        input("#lastName", "Man")
-        select("#salutation", 2)
-        select("#gender", 2)
+        select("#fiscalYear", 2)
+        select("#taxTypeId", 3)
         scrollToBottom()
-        input("#phone", "+5147580000")
-        input("#mobile", "+5147580011")
-        input("#email", "yo@gmail.com")
-        input("#profession", "XX")
-        input("#employer", "EG")
+        input("#startAt", "2020\t1211")
+        input("#dueAt", "2020\t1221")
+        input("#description", "This is a nice description")
         click(".btn-cancel")
 
-        assertCurrentPageIs(PageName.CONTACT_LIST)
+        assertCurrentPageIs(PageName.TAX_LIST)
     }
 
     @Test
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
-        doThrow(ex).whenever(kokiContacts).create(any())
+        doThrow(ex).whenever(kokiTaxes).create(any())
 
-        navigateTo("/contacts/create")
+        navigateTo("/taxes/create")
 
-        assertCurrentPageIs(PageName.CONTACT_CREATE)
+        assertCurrentPageIs(PageName.TAX_CREATE)
 
-        select("#contactTypeId", 3)
-        input("#firstName", "Yo")
-        input("#lastName", "Man")
-        select("#salutation", 2)
-        select("#gender", 2)
+        select("#fiscalYear", 2)
+        select("#taxTypeId", 3)
         scrollToBottom()
-        input("#phone", "+5147580000")
-        input("#mobile", "+5147580011")
-        input("#email", "yo@gmail.com")
-        input("#profession", "XX")
-        input("#employer", "EG")
+        input("#startAt", "2020\t1211")
+        input("#dueAt", "2020\t1221")
+        input("#description", "This is a nice description")
         click("button[type=submit]")
 
-        assertCurrentPageIs(PageName.CONTACT_CREATE)
+        assertCurrentPageIs(PageName.TAX_CREATE)
         assertElementPresent(".alert-danger")
     }
 
@@ -126,7 +105,7 @@ class CreateContactControllerTest : AbstractPageControllerTest() {
     fun `login required`() {
         setUpAnonymousUser()
 
-        navigateTo("/contacts/create")
+        navigateTo("/taxes/create")
         assertCurrentPageIs(PageName.LOGIN)
     }
 }
