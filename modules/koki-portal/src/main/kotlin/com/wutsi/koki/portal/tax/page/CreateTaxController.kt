@@ -57,7 +57,7 @@ class CreateTaxController(
         )
 
         val year2 = LocalDate.now().year
-        val year1 = year2-100
+        val year1 = year2 - 100
         val years = (year2 downTo year1).toList()
         model.addAttribute("years", years)
         return "taxes/create"
