@@ -3,7 +3,7 @@ package com.wutsi.koki.portal.file.mapper
 import com.wutsi.koki.file.dto.File
 import com.wutsi.koki.file.dto.FileSummary
 import com.wutsi.koki.portal.file.model.FileModel
-import com.wutsi.koki.portal.model.UserModel
+import com.wutsi.koki.portal.user.model.UserModel
 import org.apache.commons.io.FilenameUtils
 import org.springframework.stereotype.Service
 import java.text.DateFormat

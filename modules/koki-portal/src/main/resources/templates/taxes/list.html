@@ -6,12 +6,12 @@
 
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
-<div th:replace="~{__components/layout :: menubar('accounts')}"></div>
+<div th:replace="~{__components/layout :: menubar('taxes')}"></div>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/account :: account-breadcrumb(null)}"></div>
+            <div th:replace="~{__components/tax :: tax-breadcrumb(null)}"></div>
         </div>
     </div>
 
@@ -19,50 +19,51 @@
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
-                    <div class="btn-group border margin-bottom">
-                        <button aria-expanded="false"
-                                class="btn dropdown-toggle padding"
-                                data-bs-toggle="dropdown"
-                                type="button">
-                            <span th:if="${collection} == '1'">All Accounts</span>
-                            <span th:if="${collection} == '2'">Accounts I manage</span>
-                            <span th:if="${collection} == '3'">Accounts I created</span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li th:if="${collection} != '1'">
-                                <a class="dropdown-item" href="/accounts?col=1">All Accounts</a>
-                            </li>
-                            <li th:if="${collection} != '2'">
-                                <a class="dropdown-item" href="/accounts?col=2">Accounts I manage</a>
-                            </li>
-                            <li th:if="${collection} != '3'">
-                                <a class="dropdown-item" href="/accounts?col=3">Accounts I created</a>
-                            </li>
-                        </ul>
+                    <div class="flex flex-space-between">
+                        <div class="btn-group border margin-bottom">
+                            <button aria-expanded="false"
+                                    class="btn dropdown-toggle padding"
+                                    data-bs-toggle="dropdown"
+                                    type="button">
+                                <span th:if="${collection} == '1'">All Tax Reports</span>
+                                <span th:if="${collection} == '2'">My Tax Reports</span>
+                                <span th:if="${collection} == '3'">My assigned Tax Reports</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li th:if="${collection} != '1'">
+                                    <a class="dropdown-item" href="/taxes?col=1">All Tax Reports</a>
+                                </li>
+                                <li th:if="${collection} != '2'">
+                                    <a class="dropdown-item" href="/taxes?col=2">My Tax Reports</a>
+                                </li>
+                                <li th:if="${collection} != '3'">
+                                    <a class="dropdown-item" href="/taxes?col=3">My assigned Tax Reports</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <a class="btn-create btn btn-light btn-sm" href="/taxes/create">Create New Tax Report</a>
+                        </div>
                     </div>
 
-                    <div class="widget-toolbar">
-                        <a class="btn-create btn btn-secondary" href="/accounts/create">Create New Account</a>
-                    </div>
-
-                    <table class="table table-striped" th:if="${accounts}">
+                    <table class="table table-striped" th:if="${taxes}">
                         <tr>
-                            <th>Name</th>
+                            <th width="1%">Year</th>
                             <th>Type</th>
-                            <th>Phone</th>
-                            <th>Mobile</th>
-                            <th>Email</th>
+                            <th>Account</th>
+                            <th>Status</th>
+                            <th>Accountant</th>
+                            <th>Assigned To</th>
                             <th>Modified</th>
-                            <th>Manager</th>
                             <td></td>
                         </tr>
-                        <tr class="account" th:each="account : ${accounts}">
-                            <div th:replace="~{__components/account :: columns(${account})}"></div>
+                        <tr class="tax" th:each="tax : ${taxes}">
+                            <div th:replace="~{__components/tax :: columns(${tax})}"></div>
                         </tr>
-                        <tr th:replace="~{__components/account :: load-more(${moreUrl})}"></tr>
+                        <tr th:replace="~{__components/tax :: load-more(${moreUrl})}"></tr>
                     </table>
 
-                    <div class="text-center" th:if="!${accounts}">No account</div>
+                    <div class="text-center" th:if="!${taxes}">No tax</div>
                 </div>
             </div>
         </div>

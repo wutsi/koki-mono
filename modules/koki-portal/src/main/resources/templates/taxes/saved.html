@@ -6,12 +6,12 @@
 
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
-<div th:replace="~{__components/layout :: menubar('accounts')}"></div>
+<div th:replace="~{__components/layout :: menubar('taxes')}"></div>
 
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/account :: account-breadcrumb(${account})}"></div>
+            <div th:replace="~{__components/tax :: tax-breadcrumb(${tax})}"></div>
         </div>
     </div>
 
@@ -20,15 +20,15 @@
             <div class="widget">
                 <div class="widget-body">
                     <div class="alert alert-success">
-                        The account has been successfully saved.
+                        The tax report has been successfully saved.
                     </div>
                     <div class="text-center">
                         <a class="btn btn-secondary btn-create margin-right"
                            th:href="${createUrl}"
                            th:if="${createUrl}">
-                            Create Another Account
+                            Create Another Tax Report
                         </a>
-                        <a class="btn btn-secondary btn-ok" href="/accounts">Back to Accounts</a>
+                        <a class="btn btn-secondary btn-ok" href="/taxes">Back to Taxes</a>
                     </div>
                 </div>
             </div>

@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.model
 
+import com.wutsi.koki.portal.user.model.UserModel
 import java.util.Date
 
 data class FormSubmissionModel(

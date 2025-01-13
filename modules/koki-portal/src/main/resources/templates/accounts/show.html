@@ -19,18 +19,20 @@
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
-                    <div class="widget-toolbar">
-                        <a class="btn-edit btn btn-secondary"
-                           th:href="'/accounts/' + ${account.id} + '/edit'">Edit</a>
-                        <a class="btn-delete btn btn-danger float-right"
-                           onclick="return confirm('Are you sure you want to delete the account?')"
-                           th:href="'/accounts/' + ${account.id} + '/delete'">Delete</a>
+                    <div class="flex flex-space-between">
+                        <h1 class="entity-title">
+                            <img align="absmiddle" src="/image/account.png"/>
+                            <span th:text="${account.name}">NAME</span>
+                        </h1>
+                        <div>
+                            <a class="btn-edit btn btn-light btn-sm"
+                               th:href="'/accounts/' + ${account.id} + '/edit'">Edit</a>
+                            <a class="btn-delete btn btn-danger btn-sm"
+                               onclick="return confirm('Are you sure you want to delete the account?')"
+                               th:href="'/accounts/' + ${account.id} + '/delete'">Delete</a>
+                        </div>
                     </div>
 
-                    <h1 class="entity-title">
-                        <img align="absmiddle" src="/image/account.png"/>
-                        <span th:text="${account.name}">NAME</span>
-                    </h1>
                     <div class="flex">
                         <div class="margin-right-2x" th:if="${account.accountType}">
                             <b>Type</b><br/>
@@ -100,11 +102,11 @@
                                     <td th:text="${account.name}">NAME</td>
                                 </tr>
                                 <tr th:if="${account.accountType}">
-                                    <td width="20%"><b>Type</b></td>
+                                    <td><b>Type</b></td>
                                     <td th:text="${account.accountType?.title}">TYPE</td>
                                 </tr>
                                 <tr th:if="${account.managedBy}">
-                                    <td width="20%"><b>Account Manager</b></td>
+                                    <td><b>Account Manager</b></td>
                                     <td th:text="${account.managedBy?.displayName}">ACCOUNT MANAGER</td>
                                 </tr>
                                 <tr th:if="${account.phone}">
@@ -122,38 +124,38 @@
                                     </td>
                                 </tr>
                                 <tr th:if="${account.website}">
-                                    <td width="20%"><b>Website</b></td>
+                                    <td><b>Website</b></td>
                                     <td>
                                         <a target="_blank" th:href="${account.website}" th:text="${account.website}">LINK</a>
                                     </td>
                                 </tr>
                                 <tr th:if="${account.language}">
-                                    <td width="20%"><b>Language</b></td>
+                                    <td><b>Language</b></td>
                                     <td th:text="${account.languageText}">LANGUAGE</td>
                                 </tr>
                                 <tr th:if="${account.description}">
-                                    <td width="20%"><b>Description</b></td>
+                                    <td><b>Description</b></td>
                                     <td th:text="${account.description}">DESCRIPTION</td>
                                 </tr>
                                 <tr th:each="attr : ${account.attributes}">
-                                    <td width="20%"><b th:text="${attr.attribute.label}">NAME</b></td>
+                                    <td><b th:text="${attr.attribute.label}">NAME</b></td>
                                     <td th:text="${attr.value}">DESCRIPTION</td>
                                 </tr>
                                 <tr>
-                                    <td width="20%"><b>Created</b></td>
-                                    <td th:text="${account.createdAtText}">CREATED</td>
-                                </tr>
-                                <tr th:if="${account.createdBy}">
-                                    <td width="20%"><b>Created By</b></td>
-                                    <td th:text="${account.createdBy.displayName}">MODIFIED BY</td>
+                                    <td><b>Created</b></td>
+                                    <td>
+                                        <span th:text="${account.createdAtText}">DATE</span>
+                                        <span th:if="${account.createdBy}">by</span>
+                                        <span th:if="${account.createdBy}" th:text="${account.createdBy.displayName}">MODIFIED BY</span>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td width="20%"><b>Modified</b></td>
-                                    <td th:text="${account.modifiedAtText}">CREATED</td>
-                                </tr>
-                                <tr th:if="${account.modifiedBy}">
-                                    <td width="20%"><b>Modified By</b></td>
-                                    <td th:text="${account.modifiedBy.displayName}">MODIFIED BY</td>
+                                    <td><b>Modified</b></td>
+                                    <td>
+                                        <span th:text="${account.modifiedAtText}">DATE</span>
+                                        <span th:if="${account.modifiedBy}">by</span>
+                                        <span th:if="${account.modifiedBy}" th:text="${account.modifiedBy.displayName}">MODIFIED BY</span>
+                                    </td>
                                 </tr>
                             </table>
                         </div>

@@ -6,7 +6,7 @@ import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.contact.form.ContactForm
 import com.wutsi.koki.portal.contact.mapper.ContactMapper
 import com.wutsi.koki.portal.contact.model.ContactModel
-import com.wutsi.koki.portal.service.UserService
+import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.sdk.KokiContacts
 import org.springframework.stereotype.Service
 

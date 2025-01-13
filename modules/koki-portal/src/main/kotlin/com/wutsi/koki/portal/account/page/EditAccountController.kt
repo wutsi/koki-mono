@@ -8,7 +8,7 @@ import com.wutsi.koki.portal.account.service.AttributeService
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.portal.service.UserService
+import com.wutsi.koki.portal.user.service.UserService
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model

@@ -73,6 +73,14 @@ object PageName {
     const val TASK = "page.task"
     const val TASK_COMPLETED = "page.task.completed"
 
+    const val TAX = "page.tax"
+    const val TAX_LIST = "page.tax.list"
+    const val TAX_EDIT = "page.tax.edit"
+    const val TAX_CREATE = "page.tax.create"
+    const val TAX_DELETED = "page.tax.deleted"
+    const val TAX_SAVED = "page.tax.saved"
+    const val TAX_STATUS = "page.tax.status"
+
     const val UPLOAD = "upload"
 
     const val WORKFLOW = "page.workflow"

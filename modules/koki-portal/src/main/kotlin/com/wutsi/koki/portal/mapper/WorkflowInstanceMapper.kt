@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.portal.model.ActivityInstanceModel
 import com.wutsi.koki.portal.model.ActivityModel
 import com.wutsi.koki.portal.model.ParticipantModel
-import com.wutsi.koki.portal.model.RoleModel
-import com.wutsi.koki.portal.model.UserModel
 import com.wutsi.koki.portal.model.WorkflowInstanceModel
 import com.wutsi.koki.portal.model.WorkflowModel
+import com.wutsi.koki.portal.user.model.RoleModel
+import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.workflow.dto.ActivityInstanceSummary
 import com.wutsi.koki.workflow.dto.WorkflowInstance
 import com.wutsi.koki.workflow.dto.WorkflowInstanceSummary

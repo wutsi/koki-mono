@@ -7,7 +7,7 @@ import com.wutsi.koki.form.dto.FormSubmissionSummary
 import com.wutsi.koki.form.dto.FormSummary
 import com.wutsi.koki.portal.model.FormModel
 import com.wutsi.koki.portal.model.FormSubmissionModel
-import com.wutsi.koki.portal.model.UserModel
+import com.wutsi.koki.portal.user.model.UserModel
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import kotlin.collections.listOf

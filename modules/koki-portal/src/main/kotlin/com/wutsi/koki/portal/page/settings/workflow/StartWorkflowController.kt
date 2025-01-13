@@ -1,13 +1,13 @@
 package com.wutsi.koki.portal.page.settings.workflow
 
 import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.model.UserModel
 import com.wutsi.koki.portal.model.WorkflowModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.portal.service.UserService
 import com.wutsi.koki.portal.service.WorkflowInstanceService
 import com.wutsi.koki.portal.service.WorkflowService
+import com.wutsi.koki.portal.user.model.UserModel
+import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.workflow.dto.Participant
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.stereotype.Controller

@@ -318,6 +318,10 @@ tr.activity-running {
     border: 1px solid gray !important;
 }
 
+.btn-light {
+    border: 1px solid gray;
+}
+
 .widget-body ol.breadcrumb {
     margin-bottom: 0;
     padding-bottom: 0

@@ -5,6 +5,7 @@ import com.wutsi.koki.portal.mapper.WorkflowMapper
 import com.wutsi.koki.portal.model.ActivityModel
 import com.wutsi.koki.portal.model.WorkflowModel
 import com.wutsi.koki.portal.page.workflow.SaveWorkflowForm
+import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.sdk.KokiWorkflows
 import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.ImportWorkflowRequest

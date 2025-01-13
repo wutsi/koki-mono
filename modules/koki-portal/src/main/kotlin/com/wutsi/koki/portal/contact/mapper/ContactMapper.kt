@@ -8,7 +8,7 @@ import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.contact.model.ContactTypeModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
-import com.wutsi.koki.portal.model.UserModel
+import com.wutsi.koki.portal.user.model.UserModel
 import org.springframework.stereotype.Service
 
 @Service

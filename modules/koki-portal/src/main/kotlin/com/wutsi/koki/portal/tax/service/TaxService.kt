@@ -1,4 +1,157 @@
 package com.wutsi.koki.portal.tax.service
 
-class TaxService {
+import com.wutsi.koki.portal.account.model.AccountModel
+import com.wutsi.koki.portal.account.service.AccountService
+import com.wutsi.koki.portal.tax.form.TaxForm
+import com.wutsi.koki.portal.tax.form.TaxStatusForm
+import com.wutsi.koki.portal.tax.mapper.TaxMapper
+import com.wutsi.koki.portal.tax.model.TaxModel
+import com.wutsi.koki.portal.user.service.UserService
+import com.wutsi.koki.sdk.KokiTaxes
+import com.wutsi.koki.tax.dto.CreateTaxRequest
+import com.wutsi.koki.tax.dto.TaxStatus
+import com.wutsi.koki.tax.dto.UpdateTaxRequest
+import com.wutsi.koki.tax.dto.UpdateTaxStatusRequest
+import org.springframework.stereotype.Service
+import java.text.SimpleDateFormat
+import kotlin.collections.flatMap
+
+@Service
+class TaxService(
+    private val koki: KokiTaxes,
+    private val mapper: TaxMapper,
+    private val taxTypeService: TaxTypeService,
+    private val userService: UserService,
+    private val accountService: AccountService
+) {
+    fun tax(id: Long): TaxModel {
+        val tax = koki.tax(id).tax
+        val account = accountService.account(tax.accountId, fullGraph = false)
+        val taxType = tax.taxTypeId?.let { id -> taxTypeService.taxType(id) }
+        val userIds = listOf(tax.accountantId, tax.technicianId, tax.assigneeId, tax.createdById, tax.modifiedById)
+            .filterNotNull()
+            .toSet()
+        val users = if (userIds.isEmpty()) {
+            emptyMap()
+        } else {
+            userService.users(
+                ids = userIds.toList(),
+                limit = userIds.size
+            ).associateBy { user -> user.id }
+        }
+
+        return mapper.toTax(
+            entity = tax,
+            account = account,
+            users = users,
+            taxType = taxType
+        )
+    }
+
+    fun taxes(
+        ids: List<Long> = emptyList(),
+        taxTypeIds: List<Long> = emptyList(),
+        accountIds: List<Long> = emptyList(),
+        participantIds: List<Long> = emptyList(),
+        assigneeIds: List<Long> = emptyList(),
+        createdByIds: List<Long> = emptyList(),
+        statuses: List<TaxStatus> = emptyList(),
+        limit: Int = 20,
+        offset: Int = 0,
+    ): List<TaxModel> {
+        val taxes = koki.taxes(
+            ids = ids,
+            taxTypeIds = taxTypeIds,
+            accountIds = accountIds,
+            participantIds = participantIds,
+            assigneeIds = assigneeIds,
+            createdByIds = createdByIds,
+            statuses = statuses,
+            limit = limit,
+            offset = offset
+        ).taxes
+
+        // Account
+        val accountIds = taxes.map { tax -> tax.accountId }.toSet()
+        val accounts = accountService.accounts(
+            ids = accountIds.toList(),
+            limit = accountIds.size,
+            fullGraph = false,
+        ).associateBy { accountant -> accountant.id }
+
+        // Types
+        val taxTypeIds = taxes.mapNotNull { tax -> tax.taxTypeId }.toSet()
+        val taxTypes = taxTypeService.taxTypes(
+            ids = taxTypeIds.toList(),
+            limit = taxTypeIds.size
+        ).associateBy { taxType -> taxType.id }
+
+        // Users
+        val userIds = taxes.flatMap { tax ->
+            listOf(tax.accountantId, tax.technicianId, tax.assigneeId, tax.createdById, tax.modifiedById)
+        }
+            .filterNotNull()
+            .toSet()
+        val users = if (userIds.isEmpty()) {
+            emptyMap()
+        } else {
+            userService.users(
+                ids = userIds.toList(),
+                limit = userIds.size
+            ).associateBy { user -> user.id }
+        }
+
+        return taxes.map { tax ->
+            mapper.toTax(
+                entity = tax,
+                account = accounts[tax.accountId] ?: AccountModel(tax.accountId),
+                users = users,
+                taxType = taxTypes[tax.taxTypeId]
+            )
+        }
+    }
+
+    fun delete(id: Long) {
+        koki.delete(id)
+    }
+
+    fun create(form: TaxForm): Long {
+        val fmt = SimpleDateFormat("yyyy-MM-dd")
+        val request = CreateTaxRequest(
+            fiscalYear = form.fiscalYear,
+            accountId = form.accountId,
+            taxTypeId = form.taxTypeId,
+            assigneeId = form.assigneeId,
+            accountantId = form.accountantId,
+            technicianId = form.technicianId,
+            description = form.description?.ifEmpty { null },
+            startAt = form.startAt.ifEmpty { null }?.let { date -> fmt.parse(date) },
+            dueAt = form.dueAt.ifEmpty { null }?.let { date -> fmt.parse(date) },
+        )
+        return koki.create(request).taxId
+    }
+
+    fun update(id: Long, form: TaxForm) {
+        val fmt = SimpleDateFormat("yyyy-MM-dd")
+        val request = UpdateTaxRequest(
+            fiscalYear = form.fiscalYear,
+            accountId = form.accountId,
+            taxTypeId = form.taxTypeId,
+            accountantId = form.accountantId,
+            technicianId = form.technicianId,
+            description = form.description?.ifEmpty { null },
+            startAt = form.startAt.ifEmpty { null }?.let { date -> fmt.parse(date) },
+            dueAt = form.dueAt.ifEmpty { null }?.let { date -> fmt.parse(date) },
+        )
+        koki.update(id, request)
+    }
+
+    fun status(id: Long, form: TaxStatusForm) {
+        val request = UpdateTaxStatusRequest(
+            assigneeId = form.assigneeId,
+            status = form.status,
+            notes = form.notes,
+        )
+        koki.status(id, request)
+    }
 }

@@ -13,7 +13,7 @@
         <tr>
             <td valign="top">Body</td>
             <td>
-                <div id="html-editor" style="height: 10em" th:text="${form.body}"></div>
+                <div id="html-editor" style="height: 10em" th:utext="${form.body}"></div>
                 <textarea name="body" style="display: none" th:field="*{body}"></textarea>
             </td>
         </tr>

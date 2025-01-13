@@ -2,7 +2,7 @@ package com.wutsi.koki.portal.contact.model
 
 import com.wutsi.koki.contact.dto.Gender
 import com.wutsi.koki.portal.account.model.AccountModel
-import com.wutsi.koki.portal.model.UserModel
+import com.wutsi.koki.portal.user.model.UserModel
 import java.util.Date
 
 data class ContactModel(

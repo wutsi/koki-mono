@@ -5,7 +5,7 @@ import com.wutsi.koki.note.dto.UpdateNoteRequest
 import com.wutsi.koki.portal.note.form.NoteForm
 import com.wutsi.koki.portal.note.mapper.NoteMapper
 import com.wutsi.koki.portal.note.model.NoteModel
-import com.wutsi.koki.portal.service.UserService
+import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.sdk.KokiNotes
 import org.springframework.stereotype.Service
 

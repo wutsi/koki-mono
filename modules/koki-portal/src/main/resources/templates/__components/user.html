@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<script th:fragment="user-selector(id, roleId)" th:inline="javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        const selector = /*[[${id}]]*/ '';
+        const roleId = /*[[${roleId}]]*/ -1;
+        const url = '/users/selector/search' + (roleId ? '&role-id=' + roleId : '');
+        $('#' + selector).select2({
+            ajax: {
+                url: url,
+                dataType: 'json',
+                delay: 1000,
+                processResults: function (item) {
+                    const xitems = item.map(function (item) {
+                        return {
+                            id: item.id,
+                            text: item.displayName,
+                        }
+                    });
+                    return {
+                        results: xitems
+                    };
+                }
+            },
+            placeholder: 'Select an user',
+            allowClear: true,
+            tokenSeparators: [','],
+            minimumInputLength: 3,
+        });
+    });
+</script>
+
+</body>

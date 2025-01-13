@@ -1,6 +1,6 @@
-package com.wutsi.koki.portal.account.model
+package com.wutsi.koki.portal.tax.model
 
-data class AccountTypeModel(
+data class TaxTypeModel(
     val id: Long = -1,
     val name: String = "",
     val title: String = "",

@@ -11,7 +11,7 @@ import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.account.model.AccountTypeModel
 import com.wutsi.koki.portal.account.model.AttributeModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
-import com.wutsi.koki.portal.model.UserModel
+import com.wutsi.koki.portal.user.model.UserModel
 import org.springframework.stereotype.Service
 import java.util.Locale
 

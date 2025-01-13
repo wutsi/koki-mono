@@ -17,46 +17,24 @@
 
     <div class="row">
         <div class="col-12">
-            <form class="form" method="post" th:action="@{'/taxes/' + ${tax.id} + '/update'}" th:object="${form}">
+            <form class="form" method="post" th:action="@{'/taxes/' + ${tax.id} + '/status'}" th:object="${form}">
                 <div class="form-body">
                     <div class="section">
                         <div class="section-body">
                             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
                             <div class="section-item">
-                                <label class="title">Fiscal Year <span class="required">*</span></label>
-                                <select required th:field="*{fiscalYear}">
-                                    <option th:each="year : ${years}"
-                                            th:text="${year}"
-                                            th:value="${year}">
-                                        YEAR
+                                <label class="title">Status</label>
+                                <select th:field="*{status}">
+                                    <option th:each="status : ${statuses}"
+                                            th:text="#{'tax-status.' + ${status.name()}}"
+                                            th:value="${status.name()}">
+                                        ASSIGNEE
                                     </option>
                                 </select>
+                                <script
+                                    th:replace="~{__components/user :: user-selector('accountantId', null)}"></script>
                             </div>
-                            <div class="section-item" th:if="${taxTypes}">
-                                <label class="title">Type <span class="required">*</span></label>
-                                <select required th:field="*{taxTypeId}">
-                                    <option value=""></option>
-                                    <option th:each="taxType : ${taxTypes}"
-                                            th:text="${taxType.title}"
-                                            th:value="${taxType.id}">
-                                        TAX TYPES
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="section-item">
-                                <label class="title">Account <span class="required">*</span></label>
-                                <select th:field="*{accountId}">
-                                    <option selected
-                                            th:if="${account}"
-                                            th:text="${account.name}"
-                                            th:value="${account.id}">
-                                        ACCOUNT
-                                    </option>
-                                </select>
-                                <script th:replace="~{__components/account :: account-selector('accountId')}"></script>
-                            </div>
-
                             <div class="section-item">
                                 <label class="title">Assigned To</label>
                                 <select th:field="*{assigneeId}">
@@ -69,44 +47,29 @@
                                 </select>
                                 <script th:replace="~{__components/user :: user-selector('assigneeId', null)}"></script>
                             </div>
-                            <div class="section-item">
-                                <label class="title">Accountant</label>
-                                <select th:field="*{accountantId}">
-                                    <option selected
-                                            th:if="${accountant}"
-                                            th:text="${accountant.displayName}"
-                                            th:value="${accountant.id}">
-                                        ASSIGNEE
-                                    </option>
-                                </select>
-                                <script
-                                    th:replace="~{__components/user :: user-selector('accountantId', null)}"></script>
-                            </div>
-                            <div class="section-item">
-                                <label class="title">Technician</label>
-                                <select th:field="*{technicianId}">
-                                    <option selected
-                                            th:if="${technician}"
-                                            th:text="${technician.displayName}"
-                                            th:value="${technician.id}">
-                                        ASSIGNEE
-                                    </option>
-                                </select>
-                                <script
-                                    th:replace="~{__components/user :: user-selector('technicianId', null)}"></script>
-                            </div>
 
                             <div class="section-item">
-                                <label class="title">Start Date</label>
-                                <input th:field="*{startAt}" type="date"/>
-                            </div>
-                            <div class="section-item">
-                                <label class="title">Due Date</label>
-                                <input th:field="*{dueAt}" type="date"/>
-                            </div>
-                            <div class="section-item">
-                                <label class="title">Description</label>
-                                <textarea rows="3" th:field="*{description}"></textarea>
+                                <label class="title">Notes</label>
+                                <div id="html-editor" style="height: 10em" th:utext="${form.notes}"></div>
+                                <textarea name="notes" style="display: none" th:field="*{notes}"></textarea>
+                                <script>
+                                    const quill = new Quill(
+                                        '#html-editor',
+                                        {
+                                            theme: 'snow',
+                                            modules: {
+                                                toolbar: [
+                                                    ['bold', 'italic', 'underline', 'strike', 'link', {'color': []}],
+                                                ]
+                                            }
+                                        }
+                                    );
+                                    quill.on('text-change', (delta, oldDelta, source) => {
+                                        const notes = document.getElementById('notes');
+                                        notes.value = document.querySelector('.ql-editor').innerHTML;
+                                        console.log('>>> text-change', document.querySelector('.ql-editor').innerHTML, notes.value);
+                                    });
+                                </script>
                             </div>
                         </div>
                     </div>
@@ -114,7 +77,7 @@
 
                 <div class="form-footer">
                     <button type="submit">Submit</button>
-                    <a class="btn-cancel" href="/taxes">Cancel</a>
+                    <a class="btn-cancel" th:href="'/taxes/' + ${tax.id}">Cancel</a>
                 </div>
 
             </form>

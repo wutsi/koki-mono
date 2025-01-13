@@ -26,6 +26,7 @@ class UpdateTaxEndpointTest : AuthorizationAwareEndpointTest() {
         startAt = DateUtils.addDays(Date(), 7),
         dueAt = DateUtils.addDays(Date(), 37),
         accountantId = 555L,
+        technicianId = 666L,
     )
 
     @Test
@@ -43,6 +44,7 @@ class UpdateTaxEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(fmt.format(request.dueAt), fmt.format(tax.dueAt))
         assertEquals(fmt.format(request.startAt), fmt.format(tax.startAt))
         assertEquals(request.accountantId, tax.accountantId)
+        assertEquals(request.technicianId, tax.technicianId)
         assertEquals(USER_ID, tax.modifiedById)
     }
 

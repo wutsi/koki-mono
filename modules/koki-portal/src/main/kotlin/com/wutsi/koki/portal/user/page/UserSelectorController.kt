@@ -1,8 +1,8 @@
-package com.wutsi.koki.portal.page.user
+package com.wutsi.koki.portal.user.page
 
-import com.wutsi.koki.portal.model.UserModel
 import com.wutsi.koki.portal.page.AbstractPageController
-import com.wutsi.koki.portal.service.UserService
+import com.wutsi.koki.portal.user.model.UserModel
+import com.wutsi.koki.portal.user.service.UserService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController

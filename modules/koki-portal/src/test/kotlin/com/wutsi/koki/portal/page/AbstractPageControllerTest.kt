@@ -18,6 +18,7 @@ import com.wutsi.koki.ScriptFixtures
 import com.wutsi.koki.ServiceFixtures.SERVICE_ID
 import com.wutsi.koki.ServiceFixtures.service
 import com.wutsi.koki.ServiceFixtures.services
+import com.wutsi.koki.TaxFixtures
 import com.wutsi.koki.TenantFixtures
 import com.wutsi.koki.UserFixtures
 import com.wutsi.koki.WorkflowFixtures.activities
@@ -70,6 +71,7 @@ import com.wutsi.koki.sdk.KokiMessages
 import com.wutsi.koki.sdk.KokiNotes
 import com.wutsi.koki.sdk.KokiScripts
 import com.wutsi.koki.sdk.KokiServices
+import com.wutsi.koki.sdk.KokiTaxes
 import com.wutsi.koki.sdk.KokiTenants
 import com.wutsi.koki.sdk.KokiUsers
 import com.wutsi.koki.sdk.KokiWorkflowInstances
@@ -79,6 +81,11 @@ import com.wutsi.koki.security.dto.JWTPrincipal
 import com.wutsi.koki.service.dto.CreateServiceResponse
 import com.wutsi.koki.service.dto.GetServiceResponse
 import com.wutsi.koki.service.dto.SearchServiceResponse
+import com.wutsi.koki.tax.dto.CreateTaxResponse
+import com.wutsi.koki.tax.dto.GetTaxResponse
+import com.wutsi.koki.tax.dto.GetTaxTypeResponse
+import com.wutsi.koki.tax.dto.SearchTaxResponse
+import com.wutsi.koki.tax.dto.SearchTaxTypeResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
@@ -165,6 +172,9 @@ abstract class AbstractPageControllerTest {
     protected lateinit var kokiServices: KokiServices
 
     @MockitoBean
+    protected lateinit var kokiTaxes: KokiTaxes
+
+    @MockitoBean
     protected lateinit var kokiTenants: KokiTenants
 
     @MockitoBean
@@ -232,6 +242,7 @@ abstract class AbstractPageControllerTest {
         setupContactModule()
         setupFileModule()
         setupNoteModule()
+        setupTaxModule()
 
         setupForms()
         setupLogs()
@@ -367,6 +378,35 @@ abstract class AbstractPageControllerTest {
             )
         doReturn(GetNoteResponse(NoteFixtures.note)).whenever(kokiNotes).note(any())
         doReturn(CreateNoteResponse(NoteFixtures.NEW_NOTE_ID)).whenever(kokiNotes).create(any())
+    }
+
+    private fun setupTaxModule() {
+        // Tax Types
+        doReturn(SearchTaxTypeResponse(TaxFixtures.taxTypes)).whenever(kokiTaxes)
+            .types(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
+        doReturn(GetTaxTypeResponse(TaxFixtures.taxType)).whenever(kokiTaxes).type(any())
+
+        // Tax
+        doReturn(SearchTaxResponse(TaxFixtures.taxes)).whenever(kokiTaxes)
+            .taxes(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
+        doReturn(GetTaxResponse(TaxFixtures.tax)).whenever(kokiTaxes).tax(any())
+        doReturn(CreateTaxResponse(TaxFixtures.NEW_TAX_ID)).whenever(kokiTaxes).create(any())
     }
 
     private fun setupForms() {

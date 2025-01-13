@@ -5,7 +5,7 @@ import com.wutsi.koki.account.dto.UpdateAccountRequest
 import com.wutsi.koki.portal.account.form.AccountForm
 import com.wutsi.koki.portal.account.mapper.AccountMapper
 import com.wutsi.koki.portal.account.model.AccountModel
-import com.wutsi.koki.portal.service.UserService
+import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.sdk.KokiAccounts
 import org.springframework.stereotype.Service
 import kotlin.collections.flatMap

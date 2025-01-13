@@ -2,6 +2,7 @@
 
 ## Account
 
+- [] Link with taxes
 - [] Filter accounts on UI
 - [] Add address to Account
 - [] Settings: Import Accounts from CSV
@@ -16,7 +17,7 @@
 
 ## Contact
 
-- [] Filter contacts on UI
+- [] Fileter contacts on UI
 - [] Settings: Import Contact from CSV
 - [] Settings: Import Contact Types from CSV
 - [x] Contact API
@@ -26,29 +27,33 @@
 
 ## Files
 
+- [ ] Upload file from popup
 - [x] Show file details
 - [x] Delete files
 - [x] Download files
 - [x] Upload files
 - [x] Show file icons
 
-## Personal Taxes
+## Taxes
 
-- [] Personal tax API
-- [] Personal tax UI
-- [] Link files to taxes
-- [] Link personal taxes to account
-- [] Send email
-- [] Add a note
+- [] Home: Add my assignment widget
+- [] Home: Add my taxes widget
+- [] Send email when assigned
+- [] Add Kanban view
+- [x] Personal tax UI
+- [x] Personal tax API
+- [x] Link files to taxes
+- [x] Add a note
 
 ## Email
 
 - [] Send email
+- [] Setup email template
 
 ## Notes
 
-- [] Note API
-- [] Note UI
+- [x] Note API
+- [x] Note UI
 
 ## Event
 
@@ -58,7 +63,6 @@
 ## Product
 
 - [] Product API
-- [] Product Pricing API
 - [] Product UI
 
 ## Form
@@ -112,7 +116,6 @@
 
 ## Portal
 
-- [] Add decorator to all emails that include logos
 - [] Configure home page by role
 - [x] Align webapp domain name with Tenant
 

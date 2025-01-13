@@ -9,7 +9,7 @@ import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.service.CurrentUserHolder
-import com.wutsi.koki.portal.service.UserService
+import com.wutsi.koki.portal.user.service.UserService
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Controller

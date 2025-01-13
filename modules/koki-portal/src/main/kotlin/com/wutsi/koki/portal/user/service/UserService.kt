@@ -1,8 +1,8 @@
-package com.wutsi.koki.portal.service
+package com.wutsi.koki.portal.user.service
 
-import com.wutsi.koki.portal.mapper.UserMapper
-import com.wutsi.koki.portal.model.RoleModel
-import com.wutsi.koki.portal.model.UserModel
+import com.wutsi.koki.portal.user.mapper.UserMapper
+import com.wutsi.koki.portal.user.model.RoleModel
+import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.sdk.KokiUsers
 import org.springframework.stereotype.Service
 
