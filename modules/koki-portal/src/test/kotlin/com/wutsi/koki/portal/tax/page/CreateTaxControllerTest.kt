@@ -37,8 +37,8 @@ class CreateTaxControllerTest : AbstractPageControllerTest() {
         val tax = request.firstValue
         assertEquals(LocalDate.now().year - 2, tax.fiscalYear)
         assertEquals(taxTypes[2].id, tax.taxTypeId)
-        assertEquals(fmt.parse("2020-12-11"), tax.startAt)
-        assertEquals(fmt.parse("2020-12-21"), tax.dueAt)
+        assertEquals("2020-12-11", fmt.format(tax.startAt))
+        assertEquals("2020-12-21", fmt.format(tax.dueAt))
         assertEquals("This is a nice description", tax.description)
 
         assertCurrentPageIs(PageName.TAX_SAVED)

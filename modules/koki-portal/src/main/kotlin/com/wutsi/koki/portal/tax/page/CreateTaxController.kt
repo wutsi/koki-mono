@@ -25,13 +25,11 @@ class CreateTaxController(
 ) : AbstractPageController() {
     @GetMapping("/taxes/create")
     fun create(
-        @RequestParam(required = false, name = "account-id") accountId: Long? = null,
-        model: Model
+        @RequestParam(required = false, name = "account-id") accountId: Long? = null, model: Model
     ): String {
         val account = accountId?.let { id -> accountService.account(id) }
         val form = TaxForm(
-            accountId = accountId ?: -1,
-            accountantId = account?.managedBy?.id
+            accountId = accountId ?: -1, accountantId = account?.managedBy?.id
         )
         return create(form, account, model)
     }
@@ -49,8 +47,7 @@ class CreateTaxController(
         model.addAttribute("taxTypes", taxTypeService.taxTypes(active = true, limit = Integer.MAX_VALUE))
 
         model.addAttribute(
-            "page",
-            PageModel(
+            "page", PageModel(
                 name = PageName.TAX_CREATE,
                 title = "New Tax Report",
             )
@@ -71,10 +68,8 @@ class CreateTaxController(
             model.addAttribute("tax", tax)
             model.addAttribute("createUrl", "/taxes/create")
             model.addAttribute(
-                "page",
-                PageModel(
-                    name = PageName.TAX_SAVED,
-                    title = tax.name
+                "page", PageModel(
+                    name = PageName.TAX_SAVED, title = tax.name
                 )
             )
             return "taxes/saved"
