@@ -17,6 +17,39 @@
 
     <div class="row">
         <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div class="flex">
+                        <div class="margin-right-2x">
+                            <b>Fiscal Year</b><br/>
+                            <span th:text="${tax.fiscalYear}">FISCAL YEAR</span>
+                        </div>
+                        <div class="margin-right-2x" th:if="${tax.taxType}">
+                            <b>Type</b><br/>
+                            <span th:text="${tax.taxType.title}">TAX TYPE</span>
+                        </div>
+                        <div class="margin-right-2x">
+                            <b>Status</b><br/>
+                            <span th:replace="~{__components/tax :: tax-status(${tax.status.name()})}">STATUS</span>
+                        </div>
+                        <div class="margin-right-2x">
+                            <b>Account</b><br/>
+                            <a class="entity-title" th:href="'/accounts/' + ${tax.account.id}">
+                                <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
+                                <span th:text="${tax.account.name}">ACCOUNT</span>
+                            </a>
+                        </div>
+                        <div class="margin-right-2x" th:if="${tax.assignee}">
+                            <b>Assigned To</b><br/>
+                            <span th:text="${tax.assignee.displayName}">ASSIGNEE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
             <form class="form" method="post" th:action="@{'/taxes/' + ${tax.id} + '/status'}" th:object="${form}">
                 <div class="form-body">
                     <div class="section">
