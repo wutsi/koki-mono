@@ -25,6 +25,7 @@
                                     class="btn dropdown-toggle padding"
                                     data-bs-toggle="dropdown"
                                     type="button">
+                                <img height="24" src="/image/contact.png" width="24"/>
                                 <span th:if="${collection} == '1'">All Contacts</span>
                                 <span th:if="${collection} == '2'">Contacts I created</span>
                             </button>
@@ -37,7 +38,6 @@
                                 </li>
                             </ul>
                         </div>
-
                         <div>
                             <a class="btn-create btn btn-light btn-sm" href="/contacts/create">Create New Contact</a>
                         </div>

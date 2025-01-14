@@ -7,16 +7,19 @@
         <span th:class="'fiv-viv fiv-icon-' + ${file.extension}"></span>
     </td>
     <td>
-        <a th:href="${file.buildViewUrl(returnUrl)}" th:text="${file.name}">FILE</a>
+        <a class="btn-download" target="_blank" th:href="'/files/' + ${file.id} + '/download'" th:text="${file.name}">
+            FILE
+        </a>
     </td>
     <td th:text="${file.contentLengthText}">SIZE</td>
-    <td th:text="${file.createdAtText}">CREATED</td>
     <td>
         <span th:if="${file.createdBy}" th:text="${file.createdBy.displayName}">CREATED</span>
     </td>
-    <td class="toolbar">
-        <a class="btn-view" th:href="${file.buildViewUrl(returnUrl)}">View</a>
-        <a class="btn-download" target="_blank" th:href="'/files/' + ${file.id} + '/download'">Download</a>
+    <td th:text="${file.createdAtText}">CREATED</td>
+    <td class="toolbar text-right">
+        <a class="btn-delete" th:href="'javascript: koki_files_delete(' + ${file.id} + ')'">
+            Delete
+        </a>
     </td>
 </tr>
 

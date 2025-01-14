@@ -6,6 +6,7 @@ import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.tax.form.TaxStatusForm
 import com.wutsi.koki.portal.tax.model.TaxModel
 import com.wutsi.koki.portal.tax.service.TaxService
+import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.tax.dto.TaxStatus
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -18,6 +19,7 @@ import org.springframework.web.client.HttpClientErrorException
 @Controller
 class ChangeTaxStatusController(
     private val service: TaxService,
+    private val userService: UserService,
 ) : AbstractPageController() {
     @GetMapping("/taxes/{id}/status")
     fun edit(
@@ -43,6 +45,11 @@ class ChangeTaxStatusController(
                 title = tax.name
             )
         )
+
+        if (form.assigneeId != null) {
+            val assignee = userService.user(form.assigneeId)
+            model.addAttribute("assignee", assignee)
+        }
         return "taxes/status"
     }
 

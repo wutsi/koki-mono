@@ -12,8 +12,10 @@ import com.wutsi.koki.AccountFixtures.account
 import com.wutsi.koki.ContactFixtures
 import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.NoteFixtures
+import com.wutsi.koki.TaxFixtures
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.tenant.dto.ObjectName
 import kotlin.test.Test
 
 class AccountControllerTest : AbstractPageControllerTest() {
@@ -109,13 +111,13 @@ class AccountControllerTest : AbstractPageControllerTest() {
 
         Thread.sleep(1000)
         verify(kokiFiles).files(
-            anyOrNull(), // ids
-            anyOrNull(), // workflpw-instance-id
-            anyOrNull(), // form-id
-            eq(account.id), // owner-id
-            eq("ACCOUNT"), // owner-type
-            eq(20), // limit
-            eq(0), // offset
+            emptyList(), // ids
+            emptyList(), // workflow-instance-id
+            emptyList(), // form-id
+            account.id, // owner-id
+            ObjectName.ACCOUNT, // owner-type
+            20, // limit
+            0, // offset
         )
         assertElementCount(".widget-files tr.file", FileFixtures.files.size)
     }
@@ -126,12 +128,31 @@ class AccountControllerTest : AbstractPageControllerTest() {
 
         Thread.sleep(1000)
         verify(kokiNotes).notes(
-            anyOrNull(), // ids
-            eq(account.id), // owner-id
-            eq("ACCOUNT"), // owner-type
-            eq(20), // limit
-            eq(0), // offset
+            emptyList(), // ids
+            account.id, // owner-id
+            ObjectName.ACCOUNT, // owner-type
+            20, // limit
+            0, // offset
         )
         assertElementCount(".widget-notes tr.note", NoteFixtures.notes.size)
+    }
+
+    @Test
+    fun taxes() {
+        navigateTo("/accounts/${account.id}?tab=taxes")
+
+        Thread.sleep(1000)
+        verify(kokiTaxes).taxes(
+            emptyList(), // ids
+            emptyList(), // tsx-type-id
+            listOf(account.id), // account-id
+            emptyList(), // participant-id
+            emptyList(), // assignee-id
+            emptyList(), // created-by-id
+            emptyList(), // statuses
+            20, // limit
+            0, // offset
+        )
+        assertElementCount(".widget-taxes tr.tax", TaxFixtures.taxes.size)
     }
 }

@@ -2,12 +2,12 @@
 
 ## Account
 
-- [] Link with taxes
 - [] Filter accounts on UI
 - [] Add address to Account
 - [] Settings: Import Accounts from CSV
 - [] Settings: Import Attributes from CSV
 - [] Settings: Import Account Types from CSV
+- [x] Link with taxes
 - [x] Attributes API
 - [x] Account API
 - [x] Account UI
@@ -17,9 +17,10 @@
 
 ## Contact
 
-- [] Fileter contacts on UI
+- [] Filter contacts on UI
 - [] Settings: Import Contact from CSV
 - [] Settings: Import Contact Types from CSV
+- [] Add additional informations: address, SSN, Date of birth
 - [x] Contact API
 - [x] Contact UI
 - [x] Link files to contacts
@@ -27,7 +28,7 @@
 
 ## Files
 
-- [ ] Upload file from popup
+- [x] Upload file from popup
 - [x] Show file details
 - [x] Delete files
 - [x] Download files
@@ -36,10 +37,13 @@
 
 ## Taxes
 
-- [] Home: Add my assignment widget
-- [] Home: Add my taxes widget
 - [] Send email when assigned
 - [] Add Kanban view
+- [] Add Calendar view
+- [] Home: Add my taxes widget
+- [] Settings: Import Taxes Types from CSV
+- [] Track Time spent
+- [x] Home: Add my assignment widget
 - [x] Personal tax UI
 - [x] Personal tax API
 - [x] Link files to taxes
@@ -47,18 +51,15 @@
 
 ## Email
 
-- [] Send email
+- [] Send email to account
+- [] Send email to contact
+- [] Send email to list of contacts
 - [] Setup email template
 
 ## Notes
 
 - [x] Note API
 - [x] Note UI
-
-## Event
-
-- [] Schedule an event
-- [] Show event calendar
 
 ## Product
 
@@ -131,6 +132,7 @@
 
 ## Other
 
+- [] Implement RBAC
 - [] Add support for external modules
 - [] Add tenant healthcheck to validate connectivity with all resources
 

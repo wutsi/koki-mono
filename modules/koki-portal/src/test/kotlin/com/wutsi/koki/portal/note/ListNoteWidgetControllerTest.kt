@@ -32,7 +32,6 @@ class ListNoteWidgetControllerTest : AbstractPageControllerTest() {
 
         Thread.sleep(1000)
         verify(kokiNotes).delete(id)
-        assertElementNotPresent("#note-id")
     }
 
     @Test

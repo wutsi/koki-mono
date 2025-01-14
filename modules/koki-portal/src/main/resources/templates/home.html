@@ -11,12 +11,10 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-4">
-            <div class="widget-container" data-url="workflows/widgets/task-queue"></div>
+            <div class="widget-container"
+                 th:data-url="'/taxes/widgets/list?limit=10&title=My+Assignments&small-view=true&show-account=true&assignee-id=' + ${user.id}"></div>
         </div>
         <div class="col-8">
-            <div class="widget-container" data-url="workflows/widgets/my-tasks"></div>
-
-            <div class="widget-container" data-url="workflows/widgets/my-cases"></div>
         </div>
     </div>
 </div>
