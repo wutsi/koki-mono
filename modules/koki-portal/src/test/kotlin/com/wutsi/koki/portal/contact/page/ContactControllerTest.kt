@@ -83,7 +83,7 @@ class ContactControllerTest : AbstractPageControllerTest() {
             emptyList(), // workflpw-instance-id
             emptyList(), // form-id
             contact.id, // owner-id
-            ObjectType.ACCOUNT, // owner-type
+            ObjectType.CONTACT, // owner-type
             20, // limit
             0, // offset
         )
