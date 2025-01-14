@@ -35,6 +35,7 @@ class ListTaxWidgetController(private val service: TaxService) : AbstractPageCon
         model.addAttribute("title", title)
         model.addAttribute("loadMore", loadMore)
         model.addAttribute("showAccount", showAccount)
+        model.addAttribute("accountId", accountId)
         return "taxes/widgets/list"
     }
 
