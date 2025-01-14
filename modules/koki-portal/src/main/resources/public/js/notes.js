@@ -55,8 +55,12 @@ function koki_notes_close() {
     _koki_notes_close_modal();
 }
 
-function koki_notes_create(ownerId, ownerType) {
+function koki_notes_create() {
     console.log('Create Note');
+    const container = document.getElementById('note-list');
+    const ownerId = container.getAttribute("data-owner-id");
+    const ownerType = container.getAttribute("data-owner-type");
+
     fetch('/notes/create?owner-id=' + ownerId + '&owner-type=' + ownerType)
         .then(response => {
             if (response.ok) {

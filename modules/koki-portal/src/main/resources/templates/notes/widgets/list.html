@@ -1,13 +1,13 @@
 <div class="widget widget-notes">
     <div class="widget-body">
         <div class="margin-bottom">
-            <a class="btn-create btn btn-secondary btn-sm"
-               th:href="'javascript: koki_notes_create(' + ${ownerId} + ',\'' + ${ownerType} + '\')'">
+            <a class="btn-create btn btn-secondary btn-sm" href="javascript: koki_notes_create()">
                 Add New Note
             </a>
         </div>
 
-        <table class="table table-striped" id="note-list" th:data-owner-id="${ownerId}" th:data-owner-type="${ownerType}"
+        <table class="table table-striped" id="note-list" th:data-owner-id="${ownerId}"
+               th:data-owner-type="${ownerType}"
                th:if="${notes}">
             <tr class="border margin-top note" th:each="note : ${notes}" th:id="'note-' + ${note.id}">
                 <td th:replace="~{__components/note :: columns(${note})}"></td>

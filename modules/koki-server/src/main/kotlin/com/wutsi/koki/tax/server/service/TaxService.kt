@@ -15,6 +15,7 @@ import com.wutsi.koki.tax.server.domain.TaxEntity
 import com.wutsi.koki.tenant.dto.ObjectName
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
+import org.jsoup.Jsoup
 import org.springframework.stereotype.Service
 import java.util.Date
 
@@ -157,7 +158,7 @@ class TaxService(
         dao.save(tax)
 
         // Notes
-        if (!request.notes?.trim().isNullOrEmpty()) {
+        if (!isEmpty(request.notes)) {
             noteService.create(
                 tenantId = tenantId,
                 request = CreateNoteRequest(
@@ -168,5 +169,13 @@ class TaxService(
                 )
             )
         }
+    }
+
+    private fun isEmpty(notes: String?): Boolean {
+        if (notes.isNullOrEmpty()) {
+            return true
+        }
+        val text = Jsoup.parse(notes).text().trim()
+        return text.isEmpty()
     }
 }

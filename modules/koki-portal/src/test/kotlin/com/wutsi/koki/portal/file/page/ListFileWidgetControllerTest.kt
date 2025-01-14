@@ -2,17 +2,18 @@ package com.wutsi.koki.portal.file.page
 
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.FileFixtures.file
 import com.wutsi.koki.FileFixtures.files
 import com.wutsi.koki.file.dto.SearchFileResponse
-import com.wutsi.koki.portal.page.PageName
 import kotlin.test.Test
 
 class ListFileWidgetControllerTest : AbstractPageControllerTest() {
     @Test
     fun list() {
-        navigateTo("/files/widgets/list?workflow-instance-id=111")
+        navigateTo("/files/widgets/list?test-mode=true")
 
         assertElementCount(".widget-files tr.file", files.size)
         assertElementNotPresent(".empty-message")
@@ -31,7 +32,7 @@ class ListFileWidgetControllerTest : AbstractPageControllerTest() {
                 anyOrNull(),
             )
 
-        navigateTo("/files/widgets/list")
+        navigateTo("/files/widgets/list?test-mode=true")
 
         assertElementNotPresent(".widget-files tr.file")
         assertElementPresent(".widget-files .empty-message")
@@ -39,17 +40,31 @@ class ListFileWidgetControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun upload() {
-        navigateTo("/files/widgets/list?workflow-instance-id=111")
-        click(".btn-upload")
+        navigateTo("/files/widgets/list?owner-id=111&owner-type=ACCOUNT&test-mode=true")
+        click(".btn-upload", 1000)
 
-        assertCurrentPageIs(PageName.UPLOAD)
+        assertElementVisible("#file-modal")
     }
 
     @Test
-    fun view() {
-        navigateTo("/files/widgets/list?workflow-instance-id=111")
-        click(".btn-view")
+    fun download() {
+        navigateTo("/files/widgets/list?test-mode=true")
 
-        assertCurrentPageIs(PageName.FILE)
+        click(".btn-download")
+    }
+
+    @Test
+    fun delete() {
+        navigateTo("/files/widgets/list?test-mode=true&owner-id=555&owner-type=ACCOUNT")
+
+        val id = file.id
+        click("#file-$id .btn-delete")
+
+        val alert = driver.switchTo().alert()
+        alert.accept()
+        driver.switchTo().parentFrame()
+
+        Thread.sleep(1000)
+        verify(kokiFiles).delete(id)
     }
 }

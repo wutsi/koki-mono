@@ -25,9 +25,12 @@
                                     class="btn dropdown-toggle padding"
                                     data-bs-toggle="dropdown"
                                     type="button">
+                                <img height="24" src="/image/tax.png" width="24"/>
                                 <span th:if="${collection} == '1'">All Tax Reports</span>
                                 <span th:if="${collection} == '2'">My Tax Reports</span>
                                 <span th:if="${collection} == '3'">My assigned Tax Reports</span>
+                                <span th:if="${collection} == '4'">My closed Tax Reports</span>
+                                <span th:if="${collection} == '5'">All closed Tax Reports</span>
                             </button>
                             <ul class="dropdown-menu">
                                 <li th:if="${collection} != '1'">
@@ -39,6 +42,12 @@
                                 <li th:if="${collection} != '3'">
                                     <a class="dropdown-item" href="/taxes?col=3">My assigned Tax Reports</a>
                                 </li>
+                                <li th:if="${collection} != '4'">
+                                    <a class="dropdown-item" href="/taxes?col=3">My closed Tax Reports</a>
+                                </li>
+                                <li th:if="${collection} != '5'">
+                                    <a class="dropdown-item" href="/taxes?col=3">All closed Tax Reports</a>
+                                </li>
                             </ul>
                         </div>
                         <div>
@@ -48,8 +57,7 @@
 
                     <table class="table table-striped" th:if="${taxes}">
                         <tr>
-                            <th width="1%">Year</th>
-                            <th>Type</th>
+                            <th>Name</th>
                             <th>Account</th>
                             <th>Status</th>
                             <th>Accountant</th>
@@ -58,12 +66,12 @@
                             <td></td>
                         </tr>
                         <tr class="tax" th:each="tax : ${taxes}">
-                            <div th:replace="~{__components/tax :: columns(${tax})}"></div>
+                            <div th:replace="~{__components/tax :: columns(${tax}, true, false)}"></div>
                         </tr>
                         <tr th:replace="~{__components/tax :: load-more(${moreUrl})}"></tr>
                     </table>
 
-                    <div class="text-center" th:if="!${taxes}">No tax</div>
+                    <div class="text-center" th:if="!${taxes}">No tax report</div>
                 </div>
             </div>
         </div>
