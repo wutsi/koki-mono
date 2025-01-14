@@ -1,5 +1,6 @@
 package com.wutsi.koki.note.server.endpoint
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.note.dto.CreateNoteRequest
 import com.wutsi.koki.note.dto.CreateNoteResponse
 import com.wutsi.koki.note.dto.GetNoteResponse
@@ -64,7 +65,7 @@ class NoteEndpoints(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false, name = "id") ids: List<String> = emptyList(),
         @RequestParam(required = false, name = "owner-id") ownerId: Long? = null,
-        @RequestParam(required = false, name = "owner-type") ownerType: String? = null,
+        @RequestParam(required = false, name = "owner-type") ownerType: ObjectType? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
     ): SearchNoteResponse {

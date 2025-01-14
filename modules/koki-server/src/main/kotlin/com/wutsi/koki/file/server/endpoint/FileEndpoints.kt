@@ -1,5 +1,6 @@
 package com.wutsi.koki.file.server.endpoint
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.file.dto.UploadFileResponse
@@ -44,7 +45,7 @@ class FileEndpoints(
         @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceIds: List<String> = emptyList(),
         @RequestParam(required = false, name = "form-id") formIds: List<String> = emptyList(),
         @RequestParam(required = false, name = "owner-id") ownerId: Long? = null,
-        @RequestParam(required = false, name = "owner-type") ownerType: String? = null,
+        @RequestParam(required = false, name = "owner-type") ownerType: ObjectType? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
     ): SearchFileResponse {
@@ -78,7 +79,7 @@ class FileEndpoints(
         @RequestParam(name = "tenant-id") tenantId: Long,
         @RequestParam(required = false, name = "access-token") accessToken: String? = null,
         @RequestParam(required = false, name = "owner-id") ownerId: Long? = null,
-        @RequestParam(required = false, name = "owner-type") ownerType: String? = null,
+        @RequestParam(required = false, name = "owner-type") ownerType: ObjectType? = null,
         @RequestPart file: MultipartFile,
     ): UploadFileResponse {
         response.addHeader("Access-Control-Allow-Origin", "*")

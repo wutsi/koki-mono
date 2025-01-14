@@ -263,6 +263,15 @@ a.entity-title {
     margin-right: 0;
 }
 
+td.toolbar {
+    text-align: right;
+}
+
+.widget-toolbar a:last-child,
+.toolbar a:last-child {
+    margin-right: 0;
+}
+
 .widget .tab-content .widget {
     border: 0;
 }

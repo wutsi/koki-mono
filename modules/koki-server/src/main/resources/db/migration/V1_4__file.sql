@@ -28,7 +28,7 @@ CREATE TABLE T_FILE_OWNER(
   file_fk               BIGINT NOT NULL REFERENCES T_FILE(id),
   owner_fk              BIGINT NOT NULL,
 
-  owner_type            VARCHAR(30) NOT NULL,
+  owner_type            INT NOT NULL DEFAULT 0,
 
   UNIQUE(file_fk, owner_fk, owner_type),
   PRIMARY KEY(id)

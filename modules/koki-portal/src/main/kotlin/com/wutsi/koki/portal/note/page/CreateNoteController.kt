@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.note.page
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.note.form.NoteForm
 import com.wutsi.koki.portal.note.service.NoteService
 import org.springframework.stereotype.Controller
@@ -14,14 +15,17 @@ class CreateNoteController(private val service: NoteService) {
     @GetMapping("/notes/create")
     fun create(
         @RequestParam(name = "owner-id", required = true) ownerId: Long = -1,
-        @RequestParam(name = "owner-type", required = true) ownerType: String = "",
+        @RequestParam(name = "owner-type", required = true) ownerType: ObjectType? = null,
         model: Model
     ): String {
         model.addAttribute("ownerId", ownerId)
         model.addAttribute("ownerType", ownerType)
         model.addAttribute(
             "form",
-            NoteForm(ownerType = ownerType, ownerId = ownerId)
+            NoteForm(
+                ownerType = ownerType ?: ObjectType.UNKNOWN,
+                ownerId = ownerId
+            )
         )
         return "notes/create"
     }

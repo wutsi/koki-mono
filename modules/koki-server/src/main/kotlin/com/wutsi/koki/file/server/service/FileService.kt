@@ -1,5 +1,6 @@
 package com.wutsi.koki.file.server.service
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
@@ -40,7 +41,7 @@ class FileService(
         workflowInstanceIds: List<String> = emptyList(),
         formIds: List<String> = emptyList(),
         ownerId: Long? = null,
-        ownerType: String? = null,
+        ownerType: ObjectType? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): List<FileEntity> {
@@ -122,7 +123,7 @@ class FileService(
         userId: Long?,
         file: MultipartFile,
         ownerId: Long?,
-        ownerType: String?,
+        ownerType: ObjectType?,
         tenantId: Long,
     ): FileEntity {
         // Store
@@ -156,7 +157,7 @@ class FileService(
                 FileOwnerEntity(
                     fileId = file.id!!,
                     ownerId = ownerId,
-                    ownerType = ownerType.uppercase(),
+                    ownerType = ownerType,
                 )
             )
         }

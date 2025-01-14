@@ -1,6 +1,8 @@
 package com.wutsi.koki.note.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
+import com.wutsi.koki.common.dto.ObjectReference
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.note.dto.CreateNoteRequest
 import com.wutsi.koki.note.dto.CreateNoteResponse
 import com.wutsi.koki.note.server.dao.NoteOwnerRepository
@@ -51,8 +53,7 @@ class CreateNoteEndpointTest : AuthorizationAwareEndpointTest() {
         val request = CreateNoteRequest(
             subject = "New note",
             body = "<p>This is the body of the note</p>",
-            ownerId = 1111L,
-            ownerType = "xxxx"
+            reference = ObjectReference(id = 1111L, type = ObjectType.TAX),
         )
         val response = rest.postForEntity("/v1/notes", request, CreateNoteResponse::class.java)
 
@@ -71,7 +72,7 @@ class CreateNoteEndpointTest : AuthorizationAwareEndpointTest() {
 
         val owners = ownerDao.findByNoteId(noteId)
         assertEquals(1, owners.size)
-        assertEquals(request.ownerId, owners[0].ownerId)
-        assertEquals(request.ownerType, owners[0].ownerType)
+        assertEquals(request.reference!!.id, owners[0].ownerId)
+        assertEquals(request.reference!!.type, owners[0].ownerType)
     }
 }

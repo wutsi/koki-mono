@@ -1,5 +1,6 @@
 package com.wutsi.koki.sdk
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.note.dto.CreateNoteRequest
 import com.wutsi.koki.note.dto.CreateNoteResponse
 import com.wutsi.koki.note.dto.GetNoteResponse
@@ -38,7 +39,7 @@ class KokiNotes(
     fun notes(
         ids: List<Long>,
         ownerId: Long?,
-        ownerType: String?,
+        ownerType: ObjectType?,
         limit: Int,
         offset: Int,
     ): SearchNoteResponse {

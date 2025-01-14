@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.file.service
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.file.mapper.FileMapper
 import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.user.service.UserService
@@ -27,7 +28,7 @@ class FileService(
         workflowInstanceIds: List<String> = emptyList(),
         formIds: List<String> = emptyList(),
         ownerId: Long? = null,
-        ownerType: String? = null,
+        ownerType: ObjectType? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): List<FileModel> {
@@ -64,7 +65,7 @@ class FileService(
 
     fun uploadUrl(
         ownerId: Long? = null,
-        ownerType: String? = null,
+        ownerType: ObjectType? = null,
         workflowInstanceId: String? = null,
         formId: String? = null,
     ): String {
