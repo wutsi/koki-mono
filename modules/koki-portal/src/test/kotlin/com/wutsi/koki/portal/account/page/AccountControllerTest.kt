@@ -153,6 +153,6 @@ class AccountControllerTest : AbstractPageControllerTest() {
             20, // limit
             0, // offset
         )
-        assertElementCount(".widget-taxes tr.taxe", TaxFixtures.taxes.size)
+        assertElementCount(".widget-taxes tr.tax", TaxFixtures.taxes.size)
     }
 }
