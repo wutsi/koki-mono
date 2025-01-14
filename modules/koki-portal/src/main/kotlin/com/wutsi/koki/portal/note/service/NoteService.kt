@@ -1,5 +1,7 @@
 package com.wutsi.koki.portal.note.service
 
+import com.wutsi.koki.common.dto.ObjectReference
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.note.dto.CreateNoteRequest
 import com.wutsi.koki.note.dto.UpdateNoteRequest
 import com.wutsi.koki.portal.note.form.NoteForm
@@ -41,7 +43,7 @@ class NoteService(
     fun notes(
         ids: List<Long> = emptyList(),
         ownerId: Long? = null,
-        ownerType: String? = null,
+        ownerType: ObjectType? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): List<NoteModel> {
@@ -81,8 +83,12 @@ class NoteService(
         val request = CreateNoteRequest(
             subject = form.subject,
             body = form.body,
-            ownerId = form.ownerId,
-            ownerType = form.ownerType,
+            reference = form.ownerId?.let {
+                ObjectReference(
+                    id = form.ownerId,
+                    type = form.ownerType
+                )
+            },
         )
         return koki.create(request).noteId
     }

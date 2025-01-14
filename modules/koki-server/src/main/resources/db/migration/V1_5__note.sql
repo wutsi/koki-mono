@@ -23,7 +23,7 @@ CREATE TABLE T_NOTE_OWNER(
   note_fk               BIGINT NOT NULL REFERENCES T_NOTE(id),
   owner_fk              BIGINT NOT NULL,
 
-  owner_type            VARCHAR(30) NOT NULL,
+  owner_type            INT NOT NULL DEFAULT 0,
 
   UNIQUE(note_fk, owner_fk, owner_type),
   PRIMARY KEY(id)

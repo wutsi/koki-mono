@@ -3,7 +3,7 @@
 ## Account
 
 - [] Filter accounts on UI
-- [] Add address to Account
+- [] Add additional information: address
 - [] Settings: Import Accounts from CSV
 - [] Settings: Import Attributes from CSV
 - [] Settings: Import Account Types from CSV
@@ -17,10 +17,10 @@
 
 ## Contact
 
+- [] Add additional information: address, SSN, Date of birth
 - [] Filter contacts on UI
 - [] Settings: Import Contact from CSV
 - [] Settings: Import Contact Types from CSV
-- [] Add additional informations: address, SSN, Date of birth
 - [x] Contact API
 - [x] Contact UI
 - [x] Link files to contacts
@@ -38,6 +38,7 @@
 ## Taxes
 
 - [] Send email when assigned
+- [] Home: Widget showing the % of taxes completed per type
 - [] Add Kanban view
 - [] Add Calendar view
 - [] Home: Add my taxes widget
@@ -51,13 +52,24 @@
 
 ## Email
 
-- [] Send email to account
-- [] Send email to contact
-- [] Send email to list of contacts
-- [] Setup email template
+- [] Send email to 1 account or 1 contact, linked with object
+- [] Send email API
+- [] Email Template API
+- [] Email Template UI
+- [] Send mass email to list of contacts, accounts
+- [] Settings: Configure email layout
+- [] Settings: Configure SMTP
+
+## Calendar
+
+- [] Schedule meeting
+- [] Calendar view
 
 ## Notes
 
+- [] Add type of notes
+- [] Add mentions to notes
+- [] Email notification on notes?
 - [x] Note API
 - [x] Note UI
 

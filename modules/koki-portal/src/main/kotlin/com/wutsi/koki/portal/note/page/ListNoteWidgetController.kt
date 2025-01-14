@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.note.page
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.note.service.NoteService
 import com.wutsi.koki.portal.page.AbstractPageController
 import org.springframework.stereotype.Controller
@@ -11,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam
 class ListNoteWidgetController(private val service: NoteService) : AbstractPageController() {
     @GetMapping("/notes/widgets/list")
     fun list(
-        @RequestParam(required = false, name = "owner-id") ownerId: Long = -1,
-        @RequestParam(required = false, name = "owner-type") ownerType: String = "",
+        @RequestParam(required = false, name = "owner-id") ownerId: Long? = null,
+        @RequestParam(required = false, name = "owner-type") ownerType: ObjectType? = null,
         @RequestParam(name = "test-mode", required = false) testMode: String? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
@@ -27,8 +28,8 @@ class ListNoteWidgetController(private val service: NoteService) : AbstractPageC
 
     @GetMapping("/notes/widgets/list/more")
     fun more(
-        @RequestParam(required = false, name = "owner-id") ownerId: Long = -1,
-        @RequestParam(required = false, name = "owner-type") ownerType: String = "",
+        @RequestParam(required = false, name = "owner-id") ownerId: Long? = null,
+        @RequestParam(required = false, name = "owner-type") ownerType: ObjectType? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model

@@ -1,5 +1,7 @@
 package com.wutsi.koki.tax.server.service
 
+import com.wutsi.koki.common.dto.ObjectReference
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
@@ -12,7 +14,6 @@ import com.wutsi.koki.tax.dto.UpdateTaxRequest
 import com.wutsi.koki.tax.dto.UpdateTaxStatusRequest
 import com.wutsi.koki.tax.server.dao.TaxRepository
 import com.wutsi.koki.tax.server.domain.TaxEntity
-import com.wutsi.koki.tenant.dto.ObjectName
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -163,8 +164,10 @@ class TaxService(
                 request = CreateNoteRequest(
                     subject = "",
                     body = request.notes!!,
-                    ownerId = tax.id,
-                    ownerType = ObjectName.TAX,
+                    reference = ObjectReference(
+                        id = tax.id!!,
+                        type = ObjectType.TAX
+                    ),
                 )
             )
         }

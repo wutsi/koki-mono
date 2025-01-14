@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.file.page
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.file.service.FileService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -13,7 +14,7 @@ class ListFileWidgetController(private val service: FileService) {
     fun list(
         @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
         @RequestParam(required = false, name = "owner-id") ownerId: Long? = null,
-        @RequestParam(required = false, name = "owner-type") ownerType: String? = null,
+        @RequestParam(required = false, name = "owner-type") ownerType: ObjectType? = null,
         @RequestParam(required = false, name = "test-mode") testMode: String? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
@@ -38,7 +39,7 @@ class ListFileWidgetController(private val service: FileService) {
     fun more(
         @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
         @RequestParam(required = false, name = "owner-id") ownerId: Long? = null,
-        @RequestParam(required = false, name = "owner-type") ownerType: String? = null,
+        @RequestParam(required = false, name = "owner-type") ownerType: ObjectType? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model

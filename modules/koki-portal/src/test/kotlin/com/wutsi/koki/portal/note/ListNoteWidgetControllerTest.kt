@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.NoteFixtures.notes
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.note.dto.CreateNoteRequest
 import com.wutsi.koki.note.dto.UpdateNoteRequest
 import kotlin.test.Test
@@ -79,8 +80,8 @@ class ListNoteWidgetControllerTest : AbstractPageControllerTest() {
         verify(kokiNotes).create(request.capture())
         assertEquals("Yo man", request.firstValue.subject)
         assertEquals("<p>Hello man</p>", request.firstValue.body)
-        assertEquals("ACCOUNT", request.firstValue.ownerType)
-        assertEquals(111L, request.firstValue.ownerId)
+        assertEquals(ObjectType.ACCOUNT, request.firstValue.reference?.type)
+        assertEquals(111L, request.firstValue.reference?.id)
     }
 
     @Test

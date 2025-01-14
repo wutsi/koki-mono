@@ -8,6 +8,6 @@ INSERT INTO T_FILE(id, tenant_fk, created_by_fk, workflow_instance_id, form_id, 
            (200, 2, null, null,     null,    'bar.pdf', 'application/pdf', 4000, 'https://www.file.com/bar.pdf', false);
 
 INSERT INTO T_FILE_OWNER(file_fk, owner_fk, owner_type)
-    VALUES (100, 11, 'ACCOUNT'),
-           (104, 11, 'ACCOUNT'),
-           (199, 11, 'ACCOUNT');
+    VALUES (100, 11, 1),
+           (104, 11, 1),
+           (199, 11, 1);

@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.file.page
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.file.service.FileService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -13,7 +14,7 @@ class UploadFileController(private val service: FileService) {
     @GetMapping("/files/upload")
     fun download(
         @RequestParam(required = false, name = "owner-id") ownerId: Long? = null,
-        @RequestParam(required = false, name = "owner-type") ownerType: String? = null,
+        @RequestParam(required = false, name = "owner-type") ownerType: ObjectType? = null,
         model: Model,
     ): String {
         val uploadUrl = service.uploadUrl(

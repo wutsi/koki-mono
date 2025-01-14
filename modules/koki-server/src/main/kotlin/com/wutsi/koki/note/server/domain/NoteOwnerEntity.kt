@@ -1,5 +1,6 @@
 package com.wutsi.koki.note.server.domain
 
+import com.wutsi.koki.common.dto.ObjectType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -20,5 +21,5 @@ data class NoteOwnerEntity(
     @Column(name = "owner_fk")
     val ownerId: Long = -1,
 
-    val ownerType: String = "",
+    val ownerType: ObjectType = ObjectType.UNKNOWN,
 )

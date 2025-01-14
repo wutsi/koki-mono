@@ -1,6 +1,7 @@
 package com.wutsi.koki.file.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.UploadFileResponse
 import com.wutsi.koki.file.server.dao.FileOwnerRepository
 import com.wutsi.koki.file.server.dao.FileRepository
@@ -52,7 +53,7 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
     fun `upload and link`() {
         val entity = createEntity()
         val response = rest.exchange(
-            "/v1/files/upload?tenant-id=1&owner-id=111&owner-type=account",
+            "/v1/files/upload?tenant-id=1&owner-id=111&owner-type=" + ObjectType.ACCOUNT.name,
             HttpMethod.POST,
             entity,
             UploadFileResponse::class.java,
@@ -72,7 +73,7 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
         val fileOwners = ownerDao.findByFileId(fileId)
         assertEquals(1, fileOwners.size)
         assertEquals(111L, fileOwners[0].ownerId)
-        assertEquals("ACCOUNT", fileOwners[0].ownerType)
+        assertEquals(ObjectType.ACCOUNT, fileOwners[0].ownerType)
     }
 
     @Test

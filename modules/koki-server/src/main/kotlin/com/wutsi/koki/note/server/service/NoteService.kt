@@ -1,5 +1,6 @@
 package com.wutsi.koki.note.server.service
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
@@ -35,7 +36,7 @@ class NoteService(
         tenantId: Long,
         ids: List<String> = emptyList(),
         ownerId: Long? = null,
-        ownerType: String? = null,
+        ownerType: ObjectType? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): List<NoteEntity> {
@@ -86,12 +87,13 @@ class NoteService(
             )
         )
 
-        if (request.ownerId != null && request.ownerType != null) {
+        if (request.reference != null) {
+            val ref = request.reference!!
             ownerDao.save(
                 NoteOwnerEntity(
                     noteId = note.id,
-                    ownerId = request.ownerId!!,
-                    ownerType = request.ownerType!!,
+                    ownerId = ref.id,
+                    ownerType = ref.type,
                 )
             )
         }

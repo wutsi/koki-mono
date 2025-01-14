@@ -13,9 +13,9 @@ import com.wutsi.koki.ContactFixtures
 import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.TaxFixtures
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.tenant.dto.ObjectName
 import kotlin.test.Test
 
 class AccountControllerTest : AbstractPageControllerTest() {
@@ -115,7 +115,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
             emptyList(), // workflow-instance-id
             emptyList(), // form-id
             account.id, // owner-id
-            ObjectName.ACCOUNT, // owner-type
+            ObjectType.ACCOUNT, // owner-type
             20, // limit
             0, // offset
         )
@@ -130,7 +130,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
         verify(kokiNotes).notes(
             emptyList(), // ids
             account.id, // owner-id
-            ObjectName.ACCOUNT, // owner-type
+            ObjectType.ACCOUNT, // owner-type
             20, // limit
             0, // offset
         )

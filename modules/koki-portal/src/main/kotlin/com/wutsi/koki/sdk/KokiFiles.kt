@@ -1,5 +1,6 @@
 package com.wutsi.koki.sdk
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.file.dto.SearchFileResponse
 import org.springframework.web.client.RestTemplate
@@ -26,7 +27,7 @@ class KokiFiles(
 
     fun uploadUrl(
         ownerId: Long? = null,
-        ownerType: String? = null,
+        ownerType: ObjectType? = null,
         workflowInstanceId: String? = null,
         formId: String? = null,
     ): String {
@@ -48,7 +49,7 @@ class KokiFiles(
         workflowInstanceIds: List<String>,
         formIds: List<String>,
         ownerId: Long?,
-        ownerType: String?,
+        ownerType: ObjectType?,
         limit: Int,
         offset: Int,
     ): SearchFileResponse {
