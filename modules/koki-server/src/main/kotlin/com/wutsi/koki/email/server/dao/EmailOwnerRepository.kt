@@ -5,4 +5,6 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface EmaiOwnerRepository : CrudRepository<EmailOwnerEntity, Long>
+interface EmailOwnerRepository : CrudRepository<EmailOwnerEntity, String> {
+    fun findByEmailId(id: String): List<EmailOwnerEntity>
+}

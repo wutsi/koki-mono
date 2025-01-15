@@ -1,4 +1,4 @@
-package com.wutsi.koki.file.server.domain
+package com.wutsi.koki.email.server.domain
 
 import com.wutsi.koki.common.dto.ObjectType
 import jakarta.persistence.Column
@@ -9,14 +9,14 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = "T_FILE_OWNER")
-data class FileOwnerEntity(
+@Table(name = "T_EMAIL_OWNER")
+data class EmailOwnerEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    @Column(name = "file_fk")
-    val fileId: Long = -1,
+    @Column(name = "email_fk")
+    val emailId: String = "",
 
     @Column(name = "owner_fk")
     val ownerId: Long = -1,
