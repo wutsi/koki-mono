@@ -13,6 +13,8 @@ import com.wutsi.koki.email.dto.SendEmailRequest
 import com.wutsi.koki.email.dto.SendEmailResponse
 import com.wutsi.koki.email.server.dao.EmailOwnerRepository
 import com.wutsi.koki.email.server.dao.EmailRepository
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.platform.messaging.Message
 import com.wutsi.koki.platform.messaging.MessagingService
 import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
@@ -25,7 +27,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/email/SendEmailEndpoint.sql"])
-class SendEmailEndpoint : AuthorizationAwareEndpointTest() {
+class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var dao: EmailRepository
 
@@ -82,6 +84,19 @@ class SendEmailEndpoint : AuthorizationAwareEndpointTest() {
     }
 
     @Test
+    fun `send to account without account`() {
+        val request = SendEmailRequest(
+            subject = "Hello man",
+            body = "<p>This is an example of email</p>",
+            recipient = Recipient(id = 101, type = ObjectType.ACCOUNT),
+        )
+        val response = rest.postForEntity("/v1/emails", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.CONFLICT, response.statusCode)
+        assertEquals(ErrorCode.EMAIL_RECIPIENT_EMAIL_MISSING, response.body!!.error.code)
+    }
+
+    @Test
     fun `send to contact`() {
         val request = SendEmailRequest(
             subject = "Hello man",
@@ -112,5 +127,18 @@ class SendEmailEndpoint : AuthorizationAwareEndpointTest() {
         assertEquals("Ray Sponsible", msg.firstValue.recipient.displayName)
         assertEquals("ray.sponsible@gmail.com", msg.firstValue.recipient.email)
         assertEquals("text/html", msg.firstValue.mimeType)
+    }
+
+    @Test
+    fun `send to contact without account`() {
+        val request = SendEmailRequest(
+            subject = "Hello man",
+            body = "<p>This is an example of email</p>",
+            recipient = Recipient(id = 120, type = ObjectType.CONTACT),
+        )
+        val response = rest.postForEntity("/v1/emails", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.CONFLICT, response.statusCode)
+        assertEquals(ErrorCode.EMAIL_RECIPIENT_EMAIL_MISSING, response.body!!.error.code)
     }
 }

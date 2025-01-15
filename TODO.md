@@ -37,7 +37,7 @@
 
 ## Taxes
 
-- [] Send email when assigned
+- [] Send email notification when assigned
 - [] Home: Widget showing the % of taxes completed per type
 - [] Add Kanban view
 - [] Add Calendar view
@@ -52,8 +52,9 @@
 
 ## Email
 
-- [] Send email to 1 account or 1 contact, linked with object
 - [] Send email API
+- [] Send email UI
+- [] Attach files to email
 - [] Email Template API
 - [] Email Template UI
 - [] Send mass email to list of contacts, accounts
