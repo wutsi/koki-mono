@@ -5,30 +5,44 @@ import com.wutsi.koki.email.dto.GetEmailResponse
 import com.wutsi.koki.email.dto.SearchEmailResponse
 import com.wutsi.koki.email.dto.SendEmailRequest
 import com.wutsi.koki.email.dto.SendEmailResponse
+import com.wutsi.koki.email.server.service.EmailService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/v1/emails")
-class EmailEndpoints {
+class EmailEndpoints(
+    private val service: EmailService
+) {
     @PostMapping
-    fun send(@Valid @RequestBody request: SendEmailRequest): SendEmailResponse {
-        TODO()
+    fun send(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @Valid @RequestBody request: SendEmailRequest
+    ): SendEmailResponse {
+        val email = service.send(request, tenantId)
+        return SendEmailResponse(
+            emailId = email.id!!
+        )
     }
 
     @GetMapping("/{id}")
-    fun get(@PathVariable id: String): GetEmailResponse {
+    fun get(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: String,
+    ): GetEmailResponse {
         TODO()
     }
 
     @GetMapping
     fun search(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false, name = "id") ids: List<String> = emptyList(),
         @RequestParam(required = false, name = "owner-id") ownerId: Long? = null,
         @RequestParam(required = false, name = "owner-type") ownerType: ObjectType? = null,

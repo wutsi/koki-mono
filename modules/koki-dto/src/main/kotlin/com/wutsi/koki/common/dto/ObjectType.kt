@@ -5,4 +5,5 @@ enum class ObjectType {
     ACCOUNT,
     CONTACT,
     TAX,
+    FILE,
 }
