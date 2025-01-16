@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.email.page
+package com.wutsi.koki.portal.email.page.widget
 
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.verify

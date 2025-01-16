@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.email.page
+package com.wutsi.koki.portal.email.page.widget
 
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.email.service.EmailService
