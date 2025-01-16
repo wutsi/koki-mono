@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.EmailFixtures
 import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.TaxFixtures.tax
@@ -103,6 +104,21 @@ class TaxControllerTest : AbstractPageControllerTest() {
             0, // offset
         )
         assertElementCount(".widget-notes .note", NoteFixtures.notes.size)
+    }
+
+    @Test
+    fun emails() {
+        navigateTo("/taxes/${tax.id}?tab=emails")
+
+        Thread.sleep(1000)
+        verify(kokiEmails).emails(
+            emptyList(), // ids
+            tax.id, // owner-id
+            ObjectType.TAX, // owner-type
+            20, // limit
+            0, // offset
+        )
+        assertElementCount(".widget-emails .email", EmailFixtures.emails.size)
     }
 
     @Test

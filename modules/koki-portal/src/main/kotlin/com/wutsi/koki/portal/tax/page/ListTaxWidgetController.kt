@@ -34,7 +34,6 @@ class ListTaxWidgetController(private val service: TaxService) : AbstractPageCon
 
         model.addAttribute("title", title)
         model.addAttribute("loadMore", loadMore)
-        model.addAttribute("showAccount", showAccount)
         model.addAttribute("accountId", accountId)
         return "taxes/widgets/list"
     }
@@ -44,6 +43,7 @@ class ListTaxWidgetController(private val service: TaxService) : AbstractPageCon
         @RequestParam(required = false, name = "account-id") accountId: Long? = null,
         @RequestParam(required = false, name = "participant-id") participantId: Long? = null,
         @RequestParam(required = false, name = "assignee-id") assigneeId: Long? = null,
+        @RequestParam(required = false, name = "show-account") showAccount: Boolean = true,
         @RequestParam(required = false, name = "small-view") smallView: Boolean = false,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
@@ -56,18 +56,18 @@ class ListTaxWidgetController(private val service: TaxService) : AbstractPageCon
             limit = limit,
             offset = offset,
         )
-        if (taxes.isNotEmpty()) {
-            model.addAttribute("taxes", taxes)
-            model.addAttribute("smallView", smallView)
 
-            if (taxes.size >= limit) {
-                val nextOffset = offset + limit
-                val url = "/taxes/widgets/list/more?limit=$limit&offset=$nextOffset" +
+        model.addAttribute("taxes", taxes)
+        model.addAttribute("smallView", smallView)
+        model.addAttribute("showAccount", showAccount)
+        if (taxes.size >= limit) {
+            val nextOffset = offset + limit
+            val url =
+                "/taxes/widgets/list/more?limit=$limit&offset=$nextOffset&show-account=$showAccount&small-view=$smallView" +
                     (accountId?.let { id -> "&account-id=$id" } ?: "") +
                     (participantId?.let { id -> "&participant-id=$id" } ?: "") +
                     (assigneeId?.let { id -> "&assignee-id=$id" } ?: "")
-                model.addAttribute("moreUrl", url)
-            }
+            model.addAttribute("moreUrl", url)
         }
 
         return "taxes/more"
