@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 @Service
 class MessageMapper : TenantAwareMapper() {
     fun toMessageModel(entity: MessageSummary): MessageModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return MessageModel(
             id = entity.id,
             name = entity.name,
@@ -22,7 +22,7 @@ class MessageMapper : TenantAwareMapper() {
     }
 
     fun toMessageModel(entity: Message): MessageModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return MessageModel(
             id = entity.id,
             name = entity.name,

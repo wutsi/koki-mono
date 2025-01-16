@@ -11,7 +11,7 @@ function koki_files_upload() {
             if (response.ok) {
                 response.text()
                     .then(html => {
-                        _koki_files_open_modal(html, false);
+                        _koki_files_open_modal(html);
                     })
             } else {
                 console.log('Unable to fetch the modal', response.text());
@@ -23,7 +23,7 @@ function koki_files_close() {
     _koki_files_close_modal();
 }
 
-function _koki_files_open_modal(html, edit) {
+function _koki_files_open_modal(html) {
     document.getElementById("file-modal-body").innerHTML = html;
 
     const modal = new bootstrap.Modal('#file-modal');

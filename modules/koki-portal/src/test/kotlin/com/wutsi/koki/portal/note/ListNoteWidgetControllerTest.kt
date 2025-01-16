@@ -16,8 +16,7 @@ class ListNoteWidgetControllerTest : AbstractPageControllerTest() {
     fun list() {
         navigateTo("/notes/widgets/list?test-mode=1")
 
-        assertElementCount(".widget-notes tr.note", notes.size)
-        assertElementNotPresent(".empty-note")
+        assertElementCount(".widget-notes .note", notes.size)
     }
 
     @Test

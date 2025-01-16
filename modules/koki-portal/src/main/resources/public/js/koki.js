@@ -36,29 +36,51 @@ async function _koki_load_widgets() {
 }
 
 function _koki_tabs_lazyload() {
-    const tabs = document.querySelectorAll('button[data-bs-toggle="pill"]');
+    let tabs = document.querySelectorAll('button[data-bs-toggle="pill"]');
     for (let i = 0; i < tabs.length; i++) {
+        // Load content when lazy tab is shows
+        console.log('Listening to tab: ' + tabs[i].getAttribute('data-bs-target'));
         tabs[i].addEventListener('show.bs.tab', function (event) {
-            const content = document.querySelector(tabs[i].getAttribute('data-bs-target'));
-            const url = content.getAttribute('data-url');
-            if (url) {
-                fetch(url)
-                    .then(function (response) {
-                        response.text()
-                            .then(function (text) {
-                                content.innerHTML = text
-                            });
-                    });
+            const tabId = event.target.getAttribute('data-bs-target');
+            console.log('Tab' + tabId + ' selected');
+            if (tabId) {
+                _koki_tabs_load(tabId)
             }
         })
+    }
+
+    // Load content of active lazy tab
+    tabs = document.querySelectorAll('.tab-content .tab-pane');
+    for (let i = 0; i < tabs.length; i++) {
+        if (tabs[i].classList.contains("active")) {
+            if (tabs[i].id) {
+                console.log('Tab#' + tabs[i].id + ' is active');
+                _koki_tabs_load("#" + tabs[i].id)
+            }
+        }
+    }
+}
+
+function _koki_tabs_load(tabSelector) {
+    const content = document.querySelector(tabSelector);
+    const url = content.getAttribute('data-url');
+    if (url) {
+        console.log("Lazy loading tab: " + tabSelector);
+        fetch(url)
+            .then(function (response) {
+                response.text()
+                    .then(function (text) {
+                        content.innerHTML = text
+                    });
+            });
     }
 }
 
 function _koki_activate_current_tab() {
     const urlParams = new URLSearchParams(window.location.search);
     const tab = urlParams.get('tab');
-    console.log('Current tab', tab);
     if (tab) {
+        console.log('Current tab', tab);
         const tabDiv = document.getElementById("pills-" + tab + "-tab");
         if (tabDiv) {
             tabDiv.click();

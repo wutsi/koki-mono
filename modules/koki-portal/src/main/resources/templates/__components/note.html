@@ -2,32 +2,30 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<tr class="note" th:fragment="columns(note)" th:remove="tag">
-    <td>
-        <div>
-            <div class="note-subject">
-                <b th:text="${note.subject}">SUBJECT</b>
-            </div>
-            <div class="text-smaller">
-                <small th:if="${note.modifiedBy}" th:text="${note.modifiedBy?.displayName}">DISPLAY NANME</small>
-                <span th:if="${note.modifiedBy}">-</span>
-                <small th:text="${note.modifiedAtText}">DATE</small>
-            </div>
+<div class="note" th:fragment="columns(note)" th:remove="tag">
+    <div>
+        <div class="note-subject">
+            <b th:text="${note.subject}">SUBJECT</b>
         </div>
-        <div class="margin-top note-body" th:utext="${note.body}">BODY</div>
-        <div class="margin-top">
-            <a class="btn-edit btn btn-light btn-sm margin-top"
-               th:href="'javascript: koki_notes_edit(' + ${note.id} + ')'">
-                Edit
-            </a>
+        <div class="text-smaller">
+            <small th:if="${note.modifiedBy}" th:text="${note.modifiedBy?.displayName}">DISPLAY NANME</small>
+            <span th:if="${note.modifiedBy}">-</span>
+            <small th:text="${note.modifiedAtText}">DATE</small>
+        </div>
+    </div>
+    <div class="margin-top note-body" th:utext="${note.body}">BODY</div>
+    <div>
+        <a class="btn-edit btn btn-light btn-sm margin-top"
+           th:href="'javascript: koki_notes_edit(' + ${note.id} + ')'">
+            Edit
+        </a>
 
-            <a class="btn-delete btn btn-light btn-sm margin-top"
-               th:href="'javascript: koki_notes_delete(' + ${note.id} + ')'">
-                Delete
-            </a>
-        </div>
-    </td>
-</tr>
+        <a class="btn-delete btn btn-light btn-sm margin-top"
+           th:href="'javascript: koki_notes_delete(' + ${note.id} + ')'">
+            Delete
+        </a>
+    </div>
+</div>
 
 <tr id="note-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
     <td class="text-center" colspan="6">

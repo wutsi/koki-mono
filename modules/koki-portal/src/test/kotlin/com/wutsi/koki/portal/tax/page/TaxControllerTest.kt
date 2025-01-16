@@ -102,7 +102,7 @@ class TaxControllerTest : AbstractPageControllerTest() {
             20, // limit
             0, // offset
         )
-        assertElementCount(".widget-notes tr.note", NoteFixtures.notes.size)
+        assertElementCount(".widget-notes .note", NoteFixtures.notes.size)
     }
 
     @Test

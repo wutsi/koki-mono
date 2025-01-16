@@ -13,6 +13,7 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.platform.messaging.Message
+import com.wutsi.koki.platform.messaging.MessagingException
 import com.wutsi.koki.platform.messaging.MessagingService
 import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
 import com.wutsi.koki.platform.messaging.MessagingType
@@ -117,10 +118,17 @@ class EmailService(
         }
 
         // Send email
-        val messagingService = createMessagingService(tenantId)
-        val message = createMessage(request, email)
-        messagingService.send(message)
-        return email
+        try {
+            val messagingService = createMessagingService(tenantId)
+            val message = createMessage(request, email)
+            messagingService.send(message)
+            return email
+        } catch (ex: MessagingException) {
+            throw ConflictException(
+                error = Error(code = ErrorCode.EMAIL_DELIVERY_FAILED),
+                ex = ex
+            )
+        }
     }
 
     private fun createMessage(request: SendEmailRequest, email: EmailEntity): Message {

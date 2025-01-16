@@ -1,6 +1,7 @@
 package com.wutsi.koki.platform.messaging.smtp
 
 import com.wutsi.koki.platform.messaging.Message
+import com.wutsi.koki.platform.messaging.MessagingException
 import com.wutsi.koki.platform.messaging.MessagingService
 import com.wutsi.koki.platform.messaging.Party
 import jakarta.mail.Session
@@ -14,9 +15,13 @@ class SMTPMessagingService(
     val fromPersonal: String,
 ) : MessagingService {
     override fun send(message: Message): String {
-        val msg = createMessage(message)
-        Transport.send(msg)
-        return ""
+        try {
+            val msg = createMessage(message)
+            Transport.send(msg)
+            return ""
+        } catch (ex: Exception) {
+            throw MessagingException("Delivery failure", ex)
+        }
     }
 
     private fun createMessage(message: Message): MimeMessage {

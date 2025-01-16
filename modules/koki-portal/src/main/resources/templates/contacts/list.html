@@ -43,7 +43,8 @@
                         </div>
                     </div>
 
-                    <table class="table table-striped" th:if="${contacts}">
+                    <table class="table table-striped">
+                        <thead>
                         <tr>
                             <th>Name</th>
                             <th>Type</th>
@@ -54,13 +55,15 @@
                             <th>Account</th>
                             <td></td>
                         </tr>
-                        <tr class="contact" th:each="contact : ${contacts}">
+                        </thead>
+                        <tbody>
+                        <tr class="contact" th:each="contact : ${contacts}" th:if="${contacts}">
                             <div th:replace="~{__components/contact :: columns(${contact}, true)}"></div>
                         </tr>
-                        <tr th:replace="~{__components/contact :: load-more(${moreUrl}, true)}"></tr>
+                        <tr th:if="${contacts}"
+                            th:replace="~{__components/contact :: load-more(${moreUrl}, true)}"></tr>
+                        </tbody>
                     </table>
-
-                    <div class="text-center" th:if="!${contacts}">No contact</div>
                 </div>
             </div>
         </div>

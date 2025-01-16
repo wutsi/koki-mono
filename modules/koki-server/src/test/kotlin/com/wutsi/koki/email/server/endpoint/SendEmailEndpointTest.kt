@@ -3,6 +3,7 @@ package com.wutsi.koki.email.server.endpoint
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AuthorizationAwareEndpointTest
@@ -16,6 +17,7 @@ import com.wutsi.koki.email.server.dao.EmailRepository
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.platform.messaging.Message
+import com.wutsi.koki.platform.messaging.MessagingException
 import com.wutsi.koki.platform.messaging.MessagingService
 import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
 import org.junit.jupiter.api.BeforeEach
@@ -140,5 +142,22 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
 
         assertEquals(HttpStatus.CONFLICT, response.statusCode)
         assertEquals(ErrorCode.EMAIL_RECIPIENT_EMAIL_MISSING, response.body!!.error.code)
+    }
+
+    @Test
+    fun `email not saved on MessagingException`() {
+        doThrow(MessagingException("failed")).whenever(messagingService).send(any())
+
+        val request = SendEmailRequest(
+            subject = "Hello man",
+            body = "<p>This is an example of email</p>",
+            recipient = Recipient(id = 100, type = ObjectType.ACCOUNT),
+            owner = ObjectReference(id = 777777L, type = ObjectType.TAX)
+        )
+        val response = rest.postForEntity("/v1/emails", request, ErrorResponse::class.java)
+        assertEquals(ErrorCode.EMAIL_DELIVERY_FAILED, response.body!!.error.code)
+
+        val emails = ownerDao.findByOwnerIdAndOwnerType(request.owner!!.id, request.owner!!.type)
+        assertEquals(0, emails.size)
     }
 }

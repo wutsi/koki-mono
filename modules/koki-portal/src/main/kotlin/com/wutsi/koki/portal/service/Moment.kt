@@ -1,5 +1,6 @@
-package com.wutsi.blog.app.service
+package com.wutsi.koki.portal.service
 
+import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
 import java.text.DateFormat
@@ -8,13 +9,13 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import java.util.Date
+import java.util.Locale
 
 @Service
 class Moment(
     private val clock: Clock,
-    private val localization: LocalizationService,
+    private val messages: MessageSource,
 ) {
-
     fun format(date: Date?): String {
         if (date == null) {
             return ""
@@ -63,6 +64,11 @@ class Moment(
     }
 
     private fun getMessage(key: String, args: Array<Any>? = null): String {
-        return localization.getMessage(key, args)
+        return getMessage(key, args)
+    }
+
+    fun getMessage(key: String, args: Array<Any>? = null, locale: Locale? = null): String {
+        val loc = locale ?: LocaleContextHolder.getLocale()
+        return messages.getMessage(key, args, loc)
     }
 }

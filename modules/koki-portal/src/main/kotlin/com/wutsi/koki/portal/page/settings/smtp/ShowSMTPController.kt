@@ -3,7 +3,7 @@ package com.wutsi.koki.portal.page.settings.smtp
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.portal.service.TenantService
+import com.wutsi.koki.portal.service.ConfigurationService
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping
 
 @Controller
 class ShowSMTPController(
-    private val service: TenantService,
+    private val service: ConfigurationService,
 ) : AbstractPageController() {
     @GetMapping("/settings/smtp")
     fun show(model: Model): String {

@@ -1,70 +1,47 @@
 package com.wutsi.koki.sdk
 
 import com.wutsi.koki.common.dto.ObjectType
-import com.wutsi.koki.file.dto.GetFileResponse
-import com.wutsi.koki.file.dto.SearchFileResponse
+import com.wutsi.koki.email.dto.GetEmailResponse
+import com.wutsi.koki.email.dto.SearchEmailResponse
+import com.wutsi.koki.email.dto.SendEmailRequest
+import com.wutsi.koki.email.dto.SendEmailResponse
 import org.springframework.web.client.RestTemplate
 
-class KokiFiles(
+class KokiEmails(
     private val urlBuilder: URLBuilder,
     private val rest: RestTemplate,
-    private val tenantProvider: TenantProvider,
-    private val accessTokenProvider: AccessTokenProvider,
 ) {
     companion object {
-        private const val PATH_PREFIX = "/v1/files"
+        private const val PATH_PREFIX = "/v1/emails"
     }
 
-    fun file(id: Long): GetFileResponse {
+    fun send(request: SendEmailRequest): SendEmailResponse {
+        val url = urlBuilder.build(PATH_PREFIX)
+        return rest.postForEntity(url, request, SendEmailResponse::class.java).body
+    }
+
+    fun email(id: String): GetEmailResponse {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetFileResponse::class.java).body
+        return rest.getForEntity(url, GetEmailResponse::class.java).body
     }
 
-    fun delete(id: Long) {
-        val url = urlBuilder.build("$PATH_PREFIX/$id")
-        rest.delete(url)
-    }
-
-    fun uploadUrl(
-        ownerId: Long? = null,
-        ownerType: ObjectType? = null,
-        workflowInstanceId: String? = null,
-        formId: String? = null,
-    ): String {
-        return urlBuilder.build(
-            "$PATH_PREFIX/upload",
-            mapOf(
-                "workflow-instance-id" to workflowInstanceId,
-                "form-id" to formId,
-                "owner-id" to ownerId,
-                "owner-type" to ownerType,
-                "tenant-id" to tenantProvider.id(),
-                "access-token" to accessTokenProvider.accessToken()
-            )
-        )
-    }
-
-    fun files(
+    fun emails(
         ids: List<String>,
-        workflowInstanceIds: List<String>,
-        formIds: List<String>,
         ownerId: Long?,
         ownerType: ObjectType?,
         limit: Int,
         offset: Int,
-    ): SearchFileResponse {
+    ): SearchEmailResponse {
         val url = urlBuilder.build(
             PATH_PREFIX,
             mapOf(
                 "id" to ids,
-                "workflow-instance-id" to workflowInstanceIds,
-                "form-id" to formIds,
                 "owner-id" to ownerId,
                 "owner-type" to ownerType,
                 "limit" to limit,
                 "offset" to offset,
             )
         )
-        return rest.getForEntity(url, SearchFileResponse::class.java).body
+        return rest.getForEntity(url, SearchEmailResponse::class.java).body
     }
 }

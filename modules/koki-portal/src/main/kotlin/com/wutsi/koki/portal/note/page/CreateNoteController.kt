@@ -15,7 +15,7 @@ class CreateNoteController(private val service: NoteService) {
     @GetMapping("/notes/create")
     fun create(
         @RequestParam(name = "owner-id", required = true) ownerId: Long = -1,
-        @RequestParam(name = "owner-type", required = true) ownerType: ObjectType? = null,
+        @RequestParam(name = "owner-type", required = true) ownerType: ObjectType = ObjectType.UNKNOWN,
         model: Model
     ): String {
         model.addAttribute("ownerId", ownerId)
@@ -23,7 +23,7 @@ class CreateNoteController(private val service: NoteService) {
         model.addAttribute(
             "form",
             NoteForm(
-                ownerType = ownerType ?: ObjectType.UNKNOWN,
+                ownerType = ownerType,
                 ownerId = ownerId
             )
         )

@@ -7,6 +7,7 @@
 - [] Settings: Import Accounts from CSV
 - [] Settings: Import Attributes from CSV
 - [] Settings: Import Account Types from CSV
+- [x] Send email to account
 - [x] Link with taxes
 - [x] Attributes API
 - [x] Account API
@@ -21,6 +22,7 @@
 - [] Filter contacts on UI
 - [] Settings: Import Contact from CSV
 - [] Settings: Import Contact Types from CSV
+- [] Send email to contact
 - [x] Contact API
 - [x] Contact UI
 - [x] Link files to contacts
@@ -44,6 +46,7 @@
 - [] Home: Add my taxes widget
 - [] Settings: Import Taxes Types from CSV
 - [] Track Time spent
+- [] Send email to Taxes
 - [x] Home: Add my assignment widget
 - [x] Personal tax UI
 - [x] Personal tax API
@@ -52,8 +55,8 @@
 
 ## Email
 
-- [] Send email API
-- [] Send email UI
+- [x] Send email API
+- [x] Send email UI
 - [] Attach files to email
 - [] Email Template API
 - [] Email Template UI

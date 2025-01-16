@@ -13,7 +13,7 @@ class NoteMapper : TenantAwareMapper() {
         entity: Note,
         users: Map<Long, UserModel>,
     ): NoteModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return NoteModel(
             id = entity.id,
             subject = entity.subject,
@@ -31,7 +31,7 @@ class NoteMapper : TenantAwareMapper() {
         entity: NoteSummary,
         users: Map<Long, UserModel>,
     ): NoteModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return NoteModel(
             id = entity.id,
             subject = entity.subject,

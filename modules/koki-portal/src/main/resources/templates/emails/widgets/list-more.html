@@ -1,4 +1,4 @@
-<tr class="file" th:each="file : ${files}">
-    <td th:replace="~{__components/file :: columns(${file})}"></td>
-</tr>
-<tr th:replace="~{__components/file :: load-more(${moreUrl})}"></tr>
+<div class="email border-top padding" th:each="email : ${emails}">
+    <div th:replace="~{__components/email :: columns(${email})}"></div>
+</div>
+<div th:replace="~{__components/email :: load-more(${moreUrl})}"></div>

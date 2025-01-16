@@ -48,6 +48,7 @@
                     </div>
 
                     <table class="table table-striped" th:if="${accounts}">
+                        <thead>
                         <tr>
                             <th>Name</th>
                             <th>Type</th>
@@ -58,12 +59,14 @@
                             <th>Manager</th>
                             <td></td>
                         </tr>
+                        </thead>
+                        <tbody>
                         <tr class="account" th:each="account : ${accounts}">
                             <div th:replace="~{__components/account :: columns(${account})}"></div>
                         </tr>
                         <tr th:replace="~{__components/account :: load-more(${moreUrl})}"></tr>
+                        </tbody>
                     </table>
-
                     <div class="text-center" th:if="!${accounts}">No account</div>
                 </div>
             </div>

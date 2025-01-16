@@ -6,7 +6,8 @@
                th:if="${accountId}"
             >Add New Contact</a>
         </div>
-        <table class="table table-striped" th:if="${contacts}">
+        <table class="table table-striped">
+            <thead>
             <tr>
                 <th>Name</th>
                 <th>Type</th>
@@ -17,11 +18,13 @@
                 <th th:if="${showAccount}">Account</th>
                 <td></td>
             </tr>
-            <tr class="contact" th:each="contact : ${contacts}">
+            </thead>
+            <tbody>
+            <tr class="contact" th:each="contact : ${contacts}" th:if="${contacts}">
                 <div th:replace="~{__components/contact :: columns(${contact}, ${showAccount})}"></div>
             </tr>
-            <tr th:replace="~{__components/contact :: load-more(${moreUrl}, ${showAccount})}"></tr>
+            <tr th:if="${contacts}" th:replace="~{__components/contact :: load-more(${moreUrl}, ${showAccount})}"></tr>
+            </tbody>
         </table>
-        <div class="text-center" th:if="!${contacts}">No contact</div>
     </div>
 </div>

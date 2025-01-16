@@ -22,7 +22,7 @@ class AccountMapper : TenantAwareMapper() {
         accountTypes: Map<Long, AccountTypeModel>,
         users: Map<Long, UserModel>
     ): AccountModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return AccountModel(
             id = entity.id,
             accountType = entity.accountTypeId?.let { id -> accountTypes[id] },
@@ -46,7 +46,7 @@ class AccountMapper : TenantAwareMapper() {
         users: Map<Long, UserModel>,
         attributes: Map<Long, AttributeModel>
     ): AccountModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return AccountModel(
             id = entity.id,
             accountType = entity.accountTypeId?.let { id -> accountTypes[id] },
@@ -99,7 +99,7 @@ class AccountMapper : TenantAwareMapper() {
     }
 
     fun toAttributeModel(entity: Attribute): AttributeModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return AttributeModel(
             id = entity.id,
             name = entity.name,
@@ -117,7 +117,7 @@ class AccountMapper : TenantAwareMapper() {
     }
 
     fun toAttributeModel(entity: AttributeSummary): AttributeModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return AttributeModel(
             id = entity.id,
             name = entity.name,

@@ -1,66 +1,69 @@
 package com.wutsi.koki
 
+import com.wutsi.koki.AccountFixtures.accounts
+import com.wutsi.koki.ContactFixtures.contacts
 import com.wutsi.koki.UserFixtures.users
-import com.wutsi.koki.file.dto.File
-import com.wutsi.koki.file.dto.FileSummary
+import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.email.dto.Email
+import com.wutsi.koki.email.dto.EmailSummary
+import com.wutsi.koki.email.dto.Recipient
 import org.apache.commons.lang3.time.DateUtils
 import java.util.Date
+import java.util.UUID
 
-object FileFixtures {
-    val files = listOf(
-        FileSummary(
-            id = 100,
-            name = "T1.pdf",
-            contentType = "application/pdf",
-            contentLength = 1024L * 1024,
-            createdAt = DateUtils.addDays(Date(), -5),
-            url = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+object EmailFixtures {
+    val NEW_EMAIL_ID = UUID.randomUUID().toString()
+    val emails = listOf(
+        EmailSummary(
+            senderId = users[0].id,
+            id = "100",
+            subject = "You tax report is ready",
+            recipient = Recipient(id = accounts[0].id, type = ObjectType.ACCOUNT),
+            createdAt = DateUtils.addMinutes(Date(), 50),
         ),
-        FileSummary(
-            id = 101,
-            name = "Medical Notes.pdf",
-            contentType = "application/pdf",
-            contentLength = 11 * 1024L * 1024,
-            createdById = users[1].id,
-            createdAt = DateUtils.addDays(Date(), -5),
-            url = "https://pdfobject.com/pdf/sample.pdf",
+        EmailSummary(
+            senderId = users[0].id,
+            id = "101",
+            subject = "Your invoice is ready",
+            recipient = Recipient(id = contacts[0].id, type = ObjectType.CONTACT),
+            createdAt = DateUtils.addDays(Date(), -1),
         ),
-        FileSummary(
-            id = 103,
-            name = "Picture.png",
-            contentType = "image/png",
-            contentLength = 5 * 1024L * 1024,
-            createdById = users[0].id,
-            createdAt = DateUtils.addDays(Date(), -5),
-            url = "https://picsum.photos/800/100",
+        EmailSummary(
+            senderId = users[0].id,
+            id = "102",
+            subject = "REMINDER: Get your shit ready!!!",
+            recipient = Recipient(id = contacts[0].id, type = ObjectType.CONTACT),
+            createdAt = DateUtils.addMinutes(DateUtils.addDays(Date(), -1), 15),
         ),
-        FileSummary(
-            id = 104,
-            name = "Picture2.png",
-            contentType = "image/png",
-            contentLength = 500,
-            createdById = users[0].id,
-            createdAt = DateUtils.addDays(Date(), -5),
-            url = "https://picsum.photos/800/100",
+        EmailSummary(
+            senderId = users[0].id,
+            id = "103",
+            subject = "REMINDER: Get your shit ready!!!",
+            recipient = Recipient(id = contacts[0].id, type = ObjectType.CONTACT),
+            createdAt = DateUtils.addDays(Date(), -6),
         ),
-        FileSummary(
-            id = 105,
-            name = "empty.txt",
-            contentType = "text/plain",
-            contentLength = 0,
-            createdById = null,
-            createdAt = DateUtils.addDays(Date(), -5),
-            url = "https://picsum.photos/800/100.txt",
+        EmailSummary(
+            senderId = users[0].id,
+            id = "103",
+            subject = "Hello",
+            recipient = Recipient(id = contacts[0].id, type = ObjectType.CONTACT),
+            createdAt = DateUtils.addDays(Date(), -7),
         ),
     )
 
-    val file = File(
-        id = 100,
-        name = "T1.pdf",
-        contentType = "application/pdf",
-        contentLength = 1024L * 1024,
-        createdAt = DateUtils.addDays(Date(), -5),
-        createdById = users[0].id,
-        url = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+    val email = Email(
+        senderId = users[0].id,
+        id = "100",
+        subject = "You tax report is ready",
+        recipient = Recipient(id = contacts[0].id, type = ObjectType.CONTACT),
+        body = """
+            <p>Hi!</p>
+            <p>
+                We have completed your tax report. Please take the time to review it.
+            </p>
+            <p>
+                Do not forget to download it from our portal. It's available <a href="{{tax_url}}">here</a>
+            </p>
+        """.trimIndent()
     )
 }

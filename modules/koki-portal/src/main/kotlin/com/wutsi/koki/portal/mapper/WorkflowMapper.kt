@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service
 @Service
 class WorkflowMapper(private val objectMapper: ObjectMapper) : TenantAwareMapper() {
     fun toWorkflowModel(entity: WorkflowSummary): WorkflowModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return WorkflowModel(
             id = entity.id,
             name = entity.name,
@@ -42,7 +42,7 @@ class WorkflowMapper(private val objectMapper: ObjectMapper) : TenantAwareMapper
         services: List<ServiceModel>,
         imageUrl: String
     ): WorkflowModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         val roleMap = roles.associateBy { role -> role.id }
         val formMap = forms.associateBy { form -> form.id }
         val messageMap = messages.associateBy { message -> message.id }

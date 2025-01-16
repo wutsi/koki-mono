@@ -38,7 +38,7 @@ class TaxMapper : TenantAwareMapper() {
         account: AccountModel,
         users: Map<Long, UserModel?>
     ): TaxModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return TaxModel(
             id = entity.id,
             taxType = taxType,
@@ -67,7 +67,7 @@ class TaxMapper : TenantAwareMapper() {
         account: AccountModel,
         users: Map<Long, UserModel?>
     ): TaxModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return TaxModel(
             id = entity.id,
             taxType = taxType,

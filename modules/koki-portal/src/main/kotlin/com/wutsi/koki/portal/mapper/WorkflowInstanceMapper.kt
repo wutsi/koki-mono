@@ -26,7 +26,7 @@ class WorkflowInstanceMapper(
         users: Map<Long, UserModel>,
         roles: Map<Long, RoleModel>,
     ): WorkflowInstanceModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         val workflowInstance = WorkflowInstanceModel(
             id = entity.id,
             title = entity.title,
@@ -107,7 +107,7 @@ class WorkflowInstanceMapper(
         workflow: WorkflowModel,
         users: Map<Long, UserModel>,
     ): WorkflowInstanceModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         val workflowInstance = WorkflowInstanceModel(
             id = entity.id,
             title = entity.title,
@@ -139,7 +139,7 @@ class WorkflowInstanceMapper(
         assignee: UserModel?,
         approver: UserModel?
     ): ActivityInstanceModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return ActivityInstanceModel(
             id = entity.id,
             activity = activity,
@@ -168,7 +168,7 @@ class WorkflowInstanceMapper(
         assignee: UserModel?,
         approver: UserModel?,
     ): ActivityInstanceModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return ActivityInstanceModel(
             id = entity.id,
             workflowInstance = workflowInstance,

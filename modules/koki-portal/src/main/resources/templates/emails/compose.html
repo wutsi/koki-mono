@@ -1,22 +1,78 @@
-<table class="table">
-    <tr>
-        <td width="20%"><b>From:</b></td>
-        <td th:text="${email.sender.displayName}">SENDER</td>
-    </tr>
-    <tr>
-        <td><b>To:</b></td>
-        <td>
-            <div th:replace="~{__components/email :: recipient(${email})}"></div>
-        </td>
-    </tr>
-    <tr>
-        <td><b>Subject:</b></td>
-        <td th:text="${email.subject}">SUBJECT</td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <div style="height: 10em; overflow: hidden" th:utext="${email.body}">BODY</div>
-        </td>
-    </tr>
-</table>
-<a class="btn btn-secondary" href="javascript:koki_files_close()">Close</a>
+<form class="form" id="email-form" method="post" th:action="@{'/emails/send'}"
+      th:object="${form}">
+    <input th:field="*{ownerId}" type="hidden"/>
+    <input th:field="*{ownerType}" type="hidden"/>
+
+    <table class="table">
+        <tr>
+            <td width="20%"><b>From:</b></td>
+            <td>
+                <span th:text="${user.displayName}">NAME</span>
+                <span th:text="'<' + ${user.email} + '>'">EMAIL</span>
+            </td>
+        </tr>
+        <tr>
+            <td><b>To:</b></td>
+            <td>
+                <div class="flex">
+                    <div class="dropdown">
+                        <button aria-expanded="false" class="btn btn-light btn-sm dropdown-toggle"
+                                data-bs-toggle="dropdown" id="email-recipient-type-dropdown"
+                                type="button">
+                            <img th:src="${contact} ? '/image/contact.png': '/image/account.png'" width="24">
+                            <span th:text="${contact} ? 'Contact' : 'Account'">ACCOUNT</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="#" id="recipient-type-account">
+                                    <img src="/image/account.png" width="24"> Account
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item contact" href="#" id="recipient-type-contact">
+                                    <img src="/image/contact.png" width="24"> Contact
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="account-selector" style="flex:1" th:class="!${account} ? 'hidden'">
+                        <select style="width: 100%" th:field="*{accountId}">
+                            <option th:if="${account}"
+                                    th:text="${account.name}"
+                                    th:value="${account?.id}">
+                                ACCOUNT
+                            </option>
+                        </select>
+                    </div>
+                    <div id="contact-selector" style="flex: 1" th:class="!${contact} ? 'hidden'">
+                        <select style="width: 100%" th:field="*{contactId}">
+                            <option th:if="${contact}"
+                                    th:text="${contact.name}"
+                                    th:value="${contact?.id}">
+                                CONTACT
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <input th:field="*{recipientType}" type="hidden"/>
+            </td>
+        </tr>
+        <tr>
+            <td width="20%">Subject</td>
+            <td>
+                <input maxlength="255" name="subject" style="width:100%"
+                       th:field="*{subject}"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div class="quilljs" id="html-editor" th:utext="${form.body}"></div>
+                <textarea class="hidden" name="body" th:field="*{body}"></textarea>
+            </td>
+        </tr>
+    </table>
+    <button class="btn btn-primary margin-right" disabled id='btn-email-submit' type="submit">
+        Send
+    </button>
+    <a class="btn-cancel margin-top" id='btn-email-cancel'>Close</a>
+</form>

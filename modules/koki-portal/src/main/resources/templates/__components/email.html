@@ -2,31 +2,38 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<tr class="file" th:fragment="columns(file)" th:remove="tag">
-    <td>
-        <span th:class="'fiv-viv fiv-icon-' + ${file.extension}"></span>
-    </td>
-    <td>
-        <a class="btn-download" target="_blank" th:href="'/files/' + ${file.id} + '/download'" th:text="${file.name}">
-            FILE
+<div class="email" th:fragment="columns(email)" th:remove="tag">
+    <div>
+        <span th:text="${email.createdAtMoment}">00:00</span>
+        <a th:href="'javascript: koki_emails_open(\'' + ${email.id} + '\')'">
+            <b th:text="${email.subject}">SUBJECT</b>
         </a>
-    </td>
-    <td th:text="${file.contentLengthText}">SIZE</td>
-    <td>
-        <span th:if="${file.createdBy}" th:text="${file.createdBy.displayName}">CREATED</span>
-    </td>
-    <td th:text="${file.createdAtText}">CREATED</td>
-    <td class="toolbar text-right">
-        <a class="btn-delete" th:href="'javascript: koki_files_delete(' + ${file.id} + ')'">
-            Delete
-        </a>
-    </td>
-</tr>
+    </div>
+    <div class="margin-top">
+        Send to
+        <div th:replace="~{__components/email :: recipient(${email})}"></div>
+    </div>
+</div>
 
-<tr id="file-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
-    <td class="text-center" colspan="6">
-        <a href="javascript: koki_load_more('file-load-more')" th:data-url="${moreUrl}">Load more...</a>
-    </td>
-</tr>
+<div class="text-center padding" id="email-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
+    <a href="javascript: koki_load_more('email-load-more')" th:data-url="${moreUrl}">Load more...</a>
+</div>
+
+<div th:fragment="recipient(email)" th:remove="tag">
+    <a class="entity-title"
+       th:href="'/accounts/' + ${email.recipient.id}"
+       th:if="${email.recipient.type.name == 'ACCOUNT'}"
+    >
+        <img height="24" src="/image/account.png" width="24"/>
+        <span th:text="${email.recipient.name}">RECIPIENT</span>
+    </a>
+    <a class="entity-title"
+       th:href="'/contacts/' + ${email.recipient.id}"
+       th:if="${email.recipient.type.name == 'CONTACT'}"
+    >
+        <img height="24" src="/image/contact.png" width="24"/>
+        <span th:text="${email.recipient.name}">RECIPIENT</span>
+    </a>
+</div>
 
 </body>
