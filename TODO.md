@@ -7,6 +7,8 @@
 - [] Settings: Import Accounts from CSV
 - [] Settings: Import Attributes from CSV
 - [] Settings: Import Account Types from CSV
+- [] Send mass email to list of accounts
+- [x] Send email to account
 - [x] Link with taxes
 - [x] Attributes API
 - [x] Account API
@@ -21,6 +23,8 @@
 - [] Filter contacts on UI
 - [] Settings: Import Contact from CSV
 - [] Settings: Import Contact Types from CSV
+- [] Send mass email to list of contacts
+- [x] Send email to contact
 - [x] Contact API
 - [x] Contact UI
 - [x] Link files to contacts
@@ -37,13 +41,14 @@
 
 ## Taxes
 
-- [] Send email notification when assigned
+- [] Send email notification to assignee
 - [] Home: Widget showing the % of taxes completed per type
 - [] Add Kanban view
 - [] Add Calendar view
 - [] Home: Add my taxes widget
 - [] Settings: Import Taxes Types from CSV
 - [] Track Time spent
+- [x] Send email to Taxes
 - [x] Home: Add my assignment widget
 - [x] Personal tax UI
 - [x] Personal tax API
@@ -52,19 +57,13 @@
 
 ## Email
 
-- [] Send email API
-- [] Send email UI
+- [] Settings: Configure email layout
+- [] Settings: Configure SMTP
 - [] Attach files to email
 - [] Email Template API
 - [] Email Template UI
-- [] Send mass email to list of contacts, accounts
-- [] Settings: Configure email layout
-- [] Settings: Configure SMTP
-
-## Calendar
-
-- [] Schedule meeting
-- [] Calendar view
+- [x] Send email API
+- [x] Send email UI
 
 ## Notes
 
@@ -133,19 +132,12 @@
 - [] Configure home page by role
 - [x] Align webapp domain name with Tenant
 
-## Module
-
-### Storage
+## Storage
 
 - [] Support S3 storage
-
-### Messaging
-
-- [] Slack Notification
 
 ## Other
 
 - [] Implement RBAC
 - [] Add support for external modules
-- [] Add tenant healthcheck to validate connectivity with all resources
 

@@ -1,4 +1,4 @@
-package com.wutsi.blog.app.config
+package com.wutsi.koki.portal.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

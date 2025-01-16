@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AccountFixtures
 import com.wutsi.koki.ContactFixtures
+import com.wutsi.koki.EmailFixtures
 import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.FormFixtures
 import com.wutsi.koki.LogFixtures.logEntries
@@ -41,6 +42,9 @@ import com.wutsi.koki.contact.dto.GetContactResponse
 import com.wutsi.koki.contact.dto.GetContactTypeResponse
 import com.wutsi.koki.contact.dto.SearchContactResponse
 import com.wutsi.koki.contact.dto.SearchContactTypeResponse
+import com.wutsi.koki.email.dto.GetEmailResponse
+import com.wutsi.koki.email.dto.SearchEmailResponse
+import com.wutsi.koki.email.dto.SendEmailResponse
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
@@ -63,7 +67,9 @@ import com.wutsi.koki.script.dto.RunScriptResponse
 import com.wutsi.koki.script.dto.SearchScriptResponse
 import com.wutsi.koki.sdk.KokiAccounts
 import com.wutsi.koki.sdk.KokiAuthentication
+import com.wutsi.koki.sdk.KokiConfiguration
 import com.wutsi.koki.sdk.KokiContacts
+import com.wutsi.koki.sdk.KokiEmails
 import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiLogs
@@ -148,7 +154,13 @@ abstract class AbstractPageControllerTest {
     protected lateinit var kokiAuthentication: KokiAuthentication
 
     @MockitoBean
+    protected lateinit var kokiConfiguration: KokiConfiguration
+
+    @MockitoBean
     protected lateinit var kokiContacts: KokiContacts
+
+    @MockitoBean
+    protected lateinit var kokiEmails: KokiEmails
 
     @MockitoBean
     protected lateinit var kokiFiles: KokiFiles
@@ -242,6 +254,7 @@ abstract class AbstractPageControllerTest {
         setupContactModule()
         setupFileModule()
         setupNoteModule()
+        setupEmailModule()
         setupTaxModule()
 
         setupForms()
@@ -320,7 +333,7 @@ abstract class AbstractPageControllerTest {
             .tenants()
 
         // Configuration
-        doReturn(SearchConfigurationResponse()).whenever(kokiTenants)
+        doReturn(SearchConfigurationResponse()).whenever(kokiConfiguration)
             .configurations(anyOrNull(), anyOrNull())
 
         // Roles
@@ -365,6 +378,19 @@ abstract class AbstractPageControllerTest {
                 anyOrNull(),
                 anyOrNull(),
             )
+    }
+
+    private fun setupEmailModule() {
+        doReturn(SearchEmailResponse(EmailFixtures.emails)).whenever(kokiEmails)
+            .emails(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
+        doReturn(GetEmailResponse(EmailFixtures.email)).whenever(kokiEmails).email(any())
+        doReturn(SendEmailResponse(EmailFixtures.NEW_EMAIL_ID)).whenever(kokiEmails).send(any())
     }
 
     private fun setupNoteModule() {

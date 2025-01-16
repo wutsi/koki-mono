@@ -46,4 +46,10 @@
     </td>
 </tr>
 
+<script th:fragment="contact-selector(id)" th:inline="javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        koki_contacts_select2(/*[[${id}]]*/ '');
+    });
+</script>
+
 </body>

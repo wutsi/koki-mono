@@ -19,7 +19,7 @@ class ContactMapper : TenantAwareMapper() {
         account: AccountModel?,
         contactType: ContactTypeModel?,
     ): ContactModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return ContactModel(
             id = entity.id,
             account = account,
@@ -44,7 +44,7 @@ class ContactMapper : TenantAwareMapper() {
         account: AccountModel?,
         contactType: ContactTypeModel?,
     ): ContactModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return ContactModel(
             id = entity.id,
             account = account,

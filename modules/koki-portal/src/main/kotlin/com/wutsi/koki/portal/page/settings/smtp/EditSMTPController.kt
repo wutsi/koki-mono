@@ -3,8 +3,8 @@ package com.wutsi.koki.portal.page.settings.smtp
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.service.ConfigurationService
 import com.wutsi.koki.portal.service.SMTPValidator
-import com.wutsi.koki.portal.service.TenantService
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
@@ -17,7 +17,7 @@ import java.io.IOException
 
 @Controller
 class EditSMTPController(
-    private val service: TenantService,
+    private val service: ConfigurationService,
     private val validator: SMTPValidator,
 ) : AbstractPageController() {
     companion object {

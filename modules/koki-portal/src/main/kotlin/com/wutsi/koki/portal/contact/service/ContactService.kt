@@ -18,14 +18,14 @@ class ContactService(
     private val contactTypeService: ContactTypeService,
     private val accountService: AccountService,
 ) {
-    fun contact(id: Long): ContactModel {
+    fun contact(id: Long, fullGraph: Boolean = true): ContactModel {
         val contact = koki.contact(id).contact
 
         // Users
         val userIds = listOf(contact.createdById, contact.modifiedById)
             .filterNotNull()
             .toSet()
-        val userMap = if (userIds.isEmpty()) {
+        val userMap = if (userIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
             userService.users(ids = userIds.toList(), limit = userIds.size)
@@ -33,10 +33,18 @@ class ContactService(
         }
 
         // Contact Type
-        val contactType = contact.contactTypeId?.let { id -> contactTypeService.contactType(id) }
+        val contactType = if (contact.contactTypeId == null || !fullGraph) {
+            null
+        } else {
+            contactTypeService.contactType(contact.contactTypeId!!)
+        }
 
         // Account
-        val account = contact.accountId?.let { id -> accountService.account(id) }
+        val account = if (contact.accountId == null || !fullGraph) {
+            null
+        } else {
+            accountService.account(contact.accountId!!)
+        }
 
         return mapper.toContactModel(
             entity = contact,
@@ -54,6 +62,7 @@ class ContactService(
         createdByIds: List<Long> = emptyList(),
         limit: Int = 20,
         offset: Int = 0,
+        fullGraph: Boolean = true,
     ): List<ContactModel> {
         // Contacts
         val contacts = koki.contacts(
@@ -72,7 +81,7 @@ class ContactService(
         }
             .filterNotNull()
             .toSet()
-        val userMap = if (userIds.isEmpty()) {
+        val userMap = if (userIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
             userService.users(
@@ -85,7 +94,7 @@ class ContactService(
         // Contact Types
         val contactTypeIds = contacts.mapNotNull { contact -> contact.contactTypeId }
             .toSet()
-        val contactTypeMap = if (contactTypeIds.isEmpty()) {
+        val contactTypeMap = if (contactTypeIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
             contactTypeService.contactTypes(
@@ -97,7 +106,7 @@ class ContactService(
 
         // Accounts
         val accountIds = contacts.mapNotNull { contact -> contact.accountId }
-        val accountMap = if (accountIds.isEmpty()) {
+        val accountMap = if (accountIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
             accountService.accounts(

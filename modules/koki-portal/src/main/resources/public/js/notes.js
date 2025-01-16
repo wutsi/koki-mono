@@ -1,5 +1,3 @@
-var notesHtmlEditor;
-
 function koki_notes_delete(id) {
     console.log('Deleting Note#' + id);
     if (confirm('Are you sure you want to delete the note?')) {
@@ -8,6 +6,25 @@ function koki_notes_delete(id) {
                 _koki_notes_refresh();
             });
     }
+}
+
+function koki_notes_create() {
+    console.log('Create Note');
+    const container = document.getElementById('note-list');
+    const ownerId = container.getAttribute("data-owner-id");
+    const ownerType = container.getAttribute("data-owner-type");
+
+    fetch('/notes/create?owner-id=' + ownerId + '&owner-type=' + ownerType)
+        .then(response => {
+            if (response.ok) {
+                response.text()
+                    .then(html => {
+                        _koki_notes_open_modal(html, false);
+                    })
+            } else {
+                console.log('Unable to fetch the editor', response.text());
+            }
+        });
 }
 
 function koki_notes_edit(id) {
@@ -25,10 +42,56 @@ function koki_notes_edit(id) {
         });
 }
 
-function koki_notes_update(event) {
-    event.preventDefault();
-    console.log('Updating Note');
+function _koki_notes_open_modal(html, edit) {
+    /* Body */
+    document.getElementById("note-modal-body").innerHTML = html;
 
+    /* Title */
+    document.getElementById('note-title-create').style.display = (edit ? 'none' : 'block');
+    document.getElementById('note-title-edit').style.display = (!edit ? 'none' : 'block');
+
+    /* Form */
+    document.getElementById('note-form').addEventListener('submit', _koki_notes_submit_form);
+
+    /* Subject */
+    document.getElementById('subject').addEventListener('keydown', _koki_notes_on_change);
+
+    /* Body */
+    const htmlBody = new Quill(
+        '#html-editor',
+        {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline', 'strike', 'link', {'color': []}],
+                ]
+            }
+        }
+    );
+    htmlBody.on('text-change', _koki_notes_on_change);
+
+    /* Cancel */
+    document.getElementById('btn-note-cancel').addEventListener('click', _koki_notes_close_modal)
+
+    /* open the popup */
+    const modal = new bootstrap.Modal('#note-modal');
+    modal.show();
+}
+
+function _koki_notes_close_modal() {
+    /* remove all event listeners */
+    document.getElementById('note-form').removeEventListener('submit', _koki_notes_submit_form);
+    document.getElementById("subject").removeEventListener('keydown', _koki_notes_on_change);
+    document.getElementById("btn-note-cancel").removeEventListener('click', _koki_notes_close_modal)
+
+    /* close */
+    document.querySelector('#note-modal .btn-close').click();
+}
+
+function _koki_notes_submit_form() {
+    console.log('Submitting the Note');
+
+    event.preventDefault();
     const form = document.getElementById("note-form");
     const id = form.getAttribute("data-id");
     const data = new FormData(form);
@@ -51,66 +114,15 @@ function koki_notes_update(event) {
     });
 }
 
-function koki_notes_close() {
-    _koki_notes_close_modal();
-}
-
-function koki_notes_create() {
-    console.log('Create Note');
-    const container = document.getElementById('note-list');
-    const ownerId = container.getAttribute("data-owner-id");
-    const ownerType = container.getAttribute("data-owner-type");
-
-    fetch('/notes/create?owner-id=' + ownerId + '&owner-type=' + ownerType)
-        .then(response => {
-            if (response.ok) {
-                response.text()
-                    .then(html => {
-                        _koki_notes_open_modal(html, false);
-                    })
-            } else {
-                console.log('Unable to fetch the editor', response.text());
-            }
-        });
-}
-
-function koki_notes_add_new(event) {
-    event.preventDefault();
-
-    const form = document.getElementById("note-form");
-    if (!form.checkValidity()) {
-        console.log('Form validation failed');
-        return;
-    }
-
-    const data = new FormData(form);
-    fetch(
-        '/notes/add-new',
-        {
-            method: 'POST',
-            body: new URLSearchParams(data).toString(),
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).then(response => {
-        if (response.ok) {
-            _koki_notes_close_modal();
-            _koki_notes_refresh();
-        } else {
-            console.log('Error', response.text());
-            alert('Failed');
-        }
-    });
-}
-
-function koki_notes_on_change() {
+function _koki_notes_on_change() {
     const subject = document.getElementById('subject');
+    const editor = document.querySelector('.ql-editor')
 
-    const body = document.getElementById('body');
-    body.value = document.querySelector('.ql-editor').innerHTML;
+    // console.log('subject=' + subject.value, ' - body=' + editor.innerHTML, editor.textContent);
 
-    const submit = document.getElementById('btn-note-submit')
-    submit.disabled = (subject.value.size > 0 && body.value.size > 0);
+    document.getElementById('body').value = editor.innerHTML;
+    document.getElementById('btn-note-submit').disabled = subject.value.size === 0 ||
+        !editor.textContent;
 }
 
 function _koki_notes_refresh(id) {
@@ -135,38 +147,3 @@ function _koki_notes_refresh(id) {
             });
     }
 }
-
-function _koki_notes_open_modal(html, edit) {
-    document.getElementById("note-modal-body").innerHTML = html;
-    document.getElementById("note-title-create").style.display = (edit ? 'none' : 'block');
-    document.getElementById("note-title-edit").style.display = (!edit ? 'none' : 'block');
-
-    _koki_notes_setup_html_editor();
-
-    const modal = new bootstrap.Modal('#note-modal');
-    modal.show();
-}
-
-function _koki_notes_setup_html_editor() {
-    console.log('Creating HTML editor');
-    notesHtmlEditor = new Quill(
-        '#html-editor',
-        {
-            theme: 'snow',
-            modules: {
-                toolbar: [
-                    ['bold', 'italic', 'underline', 'strike', 'link', {'color': []}],
-                ]
-            }
-        }
-    );
-    notesHtmlEditor.on('text-change', (delta, oldDelta, source) => {
-        koki_notes_on_change();
-    });
-}
-
-function _koki_notes_close_modal() {
-    document.querySelector('#note-modal .btn-close').click();
-}
-
-

@@ -1,5 +1,4 @@
-<form class="form" id="note-form" method="post" onsubmit="koki_notes_add_new(event)" th:action="@{'/notes/add-new'}"
-      th:object="${form}">
+<form class="form" id="note-form" method="post" th:action="@{'/notes/add-new'}" th:object="${form}">
     <input th:field="*{ownerId}" type="hidden"/>
     <input th:field="*{ownerType}" type="hidden"/>
 
@@ -7,24 +6,19 @@
         <tr>
             <td width="20%">Subject</td>
             <td>
-                <input name="subject" onchange="koki_notes_on_change();" style="width:100%" th:field="*{subject}"/>
+                <input maxlength="255" name="subject" th:field="*{subject}"/>
             </td>
         </tr>
         <tr>
             <td valign="top">Body</td>
             <td>
-                <div id="html-editor" style="height: 10em" th:utext="${form.body}"></div>
-                <textarea name="body" style="display: none" th:field="*{body}"></textarea>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top"></td>
-            <td>
-                <button class="btn btn-primary margin-right" disabled id='btn-note-submit' type="submit">
-                    Save
-                </button>
-                <a class="btn-cancel margin-top" href="javascript: koki_notes_close()">Close</a>
+                <div class="quilljs" id="html-editor" th:utext="${form.body}"></div>
+                <textarea class="hidden" name="body" th:field="*{body}"></textarea>
             </td>
         </tr>
     </table>
+    <button class="btn btn-primary margin-right" disabled id='btn-note-submit' type="submit">
+        Create
+    </button>
+    <a class="btn-cancel margin-top" id='btn-note-cancel'>Close</a>
 </form>

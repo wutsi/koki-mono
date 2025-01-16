@@ -1,7 +1,7 @@
-function koki_accounts_select2(id) {
+function koki_contacts_select2(id, parentId) {
     $('#' + id).select2({
         ajax: {
-            url: '/accounts/selector/search',
+            url: '/contacts/selector/search',
             dataType: 'json',
             delay: 1000,
             processResults: function (item) {
@@ -16,9 +16,10 @@ function koki_accounts_select2(id) {
                 };
             }
         },
-        placeholder: 'Select an account',
+        placeholder: 'Select a contact',
         allowClear: true,
         tokenSeparators: [','],
         minimumInputLength: 3,
+        dropdownParent: parentId ? $('#' + parentId) : $(document.body),
     });
 }

@@ -1,9 +1,10 @@
 <div class="widget widget-files">
     <div class="widget-body">
         <div>
-            <a class="btn-upload btn btn-secondary btn-sm" href="javascript: koki_files_upload()">Upload Files</a>
+            <a class="btn-upload btn btn-secondary btn-sm margin-bottom" href="javascript: koki_files_upload()">Upload
+                Files</a>
         </div>
-        <table class="table table-striped" th:if="${files}">
+        <table class="table table-striped">
             <thead>
             <tr>
                 <th width="1%"></th>
@@ -15,14 +16,12 @@
             </tr>
             </thead>
             <tbody id="file-list" th:data-owner-id="${ownerId}" th:data-owner-type="${ownerType}">
-            <tr class="file" th:each="file : ${files}" th:id="'file-' + ${file.id}">
-                <td th:replace="~{__components/file :: columns(${file}, ${returnUrl})}"></td>
+            <tr class="file" th:each="file : ${files}" th:id="'file-' + ${file.id}" th:if="${files}">
+                <td th:replace="~{__components/file :: columns(${file})}"></td>
             </tr>
-            <tr th:replace="~{__components/file :: load-more(${moreUrl})}"></tr>
+            <tr th:if="${files}" th:replace="~{__components/file :: load-more(${moreUrl})}"></tr>
             </tbody>
         </table>
-
-        <div class="text-center empty-message " th:if="!${files}">No file!</div>
     </div>
 </div>
 

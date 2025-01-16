@@ -336,6 +336,15 @@ tr.activity-running {
     padding-bottom: 0
 }
 
+.modal-dialog form input,
+.modal-dialog form select {
+    width: 100%;
+}
+
+.modal-dialog form div.quilljs {
+    height: 15em;
+}
+
 /* ============================= */
 /* highlightjs line-number       */
 /* ============================= */
@@ -355,4 +364,11 @@ tr.activity-running {
 
 .hljs-ln-code {
     padding-left: 10px !important;
+}
+
+/* ============================= */
+/* select2                       */
+/* ============================= */
+.select2-container .select2-selection--single {
+    height: 34px !important;
 }

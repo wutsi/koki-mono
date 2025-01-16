@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<tr class="file" th:fragment="columns(file, returnUrl)" th:remove="tag">
+<tr class="file" th:fragment="columns(file)" th:remove="tag">
     <td>
         <span th:class="'fiv-viv fiv-icon-' + ${file.extension}"></span>
     </td>

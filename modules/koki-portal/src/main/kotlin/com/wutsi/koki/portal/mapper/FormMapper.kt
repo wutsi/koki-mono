@@ -22,7 +22,7 @@ class FormMapper(
         workflowInstanceId: String?,
         activityInstanceId: String?,
     ): FormModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return FormModel(
             id = entity.id,
             name = entity.name,
@@ -43,7 +43,7 @@ class FormMapper(
         workflowInstanceId: String?,
         activityInstanceId: String?,
     ): FormModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return FormModel(
             id = entity.id,
             name = entity.name,
@@ -87,7 +87,7 @@ class FormMapper(
         form: FormModel,
         submittedBy: UserModel? = null
     ): FormSubmissionModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return FormSubmissionModel(
             id = entity.id,
             data = entity.data,
@@ -105,7 +105,7 @@ class FormMapper(
         entity: FormSubmissionSummary,
         submittedBy: UserModel? = null
     ): FormSubmissionModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return FormSubmissionModel(
             id = entity.id,
             workflowInstanceId = entity.workflowInstanceId,

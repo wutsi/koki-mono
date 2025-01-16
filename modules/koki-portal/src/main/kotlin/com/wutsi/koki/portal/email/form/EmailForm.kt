@@ -1,16 +1,13 @@
 package com.wutsi.koki.portal.email.model
 
-import com.wutsi.koki.portal.user.model.UserModel
-import java.util.Date
+import com.wutsi.koki.common.dto.ObjectType
 
-data class EmailModel(
-    val id: String = "",
-    val recipient: RecipientModel = RecipientModel(),
+data class EmailForm(
+    val recipientType: ObjectType? = null,
+    val accountId: Long? = null,
+    val contactId: Long? = null,
     val subject: String = "",
     val body: String = "",
-    val attachmentFileIds: List<Long> = emptyList(),
-    val createdAt: Date = Date(),
-    val createdAtText: String = "",
-    val createdAtMoment: String = "",
-    val sender: UserModel = UserModel(),
+    val ownerType: ObjectType? = null,
+    val ownerId: Long? = null,
 )

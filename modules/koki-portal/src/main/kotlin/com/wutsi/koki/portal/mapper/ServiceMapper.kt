@@ -7,7 +7,7 @@ import com.wutsi.koki.service.dto.ServiceSummary
 @org.springframework.stereotype.Service
 class ServiceMapper : TenantAwareMapper() {
     fun toServiceModel(entity: ServiceSummary): ServiceModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return ServiceModel(
             id = entity.id,
             name = entity.name,
@@ -21,7 +21,7 @@ class ServiceMapper : TenantAwareMapper() {
     }
 
     fun toServiceModel(entity: Service): ServiceModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return ServiceModel(
             id = entity.id,
             name = entity.name,

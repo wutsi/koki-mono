@@ -15,7 +15,7 @@ class LogMapper(private val objectMapper: ObjectMapper) : TenantAwareMapper() {
         activityInstance: ActivityInstanceModel?,
         workflowInstance: WorkflowInstanceModel,
     ): LogEntryModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
 
         return LogEntryModel(
             id = entity.id,
@@ -39,7 +39,7 @@ class LogMapper(private val objectMapper: ObjectMapper) : TenantAwareMapper() {
         entity: LogEntrySummary,
         activityInstance: ActivityInstanceModel?
     ): LogEntryModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
 
         return LogEntryModel(
             id = entity.id,

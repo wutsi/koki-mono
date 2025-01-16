@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 @Service
 class ScriptMapper : TenantAwareMapper() {
     fun toScriptModel(entity: ScriptSummary): ScriptModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return ScriptModel(
             id = entity.id,
             name = entity.name,
@@ -23,7 +23,7 @@ class ScriptMapper : TenantAwareMapper() {
     }
 
     fun toScriptModel(entity: Script): ScriptModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return ScriptModel(
             id = entity.id,
             name = entity.name,

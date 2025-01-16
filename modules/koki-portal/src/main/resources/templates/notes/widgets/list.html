@@ -1,21 +1,14 @@
 <div class="widget widget-notes">
-    <div class="widget-body">
-        <div class="margin-bottom">
-            <a class="btn-create btn btn-secondary btn-sm" href="javascript: koki_notes_create()">
-                Add New Note
-            </a>
+    <div>
+        <a class="btn-create btn btn-secondary btn-sm margin-bottom" href="javascript: koki_notes_create()">
+            Add New Note
+        </a>
+        <div id="note-list" th:data-owner-id="${ownerId}" th:data-owner-type="${ownerType}">
+            <div class="border-top padding note" th:each="note : ${notes}" th:id="'note-' + ${note.id}">
+                <div th:replace="~{__components/note :: columns(${note})}"></div>
+            </div>
+            <div th:replace="~{__components/note :: load-more(${moreUrl})}"></div>
         </div>
-
-        <table class="table table-striped" id="note-list" th:data-owner-id="${ownerId}"
-               th:data-owner-type="${ownerType}"
-               th:if="${notes}">
-            <tr class="border margin-top note" th:each="note : ${notes}" th:id="'note-' + ${note.id}">
-                <td th:replace="~{__components/note :: columns(${note})}"></td>
-            </tr>
-            <tr th:replace="~{__components/note :: load-more(${moreUrl})}"></tr>
-        </table>
-
-        <div class="text-center empty-message " th:if="!${notes}">No note!</div>
     </div>
 </div>
 

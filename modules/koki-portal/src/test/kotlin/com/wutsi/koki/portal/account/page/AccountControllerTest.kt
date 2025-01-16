@@ -10,6 +10,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.AccountFixtures.account
 import com.wutsi.koki.ContactFixtures
+import com.wutsi.koki.EmailFixtures
 import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.TaxFixtures
@@ -119,7 +120,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
             20, // limit
             0, // offset
         )
-        assertElementCount(".widget-files tr.file", FileFixtures.files.size)
+        assertElementCount(".widget-files .file", FileFixtures.files.size)
     }
 
     @Test
@@ -134,7 +135,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
             20, // limit
             0, // offset
         )
-        assertElementCount(".widget-notes tr.note", NoteFixtures.notes.size)
+        assertElementCount(".widget-notes .note", NoteFixtures.notes.size)
     }
 
     @Test
@@ -153,6 +154,21 @@ class AccountControllerTest : AbstractPageControllerTest() {
             20, // limit
             0, // offset
         )
-        assertElementCount(".widget-taxes tr.tax", TaxFixtures.taxes.size)
+        assertElementCount(".widget-taxes .tax", TaxFixtures.taxes.size)
+    }
+
+    @Test
+    fun emails() {
+        navigateTo("/accounts/${account.id}?tab=emails")
+
+        Thread.sleep(1000)
+        verify(kokiEmails).emails(
+            emptyList(), // ids
+            account.id, // owner-id
+            ObjectType.ACCOUNT, // owner-type
+            20, // limit
+            0, // offset
+        )
+        assertElementCount(".widget-emails .email", EmailFixtures.emails.size)
     }
 }
