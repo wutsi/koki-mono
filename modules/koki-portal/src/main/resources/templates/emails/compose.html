@@ -1,0 +1,22 @@
+<table class="table">
+    <tr>
+        <td width="20%"><b>From:</b></td>
+        <td th:text="${email.sender.displayName}">SENDER</td>
+    </tr>
+    <tr>
+        <td><b>To:</b></td>
+        <td>
+            <div th:replace="~{__components/email :: recipient(${email})}"></div>
+        </td>
+    </tr>
+    <tr>
+        <td><b>Subject:</b></td>
+        <td th:text="${email.subject}">SUBJECT</td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <div style="height: 10em; overflow: hidden" th:utext="${email.body}">BODY</div>
+        </td>
+    </tr>
+</table>
+<a class="btn btn-secondary" href="javascript:koki_files_close()">Close</a>

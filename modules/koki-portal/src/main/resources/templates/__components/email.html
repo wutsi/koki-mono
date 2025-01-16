@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<tr class="file" th:fragment="columns(file)" th:remove="tag">
+    <td>
+        <span th:class="'fiv-viv fiv-icon-' + ${file.extension}"></span>
+    </td>
+    <td>
+        <a class="btn-download" target="_blank" th:href="'/files/' + ${file.id} + '/download'" th:text="${file.name}">
+            FILE
+        </a>
+    </td>
+    <td th:text="${file.contentLengthText}">SIZE</td>
+    <td>
+        <span th:if="${file.createdBy}" th:text="${file.createdBy.displayName}">CREATED</span>
+    </td>
+    <td th:text="${file.createdAtText}">CREATED</td>
+    <td class="toolbar text-right">
+        <a class="btn-delete" th:href="'javascript: koki_files_delete(' + ${file.id} + ')'">
+            Delete
+        </a>
+    </td>
+</tr>
+
+<tr id="file-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
+    <td class="text-center" colspan="6">
+        <a href="javascript: koki_load_more('file-load-more')" th:data-url="${moreUrl}">Load more...</a>
+    </td>
+</tr>
+
+</body>
