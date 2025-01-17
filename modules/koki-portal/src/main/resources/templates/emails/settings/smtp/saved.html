@@ -9,12 +9,15 @@
 
 <div class="settings-container">
     <div class="settings-sidebar">
-        <div th:replace="~{__components/settings :: settings-menu('')}"></div>
+        <div th:replace="~{__components/settings :: settings-menu('email')}"></div>
     </div>
     <div class="settings-content">
+        <div class="padding">
+            <div class="alert alert-success">Your Mail Server configuration has been saved</div>
+        </div>
     </div>
 </div>
 
-
 </body>
+
 </html>

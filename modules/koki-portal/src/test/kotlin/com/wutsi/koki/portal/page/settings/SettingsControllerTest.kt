@@ -41,10 +41,10 @@ class SettingsControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun smtp() {
+    fun email() {
         navigateTo("/settings")
-        click(".btn-smtp")
-        assertCurrentPageIs(PageName.SETTINGS_SMTP)
+        click(".btn-email")
+        assertCurrentPageIs(PageName.EMAIL_SETTINGS)
     }
 
     @Test

@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.service
 
-import com.wutsi.koki.portal.page.settings.smtp.SMTPForm
+import com.wutsi.koki.portal.email.model.SMTPForm
 import com.wutsi.koki.sdk.KokiConfiguration
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest

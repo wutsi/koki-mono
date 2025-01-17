@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page.settings.smtp
+package com.wutsi.koki.portal.email.model
 
 data class SMTPForm(
     val host: String,

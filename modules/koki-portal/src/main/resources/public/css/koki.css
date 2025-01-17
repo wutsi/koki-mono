@@ -320,11 +320,67 @@ tr.activity-running {
     padding-bottom: 0;
 }
 
+/* Settings */
+.settings-container {
+    display: flex;
+}
+
+.settings-sidebar {
+    width: 30vw;
+    height: 100vh;
+    background: #f8f8f8;
+    border-right: 1px solid gray;
+}
+
+.settings-sidebar ul,
+.settings-content ul {
+    margin: 0;
+    padding: 0;
+}
+
+.settings-sidebar ul li,
+.settings-content ul li {
+    border-bottom: 1px solid gray;
+    padding: 0.5em;
+    list-style: none;
+}
+
+.settings-content ul li {
+    padding-left: 1em;
+}
+
+.settings-sidebar ul li.menu-item a,
+.settings-content ul li.menu-item a {
+    color: black;
+    text-decoration: none;
+}
+
+.settings-sidebar ul li.menu-item h3,
+.settings-content ul li.menu-item h3 {
+    margin-bottom: 0;
+}
+
+
+.settings-sidebar ul li.active a,
+.settings-content ul li.active a {
+    font-weight: bold;
+}
+
+.settings-content {
+    width: 70vw;
+    height: 100vh;
+    background: white;
+}
+
 /* ============================= */
 /* bootstrap                     */
 /* ============================= */
 .border {
     border: 1px solid gray !important;
+}
+
+.border-right {
+    border-right: 1px solid gray !important;
 }
 
 .btn-light {

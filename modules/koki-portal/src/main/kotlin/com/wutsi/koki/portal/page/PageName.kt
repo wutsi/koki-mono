@@ -15,6 +15,11 @@ object PageName {
     const val CONTACT_DELETED = "page.contact.deleted"
     const val CONTACT_SAVED = "page.contact.saved"
 
+    const val EMAIL_SETTINGS = "page.settings.email"
+    const val EMAIL_SETTINGS_SMTP = "page.settings.smtp"
+    const val EMAIL_SETTINGS_SMTP_EDIT = "page.settings.smtp.edit"
+    const val EMAIL_SETTINGS_SMTP_SAVED = "page.settings.smtp.saved"
+
     const val ERROR = "page.error"
     const val ERROR_SUSPENDED = "page.error.suspended"
 
@@ -57,9 +62,6 @@ object PageName {
     const val SETTINGS_SCRIPT_EDIT = "page.settings.script.edit"
     const val SETTINGS_SCRIPT_LIST = "page.settings.script.list"
     const val SETTINGS_SCRIPT_SAVED = "page.settings.script.saved"
-    const val SETTINGS_SMTP = "page.settings.smtp"
-    const val SETTINGS_SMTP_EDIT = "page.settings.smtp.edit"
-    const val SETTINGS_SMTP_SAVED = "page.settings.smtp.saved"
     const val SETTINGS_WORKFLOW = "page.settings.workflow"
     const val SETTINGS_WORKFLOW_ACTIVITY = "page.settings.workflow.activity"
     const val SETTINGS_WORKFLOW_CREATE = "page.settings.workflow.create"

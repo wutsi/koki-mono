@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.page.settings.smtp
 
+import com.wutsi.koki.portal.email.model.SMTPForm
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
@@ -10,10 +11,10 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 
 @Controller
-class ShowSMTPController(
+class SettingsSMTPController(
     private val service: ConfigurationService,
 ) : AbstractPageController() {
-    @GetMapping("/settings/smtp")
+    @GetMapping("/settings/email/smtp")
     fun show(model: Model): String {
         val config = service.configurations(keyword = "smtp.")
         if (config.isNotEmpty()) {
@@ -29,10 +30,10 @@ class ShowSMTPController(
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.SETTINGS_SMTP,
-                title = "Mail Server"
+                name = PageName.EMAIL_SETTINGS_SMTP,
+                title = "SMTP Settings"
             )
         )
-        return "settings/smtp/show"
+        return "emails/settings/smtp/show"
     }
 }
