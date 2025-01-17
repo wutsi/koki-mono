@@ -94,10 +94,6 @@ class EmailDecoratorServiceTest {
                 <html>
                 <head>
                     <meta charset="utf-8">
-                    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
-                    <link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet"/>
-                    <meta content="width=device-width,initial-scale=1" name="viewport">
-                    <meta name="x-apple-disable-message-reformatting">
                 </head>
                 <body>
                 <table role="presentation"
