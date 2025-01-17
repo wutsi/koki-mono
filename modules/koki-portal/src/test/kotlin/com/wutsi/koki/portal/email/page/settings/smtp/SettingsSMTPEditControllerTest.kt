@@ -86,9 +86,9 @@ class SettingsSMTPEditControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun `backend error`() {
+    fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.AUTHORIZATION_PERMISSION_DENIED)
-        doThrow(ex).whenever(validator).validate(any(), any(), any())
+        doThrow(ex).whenever(kokiConfiguration).save(any())
 
         navigateTo("/settings/email/smtp/edit")
         assertCurrentPageIs(PageName.EMAIL_SETTINGS_SMTP_EDIT)
@@ -96,7 +96,6 @@ class SettingsSMTPEditControllerTest : AbstractPageControllerTest() {
         inputFields()
         assertElementPresent(".alert-danger")
 
-        verify(kokiConfiguration, never()).save(any())
         assertCurrentPageIs(PageName.EMAIL_SETTINGS_SMTP_EDIT)
     }
 

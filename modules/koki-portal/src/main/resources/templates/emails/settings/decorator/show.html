@@ -13,43 +13,26 @@
     </div>
     <div class="settings-content">
         <div class="padding">
-            <h1>SMTP</h1>
+            <h1>Email Layout</h1>
             <div>
-                <table class="table" th:if="${form}">
-                    <tr>
-                        <td width="20%"><b>Host</b></td>
-                        <td th:text="${form.host}">HOST</td>
-                    </tr>
-                    <tr>
-                        <td><b>Port</b></td>
-                        <td th:text="${form.port}">PORT</td>
-                    </tr>
-                    <tr>
-                        <td><b>Username</b></td>
-                        <td th:text="${form.username}">USERNAME</td>
-                    </tr>
-                    <tr>
-                        <td><b>Password</b></td>
-                        <td>******</td>
-                    </tr>
-                    <tr>
-                        <td><b>Sender</b></td>
-                        <td>
-                        <span th:if="!${form.fromPersonal.isEmpty()}"
-                              th:text="${form.fromPersonal} + ' <' + ${form.fromAddress} + '>'">SENDER</span>
-                            <span th:if="${form.fromPersonal.isEmpty()}" th:text="${form.fromAddress}">SENDER</span>
-                        </td>
-                    </tr>
-                </table>
-                <div class="empty text-center" th:if="!${form}">The Mail Server has not been configured</div>
-                <div class="margin-top">
-                    <a class="btn-edit btn btn-secondary" href="/settings/email/smtp/edit">Configure</a>
+                <div>
+                    <a class="btn-edit btn btn-secondary" href="/settings/email/decorator/edit">Configure</a>
+                </div>
+                <div th:if="${form}">
+                    <pre>
+                        <code class='language-html' th:text="${form.content}">CODE</code>
+                    </pre>
+                </div>
+                <div class="empty text-center margin-top" th:if="!${form}">
+                    Your email layout has not been configured.<br/>
+                    The default layout will be used.
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<div th:replace="~{__components/highlightjs :: prettity('html')}"></div>
 </body>
 
 </html>

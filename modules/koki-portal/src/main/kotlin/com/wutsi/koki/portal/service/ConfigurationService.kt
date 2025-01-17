@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.service
 
+import com.wutsi.koki.portal.email.model.EmailDecoratorForm
 import com.wutsi.koki.portal.email.model.SMTPForm
 import com.wutsi.koki.sdk.KokiConfiguration
 import com.wutsi.koki.tenant.dto.ConfigurationName
@@ -32,6 +33,16 @@ class ConfigurationService(
                     ConfigurationName.SMTP_PASSWORD to form.password,
                     ConfigurationName.SMTP_FROM_ADDRESS to form.fromAddress,
                     ConfigurationName.SMTP_FROM_PERSONAL to form.fromPersonal,
+                )
+            )
+        )
+    }
+
+    fun save(form: EmailDecoratorForm) {
+        koki.save(
+            SaveConfigurationRequest(
+                values = mapOf(
+                    ConfigurationName.EMAIL_DECORATOR to form.content,
                 )
             )
         )

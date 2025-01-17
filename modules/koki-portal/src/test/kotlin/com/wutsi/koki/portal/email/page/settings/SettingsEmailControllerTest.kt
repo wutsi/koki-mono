@@ -17,4 +17,11 @@ class SettingsEmailControllerTest : AbstractPageControllerTest() {
         click(".btn-smtp")
         assertCurrentPageIs(PageName.EMAIL_SETTINGS_SMTP)
     }
+
+    @Test
+    fun decorator() {
+        navigateTo("/settings/email")
+        click(".btn-decorator")
+        assertCurrentPageIs(PageName.EMAIL_SETTINGS_EMAIL_DECORATOR)
+    }
 }

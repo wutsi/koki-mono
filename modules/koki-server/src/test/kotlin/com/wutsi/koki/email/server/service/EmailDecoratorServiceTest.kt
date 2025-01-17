@@ -1,4 +1,4 @@
-package com.wutsi.koki.email.server.service.filter
+package com.wutsi.koki.email.server.service
 
 import com.github.mustachejava.DefaultMustacheFactory
 import com.nhaarman.mockitokotlin2.any
@@ -19,14 +19,14 @@ import org.mockito.Mockito.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class EmailDecoratorFilterTest {
+class EmailDecoratorServiceTest {
     private val configurationService = mock<ConfigurationService>()
     private val tenantService = mock<TenantService>()
     private val templatingEngine = mock<TemplatingEngine>()
-    private val filter = EmailDecoratorFilter(
-        configurationService,
-        tenantService,
-        templatingEngine
+    private val decorator = EmailDecoratorService(
+        configurationService = configurationService,
+        tenantService = tenantService,
+        templatingEngine = templatingEngine
     )
 
     private val config = ConfigurationEntity(
@@ -57,10 +57,10 @@ class EmailDecoratorFilterTest {
     }
 
     @Test
-    fun filter() {
+    fun decorate() {
         doReturn("YYY").whenever(templatingEngine).apply(any(), any())
 
-        val result = filter.filter("XXX", 1L)
+        val result = decorator.decorate("XXX", 1L)
 
         assertEquals("YYY", result)
 
@@ -82,22 +82,18 @@ class EmailDecoratorFilterTest {
             anyOrNull(),
         )
 
-        val xfilter = EmailDecoratorFilter(
-            configurationService,
-            tenantService,
-            MustacheTemplatingEngine(DefaultMustacheFactory())
+        val xdecorator = EmailDecoratorService(
+            configurationService = configurationService,
+            tenantService = tenantService,
+            templatingEngine = MustacheTemplatingEngine(DefaultMustacheFactory())
         )
-        val result = xfilter.filter("Hello world", 1L)
+        val result = xdecorator.decorate("Hello world", 1L)
 
         assertEquals(
             """
                 <html>
                 <head>
                     <meta charset="utf-8">
-                    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
-                    <link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet"/>
-                    <meta content="width=device-width,initial-scale=1" name="viewport">
-                    <meta name="x-apple-disable-message-reformatting">
                 </head>
                 <body>
                 <table role="presentation"
