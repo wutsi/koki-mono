@@ -17,6 +17,7 @@ data class Tenant(
     val logoUrl: String? = null,
     val iconUrl: String? = null,
     val portalUrl: String = "",
+    val websiteUrl: String? = null,
     val status: TenantStatus = TenantStatus.ACTIVE,
     val createdAt: Date = Date(),
 )

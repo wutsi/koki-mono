@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="settings-container">
+    <div class="settings-sidebar">
+        <div th:replace="~{__components/settings :: settings-menu('email')}"></div>
+    </div>
+    <div class="settings-content">
+        <div class="padding">
+            <h1>SMTP</h1>
+            <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+            <form class="form" method="post" th:action="@{'/settings/email/smtp/save'}" th:object="${form}">
+                <table class="table">
+                    <tr>
+                        <td width="20%"><b>Host<span class="required">*</span></b></td>
+                        <td>
+                            <input maxlength="100" required th:field="*{host}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Port<span class="required">*</span></b></td>
+                        <td>
+                            <input maxlength="4" required step="1" th:field="*{port}" type="number"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Username<span class="required">*</span></b></td>
+                        <td>
+                            <input maxlength="100" required th:field="*{username}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Password<span class="required">*</span></b></td>
+                        <td>
+                            <input maxlength="100" required th:field="*{password}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Sender Email</b></td>
+                        <td>
+                            <input maxlength="100" required th:field="*{fromAddress}" type="email"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Sender Name</b></td>
+                        <td>
+                            <input maxlength="100" th:field="*{fromPersonal}"/>
+                        </td>
+                    </tr>
+                </table>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

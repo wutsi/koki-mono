@@ -8,4 +8,7 @@ object ConfigurationName {
     const val SMTP_PORT = "smtp.port"
     const val SMTP_FROM_ADDRESS = "smtp.from.address"
     const val SMTP_FROM_PERSONAL = "smtp.from.personal"
+
+    // EMAIL
+    const val EMAIL_DECORATOR = "email.decorator"
 }
