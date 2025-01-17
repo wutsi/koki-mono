@@ -372,6 +372,22 @@ tr.activity-running {
     background: white;
 }
 
+.settings-content textarea,
+.settings-content input,
+.settings-content select {
+    padding: .5em;
+}
+
+.settings-content textarea,
+.settings-content input:not([type]),
+.settings-content input[type=text],
+.settings-content input[type=email],
+.settings-content input[type=password],
+.settings-content input[type=url],
+.settings-content select {
+    width: 100%;
+}
+
 /* ============================= */
 /* bootstrap                     */
 /* ============================= */
@@ -427,4 +443,11 @@ tr.activity-running {
 /* ============================= */
 .select2-container .select2-selection--single {
     height: 34px !important;
+}
+
+/* ============================= */
+/* codemiror                     */
+/* ============================= */
+div.CodeMirror {
+    border: 1px solid gray;
 }

@@ -37,6 +37,7 @@ class EmailService(
     private val templatingEngine: TemplatingEngine,
     private val configurationService: ConfigurationService,
     private val messagingServiceBuilder: MessagingServiceBuilder,
+    private val filterSet: EmailFilterSet,
     private val em: EntityManager,
 ) {
     fun get(id: String, tenantId: Long): EmailEntity {
@@ -132,14 +133,17 @@ class EmailService(
     }
 
     private fun createMessage(request: SendEmailRequest, email: EmailEntity): Message {
-        val recipient = toParty(email)
         val data = mutableMapOf<String, Any>()
         data.putAll(request.data)
+
+        val recipient = toParty(email)
         recipient.displayName?.let { name -> data["recipient_name"] = name }
+
+        val body = templatingEngine.apply(email.body, data)
 
         return Message(
             subject = email.subject,
-            body = templatingEngine.apply(email.body, data),
+            body = filterSet.filter(body, email.tenantId),
             mimeType = "text/html",
             recipient = recipient
         )

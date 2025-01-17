@@ -27,4 +27,5 @@ data class TenantEntity(
     val status: TenantStatus = TenantStatus.ACTIVE,
     val createdAt: Date = Date(),
     val portalUrl: String = "",
+    val websiteUrl: String? = null,
 )

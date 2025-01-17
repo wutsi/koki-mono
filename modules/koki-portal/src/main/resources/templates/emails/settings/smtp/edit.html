@@ -15,7 +15,7 @@
         <div class="padding">
             <h1>SMTP</h1>
             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
-            <form class="form" method="post" th:action="@{'/settings/email/smtp/save'}" th:object="${form}">
+            <form class="form" method="post" th:action="@{/settings/email/smtp/save}" th:object="${form}">
                 <table class="table">
                     <tr>
                         <td width="20%"><b>Host<span class="required">*</span></b></td>

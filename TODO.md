@@ -57,11 +57,11 @@
 
 ## Email
 
-- [] Settings: Configure email layout
-- [x] Settings: Configure SMTP
 - [] Attach files to email
 - [] Email Template API
 - [] Email Template UI
+- [x] Settings: Configure email layout
+- [x] Settings: Configure SMTP
 - [x] Send email API
 - [x] Send email UI
 

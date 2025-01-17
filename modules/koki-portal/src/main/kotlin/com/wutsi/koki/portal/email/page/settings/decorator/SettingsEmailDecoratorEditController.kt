@@ -9,27 +9,46 @@ import com.wutsi.koki.tenant.dto.ConfigurationName
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-class SettingsEmailDecoratorController(
+class SettingsEmailDecoratorEditController(
     private val service: ConfigurationService,
 ) : AbstractPageController() {
-    @GetMapping("/settings/email/decorator")
-    fun show(model: Model): String {
+    @GetMapping("/settings/email/decorator/edit")
+    fun edit(model: Model): String {
         val configs = service.configurations(names = listOf(ConfigurationName.EMAIL_DECORATOR))
-        configs[ConfigurationName.EMAIL_DECORATOR]?.let { config ->
-            model.addAttribute(
-                "form",
-                EmailDecoratorForm(content = config)
-            )
-        }
+        val form = EmailDecoratorForm(
+            content = configs[ConfigurationName.EMAIL_DECORATOR] ?: ""
+        )
+        return edit(form, model)
+    }
+
+    fun edit(form: EmailDecoratorForm, model: Model): String {
+        model.addAttribute("form", form)
         model.addAttribute(
-            "page",
-            PageModel(
-                name = PageName.EMAIL_SETTINGS_EMAIL_DECORATOR,
-                title = "Email Layout"
+            "page", PageModel(
+                name = PageName.EMAIL_SETTINGS_EMAIL_DECORATOR_EDIT, title = "Email Layout"
             )
         )
-        return "emails/settings/decorator/show"
+        return "emails/settings/decorator/edit"
+    }
+
+    @PostMapping("/settings/email/decorator/update")
+    fun show(form: EmailDecoratorForm, model: Model): String {
+        try {
+            service.save(form)
+            model.addAttribute(
+                "page", PageModel(
+                    name = PageName.EMAIL_SETTINGS_EMAIL_DECORATOR_SAVED, title = "Email Layout"
+                )
+            )
+            return "emails/settings/smtp/saved"
+        } catch (ex: HttpClientErrorException) {
+            val errorResponse = toErrorResponse(ex)
+            model.addAttribute("error", errorResponse.error.code)
+            return edit(form, model)
+        }
     }
 }

@@ -1,4 +1,5 @@
 package com.wutsi.koki.email.server.service
 
-class EmailFilter {
+interface EmailFilter {
+    fun filter(html: String, tenantId: Long): String
 }

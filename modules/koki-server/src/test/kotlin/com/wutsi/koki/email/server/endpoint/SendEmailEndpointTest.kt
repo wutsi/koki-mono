@@ -27,6 +27,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/email/SendEmailEndpoint.sql"])
 class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
@@ -65,7 +66,7 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
         val id = response.body!!.emailId
         val email = dao.findById(id).get()
         assertEquals(request.subject, email.subject)
-        assertEquals(request.body, email.body)
+        assertEquals("<p>This is an example of email</p>", email.body)
         assertEquals(request.recipient.id, email.recipientId)
         assertEquals(request.recipient.type, email.recipientType)
         assertEquals(USER_ID, email.senderId)
@@ -78,8 +79,11 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
 
         val msg = argumentCaptor<Message>()
         verify(messagingService).send(msg.capture())
-        assertEquals(request.subject, msg.firstValue.subject)
-        assertEquals(request.body, msg.firstValue.body)
+        assertTrue(msg.firstValue.body.contains(request.body))
+        assertEquals(
+            "<table> <tr><td>test</td></tr> <tr><td>${request.body}</td></tr> </table>",
+            msg.firstValue.body,
+        )
         assertEquals("Ray Inc", msg.firstValue.recipient.displayName)
         assertEquals("info@ray-inc.com", msg.firstValue.recipient.email)
         assertEquals("text/html", msg.firstValue.mimeType)
@@ -125,7 +129,7 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
         val msg = argumentCaptor<Message>()
         verify(messagingService).send(msg.capture())
         assertEquals(request.subject, msg.firstValue.subject)
-        assertEquals(request.body, msg.firstValue.body)
+        assertTrue(msg.firstValue.body.contains(request.body))
         assertEquals("Ray Sponsible", msg.firstValue.recipient.displayName)
         assertEquals("ray.sponsible@gmail.com", msg.firstValue.recipient.email)
         assertEquals("text/html", msg.firstValue.mimeType)
