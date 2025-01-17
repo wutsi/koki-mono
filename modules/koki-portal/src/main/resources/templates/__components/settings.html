@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+
+<ul th:fragment="settings-menu(item)">
+    <li class="menu-item">
+        <h3>Settings</h3>
+    </li>
+    <li class="menu-item" th:classappend="${item} == 'email' ? 'active'">
+        <a class="btn-email" href="/settings/email">Emails</a>
+    </li>
+    <li class="menu-item" th:classappend="${item} == 'form' ? 'active'">
+        <a class="btn-form" href="/settings/forms">Forms</a>
+    </li>
+    <li class="menu-item" th:classappend="${item} == 'message' ? 'active'">
+        <a class="btn-message" href="/settings/messages">Messages</a>
+    </li>
+    <li class="menu-item" th:classappend="${item} == 'script' ? 'active'">
+        <a class="btn-script" href="/settings/scripts">Scripts</a>
+    </li>
+    <li class="menu-item" th:classappend="${item} == 'service' ? 'active'">
+        <a class="btn-service" href="/settings/services">Service</a>
+    </li>
+    <li class="menu-item" th:classappend="${item} == 'workflow' ? 'active'">
+        <a class="btn-workflow" href="/settings/workflows">Workflows</a>
+    </li>
+</ul>
+
+</body>
+</html>

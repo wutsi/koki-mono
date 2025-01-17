@@ -58,7 +58,7 @@
 ## Email
 
 - [] Settings: Configure email layout
-- [] Settings: Configure SMTP
+- [x] Settings: Configure SMTP
 - [] Attach files to email
 - [] Email Template API
 - [] Email Template UI

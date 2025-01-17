@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page.settings.smtp
+package com.wutsi.koki.portal.email.page.settings.smtp
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
@@ -19,10 +19,12 @@ import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import java.net.SocketException
+import kotlin.collections.map
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.to
 
-class EditSMTPControllerTest : AbstractPageControllerTest() {
+class SettingsSMTPEditControllerTest : AbstractPageControllerTest() {
     private val config = mapOf(
         ConfigurationName.SMTP_PORT to "25",
         ConfigurationName.SMTP_HOST to "smtp.gmail.com",
@@ -48,8 +50,8 @@ class EditSMTPControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun save() {
-        navigateTo("/settings/smtp/edit")
-        assertCurrentPageIs(PageName.SETTINGS_SMTP_EDIT)
+        navigateTo("/settings/email/smtp/edit")
+        assertCurrentPageIs(PageName.EMAIL_SETTINGS_SMTP_EDIT)
 
         inputFields()
         assertElementNotPresent(".alert-danger")
@@ -66,34 +68,21 @@ class EditSMTPControllerTest : AbstractPageControllerTest() {
         assertEquals("no-reply@ray.com", request.firstValue.values[ConfigurationName.SMTP_FROM_ADDRESS])
         assertEquals("Ray Solutions", request.firstValue.values[ConfigurationName.SMTP_FROM_PERSONAL])
 
-        assertCurrentPageIs(PageName.SETTINGS_SMTP_SAVED)
-        click(".btn-ok")
-        assertCurrentPageIs(PageName.SETTINGS)
-    }
-
-    @Test
-    fun cancel() {
-        navigateTo("/settings/smtp/edit")
-        assertCurrentPageIs(PageName.SETTINGS_SMTP_EDIT)
-
-        scrollToBottom()
-        click(".btn-cancel")
-
-        assertCurrentPageIs(PageName.SETTINGS)
+        assertCurrentPageIs(PageName.EMAIL_SETTINGS_SMTP_SAVED)
     }
 
     @Test
     fun `SMTP validation error`() {
         doThrow(SocketException::class).whenever(validator).validate(any(), any(), any())
 
-        navigateTo("/settings/smtp/edit")
-        assertCurrentPageIs(PageName.SETTINGS_SMTP_EDIT)
+        navigateTo("/settings/email/smtp/edit")
+        assertCurrentPageIs(PageName.EMAIL_SETTINGS_SMTP_EDIT)
 
         inputFields()
         assertElementPresent(".alert-danger")
 
         verify(kokiConfiguration, never()).save(any())
-        assertCurrentPageIs(PageName.SETTINGS_SMTP_EDIT)
+        assertCurrentPageIs(PageName.EMAIL_SETTINGS_SMTP_EDIT)
     }
 
     @Test
@@ -101,14 +90,14 @@ class EditSMTPControllerTest : AbstractPageControllerTest() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.AUTHORIZATION_PERMISSION_DENIED)
         doThrow(ex).whenever(validator).validate(any(), any(), any())
 
-        navigateTo("/settings/smtp/edit")
-        assertCurrentPageIs(PageName.SETTINGS_SMTP_EDIT)
+        navigateTo("/settings/email/smtp/edit")
+        assertCurrentPageIs(PageName.EMAIL_SETTINGS_SMTP_EDIT)
 
         inputFields()
         assertElementPresent(".alert-danger")
 
         verify(kokiConfiguration, never()).save(any())
-        assertCurrentPageIs(PageName.SETTINGS_SMTP_EDIT)
+        assertCurrentPageIs(PageName.EMAIL_SETTINGS_SMTP_EDIT)
     }
 
     private fun inputFields() {
@@ -118,7 +107,6 @@ class EditSMTPControllerTest : AbstractPageControllerTest() {
         input("[name=password]", "ray234")
         input("[name=fromAddress]", "no-reply@ray.com")
         input("[name=fromPersonal]", "Ray Solutions")
-        scrollToBottom()
         click("button[type=submit]")
     }
 }

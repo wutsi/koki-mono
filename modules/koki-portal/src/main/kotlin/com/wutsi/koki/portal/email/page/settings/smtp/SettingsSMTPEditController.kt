@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.page.settings.smtp
 
+import com.wutsi.koki.portal.email.model.SMTPForm
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
@@ -12,19 +13,21 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.client.HttpClientErrorException
 import java.io.IOException
 
 @Controller
-class EditSMTPController(
+@RequestMapping("/settings/email/smtp")
+class SettingsSMTPEditController(
     private val service: ConfigurationService,
     private val validator: SMTPValidator,
 ) : AbstractPageController() {
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(EditSMTPController::class.java)
+        private val LOGGER = LoggerFactory.getLogger(SettingsSMTPEditController::class.java)
     }
 
-    @GetMapping("/settings/smtp/edit")
+    @GetMapping("/edit")
     fun edit(model: Model): String {
         val config = service.configurations(keyword = "smtp.")
         val form = SMTPForm(
@@ -42,14 +45,14 @@ class EditSMTPController(
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.SETTINGS_SMTP_EDIT,
+                name = PageName.EMAIL_SETTINGS_SMTP_EDIT,
                 title = "Mail Server"
             )
         )
-        return "settings/smtp/edit"
+        return "emails/settings/smtp/edit"
     }
 
-    @PostMapping("/settings/smtp/save")
+    @PostMapping("/save")
     fun save(@ModelAttribute form: SMTPForm, model: Model): String {
         try {
             validator.validate(form.host, form.port, form.username)
@@ -57,11 +60,11 @@ class EditSMTPController(
             model.addAttribute(
                 "page",
                 PageModel(
-                    name = PageName.SETTINGS_SMTP_SAVED,
-                    title = "Mail Server"
+                    name = PageName.EMAIL_SETTINGS_SMTP_SAVED,
+                    title = "SMTP Settings"
                 )
             )
-            return "settings/smtp/saved"
+            return "emails/settings/smtp/saved"
         } catch (ex: IOException) {
             LOGGER.error("Connection to SMTP server failed", ex)
             model.addAttribute("error", "The settings are not valid. Unable to connect to the Mail Server")
