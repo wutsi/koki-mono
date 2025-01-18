@@ -44,6 +44,14 @@ class SettingsSMTPControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun back() {
+        navigateTo("/settings/email/smtp")
+
+        click(".btn-back")
+        assertCurrentPageIs(PageName.EMAIL_SETTINGS)
+    }
+
+    @Test
     fun `not configured`() {
         doReturn(SearchConfigurationResponse()).whenever(kokiConfiguration).configurations(anyOrNull(), anyOrNull())
 

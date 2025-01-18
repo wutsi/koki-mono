@@ -3,26 +3,32 @@ package com.wutsi.koki.portal.user.page.security
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.portal.user.model.RoleForm
 import com.wutsi.koki.portal.user.model.RoleModel
 import com.wutsi.koki.portal.user.service.RoleService
+import jakarta.servlet.http.HttpServletRequest
+import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 @RequestMapping("/settings/security/roles")
-class SettingsEditRoleController(
-    private val service: RoleService
+class SettingsRoleController(
+    private val service: RoleService,
+    private val httpRequest: HttpServletRequest,
 ) : AbstractPageController() {
     @GetMapping("/{id}")
-    fun show(@PathVariable id: Long, model: Model): String {
+    fun show(
+        @PathVariable id: Long,
+        @RequestParam(required = false) updated: Long? = null,
+        model: Model
+    ): String {
         val role = service.role(id)
+        loadUpdatedToast(updated, model)
         return show(role, model)
     }
 
@@ -39,12 +45,22 @@ class SettingsEditRoleController(
         return "users/settings/roles/show"
     }
 
-    @PostMapping("/{id}/delete")
-    fun update(
-        @PathVariable id: Long,
-        @ModelAttribute form: RoleForm,
-        model: Model
-    ): String {
+    private fun loadUpdatedToast(updated: Long?, model: Model) {
+        val referer = httpRequest.getHeader(HttpHeaders.REFERER)
+        if (
+            updated != null &&
+            referer != null &&
+            (
+                referer.endsWith("/settings/security/roles/$updated/edit") ||
+                referer.endsWith("/settings/security/roles/$updated/permissions")
+            )
+        ) {
+            model.addAttribute("toast", "Updated")
+        }
+    }
+
+    @GetMapping("/{id}/delete")
+    fun update(@PathVariable id: Long, model: Model): String {
         try {
             service.delete(id)
             return "redirect:/settings/security/roles?deleted=$id"

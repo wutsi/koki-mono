@@ -97,7 +97,7 @@ class KokiSDKConfiguration(
 
     @Bean
     fun kokiModules(): KokiModules {
-        return KokiModules(urlBuilder(), rest())
+        return KokiModules(urlBuilder(), restWithoutTenantHeader())
     }
 
     @Bean

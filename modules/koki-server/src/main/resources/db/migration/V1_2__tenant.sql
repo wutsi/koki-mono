@@ -65,13 +65,18 @@ CREATE TABLE T_ROLE(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
   tenant_fk               BIGINT NOT NULL,
+  created_by_fk           BIGINT,
+  modified_by_fk          BIGINT,
+  deleted_by_fk           BIGINT,
 
   name                    VARCHAR(100) NOT NULL,
   title                   VARCHAR(255),
   description             TEXT,
   active                  BOOL NOT NULL DEFAULT true,
+  deleted                 BOOL NOT NULL DEFAULT false,
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
+  deleted_at              DATETIME,
 
   UNIQUE(tenant_fk, name),
   PRIMARY KEY(id)
@@ -90,3 +95,11 @@ CREATE TABLE T_ROLE_PERMISSION(
 
   PRIMARY KEY(role_fk, permission_fk)
 ) ENGINE = InnoDB;
+
+INSERT INTO T_MODULE(id, name, title, home_url, tab_url, settings_url)
+    VALUES (100, 'security', 'Security', null, null, '/settings/security');
+
+INSERT INTO T_PERMISSION(id, module_fk, name, description)
+    VALUES (1000, 100, 'security',      'Manage system security'),
+           (1001, 100, 'security:user', 'Manage users'),
+           (1002, 100, 'security:role', 'Manage roles');

@@ -39,12 +39,7 @@ class SettingsEmailDecoratorEditController(
     fun show(form: EmailDecoratorForm, model: Model): String {
         try {
             service.save(form)
-            model.addAttribute(
-                "page", PageModel(
-                    name = PageName.EMAIL_SETTINGS_EMAIL_DECORATOR_SAVED, title = "Email Layout"
-                )
-            )
-            return "emails/settings/smtp/saved"
+            return "redirect:/settings/email/decorator?updated=1"
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)

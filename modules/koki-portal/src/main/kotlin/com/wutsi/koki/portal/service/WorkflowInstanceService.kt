@@ -7,6 +7,7 @@ import com.wutsi.koki.portal.model.WorkflowInstanceModel
 import com.wutsi.koki.portal.page.settings.workflow.StartWorkflowForm
 import com.wutsi.koki.portal.user.model.RoleModel
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
+import com.wutsi.koki.portal.user.service.RoleService
 import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.sdk.KokiWorkflowInstances
 import com.wutsi.koki.workflow.dto.Activity
@@ -26,6 +27,7 @@ class WorkflowInstanceService(
     private val workflowMapper: WorkflowMapper,
     private val workflowService: WorkflowService,
     private val userService: UserService,
+    private val roleService: RoleService,
     private val formService: FormService,
     private val messageService: MessageService,
     private val scriptService: ScriptService,
@@ -69,7 +71,7 @@ class WorkflowInstanceService(
         ).associateBy { user -> user.id }
 
         val roleIds = workflowInstance.participants.map { participant -> participant.roleId }.toSet()
-        val roleMap = userService.roles(
+        val roleMap = roleService.roles(
             ids = roleIds.toList(),
             limit = roleIds.size
         ).associateBy { role -> role.id }
@@ -162,7 +164,7 @@ class WorkflowInstanceService(
             emptyMap()
         }
 
-        val role: RoleModel? = activity.roleId?.let { roleId -> userService.role(roleId) }
+        val role: RoleModel? = activity.roleId?.let { roleId -> roleService.role(roleId) }
         val form = activity.formId?.let { id ->
             formService.form(
                 id = id,

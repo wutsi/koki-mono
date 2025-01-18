@@ -77,7 +77,8 @@ class SettingsEmailDecoratorEditControllerTest : AbstractPageControllerTest() {
             )
         )
 
-        assertCurrentPageIs(PageName.EMAIL_SETTINGS_EMAIL_DECORATOR_SAVED)
+        assertCurrentPageIs(PageName.EMAIL_SETTINGS_EMAIL_DECORATOR)
+        assertElementVisible("#email-toast")
     }
 
     @Test

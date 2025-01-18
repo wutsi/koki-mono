@@ -12,7 +12,7 @@ import jakarta.persistence.Table
 data class PermissionEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = -1,
+    val id: Long? = null,
 
     @Column("module_fk")
     val moduleId: Long = -1,

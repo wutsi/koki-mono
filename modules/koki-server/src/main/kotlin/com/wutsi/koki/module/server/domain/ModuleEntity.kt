@@ -1,5 +1,6 @@
 package com.wutsi.koki.module.server.domain
 
+import com.wutsi.koki.common.dto.ObjectType
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -19,4 +20,5 @@ data class ModuleEntity(
     val homeUrl: String? = null,
     val tabUrl: String? = null,
     val settingsUrl: String? = null,
+    val objectType: ObjectType = ObjectType.UNKNOWN,
 )

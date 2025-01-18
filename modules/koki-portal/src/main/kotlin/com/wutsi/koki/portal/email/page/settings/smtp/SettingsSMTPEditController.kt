@@ -57,14 +57,7 @@ class SettingsSMTPEditController(
         try {
             validator.validate(form.host, form.port, form.username)
             service.save(form)
-            model.addAttribute(
-                "page",
-                PageModel(
-                    name = PageName.EMAIL_SETTINGS_SMTP_SAVED,
-                    title = "SMTP Settings"
-                )
-            )
-            return "emails/settings/smtp/saved"
+            return "redirect:/settings/email/smtp?updated=1"
         } catch (ex: IOException) {
             LOGGER.error("Connection to SMTP server failed", ex)
             model.addAttribute("error", "The settings are not valid. Unable to connect to the Mail Server")

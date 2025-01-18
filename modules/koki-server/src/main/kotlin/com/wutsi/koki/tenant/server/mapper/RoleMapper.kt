@@ -12,6 +12,9 @@ class RoleMapper {
         description = entity.description,
         active = entity.active,
         createdAt = entity.createdAt,
+        createdById = entity.createdById,
         modifiedAt = entity.modifiedAt,
-        permissionIds = entity.permissions.mapNotNull { permission -> permission.id })
+        modifiedById = entity.modifiedById,
+        permissionIds = entity.permissions.mapNotNull { permission -> permission.id }
+    )
 }

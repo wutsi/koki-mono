@@ -14,6 +14,7 @@ class ModuleMapper {
             name = entity.name,
             description = entity.description,
             title = entity.title,
+            objectType = entity.objectType,
             tabUrl = entity.tabUrl,
             homeUrl = entity.homeUrl,
             settingsUrl = entity.settingsUrl,

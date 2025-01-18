@@ -1,46 +1,62 @@
 package com.wutsi.koki.portal.user.page.settings
 
-import com.nhaarman.mockitokotlin2.anyOrNull
-import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
-import com.wutsi.koki.RoleFixtures.roles
+import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.tenant.dto.Role
-import com.wutsi.koki.tenant.dto.SearchRoleResponse
+import com.wutsi.koki.tenant.dto.CreateRoleRequest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
-class SettingsListRoleControllerTest : AbstractPageControllerTest() {
+class SettingsCreateRoleControllerTest : AbstractPageControllerTest() {
     @Test
-    fun list() {
-        navigateTo("/settings/security/roles")
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE)
+    fun create() {
+        navigateTo("/settings/security/roles/create")
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_CREATE)
 
-        assertElementCount("tr.role", roles.size)
+        input("#name", "ACCT")
+        input("#title", "Accountant")
+        input("#description", "This is an accountant that fill taxes")
+        select("#active", 1)
+        click("button[type=submit]", 1000)
+
+        val request = argumentCaptor<CreateRoleRequest>()
+        verify(kokiUsers).createRole(request.capture())
+        assertEquals("ACCT", request.firstValue.name)
+        assertEquals("Accountant", request.firstValue.title)
+        assertEquals("This is an accountant that fill taxes", request.firstValue.description)
+        assertEquals(false, request.firstValue.active)
+
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_LIST)
+        assertElementVisible("#role-toast")
     }
 
     @Test
-    fun more() {
-        var entries = mutableListOf<Role>()
-        var seed = System.currentTimeMillis()
-        repeat(20) {
-            entries.add(roles[0].copy(id = ++seed))
-        }
-        doReturn(SearchRoleResponse(entries))
-            .whenever(kokiUsers)
-            .roles(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-            )
+    fun error() {
+        val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.AUTHORIZATION_PERMISSION_DENIED)
+        doThrow(ex).whenever(kokiUsers).createRole(any())
 
-        navigateTo("/settings/security/roles")
+        navigateTo("/settings/security/roles/create")
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_CREATE)
 
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE)
-        assertElementCount("tr.role", entries.size)
+        input("#name", "ACCT")
+        input("#title", "Accountant")
+        input("#description", "This is an accountant that fill taxes")
+        select("#active", 1)
+        click("button[type=submit]", 1000)
+        assertElementPresent(".alert-danger")
 
-        scrollToBottom()
-        click("#role-load-more a", 1000)
-        assertElementCount("tr.role", 2 * entries.size)
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_CREATE)
+    }
+
+    @Test
+    fun back() {
+        navigateTo("/settings/security/roles/create")
+        click(".btn-back")
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_LIST)
     }
 }

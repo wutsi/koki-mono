@@ -68,7 +68,8 @@ class SettingsSMTPEditControllerTest : AbstractPageControllerTest() {
         assertEquals("no-reply@ray.com", request.firstValue.values[ConfigurationName.SMTP_FROM_ADDRESS])
         assertEquals("Ray Solutions", request.firstValue.values[ConfigurationName.SMTP_FROM_PERSONAL])
 
-        assertCurrentPageIs(PageName.EMAIL_SETTINGS_SMTP_SAVED)
+        assertCurrentPageIs(PageName.EMAIL_SETTINGS_SMTP)
+        assertElementVisible("#smtp-toast")
     }
 
     @Test
@@ -83,6 +84,14 @@ class SettingsSMTPEditControllerTest : AbstractPageControllerTest() {
 
         verify(kokiConfiguration, never()).save(any())
         assertCurrentPageIs(PageName.EMAIL_SETTINGS_SMTP_EDIT)
+    }
+
+    @Test
+    fun back() {
+        navigateTo("/settings/email/smtp/edit")
+
+        click(".btn-back")
+        assertCurrentPageIs(PageName.EMAIL_SETTINGS)
     }
 
     @Test
