@@ -59,8 +59,10 @@ object ErrorCode {
 
     val NOTE_NOT_FOUND: String = "$PREFIX:note:not-found"
 
+    val ROLE_DUPLICATE_NAME: String = "$PREFIX:role:duplicate-name"
     val ROLE_NOT_FOUND: String = "$PREFIX:role:not-found"
     val ROLE_NAME_MISSING: String = "$PREFIX:role:name-missing"
+    val ROLE_IN_USE: String = "$PREFIX:role:in-use"
 
     val SERVICE_DUPLICATE_NAME: String = "$PREFIX:service:duplicate-name"
     val SERVICE_IN_USE: String = "$PREFIX:service:in-use"

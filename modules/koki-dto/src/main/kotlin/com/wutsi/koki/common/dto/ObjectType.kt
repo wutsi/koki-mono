@@ -4,6 +4,8 @@ enum class ObjectType {
     UNKNOWN,
     ACCOUNT,
     CONTACT,
-    TAX,
     FILE,
+    NOTE,
+    EMAIL,
+    TAX,
 }

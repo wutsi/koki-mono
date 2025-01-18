@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+
+<div class="toast-container" style="position: absolute; top: 6em; right: 1em;" th:fragment="toast(id, msg, type)">
+    <div class="toast bg-success text-white" data-bs-autohide="false" id="role-toast-created" role="alert"
+         th:classappend="${type == 'success'? 'bg-success text-white'} ${type == 'error'? 'bg-error text-white'}">
+        <div class="d-flex">
+            <div class="toast-body" th:utext="${message}">MESSAGE</div>
+            <button aria-label="Close" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    type="button"></button>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            const toast = document.getElementById(/*[[${id}]]*/ '');
+            bootstrap.Toast.getOrCreateInstance(toast).show();
+        });
+    </script>
+</div>
+
+</body>
+</html>

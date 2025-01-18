@@ -1,5 +1,7 @@
 package com.wutsi.koki.module.dto
 
+import com.wutsi.koki.common.dto.ObjectType
+
 data class Module(
     val id: Long = -1,
     val name: String = "",
@@ -8,4 +10,5 @@ data class Module(
     val homeUrl: String? = null,
     val tabUrl: String? = null,
     val settingsUrl: String? = null,
+    val objectType: ObjectType = ObjectType.UNKNOWN,
 )
