@@ -10,4 +10,5 @@ data class Role(
     val description: String? = null,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
+    val permissionIds: List<Long> = emptyList()
 )

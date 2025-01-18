@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.service
 
-import com.wutsi.koki.tenant.dto.TenantModel
+import com.wutsi.koki.portal.tenant.model.TenantModel
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode

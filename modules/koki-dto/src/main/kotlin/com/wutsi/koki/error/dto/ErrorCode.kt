@@ -55,6 +55,8 @@ object ErrorCode {
     val MESSAGE_IN_USE: String = "$PREFIX:message:in-use"
     val MESSAGE_NOT_FOUND: String = "$PREFIX:message:not-found"
 
+    val MODULE_NOT_FOUND: String = "$PREFIX:module:not-found"
+
     val NOTE_NOT_FOUND: String = "$PREFIX:note:not-found"
 
     val ROLE_NOT_FOUND: String = "$PREFIX:role:not-found"

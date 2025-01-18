@@ -20,4 +20,5 @@ data class Tenant(
     val websiteUrl: String? = null,
     val status: TenantStatus = TenantStatus.ACTIVE,
     val createdAt: Date = Date(),
+    val moduleIds: List<Long> = emptyList(),
 )

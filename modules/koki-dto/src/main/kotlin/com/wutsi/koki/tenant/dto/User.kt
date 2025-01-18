@@ -9,5 +9,5 @@ data class User(
     val displayName: String = "",
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
-    val roles: List<Role> = emptyList(),
+    val roleIds: List<Long> = emptyList(),
 )
