@@ -58,8 +58,6 @@
 ## Email
 
 - [] Attach files to email
-- [] Email Template API
-- [] Email Template UI
 - [x] Settings: Configure email layout
 - [x] Settings: Configure SMTP
 - [x] Send email API
@@ -92,6 +90,16 @@
 - [x] Track Form submissions
 - [x] Share Forms Link
 
+## Users
+
+- [] Manage users
+- [x] Manage roles
+
+## Security
+
+- [] List of modules driven by backend
+- [] Implement RBAC
+
 ## Workflow
 
 - [] Approve/Reject activity
@@ -121,12 +129,6 @@
 - [x] Add support for Service activities
 - [x] List workflow instances
 
-## Users
-
-- [] Signup user
-- [] Invite user
-- [] Manage roles
-
 ## Portal
 
 - [] Configure home page by role
@@ -135,8 +137,4 @@
 ## Storage
 
 - [] Support S3 storage
-
-## Other
-
-- [] Implement RBAC
 
