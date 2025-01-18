@@ -1,33 +1,34 @@
 package com.wutsi.koki.module.server.endpoint
 
-import com.wutsi.koki.module.dto.GetModuleResponse
-import com.wutsi.koki.module.dto.SearchModuleResponse
-import com.wutsi.koki.module.server.mapper.ModuleMapper
-import com.wutsi.koki.module.server.service.ModuleService
+import com.wutsi.koki.module.dto.SearchPermissionResponse
+import com.wutsi.koki.module.server.mapper.PermissionMapper
+import com.wutsi.koki.module.server.service.PermissionService
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/v1/modules")
-class ModuleEndpoints(
-    private val service: ModuleService,
-    private val mapper: ModuleMapper,
+@RequestMapping("/v1/permissions")
+class PermissionEndpoints(
+    private val service: PermissionService,
+    private val mapper: PermissionMapper,
 ) {
-    @GetMapping("/{id}")
-    fun get(@PathVariable id: Long): GetModuleResponse {
-        val module = service.get(id)
-        return GetModuleResponse(
-            module = mapper.toModule(module)
-        )
-    }
-
     @GetMapping
-    fun search(): SearchModuleResponse {
-        val modules = service.search()
-        return SearchModuleResponse(
-            modules = modules.map { module -> mapper.toModuleSummary(module) }
+    fun search(
+        @RequestParam(required = false, name = "id") ids: List<Long> = emptyList(),
+        @RequestParam(required = false, name = "module-id") moduleIds: List<Long> = emptyList(),
+        @RequestParam(required = false) limit: Int = 20,
+        @RequestParam(required = false) offset: Int = 0
+    ): SearchPermissionResponse {
+        val permissions = service.search(
+            ids = ids,
+            moduleIds = moduleIds,
+            limit = limit,
+            offset = offset
+        )
+        return SearchPermissionResponse(
+            permissions = permissions.map { permission -> mapper.toPermission(permission) }
         )
     }
 }

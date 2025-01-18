@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.service
+package com.wutsi.koki.portal.tenant.service
 
 import com.wutsi.koki.portal.tenant.model.TenantModel
 import jakarta.servlet.http.HttpServletRequest

@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.service
+package com.wutsi.koki.portal.email.service
 
 import org.apache.commons.net.smtp.SMTPClient
 import org.slf4j.LoggerFactory

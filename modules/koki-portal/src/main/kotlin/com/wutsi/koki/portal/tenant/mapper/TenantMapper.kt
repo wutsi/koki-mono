@@ -1,12 +1,14 @@
-package com.wutsi.koki.portal.mapper
+package com.wutsi.koki.portal.tenant.mapper
 
+import com.wutsi.koki.portal.module.model.ModuleModel
+import com.wutsi.koki.portal.tenant.model.TenantModel
 import com.wutsi.koki.tenant.dto.Tenant
-import com.wutsi.koki.tenant.dto.TenantModel
 import org.springframework.stereotype.Service
+import kotlin.text.ifEmpty
 
 @Service
 class TenantMapper {
-    fun toTenantModel(entity: Tenant): TenantModel {
+    fun toTenantModel(entity: Tenant, modules: Map<Long, ModuleModel>): TenantModel {
         return TenantModel(
             id = entity.id,
             numberFormat = entity.numberFormat,
@@ -24,6 +26,8 @@ class TenantMapper {
             iconUrl = entity.iconUrl?.ifEmpty { null },
             logoUrl = entity.logoUrl?.ifEmpty { null },
             portalUrl = entity.portalUrl,
+            websiteUrl = entity.websiteUrl,
+            modules = entity.moduleIds.mapNotNull { id -> modules[id] },
         )
     }
 }

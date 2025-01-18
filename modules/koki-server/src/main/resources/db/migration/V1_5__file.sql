@@ -33,3 +33,11 @@ CREATE TABLE T_FILE_OWNER(
   UNIQUE(file_fk, owner_fk, owner_type),
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
+
+INSERT INTO T_MODULE(id, name, title, home_url, tab_url, settings_url)
+    VALUES (30, 'file', 'Files', null, '/files/tab', null);
+
+INSERT INTO T_PERMISSION(id, module_fk, name, description)
+    VALUES (300, 30, 'file',       'Manage files'),
+           (301, 30, 'file:admin', 'Configure files');
+

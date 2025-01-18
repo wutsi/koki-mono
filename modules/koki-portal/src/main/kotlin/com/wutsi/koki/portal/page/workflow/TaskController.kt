@@ -3,9 +3,9 @@ package com.wutsi.koki.portal.page.workflow.instance
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.portal.service.CurrentUserHolder
 import com.wutsi.koki.portal.service.FormService
 import com.wutsi.koki.portal.service.WorkflowInstanceService
+import com.wutsi.koki.portal.user.service.CurrentUserHolder
 import com.wutsi.koki.workflow.dto.ActivityType
 import com.wutsi.koki.workflow.dto.WorkflowStatus
 import org.springframework.stereotype.Controller

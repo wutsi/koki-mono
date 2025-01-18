@@ -1,6 +1,6 @@
-package com.wutsi.koki.portal.servlet
+package com.wutsi.koki.portal.tenant.servlet
 
-import com.wutsi.koki.portal.service.CurrentTenantHolder
+import com.wutsi.koki.portal.tenant.service.CurrentTenantHolder
 import com.wutsi.koki.tenant.dto.TenantStatus
 import jakarta.servlet.Filter
 import jakarta.servlet.FilterChain

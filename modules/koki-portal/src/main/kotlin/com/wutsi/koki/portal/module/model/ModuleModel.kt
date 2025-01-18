@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.tenant.model
+package com.wutsi.koki.portal.module.model
 
 data class ModuleModel(
     val id: Long = -1,

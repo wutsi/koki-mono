@@ -1,5 +1,6 @@
 package com.wutsi.koki
 
+import com.wutsi.koki.ModuleFixtures.modules
 import com.wutsi.koki.tenant.dto.Tenant
 import com.wutsi.koki.tenant.dto.TenantStatus
 
@@ -20,6 +21,7 @@ object TenantFixtures {
             status = TenantStatus.ACTIVE,
             logoUrl = "https://prod-wutsi.s3.amazonaws.com/static/wutsi-blog-web/assets/wutsi/img/logo/name-104x50.png",
             iconUrl = "https://prod-wutsi.s3.amazonaws.com/static/wutsi-blog-web/assets/wutsi/img/logo/logo_512x512.png",
+            moduleIds = modules.map { module -> module.id }
         ),
         Tenant(
             id = 2,
@@ -34,6 +36,7 @@ object TenantFixtures {
             numberFormat = "#,###,###.#0",
             monetaryFormat = "#,###,### FCFA",
             status = TenantStatus.ACTIVE,
+            moduleIds = modules.map { module -> module.id }
         ),
     )
 }
