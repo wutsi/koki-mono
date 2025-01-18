@@ -23,5 +23,7 @@ class SearchTenantEndpointTest {
 
         val tenants = result.body!!.tenants
         assertEquals(5, tenants.size)
+
+        assertEquals(3, tenants[0].moduleIds.size)
     }
 }

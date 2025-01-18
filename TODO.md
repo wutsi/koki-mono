@@ -139,5 +139,4 @@
 ## Other
 
 - [] Implement RBAC
-- [] Add support for external modules
 

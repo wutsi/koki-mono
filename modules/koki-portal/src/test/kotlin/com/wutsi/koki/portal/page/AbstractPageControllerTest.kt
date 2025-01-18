@@ -13,6 +13,7 @@ import com.wutsi.koki.FormFixtures
 import com.wutsi.koki.LogFixtures.logEntries
 import com.wutsi.koki.LogFixtures.logEntry
 import com.wutsi.koki.MessageFixtures
+import com.wutsi.koki.ModuleFixtures
 import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.RoleFixtures
 import com.wutsi.koki.ScriptFixtures
@@ -57,6 +58,8 @@ import com.wutsi.koki.form.dto.SearchFormResponse
 import com.wutsi.koki.form.dto.SearchFormSubmissionResponse
 import com.wutsi.koki.message.dto.GetMessageResponse
 import com.wutsi.koki.message.dto.SearchMessageResponse
+import com.wutsi.koki.module.dto.SearchModuleResponse
+import com.wutsi.koki.module.dto.SearchPermissionResponse
 import com.wutsi.koki.note.dto.CreateNoteResponse
 import com.wutsi.koki.note.dto.GetNoteResponse
 import com.wutsi.koki.note.dto.SearchNoteResponse
@@ -74,6 +77,7 @@ import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiLogs
 import com.wutsi.koki.sdk.KokiMessages
+import com.wutsi.koki.sdk.KokiModules
 import com.wutsi.koki.sdk.KokiNotes
 import com.wutsi.koki.sdk.KokiScripts
 import com.wutsi.koki.sdk.KokiServices
@@ -175,6 +179,9 @@ abstract class AbstractPageControllerTest {
     protected lateinit var kokiMessages: KokiMessages
 
     @MockitoBean
+    protected lateinit var kokiModules: KokiModules
+
+    @MockitoBean
     protected lateinit var kokiNotes: KokiNotes
 
     @MockitoBean
@@ -249,6 +256,7 @@ abstract class AbstractPageControllerTest {
     }
 
     private fun setupDefaultApiResponses() {
+        setupModuleModule()
         setupTenantModule()
         setupAccountModule()
         setupContactModule()
@@ -325,6 +333,18 @@ abstract class AbstractPageControllerTest {
         )
         doReturn(GetContactResponse(ContactFixtures.contact)).whenever(kokiContacts).contact(any())
         doReturn(CreateContactResponse(ContactFixtures.NEW_CONTACT_ID)).whenever(kokiContacts).create(any())
+    }
+
+    protected fun setupModuleModule() {
+        doReturn(SearchModuleResponse(ModuleFixtures.modules)).whenever(kokiModules).modules()
+
+        doReturn(SearchPermissionResponse(ModuleFixtures.permissions)).whenever(kokiModules)
+            .permissions(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            )
     }
 
     protected fun setupTenantModule() {

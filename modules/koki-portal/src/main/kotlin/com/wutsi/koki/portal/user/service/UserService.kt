@@ -10,9 +10,16 @@ import org.springframework.stereotype.Service
 class UserService(
     private val koki: KokiUsers,
     private val mapper: UserMapper,
+    private val roleService: RoleService
 ) {
-    fun user(id: Long): UserModel {
-        return mapper.toUserModel(koki.user(id).user)
+    fun user(id: Long, fullGraph: Boolean = true): UserModel {
+        val user = koki.user(id).user
+        val roles = if (user.roleIds.isEmpty() || !fullGraph) {
+            emptyList()
+        } else {
+            roleService.roles(user.roleIds)
+        }
+        return mapper.toUserModel(user, roles)
     }
 
     fun users(

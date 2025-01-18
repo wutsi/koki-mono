@@ -23,6 +23,13 @@ CREATE TABLE T_TENANT(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
+CREATE TABLE T_TENANT_MODULE(
+  tenant_fk             BIGINT NOT NULL REFERENCES T_TENANT(id),
+  module_fk             BIGINT NOT NULL REFERENCES T_MODULE(id),
+
+  PRIMARY KEY (tenant_fk, module_fk)
+) ENGINE = InnoDB;
+
 CREATE TABLE T_USER(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
@@ -75,4 +82,11 @@ CREATE TABLE T_USER_ROLE(
   role_fk       BIGINT NOT NULL REFERENCES T_ROLE(id),
 
   PRIMARY KEY(user_fk, role_fk)
+) ENGINE = InnoDB;
+
+CREATE TABLE T_ROLE_PERMISSION(
+  role_fk       BIGINT NOT NULL REFERENCES T_ROLE(id),
+  permission_fk BIGINT NOT NULL REFERENCES T_PERMISSION(id),
+
+  PRIMARY KEY(role_fk, permission_fk)
 ) ENGINE = InnoDB;

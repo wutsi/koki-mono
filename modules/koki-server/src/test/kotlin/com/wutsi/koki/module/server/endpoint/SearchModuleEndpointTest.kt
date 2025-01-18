@@ -1,7 +1,7 @@
 package com.wutsi.koki.module.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
-import com.wutsi.koki.module.dto.GetModuleResponse
+import com.wutsi.koki.module.dto.SearchModuleResponse
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import org.springframework.test.annotation.DirtiesContext
@@ -11,24 +11,15 @@ import kotlin.test.assertEquals
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(value = ["/db/test/clean.sql", "/db/test/module/GetModuleEndpoint.sql"])
-class GetModuleEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/module/SearchModuleEndpoint.sql"])
+class SearchModuleEndpointTest : TenantAwareEndpointTest() {
     @Test
-    fun get() {
-        val response = rest.getForEntity("/v1/modules/100", GetModuleResponse::class.java)
+    fun all() {
+        val response = rest.getForEntity("/v1/modules", SearchModuleResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val module = response.body!!.module
-        assertEquals("MODULE1", module.name)
-        assertEquals("Module 1", module.title)
-        assertEquals("This is a module", module.description)
-        assertEquals("/module1", module.homeUrl)
-        assertEquals("/module1/tab", module.tabUrl)
-        assertEquals("/settings/module1", module.settingsUrl)
-
-        assertEquals(2, module.permissions.size)
-        assertEquals("module1:read", module.permissions[0].name)
-        assertEquals("module1:status", module.permissions[1].name)
+        val modules = response.body!!.modules
+        assertEquals(3, modules.size)
     }
 }

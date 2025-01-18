@@ -1,5 +1,7 @@
-package com.wutsi.koki.tenant.dto
+package com.wutsi.koki.portal.tenant.model
 
+import com.wutsi.koki.portal.module.model.ModuleModel
+import com.wutsi.koki.tenant.dto.TenantStatus
 import java.util.Date
 
 data class TenantModel(
@@ -18,5 +20,7 @@ data class TenantModel(
     val logoUrl: String? = null,
     val iconUrl: String? = null,
     val portalUrl: String = "",
+    val websiteUrl: String? = null,
     val createdAt: Date = Date(),
+    val modules: List<ModuleModel> = emptyList()
 )

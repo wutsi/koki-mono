@@ -21,6 +21,7 @@ spring:
                 prepStmtCacheSqlLimit: 2048
     flyway:
         clean-disabled: false
+        locations: "classpath:db/migration,classpath:db/migration/localhost"
     jpa:
         show-sql: false
         hibernate:
@@ -69,20 +70,24 @@ springdoc:
             display-name: Authentication API
             paths-to-match: /v1/auth, /v1/auth/*
 
-        -   group: account
+        -   group: accounts
             display-name: Account API
             paths-to-match: /v1/attributes, /v1/attributes/**, /v1/account-types, /v1/account-types/**, /v1/accounts, /v1/accounts/**
 
-        -   group: contact
+        -   group: contacts
             display-name: Contact API
             paths-to-match: /v1/contact-types, /v1/contact-types/**, /v1/contacts, /v1/contacts/**
 
-        -   group: file
+        -   group: files
             display-name: File API
             paths-to-match: /v1/files, /v1/files/*
 
+        -   group: modules
+            display-name: Module API
+            paths-to-match: /v1/modules, /v1/modules/**, /v1/permissions
+
         -   group: notes
-            display-name: Notes API
+            display-name: Note API
             paths-to-match: /v1/notes, /v1/notes/*
 
         -   group: taxes

@@ -1,8 +1,8 @@
-package com.wutsi.koki.portal.service
+package com.wutsi.koki.portal.user.service
 
 import com.wutsi.koki.portal.security.JWTAuthentication
+import com.wutsi.koki.portal.service.AuthenticationService
 import com.wutsi.koki.portal.user.model.UserModel
-import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.security.dto.JWTPrincipal
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode

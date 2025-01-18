@@ -41,3 +41,10 @@ CREATE TABLE T_CONTACT(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
+INSERT INTO T_MODULE(id, name, title, home_url, tab_url, settings_url)
+    VALUES (20, 'contact', 'Contact', '/contacts', '/contacts/tab', '/settings/contacts');
+
+INSERT INTO T_PERMISSION(id, module_fk, name, description)
+    VALUES (200, 20, 'contact',       'Manage accounts'),
+           (201, 20, 'contact:admin', 'Configure accounts');
+

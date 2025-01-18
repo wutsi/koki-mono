@@ -40,3 +40,11 @@ CREATE TABLE T_TAX(
 
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
+
+INSERT INTO T_MODULE(id, name, title, home_url, tab_url, settings_url)
+    VALUES (60, 'tax', 'Taxes', 'taxes', '/taxes/tab', '/settings/taxes');
+
+INSERT INTO T_PERMISSION(id, module_fk, name, description)
+    VALUES (600, 60, 'tax',           'Manage taxes'),
+           (601, 60, 'tax:configure', 'Configure taxes');
+

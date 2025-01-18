@@ -4,7 +4,7 @@ import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.portal.service.CurrentUserHolder
+import com.wutsi.koki.portal.user.service.CurrentUserHolder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping

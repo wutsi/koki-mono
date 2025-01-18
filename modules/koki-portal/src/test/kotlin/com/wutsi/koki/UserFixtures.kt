@@ -11,7 +11,7 @@ object UserFixtures {
         id = USER_ID,
         email = "ray.sponsible@gmail.com",
         displayName = "Ray Sponsible",
-        roles = listOf(roles[0])
+        roleIds = listOf(roles[0].id)
     )
 
     val users = listOf(

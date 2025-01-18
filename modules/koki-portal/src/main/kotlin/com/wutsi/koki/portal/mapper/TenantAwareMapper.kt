@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.mapper
 
-import com.wutsi.koki.portal.service.CurrentTenantHolder
+import com.wutsi.koki.portal.tenant.service.CurrentTenantHolder
 import org.springframework.beans.factory.annotation.Autowired
 import java.text.DateFormat
 import java.text.SimpleDateFormat

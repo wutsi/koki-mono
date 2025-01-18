@@ -26,3 +26,11 @@ CREATE TABLE T_EMAIL_OWNER(
   UNIQUE(email_fk, owner_fk, owner_type),
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
+
+INSERT INTO T_MODULE(id, name, title, home_url, tab_url, settings_url)
+    VALUES (50, 'email', 'Email', null, '/emails/tab', null);
+
+INSERT INTO T_PERMISSION(id, module_fk, name, description)
+    VALUES (500, 50, 'email',       'Access emails'),
+           (501, 50, 'email:send',  'Send Emails'),
+           (502, 50, 'email:admin', 'Configure Emails');

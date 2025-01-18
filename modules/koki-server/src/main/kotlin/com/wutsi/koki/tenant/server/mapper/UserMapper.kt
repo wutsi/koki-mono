@@ -14,7 +14,7 @@ class UserMapper(private val roleMapper: RoleMapper) {
         status = entity.status,
         createdAt = entity.createdAt,
         modifiedAt = entity.modifiedAt,
-        roles = entity.roles.map { role -> roleMapper.toRole(role) }
+        roleIds = entity.roles.mapNotNull { role -> role.id }
     )
 
     fun toUserSummary(entity: UserEntity) = UserSummary(

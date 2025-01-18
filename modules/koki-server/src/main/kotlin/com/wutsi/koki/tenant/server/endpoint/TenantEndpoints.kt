@@ -25,8 +25,9 @@ class TenantEndpoints(
 
     @GetMapping
     fun search(): SearchTenantResponse {
+        val tenants = service.all()
         return SearchTenantResponse(
-            tenants = service.all().map { tenant -> mapper.toTenant(tenant) }
+            tenants = tenants.map { tenant -> mapper.toTenant(tenant) }
         )
     }
 }

@@ -24,16 +24,10 @@ class GetUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals("Ray Sponsible", user.displayName)
         assertEquals("ray.sponsible@gmail.com", user.email)
 
-        assertEquals(3, user.roles.size)
-
-        assertEquals(10, user.roles[0].id)
-        assertEquals("admin", user.roles[0].name)
-
-        assertEquals(11, user.roles[1].id)
-        assertEquals("writer", user.roles[1].name)
-
-        assertEquals(12, user.roles[2].id)
-        assertEquals("reader", user.roles[2].name)
+        assertEquals(3, user.roleIds.size)
+        assertEquals(10, user.roleIds[0])
+        assertEquals(11, user.roleIds[1])
+        assertEquals(12, user.roleIds[2])
     }
 
     @Test

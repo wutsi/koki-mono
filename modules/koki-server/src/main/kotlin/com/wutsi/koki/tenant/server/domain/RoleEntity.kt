@@ -1,11 +1,16 @@
 package com.wutsi.koki.tenant.server.domain
 
+import com.wutsi.koki.module.server.domain.PermissionEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.JoinTable
+import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
+import org.hibernate.annotations.BatchSize
 import java.util.Date
 
 @Entity
@@ -24,6 +29,15 @@ data class RoleEntity(
     var description: String? = null,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
+
+    @BatchSize(20)
+    @ManyToMany
+    @JoinTable(
+        name = "T_ROLE_PERMISSION",
+        joinColumns = arrayOf(JoinColumn(name = "role_fk")),
+        inverseJoinColumns = arrayOf(JoinColumn(name = "permission_fk")),
+    )
+    val permissions: MutableList<PermissionEntity> = mutableListOf(),
 ) {
     companion object {
         const val CSV_HEADER_NAME = "name"

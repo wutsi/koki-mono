@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service
 
 @Service
 class UserMapper {
-    fun toUserModel(entity: User): UserModel {
+    fun toUserModel(entity: User, roles: List<RoleModel>): UserModel {
         return UserModel(
             id = entity.id,
             email = entity.email,
             displayName = entity.displayName,
-            roles = entity.roles.map { role -> toRoleModel(role) },
             status = entity.status,
+            roles = roles,
         )
     }
 

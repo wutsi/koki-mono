@@ -6,6 +6,7 @@ import com.wutsi.koki.portal.model.ActivityInstanceModel
 import com.wutsi.koki.portal.model.WorkflowInstanceModel
 import com.wutsi.koki.portal.page.settings.workflow.StartWorkflowForm
 import com.wutsi.koki.portal.user.model.RoleModel
+import com.wutsi.koki.portal.user.service.CurrentUserHolder
 import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.sdk.KokiWorkflowInstances
 import com.wutsi.koki.workflow.dto.Activity

@@ -1,12 +1,12 @@
-package com.wutsi.koki.portal.servlet
+package com.wutsi.koki.portal.tenant.servlet
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.portal.service.CurrentTenantHolder
-import com.wutsi.koki.tenant.dto.TenantModel
+import com.wutsi.koki.portal.tenant.model.TenantModel
+import com.wutsi.koki.portal.tenant.service.CurrentTenantHolder
 import com.wutsi.koki.tenant.dto.TenantStatus
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
