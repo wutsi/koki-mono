@@ -13,20 +13,20 @@ import kotlin.test.Test
 class SettingsRoleControllerTest : AbstractPageControllerTest() {
     @Test
     fun show() {
-        navigateTo("/settings/security/roles/${role.id}")
+        navigateTo("/settings/roles/${role.id}")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE)
     }
 
     @Test
     fun back() {
-        navigateTo("/settings/security/roles/${role.id}")
+        navigateTo("/settings/roles/${role.id}")
         click(".btn-back")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_LIST)
     }
 
     @Test
     fun edit() {
-        navigateTo("/settings/security/roles/${role.id}")
+        navigateTo("/settings/roles/${role.id}")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE)
 
         click(".btn-edit")
@@ -35,7 +35,7 @@ class SettingsRoleControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun permission() {
-        navigateTo("/settings/security/roles/${role.id}")
+        navigateTo("/settings/roles/${role.id}")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE)
 
         click(".btn-permission")
@@ -44,14 +44,14 @@ class SettingsRoleControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun delete() {
-        navigateTo("/settings/security/roles/${role.id}")
+        navigateTo("/settings/roles/${role.id}")
         click(".btn-delete")
 
         val alert = driver.switchTo().alert()
         alert.accept()
         driver.switchTo().parentFrame()
 
-        verify(kokiUsers).deleteRole(role.id)
+        verify(rest).delete("$sdkBaseUrl/v1/roles/${role.id}")
 
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_LIST)
         assertElementVisible("#role-toast")
@@ -60,9 +60,9 @@ class SettingsRoleControllerTest : AbstractPageControllerTest() {
     @Test
     fun `delete failed`() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.AUTHORIZATION_PERMISSION_DENIED)
-        doThrow(ex).whenever(kokiUsers).deleteRole(any())
+        doThrow(ex).whenever(rest).delete(any<String>())
 
-        navigateTo("/settings/security/roles/${role.id}")
+        navigateTo("/settings/roles/${role.id}")
         click(".btn-delete")
 
         val alert = driver.switchTo().alert()

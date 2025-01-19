@@ -1,9 +1,9 @@
 package com.wutsi.koki.portal.email.page.settings.decorator
 
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
@@ -14,6 +14,8 @@ import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
 import org.junit.jupiter.api.BeforeEach
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import kotlin.test.Test
 
 class SettingsEmailDecoratorEditControllerTest : AbstractPageControllerTest() {
@@ -57,10 +59,17 @@ class SettingsEmailDecoratorEditControllerTest : AbstractPageControllerTest() {
         super.setUp()
 
         doReturn(
-            SearchConfigurationResponse(
-                config.map { cfg -> Configuration(name = cfg.key, value = cfg.value) }
+            ResponseEntity(
+                SearchConfigurationResponse(
+                    config.map { cfg -> Configuration(name = cfg.key, value = cfg.value) }
+                ),
+                HttpStatus.OK,
             )
-        ).whenever(kokiConfiguration).configurations(anyOrNull(), anyOrNull())
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchConfigurationResponse::class.java)
+            )
     }
 
     @Test
@@ -71,10 +80,12 @@ class SettingsEmailDecoratorEditControllerTest : AbstractPageControllerTest() {
         inputCodeMiror(code)
         click("button[type=submit]", 1000)
 
-        verify(kokiConfiguration).save(
+        verify(rest).postForEntity(
+            "$sdkBaseUrl/v1/configurations",
             SaveConfigurationRequest(
                 values = mapOf(ConfigurationName.EMAIL_DECORATOR to code)
-            )
+            ),
+            Any::class.java
         )
 
         assertCurrentPageIs(PageName.EMAIL_SETTINGS_EMAIL_DECORATOR)
@@ -84,7 +95,11 @@ class SettingsEmailDecoratorEditControllerTest : AbstractPageControllerTest() {
     @Test
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.AUTHORIZATION_PERMISSION_DENIED)
-        doThrow(ex).whenever(kokiConfiguration).save(any())
+        doThrow(ex).whenever(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/configurations"),
+            any<SaveConfigurationRequest>(),
+            eq(Any::class.java)
+        )
 
         navigateTo("/settings/email/decorator/edit")
         assertCurrentPageIs(PageName.EMAIL_SETTINGS_EMAIL_DECORATOR_EDIT)

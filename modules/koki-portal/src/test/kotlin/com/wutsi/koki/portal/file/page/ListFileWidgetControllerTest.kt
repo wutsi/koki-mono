@@ -41,6 +41,6 @@ class ListFileWidgetControllerTest : AbstractPageControllerTest() {
         driver.switchTo().parentFrame()
 
         Thread.sleep(1000)
-        verify(kokiFiles).delete(id)
+        verify(rest).delete("$sdkBaseUrl/v1/files/$id")
     }
 }

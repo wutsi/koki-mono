@@ -12,9 +12,9 @@
         <div th:replace="~{__components/settings :: settings-menu('security')}"></div>
     </div>
     <div class="settings-content padding">
-        <div th:replace="~{__components/settings :: settings-title('Roles', '/settings/security/roles')}"></div>
+        <div th:replace="~{__components/settings :: settings-title('Roles', '/settings/roles')}"></div>
 
-        <form class="form" method="post" th:action="@{'/settings/security/roles/' + ${role.id} + '/update'}"
+        <form class="form" method="post" th:action="@{'/settings/roles/' + ${role.id} + '/update'}"
               th:object="${form}">
             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
             <table class="table">

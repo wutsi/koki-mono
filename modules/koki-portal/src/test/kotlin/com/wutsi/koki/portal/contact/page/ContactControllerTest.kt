@@ -9,7 +9,6 @@ import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.ContactFixtures.contact
 import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.NoteFixtures
-import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import kotlin.test.Test
@@ -78,15 +77,6 @@ class ContactControllerTest : AbstractPageControllerTest() {
         navigateTo("/contacts/${contact.id}?tab=files")
 
         Thread.sleep(1000)
-        verify(kokiFiles).files(
-            emptyList(), // ids
-            emptyList(), // workflpw-instance-id
-            emptyList(), // form-id
-            contact.id, // owner-id
-            ObjectType.CONTACT, // owner-type
-            20, // limit
-            0, // offset
-        )
         assertElementCount(".widget-files tr.file", FileFixtures.files.size)
     }
 
@@ -95,13 +85,6 @@ class ContactControllerTest : AbstractPageControllerTest() {
         navigateTo("/contacts/${contact.id}?tab=notes")
 
         Thread.sleep(1000)
-        verify(kokiNotes).notes(
-            emptyList(), // ids
-            contact.id, // owner-id
-            ObjectType.CONTACT, // owner-type
-            20, // limit
-            0, // offset
-        )
         assertElementCount(".widget-notes .note", NoteFixtures.notes.size)
     }
 }

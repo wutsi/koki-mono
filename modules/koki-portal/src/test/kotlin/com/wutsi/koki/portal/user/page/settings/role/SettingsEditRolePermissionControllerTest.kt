@@ -16,14 +16,18 @@ import kotlin.test.Test
 class SettingsEditRolePermissionControllerTest : AbstractPageControllerTest() {
     @Test
     fun update() {
-        navigateTo("/settings/security/roles/${role.id}/permissions")
+        navigateTo("/settings/roles/${role.id}/permissions")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_PERMISSION)
 
         scrollToBottom()
         click("button[type=submit]", 1000)
 
         val request = argumentCaptor<SetPermissionListRequest>()
-        verify(kokiUsers).setRolePermissions(eq(role.id), request.capture())
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/roles/${role.id}/permissions"),
+            request.capture(),
+            eq(Any::class.java),
+        )
 
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE)
         assertElementVisible("#role-toast")
@@ -32,9 +36,13 @@ class SettingsEditRolePermissionControllerTest : AbstractPageControllerTest() {
     @Test
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.AUTHORIZATION_PERMISSION_DENIED)
-        doThrow(ex).whenever(kokiUsers).setRolePermissions(any(), any())
+        doThrow(ex).whenever(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/roles/${role.id}/permissions"),
+            any<SetPermissionListRequest>(),
+            eq(Any::class.java),
+        )
 
-        navigateTo("/settings/security/roles/${role.id}/permissions")
+        navigateTo("/settings/roles/${role.id}/permissions")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_PERMISSION)
 
         scrollToBottom()
@@ -46,7 +54,7 @@ class SettingsEditRolePermissionControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun back() {
-        navigateTo("/settings/security/roles/${role.id}/permissions")
+        navigateTo("/settings/roles/${role.id}/permissions")
         click(".btn-back")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_LIST)
     }

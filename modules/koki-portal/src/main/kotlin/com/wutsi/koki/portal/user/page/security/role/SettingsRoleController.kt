@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-@RequestMapping("/settings/security/roles")
+@RequestMapping("/settings/roles")
 class SettingsRoleController(
     private val service: RoleService,
     private val httpRequest: HttpServletRequest,
@@ -51,9 +51,9 @@ class SettingsRoleController(
             updated != null &&
             referer != null &&
             (
-                referer.endsWith("/settings/security/roles/$updated/edit") ||
-                referer.endsWith("/settings/security/roles/$updated/permissions")
-            )
+                referer.endsWith("/settings/roles/$updated/edit") ||
+                    referer.endsWith("/settings/roles/$updated/permissions")
+                )
         ) {
             model.addAttribute("toast", "Updated")
         }
@@ -63,7 +63,7 @@ class SettingsRoleController(
     fun update(@PathVariable id: Long, model: Model): String {
         try {
             service.delete(id)
-            return "redirect:/settings/security/roles?deleted=$id"
+            return "redirect:/settings/roles?deleted=$id"
         } catch (ex: HttpClientErrorException) {
             val response = toErrorResponse(ex)
             model.addAttribute("error", response.error.code)

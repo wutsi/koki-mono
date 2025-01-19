@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-@RequestMapping("/settings/security/roles")
+@RequestMapping("/settings/roles")
 class SettingsEditRoleController(
     private val service: RoleService
 ) : AbstractPageController() {
@@ -54,7 +54,7 @@ class SettingsEditRoleController(
     ): String {
         try {
             service.update(id, form)
-            return "redirect:/settings/security/roles/$id?updated=$id"
+            return "redirect:/settings/roles/$id?updated=$id"
         } catch (ex: HttpClientErrorException) {
             val response = toErrorResponse(ex)
             model.addAttribute("error", response.error.code)

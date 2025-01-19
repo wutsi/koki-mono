@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AccountFixtures
 import com.wutsi.koki.ContactFixtures
@@ -45,6 +46,7 @@ import com.wutsi.koki.contact.dto.SearchContactResponse
 import com.wutsi.koki.contact.dto.SearchContactTypeResponse
 import com.wutsi.koki.email.dto.GetEmailResponse
 import com.wutsi.koki.email.dto.SearchEmailResponse
+import com.wutsi.koki.email.dto.SendEmailRequest
 import com.wutsi.koki.email.dto.SendEmailResponse
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
@@ -60,6 +62,7 @@ import com.wutsi.koki.message.dto.GetMessageResponse
 import com.wutsi.koki.message.dto.SearchMessageResponse
 import com.wutsi.koki.module.dto.SearchModuleResponse
 import com.wutsi.koki.module.dto.SearchPermissionResponse
+import com.wutsi.koki.note.dto.CreateNoteRequest
 import com.wutsi.koki.note.dto.CreateNoteResponse
 import com.wutsi.koki.note.dto.GetNoteResponse
 import com.wutsi.koki.note.dto.SearchNoteResponse
@@ -69,21 +72,13 @@ import com.wutsi.koki.script.dto.GetScriptResponse
 import com.wutsi.koki.script.dto.RunScriptResponse
 import com.wutsi.koki.script.dto.SearchScriptResponse
 import com.wutsi.koki.sdk.KokiAccounts
-import com.wutsi.koki.sdk.KokiAuthentication
-import com.wutsi.koki.sdk.KokiConfiguration
 import com.wutsi.koki.sdk.KokiContacts
-import com.wutsi.koki.sdk.KokiEmails
-import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiLogs
 import com.wutsi.koki.sdk.KokiMessages
-import com.wutsi.koki.sdk.KokiModules
-import com.wutsi.koki.sdk.KokiNotes
 import com.wutsi.koki.sdk.KokiScripts
 import com.wutsi.koki.sdk.KokiServices
 import com.wutsi.koki.sdk.KokiTaxes
-import com.wutsi.koki.sdk.KokiTenants
-import com.wutsi.koki.sdk.KokiUsers
 import com.wutsi.koki.sdk.KokiWorkflowInstances
 import com.wutsi.koki.sdk.KokiWorkflows
 import com.wutsi.koki.security.dto.JWTDecoder
@@ -96,6 +91,7 @@ import com.wutsi.koki.tax.dto.GetTaxResponse
 import com.wutsi.koki.tax.dto.GetTaxTypeResponse
 import com.wutsi.koki.tax.dto.SearchTaxResponse
 import com.wutsi.koki.tax.dto.SearchTaxTypeResponse
+import com.wutsi.koki.tenant.dto.CreateRoleRequest
 import com.wutsi.koki.tenant.dto.CreateRoleResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
@@ -126,12 +122,17 @@ import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.Select
 import org.openqa.selenium.support.ui.WebDriverWait
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
+import org.springframework.http.ResponseEntity
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestTemplate
 import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
 import java.time.Duration
@@ -150,25 +151,23 @@ abstract class AbstractPageControllerTest {
     @LocalServerPort
     protected val port: Int = 0
 
+    @Value("\${koki.sdk.base-url}")
+    protected lateinit var sdkBaseUrl: String
+
     protected lateinit var driver: WebDriver
+
+    @MockitoBean
+    protected lateinit var rest: RestTemplate
+
+    @MockitoBean
+    @Qualifier("RestWithoutTenantHeader")
+    protected lateinit var restWithoutTenantHeader: RestTemplate
 
     @MockitoBean
     protected lateinit var kokiAccounts: KokiAccounts
 
     @MockitoBean
-    protected lateinit var kokiAuthentication: KokiAuthentication
-
-    @MockitoBean
-    protected lateinit var kokiConfiguration: KokiConfiguration
-
-    @MockitoBean
     protected lateinit var kokiContacts: KokiContacts
-
-    @MockitoBean
-    protected lateinit var kokiEmails: KokiEmails
-
-    @MockitoBean
-    protected lateinit var kokiFiles: KokiFiles
 
     @MockitoBean
     protected lateinit var kokiForms: KokiForms
@@ -180,12 +179,6 @@ abstract class AbstractPageControllerTest {
     protected lateinit var kokiMessages: KokiMessages
 
     @MockitoBean
-    protected lateinit var kokiModules: KokiModules
-
-    @MockitoBean
-    protected lateinit var kokiNotes: KokiNotes
-
-    @MockitoBean
     protected lateinit var kokiScripts: KokiScripts
 
     @MockitoBean
@@ -193,12 +186,6 @@ abstract class AbstractPageControllerTest {
 
     @MockitoBean
     protected lateinit var kokiTaxes: KokiTaxes
-
-    @MockitoBean
-    protected lateinit var kokiTenants: KokiTenants
-
-    @MockitoBean
-    protected lateinit var kokiUsers: KokiUsers
 
     @MockitoBean
     protected lateinit var kokiWorkflows: KokiWorkflows
@@ -259,11 +246,12 @@ abstract class AbstractPageControllerTest {
     private fun setupDefaultApiResponses() {
         setupModuleModule()
         setupTenantModule()
-        setupAccountModule()
-        setupContactModule()
         setupFileModule()
         setupNoteModule()
         setupEmailModule()
+
+        setupAccountModule()
+        setupContactModule()
         setupTaxModule()
 
         setupForms()
@@ -337,40 +325,101 @@ abstract class AbstractPageControllerTest {
     }
 
     protected fun setupModuleModule() {
-        doReturn(SearchModuleResponse(ModuleFixtures.modules)).whenever(kokiModules).modules()
+        // Modules
+        doReturn(
+            ResponseEntity(
+                SearchModuleResponse(ModuleFixtures.modules),
+                HttpStatus.OK,
+            )
+        ).whenever(restWithoutTenantHeader)
+            .getForEntity(
+                any<String>(),
+                eq(SearchModuleResponse::class.java)
+            )
 
-        doReturn(SearchPermissionResponse(ModuleFixtures.permissions)).whenever(kokiModules)
-            .permissions(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
+        // Permissions
+        doReturn(
+            ResponseEntity(
+                SearchPermissionResponse(ModuleFixtures.permissions),
+                HttpStatus.OK,
+            )
+        ).whenever(restWithoutTenantHeader)
+            .getForEntity(
+                any<String>(),
+                eq(SearchPermissionResponse::class.java)
             )
     }
 
     protected fun setupTenantModule() {
         // Tenant
-        doReturn(SearchTenantResponse(TenantFixtures.tenants)).whenever(kokiTenants)
-            .tenants()
+        doReturn(
+            ResponseEntity(
+                SearchTenantResponse(TenantFixtures.tenants),
+                HttpStatus.OK,
+            )
+        ).whenever(restWithoutTenantHeader)
+            .getForEntity(
+                any<String>(),
+                eq(SearchTenantResponse::class.java)
+            )
 
         // Configuration
-        doReturn(SearchConfigurationResponse()).whenever(kokiConfiguration)
-            .configurations(anyOrNull(), anyOrNull())
+        doReturn(
+            ResponseEntity(
+                SearchConfigurationResponse(),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchConfigurationResponse::class.java)
+            )
 
         // Roles
-        doReturn(SearchRoleResponse(RoleFixtures.roles)).whenever(kokiUsers)
-            .roles(anyOrNull(), anyOrNull(), anyOrNull())
-        doReturn(CreateRoleResponse(1111L)).whenever(kokiUsers).createRole(any())
+        doReturn(
+            ResponseEntity(
+                SearchRoleResponse(RoleFixtures.roles),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchRoleResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreateRoleResponse(111L),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateRoleRequest>(),
+                eq(CreateRoleResponse::class.java)
+            )
 
         // Users
-        doReturn(GetUserResponse(UserFixtures.user)).whenever(kokiUsers).user(USER_ID)
-        doReturn(SearchUserResponse(UserFixtures.users)).whenever(kokiUsers)
-            .users(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
+        doReturn(
+            ResponseEntity(
+                GetUserResponse(UserFixtures.user),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetUserResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                SearchUserResponse(UserFixtures.users),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchUserResponse::class.java)
             )
 
         // Access Token
@@ -382,50 +431,99 @@ abstract class AbstractPageControllerTest {
     }
 
     private fun setupFileModule() {
-        doReturn(SearchFileResponse(FileFixtures.files)).whenever(kokiFiles)
-            .files(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
+        doReturn(
+            ResponseEntity(
+                SearchFileResponse(FileFixtures.files),
+                HttpStatus.OK,
             )
-        doReturn(GetFileResponse(FileFixtures.file)).whenever(kokiFiles).file(any())
-        doReturn("/v1/files/upload").whenever(kokiFiles)
-            .uploadUrl(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchFileResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetFileResponse(FileFixtures.file),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetFileResponse::class.java)
             )
     }
 
     private fun setupEmailModule() {
-        doReturn(SearchEmailResponse(EmailFixtures.emails)).whenever(kokiEmails)
-            .emails(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
+        doReturn(
+            ResponseEntity(
+                SearchEmailResponse(EmailFixtures.emails),
+                HttpStatus.OK,
             )
-        doReturn(GetEmailResponse(EmailFixtures.email)).whenever(kokiEmails).email(any())
-        doReturn(SendEmailResponse(EmailFixtures.NEW_EMAIL_ID)).whenever(kokiEmails).send(any())
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchEmailResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetEmailResponse(EmailFixtures.email),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetEmailResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                SendEmailResponse(EmailFixtures.NEW_EMAIL_ID),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<SendEmailRequest>(),
+                eq(SendEmailResponse::class.java)
+            )
     }
 
     private fun setupNoteModule() {
-        doReturn(SearchNoteResponse(NoteFixtures.notes)).whenever(kokiNotes)
-            .notes(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
+        doReturn(
+            ResponseEntity(
+                SearchNoteResponse(NoteFixtures.notes),
+                HttpStatus.OK,
             )
-        doReturn(GetNoteResponse(NoteFixtures.note)).whenever(kokiNotes).note(any())
-        doReturn(CreateNoteResponse(NoteFixtures.NEW_NOTE_ID)).whenever(kokiNotes).create(any())
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchNoteResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetNoteResponse(NoteFixtures.note),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetNoteResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreateNoteResponse(NoteFixtures.NEW_NOTE_ID),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateNoteRequest>(),
+                eq(CreateNoteResponse::class.java)
+            )
     }
 
     private fun setupTaxModule() {

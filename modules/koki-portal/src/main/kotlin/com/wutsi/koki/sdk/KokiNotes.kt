@@ -23,7 +23,7 @@ class KokiNotes(
 
     fun update(id: Long, request: UpdateNoteRequest) {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
-        rest.postForEntity(url, request, CreateNoteResponse::class.java)
+        rest.postForEntity(url, request, Any::class.java)
     }
 
     fun delete(id: Long) {

@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.email.page.widget
 
 import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.AccountFixtures.account
@@ -9,6 +10,7 @@ import com.wutsi.koki.EmailFixtures.emails
 import com.wutsi.koki.TaxFixtures.tax
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.email.dto.SendEmailRequest
+import com.wutsi.koki.email.dto.SendEmailResponse
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
@@ -45,7 +47,12 @@ class ListEmailWidgetControllerTest : AbstractPageControllerTest() {
         click("#btn-email-submit", 1000)
 
         val request = argumentCaptor<SendEmailRequest>()
-        verify(kokiEmails).send(request.capture())
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/emails"),
+            request.capture(),
+            eq(SendEmailResponse::class.java),
+        )
+
         assertEquals("Yo man", request.firstValue.subject)
         assertEquals("<p>Hello man</p>", request.firstValue.body)
         assertEquals(tax.id, request.firstValue.owner?.id)
@@ -70,7 +77,12 @@ class ListEmailWidgetControllerTest : AbstractPageControllerTest() {
         click("#btn-email-submit", 1000)
 
         val request = argumentCaptor<SendEmailRequest>()
-        verify(kokiEmails).send(request.capture())
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/emails"),
+            request.capture(),
+            eq(SendEmailResponse::class.java),
+        )
+
         assertEquals("Yo man", request.firstValue.subject)
         assertEquals("<p>Hello man</p>", request.firstValue.body)
         assertEquals(tax.id, request.firstValue.owner?.id)
