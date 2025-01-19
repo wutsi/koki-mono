@@ -353,6 +353,8 @@ tr.activity-running {
 .settings-content ul li.menu-item a {
     color: black;
     text-decoration: none;
+    display: block;
+    width: 100%;
 }
 
 .settings-sidebar ul li.menu-item h3,

@@ -12,29 +12,32 @@
         <div th:replace="~{__components/settings :: settings-menu('security')}"></div>
     </div>
     <div class="settings-content padding">
-        <div th:replace="~{__components/settings :: settings-title('Roles', '/settings/roles')}"></div>
+        <div th:replace="~{__components/settings :: settings-title('Users', '/settings/users')}"></div>
 
-        <form class="form" method="post" th:action="@{'/settings/roles/' + ${role.id} + '/permissions'}"
+        <form class="form" method="post" th:action="@{'/settings/users/' + ${user.id} + '/roles'}"
               th:object="${form}">
             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
             <table class="table">
                 <tr>
-                    <td><b>Title</b></td>
-                    <td th:text="${role.title}">TITLE</td>
+                    <td><b>Name</b></td>
+                    <td th:text="${user.displayName}">TITLE</td>
+                </tr>
+                <tr>
+                    <td><b>Email</b></td>
+                    <td th:text="${user.email}">EMAIL</td>
                 </tr>
                 <tr>
                     <td><b>Permissions</b></td>
                     <td>
                         <table class="table table-striped">
-                            <tr th:each="permission : ${tenant.permissions}">
+                            <tr th:each="role : ${roles}">
                                 <td width="1%">
-                                    <input name="permissionId" th:checked="${role.hasPermissions(permission.id)}"
-                                           th:value="${permission.id}"
+                                    <input name="roleId" th:checked="${user.hasRole(role.id)}"
+                                           th:value="${role.id}"
                                            type="checkbox"
                                     />
                                 </td>
-                                <td th:text="${permission.name}">NAME</td>
-                                <td th:text="${permission.description}">DESCRIPTION</td>
+                                <td th:text="${role.name}">NAME</td>
                             </tr>
                         </table>
                     </td>

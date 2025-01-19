@@ -2,6 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
+<div th:fragment="user-status(status)" th:if="${status}">
+    <span th:text="#{'user-status.' + ${status.name}}">STATUS</span>
+</div>
+
 <script th:fragment="user-selector(id, roleId)" th:inline="javascript">
     document.addEventListener("DOMContentLoaded", function () {
         const selector = /*[[${id}]]*/ '';

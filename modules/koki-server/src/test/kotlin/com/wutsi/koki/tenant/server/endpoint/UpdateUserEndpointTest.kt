@@ -5,6 +5,7 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
+import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.server.dao.UserRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,6 +25,7 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
         val request = UpdateUserRequest(
             email = "thomas.nkono@hotmail.com",
             displayName = "Thomas Nkono",
+            status = UserStatus.RETIRED,
         )
 
         val result = rest.postForEntity("/v1/users/11", request, Any::class.java)
@@ -34,6 +36,7 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
         val user = dao.findById(userId).get()
         assertEquals(request.displayName, user.displayName)
         assertEquals(request.email, user.email)
+        assertEquals(request.status, user.status)
     }
 
     @Test

@@ -18,4 +18,4 @@ INSERT INTO T_USER(id, tenant_fk, email, password, display_name, status)
 INSERT INTO T_USER_ROLE(user_fk, role_fk)
     VALUES (11, 10),
            (12, 10),
-           (22, 20);
+           (12, 11);

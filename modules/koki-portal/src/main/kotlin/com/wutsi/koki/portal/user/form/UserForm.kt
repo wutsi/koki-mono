@@ -1,8 +1,10 @@
 package com.wutsi.koki.portal.user.model
 
-data class RoleForm(
-    val name: String = "",
-    val title: String = "",
-    val description: String? = null,
-    val active: Boolean = true,
+import com.wutsi.koki.tenant.dto.UserStatus
+
+data class UserForm(
+    val displayName: String = "",
+    val email: String = "",
+    val status: UserStatus = UserStatus.ACTIVE,
+    val password: String = "",
 )

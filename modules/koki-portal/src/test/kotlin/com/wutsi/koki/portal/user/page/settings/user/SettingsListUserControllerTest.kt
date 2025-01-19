@@ -1,80 +1,80 @@
-package com.wutsi.koki.portal.user.page.settings.role
+package com.wutsi.koki.portal.user.page.settings.user
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
-import com.wutsi.koki.RoleFixtures.roles
+import com.wutsi.koki.UserFixtures.users
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.tenant.dto.Role
-import com.wutsi.koki.tenant.dto.SearchRoleResponse
+import com.wutsi.koki.tenant.dto.SearchUserResponse
+import com.wutsi.koki.tenant.dto.UserSummary
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import kotlin.test.Test
 
-class SettingsListRoleControllerTest : AbstractPageControllerTest() {
+class SettingsListUserControllerTest : AbstractPageControllerTest() {
     @Test
     fun list() {
-        navigateTo("/settings/roles")
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_LIST)
+        navigateTo("/settings/users")
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_LIST)
 
-        assertElementCount("tr.role", roles.size)
+        assertElementCount("tr.user", users.size)
     }
 
     @Test
     fun more() {
-        var entries = mutableListOf<Role>()
+        var entries = mutableListOf<UserSummary>()
         var seed = System.currentTimeMillis()
         repeat(20) {
-            entries.add(roles[0].copy(id = ++seed))
+            entries.add(users[0].copy(id = ++seed))
         }
         doReturn(
             ResponseEntity(
-                SearchRoleResponse(entries),
+                SearchUserResponse(entries),
                 HttpStatus.OK,
             )
         ).whenever(rest)
             .getForEntity(
                 any<String>(),
-                eq(SearchRoleResponse::class.java)
+                eq(SearchUserResponse::class.java)
             )
 
-        navigateTo("/settings/roles")
+        navigateTo("/settings/users")
 
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_LIST)
-        assertElementCount("tr.role", entries.size)
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_LIST)
+        assertElementCount("tr.user", entries.size)
 
         scrollToBottom()
-        click("#role-load-more a", 1000)
-        assertElementCount("tr.role", 2 * entries.size)
-    }
-
-    @Test
-    fun create() {
-        navigateTo("/settings/roles")
-        click(".btn-create")
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_CREATE)
+        click("#user-load-more a", 1000)
+        assertElementCount("tr.user", 2 * entries.size)
     }
 
     @Test
     fun back() {
-        navigateTo("/settings/roles")
+        navigateTo("/settings/users")
         click(".btn-back")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS)
     }
 
     @Test
+    fun create() {
+        navigateTo("/settings/users")
+        click(".btn-create")
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_CREATE)
+    }
+
+    @Test
     fun edit() {
-        navigateTo("/settings/roles")
+        navigateTo("/settings/users")
         click(".btn-edit")
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_EDIT)
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_EDIT)
     }
 
     @Test
     fun view() {
-        navigateTo("/settings/roles")
+        navigateTo("/settings/users")
         click(".btn-view")
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE)
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER)
     }
 }

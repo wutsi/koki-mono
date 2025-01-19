@@ -19,13 +19,13 @@
             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
             <table class="table">
                 <tr>
-                    <td width="20%"><b>Name</b></td>
+                    <td width="20%"><b>Name<span class="required">*</span></b></td>
                     <td>
                         <input maxlength="10" required th:field="*{name}"/>
                     </td>
                 </tr>
                 <tr>
-                    <td><b>Title</b></td>
+                    <td><b>Title<span class="required">*</span></b></td>
                     <td>
                         <input maxlength="100" required th:field="*{title}"/>
                     </td>

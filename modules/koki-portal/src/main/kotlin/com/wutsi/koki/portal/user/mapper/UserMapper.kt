@@ -12,21 +12,31 @@ import org.springframework.stereotype.Service
 @Service
 class UserMapper : TenantAwareMapper() {
     fun toUserModel(entity: User, roles: List<RoleModel>): UserModel {
+        val fmt = createDateTimeFormat()
         return UserModel(
             id = entity.id,
             email = entity.email,
             displayName = entity.displayName,
             status = entity.status,
+            createdAt = entity.createdAt,
+            createdAtText = fmt.format(entity.createdAt),
+            modifiedAt = entity.modifiedAt,
+            modifiedAtText = fmt.format(entity.modifiedAt),
             roles = roles,
         )
     }
 
     fun toUserModel(entity: UserSummary): UserModel {
+        val fmt = createDateTimeFormat()
         return UserModel(
             id = entity.id,
             email = entity.email,
             displayName = entity.displayName,
             status = entity.status,
+            createdAt = entity.createdAt,
+            createdAtText = fmt.format(entity.createdAt),
+            modifiedAt = entity.modifiedAt,
+            modifiedAtText = fmt.format(entity.modifiedAt),
         )
     }
 

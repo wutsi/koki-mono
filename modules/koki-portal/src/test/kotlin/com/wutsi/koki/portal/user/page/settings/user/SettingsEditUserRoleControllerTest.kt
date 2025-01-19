@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.user.page.settings.role
+package com.wutsi.koki.portal.role.page.settings.role
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
@@ -7,55 +7,55 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
-import com.wutsi.koki.RoleFixtures.role
+import com.wutsi.koki.UserFixtures.user
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.tenant.dto.SetPermissionListRequest
+import com.wutsi.koki.tenant.dto.SetRoleListRequest
 import kotlin.test.Test
 
-class SettingsEditRolePermissionControllerTest : AbstractPageControllerTest() {
+class SettingsEditUserRoleControllerTest : AbstractPageControllerTest() {
     @Test
     fun update() {
-        navigateTo("/settings/roles/${role.id}/permissions")
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_PERMISSION)
+        navigateTo("/settings/users/${user.id}/roles")
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_ROLE)
 
         scrollToBottom()
         click("button[type=submit]", 1000)
 
-        val request = argumentCaptor<SetPermissionListRequest>()
+        val request = argumentCaptor<SetRoleListRequest>()
         verify(rest).postForEntity(
-            eq("$sdkBaseUrl/v1/roles/${role.id}/permissions"),
+            eq("$sdkBaseUrl/v1/users/${user.id}/roles"),
             request.capture(),
             eq(Any::class.java),
         )
 
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE)
-        assertElementVisible("#role-toast")
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER)
+        assertElementVisible("#user-toast")
     }
 
     @Test
     fun error() {
-        val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.AUTHORIZATION_PERMISSION_DENIED)
+        val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.ROLE_IN_USE)
         doThrow(ex).whenever(rest).postForEntity(
-            eq("$sdkBaseUrl/v1/roles/${role.id}/permissions"),
-            any<SetPermissionListRequest>(),
+            eq("$sdkBaseUrl/v1/users/${user.id}/roles"),
+            any<SetRoleListRequest>(),
             eq(Any::class.java),
         )
 
-        navigateTo("/settings/roles/${role.id}/permissions")
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_PERMISSION)
+        navigateTo("/settings/users/${user.id}/roles")
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_ROLE)
 
         scrollToBottom()
         click("button[type=submit]", 1000)
 
         assertElementPresent(".alert-danger")
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_PERMISSION)
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_ROLE)
     }
 
     @Test
     fun back() {
-        navigateTo("/settings/roles/${role.id}/permissions")
+        navigateTo("/settings/users/${user.id}/roles")
         click(".btn-back")
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_LIST)
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_LIST)
     }
 }

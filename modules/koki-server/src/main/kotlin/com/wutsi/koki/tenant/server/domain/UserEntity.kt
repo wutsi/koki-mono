@@ -24,6 +24,12 @@ data class UserEntity(
     @Column(name = "tenant_fk")
     val tenantId: Long = -1,
 
+    @Column(name = "created_by_fk")
+    var createdById: Long? = null,
+
+    @Column(name = "modified_by_fk")
+    var modifiedById: Long? = null,
+
     var email: String = "",
     val password: String = "",
     val salt: String = "",
@@ -39,5 +45,5 @@ data class UserEntity(
         joinColumns = arrayOf(JoinColumn(name = "user_fk")),
         inverseJoinColumns = arrayOf(JoinColumn(name = "role_fk")),
     )
-    val roles: MutableList<RoleEntity> = mutableListOf(),
+    var roles: MutableList<RoleEntity> = mutableListOf(),
 )

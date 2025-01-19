@@ -1,56 +1,54 @@
 package com.wutsi.koki.tenant.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
-import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.tenant.dto.GrantRoleRequest
-import com.wutsi.koki.tenant.dto.SearchRoleResponse
+import com.wutsi.koki.tenant.dto.SetRoleListRequest
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
+import javax.sql.DataSource
 import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/GrantRoleEndpoint.sql"])
-class GrantRoleEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/SetUserRoleListEndpoint.sql"])
+class SetUserRoleListEndpointTest : TenantAwareEndpointTest() {
+    @Autowired
+    protected lateinit var ds: DataSource
+
+    private fun roleCount(userId: Long): Int {
+        val cnn = ds.connection
+        cnn.use {
+            val stmt = cnn.createStatement()
+            stmt.use {
+                val rs = stmt.executeQuery("SELECT count(*) FROM T_USER_ROLE where user_fk=$userId")
+                rs.use {
+                    if (rs.next()) {
+                        return rs.getInt(1)
+                    }
+                }
+            }
+        }
+        return -1
+    }
+
     @Test
-    fun grant() {
-        val request = GrantRoleRequest(roleId = 11L)
+    fun set() {
+        val request = SetRoleListRequest(roleIds = listOf(10L, 11L, 12L))
         val result = rest.postForEntity("/v1/users/11/roles", request, Any::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val roles = rest.getForEntity("/v1/users/11/roles", SearchRoleResponse::class.java).body!!.roles
-        assertEquals(2, roles.size)
+        assertEquals(3, roleCount(11))
     }
 
     @Test
-    fun `grant again`() {
-        val request = GrantRoleRequest(roleId = 10L)
+    fun reset() {
+        val request = SetRoleListRequest(roleIds = listOf())
         val result = rest.postForEntity("/v1/users/12/roles", request, Any::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val roles = rest.getForEntity("/v1/users/12/roles", SearchRoleResponse::class.java).body!!.roles
-        assertEquals(1, roles.size)
-    }
-
-    @Test
-    fun `grant role of another tenant to a user`() {
-        val request = GrantRoleRequest(roleId = 20L)
-        val result = rest.postForEntity("/v1/users/11/roles", request, ErrorResponse::class.java)
-
-        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.ROLE_NOT_FOUND, result.body!!.error.code)
-    }
-
-    @Test
-    fun `grant role to a user of another tenant`() {
-        val request = GrantRoleRequest(roleId = 10L)
-        val result = rest.postForEntity("/v1/users/22/roles", request, ErrorResponse::class.java)
-
-        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.USER_NOT_FOUND, result.body!!.error.code)
+        assertEquals(0, roleCount(12))
     }
 }

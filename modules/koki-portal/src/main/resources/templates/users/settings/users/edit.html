@@ -12,37 +12,34 @@
         <div th:replace="~{__components/settings :: settings-menu('security')}"></div>
     </div>
     <div class="settings-content padding">
-        <div th:replace="~{__components/settings :: settings-title('Roles', '/settings/roles')}"></div>
+        <div th:replace="~{__components/settings :: settings-title('Users', '/settings/users')}"></div>
 
-        <form class="form" method="post" th:action="@{'/settings/roles/' + ${role.id} + '/update'}"
+        <form class="form" method="post" th:action="@{'/settings/users/' + ${user.id} + '/update'}"
               th:object="${form}">
             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
             <table class="table">
                 <tr>
-                    <td width="20%"><b>Name</b></td>
+                    <td width="20%"><b>Name<span class="required">*</span></b></td>
                     <td>
-                        <input maxlength="10" required th:field="*{name}"/>
+                        <input maxlength="10" required th:field="*{displayName}"/>
                     </td>
                 </tr>
                 <tr>
-                    <td><b>Title</b></td>
+                    <td><b>Email<span class="required">*</span></b></td>
                     <td>
-                        <input maxlength="100" required th:field="*{title}"/>
+                        <input maxlength="100" required th:field="*{email}"/>
                     </td>
                 </tr>
                 <tr>
-                    <td><b>Active</b></td>
+                    <td><b>Status</b></td>
                     <td>
-                        <select th:field="*{active}">
-                            <option value="true">Yes</option>
-                            <option value="false">No</option>
+                        <select th:field="*{status}">
+                            <option th:each="value : ${user.status.values()}"
+                                    th:text="#{'user-status.' + ${value.name()}}"
+                                    th:value="${value.name()}">
+                                OPTION
+                            </option>
                         </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td><b>Description</b></td>
-                    <td>
-                        <textarea rows="3" th:field="*{description}"></textarea>
                     </td>
                 </tr>
             </table>

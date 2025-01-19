@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.user.page.settings.role
+package com.wutsi.koki.portal.user.page.settings.user
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
@@ -9,65 +9,63 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.tenant.dto.CreateRoleRequest
-import com.wutsi.koki.tenant.dto.CreateRoleResponse
+import com.wutsi.koki.tenant.dto.CreateUserRequest
+import com.wutsi.koki.tenant.dto.CreateUserResponse
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class SettingsCreateRoleControllerTest : AbstractPageControllerTest() {
+class SettingsCreateUserControllerTest : AbstractPageControllerTest() {
     @Test
     fun create() {
-        navigateTo("/settings/roles/create")
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_CREATE)
+        navigateTo("/settings/users/create")
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_CREATE)
 
-        input("#name", "ACCT")
-        input("#title", "Accountant")
-        input("#description", "This is an accountant that fill taxes")
-        select("#active", 1)
+        input("#displayName", "Yo Man")
+        input("#email", "yoman@gmail.com")
+        input("#password", "secret")
         click("button[type=submit]", 1000)
 
-        val request = argumentCaptor<CreateRoleRequest>()
+        val request = argumentCaptor<CreateUserRequest>()
         verify(rest).postForEntity(
-            eq("$sdkBaseUrl/v1/roles"),
+            eq("$sdkBaseUrl/v1/users"),
             request.capture(),
-            eq(CreateRoleResponse::class.java),
+            eq(CreateUserResponse::class.java),
         )
 
-        assertEquals("ACCT", request.firstValue.name)
-        assertEquals("Accountant", request.firstValue.title)
-        assertEquals("This is an accountant that fill taxes", request.firstValue.description)
-        assertEquals(false, request.firstValue.active)
+        assertEquals("Yo Man", request.firstValue.displayName)
+        assertEquals("yoman@gmail.com", request.firstValue.email)
+        assertEquals("secret", request.firstValue.password)
 
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_LIST)
-        assertElementVisible("#role-toast")
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_LIST)
+        assertElementVisible("#user-toast")
     }
 
     @Test
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.AUTHORIZATION_PERMISSION_DENIED)
         doThrow(ex).whenever(rest).postForEntity(
-            eq("$sdkBaseUrl/v1/roles"),
+            eq("$sdkBaseUrl/v1/users"),
             any(),
-            eq(CreateRoleResponse::class.java),
+            eq(CreateUserResponse::class.java),
         )
 
-        navigateTo("/settings/roles/create")
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_CREATE)
+        navigateTo("/settings/users/create")
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_CREATE)
 
-        input("#name", "ACCT")
-        input("#title", "Accountant")
-        input("#description", "This is an accountant that fill taxes")
-        select("#active", 1)
+        input("#displayName", "Yo Man")
+        input("#email", "yoman@gmail.com")
+        input("#password", "secret")
         click("button[type=submit]", 1000)
+
         assertElementPresent(".alert-danger")
 
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_CREATE)
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_CREATE)
     }
 
     @Test
     fun back() {
-        navigateTo("/settings/roles/create")
+        navigateTo("/settings/users/create")
         click(".btn-back")
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_LIST)
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_LIST)
     }
 }
