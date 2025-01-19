@@ -16,6 +16,7 @@
 
         <form class="form" method="post" th:action="@{'/settings/security/roles/' + ${role.id} + '/permissions'}"
               th:object="${form}">
+            <div th:replace="~{__components/layout :: error-message(${error})}"></div>
             <table class="table">
                 <tr>
                     <td><b>Title</b></td>

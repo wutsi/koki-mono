@@ -95,4 +95,11 @@ class SettingsEmailDecoratorEditControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.EMAIL_SETTINGS_EMAIL_DECORATOR_EDIT)
     }
+
+    @Test
+    fun back() {
+        navigateTo("/settings/email/decorator/edit")
+        click(".btn-back")
+        assertCurrentPageIs(PageName.EMAIL_SETTINGS)
+    }
 }

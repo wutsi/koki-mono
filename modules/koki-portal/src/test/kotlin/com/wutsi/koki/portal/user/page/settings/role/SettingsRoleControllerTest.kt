@@ -21,7 +21,7 @@ class SettingsRoleControllerTest : AbstractPageControllerTest() {
     fun back() {
         navigateTo("/settings/security/roles/${role.id}")
         click(".btn-back")
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE)
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_LIST)
     }
 
     @Test
