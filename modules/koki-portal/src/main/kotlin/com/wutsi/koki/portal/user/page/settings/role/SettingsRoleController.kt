@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.user.page.security
+package com.wutsi.koki.portal.user.page.settings.role
 
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
@@ -60,7 +60,7 @@ class SettingsRoleController(
     }
 
     @GetMapping("/{id}/delete")
-    fun update(@PathVariable id: Long, model: Model): String {
+    fun delete(@PathVariable id: Long, model: Model): String {
         try {
             service.delete(id)
             return "redirect:/settings/roles?deleted=$id"

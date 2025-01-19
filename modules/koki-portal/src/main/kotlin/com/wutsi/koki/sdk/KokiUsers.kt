@@ -2,11 +2,15 @@ package com.wutsi.koki.sdk
 
 import com.wutsi.koki.tenant.dto.CreateRoleRequest
 import com.wutsi.koki.tenant.dto.CreateRoleResponse
+import com.wutsi.koki.tenant.dto.CreateUserRequest
+import com.wutsi.koki.tenant.dto.CreateUserResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
 import com.wutsi.koki.tenant.dto.SetPermissionListRequest
+import com.wutsi.koki.tenant.dto.SetRoleListRequest
 import com.wutsi.koki.tenant.dto.UpdateRoleRequest
+import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import org.springframework.web.client.RestTemplate
 
 class KokiUsers(
@@ -43,6 +47,21 @@ class KokiUsers(
             )
         )
         return rest.getForEntity(url, SearchUserResponse::class.java).body!!
+    }
+
+    fun createUser(request: CreateUserRequest): CreateUserResponse {
+        val url = urlBuilder.build(USER_PATH_PREFIX)
+        return rest.postForEntity(url, request, CreateUserResponse::class.java).body
+    }
+
+    fun updateUser(id: Long, request: UpdateUserRequest) {
+        val url = urlBuilder.build("$USER_PATH_PREFIX/$id")
+        rest.postForEntity(url, request, Any::class.java)
+    }
+
+    fun setUserRoles(id: Long, request: SetRoleListRequest) {
+        val url = urlBuilder.build("$USER_PATH_PREFIX/$id/roles")
+        rest.postForEntity(url, request, Any::class.java)
     }
 
     fun roles(

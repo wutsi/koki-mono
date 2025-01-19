@@ -3,17 +3,13 @@ package com.wutsi.koki.tenant.server.endpoint
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
-import com.wutsi.koki.tenant.dto.GrantRoleRequest
-import com.wutsi.koki.tenant.dto.SearchRoleResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
+import com.wutsi.koki.tenant.dto.SetRoleListRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
-import com.wutsi.koki.tenant.server.mapper.RoleMapper
 import com.wutsi.koki.tenant.server.mapper.UserMapper
-import com.wutsi.koki.tenant.server.service.RoleService
 import com.wutsi.koki.tenant.server.service.UserService
 import jakarta.validation.Valid
-import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -28,8 +24,6 @@ import org.springframework.web.bind.annotation.RestController
 class UserEndpoints(
     private val service: UserService,
     private val mapper: UserMapper,
-    private val roleService: RoleService,
-    private val roleMapper: RoleMapper,
 ) {
     @GetMapping("/{id}")
     fun get(
@@ -86,34 +80,12 @@ class UserEndpoints(
         service.update(id, request, tenantId)
     }
 
-    @GetMapping("/{id}/roles")
+    @PostMapping("/{id}/roles")
     fun roles(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
-    ): SearchRoleResponse {
-        val user = service.get(id, tenantId)
-        return SearchRoleResponse(
-            roles = user.roles.map { role -> roleMapper.toRole(role) }
-        )
-    }
-
-    @PostMapping("/{id}/roles")
-    fun grant(
-        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-        @PathVariable id: Long,
-        @RequestBody @Valid request: GrantRoleRequest,
+        @RequestBody request: SetRoleListRequest
     ) {
-        val role = roleService.get(request.roleId, tenantId)
-        service.grant(id, role, tenantId)
-    }
-
-    @DeleteMapping("/{id}/roles/{role-id}")
-    fun revoke(
-        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-        @PathVariable id: Long,
-        @PathVariable("role-id") roleId: Long,
-    ) {
-        val role = roleService.get(roleId, tenantId)
-        service.revoke(id, role, tenantId)
+        val user = service.setRoles(id, request, tenantId)
     }
 }

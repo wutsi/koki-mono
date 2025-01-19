@@ -34,6 +34,8 @@ CREATE TABLE T_USER(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
   tenant_fk               BIGINT NOT NULL,
+  created_by_fk           BIGINT,
+  modified_by_fk          BIGINT,
 
   email                   VARCHAR(255) NOT NULL,
   password                VARCHAR(32) NOT NULL,

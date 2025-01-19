@@ -4,11 +4,12 @@ import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.dto.CreateUserRequest
+import com.wutsi.koki.tenant.dto.SetRoleListRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.server.dao.UserRepository
-import com.wutsi.koki.tenant.server.domain.RoleEntity
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Service
@@ -20,8 +21,8 @@ import java.util.UUID
 class UserService(
     private val dao: UserRepository,
     private val passwordService: PasswordService,
-    private val tenantService: TenantService,
     private val roleService: RoleService,
+    private val securityService: SecurityService,
     private val em: EntityManager
 ) {
     fun get(id: Long, tenantId: Long): UserEntity {
@@ -55,22 +56,27 @@ class UserService(
             )
         }
 
-        val tenant = tenantService.get(tenantId)
         val salt = UUID.randomUUID().toString()
+        val currentUserId = securityService.getCurrentUserIdOrNull()
         val user = dao.save(
             UserEntity(
+                tenantId = tenantId,
                 email = email,
                 displayName = request.displayName,
                 status = UserStatus.ACTIVE,
                 salt = salt,
                 password = passwordService.hash(request.password, salt),
-                tenantId = tenant.id!!,
+                createdById = currentUserId,
+                modifiedById = currentUserId,
             )
         )
 
-        request.roleIds.forEach { roleId ->
-            val role = roleService.get(roleId, tenantId)
-            grant(user, role)
+        if (request.roleIds.isNotEmpty()) {
+            setRoles(
+                id = user.id!!,
+                request = SetRoleListRequest(request.roleIds),
+                tenantId = tenantId,
+            )
         }
         return user
     }
@@ -90,32 +96,27 @@ class UserService(
         val user = get(userId, tenantId)
         user.email = email
         user.displayName = request.displayName
+        request.status?.let { status -> user.status = status }
+        user.modifiedById = securityService.getCurrentUserIdOrNull()
         user.modifiedAt = Date()
         dao.save(user)
     }
 
     @Transactional
-    fun grant(id: Long, role: RoleEntity, tenantId: Long): Boolean {
+    fun setRoles(id: Long, request: SetRoleListRequest, tenantId: Long) {
         val user = get(id, tenantId)
-        return grant(user, role)
-    }
-
-    fun grant(user: UserEntity, role: RoleEntity): Boolean {
-        if (!user.roles.contains(role)) {
-            user.roles.add(role)
-            return false
+        if (request.roleIds.isEmpty()) {
+            user.roles.clear()
+        } else {
+            user.roles = roleService.search(
+                tenantId = tenantId,
+                ids = request.roleIds,
+                limit = request.roleIds.size,
+            ).toMutableList()
         }
-        return false
-    }
-
-    @Transactional
-    fun revoke(id: Long, role: RoleEntity, tenantId: Long): Boolean {
-        val user = get(id, tenantId)
-        if (user.roles.contains(role)) {
-            user.roles.remove(role)
-            return true
-        }
-        return false
+        user.modifiedById = securityService.getCurrentUserIdOrNull()
+        user.modifiedAt = Date()
+        dao.save(user)
     }
 
     fun search(

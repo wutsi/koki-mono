@@ -1,11 +1,12 @@
-package com.wutsi.koki.portal.user.page.settings.role
+package com.wutsi.koki.portal.user.page.settings.user
 
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.portal.user.model.RoleModel
-import com.wutsi.koki.portal.user.model.RolePermissionForm
+import com.wutsi.koki.portal.user.model.UserModel
+import com.wutsi.koki.portal.user.model.UserRoleForm
 import com.wutsi.koki.portal.user.service.RoleService
+import com.wutsi.koki.portal.user.service.UserService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,47 +17,51 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-@RequestMapping("/settings/roles")
-class SettingsEditRolePermissionController(
-    private val service: RoleService,
+@RequestMapping("/settings/users")
+class SettingsEditUserRoleController(
+    private val service: UserService,
+    private val roleService: RoleService,
 ) : AbstractPageController() {
-    @GetMapping("/{id}/permissions")
+    @GetMapping("/{id}/roles")
     fun edit(@PathVariable id: Long, model: Model): String {
-        val role = service.role(id)
-        val form = RolePermissionForm(
-            permissionId = role.permissions.map { permission -> permission.id }
+        val user = service.user(id)
+        val form = UserRoleForm(
+            roleId = user.roles.map { role -> role.id }
         )
-        return edit(role, form, model)
+        return edit(user, form, model)
     }
 
-    private fun edit(role: RoleModel, form: RolePermissionForm, model: Model): String {
-        model.addAttribute("role", role)
+    private fun edit(user: UserModel, form: UserRoleForm, model: Model): String {
+        model.addAttribute("user", user)
         model.addAttribute("form", form)
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.SECURITY_SETTINGS_ROLE_PERMISSION,
-                title = role.title,
+                name = PageName.SECURITY_SETTINGS_USER_ROLE,
+                title = user.displayName,
             )
         )
-        return "users/settings/roles/permissions"
+
+        val roles = roleService.roles(limit = Integer.MAX_VALUE)
+        model.addAttribute("roles", roles)
+        return "users/settings/users/roles"
     }
 
-    @PostMapping("/{id}/permissions")
+    @PostMapping("/{id}/roles")
     fun update(
         @PathVariable id: Long,
-        @ModelAttribute form: RolePermissionForm,
+        @ModelAttribute form: UserRoleForm,
         model: Model
     ): String {
         try {
-            service.setPermissions(id, form)
-            return "redirect:/settings/roles/$id?updated=$id"
+            service.setRoles(id, form)
+            return "redirect:/settings/users/$id?updated=$id"
         } catch (ex: HttpClientErrorException) {
             val response = toErrorResponse(ex)
             model.addAttribute("error", response.error.code)
 
-            val role = service.role(id)
-            return edit(role, form, model)
+            val user = service.user(id)
+            return edit(user, form, model)
         }
     }
 }

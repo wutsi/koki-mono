@@ -93,6 +93,8 @@ import com.wutsi.koki.tax.dto.SearchTaxResponse
 import com.wutsi.koki.tax.dto.SearchTaxTypeResponse
 import com.wutsi.koki.tenant.dto.CreateRoleRequest
 import com.wutsi.koki.tenant.dto.CreateRoleResponse
+import com.wutsi.koki.tenant.dto.CreateUserRequest
+import com.wutsi.koki.tenant.dto.CreateUserResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
@@ -420,6 +422,18 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(SearchUserResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreateUserResponse(777L),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateUserRequest>(),
+                eq(CreateUserResponse::class.java)
             )
 
         // Access Token

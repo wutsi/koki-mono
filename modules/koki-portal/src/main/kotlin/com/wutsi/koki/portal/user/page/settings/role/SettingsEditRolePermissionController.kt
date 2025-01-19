@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.user.page.security
+package com.wutsi.koki.portal.user.page.settings.role
 
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController

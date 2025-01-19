@@ -3,8 +3,8 @@ package com.wutsi.koki.tenant.server.endpoint
 import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
+import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.server.dao.UserRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,6 +24,7 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
         val request = UpdateUserRequest(
             email = "thomas.nkono@hotmail.com",
             displayName = "Thomas Nkono",
+            status = UserStatus.RETIRED,
         )
 
         val result = rest.postForEntity("/v1/users/11", request, Any::class.java)
@@ -34,6 +35,7 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
         val user = dao.findById(userId).get()
         assertEquals(request.displayName, user.displayName)
         assertEquals(request.email, user.email)
+        assertEquals(request.status, user.status)
     }
 
     @Test
@@ -41,6 +43,7 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
         val request = UpdateUserRequest(
             email = "OMAM.MBIYICK@hotmail.com",
             displayName = "Omam Mbiyick",
+            status = UserStatus.RETIRED,
         )
 
         val result = rest.postForEntity("/v1/users/11", request, Any::class.java)
@@ -57,6 +60,7 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
         val request = UpdateUserRequest(
             email = "RAY.sponsible@gmail.com",
             displayName = "Duplicate",
+            status = UserStatus.RETIRED,
         )
 
         val result = rest.postForEntity("/v1/users/12", request, ErrorResponse::class.java)
@@ -70,6 +74,7 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
         val request = UpdateUserRequest(
             email = "foo.bar@gmail.com",
             displayName = "Foo Bar",
+            status = UserStatus.RETIRED,
         )
 
         val result = rest.postForEntity("/v1/users/99", request, ErrorResponse::class.java)
@@ -80,10 +85,10 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun `update user of another tenant`() {
-        val request = CreateUserRequest(
-            email = "roger.milla@gmail.com",
-            displayName = "Roger Milla",
-            password = "secret"
+        val request = UpdateUserRequest(
+            email = "foo.bar@gmail.com",
+            displayName = "Foo Bar",
+            status = UserStatus.RETIRED,
         )
 
         val result = rest.postForEntity("/v1/users/22", request, ErrorResponse::class.java)

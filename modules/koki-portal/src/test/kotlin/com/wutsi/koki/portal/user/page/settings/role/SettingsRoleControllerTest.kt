@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.user.page.settings
+package com.wutsi.koki.portal.user.page.settings.role
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doThrow

@@ -92,7 +92,7 @@
 
 ## Users
 
-- [] Manage users
+- [x] Manage users
 - [x] Manage roles
 
 ## Security
