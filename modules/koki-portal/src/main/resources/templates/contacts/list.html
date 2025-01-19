@@ -27,14 +27,14 @@
                                     type="button">
                                 <img height="24" src="/image/contact.png" width="24"/>
                                 <span th:if="${collection} == '1'">All Contacts</span>
-                                <span th:if="${collection} == '2'">Contacts I created</span>
+                                <span th:if="${collection} == '2'">Contacts I Created</span>
                             </button>
                             <ul class="dropdown-menu">
                                 <li th:if="${collection} != '1'">
                                     <a class="dropdown-item" href="/contacts?col=1">All Contacts</a>
                                 </li>
                                 <li th:if="${collection} != '2'">
-                                    <a class="dropdown-item" href="/contacts?col=2">Contacts I created</a>
+                                    <a class="dropdown-item" href="/contacts?col=2">Contacts I Created</a>
                                 </li>
                             </ul>
                         </div>

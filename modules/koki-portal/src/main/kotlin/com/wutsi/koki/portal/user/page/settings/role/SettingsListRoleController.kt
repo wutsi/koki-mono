@@ -54,7 +54,7 @@ class SettingsListRoleController(
                 val role = service.role(created)
                 model.addAttribute(
                     "toast",
-                    "The role <a href='/settings/roles/${role.id}'>${role.name}</a> has been created!"
+                    "The role <a href='/settings/roles/${role.id}'>${role.title}</a> has been created!"
                 )
             } catch (ex: Exception) {
                 // Ignore
@@ -68,7 +68,7 @@ class SettingsListRoleController(
                 val role = service.role(updated!!)
                 model.addAttribute(
                     "toast",
-                    "The role <a href='/settings/roles/${role.id}'>${role.name}</a> has been updated!"
+                    "The role <a href='/settings/roles/${role.id}'>${role.title}</a> has been updated!"
                 )
             } catch (ex: Exception) {
                 // Ignore

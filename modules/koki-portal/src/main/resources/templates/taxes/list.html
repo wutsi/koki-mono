@@ -28,9 +28,9 @@
                                 <img height="24" src="/image/tax.png" width="24"/>
                                 <span th:if="${collection} == '1'">All Tax Reports</span>
                                 <span th:if="${collection} == '2'">My Tax Reports</span>
-                                <span th:if="${collection} == '3'">My assigned Tax Reports</span>
-                                <span th:if="${collection} == '4'">My closed Tax Reports</span>
-                                <span th:if="${collection} == '5'">All closed Tax Reports</span>
+                                <span th:if="${collection} == '3'">My Assigned Tax Reports</span>
+                                <span th:if="${collection} == '4'">My Closed Tax Reports</span>
+                                <span th:if="${collection} == '5'">All Closed Tax Reports</span>
                             </button>
                             <ul class="dropdown-menu">
                                 <li th:if="${collection} != '1'">
@@ -40,13 +40,13 @@
                                     <a class="dropdown-item" href="/taxes?col=2">My Tax Reports</a>
                                 </li>
                                 <li th:if="${collection} != '3'">
-                                    <a class="dropdown-item" href="/taxes?col=3">My assigned Tax Reports</a>
+                                    <a class="dropdown-item" href="/taxes?col=3">My Assigned Tax Reports</a>
                                 </li>
                                 <li th:if="${collection} != '4'">
-                                    <a class="dropdown-item" href="/taxes?col=4">My closed Tax Reports</a>
+                                    <a class="dropdown-item" href="/taxes?col=4">My Closed Tax Reports</a>
                                 </li>
                                 <li th:if="${collection} != '5'">
-                                    <a class="dropdown-item" href="/taxes?col=5">All closed Tax Reports</a>
+                                    <a class="dropdown-item" href="/taxes?col=5">All Closed Tax Reports</a>
                                 </li>
                             </ul>
                         </div>
@@ -55,7 +55,7 @@
                         </div>
                     </div>
 
-                    <table class="table table-striped" th:if="${taxes}">
+                    <table class="table table-striped">
                         <thead>
                         <tr>
                             <th>Name</th>

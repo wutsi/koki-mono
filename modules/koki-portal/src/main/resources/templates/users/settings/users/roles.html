@@ -27,9 +27,9 @@
                     <td th:text="${user.email}">EMAIL</td>
                 </tr>
                 <tr>
-                    <td><b>Permissions</b></td>
+                    <td><b>Roles</b></td>
                     <td>
-                        <table class="table table-striped">
+                        <table class="table table-striped" th:if="!${roles.isEmpty()}">
                             <tr th:each="role : ${roles}">
                                 <td width="1%">
                                     <input name="roleId" th:checked="${user.hasRole(role.id)}"
@@ -40,11 +40,12 @@
                                 <td th:text="${role.name}">NAME</td>
                             </tr>
                         </table>
+                        <em th:if="${roles.isEmpty()}">No roles configured in the system</em>
                     </td>
                 </tr>
             </table>
 
-            <button type="submit">Submit</button>
+            <button th:if="!${roles.isEmpty()}" type="submit">Submit</button>
         </form>
 
     </div>

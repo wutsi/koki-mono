@@ -46,7 +46,7 @@ class UserMapper : TenantAwareMapper() {
             id = entity.id,
             name = entity.name,
             title = entity.title ?: "",
-            description = entity.description,
+            description = entity.description?.trim()?.ifEmpty { null },
             active = entity.active,
             createdAt = entity.createdAt,
             createdAtText = fmt.format(entity.createdAt),

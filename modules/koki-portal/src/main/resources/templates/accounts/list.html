@@ -27,18 +27,18 @@
                                     type="button">
                                 <img height="24" src="/image/account.png" width="24"/>
                                 <span th:if="${collection} == '1'">All Accounts</span>
-                                <span th:if="${collection} == '2'">Accounts I manage</span>
-                                <span th:if="${collection} == '3'">Accounts I created</span>
+                                <span th:if="${collection} == '2'">Accounts I Manage</span>
+                                <span th:if="${collection} == '3'">Accounts I Created</span>
                             </button>
                             <ul class="dropdown-menu">
                                 <li th:if="${collection} != '1'">
                                     <a class="dropdown-item" href="/accounts?col=1">All Accounts</a>
                                 </li>
                                 <li th:if="${collection} != '2'">
-                                    <a class="dropdown-item" href="/accounts?col=2">Accounts I manage</a>
+                                    <a class="dropdown-item" href="/accounts?col=2">Accounts I Manage</a>
                                 </li>
                                 <li th:if="${collection} != '3'">
-                                    <a class="dropdown-item" href="/accounts?col=3">Accounts I created</a>
+                                    <a class="dropdown-item" href="/accounts?col=3">Accounts I Created</a>
                                 </li>
                             </ul>
                         </div>
@@ -47,7 +47,7 @@
                         </div>
                     </div>
 
-                    <table class="table table-striped" th:if="${accounts}">
+                    <table class="table table-striped">
                         <thead>
                         <tr>
                             <th>Name</th>
@@ -67,7 +67,6 @@
                         <tr th:replace="~{__components/account :: load-more(${moreUrl})}"></tr>
                         </tbody>
                     </table>
-                    <div class="text-center" th:if="!${accounts}">No account</div>
                 </div>
             </div>
         </div>
