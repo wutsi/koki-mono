@@ -12,7 +12,7 @@
         <div th:replace="~{__components/settings :: settings-menu('security')}"></div>
     </div>
     <div class="settings-content padding">
-        <h1>Roles</h1>
+        <div th:replace="~{__components/settings :: settings-title('Roles', '/settings/security')}"></div>
 
         <a class="btn btn-secondary btn-create" href="/settings/security/roles/create">Create Role</a>
         <table class="table table-striped">
@@ -32,8 +32,8 @@
                     <span th:if="${role.active}">Yes</span>
                 </td>
                 <td class="toolbar">
-                    <a th:href="'/settings/security/roles/' + ${role.id}">View</a>
-                    <a th:href="'/settings/security/roles/' + ${role.id} + '/edit'">Edit</a>
+                    <a class="btn-view" th:href="'/settings/security/roles/' + ${role.id}">View</a>
+                    <a class="btn-edit" th:href="'/settings/security/roles/' + ${role.id} + '/edit'">Edit</a>
                 </td>
             </tr>
             <tr id="role-load-more" th:if="${moreUrl}">
@@ -46,9 +46,9 @@
     </div>
 </div>
 
-<div th:if="${role} AND ${createdToast}">
+<div th:if="${toast}">
     <div
-        th:replace="~{__components/bootstrap :: toast('role-toast-created', 'The role has been created!')}"></div>
+        th:replace="~{__components/bootstrap :: toast('role-toast', ${toast})}"></div>
 </div>
 
 </body>

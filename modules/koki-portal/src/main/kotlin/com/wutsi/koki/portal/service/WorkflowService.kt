@@ -5,6 +5,7 @@ import com.wutsi.koki.portal.mapper.WorkflowMapper
 import com.wutsi.koki.portal.model.ActivityModel
 import com.wutsi.koki.portal.model.WorkflowModel
 import com.wutsi.koki.portal.page.workflow.SaveWorkflowForm
+import com.wutsi.koki.portal.user.service.RoleService
 import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.sdk.KokiWorkflows
 import com.wutsi.koki.workflow.dto.ActivityType
@@ -20,6 +21,7 @@ class WorkflowService(
     private val formService: FormService,
     private val messageService: MessageService,
     private val userService: UserService,
+    private val roleService: RoleService,
     private val scriptService: ScriptService,
     private val serviceService: ServiceService,
 ) {
@@ -33,12 +35,12 @@ class WorkflowService(
         val roles = if (workflow.roleIds.isEmpty()) {
             emptyList()
         } else {
-            userService.roles(ids = workflow.roleIds, limit = workflow.roleIds.size)
+            roleService.roles(ids = workflow.roleIds, limit = workflow.roleIds.size)
         }
 
         val approverRole = workflow.approverRoleId?.let { roleId ->
             roles.find { role -> role.id == roleId }
-                ?: userService.role(roleId)
+                ?: roleService.role(roleId)
         }
 
         val formIds = workflow.activities.mapNotNull { activity -> activity.formId }.toSet()

@@ -13,7 +13,8 @@
     </div>
     <div class="settings-content">
         <div class="padding">
-            <h1>SMTP</h1>
+            <div th:replace="~{__components/settings :: settings-title('SMTP', '/settings/email')}"></div>
+
             <div>
                 <table class="table" th:if="${form}">
                     <tr>
@@ -50,6 +51,9 @@
     </div>
 </div>
 
+<div th:if="${toast}">
+    <div th:replace="~{__components/bootstrap :: toast('smtp-toast', ${toast})}"></div>
+</div>
 </body>
 
 </html>

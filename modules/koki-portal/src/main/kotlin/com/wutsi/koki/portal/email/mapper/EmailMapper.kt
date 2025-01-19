@@ -27,7 +27,7 @@ class EmailMapper(
         contact: ContactModel?,
     ): EmailModel {
         val dateTimeFormat = createDateTimeFormat()
-        val timeFormat = createDateTime()
+        val timeFormat = createTimeFormat()
         return EmailModel(
             id = entity.id,
             subject = entity.subject,
@@ -47,7 +47,7 @@ class EmailMapper(
         contacts: Map<Long, ContactModel>,
     ): EmailModel {
         val dateTimeFormat = createDateTimeFormat()
-        val timeFormat = createDateTime()
+        val timeFormat = createTimeFormat()
         return EmailModel(
             id = entity.id,
             subject = entity.subject,

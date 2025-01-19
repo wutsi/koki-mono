@@ -3,50 +3,52 @@ package com.wutsi.koki.portal.user.page.security
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.user.model.RoleForm
 import com.wutsi.koki.portal.user.service.RoleService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-class SettingsListRoleController(
+@RequestMapping("/settings/security/roles")
+class SettingsCreateRoleController(
     private val service: RoleService
 ) : AbstractPageController() {
-    @GetMapping("/settings/security/roles")
-    fun show(
-        @RequestParam(required = false) limit: Int = 20,
-        @RequestParam(required = false) offset: Int = 0,
-        model: Model
-    ): String {
+    @GetMapping("/create")
+    fun create(model: Model): String {
+        val form = RoleForm()
+        return create(form, model)
+    }
+
+    private fun create(form: RoleForm, model: Model): String {
+        model.addAttribute("form", form)
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.SECURITY_SETTINGS_ROLE,
-                title = "Security Settings",
+                name = PageName.SECURITY_SETTINGS_ROLE_CREATE,
+                title = "Create Role",
             )
 
         )
-        more(limit, offset, model)
-        return "users/settings/role/list"
+        return "users/settings/roles/create"
     }
 
-    @GetMapping("/settings/security/roles/more")
-    fun more(
-        @RequestParam(required = false) limit: Int = 20,
-        @RequestParam(required = false) offset: Int = 0,
+    @PostMapping("/add-new")
+    fun addNew(
+        @ModelAttribute form: RoleForm,
         model: Model
     ): String {
-        val roles = service.roles(
-            limit = limit,
-            offset = offset
-        )
-        model.addAttribute("roles", roles)
-        if (roles.size >= limit) {
-            val nextOffset = offset + limit
-            val moreUrl = "/settings/security/roles/more?limit=$limit&offset=$nextOffset"
-            model.addAttribute("moreUrl", moreUrl)
+        try {
+            val roleId = service.create(form)
+            return "redirect:/settings/security/roles?created=$roleId"
+        } catch (ex: HttpClientErrorException) {
+            val response = toErrorResponse(ex)
+            model.addAttribute("error", response.error.code)
+            return create(form, model)
         }
-        return "users/settings/role/more"
     }
 }

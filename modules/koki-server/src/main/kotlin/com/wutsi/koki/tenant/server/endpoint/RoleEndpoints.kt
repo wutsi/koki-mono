@@ -1,13 +1,25 @@
 package com.wutsi.koki.tenant.server.endpoint
 
 import com.wutsi.koki.common.dto.ImportResponse
+import com.wutsi.koki.error.dto.Error
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.ConflictException
+import com.wutsi.koki.tenant.dto.CreateRoleRequest
+import com.wutsi.koki.tenant.dto.CreateRoleResponse
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
+import com.wutsi.koki.tenant.dto.SetPermissionListRequest
+import com.wutsi.koki.tenant.dto.UpdateRoleRequest
 import com.wutsi.koki.tenant.server.io.RoleCSVImporter
 import com.wutsi.koki.tenant.server.mapper.RoleMapper
 import com.wutsi.koki.tenant.server.service.RoleService
+import com.wutsi.koki.tenant.server.service.UserService
+import jakarta.validation.Valid
 import org.springframework.http.MediaType
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -21,7 +33,48 @@ class RoleEndpoints(
     private val importer: RoleCSVImporter,
     private val service: RoleService,
     private val mapper: RoleMapper,
+    private val userService: UserService,
 ) {
+    @PostMapping
+    fun create(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @Valid @RequestBody request: CreateRoleRequest,
+    ): CreateRoleResponse {
+        val role = service.create(request, tenantId)
+        return CreateRoleResponse(role.id!!)
+    }
+
+    @PostMapping("/{id}")
+    fun update(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
+        @Valid @RequestBody request: UpdateRoleRequest,
+    ) {
+        service.update(id, request, tenantId)
+    }
+
+    @DeleteMapping("/{id}")
+    fun delete(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
+    ) {
+        if (userService.search(roleIds = listOf(id), tenantId = 1, limit = 1).isNotEmpty()) {
+            throw ConflictException(
+                error = Error(ErrorCode.ROLE_IN_USE)
+            )
+        }
+        service.delete(id, tenantId)
+    }
+
+    @PostMapping("/{id}/permissions")
+    fun permissions(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
+        @Valid @RequestBody request: SetPermissionListRequest
+    ) {
+        service.setPermissions(id, request, tenantId)
+    }
+
     @GetMapping
     fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,

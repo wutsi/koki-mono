@@ -4,6 +4,7 @@ CREATE TABLE T_MODULE(
   name                    VARCHAR(10) NOT NULL,
   title                   VARCHAR(30) NOT NULL,
   description             TEXT,
+  object_type             INT DEFAULT 0,
   home_url                TEXT,
   tab_url                 TEXT,
   settings_url            TEXT,

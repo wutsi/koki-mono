@@ -75,4 +75,11 @@ class SettingsEmailDecoratorControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("code")
         assertElementPresent(".empty")
     }
+
+    @Test
+    fun back() {
+        navigateTo("/settings/email/decorator")
+        click(".btn-back")
+        assertCurrentPageIs(PageName.EMAIL_SETTINGS)
+    }
 }

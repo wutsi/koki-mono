@@ -77,7 +77,8 @@ class SettingsEmailDecoratorEditControllerTest : AbstractPageControllerTest() {
             )
         )
 
-        assertCurrentPageIs(PageName.EMAIL_SETTINGS_EMAIL_DECORATOR_SAVED)
+        assertCurrentPageIs(PageName.EMAIL_SETTINGS_EMAIL_DECORATOR)
+        assertElementVisible("#email-toast")
     }
 
     @Test
@@ -93,5 +94,12 @@ class SettingsEmailDecoratorEditControllerTest : AbstractPageControllerTest() {
         assertElementPresent(".alert-danger")
 
         assertCurrentPageIs(PageName.EMAIL_SETTINGS_EMAIL_DECORATOR_EDIT)
+    }
+
+    @Test
+    fun back() {
+        navigateTo("/settings/email/decorator/edit")
+        click(".btn-back")
+        assertCurrentPageIs(PageName.EMAIL_SETTINGS)
     }
 }

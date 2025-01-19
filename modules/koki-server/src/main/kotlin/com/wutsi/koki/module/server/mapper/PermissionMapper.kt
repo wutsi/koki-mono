@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 class PermissionMapper {
     fun toPermission(entity: PermissionEntity): Permission {
         return Permission(
-            id = entity.id,
+            id = entity.id!!,
             moduleId = entity.moduleId,
             name = entity.name,
             description = entity.description,

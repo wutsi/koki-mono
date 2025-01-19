@@ -25,7 +25,19 @@
     <li class="menu-item" th:classappend="${item} == 'workflow' ? 'active'">
         <a class="btn-workflow" href="/settings/workflows">Workflows</a>
     </li>
+    <li class="menu-item" th:classappend="${item} == 'security' ? 'active'">
+        <a class="btn-security" href="/settings/security">Security</a>
+    </li>
 </ul>
+
+<h3 class="flex margin-bottom" th:fragment="settings-title(title, backUrl)">
+    <div class="margin-right">
+        <a class="btn-back" th:href="${backUrl}">
+            <i class="fa-solid fa-arrow-left"></i>
+        </a>
+    </div>
+    <div th:text="${title}">TITLE</div>
+</h3>
 
 </body>
 </html>

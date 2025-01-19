@@ -49,15 +49,15 @@ object ModuleFixtures {
     )
 
     val permissions = listOf(
-        Permission(id = 1001, moduleId = 100, name = "account"),
-        Permission(id = 1002, moduleId = 100, name = "account:admin"),
-        Permission(id = 1011, moduleId = 101, name = "contact"),
-        Permission(id = 1012, moduleId = 101, name = "contact:admin"),
-        Permission(id = 1021, moduleId = 102, name = "tax"),
-        Permission(id = 1022, moduleId = 102, name = "tax:admin"),
-        Permission(id = 1031, moduleId = 103, name = "email"),
-        Permission(id = 1032, moduleId = 103, name = "email:admin"),
-        Permission(id = 1031, moduleId = 104, name = "note"),
-        Permission(id = 1032, moduleId = 104, name = "note:admin"),
+        Permission(id = 1001, moduleId = 100, name = "account", description = "Manage accounts"),
+        Permission(id = 1002, moduleId = 100, name = "account:admin", description = "Configure accounts"),
+        Permission(id = 1011, moduleId = 101, name = "contact", description = "Manage contacts"),
+        Permission(id = 1012, moduleId = 101, name = "contact:admin", description = "Configure accounts"),
+        Permission(id = 1021, moduleId = 102, name = "tax", description = "Manage taxes"),
+        Permission(id = 1022, moduleId = 102, name = "tax:admin", description = "Configre taxes"),
+        Permission(id = 1031, moduleId = 103, name = "email", description = "Manage emails"),
+        Permission(id = 1032, moduleId = 103, name = "email:admin", description = "Configure accounts"),
+        Permission(id = 1031, moduleId = 104, name = "note", description = "Manage notes"),
+        Permission(id = 1032, moduleId = 104, name = "note:admin", description = "Configure notes"),
     )
 }

@@ -96,6 +96,7 @@ import com.wutsi.koki.tax.dto.GetTaxResponse
 import com.wutsi.koki.tax.dto.GetTaxTypeResponse
 import com.wutsi.koki.tax.dto.SearchTaxResponse
 import com.wutsi.koki.tax.dto.SearchTaxTypeResponse
+import com.wutsi.koki.tenant.dto.CreateRoleResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
@@ -359,6 +360,7 @@ abstract class AbstractPageControllerTest {
         // Roles
         doReturn(SearchRoleResponse(RoleFixtures.roles)).whenever(kokiUsers)
             .roles(anyOrNull(), anyOrNull(), anyOrNull())
+        doReturn(CreateRoleResponse(1111L)).whenever(kokiUsers).createRole(any())
 
         // Users
         doReturn(GetUserResponse(UserFixtures.user)).whenever(kokiUsers).user(USER_ID)
@@ -661,7 +663,10 @@ abstract class AbstractPageControllerTest {
     }
 
     protected fun assertCurrentPageIs(page: String) {
-        assertEquals(page, driver.findElement(By.cssSelector("meta[name=wutsi\\:page_name]"))?.getAttribute("content"))
+        assertEquals(
+            page,
+            driver.findElement(By.cssSelector("meta[name=wutsi\\:page_name]")).getDomAttribute("content")
+        )
     }
 
     protected fun assertElementNotPresent(selector: String) {
@@ -694,9 +699,9 @@ abstract class AbstractPageControllerTest {
 
     protected fun assertElementAttribute(selector: String, name: String, value: String?) {
         if (value == null) {
-            assertNull(driver.findElement(By.cssSelector(selector)).getAttribute(name))
+            assertNull(driver.findElement(By.cssSelector(selector)).getDomAttribute(name))
         } else {
-            assertEquals(value, driver.findElement(By.cssSelector(selector)).getAttribute(name))
+            assertEquals(value, driver.findElement(By.cssSelector(selector)).getDomAttribute(name))
         }
     }
 
@@ -708,28 +713,28 @@ abstract class AbstractPageControllerTest {
     }
 
     protected fun assertElementAttributeNull(selector: String, name: String) {
-        val value = driver.findElement(By.cssSelector(selector)).getAttribute(name)
+        val value = driver.findElement(By.cssSelector(selector)).getDomAttribute(name)
         assertTrue(value.isNullOrEmpty())
     }
 
     protected fun assertElementAttributeStartsWith(selector: String, name: String, value: String) {
-        assertEquals(true, driver.findElement(By.cssSelector(selector)).getAttribute(name)?.startsWith(value))
+        assertEquals(true, driver.findElement(By.cssSelector(selector)).getDomAttribute(name)?.startsWith(value))
     }
 
     protected fun assertElementAttributeEndsWith(selector: String, name: String, value: String) {
-        assertEquals(true, driver.findElement(By.cssSelector(selector)).getAttribute(name)?.endsWith(value))
+        assertEquals(true, driver.findElement(By.cssSelector(selector)).getDomAttribute(name)?.endsWith(value))
     }
 
     protected fun assertElementAttributeContains(selector: String, name: String, value: String) {
-        assertEquals(true, driver.findElement(By.cssSelector(selector)).getAttribute(name)?.contains(value))
+        assertEquals(true, driver.findElement(By.cssSelector(selector)).getDomAttribute(name)?.contains(value))
     }
 
     protected fun assertElementHasClass(selector: String, value: String) {
-        assertEquals(true, driver.findElement(By.cssSelector(selector)).getAttribute("class")?.contains(value))
+        assertEquals(true, driver.findElement(By.cssSelector(selector)).getDomAttribute("class")?.contains(value))
     }
 
     protected fun assertElementHasNotClass(selector: String, value: String) {
-        assertEquals(true, driver.findElement(By.cssSelector(selector)).getAttribute("class")?.contains(value))
+        assertEquals(true, driver.findElement(By.cssSelector(selector)).getDomAttribute("class")?.contains(value))
     }
 
     protected fun click(selector: String, delayMillis: Long? = null) {

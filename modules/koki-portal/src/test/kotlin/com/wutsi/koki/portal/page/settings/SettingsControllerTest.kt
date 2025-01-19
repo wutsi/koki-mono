@@ -20,6 +20,20 @@ class SettingsControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun email() {
+        navigateTo("/settings")
+        click(".btn-email")
+        assertCurrentPageIs(PageName.EMAIL_SETTINGS)
+    }
+
+    @Test
+    fun security() {
+        navigateTo("/settings")
+        click(".btn-security")
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS)
+    }
+
+    @Test
     fun forms() {
         navigateTo("/settings")
         click(".btn-form")
@@ -38,13 +52,6 @@ class SettingsControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings")
         click(".btn-workflow")
         assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_LIST)
-    }
-
-    @Test
-    fun email() {
-        navigateTo("/settings")
-        click(".btn-email")
-        assertCurrentPageIs(PageName.EMAIL_SETTINGS)
     }
 
     @Test

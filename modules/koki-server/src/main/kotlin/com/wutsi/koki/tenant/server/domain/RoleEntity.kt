@@ -23,12 +23,23 @@ data class RoleEntity(
     @Column(name = "tenant_fk")
     val tenantId: Long = -1,
 
+    @Column(name = "created_by_fk")
+    var createdById: Long? = null,
+
+    @Column(name = "modified_by_fk")
+    var modifiedById: Long? = null,
+
+    @Column(name = "deleted_by_fk")
+    var deletedById: Long? = null,
+
     var name: String = "",
     var title: String? = null,
     var active: Boolean = true,
     var description: String? = null,
+    var deleted: Boolean = false,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
+    var deletedAt: Date? = null,
 
     @BatchSize(20)
     @ManyToMany
@@ -37,7 +48,7 @@ data class RoleEntity(
         joinColumns = arrayOf(JoinColumn(name = "role_fk")),
         inverseJoinColumns = arrayOf(JoinColumn(name = "permission_fk")),
     )
-    val permissions: MutableList<PermissionEntity> = mutableListOf(),
+    var permissions: MutableList<PermissionEntity> = mutableListOf(),
 ) {
     companion object {
         const val CSV_HEADER_NAME = "name"

@@ -4,51 +4,61 @@ import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.user.model.RoleForm
+import com.wutsi.koki.portal.user.model.RoleModel
 import com.wutsi.koki.portal.user.service.RoleService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 @RequestMapping("/settings/security/roles")
-class SettingsCreateRoleController(
+class SettingsEditRoleController(
     private val service: RoleService
 ) : AbstractPageController() {
-    @GetMapping("/create")
-    fun create(model: Model): String {
-        val form = RoleForm()
-        return create(form, model)
+    @GetMapping("/{id}/edit")
+    fun edit(@PathVariable id: Long, model: Model): String {
+        val role = service.role(id)
+        val form = RoleForm(
+            name = role.name,
+            title = role.title,
+            description = role.description,
+            active = role.active
+        )
+        return edit(role, form, model)
     }
 
-    private fun create(form: RoleForm, model: Model): String {
+    private fun edit(role: RoleModel, form: RoleForm, model: Model): String {
+        model.addAttribute("role", role)
         model.addAttribute("form", form)
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.SECURITY_SETTINGS_ROLE_CREATE,
-                title = "Create Roles",
+                name = PageName.SECURITY_SETTINGS_ROLE_EDIT,
+                title = role.title,
             )
 
         )
-        return "users/settings/roles/create"
+        return "users/settings/roles/edit"
     }
 
-    @PostMapping("/add-new")
-    fun addNew(
+    @PostMapping("/{id}/update")
+    fun update(
+        @PathVariable id: Long,
         @ModelAttribute form: RoleForm,
         model: Model
     ): String {
         try {
-            val roleId = service.create(form)
-            return "redirect:/settings/security/roles?created=$roleId"
+            service.update(id, form)
+            return "redirect:/settings/security/roles/$id?updated=$id"
         } catch (ex: HttpClientErrorException) {
             val response = toErrorResponse(ex)
             model.addAttribute("error", response.error.code)
-            return create(form, model)
+            return edit(RoleModel(id = id), form, model)
         }
     }
 }

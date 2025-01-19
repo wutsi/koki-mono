@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.module.service
 
 import com.wutsi.koki.portal.module.mapper.ModuleMapper
 import com.wutsi.koki.portal.module.model.ModuleModel
+import com.wutsi.koki.portal.module.model.PermissionModel
 import com.wutsi.koki.sdk.KokiModules
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -37,5 +38,14 @@ class ModuleService(
             }
         }
         return all!!
+    }
+
+    fun permissions(): List<PermissionModel> {
+        return modules().flatMap { module -> module.permissions }
+            .sortedBy { permission -> permission.name }
+    }
+
+    fun permissions(permissionIds: List<Long>): List<PermissionModel> {
+        return permissions().filter { permission -> permissionIds.contains(permission.id) }
     }
 }

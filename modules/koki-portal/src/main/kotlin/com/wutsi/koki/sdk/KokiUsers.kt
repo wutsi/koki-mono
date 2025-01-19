@@ -1,8 +1,12 @@
 package com.wutsi.koki.sdk
 
+import com.wutsi.koki.tenant.dto.CreateRoleRequest
+import com.wutsi.koki.tenant.dto.CreateRoleResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
+import com.wutsi.koki.tenant.dto.SetPermissionListRequest
+import com.wutsi.koki.tenant.dto.UpdateRoleRequest
 import org.springframework.web.client.RestTemplate
 
 class KokiUsers(
@@ -55,5 +59,25 @@ class KokiUsers(
             )
         )
         return rest.getForEntity(url, SearchRoleResponse::class.java).body!!
+    }
+
+    fun createRole(request: CreateRoleRequest): CreateRoleResponse {
+        val url = urlBuilder.build(ROLE_PATH_PREFIX)
+        return rest.postForEntity(url, request, CreateRoleResponse::class.java).body
+    }
+
+    fun updateRole(id: Long, request: UpdateRoleRequest) {
+        val url = urlBuilder.build("$ROLE_PATH_PREFIX/$id")
+        rest.postForEntity(url, request, Any::class.java)
+    }
+
+    fun deleteRole(id: Long) {
+        val url = urlBuilder.build("$ROLE_PATH_PREFIX/$id")
+        rest.delete(url)
+    }
+
+    fun setRolePermissions(id: Long, request: SetPermissionListRequest) {
+        val url = urlBuilder.build("$ROLE_PATH_PREFIX/$id/permissions")
+        rest.postForEntity(url, request, Any::class.java)
     }
 }

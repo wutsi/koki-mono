@@ -3,9 +3,9 @@
 <body>
 
 
-<div class="toast-container" style="position: absolute; top: 6em; right: 1em;" th:fragment="toast(id, msg, type)">
-    <div class="toast bg-success text-white" data-bs-autohide="false" id="role-toast-created" role="alert"
-         th:classappend="${type == 'success'? 'bg-success text-white'} ${type == 'error'? 'bg-error text-white'}">
+<div class="toast-container" style="position: absolute; top: 6em; right: 1em;" th:fragment="toast(id, message)">
+    <div class="toast bg-success text-white" role="alert" th:classappend="${type} == 'success' ? 'bg-success text-white'"
+         th:id="${id}">
         <div class="d-flex">
             <div class="toast-body" th:utext="${message}">MESSAGE</div>
             <button aria-label="Close" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"

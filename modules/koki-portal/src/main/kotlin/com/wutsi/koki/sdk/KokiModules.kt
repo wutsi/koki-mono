@@ -10,7 +10,7 @@ class KokiModules(
 ) {
     companion object {
         private const val MODULE_PATH_PREFIX = "/v1/modules"
-        private const val PERMISSION_PATH_PREFIX = "/v1/permission"
+        private const val PERMISSION_PATH_PREFIX = "/v1/permissions"
     }
 
     fun modules(): SearchModuleResponse {

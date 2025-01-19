@@ -72,10 +72,10 @@ CREATE TABLE T_ACCOUNT_ATTRIBUTE(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
-INSERT INTO T_MODULE(id, name, title, home_url, tab_url, settings_url)
-    VALUES (10, 'account', 'Account', '/accounts', null, '/settings/accounts');
+INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url)
+    VALUES (110, 1, 'account', 'Account', '/accounts', null, '/settings/accounts');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
-    VALUES (100, 10, 'account',       'Manage accounts'),
-           (101, 10, 'account:admin', 'Configure accounts');
+    VALUES (1100, 110, 'account',       'Manage accounts'),
+           (1101, 110, 'account:admin', 'Configure accounts');
 

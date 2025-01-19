@@ -403,6 +403,10 @@ tr.activity-running {
     border: 1px solid gray;
 }
 
+a.btn-back {
+    color: black
+}
+
 .widget-body ol.breadcrumb {
     margin-bottom: 0;
     padding-bottom: 0
@@ -416,6 +420,13 @@ tr.activity-running {
 .modal-dialog form div.quilljs {
     height: 15em;
 }
+
+.bg-success a,
+.bg-danger a,
+.bg-primary a {
+    color: white;
+}
+
 
 /* ============================= */
 /* highlightjs line-number       */

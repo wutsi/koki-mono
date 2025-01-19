@@ -14,7 +14,7 @@ abstract class TenantAwareMapper {
         return SimpleDateFormat(tenant?.dateTimeFormat ?: "yyyy-MM-dd HH:mm")
     }
 
-    protected fun createDateTime(): DateFormat {
+    protected fun createTimeFormat(): DateFormat {
         val tenant = currentTenant.get()
         return SimpleDateFormat(tenant?.timeFormat ?: "HH:mm")
     }

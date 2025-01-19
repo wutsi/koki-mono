@@ -13,7 +13,8 @@
     </div>
     <div class="settings-content">
         <div class="padding">
-            <h1>Email Layout</h1>
+            <div th:replace="~{__components/settings :: settings-title('Email Layout', '/settings/email')}"></div>
+
             <div>
                 <div>
                     <a class="btn-edit btn btn-secondary" href="/settings/email/decorator/edit">Configure</a>
@@ -30,6 +31,10 @@
             </div>
         </div>
     </div>
+</div>
+
+<div th:if="${toast}">
+    <div th:replace="~{__components/bootstrap :: toast('email-toast', ${toast})}"></div>
 </div>
 
 <div th:replace="~{__components/highlightjs :: prettity('html')}"></div>

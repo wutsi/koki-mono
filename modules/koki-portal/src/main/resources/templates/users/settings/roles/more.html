@@ -5,8 +5,8 @@
         <span th:if="${role.active}">Yes</span>
     </td>
     <td class="toolbar">
-        <a th:href="'/settings/security/roles/' + ${role.id}">View</a>
-        <a th:href="'/settings/security/roles/' + ${role.id} + '/edit'">Edit</a>
+        <a class="btn-view" th:href="'/settings/security/roles/' + ${role.id}">View</a>
+        <a class="btn-edit" th:href="'/settings/security/roles/' + ${role.id} + '/edit'">Edit</a>
     </td>
 </tr>
 <tr id="role-load-more" th:if="${moreUrl}">

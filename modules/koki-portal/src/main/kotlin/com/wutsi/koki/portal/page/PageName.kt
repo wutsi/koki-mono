@@ -18,11 +18,8 @@ object PageName {
     const val EMAIL_SETTINGS = "page.settings.email"
     const val EMAIL_SETTINGS_SMTP = "page.settings.smtp"
     const val EMAIL_SETTINGS_SMTP_EDIT = "page.settings.smtp.edit"
-    const val EMAIL_SETTINGS_SMTP_SAVED = "page.settings.smtp.saved"
-
     const val EMAIL_SETTINGS_EMAIL_DECORATOR = "page.settings.email.decorator"
     const val EMAIL_SETTINGS_EMAIL_DECORATOR_EDIT = "page.settings.email.decorator.edit"
-    const val EMAIL_SETTINGS_EMAIL_DECORATOR_SAVED = "page.settings.email.decorator.saved"
 
     const val ERROR = "page.error"
     const val ERROR_SUSPENDED = "page.error.suspended"
@@ -37,6 +34,14 @@ object PageName {
     const val LOG = "page.log"
 
     const val LOGIN = "page.login"
+
+    const val SECURITY_SETTINGS = "page.settings.security"
+    const val SECURITY_SETTINGS_USER_LIST = "page.settings.security.user.list"
+    const val SECURITY_SETTINGS_ROLE = "page.settings.security.role"
+    const val SECURITY_SETTINGS_ROLE_LIST = "page.settings.security.role.list"
+    const val SECURITY_SETTINGS_ROLE_CREATE = "page.settings.security.role.create"
+    const val SECURITY_SETTINGS_ROLE_EDIT = "page.settings.security.role.edit"
+    const val SECURITY_SETTINGS_ROLE_PERMISSION = "page.settings.security.role.permission"
 
     const val SETTINGS_MESSAGE = "page.settings.message"
     const val SETTINGS_MESSAGE_CREATE = "page.settings.message.create"

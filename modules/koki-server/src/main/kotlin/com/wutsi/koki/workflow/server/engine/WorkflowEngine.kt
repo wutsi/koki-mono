@@ -152,6 +152,7 @@ class WorkflowEngine(
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun eventReceived(
         activityInstance: ActivityInstanceEntity,
         activity: ActivityEntity,

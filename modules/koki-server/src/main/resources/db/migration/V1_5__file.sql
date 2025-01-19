@@ -34,10 +34,10 @@ CREATE TABLE T_FILE_OWNER(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
-INSERT INTO T_MODULE(id, name, title, home_url, tab_url, settings_url)
-    VALUES (30, 'file', 'Files', null, '/files/tab', null);
+INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url)
+    VALUES (130, 3, 'file', 'Files', null, '/files/tab', null);
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
-    VALUES (300, 30, 'file',       'Manage files'),
-           (301, 30, 'file:admin', 'Configure files');
+    VALUES (1300, 130, 'file',       'Manage files'),
+           (1301, 130, 'file:admin', 'Configure files');
 
