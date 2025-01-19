@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="settings-container">
+    <div class="settings-sidebar">
+        <div th:replace="~{__components/settings :: settings-menu('security')}"></div>
+    </div>
+    <div class="settings-content padding">
+        <div th:replace="~{__components/settings :: settings-title('Users', '/settings/security')}"></div>
+
+        <a class="btn btn-secondary btn-create" href="/settings/users/create">Create Role</a>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Modified</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="user" th:each="user : ${users}">
+                <td th:text="${user.displayName}">NAME</td>
+                <td th:text="${user.email}">EMAIL</td>
+                <td>
+                    <div th:replace="~{__components/user :: user-status(${user.status})}"></div>
+                </td>
+                <td th:text="${user.modifiedAtText}">MODIFIED</td>
+                <td class="toolbar">
+                    <a class="btn-view" th:href="'/settings/users/' + ${user.id}">View</a>
+                    <a class="btn-edit" th:href="'/settings/users/' + ${user.id} + '/edit'">Edit</a>
+                </td>
+            </tr>
+            <tr id="user-load-more" th:if="${moreUrl}">
+                <td class="text-center" colspan="5">
+                    <a href="javascript: koki_load_more('user-load-more')" th:data-url="${moreUrl}">Load More...</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div th:if="${toast}">
+    <div
+        th:replace="~{__components/bootstrap :: toast('user-toast', ${toast})}"></div>
+</div>
+
+</body>
+</html>

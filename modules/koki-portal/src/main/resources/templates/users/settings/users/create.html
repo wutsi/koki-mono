@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="settings-container">
+    <div class="settings-sidebar">
+        <div th:replace="~{__components/settings :: settings-menu('security')}"></div>
+    </div>
+    <div class="settings-content padding">
+        <div th:replace="~{__components/settings :: settings-title('Roles', '/settings/roles')}"></div>
+
+        <form class="form" method="post" th:action="@{/settings/roles/add-new}" th:object="${form}">
+            <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+            <table class="table">
+                <tr>
+                    <td width="20%"><b>Name</b></td>
+                    <td>
+                        <input maxlength="10" required th:field="*{name}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Title</b></td>
+                    <td>
+                        <input maxlength="100" required th:field="*{title}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Active</b></td>
+                    <td>
+                        <select th:field="*{active}">
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Description</b></td>
+                    <td>
+                        <textarea rows="3" th:field="*{description}"></textarea>
+                    </td>
+                </tr>
+            </table>
+            <button type="submit">Submit</button>
+        </form>
+
+    </div>
+</div>
+
+
+</body>
+</html>

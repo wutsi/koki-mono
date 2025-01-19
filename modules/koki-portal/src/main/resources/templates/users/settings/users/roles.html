@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="settings-container">
+    <div class="settings-sidebar">
+        <div th:replace="~{__components/settings :: settings-menu('security')}"></div>
+    </div>
+    <div class="settings-content padding">
+        <div th:replace="~{__components/settings :: settings-title('Roles', '/settings/roles')}"></div>
+
+        <form class="form" method="post" th:action="@{'/settings/roles/' + ${role.id} + '/permissions'}"
+              th:object="${form}">
+            <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+            <table class="table">
+                <tr>
+                    <td><b>Title</b></td>
+                    <td th:text="${role.title}">TITLE</td>
+                </tr>
+                <tr>
+                    <td><b>Permissions</b></td>
+                    <td>
+                        <table class="table table-striped">
+                            <tr th:each="permission : ${tenant.permissions}">
+                                <td width="1%">
+                                    <input name="permissionId" th:checked="${role.hasPermissions(permission.id)}"
+                                           th:value="${permission.id}"
+                                           type="checkbox"
+                                    />
+                                </td>
+                                <td th:text="${permission.name}">NAME</td>
+                                <td th:text="${permission.description}">DESCRIPTION</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <button type="submit">Submit</button>
+        </form>
+
+    </div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="settings-container">
+    <div class="settings-sidebar">
+        <div th:replace="~{__components/settings :: settings-menu('security')}"></div>
+    </div>
+    <div class="settings-content padding">
+        <div th:replace="~{__components/settings :: settings-title('Roles', '/settings/roles')}"></div>
+
+        <div class="margin-bottom">
+            <a class="btn btn-secondary btn-edit" th:href="'/settings/roles/' + ${role.id} + '/edit'">Edit</a>
+
+            <a class="btn btn-secondary btn-permission"
+               th:href="'/settings/roles/' + ${role.id} + '/permissions'">Manage Permissions</a>
+
+            <a class="btn btn-danger btn-delete float-right"
+               onclick="return confirm('Are you sure you want to delete this role?')"
+               th:href="'/settings/roles/' + ${role.id} + '/delete'">Delete</a>
+        </div>
+        <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+
+        <table class="table">
+            <tr>
+                <td width="20%"><b>Name</b></td>
+                <td th:text="${role.name}">NAME</td>
+            </tr>
+            <tr>
+                <td><b>Title</b></td>
+                <td th:text="${role.title}">TITLE</td>
+            </tr>
+            <tr>
+                <td><b>Active</b></td>
+                <td>
+                    <span th:if="${role.active}">Yes</span>
+                    <span th:if="!${role.active}">No</span>
+                </td>
+            </tr>
+            <tr th:if="${role.description}">
+                <td><b>Description</b></td>
+                <td th:text="${role.description}">DESCRIPTION</td>
+            </tr>
+            <tr>
+                <td><b>Permission</b></td>
+                <td>
+                    <table class="table table-striped">
+                        <tr th:each="permission : ${role.permissions}">
+                            <td th:text="${permission.name}">NAME</td>
+                            <td th:text="${permission.description}">DESCRIPTION</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div th:if="${toast}">
+    <div
+        th:replace="~{__components/bootstrap :: toast('role-toast', ${toast})}"></div>
+</div>
+
+</body>
+</html>
