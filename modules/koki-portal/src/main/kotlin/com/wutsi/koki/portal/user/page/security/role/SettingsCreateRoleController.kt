@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-@RequestMapping("/settings/security/roles")
+@RequestMapping("/settings/roles")
 class SettingsCreateRoleController(
     private val service: RoleService
 ) : AbstractPageController() {
@@ -44,7 +44,7 @@ class SettingsCreateRoleController(
     ): String {
         try {
             val roleId = service.create(form)
-            return "redirect:/settings/security/roles?created=$roleId"
+            return "redirect:/settings/roles?created=$roleId"
         } catch (ex: HttpClientErrorException) {
             val response = toErrorResponse(ex)
             model.addAttribute("error", response.error.code)

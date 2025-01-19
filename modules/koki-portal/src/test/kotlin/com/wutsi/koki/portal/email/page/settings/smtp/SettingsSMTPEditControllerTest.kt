@@ -1,10 +1,10 @@
 package com.wutsi.koki.portal.email.page.settings.smtp
 
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -17,6 +17,8 @@ import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
 import org.junit.jupiter.api.BeforeEach
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import java.net.SocketException
 import kotlin.collections.map
@@ -42,10 +44,17 @@ class SettingsSMTPEditControllerTest : AbstractPageControllerTest() {
         super.setUp()
 
         doReturn(
-            SearchConfigurationResponse(
-                config.map { cfg -> Configuration(name = cfg.key, value = cfg.value) }
+            ResponseEntity(
+                SearchConfigurationResponse(
+                    config.map { cfg -> Configuration(name = cfg.key, value = cfg.value) }
+                ),
+                HttpStatus.OK,
             )
-        ).whenever(kokiConfiguration).configurations(anyOrNull(), anyOrNull())
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchConfigurationResponse::class.java)
+            )
     }
 
     @Test
@@ -59,7 +68,11 @@ class SettingsSMTPEditControllerTest : AbstractPageControllerTest() {
         verify(validator).validate("10.1.12.244", 555, "ray")
 
         val request = argumentCaptor<SaveConfigurationRequest>()
-        verify(kokiConfiguration).save(request.capture())
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/configurations"),
+            request.capture(),
+            eq(Any::class.java)
+        )
 
         assertEquals("10.1.12.244", request.firstValue.values[ConfigurationName.SMTP_HOST])
         assertEquals("555", request.firstValue.values[ConfigurationName.SMTP_PORT])
@@ -82,7 +95,11 @@ class SettingsSMTPEditControllerTest : AbstractPageControllerTest() {
         inputFields()
         assertElementPresent(".alert-danger")
 
-        verify(kokiConfiguration, never()).save(any())
+        verify(rest, never()).postForEntity(
+            eq("$sdkBaseUrl/v1/configurations"),
+            any(),
+            eq(Any::class.java)
+        )
         assertCurrentPageIs(PageName.EMAIL_SETTINGS_SMTP_EDIT)
     }
 
@@ -97,7 +114,11 @@ class SettingsSMTPEditControllerTest : AbstractPageControllerTest() {
     @Test
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.AUTHORIZATION_PERMISSION_DENIED)
-        doThrow(ex).whenever(kokiConfiguration).save(any())
+        doThrow(ex).whenever(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/configurations"),
+            any<SaveConfigurationRequest>(),
+            eq(Any::class.java)
+        )
 
         navigateTo("/settings/email/smtp/edit")
         assertCurrentPageIs(PageName.EMAIL_SETTINGS_SMTP_EDIT)

@@ -1,12 +1,13 @@
 package com.wutsi.koki.portal.note
 
-import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.NoteFixtures.notes
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.note.dto.CreateNoteRequest
+import com.wutsi.koki.note.dto.CreateNoteResponse
 import com.wutsi.koki.note.dto.UpdateNoteRequest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -31,7 +32,7 @@ class ListNoteWidgetControllerTest : AbstractPageControllerTest() {
         driver.switchTo().parentFrame()
 
         Thread.sleep(1000)
-        verify(kokiNotes).delete(id)
+        verify(rest).delete("$sdkBaseUrl/v1/notes/$id")
     }
 
     @Test
@@ -47,7 +48,12 @@ class ListNoteWidgetControllerTest : AbstractPageControllerTest() {
         click("#btn-note-submit", 1000)
 
         val request = argumentCaptor<UpdateNoteRequest>()
-        verify(kokiNotes).update(any(), request.capture())
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/notes/${notes[0].id}"),
+            request.capture(),
+            eq(Any::class.java)
+        )
+
         assertEquals("Yo man", request.firstValue.subject)
         assertEquals("<p>Hello man</p>", request.firstValue.body)
 
@@ -76,7 +82,12 @@ class ListNoteWidgetControllerTest : AbstractPageControllerTest() {
         click("#btn-note-submit", 1000)
 
         val request = argumentCaptor<CreateNoteRequest>()
-        verify(kokiNotes).create(request.capture())
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/notes"),
+            request.capture(),
+            eq(CreateNoteResponse::class.java)
+        )
+
         assertEquals("Yo man", request.firstValue.subject)
         assertEquals("<p>Hello man</p>", request.firstValue.body)
         assertEquals(ObjectType.ACCOUNT, request.firstValue.reference?.type)

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
-@RequestMapping("/settings/security/roles")
+@RequestMapping("/settings/roles")
 class SettingsListRoleController(
     private val service: RoleService,
     private val httpRequest: HttpServletRequest,
@@ -45,16 +45,16 @@ class SettingsListRoleController(
 
     private fun loadCreatedToast(created: Long?, model: Model) {
         val referer = httpRequest.getHeader(HttpHeaders.REFERER)
-        if (created == null || referer?.endsWith("/settings/security/roles/create") != true) {
+        if (created == null || referer?.endsWith("/settings/roles/create") != true) {
             return
         }
 
-        if (canLoadToast(created, "/settings/security/roles/create")) {
+        if (canLoadToast(created, "/settings/roles/create")) {
             try {
                 val role = service.role(created)
                 model.addAttribute(
                     "toast",
-                    "The role <a href='/settings/security/roles/${role.id}'>${role.name}</a> has been created!"
+                    "The role <a href='/settings/roles/${role.id}'>${role.name}</a> has been created!"
                 )
             } catch (ex: Exception) {
                 // Ignore
@@ -63,12 +63,12 @@ class SettingsListRoleController(
     }
 
     private fun loadUpdatedToast(updated: Long?, model: Model) {
-        if (canLoadToast(updated, "/settings/security/roles/$updated/edit")) {
+        if (canLoadToast(updated, "/settings/roles/$updated/edit")) {
             try {
                 val role = service.role(updated!!)
                 model.addAttribute(
                     "toast",
-                    "The role <a href='/settings/security/roles/${role.id}'>${role.name}</a> has been updated!"
+                    "The role <a href='/settings/roles/${role.id}'>${role.name}</a> has been updated!"
                 )
             } catch (ex: Exception) {
                 // Ignore
@@ -77,7 +77,7 @@ class SettingsListRoleController(
     }
 
     private fun loadDeletedToast(deleted: Long?, model: Model) {
-        if (canLoadToast(deleted, "/settings/security/roles/$deleted")) {
+        if (canLoadToast(deleted, "/settings/roles/$deleted")) {
             model.addAttribute("toast", "The role has been deleted!")
         }
     }
@@ -100,7 +100,7 @@ class SettingsListRoleController(
         model.addAttribute("roles", roles)
         if (roles.size >= limit) {
             val nextOffset = offset + limit
-            val moreUrl = "/settings/security/roles/more?limit=$limit&offset=$nextOffset"
+            val moreUrl = "/settings/roles/more?limit=$limit&offset=$nextOffset"
             model.addAttribute("moreUrl", moreUrl)
         }
         return "users/settings/roles/more"

@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Primary
 import org.springframework.web.client.RestTemplate
 import java.time.Duration
 
@@ -141,6 +142,7 @@ class KokiSDKConfiguration(
     }
 
     @Bean
+    @Primary
     fun rest(): RestTemplate =
         RestTemplateBuilder()
             .connectTimeout(Duration.ofMillis(connectionTimeout))
@@ -152,7 +154,8 @@ class KokiSDKConfiguration(
             )
             .build()
 
-    private fun restWithoutTenantHeader(): RestTemplate =
+    @Bean("RestWithoutTenantHeader")
+    fun restWithoutTenantHeader(): RestTemplate =
         RestTemplateBuilder()
             .connectTimeout(Duration.ofMillis(connectionTimeout))
             .readTimeout(Duration.ofMillis(readTimeout))

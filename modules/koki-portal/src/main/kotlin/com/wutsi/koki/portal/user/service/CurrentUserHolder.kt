@@ -1,7 +1,7 @@
 package com.wutsi.koki.portal.user.service
 
+import com.wutsi.koki.portal.auth.service.LoginService
 import com.wutsi.koki.portal.security.JWTAuthentication
-import com.wutsi.koki.portal.service.AuthenticationService
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.security.dto.JWTPrincipal
 import org.springframework.context.annotation.Scope
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service
 @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 class CurrentUserHolder(
     private val service: UserService,
-    private val authenticationService: AuthenticationService,
+    private val loginService: LoginService,
 ) {
     private var model: UserModel? = null
 
@@ -36,7 +36,7 @@ class CurrentUserHolder(
             model = service.user(id)
             return model
         } catch (ex: Exception) {
-            authenticationService.logout()
+            loginService.logout()
             SecurityContextHolder.clearContext()
             return null
         }

@@ -17,7 +17,7 @@ import kotlin.test.assertEquals
 class SettingsEditRoleControllerTest : AbstractPageControllerTest() {
     @Test
     fun update() {
-        navigateTo("/settings/security/roles/${role.id}/edit")
+        navigateTo("/settings/roles/${role.id}/edit")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_EDIT)
 
         input("#name", "ACCT")
@@ -27,7 +27,12 @@ class SettingsEditRoleControllerTest : AbstractPageControllerTest() {
         click("button[type=submit]", 1000)
 
         val request = argumentCaptor<UpdateRoleRequest>()
-        verify(kokiUsers).updateRole(eq(role.id), request.capture())
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/roles/${role.id}"),
+            request.capture(),
+            eq(Any::class.java),
+        )
+
         assertEquals("ACCT", request.firstValue.name)
         assertEquals("Accountant", request.firstValue.title)
         assertEquals("This is an accountant that fill taxes", request.firstValue.description)
@@ -40,9 +45,13 @@ class SettingsEditRoleControllerTest : AbstractPageControllerTest() {
     @Test
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.AUTHORIZATION_PERMISSION_DENIED)
-        doThrow(ex).whenever(kokiUsers).updateRole(any(), any())
+        doThrow(ex).whenever(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/roles/${role.id}"),
+            any<UpdateRoleRequest>(),
+            eq(Any::class.java),
+        )
 
-        navigateTo("/settings/security/roles/${role.id}/edit")
+        navigateTo("/settings/roles/${role.id}/edit")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_EDIT)
 
         input("#name", "ACCT")
@@ -50,6 +59,7 @@ class SettingsEditRoleControllerTest : AbstractPageControllerTest() {
         input("#description", "This is an accountant that fill taxes")
         select("#active", 1)
         click("button[type=submit]", 1000)
+
         assertElementPresent(".alert-danger")
 
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_EDIT)
@@ -57,7 +67,7 @@ class SettingsEditRoleControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun back() {
-        navigateTo("/settings/security/roles/${role.id}/edit")
+        navigateTo("/settings/roles/${role.id}/edit")
         click(".btn-back")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_LIST)
     }

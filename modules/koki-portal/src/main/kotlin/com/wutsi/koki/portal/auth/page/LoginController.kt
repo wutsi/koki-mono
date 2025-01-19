@@ -1,9 +1,10 @@
-package com.wutsi.koki.portal.page.form
+package com.wutsi.koki.portal.auth.page
 
+import com.wutsi.koki.portal.auth.form.LoginForm
+import com.wutsi.koki.portal.auth.service.LoginService
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.portal.service.AuthenticationService
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
@@ -18,7 +19,7 @@ import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 class LoginController(
-    private val authenticationService: AuthenticationService,
+    private val service: LoginService,
     private val request: HttpServletRequest,
     private val response: HttpServletResponse,
 ) : AbstractPageController() {
@@ -43,7 +44,7 @@ class LoginController(
     fun submit(@ModelAttribute form: LoginForm, model: Model): String {
         try {
             // Login
-            authenticationService.login(form)
+            service.login(form)
 
             // Redirect
             val requestCache: RequestCache = HttpSessionRequestCache()
@@ -60,8 +61,3 @@ class LoginController(
         }
     }
 }
-
-data class LoginForm(
-    val email: String = "",
-    val password: String = "",
-)

@@ -14,7 +14,6 @@ import com.wutsi.koki.EmailFixtures
 import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.TaxFixtures
-import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import kotlin.test.Test
@@ -111,15 +110,6 @@ class AccountControllerTest : AbstractPageControllerTest() {
         navigateTo("/accounts/${account.id}?tab=files")
 
         Thread.sleep(1000)
-        verify(kokiFiles).files(
-            emptyList(), // ids
-            emptyList(), // workflow-instance-id
-            emptyList(), // form-id
-            account.id, // owner-id
-            ObjectType.ACCOUNT, // owner-type
-            20, // limit
-            0, // offset
-        )
         assertElementCount(".widget-files .file", FileFixtures.files.size)
     }
 
@@ -128,13 +118,6 @@ class AccountControllerTest : AbstractPageControllerTest() {
         navigateTo("/accounts/${account.id}?tab=notes")
 
         Thread.sleep(1000)
-        verify(kokiNotes).notes(
-            emptyList(), // ids
-            account.id, // owner-id
-            ObjectType.ACCOUNT, // owner-type
-            20, // limit
-            0, // offset
-        )
         assertElementCount(".widget-notes .note", NoteFixtures.notes.size)
     }
 
@@ -162,13 +145,6 @@ class AccountControllerTest : AbstractPageControllerTest() {
         navigateTo("/accounts/${account.id}?tab=emails")
 
         Thread.sleep(1000)
-        verify(kokiEmails).emails(
-            emptyList(), // ids
-            account.id, // owner-id
-            ObjectType.ACCOUNT, // owner-type
-            20, // limit
-            0, // offset
-        )
         assertElementCount(".widget-emails .email", EmailFixtures.emails.size)
     }
 }

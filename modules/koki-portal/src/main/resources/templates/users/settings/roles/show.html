@@ -12,17 +12,17 @@
         <div th:replace="~{__components/settings :: settings-menu('security')}"></div>
     </div>
     <div class="settings-content padding">
-        <div th:replace="~{__components/settings :: settings-title('Roles', '/settings/security/roles')}"></div>
+        <div th:replace="~{__components/settings :: settings-title('Roles', '/settings/roles')}"></div>
 
         <div class="margin-bottom">
-            <a class="btn btn-secondary btn-edit" th:href="'/settings/security/roles/' + ${role.id} + '/edit'">Edit</a>
+            <a class="btn btn-secondary btn-edit" th:href="'/settings/roles/' + ${role.id} + '/edit'">Edit</a>
 
             <a class="btn btn-secondary btn-permission"
-               th:href="'/settings/security/roles/' + ${role.id} + '/permissions'">Manage Permissions</a>
+               th:href="'/settings/roles/' + ${role.id} + '/permissions'">Manage Permissions</a>
 
             <a class="btn btn-danger btn-delete float-right"
                onclick="return confirm('Are you sure you want to delete this role?')"
-               th:href="'/settings/security/roles/' + ${role.id} + '/delete'">Delete</a>
+               th:href="'/settings/roles/' + ${role.id} + '/delete'">Delete</a>
         </div>
         <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
