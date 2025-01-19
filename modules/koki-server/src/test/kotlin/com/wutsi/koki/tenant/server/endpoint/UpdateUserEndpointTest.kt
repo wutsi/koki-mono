@@ -44,6 +44,7 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
         val request = UpdateUserRequest(
             email = "OMAM.MBIYICK@hotmail.com",
             displayName = "Omam Mbiyick",
+            status = UserStatus.RETIRED,
         )
 
         val result = rest.postForEntity("/v1/users/11", request, Any::class.java)
@@ -60,6 +61,7 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
         val request = UpdateUserRequest(
             email = "RAY.sponsible@gmail.com",
             displayName = "Duplicate",
+            status = UserStatus.RETIRED,
         )
 
         val result = rest.postForEntity("/v1/users/12", request, ErrorResponse::class.java)
@@ -73,6 +75,7 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
         val request = UpdateUserRequest(
             email = "foo.bar@gmail.com",
             displayName = "Foo Bar",
+            status = UserStatus.RETIRED,
         )
 
         val result = rest.postForEntity("/v1/users/99", request, ErrorResponse::class.java)
@@ -83,10 +86,10 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun `update user of another tenant`() {
-        val request = CreateUserRequest(
-            email = "roger.milla@gmail.com",
-            displayName = "Roger Milla",
-            password = "secret"
+        val request = UpdateUserRequest(
+            email = "foo.bar@gmail.com",
+            displayName = "Foo Bar",
+            status = UserStatus.RETIRED,
         )
 
         val result = rest.postForEntity("/v1/users/22", request, ErrorResponse::class.java)

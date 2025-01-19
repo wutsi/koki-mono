@@ -21,7 +21,6 @@ import java.util.UUID
 class UserService(
     private val dao: UserRepository,
     private val passwordService: PasswordService,
-    private val tenantService: TenantService,
     private val roleService: RoleService,
     private val securityService: SecurityService,
     private val em: EntityManager
@@ -98,7 +97,7 @@ class UserService(
         user.email = email
         user.displayName = request.displayName
         request.status?.let { status -> user.status = status }
-        user.modifiedById = securityService.getCurrentUserId()
+        user.modifiedById = securityService.getCurrentUserIdOrNull()
         user.modifiedAt = Date()
         dao.save(user)
     }
