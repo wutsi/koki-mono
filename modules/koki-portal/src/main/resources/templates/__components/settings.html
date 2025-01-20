@@ -3,13 +3,18 @@
 <body>
 
 
-<ul th:fragment="settings-menu(item)">
+<ul th:fragment="settings-menu(current)">
     <li class="menu-item">
         <h3>Settings</h3>
     </li>
-    <li class="menu-item" th:classappend="${item} == 'email' ? 'active'">
-        <a class="btn-email" href="/settings/email">Emails</a>
+    <li class="menu-item"
+        th:classappend="${current == module.name} ? 'active'"
+        th:each="module : ${tenant.modules}"
+        th:if="${module.settingsUrl} AND ${user?.canAdmin(module)} AND ${module.name != 'security'}"
+    >
+        <a th:class="'btn-' + ${module.name}" th:href="${module.settingsUrl}" th:text="${module.title}">TITLE</a>
     </li>
+
     <li class="menu-item" th:classappend="${item} == 'form' ? 'active'">
         <a class="btn-form" href="/settings/forms">Forms</a>
     </li>
@@ -25,7 +30,12 @@
     <li class="menu-item" th:classappend="${item} == 'workflow' ? 'active'">
         <a class="btn-workflow" href="/settings/workflows">Workflows</a>
     </li>
-    <li class="menu-item" th:classappend="${item} == 'security' ? 'active'">
+
+    <!-- Should be the last -->
+    <li class="menu-item"
+        th:classappend="${current == 'security'} ? 'active'"
+        th:if="${user?.hasPermission('security:admin')}"
+    >
         <a class="btn-security" href="/settings/security">Security</a>
     </li>
 </ul>
