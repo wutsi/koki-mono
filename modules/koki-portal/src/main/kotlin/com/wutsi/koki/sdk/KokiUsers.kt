@@ -66,6 +66,7 @@ class KokiUsers(
 
     fun roles(
         ids: List<Long> = emptyList(),
+        active: Boolean?,
         limit: Int = 20,
         offset: Int = 0
     ): SearchRoleResponse {
@@ -73,6 +74,7 @@ class KokiUsers(
             ROLE_PATH_PREFIX,
             mapOf(
                 "id" to ids,
+                "active" to active,
                 "limit" to limit,
                 "offset" to offset
             )

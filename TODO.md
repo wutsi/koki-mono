@@ -78,11 +78,11 @@
 
 ## Module
 
+- [] link Widget with modules
 - [x] Module API
 - [x] List of modules driven by backend in home page
 - [x] List of modules driven by backend in configuration
-- [] link CSS and JS with modules
-- [] link Widget with modules
+- [x] link CSS and JS with modules
 
 ## Security
 

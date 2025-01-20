@@ -12,6 +12,8 @@ data class ModuleModel(
     val homeUrl: String? = null,
     val tabUrl: String? = null,
     val settingsUrl: String? = null,
+    val jsUrl: String? = null,
+    val cssUrl: String? = null,
     val permissions: List<PermissionModel> = emptyList(),
 ) {
     fun toTabUrl(id: Long, module: ModuleModel): String? {

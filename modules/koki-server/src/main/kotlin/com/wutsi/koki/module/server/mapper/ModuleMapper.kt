@@ -16,6 +16,8 @@ class ModuleMapper {
             homeUrl = entity.homeUrl,
             tabUrl = entity.tabUrl,
             settingsUrl = entity.settingsUrl,
+            jsUrl = entity.jsUrl,
+            cssUrl = entity.cssUrl,
         )
     }
 }
