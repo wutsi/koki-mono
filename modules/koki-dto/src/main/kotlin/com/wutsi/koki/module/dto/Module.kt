@@ -11,4 +11,6 @@ data class Module(
     val tabUrl: String? = null,
     val settingsUrl: String? = null,
     val objectType: ObjectType = ObjectType.UNKNOWN,
+    val jsUrl: String? = null,
+    val cssUrl: String? = null,
 )
