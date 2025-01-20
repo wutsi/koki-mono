@@ -12,7 +12,6 @@ import com.wutsi.koki.TaxFixtures.taxTypes
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.tax.dto.UpdateTaxRequest
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -32,14 +31,15 @@ class EditTaxControllerTest : AbstractPageControllerTest() {
         input("#description", "This is a nice description")
         click("button[type=submit]")
 
-        val fmt = SimpleDateFormat("yyyy-MM-dd")
         val request = argumentCaptor<UpdateTaxRequest>()
-        verify(kokiTaxes).update(eq(tax.id), request.capture())
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/taxes/${tax.id}"),
+            request.capture(),
+            eq(Any::class.java),
+        )
         val tax = request.firstValue
         assertEquals(LocalDate.now().year - 2, tax.fiscalYear)
         assertEquals(taxTypes[2].id, tax.taxTypeId)
-//        assertEquals("2020-12-11", fmt.format(tax.startAt))
-//        assertEquals("2020-12-21", fmt.format(tax.dueAt))
         assertEquals("This is a nice description", tax.description)
 
         assertCurrentPageIs(PageName.TAX_SAVED)
@@ -67,7 +67,11 @@ class EditTaxControllerTest : AbstractPageControllerTest() {
     @Test
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
-        doThrow(ex).whenever(kokiTaxes).update(any(), any())
+        doThrow(ex).whenever(rest).postForEntity(
+            any<String>(),
+            any<UpdateTaxRequest>(),
+            eq(Any::class.java),
+        )
 
         navigateTo("/taxes/${tax.id}/edit")
 

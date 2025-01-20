@@ -3,7 +3,6 @@ package com.wutsi.koki.portal.tax.page
 import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.tax.form.TaxForm
 import com.wutsi.koki.portal.tax.service.TaxService
@@ -22,7 +21,7 @@ class CreateTaxController(
     private val service: TaxService,
     private val accountService: AccountService,
     private val taxTypeService: TaxTypeService,
-) : AbstractPageController() {
+) : AbstractTaxController() {
     @GetMapping("/taxes/create")
     fun create(
         @RequestParam(required = false, name = "account-id") accountId: Long? = null, model: Model
@@ -47,7 +46,8 @@ class CreateTaxController(
         model.addAttribute("taxTypes", taxTypeService.taxTypes(active = true, limit = Integer.MAX_VALUE))
 
         model.addAttribute(
-            "page", PageModel(
+            "page",
+            createPageModel(
                 name = PageName.TAX_CREATE,
                 title = "New Tax Report",
             )

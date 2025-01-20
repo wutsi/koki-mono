@@ -17,8 +17,7 @@ abstract class AbstractModuleDetailsPageController : AbstractModulePageControlle
         val path = "/layout/$moduleName.json"
         val input = this::class.java.getResourceAsStream(path)
         if (input == null) {
-            logger.warn("Layout descriptor not found: $path")
-            return
+            throw IllegalStateException("Layout descriptor not found: $path")
         }
 
         layoutDescriptor = objectMapper.readValue(input, PageLayoutDescriptor::class.java)

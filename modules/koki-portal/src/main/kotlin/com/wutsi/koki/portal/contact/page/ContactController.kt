@@ -2,7 +2,6 @@ package com.wutsi.koki.portal.contact.page
 
 import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.contact.service.ContactService
-import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.PageName
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -45,7 +44,7 @@ class ContactController(
             model.addAttribute("contact", contact)
             model.addAttribute(
                 "page",
-                PageModel(
+                createPageModel(
                     name = PageName.CONTACT_DELETED,
                     title = contact.name,
                 )

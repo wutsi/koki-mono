@@ -1,7 +1,5 @@
 package com.wutsi.koki.portal.tax.page
 
-import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.tax.service.TaxService
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
@@ -15,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam
 class ListTaxController(
     private val service: TaxService,
     private val currentUser: CurrentUserHolder,
-) : AbstractPageController() {
+) : AbstractTaxController() {
     companion object {
         const val COL_ALL_REPORTS = "1"
         const val COL_MY_REPORTS = "2"
@@ -41,7 +39,7 @@ class ListTaxController(
         model.addAttribute("collection", toCollection(collection))
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.TAX_LIST,
                 title = "Taxes",
             )

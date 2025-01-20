@@ -1,8 +1,6 @@
 package com.wutsi.koki.portal.tax.page
 
 import com.wutsi.koki.portal.account.service.AccountService
-import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.tax.form.TaxForm
 import com.wutsi.koki.portal.tax.model.TaxModel
@@ -25,7 +23,7 @@ class EditTaxController(
     private val accountService: AccountService,
     private val taxTypeService: TaxTypeService,
     private val userService: UserService,
-) : AbstractPageController() {
+) : AbstractTaxController() {
     @GetMapping("/taxes/{id}/edit")
     fun edit(
         @PathVariable id: Long,
@@ -68,7 +66,7 @@ class EditTaxController(
 
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.TAX_EDIT,
                 title = "New Tax Report",
             )
@@ -94,7 +92,7 @@ class EditTaxController(
             model.addAttribute("tax", tax)
             model.addAttribute(
                 "page",
-                PageModel(
+                createPageModel(
                     name = PageName.TAX_SAVED,
                     title = tax.name
                 )

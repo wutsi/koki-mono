@@ -5,7 +5,6 @@ import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.account.service.AccountTypeService
 import com.wutsi.koki.portal.account.service.AttributeService
-import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.user.service.UserService
 import jakarta.servlet.http.HttpServletRequest
@@ -109,7 +108,7 @@ class EditAccountController(
             model.addAttribute("account", account)
             model.addAttribute(
                 "page",
-                PageModel(
+                createPageModel(
                     name = PageName.ACCOUNT_SAVED,
                     title = form.name
                 )

@@ -5,7 +5,6 @@ import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.account.service.AccountTypeService
 import com.wutsi.koki.portal.account.service.AttributeService
-import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
 import com.wutsi.koki.portal.user.service.UserService
@@ -96,7 +95,7 @@ class CreateAccountController(
             model.addAttribute("createUrl", "/accounts/create")
             model.addAttribute(
                 "page",
-                PageModel(
+                createPageModel(
                     name = PageName.ACCOUNT_SAVED,
                     title = form.name
                 )
