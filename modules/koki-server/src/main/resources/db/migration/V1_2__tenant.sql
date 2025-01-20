@@ -102,6 +102,6 @@ INSERT INTO T_MODULE(id, name, title, home_url, tab_url, settings_url)
     VALUES (100, 'security', 'Security', null, null, '/settings/security');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
-    VALUES (1000, 100, 'security',      'Manage system security'),
-           (1001, 100, 'security:user', 'Manage users'),
-           (1002, 100, 'security:role', 'Manage roles');
+    VALUES (1000, 100, 'security:admin', 'Manage system security'),
+           (1001, 100, 'security:user',  'Manage users'),
+           (1002, 100, 'security:role',  'Manage roles');
