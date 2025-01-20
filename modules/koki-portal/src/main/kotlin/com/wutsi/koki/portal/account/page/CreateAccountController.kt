@@ -5,8 +5,6 @@ import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.account.service.AccountTypeService
 import com.wutsi.koki.portal.account.service.AttributeService
-import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
 import com.wutsi.koki.portal.user.service.UserService
@@ -28,7 +26,7 @@ class CreateAccountController(
     private val userService: UserService,
     private val currentUser: CurrentUserHolder,
     private val request: HttpServletRequest,
-) : AbstractPageController() {
+) : AbstractAccountController() {
     @GetMapping("/accounts/create")
     fun create(model: Model): String {
         val form = AccountForm(
@@ -68,7 +66,7 @@ class CreateAccountController(
 
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.ACCOUNT_CREATE,
                 title = "New Account"
             )
@@ -97,7 +95,7 @@ class CreateAccountController(
             model.addAttribute("createUrl", "/accounts/create")
             model.addAttribute(
                 "page",
-                PageModel(
+                createPageModel(
                     name = PageName.ACCOUNT_SAVED,
                     title = form.name
                 )

@@ -3,6 +3,7 @@ INSERT INTO T_TENANT(id, status, name, domain_name, locale, number_format, curre
 
 INSERT INTO T_TENANT_MODULE(tenant_fk, module_fk)
     VALUES (1, 100),
+           (1, 110),
            (1, 120),
            (1, 130),
            (1, 140),

@@ -1,7 +1,5 @@
 package com.wutsi.koki.portal.tax.page
 
-import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.tax.model.TaxModel
 import com.wutsi.koki.portal.tax.service.TaxService
@@ -14,7 +12,7 @@ import org.springframework.web.client.HttpClientErrorException
 @Controller
 class TaxController(
     private val service: TaxService,
-) : AbstractPageController() {
+) : AbstractTaxDetailsController() {
     @GetMapping("/taxes/{id}")
     fun show(
         @PathVariable id: Long,
@@ -24,7 +22,7 @@ class TaxController(
         model.addAttribute("tax", tax)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.TAX,
                 title = tax.name,
             )
@@ -36,7 +34,7 @@ class TaxController(
         model.addAttribute("tax", tax)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.TAX,
                 title = tax.name,
             )
@@ -52,7 +50,7 @@ class TaxController(
             model.addAttribute("tax", tax)
             model.addAttribute(
                 "page",
-                PageModel(
+                createPageModel(
                     name = PageName.TAX_DELETED,
                     title = tax.name,
                 )

@@ -6,7 +6,7 @@
 
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
-<div th:replace="~{__components/layout :: menubar('contacts')}"></div>
+<div th:replace="~{__components/layout :: menubar('contact')}"></div>
 
 <div class="container-fluid">
     <div class="row">
@@ -68,137 +68,89 @@
         <div class="col-12 col-md-8">
             <div class="widget">
                 <div class="widget-body">
-                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button aria-controls="pills-content" aria-selected="true" class="nav-link active"
-                                    data-bs-target="#pills-details" data-bs-toggle="pill" id="pills-details-tab"
-                                    role="tab" type="button">
-                                Details
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button aria-controls="pills-files" aria-selected="false" class="nav-link"
-                                    data-bs-target="#pills-files" data-bs-toggle="pill" id="pills-files-tab"
-                                    role="tab" type="button">
-                                Files
-                            </button>
-                        </li>
-                    </ul>
-                    <div class="tab-content" id="pills-tabContent">
-                        <div aria-labelledby="pills-details-tab" class="tab-pane fade show active"
-                             id="pills-details"
-                             role="tabpanel">
-                            <table class="table">
-                                <tr th:if="${contact.account}">
-                                    <td><b>Account</b></td>
-                                    <td>
-                                        <a class="entity-title" th:href="'/accounts/' + ${contact.account.id}">
-                                            <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
-                                            <span th:text="${contact.account.name}">ACCOUNT</span>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr th:if="${contact.contactType}">
-                                    <td><b>Contact Type</b></td>
-                                    <td th:text="${contact.contactType?.title}">TYPE</td>
-                                </tr>
-                                <tr th:if="${contact.salutation}">
-                                    <td><b>Salutations</b></td>
-                                    <td th:text="${contact.salutation}">TYPE</td>
-                                </tr>
-                                <tr>
-                                    <td width="20%"><b>First Name</b></td>
-                                    <td th:text="${contact.firstName}">TYPE</td>
-                                </tr>
-                                <tr>
-                                    <td width="20%"><b>Last Name</b></td>
-                                    <td th:text="${contact.lastName}">TYPE</td>
-                                </tr>
-                                <tr th:if="${contact.gender}">
-                                    <td><b>Gender</b></td>
-                                    <td th:text="${contact.gender.name}">GENDER</td>
-                                </tr>
-                                <tr th:if="${contact.phone}">
-                                    <td><b>Phone</b></td>
-                                    <td th:text="${contact.phone}">PHONE</td>
-                                </tr>
-                                <tr th:if="${contact.mobile}">
-                                    <td><b>Mobile</b></td>
-                                    <td th:text="${contact.mobile}">MOBILE</td>
-                                </tr>
-                                <tr th:if="${contact.email}">
-                                    <td><b>Email</b></td>
-                                    <td>
-                                        <a th:href="'mailto:' + ${contact.email}"
-                                           th:text="${contact.email}">EMAIL</a>
-                                    </td>
-                                </tr>
-                                <tr th:if="${contact.profession}">
-                                    <td><b>Profession</b></td>
-                                    <td th:text="${contact.profession}">PROFESSION</td>
-                                </tr>
-                                <tr th:if="${contact.employer}">
-                                    <td><b>Employer</b></td>
-                                    <td th:text="${contact.employer}">EMPLOYER</td>
-                                </tr>
-                                <tr>
-                                    <td><b>Created</b></td>
-                                    <td>
-                                        <span th:text="${contact.createdAtText}">DATE</span>
-                                        <span th:if="${contact.createdBy}">by</span>
-                                        <span th:if="${contact.createdBy}"
-                                              th:text="${contact.createdBy.displayName}">MODIFIED BY</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><b>Modified</b></td>
-                                    <td>
-                                        <span th:text="${contact.modifiedAtText}">DATE</span>
-                                        <span th:if="${contact.modifiedBy}">by</span>
-                                        <span th:if="${contact.modifiedBy}"
-                                              th:text="${contact.modifiedBy.displayName}">MODIFIED BY</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-
-                        <div aria-labelledby="pills-files-tab" class="tab-pane fade" id="pills-files"
-                             role="tabpanel"
-                             th:data-url="'/files/widgets/list?owner-id=' + ${contact.id} + '&owner-type=CONTACT'">
-                        </div>
-                    </div>
+                    <div th:replace="~{__components/module :: tabs('main', true)}"></div>
+                    <div th:replace="~{__components/module :: tabs-content('main', true, ${contact}, ${module})}"></div>
+                    <table class="table hidden" id="tab-details-content">
+                        <tr th:if="${contact.account}">
+                            <td><b>Account</b></td>
+                            <td>
+                                <a class="entity-title" th:href="'/accounts/' + ${contact.account.id}">
+                                    <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
+                                    <span th:text="${contact.account.name}">ACCOUNT</span>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr th:if="${contact.contactType}">
+                            <td><b>Contact Type</b></td>
+                            <td th:text="${contact.contactType?.title}">TYPE</td>
+                        </tr>
+                        <tr th:if="${contact.salutation}">
+                            <td><b>Salutations</b></td>
+                            <td th:text="${contact.salutation}">TYPE</td>
+                        </tr>
+                        <tr>
+                            <td width="20%"><b>First Name</b></td>
+                            <td th:text="${contact.firstName}">TYPE</td>
+                        </tr>
+                        <tr>
+                            <td width="20%"><b>Last Name</b></td>
+                            <td th:text="${contact.lastName}">TYPE</td>
+                        </tr>
+                        <tr th:if="${contact.gender}">
+                            <td><b>Gender</b></td>
+                            <td th:text="${contact.gender.name}">GENDER</td>
+                        </tr>
+                        <tr th:if="${contact.phone}">
+                            <td><b>Phone</b></td>
+                            <td th:text="${contact.phone}">PHONE</td>
+                        </tr>
+                        <tr th:if="${contact.mobile}">
+                            <td><b>Mobile</b></td>
+                            <td th:text="${contact.mobile}">MOBILE</td>
+                        </tr>
+                        <tr th:if="${contact.email}">
+                            <td><b>Email</b></td>
+                            <td>
+                                <a th:href="'mailto:' + ${contact.email}"
+                                   th:text="${contact.email}">EMAIL</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${contact.profession}">
+                            <td><b>Profession</b></td>
+                            <td th:text="${contact.profession}">PROFESSION</td>
+                        </tr>
+                        <tr th:if="${contact.employer}">
+                            <td><b>Employer</b></td>
+                            <td th:text="${contact.employer}">EMPLOYER</td>
+                        </tr>
+                        <tr>
+                            <td><b>Created</b></td>
+                            <td>
+                                <span th:text="${contact.createdAtText}">DATE</span>
+                                <span th:if="${contact.createdBy}">by</span>
+                                <span th:if="${contact.createdBy}"
+                                      th:text="${contact.createdBy.displayName}">MODIFIED BY</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Modified</b></td>
+                            <td>
+                                <span th:text="${contact.modifiedAtText}">DATE</span>
+                                <span th:if="${contact.modifiedBy}">by</span>
+                                <span th:if="${contact.modifiedBy}"
+                                      th:text="${contact.modifiedBy.displayName}">MODIFIED BY</span>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
         <div class="col-12 col-md-4">
             <div class="widget">
                 <div class="widget-body">
-                    <ul class="nav nav-pills mb-3" id="pills-tab-activity" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button aria-controls="pills-notes" aria-selected="false" class="nav-link active"
-                                    data-bs-target="#pills-notes" data-bs-toggle="pill" id="pills-notes-tab"
-                                    role="tab" type="button">
-                                Notes
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button aria-controls="pills-emails" aria-selected="false" class="nav-link"
-                                    data-bs-target="#pills-emails" data-bs-toggle="pill" id="pills-emails-tab"
-                                    role="tab" type="button">
-                                Emails
-                            </button>
-                        </li>
-                    </ul>
-                    <div class="tab-content" id="pills-tabContent-activity">
-                        <div aria-labelledby="pills-notes-tab" class="tab-pane fade show active" id="pills-notes"
-                             role="tabpanel"
-                             th:data-url="'/notes/widgets/list?owner-id=' + ${contact.id} + '&owner-type=CONTACT'">
-                        </div>
-                        <div aria-labelledby="pills-emails-tab" class="tab-pane fade" id="pills-emails"
-                             role="tabpanel"
-                             th:data-url="'/emails/widgets/list?owner-id=' + ${contact.id} + '&owner-type=CONTACT&recipient-id=' + ${contact.id} + '&recipient-type=CONTACT'">
-                        </div>
-                    </div>
+                    <div th:replace="~{__components/module :: tabs('side', false)}"></div>
+                    <div
+                        th:replace="~{__components/module :: tabs-content('side', false, ${contact}, ${module})}"></div>
                 </div>
             </div>
         </div>

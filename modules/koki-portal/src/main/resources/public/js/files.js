@@ -53,7 +53,7 @@ function _koki_files_refresh() {
     const container = document.getElementById('file-list');
     const ownerId = container.getAttribute("data-owner-id");
     const ownerType = container.getAttribute("data-owner-type");
-    fetch('/files/widgets/list/more?owner-id=' + ownerId + '&owner-type=' + ownerType)
+    fetch('/files/tab/more?owner-id=' + ownerId + '&owner-type=' + ownerType)
         .then(response => {
             response.text()
                 .then(html => {

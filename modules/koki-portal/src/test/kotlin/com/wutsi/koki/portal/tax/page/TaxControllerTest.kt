@@ -38,7 +38,7 @@ class TaxControllerTest : AbstractPageControllerTest() {
         alert.accept()
         driver.switchTo().parentFrame()
 
-        verify(kokiTaxes).delete(tax.id)
+        verify(rest).delete("$sdkBaseUrl/v1/taxes/${tax.id}")
         assertCurrentPageIs(PageName.TAX_DELETED)
 
         click(".btn-ok")
@@ -54,14 +54,14 @@ class TaxControllerTest : AbstractPageControllerTest() {
         alert.dismiss()
         driver.switchTo().parentFrame()
 
-        verify(kokiTaxes, never()).delete(any())
+        verify(rest, never()).delete(any<String>())
         assertCurrentPageIs(PageName.TAX)
     }
 
     @Test
     fun `error on delete`() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
-        doThrow(ex).whenever(kokiTaxes).delete(any())
+        doThrow(ex).whenever(rest).delete(any<String>())
 
         navigateTo("/taxes/${tax.id}")
         click(".btn-delete")
@@ -75,26 +75,26 @@ class TaxControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun files() {
-        navigateTo("/taxes/${tax.id}?tab=files")
+        navigateTo("/taxes/${tax.id}?tab=file")
 
         Thread.sleep(1000)
-        assertElementCount(".widget-files tr.file", FileFixtures.files.size)
+        assertElementCount(".tab-files tr.file", FileFixtures.files.size)
     }
 
     @Test
     fun notes() {
-        navigateTo("/taxes/${tax.id}?tab=notes")
+        navigateTo("/taxes/${tax.id}?tab=note")
 
         Thread.sleep(1000)
-        assertElementCount(".widget-notes .note", NoteFixtures.notes.size)
+        assertElementCount(".tab-notes .note", NoteFixtures.notes.size)
     }
 
     @Test
     fun emails() {
-        navigateTo("/taxes/${tax.id}?tab=emails")
+        navigateTo("/taxes/${tax.id}?tab=email")
 
         Thread.sleep(1000)
-        assertElementCount(".widget-emails .email", EmailFixtures.emails.size)
+        assertElementCount(".tab-emails .email", EmailFixtures.emails.size)
     }
 
     @Test

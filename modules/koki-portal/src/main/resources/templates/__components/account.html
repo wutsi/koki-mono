@@ -28,7 +28,6 @@
     <td>
         <a th:href="'mailto:' + ${account.email}" th:if="${account.email}" th:text="${account.email}">EMAIL</a>
     </td>
-    <td th:text="${account.modifiedAtText}">MODIFIED</td>
     <td th:text="${account.managedBy?.displayName}">MANAGER</td>
     <td class="toolbar">
         <a class="btn-view" th:href="'/accounts/' + ${account.id}">View</a>
@@ -37,7 +36,7 @@
 </tr>
 
 <tr id="account-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
-    <td class="text-center" colspan="8">
+    <td class="text-center" colspan="7">
         <a href="javascript: koki_load_more('account-load-more')" th:data-url="${moreUrl}">Load more...</a>
     </td>
 </tr>

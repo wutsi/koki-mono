@@ -12,12 +12,12 @@ class ModuleMapper {
         return ModuleModel(
             id = entity.id,
             name = entity.name,
-            description = entity.description,
+            description = entity.description?.trim()?.ifEmpty { null },
             title = entity.title,
             objectType = entity.objectType,
-            tabUrl = entity.tabUrl,
-            homeUrl = entity.homeUrl,
-            settingsUrl = entity.settingsUrl,
+            tabUrl = entity.tabUrl?.trim()?.ifEmpty { null },
+            homeUrl = entity.homeUrl?.trim()?.ifEmpty { null },
+            settingsUrl = entity.settingsUrl?.trim()?.ifEmpty { null },
             permissions = permissions.map { permission -> toPermissionModel(permission) }
         )
     }

@@ -1,23 +1,16 @@
-<div class="widget widget-emails">
+<div class="tab-emails">
     <div>
-        <div>
-            <a class="btn btn-secondary btn-sm margin-bottom" href="javascript: koki_emails_compose()"
-               id="btn-email-compose">
-                <i class="fa-solid fa-pen"></i>
-                Compose
-            </a>
+        <a class="btn btn-secondary btn-sm margin-bottom" href="javascript: koki_emails_compose()"
+           id="btn-email-compose">
+            <i class="fa-solid fa-pen"></i>
+            Compose
+        </a>
+    </div>
+    <div id="email-list" th:data-owner-id="${ownerId}" th:data-owner-type="${ownerType}">
+        <div class="email border-top padding" th:each="email : ${emails}" th:id="'email-' + ${email.id}">
+            <div th:replace="~{__components/email :: columns(${email})}"></div>
         </div>
-        <div id="email-list"
-             th:data-owner-id="${ownerId} ? ${ownerId}"
-             th:data-owner-type="${ownerType} ? ${ownerType}"
-             th:data-recipient-id="${recipientId} ? ${recipientId}"
-             th:data-recipient-type="${recipientType} ? ${recipientType}"
-        >
-            <div class="email border-top padding" th:each="email : ${emails}" th:id="'email-' + ${email.id}">
-                <div th:replace="~{__components/email :: columns(${email})}"></div>
-            </div>
-            <div th:replace="~{__components/email :: load-more(${moreUrl})}"></div>
-        </div>
+        <div th:replace="~{__components/email :: load-more(${moreUrl})}"></div>
     </div>
 </div>
 

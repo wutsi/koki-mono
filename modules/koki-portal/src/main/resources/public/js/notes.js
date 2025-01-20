@@ -138,7 +138,7 @@ function _koki_notes_refresh(id) {
         const container = document.getElementById('note-list');
         const ownerId = container.getAttribute("data-owner-id");
         const ownerType = container.getAttribute("data-owner-type");
-        fetch('/notes/widgets/list/more?owner-id=' + ownerId + '&owner-type=' + ownerType)
+        fetch('/notes/tab/more?owner-id=' + ownerId + '&owner-type=' + ownerType)
             .then(response => {
                 response.text()
                     .then(html => {

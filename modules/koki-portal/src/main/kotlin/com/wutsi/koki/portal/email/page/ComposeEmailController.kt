@@ -5,6 +5,7 @@ import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.email.model.EmailForm
 import com.wutsi.koki.portal.email.service.EmailService
+import com.wutsi.koki.portal.tax.service.TaxService
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -19,30 +20,29 @@ class ComposeEmailController(
     private val currentUser: CurrentUserHolder,
     private val accountService: AccountService,
     private val contactService: ContactService,
+    private val taxService: TaxService,
 ) {
     @GetMapping("/emails/compose")
     fun compose(
-        @RequestParam(name = "owner-id", required = true) ownerId: Long? = null,
-        @RequestParam(name = "owner-type", required = true) ownerType: ObjectType? = null,
-        @RequestParam(name = "recipient-id", required = true) recipientId: Long? = null,
-        @RequestParam(name = "recipient-type", required = true) recipientType: ObjectType? = null,
+        @RequestParam(name = "owner-id", required = true) ownerId: Long,
+        @RequestParam(name = "owner-type", required = true) ownerType: ObjectType,
         model: Model,
     ): String {
         model.addAttribute("user", currentUser.get())
         model.addAttribute("ownerId", ownerId)
         model.addAttribute("ownerType", ownerType)
-        model.addAttribute("recipientId", recipientId)
-        model.addAttribute("recipientType", recipientType)
 
-        val account = if (recipientType == ObjectType.ACCOUNT && recipientId != null) {
-            accountService.account(id = recipientId, fullGraph = false)
+        val account = if (ownerType == ObjectType.ACCOUNT) {
+            accountService.account(id = ownerId, fullGraph = false)
+        } else if (ownerType == ObjectType.TAX) {
+            taxService.tax(ownerId).account
         } else {
             null
         }
         model.addAttribute("account", account)
 
-        val contact = if (recipientType == ObjectType.CONTACT && recipientId != null) {
-            contactService.contact(id = recipientId, fullGraph = false)
+        val contact = if (ownerType == ObjectType.CONTACT) {
+            contactService.contact(id = ownerId, fullGraph = false)
         } else {
             null
         }
@@ -53,7 +53,7 @@ class ComposeEmailController(
             EmailForm(
                 ownerType = ownerType,
                 ownerId = ownerId,
-                recipientType = recipientType,
+                recipientType = if (account != null) ObjectType.ACCOUNT else ObjectType.CONTACT,
                 accountId = account?.id,
                 contactId = contact?.id,
             )

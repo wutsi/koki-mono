@@ -18,22 +18,28 @@
     </div>
 </div>
 
-<tr class="tax" th:fragment="columns(tax, showAccount, smallView)" th:remove="tag">
+<tr class="tax" th:fragment="columns(tax, showAccount)" th:remove="tag">
     <td>
-        <a th:href="'/taxes/' + ${tax.id}" th:text="${tax.name}">NAME</a>
+        <a th:href="'/taxes/' + ${tax.id}" th:text="${tax.fiscalYear}">NAME</a>
     </td>
+    <td th:text="${tax.taxType.title}">TYPE</td>
     <td th:if="${showAccount}">
         <a th:href="'/accounts/' + ${tax.account.id}" th:text="${tax.account.name}">ACCOUNT</a>
     </td>
-    <td th:if="!${smallView}">
+    <td>
         <span th:replace="~{__components/tax :: tax-status(${tax.status.name})}"></span>
     </td>
-    <td th:if="!${smallView}" th:text="${tax.accountant?.displayName}">ACCOUNTANT</td>
-    <td th:if="!${smallView}" th:text="${tax.assignee?.displayName}">ASSIGNEE</td>
-    <td th:if="!${smallView}" th:text="${tax.modifiedAtText}">MODIFIED</td>
+    <td th:text="${tax.accountant?.displayName}">ACCOUNTANT</td>
+    <td th:text="${tax.assignee?.displayName}">ASSIGNEE</td>
     <td class="toolbar" th:if="!${smallView}">
         <a class="btn-view" th:href="'/taxes/' + ${tax.id}">View</a>
         <a class="btn-edit" th:href="'/taxes/' + ${tax.id} + '/edit'">Edit</a>
+    </td>
+</tr>
+
+<tr id="tax-load-more" th:fragment="load-more(moreUrl, showAccount)" th:if="${moreUrl}">
+    <td class="text-center" th:colspan="${showAccount} ? 7 : 6">
+        <a href="javascript: koki_load_more('tax-load-more')" th:data-url="${moreUrl}">Load more...</a>
     </td>
 </tr>
 
@@ -54,11 +60,5 @@
           th:if="${status != 'NEW'} AND ${status != 'PREPARING'} AND ${status != 'DONE'} AND ${status != 'SIGNING'} AND ${status != 'SUBMITTING'}"
           th:text="#{'tax-status.' + ${status}}">NEW</span>
 </div>
-
-<tr id="tax-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
-    <td class="text-center" colspan="7">
-        <a href="javascript: koki_load_more('tax-load-more')" th:data-url="${moreUrl}">Load more...</a>
-    </td>
-</tr>
 
 </body>

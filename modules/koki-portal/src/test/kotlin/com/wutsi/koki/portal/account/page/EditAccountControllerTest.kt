@@ -41,7 +41,11 @@ class EditAccountControllerTest : AbstractPageControllerTest() {
         click("button[type=submit]")
 
         val request = argumentCaptor<UpdateAccountRequest>()
-        verify(kokiAccounts).update(eq(account.id), request.capture())
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/accounts/${account.id}"),
+            request.capture(),
+            eq(Any::class.java)
+        )
         assertEquals("Ray Construction Inc", request.firstValue.name)
         assertEquals(accountTypes[2].id, request.firstValue.accountTypeId)
         assertEquals(users[2].id, request.firstValue.managedById)
@@ -82,7 +86,11 @@ class EditAccountControllerTest : AbstractPageControllerTest() {
     @Test
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
-        doThrow(ex).whenever(kokiAccounts).update(any(), any())
+        doThrow(ex).whenever(rest).postForEntity(
+            any<String>(),
+            any<UpdateAccountRequest>(),
+            eq(Any::class.java)
+        )
 
         navigateTo("/accounts/${account.id}/edit")
 

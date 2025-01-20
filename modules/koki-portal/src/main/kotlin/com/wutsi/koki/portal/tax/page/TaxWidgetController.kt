@@ -1,0 +1,29 @@
+package com.wutsi.koki.portal.tax.page
+
+import com.wutsi.koki.portal.page.AbstractPageController
+import com.wutsi.koki.portal.tax.service.TaxService
+import com.wutsi.koki.portal.user.service.CurrentUserHolder
+import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
+import org.springframework.web.bind.annotation.GetMapping
+
+@Controller
+class TaxWidgetController(
+    private val service: TaxService,
+    private val currentUser: CurrentUserHolder,
+) : AbstractPageController() {
+    @GetMapping("/taxes/widget")
+    fun list(model: Model): String {
+        val user = currentUser.get()
+        if (user != null) {
+            val taxes = service.taxes(
+                assigneeIds = listOf(user.id),
+                limit = 5,
+            )
+            if (taxes.isNotEmpty()) {
+                model.addAttribute("taxes", taxes)
+            }
+        }
+        return "taxes/widget"
+    }
+}

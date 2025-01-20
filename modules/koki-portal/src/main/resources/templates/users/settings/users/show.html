@@ -43,7 +43,11 @@
                     <table class="table table-striped" th:if="!${user.roles.isEmpty()}">
                         <tr th:each="role : ${user.roles}">
                             <td>
-                                <a th:href="'/settings/roles/' + ${role.id}" th:text="${role.name}">ROLE</a>
+                                <a th:href="'/settings/roles/' + ${role.id}">
+                                    <span th:text="${role.name}">NAME</span>
+                                    -
+                                    <span th:text="${role.title}">TITLE</span>
+                                </a>
                             </td>
                         </tr>
                     </table>

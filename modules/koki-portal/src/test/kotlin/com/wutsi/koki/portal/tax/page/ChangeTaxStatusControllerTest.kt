@@ -27,7 +27,11 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
         click("button[type=submit]")
 
         val request = argumentCaptor<UpdateTaxStatusRequest>()
-        verify(kokiTaxes).status(eq(tax.id), request.capture())
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/taxes/${tax.id}/status"),
+            request.capture(),
+            eq(Any::class.java),
+        )
         val tax = request.firstValue
         assertEquals(TaxStatus.PROCESSING, tax.status)
         assertEquals("<p>Hello man</p>", tax.notes)
@@ -51,7 +55,11 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
     @Test
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
-        doThrow(ex).whenever(kokiTaxes).status(any(), any())
+        doThrow(ex).whenever(rest).postForEntity(
+            any<String>(),
+            any<UpdateTaxStatusRequest>(),
+            eq(Any::class.java),
+        )
 
         navigateTo("/taxes/${tax.id}/status")
 

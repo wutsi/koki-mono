@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.email.page.widget
+package com.wutsi.koki.portal.email.page
 
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.eq
@@ -12,19 +12,22 @@ import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.email.dto.SendEmailRequest
 import com.wutsi.koki.email.dto.SendEmailResponse
 import org.junit.jupiter.api.Test
+import kotlin.jvm.java
 import kotlin.test.assertEquals
 
-class ListEmailWidgetControllerTest : AbstractPageControllerTest() {
+class EmailTabControllerTest : AbstractPageControllerTest() {
     @Test
     fun list() {
-        navigateTo("/emails/widgets/list?test-mode=true")
+        navigateTo("/emails/tab?test-mode=true&owner-id=111&owner-type=TAX")
 
-        assertElementCount(".widget-emails .email", emails.size)
+        assertElementCount(".tab-emails .email", emails.size)
+        assertElementAttribute("#email-list", "data-owner-id", "111")
+        assertElementAttribute("#email-list", "data-owner-type", "TAX")
     }
 
     @Test
     fun open() {
-        navigateTo("/emails/widgets/list?test-mode=true")
+        navigateTo("/emails/tab?test-mode=true&owner-id=${account.id}&owner-type=ACCOUNT")
 
         click(".email a", 1000)
         assertElementVisible("#email-modal")
@@ -35,7 +38,67 @@ class ListEmailWidgetControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `send to account`() {
-        navigateTo("/emails/widgets/list?test-mode=true&owner-id=${tax.id}&owner-type=TAX&recipient-id=${account.id}&recipient-type=ACCOUNT")
+        navigateTo("/emails/tab?test-mode=true&owner-id=${account.id}&owner-type=ACCOUNT")
+
+        click("#btn-email-compose", 1000)
+        assertElementVisible("#email-modal")
+
+        assertElementVisible("#account-selector")
+        assertElementNotVisible("#contact-selector")
+        input("#subject", "Yo man")
+        input("#html-editor .ql-editor", "Hello man")
+        click("#btn-email-submit", 1000)
+
+        val request = argumentCaptor<SendEmailRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/emails"),
+            request.capture(),
+            eq(SendEmailResponse::class.java),
+        )
+
+        assertEquals("Yo man", request.firstValue.subject)
+        assertEquals("<p>Hello man</p>", request.firstValue.body)
+        assertEquals(tax.id, request.firstValue.owner?.id)
+        assertEquals(ObjectType.ACCOUNT, request.firstValue.owner?.type)
+        assertEquals(account.id, request.firstValue.recipient.id)
+        assertEquals(ObjectType.ACCOUNT, request.firstValue.recipient.type)
+
+        assertElementNotVisible("#email-modal")
+    }
+
+    @Test
+    fun `send to contact`() {
+        navigateTo("/emails/tab?test-mode=true&owner-id=${contact.id}&owner-type=CONTACT")
+
+        click("#btn-email-compose", 1000)
+        assertElementVisible("#email-modal")
+
+        assertElementNotVisible("#account-selector")
+        assertElementVisible("#contact-selector")
+        input("#subject", "Yo man")
+        input("#html-editor .ql-editor", "Hello man")
+        click("#btn-email-submit", 1000)
+
+        val request = argumentCaptor<SendEmailRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/emails"),
+            request.capture(),
+            eq(SendEmailResponse::class.java),
+        )
+
+        assertEquals("Yo man", request.firstValue.subject)
+        assertEquals("<p>Hello man</p>", request.firstValue.body)
+        assertEquals(contact.id, request.firstValue.owner?.id)
+        assertEquals(ObjectType.CONTACT, request.firstValue.owner?.type)
+        assertEquals(contact.id, request.firstValue.recipient.id)
+        assertEquals(ObjectType.CONTACT, request.firstValue.recipient.type)
+
+        assertElementNotVisible("#email-modal")
+    }
+
+    @Test
+    fun `send to tax`() {
+        navigateTo("/emails/tab?test-mode=true&owner-id=${tax.id}&owner-type=TAX")
 
         click("#btn-email-compose", 1000)
         assertElementVisible("#email-modal")
@@ -57,38 +120,8 @@ class ListEmailWidgetControllerTest : AbstractPageControllerTest() {
         assertEquals("<p>Hello man</p>", request.firstValue.body)
         assertEquals(tax.id, request.firstValue.owner?.id)
         assertEquals(ObjectType.TAX, request.firstValue.owner?.type)
-        assertEquals(account.id, request.firstValue.recipient.id)
+        assertEquals(tax.accountId, request.firstValue.recipient.id)
         assertEquals(ObjectType.ACCOUNT, request.firstValue.recipient.type)
-
-        assertElementNotVisible("#email-modal")
-    }
-
-    @Test
-    fun `send to contact`() {
-        navigateTo("/emails/widgets/list?test-mode=true&owner-id=${tax.id}&owner-type=TAX&recipient-id=${contact.id}&recipient-type=CONTACT")
-
-        click("#btn-email-compose", 1000)
-        assertElementVisible("#email-modal")
-
-        assertElementNotVisible("#account-selector")
-        assertElementVisible("#contact-selector")
-        input("#subject", "Yo man")
-        input("#html-editor .ql-editor", "Hello man")
-        click("#btn-email-submit", 1000)
-
-        val request = argumentCaptor<SendEmailRequest>()
-        verify(rest).postForEntity(
-            eq("$sdkBaseUrl/v1/emails"),
-            request.capture(),
-            eq(SendEmailResponse::class.java),
-        )
-
-        assertEquals("Yo man", request.firstValue.subject)
-        assertEquals("<p>Hello man</p>", request.firstValue.body)
-        assertEquals(tax.id, request.firstValue.owner?.id)
-        assertEquals(ObjectType.TAX, request.firstValue.owner?.type)
-        assertEquals(contact.id, request.firstValue.recipient.id)
-        assertEquals(ObjectType.CONTACT, request.firstValue.recipient.type)
 
         assertElementNotVisible("#email-modal")
     }

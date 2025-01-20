@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import java.net.URLEncoder
 
+@Deprecated("")
 @Controller
 class ListFileWidgetController(private val service: FileService) {
     @GetMapping("/files/widgets/list")
@@ -57,7 +58,7 @@ class ListFileWidgetController(private val service: FileService) {
                 val url = listOf(
                     "/files/widgets/list/more?limit=$limit&offset=$nextOffset",
                     ownerId?.let { "owner-id=$ownerId" },
-                    ownerType?.let { "owner-id=$ownerType" },
+                    ownerType?.let { "owner-type=$ownerType" },
                     workflowInstanceId?.let { "workflow-instance-id=$workflowInstanceId" },
                 ).filterNotNull()
                     .joinToString(separator = "&")

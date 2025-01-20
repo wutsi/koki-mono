@@ -1,7 +1,5 @@
 package com.wutsi.koki.portal.tax.page
 
-import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.tax.form.TaxStatusForm
 import com.wutsi.koki.portal.tax.model.TaxModel
@@ -20,7 +18,7 @@ import org.springframework.web.client.HttpClientErrorException
 class ChangeTaxStatusController(
     private val service: TaxService,
     private val userService: UserService,
-) : AbstractPageController() {
+) : AbstractTaxController() {
     @GetMapping("/taxes/{id}/status")
     fun edit(
         @PathVariable id: Long,
@@ -40,7 +38,7 @@ class ChangeTaxStatusController(
         model.addAttribute("statuses", TaxStatus.values())
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.TAX_STATUS,
                 title = tax.name
             )

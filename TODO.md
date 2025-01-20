@@ -71,6 +71,24 @@
 - [x] Note API
 - [x] Note UI
 
+## Users
+
+- [x] Manage users
+- [x] Manage roles
+
+## Module
+
+- [x] Module API
+- [x] List of modules driven by backend in home page
+- [] List of modules driven by backend in configuration
+- [] link CSS and JS with modules
+- [] link Widget with modules
+
+## Security
+
+- [] Enforce RBAC on UI
+- [] Enforce RBAC on API
+
 ## Product
 
 - [] Product API
@@ -89,16 +107,6 @@
 - [x] Support ReadOnly fields
 - [x] Track Form submissions
 - [x] Share Forms Link
-
-## Users
-
-- [x] Manage users
-- [x] Manage roles
-
-## Security
-
-- [] List of modules driven by backend
-- [] Implement RBAC
 
 ## Workflow
 

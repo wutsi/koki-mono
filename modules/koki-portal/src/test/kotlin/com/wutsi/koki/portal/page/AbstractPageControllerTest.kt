@@ -32,6 +32,7 @@ import com.wutsi.koki.WorkflowFixtures.workflowInstance
 import com.wutsi.koki.WorkflowFixtures.workflowInstances
 import com.wutsi.koki.WorkflowFixtures.workflowPictureUrl
 import com.wutsi.koki.WorkflowFixtures.workflows
+import com.wutsi.koki.account.dto.CreateAccountRequest
 import com.wutsi.koki.account.dto.CreateAccountResponse
 import com.wutsi.koki.account.dto.GetAccountResponse
 import com.wutsi.koki.account.dto.GetAccountTypeResponse
@@ -39,6 +40,7 @@ import com.wutsi.koki.account.dto.GetAttributeResponse
 import com.wutsi.koki.account.dto.SearchAccountResponse
 import com.wutsi.koki.account.dto.SearchAccountTypeResponse
 import com.wutsi.koki.account.dto.SearchAttributeResponse
+import com.wutsi.koki.contact.dto.CreateContactRequest
 import com.wutsi.koki.contact.dto.CreateContactResponse
 import com.wutsi.koki.contact.dto.GetContactResponse
 import com.wutsi.koki.contact.dto.GetContactTypeResponse
@@ -71,14 +73,11 @@ import com.wutsi.koki.script.dto.CreateScriptResponse
 import com.wutsi.koki.script.dto.GetScriptResponse
 import com.wutsi.koki.script.dto.RunScriptResponse
 import com.wutsi.koki.script.dto.SearchScriptResponse
-import com.wutsi.koki.sdk.KokiAccounts
-import com.wutsi.koki.sdk.KokiContacts
 import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiLogs
 import com.wutsi.koki.sdk.KokiMessages
 import com.wutsi.koki.sdk.KokiScripts
 import com.wutsi.koki.sdk.KokiServices
-import com.wutsi.koki.sdk.KokiTaxes
 import com.wutsi.koki.sdk.KokiWorkflowInstances
 import com.wutsi.koki.sdk.KokiWorkflows
 import com.wutsi.koki.security.dto.JWTDecoder
@@ -86,6 +85,7 @@ import com.wutsi.koki.security.dto.JWTPrincipal
 import com.wutsi.koki.service.dto.CreateServiceResponse
 import com.wutsi.koki.service.dto.GetServiceResponse
 import com.wutsi.koki.service.dto.SearchServiceResponse
+import com.wutsi.koki.tax.dto.CreateTaxRequest
 import com.wutsi.koki.tax.dto.CreateTaxResponse
 import com.wutsi.koki.tax.dto.GetTaxResponse
 import com.wutsi.koki.tax.dto.GetTaxTypeResponse
@@ -166,12 +166,6 @@ abstract class AbstractPageControllerTest {
     protected lateinit var restWithoutTenantHeader: RestTemplate
 
     @MockitoBean
-    protected lateinit var kokiAccounts: KokiAccounts
-
-    @MockitoBean
-    protected lateinit var kokiContacts: KokiContacts
-
-    @MockitoBean
     protected lateinit var kokiForms: KokiForms
 
     @MockitoBean
@@ -185,9 +179,6 @@ abstract class AbstractPageControllerTest {
 
     @MockitoBean
     protected lateinit var kokiServices: KokiServices
-
-    @MockitoBean
-    protected lateinit var kokiTaxes: KokiTaxes
 
     @MockitoBean
     protected lateinit var kokiWorkflows: KokiWorkflows
@@ -249,9 +240,8 @@ abstract class AbstractPageControllerTest {
         setupModuleModule()
         setupTenantModule()
         setupFileModule()
-        setupNoteModule()
         setupEmailModule()
-
+        setupNoteModule()
         setupAccountModule()
         setupContactModule()
         setupTaxModule()
@@ -262,68 +252,6 @@ abstract class AbstractPageControllerTest {
         setupServices()
         setupMessages()
         setupWorkflows()
-    }
-
-    private fun setupAccountModule() {
-        // Attributes
-        doReturn(SearchAttributeResponse(AccountFixtures.attributes)).whenever(kokiAccounts).attributes(
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-        )
-        doReturn(GetAttributeResponse(AccountFixtures.attribute)).whenever(kokiAccounts).attribute(any())
-
-        // Account Types
-        doReturn(SearchAccountTypeResponse(AccountFixtures.accountTypes)).whenever(kokiAccounts)
-            .types(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-            )
-        doReturn(GetAccountTypeResponse(AccountFixtures.accountType)).whenever(kokiAccounts).type(any())
-
-        // Accounts
-        doReturn(SearchAccountResponse(AccountFixtures.accounts)).whenever(kokiAccounts).accounts(
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-        )
-        doReturn(GetAccountResponse(AccountFixtures.account)).whenever(kokiAccounts).account(any())
-        doReturn(CreateAccountResponse(AccountFixtures.NEW_ACCOUNT_ID)).whenever(kokiAccounts).create(any())
-    }
-
-    private fun setupContactModule() {
-        // Contact Types
-        doReturn(SearchContactTypeResponse(ContactFixtures.contactTypes)).whenever(kokiContacts)
-            .types(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-            )
-        doReturn(GetContactTypeResponse(ContactFixtures.contactType)).whenever(kokiContacts).type(any())
-
-        // Contacts
-        doReturn(SearchContactResponse(ContactFixtures.contacts)).whenever(kokiContacts).contacts(
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-        )
-        doReturn(GetContactResponse(ContactFixtures.contact)).whenever(kokiContacts).contact(any())
-        doReturn(CreateContactResponse(ContactFixtures.NEW_CONTACT_ID)).whenever(kokiContacts).create(any())
     }
 
     protected fun setupModuleModule() {
@@ -540,33 +468,206 @@ abstract class AbstractPageControllerTest {
             )
     }
 
+    private fun setupAccountModule() {
+        // Attributes
+        doReturn(
+            ResponseEntity(
+                SearchAttributeResponse(AccountFixtures.attributes),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchAttributeResponse::class.java)
+            )
+        doReturn(
+            ResponseEntity(
+                GetAttributeResponse(AccountFixtures.attribute),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetAttributeResponse::class.java)
+            )
+
+        // Account Types
+        doReturn(
+            ResponseEntity(
+                SearchAccountTypeResponse(AccountFixtures.accountTypes),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchAccountTypeResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetAccountTypeResponse(AccountFixtures.accountType),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetAccountTypeResponse::class.java)
+            )
+
+        // Accounts
+        doReturn(
+            ResponseEntity(
+                SearchAccountResponse(AccountFixtures.accounts),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchAccountResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetAccountResponse(AccountFixtures.account),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetAccountResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreateAccountResponse(AccountFixtures.NEW_ACCOUNT_ID),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateAccountRequest>(),
+                eq(CreateAccountResponse::class.java)
+            )
+    }
+
+    private fun setupContactModule() {
+        // Contact Types
+        doReturn(
+            ResponseEntity(
+                SearchContactTypeResponse(ContactFixtures.contactTypes),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchContactTypeResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetContactTypeResponse(ContactFixtures.contactType),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetContactTypeResponse::class.java)
+            )
+
+        // Contacts
+        doReturn(
+            ResponseEntity(
+                SearchContactResponse(ContactFixtures.contacts),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchContactResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetContactResponse(ContactFixtures.contact),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetContactResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreateContactResponse(ContactFixtures.NEW_CONTACT_ID),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateContactRequest>(),
+                eq(CreateContactResponse::class.java)
+            )
+    }
+
     private fun setupTaxModule() {
         // Tax Types
-        doReturn(SearchTaxTypeResponse(TaxFixtures.taxTypes)).whenever(kokiTaxes)
-            .types(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
+        doReturn(
+            ResponseEntity(
+                SearchTaxTypeResponse(TaxFixtures.taxTypes),
+                HttpStatus.OK,
             )
-        doReturn(GetTaxTypeResponse(TaxFixtures.taxType)).whenever(kokiTaxes).type(any())
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchTaxTypeResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetTaxTypeResponse(TaxFixtures.taxType),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetTaxTypeResponse::class.java)
+            )
 
         // Tax
-        doReturn(SearchTaxResponse(TaxFixtures.taxes)).whenever(kokiTaxes)
-            .taxes(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
+        doReturn(
+            ResponseEntity(
+                SearchTaxResponse(TaxFixtures.taxes),
+                HttpStatus.OK,
             )
-        doReturn(GetTaxResponse(TaxFixtures.tax)).whenever(kokiTaxes).tax(any())
-        doReturn(CreateTaxResponse(TaxFixtures.NEW_TAX_ID)).whenever(kokiTaxes).create(any())
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchTaxResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetTaxResponse(TaxFixtures.tax),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetTaxResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreateTaxResponse(TaxFixtures.NEW_TAX_ID),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateTaxRequest>(),
+                eq(CreateTaxResponse::class.java)
+            )
     }
 
     private fun setupForms() {

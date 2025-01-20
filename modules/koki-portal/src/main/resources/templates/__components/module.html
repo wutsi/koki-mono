@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+
+<ul class="nav nav-pills mb-3" role="tablist" th:fragment="tabs(name, showDetails)" th:id="'tab-' + ${name}">
+    <li class="nav-item" role="presentation" th:if="${showDetails}">
+        <button aria-controls="pills-content" aria-selected="true" class="nav-link active"
+                data-bs-target="#pills-details" data-bs-toggle="pill" id="pills-details-tab"
+                role="tab" type="button">
+            Details
+        </button>
+    </li>
+    <li class="nav-item" role="presentation" th:each="tab, it : ${page.tabs.get(name)}">
+        <button aria-selected="false" class="nav-link" data-bs-toggle="pill" role="tab"
+                th:aria-controls="'pills-' + ${tab.name}"
+                th:classappend="!${showDetails} AND ${it.index == 0} ? 'active'"
+                th:data-bs-target="'#pills-' + ${tab.name}"
+                th:id="'pills-' + ${tab.name} + '-tab'"
+                th:text="${tab.title}"
+                type="button">
+            TAB
+        </button>
+    </li>
+</ul>
+
+<div class="tab-content" th:fragment="tabs-content(name, showDetails, ownerEntity, ownerModule)"
+     th:id="'tab-' + ${name} + '-content'">
+    <div aria-labelledby="pills-details-tab" class="tab-pane fade show active" id="pills-details" role="tabpanel"
+         th:if="${showDetails}">
+    </div>
+
+    <div class="tab-pane fade" role="tabpanel"
+         th:aria-labelledby="'pills-' + ${tab.name} + '-tab'"
+         th:classappend="!${showDetails} AND ${it.index == 0} ? 'show active'"
+         th:data-url="${tab.toTabUrl(ownerEntity.id, ownerModule)}"
+         th:each="tab,it : ${page.tabs.get(name)}"
+         th:id="'pills-' + ${tab.name}">
+    </div>
+
+    <script th:if="${showDetails}" th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            const content = document.getElementById('tab-details-content');
+            if (content) {
+                const container = document.getElementById('pills-details');
+                container.append(content);
+                content.classList.remove('hidden');
+            }
+        });
+    </script>
+
+</div>
+
+
+</body>
+</html>

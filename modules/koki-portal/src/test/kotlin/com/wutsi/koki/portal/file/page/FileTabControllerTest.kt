@@ -6,17 +6,19 @@ import com.wutsi.koki.FileFixtures.file
 import com.wutsi.koki.FileFixtures.files
 import kotlin.test.Test
 
-class ListFileWidgetControllerTest : AbstractPageControllerTest() {
+class FileTabControllerTest : AbstractPageControllerTest() {
     @Test
     fun list() {
-        navigateTo("/files/widgets/list?test-mode=true")
+        navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
 
-        assertElementCount(".widget-files tr.file", files.size)
+        assertElementCount(".tab-files tr.file", files.size)
+        assertElementAttribute("#file-list", "data-owner-id", "111")
+        assertElementAttribute("#file-list", "data-owner-type", "ACCOUNT")
     }
 
     @Test
     fun upload() {
-        navigateTo("/files/widgets/list?owner-id=111&owner-type=ACCOUNT&test-mode=true")
+        navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
         click(".btn-upload", 1000)
 
         assertElementVisible("#file-modal")
@@ -24,14 +26,14 @@ class ListFileWidgetControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun download() {
-        navigateTo("/files/widgets/list?test-mode=true")
+        navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
 
         click(".btn-download")
     }
 
     @Test
     fun delete() {
-        navigateTo("/files/widgets/list?test-mode=true&owner-id=555&owner-type=ACCOUNT")
+        navigateTo("/files/tab?test-mode=true&owner-id=555&owner-type=ACCOUNT")
 
         val id = file.id
         click("#file-$id .btn-delete")

@@ -81,14 +81,12 @@
             <li class="nav-item padding-small" th:classappend="${current == 'home'} ? 'active'">
                 <a aria-current="page" class="nav-link" href="/">Home</a>
             </li>
-            <li class="nav-item padding-small" th:classappend="${current == 'accounts'} ? 'active'">
-                <a aria-current="page" class="nav-link" href="/accounts">Accounts</a>
-            </li>
-            <li class="nav-item padding-small" th:classappend="${current == 'contacts'} ? 'active'">
-                <a aria-current="page" class="nav-link" href="/contacts">Contacts</a>
-            </li>
-            <li class="nav-item padding-small" th:classappend="${current == 'taxes'} ? 'active'">
-                <a aria-current="page" class="nav-link" href="/taxes">Taxes</a>
+            <li class="nav-item padding-small"
+                th:classappend="${current == module.name} ? 'active'"
+                th:each="module : ${tenant.modules}"
+                th:if="${module.homeUrl} AND ${user?.canAccess(module)}"
+            >
+                <a aria-current="page" class="nav-link" th:href="${module.homeUrl}" th:text="${module.title}">TITLE</a>
             </li>
         </ul>
     </div>
