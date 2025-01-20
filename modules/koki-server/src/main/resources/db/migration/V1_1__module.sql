@@ -8,6 +8,8 @@ CREATE TABLE T_MODULE(
   home_url                TEXT,
   tab_url                 TEXT,
   settings_url            TEXT,
+  js_url                  TEXT,
+  css_url                 TEXT,
 
   UNIQUE(name),
   PRIMARY KEY(id)

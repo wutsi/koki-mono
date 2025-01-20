@@ -14,6 +14,7 @@ object ModuleFixtures {
             homeUrl = "/accounts",
             settingsUrl = "/settings/accounts",
             objectType = ObjectType.ACCOUNT,
+            jsUrl = "/js/accounts.js",
         ),
         Module(
             id = 110L,
@@ -23,6 +24,7 @@ object ModuleFixtures {
             tabUrl = "/contacts/tab",
             settingsUrl = "/settings/contacts",
             objectType = ObjectType.CONTACT,
+            jsUrl = "/js/contacts.js",
         ),
         Module(
             id = 120L,
@@ -32,6 +34,7 @@ object ModuleFixtures {
             tabUrl = "/taxes/tab",
             settingsUrl = "/settings/taxes",
             objectType = ObjectType.TAX,
+            jsUrl = null,
         ),
         Module(
             id = 130L,
@@ -41,6 +44,7 @@ object ModuleFixtures {
             tabUrl = "/emails/tab",
             settingsUrl = "/settings/email",
             objectType = ObjectType.EMAIL,
+            jsUrl = "/js/emails.js",
         ),
         Module(
             id = 140L,
@@ -50,6 +54,7 @@ object ModuleFixtures {
             tabUrl = "/notes/tab",
             settingsUrl = "/settings/notes",
             objectType = ObjectType.NOTE,
+            jsUrl = "/js/notes.js",
         ),
         Module(
             id = 150L,
@@ -59,6 +64,7 @@ object ModuleFixtures {
             tabUrl = "/files/tab",
             settingsUrl = "/settings/files",
             objectType = ObjectType.FILE,
+            jsUrl = "/js/files.js",
         ),
         Module(
             id = 160,
@@ -67,6 +73,7 @@ object ModuleFixtures {
             homeUrl = null,
             tabUrl = null,
             settingsUrl = "/settings/security",
+            jsUrl = null,
         ),
     )
 

@@ -18,6 +18,8 @@ class ModuleMapper {
             tabUrl = entity.tabUrl?.trim()?.ifEmpty { null },
             homeUrl = entity.homeUrl?.trim()?.ifEmpty { null },
             settingsUrl = entity.settingsUrl?.trim()?.ifEmpty { null },
+            jsUrl = entity.jsUrl?.trim()?.ifEmpty { null },
+            cssUrl = entity.cssUrl?.trim()?.ifEmpty { null },
             permissions = permissions.map { permission -> toPermissionModel(permission) }
         )
     }

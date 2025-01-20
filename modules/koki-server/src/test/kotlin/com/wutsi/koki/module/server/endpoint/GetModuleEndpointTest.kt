@@ -26,5 +26,7 @@ class GetModuleEndpointTest : TenantAwareEndpointTest() {
         assertEquals("/module1", module.homeUrl)
         assertEquals("/module1/tab", module.tabUrl)
         assertEquals("/settings/module1", module.settingsUrl)
+        assertEquals("/js/module1.js", module.jsUrl)
+        assertEquals("/css/module1.css", module.cssUrl)
     }
 }
