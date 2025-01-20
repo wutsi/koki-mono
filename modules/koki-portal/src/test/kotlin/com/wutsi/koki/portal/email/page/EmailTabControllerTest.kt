@@ -103,8 +103,8 @@ class EmailTabControllerTest : AbstractPageControllerTest() {
         click("#btn-email-compose", 1000)
         assertElementVisible("#email-modal")
 
-        assertElementNotVisible("#account-selector")
-        assertElementVisible("#contact-selector")
+        assertElementVisible("#account-selector")
+        assertElementNotVisible("#contact-selector")
         input("#subject", "Yo man")
         input("#html-editor .ql-editor", "Hello man")
         click("#btn-email-submit", 1000)

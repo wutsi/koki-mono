@@ -99,7 +99,9 @@
 
 - [x] List of modules driven by backend in home page
 - [] List of modules driven by backend in configuration
-- [] Implement RBAC
+- [] link CSS and JS with modules
+- [] Enforce RBAC on UI
+- [] Enforce RBAC on API
 
 ## Workflow
 
