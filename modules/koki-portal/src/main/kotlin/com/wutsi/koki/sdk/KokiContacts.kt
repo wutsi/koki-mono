@@ -25,7 +25,7 @@ class KokiContacts(
 
     fun update(id: Long, request: UpdateContactRequest) {
         val url = urlBuilder.build("$CONTACT_PATH_PREFIX/$id")
-        rest.postForEntity(url, request, CreateContactResponse::class.java)
+        rest.postForEntity(url, request, Any::class.java)
     }
 
     fun delete(id: Long) {

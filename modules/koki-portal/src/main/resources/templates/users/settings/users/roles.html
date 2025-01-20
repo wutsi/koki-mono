@@ -37,7 +37,11 @@
                                            type="checkbox"
                                     />
                                 </td>
-                                <td th:text="${role.name}">NAME</td>
+                                <td>
+                                    <span th:text="${role.name}">NAME</span>
+                                    -
+                                    <span th:text="${role.title}">TITLE</span>
+                                </td>
                             </tr>
                         </table>
                         <em th:if="${roles.isEmpty()}">No roles configured in the system</em>

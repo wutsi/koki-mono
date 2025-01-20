@@ -3,11 +3,13 @@ package com.wutsi.koki.portal.contact.page
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.ContactFixtures.contactTypes
 import com.wutsi.koki.contact.dto.CreateContactRequest
+import com.wutsi.koki.contact.dto.CreateContactResponse
 import com.wutsi.koki.contact.dto.Gender
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
@@ -35,7 +37,11 @@ class CreateContactControllerTest : AbstractPageControllerTest() {
         click("button[type=submit]")
 
         val request = argumentCaptor<CreateContactRequest>()
-        verify(kokiContacts).create(request.capture())
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/contacts"),
+            request.capture(),
+            eq(CreateContactResponse::class.java)
+        )
         assertEquals(contactTypes[2].id, request.firstValue.contactTypeId)
         assertEquals("Yo", request.firstValue.firstName)
         assertEquals("Man", request.firstValue.lastName)
@@ -99,7 +105,11 @@ class CreateContactControllerTest : AbstractPageControllerTest() {
     @Test
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
-        doThrow(ex).whenever(kokiContacts).create(any())
+        doThrow(ex).whenever(rest).postForEntity(
+            any<String>(),
+            any<CreateContactRequest>(),
+            eq(CreateContactResponse::class.java)
+        )
 
         navigateTo("/contacts/create")
 

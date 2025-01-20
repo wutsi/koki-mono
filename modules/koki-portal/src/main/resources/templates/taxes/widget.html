@@ -1,0 +1,22 @@
+<div class="widget widget-taxes" th:if="${taxes}">
+    <div class="widget-header">
+        <div class="widget-title">
+            <img src="/image/tax.png" width="24"/>
+            My Assignments
+        </div>
+    </div>
+    <div class="widget-body">
+        <table class="table table-striped">
+            <tr class="tax" th:each="tax : ${taxes}">
+                <td>
+                    <a th:href="'/taxes/' + ${tax.id}">
+                        <span th:text="${tax.fiscalYear}">YYY</span>
+                        -
+                        <span th:text="${tax.taxType.title}">TYPE</span>
+                    </a>
+                </td>
+                <td th:text="${tax.account.name}">ACCOUNT</td>
+            </tr>
+        </table>
+    </div>
+</div>

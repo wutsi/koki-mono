@@ -97,7 +97,8 @@
 
 ## Security
 
-- [] List of modules driven by backend
+- [x] List of modules driven by backend in home page
+- [] List of modules driven by backend in configuration
 - [] Implement RBAC
 
 ## Workflow

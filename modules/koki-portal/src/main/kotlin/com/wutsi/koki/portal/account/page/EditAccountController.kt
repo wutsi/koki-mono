@@ -6,7 +6,6 @@ import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.account.service.AccountTypeService
 import com.wutsi.koki.portal.account.service.AttributeService
 import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.user.service.UserService
 import jakarta.servlet.http.HttpServletRequest
@@ -26,7 +25,7 @@ class EditAccountController(
     private val accountTypeService: AccountTypeService,
     private val userService: UserService,
     private val request: HttpServletRequest,
-) : AbstractPageController() {
+) : AbstractAccountController() {
     @GetMapping("/accounts/{id}/edit")
     fun edit(@PathVariable id: Long, model: Model): String {
         val account = service.account(id)
@@ -78,7 +77,7 @@ class EditAccountController(
 
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.ACCOUNT_EDIT,
                 title = form.name
             )

@@ -16,14 +16,10 @@ function koki_emails_compose() {
     const container = document.getElementById('email-list');
     const ownerId = container.getAttribute("data-owner-id");
     const ownerType = container.getAttribute("data-owner-type");
-    const recipientId = container.getAttribute("data-recipient-id");
-    const recipientType = container.getAttribute("data-recipient-type");
 
     let url = '/emails/compose?' +
         (ownerId ? '&owner-id=' + ownerId : '') +
-        (ownerType ? '&owner-type=' + ownerType : '') +
-        (recipientId ? '&recipient-id=' + recipientId : '') +
-        (recipientType ? '&recipient-type=' + recipientType : '');
+        (ownerType ? '&owner-type=' + ownerType : '');
 
     fetch(url)
         .then(response => {
@@ -173,7 +169,7 @@ function _koki_emails_refresh() {
     const container = document.getElementById('email-list');
     const ownerId = container.getAttribute("data-owner-id");
     const ownerType = container.getAttribute("data-owner-type");
-    fetch('/emails/widgets/list/more?owner-id=' + ownerId + '&owner-type=' + ownerType)
+    fetch('/emails/tab/more?owner-id=' + ownerId + '&owner-type=' + ownerType)
         .then(response => {
             response.text()
                 .then(html => {

@@ -1,0 +1,25 @@
+<div class="tab-taxes">
+    <div class="margin-bottom" th:if="${accountId}">
+        <a class="btn btn-secondary btn-sm btn-add-tax" th:href="'/taxes/tax?account-id=' + ${accountId}">
+            New Tax Report
+        </a>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th width="1%">Year</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Accountant</th>
+            <th>Assigned To</th>
+            <td></td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="tax" th:each="tax : ${taxes}">
+            <div th:replace="~{__components/tax :: columns(${tax}, false)}"></div>
+        </tr>
+        <tr th:if="${showMore}" th:replace="~{__components/tax :: load-more(${moreUrl}, false)}"></tr>
+        </tbody>
+    </table>
+</div>

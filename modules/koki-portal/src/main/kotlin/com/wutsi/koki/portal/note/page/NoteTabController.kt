@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
-class ListNoteWidgetController(private val service: NoteService) : AbstractPageController() {
-    @GetMapping("/notes/widgets/list")
+class NoteTabController(private val service: NoteService) : AbstractPageController() {
+    @GetMapping("/notes/tab")
     fun list(
-        @RequestParam(required = false, name = "owner-id") ownerId: Long? = null,
-        @RequestParam(required = false, name = "owner-type") ownerType: ObjectType? = null,
+        @RequestParam(name = "owner-id") ownerId: Long,
+        @RequestParam(name = "owner-type") ownerType: ObjectType,
         @RequestParam(name = "test-mode", required = false) testMode: String? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
@@ -23,13 +23,13 @@ class ListNoteWidgetController(private val service: NoteService) : AbstractPageC
         model.addAttribute("ownerType", ownerType)
         model.addAttribute("testMode", testMode)
         more(ownerId, ownerType, limit, offset, model)
-        return "notes/widgets/list"
+        return "notes/tab"
     }
 
-    @GetMapping("/notes/widgets/list/more")
+    @GetMapping("/notes/tab/more")
     fun more(
-        @RequestParam(required = false, name = "owner-id") ownerId: Long? = null,
-        @RequestParam(required = false, name = "owner-type") ownerType: ObjectType? = null,
+        @RequestParam(required = false, name = "owner-id") ownerId: Long,
+        @RequestParam(required = false, name = "owner-type") ownerType: ObjectType,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model
@@ -43,14 +43,9 @@ class ListNoteWidgetController(private val service: NoteService) : AbstractPageC
         model.addAttribute("notes", notes)
         if (notes.size >= limit) {
             val nextOffset = offset + limit
-            val url = listOf(
-                "/notes/widgets/list/more?limit=$limit&offset=$nextOffset",
-                ownerId?.let { "owner-id=$ownerId" },
-                ownerType?.let { "owner-id=$ownerType" },
-            ).filterNotNull()
-                .joinToString(separator = "&")
+            val url = "/notes/tab/more?limit=$limit&offset=$nextOffset&owner-id=$ownerId&owner-id=$ownerType"
             model.addAttribute("moreUrl", url)
         }
-        return "notes/widgets/list-more"
+        return "notes/tab-more"
     }
 }

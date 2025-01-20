@@ -6,7 +6,6 @@ import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.contact.service.ContactTypeService
 import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -21,7 +20,7 @@ class CreateContactController(
     private val service: ContactService,
     private val accountService: AccountService,
     private val contactTypeService: ContactTypeService,
-) : AbstractPageController() {
+) : AbstractContactController() {
     @GetMapping("/contacts/create")
     fun create(
         @RequestParam(required = false, name = "account-id") accountId: Long? = null,
@@ -40,7 +39,8 @@ class CreateContactController(
         model.addAttribute("form", form)
 
         model.addAttribute(
-            "page", PageModel(
+            "page",
+            createPageModel(
                 name = PageName.CONTACT_CREATE,
                 title = "New Contact",
             )

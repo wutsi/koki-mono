@@ -6,7 +6,7 @@
 
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
-<div th:replace="~{__components/layout :: menubar('taxes')}"></div>
+<div th:replace="~{__components/layout :: menubar('tax')}"></div>
 
 <div class="container-fluid">
     <div class="row">
@@ -58,20 +58,20 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th>Name</th>
+                            <th width="1%">Year</th>
+                            <th>Type</th>
                             <th>Account</th>
                             <th>Status</th>
                             <th>Accountant</th>
                             <th>Assigned To</th>
-                            <th>Modified</th>
                             <td></td>
                         </tr>
                         </thead>
                         <tbody>
                         <tr class="tax" th:each="tax : ${taxes}">
-                            <div th:replace="~{__components/tax :: columns(${tax}, true, false)}"></div>
+                            <div th:replace="~{__components/tax :: columns(${tax}, true)}"></div>
                         </tr>
-                        <tr th:replace="~{__components/tax :: load-more(${moreUrl})}"></tr>
+                        <tr th:replace="~{__components/tax :: load-more(${moreUrl}, true)}"></tr>
                         </tbody>
                     </table>
                 </div>

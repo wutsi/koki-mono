@@ -28,7 +28,7 @@ class KokiAccounts(
 
     fun update(id: Long, request: UpdateAccountRequest) {
         val url = urlBuilder.build("$ACCOUNT_PATH_PREFIX/$id")
-        rest.postForEntity(url, request, CreateAccountResponse::class.java)
+        rest.postForEntity(url, request, Any::class.java)
     }
 
     fun delete(id: Long) {

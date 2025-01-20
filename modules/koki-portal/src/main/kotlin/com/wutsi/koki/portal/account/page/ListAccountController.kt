@@ -1,8 +1,6 @@
 package com.wutsi.koki.portal.account.page
 
 import com.wutsi.koki.portal.account.service.AccountService
-import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
 import org.springframework.stereotype.Controller
@@ -14,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam
 class ListAccountController(
     private val service: AccountService,
     private val currentUser: CurrentUserHolder,
-) : AbstractPageController() {
+) : AbstractAccountController() {
     companion object {
         const val COL_ALL = "1"
         const val COL_MANAGED = "2"
@@ -38,7 +36,7 @@ class ListAccountController(
         model.addAttribute("collection", toCollection(collection))
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.ACCOUNT_LIST,
                 title = "Accounts",
             )

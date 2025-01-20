@@ -28,7 +28,6 @@
     <td>
         <a th:href="'mailto:' + ${contact.email}" th:if="${contact.email}" th:text="${contact.email}">EMAIL</a>
     </td>
-    <td th:text="${contact.modifiedAtText}">MODIFIED</td>
     <td th:if="${showAccount}">
         <a th:href="'/accounts/' + ${contact.account.id}"
            th:if="${contact.account}"
@@ -41,7 +40,7 @@
 </tr>
 
 <tr id="contact-load-more" th:fragment="load-more(moreUrl, showContact)" th:if="${moreUrl}">
-    <td class="text-center" th:colspan="${showContact} ? 8 : 7">
+    <td class="text-center" th:colspan="${showContact} ? 7 : 6">
         <a href="javascript: koki_load_more('contact-load-more')" th:data-url="${moreUrl}">Load more...</a>
     </td>
 </tr>

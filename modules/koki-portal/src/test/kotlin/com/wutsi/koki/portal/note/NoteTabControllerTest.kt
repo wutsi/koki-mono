@@ -12,19 +12,21 @@ import com.wutsi.koki.note.dto.UpdateNoteRequest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ListNoteWidgetControllerTest : AbstractPageControllerTest() {
+class NoteTabControllerTest : AbstractPageControllerTest() {
     @Test
     fun list() {
-        navigateTo("/notes/widgets/list?test-mode=1")
+        navigateTo("/notes/tab?test-mode=1&owner-id=111&owner-type=ACCOUNT")
 
-        assertElementCount(".widget-notes .note", notes.size)
+        assertElementCount(".tab-notes .note", notes.size)
+        assertElementAttribute("#note-list", "data-owner-id", "111")
+        assertElementAttribute("#note-list", "data-owner-type", "ACCOUNT")
     }
 
     @Test
     fun delete() {
         val id = notes[1].id
 
-        navigateTo("/notes/widgets/list?test-mode=1&owner-id=111&owner-type=ACCOUNT")
+        navigateTo("/notes/tab?test-mode=1&owner-id=111&owner-type=ACCOUNT")
 
         click("#note-$id .btn-delete")
         val alert = driver.switchTo().alert()
@@ -37,7 +39,7 @@ class ListNoteWidgetControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun edit() {
-        navigateTo("/notes/widgets/list?test-mode=1")
+        navigateTo("/notes/tab?test-mode=1&owner-id=111&owner-type=ACCOUNT")
         click(".btn-edit", 1000)
 
         assertElementVisible("#note-modal")
@@ -62,7 +64,7 @@ class ListNoteWidgetControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `cancel edit`() {
-        navigateTo("/notes/widgets/list?test-mode=1")
+        navigateTo("/notes/tab?owner-id=111&owner-type=ACCOUNT&test-mode=1")
         click(".btn-edit", 1000)
 
         click(".btn-cancel", 1000)
@@ -71,7 +73,7 @@ class ListNoteWidgetControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun add() {
-        navigateTo("/notes/widgets/list?owner-id=111&owner-type=ACCOUNT&test-mode=1")
+        navigateTo("/notes/tab?owner-id=111&owner-type=ACCOUNT&test-mode=1")
         click(".btn-create", 1000)
 
         assertElementVisible("#note-modal")
@@ -96,7 +98,7 @@ class ListNoteWidgetControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `cancel add`() {
-        navigateTo("/notes/widgets/list?owner-id=111&owner-type=ACCOUNT&test-mode=1")
+        navigateTo("/notes/tab?owner-id=111&owner-type=ACCOUNT&test-mode=1")
         click(".btn-create", 100)
 
         click(".btn-cancel")

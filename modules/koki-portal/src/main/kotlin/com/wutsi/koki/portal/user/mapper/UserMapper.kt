@@ -8,6 +8,7 @@ import com.wutsi.koki.tenant.dto.Role
 import com.wutsi.koki.tenant.dto.User
 import com.wutsi.koki.tenant.dto.UserSummary
 import org.springframework.stereotype.Service
+import kotlin.collections.flatMap
 
 @Service
 class UserMapper : TenantAwareMapper() {
@@ -23,6 +24,9 @@ class UserMapper : TenantAwareMapper() {
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.modifiedAt),
             roles = roles,
+            permissionNames = roles.flatMap { role -> role.permissions }
+                .distinctBy { permission -> permission.id }
+                .map { permission -> permission.name }
         )
     }
 

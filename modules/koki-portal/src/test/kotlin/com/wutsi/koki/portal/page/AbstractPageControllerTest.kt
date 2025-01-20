@@ -32,6 +32,7 @@ import com.wutsi.koki.WorkflowFixtures.workflowInstance
 import com.wutsi.koki.WorkflowFixtures.workflowInstances
 import com.wutsi.koki.WorkflowFixtures.workflowPictureUrl
 import com.wutsi.koki.WorkflowFixtures.workflows
+import com.wutsi.koki.account.dto.CreateAccountRequest
 import com.wutsi.koki.account.dto.CreateAccountResponse
 import com.wutsi.koki.account.dto.GetAccountResponse
 import com.wutsi.koki.account.dto.GetAccountTypeResponse
@@ -39,6 +40,7 @@ import com.wutsi.koki.account.dto.GetAttributeResponse
 import com.wutsi.koki.account.dto.SearchAccountResponse
 import com.wutsi.koki.account.dto.SearchAccountTypeResponse
 import com.wutsi.koki.account.dto.SearchAttributeResponse
+import com.wutsi.koki.contact.dto.CreateContactRequest
 import com.wutsi.koki.contact.dto.CreateContactResponse
 import com.wutsi.koki.contact.dto.GetContactResponse
 import com.wutsi.koki.contact.dto.GetContactTypeResponse
@@ -71,8 +73,6 @@ import com.wutsi.koki.script.dto.CreateScriptResponse
 import com.wutsi.koki.script.dto.GetScriptResponse
 import com.wutsi.koki.script.dto.RunScriptResponse
 import com.wutsi.koki.script.dto.SearchScriptResponse
-import com.wutsi.koki.sdk.KokiAccounts
-import com.wutsi.koki.sdk.KokiContacts
 import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiLogs
 import com.wutsi.koki.sdk.KokiMessages
@@ -166,12 +166,6 @@ abstract class AbstractPageControllerTest {
     protected lateinit var restWithoutTenantHeader: RestTemplate
 
     @MockitoBean
-    protected lateinit var kokiAccounts: KokiAccounts
-
-    @MockitoBean
-    protected lateinit var kokiContacts: KokiContacts
-
-    @MockitoBean
     protected lateinit var kokiForms: KokiForms
 
     @MockitoBean
@@ -251,9 +245,9 @@ abstract class AbstractPageControllerTest {
         setupFileModule()
         setupNoteModule()
         setupEmailModule()
-
         setupAccountModule()
         setupContactModule()
+
         setupTaxModule()
 
         setupForms()
@@ -266,64 +260,144 @@ abstract class AbstractPageControllerTest {
 
     private fun setupAccountModule() {
         // Attributes
-        doReturn(SearchAttributeResponse(AccountFixtures.attributes)).whenever(kokiAccounts).attributes(
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-        )
-        doReturn(GetAttributeResponse(AccountFixtures.attribute)).whenever(kokiAccounts).attribute(any())
+        doReturn(
+            ResponseEntity(
+                SearchAttributeResponse(AccountFixtures.attributes),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchAttributeResponse::class.java)
+            )
+        doReturn(
+            ResponseEntity(
+                GetAttributeResponse(AccountFixtures.attribute),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetAttributeResponse::class.java)
+            )
 
         // Account Types
-        doReturn(SearchAccountTypeResponse(AccountFixtures.accountTypes)).whenever(kokiAccounts)
-            .types(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
+        doReturn(
+            ResponseEntity(
+                SearchAccountTypeResponse(AccountFixtures.accountTypes),
+                HttpStatus.OK,
             )
-        doReturn(GetAccountTypeResponse(AccountFixtures.accountType)).whenever(kokiAccounts).type(any())
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchAccountTypeResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetAccountTypeResponse(AccountFixtures.accountType),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetAccountTypeResponse::class.java)
+            )
 
         // Accounts
-        doReturn(SearchAccountResponse(AccountFixtures.accounts)).whenever(kokiAccounts).accounts(
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-        )
-        doReturn(GetAccountResponse(AccountFixtures.account)).whenever(kokiAccounts).account(any())
-        doReturn(CreateAccountResponse(AccountFixtures.NEW_ACCOUNT_ID)).whenever(kokiAccounts).create(any())
+        doReturn(
+            ResponseEntity(
+                SearchAccountResponse(AccountFixtures.accounts),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchAccountResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetAccountResponse(AccountFixtures.account),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetAccountResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreateAccountResponse(AccountFixtures.NEW_ACCOUNT_ID),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateAccountRequest>(),
+                eq(CreateAccountResponse::class.java)
+            )
     }
 
     private fun setupContactModule() {
         // Contact Types
-        doReturn(SearchContactTypeResponse(ContactFixtures.contactTypes)).whenever(kokiContacts)
-            .types(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
+        doReturn(
+            ResponseEntity(
+                SearchContactTypeResponse(ContactFixtures.contactTypes),
+                HttpStatus.OK,
             )
-        doReturn(GetContactTypeResponse(ContactFixtures.contactType)).whenever(kokiContacts).type(any())
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchContactTypeResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetContactTypeResponse(ContactFixtures.contactType),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetContactTypeResponse::class.java)
+            )
 
         // Contacts
-        doReturn(SearchContactResponse(ContactFixtures.contacts)).whenever(kokiContacts).contacts(
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-        )
-        doReturn(GetContactResponse(ContactFixtures.contact)).whenever(kokiContacts).contact(any())
-        doReturn(CreateContactResponse(ContactFixtures.NEW_CONTACT_ID)).whenever(kokiContacts).create(any())
+        doReturn(
+            ResponseEntity(
+                SearchContactResponse(ContactFixtures.contacts),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchContactResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetContactResponse(ContactFixtures.contact),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetContactResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreateContactResponse(ContactFixtures.NEW_CONTACT_ID),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateContactRequest>(),
+                eq(CreateContactResponse::class.java)
+            )
     }
 
     protected fun setupModuleModule() {

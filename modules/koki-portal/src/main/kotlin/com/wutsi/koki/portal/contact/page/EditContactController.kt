@@ -5,7 +5,6 @@ import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.contact.service.ContactTypeService
 import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -19,7 +18,7 @@ import org.springframework.web.client.HttpClientErrorException
 class EditContactController(
     private val service: ContactService,
     private val contactTypeService: ContactTypeService,
-) : AbstractPageController() {
+) : AbstractContactController() {
     @GetMapping("/contacts/{id}/edit")
     fun edit(
         @PathVariable id: Long,
@@ -50,7 +49,7 @@ class EditContactController(
 
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.CONTACT_EDIT,
                 title = contact.name,
             )

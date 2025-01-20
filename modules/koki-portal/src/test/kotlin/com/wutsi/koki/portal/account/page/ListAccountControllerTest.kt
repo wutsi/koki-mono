@@ -1,13 +1,16 @@
 package com.wutsi.koki.portal.account.page
 
-import com.nhaarman.mockitokotlin2.anyOrNull
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.AccountFixtures.accounts
 import com.wutsi.koki.account.dto.AccountSummary
 import com.wutsi.koki.account.dto.SearchAccountResponse
 import com.wutsi.koki.portal.page.PageName
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import kotlin.test.Test
 
 class ListAccountControllerTest : AbstractPageControllerTest() {
@@ -26,17 +29,15 @@ class ListAccountControllerTest : AbstractPageControllerTest() {
         repeat(20) {
             entries.add(accounts[0].copy(id = ++seed))
         }
-        doReturn(SearchAccountResponse(entries))
-            .doReturn(SearchAccountResponse(accounts))
-            .whenever(kokiAccounts)
-            .accounts(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
+        doReturn(
+            ResponseEntity(
+                SearchAccountResponse(entries),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchAccountResponse::class.java)
             )
 
         navigateTo("/accounts")
@@ -46,7 +47,7 @@ class ListAccountControllerTest : AbstractPageControllerTest() {
 
         scrollToBottom()
         click("#account-load-more a", 1000)
-        assertElementCount("tr.account", entries.size + accounts.size)
+        assertElementCount("tr.account", 2 * entries.size)
     }
 
     @Test

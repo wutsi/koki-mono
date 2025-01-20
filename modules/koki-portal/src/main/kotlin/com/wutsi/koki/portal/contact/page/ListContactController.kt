@@ -1,8 +1,6 @@
 package com.wutsi.koki.portal.contact.page
 
 import com.wutsi.koki.portal.contact.service.ContactService
-import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
 import org.springframework.stereotype.Controller
@@ -14,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam
 class ListContactController(
     private val service: ContactService,
     private val currentUser: CurrentUserHolder,
-) : AbstractPageController() {
+) : AbstractContactController() {
     companion object {
         const val COL_ALL = "1"
         const val COL_CREATED = "2"
@@ -30,7 +28,7 @@ class ListContactController(
         model.addAttribute("collection", toCollection(collection))
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.CONTACT_LIST,
                 title = "Contacts",
             )

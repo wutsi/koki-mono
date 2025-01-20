@@ -1,13 +1,16 @@
 package com.wutsi.koki.portal.contact.page
 
-import com.nhaarman.mockitokotlin2.anyOrNull
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.ContactFixtures.contacts
 import com.wutsi.koki.contact.dto.ContactSummary
 import com.wutsi.koki.contact.dto.SearchContactResponse
 import com.wutsi.koki.portal.page.PageName
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import kotlin.test.Test
 
 class ListContactControllerTest : AbstractPageControllerTest() {
@@ -26,17 +29,15 @@ class ListContactControllerTest : AbstractPageControllerTest() {
         repeat(20) {
             entries.add(contacts[0].copy(id = ++seed))
         }
-        doReturn(SearchContactResponse(entries))
-            .doReturn(SearchContactResponse(contacts))
-            .whenever(kokiContacts)
-            .contacts(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
+        doReturn(
+            ResponseEntity(
+                SearchContactResponse(entries),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchContactResponse::class.java)
             )
 
         navigateTo("/contacts")
@@ -46,7 +47,7 @@ class ListContactControllerTest : AbstractPageControllerTest() {
 
         scrollToBottom()
         click("#contact-load-more a", 1000)
-        assertElementCount("tr.contact", entries.size + contacts.size)
+        assertElementCount("tr.contact", 2 * entries.size)
     }
 
     @Test

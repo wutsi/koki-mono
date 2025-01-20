@@ -37,7 +37,11 @@ class EditContactControllerTest : AbstractPageControllerTest() {
         click("button[type=submit]")
 
         val request = argumentCaptor<UpdateContactRequest>()
-        verify(kokiContacts).update(eq(contact.id), request.capture())
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/contacts/${contact.id}"),
+            request.capture(),
+            eq(Any::class.java),
+        )
         assertEquals(contactTypes[2].id, request.firstValue.contactTypeId)
         assertEquals("Yo", request.firstValue.firstName)
         assertEquals("Man", request.firstValue.lastName)
@@ -79,7 +83,11 @@ class EditContactControllerTest : AbstractPageControllerTest() {
     @Test
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
-        doThrow(ex).whenever(kokiContacts).update(any(), any())
+        doThrow(ex).whenever(rest).postForEntity(
+            any<String>(),
+            any<UpdateContactRequest>(),
+            eq(Any::class.java),
+        )
 
         navigateTo("/contacts/${contact.id}/edit")
 

@@ -1,9 +1,7 @@
 package com.wutsi.koki.portal.account.page
 
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doThrow
-import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -43,7 +41,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
         alert.accept()
         driver.switchTo().parentFrame()
 
-        verify(kokiAccounts).delete(account.id)
+        verify(rest).delete("$sdkBaseUrl/v1/accounts/${account.id}")
         assertCurrentPageIs(PageName.ACCOUNT_DELETED)
 
         click(".btn-ok")
@@ -59,14 +57,14 @@ class AccountControllerTest : AbstractPageControllerTest() {
         alert.dismiss()
         driver.switchTo().parentFrame()
 
-        verify(kokiAccounts, never()).delete(any())
+        verify(rest, never()).delete(any<String>())
         assertCurrentPageIs(PageName.ACCOUNT)
     }
 
     @Test
     fun `error on delete`() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
-        doThrow(ex).whenever(kokiAccounts).delete(any())
+        doThrow(ex).whenever(rest).delete(any<String>())
 
         navigateTo("/accounts/${account.id}")
         click(".btn-delete")
@@ -87,19 +85,10 @@ class AccountControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun contacts() {
-        navigateTo("/accounts/${account.id}?tab=contacts")
+        navigateTo("/accounts/${account.id}?tab=contact")
 
         Thread.sleep(1000)
-        verify(kokiContacts).contacts(
-            anyOrNull(), // keywords
-            anyOrNull(), // ids
-            anyOrNull(), // contact-type-ids
-            eq(listOf(account.id)), // account-ids
-            anyOrNull(), // created-by-id
-            eq(20), // limit
-            eq(0), // offset
-        )
-        assertElementCount(".widget-contacts tr.contact", ContactFixtures.contacts.size)
+        assertElementCount(".tab-contacts tr.contact", ContactFixtures.contacts.size)
 
         click(".btn-add-contact")
         assertCurrentPageIs(PageName.CONTACT_CREATE)
@@ -107,44 +96,33 @@ class AccountControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun files() {
-        navigateTo("/accounts/${account.id}?tab=files")
+        navigateTo("/accounts/${account.id}?tab=file")
 
         Thread.sleep(1000)
-        assertElementCount(".widget-files .file", FileFixtures.files.size)
+        assertElementCount(".tab-files .file", FileFixtures.files.size)
     }
 
     @Test
     fun notes() {
-        navigateTo("/accounts/${account.id}?tab=notes")
+        navigateTo("/accounts/${account.id}?tab=note")
 
         Thread.sleep(1000)
-        assertElementCount(".widget-notes .note", NoteFixtures.notes.size)
+        assertElementCount(".tab-notes .note", NoteFixtures.notes.size)
     }
 
     @Test
     fun taxes() {
-        navigateTo("/accounts/${account.id}?tab=taxes")
+        navigateTo("/accounts/${account.id}?tab=tax")
 
         Thread.sleep(1000)
-        verify(kokiTaxes).taxes(
-            emptyList(), // ids
-            emptyList(), // tsx-type-id
-            listOf(account.id), // account-id
-            emptyList(), // participant-id
-            emptyList(), // assignee-id
-            emptyList(), // created-by-id
-            emptyList(), // statuses
-            20, // limit
-            0, // offset
-        )
-        assertElementCount(".widget-taxes .tax", TaxFixtures.taxes.size)
+        assertElementCount(".tab-taxes .tax", TaxFixtures.taxes.size)
     }
 
     @Test
     fun emails() {
-        navigateTo("/accounts/${account.id}?tab=emails")
+        navigateTo("/accounts/${account.id}?tab=email")
 
         Thread.sleep(1000)
-        assertElementCount(".widget-emails .email", EmailFixtures.emails.size)
+        assertElementCount(".tab-emails .email", EmailFixtures.emails.size)
     }
 }

@@ -2,8 +2,6 @@ package com.wutsi.koki.portal.account.page
 
 import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.account.service.AccountService
-import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -14,7 +12,7 @@ import org.springframework.web.client.HttpClientErrorException
 @Controller
 class AccountController(
     private val service: AccountService,
-) : AbstractPageController() {
+) : AbstractAccountDetailsController() {
     @GetMapping("/accounts/{id}")
     fun show(
         @PathVariable id: Long,
@@ -28,7 +26,7 @@ class AccountController(
         model.addAttribute("account", account)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.ACCOUNT,
                 title = account.name,
             )
@@ -45,7 +43,7 @@ class AccountController(
             model.addAttribute("account", account)
             model.addAttribute(
                 "page",
-                PageModel(
+                createPageModel(
                     name = PageName.ACCOUNT_DELETED,
                     title = account.name,
                 )

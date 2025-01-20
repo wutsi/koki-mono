@@ -3,7 +3,6 @@ package com.wutsi.koki.portal.contact.page
 import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -14,7 +13,7 @@ import org.springframework.web.client.HttpClientErrorException
 @Controller
 class ContactController(
     private val service: ContactService
-) : AbstractPageController() {
+) : AbstractContactDetailsController() {
     @GetMapping("/contacts/{id}")
     fun show(
         @PathVariable id: Long,
@@ -29,7 +28,7 @@ class ContactController(
 
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.CONTACT,
                 title = "Contacts",
             )

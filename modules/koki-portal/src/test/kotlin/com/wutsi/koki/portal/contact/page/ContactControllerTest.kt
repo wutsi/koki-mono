@@ -37,7 +37,7 @@ class ContactControllerTest : AbstractPageControllerTest() {
         alert.accept()
         driver.switchTo().parentFrame()
 
-        verify(kokiContacts).delete(contact.id)
+        verify(rest).delete("$sdkBaseUrl/v1/contacts/${contact.id}")
         assertCurrentPageIs(PageName.CONTACT_DELETED)
 
         click(".btn-ok")
@@ -53,14 +53,14 @@ class ContactControllerTest : AbstractPageControllerTest() {
         alert.dismiss()
         driver.switchTo().parentFrame()
 
-        verify(kokiContacts, never()).delete(any())
+        verify(rest, never()).delete(any<String>())
         assertCurrentPageIs(PageName.CONTACT)
     }
 
     @Test
     fun `error on delete`() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
-        doThrow(ex).whenever(kokiContacts).delete(any())
+        doThrow(ex).whenever(rest).delete(any<String>())
 
         navigateTo("/contacts/${contact.id}")
         click(".btn-delete")
@@ -74,17 +74,17 @@ class ContactControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun files() {
-        navigateTo("/contacts/${contact.id}?tab=files")
+        navigateTo("/contacts/${contact.id}?tab=file")
 
         Thread.sleep(1000)
-        assertElementCount(".widget-files tr.file", FileFixtures.files.size)
+        assertElementCount(".tab-files tr.file", FileFixtures.files.size)
     }
 
     @Test
     fun notes() {
-        navigateTo("/contacts/${contact.id}?tab=notes")
+        navigateTo("/contacts/${contact.id}?tab=note")
 
         Thread.sleep(1000)
-        assertElementCount(".widget-notes .note", NoteFixtures.notes.size)
+        assertElementCount(".tab-notes .note", NoteFixtures.notes.size)
     }
 }
