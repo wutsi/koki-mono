@@ -40,6 +40,8 @@ import com.wutsi.koki.account.dto.GetAttributeResponse
 import com.wutsi.koki.account.dto.SearchAccountResponse
 import com.wutsi.koki.account.dto.SearchAccountTypeResponse
 import com.wutsi.koki.account.dto.SearchAttributeResponse
+import com.wutsi.koki.common.dto.ImportMessage
+import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.contact.dto.CreateContactRequest
 import com.wutsi.koki.contact.dto.CreateContactResponse
 import com.wutsi.koki.contact.dto.GetContactResponse
@@ -128,6 +130,7 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
@@ -237,6 +240,7 @@ abstract class AbstractPageControllerTest {
     }
 
     private fun setupDefaultApiResponses() {
+        setupFileUploads()
         setupModuleModule()
         setupTenantModule()
         setupFileModule()
@@ -252,6 +256,29 @@ abstract class AbstractPageControllerTest {
         setupServices()
         setupMessages()
         setupWorkflows()
+    }
+
+    protected fun setupFileUploads() {
+        doReturn(
+            ResponseEntity(
+                ImportResponse(
+                    added = 4,
+                    updated = 5,
+                    errors = 3,
+                    errorMessages = listOf(
+                        ImportMessage(location = "1", code = "INVALID_NAME"),
+                        ImportMessage(location = "2", code = "INVALID_ADDRESS", "Address is not valid"),
+                    )
+                ),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .exchange(
+                any<String>(),
+                any<HttpMethod>(),
+                any(),
+                any<Class<ImportResponse>>(),
+            )
     }
 
     protected fun setupModuleModule() {

@@ -7,6 +7,13 @@ object PageName {
     const val ACCOUNT_CREATE = "page.account.create"
     const val ACCOUNT_DELETED = "page.account.deleted"
     const val ACCOUNT_SAVED = "page.account.saved"
+    const val ACCOUNT_SETTINGS = "page.settings.account"
+    const val ACCOUNT_SETTINGS_ATTRIBUTE = "page.settings.account.attribute"
+    const val ACCOUNT_SETTINGS_ATTRIBUTE_IMPORT = "page.settings.account.attribute.import"
+    const val ACCOUNT_SETTINGS_ATTRIBUTE_LIST = "page.settings.account.attribute.list"
+    const val ACCOUNT_SETTINGS_TYPE = "page.settings.account.type"
+    const val ACCOUNT_SETTINGS_TYPE_IMPORT = "page.settings.account.type.import"
+    const val ACCOUNT_SETTINGS_TYPE_LIST = "page.settings.account.type.list"
 
     const val CONTACT = "page.contact"
     const val CONTACT_LIST = "page.contact.list"
