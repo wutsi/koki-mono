@@ -84,7 +84,7 @@ class AccountMapper : TenantAwareMapper() {
             id = entity.id,
             name = entity.name,
             title = entity.title ?: entity.name,
-            description = entity.description,
+            description = entity.description?.trim()?.ifEmpty { null },
             active = entity.active,
         )
     }
@@ -108,7 +108,7 @@ class AccountMapper : TenantAwareMapper() {
             required = entity.required,
             active = entity.active,
             choices = entity.choices,
-            description = entity.description,
+            description = entity.description?.trim()?.ifEmpty { null },
             createdAt = entity.createdAt,
             createdAtText = fmt.format(entity.createdAt),
             modifiedAt = entity.modifiedAt,

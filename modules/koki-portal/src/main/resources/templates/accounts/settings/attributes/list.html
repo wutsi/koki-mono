@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="settings-container">
+    <div class="settings-sidebar">
+        <div th:replace="~{__components/settings :: settings-menu('account')}"></div>
+    </div>
+    <div class="settings-content padding">
+        <div th:replace="~{__components/settings :: settings-title('Acccount Attributes', '/settings/accounts')}"></div>
+
+        <a class="btn btn-secondary btn-import" href="/settings/accounts/attributes/import">Import</a>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Required</th>
+                <th>Active</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="attribute" th:each="attr : ${attributes}">
+                <td>
+                    <a th:href="'/settings/accounts/attributes/' + ${attr.id}" th:text="${attr.name}">NAME</a>
+                </td>
+                <td th:text="${attr.label}">TITLE</td>
+                <td th:text="#{'attribute-type.' + ${attr.type}}">TYPE</td>
+                <td>
+                    <span th:if="${attr.required}">Yes</span>
+                    <span th:if="!${attr.required}">No</span>
+                </td>
+                <td>
+                    <span th:if="${attr.active}">Yes</span>
+                    <span th:if="!${attr.active}">No</span>
+                </td>
+            </tr>
+            <tr id="attribute-load-more" th:if="${moreUrl}">
+                <td class="text-center" colspan="5">
+                    <a href="javascript: koki_load_more('attribute-load-more')" th:data-url="${moreUrl}">Load
+                        More...</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

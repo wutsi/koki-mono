@@ -99,4 +99,20 @@
      th:text="${error}">ERROR
 </div>
 
+<div th:fragment="import-response(response)" th:if="${response}">
+    <div class="alert alert-success">
+        <div><b>File import completed</b></div>
+        <div>- <span th:text="${response.added}">00</span> row(s) added</div>
+        <div>- <span th:text="${response.updated}">00</span> row(s) updated</div>
+        <div>- <span th:text="${response.errors}">00</span> errors</div>
+    </div>
+    <div class="alert alert-warning" th:if="!${response.errorMessages.isEmpty()}">
+        <div><b>File import errors</b></div>
+        <div th:each="err : ${response.errorMessages}">
+            <span th:text="${err.location}">LOC</span>:
+            <span th:text="${err.code}">CODE</span>
+            <span th:if="${err.message}" th:text="${err.message}">LOC</span>
+        </div>
+    </div>
+</div>
 </body>

@@ -1,9 +1,11 @@
 package com.wutsi.koki.portal.account.service
 
+import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.portal.account.mapper.AccountMapper
 import com.wutsi.koki.portal.account.model.AccountTypeModel
 import com.wutsi.koki.sdk.KokiAccounts
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 
 @Service
 class AccountTypeService(
@@ -31,5 +33,9 @@ class AccountTypeService(
         ).accountTypes
 
         return accountTypes.map { accountType -> mapper.toAccountTypeModel(accountType) }
+    }
+
+    fun upload(file: MultipartFile): ImportResponse {
+        return koki.uploadTypes(file)
     }
 }

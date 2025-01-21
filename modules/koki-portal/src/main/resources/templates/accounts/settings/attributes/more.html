@@ -1,0 +1,21 @@
+<tr class="attribute" th:each="attr : ${attributes}">
+    <td>
+        <a th:href="'/settings/accounts/attributes/' + ${attr.id}" th:text="${attr.name}">NAME</a>
+    </td>
+    <td th:text="${attr.label}">TITLE</td>
+    <td th:text="#{'attribute-type.' + ${attr.type}}">TYPE</td>
+    <td>
+        <span th:if="${attr.required}">Yes</span>
+        <span th:if="!${attr.required}">No</span>
+    </td>
+    <td>
+        <span th:if="${attr.active}">Yes</span>
+        <span th:if="!${attr.active}">No</span>
+    </td>
+</tr>
+<tr id="attribute-load-more" th:if="${moreUrl}">
+    <td class="text-center" colspan="4">
+        <a href="javascript: koki_load_more('attribute-load-more')" th:data-url="${moreUrl}">Load
+            More...</a>
+    </td>
+</tr>

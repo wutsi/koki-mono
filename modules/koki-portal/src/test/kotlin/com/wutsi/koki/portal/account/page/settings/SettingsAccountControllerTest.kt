@@ -1,0 +1,27 @@
+package com.wutsi.koki.portal.account.page.settings
+
+import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.portal.page.PageName
+import kotlin.test.Test
+
+class SettingsAccountControllerTest : AbstractPageControllerTest() {
+    @Test
+    fun show() {
+        navigateTo("/settings/accounts")
+        assertCurrentPageIs(PageName.ACCOUNT_SETTINGS)
+    }
+
+    @Test
+    fun types() {
+        navigateTo("/settings/accounts")
+        click(".btn-type")
+        assertCurrentPageIs(PageName.ACCOUNT_SETTINGS_TYPE_LIST)
+    }
+
+    @Test
+    fun attributes() {
+        navigateTo("/settings/accounts")
+        click(".btn-attribute")
+        assertCurrentPageIs(PageName.ACCOUNT_SETTINGS_ATTRIBUTE_LIST)
+    }
+}

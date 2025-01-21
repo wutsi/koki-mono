@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="settings-container">
+    <div class="settings-sidebar">
+        <div th:replace="~{__components/settings :: settings-menu('account')}"></div>
+    </div>
+    <div class="settings-content padding">
+        <div
+            th:replace="~{__components/settings :: settings-title('Acccount Attributes', '/settings/accounts/attributes')}"></div>
+
+        <table class="table">
+            <tr>
+                <td width="20%"><b>Name</b></td>
+                <td th:text="${attr.name}">NAME</td>
+            </tr>
+            <tr>
+                <td><b>Title</b></td>
+                <td th:text="${attr.label}">TITLE</td>
+            </tr>
+            <tr>
+                <td><b>Type</b></td>
+                <td th:text="#{'attribute-type.' + ${attr.type}}">TYPE</td>
+            </tr>
+            <tr>
+                <td><b>Required</b></td>
+                <td>
+                    <span th:if="${attr.required}">Yes</span>
+                    <span th:if="!${attr.required}">No</span>
+                </td>
+            </tr>
+            <tr>
+                <td><b>Active</b></td>
+                <td>
+                    <span th:if="${attr.active}">Yes</span>
+                    <span th:if="!${attr.active}">No</span>
+                </td>
+            </tr>
+            <tr th:if="!${attr.choices.isEmpty()}">
+                <td><b>Choices</b></td>
+                <td>
+                    <div th:each="choice : ${attr.choices}" th:text="${choice}">CHOICE</div>
+                </td>
+            </tr>
+            <tr th:if="${attr.description}">
+                <td><b>Description</b></td>
+                <td th:text="${attr.description}">Description</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+</body>
+</html>

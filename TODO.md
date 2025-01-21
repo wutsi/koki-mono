@@ -2,12 +2,12 @@
 
 ## Account
 
-- [] Filter accounts on UI
 - [] Add additional information: address
-- [] Settings: Import Accounts from CSV
-- [] Settings: Import Attributes from CSV
-- [] Settings: Import Account Types from CSV
+- [] Filter accounts on UI
 - [] Send mass email to list of accounts
+- [] Settings: Import Accounts from CSV
+- [x] Settings: Import Attributes from CSV
+- [x] Settings: Import Account Types from CSV
 - [x] Send email to account
 - [x] Link with taxes
 - [x] Attributes API
@@ -19,10 +19,10 @@
 
 ## Contact
 
+- [] Settings: Import Contact Types from CSV
 - [] Add additional information: address, SSN, Date of birth
 - [] Filter contacts on UI
 - [] Settings: Import Contact from CSV
-- [] Settings: Import Contact Types from CSV
 - [] Send mass email to list of contacts
 - [x] Send email to contact
 - [x] Contact API
@@ -32,6 +32,7 @@
 
 ## Files
 
+- [] Settings: Configure S3 storage OR Local storage
 - [x] Upload file from popup
 - [x] Show file details
 - [x] Delete files
@@ -41,12 +42,10 @@
 
 ## Taxes
 
-- [] Send email notification to assignee
-- [] Home: Widget showing the % of taxes completed per type
+- [] Settings: Import Taxes Types from CSV
+- [] Settings: Send email notification to assignee
 - [] Add Kanban view
 - [] Add Calendar view
-- [] Home: Add my taxes widget
-- [] Settings: Import Taxes Types from CSV
 - [] Track Time spent
 - [x] Send email to Taxes
 - [x] Home: Add my assignment widget
@@ -66,8 +65,6 @@
 ## Notes
 
 - [] Add type of notes
-- [] Add mentions to notes
-- [] Email notification on notes?
 - [x] Note API
 - [x] Note UI
 
@@ -83,11 +80,6 @@
 - [x] List of modules driven by backend in home page
 - [x] List of modules driven by backend in configuration
 - [x] link CSS and JS with modules
-
-## Security
-
-- [] Enforce RBAC on UI
-- [] Enforce RBAC on API
 
 ## Product
 
@@ -107,6 +99,11 @@
 - [x] Support ReadOnly fields
 - [x] Track Form submissions
 - [x] Share Forms Link
+
+## Security
+
+- [] Enforce RBAC on UI
+- [] Enforce RBAC on API
 
 ## Workflow
 
@@ -141,8 +138,3 @@
 
 - [] Configure home page by role
 - [x] Align webapp domain name with Tenant
-
-## Storage
-
-- [] Support S3 storage
-
