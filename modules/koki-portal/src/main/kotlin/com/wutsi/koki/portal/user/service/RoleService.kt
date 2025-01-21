@@ -25,12 +25,14 @@ class RoleService(
 
     fun roles(
         ids: List<Long> = emptyList(),
+        active: Boolean? = null,
         limit: Int = 20,
         offset: Int = 0
     ): List<RoleModel> {
         // Roles
         val roles = koki.roles(
             ids = ids,
+            active = active,
             limit = limit,
             offset = offset
         ).roles

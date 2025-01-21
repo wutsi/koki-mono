@@ -27,10 +27,10 @@ CREATE TABLE T_EMAIL_OWNER(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
-INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url)
-    VALUES (150, 5, 'email', 'Email', null, '/emails/tab', '/settings/email');
+INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url)
+    VALUES (150, 5, 'email', 'Email', null, '/emails/tab', '/settings/email', '/js/emails.js');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
     VALUES (1500, 150, 'email',       'Access emails'),
-           (1501, 150, 'email:send',  'Send Emails'),
-           (1502, 150, 'email:admin', 'Configure Emails');
+           (1501, 150, 'email:admin', 'Configure Emails'),
+           (1502, 150, 'email:send',  'Send Emails');

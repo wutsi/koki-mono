@@ -42,7 +42,10 @@ class SettingsEditUserRoleController(
             )
         )
 
-        val roles = roleService.roles(limit = Integer.MAX_VALUE)
+        val roles = roleService.roles(
+            active = true,
+            limit = Integer.MAX_VALUE,
+        )
         model.addAttribute("roles", roles)
         return "users/settings/users/roles"
     }
