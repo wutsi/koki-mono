@@ -34,7 +34,7 @@ class SettingsEditUserRoleControllerTest : AbstractPageControllerTest() {
         )
 
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER)
-        assertElementVisible("#user-toast")
+        assertElementVisible("#koki-toast")
     }
 
     @Test

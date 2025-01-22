@@ -4,21 +4,21 @@
       th:object="${form}">
     <table class="table">
         <tr>
-            <td width="20%">Created By</td>
+            <td width="20%"><b>Created By:</b></td>
             <td th:text="${note.createdBy?.displayName}">CREATE BY</td>
         </tr>
         <tr>
-            <td>Created</td>
+            <td><b>Created:</b></td>
             <td th:text="${note.createdAtText}">CREATED</td>
         </tr>
         <tr>
-            <td>Subject</td>
+            <td><b>Subject:</b></td>
             <td>
                 <input name="subject" th:field="*{subject}"/>
             </td>
         </tr>
         <tr>
-            <td valign="top">Body</td>
+            <td valign="top"><b>Body:</b></td>
             <td>
                 <div class="quilljs" id="html-editor" th:utext="${form.body}"></div>
                 <textarea class="hidden" name="body" th:field="*{body}"></textarea>

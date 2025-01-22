@@ -58,7 +58,7 @@
             </td>
         </tr>
         <tr>
-            <td width="20%">Subject</td>
+            <td><b>Subject:</b></td>
             <td>
                 <input maxlength="255" name="subject" style="width:100%"
                        th:field="*{subject}"/>
@@ -68,6 +68,19 @@
             <td colspan="2">
                 <div class="quilljs" id="html-editor" th:utext="${form.body}"></div>
                 <textarea class="hidden" name="body" th:field="*{body}"></textarea>
+            </td>
+        </tr>
+        <tr th:if="${attachmentFiles}">
+            <td><b>Attachments:</b></td>
+            <td>
+                <div class="border padding-small margin-small" style="display:inline"
+                     th:each="file : ${attachmentFiles}"
+                     th:id="'attachment-' + ${file.id}"
+                >
+                    <span th:replace="~{__components/file :: file-icon(${file})}"></span>
+                    <span th:text="${file.name}">NAME</span>
+                    <input name="attachmentFileId" th:value="${file.id}" type="hidden"/>
+                </div>
             </td>
         </tr>
     </table>

@@ -82,7 +82,7 @@ class SettingsSMTPEditControllerTest : AbstractPageControllerTest() {
         assertEquals("Ray Solutions", request.firstValue.values[ConfigurationName.SMTP_FROM_PERSONAL])
 
         assertCurrentPageIs(PageName.EMAIL_SETTINGS_SMTP)
-        assertElementVisible("#smtp-toast")
+        assertElementVisible("#koki-toast")
     }
 
     @Test

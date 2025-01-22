@@ -3,7 +3,7 @@ function koki_notes_delete(id) {
     if (confirm('Are you sure you want to delete the note?')) {
         fetch('/notes/' + id + '/delete')
             .then(function () {
-                _koki_notes_refresh();
+                _koki_notes_refresh_parent_window();
             });
     }
 }
@@ -14,44 +14,31 @@ function koki_notes_create() {
     const ownerId = container.getAttribute("data-owner-id");
     const ownerType = container.getAttribute("data-owner-type");
 
-    fetch('/notes/create?owner-id=' + ownerId + '&owner-type=' + ownerType)
-        .then(response => {
-            if (response.ok) {
-                response.text()
-                    .then(html => {
-                        _koki_notes_open_modal(html, false);
-                    })
-            } else {
-                console.log('Unable to fetch the editor', response.text());
-            }
-        });
+    koki_modal_open(
+        'Create Note',
+        '/notes/create?owner-id=' + ownerId + '&owner-type=' + ownerType,
+        _koki_notes_on_modal_opened,
+        _koki_notes_on_modal_closed,
+    );
 }
 
 function koki_notes_edit(id) {
     console.log('Editing Note#' + id);
-    fetch('/notes/' + id + '/edit')
-        .then(response => {
-            if (response.ok) {
-                response.text()
-                    .then(html => {
-                        _koki_notes_open_modal(html, true);
-                    })
-            } else {
-                console.log('Unable to fetch the editor', response.text());
-            }
-        });
+    koki_modal_open(
+        'Note',
+        '/notes/' + id + '/edit',
+        _koki_notes_on_modal_opened,
+        _koki_notes_on_modal_closed,
+    );
 }
 
-function _koki_notes_open_modal(html, edit) {
-    /* Body */
-    document.getElementById("note-modal-body").innerHTML = html;
 
-    /* Title */
-    document.getElementById('note-title-create').style.display = (edit ? 'none' : 'block');
-    document.getElementById('note-title-edit').style.display = (!edit ? 'none' : 'block');
+/*===== callbacks =========*/
+function _koki_notes_on_modal_opened() {
+    console.log('_koki_notes_on_modal_opened');
 
     /* Form */
-    document.getElementById('note-form').addEventListener('submit', _koki_notes_submit_form);
+    document.getElementById('note-form').addEventListener('submit', _koki_notes_on_form_submitted);
 
     /* Subject */
     document.getElementById('subject').addEventListener('keydown', _koki_notes_on_change);
@@ -71,24 +58,20 @@ function _koki_notes_open_modal(html, edit) {
     htmlBody.on('text-change', _koki_notes_on_change);
 
     /* Cancel */
-    document.getElementById('btn-note-cancel').addEventListener('click', _koki_notes_close_modal)
-
-    /* open the popup */
-    const modal = new bootstrap.Modal('#note-modal');
-    modal.show();
+    document.getElementById('btn-note-cancel').addEventListener('click', koki_modal_close)
 }
 
-function _koki_notes_close_modal() {
+
+function _koki_notes_on_modal_closed() {
+    console.log('_koki_notes_on_modal_closed');
+
     /* remove all event listeners */
-    document.getElementById('note-form').removeEventListener('submit', _koki_notes_submit_form);
+    document.getElementById('note-form').removeEventListener('submit', _koki_notes_on_form_submitted);
     document.getElementById("subject").removeEventListener('keydown', _koki_notes_on_change);
-    document.getElementById("btn-note-cancel").removeEventListener('click', _koki_notes_close_modal)
-
-    /* close */
-    document.querySelector('#note-modal .btn-close').click();
+    document.getElementById("btn-note-cancel").removeEventListener('click', koki_modal_close)
 }
 
-function _koki_notes_submit_form() {
+function _koki_notes_on_form_submitted() {
     console.log('Submitting the Note');
 
     event.preventDefault();
@@ -105,8 +88,8 @@ function _koki_notes_submit_form() {
             }
         }).then(response => {
         if (response.ok) {
-            _koki_notes_close_modal();
-            _koki_notes_refresh(id);
+            koki_modal_close();
+            _koki_notes_refresh_parent_window(id);
         } else {
             console.log('Error', response.text());
             alert('Failed');
@@ -125,7 +108,7 @@ function _koki_notes_on_change() {
         !editor.textContent;
 }
 
-function _koki_notes_refresh(id) {
+function _koki_notes_refresh_parent_window(id) {
     if (id) {
         fetch('/notes/' + id)
             .then(response => {

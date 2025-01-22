@@ -56,7 +56,8 @@
 
 ## Email
 
-- [] Attach files to email
+- [] Attach multiple files to email
+- [x] Attach 1 file to email
 - [x] Settings: Configure email layout
 - [x] Settings: Configure SMTP
 - [x] Send email API

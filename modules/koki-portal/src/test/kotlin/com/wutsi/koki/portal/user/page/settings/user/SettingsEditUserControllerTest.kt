@@ -38,7 +38,7 @@ class SettingsEditUserControllerTest : AbstractPageControllerTest() {
         assertEquals(UserStatus.SUSPENDED, request.firstValue.status)
 
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER)
-        assertElementVisible("#user-toast")
+        assertElementVisible("#koki-toast")
     }
 
     @Test

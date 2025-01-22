@@ -118,6 +118,10 @@ a.entity-title {
     margin: 1em;
 }
 
+.margin-small {
+    margin: 0.5em;
+}
+
 .margin-2x {
     margin: 2em;
 }

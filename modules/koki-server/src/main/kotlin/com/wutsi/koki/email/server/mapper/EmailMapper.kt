@@ -19,6 +19,7 @@ class EmailMapper {
                 type = entity.recipientType,
             ),
             createdAt = entity.createdAt,
+            attachmentFileIds = entity.attachments.map { attachment -> attachment.fileId }
         )
     }
 

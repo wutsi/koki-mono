@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.client.HttpClientErrorException
 
 abstract class AbstractPageController {
+    companion object {
+        const val TOAST_TTL = 10L * 1000 // 10 secs
+    }
+
     @Autowired
     protected lateinit var objectMapper: ObjectMapper
 
@@ -30,7 +34,25 @@ abstract class AbstractPageController {
         return tenantHolder.get()
     }
 
-    fun toErrorResponse(ex: HttpClientErrorException): ErrorResponse {
+    protected fun toErrorResponse(ex: HttpClientErrorException): ErrorResponse {
         return objectMapper.readValue(ex.responseBodyAsString, ErrorResponse::class.java)
+    }
+
+    protected fun canShowToasts(
+        timestamp: Long?,
+        referer: String? = null,
+        allowedReferers: List<String> = emptyList()
+    ): Boolean {
+        if (timestamp == null || referer == null || System.currentTimeMillis() - timestamp > TOAST_TTL) {
+            return false
+        }
+
+        allowedReferers.forEach { ref ->
+            if (referer.contains(ref)) {
+                return true
+            }
+        }
+
+        return false
     }
 }

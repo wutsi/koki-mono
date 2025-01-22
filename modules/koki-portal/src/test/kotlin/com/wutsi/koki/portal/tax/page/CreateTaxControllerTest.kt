@@ -47,26 +47,8 @@ class CreateTaxControllerTest : AbstractPageControllerTest() {
 //        assertEquals("2020-12-21", fmt.format(tax.dueAt))
         assertEquals("This is a nice description", tax.description)
 
-        assertCurrentPageIs(PageName.TAX_SAVED)
-        click(".btn-ok")
         assertCurrentPageIs(PageName.TAX_LIST)
-    }
-
-    @Test
-    fun `create new`() {
-        navigateTo("/taxes/create")
-
-        select("#fiscalYear", 2)
-        select("#taxTypeId", 3)
-        scrollToBottom()
-        input("#startAt", "2020\t1211")
-        input("#dueAt", "2020\t1221")
-        input("#description", "This is a nice description")
-        click("button[type=submit]")
-
-        assertCurrentPageIs(PageName.TAX_SAVED)
-        click(".btn-create")
-        assertCurrentPageIs(PageName.TAX_CREATE)
+        assertElementVisible("#koki-toast")
     }
 
     @Test

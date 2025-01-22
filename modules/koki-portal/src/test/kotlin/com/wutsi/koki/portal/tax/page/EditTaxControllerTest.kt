@@ -42,9 +42,8 @@ class EditTaxControllerTest : AbstractPageControllerTest() {
         assertEquals(taxTypes[2].id, tax.taxTypeId)
         assertEquals("This is a nice description", tax.description)
 
-        assertCurrentPageIs(PageName.TAX_SAVED)
-        click(".btn-ok")
-        assertCurrentPageIs(PageName.TAX_LIST)
+        assertCurrentPageIs(PageName.TAX)
+        assertElementVisible("#koki-toast")
     }
 
     @Test

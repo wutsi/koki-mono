@@ -10,4 +10,5 @@ data class EmailForm(
     val body: String = "",
     val ownerType: ObjectType? = null,
     val ownerId: Long? = null,
+    val attachmentFileId: List<Long> = emptyList()
 )

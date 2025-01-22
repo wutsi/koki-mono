@@ -2,10 +2,8 @@ package com.wutsi.koki.portal.contact.page
 
 import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.contact.form.ContactForm
-import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.contact.service.ContactTypeService
-import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.PageName
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -63,23 +61,7 @@ class CreateContactController(
     ): String {
         try {
             val contactId = service.create(form)
-            val contact = ContactModel(
-                id = contactId,
-                firstName = form.firstName,
-                lastName = form.lastName,
-                salutation = form.salutation
-            )
-            model.addAttribute("contact", contact)
-            model.addAttribute(
-                "page", PageModel(
-                    name = PageName.CONTACT_SAVED, title = contact.name
-                )
-            )
-            model.addAttribute(
-                "createUrl",
-                "/contacts/create" + if (form.accountId == -1L) "" else "?account-id=${form.accountId}"
-            )
-            return "contacts/saved"
+            return "redirect:/contacts?_toast=$contactId&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)

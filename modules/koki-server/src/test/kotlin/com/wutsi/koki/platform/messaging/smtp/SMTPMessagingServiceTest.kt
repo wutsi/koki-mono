@@ -6,6 +6,7 @@ import com.wutsi.koki.platform.messaging.Message
 import com.wutsi.koki.platform.messaging.Party
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import jakarta.mail.Message.RecipientType
+import java.io.File
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -45,6 +46,22 @@ class SMTPMessagingServiceTest {
         if (smtp.isRunning) {
             smtp.stop()
         }
+    }
+
+    @Test
+    fun sendWithAttachment() {
+        val file = File.createTempFile("test", ".txt")
+        file.writeText("Hello world")
+
+        val xmessage = message.copy(attachments = listOf(file))
+
+        val sender = builder.build(config)
+        val result = sender.send(xmessage)
+
+        assertEquals("", result)
+
+        val messages = smtp.receivedMessages
+        assertTrue(messages.isNotEmpty())
     }
 
     @Test

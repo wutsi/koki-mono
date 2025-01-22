@@ -5,8 +5,6 @@ object PageName {
     const val ACCOUNT_LIST = "page.account.list"
     const val ACCOUNT_EDIT = "page.account.edit"
     const val ACCOUNT_CREATE = "page.account.create"
-    const val ACCOUNT_DELETED = "page.account.deleted"
-    const val ACCOUNT_SAVED = "page.account.saved"
     const val ACCOUNT_SETTINGS = "page.settings.account"
     const val ACCOUNT_SETTINGS_ATTRIBUTE = "page.settings.account.attribute"
     const val ACCOUNT_SETTINGS_ATTRIBUTE_IMPORT = "page.settings.account.attribute.import"
@@ -19,8 +17,6 @@ object PageName {
     const val CONTACT_LIST = "page.contact.list"
     const val CONTACT_EDIT = "page.contact.edit"
     const val CONTACT_CREATE = "page.contact.create"
-    const val CONTACT_DELETED = "page.contact.deleted"
-    const val CONTACT_SAVED = "page.contact.saved"
 
     const val EMAIL_SETTINGS = "page.settings.email"
     const val EMAIL_SETTINGS_SMTP = "page.settings.smtp"
@@ -98,8 +94,6 @@ object PageName {
     const val TAX_LIST = "page.tax.list"
     const val TAX_EDIT = "page.tax.edit"
     const val TAX_CREATE = "page.tax.create"
-    const val TAX_DELETED = "page.tax.deleted"
-    const val TAX_SAVED = "page.tax.saved"
     const val TAX_STATUS = "page.tax.status"
 
     const val UPLOAD = "upload"

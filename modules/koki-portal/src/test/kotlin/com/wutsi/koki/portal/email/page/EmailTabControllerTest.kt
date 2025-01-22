@@ -30,10 +30,10 @@ class EmailTabControllerTest : AbstractPageControllerTest() {
         navigateTo("/emails/tab?test-mode=true&owner-id=${account.id}&owner-type=ACCOUNT")
 
         click(".email a", 1000)
-        assertElementVisible("#email-modal")
+        assertElementVisible("#koki-modal")
 
         click("#btn-email-cancel")
-        assertElementNotVisible("#email-modal")
+        assertElementNotVisible("#koki-modal")
     }
 
     @Test
@@ -41,7 +41,7 @@ class EmailTabControllerTest : AbstractPageControllerTest() {
         navigateTo("/emails/tab?test-mode=true&owner-id=${account.id}&owner-type=ACCOUNT")
 
         click("#btn-email-compose", 1000)
-        assertElementVisible("#email-modal")
+        assertElementVisible("#koki-modal")
 
         assertElementVisible("#account-selector")
         assertElementNotVisible("#contact-selector")
@@ -63,7 +63,7 @@ class EmailTabControllerTest : AbstractPageControllerTest() {
         assertEquals(account.id, request.firstValue.recipient.id)
         assertEquals(ObjectType.ACCOUNT, request.firstValue.recipient.type)
 
-        assertElementNotVisible("#email-modal")
+        assertElementNotVisible("#koki-modal")
     }
 
     @Test
@@ -71,7 +71,7 @@ class EmailTabControllerTest : AbstractPageControllerTest() {
         navigateTo("/emails/tab?test-mode=true&owner-id=${contact.id}&owner-type=CONTACT")
 
         click("#btn-email-compose", 1000)
-        assertElementVisible("#email-modal")
+        assertElementVisible("#koki-modal")
 
         assertElementNotVisible("#account-selector")
         assertElementVisible("#contact-selector")
@@ -93,7 +93,7 @@ class EmailTabControllerTest : AbstractPageControllerTest() {
         assertEquals(contact.id, request.firstValue.recipient.id)
         assertEquals(ObjectType.CONTACT, request.firstValue.recipient.type)
 
-        assertElementNotVisible("#email-modal")
+        assertElementNotVisible("#koki-modal")
     }
 
     @Test
@@ -101,7 +101,7 @@ class EmailTabControllerTest : AbstractPageControllerTest() {
         navigateTo("/emails/tab?test-mode=true&owner-id=${tax.id}&owner-type=TAX")
 
         click("#btn-email-compose", 1000)
-        assertElementVisible("#email-modal")
+        assertElementVisible("#koki-modal")
 
         assertElementVisible("#account-selector")
         assertElementNotVisible("#contact-selector")
@@ -123,6 +123,6 @@ class EmailTabControllerTest : AbstractPageControllerTest() {
         assertEquals(tax.accountId, request.firstValue.recipient.id)
         assertEquals(ObjectType.ACCOUNT, request.firstValue.recipient.type)
 
-        assertElementNotVisible("#email-modal")
+        assertElementNotVisible("#koki-modal")
     }
 }

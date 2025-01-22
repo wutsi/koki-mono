@@ -38,10 +38,8 @@ class ContactControllerTest : AbstractPageControllerTest() {
         driver.switchTo().parentFrame()
 
         verify(rest).delete("$sdkBaseUrl/v1/contacts/${contact.id}")
-        assertCurrentPageIs(PageName.CONTACT_DELETED)
-
-        click(".btn-ok")
         assertCurrentPageIs(PageName.CONTACT_LIST)
+        assertElementVisible("#koki-toast")
     }
 
     @Test

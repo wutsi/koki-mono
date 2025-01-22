@@ -1,21 +1,10 @@
-function koki_load_more(containerId) {
-    const container = document.querySelector('#' + containerId);
-    const button = container.querySelector('a');
-    const url = button.getAttribute('data-url');
-
-    container.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></div>';
-    fetch(url).then(function (response) {
-        response.text().then(function (html) {
-            console.log('Replacing #' + containerId + ' with ', html);
-            $('#' + containerId).replaceWith(html);
-        });
-    });
-}
+document.addEventListener('DOMContentLoaded', koki_ready, false);
 
 function koki_ready() {
     _koki_load_widgets();
     _koki_tabs_lazyload();
     _koki_activate_current_tab();
+    _init_modal();
 }
 
 async function _koki_load_widgets() {
@@ -88,4 +77,83 @@ function _koki_activate_current_tab() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', koki_ready, false);
+
+/*========== MODAL ================*/
+/**
+ * Global variable that represent the callback to call when modal closed
+ */
+var __koki_modal_on_close;
+
+function _init_modal() {
+    const modal = document.getElementById('koki-modal');
+    if (modal) {
+        console.log('Configure modal');
+        document.getElementById('koki-modal')
+            .addEventListener('hidden.bs.modal', event => {
+                if (__koki_modal_on_close) {
+                    __koki_modal_on_close();
+                }
+            });
+    }
+}
+
+/**
+ * Open the modal
+ * @param title Title of the modal
+ * @param url URL of the modal content
+ * @param open_callback function to call after the modal is opened
+ * @param close_callback function to call after the modal is closed
+ */
+function koki_modal_open(title, url, open_callback, close_callback) {
+    console.log('Loading modal content from ' + url);
+
+    __koki_modal_on_close = close_callback;
+    fetch(url)
+        .then(response => {
+            if (response.ok) {
+                response.text()
+                    .then(html => {
+                        // Set the body
+                        document.getElementById("koki-modal-body").innerHTML = html;
+                        if (open_callback) {
+                            open_callback();
+                        }
+
+                        // Set the title
+                        document.getElementById("koki-modal-title").innerHTML = title;
+
+                        // Show
+                        const modal = new bootstrap.Modal('#koki-modal');
+                        modal.show();
+                    })
+            } else {
+                console.log('Unable to fetch the modal', response.text());
+            }
+        });
+}
+
+/**
+ * Close the modal
+ */
+function koki_modal_close() {
+    document.querySelector('#koki-modal .btn-close').click();
+}
+
+/*========== LOAD MORE ================*/
+/**
+ * Load more data
+ * @param containerId ID of the container
+ */
+function koki_load_more(containerId) {
+    const container = document.querySelector('#' + containerId);
+    const button = container.querySelector('a');
+    const url = button.getAttribute('data-url');
+
+    container.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></div>';
+    fetch(url).then(function (response) {
+        response.text().then(function (html) {
+            console.log('Replacing #' + containerId + ' with ', html);
+            $('#' + containerId).replaceWith(html);
+        });
+    });
+}

@@ -80,16 +80,7 @@ class EditContactController(
         )
         try {
             service.update(id, form)
-
-            model.addAttribute("contact", contact)
-            model.addAttribute(
-                "page",
-                createPageModel(
-                    name = PageName.CONTACT_SAVED,
-                    title = contact.name
-                )
-            )
-            return "contacts/saved"
+            return "redirect:/contacts/$id?_toast=$id&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)

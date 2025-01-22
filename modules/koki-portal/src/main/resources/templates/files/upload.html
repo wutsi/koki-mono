@@ -1,9 +1,9 @@
 <div>
     <div class="text-center">
-        <button class="btn-upload btn btn-primary margin-top" onclick="koki_files_start_upload()">
-            Upload File
+        <button class="btn-upload btn btn-primary margin-top" id="btn-file-upload">
+            Select Files
         </button>
-        <input id="file-upload" multiple onchange="koki_files_file_selected()"
+        <input id="file-upload" multiple
                style="display:none"
                th:data-upload-url="${uploadUrl}"
                type="file"/>
@@ -17,6 +17,6 @@
     </div>
     <div id="file-container"></div>
     <div class="margin-top margin-bottom">
-        <a class="btn btn-secondary" href="javascript: koki_files_close()">Close</a>
+        <a class="btn btn-secondary" id="btn-file-close">Close</a>
     </div>
 </div>

@@ -33,11 +33,7 @@
     </div>
 </div>
 
-<div th:if="${toast}">
-    <div th:replace="~{__components/bootstrap :: toast('email-toast', ${toast})}"></div>
-</div>
-
+<div th:replace="~{__components/bootstrap :: toast('${toast}')}"></div>
 <div th:replace="~{__components/highlightjs :: prettity('html')}"></div>
 </body>
-
 </html>

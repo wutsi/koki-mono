@@ -85,7 +85,11 @@ class EditAccountController(
     }
 
     @PostMapping("/accounts/{id}/update")
-    fun update(@PathVariable id: Long, @ModelAttribute form: AccountForm, model: Model): String {
+    fun update(
+        @PathVariable id: Long,
+        @ModelAttribute form: AccountForm,
+        model: Model
+    ): String {
         val account = AccountModel(
             id = id,
             name = form.name
@@ -105,15 +109,7 @@ class EditAccountController(
                 )
             )
 
-            model.addAttribute("account", account)
-            model.addAttribute(
-                "page",
-                createPageModel(
-                    name = PageName.ACCOUNT_SAVED,
-                    title = form.name
-                )
-            )
-            return "accounts/saved"
+            return "redirect:/accounts/$id?_toast=$id&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)

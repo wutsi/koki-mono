@@ -42,10 +42,8 @@ class AccountControllerTest : AbstractPageControllerTest() {
         driver.switchTo().parentFrame()
 
         verify(rest).delete("$sdkBaseUrl/v1/accounts/${account.id}")
-        assertCurrentPageIs(PageName.ACCOUNT_DELETED)
-
-        click(".btn-ok")
         assertCurrentPageIs(PageName.ACCOUNT_LIST)
+        assertElementVisible("#koki-toast")
     }
 
     @Test

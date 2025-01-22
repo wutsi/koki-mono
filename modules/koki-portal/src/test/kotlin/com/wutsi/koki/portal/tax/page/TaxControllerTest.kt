@@ -39,10 +39,8 @@ class TaxControllerTest : AbstractPageControllerTest() {
         driver.switchTo().parentFrame()
 
         verify(rest).delete("$sdkBaseUrl/v1/taxes/${tax.id}")
-        assertCurrentPageIs(PageName.TAX_DELETED)
-
-        click(".btn-ok")
         assertCurrentPageIs(PageName.TAX_LIST)
+        assertElementVisible("#koki-toast")
     }
 
     @Test

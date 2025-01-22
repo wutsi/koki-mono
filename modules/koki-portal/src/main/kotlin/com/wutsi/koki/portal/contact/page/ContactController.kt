@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestHeader
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
@@ -15,10 +17,16 @@ class ContactController(
 ) : AbstractContactDetailsController() {
     @GetMapping("/contacts/{id}")
     fun show(
+        @RequestHeader(required = false, name = "Referer") referer: String? = null,
         @PathVariable id: Long,
+        @RequestParam(required = false, name = "_toast") toast: Long? = null,
+        @RequestParam(required = false, name = "_ts") timestamp: Long? = null,
         model: Model
     ): String {
         val contact = service.contact(id)
+        if (toast == id && canShowToasts(timestamp, referer, listOf("/contacts/$id/edit", "/contacts/create"))) {
+            model.addAttribute("toast", "Saved")
+        }
         return show(contact, model)
     }
 
@@ -40,16 +48,7 @@ class ContactController(
         val contact = service.contact(id)
         try {
             service.delete(id)
-
-            model.addAttribute("contact", contact)
-            model.addAttribute(
-                "page",
-                createPageModel(
-                    name = PageName.CONTACT_DELETED,
-                    title = contact.name,
-                )
-            )
-            return "contacts/deleted"
+            return "redirect:/contacts?_op=del&_toast=$id&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)

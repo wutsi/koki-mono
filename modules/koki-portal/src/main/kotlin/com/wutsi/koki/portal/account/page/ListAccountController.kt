@@ -3,9 +3,11 @@ package com.wutsi.koki.portal.account.page
 import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
@@ -14,6 +16,8 @@ class ListAccountController(
     private val currentUser: CurrentUserHolder,
 ) : AbstractAccountController() {
     companion object {
+        private val LOGGER = LoggerFactory.getLogger(ListAccountController::class.java)
+
         const val COL_ALL = "1"
         const val COL_MANAGED = "2"
         const val COL_CREATED = "3"
@@ -21,9 +25,13 @@ class ListAccountController(
 
     @GetMapping("/accounts")
     fun list(
+        @RequestHeader(required = false, name = "Referer") referer: String? = null,
         @RequestParam(required = false, name = "col") collection: String? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
+        @RequestParam(required = false, name = "_toast") toast: Long? = null,
+        @RequestParam(required = false, name = "_ts") timestamp: Long? = null,
+        @RequestParam(required = false, name = "_op") operation: String? = null,
         model: Model
     ): String {
         more(
@@ -41,6 +49,8 @@ class ListAccountController(
                 title = "Accounts",
             )
         )
+
+        loadToast(referer, toast, timestamp, operation, model)
         return "accounts/list"
     }
 
@@ -81,6 +91,30 @@ class ListAccountController(
         }
 
         return "accounts/more"
+    }
+
+    private fun loadToast(
+        referer: String?,
+        toast: Long?,
+        timestamp: Long?,
+        operation: String?,
+        model: Model
+    ) {
+        if (toast != null && canShowToasts(timestamp, referer, listOf("/accounts/$toast", "/accounts/create"))) {
+            if (operation == "del") {
+                model.addAttribute("toast", "Deleted")
+            } else {
+                try {
+                    val account = service.account(toast, fullGraph = false)
+                    model.addAttribute(
+                        "toast",
+                        "<a href='/accounts/${account.id}'>${account.name}</a> has been saved!"
+                    )
+                } catch (ex: Exception) { // I
+                    LOGGER.warn("Unable to load toast information for Account#$toast", ex)
+                }
+            }
+        }
     }
 
     private fun toCollection(collection: String?): String {

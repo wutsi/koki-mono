@@ -53,31 +53,8 @@ class CreateContactControllerTest : AbstractPageControllerTest() {
         assertEquals("XX", request.firstValue.profession)
         assertEquals("EG", request.firstValue.employer)
 
-        assertCurrentPageIs(PageName.CONTACT_SAVED)
-        click(".btn-ok")
         assertCurrentPageIs(PageName.CONTACT_LIST)
-    }
-
-    @Test
-    fun `create new`() {
-        navigateTo("/contacts/create")
-
-        select("#contactTypeId", 3)
-        input("#firstName", "Yo")
-        input("#lastName", "Man")
-        select("#salutation", 2)
-        select("#gender", 2)
-        scrollToBottom()
-        input("#phone", "+5147580000")
-        input("#mobile", "+5147580011")
-        input("#email", "yo@gmail.com")
-        input("#profession", "XX")
-        input("#employer", "EG")
-        click("button[type=submit]")
-
-        assertCurrentPageIs(PageName.CONTACT_SAVED)
-        click(".btn-create")
-        assertCurrentPageIs(PageName.CONTACT_CREATE)
+        assertElementVisible("#koki-toast")
     }
 
     @Test

@@ -21,7 +21,7 @@ class FileTabControllerTest : AbstractPageControllerTest() {
         navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
         click(".btn-upload", 1000)
 
-        assertElementVisible("#file-modal")
+        assertElementVisible("#koki-modal")
     }
 
     @Test
@@ -44,5 +44,14 @@ class FileTabControllerTest : AbstractPageControllerTest() {
 
         Thread.sleep(1000)
         verify(rest).delete("$sdkBaseUrl/v1/files/$id")
+    }
+
+    @Test
+    fun email() {
+        navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
+        click("tr .btn-email", 1000)
+
+        assertElementVisible("#koki-modal")
+        assertElementVisible("#attachment-${file.id}")
     }
 }

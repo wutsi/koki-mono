@@ -24,7 +24,7 @@ class FileService(
     }
 
     fun files(
-        ids: List<String> = emptyList(),
+        ids: List<Long> = emptyList(),
         workflowInstanceIds: List<String> = emptyList(),
         formIds: List<String> = emptyList(),
         ownerId: Long? = null,

@@ -39,7 +39,7 @@ class SettingsEditRoleControllerTest : AbstractPageControllerTest() {
         assertEquals(false, request.firstValue.active)
 
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE)
-        assertElementVisible("#role-toast")
+        assertElementVisible("#koki-toast")
     }
 
     @Test

@@ -45,7 +45,7 @@ class KokiFiles(
     }
 
     fun files(
-        ids: List<String>,
+        ids: List<Long>,
         workflowInstanceIds: List<String>,
         formIds: List<String>,
         ownerId: Long?,

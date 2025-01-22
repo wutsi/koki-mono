@@ -59,9 +59,8 @@ class EditAccountControllerTest : AbstractPageControllerTest() {
             assertEquals("${attribute.id}2222", request.firstValue.attributes[attribute.id])
         }
 
-        assertCurrentPageIs(PageName.ACCOUNT_SAVED)
-        click(".btn-ok")
-        assertCurrentPageIs(PageName.ACCOUNT_LIST)
+        assertCurrentPageIs(PageName.ACCOUNT)
+        assertElementVisible("#koki-toast")
     }
 
     @Test

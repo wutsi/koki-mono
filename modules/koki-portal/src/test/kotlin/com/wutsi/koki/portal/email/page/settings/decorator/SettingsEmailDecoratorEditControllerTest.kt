@@ -89,7 +89,7 @@ class SettingsEmailDecoratorEditControllerTest : AbstractPageControllerTest() {
         )
 
         assertCurrentPageIs(PageName.EMAIL_SETTINGS_EMAIL_DECORATOR)
-        assertElementVisible("#email-toast")
+        assertElementVisible("#koki-toast")
     }
 
     @Test

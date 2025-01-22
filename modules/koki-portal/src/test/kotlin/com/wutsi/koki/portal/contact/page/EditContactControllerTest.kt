@@ -53,9 +53,8 @@ class EditContactControllerTest : AbstractPageControllerTest() {
         assertEquals("XX", request.firstValue.profession)
         assertEquals("EG", request.firstValue.employer)
 
-        assertCurrentPageIs(PageName.CONTACT_SAVED)
-        click(".btn-ok")
-        assertCurrentPageIs(PageName.CONTACT_LIST)
+        assertCurrentPageIs(PageName.CONTACT)
+        assertElementVisible("#koki-toast")
     }
 
     @Test
