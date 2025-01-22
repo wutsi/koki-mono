@@ -4,13 +4,13 @@
 
     <table class="table">
         <tr>
-            <td width="20%">Subject</td>
+            <td width="20%"><b>Subject:</b></td>
             <td>
                 <input maxlength="255" name="subject" th:field="*{subject}"/>
             </td>
         </tr>
         <tr>
-            <td valign="top">Body</td>
+            <td valign="top"><b>Body:</b></td>
             <td>
                 <div class="quilljs" id="html-editor" th:utext="${form.body}"></div>
                 <textarea class="hidden" name="body" th:field="*{body}"></textarea>

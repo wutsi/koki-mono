@@ -59,34 +59,8 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
             assertEquals("${attribute.id}11111", request.firstValue.attributes[attribute.id])
         }
 
-        assertCurrentPageIs(PageName.ACCOUNT_SAVED)
-        click(".btn-ok")
         assertCurrentPageIs(PageName.ACCOUNT_LIST)
-    }
-
-    @Test
-    fun `create another account`() {
-        navigateTo("/accounts/create")
-
-        input("#name", "Ray Construction Inc")
-        select("#accountTypeId", 2)
-        select("#managedById", 2)
-        input("#phone", "+5147580000")
-        input("#mobile", "+5147580011")
-        input("#email", "info@ray-construction.com")
-        scrollToMiddle()
-        input("#website", "https://www.ray-construction.com")
-        select("#language", 3)
-        input("#description", "This is the description")
-        scrollToBottom()
-        attributes.forEach { attribute ->
-            input("#attribute-${attribute.id}", "11111")
-        }
-
-        click("button[type=submit]")
-
-        click(".btn-create")
-        assertCurrentPageIs(PageName.ACCOUNT_CREATE)
+        assertElementVisible("#koki-toast")
     }
 
     @Test

@@ -3,9 +3,11 @@ package com.wutsi.koki.portal.contact.page
 import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
@@ -14,15 +16,21 @@ class ListContactController(
     private val currentUser: CurrentUserHolder,
 ) : AbstractContactController() {
     companion object {
+        private val LOGGER = LoggerFactory.getLogger(ListContactController::class.java)
+
         const val COL_ALL = "1"
         const val COL_CREATED = "2"
     }
 
     @GetMapping("/contacts")
     fun list(
+        @RequestHeader(required = false, name = "Referer") referer: String? = null,
         @RequestParam(required = false, name = "col") collection: String? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
+        @RequestParam(required = false, name = "_toast") toast: Long? = null,
+        @RequestParam(required = false, name = "_ts") timestamp: Long? = null,
+        @RequestParam(required = false, name = "_op") operation: String? = null,
         model: Model
     ): String {
         model.addAttribute("collection", toCollection(collection))
@@ -33,6 +41,7 @@ class ListContactController(
                 title = "Contacts",
             )
         )
+        loadToast(referer, toast, timestamp, operation, model)
         more(collection, true, limit, offset, model)
         return "contacts/list"
     }
@@ -70,6 +79,30 @@ class ListContactController(
         }
 
         return "contacts/more"
+    }
+
+    private fun loadToast(
+        referer: String?,
+        toast: Long?,
+        timestamp: Long?,
+        operation: String?,
+        model: Model
+    ) {
+        if (toast != null && canShowToasts(timestamp, referer, listOf("/contacts/$toast", "/contacts/create"))) {
+            if (operation == "del") {
+                model.addAttribute("toast", "Deleted")
+            } else {
+                try {
+                    val contact = service.contact(toast, fullGraph = false)
+                    model.addAttribute(
+                        "toast",
+                        "<a href='/contacts/${contact.id}'>${contact.name}</a> has been saved!"
+                    )
+                } catch (ex: Exception) { // I
+                    LOGGER.warn("Unable to load toast information for Contact#$toast", ex)
+                }
+            }
+        }
     }
 
     private fun toCollection(collection: String?): String {

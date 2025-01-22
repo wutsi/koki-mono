@@ -3,10 +3,10 @@
 <body>
 
 
-<div class="toast-container" style="position: absolute; top: 6em; right: 1em;" th:fragment="toast(id, message)">
-    <div class="toast bg-success text-white" role="alert"
-         th:classappend="${type} == 'success' ? 'bg-success text-white'"
-         th:id="${id}">
+<div class="toast-container" style="position: absolute; top: 6em; right: 1em;" th:fragment="toast(message)"
+     th:if="${message}">
+    <div class="toast bg-success text-white" id="koki-toast" role="alert"
+         th:classappend="${type} == 'success' ? 'bg-success text-white'">
         <div class="d-flex">
             <div class="toast-body" th:utext="${message}">MESSAGE</div>
             <button aria-label="Close" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
@@ -15,10 +15,24 @@
     </div>
     <script th:inline="javascript">
         document.addEventListener('DOMContentLoaded', function () {
-            const toast = document.getElementById(/*[[${id}]]*/ '');
-            bootstrap.Toast.getOrCreateInstance(toast).show();
+            console.log('Opening the toast');
+            bootstrap.Toast.getOrCreateInstance('#koki-toast').show();
         });
     </script>
+</div>
+
+<div th:fragment="modal">
+    <div class="modal" id="koki-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg" id="koki-modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="koki-modal-title">TITLE</h5>
+                    <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                </div>
+                <div class="modal-body" id="koki-modal-body"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 </body>

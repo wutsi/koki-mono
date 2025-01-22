@@ -4,14 +4,17 @@ import com.wutsi.koki.account.server.service.AccountService
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.contact.server.service.ContactService
 import com.wutsi.koki.email.dto.SendEmailRequest
+import com.wutsi.koki.email.server.dao.AttachmentRepository
 import com.wutsi.koki.email.server.dao.EmailOwnerRepository
 import com.wutsi.koki.email.server.dao.EmailRepository
+import com.wutsi.koki.email.server.domain.AttachmentEntity
 import com.wutsi.koki.email.server.domain.EmailEntity
 import com.wutsi.koki.email.server.domain.EmailOwnerEntity
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.platform.messaging.Message
 import com.wutsi.koki.platform.messaging.MessagingException
 import com.wutsi.koki.platform.messaging.MessagingService
@@ -24,12 +27,18 @@ import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
+import org.apache.commons.io.IOUtils
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import java.io.File
+import java.io.FileOutputStream
+import java.net.URL
 import java.util.UUID
 
 @Service
 class EmailService(
     private val dao: EmailRepository,
+    private val attachmentDao: AttachmentRepository,
     private val ownerDao: EmailOwnerRepository,
     private val accountService: AccountService,
     private val contactService: ContactService,
@@ -37,9 +46,14 @@ class EmailService(
     private val templatingEngine: TemplatingEngine,
     private val configurationService: ConfigurationService,
     private val messagingServiceBuilder: MessagingServiceBuilder,
+    private val fileService: FileService,
     private val filterSet: EmailFilterSet,
     private val em: EntityManager,
 ) {
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(EmailService::class.java)
+    }
+
     fun get(id: String, tenantId: Long): EmailEntity {
         val account = dao.findById(id)
             .orElseThrow { NotFoundException(Error(ErrorCode.EMAIL_NOT_FOUND)) }
@@ -95,10 +109,11 @@ class EmailService(
     @Transactional
     fun send(request: SendEmailRequest, tenantId: Long): EmailEntity {
         // Save email
+        val id = UUID.randomUUID().toString()
         val email = dao.save(
             EmailEntity(
                 tenantId = tenantId,
-                id = UUID.randomUUID().toString(),
+                id = id,
                 recipientId = request.recipient.id,
                 recipientType = request.recipient.type,
                 subject = request.subject,
@@ -106,6 +121,14 @@ class EmailService(
                 senderId = securityService.getCurrentUserId(),
             )
         )
+        request.attachmentFileIds.forEach { fileId ->
+            attachmentDao.save(
+                AttachmentEntity(
+                    emailId = id,
+                    fileId = fileId,
+                )
+            )
+        }
 
         // Reference
         if (request.owner != null) {
@@ -122,8 +145,13 @@ class EmailService(
         try {
             val messagingService = createMessagingService(tenantId)
             val message = createMessage(request, email)
-            messagingService.send(message)
-            return email
+            try {
+                messagingService.send(message)
+                return email
+            } finally {
+                // Delete all local files downloaded to free up diskspace
+                delete(message.attachments)
+            }
         } catch (ex: MessagingException) {
             throw ConflictException(
                 error = Error(code = ErrorCode.EMAIL_DELIVERY_FAILED),
@@ -145,8 +173,41 @@ class EmailService(
             subject = email.subject,
             body = filterSet.filter(body, email.tenantId),
             mimeType = "text/html",
-            recipient = recipient
+            recipient = recipient,
+            attachments = request.attachmentFileIds.map { fileId ->
+                val file = download(fileId, email.tenantId)
+                if (LOGGER.isDebugEnabled) {
+                    LOGGER.debug("Adding attachment ${file.absolutePath}")
+                }
+                file
+            }
         )
+    }
+
+    private fun download(fileId: Long, tenantId: Long): File {
+        val file = fileService.get(fileId, tenantId)
+        val parent = File(System.getProperty("java.io.tmpdir") + "/" + UUID.randomUUID().toString())
+        parent.mkdirs()
+        val localFile = File(parent, file.name)
+
+        if (LOGGER.isDebugEnabled) {
+            LOGGER.debug("Downloading File#$fileId: ${file.url} -> ${localFile.absolutePath}")
+        }
+        val fout = FileOutputStream(localFile)
+        fout.use {
+            IOUtils.copy(URL(file.url).openStream(), fout)
+        }
+        return localFile
+    }
+
+    private fun delete(files: List<File>) {
+        files.forEach { file ->
+            try {
+                file.delete()
+            } catch (ex: Exception) {
+                LOGGER.warn("Unable to delete ${file.absolutePath}", ex)
+            }
+        }
     }
 
     private fun toParty(email: EmailEntity): Party {

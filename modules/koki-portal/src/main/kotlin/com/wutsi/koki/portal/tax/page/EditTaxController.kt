@@ -87,17 +87,7 @@ class EditTaxController(
     ): String {
         try {
             service.update(id, form)
-
-            val tax = service.tax(id)
-            model.addAttribute("tax", tax)
-            model.addAttribute(
-                "page",
-                createPageModel(
-                    name = PageName.TAX_SAVED,
-                    title = tax.name
-                )
-            )
-            return "taxes/saved"
+            return "redirect:/taxes/$id?_toast=$id&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)

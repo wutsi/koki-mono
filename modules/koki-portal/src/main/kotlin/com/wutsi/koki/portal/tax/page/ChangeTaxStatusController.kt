@@ -59,7 +59,7 @@ class ChangeTaxStatusController(
     ): String {
         try {
             service.status(id, form)
-            return "redirect:/taxes/$id"
+            return "redirect:/taxes/$id?_toast=$id&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)

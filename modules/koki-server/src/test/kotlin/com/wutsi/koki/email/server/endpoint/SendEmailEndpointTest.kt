@@ -12,6 +12,7 @@ import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.email.dto.Recipient
 import com.wutsi.koki.email.dto.SendEmailRequest
 import com.wutsi.koki.email.dto.SendEmailResponse
+import com.wutsi.koki.email.server.dao.AttachmentRepository
 import com.wutsi.koki.email.server.dao.EmailOwnerRepository
 import com.wutsi.koki.email.server.dao.EmailRepository
 import com.wutsi.koki.error.dto.ErrorCode
@@ -33,6 +34,9 @@ import kotlin.test.assertTrue
 class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var dao: EmailRepository
+
+    @Autowired
+    private lateinit var attachmentDao: AttachmentRepository
 
     @Autowired
     private lateinit var ownerDao: EmailOwnerRepository
@@ -57,7 +61,8 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
             subject = "Hello man",
             body = "<p>This is an example of email</p>",
             recipient = Recipient(id = 100, type = ObjectType.ACCOUNT),
-            owner = ObjectReference(id = 111, type = ObjectType.TAX)
+            owner = ObjectReference(id = 111, type = ObjectType.TAX),
+            attachmentFileIds = listOf(100, 101)
         )
         val response = rest.postForEntity("/v1/emails", request, SendEmailResponse::class.java)
 
@@ -77,6 +82,11 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.owner!!.id, emailOwners[0].ownerId)
         assertEquals(request.owner!!.type, emailOwners[0].ownerType)
 
+        val attachments = attachmentDao.findByEmailId(id)
+        assertEquals(2, attachments.size)
+        assertEquals(100L, attachments[0].fileId)
+        assertEquals(101L, attachments[1].fileId)
+
         val msg = argumentCaptor<Message>()
         verify(messagingService).send(msg.capture())
         assertTrue(msg.firstValue.body.contains(request.body))
@@ -87,6 +97,7 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("Ray Inc", msg.firstValue.recipient.displayName)
         assertEquals("info@ray-inc.com", msg.firstValue.recipient.email)
         assertEquals("text/html", msg.firstValue.mimeType)
+        assertEquals(request.attachmentFileIds.size, msg.firstValue.attachments.size)
     }
 
     @Test
@@ -125,6 +136,9 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
 
         val emailOwners = ownerDao.findByEmailId(id)
         assertEquals(0, emailOwners.size)
+
+        val attachments = attachmentDao.findByEmailId(id)
+        assertEquals(0, attachments.size)
 
         val msg = argumentCaptor<Message>()
         verify(messagingService).send(msg.capture())

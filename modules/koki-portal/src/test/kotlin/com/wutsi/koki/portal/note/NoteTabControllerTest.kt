@@ -42,9 +42,7 @@ class NoteTabControllerTest : AbstractPageControllerTest() {
         navigateTo("/notes/tab?test-mode=1&owner-id=111&owner-type=ACCOUNT")
         click(".btn-edit", 1000)
 
-        assertElementVisible("#note-modal")
-        assertElementVisible("#note-title-edit")
-        assertElementNotVisible("#note-title-create")
+        assertElementVisible("#koki-modal")
         input("#subject", "Yo man")
         input("#html-editor .ql-editor", "Hello man")
         click("#btn-note-submit", 1000)
@@ -59,7 +57,7 @@ class NoteTabControllerTest : AbstractPageControllerTest() {
         assertEquals("Yo man", request.firstValue.subject)
         assertEquals("<p>Hello man</p>", request.firstValue.body)
 
-        assertElementNotVisible("#note-modal")
+        assertElementNotVisible("#koki-modal")
     }
 
     @Test
@@ -68,7 +66,7 @@ class NoteTabControllerTest : AbstractPageControllerTest() {
         click(".btn-edit", 1000)
 
         click(".btn-cancel", 1000)
-        assertElementNotVisible("#note-modal")
+        assertElementNotVisible("#koki-modal")
     }
 
     @Test
@@ -76,9 +74,7 @@ class NoteTabControllerTest : AbstractPageControllerTest() {
         navigateTo("/notes/tab?owner-id=111&owner-type=ACCOUNT&test-mode=1")
         click(".btn-create", 1000)
 
-        assertElementVisible("#note-modal")
-        assertElementNotVisible("#note-title-edit")
-        assertElementVisible("#note-title-create")
+        assertElementVisible("#koki-modal")
         input("#subject", "Yo man")
         input("#html-editor .ql-editor", "Hello man")
         click("#btn-note-submit", 1000)
@@ -102,6 +98,6 @@ class NoteTabControllerTest : AbstractPageControllerTest() {
         click(".btn-create", 100)
 
         click(".btn-cancel")
-        assertElementNotVisible("#note-modal")
+        assertElementNotVisible("#koki-modal")
     }
 }

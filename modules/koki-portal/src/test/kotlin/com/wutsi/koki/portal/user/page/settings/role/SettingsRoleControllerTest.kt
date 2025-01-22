@@ -54,7 +54,7 @@ class SettingsRoleControllerTest : AbstractPageControllerTest() {
         verify(rest).delete("$sdkBaseUrl/v1/roles/${role.id}")
 
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_LIST)
-        assertElementVisible("#role-toast")
+        assertElementVisible("#koki-toast")
     }
 
     @Test

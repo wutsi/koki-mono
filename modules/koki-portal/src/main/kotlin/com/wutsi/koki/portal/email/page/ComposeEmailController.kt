@@ -5,6 +5,7 @@ import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.email.model.EmailForm
 import com.wutsi.koki.portal.email.service.EmailService
+import com.wutsi.koki.portal.file.service.FileService
 import com.wutsi.koki.portal.tax.service.TaxService
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
 import org.springframework.stereotype.Controller
@@ -21,11 +22,13 @@ class ComposeEmailController(
     private val accountService: AccountService,
     private val contactService: ContactService,
     private val taxService: TaxService,
+    private val fileService: FileService,
 ) {
     @GetMapping("/emails/compose")
     fun compose(
-        @RequestParam(name = "owner-id", required = true) ownerId: Long,
-        @RequestParam(name = "owner-type", required = true) ownerType: ObjectType,
+        @RequestParam(name = "owner-id") ownerId: Long,
+        @RequestParam(name = "owner-type") ownerType: ObjectType,
+        @RequestParam(name = "attachment-file-id", required = false) attachmentFileIds: List<Long> = emptyList(),
         model: Model,
     ): String {
         model.addAttribute("user", currentUser.get())
@@ -47,6 +50,16 @@ class ComposeEmailController(
             null
         }
         model.addAttribute("contact", contact)
+
+        if (attachmentFileIds.isNotEmpty()) {
+            val attachmentFiles = fileService.files(
+                ids = attachmentFileIds,
+                limit = attachmentFileIds.size,
+            )
+            if (attachmentFiles.isNotEmpty()) {
+                model.addAttribute("attachmentFiles", attachmentFiles)
+            }
+        }
 
         model.addAttribute(
             "form",

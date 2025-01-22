@@ -128,6 +128,7 @@ class EmailService(
                 } else {
                     ObjectReference(form.ownerId, form.ownerType)
                 },
+                attachmentFileIds = form.attachmentFileId,
             )
         ).emailId
     }

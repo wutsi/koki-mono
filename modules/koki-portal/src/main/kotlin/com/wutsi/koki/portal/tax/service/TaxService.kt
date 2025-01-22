@@ -24,14 +24,20 @@ class TaxService(
     private val userService: UserService,
     private val accountService: AccountService
 ) {
-    fun tax(id: Long): TaxModel {
+    fun tax(id: Long, fullGraph: Boolean = true): TaxModel {
         val tax = koki.tax(id).tax
-        val account = accountService.account(tax.accountId, fullGraph = false)
         val taxType = tax.taxTypeId?.let { id -> taxTypeService.taxType(id) }
+
+        val account = if (fullGraph) {
+            accountService.account(tax.accountId, fullGraph = false)
+        } else {
+            AccountModel(tax.accountId)
+        }
+
         val userIds = listOf(tax.accountantId, tax.technicianId, tax.assigneeId, tax.createdById, tax.modifiedById)
             .filterNotNull()
             .toSet()
-        val users = if (userIds.isEmpty()) {
+        val users = if (userIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
             userService.users(

@@ -1,7 +1,6 @@
 package com.wutsi.koki.portal.account.page
 
 import com.wutsi.koki.portal.account.form.AccountForm
-import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.account.service.AccountTypeService
 import com.wutsi.koki.portal.account.service.AttributeService
@@ -81,7 +80,6 @@ class CreateAccountController(
                 active = true,
                 limit = Integer.MAX_VALUE,
             )
-
             val accountId = service.create(
                 form.copy(
                     attributes = attributes
@@ -90,17 +88,7 @@ class CreateAccountController(
                 )
             )
 
-            val account = AccountModel(id = accountId, name = form.name)
-            model.addAttribute("account", account)
-            model.addAttribute("createUrl", "/accounts/create")
-            model.addAttribute(
-                "page",
-                createPageModel(
-                    name = PageName.ACCOUNT_SAVED,
-                    title = form.name
-                )
-            )
-            return "accounts/saved"
+            return "redirect:/accounts?_toast=$accountId&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)

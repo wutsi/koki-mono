@@ -37,7 +37,7 @@ class SettingsCreateUserControllerTest : AbstractPageControllerTest() {
         assertEquals("secret", request.firstValue.password)
 
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_LIST)
-        assertElementVisible("#user-toast")
+        assertElementVisible("#koki-toast")
     }
 
     @Test

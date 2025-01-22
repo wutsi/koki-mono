@@ -2,7 +2,6 @@ package com.wutsi.koki.portal.tax.page
 
 import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.account.service.AccountService
-import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.tax.form.TaxForm
 import com.wutsi.koki.portal.tax.service.TaxService
@@ -64,15 +63,7 @@ class CreateTaxController(
     fun addNew(@ModelAttribute form: TaxForm, model: Model): String {
         try {
             val taxId = service.create(form)
-            val tax = service.tax(taxId)
-            model.addAttribute("tax", tax)
-            model.addAttribute("createUrl", "/taxes/create")
-            model.addAttribute(
-                "page", PageModel(
-                    name = PageName.TAX_SAVED, title = tax.name
-                )
-            )
-            return "taxes/saved"
+            return "redirect:/taxes?_toast=$taxId&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)

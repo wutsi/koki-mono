@@ -14,7 +14,6 @@ CREATE TABLE T_EMAIL(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
-
 CREATE TABLE T_EMAIL_OWNER(
   id                    BIGINT NOT NULL AUTO_INCREMENT,
 
@@ -24,6 +23,15 @@ CREATE TABLE T_EMAIL_OWNER(
   owner_type            INT NOT NULL DEFAULT 0,
 
   UNIQUE(email_fk, owner_fk, owner_type),
+  PRIMARY KEY(id)
+) ENGINE = InnoDB;
+
+CREATE TABLE T_ATTACHMENT(
+  id                    BIGINT NOT NULL AUTO_INCREMENT,
+
+  email_fk              VARCHAR(36) NOT NULL REFERENCES T_EMAIL(id),
+  file_fk               BIGINT NOT NULL,
+
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 

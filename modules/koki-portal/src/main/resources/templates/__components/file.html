@@ -2,9 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
+<span th:class="'fiv-viv fiv-icon-' + ${file.extension}" th:fragment="file-icon(file)">
+</span>
+
 <tr class="file" th:fragment="columns(file)" th:remove="tag">
     <td>
-        <span th:class="'fiv-viv fiv-icon-' + ${file.extension}"></span>
+        <div th:replace="~{__components/file :: file-icon(${file})}"></div>
     </td>
     <td>
         <a class="btn-download" target="_blank" th:href="'/files/' + ${file.id} + '/download'" th:text="${file.name}">
@@ -17,9 +20,8 @@
     </td>
     <td th:text="${file.createdAtText}">CREATED</td>
     <td class="toolbar text-right">
-        <a class="btn-delete" th:href="'javascript: koki_files_delete(' + ${file.id} + ')'">
-            Delete
-        </a>
+        <a class="btn-email" th:href="'javascript: koki_emails_compose(' + ${file.id} + ')'">Email</a>
+        <a class="btn-delete" th:href="'javascript: koki_files_delete(' + ${file.id} + ')'">Delete</a>
     </td>
 </tr>
 
