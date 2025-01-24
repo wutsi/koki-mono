@@ -45,6 +45,7 @@ INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_u
     VALUES (160, 6, 'tax', 'Taxes', '/taxes', '/taxes/tab', '/settings/taxes');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
-    VALUES (1600, 160, 'tax',       'Manage taxes'),
-           (1601, 160, 'tax:admin', 'Configure taxes');
+    VALUES (1600, 160, 'tax',        'Access taxes'),
+           (1601, 160, 'tax:manage', 'Manage taxes'),
+           (1602, 160, 'tax:admin',  'Configure taxes');
 

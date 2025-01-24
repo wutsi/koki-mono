@@ -27,7 +27,7 @@ class UpdateRoleEndpointTest : AuthorizationAwareEndpointTest() {
             name = "employee",
             title = "Employee",
             description = "Role for all employees",
-            active = true,
+            active = false,
         )
 
         val result = rest.postForEntity("/v1/roles/10", request, Any::class.java)

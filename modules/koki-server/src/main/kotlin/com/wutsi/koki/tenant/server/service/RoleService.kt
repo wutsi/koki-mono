@@ -138,6 +138,7 @@ open class RoleService(
         role.name = request.name
         role.title = request.title
         role.description = request.description
+        role.active = request.active
         role.modifiedAt = Date()
         role.modifiedById = securityService.getCurrentUserId()
         dao.save(role)

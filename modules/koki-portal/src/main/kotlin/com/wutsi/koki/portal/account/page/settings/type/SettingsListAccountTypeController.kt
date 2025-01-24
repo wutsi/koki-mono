@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 class SettingsListAccountTypeController(private val service: AccountTypeService) : AbstractPageController() {
     @GetMapping("/settings/accounts/types")
-    fun show(model: Model): String {
+    fun list(
+        model: Model
+    ): String {
         model.addAttribute(
             "page",
             PageModel(

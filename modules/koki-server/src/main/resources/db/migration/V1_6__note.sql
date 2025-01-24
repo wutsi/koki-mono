@@ -33,5 +33,6 @@ INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_u
     VALUES (140, 4, 'note', 'Notes', null, '/notes/tab', null, '/js/notes.js');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
-    VALUES (1400, 140, 'note', 'Manage notes');
+    VALUES (1400, 140, 'note',        'Access notes'),
+           (1401, 140, 'note:manage', 'Manage notes');
 

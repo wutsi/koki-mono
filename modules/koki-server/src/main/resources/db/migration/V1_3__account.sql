@@ -76,6 +76,7 @@ INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_u
     VALUES (110, 1, 'account', 'Account', '/accounts', null, '/settings/accounts', '/js/accounts.js');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
-    VALUES (1100, 110, 'account',       'Manage accounts'),
-           (1101, 110, 'account:admin', 'Configure accounts');
+    VALUES (1100, 110, 'account',        'Access accounts'),
+           (1101, 110, 'account:manage', 'Manage accounts'),
+           (1102, 110, 'account:admin',  'Configure accounts');
 

@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="settings-container">
+    <div class="settings-sidebar">
+        <div th:replace="~{__components/settings :: settings-menu('contact')}"></div>
+    </div>
+    <div class="settings-content padding">
+        <div
+            th:replace="~{__components/settings :: settings-title('Contact Types', '/settings/contacts/types')}"></div>
+
+        <form action="/settings/contacts/types/import" class="form" enctype="multipart/form-data" method="post">
+            <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+            <div th:replace="~{__components/layout :: import-response(${response})}"></div>
+
+            <div class="margin-bottom">
+                Import the contact types from a CSV file.<br/>
+                Learn more about the format of the file <a href="#">here</a>.
+            </div>
+            <table class="table">
+                <tr>
+                    <td width="20%"><b>File<span class="required">*</span></b></td>
+                    <td>
+                        <input name="file" required type="file"/>
+                    </td>
+                </tr>
+            </table>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

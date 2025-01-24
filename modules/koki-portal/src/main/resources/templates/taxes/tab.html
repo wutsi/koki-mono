@@ -1,6 +1,6 @@
 <div class="tab-taxes">
-    <div class="margin-bottom" th:if="${accountId}">
-        <a class="btn btn-secondary btn-sm btn-add-tax" th:href="'/taxes/tax?account-id=' + ${accountId}">
+    <div class="margin-bottom" th:if="${addUrl}">
+        <a class="btn btn-secondary btn-sm btn-add-tax" th:href="${addUrl}">
             New Tax Report
         </a>
     </div>

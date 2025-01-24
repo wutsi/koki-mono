@@ -56,7 +56,9 @@ class UserMapper : TenantAwareMapper() {
             createdAtText = fmt.format(entity.createdAt),
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.modifiedAt),
-            permissions = entity.permissionIds.mapNotNull { id -> permissions[id] },
+            permissions = entity.permissionIds
+                .mapNotNull { id -> permissions[id] }
+                .sortedBy { permission -> permission.name },
         )
     }
 }

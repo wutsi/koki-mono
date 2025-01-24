@@ -44,7 +44,7 @@ class SettingsCreateUserController(
     ): String {
         try {
             val userId = service.create(form)
-            return "redirect:/settings/users?created=$userId"
+            return "redirect:/settings/users?_toast=$userId&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val response = toErrorResponse(ex)
             model.addAttribute("error", response.error.code)

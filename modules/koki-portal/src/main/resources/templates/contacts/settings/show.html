@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="settings-container">
+    <div class="settings-sidebar">
+        <div th:replace="~{__components/settings :: settings-menu('contact')}"></div>
+    </div>
+    <div class="settings-content">
+        <ul>
+            <li class="menu-item">
+                <h3>Contacts</h3>
+            </li>
+            <li class="menu-item">
+                <a class="btn-type" href="/settings/contacts/types">
+                    <h5>Contact Types</h5>
+                    <div>Configure the type of contacts</div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+</body>
+</html>

@@ -54,7 +54,7 @@ class SettingsEditRoleController(
     ): String {
         try {
             service.update(id, form)
-            return "redirect:/settings/roles/$id?updated=$id"
+            return "redirect:/settings/roles/$id?_toast=$id&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val response = toErrorResponse(ex)
             model.addAttribute("error", response.error.code)

@@ -24,9 +24,7 @@ class AccountController(
         model: Model
     ): String {
         val account = service.account(id)
-        if (toast == id && canShowToasts(timestamp, referer, listOf("/accounts/$id/edit", "/accounts/create"))) {
-            model.addAttribute("toast", "Saved")
-        }
+        loadToast(id, referer, toast, timestamp, model)
         return show(account, model)
     }
 
@@ -52,6 +50,18 @@ class AccountController(
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)
             return show(account, model)
+        }
+    }
+
+    private fun loadToast(
+        id: Long,
+        referer: String?,
+        toast: Long?,
+        timestamp: Long?,
+        model: Model
+    ) {
+        if (toast == id && canShowToasts(timestamp, referer, listOf("/accounts/$id/edit", "/accounts/create"))) {
+            model.addAttribute("toast", "Saved")
         }
     }
 }

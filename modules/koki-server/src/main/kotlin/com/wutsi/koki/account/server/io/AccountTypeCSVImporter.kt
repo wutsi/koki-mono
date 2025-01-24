@@ -36,11 +36,11 @@ class AccountTypeCSVImporter(
                 .setTrim(true)
                 .build(),
         )
-        mutableListOf<ImportMessage>()
         var added: Int = 0
         var updated: Int = 0
         var errorMessages: MutableList<ImportMessage> = mutableListOf()
         var row: Int = 0
+        val names = mutableListOf<String>()
         parser.use {
             for (record in parser) {
                 row++
@@ -65,6 +65,15 @@ class AccountTypeCSVImporter(
                     errorMessages.add(
                         ImportMessage(row.toString(), ErrorCode.IMPORT_ERROR, ex.message)
                     )
+                }
+            }
+
+            // Deactivate others
+            service.search(tenantId = tenantId, limit = Integer.MAX_VALUE).forEach { type ->
+                if (!names.contains(type.name.lowercase()) && type.active) {
+                    type.active = false
+                    updated++
+                    service.save(type)
                 }
             }
         }
