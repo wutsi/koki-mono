@@ -36,27 +36,29 @@ class TaxTypeCSVImporter(
                 .setTrim(true)
                 .build(),
         )
-        mutableListOf<ImportMessage>()
         var added: Int = 0
         var updated: Int = 0
         var errorMessages: MutableList<ImportMessage> = mutableListOf()
         var row: Int = 0
+        val names = mutableListOf<String>()
         parser.use {
+            // Add/Update
             for (record in parser) {
                 row++
                 val name = record.get(TaxTypeEntity.CSV_HEADER_NAME)
                 try {
                     validate(record)
-                    val role = findTaxType(tenantId, record)
-                    if (role == null) {
+                    val type = findTaxType(tenantId, record)
+                    if (type == null) {
                         LOGGER.info("$row - Adding '$name'")
                         add(record, tenantId)
                         added++
                     } else {
                         LOGGER.info("$row - Updating '$name'")
-                        update(role, record)
+                        update(type, record)
                         updated++
                     }
+                    names.add(name.lowercase())
                 } catch (ex: WutsiException) {
                     errorMessages.add(
                         ImportMessage(row.toString(), ex.error.code, ex.error.message)
@@ -65,6 +67,16 @@ class TaxTypeCSVImporter(
                     errorMessages.add(
                         ImportMessage(row.toString(), ErrorCode.IMPORT_ERROR, ex.message)
                     )
+                }
+            }
+
+            // Deactivate others
+            service.search(tenantId = tenantId, limit = Integer.MAX_VALUE).forEach { type ->
+                if (!names.contains(type.name.lowercase()) && type.active) {
+                    LOGGER.info("Deactivating '${type.name}'")
+                    type.active = false
+                    updated++
+                    service.save(type)
                 }
             }
         }
@@ -94,8 +106,8 @@ class TaxTypeCSVImporter(
         }
     }
 
-    private fun add(record: CSVRecord, tenantId: Long) {
-        service.save(
+    private fun add(record: CSVRecord, tenantId: Long): TaxTypeEntity {
+        return service.save(
             TaxTypeEntity(
                 tenantId = tenantId,
                 name = record.get(TaxTypeEntity.CSV_HEADER_NAME),

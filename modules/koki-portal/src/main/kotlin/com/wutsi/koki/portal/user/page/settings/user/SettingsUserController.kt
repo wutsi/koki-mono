@@ -5,12 +5,11 @@ import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.portal.user.service.UserService
-import jakarta.servlet.http.HttpServletRequest
-import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 
@@ -18,16 +17,17 @@ import org.springframework.web.bind.annotation.RequestParam
 @RequestMapping("/settings/users")
 class SettingsUserController(
     private val service: UserService,
-    private val httpRequest: HttpServletRequest,
 ) : AbstractPageController() {
     @GetMapping("/{id}")
     fun show(
+        @RequestHeader(required = false, name = "Referer") referer: String? = null,
         @PathVariable id: Long,
-        @RequestParam(required = false) updated: Long? = null,
+        @RequestParam(required = false, name = "_toast") toast: Long? = null,
+        @RequestParam(required = false, name = "_ts") timestamp: Long? = null,
         model: Model
     ): String {
         val user = service.user(id)
-        loadUpdatedToast(updated, model)
+        loadToast(id, referer, toast, timestamp, model)
         return show(user, model)
     }
 
@@ -44,17 +44,20 @@ class SettingsUserController(
         return "users/settings/users/show"
     }
 
-    private fun loadUpdatedToast(updated: Long?, model: Model) {
-        val referer = httpRequest.getHeader(HttpHeaders.REFERER)
-        if (
-            updated != null &&
-            referer != null &&
-            (
-                referer.endsWith("/settings/users/$updated/edit") ||
-                    referer.endsWith("/settings/users/$updated/roles")
-                )
+    private fun loadToast(
+        id: Long,
+        referer: String?,
+        toast: Long?,
+        timestamp: Long?,
+        model: Model
+    ) {
+        if (toast == id && canShowToasts(
+                timestamp,
+                referer,
+                listOf("/settings/users/$id/edit", "/settings/users/$id/roles")
+            )
         ) {
-            model.addAttribute("toast", "Updated")
+            model.addAttribute("toast", "Saved")
         }
     }
 }

@@ -18,7 +18,9 @@ import org.springframework.web.multipart.MultipartFile
 @RequestMapping("/settings/accounts/types/import")
 class SettingsImportAccountTypeController(private val service: AccountTypeService) : AbstractPageController() {
     @GetMapping
-    fun show(model: Model): String {
+    fun show(
+        model: Model,
+    ): String {
         model.addAttribute(
             "page",
             PageModel(

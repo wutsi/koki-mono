@@ -12,13 +12,17 @@ import org.springframework.web.bind.annotation.RequestParam
 class TaxTabController(private val service: TaxService) : AbstractPageController() {
     @GetMapping("/taxes/tab")
     fun list(
-        @RequestParam(required = false, name = "owner-id") ownerId: Long,
-        @RequestParam(required = false, name = "owner-type") ownerType: ObjectType,
+        @RequestParam(name = "owner-id") ownerId: Long,
+        @RequestParam(name = "owner-type") ownerType: ObjectType,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
-        model.addAttribute("addUrl", "/taxes/create?account-id=$ownerId")
+        if (ownerType == ObjectType.ACCOUNT) {
+            model.addAttribute("addUrl", "/taxes/create?account-id=$ownerId")
+        }
+        model.addAttribute("ownerType", ownerType)
+        model.addAttribute("ownerId", ownerId)
         more(
             ownerId = ownerId,
             ownerType = ownerType,
@@ -31,8 +35,8 @@ class TaxTabController(private val service: TaxService) : AbstractPageController
 
     @GetMapping("/taxes/tab/more")
     fun more(
-        @RequestParam(required = false, name = "owner-id") ownerId: Long,
-        @RequestParam(required = false, name = "owner-type") ownerType: ObjectType,
+        @RequestParam(name = "owner-id") ownerId: Long,
+        @RequestParam(name = "owner-type") ownerType: ObjectType,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model

@@ -1,9 +1,11 @@
 package com.wutsi.koki.portal.contact.service
 
+import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.portal.contact.mapper.ContactMapper
 import com.wutsi.koki.portal.contact.model.ContactTypeModel
 import com.wutsi.koki.sdk.KokiContacts
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 
 @Service
 class ContactTypeService(
@@ -31,5 +33,9 @@ class ContactTypeService(
         ).contactTypes
 
         return contactTypes.map { contactType -> mapper.toContactTypeModel(contactType) }
+    }
+
+    fun upload(file: MultipartFile): ImportResponse {
+        return koki.uploadTypes(file)
     }
 }

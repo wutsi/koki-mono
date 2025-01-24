@@ -44,7 +44,7 @@ class SettingsCreateRoleController(
     ): String {
         try {
             val roleId = service.create(form)
-            return "redirect:/settings/roles?created=$roleId"
+            return "redirect:/settings/roles?_toast=$roleId&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val response = toErrorResponse(ex)
             model.addAttribute("error", response.error.code)

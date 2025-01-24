@@ -5,12 +5,11 @@ import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.user.model.RoleModel
 import com.wutsi.koki.portal.user.service.RoleService
-import jakarta.servlet.http.HttpServletRequest
-import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
@@ -19,16 +18,17 @@ import org.springframework.web.client.HttpClientErrorException
 @RequestMapping("/settings/roles")
 class SettingsRoleController(
     private val service: RoleService,
-    private val httpRequest: HttpServletRequest,
 ) : AbstractPageController() {
     @GetMapping("/{id}")
     fun show(
+        @RequestHeader(required = false, name = "Referer") referer: String? = null,
         @PathVariable id: Long,
-        @RequestParam(required = false) updated: Long? = null,
+        @RequestParam(required = false, name = "_toast") toast: Long? = null,
+        @RequestParam(required = false, name = "_ts") timestamp: Long? = null,
         model: Model
     ): String {
         val role = service.role(id)
-        loadUpdatedToast(updated, model)
+        loadToast(id, referer, toast, timestamp, model)
         return show(role, model)
     }
 
@@ -45,31 +45,34 @@ class SettingsRoleController(
         return "users/settings/roles/show"
     }
 
-    private fun loadUpdatedToast(updated: Long?, model: Model) {
-        val referer = httpRequest.getHeader(HttpHeaders.REFERER)
-        if (
-            updated != null &&
-            referer != null &&
-            (
-                referer.endsWith("/settings/roles/$updated/edit") ||
-                    referer.endsWith("/settings/roles/$updated/permissions")
-                )
-        ) {
-            model.addAttribute("toast", "Updated")
-        }
-    }
-
     @GetMapping("/{id}/delete")
     fun delete(@PathVariable id: Long, model: Model): String {
         try {
             service.delete(id)
-            return "redirect:/settings/roles?deleted=$id"
+            return "redirect:/settings/roles?_op=del&_toast=$id&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val response = toErrorResponse(ex)
             model.addAttribute("error", response.error.code)
 
             val role = service.role(id)
             return show(role, model)
+        }
+    }
+
+    private fun loadToast(
+        id: Long,
+        referer: String?,
+        toast: Long?,
+        timestamp: Long?,
+        model: Model
+    ) {
+        if (toast == id && canShowToasts(
+                timestamp,
+                referer,
+                listOf("/settings/roles/$id/edit", "/settings/roles/$id/permissions")
+            )
+        ) {
+            model.addAttribute("toast", "Saved")
         }
     }
 }

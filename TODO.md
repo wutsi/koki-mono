@@ -22,8 +22,8 @@
 - [] Settings: Import Contact Types from CSV
 - [] Add additional information: address, SSN, Date of birth
 - [] Filter contacts on UI
-- [] Settings: Import Contact from CSV
 - [] Send mass email to list of contacts
+- [x] Settings: Import Contact from CSV
 - [x] Send email to contact
 - [x] Contact API
 - [x] Contact UI
@@ -42,11 +42,10 @@
 
 ## Taxes
 
-- [] Settings: Import Taxes Types from CSV
-- [] Settings: Send email notification to assignee
+- [] Settings: Setup email notification
 - [] Add Kanban view
 - [] Add Calendar view
-- [] Track Time spent
+- [x] Settings: Import Taxes Types from CSV
 - [x] Send email to Taxes
 - [x] Home: Add my assignment widget
 - [x] Personal tax UI
@@ -66,13 +65,26 @@
 ## Notes
 
 - [] Add type of notes
+- [] Tack time
+- [] Compile time of employees: Monthly
 - [x] Note API
 - [x] Note UI
 
 ## Users
 
+- [] Settings: Update my user
+- [] Settings: Update my password
+- [] Settings: Filter user by role, status
+- [] Settings: Change password of user
+- [] Settings: Delete user
+- [] Add permission to READ module and MANAGE module
+- [] Import users from CSV
 - [x] Manage users
 - [x] Manage roles
+
+## Employees
+
+- Manage employee information: hourly salary, manager
 
 ## Module
 

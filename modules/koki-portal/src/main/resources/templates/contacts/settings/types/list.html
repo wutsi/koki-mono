@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="settings-container">
+    <div class="settings-sidebar">
+        <div th:replace="~{__components/settings :: settings-menu('contact')}"></div>
+    </div>
+    <div class="settings-content padding">
+        <div th:replace="~{__components/settings :: settings-title('Contact Types', '/settings/contacts')}"></div>
+
+        <a class="btn btn-secondary btn-import" href="/settings/contacts/types/import">Import</a>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Title</th>
+                <th>Active</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="type" th:each="type : ${types}">
+                <td><a th:href="'/settings/contacts/types/' + ${type.id}" th:text="${type.name}">NAME</a></td>
+                <td th:text="${type.title}">Title</td>
+                <td>
+                    <span th:if="${type.active}">Yes</span>
+                    <span th:if="!${type.active}">No</span>
+                </td>
+            </tr>
+            <tr id="type-load-more" th:if="${moreUrl}">
+                <td class="text-center" colspan="3">
+                    <a href="javascript: koki_load_more('type-load-more')" th:data-url="${moreUrl}">Load More...</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

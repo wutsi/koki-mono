@@ -13,7 +13,7 @@
     </div>
     <div class="settings-content padding">
         <div
-            th:replace="~{__components/settings :: settings-title('Acccount Types', '/settings/accounts/types')}"></div>
+            th:replace="~{__components/settings :: settings-title('Account Types', '/settings/accounts/types')}"></div>
 
         <form action="/settings/accounts/types/import" class="form" enctype="multipart/form-data" method="post">
             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
@@ -36,6 +36,5 @@
     </div>
 </div>
 
-<div th:replace="~{__components/bootstrap :: toast('${toast}')}"></div>
 </body>
 </html>

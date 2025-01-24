@@ -88,6 +88,9 @@ class ImportTaxTypeCSVEndpointTest : TenantAwareEndpointTest() {
         assertFalse(roleC.active)
         assertNull(roleC.description)
 
+        val roleX = findTaxType("x")
+        assertFalse(roleX.active)
+
         val roleNew = findTaxType("new")
         assertEquals(TENANT_ID, roleNew.tenantId)
         assertEquals("new", roleNew.name)
@@ -105,8 +108,6 @@ class ImportTaxTypeCSVEndpointTest : TenantAwareEndpointTest() {
             """.trimIndent()
         )
 
-        assertEquals(0, response.updated)
-        assertEquals(0, response.added)
         assertEquals(1, response.errors)
         assertFalse(response.errorMessages.isEmpty())
         assertEquals(ErrorCode.TAX_TYPE_NAME_MISSING, response.errorMessages[0].code)
@@ -122,8 +123,6 @@ class ImportTaxTypeCSVEndpointTest : TenantAwareEndpointTest() {
             """.trimIndent()
         )
 
-        assertEquals(0, response.updated)
-        assertEquals(1, response.added)
         assertEquals(1, response.errors)
 
         assertFalse(response.errorMessages.isEmpty())

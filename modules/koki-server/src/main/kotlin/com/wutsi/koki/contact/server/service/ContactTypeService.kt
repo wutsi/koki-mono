@@ -80,8 +80,8 @@ class ContactTypeService(
     }
 
     @Transactional
-    fun save(contactType: ContactTypeEntity) {
+    fun save(contactType: ContactTypeEntity): ContactTypeEntity {
         contactType.modifiedAt = Date()
-        dao.save(contactType)
+        return dao.save(contactType)
     }
 }

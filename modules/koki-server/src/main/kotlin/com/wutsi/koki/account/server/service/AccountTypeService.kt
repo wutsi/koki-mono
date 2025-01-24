@@ -84,8 +84,8 @@ class AccountTypeService(
     }
 
     @Transactional
-    fun save(accountType: AccountTypeEntity) {
+    fun save(accountType: AccountTypeEntity): AccountTypeEntity {
         accountType.modifiedAt = Date()
-        dao.save(accountType)
+        return dao.save(accountType)
     }
 }

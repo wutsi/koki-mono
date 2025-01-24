@@ -53,7 +53,7 @@ class SettingsEditUserController(
     ): String {
         try {
             service.update(id, form)
-            return "redirect:/settings/users/$id?updated=$id"
+            return "redirect:/settings/users/$id?_toast=$id&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val response = toErrorResponse(ex)
             model.addAttribute("error", response.error.code)

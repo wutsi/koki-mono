@@ -44,12 +44,13 @@ class RoleCSVImporter(
                 .setTrim(true)
                 .build(),
         )
-        mutableListOf<ImportMessage>()
         var added: Int = 0
         var updated: Int = 0
         var errorMessages: MutableList<ImportMessage> = mutableListOf()
         var row: Int = 0
+        val names = mutableListOf<String>()
         parser.use {
+            // Add/Update
             val tenant = tenantService.get(tenantId)
             for (record in parser) {
                 row++
@@ -66,6 +67,7 @@ class RoleCSVImporter(
                         update(role, record)
                         updated++
                     }
+                    names.add(name.lowercase())
                 } catch (ex: WutsiException) {
                     errorMessages.add(
                         ImportMessage(row.toString(), ex.error.code, ex.error.message)
@@ -74,6 +76,16 @@ class RoleCSVImporter(
                     errorMessages.add(
                         ImportMessage(row.toString(), ErrorCode.IMPORT_ERROR, ex.message)
                     )
+                }
+            }
+
+            // Deactivate others
+            service.search(tenantId = tenantId, limit = Integer.MAX_VALUE).forEach { role ->
+                if (!names.contains(role.name.lowercase()) && role.active) {
+                    LOGGER.info("Deactivating '${role.name}'")
+                    role.active = false
+                    updated++
+                    service.save(role)
                 }
             }
         }
@@ -103,8 +115,8 @@ class RoleCSVImporter(
         }
     }
 
-    private fun add(tenant: TenantEntity, record: CSVRecord) {
-        service.save(
+    private fun add(tenant: TenantEntity, record: CSVRecord): RoleEntity {
+        return service.save(
             RoleEntity(
                 tenantId = tenant.id!!,
                 name = record.get(CSV_HEADER_NAME),

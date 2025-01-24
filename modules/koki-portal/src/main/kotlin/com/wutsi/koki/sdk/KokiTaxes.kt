@@ -1,5 +1,6 @@
 package com.wutsi.koki.sdk
 
+import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.tax.dto.CreateTaxRequest
 import com.wutsi.koki.tax.dto.CreateTaxResponse
 import com.wutsi.koki.tax.dto.GetTaxResponse
@@ -10,11 +11,12 @@ import com.wutsi.koki.tax.dto.TaxStatus
 import com.wutsi.koki.tax.dto.UpdateTaxRequest
 import com.wutsi.koki.tax.dto.UpdateTaxStatusRequest
 import org.springframework.web.client.RestTemplate
+import org.springframework.web.multipart.MultipartFile
 
 class KokiTaxes(
     private val urlBuilder: URLBuilder,
-    private val rest: RestTemplate,
-) {
+    rest: RestTemplate,
+) : AbstractKokiModule(rest) {
     companion object {
         private const val TAX_PATH_PREFIX = "/v1/taxes"
         private const val TAX_TYPE_PATH_PREFIX = "/v1/tax-types"
@@ -67,6 +69,7 @@ class KokiTaxes(
         val url = urlBuilder.build("$TAX_PATH_PREFIX/$id/status")
         rest.postForEntity(url, request, Any::class.java)
     }
+
     fun delete(id: Long) {
         val url = urlBuilder.build("$TAX_PATH_PREFIX/$id")
         rest.delete(url)
@@ -95,5 +98,10 @@ class KokiTaxes(
             )
         )
         return rest.getForEntity(url, SearchTaxTypeResponse::class.java).body
+    }
+
+    fun uploadTypes(file: MultipartFile): ImportResponse {
+        val url = urlBuilder.build("$TAX_TYPE_PATH_PREFIX/csv")
+        return upload(url, file)
     }
 }
