@@ -48,16 +48,17 @@ class ContactTypeCSVImporter(
                 val name = record.get(ContactTypeEntity.CSV_HEADER_NAME)
                 try {
                     validate(record)
-                    val role = findContactType(tenantId, record)
-                    if (role == null) {
+                    val type = findContactType(tenantId, record)
+                    if (type == null) {
                         LOGGER.info("$row - Adding '$name'")
                         add(record, tenantId)
                         added++
                     } else {
                         LOGGER.info("$row - Updating '$name'")
-                        update(role, record)
+                        update(type, record)
                         updated++
                     }
+                    names.add(name.lowercase())
                 } catch (ex: WutsiException) {
                     errorMessages.add(
                         ImportMessage(row.toString(), ex.error.code, ex.error.message)
@@ -72,6 +73,7 @@ class ContactTypeCSVImporter(
             // Deactivate others
             service.search(tenantId = tenantId, limit = Integer.MAX_VALUE).forEach { type ->
                 if (!names.contains(type.name.lowercase()) && type.active) {
+                    LOGGER.info("Deactivating '${type.name}'")
                     type.active = false
                     updated++
                     service.save(type)
@@ -104,8 +106,8 @@ class ContactTypeCSVImporter(
         }
     }
 
-    private fun add(record: CSVRecord, tenantId: Long) {
-        service.save(
+    private fun add(record: CSVRecord, tenantId: Long): ContactTypeEntity {
+        return service.save(
             ContactTypeEntity(
                 tenantId = tenantId,
                 name = record.get(ContactTypeEntity.CSV_HEADER_NAME),

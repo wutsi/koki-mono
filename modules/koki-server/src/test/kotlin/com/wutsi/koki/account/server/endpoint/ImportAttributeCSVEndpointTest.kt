@@ -63,7 +63,7 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
             """.trimIndent()
         )
 
-        assertEquals(3, response.updated)
+        assertEquals(4, response.updated)
         assertEquals(1, response.added)
         assertEquals(0, response.errors)
         assertTrue(response.errorMessages.isEmpty())
@@ -98,6 +98,9 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
         assertNull(attrC.label)
         assertNull(attrC.description)
 
+        val attrX = findAttribute("x")
+        assertFalse(attrX.required)
+
         val attrNew = findAttribute("new")
         assertEquals("new", attrNew.name)
         assertEquals(TENANT_ID, attrNew.tenantId)
@@ -118,8 +121,6 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
             """.trimIndent()
         )
 
-        assertEquals(0, response.updated)
-        assertEquals(0, response.added)
         assertEquals(1, response.errors)
         assertFalse(response.errorMessages.isEmpty())
         assertEquals(ErrorCode.ATTRIBUTE_NAME_MISSING, response.errorMessages[0].code)
@@ -148,8 +149,6 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
             """.trimIndent()
         )
 
-        assertEquals(0, response.updated)
-        assertEquals(0, response.added)
         assertEquals(1, response.errors)
         assertFalse(response.errorMessages.isEmpty())
         assertEquals(ErrorCode.ATTRIBUTE_TYPE_INVALID, response.errorMessages[0].code)

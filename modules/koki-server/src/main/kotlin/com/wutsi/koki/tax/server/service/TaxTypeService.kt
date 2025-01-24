@@ -84,8 +84,8 @@ class TaxTypeService(
     }
 
     @Transactional
-    fun save(taxType: TaxTypeEntity) {
+    fun save(taxType: TaxTypeEntity): TaxTypeEntity {
         taxType.modifiedAt = Date()
-        dao.save(taxType)
+        return dao.save(taxType)
     }
 }

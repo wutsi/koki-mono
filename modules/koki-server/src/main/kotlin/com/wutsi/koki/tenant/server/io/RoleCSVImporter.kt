@@ -67,6 +67,7 @@ class RoleCSVImporter(
                         update(role, record)
                         updated++
                     }
+                    names.add(name.lowercase())
                 } catch (ex: WutsiException) {
                     errorMessages.add(
                         ImportMessage(row.toString(), ex.error.code, ex.error.message)
@@ -79,11 +80,12 @@ class RoleCSVImporter(
             }
 
             // Deactivate others
-            service.search(tenantId = tenantId, limit = Integer.MAX_VALUE).forEach { type ->
-                if (!names.contains(type.name.lowercase()) && type.active) {
-                    type.active = false
+            service.search(tenantId = tenantId, limit = Integer.MAX_VALUE).forEach { role ->
+                if (!names.contains(role.name.lowercase()) && role.active) {
+                    LOGGER.info("Deactivating '${role.name}'")
+                    role.active = false
                     updated++
-                    service.save(type)
+                    service.save(role)
                 }
             }
         }
@@ -113,8 +115,8 @@ class RoleCSVImporter(
         }
     }
 
-    private fun add(tenant: TenantEntity, record: CSVRecord) {
-        service.save(
+    private fun add(tenant: TenantEntity, record: CSVRecord): RoleEntity {
+        return service.save(
             RoleEntity(
                 tenantId = tenant.id!!,
                 name = record.get(CSV_HEADER_NAME),

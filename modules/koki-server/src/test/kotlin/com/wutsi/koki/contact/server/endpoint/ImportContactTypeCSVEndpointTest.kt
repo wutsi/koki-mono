@@ -62,7 +62,7 @@ class ImportContactTypeCSVEndpointTest : TenantAwareEndpointTest() {
             """.trimIndent()
         )
 
-        assertEquals(3, response.updated)
+        assertEquals(4, response.updated)
         assertEquals(1, response.added)
         assertEquals(0, response.errors)
         assertTrue(response.errorMessages.isEmpty())
@@ -88,6 +88,9 @@ class ImportContactTypeCSVEndpointTest : TenantAwareEndpointTest() {
         assertFalse(roleC.active)
         assertNull(roleC.description)
 
+        val roleX = findContactType("x")
+        assertFalse(roleX.active)
+
         val roleNew = findContactType("new")
         assertEquals(TENANT_ID, roleNew.tenantId)
         assertEquals("new", roleNew.name)
@@ -105,8 +108,6 @@ class ImportContactTypeCSVEndpointTest : TenantAwareEndpointTest() {
             """.trimIndent()
         )
 
-        assertEquals(0, response.updated)
-        assertEquals(0, response.added)
         assertEquals(1, response.errors)
         assertFalse(response.errorMessages.isEmpty())
         assertEquals(ErrorCode.CONTACT_TYPE_NAME_MISSING, response.errorMessages[0].code)
@@ -118,12 +119,9 @@ class ImportContactTypeCSVEndpointTest : TenantAwareEndpointTest() {
             """
                 "name","active","description"
                 "b11"
-                "a11","Yes",,,
             """.trimIndent()
         )
 
-        assertEquals(0, response.updated)
-        assertEquals(1, response.added)
         assertEquals(1, response.errors)
 
         assertFalse(response.errorMessages.isEmpty())

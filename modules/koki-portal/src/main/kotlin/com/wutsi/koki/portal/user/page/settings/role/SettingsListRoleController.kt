@@ -4,7 +4,6 @@ import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.user.service.RoleService
-import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam
 @RequestMapping("/settings/roles")
 class SettingsListRoleController(
     private val service: RoleService,
-    private val httpRequest: HttpServletRequest,
 ) : AbstractPageController() {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(SettingsListRoleController::class.java)

@@ -57,6 +57,7 @@ class AttributeCSVImporter(private val service: AttributeService) {
                         update(attribute, record)
                         updated++
                     }
+                    names.add(name.lowercase())
                 } catch (ex: WutsiException) {
                     errorMessages.add(
                         ImportMessage(row.toString(), ex.error.code, ex.error.message)
@@ -67,6 +68,7 @@ class AttributeCSVImporter(private val service: AttributeService) {
             // Deactivate others
             service.search(tenantId = tenantId, limit = Integer.MAX_VALUE).forEach { type ->
                 if (!names.contains(type.name.lowercase()) && type.active) {
+                    LOGGER.info("$row - Deactivating '${type.name}'")
                     type.active = false
                     updated++
                     service.save(type)
@@ -109,8 +111,8 @@ class AttributeCSVImporter(private val service: AttributeService) {
         }
     }
 
-    private fun add(tenantId: Long, record: CSVRecord) {
-        service.save(
+    private fun add(tenantId: Long, record: CSVRecord): AttributeEntity {
+        return service.save(
             AttributeEntity(
                 tenantId = tenantId,
                 name = record.get(AttributeEntity.CSV_HEADER_NAME),

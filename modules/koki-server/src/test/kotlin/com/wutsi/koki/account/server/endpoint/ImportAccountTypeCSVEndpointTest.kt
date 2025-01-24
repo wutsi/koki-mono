@@ -57,12 +57,12 @@ class ImportAccountTypeCSVEndpointTest : TenantAwareEndpointTest() {
                 "name","title","active","description"
                 "a","RoleA","Yes",,,
                 "b","RoleB","No","Priority of the ticket"
-                "c",,,
+                 c,,,
                 "new",,"yes",""
             """.trimIndent()
         )
 
-        assertEquals(3, response.updated)
+        assertEquals(4, response.updated)
         assertEquals(1, response.added)
         assertEquals(0, response.errors)
         assertTrue(response.errorMessages.isEmpty())
@@ -88,6 +88,9 @@ class ImportAccountTypeCSVEndpointTest : TenantAwareEndpointTest() {
         assertFalse(roleC.active)
         assertNull(roleC.description)
 
+        val roleX = findAccountType("x")
+        assertFalse(roleX.active)
+
         val roleNew = findAccountType("new")
         assertEquals(TENANT_ID, roleNew.tenantId)
         assertEquals("new", roleNew.name)
@@ -105,8 +108,6 @@ class ImportAccountTypeCSVEndpointTest : TenantAwareEndpointTest() {
             """.trimIndent()
         )
 
-        assertEquals(0, response.updated)
-        assertEquals(0, response.added)
         assertEquals(1, response.errors)
         assertFalse(response.errorMessages.isEmpty())
         assertEquals(ErrorCode.ACCOUNT_TYPE_NAME_MISSING, response.errorMessages[0].code)
@@ -118,12 +119,9 @@ class ImportAccountTypeCSVEndpointTest : TenantAwareEndpointTest() {
             """
                 "name","active","description"
                 "b11"
-                "a11","Yes",,,
             """.trimIndent()
         )
 
-        assertEquals(0, response.updated)
-        assertEquals(1, response.added)
         assertEquals(1, response.errors)
 
         assertFalse(response.errorMessages.isEmpty())

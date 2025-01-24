@@ -23,7 +23,6 @@ class SettingsRoleController(
     fun show(
         @RequestHeader(required = false, name = "Referer") referer: String? = null,
         @PathVariable id: Long,
-        @RequestParam(required = false) updated: Long? = null,
         @RequestParam(required = false, name = "_toast") toast: Long? = null,
         @RequestParam(required = false, name = "_ts") timestamp: Long? = null,
         model: Model
@@ -50,7 +49,7 @@ class SettingsRoleController(
     fun delete(@PathVariable id: Long, model: Model): String {
         try {
             service.delete(id)
-            return "redirect:/settings/roles?deleted=$id"
+            return "redirect:/settings/roles?_op=del&_toast=$id&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val response = toErrorResponse(ex)
             model.addAttribute("error", response.error.code)
