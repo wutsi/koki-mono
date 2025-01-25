@@ -119,4 +119,13 @@ class EditAccountControllerTest : AbstractPageControllerTest() {
         navigateTo("/accounts/${account.id}/edit")
         assertCurrentPageIs(PageName.LOGIN)
     }
+
+    @Test
+    fun `edit - without permission account-manage`() {
+        setUpUserWithoutPermissions(listOf("account:manage"))
+
+        navigateTo("/accounts/${account.id}/edit")
+
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
 }

@@ -11,7 +11,7 @@
 - [x] Settings: Import Account Types from CSV
 - [x] Send email to account
 - [x] Link with taxes
-- [x] Attributes API
+- [x] Attributes API**
 - [x] Account API
 - [x] Account UI
 - [x] BUG: We should not be able to delete Account with Contacts

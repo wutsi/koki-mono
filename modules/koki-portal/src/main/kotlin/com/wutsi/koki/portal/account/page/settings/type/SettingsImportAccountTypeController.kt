@@ -4,6 +4,7 @@ import com.wutsi.koki.portal.account.service.AccountTypeService
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile
 
 @Controller
 @RequestMapping("/settings/accounts/types/import")
+@RequiresPermission(permissions = ["account:admin"])
 class SettingsImportAccountTypeController(private val service: AccountTypeService) : AbstractPageController() {
     @GetMapping
     fun show(

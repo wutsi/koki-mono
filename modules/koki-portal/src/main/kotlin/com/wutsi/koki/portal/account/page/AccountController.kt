@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.account.page
 import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
+@RequiresPermission(permissions = ["account"])
 class AccountController(
     private val service: AccountService,
 ) : AbstractAccountDetailsController() {
@@ -40,6 +42,7 @@ class AccountController(
         return "accounts/show"
     }
 
+    @RequiresPermission(permissions = ["account:delete"])
     @GetMapping("/accounts/{id}/delete")
     fun delete(@PathVariable id: Long, model: Model): String {
         val account = service.account(id)

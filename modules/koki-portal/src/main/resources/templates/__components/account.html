@@ -30,8 +30,11 @@
     </td>
     <td th:text="${account.managedBy?.displayName}">MANAGER</td>
     <td class="toolbar">
-        <a class="btn-view" th:href="'/accounts/' + ${account.id}">View</a>
-        <a class="btn-edit" th:href="'/accounts/' + ${account.id} + '/edit'">Edit</a>
+        <a class="btn-view" th:href="'/accounts/' + ${account.id}"
+           th:if="${user?.hasPermission('account')}">View</a>
+
+        <a class="btn-edit" th:href="'/accounts/' + ${account.id} + '/edit'"
+           th:if="${user?.hasPermission('account:manage')}">Edit</a>
     </td>
 </tr>
 

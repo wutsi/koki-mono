@@ -43,7 +43,10 @@
                             </ul>
                         </div>
                         <div>
-                            <a class="btn-create btn btn-light btn-sm" href="/accounts/create">Create New Account</a>
+                            <a class="btn-create btn btn-light btn-sm" href="/accounts/create"
+                               th:if="${user?.hasPermission('account:manage')}">
+                                Create New Account
+                            </a>
                         </div>
                     </div>
 

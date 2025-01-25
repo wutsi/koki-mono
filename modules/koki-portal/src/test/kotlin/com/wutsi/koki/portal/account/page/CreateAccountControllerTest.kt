@@ -120,4 +120,13 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
         navigateTo("/accounts/create")
         assertCurrentPageIs(PageName.LOGIN)
     }
+
+    @Test
+    fun `create - without permission account-manage`() {
+        setUpUserWithoutPermissions(listOf("account:manage"))
+
+        navigateTo("/accounts/create")
+
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
 }

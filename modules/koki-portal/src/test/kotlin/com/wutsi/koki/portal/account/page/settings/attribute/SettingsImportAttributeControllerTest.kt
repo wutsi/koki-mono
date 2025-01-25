@@ -36,4 +36,12 @@ class SettingsImportAttributeControllerTest : AbstractPageControllerTest() {
         click(".btn-back")
         assertCurrentPageIs(PageName.ACCOUNT_SETTINGS_ATTRIBUTE_LIST)
     }
+
+    @Test
+    fun `without permission account-admin`() {
+        setUpUserWithoutPermissions(listOf("account:admin"))
+
+        navigateTo("/settings/accounts/attributes/import")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
 }

@@ -71,4 +71,24 @@ class ListAccountControllerTest : AbstractPageControllerTest() {
         click(".btn-edit")
         assertCurrentPageIs(PageName.ACCOUNT_EDIT)
     }
+
+    @Test
+    fun `list - without permission account`() {
+        setUpUserWithoutPermissions(listOf("account"))
+
+        navigateTo("/accounts")
+
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
+
+    @Test
+    fun `list - without permission account-manage`() {
+        setUpUserWithoutPermissions(listOf("account:manage"))
+
+        navigateTo("/accounts")
+
+        assertCurrentPageIs(PageName.ACCOUNT_LIST)
+        assertElementNotPresent(".btn-edit")
+        assertElementNotPresent(".btn-create")
+    }
 }

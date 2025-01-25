@@ -4,6 +4,7 @@ import com.wutsi.koki.portal.account.service.AttributeService
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile
 
 @Controller
 @RequestMapping("/settings/accounts/attributes/import")
+@RequiresPermission(permissions = ["account:admin"])
 class SettingsImportAttributeController(private val service: AttributeService) : AbstractPageController() {
     @GetMapping
     fun show(model: Model): String {

@@ -18,4 +18,12 @@ class SettingsAttributeControllerTest : AbstractPageControllerTest() {
         click(".btn-back")
         assertCurrentPageIs(PageName.ACCOUNT_SETTINGS_ATTRIBUTE_LIST)
     }
+
+    @Test
+    fun `without permission account-admin`() {
+        setUpUserWithoutPermissions(listOf("account:admin"))
+
+        navigateTo("/settings/accounts/attributes/${attribute.id}")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
 }
