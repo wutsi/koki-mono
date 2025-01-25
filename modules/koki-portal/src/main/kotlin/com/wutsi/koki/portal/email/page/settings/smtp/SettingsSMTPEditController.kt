@@ -57,7 +57,7 @@ class SettingsSMTPEditController(
         try {
             validator.validate(form.host, form.port, form.username)
             service.save(form)
-            return "redirect:/settings/email/smtp?updated=1"
+            return "redirect:/settings/email/smtp?_toast=1&_ts=" + System.currentTimeMillis()
         } catch (ex: IOException) {
             LOGGER.error("Connection to SMTP server failed", ex)
             model.addAttribute("error", "The settings are not valid. Unable to connect to the Mail Server")
