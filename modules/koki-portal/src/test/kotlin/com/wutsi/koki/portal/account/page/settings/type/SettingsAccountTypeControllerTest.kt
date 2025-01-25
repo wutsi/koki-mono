@@ -18,4 +18,12 @@ class SettingsAccountTypeControllerTest : AbstractPageControllerTest() {
         click(".btn-back")
         assertCurrentPageIs(PageName.ACCOUNT_SETTINGS_TYPE_LIST)
     }
+
+    @Test
+    fun `without permission account-admin`() {
+        setUpUserWithoutPermissions(listOf("account:admin"))
+
+        navigateTo("/settings/accounts/types/${accountType.id}")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
 }

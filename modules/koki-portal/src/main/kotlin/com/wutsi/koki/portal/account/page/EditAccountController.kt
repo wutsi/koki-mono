@@ -6,6 +6,7 @@ import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.account.service.AccountTypeService
 import com.wutsi.koki.portal.account.service.AttributeService
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.user.service.UserService
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.stereotype.Controller
@@ -18,6 +19,7 @@ import org.springframework.web.client.HttpClientErrorException
 import java.util.Locale
 
 @Controller
+@RequiresPermission(permissions = ["account:manage"])
 class EditAccountController(
     private val service: AccountService,
     private val attributeService: AttributeService,

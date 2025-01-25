@@ -30,8 +30,7 @@ object PageName {
 
     const val ERROR = "page.error"
     const val ERROR_SUSPENDED = "page.error.suspended"
-
-    const val FILE = "page.file"
+    const val ERROR_ACCESS_DENIED = "page.error.access-denied"
 
     const val FORM = "page.form"
     const val FORM_SUBMITTED = "page.form.submitted"

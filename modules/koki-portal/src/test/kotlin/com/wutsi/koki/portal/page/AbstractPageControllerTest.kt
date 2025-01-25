@@ -399,6 +399,35 @@ abstract class AbstractPageControllerTest {
         doReturn(principal).whenever(jwtDecoder).decode(any())
     }
 
+    protected fun setUpUserWithoutPermissions(names: List<String>) {
+        val xpermissions = ModuleFixtures.permissions.filter { permission ->
+            !names.contains(permission.name)
+        }
+        val xrole = RoleFixtures.role.copy(permissionIds = xpermissions.map { permission -> permission.id })
+        doReturn(
+            ResponseEntity(
+                SearchRoleResponse(listOf(xrole)),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchRoleResponse::class.java)
+            )
+
+        val xuser = UserFixtures.user.copy(roleIds = listOf(xrole.id))
+        doReturn(
+            ResponseEntity(
+                GetUserResponse(xuser),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetUserResponse::class.java)
+            )
+    }
+
     private fun setupFileModule() {
         doReturn(
             ResponseEntity(

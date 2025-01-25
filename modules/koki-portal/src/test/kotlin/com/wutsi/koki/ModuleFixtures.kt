@@ -80,6 +80,9 @@ object ModuleFixtures {
     val permissions = listOf(
         Permission(id = 1001, moduleId = 100, name = "account", description = "Manage accounts"),
         Permission(id = 1002, moduleId = 100, name = "account:admin", description = "Configure accounts"),
+        Permission(id = 1003, moduleId = 100, name = "account:manage", description = "Manage accounts"),
+        Permission(id = 1004, moduleId = 100, name = "account:delete", description = "Delete accounts"),
+
         Permission(id = 1101, moduleId = 110, name = "contact", description = "Manage contacts"),
         Permission(id = 1102, moduleId = 110, name = "contact:admin", description = "Configure accounts"),
         Permission(id = 1201, moduleId = 120, name = "tax", description = "Manage taxes"),

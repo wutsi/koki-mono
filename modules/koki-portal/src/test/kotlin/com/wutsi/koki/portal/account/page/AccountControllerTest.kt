@@ -47,7 +47,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun `dismiss delete`() {
+    fun `delete - dismiss`() {
         navigateTo("/accounts/${account.id}")
         click(".btn-delete")
 
@@ -60,7 +60,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun `error on delete`() {
+    fun `delete - error`() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
         doThrow(ex).whenever(rest).delete(any<String>())
 
@@ -122,5 +122,43 @@ class AccountControllerTest : AbstractPageControllerTest() {
 
         Thread.sleep(1000)
         assertElementCount(".tab-emails .email", EmailFixtures.emails.size)
+    }
+
+    @Test
+    fun `show - without permission account`() {
+        setUpUserWithoutPermissions(listOf("account"))
+
+        navigateTo("/accounts/${account.id}")
+
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
+
+    @Test
+    fun `show - without permission account-manage`() {
+        setUpUserWithoutPermissions(listOf("account:manage"))
+
+        navigateTo("/accounts/${account.id}")
+
+        assertCurrentPageIs(PageName.ACCOUNT)
+        assertElementNotPresent(".account-summary .btn-edit")
+    }
+
+    @Test
+    fun `show - without permission account-delete`() {
+        setUpUserWithoutPermissions(listOf("account:delete"))
+
+        navigateTo("/accounts/${account.id}")
+
+        assertCurrentPageIs(PageName.ACCOUNT)
+        assertElementNotPresent(".account-summary .btn-delete")
+    }
+
+    @Test
+    fun `delete - without permission account-delete`() {
+        setUpUserWithoutPermissions(listOf("account:delete"))
+
+        navigateTo("/accounts/${account.id}/delete")
+
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 }
