@@ -2,6 +2,7 @@
 
 ## Account
 
+- [] Apply RBAC security on UI
 - [] Add additional information: address
 - [] Filter accounts on UI
 - [] Send mass email to list of accounts
@@ -19,10 +20,11 @@
 
 ## Contact
 
-- [] Settings: Import Contact Types from CSV
+- [] Apply RBAC security on UI
 - [] Add additional information: address, SSN, Date of birth
 - [] Filter contacts on UI
 - [] Send mass email to list of contacts
+- [x] Settings: Import Contact Types from CSV
 - [x] Settings: Import Contact from CSV
 - [x] Send email to contact
 - [x] Contact API
@@ -32,6 +34,7 @@
 
 ## Files
 
+- [] Apply RBAC security on UI
 - [] Settings: Configure S3 storage OR Local storage
 - [x] Upload file from popup
 - [x] Show file details
@@ -42,6 +45,7 @@
 
 ## Taxes
 
+- [] Apply RBAC security on UI
 - [] Settings: Setup email notification
 - [] Add Kanban view
 - [] Add Calendar view
@@ -55,6 +59,7 @@
 
 ## Email
 
+- [] Apply RBAC security on UI
 - [] Attach multiple files to email
 - [x] Attach 1 file to email
 - [x] Settings: Configure email layout
@@ -64,18 +69,15 @@
 
 ## Notes
 
+- [] Apply RBAC security on UI
 - [x] Add type of notes
 - [x] Tack time
 - [x] Note API
 - [x] Note UI
 
-## Security
-
-- [] Enforce RBAC on UI
-- [] Enforce RBAC on API
-
 ## Users
 
+- [] Apply RBAC security on UI
 - [] Settings: Update my user
 - [] Settings: Update my password
 - [] Settings: Filter user by role, status

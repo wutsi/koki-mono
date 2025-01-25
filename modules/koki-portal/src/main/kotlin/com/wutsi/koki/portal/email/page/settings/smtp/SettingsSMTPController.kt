@@ -51,7 +51,7 @@ class SettingsSMTPController(
         timestamp: Long?,
         model: Model
     ) {
-        if (toast != null && canShowToasts(timestamp, referer, listOf("/settings/smtp/edit"))) {
+        if (toast != null && canShowToasts(timestamp, referer, listOf("/settings/email/smtp/edit"))) {
             model.addAttribute("toast", "Saved")
         }
     }
