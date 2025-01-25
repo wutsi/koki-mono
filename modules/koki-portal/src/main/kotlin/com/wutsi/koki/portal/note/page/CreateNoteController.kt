@@ -20,6 +20,8 @@ class CreateNoteController(private val service: NoteService) {
     ): String {
         model.addAttribute("ownerId", ownerId)
         model.addAttribute("ownerType", ownerType)
+        model.addAttribute("hours", 0..23)
+        model.addAttribute("minutes", 0..60)
         model.addAttribute(
             "form",
             NoteForm(

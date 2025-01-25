@@ -32,6 +32,16 @@ function koki_notes_edit(id) {
     );
 }
 
+function koki_notes_view(id) {
+    console.log('View Note#' + id);
+    koki_modal_open(
+        'Note',
+        '/notes/' + id,
+        _koki_notes_on_viewer_opened,
+        _koki_notes_on_viewer_closed,
+    );
+}
+
 
 /*===== callbacks =========*/
 function _koki_notes_on_modal_opened() {
@@ -61,13 +71,22 @@ function _koki_notes_on_modal_opened() {
     document.getElementById('btn-note-cancel').addEventListener('click', koki_modal_close)
 }
 
-
 function _koki_notes_on_modal_closed() {
     console.log('_koki_notes_on_modal_closed');
 
     /* remove all event listeners */
     document.getElementById('note-form').removeEventListener('submit', _koki_notes_on_form_submitted);
     document.getElementById("subject").removeEventListener('keydown', _koki_notes_on_change);
+    document.getElementById("btn-note-cancel").removeEventListener('click', koki_modal_close)
+}
+
+function _koki_notes_on_viewer_opened() {
+    console.log('_koki_notes_on_viewer_opened');
+    document.getElementById('btn-note-cancel').addEventListener('click', koki_modal_close)
+}
+
+function _koki_notes_on_viewer_closed() {
+    console.log('_koki_notes_on_viewer_opened');
     document.getElementById("btn-note-cancel").removeEventListener('click', koki_modal_close)
 }
 
@@ -110,7 +129,7 @@ function _koki_notes_on_change() {
 
 function _koki_notes_refresh_parent_window(id) {
     if (id) {
-        fetch('/notes/' + id)
+        fetch('/notes/' + id + '/fragment')
             .then(response => {
                 response.text()
                     .then(html => {

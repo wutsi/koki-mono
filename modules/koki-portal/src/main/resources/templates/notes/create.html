@@ -4,7 +4,20 @@
 
     <table class="table">
         <tr>
-            <td width="20%"><b>Subject:</b></td>
+            <td width="20%"><b>Type:</b></td>
+            <td>
+                <select th:field="*{type}">
+                    <option th:text="#{note-type.CALL}" value="CALL">TYPE</option>
+                    <option th:text="#{note-type.ONLINE_MEETING}" value="ONLINE_MEETING">TYPE</option>
+                    <option th:text="#{note-type.IN_PERSON_MEETING}" value="IN_PERSON_MEETING">TYPE</option>
+                    <option th:text="#{note-type.EVENT}" value="EVENT">TYPE</option>
+                    <option th:text="#{note-type.TASK}" value="TASK">TYPE</option>
+                    <option th:text="#{note-type.OTHER}" value="OTHER">TYPE</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Subject:</b></td>
             <td>
                 <input maxlength="255" name="subject" th:field="*{subject}"/>
             </td>
@@ -14,6 +27,23 @@
             <td>
                 <div class="quilljs" id="html-editor" th:utext="${form.body}"></div>
                 <textarea class="hidden" name="body" th:field="*{body}"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Duration:</b></td>
+            <td>
+                <select style="width: auto" th:field="*{durationHours}">
+                    <option th:each="hour : ${hours}"
+                            th:text="${hour} < 10 ? '0' + ${hour} : ${hour}"
+                            th:value="${hour}">
+                    </option>
+                </select>
+                <select style="width: auto" th:field="*{durationMinutes}">
+                    <option th:each="minute : ${minutes}"
+                            th:text="${minute} <10 ? '0' + ${minute} : ${minute}"
+                            th:value="${minute}">
+                    </option>
+                </select>
             </td>
         </tr>
     </table>

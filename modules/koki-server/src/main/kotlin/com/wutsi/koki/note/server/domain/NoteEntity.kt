@@ -1,5 +1,6 @@
 package com.wutsi.koki.note.server.domain
 
+import com.wutsi.koki.note.dto.NoteType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -35,6 +36,9 @@ data class NoteEntity(
 
     var subject: String = "",
     var body: String = "",
+    var summary: String = "",
+    var type: NoteType = NoteType.UNKNOWN,
+    var duration: Int = 0,
 
     var deleted: Boolean = false,
     val createdAt: Date = Date(),

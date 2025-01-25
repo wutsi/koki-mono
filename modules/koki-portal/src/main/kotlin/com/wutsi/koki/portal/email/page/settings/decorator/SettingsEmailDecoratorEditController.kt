@@ -39,7 +39,7 @@ class SettingsEmailDecoratorEditController(
     fun show(form: EmailDecoratorForm, model: Model): String {
         try {
             service.save(form)
-            return "redirect:/settings/email/decorator?updated=1"
+            return "redirect:/settings/email/decorator?_toast=1&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)

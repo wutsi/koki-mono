@@ -2,10 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
+<span th:fragment="type-icon(type)">
+    <i class="fa-solid fa-phone" th:if="${type.name() == 'CALL'}"></i>
+    <i class="fa-solid fa-list-check" th:if="${type.name() == 'TASK'}"></i>
+    <i class="fa-solid fa-calendar-days" th:if="${type.name() == 'EVENT'}"></i>
+    <i class="fa-solid fa-people-group" th:if="${type.name() == 'IN_PERSON_MEETING'}"></i>
+    <i class="fa-solid fa-video" th:if="${type.name() == 'ONLINE_MEETING'}"></i>
+</span>
+
 <div class="note" th:fragment="columns(note)" th:remove="tag">
     <div>
         <div class="note-subject">
-            <b th:text="${note.subject}">SUBJECT</b>
+            <span th:replace="~{__components/note :: type-icon(${note.type})}"></span>
+            <a class="subject" th:href="'javascript: koki_notes_view(' + ${note.id} + ')'">
+                <b th:text="${note.subject}">SUBJECT</b></a>
         </div>
         <div class="text-smaller">
             <small th:if="${note.modifiedBy}" th:text="${note.modifiedBy?.displayName}">DISPLAY NANME</small>
@@ -13,13 +23,12 @@
             <small th:text="${note.modifiedAtText}">DATE</small>
         </div>
     </div>
-    <div class="margin-top note-body" th:utext="${note.body}">BODY</div>
+    <div class="margin-top note-body" th:text="${note.summary}">SUMMARY</div>
     <div>
         <a class="btn-edit btn btn-light btn-sm margin-top"
            th:href="'javascript: koki_notes_edit(' + ${note.id} + ')'">
             Edit
         </a>
-
         <a class="btn-delete btn btn-light btn-sm margin-top"
            th:href="'javascript: koki_notes_delete(' + ${note.id} + ')'">
             Delete

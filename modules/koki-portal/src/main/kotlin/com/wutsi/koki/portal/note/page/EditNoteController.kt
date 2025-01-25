@@ -16,11 +16,16 @@ class EditNoteController(private val service: NoteService) {
     fun edit(@PathVariable id: Long, model: Model): String {
         val note = service.note(id)
         model.addAttribute("note", note)
+        model.addAttribute("hours", 0..23)
+        model.addAttribute("minutes", 0..60)
         model.addAttribute(
             "form",
             NoteForm(
                 subject = note.subject,
                 body = note.body,
+                type = note.type,
+                durationMinutes = note.durationMinutes,
+                durationHours = note.durationHours,
             )
         )
         model.addAttribute(
