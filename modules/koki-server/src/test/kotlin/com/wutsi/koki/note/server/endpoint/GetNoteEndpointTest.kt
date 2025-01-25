@@ -4,6 +4,7 @@ import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.note.dto.GetNoteResponse
+import com.wutsi.koki.note.dto.NoteType
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
@@ -20,6 +21,9 @@ class GetNoteEndpointTest : AuthorizationAwareEndpointTest() {
         val note = response.body!!.note
         assertEquals("Yo", note.subject)
         assertEquals("<p>Man</p>", note.body)
+        assertEquals("X", note.summary)
+        assertEquals(15, note.duration)
+        assertEquals(NoteType.ONLINE_MEETING, note.type)
     }
 
     @Test

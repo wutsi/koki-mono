@@ -13,6 +13,7 @@ import com.wutsi.koki.note.server.domain.NoteOwnerEntity
 import com.wutsi.koki.security.server.service.SecurityService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
+import org.jsoup.Jsoup
 import org.springframework.stereotype.Service
 import java.util.Date
 
@@ -82,6 +83,9 @@ class NoteService(
                 tenantId = tenantId,
                 subject = request.subject,
                 body = request.body,
+                summary = toSummary(request.body),
+                type = request.type,
+                duration = request.duration,
                 createdById = userId,
                 modifiedById = userId,
             )
@@ -105,6 +109,9 @@ class NoteService(
         val note = get(id, tenantId)
         note.subject = request.subject
         note.body = request.body
+        note.type = request.type
+        note.summary = toSummary(request.body)
+        note.duration = request.duration
         note.modifiedAt = Date()
         note.modifiedById = securityService.getCurrentUserIdOrNull()
         dao.save(note)
@@ -117,5 +124,14 @@ class NoteService(
         note.deletedAt = Date()
         note.deletedById = securityService.getCurrentUserIdOrNull()
         dao.save(note)
+    }
+
+    private fun toSummary(html: String): String {
+        val text = Jsoup.parse(html).text()
+        return if (text.length > 255) {
+            text.take(252) + "..."
+        } else {
+            text
+        }
     }
 }

@@ -21,22 +21,17 @@ class NoteService(
         val note = koki.note(id).note
 
         // Users
-        val userIds = listOf(note.createdById, note.modifiedById)
-            .filterNotNull()
-            .toSet()
+        val userIds = listOf(note.createdById, note.modifiedById).filterNotNull().toSet()
         val userMap = if (userIds.isEmpty()) {
             emptyMap()
         } else {
             userService.users(
-                ids = userIds.toList(),
-                limit = userIds.size
-            )
-                .associateBy { user -> user.id }
+                ids = userIds.toList(), limit = userIds.size
+            ).associateBy { user -> user.id }
         }
 
         return mapper.toNoteModel(
-            entity = note,
-            users = userMap
+            entity = note, users = userMap
         )
     }
 
@@ -48,27 +43,19 @@ class NoteService(
         offset: Int = 0,
     ): List<NoteModel> {
         val notes = koki.notes(
-            ids = ids,
-            ownerType = ownerType,
-            ownerId = ownerId,
-            limit = limit,
-            offset = offset
+            ids = ids, ownerType = ownerType, ownerId = ownerId, limit = limit, offset = offset
         ).notes
 
         // Users
         val userIds = notes.flatMap { note ->
             listOf(note.createdById, note.modifiedById)
-        }
-            .filterNotNull()
-            .toSet()
+        }.filterNotNull().toSet()
         val userMap = if (userIds.isEmpty()) {
             emptyMap()
         } else {
             userService.users(
-                ids = userIds.toList(),
-                limit = userIds.size
-            )
-                .associateBy { user -> user.id }
+                ids = userIds.toList(), limit = userIds.size
+            ).associateBy { user -> user.id }
         }
 
         return notes.map { note ->
@@ -83,10 +70,11 @@ class NoteService(
         val request = CreateNoteRequest(
             subject = form.subject,
             body = form.body,
+            type = form.type,
+            duration = form.durationHours * 60 + form.durationMinutes,
             reference = form.ownerId?.let {
                 ObjectReference(
-                    id = form.ownerId,
-                    type = form.ownerType
+                    id = form.ownerId, type = form.ownerType
                 )
             },
         )
@@ -97,6 +85,8 @@ class NoteService(
         val request = UpdateNoteRequest(
             subject = form.subject,
             body = form.body,
+            type = form.type,
+            duration = form.durationHours * 60 + form.durationMinutes,
         )
         return koki.update(id, request)
     }

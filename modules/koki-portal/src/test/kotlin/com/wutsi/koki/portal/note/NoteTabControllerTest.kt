@@ -8,6 +8,7 @@ import com.wutsi.koki.NoteFixtures.notes
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.note.dto.CreateNoteRequest
 import com.wutsi.koki.note.dto.CreateNoteResponse
+import com.wutsi.koki.note.dto.NoteType
 import com.wutsi.koki.note.dto.UpdateNoteRequest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -20,6 +21,14 @@ class NoteTabControllerTest : AbstractPageControllerTest() {
         assertElementCount(".tab-notes .note", notes.size)
         assertElementAttribute("#note-list", "data-owner-id", "111")
         assertElementAttribute("#note-list", "data-owner-type", "ACCOUNT")
+    }
+
+    @Test
+    fun view() {
+        navigateTo("/notes/tab?test-mode=1&owner-id=111&owner-type=ACCOUNT")
+
+        click(".note .subject", 1000)
+        assertElementVisible("#koki-modal")
     }
 
     @Test
@@ -43,8 +52,11 @@ class NoteTabControllerTest : AbstractPageControllerTest() {
         click(".btn-edit", 1000)
 
         assertElementVisible("#koki-modal")
+        select("#type", 2)
         input("#subject", "Yo man")
         input("#html-editor .ql-editor", "Hello man")
+        select("#durationHours", 1)
+        select("#durationMinutes", 10)
         click("#btn-note-submit", 1000)
 
         val request = argumentCaptor<UpdateNoteRequest>()
@@ -56,6 +68,8 @@ class NoteTabControllerTest : AbstractPageControllerTest() {
 
         assertEquals("Yo man", request.firstValue.subject)
         assertEquals("<p>Hello man</p>", request.firstValue.body)
+        assertEquals(NoteType.IN_PERSON_MEETING, request.firstValue.type)
+        assertEquals(70, request.firstValue.duration)
 
         assertElementNotVisible("#koki-modal")
     }
@@ -75,8 +89,11 @@ class NoteTabControllerTest : AbstractPageControllerTest() {
         click(".btn-create", 1000)
 
         assertElementVisible("#koki-modal")
+        select("#type", 2)
         input("#subject", "Yo man")
         input("#html-editor .ql-editor", "Hello man")
+        select("#durationHours", 1)
+        select("#durationMinutes", 10)
         click("#btn-note-submit", 1000)
 
         val request = argumentCaptor<CreateNoteRequest>()
@@ -88,6 +105,8 @@ class NoteTabControllerTest : AbstractPageControllerTest() {
 
         assertEquals("Yo man", request.firstValue.subject)
         assertEquals("<p>Hello man</p>", request.firstValue.body)
+        assertEquals(NoteType.IN_PERSON_MEETING, request.firstValue.type)
+        assertEquals(70, request.firstValue.duration)
         assertEquals(ObjectType.ACCOUNT, request.firstValue.reference?.type)
         assertEquals(111L, request.firstValue.reference?.id)
     }

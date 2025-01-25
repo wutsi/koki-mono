@@ -5,6 +5,7 @@ import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.note.dto.CreateNoteRequest
 import com.wutsi.koki.note.dto.CreateNoteResponse
+import com.wutsi.koki.note.dto.NoteType
 import com.wutsi.koki.note.server.dao.NoteOwnerRepository
 import com.wutsi.koki.note.server.dao.NoteRepository
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -27,7 +28,25 @@ class CreateNoteEndpointTest : AuthorizationAwareEndpointTest() {
     fun create() {
         val request = CreateNoteRequest(
             subject = "New note",
-            body = "<p>This is the body of the note</p>",
+            duration = 90,
+            type = NoteType.CALL,
+            body = """
+                <p>
+                    <b>Lorem Ipsum</b> is simply dummy text of the printing and typesetting industry.
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                    when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                    It has survived not only five centuries, but also the leap into electronic typesetting,
+                    remaining essentially unchanged.
+                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
+                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                </p>
+                <p>
+                    Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...
+                </p>
+                <p>
+                    There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...
+                </p>
+            """.trimIndent(),
         )
         val response = rest.postForEntity("/v1/notes", request, CreateNoteResponse::class.java)
 
@@ -36,8 +55,16 @@ class CreateNoteEndpointTest : AuthorizationAwareEndpointTest() {
         val noteId = response.body!!.noteId
         val note = dao.findById(noteId).get()
         assertEquals(TENANT_ID, note.tenantId)
+        assertEquals(request.duration, note.duration)
         assertEquals(request.subject, note.subject)
         assertEquals(request.body, note.body)
+        assertEquals(
+            """
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has...
+            """.trimIndent(),
+            note.summary,
+        )
+        assertEquals(request.type, note.type)
         assertEquals(USER_ID, note.createdById)
         assertEquals(USER_ID, note.modifiedById)
         assertFalse(note.deleted)
@@ -53,6 +80,8 @@ class CreateNoteEndpointTest : AuthorizationAwareEndpointTest() {
         val request = CreateNoteRequest(
             subject = "New note",
             body = "<p>This is the body of the note</p>",
+            duration = 15,
+            type = NoteType.ONLINE_MEETING,
             reference = ObjectReference(id = 1111L, type = ObjectType.TAX),
         )
         val response = rest.postForEntity("/v1/notes", request, CreateNoteResponse::class.java)
@@ -64,6 +93,9 @@ class CreateNoteEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(TENANT_ID, note.tenantId)
         assertEquals(request.subject, note.subject)
         assertEquals(request.body, note.body)
+        assertEquals(request.duration, note.duration)
+        assertEquals("This is the body of the note".trimIndent(), note.summary)
+        assertEquals(request.type, note.type)
         assertEquals(USER_ID, note.createdById)
         assertEquals(USER_ID, note.modifiedById)
         assertFalse(note.deleted)

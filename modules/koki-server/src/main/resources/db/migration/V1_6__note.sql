@@ -7,7 +7,11 @@ CREATE TABLE T_NOTE(
   deleted_by_fk           BIGINT,
 
   subject                 VARCHAR(255) NOT NULL ,
+  summary                 VARCHAR(255),
   body                    TEXT NOT NULL,
+  type                    INT NOT NULL DEFAULT 0,
+  duration                INT NOT NULL DEFAULT 0,
+
   deleted                 BOOL NOT NULL DEFAULT false,
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),

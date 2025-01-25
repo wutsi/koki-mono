@@ -3,6 +3,7 @@ package com.wutsi.koki.note.server.endpoint
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.note.dto.NoteType
 import com.wutsi.koki.note.dto.UpdateNoteRequest
 import com.wutsi.koki.note.server.dao.NoteRepository
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -20,7 +21,25 @@ class UpdateNoteEndpointTest : AuthorizationAwareEndpointTest() {
 
     private val request = UpdateNoteRequest(
         subject = "New note",
-        body = "<p>This is the body of the note</p>",
+        type = NoteType.CALL,
+        duration = 15,
+        body = """
+                <p>
+                    <b>Lorem Ipsum</b> is simply dummy text of the printing and typesetting industry.
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                    when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                    It has survived not only five centuries, but also the leap into electronic typesetting,
+                    remaining essentially unchanged.
+                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
+                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                </p>
+                <p>
+                    Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...
+                </p>
+                <p>
+                    There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...
+                </p>
+            """.trimIndent(),
     )
 
     @Test
@@ -34,6 +53,14 @@ class UpdateNoteEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(TENANT_ID, note.tenantId)
         assertEquals(request.subject, note.subject)
         assertEquals(request.body, note.body)
+        assertEquals(
+            """
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has...
+            """.trimIndent(),
+            note.summary,
+        )
+        assertEquals(request.type, note.type)
+        assertEquals(request.duration, note.duration)
         assertEquals(USER_ID, note.modifiedById)
         assertFalse(note.deleted)
         assertNull(note.deletedAt)

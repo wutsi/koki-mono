@@ -64,11 +64,15 @@
 
 ## Notes
 
-- [] Add type of notes
-- [] Tack time
-- [] Compile time of employees: Monthly
+- [x] Add type of notes
+- [x] Tack time
 - [x] Note API
 - [x] Note UI
+
+## Security
+
+- [] Enforce RBAC on UI
+- [] Enforce RBAC on API
 
 ## Users
 
@@ -84,11 +88,11 @@
 
 ## Employees
 
-- Manage employee information: hourly salary, manager
+- [] Manage employee information: hourly salary, manager
+- [] Compile employee hours
 
 ## Module
 
-- [] link Widget with modules
 - [x] Module API
 - [x] List of modules driven by backend in home page
 - [x] List of modules driven by backend in configuration
@@ -98,6 +102,8 @@
 
 - [] Product API
 - [] Product UI
+
+---------
 
 ## Form
 
@@ -112,11 +118,6 @@
 - [x] Support ReadOnly fields
 - [x] Track Form submissions
 - [x] Share Forms Link
-
-## Security
-
-- [] Enforce RBAC on UI
-- [] Enforce RBAC on API
 
 ## Workflow
 
