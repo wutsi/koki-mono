@@ -100,4 +100,12 @@ class CreateTaxControllerTest : AbstractPageControllerTest() {
         navigateTo("/taxes/create")
         assertCurrentPageIs(PageName.LOGIN)
     }
+
+    @Test
+    fun `create - without permission tax-manage`() {
+        setUpUserWithoutPermissions(listOf("tax:manage"))
+
+        navigateTo("/taxes/create")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
 }

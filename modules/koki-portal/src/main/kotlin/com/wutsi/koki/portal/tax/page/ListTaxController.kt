@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.tax.page
 
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tax.service.TaxService
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
 import com.wutsi.koki.tax.dto.TaxStatus
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
+@RequiresPermission(["tax"])
 class ListTaxController(
     private val service: TaxService,
     private val currentUser: CurrentUserHolder,

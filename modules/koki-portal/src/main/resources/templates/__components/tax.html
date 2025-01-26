@@ -32,8 +32,11 @@
     <td th:text="${tax.accountant?.displayName}">ACCOUNTANT</td>
     <td th:text="${tax.assignee?.displayName}">ASSIGNEE</td>
     <td class="toolbar" th:if="!${smallView}">
-        <a class="btn-view" th:href="'/taxes/' + ${tax.id}">View</a>
-        <a class="btn-edit" th:href="'/taxes/' + ${tax.id} + '/edit'">Edit</a>
+        <a class="btn-view" th:href="'/taxes/' + ${tax.id}"
+           th:if="${user?.hasPermission('tax')}">View</a>
+
+        <a class="btn-edit" th:href="'/taxes/' + ${tax.id} + '/edit'"
+           th:if="${user?.hasPermission('tax:manage')}">Edit</a>
     </td>
 </tr>
 

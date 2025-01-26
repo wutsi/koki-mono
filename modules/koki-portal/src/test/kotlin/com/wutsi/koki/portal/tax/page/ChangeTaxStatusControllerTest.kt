@@ -17,7 +17,7 @@ import kotlin.test.assertEquals
 
 class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
     @Test
-    fun edit() {
+    fun status() {
         navigateTo("/taxes/${tax.id}/status")
 
         assertCurrentPageIs(PageName.TAX_STATUS)
@@ -79,5 +79,13 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/taxes/${tax.id}/edit")
         assertCurrentPageIs(PageName.LOGIN)
+    }
+
+    @Test
+    fun `status - without permission tax-manage`() {
+        setUpUserWithoutPermissions(listOf("tax:manage"))
+
+        navigateTo("/taxes/${tax.id}/status")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 }

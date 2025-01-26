@@ -36,4 +36,12 @@ class SettingsImportTaxControllerTest : AbstractPageControllerTest() {
         click(".btn-back")
         assertCurrentPageIs(PageName.TAX_SETTINGS_TYPE_LIST)
     }
+
+    @Test
+    fun `import - without permission tax-admin`() {
+        setUpUserWithoutPermissions(listOf("tax:admin"))
+
+        navigateTo("/settings/taxes/types/import")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
 }

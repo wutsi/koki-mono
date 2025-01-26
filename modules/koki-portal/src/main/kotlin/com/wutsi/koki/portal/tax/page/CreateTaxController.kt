@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.tax.page
 import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tax.form.TaxForm
 import com.wutsi.koki.portal.tax.service.TaxService
 import com.wutsi.koki.portal.tax.service.TaxTypeService
@@ -16,6 +17,7 @@ import org.springframework.web.client.HttpClientErrorException
 import java.time.LocalDate
 
 @Controller
+@RequiresPermission(["tax:manage"])
 class CreateTaxController(
     private val service: TaxService,
     private val accountService: AccountService,

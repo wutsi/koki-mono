@@ -102,4 +102,37 @@ class TaxControllerTest : AbstractPageControllerTest() {
         click(".btn-status")
         assertCurrentPageIs(PageName.TAX_STATUS)
     }
+
+    @Test
+    fun `show - without permission tax`() {
+        setUpUserWithoutPermissions(listOf("tax"))
+
+        navigateTo("/taxes/${tax.id}")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
+
+    @Test
+    fun `show - without permission tax-manage`() {
+        setUpUserWithoutPermissions(listOf("tax:manage"))
+
+        navigateTo("/taxes/${tax.id}")
+        assertElementNotPresent(".tax-summary .btn-edit")
+        assertElementNotPresent(".tax-summary .btn-status")
+    }
+
+    @Test
+    fun `show - without permission tax-delete`() {
+        setUpUserWithoutPermissions(listOf("tax:delete"))
+
+        navigateTo("/taxes/${tax.id}")
+        assertElementNotPresent(".tax-summary .btn-delete")
+    }
+
+    @Test
+    fun `delete - without permission tax-delete`() {
+        setUpUserWithoutPermissions(listOf("tax:delete"))
+
+        navigateTo("/taxes/${tax.id}/delete")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
 }

@@ -43,13 +43,14 @@
 
 ## Taxes
 
-- [] Apply RBAC security on UI
+- [] Compile time spent by Tax report
+- [] Compile labor cost by Tax report
+- [] Compile time spent on Tax report by user
+- [] Track total time spent on Tax Report per user
 - [] Settings: Setup email notification
 - [] Add Kanban view
 - [] Add Calendar view
-- [] Compile time spent by Tax report
-- [] Compile time spent on Tax report by user
-- [] Track total time spent on Tax Report per user
+- [x] Apply RBAC security on UI
 - [x] Settings: Import Taxes Types from CSV
 - [x] Send email to Taxes
 - [x] Home: Add my assignment widget
