@@ -80,7 +80,7 @@ function _koki_emails_on_editor_opened() {
     koki_contacts_select2('contactId', 'email-modal');
 
     /* Cancel */
-    document.getElementById('btn-email-cancel').addEventListener('click', koki_modal_open)
+    document.getElementById('btn-email-cancel').addEventListener('click', koki_modal_close)
 }
 
 function _koki_emails_om_editor_closed() {
