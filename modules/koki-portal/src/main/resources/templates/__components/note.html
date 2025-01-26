@@ -24,15 +24,14 @@
         </div>
     </div>
     <div class="margin-top note-body" th:text="${note.summary}">SUMMARY</div>
-    <div>
-        <a class="btn-edit btn btn-light btn-sm margin-top"
-           th:href="'javascript: koki_notes_edit(' + ${note.id} + ')'">
-            Edit
-        </a>
-        <a class="btn-delete btn btn-light btn-sm margin-top"
-           th:href="'javascript: koki_notes_delete(' + ${note.id} + ')'">
-            Delete
-        </a>
+    <div class="margin-top">
+        <a class="btn-edit"
+           th:href="'javascript: koki_notes_edit(' + ${note.id} + ')'"
+           th:if="${user?.hasPermission('note:manage')}">Edit</a>
+
+        <a class="btn-delete margin-left"
+           th:href="'javascript: koki_notes_delete(' + ${note.id} + ')'"
+           th:if="${user?.hasPermission('note:delete')}">Delete</a>
     </div>
 </div>
 

@@ -2,7 +2,7 @@
 
 ## Account
 
-- [] Apply RBAC security on UI
+- [x] Apply RBAC security on UI
 - [] Add additional information: address
 - [] Filter accounts on UI
 - [] Send mass email to list of accounts
@@ -69,7 +69,7 @@
 
 ## Notes
 
-- [] Apply RBAC security on UI
+- [x] Apply RBAC security on UI
 - [x] Add type of notes
 - [x] Tack time
 - [x] Note API
