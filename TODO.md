@@ -44,6 +44,7 @@
 ## Taxes
 
 - [] Compile time spent by Tax report
+- [] Compile labor cost by Tax report
 - [] Compile time spent on Tax report by user
 - [] Track total time spent on Tax Report per user
 - [] Settings: Setup email notification

@@ -93,7 +93,7 @@ class ListContactControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/contacts")
 
-        assertCurrentPageIs(PageName.ACCOUNT_LIST)
+        assertCurrentPageIs(PageName.CONTACT_LIST)
         assertElementNotPresent(".btn-edit")
         assertElementNotPresent(".btn-create")
     }

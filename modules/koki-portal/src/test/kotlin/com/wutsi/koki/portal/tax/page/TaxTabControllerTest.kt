@@ -16,7 +16,7 @@ class TaxTabControllerTest : AbstractPageControllerTest() {
     @Test
     fun addNew() {
         navigateTo("/taxes/tab?test-mode=true&owner-id=111&owner-type=ACCOUNT")
-        click(".btn-add-contact")
+        click(".btn-add-tax")
 
         assertCurrentPageIs(PageName.TAX_CREATE)
     }
