@@ -28,6 +28,7 @@ import com.wutsi.koki.tenant.server.service.ConfigurationService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.apache.commons.io.IOUtils
+import org.jsoup.Jsoup
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File
@@ -114,11 +115,12 @@ class EmailService(
             EmailEntity(
                 tenantId = tenantId,
                 id = id,
+                senderId = securityService.getCurrentUserId(),
                 recipientId = request.recipient.id,
                 recipientType = request.recipient.type,
                 subject = request.subject,
                 body = request.body,
-                senderId = securityService.getCurrentUserId(),
+                summary = toSummary(request.body),
             )
         )
         request.attachmentFileIds.forEach { fileId ->
@@ -240,5 +242,14 @@ class EmailService(
         ).map { cfg -> cfg.name to cfg.value }
             .toMap()
         return messagingServiceBuilder.build(MessagingType.EMAIL, config)
+    }
+
+    private fun toSummary(html: String): String {
+        val text = Jsoup.parse(html).text()
+        return if (text.length > 255) {
+            text.take(252) + "..."
+        } else {
+            text
+        }
     }
 }

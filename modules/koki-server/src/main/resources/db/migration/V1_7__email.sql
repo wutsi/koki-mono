@@ -8,6 +8,7 @@ CREATE TABLE T_EMAIL(
 
   subject                 VARCHAR(255) NOT NULL ,
   body                    TEXT NOT NULL,
+  summary                 VARCHAR(255) NOT NULL DEFAULT '',
   recipient_type          INT DEFAULT 0,
   created_at              DATETIME DEFAULT NOW(),
 

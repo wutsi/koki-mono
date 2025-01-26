@@ -33,5 +33,6 @@ data class EmailEntity(
     val recipientType: ObjectType = ObjectType.UNKNOWN,
     val subject: String = "",
     val body: String = "",
+    var summary: String = "",
     val createdAt: Date = Date(),
 )

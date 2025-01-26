@@ -18,6 +18,7 @@ object EmailFixtures {
             senderId = users[0].id,
             id = "100",
             subject = "You tax report is ready",
+            summary = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has...",
             recipient = Recipient(id = accounts[0].id, type = ObjectType.ACCOUNT),
             createdAt = DateUtils.addMinutes(Date(), 50),
         ),
@@ -25,6 +26,7 @@ object EmailFixtures {
             senderId = users[0].id,
             id = "101",
             subject = "Your invoice is ready",
+            summary = "This is the summary of the email",
             recipient = Recipient(id = contacts[0].id, type = ObjectType.CONTACT),
             createdAt = DateUtils.addDays(Date(), -1),
         ),
@@ -32,6 +34,7 @@ object EmailFixtures {
             senderId = users[0].id,
             id = "102",
             subject = "REMINDER: Get your shit ready!!!",
+            summary = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has...",
             recipient = Recipient(id = contacts[0].id, type = ObjectType.CONTACT),
             createdAt = DateUtils.addMinutes(DateUtils.addDays(Date(), -1), 15),
         ),
@@ -57,13 +60,22 @@ object EmailFixtures {
         subject = "You tax report is ready",
         recipient = Recipient(id = contacts[0].id, type = ObjectType.CONTACT),
         body = """
-            <p>Hi!</p>
             <p>
-                We have completed your tax report. Please take the time to review it.
+                <b>Lorem Ipsum</b> is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                It has survived not only five centuries, but also the leap into electronic typesetting,
+                remaining essentially unchanged.
+                It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
+                and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
             </p>
             <p>
-                Do not forget to download it from our portal. It's available <a href="{{tax_url}}">here</a>
+                Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...
             </p>
-        """.trimIndent()
+            <p>
+                There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...
+            </p>
+        """.trimIndent(),
+        summary = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has...",
     )
 }

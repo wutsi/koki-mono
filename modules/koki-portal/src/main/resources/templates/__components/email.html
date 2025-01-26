@@ -5,21 +5,23 @@
 <div class="email" th:fragment="columns(email)" th:remove="tag">
     <div>
         <span th:text="${email.createdAtMoment}">00:00</span>
-        <a th:href="'javascript: koki_emails_open(\'' + ${email.id} + '\')'">
+        <a class="entity-title" th:href="'javascript: koki_emails_open(\'' + ${email.id} + '\')'">
             <b th:text="${email.subject}">SUBJECT</b>
         </a>
     </div>
-    <div class="margin-top">
-        Send to
-        <div th:replace="~{__components/email :: recipient(${email})}"></div>
+    <div class="margin-top text-small">
+        From: <span th:text="${email.sender.displayName}">FROM</span>
+        <br/>
+        To: <span th:replace="~{__components/email :: recipient(${email})}"></span>
     </div>
+    <div class="margin-top email-body" th:text="${email.summary}">SUMMARY</div>
 </div>
 
 <div class="text-center padding" id="email-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
     <a href="javascript: koki_load_more('email-load-more')" th:data-url="${moreUrl}">Load more...</a>
 </div>
 
-<div th:fragment="recipient(email)" th:remove="tag">
+<span th:fragment="recipient(email)">
     <a class="entity-title"
        th:href="'/accounts/' + ${email.recipient.id}"
        th:if="${email.recipient.type.name == 'ACCOUNT'}"
@@ -34,6 +36,6 @@
         <img height="24" src="/image/contact.png" width="24"/>
         <span th:text="${email.recipient.name}">RECIPIENT</span>
     </a>
-</div>
+</span>
 
 </body>

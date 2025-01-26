@@ -2,9 +2,8 @@
 
 ## Account
 
-- [] Add additional information: address
-- [] Filter accounts on UI
-- [] Send mass email to list of accounts
+- [] Add additional information to accounts: address
+- [] Add account filters
 - [] Settings: Import Accounts from CSV
 - [x] Apply RBAC security on UI
 - [x] Settings: Import Attributes from CSV
@@ -22,8 +21,7 @@
 
 - [] Apply RBAC security on UI
 - [] Add additional information: address, SSN, Date of birth
-- [] Filter contacts on UI
-- [] Send mass email to list of contacts
+- [] Add contact filters
 - [x] Settings: Import Contact Types from CSV
 - [x] Settings: Import Contact from CSV
 - [x] Send email to contact
@@ -47,9 +45,11 @@
 
 - [] Apply RBAC security on UI
 - [] Settings: Setup email notification
-- [] Compile time spent by Tax report
 - [] Add Kanban view
 - [] Add Calendar view
+- [] Compile time spent by Tax report
+- [] Compile time spent on Tax report by user
+- [] Track total time spent on Tax Report per user
 - [x] Settings: Import Taxes Types from CSV
 - [x] Send email to Taxes
 - [x] Home: Add my assignment widget
@@ -60,8 +60,8 @@
 
 ## Email
 
-- [] Show email summary
 - [] Attach multiple files to email
+- [x] Show email summary
 - [x] Apply RBAC security on UI
 - [x] Attach 1 file to email
 - [x] Settings: Configure email layout

@@ -13,6 +13,7 @@ class EmailMapper {
             id = entity.id!!,
             subject = entity.subject,
             body = entity.body,
+            summary = entity.summary,
             senderId = entity.senderId,
             recipient = Recipient(
                 id = entity.recipientId,
@@ -27,6 +28,7 @@ class EmailMapper {
         return EmailSummary(
             id = entity.id!!,
             subject = entity.subject,
+            summary = entity.summary,
             senderId = entity.senderId,
             recipient = Recipient(
                 id = entity.recipientId,
