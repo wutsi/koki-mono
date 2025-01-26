@@ -1,7 +1,7 @@
 <div class="tab-files">
     <div>
-        <a class="btn-upload btn btn-secondary btn-sm margin-bottom" href="javascript: koki_files_upload()">Upload
-            Files</a>
+        <a class="btn-upload btn btn-light btn-sm margin-bottom" href="javascript: koki_files_upload()"
+           th:if="${user?.hasPermission('file:manage')}">Upload Files</a>
     </div>
     <table class="table table-striped">
         <thead>
