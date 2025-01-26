@@ -7,5 +7,6 @@ data class EmailSummary(
     val senderId: Long = -1,
     val recipient: Recipient = Recipient(),
     val subject: String = "",
+    val summary: String = "",
     val createdAt: Date = Date(),
 )
