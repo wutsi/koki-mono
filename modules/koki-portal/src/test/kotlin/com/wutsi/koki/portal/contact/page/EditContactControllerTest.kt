@@ -116,4 +116,12 @@ class EditContactControllerTest : AbstractPageControllerTest() {
         navigateTo("/contacts/${contact.id}/edit")
         assertCurrentPageIs(PageName.LOGIN)
     }
+
+    @Test
+    fun `edit - without permission contact-manage`() {
+        setUpUserWithoutPermissions(listOf("contact:manage"))
+
+        navigateTo("/contacts/${contact.id}/edit")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
 }

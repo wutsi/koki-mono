@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.contact.page
 import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
+@RequiresPermission(["contact"])
 class ContactController(
     private val service: ContactService
 ) : AbstractContactDetailsController() {
@@ -44,6 +46,7 @@ class ContactController(
     }
 
     @GetMapping("/contacts/{id}/delete")
+    @RequiresPermission(["contact:delete"])
     fun delete(@PathVariable id: Long, model: Model): String {
         val contact = service.contact(id)
         try {

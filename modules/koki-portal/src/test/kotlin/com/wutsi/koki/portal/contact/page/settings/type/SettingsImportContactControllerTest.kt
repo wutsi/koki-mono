@@ -36,4 +36,12 @@ class SettingsImportContactControllerTest : AbstractPageControllerTest() {
         click(".btn-back")
         assertCurrentPageIs(PageName.CONTACT_SETTINGS_TYPE_LIST)
     }
+
+    @Test
+    fun `import - without permission contact-admin`() {
+        setUpUserWithoutPermissions(listOf("contact:admin"))
+
+        navigateTo("/settings/contacts/types/import")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
 }

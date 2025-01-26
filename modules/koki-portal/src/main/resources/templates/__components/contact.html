@@ -34,8 +34,11 @@
            th:text="${contact.account.name}">CONTACT</a>
     </td>
     <td class="toolbar">
-        <a class="btn-view" th:href="'/contacts/' + ${contact.id}">View</a>
-        <a class="btn-edit" th:href="'/contacts/' + ${contact.id} + '/edit'">Edit</a>
+        <a class="btn-view" th:href="'/contacts/' + ${contact.id}"
+           th:if="${user?.hasPermission('contact')}">View</a>
+
+        <a class="btn-edit" th:href="'/contacts/' + ${contact.id} + '/edit'"
+           th:if="${user?.hasPermission('contact:manage')}">Edit</a>
     </td>
 </tr>
 

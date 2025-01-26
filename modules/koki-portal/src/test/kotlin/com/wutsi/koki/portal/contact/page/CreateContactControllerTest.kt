@@ -116,4 +116,12 @@ class CreateContactControllerTest : AbstractPageControllerTest() {
         navigateTo("/contacts/create")
         assertCurrentPageIs(PageName.LOGIN)
     }
+
+    @Test
+    fun `create - without permission contact-manage`() {
+        setUpUserWithoutPermissions(listOf("contact:manage"))
+
+        navigateTo("/contacts/create")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
 }
