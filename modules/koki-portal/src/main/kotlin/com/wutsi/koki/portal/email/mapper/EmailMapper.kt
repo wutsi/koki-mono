@@ -10,16 +10,10 @@ import com.wutsi.koki.portal.email.model.EmailModel
 import com.wutsi.koki.portal.email.model.RecipientModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.user.model.UserModel
-import org.springframework.context.MessageSource
-import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
-import java.text.DateFormat
-import java.util.Date
 
 @Service
-class EmailMapper(
-    private val messages: MessageSource,
-) : TenantAwareMapper() {
+class EmailMapper : TenantAwareMapper() {
     fun toEmailModel(
         entity: Email,
         sender: UserModel,
@@ -32,6 +26,7 @@ class EmailMapper(
             id = entity.id,
             subject = entity.subject,
             body = entity.body,
+            summary = entity.summary,
             sender = sender,
             createdAt = entity.createdAt,
             createdAtText = dateTimeFormat.format(entity.createdAt),
@@ -51,6 +46,7 @@ class EmailMapper(
         return EmailModel(
             id = entity.id,
             subject = entity.subject,
+            summary = entity.summary,
             sender = senders[entity.senderId] ?: UserModel(),
             createdAt = entity.createdAt,
             createdAtText = dateTimeFormat.format(entity.createdAt),
@@ -78,17 +74,5 @@ class EmailMapper(
                 else -> ""
             },
         )
-    }
-
-    fun formatMoment(date: Date, dateTimeFormat: DateFormat, timeFormat: DateFormat): String {
-        val days = (System.currentTimeMillis() - date.time) / (1000 * 60 * 60 * 24)
-        val locale = LocaleContextHolder.getLocale()
-        return if (days < 1) {
-            messages.getMessage("moment.today", emptyArray(), locale) + " - " + timeFormat.format(date)
-        } else if (days < 2) {
-            messages.getMessage("moment.yesterday", emptyArray(), locale) + " - " + timeFormat.format(date)
-        } else {
-            dateTimeFormat.format(date)
-        }
     }
 }

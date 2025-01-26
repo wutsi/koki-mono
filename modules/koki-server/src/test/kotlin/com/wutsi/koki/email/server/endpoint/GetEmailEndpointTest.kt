@@ -21,6 +21,7 @@ class GetEmailEndpointTest : AuthorizationAwareEndpointTest() {
         val email = response.body!!.email
         assertEquals("hello", email.subject)
         assertEquals("<p>World</p>", email.body)
+        assertEquals("X", email.summary)
         assertEquals(100L, email.recipient.id)
         assertEquals(ObjectType.ACCOUNT, email.recipient.type)
         assertEquals(111L, email.senderId)

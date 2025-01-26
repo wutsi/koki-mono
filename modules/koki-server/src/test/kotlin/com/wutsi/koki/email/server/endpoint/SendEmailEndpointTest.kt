@@ -72,6 +72,7 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
         val email = dao.findById(id).get()
         assertEquals(request.subject, email.subject)
         assertEquals("<p>This is an example of email</p>", email.body)
+        assertEquals("This is an example of email", email.summary)
         assertEquals(request.recipient.id, email.recipientId)
         assertEquals(request.recipient.type, email.recipientType)
         assertEquals(USER_ID, email.senderId)
@@ -101,7 +102,7 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `send to account without account`() {
+    fun `send to account without email`() {
         val request = SendEmailRequest(
             subject = "Hello man",
             body = "<p>This is an example of email</p>",
@@ -117,7 +118,23 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
     fun `send to contact`() {
         val request = SendEmailRequest(
             subject = "Hello man",
-            body = "<p>This is an example of email</p>",
+            body = """
+                <p>
+                    <b>Lorem Ipsum</b> is simply dummy text of the printing and typesetting industry.
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                    when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                    It has survived not only five centuries, but also the leap into electronic typesetting,
+                    remaining essentially unchanged.
+                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
+                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                </p>
+                <p>
+                    Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...
+                </p>
+                <p>
+                    There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...
+                </p>
+            """.trimIndent(),
             recipient = Recipient(id = 110, type = ObjectType.CONTACT),
             owner = null
         )
@@ -129,6 +146,12 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
         val email = dao.findById(id).get()
         assertEquals(request.subject, email.subject)
         assertEquals(request.body, email.body)
+        assertEquals(
+            """
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has...
+            """.trimIndent(),
+            email.summary,
+        )
         assertEquals(request.recipient.id, email.recipientId)
         assertEquals(request.recipient.type, email.recipientType)
         assertEquals(USER_ID, email.senderId)

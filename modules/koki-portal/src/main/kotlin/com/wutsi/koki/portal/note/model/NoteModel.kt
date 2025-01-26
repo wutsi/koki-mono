@@ -15,8 +15,9 @@ data class NoteModel(
     val modifiedAt: Date = Date(),
     val createdAtText: String = "",
     val modifiedAtText: String = "",
+    val modifiedAtMoment: String = "",
     val createdBy: UserModel? = null,
-    val modifiedBy: UserModel? = null
+    val modifiedBy: UserModel? = null,
 ) {
     val url: String
         get() = "/notes/$id"

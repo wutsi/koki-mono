@@ -8,6 +8,7 @@ data class EmailModel(
     val recipient: RecipientModel = RecipientModel(),
     val subject: String = "",
     val body: String = "",
+    val summary: String = "",
     val attachmentFileIds: List<Long> = emptyList(),
     val createdAt: Date = Date(),
     val createdAtText: String = "",

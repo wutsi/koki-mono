@@ -13,14 +13,13 @@
 <div class="note" th:fragment="columns(note)" th:remove="tag">
     <div>
         <div class="note-subject">
-            <span th:replace="~{__components/note :: type-icon(${note.type})}"></span>
-            <a class="subject" th:href="'javascript: koki_notes_view(' + ${note.id} + ')'">
+            <span th:text="${note.modifiedAtMoment}">00:00</span>
+            <a class="subject entity-title" th:href="'javascript: koki_notes_view(' + ${note.id} + ')'">
+                <span th:replace="~{__components/note :: type-icon(${note.type})}"></span>
                 <b th:text="${note.subject}">SUBJECT</b></a>
         </div>
-        <div class="text-smaller">
-            <small th:if="${note.modifiedBy}" th:text="${note.modifiedBy?.displayName}">DISPLAY NANME</small>
-            <span th:if="${note.modifiedBy}">-</span>
-            <small th:text="${note.modifiedAtText}">DATE</small>
+        <div class="text-small" th:if="${note.modifiedBy}">
+            By: <span th:text="${note.modifiedBy?.displayName}">DISPLAY NANME</span>
         </div>
     </div>
     <div class="margin-top note-body" th:text="${note.summary}">SUMMARY</div>
