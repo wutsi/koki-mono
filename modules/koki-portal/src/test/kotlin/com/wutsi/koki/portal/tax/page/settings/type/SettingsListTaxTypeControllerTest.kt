@@ -24,4 +24,12 @@ class SettingsListTaxTypeControllerTest : AbstractPageControllerTest() {
         click(".btn-back")
         assertCurrentPageIs(PageName.TAX_SETTINGS)
     }
+
+    @Test
+    fun `list - without permission tax-admin`() {
+        setUpUserWithoutPermissions(listOf("tax:admin"))
+
+        navigateTo("/settings/taxes/types")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
 }

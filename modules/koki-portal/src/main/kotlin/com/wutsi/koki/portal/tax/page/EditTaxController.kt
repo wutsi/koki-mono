@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.tax.page
 
 import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tax.form.TaxForm
 import com.wutsi.koki.portal.tax.model.TaxModel
 import com.wutsi.koki.portal.tax.service.TaxService
@@ -18,6 +19,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 
 @Controller
+@RequiresPermission(["tax:manage"])
 class EditTaxController(
     private val service: TaxService,
     private val accountService: AccountService,

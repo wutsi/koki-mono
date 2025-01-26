@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.tax.page
 
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tax.model.TaxModel
 import com.wutsi.koki.portal.tax.service.TaxService
 import org.springframework.stereotype.Controller
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
+@RequiresPermission(["tax"])
 class TaxController(
     private val service: TaxService,
 ) : AbstractTaxDetailsController() {
@@ -46,6 +48,7 @@ class TaxController(
     }
 
     @GetMapping("/taxes/{id}/delete")
+    @RequiresPermission(["tax:delete"])
     fun delete(@PathVariable id: Long, model: Model): String {
         val tax = service.tax(id)
         try {

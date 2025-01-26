@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.tax.page
 
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.page.AbstractPageController
+import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tax.service.TaxService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
+@RequiresPermission(["tax"])
 class TaxTabController(private val service: TaxService) : AbstractPageController() {
     @GetMapping("/taxes/tab")
     fun list(

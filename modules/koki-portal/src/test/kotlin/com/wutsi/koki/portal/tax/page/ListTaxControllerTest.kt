@@ -78,4 +78,23 @@ class ListTaxControllerTest : AbstractPageControllerTest() {
         click(".btn-edit")
         assertCurrentPageIs(PageName.TAX_EDIT)
     }
+
+    @Test
+    fun `list - without permission tax`() {
+        setUpUserWithoutPermissions(listOf("tax"))
+
+        navigateTo("/taxes")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
+
+    @Test
+    fun `list - without permission tax-manage`() {
+        setUpUserWithoutPermissions(listOf("tax:manage"))
+
+        navigateTo("/taxes")
+
+        assertCurrentPageIs(PageName.TAX_LIST)
+        assertElementNotPresent(".btn-edit")
+        assertElementNotPresent(".btn-create")
+    }
 }

@@ -39,7 +39,8 @@
                             </ul>
                         </div>
                         <div>
-                            <a class="btn-create btn btn-light btn-sm" href="/contacts/create">Create New Contact</a>
+                            <a class="btn-create btn btn-light btn-sm" href="/contacts/create"
+                               th:if="${user?.hasPermission('contact:manage')}">Create New Contact</a>
                         </div>
                     </div>
 

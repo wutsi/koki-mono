@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.tax.page
 
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tax.form.TaxStatusForm
 import com.wutsi.koki.portal.tax.model.TaxModel
 import com.wutsi.koki.portal.tax.service.TaxService
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
+@RequiresPermission(["tax:manage"])
 class ChangeTaxStatusController(
     private val service: TaxService,
     private val userService: UserService,

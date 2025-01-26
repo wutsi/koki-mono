@@ -95,4 +95,12 @@ class EditTaxControllerTest : AbstractPageControllerTest() {
         navigateTo("/taxes/${tax.id}/edit")
         assertCurrentPageIs(PageName.LOGIN)
     }
+
+    @Test
+    fun `edit - without permission tax-manage`() {
+        setUpUserWithoutPermissions(listOf("tax:manage"))
+
+        navigateTo("/taxes/${tax.id}/edit")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
 }

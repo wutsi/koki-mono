@@ -86,4 +86,15 @@ class ListContactControllerTest : AbstractPageControllerTest() {
         navigateTo("/contacts")
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
+
+    @Test
+    fun `list - without permission contact-manage`() {
+        setUpUserWithoutPermissions(listOf("contact:manage"))
+
+        navigateTo("/contacts")
+
+        assertCurrentPageIs(PageName.ACCOUNT_LIST)
+        assertElementNotPresent(".btn-edit")
+        assertElementNotPresent(".btn-create")
+    }
 }

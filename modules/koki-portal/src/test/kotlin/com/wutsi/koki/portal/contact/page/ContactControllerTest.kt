@@ -95,6 +95,22 @@ class ContactControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun `show - without permission contact-manage`() {
+        setUpUserWithoutPermissions(listOf("contact:manage"))
+
+        navigateTo("/contacts/${contact.id}")
+        assertElementNotPresent(".contact-summary .btn-edit")
+    }
+
+    @Test
+    fun `show - without permission contact-delete`() {
+        setUpUserWithoutPermissions(listOf("contact:delete"))
+
+        navigateTo("/contacts/${contact.id}")
+        assertElementNotPresent(".contact-summary .btn-delete")
+    }
+
+    @Test
     fun `delete - without permission contact-delete`() {
         setUpUserWithoutPermissions(listOf("contact:delete"))
 
