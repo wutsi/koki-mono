@@ -6,6 +6,7 @@ import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.email.model.EmailForm
 import com.wutsi.koki.portal.email.service.EmailService
 import com.wutsi.koki.portal.file.service.FileService
+import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tax.service.TaxService
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
 import org.springframework.stereotype.Controller
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
+@RequiresPermission(["email:send"])
 class ComposeEmailController(
     private val service: EmailService,
     private val currentUser: CurrentUserHolder,

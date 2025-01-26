@@ -1,12 +1,14 @@
 package com.wutsi.koki.portal.email.page
 
 import com.wutsi.koki.portal.email.service.EmailService
+import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 
 @Controller
+@RequiresPermission(["email"])
 class EmailController(private val service: EmailService) {
     @GetMapping("/emails/{id}")
     fun show(@PathVariable id: String, model: Model): String {

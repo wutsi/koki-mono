@@ -117,4 +117,12 @@ class SettingsEmailDecoratorEditControllerTest : AbstractPageControllerTest() {
         click(".btn-back")
         assertCurrentPageIs(PageName.EMAIL_SETTINGS)
     }
+
+    @Test
+    fun `without permission email-admin`() {
+        setUpUserWithoutPermissions(listOf("email:admin"))
+
+        navigateTo("/settings/email/decorator/edit")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
 }

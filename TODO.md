@@ -59,7 +59,7 @@
 
 ## Email
 
-- [] Apply RBAC security on UI
+- [x] Apply RBAC security on UI
 - [] Attach multiple files to email
 - [x] Attach 1 file to email
 - [x] Settings: Configure email layout

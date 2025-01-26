@@ -4,6 +4,7 @@ import com.wutsi.koki.portal.email.model.EmailDecoratorForm
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.service.ConfigurationService
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import org.springframework.stereotype.Controller
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
+@RequiresPermission(["email:admin"])
 class SettingsEmailDecoratorEditController(
     private val service: ConfigurationService,
 ) : AbstractPageController() {

@@ -87,8 +87,10 @@ object ModuleFixtures {
         Permission(id = 1102, moduleId = 110, name = "contact:admin", description = "Configure accounts"),
         Permission(id = 1201, moduleId = 120, name = "tax", description = "Manage taxes"),
         Permission(id = 1202, moduleId = 120, name = "tax:admin", description = "Configre taxes"),
+
         Permission(id = 1301, moduleId = 130, name = "email", description = "Manage emails"),
-        Permission(id = 1302, moduleId = 130, name = "email:admin", description = "Configure accounts"),
+        Permission(id = 1302, moduleId = 130, name = "email:send", description = "Send emails"),
+        Permission(id = 1303, moduleId = 130, name = "email:admin", description = "Configure emails"),
 
         Permission(id = 1401, moduleId = 140, name = "note", description = "Manage notes"),
         Permission(id = 1402, moduleId = 140, name = "note:manage", description = "Manage notes"),
