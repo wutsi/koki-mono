@@ -98,6 +98,9 @@ object ModuleFixtures {
 
         Permission(id = 1501, moduleId = 150, name = "file", description = "Manage files"),
         Permission(id = 1502, moduleId = 150, name = "file:admin", description = "Configure files"),
+        Permission(id = 1503, moduleId = 150, name = "file:manage", description = "Manage files"),
+        Permission(id = 1504, moduleId = 150, name = "file:delete", description = "Delete files"),
+
         Permission(id = 1601, moduleId = 150, name = "security:admin", description = "Configure system security"),
     )
 }

@@ -4,6 +4,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.FileFixtures.file
 import com.wutsi.koki.FileFixtures.files
+import com.wutsi.koki.portal.page.PageName
 import kotlin.test.Test
 
 class FileTabControllerTest : AbstractPageControllerTest() {
@@ -53,5 +54,33 @@ class FileTabControllerTest : AbstractPageControllerTest() {
 
         assertElementVisible("#koki-modal")
         assertElementVisible("#attachment-${file.id}")
+    }
+
+    @Test
+    fun `list - without permission file-manage`() {
+        setUpUserWithoutPermissions(listOf("file:manage"))
+
+        navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
+
+        assertElementNotPresent(".btn-upload")
+    }
+
+    @Test
+    fun `list - without permission email-send`() {
+        setUpUserWithoutPermissions(listOf("email:send"))
+
+        navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
+
+        assertElementNotPresent(".btn-email")
+        assertElementPresent(".btn-upload")
+    }
+
+    @Test
+    fun `list - without permission file`() {
+        setUpUserWithoutPermissions(listOf("file"))
+
+        navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
+
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 }

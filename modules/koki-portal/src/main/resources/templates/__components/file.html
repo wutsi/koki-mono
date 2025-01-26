@@ -20,8 +20,12 @@
     </td>
     <td th:text="${file.createdAtText}">CREATED</td>
     <td class="toolbar text-right">
-        <a class="btn-email" th:href="'javascript: koki_emails_compose(' + ${file.id} + ')'">Email</a>
-        <a class="btn-delete" th:href="'javascript: koki_files_delete(' + ${file.id} + ')'">Delete</a>
+        <a class="btn-email" th:href="'javascript: koki_emails_compose(' + ${file.id} + ')'"
+           th:if="${user?.hasPermission('email:send')}">Email</a>
+
+        <a class="btn-delete"
+           th:href="'javascript: koki_files_delete(' + ${file.id} + ')'"
+           th:if="${user?.hasPermission('file:delete')}">Delete</a>
     </td>
 </tr>
 
