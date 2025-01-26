@@ -2,11 +2,11 @@
 
 ## Account
 
-- [x] Apply RBAC security on UI
 - [] Add additional information: address
 - [] Filter accounts on UI
 - [] Send mass email to list of accounts
 - [] Settings: Import Accounts from CSV
+- [x] Apply RBAC security on UI
 - [x] Settings: Import Attributes from CSV
 - [x] Settings: Import Account Types from CSV
 - [x] Send email to account
@@ -34,8 +34,8 @@
 
 ## Files
 
-- [] Apply RBAC security on UI
-- [] Settings: Configure S3 storage OR Local storage
+- [] Settings: Configure storage type: S3, Local
+- [x] Apply RBAC security on UI
 - [x] Upload file from popup
 - [x] Show file details
 - [x] Delete files
@@ -47,6 +47,7 @@
 
 - [] Apply RBAC security on UI
 - [] Settings: Setup email notification
+- [] Compile time spent by Tax report
 - [] Add Kanban view
 - [] Add Calendar view
 - [x] Settings: Import Taxes Types from CSV
@@ -59,8 +60,9 @@
 
 ## Email
 
-- [x] Apply RBAC security on UI
+- [] Show email summary
 - [] Attach multiple files to email
+- [x] Apply RBAC security on UI
 - [x] Attach 1 file to email
 - [x] Settings: Configure email layout
 - [x] Settings: Configure SMTP
@@ -78,12 +80,9 @@
 ## Users
 
 - [] Apply RBAC security on UI
-- [] Settings: Update my user
 - [] Settings: Update my password
 - [] Settings: Filter user by role, status
 - [] Settings: Change password of user
-- [] Settings: Delete user
-- [] Add permission to READ module and MANAGE module
 - [] Import users from CSV
 - [x] Manage users
 - [x] Manage roles
