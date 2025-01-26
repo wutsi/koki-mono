@@ -5,6 +5,7 @@ import com.wutsi.koki.portal.email.service.SMTPValidator
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.service.ConfigurationService
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import org.slf4j.LoggerFactory
@@ -19,6 +20,7 @@ import java.io.IOException
 
 @Controller
 @RequestMapping("/settings/email/smtp")
+@RequiresPermission(["email:admin"])
 class SettingsSMTPEditController(
     private val service: ConfigurationService,
     private val validator: SMTPValidator,

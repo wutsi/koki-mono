@@ -11,6 +11,7 @@ import com.wutsi.koki.TaxFixtures.tax
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.email.dto.SendEmailRequest
 import com.wutsi.koki.email.dto.SendEmailResponse
+import com.wutsi.koki.portal.page.PageName
 import org.junit.jupiter.api.Test
 import kotlin.jvm.java
 import kotlin.test.assertEquals
@@ -124,5 +125,21 @@ class EmailTabControllerTest : AbstractPageControllerTest() {
         assertEquals(ObjectType.ACCOUNT, request.firstValue.recipient.type)
 
         assertElementNotVisible("#koki-modal")
+    }
+
+    @Test
+    fun `list - without permission email`() {
+        setUpUserWithoutPermissions(listOf("email"))
+
+        navigateTo("/emails/tab?test-mode=true&owner-id=${tax.id}&owner-type=TAX")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
+
+    @Test
+    fun `list - without permission email-send`() {
+        setUpUserWithoutPermissions(listOf("email:send"))
+
+        navigateTo("/emails/tab?test-mode=true&owner-id=${tax.id}&owner-type=TAX")
+        assertElementNotPresent(".btn-email-compose")
     }
 }
