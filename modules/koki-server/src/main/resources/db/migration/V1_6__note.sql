@@ -38,5 +38,6 @@ INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_u
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
     VALUES (1400, 140, 'note',        'Access notes'),
-           (1401, 140, 'note:manage', 'Manage notes');
+           (1401, 140, 'note:manage', 'Manage notes'),
+           (1402, 140, 'note:delete', 'Delete notes');
 

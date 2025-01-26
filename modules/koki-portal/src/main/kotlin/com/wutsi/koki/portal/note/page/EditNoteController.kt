@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.note.page
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.note.form.NoteForm
 import com.wutsi.koki.portal.note.service.NoteService
+import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 
 @Controller
+@RequiresPermission(["note:manage"])
 class EditNoteController(private val service: NoteService) {
     @GetMapping("/notes/{id}/edit")
     fun edit(@PathVariable id: Long, model: Model): String {

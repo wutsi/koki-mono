@@ -10,6 +10,7 @@ import com.wutsi.koki.note.dto.CreateNoteRequest
 import com.wutsi.koki.note.dto.CreateNoteResponse
 import com.wutsi.koki.note.dto.NoteType
 import com.wutsi.koki.note.dto.UpdateNoteRequest
+import com.wutsi.koki.portal.page.PageName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -118,5 +119,33 @@ class NoteTabControllerTest : AbstractPageControllerTest() {
 
         click(".btn-cancel")
         assertElementNotVisible("#koki-modal")
+    }
+
+    @Test
+    fun `list - without permission note-manage`() {
+        setUpUserWithoutPermissions(listOf("note:manage"))
+
+        navigateTo("/notes/tab?test-mode=1&owner-id=111&owner-type=ACCOUNT")
+
+        assertElementNotPresent(".btn-create")
+        assertElementNotPresent(".btn-edit")
+    }
+
+    @Test
+    fun `list - without permission note-delete`() {
+        setUpUserWithoutPermissions(listOf("note:delete"))
+
+        navigateTo("/notes/tab?test-mode=1&owner-id=111&owner-type=ACCOUNT")
+
+        assertElementNotPresent(".btn-delete")
+    }
+
+    @Test
+    fun `list - without permission note`() {
+        setUpUserWithoutPermissions(listOf("note"))
+
+        navigateTo("/notes/tab?test-mode=1&owner-id=111&owner-type=ACCOUNT")
+
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 }

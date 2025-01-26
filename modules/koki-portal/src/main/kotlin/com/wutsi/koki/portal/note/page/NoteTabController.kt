@@ -3,12 +3,14 @@ package com.wutsi.koki.portal.note.page
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.note.service.NoteService
 import com.wutsi.koki.portal.page.AbstractPageController
+import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
+@RequiresPermission(["note"])
 class NoteTabController(private val service: NoteService) : AbstractPageController() {
     @GetMapping("/notes/tab")
     fun list(

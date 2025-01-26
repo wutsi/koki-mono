@@ -1,10 +1,11 @@
 <div class="tab-notes">
     <div>
-        <a class="btn-create btn btn-secondary btn-sm margin-bottom" href="javascript: koki_notes_create()">
+        <a class="btn-create btn btn-light btn-sm margin-bottom" href="javascript: koki_notes_create()"
+           th:if="${user?.hasPermission('note:manage')}">
             Add New Note
         </a>
         <div id="note-list" th:data-owner-id="${ownerId}" th:data-owner-type="${ownerType}">
-            <div class="border-top padding note" th:each="note : ${notes}" th:id="'note-' + ${note.id}">
+            <div class="border-top padding-top note" th:each="note : ${notes}" th:id="'note-' + ${note.id}">
                 <div th:replace="~{__components/note :: columns(${note})}"></div>
             </div>
             <div th:replace="~{__components/note :: load-more(${moreUrl})}"></div>
