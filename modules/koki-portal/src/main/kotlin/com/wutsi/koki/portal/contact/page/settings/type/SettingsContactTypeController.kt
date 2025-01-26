@@ -4,12 +4,14 @@ import com.wutsi.koki.portal.contact.service.ContactTypeService
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 
 @Controller
+@RequiresPermission(permissions = ["contact:admin"])
 class SettingsContactTypeController(private val service: ContactTypeService) : AbstractPageController() {
     @GetMapping("/settings/contacts/types/{id}")
     fun show(@PathVariable id: Long, model: Model): String {

@@ -85,4 +85,20 @@ class ContactControllerTest : AbstractPageControllerTest() {
         Thread.sleep(1000)
         assertElementCount(".tab-notes .note", NoteFixtures.notes.size)
     }
+
+    @Test
+    fun `show - without permission contact`() {
+        setUpUserWithoutPermissions(listOf("contact"))
+
+        navigateTo("/contacts/${contact.id}")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
+
+    @Test
+    fun `delete - without permission contact-delete`() {
+        setUpUserWithoutPermissions(listOf("contact:delete"))
+
+        navigateTo("/contacts/${contact.id}/delete")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
 }

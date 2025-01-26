@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.contact.page
 
 import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
+@RequiresPermission(["contact"])
 class ListContactController(
     private val service: ContactService,
     private val currentUser: CurrentUserHolder,

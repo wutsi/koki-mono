@@ -19,9 +19,9 @@
 
 ## Contact
 
-- [] Apply RBAC security on UI
 - [] Add additional information: address, SSN, Date of birth
 - [] Add contact filters
+- [x] Apply RBAC security on UI
 - [x] Settings: Import Contact Types from CSV
 - [x] Settings: Import Contact from CSV
 - [x] Send email to contact

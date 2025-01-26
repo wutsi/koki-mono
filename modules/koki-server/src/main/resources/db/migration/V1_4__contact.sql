@@ -45,7 +45,8 @@ INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_u
     VALUES (120, 2, 'contact', 'Contact', '/contacts', '/contacts/tab', '/settings/contacts', '/js/contacts.js');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
-    VALUES (1200, 120, 'contact',        'Access accounts'),
-           (1201, 120, 'contact:manage', 'Manage accounts'),
-           (1202, 120, 'contact:admin',  'Configure accounts');
+    VALUES (1200, 120, 'contact',        'Access contacts'),
+           (1201, 120, 'contact:manage', 'Manage contacts'),
+           (1202, 120, 'contact:delete', 'Delete contacts'),
+           (1203, 120, 'contact:admin',  'Configure contacts');
 

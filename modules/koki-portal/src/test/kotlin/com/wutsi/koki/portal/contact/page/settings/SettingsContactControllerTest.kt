@@ -17,4 +17,12 @@ class SettingsContactControllerTest : AbstractPageControllerTest() {
         click(".btn-type")
         assertCurrentPageIs(PageName.CONTACT_SETTINGS_TYPE_LIST)
     }
+
+    @Test
+    fun `show - without permission contact-admin`() {
+        setUpUserWithoutPermissions(listOf("contact:admin"))
+
+        navigateTo("/settings/contacts")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
 }
