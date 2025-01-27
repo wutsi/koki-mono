@@ -39,6 +39,7 @@ class TaxMapper : TenantAwareMapper() {
         users: Map<Long, UserModel?>
     ): TaxModel {
         val fmt = createDateTimeFormat()
+        val dateFormat = createDateFormat()
         return TaxModel(
             id = entity.id,
             taxType = taxType,
@@ -49,9 +50,9 @@ class TaxMapper : TenantAwareMapper() {
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.modifiedAt),
             startAt = entity.startAt,
-            startAtText = entity.startAt?.let { date -> fmt.format(date) },
+            startAtText = entity.startAt?.let { date -> dateFormat.format(date) },
             dueAt = entity.dueAt,
-            dueAtText = entity.dueAt?.let { date -> fmt.format(date) },
+            dueAtText = entity.dueAt?.let { date -> dateFormat.format(date) },
             createdBy = entity.createdById?.let { id -> users[id] },
             modifiedBy = entity.modifiedById?.let { id -> users[id] },
             accountant = entity.accountantId?.let { id -> users[id] },
@@ -68,6 +69,7 @@ class TaxMapper : TenantAwareMapper() {
         users: Map<Long, UserModel?>
     ): TaxModel {
         val fmt = createDateTimeFormat()
+        val dateFormat = createDateFormat()
         return TaxModel(
             id = entity.id,
             taxType = taxType,
@@ -78,9 +80,9 @@ class TaxMapper : TenantAwareMapper() {
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.modifiedAt),
             startAt = entity.startAt,
-            startAtText = entity.startAt?.let { date -> fmt.format(date) },
+            startAtText = entity.startAt?.let { date -> dateFormat.format(date) },
             dueAt = entity.dueAt,
-            dueAtText = entity.dueAt?.let { date -> fmt.format(date) },
+            dueAtText = entity.dueAt?.let { date -> dateFormat.format(date) },
             createdBy = entity.createdById?.let { id -> users[id] },
             modifiedBy = entity.modifiedById?.let { id -> users[id] },
             accountant = entity.accountantId?.let { id -> users[id] },

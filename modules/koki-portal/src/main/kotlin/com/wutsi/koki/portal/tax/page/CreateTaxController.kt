@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
-import java.time.LocalDate
 
 @Controller
 @RequiresPermission(["tax:manage"])
@@ -54,10 +53,7 @@ class CreateTaxController(
             )
         )
 
-        val year2 = LocalDate.now().year
-        val year1 = year2 - 100
-        val years = (year2 downTo year1).toList()
-        model.addAttribute("years", years)
+        loadFiscalYears(model)
         return "taxes/create"
     }
 

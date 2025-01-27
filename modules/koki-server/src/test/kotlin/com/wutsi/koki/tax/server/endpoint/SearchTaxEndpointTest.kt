@@ -100,4 +100,51 @@ class SearchTaxEndpointTest : TenantAwareEndpointTest() {
         assertEquals(102L, taxes[1].id)
         assertEquals(100L, taxes[2].id)
     }
+
+    @Test
+    fun `by fiscal-year`() {
+        val result = rest.getForEntity(
+            "/v1/taxes?fiscal-year=2014",
+            SearchTaxResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val taxes = result.body!!.taxes
+        assertEquals(3, taxes.size)
+        assertEquals(110L, taxes[0].id)
+        assertEquals(102L, taxes[1].id)
+        assertEquals(100L, taxes[2].id)
+    }
+
+    @Test
+    fun `by start-at`() {
+        val result = rest.getForEntity(
+            "/v1/taxes?start-at-from=2020-09-30&start-at-to=2020-10-03",
+            SearchTaxResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val taxes = result.body!!.taxes
+        assertEquals(2, taxes.size)
+        assertEquals(101L, taxes[0].id)
+        assertEquals(100L, taxes[1].id)
+    }
+
+    @Test
+    fun `by due-at`() {
+        val result = rest.getForEntity(
+            "/v1/taxes?due-at-from=2020-11-30&due-at-to=2021-01-01",
+            SearchTaxResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val taxes = result.body!!.taxes
+        assertEquals(3, taxes.size)
+        assertEquals(111L, taxes[0].id)
+        assertEquals(101L, taxes[1].id)
+        assertEquals(100L, taxes[2].id)
+    }
 }

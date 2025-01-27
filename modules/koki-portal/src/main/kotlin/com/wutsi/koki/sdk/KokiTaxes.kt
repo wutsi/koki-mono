@@ -12,6 +12,7 @@ import com.wutsi.koki.tax.dto.UpdateTaxRequest
 import com.wutsi.koki.tax.dto.UpdateTaxStatusRequest
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.multipart.MultipartFile
+import java.time.LocalDate
 
 class KokiTaxes(
     private val urlBuilder: URLBuilder,
@@ -35,6 +36,11 @@ class KokiTaxes(
         assigneeIds: List<Long>,
         createdByIds: List<Long>,
         statuses: List<TaxStatus>,
+        fiscalYear: Int?,
+        startAtFrom: LocalDate?,
+        startAtTo: LocalDate?,
+        dueAtFrom: LocalDate?,
+        dueAtTo: LocalDate?,
         limit: Int,
         offset: Int,
     ): SearchTaxResponse {
@@ -48,6 +54,11 @@ class KokiTaxes(
                 "assignee-id" to assigneeIds,
                 "created-by-id" to createdByIds,
                 "status" to statuses,
+                "fiscal-year" to fiscalYear,
+                "start-at-from" to startAtFrom?.toString(),
+                "start-at-to" to startAtTo?.toString(),
+                "due-at-from" to dueAtFrom?.toString(),
+                "due-at-to" to dueAtTo?.toString(),
                 "limit" to limit,
                 "offset" to offset,
             )

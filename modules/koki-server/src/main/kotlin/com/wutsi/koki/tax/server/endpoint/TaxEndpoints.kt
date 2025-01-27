@@ -10,6 +10,7 @@ import com.wutsi.koki.tax.dto.UpdateTaxStatusRequest
 import com.wutsi.koki.tax.server.mapper.TaxMapper
 import com.wutsi.koki.tax.server.service.TaxService
 import jakarta.validation.Valid
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.util.Date
 
 @RestController
 @RequestMapping("/v1/taxes")
@@ -45,6 +47,24 @@ class TaxEndpoints(
         @RequestParam(required = false, name = "assignee-id") assigneeId: List<Long> = emptyList(),
         @RequestParam(required = false, name = "created-by-id") createdByIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "status") statuses: List<TaxStatus> = emptyList(),
+        @RequestParam(required = false, name = "fiscal-year") fiscalYear: Int? = null,
+
+        @RequestParam(required = false, name = "start-at-from")
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        startAtFrom: Date? = null,
+
+        @RequestParam(required = false, name = "start-at-to")
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        startAtTo: Date? = null,
+
+        @RequestParam(required = false, name = "due-at-from")
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        dueAtFrom: Date? = null,
+
+        @RequestParam(required = false, name = "due-at-to")
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        dueAtTo: Date? = null,
+
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0
     ): SearchTaxResponse {
@@ -57,6 +77,11 @@ class TaxEndpoints(
             assigneeIds = assigneeId,
             createdByIds = createdByIds,
             statuses = statuses,
+            fiscalYear = fiscalYear,
+            startAtFrom = startAtFrom,
+            startAtTo = startAtTo,
+            dueAtFrom = dueAtFrom,
+            dueAtTo = dueAtTo,
             limit = limit,
             offset = offset
         )

@@ -11,6 +11,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
+import java.time.LocalDate
 
 @Controller
 @RequiresPermission(["tax"])
@@ -26,27 +27,35 @@ class ListTaxController(
         const val COL_MY_ASSIGNED_REPORTS = "3"
         const val COL_MY_DONE_REPORTS = "4"
         const val COL_ALL_DONE_REPORTS = "5"
+
+        const val VIEW_TABLE = "1"
+        const val VIEW_CALENDAR = "2"
     }
 
     @GetMapping("/taxes")
     fun list(
         @RequestHeader(required = false, name = "Referer") referer: String? = null,
         @RequestParam(required = false, name = "col") collection: String? = null,
-        @RequestParam(required = false) limit: Int = 20,
-        @RequestParam(required = false) offset: Int = 0,
+        @RequestParam(required = false, name = "view") view: String? = null,
+        @RequestParam(required = false, name = "month") month: String? = null,
+        @RequestParam(required = false, name = "fiscal-year") fiscalYear: Int? = null,
         @RequestParam(required = false, name = "_toast") toast: Long? = null,
         @RequestParam(required = false, name = "_ts") timestamp: Long? = null,
         @RequestParam(required = false, name = "_op") operation: String? = null,
+        @RequestParam(required = false) limit: Int = 20,
+        @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
         more(
             collection = collection,
+            fiscalYear = fiscalYear,
+            view = view,
+            month = month,
             limit = limit,
             offset = offset,
             model = model
         )
 
-        model.addAttribute("collection", toCollection(collection))
         model.addAttribute(
             "page",
             createPageModel(
@@ -56,34 +65,54 @@ class ListTaxController(
         )
 
         loadToast(referer, toast, timestamp, operation, model)
+        loadFiscalYears(model, fiscalYear)
+        model.addAttribute("collection", getCollection(collection))
+        model.addAttribute("view", getView(view))
+        model.addAttribute("month", getMonth(month))
         return "taxes/list"
     }
 
     @GetMapping("/taxes/more")
     fun more(
         @RequestParam(required = false, name = "col") collection: String? = null,
+        @RequestParam(required = false, name = "fiscal-year") fiscalYear: Int? = null,
+        @RequestParam(required = false, name = "view") view: String? = null,
+        @RequestParam(required = false, name = "month") month: String? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
-        val col = toCollection(collection)
+        val col = getCollection(collection)
         val userId = currentUser.id()
+        val year = getFiscalYear(fiscalYear)
+        val xview = getView(view)
+        val startAtFrom = LocalDate.parse(getMonth(month) + "-01")
+
         val taxes = service.taxes(
             participantIds = if (col == COL_MY_REPORTS || col == COL_MY_DONE_REPORTS) {
                 userId?.let { id -> listOf(id) } ?: emptyList()
             } else {
                 emptyList()
             },
+
             assigneeIds = if (col == COL_MY_ASSIGNED_REPORTS) {
                 userId?.let { id -> listOf(id) } ?: emptyList()
             } else {
                 emptyList()
             },
+
             statuses = if (col == COL_MY_DONE_REPORTS || col == COL_ALL_DONE_REPORTS) {
                 listOf(TaxStatus.DONE)
             } else {
-                TaxStatus.values().filter { status -> status != TaxStatus.DONE }
+                TaxStatus.entries.filter { status -> status != TaxStatus.DONE }
             },
+
+            fiscalYear = year,
+
+            startAtFrom = if (xview == VIEW_CALENDAR) startAtFrom else null,
+
+            startAtTo = if (xview == VIEW_CALENDAR) startAtFrom.plusMonths(1).minusDays(1) else null,
+
             limit = limit,
             offset = offset,
         )
@@ -96,6 +125,15 @@ class ListTaxController(
                 var url = "/taxes/more?limit=$limit&offset=$nextOffset"
                 if (collection != null) {
                     url = "$url&col=$collection"
+                }
+                if (fiscalYear != null) {
+                    url = "$url&fiscal-year=$fiscalYear"
+                }
+                if (view != null) {
+                    url = "$url&view=$view"
+                }
+                if (month != null) {
+                    url = "$url&month=$month"
                 }
                 model.addAttribute("moreUrl", url)
             }
@@ -128,7 +166,7 @@ class ListTaxController(
         }
     }
 
-    private fun toCollection(collection: String?): String {
+    private fun getCollection(collection: String?): String {
         return when (collection) {
             COL_ALL_REPORTS -> COL_ALL_REPORTS
             COL_MY_REPORTS -> COL_MY_REPORTS
@@ -137,5 +175,30 @@ class ListTaxController(
             COL_MY_DONE_REPORTS -> COL_MY_DONE_REPORTS
             else -> COL_ALL_REPORTS
         }
+    }
+
+    private fun getFiscalYear(fiscalYear: Int? = null): Int {
+        return fiscalYear ?: (LocalDate.now().year - 1)
+    }
+
+    private fun getView(view: String?): String {
+        return when (view) {
+            VIEW_CALENDAR -> VIEW_CALENDAR
+            else -> VIEW_TABLE
+        }
+    }
+
+    private fun getMonth(month: String?): String {
+        val now = try {
+            if (month != null) {
+                LocalDate.parse("$month-01")
+            } else {
+                LocalDate.now()
+            }
+        } catch (ex: Exception) {
+            LocalDate.now()
+        }
+        return "${now.year}-" +
+            if (now.monthValue < 10) "0${now.monthValue}" else now.monthValue.toString()
     }
 }
