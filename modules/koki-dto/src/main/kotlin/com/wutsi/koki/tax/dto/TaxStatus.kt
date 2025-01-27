@@ -2,11 +2,10 @@ package com.wutsi.koki.tax.dto
 
 enum class TaxStatus {
     NEW,
-    CONTACTED,
+    CONTACTING,
     PREPARING,
     PROCESSING,
     FINALIZING,
-    SIGNING,
     SUBMITTING,
     DONE,
 }
