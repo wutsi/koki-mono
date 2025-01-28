@@ -39,8 +39,8 @@ class SearchTaxEndpointTest : TenantAwareEndpointTest() {
 
         val taxes = result.body!!.taxes
         assertEquals(3, taxes.size)
-        assertEquals(111L, taxes[0].id)
-        assertEquals(101L, taxes[1].id)
+        assertEquals(101L, taxes[0].id)
+        assertEquals(111L, taxes[1].id)
         assertEquals(100L, taxes[2].id)
     }
 
@@ -52,8 +52,8 @@ class SearchTaxEndpointTest : TenantAwareEndpointTest() {
 
         val taxes = result.body!!.taxes
         assertEquals(2, taxes.size)
-        assertEquals(102L, taxes[0].id)
-        assertEquals(100L, taxes[1].id)
+        assertEquals(100L, taxes[0].id)
+        assertEquals(102L, taxes[1].id)
     }
 
     @Test
@@ -68,8 +68,8 @@ class SearchTaxEndpointTest : TenantAwareEndpointTest() {
         val taxes = result.body!!.taxes
         assertEquals(3, taxes.size)
         assertEquals(111L, taxes[0].id)
-        assertEquals(110L, taxes[1].id)
-        assertEquals(100L, taxes[2].id)
+        assertEquals(100L, taxes[1].id)
+        assertEquals(110L, taxes[2].id)
     }
 
     @Test
@@ -97,8 +97,8 @@ class SearchTaxEndpointTest : TenantAwareEndpointTest() {
         val taxes = result.body!!.taxes
         assertEquals(3, taxes.size)
         assertEquals(101L, taxes[0].id)
-        assertEquals(102L, taxes[1].id)
-        assertEquals(100L, taxes[2].id)
+        assertEquals(100L, taxes[1].id)
+        assertEquals(102L, taxes[2].id)
     }
 
     @Test
@@ -112,9 +112,9 @@ class SearchTaxEndpointTest : TenantAwareEndpointTest() {
 
         val taxes = result.body!!.taxes
         assertEquals(3, taxes.size)
-        assertEquals(110L, taxes[0].id)
+        assertEquals(100L, taxes[0].id)
         assertEquals(102L, taxes[1].id)
-        assertEquals(100L, taxes[2].id)
+        assertEquals(110L, taxes[2].id)
     }
 
     @Test
@@ -143,8 +143,8 @@ class SearchTaxEndpointTest : TenantAwareEndpointTest() {
 
         val taxes = result.body!!.taxes
         assertEquals(3, taxes.size)
-        assertEquals(111L, taxes[0].id)
-        assertEquals(101L, taxes[1].id)
+        assertEquals(101L, taxes[0].id)
+        assertEquals(111L, taxes[1].id)
         assertEquals(100L, taxes[2].id)
     }
 }

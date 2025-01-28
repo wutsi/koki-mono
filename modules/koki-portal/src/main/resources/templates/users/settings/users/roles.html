@@ -14,17 +14,17 @@
     <div class="settings-content padding">
         <div th:replace="~{__components/settings :: settings-title('Users', '/settings/users')}"></div>
 
-        <form class="form" method="post" th:action="@{'/settings/users/' + ${user.id} + '/roles'}"
+        <form class="form" method="post" th:action="@{'/settings/users/' + ${me.id} + '/roles'}"
               th:object="${form}">
             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
             <table class="table">
                 <tr>
                     <td><b>Name</b></td>
-                    <td th:text="${user.displayName}">TITLE</td>
+                    <td th:text="${me.displayName}">TITLE</td>
                 </tr>
                 <tr>
                     <td><b>Email</b></td>
-                    <td th:text="${user.email}">EMAIL</td>
+                    <td th:text="${me.email}">EMAIL</td>
                 </tr>
                 <tr>
                     <td><b>Roles</b></td>
@@ -32,7 +32,8 @@
                         <table class="table table-striped" th:if="!${roles.isEmpty()}">
                             <tr th:each="role : ${roles}">
                                 <td width="1%">
-                                    <input name="roleId" th:checked="${user.hasRole(role.id)}"
+                                    <input name="roleId"
+                                           th:checked="${me.hasRole(role.id)}"
                                            th:value="${role.id}"
                                            type="checkbox"
                                     />

@@ -41,7 +41,7 @@ class UpdateTaxStatusEndpointTest : AuthorizationAwareEndpointTest() {
         val notes = noteService.search(
             tenantId = TENANT_ID,
             ownerId = tax.id,
-            ownerType = ObjectType.TAX
+            ownerType = ObjectType.TAX,
         )
         assertEquals(1, notes.size)
         assertEquals(request.notes, notes[0].body)

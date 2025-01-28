@@ -1,15 +1,15 @@
 <tr class="user" th:each="user : ${users}">
     <td>
-        <a th:href="'/settings/users/' + ${user.id}" th:text="${user.displayName}">NAME</a>
+        <a th:href="'/settings/users/' + ${me.id}" th:text="${me.displayName}">NAME</a>
     </td>
-    <td th:text="${user.email}">EMAIL</td>
+    <td th:text="${me.email}">EMAIL</td>
     <td>
-        <div th:replace="~{__components/user :: user-status(${user.status})}"></div>
+        <div th:replace="~{__components/user :: user-status(${me.status})}"></div>
     </td>
-    <td th:text="${user.modifiedAtText}">MODIFIED</td>
+    <td th:text="${me.modifiedAtText}">MODIFIED</td>
     <td class="toolbar">
-        <a class="btn-view" th:href="'/settings/users/' + ${user.id}">View</a>
-        <a class="btn-edit" th:href="'/settings/users/' + ${user.id} + '/edit'">Edit</a>
+        <a class="btn-view" th:href="'/settings/users/' + ${me.id}">View</a>
+        <a class="btn-edit" th:href="'/settings/users/' + ${me.id} + '/edit'">Edit</a>
     </td>
 </tr>
 <tr id="user-load-more" th:if="${moreUrl}">

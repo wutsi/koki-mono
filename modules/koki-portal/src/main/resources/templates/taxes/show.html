@@ -31,7 +31,7 @@
 
                             <a class="btn-status btn btn-light btn-sm"
                                th:href="'/taxes/' + ${tax.id} + '/status'"
-                               th:if="${user?.hasPermission('tax:manage')}">Update Status</a>
+                               th:if="${user?.hasPermission('tax:status')}">Update Status</a>
 
                             <a class="btn-delete btn btn-danger btn-sm"
                                onclick="return confirm('Are you sure you want to delete the tax report?')"
@@ -71,7 +71,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-7">
             <div class="widget">
                 <div class="widget-body">
                     <div th:replace="~{__components/module :: tabs('main', true)}"></div>
@@ -100,10 +100,9 @@
                                 </a>
                             </td>
                         </tr>
-
-                        <tr th:if="${tax.assignee}">
-                            <td><b>Assigned To</b></td>
-                            <td th:text="${tax.assignee.displayName}">ASSIGNED_TO</td>
+                        <tr th:if="${tax.startAt}">
+                            <td><b>Start Date</b></td>
+                            <td th:text="${tax.startAtText}">DUE</td>
                         </tr>
                         <tr th:if="${tax.accountant}">
                             <td><b>Accountant</b></td>
@@ -113,19 +112,18 @@
                             <td><b>Technician</b></td>
                             <td th:text="${tax.technician.displayName}">TECHNICIAN</td>
                         </tr>
-
-                        <tr th:if="${tax.description}">
-                            <td><b>Description</b></td>
-                            <td th:text="${tax.description}">DESCRIPTION</td>
-                        </tr>
-
-                        <tr th:if="${tax.startAt}">
-                            <td><b>Start Date</b></td>
-                            <td th:text="${tax.startAtText}">DUE</td>
+                        <tr th:if="${tax.assignee}">
+                            <td><b>Assigned To</b></td>
+                            <td th:text="${tax.assignee.displayName}">ASSIGNED_TO</td>
                         </tr>
                         <tr th:if="${tax.dueAt}">
                             <td><b>Due Date</b></td>
                             <td th:text="${tax.dueAtText}">DUE</td>
+                        </tr>
+
+                        <tr th:if="${tax.description}">
+                            <td><b>Description</b></td>
+                            <td th:text="${tax.description}">DESCRIPTION</td>
                         </tr>
                         <tr>
                             <td><b>Created</b></td>
@@ -148,7 +146,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-5">
             <div class="widget">
                 <div class="widget-body">
                     <div th:replace="~{__components/module :: tabs('side', false)}"></div>

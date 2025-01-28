@@ -23,8 +23,10 @@
         </div>
     </div>
     <div class="margin-top note-body" th:text="${note.summary}">SUMMARY</div>
-    <div class="margin-top">
-        <a class="btn-edit"
+    <div class="margin-top margin-bottom">
+        <a class="btn-view" th:href="'javascript: koki_notes_view(' + ${note.id} + ')'">View</a>
+
+        <a class="btn-edit margin-left"
            th:href="'javascript: koki_notes_edit(' + ${note.id} + ')'"
            th:if="${user?.hasPermission('note:manage')}">Edit</a>
 

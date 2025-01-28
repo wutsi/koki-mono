@@ -1,10 +1,19 @@
 # Features
 
+## Module
+
+- [x] Module API
+- [x] List of modules driven by backend in home page
+- [x] List of modules driven by backend in configuration
+- [x] link CSS and JS with modules
+
 ## Account
 
+- [] The account manager must have the permission 'account:manage'
 - [] Add additional information to accounts: address
 - [] Add account filters
 - [] Settings: Import Accounts from CSV
+- [x] Configure validation on DTO
 - [x] Apply RBAC security on UI
 - [x] Settings: Import Attributes from CSV
 - [x] Settings: Import Account Types from CSV
@@ -21,6 +30,7 @@
 
 - [] Add additional information: address, SSN, Date of birth
 - [] Add contact filters
+- [x] Configure validation on DTO
 - [x] Apply RBAC security on UI
 - [x] Settings: Import Contact Types from CSV
 - [x] Settings: Import Contact from CSV
@@ -60,9 +70,15 @@
 - [x] Link files to taxes
 - [x] Add a note
 
+## Employees
+
+- [] Manage employee information: hourly salary, manager
+- [] Compile employee hours
+
 ## Email
 
 - [] Attach multiple files to email
+- [x] Configure validation on DTO
 - [x] Show email summary
 - [x] Apply RBAC security on UI
 - [x] Attach 1 file to email
@@ -73,6 +89,7 @@
 
 ## Notes
 
+- [x] Configure validation on DTO
 - [x] Apply RBAC security on UI
 - [x] Add type of notes
 - [x] Tack time
@@ -88,18 +105,6 @@
 - [] Import users from CSV
 - [x] Manage users
 - [x] Manage roles
-
-## Employees
-
-- [] Manage employee information: hourly salary, manager
-- [] Compile employee hours
-
-## Module
-
-- [x] Module API
-- [x] List of modules driven by backend in home page
-- [x] List of modules driven by backend in configuration
-- [x] link CSS and JS with modules
 
 ## Product
 

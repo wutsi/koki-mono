@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping
-class LoginEndpoint(private val service: AuthenticationService) {
+class LoginEndpoints(private val service: AuthenticationService) {
     @PostMapping("/v1/auth/login")
     fun login(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,

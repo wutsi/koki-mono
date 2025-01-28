@@ -17,7 +17,7 @@ data class UserModel(
     val permissionNames: List<String> = emptyList(),
 ) {
     fun hasRole(roleId: Long): Boolean {
-        return roles.find { role -> role.id == id } != null
+        return roles.find { role -> role.id == roleId } != null
     }
 
     fun hasPermission(name: String): Boolean {

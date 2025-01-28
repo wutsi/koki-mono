@@ -1,10 +1,12 @@
 package com.wutsi.koki.email.dto
 
 import com.wutsi.koki.common.dto.ObjectReference
+import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.Size
 
 data class SendEmailRequest(
     val recipient: Recipient = Recipient(),
-    val subject: String = "",
+    @get:NotEmpty @get:Size(max = 255) val subject: String = "",
     val body: String = "",
     val attachmentFileIds: List<Long> = emptyList(),
     val owner: ObjectReference? = null,

@@ -33,6 +33,7 @@ class KokiUsers(
         keyword: String? = null,
         ids: List<Long> = emptyList(),
         roleIds: List<Long> = emptyList(),
+        permissions: List<String> = emptyList(),
         limit: Int = 20,
         offset: Int = 0
     ): SearchUserResponse {
@@ -42,6 +43,7 @@ class KokiUsers(
                 "q" to keyword,
                 "id" to ids,
                 "role-id" to roleIds,
+                "permission" to permissions,
                 "limit" to limit,
                 "offset" to offset
             )

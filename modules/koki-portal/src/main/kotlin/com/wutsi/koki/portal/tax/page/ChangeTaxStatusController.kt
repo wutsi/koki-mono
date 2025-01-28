@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-@RequiresPermission(["tax:manage"])
+@RequiresPermission(["tax:status"])
 class ChangeTaxStatusController(
     private val service: TaxService,
     private val userService: UserService,

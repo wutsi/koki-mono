@@ -117,6 +117,13 @@ class TaxControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/taxes/${tax.id}")
         assertElementNotPresent(".tax-summary .btn-edit")
+    }
+
+    @Test
+    fun `show - without permission tax-status`() {
+        setUpUserWithoutPermissions(listOf("tax:status"))
+
+        navigateTo("/taxes/${tax.id}")
         assertElementNotPresent(".tax-summary .btn-status")
     }
 

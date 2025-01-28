@@ -15,12 +15,14 @@ class UserSelectorController(
     fun new(
         @RequestParam(required = false, name = "q") keyword: String? = null,
         @RequestParam(required = false, name = "role-id") roleId: List<Long> = emptyList(),
+        @RequestParam(required = false, name = "permission") permissions: List<String> = emptyList(),
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
     ): List<UserModel> {
         return service.users(
             keyword = keyword,
             roleIds = roleId,
+            permissions = permissions,
             limit = limit,
             offset = offset
         )

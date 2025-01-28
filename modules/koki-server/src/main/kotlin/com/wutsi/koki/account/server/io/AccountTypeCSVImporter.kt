@@ -57,7 +57,7 @@ class AccountTypeCSVImporter(
                         update(type, record)
                         updated++
                     }
-                    names.add(type.name)
+                    names.add(type.name.lowercase())
                 } catch (ex: WutsiException) {
                     errorMessages.add(
                         ImportMessage(row.toString(), ex.error.code, ex.error.message)

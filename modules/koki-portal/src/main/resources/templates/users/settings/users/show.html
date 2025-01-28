@@ -15,33 +15,33 @@
         <div th:replace="~{__components/settings :: settings-title('Users', '/settings/users')}"></div>
 
         <div class="margin-bottom">
-            <a class="btn btn-secondary btn-edit" th:href="'/settings/users/' + ${user.id} + '/edit'">Edit</a>
+            <a class="btn btn-secondary btn-edit" th:href="'/settings/users/' + ${me.id} + '/edit'">Edit</a>
 
             <a class="btn btn-secondary btn-role"
-               th:href="'/settings/users/' + ${user.id} + '/roles'">Manage Roles</a>
+               th:href="'/settings/users/' + ${me.id} + '/roles'">Manage Roles</a>
         </div>
         <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
         <table class="table">
             <tr>
                 <td width="20%"><b>Name</b></td>
-                <td th:text="${user.displayName}">NAME</td>
+                <td th:text="${me.displayName}">NAME</td>
             </tr>
             <tr>
                 <td><b>Email</b></td>
-                <td th:text="${user.email}">EMAIL</td>
+                <td th:text="${me.email}">EMAIL</td>
             </tr>
             <tr>
                 <td><b>Status</b></td>
                 <td>
-                    <div th:replace="~{__components/user :: user-status(${user.status})}"></div>
+                    <div th:replace="~{__components/user :: user-status(${me.status})}"></div>
                 </td>
             </tr>
             <tr>
                 <td><b>Roles</b></td>
                 <td>
-                    <table class="table table-striped" th:if="!${user.roles.isEmpty()}">
-                        <tr th:each="role : ${user.roles}">
+                    <table class="table table-striped" th:if="!${me.roles.isEmpty()}">
+                        <tr th:each="role : ${me.roles}">
                             <td>
                                 <a th:href="'/settings/roles/' + ${role.id}">
                                     <span th:text="${role.name}">NAME</span>
@@ -51,7 +51,7 @@
                             </td>
                         </tr>
                     </table>
-                    <em th:if="${user.roles.isEmpty()}">User has no role</em>
+                    <em th:if="${me.roles.isEmpty()}">User has no role</em>
                 </td>
             </tr>
         </table>

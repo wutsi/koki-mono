@@ -88,6 +88,20 @@ class SearchUserEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
+    fun `by permission`() {
+        val result = rest.getForEntity("/v1/users?permission=module1:read", SearchUserResponse::class.java)
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val users = result.body!!.users
+
+        assertEquals(2, users.size)
+
+        assertEquals(12L, users[0].id)
+        assertEquals(11L, users[1].id)
+    }
+
+    @Test
     fun all() {
         val result =
             rest.getForEntity("/v1/users?limit=2&offset=4", SearchUserResponse::class.java)

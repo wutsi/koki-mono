@@ -30,13 +30,15 @@ class UserService(
         keyword: String? = null,
         ids: List<Long> = emptyList(),
         roleIds: List<Long> = emptyList(),
+        permissions: List<String> = emptyList(),
         limit: Int = 20,
-        offset: Int = 0
+        offset: Int = 0,
     ): List<UserModel> {
         val users = koki.users(
             keyword = keyword,
             ids = ids,
             roleIds = roleIds,
+            permissions = permissions,
             limit = limit,
             offset = offset
         ).users

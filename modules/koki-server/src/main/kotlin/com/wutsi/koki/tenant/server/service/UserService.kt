@@ -125,12 +125,16 @@ class UserService(
         ids: List<Long> = emptyList(),
         roleIds: List<Long> = emptyList(),
         status: UserStatus? = null,
+        permissions: List<String> = emptyList(),
         limit: Int = 20,
         offset: Int = 0,
     ): List<UserEntity> {
         val jql = StringBuilder("SELECT U FROM UserEntity U")
-        if (roleIds.isNotEmpty()) {
+        if (roleIds.isNotEmpty() || permissions.isNotEmpty()) {
             jql.append(" JOIN U.roles R")
+        }
+        if (permissions.isNotEmpty()) {
+            jql.append(" JOIN R.permissions P")
         }
 
         jql.append(" WHERE U.tenantId = :tenantId")
@@ -140,11 +144,14 @@ class UserService(
         if (ids.isNotEmpty()) {
             jql.append(" AND U.id IN :ids")
         }
+        if (status != null) {
+            jql.append(" AND U.status = :status")
+        }
         if (roleIds.isNotEmpty()) {
             jql.append(" AND R.id IN :roleIds")
         }
-        if (status != null) {
-            jql.append(" AND U.status = :status")
+        if (permissions.isNotEmpty()) {
+            jql.append(" AND P.name IN :permissions")
         }
         jql.append(" ORDER BY U.displayName")
 
@@ -161,6 +168,9 @@ class UserService(
         }
         if (status != null) {
             query.setParameter("status", status)
+        }
+        if (permissions.isNotEmpty()) {
+            query.setParameter("permissions", permissions)
         }
 
         query.firstResult = offset

@@ -32,7 +32,7 @@ class SettingsUserController(
     }
 
     private fun show(user: UserModel, model: Model): String {
-        model.addAttribute("user", user)
+        model.addAttribute("me", user)
         model.addAttribute(
             "page",
             PageModel(

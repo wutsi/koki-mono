@@ -65,8 +65,6 @@
                                         ASSIGNEE
                                     </option>
                                 </select>
-                                <script
-                                    th:replace="~{__components/user :: user-selector('accountantId', null)}"></script>
                             </div>
                             <div class="section-item">
                                 <label class="title">Assigned To</label>
@@ -78,7 +76,8 @@
                                         ASSIGNEE
                                     </option>
                                 </select>
-                                <script th:replace="~{__components/user :: user-selector('assigneeId', null)}"></script>
+                                <script
+                                    th:replace="~{__components/user :: user-selector('assigneeId', null, 'tax:manage')}"></script>
                             </div>
 
                             <div class="section-item">

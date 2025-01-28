@@ -413,6 +413,10 @@ tr.activity-running {
     border-right: 1px solid gray !important;
 }
 
+.border-top {
+    border-top: 1px solid gray !important;
+}
+
 .btn-light {
     border: 1px solid gray;
 }

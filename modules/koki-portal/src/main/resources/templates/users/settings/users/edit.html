@@ -14,8 +14,7 @@
     <div class="settings-content padding">
         <div th:replace="~{__components/settings :: settings-title('Users', '/settings/users')}"></div>
 
-        <form class="form" method="post" th:action="@{'/settings/users/' + ${user.id} + '/update'}"
-              th:object="${form}">
+        <form class="form" method="post" th:action="@{'/settings/users/' + ${me.id} + '/update'}" th:object="${form}">
             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
             <table class="table">
                 <tr>
@@ -34,7 +33,7 @@
                     <td><b>Status</b></td>
                     <td>
                         <select th:field="*{status}">
-                            <option th:each="value : ${user.status.values()}"
+                            <option th:each="value : ${me.status.values()}"
                                     th:text="#{'user-status.' + ${value.name()}}"
                                     th:value="${value.name()}">
                                 OPTION

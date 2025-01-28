@@ -32,7 +32,7 @@ class SettingsEditUserController(
     }
 
     private fun edit(user: UserModel, form: UserForm, model: Model): String {
-        model.addAttribute("user", user)
+        model.addAttribute("me", user)
         model.addAttribute("form", form)
         model.addAttribute(
             "page",

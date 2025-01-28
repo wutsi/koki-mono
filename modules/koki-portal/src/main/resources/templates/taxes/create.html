@@ -58,26 +58,26 @@
                             </div>
 
                             <div class="section-item">
-                                <label class="title">Assigned To</label>
-                                <select th:field="*{assigneeId}"></select>
-                                <script th:replace="~{__components/user :: user-selector('assigneeId', null)}"></script>
+                                <label class="title">Start Date</label>
+                                <input th:field="*{startAt}" type="date"/>
                             </div>
                             <div class="section-item">
                                 <label class="title">Accountant</label>
                                 <select th:field="*{accountantId}"></select>
                                 <script
-                                    th:replace="~{__components/user :: user-selector('accountantId', null)}"></script>
+                                    th:replace="~{__components/user :: user-selector('accountantId', null, 'tax:manage')}"></script>
                             </div>
                             <div class="section-item">
                                 <label class="title">Technician</label>
                                 <select th:field="*{technicianId}"></select>
                                 <script
-                                    th:replace="~{__components/user :: user-selector('technicianId', null)}"></script>
+                                    th:replace="~{__components/user :: user-selector('technicianId', null, 'tax:manage')}"></script>
                             </div>
-
                             <div class="section-item">
-                                <label class="title">Start Date</label>
-                                <input th:field="*{startAt}" type="date"/>
+                                <label class="title">Assigned To</label>
+                                <select th:field="*{assigneeId}"></select>
+                                <script
+                                    th:replace="~{__components/user :: user-selector('assigneeId', null, 'tax:manage')}"></script>
                             </div>
                             <div class="section-item">
                                 <label class="title">Due Date</label>

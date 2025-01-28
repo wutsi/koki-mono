@@ -49,7 +49,7 @@
 
 <div th:fragment="tax-status(status)">
     <span class="badge text-bg-secondary"
-          th:if="${status == 'NEW'} OR ${status == 'PREPARING'}"
+          th:if="${status == 'NEW'}"
           th:text="#{'tax-status.' + ${status}}">NEW</span>
 
     <span class="badge text-bg-success"
@@ -61,7 +61,7 @@
           th:text="#{'tax-status.' + ${status}}">DONE</span>
 
     <span class="badge text-bg-info"
-          th:if="${status != 'NEW'} AND ${status != 'PREPARING'} AND ${status != 'DONE'} AND ${status != 'SIGNING'} AND ${status != 'SUBMITTING'}"
+          th:if="${status != 'NEW'} AND ${status != 'PREPARING'} AND ${status != 'DONE'}  AND ${status != 'SUBMITTING'}"
           th:text="#{'tax-status.' + ${status}}">NEW</span>
 </div>
 

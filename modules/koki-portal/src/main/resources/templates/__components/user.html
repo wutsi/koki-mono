@@ -6,11 +6,14 @@
     <span th:text="#{'user-status.' + ${status.name}}">STATUS</span>
 </div>
 
-<script th:fragment="user-selector(id, roleId)" th:inline="javascript">
+<script th:fragment="user-selector(id, roleId, permission)" th:inline="javascript">
     document.addEventListener("DOMContentLoaded", function () {
         const selector = /*[[${id}]]*/ '';
         const roleId = /*[[${roleId}]]*/ -1;
-        const url = '/users/selector/search' + (roleId ? '&role-id=' + roleId : '');
+        const permission = /*[[${permission}]]*/ '';
+        const url = '/users/selector/search?'
+            + (roleId ? '&role-id=' + roleId : '')
+            + (permission ? '&permission=' + encodeURIComponent(permission) : '');
         $('#' + selector).select2({
             ajax: {
                 url: url,

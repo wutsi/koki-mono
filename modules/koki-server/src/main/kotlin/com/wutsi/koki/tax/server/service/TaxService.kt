@@ -6,6 +6,7 @@ import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.note.dto.CreateNoteRequest
+import com.wutsi.koki.note.dto.NoteType
 import com.wutsi.koki.note.server.service.NoteService
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tax.dto.CreateTaxRequest
@@ -90,7 +91,7 @@ class TaxService(
         if (dueAtTo != null) {
             jql.append(" AND T.dueAt <= :dueAtTo")
         }
-        jql.append(" ORDER BY T.fiscalYear DESC, T.id DESC")
+        jql.append(" ORDER BY T.fiscalYear DESC, T.startAt")
 
         val query = em.createQuery(jql.toString(), TaxEntity::class.java)
         query.setParameter("tenantId", tenantId)
@@ -201,6 +202,7 @@ class TaxService(
             noteService.create(
                 tenantId = tenantId,
                 request = CreateNoteRequest(
+                    type = NoteType.TASK,
                     subject = "",
                     body = request.notes!!,
                     reference = ObjectReference(

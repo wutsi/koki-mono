@@ -82,8 +82,8 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun `status - without permission tax-manage`() {
-        setUpUserWithoutPermissions(listOf("tax:manage"))
+    fun `status - without permission tax-status`() {
+        setUpUserWithoutPermissions(listOf("tax:status"))
 
         navigateTo("/taxes/${tax.id}/status")
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)

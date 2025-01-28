@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.net.URLDecoder
 
 @RestController
 @RequestMapping("/v1/users")
@@ -43,6 +44,7 @@ class UserEndpoints(
         @RequestParam(required = false, name = "q") keyword: String? = null,
         @RequestParam(required = false) id: List<Long> = emptyList(),
         @RequestParam(required = false, name = "role-id") roleId: List<Long> = emptyList(),
+        @RequestParam(required = false, name = "permission") permissions: List<String> = emptyList(),
         @RequestParam(required = false) status: UserStatus? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
@@ -53,6 +55,7 @@ class UserEndpoints(
             roleIds = roleId,
             tenantId = tenantId,
             status = status,
+            permissions = permissions.map { permission -> URLDecoder.decode(permission, "utf-8") },
             limit = limit,
             offset = offset,
         )
