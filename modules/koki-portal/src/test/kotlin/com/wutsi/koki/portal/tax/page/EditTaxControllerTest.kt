@@ -38,7 +38,7 @@ class EditTaxControllerTest : AbstractPageControllerTest() {
             eq(Any::class.java),
         )
         val tax = request.firstValue
-        assertEquals(LocalDate.now().year - 2, tax.fiscalYear)
+        assertEquals(LocalDate.now().year - 3, tax.fiscalYear)
         assertEquals(taxTypes[2].id, tax.taxTypeId)
         assertEquals("This is a nice description", tax.description)
 

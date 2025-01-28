@@ -14,6 +14,7 @@ import com.wutsi.koki.tax.dto.UpdateTaxRequest
 import com.wutsi.koki.tax.dto.UpdateTaxStatusRequest
 import org.springframework.stereotype.Service
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import kotlin.collections.flatMap
 
 @Service
@@ -62,6 +63,11 @@ class TaxService(
         assigneeIds: List<Long> = emptyList(),
         createdByIds: List<Long> = emptyList(),
         statuses: List<TaxStatus> = emptyList(),
+        fiscalYear: Int? = null,
+        startAtFrom: LocalDate? = null,
+        startAtTo: LocalDate? = null,
+        dueAtFrom: LocalDate? = null,
+        dueAtTo: LocalDate? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): List<TaxModel> {
@@ -73,8 +79,13 @@ class TaxService(
             assigneeIds = assigneeIds,
             createdByIds = createdByIds,
             statuses = statuses,
+            fiscalYear = fiscalYear,
+            startAtFrom = startAtFrom,
+            startAtTo = startAtTo,
+            dueAtFrom = dueAtFrom,
+            dueAtTo = dueAtTo,
             limit = limit,
-            offset = offset
+            offset = offset,
         ).taxes
 
         // Account

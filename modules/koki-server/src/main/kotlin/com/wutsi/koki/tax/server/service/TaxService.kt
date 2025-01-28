@@ -45,6 +45,11 @@ class TaxService(
         participantIds: List<Long> = emptyList(),
         createdByIds: List<Long> = emptyList(),
         statuses: List<TaxStatus> = emptyList(),
+        fiscalYear: Int? = null,
+        startAtFrom: Date? = null,
+        startAtTo: Date? = null,
+        dueAtFrom: Date? = null,
+        dueAtTo: Date? = null,
         limit: Int = 20,
         offset: Int = 0
     ): List<TaxEntity> {
@@ -70,6 +75,21 @@ class TaxService(
         if (statuses.isNotEmpty()) {
             jql.append(" AND T.status IN :statuses")
         }
+        if (fiscalYear != null) {
+            jql.append(" AND T.fiscalYear IN :fiscalYear")
+        }
+        if (startAtFrom != null) {
+            jql.append(" AND T.startAt >= :startAtFrom")
+        }
+        if (startAtTo != null) {
+            jql.append(" AND T.startAt <= :startAtTo")
+        }
+        if (dueAtFrom != null) {
+            jql.append(" AND T.dueAt >= :dueAtFrom")
+        }
+        if (dueAtTo != null) {
+            jql.append(" AND T.dueAt <= :dueAtTo")
+        }
         jql.append(" ORDER BY T.fiscalYear DESC, T.id DESC")
 
         val query = em.createQuery(jql.toString(), TaxEntity::class.java)
@@ -94,6 +114,21 @@ class TaxService(
         }
         if (statuses.isNotEmpty()) {
             query.setParameter("statuses", statuses)
+        }
+        if (fiscalYear != null) {
+            query.setParameter("fiscalYear", fiscalYear)
+        }
+        if (startAtFrom != null) {
+            query.setParameter("startAtFrom", startAtFrom)
+        }
+        if (startAtTo != null) {
+            query.setParameter("startAtTo", startAtTo)
+        }
+        if (dueAtFrom != null) {
+            query.setParameter("dueAtFrom", dueAtFrom)
+        }
+        if (dueAtTo != null) {
+            query.setParameter("dueAtTo", dueAtTo)
         }
 
         query.firstResult = offset
@@ -151,10 +186,14 @@ class TaxService(
     fun status(id: Long, request: UpdateTaxStatusRequest, tenantId: Long) {
         // Update
         val tax = get(id, tenantId)
+        val now = Date()
         tax.status = request.status
         tax.assigneeId = request.assigneeId
-        tax.modifiedAt = Date()
+        tax.modifiedAt = now
         tax.modifiedById = securityService.getCurrentUserId()
+        if (request.status.ordinal > TaxStatus.NEW.ordinal && tax.startAt == null) {
+            tax.startAt = now
+        }
         dao.save(tax)
 
         // Notes

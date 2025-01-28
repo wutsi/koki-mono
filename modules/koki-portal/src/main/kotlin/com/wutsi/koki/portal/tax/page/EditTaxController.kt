@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 
 @Controller
 @RequiresPermission(["tax:manage"])
@@ -74,10 +73,7 @@ class EditTaxController(
             )
         )
 
-        val year2 = LocalDate.now().year
-        val year1 = year2 - 100
-        val years = (year2 downTo year1).toList()
-        model.addAttribute("years", years)
+        loadFiscalYears(model)
         return "taxes/edit"
     }
 

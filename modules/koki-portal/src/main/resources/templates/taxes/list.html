@@ -1,4 +1,3 @@
-
 <!DOCTYPE HTML>
 <html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
 <head>
@@ -35,35 +34,72 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li th:if="${collection} != '1'">
-                                    <a class="dropdown-item" href="/taxes?col=1">All Tax Reports</a>
+                                    <a class="dropdown-item" href="javascript: koki_taxes_on_collection_selected(1)">All
+                                        Tax Reports</a>
                                 </li>
                                 <li th:if="${collection} != '2'">
-                                    <a class="dropdown-item" href="/taxes?col=2">My Tax Reports</a>
+                                    <a class="dropdown-item" href="javascript: koki_taxes_on_collection_selected(2)">My
+                                        Tax Reports</a>
                                 </li>
                                 <li th:if="${collection} != '3'">
-                                    <a class="dropdown-item" href="/taxes?col=3">My Assigned Tax Reports</a>
+                                    <a class="dropdown-item" href="javascript: koki_taxes_on_collection_selected(3)">My
+                                        Assigned Tax Reports</a>
                                 </li>
                                 <li th:if="${collection} != '4'">
-                                    <a class="dropdown-item" href="/taxes?col=4">My Closed Tax Reports</a>
+                                    <a class="dropdown-item" href="javascript: koki_taxes_on_collection_selected(4)">My
+                                        Closed Tax Reports</a>
                                 </li>
                                 <li th:if="${collection} != '5'">
-                                    <a class="dropdown-item" href="/taxes?col=5">All Closed Tax Reports</a>
+                                    <a class="dropdown-item" href="javascript: koki_taxes_on_collection_selected(5)">All
+                                        Closed Tax Reports</a>
                                 </li>
                             </ul>
                         </div>
                         <div>
+                            <select class="btn btn-sm btn-light" id="filter-fiscal-year"
+                                    onchange="koki_taxes_on_filter_changed()">
+                                <option th:each="year : ${years}"
+                                        th:selected="${year} == ${currentYear} ? 'selected'"
+                                        th:text="${year}"
+                                        th:value="${year}">
+                                    YEAR
+                                </option>
+                            </select>
+
+                            <div aria-label="Basic example" class="btn-group" role="group">
+                                <button class="btn btn-light btn-sm" id="btn-view-table"
+                                        onclick="koki_taxes_on_view_selected(1)"
+                                        th:classappend="${view == '1'} ? 'active'"
+                                        title="Table View">
+                                    <i class="fa-solid fa-table"></i>
+                                </button>
+                                <button class="btn btn-light btn-sm" id="btn-view-calendar"
+                                        onclick="koki_taxes_on_view_selected(2)"
+                                        th:classappend="${view == '2'} ? 'active'"
+                                        title="Calendar View">
+                                    <i class="fa-regular fa-calendar-days"></i>
+                                </button>
+                            </div>
+
                             <a class="btn-create btn btn-light btn-sm" href="/taxes/create"
-                                th:if="${user?.hasPermission('tax:manage')}">Create New Tax Report</a>
+                               th:if="${user?.hasPermission('tax:manage')}">Create New Tax Report</a>
                         </div>
                     </div>
+
+                    <input class="margin-top-small margin-bottom-small" id="filter-month"
+                           onchange="koki_taxes_on_filter_changed()"
+                           th:if="${view == '2'}" th:value="${month}"
+                           type="month"
+                    />
 
                     <table class="table table-striped">
                         <thead>
                         <tr>
                             <th width="1%">Year</th>
                             <th>Type</th>
-                            <th>Account</th>
                             <th>Status</th>
+                            <th>Start Date</th>
+                            <th>Account</th>
                             <th>Accountant</th>
                             <th>Assigned To</th>
                             <td></td>
@@ -83,5 +119,32 @@
 </div>
 
 <div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
+
+<input id="filter-collection" th:value="${collection}" type="hidden"/>
+<input id="filter-view" th:value="${view}" type="hidden"/>
+<script>
+    function koki_taxes_on_collection_selected(col) {
+        document.getElementById('filter-collection').value = col;
+        koki_taxes_on_filter_changed();
+    }
+
+    function koki_taxes_on_view_selected(view) {
+        document.getElementById('filter-view').value = view;
+        koki_taxes_on_filter_changed();
+    }
+
+    function koki_taxes_on_filter_changed() {
+        const year = document.getElementById('filter-fiscal-year');
+        const col = document.getElementById('filter-collection');
+        const view = document.getElementById('filter-view');
+
+        const month = document.getElementById('filter-month');
+
+        document.location.href = '/taxes?fiscal-year=' + year.value +
+            '&col=' + col.value +
+            '&view=' + view.value +
+            (month ? '&month=' + month.value : '');
+    }
+</script>
 </body>
 </html>

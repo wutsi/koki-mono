@@ -43,13 +43,14 @@
 
 ## Taxes
 
+- [] Add Kanban view
 - [] Compile time spent by Tax report
-- [] Compile labor cost by Tax report
 - [] Compile time spent on Tax report by user
+- [] Compile labor cost by Tax report
 - [] Track total time spent on Tax Report per user
 - [] Settings: Setup email notification
-- [] Add Kanban view
-- [] Add Calendar view
+- [] Filter Accountant and Technician based on the permission 'tax:manage'
+- [x] Add Calendar view
 - [x] Apply RBAC security on UI
 - [x] Settings: Import Taxes Types from CSV
 - [x] Send email to Taxes

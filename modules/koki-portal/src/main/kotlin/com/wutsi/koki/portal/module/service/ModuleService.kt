@@ -21,7 +21,7 @@ class ModuleService(
     fun modules(): List<ModuleModel> {
         if (all == null) {
             val modules = koki.modules().modules
-            LOGGER.info("${all?.size} Modules(s) loaded")
+            LOGGER.info("${modules.size} modules(s) loaded")
 
             val permissions = koki.permissions(
                 moduleIds = modules.map { module -> module.id },

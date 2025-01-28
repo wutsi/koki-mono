@@ -41,7 +41,7 @@ class CreateTaxControllerTest : AbstractPageControllerTest() {
             eq(CreateTaxResponse::class.java),
         )
         val tax = request.firstValue
-        assertEquals(LocalDate.now().year - 2, tax.fiscalYear)
+        assertEquals(LocalDate.now().year - 3, tax.fiscalYear)
         assertEquals(taxTypes[2].id, tax.taxTypeId)
 //        assertEquals("2020-12-11", fmt.format(tax.startAt))
 //        assertEquals("2020-12-21", fmt.format(tax.dueAt))
