@@ -1,4 +1,4 @@
-<tr class="user" th:each="user : ${users}">
+<tr class="user" th:each="me : ${users}">
     <td>
         <a th:href="'/settings/users/' + ${me.id}" th:text="${me.displayName}">NAME</a>
     </td>
