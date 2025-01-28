@@ -49,6 +49,7 @@
 - [] Compile labor cost by Tax report
 - [] Track total time spent on Tax Report per user
 - [] Settings: Setup email notification
+- [] Filter Accountant and Technician based on the permission 'tax:manage'
 - [x] Add Calendar view
 - [x] Apply RBAC security on UI
 - [x] Settings: Import Taxes Types from CSV

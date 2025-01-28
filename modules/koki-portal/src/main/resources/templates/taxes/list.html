@@ -67,13 +67,14 @@
                             </select>
 
                             <div aria-label="Basic example" class="btn-group" role="group">
-                                <button class="btn-create btn btn-light btn-sm"
+                                <button class="btn btn-light btn-sm" id="btn-view-table"
                                         onclick="koki_taxes_on_view_selected(1)"
                                         th:classappend="${view == '1'} ? 'active'"
                                         title="Table View">
                                     <i class="fa-solid fa-table"></i>
                                 </button>
-                                <button class="btn-create btn btn-light btn-sm" onclick="koki_taxes_on_view_selected(2)"
+                                <button class="btn btn-light btn-sm" id="btn-view-calendar"
+                                        onclick="koki_taxes_on_view_selected(2)"
                                         th:classappend="${view == '2'} ? 'active'"
                                         title="Calendar View">
                                     <i class="fa-regular fa-calendar-days"></i>
