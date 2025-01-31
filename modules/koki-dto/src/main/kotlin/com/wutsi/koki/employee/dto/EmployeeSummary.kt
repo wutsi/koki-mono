@@ -3,15 +3,11 @@ package com.wutsi.koki.employee.dto
 import java.util.Date
 
 data class EmployeeSummary(
-    val id: Long = -1,
+    val userId: Long = -1,
     val createdById: Long? = null,
     val modifiedById: Long? = null,
-    val firstName: String = "",
-    val lastName: String = "",
+    val status: EmployeeStatus = EmployeeStatus.UNKNOWN,
     val jobTitle: String? = null,
-    val hourlyWage: Double? = null,
-    val currency: String? = null,
-    val status: EmployeeStatus = EmployeeStatus.NEW,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
 )

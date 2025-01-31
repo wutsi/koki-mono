@@ -4,5 +4,5 @@ enum class UserStatus {
     NEW,
     ACTIVE,
     SUSPENDED,
-    RETIRED,
+    TERMINATED,
 }
