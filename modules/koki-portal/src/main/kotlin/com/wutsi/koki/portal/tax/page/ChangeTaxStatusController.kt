@@ -37,7 +37,7 @@ class ChangeTaxStatusController(
     private fun edit(tax: TaxModel, form: TaxStatusForm, model: Model): String {
         model.addAttribute("tax", tax)
         model.addAttribute("form", form)
-        model.addAttribute("statuses", TaxStatus.values())
+        model.addAttribute("statuses", TaxStatus.entries)
         model.addAttribute(
             "page",
             createPageModel(

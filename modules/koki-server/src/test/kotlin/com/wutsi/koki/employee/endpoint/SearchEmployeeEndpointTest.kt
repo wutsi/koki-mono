@@ -1,53 +1,86 @@
 package com.wutsi.koki.employee.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.employee.dto.EmployeeStatus
-import com.wutsi.koki.employee.dto.GetEmployeeResponse
-import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.employee.dto.SearchEmployeeResponse
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/employee/GetEmployeeEndpoint.sql"])
-class GetEmployeeEndpointTest : AuthorizationAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/employee/SearchEmployeeEndpoint.sql"])
+class SearchEmployeeEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
-    fun get() {
-        val response = rest.getForEntity("/v1/employees/100", GetEmployeeResponse::class.java)
+    fun all() {
+        val response = rest.getForEntity("/v1/employees", SearchEmployeeResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val employee = response.body!!.employee
-        assertEquals("Ray", employee.firstName)
-        assertEquals("Sponsible", employee.lastName)
-        assertEquals("Director of Tech", employee.jobTitle)
-        assertEquals(10000.0, employee.hourlyWage)
-        assertEquals("XAF", employee.currency)
-        assertEquals(EmployeeStatus.ACTIVE, employee.status)
+        val employees = response.body!!.employees
+        assertEquals(4, employees.size)
     }
 
     @Test
-    fun notFound() {
-        val response = rest.getForEntity("/v1/employees/999", ErrorResponse::class.java)
+    fun `by keyword - firstname`() {
+        val response = rest.getForEntity("/v1/employees?q=ray", SearchEmployeeResponse::class.java)
 
-        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
-        assertEquals(ErrorCode.EMPLOYEE_NOT_FOUND, response.body!!.error.code)
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val employees = response.body!!.employees
+        assertEquals(2, employees.size)
+        assertEquals(listOf(100L, 110L), employees.map { employee -> employee.id }.sorted())
+    }
+
+    @Test
+    fun `by keyword - lastname`() {
+        val response = rest.getForEntity("/v1/employees?q=dub", SearchEmployeeResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val employees = response.body!!.employees
+        assertEquals(2, employees.size)
+        assertEquals(listOf(110L, 120L), employees.map { employee -> employee.id }.sorted())
+    }
+
+    @Test
+    fun `by status`() {
+        val response = rest.getForEntity("/v1/employees?status=ACTIVE", SearchEmployeeResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val employees = response.body!!.employees
+        assertEquals(3, employees.size)
+        assertEquals(listOf(100L, 110L, 130L), employees.map { employee -> employee.id }.sorted())
+    }
+
+    @Test
+    fun `by ids`() {
+        val response =
+            rest.getForEntity("/v1/employees?id=100&id=110&id=130", SearchEmployeeResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val employees = response.body!!.employees
+        assertEquals(3, employees.size)
+        assertEquals(listOf(100L, 110L, 130L), employees.map { employee -> employee.id }.sorted())
     }
 
     @Test
     fun deleted() {
-        val response = rest.getForEntity("/v1/employees/199", ErrorResponse::class.java)
+        val response = rest.getForEntity("/v1/employees?id=199", SearchEmployeeResponse::class.java)
 
-        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
-        assertEquals(ErrorCode.EMPLOYEE_NOT_FOUND, response.body!!.error.code)
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val employees = response.body!!.employees
+        assertEquals(0, employees.size)
     }
 
     @Test
     fun anotherTenant() {
-        val response = rest.getForEntity("/v1/employees/200", ErrorResponse::class.java)
+        val response = rest.getForEntity("/v1/employees?id=200", SearchEmployeeResponse::class.java)
 
-        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
-        assertEquals(ErrorCode.EMPLOYEE_NOT_FOUND, response.body!!.error.code)
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val employees = response.body!!.employees
+        assertEquals(0, employees.size)
     }
 }

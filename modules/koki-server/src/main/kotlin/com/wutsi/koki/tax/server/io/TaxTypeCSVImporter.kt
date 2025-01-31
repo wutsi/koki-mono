@@ -34,7 +34,7 @@ class TaxTypeCSVImporter(
                 .setDelimiter(",")
                 .setHeader(*TaxTypeEntity.CSV_HEADERS.toTypedArray())
                 .setTrim(true)
-                .build(),
+                .get(),
         )
         var added: Int = 0
         var updated: Int = 0

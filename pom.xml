@@ -101,7 +101,7 @@
         <jsoup.version>1.18.3</jsoup.version>
         <junit.version>5.11.4</junit.version>
         <junit-platform-commons.version>1.10.0</junit-platform-commons.version>
-        <java-jwt.version>4.4.0</java-jwt.version>
+        <java-jwt.version>4.5.0</java-jwt.version>
         <jgrapht.version>1.5.2</jgrapht.version>
         <jython.version>2.7.4</jython.version>
         <kotlin.version>2.1.10</kotlin.version>
@@ -110,7 +110,7 @@
         <kotlinpoet.version>1.18.1</kotlinpoet.version>
         <klint.version>0.51.0-FINAL</klint.version>
         <lettuce.version>6.4.0.RELEASE</lettuce.version>
-        <libphonenumber.version>8.13.53</libphonenumber.version>
+        <libphonenumber.version>8.13.54</libphonenumber.version>
         <mobiledetect.version>1.1.1</mobiledetect.version>
         <mustache.version>0.9.14</mustache.version>
         <mysql.version>8.0.33</mysql.version>
@@ -132,7 +132,7 @@
         <ua-java.version>1.6.1</ua-java.version>
         <xmemcached.version>2.4.8</xmemcached.version>
 
-        <wutsi-dto.version>0.0.108</wutsi-dto.version>
+        <wutsi-dto.version>0.0.109</wutsi-dto.version>
     </properties>
 
     <dependencies>

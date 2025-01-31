@@ -21,6 +21,7 @@ class KokiTaxes(
     companion object {
         private const val TAX_PATH_PREFIX = "/v1/taxes"
         private const val TAX_TYPE_PATH_PREFIX = "/v1/tax-types"
+        private const val WAGE_PATH_PREFIX = "/v1/wages"
     }
 
     fun tax(id: Long): GetTaxResponse {

@@ -5,5 +5,4 @@ import com.wutsi.koki.tax.dto.TaxStatus
 data class TaxStatusForm(
     val assigneeId: Long? = null,
     val status: TaxStatus = TaxStatus.NEW,
-    val notes: String = "",
 )

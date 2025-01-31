@@ -45,9 +45,9 @@ INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_u
     VALUES (160, 6, 'tax', 'Taxes', '/taxes', '/taxes/tab', '/settings/taxes');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
-    VALUES (1600, 160, 'tax',        'Access taxes'),
-           (1601, 160, 'tax:manage', 'Manage taxes'),
-           (1602, 160, 'tax:delete', 'Delete taxes'),
-           (1603, 160, 'tax:admin',  'Configure taxes'),
-           (1604, 160, 'tax:status', 'Change taxes status and assignment');
+    VALUES (1600, 160, 'tax',        'View tax reports'),
+           (1601, 160, 'tax:manage', 'Add/Edit tax reports'),
+           (1602, 160, 'tax:delete', 'Delete tax reports'),
+           (1603, 160, 'tax:admin',  'Configure tax module'),
+           (1604, 160, 'tax:status', 'Change tax report status and assignment');
 

@@ -28,6 +28,7 @@ CREATE TABLE T_NOTE_OWNER(
   owner_fk              BIGINT NOT NULL,
 
   owner_type            INT NOT NULL DEFAULT 0,
+  created_at            DATETIME DEFAULT NOW(),
 
   UNIQUE(note_fk, owner_fk, owner_type),
   PRIMARY KEY(id)
@@ -37,7 +38,7 @@ INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_u
     VALUES (140, 4, 'note', 'Notes', null, '/notes/tab', null, '/js/notes.js');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
-    VALUES (1400, 140, 'note',        'Access notes'),
-           (1401, 140, 'note:manage', 'Manage notes'),
+    VALUES (1400, 140, 'note',        'Read notes'),
+           (1401, 140, 'note:manage', 'Add/Edit notes'),
            (1402, 140, 'note:delete', 'Delete notes');
 

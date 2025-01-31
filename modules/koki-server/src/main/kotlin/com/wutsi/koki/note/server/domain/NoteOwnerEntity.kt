@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import java.util.Date
 
 @Entity
 @Table(name = "T_NOTE_OWNER")
@@ -22,4 +23,6 @@ data class NoteOwnerEntity(
     val ownerId: Long = -1,
 
     val ownerType: ObjectType = ObjectType.UNKNOWN,
+
+    val createdAt: Date = Date()
 )

@@ -37,7 +37,7 @@ class ContactService(
         accountIds: List<Long> = emptyList(),
         createdByIds: List<Long> = emptyList(),
         limit: Int = 20,
-        offset: Int = 0
+        offset: Int = 0,
     ): List<ContactEntity> {
         val jql = StringBuilder("SELECT C FROM ContactEntity C WHERE C.deleted=false AND C.tenantId = :tenantId")
         if (keyword != null) {

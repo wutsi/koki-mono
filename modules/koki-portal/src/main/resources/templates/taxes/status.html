@@ -79,30 +79,6 @@
                                 <script
                                     th:replace="~{__components/user :: user-selector('assigneeId', null, 'tax:manage')}"></script>
                             </div>
-
-                            <div class="section-item">
-                                <label class="title">Notes</label>
-                                <div id="html-editor" style="height: 10em" th:utext="${form.notes}"></div>
-                                <textarea name="notes" style="display: none" th:field="*{notes}"></textarea>
-                                <script>
-                                    const quill = new Quill(
-                                        '#html-editor',
-                                        {
-                                            theme: 'snow',
-                                            modules: {
-                                                toolbar: [
-                                                    ['bold', 'italic', 'underline', 'strike', 'link', {'color': []}],
-                                                ]
-                                            }
-                                        }
-                                    );
-                                    quill.on('text-change', (delta, oldDelta, source) => {
-                                        const notes = document.getElementById('notes');
-                                        notes.value = document.querySelector('.ql-editor').innerHTML;
-                                        console.log('>>> text-change', document.querySelector('.ql-editor').innerHTML, notes.value);
-                                    });
-                                </script>
-                            </div>
                         </div>
                     </div>
                 </div>

@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
 import java.text.DateFormat
+import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -30,6 +32,11 @@ abstract class TenantAwareMapper {
         return SimpleDateFormat(tenant?.timeFormat ?: "HH:mm")
     }
 
+    protected fun createNumberFormat(): DecimalFormat {
+        val tenant = currentTenant.get()
+        return DecimalFormat(tenant?.numberFormat ?: "##.#")
+    }
+
     protected fun formatMoment(date: Date, dateTimeFormat: DateFormat, timeFormat: DateFormat): String {
         val days = (System.currentTimeMillis() - date.time) / (1000 * 60 * 60 * 24)
         val locale = LocaleContextHolder.getLocale()
@@ -39,6 +46,15 @@ abstract class TenantAwareMapper {
             messages.getMessage("moment.yesterday", emptyArray(), locale) + " - " + timeFormat.format(date)
         } else {
             dateTimeFormat.format(date)
+        }
+    }
+
+    protected fun createMoneyFormat(): NumberFormat {
+        val tenant = currentTenant.get()
+        if (tenant != null) {
+            return DecimalFormat(tenant.monetaryFormat)
+        } else {
+            return createNumberFormat()
         }
     }
 }

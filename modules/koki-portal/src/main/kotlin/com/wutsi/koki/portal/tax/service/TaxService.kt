@@ -167,7 +167,6 @@ class TaxService(
         val request = UpdateTaxStatusRequest(
             assigneeId = form.assigneeId,
             status = form.status,
-            notes = form.notes,
         )
         koki.status(id, request)
     }
