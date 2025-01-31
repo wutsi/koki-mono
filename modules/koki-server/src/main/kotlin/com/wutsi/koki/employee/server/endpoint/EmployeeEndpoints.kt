@@ -9,7 +9,6 @@ import com.wutsi.koki.employee.dto.UpdateEmployeeRequest
 import com.wutsi.koki.employee.server.mapper.EmployeeMapper
 import com.wutsi.koki.employee.server.service.EmployeeService
 import jakarta.validation.Valid
-import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -43,14 +42,6 @@ class EmployeeEndpoints(
         service.update(id, request, tenantId)
     }
 
-    @DeleteMapping("/{id}")
-    fun delete(
-        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-        @PathVariable id: Long,
-    ) {
-        service.delete(id, tenantId)
-    }
-
     @GetMapping("/{id}")
     fun get(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
@@ -65,7 +56,6 @@ class EmployeeEndpoints(
     @GetMapping
     fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-        @RequestParam(required = false, name = "q") keyword: String? = null,
         @RequestParam(required = false, name = "id") ids: List<Long> = emptyList(),
         @RequestParam(required = false, name = "status") statuses: List<EmployeeStatus> = emptyList(),
         @RequestParam(required = false) limit: Int = 20,
@@ -73,7 +63,6 @@ class EmployeeEndpoints(
     ): SearchEmployeeResponse {
         val employess = service.search(
             tenantId = tenantId,
-            keyword = keyword,
             ids = ids,
             statuses = statuses,
             limit = limit,

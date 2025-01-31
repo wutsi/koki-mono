@@ -10,6 +10,7 @@ import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
 import com.wutsi.koki.tenant.dto.UserStatus
+import com.wutsi.koki.tenant.dto.UserType
 import com.wutsi.koki.tenant.server.dao.UserRepository
 import com.wutsi.koki.tenant.server.service.PasswordService
 import org.junit.jupiter.api.BeforeEach
@@ -78,6 +79,7 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.displayName, user.displayName)
         assertEquals(request.email, user.email)
         assertEquals(UserStatus.ACTIVE, user.status)
+        assertEquals(UserType.UNKNOWN, user.type)
         assertEquals(36, user.salt.length)
         assertEquals(HASHED_PASSWORD, user.password)
         assertEquals(TENANT_ID, user.tenantId)

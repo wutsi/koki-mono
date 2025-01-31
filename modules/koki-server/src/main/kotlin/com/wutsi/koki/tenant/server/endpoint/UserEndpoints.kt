@@ -89,6 +89,6 @@ class UserEndpoints(
         @PathVariable id: Long,
         @RequestBody request: SetRoleListRequest
     ) {
-        val user = service.setRoles(id, request, tenantId)
+        service.setRoles(id, request, tenantId)
     }
 }

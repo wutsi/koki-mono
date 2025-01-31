@@ -1,22 +1,20 @@
 CREATE TABLE T_EMPLOYEE(
-  id                      BIGINT NOT NULL AUTO_INCREMENT,
+  id                      BIGINT NOT NULL,
 
   tenant_fk               BIGINT NOT NULL,
   created_by_fk           BIGINT,
   modified_by_fk          BIGINT,
   deleted_by_fk           BIGINT,
 
-  first_name              VARCHAR(100) NOT NULL,
-  last_name               VARCHAR(100) NOT NULL,
   job_title               VARCHAR(100),
   hourly_wage             DECIMAL(12, 2),
   currency                VARCHAR(3),
   status                  INT DEFAULT 0,
-  deleted                 BOOLEAN NOT NULL DEFAULT false,
+  hired_at                DATE,
+  terminated_at           DATE,
 
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
-  deleted_at              DATETIME,
 
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;

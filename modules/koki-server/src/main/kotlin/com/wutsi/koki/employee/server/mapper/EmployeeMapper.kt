@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service
 class EmployeeMapper {
     fun toEmployee(entity: EmployeeEntity): Employee {
         return Employee(
-            id = entity.id!!,
-            firstName = entity.firstName,
-            lastName = entity.lastName,
+            userId = entity.id!!,
             status = entity.status,
             jobTitle = entity.jobTitle,
             hourlyWage = entity.hourlyWage,
             currency = entity.currency,
+            hiredAt = entity.hiredAt,
+            terminatedAt = entity.terminatedAt,
             modifiedAt = entity.modifiedAt,
             createdById = entity.createdById,
             modifiedById = entity.modifiedById,
@@ -25,13 +25,9 @@ class EmployeeMapper {
 
     fun toEmployeeSummary(entity: EmployeeEntity): EmployeeSummary {
         return EmployeeSummary(
-            id = entity.id!!,
-            firstName = entity.firstName,
-            lastName = entity.lastName,
+            userId = entity.id!!,
             status = entity.status,
             jobTitle = entity.jobTitle,
-            hourlyWage = entity.hourlyWage,
-            currency = entity.currency,
             modifiedAt = entity.modifiedAt,
             createdById = entity.createdById,
             modifiedById = entity.modifiedById,

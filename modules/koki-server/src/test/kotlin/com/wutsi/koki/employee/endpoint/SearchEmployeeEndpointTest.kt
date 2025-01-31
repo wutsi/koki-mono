@@ -20,28 +20,6 @@ class SearchEmployeeEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `by keyword - firstname`() {
-        val response = rest.getForEntity("/v1/employees?q=ray", SearchEmployeeResponse::class.java)
-
-        assertEquals(HttpStatus.OK, response.statusCode)
-
-        val employees = response.body!!.employees
-        assertEquals(2, employees.size)
-        assertEquals(listOf(100L, 110L), employees.map { employee -> employee.id }.sorted())
-    }
-
-    @Test
-    fun `by keyword - lastname`() {
-        val response = rest.getForEntity("/v1/employees?q=dub", SearchEmployeeResponse::class.java)
-
-        assertEquals(HttpStatus.OK, response.statusCode)
-
-        val employees = response.body!!.employees
-        assertEquals(2, employees.size)
-        assertEquals(listOf(110L, 120L), employees.map { employee -> employee.id }.sorted())
-    }
-
-    @Test
     fun `by status`() {
         val response = rest.getForEntity("/v1/employees?status=ACTIVE", SearchEmployeeResponse::class.java)
 
@@ -49,7 +27,7 @@ class SearchEmployeeEndpointTest : AuthorizationAwareEndpointTest() {
 
         val employees = response.body!!.employees
         assertEquals(3, employees.size)
-        assertEquals(listOf(100L, 110L, 130L), employees.map { employee -> employee.id }.sorted())
+        assertEquals(listOf(100L, 110L, 130L), employees.map { employee -> employee.userId }.sorted())
     }
 
     @Test
@@ -61,7 +39,7 @@ class SearchEmployeeEndpointTest : AuthorizationAwareEndpointTest() {
 
         val employees = response.body!!.employees
         assertEquals(3, employees.size)
-        assertEquals(listOf(100L, 110L, 130L), employees.map { employee -> employee.id }.sorted())
+        assertEquals(listOf(100L, 110L, 130L), employees.map { employee -> employee.userId }.sorted())
     }
 
     @Test

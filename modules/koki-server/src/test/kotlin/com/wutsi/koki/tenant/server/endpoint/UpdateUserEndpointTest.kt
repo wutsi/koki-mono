@@ -24,7 +24,7 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
         val request = UpdateUserRequest(
             email = "thomas.nkono@hotmail.com",
             displayName = "Thomas Nkono",
-            status = UserStatus.RETIRED,
+            status = UserStatus.TERMINATED,
         )
 
         val result = rest.postForEntity("/v1/users/11", request, Any::class.java)
@@ -43,7 +43,7 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
         val request = UpdateUserRequest(
             email = "OMAM.MBIYICK@hotmail.com",
             displayName = "Omam Mbiyick",
-            status = UserStatus.RETIRED,
+            status = UserStatus.TERMINATED,
         )
 
         val result = rest.postForEntity("/v1/users/11", request, Any::class.java)
@@ -60,7 +60,7 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
         val request = UpdateUserRequest(
             email = "RAY.sponsible@gmail.com",
             displayName = "Duplicate",
-            status = UserStatus.RETIRED,
+            status = UserStatus.TERMINATED,
         )
 
         val result = rest.postForEntity("/v1/users/12", request, ErrorResponse::class.java)
@@ -74,7 +74,7 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
         val request = UpdateUserRequest(
             email = "foo.bar@gmail.com",
             displayName = "Foo Bar",
-            status = UserStatus.RETIRED,
+            status = UserStatus.TERMINATED,
         )
 
         val result = rest.postForEntity("/v1/users/99", request, ErrorResponse::class.java)
@@ -88,7 +88,7 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
         val request = UpdateUserRequest(
             email = "foo.bar@gmail.com",
             displayName = "Foo Bar",
-            status = UserStatus.RETIRED,
+            status = UserStatus.TERMINATED,
         )
 
         val result = rest.postForEntity("/v1/users/22", request, ErrorResponse::class.java)

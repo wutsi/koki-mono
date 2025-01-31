@@ -12,6 +12,7 @@ class UserMapper(private val roleMapper: RoleMapper) {
         displayName = entity.displayName,
         email = entity.email,
         status = entity.status,
+        type = entity.type,
         createdAt = entity.createdAt,
         modifiedAt = entity.modifiedAt,
         roleIds = entity.roles.mapNotNull { role -> role.id }
@@ -22,6 +23,7 @@ class UserMapper(private val roleMapper: RoleMapper) {
         displayName = entity.displayName,
         email = entity.email,
         status = entity.status,
+        type = entity.type,
         createdAt = entity.createdAt,
         modifiedAt = entity.modifiedAt,
     )
