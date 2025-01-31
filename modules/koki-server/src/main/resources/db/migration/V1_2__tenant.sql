@@ -42,8 +42,9 @@ CREATE TABLE T_USER(
   salt                    VARCHAR(36) NOT NULL DEFAULT '',
   display_name            VARCHAR(255) NOT NULL,
   status                  INT NOT NULL DEFAULT 0,
+  type                    INT NOT NULL DEFAULT 0,
   created_at              DATETIME DEFAULT NOW(),
-  modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
+  modified_at             DATETIME NOT NULL DEFAULT now(),
 
   UNIQUE (tenant_fk, email),
   PRIMARY KEY(id)

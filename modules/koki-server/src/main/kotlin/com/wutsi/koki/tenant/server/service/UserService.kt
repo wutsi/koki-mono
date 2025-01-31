@@ -9,6 +9,7 @@ import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.SetRoleListRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
+import com.wutsi.koki.tenant.dto.UserType
 import com.wutsi.koki.tenant.server.dao.UserRepository
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import jakarta.persistence.EntityManager
@@ -117,6 +118,18 @@ class UserService(
         user.modifiedById = securityService.getCurrentUserIdOrNull()
         user.modifiedAt = Date()
         dao.save(user)
+    }
+
+    fun setType(id: Long, type: UserType, tenantId: Long): UserEntity {
+        val user = get(id, tenantId)
+        if (user.type == UserType.UNKNOWN) {
+            user.type = type
+            return dao.save(user)
+        } else {
+            throw ConflictException(
+                error = Error(code = ErrorCode.USER_ALREADY_ASSIGNED)
+            )
+        }
     }
 
     fun search(

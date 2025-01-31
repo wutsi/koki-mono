@@ -1,4 +1,3 @@
-INSERT INTO T_EMPLOYEE(id, tenant_fk, first_name, last_name, status, job_title, hourly_wage, currency, deleted)
-    VALUES (100, 1, 'Ray',   'Sponsible', 1, 'Director of Tech', 10000, 'XAF', false),
-           (199, 1, 'Yo',    'Deleted',   0, null, null, null, true),
-           (200, 2, 'Roger', 'Milla',     0, null, null, null, false);
+INSERT INTO T_EMPLOYEE(id, tenant_fk, status, job_title, hired_at, terminated_at, hourly_wage, currency)
+    VALUES (100, 1, 1, 'Director of Tech', '2020-05-06', '2025-01-31', 10000, 'XAF'),
+           (200, 2, 0, null, null, null, null, null);

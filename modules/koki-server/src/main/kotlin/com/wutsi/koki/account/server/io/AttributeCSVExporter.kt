@@ -19,7 +19,7 @@ class AttributeCSVExporter(private val service: AttributeService) {
                 CSVFormat.DEFAULT
                     .builder()
                     .setHeader(*AttributeEntity.CSV_HEADERS.toTypedArray())
-                    .build(),
+                    .get(),
             )
             printer.use {
                 val attributes = service.search(tenantId = tenantId, limit = Integer.MAX_VALUE)
