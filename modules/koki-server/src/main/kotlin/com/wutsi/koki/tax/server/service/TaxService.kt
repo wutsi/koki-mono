@@ -1,13 +1,8 @@
 package com.wutsi.koki.tax.server.service
 
-import com.wutsi.koki.common.dto.ObjectReference
-import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
-import com.wutsi.koki.note.dto.CreateNoteRequest
-import com.wutsi.koki.note.dto.NoteType
-import com.wutsi.koki.note.server.service.NoteService
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tax.dto.CreateTaxRequest
 import com.wutsi.koki.tax.dto.TaxStatus
@@ -25,7 +20,6 @@ class TaxService(
     private val dao: TaxRepository,
     private val securityService: SecurityService,
     private val em: EntityManager,
-    private val noteService: NoteService,
 ) {
     fun get(id: Long, tenantId: Long): TaxEntity {
         val tax = dao.findById(id)
@@ -196,21 +190,5 @@ class TaxService(
             tax.startAt = now
         }
         dao.save(tax)
-
-        // Notes
-        if (!request.notes?.trim().isNullOrEmpty()) {
-            noteService.create(
-                tenantId = tenantId,
-                request = CreateNoteRequest(
-                    type = NoteType.TASK,
-                    subject = "",
-                    body = request.notes!!,
-                    reference = ObjectReference(
-                        id = tax.id!!,
-                        type = ObjectType.TAX
-                    ),
-                )
-            )
-        }
     }
 }

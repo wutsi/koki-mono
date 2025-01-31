@@ -34,7 +34,7 @@ class ContactTypeCSVImporter(
                 .setDelimiter(",")
                 .setHeader(*ContactTypeEntity.CSV_HEADERS.toTypedArray())
                 .setTrim(true)
-                .build(),
+                .get(),
         )
         val names = mutableListOf<String>()
         var added: Int = 0

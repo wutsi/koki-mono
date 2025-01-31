@@ -21,7 +21,7 @@ class TenantMapper {
             status = entity.status,
             name = entity.name,
             locale = entity.locale,
-            currency = entity.locale,
+            currency = entity.currency,
             domainName = entity.domainName,
             iconUrl = entity.iconUrl?.ifEmpty { null },
             logoUrl = entity.logoUrl?.ifEmpty { null },

@@ -18,5 +18,7 @@ object UserFixtures {
         UserSummary(id = USER_ID, displayName = "Ray Sponsible"),
         UserSummary(id = 12L, displayName = "Roger Milla"),
         UserSummary(id = 13L, displayName = "Omam Mbiyick"),
+        UserSummary(id = 14L, displayName = "Roger Milla"),
+        UserSummary(id = 15L, displayName = "Thomas Nkono"),
     )
 }

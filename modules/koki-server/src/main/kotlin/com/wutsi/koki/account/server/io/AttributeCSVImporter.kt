@@ -33,7 +33,7 @@ class AttributeCSVImporter(private val service: AttributeService) {
                 .setDelimiter(",")
                 .setHeader(*AttributeEntity.CSV_HEADERS.toTypedArray())
                 .setTrim(true)
-                .build(),
+                .get(),
         )
         val names = mutableListOf<String>()
         var added: Int = 0

@@ -23,7 +23,6 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.TAX_STATUS)
 
         select("#status", 3)
-        input("#html-editor .ql-editor", "Hello man")
         click("button[type=submit]")
 
         val request = argumentCaptor<UpdateTaxStatusRequest>()
@@ -34,7 +33,6 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
         )
         val tax = request.firstValue
         assertEquals(TaxStatus.PROCESSING, tax.status)
-        assertEquals("<p>Hello man</p>", tax.notes)
 
         assertCurrentPageIs(PageName.TAX)
     }

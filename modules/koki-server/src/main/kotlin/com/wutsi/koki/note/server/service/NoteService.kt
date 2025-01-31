@@ -78,6 +78,7 @@ class NoteService(
     @Transactional
     fun create(request: CreateNoteRequest, tenantId: Long): NoteEntity {
         val userId = securityService.getCurrentUserIdOrNull()
+        val now = Date()
         val note = dao.save(
             NoteEntity(
                 tenantId = tenantId,
@@ -88,6 +89,8 @@ class NoteService(
                 duration = request.duration,
                 createdById = userId,
                 modifiedById = userId,
+                createdAt = now,
+                modifiedAt = now,
             )
         )
 
@@ -98,6 +101,7 @@ class NoteService(
                     noteId = note.id,
                     ownerId = ref.id,
                     ownerType = ref.type,
+                    createdAt = now,
                 )
             )
         }

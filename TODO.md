@@ -73,8 +73,9 @@
 
 ## Employees
 
-- [] Manage employee information: hourly salary, manager
-- [] Compile employee hours
+- [] Employee API
+- [] Link Employee with User
+- [] Employee UI
 
 ## Email
 

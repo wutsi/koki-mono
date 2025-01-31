@@ -1,8 +1,8 @@
-package com.wutsi.koki.contact.server.dao
+package com.wutsi.koki.employee.server.dao
 
-import com.wutsi.koki.contact.server.domain.ContactEntity
+import com.wutsi.koki.employee.server.domain.EmployeeEntity
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface ContactRepository : CrudRepository<ContactEntity, Long>
+interface EmployeeRepository : CrudRepository<EmployeeEntity, Long>
