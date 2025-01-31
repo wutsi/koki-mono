@@ -44,7 +44,6 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.TAX_STATUS)
 
         select("#status", 3)
-        input("#html-editor .ql-editor", "Hello man")
         click(".btn-cancel")
 
         assertCurrentPageIs(PageName.TAX)
@@ -64,7 +63,6 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.TAX_STATUS)
 
         select("#status", 3)
-        input("#html-editor .ql-editor", "Hello man")
         click("button[type=submit]")
 
         assertCurrentPageIs(PageName.TAX_STATUS)
