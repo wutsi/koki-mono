@@ -23,6 +23,12 @@
                     <td th:text="${me.displayName}">TITLE</td>
                 </tr>
                 <tr>
+                    <td><b>Type</b></td>
+                    <td>
+                        <span th:replace="~{__components/user :: user-type(${me.type})}"></span>
+                    </td>
+                </tr>
+                <tr>
                     <td><b>Email</b></td>
                     <td th:text="${me.email}">EMAIL</td>
                 </tr>

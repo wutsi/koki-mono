@@ -10,6 +10,7 @@ import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.sdk.KokiConfiguration
 import com.wutsi.koki.sdk.KokiContacts
 import com.wutsi.koki.sdk.KokiEmails
+import com.wutsi.koki.sdk.KokiEmployees
 import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiLogs
@@ -74,6 +75,11 @@ class KokiSDKConfiguration(
     @Bean
     fun kokiEmails(): KokiEmails {
         return KokiEmails(urlBuilder(), rest())
+    }
+
+    @Bean
+    fun kokiEmployees(): KokiEmployees {
+        return KokiEmployees(urlBuilder(), rest())
     }
 
     @Bean

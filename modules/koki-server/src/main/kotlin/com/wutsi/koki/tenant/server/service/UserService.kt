@@ -120,8 +120,7 @@ class UserService(
         dao.save(user)
     }
 
-    fun setType(id: Long, type: UserType, tenantId: Long): UserEntity {
-        val user = get(id, tenantId)
+    fun setType(user: UserEntity, type: UserType): UserEntity {
         if (user.type == UserType.UNKNOWN) {
             user.type = type
             return dao.save(user)
@@ -138,6 +137,7 @@ class UserService(
         ids: List<Long> = emptyList(),
         roleIds: List<Long> = emptyList(),
         status: UserStatus? = null,
+        type: UserType? = null,
         permissions: List<String> = emptyList(),
         limit: Int = 20,
         offset: Int = 0,
@@ -160,6 +160,9 @@ class UserService(
         if (status != null) {
             jql.append(" AND U.status = :status")
         }
+        if (type != null) {
+            jql.append(" AND U.type = :type")
+        }
         if (roleIds.isNotEmpty()) {
             jql.append(" AND R.id IN :roleIds")
         }
@@ -181,6 +184,9 @@ class UserService(
         }
         if (status != null) {
             query.setParameter("status", status)
+        }
+        if (type != null) {
+            query.setParameter("type", type)
         }
         if (permissions.isNotEmpty()) {
             query.setParameter("permissions", permissions)

@@ -2,9 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<div th:fragment="user-status(status)" th:if="${status}">
-    <span th:text="#{'user-status.' + ${status.name}}">STATUS</span>
-</div>
+<span th:fragment="user-status(status)" th:if="${status}" th:text="#{'user-status.' + ${status.name}}">
+    STATUS
+</span>
+
+<span th:fragment="user-type(type)" th:if="${type}" th:text="#{'user-type.' + ${type.name}}">
+    TYPE
+</span>
 
 <script th:fragment="user-selector(id, roleId, permission)" th:inline="javascript">
     document.addEventListener("DOMContentLoaded", function () {

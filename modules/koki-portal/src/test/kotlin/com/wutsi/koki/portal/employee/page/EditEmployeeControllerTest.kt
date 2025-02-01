@@ -7,35 +7,33 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
-import com.wutsi.koki.employee.dto.CreateEmployeeRequest
-import com.wutsi.koki.employee.dto.CreateEmployeeResponse
+import com.wutsi.koki.EmployeeFixtures.employee
 import com.wutsi.koki.employee.dto.EmployeeStatus
+import com.wutsi.koki.employee.dto.UpdateEmployeeRequest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import org.junit.jupiter.api.Assertions.assertEquals
 import kotlin.test.Test
 
-class CreateEmployeeControllerTest : AbstractPageControllerTest() {
+class EditEmployeeControllerTest : AbstractPageControllerTest() {
     @Test
-    fun create() {
-        navigateTo("/employees/create")
+    fun update() {
+        navigateTo("/employees/${employee.userId}/edit")
 
-        assertCurrentPageIs(PageName.EMPLOYEE_CREATE)
+        assertCurrentPageIs(PageName.EMPLOYEE_EDIT)
 
-        input("#email", "ray.sponsible@gmail.com")
         input("#jobTitle", "Director of Technology")
         select("#status", 2)
         input("#hourlyWage", "60")
         scrollToBottom()
         click("button[type=submit]")
 
-        val request = argumentCaptor<CreateEmployeeRequest>()
+        val request = argumentCaptor<UpdateEmployeeRequest>()
         verify(rest).postForEntity(
-            eq("$sdkBaseUrl/v1/employees"),
+            eq("$sdkBaseUrl/v1/employees/${employee.userId}"),
             request.capture(),
-            eq(CreateEmployeeResponse::class.java)
+            eq(Any::class.java)
         )
-        assertEquals("ray.sponsible@gmail.com", request.firstValue.email)
         assertEquals("Director of Technology", request.firstValue.jobTitle)
         assertEquals(EmployeeStatus.INACTIVE, request.firstValue.status)
         assertEquals(60.0, request.firstValue.hourlyWage)
@@ -46,11 +44,10 @@ class CreateEmployeeControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun cancel() {
-        navigateTo("/employees/create")
+        navigateTo("/employees/${employee.userId}/edit")
 
-        assertCurrentPageIs(PageName.EMPLOYEE_CREATE)
+        assertCurrentPageIs(PageName.EMPLOYEE_EDIT)
 
-        input("#email", "ray.sponsible@gmail.com")
         input("#jobTitle", "Director of Technology")
         select("#status", 2)
         input("#hourlyWage", "60")
@@ -65,22 +62,21 @@ class CreateEmployeeControllerTest : AbstractPageControllerTest() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
         doThrow(ex).whenever(rest).postForEntity(
             any<String>(),
-            any<CreateEmployeeRequest>(),
-            eq(CreateEmployeeResponse::class.java)
+            any<UpdateEmployeeRequest>(),
+            eq(Any::class.java)
         )
 
-        navigateTo("/employees/create")
+        navigateTo("/employees/${employee.userId}/edit")
 
-        assertCurrentPageIs(PageName.EMPLOYEE_CREATE)
+        assertCurrentPageIs(PageName.EMPLOYEE_EDIT)
 
-        input("#email", "ray.sponsible@gmail.com")
         input("#jobTitle", "Director of Technology")
         select("#status", 2)
         input("#hourlyWage", "60")
         scrollToBottom()
         click("button[type=submit]")
 
-        assertCurrentPageIs(PageName.EMPLOYEE_CREATE)
+        assertCurrentPageIs(PageName.EMPLOYEE_EDIT)
         assertElementPresent(".alert-danger")
     }
 
@@ -88,15 +84,15 @@ class CreateEmployeeControllerTest : AbstractPageControllerTest() {
     fun `login required`() {
         setUpAnonymousUser()
 
-        navigateTo("/employees/create")
+        navigateTo("/employees/${employee.userId}/edit")
         assertCurrentPageIs(PageName.LOGIN)
     }
 
     @Test
-    fun `create - without permission employee-manage`() {
+    fun `edit - without permission employee-manage`() {
         setUpUserWithoutPermissions(listOf("employee:manage"))
 
-        navigateTo("/employees/create")
+        navigateTo("/employees/${employee.userId}/edit")
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 }

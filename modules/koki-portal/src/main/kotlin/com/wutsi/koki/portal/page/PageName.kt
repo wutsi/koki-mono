@@ -28,6 +28,11 @@ object PageName {
     const val EMAIL_SETTINGS_EMAIL_DECORATOR = "page.settings.email.decorator"
     const val EMAIL_SETTINGS_EMAIL_DECORATOR_EDIT = "page.settings.email.decorator.edit"
 
+    const val EMPLOYEE = "page.employee"
+    const val EMPLOYEE_LIST = "page.employee.list"
+    const val EMPLOYEE_EDIT = "page.employee.edit"
+    const val EMPLOYEE_CREATE = "page.employee.create"
+
     const val ERROR = "page.error"
     const val ERROR_SUSPENDED = "page.error.suspended"
     const val ERROR_ACCESS_DENIED = "page.error.access-denied"

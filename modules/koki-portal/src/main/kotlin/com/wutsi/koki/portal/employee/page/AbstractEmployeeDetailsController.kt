@@ -1,13 +1,9 @@
 package com.wutsi.koki.portal.employee.page
 
-import com.wutsi.koki.portal.module.page.AbstractModulePageController
+import com.wutsi.koki.portal.module.page.AbstractModuleDetailsPageController
 
-abstract class AbstractEmployeeController : AbstractModulePageController() {
-    companion object {
-        const val MODULE_NAME = "employee"
-    }
-
+abstract class AbstractEmployeeDetailsController : AbstractModuleDetailsPageController() {
     override fun getModuleName(): String {
-        return MODULE_NAME
+        return AbstractEmployeeController.MODULE_NAME
     }
 }

@@ -11,6 +11,8 @@ import com.wutsi.koki.tenant.dto.SetPermissionListRequest
 import com.wutsi.koki.tenant.dto.SetRoleListRequest
 import com.wutsi.koki.tenant.dto.UpdateRoleRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
+import com.wutsi.koki.tenant.dto.UserStatus
+import com.wutsi.koki.tenant.dto.UserType
 import org.springframework.web.client.RestTemplate
 
 class KokiUsers(
@@ -34,6 +36,8 @@ class KokiUsers(
         ids: List<Long> = emptyList(),
         roleIds: List<Long> = emptyList(),
         permissions: List<String> = emptyList(),
+        status: UserStatus? = null,
+        type: UserType? = null,
         limit: Int = 20,
         offset: Int = 0
     ): SearchUserResponse {
@@ -44,6 +48,8 @@ class KokiUsers(
                 "id" to ids,
                 "role-id" to roleIds,
                 "permission" to permissions,
+                "status" to status,
+                "type" to type,
                 "limit" to limit,
                 "offset" to offset
             )

@@ -1,7 +1,8 @@
 package com.wutsi.koki.portal.employee.page
 
 import com.wutsi.koki.employee.dto.EmployeeStatus
-import com.wutsi.koki.portal.employee.form.CreateEmployeeForm
+import com.wutsi.koki.portal.employee.form.UpdateEmployeeForm
+import com.wutsi.koki.portal.employee.model.EmployeeModel
 import com.wutsi.koki.portal.employee.service.EmployeeService
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
@@ -9,25 +10,34 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
+import java.text.SimpleDateFormat
 import java.util.Currency
 
 @Controller
 @RequiresPermission(["employee:manage"])
-class CreateEmployeeController(
+class EditEmployeeController(
     private val service: EmployeeService,
 ) : AbstractEmployeeController() {
-    @GetMapping("/employees/create")
-    fun create(model: Model): String {
-        val form = CreateEmployeeForm(
-            currency = tenantHolder.get()?.currency,
-            status = EmployeeStatus.ACTIVE,
+    @GetMapping("/employees/{id}/edit")
+    fun create(@PathVariable id: Long, model: Model): String {
+        val employee = service.employee(id)
+        val fmt = SimpleDateFormat("yyyy-MM-dd")
+        val form = UpdateEmployeeForm(
+            jobTitle = employee.jobTitle,
+            status = employee.status,
+            hiredAt = employee.hiredAt?.let { date -> fmt.format(date) },
+            terminatedAt = employee.terminatedAt?.let { date -> fmt.format(date) },
+            hourlyWage = employee.hourlyWage?.value,
+            currency = employee.hourlyWage?.currency,
         )
-        return create(form, model)
+        return edit(employee, form, model)
     }
 
-    fun create(form: CreateEmployeeForm, model: Model): String {
+    fun edit(employee: EmployeeModel, form: UpdateEmployeeForm, model: Model): String {
+        model.addAttribute("employee", employee)
         model.addAttribute("form", form)
         model.addAttribute("statuses", EmployeeStatus.entries.filter { entry -> entry != EmployeeStatus.UNKNOWN })
 
@@ -37,27 +47,28 @@ class CreateEmployeeController(
         model.addAttribute(
             "page",
             createPageModel(
-                name = PageName.EMPLOYEE_CREATE,
-                title = "New Employees",
+                name = PageName.EMPLOYEE_EDIT,
+                title = employee.name,
             )
         )
 
-        return "employees/create"
+        return "employees/edit"
     }
 
-    @PostMapping("/employees/add-new")
+    @PostMapping("/employees/{id}/update")
     fun addNew(
-        @ModelAttribute form: CreateEmployeeForm,
+        @PathVariable id: Long,
+        @ModelAttribute form: UpdateEmployeeForm,
         model: Model
     ): String {
         try {
-            val employeeId = service.create(form)
-            return "redirect:/employees?_toast=$employeeId&_ts=" + System.currentTimeMillis()
+            service.update(id, form)
+            return "redirect:/employees?_toast=$id&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
+            val employee = service.employee(id)
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)
-            return create(form, model)
+            return edit(employee, form, model)
         }
-
     }
 }

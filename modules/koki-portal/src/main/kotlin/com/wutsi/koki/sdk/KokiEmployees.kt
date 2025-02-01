@@ -1,15 +1,12 @@
 package com.wutsi.koki.sdk
 
-import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.employee.dto.CreateEmployeeRequest
 import com.wutsi.koki.employee.dto.CreateEmployeeResponse
+import com.wutsi.koki.employee.dto.EmployeeStatus
 import com.wutsi.koki.employee.dto.GetEmployeeResponse
-import com.wutsi.koki.employee.dto.GetEmployeeTypeResponse
 import com.wutsi.koki.employee.dto.SearchEmployeeResponse
-import com.wutsi.koki.employee.dto.SearchEmployeeTypeResponse
 import com.wutsi.koki.employee.dto.UpdateEmployeeRequest
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.multipart.MultipartFile
 
 class KokiEmployees(
     private val urlBuilder: URLBuilder,
@@ -36,6 +33,7 @@ class KokiEmployees(
 
     fun employees(
         ids: List<Long>,
+        statuses: List<EmployeeStatus>,
         limit: Int,
         offset: Int,
     ): SearchEmployeeResponse {
@@ -43,6 +41,7 @@ class KokiEmployees(
             PATH_PREFIX,
             mapOf(
                 "id" to ids,
+                "status" to statuses,
                 "limit" to limit,
                 "offset" to offset,
             )

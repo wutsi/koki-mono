@@ -2,13 +2,7 @@ INSERT INTO T_TENANT(id, status, name, domain_name, locale, number_format, curre
     (1, 1, 'test', 'localhost', 'CA', '#,###,##0.00', 'CAD', 'C$', 'C$ #,###,##0.00', 'yyyy-MM-dd', 'hh:mm a', 'yyyy-MM-dd hh:mm a', 'https://prod-wutsi.s3.amazonaws.com/static/wutsi-blog-web/assets/wutsi/img/logo/name-104x50.png', 'https://prod-wutsi.s3.amazonaws.com/static/wutsi-blog-web/assets/wutsi/img/logo/logo_512x512.png', 'http://localhost:8081');
 
 INSERT INTO T_TENANT_MODULE(tenant_fk, module_fk)
-    VALUES (1, 100),
-           (1, 110),
-           (1, 120),
-           (1, 130),
-           (1, 140),
-           (1, 150),
-           (1, 160);
+    SELECT 1, id FROM T_MODULE;
 
 INSERT INTO T_ROLE(id, tenant_fk, name, title) VALUES(1, 1, 'ADM', 'Administrator');
 

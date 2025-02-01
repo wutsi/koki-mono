@@ -7,6 +7,7 @@ import com.wutsi.koki.employee.server.dao.EmployeeRepository
 import com.wutsi.koki.employee.server.domain.EmployeeEntity
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.dto.UserType
@@ -15,6 +16,7 @@ import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.Date
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 class EmployeeService(
@@ -24,8 +26,7 @@ class EmployeeService(
     private val userService: UserService,
 ) {
     fun get(id: Long, tenantId: Long): EmployeeEntity {
-        val employee = dao.findById(id)
-            .orElseThrow { NotFoundException(Error(ErrorCode.EMPLOYEE_NOT_FOUND)) }
+        val employee = dao.findById(id).orElseThrow { NotFoundException(Error(ErrorCode.EMPLOYEE_NOT_FOUND)) }
 
         if (employee.tenantId != tenantId) {
             throw NotFoundException(Error(ErrorCode.EMPLOYEE_NOT_FOUND))
@@ -65,8 +66,16 @@ class EmployeeService(
 
     @Transactional
     fun create(request: CreateEmployeeRequest, tenantId: Long): EmployeeEntity {
-        val userId = securityService.getCurrentUserIdOrNull()
-        val user = userService.setType(request.userId, UserType.EMPLOYEE, tenantId)
+        val user = userService.getByEmail(request.email, tenantId)
+        val employee = dao.findById(user.id).getOrNull()
+        if (employee != null) {
+            throw ConflictException(
+                error = Error(ErrorCode.EMPLOYEE_ALREADY_EXIST)
+            )
+        }
+
+        userService.setType(user, UserType.EMPLOYEE)
+        val currentUserId = securityService.getCurrentUserIdOrNull()
         val now = Date()
         return dao.save(
             EmployeeEntity(
@@ -78,8 +87,8 @@ class EmployeeService(
                 status = request.status,
                 hiredAt = request.hiredAt,
                 terminatedAt = request.terminatedAt,
-                createdById = userId,
-                modifiedById = userId,
+                createdById = currentUserId,
+                modifiedById = currentUserId,
                 createdAt = now,
                 modifiedAt = now,
             )
