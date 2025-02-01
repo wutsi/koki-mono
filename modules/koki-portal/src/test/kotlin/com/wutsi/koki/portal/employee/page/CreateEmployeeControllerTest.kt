@@ -1,99 +1,102 @@
 package com.wutsi.koki.portal.employee.page
 
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
-import com.wutsi.koki.EmployeeFixtures.employees
-import com.wutsi.koki.employee.dto.EmployeeSummary
-import com.wutsi.koki.employee.dto.SearchEmployeeResponse
+import com.wutsi.koki.employee.dto.CreateEmployeeRequest
+import com.wutsi.koki.employee.dto.CreateEmployeeResponse
+import com.wutsi.koki.employee.dto.EmployeeStatus
+import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
+import org.junit.jupiter.api.Assertions.assertEquals
 import kotlin.test.Test
 
-class ListEmployeeControllerTest : AbstractPageControllerTest() {
+class CreateEmployeeControllerTest : AbstractPageControllerTest() {
     @Test
-    fun list() {
-        navigateTo("/employees")
+    fun create() {
+        navigateTo("/employees/create")
+
+        assertCurrentPageIs(PageName.EMPLOYEE_CREATE)
+
+        input("#email", "ray.sponsible@gmail.com")
+        input("#jobTitle", "Director of Technology")
+        select("#status", 2)
+        input("#hourlyWage", "60")
+        scrollToBottom()
+        click("button[type=submit]")
+
+        val request = argumentCaptor<CreateEmployeeRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/employees"),
+            request.capture(),
+            eq(CreateEmployeeResponse::class.java)
+        )
+        assertEquals("ray.sponsible@gmail.com", request.firstValue.email)
+        assertEquals("Director of Technology", request.firstValue.jobTitle)
+        assertEquals(EmployeeStatus.INACTIVE, request.firstValue.status)
+        assertEquals(60.0, request.firstValue.hourlyWage)
 
         assertCurrentPageIs(PageName.EMPLOYEE_LIST)
-        assertElementCount("tr.employee", employees.size)
+        assertElementVisible("#koki-toast")
     }
 
     @Test
-    fun loadMore() {
-        var entries = mutableListOf<EmployeeSummary>()
-        repeat(20) {
-            entries.add(employees[0].copy())
-        }
-        doReturn(
-            ResponseEntity(
-                SearchEmployeeResponse(entries),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchEmployeeResponse::class.java)
-            )
+    fun cancel() {
+        navigateTo("/employees/create")
 
-        navigateTo("/employees")
+        assertCurrentPageIs(PageName.EMPLOYEE_CREATE)
+
+        input("#email", "ray.sponsible@gmail.com")
+        input("#jobTitle", "Director of Technology")
+        select("#status", 2)
+        input("#hourlyWage", "60")
+        scrollToBottom()
+        click(".btn-cancel")
 
         assertCurrentPageIs(PageName.EMPLOYEE_LIST)
-        assertElementCount("tr.employee", entries.size)
+    }
 
+    @Test
+    fun error() {
+        val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
+        doThrow(ex).whenever(rest).postForEntity(
+            any<String>(),
+            any<CreateEmployeeRequest>(),
+            eq(CreateEmployeeResponse::class.java)
+        )
+
+        navigateTo("/employees/create")
+
+        assertCurrentPageIs(PageName.EMPLOYEE_CREATE)
+
+        input("#email", "ray.sponsible@gmail.com")
+        input("#jobTitle", "Director of Technology")
+        select("#status", 2)
+        input("#hourlyWage", "60")
         scrollToBottom()
-        click("#employee-load-more a", 1000)
-        assertElementCount("tr.employee", 2 * entries.size)
+        click("button[type=submit]")
+
+        assertCurrentPageIs(PageName.EMPLOYEE_CREATE)
+        assertElementPresent(".alert-danger")
     }
 
     @Test
     fun `login required`() {
         setUpAnonymousUser()
 
-        navigateTo("/employees")
+        navigateTo("/employees/create")
         assertCurrentPageIs(PageName.LOGIN)
     }
 
     @Test
-    fun show() {
-        navigateTo("/employees")
-        click(".btn-view")
-        assertCurrentPageIs(PageName.EMPLOYEE)
-    }
-
-    @Test
-    fun edit() {
-        navigateTo("/employees")
-        click(".btn-edit")
-        assertCurrentPageIs(PageName.EMPLOYEE_EDIT)
-    }
-
-    @Test
-    fun create() {
-        navigateTo("/employees")
-        click(".btn-create")
-        assertCurrentPageIs(PageName.EMPLOYEE_CREATE)
-    }
-
-    @Test
-    fun `list - without permission employee`() {
-        setUpUserWithoutPermissions(listOf("employee"))
-
-        navigateTo("/employees")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
-    }
-
-    @Test
-    fun `list - without permission employee-manage`() {
+    fun `create - without permission employee-manage`() {
         setUpUserWithoutPermissions(listOf("employee:manage"))
 
-        navigateTo("/employees")
-
-        assertCurrentPageIs(PageName.EMPLOYEE_LIST)
-        assertElementNotPresent(".btn-edit")
-        assertElementNotPresent(".btn-create")
+        navigateTo("/employees/create")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 }

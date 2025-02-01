@@ -36,6 +36,7 @@ class WorkflowTaskDispatcherTest {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
+                anyOrNull(),
             )
 
         val result = dispatcher.dispatch(11, 1)
@@ -48,6 +49,7 @@ class WorkflowTaskDispatcherTest {
         val user = UserEntity(id = 11L)
         doReturn(listOf(user)).whenever(userService)
             .search(
+                anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
@@ -73,6 +75,7 @@ class WorkflowTaskDispatcherTest {
         )
         doReturn(users).whenever(userService)
             .search(
+                anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),

@@ -11,22 +11,22 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/employee :: employee-breadcrumb(null)}"></div>
+            <div th:replace="~{__components/employee :: employee-breadcrumb(${employee})}"></div>
         </div>
     </div>
 
     <div class="row">
         <div class="col-12">
-            <form class="form" method="post" th:action="@{/employees/add-new}" th:object="${form}">
+            <form class="form" method="post" th:action="@{'/employees/' + ${employee.id} + '/update'}"
+                  th:object="${form}">
                 <div class="form-body">
                     <div class="section">
                         <div class="section-body">
                             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
                             <div class="section-item">
-                                <label class="title">Email <span class="required">*</span></label>
-                                <div class="description">Enter the email of the employee</div>
-                                <input required th:field="*{email}" type="email"/>
+                                <label class="title">Employee Name</label>
+                                <div th:text="${employee.name}">NAME</div>
                             </div>
                             <div class="section-item">
                                 <label class="title">Status <span class="required">*</span></label>

@@ -20,7 +20,7 @@ class ConfigurationService(
             keyword = keyword,
         ).configurations
             .map { config -> config.name to config.value }
-            .toMap() as Map<String, String>
+            .toMap()
     }
 
     fun save(form: SMTPForm) {

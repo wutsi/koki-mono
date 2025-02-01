@@ -20,10 +20,9 @@ CREATE TABLE T_EMPLOYEE(
 ) ENGINE = InnoDB;
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url)
-    VALUES (170, 7, 'employee', 'Employee', '/employeed', null, null);
+    VALUES (170, 7, 'employee', 'Employee', '/employees', null, null);
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
     VALUES (1700, 170, 'employee',        'View employees profile'),
-           (1701, 170, 'employee:manage', 'Add/Edit employees profile'),
-           (1702, 170, 'employee:delete', 'Delete employees profile');
+           (1701, 170, 'employee:manage', 'Add/Edit employees profile');
 

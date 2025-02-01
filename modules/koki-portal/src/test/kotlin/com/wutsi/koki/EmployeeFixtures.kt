@@ -8,7 +8,7 @@ import com.wutsi.koki.employee.dto.EmployeeSummary
 import org.apache.commons.lang3.time.DateUtils
 import java.util.Date
 
-object ContactFixtures {
+object EmployeeFixtures {
     val employees = listOf(
         EmployeeSummary(
             userId = users[0].id,
@@ -16,22 +16,22 @@ object ContactFixtures {
             status = EmployeeStatus.ACTIVE,
         ),
         EmployeeSummary(
-            userId = users[0].id,
-            jobTitle = "Accountant",
-            status = EmployeeStatus.ACTIVE,
-        ),
-        EmployeeSummary(
             userId = users[1].id,
-            jobTitle = null,
+            jobTitle = "Accountant",
             status = EmployeeStatus.ACTIVE,
         ),
         EmployeeSummary(
             userId = users[2].id,
             jobTitle = null,
-            status = EmployeeStatus.TERMINATED,
+            status = EmployeeStatus.ACTIVE,
         ),
         EmployeeSummary(
             userId = users[3].id,
+            jobTitle = null,
+            status = EmployeeStatus.TERMINATED,
+        ),
+        EmployeeSummary(
+            userId = users[4].id,
             jobTitle = null,
             status = EmployeeStatus.ACTIVE,
         ),

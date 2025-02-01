@@ -6,12 +6,12 @@
 
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
-<div th:replace="~{__components/layout :: menubar('contact')}"></div>
+<div th:replace="~{__components/layout :: menubar('employee')}"></div>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/contact :: contact-breadcrumb(null)}"></div>
+            <div th:replace="~{__components/employee :: employee-breadcrumb(null)}"></div>
         </div>
     </div>
 
@@ -25,22 +25,27 @@
                                     class="btn dropdown-toggle padding"
                                     data-bs-toggle="dropdown"
                                     type="button">
-                                <img height="24" src="/image/contact.png" width="24"/>
-                                <span th:if="${collection} == '1'">All Contacts</span>
-                                <span th:if="${collection} == '2'">Contacts I Created</span>
+                                <img height="24" src="/image/employee.png" width="24"/>
+                                <span>All Employees</span>
                             </button>
-                            <ul class="dropdown-menu">
-                                <li th:if="${collection} != '1'">
-                                    <a class="dropdown-item" href="/contacts?col=1">All Contacts</a>
-                                </li>
-                                <li th:if="${collection} != '2'">
-                                    <a class="dropdown-item" href="/contacts?col=2">Contacts I Created</a>
-                                </li>
-                            </ul>
                         </div>
                         <div>
-                            <a class="btn-create btn btn-light btn-sm" href="/contacts/create"
-                               th:if="${user?.hasPermission('contact:manage')}">Create New Contact</a>
+                            <div class="btn-group">
+                                <select class="btn btn-sm btn-light" if="filter-status"
+                                        onchange="koki_employees_on_filter_changed()"
+                                        style="width: auto"
+                                >
+                                    <option value="">All Status</option>
+                                    <option th:each="ss : ${statuses}"
+                                            th:selected="${ss.name()} == ${status?.name()}"
+                                            th:text="#{'employee-status.' + ${ss.name()}}"
+                                            th:value="${ss.name()}"
+                                    >STATUS
+                                    </option>
+                                </select>
+                            </div>
+                            <a class="btn-create btn btn-light btn-sm" href="/employees/create"
+                               th:if="${user?.hasPermission('employee:manage')}">Create New Employee</a>
                         </div>
                     </div>
 
@@ -48,20 +53,17 @@
                         <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Type</th>
-                            <th>Phone</th>
-                            <th>Mobile</th>
-                            <th>Email</th>
-                            <th>Account</th>
+                            <th>Status</th>
+                            <th>Job Title</th>
                             <td></td>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="contact" th:each="contact : ${contacts}" th:if="${contacts}">
-                            <div th:replace="~{__components/contact :: columns(${contact}, true)}"></div>
+                        <tr class="employee" th:each="employee : ${employees}" th:if="${employees}">
+                            <div th:replace="~{__components/employee :: columns(${employee})}"></div>
                         </tr>
-                        <tr th:if="${contacts}"
-                            th:replace="~{__components/contact :: load-more(${moreUrl}, true)}"></tr>
+                        <tr th:if="${employees}"
+                            th:replace="~{__components/employee :: load-more(${moreUrl})}"></tr>
                         </tbody>
                     </table>
                 </div>
@@ -71,5 +73,15 @@
 </div>
 
 <div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
+
+<script>
+    function koki_employees_on_filter_changed() {
+        const status = document.getElementById('filter-status').value;
+
+        document.location.href = '/employees?' +
+            (status && status.length > 0 ? '&status=' + status : '');
+    }
+
+</script>
 </body>
 </html>

@@ -32,9 +32,15 @@
                 <td th:text="${me.email}">EMAIL</td>
             </tr>
             <tr>
+                <td><b>Type</b></td>
+                <td>
+                    <span th:replace="~{__components/user :: user-type(${me.type})}"></span>
+                </td>
+            </tr>
+            <tr>
                 <td><b>Status</b></td>
                 <td>
-                    <div th:replace="~{__components/user :: user-status(${me.status})}"></div>
+                    <span th:replace="~{__components/user :: user-status(${me.status})}"></span>
                 </td>
             </tr>
             <tr>

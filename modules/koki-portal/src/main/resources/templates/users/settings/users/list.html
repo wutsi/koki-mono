@@ -14,12 +14,54 @@
     <div class="settings-content padding">
         <div th:replace="~{__components/settings :: settings-title('Users', '/settings/security')}"></div>
 
-        <a class="btn btn-secondary btn-create" href="/settings/users/create">Create User</a>
+        <div class="flex flex-space-between">
+            <div>
+                <a class="btn btn-secondary btn-create" href="/settings/users/create">Create User</a>
+            </div>
+            <div class="btn-group">
+                <select class="btn btn-sm btn-light" id="filter-role-id" onchange="koki_users_on_filter_changed()"
+                        style="width: auto"
+                        th:if="${roles?.isEmpty() == false}">
+                    <option value="">All Roles</option>
+                    <option
+                        th:each="role : ${roles}"
+                        th:selected="${role.id} == ${roleId}"
+                        th:text="${role.title}"
+                        th:value="${role.id}"
+                    >ROLE
+                    </option>
+                </select>
+                <select class="btn btn-sm btn-light" id="filter-type" onchange="koki_users_on_filter_changed()"
+                        style="width: auto">
+                    <option value="">All Types</option>
+                    <option
+                        th:each="tt : ${types}"
+                        th:selected="${tt} == ${type}"
+                        th:text="#{'user-type.' + ${tt}}"
+                        th:value="${tt}"
+                    >TYPE
+                    </option>
+                </select>
+                <select class="btn btn-sm btn-light" id="filter-status" onchange="koki_users_on_filter_changed()"
+                        style="width: auto">
+                    <option value="">All Statuses</option>
+                    <option
+                        th:each="ss : ${statuses}"
+                        th:selected="${ss} == ${status}"
+                        th:text="#{'user-status.' + ${ss}}"
+                        th:value="${ss}"
+                    >STATUS
+                    </option>
+                </select>
+            </div>
+        </div>
+
         <table class="table table-striped">
             <thead>
             <tr>
                 <th>Name</th>
                 <th>Email</th>
+                <th>Type</th>
                 <th>Status</th>
                 <th>Modified</th>
                 <th></th>
@@ -32,7 +74,10 @@
                 </td>
                 <td th:text="${me.email}">EMAIL</td>
                 <td>
-                    <div th:replace="~{__components/user :: user-status(${me.status})}"></div>
+                    <span th:replace="~{__components/user :: user-type(${me.type})}"></span>
+                </td>
+                <td>
+                    <span th:replace="~{__components/user :: user-status(${me.status})}"></span>
                 </td>
                 <td th:text="${me.modifiedAtText}">MODIFIED</td>
                 <td class="toolbar">
@@ -51,5 +96,19 @@
 </div>
 
 <div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
+
+<script>
+    function koki_users_on_filter_changed() {
+        const roleId = document.getElementById('filter-role-id').value;
+        const type = document.getElementById('filter-type').value;
+        const status = document.getElementById('filter-status').value;
+
+        document.location.href = '/settings/users?' +
+            (roleId && roleId.length > 0 ? '&role-id=' + roleId : '') +
+            (type && type.length > 0 ? '&type=' + type : '') +
+            (status && status.length > 0 ? '&status=' + status : '');
+    }
+
+</script>
 </body>
 </html>

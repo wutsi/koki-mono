@@ -2,56 +2,41 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<div class="widget" th:fragment="contact-breadcrumb(contact)">
+<div class="widget" th:fragment="employee-breadcrumb(employee)">
     <div class="widget-body">
         <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item" th:if="${contact}"><a href="/contacts">Contacts</a></li>
-                <li class="breadcrumb-item active" th:if="${contact}">
-                    <img align="absmiddle" height="24" src="/image/contact.png" width="24"/>
-                    <span th:text="${contact.name}">CONTACT</span>
+                <li class="breadcrumb-item" th:if="${employee}"><a href="/employees">Employees</a></li>
+                <li class="breadcrumb-item active" th:if="${employee}">
+                    <img align="absmiddle" height="24" src="/image/employee.png" width="24"/>
+                    <span th:text="${employee.user.displayName}">EMPLOYEE</span>
                 </li>
-                <li class="breadcrumb-item active" th:if="!${contact}">Contacts</li>
+                <li class="breadcrumb-item active" th:if="!${employee}">Employees</li>
             </ol>
         </nav>
     </div>
 </div>
 
-<tr class="contact" th:fragment="columns(contact, showAccount)" th:remove="tag">
+<tr class="employee" th:fragment="columns(employee)" th:remove="tag">
     <td>
-        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.name}">NAME</a>
+        <a th:href="'/employees/' + ${employee.user.id}" th:text="${employee.user.displayName}">NAME</a>
     </td>
-    <td th:text="${contact.contactType?.title}">CONTACT TYPE</td>
-    <td th:text="${contact.phone}">PHONE</td>
-    <td th:text="${contact.mobile}">MOBILE</td>
-    <td>
-        <a th:href="'mailto:' + ${contact.email}" th:if="${contact.email}" th:text="${contact.email}">EMAIL</a>
-    </td>
-    <td th:if="${showAccount}">
-        <a th:href="'/accounts/' + ${contact.account.id}"
-           th:if="${contact.account}"
-           th:text="${contact.account.name}">CONTACT</a>
-    </td>
+    <td th:text="#{'employee-status.' + ${employee.status}}">STATUS</td>
+    <td th:text="${employee.jobTitle}">CONTACT TYPE</td>
     <td class="toolbar">
-        <a class="btn-view" th:href="'/contacts/' + ${contact.id}"
-           th:if="${user?.hasPermission('contact')}">View</a>
+        <a class="btn-view" th:href="'/employees/' + ${employee.id}"
+           th:if="${user?.hasPermission('employee')}">View</a>
 
-        <a class="btn-edit" th:href="'/contacts/' + ${contact.id} + '/edit'"
-           th:if="${user?.hasPermission('contact:manage')}">Edit</a>
+        <a class="btn-edit" th:href="'/employees/' + ${employee.id} + '/edit'"
+           th:if="${user?.hasPermission('employee:manage')}">Edit</a>
     </td>
 </tr>
 
-<tr id="contact-load-more" th:fragment="load-more(moreUrl, showContact)" th:if="${moreUrl}">
-    <td class="text-center" th:colspan="${showContact} ? 7 : 6">
-        <a href="javascript: koki_load_more('contact-load-more')" th:data-url="${moreUrl}">Load more...</a>
+<tr id="employee-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
+    <td class="text-center" colspan="4">
+        <a href="javascript: koki_load_more('employee-load-more')" th:data-url="${moreUrl}">Load more...</a>
     </td>
 </tr>
-
-<script th:fragment="contact-selector(id)" th:inline="javascript">
-    document.addEventListener("DOMContentLoaded", function () {
-        koki_contacts_select2(/*[[${id}]]*/ '');
-    });
-</script>
 
 </body>

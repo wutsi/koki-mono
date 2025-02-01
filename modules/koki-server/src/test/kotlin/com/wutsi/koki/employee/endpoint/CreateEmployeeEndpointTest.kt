@@ -27,7 +27,7 @@ class CreateEmployeeEndpointTest : AuthorizationAwareEndpointTest() {
     private lateinit var userDao: UserRepository
 
     private val request = CreateEmployeeRequest(
-        userId = 111L,
+        email = "ray.sponsible@gmail.com",
         jobTitle = "Director of Technology",
         hourlyWage = 10000.0,
         currency = "XAF",
@@ -46,7 +46,7 @@ class CreateEmployeeEndpointTest : AuthorizationAwareEndpointTest() {
         val employeeId = response.body!!.employeeId
         val employee = dao.findById(employeeId).get()
 
-        assertEquals(request.userId, employee.id)
+        assertEquals(111L, employee.id)
         assertEquals(request.jobTitle, employee.jobTitle)
         assertEquals(request.hourlyWage, employee.hourlyWage)
         assertEquals(request.currency, employee.currency)
@@ -56,13 +56,38 @@ class CreateEmployeeEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(USER_ID, employee.createdById)
         assertEquals(USER_ID, employee.modifiedById)
 
-        val user = userDao.findById(request.userId).get()
+        val user = userDao.findById(employeeId).get()
         assertEquals(UserType.EMPLOYEE, user.type)
     }
 
     @Test
+    fun `already exist`() {
+        val response = rest.postForEntity(
+            "/v1/employees",
+            request.copy(email = "omam.mbiyick@gmail.com"),
+            ErrorResponse::class.java
+        )
+
+        assertEquals(HttpStatus.CONFLICT, response.statusCode)
+        assertEquals(ErrorCode.EMPLOYEE_ALREADY_EXIST, response.body!!.error.code)
+    }
+
+    @Test
+    fun `invalid email`() {
+        val response =
+            rest.postForEntity("/v1/employees", request.copy(email = "xxx@gmail.com"), ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertEquals(ErrorCode.USER_NOT_FOUND, response.body!!.error.code)
+    }
+
+    @Test
     fun `already assigned`() {
-        val response = rest.postForEntity("/v1/employees", request.copy(userId = 155), ErrorResponse::class.java)
+        val response = rest.postForEntity(
+            "/v1/employees",
+            request.copy(email = "roger.milla@gmail.com"),
+            ErrorResponse::class.java
+        )
 
         assertEquals(HttpStatus.CONFLICT, response.statusCode)
         assertEquals(ErrorCode.USER_ALREADY_ASSIGNED, response.body!!.error.code)

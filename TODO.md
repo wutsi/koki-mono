@@ -73,9 +73,9 @@
 
 ## Employees
 
-- [] Employee API
-- [] Link Employee with User
-- [] Employee UI
+- [x] Employee API
+- [x] Link Employee with User
+- [x] Employee UI
 
 ## Email
 
