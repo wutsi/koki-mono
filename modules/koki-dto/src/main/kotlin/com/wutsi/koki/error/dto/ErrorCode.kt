@@ -33,6 +33,7 @@ object ErrorCode {
     val EMAIL_RECIPIENT_EMAIL_MISSING: String = "$PREFIX:email:recipient-email-missing"
     val EMAIL_RECIPIENT_NOT_SUPPORTED: String = "$PREFIX:email:recipient-not-supported"
 
+    val EMPLOYEE_ALREADY_EXIST: String = "$PREFIX:employee:already-exist"
     val EMPLOYEE_NOT_FOUND: String = "$PREFIX:employee:not-found"
 
     val FILE_NOT_FOUND: String = "$PREFIX:file:not-found"

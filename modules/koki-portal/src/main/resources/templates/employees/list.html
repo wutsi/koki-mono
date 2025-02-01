@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('contact')}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/contact :: contact-breadcrumb(null)}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div class="flex flex-space-between">
+                        <div class="btn-group border margin-bottom">
+                            <button aria-expanded="false"
+                                    class="btn dropdown-toggle padding"
+                                    data-bs-toggle="dropdown"
+                                    type="button">
+                                <img height="24" src="/image/contact.png" width="24"/>
+                                <span th:if="${collection} == '1'">All Contacts</span>
+                                <span th:if="${collection} == '2'">Contacts I Created</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li th:if="${collection} != '1'">
+                                    <a class="dropdown-item" href="/contacts?col=1">All Contacts</a>
+                                </li>
+                                <li th:if="${collection} != '2'">
+                                    <a class="dropdown-item" href="/contacts?col=2">Contacts I Created</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <a class="btn-create btn btn-light btn-sm" href="/contacts/create"
+                               th:if="${user?.hasPermission('contact:manage')}">Create New Contact</a>
+                        </div>
+                    </div>
+
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Phone</th>
+                            <th>Mobile</th>
+                            <th>Email</th>
+                            <th>Account</th>
+                            <td></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="contact" th:each="contact : ${contacts}" th:if="${contacts}">
+                            <div th:replace="~{__components/contact :: columns(${contact}, true)}"></div>
+                        </tr>
+                        <tr th:if="${contacts}"
+                            th:replace="~{__components/contact :: load-more(${moreUrl}, true)}"></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
+</body>
+</html>

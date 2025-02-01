@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('contact')}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/contact :: contact-breadcrumb(null)}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <form class="form" method="post" th:action="@{/contacts/add-new}" th:object="${form}">
+                <div class="form-body">
+                    <div class="section">
+                        <div class="section-body">
+                            <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+
+                            <div class="section-item">
+                                <label class="title">Account</label>
+                                <select th:field="*{accountId}">
+                                    <option th:if="${account}"
+                                            th:text="${account.name}"
+                                            th:value="${account.id}">
+                                        ACCOUNT
+                                    </option>
+                                </select>
+                                <script th:replace="~{__components/account :: account-selector('accountId')}"></script>
+                            </div>
+                            <div class="section-item" th:if="${contactTypes}">
+                                <label class="title">Contact Type <span class="required">*</span></label>
+                                <select required th:field="*{contactTypeId}">
+                                    <option value="-1"></option>
+                                    <option th:each="contactType : ${contactTypes}"
+                                            th:text="${contactType.title}"
+                                            th:value="${contactType.id}">
+                                        CONTACT TYPE
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Salutation</label>
+                                <select th:field="*{salutation}">
+                                    <option value=""></option>
+                                    <option value="Mr.">Mr.</option>
+                                    <option value="Ms.">Ms.</option>
+                                    <option value="Dr.">Dr.</option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">First Name <span class="required">*</span></label>
+                                <input maxlength="100" required th:field="*{firstName}"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Last Name <span class="required">*</span></label>
+                                <input maxlength="100" required th:field="*{lastName}"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Gender</label>
+                                <select th:field="*{gender}">
+                                    <option value=""></option>
+                                    <option value="MALE">Male</option>
+                                    <option value="FEMALE">Female</option>
+                                </select>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title">Phone</label>
+                                <input maxlength="30" th:field="*{phone}"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Mobile</label>
+                                <input maxlength="30" th:field="*{mobile}"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Email</label>
+                                <input maxlength="100" th:field="*{email}" type="email"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Profession</label>
+                                <input maxlength="100" th:field="*{profession}"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Employer</label>
+                                <input maxlength="100" th:field="*{employer}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit">Submit</button>
+                    <a class="btn-cancel" href="/contacts">Cancel</a>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

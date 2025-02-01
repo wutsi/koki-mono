@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="widget" th:fragment="contact-breadcrumb(contact)">
+    <div class="widget-body">
+        <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item" th:if="${contact}"><a href="/contacts">Contacts</a></li>
+                <li class="breadcrumb-item active" th:if="${contact}">
+                    <img align="absmiddle" height="24" src="/image/contact.png" width="24"/>
+                    <span th:text="${contact.name}">CONTACT</span>
+                </li>
+                <li class="breadcrumb-item active" th:if="!${contact}">Contacts</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<tr class="contact" th:fragment="columns(contact, showAccount)" th:remove="tag">
+    <td>
+        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.name}">NAME</a>
+    </td>
+    <td th:text="${contact.contactType?.title}">CONTACT TYPE</td>
+    <td th:text="${contact.phone}">PHONE</td>
+    <td th:text="${contact.mobile}">MOBILE</td>
+    <td>
+        <a th:href="'mailto:' + ${contact.email}" th:if="${contact.email}" th:text="${contact.email}">EMAIL</a>
+    </td>
+    <td th:if="${showAccount}">
+        <a th:href="'/accounts/' + ${contact.account.id}"
+           th:if="${contact.account}"
+           th:text="${contact.account.name}">CONTACT</a>
+    </td>
+    <td class="toolbar">
+        <a class="btn-view" th:href="'/contacts/' + ${contact.id}"
+           th:if="${user?.hasPermission('contact')}">View</a>
+
+        <a class="btn-edit" th:href="'/contacts/' + ${contact.id} + '/edit'"
+           th:if="${user?.hasPermission('contact:manage')}">Edit</a>
+    </td>
+</tr>
+
+<tr id="contact-load-more" th:fragment="load-more(moreUrl, showContact)" th:if="${moreUrl}">
+    <td class="text-center" th:colspan="${showContact} ? 7 : 6">
+        <a href="javascript: koki_load_more('contact-load-more')" th:data-url="${moreUrl}">Load more...</a>
+    </td>
+</tr>
+
+<script th:fragment="contact-selector(id)" th:inline="javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        koki_contacts_select2(/*[[${id}]]*/ '');
+    });
+</script>
+
+</body>

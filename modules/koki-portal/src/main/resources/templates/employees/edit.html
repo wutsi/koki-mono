@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('employee')}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/employee :: employee-breadcrumb(null)}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <form class="form" method="post" th:action="@{/employees/add-new}" th:object="${form}">
+                <div class="form-body">
+                    <div class="section">
+                        <div class="section-body">
+                            <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+
+                            <div class="section-item">
+                                <label class="title">Email <span class="required">*</span></label>
+                                <div class="description">Enter the email of the employee</div>
+                                <input required th:field="*{email}" type="email"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Status <span class="required">*</span></label>
+                                <select required th:field="*{status}">
+                                    <option value=""></option>
+                                    <option th:each="ss : ${statuses}"
+                                            th:selected="${ss.name()} == ${status?.name()}"
+                                            th:text="#{'employee-status.' + ${ss.name()}}"
+                                            th:value="${ss.name()}"
+                                    >STATUS
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Job Title</label>
+                                <input maxlength="100" th:field="*{jobTitle}"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Hourly Wage</label>
+                                <input th:field="*{hourlyWage}" type="number"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Currency</label>
+                                <select th:field="*{currency}">
+                                    <option th:each="currency : ${currencies}"
+                                            th:selected="${currency.currencyCode} == ${form.currency}"
+                                            th:text="${currency.displayName}"
+                                            th:value="${currency.currencyCode}"
+                                    >CURRENCY
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Hired Date</label>
+                                <input th:field="*{hiredAt}" type="date"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Termination Date</label>
+                                <input th:field="*{terminatedAt}" type="date"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit">Submit</button>
+                    <a class="btn-cancel" href="/employees">Cancel</a>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
