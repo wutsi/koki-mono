@@ -28,9 +28,10 @@ class SettingsAboutTenantControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission tenant-admin`() {
+        setUpUserWithoutPermissions(listOf("tenant:admin"))
+
         navigateTo("/settings/tenant/about")
 
-        navigateTo("/settings/tenant")
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 }
