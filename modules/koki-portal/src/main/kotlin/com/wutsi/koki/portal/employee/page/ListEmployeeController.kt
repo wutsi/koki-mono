@@ -1,9 +1,11 @@
 package com.wutsi.koki.portal.employee.page
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.employee.dto.EmployeeStatus
 import com.wutsi.koki.portal.employee.service.EmployeeService
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
+import com.wutsi.koki.portal.tenant.service.TypeService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam
 @RequiresPermission(["employee"])
 class ListEmployeeController(
     private val service: EmployeeService,
+    private val typeService: TypeService,
 ) : AbstractEmployeeController() {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ListEmployeeController::class.java)
@@ -23,7 +26,8 @@ class ListEmployeeController(
     @GetMapping("/employees")
     fun list(
         @RequestHeader(required = false, name = "Referer") referer: String? = null,
-        @RequestParam(required = false) status: EmployeeStatus? = null,
+        @RequestParam(required = false) status: EmployeeStatus? = EmployeeStatus.ACTIVE,
+        @RequestParam(required = false, name = "type-id") typeId: Long? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         @RequestParam(required = false, name = "_toast") toast: Long? = null,
@@ -42,20 +46,28 @@ class ListEmployeeController(
         model.addAttribute("statuses", EmployeeStatus.entries.filter { entry -> entry != EmployeeStatus.UNKNOWN })
         model.addAttribute("status", status)
 
+        model.addAttribute(
+            "types",
+            typeService.types(objectType = ObjectType.EMPLOYEE, active = true, limit = Integer.MAX_VALUE)
+        )
+        model.addAttribute("typeId", typeId)
+
         loadToast(referer, toast, timestamp, model)
-        more(status, limit, offset, model)
+        more(status, typeId, limit, offset, model)
         return "employees/list"
     }
 
     @GetMapping("/employees/more")
     fun more(
         @RequestParam(required = false) status: EmployeeStatus? = null,
+        @RequestParam(required = false, name = "type-id") typeId: Long? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
         val employees = service.employees(
             statuses = status?.let { listOf(status) } ?: emptyList(),
+            employeeTypeIds = typeId?.let { listOf(typeId) } ?: emptyList(),
             limit = limit,
             offset = offset
         )
@@ -66,6 +78,9 @@ class ListEmployeeController(
                 var url = "/employees/more?limit=$limit&offset=$nextOffset"
                 if (status != null) {
                     url = "$url&status=$status"
+                }
+                if (typeId != null) {
+                    url = "$url&type-id=$typeId"
                 }
                 model.addAttribute("moreUrl", url)
             }

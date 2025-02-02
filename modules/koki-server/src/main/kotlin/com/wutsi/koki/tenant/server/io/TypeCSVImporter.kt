@@ -2,13 +2,13 @@ package com.wutsi.koki.tenant.server.io
 
 import com.wutsi.koki.common.dto.ImportMessage
 import com.wutsi.koki.common.dto.ImportResponse
-import com.wutsi.koki.contact.server.domain.ContactTypeEntity
-import com.wutsi.koki.contact.server.service.ContactTypeService
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.BadRequestException
-import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.error.exception.WutsiException
+import com.wutsi.koki.tenant.server.domain.TypeEntity
+import com.wutsi.koki.tenant.server.service.TypeService
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVRecord
@@ -18,13 +18,17 @@ import java.io.InputStream
 
 @Service
 class TypeCSVImporter(
-    private val service: ContactTypeService
+    private val service: TypeService
 ) {
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(ContactTypeCSVImporter::class.java)
+        private val LOGGER = LoggerFactory.getLogger(TypeCSVImporter::class.java)
     }
 
-    fun import(input: InputStream, tenantId: Long): ImportResponse {
+    fun import(
+        input: InputStream,
+        objectType: ObjectType,
+        tenantId: Long
+    ): ImportResponse {
         val parser = CSVParser.parse(
             input,
             Charsets.UTF_8,
@@ -32,11 +36,11 @@ class TypeCSVImporter(
                 .create()
                 .setSkipHeaderRecord(true)
                 .setDelimiter(",")
-                .setHeader(*ContactTypeEntity.CSV_HEADERS.toTypedArray())
+                .setHeader(*TypeEntity.CSV_HEADERS.toTypedArray())
                 .setTrim(true)
                 .get(),
         )
-        val names = mutableListOf<String>()
+        val keys = mutableListOf<String>()
         var added: Int = 0
         var updated: Int = 0
         var errorMessages: MutableList<ImportMessage> = mutableListOf()
@@ -45,20 +49,20 @@ class TypeCSVImporter(
             // Add/Update
             for (record in parser) {
                 row++
-                val name = record.get(ContactTypeEntity.CSV_HEADER_NAME)
+                val name = record.get(TypeEntity.CSV_HEADER_NAME)
                 try {
                     validate(record)
-                    val type = findContactType(tenantId, record)
+                    val type = findType(record, objectType, tenantId)
                     if (type == null) {
-                        LOGGER.info("$row - Adding '$name'")
-                        add(record, tenantId)
+                        LOGGER.info("$row - Adding '$name' for $objectType")
+                        add(record, objectType, tenantId)
                         added++
                     } else {
-                        LOGGER.info("$row - Updating '$name'")
+                        LOGGER.info("$row - Updating '$name' for $objectType")
                         update(type, record)
                         updated++
                     }
-                    names.add(name.lowercase())
+                    keys.add(toKey(objectType, name))
                 } catch (ex: WutsiException) {
                     errorMessages.add(
                         ImportMessage(row.toString(), ex.error.code, ex.error.message)
@@ -71,12 +75,15 @@ class TypeCSVImporter(
             }
 
             // Deactivate others
-            service.search(tenantId = tenantId, limit = Integer.MAX_VALUE).forEach { type ->
-                if (!names.contains(type.name.lowercase()) && type.active) {
-                    LOGGER.info("Deactivating '${type.name}'")
-                    type.active = false
+            service.search(
+                tenantId = tenantId,
+                objectType = objectType,
+                limit = Integer.MAX_VALUE
+            ).forEach { type ->
+                if (!keys.contains(toKey(type.objectType, type.name)) && type.active) {
+                    LOGGER.info("Deactivating '${type.name}' for $objectType")
+                    deactivate(type)
                     updated++
-                    service.save(type)
                 }
             }
         }
@@ -89,40 +96,50 @@ class TypeCSVImporter(
         )
     }
 
+    private fun toKey(type: ObjectType, name: String): String {
+        return type.name + "-" + name.lowercase()
+    }
+
     private fun validate(record: CSVRecord) {
         // Name
-        val name = record.get(ContactTypeEntity.CSV_HEADER_NAME)
-        if (name.isNullOrEmpty()) {
-            throw BadRequestException(error = Error(code = ErrorCode.CONTACT_TYPE_NAME_MISSING))
+        val name = getName(record)
+        if (name.isEmpty()) {
+            throw BadRequestException(error = Error(code = ErrorCode.TYPE_NAME_MISSING))
         }
     }
 
-    private fun findContactType(tenantId: Long, record: CSVRecord): ContactTypeEntity? {
-        try {
-            val name = record.get(ContactTypeEntity.CSV_HEADER_NAME)
-            return service.getByName(name, tenantId)
-        } catch (ex: NotFoundException) {
-            return null
-        }
+    private fun findType(record: CSVRecord, objectType: ObjectType, tenantId: Long): TypeEntity? {
+        val name = getName(record)
+        return service.getByNameAndObjectType(name, objectType, tenantId)
     }
 
-    private fun add(record: CSVRecord, tenantId: Long): ContactTypeEntity {
+    private fun getName(record: CSVRecord): String {
+        return record.get(TypeEntity.CSV_HEADER_NAME)?.trim() ?: ""
+    }
+
+    private fun add(record: CSVRecord, objectType: ObjectType, tenantId: Long): TypeEntity {
         return service.save(
-            ContactTypeEntity(
+            TypeEntity(
                 tenantId = tenantId,
-                name = record.get(ContactTypeEntity.CSV_HEADER_NAME),
-                title = record.get(ContactTypeEntity.CSV_HEADER_TITLE).ifEmpty { null },
-                description = record.get(ContactTypeEntity.CSV_HEADER_DESCRIPTION).ifEmpty { null },
-                active = record.get(ContactTypeEntity.CSV_HEADER_ACTIVE).lowercase() == "yes",
+                objectType = objectType,
+                name = getName(record),
+                title = record.get(TypeEntity.CSV_HEADER_TITLE).trim().ifEmpty { null },
+                description = record.get(TypeEntity.CSV_HEADER_DESCRIPTION).trim().ifEmpty { null },
+                active = true,
             )
         )
     }
 
-    private fun update(contactType: ContactTypeEntity, record: CSVRecord) {
-        contactType.name = record.get(ContactTypeEntity.CSV_HEADER_NAME)
-        contactType.title = record.get(ContactTypeEntity.CSV_HEADER_TITLE).ifEmpty { null }
-        contactType.description = record.get(ContactTypeEntity.CSV_HEADER_DESCRIPTION).ifEmpty { null }
-        contactType.active = record.get(ContactTypeEntity.CSV_HEADER_ACTIVE).equals("yes", true)
-        service.save(contactType)
+    private fun update(type: TypeEntity, record: CSVRecord) {
+        type.name = getName(record)
+        type.title = record.get(TypeEntity.CSV_HEADER_TITLE).ifEmpty { null }
+        type.description = record.get(TypeEntity.CSV_HEADER_DESCRIPTION).ifEmpty { null }
+        type.active = true
+        service.save(type)
+    }
+
+    fun deactivate(type: TypeEntity) {
+        type.active = false
+        service.save(type)
     }
 }

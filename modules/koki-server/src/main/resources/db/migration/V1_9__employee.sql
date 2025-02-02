@@ -2,6 +2,7 @@ CREATE TABLE T_EMPLOYEE(
   id                      BIGINT NOT NULL,
 
   tenant_fk               BIGINT NOT NULL,
+  employee_type_fk        BIGINT,
   created_by_fk           BIGINT,
   modified_by_fk          BIGINT,
   deleted_by_fk           BIGINT,

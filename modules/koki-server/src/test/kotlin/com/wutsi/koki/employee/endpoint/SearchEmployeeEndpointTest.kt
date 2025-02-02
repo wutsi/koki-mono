@@ -43,6 +43,18 @@ class SearchEmployeeEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
+    fun `by employee-type`() {
+        val response =
+            rest.getForEntity("/v1/employees?employee-type-id=11", SearchEmployeeResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val employees = response.body!!.employees
+        assertEquals(3, employees.size)
+        assertEquals(listOf(100L, 110L, 130L), employees.map { employee -> employee.userId }.sorted())
+    }
+
+    @Test
     fun deleted() {
         val response = rest.getForEntity("/v1/employees?id=199", SearchEmployeeResponse::class.java)
 

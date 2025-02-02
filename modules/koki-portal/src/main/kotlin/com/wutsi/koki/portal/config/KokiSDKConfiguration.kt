@@ -21,6 +21,7 @@ import com.wutsi.koki.sdk.KokiScripts
 import com.wutsi.koki.sdk.KokiServices
 import com.wutsi.koki.sdk.KokiTaxes
 import com.wutsi.koki.sdk.KokiTenants
+import com.wutsi.koki.sdk.KokiTypes
 import com.wutsi.koki.sdk.KokiUsers
 import com.wutsi.koki.sdk.KokiWorkflowInstances
 import com.wutsi.koki.sdk.KokiWorkflows
@@ -130,6 +131,11 @@ class KokiSDKConfiguration(
     @Bean
     fun kokiTenant(): KokiTenants {
         return KokiTenants(urlBuilder(), restWithoutTenantHeader())
+    }
+
+    @Bean
+    fun kokiTypes(): KokiTypes {
+        return KokiTypes(urlBuilder(), rest())
     }
 
     @Bean

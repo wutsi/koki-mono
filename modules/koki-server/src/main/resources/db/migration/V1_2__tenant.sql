@@ -30,6 +30,24 @@ CREATE TABLE T_TENANT_MODULE(
   PRIMARY KEY (tenant_fk, module_fk)
 ) ENGINE = InnoDB;
 
+CREATE TABLE T_TYPE(
+  id                      BIGINT NOT NULL AUTO_INCREMENT,
+
+  tenant_fk               BIGINT NOT NULL,
+
+  object_type             INT NOT NULL,
+  name                    VARCHAR(100) NOT NULL,
+  title                   VARCHAR(100),
+  description             TEXT,
+  active                  BOOL NOT NULL DEFAULT true,
+  created_at              DATETIME DEFAULT NOW(),
+  modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
+
+  UNIQUE(tenant_fk, object_type, name),
+  PRIMARY KEY(id)
+) ENGINE = InnoDB;
+
+
 CREATE TABLE T_USER(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
@@ -100,9 +118,9 @@ CREATE TABLE T_ROLE_PERMISSION(
 ) ENGINE = InnoDB;
 
 INSERT INTO T_MODULE(id, name, title, home_url, tab_url, settings_url)
-    VALUES (100, 'security', 'Security', null, null, '/settings/security');
+    VALUES (900, 'security', 'Security', null, null, '/settings/security'),
+           (901, 'tenant',   'Tenant',   null, null, '/settings/tenant');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
-    VALUES (1000, 100, 'security:admin', 'Manage system security'),
-           (1001, 100, 'security:user',  'Manage users'),
-           (1002, 100, 'security:role',  'Manage roles');
+    VALUES (9000, 901, 'security:admin', 'Manage system security'),
+           (9010, 900, 'tenant:admin',   'Manage tenant');

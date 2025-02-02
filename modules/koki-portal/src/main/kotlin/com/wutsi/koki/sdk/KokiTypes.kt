@@ -3,27 +3,20 @@ package com.wutsi.koki.sdk
 import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.tenant.dto.GetTypeResponse
-import com.wutsi.koki.tenant.dto.SearchTenantResponse
 import com.wutsi.koki.tenant.dto.SearchTypeResponse
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.multipart.MultipartFile
 
-class KokiTenants(
+class KokiTypes(
     private val urlBuilder: URLBuilder,
     rest: RestTemplate,
 ) : AbstractKokiModule(rest) {
     companion object {
-        private const val PATH_PREFIX = "/v1/tenants"
-        private const val TYPE_PATH_PREFIX = "/v1/types"
-    }
-
-    fun tenants(): SearchTenantResponse {
-        val url = urlBuilder.build(PATH_PREFIX)
-        return rest.getForEntity(url, SearchTenantResponse::class.java).body
+        private const val PATH_PREFIX = "/v1/types"
     }
 
     fun type(id: Long): GetTypeResponse {
-        val url = urlBuilder.build("$TYPE_PATH_PREFIX/$id")
+        val url = urlBuilder.build("$PATH_PREFIX/$id")
         return rest.getForEntity(url, GetTypeResponse::class.java).body
     }
 
@@ -36,7 +29,7 @@ class KokiTenants(
         offset: Int,
     ): SearchTypeResponse {
         val url = urlBuilder.build(
-            TYPE_PATH_PREFIX,
+            PATH_PREFIX,
             mapOf(
                 "id" to ids,
                 "q" to keyword,
@@ -51,7 +44,7 @@ class KokiTenants(
 
     fun uploadTypes(file: MultipartFile, objectType: ObjectType): ImportResponse {
         val url = urlBuilder.build(
-            "$TYPE_PATH_PREFIX/csv",
+            "$PATH_PREFIX/csv",
             mapOf(
                 "object-type" to objectType,
             )

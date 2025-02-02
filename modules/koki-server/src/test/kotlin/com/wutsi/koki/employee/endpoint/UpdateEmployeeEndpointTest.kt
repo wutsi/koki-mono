@@ -26,7 +26,8 @@ class UpdateEmployeeEndpointTest : AuthorizationAwareEndpointTest() {
         currency = "XAF",
         status = EmployeeStatus.ACTIVE,
         hiredAt = DateUtils.addDays(Date(), 7),
-        terminatedAt = DateUtils.addDays(Date(), 300)
+        terminatedAt = DateUtils.addDays(Date(), 300),
+        employeeTypeId = 777L,
     )
 
     @Test
@@ -44,6 +45,7 @@ class UpdateEmployeeEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(fmt.format(request.hiredAt), fmt.format(employee.hiredAt))
         assertEquals(fmt.format(request.terminatedAt), fmt.format(employee.terminatedAt))
         assertEquals(USER_ID, employee.modifiedById)
+        assertEquals(request.employeeTypeId, employee.employeeTypeId)
     }
 
     @Test

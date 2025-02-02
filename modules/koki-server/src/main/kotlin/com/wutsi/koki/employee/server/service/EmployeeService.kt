@@ -38,6 +38,7 @@ class EmployeeService(
         tenantId: Long,
         ids: List<Long> = emptyList(),
         statuses: List<EmployeeStatus> = emptyList(),
+        employeeTypeIds: List<Long> = emptyList(),
         limit: Int = 20,
         offset: Int = 0,
     ): List<EmployeeEntity> {
@@ -49,6 +50,9 @@ class EmployeeService(
         if (statuses.isNotEmpty()) {
             jql.append(" AND E.status IN :statuses")
         }
+        if (employeeTypeIds.isNotEmpty()) {
+            jql.append(" AND E.employeeTypeId IN :employeeTypeIds")
+        }
 
         val query = em.createQuery(jql.toString(), EmployeeEntity::class.java)
         query.setParameter("tenantId", tenantId)
@@ -57,6 +61,9 @@ class EmployeeService(
         }
         if (statuses.isNotEmpty()) {
             query.setParameter("statuses", statuses)
+        }
+        if (employeeTypeIds.isNotEmpty()) {
+            query.setParameter("employeeTypeIds", employeeTypeIds)
         }
 
         query.firstResult = offset
@@ -81,6 +88,7 @@ class EmployeeService(
             EmployeeEntity(
                 id = user.id,
                 tenantId = tenantId,
+                employeeTypeId = request.employeeTypeId,
                 jobTitle = request.jobTitle,
                 hourlyWage = request.hourlyWage,
                 currency = request.currency,
@@ -98,6 +106,7 @@ class EmployeeService(
     @Transactional
     fun update(id: Long, request: UpdateEmployeeRequest, tenantId: Long) {
         val employee = get(id, tenantId)
+        employee.employeeTypeId = request.employeeTypeId
         employee.jobTitle = request.jobTitle
         employee.status = request.status
         employee.hourlyWage = request.hourlyWage

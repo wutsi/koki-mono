@@ -22,6 +22,7 @@
     <td>
         <a th:href="'/employees/' + ${employee.user.id}" th:text="${employee.user.displayName}">NAME</a>
     </td>
+    <td th:text="${employee.employeeType?.title}">EMPLOYEE_TYPE</td>
     <td th:text="#{'employee-status.' + ${employee.status}}">STATUS</td>
     <td th:text="${employee.jobTitle}">CONTACT TYPE</td>
     <td class="toolbar">

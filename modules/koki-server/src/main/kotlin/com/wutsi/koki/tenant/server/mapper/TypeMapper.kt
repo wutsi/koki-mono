@@ -1,15 +1,16 @@
-package com.wutsi.koki.contact.server.mapper
+package com.wutsi.koki.tenant.server.mapper
 
-import com.wutsi.koki.contact.dto.ContactType
-import com.wutsi.koki.contact.dto.ContactTypeSummary
-import com.wutsi.koki.contact.server.domain.ContactTypeEntity
+import com.wutsi.koki.tenant.dto.Type
+import com.wutsi.koki.tenant.dto.TypeSummary
+import com.wutsi.koki.tenant.server.domain.TypeEntity
 import org.springframework.stereotype.Service
 
 @Service
-class ContactTypeMapper {
-    fun toContactType(entity: ContactTypeEntity): ContactType {
-        return ContactType(
+class TypeMapper {
+    fun toType(entity: TypeEntity): Type {
+        return Type(
             id = entity.id!!,
+            objectType = entity.objectType,
             name = entity.name,
             title = entity.title,
             description = entity.description,
@@ -19,9 +20,10 @@ class ContactTypeMapper {
         )
     }
 
-    fun toContactTypeSummary(entity: ContactTypeEntity): ContactTypeSummary {
-        return ContactTypeSummary(
+    fun toTypeSummary(entity: TypeEntity): TypeSummary {
+        return TypeSummary(
             id = entity.id!!,
+            objectType = entity.objectType,
             name = entity.name,
             title = entity.title,
             active = entity.active,

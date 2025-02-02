@@ -34,14 +34,15 @@ class KokiEmployees(
     fun employees(
         ids: List<Long>,
         statuses: List<EmployeeStatus>,
+        employeeTypeIds: List<Long>,
         limit: Int,
         offset: Int,
     ): SearchEmployeeResponse {
         val url = urlBuilder.build(
-            PATH_PREFIX,
-            mapOf(
+            PATH_PREFIX, mapOf(
                 "id" to ids,
                 "status" to statuses,
+                "employee-type-id" to employeeTypeIds,
                 "limit" to limit,
                 "offset" to offset,
             )

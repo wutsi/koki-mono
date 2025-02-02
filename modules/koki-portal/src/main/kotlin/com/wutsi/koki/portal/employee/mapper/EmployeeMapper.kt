@@ -5,17 +5,23 @@ import com.wutsi.koki.employee.dto.EmployeeSummary
 import com.wutsi.koki.portal.employee.model.EmployeeModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.model.MoneyMapper
+import com.wutsi.koki.portal.tenant.model.TypeModel
 import com.wutsi.koki.portal.user.model.UserModel
 import org.springframework.stereotype.Service
 
 @Service
 class EmployeeMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
-    fun toEmployeeModel(entity: Employee, users: Map<Long, UserModel>): EmployeeModel {
+    fun toEmployeeModel(
+        entity: Employee,
+        users: Map<Long, UserModel>,
+        employeeType: TypeModel? = null,
+    ): EmployeeModel {
         val dateTimeFormat = createDateTimeFormat()
         val dateFormat = createDateFormat()
 
         return EmployeeModel(
             user = users[entity.userId] ?: UserModel(id = entity.userId),
+            employeeType = employeeType,
             jobTitle = entity.jobTitle,
             hourlyWage = entity.hourlyWage?.let { amount -> moneyMapper.toMoneyModel(amount) },
             status = entity.status,
@@ -32,11 +38,16 @@ class EmployeeMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper()
         )
     }
 
-    fun toEmployeeModel(entity: EmployeeSummary, users: Map<Long, UserModel>): EmployeeModel {
+    fun toEmployeeModel(
+        entity: EmployeeSummary,
+        users: Map<Long, UserModel>,
+        employeeTypes: Map<Long, TypeModel>,
+    ): EmployeeModel {
         val dateTimeFormat = createDateTimeFormat()
 
         return EmployeeModel(
             user = users[entity.userId] ?: UserModel(id = entity.userId),
+            employeeType = entity.employeeTypeId?.let { id -> employeeTypes[id] },
             jobTitle = entity.jobTitle,
             status = entity.status,
             modifiedAt = entity.modifiedAt,

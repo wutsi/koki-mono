@@ -22,6 +22,9 @@ data class EmployeeEntity(
     @Column(name = "modified_by_fk")
     var modifiedById: Long? = null,
 
+    @Column(name = "employee_type_fk")
+    var employeeTypeId: Long? = null,
+
     var jobTitle: String? = null,
     var hourlyWage: Double? = null,
     var currency: String? = null,

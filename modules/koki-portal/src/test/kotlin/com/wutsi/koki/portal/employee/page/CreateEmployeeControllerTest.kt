@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.TenantFixtures
 import com.wutsi.koki.employee.dto.CreateEmployeeRequest
 import com.wutsi.koki.employee.dto.CreateEmployeeResponse
 import com.wutsi.koki.employee.dto.EmployeeStatus
@@ -23,10 +24,11 @@ class CreateEmployeeControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.EMPLOYEE_CREATE)
 
         input("#email", "ray.sponsible@gmail.com")
+        select("#employeeTypeId", 2)
         input("#jobTitle", "Director of Technology")
         select("#status", 2)
-        input("#hourlyWage", "60")
         scrollToBottom()
+        input("#hourlyWage", "60")
         click("button[type=submit]")
 
         val request = argumentCaptor<CreateEmployeeRequest>()
@@ -36,6 +38,7 @@ class CreateEmployeeControllerTest : AbstractPageControllerTest() {
             eq(CreateEmployeeResponse::class.java)
         )
         assertEquals("ray.sponsible@gmail.com", request.firstValue.email)
+        assertEquals(TenantFixtures.types[2].id, request.firstValue.employeeTypeId)
         assertEquals("Director of Technology", request.firstValue.jobTitle)
         assertEquals(EmployeeStatus.INACTIVE, request.firstValue.status)
         assertEquals(60.0, request.firstValue.hourlyWage)
@@ -51,10 +54,11 @@ class CreateEmployeeControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.EMPLOYEE_CREATE)
 
         input("#email", "ray.sponsible@gmail.com")
+        select("#employeeTypeId", 2)
         input("#jobTitle", "Director of Technology")
         select("#status", 2)
-        input("#hourlyWage", "60")
         scrollToBottom()
+        input("#hourlyWage", "60")
         click(".btn-cancel")
 
         assertCurrentPageIs(PageName.EMPLOYEE_LIST)
@@ -74,10 +78,11 @@ class CreateEmployeeControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.EMPLOYEE_CREATE)
 
         input("#email", "ray.sponsible@gmail.com")
+        select("#employeeTypeId", 2)
         input("#jobTitle", "Director of Technology")
         select("#status", 2)
-        input("#hourlyWage", "60")
         scrollToBottom()
+        input("#hourlyWage", "60")
         click("button[type=submit]")
 
         assertCurrentPageIs(PageName.EMPLOYEE_CREATE)

@@ -1,6 +1,6 @@
-INSERT INTO T_EMPLOYEE(id, tenant_fk, status)
-    VALUES (100, 1, 1),
-           (110, 1, 1),
-           (120, 1, 2),
-           (130, 1, 1),
-           (200, 2, 0);
+INSERT INTO T_EMPLOYEE(id, tenant_fk, status, employee_type_fk)
+    VALUES (100, 1, 1, 11),
+           (110, 1, 1, 11),
+           (120, 1, 2, 13),
+           (130, 1, 1, 11),
+           (200, 2, 0, 22);

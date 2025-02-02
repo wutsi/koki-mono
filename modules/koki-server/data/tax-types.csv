@@ -1,3 +1,3 @@
-name,title,active,description
-T1,T1,yes,Personal Taxes
-T2,T2,yes,Business Taxes
+name,title,description
+T1,T1,Personal Taxes
+T2,T2,Corporate Taxes

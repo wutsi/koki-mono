@@ -29,6 +29,17 @@
                                 <div th:text="${employee.name}">NAME</div>
                             </div>
                             <div class="section-item">
+                                <label class="title">Type <span class="required">*</span></label>
+                                <select required th:field="*{employeeTypeId}">
+                                    <option th:each="type : ${types}"
+                                            th:selected="${type.id} == ${form.employeeTypeId}"
+                                            th:text="${type.title}"
+                                            th:value="${type.id}"
+                                    >TYPE
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item">
                                 <label class="title">Status <span class="required">*</span></label>
                                 <select required th:field="*{status}">
                                     <option value=""></option>

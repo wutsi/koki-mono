@@ -1,41 +1,43 @@
-package com.wutsi.koki.portal.contact.service
+package com.wutsi.koki.portal.tenant.service
 
 import com.wutsi.koki.common.dto.ImportResponse
-import com.wutsi.koki.portal.contact.mapper.ContactMapper
-import com.wutsi.koki.portal.contact.model.ContactTypeModel
-import com.wutsi.koki.sdk.KokiContacts
+import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.portal.tenant.mapper.TenantMapper
+import com.wutsi.koki.portal.tenant.model.TypeModel
+import com.wutsi.koki.sdk.KokiTypes
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 
 @Service
-class ContactTypeService(
-    private val koki: KokiContacts,
-    private val mapper: ContactMapper,
+class TypeService(
+    private val koki: KokiTypes,
+    private val mapper: TenantMapper,
 ) {
-    fun contactType(id: Long): ContactTypeModel {
-        val contactType = koki.type(id).contactType
-        return mapper.toContactTypeModel(contactType)
+    fun type(id: Long): TypeModel {
+        val type = koki.type(id).type
+        return mapper.toTypeModel(type)
     }
 
-    fun contactTypes(
+    fun types(
         ids: List<Long> = emptyList(),
-        names: List<String> = emptyList(),
+        keyword: String? = null,
         active: Boolean? = null,
+        objectType: ObjectType? = null,
         limit: Int = 20,
-        offset: Int = 0
-    ): List<ContactTypeModel> {
-        val contactTypes = koki.types(
+        offset: Int = 0,
+    ): List<TypeModel> {
+        val types = koki.types(
             ids = ids,
-            names = names,
+            keyword = keyword,
+            objectType = objectType,
             active = active,
             limit = limit,
             offset = offset
-        ).contactTypes
-
-        return contactTypes.map { contactType -> mapper.toContactTypeModel(contactType) }
+        ).types.sortedBy { type -> type.title }
+        return types.map { type -> mapper.toTypeModel(type) }
     }
 
-    fun upload(file: MultipartFile): ImportResponse {
-        return koki.uploadTypes(file)
+    fun upload(file: MultipartFile, objectType: ObjectType): ImportResponse {
+        return koki.uploadTypes(file, objectType)
     }
 }

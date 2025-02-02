@@ -10,7 +10,7 @@
     <li class="menu-item"
         th:classappend="${current == module.name} ? 'active'"
         th:each="module : ${tenant.modules}"
-        th:if="${module.settingsUrl} AND ${user?.canAdmin(module)} AND ${module.name != 'security'}"
+        th:if="${module.settingsUrl} AND ${user?.canAdmin(module)} AND ${module.name != 'security'} AND ${module.name != 'tenant'}"
     >
         <a th:class="'btn-' + ${module.name}" th:href="${module.settingsUrl}" th:text="${module.title}">TITLE</a>
     </li>
@@ -37,6 +37,12 @@
         th:if="${user?.hasPermission('security:admin')}"
     >
         <a class="btn-security" href="/settings/security">Security</a>
+    </li>
+    <li class="menu-item"
+        th:classappend="${current == 'tenant'} ? 'active'"
+        th:if="${user?.hasPermission('tenant:admin')}"
+    >
+        <a class="btn-tenant" href="/settings/tenant">Tenant</a>
     </li>
 </ul>
 
