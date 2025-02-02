@@ -1,4 +1,4 @@
 name,title,description
-P,Primary,
-S,Spouse,
-C,Child,
+PRI,Primary,
+SEC,Spouse,
+CHI,Child,

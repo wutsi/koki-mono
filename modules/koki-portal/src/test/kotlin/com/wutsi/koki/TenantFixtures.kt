@@ -25,7 +25,9 @@ object TenantFixtures {
             status = TenantStatus.ACTIVE,
             logoUrl = "https://prod-wutsi.s3.amazonaws.com/static/wutsi-blog-web/assets/wutsi/img/logo/name-104x50.png",
             iconUrl = "https://prod-wutsi.s3.amazonaws.com/static/wutsi-blog-web/assets/wutsi/img/logo/logo_512x512.png",
-            moduleIds = modules.map { module -> module.id }
+            moduleIds = modules.map { module -> module.id },
+            websiteUrl = "https://www.google.com",
+            portalUrl = "http://localhost:8080",
         ),
         Tenant(
             id = 2,

@@ -1,5 +1,5 @@
 name,title,description
-F,Full Time,
-P,Part Time,
-C,Contractor,
-I,Intern,
+FTE,Full Time,
+PTE,Part Time,
+CE,Contractor,
+IE,Intern,
