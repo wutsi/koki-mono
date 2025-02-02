@@ -12,13 +12,6 @@ class SettingsAccountControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun types() {
-        navigateTo("/settings/accounts")
-        click(".btn-type")
-        assertCurrentPageIs(PageName.ACCOUNT_SETTINGS_TYPE_LIST)
-    }
-
-    @Test
     fun attributes() {
         navigateTo("/settings/accounts")
         click(".btn-attribute")

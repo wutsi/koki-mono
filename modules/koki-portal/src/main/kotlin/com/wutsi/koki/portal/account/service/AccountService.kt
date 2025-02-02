@@ -5,6 +5,7 @@ import com.wutsi.koki.account.dto.UpdateAccountRequest
 import com.wutsi.koki.portal.account.form.AccountForm
 import com.wutsi.koki.portal.account.mapper.AccountMapper
 import com.wutsi.koki.portal.account.model.AccountModel
+import com.wutsi.koki.portal.tenant.service.TypeService
 import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.sdk.KokiAccounts
 import org.springframework.stereotype.Service
@@ -16,7 +17,7 @@ class AccountService(
     private val mapper: AccountMapper,
     private val userService: UserService,
     private val attributeService: AttributeService,
-    private val accountTypeService: AccountTypeService,
+    private val typeService: TypeService,
 ) {
     fun account(id: Long, fullGraph: Boolean = true): AccountModel {
         val account = koki.account(id).account
@@ -43,7 +44,7 @@ class AccountService(
             emptyMap()
         } else {
             val id = account.accountTypeId!!
-            mapOf(id to accountTypeService.accountType(id))
+            mapOf(id to typeService.type(id))
         }
 
         return mapper.toAccountModel(
@@ -94,7 +95,7 @@ class AccountService(
         val accountTypeMap = if (accountTypeIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
-            accountTypeService.accountTypes(
+            typeService.types(
                 ids = accountTypeIds.toList(),
                 limit = accountTypeIds.size,
             )

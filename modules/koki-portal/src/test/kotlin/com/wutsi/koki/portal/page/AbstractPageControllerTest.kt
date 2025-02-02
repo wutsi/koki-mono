@@ -36,10 +36,8 @@ import com.wutsi.koki.WorkflowFixtures.workflows
 import com.wutsi.koki.account.dto.CreateAccountRequest
 import com.wutsi.koki.account.dto.CreateAccountResponse
 import com.wutsi.koki.account.dto.GetAccountResponse
-import com.wutsi.koki.account.dto.GetAccountTypeResponse
 import com.wutsi.koki.account.dto.GetAttributeResponse
 import com.wutsi.koki.account.dto.SearchAccountResponse
-import com.wutsi.koki.account.dto.SearchAccountTypeResponse
 import com.wutsi.koki.account.dto.SearchAttributeResponse
 import com.wutsi.koki.common.dto.ImportMessage
 import com.wutsi.koki.common.dto.ImportResponse
@@ -572,29 +570,6 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(GetAttributeResponse::class.java)
-            )
-
-        // Account Types
-        doReturn(
-            ResponseEntity(
-                SearchAccountTypeResponse(AccountFixtures.accountTypes),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchAccountTypeResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                GetAccountTypeResponse(AccountFixtures.accountType),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetAccountTypeResponse::class.java)
             )
 
         // Accounts

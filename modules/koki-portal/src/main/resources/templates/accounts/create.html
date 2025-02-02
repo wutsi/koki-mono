@@ -28,12 +28,13 @@
                                 <input maxlength="100" required th:field="*{name}"/>
                             </div>
                             <div class="section-item" th:if="${accountTypes}">
-                                <label class="title">Type</label>
-                                <select th:field="*{accountTypeId}">
-                                    <option value="-1"></option>
+                                <label class="title">Type <span class="required">*</span></label>
+                                <select required id="accountTypeId" name="accountTypeId">
+                                    <option value=""></option>
                                     <option th:each="accountType : ${accountTypes}"
                                             th:text="${accountType.title}"
-                                            th:value="${accountType.id}">
+                                            th:value="${accountType.id}"
+                                            th:selected="${form.accountTypeId} == ${accountType.id}">
                                         ACCOUNT TYPE
                                     </option>
                                 </select>
@@ -54,12 +55,12 @@
                                 <input maxlength="100" th:field="*{email}" type="email"/>
                             </div>
                             <div class="section-item">
-                                <label class="title">Phone</label>
-                                <input maxlength="30" th:field="*{phone}"/>
-                            </div>
-                            <div class="section-item">
                                 <label class="title">Mobile</label>
                                 <input maxlength="30" th:field="*{mobile}"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Phone</label>
+                                <input maxlength="30" th:field="*{phone}"/>
                             </div>
                             <div class="section-item">
                                 <label class="title">Website</label>

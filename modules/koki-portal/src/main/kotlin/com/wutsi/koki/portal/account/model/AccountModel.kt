@@ -1,11 +1,12 @@
 package com.wutsi.koki.portal.account.model
 
+import com.wutsi.koki.portal.tenant.model.TypeModel
 import com.wutsi.koki.portal.user.model.UserModel
 import java.util.Date
 
 data class AccountModel(
     val id: Long = -1,
-    val accountType: AccountTypeModel? = null,
+    val accountType: TypeModel? = null,
     val name: String = "",
     val phone: String? = null,
     val mobile: String? = null,

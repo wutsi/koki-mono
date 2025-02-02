@@ -2,15 +2,13 @@ package com.wutsi.koki.portal.account.mapper
 
 import com.wutsi.koki.account.dto.Account
 import com.wutsi.koki.account.dto.AccountSummary
-import com.wutsi.koki.account.dto.AccountType
-import com.wutsi.koki.account.dto.AccountTypeSummary
 import com.wutsi.koki.account.dto.Attribute
 import com.wutsi.koki.account.dto.AttributeSummary
 import com.wutsi.koki.portal.account.model.AccountAttributeModel
 import com.wutsi.koki.portal.account.model.AccountModel
-import com.wutsi.koki.portal.account.model.AccountTypeModel
 import com.wutsi.koki.portal.account.model.AttributeModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
+import com.wutsi.koki.portal.tenant.model.TypeModel
 import com.wutsi.koki.portal.user.model.UserModel
 import org.springframework.stereotype.Service
 import java.util.Locale
@@ -19,7 +17,7 @@ import java.util.Locale
 class AccountMapper : TenantAwareMapper() {
     fun toAccountModel(
         entity: AccountSummary,
-        accountTypes: Map<Long, AccountTypeModel>,
+        accountTypes: Map<Long, TypeModel>,
         users: Map<Long, UserModel>
     ): AccountModel {
         val fmt = createDateTimeFormat()
@@ -42,7 +40,7 @@ class AccountMapper : TenantAwareMapper() {
 
     fun toAccountModel(
         entity: Account,
-        accountTypes: Map<Long, AccountTypeModel>,
+        accountTypes: Map<Long, TypeModel>,
         users: Map<Long, UserModel>,
         attributes: Map<Long, AttributeModel>
     ): AccountModel {
@@ -76,25 +74,6 @@ class AccountMapper : TenantAwareMapper() {
                     )
                 }
             }
-        )
-    }
-
-    fun toAccountTypeModel(entity: AccountType): AccountTypeModel {
-        return AccountTypeModel(
-            id = entity.id,
-            name = entity.name,
-            title = entity.title ?: entity.name,
-            description = entity.description?.trim()?.ifEmpty { null },
-            active = entity.active,
-        )
-    }
-
-    fun toAccountTypeModel(entity: AccountTypeSummary): AccountTypeModel {
-        return AccountTypeModel(
-            id = entity.id,
-            name = entity.name,
-            title = entity.title ?: entity.name,
-            active = entity.active,
         )
     }
 

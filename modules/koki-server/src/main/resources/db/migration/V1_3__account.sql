@@ -17,27 +17,11 @@ CREATE TABLE T_ATTRIBUTE(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
-CREATE TABLE T_ACCOUNT_TYPE(
-  id                      BIGINT NOT NULL AUTO_INCREMENT,
-
-  tenant_fk               BIGINT NOT NULL,
-
-  name                    VARCHAR(100) NOT NULL,
-  title                   VARCHAR(255),
-  description             TEXT,
-  active                  BOOL NOT NULL DEFAULT true,
-  created_at              DATETIME DEFAULT NOW(),
-  modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
-
-  UNIQUE(tenant_fk, name),
-  PRIMARY KEY(id)
-) ENGINE = InnoDB;
-
 CREATE TABLE T_ACCOUNT(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
   tenant_fk               BIGINT NOT NULL,
-  account_type_fk         BIGINT REFERENCES T_ACCOUNT_TYPE(id),
+  account_type_fk         BIGINT,
   created_by_fk           BIGINT,
   modified_by_fk          BIGINT,
   deleted_by_fk           BIGINT,

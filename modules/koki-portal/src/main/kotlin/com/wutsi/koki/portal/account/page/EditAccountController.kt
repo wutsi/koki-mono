@@ -1,12 +1,13 @@
 package com.wutsi.koki.portal.account.page
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.account.form.AccountForm
 import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.account.service.AccountService
-import com.wutsi.koki.portal.account.service.AccountTypeService
 import com.wutsi.koki.portal.account.service.AttributeService
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
+import com.wutsi.koki.portal.tenant.service.TypeService
 import com.wutsi.koki.portal.user.service.UserService
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.stereotype.Controller
@@ -23,7 +24,7 @@ import java.util.Locale
 class EditAccountController(
     private val service: AccountService,
     private val attributeService: AttributeService,
-    private val accountTypeService: AccountTypeService,
+    private val typeService: TypeService,
     private val userService: UserService,
     private val request: HttpServletRequest,
 ) : AbstractAccountController() {
@@ -58,7 +59,8 @@ class EditAccountController(
             model.addAttribute("attributes", attributes)
         }
 
-        val accountTypes = accountTypeService.accountTypes(
+        val accountTypes = typeService.types(
+            objectType = ObjectType.ACCOUNT,
             limit = Integer.MAX_VALUE,
         ).filter { accountType -> // All active + inactive type used by the account
             accountType.active || accountType.id == account.accountType?.id
