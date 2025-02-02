@@ -2,7 +2,6 @@ package com.wutsi.koki.portal.tenant.page.settings.type
 
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.TypeService
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
 @RequiresPermission(["tenant:admin"])
-class SettingsListTypeController(private val service: TypeService) : AbstractPageController() {
+class SettingsListTypeController(private val service: TypeService) : AbstractSettingsTypeController() {
     @GetMapping("/settings/tenant/types")
     fun list(
         @RequestParam(required = false, name = "object-type") objectType: ObjectType? = null,
@@ -28,19 +27,10 @@ class SettingsListTypeController(private val service: TypeService) : AbstractPag
                 name = PageName.TENANT_SETTINGS_TYPE_LIST,
                 title = "Types",
             )
-
         )
 
         model.addAttribute("objectType", objectType)
-        model.addAttribute(
-            "objectTypes",
-            listOf(
-                ObjectType.ACCOUNT,
-                ObjectType.CONTACT,
-                ObjectType.EMPLOYEE,
-                ObjectType.TAX,
-            )
-        )
+        model.addAttribute("objectTypes", getObjectTypes())
 
         model.addAttribute("active", active)
 
