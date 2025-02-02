@@ -17,10 +17,6 @@ object PageName {
     const val CONTACT_LIST = "page.contact.list"
     const val CONTACT_EDIT = "page.contact.edit"
     const val CONTACT_CREATE = "page.contact.create"
-    const val CONTACT_SETTINGS = "page.contact.settings"
-    const val CONTACT_SETTINGS_TYPE = "page.settings.contact.type"
-    const val CONTACT_SETTINGS_TYPE_IMPORT = "page.settings.contact.type.import"
-    const val CONTACT_SETTINGS_TYPE_LIST = "page.settings.contact.type.list"
 
     const val EMAIL_SETTINGS = "page.settings.email"
     const val EMAIL_SETTINGS_SMTP = "page.settings.smtp"
