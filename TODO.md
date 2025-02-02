@@ -73,6 +73,7 @@
 
 ## Employees
 
+- [] Send email to employee
 - [x] Employee API
 - [x] Link Employee with User
 - [x] Employee UI

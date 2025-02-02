@@ -1,8 +1,10 @@
 package com.wutsi.koki.portal.tax.page
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tax.service.TaxService
+import com.wutsi.koki.portal.tenant.service.TypeService
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
 import com.wutsi.koki.tax.dto.TaxStatus
 import org.slf4j.LoggerFactory
@@ -18,6 +20,7 @@ import java.time.LocalDate
 class ListTaxController(
     private val service: TaxService,
     private val currentUser: CurrentUserHolder,
+    private val typeService: TypeService,
 ) : AbstractTaxController() {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ListTaxController::class.java)
@@ -25,8 +28,6 @@ class ListTaxController(
         const val COL_ALL_REPORTS = "1"
         const val COL_MY_REPORTS = "2"
         const val COL_MY_ASSIGNED_REPORTS = "3"
-        const val COL_MY_DONE_REPORTS = "4"
-        const val COL_ALL_DONE_REPORTS = "5"
 
         const val VIEW_TABLE = "1"
         const val VIEW_CALENDAR = "2"
@@ -39,6 +40,8 @@ class ListTaxController(
         @RequestParam(required = false, name = "view") view: String? = null,
         @RequestParam(required = false, name = "month") month: String? = null,
         @RequestParam(required = false, name = "fiscal-year") fiscalYear: Int? = null,
+        @RequestParam(required = false, name = "type-id") typeId: Long? = null,
+        @RequestParam(required = false) status: TaxStatus? = null,
         @RequestParam(required = false, name = "_toast") toast: Long? = null,
         @RequestParam(required = false, name = "_ts") timestamp: Long? = null,
         @RequestParam(required = false, name = "_op") operation: String? = null,
@@ -49,6 +52,8 @@ class ListTaxController(
         more(
             collection = collection,
             fiscalYear = fiscalYear,
+            typeId = typeId,
+            status = status,
             view = view,
             month = month,
             limit = limit,
@@ -69,6 +74,16 @@ class ListTaxController(
         model.addAttribute("collection", getCollection(collection))
         model.addAttribute("view", getView(view))
         model.addAttribute("month", getMonth(month))
+
+        model.addAttribute("statuses", TaxStatus.entries)
+        model.addAttribute("status", status)
+
+        model.addAttribute(
+            "types",
+            typeService.types(objectType = ObjectType.TAX, active = true, limit = Integer.MAX_VALUE)
+        )
+        model.addAttribute("typeId", typeId)
+
         return "taxes/list"
     }
 
@@ -76,6 +91,8 @@ class ListTaxController(
     fun more(
         @RequestParam(required = false, name = "col") collection: String? = null,
         @RequestParam(required = false, name = "fiscal-year") fiscalYear: Int? = null,
+        @RequestParam(required = false, name = "type-id") typeId: Long? = null,
+        @RequestParam(required = false) status: TaxStatus? = null,
         @RequestParam(required = false, name = "view") view: String? = null,
         @RequestParam(required = false, name = "month") month: String? = null,
         @RequestParam(required = false) limit: Int = 20,
@@ -89,7 +106,7 @@ class ListTaxController(
         val startAtFrom = LocalDate.parse(getMonth(month) + "-01")
 
         val taxes = service.taxes(
-            participantIds = if (col == COL_MY_REPORTS || col == COL_MY_DONE_REPORTS) {
+            participantIds = if (col == COL_MY_REPORTS) {
                 userId?.let { id -> listOf(id) } ?: emptyList()
             } else {
                 emptyList()
@@ -101,18 +118,10 @@ class ListTaxController(
                 emptyList()
             },
 
-            statuses = if (col == COL_MY_DONE_REPORTS || col == COL_ALL_DONE_REPORTS) {
-                listOf(TaxStatus.DONE)
-            } else {
-                TaxStatus.entries.filter { status -> status != TaxStatus.DONE }
-            },
-
+            statuses = status?.let { listOf(status) } ?: emptyList(),
             fiscalYear = year,
-
             startAtFrom = if (xview == VIEW_CALENDAR) startAtFrom else null,
-
             startAtTo = if (xview == VIEW_CALENDAR) startAtFrom.plusMonths(1).minusDays(1) else null,
-
             limit = limit,
             offset = offset,
         )
@@ -128,6 +137,12 @@ class ListTaxController(
                 }
                 if (fiscalYear != null) {
                     url = "$url&fiscal-year=$fiscalYear"
+                }
+                if (typeId != null) {
+                    url = "$url&type-id=$typeId"
+                }
+                if (status != null) {
+                    url = "$url&status=$status"
                 }
                 if (view != null) {
                     url = "$url&view=$view"
@@ -171,8 +186,6 @@ class ListTaxController(
             COL_ALL_REPORTS -> COL_ALL_REPORTS
             COL_MY_REPORTS -> COL_MY_REPORTS
             COL_MY_ASSIGNED_REPORTS -> COL_MY_ASSIGNED_REPORTS
-            COL_ALL_DONE_REPORTS -> COL_ALL_DONE_REPORTS
-            COL_MY_DONE_REPORTS -> COL_MY_DONE_REPORTS
             else -> COL_ALL_REPORTS
         }
     }

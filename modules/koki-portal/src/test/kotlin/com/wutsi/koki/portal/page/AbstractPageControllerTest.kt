@@ -95,9 +95,7 @@ import com.wutsi.koki.service.dto.SearchServiceResponse
 import com.wutsi.koki.tax.dto.CreateTaxRequest
 import com.wutsi.koki.tax.dto.CreateTaxResponse
 import com.wutsi.koki.tax.dto.GetTaxResponse
-import com.wutsi.koki.tax.dto.GetTaxTypeResponse
 import com.wutsi.koki.tax.dto.SearchTaxResponse
-import com.wutsi.koki.tax.dto.SearchTaxTypeResponse
 import com.wutsi.koki.tenant.dto.CreateRoleRequest
 import com.wutsi.koki.tenant.dto.CreateRoleResponse
 import com.wutsi.koki.tenant.dto.CreateUserRequest
@@ -734,29 +732,6 @@ abstract class AbstractPageControllerTest {
     }
 
     private fun setupTaxModule() {
-        // Tax Types
-        doReturn(
-            ResponseEntity(
-                SearchTaxTypeResponse(TaxFixtures.taxTypes),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchTaxTypeResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                GetTaxTypeResponse(TaxFixtures.taxType),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetTaxTypeResponse::class.java)
-            )
-
         // Tax
         doReturn(
             ResponseEntity(

@@ -1,12 +1,13 @@
 package com.wutsi.koki.portal.tax.page
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tax.form.TaxForm
 import com.wutsi.koki.portal.tax.model.TaxModel
 import com.wutsi.koki.portal.tax.service.TaxService
-import com.wutsi.koki.portal.tax.service.TaxTypeService
+import com.wutsi.koki.portal.tenant.service.TypeService
 import com.wutsi.koki.portal.user.service.UserService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -22,7 +23,7 @@ import java.text.SimpleDateFormat
 class EditTaxController(
     private val service: TaxService,
     private val accountService: AccountService,
-    private val taxTypeService: TaxTypeService,
+    private val typeService: TypeService,
     private val userService: UserService,
 ) : AbstractTaxController() {
     @GetMapping("/taxes/{id}/edit")
@@ -49,7 +50,17 @@ class EditTaxController(
     private fun edit(tax: TaxModel, form: TaxForm, model: Model): String {
         model.addAttribute("tax", tax)
         model.addAttribute("form", form)
-        model.addAttribute("taxTypes", taxTypeService.taxTypes(active = true, limit = Integer.MAX_VALUE))
+
+        model.addAttribute(
+            "taxTypes",
+            typeService.types(
+                objectType = ObjectType.TAX,
+                limit = Integer.MAX_VALUE,
+            ).filter { type ->
+                type.id == tax.taxType?.id || type.active
+            }
+        )
+
         model.addAttribute("account", accountService.account(form.accountId))
 
         val userIds = listOf(form.assigneeId, form.accountantId, form.technicianId)

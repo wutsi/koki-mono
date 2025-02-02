@@ -1,17 +1,13 @@
 package com.wutsi.koki.sdk
 
-import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.tax.dto.CreateTaxRequest
 import com.wutsi.koki.tax.dto.CreateTaxResponse
 import com.wutsi.koki.tax.dto.GetTaxResponse
-import com.wutsi.koki.tax.dto.GetTaxTypeResponse
 import com.wutsi.koki.tax.dto.SearchTaxResponse
-import com.wutsi.koki.tax.dto.SearchTaxTypeResponse
 import com.wutsi.koki.tax.dto.TaxStatus
 import com.wutsi.koki.tax.dto.UpdateTaxRequest
 import com.wutsi.koki.tax.dto.UpdateTaxStatusRequest
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDate
 
 class KokiTaxes(
@@ -20,8 +16,6 @@ class KokiTaxes(
 ) : AbstractKokiModule(rest) {
     companion object {
         private const val TAX_PATH_PREFIX = "/v1/taxes"
-        private const val TAX_TYPE_PATH_PREFIX = "/v1/tax-types"
-        private const val WAGE_PATH_PREFIX = "/v1/wages"
     }
 
     fun tax(id: Long): GetTaxResponse {
@@ -85,35 +79,5 @@ class KokiTaxes(
     fun delete(id: Long) {
         val url = urlBuilder.build("$TAX_PATH_PREFIX/$id")
         rest.delete(url)
-    }
-
-    fun type(id: Long): GetTaxTypeResponse {
-        val url = urlBuilder.build("$TAX_TYPE_PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetTaxTypeResponse::class.java).body
-    }
-
-    fun types(
-        ids: List<Long>,
-        names: List<String>,
-        active: Boolean?,
-        limit: Int,
-        offset: Int,
-    ): SearchTaxTypeResponse {
-        val url = urlBuilder.build(
-            TAX_TYPE_PATH_PREFIX,
-            mapOf(
-                "id" to ids,
-                "name" to names,
-                "active" to active,
-                "limit" to limit,
-                "offset" to offset,
-            )
-        )
-        return rest.getForEntity(url, SearchTaxTypeResponse::class.java).body
-    }
-
-    fun uploadTypes(file: MultipartFile): ImportResponse {
-        val url = urlBuilder.build("$TAX_TYPE_PATH_PREFIX/csv")
-        return upload(url, file)
     }
 }

@@ -1,12 +1,13 @@
 package com.wutsi.koki.portal.tax.page
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tax.form.TaxForm
 import com.wutsi.koki.portal.tax.service.TaxService
-import com.wutsi.koki.portal.tax.service.TaxTypeService
+import com.wutsi.koki.portal.tenant.service.TypeService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -20,7 +21,7 @@ import org.springframework.web.client.HttpClientErrorException
 class CreateTaxController(
     private val service: TaxService,
     private val accountService: AccountService,
-    private val taxTypeService: TaxTypeService,
+    private val typeService: TypeService,
 ) : AbstractTaxController() {
     @GetMapping("/taxes/create")
     fun create(
@@ -43,7 +44,14 @@ class CreateTaxController(
         }
         model.addAttribute("form", form)
 
-        model.addAttribute("taxTypes", taxTypeService.taxTypes(active = true, limit = Integer.MAX_VALUE))
+        model.addAttribute(
+            "taxTypes",
+            typeService.types(
+                active = true,
+                objectType = ObjectType.TAX,
+                limit = Integer.MAX_VALUE,
+            )
+        )
 
         model.addAttribute(
             "page",
