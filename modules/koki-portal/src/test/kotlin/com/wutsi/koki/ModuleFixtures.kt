@@ -103,15 +103,13 @@ object ModuleFixtures {
         Permission(id = 1004, moduleId = 100, name = "account:delete", description = "Delete accounts"),
 
         Permission(id = 1101, moduleId = 110, name = "contact", description = "Access contacts"),
-        Permission(id = 1102, moduleId = 110, name = "contact:admin", description = "Configure contacts"),
-        Permission(id = 1103, moduleId = 110, name = "contact:manage", description = "Manage contacts"),
-        Permission(id = 1104, moduleId = 110, name = "contact:delete", description = "Delete contacts"),
+        Permission(id = 1102, moduleId = 110, name = "contact:manage", description = "Manage contacts"),
+        Permission(id = 1103, moduleId = 110, name = "contact:delete", description = "Delete contacts"),
 
         Permission(id = 1201, moduleId = 120, name = "tax", description = "Access taxes"),
-        Permission(id = 1202, moduleId = 120, name = "tax:admin", description = "Configre taxes"),
-        Permission(id = 1203, moduleId = 120, name = "tax:manage", description = "Manage taxes"),
-        Permission(id = 1204, moduleId = 120, name = "tax:delete", description = "Delete taxes"),
-        Permission(id = 1205, moduleId = 120, name = "tax:status", description = "Manage taxes status and assignment"),
+        Permission(id = 1202, moduleId = 120, name = "tax:manage", description = "Manage taxes"),
+        Permission(id = 1203, moduleId = 120, name = "tax:delete", description = "Delete taxes"),
+        Permission(id = 1204, moduleId = 120, name = "tax:status", description = "Manage taxes status and assignment"),
 
         Permission(id = 1301, moduleId = 130, name = "email", description = "Access emails"),
         Permission(id = 1302, moduleId = 130, name = "email:send", description = "Send emails"),

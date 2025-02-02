@@ -100,15 +100,7 @@
                         </tr>
                         <tr th:if="${contact.gender}">
                             <td><b>Gender</b></td>
-                            <td th:text="${contact.gender.name}">GENDER</td>
-                        </tr>
-                        <tr th:if="${contact.phone}">
-                            <td><b>Phone</b></td>
-                            <td th:text="${contact.phone}">PHONE</td>
-                        </tr>
-                        <tr th:if="${contact.mobile}">
-                            <td><b>Mobile</b></td>
-                            <td th:text="${contact.mobile}">MOBILE</td>
+                            <td th:text="#{'gender.' + ${contact.gender.name}}">GENDER</td>
                         </tr>
                         <tr th:if="${contact.email}">
                             <td><b>Email</b></td>
@@ -116,6 +108,14 @@
                                 <a th:href="'mailto:' + ${contact.email}"
                                    th:text="${contact.email}">EMAIL</a>
                             </td>
+                        </tr>
+                        <tr th:if="${contact.mobile}">
+                            <td><b>Mobile</b></td>
+                            <td th:text="${contact.mobile}">MOBILE</td>
+                        </tr>
+                        <tr th:if="${contact.phone}">
+                            <td><b>Phone</b></td>
+                            <td th:text="${contact.phone}">PHONE</td>
                         </tr>
                         <tr th:if="${contact.profession}">
                             <td><b>Profession</b></td>

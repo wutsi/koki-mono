@@ -2,13 +2,14 @@ package com.wutsi.koki.portal.contact.model
 
 import com.wutsi.koki.contact.dto.Gender
 import com.wutsi.koki.portal.account.model.AccountModel
+import com.wutsi.koki.portal.tenant.model.TypeModel
 import com.wutsi.koki.portal.user.model.UserModel
 import java.util.Date
 
 data class ContactModel(
     val id: Long = -1,
     val account: AccountModel? = null,
-    val contactType: ContactTypeModel? = null,
+    val contactType: TypeModel? = null,
     val salutation: String? = null,
     val firstName: String = "",
     val lastName: String = "",

@@ -1,11 +1,12 @@
 package com.wutsi.koki.portal.contact.page
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.contact.form.ContactForm
 import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.contact.service.ContactService
-import com.wutsi.koki.portal.contact.service.ContactTypeService
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
+import com.wutsi.koki.portal.tenant.service.TypeService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -18,7 +19,7 @@ import org.springframework.web.client.HttpClientErrorException
 @RequiresPermission(["contact:manage"])
 class EditContactController(
     private val service: ContactService,
-    private val contactTypeService: ContactTypeService,
+    private val typeService: TypeService,
 ) : AbstractContactController() {
     @GetMapping("/contacts/{id}/edit")
     fun edit(
@@ -56,7 +57,8 @@ class EditContactController(
             )
         )
 
-        val contactTypes = contactTypeService.contactTypes(
+        val contactTypes = typeService.types(
+            objectType = ObjectType.CONTACT,
             limit = Integer.MAX_VALUE
         ).filter { contactType ->
             contactType.active || (contactType.id == contact.contactType?.id)

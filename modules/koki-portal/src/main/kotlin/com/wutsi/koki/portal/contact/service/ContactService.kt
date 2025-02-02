@@ -6,6 +6,7 @@ import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.contact.form.ContactForm
 import com.wutsi.koki.portal.contact.mapper.ContactMapper
 import com.wutsi.koki.portal.contact.model.ContactModel
+import com.wutsi.koki.portal.tenant.service.TypeService
 import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.sdk.KokiContacts
 import org.springframework.stereotype.Service
@@ -15,7 +16,7 @@ class ContactService(
     private val koki: KokiContacts,
     private val mapper: ContactMapper,
     private val userService: UserService,
-    private val contactTypeService: ContactTypeService,
+    private val typeService: TypeService,
     private val accountService: AccountService,
 ) {
     fun contact(id: Long, fullGraph: Boolean = true): ContactModel {
@@ -36,7 +37,7 @@ class ContactService(
         val contactType = if (contact.contactTypeId == null || !fullGraph) {
             null
         } else {
-            contactTypeService.contactType(contact.contactTypeId!!)
+            typeService.type(contact.contactTypeId!!)
         }
 
         // Account
@@ -97,7 +98,7 @@ class ContactService(
         val contactTypeMap = if (contactTypeIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
-            contactTypeService.contactTypes(
+            typeService.types(
                 ids = contactTypeIds.toList(),
                 limit = contactTypeIds.size,
             )

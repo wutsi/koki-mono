@@ -2,12 +2,10 @@ package com.wutsi.koki.portal.contact.mapper
 
 import com.wutsi.koki.contact.dto.Contact
 import com.wutsi.koki.contact.dto.ContactSummary
-import com.wutsi.koki.contact.dto.ContactType
-import com.wutsi.koki.contact.dto.ContactTypeSummary
 import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.contact.model.ContactModel
-import com.wutsi.koki.portal.contact.model.ContactTypeModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
+import com.wutsi.koki.portal.tenant.model.TypeModel
 import com.wutsi.koki.portal.user.model.UserModel
 import org.springframework.stereotype.Service
 
@@ -17,7 +15,7 @@ class ContactMapper : TenantAwareMapper() {
         entity: ContactSummary,
         users: Map<Long, UserModel>,
         account: AccountModel?,
-        contactType: ContactTypeModel?,
+        contactType: TypeModel?,
     ): ContactModel {
         val fmt = createDateTimeFormat()
         return ContactModel(
@@ -42,7 +40,7 @@ class ContactMapper : TenantAwareMapper() {
         entity: Contact,
         users: Map<Long, UserModel>,
         account: AccountModel?,
-        contactType: ContactTypeModel?,
+        contactType: TypeModel?,
     ): ContactModel {
         val fmt = createDateTimeFormat()
         return ContactModel(
@@ -64,25 +62,6 @@ class ContactMapper : TenantAwareMapper() {
             employer = entity.employer,
             gender = entity.gender,
             salutation = entity.salutation,
-        )
-    }
-
-    fun toContactTypeModel(entity: ContactType): ContactTypeModel {
-        return ContactTypeModel(
-            id = entity.id,
-            name = entity.name,
-            title = entity.title ?: entity.name,
-            active = entity.active,
-            description = entity.description,
-        )
-    }
-
-    fun toContactTypeModel(entity: ContactTypeSummary): ContactTypeModel {
-        return ContactTypeModel(
-            id = entity.id,
-            name = entity.name,
-            title = entity.title ?: entity.name,
-            active = entity.active,
         )
     }
 }

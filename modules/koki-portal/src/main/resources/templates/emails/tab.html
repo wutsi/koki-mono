@@ -1,6 +1,6 @@
 <div class="tab-emails">
     <div>
-        <a class="btn btn-light btn-sm margin-bottom" href="javascript: koki_emails_compose()"
+        <a class="btn btn-light btn-sm" href="javascript: koki_emails_compose()"
            id="btn-email-compose"
            th:if="${user?.hasPermission('email:send')}">
             <i class="fa-solid fa-pen"></i>
@@ -8,7 +8,7 @@
         </a>
     </div>
     <div id="email-list" th:data-owner-id="${ownerId}" th:data-owner-type="${ownerType}">
-        <div class="email border-top padding" th:each="email : ${emails}" th:id="'email-' + ${email.id}">
+        <div class="border-top padding-top margin-top email" th:each="email : ${emails}" th:id="'email-' + ${email.id}">
             <div th:replace="~{__components/email :: columns(${email})}"></div>
         </div>
         <div th:replace="~{__components/email :: load-more(${moreUrl})}"></div>
