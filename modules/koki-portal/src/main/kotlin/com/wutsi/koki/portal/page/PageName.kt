@@ -46,6 +46,12 @@ object PageName {
 
     const val LOGIN = "page.login"
 
+    const val TENANT_SETTINGS = "page.settings.tenant"
+    const val TENANT_SETTINGS_ABOUT = "page.settings.tenant.about"
+    const val TENANT_SETTINGS_TYPE = "page.settings.tenant.type"
+    const val TENANT_SETTINGS_TYPE_IMPORT = "page.settings.tenant.type.import"
+    const val TENANT_SETTINGS_TYPE_LIST = "page.settings.tenant.type.list"
+
     const val SECURITY_SETTINGS = "page.settings.security"
     const val SECURITY_SETTINGS_ROLE = "page.settings.security.role"
     const val SECURITY_SETTINGS_ROLE_CREATE = "page.settings.security.role.create"
@@ -107,8 +113,6 @@ object PageName {
     const val TAX_SETTINGS_TYPE = "page.settings.tax.type"
     const val TAX_SETTINGS_TYPE_IMPORT = "page.settings.tax.type.import"
     const val TAX_SETTINGS_TYPE_LIST = "page.settings.tax.type.list"
-
-    const val UPLOAD = "upload"
 
     const val WORKFLOW = "page.workflow"
     const val WORKFLOW_ACTIVITY = "page.activity"

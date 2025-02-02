@@ -10,6 +10,7 @@ class EmployeeMapper {
     fun toEmployee(entity: EmployeeEntity): Employee {
         return Employee(
             userId = entity.id!!,
+            employeeTypeId = entity.employeeTypeId,
             status = entity.status,
             jobTitle = entity.jobTitle,
             hourlyWage = entity.hourlyWage,
@@ -26,6 +27,7 @@ class EmployeeMapper {
     fun toEmployeeSummary(entity: EmployeeEntity): EmployeeSummary {
         return EmployeeSummary(
             userId = entity.id!!,
+            employeeTypeId = entity.employeeTypeId,
             status = entity.status,
             jobTitle = entity.jobTitle,
             modifiedAt = entity.modifiedAt,

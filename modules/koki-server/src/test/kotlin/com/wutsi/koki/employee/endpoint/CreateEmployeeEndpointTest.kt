@@ -33,7 +33,8 @@ class CreateEmployeeEndpointTest : AuthorizationAwareEndpointTest() {
         currency = "XAF",
         status = EmployeeStatus.ACTIVE,
         hiredAt = DateUtils.addDays(Date(), 7),
-        terminatedAt = DateUtils.addDays(Date(), 300)
+        terminatedAt = DateUtils.addDays(Date(), 300),
+        employeeTypeId = 777L,
     )
 
     @Test
@@ -55,6 +56,7 @@ class CreateEmployeeEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(fmt.format(request.terminatedAt), fmt.format(employee.terminatedAt))
         assertEquals(USER_ID, employee.createdById)
         assertEquals(USER_ID, employee.modifiedById)
+        assertEquals(request.employeeTypeId, employee.employeeTypeId)
 
         val user = userDao.findById(employeeId).get()
         assertEquals(UserType.EMPLOYEE, user.type)

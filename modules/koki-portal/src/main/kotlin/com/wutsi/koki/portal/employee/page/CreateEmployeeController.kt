@@ -1,10 +1,12 @@
 package com.wutsi.koki.portal.employee.page
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.employee.dto.EmployeeStatus
 import com.wutsi.koki.portal.employee.form.CreateEmployeeForm
 import com.wutsi.koki.portal.employee.service.EmployeeService
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
+import com.wutsi.koki.portal.tenant.service.TypeService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,6 +19,7 @@ import java.util.Currency
 @RequiresPermission(["employee:manage"])
 class CreateEmployeeController(
     private val service: EmployeeService,
+    private val typeService: TypeService,
 ) : AbstractEmployeeController() {
     @GetMapping("/employees/create")
     fun create(model: Model): String {
@@ -33,6 +36,11 @@ class CreateEmployeeController(
 
         val currency = Currency.getInstance(tenantHolder.get()?.currency)
         model.addAttribute("currencies", listOf(currency))
+
+        model.addAttribute(
+            "types",
+            typeService.types(objectType = ObjectType.EMPLOYEE, active = true, limit = Integer.MAX_VALUE)
+        )
 
         model.addAttribute(
             "page",

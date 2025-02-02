@@ -4,6 +4,7 @@ import com.wutsi.koki.employee.dto.EmployeeStatus
 
 data class CreateEmployeeForm(
     val email: String = "",
+    val employeeTypeId: Long? = null,
     val jobTitle: String? = null,
     val currency: String? = null,
     val hourlyWage: Double? = null,

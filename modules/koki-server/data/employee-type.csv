@@ -1,3 +1,5 @@
-name,title,active,description
-HOUSEHOLD,Household,yes,Family Household
-BUSINESS,Business,yes,Corporation
+name,title,description
+FTE,Full Time,
+PTE,Part Time,
+CE,Contractor,
+IE,Intern,

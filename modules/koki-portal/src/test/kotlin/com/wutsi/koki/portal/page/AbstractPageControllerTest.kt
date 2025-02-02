@@ -102,10 +102,12 @@ import com.wutsi.koki.tenant.dto.CreateRoleRequest
 import com.wutsi.koki.tenant.dto.CreateRoleResponse
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
+import com.wutsi.koki.tenant.dto.GetTypeResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
 import com.wutsi.koki.tenant.dto.SearchTenantResponse
+import com.wutsi.koki.tenant.dto.SearchTypeResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
 import com.wutsi.koki.workflow.dto.GetActivityInstanceResponse
 import com.wutsi.koki.workflow.dto.GetLogEntryResponse
@@ -336,6 +338,29 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(SearchConfigurationResponse::class.java)
+            )
+
+        // Types
+        doReturn(
+            ResponseEntity(
+                SearchTypeResponse(TenantFixtures.types),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchTypeResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetTypeResponse(TenantFixtures.type),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetTypeResponse::class.java)
             )
 
         // Roles

@@ -1,0 +1,16 @@
+<tr class="type" th:each="type : ${types}">
+    <td th:text="${type.name}">NAME</td>
+    <td>
+        <a th:href="'/settings/tenant/types/' + ${type.id}" th:text="${type.title}">TITLE</a>
+    </td>
+    <td th:text="#{'object-type.' + ${type.objectType.name}}">OBJECT</td>
+    <td>
+        <span th:if="${type.active}">Yes</span>
+        <span th:if="!${type.active}">No</span>
+    </td>
+</tr>
+<tr id="type-load-more" th:if="${moreUrl}">
+    <td class="text-center" colspan="3">
+        <a href="javascript: koki_load_more('type-load-more')" th:data-url="${moreUrl}">Load More...</a>
+    </td>
+</tr>

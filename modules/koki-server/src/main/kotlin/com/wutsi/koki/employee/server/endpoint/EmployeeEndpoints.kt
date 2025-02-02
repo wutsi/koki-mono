@@ -58,6 +58,7 @@ class EmployeeEndpoints(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false, name = "id") ids: List<Long> = emptyList(),
         @RequestParam(required = false, name = "status") statuses: List<EmployeeStatus> = emptyList(),
+        @RequestParam(required = false, name = "employee-type-id") employeeTypeIds: List<Long> = emptyList(),
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0
     ): SearchEmployeeResponse {
@@ -65,6 +66,7 @@ class EmployeeEndpoints(
             tenantId = tenantId,
             ids = ids,
             statuses = statuses,
+            employeeTypeIds = employeeTypeIds,
             limit = limit,
             offset = offset
         )

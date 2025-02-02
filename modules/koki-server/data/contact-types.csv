@@ -1,5 +1,4 @@
-name,title,active,description
-PRIMARY,Primary Contact,yes,
-SPOUSE,Spouse,yes,
-CHILD,Child,yes,
-EMPLOYEE,Employee,yes,
+name,title,description
+PRI,Primary,
+SEC,Spouse,
+CHI,Child,

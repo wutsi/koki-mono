@@ -31,6 +31,10 @@
                         </div>
                     </div>
                     <div class="flex">
+                        <div class="margin-right-2x" th:if="${employee.employeeType}">
+                            <b>Type</b><br/>
+                            <span th:text="${employee.employeeType.title}">STATUS</span>
+                        </div>
                         <div class="margin-right-2x" th:if="${employee.status}">
                             <b>Status</b><br/>
                             <span th:text="#{'employee-status.' + ${employee.status}}">STATUS</span>
@@ -47,11 +51,16 @@
             <div class="widget">
                 <div class="widget-body">
                     <div th:replace="~{__components/module :: tabs('main', true)}"></div>
-                    <div th:replace="~{__components/module :: tabs-content('main', true, ${employee}, ${module})}"></div>
+                    <div
+                        th:replace="~{__components/module :: tabs-content('main', true, ${employee}, ${module})}"></div>
                     <table class="table hidden" id="tab-details-content">
                         <tr>
                             <td width="20%"><b>Name</b></td>
                             <td th:text="${employee.name}">NAME</td>
+                        </tr>
+                        <tr th:if="${employee.employeeType}">
+                            <td><b>Type</b></td>
+                            <td th:text="${employee.employeeType.title}">TYPE</td>
                         </tr>
                         <tr>
                             <td><b>Status</b></td>

@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="settings-container">
+    <div class="settings-sidebar">
+        <div th:replace="~{__components/settings :: settings-menu('tenant')}"></div>
+    </div>
+    <div class="settings-content padding">
+        <div th:replace="~{__components/settings :: settings-title('Types', '/settings/tenant')}"></div>
+
+        <div class="flex flex-space-between">
+            <a class="btn btn-secondary btn-import" href="/settings/tenant/types/import">Import</a>
+            <div>
+                <select class="btn btn-light btn-sm" id="filter-active"
+                        onchange="koki_types_filter_changed()"
+                        style="width: auto">
+                    <option value=""></option>
+                    <option th:selected="${active == true}" value="true">Active</option>
+                    <option th:selected="${active == false}" value="true">Not Active</option>
+                </select>
+                <select class="btn btn-light btn-sm" id="filter-object-type"
+                        onchange="koki_types_filter_changed()"
+                        style="width: auto">
+                    <option value="">All Types</option>
+                    <option
+                        th:each="tt : ${objectTypes}"
+                        th:selected="${tt} == ${objectType}"
+                        th:text="#{'object-type.' + ${tt.name}}"
+                        th:value="${tt.name}"
+                    >TYPE
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Title</th>
+                <th>Object</th>
+                <th>Active</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="type" th:each="type : ${types}">
+                <td th:text="${type.name}">NAME</td>
+                <td th:text="${type.title}">TITLE</td>
+                <td th:text="#{'object-type.' + ${type.objectType.name}}">OBJECT</td>
+                <td>
+                    <span th:if="${type.active}">Yes</span>
+                    <span th:if="!${type.active}">No</span>
+                </td>
+            </tr>
+            <tr id="type-load-more" th:if="${moreUrl}">
+                <td class="text-center" colspan="3">
+                    <a href="javascript: koki_load_more('type-load-more')" th:data-url="${moreUrl}">Load More...</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function koki_types_filter_changed() {
+        const active = document.getElementById('filter-active').value;
+        const objectType = document.getElementById('filter-object-type').value;
+
+        document.location.href = '/settings/tenant/types?' +
+            (active && active.length > 0 ? '&active=' + active : '') +
+            (objectType && objectType.length > 0 ? '&object-type=' + objectType : '');
+    }
+</script>
+</body>
+</html>

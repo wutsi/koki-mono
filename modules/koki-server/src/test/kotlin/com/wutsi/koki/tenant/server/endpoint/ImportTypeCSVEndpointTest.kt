@@ -1,10 +1,11 @@
-package com.wutsi.koki.contact.server.endpoint
+package com.wutsi.koki.tenant.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.common.dto.ImportResponse
-import com.wutsi.koki.contact.server.dao.ContactTypeRepository
-import com.wutsi.koki.contact.server.domain.ContactTypeEntity
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.tenant.server.dao.TypeRepository
+import com.wutsi.koki.tenant.server.domain.TypeEntity
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,12 +21,12 @@ import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/contact/ImportContactTypeCSVEndpoint.sql"])
-class ImportContactTypeCSVEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/ImportTypeCSVEndpoint.sql"])
+class ImportTypeCSVEndpointTest : TenantAwareEndpointTest() {
     @Autowired
-    private lateinit var dao: ContactTypeRepository
+    private lateinit var dao: TypeRepository
 
-    private fun upload(body: String): ImportResponse {
+    private fun upload(objectType: ObjectType, body: String): ImportResponse {
         val headers = HttpHeaders()
         headers.contentType = MediaType.MULTIPART_FORM_DATA
 
@@ -43,7 +44,7 @@ class ImportContactTypeCSVEndpointTest : TenantAwareEndpointTest() {
 
         val requestEntity = HttpEntity<MultiValueMap<String, Any>>(body, headers)
         return rest.exchange(
-            "/v1/contact-types/csv",
+            "/v1/types/csv?object-type=$objectType",
             HttpMethod.POST,
             requestEntity,
             ImportResponse::class.java,
@@ -53,71 +54,75 @@ class ImportContactTypeCSVEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun import() {
         val response = upload(
+            ObjectType.ACCOUNT,
             """
-                "name","title","active","description"
-                "a","RoleA","Yes",,,
-                "b","RoleB","No","Priority of the ticket"
-                "c",,,
-                "new",,"yes",""
+                "name","title","description"
+                "a","RoleA",
+                "b","RoleB","Priority of the ticket"
+                "c",,
+                "new",,""
             """.trimIndent()
         )
 
-        assertEquals(4, response.updated)
         assertEquals(1, response.added)
+        assertEquals(4, response.updated)
         assertEquals(0, response.errors)
         assertTrue(response.errorMessages.isEmpty())
 
-        val roleA = findContactType("a")
-        assertEquals("a", roleA.name)
-        assertEquals("RoleA", roleA.title)
-        assertEquals(TENANT_ID, roleA.tenantId)
-        assertTrue(roleA.active)
-        assertNull(roleA.description)
+        val typeA = findType("a", ObjectType.ACCOUNT)
+        assertEquals("a", typeA?.name)
+        assertEquals("RoleA", typeA?.title)
+        assertEquals(TENANT_ID, typeA?.tenantId)
+        assertEquals(ObjectType.ACCOUNT, typeA?.objectType)
+        assertEquals(true, typeA?.active)
+        assertNull(typeA?.description)
 
-        val roleB = findContactType("b")
-        assertEquals("b", roleB.name)
-        assertEquals("RoleB", roleB.title)
-        assertEquals(TENANT_ID, roleB.tenantId)
-        assertFalse(roleB.active)
-        assertEquals("Priority of the ticket", roleB.description)
+        val typeB = findType("b", ObjectType.ACCOUNT)
+        assertEquals("b", typeB?.name)
+        assertEquals("RoleB", typeB?.title)
+        assertEquals(TENANT_ID, typeB?.tenantId)
+        assertEquals(true, typeB?.active)
+        assertEquals("Priority of the ticket", typeB?.description)
 
-        val roleC = findContactType("c")
-        assertEquals(TENANT_ID, roleC.tenantId)
-        assertEquals("c", roleC.name)
-        assertNull(roleC.title)
-        assertFalse(roleC.active)
-        assertNull(roleC.description)
+        val typeC = findType("c", ObjectType.ACCOUNT)
+        assertEquals(TENANT_ID, typeC?.tenantId)
+        assertEquals("c", typeC?.name)
+        assertNull(typeC?.title)
+        assertEquals(true, typeC?.active)
+        assertNull(typeC?.description)
 
-        val roleX = findContactType("x")
-        assertFalse(roleX.active)
+        val typeX = findType("x", ObjectType.ACCOUNT)
+        assertEquals(false, typeX?.active)
 
-        val roleNew = findContactType("new")
-        assertEquals(TENANT_ID, roleNew.tenantId)
-        assertEquals("new", roleNew.name)
-        assertNull(roleNew.title)
-        assertTrue(roleNew.active)
-        assertNull(roleNew.description)
+        val typeNew = findType("new", ObjectType.ACCOUNT)
+        assertEquals(TENANT_ID, typeNew?.tenantId)
+        assertEquals("new", typeNew?.name)
+        assertNull(typeNew?.title)
+        assertEquals(true, typeNew?.active)
+        assertNull(typeNew?.description)
     }
 
     @Test
     fun noName() {
         val response = upload(
+            ObjectType.ACCOUNT,
             """
-                "name","active","description"
-                "","No","Priority of the ticket"
+                "name","description"
+                "","Priority of the ticket"
             """.trimIndent()
         )
 
         assertEquals(1, response.errors)
         assertFalse(response.errorMessages.isEmpty())
-        assertEquals(ErrorCode.CONTACT_TYPE_NAME_MISSING, response.errorMessages[0].code)
+        assertEquals(ErrorCode.TYPE_NAME_MISSING, response.errorMessages[0].code)
     }
 
     @Test
     fun `malformed row`() {
         val response = upload(
+            ObjectType.ACCOUNT,
             """
-                "name","active","description"
+                "name","description"
                 "b11"
             """.trimIndent()
         )
@@ -128,7 +133,7 @@ class ImportContactTypeCSVEndpointTest : TenantAwareEndpointTest() {
         assertEquals(ErrorCode.IMPORT_ERROR, response.errorMessages[0].code)
     }
 
-    private fun findContactType(name: String): ContactTypeEntity {
-        return dao.findByNameIgnoreCaseAndTenantId(name, getTenantId())!!
+    private fun findType(name: String, objectType: ObjectType): TypeEntity? {
+        return dao.findByNameIgnoreCaseAndObjectTypeAndTenantId(name, objectType, getTenantId())
     }
 }

@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="settings-container">
+    <div class="settings-sidebar">
+        <div th:replace="~{__components/settings :: settings-menu('tenant')}"></div>
+    </div>
+    <div class="settings-content padding">
+        <div th:replace="~{__components/settings :: settings-title('About', '/settings/tenant')}"></div>
+
+        <table class="table">
+            <tr>
+                <td width="30%"><b>Name:</b></td>
+                <td th:text="${tenant.name}">NAME</td>
+            </tr>
+            <tr>
+                <td><b>Domain Name:</b></td>
+                <td th:text="${tenant.domainName}">DOMAIN</td>
+            </tr>
+            <tr>
+                <td><b>Status:</b></td>
+                <td th:text="#{'tenant-status.' + ${tenant.status}}">STATUS</td>
+            </tr>
+            <tr>
+                <td><b>Locale:</b></td>
+                <td th:text="${tenant.locale}">LOCALE</td>
+            </tr>
+            <tr>
+                <td><b>Currency:</b></td>
+                <td th:text="${tenant.currency}">CURRENCY</td>
+            </tr>
+            <tr th:if="${tenant.websiteUrl}">
+                <td><b>Website:</b></td>
+                <td>
+                    <a target="_blank" th:href="${tenant.websiteUrl}" th:text="${tenant.websiteUrl}">URL</a>
+                </td>
+            </tr>
+            <tr>
+                <td><b>Portal:</b></td>
+                <td>
+                    <a target="_blank" th:href="${tenant.portalUrl}" th:text="${tenant.portalUrl}">URL</a>
+                </td>
+            </tr>
+            <tr>
+                <td><b>Modules:</b></td>
+                <td>
+                    <span class="badge text-bg-secondary margin-right" th:each="mm : ${tenant.modules}"
+                          th:text="${mm.title}">MODULE</span>
+                </td>
+            </tr>
+            <tr th:if="${tenant.logoUrl}">
+                <td><b>Logo:</b></td>
+                <td>
+                    <img height="64" th:src="${tenant.logoUrl}"/>
+                </td>
+            </tr>
+            <tr th:if="${tenant.iconUrl}">
+                <td><b>Icon:</b></td>
+                <td>
+                    <img height="64" th:src="${tenant.iconUrl}"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+</body>
+</html>

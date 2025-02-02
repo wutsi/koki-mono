@@ -30,20 +30,30 @@
                             </button>
                         </div>
                         <div>
-                            <div class="btn-group">
-                                <select class="btn btn-sm btn-light" if="filter-status"
-                                        onchange="koki_employees_on_filter_changed()"
-                                        style="width: auto"
-                                >
-                                    <option value="">All Status</option>
-                                    <option th:each="ss : ${statuses}"
-                                            th:selected="${ss.name()} == ${status?.name()}"
-                                            th:text="#{'employee-status.' + ${ss.name()}}"
-                                            th:value="${ss.name()}"
-                                    >STATUS
-                                    </option>
-                                </select>
-                            </div>
+                            <select class="btn btn-sm btn-light" id="filter-type-id"
+                                    onchange="koki_employees_on_filter_changed()"
+                                    style="width: auto"
+                            >
+                                <option value="">All Types</option>
+                                <option th:each="type : ${types}"
+                                        th:selected="${type.id} == ${typeId}"
+                                        th:text="${type.title}"
+                                        th:value="${type.id}"
+                                >TYPE
+                                </option>
+                            </select>
+                            <select class="btn btn-sm btn-light" id="filter-status"
+                                    onchange="koki_employees_on_filter_changed()"
+                                    style="width: auto"
+                            >
+                                <option value="">All Status</option>
+                                <option th:each="ss : ${statuses}"
+                                        th:selected="${ss.name()} == ${status?.name()}"
+                                        th:text="#{'employee-status.' + ${ss.name()}}"
+                                        th:value="${ss.name()}"
+                                >STATUS
+                                </option>
+                            </select>
                             <a class="btn-create btn btn-light btn-sm" href="/employees/create"
                                th:if="${user?.hasPermission('employee:manage')}">Create New Employee</a>
                         </div>
@@ -53,6 +63,7 @@
                         <thead>
                         <tr>
                             <th>Name</th>
+                            <th>Type</th>
                             <th>Status</th>
                             <th>Job Title</th>
                             <td></td>
@@ -77,9 +88,11 @@
 <script>
     function koki_employees_on_filter_changed() {
         const status = document.getElementById('filter-status').value;
+        const typeId = document.getElementById('filter-type-id').value;
 
         document.location.href = '/employees?' +
-            (status && status.length > 0 ? '&status=' + status : '');
+            (status && status.length > 0 ? '&status=' + status : '') +
+            (typeId && typeId.length > 0 ? '&type-id=' + typeId : '');
     }
 
 </script>
