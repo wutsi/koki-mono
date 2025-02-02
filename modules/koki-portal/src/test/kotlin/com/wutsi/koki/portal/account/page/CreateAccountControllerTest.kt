@@ -92,6 +92,7 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
 
         input("#name", "Ray Construction Inc")
         select("#managedById", 2)
+        select("#accountTypeId", 2)
         input("#phone", "+5147580000")
         input("#mobile", "+5147580011")
         input("#email", "info@ray-construction.com")
