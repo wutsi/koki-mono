@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.tax.model
 
 import com.wutsi.koki.portal.account.model.AccountModel
+import com.wutsi.koki.portal.tenant.model.TypeModel
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.tax.dto.TaxStatus
 import java.util.Date
@@ -10,7 +11,7 @@ data class TaxModel(
     val fiscalYear: Int = -1,
     val status: TaxStatus = TaxStatus.NEW,
     val description: String? = null,
-    val taxType: TaxTypeModel? = null,
+    val taxType: TypeModel? = null,
     val account: AccountModel = AccountModel(),
     val accountant: UserModel? = null,
     val technician: UserModel? = null,

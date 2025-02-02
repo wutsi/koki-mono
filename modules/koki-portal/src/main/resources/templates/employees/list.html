@@ -33,6 +33,7 @@
                             <select class="btn btn-sm btn-light" id="filter-type-id"
                                     onchange="koki_employees_on_filter_changed()"
                                     style="width: auto"
+                                    th:if="!${types.isEmpty()}"
                             >
                                 <option value="">All Types</option>
                                 <option th:each="type : ${types}"

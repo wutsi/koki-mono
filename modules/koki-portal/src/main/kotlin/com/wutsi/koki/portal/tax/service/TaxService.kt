@@ -6,6 +6,7 @@ import com.wutsi.koki.portal.tax.form.TaxForm
 import com.wutsi.koki.portal.tax.form.TaxStatusForm
 import com.wutsi.koki.portal.tax.mapper.TaxMapper
 import com.wutsi.koki.portal.tax.model.TaxModel
+import com.wutsi.koki.portal.tenant.service.TypeService
 import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.sdk.KokiTaxes
 import com.wutsi.koki.tax.dto.CreateTaxRequest
@@ -21,13 +22,13 @@ import kotlin.collections.flatMap
 class TaxService(
     private val koki: KokiTaxes,
     private val mapper: TaxMapper,
-    private val taxTypeService: TaxTypeService,
+    private val typeService: TypeService,
     private val userService: UserService,
     private val accountService: AccountService
 ) {
     fun tax(id: Long, fullGraph: Boolean = true): TaxModel {
         val tax = koki.tax(id).tax
-        val taxType = tax.taxTypeId?.let { id -> taxTypeService.taxType(id) }
+        val taxType = tax.taxTypeId?.let { id -> typeService.type(id) }
 
         val account = if (fullGraph) {
             accountService.account(tax.accountId, fullGraph = false)
@@ -98,7 +99,7 @@ class TaxService(
 
         // Types
         val taxTypeIds = taxes.mapNotNull { tax -> tax.taxTypeId }.toSet()
-        val taxTypes = taxTypeService.taxTypes(
+        val taxTypes = typeService.types(
             ids = taxTypeIds.toList(),
             limit = taxTypeIds.size
         ).associateBy { taxType -> taxType.id }

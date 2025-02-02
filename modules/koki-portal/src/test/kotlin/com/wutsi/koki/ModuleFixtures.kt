@@ -32,7 +32,7 @@ object ModuleFixtures {
             title = "Taxes",
             homeUrl = "/taxes",
             tabUrl = "/taxes/tab",
-            settingsUrl = "/settings/taxes",
+            settingsUrl = null,
             objectType = ObjectType.TAX,
             jsUrl = null,
         ),
@@ -86,21 +86,12 @@ object ModuleFixtures {
         ),
 
         Module(
-            id = 900,
+            id = 180,
             name = "tenant",
             title = "Tenant",
             homeUrl = null,
             tabUrl = null,
             settingsUrl = "/settings/tenant",
-            jsUrl = null,
-        ),
-        Module(
-            id = 910,
-            name = "secrity",
-            title = "Security",
-            homeUrl = null,
-            tabUrl = null,
-            settingsUrl = "/settings/security",
             jsUrl = null,
         ),
     )
@@ -140,7 +131,6 @@ object ModuleFixtures {
         Permission(id = 1701, moduleId = 170, name = "employee", description = "Access employees"),
         Permission(id = 1702, moduleId = 170, name = "employee:manage", description = "Manage employees"),
 
-        Permission(id = 9100, moduleId = 900, name = "tenant:admin", description = "Manage Tenant"),
-        Permission(id = 9200, moduleId = 910, name = "security:admin", description = "Manage Security"),
+        Permission(id = 1801, moduleId = 180, name = "tenant:admin", description = "Manage Tenant"),
     )
 }

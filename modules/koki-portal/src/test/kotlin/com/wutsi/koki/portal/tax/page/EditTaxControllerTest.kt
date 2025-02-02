@@ -8,7 +8,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.TaxFixtures.tax
-import com.wutsi.koki.TaxFixtures.taxTypes
+import com.wutsi.koki.TenantFixtures
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.tax.dto.UpdateTaxRequest
@@ -39,7 +39,7 @@ class EditTaxControllerTest : AbstractPageControllerTest() {
         )
         val tax = request.firstValue
         assertEquals(LocalDate.now().year - 3, tax.fiscalYear)
-        assertEquals(taxTypes[2].id, tax.taxTypeId)
+        assertEquals(TenantFixtures.types.sortedBy { it.title }[2].id, tax.taxTypeId)
         assertEquals("This is a nice description", tax.description)
 
         assertCurrentPageIs(PageName.TAX)

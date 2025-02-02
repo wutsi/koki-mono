@@ -5,36 +5,11 @@ import com.wutsi.koki.UserFixtures.users
 import com.wutsi.koki.tax.dto.Tax
 import com.wutsi.koki.tax.dto.TaxStatus
 import com.wutsi.koki.tax.dto.TaxSummary
-import com.wutsi.koki.tax.dto.TaxType
-import com.wutsi.koki.tax.dto.TaxTypeSummary
 import org.apache.commons.lang3.time.DateUtils
 import java.util.Date
 
 object TaxFixtures {
-    // Tax Types
-    val taxTypes = listOf(
-        TaxTypeSummary(
-            id = 100,
-            name = "T1",
-            title = "Personal Taxes"
-        ),
-        TaxTypeSummary(
-            id = 101,
-            name = "Corporate Taxes",
-        ),
-        TaxTypeSummary(
-            id = 102,
-            name = "TVQ",
-        ),
-    )
-
-    val taxType = TaxType(
-        id = 100,
-        name = "T1",
-        description = "Tax for personal user",
-    )
-
-    // Taxs
+    // Taxes
     val NEW_TAX_ID = 5555L
     val taxes = listOf(
         TaxSummary(
@@ -43,7 +18,7 @@ object TaxFixtures {
             accountantId = users[0].id,
             technicianId = users[1].id,
             assigneeId = users[0].id,
-            taxTypeId = taxTypes[0].id,
+            taxTypeId = TenantFixtures.types[0].id,
             fiscalYear = 2024,
             status = TaxStatus.PROCESSING,
             startAt = Date(),
@@ -55,7 +30,7 @@ object TaxFixtures {
             id = 101,
             accountId = accounts[0].id,
             accountantId = users[0].id,
-            taxTypeId = taxTypes[0].id,
+            taxTypeId = TenantFixtures.types[1].id,
             fiscalYear = 2023,
             status = TaxStatus.DONE,
             startAt = DateUtils.addYears(Date(), -1),
@@ -66,7 +41,7 @@ object TaxFixtures {
             id = 102,
             accountId = accounts[0].id,
             accountantId = users[0].id,
-            taxTypeId = taxTypes[0].id,
+            taxTypeId = TenantFixtures.types[2].id,
             fiscalYear = 2022,
             status = TaxStatus.DONE,
             startAt = DateUtils.addYears(Date(), -2),
@@ -81,7 +56,7 @@ object TaxFixtures {
         accountantId = users[0].id,
         technicianId = users[1].id,
         assigneeId = users[0].id,
-        taxTypeId = taxTypes[0].id,
+        taxTypeId = TenantFixtures.types[0].id,
         fiscalYear = 2022,
         status = TaxStatus.PREPARING,
         startAt = DateUtils.addYears(Date(), -2),

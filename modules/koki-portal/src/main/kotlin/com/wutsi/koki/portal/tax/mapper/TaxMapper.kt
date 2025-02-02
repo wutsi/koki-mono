@@ -3,38 +3,17 @@ package com.wutsi.koki.portal.tax.mapper
 import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.tax.model.TaxModel
-import com.wutsi.koki.portal.tax.model.TaxTypeModel
+import com.wutsi.koki.portal.tenant.model.TypeModel
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.tax.dto.Tax
 import com.wutsi.koki.tax.dto.TaxSummary
-import com.wutsi.koki.tax.dto.TaxType
-import com.wutsi.koki.tax.dto.TaxTypeSummary
 import org.springframework.stereotype.Service
 
 @Service
 class TaxMapper : TenantAwareMapper() {
-    fun toTaxTypeModel(entity: TaxType): TaxTypeModel {
-        return TaxTypeModel(
-            id = entity.id,
-            name = entity.name,
-            title = entity.title ?: entity.name,
-            description = entity.description,
-            active = entity.active,
-        )
-    }
-
-    fun toTaxTypeModel(entity: TaxTypeSummary): TaxTypeModel {
-        return TaxTypeModel(
-            id = entity.id,
-            name = entity.name,
-            title = entity.title ?: entity.name,
-            active = entity.active,
-        )
-    }
-
     fun toTax(
         entity: TaxSummary,
-        taxType: TaxTypeModel?,
+        taxType: TypeModel?,
         account: AccountModel,
         users: Map<Long, UserModel?>
     ): TaxModel {
@@ -64,7 +43,7 @@ class TaxMapper : TenantAwareMapper() {
 
     fun toTax(
         entity: Tax,
-        taxType: TaxTypeModel?,
+        taxType: TypeModel?,
         account: AccountModel,
         users: Map<Long, UserModel?>
     ): TaxModel {
