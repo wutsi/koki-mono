@@ -3,10 +3,8 @@ package com.wutsi.koki.sdk
 import com.wutsi.koki.account.dto.CreateAccountRequest
 import com.wutsi.koki.account.dto.CreateAccountResponse
 import com.wutsi.koki.account.dto.GetAccountResponse
-import com.wutsi.koki.account.dto.GetAccountTypeResponse
 import com.wutsi.koki.account.dto.GetAttributeResponse
 import com.wutsi.koki.account.dto.SearchAccountResponse
-import com.wutsi.koki.account.dto.SearchAccountTypeResponse
 import com.wutsi.koki.account.dto.SearchAttributeResponse
 import com.wutsi.koki.account.dto.UpdateAccountRequest
 import com.wutsi.koki.common.dto.ImportResponse
@@ -65,36 +63,6 @@ class KokiAccounts(
             )
         )
         return rest.getForEntity(url, SearchAccountResponse::class.java).body
-    }
-
-    fun type(id: Long): GetAccountTypeResponse {
-        val url = urlBuilder.build("$ACCOUNT_TYPE_PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetAccountTypeResponse::class.java).body
-    }
-
-    fun types(
-        ids: List<Long>,
-        names: List<String>,
-        active: Boolean?,
-        limit: Int,
-        offset: Int,
-    ): SearchAccountTypeResponse {
-        val url = urlBuilder.build(
-            ACCOUNT_TYPE_PATH_PREFIX,
-            mapOf(
-                "id" to ids,
-                "name" to names,
-                "active" to active,
-                "limit" to limit,
-                "offset" to offset,
-            )
-        )
-        return rest.getForEntity(url, SearchAccountTypeResponse::class.java).body
-    }
-
-    fun uploadTypes(file: MultipartFile): ImportResponse {
-        val url = urlBuilder.build("$ACCOUNT_TYPE_PATH_PREFIX/csv")
-        return upload(url, file)
     }
 
     fun attribute(id: Long): GetAttributeResponse {

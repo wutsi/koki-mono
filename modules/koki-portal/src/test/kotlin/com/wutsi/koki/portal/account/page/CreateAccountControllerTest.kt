@@ -7,8 +7,8 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
-import com.wutsi.koki.AccountFixtures.accountTypes
 import com.wutsi.koki.AccountFixtures.attributes
+import com.wutsi.koki.TenantFixtures
 import com.wutsi.koki.UserFixtures.users
 import com.wutsi.koki.account.dto.CreateAccountRequest
 import com.wutsi.koki.account.dto.CreateAccountResponse
@@ -42,12 +42,10 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
 
         val request = argumentCaptor<CreateAccountRequest>()
         verify(rest).postForEntity(
-            eq("$sdkBaseUrl/v1/accounts"),
-            request.capture(),
-            eq(CreateAccountResponse::class.java)
+            eq("$sdkBaseUrl/v1/accounts"), request.capture(), eq(CreateAccountResponse::class.java)
         )
         assertEquals("Ray Construction Inc", request.firstValue.name)
-        assertEquals(accountTypes[1].id, request.firstValue.accountTypeId)
+        assertEquals(TenantFixtures.types.sortedBy { it.title }[1].id, request.firstValue.accountTypeId)
         assertEquals(users[1].id, request.firstValue.managedById)
         assertEquals("+5147580000", request.firstValue.phone)
         assertEquals("+5147580011", request.firstValue.mobile)
@@ -87,9 +85,7 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
         doThrow(ex).whenever(rest).postForEntity(
-            any<String>(),
-            any<CreateAccountRequest>(),
-            eq(CreateAccountResponse::class.java)
+            any<String>(), any<CreateAccountRequest>(), eq(CreateAccountResponse::class.java)
         )
 
         navigateTo("/accounts/create")

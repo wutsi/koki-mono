@@ -1,11 +1,12 @@
 package com.wutsi.koki.portal.account.page
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.account.form.AccountForm
 import com.wutsi.koki.portal.account.service.AccountService
-import com.wutsi.koki.portal.account.service.AccountTypeService
 import com.wutsi.koki.portal.account.service.AttributeService
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
+import com.wutsi.koki.portal.tenant.service.TypeService
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
 import com.wutsi.koki.portal.user.service.UserService
 import jakarta.servlet.http.HttpServletRequest
@@ -23,7 +24,7 @@ import java.util.Locale
 class CreateAccountController(
     private val service: AccountService,
     private val attributeService: AttributeService,
-    private val accountTypeService: AccountTypeService,
+    private val accountTypeService: TypeService,
     private val userService: UserService,
     private val currentUser: CurrentUserHolder,
     private val request: HttpServletRequest,
@@ -48,7 +49,8 @@ class CreateAccountController(
             model.addAttribute("attributes", attributes)
         }
 
-        val accountTypes = accountTypeService.accountTypes(
+        val accountTypes = accountTypeService.types(
+            objectType = ObjectType.ACCOUNT,
             active = true,
             limit = Integer.MAX_VALUE,
         )

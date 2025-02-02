@@ -31,6 +31,7 @@
                             <div class="section-item">
                                 <label class="title">Type <span class="required">*</span></label>
                                 <select required th:field="*{employeeTypeId}">
+                                    <option value=""></option>
                                     <option th:each="type : ${types}"
                                             th:selected="${type.id} == ${form.employeeTypeId}"
                                             th:text="${type.title}"

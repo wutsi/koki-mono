@@ -36,9 +36,10 @@
                             </div>
                             <div class="section-item" th:if="${contactTypes}">
                                 <label class="title">Contact Type <span class="required">*</span></label>
-                                <select required th:field="*{contactTypeId}">
-                                    <option value="-1"></option>
+                                <select id="contactTypeId" name="contactTypeId" required>
+                                    <option value=""></option>
                                     <option th:each="contactType : ${contactTypes}"
+                                            th:selected="${contactType.id} == ${form.contactTypeId}"
                                             th:text="${contactType.title}"
                                             th:value="${contactType.id}">
                                         CONTACT TYPE

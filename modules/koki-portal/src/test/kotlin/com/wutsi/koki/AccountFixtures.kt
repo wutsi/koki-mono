@@ -2,8 +2,6 @@ package com.wutsi.koki
 
 import com.wutsi.koki.account.dto.Account
 import com.wutsi.koki.account.dto.AccountSummary
-import com.wutsi.koki.account.dto.AccountType
-import com.wutsi.koki.account.dto.AccountTypeSummary
 import com.wutsi.koki.account.dto.Attribute
 import com.wutsi.koki.account.dto.AttributeSummary
 import com.wutsi.koki.account.dto.AttributeType
@@ -55,35 +53,12 @@ object AccountFixtures {
         )
     )
 
-    // Account Types
-    val accountTypes = listOf(
-        AccountTypeSummary(
-            id = 100,
-            name = "T1",
-            title = "Tier-1"
-        ),
-        AccountTypeSummary(
-            id = 101,
-            name = "T2",
-        ),
-        AccountTypeSummary(
-            id = 102,
-            name = "T4",
-        ),
-    )
-
-    val accountType = AccountType(
-        id = 100,
-        name = "T1",
-        description = "Account for personal user",
-    )
-
     // Accounts
     val NEW_ACCOUNT_ID = 5555L
     val accounts = listOf(
         AccountSummary(
             id = 100,
-            accountTypeId = accountTypes[0].id,
+            accountTypeId = TenantFixtures.types[0].id,
             name = "Yahoo Inc",
             managedById = UserFixtures.users[0].id,
             email = "info@yahoo.com",
@@ -94,7 +69,7 @@ object AccountFixtures {
         ),
         AccountSummary(
             id = 101,
-            accountTypeId = accountTypes[1].id,
+            accountTypeId = TenantFixtures.types[1].id,
             name = "Google Inc",
             managedById = UserFixtures.users[0].id,
         ),
@@ -113,7 +88,7 @@ object AccountFixtures {
 
     val account = Account(
         id = 100,
-        accountTypeId = accountTypes[0].id,
+        accountTypeId = TenantFixtures.types[0].id,
         name = "Yahoo Inc",
         managedById = UserFixtures.users[0].id,
         email = "info@yahoo.com",

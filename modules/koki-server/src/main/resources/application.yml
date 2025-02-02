@@ -72,7 +72,7 @@ springdoc:
 
         -   group: accounts
             display-name: Account API
-            paths-to-match: /v1/attributes, /v1/attributes/**, /v1/account-types, /v1/account-types/**, /v1/accounts, /v1/accounts/**
+            paths-to-match: /v1/attributes, /v1/attributes/**, /v1/accounts, /v1/accounts/**
 
         -   group: contacts
             display-name: Contact API

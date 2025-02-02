@@ -8,8 +8,8 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.AccountFixtures.account
-import com.wutsi.koki.AccountFixtures.accountTypes
 import com.wutsi.koki.AccountFixtures.attributes
+import com.wutsi.koki.TenantFixtures
 import com.wutsi.koki.UserFixtures.users
 import com.wutsi.koki.account.dto.UpdateAccountRequest
 import com.wutsi.koki.error.dto.ErrorCode
@@ -47,7 +47,7 @@ class EditAccountControllerTest : AbstractPageControllerTest() {
             eq(Any::class.java)
         )
         assertEquals("Ray Construction Inc", request.firstValue.name)
-        assertEquals(accountTypes[2].id, request.firstValue.accountTypeId)
+        assertEquals(TenantFixtures.types.sortedBy { it.title }[2].id, request.firstValue.accountTypeId)
         assertEquals(users[2].id, request.firstValue.managedById)
         assertEquals("+5147580000", request.firstValue.phone)
         assertEquals("+5147580011", request.firstValue.mobile)
