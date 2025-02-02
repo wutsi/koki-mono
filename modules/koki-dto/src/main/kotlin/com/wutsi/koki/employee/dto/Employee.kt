@@ -4,6 +4,7 @@ import java.util.Date
 
 data class Employee(
     val userId: Long = -1,
+    val employeeTypeId: Long? = null,
     val createdById: Long? = null,
     val modifiedById: Long? = null,
     val jobTitle: String? = null,

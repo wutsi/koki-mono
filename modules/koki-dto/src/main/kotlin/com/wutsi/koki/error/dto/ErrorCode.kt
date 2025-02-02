@@ -84,6 +84,9 @@ object ErrorCode {
     val TENANT_NOT_FOUND: String = "$PREFIX:tenant:not-found"
     val TENANT_MISSING_FROM_HEADER: String = "$PREFIX:tenant:missing-from-header"
 
+    val TYPE_NOT_FOUND: String = "$PREFIX:type:not-found"
+    val TYPE_NAME_MISSING: String = "$PREFIX:type:name-missing"
+
     val USER_NOT_FOUND: String = "$PREFIX:user:not-found"
     val USER_DUPLICATE_EMAIL: String = "$PREFIX:user:duplicate-email"
     val USER_ALREADY_ASSIGNED: String = "$PREFIX:user:already-assigned"

@@ -10,6 +10,7 @@ data class CreateEmployeeRequest(
     @get:Size(max = 100) val jobTitle: String? = null,
     @get:Size(min = 3, max = 3) val currency: String? = null,
 
+    val employeeTypeId: Long? = null,
     val hourlyWage: Double? = null,
     val status: EmployeeStatus = EmployeeStatus.UNKNOWN,
     val hiredAt: Date? = null,
