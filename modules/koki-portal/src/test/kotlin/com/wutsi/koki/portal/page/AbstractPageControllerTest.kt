@@ -46,9 +46,7 @@ import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.contact.dto.CreateContactRequest
 import com.wutsi.koki.contact.dto.CreateContactResponse
 import com.wutsi.koki.contact.dto.GetContactResponse
-import com.wutsi.koki.contact.dto.GetContactTypeResponse
 import com.wutsi.koki.contact.dto.SearchContactResponse
-import com.wutsi.koki.contact.dto.SearchContactTypeResponse
 import com.wutsi.koki.email.dto.GetEmailResponse
 import com.wutsi.koki.email.dto.SearchEmailResponse
 import com.wutsi.koki.email.dto.SendEmailRequest
@@ -636,29 +634,6 @@ abstract class AbstractPageControllerTest {
     }
 
     private fun setupContactModule() {
-        // Contact Types
-        doReturn(
-            ResponseEntity(
-                SearchContactTypeResponse(ContactFixtures.contactTypes),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchContactTypeResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                GetContactTypeResponse(ContactFixtures.contactType),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetContactTypeResponse::class.java)
-            )
-
         // Contacts
         doReturn(
             ResponseEntity(

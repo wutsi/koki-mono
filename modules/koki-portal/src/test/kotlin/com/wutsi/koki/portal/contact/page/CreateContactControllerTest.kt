@@ -7,7 +7,7 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
-import com.wutsi.koki.ContactFixtures.contactTypes
+import com.wutsi.koki.TenantFixtures
 import com.wutsi.koki.contact.dto.CreateContactRequest
 import com.wutsi.koki.contact.dto.CreateContactResponse
 import com.wutsi.koki.contact.dto.Gender
@@ -42,7 +42,7 @@ class CreateContactControllerTest : AbstractPageControllerTest() {
             request.capture(),
             eq(CreateContactResponse::class.java)
         )
-        assertEquals(contactTypes[2].id, request.firstValue.contactTypeId)
+        assertEquals(TenantFixtures.types.sortedBy { it.title }[2].id, request.firstValue.contactTypeId)
         assertEquals("Yo", request.firstValue.firstName)
         assertEquals("Man", request.firstValue.lastName)
         assertEquals("Ms.", request.firstValue.salutations)

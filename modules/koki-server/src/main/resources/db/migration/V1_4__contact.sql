@@ -1,24 +1,8 @@
-CREATE TABLE T_CONTACT_TYPE(
-  id                      BIGINT NOT NULL AUTO_INCREMENT,
-
-  tenant_fk               BIGINT NOT NULL,
-
-  name                    VARCHAR(100) NOT NULL,
-  title                   VARCHAR(255),
-  description             TEXT,
-  active                  BOOL NOT NULL DEFAULT true,
-  created_at              DATETIME DEFAULT NOW(),
-  modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
-
-  UNIQUE(tenant_fk, name),
-  PRIMARY KEY(id)
-) ENGINE = InnoDB;
-
 CREATE TABLE T_CONTACT(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
   tenant_fk               BIGINT NOT NULL,
-  contact_type_fk         BIGINT REFERENCES T_CONTACT_TYPE(id),
+  contact_type_fk         BIGINT,
   account_fk              BIGINT,
   created_by_fk           BIGINT,
   modified_by_fk          BIGINT,
@@ -42,11 +26,10 @@ CREATE TABLE T_CONTACT(
 ) ENGINE = InnoDB;
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url)
-    VALUES (120, 2, 'contact', 'Contact', '/contacts', '/contacts/tab', '/settings/contacts', '/js/contacts.js');
+    VALUES (120, 2, 'contact', 'Contact', '/contacts', '/contacts/tab', null, '/js/contacts.js');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
     VALUES (1200, 120, 'contact',        'View contacts profile'),
            (1201, 120, 'contact:manage', 'Add/Edit contacts profile'),
-           (1202, 120, 'contact:delete', 'Delete contacts profile'),
-           (1203, 120, 'contact:admin',  'Configure contact module');
+           (1202, 120, 'contact:delete', 'Delete contacts profile');
 

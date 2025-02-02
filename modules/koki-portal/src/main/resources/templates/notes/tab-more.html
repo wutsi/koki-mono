@@ -1,4 +1,4 @@
-<div class="padding border-top note" th:each="note : ${notes}" th:id="'note-' + ${note.id}">
+<div class="border-top padding-top margin-top note" th:each="note : ${notes}" th:id="'note-' + ${note.id}">
     <div th:replace="~{__components/note :: columns(${note})}"></div>
 </div>
 <div th:replace="~{__components/note :: load-more(${moreUrl})}"></div>

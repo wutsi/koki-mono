@@ -1,15 +1,11 @@
 package com.wutsi.koki.sdk
 
-import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.contact.dto.CreateContactRequest
 import com.wutsi.koki.contact.dto.CreateContactResponse
 import com.wutsi.koki.contact.dto.GetContactResponse
-import com.wutsi.koki.contact.dto.GetContactTypeResponse
 import com.wutsi.koki.contact.dto.SearchContactResponse
-import com.wutsi.koki.contact.dto.SearchContactTypeResponse
 import com.wutsi.koki.contact.dto.UpdateContactRequest
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.multipart.MultipartFile
 
 class KokiContacts(
     private val urlBuilder: URLBuilder,
@@ -17,7 +13,6 @@ class KokiContacts(
 ) : AbstractKokiModule(rest) {
     companion object {
         private const val CONTACT_PATH_PREFIX = "/v1/contacts"
-        private const val CONTACT_TYPE_PATH_PREFIX = "/v1/contact-types"
     }
 
     fun create(request: CreateContactRequest): CreateContactResponse {
@@ -62,35 +57,5 @@ class KokiContacts(
             )
         )
         return rest.getForEntity(url, SearchContactResponse::class.java).body
-    }
-
-    fun type(id: Long): GetContactTypeResponse {
-        val url = urlBuilder.build("$CONTACT_TYPE_PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetContactTypeResponse::class.java).body
-    }
-
-    fun types(
-        ids: List<Long>,
-        names: List<String>,
-        active: Boolean?,
-        limit: Int,
-        offset: Int,
-    ): SearchContactTypeResponse {
-        val url = urlBuilder.build(
-            CONTACT_TYPE_PATH_PREFIX,
-            mapOf(
-                "id" to ids,
-                "name" to names,
-                "active" to active,
-                "limit" to limit,
-                "offset" to offset,
-            )
-        )
-        return rest.getForEntity(url, SearchContactTypeResponse::class.java).body
-    }
-
-    fun uploadTypes(file: MultipartFile): ImportResponse {
-        val url = urlBuilder.build("$CONTACT_TYPE_PATH_PREFIX/csv")
-        return upload(url, file)
     }
 }
