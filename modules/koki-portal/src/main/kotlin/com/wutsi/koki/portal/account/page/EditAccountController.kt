@@ -69,14 +69,15 @@ class EditAccountController(
             model.addAttribute("accountTypes", accountTypes)
         }
 
+        if (form.managedById != null) {
+            model.addAttribute("manager", userService.user(id = form.managedById, fullGraph = false))
+        }
+
         val languages = Locale.getISOLanguages()
             .map { lang -> Locale(lang) }
             .toSet()
             .sortedBy { it.getDisplayLanguage() }
         model.addAttribute("languages", languages)
-
-        val users = userService.users()
-        model.addAttribute("users", users)
 
         model.addAttribute(
             "page",

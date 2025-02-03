@@ -9,6 +9,6 @@ data class AccountForm(
     val website: String? = null,
     val language: String? = null,
     val description: String? = null,
-    val managedById: Long = -1,
+    val managedById: Long? = null,
     val attributes: Map<Long, String> = emptyMap(),
 )

@@ -9,10 +9,10 @@
 
 ## Account
 
-- [] The account manager must have the permission 'account:manage'
 - [] Add additional information to accounts: address
-- [] Add account filters
 - [] Settings: Import Accounts from CSV
+- [x] The account manager must have the permission 'account:manage'
+- [x] Add account filters
 - [x] Configure validation on DTO
 - [x] Apply RBAC security on UI
 - [x] Settings: Import Attributes from CSV
@@ -29,7 +29,7 @@
 ## Contact
 
 - [] Add additional information: address, SSN, Date of birth
-- [] Add contact filters
+- [x] Add contact filters
 - [x] Configure validation on DTO
 - [x] Apply RBAC security on UI
 - [x] Settings: Import Contact Types from CSV
@@ -60,7 +60,7 @@
 - [] Compile labor cost by Tax report
 - [] Track total time spent on Tax Report per user
 - [] Settings: Setup email notification
-- [] Filter Accountant and Technician based on the permission 'tax:manage'
+- [x] Filter Accountant and Technician based on the permission 'tax:manage'
 - [x] Add Calendar view
 - [x] Apply RBAC security on UI
 - [x] Settings: Import Taxes Types from CSV

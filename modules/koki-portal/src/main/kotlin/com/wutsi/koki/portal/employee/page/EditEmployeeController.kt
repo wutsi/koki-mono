@@ -35,6 +35,7 @@ class EditEmployeeController(
             terminatedAt = employee.terminatedAt?.let { date -> fmt.format(date) },
             hourlyWage = employee.hourlyWage?.value,
             currency = employee.hourlyWage?.currency,
+            employeeTypeId = employee.employeeType?.id,
         )
         return edit(employee, form, model)
     }
