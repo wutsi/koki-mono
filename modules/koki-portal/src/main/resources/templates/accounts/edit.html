@@ -43,13 +43,14 @@
                             <div class="section-item">
                                 <label class="title">Account Manager</label>
                                 <select th:field="*{managedById}">
-                                    <option value="-1"></option>
-                                    <option th:each="manager : ${users}"
+                                    <option selected
+                                            th:if="${manager}"
                                             th:text="${manager.displayName}"
                                             th:value="${manager.id}">
                                         MANAGER
                                     </option>
                                 </select>
+                                <script th:replace="~{__components/user :: user-selector('managedById', null, 'accout:manage')}"></script>
                             </div>
                             <div class="section-item">
                                 <label class="title">Email</label>

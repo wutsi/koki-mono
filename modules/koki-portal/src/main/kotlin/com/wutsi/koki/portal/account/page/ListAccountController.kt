@@ -1,8 +1,10 @@
 package com.wutsi.koki.portal.account.page
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
+import com.wutsi.koki.portal.tenant.service.TypeService
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam
 class ListAccountController(
     private val service: AccountService,
     private val currentUser: CurrentUserHolder,
+    private val typeService: TypeService,
 ) : AbstractAccountController() {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ListAccountController::class.java)
@@ -29,6 +32,7 @@ class ListAccountController(
     fun list(
         @RequestHeader(required = false, name = "Referer") referer: String? = null,
         @RequestParam(required = false, name = "col") collection: String? = null,
+        @RequestParam(required = false, name = "type-id") typeId: Long? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         @RequestParam(required = false, name = "_toast") toast: Long? = null,
@@ -38,6 +42,7 @@ class ListAccountController(
     ): String {
         more(
             collection = collection,
+            typeId = typeId,
             limit = limit,
             offset = offset,
             model = model
@@ -53,12 +58,20 @@ class ListAccountController(
         )
 
         loadToast(referer, toast, timestamp, operation, model)
+
+        model.addAttribute(
+            "types",
+            typeService.types(objectType = ObjectType.ACCOUNT, active = true, limit = Integer.MAX_VALUE)
+        )
+        model.addAttribute("typeId", typeId)
+
         return "accounts/list"
     }
 
     @GetMapping("/accounts/more")
     fun more(
         @RequestParam(required = false, name = "col") collection: String? = null,
+        @RequestParam(required = false, name = "type-id") typeId: Long? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model
@@ -66,16 +79,20 @@ class ListAccountController(
         val col = toCollection(collection)
         val userId = currentUser.id()
         val accounts = service.accounts(
+            accountTypeIds = typeId?.let { listOf(typeId) } ?: emptyList(),
+
             managedByIds = if (col == COL_MANAGED) {
                 userId?.let { id -> listOf(id) } ?: emptyList()
             } else {
                 emptyList()
             },
+
             createdByIds = if (col == COL_CREATED) {
                 userId?.let { id -> listOf(id) } ?: emptyList()
             } else {
                 emptyList()
             },
+
             limit = limit,
             offset = offset,
         )
@@ -87,6 +104,9 @@ class ListAccountController(
                 var url = "/accounts/more?limit=$limit&offset=$nextOffset"
                 if (collection != null) {
                     url = "$url&col=$collection"
+                }
+                if (typeId != null) {
+                    url = "$url&type-id=$typeId"
                 }
                 model.addAttribute("moreUrl", url)
             }

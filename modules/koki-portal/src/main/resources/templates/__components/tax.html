@@ -31,6 +31,7 @@
         <a th:href="'/accounts/' + ${tax.account.id}" th:text="${tax.account.name}">ACCOUNT</a>
     </td>
     <td th:text="${tax.accountant?.displayName}">ACCOUNTANT</td>
+    <td th:text="${tax.technician?.displayName}">ACCOUNTANT</td>
     <td th:text="${tax.assignee?.displayName}">ASSIGNEE</td>
     <td class="toolbar" th:if="!${smallView}">
         <a class="btn-view" th:href="'/taxes/' + ${tax.id}"
@@ -42,7 +43,7 @@
 </tr>
 
 <tr id="tax-load-more" th:fragment="load-more(moreUrl, showAccount)" th:if="${moreUrl}">
-    <td class="text-center" th:colspan="${showAccount} ? 8 : 7">
+    <td class="text-center" th:colspan="${showAccount} ? 9 : 8">
         <a href="javascript: koki_load_more('tax-load-more')" th:data-url="${moreUrl}">Load more...</a>
     </td>
 </tr>

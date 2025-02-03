@@ -125,7 +125,7 @@ class AccountService(
             email = form.email?.trim()?.ifEmpty { null },
             website = form.website?.trim()?.ifEmpty { null },
             language = form.language?.trim()?.ifEmpty { null },
-            managedById = if (form.managedById == -1L) null else form.managedById,
+            managedById = form.managedById,
             attributes = form.attributes,
         )
         return koki.create(request).accountId
@@ -141,7 +141,7 @@ class AccountService(
             email = form.email?.trim()?.ifEmpty { null },
             website = form.website?.trim()?.ifEmpty { null },
             language = form.language?.trim()?.ifEmpty { null },
-            managedById = if (form.managedById == -1L) null else form.managedById,
+            managedById = form.managedById,
             attributes = form.attributes,
         )
         koki.update(id, request)

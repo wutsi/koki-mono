@@ -43,6 +43,19 @@
                             </ul>
                         </div>
                         <div>
+                            <select class="btn btn-sm btn-light" id="filter-type-id"
+                                    onchange="koki_accounts_on_filter_changed()"
+                                    style="width: auto"
+                                    th:if="!${types.isEmpty()}"
+                            >
+                                <option value="">All Types</option>
+                                <option th:each="type : ${types}"
+                                        th:selected="${type.id} == ${typeId}"
+                                        th:text="${type.title}"
+                                        th:value="${type.id}"
+                                >TYPE
+                                </option>
+                            </select>
                             <a class="btn-create btn btn-light btn-sm" href="/accounts/create"
                                th:if="${user?.hasPermission('account:manage')}">
                                 Create New Account
@@ -76,5 +89,14 @@
 </div>
 
 <div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
+<script>
+    function koki_accounts_on_filter_changed() {
+        const typeId = document.getElementById('filter-type-id').value;
+
+        document.location.href = '/accounts?' +
+            (typeId && typeId.length > 0 ? '&type-id=' + typeId : '');
+    }
+
+</script>
 </body>
 </html>

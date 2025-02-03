@@ -97,7 +97,7 @@ class ListEmployeeController(
     ) {
         if (toast != null && canShowToasts(timestamp, referer, listOf("/employees/$toast", "/employees/create"))) {
             try {
-                val employee = service.employee(toast, fullGraph = false)
+                val employee = service.employee(toast)
                 model.addAttribute(
                     "toast",
                     "<a href='/employees/${employee.user.id}'>${employee.user.displayName}</a> has been saved!"

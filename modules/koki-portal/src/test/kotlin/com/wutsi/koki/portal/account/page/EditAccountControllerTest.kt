@@ -10,7 +10,6 @@ import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.AccountFixtures.account
 import com.wutsi.koki.AccountFixtures.attributes
 import com.wutsi.koki.TenantFixtures
-import com.wutsi.koki.UserFixtures.users
 import com.wutsi.koki.account.dto.UpdateAccountRequest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
@@ -25,7 +24,6 @@ class EditAccountControllerTest : AbstractPageControllerTest() {
 
         input("#name", "Ray Construction Inc")
         select("#accountTypeId", 3)
-        select("#managedById", 3)
         input("#phone", "+5147580000")
         input("#mobile", "+5147580011")
         input("#email", "info@ray-construction.com")
@@ -48,7 +46,6 @@ class EditAccountControllerTest : AbstractPageControllerTest() {
         )
         assertEquals("Ray Construction Inc", request.firstValue.name)
         assertEquals(TenantFixtures.types.sortedBy { it.title }[2].id, request.firstValue.accountTypeId)
-        assertEquals(users[2].id, request.firstValue.managedById)
         assertEquals("+5147580000", request.firstValue.phone)
         assertEquals("+5147580011", request.firstValue.mobile)
         assertEquals("info@ray-construction.com", request.firstValue.email)
@@ -69,7 +66,6 @@ class EditAccountControllerTest : AbstractPageControllerTest() {
 
         input("#name", "Ray Construction Inc")
         select("#accountTypeId", 3)
-        select("#managedById", 3)
         input("#phone", "+5147580000")
         input("#mobile", "+5147580011")
         input("#email", "info@ray-construction.com")
@@ -94,7 +90,6 @@ class EditAccountControllerTest : AbstractPageControllerTest() {
         navigateTo("/accounts/${account.id}/edit")
 
         input("#name", "Ray Construction Inc")
-        select("#managedById", 2)
         input("#phone", "+5147580000")
         input("#mobile", "+5147580011")
         input("#email", "info@ray-construction.com")

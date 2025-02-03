@@ -64,9 +64,6 @@ class CreateAccountController(
             .sortedBy { it.getDisplayLanguage() }
         model.addAttribute("languages", languages)
 
-        val users = userService.users()
-        model.addAttribute("users", users)
-
         model.addAttribute(
             "page",
             createPageModel(
