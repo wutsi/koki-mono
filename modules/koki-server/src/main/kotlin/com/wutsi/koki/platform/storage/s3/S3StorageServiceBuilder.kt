@@ -1,53 +1,34 @@
 package com.wutsi.koki.platform.storage.s3
 
-import com.amazonaws.services.s3.AmazonS3
-import com.amazonaws.services.s3.model.GetObjectRequest
-import com.amazonaws.services.s3.model.ObjectMetadata
-import com.amazonaws.services.s3.model.PutObjectRequest
 import com.wutsi.koki.platform.storage.StorageService
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
-import java.net.URL
+import com.wutsi.koki.tenant.dto.ConfigurationName
 
-class S3StorageService(
-    private val bucket: String,
-    private val s3: AmazonS3,
-) : StorageService {
-    override fun store(
-        path: String,
-        content: InputStream,
-        contentType: String?,
-        contentLength: Long
-    ): URL {
-        val meta = ObjectMetadata()
-        meta.contentLength = contentLength
-        contentType?.let { meta.contentType = it }
-
-        val request = PutObjectRequest(bucket, path, content, meta)
-        try {
-            s3.putObject(request)
-            return URL(getUrlPrefix() + "/$path")
-        } catch (e: Exception) {
-            throw IOException(String.format("Unable to store to s3://%s/%s", bucket, path), e)
-        }
-
+class S3StorageServiceBuilder {
+    companion object {
+        val CONFIG_NAMES = listOf(
+            ConfigurationName.STORAGE_S3_BUCKET,
+            ConfigurationName.STORAGE_S3_REGION,
+            ConfigurationName.STORAGE_S3_ACCESS_KEY,
+            ConfigurationName.STORAGE_S3_SECRET_KEY,
+        )
     }
 
-    override fun get(url: URL, os: OutputStream) {
-        val path = url.path.substring(bucket.length + 2)
-        val request = GetObjectRequest(bucket, path)
-        try {
-            val obj = s3.getObject(request)
-            obj.use {
-                obj.objectContent.copyTo(os)
-            }
-        } catch (e: Exception) {
-            throw IOException(String.format("Unable to get s3://%s/%s", bucket, path), e)
-        }
+    private val s3Builder: S3Builder = S3Builder()
+
+    fun build(config: Map<String, String>): StorageService {
+        validate(config)
+
+        val bucket = config.get(ConfigurationName.STORAGE_S3_BUCKET)!!
+        val region = config.get(ConfigurationName.STORAGE_S3_REGION)!!
+        val accessKey = config.get(ConfigurationName.STORAGE_S3_ACCESS_KEY)!!
+        val secretKey = config.get(ConfigurationName.STORAGE_S3_SECRET_KEY)!!
+        return S3StorageService(bucket, s3Builder.build(region, accessKey, secretKey))
     }
 
-    private fun getUrlPrefix(): String {
-        return "https://s3.amazonaws.com/$bucket"
+    private fun validate(config: Map<String, String>) {
+        val missing = CONFIG_NAMES.filter { name -> config[name] == null }
+        if (missing.isNotEmpty()) {
+            throw IllegalStateException("S3 not configured. Missing config: $missing")
+        }
     }
 }

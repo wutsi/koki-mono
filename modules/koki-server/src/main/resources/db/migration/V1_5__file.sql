@@ -35,7 +35,7 @@ CREATE TABLE T_FILE_OWNER(
 ) ENGINE = InnoDB;
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url)
-    VALUES (130, 3, 'file', 'Files', null, '/files/tab', null, '/js/files.js');
+    VALUES (130, 3, 'file', 'Files', null, '/files/tab', '/settings/files', '/js/files.js');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
     VALUES (1300, 130, 'file',         'Download files'),

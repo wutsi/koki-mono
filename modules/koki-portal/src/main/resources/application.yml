@@ -82,5 +82,6 @@ koki:
 
     storage:
         local:
+            enable: true
             directory: ${user.home}/__wutsi/koki
             servlet-path: /local-storage

@@ -7,6 +7,8 @@ import com.rabbitmq.client.Channel
 import com.rabbitmq.client.GetResponse
 import com.wutsi.koki.event.server.service.EventPublisher
 import com.wutsi.koki.platform.storage.StorageService
+import com.wutsi.koki.platform.storage.StorageServiceBuilder
+import com.wutsi.koki.platform.storage.StorageType
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import java.io.ByteArrayInputStream
@@ -17,7 +19,7 @@ import java.util.Date
 class RabbitMQEventPublisher(
     private val channel: Channel,
     private val objectMapper: ObjectMapper,
-    private val storage: StorageService,
+    private val storageBuilder: StorageServiceBuilder,
 
     @Value("\${koki.event-publisher.rabbitmq.exchange-name}") private val exchangeName: String,
     @Value("\${koki.event-publisher.rabbitmq.max-retries}") private val maxRetries: Int,
@@ -71,14 +73,14 @@ class RabbitMQEventPublisher(
     private fun archive(dlq: String, response: GetResponse) {
         val fmt = SimpleDateFormat("yyyy/MM/dd")
         val contentType = response.props.contentType
-        val path = "rabbitmq/archive/$dlq/" +
+        val path = "rabbitmq/queues/$dlq/" +
             fmt.format(Date()) +
             "/" +
             response.envelope.deliveryTag +
             extension(contentType)
 
         try {
-            storage.store(
+            getStorageService().store(
                 path = path,
                 content = ByteArrayInputStream(response.body),
                 contentType = contentType,
@@ -117,5 +119,9 @@ class RabbitMQEventPublisher(
             .contentType("application/json")
             .contentEncoding("utf-8")
             .build()
+    }
+
+    private fun getStorageService(): StorageService {
+        return storageBuilder.build(StorageType.KOKI, emptyMap())
     }
 }

@@ -14,3 +14,7 @@ spring:
 swagger:
     protocol: https
 
+koki:
+    storage:
+        local:
+            enable: false

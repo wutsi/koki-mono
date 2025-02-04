@@ -13,33 +13,73 @@
     </div>
     <div class="settings-content padding">
         <div
-            th:replace="~{__components/settings :: settings-title('File Storage', '/settings/files')}"></div>
+            th:replace="~{__components/settings :: settings-title('File Storage', '/settings/files/storage')}"></div>
 
-        <table class="table">
-            <tr>
-                <td width="20%"><b>Type</b></td>
-                <td th:text="#{'storage-type.' + ${form.type}}">STORAGE</td>
-            </tr>
-            <tr th:if="${form.type == 'S3'}">
-                <td><b>Bucket</b></td>
-                <td id="s3-bucket" th:text="${form.s3Bucket}">BUCKET</td>
-            </tr>
-            <tr th:if="${form.type == 'S3'}">
-                <td><b>Region</b></td>
-                <td id="s3-region" th:text="${form.s3Region}">REGION</td>
-            </tr>
-            <tr th:if="${form.type == 'S3'}">
-                <td><b>Access Key</b></td>
-                <td id="s3-access-key">*****</td>
-            </tr>
-            <tr th:if="${form.type == 'S3'}">
-                <td><b>Secret Key</b></td>
-                <td id="s3-secret-key">*****</td>
-            </tr>
-        </table>
+        <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+        <form class="form" method="post" th:action="@{/settings/files/storage/save}" th:object="${form}">
+            <table class="table">
+                <tr>
+                    <td width="20%"><b>Type <span class="required">*</span></b></td>
+                    <td>
+                        <select onchange="koki_files_storage_type_changed()" required th:field="*{type}">
+                            <option value=""></option>
+                            <option th:each="type : ${types}"
+                                    th:text="#{'storage-type.' + ${type}}"
+                                    th:value="${type}">
+                                TYPE
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="s3" th:classappend="${form.type} != 'S3' ? 'hidden'">
+                    <td><b>Bucket <span class="required">*</span></b></td>
+                    <td>
+                        <input maxlength="100" required th:field="*{s3Bucket}"/>
+                    </td>
+                </tr>
+                <tr class="s3" th:classappend="${form.type} != 'S3' ? 'hidden'">
+                    <td><b>Region <span class="required">*</span></b></td>
+                    <td>
+                        <select required th:field="*{s3Region}">
+                            <option value=""></option>
+                            <option th:each="region : ${s3Regions}"
+                                    th:text="${region}"
+                                    th:value="${region}">
+                                REGION
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="s3" th:classappend="${form.type} != 'S3' ? 'hidden'">
+                    <td><b>Access Key <span class="required">*</span></b></td>
+                    <td>
+                        <input required th:field="*{s3AccessKey}"/>
+                    </td>
+                </tr>
+                <tr class="s3" th:classappend="${form.type} != 'S3' ? 'hidden'">
+                    <td><b>Secret Key <span class="required">*</span></b></td>
+                    <td>
+                        <input required th:field="*{s3SecretKey}"/>
+                    </td>
+                </tr>
+            </table>
+            <button type="submit">Submit</button>
+        </form>
     </div>
 </div>
 
-
+<script>
+    function koki_files_storage_type_changed() {
+        const type = document.getElementById('type').value;
+        const s3 = (type === 'S3');
+        document.querySelectorAll('.s3').forEach((elt) => {
+            if (s3) {
+                elt.classList.remove('hidden');
+            } else {
+                elt.classList.add('hidden');
+            }
+        });
+    }
+</script>
 </body>
 </html>

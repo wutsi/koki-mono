@@ -33,6 +33,10 @@ object PageName {
     const val ERROR_SUSPENDED = "page.error.suspended"
     const val ERROR_ACCESS_DENIED = "page.error.access-denied"
 
+    const val FILE_SETTINGS = "page.settings.file"
+    const val FILE_SETTINGS_STORAGE = "page.settings.file.storage"
+    const val FILE_SETTINGS_STORAGE_EDIT = "page.settings.file.storage.edit"
+
     const val FORM = "page.form"
     const val FORM_SUBMITTED = "page.form.submitted"
 

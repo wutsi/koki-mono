@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.file.page.settings
 
+import com.amazonaws.regions.Regions
 import com.wutsi.koki.portal.file.form.StorageForm
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
@@ -10,51 +11,56 @@ import com.wutsi.koki.tenant.dto.ConfigurationName
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestHeader
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 @RequiresPermission(["file:admin"])
-class SettingsStorageController(private val service: ConfigurationService) : AbstractPageController() {
-    @GetMapping("/settings/files/storage")
-    fun show(
-        @RequestHeader(required = false, name = "Referer") referer: String? = null,
-        @RequestParam(required = false, name = "_toast") toast: Long? = null,
-        @RequestParam(required = false, name = "_ts") timestamp: Long? = null,
+class SettingsEditStorageController(private val service: ConfigurationService) : AbstractPageController() {
+    @GetMapping("/settings/files/storage/edit")
+    fun edit(
         model: Model,
     ): String {
         val config = service.configurations(keyword = "storage.")
         val form = if (config.isNotEmpty()) {
             StorageForm(
-                type = config[ConfigurationName.STORAGE_TYPE] ?: "LOCAL",
+                type = config[ConfigurationName.STORAGE_TYPE] ?: "KOKI",
                 s3Bucket = config[ConfigurationName.STORAGE_S3_BUCKET] ?: "",
                 s3Region = config[ConfigurationName.STORAGE_S3_REGION] ?: "",
-                s3AccessKey = "*****",
-                s3SecretKey = "*****",
+                s3AccessKey = config[ConfigurationName.STORAGE_S3_ACCESS_KEY] ?: "",
+                s3SecretKey = config[ConfigurationName.STORAGE_S3_SECRET_KEY] ?: "",
             )
         } else {
-            StorageForm(type = "LOCAL")
+            StorageForm(type = "KOKI")
         }
+        return edit(form, model)
+    }
+
+    private fun edit(form: StorageForm, model: Model): String {
         model.addAttribute("form", form)
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.FILE_SETTINGS_STORAGE,
+                name = PageName.FILE_SETTINGS_STORAGE_EDIT,
                 title = "File Settings"
             )
         )
-        loadToast(referer, toast, timestamp, model)
-        return "files/settings/storage/show"
+
+        model.addAttribute("s3Regions", Regions.entries.map { region -> region.getName() }.sorted())
+        model.addAttribute("types", listOf("KOKI", "S3"))
+        return "files/settings/storage/edit"
     }
 
-    private fun loadToast(
-        referer: String?,
-        toast: Long?,
-        timestamp: Long?,
-        model: Model
-    ) {
-        if (toast != null && canShowToasts(timestamp, referer, listOf("/settings/files/edit"))) {
-            model.addAttribute("toast", "Saved")
+    @PostMapping("/settings/files/storage/save")
+    fun save(@ModelAttribute form: StorageForm, model: Model): String {
+        try {
+            service.save(form)
+            return "redirect:/settings/files/storage?_toast=1&_ts=" + System.currentTimeMillis()
+        } catch (ex: HttpClientErrorException) {
+            val errorResponse = toErrorResponse(ex)
+            model.addAttribute("error", errorResponse.error.code)
+            return edit(form, model)
         }
     }
 }

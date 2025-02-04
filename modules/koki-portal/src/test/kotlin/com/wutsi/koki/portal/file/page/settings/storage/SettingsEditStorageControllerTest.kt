@@ -1,88 +1,85 @@
 package com.wutsi.koki.portal.file.page.settings.storage
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.blog.app.page.AbstractPageControllerTest
-import com.wutsi.koki.TenantFixtures
 import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.tenant.dto.Configuration
 import com.wutsi.koki.tenant.dto.ConfigurationName
-import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
+import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
-class SettingsStorageControllerTest : AbstractPageControllerTest() {
+class SettingsEditStorageControllerTest : AbstractPageControllerTest() {
     @Test
-    fun `s3 config`() {
-        setupConfiguration("S3")
-
-        navigateTo("/settings/files/storage")
-        assertCurrentPageIs(PageName.FILE_SETTINGS_STORAGE)
-        assertElementCount(".s3", 4)
-    }
-
-    @Test
-    fun `local config`() {
-        setupConfiguration("LOCAL")
-
-        navigateTo("/settings/files/storage")
-        assertCurrentPageIs(PageName.FILE_SETTINGS_STORAGE)
-        assertElementCount(".s3", 0)
-    }
-
-    @Test
-    fun edit() {
-        setupConfiguration("S3")
-
-        navigateTo("/settings/files/storage")
-        click(".btn-edit")
+    fun native() {
+        navigateTo("/settings/files/storage/edit")
         assertCurrentPageIs(PageName.FILE_SETTINGS_STORAGE_EDIT)
+        select("#type", 1)
+        assertElementNotVisible(".s3")
+        click("button[type=submit]")
+
+        val request = argumentCaptor<SaveConfigurationRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/configurations"),
+            request.capture(),
+            eq(Any::class.java)
+        )
+
+        assertEquals("KOKI", request.firstValue.values[ConfigurationName.STORAGE_TYPE])
+
+        assertCurrentPageIs(PageName.FILE_SETTINGS_STORAGE)
+        assertElementVisible("#koki-toast")
+    }
+
+    @Test
+    fun s3() {
+        navigateTo("/settings/files/storage/edit")
+        assertCurrentPageIs(PageName.FILE_SETTINGS_STORAGE_EDIT)
+        select("#type", 2)
+        Thread.sleep(1000L)
+
+        input("#s3Bucket", "test")
+        select("#s3Region", 2)
+        input("#s3AccessKey", "ACC-0000")
+        input("#s3SecretKey", "SEC-0000")
+        click("button[type=submit]")
+
+        val request = argumentCaptor<SaveConfigurationRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/configurations"),
+            request.capture(),
+            eq(Any::class.java)
+        )
+
+        assertEquals("S3", request.firstValue.values[ConfigurationName.STORAGE_TYPE])
+        assertEquals("test", request.firstValue.values[ConfigurationName.STORAGE_S3_BUCKET])
+        assertEquals("ap-east-1", request.firstValue.values[ConfigurationName.STORAGE_S3_REGION])
+        assertEquals("SEC-0000", request.firstValue.values[ConfigurationName.STORAGE_S3_SECRET_KEY])
+        assertEquals("ACC-0000", request.firstValue.values[ConfigurationName.STORAGE_S3_ACCESS_KEY])
+
+        assertCurrentPageIs(PageName.FILE_SETTINGS_STORAGE)
+        assertElementVisible("#koki-toast")
     }
 
     @Test
     fun back() {
-        setupConfiguration("LOCAL")
-
-        navigateTo("/settings/files/storage")
+        navigateTo("/settings/files/storage/edit")
         click(".btn-back")
-        assertCurrentPageIs(PageName.FILE_SETTINGS)
+        assertCurrentPageIs(PageName.FILE_SETTINGS_STORAGE)
     }
 
     @Test
     fun `show - without permission file-admin`() {
         setUpUserWithoutPermissions(listOf("file:admin"))
-        navigateTo("/settings/files/storage")
+        navigateTo("/settings/files/storage/edit")
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 
     @Test
     fun `required login`() {
         setUpAnonymousUser()
-        navigateTo("/settings/files/storage")
+        navigateTo("/settings/files/storage/edit")
         assertCurrentPageIs(PageName.LOGIN)
-    }
-
-
-    private fun setupConfiguration(storageType: String) {
-        doReturn(
-            ResponseEntity(
-                SearchConfigurationResponse(
-                    configurations = TenantFixtures.config.map { cfg ->
-                        Configuration(
-                            name = cfg.key,
-                            value = if (cfg.key == ConfigurationName.STORAGE_TYPE) storageType else cfg.value
-                        )
-                    }
-                ),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchConfigurationResponse::class.java)
-            )
     }
 }

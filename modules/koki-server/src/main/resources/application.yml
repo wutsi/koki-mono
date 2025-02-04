@@ -155,22 +155,32 @@ logging:
 
 koki:
     server-url: http://localhost:${server.port}
+
     executor:
         thread-pool-size: 16
+
     rabbitmq:
         url: amqp://localhost
+
     event-publisher:
         type: rabbitmq # rabbitmq | spring
         rabbitmq:
             exchange-name: koki
             max-retries: 24
             ttl-seconds: 84600
+
     storage:
         type: local # local | s3
         local:
             directory: ${user.home}/__wutsi
             base-url: http://localhost:${server.port}
             servlet-path: /local-storage
+        aws:
+            bucket: koki-test
+            region: us-east1
+            access-key:
+            secret-key:
+
     workflow-engine:
         rabbitmq:
             workflow-queue: koki-workflow-queue
