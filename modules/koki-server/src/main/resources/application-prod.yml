@@ -16,6 +16,9 @@ swagger:
     protocol: https
 
 koki:
+    rabbitmq:
+        url: ${CLOUDAMQP_URL}
+
     storage:
         type: aws
         aws:
