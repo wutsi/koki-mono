@@ -108,7 +108,7 @@ jobs:
             -   name: Health check
                 env:
                     HEROKU_APP: koki-server-test
-                    DOMAIN_SUFFIX: 71da83cfcf1a
+                    DOMAIN_SUFFIX: ${{ KOKI_SERVER_DOMAIN_SUFFIX_TEST }}
                 run: |
-                    sleep 30
+                    sleep 45
                     curl -sSf https://${HEROKU_APP}-{DOMAIN_SUFFIX}.herokuapp.com/actuator/health >> /dev/null
