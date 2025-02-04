@@ -42,8 +42,9 @@
 
 ## Files
 
-- [] Tag the files:
-- [] Settings: Configure storage type: S3, Local
+- [] Integrate AI to describe the file
+- [] Tag the files
+- [x] Settings: Configure storage type: S3, Local
 - [x] Apply RBAC security on UI
 - [x] Upload file from popup
 - [x] Show file details

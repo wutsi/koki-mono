@@ -1,4 +1,12 @@
-package com.wutsi.koki.platform.storage
+package com.wutsi.koki.platform.storage.local
 
-class StorageServiceBuilder {
+import com.wutsi.koki.platform.storage.StorageService
+
+class LocalStorageServiceBuilder(
+    private val directory: String,
+    private val baseUrl: String,
+) {
+    fun build(): StorageService {
+        return LocalStorageService(directory, baseUrl)
+    }
 }

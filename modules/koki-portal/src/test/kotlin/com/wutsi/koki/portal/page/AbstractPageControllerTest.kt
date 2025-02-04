@@ -92,6 +92,7 @@ import com.wutsi.koki.tax.dto.CreateTaxRequest
 import com.wutsi.koki.tax.dto.CreateTaxResponse
 import com.wutsi.koki.tax.dto.GetTaxResponse
 import com.wutsi.koki.tax.dto.SearchTaxResponse
+import com.wutsi.koki.tenant.dto.Configuration
 import com.wutsi.koki.tenant.dto.CreateRoleRequest
 import com.wutsi.koki.tenant.dto.CreateRoleResponse
 import com.wutsi.koki.tenant.dto.CreateUserRequest
@@ -325,7 +326,14 @@ abstract class AbstractPageControllerTest {
         // Configuration
         doReturn(
             ResponseEntity(
-                SearchConfigurationResponse(),
+                SearchConfigurationResponse(
+                    configurations = TenantFixtures.config.map { cfg ->
+                        Configuration(
+                            name = cfg.key,
+                            value = cfg.value
+                        )
+                    }
+                ),
                 HttpStatus.OK,
             )
         ).whenever(rest)

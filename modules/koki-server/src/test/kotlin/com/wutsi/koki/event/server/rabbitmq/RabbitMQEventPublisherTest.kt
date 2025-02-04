@@ -14,6 +14,8 @@ import com.rabbitmq.client.Channel
 import com.rabbitmq.client.Envelope
 import com.rabbitmq.client.GetResponse
 import com.wutsi.koki.platform.storage.StorageService
+import com.wutsi.koki.platform.storage.StorageServiceBuilder
+import com.wutsi.koki.platform.storage.StorageType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
@@ -23,13 +25,14 @@ import kotlin.test.Test
 
 class RabbitMQEventPublisherTest {
     private val storage = mock<StorageService>()
+    private val storageBuilder = mock<StorageServiceBuilder>()
     private val channel = mock<Channel>()
     private val objectMapper: ObjectMapper = ObjectMapper()
     private val exchangeName: String = "koki"
     private val maxRetries: Int = 24
     private val ttl: Int = 86400
 
-    private val publisher = RabbitMQEventPublisher(channel, objectMapper, storage, exchangeName, maxRetries, ttl)
+    private val publisher = RabbitMQEventPublisher(channel, objectMapper, storageBuilder, exchangeName, maxRetries, ttl)
     private val queue = "test-queue"
     private val dlq = "test-dlq"
 
@@ -49,6 +52,8 @@ class RabbitMQEventPublisherTest {
         doReturn(enveloppe).whenever(response).envelope
 
         doReturn(body.toByteArray()).whenever(response).body
+
+        doReturn(storage).whenever(storageBuilder).build(eq(StorageType.KOKI), any())
     }
 
     @Test
@@ -129,7 +134,7 @@ class RabbitMQEventPublisherTest {
 
         val today = SimpleDateFormat("yyyy/MM/dd").format(Date())
         verify(storage).store(
-            eq("rabbitmq/archive/$dlq/$today/$deliveryTag.json"),
+            eq("rabbitmq/queues/$dlq/$today/$deliveryTag.json"),
             any(),
             eq("application/json"),
             eq(body.length.toLong())

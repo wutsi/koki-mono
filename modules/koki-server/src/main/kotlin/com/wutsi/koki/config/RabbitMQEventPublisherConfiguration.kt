@@ -5,7 +5,7 @@ import com.rabbitmq.client.BuiltinExchangeType
 import com.rabbitmq.client.Channel
 import com.wutsi.koki.event.server.rabbitmq.RabbitMQEventPublisher
 import com.wutsi.koki.event.server.service.EventPublisher
-import com.wutsi.koki.platform.storage.StorageService
+import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import jakarta.annotation.PostConstruct
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Configuration
 class RabbitMQEventPublisherConfiguration(
     private val channel: Channel,
     private val objectMapper: ObjectMapper,
-    private val storageService: StorageService,
+    private val storageServiceBuilder: StorageServiceBuilder,
 
     @Value("\${koki.event-publisher.rabbitmq.exchange-name}") private val exchangeName: String,
     @Value("\${koki.event-publisher.rabbitmq.max-retries}") private val maxRetries: Int,
@@ -50,7 +50,7 @@ class RabbitMQEventPublisherConfiguration(
             ttl = ttl,
             maxRetries = maxRetries,
             objectMapper = objectMapper,
-            storage = storageService,
+            storageBuilder = storageServiceBuilder,
         )
     }
 }

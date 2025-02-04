@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.file.form
 
-data class FileSettingsForm(
+data class StorageForm(
     val type: String = "",
     val s3Bucket: String = "",
     val s3Region: String = "",

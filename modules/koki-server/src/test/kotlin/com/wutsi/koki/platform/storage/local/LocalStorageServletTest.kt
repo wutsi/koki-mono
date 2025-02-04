@@ -1,11 +1,9 @@
-package com.wutsi.koki.platform.storage.fs
+package com.wutsi.koki.platform.storage.local
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.platform.storage.local.LocalStorageService
-import com.wutsi.koki.platform.storage.local.LocalStorageServlet
 import jakarta.servlet.ServletOutputStream
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

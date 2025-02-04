@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.file.page.settings
 
-import com.wutsi.koki.portal.email.model.SMTPForm
+import com.wutsi.koki.portal.file.form.StorageForm
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
@@ -15,35 +15,36 @@ import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
 @RequiresPermission(["file:admin"])
-class SettingsFileController(private val service: ConfigurationService): AbstractPageController(){
-    @GetMapping("/settings/files")
+class SettingsStorageController(private val service: ConfigurationService) : AbstractPageController() {
+    @GetMapping("/settings/files/storage")
     fun show(
         @RequestHeader(required = false, name = "Referer") referer: String? = null,
         @RequestParam(required = false, name = "_toast") toast: Long? = null,
         @RequestParam(required = false, name = "_ts") timestamp: Long? = null,
         model: Model,
-    ): String{
+    ): String {
         val config = service.configurations(keyword = "storage.")
-        if (config.isNotEmpty()) {
-            val form = SMTPForm(
-                host = config[ConfigurationName.SMTP_HOST] ?: "",
-                username = config[ConfigurationName.SMTP_USERNAME] ?: "",
-                password = config[ConfigurationName.SMTP_PASSWORD] ?: "",
-                fromAddress = config[ConfigurationName.SMTP_FROM_ADDRESS] ?: "",
-                fromPersonal = config[ConfigurationName.SMTP_FROM_PERSONAL] ?: "",
+        val form = if (config.isNotEmpty()) {
+            StorageForm(
+                type = config[ConfigurationName.STORAGE_TYPE] ?: "KOKI",
+                s3Bucket = config[ConfigurationName.STORAGE_S3_BUCKET] ?: "",
+                s3Region = config[ConfigurationName.STORAGE_S3_REGION] ?: "",
+                s3AccessKey = "*****",
+                s3SecretKey = "*****",
             )
-            model.addAttribute("form", form)
+        } else {
+            StorageForm(type = "KOKI")
         }
+        model.addAttribute("form", form)
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.FILE_SETTINGS,
+                name = PageName.FILE_SETTINGS_STORAGE,
                 title = "File Settings"
             )
         )
         loadToast(referer, toast, timestamp, model)
-        return "files/settings/show"
-
+        return "files/settings/storage/show"
     }
 
     private fun loadToast(
@@ -52,7 +53,7 @@ class SettingsFileController(private val service: ConfigurationService): Abstrac
         timestamp: Long?,
         model: Model
     ) {
-        if (toast != null && canShowToasts(timestamp, referer, listOf("/settings/files/edit"))) {
+        if (toast != null && canShowToasts(timestamp, referer, listOf("/settings/files/storage/edit"))) {
             model.addAttribute("toast", "Saved")
         }
     }

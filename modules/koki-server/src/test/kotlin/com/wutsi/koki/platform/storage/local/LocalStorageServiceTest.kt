@@ -1,6 +1,5 @@
-package com.wutsi.koki.platform.storage.fs
+package com.wutsi.koki.platform.storage.local
 
-import com.wutsi.koki.platform.storage.local.LocalStorageService
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File

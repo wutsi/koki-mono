@@ -12,3 +12,11 @@ spring:
 swagger:
     protocol: https
 
+koki:
+    storage:
+        type: aws
+        aws:
+            bucket: koki-test
+            region: us-east1
+            access-key: ${AWS_ACCESS_KEY}
+            secret-key: ${AWS_SECRET_KEY}
