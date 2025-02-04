@@ -84,8 +84,8 @@ jobs:
                 env:
                     HEROKU_APP: koki-server-test
                     HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY_TEST}}
-                    AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_TEST }}
-                    AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY_TEST }}
+                    AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY_TEST}}
+                    AWS_SECRET_KEY: ${{secrets.AWS_SECRET_KEY_TEST}}
                     CLOUDAMQP_URL: ${{secrets.CLOUDAMQP_URL_TEST}}
                     MYSQL_USERNAME: ${{secrets.MYSQL_USERNAME_TEST}}
                     MYSQL_PASSWORD: ${{secrets.MYSQL_PASSWORD_TEST}}
@@ -109,7 +109,7 @@ jobs:
             -   name: Health check
                 env:
                     HEROKU_APP: koki-server-test
-                    DOMAIN_SUFFIX: ${{ KOKI_SERVER_DOMAIN_SUFFIX_TEST }}
+                    DOMAIN_SUFFIX: 71da83cfcf1a
                 run: |
                     sleep 45
                     curl -sSf https://${HEROKU_APP}-{DOMAIN_SUFFIX}.herokuapp.com/actuator/health >> /dev/null
