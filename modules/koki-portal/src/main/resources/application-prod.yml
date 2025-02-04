@@ -1,20 +1,3 @@
-database:
-    pool-size: 16
-
-spring:
-    flyway:
-        clean-disabled: true
-    jpa:
-        show-sql: false
-    datasource:
-        url: ${SPRING_DATABASE_URL}
-        username: ${SPRING_DATABASE_USERNAME}
-        password: ${SPRING_DATABASE_PASSWORD}
-
-swagger:
-    protocol: https
-
 koki:
-    storage:
-        local:
-            enable: false
+    sdk:
+        base-url: ${KOKI_PORTAL_URL_TEST}
