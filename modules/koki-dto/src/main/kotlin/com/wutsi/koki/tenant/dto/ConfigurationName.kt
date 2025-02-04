@@ -11,4 +11,13 @@ object ConfigurationName {
 
     // EMAIL
     const val EMAIL_DECORATOR = "email.decorator"
+
+    // Storage
+    const val STORAGE_TYPE = "storage.type"
+    const val STORAGE_LOCAL_DIRECTORY = "storage.local.directory"
+    const val STORAGE_LOCAL_BASE_URL = "storage.local.base_url"
+    const val STORAGE_S3_BUCKET = "storage.s3.bucket"
+    const val STORAGE_S3_REGION = "storage.s3.region"
+    const val STORAGE_S3_ACCESS_KEY = "storage.s3.access-key"
+    const val STORAGE_S3_SECRET_KEY = "storage.s3.secret-key"
 }

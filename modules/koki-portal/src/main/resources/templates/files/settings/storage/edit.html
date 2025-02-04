@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="settings-container">
+    <div class="settings-sidebar">
+        <div th:replace="~{__components/settings :: settings-menu('file')}"></div>
+    </div>
+    <div class="settings-content padding">
+        <div
+            th:replace="~{__components/settings :: settings-title('File Storage', '/settings/files')}"></div>
+
+        <table class="table">
+            <tr>
+                <td width="20%"><b>Type</b></td>
+                <td th:text="#{'storage-type.' + ${form.type}}">STORAGE</td>
+            </tr>
+            <tr th:if="${form.type == 'S3'}">
+                <td><b>Bucket</b></td>
+                <td id="s3-bucket" th:text="${form.s3Bucket}">BUCKET</td>
+            </tr>
+            <tr th:if="${form.type == 'S3'}">
+                <td><b>Region</b></td>
+                <td id="s3-region" th:text="${form.s3Region}">REGION</td>
+            </tr>
+            <tr th:if="${form.type == 'S3'}">
+                <td><b>Access Key</b></td>
+                <td id="s3-access-key">*****</td>
+            </tr>
+            <tr th:if="${form.type == 'S3'}">
+                <td><b>Secret Key</b></td>
+                <td id="s3-secret-key">*****</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+</body>
+</html>
