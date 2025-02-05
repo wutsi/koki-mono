@@ -1,7 +1,7 @@
 spring:
     flyway:
         clean-disabled: false
-        locations: "classpath:db/migration,classpath:db/migration/test"
+        locations: "classpath:db/migration/common,classpath:db/migration/test"
     jpa:
         show-sql: false
     datasource:
