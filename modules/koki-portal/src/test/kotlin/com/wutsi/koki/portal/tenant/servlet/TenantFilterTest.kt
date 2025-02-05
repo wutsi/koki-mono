@@ -107,4 +107,16 @@ class TenantFilterTest {
         verify(response, never()).sendRedirect(any())
         verify(chain).doFilter(request, response)
     }
+
+    @Test
+    fun `ignore actuator`() {
+        doReturn("/actuator/health").whenever(request).requestURI
+
+        filter.doFilter(request, response, chain)
+
+        verify(currentTenant, never()).get()
+        verify(response, never()).sendError(any())
+        verify(response, never()).sendRedirect(any())
+        verify(chain).doFilter(request, response)
+    }
 }

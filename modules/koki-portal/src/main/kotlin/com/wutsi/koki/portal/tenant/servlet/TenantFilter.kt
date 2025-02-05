@@ -47,6 +47,7 @@ class TenantFilter(private val currentTenant: CurrentTenantHolder) : Filter {
         return request.requestURI.startsWith("/error") ||
             request.requestURI.startsWith("/image") ||
             request.requestURI.startsWith("/css") ||
-            request.requestURI.startsWith("/js")
+            request.requestURI.startsWith("/js") ||
+            request.requestURI.startsWith("/actuator")
     }
 }
