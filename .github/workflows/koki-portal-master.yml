@@ -89,4 +89,5 @@ jobs:
                     APP_URL: ${{secrets.KOKI_PORTAL_URL_TEST}}
                 run: |
                     sleep 45
+                    echo ${APP_URL}
                     curl -sSf https://${APP_URL}/actuator/health >> /dev/null
