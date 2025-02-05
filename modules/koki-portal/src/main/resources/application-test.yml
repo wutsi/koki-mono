@@ -1,3 +1,3 @@
 koki:
     sdk:
-        base-url: ${KOKI_SERVER_URL_TEST}
+        base-url: ${KOKI_SERVER_URL}
