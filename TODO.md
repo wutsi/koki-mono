@@ -113,7 +113,8 @@
 
 ## Product
 
-- [] Product API
+- [] Product, Price, Category API
+- Discount API
 - [] Product UI
 
 ---------

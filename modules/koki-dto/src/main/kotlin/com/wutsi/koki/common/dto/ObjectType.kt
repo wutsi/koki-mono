@@ -9,4 +9,5 @@ enum class ObjectType {
     EMAIL,
     TAX,
     EMPLOYEE,
+    PRODUCT
 }
