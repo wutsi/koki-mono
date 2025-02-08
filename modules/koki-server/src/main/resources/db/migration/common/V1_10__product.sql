@@ -25,6 +25,7 @@ CREATE TABLE T_PRICE(
 
   tenant_fk               BIGINT NOT NULL,
   product_fk              BIGINT NOT NULL REFERENCES T_PRODUCT(id),
+  account_type_fk         BIGINT,
   created_by_fk           BIGINT,
   modified_by_fk          BIGINT,
   deleted_by_fk           BIGINT,
@@ -33,6 +34,8 @@ CREATE TABLE T_PRICE(
   amount                  DOUBLE NOT NULL,
   currency                VARCHAR(3) NOT NULL,
   active                  BOOLEAN NOT NULL DEFAULT true,
+  start_at                DATE,
+  end_at                  DATE,
 
   deleted                 BOOLEAN NOT NULL DEFAULT false,
   created_at              DATETIME DEFAULT NOW(),

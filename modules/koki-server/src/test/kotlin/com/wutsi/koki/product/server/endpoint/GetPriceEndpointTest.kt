@@ -1,51 +1,46 @@
 package com.wutsi.koki.price.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.product.dto.CreatePriceRequest
-import com.wutsi.koki.product.dto.CreatePriceResponse
-import com.wutsi.koki.product.server.dao.PriceRepository
-import org.apache.commons.lang3.time.DateUtils
-import org.springframework.beans.factory.annotation.Autowired
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.product.dto.GetPriceResponse
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import java.text.SimpleDateFormat
-import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/product/CreatePriceEndpoint.sql"])
-class CreatePriceEndpointTest : AuthorizationAwareEndpointTest() {
-    @Autowired
-    private lateinit var dao: PriceRepository
-
-    private val request = CreatePriceRequest(
-        name = "Default",
-        amount = 555.0,
-        currency = "CAD",
-        startAt = DateUtils.addDays(Date(), 1),
-        endAt = DateUtils.addDays(Date(), 10),
-        active = true,
-        productId = 100L,
-    )
-
+@Sql(value = ["/db/test/clean.sql", "/db/test/product/GetPriceEndpoint.sql"])
+class GetPriceEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
-    fun create() {
-        val response = rest.postForEntity("/v1/prices", request, CreatePriceResponse::class.java)
+    fun get() {
+        val response = rest.getForEntity("/v1/prices/100", GetPriceResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val fmt = SimpleDateFormat("yyyy-MM-dd")
-        val price = dao.findById(response.body!!.priceId).get()
-        assertEquals(TENANT_ID, price.tenantId)
-        assertEquals(request.productId, price.productId)
-        assertEquals(request.name, price.name)
-        assertEquals(request.amount, price.amount)
-        assertEquals(request.currency, price.currency)
-        assertEquals(request.active, price.active)
-        assertEquals(fmt.format(request.startAt), fmt.format(price.startAt))
-        assertEquals(fmt.format(request.endAt), fmt.format(price.endAt))
-        assertEquals(false, price.deleted)
-        assertEquals(USER_ID, price.createdById)
-        assertEquals(USER_ID, price.modifiedById)
+        val price = response.body!!.price
+        assertEquals(100L, price.productId)
+        assertEquals(111L, price.accountTypeId)
+        assertEquals("P1", price.name)
+        assertEquals(1000.0, price.amount)
+        assertEquals("CAD", price.currency)
+        assertEquals(true, price.active)
+        assertEquals("2020-10-11", fmt.format(price.startAt))
+        assertEquals("2021-11-11", fmt.format(price.endAt))
+    }
+
+    @Test
+    fun notFound() {
+        val response = rest.getForEntity("/v1/prices/999999", ErrorResponse::class.java)
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertEquals(ErrorCode.PRICE_NOT_FOUND, response.body?.error?.code)
+    }
+
+    @Test
+    fun anotherTenant() {
+        val response = rest.getForEntity("/v1/prices/200", ErrorResponse::class.java)
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertEquals(ErrorCode.PRICE_NOT_FOUND, response.body?.error?.code)
     }
 }

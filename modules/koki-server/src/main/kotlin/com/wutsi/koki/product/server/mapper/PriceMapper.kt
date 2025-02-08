@@ -6,10 +6,12 @@ import com.wutsi.koki.product.server.domain.PriceEntity
 import org.springframework.stereotype.Service
 
 @Service
-class PriceMapper{
-    fun toPrice(entity: PriceEntity): Price{
+class PriceMapper {
+    fun toPrice(entity: PriceEntity): Price {
         return Price(
             id = entity.id!!,
+            productId = entity.productId,
+            accountTypeId = entity.accountTypeId,
             name = entity.name,
             amount = entity.amount,
             currency = entity.currency,
@@ -23,9 +25,11 @@ class PriceMapper{
         )
     }
 
-    fun toPriceSummary(entity: PriceEntity): PriceSummary{
+    fun toPriceSummary(entity: PriceEntity): PriceSummary {
         return PriceSummary(
             id = entity.id!!,
+            productId = entity.productId,
+            accountTypeId = entity.accountTypeId,
             name = entity.name,
             amount = entity.amount,
             currency = entity.currency,

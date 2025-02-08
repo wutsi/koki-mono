@@ -21,6 +21,9 @@ data class PriceEntity(
     @Column(name = "product_fk")
     val productId: Long = -1,
 
+    @Column(name = "account_type_fk")
+    var accountTypeId: Long? = null,
+
     @Column(name = "created_by_fk")
     val createdById: Long? = null,
 
@@ -30,7 +33,7 @@ data class PriceEntity(
     @Column(name = "deleted_by_fk")
     var deletedById: Long? = null,
 
-    var name: String = "",
+    var name: String? = null,
     var amount: Double = 0.0,
     var currency: String = "",
     var startAt: Date? = null,

@@ -6,8 +6,8 @@ import com.wutsi.koki.product.server.domain.ProductEntity
 import org.springframework.stereotype.Service
 
 @Service
-class ProductMapper{
-    fun toProduct(entity: ProductEntity): Product{
+class ProductMapper {
+    fun toProduct(entity: ProductEntity): Product {
         return Product(
             id = entity.id!!,
             name = entity.name,
@@ -22,7 +22,7 @@ class ProductMapper{
         )
     }
 
-    fun toProductSummary(entity: ProductEntity): ProductSummary{
+    fun toProductSummary(entity: ProductEntity): ProductSummary {
         return ProductSummary(
             id = entity.id!!,
             name = entity.name,
