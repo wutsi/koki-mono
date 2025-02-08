@@ -5,6 +5,7 @@ import java.util.Date
 data class Price(
     val id: Long = -1,
     val productId: Long = -1,
+    val accountTypeId: Long? = null,
     val name: String? = null,
     val amount: Double = 0.0,
     val currency: String = "",

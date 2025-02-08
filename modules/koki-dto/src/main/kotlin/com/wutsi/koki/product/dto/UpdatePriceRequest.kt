@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size
 import java.util.Date
 
 data class UpdatePriceRequest(
-    val productId: Long = -1,
+    val accountTypeId: Long? = null,
 
     @get:Size(max = 100) val name: String? = null,
     @get:NotEmpty() @get:Size(max = 3) val currency: String = "",

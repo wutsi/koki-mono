@@ -6,6 +6,7 @@ import java.util.Date
 
 data class CreatePriceRequest(
     val productId: Long = -1,
+    val accountTypeId: Long? = null,
 
     @get:Size(max = 100) val name: String? = null,
     @get:NotEmpty() @get:Size(max = 3) val currency: String = "",
