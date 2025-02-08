@@ -60,6 +60,10 @@ object ErrorCode {
 
     val MODULE_NOT_FOUND: String = "$PREFIX:module:not-found"
 
+    val PRICE_NOT_FOUND: String = "$PREFIX:price:not-found"
+
+    val PRODUCT_NOT_FOUND: String = "$PREFIX:product:not-found"
+
     val NOTE_NOT_FOUND: String = "$PREFIX:note:not-found"
 
     val ROLE_DUPLICATE_NAME: String = "$PREFIX:role:duplicate-name"
