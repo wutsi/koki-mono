@@ -113,7 +113,7 @@
 
 ## Product
 
-- [] Product API
+- [x] Product, Price
 - [] Product UI
 
 ---------

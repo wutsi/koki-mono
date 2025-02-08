@@ -1,4 +1,4 @@
-package com.wutsi.koki.employee.endpoint
+package com.wutsi.koki.employee.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.employee.dto.EmployeeStatus
