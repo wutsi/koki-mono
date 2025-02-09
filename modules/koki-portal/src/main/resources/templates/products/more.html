@@ -1,0 +1,4 @@
+<tr class="product" th:each="product : ${products}">
+    <div th:replace="~{__components/product :: columns(${product})}"></div>
+</tr>
+<tr th:replace="~{__components/product :: load-more(${moreUrl})}"></tr>

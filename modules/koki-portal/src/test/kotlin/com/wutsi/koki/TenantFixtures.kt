@@ -68,6 +68,9 @@ object TenantFixtures {
         TypeSummary(id = 111, objectType = ObjectType.EMPLOYEE, name = "P", title = "Part-Time"),
         TypeSummary(id = 112, objectType = ObjectType.EMPLOYEE, name = "C", title = "Contractor"),
         TypeSummary(id = 113, objectType = ObjectType.EMPLOYEE, name = "I", title = "Intern"),
+
+        TypeSummary(id = 120, objectType = ObjectType.ACCOUNT, name = "Business"),
+        TypeSummary(id = 121, objectType = ObjectType.ACCOUNT, name = "Household"),
     )
 
     val type = Type(

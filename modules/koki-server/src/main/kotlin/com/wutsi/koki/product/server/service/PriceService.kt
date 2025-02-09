@@ -101,6 +101,7 @@ class PriceService(
                 currency = request.currency,
                 startAt = request.startAt,
                 endAt = request.endAt,
+                active = request.active,
                 createdAt = now,
                 createdById = userId,
                 modifiedAt = now,
@@ -114,6 +115,7 @@ class PriceService(
         val price = get(id, tenantId)
         price.accountTypeId = request.accountTypeId
         price.name = request.name
+        price.active = request.active
         price.amount = request.amount
         price.currency = request.currency
         price.startAt = request.startAt

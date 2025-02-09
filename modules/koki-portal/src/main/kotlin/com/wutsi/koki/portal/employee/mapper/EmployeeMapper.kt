@@ -23,7 +23,13 @@ class EmployeeMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper()
             user = users[entity.userId] ?: UserModel(id = entity.userId),
             employeeType = employeeType,
             jobTitle = entity.jobTitle,
-            hourlyWage = entity.hourlyWage?.let { amount -> moneyMapper.toMoneyModel(amount) },
+            hourlyWage = entity.hourlyWage?.let { amount ->
+                if (entity.currency == null) {
+                    moneyMapper.toMoneyModel(amount)
+                } else {
+                    moneyMapper.toMoneyModel(amount, entity.currency!!)
+                }
+            },
             status = entity.status,
             hiredAt = entity.hiredAt,
             hiredAtText = entity.hiredAt?.let { date -> dateFormat.format(date) },
