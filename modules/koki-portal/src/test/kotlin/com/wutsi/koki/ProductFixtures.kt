@@ -1,8 +1,12 @@
 package com.wutsi.koki
 
+import com.wutsi.koki.product.dto.Price
+import com.wutsi.koki.product.dto.PriceSummary
 import com.wutsi.koki.product.dto.Product
 import com.wutsi.koki.product.dto.ProductSummary
 import com.wutsi.koki.product.dto.ProductType
+import org.apache.commons.lang3.time.DateUtils
+import java.util.Date
 
 object ProductFixtures {
     // Products
@@ -63,5 +67,45 @@ object ProductFixtures {
         description = "This is the description of the product",
         modifiedById = UserFixtures.users[0].id,
         createdById = UserFixtures.users[0].id
+    )
+
+    // Prices
+    val prices = listOf(
+        PriceSummary(
+            id = 10001,
+            productId = product.id,
+            name = "List Price",
+            amount = 1000.0,
+            currency = "CAD",
+            startAt = DateUtils.addDays(Date(), -300),
+        ),
+        PriceSummary(
+            id = 10002,
+            productId = product.id,
+            accountTypeId = 120L,
+            name = "Business Price",
+            amount = 900.0,
+            currency = "CAD",
+            startAt = DateUtils.addDays(Date(), -300),
+            endAt = DateUtils.addDays(Date(), -100),
+        ),
+        PriceSummary(
+            id = 10003,
+            productId = product.id,
+            amount = 1500.0,
+            currency = "USD",
+            startAt = DateUtils.addDays(Date(), -300),
+        ),
+    )
+
+    val price = Price(
+        id = 10001,
+        productId = product.id,
+        accountTypeId = 120L,
+        name = "List Price",
+        amount = 1000.0,
+        currency = "CAD",
+        startAt = DateUtils.addDays(Date(), -300),
+        endAt = DateUtils.addDays(Date(), -100),
     )
 }

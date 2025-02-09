@@ -73,9 +73,13 @@ import com.wutsi.koki.note.dto.CreateNoteResponse
 import com.wutsi.koki.note.dto.GetNoteResponse
 import com.wutsi.koki.note.dto.SearchNoteResponse
 import com.wutsi.koki.portal.service.AccessTokenHolder
+import com.wutsi.koki.product.dto.CreatePriceRequest
+import com.wutsi.koki.product.dto.CreatePriceResponse
 import com.wutsi.koki.product.dto.CreateProductRequest
 import com.wutsi.koki.product.dto.CreateProductResponse
+import com.wutsi.koki.product.dto.GetPriceResponse
 import com.wutsi.koki.product.dto.GetProductResponse
+import com.wutsi.koki.product.dto.SearchPriceResponse
 import com.wutsi.koki.product.dto.SearchProductResponse
 import com.wutsi.koki.script.dto.CreateScriptResponse
 import com.wutsi.koki.script.dto.GetScriptResponse
@@ -656,6 +660,41 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any<CreateProductRequest>(),
                 eq(CreateProductResponse::class.java)
+            )
+
+        // Prices
+        doReturn(
+            ResponseEntity(
+                SearchPriceResponse(ProductFixtures.prices),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchPriceResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetPriceResponse(ProductFixtures.price),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetPriceResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreatePriceResponse(777L),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreatePriceRequest>(),
+                eq(CreatePriceResponse::class.java)
             )
     }
 

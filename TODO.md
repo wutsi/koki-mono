@@ -113,8 +113,13 @@
 
 ## Product
 
-- [x] Product, Price
+- [] Add attributes for Services
+- [] Add attributes for Digital service
+- [] Link with categories
+- [] Link with sales tax
 - [] Product UI
+- [] Price UI
+- [x] Product, Price API
 
 ---------
 
