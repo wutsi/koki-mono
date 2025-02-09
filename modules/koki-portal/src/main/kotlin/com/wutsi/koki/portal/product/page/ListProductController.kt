@@ -22,6 +22,7 @@ class ListProductController(private val service: ProductService) : AbstractProdu
     fun list(
         @RequestHeader(required = false, name = "Referer") referer: String? = null,
         @RequestParam(required = false) type: ProductType? = null,
+        @RequestParam(required = false) active: Int? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         @RequestParam(required = false, name = "_toast") toast: Long? = null,
@@ -36,23 +37,27 @@ class ListProductController(private val service: ProductService) : AbstractProdu
             )
         )
 
+        model.addAttribute("active", active)
+
         model.addAttribute("type", type)
         model.addAttribute("types", ProductType.entries.filter { entry -> entry != ProductType.UNKNOWN })
 
         loadToast(referer, toast, timestamp, model)
-        more(type, limit, offset, model)
+        more(type, active, limit, offset, model)
         return "products/list"
     }
 
     @GetMapping("/products/more")
     fun more(
         @RequestParam(required = false) type: ProductType? = null,
+        @RequestParam(required = false) active: Int? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
         val products = service.products(
             types = type?.let { listOf(type) } ?: emptyList(),
+            active = active?.let { value -> if (value == 0) false else true },
             limit = limit,
             offset = offset
         )
@@ -62,7 +67,10 @@ class ListProductController(private val service: ProductService) : AbstractProdu
                 val nextOffset = offset + limit
                 var url = "/products/more?limit=$limit&offset=$nextOffset"
                 if (type != null) {
-                    url = "$url&type-id=$type"
+                    url = "$url&type=$type"
+                }
+                if (active != null) {
+                    url = "$url&active=$active"
                 }
                 model.addAttribute("moreUrl", url)
             }

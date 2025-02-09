@@ -30,7 +30,7 @@
                             </button>
                         </div>
                         <div>
-                            <select class="btn btn-sm btn-light" id="filter-type-id"
+                            <select class="btn btn-sm btn-light" id="filter-type"
                                     onchange="koki_products_on_filter_changed()"
                                     style="width: auto"
                                     th:if="!${types.isEmpty()}"
@@ -43,7 +43,15 @@
                                 >TYPE
                                 </option>
                             </select>
-                            <a class="btn-create btn btn-light btn-sm" href="/products/create"
+                            <select class="btn btn-sm btn-light" id="filter-active"
+                                    onchange="koki_products_on_filter_changed()"
+                                    style="width: auto"
+                            >
+                                <option value="">All Statuses</option>
+                                <option th:selected="${active == 1}" value="1">Active</option>
+                                <option th:selected="${active == 0}" value="0">Not Active</option>
+                            </select>
+                            <a class="btn-create btn btn-primary btn-sm" href="/products/create"
                                th:if="${user?.hasPermission('product:manage')}">
                                 Create New Product
                             </a>
@@ -76,9 +84,11 @@
 <script>
     function koki_products_on_filter_changed() {
         const type = document.getElementById('filter-type').value;
+        const active = document.getElementById('filter-active').value;
 
         document.location.href = '/products?' +
-            (type && type.length > 0 ? '&type=' + type : '');
+            (type && type.length > 0 ? '&type=' + type : '') +
+            (active && active.length > 0 ? '&active=' + active : '');
     }
 
 </script>

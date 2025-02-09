@@ -26,7 +26,7 @@ class ListEmployeeController(
     @GetMapping("/employees")
     fun list(
         @RequestHeader(required = false, name = "Referer") referer: String? = null,
-        @RequestParam(required = false) status: EmployeeStatus? = EmployeeStatus.ACTIVE,
+        @RequestParam(required = false) status: EmployeeStatus? = null,
         @RequestParam(required = false, name = "type-id") typeId: Long? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
