@@ -114,9 +114,10 @@
 ## Product
 
 - [] Add attributes for Services
+- [] Flag taxable product
+- [] Add support for multiple currencies
 - [] Add attributes for Digital service
 - [] Link with categories
-- [] Link with sales tax
 - [x] Product UI
 - [x] Price UI
 - [x] Product, Price API

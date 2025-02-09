@@ -19,6 +19,7 @@
 </div>
 
 <tr class="product" th:fragment="columns(product)" th:remove="tag">
+    <td th:text="${product.code}">CODE</td>
     <td>
         <a th:href="'/products/' + ${product.id}" th:text="${product.name}">NAME</a>
     </td>
@@ -37,7 +38,7 @@
 </tr>
 
 <tr id="product-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
-    <td class="text-center" colspan="4">
+    <td class="text-center" colspan="5">
         <a href="javascript: koki_load_more('product-load-more')" th:data-url="${moreUrl}">Load more...</a>
     </td>
 </tr>
@@ -62,7 +63,7 @@
 </tr>
 
 <tr id="price-load-more" th:fragment="price-load-more(moreUrl)" th:if="${moreUrl}">
-    <td class="text-center" colspan="5">
+    <td class="text-center" colspan="6">
         <a href="javascript: koki_load_more('price-load-more')" th:data-url="${moreUrl}">Load more...</a>
     </td>
 </tr>

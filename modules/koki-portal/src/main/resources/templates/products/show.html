@@ -37,13 +37,13 @@
                     </div>
 
                     <div class="flex">
-                        <div class="margin-right-2x">
-                            <b>Type</b><br/>
-                            <span th:text="#{'product-type.' + ${product.type}}">TYPE</span>
-                        </div>
                         <div class="margin-right-2x" th:if="${product.code}">
                             <b>Code</b><br/>
                             <span th:text="${product.code}">CODE</span>
+                        </div>
+                        <div class="margin-right-2x">
+                            <b>Type</b><br/>
+                            <span th:text="#{'product-type.' + ${product.type}}">TYPE</span>
                         </div>
                     </div>
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
@@ -86,6 +86,10 @@
                         <div aria-labelledby="pills-details-tab" class="tab-pane fade show active" id="pills-details"
                              role="tabpanel">
                             <table class="table" id="tab-details-content">
+                                <tr th:if="${product.code}">
+                                    <td><b>Code</b></td>
+                                    <td th:text="${product.code}">CODE</td>
+                                </tr>
                                 <tr>
                                     <td width="20%"><b>Name</b></td>
                                     <td th:text="${product.name}">NAME</td>
@@ -93,10 +97,6 @@
                                 <tr>
                                     <td><b>Type</b></td>
                                     <td th:text="#{'product-type.' + ${product.type}}">TYPE</td>
-                                </tr>
-                                <tr th:if="${product.code}">
-                                    <td><b>Code</b></td>
-                                    <td th:text="${product.code}">CODE</td>
                                 </tr>
                                 <tr th:if="${product.description}">
                                     <td><b>Description</b></td>

@@ -3,21 +3,20 @@ package com.wutsi.koki.portal.file.mapper
 import com.wutsi.koki.file.dto.File
 import com.wutsi.koki.file.dto.FileSummary
 import com.wutsi.koki.portal.file.model.FileModel
+import com.wutsi.koki.portal.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.user.model.UserModel
 import org.apache.commons.io.FilenameUtils
 import org.springframework.stereotype.Service
-import java.text.DateFormat
 import java.text.DecimalFormat
-import java.text.SimpleDateFormat
 import java.text.StringCharacterIterator
 
 @Service
-class FileMapper {
+class FileMapper : TenantAwareMapper() {
     fun toFileModel(
         entity: FileSummary,
         createdBy: UserModel?,
     ): FileModel {
-        val fmt = createDateFormat()
+        val fmt = createDateTimeFormat()
         return FileModel(
             id = entity.id,
             name = entity.name,
@@ -36,8 +35,7 @@ class FileMapper {
         entity: File,
         createdBy: UserModel?,
     ): FileModel {
-        val fmt = createDateFormat()
-
+        val fmt = createDateTimeFormat()
         return FileModel(
             id = entity.id,
             name = entity.name,
@@ -52,10 +50,6 @@ class FileMapper {
             workflowInstanceId = entity.workflowInstanceId,
             extension = FilenameUtils.getExtension(entity.name).lowercase(),
         )
-    }
-
-    private fun createDateFormat(): DateFormat {
-        return SimpleDateFormat("yyyy/MM/dd HH:mm")
     }
 
     private fun toFileSizeText(value: Long): String {
