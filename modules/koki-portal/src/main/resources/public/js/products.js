@@ -3,7 +3,7 @@ function koki_prices_delete(id) {
     if (confirm('Are you sure you want to delete the price?')) {
         fetch('/prices/' + id + '/delete')
             .then(function () {
-                _koki_notes_refresh_parent_window();
+                _koki_prices_refresh_parent_window();
             });
     }
 }
