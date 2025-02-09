@@ -94,6 +94,16 @@ object ModuleFixtures {
             settingsUrl = "/settings/tenant",
             jsUrl = null,
         ),
+
+        Module(
+            id = 190,
+            name = "product",
+            title = "Product",
+            homeUrl = "/products",
+            tabUrl = null,
+            settingsUrl = null,
+            jsUrl = null,
+        ),
     )
 
     val permissions = listOf(
@@ -130,5 +140,10 @@ object ModuleFixtures {
         Permission(id = 1702, moduleId = 170, name = "employee:manage", description = "Manage employees"),
 
         Permission(id = 1801, moduleId = 180, name = "tenant:admin", description = "Manage Tenant"),
+
+        Permission(id = 1901, moduleId = 190, name = "product", description = "Access products"),
+        Permission(id = 1902, moduleId = 190, name = "product:admin", description = "Configure products"),
+        Permission(id = 1903, moduleId = 190, name = "product:manage", description = "Manage products"),
+        Permission(id = 1904, moduleId = 190, name = "product:delete", description = "Delete products"),
     )
 }

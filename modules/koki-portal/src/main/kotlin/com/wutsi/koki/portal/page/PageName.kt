@@ -46,6 +46,11 @@ object PageName {
 
     const val LOGIN = "page.login"
 
+    const val PRODUCT = "page.product"
+    const val PRODUCT_CREATE = "page.product.create"
+    const val PRODUCT_EDIT = "page.product.edit"
+    const val PRODUCT_LIST = "page.product.list"
+
     const val TENANT_SETTINGS = "page.settings.tenant"
     const val TENANT_SETTINGS_ABOUT = "page.settings.tenant.about"
     const val TENANT_SETTINGS_TYPE = "page.settings.tenant.type"

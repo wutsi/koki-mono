@@ -17,6 +17,7 @@ import com.wutsi.koki.LogFixtures.logEntry
 import com.wutsi.koki.MessageFixtures
 import com.wutsi.koki.ModuleFixtures
 import com.wutsi.koki.NoteFixtures
+import com.wutsi.koki.ProductFixtures
 import com.wutsi.koki.RoleFixtures
 import com.wutsi.koki.ScriptFixtures
 import com.wutsi.koki.ServiceFixtures.SERVICE_ID
@@ -72,6 +73,10 @@ import com.wutsi.koki.note.dto.CreateNoteResponse
 import com.wutsi.koki.note.dto.GetNoteResponse
 import com.wutsi.koki.note.dto.SearchNoteResponse
 import com.wutsi.koki.portal.service.AccessTokenHolder
+import com.wutsi.koki.product.dto.CreateProductRequest
+import com.wutsi.koki.product.dto.CreateProductResponse
+import com.wutsi.koki.product.dto.GetProductResponse
+import com.wutsi.koki.product.dto.SearchProductResponse
 import com.wutsi.koki.script.dto.CreateScriptResponse
 import com.wutsi.koki.script.dto.GetScriptResponse
 import com.wutsi.koki.script.dto.RunScriptResponse
@@ -252,6 +257,7 @@ abstract class AbstractPageControllerTest {
         setupContactModule()
         setupEmployeeModule()
         setupTaxModule()
+        setupProductModule()
 
         setupForms()
         setupLogs()
@@ -613,6 +619,43 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any<CreateAccountRequest>(),
                 eq(CreateAccountResponse::class.java)
+            )
+    }
+
+    private fun setupProductModule() {
+        // Products
+        doReturn(
+            ResponseEntity(
+                SearchProductResponse(ProductFixtures.products),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchProductResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetProductResponse(ProductFixtures.product),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetProductResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreateProductResponse(555L),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateProductRequest>(),
+                eq(CreateProductResponse::class.java)
             )
     }
 

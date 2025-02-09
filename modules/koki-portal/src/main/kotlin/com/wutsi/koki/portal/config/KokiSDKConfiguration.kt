@@ -17,6 +17,7 @@ import com.wutsi.koki.sdk.KokiLogs
 import com.wutsi.koki.sdk.KokiMessages
 import com.wutsi.koki.sdk.KokiModules
 import com.wutsi.koki.sdk.KokiNotes
+import com.wutsi.koki.sdk.KokiProducts
 import com.wutsi.koki.sdk.KokiScripts
 import com.wutsi.koki.sdk.KokiServices
 import com.wutsi.koki.sdk.KokiTaxes
@@ -111,6 +112,11 @@ class KokiSDKConfiguration(
     @Bean
     fun kokiNotes(): KokiNotes {
         return KokiNotes(urlBuilder(), rest())
+    }
+
+    @Bean
+    fun kokiProducts(): KokiProducts {
+        return KokiProducts(urlBuilder(), rest())
     }
 
     @Bean

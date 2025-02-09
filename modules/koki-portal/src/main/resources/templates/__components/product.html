@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="widget" th:fragment="product-breadcrumb(product)">
+    <div class="widget-body">
+        <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item" th:if="${product}"><a href="/products">Products</a></li>
+                <li class="breadcrumb-item active" th:if="${product}">
+                    <img align="absmiddle" height="24" src="/image/product.png" width="24"/>
+                    <span th:text="${product.name}">PRODUCT</span>
+                </li>
+                <li class="breadcrumb-item active" th:if="!${product}">Products</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<tr class="product" th:fragment="columns(product)" th:remove="tag">
+    <td>
+        <a th:href="'/products/' + ${product.id}" th:text="${product.name}">NAME</a>
+    </td>
+    <td th:text="#{'product-type.' + ${product.type}}">TYPE</td>
+    <td>
+        <span th:if="${product.active}">Yes</span>
+        <span th:if="!${product.active}">No</span>
+    </td>
+    <td class="toolbar">
+        <a class="btn-view" th:href="'/products/' + ${product.id}"
+           th:if="${user?.hasPermission('product')}">View</a>
+
+        <a class="btn-edit" th:href="'/products/' + ${product.id} + '/edit'"
+           th:if="${user?.hasPermission('product:manage')}">Edit</a>
+    </td>
+</tr>
+
+<tr id="product-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
+    <td class="text-center" colspan="4">
+        <a href="javascript: koki_load_more('product-load-more')" th:data-url="${moreUrl}">Load more...</a>
+    </td>
+</tr>
+
+</body>

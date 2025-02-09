@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('product')}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/product :: product-breadcrumb(${product})}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body product-summary">
+                    <div class="flex flex-space-between">
+                        <h1 class="entity-title">
+                            <img align="absmiddle" src="/image/product.png"/>
+                            <span th:text="${product.name}">NAME</span>
+                        </h1>
+                        <div>
+                            <a class="btn-edit btn btn-light btn-sm"
+                               th:href="'/products/' + ${product.id} + '/edit'"
+                               th:if="${user?.hasPermission('product:manage')}">Edit</a>
+
+                            <a class="btn-delete btn btn-danger btn-sm"
+                               onclick="return confirm('Are you sure you want to delete the product?')"
+                               th:href="'/products/' + ${product.id} + '/delete'"
+                               th:if="${user?.hasPermission('product:delete')}">Delete</a>
+                        </div>
+                    </div>
+
+                    <div class="flex">
+                        <div class="margin-right-2x">
+                            <b>Type</b><br/>
+                            <span th:text="#{'product-type.' + ${product.type}}">TYPE</span>
+                        </div>
+                        <div class="margin-right-2x" th:if="${product.code}">
+                            <b>Code</b><br/>
+                            <span th:text="${product.code}">CODE</span>
+                        </div>
+                    </div>
+                    <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div th:replace="~{__components/module :: tabs('main', true)}"></div>
+                    <div th:replace="~{__components/module :: tabs-content('main', true, ${product}, ${module})}"></div>
+                    <table class="table hidden" id="tab-details-content">
+                        <tr>
+                            <td width="20%"><b>Name</b></td>
+                            <td th:text="${product.name}">NAME</td>
+                        </tr>
+                        <tr>
+                            <td><b>Type</b></td>
+                            <td th:text="#{'product-type.' + ${product.type}}">TYPE</td>
+                        </tr>
+                        <tr th:if="${product.code}">
+                            <td><b>Code</b></td>
+                            <td th:text="${product.code}">CODE</td>
+                        </tr>
+                        <tr th:if="${product.description}">
+                            <td><b>Description</b></td>
+                            <td th:text="${product.description}">DESCRIPTION</td>
+                        </tr>
+                        <tr>
+                            <td><b>Active</b></td>
+                            <td>
+                                <span th:if="${product.active}">Yes</span>
+                                <span th:if="!${product.active}">No</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Created</b></td>
+                            <td>
+                                <span th:text="${product.createdAtText}">DATE</span>
+                                <span th:if="${product.createdBy}">by</span>
+                                <span th:if="${product.createdBy}" th:text="${product.createdBy.displayName}">MODIFIED BY</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Modified</b></td>
+                            <td>
+                                <span th:text="${product.modifiedAtText}">DATE</span>
+                                <span th:if="${product.modifiedBy}">by</span>
+                                <span th:if="${product.modifiedBy}" th:text="${product.modifiedBy.displayName}">MODIFIED BY</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
+<div th:replace="~{__components/bootstrap :: modal}"></div>
+</body>
+</html>
