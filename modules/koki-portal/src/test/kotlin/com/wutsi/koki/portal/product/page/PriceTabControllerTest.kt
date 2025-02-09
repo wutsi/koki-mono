@@ -85,6 +85,7 @@ class PriceTabControllerTest : AbstractPageControllerTest() {
         alert.accept()
         driver.switchTo().parentFrame()
 
+        Thread.sleep(1000)
         verify(rest).delete("$sdkBaseUrl/v1/prices/${prices[0].id}")
     }
 
