@@ -117,8 +117,8 @@
 - [] Add attributes for Digital service
 - [] Link with categories
 - [] Link with sales tax
-- [] Product UI
-- [] Price UI
+- [x] Product UI
+- [x] Price UI
 - [x] Product, Price API
 
 ---------
