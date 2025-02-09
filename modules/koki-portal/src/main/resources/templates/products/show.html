@@ -56,49 +56,87 @@
         <div class="col-md-12">
             <div class="widget">
                 <div class="widget-body">
-                    <div th:replace="~{__components/module :: tabs('main', true)}"></div>
-                    <div th:replace="~{__components/module :: tabs-content('main', true, ${product}, ${module})}"></div>
-                    <table class="table hidden" id="tab-details-content">
-                        <tr>
-                            <td width="20%"><b>Name</b></td>
-                            <td th:text="${product.name}">NAME</td>
-                        </tr>
-                        <tr>
-                            <td><b>Type</b></td>
-                            <td th:text="#{'product-type.' + ${product.type}}">TYPE</td>
-                        </tr>
-                        <tr th:if="${product.code}">
-                            <td><b>Code</b></td>
-                            <td th:text="${product.code}">CODE</td>
-                        </tr>
-                        <tr th:if="${product.description}">
-                            <td><b>Description</b></td>
-                            <td th:text="${product.description}">DESCRIPTION</td>
-                        </tr>
-                        <tr>
-                            <td><b>Active</b></td>
-                            <td>
-                                <span th:if="${product.active}">Yes</span>
-                                <span th:if="!${product.active}">No</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><b>Created</b></td>
-                            <td>
-                                <span th:text="${product.createdAtText}">DATE</span>
-                                <span th:if="${product.createdBy}">by</span>
-                                <span th:if="${product.createdBy}" th:text="${product.createdBy.displayName}">MODIFIED BY</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><b>Modified</b></td>
-                            <td>
-                                <span th:text="${product.modifiedAtText}">DATE</span>
-                                <span th:if="${product.modifiedBy}">by</span>
-                                <span th:if="${product.modifiedBy}" th:text="${product.modifiedBy.displayName}">MODIFIED BY</span>
-                            </td>
-                        </tr>
-                    </table>
+                    <ul class="nav nav-pills mb-3" id="tab-main" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-content" aria-selected="true" class="nav-link active"
+                                    data-bs-target="#pills-details" data-bs-toggle="pill" id="pills-details-tab"
+                                    role="tab" type="button">
+                                Details
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-content" aria-selected="true" class="nav-link"
+                                    data-bs-target="#pills-price" data-bs-toggle="pill" id="pills-price-tab"
+                                    role="tab" type="button">
+                                Prices
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation" th:each="tab : ${page.tabs.get('main')}">
+                            <button aria-selected="false" class="nav-link" data-bs-toggle="pill" role="tab"
+                                    th:aria-controls="'pills-' + ${tab.name}"
+                                    th:data-bs-target="'#pills-' + ${tab.name}"
+                                    th:id="'pills-' + ${tab.name} + '-tab'"
+                                    th:text="${tab.title}"
+                                    type="button">
+                                TAB
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="tab-main-content">
+                        <div aria-labelledby="pills-details-tab" class="tab-pane fade show active" id="pills-details"
+                             role="tabpanel">
+                            <table class="table" id="tab-details-content">
+                                <tr>
+                                    <td width="20%"><b>Name</b></td>
+                                    <td th:text="${product.name}">NAME</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Type</b></td>
+                                    <td th:text="#{'product-type.' + ${product.type}}">TYPE</td>
+                                </tr>
+                                <tr th:if="${product.code}">
+                                    <td><b>Code</b></td>
+                                    <td th:text="${product.code}">CODE</td>
+                                </tr>
+                                <tr th:if="${product.description}">
+                                    <td><b>Description</b></td>
+                                    <td th:text="${product.description}">DESCRIPTION</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Active</b></td>
+                                    <td>
+                                        <span th:if="${product.active}">Yes</span>
+                                        <span th:if="!${product.active}">No</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><b>Created</b></td>
+                                    <td>
+                                        <span th:text="${product.createdAtText}">DATE</span>
+                                        <span th:if="${product.createdBy}">by</span>
+                                        <span th:if="${product.createdBy}" th:text="${product.createdBy.displayName}">MODIFIED BY</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><b>Modified</b></td>
+                                    <td>
+                                        <span th:text="${product.modifiedAtText}">DATE</span>
+                                        <span th:if="${product.modifiedBy}">by</span>
+                                        <span th:if="${product.modifiedBy}" th:text="${product.modifiedBy.displayName}">MODIFIED BY</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div aria-labelledby="pills-price-tab" class="tab-pane fade" id="pills-price" role="tabpanel"
+                             th:data-url="'/prices/tab?product-id=' + ${product.id}">
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel"
+                             th:aria-labelledby="'pills-' + ${tab.name} + '-tab'"
+                             th:data-url="${tab.toTabUrl(product.id, module)}"
+                             th:each="tab : ${page.tabs.get('main')}"
+                             th:id="'pills-' + ${tab.name}">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

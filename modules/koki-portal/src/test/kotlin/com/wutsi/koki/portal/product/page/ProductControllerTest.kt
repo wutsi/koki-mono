@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.FileFixtures
+import com.wutsi.koki.ProductFixtures
 import com.wutsi.koki.ProductFixtures.product
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
@@ -75,6 +76,14 @@ class ProductControllerTest : AbstractPageControllerTest() {
         navigateTo("/products/${product.id}")
         click(".btn-edit")
         assertCurrentPageIs(PageName.PRODUCT_EDIT)
+    }
+
+    @Test
+    fun prices() {
+        navigateTo("/products/${product.id}?tab=price")
+
+        Thread.sleep(1000)
+        assertElementCount(".tab-prices .price", ProductFixtures.prices.size)
     }
 
     @Test

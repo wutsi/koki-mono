@@ -102,7 +102,7 @@ object ModuleFixtures {
             homeUrl = "/products",
             tabUrl = null,
             settingsUrl = null,
-            jsUrl = null,
+            jsUrl = "/js/products.js",
         ),
     )
 

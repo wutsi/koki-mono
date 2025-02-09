@@ -42,4 +42,29 @@
     </td>
 </tr>
 
+<tr class="price" th:fragment="price-columns(price)" th:remove="tag">
+    <td th:text="${price.name}">NAME</td>
+    <td th:text="${price.amount}">AMOUNT</td>
+    <td th:text="${price.startAtText}">START</td>
+    <td th:text="${price.endAtText}">END</td>
+    <td>
+        <span th:if="${price.active}">Yes</span>
+        <span th:if="!${price.active}">No</span>
+    </td>
+    <td class="toolbar">
+        <a class="btn-edit" th:href="'javascript: koki_prices_edit(' + ${price.id} + ')'"
+           th:if="${user?.hasPermission('product:manage')}">Edit</a>
+
+        <a class="btn-delete"
+           th:href="'javascript: koki_prices_delete(' + ${price.id} + ')'"
+           th:if="${user?.hasPermission('product:manage')}">Edit</a>
+    </td>
+</tr>
+
+<tr id="price-load-more" th:fragment="price-load-more(moreUrl)" th:if="${moreUrl}">
+    <td class="text-center" colspan="5">
+        <a href="javascript: koki_load_more('price-load-more')" th:data-url="${moreUrl}">Load more...</a>
+    </td>
+</tr>
+
 </body>

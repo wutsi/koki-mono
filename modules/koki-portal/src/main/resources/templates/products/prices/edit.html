@@ -1,0 +1,53 @@
+<form class="form" id="price-form" method="post" th:action="@{'/prices/' + ${price.id} + '/update'}"
+      th:data-id="${price.id}"
+      th:object="${form}">
+    <table class="table">
+        <tr>
+            <td width="20%"><b>Name:</b></td>
+            <td>
+                <input maxlength="100" th:field="*{name}"/>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Amount:</b></td>
+            <td>
+                <input required th:field="*{amount}" type="number"/>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Currency:</b></td>
+            <td>
+                <select th:field="*{currency}">
+                    <option th:each="currency : ${currencies}"
+                            th:text="${currency.displayName}"
+                            th:value="${currency.currencyCode}"
+                    >CURRENCY
+                    </option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><b>From Date:</b></td>
+            <td>
+                <input th:field="*{startAt}" type="date"/>
+            </td>
+        </tr>
+        <tr>
+            <td><b>To Date:</b></td>
+            <td>
+                <input th:field="*{endAt}" type="date"/>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Active:</b></td>
+            <td>
+                <select th:field="*{active}">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <button class="btn btn-primary margin-right" id='btn-price-submit' type="submit">Save</button>
+    <a class="btn-cancel margin-top" id='btn-price-cancel'>Close</a>
+</form>
