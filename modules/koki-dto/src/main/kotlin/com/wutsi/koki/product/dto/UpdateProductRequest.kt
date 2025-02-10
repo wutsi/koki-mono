@@ -11,4 +11,7 @@ data class UpdateProductRequest(
 
     val description: String? = null,
     val active: Boolean = true,
+
+    val unitId: Long? = null,
+    val quantity: Int? = null,
 )

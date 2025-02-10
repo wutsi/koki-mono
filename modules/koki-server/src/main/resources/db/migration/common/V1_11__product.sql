@@ -1,3 +1,13 @@
+CREATE TABLE T_UNIT(
+  id                      BIGINT NOT NULL AUTO_INCREMENT,
+
+  name                    VARCHAR(100) NOT NULL,
+  abbreviation            VARCHAR(5),
+
+  UNIQUE(name),
+  PRIMARY KEY(id)
+) ENGINE = InnoDB;
+
 CREATE TABLE T_PRODUCT(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
@@ -11,6 +21,9 @@ CREATE TABLE T_PRODUCT(
   code                    VARCHAR(30),
   description             TEXT,
   active                  BOOLEAN NOT NULL DEFAULT true,
+
+  unit_fk                 BIGINT REFERENCES T_UNIT(id),
+  quantity                INT,
 
   deleted                 BOOLEAN NOT NULL DEFAULT false,
   created_at              DATETIME DEFAULT NOW(),
@@ -45,6 +58,21 @@ CREATE TABLE T_PRICE(
   PRIMARY KEY(id)
 );
 
+INSERT INTO T_UNIT(id, name)
+    VALUES (110, 'Hour'),
+           (111, 'Day'),
+           (112, 'Week'),
+           (113, 'Month'),
+           (120, 'Session'),
+           (121, 'Class'),
+           (122, 'Consultation'),
+           (130, 'Project'),
+           (131, 'Website'),
+           (132, 'Design'),
+           (140, 'Visit'),
+           (141, 'Treatment'),
+           (142, 'Lesson');
+
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url)
     VALUES (180, 8, 'product', 'Product', '/products', '/products/tab', null, '/js/products.js');
 
@@ -52,4 +80,3 @@ INSERT INTO T_PERMISSION(id, module_fk, name, description)
     VALUES (1800, 180, 'product',        'View products'),
            (1801, 180, 'product:manage', 'Add/Edit products'),
            (1802, 180, 'product:delete', 'Delete products');
-
