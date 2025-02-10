@@ -1,6 +1,6 @@
-package com.wutsi.koki.product.server.dao
+package com.wutsi.koki.refdata.server.dao
 
-import com.wutsi.koki.product.server.domain.UnitEntity
+import com.wutsi.koki.refdata.server.domain.UnitEntity
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 

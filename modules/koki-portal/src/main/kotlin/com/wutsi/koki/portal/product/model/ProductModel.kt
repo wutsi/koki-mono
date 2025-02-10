@@ -17,4 +17,5 @@ data class ProductModel(
     val modifiedAtText: String = "",
     val createdBy: UserModel? = null,
     val modifiedBy: UserModel? = null,
+    val serviceDetails: ServiceDetailsModel? = null
 )

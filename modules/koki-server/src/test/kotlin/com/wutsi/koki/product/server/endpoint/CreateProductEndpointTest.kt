@@ -11,7 +11,7 @@ import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql"])
+@Sql(value = ["/db/test/clean.sql", "/db/test/product/CreateProductEndpoint.sql"])
 class CreateProductEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var dao: ProductRepository
@@ -21,7 +21,9 @@ class CreateProductEndpointTest : AuthorizationAwareEndpointTest() {
         code = "XXX",
         description = "Lunettes futuristes",
         active = true,
-        type = ProductType.PHYSICAL,
+        type = ProductType.SERVICE,
+        unitId = 11,
+        quantity = 1,
     )
 
     @Test
@@ -40,5 +42,7 @@ class CreateProductEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(false, product.deleted)
         assertEquals(USER_ID, product.createdById)
         assertEquals(USER_ID, product.modifiedById)
+        assertEquals(request.quantity, product.serviceDetails?.quantity)
+        assertEquals(request.unitId, product.serviceDetails?.unitId)
     }
 }

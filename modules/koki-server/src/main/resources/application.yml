@@ -98,6 +98,10 @@ springdoc:
             display-name: Product API
             paths-to-match: /v1/prices, /v1/prices/**, /v1/products, /v1/products/**
 
+        -   group: refdata
+            display-name: RefData API
+            paths-to-match: /v1/units
+
         -   group: taxes
             display-name: Tax API
             paths-to-match: /v1/taxes, /v1/taxes/**

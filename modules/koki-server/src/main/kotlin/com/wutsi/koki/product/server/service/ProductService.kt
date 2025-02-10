@@ -8,6 +8,7 @@ import com.wutsi.koki.product.dto.ProductType
 import com.wutsi.koki.product.dto.UpdateProductRequest
 import com.wutsi.koki.product.server.dao.ProductRepository
 import com.wutsi.koki.product.server.domain.ProductEntity
+import com.wutsi.koki.product.server.domain.ServiceDetailsData
 import com.wutsi.koki.security.server.service.SecurityService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
@@ -84,6 +85,10 @@ class ProductService(
                 createdById = userId,
                 modifiedAt = now,
                 modifiedById = userId,
+                serviceDetails = ServiceDetailsData(
+                    unitId = request.unitId,
+                    quantity = request.quantity
+                )
             )
         )
     }
@@ -98,6 +103,10 @@ class ProductService(
         product.type = request.type
         product.modifiedAt = Date()
         product.modifiedById = securityService.getCurrentUserIdOrNull()
+        product.serviceDetails = ServiceDetailsData(
+            unitId = request.unitId,
+            quantity = request.quantity
+        )
         dao.save(product)
     }
 

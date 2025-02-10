@@ -18,6 +18,7 @@ import com.wutsi.koki.sdk.KokiMessages
 import com.wutsi.koki.sdk.KokiModules
 import com.wutsi.koki.sdk.KokiNotes
 import com.wutsi.koki.sdk.KokiProducts
+import com.wutsi.koki.sdk.KokiRefData
 import com.wutsi.koki.sdk.KokiScripts
 import com.wutsi.koki.sdk.KokiServices
 import com.wutsi.koki.sdk.KokiTaxes
@@ -120,6 +121,11 @@ class KokiSDKConfiguration(
     }
 
     @Bean
+    fun kokiRefData(): KokiRefData {
+        return KokiRefData(urlBuilder(), rest())
+    }
+
+    @Bean
     fun kokiScripts(): KokiScripts {
         return KokiScripts(urlBuilder(), rest())
     }
@@ -161,25 +167,18 @@ class KokiSDKConfiguration(
 
     @Bean
     @Primary
-    fun rest(): RestTemplate =
-        RestTemplateBuilder()
-            .connectTimeout(Duration.ofMillis(connectionTimeout))
-            .readTimeout(Duration.ofMillis(readTimeout))
-            .interceptors(
-                debugRestInterceptor,
-                tenantRestInterceptor,
-                authorizationInterceptor,
-            )
-            .build()
+    fun rest(): RestTemplate = RestTemplateBuilder().connectTimeout(Duration.ofMillis(connectionTimeout))
+        .readTimeout(Duration.ofMillis(readTimeout)).interceptors(
+            debugRestInterceptor,
+            tenantRestInterceptor,
+            authorizationInterceptor,
+        ).build()
 
     @Bean("RestWithoutTenantHeader")
     fun restWithoutTenantHeader(): RestTemplate =
-        RestTemplateBuilder()
-            .connectTimeout(Duration.ofMillis(connectionTimeout))
-            .readTimeout(Duration.ofMillis(readTimeout))
-            .interceptors(
+        RestTemplateBuilder().connectTimeout(Duration.ofMillis(connectionTimeout))
+            .readTimeout(Duration.ofMillis(readTimeout)).interceptors(
                 debugRestInterceptor,
                 authorizationInterceptor,
-            )
-            .build()
+            ).build()
 }

@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.product.page
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.product.form.ProductForm
 import com.wutsi.koki.portal.product.service.ProductService
+import com.wutsi.koki.portal.refdata.service.UnitService
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.product.dto.ProductType
 import org.springframework.stereotype.Controller
@@ -14,7 +15,10 @@ import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 @RequiresPermission(["product:manage"])
-class CreateProductController(private val service: ProductService) : AbstractProductController() {
+class CreateProductController(
+    private val service: ProductService,
+    private val unitService: UnitService,
+) : AbstractProductController() {
     @GetMapping("/products/create")
     fun create(model: Model): String {
         val form = ProductForm()
@@ -31,6 +35,9 @@ class CreateProductController(private val service: ProductService) : AbstractPro
                 title = "Products",
             )
         )
+
+        model.addAttribute("units", unitService.units())
+
         return "products/create"
     }
 

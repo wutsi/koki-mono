@@ -8,4 +8,6 @@ data class ProductForm(
     val code: String? = null,
     val description: String? = null,
     val active: Boolean = true,
+    val unitId: Long? = null,
+    val quantity: Int? = null,
 )

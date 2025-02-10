@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.product.model
+package com.wutsi.koki.portal.refdata.model
 
 data class UnitModel(
     val id: Long = -1,

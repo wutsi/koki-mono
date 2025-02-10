@@ -1,8 +1,8 @@
-package com.wutsi.koki.product.server.endpoint
+package com.wutsi.koki.refdata.server.endpoint
 
-import com.wutsi.koki.product.dto.SearchUnitResponse
-import com.wutsi.koki.product.server.mapper.UnitMapper
-import com.wutsi.koki.product.server.service.UnitService
+import com.wutsi.koki.refdata.dto.SearchUnitResponse
+import com.wutsi.koki.refdata.server.mapper.UnitMapper
+import com.wutsi.koki.refdata.server.service.UnitService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
