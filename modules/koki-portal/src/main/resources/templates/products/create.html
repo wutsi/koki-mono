@@ -92,7 +92,10 @@
 
 <script>
     function on_type_changed() {
+        console.log('on_type_changed');
+
         const type = document.getElementById('type').value;
+        console.log('...type=', type);
         document.getElementById('section-service').style.display = (type === 'SERVICE' ? 'block' : 'none');
     }
 </script>

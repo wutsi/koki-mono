@@ -34,7 +34,7 @@
                             </div>
                             <div class="section-item">
                                 <label class="title">Type <span class="required">*</span></label>
-                                <select required th:field="*{type}" onchange="on_type_changed()">
+                                <select onchange="on_type_changed()" required th:field="*{type}">
                                     <option value=""></option>
                                     <option th:each="type : ${types}"
                                             th:text="#{'product-type.' + ${type}}"
@@ -58,6 +58,29 @@
                     </div>
                 </div>
 
+                <div class="section" id="section-service" th:style="${form.type.name() != 'SERVICE'} ? 'display: none'">
+                    <div class="section-header">
+                        <h3 class="section-title">Service Details</h3>
+                    </div>
+                    <div class="section-body">
+                        <div class="section-item">
+                            <label class="title">Unit</label>
+                            <select required th:field="*{unitId}">
+                                <option value="-1"></option>
+                                <option th:each="unit : ${units}"
+                                        th:text="${unit.name}"
+                                        th:value="${unit.id}">
+                                    UNIT
+                                </option>
+                            </select>
+                        </div>
+                        <div class="section-item">
+                            <label class="title">Quantity</label>
+                            <input step="0" th:field="*{quantity}" type="number"/>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-footer">
                     <button type="submit">Submit</button>
                     <a class="btn-cancel" href="/products">Cancel</a>
@@ -65,13 +88,15 @@
 
             </form>
         </div>
-
     </div>
 </div>
 
 <script>
     function on_type_changed() {
+        console.log('on_type_changed');
+
         const type = document.getElementById('type').value;
+        console.log('...type=', type);
         document.getElementById('section-service').style.display = (type === 'SERVICE' ? 'block' : 'none');
     }
 </script>

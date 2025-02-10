@@ -19,7 +19,7 @@ import kotlin.test.assertEquals
 class EditProductControllerTest : AbstractPageControllerTest() {
     private fun inputFields(type: Int = 2) {
         input("#name", "Product A")
-        select("#type", 2)
+        select("#type", type)
         input("#code", "PA")
         input("#description", "This is the description of the product")
         select("#active", 1)
@@ -45,7 +45,7 @@ class EditProductControllerTest : AbstractPageControllerTest() {
             eq("$sdkBaseUrl/v1/products/${product.id}"), request.capture(), eq(Any::class.java)
         )
         assertEquals("Product A", request.firstValue.name)
-        assertEquals(ProductType.DIGITAL, request.firstValue.type)
+        assertEquals(ProductType.SERVICE, request.firstValue.type)
         assertEquals("PA", request.firstValue.code)
         assertEquals("This is the description of the product", request.firstValue.description)
         assertEquals(false, request.firstValue.active)

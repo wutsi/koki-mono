@@ -29,7 +29,9 @@ class EditProductController(
             code = product.code,
             description = product.description,
             type = product.type,
-            active = product.active
+            active = product.active,
+            quantity = product.serviceDetails?.quantity,
+            unitId = product.serviceDetails?.unit?.id,
         )
         return edit(product, form, model)
     }
