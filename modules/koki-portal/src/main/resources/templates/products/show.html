@@ -109,6 +109,22 @@
                                         <span th:if="!${product.active}">No</span>
                                     </td>
                                 </tr>
+
+                                <tr th:if="${product.serviceDetails}">
+                                    <td colspan="2"></td>
+                                </tr>
+                                <tr th:if="${product.serviceDetails?.unit}">
+                                    <td><b>Unit</b></td>
+                                    <td th:text="${product.serviceDetails?.unit?.name}">UNIT</td>
+                                </tr>
+                                <tr th:if="${product.serviceDetails?.quantity}">
+                                    <td><b>Quantity</b></td>
+                                    <td th:text="${product.serviceDetails?.quantity}">QUANTITY</td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2"></td>
+                                </tr>
                                 <tr>
                                     <td><b>Created</b></td>
                                     <td>

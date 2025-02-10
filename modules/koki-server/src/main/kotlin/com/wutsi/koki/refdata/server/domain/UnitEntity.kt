@@ -1,4 +1,4 @@
-package com.wutsi.koki.product.server.domain
+package com.wutsi.koki.refdata.server.domain
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue

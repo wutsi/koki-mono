@@ -8,6 +8,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.ProductFixtures.product
+import com.wutsi.koki.RefDataFixtures
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.product.dto.ProductType
@@ -16,22 +17,27 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class EditProductControllerTest : AbstractPageControllerTest() {
-    private fun inputFields() {
+    private fun inputFields(type: Int = 2) {
         input("#name", "Product A")
-        select("#type", 2)
+        select("#type", type)
         input("#code", "PA")
         input("#description", "This is the description of the product")
         select("#active", 1)
         scrollToBottom()
+
+        if (type == 1) {
+            select("#unitId", 2)
+            input("#quantity", "4")
+        }
     }
 
     @Test
-    fun edit() {
+    fun `edit service`() {
         navigateTo("/products/${product.id}/edit")
 
         assertCurrentPageIs(PageName.PRODUCT_EDIT)
 
-        inputFields()
+        inputFields(1)
         click("button[type=submit]")
 
         val request = argumentCaptor<UpdateProductRequest>()
@@ -39,10 +45,12 @@ class EditProductControllerTest : AbstractPageControllerTest() {
             eq("$sdkBaseUrl/v1/products/${product.id}"), request.capture(), eq(Any::class.java)
         )
         assertEquals("Product A", request.firstValue.name)
-        assertEquals(ProductType.DIGITAL, request.firstValue.type)
+        assertEquals(ProductType.SERVICE, request.firstValue.type)
         assertEquals("PA", request.firstValue.code)
         assertEquals("This is the description of the product", request.firstValue.description)
         assertEquals(false, request.firstValue.active)
+        assertEquals(RefDataFixtures.units[1].id, request.firstValue.unitId)
+        assertEquals(4, request.firstValue.quantity)
 
         assertCurrentPageIs(PageName.PRODUCT)
         assertElementVisible("#koki-toast")

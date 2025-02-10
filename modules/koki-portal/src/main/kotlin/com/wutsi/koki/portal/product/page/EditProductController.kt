@@ -4,6 +4,7 @@ import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.product.form.ProductForm
 import com.wutsi.koki.portal.product.model.ProductModel
 import com.wutsi.koki.portal.product.service.ProductService
+import com.wutsi.koki.portal.refdata.service.UnitService
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.product.dto.ProductType
 import org.springframework.stereotype.Controller
@@ -16,7 +17,10 @@ import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 @RequiresPermission(["product:manage"])
-class EditProductController(private val service: ProductService) : AbstractProductController() {
+class EditProductController(
+    private val service: ProductService,
+    private val unitService: UnitService,
+) : AbstractProductController() {
     @GetMapping("/products/{id}/edit")
     fun edit(@PathVariable id: Long, model: Model): String {
         val product = service.product(id)
@@ -25,7 +29,9 @@ class EditProductController(private val service: ProductService) : AbstractProdu
             code = product.code,
             description = product.description,
             type = product.type,
-            active = product.active
+            active = product.active,
+            quantity = product.serviceDetails?.quantity,
+            unitId = product.serviceDetails?.unit?.id,
         )
         return edit(product, form, model)
     }
@@ -34,6 +40,8 @@ class EditProductController(private val service: ProductService) : AbstractProdu
         model.addAttribute("product", product)
         model.addAttribute("form", form)
         model.addAttribute("types", ProductType.entries.filter { entry -> entry != ProductType.UNKNOWN })
+        model.addAttribute("units", unitService.units())
+
         model.addAttribute(
             "page",
             createPageModel(

@@ -5,6 +5,7 @@ import com.wutsi.koki.portal.product.form.ProductForm
 import com.wutsi.koki.portal.product.mapper.ProductMapper
 import com.wutsi.koki.portal.product.model.PriceModel
 import com.wutsi.koki.portal.product.model.ProductModel
+import com.wutsi.koki.portal.refdata.service.UnitService
 import com.wutsi.koki.portal.tenant.service.TypeService
 import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.product.dto.CreatePriceRequest
@@ -24,6 +25,7 @@ class ProductService(
     private val mapper: ProductMapper,
     private val userService: UserService,
     private val typeService: TypeService,
+    private val unitService: UnitService,
 ) {
     fun product(id: Long, fullGraph: Boolean = true): ProductModel {
         val product = koki.product(id).product
@@ -38,7 +40,16 @@ class ProductService(
             ).associateBy { user -> user.id }
         }
 
-        return mapper.toProductModel(product, users)
+        val units = if (product.serviceDetails?.unitId == null || !fullGraph) {
+            emptyMap()
+        } else {
+            val unit = unitService.unit(product.serviceDetails!!.unitId!!)
+            unit?.let {
+                mapOf(unit.id to unit)
+            } ?: emptyMap()
+        }
+
+        return mapper.toProductModel(product, units, users)
     }
 
     fun products(
@@ -79,6 +90,8 @@ class ProductService(
                 description = form.description?.trim()?.ifEmpty { null },
                 active = form.active,
                 type = form.type,
+                unitId = if (form.type == ProductType.SERVICE) toId(form.unitId) else null,
+                quantity = if (form.type == ProductType.SERVICE) form.quantity else null,
             )
         ).productId
     }
@@ -91,8 +104,14 @@ class ProductService(
                 description = form.description?.trim()?.ifEmpty { null },
                 active = form.active,
                 type = form.type,
+                unitId = if (form.type == ProductType.SERVICE) toId(form.unitId) else null,
+                quantity = if (form.type == ProductType.SERVICE) form.quantity else null,
             )
         )
+    }
+
+    private fun toId(id: Long?): Long? {
+        return if (id == null || id == -1L) null else id
     }
 
     fun delete(id: Long) {

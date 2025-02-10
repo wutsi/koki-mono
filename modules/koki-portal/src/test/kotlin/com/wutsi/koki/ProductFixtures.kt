@@ -5,6 +5,7 @@ import com.wutsi.koki.product.dto.PriceSummary
 import com.wutsi.koki.product.dto.Product
 import com.wutsi.koki.product.dto.ProductSummary
 import com.wutsi.koki.product.dto.ProductType
+import com.wutsi.koki.product.dto.ServiceDetails
 import org.apache.commons.lang3.time.DateUtils
 import java.util.Date
 
@@ -60,13 +61,17 @@ object ProductFixtures {
 
     val product = Product(
         id = 100,
-        type = ProductType.PHYSICAL,
+        type = ProductType.SERVICE,
         name = "Soulier 123",
         code = "SOU-123",
         active = true,
         description = "This is the description of the product",
         modifiedById = UserFixtures.users[0].id,
-        createdById = UserFixtures.users[0].id
+        createdById = UserFixtures.users[0].id,
+        serviceDetails = ServiceDetails(
+            quantity = 1,
+            unitId = RefDataFixtures.units[0].id,
+        )
     )
 
     // Prices

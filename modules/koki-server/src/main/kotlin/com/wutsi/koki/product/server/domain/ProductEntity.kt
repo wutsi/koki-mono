@@ -2,6 +2,7 @@ package com.wutsi.koki.product.server.domain
 
 import com.wutsi.koki.product.dto.ProductType
 import jakarta.persistence.Column
+import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -34,6 +35,9 @@ data class ProductEntity(
     var type: ProductType = ProductType.UNKNOWN,
     var active: Boolean = true,
     var deleted: Boolean = false,
+
+    @Embedded
+    var serviceDetails: ServiceDetailsData? = null,
 
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),

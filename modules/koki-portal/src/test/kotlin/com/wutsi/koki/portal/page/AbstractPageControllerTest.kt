@@ -18,6 +18,7 @@ import com.wutsi.koki.MessageFixtures
 import com.wutsi.koki.ModuleFixtures
 import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.ProductFixtures
+import com.wutsi.koki.RefDataFixtures
 import com.wutsi.koki.RoleFixtures
 import com.wutsi.koki.ScriptFixtures
 import com.wutsi.koki.ServiceFixtures.SERVICE_ID
@@ -81,6 +82,7 @@ import com.wutsi.koki.product.dto.GetPriceResponse
 import com.wutsi.koki.product.dto.GetProductResponse
 import com.wutsi.koki.product.dto.SearchPriceResponse
 import com.wutsi.koki.product.dto.SearchProductResponse
+import com.wutsi.koki.refdata.dto.SearchUnitResponse
 import com.wutsi.koki.script.dto.CreateScriptResponse
 import com.wutsi.koki.script.dto.GetScriptResponse
 import com.wutsi.koki.script.dto.RunScriptResponse
@@ -251,6 +253,7 @@ abstract class AbstractPageControllerTest {
     }
 
     private fun setupDefaultApiResponses() {
+        setupRefDataModule()
         setupFileUploads()
         setupModuleModule()
         setupTenantModule()
@@ -623,6 +626,20 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any<CreateAccountRequest>(),
                 eq(CreateAccountResponse::class.java)
+            )
+    }
+
+    private fun setupRefDataModule() {
+        // Units
+        doReturn(
+            ResponseEntity(
+                SearchUnitResponse(RefDataFixtures.units),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchUnitResponse::class.java)
             )
     }
 

@@ -1,7 +1,7 @@
-package com.wutsi.koki.product.server.service
+package com.wutsi.koki.refdata.server.service
 
-import com.wutsi.koki.product.server.dao.UnitRepository
-import com.wutsi.koki.product.server.domain.UnitEntity
+import com.wutsi.koki.refdata.server.dao.UnitRepository
+import com.wutsi.koki.refdata.server.domain.UnitEntity
 import org.springframework.stereotype.Service
 
 @Service
