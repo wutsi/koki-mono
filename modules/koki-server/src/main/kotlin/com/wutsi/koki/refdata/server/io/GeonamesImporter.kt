@@ -18,16 +18,14 @@ import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
 import java.nio.file.Files
-import java.text.Normalizer
 import java.util.Locale
 import kotlin.io.outputStream
 
 @Service
-class LocationTSVImporter(private val service: LocationService) {
+class GeonamesImporter(private val service: LocationService) {
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(LocationTSVImporter::class.java)
+        private val LOGGER = LoggerFactory.getLogger(GeonamesImporter::class.java)
 
-        private val REGEX_UNACCENT = "\\p{InCombiningDiacriticalMarks}+".toRegex()
         private val MIN_POPULATION = 1000
         private const val RECORD_ID = 0
         private const val RECORD_NAME = 1
@@ -36,7 +34,7 @@ class LocationTSVImporter(private val service: LocationService) {
         private const val RECORD_FEATURE_CLASS = 6
         private const val RECORD_FEATURE_CODE = 7
         private const val RECORD_COUNTRY = 8
-        private const val RECORD_ADMIN1 = 11
+        private const val RECORD_ADMIN1_CODE = 10
         private const val RECORD_POPULATION = 14
         private const val RECORD_TIMEZONE = 17
     }
@@ -47,26 +45,31 @@ class LocationTSVImporter(private val service: LocationService) {
         var updated = 0
         var errors = mutableListOf<ImportMessage>()
 
-        val url = URL("https://download.geonames.org/export/dump/${country.uppercase()}.zip")
-        val file = download(url, "$country.txt")
+        // Import states
+        val admin1Codes = importAdmin1Codes(country.uppercase())
+
+        // Import Location
+        val file = download(URL("https://download.geonames.org/export/dump/${country.uppercase()}.zip"), "$country.txt")
         val parser = createParser(file)
+        var countryId: Long = -1
+        var stateIds = mutableListOf<Long>()
         for (record in parser) {
             if (accept(record, country)) {
                 try {
                     val id = record.get(RECORD_ID).toLong()
                     var location = service.getOrNull(id)
                     if (location == null) {
-                        location = add(id, record)
+                        location = add(id, record, admin1Codes)
                         added++
-                        if (LOGGER.isDebugEnabled) {
-                            LOGGER.debug("$row - Added: ${location.name} - ${location.type}")
-                        }
                     } else {
-                        update(location, record)
+                        update(location, record, admin1Codes)
                         updated++
-                        if (LOGGER.isDebugEnabled) {
-                            LOGGER.debug("$row - Updated: ${location.name} - ${location.type}")
-                        }
+                    }
+
+                    if (location?.type == LocationType.COUNTRY) {
+                        countryId = id
+                    } else if (location?.type == LocationType.STATE) {
+                        stateIds.add(id)
                     }
                 } catch (ex: Exception) {
                     errors.add(ImportMessage(row.toString(), "", ex.message))
@@ -75,6 +78,11 @@ class LocationTSVImporter(private val service: LocationService) {
                 }
             }
         }
+
+        // Link states -> countries
+        stateIds.forEach { stateId -> service.link(countryId, stateId) }
+
+        LOGGER.info("${added + updated} location(s) imported with $errors error(s)")
         return ImportResponse(
             added = added,
             updated = updated,
@@ -83,8 +91,8 @@ class LocationTSVImporter(private val service: LocationService) {
         )
     }
 
-    fun importStates(country: String): Map<String, Long> {
-        val result = mutableMapOf<String, Long> ()
+    private fun importAdmin1Codes(country: String): Map<String, Long> {
+        val result = mutableMapOf<String, Long>()
         val url = URL("https://download.geonames.org/export/dump/admin1CodesASCII.txt")
         val file = downloadAdminCode1(url)
         val parser = createParser(file)
@@ -96,7 +104,7 @@ class LocationTSVImporter(private val service: LocationService) {
             }
         }
 
-        LOGGER.info(" ${result.size} states loaded")
+        LOGGER.info(" ${result.size} admin1 loaded")
         return result
     }
 
@@ -123,7 +131,7 @@ class LocationTSVImporter(private val service: LocationService) {
         )
     }
 
-    private fun add(id: Long, record: CSVRecord): LocationEntity {
+    private fun add(id: Long, record: CSVRecord, admin1Codes: Map<String, Long>): LocationEntity {
         val type = toLocationType(record)
         val name = toLocationName(record, type)
 
@@ -131,24 +139,38 @@ class LocationTSVImporter(private val service: LocationService) {
             LocationEntity(
                 id = id,
                 name = name,
-                asciiName = toAscii(name),
+                asciiName = service.toAscii(name),
                 country = record.get(RECORD_COUNTRY),
                 type = type,
-                population = record.get(RECORD_POPULATION).toLong()
+                population = record.get(RECORD_POPULATION).toLong(),
+                parentId = if (type == LocationType.CITY) getStateId(record, admin1Codes) else null,
             )
         )
     }
 
-    private fun update(location: LocationEntity, record: CSVRecord) {
+    private fun update(location: LocationEntity, record: CSVRecord, admin1Codes: Map<String, Long>) {
         val type = toLocationType(record)
         val name = toLocationName(record, type)
 
         location.name = name
-        location.asciiName = toAscii(name)
+        location.asciiName = service.toAscii(name)
         location.country = record.get(RECORD_COUNTRY)
         location.type = type
         location.population = record.get(RECORD_POPULATION).toLong()
+        location.parentId = if (type == LocationType.CITY) getStateId(record, admin1Codes) else location.parentId
+
         service.save(location)
+    }
+
+    private fun getStateId(record: CSVRecord, admin1Codes: Map<String, Long>): Long? {
+        val country = record.get(RECORD_COUNTRY)
+        val code = record.get(RECORD_ADMIN1_CODE)
+        if (code.isNullOrEmpty()) {
+            return null
+        }
+
+        return admin1Codes["$country.$code"]
+            ?: admin1Codes["$country.0$code"]
     }
 
     private fun toLocationName(record: CSVRecord, type: LocationType): String {
@@ -183,9 +205,10 @@ class LocationTSVImporter(private val service: LocationService) {
                 record.get(RECORD_FEATURE_CLASS) == "P" &&
                     listOf(
                         "PPL",
-                        "PPL2",
-                        "PPL3",
-                        "PPL4",
+                        "PPLA",
+                        "PPLA2",
+                        "PPLA3",
+                        "PPLA4",
                         "PPLC",
                         "PPLCH",
                     ).contains(record.get(RECORD_FEATURE_CODE)) &&
@@ -228,10 +251,5 @@ class LocationTSVImporter(private val service: LocationService) {
                 data = mapOf("url" to url.toString())
             )
         )
-    }
-
-    fun toAscii(str: String): String {
-        val temp = Normalizer.normalize(str, Normalizer.Form.NFD)
-        return REGEX_UNACCENT.replace(temp, "")
     }
 }

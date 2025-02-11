@@ -1,5 +1,10 @@
 # Features
 
+## RefData
+
+- [x] Unit API
+- [] Location API
+
 ## Module
 
 - [x] Module API
@@ -113,11 +118,13 @@
 
 ## Product
 
-- [] Add attributes for Services
-- [] Flag taxable product
-- [] Add support for multiple currencies
+- [] Integrate sales tax
+- [] Integrate Offer API
 - [] Add attributes for Digital service
+- [] Add attributes for Physical service
+- [] Add attributes for Subscription service
 - [] Link with categories
+- [x] Add attributes for Services
 - [x] Product UI
 - [x] Price UI
 - [x] Product, Price API
