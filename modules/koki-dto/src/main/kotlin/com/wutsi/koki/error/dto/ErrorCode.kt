@@ -52,6 +52,9 @@ object ErrorCode {
     val HTTP_AUTHENTICATION_FAILED = "$PREFIX:http:authetication-failed"
     val HTTP_DOWNSTREAM_ERROR = "$PREFIX:http:downstream-error"
 
+    val LOCATION_NOT_FOUND = "$PREFIX:location:not-found"
+    val LOCATION_FEED_NOT_FOUND = "$PREFIX:location:feed-not-found"
+
     val LOG_NOT_FOUND = "$PREFIX:log:not-found"
 
     val MESSAGE_DUPLICATE_NAME: String = "$PREFIX:message:duplicate-name"
