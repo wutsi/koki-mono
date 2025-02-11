@@ -15,22 +15,6 @@
         <a th:class="'btn-' + ${module.name}" th:href="${module.settingsUrl}" th:text="${module.title}">TITLE</a>
     </li>
 
-    <li class="menu-item" th:classappend="${item} == 'form' ? 'active'">
-        <a class="btn-form" href="/settings/forms">Forms</a>
-    </li>
-    <li class="menu-item" th:classappend="${item} == 'message' ? 'active'">
-        <a class="btn-message" href="/settings/messages">Messages</a>
-    </li>
-    <li class="menu-item" th:classappend="${item} == 'script' ? 'active'">
-        <a class="btn-script" href="/settings/scripts">Scripts</a>
-    </li>
-    <li class="menu-item" th:classappend="${item} == 'service' ? 'active'">
-        <a class="btn-service" href="/settings/services">Service</a>
-    </li>
-    <li class="menu-item" th:classappend="${item} == 'workflow' ? 'active'">
-        <a class="btn-workflow" href="/settings/workflows">Workflows</a>
-    </li>
-
     <!-- Should be the last -->
     <li class="menu-item"
         th:classappend="${current == 'security'} ? 'active'"
