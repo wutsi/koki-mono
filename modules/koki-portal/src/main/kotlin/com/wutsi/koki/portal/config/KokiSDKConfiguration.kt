@@ -12,21 +12,14 @@ import com.wutsi.koki.sdk.KokiContacts
 import com.wutsi.koki.sdk.KokiEmails
 import com.wutsi.koki.sdk.KokiEmployees
 import com.wutsi.koki.sdk.KokiFiles
-import com.wutsi.koki.sdk.KokiForms
-import com.wutsi.koki.sdk.KokiLogs
-import com.wutsi.koki.sdk.KokiMessages
 import com.wutsi.koki.sdk.KokiModules
 import com.wutsi.koki.sdk.KokiNotes
 import com.wutsi.koki.sdk.KokiProducts
 import com.wutsi.koki.sdk.KokiRefData
-import com.wutsi.koki.sdk.KokiScripts
-import com.wutsi.koki.sdk.KokiServices
 import com.wutsi.koki.sdk.KokiTaxes
 import com.wutsi.koki.sdk.KokiTenants
 import com.wutsi.koki.sdk.KokiTypes
 import com.wutsi.koki.sdk.KokiUsers
-import com.wutsi.koki.sdk.KokiWorkflowInstances
-import com.wutsi.koki.sdk.KokiWorkflows
 import com.wutsi.koki.sdk.TenantProvider
 import com.wutsi.koki.sdk.URLBuilder
 import org.springframework.beans.factory.annotation.Value
@@ -91,21 +84,6 @@ class KokiSDKConfiguration(
     }
 
     @Bean
-    fun kokiForms(): KokiForms {
-        return KokiForms(urlBuilder(), rest(), tenantProvider)
-    }
-
-    @Bean
-    fun kokiLogs(): KokiLogs {
-        return KokiLogs(urlBuilder(), rest())
-    }
-
-    @Bean
-    fun kokiMessages(): KokiMessages {
-        return KokiMessages(urlBuilder(), rest())
-    }
-
-    @Bean
     fun kokiModules(): KokiModules {
         return KokiModules(urlBuilder(), restWithoutTenantHeader())
     }
@@ -126,16 +104,6 @@ class KokiSDKConfiguration(
     }
 
     @Bean
-    fun kokiScripts(): KokiScripts {
-        return KokiScripts(urlBuilder(), rest())
-    }
-
-    @Bean
-    fun kokiServices(): KokiServices {
-        return KokiServices(urlBuilder(), rest())
-    }
-
-    @Bean
     fun kokiTaxes(): KokiTaxes {
         return KokiTaxes(urlBuilder(), rest())
     }
@@ -153,16 +121,6 @@ class KokiSDKConfiguration(
     @Bean
     fun kokiUser(): KokiUsers {
         return KokiUsers(urlBuilder(), rest())
-    }
-
-    @Bean
-    fun kokiWorkflow(): KokiWorkflows {
-        return KokiWorkflows(urlBuilder(), rest(), tenantProvider, objectMapper)
-    }
-
-    @Bean
-    fun kokiWorkflowInstance(): KokiWorkflowInstances {
-        return KokiWorkflowInstances(urlBuilder(), rest(), tenantProvider)
     }
 
     @Bean

@@ -2,7 +2,6 @@ package com.wutsi.blog.app.page
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
@@ -11,30 +10,14 @@ import com.wutsi.koki.ContactFixtures
 import com.wutsi.koki.EmailFixtures
 import com.wutsi.koki.EmployeeFixtures
 import com.wutsi.koki.FileFixtures
-import com.wutsi.koki.FormFixtures
-import com.wutsi.koki.LogFixtures.logEntries
-import com.wutsi.koki.LogFixtures.logEntry
-import com.wutsi.koki.MessageFixtures
 import com.wutsi.koki.ModuleFixtures
 import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.ProductFixtures
 import com.wutsi.koki.RefDataFixtures
 import com.wutsi.koki.RoleFixtures
-import com.wutsi.koki.ScriptFixtures
-import com.wutsi.koki.ServiceFixtures.SERVICE_ID
-import com.wutsi.koki.ServiceFixtures.service
-import com.wutsi.koki.ServiceFixtures.services
 import com.wutsi.koki.TaxFixtures
 import com.wutsi.koki.TenantFixtures
 import com.wutsi.koki.UserFixtures
-import com.wutsi.koki.WorkflowFixtures.activities
-import com.wutsi.koki.WorkflowFixtures.activityInstance
-import com.wutsi.koki.WorkflowFixtures.activityInstances
-import com.wutsi.koki.WorkflowFixtures.workflow
-import com.wutsi.koki.WorkflowFixtures.workflowInstance
-import com.wutsi.koki.WorkflowFixtures.workflowInstances
-import com.wutsi.koki.WorkflowFixtures.workflowPictureUrl
-import com.wutsi.koki.WorkflowFixtures.workflows
 import com.wutsi.koki.account.dto.CreateAccountRequest
 import com.wutsi.koki.account.dto.CreateAccountResponse
 import com.wutsi.koki.account.dto.GetAccountResponse
@@ -60,13 +43,6 @@ import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.file.dto.SearchFileResponse
-import com.wutsi.koki.form.dto.GetFormResponse
-import com.wutsi.koki.form.dto.GetFormSubmissionResponse
-import com.wutsi.koki.form.dto.SaveFormResponse
-import com.wutsi.koki.form.dto.SearchFormResponse
-import com.wutsi.koki.form.dto.SearchFormSubmissionResponse
-import com.wutsi.koki.message.dto.GetMessageResponse
-import com.wutsi.koki.message.dto.SearchMessageResponse
 import com.wutsi.koki.module.dto.SearchModuleResponse
 import com.wutsi.koki.module.dto.SearchPermissionResponse
 import com.wutsi.koki.note.dto.CreateNoteRequest
@@ -83,22 +59,8 @@ import com.wutsi.koki.product.dto.GetProductResponse
 import com.wutsi.koki.product.dto.SearchPriceResponse
 import com.wutsi.koki.product.dto.SearchProductResponse
 import com.wutsi.koki.refdata.dto.SearchUnitResponse
-import com.wutsi.koki.script.dto.CreateScriptResponse
-import com.wutsi.koki.script.dto.GetScriptResponse
-import com.wutsi.koki.script.dto.RunScriptResponse
-import com.wutsi.koki.script.dto.SearchScriptResponse
-import com.wutsi.koki.sdk.KokiForms
-import com.wutsi.koki.sdk.KokiLogs
-import com.wutsi.koki.sdk.KokiMessages
-import com.wutsi.koki.sdk.KokiScripts
-import com.wutsi.koki.sdk.KokiServices
-import com.wutsi.koki.sdk.KokiWorkflowInstances
-import com.wutsi.koki.sdk.KokiWorkflows
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
-import com.wutsi.koki.service.dto.CreateServiceResponse
-import com.wutsi.koki.service.dto.GetServiceResponse
-import com.wutsi.koki.service.dto.SearchServiceResponse
 import com.wutsi.koki.tax.dto.CreateTaxRequest
 import com.wutsi.koki.tax.dto.CreateTaxResponse
 import com.wutsi.koki.tax.dto.GetTaxResponse
@@ -115,15 +77,6 @@ import com.wutsi.koki.tenant.dto.SearchRoleResponse
 import com.wutsi.koki.tenant.dto.SearchTenantResponse
 import com.wutsi.koki.tenant.dto.SearchTypeResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
-import com.wutsi.koki.workflow.dto.GetActivityInstanceResponse
-import com.wutsi.koki.workflow.dto.GetLogEntryResponse
-import com.wutsi.koki.workflow.dto.GetWorkflowInstanceResponse
-import com.wutsi.koki.workflow.dto.GetWorkflowResponse
-import com.wutsi.koki.workflow.dto.SearchActivityInstanceResponse
-import com.wutsi.koki.workflow.dto.SearchActivityResponse
-import com.wutsi.koki.workflow.dto.SearchLogEntryResponse
-import com.wutsi.koki.workflow.dto.SearchWorkflowInstanceResponse
-import com.wutsi.koki.workflow.dto.SearchWorkflowResponse
 import org.apache.commons.io.IOUtils
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -180,27 +133,6 @@ abstract class AbstractPageControllerTest {
     @MockitoBean
     @Qualifier("RestWithoutTenantHeader")
     protected lateinit var restWithoutTenantHeader: RestTemplate
-
-    @MockitoBean
-    protected lateinit var kokiForms: KokiForms
-
-    @MockitoBean
-    protected lateinit var kokiLogs: KokiLogs
-
-    @MockitoBean
-    protected lateinit var kokiMessages: KokiMessages
-
-    @MockitoBean
-    protected lateinit var kokiScripts: KokiScripts
-
-    @MockitoBean
-    protected lateinit var kokiServices: KokiServices
-
-    @MockitoBean
-    protected lateinit var kokiWorkflows: KokiWorkflows
-
-    @MockitoBean
-    protected lateinit var kokiWorkflowInstances: KokiWorkflowInstances
 
     @MockitoBean
     protected lateinit var accessTokenHolder: AccessTokenHolder
@@ -265,13 +197,6 @@ abstract class AbstractPageControllerTest {
         setupEmployeeModule()
         setupTaxModule()
         setupProductModule()
-
-        setupForms()
-        setupLogs()
-        setupScripts()
-        setupServices()
-        setupMessages()
-        setupWorkflows()
     }
 
     protected fun setupFileUploads() {
@@ -822,177 +747,6 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any<CreateTaxRequest>(),
                 eq(CreateTaxResponse::class.java)
-            )
-    }
-
-    private fun setupForms() {
-        doReturn(SaveFormResponse(FormFixtures.FORM_ID)).whenever(kokiForms).create(any())
-
-        doReturn(GetFormResponse(FormFixtures.form)).whenever(kokiForms).form(any())
-
-        doReturn(SearchFormResponse(FormFixtures.forms)).whenever(kokiForms)
-            .forms(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-            )
-
-        doReturn(GetFormSubmissionResponse(FormFixtures.formSubmission)).whenever(kokiForms).submission(any())
-
-        doReturn(SearchFormSubmissionResponse(FormFixtures.formSubmissions)).whenever(kokiForms)
-            .submissions(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-            )
-
-        val html = getResourceAsString("/form-readonly.html")
-        doReturn(html).whenever(kokiForms)
-            .html(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
-    }
-
-    private fun setupScripts() {
-        doReturn(CreateScriptResponse(ScriptFixtures.SCRIPT_ID)).whenever(kokiScripts).create(any())
-
-        doReturn(GetScriptResponse(ScriptFixtures.script)).whenever(kokiScripts).script(any())
-
-        doReturn(SearchScriptResponse(ScriptFixtures.scripts)).whenever(kokiScripts)
-            .scripts(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-            )
-
-        doReturn(
-            RunScriptResponse(
-                bindings = mapOf(
-                    "return" to "122",
-                    "var1" to "11"
-                ),
-                console = """
-                Hello world
-                Computing the results...
-            """.trimIndent()
-            )
-        ).whenever(kokiScripts).run(any())
-    }
-
-    private fun setupServices() {
-        doReturn(CreateServiceResponse(SERVICE_ID)).whenever(kokiServices).create(any())
-
-        doReturn(GetServiceResponse(service)).whenever(kokiServices).service(any())
-
-        doReturn(SearchServiceResponse(services)).whenever(kokiServices)
-            .services(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-            )
-    }
-
-    private fun setupMessages() {
-        doReturn(GetMessageResponse(MessageFixtures.message)).whenever(kokiMessages).message(any())
-
-        doReturn(SearchMessageResponse(MessageFixtures.messages)).whenever(kokiMessages)
-            .messages(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-            )
-    }
-
-    private fun setupWorkflows() {
-        doReturn(workflowPictureUrl).whenever(kokiWorkflows).imageUrl(any())
-        doReturn(workflowPictureUrl).whenever(kokiWorkflowInstances).imageUrl(any())
-
-        val json = getResourceAsString("/workflow-001.json")
-        doReturn(json).whenever(kokiWorkflows).json(any())
-
-        doReturn(GetWorkflowResponse(workflow)).whenever(kokiWorkflows).workflow(anyOrNull())
-        doReturn(SearchWorkflowResponse(workflows)).whenever(kokiWorkflows)
-            .workflows(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-            )
-
-        doReturn(SearchActivityResponse(activities)).whenever(kokiWorkflows)
-            .activities(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-            )
-
-        doReturn(GetWorkflowInstanceResponse(workflowInstance)).whenever(kokiWorkflowInstances).workflow(any())
-        doReturn(SearchWorkflowInstanceResponse(workflowInstances)).whenever(kokiWorkflowInstances)
-            .workflows(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull()
-            )
-
-        doReturn(GetActivityInstanceResponse(activityInstance)).whenever(kokiWorkflowInstances)
-            .activity(any())
-        doReturn(SearchActivityInstanceResponse(activityInstances)).whenever(kokiWorkflowInstances)
-            .activities(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull()
-            )
-    }
-
-    private fun setupLogs() {
-        doReturn(GetLogEntryResponse(logEntry)).whenever(kokiLogs).log(any())
-        doReturn(SearchLogEntryResponse(logEntries)).whenever(kokiLogs)
-            .logs(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
             )
     }
 

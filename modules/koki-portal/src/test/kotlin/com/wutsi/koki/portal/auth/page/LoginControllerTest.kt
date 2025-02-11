@@ -8,9 +8,8 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.AccountFixtures.account
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.form.dto.Form
-import com.wutsi.koki.form.dto.GetFormResponse
 import com.wutsi.koki.party.dto.LoginRequest
 import com.wutsi.koki.party.dto.LoginResponse
 import com.wutsi.koki.portal.page.PageName
@@ -97,15 +96,8 @@ class LoginControllerTest : AbstractPageControllerTest() {
         // GIVEN
         setUpAnonymousUser()
 
-        val form = Form(
-            id = "309302",
-            name = "FRM-001",
-            title = "Incident Report",
-        )
-        doReturn(GetFormResponse(form)).whenever(kokiForms).form(any())
-
         // WHEN
-        navigateTo("/forms/4304309")
+        navigateTo("/accounts/${account.id}")
         setupTenantModule()
 
         // THEN
@@ -124,6 +116,6 @@ class LoginControllerTest : AbstractPageControllerTest() {
         verify(accessTokenHolder).set(accessTokenArg.capture(), any(), any())
         assertEquals(accessToken, accessTokenArg.firstValue)
 
-        assertCurrentPageIs(PageName.FORM)
+        assertCurrentPageIs(PageName.ACCOUNT)
     }
 }

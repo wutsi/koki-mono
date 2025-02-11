@@ -170,13 +170,6 @@ koki:
     rabbitmq:
         url: amqp://localhost
 
-    event-publisher:
-        type: rabbitmq # rabbitmq | spring
-        rabbitmq:
-            exchange-name: koki
-            max-retries: 24
-            ttl-seconds: 84600
-
     storage:
         type: local # local | s3
         local:
@@ -188,14 +181,3 @@ koki:
             region: us-east1
             access-key:
             secret-key:
-
-    workflow-engine:
-        rabbitmq:
-            workflow-queue: koki-workflow-queue
-            workflow-dlq: koki-workflow-dlq
-            log-queue: koki-log-queue
-            log-dlq: koki-log-dlq
-            notification-queue: koki-notification-queue
-            notification-dlq: koki-notification-dlq
-            dlq-cron: "0 */30 * * * *"  # Every 30 mins
-            consumer-delay-seconds: 1

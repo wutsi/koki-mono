@@ -32,39 +32,4 @@ class SettingsControllerTest : AbstractPageControllerTest() {
         click(".btn-security")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS)
     }
-
-    @Test
-    fun forms() {
-        navigateTo("/settings")
-        click(".btn-form")
-        assertCurrentPageIs(PageName.SETTINGS_FORM_LIST)
-    }
-
-    @Test
-    fun messages() {
-        navigateTo("/settings")
-        click(".btn-message")
-        assertCurrentPageIs(PageName.SETTINGS_MESSAGE_LIST)
-    }
-
-    @Test
-    fun workflows() {
-        navigateTo("/settings")
-        click(".btn-workflow")
-        assertCurrentPageIs(PageName.SETTINGS_WORKFLOW_LIST)
-    }
-
-    @Test
-    fun scripts() {
-        navigateTo("/settings")
-        click(".btn-script")
-        assertCurrentPageIs(PageName.SETTINGS_SCRIPT_LIST)
-    }
-
-    @Test
-    fun services() {
-        navigateTo("/settings")
-        click(".btn-service")
-        assertCurrentPageIs(PageName.SETTINGS_SERVICE_LIST)
-    }
 }
