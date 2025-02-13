@@ -8,7 +8,6 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.ContactFixtures.contact
-import com.wutsi.koki.TenantFixtures
 import com.wutsi.koki.contact.dto.Gender
 import com.wutsi.koki.contact.dto.UpdateContactRequest
 import com.wutsi.koki.error.dto.ErrorCode

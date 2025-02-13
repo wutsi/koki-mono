@@ -7,7 +7,6 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
-import com.wutsi.koki.TenantFixtures
 import com.wutsi.koki.employee.dto.CreateEmployeeRequest
 import com.wutsi.koki.employee.dto.CreateEmployeeResponse
 import com.wutsi.koki.employee.dto.EmployeeStatus
