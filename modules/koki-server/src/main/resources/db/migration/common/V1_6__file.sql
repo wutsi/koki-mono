@@ -5,8 +5,6 @@ CREATE TABLE T_FILE(
   created_by_fk           BIGINT,
   deleted_by_fk           BIGINT,
 
-  workflow_instance_id    VARCHAR(36),
-  form_id                 VARCHAR(36),
   name                    VARCHAR(100) NOT NULL,
   content_type            VARCHAR(100) NOT NULL,
   content_length          LONG NOT NULL,
@@ -17,9 +15,6 @@ CREATE TABLE T_FILE(
 
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
-
-CREATE INDEX I_FILE_WORKFLOW ON T_FILE(workflow_instance_id);
-CREATE INDEX I_FILE_FORM ON T_FILE(form_id);
 
 
 CREATE TABLE T_FILE_OWNER(

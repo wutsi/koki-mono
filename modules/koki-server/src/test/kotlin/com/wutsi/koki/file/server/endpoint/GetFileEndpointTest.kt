@@ -22,8 +22,6 @@ class GetFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("https://www.file.com/foo.pdf", file.url)
         assertEquals("application/pdf", file.contentType)
         assertEquals(1000L, file.contentLength)
-        assertEquals("wi-100", file.workflowInstanceId)
-        assertEquals("f-100", file.formId)
         assertEquals(USER_ID, file.createdById)
     }
 

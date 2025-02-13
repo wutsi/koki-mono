@@ -25,6 +25,10 @@ CREATE TABLE T_TAX(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
+CREATE INDEX I_TAX_status ON T_TAX(status, tenant_fk);
+CREATE INDEX I_TAX_type ON T_TAX(tax_type_fk, tenant_fk);
+CREATE INDEX I_TAX_account ON T_TAX(account_fk, tenant_fk);
+
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url)
     VALUES (160, 6, 'tax', 'Taxes', '/taxes', '/taxes/tab', null);
 

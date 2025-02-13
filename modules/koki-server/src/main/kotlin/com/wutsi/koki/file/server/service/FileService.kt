@@ -43,8 +43,6 @@ class FileService(
     fun search(
         tenantId: Long,
         ids: List<String> = emptyList(),
-        workflowInstanceIds: List<String> = emptyList(),
-        formIds: List<String> = emptyList(),
         ownerId: Long? = null,
         ownerType: ObjectType? = null,
         limit: Int = 20,
@@ -59,12 +57,6 @@ class FileService(
         if (ids.isNotEmpty()) {
             jql.append(" AND F.id IN :ids")
         }
-        if (workflowInstanceIds.isNotEmpty()) {
-            jql.append(" AND F.workflowInstanceId IN :workflowInstanceIds")
-        }
-        if (formIds.isNotEmpty()) {
-            jql.append(" AND F.formId IN :formIds")
-        }
         if (ownerId != null) {
             jql.append(" AND O.ownerId = :ownerId")
         }
@@ -78,12 +70,6 @@ class FileService(
         if (ids.isNotEmpty()) {
             query.setParameter("ids", ids)
         }
-        if (workflowInstanceIds.isNotEmpty()) {
-            query.setParameter("workflowInstanceIds", workflowInstanceIds)
-        }
-        if (formIds.isNotEmpty()) {
-            query.setParameter("formIds", formIds)
-        }
         if (ownerId != null) {
             query.setParameter("ownerId", ownerId)
         }
@@ -96,35 +82,8 @@ class FileService(
         return query.resultList
     }
 
-    fun link(fileIds: List<String>, workflowInstanceId: String, tenantId: Long) {
-        var files = search(
-            tenantId = tenantId,
-            workflowInstanceIds = listOf(workflowInstanceId),
-            limit = Integer.MAX_VALUE,
-        )
-        if (files.isNotEmpty()) {
-            files.forEach { file ->
-                file.workflowInstanceId = null
-            }
-            dao.saveAll(files)
-        }
-
-        /* Sync */
-        if (fileIds.isNotEmpty()) {
-            files = search(
-                tenantId = tenantId, ids = fileIds, limit = fileIds.size
-            )
-            if (files.isNotEmpty()) {
-                files.forEach { file -> file.workflowInstanceId = workflowInstanceId }
-                dao.saveAll(files)
-            }
-        }
-    }
-
     @Transactional
     fun upload(
-        workflowInstanceId: String?,
-        formId: String?,
         userId: Long?,
         file: MultipartFile,
         ownerId: Long?,
@@ -136,7 +95,7 @@ class FileService(
         val path = if (ownerId != null && ownerType != null) {
             toPath(file, ownerId, ownerType, fileId, tenantId)
         } else {
-            toPath(file, formId, workflowInstanceId, fileId, tenantId)
+            toPath(file, fileId, tenantId)
         }
         val url = getStorageService(tenantId).store(
             path = path.toString(),
@@ -152,8 +111,6 @@ class FileService(
                 tenantId = tenantId,
                 name = file.originalFilename ?: fileId,
                 url = url.toString(),
-                workflowInstanceId = workflowInstanceId,
-                formId = formId,
                 contentType = file.contentType ?: "application/octet-stream",
                 contentLength = file.size,
                 createdAt = Date(),
@@ -189,14 +146,10 @@ class FileService(
 
     private fun toPath(
         file: MultipartFile,
-        formId: String?,
-        workflowInstanceId: String?,
         fileId: String,
         tenantId: Long,
     ): String {
-        val path = StringBuilder("tenant/$tenantId")
-        formId?.let { path.append("/form/$formId") }
-        workflowInstanceId?.let { path.append("/workflow-instance/$workflowInstanceId") }
+        val path = StringBuilder("tenant/$tenantId/uploads")
         path.append("/$fileId")
         path.append("/" + URLEncoder.encode(file.originalFilename, "utf-8"))
         return path.toString()

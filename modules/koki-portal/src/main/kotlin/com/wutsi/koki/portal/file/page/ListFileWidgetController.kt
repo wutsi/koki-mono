@@ -13,7 +13,6 @@ import java.net.URLEncoder
 class ListFileWidgetController(private val service: FileService) {
     @GetMapping("/files/widgets/list")
     fun list(
-        @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
         @RequestParam(required = false, name = "owner-id") ownerId: Long? = null,
         @RequestParam(required = false, name = "owner-type") ownerType: ObjectType? = null,
         @RequestParam(required = false, name = "test-mode") testMode: String? = null,
@@ -24,7 +23,6 @@ class ListFileWidgetController(private val service: FileService) {
         val url = service.uploadUrl(
             ownerId = ownerId,
             ownerType = ownerType,
-            workflowInstanceId = workflowInstanceId
         )
 
         var uploadUrl = "/files/upload?upload-url=" + URLEncoder.encode(url, "utf-8")
@@ -32,13 +30,12 @@ class ListFileWidgetController(private val service: FileService) {
         model.addAttribute("testMode", testMode)
         model.addAttribute("ownerId", ownerId)
         model.addAttribute("ownerType", ownerType)
-        more(workflowInstanceId, ownerId, ownerType, limit, offset, model)
+        more(ownerId, ownerType, limit, offset, model)
         return "files/widgets/list"
     }
 
     @GetMapping("/files/widgets/list/more")
     fun more(
-        @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
         @RequestParam(required = false, name = "owner-id") ownerId: Long? = null,
         @RequestParam(required = false, name = "owner-type") ownerType: ObjectType? = null,
         @RequestParam(required = false) limit: Int = 20,
@@ -46,7 +43,6 @@ class ListFileWidgetController(private val service: FileService) {
         model: Model
     ): String {
         val files = service.files(
-            workflowInstanceIds = workflowInstanceId?.let { id -> listOf(id) } ?: emptyList(),
             ownerId = ownerId,
             ownerType = ownerType,
         )
@@ -59,7 +55,6 @@ class ListFileWidgetController(private val service: FileService) {
                     "/files/widgets/list/more?limit=$limit&offset=$nextOffset",
                     ownerId?.let { "owner-id=$ownerId" },
                     ownerType?.let { "owner-type=$ownerType" },
-                    workflowInstanceId?.let { "workflow-instance-id=$workflowInstanceId" },
                 ).filterNotNull()
                     .joinToString(separator = "&")
                 model.addAttribute("moreUrl", url)

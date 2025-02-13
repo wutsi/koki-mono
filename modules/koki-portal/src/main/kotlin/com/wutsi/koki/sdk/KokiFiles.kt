@@ -46,8 +46,6 @@ class KokiFiles(
 
     fun files(
         ids: List<Long>,
-        workflowInstanceIds: List<String>,
-        formIds: List<String>,
         ownerId: Long?,
         ownerType: ObjectType?,
         limit: Int,
@@ -57,8 +55,6 @@ class KokiFiles(
             PATH_PREFIX,
             mapOf(
                 "id" to ids,
-                "workflow-instance-id" to workflowInstanceIds,
-                "form-id" to formIds,
                 "owner-id" to ownerId,
                 "owner-type" to ownerType,
                 "limit" to limit,

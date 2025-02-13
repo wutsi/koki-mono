@@ -20,26 +20,6 @@ class SearchFileEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `by workflow`() {
-        val response = rest.getForEntity("/v1/files?workflow-instance-id=wi-100", SearchFileResponse::class.java)
-
-        assertEquals(HttpStatus.OK, response.statusCode)
-
-        val files = response.body!!.files
-        assertEquals(2, files.size)
-    }
-
-    @Test
-    fun `by form`() {
-        val response = rest.getForEntity("/v1/files?form-id=f-100&form-id=f-110", SearchFileResponse::class.java)
-
-        assertEquals(HttpStatus.OK, response.statusCode)
-
-        val files = response.body!!.files
-        assertEquals(3, files.size)
-    }
-
-    @Test
     fun `by id`() {
         val response = rest.getForEntity("/v1/files?id=100&id=101&id=103&id=199", SearchFileResponse::class.java)
 

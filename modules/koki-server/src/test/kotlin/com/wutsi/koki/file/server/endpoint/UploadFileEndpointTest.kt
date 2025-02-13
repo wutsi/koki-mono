@@ -29,7 +29,7 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
     fun upload() {
         val entity = createEntity()
         val response = rest.exchange(
-            "/v1/files/upload?tenant-id=1&workflow-instance-id=111&form-id=222",
+            "/v1/files/upload?tenant-id=1",
             HttpMethod.POST,
             entity,
             UploadFileResponse::class.java,
@@ -44,8 +44,6 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("file.txt", file.name)
         assertEquals("text/plain", file.contentType)
         assertEquals(12, file.contentLength)
-        assertEquals("111", file.workflowInstanceId)
-        assertEquals("222", file.formId)
         assertEquals(USER_ID, file.createdById)
     }
 
@@ -82,7 +80,7 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
         val entity = createEntity()
         val accessToken = createAccessToken()
         val response = rest.exchange(
-            "/v1/files/upload?tenant-id=1&workflow-instance-id=111&form-id=222&access-token=$accessToken",
+            "/v1/files/upload?tenant-id=1&access-token=$accessToken",
             HttpMethod.POST,
             entity,
             UploadFileResponse::class.java,
@@ -97,8 +95,6 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("file.txt", file.name)
         assertEquals("text/plain", file.contentType)
         assertEquals(12, file.contentLength)
-        assertEquals("111", file.workflowInstanceId)
-        assertEquals("222", file.formId)
         assertEquals(USER_ID, file.createdById)
     }
 
@@ -123,8 +119,6 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("file.txt", file.name)
         assertEquals("text/plain", file.contentType)
         assertEquals(12, file.contentLength)
-        assertEquals(null, file.workflowInstanceId)
-        assertEquals(null, file.formId)
         assertEquals(null, file.createdById)
     }
 

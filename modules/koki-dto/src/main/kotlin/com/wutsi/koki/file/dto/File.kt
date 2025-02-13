@@ -5,8 +5,6 @@ import java.util.Date
 data class File(
     val id: Long = -1L,
     val createdById: Long? = null,
-    val workflowInstanceId: String? = null,
-    val formId: String? = null,
     val name: String = "",
     val contentType: String = "",
     val contentLength: Long = -1,

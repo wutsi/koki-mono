@@ -16,8 +16,6 @@ class FileMapper {
             contentType = entity.contentType,
             createdAt = entity.createdAt,
             createdById = entity.createdById,
-            workflowInstanceId = entity.workflowInstanceId,
-            formId = entity.formId,
         )
     }
 

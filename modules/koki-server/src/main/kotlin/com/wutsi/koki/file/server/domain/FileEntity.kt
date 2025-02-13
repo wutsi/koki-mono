@@ -30,8 +30,6 @@ data class FileEntity(
     @JoinColumn(name = "file_fk")
     val fileOwners: List<FileOwnerEntity> = emptyList(),
 
-    var workflowInstanceId: String? = null,
-    val formId: String? = null,
     val name: String = "",
     val contentType: String = "",
     val contentLength: Long = -1,

@@ -20,6 +20,9 @@ CREATE TABLE T_EMPLOYEE(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
+CREATE INDEX I_EMPLOYEE_status ON T_EMPLOYEE(status, tenant_fk);
+CREATE INDEX I_EMPLOYEE_type ON T_EMPLOYEE(employee_type_fk, tenant_fk);
+
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url)
     VALUES (170, 7, 'employee', 'Employee', '/employees', null, null);
 

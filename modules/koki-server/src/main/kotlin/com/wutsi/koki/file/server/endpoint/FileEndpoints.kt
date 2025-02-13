@@ -42,8 +42,6 @@ class FileEndpoints(
     fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false, name = "id") ids: List<String> = emptyList(),
-        @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceIds: List<String> = emptyList(),
-        @RequestParam(required = false, name = "form-id") formIds: List<String> = emptyList(),
         @RequestParam(required = false, name = "owner-id") ownerId: Long? = null,
         @RequestParam(required = false, name = "owner-type") ownerType: ObjectType? = null,
         @RequestParam(required = false) limit: Int = 20,
@@ -52,8 +50,6 @@ class FileEndpoints(
         val files = service.search(
             tenantId = tenantId,
             ids = ids,
-            workflowInstanceIds = workflowInstanceIds,
-            formIds = formIds,
             ownerId = ownerId,
             ownerType = ownerType,
             limit = limit,
@@ -74,8 +70,6 @@ class FileEndpoints(
 
     @PostMapping("/upload", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun upload(
-        @RequestParam(required = false, name = "workflow-instance-id") workflowInstanceId: String? = null,
-        @RequestParam(required = false, name = "form-id") formId: String? = null,
         @RequestParam(name = "tenant-id") tenantId: Long,
         @RequestParam(required = false, name = "access-token") accessToken: String? = null,
         @RequestParam(required = false, name = "owner-id") ownerId: Long? = null,
@@ -85,8 +79,6 @@ class FileEndpoints(
         response.addHeader("Access-Control-Allow-Origin", "*")
 
         val file = service.upload(
-            workflowInstanceId = workflowInstanceId,
-            formId = formId,
             tenantId = tenantId,
             file = file,
             userId = accessToken?.let { toUserId(accessToken) },

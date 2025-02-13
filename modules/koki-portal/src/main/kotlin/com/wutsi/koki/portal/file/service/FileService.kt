@@ -25,8 +25,6 @@ class FileService(
 
     fun files(
         ids: List<Long> = emptyList(),
-        workflowInstanceIds: List<String> = emptyList(),
-        formIds: List<String> = emptyList(),
         ownerId: Long? = null,
         ownerType: ObjectType? = null,
         limit: Int = 20,
@@ -34,8 +32,6 @@ class FileService(
     ): List<FileModel> {
         val files = koki.files(
             ids = ids,
-            workflowInstanceIds = workflowInstanceIds,
-            formIds = formIds,
             ownerId = ownerId,
             ownerType = ownerType,
             limit = limit,
