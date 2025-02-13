@@ -1,5 +1,6 @@
 package com.wutsi.koki.account.dto
 
+import com.wutsi.koki.refdata.dto.Address
 import java.util.Date
 
 data class Account(
@@ -18,4 +19,6 @@ data class Account(
     val createdById: Long? = null,
     val modifiedById: Long? = null,
     val managedById: Long? = null,
+    val shippingAddress: Address? = null,
+    val billingAddress: Address? = null,
 )

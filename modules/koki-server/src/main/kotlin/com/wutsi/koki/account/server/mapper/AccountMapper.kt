@@ -2,6 +2,7 @@ package com.wutsi.koki.account.server.mapper
 
 import com.wutsi.koki.account.dto.Account
 import com.wutsi.koki.account.dto.AccountSummary
+import com.wutsi.koki.common.dto.Address
 import com.wutsi.koki.form.server.domain.AccountEntity
 import org.springframework.stereotype.Service
 
@@ -30,6 +31,24 @@ class AccountMapper {
                     accountAttribute.attributeId to accountAttribute.value!!
                 }
             }.toMap(),
+            shippingAddress = if (entity.hasShippingAddress()){
+                Address(
+                    street = entity.shippingStreet,
+                    postalCode = entity.shippingPostalCode,
+                    cityId = entity.shippingCityId,
+                )
+            } else {
+                null
+            },
+            billingAddress = if (entity.hasBillingAddress()){
+                Address(
+                    street = entity.billingStreet,
+                    postalCode = entity.billingPostalCode,
+                    cityId = entity.billingCityId,
+                )
+            } else {
+                null
+            },
         )
     }
 

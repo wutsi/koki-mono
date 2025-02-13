@@ -1,10 +1,11 @@
-package com.wutsi.koki.refdata.dto
+package com.wutsi.koki.portal.refdata.model
 
-data class Location(
+import com.wutsi.koki.refdata.dto.LocationType
+
+data class LocationModel(
     val id: Long = -1,
     val parentId: Long? = null,
     val name: String = "",
     val type: LocationType = LocationType.UNKNOWN,
     val country: String = "",
-    val population: Long = 0,
 )

@@ -46,9 +46,23 @@ data class AccountEntity(
     var website: String? = null,
     var language: String? = null,
     var description: String? = null,
+    var shippingStreet: String? = null,
+    var shippingCityId: Long? = null,
+    var shippingPostalCode: String? = null,
+    var billingStreet: String? = null,
+    var billingCityId: Long? = null,
+    var billingPostalCode: String? = null,
 
     var deleted: Boolean = false,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
     var deletedAt: Date? = null,
-)
+){
+    fun hasShippingAddress(): Boolean {
+        return shippingCityId != null || !shippingPostalCode.isNullOrEmpty() || !shippingStreet.isNullOrEmpty()
+    }
+
+    fun hasBillingAddress(): Boolean {
+        return billingCityId != null || !billingPostalCode.isNullOrEmpty() || !billingStreet.isNullOrEmpty()
+    }
+}

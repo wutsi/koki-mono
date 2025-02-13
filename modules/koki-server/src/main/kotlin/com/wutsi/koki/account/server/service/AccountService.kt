@@ -46,6 +46,12 @@ class AccountService(
                 website = request.website,
                 language = request.language?.lowercase(),
                 description = request.description,
+                shippingStreet = request.shippingStreet,
+                shippingCityId = request.shippingCityId,
+                shippingPostalCode = request.shippingPostalCode,
+                billingStreet = request.billingStreet,
+                billingCityId = request.billingCityId,
+                billingPostalCode = request.billingPostalCode,
                 managedById = request.managedById,
                 createdById = userId,
                 modifiedById = userId,
@@ -77,6 +83,12 @@ class AccountService(
         account.mobile = request.mobile
         account.website = request.website
         account.language = request.language?.lowercase()
+        account.shippingStreet = request.shippingStreet
+        account.shippingCityId = request.shippingCityId
+        account.shippingPostalCode = request.shippingPostalCode
+        account.billingStreet = request.billingStreet
+        account.billingCityId = request.billingCityId
+        account.billingPostalCode = request.billingPostalCode
         account.description = request.description
         account.managedById = request.managedById
         account.modifiedById = securityService.getCurrentUserIdOrNull()

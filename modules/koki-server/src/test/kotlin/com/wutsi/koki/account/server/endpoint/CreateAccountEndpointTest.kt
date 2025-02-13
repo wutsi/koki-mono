@@ -36,6 +36,12 @@ class CreateAccountEndpointTest : AuthorizationAwareEndpointTest() {
                 101L to "40394039"
             ),
             accountTypeId = 100L,
+            shippingStreet = "340 Pascal",
+            shippingPostalCode = "123 111",
+            shippingCityId = 111L,
+            billingStreet = "333 Nicolet",
+            billingPostalCode = "222 222",
+            billingCityId = 222L,
         )
         val response = rest.postForEntity("/v1/accounts", request, CreateAccountResponse::class.java)
 
@@ -51,6 +57,12 @@ class CreateAccountEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.email, account.email)
         assertEquals(request.website, account.website)
         assertEquals(request.language, account.language)
+        assertEquals(request.shippingStreet, account.shippingStreet)
+        assertEquals(request.shippingPostalCode, account.shippingPostalCode)
+        assertEquals(request.shippingCityId, account.shippingCityId)
+        assertEquals(request.billingStreet, account.billingStreet)
+        assertEquals(request.billingPostalCode, account.billingPostalCode)
+        assertEquals(request.billingCityId, account.billingCityId)
         assertEquals(USER_ID, account.createdById)
         assertEquals(USER_ID, account.modifiedById)
         assertFalse(account.deleted)

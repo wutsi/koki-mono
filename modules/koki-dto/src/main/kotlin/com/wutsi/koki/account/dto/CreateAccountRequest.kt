@@ -17,4 +17,14 @@ data class CreateAccountRequest(
     val description: String? = null,
     val attributes: Map<Long, String> = emptyMap(),
     val managedById: Long? = null,
+
+    @get:Size(max = 30) val shippingPostalCode: String? = null,
+    @get:Size(max = 2) val shippingCountry: String? = null,
+    val shippingStreet: String? = null,
+    val shippingCityId: Long? = null,
+
+    @get:Size(max = 30) val billingPostalCode: String? = null,
+    @get:Size(max = 2) val billingCountry: String? = null,
+    val billingStreet: String? = null,
+    val billingCityId: Long? = null,
 )
