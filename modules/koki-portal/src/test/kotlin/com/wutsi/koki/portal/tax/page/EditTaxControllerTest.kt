@@ -39,7 +39,7 @@ class EditTaxControllerTest : AbstractPageControllerTest() {
         )
         val tax = request.firstValue
         assertEquals(LocalDate.now().year - 3, tax.fiscalYear)
-        assertEquals(TenantFixtures.types.sortedBy { it.title }[2].id, tax.taxTypeId)
+        assertEquals(110L, tax.taxTypeId)
         assertEquals("This is a nice description", tax.description)
 
         assertCurrentPageIs(PageName.TAX)

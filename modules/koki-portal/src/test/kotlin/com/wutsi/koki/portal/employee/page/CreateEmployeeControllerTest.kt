@@ -38,7 +38,7 @@ class CreateEmployeeControllerTest : AbstractPageControllerTest() {
             eq(CreateEmployeeResponse::class.java)
         )
         assertEquals("ray.sponsible@gmail.com", request.firstValue.email)
-        assertEquals(TenantFixtures.types.sortedBy { it.title }[1].id, request.firstValue.employeeTypeId)
+        assertEquals(112L, request.firstValue.employeeTypeId)
         assertEquals("Director of Technology", request.firstValue.jobTitle)
         assertEquals(EmployeeStatus.INACTIVE, request.firstValue.status)
         assertEquals(60.0, request.firstValue.hourlyWage)

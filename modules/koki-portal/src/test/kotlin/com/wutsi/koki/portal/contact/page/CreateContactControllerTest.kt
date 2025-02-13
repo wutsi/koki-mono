@@ -42,7 +42,7 @@ class CreateContactControllerTest : AbstractPageControllerTest() {
             request.capture(),
             eq(CreateContactResponse::class.java)
         )
-        assertEquals(TenantFixtures.types.sortedBy { it.title }[2].id, request.firstValue.contactTypeId)
+        assertEquals(110L, request.firstValue.contactTypeId)
         assertEquals("Yo", request.firstValue.firstName)
         assertEquals("Man", request.firstValue.lastName)
         assertEquals("Ms.", request.firstValue.salutations)
