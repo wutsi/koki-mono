@@ -5,6 +5,7 @@ import com.wutsi.koki.account.dto.AccountSummary
 import com.wutsi.koki.account.dto.Attribute
 import com.wutsi.koki.account.dto.AttributeSummary
 import com.wutsi.koki.account.dto.AttributeType
+import com.wutsi.koki.refdata.dto.Address
 
 object AccountFixtures {
     // Attributes
@@ -103,6 +104,20 @@ object AccountFixtures {
             attributes[0].id to "0000001",
             attributes[1].id to "0000011",
             attributes[2].id to "2020",
-        )
+        ),
+        billingAddress = Address(
+            street = "340 Pascal",
+            postalCode = "H7K 1C7",
+            cityId = RefDataFixtures.locations[2].id,
+            stateId = RefDataFixtures.locations[2].parentId,
+            country = "CA",
+        ),
+        shippingAddress = Address(
+            street = "333 Nicolet",
+            postalCode = "111 111",
+            cityId = RefDataFixtures.locations[3].id,
+            stateId = RefDataFixtures.locations[3].parentId,
+            country = "CA",
+        ),
     )
 }

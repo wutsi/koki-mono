@@ -21,28 +21,33 @@ class CreateAccountEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var attrDao: AccountAttributeRepository
 
+    val request = CreateAccountRequest(
+        name = "Ray Sponsible Inc",
+        phone = "+5141110000",
+        mobile = "+5141110011",
+        email = "info@ray-sponsible-inc.com",
+        website = "https://www.ray-sponsible-inc.com",
+        language = "en",
+        description = "Description of the account",
+        attributes = mapOf(
+            100L to "NEQ-0000001",
+            101L to "40394039"
+        ),
+        accountTypeId = 100L,
+
+        shippingStreet = "340 Pascal",
+        shippingPostalCode = "123 111",
+        shippingCityId = 111L,
+        shippingCountry = "be",
+
+        billingStreet = "333 Nicolet",
+        billingPostalCode = "222 222",
+        billingCityId = 222L,
+        billingCountry = "fr"
+    )
+
     @Test
     fun create() {
-        val request = CreateAccountRequest(
-            name = "Ray Sponsible Inc",
-            phone = "+5141110000",
-            mobile = "+5141110011",
-            email = "info@ray-sponsible-inc.com",
-            website = "https://www.ray-sponsible-inc.com",
-            language = "en",
-            description = "Description of the account",
-            attributes = mapOf(
-                100L to "NEQ-0000001",
-                101L to "40394039"
-            ),
-            accountTypeId = 100L,
-            shippingStreet = "340 Pascal",
-            shippingPostalCode = "123 111",
-            shippingCityId = 111L,
-            billingStreet = "333 Nicolet",
-            billingPostalCode = "222 222",
-            billingCityId = 222L,
-        )
         val response = rest.postForEntity("/v1/accounts", request, CreateAccountResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
@@ -57,12 +62,19 @@ class CreateAccountEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.email, account.email)
         assertEquals(request.website, account.website)
         assertEquals(request.language, account.language)
+
+        assertEquals(request.shippingCityId, account.shippingCityId)
+        assertEquals(333L, account.shippingStateId)
+        assertEquals("CA", account.shippingCountry)
         assertEquals(request.shippingStreet, account.shippingStreet)
         assertEquals(request.shippingPostalCode, account.shippingPostalCode)
-        assertEquals(request.shippingCityId, account.shippingCityId)
+
+        assertEquals(request.billingCityId, account.billingCityId)
+        assertEquals(777L, account.billingStateId)
+        assertEquals("CA", account.billingCountry)
         assertEquals(request.billingStreet, account.billingStreet)
         assertEquals(request.billingPostalCode, account.billingPostalCode)
-        assertEquals(request.billingCityId, account.billingCityId)
+
         assertEquals(USER_ID, account.createdById)
         assertEquals(USER_ID, account.modifiedById)
         assertFalse(account.deleted)
@@ -79,5 +91,28 @@ class CreateAccountEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(accountId, attrs[1].accountId)
         assertEquals(101L, attrs[1].attributeId)
         assertEquals(request.attributes[101], attrs[1].value)
+    }
+
+    @Test
+    fun `no city`() {
+        val xrequest = request.copy(shippingCityId = null, billingCityId = null)
+        val response = rest.postForEntity("/v1/accounts", xrequest, CreateAccountResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val accountId = response.body!!.accountId
+        val account = dao.findById(accountId).get()
+
+        assertEquals(null, account.shippingCityId)
+        assertEquals(null, account.shippingStateId)
+        assertEquals("BE", account.shippingCountry)
+        assertEquals(request.billingStreet, account.billingStreet)
+        assertEquals(request.billingPostalCode, account.billingPostalCode)
+
+        assertEquals(null, account.billingCityId)
+        assertEquals(null, account.billingStateId)
+        assertEquals("FR", account.billingCountry)
+        assertEquals(request.shippingStreet, account.shippingStreet)
+        assertEquals(request.shippingPostalCode, account.shippingPostalCode)
     }
 }

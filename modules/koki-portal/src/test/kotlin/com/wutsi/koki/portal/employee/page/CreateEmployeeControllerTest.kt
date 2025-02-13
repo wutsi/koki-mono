@@ -7,7 +7,6 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
-import com.wutsi.koki.TenantFixtures
 import com.wutsi.koki.employee.dto.CreateEmployeeRequest
 import com.wutsi.koki.employee.dto.CreateEmployeeResponse
 import com.wutsi.koki.employee.dto.EmployeeStatus
@@ -38,7 +37,7 @@ class CreateEmployeeControllerTest : AbstractPageControllerTest() {
             eq(CreateEmployeeResponse::class.java)
         )
         assertEquals("ray.sponsible@gmail.com", request.firstValue.email)
-        assertEquals(TenantFixtures.types.sortedBy { it.title }[1].id, request.firstValue.employeeTypeId)
+        assertEquals(112L, request.firstValue.employeeTypeId)
         assertEquals("Director of Technology", request.firstValue.jobTitle)
         assertEquals(EmployeeStatus.INACTIVE, request.firstValue.status)
         assertEquals(60.0, request.firstValue.hourlyWage)

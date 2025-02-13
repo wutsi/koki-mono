@@ -111,9 +111,26 @@
                             <td><b>Description</b></td>
                             <td th:text="${account.description}">DESCRIPTION</td>
                         </tr>
+                        <tr th:if="${account.shippingAddress}">
+                            <td><b>Shipping Address</b></td>
+                            <td th:utext="${account.shippingAddress.toHtml()}">SHIPPING ADDRESS</td>
+                        </tr>
+                        <tr th:if="${account.billingAddress}">
+                            <td><b>Billing Address</b></td>
+                            <td th:utext="${account.billingAddress.toHtml()}">BILLING ADDRESS</td>
+                        </tr>
+
+
+                        <tr th:if="!${account.attributes.isEmpty()}">
+                            <td colspan="2"></td>
+                        </tr>
                         <tr th:each="attr : ${account.attributes}">
                             <td><b th:text="${attr.attribute.label}">NAME</b></td>
                             <td th:text="${attr.value}">DESCRIPTION</td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2"></td>
                         </tr>
                         <tr>
                             <td><b>Created</b></td>

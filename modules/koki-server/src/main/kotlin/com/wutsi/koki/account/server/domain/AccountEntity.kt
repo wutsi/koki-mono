@@ -46,23 +46,37 @@ data class AccountEntity(
     var website: String? = null,
     var language: String? = null,
     var description: String? = null,
+
+    @Column("shipping_city_fk") var shippingCityId: Long? = null,
+    @Column("shipping_state_fk") var shippingStateId: Long? = null,
     var shippingStreet: String? = null,
-    var shippingCityId: Long? = null,
     var shippingPostalCode: String? = null,
+    var shippingCountry: String? = null,
+
+    @Column("billing_city_fk") var billingCityId: Long? = null,
+    @Column("billing_state_fk") var billingStateId: Long? = null,
     var billingStreet: String? = null,
-    var billingCityId: Long? = null,
     var billingPostalCode: String? = null,
+    var billingCountry: String? = null,
 
     var deleted: Boolean = false,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
     var deletedAt: Date? = null,
-){
+) {
     fun hasShippingAddress(): Boolean {
-        return shippingCityId != null || !shippingPostalCode.isNullOrEmpty() || !shippingStreet.isNullOrEmpty()
+        return shippingCityId != null ||
+            shippingStateId != null ||
+            !shippingPostalCode.isNullOrEmpty() ||
+            !shippingStreet.isNullOrEmpty() ||
+            !shippingCountry.isNullOrEmpty()
     }
 
     fun hasBillingAddress(): Boolean {
-        return billingCityId != null || !billingPostalCode.isNullOrEmpty() || !billingStreet.isNullOrEmpty()
+        return billingCityId != null ||
+            billingStateId != null ||
+            !billingPostalCode.isNullOrEmpty() ||
+            !billingStreet.isNullOrEmpty() ||
+            !billingCountry.isNullOrEmpty()
     }
 }

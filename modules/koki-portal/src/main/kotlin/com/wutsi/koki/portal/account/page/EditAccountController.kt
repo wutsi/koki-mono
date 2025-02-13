@@ -10,6 +10,7 @@ import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.TypeService
 import com.wutsi.koki.portal.user.service.UserService
 import jakarta.servlet.http.HttpServletRequest
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -32,8 +33,8 @@ class EditAccountController(
     fun edit(@PathVariable id: Long, model: Model): String {
         val account = service.account(id)
         val form = AccountForm(
-            managedById = account.managedBy?.id ?: -1,
-            accountTypeId = account.accountType?.id ?: -1,
+            managedById = account.managedBy?.id,
+            accountTypeId = account.accountType?.id,
             language = account.language,
             phone = account.phone,
             description = account.description,
@@ -41,7 +42,15 @@ class EditAccountController(
             email = account.email,
             mobile = account.mobile,
             name = account.name,
-            attributes = account.attributes.map { attr -> attr.attribute.id to attr.value }.toMap()
+            attributes = account.attributes.map { attr -> attr.attribute.id to attr.value }.toMap(),
+            shippingStreet = account.shippingAddress?.street,
+            shippingCountry = account.shippingAddress?.country,
+            shippingPostalCode = account.shippingAddress?.postalCode,
+            shippingCityId = account.shippingAddress?.city?.id,
+            billingStreet = account.billingAddress?.street,
+            billingCountry = account.billingAddress?.country,
+            billingPostalCode = account.billingAddress?.postalCode,
+            billingCityId = account.billingAddress?.city?.id,
         )
         return edit(model, form, account)
     }
@@ -78,6 +87,11 @@ class EditAccountController(
             .toSet()
             .sortedBy { it.getDisplayLanguage() }
         model.addAttribute("languages", languages)
+
+        val countries = Locale.getISOCountries()
+            .map { country -> Locale(LocaleContextHolder.getLocale().language, country) }
+            .sortedBy { country -> country.getDisplayCountry() }
+        model.addAttribute("countries", countries)
 
         model.addAttribute(
             "page",

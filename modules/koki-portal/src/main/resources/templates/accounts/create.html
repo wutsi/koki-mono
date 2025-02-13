@@ -81,6 +81,65 @@
                     </div>
                 </div>
 
+                <div class="section">
+                    <div class="section-header">
+                        <h3 class="section-title">Shipping Address</h3>
+                    </div>
+                    <div class="section-body">
+                        <div class="section-item">
+                            <label class="title">Country</label>
+                            <select th:field="*{shippingCountry}">
+                                <option value=""></option>
+                                <option th:each="country : ${countries}"
+                                        th:value="${country.country}"
+                                        th:text="${country.displayCountry}"
+                                >COUNTRY</option>
+                            </select>
+                        </div>
+                        <div class="section-item">
+                            <label class="title">City</label>
+                            <select th:field="*{shippingCityId}"></select>
+                        </div>
+                        <div class="section-item">
+                            <label class="title">Street</label>
+                            <input th:field="*{shippingStreet}" />
+                        </div>
+                        <div class="section-item">
+                            <label class="title">Postal Code</label>
+                            <input maxlength="30" th:field="*{shippingPostalCode}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-header">
+                        <h3 class="section-title">Billing Address</h3>
+                    </div>
+                    <div class="section-body">
+                        <div class="section-item">
+                            <label class="title">Country</label>
+                            <select th:field="*{billingCountry}">
+                                <option value=""></option>
+                                <option th:each="country : ${countries}"
+                                        th:value="${country.country}"
+                                        th:text="${country.displayCountry}"
+                                >COUNTRY</option>
+                            </select>
+                        </div>
+                        <div class="section-item">
+                            <label class="title">City</label>
+                            <select th:field="*{billingCityId}"></select>
+                        </div>
+                        <div class="section-item">
+                            <label class="title">Street</label>
+                            <input th:field="*{billingStreet}" />
+                        </div>
+                        <div class="section-item">
+                            <label class="title">Postal Code</label>
+                            <input maxlength="30" th:field="*{billingPostalCode}" />
+                        </div>
+                    </div>
+                </div>
+
                 <div class="section" th:if="${attributes}">
                     <div class="section-body">
                         <div class="section-item" th:each="attribute : ${attributes}">
@@ -131,5 +190,10 @@
 
     </div>
 </div>
+
+<script>
+    koki_address_editor('shippingCountry', 'shippingCityId');
+    koki_address_editor('billingCountry', 'billingCityId');
+</script>
 </body>
 </html>

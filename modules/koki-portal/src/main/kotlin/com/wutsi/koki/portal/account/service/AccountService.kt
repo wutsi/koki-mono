@@ -5,6 +5,7 @@ import com.wutsi.koki.account.dto.UpdateAccountRequest
 import com.wutsi.koki.portal.account.form.AccountForm
 import com.wutsi.koki.portal.account.mapper.AccountMapper
 import com.wutsi.koki.portal.account.model.AccountModel
+import com.wutsi.koki.portal.refdata.service.LocationService
 import com.wutsi.koki.portal.tenant.service.TypeService
 import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.sdk.KokiAccounts
@@ -18,6 +19,7 @@ class AccountService(
     private val userService: UserService,
     private val attributeService: AttributeService,
     private val typeService: TypeService,
+    private val locationService: LocationService,
 ) {
     fun account(id: Long, fullGraph: Boolean = true): AccountModel {
         val account = koki.account(id).account
@@ -47,11 +49,27 @@ class AccountService(
             mapOf(id to typeService.type(id))
         }
 
+        val locationIds = listOf(
+            account.shippingAddress?.cityId,
+            account.shippingAddress?.stateId,
+            account.billingAddress?.cityId,
+            account.billingAddress?.stateId,
+        ).filterNotNull().toSet()
+        val locations = if (locationIds.isEmpty() || !fullGraph) {
+            emptyMap()
+        } else {
+            locationService.locations(
+                ids = locationIds.toList(),
+                limit = locationIds.size
+            ).associateBy { location -> location.id }
+        }
+
         return mapper.toAccountModel(
             entity = account,
             accountTypes = accountTypeMap,
             users = userMap,
             attributes = attributeMap,
+            locations = locations
         )
     }
 
@@ -125,8 +143,16 @@ class AccountService(
             email = form.email?.trim()?.ifEmpty { null },
             website = form.website?.trim()?.ifEmpty { null },
             language = form.language?.trim()?.ifEmpty { null },
-            managedById = form.managedById,
+            managedById = if (form.managedById == -1L) null else form.managedById,
             attributes = form.attributes,
+            shippingCountry = form.shippingCountry,
+            shippingStreet = form.shippingStreet,
+            shippingCityId = if (form.shippingCityId == -1L) null else form.shippingCityId,
+            shippingPostalCode = form.shippingPostalCode,
+            billingCountry = form.billingCountry,
+            billingStreet = form.billingStreet,
+            billingCityId = if (form.billingCityId == -1L) null else form.billingCityId,
+            billingPostalCode = form.billingPostalCode,
         )
         return koki.create(request).accountId
     }
@@ -141,8 +167,16 @@ class AccountService(
             email = form.email?.trim()?.ifEmpty { null },
             website = form.website?.trim()?.ifEmpty { null },
             language = form.language?.trim()?.ifEmpty { null },
-            managedById = form.managedById,
+            managedById = if (form.managedById == -1L) null else form.managedById,
             attributes = form.attributes,
+            shippingCountry = form.shippingCountry,
+            shippingStreet = form.shippingStreet,
+            shippingCityId = if (form.shippingCityId == -1L) null else form.shippingCityId,
+            shippingPostalCode = form.shippingPostalCode,
+            billingCountry = form.billingCountry,
+            billingStreet = form.billingStreet,
+            billingCityId = if (form.billingCityId == -1L) null else form.billingCityId,
+            billingPostalCode = form.billingPostalCode,
         )
         koki.update(id, request)
     }

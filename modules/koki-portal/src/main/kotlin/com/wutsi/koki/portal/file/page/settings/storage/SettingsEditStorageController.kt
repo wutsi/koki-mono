@@ -6,7 +6,7 @@ import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
-import com.wutsi.koki.portal.service.ConfigurationService
+import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model

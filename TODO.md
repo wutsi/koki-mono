@@ -14,8 +14,8 @@
 
 ## Account
 
-- [] Add additional information to accounts: address
 - [] Settings: Import Accounts from CSV
+- [x] Add additional information to accounts: address
 - [x] The account manager must have the permission 'account:manage'
 - [x] Add account filters
 - [x] Configure validation on DTO

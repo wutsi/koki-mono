@@ -58,9 +58,13 @@ class CreateAccountController(
 
         val languages = Locale.getISOLanguages()
             .map { lang -> Locale(lang) }
-            .toSet()
-            .sortedBy { it.getDisplayLanguage() }
+            .sortedBy { lang -> lang.getDisplayLanguage() }
         model.addAttribute("languages", languages)
+
+        val countries = Locale.getISOCountries()
+            .map { country -> Locale(LocaleContextHolder.getLocale().language, country) }
+            .sortedBy { country -> country.getDisplayCountry() }
+        model.addAttribute("countries", countries)
 
         model.addAttribute(
             "page",

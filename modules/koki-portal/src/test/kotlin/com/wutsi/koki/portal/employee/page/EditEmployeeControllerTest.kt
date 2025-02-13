@@ -8,7 +8,6 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.EmployeeFixtures.employee
-import com.wutsi.koki.TenantFixtures
 import com.wutsi.koki.employee.dto.EmployeeStatus
 import com.wutsi.koki.employee.dto.UpdateEmployeeRequest
 import com.wutsi.koki.error.dto.ErrorCode
@@ -37,7 +36,7 @@ class EditEmployeeControllerTest : AbstractPageControllerTest() {
             eq(Any::class.java)
         )
         assertEquals("Director of Technology", request.firstValue.jobTitle)
-        assertEquals(TenantFixtures.types.sortedBy { it.title }[1].id, request.firstValue.employeeTypeId)
+        assertEquals(112L, request.firstValue.employeeTypeId)
         assertEquals(EmployeeStatus.INACTIVE, request.firstValue.status)
         assertEquals(60.0, request.firstValue.hourlyWage)
 

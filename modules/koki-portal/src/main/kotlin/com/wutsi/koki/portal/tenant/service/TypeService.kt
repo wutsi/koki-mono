@@ -33,7 +33,7 @@ class TypeService(
             active = active,
             limit = limit,
             offset = offset
-        ).types.sortedBy { type -> type.title }
+        ).types.sortedBy { type -> (type.title ?: type.name).uppercase() }
         return types.map { type -> mapper.toTypeModel(type) }
     }
 

@@ -58,6 +58,7 @@ import com.wutsi.koki.product.dto.GetPriceResponse
 import com.wutsi.koki.product.dto.GetProductResponse
 import com.wutsi.koki.product.dto.SearchPriceResponse
 import com.wutsi.koki.product.dto.SearchProductResponse
+import com.wutsi.koki.refdata.dto.SearchLocationResponse
 import com.wutsi.koki.refdata.dto.SearchUnitResponse
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
@@ -208,7 +209,7 @@ abstract class AbstractPageControllerTest {
                     errors = 3,
                     errorMessages = listOf(
                         ImportMessage(location = "1", code = "INVALID_NAME"),
-                        ImportMessage(location = "2", code = "INVALID_ADDRESS", "Address is not valid"),
+                        ImportMessage(location = "2", code = "INVALID_ADDRESS", "LocationModel is not valid"),
                     )
                 ),
                 HttpStatus.OK,
@@ -565,6 +566,18 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(SearchUnitResponse::class.java)
+            )
+
+        // Location
+        doReturn(
+            ResponseEntity(
+                SearchLocationResponse(RefDataFixtures.locations),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchLocationResponse::class.java)
             )
     }
 
