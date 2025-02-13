@@ -35,7 +35,15 @@ class UpdateAccountEndpointTest : AuthorizationAwareEndpointTest() {
             101L to "",
             102L to "TVQ-22222",
             104L to "yes"
-        )
+        ),
+        shippingStreet = "340 Pascal",
+        shippingPostalCode = "123 111",
+        shippingCityId = 111L,
+        shippingCountry = "be",
+        billingStreet = "333 Nicolet",
+        billingPostalCode = "222 222",
+        billingCityId = 222L,
+        billingCountry = "fr"
     )
 
     @Test
@@ -54,6 +62,16 @@ class UpdateAccountEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.email, account.email)
         assertEquals(request.website, account.website)
         assertEquals(request.language, account.language)
+        assertEquals(request.shippingStreet, account.shippingStreet)
+        assertEquals(request.shippingPostalCode, account.shippingPostalCode)
+        assertEquals(request.shippingCityId, account.shippingCityId)
+        assertEquals(333L, account.shippingStateId)
+        assertEquals("CA", account.shippingCountry)
+        assertEquals(request.billingStreet, account.billingStreet)
+        assertEquals(request.billingPostalCode, account.billingPostalCode)
+        assertEquals(request.billingCityId, account.billingCityId)
+        assertEquals(777L, account.billingStateId)
+        assertEquals("CA", account.billingCountry)
         assertEquals(USER_ID, account.modifiedById)
 
         val attrs = attrDao.findByAccountId(accountId).sortedBy { it.attributeId }
@@ -78,6 +96,29 @@ class UpdateAccountEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(accountId, attrs[4].accountId)
         assertEquals(104L, attrs[4].attributeId)
         assertEquals(request.attributes[104], attrs[4].value)
+    }
+
+    @Test
+    fun `no city`() {
+        val xrequest = request.copy(shippingCityId = null, billingCityId = null)
+        val response = rest.postForEntity("/v1/accounts/1000", xrequest, Any::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val accountId = 1000L
+        val account = dao.findById(accountId).get()
+
+        assertEquals(null, account.shippingCityId)
+        assertEquals(null, account.shippingStateId)
+        assertEquals("BE", account.shippingCountry)
+        assertEquals(request.billingStreet, account.billingStreet)
+        assertEquals(request.billingPostalCode, account.billingPostalCode)
+
+        assertEquals(null, account.billingCityId)
+        assertEquals(null, account.billingStateId)
+        assertEquals("FR", account.billingCountry)
+        assertEquals(request.shippingStreet, account.shippingStreet)
+        assertEquals(request.shippingPostalCode, account.shippingPostalCode)
     }
 
     @Test

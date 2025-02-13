@@ -139,7 +139,6 @@ function koki_modal_close() {
     document.querySelector('#koki-modal .btn-close').click();
 }
 
-/*========== LOAD MORE ================*/
 /**
  * Load more data
  * @param containerId ID of the container
@@ -156,4 +155,43 @@ function koki_load_more(containerId) {
             $('#' + containerId).replaceWith(html);
         });
     });
+}
+
+/**
+ * Configure the address editor
+ * @param countryId
+ * @param cityId
+ */
+function koki_address_editor(countryId, cityId) {
+    $('#' + countryId).select2();
+    $('#' + countryId).on('select2:select', function (e) {
+        console.log('country changed....');
+        $('#' + cityId).val('').trigger('change');
+    });
+
+    $('#' + cityId).select2({
+            ajax: {
+                url: function () {
+                    return '/locations/selector/search?type=CITY&country=' + document.getElementById(countryId).value;
+                },
+                dataType: 'json',
+                delay: 1000,
+                processResults: function (item) {
+                    const xitems = item.map(function (item) {
+                        return {
+                            id: item.id,
+                            text: item.name,
+                        }
+                    });
+                    return {
+                        results: xitems
+                    };
+                }
+            },
+            placeholder: 'Select an city',
+            allowClear: true,
+            tokenSeparators: [','],
+            minimumInputLength: 3,
+        }
+    );
 }

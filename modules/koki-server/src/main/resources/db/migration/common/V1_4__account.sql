@@ -35,6 +35,17 @@ CREATE TABLE T_ACCOUNT(
   language                VARCHAR(2),
   description             TEXT,
 
+  shipping_street         TEXT,
+  shipping_postal_code    VARCHAR(30),
+  shipping_city_fk        BIGINT,
+  shipping_state_fk       BIGINT,
+  shipping_country        VARCHAR(2),
+  billing_street          TEXT,
+  billing_postal_code     VARCHAR(30),
+  billing_city_fk         BIGINT,
+  billing_state_fk        BIGINT,
+  billing_country         VARCHAR(2),
+
   deleted                 BOOLEAN NOT NULL DEFAULT false,
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
@@ -42,6 +53,8 @@ CREATE TABLE T_ACCOUNT(
 
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
+
+CREATE INDEX I_ACCOUNT_account_type ON T_ACCOUNT(account_type_fk);
 
 CREATE TABLE T_ACCOUNT_ATTRIBUTE(
   id                      BIGINT NOT NULL AUTO_INCREMENT,

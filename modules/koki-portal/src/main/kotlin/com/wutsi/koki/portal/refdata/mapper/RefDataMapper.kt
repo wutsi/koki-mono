@@ -1,7 +1,9 @@
 package com.wutsi.koki.portal.refdata.mapper
 
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
+import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.refdata.model.UnitModel
+import com.wutsi.koki.refdata.dto.Location
 import com.wutsi.koki.refdata.dto.Unit
 import org.springframework.stereotype.Service
 
@@ -12,6 +14,16 @@ class RefDataMapper : TenantAwareMapper() {
             id = entity.id,
             name = entity.name,
             abbreviation = entity.abbreviation,
+        )
+    }
+
+    fun toLocationModel(entity: Location): LocationModel {
+        return LocationModel(
+            id = entity.id,
+            name = entity.name,
+            parentId = entity.parentId,
+            type = entity.type,
+            country = entity.country,
         )
     }
 }

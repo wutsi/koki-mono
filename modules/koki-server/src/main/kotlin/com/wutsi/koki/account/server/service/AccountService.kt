@@ -9,6 +9,8 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.form.server.domain.AccountAttributeEntity
 import com.wutsi.koki.form.server.domain.AccountEntity
+import com.wutsi.koki.refdata.dto.LocationType
+import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.security.server.service.SecurityService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
@@ -20,6 +22,7 @@ class AccountService(
     private val dao: AccountRepository,
     private val attributeDao: AccountAttributeRepository,
     private val securityService: SecurityService,
+    private val locationService: LocationService,
     private var em: EntityManager,
 ) {
     fun get(id: Long, tenantId: Long): AccountEntity {
@@ -35,6 +38,9 @@ class AccountService(
     @Transactional
     fun create(request: CreateAccountRequest, tenantId: Long): AccountEntity {
         val userId = securityService.getCurrentUserIdOrNull()
+        val shippingCity = request.shippingCityId?.let { id -> locationService.get(id, LocationType.CITY) }
+        val billingCity = request.billingCityId?.let { id -> locationService.get(id, LocationType.CITY) }
+
         val account = dao.save(
             AccountEntity(
                 tenantId = tenantId,
@@ -46,15 +52,21 @@ class AccountService(
                 website = request.website,
                 language = request.language?.lowercase(),
                 description = request.description,
-                shippingStreet = request.shippingStreet,
-                shippingCityId = request.shippingCityId,
-                shippingPostalCode = request.shippingPostalCode,
-                billingStreet = request.billingStreet,
-                billingCityId = request.billingCityId,
-                billingPostalCode = request.billingPostalCode,
                 managedById = request.managedById,
                 createdById = userId,
                 modifiedById = userId,
+
+                shippingStreet = request.shippingStreet,
+                shippingCityId = shippingCity?.id,
+                shippingStateId = shippingCity?.parentId,
+                shippingCountry = (shippingCity?.country ?: request.shippingCountry)?.uppercase(),
+                shippingPostalCode = request.shippingPostalCode,
+
+                billingStreet = request.billingStreet,
+                billingCityId = billingCity?.id,
+                billingStateId = billingCity?.parentId,
+                billingCountry = (billingCity?.country ?: request.billingCountry)?.uppercase(),
+                billingPostalCode = request.billingPostalCode,
             )
         )
 
@@ -76,6 +88,9 @@ class AccountService(
     @Transactional
     fun update(id: Long, request: UpdateAccountRequest, tenantId: Long) {
         val account = get(id, tenantId)
+        val shippingCity = request.shippingCityId?.let { id -> locationService.get(id, LocationType.CITY) }
+        val billingCity = request.billingCityId?.let { id -> locationService.get(id, LocationType.CITY) }
+
         account.name = request.name
         account.phone = request.phone
         account.accountTypeId = request.accountTypeId
@@ -83,12 +98,19 @@ class AccountService(
         account.mobile = request.mobile
         account.website = request.website
         account.language = request.language?.lowercase()
+
         account.shippingStreet = request.shippingStreet
-        account.shippingCityId = request.shippingCityId
+        account.shippingCityId = shippingCity?.id
+        account.shippingStateId = shippingCity?.parentId
         account.shippingPostalCode = request.shippingPostalCode
+        account.shippingCountry = (shippingCity?.country ?: request.shippingCountry)?.uppercase()
+
         account.billingStreet = request.billingStreet
-        account.billingCityId = request.billingCityId
+        account.billingCityId = billingCity?.id
+        account.billingStateId = billingCity?.parentId
         account.billingPostalCode = request.billingPostalCode
+        account.billingCountry = (billingCity?.country ?: request.billingCountry)?.uppercase()
+
         account.description = request.description
         account.managedById = request.managedById
         account.modifiedById = securityService.getCurrentUserIdOrNull()

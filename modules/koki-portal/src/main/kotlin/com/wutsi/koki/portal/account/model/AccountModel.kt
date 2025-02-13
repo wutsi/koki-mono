@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.account.model
 
+import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.tenant.model.TypeModel
 import com.wutsi.koki.portal.user.model.UserModel
 import java.util.Date
@@ -22,5 +23,7 @@ data class AccountModel(
     val createdBy: UserModel? = null,
     val modifiedBy: UserModel? = null,
     val managedBy: UserModel? = null,
-    val attributes: List<AccountAttributeModel> = emptyList()
+    val attributes: List<AccountAttributeModel> = emptyList(),
+    val shippingAddress: AddressModel? = null,
+    val billingAddress: AddressModel? = null,
 )

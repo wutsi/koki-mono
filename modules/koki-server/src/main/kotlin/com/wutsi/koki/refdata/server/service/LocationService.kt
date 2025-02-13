@@ -1,5 +1,9 @@
 package com.wutsi.koki.refdata.server.service
 
+import com.wutsi.koki.error.dto.Error
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.Parameter
+import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.dao.LocationRepository
 import com.wutsi.koki.refdata.server.domain.LocationEntity
@@ -20,6 +24,16 @@ class LocationService(
 
     fun getOrNull(id: Long): LocationEntity? {
         return dao.findById(id).getOrNull()
+    }
+
+    fun get(id: Long, type: LocationType): LocationEntity? {
+        val location = dao.findById(id).getOrNull()
+            ?: throw NotFoundException(error = Error(ErrorCode.LOCATION_NOT_FOUND, parameter = Parameter(value = id)))
+
+        if (location.type != type) {
+            throw NotFoundException(error = Error(ErrorCode.LOCATION_NOT_FOUND, parameter = Parameter(value = id)))
+        }
+        return location
     }
 
     @Transactional
