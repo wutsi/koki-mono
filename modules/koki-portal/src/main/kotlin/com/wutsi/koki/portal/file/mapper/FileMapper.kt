@@ -46,8 +46,6 @@ class FileMapper : TenantAwareMapper() {
             createdAt = entity.createdAt,
             createdAtText = fmt.format(entity.createdAt),
             createdBy = createdBy,
-            formId = entity.formId,
-            workflowInstanceId = entity.workflowInstanceId,
             extension = FilenameUtils.getExtension(entity.name).lowercase(),
         )
     }

@@ -25,8 +25,8 @@ CREATE TABLE T_CONTACT(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
-CREATE INDEX I_CONTACT_account ON T_CONTACT(account_fk);
-CREATE INDEX I_CONTACT_contact_type_fk ON T_CONTACT(contact_type_fk);
+CREATE INDEX I_CONTACT_account ON T_CONTACT(account_fk, deleted, tenant_fk);
+CREATE INDEX I_CONTACT_contact_type_fk ON T_CONTACT(contact_type_fk, deleted, tenant_fk);
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url)
     VALUES (120, 2, 'contact', 'Contact', '/contacts', '/contacts/tab', null, '/js/contacts.js');

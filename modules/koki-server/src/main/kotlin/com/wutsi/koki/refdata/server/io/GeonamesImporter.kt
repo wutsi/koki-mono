@@ -177,7 +177,9 @@ class GeonamesImporter(private val service: LocationService) {
         return if (type == LocationType.COUNTRY) {
             Locale("en", record.get(RECORD_COUNTRY)).displayCountry
         } else {
-            record.get(RECORD_NAME)
+            val name = record.get(RECORD_NAME)
+            val i = name.indexOf("/")
+            return if (i > 0) name.substring(0, i) else name
         }
     }
 

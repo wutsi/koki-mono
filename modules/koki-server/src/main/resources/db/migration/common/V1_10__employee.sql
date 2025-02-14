@@ -5,7 +5,6 @@ CREATE TABLE T_EMPLOYEE(
   employee_type_fk        BIGINT,
   created_by_fk           BIGINT,
   modified_by_fk          BIGINT,
-  deleted_by_fk           BIGINT,
 
   job_title               VARCHAR(100),
   hourly_wage             DECIMAL(12, 2),

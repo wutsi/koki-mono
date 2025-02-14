@@ -1,8 +1,0 @@
-{
-  "name": "payment-successful",
-  "data": {
-    "transaction_id": "111222333",
-    "gateway": "stripe",
-    "transaction_date": "2024-12-01"
-  }
-}
