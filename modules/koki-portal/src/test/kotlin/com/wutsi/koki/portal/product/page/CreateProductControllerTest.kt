@@ -70,7 +70,7 @@ class CreateProductControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun error() {
-        val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
+        val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.ACCOUNT_IN_USE)
         doThrow(ex).whenever(rest).postForEntity(
             any<String>(), any<CreateProductRequest>(), eq(CreateProductResponse::class.java)
         )

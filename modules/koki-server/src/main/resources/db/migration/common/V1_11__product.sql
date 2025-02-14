@@ -23,7 +23,8 @@ CREATE TABLE T_PRODUCT(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
-CREATE INDEX I_PRODUCT_type ON T_PRODUCT(type, tenant_fk);
+CREATE INDEX I_PRODUCT_type ON T_PRODUCT(type, deleted, tenant_fk);
+CREATE INDEX I_PRODUCT_active ON T_PRODUCT(active, deleted, tenant_fk);
 
 CREATE TABLE T_PRICE(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
@@ -36,7 +37,7 @@ CREATE TABLE T_PRICE(
   deleted_by_fk           BIGINT,
 
   name                    VARCHAR(100),
-  amount                  DOUBLE NOT NULL,
+  amount                  DECIMAL(10, 2) NOT NULL,
   currency                VARCHAR(3) NOT NULL,
   active                  BOOLEAN NOT NULL DEFAULT true,
   start_at                DATE,

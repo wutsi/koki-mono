@@ -1,0 +1,18 @@
+name,state,rate,priority
+GST,Alberta,5,0
+GST,British Columbia,5,0
+PST,British Columbia,7,0
+GST,Manitoba,5,0
+PST,Manitoba,7,0
+HST,New Brunswick,15,0
+HST,Newfoundland and Labrador,15,0
+GST,Northwest Territories,5,0
+HST,Nova Scotia,15,0
+GST,Nunavut,5,0
+HST,Ontario,13,0
+HST,Prince Edward Island,15,0
+GST,Quebec,5,0
+PST,Quebec,9.975,1
+GST,Saskatchewan,5,0
+PST,Saskatchewan,6,0
+GST,Yukon,5,0

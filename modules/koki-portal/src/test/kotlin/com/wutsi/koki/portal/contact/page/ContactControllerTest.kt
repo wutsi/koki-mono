@@ -57,7 +57,7 @@ class ContactControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `error on delete`() {
-        val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.FORM_IN_USE)
+        val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.ACCOUNT_IN_USE)
         doThrow(ex).whenever(rest).delete(any<String>())
 
         navigateTo("/contacts/${contact.id}")
