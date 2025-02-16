@@ -85,6 +85,7 @@ class ProductService(
                 createdById = userId,
                 modifiedAt = now,
                 modifiedById = userId,
+                categoryId = request.categoryId,
                 serviceDetails = ServiceDetailsData(
                     unitId = request.unitId,
                     quantity = request.quantity
@@ -103,6 +104,7 @@ class ProductService(
         product.type = request.type
         product.modifiedAt = Date()
         product.modifiedById = securityService.getCurrentUserIdOrNull()
+        product.categoryId = request.categoryId
         product.serviceDetails = ServiceDetailsData(
             unitId = request.unitId,
             quantity = request.quantity

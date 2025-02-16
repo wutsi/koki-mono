@@ -37,8 +37,14 @@ class SalesTaxImporter(
         var errors = mutableListOf<ImportMessage>()
 
         /* import */
-        val input = SalesTaxImporter::class.java.getResourceAsStream("/refdata/sales-tax//$country.csv")
-            ?: throw ConflictException(error = Error(code = ErrorCode.SALES_TAX_COUNTRY_NOT_SUPPORTED))
+        val filename = "/refdata/sales-tax/$country.csv"
+        val input = SalesTaxImporter::class.java.getResourceAsStream(filename)
+            ?: throw ConflictException(
+                error = Error(
+                    code = ErrorCode.SALES_TAX_COUNTRY_NOT_SUPPORTED,
+                    message = "Resource not found $filename",
+                )
+            )
 
         val salesTaxes = service.getByCountry(country).toMutableList()
         val states = locationService.search(country = country, type = LocationType.STATE)
@@ -81,7 +87,7 @@ class SalesTaxImporter(
         salesTaxes.filter { salesTax -> !salesTaxIds.contains(salesTax.id) }
             .forEach { salesTax -> deactivate(salesTax) }
 
-        LOGGER.info("${added + updated} taxes(s) imported with $errors error(s)")
+        LOGGER.info("${added + updated} tax(es) for $country imported with $errors error(s)")
         return ImportResponse(
             added = added,
             updated = updated,

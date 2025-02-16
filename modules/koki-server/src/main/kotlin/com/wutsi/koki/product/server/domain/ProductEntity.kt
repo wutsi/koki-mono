@@ -29,6 +29,9 @@ data class ProductEntity(
     @Column(name = "deleted_by_fk")
     var deletedById: Long? = null,
 
+    @Column(name = "category_fk")
+    var categoryId: Long? = null,
+
     var name: String = "",
     var code: String? = null,
     var description: String? = null,
