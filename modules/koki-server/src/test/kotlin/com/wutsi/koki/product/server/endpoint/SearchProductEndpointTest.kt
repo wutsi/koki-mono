@@ -26,19 +26,19 @@ class SearchProductEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val products = response.body!!.products
-        assertEquals(3, products.size)
-        assertEquals(listOf(100L, 110L, 120L), products.map { product -> product.id }.sorted())
+        assertEquals(4, products.size)
+        assertEquals(listOf(110L, 120L, 130L, 140L), products.map { product -> product.id }.sorted())
     }
 
     @Test
     fun `by id`() {
-        val response = rest.getForEntity("/v1/products?id=100&id=110&id=200", SearchProductResponse::class.java)
+        val response = rest.getForEntity("/v1/products?id=120&id=140&id=200", SearchProductResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val products = response.body!!.products
         assertEquals(2, products.size)
-        assertEquals(listOf(100L, 110L), products.map { product -> product.id }.sorted())
+        assertEquals(listOf(120L, 140L), products.map { product -> product.id }.sorted())
     }
 
     @Test

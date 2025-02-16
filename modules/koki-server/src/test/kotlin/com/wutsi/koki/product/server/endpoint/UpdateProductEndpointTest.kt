@@ -22,9 +22,10 @@ class UpdateProductEndpointTest : AuthorizationAwareEndpointTest() {
         code = "RAY123",
         description = "Lunettes futuristes",
         active = true,
-        type = ProductType.SUBSCRIPTION,
+        type = ProductType.DIGITAL,
         unitId = 11,
         quantity = 1,
+        categoryId = 111L
     )
 
     @Test
@@ -40,6 +41,7 @@ class UpdateProductEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.active, product.active)
         assertEquals(request.type, product.type)
         assertEquals(USER_ID, product.modifiedById)
+        assertEquals(request.categoryId, product.categoryId)
         assertEquals(request.quantity, product.serviceDetails?.quantity)
         assertEquals(request.unitId, product.serviceDetails?.unitId)
     }

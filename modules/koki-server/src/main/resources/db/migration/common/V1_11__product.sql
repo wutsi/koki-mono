@@ -5,6 +5,7 @@ CREATE TABLE T_PRODUCT(
   created_by_fk           BIGINT,
   modified_by_fk          BIGINT,
   deleted_by_fk           BIGINT,
+  category_fk             BIGINT,
 
   type                    INT NOT NULL DEFAULT 0,
   name                    VARCHAR(100) NOT NULL,
@@ -25,6 +26,7 @@ CREATE TABLE T_PRODUCT(
 
 CREATE INDEX I_PRODUCT_type ON T_PRODUCT(type, deleted, tenant_fk);
 CREATE INDEX I_PRODUCT_active ON T_PRODUCT(active, deleted, tenant_fk);
+CREATE INDEX I_PRODUCT_product ON T_PRODUCT(category_fk, deleted, tenant_fk);
 
 CREATE TABLE T_PRICE(
   id                      BIGINT NOT NULL AUTO_INCREMENT,

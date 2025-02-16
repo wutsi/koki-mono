@@ -1,0 +1,138 @@
+10000,Automotive
+10001,Automotive > Repair
+10002,Automotive > Repair > Engine Repair
+10003,Automotive > Repair > Transmission Repair
+10004,Automotive > Repair > Brake Repair
+10005,Automotive > Repair > Tire Rotation
+10006,Automotive > Repair > Oil Change
+10007,Automotive > Detailing
+10008,Automotive > Detailing > Interior Detailing
+10009,Automotive > Detailing > Exterior Detailing
+10010,Automotive > Detailing > Headlight Restoration
+10011,Home Services
+10012,Home Services > Cleaning
+10013,Home Services > Cleaning > House Cleaning
+10014,Home Services > Cleaning > Carpet Cleaning
+10015,Home Services > Cleaning > Window Cleaning
+10016,Home Services > Cleaning > Deep Cleaning
+10017,Home Services > Repair
+10018,Home Services > Repair > Plumbing
+10019,Home Services > Repair > Electrical
+10020,Home Services > Repair > HVAC
+10021,Home Services > Repair > Appliance Repair
+10022,Home Services > Landscaping
+10023,Home Services > Landscaping > Lawn Mowing
+10024,Home Services > Landscaping > Gardening
+10025,Home Services > Landscaping > Tree Trimming
+10026,Home Services > Landscaping > Snow Removal
+10027,Home Services > Moving
+10028,Home Services > Moving > Local Moving
+10029,Home Services > Moving > Long Distance Moving
+10030,Home Services > Moving > Packing Services
+10031,Home Services > Pest Control
+10032,Home Services > Pest Control > Pest Inspection
+10033,Home Services > Pest Control > Pest Treatment
+10034,Home Services > Pest Control > Rodent Control
+10035,Home Improvement
+10036,Home Improvement > Remodeling
+10037,Home Improvement > Remodeling > Kitchen Remodeling
+10038,Home Improvement > Remodeling > Bathroom Remodeling
+10039,Home Improvement > Remodeling > Basement Finishing
+10040,Home Improvement > Construction
+10041,Home Improvement > Construction > Roofing
+10042,Home Improvement > Construction > Siding
+10043,Home Improvement > Construction > Framing
+10044,Home Improvement > Painting
+10045,Home Improvement > Painting > Interior Painting
+10046,Home Improvement > Painting > Exterior Painting
+10047,Home Improvement > Painting > Cabinet Painting
+10048,Personal Services
+10049,Personal Services > Beauty
+10050,Personal Services > Beauty > Haircut
+10051,Personal Services > Beauty > Hair Coloring
+10052,Personal Services > Beauty > Manicure
+10053,Personal Services > Beauty > Pedicure
+10054,Personal Services > Beauty > Facial
+10055,Personal Services > Wellness
+10056,Personal Services > Wellness > Massage Therapy
+10057,Personal Services > Wellness > Yoga Classes
+10058,Personal Services > Wellness > Personal Training
+10059,Personal Services > Pet Care
+10060,Personal Services > Pet Care > Dog Walking
+10061,Personal Services > Pet Care > Pet Grooming
+10062,Personal Services > Pet Care > Pet Sitting
+10063,Professional Services
+10064,Professional Services > Legal
+10065,Professional Services > Legal > Legal Consultation
+10066,Professional Services > Legal > Contract Drafting
+10067,Professional Services > Legal > Litigation
+10068,Professional Services > Financial Services
+10069,Professional Services > Financial Services > Financial Planning
+10070,Professional Services > Financial Services > Investment Management
+10071,Professional Services > Financial Services > Retirement Planning
+10072,Professional Services > Financial Services > Estate Planning
+10073,Professional Services > Accounting
+10074,Professional Services > Accounting > Tax Preparation
+10075,Professional Services > Accounting > Bookkeeping
+10076,Professional Services > Accounting > Auditing
+10077,Professional Services > Consulting
+10078,Professional Services > Consulting > Business Consulting
+10079,Professional Services > Consulting > Marketing Consulting
+10080,Professional Services > Consulting > IT Consulting
+10081,Professional Services > Tutoring
+10082,Professional Services > Tutoring > Academic Tutoring
+10083,Professional Services > Tutoring > Test Prep
+10084,Professional Services > Tutoring > Language Tutoring
+10085,Event Services
+10086,Event Services > Catering
+10087,Event Services > Catering > Wedding Catering
+10088,Event Services > Catering > Corporate Catering
+10089,Event Services > Catering > Party Catering
+10090,Event Services > Photography
+10091,Event Services > Photography > Wedding Photography
+10092,Event Services > Photography > Portrait Photography
+10093,Event Services > Photography > Event Photography
+10094,Event Services > DJ
+10095,Event Services > DJ > Wedding DJ
+10096,Event Services > DJ > Party DJ
+10097,Event Services > DJ > Corporate Event DJ
+10098,Digital Services
+10099,Digital Services > Web Development
+10100,Digital Services > Web Development > Website Design
+10101,Digital Services > Web Development > E-commerce Development
+10102,Digital Services > Web Development > Web Application Development
+10103,Digital Services > Digital Marketing
+10104,Digital Services > Digital Marketing > Search Engine Optimization (SEO)
+10105,Digital Services > Digital Marketing > Social Media Marketing
+10106,Digital Services > Digital Marketing > Email Marketing
+10107,Digital Services > Digital Marketing > Content Marketing
+10108,Digital Services > Digital Marketing > Paid Advertising (PPC)
+10109,Digital Services > Graphic Design
+10110,Digital Services > Graphic Design > Logo Design
+10111,Digital Services > Graphic Design > Branding
+10112,Digital Services > Graphic Design > Website Graphics
+10113,Digital Services > Graphic Design > Marketing Collateral
+10114,Digital Services > Writing & Editing
+10115,Digital Services > Writing & Editing > Content Writing
+10116,Digital Services > Writing & Editing > Copywriting
+10117,Digital Services > Writing & Editing > Editing & Proofreading
+10118,Digital Services > Video & Animation
+10119,Digital Services > Video & Animation > Video Editing
+10120,Digital Services > Video & Animation > Animation
+10121,Digital Services > Video & Animation > Motion Graphics
+10122,Digital Services > Music & Audio
+10123,Digital Services > Music & Audio > Music Production
+10124,Digital Services > Music & Audio > Sound Design
+10125,Digital Services > Music & Audio > Voice Over
+10126,Digital Services > Virtual Assistant
+10127,Digital Services > Virtual Assistant > Administrative Support
+10128,Digital Services > Virtual Assistant > Customer Service
+10129,Digital Services > Virtual Assistant > Social Media Management
+10130,Digital Services > Data Entry
+10131,Digital Services > Data Entry > Data Entry
+10132,Digital Services > Data Entry > Data Cleaning
+10133,Digital Services > Data Entry > Data Processing
+10134,Digital Services > Customer Service
+10135,Digital Services > Customer Service > Email Support
+10136,Digital Services > Customer Service > Chat Support
+10137,Digital Services > Customer Service > Phone Support

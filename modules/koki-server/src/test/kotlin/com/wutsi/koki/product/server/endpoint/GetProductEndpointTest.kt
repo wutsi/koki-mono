@@ -23,7 +23,8 @@ class GetProductEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("Rayband 123", product.name)
         assertEquals("Glasses with class", product.description)
         assertEquals(true, product.active)
-        assertEquals(ProductType.PHYSICAL, product.type)
+        assertEquals(ProductType.SERVICE, product.type)
+        assertEquals(222L, product.categoryId)
     }
 
     @Test

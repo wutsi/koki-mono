@@ -24,6 +24,7 @@ class CreateProductEndpointTest : AuthorizationAwareEndpointTest() {
         type = ProductType.SERVICE,
         unitId = 11,
         quantity = 1,
+        categoryId = 111L
     )
 
     @Test
@@ -42,6 +43,7 @@ class CreateProductEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(false, product.deleted)
         assertEquals(USER_ID, product.createdById)
         assertEquals(USER_ID, product.modifiedById)
+        assertEquals(request.categoryId, product.categoryId)
         assertEquals(request.quantity, product.serviceDetails?.quantity)
         assertEquals(request.unitId, product.serviceDetails?.unitId)
     }

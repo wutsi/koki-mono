@@ -119,6 +119,7 @@
 ## Product
 
 - [] Integrate sales tax
+- [] Product Categories for services
 - [] Integrate Offer API
 - [] Add attributes for Digital service
 - [] Add attributes for Physical service

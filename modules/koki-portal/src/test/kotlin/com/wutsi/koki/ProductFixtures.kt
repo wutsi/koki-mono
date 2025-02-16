@@ -23,7 +23,7 @@ object ProductFixtures {
         ),
         ProductSummary(
             id = 101,
-            type = ProductType.SUBSCRIPTION,
+            type = ProductType.DIGITAL,
             name = "Netflix 100",
             code = "NET-100",
             active = false,

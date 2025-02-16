@@ -1,4 +1,3 @@
--- Units
 CREATE TABLE T_UNIT(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
@@ -25,7 +24,7 @@ INSERT INTO T_UNIT(id, name)
            (142, 'Lesson')
 ;
 
--- Locations
+
 CREATE TABLE T_LOCATION(
   id          BIGINT NOT NULL,
 
@@ -44,7 +43,7 @@ CREATE INDEX T_LOCATION_parent ON T_LOCATION(parent_fk);
 CREATE INDEX I_LOCATION_country ON T_LOCATION(country);
 CREATE INDEX I_LOCATION_type ON T_LOCATION(type);
 
--- SalesTax
+
 CREATE TABLE T_SALES_TAX(
   id             BIGINT NOT NULL AUTO_INCREMENT,
 
@@ -60,3 +59,19 @@ CREATE TABLE T_SALES_TAX(
 ) ENGINE = InnoDB;
 
 CREATE INDEX I_SALES_TAX_country ON T_SALES_TAX(country);
+
+
+CREATE TABLE T_CATEGORY(
+  id             BIGINT NOT NULL AUTO_INCREMENT,
+
+  name           VARCHAR(255) NOT NULL ,
+  long_name      TEXT NOT NULL ,
+  type           INT NOT NULL DEFAULT 0,
+  level          INT NOT NULL DEFAULT 0,
+  active         BOOLEAN NOT NULL DEFAULT true,
+
+  PRIMARY KEY(id)
+) ENGINE = InnoDB;
+
+ALTER TABLE T_CATEGORY ADD COLUMN parent_fk BIGINT REFERENCES T_CATEGORY(id);
+CREATE INDEX I_CATEGORY_type ON T_CATEGORY(type);
