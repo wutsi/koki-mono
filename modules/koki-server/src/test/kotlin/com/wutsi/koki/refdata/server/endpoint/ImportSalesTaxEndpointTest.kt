@@ -2,6 +2,8 @@ package com.wutsi.koki.refdata.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.common.dto.ImportResponse
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.refdata.server.dao.SalesTaxRepository
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.springframework.beans.factory.annotation.Autowired
@@ -195,5 +197,22 @@ class ImportSalesTaxEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(113L, yk[0].stateId)
         assertEquals(true, yk[0].active)
         assertEquals(0, yk[0].priority)
+    }
+
+    @Test
+    fun `bad country`() {
+        val response = rest.getForEntity("/v1/sales-taxes/import?country=zzz", ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.CONFLICT, response.statusCode)
+        assertEquals(ErrorCode.SALES_TAX_COUNTRY_NOT_SUPPORTED, response.body?.error?.code)
+    }
+
+    @Test
+    fun `bad state`() {
+        val response = rest.getForEntity("/v1/sales-taxes/import?country=YY", ImportResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+        assertEquals(1, response.body!!.errors)
+        assertEquals(ErrorCode.SALES_TAX_STATE_NOT_FOUND, response.body!!.errorMessages[0].code)
     }
 }

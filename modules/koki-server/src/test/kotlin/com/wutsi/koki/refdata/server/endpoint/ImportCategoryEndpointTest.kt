@@ -2,6 +2,8 @@ package com.wutsi.koki.refdata.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.common.dto.ImportResponse
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.refdata.dto.CategoryType
 import com.wutsi.koki.refdata.server.dao.CategoryRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -66,5 +68,13 @@ class ImportCategoryEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(true, category.active)
         assertEquals("Cabinets", category.name)
         assertEquals("Office Supplies > Office Furniture > Cabinets", category.longName)
+    }
+
+    @Test
+    fun `bad type`() {
+        val response = rest.getForEntity("/v1/categories/import?type=UNKNOWN", ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.CONFLICT, response.statusCode)
+        assertEquals(ErrorCode.CATEGORY_TYPE_NOT_SUPPORTED, response.body?.error?.code)
     }
 }
