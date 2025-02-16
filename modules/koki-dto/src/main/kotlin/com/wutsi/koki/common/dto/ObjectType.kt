@@ -7,7 +7,7 @@ enum class ObjectType {
     FILE,
     NOTE,
     EMAIL,
-    TAX,
+    PRODUCT,
     EMPLOYEE,
-    PRODUCT
+    TAX,
 }
