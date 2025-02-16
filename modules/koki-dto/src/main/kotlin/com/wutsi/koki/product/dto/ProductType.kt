@@ -4,6 +4,5 @@ enum class ProductType {
     UNKNOWN,
     SERVICE,
     DIGITAL,
-    SUBSCRIPTION,
     PHYSICAL,
 }

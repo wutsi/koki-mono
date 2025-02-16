@@ -4,6 +4,7 @@ import java.util.Date
 
 data class ProductSummary(
     val id: Long = -1,
+    val categoryId: Long? = null,
     val type: ProductType = ProductType.UNKNOWN,
     val name: String = "",
     val code: String? = null,

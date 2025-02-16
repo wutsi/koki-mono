@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Size
 
 data class UpdateProductRequest(
+    val categoryId: Long? = null,
     val type: ProductType = ProductType.UNKNOWN,
 
     @get:NotEmpty @get:Size(max = 100) val name: String = "",
