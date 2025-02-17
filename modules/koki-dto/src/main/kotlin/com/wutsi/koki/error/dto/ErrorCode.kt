@@ -63,6 +63,7 @@ object ErrorCode {
     val SALES_TAX_STATE_NOT_FOUND: String = "$PREFIX:sales-tax:state-not-found"
 
     val TAX_NOT_FOUND: String = "$PREFIX:tax:not-found"
+    val TAX_PRODUCT_NOT_FOUND: String = "$PREFIX:tax-product:not-found"
 
     val TENANT_NOT_FOUND: String = "$PREFIX:tenant:not-found"
     val TENANT_MISSING_FROM_HEADER: String = "$PREFIX:tenant:missing-from-header"
