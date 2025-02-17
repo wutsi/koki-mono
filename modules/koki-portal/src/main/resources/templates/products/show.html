@@ -45,6 +45,10 @@
                             <b>Type</b><br/>
                             <span th:text="#{'product-type.' + ${product.type}}">TYPE</span>
                         </div>
+                        <div class="margin-right-2x" th:if="${product.category}">
+                            <b>Category</b><br/>
+                            <span th:text="${product.category.name}">CATEGORY</span>
+                        </div>
                     </div>
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
                 </div>
@@ -97,6 +101,10 @@
                                 <tr>
                                     <td><b>Type</b></td>
                                     <td th:text="#{'product-type.' + ${product.type}}">TYPE</td>
+                                </tr>
+                                <tr th:if="${product.category}">
+                                    <td><b>Category</b></td>
+                                    <td th:text="${product.category.longName}">CATEGORY</td>
                                 </tr>
                                 <tr th:if="${product.description}">
                                     <td><b>Description</b></td>

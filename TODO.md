@@ -118,17 +118,23 @@
 
 ## Product
 
-- [] Integrate sales tax
-- [] Product Categories for services
 - [] Integrate Offer API
 - [] Add attributes for Digital service
 - [] Add attributes for Physical service
-- [] Add attributes for Subscription service
-- [] Link with categories
+- [x] Integrate sales tax
+- [x] Product Categories for services
+- [x] Link with categories
 - [x] Add attributes for Services
 - [x] Product UI
 - [x] Price UI
 - [x] Product, Price API
+
+## Invoice
+
+- [] Invoice API
+- [] Create invoice for Taxes
+- [] Send invoice to customer
+- [] Capture online payment: Paypal, Stripe, Flutterwave
 
 ## Portal
 

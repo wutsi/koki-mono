@@ -11,5 +11,7 @@ INSERT INTO T_TAX(id, tenant_fk, tax_type_fk, account_fk, accountant_fk, technic
            (200, 2, null, 222, null,  null,  null,  2, 2014, false, '2014-03-01 15:30:00', '2014-04-30 15:30:00', null);
 
 INSERT INTO T_TAX_PRODUCT(id, tenant_fk, tax_fk, product_fk, quantity, unit_price, sub_total, description)
-    VALUES (100, 1, 100, 111, 3, 150, 300, 'Yo man...'),
+    VALUES (100, 1, 100, 111, 3, 150, 450, 'Yo man...'),
+           (110, 1, 100, 112, 1, 100, 100, 'Yo man...'),
+           (120, 1, 100, 113, 3, 50,  150, 'Yo man...'),
            (200, 2, 200, 111, 1, 100, 100, null);

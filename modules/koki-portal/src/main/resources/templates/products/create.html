@@ -43,6 +43,10 @@
                                 </select>
                             </div>
                             <div class="section-item">
+                                <label class="title">Category</label>
+                                <select th:field="*{categoryId}"></select>
+                            </div>
+                            <div class="section-item">
                                 <label class="title">Description</label>
                                 <textarea rows="3" th:field="*{description}"></textarea>
                             </div>
@@ -94,8 +98,11 @@
     function on_type_changed() {
         console.log('on_type_changed');
 
+        // category
+        koki_category_editor('categoryId', 'type');
+
+        // custom attributes
         const type = document.getElementById('type').value;
-        console.log('...type=', type);
         document.getElementById('section-service').style.display = (type === 'SERVICE' ? 'block' : 'none');
     }
 </script>

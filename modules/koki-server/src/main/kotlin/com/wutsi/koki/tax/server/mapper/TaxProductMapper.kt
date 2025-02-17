@@ -1,48 +1,20 @@
 package com.wutsi.koki.tax.server.mapper
 
-import com.wutsi.koki.tax.dto.Tax
-import com.wutsi.koki.tax.dto.TaxSummary
-import com.wutsi.koki.tax.server.domain.TaxEntity
+import com.wutsi.koki.tax.dto.TaxProduct
+import com.wutsi.koki.tax.server.domain.TaxProductEntity
 import org.springframework.stereotype.Service
 
 @Service
-class TaxMapper {
-    fun toTax(entity: TaxEntity): Tax {
-        return Tax(
+class TaxProductMapper {
+    fun toTaxProduct(entity: TaxProductEntity): TaxProduct {
+        return TaxProduct(
             id = entity.id!!,
-            taxTypeId = entity.taxTypeId,
-            fiscalYear = entity.fiscalYear,
-            status = entity.status,
-            createdAt = entity.createdAt,
-            modifiedAt = entity.modifiedAt,
-            startAt = entity.startAt,
-            dueAt = entity.dueAt,
-            createdById = entity.createdById,
-            modifiedById = entity.modifiedById,
-            accountantId = entity.accountantId,
-            technicianId = entity.technicianId,
-            assigneeId = entity.assigneeId,
-            accountId = entity.accountId,
+            taxId = entity.taxId,
+            productId = entity.productId,
+            quantity = entity.quantity,
+            unitPrice = entity.unitPrice,
+            subTotal = entity.subTotal,
             description = entity.description,
-        )
-    }
-
-    fun toTaxSummary(entity: TaxEntity): TaxSummary {
-        return TaxSummary(
-            id = entity.id!!,
-            taxTypeId = entity.taxTypeId,
-            fiscalYear = entity.fiscalYear,
-            status = entity.status,
-            accountId = entity.accountId,
-            accountantId = entity.accountantId,
-            technicianId = entity.technicianId,
-            assigneeId = entity.assigneeId,
-            createdById = entity.createdById,
-            modifiedById = entity.modifiedById,
-            createdAt = entity.createdAt,
-            modifiedAt = entity.modifiedAt,
-            startAt = entity.startAt,
-            dueAt = entity.dueAt,
         )
     }
 }

@@ -39,7 +39,7 @@ class CategoryService(
         val jql = StringBuilder("SELECT C FROM CategoryEntity C WHERE C.id>0")
 
         if (keyword != null) {
-            jql.append(" AND UPPER(C.name) LIKE :keyword")
+            jql.append(" AND UPPER(C.longName) LIKE :keyword")
         }
         if (ids.isNotEmpty()) {
             jql.append(" AND C.id IN :ids")
@@ -59,7 +59,7 @@ class CategoryService(
 
         val query = em.createQuery(jql.toString(), CategoryEntity::class.java)
         if (keyword != null) {
-            query.setParameter("keyword", "${keyword.uppercase()}%")
+            query.setParameter("keyword", "%${keyword.uppercase()}%")
         }
         if (ids.isNotEmpty()) {
             query.setParameter("ids", ids)
