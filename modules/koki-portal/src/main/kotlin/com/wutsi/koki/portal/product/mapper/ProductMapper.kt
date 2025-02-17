@@ -5,6 +5,7 @@ import com.wutsi.koki.portal.model.MoneyMapper
 import com.wutsi.koki.portal.product.model.PriceModel
 import com.wutsi.koki.portal.product.model.ProductModel
 import com.wutsi.koki.portal.product.model.ServiceDetailsModel
+import com.wutsi.koki.portal.refdata.model.CategoryModel
 import com.wutsi.koki.portal.refdata.model.UnitModel
 import com.wutsi.koki.portal.tenant.model.TypeModel
 import com.wutsi.koki.portal.user.model.UserModel
@@ -17,7 +18,10 @@ import org.springframework.stereotype.Service
 @Service
 class ProductMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
     fun toProductModel(
-        entity: Product, units: Map<Long, UnitModel>, users: Map<Long, UserModel>
+        entity: Product,
+        units: Map<Long, UnitModel>,
+        users: Map<Long, UserModel>,
+        categories: Map<Long, CategoryModel>,
     ): ProductModel {
         val fmt = createDateFormat()
         return ProductModel(id = entity.id,
@@ -32,13 +36,22 @@ class ProductMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() 
             createdAt = entity.createdAt,
             createdAtText = fmt.format(entity.createdAt),
             createdBy = entity.createdById?.let { id -> users[id] },
+            category = entity.categoryId?.let { id -> categories[id] },
             serviceDetails = entity.serviceDetails?.let { details ->
-                ServiceDetailsModel(quantity = details.quantity, unit = details.unitId?.let { id -> units[id] })
-            })
+                ServiceDetailsModel(
+                    quantity = details.quantity,
+                    unit = details.unitId?.let { id ->
+                        units[id]
+                    }
+                )
+            }
+        )
     }
 
     fun toProductModel(
-        entity: ProductSummary, users: Map<Long, UserModel>
+        entity: ProductSummary,
+        users: Map<Long, UserModel>,
+        categories: Map<Long, CategoryModel>,
     ): ProductModel {
         val fmt = createDateFormat()
         return ProductModel(
@@ -53,6 +66,7 @@ class ProductMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() 
             createdAt = entity.createdAt,
             createdAtText = fmt.format(entity.createdAt),
             createdBy = entity.createdById?.let { id -> users[id] },
+            category = entity.categoryId?.let { id -> categories[id] },
         )
     }
 

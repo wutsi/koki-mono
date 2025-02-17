@@ -1,43 +1,29 @@
 package com.wutsi.koki.portal.refdata.page
 
-import com.wutsi.koki.portal.refdata.service.LocationService
-import com.wutsi.koki.refdata.dto.LocationType
+import com.wutsi.koki.portal.refdata.service.CategoryService
+import com.wutsi.koki.refdata.dto.CategoryType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class LocationSelectorController(private val service: LocationService) {
-    @GetMapping("/locations/selector/search")
+class CategorySelectorController(private val service: CategoryService) {
+    @GetMapping("/categories/selector/search")
     fun search(
         @RequestParam(required = false, name = "q") keyword: String? = null,
-        @RequestParam(required = false, name = "country") country: String? = null,
-        @RequestParam(required = false) type: LocationType = LocationType.CITY,
+        @RequestParam type: CategoryType,
     ): List<Map<String, Any>> {
-        val locations = service.locations(
+        val categories = service.categories(
             keyword = keyword,
-            country = country,
             type = type,
+            active = true,
             limit = 20,
         )
 
-        val parentIds = locations.map { location -> location.parentId }.filterNotNull().toSet()
-        val parents = if (parentIds.isEmpty()) {
-            emptyMap()
-        } else {
-            service.locations(
-                ids = parentIds.toList(),
-                limit = parentIds.size,
-            ).associateBy { location -> location.id }
-        }
-
-        return locations.map { location ->
+        return categories.map { category ->
             mapOf(
-                "id" to location.id,
-                "name" to listOf(
-                    location.name,
-                    location.parentId?.let { id -> parents[id]?.name }
-                ).filterNotNull().joinToString(", ")
+                "id" to category.id,
+                "name" to category.longName
             )
         }
     }

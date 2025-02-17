@@ -4,6 +4,7 @@ import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.product.form.ProductForm
 import com.wutsi.koki.portal.product.model.ProductModel
 import com.wutsi.koki.portal.product.service.ProductService
+import com.wutsi.koki.portal.refdata.service.CategoryService
 import com.wutsi.koki.portal.refdata.service.UnitService
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.product.dto.ProductType
@@ -20,6 +21,7 @@ import org.springframework.web.client.HttpClientErrorException
 class EditProductController(
     private val service: ProductService,
     private val unitService: UnitService,
+    private val categoryService: CategoryService,
 ) : AbstractProductController() {
     @GetMapping("/products/{id}/edit")
     fun edit(@PathVariable id: Long, model: Model): String {
@@ -32,6 +34,7 @@ class EditProductController(
             active = product.active,
             quantity = product.serviceDetails?.quantity,
             unitId = product.serviceDetails?.unit?.id,
+            categoryId = product.category?.id,
         )
         return edit(product, form, model)
     }
@@ -41,6 +44,7 @@ class EditProductController(
         model.addAttribute("form", form)
         model.addAttribute("types", ProductType.entries.filter { entry -> entry != ProductType.UNKNOWN })
         model.addAttribute("units", unitService.units())
+        model.addAttribute("category", form.categoryId?.let { id -> categoryService.category(id) })
 
         model.addAttribute(
             "page",

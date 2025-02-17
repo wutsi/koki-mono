@@ -32,12 +32,37 @@ CREATE INDEX I_TAX_assigned ON T_TAX(assignee_fk, deleted, tenant_fk);
 CREATE INDEX I_TAX_accountant ON T_TAX(accountant_fk, deleted, tenant_fk);
 CREATE INDEX I_TAX_technician ON T_TAX(technician_fk, deleted, tenant_fk);
 
+
+
+CREATE TABLE T_TAX_PRODUCT(
+  id                      BIGINT NOT NULL AUTO_INCREMENT,
+
+  tenant_fk               BIGINT NOT NULL,
+  tax_fk                  BIGINT NOT NULL REFERENCES T_TAX(id),
+  product_fk              BIGINT,
+  created_by_fk           BIGINT,
+  modified_by_fk          BIGINT,
+
+  quantity                INT NOT NULL DEFAULT 1,
+  unit_price              DECIMAL(10, 2) NOT NULL DEFAULT 0,
+  sub_total               DECIMAL(10, 2) NOT NULL DEFAULT 0,
+  description             VARCHAR(100),
+
+  created_at              DATETIME DEFAULT NOW(),
+  modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
+
+  UNIQUE(tax_fk, product_fk),
+  PRIMARY KEY(id)
+) ENGINE = InnoDB;
+
+
+
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url)
-    VALUES (160, 6, 'tax', 'Taxes', '/taxes', '/taxes/tab', null);
+    VALUES (180, 8, 'tax', 'Taxes', '/taxes', '/taxes/tab', null);
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
-    VALUES (1600, 160, 'tax',        'View tax reports'),
-           (1601, 160, 'tax:manage', 'Add/Edit tax reports'),
-           (1602, 160, 'tax:delete', 'Delete tax reports'),
-           (1604, 160, 'tax:status', 'Change tax report status and assignment');
+    VALUES (1800, 180, 'tax',        'View tax reports'),
+           (1801, 180, 'tax:manage', 'Add/Edit tax reports'),
+           (1802, 180, 'tax:delete', 'Delete tax reports'),
+           (1804, 180, 'tax:status', 'Change tax report status and assignment');
 

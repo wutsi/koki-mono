@@ -5,6 +5,7 @@ import com.wutsi.koki.portal.product.form.ProductForm
 import com.wutsi.koki.portal.product.mapper.ProductMapper
 import com.wutsi.koki.portal.product.model.PriceModel
 import com.wutsi.koki.portal.product.model.ProductModel
+import com.wutsi.koki.portal.refdata.service.CategoryService
 import com.wutsi.koki.portal.refdata.service.UnitService
 import com.wutsi.koki.portal.tenant.service.TypeService
 import com.wutsi.koki.portal.user.service.UserService
@@ -26,6 +27,7 @@ class ProductService(
     private val userService: UserService,
     private val typeService: TypeService,
     private val unitService: UnitService,
+    private val categoryService: CategoryService,
 ) {
     fun product(id: Long, fullGraph: Boolean = true): ProductModel {
         val product = koki.product(id).product
@@ -49,7 +51,15 @@ class ProductService(
             } ?: emptyMap()
         }
 
-        return mapper.toProductModel(product, units, users)
+        val categories = if (product.categoryId == null || !fullGraph) {
+            emptyMap()
+        } else {
+            categoryService.category(product.categoryId!!)
+                ?.let { category -> mapOf(category.id to category) }
+                ?: emptyMap()
+        }
+
+        return mapper.toProductModel(product, units, users, categories)
     }
 
     fun products(
@@ -68,8 +78,9 @@ class ProductService(
             offset = offset,
         ).products
 
-        val userIds =
-            products.flatMap { product -> listOf(product.createdById, product.modifiedById) }.filterNotNull().toSet()
+        val userIds = products.flatMap { product -> listOf(product.createdById, product.modifiedById) }
+            .filterNotNull()
+            .toSet()
         val users = if (userIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
@@ -79,7 +90,18 @@ class ProductService(
             ).associateBy { user -> user.id }
         }
 
-        return products.map { product -> mapper.toProductModel(product, users) }
+        val categoryIds = products.map { product -> product.categoryId }
+            .filterNotNull()
+            .toSet()
+        val categories = if (categoryIds.isEmpty() || !fullGraph) {
+            emptyMap()
+        } else {
+            categoryService.categories(
+                ids = categoryIds.toList(),
+                limit = categoryIds.size
+            ).associateBy { category -> category.id }
+        }
+        return products.map { product -> mapper.toProductModel(product, users, categories) }
     }
 
     fun create(form: ProductForm): Long {
@@ -92,6 +114,7 @@ class ProductService(
                 type = form.type,
                 unitId = if (form.type == ProductType.SERVICE) toId(form.unitId) else null,
                 quantity = if (form.type == ProductType.SERVICE) form.quantity else null,
+                categoryId = if (form.categoryId == -1L) null else form.categoryId
             )
         ).productId
     }
@@ -106,6 +129,7 @@ class ProductService(
                 type = form.type,
                 unitId = if (form.type == ProductType.SERVICE) toId(form.unitId) else null,
                 quantity = if (form.type == ProductType.SERVICE) form.quantity else null,
+                categoryId = if (form.categoryId == -1L) null else form.categoryId
             )
         )
     }

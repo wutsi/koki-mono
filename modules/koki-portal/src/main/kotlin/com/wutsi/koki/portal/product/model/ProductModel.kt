@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.product.model
 
+import com.wutsi.koki.portal.refdata.model.CategoryModel
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.product.dto.ProductType
 import java.util.Date
@@ -17,5 +18,6 @@ data class ProductModel(
     val modifiedAtText: String = "",
     val createdBy: UserModel? = null,
     val modifiedBy: UserModel? = null,
+    val category: CategoryModel? = null,
     val serviceDetails: ServiceDetailsModel? = null
 )

@@ -70,7 +70,7 @@ class SearchCategoryEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val categories = response.body!!.categories
-        assertEquals(3, categories.size)
-        assertEquals(listOf(1110L, 1120L, 1130L), categories.map { it.id })
+        assertEquals(5, categories.size)
+        assertEquals(listOf(1110L, 1120L, 1130L, 1131L, 1132L), categories.map { it.id })
     }
 }

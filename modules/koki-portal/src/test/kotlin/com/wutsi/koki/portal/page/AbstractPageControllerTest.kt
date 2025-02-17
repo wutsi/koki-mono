@@ -58,6 +58,7 @@ import com.wutsi.koki.product.dto.GetPriceResponse
 import com.wutsi.koki.product.dto.GetProductResponse
 import com.wutsi.koki.product.dto.SearchPriceResponse
 import com.wutsi.koki.product.dto.SearchProductResponse
+import com.wutsi.koki.refdata.dto.SearchCategoryResponse
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
 import com.wutsi.koki.refdata.dto.SearchUnitResponse
 import com.wutsi.koki.security.dto.JWTDecoder
@@ -578,6 +579,18 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(SearchLocationResponse::class.java)
+            )
+
+        // Categories
+        doReturn(
+            ResponseEntity(
+                SearchCategoryResponse(RefDataFixtures.categories),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchCategoryResponse::class.java)
             )
     }
 

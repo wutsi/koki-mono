@@ -4,6 +4,7 @@ import com.wutsi.koki.product.dto.ProductType
 
 data class ProductForm(
     val type: ProductType = ProductType.UNKNOWN,
+    val categoryId: Long? = null,
     val name: String = "",
     val code: String? = null,
     val description: String? = null,

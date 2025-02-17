@@ -1,55 +1,49 @@
 package com.wutsi.koki.tax.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.tax.dto.CreateTaxRequest
-import com.wutsi.koki.tax.dto.CreateTaxResponse
-import com.wutsi.koki.tax.dto.TaxStatus
-import com.wutsi.koki.tax.server.dao.TaxRepository
-import org.apache.commons.lang3.time.DateUtils
+import com.wutsi.koki.tax.dto.CreateTaxProductRequest
+import com.wutsi.koki.tax.dto.CreateTaxProductResponse
+import com.wutsi.koki.tax.dto.Offer
+import com.wutsi.koki.tax.server.dao.TaxProductRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
-import java.text.SimpleDateFormat
-import java.util.Date
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/tax/CreateTaxEndpoint.sql"])
-class CreateTaxEndpointTest : AuthorizationAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/tax/CreateTaxProductEndpoint.sql"])
+class CreateTaxProductEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
-    private lateinit var dao: TaxRepository
+    private lateinit var dao: TaxProductRepository
 
     @Test
     fun create() {
-        val fmt = SimpleDateFormat("yyyy-MM-dd HH:mm")
-        val request = CreateTaxRequest(
-            accountId = 111,
-            taxTypeId = 100,
-            fiscalYear = 2024,
-            description = "New Taxes for 2025",
-            startAt = DateUtils.addDays(Date(), 7),
-            dueAt = DateUtils.addDays(Date(), 37),
-            accountantId = 555L,
-            technicianId = 666L,
-            assigneeId = 777L,
+        val request = CreateTaxProductRequest(
+            taxId = 100L,
+            offers = listOf(
+                Offer(productId = 111L, unitPrice = 100.0),
+                Offer(productId = 222L, unitPrice = 50.0),
+            )
         )
-        val result = rest.postForEntity("/v1/taxes", request, CreateTaxResponse::class.java)
+        val result = rest.postForEntity("/v1/tax-products", request, CreateTaxProductResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val taxId = result.body!!.taxId
-        val tax = dao.findById(taxId).get()
-        assertEquals(request.accountId, tax.accountId)
-        assertEquals(request.taxTypeId, tax.taxTypeId)
-        assertEquals(request.fiscalYear, tax.fiscalYear)
-        assertEquals(request.description, tax.description)
-        assertEquals(fmt.format(request.dueAt), fmt.format(tax.dueAt))
-        assertEquals(fmt.format(request.startAt), fmt.format(tax.startAt))
-        assertEquals(request.accountantId, tax.accountantId)
-        assertEquals(request.technicianId, tax.technicianId)
-        assertEquals(request.assigneeId, tax.assigneeId)
-        assertEquals(USER_ID, tax.createdById)
-        assertEquals(USER_ID, tax.modifiedById)
-        assertEquals(TaxStatus.NEW, tax.status)
+        val ids = result.body!!.taxProductIds
+        assertEquals(2, ids.size)
+
+        val taxProduct1 = dao.findByTaxIdAndProductId(request.taxId, request.offers[0].productId)!!
+        assertEquals(TENANT_ID, taxProduct1.tenantId)
+        assertEquals(request.taxId, taxProduct1.taxId)
+        assertEquals(100.0, taxProduct1.unitPrice)
+        assertEquals(4, taxProduct1.quantity)
+        assertEquals(400.0, taxProduct1.subTotal)
+
+        val taxProduct2 = dao.findByTaxIdAndProductId(request.taxId, request.offers[1].productId)!!
+        assertEquals(TENANT_ID, taxProduct2.tenantId)
+        assertEquals(request.taxId, taxProduct2.taxId)
+        assertEquals(50.0, taxProduct2.unitPrice)
+        assertEquals(1, taxProduct2.quantity)
+        assertEquals(50.0, taxProduct2.subTotal)
     }
 }

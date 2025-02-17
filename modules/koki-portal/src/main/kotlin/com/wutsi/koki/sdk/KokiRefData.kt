@@ -1,6 +1,8 @@
 package com.wutsi.koki.sdk
 
+import com.wutsi.koki.refdata.dto.CategoryType
 import com.wutsi.koki.refdata.dto.LocationType
+import com.wutsi.koki.refdata.dto.SearchCategoryResponse
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
 import com.wutsi.koki.refdata.dto.SearchUnitResponse
 import org.springframework.web.client.RestTemplate
@@ -12,6 +14,7 @@ class KokiRefData(
     companion object {
         private const val UNIT_PATH_PREFIX = "/v1/units"
         private const val LOCATION_PATH_PREFIX = "/v1/locations"
+        private const val CATEGORY_PATH_PREFIX = "/v1/categories"
     }
 
     fun units(): SearchUnitResponse {
@@ -40,5 +43,30 @@ class KokiRefData(
             )
         )
         return rest.getForEntity(url, SearchLocationResponse::class.java).body
+    }
+
+    fun categories(
+        keyword: String?,
+        ids: List<Long>,
+        parentId: Long?,
+        type: CategoryType?,
+        active: Boolean?,
+        level: Int?,
+        limit: Int,
+        offset: Int,
+    ): SearchCategoryResponse {
+        val url = urlBuilder.build(
+            CATEGORY_PATH_PREFIX, mapOf(
+                "q" to keyword,
+                "id" to ids,
+                "parent-id" to parentId,
+                "type" to type,
+                "active" to active,
+                "level" to level,
+                "limit" to limit,
+                "offset" to offset,
+            )
+        )
+        return rest.getForEntity(url, SearchCategoryResponse::class.java).body
     }
 }

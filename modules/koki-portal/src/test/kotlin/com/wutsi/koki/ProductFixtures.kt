@@ -62,6 +62,7 @@ object ProductFixtures {
     val product = Product(
         id = 100,
         type = ProductType.SERVICE,
+        categoryId = RefDataFixtures.categories[0].id,
         name = "Soulier 123",
         code = "SOU-123",
         active = true,
