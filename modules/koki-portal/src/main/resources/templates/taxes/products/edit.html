@@ -1,62 +1,33 @@
-<form class="form" id="note-form" method="post"
-      th:action="@{'/notes/' + ${note.id} + '/update'}"
-      th:data-id="${note.id}"
+<form class="form" id="tax-product-form" method="post"
+      th:action="@{'/tax-products/' + ${taxProduct.id} + '/update'}"
+      th:data-id="${taxProduct.id}"
       th:object="${form}">
     <table class="table">
         <tr>
-            <td width="25%"><b>Created By:</b></td>
-            <td th:text="${note.createdBy?.displayName}">CREATE BY</td>
+            <td width="25%"><b>Product</b></td>
+            <td th:text="${taxProduct.product.name}">PRODUCT</td>
         </tr>
         <tr>
-            <td><b>Created:</b></td>
-            <td th:text="${note.createdAtText}">CREATED</td>
-        </tr>
-        <tr>
-            <td><b>Type:</b></td>
+            <td><b>Unit Price <span class="required">*</span></b></td>
             <td>
-                <select th:field="*{type}">
-                    <option th:text="#{note-type.CALL}" value="CALL">TYPE</option>
-                    <option th:text="#{note-type.ONLINE_MEETING}" value="ONLINE_MEETING">TYPE</option>
-                    <option th:text="#{note-type.IN_PERSON_MEETING}" value="IN_PERSON_MEETING">TYPE</option>
-                    <option th:text="#{note-type.EVENT}" value="EVENT">TYPE</option>
-                    <option th:text="#{note-type.TASK}" value="TASK">TYPE</option>
-                    <option th:text="#{note-type.OTHER}" value="OTHER">TYPE</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td><b>Subject:</b></td>
-            <td>
-                <input name="subject" th:field="*{subject}"/>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top"><b>Body:</b></td>
-            <td>
-                <div class="quilljs" id="html-editor" th:utext="${form.body}"></div>
-                <textarea class="hidden" name="body" th:field="*{body}"></textarea>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top"><b>Duration <small>(HH:MM)</small>:</b></td>
-            <td>
-                <select style="width: auto" th:field="*{durationHours}">
-                    <option th:each="hour : ${hours}"
-                            th:text="${hour} < 10 ? '0' + ${hour} : ${hour}"
-                            th:value="${hour}">
+                <select required th:field="*{unitPrice}">
+                    <option th:each="price : ${prices}"
+                            th:text="${price.amount}"
+                            th:value="${price.amount.value}">
+                        $$
                     </option>
                 </select>
-                <select style="width: auto" th:field="*{durationMinutes}">
-                    <option th:each="minute : ${minutes}"
-                            th:text="${minute} <10 ? '0' + ${minute} : ${minute}"
-                            th:value="${minute}">
-                    </option>
-                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Quantity <span class="required">*</span></b></td>
+            <td>
+                <input min="1" required step="1" th:field="*{quantity}" type="number"/>
             </td>
         </tr>
     </table>
-    <button class="btn btn-primary margin-right" disabled id='btn-note-submit' type="submit">
+    <button class="btn btn-primary margin-right" id='btn-tax-product-submit' type="submit">
         Update
     </button>
-    <a class="btn-cancel margin-top" id='btn-note-cancel'>Close</a>
+    <a class="btn-cancel margin-top" id='btn-tax-product-cancel'>Close</a>
 </form>

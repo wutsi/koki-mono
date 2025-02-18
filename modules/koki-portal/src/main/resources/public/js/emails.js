@@ -76,8 +76,8 @@ function _koki_emails_on_editor_opened() {
     document.getElementById('recipient-type-contact').addEventListener('click', _koki_emails_on_contact_selected);
     document.getElementById('accountId').addEventListener('keydown', _koki_emails_on_change);
     document.getElementById('contactId').addEventListener('keydown', _koki_emails_on_change);
-    koki_accounts_select2('accountId', 'email-modal');
-    koki_contacts_select2('contactId', 'email-modal');
+    koki_accounts_select2('accountId', 'koki-modal');
+    koki_contacts_select2('contactId', 'koki-modal');
 
     /* Cancel */
     document.getElementById('btn-email-cancel').addEventListener('click', koki_modal_close)

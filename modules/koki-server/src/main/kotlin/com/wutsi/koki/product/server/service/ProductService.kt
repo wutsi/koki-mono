@@ -35,6 +35,7 @@ class ProductService(
         tenantId: Long,
         ids: List<Long> = emptyList(),
         types: List<ProductType> = emptyList(),
+        keyword: String? = null,
         active: Boolean? = null,
         limit: Int = 20,
         offset: Int = 0,
@@ -46,6 +47,9 @@ class ProductService(
         }
         if (types.isNotEmpty()) {
             jql.append(" AND P.type IN :types")
+        }
+        if (keyword != null) {
+            jql.append(" AND UPPER(P.name) LIKE :keyword")
         }
         if (active != null) {
             jql.append(" AND P.active = :active")
@@ -59,6 +63,9 @@ class ProductService(
         }
         if (types.isNotEmpty()) {
             query.setParameter("types", types)
+        }
+        if (keyword != null) {
+            query.setParameter("keyword", "${keyword.uppercase()}%")
         }
         if (active != null) {
             query.setParameter("active", active)

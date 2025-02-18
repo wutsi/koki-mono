@@ -3,6 +3,7 @@ package com.wutsi.koki
 import com.wutsi.koki.AccountFixtures.accounts
 import com.wutsi.koki.UserFixtures.users
 import com.wutsi.koki.tax.dto.Tax
+import com.wutsi.koki.tax.dto.TaxProduct
 import com.wutsi.koki.tax.dto.TaxStatus
 import com.wutsi.koki.tax.dto.TaxSummary
 import org.apache.commons.lang3.time.DateUtils
@@ -63,5 +64,40 @@ object TaxFixtures {
         modifiedById = users[0].id,
         createdById = users[0].id,
         description = "This is the description of the Tax Report",
+    )
+
+    // Products
+    val taxProducts = listOf(
+        TaxProduct(
+            id = 1,
+            productId = ProductFixtures.products[0].id,
+            quantity = 1,
+            unitPrice = 150.0,
+            subTotal = 150.0
+        ),
+        TaxProduct(
+            id = 2,
+            productId = ProductFixtures.products[1].id,
+            quantity = 2,
+            unitPrice = 75.0,
+            subTotal = 150.0
+        ),
+        TaxProduct(
+            id = 3,
+            productId = ProductFixtures.products[2].id,
+            quantity = 30,
+            unitPrice = 10.0,
+            subTotal = 300.0
+        ),
+    )
+
+    val taxProduct = TaxProduct(
+        id = 1,
+        productId = ProductFixtures.products[0].id,
+        quantity = 2,
+        unitPrice = ProductFixtures.prices[0].amount,
+        subTotal = 2 * ProductFixtures.prices[0].amount,
+        description = "Product #1",
+        taxId = tax.id,
     )
 }

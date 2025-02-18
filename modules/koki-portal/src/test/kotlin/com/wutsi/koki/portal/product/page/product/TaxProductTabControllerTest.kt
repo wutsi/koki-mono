@@ -1,101 +1,78 @@
 package com.wutsi.koki.portal.product.page
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.blog.app.page.AbstractPageControllerTest
-import com.wutsi.koki.ProductFixtures.products
-import com.wutsi.koki.portal.page.PageName
-import com.wutsi.koki.product.dto.ProductSummary
-import com.wutsi.koki.product.dto.SearchProductResponse
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
+import com.wutsi.koki.ProductFixtures
+import com.wutsi.koki.TaxFixtures
+import com.wutsi.koki.tax.dto.UpdateTaxProductRequest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
-class ListProductControllerTest : AbstractPageControllerTest() {
+class TaxProductTabControllerTest : AbstractPageControllerTest() {
     @Test
     fun list() {
-        navigateTo("/products")
-
-        assertCurrentPageIs(PageName.PRODUCT_LIST)
-        assertElementCount("tr.product", products.size)
+        navigateTo("/tax-products/tab?test-mode=true&tax-id=" + TaxFixtures.tax.id)
+        assertElementCount("tr.tax-product", TaxFixtures.taxProducts.size)
     }
 
     @Test
-    fun loadMore() {
-        var entries = mutableListOf<ProductSummary>()
-        var seed = System.currentTimeMillis()
-        repeat(20) {
-            entries.add(products[0].copy(id = ++seed))
-        }
-        doReturn(
-            ResponseEntity(
-                SearchProductResponse(entries),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchProductResponse::class.java)
-            )
+    fun delete() {
+        navigateTo("/tax-products/tab?test-mode=true&tax-id=" + TaxFixtures.tax.id)
 
-        navigateTo("/products")
+        val id = TaxFixtures.taxProduct.id
+        click("#tax-product-$id .btn-delete")
+        val alert = driver.switchTo().alert()
+        alert.accept()
+        driver.switchTo().parentFrame()
 
-        assertCurrentPageIs(PageName.PRODUCT_LIST)
-        assertElementCount("tr.product", entries.size)
-
-        scrollToBottom()
-        click("#product-load-more a", 1000)
-        assertElementCount("tr.product", 2 * entries.size)
-    }
-
-    @Test
-    fun `login required`() {
-        setUpAnonymousUser()
-
-        navigateTo("/products")
-        assertCurrentPageIs(PageName.LOGIN)
-    }
-
-    @Test
-    fun show() {
-        navigateTo("/products")
-        click(".btn-view")
-        assertCurrentPageIs(PageName.PRODUCT)
-    }
-
-    @Test
-    fun create() {
-        navigateTo("/products")
-        click(".btn-create")
-        assertCurrentPageIs(PageName.PRODUCT_CREATE)
+        Thread.sleep(1000)
+        verify(rest).delete("$sdkBaseUrl/v1/tax-products/$id")
     }
 
     @Test
     fun edit() {
-        navigateTo("/products")
-        click(".btn-edit")
-        assertCurrentPageIs(PageName.PRODUCT_EDIT)
+        navigateTo("/tax-products/tab?test-mode=true&tax-id=" + TaxFixtures.tax.id)
+
+        val id = TaxFixtures.taxProduct.id
+        click("#tax-product-$id .btn-edit")
+
+        Thread.sleep(1000)
+        assertElementVisible("#koki-modal")
+
+        select("#unitPrice", 2)
+        input("#quantity", "4")
+        click("button[type=submit]", 1000)
+
+        Thread.sleep(1000)
+        val request = argumentCaptor<UpdateTaxProductRequest>()
+        verify(rest).postForEntity(eq("$sdkBaseUrl/v1/tax-products/$id"), request.capture(), eq(Any::class.java))
+        assertEquals(ProductFixtures.prices[2].amount, request.firstValue.unitPrice)
+        assertEquals(4, request.firstValue.quantity)
+
+        assertElementNotVisible("#koki-modal")
     }
 
     @Test
-    fun `list - without permission product`() {
-        setUpUserWithoutPermissions(listOf("product"))
+    fun add() {
+        navigateTo("/tax-products/tab?test-mode=true&tax-id=" + TaxFixtures.tax.id)
 
-        navigateTo("/products")
+        click(".tab-tax-products .btn-add-product")
 
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        Thread.sleep(1000)
+        assertElementVisible("#koki-modal")
     }
 
     @Test
-    fun `list - without permission product-manage`() {
-        setUpUserWithoutPermissions(listOf("product:manage"))
+    fun `list - without permission tax-manage`() {
+        setUpUserWithoutPermissions(listOf("tax:manage"))
 
-        navigateTo("/products")
+        navigateTo("/tax-products/tab?test-mode=true&tax-id=" + TaxFixtures.tax.id)
 
-        assertCurrentPageIs(PageName.PRODUCT_LIST)
+        assertElementNotPresent(".btn-add-product")
+        assertElementNotPresent(".btn-delete")
         assertElementNotPresent(".btn-edit")
-        assertElementNotPresent(".btn-create")
     }
+
 }

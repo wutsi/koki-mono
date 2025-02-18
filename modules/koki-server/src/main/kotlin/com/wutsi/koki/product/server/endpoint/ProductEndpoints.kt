@@ -67,6 +67,7 @@ class ProductEndpoints(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false, name = "id") ids: List<Long> = emptyList(),
         @RequestParam(required = false, name = "type") types: List<ProductType> = emptyList(),
+        @RequestParam(required = false, name = "q") keyword: String? = null,
         @RequestParam(required = false) active: Boolean? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
@@ -75,6 +76,7 @@ class ProductEndpoints(
             tenantId = tenantId,
             ids = ids,
             types = types,
+            keyword = keyword,
             active = active,
             limit = limit,
             offset = offset

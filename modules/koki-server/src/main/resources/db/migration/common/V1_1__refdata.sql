@@ -9,7 +9,8 @@ CREATE TABLE T_UNIT(
 ) ENGINE = InnoDB;
 
 INSERT INTO T_UNIT(id, name)
-    VALUES (110, 'Hour'),
+    VALUES (100, 'Each'),
+           (110, 'Hour'),
            (111, 'Day'),
            (112, 'Week'),
            (113, 'Month'),
