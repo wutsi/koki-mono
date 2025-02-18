@@ -74,5 +74,4 @@ class TaxProductTabControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent(".btn-delete")
         assertElementNotPresent(".btn-edit")
     }
-
 }

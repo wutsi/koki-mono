@@ -62,7 +62,7 @@
           th:text="#{'tax-status.' + ${status}}">DONE</span>
 
     <span class="badge text-bg-info"
-          th:if="${status != 'NEW'} AND ${status != 'PREPARING'} AND ${status != 'DONE'}  AND ${status != 'SUBMITTING'}"
+          th:if="${status != 'NEW'} AND ${status != 'DONE'}  AND ${status != 'SUBMITTING'}"
           th:text="#{'tax-status.' + ${status}}">NEW</span>
 </div>
 
