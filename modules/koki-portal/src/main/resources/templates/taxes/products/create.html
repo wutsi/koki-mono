@@ -1,0 +1,14 @@
+<form class="form" id="tax-product-form" method="post" th:action="@{'/tax-products/add-new'}" th:object="${form}">
+    <table class="table">
+        <tr>
+            <th width="1%"></th>
+            <th>Product</th>
+            <th>Price</th>
+        </tr>
+        <tr th:each="product : ${products}">
+
+        </tr>
+    </table>
+    <button class="btn btn-primary margin-right" id='btn-tax-product-submit' type="submit">Add</button>
+    <a class="btn-cancel margin-top" id='btn-tax-product-cancel'>Close</a>
+</form>
