@@ -82,7 +82,7 @@
                                 Details
                             </button>
                         </li>
-                        <li class="nav-item" role="presentation" th:if="${tenant.hasPermission('product')}">
+                        <li class="nav-item" role="presentation" th:if="${user?.hasPermission('product')}">
                             <button aria-controls="pills-content" aria-selected="true" class="nav-link"
                                     data-bs-target="#pills-tax-product" data-bs-toggle="pill" id="pills-tax-product-tab"
                                     role="tab" type="button">
@@ -174,7 +174,7 @@
                         <div aria-labelledby="pills-tax-product-tab" class="tab-pane fade" id="pills-tax-product"
                              role="tabpanel"
                              th:data-url="'/tax-products/tab?tax-id=' + ${tax.id}"
-                             th:if="${tenant.hasPermission('product')}">
+                             th:if="${user?.hasPermission('product')}">
                         </div>
                         <div class="tab-pane fade" role="tabpanel"
                              th:aria-labelledby="'pills-' + ${tab.name} + '-tab'"

@@ -151,4 +151,13 @@ class TaxControllerTest : AbstractPageControllerTest() {
         navigateTo("/taxes/${tax.id}/delete")
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
+
+    @Test
+    fun `delete - without permission prodict`() {
+        setUpUserWithoutPermissions(listOf("product"))
+
+        navigateTo("/taxes/${tax.id}")
+        assertElementNotPresent("#pills-tax-product")
+        assertElementNotPresent("#pills-tax-product-tab")
+    }
 }
