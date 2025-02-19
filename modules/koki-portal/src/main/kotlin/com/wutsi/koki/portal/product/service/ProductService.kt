@@ -66,6 +66,7 @@ class ProductService(
         ids: List<Long> = emptyList(),
         types: List<ProductType> = emptyList(),
         active: Boolean? = null,
+        keyword: String? = null,
         limit: Int = 10,
         offset: Int = 0,
         fullGraph: Boolean = true,
@@ -74,6 +75,7 @@ class ProductService(
             ids = ids,
             types = types,
             active = active,
+            keyword = keyword,
             limit = limit,
             offset = offset,
         ).products

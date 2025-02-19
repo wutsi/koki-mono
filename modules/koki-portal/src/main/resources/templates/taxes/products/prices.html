@@ -1,26 +1,5 @@
-<form class="form" id="tax-product-form" method="post" th:action="@{'/tax-products/add-new'}" th:object="${form}">
-    <input type="hidden" th:field="*{taxId}" />
-
-    <table class="table">
-        <tr>
-            <td width="20%"><b>Product <span class="required">*</span></b></td>
-            <td>
-                <select required th:field="*{productId}"></select>
-            </td>
-        </tr>
-        <tr>
-            <td><b>Unit Price <span class="required">*</span></b></td>
-            <td>
-                <select required th:field="*{unitPrice}"></select>
-            </td>
-        </tr>
-        <tr>
-            <td><b>Quantity</b></td>
-            <td>
-                <input type="number" step="1" min="1" th:field="*{quantity}" />
-            </td>
-        </tr>
-    </table>
-    <button class="btn btn-primary margin-right" id='btn-tax-product-submit' type="submit">Add</button>
-    <a class="btn-cancel margin-top" id='btn-tax-product-cancel'>Close</a>
-</form>
+<option th:each="price : ${prices}"
+        th:text="${price.amount}"
+        th:value="${price.id}"
+>$$$
+</option>

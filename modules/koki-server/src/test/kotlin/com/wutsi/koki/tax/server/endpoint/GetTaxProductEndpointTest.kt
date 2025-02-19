@@ -12,7 +12,7 @@ import kotlin.test.assertEquals
 @Sql(value = ["/db/test/clean.sql", "/db/test/tax/GetTaxProductEndpoint.sql"])
 class GetTaxProductEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
-    fun create() {
+    fun get() {
         val result = rest.getForEntity("/v1/tax-products/100", GetTaxProductResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
@@ -20,9 +20,11 @@ class GetTaxProductEndpointTest : AuthorizationAwareEndpointTest() {
         val taxProduct = result.body!!.taxProduct
         assertEquals(100L, taxProduct.taxId)
         assertEquals(111L, taxProduct.productId)
+        assertEquals(11100L, taxProduct.unitPriceId)
         assertEquals(150.0, taxProduct.unitPrice)
         assertEquals(3, taxProduct.quantity)
         assertEquals(450.0, taxProduct.subTotal)
+        assertEquals("CAD", taxProduct.currency)
         assertEquals("Yo man...", taxProduct.description)
     }
 

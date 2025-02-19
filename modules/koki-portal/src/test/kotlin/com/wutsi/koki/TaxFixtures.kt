@@ -3,6 +3,7 @@ package com.wutsi.koki
 import com.wutsi.koki.AccountFixtures.accounts
 import com.wutsi.koki.UserFixtures.users
 import com.wutsi.koki.tax.dto.Tax
+import com.wutsi.koki.tax.dto.TaxProduct
 import com.wutsi.koki.tax.dto.TaxStatus
 import com.wutsi.koki.tax.dto.TaxSummary
 import org.apache.commons.lang3.time.DateUtils
@@ -63,5 +64,48 @@ object TaxFixtures {
         modifiedById = users[0].id,
         createdById = users[0].id,
         description = "This is the description of the Tax Report",
+    )
+
+    // Products
+    val taxProducts = listOf(
+        TaxProduct(
+            id = 1,
+            quantity = 1,
+            productId = ProductFixtures.products[0].id,
+            unitPriceId = ProductFixtures.prices[0].id,
+            unitPrice = 150.0,
+            subTotal = 150.0,
+            currency = "CAD",
+        ),
+        TaxProduct(
+            id = 2,
+            productId = ProductFixtures.products[1].id,
+            unitPriceId = ProductFixtures.prices[0].id,
+            quantity = 2,
+            unitPrice = 75.0,
+            subTotal = 150.0,
+            currency = "CAD",
+        ),
+        TaxProduct(
+            id = 3,
+            quantity = 30,
+            productId = ProductFixtures.products[2].id,
+            unitPriceId = ProductFixtures.prices[0].id,
+            unitPrice = 10.0,
+            subTotal = 300.0,
+            currency = "CAD",
+        ),
+    )
+
+    val taxProduct = TaxProduct(
+        id = 1,
+        quantity = 2,
+        productId = ProductFixtures.products[0].id,
+        unitPriceId = ProductFixtures.prices[0].id,
+        unitPrice = ProductFixtures.prices[0].amount,
+        subTotal = 2 * ProductFixtures.prices[0].amount,
+        description = "Product #1",
+        taxId = tax.id,
+        currency = "CAD",
     )
 }

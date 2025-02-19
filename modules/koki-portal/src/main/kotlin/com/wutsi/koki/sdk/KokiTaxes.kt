@@ -1,10 +1,15 @@
 package com.wutsi.koki.sdk
 
+import com.wutsi.koki.tax.dto.CreateTaxProductRequest
+import com.wutsi.koki.tax.dto.CreateTaxProductResponse
 import com.wutsi.koki.tax.dto.CreateTaxRequest
 import com.wutsi.koki.tax.dto.CreateTaxResponse
+import com.wutsi.koki.tax.dto.GetTaxProductResponse
 import com.wutsi.koki.tax.dto.GetTaxResponse
+import com.wutsi.koki.tax.dto.SearchTaxProductResponse
 import com.wutsi.koki.tax.dto.SearchTaxResponse
 import com.wutsi.koki.tax.dto.TaxStatus
+import com.wutsi.koki.tax.dto.UpdateTaxProductRequest
 import com.wutsi.koki.tax.dto.UpdateTaxRequest
 import com.wutsi.koki.tax.dto.UpdateTaxStatusRequest
 import org.springframework.web.client.RestTemplate
@@ -16,6 +21,7 @@ class KokiTaxes(
 ) : AbstractKokiModule(rest) {
     companion object {
         private const val TAX_PATH_PREFIX = "/v1/taxes"
+        private const val PRODUCT_PATH_PREFIX = "/v1/tax-products"
     }
 
     fun tax(id: Long): GetTaxResponse {
@@ -79,5 +85,37 @@ class KokiTaxes(
     fun delete(id: Long) {
         val url = urlBuilder.build("$TAX_PATH_PREFIX/$id")
         rest.delete(url)
+    }
+
+    fun addProduct(request: CreateTaxProductRequest): CreateTaxProductResponse {
+        val url = urlBuilder.build(PRODUCT_PATH_PREFIX)
+        return rest.postForEntity(url, request, CreateTaxProductResponse::class.java).body
+    }
+
+    fun updateProduct(id: Long, request: UpdateTaxProductRequest) {
+        val url = urlBuilder.build("$PRODUCT_PATH_PREFIX/$id")
+        rest.postForEntity(url, request, Any::class.java)
+    }
+
+    fun deleteProduct(id: Long) {
+        val url = urlBuilder.build("$PRODUCT_PATH_PREFIX/$id")
+        rest.delete(url)
+    }
+
+    fun products(taxId: Long, limit: Int, offset: Int): SearchTaxProductResponse {
+        val url = urlBuilder.build(
+            path = PRODUCT_PATH_PREFIX,
+            parameters = mapOf(
+                "tax-id" to taxId,
+                "limit" to limit,
+                "offset" to offset,
+            )
+        )
+        return rest.getForEntity(url, SearchTaxProductResponse::class.java).body
+    }
+
+    fun product(id: Long): GetTaxProductResponse {
+        val url = urlBuilder.build("$PRODUCT_PATH_PREFIX/$id")
+        return rest.getForEntity(url, GetTaxProductResponse::class.java).body
     }
 }

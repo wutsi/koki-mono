@@ -9,6 +9,7 @@ import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.EmailFixtures
 import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.NoteFixtures
+import com.wutsi.koki.TaxFixtures
 import com.wutsi.koki.TaxFixtures.tax
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
@@ -69,6 +70,14 @@ class TaxControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.TAX)
         assertElementPresent(".alert-danger")
+    }
+
+    @Test
+    fun taxProducts() {
+        navigateTo("/taxes/${tax.id}?tab=tax-product")
+
+        Thread.sleep(1000)
+        assertElementCount(".tab-tax-products tr.tax-product", TaxFixtures.taxProducts.size)
     }
 
     @Test
@@ -141,5 +150,14 @@ class TaxControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/taxes/${tax.id}/delete")
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
+
+    @Test
+    fun `delete - without permission prodict`() {
+        setUpUserWithoutPermissions(listOf("product"))
+
+        navigateTo("/taxes/${tax.id}")
+        assertElementNotPresent("#pills-tax-product")
+        assertElementNotPresent("#pills-tax-product-tab")
     }
 }

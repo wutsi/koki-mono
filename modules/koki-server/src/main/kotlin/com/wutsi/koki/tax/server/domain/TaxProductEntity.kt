@@ -30,9 +30,13 @@ data class TaxProductEntity(
     @Column(name = "product_fk")
     var productId: Long = -1,
 
+    @Column(name = "unit_price_fk")
+    var unitPriceId: Long = -1,
+
     var unitPrice: Double = 0.0,
     var quantity: Int = 1,
     var description: String? = null,
+    var currency: String = "",
 
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),

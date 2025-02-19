@@ -18,7 +18,7 @@ class UpdateTaxProductEndpointTest : AuthorizationAwareEndpointTest() {
     fun update() {
         val request = UpdateTaxProductRequest(
             quantity = 10,
-            unitPrice = 170.0,
+            unitPriceId = 11101,
             description = "yo man"
         )
         val result = rest.postForEntity("/v1/tax-products/100", request, Any::class.java)
@@ -28,9 +28,22 @@ class UpdateTaxProductEndpointTest : AuthorizationAwareEndpointTest() {
         val taxProduct = dao.findById(100).get()
         assertEquals(TENANT_ID, taxProduct.tenantId)
         assertEquals(100, taxProduct.taxId)
-        assertEquals(request.unitPrice, taxProduct.unitPrice)
+        assertEquals(request.unitPriceId, taxProduct.unitPriceId)
+        assertEquals(125.0, taxProduct.unitPrice)
         assertEquals(request.quantity, taxProduct.quantity)
-        assertEquals(request.unitPrice * request.quantity, taxProduct.subTotal)
+        assertEquals(125.0 * request.quantity, taxProduct.subTotal)
         assertEquals(request.description, taxProduct.description)
+    }
+
+    @Test
+    fun `invalid price`() {
+        val request = UpdateTaxProductRequest(
+            quantity = 10,
+            unitPriceId = 22200,
+            description = "yo man"
+        )
+        val result = rest.postForEntity("/v1/tax-products/100", request, Any::class.java)
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, result.statusCode)
     }
 }

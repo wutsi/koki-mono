@@ -28,4 +28,8 @@ data class TenantModel(
     val permissions: List<PermissionModel>
         get() = modules.flatMap { module -> module.permissions }
             .sortedBy { permission -> permission.name }
+
+    fun hasModule(name: String): Boolean {
+        return modules.find { module -> module.name == name } != null
+    }
 }

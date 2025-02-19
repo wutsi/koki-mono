@@ -432,8 +432,10 @@ a.btn-back {
 
 .modal-dialog form input,
 .modal-dialog form select {
-    width: 100%;
+    width: 100% !important;
+    padding: 0.5em;
 }
+
 
 .modal-dialog form div.quilljs {
     height: 15em;

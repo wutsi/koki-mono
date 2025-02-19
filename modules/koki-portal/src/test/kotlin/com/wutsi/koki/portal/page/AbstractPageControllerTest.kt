@@ -63,9 +63,13 @@ import com.wutsi.koki.refdata.dto.SearchLocationResponse
 import com.wutsi.koki.refdata.dto.SearchUnitResponse
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
+import com.wutsi.koki.tax.dto.CreateTaxProductRequest
+import com.wutsi.koki.tax.dto.CreateTaxProductResponse
 import com.wutsi.koki.tax.dto.CreateTaxRequest
 import com.wutsi.koki.tax.dto.CreateTaxResponse
+import com.wutsi.koki.tax.dto.GetTaxProductResponse
 import com.wutsi.koki.tax.dto.GetTaxResponse
+import com.wutsi.koki.tax.dto.SearchTaxProductResponse
 import com.wutsi.koki.tax.dto.SearchTaxResponse
 import com.wutsi.koki.tenant.dto.Configuration
 import com.wutsi.koki.tenant.dto.CreateRoleRequest
@@ -197,8 +201,8 @@ abstract class AbstractPageControllerTest {
         setupAccountModule()
         setupContactModule()
         setupEmployeeModule()
-        setupTaxModule()
         setupProductModule()
+        setupTaxModule()
     }
 
     protected fun setupFileUploads() {
@@ -773,6 +777,41 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any<CreateTaxRequest>(),
                 eq(CreateTaxResponse::class.java)
+            )
+
+        // TaxProduct
+        doReturn(
+            ResponseEntity(
+                SearchTaxProductResponse(TaxFixtures.taxProducts),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchTaxProductResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetTaxProductResponse(TaxFixtures.taxProduct),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetTaxProductResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreateTaxProductResponse(111L),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateTaxProductRequest>(),
+                eq(CreateTaxProductResponse::class.java)
             )
     }
 

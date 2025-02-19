@@ -54,8 +54,8 @@ class TaxProductEndpoints(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @Valid @RequestBody request: CreateTaxProductRequest,
     ): CreateTaxProductResponse {
-        val taxProducts = service.create(request, tenantId)
-        return CreateTaxProductResponse(taxProducts.mapNotNull { taxProduct -> taxProduct.id })
+        val taxProduct = service.create(request, tenantId)
+        return CreateTaxProductResponse(taxProduct.id!!)
     }
 
     @PostMapping("/{id}")

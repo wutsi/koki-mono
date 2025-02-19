@@ -47,6 +47,7 @@ class KokiProducts(
         ids: List<Long>,
         types: List<ProductType>,
         active: Boolean?,
+        keyword: String?,
         limit: Int,
         offset: Int,
     ): SearchProductResponse {
@@ -56,6 +57,7 @@ class KokiProducts(
                 "id" to ids,
                 "type" to types,
                 "active" to active,
+                "q" to keyword,
                 "limit" to limit,
                 "offset" to offset,
             )

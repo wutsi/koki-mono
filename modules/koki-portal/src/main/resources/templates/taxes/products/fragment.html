@@ -1,10 +1,1 @@
-<tr class="tax-product" th:each="taxProduct : ${taxProducts}" th:id="'tax-product-' + ${taxProduct.id}">
-    <td th:text="${taxProduct.product.name}">PRODUCT</td>
-    <td th:text="${taxProduct.unitPrice}">$$$</td>
-    <td th:text="${taxProduct.quantity}">1111</td>
-    <td th:text="${taxProduct.subTotal}">$$$</td>
-    <td class="toolbar">
-        <a class="btn-edit" th:href="'javascript: koki_taxes_edit_product(' + ${taxProduct.id} + ')'">Edit</a>
-        <a class="btn-delete" th:href="'javascript: koki_taxes_remove_product(' + ${taxProduct.id} + ')'">Remove</a>
-    </td>
-</tr>
+<div th:replace="~{__components/tax :: tax-product-columns(${taxProduct})}"></div>
