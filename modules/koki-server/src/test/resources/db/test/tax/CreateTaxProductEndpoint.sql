@@ -10,6 +10,7 @@ INSERT INTO T_TAX(id, tenant_fk, tax_type_fk, account_fk, accountant_fk, technic
 
 INSERT INTO T_PRODUCT(id, tenant_fk, code, name, description, active, deleted)
        VALUES (111, 1, 'XXX', 'Product 123', null, true, false),
+              (155, 1, '155', 'Product 155', null, true, false),
               (222, 2, 'yyy', 'Product xxx', null, true, true);
 
 INSERT INTO T_PRICE(id, tenant_fk, product_fk, amount, currency)
