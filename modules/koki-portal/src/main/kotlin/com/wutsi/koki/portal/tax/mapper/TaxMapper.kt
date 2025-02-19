@@ -84,10 +84,11 @@ class TaxMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             id = entity.id,
             description = entity.description,
             taxId = entity.taxId,
+            unitPriceId = entity.unitPriceId,
             quantity = entity.quantity,
             product = products[entity.productId] ?: ProductModel(id = entity.productId),
-            unitPrice = moneyMapper.toMoneyModel(entity.unitPrice),
-            subTotal = moneyMapper.toMoneyModel(entity.subTotal),
+            unitPrice = moneyMapper.toMoneyModel(entity.unitPrice, entity.currency),
+            subTotal = moneyMapper.toMoneyModel(entity.subTotal, entity.currency),
         )
     }
 }

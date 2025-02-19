@@ -20,7 +20,7 @@ class CreateTaxProductEndpointTest : AuthorizationAwareEndpointTest() {
         val request = CreateTaxProductRequest(
             taxId = 100L,
             productId = 111L,
-            unitPrice = 100.0,
+            unitPriceId = 11100L,
             description = "Yo man",
             quantity = 5
         )
@@ -33,9 +33,25 @@ class CreateTaxProductEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(TENANT_ID, taxProduct1.tenantId)
         assertEquals(request.taxId, taxProduct1.taxId)
         assertEquals(request.productId, taxProduct1.productId)
-        assertEquals(request.unitPrice, taxProduct1.unitPrice)
+        assertEquals(request.unitPriceId, taxProduct1.unitPriceId)
         assertEquals(request.quantity, taxProduct1.quantity)
-        assertEquals(request.quantity * request.unitPrice, taxProduct1.subTotal)
         assertEquals(request.description, taxProduct1.description)
+        assertEquals(150.0, taxProduct1.unitPrice)
+        assertEquals("CAD", taxProduct1.currency)
+        assertEquals(request.quantity * 150.0, taxProduct1.subTotal)
+    }
+
+    @Test
+    fun `invalid price`() {
+        val request = CreateTaxProductRequest(
+            taxId = 100L,
+            productId = 111L,
+            unitPriceId = 22200L,
+            description = "Yo man",
+            quantity = 5
+        )
+        val result = rest.postForEntity("/v1/tax-products", request, CreateTaxProductResponse::class.java)
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, result.statusCode)
     }
 }

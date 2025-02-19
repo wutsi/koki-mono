@@ -41,14 +41,14 @@ class TaxProductTabControllerTest : AbstractPageControllerTest() {
         Thread.sleep(1000)
         assertElementVisible("#koki-modal")
 
-        select("#unitPrice", 2)
+        select("#unitPriceId", 2)
         input("#quantity", "4")
         click("button[type=submit]", 1000)
 
         Thread.sleep(1000)
         val request = argumentCaptor<UpdateTaxProductRequest>()
         verify(rest).postForEntity(eq("$sdkBaseUrl/v1/tax-products/$id"), request.capture(), eq(Any::class.java))
-        assertEquals(ProductFixtures.prices[2].amount, request.firstValue.unitPrice)
+        assertEquals(ProductFixtures.prices[2].id, request.firstValue.unitPriceId)
         assertEquals(4, request.firstValue.quantity)
 
         assertElementNotVisible("#koki-modal")

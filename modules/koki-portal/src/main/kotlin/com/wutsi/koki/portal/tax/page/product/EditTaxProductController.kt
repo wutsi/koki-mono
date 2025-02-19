@@ -34,7 +34,7 @@ class EditTaxProductController(
             "form",
             TaxProductForm(
                 quantity = taxProduct.quantity,
-                unitPrice = taxProduct.unitPrice.value,
+                unitPriceId = taxProduct.unitPriceId,
             )
         )
         return "taxes/products/edit"

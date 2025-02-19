@@ -54,7 +54,7 @@ class TaxProductService(
                 productId = form.productId,
                 taxId = form.taxId,
                 quantity = form.quantity,
-                unitPrice = form.unitPrice,
+                unitPriceId = form.unitPriceId,
             )
         ).taxProductId
     }
@@ -64,7 +64,7 @@ class TaxProductService(
             id,
             UpdateTaxProductRequest(
                 quantity = form.quantity,
-                unitPrice = form.unitPrice,
+                unitPriceId = form.unitPriceId,
             )
         )
     }

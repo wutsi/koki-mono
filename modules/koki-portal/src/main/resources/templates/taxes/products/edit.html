@@ -10,10 +10,10 @@
         <tr>
             <td><b>Unit Price <span class="required">*</span></b></td>
             <td>
-                <select required th:field="*{unitPrice}">
+                <select required th:field="*{unitPriceId}">
                     <option th:each="price : ${prices}"
                             th:text="${price.amount}"
-                            th:value="${price.amount.value}">
+                            th:value="${price.id}">
                         $$
                     </option>
                 </select>

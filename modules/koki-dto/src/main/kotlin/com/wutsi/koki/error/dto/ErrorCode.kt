@@ -51,6 +51,7 @@ object ErrorCode {
     val NOTE_NOT_FOUND: String = "$PREFIX:note:not-found"
 
     val PRICE_NOT_FOUND: String = "$PREFIX:price:not-found"
+    val PRICE_IN_USE: String = "$PREFIX:price:in-use"
 
     val PRODUCT_NOT_FOUND: String = "$PREFIX:product:not-found"
 

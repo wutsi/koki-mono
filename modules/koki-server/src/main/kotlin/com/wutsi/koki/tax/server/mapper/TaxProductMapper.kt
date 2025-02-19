@@ -11,9 +11,11 @@ class TaxProductMapper {
             id = entity.id!!,
             taxId = entity.taxId,
             productId = entity.productId,
+            unitPriceId = entity.unitPriceId,
             quantity = entity.quantity,
             unitPrice = entity.unitPrice,
             subTotal = entity.subTotal,
+            currency = entity.currency,
             description = entity.description,
         )
     }

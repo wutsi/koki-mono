@@ -39,13 +39,15 @@ CREATE TABLE T_TAX_PRODUCT(
 
   tenant_fk               BIGINT NOT NULL,
   tax_fk                  BIGINT NOT NULL REFERENCES T_TAX(id),
-  product_fk              BIGINT,
+  product_fk              BIGINT NOT NULL,
+  unit_price_fk           BIGINT NOT NULL,
   created_by_fk           BIGINT,
   modified_by_fk          BIGINT,
 
   quantity                INT NOT NULL DEFAULT 1,
   unit_price              DECIMAL(10, 2) NOT NULL DEFAULT 0,
   sub_total               DECIMAL(10, 2) NOT NULL DEFAULT 0,
+  currency                VARCHAR(3) NOT NULL,
   description             VARCHAR(100),
 
   created_at              DATETIME DEFAULT NOW(),
@@ -55,6 +57,8 @@ CREATE TABLE T_TAX_PRODUCT(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
+CREATE INDEX I_TAX_PRODUCT_unit_price ON T_TAX_PRODUCT(unit_price_fk, tenant_fk);
+CREATE INDEX I_TAX_PRODUCT_product ON T_TAX_PRODUCT(product_fk, tenant_fk);
 
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url)

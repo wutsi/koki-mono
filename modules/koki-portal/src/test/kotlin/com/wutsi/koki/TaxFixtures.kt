@@ -70,34 +70,42 @@ object TaxFixtures {
     val taxProducts = listOf(
         TaxProduct(
             id = 1,
-            productId = ProductFixtures.products[0].id,
             quantity = 1,
+            productId = ProductFixtures.products[0].id,
+            unitPriceId = ProductFixtures.prices[0].id,
             unitPrice = 150.0,
-            subTotal = 150.0
+            subTotal = 150.0,
+            currency = "CAD",
         ),
         TaxProduct(
             id = 2,
             productId = ProductFixtures.products[1].id,
+            unitPriceId = ProductFixtures.prices[0].id,
             quantity = 2,
             unitPrice = 75.0,
-            subTotal = 150.0
+            subTotal = 150.0,
+            currency = "CAD",
         ),
         TaxProduct(
             id = 3,
-            productId = ProductFixtures.products[2].id,
             quantity = 30,
+            productId = ProductFixtures.products[2].id,
+            unitPriceId = ProductFixtures.prices[0].id,
             unitPrice = 10.0,
-            subTotal = 300.0
+            subTotal = 300.0,
+            currency = "CAD",
         ),
     )
 
     val taxProduct = TaxProduct(
         id = 1,
-        productId = ProductFixtures.products[0].id,
         quantity = 2,
+        productId = ProductFixtures.products[0].id,
+        unitPriceId = ProductFixtures.prices[0].id,
         unitPrice = ProductFixtures.prices[0].amount,
         subTotal = 2 * ProductFixtures.prices[0].amount,
         description = "Product #1",
         taxId = tax.id,
+        currency = "CAD",
     )
 }

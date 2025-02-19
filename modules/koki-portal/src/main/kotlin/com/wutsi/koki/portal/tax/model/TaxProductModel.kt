@@ -6,6 +6,7 @@ import com.wutsi.koki.portal.product.model.ProductModel
 data class TaxProductModel(
     val id: Long = -1,
     val taxId: Long = -1,
+    val unitPriceId: Long = -1,
     val product: ProductModel = ProductModel(),
     val description: String? = null,
     val quantity: Int = 1,
