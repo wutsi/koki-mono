@@ -30,7 +30,7 @@ class TaxProductTabController(
         @RequestParam(name = "tax-id") taxId: Long,
         model: Model
     ): String {
-        val taxProducts = service.products(taxId = taxId, limit = Integer.MAX_VALUE)
+        val taxProducts = service.products(taxIds = listOf(taxId), limit = Integer.MAX_VALUE)
         model.addAttribute("taxProducts", taxProducts)
         return "taxes/products/items"
     }

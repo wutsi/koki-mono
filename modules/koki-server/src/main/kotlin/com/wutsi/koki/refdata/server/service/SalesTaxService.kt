@@ -22,8 +22,7 @@ class SalesTaxService(
 
     fun search(
         ids: List<Long> = emptyList(),
-        stateId: Long? = null,
-        country: String? = null,
+        juridictionId: Long? = null,
         active: Boolean? = null,
         limit: Int = 20,
         offset: Int = 0,
@@ -33,28 +32,22 @@ class SalesTaxService(
         if (ids.isNotEmpty()) {
             jql.append(" AND S.id IN :ids")
         }
-        if (stateId != null) {
-            jql.append(" AND S.stateId = :stateId")
+        if (juridictionId != null) {
+            jql.append(" AND S.juridiction.id = :juridictionId")
         }
         if (active != null) {
             jql.append(" AND S.active = :active")
-        }
-        if (country != null) {
-            jql.append(" AND S.country = :country")
         }
 
         val query = em.createQuery(jql.toString(), SalesTaxEntity::class.java)
         if (ids.isNotEmpty()) {
             query.setParameter("ids", ids)
         }
-        if (stateId != null) {
-            query.setParameter("stateId", stateId)
+        if (juridictionId != null) {
+            query.setParameter("juridictionId", juridictionId)
         }
         if (active != null) {
             query.setParameter("active", active)
-        }
-        if (country != null) {
-            query.setParameter("country", country)
         }
 
         query.firstResult = offset

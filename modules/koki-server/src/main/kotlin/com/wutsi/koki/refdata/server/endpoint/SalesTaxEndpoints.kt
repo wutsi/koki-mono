@@ -25,16 +25,14 @@ class SalesTaxEndpoints(
     @GetMapping
     fun search(
         @RequestParam(required = false, name = "id") ids: List<Long> = emptyList(),
-        @RequestParam(required = false, name = "state-id") stateId: Long? = null,
-        @RequestParam(required = false) country: String? = null,
+        @RequestParam(required = false, name = "juridiction-id") juridictionId: Long? = null,
         @RequestParam(required = false) active: Boolean? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
     ): SearchSalesTaxResponse {
         val salesTaxes = service.search(
             ids = ids,
-            stateId = stateId,
-            country = country,
+            juridictionId = juridictionId,
             active = active,
             limit = limit,
             offset = offset

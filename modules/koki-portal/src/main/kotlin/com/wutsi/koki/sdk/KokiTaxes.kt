@@ -102,11 +102,19 @@ class KokiTaxes(
         rest.delete(url)
     }
 
-    fun products(taxId: Long, limit: Int, offset: Int): SearchTaxProductResponse {
+    fun products(
+        taxIds: List<Long>,
+        productIds: List<Long>,
+        unitPriceIds: List<Long>,
+        limit: Int,
+        offset: Int
+    ): SearchTaxProductResponse {
         val url = urlBuilder.build(
             path = PRODUCT_PATH_PREFIX,
             parameters = mapOf(
-                "tax-id" to taxId,
+                "tax-id" to taxIds,
+                "product-id" to productIds,
+                "unit-price-ids" to unitPriceIds,
                 "limit" to limit,
                 "offset" to offset,
             )

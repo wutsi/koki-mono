@@ -1,14 +1,14 @@
-237,CM,Cameroon
-1AB,CA,Alberta
-1BC,CA,British Columbia
-1MN,CA,Manitoba
-1NB,CA,New Brunswick
-1NL,CA,Newfoundland and Labrador
-1NT,CA,Northwest Territories
-1NS,CA,Nova Scotia
-1NN,CA,Nunavut
-1ON,CA,Ontario
-1PE,CA,Prince Edward Island
-1QC,CA,Quebec
-1SK,CA,Saskatchewan
-1YK,CA,Yukon
+id,state
+1000,Alberta
+1001,British Columbia
+1002,Manitoba
+1003,New Brunswick
+1004,Newfoundland and Labrador
+1005,Northwest Territories
+1006,Nova Scotia
+1007,Nunavut
+1008,Ontario
+1009,Prince Edward Island
+1010,Quebec
+1011,Saskatchewan
+1012,Yukon

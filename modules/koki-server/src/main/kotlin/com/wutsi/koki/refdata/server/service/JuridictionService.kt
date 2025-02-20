@@ -1,22 +1,27 @@
 package com.wutsi.koki.refdata.server.service
 
-import com.wutsi.koki.refdata.server.dao.SalesTaxRepository
-import com.wutsi.koki.refdata.server.domain.SalesTaxEntity
+import com.wutsi.koki.refdata.server.dao.JuridictionRepository
+import com.wutsi.koki.refdata.server.domain.JuridictionEntity
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import kotlin.jvm.optionals.getOrNull
 
 @Service
-class SalesTaxService(
-    private val dao: SalesTaxRepository,
+class JuridictionService(
+    private val dao: JuridictionRepository,
     private val em: EntityManager,
 ) {
-    fun getByCountry(country: String): List<SalesTaxEntity> {
+    fun getByIdOrNull(id: Long): JuridictionEntity? {
+        return dao.findById(id).getOrNull()
+    }
+
+    fun getByCountry(country: String): List<JuridictionEntity> {
         return dao.findByCountry(country)
     }
 
     @Transactional
-    fun save(salesTax: SalesTaxEntity): SalesTaxEntity {
+    fun save(salesTax: JuridictionEntity): JuridictionEntity {
         return dao.save(salesTax)
     }
 
@@ -24,34 +29,27 @@ class SalesTaxService(
         ids: List<Long> = emptyList(),
         stateId: Long? = null,
         country: String? = null,
-        active: Boolean? = null,
         limit: Int = 20,
         offset: Int = 0,
-    ): List<SalesTaxEntity> {
-        val jql = StringBuilder("SELECT S FROM SalesTaxEntity S WHERE S.id>0")
+    ): List<JuridictionEntity> {
+        val jql = StringBuilder("SELECT J FROM JuridictionEntity J WHERE J.id>0")
 
         if (ids.isNotEmpty()) {
-            jql.append(" AND S.id IN :ids")
+            jql.append(" AND J.id IN :ids")
         }
         if (stateId != null) {
-            jql.append(" AND S.stateId = :stateId")
-        }
-        if (active != null) {
-            jql.append(" AND S.active = :active")
+            jql.append(" AND J.stateId = :stateId")
         }
         if (country != null) {
-            jql.append(" AND S.country = :country")
+            jql.append(" AND J.country = :country")
         }
 
-        val query = em.createQuery(jql.toString(), SalesTaxEntity::class.java)
+        val query = em.createQuery(jql.toString(), JuridictionEntity::class.java)
         if (ids.isNotEmpty()) {
             query.setParameter("ids", ids)
         }
         if (stateId != null) {
             query.setParameter("stateId", stateId)
-        }
-        if (active != null) {
-            query.setParameter("active", active)
         }
         if (country != null) {
             query.setParameter("country", country)

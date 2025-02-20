@@ -100,7 +100,7 @@ springdoc:
 
         -   group: refdata
             display-name: RefData API
-            paths-to-match: /v1/categories, /v1/categories/**, /v1/locations, /v1/locations/*, /v1/sales-taxes, /v1/sales-taxes/**, /v1/units
+            paths-to-match: /v1/categories, /v1/categories/**, /v1/juridictions, /v1/juridictions/**, /v1/locations, /v1/locations/*, /v1/sales-taxes, /v1/sales-taxes/**, /v1/units
 
         -   group: taxes
             display-name: Tax API
