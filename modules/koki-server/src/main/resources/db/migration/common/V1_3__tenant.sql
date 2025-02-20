@@ -103,6 +103,7 @@ CREATE TABLE T_ROLE(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
+
 CREATE TABLE T_USER_ROLE(
   user_fk       BIGINT NOT NULL REFERENCES T_USER(id),
   role_fk       BIGINT NOT NULL REFERENCES T_ROLE(id),
@@ -110,12 +111,35 @@ CREATE TABLE T_USER_ROLE(
   PRIMARY KEY(user_fk, role_fk)
 ) ENGINE = InnoDB;
 
+
 CREATE TABLE T_ROLE_PERMISSION(
   role_fk       BIGINT NOT NULL REFERENCES T_ROLE(id),
   permission_fk BIGINT NOT NULL REFERENCES T_PERMISSION(id),
 
   PRIMARY KEY(role_fk, permission_fk)
 ) ENGINE = InnoDB;
+
+
+CREATE TABLE T_BUSINESS(
+    id                      BIGINT NOT NULL AUTO_INCREMENT,
+
+    tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
+    juridiction_fk          BIGINT NOT NULL,
+
+    company_name            VARCHAR(100),
+    phone                   VARCHAR(30),
+    fax                     VARCHAR(30),
+    email                   VARCHAR(255),
+    website                 TEXT,
+    address_street          TEXT,
+    address_postal_code     VARCHAR(30),
+    address_city_fk         BIGINT,
+    address_state_fk        BIGINT,
+    address_country         VARCHAR(2),
+
+    PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
 
 INSERT INTO T_MODULE(id, name, title, home_url, tab_url, settings_url)
     VALUES (900, 'security', 'Security', null, null, '/settings/security'),

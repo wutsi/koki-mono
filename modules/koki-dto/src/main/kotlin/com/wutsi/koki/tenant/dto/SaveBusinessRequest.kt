@@ -1,19 +1,26 @@
 package com.wutsi.koki.tenant.dto
 
-import com.wutsi.koki.refdata.dto.Address
+import jakarta.validation.constraints.Email
+import jakarta.validation.constraints.Size
 import java.util.Date
 
-data class Business(
-    val id: Long = -1,
+data class SaveBusinessRequest(
     val tenantId: Long = -1,
     val juridictionId: Long = -1,
-    val companyName: String = "",
-    val registrationNumber: String? = null,
+
+    @get:Size(max = 100) val companyName: String = "",
+    @get:Size(max = 30) val registrationNumber: String? = null,
     val dateOfRegistration: Date? = null,
-    val phone: String? = null,
-    val fax: String? = null,
-    val email: String? = null,
+
+    @get:Size(max = 30) val phone: String? = null,
+    @get:Size(max = 30) val fax: String? = null,
+    @get:Email @get:Size(max = 255) val email: String? = null,
     val website: String? = null,
-    val address: Address? = null,
-    val taxIdentifiers: List<BusinessTaxIdentifier> = emptyList(),
+
+    @get:Size(max = 30) val addressPostalCode: String? = null,
+    @get:Size(max = 2) val addressCountry: String? = null,
+    val addressStreet: String? = null,
+    val addressCityId: Long? = null,
+
+    val taxIdentifiers: Map<String, String> = emptyMap(),
 )
