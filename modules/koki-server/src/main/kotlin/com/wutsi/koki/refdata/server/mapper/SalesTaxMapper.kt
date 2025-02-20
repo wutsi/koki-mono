@@ -10,10 +10,9 @@ class SalesTaxMapper {
         return SalesTax(
             id = entity.id!!,
             name = entity.name,
-            country = entity.country,
             active = entity.active,
             rate = entity.rate,
-            stateId = entity.stateId,
+            juridictionId = entity.juridiction.id,
             priority = entity.priority,
         )
     }

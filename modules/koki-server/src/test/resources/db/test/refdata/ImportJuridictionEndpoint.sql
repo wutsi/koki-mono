@@ -14,5 +14,5 @@ INSERT INTO T_LOCATION (id, type, name, ascii_name, country)
            (113, 2, 'Yukon', 'Yukon', 'CA')
 ;
 
-INSERT INTO T_SALES_TAX(id, country, state_fk, name, rate, active)
-    VALUES(100, 'CA', 111, 'XXX', 9.0, true);
+INSERT INTO T_JURIDICTION(id, country, state_fk)
+    VALUES(1000, 'CA', 101);

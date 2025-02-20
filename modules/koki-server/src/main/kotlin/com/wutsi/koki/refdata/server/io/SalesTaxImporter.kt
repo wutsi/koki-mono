@@ -5,10 +5,9 @@ import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
-import com.wutsi.koki.refdata.dto.LocationType
-import com.wutsi.koki.refdata.server.domain.LocationEntity
+import com.wutsi.koki.refdata.server.domain.JuridictionEntity
 import com.wutsi.koki.refdata.server.domain.SalesTaxEntity
-import com.wutsi.koki.refdata.server.service.LocationService
+import com.wutsi.koki.refdata.server.service.JuridictionService
 import com.wutsi.koki.refdata.server.service.SalesTaxService
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
@@ -20,13 +19,13 @@ import java.io.InputStream
 @Service
 class SalesTaxImporter(
     private val service: SalesTaxService,
-    private val locationService: LocationService,
+    private val juridictionService: JuridictionService,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(SalesTaxImporter::class.java)
 
         private const val RECORD_NAME = 0
-        private const val RECORD_STATE = 1
+        private const val RECORD_JURIDICTION = 1
         private const val RECORD_RATE = 2
         private const val RECORD_PRIORITY = 3
     }
@@ -47,9 +46,6 @@ class SalesTaxImporter(
             )
 
         val salesTaxes = service.getByCountry(country).toMutableList()
-        val states = locationService.search(country = country, type = LocationType.STATE)
-            .associateBy { state -> state.asciiName.uppercase() }
-
         val salesTaxIds = mutableListOf<Long>()
         val parser = createParser(input)
         for (record in parser) {
@@ -57,22 +53,22 @@ class SalesTaxImporter(
                 continue
             }
             val name = record.get(RECORD_NAME)
-            val stateName = record.get(RECORD_STATE)?.trim()?.ifEmpty { null }
-            val state = stateName?.let { data -> states[data.uppercase()] }
-            if (state == null && stateName != null) {
+            val juridictionId = record.get(RECORD_JURIDICTION).toLong()
+            val juridiction = juridictionService.getByIdOrNull(juridictionId)
+            if (juridiction == null) {
                 errors.add(
                     ImportMessage(
                         location = record.recordNumber.toString(),
-                        code = ErrorCode.SALES_TAX_STATE_NOT_FOUND,
-                        message = "State not found: $stateName",
+                        code = ErrorCode.JURIDICTION_NOT_FOUND,
+                        message = "Juridiction not found: $juridictionId",
                     )
                 )
             } else {
                 var salesTax = salesTaxes.find { tax ->
-                    tax.name.equals(name, true) && tax.stateId == state?.id
+                    tax.name.equals(name, true) && tax.juridiction.id == juridiction?.id
                 }
                 if (salesTax == null) {
-                    salesTax = create(country, state, record)
+                    salesTax = create(juridiction, record)
                     salesTaxes.add(salesTax)
                     added++
                 } else {
@@ -106,11 +102,10 @@ class SalesTaxImporter(
         )
     }
 
-    private fun create(country: String, state: LocationEntity?, record: CSVRecord): SalesTaxEntity {
+    private fun create(juridiction: JuridictionEntity, record: CSVRecord): SalesTaxEntity {
         return service.save(
             SalesTaxEntity(
-                country = country,
-                stateId = state?.id,
+                juridiction = juridiction,
                 active = true,
                 name = record.get(RECORD_NAME),
                 rate = record.get(RECORD_RATE).toDouble(),

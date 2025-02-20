@@ -11,13 +11,12 @@ INSERT INTO T_LOCATION (id, type, name, ascii_name, country)
            (110, 2, 'Prince Edward Island', 'Prince Edward Island', 'CA'),
            (111, 2, 'Quebec', 'Quebec', 'CA'),
            (112, 2, 'Saskatchewan', 'Saskatchewan', 'CA'),
-           (113, 2, 'Yukon', 'Yukon', 'CA')
+           (113, 2, 'Yukon', 'Yukon', 'CA'),
+           (200, 1, 'Cameroon', 'Cameron', 'C<')
 ;
 
-INSERT INTO T_SALES_TAX(id, country, state_fk, name, rate, active)
-    VALUES(1011, 'CA', 101, 'GST', 5.0, true),
-          (1091, 'CA', 109, 'HST', 13.0, true),
-          (1111, 'CA', 111, 'GST', 5.0, true),
-          (1112, 'CA', 111, 'PST', 9.975, true),
-          (2001, 'CM', 111, 'VAT', 19.75, true),
-          (2002, 'CM', 111, 'VAT-old', 30.0, false);
+INSERT INTO T_JURIDICTION(id, country, state_fk)
+    VALUES(1011, 'CA', 101),
+          (1091, 'CA', 109),
+          (1112, 'CA', 111),
+          (2001, 'CM', null);

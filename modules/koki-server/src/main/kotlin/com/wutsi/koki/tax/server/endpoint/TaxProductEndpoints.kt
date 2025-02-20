@@ -36,13 +36,17 @@ class TaxProductEndpoints(
     @GetMapping
     fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-        @RequestParam(name = "tax-id") taxId: Long,
+        @RequestParam(required = false, name = "tax-id") taxIds: List<Long> = emptyList(),
+        @RequestParam(required = false, name = "product-id") productIds: List<Long> = emptyList(),
+        @RequestParam(required = false, name = "unit-price-id") unitPriceIds: List<Long> = emptyList(),
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
     ): SearchTaxProductResponse {
         val entities = service.search(
             tenantId = tenantId,
-            taxId = taxId,
+            taxIds = taxIds,
+            productIds = productIds,
+            unitPriceIds = unitPriceIds,
             limit = limit,
             offset = offset
         )
