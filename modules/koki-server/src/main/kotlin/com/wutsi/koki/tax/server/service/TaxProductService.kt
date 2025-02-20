@@ -9,8 +9,8 @@ import com.wutsi.koki.tax.dto.CreateTaxProductRequest
 import com.wutsi.koki.tax.dto.UpdateTaxProductRequest
 import com.wutsi.koki.tax.server.dao.TaxProductRepository
 import com.wutsi.koki.tax.server.domain.TaxProductEntity
+import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
-import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import java.util.Date
 
@@ -19,6 +19,7 @@ class TaxProductService(
     private val dao: TaxProductRepository,
     private val securityService: SecurityService,
     private val priceService: PriceService,
+    private val em: EntityManager,
 ) {
     fun get(id: Long, tenantId: Long): TaxProductEntity {
         val tax = dao.findById(id)
@@ -32,12 +33,38 @@ class TaxProductService(
 
     fun search(
         tenantId: Long,
-        taxId: Long,
+        taxIds: List<Long> = emptyList(),
+        unitPriceIds: List<Long> = emptyList(),
+        productIds: List<Long> = emptyList(),
         limit: Int = 20,
         offset: Int = 0,
     ): List<TaxProductEntity> {
-        val pageable = PageRequest.of(offset / limit, limit)
-        return dao.findByTaxIdAndTenantId(taxId, tenantId, pageable)
+        val jql = StringBuilder("SELECT T FROM TaxProductEntity T WHERE T.tenantId = :tenantId")
+        if (taxIds.isNotEmpty()) {
+            jql.append(" AND T.taxId IN :taxIds")
+        }
+        if (unitPriceIds.isNotEmpty()) {
+            jql.append(" AND T.unitPriceId IN :unitPriceIds")
+        }
+        if (productIds.isNotEmpty()) {
+            jql.append(" AND T.productId IN :productIds")
+        }
+
+        val query = em.createQuery(jql.toString(), TaxProductEntity::class.java)
+        query.setParameter("tenantId", tenantId)
+        if (taxIds.isNotEmpty()) {
+            query.setParameter("taxIds", taxIds)
+        }
+        if (unitPriceIds.isNotEmpty()) {
+            query.setParameter("unitPriceIds", unitPriceIds)
+        }
+        if (productIds.isNotEmpty()) {
+            query.setParameter("productIds", productIds)
+        }
+
+        query.firstResult = offset
+        query.maxResults = limit
+        return query.resultList
     }
 
     @Transactional

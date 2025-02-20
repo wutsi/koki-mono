@@ -10,18 +10,8 @@ import kotlin.test.assertEquals
 @Sql(value = ["/db/test/clean.sql", "/db/test/refdata/SearchSalesTaxEndpoint.sql"])
 class SearchSalesTaxEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
-    fun `by country`() {
-        val response = rest.getForEntity("/v1/sales-taxes?country=CM", SearchSalesTaxResponse::class.java)
-
-        assertEquals(HttpStatus.OK, response.statusCode)
-
-        val taxes = response.body!!.salesTaxes
-        assertEquals(2, taxes.size)
-    }
-
-    @Test
-    fun `by state`() {
-        val response = rest.getForEntity("/v1/sales-taxes?country=CM&state-id=111", SearchSalesTaxResponse::class.java)
+    fun `by juridiction`() {
+        val response = rest.getForEntity("/v1/sales-taxes?juridiction-id=237", SearchSalesTaxResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 

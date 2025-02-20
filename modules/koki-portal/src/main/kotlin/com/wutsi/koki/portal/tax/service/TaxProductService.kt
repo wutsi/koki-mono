@@ -22,11 +22,19 @@ class TaxProductService(
     }
 
     fun products(
-        taxId: Long,
+        taxIds: List<Long> = emptyList(),
+        productIds: List<Long> = emptyList(),
+        unitPriceIds: List<Long> = emptyList(),
         limit: Int = 20,
         offset: Int = 0,
     ): List<TaxProductModel> {
-        val taxProducts = koki.products(taxId, limit, offset).taxProducts
+        val taxProducts = koki.products(
+            taxIds = taxIds,
+            productIds = productIds,
+            unitPriceIds = unitPriceIds,
+            limit = limit,
+            offset = offset,
+        ).taxProducts
 
         // Products
         val productIds = taxProducts.map { taxProduct -> taxProduct.productId }.toSet()
@@ -61,8 +69,7 @@ class TaxProductService(
 
     fun update(id: Long, form: TaxProductForm) {
         koki.updateProduct(
-            id,
-            UpdateTaxProductRequest(
+            id, UpdateTaxProductRequest(
                 quantity = form.quantity,
                 unitPriceId = form.unitPriceId,
             )

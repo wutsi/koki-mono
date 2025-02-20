@@ -27,10 +27,20 @@ class DeleteAccountEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `account in use`() {
+    fun `account with contact`() {
         rest.delete("/v1/accounts/1100")
 
         val account = dao.findById(1100L).get()
+        assertFalse(account.deleted)
+        assertNull(account.deletedAt)
+        assertNull(account.deletedById)
+    }
+
+    @Test
+    fun `account with taxes`() {
+        rest.delete("/v1/accounts/1110")
+
+        val account = dao.findById(1110L).get()
         assertFalse(account.deleted)
         assertNull(account.deletedAt)
         assertNull(account.deletedById)
