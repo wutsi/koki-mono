@@ -43,6 +43,9 @@ object ErrorCode {
     val HTTP_AUTHENTICATION_FAILED = "$PREFIX:http:authetication-failed"
     val HTTP_DOWNSTREAM_ERROR = "$PREFIX:http:downstream-error"
 
+    val JURIDICTION_NOT_FOUND: String = "$PREFIX:juridiction:juridiction-not-found"
+    val JURIDICTION_COUNTRY_NOT_SUPPORTED: String = "$PREFIX:juridiction:country-not-supported"
+
     val LOCATION_NOT_FOUND = "$PREFIX:location:not-found"
     val LOCATION_FEED_NOT_FOUND = "$PREFIX:location:feed-not-found"
 
@@ -54,6 +57,7 @@ object ErrorCode {
     val PRICE_IN_USE: String = "$PREFIX:price:in-use"
 
     val PRODUCT_NOT_FOUND: String = "$PREFIX:product:not-found"
+    val PRODUCT_IN_USE: String = "$PREFIX:product:in-use"
 
     val ROLE_DUPLICATE_NAME: String = "$PREFIX:role:duplicate-name"
     val ROLE_NOT_FOUND: String = "$PREFIX:role:not-found"
