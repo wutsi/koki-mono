@@ -129,6 +129,6 @@ class ImportRoleCSVEndpointTest : TenantAwareEndpointTest() {
     }
 
     private fun findRole(name: String): RoleEntity {
-        return dao.findByTenantIdAndNameIn(getTenantId(), listOf(name)).first()
+        return dao.findByTenantIdAndNameIn(TENANT_ID, listOf(name)).first()
     }
 }

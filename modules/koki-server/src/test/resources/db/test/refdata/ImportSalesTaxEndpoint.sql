@@ -1,5 +1,6 @@
 INSERT INTO T_LOCATION (id, type, name, ascii_name, country)
-    VALUES (101, 2, 'Alberta', 'Alberta', 'CA'),
+    VALUES (100, 1, 'Canada', 'Canada', 'CA'),
+           (101, 2, 'Alberta', 'Alberta', 'CA'),
            (102, 2, 'British Columbia', 'British Columbia', 'CA'),
            (103, 2, 'Manitoba', 'Manitoba', 'CA'),
            (104, 2, 'New Brunswick', 'New Brunswick', 'CA'),
@@ -15,22 +16,23 @@ INSERT INTO T_LOCATION (id, type, name, ascii_name, country)
 ;
 
 INSERT INTO T_JURIDICTION (id, state_fk, country)
-    VALUES (1000, 101, 'CA'),
-           (1001, 102, 'CA'),
-           (1002, 103, 'CA'),
-           (1003, 104, 'CA'),
-           (1004, 105, 'CA'),
-           (1005, 106, 'CA'),
-           (1006, 107, 'CA'),
-           (1007, 108, 'CA'),
-           (1008, 109, 'CA'),
-           (1009, 110, 'CA'),
-           (1010, 111, 'CA'),
-           (1011, 112, 'CA'),
-           (1012, 113, 'CA'),
+    VALUES (1000, null, 'CA'),
+           (1001, 101, 'CA'),
+           (1002, 102, 'CA'),
+           (1003, 103, 'CA'),
+           (1004, 104, 'CA'),
+           (1005, 105, 'CA'),
+           (1006, 106, 'CA'),
+           (1007, 107, 'CA'),
+           (1008, 108, 'CA'),
+           (1009, 119, 'CA'),
+           (1010, 110, 'CA'),
+           (1011, 111, 'CA'),
+           (1012, 112, 'CA'),
+           (1013, 113, 'CA'),
 
            (237, null, 'CM')
 ;
 
 INSERT INTO T_SALES_TAX(id, juridiction_fk, name, rate, active)
-    VALUES(100, 1010, 'XXX', 9.0, true);
+    VALUES(100, 1011, 'XXX', 9.0, true);

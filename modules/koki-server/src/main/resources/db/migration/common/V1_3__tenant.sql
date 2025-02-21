@@ -124,9 +124,10 @@ CREATE TABLE T_BUSINESS(
     id                      BIGINT NOT NULL AUTO_INCREMENT,
 
     tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
-    juridiction_fk          BIGINT NOT NULL,
+    created_by_fk           BIGINT,
+    modified_by_fk          BIGINT,
 
-    company_name            VARCHAR(100),
+    company_name            VARCHAR(100) NOT NULL,
     phone                   VARCHAR(30),
     fax                     VARCHAR(30),
     email                   VARCHAR(255),
@@ -137,7 +138,30 @@ CREATE TABLE T_BUSINESS(
     address_state_fk        BIGINT,
     address_country         VARCHAR(2),
 
+    created_at              DATETIME DEFAULT NOW(),
+    modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
+
     PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
+CREATE TABLE T_BUSINESS_TAX_IDENTIFIER(
+    id                      BIGINT NOT NULL AUTO_INCREMENT,
+
+    business_fk             BIGINT NOT NULL REFERENCES T_BUSINESS(id),
+    sales_tax_fk            BIGINT NOT NULL,
+
+    number                  VARCHAR(30),
+
+    UNIQUE(business_fk, sales_tax_fk),
+    PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
+
+CREATE TABLE T_BUSINESS_JURIDICTION(
+    business_fk         BIGINT NOT NULL REFERENCES T_BUSINESS(id),
+    juridiction_fk      BIGINT NOT NULL REFERENCES T_JURIDICTION(id),
+
+    PRIMARY KEY (business_fk, juridiction_fk)
 ) ENGINE = InnoDB;
 
 

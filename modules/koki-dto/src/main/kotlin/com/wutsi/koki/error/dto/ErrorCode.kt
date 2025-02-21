@@ -21,6 +21,8 @@ object ErrorCode {
     val AUTHORIZATION_TOKEN_EXPIRED: String = "$PREFIX:auth:token-expired"
     val AUTHORIZATION_UNAUTHENTICATED: String = "$PREFIX:auth:unauthenticated"
 
+    val BUSINESS_NOT_FOUND: String = "$PREFIX:business:not-found"
+
     val CATEGORY_TYPE_NOT_SUPPORTED: String = "$PREFIX:category:type-not-supported"
 
     val CONTACT_NOT_FOUND: String = "$PREFIX:contact:not-found"

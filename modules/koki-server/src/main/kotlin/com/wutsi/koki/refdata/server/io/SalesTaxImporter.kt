@@ -81,7 +81,10 @@ class SalesTaxImporter(
 
         /* deactivate */
         salesTaxes.filter { salesTax -> !salesTaxIds.contains(salesTax.id) }
-            .forEach { salesTax -> deactivate(salesTax) }
+            .forEach { salesTax ->
+                deactivate(salesTax)
+                updated++
+            }
 
         LOGGER.info("${added + updated} tax(es) for $country imported with $errors error(s)")
         return ImportResponse(

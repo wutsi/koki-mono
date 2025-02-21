@@ -4,8 +4,6 @@ import com.wutsi.koki.refdata.dto.Address
 
 data class Business(
     val id: Long = -1,
-    val tenantId: Long = -1,
-    val juridictionId: Long = -1,
     val companyName: String = "",
     val phone: String? = null,
     val fax: String? = null,
@@ -13,4 +11,5 @@ data class Business(
     val website: String? = null,
     val address: Address? = null,
     val taxIdentifiers: List<BusinessTaxIdentifier> = emptyList(),
+    val juridictionIds: List<Long> = emptyList(),
 )
