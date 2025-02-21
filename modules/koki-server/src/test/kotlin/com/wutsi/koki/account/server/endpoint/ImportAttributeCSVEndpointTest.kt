@@ -155,6 +155,6 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
     }
 
     private fun findAttribute(name: String): AttributeEntity {
-        return dao.findByTenantIdAndName(getTenantId(), name)!!
+        return dao.findByTenantIdAndName(TENANT_ID, name)!!
     }
 }

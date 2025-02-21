@@ -134,6 +134,6 @@ class ImportTypeCSVEndpointTest : TenantAwareEndpointTest() {
     }
 
     private fun findType(name: String, objectType: ObjectType): TypeEntity? {
-        return dao.findByNameIgnoreCaseAndObjectTypeAndTenantId(name, objectType, getTenantId())
+        return dao.findByNameIgnoreCaseAndObjectTypeAndTenantId(name, objectType, TENANT_ID)
     }
 }

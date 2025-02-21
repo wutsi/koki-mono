@@ -103,6 +103,7 @@ CREATE TABLE T_ROLE(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
+
 CREATE TABLE T_USER_ROLE(
   user_fk       BIGINT NOT NULL REFERENCES T_USER(id),
   role_fk       BIGINT NOT NULL REFERENCES T_ROLE(id),
@@ -110,12 +111,59 @@ CREATE TABLE T_USER_ROLE(
   PRIMARY KEY(user_fk, role_fk)
 ) ENGINE = InnoDB;
 
+
 CREATE TABLE T_ROLE_PERMISSION(
   role_fk       BIGINT NOT NULL REFERENCES T_ROLE(id),
   permission_fk BIGINT NOT NULL REFERENCES T_PERMISSION(id),
 
   PRIMARY KEY(role_fk, permission_fk)
 ) ENGINE = InnoDB;
+
+
+CREATE TABLE T_BUSINESS(
+    id                      BIGINT NOT NULL AUTO_INCREMENT,
+
+    tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
+    created_by_fk           BIGINT,
+    modified_by_fk          BIGINT,
+
+    company_name            VARCHAR(100) NOT NULL,
+    phone                   VARCHAR(30),
+    fax                     VARCHAR(30),
+    email                   VARCHAR(255),
+    website                 TEXT,
+    address_street          TEXT,
+    address_postal_code     VARCHAR(30),
+    address_city_fk         BIGINT,
+    address_state_fk        BIGINT,
+    address_country         VARCHAR(2),
+
+    created_at              DATETIME DEFAULT NOW(),
+    modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
+
+    PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
+CREATE TABLE T_BUSINESS_TAX_IDENTIFIER(
+    id                      BIGINT NOT NULL AUTO_INCREMENT,
+
+    business_fk             BIGINT NOT NULL REFERENCES T_BUSINESS(id),
+    sales_tax_fk            BIGINT NOT NULL,
+
+    number                  VARCHAR(30),
+
+    UNIQUE(business_fk, sales_tax_fk),
+    PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
+
+CREATE TABLE T_BUSINESS_JURIDICTION(
+    business_fk         BIGINT NOT NULL REFERENCES T_BUSINESS(id),
+    juridiction_fk      BIGINT NOT NULL REFERENCES T_JURIDICTION(id),
+
+    PRIMARY KEY (business_fk, juridiction_fk)
+) ENGINE = InnoDB;
+
 
 INSERT INTO T_MODULE(id, name, title, home_url, tab_url, settings_url)
     VALUES (900, 'security', 'Security', null, null, '/settings/security'),

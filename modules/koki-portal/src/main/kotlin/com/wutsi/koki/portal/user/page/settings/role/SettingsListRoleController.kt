@@ -70,11 +70,9 @@ class SettingsListRoleController(
         operation: String?,
         model: Model
     ) {
-        if (toast != null && canShowToasts(
-                timestamp,
-                referer,
-                listOf("/settings/roles/$toast", "/settings/roles/create")
-            )
+        if (
+            toast != null &&
+            canShowToasts(timestamp, referer, listOf("/settings/roles/$toast", "/settings/roles/create"))
         ) {
             if (operation == "del") {
                 model.addAttribute("toast", "Deleted")

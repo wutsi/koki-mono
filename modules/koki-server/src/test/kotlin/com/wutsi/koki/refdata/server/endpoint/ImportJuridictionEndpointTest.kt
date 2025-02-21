@@ -21,6 +21,9 @@ class ImportJuridictionEndpointTest : AuthorizationAwareEndpointTest() {
         val response = rest.getForEntity("/v1/juridictions/import?country=CM", ImportResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
+        assertEquals(0, response.body?.errors)
+        assertEquals(1, response.body?.added)
+        assertEquals(0, response.body?.updated)
 
         val taxes = dao.findByCountry("CM")
         assertEquals(1, taxes.size)
@@ -28,104 +31,87 @@ class ImportJuridictionEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(null, taxes[0].stateId)
     }
 
-    //    @Test
+    @Test
     fun ca() {
         val response = rest.getForEntity("/v1/juridictions/import?country=CA", ImportResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
+        assertEquals(0, response.body?.errors)
+        assertEquals(13, response.body?.added)
+        assertEquals(1, response.body?.updated)
 
         val juridictions = dao.findByCountry("CA")
-        assertEquals(18, juridictions.size)
+        assertEquals(14, juridictions.size)
+
+        // CA
+        assertEquals(1000L, juridictions[0].id)
+        assertEquals("CA", juridictions[0].country)
+        assertEquals(null, juridictions[0].stateId)
 
         // Alberta
-        val ab = juridictions.filter { tax -> tax.stateId == 101L }
-        assertEquals(1, ab.size)
-        assertEquals("CA", ab[0].country)
-        assertEquals(101L, ab[0].stateId)
+        assertEquals(1001L, juridictions[1].id)
+        assertEquals("CA", juridictions[1].country)
+        assertEquals(101, juridictions[1].stateId)
 
         // British Columbia
-        val bc = juridictions.filter { tax -> tax.stateId == 102L }
-        assertEquals(2, bc.size)
-        assertEquals("CA", bc[0].country)
-        assertEquals(102L, bc[0].stateId)
-
-        assertEquals("CA", bc[1].country)
-        assertEquals(102L, bc[1].stateId)
+        assertEquals(1002L, juridictions[2].id)
+        assertEquals("CA", juridictions[2].country)
+        assertEquals(102, juridictions[2].stateId)
 
         // Manitoba
-        val mb = juridictions.filter { tax -> tax.stateId == 103L }
-        assertEquals(2, mb.size)
-        assertEquals("CA", mb[0].country)
-        assertEquals(103L, mb[0].stateId)
-
-        assertEquals("CA", mb[1].country)
-        assertEquals(103L, mb[1].stateId)
+        assertEquals(1003L, juridictions[3].id)
+        assertEquals("CA", juridictions[3].country)
+        assertEquals(103, juridictions[3].stateId)
 
         // New Brunswick
-        val nb = juridictions.filter { tax -> tax.stateId == 104L }
-        assertEquals(1, nb.size)
-        assertEquals("CA", nb[0].country)
-        assertEquals(104L, nb[0].stateId)
+        assertEquals(1004L, juridictions[4].id)
+        assertEquals("CA", juridictions[4].country)
+        assertEquals(104, juridictions[4].stateId)
 
         //  Newfoundland and Labrador
-        val nl = juridictions.filter { tax -> tax.stateId == 105L }
-        assertEquals(1, nl.size)
-        assertEquals("CA", nl[0].country)
-        assertEquals(105L, nl[0].stateId)
+        assertEquals(1005L, juridictions[5].id)
+        assertEquals("CA", juridictions[5].country)
+        assertEquals(105, juridictions[5].stateId)
 
         // Northwest Territories
-        val nt = juridictions.filter { tax -> tax.stateId == 106L }
-        assertEquals(1, nt.size)
-        assertEquals("CA", nt[0].country)
-        assertEquals(106L, nt[0].stateId)
+        assertEquals(1006L, juridictions[6].id)
+        assertEquals("CA", juridictions[6].country)
+        assertEquals(106, juridictions[6].stateId)
 
         //  Nova Scotia
-        val ns = juridictions.filter { tax -> tax.stateId == 107L }
-        assertEquals(1, ns.size)
-        assertEquals("CA", ns[0].country)
-        assertEquals(107L, ns[0].stateId)
+        assertEquals(1007L, juridictions[7].id)
+        assertEquals("CA", juridictions[7].country)
+        assertEquals(107, juridictions[7].stateId)
 
         //  Nunavut
-        val nv = juridictions.filter { tax -> tax.stateId == 108L }
-        assertEquals(1, nv.size)
-        assertEquals("CA", nv[0].country)
-        assertEquals(108L, nv[0].stateId)
+        assertEquals(1008L, juridictions[8].id)
+        assertEquals("CA", juridictions[8].country)
+        assertEquals(108, juridictions[8].stateId)
 
         //  Ontario
-        val on = juridictions.filter { tax -> tax.stateId == 109L }
-        assertEquals(1, on.size)
-        assertEquals("CA", on[0].country)
-        assertEquals(109L, on[0].stateId)
+        assertEquals(1009L, juridictions[9].id)
+        assertEquals("CA", juridictions[9].country)
+        assertEquals(109, juridictions[9].stateId)
 
         //  Prince Edward Island
-        val pe = juridictions.filter { tax -> tax.stateId == 110L }
-        assertEquals(1, pe.size)
-        assertEquals("CA", pe[0].country)
-        assertEquals(110L, pe[0].stateId)
+        assertEquals(1010L, juridictions[10].id)
+        assertEquals("CA", juridictions[10].country)
+        assertEquals(110, juridictions[10].stateId)
 
         //  Quebec
-        val qc = juridictions.filter { tax -> tax.stateId == 111L }
-        assertEquals(2, qc.size)
-        assertEquals("CA", qc[0].country)
-        assertEquals(111L, qc[0].stateId)
-
-        assertEquals("CA", qc[1].country)
-        assertEquals(111L, qc[1].stateId)
+        assertEquals(1011L, juridictions[11].id)
+        assertEquals("CA", juridictions[11].country)
+        assertEquals(111, juridictions[11].stateId)
 
         //  Saskatchewan
-        val sk = juridictions.filter { tax -> tax.stateId == 112L }
-        assertEquals(2, sk.size)
-        assertEquals("CA", sk[0].country)
-        assertEquals(112L, sk[0].stateId)
-
-        assertEquals("CA", sk[1].country)
-        assertEquals(112L, sk[1].stateId)
+        assertEquals(1012L, juridictions[12].id)
+        assertEquals("CA", juridictions[12].country)
+        assertEquals(112, juridictions[12].stateId)
 
         // Yukon
-        val yk = juridictions.filter { tax -> tax.stateId == 113L }
-        assertEquals(1, yk.size)
-        assertEquals("CA", yk[0].country)
-        assertEquals(113L, yk[0].stateId)
+        assertEquals(1013L, juridictions[13].id)
+        assertEquals("CA", juridictions[13].country)
+        assertEquals(113, juridictions[13].stateId)
     }
 
     @Test

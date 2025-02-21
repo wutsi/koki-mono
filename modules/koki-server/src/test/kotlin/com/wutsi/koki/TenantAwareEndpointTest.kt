@@ -29,8 +29,6 @@ abstract class TenantAwareEndpointTest : ClientHttpRequestInterceptor {
 
     protected var ignoreTenantIdHeader: Boolean = false
 
-    protected open fun getTenantId() = TENANT_ID
-
     private val folder = File(File(System.getProperty("user.home")), "__wutsi")
 
     override fun intercept(
@@ -39,7 +37,7 @@ abstract class TenantAwareEndpointTest : ClientHttpRequestInterceptor {
         execution: ClientHttpRequestExecution
     ): ClientHttpResponse {
         if (!ignoreTenantIdHeader) {
-            request.headers.add(HttpHeader.TENANT_ID, getTenantId().toString())
+            request.headers.add(HttpHeader.TENANT_ID, TENANT_ID.toString())
         } else {
             request.headers.remove(HttpHeader.TENANT_ID)
         }

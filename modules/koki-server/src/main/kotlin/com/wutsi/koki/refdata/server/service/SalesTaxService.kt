@@ -22,7 +22,7 @@ class SalesTaxService(
 
     fun search(
         ids: List<Long> = emptyList(),
-        juridictionId: Long? = null,
+        juridictionIds: List<Long> = emptyList(),
         active: Boolean? = null,
         limit: Int = 20,
         offset: Int = 0,
@@ -32,8 +32,8 @@ class SalesTaxService(
         if (ids.isNotEmpty()) {
             jql.append(" AND S.id IN :ids")
         }
-        if (juridictionId != null) {
-            jql.append(" AND S.juridiction.id = :juridictionId")
+        if (juridictionIds.isNotEmpty()) {
+            jql.append(" AND S.juridiction.id IN :juridictionIds")
         }
         if (active != null) {
             jql.append(" AND S.active = :active")
@@ -43,8 +43,8 @@ class SalesTaxService(
         if (ids.isNotEmpty()) {
             query.setParameter("ids", ids)
         }
-        if (juridictionId != null) {
-            query.setParameter("juridictionId", juridictionId)
+        if (juridictionIds.isNotEmpty()) {
+            query.setParameter("juridictionIds", juridictionIds)
         }
         if (active != null) {
             query.setParameter("active", active)

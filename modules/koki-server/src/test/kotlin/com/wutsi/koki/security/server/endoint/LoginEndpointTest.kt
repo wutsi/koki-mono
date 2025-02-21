@@ -34,7 +34,7 @@ class LoginEndpointTest : TenantAwareEndpointTest() {
         val accessToken = result.body!!.accessToken
         val principal = authenticationService.decodeAccessToken(accessToken)
         assertEquals(11L, principal.getUserId())
-        assertEquals(getTenantId(), principal.getTenantId())
+        assertEquals(TENANT_ID, principal.getTenantId())
         assertEquals("Ray Sponsible", principal.getSubject())
     }
 

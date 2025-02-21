@@ -100,11 +100,9 @@ class SettingsListUserController(
         operation: String?,
         model: Model
     ) {
-        if (toast != null && canShowToasts(
-                timestamp,
-                referer,
-                listOf("/settings/users/$toast", "/settings/users/create")
-            )
+        if (
+            toast != null &&
+            canShowToasts(timestamp, referer, listOf("/settings/users/$toast", "/settings/users/create"))
         ) {
             if (operation == "del") {
                 model.addAttribute("toast", "Deleted")

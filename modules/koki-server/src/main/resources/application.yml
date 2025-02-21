@@ -108,7 +108,7 @@ springdoc:
 
         -   group: tenant
             display-name: Tenant API
-            paths-to-match: /v1/tenants, /v1/tenants/**, /v1/types, /v1/types/**, /v1/configurations, /v1/configurations/**
+            paths-to-match: /v1/businesses, /v1/tenants, /v1/tenants/**, /v1/types, /v1/types/**, /v1/configurations, /v1/configurations/**
 
         -   group: user
             display-name: User API
