@@ -66,11 +66,9 @@ class SettingsRoleController(
         timestamp: Long?,
         model: Model
     ) {
-        if (toast == id && canShowToasts(
-                timestamp,
-                referer,
-                listOf("/settings/roles/$id/edit", "/settings/roles/$id/permissions")
-            )
+        if (
+            toast == id &&
+            canShowToasts(timestamp, referer, listOf("/settings/roles/$id/edit", "/settings/roles/$id/permissions"))
         ) {
             model.addAttribute("toast", "Saved")
         }
