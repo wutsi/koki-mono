@@ -47,8 +47,17 @@
                 <tr th:if="!${tenant.permissions.isEmpty()}">
                     <td><b>Permissions</b></td>
                     <td>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </span>
+                            <input class="form-control" id='search-input'
+                                   onkeyup="koki_table_filter('search-input', 'permission-table', 1)"
+                                   placeholder="Search permission"
+                                   type="text"/>
+                        </div>
                         <div class="overflow-auto border" style="height: 23em;">
-                            <table class="table table-striped">
+                            <table class="table" id="permission-table">
                                 <tr th:each="permission : ${tenant.permissions}">
                                     <td class="padding-right" width="1%">
                                         <input name="permissionIds"
