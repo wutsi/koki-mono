@@ -70,12 +70,14 @@
 
 ## Taxes
 
-- [] Add Kanban view
-- [] Compile time spent by Tax report
-- [] Compile time spent on Tax report by user
-- [] Compile labor cost by Tax report
-- [] Track total time spent on Tax Report per user
+- [] Create Invoices
+- [] Taxes KPI
+    - [] Time spent by Tax report
+    - [] Time spent on Tax report by user
+    - [] Labor cost by Tax report
+    - [] Total time spent on Tax Report per user
 - [] Settings: Setup email notification
+- [] Add Kanban view
 - [x] Link taxes with products
 - [x] Filter Accountant and Technician based on the permission 'tax:manage'
 - [x] Add Calendar view
@@ -142,14 +144,10 @@
 - [x] Price UI
 - [x] Product, Price API
 
-## Invoice
+## Invoicing
 
 - [] Invoice API
-- [] Create invoice for Taxes
+- [] Generate Invoice PDF
 - [] Send invoice to customer
-- [] Capture online payment: Paypal, Stripe, Flutterwave
-
-## Portal
-
-- [] Configure home page by role
-- [x] Align webapp domain name with Tenant
+- [] Capture online payments: Paypal, Stripe, Flutterwave
+- [] Capture payments manually: Cash, Check etc...

@@ -47,7 +47,7 @@ class BusinessService(
                 companyName = form.companyName,
                 email = form.email,
                 fax = form.fax,
-                phone = form.fax,
+                phone = form.phone,
                 website = form.website,
                 addressCityId = form.addressCityId,
                 addressStreet = form.addressStreet,

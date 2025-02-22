@@ -21,6 +21,8 @@ class SettingsEditBusinessControllerTest : AbstractPageControllerTest() {
         input("#email", "info@yo-man.com")
         input("#website", "https://yo-man.com")
         scrollToBottom()
+        input("#addressStreet", "101010 Mimboman")
+        input("#addressPostalCode", "123456")
         click("button[type=submit]")
 
         val request = argumentCaptor<SaveBusinessRequest>()
@@ -30,5 +32,7 @@ class SettingsEditBusinessControllerTest : AbstractPageControllerTest() {
         assertEquals("5147580100", request.firstValue.fax)
         assertEquals("info@yo-man.com", request.firstValue.email)
         assertEquals("https://yo-man.com", request.firstValue.website)
+        assertEquals("123456", request.firstValue.addressPostalCode)
+        assertEquals("101010 Mimboman", request.firstValue.addressStreet)
     }
 }
