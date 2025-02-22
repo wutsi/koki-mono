@@ -7,4 +7,5 @@ data class CreateRoleRequest(
     @get:NotEmpty val title: String? = null,
     val active: Boolean = true,
     val description: String? = null,
+    val permissionIds: List<Long> = emptyList()
 )

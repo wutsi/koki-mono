@@ -7,4 +7,5 @@ data class UpdateUserRequest(
     @get:NotEmpty val email: String = "",
     @get:NotEmpty val displayName: String = "",
     @get:NotNull val status: UserStatus? = null,
+    val roleIds: List<Long> = emptyList(),
 )
