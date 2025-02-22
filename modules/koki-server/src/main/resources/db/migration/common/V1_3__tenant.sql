@@ -144,18 +144,6 @@ CREATE TABLE T_BUSINESS(
     PRIMARY KEY (id)
 ) ENGINE = InnoDB;
 
-CREATE TABLE T_BUSINESS_TAX_IDENTIFIER(
-    id                      BIGINT NOT NULL AUTO_INCREMENT,
-
-    business_fk             BIGINT NOT NULL REFERENCES T_BUSINESS(id),
-    sales_tax_fk            BIGINT NOT NULL,
-
-    number                  VARCHAR(30),
-
-    UNIQUE(business_fk, sales_tax_fk),
-    PRIMARY KEY (id)
-) ENGINE = InnoDB;
-
 
 CREATE TABLE T_BUSINESS_JURIDICTION(
     business_fk         BIGINT NOT NULL REFERENCES T_BUSINESS(id),

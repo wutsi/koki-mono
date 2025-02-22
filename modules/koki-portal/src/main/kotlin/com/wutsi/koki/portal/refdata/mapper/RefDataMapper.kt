@@ -1,13 +1,19 @@
 package com.wutsi.koki.portal.refdata.mapper
 
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
+import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.CategoryModel
+import com.wutsi.koki.portal.refdata.model.JuridictionModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.refdata.model.UnitModel
+import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.Category
+import com.wutsi.koki.refdata.dto.Juridiction
 import com.wutsi.koki.refdata.dto.Location
 import com.wutsi.koki.refdata.dto.Unit
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
+import java.util.Locale
 
 @Service
 class RefDataMapper : TenantAwareMapper() {
@@ -38,6 +44,31 @@ class RefDataMapper : TenantAwareMapper() {
             level = entity.level,
             active = entity.active,
             longName = entity.longName,
+        )
+    }
+
+    fun toJuridictionModel(entity: Juridiction, locations: Map<Long, LocationModel>): JuridictionModel {
+        val state = entity.stateId?.let { id -> locations[id] }
+        val displayCountry = Locale("en", entity.country).displayCountry
+        return JuridictionModel(
+            id = entity.id,
+            state = state,
+            country = entity.country,
+            name = if (state == null) displayCountry else "${state.name}, $displayCountry",
+        )
+    }
+
+    fun toAddressModel(entity: Address, locations: Map<Long, LocationModel>): AddressModel {
+        val city = entity.cityId?.let { id -> locations[id] }
+        return AddressModel(
+            street = entity.street?.ifEmpty { null },
+            postalCode = entity.postalCode?.ifEmpty { null },
+            city = city,
+            state = city?.parentId?.let { id -> locations[id] },
+            country = entity.country?.ifEmpty { null },
+            countryName = entity.country?.let { country ->
+                Locale(LocaleContextHolder.getLocale().language, country).getDisplayCountry()
+            }
         )
     }
 }

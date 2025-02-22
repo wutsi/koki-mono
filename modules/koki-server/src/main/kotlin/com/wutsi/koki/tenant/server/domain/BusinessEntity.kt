@@ -52,4 +52,12 @@ data class BusinessEntity(
         inverseJoinColumns = arrayOf(JoinColumn(name = "juridiction_fk")),
     )
     var juridictions: MutableList<JuridictionEntity> = mutableListOf(),
-)
+) {
+    fun hasAddress(): Boolean {
+        return addressCityId != null ||
+            addressStateId != null ||
+            !addressPostalCode.isNullOrEmpty() ||
+            !addressStreet.isNullOrEmpty() ||
+            !addressCountry.isNullOrEmpty()
+    }
+}

@@ -2,6 +2,7 @@ package com.wutsi.koki
 
 import com.wutsi.koki.refdata.dto.Category
 import com.wutsi.koki.refdata.dto.CategoryType
+import com.wutsi.koki.refdata.dto.Juridiction
 import com.wutsi.koki.refdata.dto.Location
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.dto.Unit
@@ -40,5 +41,13 @@ object RefDataFixtures {
             name = "Brake Repair",
             longName = "Automotive > Repair > Brake Repair"
         ),
+    )
+
+    // Juridiction
+    val juridictions = listOf(
+        Juridiction(id = 100, stateId = null, country = "CA"),
+        Juridiction(id = 101, stateId = locations[0].id, country = "CA"),
+        Juridiction(id = 102, stateId = locations[1].id, country = "CA"),
+        Juridiction(id = 237, stateId = null, country = "CM"),
     )
 }

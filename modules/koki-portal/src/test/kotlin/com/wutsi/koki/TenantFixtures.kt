@@ -2,6 +2,8 @@ package com.wutsi.koki
 
 import com.wutsi.koki.ModuleFixtures.modules
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.refdata.dto.Address
+import com.wutsi.koki.tenant.dto.Business
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.Tenant
 import com.wutsi.koki.tenant.dto.TenantStatus
@@ -79,5 +81,25 @@ object TenantFixtures {
         name = "F",
         title = "Full-Time",
         description = "Full Time Employee"
+    )
+
+    val business = Business(
+        id = 111,
+        companyName = "Test Inc",
+        email = "info@yahoo.com",
+        phone = "+9189990000",
+        fax = "+9189990011",
+        website = "https://yahoo.com",
+        juridictionIds = listOf(
+            RefDataFixtures.juridictions[0].id,
+            RefDataFixtures.juridictions[1].id,
+        ),
+        address = Address(
+            street = "340 Pascal",
+            postalCode = "H7K 1C7",
+            cityId = RefDataFixtures.locations[2].id,
+            stateId = RefDataFixtures.locations[2].parentId,
+            country = "CA",
+        ),
     )
 }
