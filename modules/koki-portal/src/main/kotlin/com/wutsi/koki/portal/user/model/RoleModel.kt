@@ -6,7 +6,7 @@ import java.util.Date
 data class RoleModel(
     val id: Long = -1,
     val name: String = "",
-    val title: String = "",
+    val title: String? = null,
     val description: String? = null,
     val active: Boolean = true,
     val createdAt: Date = Date(),

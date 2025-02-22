@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.user.page.settings.role
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.user.service.RoleService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
 @RequestMapping("/settings/roles")
+@RequiresPermission(["security:admin"])
 class SettingsListRoleController(
     private val service: RoleService,
 ) : AbstractPageController() {

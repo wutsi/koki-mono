@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.user.page.settings.role
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.user.model.RoleForm
 import com.wutsi.koki.portal.user.service.RoleService
 import org.springframework.stereotype.Controller
@@ -15,8 +16,9 @@ import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 @RequestMapping("/settings/roles")
+@RequiresPermission(["security:admin"])
 class SettingsCreateRoleController(
-    private val service: RoleService
+    private val service: RoleService,
 ) : AbstractPageController() {
     @GetMapping("/create")
     fun create(model: Model): String {
@@ -32,7 +34,6 @@ class SettingsCreateRoleController(
                 name = PageName.SECURITY_SETTINGS_ROLE_CREATE,
                 title = "Create Role",
             )
-
         )
         return "users/settings/roles/create"
     }

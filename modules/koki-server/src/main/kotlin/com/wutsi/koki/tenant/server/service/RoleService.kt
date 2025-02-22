@@ -8,7 +8,6 @@ import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.module.server.service.PermissionService
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.dto.CreateRoleRequest
-import com.wutsi.koki.tenant.dto.SetPermissionListRequest
 import com.wutsi.koki.tenant.dto.UpdateRoleRequest
 import com.wutsi.koki.tenant.server.dao.RoleRepository
 import com.wutsi.koki.tenant.server.domain.RoleEntity
@@ -71,14 +70,6 @@ open class RoleService(
         return role
     }
 
-    fun getAll(ids: List<Long>, tenantId: Long): List<RoleEntity> {
-        return search(
-            tenantId = tenantId,
-            ids = ids,
-            limit = ids.size,
-        )
-    }
-
     fun getByName(name: String, tenantId: Long): RoleEntity {
         val roles = search(
             names = listOf(name),
@@ -111,7 +102,7 @@ open class RoleService(
         }
 
         val userId = securityService.getCurrentUserId()
-        return dao.save(
+        val role = dao.save(
             RoleEntity(
                 tenantId = tenantId,
                 name = request.name,
@@ -122,6 +113,8 @@ open class RoleService(
                 createdById = userId,
             )
         )
+        setPermissions(role, request.permissionIds)
+        return role
     }
 
     @Transactional
@@ -142,6 +135,8 @@ open class RoleService(
         role.modifiedAt = Date()
         role.modifiedById = securityService.getCurrentUserId()
         dao.save(role)
+
+        setPermissions(role, request.permissionIds)
     }
 
     @Transactional
@@ -153,15 +148,13 @@ open class RoleService(
         dao.save(role)
     }
 
-    @Transactional
-    fun setPermissions(id: Long, request: SetPermissionListRequest, tenantId: Long) {
-        val role = get(id, tenantId)
-        if (request.permissionIds.isEmpty()) {
+    fun setPermissions(role: RoleEntity, permissionIds: List<Long>) {
+        if (permissionIds.isEmpty()) {
             role.permissions.clear()
         } else {
             role.permissions = permissionService.search(
-                ids = request.permissionIds,
-                limit = request.permissionIds.size
+                ids = permissionIds,
+                limit = permissionIds.size
             ).toMutableList()
         }
         role.modifiedById = securityService.getCurrentUserId()

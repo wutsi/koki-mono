@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.RoleFixtures
 import com.wutsi.koki.UserFixtures.user
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
@@ -17,13 +18,15 @@ import kotlin.test.assertEquals
 
 class SettingsEditUserControllerTest : AbstractPageControllerTest() {
     @Test
-    fun update() {
+    fun edit() {
         navigateTo("/settings/users/${user.id}/edit")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_EDIT)
 
         input("#displayName", "Yo Man")
         input("#email", "yoman@gmail.com")
         select("#status", 2)
+        click("#role-" + RoleFixtures.roles[0].id)
+        click("#role-" + RoleFixtures.roles[2].id)
         click("button[type=submit]", 1000)
 
         val request = argumentCaptor<UpdateUserRequest>()
@@ -36,6 +39,7 @@ class SettingsEditUserControllerTest : AbstractPageControllerTest() {
         assertEquals("Yo Man", request.firstValue.displayName)
         assertEquals("yoman@gmail.com", request.firstValue.email)
         assertEquals(UserStatus.SUSPENDED, request.firstValue.status)
+        assertEquals(listOf(RoleFixtures.roles[0].id, RoleFixtures.roles[2].id), request.firstValue.roleIds)
 
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER)
         assertElementVisible("#koki-toast")
@@ -68,5 +72,13 @@ class SettingsEditUserControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/users/${user.id}/edit")
         click(".btn-back")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_LIST)
+    }
+
+    @Test
+    fun `edit - without permission security-admin`() {
+        setUpUserWithoutPermissions(listOf("security:admin"))
+
+        navigateTo("/settings/users/${user.id}/edit")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 }

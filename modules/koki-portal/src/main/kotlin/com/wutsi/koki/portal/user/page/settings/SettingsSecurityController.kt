@@ -3,11 +3,13 @@ package com.wutsi.koki.portal.user.page.settings
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 
 @Controller
+@RequiresPermission(["security:admin"])
 class SettingsSecurityController : AbstractPageController() {
     @GetMapping("/settings/security")
     fun show(model: Model): String {

@@ -27,9 +27,10 @@ class SettingsUserControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun role() {
+    fun `show - without permission security-admin`() {
+        setUpUserWithoutPermissions(listOf("security:admin"))
+
         navigateTo("/settings/users/${user.id}")
-        click(".btn-role")
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_ROLE)
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 }

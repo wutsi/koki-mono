@@ -35,6 +35,27 @@
                         <input required th:field="*{password}" type="password"/>
                     </td>
                 </tr>
+                <tr th:if="!${roles.isEmpty()}">
+                    <td><b>Roles</b></td>
+                    <td>
+                        <table class="table table-striped">
+                            <tr th:each="role : ${roles}">
+                                <td class="padding-right" width="1%">
+                                    <input name="roleIds"
+                                           th:checked="!${form.roleIds.isEmpty()} AND ${form.roleIds.contains(role.id)}"
+                                           th:id="'role-' + ${role.id}"
+                                           th:value="${role.id}"
+                                           type="checkbox"
+                                    />
+                                </td>
+                                <td>
+                                    <span th:if="${role.title}" th:text="${role.title}">TITLE</span>
+                                    <span th:if="!${role.title}" th:text="${role.name}">NAME</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
             </table>
             <button type="submit">Submit</button>
         </form>

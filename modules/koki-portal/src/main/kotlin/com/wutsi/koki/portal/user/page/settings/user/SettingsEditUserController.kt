@@ -3,8 +3,10 @@ package com.wutsi.koki.portal.user.page.settings.user
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.user.model.UserForm
 import com.wutsi.koki.portal.user.model.UserModel
+import com.wutsi.koki.portal.user.service.RoleService
 import com.wutsi.koki.portal.user.service.UserService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -17,8 +19,10 @@ import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 @RequestMapping("/settings/users")
+@RequiresPermission(["security:admin"])
 class SettingsEditUserController(
-    private val service: UserService
+    private val service: UserService,
+    private val roleService: RoleService,
 ) : AbstractPageController() {
     @GetMapping("/{id}/edit")
     fun edit(@PathVariable id: Long, model: Model): String {
@@ -35,13 +39,17 @@ class SettingsEditUserController(
         model.addAttribute("me", user)
         model.addAttribute("form", form)
         model.addAttribute(
+            "roles",
+            roleService.roles(limit = Integer.MAX_VALUE)
+        )
+        model.addAttribute(
             "page",
             PageModel(
                 name = PageName.SECURITY_SETTINGS_USER_EDIT,
                 title = user.displayName,
             )
-
         )
+
         return "users/settings/users/edit"
     }
 

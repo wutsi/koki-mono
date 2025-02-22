@@ -45,6 +45,27 @@
                         <textarea rows="3" th:field="*{description}"></textarea>
                     </td>
                 </tr>
+                <tr th:if="!${tenant.permissions.isEmpty()}">
+                    <td><b>Permissions</b></td>
+                    <td>
+                        <div class="overflow-auto border" style="height: 23em;">
+                            <table class="table table-striped">
+                                <tr th:each="permission : ${tenant.permissions}">
+                                    <td class="padding-right" width="1%">
+                                        <input name="permissionIds"
+                                               th:checked="!${form.permissionIds.isEmpty()} AND ${form.permissionIds.contains(permission.id)}"
+                                               th:id="'permission-' + ${permission.id}"
+                                               th:value="${permission.id}"
+                                               type="checkbox"
+                                        />
+                                    </td>
+                                    <td th:text="${permission.name}">NAME</td>
+                                    <td th:text="${permission.description}">DESCRIPTION</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
             </table>
             <button type="submit">Submit</button>
         </form>

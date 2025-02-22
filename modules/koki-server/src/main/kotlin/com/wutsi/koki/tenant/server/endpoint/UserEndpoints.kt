@@ -4,7 +4,6 @@ import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
-import com.wutsi.koki.tenant.dto.SetRoleListRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.dto.UserType
@@ -84,14 +83,5 @@ class UserEndpoints(
         @RequestBody @Valid request: UpdateUserRequest
     ) {
         service.update(id, request, tenantId)
-    }
-
-    @PostMapping("/{id}/roles")
-    fun roles(
-        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-        @PathVariable id: Long,
-        @RequestBody request: SetRoleListRequest
-    ) {
-        service.setRoles(id, request, tenantId)
     }
 }

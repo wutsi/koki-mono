@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.ModuleFixtures
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.tenant.dto.CreateRoleRequest
@@ -24,6 +25,10 @@ class SettingsCreateRoleControllerTest : AbstractPageControllerTest() {
         input("#title", "Accountant")
         input("#description", "This is an accountant that fill taxes")
         select("#active", 1)
+        click("#permission-" + ModuleFixtures.permissions[0].id)
+        click("#permission-" + ModuleFixtures.permissions[2].id)
+        click("#permission-" + ModuleFixtures.permissions[5].id)
+        scrollToBottom()
         click("button[type=submit]", 1000)
 
         val request = argumentCaptor<CreateRoleRequest>()
@@ -37,7 +42,14 @@ class SettingsCreateRoleControllerTest : AbstractPageControllerTest() {
         assertEquals("Accountant", request.firstValue.title)
         assertEquals("This is an accountant that fill taxes", request.firstValue.description)
         assertEquals(false, request.firstValue.active)
-
+        assertEquals(
+            listOf(
+                ModuleFixtures.permissions[0].id,
+                ModuleFixtures.permissions[2].id,
+                ModuleFixtures.permissions[5].id
+            ),
+            request.firstValue.permissionIds
+        )
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_LIST)
         assertElementVisible("#koki-toast")
     }
@@ -58,9 +70,10 @@ class SettingsCreateRoleControllerTest : AbstractPageControllerTest() {
         input("#title", "Accountant")
         input("#description", "This is an accountant that fill taxes")
         select("#active", 1)
+        scrollToBottom()
         click("button[type=submit]", 1000)
-        assertElementPresent(".alert-danger")
 
+        assertElementPresent(".alert-danger")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_CREATE)
     }
 
@@ -69,5 +82,13 @@ class SettingsCreateRoleControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/roles/create")
         click(".btn-back")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_LIST)
+    }
+
+    @Test
+    fun `create - without permission security-admin`() {
+        setUpUserWithoutPermissions(listOf("security:admin"))
+
+        navigateTo("/settings/roles/create")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 }

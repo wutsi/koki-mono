@@ -8,10 +8,12 @@
 
 ## RefData
 
+- [] Add endpoint to import all ref data
 - [x] Unit API
 - [x] Location API
 - [x] Juridiction API
 - [x] Category API
+- [x] Sales Tax API
 
 ## Module
 
@@ -122,12 +124,13 @@
 
 ## Users
 
-- [] Set roles on create and update
-- [] Apply RBAC security on UI
+- [] Settings: Import users from CSV
 - [] Settings: Update my password
-- [] Settings: Filter user by role, status
 - [] Settings: Change password of user
-- [] Import users from CSV
+- [x] Settings: Filter user by role, status
+- [x] Set roles on create/update users
+- [x] Set permission on create/update roles
+- [x] Apply RBAC security on UI
 - [x] Manage users
 - [x] Manage roles
 
@@ -136,7 +139,6 @@
 - [] Integrate Offer API
 - [] Add attributes for Digital service
 - [] Add attributes for Physical service
-- [x] Integrate sales tax
 - [x] Product Categories for services
 - [x] Link with categories
 - [x] Add attributes for Services
