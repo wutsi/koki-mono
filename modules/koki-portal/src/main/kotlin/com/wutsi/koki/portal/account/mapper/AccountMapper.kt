@@ -8,17 +8,17 @@ import com.wutsi.koki.portal.account.model.AccountAttributeModel
 import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.account.model.AttributeModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
-import com.wutsi.koki.portal.refdata.model.AddressModel
+import com.wutsi.koki.portal.refdata.mapper.RefDataMapper
 import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.tenant.model.TypeModel
 import com.wutsi.koki.portal.user.model.UserModel
-import com.wutsi.koki.refdata.dto.Address
-import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
 import java.util.Locale
 
 @Service
-class AccountMapper : TenantAwareMapper() {
+class AccountMapper(
+    private val refDataMapper: RefDataMapper
+) : TenantAwareMapper() {
     fun toAccountModel(
         entity: AccountSummary,
         accountTypes: Map<Long, TypeModel>,
@@ -47,7 +47,7 @@ class AccountMapper : TenantAwareMapper() {
         accountTypes: Map<Long, TypeModel>,
         users: Map<Long, UserModel>,
         attributes: Map<Long, AttributeModel>,
-        locations: Map<Long, LocationModel>
+        locations: Map<Long, LocationModel>,
     ): AccountModel {
         val fmt = createDateTimeFormat()
         return AccountModel(
@@ -79,22 +79,12 @@ class AccountMapper : TenantAwareMapper() {
                     )
                 }
             },
-            shippingAddress = entity.shippingAddress?.let { address -> toAddressModel(address, locations) },
-            billingAddress = entity.billingAddress?.let { address -> toAddressModel(address, locations) },
-        )
-    }
-
-    fun toAddressModel(entity: Address, locations: Map<Long, LocationModel>): AddressModel {
-        val city = entity.cityId?.let { id -> locations[id] }
-        return AddressModel(
-            street = entity.street?.ifEmpty { null },
-            postalCode = entity.postalCode?.ifEmpty { null },
-            city = city,
-            state = city?.parentId?.let { id -> locations[id] },
-            country = entity.country?.ifEmpty { null },
-            countryName = entity.country?.let { country ->
-                Locale(LocaleContextHolder.getLocale().language, country).getDisplayCountry()
-            }
+            shippingAddress = entity.shippingAddress?.let { address ->
+                refDataMapper.toAddressModel(address, locations)
+            },
+            billingAddress = entity.billingAddress?.let { address ->
+                refDataMapper.toAddressModel(address, locations)
+            },
         )
     }
 

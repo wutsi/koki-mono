@@ -9,8 +9,9 @@ INSERT INTO T_JURIDICTION (id, state_fk, country)
 INSERT INTO T_TENANT(id, name, domain_name, locale, currency, portal_url)
     VALUES (1, 'tenant-1', 'tenant-1.com', 'en_US', 'USD', 'https://tenant-1.com');
 
-INSERT INTO T_BUSINESS(id, tenant_fk, company_name)
-    VALUES (100, 1, 'My Business');
+INSERT INTO T_BUSINESS(id, tenant_fk, company_name, phone, fax, email, website, address_city_fk, address_state_fk, address_country, address_postal_code, address_street)
+    VALUES (100, 1, 'My Business', '+5147580100', '+5147580111', 'info@my-biz.com', 'https://my-biz.com', 111, 100, 'CA', 'H7K1C6', '340 Pascal');
 
 INSERT INTO T_BUSINESS_JURIDICTION(business_fk, juridiction_fk)
-    VALUES (100, 1010);
+    VALUES (100, 1010),
+           (100, 1011);

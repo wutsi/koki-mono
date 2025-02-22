@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="settings-container">
+    <div class="settings-sidebar">
+        <div th:replace="~{__components/settings :: settings-menu('tenant')}"></div>
+    </div>
+    <div class="settings-content">
+        <div class="padding">
+            <div
+                th:replace="~{__components/settings :: settings-title('Business Entity', '/settings/tenant/business')}"></div>
+
+            <div>
+                <form class="form" method="post" th:action="@{/settings/tenant/business/save}" th:object="${form}">
+                    <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+
+                    <table class="table">
+                        <tr>
+                            <td width="20%"><b>Company Name <span class="required">*</span></b></td>
+                            <td><input maxlength="100" required th:field="*{companyName}"/></td>
+                        </tr>
+                        <tr>
+                            <td><b>Juridictions <span class="required">*</span></b></td>
+                            <td>
+                                <select multiple required th:field="*{juridictionIds}">
+                                    <option th:each="juridiction  : ${juridictions}"
+                                            th:text="${juridiction.name}"
+                                            th:value="${juridiction.id}">
+                                        JURIDICTIONS
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Email</b></td>
+                            <td><input maxlength="255" th:field="*{email}"/></td>
+                        </tr>
+                        <tr>
+                            <td><b>Phone</b></td>
+                            <td><input maxlength="30" th:field="*{phone}"/></td>
+                        </tr>
+                        <tr>
+                            <td><b>Fax</b></td>
+                            <td><input maxlength="30" th:field="*{fax}"/></td>
+                        </tr>
+                        <tr>
+                            <td><b>Website</b></td>
+                            <td><input th:field="*{website}"/></td>
+                        </tr>
+                    </table>
+
+                    <table class="table">
+                        <tr>
+                            <td width="20%"><b>Country</b></td>
+                            <td>
+                                <select th:field="*{addressCountry}">
+                                    <option value=""></option>
+                                    <option th:each="country : ${countries}"
+                                            th:text="${country.displayCountry}"
+                                            th:value="${country.country}"
+                                    >COUNTRY
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>City</b></td>
+                            <td>
+                                <select th:field="*{addressCityId}">
+                                    <option selected th:if="${city}"
+                                            th:text="${city.name}"
+                                            th:value="${city.id}"
+                                    >CITY
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Street</b></td>
+                            <td>
+                                <input th:field="*{addressStreet}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Postal Code</b></td>
+                            <td>
+                                <input maxlength="30" th:field="*{addressPostalCode}"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <button type="submit">Submit</button>
+                    <a href="/settings/tenant/business">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
+
+<script>
+    $('#juridictionIds').select2();
+    koki_address_editor('addressCountry', 'addressCityId');
+</script>
+</body>
+</html>

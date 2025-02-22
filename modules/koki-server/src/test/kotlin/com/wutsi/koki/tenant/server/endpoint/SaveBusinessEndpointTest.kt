@@ -3,7 +3,6 @@ package com.wutsi.koki.tenant.server.endpoint
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.tenant.dto.SaveBusinessRequest
 import com.wutsi.koki.tenant.server.dao.BusinessRepository
-import com.wutsi.koki.tenant.server.dao.BusinessTaxIdentifierRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -18,9 +17,6 @@ class SaveBusinessEndpointTest : AuthorizationAwareEndpointTest() {
     private lateinit var dao: BusinessRepository
 
     @Autowired
-    private lateinit var taxIdDao: BusinessTaxIdentifierRepository
-
-    @Autowired
     protected lateinit var ds: DataSource
 
     private val request = SaveBusinessRequest(
@@ -32,7 +28,6 @@ class SaveBusinessEndpointTest : AuthorizationAwareEndpointTest() {
         addressStreet = "340 Pascal",
         addressPostalCode = "123 111",
         addressCityId = 111L,
-        addressStateId = 222L,
         addressCountry = "ca",
         taxIdentifiers = mapOf(
             1111L to "GST-00001430943",
@@ -44,7 +39,7 @@ class SaveBusinessEndpointTest : AuthorizationAwareEndpointTest() {
         ),
     )
 
-    private fun getTaxId(businessId: Long): List<Long> {
+    private fun getJuridictionIds(businessId: Long): List<Long> {
         val ids = mutableListOf<Long>()
         val cnn = ds.connection
         cnn.use {
@@ -81,16 +76,11 @@ class SaveBusinessEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.addressPostalCode, business.addressPostalCode)
         assertEquals(request.addressCountry?.uppercase(), business.addressCountry)
         assertEquals(request.addressCityId, business.addressCityId)
-        assertEquals(request.addressStateId, business.addressStateId)
+        assertEquals(100L, business.addressStateId)
         assertEquals(USER_ID, business.createdById)
         assertEquals(USER_ID, business.modifiedById)
 
-        val taxIds = taxIdDao.findByBusinessId(business.id)
-        assertEquals(request.taxIdentifiers.size, taxIds.size)
-        assertEquals(request.taxIdentifiers[taxIds[0].salesTaxId], taxIds[0].number)
-        assertEquals(request.taxIdentifiers[taxIds[1].salesTaxId], taxIds[1].number)
-
-        assertEquals(request.juridictionIds, getTaxId(business.id))
+        assertEquals(request.juridictionIds, getJuridictionIds(business.id))
     }
 
     @Sql(value = ["/db/test/clean.sql", "/db/test/tenant/UpdateBusinessEndpoint.sql"])
@@ -112,14 +102,9 @@ class SaveBusinessEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.addressPostalCode, business.addressPostalCode)
         assertEquals(request.addressCountry?.uppercase(), business.addressCountry)
         assertEquals(request.addressCityId, business.addressCityId)
-        assertEquals(request.addressStateId, business.addressStateId)
+        assertEquals(100L, business.addressStateId)
         assertEquals(USER_ID, business.modifiedById)
 
-        val taxIds = taxIdDao.findByBusinessId(business.id)
-        assertEquals(request.taxIdentifiers.size, taxIds.size)
-        assertEquals(request.taxIdentifiers[taxIds[0].salesTaxId], taxIds[0].number)
-        assertEquals(request.taxIdentifiers[taxIds[1].salesTaxId], taxIds[1].number)
-
-        assertEquals(request.juridictionIds, getTaxId(business.id))
+        assertEquals(request.juridictionIds, getJuridictionIds(business.id))
     }
 }

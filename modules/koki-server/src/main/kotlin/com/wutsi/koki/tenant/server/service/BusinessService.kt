@@ -1,13 +1,15 @@
 package com.wutsi.koki.tenant.server.service
 
+import com.wutsi.koki.error.dto.Error
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.service.JuridictionService
-import com.wutsi.koki.refdata.server.service.SalesTaxService
+import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.dto.SaveBusinessRequest
 import com.wutsi.koki.tenant.server.dao.BusinessRepository
-import com.wutsi.koki.tenant.server.dao.BusinessTaxIdentifierRepository
 import com.wutsi.koki.tenant.server.domain.BusinessEntity
-import com.wutsi.koki.tenant.server.domain.BusinessTaxIdentifierEntity
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.Date
@@ -15,11 +17,17 @@ import java.util.Date
 @Service
 class BusinessService(
     private val dao: BusinessRepository,
-    private val taxIdDao: BusinessTaxIdentifierRepository,
-    private val salesTaxService: SalesTaxService,
     private val securityService: SecurityService,
     private val juridictionService: JuridictionService,
+    private val locationService: LocationService,
 ) {
+    fun get(tenantId: Long): BusinessEntity {
+        return dao.findByTenantId(tenantId)
+            ?: throw NotFoundException(
+                error = Error(ErrorCode.BUSINESS_NOT_FOUND)
+            )
+    }
+
     @Transactional
     fun save(request: SaveBusinessRequest, tenantId: Long) {
         val business = dao.findByTenantId(tenantId)
@@ -32,6 +40,7 @@ class BusinessService(
 
     private fun create(request: SaveBusinessRequest, tenantId: Long) {
         val userId = securityService.getCurrentUserIdOrNull()
+        val city = request.addressCityId?.let { id -> locationService.get(id, LocationType.CITY) }
         val now = Date()
         val business = dao.save(
             BusinessEntity(
@@ -41,9 +50,9 @@ class BusinessService(
                 phone = request.phone,
                 fax = request.fax,
                 website = request.website,
-                addressCityId = request.addressCityId,
+                addressCityId = city?.id,
+                addressStateId = city?.parentId,
                 addressStreet = request.addressStreet,
-                addressStateId = request.addressStateId,
                 addressCountry = request.addressCountry?.uppercase(),
                 addressPostalCode = request.addressPostalCode,
                 createdAt = now,
@@ -60,39 +69,19 @@ class BusinessService(
                 }
             )
         )
-        createTaxIdentifiers(business, request)
-    }
-
-    private fun createTaxIdentifiers(business: BusinessEntity, request: SaveBusinessRequest) {
-        val salesTaxeIds = salesTaxService.search(
-            juridictionIds = request.juridictionIds,
-            limit = Integer.MAX_VALUE
-        ).mapNotNull { salesTax -> salesTax.id }
-            .toSet()
-        salesTaxeIds
-            .map { id ->
-                val number = request.taxIdentifiers[id]?.trim()?.ifEmpty { null }
-                number?.let {
-                    taxIdDao.save(
-                        BusinessTaxIdentifierEntity(
-                            businessId = business.id,
-                            salesTaxId = id,
-                            number = number
-                        )
-                    )
-                }
-            }.filterNotNull()
     }
 
     private fun update(request: SaveBusinessRequest, business: BusinessEntity) {
+        val city = request.addressCityId?.let { id -> locationService.get(id, LocationType.CITY) }
+
         business.companyName = request.companyName
         business.email = request.email
         business.phone = request.phone
         business.fax = request.fax
         business.website = request.website
-        business.addressCityId = request.addressCityId
+        business.addressCityId = city?.id
+        business.addressStateId = city?.parentId
         business.addressStreet = request.addressStreet
-        business.addressStateId = request.addressStateId
         business.addressCountry = request.addressCountry?.uppercase()
         business.addressPostalCode = request.addressPostalCode
         business.modifiedAt = Date()
@@ -106,36 +95,5 @@ class BusinessService(
             ).toMutableList()
         }
         dao.save(business)
-
-        updateTaxIdentifiers(business, request)
-    }
-
-    private fun updateTaxIdentifiers(business: BusinessEntity, request: SaveBusinessRequest) {
-        // Add/Update
-        val taxIdentifierIds = mutableListOf<Long>()
-        request.taxIdentifiers.forEach { entry ->
-            var taxIdentifier = taxIdDao.findByBusinessIdAndSalesTaxId(business.id, entry.key)
-            if (taxIdentifier == null) {
-                taxIdentifier = taxIdDao.save(
-                    BusinessTaxIdentifierEntity(
-                        businessId = business.id,
-                        salesTaxId = entry.key,
-                        number = entry.value,
-                    )
-                )
-            } else {
-                taxIdentifier.number = entry.value
-                taxIdDao.save(taxIdentifier)
-            }
-
-            taxIdentifierIds.add(taxIdentifier.id)
-        }
-
-        // Delete
-        taxIdDao.findByBusinessId(business.id).forEach { taxIdentifier ->
-            if (!taxIdentifierIds.contains(taxIdentifier.id)) {
-                taxIdDao.delete(taxIdentifier)
-            }
-        }
     }
 }

@@ -1,8 +1,13 @@
 package com.wutsi.koki.portal.tenant.mapper
 
 import com.wutsi.koki.portal.module.model.ModuleModel
+import com.wutsi.koki.portal.refdata.mapper.RefDataMapper
+import com.wutsi.koki.portal.refdata.model.JuridictionModel
+import com.wutsi.koki.portal.refdata.model.LocationModel
+import com.wutsi.koki.portal.tenant.model.BusinessModel
 import com.wutsi.koki.portal.tenant.model.TenantModel
 import com.wutsi.koki.portal.tenant.model.TypeModel
+import com.wutsi.koki.tenant.dto.Business
 import com.wutsi.koki.tenant.dto.Tenant
 import com.wutsi.koki.tenant.dto.Type
 import com.wutsi.koki.tenant.dto.TypeSummary
@@ -10,7 +15,9 @@ import org.springframework.stereotype.Service
 import kotlin.text.ifEmpty
 
 @Service
-class TenantMapper {
+class TenantMapper(
+    private val refDataMapper: RefDataMapper
+) {
     fun toTenantModel(entity: Tenant, modules: Map<Long, ModuleModel>): TenantModel {
         return TenantModel(
             id = entity.id,
@@ -52,6 +59,25 @@ class TenantMapper {
             title = entity.title ?: entity.name,
             objectType = entity.objectType,
             active = entity.active,
+        )
+    }
+
+    fun toBusinessModel(
+        entity: Business,
+        juridictions: Map<Long, JuridictionModel>,
+        locations: Map<Long, LocationModel>,
+    ): BusinessModel {
+        return BusinessModel(
+            id = entity.id,
+            companyName = entity.companyName,
+            website = entity.website?.trim()?.ifEmpty { null },
+            phone = entity.phone?.trim()?.ifEmpty { null },
+            fax = entity.fax?.trim()?.ifEmpty { null },
+            email = entity.email?.trim()?.ifEmpty { null },
+            juridictions = entity.juridictionIds.mapNotNull { id -> juridictions[id] },
+            address = entity.address?.let { address ->
+                refDataMapper.toAddressModel(address, locations)
+            },
         )
     }
 }

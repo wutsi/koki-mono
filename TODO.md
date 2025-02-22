@@ -1,9 +1,17 @@
 # Features
 
+## Business
+
+- [] Integrate [int-tel](https://intl-tel-input.com/) for phone number input
+- [x] Business entity
+- [x] Settings: Setup business information
+
 ## RefData
 
 - [x] Unit API
 - [x] Location API
+- [x] Juridiction API
+- [x] Category API
 
 ## Module
 
@@ -15,6 +23,7 @@
 ## Account
 
 - [] Settings: Import Accounts from CSV
+- [] Integrate [int-tel](https://intl-tel-input.com/) for phone number input
 - [x] Add additional information to accounts: address
 - [x] The account manager must have the permission 'account:manage'
 - [x] Add account filters
@@ -34,6 +43,7 @@
 ## Contact
 
 - [] Add additional information: address, SSN, Date of birth
+- [] Integrate [int-tel](https://intl-tel-input.com/) for phone number input
 - [x] Add contact filters
 - [x] Configure validation on DTO
 - [x] Apply RBAC security on UI
@@ -66,6 +76,7 @@
 - [] Compile labor cost by Tax report
 - [] Track total time spent on Tax Report per user
 - [] Settings: Setup email notification
+- [x] Link taxes with products
 - [x] Filter Accountant and Technician based on the permission 'tax:manage'
 - [x] Add Calendar view
 - [x] Apply RBAC security on UI
@@ -80,6 +91,7 @@
 ## Employees
 
 - [] Send email to employee
+- [] Integrate [int-tel](https://intl-tel-input.com/) for phone number input
 - [x] Employee API
 - [x] Link Employee with User
 - [x] Employee UI
@@ -108,6 +120,7 @@
 
 ## Users
 
+- [] Set roles on create and update
 - [] Apply RBAC security on UI
 - [] Settings: Update my password
 - [] Settings: Filter user by role, status
