@@ -4,6 +4,7 @@ import com.wutsi.koki.portal.account.page.ListAccountController
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.user.service.RoleService
 import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.tenant.dto.UserStatus
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
 @RequestMapping("/settings/users")
+@RequiresPermission(["security:admin"])
 class SettingsListUserController(
     private val service: UserService,
     private val roleService: RoleService,

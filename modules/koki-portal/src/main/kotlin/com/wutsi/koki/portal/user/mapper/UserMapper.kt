@@ -51,7 +51,7 @@ class UserMapper : TenantAwareMapper() {
         return RoleModel(
             id = entity.id,
             name = entity.name,
-            title = entity.title ?: "",
+            title = entity.title?.trim()?.ifEmpty { null },
             description = entity.description?.trim()?.ifEmpty { null },
             active = entity.active,
             createdAt = entity.createdAt,

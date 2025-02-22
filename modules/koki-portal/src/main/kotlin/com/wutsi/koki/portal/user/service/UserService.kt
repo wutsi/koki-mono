@@ -3,10 +3,8 @@ package com.wutsi.koki.portal.user.service
 import com.wutsi.koki.portal.user.mapper.UserMapper
 import com.wutsi.koki.portal.user.model.UserForm
 import com.wutsi.koki.portal.user.model.UserModel
-import com.wutsi.koki.portal.user.model.UserRoleForm
 import com.wutsi.koki.sdk.KokiUsers
 import com.wutsi.koki.tenant.dto.CreateUserRequest
-import com.wutsi.koki.tenant.dto.SetRoleListRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.dto.UserType
@@ -58,6 +56,7 @@ class UserService(
                 displayName = form.displayName,
                 email = form.email,
                 password = form.password,
+                roleIds = form.roleIds,
             )
         ).userId
     }
@@ -68,15 +67,9 @@ class UserService(
             UpdateUserRequest(
                 displayName = form.displayName,
                 email = form.email,
-                status = form.status
+                status = form.status,
+                roleIds = form.roleIds,
             )
-        )
-    }
-
-    fun setRoles(id: Long, form: UserRoleForm) {
-        koki.setUserRoles(
-            id,
-            SetRoleListRequest(roleIds = form.roleId)
         )
     }
 }

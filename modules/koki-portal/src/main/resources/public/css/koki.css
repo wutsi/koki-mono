@@ -402,6 +402,10 @@ tr.activity-running {
     width: 100%;
 }
 
+.settings-content .input-group input {
+    width: auto;
+}
+
 /* ============================= */
 /* bootstrap                     */
 /* ============================= */

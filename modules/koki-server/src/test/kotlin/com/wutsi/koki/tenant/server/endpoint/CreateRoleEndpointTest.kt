@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
+import javax.sql.DataSource
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
@@ -21,6 +22,26 @@ class CreateRoleEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var dao: RoleRepository
 
+    @Autowired
+    protected lateinit var ds: DataSource
+
+    private fun getPermissionIds(roleId: Long): List<Long> {
+        val result = mutableListOf<Long>()
+        val cnn = ds.connection
+        cnn.use {
+            val stmt = cnn.createStatement()
+            stmt.use {
+                val rs = stmt.executeQuery("SELECT permission_fk FROM T_ROLE_PERMISSION where role_fk=$roleId")
+                rs.use {
+                    while (rs.next()) {
+                        result.add(rs.getLong(1))
+                    }
+                }
+            }
+        }
+        return result
+    }
+
     @Test
     fun create() {
         val request = CreateRoleRequest(
@@ -28,6 +49,7 @@ class CreateRoleEndpointTest : AuthorizationAwareEndpointTest() {
             title = "Employee",
             description = "Role for all employees",
             active = true,
+            permissionIds = listOf(101, 201, 301)
         )
 
         val result = rest.postForEntity("/v1/roles", request, CreateRoleResponse::class.java)
@@ -46,6 +68,7 @@ class CreateRoleEndpointTest : AuthorizationAwareEndpointTest() {
         assertFalse(role.deleted)
         assertNull(role.deletedById)
         assertNull(role.deletedAt)
+        assertEquals(request.permissionIds, getPermissionIds(roleId))
     }
 
     @Test

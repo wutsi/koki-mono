@@ -6,7 +6,6 @@ import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.dto.CreateUserRequest
-import com.wutsi.koki.tenant.dto.SetRoleListRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.dto.UserType
@@ -41,10 +40,6 @@ class UserService(
             ?: throw NotFoundException(Error(ErrorCode.USER_NOT_FOUND))
     }
 
-    fun getAll(id: List<Long>, tenantId: Long): List<UserEntity> {
-        return dao.findByIdInAndTenantId(id, tenantId)
-    }
-
     @Transactional
     fun create(request: CreateUserRequest, tenantId: Long): UserEntity {
         val email = request.email.lowercase()
@@ -72,13 +67,7 @@ class UserService(
             )
         )
 
-        if (request.roleIds.isNotEmpty()) {
-            setRoles(
-                id = user.id!!,
-                request = SetRoleListRequest(request.roleIds),
-                tenantId = tenantId,
-            )
-        }
+        setRoles(user, request.roleIds.distinct())
         return user
     }
 
@@ -101,18 +90,18 @@ class UserService(
         user.modifiedById = securityService.getCurrentUserIdOrNull()
         user.modifiedAt = Date()
         dao.save(user)
+
+        setRoles(user, request.roleIds.distinct())
     }
 
-    @Transactional
-    fun setRoles(id: Long, request: SetRoleListRequest, tenantId: Long) {
-        val user = get(id, tenantId)
-        if (request.roleIds.isEmpty()) {
+    private fun setRoles(user: UserEntity, roleIds: List<Long>) {
+        if (roleIds.isEmpty()) {
             user.roles.clear()
         } else {
             user.roles = roleService.search(
-                tenantId = tenantId,
-                ids = request.roleIds,
-                limit = request.roleIds.size,
+                tenantId = user.tenantId,
+                ids = roleIds,
+                limit = roleIds.size,
             ).toMutableList()
         }
         user.modifiedById = securityService.getCurrentUserIdOrNull()

@@ -236,3 +236,29 @@ function koki_category_editor(categoryId, typeId) {
         }
     );
 }
+
+/**
+ * Filter rows from a table
+ * @param inputId - ID of the search input
+ * @param tableId - ID of the table
+ * @param columnIndex - ID of the colum where to search
+ */
+function koki_table_filter(inputId, tableId, columnIndex) {
+    // Declare variables
+    const filter = document.getElementById(inputId).value.toUpperCase();
+    const table = document.getElementById(tableId);
+    const tr = table.getElementsByTagName("tr");
+
+    for (var i = 0; i < tr.length; i++) {
+        var td = tr[i].getElementsByTagName("td")[columnIndex];
+        if (td) {
+            var txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+

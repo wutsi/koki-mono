@@ -7,8 +7,6 @@ import com.wutsi.koki.tenant.dto.CreateUserResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
-import com.wutsi.koki.tenant.dto.SetPermissionListRequest
-import com.wutsi.koki.tenant.dto.SetRoleListRequest
 import com.wutsi.koki.tenant.dto.UpdateRoleRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
@@ -67,11 +65,6 @@ class KokiUsers(
         rest.postForEntity(url, request, Any::class.java)
     }
 
-    fun setUserRoles(id: Long, request: SetRoleListRequest) {
-        val url = urlBuilder.build("$USER_PATH_PREFIX/$id/roles")
-        rest.postForEntity(url, request, Any::class.java)
-    }
-
     fun roles(
         ids: List<Long> = emptyList(),
         active: Boolean?,
@@ -103,10 +96,5 @@ class KokiUsers(
     fun deleteRole(id: Long) {
         val url = urlBuilder.build("$ROLE_PATH_PREFIX/$id")
         rest.delete(url)
-    }
-
-    fun setRolePermissions(id: Long, request: SetPermissionListRequest) {
-        val url = urlBuilder.build("$ROLE_PATH_PREFIX/$id/permissions")
-        rest.postForEntity(url, request, Any::class.java)
     }
 }

@@ -64,12 +64,10 @@ object PageName {
     const val SECURITY_SETTINGS_ROLE_CREATE = "page.settings.security.role.create"
     const val SECURITY_SETTINGS_ROLE_EDIT = "page.settings.security.role.edit"
     const val SECURITY_SETTINGS_ROLE_LIST = "page.settings.security.role.list"
-    const val SECURITY_SETTINGS_ROLE_PERMISSION = "page.settings.security.role.permission"
     const val SECURITY_SETTINGS_USER = "page.settings.security.user"
     const val SECURITY_SETTINGS_USER_CREATE = "page.settings.security.user.create"
     const val SECURITY_SETTINGS_USER_EDIT = "page.settings.security.user.edit"
     const val SECURITY_SETTINGS_USER_LIST = "page.settings.security.user.list"
-    const val SECURITY_SETTINGS_USER_ROLE = "page.settings.security.user.role"
 
     const val SETTINGS_MESSAGE = "page.settings.message"
     const val SETTINGS_MESSAGE_CREATE = "page.settings.message.create"

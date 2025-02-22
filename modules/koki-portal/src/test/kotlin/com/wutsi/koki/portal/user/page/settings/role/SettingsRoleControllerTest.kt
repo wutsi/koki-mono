@@ -34,15 +34,6 @@ class SettingsRoleControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun permission() {
-        navigateTo("/settings/roles/${role.id}")
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE)
-
-        click(".btn-permission")
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_PERMISSION)
-    }
-
-    @Test
     fun delete() {
         navigateTo("/settings/roles/${role.id}")
         click(".btn-delete")
@@ -72,5 +63,13 @@ class SettingsRoleControllerTest : AbstractPageControllerTest() {
         assertElementPresent(".alert-danger")
 
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE)
+    }
+
+    @Test
+    fun `show - without permission security-admin`() {
+        setUpUserWithoutPermissions(listOf("security:admin"))
+
+        navigateTo("/settings/roles/${role.id}")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 }

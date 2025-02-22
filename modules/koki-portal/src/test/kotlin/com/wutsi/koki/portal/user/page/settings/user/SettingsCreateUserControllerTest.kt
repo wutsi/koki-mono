@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.RoleFixtures
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.tenant.dto.CreateUserRequest
@@ -23,6 +24,9 @@ class SettingsCreateUserControllerTest : AbstractPageControllerTest() {
         input("#displayName", "Yo Man")
         input("#email", "yoman@gmail.com")
         input("#password", "secret")
+        click("#role-" + RoleFixtures.roles[0].id)
+        click("#role-" + RoleFixtures.roles[2].id)
+        input("#password", "secret")
         click("button[type=submit]", 1000)
 
         val request = argumentCaptor<CreateUserRequest>()
@@ -35,6 +39,7 @@ class SettingsCreateUserControllerTest : AbstractPageControllerTest() {
         assertEquals("Yo Man", request.firstValue.displayName)
         assertEquals("yoman@gmail.com", request.firstValue.email)
         assertEquals("secret", request.firstValue.password)
+        assertEquals(listOf(RoleFixtures.roles[0].id, RoleFixtures.roles[2].id), request.firstValue.roleIds)
 
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_LIST)
         assertElementVisible("#koki-toast")
@@ -67,5 +72,13 @@ class SettingsCreateUserControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/users/create")
         click(".btn-back")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_LIST)
+    }
+
+    @Test
+    fun `create - without permission security-admin`() {
+        setUpUserWithoutPermissions(listOf("security:admin"))
+
+        navigateTo("/settings/users/create")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 }

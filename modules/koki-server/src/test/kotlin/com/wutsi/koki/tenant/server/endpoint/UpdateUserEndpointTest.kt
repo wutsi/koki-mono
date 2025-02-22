@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
+import javax.sql.DataSource
 import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -19,12 +20,32 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var dao: UserRepository
 
+    @Autowired
+    protected lateinit var ds: DataSource
+
+    private fun roleCount(userId: Long): Int {
+        val cnn = ds.connection
+        cnn.use {
+            val stmt = cnn.createStatement()
+            stmt.use {
+                val rs = stmt.executeQuery("SELECT count(*) FROM T_USER_ROLE where user_fk=$userId")
+                rs.use {
+                    if (rs.next()) {
+                        return rs.getInt(1)
+                    }
+                }
+            }
+        }
+        return -1
+    }
+
     @Test
     fun update() {
         val request = UpdateUserRequest(
             email = "thomas.nkono@hotmail.com",
             displayName = "Thomas Nkono",
             status = UserStatus.TERMINATED,
+            roleIds = listOf(11L, 12L)
         )
 
         val result = rest.postForEntity("/v1/users/11", request, Any::class.java)
@@ -36,6 +57,7 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.displayName, user.displayName)
         assertEquals(request.email, user.email)
         assertEquals(request.status, user.status)
+        assertEquals(request.roleIds.size, roleCount(userId))
     }
 
     @Test
@@ -53,6 +75,7 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
         val userId = 11L
         val user = dao.findById(userId).get()
         assertEquals(request.email.lowercase(), user.email)
+        assertEquals(0, roleCount(userId))
     }
 
     @Test

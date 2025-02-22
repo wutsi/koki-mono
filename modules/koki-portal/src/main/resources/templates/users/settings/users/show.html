@@ -16,9 +16,6 @@
 
         <div class="margin-bottom">
             <a class="btn btn-secondary btn-edit" th:href="'/settings/users/' + ${me.id} + '/edit'">Edit</a>
-
-            <a class="btn btn-secondary btn-role"
-               th:href="'/settings/users/' + ${me.id} + '/roles'">Manage Roles</a>
         </div>
         <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
@@ -31,7 +28,7 @@
                 <td><b>Email</b></td>
                 <td th:text="${me.email}">EMAIL</td>
             </tr>
-            <tr>
+            <tr th:if="${me.type.name != 'UNKNOWN'}">
                 <td><b>Type</b></td>
                 <td>
                     <span th:replace="~{__components/user :: user-type(${me.type})}"></span>
@@ -50,9 +47,8 @@
                         <tr th:each="role : ${me.roles}">
                             <td>
                                 <a th:href="'/settings/roles/' + ${role.id}">
-                                    <span th:text="${role.name}">NAME</span>
-                                    -
-                                    <span th:text="${role.title}">TITLE</span>
+                                    <span th:if="${role.title}" th:text="${role.title}">TITLE</span>
+                                    <span th:if="!${role.title}" th:text="${role.name}">NAME</span>
                                 </a>
                             </td>
                         </tr>

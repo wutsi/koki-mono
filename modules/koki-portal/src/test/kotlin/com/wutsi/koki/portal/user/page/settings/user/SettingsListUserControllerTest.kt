@@ -77,4 +77,12 @@ class SettingsListUserControllerTest : AbstractPageControllerTest() {
         click(".btn-view")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER)
     }
+
+    @Test
+    fun `list - without permission security-admin`() {
+        setUpUserWithoutPermissions(listOf("security:admin"))
+
+        navigateTo("/settings/users")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
 }

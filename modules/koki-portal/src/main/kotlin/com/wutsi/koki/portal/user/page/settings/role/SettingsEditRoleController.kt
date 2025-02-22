@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.user.page.settings.role
 import com.wutsi.koki.portal.model.PageModel
 import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.user.model.RoleForm
 import com.wutsi.koki.portal.user.model.RoleModel
 import com.wutsi.koki.portal.user.service.RoleService
@@ -17,6 +18,7 @@ import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 @RequestMapping("/settings/roles")
+@RequiresPermission(["security:admin"])
 class SettingsEditRoleController(
     private val service: RoleService
 ) : AbstractPageController() {
@@ -27,7 +29,8 @@ class SettingsEditRoleController(
             name = role.name,
             title = role.title,
             description = role.description,
-            active = role.active
+            active = role.active,
+            permissionIds = role.permissions.map { permission -> permission.id }
         )
         return edit(role, form, model)
     }
@@ -39,7 +42,7 @@ class SettingsEditRoleController(
             "page",
             PageModel(
                 name = PageName.SECURITY_SETTINGS_ROLE_EDIT,
-                title = role.title,
+                title = role.title ?: role.name,
             )
 
         )

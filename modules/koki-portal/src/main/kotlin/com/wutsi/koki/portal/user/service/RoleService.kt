@@ -4,10 +4,8 @@ import com.wutsi.koki.portal.module.service.ModuleService
 import com.wutsi.koki.portal.user.mapper.UserMapper
 import com.wutsi.koki.portal.user.model.RoleForm
 import com.wutsi.koki.portal.user.model.RoleModel
-import com.wutsi.koki.portal.user.model.RolePermissionForm
 import com.wutsi.koki.sdk.KokiUsers
 import com.wutsi.koki.tenant.dto.CreateRoleRequest
-import com.wutsi.koki.tenant.dto.SetPermissionListRequest
 import com.wutsi.koki.tenant.dto.UpdateRoleRequest
 import org.springframework.stereotype.Service
 
@@ -56,7 +54,8 @@ class RoleService(
                 name = form.name,
                 title = form.title,
                 description = form.description,
-                active = form.active
+                active = form.active,
+                permissionIds = form.permissionIds,
             )
         ).roleId
     }
@@ -68,21 +67,13 @@ class RoleService(
                 name = form.name,
                 title = form.title,
                 description = form.description,
-                active = form.active
+                active = form.active,
+                permissionIds = form.permissionIds,
             )
         )
     }
 
     fun delete(id: Long) {
         koki.deleteRole(id)
-    }
-
-    fun setPermissions(id: Long, form: RolePermissionForm) {
-        koki.setRolePermissions(
-            id,
-            SetPermissionListRequest(
-                permissionIds = form.permissionId
-            )
-        )
     }
 }

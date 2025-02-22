@@ -7,7 +7,6 @@ import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.tenant.dto.CreateRoleRequest
 import com.wutsi.koki.tenant.dto.CreateRoleResponse
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
-import com.wutsi.koki.tenant.dto.SetPermissionListRequest
 import com.wutsi.koki.tenant.dto.UpdateRoleRequest
 import com.wutsi.koki.tenant.server.io.RoleCSVImporter
 import com.wutsi.koki.tenant.server.mapper.RoleMapper
@@ -64,15 +63,6 @@ class RoleEndpoints(
             )
         }
         service.delete(id, tenantId)
-    }
-
-    @PostMapping("/{id}/permissions")
-    fun permissions(
-        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-        @PathVariable id: Long,
-        @Valid @RequestBody request: SetPermissionListRequest
-    ) {
-        service.setPermissions(id, request, tenantId)
     }
 
     @GetMapping
