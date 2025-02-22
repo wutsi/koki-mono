@@ -19,7 +19,6 @@ data class SaveBusinessRequest(
     @get:Size(max = 2) val addressCountry: String? = null,
     val addressStreet: String? = null,
     val addressCityId: Long? = null,
-    val addressStateId: Long? = null,
 
     val taxIdentifiers: Map<Long, String> = emptyMap(),
 

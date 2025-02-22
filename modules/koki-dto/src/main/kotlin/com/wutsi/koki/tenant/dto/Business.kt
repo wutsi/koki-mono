@@ -1,6 +1,7 @@
 package com.wutsi.koki.tenant.dto
 
 import com.wutsi.koki.refdata.dto.Address
+import java.util.Date
 
 data class Business(
     val id: Long = -1,
@@ -10,6 +11,9 @@ data class Business(
     val email: String? = null,
     val website: String? = null,
     val address: Address? = null,
-    val taxIdentifiers: List<BusinessTaxIdentifier> = emptyList(),
     val juridictionIds: List<Long> = emptyList(),
+    val createdAt: Date = Date(),
+    val modifiedAt: Date = Date(),
+    val createdById: Long? = null,
+    val modifiedById: Long? = null,
 )
