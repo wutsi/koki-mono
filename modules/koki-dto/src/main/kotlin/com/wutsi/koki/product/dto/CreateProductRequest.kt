@@ -15,4 +15,6 @@ data class CreateProductRequest(
 
     val unitId: Long? = null,
     val quantity: Int? = null,
+    val unitPrice: Double? = null,
+    @get:Size(max = 3) val currency: String = "",
 )

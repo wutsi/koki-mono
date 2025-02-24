@@ -4,6 +4,7 @@ data class TaxProduct(
     val id: Long = -1,
     val taxId: Long = -1,
     val productId: Long = -1,
+    val unitId: Long = -1,
     val unitPriceId: Long = -1,
     val description: String? = null,
     val quantity: Int = 1,

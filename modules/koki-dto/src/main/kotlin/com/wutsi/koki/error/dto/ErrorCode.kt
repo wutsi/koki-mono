@@ -59,6 +59,8 @@ object ErrorCode {
 
     val PRICE_NOT_FOUND: String = "$PREFIX:price:not-found"
     val PRICE_IN_USE: String = "$PREFIX:price:in-use"
+    val PRICE_CURRENCY_NOT_VALID: String = "$PREFIX:price:currency-not-valid"
+    val PRICE_CURRENCY_MISSING: String = "$PREFIX:price:currency-missing"
 
     val PRODUCT_NOT_FOUND: String = "$PREFIX:product:not-found"
     val PRODUCT_IN_USE: String = "$PREFIX:product:in-use"
