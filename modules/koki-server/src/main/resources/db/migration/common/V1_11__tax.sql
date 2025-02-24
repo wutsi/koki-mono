@@ -49,12 +49,11 @@ CREATE TABLE T_TAX_PRODUCT(
   unit_price              DECIMAL(10, 2) NOT NULL DEFAULT 0,
   sub_total               DECIMAL(10, 2) NOT NULL DEFAULT 0,
   currency                VARCHAR(3) NOT NULL,
-  description             VARCHAR(100),
+  description             TEXT,
 
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
 
-  UNIQUE(tax_fk, product_fk),
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 

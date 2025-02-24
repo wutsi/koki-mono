@@ -2,7 +2,10 @@ package com.wutsi.koki.product.server.service
 
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.BadRequestException
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.price.server.service.PriceService
+import com.wutsi.koki.product.dto.CreatePriceRequest
 import com.wutsi.koki.product.dto.CreateProductRequest
 import com.wutsi.koki.product.dto.ProductType
 import com.wutsi.koki.product.dto.UpdateProductRequest
@@ -19,6 +22,7 @@ import java.util.Date
 class ProductService(
     private val dao: ProductRepository,
     private val securityService: SecurityService,
+    private val priceService: PriceService,
     private val em: EntityManager,
 ) {
     fun get(id: Long, tenantId: Long): ProductEntity {
@@ -80,7 +84,7 @@ class ProductService(
     fun create(request: CreateProductRequest, tenantId: Long): ProductEntity {
         val userId = securityService.getCurrentUserIdOrNull()
         val now = Date()
-        return dao.save(
+        val product = dao.save(
             ProductEntity(
                 tenantId = tenantId,
                 name = request.name,
@@ -99,6 +103,24 @@ class ProductService(
                 )
             )
         )
+        if (request.unitPrice != null) {
+            if (request.currency.isEmpty()) {
+                throw BadRequestException(
+                    error = Error(ErrorCode.PRICE_CURRENCY_MISSING)
+                )
+            }
+
+            priceService.create(
+                request = CreatePriceRequest(
+                    productId = product.id!!,
+                    amount = request.unitPrice!!,
+                    currency = request.currency,
+                    active = true,
+                ),
+                tenantId = tenantId
+            )
+        }
+        return product
     }
 
     @Transactional

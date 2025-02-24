@@ -4,6 +4,7 @@ import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.price.server.service.PriceService
+import com.wutsi.koki.product.server.service.ProductService
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tax.dto.CreateTaxProductRequest
 import com.wutsi.koki.tax.dto.UpdateTaxProductRequest
@@ -19,6 +20,7 @@ class TaxProductService(
     private val dao: TaxProductRepository,
     private val securityService: SecurityService,
     private val priceService: PriceService,
+    private val productService: ProductService,
     private val em: EntityManager,
 ) {
     fun get(id: Long, tenantId: Long): TaxProductEntity {
@@ -75,6 +77,12 @@ class TaxProductService(
         }
         val userId = securityService.getCurrentUserIdOrNull()
         val now = Date()
+        val description = if (request.description.isNullOrEmpty()) {
+            productService.get(request.productId, tenantId).name
+        } else {
+            request.description
+        }
+
         return dao.save(
             TaxProductEntity(
                 tenantId = tenantId,
@@ -84,7 +92,7 @@ class TaxProductService(
                 unitPrice = price.amount,
                 currency = price.currency,
                 quantity = request.quantity,
-                description = request.description,
+                description = description,
                 modifiedAt = now,
                 createdAt = now,
                 modifiedById = userId,

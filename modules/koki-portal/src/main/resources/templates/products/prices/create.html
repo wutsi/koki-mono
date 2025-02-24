@@ -9,13 +9,13 @@
             </td>
         </tr>
         <tr>
-            <td><b>Amount:</b></td>
+            <td><b>Amount: <span class="required">*</span></b></td>
             <td>
                 <input required th:field="*{amount}" type="number"/>
             </td>
         </tr>
         <tr>
-            <td><b>Currency:</b></td>
+            <td><b>Currency: <span class="required">*</span></b></td>
             <td>
                 <select th:field="*{currency}">
                     <option th:each="currency : ${currencies}"

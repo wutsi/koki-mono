@@ -68,8 +68,9 @@
 
 <tr th:fragment="tax-product-columns(taxProduct)" th:remove="tag">
     <td>
-        <a target="_blank" th:href="'/products/' + ${taxProduct.product.id}" th:text="${taxProduct.product.name}">PRODUCT</a>
+        <a target="_blank" th:href="'/products/' + ${taxProduct.product.id}" th:text="${taxProduct.product.code}">PRODUCT</a>
     </td>
+    <td th:text="${taxProduct.description}">DESCRIPTION</td>
     <td th:text="${taxProduct.unitPrice}">$$$</td>
     <td th:text="${taxProduct.quantity}">1111</td>
     <td th:text="${taxProduct.subTotal}">$$$</td>

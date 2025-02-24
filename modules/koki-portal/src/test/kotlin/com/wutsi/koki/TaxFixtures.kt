@@ -76,6 +76,7 @@ object TaxFixtures {
             unitPrice = 150.0,
             subTotal = 150.0,
             currency = "CAD",
+            description = "Product 1",
         ),
         TaxProduct(
             id = 2,
@@ -85,6 +86,7 @@ object TaxFixtures {
             unitPrice = 75.0,
             subTotal = 150.0,
             currency = "CAD",
+            description = "Product 2",
         ),
         TaxProduct(
             id = 3,
@@ -94,6 +96,7 @@ object TaxFixtures {
             unitPrice = 10.0,
             subTotal = 300.0,
             currency = "CAD",
+            description = "Product 3",
         ),
     )
 

@@ -21,6 +21,7 @@ class CreateProductControllerTest : AbstractPageControllerTest() {
         input("#name", "Product A")
         select("#type", type)
         input("#code", "PA")
+        input("#unitPrice", "150")
         input("#description", "This is the description of the product")
         select("#active", 1)
         scrollToBottom()
@@ -51,6 +52,8 @@ class CreateProductControllerTest : AbstractPageControllerTest() {
         assertEquals(false, request.firstValue.active)
         assertEquals(RefDataFixtures.units[1].id, request.firstValue.unitId)
         assertEquals(4, request.firstValue.quantity)
+        assertEquals(150.0, request.firstValue.unitPrice)
+        assertEquals("CAD", request.firstValue.currency)
 
         assertCurrentPageIs(PageName.PRODUCT_LIST)
         assertElementVisible("#koki-toast")

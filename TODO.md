@@ -15,6 +15,10 @@
 - [x] Category API
 - [x] Sales Tax API
 
+## Tenant
+
+- [] Tenant should have a list of currencies
+
 ## Module
 
 - [x] Module API
@@ -139,6 +143,7 @@
 - [] Integrate Offer API
 - [] Add attributes for Digital service
 - [] Add attributes for Physical service
+- [x] Set price on creation
 - [x] Product Categories for services
 - [x] Link with categories
 - [x] Add attributes for Services
@@ -148,8 +153,9 @@
 
 ## Invoicing
 
-- [] Invoice API
+- [x] Invoice API
+- [] Send invoice by email
 - [] Generate Invoice PDF
-- [] Send invoice to customer
+- [] Payment API
 - [] Capture online payments: Paypal, Stripe, Flutterwave
 - [] Capture payments manually: Cash, Check etc...
