@@ -129,6 +129,7 @@ class InvoiceService(
                 tenantId = tenantId,
                 taxId = request.taxId,
                 orderId = request.orderId,
+                description = request.description,
 
                 customerAccountId = request.customerAccountId,
                 customerName = request.customerName,
