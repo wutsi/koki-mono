@@ -1,72 +1,105 @@
-CREATE TABLE T_TAX(
-  id                      BIGINT NOT NULL AUTO_INCREMENT,
+CREATE TABLE T_INVOICE_SEQUENCE(
+  id                BIGINT NOT NULL AUTO_INCREMENT,
 
-  tenant_fk               BIGINT NOT NULL,
-  tax_type_fk             BIGINT,
-  account_fk              BIGINT NOT NULL,
-  created_by_fk           BIGINT,
-  modified_by_fk          BIGINT,
-  deleted_by_fk           BIGINT,
-  accountant_fk           BIGINT,
-  technician_fk           BIGINT,
-  assignee_fk             BIGINT,
+  tenant_fk         BIGINT NOT NULL,
+  current           BIGINT,
 
-  status                  INT NOT NULL DEFAULT 0,
-  fiscal_year             INT,
-  description             TEXT,
-
-  deleted                 BOOLEAN NOT NULL DEFAULT false,
-  created_at              DATETIME DEFAULT NOW(),
-  modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
-  deleted_at              DATETIME,
-  start_at                DATETIME,
-  due_at                  DATETIME,
-
+  UNIQUE(tenant_fk),
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
-CREATE INDEX I_TAX_status ON T_TAX(status, deleted, tenant_fk);
-CREATE INDEX I_TAX_type ON T_TAX(tax_type_fk, deleted, tenant_fk);
-CREATE INDEX I_TAX_account ON T_TAX(account_fk, deleted, tenant_fk);
-CREATE INDEX I_TAX_assigned ON T_TAX(assignee_fk, deleted, tenant_fk);
-CREATE INDEX I_TAX_accountant ON T_TAX(accountant_fk, deleted, tenant_fk);
-CREATE INDEX I_TAX_technician ON T_TAX(technician_fk, deleted, tenant_fk);
-
-
-
-CREATE TABLE T_TAX_PRODUCT(
+CREATE TABLE T_INVOICE(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
   tenant_fk               BIGINT NOT NULL,
-  tax_fk                  BIGINT NOT NULL REFERENCES T_TAX(id),
-  product_fk              BIGINT NOT NULL,
-  unit_price_fk           BIGINT NOT NULL,
+  customer_account_fk     BIGINT,
+  order_fk                BIGINT,
+  tax_fk                  BIGINT,
   created_by_fk           BIGINT,
   modified_by_fk          BIGINT,
+
+  customer_name           VARCHAR(255) NOT NULL,
+  customer_email          VARCHAR(255) NOT NULL,
+  customer_phone          VARCHAR(30),
+  customer_mobile         VARCHAR(30),
+
+  number                  BIGINT,
+  status                  INT NOT NULL DEFAULT 0,
+  description             TEXT,
+  sub_total_amount        DECIMAL(10, 2) NOT NULL DEFAULT 0,
+  total_tax_amount        DECIMAL(10, 2) NOT NULL DEFAULT 0,
+  total_discount_amount   DECIMAL(10, 2) NOT NULL DEFAULT 0,
+  total_amount            DECIMAL(10, 2) NOT NULL DEFAULT 0,
+  amount_paid             DECIMAL(10, 2) NOT NULL DEFAULT 0,
+  amount_due              DECIMAL(10, 2) NOT NULL DEFAULT 0,
+  currency                VARCHAR(3) NOT NULL,
+
+  shipping_street         TEXT,
+  shipping_postal_code    VARCHAR(30),
+  shipping_city_fk        BIGINT,
+  shipping_state_fk       BIGINT,
+  shipping_country        VARCHAR(2),
+  billing_street          TEXT,
+  billing_postal_code     VARCHAR(30),
+  billing_city_fk         BIGINT,
+  billing_state_fk        BIGINT,
+  billing_country         VARCHAR(2),
+
+  created_at              DATETIME DEFAULT NOW(),
+  modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
+  due_at                  DATE,
+
+  UNIQUE(tenant_fk, number),
+  PRIMARY KEY(id)
+) ENGINE = InnoDB;
+
+CREATE INDEX I_INVOICE_tenant ON T_INVOICE(tenant_fk);
+CREATE INDEX I_INVOICE_status ON T_INVOICE(status);
+CREATE INDEX I_INVOICE_account ON T_INVOICE(customer_account_fk);
+CREATE INDEX I_INVOICE_tax ON T_INVOICE(tax_fk);
+CREATE INDEX I_INVOICE_order ON T_INVOICE(order_fk);
+
+
+CREATE TABLE T_INVOICE_ITEM(
+  id                      BIGINT NOT NULL AUTO_INCREMENT,
+
+  invoice_fk              BIGINT NOT NULL REFERENCES T_INVOICE(id),
+  product_fk              BIGINT NOT NULL,
+  unit_price_fk           BIGINT NOT NULL,
+  unit_fk                 BIGINT,
 
   quantity                INT NOT NULL DEFAULT 1,
   unit_price              DECIMAL(10, 2) NOT NULL DEFAULT 0,
   sub_total               DECIMAL(10, 2) NOT NULL DEFAULT 0,
   currency                VARCHAR(3) NOT NULL,
-  description             VARCHAR(100),
+  description             TEXT,
 
-  created_at              DATETIME DEFAULT NOW(),
-  modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
-
-  UNIQUE(tax_fk, product_fk),
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
-CREATE INDEX I_TAX_PRODUCT_unit_price ON T_TAX_PRODUCT(unit_price_fk, tenant_fk);
-CREATE INDEX I_TAX_PRODUCT_product ON T_TAX_PRODUCT(product_fk, tenant_fk);
+
+CREATE TABLE T_INVOICE_TAX(
+  id                      BIGINT NOT NULL AUTO_INCREMENT,
+
+  invoice_item_fk         BIGINT NOT NULL REFERENCES T_INVOICE_ITEM(id),
+  sales_tax_fk            BIGINT NOT NULL,
+
+  rate                    DECIMAL(10, 4),
+  amount                  DECIMAL(10, 2),
+  currency                VARCHAR(3) NOT NULL,
+
+  UNIQUE(invoice_item_fk, sales_tax_fk),
+  PRIMARY KEY(id)
+) ENGINE = InnoDB;
+
+
 
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url)
-    VALUES (180, 8, 'tax', 'Taxes', '/taxes', '/taxes/tab', null, '/js/taxes.js');
+    VALUES (190, 9, 'invoice', 'Invoices', '/invoices', '/invoices/tab', '/settings/invoices', '/js/invoices.js');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
-    VALUES (1800, 180, 'tax',        'View tax reports'),
-           (1801, 180, 'tax:manage', 'Add/Edit tax reports'),
-           (1802, 180, 'tax:delete', 'Delete tax reports'),
-           (1804, 180, 'tax:status', 'Change tax report status and assignment');
+    VALUES (1900, 190, 'invoice',        'View invoices'),
+           (1901, 190, 'invoice:manage', 'Add/Edit invoice'),
+           (1903, 190, 'invoice:admin',  'Configure invoice module');
 

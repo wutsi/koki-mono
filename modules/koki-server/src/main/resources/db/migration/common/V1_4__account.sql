@@ -54,7 +54,8 @@ CREATE TABLE T_ACCOUNT(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
-CREATE INDEX I_ACCOUNT_account_type ON T_ACCOUNT(account_type_fk, deleted, tenant_fk);
+CREATE INDEX I_ACCOUNT_tenant ON T_ACCOUNT(tenant_fk);
+CREATE INDEX I_ACCOUNT_account_type ON T_ACCOUNT(account_type_fk);
 
 CREATE TABLE T_ACCOUNT_ATTRIBUTE(
   id                      BIGINT NOT NULL AUTO_INCREMENT,

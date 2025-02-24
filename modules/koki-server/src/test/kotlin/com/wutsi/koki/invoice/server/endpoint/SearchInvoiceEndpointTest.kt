@@ -1,97 +1,64 @@
 package com.wutsi.koki.invoice.server.endpoint
 
-import com.ibm.icu.text.SimpleDateFormat
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.invoice.dto.GetInvoiceResponse
-import com.wutsi.koki.invoice.dto.InvoiceStatus
-import org.springframework.http.HttpStatus
+import com.wutsi.koki.invoice.dto.SearchInvoiceResponse
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/invoice/GetInvoiceEndpoint.sql"])
-class GetInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
-    private val fmt = SimpleDateFormat("yyyy-MM-dd")
-
+@Sql(value = ["/db/test/clean.sql", "/db/test/invoice/SearchInvoiceEndpoint.sql"])
+class SearchInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
-    fun get() {
-        val response = rest.getForEntity("/v1/invoices/100", GetInvoiceResponse::class.java)
+    fun all() {
+        val response = rest.getForEntity("/v1/invoices", SearchInvoiceResponse::class.java)
 
-        assertEquals(HttpStatus.OK, response.statusCode)
-
-        val invoice = response.body!!.invoice
-        assertEquals(10955L, invoice.number)
-        assertEquals(7777L, invoice.taxId)
-        assertEquals(9999L, invoice.orderId)
-        assertEquals(InvoiceStatus.OPENED, invoice.status)
-        assertEquals("Sample description", invoice.description)
-        assertEquals(111, invoice.customer.accountId)
-        assertEquals("Ray Sponsible", invoice.customer.name)
-        assertEquals("ray.sponsible@gmail.com", invoice.customer.email)
-        assertEquals("+5147580111", invoice.customer.phone)
-        assertEquals("+514758000", invoice.customer.mobile)
-        assertEquals(40.00, invoice.totalTaxAmount)
-        assertEquals(20.00, invoice.totalDiscountAmount)
-        assertEquals(800.00, invoice.subTotalAmount)
-        assertEquals(820.00, invoice.totalAmount)
-        assertEquals(810.00, invoice.amountPaid)
-        assertEquals(10.00, invoice.amountDue)
-        assertEquals("CAD", invoice.currency)
-        assertEquals(111L, invoice.shippingAddress?.cityId)
-        assertEquals(100L, invoice.shippingAddress?.stateId)
-        assertEquals("CA", invoice.shippingAddress?.country)
-        assertEquals("340 Pascal", invoice.shippingAddress?.street)
-        assertEquals("H1K1C1", invoice.shippingAddress?.postalCode)
-        assertEquals(211L, invoice.billingAddress?.cityId)
-        assertEquals(200L, invoice.billingAddress?.stateId)
-        assertEquals("CA", invoice.billingAddress?.country)
-        assertEquals("311 Pascal", invoice.billingAddress?.street)
-        assertEquals("H2K2C2", invoice.billingAddress?.postalCode)
-        assertEquals("2025-01-30", fmt.format(invoice.dueAt))
-
-        val items = invoice.items
-        assertEquals(2, items.size)
-        assertEquals(1L, items[0].productId)
-        assertEquals(11L, items[0].unitPriceId)
-        assertEquals(3L, items[0].unitId)
-        assertEquals(300.0, items[0].unitPrice)
-        assertEquals(2, items[0].quantity)
-        assertEquals(600.0, items[0].subTotal)
-        assertEquals("product 1", items[0].description)
-        assertEquals(2L, items[1].productId)
-        assertEquals(22L, items[1].unitPriceId)
-        assertEquals(5L, items[1].unitId)
-        assertEquals(200.0, items[1].unitPrice)
-        assertEquals(1, items[1].quantity)
-        assertEquals(200.0, items[1].subTotal)
-        assertEquals("product 2", items[1].description)
-
-        val taxes0 = items[0].taxes
-        assertEquals(2, taxes0.size)
-        assertEquals(20L, taxes0[0].salesTaxId)
-        assertEquals(5.0, taxes0[0].rate)
-        assertEquals(10.0, taxes0[0].amount)
-        assertEquals("CAD", taxes0[0].currency)
-        assertEquals(21L, taxes0[1].salesTaxId)
-        assertEquals(9.975, taxes0[1].rate)
-        assertEquals(25.00, taxes0[1].amount)
-        assertEquals("CAD", taxes0[1].currency)
-
-        val taxes1 = items[1].taxes
-        assertEquals(1, taxes1.size)
-        assertEquals(20L, taxes1[0].salesTaxId)
-        assertEquals(5.0, taxes1[0].rate)
-        assertEquals(5.0, taxes1[0].amount)
-        assertEquals("CAD", taxes1[0].currency)
+        val invoices = response.body!!.invoices
+        assertEquals(4, invoices.size)
     }
 
     @Test
-    fun `not found`() {
-        val response = rest.getForEntity("/v1/invoices/999", ErrorResponse::class.java)
+    fun `by id`() {
+        val response = rest.getForEntity("/v1/invoices?id=100&id=102&id=103&id=200", SearchInvoiceResponse::class.java)
 
-        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
-        assertEquals(ErrorCode.INVOICE_NOT_FOUND, response.body?.error?.code)
+        val invoices = response.body!!.invoices
+        assertEquals(3, invoices.size)
+        assertEquals(listOf(103L, 102L, 100L), invoices.map { invoice -> invoice.id })
+    }
+
+    @Test
+    fun `by tax-id`() {
+        val response = rest.getForEntity("/v1/invoices?tax-id=7779", SearchInvoiceResponse::class.java)
+
+        val invoices = response.body!!.invoices
+        assertEquals(1, invoices.size)
+        assertEquals(102, invoices[0].id)
+    }
+
+    @Test
+    fun `by order-id`() {
+        val response = rest.getForEntity("/v1/invoices?order-id=8888", SearchInvoiceResponse::class.java)
+
+        val invoices = response.body!!.invoices
+        assertEquals(1, invoices.size)
+        assertEquals(103, invoices[0].id)
+    }
+
+    @Test
+    fun `by number`() {
+        val response = rest.getForEntity("/v1/invoices?number=10958", SearchInvoiceResponse::class.java)
+
+        val invoices = response.body!!.invoices
+        assertEquals(1, invoices.size)
+        assertEquals(103, invoices[0].id)
+    }
+
+    @Test
+    fun `by status`() {
+        val response =
+            rest.getForEntity("/v1/invoices?status=OPENED&status=CANCELLED", SearchInvoiceResponse::class.java)
+
+        val invoices = response.body!!.invoices
+        assertEquals(2, invoices.size)
+        assertEquals(listOf(103L, 100L), invoices.map { invoice -> invoice.id })
     }
 }
