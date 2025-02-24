@@ -9,27 +9,21 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 
-
 @Entity
-@Table(name = "T_INVOICE_ITEM")
-data class InvoiceItemEntity(
+@Table(name = "T_INVOICE_TAX")
+data class InvoiceTaxEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = -1,
+    val id: Long? = null,
 
-    @Column(name = "product_fk")
-    val productId: Long = -1,
-
-    @Column(name = "unit_price_fk")
-    val unitPriceId: Long = -1,
+    @Column(name = "sales_tax_fk")
+    val salesTaxId: Long = -1,
 
     @ManyToOne
-    @JoinColumn(name = "invoice_fk")
-    val invoice: InvoiceEntity = InvoiceEntity(),
+    @JoinColumn(name = "invoice_item_fk")
+    val invoiceItem: InvoiceItemEntity = InvoiceItemEntity(),
 
-    val unitPrice: Double = 0.0,
-    val quantity: Int = 1,
-    val subTotal: Double = 0.0,
-    val description: String? = null,
+    val rate: Double = 0.0,
+    val amount: Double = 0.0,
     val currency: String = "",
 )

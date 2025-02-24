@@ -29,6 +29,7 @@ CREATE TABLE T_FILE_OWNER(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
+
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url)
     VALUES (130, 3, 'file', 'Files', null, '/files/tab', '/settings/files', '/js/files.js');
 

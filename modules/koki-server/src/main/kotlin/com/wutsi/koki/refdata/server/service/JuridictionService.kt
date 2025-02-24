@@ -59,4 +59,17 @@ class JuridictionService(
         query.maxResults = limit
         return query.resultList
     }
+
+    fun findJuridiction(stateId: Long?, country: String?, juridictions: List<JuridictionEntity>): JuridictionEntity? {
+        val juridiction = juridictions.find { juridiction ->
+            juridiction.country == country && juridiction.stateId == stateId && juridiction.stateId != null
+        }
+        if (juridiction != null) {
+            return juridiction
+        }
+
+        return juridictions.find { juridiction ->
+            juridiction.country == country && juridiction.stateId == null
+        }
+    }
 }

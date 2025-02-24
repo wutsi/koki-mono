@@ -154,7 +154,7 @@ class ImportSalesTaxEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("PST", qc[1].name)
         assertEquals(9.975, qc[1].rate)
         assertEquals(true, qc[1].active)
-        assertEquals(1, qc[1].priority)
+        assertEquals(0, qc[1].priority)
 
         //  Saskatchewan
         val sk = taxes.filter { tax -> tax.juridiction.id == 1012L && tax.active }

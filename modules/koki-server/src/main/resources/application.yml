@@ -86,6 +86,10 @@ springdoc:
             display-name: File API
             paths-to-match: /v1/files, /v1/files/**
 
+        -   group: invoices
+            display-name: Invoice API
+            paths-to-match: /v1/invoices, /v1/invoices/**
+
         -   group: modules
             display-name: Module API
             paths-to-match: /v1/modules, /v1/modules/**, /v1/permissions
@@ -100,7 +104,7 @@ springdoc:
 
         -   group: refdata
             display-name: RefData API
-            paths-to-match: /v1/categories, /v1/categories/**, /v1/juridictions, /v1/juridictions/**, /v1/locations, /v1/locations/*, /v1/sales-taxes, /v1/sales-taxes/**, /v1/units
+            paths-to-match: /v1/categories, /v1/categories/**, /v1/juridictions, /v1/juridictions/**, /v1/locations, /v1/locations/*, /v1/refdata/**, /v1/sales-taxes, /v1/sales-taxes/**, /v1/units
 
         -   group: taxes
             display-name: Tax API

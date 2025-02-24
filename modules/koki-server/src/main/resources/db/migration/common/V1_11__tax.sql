@@ -25,12 +25,13 @@ CREATE TABLE T_TAX(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
-CREATE INDEX I_TAX_status ON T_TAX(status, deleted, tenant_fk);
-CREATE INDEX I_TAX_type ON T_TAX(tax_type_fk, deleted, tenant_fk);
-CREATE INDEX I_TAX_account ON T_TAX(account_fk, deleted, tenant_fk);
-CREATE INDEX I_TAX_assigned ON T_TAX(assignee_fk, deleted, tenant_fk);
-CREATE INDEX I_TAX_accountant ON T_TAX(accountant_fk, deleted, tenant_fk);
-CREATE INDEX I_TAX_technician ON T_TAX(technician_fk, deleted, tenant_fk);
+CREATE INDEX I_TAX_tenant ON T_TAX(tenant_fk);
+CREATE INDEX I_TAX_status ON T_TAX(status);
+CREATE INDEX I_TAX_type ON T_TAX(tax_type_fk);
+CREATE INDEX I_TAX_account ON T_TAX(account_fk);
+CREATE INDEX I_TAX_assigned ON T_TAX(assignee_fk);
+CREATE INDEX I_TAX_accountant ON T_TAX(accountant_fk);
+CREATE INDEX I_TAX_technician ON T_TAX(technician_fk);
 
 
 
