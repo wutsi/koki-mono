@@ -10,4 +10,5 @@ enum class ObjectType {
     PRODUCT,
     EMPLOYEE,
     TAX,
+    INVOICE,
 }
