@@ -20,13 +20,13 @@
                 <tr>
                     <td width="20%"><b>Name<span class="required">*</span></b></td>
                     <td>
-                        <input maxlength="10" required th:field="*{name}"/>
+                        <input maxlength="100" required th:field="*{name}"/>
                     </td>
                 </tr>
                 <tr>
-                    <td><b>Title<span class="required">*</span></b></td>
+                    <td><b>Title</b></td>
                     <td>
-                        <input maxlength="100" required th:field="*{title}"/>
+                        <input maxlength="100" th:field="*{title}"/>
                     </td>
                 </tr>
                 <tr>
@@ -57,7 +57,7 @@
                                    type="text"/>
                         </div>
                         <div class="overflow-auto border" style="height: 23em;">
-                            <table class="table" id="permission-table">
+                            <table class="table table-striped" id="permission-table">
                                 <tr th:each="permission : ${tenant.permissions}">
                                     <td class="padding-right" width="1%">
                                         <input name="permissionIds"

@@ -28,7 +28,7 @@ class ChangeTaxStatusController(
     ): String {
         val tax = service.tax(id)
         val form = TaxStatusForm(
-            assigneeId = tax.assignee?.id,
+            assigneeId = null,
             status = tax.status,
         )
         return edit(tax, form, model)

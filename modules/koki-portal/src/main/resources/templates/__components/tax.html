@@ -28,7 +28,7 @@
     </td>
     <td th:text="${tax.startAtText}">START_DATE</td>
     <td th:if="${showAccount}">
-        <a th:href="'/accounts/' + ${tax.account.id}" th:text="${tax.account.name}">ACCOUNT</a>
+        <a target="_blank" th:href="'/accounts/' + ${tax.account.id}" th:text="${tax.account.name}">ACCOUNT</a>
     </td>
     <td th:text="${tax.accountant?.displayName}">ACCOUNTANT</td>
     <td th:text="${tax.technician?.displayName}">ACCOUNTANT</td>

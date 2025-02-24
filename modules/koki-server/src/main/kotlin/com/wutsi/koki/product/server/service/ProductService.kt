@@ -53,7 +53,7 @@ class ProductService(
             jql.append(" AND P.type IN :types")
         }
         if (keyword != null) {
-            jql.append(" AND UPPER(P.name) LIKE :keyword")
+            jql.append(" AND (UPPER(P.code) LIKE :keyword) OR (UPPER(P.name) LIKE :keyword)")
         }
         if (active != null) {
             jql.append(" AND P.active = :active")

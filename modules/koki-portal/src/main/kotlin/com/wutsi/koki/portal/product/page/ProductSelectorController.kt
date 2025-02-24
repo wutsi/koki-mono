@@ -22,7 +22,10 @@ class ProductSelectorController(
         ).map { product ->
             mapOf(
                 "id" to product.id,
-                "name" to product.name,
+                "name" to listOf(
+                    product.code,
+                    product.name
+                ).joinToString(separator = " - "),
             )
         }
     }

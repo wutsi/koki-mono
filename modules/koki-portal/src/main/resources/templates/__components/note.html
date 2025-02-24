@@ -19,8 +19,14 @@
                 <b th:text="${note.subject}">SUBJECT</b></a>
         </div>
         <div class="text-small" th:if="${note.modifiedBy}">
-            By: <span th:text="${note.modifiedBy?.displayName}">DISPLAY NANME</span>
+            By:
+            <span th:text="${note.modifiedBy?.displayName}">DISPLAY NANME</span>
         </div>
+        <div class="text-small" th:if="${note.duration > 0}">
+            Duration:
+            <span th:text="${note.durationText}">DURATION</span>
+        </div>
+
     </div>
     <div class="margin-top note-body" th:text="${note.summary}">SUMMARY</div>
     <div class="margin-top margin-bottom">

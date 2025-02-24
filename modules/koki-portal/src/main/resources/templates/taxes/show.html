@@ -54,7 +54,7 @@
                         </div>
                         <div class="margin-right-2x">
                             <b>Account</b><br/>
-                            <a class="entity-title" th:href="'/accounts/' + ${tax.account.id}">
+                            <a class="entity-title" target="_blank" th:href="'/accounts/' + ${tax.account.id}">
                                 <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
                                 <span th:text="${tax.account.name}">ACCOUNT</span>
                             </a>
@@ -121,7 +121,8 @@
                                 <tr>
                                     <td><b>Account</b></td>
                                     <td>
-                                        <a class="entity-title" th:href="'/accounts/' + ${tax.account.id}">
+                                        <a class="entity-title" target="_blank"
+                                           th:href="'/accounts/' + ${tax.account.id}">
                                             <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
                                             <span th:text="${tax.account.name}">ACCOUNT</span>
                                         </a>
@@ -130,6 +131,10 @@
                                 <tr th:if="${tax.startAt}">
                                     <td><b>Start Date</b></td>
                                     <td th:text="${tax.startAtText}">DUE</td>
+                                </tr>
+                                <tr th:if="${tax.dueAt}">
+                                    <td><b>Due Date</b></td>
+                                    <td th:text="${tax.dueAtText}">DUE</td>
                                 </tr>
                                 <tr th:if="${tax.accountant}">
                                     <td><b>Accountant</b></td>
@@ -142,10 +147,6 @@
                                 <tr th:if="${tax.assignee}">
                                     <td><b>Assigned To</b></td>
                                     <td th:text="${tax.assignee.displayName}">ASSIGNED_TO</td>
-                                </tr>
-                                <tr th:if="${tax.dueAt}">
-                                    <td><b>Due Date</b></td>
-                                    <td th:text="${tax.dueAtText}">DUE</td>
                                 </tr>
 
                                 <tr th:if="${tax.description}">

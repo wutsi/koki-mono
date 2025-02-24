@@ -31,6 +31,7 @@ class SettingsEditUserController(
             displayName = user.displayName,
             email = user.email,
             status = user.status,
+            roleIds = user.roles.map { role -> role.id }
         )
         return edit(user, form, model)
     }

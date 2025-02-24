@@ -37,8 +37,10 @@ function _koki_taxes_product_on_add_modal_opened() {
     document.getElementById('btn-tax-product-cancel').addEventListener('click', koki_modal_close)
 
     koki_products_select2('productId', 'koki-modal');
+    $('#unitPriceId').attr('disabled', true);
     $('#productId').on('select2:select', function (e) {
-        $('#unitPrice').load('/tax-products/prices?product-id=' + $('#productId').val());
+        $('#unitPriceId').attr('disabled', false);
+        $('#unitPriceId').load('/tax-products/prices?product-id=' + $('#productId').val());
     });
 }
 

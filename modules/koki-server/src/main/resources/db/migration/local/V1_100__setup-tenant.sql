@@ -4,7 +4,7 @@ INSERT INTO T_TENANT(id, status, name, domain_name, locale, number_format, curre
 INSERT INTO T_TENANT_MODULE(tenant_fk, module_fk)
     SELECT 1, id FROM T_MODULE;
 
-INSERT INTO T_ROLE(id, tenant_fk, name, title) VALUES(1, 1, 'ADM', 'Administrator');
+INSERT INTO T_ROLE(id, tenant_fk, name) VALUES(1, 1, 'Administrator');
 
 INSERT INTO T_ROLE_PERMISSION(role_fk, permission_fk) SELECT 1, P.id from T_PERMISSION P;
 

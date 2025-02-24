@@ -436,7 +436,7 @@ a.btn-back {
 
 .modal-dialog form input,
 .modal-dialog form select {
-    width: 100% !important;
+    width: 100%;
     padding: 0.5em;
 }
 

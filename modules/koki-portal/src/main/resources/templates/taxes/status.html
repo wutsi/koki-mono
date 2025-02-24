@@ -67,15 +67,8 @@
                                 </select>
                             </div>
                             <div class="section-item">
-                                <label class="title">Assigned To</label>
-                                <select th:field="*{assigneeId}">
-                                    <option selected
-                                            th:if="${assignee}"
-                                            th:text="${assignee.displayName}"
-                                            th:value="${assignee.id}">
-                                        ASSIGNEE
-                                    </option>
-                                </select>
+                                <label class="title">Assigned To <span class="required">*</span></label>
+                                <select required th:field="*{assigneeId}"></select>
                                 <script
                                     th:replace="~{__components/user :: user-selector('assigneeId', null, 'tax:status')}"></script>
                             </div>

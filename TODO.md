@@ -8,7 +8,7 @@
 
 ## RefData
 
-- [] Add endpoint to import all ref data
+- [x] Add endpoint to import all ref data
 - [x] Unit API
 - [x] Location API
 - [x] Juridiction API
@@ -77,12 +77,12 @@
 ## Taxes
 
 - [] Create Invoices
+- [] Settings: Setup email notification
 - [] Taxes KPI
     - [] Time spent by Tax report
     - [] Time spent on Tax report by user
     - [] Labor cost by Tax report
     - [] Total time spent on Tax Report per user
-- [] Settings: Setup email notification
 - [] Add Kanban view
 - [x] Link taxes with products
 - [x] Filter Accountant and Technician based on the permission 'tax:manage'
@@ -154,8 +154,14 @@
 ## Invoicing
 
 - [x] Invoice API
-- [] Send invoice by email
+- [] Invoice UI
 - [] Generate Invoice PDF
+- [] Send invoice by email
+- [] Setting: Configure initial invoice number
+- [] Setting: Select invoice PDF layout
 - [] Payment API
-- [] Capture online payments: Paypal, Stripe, Flutterwave
+- [] Capture online payments:
+    - [] Paypal
+    - [] Stripe
+    - [] Flutterwave
 - [] Capture payments manually: Cash, Check etc...

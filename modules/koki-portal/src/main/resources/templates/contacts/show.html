@@ -54,7 +54,7 @@
                         </div>
                         <div class="margin-right-2x" th:if="${contact.account}">
                             <b>Account</b><br/>
-                            <a class="entity-title" th:href="'/accounts/' + ${contact.account.id}">
+                            <a class="entity-title" target="_blank" th:href="'/accounts/' + ${contact.account.id}">
                                 <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
                                 <span th:text="${contact.account.name}">ACCOUNT</span>
                             </a>
@@ -76,7 +76,7 @@
                         <tr th:if="${contact.account}">
                             <td><b>Account</b></td>
                             <td>
-                                <a class="entity-title" th:href="'/accounts/' + ${contact.account.id}">
+                                <a class="entity-title" target="_blank" th:href="'/accounts/' + ${contact.account.id}">
                                     <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
                                     <span th:text="${contact.account.name}">ACCOUNT</span>
                                 </a>
