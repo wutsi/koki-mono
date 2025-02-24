@@ -72,6 +72,7 @@ class TaxProductService(
             id, UpdateTaxProductRequest(
                 quantity = form.quantity,
                 unitPriceId = form.unitPriceId,
+                description = form.description,
             )
         )
     }

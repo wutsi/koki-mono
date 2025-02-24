@@ -5,4 +5,6 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface PriceRepository : CrudRepository<PriceEntity, Long>
+interface PriceRepository : CrudRepository<PriceEntity, Long> {
+    fun findByProductId(productId: Long): List<PriceEntity>
+}

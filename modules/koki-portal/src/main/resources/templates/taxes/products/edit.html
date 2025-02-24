@@ -5,7 +5,13 @@
     <table class="table">
         <tr>
             <td width="25%"><b>Product</b></td>
-            <td th:text="${taxProduct.product.name}">PRODUCT</td>
+            <td th:text="${taxProduct.product.code}">PRODUCT</td>
+        </tr>
+        <tr>
+            <td><b>Description</b></td>
+            <td>
+                <input th:field="*{description}" />
+            </td>
         </tr>
         <tr>
             <td><b>Unit Price <span class="required">*</span></b></td>

@@ -11,4 +11,6 @@ data class ProductForm(
     val active: Boolean = true,
     val unitId: Long? = null,
     val quantity: Int? = null,
+    val unitPrice: Double? = null,
+    val currency: String = "",
 )

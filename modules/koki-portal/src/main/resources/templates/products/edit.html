@@ -25,12 +25,12 @@
                             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
                             <div class="section-item">
-                                <label class="title">Code</label>
-                                <input maxlength="30" th:field="*{code}"/>
-                            </div>
-                            <div class="section-item">
                                 <label class="title">Name <span class="required">*</span></label>
                                 <input maxlength="100" required th:field="*{name}"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Code <span class="required">*</span></label>
+                                <input maxlength="30" required th:field="*{code}"/>
                             </div>
                             <div class="section-item">
                                 <label class="title">Type <span class="required">*</span></label>

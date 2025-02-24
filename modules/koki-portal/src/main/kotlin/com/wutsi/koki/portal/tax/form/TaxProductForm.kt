@@ -5,4 +5,5 @@ data class TaxProductForm(
     val productId: Long = -1,
     val unitPriceId: Long = -1,
     val quantity: Int = 1,
+    val description: String? = null,
 )

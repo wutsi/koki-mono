@@ -42,6 +42,32 @@ class CreateTaxProductEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
+    fun `create without description`() {
+        val request = CreateTaxProductRequest(
+            taxId = 100L,
+            productId = 111L,
+            unitPriceId = 11100L,
+            quantity = 5,
+            description = null
+        )
+        val result = rest.postForEntity("/v1/tax-products", request, CreateTaxProductResponse::class.java)
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val id = result.body!!.taxProductId
+        val taxProduct1 = dao.findById(id).get()
+        assertEquals(TENANT_ID, taxProduct1.tenantId)
+        assertEquals(request.taxId, taxProduct1.taxId)
+        assertEquals(request.productId, taxProduct1.productId)
+        assertEquals(request.unitPriceId, taxProduct1.unitPriceId)
+        assertEquals(request.quantity, taxProduct1.quantity)
+        assertEquals("Product 111", taxProduct1.description)
+        assertEquals(150.0, taxProduct1.unitPrice)
+        assertEquals("CAD", taxProduct1.currency)
+        assertEquals(request.quantity * 150.0, taxProduct1.subTotal)
+    }
+
+    @Test
     fun `invalid price`() {
         val request = CreateTaxProductRequest(
             taxId = 100L,

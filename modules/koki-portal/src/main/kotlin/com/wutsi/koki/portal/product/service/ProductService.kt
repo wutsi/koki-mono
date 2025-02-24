@@ -116,7 +116,9 @@ class ProductService(
                 type = form.type,
                 unitId = if (form.type == ProductType.SERVICE) toId(form.unitId) else null,
                 quantity = if (form.type == ProductType.SERVICE) form.quantity else null,
-                categoryId = if (form.categoryId == -1L) null else form.categoryId
+                categoryId = if (form.categoryId == -1L) null else form.categoryId,
+                unitPrice = form.unitPrice,
+                currency = form.currency,
             )
         ).productId
     }

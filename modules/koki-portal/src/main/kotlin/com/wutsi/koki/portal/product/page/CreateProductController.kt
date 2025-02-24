@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
+import java.util.Currency
 
 @Controller
 @RequiresPermission(["product:manage"])
@@ -21,7 +22,12 @@ class CreateProductController(
 ) : AbstractProductController() {
     @GetMapping("/products/create")
     fun create(model: Model): String {
-        val form = ProductForm()
+        val currency = Currency.getInstance(tenantHolder.get()!!.currency)
+        model.addAttribute("currencies", listOf(currency))
+
+        val form = ProductForm(
+            currency = currency.currencyCode
+        )
         return create(form, model)
     }
 

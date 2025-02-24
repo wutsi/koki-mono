@@ -41,6 +41,7 @@ class TaxProductTabControllerTest : AbstractPageControllerTest() {
         Thread.sleep(1000)
         assertElementVisible("#koki-modal")
 
+        input("#description", "This is a product")
         select("#unitPriceId", 2)
         input("#quantity", "4")
         click("button[type=submit]", 1000)
@@ -50,6 +51,7 @@ class TaxProductTabControllerTest : AbstractPageControllerTest() {
         verify(rest).postForEntity(eq("$sdkBaseUrl/v1/tax-products/$id"), request.capture(), eq(Any::class.java))
         assertEquals(ProductFixtures.prices[2].id, request.firstValue.unitPriceId)
         assertEquals(4, request.firstValue.quantity)
+        assertEquals("This is a product", request.firstValue.description)
 
         assertElementNotVisible("#koki-modal")
     }
