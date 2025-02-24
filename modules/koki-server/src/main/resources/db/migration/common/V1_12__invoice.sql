@@ -81,7 +81,7 @@ CREATE TABLE T_INVOICE_ITEM(
 CREATE TABLE T_INVOICE_TAX(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
-  invoice_item_fk         BIGINT NOT NULL REFERENCES T_INVOICE(id),
+  invoice_item_fk         BIGINT NOT NULL REFERENCES T_INVOICE_ITEM(id),
   sales_tax_fk            BIGINT NOT NULL,
 
   rate                    DECIMAL(10, 4),
