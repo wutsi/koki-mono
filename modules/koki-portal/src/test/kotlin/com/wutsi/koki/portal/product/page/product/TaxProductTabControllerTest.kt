@@ -6,6 +6,8 @@ import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.ProductFixtures
 import com.wutsi.koki.TaxFixtures
+import com.wutsi.koki.tax.dto.CreateTaxProductRequest
+import com.wutsi.koki.tax.dto.CreateTaxProductResponse
 import com.wutsi.koki.tax.dto.UpdateTaxProductRequest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -46,7 +48,6 @@ class TaxProductTabControllerTest : AbstractPageControllerTest() {
         input("#quantity", "4")
         click("button[type=submit]", 1000)
 
-        Thread.sleep(1000)
         val request = argumentCaptor<UpdateTaxProductRequest>()
         verify(rest).postForEntity(eq("$sdkBaseUrl/v1/tax-products/$id"), request.capture(), eq(Any::class.java))
         assertEquals(ProductFixtures.prices[2].id, request.firstValue.unitPriceId)
@@ -61,9 +62,27 @@ class TaxProductTabControllerTest : AbstractPageControllerTest() {
         navigateTo("/tax-products/tab?test-mode=true&tax-id=" + TaxFixtures.tax.id)
 
         click(".tab-tax-products .btn-add-product")
-
         Thread.sleep(1000)
         assertElementVisible("#koki-modal")
+
+        select2("#productId", "${ProductFixtures.products[0].code} - ${ProductFixtures.products[0].name}")
+        Thread.sleep(1000)
+        select("#unitPriceId", 2)
+        input("#quantity", "4")
+        click("button[type=submit]", 1000)
+
+        val request = argumentCaptor<CreateTaxProductRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/tax-products"),
+            request.capture(),
+            eq(CreateTaxProductResponse::class.java)
+        )
+        assertEquals(ProductFixtures.products[0].id, request.firstValue.productId)
+        assertEquals(ProductFixtures.prices[2].id, request.firstValue.unitPriceId)
+        assertEquals(4, request.firstValue.quantity)
+        assertEquals(null, request.firstValue.description)
+
+        assertElementNotVisible("#koki-modal")
     }
 
     @Test
