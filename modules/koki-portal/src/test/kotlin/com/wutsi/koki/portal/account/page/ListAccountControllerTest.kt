@@ -8,7 +8,7 @@ import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.AccountFixtures.accounts
 import com.wutsi.koki.account.dto.AccountSummary
 import com.wutsi.koki.account.dto.SearchAccountResponse
-import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.common.page.PageName
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import kotlin.test.Test

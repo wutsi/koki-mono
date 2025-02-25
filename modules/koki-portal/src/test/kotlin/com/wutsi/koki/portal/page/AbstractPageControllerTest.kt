@@ -49,7 +49,7 @@ import com.wutsi.koki.note.dto.CreateNoteRequest
 import com.wutsi.koki.note.dto.CreateNoteResponse
 import com.wutsi.koki.note.dto.GetNoteResponse
 import com.wutsi.koki.note.dto.SearchNoteResponse
-import com.wutsi.koki.portal.service.AccessTokenHolder
+import com.wutsi.koki.portal.security.service.AccessTokenHolder
 import com.wutsi.koki.product.dto.CreatePriceRequest
 import com.wutsi.koki.product.dto.CreatePriceResponse
 import com.wutsi.koki.product.dto.CreateProductRequest

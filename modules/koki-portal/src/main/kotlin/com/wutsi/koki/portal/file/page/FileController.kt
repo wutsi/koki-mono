@@ -1,7 +1,7 @@
 package com.wutsi.koki.portal.file.page
 
+import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.file.service.FileService
-import com.wutsi.koki.portal.page.AbstractPageController
 import com.wutsi.koki.portal.security.RequiresPermission
 import jakarta.servlet.http.HttpServletResponse
 import org.apache.commons.io.IOUtils

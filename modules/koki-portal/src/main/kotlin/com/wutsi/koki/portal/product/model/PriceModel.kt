@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.product.model
 
-import com.wutsi.blog.app.model.MoneyModel
+import com.wutsi.blog.portal.common.model.MoneyModel
 import com.wutsi.koki.portal.tenant.model.TypeModel
 import java.util.Date
 

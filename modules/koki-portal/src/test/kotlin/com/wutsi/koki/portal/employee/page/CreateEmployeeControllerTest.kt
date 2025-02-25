@@ -11,7 +11,7 @@ import com.wutsi.koki.employee.dto.CreateEmployeeRequest
 import com.wutsi.koki.employee.dto.CreateEmployeeResponse
 import com.wutsi.koki.employee.dto.EmployeeStatus
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.common.page.PageName
 import org.junit.jupiter.api.Assertions.assertEquals
 import kotlin.test.Test
 

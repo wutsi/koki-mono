@@ -1,6 +1,7 @@
-package com.wutsi.koki.portal.security
+package com.wutsi.koki.portal.security.servlet
 
-import com.wutsi.koki.portal.service.AccessTokenHolder
+import com.wutsi.koki.portal.security.JWTAuthentication
+import com.wutsi.koki.portal.security.service.AccessTokenHolder
 import com.wutsi.koki.security.dto.JWTDecoder
 import jakarta.servlet.Filter
 import jakarta.servlet.FilterChain

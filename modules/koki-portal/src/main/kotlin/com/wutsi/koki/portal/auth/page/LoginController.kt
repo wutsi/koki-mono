@@ -2,9 +2,9 @@ package com.wutsi.koki.portal.auth.page
 
 import com.wutsi.koki.portal.auth.form.LoginForm
 import com.wutsi.koki.portal.auth.service.LoginService
-import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.page.AbstractPageController
-import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.common.model.PageModel
+import com.wutsi.koki.portal.common.page.AbstractPageController
+import com.wutsi.koki.portal.common.page.PageName
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory

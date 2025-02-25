@@ -1,7 +1,7 @@
 package com.wutsi.koki.portal.auth.service
 
 import com.wutsi.koki.portal.auth.form.LoginForm
-import com.wutsi.koki.portal.service.AccessTokenHolder
+import com.wutsi.koki.portal.security.service.AccessTokenHolder
 import com.wutsi.koki.sdk.KokiAuthentication
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

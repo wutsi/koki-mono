@@ -5,7 +5,8 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.portal.service.AccessTokenHolder
+import com.wutsi.koki.portal.security.service.AccessTokenHolder
+import com.wutsi.koki.portal.security.servlet.JWTAuthenticationFilter
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
 import jakarta.servlet.FilterChain

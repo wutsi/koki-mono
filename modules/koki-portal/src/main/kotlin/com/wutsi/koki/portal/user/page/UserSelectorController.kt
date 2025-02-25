@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.user.page
 
-import com.wutsi.koki.portal.page.AbstractPageController
+import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.portal.user.service.UserService
 import org.springframework.web.bind.annotation.GetMapping

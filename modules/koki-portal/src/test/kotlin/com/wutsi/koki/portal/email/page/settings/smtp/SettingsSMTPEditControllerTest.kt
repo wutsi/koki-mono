@@ -9,8 +9,8 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.email.service.SMTPValidator
-import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import org.springframework.test.context.bean.override.mockito.MockitoBean

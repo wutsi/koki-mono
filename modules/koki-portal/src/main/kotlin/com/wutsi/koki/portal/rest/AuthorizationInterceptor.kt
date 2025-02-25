@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.rest
 
-import com.wutsi.koki.portal.service.AccessTokenHolder
+import com.wutsi.koki.portal.security.service.AccessTokenHolder
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpRequest

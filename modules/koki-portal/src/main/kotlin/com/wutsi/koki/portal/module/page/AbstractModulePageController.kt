@@ -1,8 +1,8 @@
 package com.wutsi.koki.portal.module.page
 
-import com.wutsi.koki.portal.model.PageModel
+import com.wutsi.koki.portal.common.model.PageModel
+import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.module.model.ModuleModel
-import com.wutsi.koki.portal.page.AbstractPageController
 import org.springframework.web.bind.annotation.ModelAttribute
 
 abstract class AbstractModulePageController : AbstractPageController() {

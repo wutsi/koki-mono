@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.tax.page.product
 
-import com.wutsi.koki.portal.page.AbstractPageController
+import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tax.service.TaxProductService
 import org.springframework.stereotype.Controller

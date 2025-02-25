@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.model
+package com.wutsi.koki.portal.common.model
 
 import com.wutsi.koki.portal.module.model.ModuleModel
 

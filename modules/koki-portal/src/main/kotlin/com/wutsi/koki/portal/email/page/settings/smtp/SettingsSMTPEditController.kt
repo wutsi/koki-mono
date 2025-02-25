@@ -1,10 +1,10 @@
 package com.wutsi.koki.portal.page.settings.smtp
 
+import com.wutsi.koki.portal.common.model.PageModel
+import com.wutsi.koki.portal.common.page.AbstractPageController
+import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.email.model.SMTPForm
 import com.wutsi.koki.portal.email.service.SMTPValidator
-import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.page.AbstractPageController
-import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import com.wutsi.koki.tenant.dto.ConfigurationName

@@ -1,8 +1,8 @@
 package com.wutsi.koki.portal.tax.mapper
 
 import com.wutsi.koki.portal.account.model.AccountModel
+import com.wutsi.koki.portal.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
-import com.wutsi.koki.portal.model.MoneyMapper
 import com.wutsi.koki.portal.product.model.ProductModel
 import com.wutsi.koki.portal.tax.model.TaxModel
 import com.wutsi.koki.portal.tax.model.TaxProductModel

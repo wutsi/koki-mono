@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.tax.model
 
-import com.wutsi.blog.app.model.MoneyModel
+import com.wutsi.blog.portal.common.model.MoneyModel
 import com.wutsi.koki.portal.product.model.ProductModel
 
 data class TaxProductModel(

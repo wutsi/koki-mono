@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.product.page
 
-import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.product.service.ProductService
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.product.dto.ProductType

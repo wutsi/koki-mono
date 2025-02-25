@@ -2,8 +2,8 @@ package com.wutsi.koki.portal.employee.page
 
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.employee.dto.EmployeeStatus
+import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.employee.service.EmployeeService
-import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.TypeService
 import org.slf4j.LoggerFactory
