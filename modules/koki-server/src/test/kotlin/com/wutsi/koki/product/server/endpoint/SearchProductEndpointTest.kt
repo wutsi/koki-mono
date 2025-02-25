@@ -53,7 +53,7 @@ class SearchProductEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `by keywords`() {
+    fun `by keywords - name`() {
         val response = rest.getForEntity("/v1/products?q=PRO", SearchProductResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
@@ -61,5 +61,16 @@ class SearchProductEndpointTest : AuthorizationAwareEndpointTest() {
         val products = response.body!!.products
         assertEquals(2, products.size)
         assertEquals(listOf(110L, 120L), products.map { product -> product.id }.sorted())
+    }
+
+    @Test
+    fun `by keywords - code`() {
+        val response = rest.getForEntity("/v1/products?q=P-", SearchProductResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val products = response.body!!.products
+        assertEquals(3, products.size)
+        assertEquals(listOf(110L, 120L, 140L), products.map { product -> product.id }.sorted())
     }
 }

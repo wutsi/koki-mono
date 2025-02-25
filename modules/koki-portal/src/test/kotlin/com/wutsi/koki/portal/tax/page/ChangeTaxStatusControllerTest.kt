@@ -8,6 +8,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.TaxFixtures.tax
+import com.wutsi.koki.UserFixtures
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.tax.dto.TaxStatus
@@ -23,6 +24,7 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.TAX_STATUS)
 
         select("#status", 3)
+        select2("#assigneeId", UserFixtures.users[0].displayName)
         click("button[type=submit]")
 
         val request = argumentCaptor<UpdateTaxStatusRequest>()
@@ -31,8 +33,8 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
             request.capture(),
             eq(Any::class.java),
         )
-        val tax = request.firstValue
-        assertEquals(TaxStatus.PROCESSING, tax.status)
+        assertEquals(TaxStatus.PROCESSING, request.firstValue.status)
+        assertEquals(UserFixtures.users[0].id, request.firstValue.assigneeId)
 
         assertCurrentPageIs(PageName.TAX)
     }
@@ -44,6 +46,7 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.TAX_STATUS)
 
         select("#status", 3)
+        select2("#assigneeId", UserFixtures.users[0].displayName)
         click(".btn-cancel")
 
         assertCurrentPageIs(PageName.TAX)
@@ -63,6 +66,7 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.TAX_STATUS)
 
         select("#status", 3)
+        select2("#assigneeId", UserFixtures.users[0].displayName)
         click("button[type=submit]")
 
         assertCurrentPageIs(PageName.TAX_STATUS)

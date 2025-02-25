@@ -85,6 +85,7 @@ import com.wutsi.koki.tenant.dto.SearchRoleResponse
 import com.wutsi.koki.tenant.dto.SearchTenantResponse
 import com.wutsi.koki.tenant.dto.SearchTypeResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
+import io.eotsevych.select2.Select2
 import org.apache.commons.io.IOUtils
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -996,5 +997,11 @@ abstract class AbstractPageControllerTest {
         val by = By.cssSelector(selector)
         val select = Select(driver.findElement(by))
         select.selectByIndex(index)
+    }
+
+    protected fun select2(selector: String, text: String) {
+        val by = By.cssSelector(selector)
+        val select = Select2(driver.findElement(by))
+        select.selectByText(text)
     }
 }
