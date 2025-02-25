@@ -66,6 +66,7 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.TAX_STATUS)
 
         select("#status", 3)
+        select2("#assigneeId", UserFixtures.users[0].displayName)
         click("button[type=submit]")
 
         assertCurrentPageIs(PageName.TAX_STATUS)
