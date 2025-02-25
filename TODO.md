@@ -1,33 +1,9 @@
 # Features
 
-## Business
-
-- [] Integrate [int-tel](https://intl-tel-input.com/) for phone number input
-- [x] Business entity
-- [x] Settings: Setup business information
-
-## RefData
-
-- [x] Add endpoint to import all ref data
-- [x] Unit API
-- [x] Location API
-- [x] Juridiction API
-- [x] Category API
-- [x] Sales Tax API
-
-## Tenant
-
-- [] Tenant should have a list of currencies
-
-## Module
-
-- [x] Module API
-- [x] List of modules driven by backend in home page
-- [x] List of modules driven by backend in configuration
-- [x] link CSS and JS with modules
-
 ## Account
 
+- [] Add AccountUser/AccountUserRole to manage relation ship between Account and User per module. Ex: Accountant,
+  Technician
 - [] Settings: Import Accounts from CSV
 - [] Integrate [int-tel](https://intl-tel-input.com/) for phone number input
 - [x] Add additional information to accounts: address
@@ -46,6 +22,12 @@
 - [x] Link files to account
 - [x] Add note to account
 
+## Business
+
+- [] Integrate [int-tel](https://intl-tel-input.com/) for phone number input
+- [x] Business entity
+- [x] Settings: Setup business information
+
 ## Contact
 
 - [] Add additional information: address, SSN, Date of birth
@@ -61,6 +43,27 @@
 - [x] Link files to contacts
 - [x] Add address to Contact
 
+## Email
+
+- [] Auto-translate email
+- [] Attach multiple files to email
+- [x] Configure validation on DTO
+- [x] Show email summary
+- [x] Apply RBAC security on UI
+- [x] Attach 1 file to email
+- [x] Settings: Configure email layout
+- [x] Settings: Configure SMTP
+- [x] Send email API
+- [x] Send email UI
+
+## Employees
+
+- [] Send email to employee
+- [] Integrate [int-tel](https://intl-tel-input.com/) for phone number input
+- [x] Employee API
+- [x] Link Employee with User
+- [x] Employee UI
+
 ## Files
 
 - [] Integrate AI to describe the file
@@ -73,6 +76,59 @@
 - [x] Download files
 - [x] Upload files
 - [x] Show file icons
+
+## Invoicing
+
+- [x] Invoice API
+- [] Invoice UI
+- [] Generate Invoice PDF
+- [] Send invoice by email
+- [] Setting: Configure initial invoice number
+- [] Setting: Select invoice PDF layout
+- [] Payment API
+- [] Capture online payments:
+    - [] Paypal
+    - [] Stripe
+    - [] Flutterwave
+- [] Capture payments manually: Cash, Check etc...
+
+## Module
+
+- [x] Module API
+- [x] List of modules driven by backend in home page
+- [x] List of modules driven by backend in configuration
+- [x] link CSS and JS with modules
+
+## Notes
+
+- [x] Configure validation on DTO
+- [x] Apply RBAC security on UI
+- [x] Add type of notes
+- [x] Tack time
+- [x] Note API
+- [x] Note UI
+
+## Product
+
+- [] Integrate Offer API
+- [] Add attributes for Digital service
+- [] Add attributes for Physical service
+- [x] Set price on creation
+- [x] Product Categories for services
+- [x] Link with categories
+- [x] Add attributes for Services
+- [x] Product UI
+- [x] Price UI
+- [x] Product, Price API
+
+## RefData
+
+- [x] Add endpoint to import all ref data
+- [x] Unit API
+- [x] Location API
+- [x] Juridiction API
+- [x] Category API
+- [x] Sales Tax API
 
 ## Taxes
 
@@ -96,35 +152,9 @@
 - [x] Link files to taxes
 - [x] Add a note
 
-## Employees
+## Tenant
 
-- [] Send email to employee
-- [] Integrate [int-tel](https://intl-tel-input.com/) for phone number input
-- [x] Employee API
-- [x] Link Employee with User
-- [x] Employee UI
-
-## Email
-
-- [] Auto-translate email
-- [] Attach multiple files to email
-- [x] Configure validation on DTO
-- [x] Show email summary
-- [x] Apply RBAC security on UI
-- [x] Attach 1 file to email
-- [x] Settings: Configure email layout
-- [x] Settings: Configure SMTP
-- [x] Send email API
-- [x] Send email UI
-
-## Notes
-
-- [x] Configure validation on DTO
-- [x] Apply RBAC security on UI
-- [x] Add type of notes
-- [x] Tack time
-- [x] Note API
-- [x] Note UI
+- [] Tenant should have a list of currencies
 
 ## Users
 
@@ -138,30 +168,6 @@
 - [x] Manage users
 - [x] Manage roles
 
-## Product
+## Web
 
-- [] Integrate Offer API
-- [] Add attributes for Digital service
-- [] Add attributes for Physical service
-- [x] Set price on creation
-- [x] Product Categories for services
-- [x] Link with categories
-- [x] Add attributes for Services
-- [x] Product UI
-- [x] Price UI
-- [x] Product, Price API
-
-## Invoicing
-
-- [x] Invoice API
-- [] Invoice UI
-- [] Generate Invoice PDF
-- [] Send invoice by email
-- [] Setting: Configure initial invoice number
-- [] Setting: Select invoice PDF layout
-- [] Payment API
-- [] Capture online payments:
-    - [] Paypal
-    - [] Stripe
-    - [] Flutterwave
-- [] Capture payments manually: Cash, Check etc...
+- [] serve all static resource from external site

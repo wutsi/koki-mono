@@ -2,9 +2,9 @@ package com.wutsi.koki.portal.employee.mapper
 
 import com.wutsi.koki.employee.dto.Employee
 import com.wutsi.koki.employee.dto.EmployeeSummary
+import com.wutsi.koki.portal.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.employee.model.EmployeeModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
-import com.wutsi.koki.portal.model.MoneyMapper
 import com.wutsi.koki.portal.tenant.model.TypeModel
 import com.wutsi.koki.portal.user.model.UserModel
 import org.springframework.stereotype.Service

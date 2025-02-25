@@ -10,7 +10,7 @@ import com.wutsi.koki.note.dto.CreateNoteRequest
 import com.wutsi.koki.note.dto.CreateNoteResponse
 import com.wutsi.koki.note.dto.NoteType
 import com.wutsi.koki.note.dto.UpdateNoteRequest
-import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.common.page.PageName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.module.page
 
-import com.wutsi.koki.portal.model.PageModel
+import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.module.model.PageLayoutDescriptor
 import jakarta.annotation.PostConstruct
 import org.slf4j.LoggerFactory

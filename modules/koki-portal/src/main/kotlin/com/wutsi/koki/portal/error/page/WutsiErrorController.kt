@@ -1,8 +1,8 @@
-package com.wutsi.koki.portal.page.error
+package com.wutsi.koki.portal.error.page
 
-import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.page.AbstractPageController
-import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.common.model.PageModel
+import com.wutsi.koki.portal.common.page.AbstractPageController
+import com.wutsi.koki.portal.common.page.PageName
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.boot.web.servlet.error.ErrorController
@@ -10,6 +10,9 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import java.lang.StringBuilder
+import kotlin.jvm.java
+import kotlin.let
 
 @Controller
 @RequestMapping

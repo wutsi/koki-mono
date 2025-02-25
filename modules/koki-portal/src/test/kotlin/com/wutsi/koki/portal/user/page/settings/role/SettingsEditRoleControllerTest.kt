@@ -10,7 +10,7 @@ import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.RoleFixtures
 import com.wutsi.koki.RoleFixtures.role
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.tenant.dto.UpdateRoleRequest
 import kotlin.test.Test
 import kotlin.test.assertEquals

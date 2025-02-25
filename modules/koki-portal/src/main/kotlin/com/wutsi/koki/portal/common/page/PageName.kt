@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page
+package com.wutsi.koki.portal.common.page
 
 object PageName {
     const val ACCOUNT = "page.account"

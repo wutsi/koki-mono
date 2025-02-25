@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.page
+package com.wutsi.koki.portal.common.page
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.error.dto.ErrorResponse

@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.product.page
 
-import com.wutsi.koki.portal.page.AbstractPageController
+import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.product.service.ProductService
 import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller

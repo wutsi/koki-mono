@@ -6,7 +6,7 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.RoleFixtures.roles
-import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.tenant.dto.Role
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
 import org.springframework.http.HttpStatus

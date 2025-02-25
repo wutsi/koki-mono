@@ -12,7 +12,7 @@ import com.wutsi.koki.AccountFixtures.account
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.party.dto.LoginRequest
 import com.wutsi.koki.party.dto.LoginResponse
-import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.common.page.PageName
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

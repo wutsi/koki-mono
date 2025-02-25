@@ -10,7 +10,7 @@ import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.ProductFixtures.product
 import com.wutsi.koki.RefDataFixtures
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.product.dto.ProductType
 import com.wutsi.koki.product.dto.UpdateProductRequest
 import kotlin.test.Test

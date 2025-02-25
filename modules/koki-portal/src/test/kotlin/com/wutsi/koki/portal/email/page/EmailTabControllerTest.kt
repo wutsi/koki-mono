@@ -11,7 +11,7 @@ import com.wutsi.koki.TaxFixtures.tax
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.email.dto.SendEmailRequest
 import com.wutsi.koki.email.dto.SendEmailResponse
-import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.common.page.PageName
 import org.junit.jupiter.api.Test
 import kotlin.jvm.java
 import kotlin.test.assertEquals

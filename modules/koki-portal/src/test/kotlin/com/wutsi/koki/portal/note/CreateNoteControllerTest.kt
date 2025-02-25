@@ -1,7 +1,7 @@
 package com.wutsi.koki.portal.note
 
 import com.wutsi.blog.app.page.AbstractPageControllerTest
-import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.common.page.PageName
 import kotlin.test.Test
 
 class CreateNoteControllerTest : AbstractPageControllerTest() {

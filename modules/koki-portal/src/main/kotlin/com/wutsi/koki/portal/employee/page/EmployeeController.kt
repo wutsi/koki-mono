@@ -1,7 +1,7 @@
 package com.wutsi.koki.portal.employee.page
 
+import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.employee.service.EmployeeService
-import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model

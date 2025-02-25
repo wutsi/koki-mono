@@ -5,7 +5,7 @@ import com.wutsi.koki.portal.account.form.AccountForm
 import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.account.service.AttributeService
-import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.TypeService
 import com.wutsi.koki.portal.user.service.UserService

@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.tax.page
 
-import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tax.model.TaxModel
 import com.wutsi.koki.portal.tax.service.TaxService

@@ -1,7 +1,7 @@
 package com.wutsi.koki.portal.product.mapper
 
+import com.wutsi.koki.portal.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
-import com.wutsi.koki.portal.model.MoneyMapper
 import com.wutsi.koki.portal.product.model.PriceModel
 import com.wutsi.koki.portal.product.model.ProductModel
 import com.wutsi.koki.portal.product.model.ServiceDetailsModel

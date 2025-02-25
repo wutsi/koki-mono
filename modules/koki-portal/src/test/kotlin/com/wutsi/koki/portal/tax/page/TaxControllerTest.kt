@@ -12,7 +12,7 @@ import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.TaxFixtures
 import com.wutsi.koki.TaxFixtures.tax
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.common.page.PageName
 import kotlin.test.Test
 
 class TaxControllerTest : AbstractPageControllerTest() {

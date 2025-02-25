@@ -1,10 +1,10 @@
 package com.wutsi.koki.portal.contact.page
 
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.contact.form.ContactForm
 import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.contact.service.ContactService
-import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.TypeService
 import org.springframework.stereotype.Controller

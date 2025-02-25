@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.service
+package com.wutsi.koki.portal.security.service
 
 import com.wutsi.koki.sdk.AccessTokenProvider
 import jakarta.servlet.http.HttpServletRequest

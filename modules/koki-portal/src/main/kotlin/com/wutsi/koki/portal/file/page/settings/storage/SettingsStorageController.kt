@@ -1,9 +1,9 @@
 package com.wutsi.koki.portal.file.page.settings
 
+import com.wutsi.koki.portal.common.model.PageModel
+import com.wutsi.koki.portal.common.page.AbstractPageController
+import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.file.form.StorageForm
-import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.page.AbstractPageController
-import com.wutsi.koki.portal.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import com.wutsi.koki.tenant.dto.ConfigurationName

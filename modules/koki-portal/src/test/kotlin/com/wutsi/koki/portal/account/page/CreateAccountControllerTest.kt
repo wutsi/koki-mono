@@ -11,7 +11,7 @@ import com.wutsi.koki.AccountFixtures.attributes
 import com.wutsi.koki.account.dto.CreateAccountRequest
 import com.wutsi.koki.account.dto.CreateAccountResponse
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.common.page.PageName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

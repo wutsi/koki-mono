@@ -1,8 +1,8 @@
-package com.wutsi.koki.portal.page.settings
+package com.wutsi.koki.portal.settings.page
 
-import com.wutsi.koki.portal.model.PageModel
-import com.wutsi.koki.portal.page.AbstractPageController
-import com.wutsi.koki.portal.page.PageName
+import com.wutsi.koki.portal.common.model.PageModel
+import com.wutsi.koki.portal.common.page.AbstractPageController
+import com.wutsi.koki.portal.common.page.PageName
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
