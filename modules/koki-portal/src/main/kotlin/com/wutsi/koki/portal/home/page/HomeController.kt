@@ -18,6 +18,6 @@ class HomeController : AbstractPageController() {
                 title = "Home",
             )
         )
-        return "home"
+        return "home/show"
     }
 }
