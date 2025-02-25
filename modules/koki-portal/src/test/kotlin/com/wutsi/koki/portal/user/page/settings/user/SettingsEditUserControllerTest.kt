@@ -39,7 +39,12 @@ class SettingsEditUserControllerTest : AbstractPageControllerTest() {
         assertEquals("Yo Man", request.firstValue.displayName)
         assertEquals("yoman@gmail.com", request.firstValue.email)
         assertEquals(UserStatus.SUSPENDED, request.firstValue.status)
-        assertEquals(listOf(RoleFixtures.roles[0].id, RoleFixtures.roles[2].id), request.firstValue.roleIds)
+        assertEquals(
+            RoleFixtures.roles.filter { role ->
+                role.id != RoleFixtures.roles[0].id && role.id != RoleFixtures.roles[2].id
+            }.map { role -> role.id },
+            request.firstValue.roleIds
+        )
 
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER)
         assertElementVisible("#koki-toast")
