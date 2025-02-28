@@ -9,6 +9,7 @@ data class ProductSummary(
     val name: String = "",
     val code: String? = null,
     val active: Boolean = true,
+    val serviceDetails: ServiceDetails? = null,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
     val createdById: Long? = null,

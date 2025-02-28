@@ -46,6 +46,7 @@ object ErrorCode {
     val HTTP_DOWNSTREAM_ERROR = "$PREFIX:http:downstream-error"
 
     val INVOICE_NOT_FOUND: String = "$PREFIX:invoice:not-found"
+    val INVOICE_BAD_STATUS: String = "$PREFIX:invoice:bad-status"
 
     val JURIDICTION_NOT_FOUND: String = "$PREFIX:juridiction:not-found"
     val JURIDICTION_COUNTRY_NOT_SUPPORTED: String = "$PREFIX:juridiction:country-not-supported"

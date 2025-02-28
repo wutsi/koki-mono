@@ -6,6 +6,7 @@ data class TaxSummary(
     val id: Long = -1,
     val fiscalYear: Int = -1,
     val taxTypeId: Long? = null,
+    val invoiceId: Long? = null,
     val status: TaxStatus = TaxStatus.NEW,
     val accountId: Long = -1,
     val accountantId: Long? = null,

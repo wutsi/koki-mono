@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="widget" th:fragment="invoice-breadcrumb(invoice)">
+    <div class="widget-body">
+        <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item" th:if="${invoice}"><a href="/invoices">Invoices</a></li>
+                <li class="breadcrumb-item active" th:if="${invoice}">
+                    <img align="absmiddle" height="24" src="/image/invoice.png" width="24"/>
+                    <span th:text="${invoice.number}">NUMBER</span>
+                </li>
+                <li class="breadcrumb-item active" th:if="!${invoice}">Invoices</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<tr class="invoice" th:fragment="columns(invoice)" th:remove="tag">
+    <td>
+        <a th:href="'/invoices/' + ${invoice.id}" th:text="${invoice.number}">NUMBER</a>
+    </td>
+    <td th:text="${invoice.createdAtText}">DATE</td>
+    <td th:text="${invoice.customer.name}">
+        <a target="_blank"
+           th:href="'/accounts/' + ${invoice.customer.accountId}"
+           th:if="${invoice.customer.accountId}"
+           th:text="${invoice.customer.name}">
+            CUSTOMER
+        </a>
+        <span th:if="!${invoice.customer.accountId}" th:text="${${invoice.customer.name}}">CUSTOMER</span>
+    </td>
+    <td>
+        <span th:replace="~{__components/invoice :: invoice-status(${invoice.status.name})}"></span>
+    </td>
+    <td th:text="${invoice.totalAmount}">AMOUNT</td>
+    <td class="toolbar" th:if="!${smallView}">
+    </td>
+</tr>
+
+<tr id="invoice-load-more" th:fragment="load-more(moreUrl, showAccount)" th:if="${moreUrl}">
+    <td class="text-center" th:colspan="${showAccount} ? 9 : 8">
+        <a href="javascript: koki_load_more('invoice-load-more')" th:data-url="${moreUrl}">Load more...</a>
+    </td>
+</tr>
+
+<div th:fragment="invoice-status(status)">
+    <span class="badge text-bg-secondary"
+          th:if="${status == 'DRAFT'}"
+          th:text="#{'invoice-status.' + ${status}}">NEW</span>
+
+    <span class="badge text-bg-success"
+          th:if="${status == 'COMPLETED'}"
+          th:text="#{'invoice-status.' + ${status}}">COMPLETED</span>
+
+    <span class="badge text-bg-danger"
+          th:if="${status == 'CANCELLED'}"
+          th:text="#{'invoice-status.' + ${status}}">CANCELLED</span>
+
+    <span class="badge text-bg-info"
+          th:if="${status != 'OPENED'}"
+          th:text="#{'invoice-status.' + ${status}}">OPEEND</span>
+</div>
+
+
+</body>

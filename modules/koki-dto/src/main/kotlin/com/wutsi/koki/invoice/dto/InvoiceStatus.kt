@@ -5,5 +5,5 @@ enum class InvoiceStatus {
     DRAFT,
     OPENED,
     PAID,
-    CANCELLED,
+    VOIDED,
 }
