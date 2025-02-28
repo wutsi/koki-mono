@@ -1,97 +1,59 @@
 package com.wutsi.koki.sdk
 
-import com.wutsi.koki.account.dto.CreateAccountRequest
-import com.wutsi.koki.account.dto.CreateAccountResponse
-import com.wutsi.koki.account.dto.GetAccountResponse
-import com.wutsi.koki.account.dto.GetAttributeResponse
-import com.wutsi.koki.account.dto.SearchAccountResponse
-import com.wutsi.koki.account.dto.SearchAttributeResponse
-import com.wutsi.koki.account.dto.UpdateAccountRequest
-import com.wutsi.koki.common.dto.ImportResponse
+import com.wutsi.koki.invoice.dto.CreateInvoiceRequest
+import com.wutsi.koki.invoice.dto.CreateInvoiceResponse
+import com.wutsi.koki.invoice.dto.GetInvoiceResponse
+import com.wutsi.koki.invoice.dto.InvoiceStatus
+import com.wutsi.koki.invoice.dto.SearchInvoiceResponse
+import com.wutsi.koki.invoice.dto.UpdateInvoiceStatusRequest
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.multipart.MultipartFile
 
-class KokiAccounts(
+class KokiInvoices(
     private val urlBuilder: URLBuilder,
     rest: RestTemplate,
 ) : AbstractKokiModule(rest) {
     companion object {
-        private const val ACCOUNT_PATH_PREFIX = "/v1/accounts"
-        private const val ACCOUNT_TYPE_PATH_PREFIX = "/v1/account-types"
-        private const val ATTRIBUTE_PATH_PREFIX = "/v1/attributes"
+        private const val INVOICE_PATH_PREFIX = "/v1/invoices"
     }
 
-    fun create(request: CreateAccountRequest): CreateAccountResponse {
-        val url = urlBuilder.build(ACCOUNT_PATH_PREFIX)
-        return rest.postForEntity(url, request, CreateAccountResponse::class.java).body
+    fun create(request: CreateInvoiceRequest): CreateInvoiceResponse {
+        val url = urlBuilder.build(INVOICE_PATH_PREFIX)
+        return rest.postForEntity(url, request, CreateInvoiceResponse::class.java).body
     }
 
-    fun update(id: Long, request: UpdateAccountRequest) {
-        val url = urlBuilder.build("$ACCOUNT_PATH_PREFIX/$id")
+    fun invoice(id: Long): GetInvoiceResponse {
+        val url = urlBuilder.build("$INVOICE_PATH_PREFIX/$id")
+        return rest.getForEntity(url, GetInvoiceResponse::class.java).body
+    }
+
+    fun invoices(
+        ids: List<Long>,
+        number: Long?,
+        statuses: List<InvoiceStatus>,
+        accountId: Long?,
+        taxId: Long?,
+        orderId: Long?,
+        limit: Int,
+        offset: Int,
+    ): SearchInvoiceResponse {
+        val url = urlBuilder.build(
+            INVOICE_PATH_PREFIX,
+            mapOf(
+                "id" to ids,
+                "number" to number,
+                "status" to statuses,
+                "account-id" to accountId,
+                "tax-id" to taxId,
+                "order-id" to orderId,
+                "limit" to limit,
+                "offset" to offset,
+            )
+        )
+        return rest.getForEntity(url, SearchInvoiceResponse::class.java).body
+    }
+
+    fun setStatus(id: Long, request: UpdateInvoiceStatusRequest) {
+        val url = urlBuilder.build("$INVOICE_PATH_PREFIX/$id/statuses")
         rest.postForEntity(url, request, Any::class.java)
-    }
-
-    fun delete(id: Long) {
-        val url = urlBuilder.build("$ACCOUNT_PATH_PREFIX/$id")
-        rest.delete(url)
-    }
-
-    fun account(id: Long): GetAccountResponse {
-        val url = urlBuilder.build("$ACCOUNT_PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetAccountResponse::class.java).body
-    }
-
-    fun accounts(
-        keyword: String?,
-        ids: List<Long>,
-        accountTypeIds: List<Long>,
-        managedByIds: List<Long>,
-        createdByIds: List<Long>,
-        limit: Int,
-        offset: Int,
-    ): SearchAccountResponse {
-        val url = urlBuilder.build(
-            ACCOUNT_PATH_PREFIX,
-            mapOf(
-                "q" to keyword,
-                "id" to ids,
-                "account-type-id" to accountTypeIds,
-                "managed-by-id" to managedByIds,
-                "created-by-id" to createdByIds,
-                "limit" to limit,
-                "offset" to offset,
-            )
-        )
-        return rest.getForEntity(url, SearchAccountResponse::class.java).body
-    }
-
-    fun attribute(id: Long): GetAttributeResponse {
-        val url = urlBuilder.build("$ATTRIBUTE_PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetAttributeResponse::class.java).body
-    }
-
-    fun attributes(
-        ids: List<Long>,
-        names: List<String>,
-        active: Boolean?,
-        limit: Int,
-        offset: Int,
-    ): SearchAttributeResponse {
-        val url = urlBuilder.build(
-            ATTRIBUTE_PATH_PREFIX,
-            mapOf(
-                "id" to ids,
-                "name" to names,
-                "active" to active,
-                "limit" to limit,
-                "offset" to offset,
-            )
-        )
-        return rest.getForEntity(url, SearchAttributeResponse::class.java).body
-    }
-
-    fun uploadAttributes(file: MultipartFile): ImportResponse {
-        val url = urlBuilder.build("$ATTRIBUTE_PATH_PREFIX/csv")
-        return upload(url, file)
     }
 }

@@ -13,6 +13,7 @@ import com.wutsi.koki.product.dto.Price
 import com.wutsi.koki.product.dto.PriceSummary
 import com.wutsi.koki.product.dto.Product
 import com.wutsi.koki.product.dto.ProductSummary
+import com.wutsi.koki.product.dto.ServiceDetails
 import org.springframework.stereotype.Service
 
 @Service
@@ -37,19 +38,13 @@ class ProductMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() 
             createdAtText = fmt.format(entity.createdAt),
             createdBy = entity.createdById?.let { id -> users[id] },
             category = entity.categoryId?.let { id -> categories[id] },
-            serviceDetails = entity.serviceDetails?.let { details ->
-                ServiceDetailsModel(
-                    quantity = details.quantity,
-                    unit = details.unitId?.let { id ->
-                        units[id]
-                    }
-                )
-            }
+            serviceDetails = entity.serviceDetails?.let { details -> toServiceDetails(details, units) }
         )
     }
 
     fun toProductModel(
         entity: ProductSummary,
+        units: Map<Long, UnitModel>,
         users: Map<Long, UserModel>,
         categories: Map<Long, CategoryModel>,
     ): ProductModel {
@@ -67,6 +62,7 @@ class ProductMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() 
             createdAtText = fmt.format(entity.createdAt),
             createdBy = entity.createdById?.let { id -> users[id] },
             category = entity.categoryId?.let { id -> categories[id] },
+            serviceDetails = entity.serviceDetails?.let { details -> toServiceDetails(details, units) }
         )
     }
 
@@ -102,6 +98,15 @@ class ProductMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() 
             endAt = entity.endAt,
             endAtText = entity.endAt?.let { date -> fmt.format(date) },
             active = entity.active,
+        )
+    }
+
+    fun toServiceDetails(details: ServiceDetails, units: Map<Long, UnitModel>): ServiceDetailsModel {
+        return ServiceDetailsModel(
+            quantity = details.quantity,
+            unit = details.unitId?.let { id ->
+                units[id]
+            }
         )
     }
 }

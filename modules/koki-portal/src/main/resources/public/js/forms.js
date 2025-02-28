@@ -11,14 +11,18 @@ function _koki_validate_form(e) {
     console.log('validating form...');
 
     const form = e.target;
+
     const valid1 = form.checkValidity();
+    console.log('...checkValidity: ' + valid1);
+
     const valid2 = _koki_validate_all_checkbox_groups();
     const valid3 = _koki_validate_all_file();
+    console.log(valid1, valid2, valid3);
     if (!valid1 || !valid2 || !valid3) {
-        console.log('form valid...');
+        console.log('form not valid...');
         e.preventDefault();
     } else {
-        console.log('form not valid...');
+        console.log('form valid...');
     }
 }
 

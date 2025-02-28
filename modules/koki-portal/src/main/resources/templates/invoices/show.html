@@ -6,62 +6,69 @@
 
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
-<div th:replace="~{__components/layout :: menubar('tax')}"></div>
+<div th:replace="~{__components/layout :: menubar('invoice')}"></div>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/tax :: tax-breadcrumb(${tax})}"></div>
+            <div th:replace="~{__components/invoice :: invoice-breadcrumb(${invoice})}"></div>
         </div>
     </div>
 
     <div class="row">
         <div class="col-12">
-            <div class="widget tax-summary">
+            <div class="widget invoice-summary">
                 <div class="widget-body">
                     <div class="flex flex-space-between">
                         <h1 class="entity-title">
-                            <img align="absmiddle" src="/image/tax.png"/>
-                            <span th:text="${tax.name}">NAME</span>
+                            <img align="absmiddle" src="/image/invoice.png"/>
+                            <span th:text="${invoice.number}">NUMBER</span>
                         </h1>
                         <div>
-                            <a class="btn-edit btn btn-light btn-sm"
-                               th:href="'/taxes/' + ${tax.id} + '/edit'"
-                               th:if="${user?.hasPermission('tax:manage')}">Edit</a>
+                            <a class="btn-approve btn btn-light btn-sm"
+                               th:href="'/invoices/' + ${invoice.id} + '/approve'"
+                               onclick="return confirm('Are you sure you want to approve the invoice?')"
+                               th:if="${invoice.draft} AND ${user?.hasPermission('invoice:manage')}"
+                            >
+                                Approve
+                            </a>
 
-                            <a class="btn-status btn btn-light btn-sm"
-                               th:href="'/taxes/' + ${tax.id} + '/status'"
-                               th:if="${user?.hasPermission('tax:status')}">Update Status</a>
-
-                            <a class="btn-delete btn btn-danger btn-sm"
-                               onclick="return confirm('Are you sure you want to delete the tax report?')"
-                               th:href="'/taxes/' + ${tax.id} + '/delete'"
-                               th:if="${user?.hasPermission('tax:delete')}">Delete</a>
+                            <a class="btn-void btn btn-danger btn-sm"
+                               th:href="'/invoices/' + ${invoice.id} + '/void'"
+                               onclick="return confirm('Are you sure you want to void the invoice?')"
+                               th:if="!${invoice.closed} AND ${user?.hasPermission('invoice:manage')}"
+                            >
+                                Void
+                            </a>
                         </div>
                     </div>
                     <div class="flex">
                         <div class="margin-right-2x">
-                            <b>Fiscal Year</b><br/>
-                            <span th:text="${tax.fiscalYear}">FISCAL YEAR</span>
-                        </div>
-                        <div class="margin-right-2x" th:if="${tax.taxType}">
-                            <b>Type</b><br/>
-                            <span th:text="${tax.taxType.title}">TAX TYPE</span>
+                            <b>Invoice Number</b><br/>
+                            <span th:text="${invoice.number}">NUMBER</span>
                         </div>
                         <div class="margin-right-2x">
                             <b>Status</b><br/>
-                            <span th:replace="~{__components/tax :: tax-status(${tax.status.name()})}">STATUS</span>
+                            <span
+                                th:replace="~{__components/invoice :: invoice-status(${invoice.status.name})}">STATUS</span>
                         </div>
                         <div class="margin-right-2x">
-                            <b>Account</b><br/>
-                            <a class="entity-title" target="_blank" th:href="'/accounts/' + ${tax.account.id}">
+                            <b>Customer</b><br/>
+                            <a class="entity-title" target="_blank"
+                               th:href="'/accounts/' + ${invoice.customer.account.id}"
+                               th:if="${invoice.customer.account}">
                                 <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
-                                <span th:text="${tax.account.name}">ACCOUNT</span>
+                                <span th:text="${invoice.customer.name}">CUSTOMER</span>
                             </a>
+                            <div th:if="!${invoice.customer.account}" th:text="${invoice.customer.name}">CUSTOMER</div>
                         </div>
-                        <div class="margin-right-2x" th:if="${tax.assignee}">
-                            <b>Assigned To</b><br/>
-                            <span th:text="${tax.assignee.displayName}">ASSIGNEE</span>
+                        <div class="margin-right-2x">
+                            <b>Total Amount</b><br/>
+                            <span th:text="${invoice.totalAmount}">$$$</span>
+                        </div>
+                        <div class="margin-right-2x">
+                            <b>Amount Due</b><br/>
+                            <span th:text="${invoice.amountDue}">$$$</span>
                         </div>
                     </div>
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
@@ -84,7 +91,8 @@
                         </li>
                         <li class="nav-item" role="presentation" th:if="${user?.hasPermission('product')}">
                             <button aria-controls="pills-content" aria-selected="true" class="nav-link"
-                                    data-bs-target="#pills-tax-product" data-bs-toggle="pill" id="pills-tax-product-tab"
+                                    data-bs-target="#pills-invoice-product" data-bs-toggle="pill"
+                                    id="pills-invoice-product-tab"
                                     role="tab" type="button">
                                 Products
                             </button>
@@ -103,83 +111,140 @@
                     <div class="tab-content" id="tab-main-content">
                         <div aria-labelledby="pills-details-tab" class="tab-pane fade show active" id="pills-details"
                              role="tabpanel">
+
                             <table class="table" id="tab-details-content">
                                 <tr>
-                                    <td width="20%"><b>Fiscal Year</b></td>
-                                    <td th:text="${tax.fiscalYear}">FISCAL YEAR</td>
+                                    <td width="20%"><b>Invoice Number</b></td>
+                                    <td th:text="${invoice.number}">NUMBER</td>
                                 </tr>
-                                <tr th:if="${tax.taxType}">
-                                    <td><b>Type</b></td>
-                                    <td th:text="${tax.taxType?.title}">TYPE</td>
+                                <tr>
+                                    <td><b>Date</b></td>
+                                    <td th:text="${invoice.createdAtText}">CREATED</td>
+                                </tr>
+                                <tr th:if="${invoice.dueAt}">
+                                    <td><b>Due Date</b></td>
+                                    <td th:text="${invoice.dueAtText}">DUE</td>
+                                </tr>
+
+                                <tr>
+                                    <td><b>Amount Due</b></td>
+                                    <td th:text="${invoice.amountDue}">$$</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Amount Paid</b></td>
+                                    <td th:text="${invoice.amountPaid}">$$</td>
                                 </tr>
                                 <tr>
                                     <td><b>Status</b></td>
                                     <td>
-                                        <span th:replace="~{__components/tax :: tax-status(${tax.status.name()})}">STATUS</span>
+                                        <span
+                                            th:replace="~{__components/invoice :: invoice-status(${invoice.status.name()})}">STATUS</span>
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td><b>Account</b></td>
-                                    <td>
-                                        <a class="entity-title" target="_blank"
-                                           th:href="'/accounts/' + ${tax.account.id}">
-                                            <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
-                                            <span th:text="${tax.account.name}">ACCOUNT</span>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr th:if="${tax.startAt}">
-                                    <td><b>Start Date</b></td>
-                                    <td th:text="${tax.startAtText}">DUE</td>
-                                </tr>
-                                <tr th:if="${tax.dueAt}">
-                                    <td><b>Due Date</b></td>
-                                    <td th:text="${tax.dueAtText}">DUE</td>
-                                </tr>
-                                <tr th:if="${tax.accountant}">
-                                    <td><b>Accountant</b></td>
-                                    <td th:text="${tax.accountant.displayName}">ACCOUNTANT</td>
-                                </tr>
-                                <tr th:if="${tax.technician}">
-                                    <td><b>Technician</b></td>
-                                    <td th:text="${tax.technician.displayName}">TECHNICIAN</td>
-                                </tr>
-                                <tr th:if="${tax.assignee}">
-                                    <td><b>Assigned To</b></td>
-                                    <td th:text="${tax.assignee.displayName}">ASSIGNED_TO</td>
                                 </tr>
 
-                                <tr th:if="${tax.description}">
+                                <tr>
+                                    <td><b>Customer</b></td>
+                                    <td>
+                                        <a class="entity-title" target="_blank"
+                                           th:href="'/accounts/' + ${invoice.customer.account.id}"
+                                           th:if="${invoice.customer.account}">
+                                            <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
+                                            <span th:text="${invoice.customer.name}">CUSTOMER</span>
+                                        </a>
+                                        <div th:if="!${invoice.customer.account}" th:text="${invoice.customer.name}">
+                                            CUSTOMER
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr th:if="${invoice.shippingAddress}">
+                                    <td><b>Shipping Address</b></td>
+                                    <td th:utext="${invoice.shippingAddress.toHtml()}">ADDRESS</td>
+                                </tr>
+                                <tr th:if="${invoice.billingAddress}">
+                                    <td><b>Billing Address</b></td>
+                                    <td th:utext="${invoice.billingAddress.toHtml()}">ADDRESS</td>
+                                </tr>
+
+
+                                <tr th:if="${invoice.description}">
                                     <td><b>Description</b></td>
-                                    <td th:text="${tax.description}">DESCRIPTION</td>
+                                    <td th:text="${invoice.description}">DESCRIPTION</td>
                                 </tr>
                                 <tr>
                                     <td><b>Created</b></td>
                                     <td>
-                                        <span th:text="${tax.createdAtText}">DATE</span>
-                                        <span th:if="${tax.createdBy}">by</span>
-                                        <span th:if="${tax.createdBy}" th:text="${tax.createdBy.displayName}">MODIFIED BY</span>
+                                        <span th:text="${invoice.createdAtText}">DATE</span>
+                                        <span th:if="${invoice.createdBy}">by</span>
+                                        <span th:if="${invoice.createdBy}" th:text="${invoice.createdBy.displayName}">MODIFIED BY</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td><b>Modified</b></td>
                                     <td>
-                                        <span th:text="${tax.modifiedAtText}">DATE</span>
-                                        <span th:if="${tax.modifiedBy}">by</span>
-                                        <span th:if="${tax.modifiedBy}"
-                                              th:text="${tax.modifiedBy.displayName}">MODIFIED BY</span>
+                                        <span th:text="${invoice.modifiedAtText}">DATE</span>
+                                        <span th:if="${invoice.modifiedBy}">by</span>
+                                        <span th:if="${invoice.modifiedBy}"
+                                              th:text="${invoice.modifiedBy.displayName}">MODIFIED BY</span>
                                     </td>
                                 </tr>
                             </table>
                         </div>
-                        <div aria-labelledby="pills-tax-product-tab" class="tab-pane fade" id="pills-tax-product"
-                             role="tabpanel"
-                             th:data-url="'/tax-products/tab?tax-id=' + ${tax.id}"
-                             th:if="${user?.hasPermission('product')}">
+
+                        <div aria-labelledby="pills-invoice-product-tab" class="tab-pane fade"
+                             id="pills-invoice-product"
+                             role="tabpanel">
+
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Description</th>
+                                    <th>Unit Price</th>
+                                    <th>Quantity</th>
+                                    <th>Unit</th>
+                                    <th>Amount</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="invoice-item" th:each="item : ${invoice.items}">
+                                    <td>
+                                        <a target="_blank" th:href="'/products/' + ${item.product.id}"
+                                           th:text="${item.product.code}">P111</a>
+                                    </td>
+                                    <td th:text="${item.description}">DESCRIPTION</td>
+                                    <td th:text="${item.unitPrice}">$$</td>
+                                    <td th:text="${item.quantity}">222</td>
+                                    <td th:text="${item.unit?.name}">222</td>
+                                    <td class="text-right" th:text="${item.subTotal}">$$$</td>
+                                </tr>
+                                <tr class="invoice-tax" th:each="tax : ${invoice.taxes}">
+                                    <td></td>
+                                    <td colspan="4">
+                                        <span th:text="${tax.salesTax.name}">NAME</span>:
+                                        <span th:text="${tax.salesTax.rateText}">%%%</span>
+                                    </td>
+                                    <td class="text-right" th:text="${tax.amount}">$$$</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right" colspan="5"><b>Total Amount</b></td>
+                                    <td class="text-right" th:text="${invoice.totalAmount}">%%%</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right" colspan="5"><b>Amount Paid</b></td>
+                                    <td class="text-right" th:text="${invoice.amountPaid}">%%%</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right" colspan="5"><b>Amount Due</b></td>
+                                    <td class="text-right"><b
+                                        th:text="${invoice.amountDue}">%%%</b></td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
+
                         <div class="tab-pane fade" role="tabpanel"
                              th:aria-labelledby="'pills-' + ${tab.name} + '-tab'"
-                             th:data-url="${tab.toTabUrl(tax.id, module)}"
+                             th:data-url="${tab.toTabUrl(invoice.id, module)}"
                              th:each="tab : ${page.tabs.get('main')}"
                              th:id="'pills-' + ${tab.name}">
                         </div>
@@ -191,7 +256,8 @@
             <div class="widget">
                 <div class="widget-body">
                     <div th:replace="~{__components/module :: tabs('side', false)}"></div>
-                    <div th:replace="~{__components/module :: tabs-content('side', false, ${tax}, ${module})}"></div>
+                    <div
+                        th:replace="~{__components/module :: tabs-content('side', false, ${invoice}, ${module})}"></div>
                 </div>
             </div>
         </div>

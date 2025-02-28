@@ -191,4 +191,11 @@ class TaxService(
         }
         dao.save(tax)
     }
+
+    @Transactional
+    fun setInvoice(id: Long, invoiceId: Long?, tenantId: Long) {
+        val tax = get(id, tenantId)
+        tax.invoiceId = invoiceId
+        dao.save(tax)
+    }
 }

@@ -1,44 +1,30 @@
 package com.wutsi.koki.portal.refdata.service
 
 import com.wutsi.koki.portal.refdata.mapper.RefDataMapper
-import com.wutsi.koki.portal.refdata.model.JuridictionModel
+import com.wutsi.koki.portal.refdata.model.SalesTaxModel
 import com.wutsi.koki.sdk.KokiRefData
 import org.springframework.stereotype.Service
 
 @Service
-class JuridictionService(
+class SalesTaxService(
     private val koki: KokiRefData,
     private val mapper: RefDataMapper,
-    private val locationService: LocationService,
 ) {
-    fun juridictions(
+    fun salesTaxes(
         ids: List<Long> = emptyList(),
-        stateId: Long? = null,
-        country: String? = null,
+        juridictionIds: List<Long> = emptyList(),
+        active: Boolean? = null,
         limit: Int = 20,
         offset: Int = 0
-    ): List<JuridictionModel> {
-        val juridictions = koki.juridictions(
+    ): List<SalesTaxModel> {
+        val salesTaxes = koki.salesTaxes(
             ids = ids,
-            stateId = stateId,
-            country = country,
+            juridictionIds = juridictionIds,
+            active = active,
             limit = limit,
             offset = offset,
-        ).juridictions
+        ).salesTaxes
 
-        val stateIds = juridictions.mapNotNull { juridiction -> juridiction.stateId }.toSet()
-        val states = if (stateIds.isEmpty()) {
-            emptyMap()
-        } else {
-            locationService.locations(
-                ids = stateIds.toList(),
-                limit = stateIds.size
-            ).associateBy { juridiction -> juridiction.id }
-        }
-
-        return juridictions.map { juridiction -> mapper.toJuridictionModel(juridiction, states) }
-            .sortedBy { juridiction ->
-                juridiction.country + " - " + (juridiction.state?.let { juridiction.name } ?: "")
-            }
+        return salesTaxes.map { salesTax -> mapper.toSalesTaxModel(salesTax) }
     }
 }

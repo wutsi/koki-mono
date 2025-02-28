@@ -10,6 +10,7 @@ CREATE TABLE T_TAX(
   accountant_fk           BIGINT,
   technician_fk           BIGINT,
   assignee_fk             BIGINT,
+  invoice_fk              BIGINT,
 
   status                  INT NOT NULL DEFAULT 0,
   fiscal_year             INT,
@@ -32,6 +33,7 @@ CREATE INDEX I_TAX_account ON T_TAX(account_fk);
 CREATE INDEX I_TAX_assigned ON T_TAX(assignee_fk);
 CREATE INDEX I_TAX_accountant ON T_TAX(accountant_fk);
 CREATE INDEX I_TAX_technician ON T_TAX(technician_fk);
+CREATE INDEX I_TAX_invoice ON T_TAX(invoice_fk);
 
 
 

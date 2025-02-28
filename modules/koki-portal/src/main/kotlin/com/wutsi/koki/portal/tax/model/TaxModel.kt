@@ -8,6 +8,7 @@ import java.util.Date
 
 data class TaxModel(
     val id: Long = -1,
+    val invoiceId: Long? = null,
     val fiscalYear: Int = -1,
     val status: TaxStatus = TaxStatus.NEW,
     val description: String? = null,

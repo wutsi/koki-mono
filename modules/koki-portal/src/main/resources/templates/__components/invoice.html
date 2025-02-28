@@ -23,25 +23,26 @@
         <a th:href="'/invoices/' + ${invoice.id}" th:text="${invoice.number}">NUMBER</a>
     </td>
     <td th:text="${invoice.createdAtText}">DATE</td>
-    <td th:text="${invoice.customer.name}">
+    <td>
         <a target="_blank"
-           th:href="'/accounts/' + ${invoice.customer.accountId}"
-           th:if="${invoice.customer.accountId}"
+           th:href="'/accounts/' + ${invoice.customer.account.id}"
+           th:if="${invoice.customer.account}"
            th:text="${invoice.customer.name}">
             CUSTOMER
         </a>
-        <span th:if="!${invoice.customer.accountId}" th:text="${${invoice.customer.name}}">CUSTOMER</span>
+        <span th:if="!${invoice.customer.account}" th:text="${invoice.customer.name}">CUSTOMER</span>
     </td>
     <td>
         <span th:replace="~{__components/invoice :: invoice-status(${invoice.status.name})}"></span>
     </td>
     <td th:text="${invoice.totalAmount}">AMOUNT</td>
-    <td class="toolbar" th:if="!${smallView}">
+    <td class="toolbar">
+        <a class="btn-view" th:href="'/invoices/' + ${invoice.id}">View</a>
     </td>
 </tr>
 
-<tr id="invoice-load-more" th:fragment="load-more(moreUrl, showAccount)" th:if="${moreUrl}">
-    <td class="text-center" th:colspan="${showAccount} ? 9 : 8">
+<tr id="invoice-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
+    <td class="text-center" colspan="6">
         <a href="javascript: koki_load_more('invoice-load-more')" th:data-url="${moreUrl}">Load more...</a>
     </td>
 </tr>
@@ -52,16 +53,16 @@
           th:text="#{'invoice-status.' + ${status}}">NEW</span>
 
     <span class="badge text-bg-success"
-          th:if="${status == 'COMPLETED'}"
-          th:text="#{'invoice-status.' + ${status}}">COMPLETED</span>
-
-    <span class="badge text-bg-danger"
-          th:if="${status == 'CANCELLED'}"
-          th:text="#{'invoice-status.' + ${status}}">CANCELLED</span>
+          th:if="${status == 'PAID'}"
+          th:text="#{'invoice-status.' + ${status}}">PAID</span>
 
     <span class="badge text-bg-info"
-          th:if="${status != 'OPENED'}"
-          th:text="#{'invoice-status.' + ${status}}">OPEEND</span>
+          th:if="${status == 'OPENED'}"
+          th:text="#{'invoice-status.' + ${status}}">OPENED</span>
+
+    <span class="badge text-bg-danger"
+          th:if="${status == 'VOIDED'}"
+          th:text="#{'invoice-status.' + ${status}}">CANCELLED</span>
 </div>
 
 

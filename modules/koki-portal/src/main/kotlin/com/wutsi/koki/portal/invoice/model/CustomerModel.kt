@@ -1,4 +1,11 @@
 package com.wutsi.koki.portal.invoice.model
 
-class CustomerModel {
-}
+import com.wutsi.koki.portal.account.model.AccountModel
+
+data class CustomerModel(
+    val account: AccountModel? = null,
+    val name: String = "",
+    val email: String = "",
+    val phone: String? = null,
+    val mobile: String? = null,
+)

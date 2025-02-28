@@ -24,3 +24,6 @@ INSERT INTO T_BUSINESS_JURIDICTION(business_fk, juridiction_fk)
            (1, 1001);
 
 INSERT INTO T_INVOICE_SEQUENCE(tenant_fk, current) VALUES(1, 10943);
+
+INSERT INTO T_TAX(id, tenant_fk, account_fk, fiscal_year)
+    VALUES (111, 1, 100, 2024);

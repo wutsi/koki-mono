@@ -5,11 +5,13 @@ import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.CategoryModel
 import com.wutsi.koki.portal.refdata.model.JuridictionModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
+import com.wutsi.koki.portal.refdata.model.SalesTaxModel
 import com.wutsi.koki.portal.refdata.model.UnitModel
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.Category
 import com.wutsi.koki.refdata.dto.Juridiction
 import com.wutsi.koki.refdata.dto.Location
+import com.wutsi.koki.refdata.dto.SalesTax
 import com.wutsi.koki.refdata.dto.Unit
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
@@ -69,6 +71,17 @@ class RefDataMapper : TenantAwareMapper() {
             countryName = entity.country?.let { country ->
                 Locale(LocaleContextHolder.getLocale().language, country).getDisplayCountry()
             }
+        )
+    }
+
+    fun toSalesTaxModel(entity: SalesTax): SalesTaxModel {
+        return SalesTaxModel(
+            id = entity.id,
+            rate = entity.rate,
+            priority = entity.priority,
+            name = entity.name,
+            juridictionId = entity.juridictionId ?: -1L,
+            active = entity.active,
         )
     }
 }

@@ -13,6 +13,7 @@ import com.wutsi.koki.sdk.KokiContacts
 import com.wutsi.koki.sdk.KokiEmails
 import com.wutsi.koki.sdk.KokiEmployees
 import com.wutsi.koki.sdk.KokiFiles
+import com.wutsi.koki.sdk.KokiInvoices
 import com.wutsi.koki.sdk.KokiModules
 import com.wutsi.koki.sdk.KokiNotes
 import com.wutsi.koki.sdk.KokiProducts
@@ -87,6 +88,11 @@ class KokiSDKConfiguration(
     @Bean
     fun kokiFile(): KokiFiles {
         return KokiFiles(urlBuilder(), rest(), tenantProvider, accessTokenProvider)
+    }
+
+    @Bean
+    fun kokiInvoices(): KokiInvoices {
+        return KokiInvoices(urlBuilder(), rest())
     }
 
     @Bean

@@ -37,12 +37,10 @@ object PageName {
     const val FILE_SETTINGS_STORAGE = "page.settings.file.storage"
     const val FILE_SETTINGS_STORAGE_EDIT = "page.settings.file.storage.edit"
 
-    const val FORM = "page.form"
-    const val FORM_SUBMITTED = "page.form.submitted"
-
     const val HOME = "page.home"
 
-    const val LOG = "page.log"
+    const val INVOICE = "page.invoice"
+    const val INVOICE_LIST = "page.invoice.list"
 
     const val LOGIN = "page.login"
 
@@ -55,7 +53,6 @@ object PageName {
     const val TENANT_SETTINGS_ABOUT = "page.settings.tenant.about"
     const val TENANT_SETTINGS_BUSINESS = "page.settings.tenant.business"
     const val TENANT_SETTINGS_BUSINESS_EDIT = "page.settings.tenant.business.edit"
-    const val TENANT_SETTINGS_TYPE = "page.settings.tenant.type"
     const val TENANT_SETTINGS_TYPE_IMPORT = "page.settings.tenant.type.import"
     const val TENANT_SETTINGS_TYPE_LIST = "page.settings.tenant.type.list"
 
@@ -69,54 +66,11 @@ object PageName {
     const val SECURITY_SETTINGS_USER_EDIT = "page.settings.security.user.edit"
     const val SECURITY_SETTINGS_USER_LIST = "page.settings.security.user.list"
 
-    const val SETTINGS_MESSAGE = "page.settings.message"
-    const val SETTINGS_MESSAGE_CREATE = "page.settings.message.create"
-    const val SETTINGS_MESSAGE_DELETED = "page.settings.message.deleted"
-    const val SETTINGS_MESSAGE_EDIT = "page.settings.message.edit"
-    const val SETTINGS_MESSAGE_LIST = "page.settings.message.list"
-    const val SETTINGS_MESSAGE_SAVED = "page.settings.message.saved"
-
     const val SETTINGS = "page.settings"
-    const val SETTINGS_FORM = "page.settings.form"
-    const val SETTINGS_FORM_CREATE = "page.settings.form.create"
-    const val SETTINGS_FORM_DELETED = "page.settings.form.deleted"
-    const val SETTINGS_FORM_EDIT = "page.settings.form.edit"
-    const val SETTINGS_FORM_LIST = "page.settings.form.list"
-    const val SETTINGS_FORM_SAVED = "page.settings.form.saved"
-    const val SETTINGS_FORM_SUBMISSION = "page.settings.form.submission"
-    const val SETTINGS_SERVICE = "page.settings.service"
-    const val SETTINGS_SERVICE_CREATE = "page.settings.service.create"
-    const val SETTINGS_SERVICE_DELETED = "page.settings.service.deleted"
-    const val SETTINGS_SERVICE_EDIT = "page.settings.service.edit"
-    const val SETTINGS_SERVICE_LIST = "page.settings.service.list"
-    const val SETTINGS_SERVICE_SAVED = "page.settings.service.saved"
-    const val SETTINGS_SCRIPT = "page.settings.script"
-    const val SETTINGS_SCRIPT_CREATE = "page.settings.script.create"
-    const val SETTINGS_SCRIPT_RUN = "page.settings.script.run"
-    const val SETTINGS_SCRIPT_DELETED = "page.settings.script.deleted"
-    const val SETTINGS_SCRIPT_EDIT = "page.settings.script.edit"
-    const val SETTINGS_SCRIPT_LIST = "page.settings.script.list"
-    const val SETTINGS_SCRIPT_SAVED = "page.settings.script.saved"
-    const val SETTINGS_WORKFLOW = "page.settings.workflow"
-    const val SETTINGS_WORKFLOW_ACTIVITY = "page.settings.workflow.activity"
-    const val SETTINGS_WORKFLOW_CREATE = "page.settings.workflow.create"
-    const val SETTINGS_WORKFLOW_EDIT = "page.settings.workflow.edit"
-    const val SETTINGS_WORKFLOW_LIST = "page.settings.workflow.list"
-    const val SETTINGS_WORKFLOW_SAVED = "page.settings.workflow.saved"
-    const val SETTINGS_WORKFLOW_START = "page.settings.workflow.start"
-    const val SETTINGS_WORKFLOW_STARTED = "page.settings.workflow.started"
-
-    const val TASK = "page.task"
-    const val TASK_COMPLETED = "page.task.completed"
 
     const val TAX = "page.tax"
     const val TAX_LIST = "page.tax.list"
     const val TAX_EDIT = "page.tax.edit"
     const val TAX_CREATE = "page.tax.create"
     const val TAX_STATUS = "page.tax.status"
-
-    const val WORKFLOW = "page.workflow"
-    const val WORKFLOW_ACTIVITY = "page.activity"
-    const val WORKFLOW_ACTIVITY_COMPLETED = "page.activity.completed"
-    const val WORKFLOW_LIST = "page.workflow.list"
 }

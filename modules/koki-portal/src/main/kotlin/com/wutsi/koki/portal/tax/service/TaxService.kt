@@ -31,7 +31,7 @@ class TaxService(
         val taxType = tax.taxTypeId?.let { id -> typeService.type(id) }
 
         val account = if (fullGraph) {
-            accountService.account(tax.accountId, fullGraph = false)
+            accountService.account(tax.accountId)
         } else {
             AccountModel(tax.accountId)
         }

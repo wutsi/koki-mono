@@ -12,7 +12,7 @@ class SalesTaxMapper {
             name = entity.name,
             active = entity.active,
             rate = entity.rate,
-            juridictionId = entity.juridiction.id,
+            juridictionId = entity.juridiction.id!!,
             priority = entity.priority,
         )
     }

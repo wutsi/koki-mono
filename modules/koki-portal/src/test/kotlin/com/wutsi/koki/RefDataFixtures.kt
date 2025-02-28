@@ -5,6 +5,7 @@ import com.wutsi.koki.refdata.dto.CategoryType
 import com.wutsi.koki.refdata.dto.Juridiction
 import com.wutsi.koki.refdata.dto.Location
 import com.wutsi.koki.refdata.dto.LocationType
+import com.wutsi.koki.refdata.dto.SalesTax
 import com.wutsi.koki.refdata.dto.Unit
 
 object RefDataFixtures {
@@ -49,5 +50,13 @@ object RefDataFixtures {
         Juridiction(id = 101, stateId = locations[0].id, country = "CA"),
         Juridiction(id = 102, stateId = locations[1].id, country = "CA"),
         Juridiction(id = 237, stateId = null, country = "CM"),
+    )
+
+    // Sales Taxes
+    val salesTaxes = listOf(
+        SalesTax(id = 10000, name = "GST", rate = 5.0, juridictionId = 100),
+        SalesTax(id = 10100, name = "GST", rate = 5.0, juridictionId = 101),
+        SalesTax(id = 10101, name = "PST", rate = 9.975, juridictionId = 101),
+        SalesTax(id = 10200, name = "HST", rate = 13.0, juridictionId = 102),
     )
 }

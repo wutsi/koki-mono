@@ -104,6 +104,16 @@ object ModuleFixtures {
             settingsUrl = null,
             jsUrl = "/js/products.js",
         ),
+
+        Module(
+            id = 200,
+            name = "invoice",
+            title = "Invoice",
+            homeUrl = "/invoices",
+            tabUrl = "/invoices/tab",
+            settingsUrl = "/settings/invoices",
+            jsUrl = "/js/invoices.js",
+        ),
     )
 
     val permissions = listOf(
@@ -145,5 +155,10 @@ object ModuleFixtures {
         Permission(id = 1902, moduleId = 190, name = "product:admin", description = "Configure products"),
         Permission(id = 1903, moduleId = 190, name = "product:manage", description = "Manage products"),
         Permission(id = 1904, moduleId = 190, name = "product:delete", description = "Delete products"),
+
+        Permission(id = 2001, moduleId = 200, name = "invoice", description = "Access invoices"),
+        Permission(id = 2002, moduleId = 200, name = "invoice:admin", description = "Configure invoices"),
+        Permission(id = 2003, moduleId = 200, name = "invoice:void", description = "Void invoices"),
+        Permission(id = 2004, moduleId = 200, name = "invoice:manage", description = "Manage invoices"),
     )
 }

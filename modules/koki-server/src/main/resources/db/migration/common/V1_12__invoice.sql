@@ -92,7 +92,19 @@ CREATE TABLE T_INVOICE_TAX(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
+CREATE TABLE T_INVOICE_LOG(
+  id                      BIGINT NOT NULL AUTO_INCREMENT,
 
+  tenant_fk               BIGINT NOT NULL,
+  invoice_fk              BIGINT NOT NULL REFERENCES T_INVOICE(id),
+  created_by_fk           BIGINT,
+
+  status                  INT NOT NULL DEFAULT 0,
+  comment                 TEXT,
+  created_at              DATETIME NOT NULL DEFAULT now(),
+
+  PRIMARY KEY(id)
+) ENGINE = InnoDB;
 
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url)
@@ -101,5 +113,6 @@ INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_u
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
     VALUES (1900, 190, 'invoice',        'View invoices'),
            (1901, 190, 'invoice:manage', 'Add/Edit invoice'),
+           (1902, 190, 'invoice:void',   'Void invoice'),
            (1903, 190, 'invoice:admin',  'Configure invoice module');
 

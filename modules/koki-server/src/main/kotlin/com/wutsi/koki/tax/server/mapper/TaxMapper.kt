@@ -11,6 +11,7 @@ class TaxMapper {
         return Tax(
             id = entity.id!!,
             taxTypeId = entity.taxTypeId,
+            invoiceId = entity.invoiceId,
             fiscalYear = entity.fiscalYear,
             status = entity.status,
             createdAt = entity.createdAt,
@@ -31,6 +32,7 @@ class TaxMapper {
         return TaxSummary(
             id = entity.id!!,
             taxTypeId = entity.taxTypeId,
+            invoiceId = entity.invoiceId,
             fiscalYear = entity.fiscalYear,
             status = entity.status,
             accountId = entity.accountId,
