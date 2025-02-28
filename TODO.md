@@ -82,9 +82,10 @@
 - [x] Invoice API
 - [x] Invoice UI
 - [] Generate Invoice PDF
-- [] Send invoice by email
+- [] Send invoice by email when approved
+- [] Send invoice by email when paid
 - [] Setting: Configure initial invoice number
-- [] Setting: Select invoice PDF layout
+- [] Setting: Configure email content
 - [] Payment API
 - [] Capture online payments:
     - [] Paypal

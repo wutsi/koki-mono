@@ -39,10 +39,6 @@
                                         th:value="${ss.name()}">STATUS
                                 </option>
                             </select>
-                            <!--
-                                                        <a class="btn-create btn btn-primary btn-sm" href="/invoices/create"
-                                                           th:if="${user?.hasPermission('invoice:manage')}">Create New Invoice</a>
-                            -->
                         </div>
                     </div>
 
@@ -53,7 +49,8 @@
                             <th>Date</th>
                             <th>Customer</th>
                             <th>Status</th>
-                            <th>Amount</th>
+                            <th>Total Amount</th>
+                            <th>Amount Due</th>
                             <td></td>
                         </tr>
                         </thead>

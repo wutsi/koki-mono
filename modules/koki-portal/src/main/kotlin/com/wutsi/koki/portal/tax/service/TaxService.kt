@@ -71,6 +71,7 @@ class TaxService(
         dueAtTo: LocalDate? = null,
         limit: Int = 20,
         offset: Int = 0,
+        fullGraph: Boolean = true,
     ): List<TaxModel> {
         val taxes = koki.taxes(
             ids = ids,
@@ -91,11 +92,15 @@ class TaxService(
 
         // Account
         val accountIds = taxes.map { tax -> tax.accountId }.toSet()
-        val accounts = accountService.accounts(
-            ids = accountIds.toList(),
-            limit = accountIds.size,
-            fullGraph = false,
-        ).associateBy { accountant -> accountant.id }
+        val accounts = if (accountIds.isEmpty() || !fullGraph) {
+            emptyMap()
+        } else {
+            accountService.accounts(
+                ids = accountIds.toList(),
+                limit = accountIds.size,
+                fullGraph = false,
+            ).associateBy { accountant -> accountant.id }
+        }
 
         // Types
         val taxTypeIds = taxes.mapNotNull { tax -> tax.taxTypeId }.toSet()
@@ -110,7 +115,7 @@ class TaxService(
         }
             .filterNotNull()
             .toSet()
-        val users = if (userIds.isEmpty()) {
+        val users = if (userIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
             userService.users(
