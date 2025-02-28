@@ -297,6 +297,7 @@ class InvoiceService(
         invoice.subTotalAmount = invoice.items.sumOf { item -> item.subTotal }
         invoice.totalTaxAmount = invoice.items.sumOf { item -> item.taxes.sumOf { tax -> tax.amount } }
         invoice.totalAmount = invoice.subTotalAmount + invoice.totalTaxAmount - invoice.totalDiscountAmount
+        invoice.amountDue = invoice.totalAmount
         return dao.save(invoice)
     }
 

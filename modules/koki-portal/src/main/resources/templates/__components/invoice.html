@@ -35,14 +35,15 @@
     <td>
         <span th:replace="~{__components/invoice :: invoice-status(${invoice.status.name})}"></span>
     </td>
-    <td th:text="${invoice.totalAmount}">AMOUNT</td>
+    <td th:text="${invoice.totalAmount}">$$$</td>
+    <td th:text="${invoice.amountDue}">$$$</td>
     <td class="toolbar">
         <a class="btn-view" th:href="'/invoices/' + ${invoice.id}">View</a>
     </td>
 </tr>
 
 <tr id="invoice-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
-    <td class="text-center" colspan="6">
+    <td class="text-center" colspan="7">
         <a href="javascript: koki_load_more('invoice-load-more')" th:data-url="${moreUrl}">Load more...</a>
     </td>
 </tr>

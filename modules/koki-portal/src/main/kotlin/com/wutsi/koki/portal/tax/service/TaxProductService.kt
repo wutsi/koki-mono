@@ -41,7 +41,6 @@ class TaxProductService(
         val products = productService.products(
             ids = productIds.toList(),
             limit = productIds.size,
-            fullGraph = false,
         ).associateBy { product -> product.id }
 
         return taxProducts.map { taxProduct ->

@@ -13,6 +13,7 @@ import com.wutsi.koki.portal.refdata.service.SalesTaxService
 import com.wutsi.koki.portal.refdata.service.UnitService
 import com.wutsi.koki.portal.tax.model.TaxModel
 import com.wutsi.koki.portal.tax.model.TaxProductModel
+import com.wutsi.koki.portal.tax.service.TaxService
 import com.wutsi.koki.portal.tenant.service.CurrentTenantHolder
 import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.sdk.KokiInvoices
@@ -30,6 +31,7 @@ class InvoiceService(
     private val productService: ProductService,
     private val salesTaxService: SalesTaxService,
     private val currentTenant: CurrentTenantHolder,
+    private val taxService: TaxService,
 ) {
     fun createInvoice(tax: TaxModel, taxProducts: List<TaxProductModel>): Long {
         return koki.create(
@@ -76,6 +78,13 @@ class InvoiceService(
             null
         } else {
             accountService.account(invoice.customer.accountId!!, false)
+        }
+
+        // Taxes
+        val tax = if (!fullGraph) {
+            invoice.taxId?.let { id -> TaxModel(id = id) }
+        } else {
+            invoice.taxId?.let { id -> taxService.tax(id, false) }
         }
 
         // Users
@@ -145,6 +154,7 @@ class InvoiceService(
 
         return mapper.toInvoiceModel(
             entity = invoice,
+            taxes = tax?.let { mapOf(tax.id to tax) } ?: emptyMap(),
             accounts = account?.let { mapOf(account.id to account) } ?: emptyMap(),
             locations = locations,
             units = units,
@@ -176,6 +186,17 @@ class InvoiceService(
             offset = offset,
         ).invoices
 
+        val taxIds = invoices.mapNotNull { invoice -> invoice.taxId }.distinct()
+        val taxes = if (taxIds.isEmpty() || !fullGraph) {
+            emptyMap()
+        } else {
+            taxService.taxes(
+                ids = taxIds,
+                limit = taxIds.size,
+                fullGraph = false,
+            ).associateBy { invoice -> invoice.id }
+        }
+
         val accountIds = invoices.mapNotNull { invoice -> invoice.customer.accountId }.distinct()
         val accounts = if (accountIds.isEmpty() || !fullGraph) {
             emptyMap()
@@ -201,6 +222,7 @@ class InvoiceService(
         return invoices.map { invoice ->
             mapper.toInvoiceModel(
                 entity = invoice,
+                taxes = taxes,
                 users = users,
                 accounts = accounts,
             )
