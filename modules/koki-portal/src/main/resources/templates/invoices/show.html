@@ -26,17 +26,17 @@
                         </h1>
                         <div>
                             <a class="btn-approve btn btn-light btn-sm"
-                               th:href="'/invoices/' + ${invoice.id} + '/approve'"
                                onclick="return confirm('Are you sure you want to approve the invoice?')"
+                               th:href="'/invoices/' + ${invoice.id} + '/approve'"
                                th:if="${invoice.draft} AND ${user?.hasPermission('invoice:manage')}"
                             >
                                 Approve
                             </a>
 
                             <a class="btn-void btn btn-danger btn-sm"
-                               th:href="'/invoices/' + ${invoice.id} + '/void'"
                                onclick="return confirm('Are you sure you want to void the invoice?')"
-                               th:if="!${invoice.closed} AND ${user?.hasPermission('invoice:manage')}"
+                               th:href="'/invoices/' + ${invoice.id} + '/void'"
+                               th:if="!${invoice.closed} AND ${user?.hasPermission('invoice:void')}"
                             >
                                 Void
                             </a>
