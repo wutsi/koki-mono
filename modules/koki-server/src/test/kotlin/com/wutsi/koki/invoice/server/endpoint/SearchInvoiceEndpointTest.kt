@@ -55,7 +55,7 @@ class SearchInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
     fun `by status`() {
         val response =
-            rest.getForEntity("/v1/invoices?status=OPENED&status=CANCELLED", SearchInvoiceResponse::class.java)
+            rest.getForEntity("/v1/invoices?status=OPENED&status=VOIDED", SearchInvoiceResponse::class.java)
 
         val invoices = response.body!!.invoices
         assertEquals(2, invoices.size)

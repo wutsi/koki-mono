@@ -103,7 +103,18 @@ class ProductService(
                 limit = categoryIds.size
             ).associateBy { category -> category.id }
         }
-        return products.map { product -> mapper.toProductModel(product, users, categories) }
+
+        val unitIds = products.map { product -> product.serviceDetails?.unitId }
+            .filterNotNull()
+            .distinct()
+        val units = if (unitIds.isEmpty() || !fullGraph) {
+            emptyMap()
+        } else {
+            unitService.units(unitIds)
+                .associateBy { unit -> unit.id }
+        }
+
+        return products.map { product -> mapper.toProductModel(product, units, users, categories) }
     }
 
     fun create(form: ProductForm): Long {

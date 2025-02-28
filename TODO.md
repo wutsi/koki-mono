@@ -80,7 +80,7 @@
 ## Invoicing
 
 - [x] Invoice API
-- [] Invoice UI
+- [x] Invoice UI
 - [] Generate Invoice PDF
 - [] Send invoice by email
 - [] Setting: Configure initial invoice number
@@ -91,6 +91,8 @@
     - [] Stripe
     - [] Flutterwave
 - [] Capture payments manually: Cash, Check etc...
+- [] Create new invoice
+- [] Add/Remove products from draft invoice
 
 ## Module
 
@@ -132,7 +134,7 @@
 
 ## Taxes
 
-- [] Create Invoices
+- [x] Create Invoices
 - [] Settings: Setup email notification
 - [] Taxes KPI
     - [] Time spent by Tax report

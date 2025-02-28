@@ -10,6 +10,7 @@ import com.wutsi.koki.ContactFixtures
 import com.wutsi.koki.EmailFixtures
 import com.wutsi.koki.EmployeeFixtures
 import com.wutsi.koki.FileFixtures
+import com.wutsi.koki.InvoiceFixtures
 import com.wutsi.koki.ModuleFixtures
 import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.ProductFixtures
@@ -43,6 +44,10 @@ import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.file.dto.SearchFileResponse
+import com.wutsi.koki.invoice.dto.CreateInvoiceRequest
+import com.wutsi.koki.invoice.dto.CreateInvoiceResponse
+import com.wutsi.koki.invoice.dto.GetInvoiceResponse
+import com.wutsi.koki.invoice.dto.SearchInvoiceResponse
 import com.wutsi.koki.module.dto.SearchModuleResponse
 import com.wutsi.koki.module.dto.SearchPermissionResponse
 import com.wutsi.koki.note.dto.CreateNoteRequest
@@ -61,6 +66,7 @@ import com.wutsi.koki.product.dto.SearchProductResponse
 import com.wutsi.koki.refdata.dto.SearchCategoryResponse
 import com.wutsi.koki.refdata.dto.SearchJuridictionResponse
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
+import com.wutsi.koki.refdata.dto.SearchSalesTaxResponse
 import com.wutsi.koki.refdata.dto.SearchUnitResponse
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
@@ -206,6 +212,7 @@ abstract class AbstractPageControllerTest {
         setupEmployeeModule()
         setupProductModule()
         setupTaxModule()
+        setupInvoiceModule()
     }
 
     protected fun setupFileUploads() {
@@ -623,6 +630,18 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 eq(SearchJuridictionResponse::class.java)
             )
+
+        // Sales Tax
+        doReturn(
+            ResponseEntity(
+                SearchSalesTaxResponse(RefDataFixtures.salesTaxes),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchSalesTaxResponse::class.java)
+            )
     }
 
     private fun setupProductModule() {
@@ -839,6 +858,43 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any<CreateTaxProductRequest>(),
                 eq(CreateTaxProductResponse::class.java)
+            )
+    }
+
+    fun setupInvoiceModule() {
+        // Invoice
+        doReturn(
+            ResponseEntity(
+                SearchInvoiceResponse(InvoiceFixtures.invoices),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchInvoiceResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetInvoiceResponse(InvoiceFixtures.invoice),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetInvoiceResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreateInvoiceResponse(3333L),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateInvoiceRequest>(),
+                eq(CreateInvoiceResponse::class.java)
             )
     }
 

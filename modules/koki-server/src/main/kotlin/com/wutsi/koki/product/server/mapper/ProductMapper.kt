@@ -4,6 +4,7 @@ import com.wutsi.koki.product.dto.Product
 import com.wutsi.koki.product.dto.ProductSummary
 import com.wutsi.koki.product.dto.ServiceDetails
 import com.wutsi.koki.product.server.domain.ProductEntity
+import com.wutsi.koki.product.server.domain.ServiceDetailsData
 import org.springframework.stereotype.Service
 
 @Service
@@ -20,12 +21,7 @@ class ProductMapper {
             createdById = entity.createdById,
             modifiedAt = entity.modifiedAt,
             modifiedById = entity.modifiedById,
-            serviceDetails = entity.serviceDetails?.let { details ->
-                ServiceDetails(
-                    unitId = details.unitId,
-                    quantity = details.quantity,
-                )
-            })
+            serviceDetails = entity.serviceDetails?.let { details -> toServiceDetails(details) })
     }
 
     fun toProductSummary(entity: ProductEntity): ProductSummary {
@@ -40,6 +36,14 @@ class ProductMapper {
             createdById = entity.createdById,
             modifiedAt = entity.modifiedAt,
             modifiedById = entity.modifiedById,
+            serviceDetails = entity.serviceDetails?.let { details -> toServiceDetails(details) },
+        )
+    }
+
+    fun toServiceDetails(details: ServiceDetailsData): ServiceDetails {
+        return ServiceDetails(
+            unitId = details.unitId,
+            quantity = details.quantity,
         )
     }
 }

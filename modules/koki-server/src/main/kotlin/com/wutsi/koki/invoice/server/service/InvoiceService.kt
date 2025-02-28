@@ -2,15 +2,19 @@ package com.wutsi.koki.invoice.server.service
 
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.BadRequestException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.invoice.dto.CreateInvoiceRequest
 import com.wutsi.koki.invoice.dto.InvoiceStatus
+import com.wutsi.koki.invoice.dto.UpdateInvoiceStatusRequest
 import com.wutsi.koki.invoice.server.dao.InvoiceItemRepository
+import com.wutsi.koki.invoice.server.dao.InvoiceLogRepository
 import com.wutsi.koki.invoice.server.dao.InvoiceRepository
 import com.wutsi.koki.invoice.server.dao.InvoiceSequenceRepository
 import com.wutsi.koki.invoice.server.dao.InvoiceTaxRepository
 import com.wutsi.koki.invoice.server.domain.InvoiceEntity
 import com.wutsi.koki.invoice.server.domain.InvoiceItemEntity
+import com.wutsi.koki.invoice.server.domain.InvoiceLogEntity
 import com.wutsi.koki.invoice.server.domain.InvoiceSequenceEntity
 import com.wutsi.koki.invoice.server.domain.InvoiceTaxEntity
 import com.wutsi.koki.refdata.dto.LocationType
@@ -19,6 +23,7 @@ import com.wutsi.koki.refdata.server.service.JuridictionService
 import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.refdata.server.service.SalesTaxService
 import com.wutsi.koki.security.server.service.SecurityService
+import com.wutsi.koki.tax.server.service.TaxService
 import com.wutsi.koki.tenant.server.domain.BusinessEntity
 import com.wutsi.koki.tenant.server.service.BusinessService
 import jakarta.persistence.EntityManager
@@ -32,11 +37,13 @@ class InvoiceService(
     private val itemDao: InvoiceItemRepository,
     private val taxDao: InvoiceTaxRepository,
     private val seqDao: InvoiceSequenceRepository,
+    private val logDao: InvoiceLogRepository,
     private val securityService: SecurityService,
     private val locationService: LocationService,
     private val businessService: BusinessService,
     private val juridictionService: JuridictionService,
     private val salesTaxService: SalesTaxService,
+    private val taxService: TaxService,
     private val em: EntityManager,
 ) {
     fun get(id: Long, tenantId: Long): InvoiceEntity {
@@ -109,10 +116,64 @@ class InvoiceService(
     }
 
     @Transactional
+    fun status(id: Long, request: UpdateInvoiceStatusRequest, tenantId: Long) {
+        val invoice = get(id, tenantId)
+
+        // Never change the status of closed invoice
+        if (invoice.status == InvoiceStatus.VOIDED || invoice.status == InvoiceStatus.PAID) {
+            throw BadRequestException(
+                Error(
+                    code = ErrorCode.INVOICE_BAD_STATUS,
+                    data = mapOf(
+                        "invoiceStatus" to invoice.status,
+                        "requestStatus" to request.status,
+                    )
+                )
+            )
+        }
+
+        // Update the invoice
+        if (request.status == InvoiceStatus.OPENED && invoice.status == InvoiceStatus.DRAFT) {
+            invoice.status = request.status
+        } else if (request.status == InvoiceStatus.VOIDED && (invoice.status == InvoiceStatus.OPENED || invoice.status == InvoiceStatus.DRAFT)) {
+            invoice.status = request.status
+        } else if (request.status == InvoiceStatus.PAID && invoice.status == InvoiceStatus.OPENED && invoice.amountDue <= 0) {
+            invoice.status = request.status
+        } else {
+            throw BadRequestException(
+                Error(
+                    code = ErrorCode.INVOICE_BAD_STATUS,
+                    data = mapOf(
+                        "invoiceStatus" to invoice.status,
+                        "requestStatus" to request.status,
+                        "amountDue" to invoice.amountDue,
+                    )
+                )
+            )
+        }
+        invoice.modifiedById = securityService.getCurrentUserIdOrNull()
+        invoice.modifiedAt = Date()
+        dao.save(invoice)
+
+        // Reset invoice
+        invoice.taxId?.let { id ->
+            taxService.setInvoice(id, null, invoice.tenantId)
+        }
+
+        // Log
+        recordLog(invoice, request.status, request.comment)
+    }
+
+    @Transactional
     fun create(request: CreateInvoiceRequest, tenantId: Long): InvoiceEntity {
         val invoice = createInvoice(request, tenantId)
         addItems(request, invoice)
         applyTaxes(invoice)
+        recordLog(invoice, invoice.status, null)
+
+        request.taxId?.let { id ->
+            taxService.setInvoice(id, invoice.id, invoice.tenantId)
+        }
         return computeTotals(invoice)
     }
 
@@ -249,5 +310,17 @@ class InvoiceService(
             seqDao.save(seq)
             return seq.current
         }
+    }
+
+    private fun recordLog(invoice: InvoiceEntity, status: InvoiceStatus, comment: String?): InvoiceLogEntity {
+        return logDao.save(
+            InvoiceLogEntity(
+                invoice = invoice,
+                status = status,
+                comment = comment,
+                createdById = securityService.getCurrentUserIdOrNull(),
+                createdAt = Date(),
+            )
+        )
     }
 }

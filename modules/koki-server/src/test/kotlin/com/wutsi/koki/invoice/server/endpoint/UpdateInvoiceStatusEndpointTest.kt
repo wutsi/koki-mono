@@ -1,64 +1,148 @@
 package com.wutsi.koki.invoice.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.invoice.dto.SearchInvoiceResponse
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.invoice.dto.InvoiceStatus
+import com.wutsi.koki.invoice.dto.UpdateInvoiceStatusRequest
+import com.wutsi.koki.invoice.server.dao.InvoiceLogRepository
+import com.wutsi.koki.invoice.server.dao.InvoiceRepository
+import com.wutsi.koki.tax.server.dao.TaxRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/invoice/SearchInvoiceEndpoint.sql"])
-class SearchInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
-    @Test
-    fun all() {
-        val response = rest.getForEntity("/v1/invoices", SearchInvoiceResponse::class.java)
+@Sql(value = ["/db/test/clean.sql", "/db/test/invoice/UpdateInvoiceStatusEndpoint.sql"])
+class UpdateInvoiceStatusEndpointTest : AuthorizationAwareEndpointTest() {
+    @Autowired
+    private lateinit var dao: InvoiceRepository
 
-        val invoices = response.body!!.invoices
-        assertEquals(4, invoices.size)
+    @Autowired
+    private lateinit var logDao: InvoiceLogRepository
+
+    @Autowired
+    private lateinit var taxDao: TaxRepository
+
+    private fun test(invoiceId: Long, status: InvoiceStatus) {
+        val request = UpdateInvoiceStatusRequest(
+            status = status,
+            comment = "Yo man"
+        )
+        val response = rest.postForEntity("/v1/invoices/$invoiceId/statuses", request, Any::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val invoice = dao.findById(invoiceId).get()
+        assertEquals(request.status, invoice.status)
+        assertEquals(USER_ID, invoice.modifiedById)
+
+        val logs = logDao.findByInvoice(invoice)
+        assertEquals(1, logs.size)
+        assertEquals(request.status, logs[0].status)
+        assertEquals(request.comment, logs[0].comment)
+        assertEquals(USER_ID, logs[0].createdById)
+    }
+
+    fun badStatus(invoiceId: Long, status: InvoiceStatus) {
+        val request = UpdateInvoiceStatusRequest(
+            status = status,
+            comment = "Yo man"
+        )
+        val response = rest.postForEntity("/v1/invoices/$invoiceId/statuses", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
+        assertEquals(ErrorCode.INVOICE_BAD_STATUS, response.body?.error?.code)
+
+        val invoice = dao.findById(invoiceId).get()
+        val logs = logDao.findByInvoice(invoice)
+        assertEquals(0, logs.size)
     }
 
     @Test
-    fun `by id`() {
-        val response = rest.getForEntity("/v1/invoices?id=100&id=102&id=103&id=200", SearchInvoiceResponse::class.java)
-
-        val invoices = response.body!!.invoices
-        assertEquals(3, invoices.size)
-        assertEquals(listOf(103L, 102L, 100L), invoices.map { invoice -> invoice.id })
+    fun `DRAFT to OPENED`() {
+        test(100, InvoiceStatus.OPENED)
     }
 
     @Test
-    fun `by tax-id`() {
-        val response = rest.getForEntity("/v1/invoices?tax-id=7779", SearchInvoiceResponse::class.java)
-
-        val invoices = response.body!!.invoices
-        assertEquals(1, invoices.size)
-        assertEquals(102, invoices[0].id)
+    fun `DRAFT to VOIDED`() {
+        test(101, InvoiceStatus.VOIDED)
     }
 
     @Test
-    fun `by order-id`() {
-        val response = rest.getForEntity("/v1/invoices?order-id=8888", SearchInvoiceResponse::class.java)
-
-        val invoices = response.body!!.invoices
-        assertEquals(1, invoices.size)
-        assertEquals(103, invoices[0].id)
+    fun `DRAFT to PAID`() {
+        badStatus(102, InvoiceStatus.PAID)
     }
 
     @Test
-    fun `by number`() {
-        val response = rest.getForEntity("/v1/invoices?number=10958", SearchInvoiceResponse::class.java)
-
-        val invoices = response.body!!.invoices
-        assertEquals(1, invoices.size)
-        assertEquals(103, invoices[0].id)
+    fun `OPENED to PAID`() {
+        test(110, InvoiceStatus.PAID)
     }
 
     @Test
-    fun `by status`() {
-        val response =
-            rest.getForEntity("/v1/invoices?status=OPENED&status=VOIDED", SearchInvoiceResponse::class.java)
+    fun `OPENED to PAID with Balance`() {
+        badStatus(111, InvoiceStatus.PAID)
+    }
 
-        val invoices = response.body!!.invoices
-        assertEquals(2, invoices.size)
-        assertEquals(listOf(103L, 100L), invoices.map { invoice -> invoice.id })
+    @Test
+    fun `OPENED to VOID`() {
+        test(112, InvoiceStatus.VOIDED)
+    }
+
+    @Test
+    fun `OPENED to DRAFT`() {
+        badStatus(113, InvoiceStatus.DRAFT)
+    }
+
+    @Test
+    fun `PAID to DRAFT`() {
+        badStatus(120, InvoiceStatus.DRAFT)
+    }
+
+    @Test
+    fun `PAID to OPENED`() {
+        badStatus(121, InvoiceStatus.DRAFT)
+    }
+
+    @Test
+    fun `PAID to VOID`() {
+        badStatus(122, InvoiceStatus.DRAFT)
+    }
+
+    @Test
+    fun `VOIDED to DRAFT`() {
+        badStatus(130, InvoiceStatus.DRAFT)
+    }
+
+    @Test
+    fun `VOIDED to OPENED`() {
+        badStatus(131, InvoiceStatus.DRAFT)
+    }
+
+    @Test
+    fun `VOIDED to VOID`() {
+        badStatus(132, InvoiceStatus.DRAFT)
+    }
+
+    @Test
+    fun `void tax invoice`() {
+        test(140, InvoiceStatus.VOIDED)
+
+        val tax = taxDao.findById(1400L).get()
+        assertEquals(null, tax.invoiceId)
+    }
+
+    @Test
+    fun unknown() {
+        val invoiceId = 100L
+        val request = UpdateInvoiceStatusRequest(
+            status = InvoiceStatus.UNKNOWN,
+            comment = "Yo man"
+        )
+        val response = rest.postForEntity("/v1/invoices/$invoiceId/statuses", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
+        assertEquals(ErrorCode.INVOICE_BAD_STATUS, response.body?.error?.code)
     }
 }

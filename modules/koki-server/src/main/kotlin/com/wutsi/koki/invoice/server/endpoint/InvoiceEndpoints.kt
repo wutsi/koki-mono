@@ -5,6 +5,7 @@ import com.wutsi.koki.invoice.dto.CreateInvoiceResponse
 import com.wutsi.koki.invoice.dto.GetInvoiceResponse
 import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.invoice.dto.SearchInvoiceResponse
+import com.wutsi.koki.invoice.dto.UpdateInvoiceStatusRequest
 import com.wutsi.koki.invoice.server.mapper.InvoiceMapper
 import com.wutsi.koki.invoice.server.service.InvoiceService
 import jakarta.validation.Valid
@@ -41,6 +42,15 @@ class InvoiceEndpoints(
         return GetInvoiceResponse(
             invoice = mapper.toInvoice(invoice)
         )
+    }
+
+    @PostMapping("/{id}/statuses")
+    fun status(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
+        @Valid @RequestBody request: UpdateInvoiceStatusRequest,
+    ) {
+        service.status(id, request, tenantId)
     }
 
     @GetMapping

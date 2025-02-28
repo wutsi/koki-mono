@@ -43,6 +43,9 @@ data class TaxEntity(
     @Column(name = "assignee_fk")
     var assigneeId: Long? = null,
 
+    @Column(name = "invoice_fk")
+    var invoiceId: Long? = null,
+
     var fiscalYear: Int = -1,
     var status: TaxStatus = TaxStatus.NEW,
     var description: String? = null,

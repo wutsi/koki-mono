@@ -1,9 +1,15 @@
 <div class="tab-tax-products">
     <div class="margin-bottom">
-        <a ); class="btn btn-light btn-sm btn-add-product"
-           th:href="'javascript: koki_taxes_add_product(' + ${taxId} + ')'"
+        <a class="btn btn-light btn-sm btn-add-product"
+           th:href="'javascript: koki_taxes_add_product(' + ${tax.id} + ')'"
            th:if="${user?.hasPermission('tax:manage')}">
             Add Product
+        </a>
+        <a class="btn btn-light btn-sm btn-create-invoice" id="btn-create-invoice"
+           onclick="return confirm('Are you ready to invoice your client?')"
+           th:href="'/tax-products/tab/create-invoice?tax-id=' + ${tax.id}"
+           th:if="!${tax.invoiceId} AND ${user?.hasPermission('tax:manage')} AND ${user?.hasPermission('invoice:manage')}">
+            Create Invoice
         </a>
     </div>
     <table class="table table-striped">
@@ -17,7 +23,7 @@
             <th></th>
         </tr>
         </thead>
-        <tbody id="tax-product-list" th:data-tax-id="${taxId}">
+        <tbody id="tax-product-list" th:data-tax-id="${tax.id}">
         <tr class="tax-product" th:each="taxProduct : ${taxProducts}" th:id="'tax-product-' + ${taxProduct.id}">
             <td th:replace="~{__components/tax :: tax-product-columns(${taxProduct})}"></td>
         </tr>

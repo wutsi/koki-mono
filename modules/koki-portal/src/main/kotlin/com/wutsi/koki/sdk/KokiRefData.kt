@@ -5,6 +5,7 @@ import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.dto.SearchCategoryResponse
 import com.wutsi.koki.refdata.dto.SearchJuridictionResponse
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
+import com.wutsi.koki.refdata.dto.SearchSalesTaxResponse
 import com.wutsi.koki.refdata.dto.SearchUnitResponse
 import org.springframework.web.client.RestTemplate
 
@@ -17,6 +18,7 @@ class KokiRefData(
         private const val LOCATION_PATH_PREFIX = "/v1/locations"
         private const val CATEGORY_PATH_PREFIX = "/v1/categories"
         private const val JURIDICTION_PATH_PREFIX = "/v1/juridictions"
+        private const val SALES_TAXES_PATH_PREFIX = "/v1/sales-taxes"
     }
 
     fun units(): SearchUnitResponse {
@@ -89,5 +91,24 @@ class KokiRefData(
             )
         )
         return rest.getForEntity(url, SearchJuridictionResponse::class.java).body
+    }
+
+    fun salesTaxes(
+        ids: List<Long>,
+        juridictionIds: List<Long>,
+        active: Boolean?,
+        limit: Int,
+        offset: Int,
+    ): SearchSalesTaxResponse {
+        val url = urlBuilder.build(
+            SALES_TAXES_PATH_PREFIX, mapOf(
+                "id" to ids,
+                "juridiction-id" to juridictionIds,
+                "active" to active,
+                "limit" to limit,
+                "offset" to offset,
+            )
+        )
+        return rest.getForEntity(url, SearchSalesTaxResponse::class.java).body
     }
 }

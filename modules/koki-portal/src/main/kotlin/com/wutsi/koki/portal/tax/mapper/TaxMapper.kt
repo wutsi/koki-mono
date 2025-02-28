@@ -25,6 +25,7 @@ class TaxMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
         val dateFormat = createDateFormat()
         return TaxModel(
             id = entity.id,
+            invoiceId = entity.invoiceId,
             taxType = taxType,
             fiscalYear = entity.fiscalYear,
             status = entity.status,
@@ -55,6 +56,7 @@ class TaxMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
         val dateFormat = createDateFormat()
         return TaxModel(
             id = entity.id,
+            invoiceId = entity.invoiceId,
             taxType = taxType,
             fiscalYear = entity.fiscalYear,
             status = entity.status,

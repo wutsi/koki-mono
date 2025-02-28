@@ -37,7 +37,11 @@ object ProductFixtures {
             code = null,
             active = false,
             modifiedById = UserFixtures.users[2].id,
-            createdById = UserFixtures.users[2].id
+            createdById = UserFixtures.users[2].id,
+            serviceDetails = ServiceDetails(
+                quantity = 1,
+                unitId = RefDataFixtures.units[0].id,
+            )
         ),
         ProductSummary(
             id = 103,
@@ -46,7 +50,11 @@ object ProductFixtures {
             code = null,
             active = false,
             modifiedById = UserFixtures.users[0].id,
-            createdById = UserFixtures.users[2].id
+            createdById = UserFixtures.users[2].id,
+            serviceDetails = ServiceDetails(
+                quantity = 1,
+                unitId = RefDataFixtures.units[1].id,
+            )
         ),
         ProductSummary(
             id = 104,

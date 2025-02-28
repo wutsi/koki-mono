@@ -7,9 +7,11 @@ import com.wutsi.koki.invoice.dto.CreateInvoiceResponse
 import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.invoice.dto.Item
 import com.wutsi.koki.invoice.server.dao.InvoiceItemRepository
+import com.wutsi.koki.invoice.server.dao.InvoiceLogRepository
 import com.wutsi.koki.invoice.server.dao.InvoiceRepository
 import com.wutsi.koki.invoice.server.dao.InvoiceSequenceRepository
 import com.wutsi.koki.invoice.server.dao.InvoiceTaxRepository
+import com.wutsi.koki.tax.server.dao.TaxRepository
 import org.apache.commons.lang3.time.DateUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -27,16 +29,22 @@ class CreateInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
     private lateinit var itemDao: InvoiceItemRepository
 
     @Autowired
-    private lateinit var taxDao: InvoiceTaxRepository
+    private lateinit var invoiceTaxDao: InvoiceTaxRepository
 
     @Autowired
     private lateinit var seqDao: InvoiceSequenceRepository
 
+    @Autowired
+    private lateinit var logDao: InvoiceLogRepository
+
+    @Autowired
+    private lateinit var taxDao: TaxRepository
+
     private val fmt = SimpleDateFormat("yyyy-MM-dd")
 
     private val request = CreateInvoiceRequest(
-        taxId = 111L,
-        orderId = 888L,
+        taxId = null,
+        orderId = null,
         customerAccountId = 333L,
         customerName = "Ray Sponsible Inc",
         customerPhone = "+5141110000",
@@ -131,7 +139,7 @@ class CreateInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.items[1].quantity * request.items[1].unitPrice, items[1].subTotal)
         assertEquals(request.items[1].description, items[1].description)
 
-        val taxes0 = taxDao.findByInvoiceItem(items[0])
+        val taxes0 = invoiceTaxDao.findByInvoiceItem(items[0])
         assertEquals(2, taxes0.size)
         assertEquals(20L, taxes0[0].salesTaxId)
         assertEquals(5.0, taxes0[0].rate)
@@ -142,7 +150,7 @@ class CreateInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(49.88, taxes0[1].amount)
         assertEquals("CAD", taxes0[1].currency)
 
-        val taxes1 = taxDao.findByInvoiceItem(items[1])
+        val taxes1 = invoiceTaxDao.findByInvoiceItem(items[1])
         assertEquals(2, taxes1.size)
         assertEquals(20L, taxes1[0].salesTaxId)
         assertEquals(5.0, taxes1[0].rate)
@@ -152,6 +160,12 @@ class CreateInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(9.975, taxes1[1].rate)
         assertEquals(29.93, taxes1[1].amount)
         assertEquals("CAD", taxes1[1].currency)
+
+        val logs = logDao.findByInvoice(invoice)
+        assertEquals(1, logs.size)
+        assertEquals(invoice.status, logs[0].status)
+        assertEquals(null, logs[0].comment)
+        assertEquals(USER_ID, logs[0].createdById)
     }
 
     @Test
@@ -213,10 +227,10 @@ class CreateInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.items[1].quantity * request.items[1].unitPrice, items[1].subTotal)
         assertEquals(request.items[1].description, items[1].description)
 
-        val taxes0 = taxDao.findByInvoiceItem(items[0])
+        val taxes0 = invoiceTaxDao.findByInvoiceItem(items[0])
         assertEquals(0, taxes0.size)
 
-        val taxes1 = taxDao.findByInvoiceItem(items[1])
+        val taxes1 = invoiceTaxDao.findByInvoiceItem(items[1])
         assertEquals(0, taxes1.size)
     }
 
@@ -279,18 +293,28 @@ class CreateInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.items[1].quantity * request.items[1].unitPrice, items[1].subTotal)
         assertEquals(request.items[1].description, items[1].description)
 
-        val taxes0 = taxDao.findByInvoiceItem(items[0])
+        val taxes0 = invoiceTaxDao.findByInvoiceItem(items[0])
         assertEquals(1, taxes0.size)
         assertEquals(10L, taxes0[0].salesTaxId)
         assertEquals(5.0, taxes0[0].rate)
         assertEquals(25.0, taxes0[0].amount)
         assertEquals("CAD", taxes0[0].currency)
 
-        val taxes1 = taxDao.findByInvoiceItem(items[1])
+        val taxes1 = invoiceTaxDao.findByInvoiceItem(items[1])
         assertEquals(1, taxes1.size)
         assertEquals(10L, taxes1[0].salesTaxId)
         assertEquals(5.0, taxes1[0].rate)
         assertEquals(15.0, taxes1[0].amount)
         assertEquals("CAD", taxes1[0].currency)
+    }
+
+    @Test
+    fun `create tax invoice`() {
+        val response = rest.postForEntity("/v1/invoices", request.copy(taxId = 111L), CreateInvoiceResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val tax = taxDao.findById(111L).get()
+        assertEquals(response.body!!.invoiceId, tax.invoiceId)
     }
 }

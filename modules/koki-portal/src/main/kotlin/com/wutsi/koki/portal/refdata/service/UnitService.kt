@@ -25,6 +25,10 @@ class UnitService(
         return all!!
     }
 
+    fun units(ids: List<Long>): List<UnitModel> {
+        return units().filter { unit -> ids.contains(unit.id) }
+    }
+
     fun unit(id: Long): UnitModel? {
         return units().find { unit -> unit.id == id }
     }
