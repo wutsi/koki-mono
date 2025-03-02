@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate
 
 class KokiInvoices(
     private val urlBuilder: URLBuilder,
+    private val tenantProvider: TenantProvider,
     rest: RestTemplate,
 ) : AbstractKokiModule(rest) {
     companion object {
@@ -55,5 +56,9 @@ class KokiInvoices(
     fun setStatus(id: Long, request: UpdateInvoiceStatusRequest) {
         val url = urlBuilder.build("$INVOICE_PATH_PREFIX/$id/statuses")
         rest.postForEntity(url, request, Any::class.java)
+    }
+
+    fun url(id: Long): String {
+        return urlBuilder.build("$INVOICE_PATH_PREFIX/pdf/${tenantProvider.id()}.$id.pdf")
     }
 }

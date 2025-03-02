@@ -51,14 +51,13 @@ abstract class TenantAwareEndpointTest : ClientHttpRequestInterceptor {
     }
 
     protected fun download(
-        u: String,
+        url: String,
         expectedStatusCode: Int,
         expectedFileName: String?,
         expectedContentType: String,
         accessToken: String? = null,
     ): File? {
-        val url = URL(u)
-        val cnn = url.openConnection() as HttpURLConnection
+        val cnn = URL(url).openConnection() as HttpURLConnection
         try {
             if (accessToken != null) {
                 cnn.setRequestProperty("Authorization", "Bearer $accessToken")

@@ -1,14 +1,20 @@
 package com.wutsi.koki.invoice.server.endpoint
 
+import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.invoice.dto.CreateInvoiceRequest
 import com.wutsi.koki.invoice.dto.CreateInvoiceResponse
 import com.wutsi.koki.invoice.dto.GetInvoiceResponse
 import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.invoice.dto.SearchInvoiceResponse
 import com.wutsi.koki.invoice.dto.UpdateInvoiceStatusRequest
+import com.wutsi.koki.invoice.server.io.pdf.InvoicePdfExporter
 import com.wutsi.koki.invoice.server.mapper.InvoiceMapper
 import com.wutsi.koki.invoice.server.service.InvoiceService
+import com.wutsi.koki.tenant.server.service.TenantService
+import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
+import org.springframework.http.ContentDisposition
+import org.springframework.http.HttpHeaders
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -22,7 +28,9 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/v1/invoices")
 class InvoiceEndpoints(
     private val service: InvoiceService,
+    private val tenantService: TenantService,
     private val mapper: InvoiceMapper,
+    private val pdfExporter: InvoicePdfExporter,
 ) {
     @PostMapping
     fun create(
@@ -39,8 +47,9 @@ class InvoiceEndpoints(
         @PathVariable id: Long,
     ): GetInvoiceResponse {
         val invoice = service.get(id, tenantId)
+        val tenant = tenantService.get(tenantId)
         return GetInvoiceResponse(
-            invoice = mapper.toInvoice(invoice)
+            invoice = mapper.toInvoice(invoice, tenant)
         )
     }
 
@@ -77,5 +86,25 @@ class InvoiceEndpoints(
             offset = offset,
         )
         return SearchInvoiceResponse(invoices = invoices.map { invoice -> mapper.toInvoiceSummary(invoice) })
+    }
+
+    @GetMapping("/pdf/{tenant-id}.{invoice-id}.pdf")
+    fun pdf(
+        @PathVariable("tenant-id") tenantId: Long,
+        @PathVariable("invoice-id") id: Long,
+        response: HttpServletResponse
+    ) {
+        response.contentType = "application/pdf"
+        response.setHeader(
+            HttpHeaders.CONTENT_DISPOSITION,
+            ContentDisposition.attachment().filename("$tenantId.$id.pdf").build().toString()
+        )
+        try {
+            val invoice = service.get(id, tenantId)
+            pdfExporter.export(invoice, response.outputStream)
+        } catch (ex: NotFoundException) {
+            response.contentType = "application/json"
+            response.sendError(404, "Invoice not found")
+        }
     }
 }

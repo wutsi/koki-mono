@@ -81,6 +81,7 @@ object InvoiceFixtures {
 
     val invoice = Invoice(
         id = 103L,
+        pdfUrl = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
         number = 12039221L,
         createdAt = Date(),
         dueAt = DateUtils.addDays(Date(), 10),
@@ -158,6 +159,22 @@ object InvoiceFixtures {
                         currency = "CAD",
                     ),
                 )
+            ),
+        ),
+        taxes = listOf(
+            InvoiceSalesTax(
+                id = 1030000,
+                salesTaxId = RefDataFixtures.salesTaxes[1].id,
+                rate = 5.0,
+                amount = 15.0,
+                currency = "CAD",
+            ),
+            InvoiceSalesTax(
+                id = 1030000,
+                salesTaxId = RefDataFixtures.salesTaxes[2].id,
+                rate = 9.975,
+                amount = 25.0,
+                currency = "CAD",
             ),
         )
     )

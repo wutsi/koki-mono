@@ -3,38 +3,105 @@
 
 </head>
 <body>
-<table>
+
+<table width="100%">
     <tr>
-        <td width="33%">
-            <h2>{{entityName}}</h2>
-            {{{entityAddress}}}
+        <td width="50%">
+            <h3 style="text-transform: uppercase; margin: 0">{{businessName}}</h3>
+            <div>{{{businessAddress}}}</div>
+            <div>{{{businessEmail}}}</div>
+            <div>{{{businessWebsite}}}</div>
         </td>
-        <td width="34%"></td>
-        <td width="33%">
-            <h2>INVOICE</h2>
-            <div>Invoice Number: {{invoiceNumber}}</div>
-            <div>Invoice Date: {{invoiceDate}}</div>
+        <td valign="top" width="50%">
+            <h1 style="text-align: right; margin: 0">Invoice</h1>
         </td>
     </tr>
 </table>
 
-<table>
+<table border="0" cellpadding="10" cellspacing="2" style="margin-top: 20px" width="100%">
     <tr>
-        <th>Product</th>
-        <th>Description</th>
-        <th>Unit Price</th>
-        <th>Quantity</th>
-        <th>Unit</th>
-        <th>Amount</th>
+        <td style="background: #f0f0f0" width="33%">
+            No: <b>{{invoiceNumber}}</b>
+        </td>
+        <td align="center" style="background: #f0f0f0" width="33%">
+            Date: {{invoiceDate}}
+        </td>
+        <td align="right" style="background: #f0f0f0" width="33%">
+            {{#invoiceDueDate}}
+            Pay By: {{invoiceDueDate}}
+            {{/invoiceDueDate}}
+        </td>
     </tr>
     <tr>
-        <td>{{code}}</td>
-        <td>{{description}}</td>
-        <td>{{unitPrice}}</td>
-        <td>{{quantity}}</td>
-        <td>{{unit}}</td>
-        <td>{{subTotal}}</td>
+        <td colspan="3">
+            {{#invoiceDraft}}
+            <h2 style="text-align: center; margin:0; color: gray; text-transform: uppercase">Draft</h2>
+            {{/invoiceDraft}}
+
+            {{#invoicePaid}}
+            <h2 style="text-align: center; margin:0; color: darkgreen; text-transform: uppercase">Paid</h2>
+            {{/invoicePaid}}
+
+            {{#invoiceVoided}}
+            <h2 style="text-align: center; margin:0; color: darkred; text-transform: uppercase">Cancelled</h2>
+            {{/invoiceVoided}}
+        </td>
     </tr>
 </table>
+
+<table border="0" cellpadding="10" cellspacing="2" style="margin-top: 20px" width="100%">
+    <tr>
+        <th style="background: #f0f0f0" width="50%">BILL TO</th>
+        <th style="background: #f0f0f0" with="50%">SHIP TO</th>
+    </tr>
+    <tr>
+        <td valign="top">
+            <b>{{customerName}}</b>
+            <div>{{{customerBillingAddress}}}</div>
+        </td>
+        <td valign="top">
+            <b>{{customerName}}</b>
+            <div>{{{customerShippingAddress}}}</div>
+        </td>
+    </tr>
+</table>
+
+<table border="1" cellpadding="5" cellspacing="0" style="margin-top: 20px" width="100%">
+    <tr>
+        <th align="center" style="background: #f0f0f0" width="35%">Description</th>
+        <th align="center" style="background: #f0f0f0" width="20%">Unit Price</th>
+        <th align="center" style="background: #f0f0f0" width="10%">Quantity</th>
+        <th align="center" style="background: #f0f0f0" width="10%">Unit</th>
+        <th align="center" style="background: #f0f0f0" width="25%">Amount</th>
+    </tr>
+    {{#items}}
+    <tr>
+        <td valign="top">{{description}}</td>
+        <td valign="top">{{unitPrice}}</td>
+        <td valign="top">{{quantity}}</td>
+        <td valign="top">{{unit}}</td>
+        <td align="right" valign="top">{{subTotal}}</td>
+    </tr>
+    {{/items}}
+    {{#taxes}}
+    <tr>
+        <td align="right" colspan="4" valign="top">{{name}} - {{rate}}%</td>
+        <td align="right" valign="top">{{amount}}</td>
+    </tr>
+    {{/taxes}}
+    <tr>
+        <td align="right" align="right" colspan="4">Total</td>
+        <td align="right" style="background: #f0f0f0">{{totalAmount}}</td>
+    </tr>
+    <tr>
+        <td align="right" colspan="4">Amount Paid</td>
+        <td align="right" style="background: #f0f0f0">{{amountPaid}}</td>
+    </tr>
+    <tr>
+        <td align="right" colspan="4"><b>Amount Due</b></td>
+        <td align="right" style="background: #f0f0f0"><b>{{amountDue}}</b></td>
+    </tr>
+</table>
+
 </body>
 </html>

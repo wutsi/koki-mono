@@ -1,31 +1,29 @@
 package com.wutsi.koki.invoice.server.io.pdf
 
 import com.wutsi.koki.invoice.server.domain.InvoiceEntity
-import org.apache.commons.io.IOUtils
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
+import com.wutsi.koki.invoice.server.io.html.InvoiceHtmlExporter
 import org.springframework.stereotype.Service
 import org.xhtmlrenderer.pdf.ITextRenderer
+import java.io.ByteArrayOutputStream
 import java.io.OutputStream
 
 @Service
-class InvoicePDFGenerator {
-    fun generate(invoice: InvoiceEntity, output: OutputStream) {
-        val doc = loadDocument()
+class InvoicePdfExporter(
+    private val htmlExporter: InvoiceHtmlExporter
+) {
+    fun export(invoice: InvoiceEntity, output: OutputStream) {
         val renderer = ITextRenderer()
         val context = renderer.sharedContext
         context.isPrint = true
         context.isInteractive = true
-        renderer.setDocumentFromString(doc.html())
+        renderer.setDocumentFromString(html(invoice))
         renderer.layout()
         renderer.createPDF(output)
     }
 
-    private fun loadDocument(): Document {
-        val input = InvoicePDFGenerator::class.java.getResourceAsStream("/invoice/default/template.html")
-        val html = IOUtils.toString(input, "utf-8")
-        val doc = Jsoup.parse(html, "utf-8")
-        doc.outputSettings().syntax(Document.OutputSettings.Syntax.xml)
-        return doc
+    private fun html(invoice: InvoiceEntity): String {
+        val output = ByteArrayOutputStream()
+        htmlExporter.export(invoice, output)
+        return output.toString("utf-8")
     }
 }
