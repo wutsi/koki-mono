@@ -1,0 +1,40 @@
+<html>
+<head>
+
+</head>
+<body>
+<table>
+    <tr>
+        <td width="33%">
+            <h2>{{entityName}}</h2>
+            {{{entityAddress}}}
+        </td>
+        <td width="34%"></td>
+        <td width="33%">
+            <h2>INVOICE</h2>
+            <div>Invoice Number: {{invoiceNumber}}</div>
+            <div>Invoice Date: {{invoiceDate}}</div>
+        </td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <th>Product</th>
+        <th>Description</th>
+        <th>Unit Price</th>
+        <th>Quantity</th>
+        <th>Unit</th>
+        <th>Amount</th>
+    </tr>
+    <tr>
+        <td>{{code}}</td>
+        <td>{{description}}</td>
+        <td>{{unitPrice}}</td>
+        <td>{{quantity}}</td>
+        <td>{{unit}}</td>
+        <td>{{subTotal}}</td>
+    </tr>
+</table>
+</body>
+</html>

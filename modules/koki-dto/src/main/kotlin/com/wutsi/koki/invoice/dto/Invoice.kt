@@ -23,6 +23,7 @@ data class Invoice(
     val shippingAddress: Address? = Address(),
     val billingAddress: Address? = Address(),
     val items: List<InvoiceItem> = emptyList(),
+    val taxes: List<InvoiceSalesTax> = emptyList(),
 
     val createdAt: Date = Date(),
     val createdById: Long? = null,
