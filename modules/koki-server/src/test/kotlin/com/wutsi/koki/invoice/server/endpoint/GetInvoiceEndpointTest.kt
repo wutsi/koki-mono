@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/invoice/ExportInvoicePDFEndpoint.sql"])
 class GetInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
