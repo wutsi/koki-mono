@@ -12,7 +12,7 @@ class TenantInvoiceInitializer : AbstractTenantModuleInitializer() {
         setConfigurationIfMissing(
             name = ConfigurationName.INVOICE_EMAIL_OPENED,
             value = IOUtils.toString(
-                TenantEmailInitializer::class.java.getResourceAsStream("/template/email/opened.html"),
+                TenantEmailInitializer::class.java.getResourceAsStream("/invoice/email/opened.html"),
                 "utf-8"
             ),
             tenantId = tenatId
@@ -21,7 +21,7 @@ class TenantInvoiceInitializer : AbstractTenantModuleInitializer() {
         setConfigurationIfMissing(
             name = ConfigurationName.INVOICE_EMAIL_PAID,
             value = IOUtils.toString(
-                TenantEmailInitializer::class.java.getResourceAsStream("/template/email/paid.html"),
+                TenantEmailInitializer::class.java.getResourceAsStream("/invoice/email/paid.html"),
                 "utf-8"
             ),
             tenantId = tenatId
