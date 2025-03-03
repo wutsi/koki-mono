@@ -80,8 +80,6 @@
 
 ## Invoicing
 
-- [+] Setting: Configure payment terms
-- [+] Setting: Select invoice format
 - [] Send invoice by email when approved
 - [] Send invoice by email when paid
 - [] Setting: Configure email content
@@ -95,6 +93,8 @@
 - [x] Invoice API
 - [x] Invoice UI
 - [x] Generate Invoice PDF
+- [x] Setting: Configure payment terms
+- [x] Setting: Select invoice format
 
 ## Module
 
@@ -159,7 +159,7 @@
 ## Tenant
 
 - [] Tenant should have a list of currencies
-- [] Init a tenant
+- [x] Init a tenant
 
 ## Users
 

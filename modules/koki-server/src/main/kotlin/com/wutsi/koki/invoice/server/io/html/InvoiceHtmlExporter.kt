@@ -48,7 +48,7 @@ class InvoiceHtmlExporter(
     }
 
     private fun loadDocument(invoice: InvoiceEntity): Document {
-        val input = InvoiceHtmlExporter::class.java.getResourceAsStream("/invoice/default/template.html")
+        val input = InvoiceHtmlExporter::class.java.getResourceAsStream("/invoice/template/default.html")
         val html = IOUtils.toString(input, "utf-8")
         val data = createData(invoice)
         val xhtml = templatingEngine.apply(html, data)
