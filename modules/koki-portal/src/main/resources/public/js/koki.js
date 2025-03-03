@@ -198,45 +198,6 @@ function koki_address_editor(countryId, cityId) {
     $('#' + cityId).attr('disabled', true);
 }
 
-
-/**
- * Configure the address editor
- * @param categoryId - ID of the category element
- * @param typeId - ID of the type element
- */
-function koki_category_editor(categoryId, typeId) {
-    $('#' + typeId).on('select2:select', function (e) {
-        console.log('type changed....');
-        $('#' + categoryId).val('').trigger('change');
-    });
-
-    $('#' + categoryId).select2({
-            ajax: {
-                url: function () {
-                    return '/categories/selector/search?type=' + document.getElementById(typeId).value;
-                },
-                dataType: 'json',
-                delay: 1000,
-                processResults: function (item) {
-                    const xitems = item.map(function (item) {
-                        return {
-                            id: item.id,
-                            text: item.name,
-                        }
-                    });
-                    return {
-                        results: xitems
-                    };
-                }
-            },
-            placeholder: 'Select a category',
-            allowClear: true,
-            tokenSeparators: [','],
-            minimumInputLength: 3,
-        }
-    );
-}
-
 /**
  * Filter rows from a table
  * @param inputId - ID of the search input

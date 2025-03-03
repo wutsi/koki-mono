@@ -22,7 +22,10 @@ data class TenantEntity(
     val numberFormat: String = "",
     val currency: String = "",
     val currencySymbol: String = "",
+
+    @Deprecated("Infer money format from currency")
     val monetaryFormat: String = "",
+
     val dateFormat: String = "",
     val timeFormat: String = "",
     val dateTimeFormat: String = "",

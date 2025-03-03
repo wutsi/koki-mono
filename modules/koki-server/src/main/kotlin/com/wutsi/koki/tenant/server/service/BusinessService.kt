@@ -38,11 +38,11 @@ class BusinessService(
         }
     }
 
-    private fun create(request: SaveBusinessRequest, tenantId: Long) {
+    private fun create(request: SaveBusinessRequest, tenantId: Long): BusinessEntity {
         val userId = securityService.getCurrentUserIdOrNull()
         val city = request.addressCityId?.let { id -> locationService.get(id, LocationType.CITY) }
         val now = Date()
-        val business = dao.save(
+        return dao.save(
             BusinessEntity(
                 tenantId = tenantId,
                 companyName = request.companyName,

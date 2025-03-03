@@ -15,6 +15,7 @@ import com.wutsi.koki.invoice.dto.UpdateInvoiceStatusRequest
 import com.wutsi.koki.portal.common.page.PageName
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -143,6 +144,21 @@ class InvoiceControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("invoice:manage"))
 
         navigateTo("/invoices/${invoice.id}/void")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
+
+    @Test
+    fun download() {
+        navigateTo("/invoices/${invoice.id}")
+        assertCurrentPageIs(PageName.INVOICE)
+        click(".btn-download")
+    }
+
+    @Test
+    fun `download - without permission invoice`() {
+        setUpUserWithoutPermissions(listOf("invoice"))
+
+        navigateTo("/invoices/i${invoice.id}/${UUID.randomUUID()}.pdf")
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 

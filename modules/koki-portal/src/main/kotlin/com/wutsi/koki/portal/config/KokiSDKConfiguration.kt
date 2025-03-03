@@ -92,7 +92,7 @@ class KokiSDKConfiguration(
 
     @Bean
     fun kokiInvoices(): KokiInvoices {
-        return KokiInvoices(urlBuilder(), rest())
+        return KokiInvoices(urlBuilder(), tenantProvider, rest())
     }
 
     @Bean

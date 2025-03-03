@@ -34,7 +34,7 @@
                             </div>
                             <div class="section-item">
                                 <label class="title">Type <span class="required">*</span></label>
-                                <select onchange="on_type_changed()" required th:field="*{type}">
+                                <select required th:field="*{type}">
                                     <option value=""></option>
                                     <option th:each="type : ${types}"
                                             th:text="#{'product-type.' + ${type}}"
@@ -102,13 +102,7 @@
 </div>
 
 <script>
-    function on_type_changed() {
-        console.log('on_type_changed');
-
-        const type = document.getElementById('type').value;
-        console.log('...type=', type);
-        document.getElementById('section-service').style.display = (type === 'SERVICE' ? 'block' : 'none');
-    }
+    document.addEventListener('DOMContentLoaded', koki_product_editor_ready, false);
 </script>
 </body>
 </html>

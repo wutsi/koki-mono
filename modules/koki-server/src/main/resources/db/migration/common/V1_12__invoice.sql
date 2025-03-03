@@ -84,6 +84,7 @@ CREATE TABLE T_INVOICE_TAX(
   invoice_item_fk         BIGINT NOT NULL REFERENCES T_INVOICE_ITEM(id),
   sales_tax_fk            BIGINT NOT NULL,
 
+  description             TEXT,
   rate                    DECIMAL(10, 4),
   amount                  DECIMAL(10, 2),
   currency                VARCHAR(3) NOT NULL,

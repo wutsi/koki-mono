@@ -2,6 +2,7 @@
 
 ## Account
 
+- [] List account invoices
 - [] Add AccountUser/AccountUserRole to manage relation ship between Account and User per module. Ex: Accountant,
   Technician
 - [] Settings: Import Accounts from CSV
@@ -81,11 +82,13 @@
 
 - [x] Invoice API
 - [x] Invoice UI
-- [] Generate Invoice PDF
+- [x] Generate Invoice PDF
 - [] Send invoice by email when approved
 - [] Send invoice by email when paid
-- [] Setting: Configure initial invoice number
 - [] Setting: Configure email content
+- [] Setting: Configure initial invoice number
+- [] Setting: Configure payment terms
+- [] Setting: Select invoice format
 - [] Payment API
 - [] Capture online payments:
     - [] Paypal
@@ -135,7 +138,6 @@
 
 ## Taxes
 
-- [x] Create Invoices
 - [] Settings: Setup email notification
 - [] Taxes KPI
     - [] Time spent by Tax report
@@ -143,6 +145,7 @@
     - [] Labor cost by Tax report
     - [] Total time spent on Tax Report per user
 - [] Add Kanban view
+- [x] Create Invoices
 - [x] Link taxes with products
 - [x] Filter Accountant and Technician based on the permission 'tax:manage'
 - [x] Add Calendar view

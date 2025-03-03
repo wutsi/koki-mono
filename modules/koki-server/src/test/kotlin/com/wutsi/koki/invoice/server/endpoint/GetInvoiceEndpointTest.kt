@@ -11,7 +11,7 @@ import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/invoice/GetInvoiceEndpoint.sql"])
+@Sql(value = ["/db/test/clean.sql", "/db/test/invoice/ExportInvoicePDFEndpoint.sql"])
 class GetInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
     private val fmt = SimpleDateFormat("yyyy-MM-dd")
 
@@ -22,6 +22,8 @@ class GetInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val invoice = response.body!!.invoice
+        assertEquals(true, invoice.pdfUrl?.startsWith("https://test.com/invoices/i100"))
+        assertEquals(true, invoice.pdfUrl?.endsWith(".pdf"))
         assertEquals(10955L, invoice.number)
         assertEquals(7777L, invoice.taxId)
         assertEquals(9999L, invoice.orderId)
@@ -55,14 +57,14 @@ class GetInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(2, items.size)
         assertEquals(1L, items[0].productId)
         assertEquals(11L, items[0].unitPriceId)
-        assertEquals(3L, items[0].unitId)
+        assertEquals(110L, items[0].unitId)
         assertEquals(300.0, items[0].unitPrice)
         assertEquals(2, items[0].quantity)
         assertEquals(600.0, items[0].subTotal)
         assertEquals("product 1", items[0].description)
         assertEquals(2L, items[1].productId)
         assertEquals(22L, items[1].unitPriceId)
-        assertEquals(5L, items[1].unitId)
+        assertEquals(111L, items[1].unitId)
         assertEquals(200.0, items[1].unitPrice)
         assertEquals(1, items[1].quantity)
         assertEquals(200.0, items[1].subTotal)
@@ -70,21 +72,32 @@ class GetInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
 
         val taxes0 = items[0].taxes
         assertEquals(2, taxes0.size)
-        assertEquals(20L, taxes0[0].salesTaxId)
+        assertEquals(1011L, taxes0[0].salesTaxId)
         assertEquals(5.0, taxes0[0].rate)
         assertEquals(10.0, taxes0[0].amount)
         assertEquals("CAD", taxes0[0].currency)
-        assertEquals(21L, taxes0[1].salesTaxId)
+        assertEquals(1112L, taxes0[1].salesTaxId)
         assertEquals(9.975, taxes0[1].rate)
         assertEquals(25.00, taxes0[1].amount)
         assertEquals("CAD", taxes0[1].currency)
 
         val taxes1 = items[1].taxes
         assertEquals(1, taxes1.size)
-        assertEquals(20L, taxes1[0].salesTaxId)
+        assertEquals(1011L, taxes1[0].salesTaxId)
         assertEquals(5.0, taxes1[0].rate)
         assertEquals(5.0, taxes1[0].amount)
         assertEquals("CAD", taxes1[0].currency)
+
+        val taxes = invoice.taxes
+        assertEquals(2, taxes.size)
+        assertEquals(1011L, taxes[0].salesTaxId)
+        assertEquals(5.0, taxes[0].rate)
+        assertEquals(15.0, taxes[0].amount)
+        assertEquals("CAD", taxes[0].currency)
+        assertEquals(1112L, taxes[1].salesTaxId)
+        assertEquals(9.975, taxes[1].rate)
+        assertEquals(25.0, taxes[1].amount)
+        assertEquals("CAD", taxes[1].currency)
     }
 
     @Test

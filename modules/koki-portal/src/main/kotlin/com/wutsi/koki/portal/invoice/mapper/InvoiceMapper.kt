@@ -69,20 +69,9 @@ class InvoiceMapper(
         val fmt = createDateTimeFormat()
         val dateFormat = createDateFormat()
 
-        val invoiceTaxes = entity.items.flatMap { item -> item.taxes }
-            .groupBy { tax -> tax.salesTaxId }
-            .map { entry ->
-                InvoiceSalesTax(
-                    id = -1,
-                    salesTaxId = entry.key,
-                    rate = entry.value[0].rate,
-                    currency = entry.value[0].currency,
-                    amount = entry.value.sumOf { it.amount }
-                )
-            }
-
         return InvoiceModel(
             id = entity.id,
+            pdfUrl = entity.pdfUrl,
             tax = entity.taxId?.let { id -> taxes[id] },
             number = entity.number,
             status = entity.status,
@@ -108,7 +97,7 @@ class InvoiceMapper(
             shippingAddress = entity.shippingAddress?.let { addr -> refDataMapper.toAddressModel(addr, locations) },
             billingAddress = entity.billingAddress?.let { addr -> refDataMapper.toAddressModel(addr, locations) },
             items = entity.items.map { item -> toInvoiceItemModel(item, units, products, salesTaxes) },
-            taxes = invoiceTaxes.map { tax -> toInvoiceSalesTaxModel(tax, salesTaxes) }
+            taxes = entity.taxes.map { tax -> toInvoiceSalesTaxModel(tax, salesTaxes) }
         )
     }
 

@@ -31,7 +31,53 @@ function koki_prices_edit(id) {
     );
 }
 
+function koki_product_editor_ready() {
+    const type = document.getElementById('type');
+    type.addEventListener('change', _on_product_type_changed);
+
+    $('#categoryId').select2({
+            ajax: {
+                url: function () {
+                    return '/categories/selector/search?type=' + type.value;
+                },
+                dataType: 'json',
+                delay: 1000,
+                processResults: function (item) {
+                    const xitems = item.map(function (item) {
+                        return {
+                            id: item.id,
+                            text: item.name,
+                        }
+                    });
+                    return {
+                        results: xitems
+                    };
+                }
+            },
+            placeholder: 'Select a category',
+            allowClear: true,
+            tokenSeparators: [','],
+            minimumInputLength: 3,
+        }
+    );
+
+}
+
 /*===== callbacks =========*/
+function _on_product_type_changed() {
+    console.log('_on_product_type_changed');
+
+    // Category
+    const type = document.getElementById('type');
+    $('#categoryId').val('').trigger('change');
+    document.getElementById('categoryId').disabled = !type.value || (type.value.length === 0);
+
+    // custom attributes
+    document.getElementById('section-service').style.display = (type.value === 'SERVICE' ? 'block' : 'none');
+    document.getElementById('section-digital').style.display = (type.value === 'DIGITAL' ? 'block' : 'none');
+    document.getElementById('section-physical').style.display = (type.value === 'PHYSICAL' ? 'block' : 'none');
+}
+
 function _koki_prices_on_modal_opened() {
     console.log('_koki_prices_on_modal_opened');
 

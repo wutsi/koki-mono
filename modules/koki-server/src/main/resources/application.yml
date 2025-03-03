@@ -163,5 +163,5 @@ koki:
         aws:
             bucket: koki-test
             region: us-east1
-            access-key:
-            secret-key:
+            access-key: ""
+            secret-key: ""

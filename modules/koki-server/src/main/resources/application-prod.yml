@@ -15,6 +15,10 @@ spring:
 swagger:
     protocol: https
 
+logging:
+    level:
+        com.wutsi: INFO
+
 koki:
     rabbitmq:
         url: ${CLOUDAMQP_URL}

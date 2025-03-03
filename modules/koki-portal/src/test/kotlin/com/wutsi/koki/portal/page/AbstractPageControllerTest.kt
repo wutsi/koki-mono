@@ -42,6 +42,7 @@ import com.wutsi.koki.employee.dto.SearchEmployeeResponse
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
+import com.wutsi.koki.file.dto.File
 import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.invoice.dto.CreateInvoiceRequest
@@ -161,6 +162,8 @@ abstract class AbstractPageControllerTest {
     protected val accessToken: String =
         "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJpc3MiOiJLb2tpIiwic3ViIjoiSGVydmUgVGNoZXBhbm5vdSIsInVzZXJJZCI6MjA0LCJ0ZW5hbnRJZCI6MSwiaWF0IjoxNzMxNTA5MDM0LCJleHAiOjE3MzE1OTU0MzR9."
 
+    protected val downloadDir = java.io.File(System.getProperty("user.home") + "/__wutsi/selenuim/downloads")
+
     fun setUpAnonymousUser() {
         doReturn(null).whenever(accessTokenHolder).get(any())
     }
@@ -192,6 +195,13 @@ abstract class AbstractPageControllerTest {
             options.addArguments("--no-sandbox")
             options.addArguments("--disable-dev-shm-usage")
         }
+        options.setEnableDownloads(true)
+
+        downloadDir.mkdirs()
+        val prefs = mapOf(
+            "download.default_directory" to downloadDir.absolutePath
+        )
+        options.setExperimentalOption("prefs", prefs)
 
         this.driver = ChromeDriver(options)
         if (System.getProperty("headless") == "true") { // In headless mode, set a size that will not require vertical scrolling

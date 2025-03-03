@@ -1,4 +1,4 @@
-package com.wutsi.koki.invoice.server.io.pdf
+package com.wutsi.koki.invoice.server.io.html
 
 import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.invoice.server.domain.InvoiceEntity
@@ -7,49 +7,59 @@ import com.wutsi.koki.refdata.server.domain.LocationEntity
 import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.refdata.server.service.SalesTaxService
 import com.wutsi.koki.refdata.server.service.UnitService
-import com.wutsi.koki.tenant.server.domain.BusinessEntity
+import com.wutsi.koki.tenant.server.service.BusinessService
 import com.wutsi.koki.tenant.server.service.TenantService
 import org.apache.commons.io.IOUtils
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import org.xhtmlrenderer.pdf.ITextRenderer
 import java.io.OutputStream
+import java.io.OutputStreamWriter
 import java.net.URL
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Service
-class InvoicePDFExporter(
+class InvoiceHtmlExporter(
     private val templatingEngine: TemplatingEngine,
     private val locationService: LocationService,
     private val tenantService: TenantService,
     private val unitService: UnitService,
     private val salesTaxService: SalesTaxService,
+    private val businessService: BusinessService,
 ) {
-    fun export(invoice: InvoiceEntity, business: BusinessEntity, output: OutputStream) {
-        val doc = loadDocument(invoice, business)
-        val renderer = ITextRenderer()
-        val context = renderer.sharedContext
-        context.isPrint = true
-        context.isInteractive = true
-        renderer.setDocumentFromString(doc.html())
-        renderer.layout()
-        renderer.createPDF(output)
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(InvoiceHtmlExporter::class.java)
     }
 
-    private fun loadDocument(invoice: InvoiceEntity, business: BusinessEntity): Document {
-        val input = InvoicePDFExporter::class.java.getResourceAsStream("/invoice/default/template.html")
+    fun export(invoice: InvoiceEntity, output: OutputStream) {
+        val doc = loadDocument(invoice)
+        val writer = OutputStreamWriter(output)
+        writer.use {
+            val xml = doc.html()
+            if (LOGGER.isDebugEnabled) {
+                LOGGER.debug("-----------\n$xml\n")
+            }
+            writer.write(xml)
+        }
+    }
+
+    private fun loadDocument(invoice: InvoiceEntity): Document {
+        val input = InvoiceHtmlExporter::class.java.getResourceAsStream("/invoice/default/template.html")
         val html = IOUtils.toString(input, "utf-8")
-        val data = createData(invoice, business)
+        val data = createData(invoice)
         val xhtml = templatingEngine.apply(html, data)
         val doc = Jsoup.parse(xhtml, "utf-8")
         doc.outputSettings().syntax(Document.OutputSettings.Syntax.xml)
         return doc
     }
 
-    private fun createData(invoice: InvoiceEntity, business: BusinessEntity): Map<String, Any> {
+    private fun createData(invoice: InvoiceEntity): Map<String, Any> {
+        // Business
+        val business = businessService.get(invoice.tenantId)
+
         // Locations
         val locationIds = listOf(
             invoice.shippingCityId,
@@ -176,5 +186,4 @@ class InvoicePDFExporter(
         }
         throw IllegalStateException("Currency not supported: $currency")
     }
-
 }

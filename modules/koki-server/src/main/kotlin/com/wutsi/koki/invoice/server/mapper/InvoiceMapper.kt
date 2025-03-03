@@ -7,13 +7,16 @@ import com.wutsi.koki.invoice.dto.InvoiceSalesTax
 import com.wutsi.koki.invoice.dto.InvoiceSummary
 import com.wutsi.koki.invoice.server.domain.InvoiceEntity
 import com.wutsi.koki.refdata.dto.Address
+import com.wutsi.koki.tenant.server.domain.TenantEntity
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 @Service
 class InvoiceMapper {
-    fun toInvoice(entity: InvoiceEntity): Invoice {
+    fun toInvoice(entity: InvoiceEntity, tenant: TenantEntity): Invoice {
         return Invoice(
             id = entity.id!!,
+            pdfUrl = "${tenant.portalUrl}/invoices/i${entity.id}/${UUID.randomUUID()}.pdf",
             number = entity.number,
             taxId = entity.taxId,
             orderId = entity.orderId,
@@ -81,7 +84,18 @@ class InvoiceMapper {
                         )
                     }
                 )
-            }
+            },
+            taxes = entity.items.flatMap { item -> item.taxes }
+                .groupBy { tax -> tax.salesTaxId }
+                .map { entry ->
+                    InvoiceSalesTax(
+                        id = -1,
+                        salesTaxId = entry.key,
+                        rate = entry.value[0].rate,
+                        currency = entry.value[0].currency,
+                        amount = entry.value.sumOf { it.amount }
+                    )
+                }
         )
     }
 
