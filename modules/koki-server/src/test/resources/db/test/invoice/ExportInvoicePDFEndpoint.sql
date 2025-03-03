@@ -13,6 +13,12 @@ INSERT INTO T_UNIT(id, name)
            (141, 'Treatment'),
            (142, 'Lesson');
 
+INSERT INTO T_JURIDICTION(id, country, state_fk)
+    VALUES(1000, 'CA', 101),
+          (1008, 'CA', 109),
+          (1010, 'CA', 111),
+          (237, 'CM', null);
+
 INSERT INTO T_SALES_TAX(id, juridiction_fk, name, rate, active)
     VALUES(1011, 1000, 'GST', 5.0, true),
           (1091, 1008, 'HST', 13.0, true),

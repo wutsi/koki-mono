@@ -20,7 +20,7 @@ class GetBusinessEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(HttpStatus.OK, result.statusCode)
 
         val business = result.body!!.business
-        assertEquals("My Business", business.companyName)
+        assertEquals("Business Inc", business.companyName)
         assertEquals("+5147580100", business.phone)
         assertEquals("+5147580111", business.fax)
         assertEquals("info@my-biz.com", business.email)
