@@ -57,6 +57,7 @@ abstract class TenantAwareEndpointTest : ClientHttpRequestInterceptor {
         expectedContentType: String,
         accessToken: String? = null,
     ): File? {
+        folder.mkdirs()
         val cnn = URL(url).openConnection() as HttpURLConnection
         try {
             if (accessToken != null) {
