@@ -12,6 +12,12 @@ object ConfigurationName {
     // EMAIL
     const val EMAIL_DECORATOR = "email.decorator"
 
+    // INVOICE
+    const val INVOICE_START_NUMBER = "invoice.start.number"
+    const val INVOICE_DUE_DAYS = "invoice.due.days"
+    const val INVOICE_EMAIL_OPENED = "invoice.email.opened"
+    const val INVOICE_EMAIL_PAID = "invoice.email.paid"
+
     // Storage
     const val STORAGE_TYPE = "storage.type"
     const val STORAGE_LOCAL_DIRECTORY = "storage.local.directory"

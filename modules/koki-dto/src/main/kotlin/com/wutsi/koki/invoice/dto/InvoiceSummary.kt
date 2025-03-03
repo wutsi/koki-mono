@@ -17,5 +17,6 @@ data class InvoiceSummary(
     val createdById: Long? = null,
     val modifiedAt: Date = Date(),
     val modifiedById: Long? = null,
+    val invoicedAt: Date? = null,
     val dueAt: Date? = null,
 )
