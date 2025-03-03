@@ -11,7 +11,7 @@ import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/invoice/ExportInvoicePDFEndpoint.sql"])
+@Sql(value = ["/db/test/clean.sql", "/db/test/invoice/GetInvoicePDFEndpoint.sql"])
 class GetInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
     private val fmt = SimpleDateFormat("yyyy-MM-dd")
 
@@ -51,6 +51,7 @@ class GetInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("CA", invoice.billingAddress?.country)
         assertEquals("311 Pascal", invoice.billingAddress?.street)
         assertEquals("H2K2C2", invoice.billingAddress?.postalCode)
+        assertEquals("2025-01-01", fmt.format(invoice.invoicedAt))
         assertEquals("2025-01-30", fmt.format(invoice.dueAt))
 
         val items = invoice.items

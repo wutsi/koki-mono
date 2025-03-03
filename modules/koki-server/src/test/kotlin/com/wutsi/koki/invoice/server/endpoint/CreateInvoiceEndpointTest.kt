@@ -12,7 +12,11 @@ import com.wutsi.koki.invoice.server.dao.InvoiceRepository
 import com.wutsi.koki.invoice.server.dao.InvoiceSequenceRepository
 import com.wutsi.koki.invoice.server.dao.InvoiceTaxRepository
 import com.wutsi.koki.tax.server.dao.TaxRepository
+import com.wutsi.koki.tenant.dto.ConfigurationName
+import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
+import com.wutsi.koki.tenant.server.service.ConfigurationService
 import org.apache.commons.lang3.time.DateUtils
+import org.bouncycastle.oer.OERDefinition.seq
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
@@ -39,6 +43,9 @@ class CreateInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Autowired
     private lateinit var taxDao: TaxRepository
+
+    @Autowired
+    private lateinit var configService: ConfigurationService
 
     private val fmt = SimpleDateFormat("yyyy-MM-dd")
 
@@ -322,5 +329,49 @@ class CreateInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
 
         val tax = taxDao.findById(111L).get()
         assertEquals(response.body!!.invoiceId, tax.invoiceId)
+    }
+
+    @Test
+    fun `create with start number`() {
+        // GIVEN
+        val startNumber = 1000
+        configService.save(
+            request = SaveConfigurationRequest(
+                values = mapOf(ConfigurationName.INVOICE_START_NUMBER to startNumber.toString())
+            ),
+            tenantId = TENANT_ID,
+        )
+
+        val lastNumber = seqDao.findByTenantId(TENANT_ID)?.current ?: 0
+
+        // WHEN
+        val response = rest.postForEntity("/v1/invoices", request, CreateInvoiceResponse::class.java)
+
+        // THEN
+        val invoiceId = response.body!!.invoiceId
+        val invoice = dao.findById(invoiceId).get()
+        assertEquals(lastNumber + 1 + startNumber, invoice.number)
+    }
+
+    @Test
+    fun `create with invalid start number`() {
+        // GIVEN
+        val startNumber = "xxx"
+        configService.save(
+            request = SaveConfigurationRequest(
+                values = mapOf(ConfigurationName.INVOICE_START_NUMBER to startNumber)
+            ),
+            tenantId = TENANT_ID,
+        )
+
+        val lastNumber = seqDao.findByTenantId(TENANT_ID)?.current ?: 0
+
+        // WHEN
+        val response = rest.postForEntity("/v1/invoices", request, CreateInvoiceResponse::class.java)
+
+        // THEN
+        val invoiceId = response.body!!.invoiceId
+        val invoice = dao.findById(invoiceId).get()
+        assertEquals(lastNumber + 1, invoice.number)
     }
 }

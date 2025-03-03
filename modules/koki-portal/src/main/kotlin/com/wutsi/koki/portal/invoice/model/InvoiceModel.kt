@@ -32,6 +32,8 @@ data class InvoiceModel(
     val modifiedAtText: String = "",
     val createdBy: UserModel? = null,
     val modifiedBy: UserModel? = null,
+    val invoicedAt: Date? = null,
+    val invoicedAtText: String? = null,
     val dueAt: Date? = null,
     val dueAtText: String? = null,
 

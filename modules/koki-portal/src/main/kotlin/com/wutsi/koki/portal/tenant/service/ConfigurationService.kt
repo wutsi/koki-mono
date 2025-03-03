@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.tenant.service
 import com.wutsi.koki.portal.email.model.EmailDecoratorForm
 import com.wutsi.koki.portal.email.model.SMTPForm
 import com.wutsi.koki.portal.file.form.StorageForm
+import com.wutsi.koki.portal.invoice.form.InvoiceSettingsForm
 import com.wutsi.koki.sdk.KokiConfiguration
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
@@ -34,6 +35,17 @@ class ConfigurationService(
                     ConfigurationName.SMTP_PASSWORD to form.password,
                     ConfigurationName.SMTP_FROM_ADDRESS to form.fromAddress,
                     ConfigurationName.SMTP_FROM_PERSONAL to form.fromPersonal,
+                )
+            )
+        )
+    }
+
+    fun save(form: InvoiceSettingsForm) {
+        koki.save(
+            SaveConfigurationRequest(
+                values = mapOf(
+                    ConfigurationName.INVOICE_DUE_DAYS to form.dueDays.toString(),
+                    ConfigurationName.INVOICE_START_NUMBER to form.startNumber.toString(),
                 )
             )
         )

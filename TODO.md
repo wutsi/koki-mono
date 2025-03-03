@@ -80,23 +80,21 @@
 
 ## Invoicing
 
-- [x] Invoice API
-- [x] Invoice UI
-- [x] Generate Invoice PDF
+- [+] Setting: Configure payment terms
+- [+] Setting: Select invoice format
 - [] Send invoice by email when approved
 - [] Send invoice by email when paid
 - [] Setting: Configure email content
 - [] Setting: Configure initial invoice number
-- [] Setting: Configure payment terms
-- [] Setting: Select invoice format
 - [] Payment API
+- [] Capture payments manually: Cash, Check etc...
 - [] Capture online payments:
     - [] Paypal
     - [] Stripe
     - [] Flutterwave
-- [] Capture payments manually: Cash, Check etc...
-- [] Create new invoice
-- [] Add/Remove products from draft invoice
+- [x] Invoice API
+- [x] Invoice UI
+- [x] Generate Invoice PDF
 
 ## Module
 
@@ -161,6 +159,7 @@
 ## Tenant
 
 - [] Tenant should have a list of currencies
+- [] Init a tenant
 
 ## Users
 

@@ -135,9 +135,9 @@
                                     <td width="20%"><b>Invoice Number</b></td>
                                     <td th:text="${invoice.number}">NUMBER</td>
                                 </tr>
-                                <tr>
-                                    <td><b>Date</b></td>
-                                    <td th:text="${invoice.createdAtText}">CREATED</td>
+                                <tr th:if="${invoice.invoicedAt}">
+                                    <td><b>Invoice Date</b></td>
+                                    <td th:text="${invoice.invoicedAtText}">INVOICE_DATE</td>
                                 </tr>
                                 <tr th:if="${invoice.dueAt}">
                                     <td><b>Due Date</b></td>

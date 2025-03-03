@@ -37,6 +37,18 @@ class ExportInvoicePDFEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
+    fun cancelled() {
+        val file = download(
+            url = "http://localhost:$port/v1/invoices/pdf/$TENANT_ID.300.pdf",
+            expectedStatusCode = 200,
+            expectedFileName = "$TENANT_ID.300.pdf",
+            expectedContentType = "application/pdf"
+        )
+
+        assertTrue(file!!.length() > 0L)
+    }
+
+    @Test
     fun notFound() {
         val file = download(
             url = "http://localhost:$port/v1/invoices/pdf/$TENANT_ID.9999.pdf",

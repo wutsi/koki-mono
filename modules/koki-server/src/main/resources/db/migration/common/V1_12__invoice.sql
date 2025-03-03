@@ -47,7 +47,9 @@ CREATE TABLE T_INVOICE(
 
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
+  invoiced_at             DATE,
   due_at                  DATE,
+  due_days                INT,
 
   UNIQUE(tenant_fk, number),
   PRIMARY KEY(id)

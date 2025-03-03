@@ -19,6 +19,9 @@ object TenantFixtures {
         ConfigurationName.SMTP_FROM_ADDRESS to "no-reply@koki.com",
         ConfigurationName.SMTP_FROM_PERSONAL to "Koki",
 
+        ConfigurationName.INVOICE_DUE_DAYS to "30",
+        ConfigurationName.INVOICE_START_NUMBER to "1550",
+
         ConfigurationName.STORAGE_TYPE to "S3",
         ConfigurationName.STORAGE_S3_BUCKET to "tenant-koki",
         ConfigurationName.STORAGE_S3_REGION to "us-west-2",

@@ -9,23 +9,36 @@
 
 <div class="settings-container">
     <div class="settings-sidebar">
-        <div th:replace="~{__components/settings :: settings-menu('file')}"></div>
+        <div th:replace="~{__components/settings :: settings-menu('invoice')}"></div>
     </div>
-    <div class="settings-content">
-        <ul>
-            <li class="menu-item">
-                <h3>File</h3>
-            </li>
-            <li class="menu-item">
-                <a class="btn-storage" href="/settings/files/storage">
-                    <h5>Storage</h5>
-                    <div>Configure where your files will be stored</div>
-                </a>
-            </li>
-        </ul>
+    <div class="settings-content padding">
+        <div
+            th:replace="~{__components/settings :: settings-title('Invoice', '/settings')}"></div>
+
+        <table class="table">
+            <tr>
+                <td width="30%"><b>Start Invoice Number</b></td>
+                <td th:text="${form.startNumber}">NUMBER</td>
+            </tr>
+            <tr>
+                <td><b>Payment Terms</b></td>
+                <td>
+                    <div th:if="${form.dueDays == 0}">Pay Upon Reception</div>
+                    <div th:if="${form.dueDays > 0}">
+                        <span th:text="${form.dueDays}">00</span>
+                        days
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <a class="btn-edit btn btn-secondary" href="/settings/invoices/edit">Configure</a>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 
-
+<div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
 </body>
 </html>

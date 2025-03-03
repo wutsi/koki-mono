@@ -32,4 +32,11 @@ class SettingsControllerTest : AbstractPageControllerTest() {
         click(".btn-security")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS)
     }
+
+    @Test
+    fun invoice() {
+        navigateTo("/settings")
+        click(".btn-invoice")
+        assertCurrentPageIs(PageName.INVOICE_SETTINGS)
+    }
 }

@@ -75,7 +75,7 @@ INSERT INTO T_INVOICE(
           111, 'Ray Sponsible', 'ray.sponsible@gmail.com', '+5147580111', '+514758000',
           '340 Pascal', 'H1K1C1', 111, 100, 'CA',
           '311 Pascal', 'H2K2C2', 211, 200, 'CA',
-          '2025-01-01', '2025-01-30'
+          '2025-01-01', '2025-01-01'
         );
 
 INSERT INTO T_INVOICE_ITEM(id, invoice_fk, product_fk, unit_price_fk, unit_fk, quantity, unit_price, sub_total, currency, description)

@@ -81,10 +81,12 @@ class InvoiceMapper(
             modifiedAtText = fmt.format(entity.modifiedAt),
             modifiedBy = entity.modifiedById?.let { id -> users[id] },
             createdAt = entity.createdAt,
-            createdAtText = dateFormat.format(entity.createdAt),
+            createdAtText = fmt.format(entity.createdAt),
             createdBy = entity.createdById?.let { id -> users[id] },
             dueAt = entity.dueAt,
             dueAtText = entity.dueAt?.let { date -> dateFormat.format(date) },
+            invoicedAt = entity.invoicedAt,
+            invoicedAtText = entity.invoicedAt?.let { date -> dateFormat.format(date) },
 
             subTotalAmount = moneyMapper.toMoneyModel(entity.subTotalAmount, entity.currency),
             totalTaxAmount = moneyMapper.toMoneyModel(entity.totalTaxAmount, entity.currency),
