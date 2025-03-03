@@ -24,10 +24,13 @@ import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.refdata.server.service.SalesTaxService
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tax.server.service.TaxService
+import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.domain.BusinessEntity
 import com.wutsi.koki.tenant.server.service.BusinessService
+import com.wutsi.koki.tenant.server.service.ConfigurationService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
+import org.apache.commons.lang3.time.DateUtils
 import org.springframework.stereotype.Service
 import java.util.Date
 
@@ -44,6 +47,7 @@ class InvoiceService(
     private val juridictionService: JuridictionService,
     private val salesTaxService: SalesTaxService,
     private val taxService: TaxService,
+    private val configurationService: ConfigurationService,
     private val em: EntityManager,
 ) {
     fun get(id: Long, tenantId: Long): InvoiceEntity {
@@ -134,7 +138,10 @@ class InvoiceService(
 
         // Update the invoice
         if (request.status == InvoiceStatus.OPENED && invoice.status == InvoiceStatus.DRAFT) {
+            val now = Date()
             invoice.status = request.status
+            invoice.invoicedAt = Date()
+            invoice.dueAt = DateUtils.addDays(now, getDueDays(tenantId))
         } else if (request.status == InvoiceStatus.VOIDED && (invoice.status == InvoiceStatus.OPENED || invoice.status == InvoiceStatus.DRAFT)) {
             invoice.status = request.status
         } else if (request.status == InvoiceStatus.PAID && invoice.status == InvoiceStatus.OPENED && invoice.amountDue <= 0) {
@@ -302,14 +309,47 @@ class InvoiceService(
     }
 
     private fun generateNumber(tenantId: Long): Long {
+        // Generate number
         val seq = seqDao.findByTenantId(tenantId)
-        if (seq == null) {
+        val number = if (seq == null) {
             seqDao.save(InvoiceSequenceEntity(tenantId = tenantId, current = 1))
-            return 1L
+            1L
         } else {
             seq.current = seq.current + 1
             seqDao.save(seq)
-            return seq.current
+            seq.current
+        }
+
+        // Start
+        val configs = configurationService.search(
+            tenantId = tenantId,
+            names = listOf(ConfigurationName.INVOICE_START_NUMBER)
+        )
+        val start = if (configs.isEmpty()) {
+            0L
+        } else {
+            try {
+                configs[0].value.toLong()
+            } catch (ex: Exception) {
+                0L
+            }
+        }
+        return start + number
+    }
+
+    private fun getDueDays(tenantId: Long): Int {
+        val configs = configurationService.search(
+            tenantId = tenantId,
+            names = listOf(ConfigurationName.INVOICE_DUE_DAYS)
+        )
+        return if (configs.isEmpty()) {
+            0
+        } else {
+            try {
+                configs[0].value.toInt()
+            } catch (ex: Exception) {
+                0
+            }
         }
     }
 

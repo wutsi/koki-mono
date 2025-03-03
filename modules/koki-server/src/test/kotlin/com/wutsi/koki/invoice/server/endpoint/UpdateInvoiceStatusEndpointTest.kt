@@ -7,10 +7,17 @@ import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.invoice.dto.UpdateInvoiceStatusRequest
 import com.wutsi.koki.invoice.server.dao.InvoiceLogRepository
 import com.wutsi.koki.invoice.server.dao.InvoiceRepository
+import com.wutsi.koki.invoice.server.domain.InvoiceEntity
 import com.wutsi.koki.tax.server.dao.TaxRepository
+import com.wutsi.koki.tenant.dto.ConfigurationName
+import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
+import com.wutsi.koki.tenant.server.service.ConfigurationService
+import org.apache.commons.lang3.time.DateUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
+import java.text.SimpleDateFormat
+import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -25,7 +32,10 @@ class UpdateInvoiceStatusEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var taxDao: TaxRepository
 
-    private fun test(invoiceId: Long, status: InvoiceStatus) {
+    @Autowired
+    private lateinit var configService: ConfigurationService
+
+    private fun test(invoiceId: Long, status: InvoiceStatus): InvoiceEntity {
         val request = UpdateInvoiceStatusRequest(
             status = status,
             comment = "Yo man"
@@ -43,6 +53,8 @@ class UpdateInvoiceStatusEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.status, logs[0].status)
         assertEquals(request.comment, logs[0].comment)
         assertEquals(USER_ID, logs[0].createdById)
+
+        return invoice
     }
 
     fun badStatus(invoiceId: Long, status: InvoiceStatus) {
@@ -61,18 +73,64 @@ class UpdateInvoiceStatusEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `DRAFT to OPENED`() {
-        test(100, InvoiceStatus.OPENED)
+    fun `DRAFT to OPENED - no due days`() {
+        configService.save(
+            request = SaveConfigurationRequest(
+                mapOf(ConfigurationName.INVOICE_DUE_DAYS to "")
+            ),
+            tenantId = TENANT_ID
+        )
+
+        val invoice = test(100, InvoiceStatus.OPENED)
+
+        val fmt = SimpleDateFormat("yyyy-MM-dd")
+        val now = Date()
+        assertEquals(fmt.format(now), fmt.format(invoice.invoicedAt))
+        assertEquals(fmt.format(now), fmt.format(invoice.dueAt))
+    }
+
+    @Test
+    fun `DRAFT to OPENED - 30 due days`() {
+        configService.save(
+            request = SaveConfigurationRequest(
+                mapOf(ConfigurationName.INVOICE_DUE_DAYS to "30")
+            ),
+            tenantId = TENANT_ID
+        )
+
+        val invoice = test(101, InvoiceStatus.OPENED)
+
+        val fmt = SimpleDateFormat("yyyy-MM-dd")
+        val now = Date()
+        assertEquals(fmt.format(now), fmt.format(invoice.invoicedAt))
+        assertEquals(fmt.format(DateUtils.addDays(now, 30)), fmt.format(invoice.dueAt))
+    }
+
+    @Test
+    fun `DRAFT to OPENED - invalid due days`() {
+        configService.save(
+            request = SaveConfigurationRequest(
+                mapOf(ConfigurationName.INVOICE_DUE_DAYS to "xxx")
+            ),
+            tenantId = TENANT_ID
+        )
+
+        val invoice = test(102, InvoiceStatus.OPENED)
+
+        val fmt = SimpleDateFormat("yyyy-MM-dd")
+        val now = Date()
+        assertEquals(fmt.format(now), fmt.format(invoice.invoicedAt))
+        assertEquals(fmt.format(now), fmt.format(invoice.dueAt))
     }
 
     @Test
     fun `DRAFT to VOIDED`() {
-        test(101, InvoiceStatus.VOIDED)
+        test(103, InvoiceStatus.VOIDED)
     }
 
     @Test
     fun `DRAFT to PAID`() {
-        badStatus(102, InvoiceStatus.PAID)
+        badStatus(104, InvoiceStatus.PAID)
     }
 
     @Test

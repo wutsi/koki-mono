@@ -1,42 +1,41 @@
-package com.wutsi.koki.portal.settings.page
+package com.wutsi.koki.portal.invoice.page.settings
 
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
 import kotlin.test.Test
 
-class SettingsControllerTest : AbstractPageControllerTest() {
+class SettingsInvoiceControllerTest : AbstractPageControllerTest() {
     @Test
     fun show() {
-        navigateTo("/settings")
-        assertCurrentPageIs(PageName.SETTINGS)
+        navigateTo("/settings/invoices")
+        assertCurrentPageIs(PageName.INVOICE_SETTINGS)
     }
 
     @Test
-    fun `login required`() {
-        setUpAnonymousUser()
+    fun edit() {
+        navigateTo("/settings/invoices")
+        click(".btn-edit")
+        assertCurrentPageIs(PageName.INVOICE_SETTINGS_EDIT)
+    }
 
-        navigateTo("/settings")
+    @Test
+    fun `show - without permission invoice-admin`() {
+        setUpUserWithoutPermissions(listOf("invoice:admin"))
+        navigateTo("/settings/invoices")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
+
+    @Test
+    fun `required login`() {
+        setUpAnonymousUser()
+        navigateTo("/settings/invoices")
         assertCurrentPageIs(PageName.LOGIN)
     }
 
     @Test
-    fun email() {
-        navigateTo("/settings")
-        click(".btn-email")
-        assertCurrentPageIs(PageName.EMAIL_SETTINGS)
-    }
-
-    @Test
-    fun security() {
-        navigateTo("/settings")
-        click(".btn-security")
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS)
-    }
-
-    @Test
-    fun invoice() {
-        navigateTo("/settings")
-        click(".btn-invoice")
-        assertCurrentPageIs(PageName.INVOICE_SETTINGS)
+    fun back() {
+        navigateTo("/settings/invoices")
+        click(".btn-back")
+        assertCurrentPageIs(PageName.SETTINGS)
     }
 }

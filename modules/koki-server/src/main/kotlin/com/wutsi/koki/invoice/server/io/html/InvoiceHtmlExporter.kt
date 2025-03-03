@@ -19,6 +19,7 @@ import java.io.OutputStreamWriter
 import java.net.URL
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 @Service
@@ -107,8 +108,14 @@ class InvoiceHtmlExporter(
         )
 
         data["invoiceNumber"] = invoice.number
-        data["invoiceDate"] = dateFormat.format(invoice.createdAt)
-        invoice.dueAt?.let { data["invoiceDueDate"] = dateFormat.format(invoice.dueAt) }
+        invoice.invoicedAt?.let { data["invoiceDate"] = dateFormat.format(invoice.invoicedAt) }
+        if (isSameDay(invoice.invoicedAt, invoice.dueAt)) {
+            data["invoicePayUponReception"] = true
+        } else {
+            invoice.dueAt?.let {
+                data["invoiceDueDate"] = dateFormat.format(invoice.dueAt)
+            }
+        }
         data["totalAmount"] = moneyFormat.format(invoice.totalAmount)
         data["invoicePaid"] = (invoice.status == InvoiceStatus.PAID)
         data["invoiceVoided"] = (invoice.status == InvoiceStatus.VOIDED)
@@ -185,5 +192,13 @@ class InvoiceHtmlExporter(
             }
         }
         throw IllegalStateException("Currency not supported: $currency")
+    }
+
+    private fun isSameDay(date1: Date?, date2: Date?): Boolean {
+        if (date1 == null || date2 == null) {
+            return false
+        } else {
+            return Math.abs(date1.time - date2.time) <= 86400000L
+        }
     }
 }

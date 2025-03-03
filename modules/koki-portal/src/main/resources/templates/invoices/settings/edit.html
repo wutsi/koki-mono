@@ -12,28 +12,42 @@
         <div th:replace="~{__components/settings :: settings-menu('invoice')}"></div>
     </div>
     <div class="settings-content padding">
-        <div
-            th:replace="~{__components/settings :: settings-title('Invoice', '/settings')}"></div>
+        <div th:replace="~{__components/settings :: settings-title('Invoice', '/settings/invoices')}"></div>
 
-        <table class="table">
-            <tr>
-                <td width="30%"><b>Start Invoice Number</b></td>
-                <td th:text="${form.startNumber}">NUMBER</td>
-            </tr>
-            <tr>
-                <td><b>Payment Terms</b></td>
-                <td>
-                    <div th:if="${form.dueDays == 0}">Pay Upon Receiption</div>
-                    <div th:if="${form.dueDays > 0}">
-                        <span th:text="${form.dueDays}">00</span>
-                        days
-                    </div>
-                </td>
-            </tr>
-        </table>
-        <div class="margin-top">
-            <a class="btn-edit btn btn-secondary" href="/settings/invoices/edit">Configure</a>
-        </div>
+        <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+        <form class="form" method="post" th:action="@{/settings/invoices/save}" th:object="${form}">
+            <table class="table">
+                <tr>
+                    <td width="30%"><b>Start Invoice Number <span class="required">*</span></b></td>
+                    <td>
+                        <input required step="1" th:field="*{startNumber}" type="number"/>
+                        <div class="margin-top text-small">
+                            Be careful changing the starting invoice number.
+                            <br/>
+                            Make sure you DO NOT have any invoice having a number greater that
+                            the number you've entered here.
+                            <br/>
+                            This will lead to errors.
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Payment Terms <span class="required">*</span></b></td>
+                    <td>
+                        <select th:field="*{dueDays}">
+                            <option value="0">Pay Upon Reception</option>
+                            <option value="7">Payment due within 7 days</option>
+                            <option value="10">Payment due within 10 days</option>
+                            <option value="15">Payment due within 15 days</option>
+                            <option value="30">Payment due within 30 days</option>
+                            <option value="60">Payment due within 60 days</option>
+                            <option value="90">Payment due within 90 days</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <button type="submit">Save</button>
+        </form>
     </div>
 </div>
 

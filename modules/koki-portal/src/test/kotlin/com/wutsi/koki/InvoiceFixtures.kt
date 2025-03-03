@@ -84,6 +84,7 @@ object InvoiceFixtures {
         pdfUrl = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
         number = 12039221L,
         createdAt = Date(),
+        invoicedAt = Date(),
         dueAt = DateUtils.addDays(Date(), 10),
         customer = Customer(name = "Ray Sponsible"),
         taxId = TaxFixtures.taxes[1].id,

@@ -67,6 +67,7 @@ data class InvoiceEntity(
 
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
+    var invoicedAt: Date? = null,
     var dueAt: Date? = null,
 ) {
     fun hasShippingAddress(): Boolean {

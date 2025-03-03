@@ -3,6 +3,8 @@ INSERT INTO T_INVOICE(id, tenant_fk, tax_fk, order_fk, number, status, customer_
         (100, 1, null, null, 10955, 1, 1,    'Ray Sponsible', 'ray.sponsible@gmail.com', 0, 'CAD'),
         (101, 1, null, null, 10956, 1, 1,    'Ray Sponsible', 'ray.sponsible@gmail.com', 0, 'CAD'),
         (102, 1, null, null, 10957, 1, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
+        (103, 1, null, null, 10958, 1, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
+        (104, 1, null, null, 10959, 1, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
 
         (110, 1, null, null, 10910, 2, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
         (111, 1, null, null, 10911, 2, null, 'Roger', 'roger.milla@gmail.com', 10, 'CAD'),

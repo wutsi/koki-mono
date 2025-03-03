@@ -24,11 +24,15 @@
             No: <b>{{invoiceNumber}}</b>
         </td>
         <td align="center" style="background: #f0f0f0" width="33%">
-            Date: {{invoiceDate}}
+            Invoice Date: {{invoiceDate}}
         </td>
         <td align="right" style="background: #f0f0f0" width="33%">
+            {{#invoicePayUponReception}}
+            Pay Upon Reception
+            {{/invoicePayUponReception}}
+
             {{#invoiceDueDate}}
-            Pay By: {{invoiceDueDate}}
+            Due Due: {{invoiceDueDate}}
             {{/invoiceDueDate}}
         </td>
     </tr>
