@@ -9,7 +9,6 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.email.server.service.TenantEmailInitializer
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import com.wutsi.koki.tenant.server.domain.ConfigurationEntity
@@ -17,7 +16,6 @@ import com.wutsi.koki.tenant.server.service.ConfigurationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.bean.override.mockito.MockitoBean
-import kotlin.collections.flatMap
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 

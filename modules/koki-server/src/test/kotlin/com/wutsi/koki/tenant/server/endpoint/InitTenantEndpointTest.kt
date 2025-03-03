@@ -1,24 +1,13 @@
 package com.wutsi.koki.tenant.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.tenant.dto.ConfigurationName
-import com.wutsi.koki.tenant.dto.CreateRoleRequest
-import com.wutsi.koki.tenant.dto.CreateRoleResponse
 import com.wutsi.koki.tenant.server.dao.ConfigurationRepository
-import com.wutsi.koki.tenant.server.dao.RoleRepository
-import com.wutsi.koki.tenant.server.service.TenantInitializer
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
-import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
-import javax.sql.DataSource
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/tenant/InitTenantEndpointTest.sql"])
