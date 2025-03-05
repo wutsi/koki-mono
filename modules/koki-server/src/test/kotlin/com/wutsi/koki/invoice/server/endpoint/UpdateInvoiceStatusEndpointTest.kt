@@ -73,7 +73,7 @@ class UpdateInvoiceStatusEndpointTest : AuthorizationAwareEndpointTest() {
             assertEquals("application/pdf", file.contentType)
         } else if (invoice.status == InvoiceStatus.VOIDED) {
             assertNotNull(invoice.pdfVoidedFileId)
-            val file = fileDao.findById(invoice.pdfPaidFileId!!).get()
+            val file = fileDao.findById(invoice.pdfVoidedFileId!!).get()
             assertEquals("Invoice-${invoice.number}.pdf", file.name)
             assertEquals("application/pdf", file.contentType)
         }

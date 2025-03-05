@@ -106,7 +106,7 @@ class FileService(
 
         // Create the file
         return create(
-            filename = file.name,
+            filename = file.originalFilename ?: file.name,
             contentType = file.contentType,
             contentLength = file.size,
             userId = userId,
