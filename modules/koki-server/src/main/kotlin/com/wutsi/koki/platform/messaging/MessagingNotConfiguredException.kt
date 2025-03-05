@@ -1,3 +1,3 @@
 package com.wutsi.koki.platform.messaging
 
-class MessagingServiceNotConfiguredException(message: String): RuntimeException(message) 
+class MessagingNotConfiguredException(message: String) : RuntimeException(message)

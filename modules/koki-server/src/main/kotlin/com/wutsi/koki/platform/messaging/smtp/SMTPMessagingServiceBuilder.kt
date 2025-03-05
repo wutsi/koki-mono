@@ -1,10 +1,12 @@
 package com.wutsi.koki.platform.messaging.smtp
 
+import com.wutsi.koki.platform.messaging.MessagingNotConfiguredException
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import jakarta.mail.Authenticator
 import jakarta.mail.PasswordAuthentication
 import jakarta.mail.Session
 import java.util.Properties
+import kotlin.jvm.Throws
 
 class SMTPMessagingServiceBuilder {
     companion object {
@@ -18,6 +20,7 @@ class SMTPMessagingServiceBuilder {
         )
     }
 
+    @Throws(MessagingNotConfiguredException::class)
     fun build(config: Map<String, String>): SMTPMessagingService {
         validate(config)
 
@@ -45,7 +48,7 @@ class SMTPMessagingServiceBuilder {
     private fun validate(config: Map<String, String>) {
         val missing = CONFIG_NAMES.filter { name -> config[name] == null }
         if (missing.isNotEmpty()) {
-            throw IllegalStateException("SMTP not configured. Missing config: $missing")
+            throw MessagingNotConfiguredException("SMTP not configured. Missing config: $missing")
         }
     }
 }

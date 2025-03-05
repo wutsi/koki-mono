@@ -1,20 +1,18 @@
-package com.wutsi.koki.notification.server.mq
+package com.wutsi.koki.notification.server.service
 
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
-import org.springframework.beans.factory.annotation.Autowired
 
-abstract class AbstractNotificationWorker: NotificationWorker {
-    @Autowired
-    private lateinit var registry: NotificationConsumer
-
+abstract class AbstractNotificationWorker(
+    private val registry: NotificationConsumer
+) : NotificationWorker {
     @PostConstruct
-    fun setUp(){
+    fun setUp() {
         registry.register(this)
     }
 
     @PreDestroy
-    fun tearDown(){
+    fun tearDown() {
         registry.unregister(this)
     }
 }

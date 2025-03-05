@@ -5,11 +5,11 @@ import com.rabbitmq.client.AMQP
 import com.rabbitmq.client.AMQP.BasicProperties
 import com.rabbitmq.client.Channel
 import com.rabbitmq.client.GetResponse
+import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.platform.storage.StorageType
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
 import java.io.ByteArrayInputStream
 import java.nio.charset.Charset
 import java.text.SimpleDateFormat
@@ -19,13 +19,26 @@ class RabbitMQPublisher(
     private val channel: Channel,
     private val objectMapper: ObjectMapper,
     private val storageBuilder: StorageServiceBuilder,
-
-    @Value("\${koki.rabbitmq.exchange-name}") private val exchangeName: String,
-    @Value("\${koki.rabbitmq.max-retries}") private val maxRetries: Int,
-    @Value("\${koki.rabbitmq.ttl-seconds}") private val ttl: Int,
-) {
+    private val exchangeName: String,
+    private val maxRetries: Int,
+    private val ttl: Int,
+) : Publisher {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(RabbitMQPublisher::class.java)
+    }
+
+    override fun publish(event: Any) {
+        try {
+            val rabbitMQEvent = createRabbitMQEvent(event)
+            channel.basicPublish(
+                exchangeName,
+                "", // routing-key
+                properties(), // basic-properties
+                objectMapper.writeValueAsString(rabbitMQEvent).toByteArray(Charset.forName("utf-8")),
+            )
+        } catch (ex: Exception) {
+            LOGGER.warn("Unnable to publish event: $event", ex)
+        }
     }
 
     fun processDlq(queue: String, dlq: String) {
@@ -52,20 +65,6 @@ class RabbitMQPublisher(
             }
         } finally {
             LOGGER.info("DLQ=$dlq - $processed message(s) processed, $expired message(s) expired")
-        }
-    }
-
-    override fun publish(event: Any) {
-        try {
-            val rabbitMQEvent = createRabbitMQEvent(event)
-            channel.basicPublish(
-                exchangeName,
-                "", // routing-key
-                properties(), // basic-properties
-                objectMapper.writeValueAsString(rabbitMQEvent).toByteArray(Charset.forName("utf-8")),
-            )
-        } catch (ex: Exception) {
-            LOGGER.warn("Unnable to publish event: $event", ex)
         }
     }
 

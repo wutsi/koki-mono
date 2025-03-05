@@ -80,16 +80,22 @@
 
 ## Invoicing
 
-- [] Send invoice by email when approved
-- [] Send invoice by email when paid
-- [] Setting: Configure email content
-- [] Setting: Configure initial invoice number
+- [x] Before sending email notification, make sure that event.status=invoice.status
+- [x] Setting: Configure email content
+- [x] Setting: Configure initial invoice number
+- [x] Send invoice by email when approved
+- [x] Send invoice by email when paid
 - [] Payment API
-- [] Capture payments manually: Cash, Check etc...
+- [] Capture payments manually:
+    - [] Cash
+    - [] Check
+    - [] Interact
 - [] Capture online payments:
     - [] Paypal
     - [] Stripe
     - [] Flutterwave
+- [] Invoice Widget
+- [] Send email for unpaid invoices
 - [x] Invoice API
 - [x] Invoice UI
 - [x] Generate Invoice PDF

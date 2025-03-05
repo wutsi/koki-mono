@@ -10,7 +10,6 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
-import org.hibernate.annotations.BatchSize
 import java.util.Date
 
 @Entity
@@ -41,7 +40,6 @@ data class RoleEntity(
     var modifiedAt: Date = Date(),
     var deletedAt: Date? = null,
 
-    @BatchSize(20)
     @ManyToMany
     @JoinTable(
         name = "T_ROLE_PERMISSION",

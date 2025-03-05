@@ -38,9 +38,15 @@ class TenantInvoiceInitializerTest {
         initializer.init(tenantId)
 
         val request = argumentCaptor<SaveConfigurationRequest>()
-        verify(configurationService, times(2)).save(request.capture(), eq(tenantId))
-        assertNotNull(request.firstValue.values[ConfigurationName.INVOICE_EMAIL_OPENED])
-        assertNotNull(request.secondValue.values[ConfigurationName.INVOICE_EMAIL_PAID])
+        verify(configurationService, times(6)).save(request.capture(), eq(tenantId))
+
+        assertNotNull(request.allValues[0].values[ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED])
+        assertNotNull(request.allValues[1].values[ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT])
+        assertNotNull(request.allValues[2].values[ConfigurationName.INVOICE_EMAIL_OPENED_BODY])
+
+        assertNotNull(request.allValues[3].values[ConfigurationName.INVOICE_EMAIL_PAID_ENABLED])
+        assertNotNull(request.allValues[4].values[ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT])
+        assertNotNull(request.allValues[5].values[ConfigurationName.INVOICE_EMAIL_PAID_BODY])
     }
 
     @Test

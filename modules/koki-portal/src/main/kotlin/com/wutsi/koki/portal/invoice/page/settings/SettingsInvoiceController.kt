@@ -3,7 +3,9 @@ package com.wutsi.koki.portal.invoice.page.settings
 import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
+import com.wutsi.koki.portal.invoice.form.InvoiceNotificationSettingsForm
 import com.wutsi.koki.portal.invoice.form.InvoiceSettingsForm
+import com.wutsi.koki.portal.invoice.model.InvoiceNotificationType
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import com.wutsi.koki.tenant.dto.ConfigurationName
@@ -23,6 +25,7 @@ class SettingsInvoiceController(
         @RequestHeader(required = false, name = "Referer") referer: String? = null,
         @RequestParam(required = false, name = "_toast") toast: Long? = null,
         @RequestParam(required = false, name = "_ts") timestamp: Long? = null,
+        @RequestParam(required = false, name = "_op") operation: String? = null,
         model: Model
     ): String {
         val configs = service.configurations(keyword = "invoice.")
@@ -31,6 +34,22 @@ class SettingsInvoiceController(
             InvoiceSettingsForm(
                 dueDays = (configs[ConfigurationName.INVOICE_DUE_DAYS]?.toInt() ?: 0),
                 startNumber = (configs[ConfigurationName.INVOICE_START_NUMBER]?.toLong() ?: 0L),
+            )
+        )
+        model.addAttribute(
+            "openedNotification",
+            InvoiceNotificationSettingsForm(
+                enabled = !configs[ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED].isNullOrEmpty(),
+                subject = configs[ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT] ?: "",
+                body = configs[ConfigurationName.INVOICE_EMAIL_OPENED_BODY] ?: "",
+            )
+        )
+        model.addAttribute(
+            "paidNotification",
+            InvoiceNotificationSettingsForm(
+                enabled = !configs[ConfigurationName.INVOICE_EMAIL_PAID_ENABLED].isNullOrEmpty(),
+                subject = configs[ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT] ?: "",
+                body = configs[ConfigurationName.INVOICE_EMAIL_PAID_BODY] ?: "",
             )
         )
 
@@ -42,7 +61,7 @@ class SettingsInvoiceController(
             )
         )
 
-        loadToast(referer, toast, timestamp, model)
+        loadToast(referer, toast, timestamp, operation, model)
         return "invoices/settings/show"
     }
 
@@ -50,10 +69,43 @@ class SettingsInvoiceController(
         referer: String?,
         toast: Long?,
         timestamp: Long?,
+        operation: String?,
         model: Model
     ) {
-        if (toast != null && canShowToasts(timestamp, referer, listOf("/settings/invoices/edit"))) {
-            model.addAttribute("toast", "Saved")
+        if (
+            toast != null &&
+            canShowToasts(
+                timestamp,
+                referer,
+                listOf(
+                    "/settings/invoices",
+                    "/settings/invoices/edit",
+                    "/settings/invoices/notifications/paid",
+                    "/settings/invoices/notifications/opened"
+                )
+            )
+        ) {
+            if (referer?.startsWith("/settings/invoices/notifications/") == true) {
+                model.addAttribute("toast", "Notification updated")
+            } else if (referer == "/settings/invoices") {
+                if (operation == "enabled") {
+                    model.addAttribute("toast", "Notification enabled")
+                } else if (operation == "disabled") {
+                    model.addAttribute("toast", "Notification disabled")
+                }
+            } else {
+                model.addAttribute("toast", "Saved")
+            }
         }
+    }
+
+    @GetMapping("/settings/invoices/notifications/enable")
+    fun enable(
+        @RequestParam type: InvoiceNotificationType,
+        @RequestParam status: Boolean,
+    ): String {
+        service.enable(type, status)
+        return "redirect:/settings/invoices?_toast=1&_ts=" + System.currentTimeMillis() +
+            "&_op=" + if (status) "enabled" else "disabled"
     }
 }

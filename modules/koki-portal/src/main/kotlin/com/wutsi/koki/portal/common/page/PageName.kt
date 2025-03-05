@@ -43,6 +43,7 @@ object PageName {
     const val INVOICE_LIST = "page.invoice.list"
     const val INVOICE_SETTINGS = "page.settings.invoice"
     const val INVOICE_SETTINGS_EDIT = "page.settings.invoice.edit"
+    const val INVOICE_SETTINGS_NOTIFICATION = "page.settings.invoice.notification"
 
     const val LOGIN = "page.login"
 

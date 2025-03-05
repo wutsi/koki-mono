@@ -9,6 +9,7 @@ import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.email.mapper.EmailMapper
 import com.wutsi.koki.portal.email.model.EmailForm
 import com.wutsi.koki.portal.email.model.EmailModel
+import com.wutsi.koki.portal.file.service.FileService
 import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.sdk.KokiEmails
 import org.springframework.stereotype.Service
@@ -19,27 +20,21 @@ class EmailService(
     private val mapper: EmailMapper,
     private val accountService: AccountService,
     private val contactService: ContactService,
+    private val fileService: FileService,
     private val userService: UserService,
 ) {
     fun email(id: String): EmailModel {
         val email = koki.email(id).email
-        val sender = userService.user(email.senderId)
-        val account = if (email.recipient.type == ObjectType.ACCOUNT) {
-            accountService.account(id = email.recipient.id, fullGraph = false)
+        val sender = email.senderId?.let { id -> userService.user(id) }
+        val files = if (email.attachmentFileIds.isNotEmpty()) {
+            fileService.files(
+                ids = email.attachmentFileIds,
+                limit = email.attachmentFileIds.size,
+            ).associateBy { file -> file.id }
         } else {
-            null
+            emptyMap()
         }
-        val contact = if (email.recipient.type == ObjectType.CONTACT) {
-            contactService.contact(id = email.recipient.id)
-        } else {
-            null
-        }
-        return mapper.toEmailModel(
-            entity = email,
-            sender = sender,
-            account = account,
-            contact = contact
-        )
+        return mapper.toEmailModel(entity = email, sender = sender, files = files)
     }
 
     fun emails(
@@ -60,6 +55,7 @@ class EmailService(
 
         // Senders
         val senderIds = emails.map { email -> email.senderId }
+            .filterNotNull()
             .toSet()
         val senders = if (senderIds.isEmpty() || !fullGraph) {
             emptyMap()
@@ -70,57 +66,46 @@ class EmailService(
             ).associateBy { user -> user.id }
         }
 
-        // Accounts
-        val accountIds = emails
-            .filter { email -> email.recipient.type == ObjectType.ACCOUNT }
-            .map { email -> email.recipient.id }
-            .toSet()
-        val accounts = if (accountIds.isEmpty() || !fullGraph) {
-            emptyMap()
-        } else {
-            accountService.accounts(
-                ids = accountIds.toList(),
-                limit = accountIds.size,
-            ).associateBy { account -> account.id }
-        }
-
-        // Contacts
-        val contactIds = emails
-            .filter { email -> email.recipient.type == ObjectType.CONTACT }
-            .map { email -> email.recipient.id }
-            .toSet()
-        val contacts = if (contactIds.isEmpty() || !fullGraph) {
-            emptyMap()
-        } else {
-            contactService.contacts(
-                ids = contactIds.toList(),
-                limit = contactIds.size,
-            ).associateBy { contact -> contact.id }
-        }
-
         return emails.map { email ->
             mapper.toEmailModel(
                 entity = email,
                 senders = senders,
-                accounts = accounts,
-                contacts = contacts,
             )
         }
     }
 
     fun send(form: EmailForm): String {
+        val account = if (form.recipientType == ObjectType.ACCOUNT && form.accountId != null) {
+            accountService.account(form.accountId!!, fullGraph = false)
+        } else {
+            null
+        }
+        val contact = if (form.recipientType == ObjectType.CONTACT && form.contactId != null) {
+            contactService.contact(form.contactId!!, fullGraph = false)
+        } else {
+            null
+        }
+
         return koki.send(
             request = SendEmailRequest(
                 subject = form.subject,
                 body = form.body,
                 recipient = Recipient(
                     type = form.recipientType ?: ObjectType.UNKNOWN,
-                    id = if (form.recipientType == ObjectType.ACCOUNT) {
-                        form.accountId ?: -1L
-                    } else if (form.recipientType == ObjectType.CONTACT) {
-                        form.contactId ?: -1L
-                    } else {
-                        -1L
+                    id = when (form.recipientType) {
+                        ObjectType.ACCOUNT -> form.accountId
+                        ObjectType.CONTACT -> form.contactId
+                        else -> null
+                    },
+                    displayName = when (form.recipientType) {
+                        ObjectType.ACCOUNT -> account?.name
+                        ObjectType.CONTACT -> "${contact?.firstName} ${contact?.lastName}"
+                        else -> null
+                    },
+                    email = when (form.recipientType) {
+                        ObjectType.ACCOUNT -> account?.email ?: ""
+                        ObjectType.CONTACT -> contact?.email ?: ""
+                        else -> ""
                     }
                 ),
                 owner = if (form.ownerId == null || form.ownerType == null) {

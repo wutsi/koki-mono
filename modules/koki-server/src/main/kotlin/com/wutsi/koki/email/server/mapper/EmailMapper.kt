@@ -18,6 +18,8 @@ class EmailMapper {
             recipient = Recipient(
                 id = entity.recipientId,
                 type = entity.recipientType,
+                email = entity.recipientEmail,
+                displayName = entity.recipientEmail,
             ),
             createdAt = entity.createdAt,
             attachmentFileIds = entity.attachments.map { attachment -> attachment.fileId }
@@ -33,6 +35,8 @@ class EmailMapper {
             recipient = Recipient(
                 id = entity.recipientId,
                 type = entity.recipientType,
+                email = entity.recipientEmail,
+                displayName = entity.recipientEmail,
             ),
             createdAt = entity.createdAt,
         )

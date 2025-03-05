@@ -10,7 +10,6 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
-import org.hibernate.annotations.BatchSize
 import java.util.Date
 
 @Entity
@@ -44,7 +43,6 @@ data class BusinessEntity(
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
 
-    @BatchSize(20)
     @ManyToMany
     @JoinTable(
         name = "T_BUSINESS_JURIDICTION",

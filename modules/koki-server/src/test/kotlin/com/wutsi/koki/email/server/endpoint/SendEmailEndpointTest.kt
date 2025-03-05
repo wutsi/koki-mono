@@ -19,6 +19,7 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.platform.messaging.Message
 import com.wutsi.koki.platform.messaging.MessagingException
+import com.wutsi.koki.platform.messaging.MessagingNotConfiguredException
 import com.wutsi.koki.platform.messaging.MessagingService
 import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
 import org.junit.jupiter.api.BeforeEach
@@ -60,7 +61,12 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
         val request = SendEmailRequest(
             subject = "Hello man",
             body = "<p>This is an example of email</p>",
-            recipient = Recipient(id = 100, type = ObjectType.ACCOUNT),
+            recipient = Recipient(
+                id = 100,
+                type = ObjectType.ACCOUNT,
+                email = "info@ray-inc.com",
+                displayName = "Ray Inc"
+            ),
             owner = ObjectReference(id = 111, type = ObjectType.TAX),
             attachmentFileIds = listOf(100, 101)
         )
@@ -75,6 +81,9 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("This is an example of email", email.summary)
         assertEquals(request.recipient.id, email.recipientId)
         assertEquals(request.recipient.type, email.recipientType)
+        assertEquals(request.recipient.email, email.recipientEmail)
+        assertEquals(request.recipient.displayName, email.recipientDisplayName)
+        assertEquals(request.attachmentFileIds.size, email.attachmentCount)
         assertEquals(USER_ID, email.senderId)
         assertEquals(TENANT_ID, email.tenantId)
 
@@ -95,8 +104,8 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
             "<table> <tr><td>test</td></tr> <tr><td>${request.body}</td></tr> </table>",
             msg.firstValue.body,
         )
-        assertEquals("Ray Inc", msg.firstValue.recipient.displayName)
-        assertEquals("info@ray-inc.com", msg.firstValue.recipient.email)
+        assertEquals(request.recipient.displayName, msg.firstValue.recipient.displayName)
+        assertEquals(request.recipient.email, msg.firstValue.recipient.email)
         assertEquals("text/html", msg.firstValue.mimeType)
         assertEquals(request.attachmentFileIds.size, msg.firstValue.attachments.size)
     }
@@ -135,7 +144,12 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
                     There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...
                 </p>
             """.trimIndent(),
-            recipient = Recipient(id = 110, type = ObjectType.CONTACT),
+            recipient = Recipient(
+                id = 110,
+                type = ObjectType.CONTACT,
+                email = "ray.sponsible@gmail.com",
+                displayName = "Ray Sponsible"
+            ),
             owner = null
         )
         val response = rest.postForEntity("/v1/emails", request, SendEmailResponse::class.java)
@@ -154,6 +168,7 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
         )
         assertEquals(request.recipient.id, email.recipientId)
         assertEquals(request.recipient.type, email.recipientType)
+        assertEquals(request.attachmentFileIds.size, email.attachmentCount)
         assertEquals(USER_ID, email.senderId)
         assertEquals(TENANT_ID, email.tenantId)
 
@@ -167,22 +182,63 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
         verify(messagingService).send(msg.capture())
         assertEquals(request.subject, msg.firstValue.subject)
         assertTrue(msg.firstValue.body.contains(request.body))
-        assertEquals("Ray Sponsible", msg.firstValue.recipient.displayName)
-        assertEquals("ray.sponsible@gmail.com", msg.firstValue.recipient.email)
+        assertEquals(request.recipient.displayName, msg.firstValue.recipient.displayName)
+        assertEquals(request.recipient.email, msg.firstValue.recipient.email)
         assertEquals("text/html", msg.firstValue.mimeType)
     }
 
     @Test
-    fun `send to contact without account`() {
+    fun `send without recipientId`() {
         val request = SendEmailRequest(
             subject = "Hello man",
             body = "<p>This is an example of email</p>",
-            recipient = Recipient(id = 120, type = ObjectType.CONTACT),
+            recipient = Recipient(
+                id = null,
+                type = ObjectType.UNKNOWN,
+                email = "info@ray-inc.com",
+                displayName = "Ray Inc"
+            ),
+            owner = ObjectReference(id = 111, type = ObjectType.TAX),
+            attachmentFileIds = listOf(100, 101)
         )
-        val response = rest.postForEntity("/v1/emails", request, ErrorResponse::class.java)
+        val response = rest.postForEntity("/v1/emails", request, SendEmailResponse::class.java)
 
-        assertEquals(HttpStatus.CONFLICT, response.statusCode)
-        assertEquals(ErrorCode.EMAIL_RECIPIENT_EMAIL_MISSING, response.body!!.error.code)
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val id = response.body!!.emailId
+        val email = dao.findById(id).get()
+        assertEquals(request.subject, email.subject)
+        assertEquals("<p>This is an example of email</p>", email.body)
+        assertEquals("This is an example of email", email.summary)
+        assertEquals(request.recipient.id, email.recipientId)
+        assertEquals(request.recipient.type, email.recipientType)
+        assertEquals(request.recipient.email, email.recipientEmail)
+        assertEquals(request.recipient.displayName, email.recipientDisplayName)
+        assertEquals(request.attachmentFileIds.size, email.attachmentCount)
+        assertEquals(USER_ID, email.senderId)
+        assertEquals(TENANT_ID, email.tenantId)
+
+        val emailOwners = ownerDao.findByEmailId(id)
+        assertEquals(1, emailOwners.size)
+        assertEquals(request.owner!!.id, emailOwners[0].ownerId)
+        assertEquals(request.owner!!.type, emailOwners[0].ownerType)
+
+        val attachments = attachmentDao.findByEmailId(id)
+        assertEquals(2, attachments.size)
+        assertEquals(100L, attachments[0].fileId)
+        assertEquals(101L, attachments[1].fileId)
+
+        val msg = argumentCaptor<Message>()
+        verify(messagingService).send(msg.capture())
+        assertTrue(msg.firstValue.body.contains(request.body))
+        assertEquals(
+            "<table> <tr><td>test</td></tr> <tr><td>${request.body}</td></tr> </table>",
+            msg.firstValue.body,
+        )
+        assertEquals(request.recipient.displayName, msg.firstValue.recipient.displayName)
+        assertEquals(request.recipient.email, msg.firstValue.recipient.email)
+        assertEquals("text/html", msg.firstValue.mimeType)
+        assertEquals(request.attachmentFileIds.size, msg.firstValue.attachments.size)
     }
 
     @Test
@@ -192,11 +248,28 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
         val request = SendEmailRequest(
             subject = "Hello man",
             body = "<p>This is an example of email</p>",
-            recipient = Recipient(id = 100, type = ObjectType.ACCOUNT),
+            recipient = Recipient(email = "foo@gmail.com"),
             owner = ObjectReference(id = 777777L, type = ObjectType.TAX)
         )
         val response = rest.postForEntity("/v1/emails", request, ErrorResponse::class.java)
         assertEquals(ErrorCode.EMAIL_DELIVERY_FAILED, response.body!!.error.code)
+
+        val emails = ownerDao.findByOwnerIdAndOwnerType(request.owner!!.id, request.owner!!.type)
+        assertEquals(0, emails.size)
+    }
+
+    @Test
+    fun `no SMTP`() {
+        doThrow(MessagingNotConfiguredException("failed")).whenever(messagingService).send(any())
+
+        val request = SendEmailRequest(
+            subject = "Hello man",
+            body = "<p>This is an example of email</p>",
+            recipient = Recipient(email = "foo@gmail.com"),
+            owner = ObjectReference(id = 777777L, type = ObjectType.TAX)
+        )
+        val response = rest.postForEntity("/v1/emails", request, ErrorResponse::class.java)
+        assertEquals(ErrorCode.EMAIL_SMTP_NOT_CONFIGURED, response.body!!.error.code)
 
         val emails = ownerDao.findByOwnerIdAndOwnerType(request.owner!!.id, request.owner!!.type)
         assertEquals(0, emails.size)

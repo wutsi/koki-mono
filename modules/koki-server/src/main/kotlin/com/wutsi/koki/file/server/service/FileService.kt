@@ -1,5 +1,6 @@
 package com.wutsi.koki.file.server.service
 
+import com.lowagie.text.pdf.PdfFileSpecification.url
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
@@ -18,6 +19,8 @@ import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
+import java.io.InputStream
+import java.net.URL
 import java.net.URLEncoder
 import java.util.Date
 import java.util.UUID
@@ -91,28 +94,49 @@ class FileService(
         tenantId: Long,
     ): FileEntity {
         // Store
-        val fileId = UUID.randomUUID().toString()
-        val path = if (ownerId != null && ownerType != null) {
-            toPath(file, ownerId, ownerType, fileId, tenantId)
-        } else {
-            toPath(file, fileId, tenantId)
-        }
-        val url = getStorageService(tenantId).store(
-            path = path.toString(),
+        val url = store(
+            filename = URLEncoder.encode(file.originalFilename, "utf-8"),
             content = file.inputStream,
             contentType = file.contentType,
             contentLength = file.size,
+            ownerId = ownerId,
+            ownerType = ownerType,
+            tenantId = tenantId,
         )
 
+        // Create the file
+        return create(
+            filename = file.name,
+            contentType = file.contentType,
+            contentLength = file.size,
+            userId = userId,
+            url = url,
+            ownerId = ownerId,
+            ownerType = ownerType,
+            tenantId = tenantId
+        )
+    }
+
+    @Transactional
+    fun create(
+        filename: String,
+        contentType: String?,
+        contentLength: Long,
+        userId: Long?,
+        url: URL,
+        ownerId: Long?,
+        ownerType: ObjectType?,
+        tenantId: Long,
+    ): FileEntity {
         // Create the file
         val file = dao.save(
             FileEntity(
                 createdById = userId ?: securityService.getCurrentUserIdOrNull(),
                 tenantId = tenantId,
-                name = file.originalFilename ?: fileId,
+                name = filename,
                 url = url.toString(),
-                contentType = file.contentType ?: "application/octet-stream",
-                contentLength = file.size,
+                contentType = contentType ?: "application/octet-stream",
+                contentLength = contentLength,
                 createdAt = Date(),
             )
         )
@@ -130,6 +154,30 @@ class FileService(
         return file
     }
 
+    fun store(
+        filename: String,
+        contentType: String?,
+        contentLength: Long,
+        content: InputStream,
+        ownerId: Long?,
+        ownerType: ObjectType?,
+        tenantId: Long,
+    ): URL {
+        // Store
+        val fileId = UUID.randomUUID().toString()
+        val path = if (ownerId != null && ownerType != null) {
+            toPath(filename, ownerId, ownerType, fileId, tenantId)
+        } else {
+            toPath(filename, fileId, tenantId)
+        }
+        return getStorageService(tenantId).store(
+            path = path.toString(),
+            content = content,
+            contentType = contentType,
+            contentLength = contentLength,
+        )
+    }
+
     @Transactional
     fun delete(id: Long, tenantId: Long) {
         val file = get(id, tenantId)
@@ -145,18 +193,18 @@ class FileService(
     }
 
     private fun toPath(
-        file: MultipartFile,
+        filename: String,
         fileId: String,
         tenantId: Long,
     ): String {
         val path = StringBuilder("tenant/$tenantId/uploads")
         path.append("/$fileId")
-        path.append("/" + URLEncoder.encode(file.originalFilename, "utf-8"))
+        path.append("/$filename")
         return path.toString()
     }
 
     private fun toPath(
-        file: MultipartFile,
+        filename: String,
         ownerId: Long,
         ownerType: ObjectType,
         fileId: String,
@@ -166,7 +214,7 @@ class FileService(
         path.append("/").append(ownerType.name.lowercase())
         path.append("/").append(ownerId)
         path.append("/$fileId")
-        path.append("/" + URLEncoder.encode(file.originalFilename, "utf-8"))
+        path.append("/$filename")
         return path.toString()
     }
 

@@ -1,5 +1,6 @@
 package com.wutsi.koki.platform.messaging.smtp
 
+import com.wutsi.koki.platform.messaging.MessagingNotConfiguredException
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
@@ -30,42 +31,42 @@ class SMTPMessagingServiceBuilderTest {
 
     @Test
     fun `missing port`() {
-        assertThrows<IllegalStateException> {
+        assertThrows<MessagingNotConfiguredException> {
             builder.build(createConfigExcluding(ConfigurationName.SMTP_PORT))
         }
     }
 
     @Test
     fun `missing host`() {
-        assertThrows<IllegalStateException> {
+        assertThrows<MessagingNotConfiguredException> {
             builder.build(createConfigExcluding(ConfigurationName.SMTP_HOST))
         }
     }
 
     @Test
     fun `missing username`() {
-        assertThrows<IllegalStateException> {
+        assertThrows<MessagingNotConfiguredException> {
             builder.build(createConfigExcluding(ConfigurationName.SMTP_USERNAME))
         }
     }
 
     @Test
     fun `missing password`() {
-        assertThrows<IllegalStateException> {
+        assertThrows<MessagingNotConfiguredException> {
             builder.build(createConfigExcluding(ConfigurationName.SMTP_PASSWORD))
         }
     }
 
     @Test
     fun `missing from-personal`() {
-        assertThrows<IllegalStateException> {
+        assertThrows<MessagingNotConfiguredException> {
             builder.build(createConfigExcluding(ConfigurationName.SMTP_FROM_PERSONAL))
         }
     }
 
     @Test
     fun `missing from-address`() {
-        assertThrows<IllegalStateException> {
+        assertThrows<MessagingNotConfiguredException> {
             builder.build(createConfigExcluding(ConfigurationName.SMTP_FROM_ADDRESS))
         }
     }
