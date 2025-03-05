@@ -6,6 +6,7 @@ INSERT INTO T_CONFIGURATION(tenant_fk, name, value)
     VALUES (1, 'email.decorator',   '<table> <tr><td>{{tenant_name}}</td></tr> <tr><td>{{{body}}}</td></tr> </table>');
 
 INSERT INTO T_FILE(id, tenant_fk, created_by_fk, name, content_type, content_length, url)
-    VALUES (100, 1, 11, 'image.png', 'image/ong',       1000, 'https://picsum.photos/200/300'),
-           (101, 1, 11, 'bar.pdf',   'application/pdf', 1000, 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf');
+    VALUES (100, 1, 11, 'image.png',    'image/ong',       1000, 'https://picsum.photos/200/300'),
+           (101, 1, 11, 'bar.pdf',      'application/pdf', 1000, 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'),
+           (199, 1, 11, 'bad-file.pdf', 'application/pdf', 1000, 'https://invalid-file.com');
 

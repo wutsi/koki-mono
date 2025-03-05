@@ -158,7 +158,7 @@ koki:
         ttl-seconds: 84600
 
     storage:
-        type: local # local | s3
+        type: local # local | aws
         local:
             directory: ${user.home}/__wutsi
             base-url: http://localhost:${server.port}
@@ -175,4 +175,4 @@ koki:
                 consumer-delay-seconds: 1
                 queue: koki-notification-queue
                 dlq: koki-notification-dlq
-                dlq-cron: "0 */30 * * * *"  # Every 30 mins
+                dlq-cron: "0 */5 * * * *"  # Every 5 mins

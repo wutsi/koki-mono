@@ -106,9 +106,16 @@ class EmailService(
     }
 
     @Transactional
-    fun send(request: SendEmailRequest, tenantId: Long, senderId: Long): EmailEntity {
+    fun send(request: SendEmailRequest, tenantId: Long): EmailEntity {
+        // Data
+        val data = mutableMapOf<String, Any>()
+        data.putAll(request.data)
+        request.recipient.displayName?.let { name -> data["recipientName"] = name }
+
         // Save email
         val id = UUID.randomUUID().toString()
+        val subject = templatingEngine.apply(request.subject, data)
+        val body = templatingEngine.apply(request.body, data)
         val email = dao.save(
             EmailEntity(
                 tenantId = tenantId,
@@ -118,9 +125,9 @@ class EmailService(
                 recipientId = request.recipient.id,
                 recipientDisplayName = request.recipient.displayName,
                 recipientEmail = request.recipient.email,
-                subject = request.subject,
-                body = request.body,
-                summary = toSummary(request.body),
+                subject = subject,
+                body = body,
+                summary = toSummary(body),
                 attachmentCount = request.attachmentFileIds.size,
             )
         )
@@ -143,46 +150,52 @@ class EmailService(
         }
 
         // Send email
-        val message = createMessage(request, email)
         try {
-            createMessagingService(tenantId).send(message)
+            val message = createMessage(request, email)
+            try {
+                createMessagingService(tenantId).send(message)
 
-            logger.add("email_sent", true)
-            logger.add("email_address", request.recipient.email)
-            return email
-        } catch (ex: MessagingException) {
-            throw ConflictException(
-                error = Error(code = ErrorCode.EMAIL_DELIVERY_FAILED), ex = ex
-            )
+                logger.add("email_sent", true)
+                logger.add("email_address", request.recipient.email)
+                return email
+            } finally {
+                delete(message.attachments) // Delete all local files downloaded to free up diskspace
+            }
         } catch (ex: MessagingNotConfiguredException) {
             throw ConflictException(
-                error = Error(code = ErrorCode.EMAIL_SMTP_NOT_CONFIGURED), ex = ex
+                error = Error(code = ErrorCode.EMAIL_SMTP_NOT_CONFIGURED),
+                ex = ex,
             )
-        } finally {
-            delete(message.attachments) // Delete all local files downloaded to free up diskspace
+        } catch (ex: MessagingException) {
+            throw ConflictException(
+                error = Error(code = ErrorCode.EMAIL_DELIVERY_FAILED),
+                ex = ex,
+            )
+        } catch (ex: Exception) {
+            throw ConflictException(
+                error = Error(code = ErrorCode.EMAIL_DELIVERY_FAILED),
+                ex = ex,
+            )
         }
     }
 
     private fun createMessage(request: SendEmailRequest, email: EmailEntity): Message {
-        val data = mutableMapOf<String, Any>()
-        data.putAll(request.data)
-
-        val recipient = toParty(email = request.recipient.email, displayName = request.recipient.displayName)
-        recipient.displayName?.let { name -> data["recipient_name"] = name }
-
-        val body = templatingEngine.apply(email.body, data)
-
-        return Message(subject = email.subject,
-            body = filterSet.filter(body, email.tenantId),
+        return Message(
+            subject = email.subject,
+            body = filterSet.filter(email.body, email.tenantId),
             mimeType = "text/html",
-            recipient = recipient,
+            recipient = Party(
+                email = email.recipientEmail,
+                displayName = email.recipientDisplayName
+            ),
             attachments = request.attachmentFileIds.map { fileId ->
                 val file = download(fileId, email.tenantId)
                 if (LOGGER.isDebugEnabled) {
                     LOGGER.debug("Adding attachment ${file.absolutePath}")
                 }
                 file
-            })
+            }
+        )
     }
 
     private fun download(fileId: Long, tenantId: Long): File {
@@ -209,15 +222,6 @@ class EmailService(
                 LOGGER.warn("Unable to delete ${file.absolutePath}", ex)
             }
         }
-    }
-
-    private fun toParty(displayName: String?, email: String): Party {
-        if (email.isEmpty()) {
-            throw ConflictException(
-                error = Error(ErrorCode.EMAIL_RECIPIENT_EMAIL_MISSING)
-            )
-        }
-        return Party(displayName = displayName, email = email)
     }
 
     private fun createMessagingService(tenantId: Long): MessagingService {

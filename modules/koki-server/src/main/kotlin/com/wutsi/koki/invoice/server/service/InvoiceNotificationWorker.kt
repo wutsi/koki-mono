@@ -64,7 +64,7 @@ class InvoiceNotificationWorker(
 
     private fun send(event: InvoiceStatusChangedEvent) {
         val invoice = invoiceService.get(id = event.invoiceId, tenantId = event.tenantId)
-        logger.add("event_status", invoice.status)
+        logger.add("invoice_status", invoice.status)
         if (invoice.status != event.status) {
             logger.add("notification_email_sent", false)
             logger.add("notification_email_reason", "StatusMismatch")
