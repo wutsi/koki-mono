@@ -1,4 +1,6 @@
 package com.wutsi.koki.portal.invoice.model
 
-class InvoiceNotificationType {
+enum class InvoiceNotificationType {
+    opened,
+    paid,
 }

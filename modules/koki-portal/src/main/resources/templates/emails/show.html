@@ -1,5 +1,5 @@
 <table class="table">
-    <tr>
+    <tr th:if="${email.sender}">
         <td width="20%">From:</td>
         <td>
             <span th:text="${email.sender.displayName}">NAME</span>
@@ -21,5 +21,22 @@
             <div class="overflow-auto" style="height: 15em" th:utext="${email.body}">BODY</div>
         </td>
     </tr>
+    <tr th:if="${email.attachmentFiles}">
+        <td colspan="2">
+            <div class="padding-top padding-bottom">
+                <div class="border padding-small margin-small" style="display:inline"
+                     th:each="file : ${email.attachmentFiles}"
+                     th:id="'attachment-' + ${file.id}"
+                >
+                    <a class="entity-title" target="_blank"
+                       th:href="'/files/' + ${file.id} + '/download'">
+                        <span th:replace="~{__components/file :: file-icon(${file})}"></span>
+                        <span th:text="${file.name}">NAME</span>
+                    </a>
+                </div>
+            </div>
+        </td>
+    </tr>
 </table>
+
 <a class="btn btn-secondary btn-cancel" id="btn-email-cancel">Close</a>

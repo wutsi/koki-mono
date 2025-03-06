@@ -1,13 +1,18 @@
 package com.wutsi.koki.invoice.server.endpoint
 
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.file.server.dao.FileRepository
 import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.invoice.dto.UpdateInvoiceStatusRequest
+import com.wutsi.koki.invoice.dto.event.InvoiceStatusChangedEvent
 import com.wutsi.koki.invoice.server.dao.InvoiceLogRepository
 import com.wutsi.koki.invoice.server.dao.InvoiceRepository
 import com.wutsi.koki.invoice.server.domain.InvoiceEntity
+import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.tax.server.dao.TaxRepository
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
@@ -15,11 +20,13 @@ import com.wutsi.koki.tenant.server.service.ConfigurationService
 import org.apache.commons.lang3.time.DateUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
 import java.text.SimpleDateFormat
 import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/invoice/UpdateInvoiceStatusEndpoint.sql"])
 class UpdateInvoiceStatusEndpointTest : AuthorizationAwareEndpointTest() {
@@ -33,7 +40,13 @@ class UpdateInvoiceStatusEndpointTest : AuthorizationAwareEndpointTest() {
     private lateinit var taxDao: TaxRepository
 
     @Autowired
+    private lateinit var fileDao: FileRepository
+
+    @Autowired
     private lateinit var configService: ConfigurationService
+
+    @MockitoBean
+    private lateinit var publisher: Publisher
 
     private fun test(invoiceId: Long, status: InvoiceStatus): InvoiceEntity {
         val request = UpdateInvoiceStatusRequest(
@@ -48,11 +61,34 @@ class UpdateInvoiceStatusEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.status, invoice.status)
         assertEquals(USER_ID, invoice.modifiedById)
 
+        if (invoice.status == InvoiceStatus.OPENED) {
+            assertNotNull(invoice.pdfOpenedFileId)
+            val file = fileDao.findById(invoice.pdfOpenedFileId!!).get()
+            assertEquals("Invoice-${invoice.number}.pdf", file.name)
+            assertEquals("application/pdf", file.contentType)
+        } else if (invoice.status == InvoiceStatus.PAID) {
+            assertNotNull(invoice.pdfPaidFileId)
+            val file = fileDao.findById(invoice.pdfPaidFileId!!).get()
+            assertEquals("Invoice-${invoice.number}.pdf", file.name)
+            assertEquals("application/pdf", file.contentType)
+        } else if (invoice.status == InvoiceStatus.VOIDED) {
+            assertNotNull(invoice.pdfVoidedFileId)
+            val file = fileDao.findById(invoice.pdfVoidedFileId!!).get()
+            assertEquals("Invoice-${invoice.number}.pdf", file.name)
+            assertEquals("application/pdf", file.contentType)
+        }
+
         val logs = logDao.findByInvoice(invoice)
         assertEquals(1, logs.size)
         assertEquals(request.status, logs[0].status)
         assertEquals(request.comment, logs[0].comment)
         assertEquals(USER_ID, logs[0].createdById)
+
+        val event = argumentCaptor<InvoiceStatusChangedEvent>()
+        verify(publisher).publish(event.capture())
+        assertEquals(status, event.firstValue.status)
+        assertEquals(TENANT_ID, event.firstValue.tenantId)
+        assertEquals(invoiceId, event.firstValue.invoiceId)
 
         return invoice
     }

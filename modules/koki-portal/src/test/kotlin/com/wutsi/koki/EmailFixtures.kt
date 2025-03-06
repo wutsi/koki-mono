@@ -19,15 +19,26 @@ object EmailFixtures {
             id = "100",
             subject = "You tax report is ready",
             summary = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has...",
-            recipient = Recipient(id = accounts[0].id, type = ObjectType.ACCOUNT),
+            recipient = Recipient(
+                id = accounts[0].id,
+                type = ObjectType.ACCOUNT,
+                displayName = accounts[0].name,
+                email = accounts[0].email ?: "",
+            ),
             createdAt = DateUtils.addMinutes(Date(), 50),
+            attachmentCount = 1,
         ),
         EmailSummary(
             senderId = users[0].id,
             id = "101",
             subject = "Your invoice is ready",
             summary = "This is the summary of the email",
-            recipient = Recipient(id = contacts[0].id, type = ObjectType.CONTACT),
+            recipient = Recipient(
+                id = contacts[0].id,
+                type = ObjectType.CONTACT,
+                displayName = "${contacts[0].firstName} ${contacts[0].lastName}",
+                email = contacts[0].email ?: ""
+            ),
             createdAt = DateUtils.addDays(Date(), -1),
         ),
         EmailSummary(
@@ -35,21 +46,32 @@ object EmailFixtures {
             id = "102",
             subject = "REMINDER: Get your shit ready!!!",
             summary = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has...",
-            recipient = Recipient(id = contacts[0].id, type = ObjectType.CONTACT),
+            recipient = Recipient(
+                id = contacts[0].id,
+                type = ObjectType.CONTACT,
+                displayName = "${contacts[0].firstName} ${contacts[0].lastName}",
+                email = contacts[0].email ?: ""
+            ),
             createdAt = DateUtils.addMinutes(DateUtils.addDays(Date(), -1), 15),
+            attachmentCount = 3,
         ),
         EmailSummary(
             senderId = users[0].id,
             id = "103",
             subject = "REMINDER: Get your shit ready!!!",
-            recipient = Recipient(id = contacts[0].id, type = ObjectType.CONTACT),
+            recipient = Recipient(
+                id = contacts[0].id,
+                type = ObjectType.CONTACT,
+                displayName = "${contacts[0].firstName} ${contacts[0].lastName}",
+                email = contacts[0].email ?: ""
+            ),
             createdAt = DateUtils.addDays(Date(), -6),
         ),
         EmailSummary(
             senderId = users[0].id,
             id = "103",
             subject = "Hello",
-            recipient = Recipient(id = contacts[0].id, type = ObjectType.CONTACT),
+            recipient = Recipient(displayName = "Paul Biya", email = "paul.biya@gmail.com"),
             createdAt = DateUtils.addDays(Date(), -7),
         ),
     )
@@ -58,7 +80,12 @@ object EmailFixtures {
         senderId = users[0].id,
         id = "100",
         subject = "You tax report is ready",
-        recipient = Recipient(id = contacts[0].id, type = ObjectType.CONTACT),
+        recipient = Recipient(
+            id = contacts[0].id,
+            type = ObjectType.CONTACT,
+            displayName = "${contacts[0].firstName} ${contacts[0].lastName}",
+            email = contacts[0].email ?: "",
+        ),
         body = """
             <p>
                 <b>Lorem Ipsum</b> is simply dummy text of the printing and typesetting industry.
@@ -77,5 +104,6 @@ object EmailFixtures {
             </p>
         """.trimIndent(),
         summary = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has...",
+        attachmentFileIds = listOf(FileFixtures.files[0].id),
     )
 }

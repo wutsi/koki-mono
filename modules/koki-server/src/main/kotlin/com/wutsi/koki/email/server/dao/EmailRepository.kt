@@ -5,4 +5,6 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface EmailRepository : CrudRepository<EmailEntity, String>
+interface EmailRepository : CrudRepository<EmailEntity, String> {
+    fun findByRecipientEmail(email: String): List<EmailEntity>
+}

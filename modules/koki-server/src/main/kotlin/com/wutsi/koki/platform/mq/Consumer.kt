@@ -1,5 +1,5 @@
 package com.wutsi.koki.platform.mq
 
 interface Consumer {
-    fun consume(event: Any)
+    fun consume(event: Any): Boolean
 }

@@ -11,7 +11,6 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
-import org.hibernate.annotations.BatchSize
 import java.util.Date
 import kotlin.collections.mutableListOf
 
@@ -40,7 +39,6 @@ data class UserEntity(
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
 
-    @BatchSize(20)
     @ManyToMany
     @JoinTable(
         name = "T_USER_ROLE",

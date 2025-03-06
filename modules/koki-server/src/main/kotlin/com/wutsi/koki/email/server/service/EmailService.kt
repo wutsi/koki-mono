@@ -1,8 +1,6 @@
 package com.wutsi.koki.email.server.service
 
-import com.wutsi.koki.account.server.service.AccountService
 import com.wutsi.koki.common.dto.ObjectType
-import com.wutsi.koki.contact.server.service.ContactService
 import com.wutsi.koki.email.dto.SendEmailRequest
 import com.wutsi.koki.email.server.dao.AttachmentRepository
 import com.wutsi.koki.email.server.dao.EmailOwnerRepository
@@ -15,8 +13,10 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.file.server.service.FileService
+import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.messaging.Message
 import com.wutsi.koki.platform.messaging.MessagingException
+import com.wutsi.koki.platform.messaging.MessagingNotConfiguredException
 import com.wutsi.koki.platform.messaging.MessagingService
 import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
 import com.wutsi.koki.platform.messaging.MessagingType
@@ -41,8 +41,6 @@ class EmailService(
     private val dao: EmailRepository,
     private val attachmentDao: AttachmentRepository,
     private val ownerDao: EmailOwnerRepository,
-    private val accountService: AccountService,
-    private val contactService: ContactService,
     private val securityService: SecurityService,
     private val templatingEngine: TemplatingEngine,
     private val configurationService: ConfigurationService,
@@ -50,14 +48,14 @@ class EmailService(
     private val fileService: FileService,
     private val filterSet: EmailFilterSet,
     private val em: EntityManager,
+    private val logger: KVLogger,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(EmailService::class.java)
     }
 
     fun get(id: String, tenantId: Long): EmailEntity {
-        val account = dao.findById(id)
-            .orElseThrow { NotFoundException(Error(ErrorCode.EMAIL_NOT_FOUND)) }
+        val account = dao.findById(id).orElseThrow { NotFoundException(Error(ErrorCode.EMAIL_NOT_FOUND)) }
 
         if (account.tenantId != tenantId) {
             throw NotFoundException(Error(ErrorCode.EMAIL_NOT_FOUND))
@@ -109,18 +107,28 @@ class EmailService(
 
     @Transactional
     fun send(request: SendEmailRequest, tenantId: Long): EmailEntity {
+        // Data
+        val data = mutableMapOf<String, Any>()
+        data.putAll(request.data)
+        request.recipient.displayName?.let { name -> data["recipientName"] = name }
+
         // Save email
         val id = UUID.randomUUID().toString()
+        val subject = templatingEngine.apply(request.subject, data)
+        val body = templatingEngine.apply(request.body, data)
         val email = dao.save(
             EmailEntity(
                 tenantId = tenantId,
                 id = id,
-                senderId = securityService.getCurrentUserId(),
-                recipientId = request.recipient.id,
+                senderId = securityService.getCurrentUserIdOrNull(),
                 recipientType = request.recipient.type,
-                subject = request.subject,
-                body = request.body,
-                summary = toSummary(request.body),
+                recipientId = request.recipient.id,
+                recipientDisplayName = request.recipient.displayName,
+                recipientEmail = request.recipient.email,
+                subject = subject,
+                body = body,
+                summary = toSummary(body),
+                attachmentCount = request.attachmentFileIds.size,
             )
         )
         request.attachmentFileIds.forEach { fileId ->
@@ -136,46 +144,50 @@ class EmailService(
         if (request.owner != null) {
             ownerDao.save(
                 EmailOwnerEntity(
-                    emailId = email.id!!,
-                    ownerId = request.owner!!.id,
-                    ownerType = request.owner!!.type
+                    emailId = email.id!!, ownerId = request.owner!!.id, ownerType = request.owner!!.type
                 )
             )
         }
 
         // Send email
         try {
-            val messagingService = createMessagingService(tenantId)
             val message = createMessage(request, email)
             try {
-                messagingService.send(message)
+                createMessagingService(tenantId).send(message)
+
+                logger.add("email_sent", true)
+                logger.add("email_address", request.recipient.email)
                 return email
             } finally {
-                // Delete all local files downloaded to free up diskspace
-                delete(message.attachments)
+                delete(message.attachments) // Delete all local files downloaded to free up diskspace
             }
+        } catch (ex: MessagingNotConfiguredException) {
+            throw ConflictException(
+                error = Error(code = ErrorCode.EMAIL_SMTP_NOT_CONFIGURED),
+                ex = ex,
+            )
         } catch (ex: MessagingException) {
             throw ConflictException(
                 error = Error(code = ErrorCode.EMAIL_DELIVERY_FAILED),
-                ex = ex
+                ex = ex,
+            )
+        } catch (ex: Exception) {
+            throw ConflictException(
+                error = Error(code = ErrorCode.EMAIL_DELIVERY_FAILED),
+                ex = ex,
             )
         }
     }
 
     private fun createMessage(request: SendEmailRequest, email: EmailEntity): Message {
-        val data = mutableMapOf<String, Any>()
-        data.putAll(request.data)
-
-        val recipient = toParty(email)
-        recipient.displayName?.let { name -> data["recipient_name"] = name }
-
-        val body = templatingEngine.apply(email.body, data)
-
         return Message(
             subject = email.subject,
-            body = filterSet.filter(body, email.tenantId),
+            body = filterSet.filter(email.body, email.tenantId),
             mimeType = "text/html",
-            recipient = recipient,
+            recipient = Party(
+                email = email.recipientEmail,
+                displayName = email.recipientDisplayName
+            ),
             attachments = request.attachmentFileIds.map { fileId ->
                 val file = download(fileId, email.tenantId)
                 if (LOGGER.isDebugEnabled) {
@@ -212,35 +224,10 @@ class EmailService(
         }
     }
 
-    private fun toParty(email: EmailEntity): Party {
-        if (email.recipientType == ObjectType.ACCOUNT) {
-            val account = accountService.get(email.recipientId, email.tenantId)
-            return toParty(account.name, account.email)
-        } else if (email.recipientType == ObjectType.CONTACT) {
-            val contact = contactService.get(email.recipientId, email.tenantId)
-            return toParty("${contact.firstName} ${contact.lastName}".trim(), contact.email)
-        } else {
-            throw ConflictException(
-                error = Error(ErrorCode.EMAIL_RECIPIENT_NOT_SUPPORTED)
-            )
-        }
-    }
-
-    private fun toParty(displayName: String, email: String?): Party {
-        if (email.isNullOrEmpty()) {
-            throw ConflictException(
-                error = Error(ErrorCode.EMAIL_RECIPIENT_EMAIL_MISSING)
-            )
-        }
-        return Party(displayName = displayName, email = email)
-    }
-
     private fun createMessagingService(tenantId: Long): MessagingService {
         val config = configurationService.search(
-            names = SMTPMessagingServiceBuilder.CONFIG_NAMES,
-            tenantId = tenantId
-        ).map { cfg -> cfg.name to cfg.value }
-            .toMap()
+            names = SMTPMessagingServiceBuilder.CONFIG_NAMES, tenantId = tenantId
+        ).map { cfg -> cfg.name to cfg.value }.toMap()
         return messagingServiceBuilder.build(MessagingType.EMAIL, config)
     }
 

@@ -14,14 +14,14 @@ import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class SettingsEditInvoiceControllerTest : AbstractPageControllerTest() {
+class SettingsInvoiceNotificationControllerTest : AbstractPageControllerTest() {
     @Test
-    fun edit() {
-        navigateTo("/settings/invoices/edit")
-        assertCurrentPageIs(PageName.INVOICE_SETTINGS_EDIT)
+    fun opened() {
+        navigateTo("/settings/invoices/notifications/opened")
+        assertCurrentPageIs(PageName.INVOICE_SETTINGS_NOTIFICATION)
 
-        input("#startNumber", "5555")
-        select("#dueDays", 2)
+        input("#subject", "This is the subject {{invoiceNumber}}")
+        inputCodeMiror("<p>Hello</p>")
         click("button[type=submit]", 1000)
 
         val request = argumentCaptor<SaveConfigurationRequest>()
@@ -30,8 +30,36 @@ class SettingsEditInvoiceControllerTest : AbstractPageControllerTest() {
             request.capture(),
             eq(Any::class.java)
         )
-        assertEquals("5555", request.firstValue.values[ConfigurationName.INVOICE_START_NUMBER])
-        assertEquals("10", request.firstValue.values[ConfigurationName.INVOICE_DUE_DAYS])
+        assertEquals(
+            "This is the subject {{invoiceNumber}}",
+            request.firstValue.values[ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT]
+        )
+        assertEquals("<p>Hello</p>", request.firstValue.values[ConfigurationName.INVOICE_EMAIL_OPENED_BODY])
+
+        assertCurrentPageIs(PageName.INVOICE_SETTINGS)
+        assertElementVisible("#koki-toast")
+    }
+
+    @Test
+    fun paid() {
+        navigateTo("/settings/invoices/notifications/paid")
+        assertCurrentPageIs(PageName.INVOICE_SETTINGS_NOTIFICATION)
+
+        input("#subject", "This is the subject {{invoiceNumber}}")
+        inputCodeMiror("<p>Hello</p>")
+        click("button[type=submit]", 1000)
+
+        val request = argumentCaptor<SaveConfigurationRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/configurations"),
+            request.capture(),
+            eq(Any::class.java)
+        )
+        assertEquals(
+            "This is the subject {{invoiceNumber}}",
+            request.firstValue.values[ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT]
+        )
+        assertEquals("<p>Hello</p>", request.firstValue.values[ConfigurationName.INVOICE_EMAIL_PAID_BODY])
 
         assertCurrentPageIs(PageName.INVOICE_SETTINGS)
         assertElementVisible("#koki-toast")
@@ -47,20 +75,16 @@ class SettingsEditInvoiceControllerTest : AbstractPageControllerTest() {
                 eq(Any::class.java)
             )
 
-        navigateTo("/settings/invoices/edit")
-        assertCurrentPageIs(PageName.INVOICE_SETTINGS_EDIT)
-
-        input("#startNumber", "5555")
-        select("#dueDays", 2)
+        navigateTo("/settings/invoices/notifications/opened")
         click("button[type=submit]", 1000)
 
-        assertCurrentPageIs(PageName.INVOICE_SETTINGS_EDIT)
+        assertCurrentPageIs(PageName.INVOICE_SETTINGS_NOTIFICATION)
         assertElementPresent("#alert-error")
     }
 
     @Test
     fun back() {
-        navigateTo("/settings/invoices/edit")
+        navigateTo("/settings/invoices/notifications/opened")
         click(".btn-back")
         assertCurrentPageIs(PageName.INVOICE_SETTINGS)
     }
@@ -68,14 +92,14 @@ class SettingsEditInvoiceControllerTest : AbstractPageControllerTest() {
     @Test
     fun `edit - without permission invoice-admin`() {
         setUpUserWithoutPermissions(listOf("invoice:admin"))
-        navigateTo("/settings/invoices/edit")
+        navigateTo("/settings/invoices/notifications/paid")
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 
     @Test
     fun `required login`() {
         setUpAnonymousUser()
-        navigateTo("/settings/invoices/edit")
+        navigateTo("/settings/invoices/notifications/paid")
         assertCurrentPageIs(PageName.LOGIN)
     }
 }

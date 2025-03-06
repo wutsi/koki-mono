@@ -2,13 +2,15 @@ package com.wutsi.koki.invoice.server.io.html
 
 import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.invoice.server.domain.InvoiceEntity
+import com.wutsi.koki.invoice.server.service.InvoiceService
 import com.wutsi.koki.platform.templating.TemplatingEngine
 import com.wutsi.koki.refdata.server.domain.LocationEntity
 import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.refdata.server.service.SalesTaxService
 import com.wutsi.koki.refdata.server.service.UnitService
-import com.wutsi.koki.tenant.server.service.BusinessService
+import com.wutsi.koki.tenant.server.domain.BusinessEntity
 import com.wutsi.koki.tenant.server.service.TenantService
+import com.wutsi.koki.util.CurrencyUtil
 import org.apache.commons.io.IOUtils
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -17,7 +19,6 @@ import org.springframework.stereotype.Service
 import java.io.OutputStream
 import java.io.OutputStreamWriter
 import java.net.URL
-import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -29,14 +30,14 @@ class InvoiceHtmlExporter(
     private val tenantService: TenantService,
     private val unitService: UnitService,
     private val salesTaxService: SalesTaxService,
-    private val businessService: BusinessService,
+    private val invoiceService: InvoiceService,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(InvoiceHtmlExporter::class.java)
     }
 
-    fun export(invoice: InvoiceEntity, output: OutputStream) {
-        val doc = loadDocument(invoice)
+    fun export(invoice: InvoiceEntity, business: BusinessEntity, output: OutputStream) {
+        val doc = loadDocument(invoice, business)
         val writer = OutputStreamWriter(output)
         writer.use {
             val xml = doc.html()
@@ -47,19 +48,19 @@ class InvoiceHtmlExporter(
         }
     }
 
-    private fun loadDocument(invoice: InvoiceEntity): Document {
+    private fun loadDocument(invoice: InvoiceEntity, business: BusinessEntity): Document {
         val input = InvoiceHtmlExporter::class.java.getResourceAsStream("/invoice/template/default.html")
         val html = IOUtils.toString(input, "utf-8")
-        val data = createData(invoice)
+        val data = createData(invoice, business)
         val xhtml = templatingEngine.apply(html, data)
         val doc = Jsoup.parse(xhtml, "utf-8")
         doc.outputSettings().syntax(Document.OutputSettings.Syntax.xml)
         return doc
     }
 
-    private fun createData(invoice: InvoiceEntity): Map<String, Any> {
-        // Business
-        val business = businessService.get(invoice.tenantId)
+    private fun createData(invoice: InvoiceEntity, business: BusinessEntity): Map<String, Any> {
+        val items = invoiceService.getInvoiceItems(invoice)
+        val taxes = invoiceService.getInvoiceTaxes(invoice)
 
         // Locations
         val locationIds = listOf(
@@ -78,13 +79,12 @@ class InvoiceHtmlExporter(
         }
 
         // Units
-        val unitIds = invoice.items.map { item -> item.unitId }.filterNotNull().distinct()
+        val unitIds = items.map { item -> item.unitId }.filterNotNull().distinct()
         val units = unitService.all().filter { unit -> unitIds.contains(unit.id) }
             .associateBy { unit -> unit.id }
 
         // Sale Taxes
-        val saleTaxIds = invoice.items.flatMap { item -> item.taxes }
-            .map { tax -> tax.salesTaxId }
+        val saleTaxIds = taxes.map { tax -> tax.salesTaxId }
             .distinct()
         val salesTaxes = salesTaxService.search(ids = saleTaxIds, limit = saleTaxIds.size)
             .associateBy { tax -> tax.id }
@@ -92,7 +92,9 @@ class InvoiceHtmlExporter(
         // Data
         val tenant = tenantService.get(invoice.tenantId)
         val dateFormat = SimpleDateFormat(tenant.dateFormat)
-        val moneyFormat = getMoneyFormatter(invoice.items.firstOrNull()?.currency ?: tenant.currency)
+        val moneyFormat = CurrencyUtil.getNumberFormat(
+            items.firstOrNull()?.currency ?: tenant.currency
+        )
         val data = mutableMapOf<String, Any>()
         data["businessName"] = business.companyName
         data["businessPhone"] = (business.phone ?: "")
@@ -143,7 +145,7 @@ class InvoiceHtmlExporter(
             locations = locations,
         )
 
-        data["items"] = invoice.items.map { item ->
+        data["items"] = items.map { item ->
             mapOf(
                 "description" to (item.description ?: ""),
                 "unitPrice" to moneyFormat.format(item.unitPrice),
@@ -153,8 +155,7 @@ class InvoiceHtmlExporter(
             )
         }
 
-        data["taxes"] = invoice.items.flatMap { item -> item.taxes }
-            .groupBy { tax -> tax.salesTaxId }
+        data["taxes"] = taxes.groupBy { tax -> tax.salesTaxId }
             .map { entry ->
                 mapOf(
                     "name" to (salesTaxes[entry.value[0].salesTaxId]?.let { tax -> tax.name } ?: ""),
@@ -182,16 +183,6 @@ class InvoiceHtmlExporter(
             country?.let { country -> Locale("en", country).displayCountry },
         ).filterNotNull()
             .joinToString("<br>")
-    }
-
-    private fun getMoneyFormatter(currency: String): NumberFormat {
-        NumberFormat.getAvailableLocales().forEach { locale ->
-            val fmt = NumberFormat.getCurrencyInstance(locale)
-            if (fmt.getCurrency().getCurrencyCode() == currency) {
-                return fmt
-            }
-        }
-        throw IllegalStateException("Currency not supported: $currency")
     }
 
     private fun isSameDay(date1: Date?, date2: Date?): Boolean {

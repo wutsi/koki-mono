@@ -4,6 +4,7 @@ import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.BadRequestException
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.invoice.dto.CreateInvoiceRequest
 import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.invoice.dto.UpdateInvoiceStatusRequest
@@ -58,6 +59,14 @@ class InvoiceService(
             throw NotFoundException(Error(ErrorCode.INVOICE_NOT_FOUND))
         }
         return tax
+    }
+
+    fun getInvoiceItems(invoice: InvoiceEntity): List<InvoiceItemEntity> {
+        return itemDao.findByInvoice(invoice)
+    }
+
+    fun getInvoiceTaxes(invoice: InvoiceEntity): List<InvoiceTaxEntity> {
+        return taxDao.findByInvoice(invoice)
     }
 
     fun search(
@@ -120,7 +129,7 @@ class InvoiceService(
     }
 
     @Transactional
-    fun status(id: Long, request: UpdateInvoiceStatusRequest, tenantId: Long) {
+    fun status(id: Long, request: UpdateInvoiceStatusRequest, tenantId: Long): InvoiceEntity {
         val invoice = get(id, tenantId)
 
         // Never change the status of closed invoice
@@ -169,13 +178,30 @@ class InvoiceService(
 
         // Log
         recordLog(invoice, request.status, request.comment)
+
+        return invoice
+    }
+
+    @Transactional
+    fun linkPdfFile(invoice: InvoiceEntity, file: FileEntity) {
+        if (invoice.status == InvoiceStatus.OPENED) {
+            invoice.pdfOpenedFileId = file.id
+        } else if (invoice.status == InvoiceStatus.PAID) {
+            invoice.pdfPaidFileId = file.id
+        } else if (invoice.status == InvoiceStatus.VOIDED) {
+            invoice.pdfVoidedFileId = file.id
+        } else {
+            return
+        }
+        dao.save(invoice)
     }
 
     @Transactional
     fun create(request: CreateInvoiceRequest, tenantId: Long): InvoiceEntity {
         val invoice = createInvoice(request, tenantId)
+        val business = businessService.get(tenantId)
         addItems(request, invoice)
-        applyTaxes(invoice)
+        applyTaxes(invoice, business)
         recordLog(invoice, invoice.status, null)
 
         request.taxId?.let { id ->
@@ -251,22 +277,7 @@ class InvoiceService(
         }
     }
 
-    private fun applyTaxes(invoice: InvoiceEntity) {
-        val business = try {
-            businessService.get(tenantId = invoice.tenantId)
-        } catch (ex: NotFoundException) {
-            null
-        }
-
-        if (business != null) {
-            applyTaxes(invoice, business)
-        }
-    }
-
-    private fun applyTaxes(
-        invoice: InvoiceEntity,
-        business: BusinessEntity,
-    ) {
+    private fun applyTaxes(invoice: InvoiceEntity, business: BusinessEntity) {
         val juridiction = juridictionService.findJuridiction(
             stateId = invoice.shippingStateId,
             country = invoice.shippingCountry,

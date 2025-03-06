@@ -62,6 +62,8 @@ class EmailTabControllerTest : AbstractPageControllerTest() {
         assertEquals(tax.id, request.firstValue.owner?.id)
         assertEquals(ObjectType.ACCOUNT, request.firstValue.owner?.type)
         assertEquals(account.id, request.firstValue.recipient.id)
+        assertEquals(account.name, request.firstValue.recipient.displayName)
+        assertEquals(account.email, request.firstValue.recipient.email)
         assertEquals(ObjectType.ACCOUNT, request.firstValue.recipient.type)
 
         assertElementNotVisible("#koki-modal")
@@ -92,6 +94,8 @@ class EmailTabControllerTest : AbstractPageControllerTest() {
         assertEquals(contact.id, request.firstValue.owner?.id)
         assertEquals(ObjectType.CONTACT, request.firstValue.owner?.type)
         assertEquals(contact.id, request.firstValue.recipient.id)
+        assertEquals("${contact.firstName} ${contact.lastName}", request.firstValue.recipient.displayName)
+        assertEquals(contact.email, request.firstValue.recipient.email)
         assertEquals(ObjectType.CONTACT, request.firstValue.recipient.type)
 
         assertElementNotVisible("#koki-modal")

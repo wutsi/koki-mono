@@ -15,7 +15,12 @@
         <div
             th:replace="~{__components/settings :: settings-title('Invoice', '/settings')}"></div>
 
-        <table class="table">
+        <table class="table border-light">
+            <tr>
+                <td colspan="2">
+                    <h4 class="margin-none">General</h4>
+                </td>
+            </tr>
             <tr>
                 <td width="30%"><b>Start Invoice Number</b></td>
                 <td th:text="${form.startNumber}">NUMBER</td>
@@ -33,6 +38,74 @@
             <tr>
                 <td colspan="2">
                     <a class="btn-edit btn btn-secondary" href="/settings/invoices/edit">Configure</a>
+                </td>
+            </tr>
+        </table>
+
+        <p>&nbsp;</p>
+
+        <table class="table border-light">
+            <tr>
+                <td colspan="3">
+                    <h4 class="margin-none">Notifications</h4>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>When an invoice is opened</b>
+                    <div class="text-small margin-left">
+                        Subject: <span th:text="${openedNotification.subject}">SUBJECT</span>
+                    </div>
+                </td>
+                <td>
+                    <span class="badge text-bg-success" th:if="${openedNotification.enabled}">Enabled</span>
+                    <span class="badge text-bg-danger" th:if="!${openedNotification.enabled}">Disabled</span>
+                </td>
+                <td align="right">
+                    <a class="btn btn-sm btn-light btn-notification-opened"
+                       href="/settings/invoices/notifications/opened"
+                       th:if="${openedNotification.enabled}">
+                        Configure
+                    </a>
+                    <a class="btn btn-sm btn-primary btn-notification-opened-enable"
+                       href="/settings/invoices/notifications/enable?status=true&type=opened"
+                       th:if="!${openedNotification.enabled}">
+                        Enable
+                    </a>
+                    <a class="btn btn-sm btn-danger btn-notification-opened-disable"
+                       href="/settings/invoices/notifications/enable?status=false&type=opened"
+                       th:if="${openedNotification.enabled}">
+                        Disable
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>When an invoice is paid</b>
+                    <div class="text-small margin-left">
+                        Subject: <span th:text="${paidNotification.subject}">SUBJECT</span>
+                    </div>
+                </td>
+                <td>
+                    <span class="badge text-bg-success" th:if="${paidNotification.enabled}">Enabled</span>
+                    <span class="badge text-bg-danger" th:if="!${paidNotification.enabled}">Disabled</span>
+                </td>
+                <td align="right">
+                    <a class="btn btn-sm btn-light btn-notification-paid"
+                       href="/settings/invoices/notifications/paid"
+                       th:if="${paidNotification.enabled}">
+                        Configure
+                    </a>
+                    <a class="btn btn-sm btn-primary btn-notification-paid-enable"
+                       href="/settings/invoices/notifications/enable?status=true&type=paid"
+                       th:if="!${paidNotification.enabled}">
+                        Enable
+                    </a>
+                    <a class="btn btn-sm btn-danger btn-notification-paid-disable"
+                       href="/settings/invoices/notifications/enable?status=false&type=paid"
+                       th:if="${paidNotification.enabled}">
+                        Disable
+                    </a>
                 </td>
             </tr>
         </table>

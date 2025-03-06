@@ -8,23 +8,43 @@ import org.springframework.stereotype.Service
 
 @Service
 class TenantInvoiceInitializer : AbstractTenantModuleInitializer() {
-    override fun init(tenatId: Long) {
+    override fun init(tenantId: Long) {
         setConfigurationIfMissing(
-            name = ConfigurationName.INVOICE_EMAIL_OPENED,
+            name = ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED,
+            value = "1",
+            tenantId = tenantId
+        )
+        setConfigurationIfMissing(
+            name = ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT,
+            value = InvoiceNotificationWorker.INVOICE_EMAIL_OPENED_SUBJECT,
+            tenantId = tenantId
+        )
+        setConfigurationIfMissing(
+            name = ConfigurationName.INVOICE_EMAIL_OPENED_BODY,
             value = IOUtils.toString(
                 TenantEmailInitializer::class.java.getResourceAsStream("/invoice/email/opened.html"),
                 "utf-8"
             ),
-            tenantId = tenatId
+            tenantId = tenantId
         )
 
         setConfigurationIfMissing(
-            name = ConfigurationName.INVOICE_EMAIL_PAID,
+            name = ConfigurationName.INVOICE_EMAIL_PAID_ENABLED,
+            value = "1",
+            tenantId = tenantId
+        )
+        setConfigurationIfMissing(
+            name = ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT,
+            value = InvoiceNotificationWorker.INVOICE_EMAIL_PAID_SUBJECT,
+            tenantId = tenantId
+        )
+        setConfigurationIfMissing(
+            name = ConfigurationName.INVOICE_EMAIL_PAID_BODY,
             value = IOUtils.toString(
                 TenantEmailInitializer::class.java.getResourceAsStream("/invoice/email/paid.html"),
                 "utf-8"
             ),
-            tenantId = tenatId
+            tenantId = tenantId
         )
     }
 }

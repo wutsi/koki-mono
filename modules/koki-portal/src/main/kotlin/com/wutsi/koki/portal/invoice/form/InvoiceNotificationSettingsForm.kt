@@ -1,6 +1,10 @@
 package com.wutsi.koki.portal.invoice.form
 
-data class InvoiceSettingsForm(
-    val dueDays: Int = 0,
-    val startNumber: Long = 0L,
+import com.wutsi.koki.portal.invoice.model.InvoiceNotificationType
+
+data class InvoiceNotificationSettingsForm(
+    val enabled: Boolean = false,
+    val subject: String? = null,
+    val body: String? = null,
+    val type: InvoiceNotificationType? = null,
 )

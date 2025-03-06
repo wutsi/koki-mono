@@ -8,11 +8,15 @@
         <a class="entity-title" th:href="'javascript: koki_emails_open(\'' + ${email.id} + '\')'">
             <b th:text="${email.subject}">SUBJECT</b>
         </a>
+        <i class="fa-solid fa-paperclip" th:if="${email.hasAttachment}"></i>
     </div>
     <div class="margin-top text-small">
-        From: <span th:text="${email.sender.displayName}">FROM</span>
-        <br/>
-        To: <span th:replace="~{__components/email :: recipient(${email})}"></span>
+        <div th:if="${email.sender}">
+            From: <span th:text="${email.sender.displayName}">FROM</span>
+        </div>
+        <div>
+            To: <span th:replace="~{__components/email :: recipient(${email})}"></span>
+        </div>
     </div>
     <div class="margin-top email-body" th:text="${email.summary}">SUMMARY</div>
 </div>
@@ -36,6 +40,7 @@
         <img height="24" src="/image/contact.png" width="24"/>
         <span th:text="${email.recipient.name}">RECIPIENT</span>
     </a>
+    <span th:if="${email.recipient.type.name == 'UNKNOWN'}" th:text="${email.recipient.name}">RECIPIENT</span>
 </span>
 
 </body>

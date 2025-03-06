@@ -97,7 +97,7 @@ class EmailDecoratorServiceTest {
                 </head>
                 <body>
                 <table role="presentation"
-                       style="max-width: 800px; width: 96%; border-spacing: 0; font-size: 18px; margin: 16px auto 0 auto; border: 1px solid gray;">
+                       style="max-width: 800px; width: 96%; border-spacing: 0; font-size: 18px; margin: 16px auto 0 auto;">
                     <tr>
                         <td style="text-align: right; padding: 32px;">
                             <a href="https://www.test.com" style="text-decoration: none;">

@@ -2,18 +2,25 @@ CREATE TABLE T_EMAIL(
   id                      VARCHAR(36) NOT NULL,
 
   tenant_fk               BIGINT NOT NULL,
-  sender_fk               BIGINT NOT NULL,
-  recipient_fk            BIGINT NOT NULL,
+  sender_fk               BIGINT,
+  recipient_fk            BIGINT,
   created_by_fk           BIGINT,
 
+  recipient_email         VARCHAR(255) NOT NULL,
+  recipient_display_name  VARCHAR(100),
   subject                 VARCHAR(255) NOT NULL ,
   body                    TEXT NOT NULL,
   summary                 VARCHAR(255) NOT NULL DEFAULT '',
   recipient_type          INT DEFAULT 0,
+  attachment_count        INT NOT NULL DEFAULT 0,
   created_at              DATETIME DEFAULT NOW(),
 
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
+
+CREATE INDEX I_EMAIL_tenant ON T_EMAIL(tenant_fk);
+CREATE INDEX I_EMAIL_recipient ON T_EMAIL(recipient_fk);
+CREATE INDEX I_EMAIL_recipient_email ON T_EMAIL(recipient_email);
 
 CREATE TABLE T_EMAIL_OWNER(
   id                    BIGINT NOT NULL AUTO_INCREMENT,

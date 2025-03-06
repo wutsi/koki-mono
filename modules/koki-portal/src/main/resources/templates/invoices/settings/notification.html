@@ -12,37 +12,28 @@
         <div th:replace="~{__components/settings :: settings-menu('invoice')}"></div>
     </div>
     <div class="settings-content padding">
-        <div th:replace="~{__components/settings :: settings-title('Invoice', '/settings/invoices')}"></div>
+        <div th:replace="~{__components/settings :: settings-title('Email Notification', '/settings/invoices')}"></div>
 
         <div th:replace="~{__components/layout :: error-message(${error})}"></div>
-        <form class="form" method="post" th:action="@{/settings/invoices/save}" th:object="${form}">
+        <form class="form" method="post" th:action="@{/settings/invoices/notifications/save}" th:object="${form}">
+            <input th:field="*{type}" type="hidden"/>
             <table class="table">
                 <tr>
-                    <td width="30%"><b>Start Invoice Number <span class="required">*</span></b></td>
-                    <td>
-                        <input required step="1" th:field="*{startNumber}" type="number"/>
-                        <div class="margin-top text-small">
-                            Be careful changing the starting invoice number.
-                            <br/>
-                            Make sure you DO NOT have any invoice having a number greater that
-                            the number you've entered here.
-                            <br/>
-                            This will lead to errors.
-                        </div>
+                    <td colspan="2">
+                        <h4 th:if="${form.type.name == 'paid'}">When an invoice is paid</h4>
+                        <h4 th:if="${form.type.name == 'opened'}">When an invoice is opened</h4>
                     </td>
                 </tr>
-                <tr>
-                    <td><b>Payment Terms <span class="required">*</span></b></td>
+                <tr id="tr-subject">
+                    <td><b>Subject <span class="required">*</span></b></td>
                     <td>
-                        <select th:field="*{dueDays}">
-                            <option value="0">Pay Upon Reception</option>
-                            <option value="7">Payment due within 7 days</option>
-                            <option value="10">Payment due within 10 days</option>
-                            <option value="15">Payment due within 15 days</option>
-                            <option value="30">Payment due within 30 days</option>
-                            <option value="60">Payment due within 60 days</option>
-                            <option value="90">Payment due within 90 days</option>
-                        </select>
+                        <input required th:field="*{subject}"/>
+                    </td>
+                </tr>
+                <tr id="tr-body">
+                    <td><b>Body <span class="required">*</span></b></td>
+                    <td>
+                        <textarea rows="15" th:field="*{body}"></textarea>
                     </td>
                 </tr>
             </table>
@@ -51,6 +42,6 @@
     </div>
 </div>
 
-
+<div th:replace="~{__components/codemirror :: html-editor('body', ${form.body})}"></div>
 </body>
 </html>
