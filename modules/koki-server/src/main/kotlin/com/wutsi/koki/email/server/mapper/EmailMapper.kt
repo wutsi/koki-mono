@@ -22,6 +22,7 @@ class EmailMapper {
                 displayName = entity.recipientDisplayName,
             ),
             createdAt = entity.createdAt,
+            attachmentCount = entity.attachments.size,
             attachmentFileIds = entity.attachments.map { attachment -> attachment.fileId }
         )
     }
@@ -36,8 +37,9 @@ class EmailMapper {
                 id = entity.recipientId,
                 type = entity.recipientType,
                 email = entity.recipientEmail,
-                displayName = entity.recipientEmail,
+                displayName = entity.recipientDisplayName,
             ),
+            attachmentCount = entity.attachmentCount,
             createdAt = entity.createdAt,
         )
     }

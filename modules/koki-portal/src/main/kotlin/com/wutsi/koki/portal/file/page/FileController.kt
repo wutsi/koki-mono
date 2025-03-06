@@ -5,10 +5,15 @@ import com.wutsi.koki.portal.file.service.FileService
 import com.wutsi.koki.portal.security.RequiresPermission
 import jakarta.servlet.http.HttpServletResponse
 import org.apache.commons.io.IOUtils
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import java.io.ByteArrayOutputStream
 import java.net.URL
 
 @Controller
@@ -26,15 +31,19 @@ class FileController(
     }
 
     @GetMapping("/files/{id}/download")
-    fun download(@PathVariable id: Long) {
+    fun download(@PathVariable id: Long): ResponseEntity<ByteArray> {
         val file = service.file(id)
-        response.contentType = file.contentType
-        response.setContentLength(file.contentLength.toInt())
-        response.setHeader("Content-Disposition", "attachment; filename=\"${file.name}\"")
-        URL(file.contentUrl)
-            .openStream()
-            .use { inputStream ->
-                IOUtils.copy(inputStream, response.outputStream)
-            }
+
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.parseMediaType(file.contentType)
+        headers.contentLength = file.contentLength
+        headers.setContentDispositionFormData(file.name, file.name)
+
+        val output = ByteArrayOutputStream()
+        URL(file.contentUrl).openStream().use { input ->
+            IOUtils.copy(input, output)
+        }
+
+        return ResponseEntity(output.toByteArray(), headers, HttpStatus.OK)
     }
 }

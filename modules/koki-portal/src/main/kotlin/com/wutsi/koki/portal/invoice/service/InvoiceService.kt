@@ -74,7 +74,7 @@ class InvoiceService(
         val invoice = koki.invoice(id).invoice
 
         // Account
-        val account = if (invoice.customer.accountId == null || fullGraph == false) {
+        val account = if (invoice.customer.accountId == null || !fullGraph) {
             null
         } else {
             accountService.account(invoice.customer.accountId!!, false)

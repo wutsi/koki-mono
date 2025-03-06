@@ -8,6 +8,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.EmailFixtures
 import com.wutsi.koki.FileFixtures
+import com.wutsi.koki.InvoiceFixtures
 import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.TaxFixtures
 import com.wutsi.koki.TaxFixtures.tax
@@ -86,6 +87,14 @@ class TaxControllerTest : AbstractPageControllerTest() {
 
         Thread.sleep(1000)
         assertElementCount(".tab-files tr.file", FileFixtures.files.size)
+    }
+
+    @Test
+    fun invoices() {
+        navigateTo("/taxes/${tax.id}?tab=invoice")
+
+        Thread.sleep(1000)
+        assertElementCount(".tab-invoices tr.invoice", InvoiceFixtures.invoices.size)
     }
 
     @Test

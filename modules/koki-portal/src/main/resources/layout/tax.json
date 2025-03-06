@@ -1,7 +1,8 @@
 {
   "tabs": {
     "main": [
-      "file"
+      "file",
+      "invoice"
     ],
     "side": [
       "note",
