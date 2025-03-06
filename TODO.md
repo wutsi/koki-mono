@@ -2,11 +2,11 @@
 
 ## Account
 
-- [] List account invoices
 - [] Add AccountUser/AccountUserRole to manage relation ship between Account and User per module. Ex: Accountant,
   Technician
 - [] Settings: Import Accounts from CSV
 - [] Integrate [int-tel](https://intl-tel-input.com/) for phone number input
+- [x] List account invoices
 - [x] Add additional information to accounts: address
 - [x] The account manager must have the permission 'account:manage'
 - [x] Add account filters
@@ -46,6 +46,7 @@
 
 ## Email
 
+- [] Add native email configuration
 - [] Auto-translate email
 - [] Attach multiple files to email
 - [x] Configure validation on DTO
@@ -80,11 +81,7 @@
 
 ## Invoicing
 
-- [x] Before sending email notification, make sure that event.status=invoice.status
-- [x] Setting: Configure email content
-- [x] Setting: Configure initial invoice number
-- [x] Send invoice by email when approved
-- [x] Send invoice by email when paid
+- [] Invoice Widget
 - [] Payment API
 - [] Capture payments manually:
     - [] Cash
@@ -94,13 +91,17 @@
     - [] Paypal
     - [] Stripe
     - [] Flutterwave
-- [] Invoice Widget
 - [] Send email for unpaid invoices
-- [x] Invoice API
-- [x] Invoice UI
-- [x] Generate Invoice PDF
+- [x] Send invoice by email when approved
+- [x] Send invoice by email when paid
 - [x] Setting: Configure payment terms
 - [x] Setting: Select invoice format
+- [x] Before sending email notification, make sure that event.status=invoice.status
+- [x] Setting: Configure email content
+- [x] Setting: Configure initial invoice number
+- [x] Generate Invoice PDF
+- [x] Invoice API
+- [x] Invoice UI
 
 ## Module
 
@@ -161,6 +162,7 @@
 - [x] Personal tax API
 - [x] Link files to taxes
 - [x] Add a note
+- [x] List taxes invoices
 
 ## Tenant
 

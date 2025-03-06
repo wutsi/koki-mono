@@ -44,7 +44,7 @@ class EmailMapper : TenantAwareMapper() {
             id = entity.id,
             subject = entity.subject,
             summary = entity.summary,
-            sender = senders[entity.senderId] ?: UserModel(),
+            sender = senders[entity.senderId],
             createdAt = entity.createdAt,
             createdAtText = dateTimeFormat.format(entity.createdAt),
             createdAtMoment = formatMoment(entity.createdAt, dateTimeFormat, timeFormat),

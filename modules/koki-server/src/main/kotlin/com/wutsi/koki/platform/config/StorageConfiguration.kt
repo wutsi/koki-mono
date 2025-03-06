@@ -32,7 +32,7 @@ class StorageConfiguration(
 
     @Bean
     fun localStorageServiceBuilder(): LocalStorageServiceBuilder {
-        return LocalStorageServiceBuilder(directory, baseUrl)
+        return LocalStorageServiceBuilder(directory, "$baseUrl$servletPath")
     }
 
     @Bean
@@ -45,7 +45,7 @@ class StorageConfiguration(
         return KokiStorageServiceBuilder(
             type = type,
             directory = directory,
-            baseUrl = baseUrl,
+            baseUrl = "$baseUrl$servletPath",
             s3SecretKey = s3SecretKey,
             s3AccessKey = s3AccessKey,
             s3Region = s3Region,

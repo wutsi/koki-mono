@@ -39,7 +39,7 @@
                         <select style="width: 100%" th:field="*{accountId}">
                             <option th:if="${account}"
                                     th:text="${account.name}"
-                                    th:value="${account?.id}">
+                                    th:value="${account.id}">
                                 ACCOUNT
                             </option>
                         </select>
@@ -48,7 +48,7 @@
                         <select style="width: 100%" th:field="*{contactId}">
                             <option th:if="${contact}"
                                     th:text="${contact.name}"
-                                    th:value="${contact?.id}">
+                                    th:value="${contact.id}">
                                 CONTACT
                             </option>
                         </select>

@@ -157,8 +157,8 @@ function _koki_emails_on_recipient_type_changed(type) {
     button.innerHTML = document.getElementById('recipient-type-' + type.toLowerCase()).innerHTML;
 
     document.getElementById('recipientType').value = type.toUpperCase();
-    document.getElementById('account-selector').style.display = (type === 'account' ? 'block' : 'none');
-    document.getElementById('contact-selector').style.display = (type === 'contact' ? 'block' : 'none');
+    document.getElementById('account-selector').style.display = (type === 'ACCOUNT' ? 'block' : 'none');
+    document.getElementById('contact-selector').style.display = (type === 'CONTACT' ? 'block' : 'none');
 
     _koki_emails_on_change();
 }

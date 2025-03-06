@@ -10,6 +10,7 @@ import com.wutsi.koki.AccountFixtures.account
 import com.wutsi.koki.ContactFixtures
 import com.wutsi.koki.EmailFixtures
 import com.wutsi.koki.FileFixtures
+import com.wutsi.koki.InvoiceFixtures
 import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.TaxFixtures
 import com.wutsi.koki.error.dto.ErrorCode
@@ -98,6 +99,14 @@ class AccountControllerTest : AbstractPageControllerTest() {
 
         Thread.sleep(1000)
         assertElementCount(".tab-files .file", FileFixtures.files.size)
+    }
+
+    @Test
+    fun invoices() {
+        navigateTo("/accounts/${account.id}?tab=invoice")
+
+        Thread.sleep(1000)
+        assertElementCount(".tab-invoices tr.invoice", InvoiceFixtures.invoices.size)
     }
 
     @Test

@@ -97,7 +97,6 @@ class InvoiceController(
         val url = service.url(id)
         val output = ByteArrayOutputStream()
         URL(url).openStream().use { input ->
-            response.contentType = "application/pdf"
             IOUtils.copy(input, output)
         }
 
