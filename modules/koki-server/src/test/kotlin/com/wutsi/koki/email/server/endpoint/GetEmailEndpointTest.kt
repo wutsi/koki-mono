@@ -23,6 +23,8 @@ class GetEmailEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("<p>World</p>", email.body)
         assertEquals("X", email.summary)
         assertEquals(100L, email.recipient.id)
+        assertEquals("ray.sponsible@gmail.com", email.recipient.email)
+        assertEquals("Ray Sponsible", email.recipient.displayName)
         assertEquals(ObjectType.ACCOUNT, email.recipient.type)
         assertEquals(111L, email.senderId)
     }

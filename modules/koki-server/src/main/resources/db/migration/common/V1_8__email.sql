@@ -6,7 +6,7 @@ CREATE TABLE T_EMAIL(
   recipient_fk            BIGINT,
   created_by_fk           BIGINT,
 
-  recipient_email         VARCHAR(255),
+  recipient_email         VARCHAR(255) NOT NULL,
   recipient_display_name  VARCHAR(100),
   subject                 VARCHAR(255) NOT NULL ,
   body                    TEXT NOT NULL,
