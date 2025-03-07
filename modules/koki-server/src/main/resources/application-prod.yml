@@ -24,7 +24,7 @@ koki:
         url: ${CLOUDAMQP_URL}
 
     storage:
-        type: aws
+        type: s3
         s3:
             bucket: koki-prod
             region: us-east1

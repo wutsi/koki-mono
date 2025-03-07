@@ -163,6 +163,7 @@ function koki_load_more(containerId) {
  * @param cityId - ID of the city element
  */
 function koki_address_editor(countryId, cityId) {
+    const country = document.getElementById(countryId).value;
     $('#' + countryId).select2();
     $('#' + countryId).on('select2:select', function (e) {
         console.log('country changed....');
@@ -195,7 +196,7 @@ function koki_address_editor(countryId, cityId) {
             minimumInputLength: 3,
         }
     );
-    $('#' + cityId).attr('disabled', true);
+    $('#' + cityId).attr('disabled', !country || country.length === 0);
 }
 
 /**
