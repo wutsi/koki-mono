@@ -37,3 +37,8 @@ koki:
         username: ${SMTP_USER}
         password: ${SMTP_PASSWORD}
         from: no-reply@wutsi.com
+
+    module:
+        notification:
+            mq:
+                dlq-cron: "0 */15 * * * *"  # Every 15 mins
