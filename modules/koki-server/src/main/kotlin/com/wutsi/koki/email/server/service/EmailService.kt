@@ -153,8 +153,14 @@ class EmailService(
         try {
             val message = createMessage(request, email)
             try {
-                createMessagingService(tenantId).send(message)
+                logger.add("recipient_email", message.recipient.email)
+                if (message.recipient.email.isEmpty()) {
+                    throw ConflictException(
+                        error = Error(code = ErrorCode.EMAIL_RECIPIENT_EMAIL_MISSING),
+                    )
+                }
 
+                createMessagingService(tenantId).send(message)
                 logger.add("email_sent", true)
                 logger.add("email_address", request.recipient.email)
                 return email
