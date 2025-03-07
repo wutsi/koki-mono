@@ -63,8 +63,7 @@ class InvoiceNotificationWorkerTest {
     private val configurations = listOf(
         ConfigurationEntity(name = ConfigurationName.INVOICE_EMAIL_ENABLED, value = "1"),
         ConfigurationEntity(
-            name = ConfigurationName.INVOICE_EMAIL_SUBJECT,
-            value = "New Invoice #{{invoiceNumber}}"
+            name = ConfigurationName.INVOICE_EMAIL_SUBJECT, value = "New Invoice #{{invoiceNumber}}"
         ),
         ConfigurationEntity(name = ConfigurationName.INVOICE_EMAIL_BODY, value = "You have a new invoice!"),
 
@@ -78,27 +77,12 @@ class InvoiceNotificationWorkerTest {
 
     @BeforeEach
     fun setUp() {
-        doReturn(url).whenever(fileService)
-            .store(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull()
-            )
-        doReturn(file).whenever(fileService)
-            .create(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull()
-            )
+        doReturn(url).whenever(fileService).store(
+            anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull()
+        )
+        doReturn(file).whenever(fileService).create(
+            anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull()
+        )
         doReturn(business).whenever(businessService).get(any())
         doReturn(configurations).whenever(configurationService).search(anyOrNull(), anyOrNull(), anyOrNull())
     }
@@ -116,12 +100,14 @@ class InvoiceNotificationWorkerTest {
         )
     }
 
-    private fun createInvoice(status: InvoiceStatus, customerAccountId: Long? = 555L): InvoiceEntity {
+    private fun createInvoice(
+        status: InvoiceStatus, customerAccountId: Long? = 555L, email: String = "ray.sponsible@gmail.com"
+    ): InvoiceEntity {
         val invoice = InvoiceEntity(
             id = invoiceId,
             number = 1445L,
             customerAccountId = customerAccountId,
-            customerEmail = "ray.sponsible@gmail.com",
+            customerEmail = email,
             customerName = "Ray Sponsible",
             status = status,
             currency = "CAD",
@@ -165,10 +151,9 @@ class InvoiceNotificationWorkerTest {
 
     @Test
     fun `notify opened invoice - not enabled`() {
-        doReturn(
-            configurations.filter { config -> config.name != ConfigurationName.INVOICE_EMAIL_ENABLED }
-        ).whenever(configurationService)
-            .search(anyOrNull(), anyOrNull(), anyOrNull())
+        doReturn(configurations.filter { config -> config.name != ConfigurationName.INVOICE_EMAIL_ENABLED }).whenever(
+            configurationService
+        ).search(anyOrNull(), anyOrNull(), anyOrNull())
 
         val invoice = createInvoice(InvoiceStatus.OPENED)
         val event = createEvent(invoice.status)
@@ -179,10 +164,9 @@ class InvoiceNotificationWorkerTest {
 
     @Test
     fun `notify opened invoice - no config`() {
-        doReturn(
-            configurations.filter { config -> config.name == ConfigurationName.INVOICE_EMAIL_ENABLED }
-        ).whenever(configurationService)
-            .search(anyOrNull(), anyOrNull(), anyOrNull())
+        doReturn(configurations.filter { config -> config.name == ConfigurationName.INVOICE_EMAIL_ENABLED }).whenever(
+            configurationService
+        ).search(anyOrNull(), anyOrNull(), anyOrNull())
 
         val invoice = createInvoice(InvoiceStatus.OPENED, customerAccountId = null)
         val event = createEvent(invoice.status)
@@ -224,10 +208,9 @@ class InvoiceNotificationWorkerTest {
 
     @Test
     fun `notify paid invoice - not enabled`() {
-        doReturn(
-            configurations.filter { config -> config.name != ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED }
-        ).whenever(configurationService)
-            .search(anyOrNull(), anyOrNull(), anyOrNull())
+        doReturn(configurations.filter { config -> config.name != ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED }).whenever(
+            configurationService
+        ).search(anyOrNull(), anyOrNull(), anyOrNull())
 
         val invoice = createInvoice(InvoiceStatus.PAID)
         val event = createEvent(invoice.status)
@@ -238,10 +221,9 @@ class InvoiceNotificationWorkerTest {
 
     @Test
     fun `notify paid invoice - no config`() {
-        doReturn(
-            configurations.filter { config -> config.name == ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED }
-        ).whenever(configurationService)
-            .search(anyOrNull(), anyOrNull(), anyOrNull())
+        doReturn(configurations.filter { config -> config.name == ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED }).whenever(
+            configurationService
+        ).search(anyOrNull(), anyOrNull(), anyOrNull())
 
         val invoice = createInvoice(InvoiceStatus.PAID, customerAccountId = null)
         val event = createEvent(invoice.status)
@@ -282,6 +264,15 @@ class InvoiceNotificationWorkerTest {
     @Test
     fun `status mismatch`() {
         createInvoice(InvoiceStatus.VOIDED)
+        val event = createEvent(InvoiceStatus.OPENED)
+        worker.notify(event)
+
+        verify(emailService, never()).send(any(), any())
+    }
+
+    @Test
+    fun `customer with no email`() {
+        createInvoice(InvoiceStatus.OPENED, email = "")
         val event = createEvent(InvoiceStatus.OPENED)
         worker.notify(event)
 
