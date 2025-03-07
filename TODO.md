@@ -169,6 +169,7 @@
 ## Tenant
 
 - [] Tenant should have a list of currencies
+- [] Add tenant healthcheck for S3, Email
 - [x] Init a tenant
 
 ## Users
@@ -186,3 +187,7 @@
 ## Web
 
 - [] serve all static resource from external site
+
+## Other
+
+- [] Add healthcheck for S3, RabbitMQ, Email
