@@ -73,14 +73,18 @@ class InvoiceNotificationWorker(
         val invoice = invoiceService.get(id = event.invoiceId, tenantId = event.tenantId)
         logger.add("invoice_status", invoice.status)
         if (invoice.status != event.status) {
-            logger.add("notification_email_sent", false)
-            logger.add("notification_email_reason", "StatusMismatch")
+            logger.add("email_sent", false)
+            logger.add("email_reason", "StatusMismatch")
+            return
+        }
+        if (invoice.customerEmail.isEmpty()) {
+            logger.add("email_sent", false)
+            logger.add("email_reason", "NoEmail")
             return
         }
 
         val configs = configurationService.search(tenantId = event.tenantId, keyword = "invoice.")
-            .map { config -> config.name to config.value }
-            .toMap()
+            .map { config -> config.name to config.value }.toMap()
         if (!isEnabled(configs, event)) {
             if (LOGGER.isDebugEnabled) {
                 LOGGER.debug("Email notification not enabled for status: ${event.status}")
@@ -90,22 +94,19 @@ class InvoiceNotificationWorker(
 
         val business = businessService.get(tenantId = event.tenantId)
         val file = pdfFile(invoice, business, event)
-        emailService.send(
-            request = SendEmailRequest(
-                recipient = Recipient(
-                    displayName = invoice.customerName,
-                    email = invoice.customerEmail,
-                    id = invoice.customerAccountId,
-                    type = invoice.customerAccountId?.let { ObjectType.ACCOUNT } ?: ObjectType.UNKNOWN,
-                ),
-                subject = getSubject(configs, event),
-                body = getBody(configs, event),
-                data = createData(invoice, business),
-                owner = ObjectReference(id = invoice.id!!, type = ObjectType.INVOICE),
-                attachmentFileIds = listOf(file.id!!),
+        emailService.send(request = SendEmailRequest(
+            recipient = Recipient(
+                displayName = invoice.customerName,
+                email = invoice.customerEmail,
+                id = invoice.customerAccountId,
+                type = invoice.customerAccountId?.let { ObjectType.ACCOUNT } ?: ObjectType.UNKNOWN,
             ),
-            tenantId = invoice.tenantId
-        )
+            subject = getSubject(configs, event),
+            body = getBody(configs, event),
+            data = createData(invoice, business),
+            owner = ObjectReference(id = invoice.id!!, type = ObjectType.INVOICE),
+            attachmentFileIds = listOf(file.id!!),
+        ), tenantId = invoice.tenantId)
     }
 
     private fun createData(invoice: InvoiceEntity, business: BusinessEntity): Map<String, Any> {
@@ -140,20 +141,16 @@ class InvoiceNotificationWorker(
 
     private fun getBody(configs: Map<String, String>, event: InvoiceStatusChangedEvent): String {
         return when (event.status) {
-            InvoiceStatus.OPENED -> configs[ConfigurationName.INVOICE_EMAIL_BODY]
-                ?: ""
+            InvoiceStatus.OPENED -> configs[ConfigurationName.INVOICE_EMAIL_BODY] ?: ""
 
-            InvoiceStatus.PAID -> configs[ConfigurationName.INVOICE_EMAIL_RECEIPT_BODY]
-                ?: ""
+            InvoiceStatus.PAID -> configs[ConfigurationName.INVOICE_EMAIL_RECEIPT_BODY] ?: ""
 
             else -> throw IllegalStateException("Not supported: ${event.status}")
         }
     }
 
     private fun pdfFile(
-        invoice: InvoiceEntity,
-        business: BusinessEntity,
-        event: InvoiceStatusChangedEvent
+        invoice: InvoiceEntity, business: BusinessEntity, event: InvoiceStatusChangedEvent
     ): FileEntity {
         val file = File.createTempFile("invoice-${invoice.id}", ".pdf")
         try {
