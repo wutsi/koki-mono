@@ -70,6 +70,7 @@
 
 - [] Integrate AI to describe the file
 - [] Tag the files
+- [x] Validate S3 configuration
 - [x] Settings: Configure storage type: S3, Local
 - [x] Apply RBAC security on UI
 - [x] Upload file from popup
@@ -81,10 +82,9 @@
 
 ## Invoicing
 
+- [-] Payment API
 - [] Send invoice manually
-- [] Handle approval when customer has no email
 - [] Invoice Widget
-- [] Payment API
 - [] Capture payments manually:
     - [] Cash
     - [] Check

@@ -65,8 +65,8 @@ class SettingsSMTPEditController(
             service.save(form)
             return "redirect:/settings/email/smtp?_toast=1&_ts=" + System.currentTimeMillis()
         } catch (ex: IOException) {
-            LOGGER.error("Connection to SMTP server failed", ex)
-            model.addAttribute("error", "The settings are not valid. Unable to connect to the Mail Server")
+            LOGGER.error("Bad SMTP configuration", ex)
+            model.addAttribute("error", "Your settings are not valid. Unable to connect to the Mail Server")
             return edit(form, model)
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)

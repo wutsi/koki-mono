@@ -1,16 +1,26 @@
 package com.wutsi.koki.portal.file.page.settings.storage
 
+import com.amazonaws.AmazonClientException
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
+import com.wutsi.koki.portal.file.service.S3Validator
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class SettingsEditStorageControllerTest : AbstractPageControllerTest() {
+    @MockitoBean
+    private lateinit var validator: S3Validator
+
     @Test
     fun native() {
         navigateTo("/settings/files/storage/edit")
@@ -60,6 +70,27 @@ class SettingsEditStorageControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.FILE_SETTINGS_STORAGE)
         assertElementVisible("#koki-toast")
+    }
+
+    @Test
+    fun `S3 validation error`() {
+        doThrow(AmazonClientException("Failed")).whenever(validator).validate(any(), any(), any(), any())
+
+        navigateTo("/settings/files/storage/edit")
+        assertCurrentPageIs(PageName.FILE_SETTINGS_STORAGE_EDIT)
+        select("#type", 2)
+        Thread.sleep(1000L)
+
+        input("#s3Bucket", "test")
+        select("#s3Region", 2)
+        input("#s3AccessKey", "ACC-0000")
+        input("#s3SecretKey", "SEC-0000")
+        click("button[type=submit]")
+
+        assertElementPresent(".alert-danger")
+        assertCurrentPageIs(PageName.FILE_SETTINGS_STORAGE_EDIT)
+
+        verify(rest, never()).postForEntity(any<String>(), any(), eq(Any::class.java))
     }
 
     @Test
