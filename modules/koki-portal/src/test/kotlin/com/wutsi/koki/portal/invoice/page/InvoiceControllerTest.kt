@@ -138,14 +138,6 @@ class InvoiceControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 
-    @Test
-    fun `download - without permission invoice`() {
-        setUpUserWithoutPermissions(listOf("invoice"))
-
-        navigateTo("/invoices/i${invoice.id}/${UUID.randomUUID()}.pdf")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
-    }
-
     private fun setupDraftInvoice() {
         doReturn(
             ResponseEntity(

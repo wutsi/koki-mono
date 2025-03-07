@@ -23,9 +23,15 @@ import kotlin.test.assertEquals
 
 class InvoiceTabControllerTest : AbstractPageControllerTest() {
     @Test
+    fun `list - account`() {
+        navigateTo("/invoices/tab?test-mode=true&owner-type=ACCOUNT&owner-id=" + AccountFixtures.account.id)
+        assertElementCount(".tab-invoices tr.invoice", InvoiceFixtures.invoices.size)
+    }
+
+    @Test
     fun `list - tax`() {
         navigateTo("/invoices/tab?test-mode=true&owner-type=TAX&owner-id=" + TaxFixtures.tax.id)
-        assertElementCount(".tab-invoice str.invoice", InvoiceFixtures.invoices.size)
+        assertElementCount(".tab-invoices tr.invoice", InvoiceFixtures.invoices.size)
     }
 
     @Test
