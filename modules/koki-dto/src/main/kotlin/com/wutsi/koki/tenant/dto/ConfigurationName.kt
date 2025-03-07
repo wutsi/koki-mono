@@ -15,12 +15,12 @@ object ConfigurationName {
     // INVOICE
     const val INVOICE_START_NUMBER = "invoice.start.number"
     const val INVOICE_DUE_DAYS = "invoice.due.days"
-    const val INVOICE_EMAIL_OPENED_ENABLED = "invoice.email.opened.enabled"
-    const val INVOICE_EMAIL_OPENED_BODY = "invoice.email.opened.body"
-    const val INVOICE_EMAIL_OPENED_SUBJECT = "invoice.email.opened.subject"
-    const val INVOICE_EMAIL_PAID_ENABLED = "invoice.email.paid.enabled"
-    const val INVOICE_EMAIL_PAID_BODY = "invoice.email.paid.body"
-    const val INVOICE_EMAIL_PAID_SUBJECT = "invoice.email.paid.subject"
+    const val INVOICE_EMAIL_ENABLED = "invoice.email.enabled"
+    const val INVOICE_EMAIL_BODY = "invoice.email.body"
+    const val INVOICE_EMAIL_SUBJECT = "invoice.email.subject"
+    const val INVOICE_EMAIL_RECEIPT_ENABLED = "invoice.email.paid.enabled"
+    const val INVOICE_EMAIL_RECEIPT_BODY = "invoice.email.paid.body"
+    const val INVOICE_EMAIL_RECEIPT_SUBJECT = "invoice.email.paid.subject"
 
     // Storage
     const val STORAGE_TYPE = "storage.type"

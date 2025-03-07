@@ -4,9 +4,11 @@ import java.util.Date
 
 data class Tax(
     val id: Long = -1,
-    val invoiceId: Long? = null,
     val fiscalYear: Int = -1,
     val description: String? = null,
+    val totalRevenue: Double? = null,
+    val currency: String? = null,
+    var productCount: Int = 0,
     val taxTypeId: Long? = null,
     val accountId: Long = -1,
     val accountantId: Long? = null,
