@@ -13,7 +13,11 @@
             <div>{{{businessWebsite}}}</div>
         </td>
         <td valign="top" width="50%">
-            <h1 style="text-align: right; margin: 0">Invoice</h1>
+            <h1 style="text-align: right">Invoice</h1>
+
+            {{#invoiceVoided}}
+            <h3 style="text-align: right; color: darkred">VOIDED</h3>
+            {{/invoiceVoided}}
         </td>
     </tr>
 </table>
@@ -34,21 +38,6 @@
             {{#invoiceDueDate}}
             Due Due: {{invoiceDueDate}}
             {{/invoiceDueDate}}
-        </td>
-    </tr>
-    <tr>
-        <td colspan="3">
-            {{#invoiceDraft}}
-            <h2 style="text-align: center; margin:0; color: gray; text-transform: uppercase">Draft</h2>
-            {{/invoiceDraft}}
-
-            {{#invoicePaid}}
-            <h2 style="text-align: center; margin:0; color: darkgreen; text-transform: uppercase">Paid</h2>
-            {{/invoicePaid}}
-
-            {{#invoiceVoided}}
-            <h2 style="text-align: center; margin:0; color: darkred; text-transform: uppercase">Cancelled</h2>
-            {{/invoiceVoided}}
         </td>
     </tr>
 </table>
@@ -96,14 +85,6 @@
     <tr>
         <td align="right" align="right" colspan="4">Total</td>
         <td align="right" style="background: #f0f0f0">{{totalAmount}}</td>
-    </tr>
-    <tr>
-        <td align="right" colspan="4">Amount Paid</td>
-        <td align="right" style="background: #f0f0f0">{{amountPaid}}</td>
-    </tr>
-    <tr>
-        <td align="right" colspan="4"><b>Amount Due</b></td>
-        <td align="right" style="background: #f0f0f0"><b>{{amountDue}}</b></td>
     </tr>
 </table>
 

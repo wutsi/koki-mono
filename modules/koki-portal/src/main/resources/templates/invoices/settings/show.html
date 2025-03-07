@@ -47,17 +47,17 @@
         <table class="table border-light">
             <tr>
                 <td colspan="3">
-                    <h4 class="margin-none">Notifications</h4>
+                    <h4 class="margin-none">Email Notifications</h4>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <b>When an invoice is opened</b>
+                    <b>When an invoice is approved</b>
                     <div class="text-small margin-left">
                         Subject: <span th:text="${openedNotification.subject}">SUBJECT</span>
                     </div>
                 </td>
-                <td>
+                <td align="right">
                     <span class="badge text-bg-success" th:if="${openedNotification.enabled}">Enabled</span>
                     <span class="badge text-bg-danger" th:if="!${openedNotification.enabled}">Disabled</span>
                 </td>
@@ -86,7 +86,7 @@
                         Subject: <span th:text="${paidNotification.subject}">SUBJECT</span>
                     </div>
                 </td>
-                <td>
+                <td align="right">
                     <span class="badge text-bg-success" th:if="${paidNotification.enabled}">Enabled</span>
                     <span class="badge text-bg-danger" th:if="!${paidNotification.enabled}">Disabled</span>
                 </td>

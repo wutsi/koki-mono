@@ -21,12 +21,12 @@ object TenantFixtures {
 
         ConfigurationName.INVOICE_DUE_DAYS to "30",
         ConfigurationName.INVOICE_START_NUMBER to "1550",
-        ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED to "1",
-        ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT to "Invoice #{{invoiceNumber}}",
-        ConfigurationName.INVOICE_EMAIL_OPENED_BODY to "You have a new invoice!",
-        ConfigurationName.INVOICE_EMAIL_PAID_ENABLED to "",
-        ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT to "Invoice #{{invoiceNumber}} paid",
-        ConfigurationName.INVOICE_EMAIL_PAID_BODY to "Thank you for your business!",
+        ConfigurationName.INVOICE_EMAIL_ENABLED to "1",
+        ConfigurationName.INVOICE_EMAIL_SUBJECT to "Invoice #{{invoiceNumber}}",
+        ConfigurationName.INVOICE_EMAIL_BODY to "You have a new invoice!",
+        ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED to "",
+        ConfigurationName.INVOICE_EMAIL_RECEIPT_SUBJECT to "Invoice #{{invoiceNumber}} paid",
+        ConfigurationName.INVOICE_EMAIL_RECEIPT_BODY to "Thank you for your business!",
 
         ConfigurationName.STORAGE_TYPE to "S3",
         ConfigurationName.STORAGE_S3_BUCKET to "tenant-koki",

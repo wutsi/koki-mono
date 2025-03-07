@@ -82,13 +82,13 @@ class ConfigurationService(
             SaveConfigurationRequest(
                 values = if (form.type == InvoiceNotificationType.paid) {
                     mapOf(
-                        ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT to (form.subject ?: ""),
-                        ConfigurationName.INVOICE_EMAIL_PAID_BODY to (form.body ?: ""),
+                        ConfigurationName.INVOICE_EMAIL_RECEIPT_SUBJECT to (form.subject ?: ""),
+                        ConfigurationName.INVOICE_EMAIL_RECEIPT_BODY to (form.body ?: ""),
                     )
                 } else if (form.type == InvoiceNotificationType.opened) {
                     mapOf(
-                        ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT to (form.subject ?: ""),
-                        ConfigurationName.INVOICE_EMAIL_OPENED_BODY to (form.body ?: ""),
+                        ConfigurationName.INVOICE_EMAIL_SUBJECT to (form.subject ?: ""),
+                        ConfigurationName.INVOICE_EMAIL_BODY to (form.body ?: ""),
                     )
                 } else {
                     emptyMap()
@@ -102,11 +102,11 @@ class ConfigurationService(
             SaveConfigurationRequest(
                 values = if (type == InvoiceNotificationType.paid) {
                     mapOf(
-                        ConfigurationName.INVOICE_EMAIL_PAID_ENABLED to (if (status) "1" else "")
+                        ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED to (if (status) "1" else "")
                     )
                 } else if (type == InvoiceNotificationType.opened) {
                     mapOf(
-                        ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED to (if (status) "1" else "")
+                        ConfigurationName.INVOICE_EMAIL_ENABLED to (if (status) "1" else "")
                     )
                 } else {
                     emptyMap()

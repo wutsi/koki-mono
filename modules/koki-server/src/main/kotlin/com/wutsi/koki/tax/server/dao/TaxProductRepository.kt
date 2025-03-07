@@ -5,4 +5,6 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface TaxProductRepository : CrudRepository<TaxProductEntity, Long>
+interface TaxProductRepository : CrudRepository<TaxProductEntity, Long> {
+    fun findByTaxId(taxId: Long): List<TaxProductEntity>
+}

@@ -33,14 +33,6 @@
                                 Approve
                             </a>
 
-                            <a class="btn-download btn btn-light btn-sm" target="_blank"
-                               th:href="${invoice.pdfUrl}"
-                               th:if="${invoice.status.name} != 'DRAFT'"
-                            >
-                                <span class="fiv-viv fiv-icon-pdf"></span>
-                                Download PDF
-                            </a>
-
                             <a class="btn-void btn btn-danger btn-sm"
                                onclick="return confirm('Are you sure you want to void the invoice?')"
                                th:href="'/invoices/' + ${invoice.id} + '/void'"

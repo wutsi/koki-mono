@@ -7,7 +7,6 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
-import com.wutsi.koki.FileFixtures.files
 import com.wutsi.koki.InvoiceFixtures.invoice
 import com.wutsi.koki.invoice.dto.GetInvoiceResponse
 import com.wutsi.koki.invoice.dto.InvoiceStatus
@@ -15,7 +14,6 @@ import com.wutsi.koki.invoice.dto.UpdateInvoiceStatusRequest
 import com.wutsi.koki.portal.common.page.PageName
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -34,14 +32,6 @@ class InvoiceControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.INVOICE)
         assertElementCount("tr.invoice-item", invoice.items.size)
         assertElementCount("tr.invoice-tax", 2)
-    }
-
-    @Test
-    fun file() {
-        navigateTo("/invoices/${invoice.id}?tab=file")
-
-        assertCurrentPageIs(PageName.INVOICE)
-        assertElementCount("tr.file", files.size)
     }
 
     @Test
@@ -144,21 +134,6 @@ class InvoiceControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("invoice:manage"))
 
         navigateTo("/invoices/${invoice.id}/void")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
-    }
-
-    @Test
-    fun download() {
-        navigateTo("/invoices/${invoice.id}")
-        assertCurrentPageIs(PageName.INVOICE)
-        click(".btn-download")
-    }
-
-    @Test
-    fun `download - without permission invoice`() {
-        setUpUserWithoutPermissions(listOf("invoice"))
-
-        navigateTo("/invoices/i${invoice.id}/${UUID.randomUUID()}.pdf")
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 

@@ -11,9 +11,13 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.email.dto.SendEmailRequest
 import com.wutsi.koki.email.server.service.EmailService
+import com.wutsi.koki.file.server.domain.FileEntity
+import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.invoice.dto.event.InvoiceStatusChangedEvent
 import com.wutsi.koki.invoice.server.domain.InvoiceEntity
+import com.wutsi.koki.invoice.server.io.pdf.InvoicePdfExporter
+import com.wutsi.koki.invoice.server.io.pdf.ReceiptPdfExporter
 import com.wutsi.koki.notification.server.service.NotificationConsumer
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.tenant.dto.ConfigurationName
@@ -24,6 +28,7 @@ import com.wutsi.koki.tenant.server.service.ConfigurationService
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
+import java.net.URL
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -32,8 +37,13 @@ class InvoiceNotificationWorkerTest {
     private val configurationService = mock<ConfigurationService>()
     private val invoiceService = mock<InvoiceService>()
     private val businessService = mock<BusinessService>()
+    private val fileService = mock<FileService>()
+    private val receiptPdfExporter = mock<ReceiptPdfExporter>()
+    private val invoicePdfExporter = mock<InvoicePdfExporter>()
     private val logger = DefaultKVLogger()
     private val emailService = mock<EmailService>()
+    private val url = URL("https://fff.com/foo.pdf")
+    private val file = FileEntity(id = 555)
 
     private val worker = InvoiceNotificationWorker(
         registry = registry,
@@ -41,6 +51,9 @@ class InvoiceNotificationWorkerTest {
         invoiceService = invoiceService,
         emailService = emailService,
         businessService = businessService,
+        fileService = fileService,
+        receiptPdfExporter = receiptPdfExporter,
+        invoicePdfExporter = invoicePdfExporter,
         logger = logger,
     )
 
@@ -48,23 +61,44 @@ class InvoiceNotificationWorkerTest {
     private val business = BusinessEntity(companyName = "Olive Inc")
 
     private val configurations = listOf(
-        ConfigurationEntity(name = ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED, value = "1"),
+        ConfigurationEntity(name = ConfigurationName.INVOICE_EMAIL_ENABLED, value = "1"),
         ConfigurationEntity(
-            name = ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT,
+            name = ConfigurationName.INVOICE_EMAIL_SUBJECT,
             value = "New Invoice #{{invoiceNumber}}"
         ),
-        ConfigurationEntity(name = ConfigurationName.INVOICE_EMAIL_OPENED_BODY, value = "You have a new invoice!"),
+        ConfigurationEntity(name = ConfigurationName.INVOICE_EMAIL_BODY, value = "You have a new invoice!"),
 
-        ConfigurationEntity(name = ConfigurationName.INVOICE_EMAIL_PAID_ENABLED, value = "1"),
+        ConfigurationEntity(name = ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED, value = "1"),
         ConfigurationEntity(
-            name = ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT,
+            name = ConfigurationName.INVOICE_EMAIL_RECEIPT_SUBJECT,
             value = "Thank you for your payment - Invoice #{{invoiceNumber}}"
         ),
-        ConfigurationEntity(name = ConfigurationName.INVOICE_EMAIL_PAID_BODY, value = "Thank you!"),
+        ConfigurationEntity(name = ConfigurationName.INVOICE_EMAIL_RECEIPT_BODY, value = "Thank you!"),
     )
 
     @BeforeEach
     fun setUp() {
+        doReturn(url).whenever(fileService)
+            .store(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull()
+            )
+        doReturn(file).whenever(fileService)
+            .create(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull()
+            )
         doReturn(business).whenever(businessService).get(any())
         doReturn(configurations).whenever(configurationService).search(anyOrNull(), anyOrNull(), anyOrNull())
     }
@@ -92,9 +126,6 @@ class InvoiceNotificationWorkerTest {
             status = status,
             currency = "CAD",
             tenantId = 111L,
-            pdfPaidFileId = 3333L,
-            pdfOpenedFileId = 7777L,
-            pdfVoidedFileId = 9999L
         )
         doReturn(invoice).whenever(invoiceService).get(any(), any())
         return invoice
@@ -127,7 +158,7 @@ class InvoiceNotificationWorkerTest {
         assertEquals(ObjectType.ACCOUNT, request.firstValue.recipient.type)
         assertEquals("New Invoice #{{invoiceNumber}}", request.firstValue.subject)
         assertEquals("You have a new invoice!", request.firstValue.body)
-        assertEquals(listOf(invoice.pdfOpenedFileId), request.firstValue.attachmentFileIds)
+        assertEquals(listOf(file.id), request.firstValue.attachmentFileIds)
         assertEquals(invoice.id, request.firstValue.owner?.id)
         assertEquals(ObjectType.INVOICE, request.firstValue.owner?.type)
     }
@@ -135,7 +166,7 @@ class InvoiceNotificationWorkerTest {
     @Test
     fun `notify opened invoice - not enabled`() {
         doReturn(
-            configurations.filter { config -> config.name != ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED }
+            configurations.filter { config -> config.name != ConfigurationName.INVOICE_EMAIL_ENABLED }
         ).whenever(configurationService)
             .search(anyOrNull(), anyOrNull(), anyOrNull())
 
@@ -149,7 +180,7 @@ class InvoiceNotificationWorkerTest {
     @Test
     fun `notify opened invoice - no config`() {
         doReturn(
-            configurations.filter { config -> config.name == ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED }
+            configurations.filter { config -> config.name == ConfigurationName.INVOICE_EMAIL_ENABLED }
         ).whenever(configurationService)
             .search(anyOrNull(), anyOrNull(), anyOrNull())
 
@@ -166,7 +197,7 @@ class InvoiceNotificationWorkerTest {
         assertEquals(ObjectType.UNKNOWN, request.firstValue.recipient.type)
         assertEquals(InvoiceNotificationWorker.INVOICE_EMAIL_OPENED_SUBJECT, request.firstValue.subject)
         assertEquals("", request.firstValue.body)
-        assertEquals(listOf(invoice.pdfOpenedFileId), request.firstValue.attachmentFileIds)
+        assertEquals(true, request.firstValue.attachmentFileIds.isNotEmpty())
         assertEquals(invoice.id, request.firstValue.owner?.id)
         assertEquals(ObjectType.INVOICE, request.firstValue.owner?.type)
     }
@@ -186,7 +217,7 @@ class InvoiceNotificationWorkerTest {
         assertEquals(ObjectType.ACCOUNT, request.firstValue.recipient.type)
         assertEquals("Thank you for your payment - Invoice #{{invoiceNumber}}", request.firstValue.subject)
         assertEquals("Thank you!", request.firstValue.body)
-        assertEquals(listOf(invoice.pdfPaidFileId), request.firstValue.attachmentFileIds)
+        assertEquals(true, request.firstValue.attachmentFileIds.isNotEmpty())
         assertEquals(invoice.id, request.firstValue.owner?.id)
         assertEquals(ObjectType.INVOICE, request.firstValue.owner?.type)
     }
@@ -194,7 +225,7 @@ class InvoiceNotificationWorkerTest {
     @Test
     fun `notify paid invoice - not enabled`() {
         doReturn(
-            configurations.filter { config -> config.name != ConfigurationName.INVOICE_EMAIL_PAID_ENABLED }
+            configurations.filter { config -> config.name != ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED }
         ).whenever(configurationService)
             .search(anyOrNull(), anyOrNull(), anyOrNull())
 
@@ -208,7 +239,7 @@ class InvoiceNotificationWorkerTest {
     @Test
     fun `notify paid invoice - no config`() {
         doReturn(
-            configurations.filter { config -> config.name == ConfigurationName.INVOICE_EMAIL_PAID_ENABLED }
+            configurations.filter { config -> config.name == ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED }
         ).whenever(configurationService)
             .search(anyOrNull(), anyOrNull(), anyOrNull())
 
@@ -225,7 +256,7 @@ class InvoiceNotificationWorkerTest {
         assertEquals(ObjectType.UNKNOWN, request.firstValue.recipient.type)
         assertEquals(InvoiceNotificationWorker.INVOICE_EMAIL_PAID_SUBJECT, request.firstValue.subject)
         assertEquals("", request.firstValue.body)
-        assertEquals(listOf(invoice.pdfPaidFileId), request.firstValue.attachmentFileIds)
+        assertEquals(true, request.firstValue.attachmentFileIds.isNotEmpty())
         assertEquals(invoice.id, request.firstValue.owner?.id)
         assertEquals(ObjectType.INVOICE, request.firstValue.owner?.type)
     }

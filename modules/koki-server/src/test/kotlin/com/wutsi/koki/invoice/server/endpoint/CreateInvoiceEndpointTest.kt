@@ -322,16 +322,6 @@ class CreateInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `create tax invoice`() {
-        val response = rest.postForEntity("/v1/invoices", request.copy(taxId = 111L), CreateInvoiceResponse::class.java)
-
-        assertEquals(HttpStatus.OK, response.statusCode)
-
-        val tax = taxDao.findById(111L).get()
-        assertEquals(response.body!!.invoiceId, tax.invoiceId)
-    }
-
-    @Test
     fun `create with start number`() {
         // GIVEN
         val startNumber = 1000

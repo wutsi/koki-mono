@@ -35,16 +35,16 @@ class SettingsEditInvoiceNotificationController(
         return InvoiceNotificationSettingsForm(
             type = type,
             enabled = when (type) {
-                InvoiceNotificationType.paid -> !configs[ConfigurationName.INVOICE_EMAIL_PAID_ENABLED].isNullOrEmpty()
-                InvoiceNotificationType.opened -> !configs[ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED].isNullOrEmpty()
+                InvoiceNotificationType.paid -> !configs[ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED].isNullOrEmpty()
+                InvoiceNotificationType.opened -> !configs[ConfigurationName.INVOICE_EMAIL_ENABLED].isNullOrEmpty()
             },
             subject = when (type) {
-                InvoiceNotificationType.paid -> configs[ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT]
-                InvoiceNotificationType.opened -> configs[ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT]
+                InvoiceNotificationType.paid -> configs[ConfigurationName.INVOICE_EMAIL_RECEIPT_SUBJECT]
+                InvoiceNotificationType.opened -> configs[ConfigurationName.INVOICE_EMAIL_SUBJECT]
             },
             body = when (type) {
-                InvoiceNotificationType.paid -> configs[ConfigurationName.INVOICE_EMAIL_PAID_BODY]
-                InvoiceNotificationType.opened -> configs[ConfigurationName.INVOICE_EMAIL_OPENED_BODY]
+                InvoiceNotificationType.paid -> configs[ConfigurationName.INVOICE_EMAIL_RECEIPT_BODY]
+                InvoiceNotificationType.opened -> configs[ConfigurationName.INVOICE_EMAIL_BODY]
             },
         )
     }

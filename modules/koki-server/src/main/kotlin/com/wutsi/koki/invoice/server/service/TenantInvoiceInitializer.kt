@@ -8,43 +8,38 @@ import org.springframework.stereotype.Service
 
 @Service
 class TenantInvoiceInitializer : AbstractTenantModuleInitializer() {
+    companion object {
+        const val INVOICE_BODY = "/invoice/email/default/invoice.html"
+        const val RECEIPT_BODY = "/invoice/email/default/receipt.html"
+    }
+
     override fun init(tenantId: Long) {
         setConfigurationIfMissing(
-            name = ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED,
-            value = "1",
-            tenantId = tenantId
+            name = ConfigurationName.INVOICE_EMAIL_ENABLED, value = "1", tenantId = tenantId
         )
         setConfigurationIfMissing(
-            name = ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT,
+            name = ConfigurationName.INVOICE_EMAIL_SUBJECT,
             value = InvoiceNotificationWorker.INVOICE_EMAIL_OPENED_SUBJECT,
             tenantId = tenantId
         )
         setConfigurationIfMissing(
-            name = ConfigurationName.INVOICE_EMAIL_OPENED_BODY,
-            value = IOUtils.toString(
-                TenantEmailInitializer::class.java.getResourceAsStream("/invoice/email/opened.html"),
-                "utf-8"
-            ),
-            tenantId = tenantId
+            name = ConfigurationName.INVOICE_EMAIL_BODY, value = IOUtils.toString(
+                TenantEmailInitializer::class.java.getResourceAsStream(INVOICE_BODY), "utf-8"
+            ), tenantId = tenantId
         )
 
         setConfigurationIfMissing(
-            name = ConfigurationName.INVOICE_EMAIL_PAID_ENABLED,
-            value = "1",
-            tenantId = tenantId
+            name = ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED, value = "1", tenantId = tenantId
         )
         setConfigurationIfMissing(
-            name = ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT,
+            name = ConfigurationName.INVOICE_EMAIL_RECEIPT_SUBJECT,
             value = InvoiceNotificationWorker.INVOICE_EMAIL_PAID_SUBJECT,
             tenantId = tenantId
         )
         setConfigurationIfMissing(
-            name = ConfigurationName.INVOICE_EMAIL_PAID_BODY,
-            value = IOUtils.toString(
-                TenantEmailInitializer::class.java.getResourceAsStream("/invoice/email/paid.html"),
-                "utf-8"
-            ),
-            tenantId = tenantId
+            name = ConfigurationName.INVOICE_EMAIL_RECEIPT_BODY, value = IOUtils.toString(
+                TenantEmailInitializer::class.java.getResourceAsStream(RECEIPT_BODY), "utf-8"
+            ), tenantId = tenantId
         )
     }
 }

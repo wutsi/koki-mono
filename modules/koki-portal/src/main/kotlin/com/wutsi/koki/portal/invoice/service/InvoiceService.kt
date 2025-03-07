@@ -237,8 +237,4 @@ class InvoiceService(
             )
         )
     }
-
-    fun url(id: Long): String {
-        return koki.url(id)
-    }
 }

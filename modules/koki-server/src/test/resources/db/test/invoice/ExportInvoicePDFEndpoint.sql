@@ -61,13 +61,32 @@ INSERT INTO T_INVOICE(
   VALUES
       (
         100, 1, 7777, 9999,
-        10955, 2, 'Sample description',
+        100, 2, 'Sample description',
         800.00, 40.00, 20.00, 820.00, 810.00, 10.00, 'CAD',
         111, 'Ray Sponsible', 'ray.sponsible@gmail.com', '+5147580111', '+514758000',
         '340 Pascal', 'H1K1C1', 111, 100, 'CA',
         '311 Pascal', 'H2K2C2', 211, 200, 'CA',
         '2025-01-01', '2025-01-30'
       ),
+      (
+        101, 1, null, null,
+        101, 1, 'Draft invoice',
+        800.00, 40.00, 20.00, 820.00, 810.00, 10.00, 'CAD',
+        111, 'Ray Sponsible', 'ray.sponsible@gmail.com', '+5147580111', '+514758000',
+        '340 Pascal', 'H1K1C1', 111, 100, 'CA',
+        '311 Pascal', 'H2K2C2', 211, 200, 'CA',
+        '2025-01-01', '2025-01-30'
+      ),
+      (
+        102, 1, null, null,
+        102, 4, 'Voided invoice',
+        800.00, 40.00, 20.00, 820.00, 810.00, 10.00, 'CAD',
+        111, 'Ray Sponsible', 'ray.sponsible@gmail.com', '+5147580111', '+514758000',
+        '340 Pascal', 'H1K1C1', 111, 100, 'CA',
+        '311 Pascal', 'H2K2C2', 211, 200, 'CA',
+        '2025-01-01', '2025-01-30'
+      ),
+
       (
           200, 1, 7777, 9999,
           10956, 3, 'Sample description',
@@ -91,13 +110,20 @@ INSERT INTO T_INVOICE_ITEM(id, invoice_fk, product_fk, unit_price_fk, unit_fk, q
 VALUES (110, 100, 1, 11, 110, 2, 300, 600, 'CAD', 'product 1'),
        (120, 100, 2, 22, 111, 1, 200, 200, 'CAD', 'product 2'),
 
+       (112, 102, 1, 11, 110, 2, 300, 600, 'CAD', 'product 1'),
+       (122, 102, 2, 22, 111, 1, 200, 200, 'CAD', 'product 2'),
+
        (210, 200, 1, 11, 110, 2, 300, 600, 'CAD', 'product 1'),
        (220, 200, 2, 22, 111, 1, 200, 200, 'CAD', 'product 2');
 
 INSERT INTO T_INVOICE_TAX(id, invoice_item_fk, sales_tax_fk, rate, amount, currency)
-VALUES (111, 110, 1011, 5.000, 10.00, 'CAD'),
-       (112, 110, 1112, 9.975, 25.00, 'CAD'),
-       (121, 120, 1011, 5.000,  5.00, 'CAD'),
+VALUES (1101, 110, 1011, 5.000, 10.00, 'CAD'),
+       (1102, 110, 1112, 9.975, 25.00, 'CAD'),
+       (1201, 120, 1011, 5.000,  5.00, 'CAD'),
+
+       (1121, 112, 1011, 5.000, 10.00, 'CAD'),
+       (1122, 112, 1112, 9.975, 25.00, 'CAD'),
+       (1221, 122, 1011, 5.000,  5.00, 'CAD'),
 
        (211, 210, 1011, 5.000, 10.00, 'CAD'),
        (212, 210, 1112, 9.975, 25.00, 'CAD'),

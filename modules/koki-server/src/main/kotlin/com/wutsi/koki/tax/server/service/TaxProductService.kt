@@ -21,6 +21,7 @@ class TaxProductService(
     private val securityService: SecurityService,
     private val priceService: PriceService,
     private val productService: ProductService,
+    private val taxService: TaxService,
     private val em: EntityManager,
 ) {
     fun get(id: Long, tenantId: Long): TaxProductEntity {
@@ -83,7 +84,7 @@ class TaxProductService(
             request.description
         }
 
-        return dao.save(
+        val taxProduct = dao.save(
             TaxProductEntity(
                 tenantId = tenantId,
                 taxId = request.taxId,
@@ -99,6 +100,9 @@ class TaxProductService(
                 createdById = userId
             )
         )
+
+        taxService.updateTotalAmount(request.taxId, tenantId)
+        return taxProduct
     }
 
     @Transactional
@@ -118,6 +122,8 @@ class TaxProductService(
         taxProduct.modifiedById = securityService.getCurrentUserIdOrNull()
         taxProduct.modifiedAt = Date()
         dao.save(taxProduct)
+
+        taxService.updateTotalAmount(taxProduct.taxId, tenantId)
     }
 
     @Transactional

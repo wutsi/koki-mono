@@ -14,6 +14,10 @@
         </td>
         <td valign="top" width="50%">
             <h1 style="text-align: right; margin: 0">Invoice</h1>
+
+            {{#invoicePaid}}
+            <h3 style="text-align: right; color: darkgreen">PAID</h3>
+            {{/invoicePaid}}
         </td>
     </tr>
 </table>
@@ -34,21 +38,6 @@
             {{#invoiceDueDate}}
             Due Due: {{invoiceDueDate}}
             {{/invoiceDueDate}}
-        </td>
-    </tr>
-    <tr>
-        <td colspan="3">
-            {{#invoiceDraft}}
-            <h2 style="text-align: center; margin:0; color: gray; text-transform: uppercase">Draft</h2>
-            {{/invoiceDraft}}
-
-            {{#invoicePaid}}
-            <h2 style="text-align: center; margin:0; color: darkgreen; text-transform: uppercase">Paid</h2>
-            {{/invoicePaid}}
-
-            {{#invoiceVoided}}
-            <h2 style="text-align: center; margin:0; color: darkred; text-transform: uppercase">Cancelled</h2>
-            {{/invoiceVoided}}
         </td>
     </tr>
 </table>

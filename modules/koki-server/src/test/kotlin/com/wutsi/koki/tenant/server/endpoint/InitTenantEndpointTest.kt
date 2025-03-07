@@ -26,12 +26,12 @@ class InitTenantEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(7, names.size)
         assertTrue(names.contains(ConfigurationName.EMAIL_DECORATOR))
 
-        assertTrue(names.contains(ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED))
-        assertTrue(names.contains(ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT))
-        assertTrue(names.contains(ConfigurationName.INVOICE_EMAIL_OPENED_BODY))
+        assertTrue(names.contains(ConfigurationName.INVOICE_EMAIL_ENABLED))
+        assertTrue(names.contains(ConfigurationName.INVOICE_EMAIL_SUBJECT))
+        assertTrue(names.contains(ConfigurationName.INVOICE_EMAIL_BODY))
 
-        assertTrue(names.contains(ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED))
-        assertTrue(names.contains(ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT))
-        assertTrue(names.contains(ConfigurationName.INVOICE_EMAIL_OPENED_BODY))
+        assertTrue(names.contains(ConfigurationName.INVOICE_EMAIL_ENABLED))
+        assertTrue(names.contains(ConfigurationName.INVOICE_EMAIL_SUBJECT))
+        assertTrue(names.contains(ConfigurationName.INVOICE_EMAIL_BODY))
     }
 }

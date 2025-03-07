@@ -15,7 +15,7 @@ import org.apache.commons.io.IOUtils
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Service
+import org.springframework.beans.factory.annotation.Autowired
 import java.io.OutputStream
 import java.io.OutputStreamWriter
 import java.net.MalformedURLException
@@ -24,15 +24,30 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-abstract class AbstractInvoiceHtmlExporter(
-    private val templatingEngine: TemplatingEngine,
-    private val locationService: LocationService,
-    private val tenantService: TenantService,
-    private val unitService: UnitService,
-    private val salesTaxService: SalesTaxService,
-    private val invoiceService: InvoiceService,
-) {
+abstract class AbstractHtmlExporter {
+    @Autowired
+    protected lateinit var templatingEngine: TemplatingEngine
+
+    @Autowired
+    protected lateinit var locationService: LocationService
+
+    @Autowired
+    protected lateinit var tenantService: TenantService
+
+    @Autowired
+    protected lateinit var unitService: UnitService
+
+    @Autowired
+    protected lateinit var salesTaxService: SalesTaxService
+
+    @Autowired
+    protected lateinit var invoiceService: InvoiceService
+
     protected abstract fun getHtml(): String
+
+    fun getHtml(htmlPath: String): String {
+        return IOUtils.toString(ReceiptHtmlExporter::class.java.getResourceAsStream(htmlPath), "utf-8")
+    }
 
     fun export(invoice: InvoiceEntity, business: BusinessEntity, output: OutputStream) {
         val doc = loadDocument(invoice, business)
@@ -127,7 +142,6 @@ abstract class AbstractInvoiceHtmlExporter(
         data["totalAmount"] = moneyFormat.format(invoice.totalAmount)
         data["invoicePaid"] = (invoice.status == InvoiceStatus.PAID)
         data["invoiceVoided"] = (invoice.status == InvoiceStatus.VOIDED)
-        data["invoiceDraft"] = (invoice.status == InvoiceStatus.DRAFT)
         data["amountPaid"] = moneyFormat.format(invoice.amountPaid)
         data["amountDue"] = moneyFormat.format(invoice.amountDue)
 
