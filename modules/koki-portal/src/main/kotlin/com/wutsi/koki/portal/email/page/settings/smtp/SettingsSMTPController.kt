@@ -26,16 +26,15 @@ class SettingsSMTPController(
         model: Model,
     ): String {
         val config = service.configurations(keyword = "smtp.")
-        if (config.isNotEmpty()) {
-            val form = SMTPForm(
-                host = config[ConfigurationName.SMTP_HOST] ?: "",
-                username = config[ConfigurationName.SMTP_USERNAME] ?: "",
-                password = config[ConfigurationName.SMTP_PASSWORD] ?: "",
-                fromAddress = config[ConfigurationName.SMTP_FROM_ADDRESS] ?: "",
-                fromPersonal = config[ConfigurationName.SMTP_FROM_PERSONAL] ?: "",
-            )
-            model.addAttribute("form", form)
-        }
+        val form = SMTPForm(
+            type = config[ConfigurationName.SMTP_TYPE] ?: "KOKI",
+            host = config[ConfigurationName.SMTP_HOST] ?: "",
+            username = config[ConfigurationName.SMTP_USERNAME] ?: "",
+            password = config[ConfigurationName.SMTP_PASSWORD] ?: "",
+            fromAddress = config[ConfigurationName.SMTP_FROM_ADDRESS] ?: "",
+            fromPersonal = config[ConfigurationName.SMTP_FROM_PERSONAL] ?: "",
+        )
+        model.addAttribute("form", form)
         model.addAttribute(
             "page",
             PageModel(

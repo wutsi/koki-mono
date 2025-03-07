@@ -31,6 +31,7 @@ class ConfigurationService(
         koki.save(
             SaveConfigurationRequest(
                 values = mapOf(
+                    ConfigurationName.SMTP_TYPE to form.type,
                     ConfigurationName.SMTP_PORT to form.port.toString(),
                     ConfigurationName.SMTP_HOST to form.host,
                     ConfigurationName.SMTP_USERNAME to form.username,

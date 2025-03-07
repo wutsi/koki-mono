@@ -12,14 +12,25 @@ spring:
 swagger:
     protocol: https
 
+logging:
+    level:
+        com.wutsi: INFO
+
 koki:
     rabbitmq:
         url: ${CLOUDAMQP_URL}
 
     storage:
         type: aws
-        aws:
+        s3:
             bucket: koki-test
             region: us-east1
             access-key: ${AWS_ACCESS_KEY}
             secret-key: ${AWS_SECRET_KEY}
+
+    smtp:
+        host: ${SMTP_HOST}
+        port: ${SMTP_PORT}
+        username: ${SMTP_USER}
+        password: ${SMTP_PASSWORD}
+        from: no-reply@wutsi.com

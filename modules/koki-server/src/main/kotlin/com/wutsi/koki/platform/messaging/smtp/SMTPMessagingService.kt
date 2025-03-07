@@ -11,11 +11,12 @@ import jakarta.mail.internet.InternetAddress
 import jakarta.mail.internet.MimeBodyPart
 import jakarta.mail.internet.MimeMessage
 import jakarta.mail.internet.MimeMultipart
+import jdk.internal.joptsimple.internal.Messages.message
 
 class SMTPMessagingService(
     val session: Session,
     val fromAddress: String,
-    val fromPersonal: String,
+    val fromPersonal: String?,
 ) : MessagingService {
     override fun send(message: Message): String {
         try {
@@ -32,7 +33,9 @@ class SMTPMessagingService(
 
         // Headers
         val senderName = message.sender?.displayName?.ifEmpty { null } ?: fromPersonal
-        msg.addFrom(arrayOf(InternetAddress(fromAddress, senderName)))
+        msg.addFrom(
+            arrayOf(InternetAddress(fromAddress, senderName))
+        )
         msg.addRecipients(jakarta.mail.Message.RecipientType.TO, arrayOf(toAddress(message.recipient)))
         message.language?.let { lang -> msg.contentLanguage = arrayOf(lang) }
 

@@ -18,22 +18,26 @@
             <div>
                 <table class="table" th:if="${form}">
                     <tr>
+                        <td width="20%"><b>Type</b></td>
+                        <td th:text="#{'smtp-type.' + ${form.type}}">STORAGE</td>
+                    </tr>
+                    <tr th:if="${form.type == 'EXTERNAL'}">
                         <td width="20%"><b>Host</b></td>
                         <td th:text="${form.host}">HOST</td>
                     </tr>
-                    <tr>
+                    <tr th:if="${form.type == 'EXTERNAL'}">
                         <td><b>Port</b></td>
                         <td th:text="${form.port}">PORT</td>
                     </tr>
-                    <tr>
+                    <tr th:if="${form.type == 'EXTERNAL'}">
                         <td><b>Username</b></td>
                         <td th:text="${form.username}">USERNAME</td>
                     </tr>
-                    <tr>
+                    <tr th:if="${form.type == 'EXTERNAL'}">
                         <td><b>Password</b></td>
                         <td>******</td>
                     </tr>
-                    <tr>
+                    <tr th:if="${form.type == 'EXTERNAL'}">
                         <td><b>Sender</b></td>
                         <td>
                         <span th:if="!${form.fromPersonal.isEmpty()}"
@@ -42,7 +46,6 @@
                         </td>
                     </tr>
                 </table>
-                <div class="empty text-center" th:if="!${form}">The Mail Server has not been configured</div>
                 <div class="margin-top">
                     <a class="btn-edit btn btn-secondary" href="/settings/email/smtp/edit">Configure</a>
                 </div>

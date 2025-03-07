@@ -33,6 +33,7 @@ class SettingsSMTPEditController(
     fun edit(model: Model): String {
         val config = service.configurations(keyword = "smtp.")
         val form = SMTPForm(
+            type = config[ConfigurationName.SMTP_TYPE] ?: "KOKI",
             host = config[ConfigurationName.SMTP_HOST] ?: "",
             username = config[ConfigurationName.SMTP_USERNAME] ?: "",
             password = config[ConfigurationName.SMTP_PASSWORD] ?: "",
@@ -51,13 +52,16 @@ class SettingsSMTPEditController(
                 title = "Mail Server"
             )
         )
+        model.addAttribute("types", listOf("KOKI", "EXTERNAL"))
         return "emails/settings/smtp/edit"
     }
 
     @PostMapping("/save")
     fun save(@ModelAttribute form: SMTPForm, model: Model): String {
         try {
-            validator.validate(form.host, form.port, form.username)
+            if (form.type == "EXTERNAL") {
+                validator.validate(form.host, form.port, form.username)
+            }
             service.save(form)
             return "redirect:/settings/email/smtp?_toast=1&_ts=" + System.currentTimeMillis()
         } catch (ex: IOException) {

@@ -23,17 +23,13 @@ class SettingsEditStorageController(private val service: ConfigurationService) :
         model: Model,
     ): String {
         val config = service.configurations(keyword = "storage.")
-        val form = if (config.isNotEmpty()) {
-            StorageForm(
-                type = config[ConfigurationName.STORAGE_TYPE] ?: "KOKI",
-                s3Bucket = config[ConfigurationName.STORAGE_S3_BUCKET] ?: "",
-                s3Region = config[ConfigurationName.STORAGE_S3_REGION] ?: "",
-                s3AccessKey = config[ConfigurationName.STORAGE_S3_ACCESS_KEY] ?: "",
-                s3SecretKey = config[ConfigurationName.STORAGE_S3_SECRET_KEY] ?: "",
-            )
-        } else {
-            StorageForm(type = "KOKI")
-        }
+        val form = StorageForm(
+            type = config[ConfigurationName.STORAGE_TYPE] ?: "KOKI",
+            s3Bucket = config[ConfigurationName.STORAGE_S3_BUCKET] ?: "",
+            s3Region = config[ConfigurationName.STORAGE_S3_REGION] ?: "",
+            s3AccessKey = config[ConfigurationName.STORAGE_S3_ACCESS_KEY] ?: "",
+            s3SecretKey = config[ConfigurationName.STORAGE_S3_SECRET_KEY] ?: "",
+        )
         return edit(form, model)
     }
 

@@ -24,17 +24,13 @@ class SettingsStorageController(private val service: ConfigurationService) : Abs
         model: Model,
     ): String {
         val config = service.configurations(keyword = "storage.")
-        val form = if (config.isNotEmpty()) {
-            StorageForm(
-                type = config[ConfigurationName.STORAGE_TYPE] ?: "KOKI",
-                s3Bucket = config[ConfigurationName.STORAGE_S3_BUCKET] ?: "",
-                s3Region = config[ConfigurationName.STORAGE_S3_REGION] ?: "",
-                s3AccessKey = "*****",
-                s3SecretKey = "*****",
-            )
-        } else {
-            StorageForm(type = "KOKI")
-        }
+        val form = StorageForm(
+            type = config[ConfigurationName.STORAGE_TYPE] ?: "KOKI",
+            s3Bucket = config[ConfigurationName.STORAGE_S3_BUCKET] ?: "",
+            s3Region = config[ConfigurationName.STORAGE_S3_REGION] ?: "",
+            s3AccessKey = "*****",
+            s3SecretKey = "*****",
+        )
         model.addAttribute("form", form)
         model.addAttribute(
             "page",
