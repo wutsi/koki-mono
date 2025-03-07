@@ -61,6 +61,10 @@
                                 <input th:field="*{startAt}" type="date"/>
                             </div>
                             <div class="section-item">
+                                <label class="title">Due Date</label>
+                                <input th:field="*{dueAt}" type="date"/>
+                            </div>
+                            <div class="section-item">
                                 <label class="title">Accountant</label>
                                 <select th:field="*{accountantId}">
                                     <option selected
@@ -85,10 +89,6 @@
                                 </select>
                                 <script
                                     th:replace="~{__components/user :: user-selector('technicianId', null, 'tax:status')}"></script>
-                            </div>
-                            <div class="section-item">
-                                <label class="title">Due Date</label>
-                                <input th:field="*{dueAt}" type="date"/>
                             </div>
                             <div class="section-item">
                                 <label class="title">Description</label>
