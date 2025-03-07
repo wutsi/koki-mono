@@ -2,6 +2,7 @@ package com.wutsi.koki.tenant.dto
 
 object ConfigurationName {
     // SMTP CONFIGURATION
+    const val SMTP_TYPE = "smtp.type"
     const val SMTP_USERNAME = "smtp.username"
     const val SMTP_PASSWORD = "smtp.password"
     const val SMTP_HOST = "smtp.host"
