@@ -46,9 +46,9 @@
 
 ## Email
 
-- [] Add native email configuration
 - [] Auto-translate email
 - [] Attach multiple files to email
+- [x] Add native SMTP configuration
 - [x] Configure validation on DTO
 - [x] Show email summary
 - [x] Apply RBAC security on UI
@@ -81,6 +81,8 @@
 
 ## Invoicing
 
+- [] Send invoice manually
+- [] Handle approval when customer has no email
 - [] Invoice Widget
 - [] Payment API
 - [] Capture payments manually:

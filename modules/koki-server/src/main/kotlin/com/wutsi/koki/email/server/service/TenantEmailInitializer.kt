@@ -1,5 +1,6 @@
 package com.wutsi.koki.email.server.service
 
+import com.wutsi.koki.platform.messaging.smtp.SMTPType
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.service.AbstractTenantModuleInitializer
 import org.apache.commons.io.IOUtils
@@ -14,6 +15,12 @@ class TenantEmailInitializer : AbstractTenantModuleInitializer() {
                 TenantEmailInitializer::class.java.getResourceAsStream("/email/decorator.html"),
                 "utf-8"
             ),
+            tenantId = tenatId
+        )
+
+        setConfigurationIfMissing(
+            name = ConfigurationName.SMTP_TYPE,
+            value = SMTPType.KOKI.name,
             tenantId = tenatId
         )
     }

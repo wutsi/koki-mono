@@ -158,16 +158,23 @@ koki:
         ttl-seconds: 84600
 
     storage:
-        type: local # local | aws
+        type: local # local | s3
         local:
             directory: ${user.home}/__wutsi
             base-url: http://localhost:${server.port}
             servlet-path: /local-storage
-        aws:
+        s3:
             bucket: koki-test
             region: us-east1
             access-key: ""
             secret-key: ""
+
+    smtp:
+        host: localhost
+        port: 3025
+        username: wutsi
+        password: secret
+        from: no-reply@wutsi.com
 
     module:
         notification:

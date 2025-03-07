@@ -8,6 +8,7 @@ import kotlin.test.assertEquals
 
 class SMTPMessagingServiceBuilderTest {
     private val config = mapOf(
+        ConfigurationName.SMTP_TYPE to SMTPType.EXTERNAL.name,
         ConfigurationName.SMTP_PORT to "25",
         ConfigurationName.SMTP_HOST to "smtp.gmail.com",
         ConfigurationName.SMTP_USERNAME to "ray.sponsible",
@@ -15,14 +16,46 @@ class SMTPMessagingServiceBuilderTest {
         ConfigurationName.SMTP_FROM_ADDRESS to "no-reply@koki.com",
         ConfigurationName.SMTP_FROM_PERSONAL to "Koki"
     )
-    private val builder = SMTPMessagingServiceBuilder()
+    private val builder = SMTPMessagingServiceBuilder(
+        host = "127.0.0.1",
+        port = 587,
+        username = "xxx",
+        password = "yyyy",
+        from = "no-reply@xxxx.com"
+    )
 
     @Test
-    fun build() {
+    fun buildKoki() {
+        val smtp = builder.build(
+            mapOf(ConfigurationName.SMTP_TYPE to SMTPType.KOKI.name)
+        )
+
+        assertEquals(null, smtp.fromPersonal)
+        assertEquals("no-reply@xxxx.com", smtp.fromAddress)
+        assertEquals("587", smtp.session.getProperty("mail.smtp.port"))
+        assertEquals("127.0.0.1", smtp.session.getProperty("mail.smtp.host"))
+        assertEquals("true", smtp.session.getProperty("mail.smtp.starttls.enable"))
+        assertEquals("true", smtp.session.getProperty("mail.smtp.auth"))
+    }
+
+    @Test
+    fun buildDefault() {
+        val smtp = builder.build(emptyMap())
+
+        assertEquals(null, smtp.fromPersonal)
+        assertEquals("no-reply@xxxx.com", smtp.fromAddress)
+        assertEquals("587", smtp.session.getProperty("mail.smtp.port"))
+        assertEquals("127.0.0.1", smtp.session.getProperty("mail.smtp.host"))
+        assertEquals("true", smtp.session.getProperty("mail.smtp.starttls.enable"))
+        assertEquals("true", smtp.session.getProperty("mail.smtp.auth"))
+    }
+
+    @Test
+    fun buildExternal() {
         val smtp = builder.build(config)
 
-        assertEquals("Koki", smtp.fromPersonal)
-        assertEquals("no-reply@koki.com", smtp.fromAddress)
+        assertEquals(config[ConfigurationName.SMTP_FROM_PERSONAL], smtp.fromPersonal)
+        assertEquals(config[ConfigurationName.SMTP_FROM_ADDRESS], smtp.fromAddress)
         assertEquals(config[ConfigurationName.SMTP_PORT], smtp.session.getProperty("mail.smtp.port"))
         assertEquals(config[ConfigurationName.SMTP_HOST], smtp.session.getProperty("mail.smtp.host"))
         assertEquals("true", smtp.session.getProperty("mail.smtp.starttls.enable"))

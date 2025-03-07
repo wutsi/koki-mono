@@ -225,7 +225,8 @@ class FileService(
         ).map { config -> config.name to config.value }
             .toMap()
 
-        val type = configs.get(ConfigurationName.STORAGE_TYPE)?.let { value -> StorageType.valueOf(value.uppercase()) }
+        val type = configs.get(ConfigurationName.STORAGE_TYPE)
+            ?.let { value -> StorageType.valueOf(value.uppercase()) }
             ?: StorageType.KOKI
 
         return storageBuilder.build(type, configs)

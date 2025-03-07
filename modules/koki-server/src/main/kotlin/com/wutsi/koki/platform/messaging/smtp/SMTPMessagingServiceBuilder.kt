@@ -8,9 +8,16 @@ import jakarta.mail.Session
 import java.util.Properties
 import kotlin.jvm.Throws
 
-class SMTPMessagingServiceBuilder {
+class SMTPMessagingServiceBuilder(
+    private val host: String,
+    private val port: Int,
+    private val username: String,
+    private val password: String,
+    private val from: String,
+) {
     companion object {
         val CONFIG_NAMES = listOf(
+            ConfigurationName.SMTP_TYPE,
             ConfigurationName.SMTP_PORT,
             ConfigurationName.SMTP_HOST,
             ConfigurationName.SMTP_USERNAME,
@@ -22,6 +29,37 @@ class SMTPMessagingServiceBuilder {
 
     @Throws(MessagingNotConfiguredException::class)
     fun build(config: Map<String, String>): SMTPMessagingService {
+        val type = config[ConfigurationName.SMTP_TYPE]
+
+        return when (type?.uppercase()) {
+            SMTPType.EXTERNAL.name -> createExternalService(config)
+            else -> createKokiService()
+        }
+    }
+
+    private fun createKokiService(): SMTPMessagingService {
+        val props = Properties()
+        props.put("mail.smtp.auth", "true")
+        props.put("mail.smtp.starttls.enable", "true")
+        props.put("mail.smtp.port", port.toString())
+        props.put("mail.smtp.host", host)
+
+        val authenticator = object : Authenticator() {
+            override fun getPasswordAuthentication(): PasswordAuthentication {
+                val username = username
+                val password = password
+                return PasswordAuthentication(username, password)
+            }
+        }
+
+        return SMTPMessagingService(
+            session = Session.getInstance(props, authenticator),
+            fromAddress = from,
+            fromPersonal = null
+        )
+    }
+
+    private fun createExternalService(config: Map<String, String>): SMTPMessagingService {
         validate(config)
 
         val props = Properties()
@@ -46,7 +84,9 @@ class SMTPMessagingServiceBuilder {
     }
 
     private fun validate(config: Map<String, String>) {
-        val missing = CONFIG_NAMES.filter { name -> config[name] == null }
+        val missing = CONFIG_NAMES.filter { name ->
+            name != ConfigurationName.SMTP_TYPE && config[name].isNullOrEmpty()
+        }
         if (missing.isNotEmpty()) {
             throw MessagingNotConfiguredException("SMTP not configured. Missing config: $missing")
         }

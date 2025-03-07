@@ -16,6 +16,7 @@ import kotlin.test.assertTrue
 class SMTPMessagingServiceTest {
     private val port = 8025
     private val config = mapOf(
+        ConfigurationName.SMTP_TYPE to SMTPType.EXTERNAL.name,
         ConfigurationName.SMTP_PORT to port.toString(),
         ConfigurationName.SMTP_HOST to "localhost",
         ConfigurationName.SMTP_USERNAME to "ray.sponsible",
@@ -25,7 +26,13 @@ class SMTPMessagingServiceTest {
     )
 
     private lateinit var smtp: GreenMail
-    private val builder = SMTPMessagingServiceBuilder()
+    private val builder = SMTPMessagingServiceBuilder(
+        host = "127.0.0.1",
+        port = 587,
+        username = "xxx",
+        password = "yyyy",
+        from = "no-reply@xxxx.com"
+    )
     private val message = Message(
         sender = Party(email = "no-reply@tenant1.com", displayName = "Tenant1"),
         recipient = Party(email = "ray.sponsible@gmail.com", displayName = "Ray Sponsible"),

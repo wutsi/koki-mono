@@ -9,15 +9,17 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.email.server.service.TenantEmailInitializer
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import com.wutsi.koki.tenant.server.domain.ConfigurationEntity
 import com.wutsi.koki.tenant.server.service.ConfigurationService
+import org.apache.commons.io.IOUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import kotlin.test.Test
-import kotlin.test.assertNotNull
+import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TenantInvoiceInitializerTest {
@@ -40,13 +42,25 @@ class TenantInvoiceInitializerTest {
         val request = argumentCaptor<SaveConfigurationRequest>()
         verify(configurationService, times(6)).save(request.capture(), eq(tenantId))
 
-        assertNotNull(request.allValues[0].values[ConfigurationName.INVOICE_EMAIL_ENABLED])
-        assertNotNull(request.allValues[1].values[ConfigurationName.INVOICE_EMAIL_SUBJECT])
-        assertNotNull(request.allValues[2].values[ConfigurationName.INVOICE_EMAIL_BODY])
+        assertEquals("1", request.allValues[0].values[ConfigurationName.INVOICE_EMAIL_ENABLED])
+        assertEquals(
+            TenantInvoiceInitializer.INVOICE_SUBJECT,
+            request.allValues[1].values[ConfigurationName.INVOICE_EMAIL_SUBJECT]
+        )
+        assertEquals(
+            getContent(TenantInvoiceInitializer.INVOICE_BODY_PATH),
+            request.allValues[2].values[ConfigurationName.INVOICE_EMAIL_BODY]
+        )
 
-        assertNotNull(request.allValues[3].values[ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED])
-        assertNotNull(request.allValues[4].values[ConfigurationName.INVOICE_EMAIL_RECEIPT_SUBJECT])
-        assertNotNull(request.allValues[5].values[ConfigurationName.INVOICE_EMAIL_RECEIPT_BODY])
+        assertEquals("1", request.allValues[3].values[ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED])
+        assertEquals(
+            TenantInvoiceInitializer.RECEIPT_SUBJECT,
+            request.allValues[4].values[ConfigurationName.INVOICE_EMAIL_RECEIPT_SUBJECT]
+        )
+        assertEquals(
+            getContent(TenantInvoiceInitializer.RECEIPT_BODY_PATH),
+            request.allValues[5].values[ConfigurationName.INVOICE_EMAIL_RECEIPT_BODY]
+        )
     }
 
     @Test
@@ -58,5 +72,11 @@ class TenantInvoiceInitializerTest {
         initializer.init(tenantId)
 
         verify(configurationService, never()).save(any(), any())
+    }
+
+    private fun getContent(path: String): String {
+        return IOUtils.toString(
+            TenantEmailInitializer::class.java.getResourceAsStream(path), "utf-8"
+        )
     }
 }

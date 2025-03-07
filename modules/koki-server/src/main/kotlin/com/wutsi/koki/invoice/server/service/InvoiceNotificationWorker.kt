@@ -48,9 +48,6 @@ class InvoiceNotificationWorker(
 ) : AbstractNotificationWorker(registry) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(InvoiceNotificationWorker::class.java)
-
-        val INVOICE_EMAIL_OPENED_SUBJECT = "Invoice #{{invoiceNumber}} from {{businessName}}"
-        val INVOICE_EMAIL_PAID_SUBJECT = "Thank you for your payment - Invoice #{{invoiceNumber}} from {{businessName}}"
     }
 
     override fun notify(event: Any): Boolean {
@@ -132,10 +129,10 @@ class InvoiceNotificationWorker(
     private fun getSubject(configs: Map<String, String>, event: InvoiceStatusChangedEvent): String {
         return when (event.status) {
             InvoiceStatus.OPENED -> configs[ConfigurationName.INVOICE_EMAIL_SUBJECT]
-                ?: INVOICE_EMAIL_OPENED_SUBJECT
+                ?: TenantInvoiceInitializer.INVOICE_SUBJECT
 
             InvoiceStatus.PAID -> configs[ConfigurationName.INVOICE_EMAIL_RECEIPT_SUBJECT]
-                ?: INVOICE_EMAIL_PAID_SUBJECT
+                ?: TenantInvoiceInitializer.RECEIPT_SUBJECT
 
             else -> throw IllegalStateException("Not supported: ${event.status}")
         }

@@ -23,7 +23,7 @@ class SettingsSMTPEditControllerTest : AbstractPageControllerTest() {
     private lateinit var validator: SMTPValidator
 
     @Test
-    fun save() {
+    fun external() {
         navigateTo("/settings/email/smtp/edit")
         assertCurrentPageIs(PageName.EMAIL_SETTINGS_SMTP_EDIT)
 
@@ -39,12 +39,35 @@ class SettingsSMTPEditControllerTest : AbstractPageControllerTest() {
             eq(Any::class.java)
         )
 
+        assertEquals("EXTERNAL", request.firstValue.values[ConfigurationName.SMTP_TYPE])
         assertEquals("10.1.12.244", request.firstValue.values[ConfigurationName.SMTP_HOST])
         assertEquals("555", request.firstValue.values[ConfigurationName.SMTP_PORT])
         assertEquals("ray", request.firstValue.values[ConfigurationName.SMTP_USERNAME])
         assertEquals("ray234", request.firstValue.values[ConfigurationName.SMTP_PASSWORD])
         assertEquals("no-reply@ray.com", request.firstValue.values[ConfigurationName.SMTP_FROM_ADDRESS])
         assertEquals("Ray Solutions", request.firstValue.values[ConfigurationName.SMTP_FROM_PERSONAL])
+
+        assertCurrentPageIs(PageName.EMAIL_SETTINGS_SMTP)
+        assertElementVisible("#koki-toast")
+    }
+
+    @Test
+    fun koki() {
+        navigateTo("/settings/email/smtp/edit")
+        assertCurrentPageIs(PageName.EMAIL_SETTINGS_SMTP_EDIT)
+
+        inputFields(type = 1)
+
+        verify(validator, never()).validate(any(), any(), any())
+
+        val request = argumentCaptor<SaveConfigurationRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/configurations"),
+            request.capture(),
+            eq(Any::class.java)
+        )
+
+        assertEquals("KOKI", request.firstValue.values[ConfigurationName.SMTP_TYPE])
 
         assertCurrentPageIs(PageName.EMAIL_SETTINGS_SMTP)
         assertElementVisible("#koki-toast")
@@ -102,13 +125,16 @@ class SettingsSMTPEditControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 
-    private fun inputFields() {
-        input("[name=host]", "10.1.12.244")
-        input("[name=port]", "555")
-        input("[name=username]", "ray")
-        input("[name=password]", "ray234")
-        input("[name=fromAddress]", "no-reply@ray.com")
-        input("[name=fromPersonal]", "Ray Solutions")
+    private fun inputFields(type: Int = 2) {
+        select("[name=type]", type)
+        if (type == 2) {
+            input("[name=host]", "10.1.12.244")
+            input("[name=port]", "555")
+            input("[name=username]", "ray")
+            input("[name=password]", "ray234")
+            input("[name=fromAddress]", "no-reply@ray.com")
+            input("[name=fromPersonal]", "Ray Solutions")
+        }
         click("button[type=submit]")
     }
 }

@@ -1,4 +1,6 @@
-package com.wutsi.koki.platform.config
+package com.wutsi.koki.platform.messaging.smtp
 
-class SMTPType {
+enum class SMTPType {
+    KOKI,
+    EXTERNAL,
 }

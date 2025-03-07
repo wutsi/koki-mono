@@ -1,6 +1,7 @@
 package com.wutsi.koki.platform.storage.koki
 
 import com.wutsi.koki.platform.storage.StorageService
+import com.wutsi.koki.platform.storage.StorageType
 import com.wutsi.koki.platform.storage.local.LocalStorageService
 import com.wutsi.koki.platform.storage.s3.S3Builder
 import com.wutsi.koki.platform.storage.s3.S3StorageService
@@ -17,12 +18,10 @@ class KokiStorageServiceBuilder(
     private val s3Builder: S3Builder = S3Builder()
 
     fun build(): StorageService {
-        if (type == "local") {
-            return LocalStorageService(directory, baseUrl)
-        } else if (type == "s3") {
-            return S3StorageService(s3Bucket, s3Builder.build(s3Region, s3AccessKey, s3SecretKey))
-        } else {
-            throw IllegalStateException("Storage not supported: $type")
+        return when (type.uppercase()) {
+            StorageType.LOCAL.name -> LocalStorageService(directory, baseUrl)
+            StorageType.S3.name -> S3StorageService(s3Bucket, s3Builder.build(s3Region, s3AccessKey, s3SecretKey))
+            else -> throw IllegalStateException("Storage not supported: $type")
         }
     }
 }
