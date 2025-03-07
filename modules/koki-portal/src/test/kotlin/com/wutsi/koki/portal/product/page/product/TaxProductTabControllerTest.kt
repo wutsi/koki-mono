@@ -4,11 +4,8 @@ import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.blog.app.page.AbstractPageControllerTest
-import com.wutsi.koki.AccountFixtures
 import com.wutsi.koki.ProductFixtures
 import com.wutsi.koki.TaxFixtures
-import com.wutsi.koki.invoice.dto.CreateInvoiceRequest
-import com.wutsi.koki.invoice.dto.CreateInvoiceResponse
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.tax.dto.CreateTaxProductRequest
 import com.wutsi.koki.tax.dto.CreateTaxProductResponse
@@ -100,51 +97,10 @@ class TaxProductTabControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun createInvoice() {
+    fun `list - without permission tax`() {
+        setUpUserWithoutPermissions(listOf("tax"))
+
         navigateTo("/tax-products/tab?test-mode=true&tax-id=" + TaxFixtures.tax.id)
-
-        click(".tab-tax-products .btn-create-invoice")
-
-        val alert = driver.switchTo().alert()
-        alert.accept()
-        driver.switchTo().parentFrame()
-
-        val request = argumentCaptor<CreateInvoiceRequest>()
-        verify(rest).postForEntity(
-            eq("$sdkBaseUrl/v1/invoices"),
-            request.capture(),
-            eq(CreateInvoiceResponse::class.java)
-        )
-        assertEquals(TaxFixtures.tax.id, request.firstValue.taxId)
-        assertEquals(null, request.firstValue.orderId)
-        assertEquals(TaxFixtures.tax.accountId, request.firstValue.customerAccountId)
-        assertEquals(AccountFixtures.account.name, request.firstValue.customerName)
-        assertEquals(AccountFixtures.account.email, request.firstValue.customerEmail)
-        assertEquals(AccountFixtures.account.phone, request.firstValue.customerPhone)
-        assertEquals(AccountFixtures.account.mobile, request.firstValue.customerMobile)
-
-        assertEquals(AccountFixtures.account.shippingAddress?.street, request.firstValue.shippingStreet)
-        assertEquals(AccountFixtures.account.shippingAddress?.postalCode, request.firstValue.shippingPostalCode)
-        assertEquals(AccountFixtures.account.shippingAddress?.country, request.firstValue.shippingCountry)
-        assertEquals(AccountFixtures.account.shippingAddress?.cityId, request.firstValue.shippingCityId)
-
-        assertEquals(AccountFixtures.account.billingAddress?.street, request.firstValue.billingStreet)
-        assertEquals(AccountFixtures.account.billingAddress?.postalCode, request.firstValue.billingPostalCode)
-        assertEquals(AccountFixtures.account.billingAddress?.country, request.firstValue.billingCountry)
-        assertEquals(AccountFixtures.account.billingAddress?.cityId, request.firstValue.billingCityId)
-
-        assertEquals(TaxFixtures.taxProducts.size, request.firstValue.items.size)
-        var i = 0
-        request.firstValue.items.forEach { item ->
-            assertEquals(TaxFixtures.taxProducts[i].productId, item.productId, "item#$i")
-            assertEquals(TaxFixtures.taxProducts[i].unitPriceId, item.unitPriceId, "item#$i")
-            assertEquals(TaxFixtures.taxProducts[i].unitPrice, item.unitPrice, "item#$i")
-            assertEquals(TaxFixtures.taxProducts[i].description, item.description, "item#$i")
-
-            i++
-        }
-
-        assertCurrentPageIs(PageName.INVOICE)
-        assertElementNotVisible("#koki-modal")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 }

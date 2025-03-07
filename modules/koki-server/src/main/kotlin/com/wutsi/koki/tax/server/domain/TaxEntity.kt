@@ -43,12 +43,12 @@ data class TaxEntity(
     @Column(name = "assignee_fk")
     var assigneeId: Long? = null,
 
-    @Column(name = "invoice_fk")
-    var invoiceId: Long? = null,
-
     var fiscalYear: Int = -1,
     var status: TaxStatus = TaxStatus.NEW,
     var description: String? = null,
+    var totalRevenue: Double? = null,
+    var productCount: Int = 0,
+    var currency: String? = null,
 
     var deleted: Boolean = false,
     val createdAt: Date = Date(),

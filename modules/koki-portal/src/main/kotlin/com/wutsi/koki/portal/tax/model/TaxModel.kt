@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.tax.model
 
+import com.wutsi.blog.portal.common.model.MoneyModel
 import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.tenant.model.TypeModel
 import com.wutsi.koki.portal.user.model.UserModel
@@ -8,7 +9,6 @@ import java.util.Date
 
 data class TaxModel(
     val id: Long = -1,
-    val invoiceId: Long? = null,
     val fiscalYear: Int = -1,
     val status: TaxStatus = TaxStatus.NEW,
     val description: String? = null,
@@ -27,6 +27,8 @@ data class TaxModel(
     val dueAtText: String? = null,
     val createdBy: UserModel? = null,
     val modifiedBy: UserModel? = null,
+    val totalRevenue: MoneyModel? = null,
+    val productCount: Int = 0,
 ) {
     val name: String
         get() = (taxType?.let { type -> "$fiscalYear - ${type.title}" } ?: fiscalYear.toString())

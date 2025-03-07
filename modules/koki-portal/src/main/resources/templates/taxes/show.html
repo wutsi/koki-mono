@@ -63,16 +63,6 @@
                             <b>Assigned To</b><br/>
                             <span th:text="${tax.assignee.displayName}">ASSIGNEE</span>
                         </div>
-                        <div class="margin-right-2x" th:if="${tax.invoiceId}">
-                            <b>Invoice Number</b><br/>
-                            <a class="entity-title" target="_blank"
-                               th:href="'/invoices/' + ${tax.invoiceId}"
-                               th:if="${user?.hasPermission('invoice')}">
-                                <img align="absmiddle" height="24" src="/image/invoice.png" width="24"/>
-                                <span th:text="${tax.invoiceId}">INVOICE</span>
-                            </a>
-                            <span th:if="!${user?.hasPermission('invoice')}" th:text="${tax.invoiceId}">INVOICE</span>
-                        </div>
                     </div>
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
                 </div>
@@ -136,18 +126,6 @@
                                             <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
                                             <span th:text="${tax.account.name}">ACCOUNT</span>
                                         </a>
-                                    </td>
-                                </tr>
-                                <tr th:if="${tax.invoiceId}">
-                                    <td><b>Invoice Number</b></td>
-                                    <td>
-                                        <a class="entity-title" target="_blank"
-                                           th:href="'/invoices/' + ${tax.invoiceId}"
-                                           th:if="${user?.hasPermission('invoice')}">
-                                            <img align="absmiddle" height="24" src="/image/invoice.png" width="24"/>
-                                            <span th:text="${tax.invoiceId}">ACCOUNT</span>
-                                        </a>
-                                        <span th:if="!${user?.hasPermission('invoice')}" th:text="${tax.invoiceId}">INVOICE</span>
                                     </td>
                                 </tr>
                                 <tr th:if="${tax.startAt}">

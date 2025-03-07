@@ -9,8 +9,9 @@ INSERT INTO T_TAX(id, tenant_fk, tax_type_fk, account_fk, accountant_fk, technic
     VALUES (100, 1, 100, 111, 110,  111,  112,  2, 2014, false, '2014-03-01 15:30:00', '2014-04-30 15:30:00', '2014 Tax Statements');
 
 INSERT INTO T_PRODUCT(id, tenant_fk, code, name, description, active, deleted)
-       VALUES (111, 1, 'XXX', 'Product 123', null, true, false),
-              (222, 2, 'yyy', 'Product xxx', null, true, true);
+       VALUES (111, 1, '111', 'Product 111', null, true, false),
+              (112, 1, '112', 'Product 112', null, true, false),
+              (222, 2, '222', 'Product xxx', null, true, true);
 
 INSERT INTO T_PRICE(id, tenant_fk, product_fk, amount, currency)
     VALUE (11100, 1, 111, 150, 'CAD'),
@@ -18,4 +19,5 @@ INSERT INTO T_PRICE(id, tenant_fk, product_fk, amount, currency)
           (22200, 1, 222, 150, 'CAD');
 
 INSERT INTO T_TAX_PRODUCT(id, tenant_fk, tax_fk, product_fk, unit_price_fk, quantity, unit_price, sub_total, currency)
-    VALUES (100, 1, 100, 111, 11100, 3, 150, 300, 'CAD');
+    VALUES (100, 1, 100, 111, 11100, 3, 150, 300, 'CAD'),
+           (112, 1, 100, 112, 11100, 1, 100, 100, 'CAD');

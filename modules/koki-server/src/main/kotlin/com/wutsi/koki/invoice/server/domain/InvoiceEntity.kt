@@ -32,15 +32,6 @@ data class InvoiceEntity(
     @Column(name = "modified_by_fk")
     var modifiedById: Long? = null,
 
-    @Column("pdf_opened_file_fk")
-    var pdfOpenedFileId: Long? = null,
-
-    @Column("pdf_paid_file_fk")
-    var pdfPaidFileId: Long? = null,
-
-    @Column("pdf_voided_file_fk")
-    var pdfVoidedFileId: Long? = null,
-
     @Column(name = "customer_account_fk")
     val customerAccountId: Long? = null,
     val customerName: String = "",

@@ -17,9 +17,6 @@ CREATE TABLE T_INVOICE(
   tax_fk                  BIGINT,
   created_by_fk           BIGINT,
   modified_by_fk          BIGINT,
-  pdf_opened_file_fk      BIGINT,
-  pdf_paid_file_fk        BIGINT,
-  pdf_voided_file_fk      BIGINT,
 
   customer_name           VARCHAR(255) NOT NULL,
   customer_email          VARCHAR(255) NOT NULL,

@@ -7,7 +7,6 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
-import com.wutsi.koki.FileFixtures.files
 import com.wutsi.koki.InvoiceFixtures.invoice
 import com.wutsi.koki.invoice.dto.GetInvoiceResponse
 import com.wutsi.koki.invoice.dto.InvoiceStatus
@@ -34,14 +33,6 @@ class InvoiceControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.INVOICE)
         assertElementCount("tr.invoice-item", invoice.items.size)
         assertElementCount("tr.invoice-tax", 2)
-    }
-
-    @Test
-    fun file() {
-        navigateTo("/invoices/${invoice.id}?tab=file")
-
-        assertCurrentPageIs(PageName.INVOICE)
-        assertElementCount("tr.file", files.size)
     }
 
     @Test
@@ -145,13 +136,6 @@ class InvoiceControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/invoices/${invoice.id}/void")
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
-    }
-
-    @Test
-    fun download() {
-        navigateTo("/invoices/${invoice.id}")
-        assertCurrentPageIs(PageName.INVOICE)
-        click(".btn-download")
     }
 
     @Test

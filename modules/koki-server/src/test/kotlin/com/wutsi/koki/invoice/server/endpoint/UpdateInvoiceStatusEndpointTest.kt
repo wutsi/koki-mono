@@ -26,7 +26,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/invoice/UpdateInvoiceStatusEndpoint.sql"])
 class UpdateInvoiceStatusEndpointTest : AuthorizationAwareEndpointTest() {
@@ -60,23 +59,6 @@ class UpdateInvoiceStatusEndpointTest : AuthorizationAwareEndpointTest() {
         val invoice = dao.findById(invoiceId).get()
         assertEquals(request.status, invoice.status)
         assertEquals(USER_ID, invoice.modifiedById)
-
-        if (invoice.status == InvoiceStatus.OPENED) {
-            assertNotNull(invoice.pdfOpenedFileId)
-            val file = fileDao.findById(invoice.pdfOpenedFileId!!).get()
-            assertEquals("Invoice-${invoice.number}.pdf", file.name)
-            assertEquals("application/pdf", file.contentType)
-        } else if (invoice.status == InvoiceStatus.PAID) {
-            assertNotNull(invoice.pdfPaidFileId)
-            val file = fileDao.findById(invoice.pdfPaidFileId!!).get()
-            assertEquals("Invoice-${invoice.number}.pdf", file.name)
-            assertEquals("application/pdf", file.contentType)
-        } else if (invoice.status == InvoiceStatus.VOIDED) {
-            assertNotNull(invoice.pdfVoidedFileId)
-            val file = fileDao.findById(invoice.pdfVoidedFileId!!).get()
-            assertEquals("Invoice-${invoice.number}.pdf", file.name)
-            assertEquals("application/pdf", file.contentType)
-        }
 
         val logs = logDao.findByInvoice(invoice)
         assertEquals(1, logs.size)
@@ -222,9 +204,6 @@ class UpdateInvoiceStatusEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
     fun `void tax invoice`() {
         test(140, InvoiceStatus.VOIDED)
-
-        val tax = taxDao.findById(1400L).get()
-        assertEquals(null, tax.invoiceId)
     }
 
     @Test

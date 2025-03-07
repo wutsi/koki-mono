@@ -15,6 +15,9 @@ CREATE TABLE T_TAX(
   status                  INT NOT NULL DEFAULT 0,
   fiscal_year             INT,
   description             TEXT,
+  total_revenue           DECIMAL(10, 2),
+  product_count           INT NOT NULL DEFAULT 0,
+  currency                VARCHAR(3),
 
   deleted                 BOOLEAN NOT NULL DEFAULT false,
   created_at              DATETIME DEFAULT NOW(),

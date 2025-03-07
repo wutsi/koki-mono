@@ -4,7 +4,6 @@ import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.BadRequestException
 import com.wutsi.koki.error.exception.NotFoundException
-import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.invoice.dto.CreateInvoiceRequest
 import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.invoice.dto.UpdateInvoiceStatusRequest
@@ -171,29 +170,10 @@ class InvoiceService(
         invoice.modifiedAt = Date()
         dao.save(invoice)
 
-        // Reset invoice
-        invoice.taxId?.let { id ->
-            taxService.setInvoice(id, null, invoice.tenantId)
-        }
-
         // Log
         recordLog(invoice, request.status, request.comment)
 
         return invoice
-    }
-
-    @Transactional
-    fun linkPdfFile(invoice: InvoiceEntity, file: FileEntity) {
-        if (invoice.status == InvoiceStatus.OPENED) {
-            invoice.pdfOpenedFileId = file.id
-        } else if (invoice.status == InvoiceStatus.PAID) {
-            invoice.pdfPaidFileId = file.id
-        } else if (invoice.status == InvoiceStatus.VOIDED) {
-            invoice.pdfVoidedFileId = file.id
-        } else {
-            return
-        }
-        dao.save(invoice)
     }
 
     @Transactional
@@ -204,9 +184,6 @@ class InvoiceService(
         applyTaxes(invoice, business)
         recordLog(invoice, invoice.status, null)
 
-        request.taxId?.let { id ->
-            taxService.setInvoice(id, invoice.id, invoice.tenantId)
-        }
         return computeTotals(invoice)
     }
 

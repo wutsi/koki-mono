@@ -8,6 +8,7 @@ import com.wutsi.koki.tax.dto.CreateTaxRequest
 import com.wutsi.koki.tax.dto.TaxStatus
 import com.wutsi.koki.tax.dto.UpdateTaxRequest
 import com.wutsi.koki.tax.dto.UpdateTaxStatusRequest
+import com.wutsi.koki.tax.server.dao.TaxProductRepository
 import com.wutsi.koki.tax.server.dao.TaxRepository
 import com.wutsi.koki.tax.server.domain.TaxEntity
 import jakarta.persistence.EntityManager
@@ -18,12 +19,12 @@ import java.util.Date
 @Service
 class TaxService(
     private val dao: TaxRepository,
+    private val taxProductDao: TaxProductRepository,
     private val securityService: SecurityService,
     private val em: EntityManager,
 ) {
     fun get(id: Long, tenantId: Long): TaxEntity {
-        val tax = dao.findById(id)
-            .orElseThrow { NotFoundException(Error(ErrorCode.TAX_NOT_FOUND)) }
+        val tax = dao.findById(id).orElseThrow { NotFoundException(Error(ErrorCode.TAX_NOT_FOUND)) }
 
         if (tax.tenantId != tenantId || tax.deleted) {
             throw NotFoundException(Error(ErrorCode.TAX_NOT_FOUND))
@@ -193,9 +194,17 @@ class TaxService(
     }
 
     @Transactional
-    fun setInvoice(id: Long, invoiceId: Long?, tenantId: Long) {
+    fun updateTotalAmount(id: Long, tenantId: Long) {
         val tax = get(id, tenantId)
-        tax.invoiceId = invoiceId
+        val taxProducts = taxProductDao.findByTaxId(id)
+        if (taxProducts.isEmpty()) {
+            tax.totalRevenue = null
+            tax.currency = null
+        } else {
+            tax.totalRevenue = taxProducts.sumOf { taxProduct -> taxProduct.subTotal }
+            tax.currency = taxProducts.first().currency
+        }
+        tax.productCount = taxProducts.size
         dao.save(tax)
     }
 }

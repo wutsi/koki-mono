@@ -64,6 +64,9 @@ object TaxFixtures {
         modifiedById = users[0].id,
         createdById = users[0].id,
         description = "This is the description of the Tax Report",
+        totalRevenue = 600.0,
+        currency = "CAD",
+        productCount = 3
     )
 
     // Products
