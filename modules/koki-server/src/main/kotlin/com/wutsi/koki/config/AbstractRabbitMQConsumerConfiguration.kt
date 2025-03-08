@@ -1,6 +1,7 @@
 package com.wutsi.koki.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.rabbitmq.client.BuiltinExchangeType
 import com.rabbitmq.client.Channel
 import com.wutsi.koki.platform.mq.Consumer
 import com.wutsi.koki.platform.mq.Publisher
@@ -47,6 +48,17 @@ abstract class AbstractRabbitMQConsumerConfiguration(
             }
         }
         Timer(queue, false).schedule(task, 1000L * consumerDelay)
+    }
+
+    fun setupExchange(exchangeName: String) {
+        val logger = getLogger()
+        logger.info("setup exchange $exchangeName")
+
+        channel.exchangeDeclare(
+            exchangeName,
+            BuiltinExchangeType.FANOUT,
+            true, // durable
+        )
     }
 
     protected fun setupQueue(queue: String, dlq: String, exchangeName: String) {

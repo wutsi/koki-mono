@@ -1,8 +1,12 @@
-package com.wutsi.koki.platform.config
+package com.wutsi.koki.platform.messaging.config
 
 import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
+import com.wutsi.koki.platform.messaging.smtp.SMTPHealthIndicator
 import com.wutsi.koki.platform.messaging.smtp.SMTPMessagingServiceBuilder
+import com.wutsi.koki.platform.messaging.smtp.SMTPSessionBuilder
+import jakarta.mail.Session
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.actuate.health.HealthIndicator
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -24,11 +28,24 @@ open class MessagingConfiguration(
     @Bean
     open fun smtpMessagingServiceBuilder(): SMTPMessagingServiceBuilder {
         return SMTPMessagingServiceBuilder(
+            session = smtpSession(),
+            from = from,
+        )
+    }
+
+    @Bean
+    open fun smtpHealthIndicator(): HealthIndicator {
+        return SMTPHealthIndicator(
+            session = smtpSession()
+        )
+    }
+
+    private fun smtpSession(): Session {
+        return SMTPSessionBuilder().build(
             host = host,
             port = port,
             username = username,
             password = password,
-            from = from,
         )
     }
 }

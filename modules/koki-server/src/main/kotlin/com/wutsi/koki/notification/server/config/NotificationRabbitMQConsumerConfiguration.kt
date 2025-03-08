@@ -24,6 +24,7 @@ class NotificationRabbitMQConsumerConfiguration(
 ) : AbstractRabbitMQConsumerConfiguration(channel, objectMapper, publisher) {
     @PostConstruct
     fun init() {
+        setupExchange(exchangeName)
         setupQueue(queue, dlq, exchangeName)
         setupConsumer(queue, invoiceConsumer, consumerDelay)
     }

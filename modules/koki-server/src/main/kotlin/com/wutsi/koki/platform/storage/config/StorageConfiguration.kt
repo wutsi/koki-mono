@@ -1,11 +1,15 @@
-package com.wutsi.koki.platform.config
+package com.wutsi.koki.platform.storage.config
 
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.platform.storage.koki.KokiStorageServiceBuilder
 import com.wutsi.koki.platform.storage.local.LocalStorageServiceBuilder
 import com.wutsi.koki.platform.storage.local.LocalStorageServlet
+import com.wutsi.koki.platform.storage.s3.S3Builder
+import com.wutsi.koki.platform.storage.s3.S3HealthIndicator
 import com.wutsi.koki.platform.storage.s3.S3StorageServiceBuilder
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.actuate.health.HealthIndicator
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.web.servlet.ServletRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -24,9 +28,7 @@ class StorageConfiguration(
     @Bean
     fun storageServiceBuilder(): StorageServiceBuilder {
         return StorageServiceBuilder(
-            local = localStorageServiceBuilder(),
-            s3 = s3StorageServiceBuilder(),
-            koki = kokiStorageServiceBuilder()
+            local = localStorageServiceBuilder(), s3 = s3StorageServiceBuilder(), koki = kokiStorageServiceBuilder()
         )
     }
 
@@ -56,5 +58,18 @@ class StorageConfiguration(
     @Bean
     open fun storageServlet(): ServletRegistrationBean<*> {
         return ServletRegistrationBean(LocalStorageServlet(directory), "$servletPath/*")
+    }
+
+    @Bean
+    @ConditionalOnProperty(
+        value = ["koki.storage.type"],
+        havingValue = "s3",
+        matchIfMissing = false,
+    )
+    open fun s3HealthIndicator(): HealthIndicator {
+        return S3HealthIndicator(
+            s3 = S3Builder().build(s3Region, s3AccessKey, s3SecretKey),
+            bucket = s3Bucket,
+        )
     }
 }

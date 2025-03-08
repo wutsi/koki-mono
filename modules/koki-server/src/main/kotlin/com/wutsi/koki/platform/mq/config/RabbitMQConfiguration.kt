@@ -1,12 +1,14 @@
-package com.wutsi.koki.config
+package com.wutsi.koki.platform.mq.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.client.Channel
 import com.rabbitmq.client.ConnectionFactory
 import com.wutsi.koki.platform.mq.Publisher
+import com.wutsi.koki.platform.mq.rabbitmq.RabbitMQHealthIndicator
 import com.wutsi.koki.platform.mq.rabbitmq.RabbitMQPublisher
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.actuate.health.HealthIndicator
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.util.concurrent.ExecutorService
@@ -47,5 +49,10 @@ class RabbitMQConfiguration(
             objectMapper = objectMapper,
             storageBuilder = storageServiceBuilder,
         )
+    }
+
+    @Bean
+    fun rabbitMQHealthIndicator(): HealthIndicator {
+        return RabbitMQHealthIndicator(channel())
     }
 }
