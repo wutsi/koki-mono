@@ -165,7 +165,7 @@ koki:
             servlet-path: /local-storage
         s3:
             bucket: koki-test
-            region: us-east1
+            region: us-east-1
             access-key: ""
             secret-key: ""
 
