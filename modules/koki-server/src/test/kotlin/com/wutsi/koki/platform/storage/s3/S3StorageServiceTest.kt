@@ -42,6 +42,36 @@ class S3StorageServiceTest {
     }
 
     @Test
+    fun `file with space`() {
+        val content = ByteArrayInputStream("hello".toByteArray())
+        val result = storage.store("document/yo man.txt", content, "text/plain", 10000L)
+
+        assertNotNull(result)
+        assertEquals(URL("https://s3.amazonaws.com/bucket/document/yo-man.txt"), result)
+
+        val request: ArgumentCaptor<PutObjectRequest> = ArgumentCaptor.forClass(PutObjectRequest::class.java)
+        verify(s3).putObject(request.capture())
+        assertEquals(request.value.bucketName, bucket)
+        assertEquals(request.value.metadata.contentType, "text/plain")
+        assertEquals(request.value.metadata.contentLength, 10000L)
+    }
+
+    @Test
+    fun `file with accent`() {
+        val content = ByteArrayInputStream("hello".toByteArray())
+        val result = storage.store("document/éâêîôû.txt", content, "text/plain", 10000L)
+
+        assertNotNull(result)
+        assertEquals(URL("https://s3.amazonaws.com/bucket/document/eaeiou.txt"), result)
+
+        val request: ArgumentCaptor<PutObjectRequest> = ArgumentCaptor.forClass(PutObjectRequest::class.java)
+        verify(s3).putObject(request.capture())
+        assertEquals(request.value.bucketName, bucket)
+        assertEquals(request.value.metadata.contentType, "text/plain")
+        assertEquals(request.value.metadata.contentLength, 10000L)
+    }
+
+    @Test
     fun storeWithError() {
         doThrow(RuntimeException::class).whenever(s3).putObject(ArgumentMatchers.any())
 

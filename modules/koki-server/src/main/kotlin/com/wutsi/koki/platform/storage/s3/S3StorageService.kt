@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.GetObjectRequest
 import com.amazonaws.services.s3.model.ObjectMetadata
 import com.amazonaws.services.s3.model.PutObjectRequest
 import com.wutsi.koki.platform.storage.StorageService
+import org.apache.commons.lang3.StringUtils
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -24,10 +25,11 @@ class S3StorageService(
         meta.contentLength = contentLength
         contentType?.let { meta.contentType = it }
 
-        val request = PutObjectRequest(bucket, path, content, meta)
+        val xpath = StringUtils.stripAccents(path).replace(' ', '-')
+        val request = PutObjectRequest(bucket, xpath, content, meta)
         try {
             s3.putObject(request)
-            return URL(getUrlPrefix() + "/$path")
+            return URL(getUrlPrefix() + "/$xpath")
         } catch (e: Exception) {
             throw IOException(String.format("Unable to store to s3://%s/%s", bucket, path), e)
         }
