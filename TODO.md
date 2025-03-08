@@ -121,6 +121,10 @@
 - [x] Note API
 - [x] Note UI
 
+## Platform
+
+- [x] Add healthcheck for S3, RabbitMQ, Email
+
 ## Product
 
 - [] Integrate Offer API
@@ -187,7 +191,3 @@
 ## Web
 
 - [] serve all static resource from external site
-
-## Other
-
-- [] Add healthcheck for S3, RabbitMQ, Email

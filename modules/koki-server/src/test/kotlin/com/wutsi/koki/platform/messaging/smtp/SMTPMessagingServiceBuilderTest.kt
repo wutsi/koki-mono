@@ -2,7 +2,9 @@ package com.wutsi.koki.platform.messaging.smtp
 
 import com.wutsi.koki.platform.messaging.MessagingNotConfiguredException
 import com.wutsi.koki.tenant.dto.ConfigurationName
+import jakarta.mail.Session
 import org.junit.jupiter.api.assertThrows
+import org.mockito.Mockito.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -16,11 +18,10 @@ class SMTPMessagingServiceBuilderTest {
         ConfigurationName.SMTP_FROM_ADDRESS to "no-reply@koki.com",
         ConfigurationName.SMTP_FROM_PERSONAL to "Koki"
     )
+
+    private val session = mock<Session>()
     private val builder = SMTPMessagingServiceBuilder(
-        host = "127.0.0.1",
-        port = 587,
-        username = "xxx",
-        password = "yyyy",
+        session = session,
         from = "no-reply@xxxx.com"
     )
 
@@ -32,22 +33,7 @@ class SMTPMessagingServiceBuilderTest {
 
         assertEquals(null, smtp.fromPersonal)
         assertEquals("no-reply@xxxx.com", smtp.fromAddress)
-        assertEquals("587", smtp.session.getProperty("mail.smtp.port"))
-        assertEquals("127.0.0.1", smtp.session.getProperty("mail.smtp.host"))
-        assertEquals("true", smtp.session.getProperty("mail.smtp.starttls.enable"))
-        assertEquals("true", smtp.session.getProperty("mail.smtp.auth"))
-    }
-
-    @Test
-    fun buildDefault() {
-        val smtp = builder.build(emptyMap())
-
-        assertEquals(null, smtp.fromPersonal)
-        assertEquals("no-reply@xxxx.com", smtp.fromAddress)
-        assertEquals("587", smtp.session.getProperty("mail.smtp.port"))
-        assertEquals("127.0.0.1", smtp.session.getProperty("mail.smtp.host"))
-        assertEquals("true", smtp.session.getProperty("mail.smtp.starttls.enable"))
-        assertEquals("true", smtp.session.getProperty("mail.smtp.auth"))
+        assertEquals(session, smtp.session)
     }
 
     @Test

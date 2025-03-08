@@ -6,6 +6,8 @@ import com.wutsi.koki.platform.messaging.Message
 import com.wutsi.koki.platform.messaging.Party
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import jakarta.mail.Message.RecipientType
+import jakarta.mail.Session
+import org.mockito.Mockito.mock
 import java.io.File
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -27,10 +29,7 @@ class SMTPMessagingServiceTest {
 
     private lateinit var smtp: GreenMail
     private val builder = SMTPMessagingServiceBuilder(
-        host = "127.0.0.1",
-        port = 587,
-        username = "xxx",
-        password = "yyyy",
+        session = mock<Session>(),
         from = "no-reply@xxxx.com"
     )
     private val message = Message(

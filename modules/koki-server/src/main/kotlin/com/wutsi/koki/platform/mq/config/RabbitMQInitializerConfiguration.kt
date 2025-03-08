@@ -1,4 +1,4 @@
-package com.wutsi.koki.config
+package com.wutsi.koki.platform.mq.config
 
 import com.rabbitmq.client.BuiltinExchangeType
 import com.rabbitmq.client.Channel
