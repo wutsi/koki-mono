@@ -34,17 +34,18 @@ open class MessagingConfiguration(
     }
 
     @Bean
-    fun smtpSession(): Session {
+    open fun smtpHealthIndicator(): HealthIndicator {
+        return SMTPHealthIndicator(
+            session = smtpSession()
+        )
+    }
+
+    private fun smtpSession(): Session {
         return SMTPSessionBuilder().build(
             host = host,
             port = port,
             username = username,
             password = password,
         )
-    }
-
-    @Bean
-    open fun smtpHealthIndicator(): HealthIndicator {
-        return SMTPHealthIndicator(smtpSession())
     }
 }
