@@ -1,10 +1,10 @@
 package com.wutsi.koki.payment.dto
 
+import java.util.Date
+
 data class PaymentMethodCheck(
-    val checkNumber: Int = -1,
-    val checkDate: String = "",
+    val id: String = "",
+    val checkNumber: String = "",
     val bankName: String = "",
-    val routingNumber: String = "",
-    val accountNumber: String = "",
-    val payeeName: String = "",
+    val clearedAt: Date? = null,
 )

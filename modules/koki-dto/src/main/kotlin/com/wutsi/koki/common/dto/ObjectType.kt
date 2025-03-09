@@ -11,4 +11,5 @@ enum class ObjectType {
     EMPLOYEE,
     TAX,
     INVOICE,
+    PAYMENT,
 }
