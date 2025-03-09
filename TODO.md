@@ -69,7 +69,7 @@
 ## Files
 
 - [] Integrate AI to describe the file
-- [] Tag the files
+- [] Add Metadata to files: id, tenant-id, owner-type, owner-id
 - [x] Validate S3 configuration
 - [x] Settings: Configure storage type: S3, Local
 - [x] Apply RBAC security on UI
@@ -80,20 +80,12 @@
 - [x] Upload files
 - [x] Show file icons
 
-## Invoicing
+## Invoice
 
+- [] Update amount due on successfull payment
+- [] Invoice Widget
 - [x] Download invoices
 - [x] Send invoice manually via email
-- [] Invoice Widget
-- [] Capture payments manually:
-    - [] Cash
-    - [] Check
-    - [] Interact
-- [] Capture online payments:
-    - [] Paypal
-    - [] Stripe
-    - [] Flutterwave
-- [] Payment API
 - [] Send email for unpaid invoices
 - [x] Send invoice by email when approved
 - [x] Send invoice by email when paid
@@ -125,6 +117,19 @@
 ## Platform
 
 - [x] Add healthcheck for S3, RabbitMQ, Email
+
+## Payment
+
+- [-] Payment API
+- [] Capture payments manually:
+    - [] Cash
+    - [] Check
+    - [] Interact
+- [] Capture online payments:
+    - [] Paypal
+    - [] Stripe
+    - [] Flutterwave
+- [] Send invoice on payment
 
 ## Product
 
