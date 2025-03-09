@@ -80,6 +80,8 @@ object ErrorCode {
     val TENANT_NOT_FOUND: String = "$PREFIX:tenant:not-found"
     val TENANT_MISSING_FROM_HEADER: String = "$PREFIX:tenant:missing-from-header"
 
+    val TRANSACTION_NOT_FOUND: String = "$PREFIX:transaction:not-found"
+
     val TYPE_NOT_FOUND: String = "$PREFIX:type:not-found"
     val TYPE_NAME_MISSING: String = "$PREFIX:type:name-missing"
 
