@@ -88,7 +88,7 @@ springdoc:
 
         -   group: invoices
             display-name: Invoice API
-            paths-to-match: /v1/invoices, /v1/invoices/**, /v1/payments, /v1/payments/**
+            paths-to-match: /v1/invoices, /v1/invoices/**
 
         -   group: modules
             display-name: Module API
@@ -97,6 +97,10 @@ springdoc:
         -   group: notes
             display-name: Note API
             paths-to-match: /v1/notes, /v1/notes/*
+
+        -   group: payments
+            display-name: Payment API
+            paths-to-match: /v1/payments, /v1/payments/**, /v1/refunds, /v1/refunds/**, /v1/transactions, /v1/transactions/**
 
         -   group: products
             display-name: Product API
