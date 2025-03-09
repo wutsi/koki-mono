@@ -16,6 +16,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
 import java.io.OutputStream
 import java.io.OutputStreamWriter
 import java.net.MalformedURLException
@@ -24,7 +25,12 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-abstract class AbstractHtmlExporter {
+@Service
+class InvoiceHtmlExporter {
+    companion object {
+        const val TEMPLATE = "/invoice/template/default/invoice.html"
+    }
+
     @Autowired
     protected lateinit var templatingEngine: TemplatingEngine
 
@@ -43,12 +49,6 @@ abstract class AbstractHtmlExporter {
     @Autowired
     protected lateinit var invoiceService: InvoiceService
 
-    protected abstract fun getHtml(): String
-
-    fun getHtml(htmlPath: String): String {
-        return IOUtils.toString(ReceiptHtmlExporter::class.java.getResourceAsStream(htmlPath), "utf-8")
-    }
-
     fun export(invoice: InvoiceEntity, business: BusinessEntity, output: OutputStream) {
         val doc = loadDocument(invoice, business)
         val writer = OutputStreamWriter(output)
@@ -63,7 +63,7 @@ abstract class AbstractHtmlExporter {
     }
 
     private fun loadDocument(invoice: InvoiceEntity, business: BusinessEntity): Document {
-        val html = getHtml()
+        val html = IOUtils.toString(InvoiceHtmlExporter::class.java.getResourceAsStream(TEMPLATE), "utf-8")
         val data = createData(invoice, business)
         val xhtml = templatingEngine.apply(html, data)
         val doc = Jsoup.parse(xhtml, "utf-8")

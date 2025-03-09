@@ -14,6 +14,7 @@ import com.wutsi.koki.invoice.dto.UpdateInvoiceStatusRequest
 import com.wutsi.koki.portal.common.page.PageName
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -23,6 +24,19 @@ class InvoiceControllerTest : AbstractPageControllerTest() {
         navigateTo("/invoices/${invoice.id}")
 
         assertCurrentPageIs(PageName.INVOICE)
+        assertElementPresent(".btn-download")
+        assertElementPresent(".btn-send")
+    }
+
+    @Test
+    fun draft() {
+        setupDraftInvoice()
+
+        navigateTo("/invoices/${invoice.id}")
+
+        assertCurrentPageIs(PageName.INVOICE)
+        assertElementNotPresent(".btn-download")
+        assertElementNotPresent(".btn-send")
     }
 
     @Test
@@ -59,6 +73,7 @@ class InvoiceControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.INVOICE)
         assertElementNotPresent(".btn-approve")
+        assertElementNotPresent(".btn-send")
     }
 
     @Test
@@ -135,6 +150,32 @@ class InvoiceControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/invoices/${invoice.id}/void")
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
+
+    @Test
+    fun `download - without permission invoice`() {
+        setUpUserWithoutPermissions(listOf("invoice"))
+
+        navigateTo("/invoices/i${invoice.id}/${UUID.randomUUID()}.pdf")
+        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+    }
+
+    @Test
+    fun send() {
+        navigateTo("/invoices/${invoice.id}")
+        click(".btn-send")
+
+        val alert = driver.switchTo().alert()
+        alert.accept()
+        driver.switchTo().parentFrame()
+
+        verify(rest).getForEntity(
+            eq("$sdkBaseUrl/v1/invoices/${invoice.id}/send"),
+            eq(Any::class.java)
+        )
+
+        assertCurrentPageIs(PageName.INVOICE)
+//        assertElementVisible("#koki-toast")
     }
 
     private fun setupDraftInvoice() {

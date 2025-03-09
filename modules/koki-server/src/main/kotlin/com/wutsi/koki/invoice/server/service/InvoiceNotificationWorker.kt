@@ -9,9 +9,9 @@ import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.invoice.dto.event.InvoiceStatusChangedEvent
+import com.wutsi.koki.invoice.server.command.SendInvoiceCommand
 import com.wutsi.koki.invoice.server.domain.InvoiceEntity
 import com.wutsi.koki.invoice.server.io.pdf.InvoicePdfExporter
-import com.wutsi.koki.invoice.server.io.pdf.ReceiptPdfExporter
 import com.wutsi.koki.notification.server.service.AbstractNotificationWorker
 import com.wutsi.koki.notification.server.service.NotificationConsumer
 import com.wutsi.koki.platform.logger.KVLogger
@@ -44,7 +44,6 @@ class InvoiceNotificationWorker(
     private val emailService: EmailService,
     private val fileService: FileService,
     private val invoicePdfExporter: InvoicePdfExporter,
-    private val receiptPdfExporter: ReceiptPdfExporter,
 ) : AbstractNotificationWorker(registry) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(InvoiceNotificationWorker::class.java)
@@ -53,6 +52,8 @@ class InvoiceNotificationWorker(
     override fun notify(event: Any): Boolean {
         if (event is InvoiceStatusChangedEvent) {
             onStatusChanged(event)
+        } else if (event is SendInvoiceCommand) {
+            onSend(event)
         } else {
             return false
         }
@@ -93,20 +94,59 @@ class InvoiceNotificationWorker(
         }
 
         val business = businessService.get(tenantId = event.tenantId)
-        val file = pdfFile(invoice, business, event)
-        emailService.send(request = SendEmailRequest(
-            recipient = Recipient(
-                displayName = invoice.customerName,
-                email = invoice.customerEmail,
-                id = invoice.customerAccountId,
-                type = invoice.customerAccountId?.let { ObjectType.ACCOUNT } ?: ObjectType.UNKNOWN,
+        val file = pdfFile(invoice, business)
+        emailService.send(
+            request = SendEmailRequest(
+                recipient = Recipient(
+                    displayName = invoice.customerName,
+                    email = invoice.customerEmail,
+                    id = invoice.customerAccountId,
+                    type = invoice.customerAccountId?.let { ObjectType.ACCOUNT } ?: ObjectType.UNKNOWN,
+                ),
+                subject = getSubject(configs, event),
+                body = getBody(configs, event),
+                data = createData(invoice, business),
+                owner = ObjectReference(id = invoice.id!!, type = ObjectType.INVOICE),
+                attachmentFileIds = listOf(file.id!!),
             ),
-            subject = getSubject(configs, event),
-            body = getBody(configs, event),
-            data = createData(invoice, business),
-            owner = ObjectReference(id = invoice.id!!, type = ObjectType.INVOICE),
-            attachmentFileIds = listOf(file.id!!),
-        ), tenantId = invoice.tenantId)
+            tenantId = invoice.tenantId
+        )
+    }
+
+    private fun onSend(event: SendInvoiceCommand) {
+        logger.add("event_invoice_id", event.invoiceId)
+        logger.add("event_tenant_id", event.tenantId)
+
+        send(event)
+    }
+
+    private fun send(event: SendInvoiceCommand) {
+        val invoice = invoiceService.get(id = event.invoiceId, tenantId = event.tenantId)
+        val business = businessService.get(tenantId = event.tenantId)
+
+        val configs = configurationService.search(tenantId = event.tenantId, keyword = "invoice.")
+            .map { config -> config.name to config.value }.toMap()
+
+        val file = pdfFile(invoice, business)
+        emailService.send(
+            request = SendEmailRequest(
+                recipient = Recipient(
+                    displayName = invoice.customerName,
+                    email = invoice.customerEmail,
+                    id = invoice.customerAccountId,
+                    type = invoice.customerAccountId?.let { ObjectType.ACCOUNT } ?: ObjectType.UNKNOWN,
+                ),
+
+                subject = configs[ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT]
+                    ?: TenantInvoiceInitializer.INVOICE_SUBJECT,
+
+                body = configs[ConfigurationName.INVOICE_EMAIL_OPENED_BODY] ?: "",
+                data = createData(invoice, business),
+                owner = ObjectReference(id = invoice.id!!, type = ObjectType.INVOICE),
+                attachmentFileIds = listOf(file.id!!),
+            ),
+            tenantId = invoice.tenantId
+        )
     }
 
     private fun createData(invoice: InvoiceEntity, business: BusinessEntity): Map<String, Any> {
@@ -121,18 +161,18 @@ class InvoiceNotificationWorker(
 
     private fun isEnabled(configs: Map<String, String>, event: InvoiceStatusChangedEvent): Boolean {
         return when (event.status) {
-            InvoiceStatus.OPENED -> configs[ConfigurationName.INVOICE_EMAIL_ENABLED] != null
-            InvoiceStatus.PAID -> configs[ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED] != null
+            InvoiceStatus.OPENED -> configs[ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED] != null
+            InvoiceStatus.PAID -> configs[ConfigurationName.INVOICE_EMAIL_PAID_ENABLED] != null
             else -> false
         }
     }
 
     private fun getSubject(configs: Map<String, String>, event: InvoiceStatusChangedEvent): String {
         return when (event.status) {
-            InvoiceStatus.OPENED -> configs[ConfigurationName.INVOICE_EMAIL_SUBJECT]
+            InvoiceStatus.OPENED -> configs[ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT]
                 ?: TenantInvoiceInitializer.INVOICE_SUBJECT
 
-            InvoiceStatus.PAID -> configs[ConfigurationName.INVOICE_EMAIL_RECEIPT_SUBJECT]
+            InvoiceStatus.PAID -> configs[ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT]
                 ?: TenantInvoiceInitializer.RECEIPT_SUBJECT
 
             else -> throw IllegalStateException("Not supported: ${event.status}")
@@ -141,31 +181,23 @@ class InvoiceNotificationWorker(
 
     private fun getBody(configs: Map<String, String>, event: InvoiceStatusChangedEvent): String {
         return when (event.status) {
-            InvoiceStatus.OPENED -> configs[ConfigurationName.INVOICE_EMAIL_BODY] ?: ""
+            InvoiceStatus.OPENED -> configs[ConfigurationName.INVOICE_EMAIL_OPENED_BODY] ?: ""
 
-            InvoiceStatus.PAID -> configs[ConfigurationName.INVOICE_EMAIL_RECEIPT_BODY] ?: ""
+            InvoiceStatus.PAID -> configs[ConfigurationName.INVOICE_EMAIL_PAID_BODY] ?: ""
 
             else -> throw IllegalStateException("Not supported: ${event.status}")
         }
     }
 
-    private fun pdfFile(
-        invoice: InvoiceEntity, business: BusinessEntity, event: InvoiceStatusChangedEvent
-    ): FileEntity {
+    private fun pdfFile(invoice: InvoiceEntity, business: BusinessEntity): FileEntity {
         val file = File.createTempFile("invoice-${invoice.id}", ".pdf")
         try {
             // Filename
-            val filename = when (event.status) {
-                InvoiceStatus.OPENED -> "Invoice-${invoice.number}.pdf"
-                else -> "Invoice-${invoice.number}-Receipt.pdf"
-            }
+            val filename = "Invoice-${invoice.number}.pdf"
 
             // Create PDF
             val output = FileOutputStream(file)
-            when (event.status) {
-                InvoiceStatus.OPENED -> invoicePdfExporter.export(invoice, business, output)
-                else -> receiptPdfExporter.export(invoice, business, output)
-            }
+            invoicePdfExporter.export(invoice, business, output)
 
             // Store to the cloud
             val input = FileInputStream(file)

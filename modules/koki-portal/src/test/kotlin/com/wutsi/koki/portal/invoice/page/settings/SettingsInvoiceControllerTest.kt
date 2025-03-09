@@ -65,7 +65,7 @@ class SettingsInvoiceControllerTest : AbstractPageControllerTest() {
         )
         assertEquals(
             "1",
-            request.firstValue.values[ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED]
+            request.firstValue.values[ConfigurationName.INVOICE_EMAIL_PAID_ENABLED]
         )
 
         assertCurrentPageIs(PageName.INVOICE_SETTINGS)
@@ -85,7 +85,7 @@ class SettingsInvoiceControllerTest : AbstractPageControllerTest() {
         )
         assertEquals(
             "",
-            request.firstValue.values[ConfigurationName.INVOICE_EMAIL_ENABLED]
+            request.firstValue.values[ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED]
         )
 
         assertCurrentPageIs(PageName.INVOICE_SETTINGS)

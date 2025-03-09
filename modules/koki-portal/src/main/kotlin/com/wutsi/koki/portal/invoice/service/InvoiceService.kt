@@ -237,4 +237,12 @@ class InvoiceService(
             )
         )
     }
+
+    fun url(id: Long): String {
+        return koki.url(id)
+    }
+
+    fun send(id: Long) {
+        koki.send(id)
+    }
 }

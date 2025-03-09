@@ -16,7 +16,7 @@ class ExportInvoicePDFEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
     fun invoice() {
         val file = download(
-            url = "http://localhost:$port/v1/invoices/pdf/invoice-$TENANT_ID.100.pdf",
+            url = "http://localhost:$port/v1/invoices/pdf/$TENANT_ID.100.pdf",
             expectedStatusCode = 200,
             expectedFileName = "invoice-$TENANT_ID.100.pdf",
             expectedContentType = "application/pdf"
@@ -30,7 +30,7 @@ class ExportInvoicePDFEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
     fun `draft invoice`() {
         val file = download(
-            url = "http://localhost:$port/v1/invoices/pdf/invoice-$TENANT_ID.101.pdf",
+            url = "http://localhost:$port/v1/invoices/pdf/$TENANT_ID.101.pdf",
             expectedStatusCode = 404,
             expectedFileName = null,
             expectedContentType = "",
@@ -42,7 +42,7 @@ class ExportInvoicePDFEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
     fun `voided invoice`() {
         val file = download(
-            url = "http://localhost:$port/v1/invoices/pdf/invoice-$TENANT_ID.102.pdf",
+            url = "http://localhost:$port/v1/invoices/pdf/$TENANT_ID.102.pdf",
             expectedStatusCode = 200,
             expectedFileName = "invoice-$TENANT_ID.102.pdf",
             expectedContentType = "application/pdf"
@@ -54,11 +54,11 @@ class ExportInvoicePDFEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun receipt() {
+    fun paid() {
         val file = download(
-            url = "http://localhost:$port/v1/invoices/pdf/receipt-$TENANT_ID.200.pdf",
+            url = "http://localhost:$port/v1/invoices/pdf/$TENANT_ID.200.pdf",
             expectedStatusCode = 200,
-            expectedFileName = "receipt-$TENANT_ID.200.pdf",
+            expectedFileName = "invoice-$TENANT_ID.200.pdf",
             expectedContentType = "application/pdf"
         )
 
@@ -70,7 +70,7 @@ class ExportInvoicePDFEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
     fun notFound() {
         val file = download(
-            url = "http://localhost:$port/v1/invoices/pdf/invoice-$TENANT_ID.9999.pdf",
+            url = "http://localhost:$port/v1/invoices/pdf/$TENANT_ID.9999.pdf",
             expectedStatusCode = 404,
             expectedFileName = null,
             expectedContentType = ""

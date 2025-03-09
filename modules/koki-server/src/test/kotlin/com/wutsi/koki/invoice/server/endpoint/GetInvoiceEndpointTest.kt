@@ -22,8 +22,6 @@ class GetInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val invoice = response.body!!.invoice
-        assertEquals(true, invoice.pdfUrl?.startsWith("https://test.com/invoices/i100"))
-        assertEquals(true, invoice.pdfUrl?.endsWith(".pdf"))
         assertEquals(10955L, invoice.number)
         assertEquals(7777L, invoice.taxId)
         assertEquals(9999L, invoice.orderId)

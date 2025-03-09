@@ -70,30 +70,10 @@ INSERT INTO T_INVOICE(
       ),
       (
           200, 1, 7777, 9999,
-          10956, 3, 'Sample description',
+          10956, 1, 'Sample description',
           800.00, 40.00, 20.00, 820.00, 810.00, 10.00, 'CAD',
           111, 'Ray Sponsible', 'ray.sponsible@gmail.com', '+5147580111', '+514758000',
           '340 Pascal', 'H1K1C1', 111, 100, 'CA',
           '311 Pascal', 'H2K2C2', 211, 200, 'CA',
           '2025-01-01', '2025-01-01'
-        );
-
-INSERT INTO T_INVOICE_ITEM(id, invoice_fk, product_fk, unit_price_fk, unit_fk, quantity, unit_price, sub_total, currency, description)
-VALUES (110, 100, 1, 11, 110, 2, 300, 600, 'CAD', 'product 1'),
-       (120, 100, 2, 22, 111, 1, 200, 200, 'CAD', 'product 2'),
-
-       (210, 200, 1, 11, 110, 2, 300, 600, 'CAD', 'product 1'),
-       (220, 200, 2, 22, 111, 1, 200, 200, 'CAD', 'product 2');
-
-INSERT INTO T_INVOICE_TAX(id, invoice_item_fk, sales_tax_fk, rate, amount, currency)
-VALUES (111, 110, 1011, 5.000, 10.00, 'CAD'),
-       (112, 110, 1112, 9.975, 25.00, 'CAD'),
-       (121, 120, 1011, 5.000,  5.00, 'CAD'),
-
-       (211, 210, 1011, 5.000, 10.00, 'CAD'),
-       (212, 210, 1112, 9.975, 25.00, 'CAD'),
-       (221, 220, 1011, 5.000,  5.00, 'CAD');
-
-INSERT INTO T_PRODUCT(id, tenant_fk, code, name, description, active)
-       VALUES (1, 1, 'T1',     'Product 123', null, true),
-              (2, 1, 'T1serv', 'Product xxx', null, true);
+      );

@@ -9,14 +9,12 @@ import com.wutsi.koki.invoice.server.domain.InvoiceEntity
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.tenant.server.domain.TenantEntity
 import org.springframework.stereotype.Service
-import java.util.UUID
 
 @Service
 class InvoiceMapper {
     fun toInvoice(entity: InvoiceEntity, tenant: TenantEntity): Invoice {
         return Invoice(
             id = entity.id!!,
-            pdfUrl = "${tenant.portalUrl}/invoices/i${entity.id}/${UUID.randomUUID()}.pdf",
             number = entity.number,
             taxId = entity.taxId,
             orderId = entity.orderId,

@@ -18,17 +18,17 @@ class TenantInvoiceInitializer : AbstractTenantModuleInitializer() {
 
     override fun init(tenantId: Long) {
         setConfigurationIfMissing(
-            name = ConfigurationName.INVOICE_EMAIL_ENABLED,
+            name = ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED,
             value = "1",
             tenantId = tenantId,
         )
         setConfigurationIfMissing(
-            name = ConfigurationName.INVOICE_EMAIL_SUBJECT,
+            name = ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT,
             value = INVOICE_SUBJECT,
             tenantId = tenantId,
         )
         setConfigurationIfMissing(
-            name = ConfigurationName.INVOICE_EMAIL_BODY,
+            name = ConfigurationName.INVOICE_EMAIL_OPENED_BODY,
             value = IOUtils.toString(
                 TenantEmailInitializer::class.java.getResourceAsStream(INVOICE_BODY_PATH), "utf-8"
             ),
@@ -36,17 +36,17 @@ class TenantInvoiceInitializer : AbstractTenantModuleInitializer() {
         )
 
         setConfigurationIfMissing(
-            name = ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED,
+            name = ConfigurationName.INVOICE_EMAIL_PAID_ENABLED,
             value = "1",
             tenantId = tenantId,
         )
         setConfigurationIfMissing(
-            name = ConfigurationName.INVOICE_EMAIL_RECEIPT_SUBJECT,
+            name = ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT,
             value = RECEIPT_SUBJECT,
             tenantId = tenantId,
         )
         setConfigurationIfMissing(
-            name = ConfigurationName.INVOICE_EMAIL_RECEIPT_BODY,
+            name = ConfigurationName.INVOICE_EMAIL_PAID_BODY,
             value = IOUtils.toString(
                 TenantEmailInitializer::class.java.getResourceAsStream(RECEIPT_BODY_PATH), "utf-8"
             ),

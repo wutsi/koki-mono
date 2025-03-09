@@ -15,9 +15,9 @@ import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.invoice.dto.event.InvoiceStatusChangedEvent
+import com.wutsi.koki.invoice.server.command.SendInvoiceCommand
 import com.wutsi.koki.invoice.server.domain.InvoiceEntity
 import com.wutsi.koki.invoice.server.io.pdf.InvoicePdfExporter
-import com.wutsi.koki.invoice.server.io.pdf.ReceiptPdfExporter
 import com.wutsi.koki.notification.server.service.NotificationConsumer
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.tenant.dto.ConfigurationName
@@ -38,7 +38,6 @@ class InvoiceNotificationWorkerTest {
     private val invoiceService = mock<InvoiceService>()
     private val businessService = mock<BusinessService>()
     private val fileService = mock<FileService>()
-    private val receiptPdfExporter = mock<ReceiptPdfExporter>()
     private val invoicePdfExporter = mock<InvoicePdfExporter>()
     private val logger = DefaultKVLogger()
     private val emailService = mock<EmailService>()
@@ -52,7 +51,6 @@ class InvoiceNotificationWorkerTest {
         emailService = emailService,
         businessService = businessService,
         fileService = fileService,
-        receiptPdfExporter = receiptPdfExporter,
         invoicePdfExporter = invoicePdfExporter,
         logger = logger,
     )
@@ -61,18 +59,18 @@ class InvoiceNotificationWorkerTest {
     private val business = BusinessEntity(companyName = "Olive Inc")
 
     private val configurations = listOf(
-        ConfigurationEntity(name = ConfigurationName.INVOICE_EMAIL_ENABLED, value = "1"),
+        ConfigurationEntity(name = ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED, value = "1"),
         ConfigurationEntity(
-            name = ConfigurationName.INVOICE_EMAIL_SUBJECT, value = "New Invoice #{{invoiceNumber}}"
+            name = ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT, value = "New Invoice #{{invoiceNumber}}"
         ),
-        ConfigurationEntity(name = ConfigurationName.INVOICE_EMAIL_BODY, value = "You have a new invoice!"),
+        ConfigurationEntity(name = ConfigurationName.INVOICE_EMAIL_OPENED_BODY, value = "You have a new invoice!"),
 
-        ConfigurationEntity(name = ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED, value = "1"),
+        ConfigurationEntity(name = ConfigurationName.INVOICE_EMAIL_PAID_ENABLED, value = "1"),
         ConfigurationEntity(
-            name = ConfigurationName.INVOICE_EMAIL_RECEIPT_SUBJECT,
+            name = ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT,
             value = "Thank you for your payment - Invoice #{{invoiceNumber}}"
         ),
-        ConfigurationEntity(name = ConfigurationName.INVOICE_EMAIL_RECEIPT_BODY, value = "Thank you!"),
+        ConfigurationEntity(name = ConfigurationName.INVOICE_EMAIL_PAID_BODY, value = "Thank you!"),
     )
 
     @BeforeEach
@@ -130,6 +128,27 @@ class InvoiceNotificationWorkerTest {
     }
 
     @Test
+    fun `send invoice`() {
+        val invoice = createInvoice(InvoiceStatus.OPENED)
+        worker.notify(
+            SendInvoiceCommand(invoiceId = invoiceId, tenantId = invoice.tenantId)
+        )
+
+        val request = argumentCaptor<SendEmailRequest>()
+        verify(emailService).send(request.capture(), eq(invoice.tenantId))
+
+        assertEquals(invoice.customerEmail, request.firstValue.recipient.email)
+        assertEquals(invoice.customerName, request.firstValue.recipient.displayName)
+        assertEquals(invoice.customerAccountId, request.firstValue.recipient.id)
+        assertEquals(ObjectType.ACCOUNT, request.firstValue.recipient.type)
+        assertEquals("New Invoice #{{invoiceNumber}}", request.firstValue.subject)
+        assertEquals("You have a new invoice!", request.firstValue.body)
+        assertEquals(listOf(file.id), request.firstValue.attachmentFileIds)
+        assertEquals(invoice.id, request.firstValue.owner?.id)
+        assertEquals(ObjectType.INVOICE, request.firstValue.owner?.type)
+    }
+
+    @Test
     fun `notify opened invoice`() {
         val invoice = createInvoice(InvoiceStatus.OPENED)
         val event = createEvent(invoice.status)
@@ -151,7 +170,7 @@ class InvoiceNotificationWorkerTest {
 
     @Test
     fun `notify opened invoice - not enabled`() {
-        doReturn(configurations.filter { config -> config.name != ConfigurationName.INVOICE_EMAIL_ENABLED }).whenever(
+        doReturn(configurations.filter { config -> config.name != ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED }).whenever(
             configurationService
         ).search(anyOrNull(), anyOrNull(), anyOrNull())
 
@@ -164,7 +183,7 @@ class InvoiceNotificationWorkerTest {
 
     @Test
     fun `notify opened invoice - no config`() {
-        doReturn(configurations.filter { config -> config.name == ConfigurationName.INVOICE_EMAIL_ENABLED }).whenever(
+        doReturn(configurations.filter { config -> config.name == ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED }).whenever(
             configurationService
         ).search(anyOrNull(), anyOrNull(), anyOrNull())
 
@@ -208,7 +227,7 @@ class InvoiceNotificationWorkerTest {
 
     @Test
     fun `notify paid invoice - not enabled`() {
-        doReturn(configurations.filter { config -> config.name != ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED }).whenever(
+        doReturn(configurations.filter { config -> config.name != ConfigurationName.INVOICE_EMAIL_PAID_ENABLED }).whenever(
             configurationService
         ).search(anyOrNull(), anyOrNull(), anyOrNull())
 
@@ -221,7 +240,7 @@ class InvoiceNotificationWorkerTest {
 
     @Test
     fun `notify paid invoice - no config`() {
-        doReturn(configurations.filter { config -> config.name == ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED }).whenever(
+        doReturn(configurations.filter { config -> config.name == ConfigurationName.INVOICE_EMAIL_PAID_ENABLED }).whenever(
             configurationService
         ).search(anyOrNull(), anyOrNull(), anyOrNull())
 

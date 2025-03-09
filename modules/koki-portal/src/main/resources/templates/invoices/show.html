@@ -33,6 +33,24 @@
                                 Approve
                             </a>
 
+                            <a class="btn-download btn btn-light btn-sm" target="_blank"
+                               th:href="${pdfUrl}"
+                               th:if="${invoice.status.name} != 'DRAFT'"
+                            >
+                                <span class="fiv-viv fiv-icon-pdf"></span>
+                                Download PDF
+                            </a>
+
+                            <a class="btn-send btn btn-light btn-sm"
+                               onclick="return confirm('Are you sure you want to send the invoice to the customer?')"
+                               target="_blank"
+                               th:href="'/invoices/' + ${invoice.id} + '/send'"
+                               th:if="${invoice.status.name} != 'DRAFT' AND ${user?.hasPermission('invoice:manage')}"
+                            >
+                                <i class="fa-regular fa-envelope"></i>
+                                Send
+                            </a>
+
                             <a class="btn-void btn btn-danger btn-sm"
                                onclick="return confirm('Are you sure you want to void the invoice?')"
                                th:href="'/invoices/' + ${invoice.id} + '/void'"
@@ -137,13 +155,18 @@
                                 </tr>
 
                                 <tr>
-                                    <td><b>Amount Due</b></td>
-                                    <td th:text="${invoice.amountDue}">$$</td>
+                                    <td><b>Total Amount</b></td>
+                                    <td th:text="${invoice.totalAmount}">$$</td>
                                 </tr>
                                 <tr>
                                     <td><b>Amount Paid</b></td>
                                     <td th:text="${invoice.amountPaid}">$$</td>
                                 </tr>
+                                <tr>
+                                    <td><b>Amount Due</b></td>
+                                    <td th:text="${invoice.amountDue}">$$</td>
+                                </tr>
+
                                 <tr>
                                     <td><b>Status</b></td>
                                     <td>

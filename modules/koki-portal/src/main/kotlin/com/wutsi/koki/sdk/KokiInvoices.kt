@@ -57,4 +57,13 @@ class KokiInvoices(
         val url = urlBuilder.build("$INVOICE_PATH_PREFIX/$id/statuses")
         rest.postForEntity(url, request, Any::class.java)
     }
+
+    fun url(id: Long): String {
+        return urlBuilder.build("$INVOICE_PATH_PREFIX/pdf/${tenantProvider.id()}.$id.pdf")
+    }
+
+    fun send(id: Long) {
+        val url = urlBuilder.build("$INVOICE_PATH_PREFIX/$id/send")
+        rest.getForEntity(url, Any::class.java)
+    }
 }
