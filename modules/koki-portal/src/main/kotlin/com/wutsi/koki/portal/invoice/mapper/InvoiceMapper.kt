@@ -71,7 +71,6 @@ class InvoiceMapper(
 
         return InvoiceModel(
             id = entity.id,
-            pdfUrl = entity.pdfUrl,
             tax = entity.taxId?.let { id -> taxes[id] },
             number = entity.number,
             status = entity.status,

@@ -32,9 +32,9 @@ class SettingsInvoiceNotificationControllerTest : AbstractPageControllerTest() {
         )
         assertEquals(
             "This is the subject {{invoiceNumber}}",
-            request.firstValue.values[ConfigurationName.INVOICE_EMAIL_SUBJECT]
+            request.firstValue.values[ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT]
         )
-        assertEquals("<p>Hello</p>", request.firstValue.values[ConfigurationName.INVOICE_EMAIL_BODY])
+        assertEquals("<p>Hello</p>", request.firstValue.values[ConfigurationName.INVOICE_EMAIL_OPENED_BODY])
 
         assertCurrentPageIs(PageName.INVOICE_SETTINGS)
         assertElementVisible("#koki-toast")
@@ -57,9 +57,9 @@ class SettingsInvoiceNotificationControllerTest : AbstractPageControllerTest() {
         )
         assertEquals(
             "This is the subject {{invoiceNumber}}",
-            request.firstValue.values[ConfigurationName.INVOICE_EMAIL_RECEIPT_SUBJECT]
+            request.firstValue.values[ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT]
         )
-        assertEquals("<p>Hello</p>", request.firstValue.values[ConfigurationName.INVOICE_EMAIL_RECEIPT_BODY])
+        assertEquals("<p>Hello</p>", request.firstValue.values[ConfigurationName.INVOICE_EMAIL_PAID_BODY])
 
         assertCurrentPageIs(PageName.INVOICE_SETTINGS)
         assertElementVisible("#koki-toast")

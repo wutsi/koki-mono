@@ -39,17 +39,17 @@ class SettingsInvoiceController(
         model.addAttribute(
             "openedNotification",
             InvoiceNotificationSettingsForm(
-                enabled = !configs[ConfigurationName.INVOICE_EMAIL_ENABLED].isNullOrEmpty(),
-                subject = configs[ConfigurationName.INVOICE_EMAIL_SUBJECT] ?: "",
-                body = configs[ConfigurationName.INVOICE_EMAIL_BODY] ?: "",
+                enabled = !configs[ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED].isNullOrEmpty(),
+                subject = configs[ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT] ?: "",
+                body = configs[ConfigurationName.INVOICE_EMAIL_OPENED_BODY] ?: "",
             )
         )
         model.addAttribute(
             "paidNotification",
             InvoiceNotificationSettingsForm(
-                enabled = !configs[ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED].isNullOrEmpty(),
-                subject = configs[ConfigurationName.INVOICE_EMAIL_RECEIPT_SUBJECT] ?: "",
-                body = configs[ConfigurationName.INVOICE_EMAIL_RECEIPT_BODY] ?: "",
+                enabled = !configs[ConfigurationName.INVOICE_EMAIL_PAID_ENABLED].isNullOrEmpty(),
+                subject = configs[ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT] ?: "",
+                body = configs[ConfigurationName.INVOICE_EMAIL_PAID_BODY] ?: "",
             )
         )
 

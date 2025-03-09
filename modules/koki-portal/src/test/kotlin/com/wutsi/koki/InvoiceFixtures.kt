@@ -81,7 +81,6 @@ object InvoiceFixtures {
 
     val invoice = Invoice(
         id = 103L,
-        pdfUrl = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
         number = 12039221L,
         createdAt = Date(),
         invoicedAt = Date(),
