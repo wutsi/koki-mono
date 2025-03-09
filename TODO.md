@@ -82,8 +82,8 @@
 
 ## Invoice
 
-- [] Update amount due on successfull payment
 - [] Invoice Widget
+- [x] Update amount due on successfull payment
 - [x] Download invoices
 - [x] Send invoice manually via email
 - [] Send email for unpaid invoices
@@ -120,16 +120,15 @@
 
 ## Payment
 
-- [-] Payment API
-- [] Capture payments manually:
-    - [] Cash
-    - [] Check
-    - [] Interact
+- [x] Payment API
+- [x] Capture payments manually:
+    - [x] Cash
+    - [x] Check
+    - [x] Interact
 - [] Capture online payments:
     - [] Paypal
     - [] Stripe
     - [] Flutterwave
-- [] Send invoice on payment
 
 ## Product
 

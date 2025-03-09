@@ -17,13 +17,14 @@ import com.wutsi.koki.invoice.server.domain.InvoiceItemEntity
 import com.wutsi.koki.invoice.server.domain.InvoiceLogEntity
 import com.wutsi.koki.invoice.server.domain.InvoiceSequenceEntity
 import com.wutsi.koki.invoice.server.domain.InvoiceTaxEntity
+import com.wutsi.koki.payment.dto.TransactionStatus
+import com.wutsi.koki.payment.server.dao.TransactionRepository
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.domain.SalesTaxEntity
 import com.wutsi.koki.refdata.server.service.JuridictionService
 import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.refdata.server.service.SalesTaxService
 import com.wutsi.koki.security.server.service.SecurityService
-import com.wutsi.koki.tax.server.service.TaxService
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.domain.BusinessEntity
 import com.wutsi.koki.tenant.server.service.BusinessService
@@ -41,12 +42,12 @@ class InvoiceService(
     private val taxDao: InvoiceTaxRepository,
     private val seqDao: InvoiceSequenceRepository,
     private val logDao: InvoiceLogRepository,
+    private val txDao: TransactionRepository,
     private val securityService: SecurityService,
     private val locationService: LocationService,
     private val businessService: BusinessService,
     private val juridictionService: JuridictionService,
     private val salesTaxService: SalesTaxService,
-    private val taxService: TaxService,
     private val configurationService: ConfigurationService,
     private val em: EntityManager,
 ) {
@@ -185,6 +186,27 @@ class InvoiceService(
         recordLog(invoice, invoice.status, null)
 
         return computeTotals(invoice)
+    }
+
+    @Transactional
+    fun onPaymentReceived(id: Long, tenantId: Long): InvoiceEntity {
+        /* Update amount due */
+        val invoice = get(id, tenantId)
+        val transactions = txDao.findByInvoiceIdAndStatus(id, TransactionStatus.SUCCESSFUL)
+        val amountPaid = transactions.sumOf { tx -> tx.amount }
+        invoice.amountPaid = amountPaid
+        invoice.amountDue = invoice.amountPaid - invoice.amountPaid
+        dao.save(invoice)
+
+        /* Update status */
+        if (invoice.amountDue <= 0.0 && invoice.status == InvoiceStatus.OPENED) {
+            status(
+                id = id,
+                request = UpdateInvoiceStatusRequest(status = InvoiceStatus.PAID),
+                tenantId = tenantId,
+            )
+        }
+        return invoice
     }
 
     private fun createInvoice(request: CreateInvoiceRequest, tenantId: Long): InvoiceEntity {
