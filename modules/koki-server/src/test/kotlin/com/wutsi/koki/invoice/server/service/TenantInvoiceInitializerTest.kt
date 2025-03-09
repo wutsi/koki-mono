@@ -42,24 +42,24 @@ class TenantInvoiceInitializerTest {
         val request = argumentCaptor<SaveConfigurationRequest>()
         verify(configurationService, times(6)).save(request.capture(), eq(tenantId))
 
-        assertEquals("1", request.allValues[0].values[ConfigurationName.INVOICE_EMAIL_ENABLED])
+        assertEquals("1", request.allValues[0].values[ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED])
         assertEquals(
             TenantInvoiceInitializer.INVOICE_SUBJECT,
-            request.allValues[1].values[ConfigurationName.INVOICE_EMAIL_SUBJECT]
+            request.allValues[1].values[ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT]
         )
         assertEquals(
             getContent(TenantInvoiceInitializer.INVOICE_BODY_PATH),
-            request.allValues[2].values[ConfigurationName.INVOICE_EMAIL_BODY]
+            request.allValues[2].values[ConfigurationName.INVOICE_EMAIL_OPENED_BODY]
         )
 
-        assertEquals("1", request.allValues[3].values[ConfigurationName.INVOICE_EMAIL_RECEIPT_ENABLED])
+        assertEquals("1", request.allValues[3].values[ConfigurationName.INVOICE_EMAIL_PAID_ENABLED])
         assertEquals(
             TenantInvoiceInitializer.RECEIPT_SUBJECT,
-            request.allValues[4].values[ConfigurationName.INVOICE_EMAIL_RECEIPT_SUBJECT]
+            request.allValues[4].values[ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT]
         )
         assertEquals(
             getContent(TenantInvoiceInitializer.RECEIPT_BODY_PATH),
-            request.allValues[5].values[ConfigurationName.INVOICE_EMAIL_RECEIPT_BODY]
+            request.allValues[5].values[ConfigurationName.INVOICE_EMAIL_PAID_BODY]
         )
     }
 

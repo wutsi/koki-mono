@@ -82,8 +82,8 @@
 
 ## Invoicing
 
-- [-] Payment API
-- [] Send invoice manually
+- [x] Download invoices
+- [x] Send invoice manually via email
 - [] Invoice Widget
 - [] Capture payments manually:
     - [] Cash
@@ -93,6 +93,7 @@
     - [] Paypal
     - [] Stripe
     - [] Flutterwave
+- [] Payment API
 - [] Send email for unpaid invoices
 - [x] Send invoice by email when approved
 - [x] Send invoice by email when paid

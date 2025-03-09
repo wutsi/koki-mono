@@ -11,10 +11,8 @@ import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.invoice.dto.SearchInvoiceResponse
 import com.wutsi.koki.invoice.dto.UpdateInvoiceStatusRequest
 import com.wutsi.koki.invoice.dto.event.InvoiceStatusChangedEvent
-import com.wutsi.koki.invoice.server.domain.InvoiceEntity
-import com.wutsi.koki.invoice.server.io.pdf.AbstractPdfExporter
+import com.wutsi.koki.invoice.server.command.SendInvoiceCommand
 import com.wutsi.koki.invoice.server.io.pdf.InvoicePdfExporter
-import com.wutsi.koki.invoice.server.io.pdf.ReceiptPdfExporter
 import com.wutsi.koki.invoice.server.mapper.InvoiceMapper
 import com.wutsi.koki.invoice.server.service.InvoiceService
 import com.wutsi.koki.platform.mq.Publisher
@@ -41,7 +39,6 @@ class InvoiceEndpoints(
     private val businessService: BusinessService,
     private val mapper: InvoiceMapper,
     private val invoicePdfExporter: InvoicePdfExporter,
-    private val receiptPdfExporter: ReceiptPdfExporter,
     private val publisher: Publisher,
 ) {
     @PostMapping
@@ -62,6 +59,29 @@ class InvoiceEndpoints(
         val tenant = tenantService.get(tenantId)
         return GetInvoiceResponse(
             invoice = mapper.toInvoice(invoice, tenant)
+        )
+    }
+
+    @GetMapping("/{id}/send")
+    fun send(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
+    ) {
+        val invoice = service.get(id, tenantId)
+        if (invoice.status == InvoiceStatus.DRAFT) {
+            throw NotFoundException(
+                error = Error(
+                    code = ErrorCode.INVOICE_BAD_STATUS,
+                    parameter = Parameter(value = invoice.status)
+                )
+            )
+        }
+
+        publisher.publish(
+            SendInvoiceCommand(
+                tenantId = tenantId,
+                invoiceId = id,
+            )
         )
     }
 
@@ -110,43 +130,12 @@ class InvoiceEndpoints(
         return SearchInvoiceResponse(invoices = invoices.map { invoice -> mapper.toInvoiceSummary(invoice) })
     }
 
-    @GetMapping("/pdf/invoice-{tenant-id}.{invoice-id}.pdf")
+    @GetMapping("/pdf/{tenant-id}.{invoice-id}.pdf")
     fun invoicePdf(
         @PathVariable("tenant-id") tenantId: Long,
         @PathVariable("invoice-id") id: Long,
         response: HttpServletResponse
     ) {
-        pdf(
-            id = id,
-            tenantId = tenantId,
-            filename = "invoice-$tenantId.$id.pdf",
-            response = response,
-            pdfExporter = invoicePdfExporter,
-        )
-    }
-
-    @GetMapping("/pdf/receipt-{tenant-id}.{invoice-id}.pdf")
-    fun receiptPdf(
-        @PathVariable("tenant-id") tenantId: Long,
-        @PathVariable("invoice-id") id: Long,
-        response: HttpServletResponse
-    ) {
-        pdf(
-            id = id,
-            tenantId = tenantId,
-            filename = "receipt-$tenantId.$id.pdf",
-            response = response,
-            pdfExporter = receiptPdfExporter,
-        )
-    }
-
-    private fun pdf(
-        id: Long,
-        tenantId: Long,
-        filename: String,
-        pdfExporter: AbstractPdfExporter,
-        response: HttpServletResponse,
-    ): InvoiceEntity {
         val invoice = service.get(id, tenantId)
         if (invoice.status == InvoiceStatus.DRAFT) {
             throw NotFoundException(
@@ -157,54 +146,13 @@ class InvoiceEndpoints(
             )
         }
 
+        val filename = "invoice-$tenantId.$id.pdf"
         response.contentType = "application/pdf"
         response.setHeader(
             HttpHeaders.CONTENT_DISPOSITION,
             ContentDisposition.attachment().filename(filename).build().toString()
         )
         val business = businessService.get(tenantId)
-        pdfExporter.export(invoice, business, response.outputStream)
-
-        return invoice
+        invoicePdfExporter.export(invoice, business, response.outputStream)
     }
-
-//    private fun pdfFile(id: Long, tenantId: Long): FileEntity {
-//        val file = File.createTempFile("invoice-$id", ".pdf")
-//        try {
-//            // Create PDF
-//            val output = FileOutputStream(file)
-//            val invoice = output.use {
-//                pdf(id, tenantId, output)
-//            }
-//
-//            // Store to the cloud
-//            val filename = "Invoice-${invoice.number}.pdf"
-//            val input = FileInputStream(file)
-//            val url = input.use {
-//                fileService.store(
-//                    filename = filename,
-//                    content = input,
-//                    contentType = "application/pdf",
-//                    contentLength = file.length(),
-//                    tenantId = invoice.tenantId,
-//                    ownerId = invoice.id,
-//                    ownerType = ObjectType.INVOICE,
-//                )
-//            }
-//
-//            // Create the file
-//            return fileService.create(
-//                filename = filename,
-//                contentType = "application/pdf",
-//                contentLength = file.length(),
-//                userId = securityService.getCurrentUserIdOrNull(),
-//                ownerId = null,
-//                ownerType = null,
-//                tenantId = invoice.tenantId,
-//                url = url,
-//            )
-//        } finally {
-//            file.delete()
-//        }
-//    }
 }

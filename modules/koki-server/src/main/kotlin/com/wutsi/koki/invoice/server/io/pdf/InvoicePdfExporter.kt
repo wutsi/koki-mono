@@ -3,11 +3,13 @@ package com.wutsi.koki.invoice.server.io.pdf
 import com.wutsi.koki.invoice.server.domain.InvoiceEntity
 import com.wutsi.koki.invoice.server.io.html.InvoiceHtmlExporter
 import com.wutsi.koki.tenant.server.domain.BusinessEntity
+import org.springframework.stereotype.Service
 import org.xhtmlrenderer.pdf.ITextRenderer
 import java.io.ByteArrayOutputStream
 import java.io.OutputStream
 
-open class PdfExporter(
+@Service
+class InvoicePdfExporter(
     private val htmlExporter: InvoiceHtmlExporter
 ) {
     fun export(invoice: InvoiceEntity, business: BusinessEntity, output: OutputStream) {

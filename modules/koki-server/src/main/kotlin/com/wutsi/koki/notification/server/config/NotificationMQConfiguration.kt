@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.Scheduled
 
 @Configuration
-class NotificationRabbitMQConsumerConfiguration(
+class NotificationMQConfiguration(
     private val invoiceConsumer: NotificationConsumer,
     channel: Channel,
     objectMapper: ObjectMapper,
