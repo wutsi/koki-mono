@@ -33,7 +33,7 @@ CREATE TABLE T_PAYMENT_METHOD_CASH(
   id                      VARCHAR(36) NOT NULL,
 
   tenant_fk               BIGINT NOT NULL,
-  transaction_fk          VARCHAR(36) NOT NULL REFERENCES T_INVOICE(id),
+  transaction_fk          VARCHAR(36) NOT NULL REFERENCES T_TRANSACTION(id),
   collected_by_fk         BIGINT,
 
   collected_at            DATE,
@@ -46,7 +46,7 @@ CREATE TABLE T_PAYMENT_METHOD_INTERACT(
   id                      VARCHAR(36) NOT NULL,
 
   tenant_fk               BIGINT NOT NULL,
-  transaction_fk          VARCHAR(36) NOT NULL REFERENCES T_INVOICE(id),
+  transaction_fk          VARCHAR(36) NOT NULL REFERENCES T_TRANSACTION(id),
 
   reference_number        VARCHAR(30) NOT NULL,
   bank_name               VARCHAR(100) NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE T_PAYMENT_METHOD_CHECK(
   id                      VARCHAR(36) NOT NULL,
 
   tenant_fk               BIGINT NOT NULL,
-  transaction_fk          VARCHAR(36) NOT NULL REFERENCES T_INVOICE(id),
+  transaction_fk          VARCHAR(36) NOT NULL REFERENCES T_TRANSACTION(id),
 
   check_number            VARCHAR(30) NOT NULL,
   bank_name               VARCHAR(100) NOT NULL,
