@@ -1,0 +1,11 @@
+{
+  "tabs": {
+    "main": [
+      "file"
+    ],
+    "side": [
+      "note",
+      "email"
+    ]
+  }
+}

@@ -4,8 +4,9 @@ enum class PaymentMethodType {
     UNKNOWN,
     CASH,
     CHECK,
-    INTERACT,
+    INTERAC,
     CREDIT_CARD,
     MOBILE,
-    WIRE,
+    BANK,
+    PAYPAL,
 }

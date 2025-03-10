@@ -5,7 +5,7 @@ import java.util.Date
 data class Transaction(
     val id: String = "",
     val invoiceId: Long = -1,
-    val createById: Long? = null,
+    val createdById: Long? = null,
     val type: TransactionType = TransactionType.UNKNOWN,
     val paymentMethodType: PaymentMethodType = PaymentMethodType.UNKNOWN,
     val status: TransactionStatus = TransactionStatus.UNKNOWN,
