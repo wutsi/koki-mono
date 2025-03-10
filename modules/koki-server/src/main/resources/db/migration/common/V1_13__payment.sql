@@ -71,7 +71,7 @@ CREATE TABLE T_PAYMENT_METHOD_CHECK(
 
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url)
-    VALUES (200, 10, 'payment', 'Payment', '/payments', '/payments/tab', '/settings/payments', '/js/payments.js');
+    VALUES (200, 10, 'payment', 'Payments', '/payments', '/payments/tab', '/settings/payments', '/js/payments.js');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
     VALUES (2000, 200, 'payment',        'View payments'),

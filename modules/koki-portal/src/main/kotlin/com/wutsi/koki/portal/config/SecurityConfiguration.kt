@@ -31,6 +31,8 @@ class SecurityConfiguration(
                     .requestMatchers(AntPathRequestMatcher("/employees/**/*")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/invoices")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/invoices/**/*")).authenticated()
+                    .requestMatchers(AntPathRequestMatcher("/payments")).authenticated()
+                    .requestMatchers(AntPathRequestMatcher("/payments/**/*")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/products")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/products/**/*")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/settings")).authenticated()

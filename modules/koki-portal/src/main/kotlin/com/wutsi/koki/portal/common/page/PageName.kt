@@ -47,6 +47,9 @@ object PageName {
 
     const val LOGIN = "page.login"
 
+    const val PAYMENT = "page.payment"
+    const val PAYMENT_LIST = "page.payment.list"
+
     const val PRODUCT = "page.product"
     const val PRODUCT_CREATE = "page.product.create"
     const val PRODUCT_EDIT = "page.product.edit"

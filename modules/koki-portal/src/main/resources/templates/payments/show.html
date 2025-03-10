@@ -6,97 +6,56 @@
 
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
-<div th:replace="~{__components/layout :: menubar('invoice')}"></div>
+<div th:replace="~{__components/layout :: menubar('payment')}"></div>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/invoice :: invoice-breadcrumb(${invoice})}"></div>
+            <div th:replace="~{__components/payment :: payment-breadcrumb(${payment})}"></div>
         </div>
     </div>
 
     <div class="row">
         <div class="col-12">
-            <div class="widget invoice-summary">
+            <div class="widget payment-summary">
                 <div class="widget-body">
                     <div class="flex flex-space-between">
                         <h1 class="entity-title">
-                            <img align="absmiddle" src="/image/invoice.png"/>
-                            <span th:text="${invoice.number}">NUMBER</span>
+                            <img align="absmiddle" src="/image/payment.png"/>
+                            <span th:text="${payment.id}">ID</span>
                         </h1>
-                        <div>
-                            <a class="btn-approve btn btn-light btn-sm"
-                               onclick="return confirm('Are you sure you want to approve the invoice?')"
-                               th:href="'/invoices/' + ${invoice.id} + '/approve'"
-                               th:if="${invoice.draft} AND ${user?.hasPermission('invoice:manage')}"
-                            >
-                                Approve
-                            </a>
-
-                            <a class="btn-download btn btn-light btn-sm" target="_blank"
-                               th:href="${pdfUrl}"
-                               th:if="${invoice.status.name} != 'DRAFT'"
-                            >
-                                <span class="fiv-viv fiv-icon-pdf"></span>
-                                Download PDF
-                            </a>
-
-                            <a class="btn-send btn btn-light btn-sm"
-                               onclick="return confirm('Are you sure you want to send the invoice to the customer?')"
-                               target="_blank"
-                               th:href="'/invoices/' + ${invoice.id} + '/send'"
-                               th:if="${invoice.status.name} != 'DRAFT' AND ${user?.hasPermission('invoice:manage')}"
-                            >
-                                <i class="fa-regular fa-envelope"></i>
-                                Send
-                            </a>
-
-                            <a class="btn-void btn btn-danger btn-sm"
-                               onclick="return confirm('Are you sure you want to void the invoice?')"
-                               th:href="'/invoices/' + ${invoice.id} + '/void'"
-                               th:if="!${invoice.closed} AND ${user?.hasPermission('invoice:void')}"
-                            >
-                                Void
-                            </a>
-                        </div>
                     </div>
                     <div class="flex">
                         <div class="margin-right-2x">
                             <b>Invoice Number</b><br/>
-                            <span th:text="${invoice.number}">NUMBER</span>
+                            <a class="entity-title" target="_blank"
+                               th:href="'/invoices/' + ${payment.invoice.id}"
+                               th:if="${user?.hasPermission('invoice')}">
+                                <img align="absmiddle" height="24" src="/image/payment.png" width="24"/>
+                                <span th:text="${payment.invoice.number}">INVOICE-NUMBER</span>
+                            </a>
+
+                            <img align="absmiddle" height="24" src="/image/payment.png"
+                                 th:if="!${user?.hasPermission('invoice')}" width="24"/>
+                            <span th:if="!${user?.hasPermission('invoice')}" th:text="${payment.invoice.number}">INVOICE-NUMBER</span>
+                        </div>
+                        <div class="margin-right-2x">
+                            <b>Type</b><br/>
+                            <span th:text="#{'transaction-type.' + ${payment.type.name}}">TYPE</span>
                         </div>
                         <div class="margin-right-2x">
                             <b>Status</b><br/>
                             <span
-                                th:replace="~{__components/invoice :: invoice-status(${invoice.status.name})}">STATUS</span>
+                                th:replace="~{__components/payment :: payment-status(${payment.status.name})}">STATUS</span>
                         </div>
                         <div class="margin-right-2x">
-                            <b>Customer</b><br/>
-                            <a class="entity-title" target="_blank"
-                               th:href="'/accounts/' + ${invoice.customer.account.id}"
-                               th:if="${invoice.customer.account}">
-                                <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
-                                <span th:text="${invoice.customer.name}">CUSTOMER</span>
-                            </a>
-                            <div th:if="!${invoice.customer.account}" th:text="${invoice.customer.name}">CUSTOMER</div>
-                        </div>
-                        <div class="margin-right-2x" th:if="${invoice.tax}">
-                            <b>Tax Report</b><br/>
-                            <a class="entity-title" target="_blank"
-                               th:href="'/taxes/' + ${invoice.tax.id}"
-                               th:if="${user?.hasPermission('tax')}">
-                                <img align="absmiddle" height="24" src="/image/tax.png" width="24"/>
-                                <span th:text="${invoice.tax.name}">TAX</span>
-                            </a>
-                            <span th:if="!${user?.hasPermission('tax')}" th:text="${invoice.tax.name}">TAX</span>
+                            <b>Payment Method</b><br/>
+                            <span
+                                th:replace="~{__components/payment :: payment-method-type(${payment.paymentMethodType.name})}"></span>
                         </div>
                         <div class="margin-right-2x">
-                            <b>Total Amount</b><br/>
-                            <span th:text="${invoice.totalAmount}">$$$</span>
-                        </div>
-                        <div class="margin-right-2x">
-                            <b>Amount Due</b><br/>
-                            <span th:text="${invoice.amountDue}">$$$</span>
+                            <b>Amount</b><br/>
+                            <span th:text="${payment.amount}">$$$</span>
                         </div>
                     </div>
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
@@ -106,7 +65,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-12">
             <div class="widget">
                 <div class="widget-body">
                     <ul class="nav nav-pills mb-3" id="tab-main" role="tablist">
@@ -115,14 +74,6 @@
                                     data-bs-target="#pills-details" data-bs-toggle="pill" id="pills-details-tab"
                                     role="tab" type="button">
                                 Details
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation" th:if="${user?.hasPermission('product')}">
-                            <button aria-controls="pills-content" aria-selected="true" class="nav-link"
-                                    data-bs-target="#pills-invoice-product" data-bs-toggle="pill"
-                                    id="pills-invoice-product-tab"
-                                    role="tab" type="button">
-                                Products
                             </button>
                         </li>
                         <li class="nav-item" role="presentation" th:each="tab : ${page.tabs.get('main')}">
@@ -143,153 +94,75 @@
                             <table class="table" id="tab-details-content">
                                 <tr>
                                     <td width="20%"><b>Invoice Number</b></td>
-                                    <td th:text="${invoice.number}">NUMBER</td>
-                                </tr>
-                                <tr th:if="${invoice.invoicedAt}">
-                                    <td><b>Invoice Date</b></td>
-                                    <td th:text="${invoice.invoicedAtText}">INVOICE_DATE</td>
-                                </tr>
-                                <tr th:if="${invoice.dueAt}">
-                                    <td><b>Due Date</b></td>
-                                    <td th:text="${invoice.dueAtText}">DUE</td>
-                                </tr>
+                                    <td>
+                                        <a class="entity-title" target="_blank"
+                                           th:href="'/invoices/' + ${payment.invoice.id}"
+                                           th:if="${user?.hasPermission('invoice')}">
+                                            <img align="absmiddle" height="24" src="/image/payment.png" width="24"/>
+                                            <span th:text="${payment.invoice.number}">INVOICE-NUMBER</span>
+                                        </a>
 
-                                <tr>
-                                    <td><b>Total Amount</b></td>
-                                    <td th:text="${invoice.totalAmount}">$$</td>
+                                        <img align="absmiddle" height="24" src="/image/payment.png"
+                                             th:if="!${user?.hasPermission('invoice')}" width="24"/>
+                                        <span th:if="!${user?.hasPermission('invoice')}"
+                                              th:text="${payment.invoice.number}">INVOICE-NUMBER</span>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td><b>Amount Paid</b></td>
-                                    <td th:text="${invoice.amountPaid}">$$</td>
+                                    <td><b>Type</b></td>
+                                    <td th:text="#{'transaction-type.' + ${payment.type.name}}">TYPE</td>
                                 </tr>
-                                <tr>
-                                    <td><b>Amount Due</b></td>
-                                    <td th:text="${invoice.amountDue}">$$</td>
-                                </tr>
-
                                 <tr>
                                     <td><b>Status</b></td>
                                     <td>
                                         <span
-                                            th:replace="~{__components/invoice :: invoice-status(${invoice.status.name()})}">STATUS</span>
+                                            th:replace="~{__components/payment :: payment-status(${payment.status.name()})}">STATUS</span>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td><b>Payment Method</b></td>
+                                    <td>
+                                        <span
+                                            th:replace="~{__components/payment :: payment-method-type(${payment.paymentMethodType.name})}"></span>
+                                    </td>
+                                </tr>
+                                <tr th:if="${payment.gateway.name != 'UNKNOWN'}">
+                                    <td><b>Payment Gateway</b></td>
+                                    <td th:text="#{'payment-gateway.' + ${payment.gateway.name}}">GATEWAY</td>
                                 </tr>
 
                                 <tr>
-                                    <td><b>Customer</b></td>
-                                    <td>
-                                        <a class="entity-title" target="_blank"
-                                           th:href="'/accounts/' + ${invoice.customer.account.id}"
-                                           th:if="${invoice.customer.account}">
-                                            <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
-                                            <span th:text="${invoice.customer.name}">CUSTOMER</span>
-                                        </a>
-                                        <div th:if="!${invoice.customer.account}" th:text="${invoice.customer.name}">
-                                            CUSTOMER
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr th:if="${invoice.tax}">
-                                    <td><b>Tax Report</b></td>
-                                    <td>
-                                        <a class="entity-title" target="_blank"
-                                           th:href="'/taxes/' + ${invoice.tax.id}"
-                                           th:if="${user?.hasPermission('tax')}">
-                                            <img align="absmiddle" height="24" src="/image/tax.png" width="24"/>
-                                            <span th:text="${invoice.tax.name}">TAX</span>
-                                        </a>
-                                        <span th:if="!${user?.hasPermission('tax')}"
-                                              th:text="${invoice.tax.name}">TAX</span>
-                                    </td>
-                                </tr>
-                                <tr th:if="${invoice.shippingAddress}">
-                                    <td><b>Shipping Address</b></td>
-                                    <td th:utext="${invoice.shippingAddress.toHtml()}">ADDRESS</td>
-                                </tr>
-                                <tr th:if="${invoice.billingAddress}">
-                                    <td><b>Billing Address</b></td>
-                                    <td th:utext="${invoice.billingAddress.toHtml()}">ADDRESS</td>
+                                    <td><b>Amount</b></td>
+                                    <td th:text="${payment.amount}">$$</td>
                                 </tr>
 
-                                <tr th:if="${invoice.description}">
+                                <tr th:if="${payment.errorCode}">
+                                    <td><b>Error Code</b></td>
+                                    <td th:utext="${payment.errorCode}">ERROR-CODE</td>
+                                </tr>
+                                <tr th:if="${payment.supplierErrorCode}">
+                                    <td><b>Supplier Error Code</b></td>
+                                    <td th:utext="${payment.supplierErrorCode}">SUPPLIER-ERROR-CODE</td>
+                                </tr>
+
+                                <tr th:if="${payment.description}">
                                     <td><b>Description</b></td>
-                                    <td th:text="${invoice.description}">DESCRIPTION</td>
+                                    <td th:text="${payment.description}">DESCRIPTION</td>
                                 </tr>
                                 <tr>
                                     <td><b>Created</b></td>
                                     <td>
-                                        <span th:text="${invoice.createdAtText}">DATE</span>
-                                        <span th:if="${invoice.createdBy}">by</span>
-                                        <span th:if="${invoice.createdBy}" th:text="${invoice.createdBy.displayName}">MODIFIED BY</span>
+                                        <span th:text="${payment.createdAtText}">DATE</span>
+                                        <span th:if="${payment.createdBy}">by</span>
+                                        <span th:if="${payment.createdBy}" th:text="${payment.createdBy.displayName}">MODIFIED BY</span>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td><b>Modified</b></td>
-                                    <td>
-                                        <span th:text="${invoice.modifiedAtText}">DATE</span>
-                                        <span th:if="${invoice.modifiedBy}">by</span>
-                                        <span th:if="${invoice.modifiedBy}"
-                                              th:text="${invoice.modifiedBy.displayName}">MODIFIED BY</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-
-                        <div aria-labelledby="pills-invoice-product-tab" class="tab-pane fade"
-                             id="pills-invoice-product"
-                             role="tabpanel">
-
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>Product</th>
-                                    <th>Description</th>
-                                    <th>Unit Price</th>
-                                    <th>Quantity</th>
-                                    <th>Unit</th>
-                                    <th>Amount</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr class="invoice-item" th:each="item : ${invoice.items}">
-                                    <td>
-                                        <a target="_blank" th:href="'/products/' + ${item.product.id}"
-                                           th:text="${item.product.code}">P111</a>
-                                    </td>
-                                    <td th:text="${item.description}">DESCRIPTION</td>
-                                    <td th:text="${item.unitPrice}">$$</td>
-                                    <td th:text="${item.quantity}">222</td>
-                                    <td th:text="${item.unit?.name}">222</td>
-                                    <td class="text-right" th:text="${item.subTotal}">$$$</td>
-                                </tr>
-                                <tr class="invoice-tax" th:each="tax : ${invoice.taxes}">
-                                    <td></td>
-                                    <td colspan="4">
-                                        <span th:text="${tax.salesTax.name}">NAME</span>:
-                                        <span th:text="${tax.salesTax.rateText}">%%%</span>
-                                    </td>
-                                    <td class="text-right" th:text="${tax.amount}">$$$</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-right" colspan="5"><b>Total Amount</b></td>
-                                    <td class="text-right" th:text="${invoice.totalAmount}">%%%</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-right" colspan="5"><b>Amount Paid</b></td>
-                                    <td class="text-right" th:text="${invoice.amountPaid}">%%%</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-right" colspan="5"><b>Amount Due</b></td>
-                                    <td class="text-right"><b
-                                        th:text="${invoice.amountDue}">%%%</b></td>
-                                </tr>
-                                </tbody>
                             </table>
                         </div>
 
                         <div class="tab-pane fade" role="tabpanel"
                              th:aria-labelledby="'pills-' + ${tab.name} + '-tab'"
-                             th:data-url="${tab.toTabUrl(invoice.id, module)}"
+                             th:data-url="${tab.toTabUrl(payment.id, module)}"
                              th:each="tab : ${page.tabs.get('main')}"
                              th:id="'pills-' + ${tab.name}">
                         </div>
@@ -297,15 +170,17 @@
                 </div>
             </div>
         </div>
+        <!--
         <div class="col-md-5">
             <div class="widget">
                 <div class="widget-body">
                     <div th:replace="~{__components/module :: tabs('side', false)}"></div>
                     <div
-                        th:replace="~{__components/module :: tabs-content('side', false, ${invoice}, ${module})}"></div>
+                        th:replace="~{__components/module :: tabs-content('side', false, ${payment}, ${module})}"></div>
                 </div>
             </div>
         </div>
+        -->
     </div>
 </div>
 

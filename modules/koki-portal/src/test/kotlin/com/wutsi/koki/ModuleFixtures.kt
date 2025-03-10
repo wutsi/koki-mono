@@ -10,7 +10,7 @@ object ModuleFixtures {
         Module(
             id = 100L,
             name = "account",
-            title = "Account",
+            title = "Accounts",
             homeUrl = "/accounts",
             settingsUrl = "/settings/accounts",
             objectType = ObjectType.ACCOUNT,
@@ -39,7 +39,7 @@ object ModuleFixtures {
         Module(
             id = 130L,
             name = "email",
-            title = "Email",
+            title = "Emails",
             homeUrl = null,
             tabUrl = "/emails/tab",
             settingsUrl = "/settings/email",
@@ -78,7 +78,7 @@ object ModuleFixtures {
         Module(
             id = 170,
             name = "employee",
-            title = "Employee",
+            title = "Employees",
             homeUrl = "/employees",
             tabUrl = null,
             settingsUrl = null,
@@ -98,7 +98,7 @@ object ModuleFixtures {
         Module(
             id = 190,
             name = "product",
-            title = "Product",
+            title = "Products",
             homeUrl = "/products",
             tabUrl = null,
             settingsUrl = null,
@@ -108,11 +108,23 @@ object ModuleFixtures {
         Module(
             id = 200,
             name = "invoice",
-            title = "Invoice",
+            title = "Invoices",
             homeUrl = "/invoices",
             tabUrl = "/invoices/tab",
             settingsUrl = "/settings/invoices",
             jsUrl = "/js/invoices.js",
+            objectType = ObjectType.INVOICE,
+        ),
+
+        Module(
+            id = 210,
+            name = "payment",
+            title = "Payments",
+            homeUrl = "/payments",
+            tabUrl = "/payments/tab",
+            settingsUrl = "/settings/payments",
+            jsUrl = "/js/payments.js",
+            objectType = ObjectType.PAYMENT,
         ),
     )
 
@@ -160,5 +172,9 @@ object ModuleFixtures {
         Permission(id = 2002, moduleId = 200, name = "invoice:admin", description = "Configure invoices"),
         Permission(id = 2003, moduleId = 200, name = "invoice:void", description = "Void invoices"),
         Permission(id = 2004, moduleId = 200, name = "invoice:manage", description = "Manage invoices"),
+
+        Permission(id = 2101, moduleId = 210, name = "payment", description = "Access payment"),
+        Permission(id = 2102, moduleId = 210, name = "payment:admin", description = "Configure payment"),
+        Permission(id = 2103, moduleId = 210, name = "payment:manage", description = "Manage payment"),
     )
 }

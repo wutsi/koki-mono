@@ -13,6 +13,7 @@ import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.InvoiceFixtures
 import com.wutsi.koki.ModuleFixtures
 import com.wutsi.koki.NoteFixtures
+import com.wutsi.koki.PaymentFixtures
 import com.wutsi.koki.ProductFixtures
 import com.wutsi.koki.RefDataFixtures
 import com.wutsi.koki.RoleFixtures
@@ -42,7 +43,6 @@ import com.wutsi.koki.employee.dto.SearchEmployeeResponse
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
-import com.wutsi.koki.file.dto.File
 import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.invoice.dto.CreateInvoiceRequest
@@ -55,6 +55,10 @@ import com.wutsi.koki.note.dto.CreateNoteRequest
 import com.wutsi.koki.note.dto.CreateNoteResponse
 import com.wutsi.koki.note.dto.GetNoteResponse
 import com.wutsi.koki.note.dto.SearchNoteResponse
+import com.wutsi.koki.payment.dto.CreateCashPaymentRequest
+import com.wutsi.koki.payment.dto.CreatePaymentResponse
+import com.wutsi.koki.payment.dto.GetTransactionResponse
+import com.wutsi.koki.payment.dto.SearchTransactionResponse
 import com.wutsi.koki.portal.security.service.AccessTokenHolder
 import com.wutsi.koki.product.dto.CreatePriceRequest
 import com.wutsi.koki.product.dto.CreatePriceResponse
@@ -123,6 +127,7 @@ import org.springframework.web.client.RestTemplate
 import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
 import java.time.Duration
+import java.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
@@ -223,6 +228,7 @@ abstract class AbstractPageControllerTest {
         setupProductModule()
         setupTaxModule()
         setupInvoiceModule()
+        setupPaymentModule()
     }
 
     protected fun setupFileUploads() {
@@ -905,6 +911,42 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any<CreateInvoiceRequest>(),
                 eq(CreateInvoiceResponse::class.java)
+            )
+    }
+
+    fun setupPaymentModule() {
+        doReturn(
+            ResponseEntity(
+                SearchTransactionResponse(PaymentFixtures.transactions),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchTransactionResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetTransactionResponse(PaymentFixtures.transaction),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetTransactionResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreatePaymentResponse(UUID.randomUUID().toString()),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateCashPaymentRequest>(),
+                eq(CreatePaymentResponse::class.java)
             )
     }
 

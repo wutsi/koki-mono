@@ -8,6 +8,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.InvoiceFixtures.invoice
+import com.wutsi.koki.PaymentFixtures
 import com.wutsi.koki.invoice.dto.GetInvoiceResponse
 import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.invoice.dto.UpdateInvoiceStatusRequest
@@ -46,6 +47,14 @@ class InvoiceControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.INVOICE)
         assertElementCount("tr.invoice-item", invoice.items.size)
         assertElementCount("tr.invoice-tax", 2)
+    }
+
+    @Test
+    fun payments() {
+        navigateTo("/invoices/${invoice.id}?tab=payment")
+
+        assertCurrentPageIs(PageName.INVOICE)
+        assertElementCount("tr.payment", PaymentFixtures.transactions.size)
     }
 
     @Test

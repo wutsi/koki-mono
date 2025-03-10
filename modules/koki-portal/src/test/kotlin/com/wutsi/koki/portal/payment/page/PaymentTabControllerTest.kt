@@ -5,6 +5,8 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.AccountFixtures.account
+import com.wutsi.koki.InvoiceFixtures.invoice
 import com.wutsi.koki.PaymentFixtures.transactions
 import com.wutsi.koki.payment.dto.SearchTransactionResponse
 import com.wutsi.koki.payment.dto.TransactionSummary
@@ -14,12 +16,18 @@ import org.springframework.http.ResponseEntity
 import java.util.UUID
 import kotlin.test.Test
 
-class ListPaymentControllerTest : AbstractPageControllerTest() {
+class PaymentTabControllerTest : AbstractPageControllerTest() {
     @Test
-    fun list() {
-        navigateTo("/payments")
+    fun `list - account`() {
+        navigateTo("/payments/tab?test-mode=true&owner-type=ACCOUNT&owner-id=" + account.id)
 
-        assertCurrentPageIs(PageName.PAYMENT_LIST)
+        assertElementCount("tr.payment", 0)
+    }
+
+    @Test
+    fun `list - invoice`() {
+        navigateTo("/payments/tab?test-mode=true&owner-type=INVOICE&owner-id=" + invoice.id)
+
         assertElementCount("tr.payment", transactions.size)
     }
 
@@ -40,9 +48,7 @@ class ListPaymentControllerTest : AbstractPageControllerTest() {
                 eq(SearchTransactionResponse::class.java)
             )
 
-        navigateTo("/payments")
-
-        assertCurrentPageIs(PageName.PAYMENT_LIST)
+        navigateTo("/payments/tab?test-mode=true&owner-type=INVOICE&owner-id=" + invoice.id)
         assertElementCount("tr.payment", entries.size)
 
         scrollToBottom()
@@ -54,7 +60,7 @@ class ListPaymentControllerTest : AbstractPageControllerTest() {
     fun `login required`() {
         setUpAnonymousUser()
 
-        navigateTo("/payments")
+        navigateTo("/payments/tab?test-mode=true&owner-type=INVOICE&owner-id=" + invoice.id)
         assertCurrentPageIs(PageName.LOGIN)
     }
 
@@ -62,25 +68,14 @@ class ListPaymentControllerTest : AbstractPageControllerTest() {
     fun `list - without permission payment`() {
         setUpUserWithoutPermissions(listOf("payment"))
 
-        navigateTo("/payments")
+        navigateTo("/payments/tab?test-mode=true&owner-type=INVOICE&owner-id=" + invoice.id)
 
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 
     @Test
-    fun `list - without permission payment-manage`() {
-        setUpUserWithoutPermissions(listOf("payment:manage"))
-
-        navigateTo("/payments")
-
-        assertCurrentPageIs(PageName.PAYMENT_LIST)
-//        assertElementNotPresent(".btn-edit")
-//        assertElementNotPresent(".btn-create")
-    }
-
-    @Test
     fun show() {
-        navigateTo("/payments")
+        navigateTo("/payments/tab?test-mode=true&owner-type=INVOICE&owner-id=" + invoice.id)
         click(".btn-view")
 
         assertCurrentPageIs(PageName.PAYMENT)

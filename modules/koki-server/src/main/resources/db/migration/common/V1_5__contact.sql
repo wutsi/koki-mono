@@ -30,7 +30,7 @@ CREATE INDEX I_CONTACT_account ON T_CONTACT(account_fk);
 CREATE INDEX I_CONTACT_contact_type_fk ON T_CONTACT(contact_type_fk);
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url)
-    VALUES (120, 2, 'contact', 'Contact', '/contacts', '/contacts/tab', null, '/js/contacts.js');
+    VALUES (120, 2, 'contact', 'Contacts', '/contacts', '/contacts/tab', null, '/js/contacts.js');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
     VALUES (1200, 120, 'contact',        'View contacts profile'),

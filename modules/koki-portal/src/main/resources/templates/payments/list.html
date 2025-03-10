@@ -6,12 +6,12 @@
 
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
-<div th:replace="~{__components/layout :: menubar('invoice')}"></div>
+<div th:replace="~{__components/layout :: menubar('payment')}"></div>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/invoice :: invoice-breadcrumb(null)}"></div>
+            <div th:replace="~{__components/payment :: payment-breadcrumb(null)}"></div>
         </div>
     </div>
 
@@ -21,21 +21,19 @@
                 <div class="widget-body">
                     <div class="flex flex-space-between">
                         <div class="btn-group border margin-bottom">
-                            <button aria-expanded="false"
-                                    class="btn padding"
-                                    type="button">
-                                <img height="24" src="/image/invoice.png" width="24"/>
-                                <span>Invoices</span>
+                            <button aria-expanded="false" class="btn padding" type="button">
+                                <img height="24" src="/image/payment.png" width="24"/>
+                                <span>Payments</span>
                             </button>
                         </div>
                         <div>
                             <select class="btn btn-sm btn-light" id="filter-status"
-                                    onchange="koki_invoices_on_filter_changed()"
+                                    onchange="koki_payments_on_filter_changed()"
                                     style="width: auto">
                                 <option value="">All Statuses</option>
                                 <option th:each="ss : ${statuses}"
                                         th:selected="${ss.name()} == ${status?.name()}"
-                                        th:text="#{'invoice-status.' + ${ss.name()}}"
+                                        th:text="#{'transaction-status.' + ${ss.name()}}"
                                         th:value="${ss.name()}">STATUS
                                 </option>
                             </select>
@@ -45,20 +43,20 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th>Number</th>
                             <th>Date</th>
-                            <th>Customer</th>
-                            <th>Status</th>
-                            <th>Total Amount</th>
-                            <th>Amount Due</th>
+                            <th>Invoice</th>
+                            <th>Type</th>
+                            <th>Method</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-right">Amount</th>
                             <td></td>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="invoice" th:each="invoice : ${invoices}">
-                            <div th:replace="~{__components/invoice :: columns(${invoice})}"></div>
+                        <tr class="payment" th:each="payment : ${payments}">
+                            <div th:replace="~{__components/payment :: columns(${payment}, true)}"></div>
                         </tr>
-                        <tr th:replace="~{__components/invoice :: load-more(${moreUrl})}"></tr>
+                        <tr th:replace="~{__components/payment :: load-more(${moreUrl})}"></tr>
                         </tbody>
                     </table>
                 </div>
@@ -70,9 +68,9 @@
 <div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
 
 <script>
-    function koki_invoices_on_filter_changed() {
+    function koki_payments_on_filter_changed() {
         const status = document.getElementById('filter-status').value;
-        document.location.href = '/invoices?' +
+        document.location.href = '/payments?' +
             (status && status.length > 0 ? '&status=' + status : '');
     }
 </script>

@@ -55,7 +55,7 @@ CREATE TABLE T_PRICE(
 );
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url)
-    VALUES (160, 6, 'product', 'Product', '/products', '/products/tab', null, '/js/products.js');
+    VALUES (160, 6, 'product', 'Products', '/products', '/products/tab', null, '/js/products.js');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
     VALUES (1600, 160, 'product',        'View products'),

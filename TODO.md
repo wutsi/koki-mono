@@ -120,15 +120,22 @@
 
 ## Payment
 
+- [] Settings: Configure the supported payment method
+    - [] Cash
+    - [] Check
+    - [] Interact
+    - [] Paypal
+    - [] Stripe
+    - [] Flutterwave
+- [] Capture online payments:
+    - [] Paypal
+    - [] Stripe
+    - [] Flutterwave
 - [x] Payment API
 - [x] Capture payments manually:
     - [x] Cash
     - [x] Check
     - [x] Interact
-- [] Capture online payments:
-    - [] Paypal
-    - [] Stripe
-    - [] Flutterwave
 
 ## Product
 

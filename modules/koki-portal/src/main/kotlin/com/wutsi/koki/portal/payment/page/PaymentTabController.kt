@@ -1,8 +1,6 @@
 package com.wutsi.koki.portal.payment.page
 
-import com.wutsi.koki.payment.dto.TransactionStatus
-import com.wutsi.koki.payment.dto.TransactionType
-import com.wutsi.koki.portal.common.page.PageName
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.payment.service.TransactionService
 import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller
@@ -12,64 +10,51 @@ import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
 @RequiresPermission(["payment"])
-class ListPaymentController(
+class PaymentTabController(
     private val service: TransactionService
 ) : AbstractPaymentController() {
-    @GetMapping("/payments")
+    @GetMapping("/payments/tab")
     fun list(
-        @RequestParam(required = false) status: TransactionStatus? = null,
-        @RequestParam(required = false) type: TransactionType? = null,
+        @RequestParam(name = "owner-id") ownerId: Long,
+        @RequestParam(name = "owner-type") ownerType: ObjectType,
+        @RequestParam(required = false, name = "test-mode") testMode: String? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
-        model.addAttribute(
-            "page",
-            createPageModel(
-                name = PageName.PAYMENT_LIST,
-                title = "Payments",
-            )
-        )
+        model.addAttribute("testMode", testMode)
 
-        model.addAttribute("statuses", TransactionStatus.entries.filter { entry -> entry != TransactionStatus.UNKNOWN })
-        model.addAttribute("status", status)
-
-        model.addAttribute("types", TransactionType.entries.filter { entry -> entry != TransactionType.UNKNOWN })
-        model.addAttribute("type", type)
-
-        more(status, type, limit, offset, model)
-        return "payments/list"
+        more(ownerId, ownerType, limit, offset, model)
+        return "payments/tab"
     }
 
-    @GetMapping("/payments/more")
+    @GetMapping("/payments/tab/more")
     fun more(
-        @RequestParam(required = false) status: TransactionStatus? = null,
-        @RequestParam(required = false) type: TransactionType? = null,
+        @RequestParam(name = "owner-id") ownerId: Long,
+        @RequestParam(name = "owner-type") ownerType: ObjectType,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
-        val transactions = service.transactions(
-            statuses = status?.let { listOf(status) } ?: emptyList(),
-            types = type?.let { listOf(type) } ?: emptyList(),
-            limit = limit,
-            offset = offset,
-        )
+        model.addAttribute("showInvoice", false)
+
+        val transactions = if (ownerType == ObjectType.INVOICE) {
+            service.transactions(
+                invoiceId = ownerId,
+                limit = limit,
+                offset = offset,
+            )
+        } else {
+            emptyList()
+        }
         if (transactions.isNotEmpty()) {
             model.addAttribute("payments", transactions)
             if (transactions.size >= limit) {
                 val nextOffset = offset + limit
-                var url = "/payments/more?limit=$limit&offset=$nextOffset"
-                if (status != null) {
-                    url = "$url&status=$status"
-                }
-                if (type != null) {
-                    url = "$url&type=$type"
-                }
+                var url = "/payments/tab/more?limit=$limit&offset=$nextOffset&owner-id=$ownerId&owner-type=$ownerType"
                 model.addAttribute("moreUrl", url)
             }
         }
-
         return "payments/more"
     }
 }

@@ -9,7 +9,6 @@ import java.util.Date
 
 data class InvoiceModel(
     val id: Long = -1,
-    val pdfUrl: String? = null,
     val tax: TaxModel? = null,
     val number: Long = -1,
     val status: InvoiceStatus = InvoiceStatus.UNKNOWN,

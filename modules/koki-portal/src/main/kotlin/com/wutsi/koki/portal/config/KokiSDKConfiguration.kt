@@ -16,6 +16,7 @@ import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiInvoices
 import com.wutsi.koki.sdk.KokiModules
 import com.wutsi.koki.sdk.KokiNotes
+import com.wutsi.koki.sdk.KokiPayments
 import com.wutsi.koki.sdk.KokiProducts
 import com.wutsi.koki.sdk.KokiRefData
 import com.wutsi.koki.sdk.KokiTaxes
@@ -103,6 +104,11 @@ class KokiSDKConfiguration(
     @Bean
     fun kokiNotes(): KokiNotes {
         return KokiNotes(urlBuilder(), rest())
+    }
+
+    @Bean
+    fun kokiPayments(): KokiPayments {
+        return KokiPayments(urlBuilder(), rest())
     }
 
     @Bean
