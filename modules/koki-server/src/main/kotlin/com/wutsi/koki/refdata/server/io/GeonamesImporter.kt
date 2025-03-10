@@ -11,7 +11,6 @@ import com.wutsi.koki.refdata.server.service.LocationService
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVRecord
-import org.apache.tools.zip.ZipFile
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File
@@ -19,6 +18,7 @@ import java.io.FileOutputStream
 import java.net.URL
 import java.nio.file.Files
 import java.util.Locale
+import java.util.zip.ZipFile
 import kotlin.io.outputStream
 
 @Service
@@ -235,7 +235,7 @@ class GeonamesImporter(private val service: LocationService) {
 
         // Extract
         ZipFile(zip.toFile()).use { zip ->
-            val entry = zip.entries.asSequence().find { it.name == filename }
+            val entry = zip.entries().asSequence().find { it.name == filename }
             if (entry != null) {
                 val file = Files.createTempFile("file", ".txt").toFile()
                 zip.getInputStream(entry).use { input ->

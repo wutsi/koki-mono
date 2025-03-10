@@ -55,7 +55,7 @@ class PaymentService(
         return paymentMethod
     }
 
-    fun getInteractByTransactionId(transactionId: String): PaymentMethodInteractEntity {
+    fun getInteracByTransactionId(transactionId: String): PaymentMethodInteractEntity {
         val paymentMethod = interactDao.findByTransactionId(transactionId)
         if (paymentMethod == null) {
             throw NotFoundException(
@@ -109,7 +109,7 @@ class PaymentService(
                 invoiceId = request.invoiceId,
                 tenantId = tenantId,
                 type = TransactionType.PAYMENT,
-                paymentMethodType = PaymentMethodType.INTERACT,
+                paymentMethodType = PaymentMethodType.INTERAC,
                 status = TransactionStatus.SUCCESSFUL,
                 currency = request.currency,
                 amount = request.amount,

@@ -18,7 +18,7 @@ class TransactionMapper {
         return TransactionSummary(
             id = entity.id!!,
             invoiceId = entity.invoiceId,
-            createById = entity.createdById,
+            createdById = entity.createdById,
             type = entity.type,
             paymentMethodType = entity.paymentMethodType,
             status = entity.status,
@@ -38,7 +38,7 @@ class TransactionMapper {
         return Transaction(
             id = entity.id!!,
             invoiceId = entity.invoiceId,
-            createById = entity.createdById,
+            createdById = entity.createdById,
             type = entity.type,
             paymentMethodType = entity.paymentMethodType,
             status = entity.status,

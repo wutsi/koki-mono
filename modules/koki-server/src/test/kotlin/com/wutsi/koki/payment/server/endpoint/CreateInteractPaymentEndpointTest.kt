@@ -54,7 +54,7 @@ class CreateInteractPaymentEndpointTest : AuthorizationAwareEndpointTest() {
         val tx = dao.findById(transactionId).get()
         assertEquals(TENANT_ID, tx.tenantId)
         assertEquals(TransactionType.PAYMENT, tx.type)
-        assertEquals(PaymentMethodType.INTERACT, tx.paymentMethodType)
+        assertEquals(PaymentMethodType.INTERAC, tx.paymentMethodType)
         assertEquals(TransactionStatus.SUCCESSFUL, tx.status)
         assertEquals(request.invoiceId, tx.invoiceId)
         assertEquals(request.description, tx.description)
