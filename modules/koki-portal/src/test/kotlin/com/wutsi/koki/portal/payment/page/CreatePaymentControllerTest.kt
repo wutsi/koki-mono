@@ -51,7 +51,10 @@ class CreatePaymentControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.PAYMENT_CREATE)
         click(".btn-payment-cash")
 
+        input("#amount", invoice.amountDue.toLong().toString())
         scrollToBottom()
+        select2("#collectedById", UserFixtures.users[1].displayName)
+        input("#description", "This is the description")
         click(".btn-cancel", 1000)
 
         verify(rest, never()).postForEntity(
@@ -98,7 +101,11 @@ class CreatePaymentControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.PAYMENT_CREATE)
         click(".btn-payment-check")
 
+        input("#amount", invoice.amountDue.toLong().toString())
         scrollToBottom()
+        input("#checkNumber", "123435")
+        input("#bankName", "TD Bank")
+        input("#description", "This is the description")
         click(".btn-cancel", 1000)
 
         verify(rest, never()).postForEntity(
@@ -145,7 +152,11 @@ class CreatePaymentControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.PAYMENT_CREATE)
         click(".btn-payment-interac")
 
+        input("#amount", invoice.amountDue.toLong().toString())
         scrollToBottom()
+        input("#referenceNumber", "123435")
+        input("#bankName", "TD Bank")
+        input("#description", "This is the description")
         click(".btn-cancel", 1000)
 
         verify(rest, never()).postForEntity(
