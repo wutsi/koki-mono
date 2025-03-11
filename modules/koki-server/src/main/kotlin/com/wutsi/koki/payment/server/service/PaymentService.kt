@@ -5,7 +5,7 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.payment.dto.CreateCashPaymentRequest
 import com.wutsi.koki.payment.dto.CreateCheckPaymentRequest
-import com.wutsi.koki.payment.dto.CreateInteractPaymentRequest
+import com.wutsi.koki.payment.dto.CreateInteracPaymentRequest
 import com.wutsi.koki.payment.dto.PaymentMethodType
 import com.wutsi.koki.payment.dto.TransactionStatus
 import com.wutsi.koki.payment.dto.TransactionType
@@ -100,7 +100,7 @@ class PaymentService(
     }
 
     @Transactional
-    fun interact(request: CreateInteractPaymentRequest, tenantId: Long): TransactionEntity {
+    fun interact(request: CreateInteracPaymentRequest, tenantId: Long): TransactionEntity {
         val userId = securityService.getCurrentUserIdOrNull()
         val now = Date()
         val tx = dao.save(

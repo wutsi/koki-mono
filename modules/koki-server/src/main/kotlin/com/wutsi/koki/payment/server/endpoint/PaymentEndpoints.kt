@@ -2,7 +2,7 @@ package com.wutsi.koki.payment.server.endpoint
 
 import com.wutsi.koki.payment.dto.CreateCashPaymentRequest
 import com.wutsi.koki.payment.dto.CreateCheckPaymentRequest
-import com.wutsi.koki.payment.dto.CreateInteractPaymentRequest
+import com.wutsi.koki.payment.dto.CreateInteracPaymentRequest
 import com.wutsi.koki.payment.dto.CreatePaymentResponse
 import com.wutsi.koki.payment.dto.event.TransactionCompletedEvent
 import com.wutsi.koki.payment.server.domain.TransactionEntity
@@ -34,10 +34,10 @@ class PaymentEndpoints(
         )
     }
 
-    @PostMapping("/interact")
+    @PostMapping("/interac")
     fun interact(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-        @Valid @RequestBody request: CreateInteractPaymentRequest,
+        @Valid @RequestBody request: CreateInteracPaymentRequest,
     ): CreatePaymentResponse {
         val tx = service.interact(request, tenantId)
         publish(tx)

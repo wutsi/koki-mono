@@ -1,5 +1,9 @@
 package com.wutsi.koki.sdk
 
+import com.wutsi.koki.payment.dto.CreateCashPaymentRequest
+import com.wutsi.koki.payment.dto.CreateCheckPaymentRequest
+import com.wutsi.koki.payment.dto.CreateInteracPaymentRequest
+import com.wutsi.koki.payment.dto.CreatePaymentResponse
 import com.wutsi.koki.payment.dto.GetTransactionResponse
 import com.wutsi.koki.payment.dto.SearchTransactionResponse
 import com.wutsi.koki.payment.dto.TransactionStatus
@@ -14,6 +18,22 @@ class KokiPayments(
 ) : AbstractKokiModule(rest) {
     companion object {
         private const val TRANSACTION_PATH_PREFIX = "/v1/transactions"
+        private const val PAYMENT_PATH_PREFIX = "/v1/payments"
+    }
+
+    fun cashPayment(request: CreateCashPaymentRequest): CreatePaymentResponse {
+        val url = urlBuilder.build("$PAYMENT_PATH_PREFIX/cash")
+        return rest.postForEntity(url, request, CreatePaymentResponse::class.java).body
+    }
+
+    fun checkPayment(request: CreateCheckPaymentRequest): CreatePaymentResponse {
+        val url = urlBuilder.build("$PAYMENT_PATH_PREFIX/check")
+        return rest.postForEntity(url, request, CreatePaymentResponse::class.java).body
+    }
+
+    fun interacPayment(request: CreateInteracPaymentRequest): CreatePaymentResponse {
+        val url = urlBuilder.build("$PAYMENT_PATH_PREFIX/interac")
+        return rest.postForEntity(url, request, CreatePaymentResponse::class.java).body
     }
 
     fun transaction(id: String): GetTransactionResponse {

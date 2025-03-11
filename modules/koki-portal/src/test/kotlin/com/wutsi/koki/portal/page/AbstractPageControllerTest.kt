@@ -56,6 +56,8 @@ import com.wutsi.koki.note.dto.CreateNoteResponse
 import com.wutsi.koki.note.dto.GetNoteResponse
 import com.wutsi.koki.note.dto.SearchNoteResponse
 import com.wutsi.koki.payment.dto.CreateCashPaymentRequest
+import com.wutsi.koki.payment.dto.CreateCheckPaymentRequest
+import com.wutsi.koki.payment.dto.CreateInteracPaymentRequest
 import com.wutsi.koki.payment.dto.CreatePaymentResponse
 import com.wutsi.koki.payment.dto.GetTransactionResponse
 import com.wutsi.koki.payment.dto.SearchTransactionResponse
@@ -946,6 +948,28 @@ abstract class AbstractPageControllerTest {
             .postForEntity(
                 any<String>(),
                 any<CreateCashPaymentRequest>(),
+                eq(CreatePaymentResponse::class.java)
+            )
+        doReturn(
+            ResponseEntity(
+                CreatePaymentResponse(UUID.randomUUID().toString()),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateCheckPaymentRequest>(),
+                eq(CreatePaymentResponse::class.java)
+            )
+        doReturn(
+            ResponseEntity(
+                CreatePaymentResponse(UUID.randomUUID().toString()),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateInteracPaymentRequest>(),
                 eq(CreatePaymentResponse::class.java)
             )
     }

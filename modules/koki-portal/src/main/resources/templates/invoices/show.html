@@ -51,6 +51,13 @@
                                 Send
                             </a>
 
+                            <a class="btn-payment btn btn-primary btn-sm"
+                               th:href="'/payments/create?invoice-id' + ${invoice.id}"
+                               th:if="${invoice.opened} AND ${user?.hasPermission('payment:manage')}"
+                            >
+                                Create Payment
+                            </a>
+
                             <a class="btn-void btn btn-danger btn-sm"
                                onclick="return confirm('Are you sure you want to void the invoice?')"
                                th:href="'/invoices/' + ${invoice.id} + '/void'"

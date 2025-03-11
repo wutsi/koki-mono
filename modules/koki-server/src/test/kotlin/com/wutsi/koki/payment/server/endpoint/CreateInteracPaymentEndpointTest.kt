@@ -4,7 +4,7 @@ import com.ibm.icu.text.SimpleDateFormat
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.payment.dto.CreateInteractPaymentRequest
+import com.wutsi.koki.payment.dto.CreateInteracPaymentRequest
 import com.wutsi.koki.payment.dto.CreatePaymentResponse
 import com.wutsi.koki.payment.dto.PaymentMethodType
 import com.wutsi.koki.payment.dto.TransactionStatus
@@ -23,7 +23,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @Sql(value = ["/db/test/clean.sql"])
-class CreateInteractPaymentEndpointTest : AuthorizationAwareEndpointTest() {
+class CreateInteracPaymentEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var dao: TransactionRepository
 
@@ -35,7 +35,7 @@ class CreateInteractPaymentEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Test
     fun create() {
-        val request = CreateInteractPaymentRequest(
+        val request = CreateInteracPaymentRequest(
             invoiceId = 111L,
             description = "This is the description",
             sentAt = DateUtils.addDays(Date(), -10),
@@ -45,7 +45,7 @@ class CreateInteractPaymentEndpointTest : AuthorizationAwareEndpointTest() {
             currency = "CAD",
             referenceNumber = "320430943"
         )
-        val response = rest.postForEntity("/v1/payments/interact", request, CreatePaymentResponse::class.java)
+        val response = rest.postForEntity("/v1/payments/interac", request, CreatePaymentResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 

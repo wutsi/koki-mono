@@ -66,7 +66,7 @@ class InvoiceTabController(
         model: Model
     ): String {
         loadMore(ownerId, ownerType, limit, offset, model)
-        return "invoices/tab-more"
+        return "invoices/more"
     }
 
     @GetMapping("/invoices/tab/create-invoice")
