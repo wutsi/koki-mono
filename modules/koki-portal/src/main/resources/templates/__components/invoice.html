@@ -32,11 +32,11 @@
         </a>
         <span th:if="!${invoice.customer.account}" th:text="${invoice.customer.name}">CUSTOMER</span>
     </td>
-    <td>
+    <td class="text-center">
         <span th:replace="~{__components/invoice :: invoice-status(${invoice.status.name})}"></span>
     </td>
-    <td th:text="${invoice.totalAmount}">$$$</td>
-    <td th:text="${invoice.amountDue}">$$$</td>
+    <td class="text-right" th:text="${invoice.totalAmount}">$$$</td>
+    <td class="text-right" th:text="${invoice.amountDue}">$$$</td>
     <td class="toolbar">
         <a class="btn-view" th:href="'/invoices/' + ${invoice.id}">View</a>
     </td>

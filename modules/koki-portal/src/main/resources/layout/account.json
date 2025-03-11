@@ -7,8 +7,8 @@
       "invoice"
     ],
     "side": [
-      "note",
-      "email"
+      "email",
+      "note"
     ]
   }
 }

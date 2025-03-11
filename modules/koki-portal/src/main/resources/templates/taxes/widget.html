@@ -15,6 +15,9 @@
                         <span th:text="${tax.taxType.title}">TYPE</span>
                     </a>
                 </td>
+                <td class="text-center">
+                    <span th:replace="~{__components/tax :: tax-status(${tax.status.name()})}">STATUS</span>
+                </td>
                 <td th:text="${tax.account.name}">ACCOUNT</td>
             </tr>
         </table>

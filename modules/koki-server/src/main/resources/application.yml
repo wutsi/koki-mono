@@ -181,6 +181,13 @@ koki:
         from: no-reply@wutsi.com
 
     module:
+        invoice:
+            mq:
+                consumer-delay-seconds: 1
+                queue: koki-invoice-queue
+                dlq: koki-invoice-dlq
+                dlq-cron: "0 */5 * * * *"  # Every 5 mins
+
         notification:
             mq:
                 consumer-delay-seconds: 1

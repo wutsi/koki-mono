@@ -195,7 +195,7 @@ class InvoiceService(
         val transactions = txDao.findByInvoiceIdAndStatus(id, TransactionStatus.SUCCESSFUL)
         val amountPaid = transactions.sumOf { tx -> tx.amount }
         invoice.amountPaid = amountPaid
-        invoice.amountDue = invoice.amountPaid - invoice.amountPaid
+        invoice.amountDue = invoice.totalAmount - invoice.amountPaid
         dao.save(invoice)
 
         /* Update status */

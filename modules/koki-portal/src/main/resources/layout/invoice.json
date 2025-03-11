@@ -4,8 +4,8 @@
       "payment"
     ],
     "side": [
-      "note",
-      "email"
+      "email",
+      "note"
     ]
   }
 }
