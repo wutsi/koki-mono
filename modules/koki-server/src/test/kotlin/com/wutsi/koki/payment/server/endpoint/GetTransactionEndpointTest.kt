@@ -86,7 +86,7 @@ class GetTransactionEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val tx = response.body!!.transaction
-        assertEquals(PaymentMethodType.INTERACT, tx.paymentMethodType)
+        assertEquals(PaymentMethodType.INTERAC, tx.paymentMethodType)
         assertEquals(TransactionType.PAYMENT, tx.type)
         assertEquals(TransactionStatus.PENDING, tx.status)
         assertEquals(PaymentGateway.UNKNOWN, tx.gateway)

@@ -42,6 +42,9 @@ data class InvoiceModel(
     val paid: Boolean
         get() = amountDue.value <= 0
 
+    val opened: Boolean
+        get() = status == InvoiceStatus.OPENED
+
     val draft: Boolean
         get() = status == InvoiceStatus.DRAFT
 

@@ -83,6 +83,8 @@ class InvoiceControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.INVOICE)
         assertElementNotPresent(".btn-approve")
         assertElementNotPresent(".btn-send")
+        assertElementPresent(".btn-payment")
+        assertElementPresent(".btn-void")
     }
 
     @Test
@@ -92,7 +94,23 @@ class InvoiceControllerTest : AbstractPageControllerTest() {
         navigateTo("/invoices/${invoice.id}")
 
         assertCurrentPageIs(PageName.INVOICE)
+        assertElementNotPresent(".btn-approve")
+        assertElementPresent(".btn-send")
+        assertElementPresent(".btn-payment")
         assertElementNotPresent(".btn-void")
+    }
+
+    @Test
+    fun `show - without permission payment-manage`() {
+        setUpUserWithoutPermissions(listOf("payment:manage"))
+
+        navigateTo("/invoices/${invoice.id}")
+
+        assertCurrentPageIs(PageName.INVOICE)
+        assertElementNotPresent(".btn-approve")
+        assertElementPresent(".btn-send")
+        assertElementNotPresent(".btn-payment")
+        assertElementPresent(".btn-void")
     }
 
     @Test
@@ -185,6 +203,13 @@ class InvoiceControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.INVOICE)
 //        assertElementVisible("#koki-toast")
+    }
+
+    @Test
+    fun `make payment`() {
+        navigateTo("/invoices/${invoice.id}")
+        click(".btn-payment")
+        assertCurrentPageIs(PageName.PAYMENT_CREATE)
     }
 
     private fun setupDraftInvoice() {

@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('payment')}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/payment :: payment-breadcrumb(null)}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="widget">
+                <div class="widget-body">
+                    <h1>New Payment</h1>
+
+                    <h3>Select the payment method</h3>
+
+                    <div th:each="type : ${paymentMethodTypes}">
+
+                        <a class="entity-title" th:classappend="'btn-payment-' + ${type.name.toLowerCase()}"
+                           th:href="'/payments/create?payment-method-type=' + ${type.name} + '&invoice-id=' + ${invoiceId}">
+
+                            <div class="border margin-top padding flex">
+                                <div class="margin-right text-larger">
+                                    <div
+                                        th:replace="~{__components/payment :: payment-method-icon(${type.name})}"></div>
+                                </div>
+                                <div class="text-larger" th:text="#{'payment-method-type.' + ${type.name}}">TYPE</div>
+                            </div>
+
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
+<div th:replace="~{__components/bootstrap :: modal}"></div>
+</body>
+</html>

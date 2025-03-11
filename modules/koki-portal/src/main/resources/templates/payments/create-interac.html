@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('payment')}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/payment :: payment-breadcrumb(null)}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <form class="form" method="post" th:action="@{/payments/add-new}" th:object="${form}">
+                <input th:field="*{paymentMethodType}" type="hidden"/>
+                <input th:field="*{invoiceId}" type="hidden"/>
+
+                <div class="form-body">
+                    <div class="section">
+                        <div class="section-body">
+                            <h1 class="padding margin-none">New Payment</h1>
+
+                            <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+
+                            <div class="section-item">
+                                <label class="title">Invoice</label>
+                                <div>
+                                    <a class="entity-title" target="_blank"
+                                       th:href="'/invoices/' + ${invoice.id}"
+                                       th:if="${user?.hasPermission('invoice')}">
+                                        <img align="absmiddle" height="24" src="/image/payment.png" width="24"/>
+                                        <span th:text="${invoice.number}">INVOICE-NUMBER</span>
+                                    </a>
+
+                                    <img align="absmiddle" height="24" src="/image/payment.png"
+                                         th:if="!${user?.hasPermission('invoice')}" width="24"/>
+                                    <span th:if="!${user?.hasPermission('invoice')}"
+                                          th:text="${invoice.number}">INVOICE-NUMBER</span>
+                                </div>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Amount Due</label>
+                                <div th:text="${invoice.amountDue}">$$$</div>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Payment Method</label>
+                                <div>
+                                    <div th:replace="~{__components/payment :: payment-method-type('INTERAC')}"></div>
+                                </div>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title">Payment Amount <span class="required">*</span></label>
+                                <input required th:field="*{amount}" type="number"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Currency <span class="required">*</span></label>
+                                <select th:field="*{currency}">
+                                    <option selected
+                                            th:text="${currency.displayName}"
+                                            th:value="${currency.currencyCode}"
+                                    >
+                                        CURRENCY
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title">Reference Number</label>
+                                <input maxlength="10" th:field="*{referenceNumber}"/>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title">Bank Name</label>
+                                <input maxlength="100" th:field="*{bankName}"/>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title">Sent Date</label>
+                                <input th:field="*{sentAt}" type="date"/>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title">Cleared Date</label>
+                                <input th:field="*{clearedAt}" type="date"/>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title">Description</label>
+                                <textarea rows="3" th:field="*{description}"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit">Submit</button>
+                    <a class="btn-cancel" th:href="${cancelUrl}">Cancel</a>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
+</body>
+</html>

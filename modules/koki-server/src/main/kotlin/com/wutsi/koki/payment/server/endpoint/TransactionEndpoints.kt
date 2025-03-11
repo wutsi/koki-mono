@@ -43,8 +43,8 @@ class TransactionEndpoints(
                 } else {
                     null
                 },
-                interact = if (tx.paymentMethodType == PaymentMethodType.INTERACT) {
-                    paymentService.getInteractByTransactionId(id)
+                interact = if (tx.paymentMethodType == PaymentMethodType.INTERAC) {
+                    paymentService.getInteracByTransactionId(id)
                 } else {
                     null
                 },

@@ -36,7 +36,7 @@ class PaymentTabController(
         @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
-        model.addAttribute("showInvoice", false)
+        model.addAttribute("showInvoice", ownerType != ObjectType.INVOICE)
 
         val transactions = if (ownerType == ObjectType.INVOICE) {
             service.transactions(
