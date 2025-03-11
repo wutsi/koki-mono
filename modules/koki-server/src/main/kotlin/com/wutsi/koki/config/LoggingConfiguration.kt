@@ -1,4 +1,4 @@
-package com.wutsi.koki.platform.logger.config
+package com.wutsi.koki.config
 
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.logger.DynamicKVLogger

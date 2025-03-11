@@ -54,6 +54,8 @@ class InvoiceControllerTest : AbstractPageControllerTest() {
         navigateTo("/invoices/${invoice.id}?tab=payment")
 
         assertCurrentPageIs(PageName.INVOICE)
+
+        Thread.sleep(1000)
         assertElementCount("tr.payment", PaymentFixtures.transactions.size)
     }
 

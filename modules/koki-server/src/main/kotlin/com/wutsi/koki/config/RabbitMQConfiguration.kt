@@ -1,4 +1,4 @@
-package com.wutsi.koki.platform.mq.config
+package com.wutsi.koki.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.client.Channel

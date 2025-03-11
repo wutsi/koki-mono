@@ -1,4 +1,4 @@
-package com.wutsi.koki.platform.templating.config
+package com.wutsi.koki.config
 
 import com.github.mustachejava.DefaultMustacheFactory
 import com.wutsi.koki.platform.templating.MustacheTemplatingEngine

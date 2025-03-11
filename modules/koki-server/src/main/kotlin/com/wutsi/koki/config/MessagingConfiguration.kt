@@ -1,4 +1,4 @@
-package com.wutsi.koki.platform.messaging.config
+package com.wutsi.koki.config
 
 import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
 import com.wutsi.koki.platform.messaging.smtp.SMTPHealthIndicator

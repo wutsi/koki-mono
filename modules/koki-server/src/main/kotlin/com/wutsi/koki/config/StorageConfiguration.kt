@@ -1,4 +1,4 @@
-package com.wutsi.koki.platform.storage.config
+package com.wutsi.koki.config
 
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.platform.storage.koki.KokiStorageServiceBuilder
