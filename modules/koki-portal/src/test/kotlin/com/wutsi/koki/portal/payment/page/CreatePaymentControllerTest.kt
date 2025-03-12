@@ -199,7 +199,7 @@ class CreatePaymentControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `interac not supported`() {
-        disableConfig(ConfigurationName.PAYMENT_METHOD_CHECK_ENABLED)
+        disableConfig(ConfigurationName.PAYMENT_METHOD_INTERAC_ENABLED)
 
         navigateTo("/payments/create?invoice-id=${invoice.id}")
         assertElementNotPresent(".btn-payment-interac")
