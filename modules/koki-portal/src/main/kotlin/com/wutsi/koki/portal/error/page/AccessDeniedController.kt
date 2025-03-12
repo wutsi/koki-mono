@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.error.exception
+package com.wutsi.koki.portal.error.page
 
 import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController

@@ -9,48 +9,59 @@
 
 <div class="settings-container">
     <div class="settings-sidebar">
-        <div th:replace="~{__components/settings :: settings-menu('invoice')}"></div>
+        <div th:replace="~{__components/settings :: settings-menu('payment')}"></div>
     </div>
     <div class="settings-content padding">
-        <div th:replace="~{__components/settings :: settings-title('Invoice', '/settings/invoices')}"></div>
+        <div
+            th:replace="~{__components/settings :: settings-title('Configure Credit Card Payments', '/settings/payments')}"></div>
 
         <div th:replace="~{__components/layout :: error-message(${error})}"></div>
-        <form class="form" method="post" th:action="@{/settings/invoices/save}" th:object="${form}">
+
+        <form class="form" method="post" onsubmit="on_submit()"
+              th:action="@{/settings/payments/credit-card/save}"
+              th:object="${form}">
+
             <table class="table">
                 <tr>
-                    <td width="30%"><b>Start Invoice Number <span class="required">*</span></b></td>
+                    <td width="30%"><b>Payment Gateway<span class="required">*</span></b></td>
                     <td>
-                        <input required step="1" th:field="*{startNumber}" type="number"/>
-                        <div class="margin-top text-small">
-                            Be careful changing the starting invoice number.
-                            <br/>
-                            Make sure you DO NOT have any invoice having a number greater that
-                            the number you've entered here.
-                            <br/>
-                            This will lead to errors.
-                        </div>
+                        <select onchange="return koki_payments_gateway_changed()" required th:field="*{gateway}">
+                            <option value=""></option>
+                            <option value="STRIPE">Stripe</option>
+                        </select>
                     </td>
                 </tr>
-                <tr>
-                    <td><b>Payment Terms <span class="required">*</span></b></td>
+                <tr class="stripe" th:classappend="${form.gateway?.name} != 'STRIPE' ? 'hidden'">
+                    <td><b>API Key <span class="required">*</span></b></td>
                     <td>
-                        <select th:field="*{dueDays}">
-                            <option value="0">Pay Upon Reception</option>
-                            <option value="7">Payment due within 7 days</option>
-                            <option value="10">Payment due within 10 days</option>
-                            <option value="15">Payment due within 15 days</option>
-                            <option value="30">Payment due within 30 days</option>
-                            <option value="60">Payment due within 60 days</option>
-                            <option value="90">Payment due within 90 days</option>
-                        </select>
+                        <input required th:field="*{stripeApiKey}"/>
                     </td>
                 </tr>
             </table>
             <button type="submit">Save</button>
+
         </form>
     </div>
 </div>
 
+<script>
+    function on_submit() {
+        document.getElementById('#btn-submit').disabled = true;
+        return true
+    }
+
+    function koki_payments_gateway_changed() {
+        const gateway = document.getElementById('gateway').value;
+        const stripe = (gateway === 'STRIPE');
+        document.querySelectorAll('.stripe').forEach((elt) => {
+            if (stripe) {
+                elt.classList.remove('hidden');
+            } else {
+                elt.classList.add('hidden');
+            }
+        });
+    }
+</script>
 
 </body>
 </html>

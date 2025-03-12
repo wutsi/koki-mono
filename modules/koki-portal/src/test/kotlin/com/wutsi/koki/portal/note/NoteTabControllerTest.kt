@@ -38,7 +38,7 @@ class NoteTabControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/notes/tab?test-mode=1&owner-id=111&owner-type=ACCOUNT")
 
-        click("#note-$id .btn-delete")
+        click("#note-$id .btn-delete", 100)
         val alert = driver.switchTo().alert()
         alert.accept()
         driver.switchTo().parentFrame()

@@ -2,17 +2,25 @@ package com.wutsi.koki.portal.payment.page
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.InvoiceFixtures.invoice
+import com.wutsi.koki.TenantFixtures
 import com.wutsi.koki.UserFixtures
 import com.wutsi.koki.payment.dto.CreateCashPaymentRequest
 import com.wutsi.koki.payment.dto.CreateCheckPaymentRequest
 import com.wutsi.koki.payment.dto.CreateInteracPaymentRequest
 import com.wutsi.koki.payment.dto.CreatePaymentResponse
 import com.wutsi.koki.portal.common.page.PageName
+import com.wutsi.koki.tenant.dto.Configuration
+import com.wutsi.koki.tenant.dto.ConfigurationName
+import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -63,6 +71,17 @@ class CreatePaymentControllerTest : AbstractPageControllerTest() {
             eq(CreatePaymentResponse::class.java)
         )
         assertCurrentPageIs(PageName.INVOICE)
+    }
+
+    @Test
+    fun `cash not supported`() {
+        disableConfig(ConfigurationName.PAYMENT_METHOD_CASH_ENABLED)
+
+        navigateTo("/payments/create?invoice-id=${invoice.id}")
+        assertElementNotPresent(".btn-payment-cash")
+
+        navigateTo("/payments/create?invoice-id=${invoice.id}&payment-method-type=CASH")
+        assertCurrentPageIs(PageName.ERROR_PAYMENT_NOT_SUPPORTED)
     }
 
     @Test
@@ -117,6 +136,17 @@ class CreatePaymentControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun `check not supported`() {
+        disableConfig(ConfigurationName.PAYMENT_METHOD_CHECK_ENABLED)
+
+        navigateTo("/payments/create?invoice-id=${invoice.id}")
+        assertElementNotPresent(".btn-payment-check")
+
+        navigateTo("/payments/create?invoice-id=${invoice.id}&payment-method-type=CHECK")
+        assertCurrentPageIs(PageName.ERROR_PAYMENT_NOT_SUPPORTED)
+    }
+
+    @Test
     fun interac() {
         navigateTo("/payments/create?invoice-id=${invoice.id}")
 
@@ -165,5 +195,56 @@ class CreatePaymentControllerTest : AbstractPageControllerTest() {
             eq(CreatePaymentResponse::class.java)
         )
         assertCurrentPageIs(PageName.INVOICE)
+    }
+
+    @Test
+    fun `interac not supported`() {
+        disableConfig(ConfigurationName.PAYMENT_METHOD_CHECK_ENABLED)
+
+        navigateTo("/payments/create?invoice-id=${invoice.id}")
+        assertElementNotPresent(".btn-payment-interac")
+
+        navigateTo("/payments/create?invoice-id=${invoice.id}&payment-method-type=INTERAC")
+        assertCurrentPageIs(PageName.ERROR_PAYMENT_NOT_SUPPORTED)
+    }
+
+    @Test
+    fun `no payment not supported`() {
+        disableConfig(
+            listOf(
+                ConfigurationName.PAYMENT_METHOD_CASH_ENABLED,
+                ConfigurationName.PAYMENT_METHOD_CHECK_ENABLED,
+                ConfigurationName.PAYMENT_METHOD_INTERAC_ENABLED,
+            )
+        )
+
+        navigateTo("/payments/create?invoice-id=${invoice.id}")
+        assertCurrentPageIs(PageName.ERROR_PAYMENT_NOT_SUPPORTED)
+    }
+
+    private fun disableConfig(name: String) {
+        disableConfig(listOf(name))
+    }
+
+    private fun disableConfig(names: List<String>) {
+        doReturn(
+            ResponseEntity(
+                SearchConfigurationResponse(
+                    configurations = TenantFixtures.config
+                        .filter { cfg -> !names.contains(cfg.key) }
+                        .map { cfg ->
+                            Configuration(
+                                name = cfg.key,
+                                value = cfg.value
+                            )
+                        }
+                ),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchConfigurationResponse::class.java)
+            )
     }
 }

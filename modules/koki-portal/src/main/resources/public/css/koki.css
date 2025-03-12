@@ -57,6 +57,10 @@ a.entity-title {
     font-size: larger;
 }
 
+.text-x-large {
+    font-size: x-large;
+}
+
 .share-panel {
     border-radius: 0.5em;
     border: 1px solid gray;

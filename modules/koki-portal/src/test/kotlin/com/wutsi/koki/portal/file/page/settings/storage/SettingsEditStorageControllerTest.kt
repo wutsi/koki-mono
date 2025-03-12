@@ -85,7 +85,7 @@ class SettingsEditStorageControllerTest : AbstractPageControllerTest() {
         select("#s3Region", 2)
         input("#s3AccessKey", "ACC-0000")
         input("#s3SecretKey", "SEC-0000")
-        click("button[type=submit]")
+        click("button[type=submit]", 100)
 
         assertElementPresent(".alert-danger")
         assertCurrentPageIs(PageName.FILE_SETTINGS_STORAGE_EDIT)
