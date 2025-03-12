@@ -37,7 +37,7 @@ class FileTabControllerTest : AbstractPageControllerTest() {
         navigateTo("/files/tab?test-mode=true&owner-id=555&owner-type=ACCOUNT")
 
         val id = file.id
-        click("#file-$id .btn-delete")
+        click("#file-$id .btn-delete", 1000)
 
         val alert = driver.switchTo().alert()
         alert.accept()

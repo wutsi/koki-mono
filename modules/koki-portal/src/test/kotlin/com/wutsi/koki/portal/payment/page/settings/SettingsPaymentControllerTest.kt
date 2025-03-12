@@ -125,7 +125,7 @@ class SettingsPaymentControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.PAYMENT_SETTINGS_CREDIT_CARD)
         select("#gateway", 1)
         input("#stripeApiKey", "ST.123456780")
-        click("button[type=submit]")
+        click("button[type=submit]", 100)
 
         val request = argumentCaptor<SaveConfigurationRequest>()
         verify(rest).postForEntity(
@@ -151,7 +151,7 @@ class SettingsPaymentControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.PAYMENT_SETTINGS_CREDIT_CARD)
         select("#gateway", 1)
         input("#stripeApiKey", "ST.123456780")
-        click("button[type=submit]")
+        click("button[type=submit]", 100)
 
         val request = argumentCaptor<SaveConfigurationRequest>()
         verify(rest).postForEntity(
@@ -211,7 +211,7 @@ class SettingsPaymentControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.PAYMENT_SETTINGS_PAYPAL)
         input("#clientId", "CL.123456780")
         input("#secretKey", "SK.123456780")
-        click("button[type=submit]")
+        click("button[type=submit]", 100)
 
         val request = argumentCaptor<SaveConfigurationRequest>()
         verify(rest).postForEntity(
@@ -245,7 +245,7 @@ class SettingsPaymentControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.PAYMENT_SETTINGS_MOBILE)
         select("#gateway", 1)
         input("#flutterwaveSecretKey", "FL.123456780")
-        click("button[type=submit]")
+        click("button[type=submit]", 100)
 
         val request = argumentCaptor<SaveConfigurationRequest>()
         verify(rest).postForEntity(
@@ -270,7 +270,7 @@ class SettingsPaymentControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.PAYMENT_SETTINGS_MOBILE)
         select("#gateway", 1)
         input("#flutterwaveSecretKey", "FL.123456780")
-        click("button[type=submit]")
+        click("button[type=submit]", 100)
 
         val request = argumentCaptor<SaveConfigurationRequest>()
         verify(rest).postForEntity(

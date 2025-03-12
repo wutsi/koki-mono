@@ -25,7 +25,7 @@ class TaxProductTabControllerTest : AbstractPageControllerTest() {
         navigateTo("/tax-products/tab?test-mode=true&tax-id=" + TaxFixtures.tax.id)
 
         val id = TaxFixtures.taxProduct.id
-        click("#tax-product-$id .btn-delete")
+        click("#tax-product-$id .btn-delete", 100)
         val alert = driver.switchTo().alert()
         alert.accept()
         driver.switchTo().parentFrame()
@@ -39,7 +39,7 @@ class TaxProductTabControllerTest : AbstractPageControllerTest() {
         navigateTo("/tax-products/tab?test-mode=true&tax-id=" + TaxFixtures.tax.id)
 
         val id = TaxFixtures.taxProduct.id
-        click("#tax-product-$id .btn-edit")
+        click("#tax-product-$id .btn-edit", 100)
 
         Thread.sleep(1000)
         assertElementVisible("#koki-modal")

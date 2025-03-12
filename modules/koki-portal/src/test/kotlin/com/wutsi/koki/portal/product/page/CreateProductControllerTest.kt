@@ -39,7 +39,7 @@ class CreateProductControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.PRODUCT_CREATE)
 
         inputFields(1)
-        click("button[type=submit]")
+        click("button[type=submit]", 1000)
 
         val request = argumentCaptor<CreateProductRequest>()
         verify(rest).postForEntity(
@@ -81,7 +81,7 @@ class CreateProductControllerTest : AbstractPageControllerTest() {
         navigateTo("/products/create")
 
         inputFields()
-        click("button[type=submit]")
+        click("button[type=submit]", 1000)
 
         assertCurrentPageIs(PageName.PRODUCT_CREATE)
         assertElementPresent(".alert-danger")
