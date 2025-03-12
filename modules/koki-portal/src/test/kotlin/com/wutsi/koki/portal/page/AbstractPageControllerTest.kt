@@ -1083,7 +1083,7 @@ abstract class AbstractPageControllerTest {
         assertEquals(true, driver.findElement(By.cssSelector(selector)).getDomAttribute("class")?.contains(value))
     }
 
-    protected fun click(selector: String, delayMillis: Long? = null) {
+    protected fun click(selector: String, delayMillis: Long? = 1000) {
         driver.findElement(By.cssSelector(selector)).click()
         delayMillis?.let { Thread.sleep(delayMillis) }
     }

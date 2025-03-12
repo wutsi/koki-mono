@@ -25,7 +25,7 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
 
         select("#status", 3)
         select2("#assigneeId", UserFixtures.users[0].displayName)
-        click("button[type=submit]")
+        click("button[type=submit]", 1000)
 
         val request = argumentCaptor<UpdateTaxStatusRequest>()
         verify(rest).postForEntity(
@@ -47,7 +47,7 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
 
         select("#status", 3)
         select2("#assigneeId", UserFixtures.users[0].displayName)
-        click(".btn-cancel")
+        click(".btn-cancel", 1000)
 
         assertCurrentPageIs(PageName.TAX)
     }
@@ -67,7 +67,7 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
 
         select("#status", 3)
         select2("#assigneeId", UserFixtures.users[0].displayName)
-        click("button[type=submit]")
+        click("button[type=submit]", 1000)
 
         assertCurrentPageIs(PageName.TAX_STATUS)
         assertElementPresent(".alert-danger")

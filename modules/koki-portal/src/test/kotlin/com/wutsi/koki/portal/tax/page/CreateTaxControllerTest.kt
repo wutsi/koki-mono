@@ -31,7 +31,7 @@ class CreateTaxControllerTest : AbstractPageControllerTest() {
         input("#startAt", "2020\t1211")
         input("#dueAt", "2020\t1221")
         input("#description", "This is a nice description")
-        click("button[type=submit]")
+        click("button[type=submit]", 1000)
 
         SimpleDateFormat("yyyy-MM-dd")
         val request = argumentCaptor<CreateTaxRequest>()
@@ -88,7 +88,7 @@ class CreateTaxControllerTest : AbstractPageControllerTest() {
         input("#startAt", "2020\t1211")
         input("#dueAt", "2020\t1221")
         input("#description", "This is a nice description")
-        click("button[type=submit]")
+        click("button[type=submit]", 1000)
 
         assertCurrentPageIs(PageName.TAX_CREATE)
         assertElementPresent(".alert-danger")

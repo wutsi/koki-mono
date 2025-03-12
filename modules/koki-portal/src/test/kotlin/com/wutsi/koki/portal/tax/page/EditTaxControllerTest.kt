@@ -28,7 +28,7 @@ class EditTaxControllerTest : AbstractPageControllerTest() {
         input("#startAt", "2020\t1211")
         input("#dueAt", "2020\t1221")
         input("#description", "This is a nice description")
-        click("button[type=submit]")
+        click("button[type=submit]", 1000)
 
         val request = argumentCaptor<UpdateTaxRequest>()
         verify(rest).postForEntity(
@@ -57,7 +57,7 @@ class EditTaxControllerTest : AbstractPageControllerTest() {
         input("#startAt", "2020\t1211")
         input("#dueAt", "2020\t1221")
         input("#description", "This is a nice description")
-        click(".btn-cancel")
+        click(".btn-cancel", 1000)
 
         assertCurrentPageIs(PageName.TAX_LIST)
     }
@@ -81,7 +81,7 @@ class EditTaxControllerTest : AbstractPageControllerTest() {
         input("#startAt", "2020\t1211")
         input("#dueAt", "2020\t1221")
         input("#description", "This is a nice description")
-        click("button[type=submit]")
+        click("button[type=submit]", 1000)
 
         assertCurrentPageIs(PageName.TAX_EDIT)
         assertElementPresent(".alert-danger")

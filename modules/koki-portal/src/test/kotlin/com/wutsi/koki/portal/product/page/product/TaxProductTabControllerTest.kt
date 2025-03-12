@@ -39,7 +39,7 @@ class TaxProductTabControllerTest : AbstractPageControllerTest() {
         navigateTo("/tax-products/tab?test-mode=true&tax-id=" + TaxFixtures.tax.id)
 
         val id = TaxFixtures.taxProduct.id
-        click("#tax-product-$id .btn-edit", 100)
+        click("#tax-product-$id .btn-edit", 1000)
 
         Thread.sleep(1000)
         assertElementVisible("#koki-modal")

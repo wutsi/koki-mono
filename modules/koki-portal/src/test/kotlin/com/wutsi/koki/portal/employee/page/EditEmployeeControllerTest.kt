@@ -27,7 +27,7 @@ class EditEmployeeControllerTest : AbstractPageControllerTest() {
         select("#status", 2)
         scrollToBottom()
         input("#hourlyWage", "60")
-        click("button[type=submit]")
+        click("button[type=submit]", 1000)
 
         val request = argumentCaptor<UpdateEmployeeRequest>()
         verify(rest).postForEntity(
@@ -77,7 +77,7 @@ class EditEmployeeControllerTest : AbstractPageControllerTest() {
         select("#status", 2)
         scrollToBottom()
         input("#hourlyWage", "60")
-        click("button[type=submit]")
+        click("button[type=submit]", 1000)
 
         assertCurrentPageIs(PageName.EMPLOYEE_EDIT)
         assertElementPresent(".alert-danger")
