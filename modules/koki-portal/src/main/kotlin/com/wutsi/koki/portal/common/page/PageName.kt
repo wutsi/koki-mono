@@ -32,6 +32,7 @@ object PageName {
     const val ERROR = "page.error"
     const val ERROR_SUSPENDED = "page.error.suspended"
     const val ERROR_ACCESS_DENIED = "page.error.access-denied"
+    const val ERROR_PAYMENT_NOT_SUPPORTED = "page.error.payment.not-supported"
 
     const val FILE_SETTINGS = "page.settings.file"
     const val FILE_SETTINGS_STORAGE = "page.settings.file.storage"
@@ -50,6 +51,10 @@ object PageName {
     const val PAYMENT = "page.payment"
     const val PAYMENT_CREATE = "page.payment.create"
     const val PAYMENT_LIST = "page.payment.list"
+    const val PAYMENT_SETTINGS = "page.payment.settings"
+    const val PAYMENT_SETTINGS_CREDIT_CARD = "page.payment.settings.credit_card"
+    const val PAYMENT_SETTINGS_MOBILE = "page.payment.settings.mobile"
+    const val PAYMENT_SETTINGS_PAYPAL = "page.payment.settings.paypal"
 
     const val PRODUCT = "page.product"
     const val PRODUCT_CREATE = "page.product.create"

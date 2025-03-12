@@ -23,7 +23,7 @@ class InitTenantEndpointTest : AuthorizationAwareEndpointTest() {
 
         val names = dao.findByTenantId(1).map { config -> config.name }
 
-        assertEquals(9, names.size)
+        assertEquals(11, names.size)
         assertTrue(names.contains(ConfigurationName.EMAIL_DECORATOR))
         assertTrue(names.contains(ConfigurationName.SMTP_TYPE))
 
@@ -36,5 +36,8 @@ class InitTenantEndpointTest : AuthorizationAwareEndpointTest() {
         assertTrue(names.contains(ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED))
         assertTrue(names.contains(ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT))
         assertTrue(names.contains(ConfigurationName.INVOICE_EMAIL_OPENED_BODY))
+
+        assertTrue(names.contains(ConfigurationName.PAYMENT_METHOD_CASH_ENABLED))
+        assertTrue(names.contains(ConfigurationName.PAYMENT_METHOD_CHECK_ENABLED))
     }
 }

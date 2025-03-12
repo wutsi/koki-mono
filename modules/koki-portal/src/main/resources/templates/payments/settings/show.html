@@ -1,0 +1,229 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="settings-container">
+    <div class="settings-sidebar">
+        <div th:replace="~{__components/settings :: settings-menu('payment')}"></div>
+    </div>
+    <div class="settings-content padding">
+        <div
+            th:replace="~{__components/settings :: settings-title('Payment', '/settings')}"></div>
+
+        <table class="table table-striped border-light">
+            <tr>
+                <td colspan="4">
+                    <h4>Payment Methods</h4>
+                </td>
+            </tr>
+
+            <!-- CASH -->
+            <tr>
+                <td class="text-x-large" width="1">
+                    <div th:replace="~{__components/payment :: payment-method-icon('CASH')}"></div>
+                </td>
+                <td class="padding-right">
+                    <h5>Cash</h5>
+                    <div>
+                        Accept cash payments
+                    </div>
+                </td>
+                <td align="right">
+                    <span class="badge text-bg-success" th:if="${form.cash}">Enabled</span>
+                    <span class="badge text-bg-danger" th:if="!${form.cash}">Disabled</span>
+                </td>
+                <td align="right">
+                    <a class="btn btn-sm btn-primary btn-cash-enable"
+                       href="/settings/payments/enable?status=true&type=CASH"
+                       th:if="!${form.cash}">
+                        Enable
+                    </a>
+                    <a class="btn btn-sm btn-danger btn-cash-disable"
+                       href="/settings/payments/enable?status=false&type=CASH"
+                       th:if="${form.cash}">
+                        Disable
+                    </a>
+                </td>
+            </tr>
+
+            <!-- CHECK -->
+            <tr>
+                <td class="text-x-large" width="1">
+                    <div th:replace="~{__components/payment :: payment-method-icon('CHECK')}"></div>
+                </td>
+                <td class="padding-right">
+                    <h5>Check</h5>
+                    <div>
+                        Accept payments from checks
+                    </div>
+                </td>
+                <td align="right">
+                    <span class="badge text-bg-success" th:if="${form.check}">Enabled</span>
+                    <span class="badge text-bg-danger" th:if="!${form.check}">Disabled</span>
+                </td>
+                <td align="right">
+                    <a class="btn btn-sm btn-primary btn-check-enable"
+                       href="/settings/payments/enable?status=true&type=CHECK"
+                       th:if="!${form.check}">
+                        Enable
+                    </a>
+                    <a class="btn btn-sm btn-danger btn-check-disable"
+                       href="/settings/payments/enable?status=false&type=CHECK"
+                       th:if="${form.check}">
+                        Disable
+                    </a>
+                </td>
+            </tr>
+
+            <!-- INTERAC -->
+            <tr>
+                <td class="text-x-large" width="1">
+                    <div th:replace="~{__components/payment :: payment-method-icon('INTERAC')}"></div>
+                </td>
+                <td class="padding-right">
+                    <h5>Interact</h5>
+                    <div>
+                        Accept Interac payments.
+                    </div>
+                </td>
+                <td align="right">
+                    <span class="badge text-bg-success" th:if="${form.interac}">Enabled</span>
+                    <span class="badge text-bg-danger" th:if="!${form.interac}">Disabled</span>
+                </td>
+                <td align="right">
+                    <a class="btn btn-sm btn-primary btn-interac-enable"
+                       href="/settings/payments/enable?status=true&type=INTERAC"
+                       th:if="!${form.interac}">
+                        Enable
+                    </a>
+                    <a class="btn btn-sm btn-danger btn-interac-disable"
+                       href="/settings/payments/enable?status=false&type=INTERAC"
+                       th:if="${form.interac}">
+                        Disable
+                    </a>
+                </td>
+            </tr>
+
+            <!-- CREDIT CARD -->
+            <tr>
+                <td class="text-x-large" width="1">
+                    <div th:replace="~{__components/payment :: payment-method-icon('CREDIT_CARD')}"></div>
+                </td>
+                <td class="padding-right">
+                    <h5>Credit Card</h5>
+                    <div>
+                        <div>
+                            Accept credit card payments
+                        </div>
+                        <div th:if="${form.creditCard} AND ${form.creditCardGateway}">
+                            <img height="24" src="/image/payment/stripe.png"
+                                 th:if="${form.creditCardGateway.name == 'STRIPE'}"/>
+                        </div>
+                    </div>
+                </td>
+                <td align="right">
+                    <span class="badge text-bg-success" th:if="${form.creditCard}">Enabled</span>
+                    <span class="badge text-bg-danger" th:if="!${form.creditCard}">Disabled</span>
+                </td>
+                <td align="right">
+                    <a class="btn btn-sm btn-light btn-credit-card-configure"
+                       href="/settings/payments/credit-card"
+                       th:if="${form.creditCard}">
+                        Configure
+                    </a>
+                    <a class="btn btn-sm btn-primary btn-credit-card-enable"
+                       href="/settings/payments/credit-card"
+                       th:if="!${form.creditCard}">
+                        Enable
+                    </a>
+                    <a class="btn btn-sm btn-danger btn-credit-card-disable"
+                       href="/settings/payments/enable?status=false&type=CREDIT_CARD"
+                       th:if="${form.creditCard}">
+                        Disable
+                    </a>
+                </td>
+            </tr>
+
+            <!-- PAYPAL -->
+            <tr>
+                <td class="text-x-large" width="1">
+                    <div th:replace="~{__components/payment :: payment-method-icon('PAYPAL')}"></div>
+                </td>
+                <td class="padding-right">
+                    <h5>PayPal</h5>
+                    <div>
+                        Accept PayPal payments
+                    </div>
+                </td>
+                <td align="right">
+                    <span class="badge text-bg-success" th:if="${form.paypal}">Enabled</span>
+                    <span class="badge text-bg-danger" th:if="!${form.paypal}">Disabled</span>
+                </td>
+                <td align="right">
+                    <a class="btn btn-sm btn-light btn-paypal-configure"
+                       href="/settings/payments/paypal"
+                       th:if="${form.paypal}">
+                        Configure
+                    </a>
+                    <a class="btn btn-sm btn-primary btn-paypal-enable"
+                       href="/settings/payments/paypal"
+                       th:if="!${form.paypal}">
+                        Enable
+                    </a>
+                    <a class="btn btn-sm btn-danger btn-paypal-disable"
+                       href="/settings/payments/enable?status=false&type=PAYPAL"
+                       th:if="${form.paypal}">
+                        Disable
+                    </a>
+                </td>
+            </tr>
+
+            <!-- MOBILE -->
+            <tr>
+                <td class="text-x-large" width="1">
+                    <div th:replace="~{__components/payment :: payment-method-icon('MOBILE')}"></div>
+                </td>
+                <td class="padding-right">
+                    <h5>Mobile</h4>
+                    <div>
+                        Accept mobile payments
+                        <div th:if="${form.mobile} AND ${form.mobileGateway}">
+                            <img height="24" src="/image/payment/flutterwave.png"
+                                 th:if="${form.mobileGateway.name == 'FLUTTERWAVE'}"/>
+                        </div>
+                    </div>
+                </td>
+                <td align="right">
+                    <span class="badge text-bg-success" th:if="${form.mobile}">Enabled</span>
+                    <span class="badge text-bg-danger" th:if="!${form.mobile}">Disabled</span>
+                </td>
+                <td align="right">
+                    <a class="btn btn-sm btn-light btn-mobile-configure"
+                       href="/settings/payments/mobile"
+                       th:if="${form.mobile}">
+                        Configure
+                    </a>
+                    <a class="btn btn-sm btn-primary btn-mobile-enable"
+                       href="/settings/payments/mobile"
+                       th:if="!${form.mobile}">
+                        Enable
+                    </a>
+                    <a class="btn btn-sm btn-danger btn-mobile-disable"
+                       href="/settings/payments/enable?status=false&type=MOBILE"
+                       th:if="${form.mobile}">
+                        Disable
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
+</body>
+</html>

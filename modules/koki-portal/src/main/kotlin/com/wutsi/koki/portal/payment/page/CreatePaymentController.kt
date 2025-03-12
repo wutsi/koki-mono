@@ -7,7 +7,9 @@ import com.wutsi.koki.portal.invoice.service.InvoiceService
 import com.wutsi.koki.portal.payment.form.PaymentForm
 import com.wutsi.koki.portal.payment.service.PaymentService
 import com.wutsi.koki.portal.security.RequiresPermission
+import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import com.wutsi.koki.portal.user.service.UserService
+import com.wutsi.koki.tenant.dto.ConfigurationName
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -23,6 +25,7 @@ class CreatePaymentController(
     private val invoiceService: InvoiceService,
     private val userService: UserService,
     private val paymentService: PaymentService,
+    private val configurationService: ConfigurationService,
 ) : AbstractPaymentController() {
     @GetMapping("/payments/create")
     fun create(
@@ -39,9 +42,14 @@ class CreatePaymentController(
             )
         )
 
+        val config = configurationService.configurations(keyword = "payment.")
         if (paymentMethodType == null) {
-            return selectPaymentMethod(invoiceId, model)
+            return selectPaymentMethod(invoiceId, model, config)
         } else {
+            if (paymentMethod(paymentMethodType, config) == null) {
+                return "redirect:/error/payment-not-supported?payment-method-type=$paymentMethodType"
+            }
+
             val invoice = invoiceService.invoice(invoiceId, fullGraph = false)
             val form = PaymentForm(
                 invoiceId = invoiceId,
@@ -65,16 +73,35 @@ class CreatePaymentController(
         }
     }
 
-    private fun selectPaymentMethod(invoiceId: Long, model: Model): String {
+    private fun selectPaymentMethod(invoiceId: Long, model: Model, config: Map<String, String>): String {
         val paymentMethodTypes = listOf(
-            PaymentMethodType.CASH,
-            PaymentMethodType.CHECK,
-            PaymentMethodType.INTERAC,
-        )
+            paymentMethod(PaymentMethodType.CASH, config),
+            paymentMethod(PaymentMethodType.CHECK, config),
+            paymentMethod(PaymentMethodType.INTERAC, config),
+        ).filterNotNull()
+        if (paymentMethodTypes.isEmpty()) {
+            return "redirect:/error/payment-not-supported"
+        }
         model.addAttribute("paymentMethodTypes", paymentMethodTypes)
 
         model.addAttribute("invoiceId", invoiceId)
         return "payments/create-payment-method"
+    }
+
+    private fun paymentMethod(type: PaymentMethodType, config: Map<String, String>): PaymentMethodType? {
+        val name = when (type) {
+            PaymentMethodType.CASH -> ConfigurationName.PAYMENT_METHOD_CASH_ENABLED
+            PaymentMethodType.CHECK -> ConfigurationName.PAYMENT_METHOD_CHECK_ENABLED
+            PaymentMethodType.INTERAC -> ConfigurationName.PAYMENT_METHOD_INTERAC_ENABLED
+            else -> null
+        }
+
+        val enabled = name?.let { config[name] }
+        return if (enabled == null) {
+            null
+        } else {
+            type
+        }
     }
 
     private fun create(
