@@ -38,10 +38,10 @@ class TenantPaymentInitializerTest {
         initializer.init(tenantId)
 
         val request = argumentCaptor<SaveConfigurationRequest>()
-        verify(configurationService, times(6)).save(request.capture(), eq(tenantId))
+        verify(configurationService, times(2)).save(request.capture(), eq(tenantId))
 
-        assertEquals("1", request.allValues[3].values[ConfigurationName.PAYMENT_METHOD_CASH_ENABLED])
-        assertEquals("1", request.allValues[0].values[ConfigurationName.PAYMENT_METHOD_CHECK_ENABLED])
+        assertEquals("1", request.allValues[0].values[ConfigurationName.PAYMENT_METHOD_CASH_ENABLED])
+        assertEquals("1", request.allValues[1].values[ConfigurationName.PAYMENT_METHOD_CHECK_ENABLED])
     }
 
     @Test
