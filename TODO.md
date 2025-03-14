@@ -83,6 +83,7 @@
 ## Invoice
 
 - [] Invoice Widget
+- [] Add locale to invoice
 - [x] Update amount due on successfull payment
 - [x] Download invoices
 - [x] Send invoice manually via email
@@ -120,10 +121,12 @@
 
 ## Payment
 
-- [] Capture online payments:
-    - [] Paypal
-    - [] Stripe
-    - [] Flutterwave
+- [] Capture online payments Stripe
+- [] Settings: Validate Stripe configuration
+- [] Capture online payments Paypal
+- [] Settings: Validate Paypal configuration
+- [] Capture online payments Flutterwave
+- [] Settings: Validate Flutterwave configuration
 - [x] Settings: Configure the supported payment method
     - [x] Cash
     - [x] Check
@@ -142,6 +145,7 @@
 - [] Integrate Offer API
 - [] Add attributes for Digital service
 - [] Add attributes for Physical service
+- [] Add Images to product
 - [x] Set price on creation
 - [x] Product Categories for services
 - [x] Link with categories

@@ -5,6 +5,8 @@ import com.wutsi.koki.payment.dto.CreateCheckPaymentRequest
 import com.wutsi.koki.payment.dto.CreateInteracPaymentRequest
 import com.wutsi.koki.payment.dto.CreatePaymentResponse
 import com.wutsi.koki.payment.dto.GetTransactionResponse
+import com.wutsi.koki.payment.dto.PrepareCheckoutRequest
+import com.wutsi.koki.payment.dto.PrepareCheckoutResponse
 import com.wutsi.koki.payment.dto.SearchTransactionResponse
 import com.wutsi.koki.payment.dto.TransactionStatus
 import com.wutsi.koki.payment.dto.TransactionType
@@ -36,8 +38,16 @@ class KokiPayments(
         return rest.postForEntity(url, request, CreatePaymentResponse::class.java).body
     }
 
-    fun transaction(id: String): GetTransactionResponse {
-        val url = urlBuilder.build("$TRANSACTION_PATH_PREFIX/$id")
+    fun checkout(request: PrepareCheckoutRequest): PrepareCheckoutResponse {
+        val url = urlBuilder.build("$PAYMENT_PATH_PREFIX/checkout")
+        return rest.postForEntity(url, request, PrepareCheckoutResponse::class.java).body
+    }
+
+    fun transaction(id: String, sync: Boolean? = null): GetTransactionResponse {
+        val url = urlBuilder.build(
+            path = "$TRANSACTION_PATH_PREFIX/$id",
+            parameters = mapOf("sync" to sync)
+        )
         return rest.getForEntity(url, GetTransactionResponse::class.java).body
     }
 

@@ -24,8 +24,6 @@ class TenantMapper {
         iconUrl = entity.iconUrl?.ifEmpty { null },
         portalUrl = entity.portalUrl,
         websiteUrl = entity.websiteUrl,
-        moduleIds = entity.modules.mapNotNull { module ->
-            module.id
-        },
+        moduleIds = entity.modules.map { module -> module.id },
     )
 }

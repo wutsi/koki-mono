@@ -4,6 +4,8 @@ import com.wutsi.koki.payment.dto.CreateCashPaymentRequest
 import com.wutsi.koki.payment.dto.CreateCheckPaymentRequest
 import com.wutsi.koki.payment.dto.CreateInteracPaymentRequest
 import com.wutsi.koki.payment.dto.CreatePaymentResponse
+import com.wutsi.koki.payment.dto.PrepareCheckoutRequest
+import com.wutsi.koki.payment.dto.PrepareCheckoutResponse
 import com.wutsi.koki.payment.dto.event.TransactionCompletedEvent
 import com.wutsi.koki.payment.server.domain.TransactionEntity
 import com.wutsi.koki.payment.server.service.PaymentService
@@ -57,6 +59,19 @@ class PaymentEndpoints(
         return CreatePaymentResponse(
             transactionId = tx.id!!,
             status = tx.status,
+        )
+    }
+
+    @PostMapping("/checkout")
+    fun checkout(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @Valid @RequestBody request: PrepareCheckoutRequest,
+    ): PrepareCheckoutResponse {
+        val tx = service.checkout(request, tenantId)
+        return PrepareCheckoutResponse(
+            transactionId = tx.id!!,
+            status = tx.status,
+            redirectUrl = tx.checkoutUrl!!,
         )
     }
 

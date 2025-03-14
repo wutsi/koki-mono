@@ -45,15 +45,15 @@
         />
     </a>
 
-    <ul class="navbar-nav ms-auto">
+    <ul class="navbar-nav ms-auto" th:if="${user}">
         <li>
             <button aria-expanded="false" class="nav-link user btn btn-primary dropdown-toggle"
                     data-bs-toggle="dropdown"
-                    id="navbarDropdown" th:if="${user}"
+                    id="navbarDropdown"
                     type="button">
                 <i class="fa-solid fa-bars"></i>
             </button>
-            <ul class="dropdown-menu" th:if="${user}">
+            <ul class="dropdown-menu">
                 <li>
                     <div class="dropdown-item">
                         <div class="user-hi">
@@ -95,8 +95,11 @@
     </div>
 </nav>
 
-<div class="alert alert-danger margin" id="alert-error" th:fragment="error-message(error)" th:if="${error}"
-     th:text="${error}">ERROR
+<div class="alert alert-danger margin" id="alert-error"
+     th:fragment="error-message(error)"
+     th:if="${error}"
+     th:text="${error}">
+    ERROR
 </div>
 
 <div th:fragment="import-response(response)" th:if="${response}">

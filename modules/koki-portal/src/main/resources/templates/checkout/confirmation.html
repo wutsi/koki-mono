@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 margin-top-4x">&nbsp;</div>
+    </div>
+
+    <div class="row">
+        <div th:class="${tx.invoice.paid} ? 'col-8 offset-2' : 'col-12'">
+
+            <div class="widget margin-top-4x">
+                <div class="widget-body">
+                    <div th:replace="~{__components/checkout :: checkout-header(${tx.invoice})}"></div>
+
+                    <div class="margin-top-2x" th:if="${tx.successful}">
+                        <h2>
+                            <i class="fa-solid fa-circle-check success"></i>
+                            Thank you for your payment!
+                        </h2>
+                        <div>
+                            <p th:if="${notificationSent}">
+                                Your invoice has been sent to
+                                <b th:text="${tx.invoice.customer.email}">xxx@xxx</b>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="margin-top-2x" th:if="${tx.failed}">
+                        <h2>
+                            <i class="fa-solid fa-triangle-exclamation error"></i>
+                            Payment error
+                        </h2>
+                        <div class="alert alert-danger margin">
+                            An error has occurred while processing the payment. Please try again.
+                        </div>
+                    </div>
+                    <div class="margin-top-2x" th:if="${tx.pending}">
+                        <h2 class="text-center">The transaction is being processed</h2>
+                    </div>
+
+                    <div class="margin-top flex flex-space-between margin-top-2x">
+                        <div th:style="!${tx.invoice.paid} ? 'width: 70%' : 'width:100%'">
+                            <div th:replace="~{__components/checkout :: checkout-invoice(${tx.invoice})}"></div>
+                        </div>
+                        <div style="width:25%" th:if="!${tx.invoice.paid}">
+                            <div
+                                th:replace="~{__components/checkout :: checkout-buttons(${tx.invoice}, ${paymentMethodTypes})}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

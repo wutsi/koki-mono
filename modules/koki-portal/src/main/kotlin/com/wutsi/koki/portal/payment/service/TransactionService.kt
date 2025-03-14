@@ -19,10 +19,11 @@ class TransactionService(
 ) {
     fun transaction(
         id: String,
+        sync: Boolean? = null,
         fullGraph: Boolean = true,
     ): TransactionModel {
-        val tx = koki.transaction(id).transaction
-        val invoice = invoiceService.invoice(id = tx.invoiceId, fullGraph = false)
+        val tx = koki.transaction(id, sync).transaction
+        val invoice = invoiceService.invoice(id = tx.invoiceId, fullGraph = true)
 
         val userIds = listOf(tx.createdById, tx.paymentMethod.cash?.collectedById).filterNotNull().distinct()
         val users = if (userIds.isEmpty() || !fullGraph) {

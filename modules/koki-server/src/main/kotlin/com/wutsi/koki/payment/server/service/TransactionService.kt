@@ -7,7 +7,10 @@ import com.wutsi.koki.payment.dto.TransactionStatus
 import com.wutsi.koki.payment.dto.TransactionType
 import com.wutsi.koki.payment.server.dao.TransactionRepository
 import com.wutsi.koki.payment.server.domain.TransactionEntity
+import com.wutsi.koki.platform.logger.KVLogger
 import jakarta.persistence.EntityManager
+import jakarta.transaction.Transactional
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.Date
 import kotlin.jvm.optionals.getOrNull
@@ -15,8 +18,14 @@ import kotlin.jvm.optionals.getOrNull
 @Service
 class TransactionService(
     private val dao: TransactionRepository,
-    private val em: EntityManager
+    private val em: EntityManager,
+    private val paymentGatewayServiceProvider: PaymentGatewayServiceProvider,
+    private val logger: KVLogger,
 ) {
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(TransactionService::class.java)
+    }
+
     fun get(id: String, tenantId: Long): TransactionEntity {
         val tx = dao.findById(id).getOrNull()
         if (tx == null || tx?.tenantId != tenantId) {
@@ -27,6 +36,21 @@ class TransactionService(
             )
         }
         return tx
+    }
+
+    @Transactional
+    fun sync(tx: TransactionEntity): TransactionEntity {
+        try {
+            val gatewayService = paymentGatewayServiceProvider.get(tx.gateway)
+            gatewayService.sync(tx)
+        } catch (ex: PaymentGatewayException) {
+            LOGGER.warn("Failure", ex)
+
+            tx.status = TransactionStatus.FAILED
+            tx.errorCode = ex.errorCode
+            tx.supplierErrorCode = ex.supplierErrorCode
+        }
+        return dao.save(tx)
     }
 
     fun search(

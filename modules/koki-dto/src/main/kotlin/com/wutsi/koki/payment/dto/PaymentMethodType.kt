@@ -1,12 +1,12 @@
 package com.wutsi.koki.payment.dto
 
-enum class PaymentMethodType {
-    UNKNOWN,
-    CASH,
-    CHECK,
-    INTERAC,
-    CREDIT_CARD,
-    MOBILE,
-    BANK,
-    PAYPAL,
+enum class PaymentMethodType(val online: Boolean) {
+    UNKNOWN(false),
+    CASH(false),
+    CHECK(false),
+    INTERAC(false),
+    CREDIT_CARD(true),
+    MOBILE(true),
+    BANK(false),
+    PAYPAL(true),
 }

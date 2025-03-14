@@ -18,10 +18,21 @@ data class TransactionModel(
     val gateway: PaymentGateway = PaymentGateway.UNKNOWN,
     val amount: MoneyModel = MoneyModel(),
     val errorCode: String? = null,
+    val supplierTransactionId: String? = null,
+    val supplierStatus: String? = null,
     val supplierErrorCode: String? = null,
     val description: String? = null,
     val createdAt: Date = Date(),
     val createdAtText: String = "",
     val paymentMethod: PaymentMethodModel = PaymentMethodModel(),
     val createdBy: UserModel? = null,
-)
+) {
+    val successful: Boolean
+        get() = status == TransactionStatus.SUCCESSFUL
+
+    val failed: Boolean
+        get() = status == TransactionStatus.FAILED
+
+    val pending: Boolean
+        get() = status == TransactionStatus.PENDING
+}

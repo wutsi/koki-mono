@@ -19,7 +19,9 @@
 </div>
 
 <tr class="payment" th:fragment="columns(payment, showInvoice)" th:remove="tag">
-    <td th:text="${payment.createdAtText}">DATE</td>
+    <td>
+        <a th:href="'/payments/' + ${payment.id}" th:text="${payment.createdAtText}">DATE</a>
+    </td>
     <td th:if="${showInvoice}">
         <a target="_blank"
            th:href="'/invoices/' + ${payment.invoice.id}"

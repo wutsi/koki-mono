@@ -13,6 +13,8 @@ data class Transaction(
     val amount: Double = 0.0,
     val currency: String = "",
     val errorCode: String? = null,
+    val supplierTransactionId: String? = null,
+    val supplierStatus: String? = null,
     val supplierErrorCode: String? = null,
     val description: String? = null,
     val createdAt: Date = Date(),

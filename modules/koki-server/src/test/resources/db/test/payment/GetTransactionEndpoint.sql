@@ -1,12 +1,17 @@
-INSERT INTO T_TRANSACTION(id, tenant_fk, type, payment_method_type, status, invoice_fk, amount, currency, gateway, error_code, supplier_error_code, description)
-    VALUES (110, 1, 1, 1, 3, 1111, 500, 'CAD', 0, '1111', 'insufisant-funds', 'cash'),
-           (119, 1, 1, 1, 3, 1111, 500, 'CAD', 0, '1111', 'insufisant-funds', 'no-payment-method-details'),
+INSERT INTO T_TRANSACTION(id, tenant_fk, type, payment_method_type, status, invoice_fk, amount, currency, gateway, error_code, supplier_error_code, supplier_transaction_id, description)
+    VALUES (110, 1, 1, 1, 3, 1111, 500, 'CAD', 0, '1111', 'insufisant-funds', null, 'cash'),
+           (119, 1, 1, 1, 3, 1111, 500, 'CAD', 0, '1111', 'insufisant-funds', null, 'no-payment-method-details'),
 
-           (120, 1, 1, 2, 2, 1111, 500, 'CAD', 0, null, null, 'check'),
-           (129, 1, 1, 2, 2, 1111, 500, 'CAD', 0, null, null, 'check'),
+           (120, 1, 1, 2, 2, 1111, 500, 'CAD', 0, null, null, null, 'check'),
+           (129, 1, 1, 2, 2, 1111, 500, 'CAD', 0, null, null, null, 'check'),
 
-           (130, 1, 3, 3, 1, 1111, 500, 'CAD', 0, null, null, 'interact'),
-           (139, 1, 1, 3, 1, 1111, 500, 'CAD', 0, null, null, null)
+           (130, 1, 3, 3, 1, 1111, 500, 'CAD', 0, null, null, null, 'interact'),
+           (139, 1, 1, 3, 1, 1111, 500, 'CAD', 0, null, null, null, null),
+
+           (140, 1, 1, 4, 1, 1111, 500, 'CAD', 1, null, null, 'STRIPE.140', 'credit-card PENDING'),
+           (141, 1, 1, 4, 1, 1111, 500, 'CAD', 1, null, null, 'STRIPE.141', 'credit-card PENDING'),
+           (142, 1, 1, 4, 2, 1111, 500, 'CAD', 1, null, null, 'STRIPE.142', 'credit-card SUCCESSFUL'),
+           (143, 1, 1, 4, 3, 1111, 500, 'CAD', 1, null, null, 'STRIPE.143', 'credit-card FAILED')
 ;
 
 INSERT INTO T_PAYMENT_METHOD_CASH(id, tenant_fk, transaction_fk, collected_by_fk, collected_at) VALUES

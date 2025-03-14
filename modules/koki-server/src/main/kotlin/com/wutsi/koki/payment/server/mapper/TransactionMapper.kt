@@ -48,6 +48,8 @@ class TransactionMapper {
             errorCode = entity.errorCode,
             description = entity.description,
             gateway = entity.gateway,
+            supplierTransactionId = entity.supplierTransactionId,
+            supplierStatus = entity.supplierStatus,
             supplierErrorCode = entity.supplierErrorCode,
             paymentMethod = PaymentMethod(
                 cash = cash?.let { toPaymentMethodCash(cash) },

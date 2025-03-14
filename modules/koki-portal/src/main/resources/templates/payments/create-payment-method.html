@@ -29,7 +29,7 @@
                            th:href="'/payments/create?payment-method-type=' + ${type.name} + '&invoice-id=' + ${invoiceId}">
 
                             <div class="border margin-top padding flex">
-                                <div class="margin-right text-larger">
+                                <div class="text-larger" style="width: 50px">
                                     <div
                                         th:replace="~{__components/payment :: payment-method-icon(${type.name})}"></div>
                                 </div>

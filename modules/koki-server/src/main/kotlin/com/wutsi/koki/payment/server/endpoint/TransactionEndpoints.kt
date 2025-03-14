@@ -5,9 +5,12 @@ import com.wutsi.koki.payment.dto.PaymentMethodType
 import com.wutsi.koki.payment.dto.SearchTransactionResponse
 import com.wutsi.koki.payment.dto.TransactionStatus
 import com.wutsi.koki.payment.dto.TransactionType
+import com.wutsi.koki.payment.dto.event.TransactionCompletedEvent
+import com.wutsi.koki.payment.server.domain.TransactionEntity
 import com.wutsi.koki.payment.server.mapper.TransactionMapper
 import com.wutsi.koki.payment.server.service.PaymentService
 import com.wutsi.koki.payment.server.service.TransactionService
+import com.wutsi.koki.platform.mq.Publisher
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -23,28 +26,43 @@ class TransactionEndpoints(
     private val service: TransactionService,
     private val paymentService: PaymentService,
     private val mapper: TransactionMapper,
+    private val publisher: Publisher
 ) {
     @GetMapping("/{id}")
     fun get(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-        @PathVariable id: String
+        @PathVariable id: String,
+        @RequestParam(required = false) sync: Boolean = false
     ): GetTransactionResponse {
         val tx = service.get(id, tenantId)
+        val status = tx.status
+        if (sync && tx.status == TransactionStatus.PENDING) {
+            val tx2 = service.sync(tx)
+            if (tx2.status != status) {
+                publish(tx2)
+            }
+            return toGetTransactionResponse(tx2)
+        } else {
+            return toGetTransactionResponse(tx)
+        }
+    }
+
+    private fun toGetTransactionResponse(tx: TransactionEntity): GetTransactionResponse {
         return GetTransactionResponse(
             transaction = mapper.toTransaction(
                 entity = tx,
                 cash = if (tx.paymentMethodType == PaymentMethodType.CASH) {
-                    paymentService.getCashByTransactionId(id)
+                    paymentService.getCashByTransactionId(tx.id!!)
                 } else {
                     null
                 },
                 check = if (tx.paymentMethodType == PaymentMethodType.CHECK) {
-                    paymentService.getCheckByTransactionId(id)
+                    paymentService.getCheckByTransactionId(tx.id!!)
                 } else {
                     null
                 },
                 interact = if (tx.paymentMethodType == PaymentMethodType.INTERAC) {
-                    paymentService.getInteracByTransactionId(id)
+                    paymentService.getInteracByTransactionId(tx.id!!)
                 } else {
                     null
                 },
@@ -84,6 +102,16 @@ class TransactionEndpoints(
         )
         return SearchTransactionResponse(
             transactions = transactions.map { tx -> mapper.toTransactionSummary(tx) }
+        )
+    }
+
+    private fun publish(tx: TransactionEntity) {
+        publisher.publish(
+            TransactionCompletedEvent(
+                transactionId = tx.id!!,
+                tenantId = tx.tenantId,
+                status = tx.status,
+            )
         )
     }
 }

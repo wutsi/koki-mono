@@ -11,8 +11,11 @@ CREATE TABLE T_TRANSACTION(
   gateway                 INT NOT NULL DEFAULT 0,
   amount                  DECIMAL(10, 2) NOT NULL,
   currency                VARCHAR(3) NOT NULL,
-  error_code              VARCHAR(30),
-  supplier_error_code     VARCHAR(30),
+  checkout_url            TEXT,
+  supplier_transaction_id VARCHAR(36),
+  supplier_status         VARCHAR(30),
+  error_code              VARCHAR(255),
+  supplier_error_code     VARCHAR(255),
   description             TEXT,
 
   created_at              DATETIME DEFAULT NOW(),

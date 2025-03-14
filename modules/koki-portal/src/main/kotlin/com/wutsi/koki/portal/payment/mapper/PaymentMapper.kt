@@ -35,6 +35,8 @@ class PaymentMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() 
             description = entity.description,
             gateway = entity.gateway,
             supplierErrorCode = entity.supplierErrorCode,
+            supplierTransactionId = entity.supplierTransactionId,
+            supplierStatus = entity.supplierStatus,
             paymentMethod = toPaymentMethodModel(
                 entity = entity.paymentMethod,
                 users = users

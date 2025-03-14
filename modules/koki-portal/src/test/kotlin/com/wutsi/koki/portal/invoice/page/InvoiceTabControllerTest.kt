@@ -165,6 +165,7 @@ class InvoiceTabControllerTest : AbstractPageControllerTest() {
             assertEquals(TaxFixtures.taxProducts[i].unitPriceId, item.unitPriceId, "item#$i")
             assertEquals(TaxFixtures.taxProducts[i].unitPrice, item.unitPrice, "item#$i")
             assertEquals(TaxFixtures.taxProducts[i].description, item.description, "item#$i")
+            assertEquals(TaxFixtures.taxProducts[i].quantity, item.quantity, "item#$i")
 
             i++
         }

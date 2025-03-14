@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="checkout-header(invoice)">
+    <div class="text-small">
+        Invoice #<b th:text="${invoice.number}">0000</b>
+    </div>
+    <div th:if="!${invoice.paid}">
+        <div>Pay</div>
+        <h1 th:text="${invoice.amountDue}">$$$</h1>
+    </div>
+    <div th:if="${invoice.paid}">
+        <div th:replace="~{__components/invoice :: invoice-status(${invoice.status.name})}"></div>
+    </div>
+</div>
+
+<table class="table" th:fragment="checkout-invoice(invoice)">
+    <tr th:each="item : ${invoice.items}">
+        <td valign="top">
+            <div th:text="${item.description}">ITEM</div>
+            <div class="text-small" th:if="${item.quantity > 1}">
+                Quantity: <span th:text="${item.quantity}">1111</span>
+            </div>
+        </td>
+        <td align="right" valign="top">
+            <div th:text="${item.subTotal}">$$$</div>
+            <div class="text-small" th:if="${item.quantity > 1}">
+                Quantity: <span th:text="${item.quantity}">1111</span>
+            </div>
+        </td>
+    </tr>
+    <tr th:each="item : ${invoice.taxes}">
+        <td valign="top">
+            <span th:text="${item.salesTax.name}">ITEM</span>
+            (<span th:text="${item.salesTax.rateText}">%%%</span>)
+        </td>
+        <td align="right" valign="top">
+            <div th:text="${item.amount}">$$$</div>
+        </td>
+    </tr>
+</table>
+
+<div th:fragment="checkout-buttons(invoice, paymentMethodTypes)">
+    <h5 class="text-center">Pay With</h5>
+    <div th:each="type : ${paymentMethodTypes}">
+        <a class="entity-title" th:classappend="'btn-checkout-' + ${type.name.toLowerCase()}"
+           th:href="'/checkout/prepare?payment-method-type=' + ${type.name} + '&invoice-id=' + ${invoice.id}">
+
+            <div class="border border-rounded margin-bottom padding-small flex background-lightgray">
+                <div class="text-larger" style="width: 50px">
+                    <div th:replace="~{__components/payment :: payment-method-icon(${type.name})}"></div>
+                </div>
+                <div class="text-larger" th:text="#{'payment-method-type.' + ${type.name}}">
+                    TYPE
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+</body>

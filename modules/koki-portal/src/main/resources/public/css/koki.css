@@ -421,6 +421,10 @@ tr.activity-running {
     border: 1px solid gray !important;
 }
 
+.border-rounded {
+    border-radius: 4px 4px 4px 4px;
+}
+
 .border-light {
     border: 1px solid lightgray !important;
 }

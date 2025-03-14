@@ -48,16 +48,19 @@ class CreatePaymentController(
         } else {
             if (paymentMethod(paymentMethodType, config) == null) {
                 return "redirect:/error/payment-not-supported?payment-method-type=$paymentMethodType"
+            } else if (paymentMethodType.online) {
+                val redirectUrl = paymentService.checkout(invoiceId, paymentMethodType)
+                return "redirect:$redirectUrl"
+            } else {
+                val invoice = invoiceService.invoice(invoiceId, fullGraph = false)
+                val form = PaymentForm(
+                    invoiceId = invoiceId,
+                    paymentMethodType = paymentMethodType,
+                    currency = invoice.totalAmount.currency,
+                    collectedById = userHolder.id()
+                )
+                return create(form, invoice, model)
             }
-
-            val invoice = invoiceService.invoice(invoiceId, fullGraph = false)
-            val form = PaymentForm(
-                invoiceId = invoiceId,
-                paymentMethodType = paymentMethodType,
-                currency = invoice.totalAmount.currency,
-                collectedById = userHolder.id()
-            )
-            return create(form, invoice, model)
         }
     }
 
@@ -78,6 +81,7 @@ class CreatePaymentController(
             paymentMethod(PaymentMethodType.CASH, config),
             paymentMethod(PaymentMethodType.CHECK, config),
             paymentMethod(PaymentMethodType.INTERAC, config),
+            paymentMethod(PaymentMethodType.CREDIT_CARD, config),
         ).filterNotNull()
         if (paymentMethodTypes.isEmpty()) {
             return "redirect:/error/payment-not-supported"
@@ -93,6 +97,7 @@ class CreatePaymentController(
             PaymentMethodType.CASH -> ConfigurationName.PAYMENT_METHOD_CASH_ENABLED
             PaymentMethodType.CHECK -> ConfigurationName.PAYMENT_METHOD_CHECK_ENABLED
             PaymentMethodType.INTERAC -> ConfigurationName.PAYMENT_METHOD_INTERAC_ENABLED
+            PaymentMethodType.CREDIT_CARD -> ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_ENABLED
             else -> null
         }
 

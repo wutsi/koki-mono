@@ -2,11 +2,17 @@ package com.wutsi.koki.payment.server.service
 
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.Parameter
+import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.error.exception.WutsiException
+import com.wutsi.koki.invoice.server.service.InvoiceService
 import com.wutsi.koki.payment.dto.CreateCashPaymentRequest
 import com.wutsi.koki.payment.dto.CreateCheckPaymentRequest
 import com.wutsi.koki.payment.dto.CreateInteracPaymentRequest
+import com.wutsi.koki.payment.dto.PaymentGateway
 import com.wutsi.koki.payment.dto.PaymentMethodType
+import com.wutsi.koki.payment.dto.PrepareCheckoutRequest
 import com.wutsi.koki.payment.dto.TransactionStatus
 import com.wutsi.koki.payment.dto.TransactionType
 import com.wutsi.koki.payment.server.dao.PaymentMethodCashRepository
@@ -18,7 +24,9 @@ import com.wutsi.koki.payment.server.domain.PaymentMethodCheckEntity
 import com.wutsi.koki.payment.server.domain.PaymentMethodInteractEntity
 import com.wutsi.koki.payment.server.domain.TransactionEntity
 import com.wutsi.koki.security.server.service.SecurityService
+import com.wutsi.koki.tenant.server.service.ConfigurationService
 import jakarta.transaction.Transactional
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.Date
 import java.util.UUID
@@ -30,7 +38,14 @@ class PaymentService(
     private val interactDao: PaymentMethodInteractRepository,
     private val checkDao: PaymentMethodCheckRepository,
     private val securityService: SecurityService,
+    private val invoiceService: InvoiceService,
+    private val configurationService: ConfigurationService,
+    private val paymentGatewayServiceProvider: PaymentGatewayServiceProvider,
 ) {
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(PaymentService::class.java)
+    }
+
     fun getCashByTransactionId(transactionId: String): PaymentMethodCashEntity {
         val paymentMethod = cashDao.findByTransactionId(transactionId)
         if (paymentMethod == null) {
@@ -164,5 +179,77 @@ class PaymentService(
             )
         )
         return tx
+    }
+
+    @Transactional
+    fun checkout(request: PrepareCheckoutRequest, tenantId: Long): TransactionEntity {
+        // Create transaction
+        val invoice = invoiceService.get(request.invoiceId, tenantId)
+        val userId = securityService.getCurrentUserIdOrNull()
+        val now = Date()
+        val tx = dao.save(
+            TransactionEntity(
+                id = UUID.randomUUID().toString(),
+                invoiceId = request.invoiceId,
+                tenantId = tenantId,
+                type = TransactionType.PAYMENT,
+                paymentMethodType = request.paymentMethodType,
+                gateway = PaymentGateway.UNKNOWN,
+                status = TransactionStatus.PENDING,
+                currency = invoice.currency,
+                amount = invoice.totalAmount,
+                description = invoice.description,
+                createdById = userId,
+                createdAt = now,
+                modifiedAt = now,
+            )
+        )
+
+        // Checkout
+        try {
+            tx.gateway = getPaymentGateway(request.paymentMethodType, tenantId)
+            val gatewayService = paymentGatewayServiceProvider.get(tx.gateway)
+            gatewayService.checkout(tx)
+        } catch (ex: PaymentGatewayException) {
+            LOGGER.warn("Payment failed", ex)
+
+            tx.status = TransactionStatus.FAILED
+            tx.errorCode = ex.errorCode
+            tx.supplierErrorCode = ex.supplierErrorCode
+        } catch (ex: WutsiException) {
+            LOGGER.warn("Payment failed", ex)
+
+            tx.status = TransactionStatus.FAILED
+            tx.errorCode = ex.error.code
+        } catch (ex: Throwable) {
+            LOGGER.warn("Payment failed", ex)
+
+            tx.status = TransactionStatus.FAILED
+            tx.errorCode = ErrorCode.TRANSACTION_PAYMENT_FAILED
+        }
+
+        dao.save(tx)
+        return tx
+    }
+
+    private fun getPaymentGateway(type: PaymentMethodType, tenantId: Long): PaymentGateway {
+        val config = configurationService.search(keyword = "payment.", tenantId = tenantId)
+            .map { cfg -> cfg.name to cfg.value }
+            .toMap()
+
+        val gateways = PaymentGateway.entries
+            .filter { gateway -> gateway.paymentMethodType == type }
+            .filter { gateway ->
+                config["payment.method.${type.name.lowercase()}.gateway"] == gateway.name &&
+                    config["payment.method.${type.name.lowercase()}.enabled"] != null
+            }
+
+        return gateways.firstOrNull()
+            ?: throw ConflictException(
+                error = Error(
+                    code = ErrorCode.TRANSACTION_PAYMENT_METHOD_NOT_SUPPORTED,
+                    parameter = Parameter(value = type.name),
+                )
+            )
     }
 }

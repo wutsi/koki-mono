@@ -13,6 +13,9 @@ object PageName {
     const val ACCOUNT_SETTINGS_TYPE_IMPORT = "page.settings.account.type.import"
     const val ACCOUNT_SETTINGS_TYPE_LIST = "page.settings.account.type.list"
 
+    const val CHECKOUT = "page.checkout"
+    const val CHECKOUT_CONFIRMATION = "page.checkout.confirmation"
+
     const val CONTACT = "page.contact"
     const val CONTACT_LIST = "page.contact.list"
     const val CONTACT_EDIT = "page.contact.edit"

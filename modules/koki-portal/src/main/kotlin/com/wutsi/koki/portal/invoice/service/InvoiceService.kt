@@ -64,6 +64,7 @@ class InvoiceService(
                         unitPriceId = taxProduct.unitPriceId,
                         unitPrice = taxProduct.unitPrice.value,
                         description = taxProduct.description,
+                        quantity = taxProduct.quantity,
                     )
                 }
             )

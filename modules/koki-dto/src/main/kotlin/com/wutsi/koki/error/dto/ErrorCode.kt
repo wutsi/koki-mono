@@ -82,6 +82,8 @@ object ErrorCode {
 
     val TRANSACTION_NOT_FOUND: String = "$PREFIX:transaction:not-found"
     val TRANSACTION_PAYMENT_METHOD_NOT_FOUND: String = "$PREFIX:transaction:payment-method-not-found"
+    val TRANSACTION_PAYMENT_METHOD_NOT_SUPPORTED: String = "$PREFIX:transaction:payment-method-not-supported"
+    val TRANSACTION_PAYMENT_FAILED: String = "$PREFIX:transaction:failed"
 
     val TYPE_NOT_FOUND: String = "$PREFIX:type:not-found"
     val TYPE_NAME_MISSING: String = "$PREFIX:type:name-missing"
