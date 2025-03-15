@@ -10,34 +10,7 @@ import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class SettingsPaymentControllerTest : AbstractPageControllerTest() {
-    @Test
-    fun show() {
-        navigateTo("/settings/payments")
-        assertCurrentPageIs(PageName.PAYMENT_SETTINGS)
-    }
-
-    @Test
-    fun `show - without permission invoice-admin`() {
-        setUpUserWithoutPermissions(listOf("payment:admin"))
-        navigateTo("/settings/payments")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
-    }
-
-    @Test
-    fun `required login`() {
-        setUpAnonymousUser()
-        navigateTo("/settings/payments")
-        assertCurrentPageIs(PageName.LOGIN)
-    }
-
-    @Test
-    fun back() {
-        navigateTo("/settings/payments")
-        click(".btn-back")
-        assertCurrentPageIs(PageName.SETTINGS)
-    }
-
+class SettingsPaymentMobileControllerTest : AbstractPageControllerTest() {
     @Test
     fun `mobile - disable`() {
         navigateTo("/settings/payments")
@@ -55,6 +28,8 @@ class SettingsPaymentControllerTest : AbstractPageControllerTest() {
         click(".btn-mobile-enable", 1000)
 
         assertCurrentPageIs(PageName.PAYMENT_SETTINGS_MOBILE)
+        select("#offline", 1)
+        input("#offlinePhoneNumber", "5457580000")
         select("#gateway", 1)
         input("#flutterwaveSecretKey", "FL.123456780")
         click("button[type=submit]", 1000)
@@ -69,6 +44,10 @@ class SettingsPaymentControllerTest : AbstractPageControllerTest() {
         assertEquals(
             "FL.123456780",
             request.firstValue.values[ConfigurationName.PAYMENT_METHOD_MOBILE_GATEWAY_FLUTTERWAVE_SECRET_KEY]
+        )
+        assertEquals(
+            "5457580000",
+            request.firstValue.values[ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_PHONE_NUMBER]
         )
 
         assertCurrentPageIs(PageName.PAYMENT_SETTINGS)
@@ -80,6 +59,7 @@ class SettingsPaymentControllerTest : AbstractPageControllerTest() {
         click(".btn-mobile-configure", 1000)
 
         assertCurrentPageIs(PageName.PAYMENT_SETTINGS_MOBILE)
+        select("#offline", 0)
         select("#gateway", 1)
         input("#flutterwaveSecretKey", "FL.123456780")
         click("button[type=submit]", 1000)
@@ -94,6 +74,10 @@ class SettingsPaymentControllerTest : AbstractPageControllerTest() {
         assertEquals(
             "FL.123456780",
             request.firstValue.values[ConfigurationName.PAYMENT_METHOD_MOBILE_GATEWAY_FLUTTERWAVE_SECRET_KEY]
+        )
+        assertEquals(
+            "",
+            request.firstValue.values[ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_PHONE_NUMBER]
         )
 
         assertCurrentPageIs(PageName.PAYMENT_SETTINGS)

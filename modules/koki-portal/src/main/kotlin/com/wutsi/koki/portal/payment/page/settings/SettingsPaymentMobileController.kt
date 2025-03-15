@@ -26,11 +26,16 @@ class SettingsPaymentMobileController(
         val configs = service.configurations(keyword = "payment.")
 
         val form = PaymentSettingsMobileForm(
-            gateway = when (configs[ConfigurationName.PAYMENT_METHOD_MOBILE_GATEWAY]?.lowercase()) {
-                "flutterwave" -> PaymentGateway.FLUTTERWAVE
-                else -> null
-            },
+            offline = (configs[ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_PHONE_NUMBER] != null),
+            offlinePhoneNumber = configs[ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_PHONE_NUMBER],
             flutterwaveSecretKey = configs[ConfigurationName.PAYMENT_METHOD_MOBILE_GATEWAY_FLUTTERWAVE_SECRET_KEY],
+            gateway = configs[ConfigurationName.PAYMENT_METHOD_MOBILE_GATEWAY]?.let { gateway ->
+                try {
+                    PaymentGateway.valueOf(gateway.uppercase())
+                } catch (ex: Throwable) {
+                    null
+                }
+            },
         )
 
         return edit(form, model)

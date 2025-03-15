@@ -403,6 +403,7 @@ tr.activity-running {
 .settings-content textarea,
 .settings-content input:not([type]),
 .settings-content input[type=text],
+.settings-content input[type=tel],
 .settings-content input[type=email],
 .settings-content input[type=password],
 .settings-content input[type=url],

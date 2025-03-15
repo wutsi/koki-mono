@@ -21,6 +21,29 @@
               th:action="@{/settings/payments/mobile/save}"
               th:object="${form}">
 
+            <h4>Offline Payment</h4>
+            <table class="table">
+                <tr>
+                    <td width="30%"><b>Accept offline payment?</b></td>
+                    <td>
+                        <select onchange="return koki_payments_offline_changed()" th:field="*{offline}">
+                            <option value="false">No</option>
+                            <option value="true">Yes</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="offline" th:classappend="!${form.offline} ? 'hidden'">
+                    <td><b>Phone Number</b></td>
+                    <td>
+                        <input th:field="*{offlinePhoneNumber}" th:required="${form.offline}" type="tel"/>
+                        <div class="text-small">
+                            Phone number for sending mobile money.
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <h4 class="margin-top">Online Payment</h4>
             <table class="table">
                 <tr>
                     <td width="30%"><b>Payment Gateway<span class="required">*</span></b></td>
@@ -38,14 +61,14 @@
                     </td>
                 </tr>
             </table>
-            <button type="submit">Save</button>
+            <button id="btn-submit" type="submit">Save</button>
         </form>
     </div>
 </div>
 
 <script>
     function on_submit() {
-        document.getElementById('#btn-submit').disabled = true;
+        document.getElementById('btn-submit').disabled = true;
         return true
     }
 
@@ -59,6 +82,22 @@
             } else {
                 elt.classList.add('hidden');
             }
+        });
+    }
+
+
+    function koki_payments_offline_changed() {
+        console.log('koki_payments_offline_changed');
+
+        const gateway = document.getElementById('offline').value;
+        const offline = (gateway === 'yes');
+        document.querySelectorAll('.offline').forEach((elt) => {
+            if (!offline) {
+                elt.classList.remove('hidden');
+            } else {
+                elt.classList.add('hidden');
+            }
+            document.getElementById('offlinePhoneNumber').required = offline;
         });
     }
 </script>

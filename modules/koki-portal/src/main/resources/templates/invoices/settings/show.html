@@ -62,48 +62,19 @@
                     <span class="badge text-bg-danger" th:if="!${openedNotification.enabled}">Disabled</span>
                 </td>
                 <td align="right">
-                    <a class="btn btn-sm btn-light btn-notification-opened"
-                       href="/settings/invoices/notifications/opened"
+                    <a class="btn btn-sm btn-light btn-notification"
+                       href="/settings/invoices/notifications"
                        th:if="${openedNotification.enabled}">
                         Configure
                     </a>
-                    <a class="btn btn-sm btn-primary btn-notification-opened-enable"
-                       href="/settings/invoices/notifications/enable?status=true&type=opened"
+                    <a class="btn btn-sm btn-primary btn-notification-enable"
+                       href="/settings/invoices/notifications/enable?status=true"
                        th:if="!${openedNotification.enabled}">
                         Enable
                     </a>
-                    <a class="btn btn-sm btn-danger btn-notification-opened-disable"
-                       href="/settings/invoices/notifications/enable?status=false&type=opened"
+                    <a class="btn btn-sm btn-danger btn-notification-disable"
+                       href="/settings/invoices/notifications/enable?status=false"
                        th:if="${openedNotification.enabled}">
-                        Disable
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <b>When an invoice is paid</b>
-                    <div class="text-small margin-left">
-                        Subject: <span th:text="${paidNotification.subject}">SUBJECT</span>
-                    </div>
-                </td>
-                <td align="right">
-                    <span class="badge text-bg-success" th:if="${paidNotification.enabled}">Enabled</span>
-                    <span class="badge text-bg-danger" th:if="!${paidNotification.enabled}">Disabled</span>
-                </td>
-                <td align="right">
-                    <a class="btn btn-sm btn-light btn-notification-paid"
-                       href="/settings/invoices/notifications/paid"
-                       th:if="${paidNotification.enabled}">
-                        Configure
-                    </a>
-                    <a class="btn btn-sm btn-primary btn-notification-paid-enable"
-                       href="/settings/invoices/notifications/enable?status=true&type=paid"
-                       th:if="!${paidNotification.enabled}">
-                        Enable
-                    </a>
-                    <a class="btn btn-sm btn-danger btn-notification-paid-disable"
-                       href="/settings/invoices/notifications/enable?status=false&type=paid"
-                       th:if="${paidNotification.enabled}">
                         Disable
                     </a>
                 </td>

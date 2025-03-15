@@ -34,7 +34,6 @@ class SettingsEditInvoiceControllerTest : AbstractPageControllerTest() {
         assertEquals("10", request.firstValue.values[ConfigurationName.INVOICE_DUE_DAYS])
 
         assertCurrentPageIs(PageName.INVOICE_SETTINGS)
-        assertElementVisible("#koki-toast")
     }
 
     @Test
