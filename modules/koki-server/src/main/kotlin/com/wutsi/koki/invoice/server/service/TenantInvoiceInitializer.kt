@@ -13,7 +13,7 @@ class TenantInvoiceInitializer : AbstractTenantModuleInitializer() {
         const val INVOICE_BODY_PATH = "/invoice/email/default/invoice.html"
 
         const val RECEIPT_SUBJECT = "Thank you for your payment - Invoice #{{invoiceNumber}} from {{businessName}}"
-        const val RECEIPT_BODY_PATH = "/invoice/email/default/receipt.html"
+        const val RECEIPT_BODY_PATH = "/payment/email/default/payment.html"
     }
 
     override fun init(tenantId: Long) {

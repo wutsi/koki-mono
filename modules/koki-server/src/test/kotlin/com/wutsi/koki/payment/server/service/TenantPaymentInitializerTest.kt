@@ -9,6 +9,7 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.invoice.server.service.TenantInvoiceInitializer
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import com.wutsi.koki.tenant.server.domain.ConfigurationEntity
@@ -38,10 +39,17 @@ class TenantPaymentInitializerTest {
         initializer.init(tenantId)
 
         val request = argumentCaptor<SaveConfigurationRequest>()
-        verify(configurationService, times(2)).save(request.capture(), eq(tenantId))
+        verify(configurationService, times(3)).save(request.capture(), eq(tenantId))
 
-        assertEquals("1", request.allValues[0].values[ConfigurationName.PAYMENT_METHOD_CASH_ENABLED])
-        assertEquals("1", request.allValues[1].values[ConfigurationName.PAYMENT_METHOD_CHECK_ENABLED])
+        assertEquals("1", request.allValues[0].values[ConfigurationName.PAYMENT_EMAIL_ENABLED])
+        assertEquals(
+            TenantPaymentInitializer.EMAIL_SUBJECT,
+            request.allValues[1].values[ConfigurationName.PAYMENT_EMAIL_SUBJECT]
+        )
+        assertEquals(
+            getContent(TenantPaymentInitializer.EMAIL_BODY_PATH),
+            request.allValues[1].values[ConfigurationName.PAYMENT_EMAIL_BODY]
+        )
     }
 
     @Test
@@ -53,5 +61,11 @@ class TenantPaymentInitializerTest {
         initializer.init(tenantId)
 
         verify(configurationService, never()).save(any(), any())
+    }
+
+    private fun getContent(path: String): String {
+        return IOUtils.toString(
+            TenantPaymentInitializer::class.java.getResourceAsStream(path), "utf-8"
+        )
     }
 }

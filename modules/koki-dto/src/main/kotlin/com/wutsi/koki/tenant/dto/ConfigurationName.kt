@@ -30,6 +30,10 @@ object ConfigurationName {
     const val INVOICE_EMAIL_PAID_SUBJECT = "invoice.email.paid.subject"
 
     // Payment
+    const val PAYMENT_EMAIL_ENABLED = "payment.email.enabled"
+    const val PAYMENT_EMAIL_BODY = "payment.email.body"
+    const val PAYMENT_EMAIL_SUBJECT = "payment.email.subject"
+
     const val PAYMENT_METHOD_CASH_ENABLED = "payment.method.cash.enabled"
     const val PAYMENT_METHOD_CASH_INSTRUCTIONS = "payment.method.cash.instructions"
 
