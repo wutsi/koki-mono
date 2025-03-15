@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="settings-container">
+    <div class="settings-sidebar">
+        <div th:replace="~{__components/settings :: settings-menu('payment')}"></div>
+    </div>
+    <div class="settings-content padding">
+        <div
+            th:replace="~{__components/settings :: settings-title('Configure Check Payments', '/settings/payments')}"></div>
+
+        <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+
+        <form class="form" method="post" onsubmit="on_submit()"
+              th:action="@{/settings/payments/check/save}"
+              th:object="${form}">
+
+            <table class="table">
+                <tr>
+                    <td width="30%"><b>Pay To<span class="required">*</span></b></td>
+                    <td>
+                        <input required th:field="*{payee}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Payment Instructions</b></td>
+                    <td>
+                        <textarea cols="3" maxlength="1000" th:field="*{instructions}"></textarea>
+                        <div class="text-small">
+                            Instructions to send to customer to help them to make payments by check.
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <button id="btn-submit" type="submit">Save</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function on_submit() {
+        document.getElementById('btn-submit').disabled = true;
+        return true
+    }
+</script>
+
+</body>
+</html>

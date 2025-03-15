@@ -16,30 +16,44 @@ object ConfigurationName {
     // INVOICE
     const val INVOICE_START_NUMBER = "invoice.start.number"
     const val INVOICE_DUE_DAYS = "invoice.due.days"
-    const val INVOICE_EMAIL_OPENED_ENABLED = "invoice.email.opened.enabled"
-    const val INVOICE_EMAIL_OPENED_BODY = "invoice.email.opened.body"
-    const val INVOICE_EMAIL_OPENED_SUBJECT = "invoice.email.opened.subject"
+    const val INVOICE_EMAIL_ENABLED = "invoice.email.enabled"
+    const val INVOICE_EMAIL_BODY = "invoice.email.body"
+    const val INVOICE_EMAIL_SUBJECT = "invoice.email.subject"
+
+    @Deprecated("")
     const val INVOICE_EMAIL_PAID_ENABLED = "invoice.email.paid.enabled"
+
+    @Deprecated("")
     const val INVOICE_EMAIL_PAID_BODY = "invoice.email.paid.body"
+
+    @Deprecated("")
     const val INVOICE_EMAIL_PAID_SUBJECT = "invoice.email.paid.subject"
 
     // Payment
     const val PAYMENT_METHOD_CASH_ENABLED = "payment.method.cash.enabled"
+    const val PAYMENT_METHOD_CASH_INSTRUCTIONS = "payment.method.cash.instructions"
 
     const val PAYMENT_METHOD_CHECK_ENABLED = "payment.method.check.enabled"
+    const val PAYMENT_METHOD_CHECK_PAYEE = "payment.method.check.payee"
+    const val PAYMENT_METHOD_CHECK_INSTRUCTIONS = "payment.method.check.instructions"
 
     const val PAYMENT_METHOD_INTERAC_ENABLED = "payment.method.interac.enabled"
+    const val PAYMENT_METHOD_INTERAC_EMAIL = "payment.method.interac.email"
+    const val PAYMENT_METHOD_INTERAC_QUESTION = "payment.method.interac.question"
+    const val PAYMENT_METHOD_INTERAC_ANSWER = "payment.method.interac.answer"
+
+    const val PAYMENT_METHOD_BANK_ENABLED = "payment.method.bank.enabled"
 
     const val PAYMENT_METHOD_CREDIT_CARD_ENABLED = "payment.method.credit_card.enabled"
+    const val PAYMENT_METHOD_CREDIT_CARD_OFFLINE_PHONE_NUMBER = "payment.method.credit_card.offline.phone_number"
     const val PAYMENT_METHOD_CREDIT_CARD_GATEWAY = "payment.method.credit_card.gateway"
     const val PAYMENT_METHOD_CREDIT_CARD_GATEWAY_STRIPE_API_KEY = "payment.method.credit_card.gateway.stripe.api_key"
 
     const val PAYMENT_METHOD_MOBILE_ENABLED = "payment.method.mobile.enabled"
+    const val PAYMENT_METHOD_MOBILE_OFFLINE_PHONE_NUMBER = "payment.method.mobile.offline.phone_number"
     const val PAYMENT_METHOD_MOBILE_GATEWAY = "payment.method.mobile.gateway"
     const val PAYMENT_METHOD_MOBILE_GATEWAY_FLUTTERWAVE_SECRET_KEY =
         "payment.method.mobile.gateway.flutterwave_secret_key"
-
-    const val PAYMENT_METHOD_BANK_ENABLED = "payment.method.bank.enabled"
 
     const val PAYMENT_METHOD_PAYPAL_ENABLED = "payment.method.paypal.enabled"
     const val PAYMENT_METHOD_PAYPAL_CLIENT_ID = "payment.method.paypal.client_id"
