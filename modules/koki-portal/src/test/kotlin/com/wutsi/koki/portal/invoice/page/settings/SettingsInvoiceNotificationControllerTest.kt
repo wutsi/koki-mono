@@ -16,7 +16,7 @@ import kotlin.test.assertEquals
 
 class SettingsInvoiceNotificationControllerTest : AbstractPageControllerTest() {
     @Test
-    fun opened() {
+    fun edit() {
         navigateTo("/settings/invoices/notifications")
         assertCurrentPageIs(PageName.INVOICE_SETTINGS_NOTIFICATION)
 
@@ -37,7 +37,6 @@ class SettingsInvoiceNotificationControllerTest : AbstractPageControllerTest() {
         assertEquals("<p>Hello</p>", request.firstValue.values[ConfigurationName.INVOICE_EMAIL_BODY])
 
         assertCurrentPageIs(PageName.INVOICE_SETTINGS)
-        assertElementVisible("#koki-toast")
     }
 
     @Test

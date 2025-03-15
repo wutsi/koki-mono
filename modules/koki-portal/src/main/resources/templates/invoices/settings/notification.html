@@ -16,12 +16,10 @@
 
         <div th:replace="~{__components/layout :: error-message(${error})}"></div>
         <form class="form" method="post" th:action="@{/settings/invoices/notifications/save}" th:object="${form}">
-            <input th:field="*{type}" type="hidden"/>
             <table class="table">
                 <tr>
                     <td colspan="2">
-                        <h4 th:if="${form.type.name == 'paid'}">When an invoice is paid</h4>
-                        <h4 th:if="${form.type.name == 'opened'}">When an invoice is approved</h4>
+                        <h4>When an invoice is approved</h4>
                     </td>
                 </tr>
                 <tr id="tr-subject">
