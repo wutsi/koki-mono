@@ -5,15 +5,18 @@
 </head>
 
 <body>
-<div th:replace="~{__components/layout :: navbar}"></div>
 
 <div class="container">
     <div class="row">
-        <div class="col-12 margin-top-4x">&nbsp;</div>
+        <div class="col-12 col-md-6 offset-md-3">
+            <h1 class="section-title text-center">
+                <img class="align-right" height="50" th:if="${tenant.logoUrl}" th:src="${tenant.logoUrl}"/>
+                <span th:if="!${tenant.logoUrl}" th:text="${tenant.name}"/>
+            </h1>
+        </div>
     </div>
-
     <div class="row">
-        <div th:class="${tx.invoice.paid} ? 'col-8 offset-2' : 'col-12'">
+        <div class="col-8 offset-2">
 
             <div class="widget margin-top-4x">
                 <div class="widget-body">
@@ -45,10 +48,10 @@
                     </div>
 
                     <div class="margin-top flex flex-space-between margin-top-2x">
-                        <div th:style="!${tx.invoice.paid} ? 'width: 70%' : 'width:100%'">
+                        <div th:style="!${tx.invoice.paid} ? 'width: 60%' : 'width:100%'">
                             <div th:replace="~{__components/checkout :: checkout-invoice(${tx.invoice})}"></div>
                         </div>
-                        <div style="width:25%" th:if="!${tx.invoice.paid}">
+                        <div style="width:35%" th:if="!${tx.invoice.paid}">
                             <div
                                 th:replace="~{__components/checkout :: checkout-buttons(${tx.invoice}, ${paymentMethodTypes})}"></div>
                         </div>

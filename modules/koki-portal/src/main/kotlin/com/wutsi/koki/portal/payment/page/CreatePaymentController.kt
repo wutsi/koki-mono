@@ -81,7 +81,6 @@ class CreatePaymentController(
             paymentMethod(PaymentMethodType.CASH, config),
             paymentMethod(PaymentMethodType.CHECK, config),
             paymentMethod(PaymentMethodType.INTERAC, config),
-            paymentMethod(PaymentMethodType.CREDIT_CARD, config),
         ).filterNotNull()
         if (paymentMethodTypes.isEmpty()) {
             return "redirect:/error/payment-not-supported"

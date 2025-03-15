@@ -84,10 +84,10 @@
 
 - [] Invoice Widget
 - [] Add locale to invoice
+- [] Send email for unpaid invoices
 - [x] Update amount due on successfull payment
 - [x] Download invoices
 - [x] Send invoice manually via email
-- [] Send email for unpaid invoices
 - [x] Send invoice by email when approved
 - [x] Send invoice by email when paid
 - [x] Setting: Configure payment terms

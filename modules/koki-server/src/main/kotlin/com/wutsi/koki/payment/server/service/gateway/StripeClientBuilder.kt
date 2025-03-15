@@ -23,7 +23,7 @@ class StripeClientBuilder(
         )
         return configs.firstOrNull()?.value
             ?: throw PaymentGatewayException(
-                errorCode = ErrorCode.TRANSACTION_PAYMENT_METHOD_NOT_FOUND,
+                errorCode = ErrorCode.TRANSACTION_PAYMENT_METHOD_NOT_SUPPORTED,
                 supplierErrorCode = null,
                 message = "No API Kpi",
             )

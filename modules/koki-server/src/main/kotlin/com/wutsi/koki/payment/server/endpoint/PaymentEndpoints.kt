@@ -71,7 +71,7 @@ class PaymentEndpoints(
         return PrepareCheckoutResponse(
             transactionId = tx.id!!,
             status = tx.status,
-            redirectUrl = tx.checkoutUrl!!,
+            redirectUrl = tx.checkoutUrl,
         )
     }
 
