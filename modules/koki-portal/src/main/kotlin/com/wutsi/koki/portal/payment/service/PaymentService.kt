@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat
 class PaymentService(
     private val koki: KokiPayments,
 ) {
-    fun checkout(invoiceId: Long, paymentMethodType: PaymentMethodType): String {
+    fun checkout(invoiceId: Long, paymentMethodType: PaymentMethodType): String? {
         return koki.checkout(
             PrepareCheckoutRequest(
                 invoiceId = invoiceId, paymentMethodType = paymentMethodType

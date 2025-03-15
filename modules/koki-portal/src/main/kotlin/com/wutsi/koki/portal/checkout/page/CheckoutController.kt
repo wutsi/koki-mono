@@ -44,7 +44,12 @@ class CheckoutController(
     ): String {
         try {
             val redirectUrl = paymentService.checkout(invoiceId, paymentMethodType)
-            return "redirect:$redirectUrl"
+            if (redirectUrl != null) {
+                return "redirect:$redirectUrl"
+            } else {
+                model.addAttribute("error", "Failed")
+                return show(invoiceId, model)
+            }
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)
