@@ -48,14 +48,16 @@ class SettingsInvoiceControllerTest : AbstractPageControllerTest() {
     @Test
     fun `notification opened`() {
         navigateTo("/settings/invoices")
-        click(".btn-notification-opened")
+        click(".btn-notification")
         assertCurrentPageIs(PageName.INVOICE_SETTINGS_NOTIFICATION)
     }
 
     @Test
     fun `enable notification`() {
+        disableConfig(listOf(ConfigurationName.INVOICE_EMAIL_ENABLED))
+
         navigateTo("/settings/invoices")
-        click(".btn-notification-paid-enable")
+        click(".btn-notification-enable")
 
         val request = argumentCaptor<SaveConfigurationRequest>()
         verify(rest).postForEntity(
@@ -65,17 +67,16 @@ class SettingsInvoiceControllerTest : AbstractPageControllerTest() {
         )
         assertEquals(
             "1",
-            request.firstValue.values[ConfigurationName.INVOICE_EMAIL_PAID_ENABLED]
+            request.firstValue.values[ConfigurationName.INVOICE_EMAIL_ENABLED]
         )
 
         assertCurrentPageIs(PageName.INVOICE_SETTINGS)
-        assertElementVisible("#koki-toast")
     }
 
     @Test
     fun `disable notification`() {
         navigateTo("/settings/invoices")
-        click(".btn-notification-opened-disable")
+        click(".btn-notification-disable")
 
         val request = argumentCaptor<SaveConfigurationRequest>()
         verify(rest).postForEntity(
@@ -85,10 +86,9 @@ class SettingsInvoiceControllerTest : AbstractPageControllerTest() {
         )
         assertEquals(
             "",
-            request.firstValue.values[ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED]
+            request.firstValue.values[ConfigurationName.INVOICE_EMAIL_ENABLED]
         )
 
         assertCurrentPageIs(PageName.INVOICE_SETTINGS)
-        assertElementVisible("#koki-toast")
     }
 }

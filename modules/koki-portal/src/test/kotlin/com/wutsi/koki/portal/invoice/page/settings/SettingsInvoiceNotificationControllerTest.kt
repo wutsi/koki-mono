@@ -17,7 +17,7 @@ import kotlin.test.assertEquals
 class SettingsInvoiceNotificationControllerTest : AbstractPageControllerTest() {
     @Test
     fun opened() {
-        navigateTo("/settings/invoices/notifications/opened")
+        navigateTo("/settings/invoices/notifications")
         assertCurrentPageIs(PageName.INVOICE_SETTINGS_NOTIFICATION)
 
         input("#subject", "This is the subject {{invoiceNumber}}")
@@ -32,34 +32,9 @@ class SettingsInvoiceNotificationControllerTest : AbstractPageControllerTest() {
         )
         assertEquals(
             "This is the subject {{invoiceNumber}}",
-            request.firstValue.values[ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT]
+            request.firstValue.values[ConfigurationName.INVOICE_EMAIL_SUBJECT]
         )
-        assertEquals("<p>Hello</p>", request.firstValue.values[ConfigurationName.INVOICE_EMAIL_OPENED_BODY])
-
-        assertCurrentPageIs(PageName.INVOICE_SETTINGS)
-        assertElementVisible("#koki-toast")
-    }
-
-    @Test
-    fun paid() {
-        navigateTo("/settings/invoices/notifications/paid")
-        assertCurrentPageIs(PageName.INVOICE_SETTINGS_NOTIFICATION)
-
-        input("#subject", "This is the subject {{invoiceNumber}}")
-        inputCodeMiror("<p>Hello</p>")
-        click("button[type=submit]", 1000)
-
-        val request = argumentCaptor<SaveConfigurationRequest>()
-        verify(rest).postForEntity(
-            eq("$sdkBaseUrl/v1/configurations"),
-            request.capture(),
-            eq(Any::class.java)
-        )
-        assertEquals(
-            "This is the subject {{invoiceNumber}}",
-            request.firstValue.values[ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT]
-        )
-        assertEquals("<p>Hello</p>", request.firstValue.values[ConfigurationName.INVOICE_EMAIL_PAID_BODY])
+        assertEquals("<p>Hello</p>", request.firstValue.values[ConfigurationName.INVOICE_EMAIL_BODY])
 
         assertCurrentPageIs(PageName.INVOICE_SETTINGS)
         assertElementVisible("#koki-toast")
@@ -75,7 +50,7 @@ class SettingsInvoiceNotificationControllerTest : AbstractPageControllerTest() {
                 eq(Any::class.java)
             )
 
-        navigateTo("/settings/invoices/notifications/opened")
+        navigateTo("/settings/invoices/notifications")
         click("button[type=submit]", 1000)
 
         assertCurrentPageIs(PageName.INVOICE_SETTINGS_NOTIFICATION)
@@ -84,7 +59,7 @@ class SettingsInvoiceNotificationControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun back() {
-        navigateTo("/settings/invoices/notifications/opened")
+        navigateTo("/settings/invoices/notifications")
         click(".btn-back")
         assertCurrentPageIs(PageName.INVOICE_SETTINGS)
     }
@@ -92,14 +67,14 @@ class SettingsInvoiceNotificationControllerTest : AbstractPageControllerTest() {
     @Test
     fun `edit - without permission invoice-admin`() {
         setUpUserWithoutPermissions(listOf("invoice:admin"))
-        navigateTo("/settings/invoices/notifications/paid")
+        navigateTo("/settings/invoices/notifications")
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 
     @Test
     fun `required login`() {
         setUpAnonymousUser()
-        navigateTo("/settings/invoices/notifications/paid")
+        navigateTo("/settings/invoices/notifications")
         assertCurrentPageIs(PageName.LOGIN)
     }
 }

@@ -12,7 +12,7 @@ CREATE TABLE T_TRANSACTION(
   amount                  DECIMAL(10, 2) NOT NULL,
   currency                VARCHAR(3) NOT NULL,
   checkout_url            TEXT,
-  supplier_transaction_id VARCHAR(36),
+  supplier_transaction_id VARCHAR(255),
   supplier_status         VARCHAR(30),
   error_code              VARCHAR(255),
   supplier_error_code     VARCHAR(255),

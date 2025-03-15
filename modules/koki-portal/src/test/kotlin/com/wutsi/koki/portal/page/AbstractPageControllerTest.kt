@@ -2,8 +2,10 @@ package com.wutsi.blog.app.page
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AccountFixtures
 import com.wutsi.koki.ContactFixtures
@@ -93,6 +95,7 @@ import com.wutsi.koki.tenant.dto.CreateUserResponse
 import com.wutsi.koki.tenant.dto.GetBusinessResponse
 import com.wutsi.koki.tenant.dto.GetTypeResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
+import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
 import com.wutsi.koki.tenant.dto.SearchTenantResponse
@@ -1135,5 +1138,37 @@ abstract class AbstractPageControllerTest {
         val by = By.cssSelector(selector)
         val select = Select2(driver.findElement(by))
         select.selectByText(text)
+    }
+
+    protected fun assertConfig(expectedValue: String, name: String) {
+        val request = argumentCaptor<SaveConfigurationRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/configurations"),
+            request.capture(),
+            eq(Any::class.java)
+        )
+        assertEquals(expectedValue, request.firstValue.values[name])
+    }
+
+    protected fun disableConfig(names: List<String>) {
+        doReturn(
+            ResponseEntity(
+                SearchConfigurationResponse(
+                    configurations = TenantFixtures.config
+                        .filter { cfg -> !names.contains(cfg.key) }
+                        .map { cfg ->
+                            Configuration(
+                                name = cfg.key,
+                                value = cfg.value
+                            )
+                        }
+                ),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchConfigurationResponse::class.java)
+            )
     }
 }

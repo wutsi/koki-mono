@@ -17,22 +17,52 @@ import com.wutsi.koki.notification.server.service.NotificationConsumer
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.domain.BusinessEntity
+import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.service.BusinessService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
+import com.wutsi.koki.tenant.server.service.TenantService
 import com.wutsi.koki.util.CurrencyUtil
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.Date
 
 /**
  * Send email notification about invoice
  * Email Variable:
+ * - customerName
+ * - businessName
  * - invoiceNumber
  * - invoiceAmountDue
  * - invoiceTotalAmount
- * - businessName
+ * - invoiceDate
+ * - invoiceDueDate
+ * - invoicePayUponReception
+ * - portalPaymentURL: URL where to pay online
+ *
+ * - paymentMethodInterac: TRUE if the merchant support Interact Transfer
+ * - interacEmail: Email of the interac account
+ * - interacQuestion: Secret question the customer should enter
+ * - interacAnswer: Secret answer
+ *
+ * - paymentMethodCreditCard: TRUE if the merchant support CreditCard payment
+ * - creditCardOfflinePhoneNumber: Phone number where to call for capturing the payment via phone
+ *
+ * - paymentMethodMobile: TRUE if the merchant support Mobile-Money payment
+ * - mobileOfflinePhoneNumber: Phone number where to send mobile payment offline
+ *
+ * - paymentMethodPaypal: TRUE if the merchant support PayPal payment
+ *
+ * - paymentMethodCheck: TRUE if the merchant support payment via check
+ * - checkPayTo
+ * - checkInstructions
+ *
+ * - paymentMethodCash: TRUE if the merchant support payment in cach
+ * - cashInstructions
  */
 @Service
 class InvoiceNotificationWorker(
@@ -44,6 +74,9 @@ class InvoiceNotificationWorker(
     private val emailService: EmailService,
     private val fileService: FileService,
     private val invoicePdfExporter: InvoicePdfExporter,
+    private val tenantService: TenantService,
+
+    @Value("\${koki.portal-url}") private val portalUrl: String
 ) : AbstractNotificationWorker(registry) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(InvoiceNotificationWorker::class.java)
@@ -65,7 +98,7 @@ class InvoiceNotificationWorker(
         logger.add("event_invoice_id", event.invoiceId)
         logger.add("event_tenant_id", event.tenantId)
 
-        if (event.status == InvoiceStatus.PAID || event.status == InvoiceStatus.OPENED) {
+        if (event.status == InvoiceStatus.OPENED) {
             send(event)
         }
     }
@@ -94,6 +127,7 @@ class InvoiceNotificationWorker(
         }
 
         val business = businessService.get(tenantId = event.tenantId)
+        val tenant = tenantService.get(event.tenantId)
         val file = pdfFile(invoice, business)
         emailService.send(
             request = SendEmailRequest(
@@ -105,7 +139,7 @@ class InvoiceNotificationWorker(
                 ),
                 subject = getSubject(configs, event),
                 body = getBody(configs, event),
-                data = createData(invoice, business),
+                data = createData(invoice, business, tenant),
                 owner = ObjectReference(id = invoice.id!!, type = ObjectType.INVOICE),
                 attachmentFileIds = listOf(file.id!!),
             ),
@@ -123,6 +157,7 @@ class InvoiceNotificationWorker(
     private fun send(event: SendInvoiceCommand) {
         val invoice = invoiceService.get(id = event.invoiceId, tenantId = event.tenantId)
         val business = businessService.get(tenantId = event.tenantId)
+        val tenant = tenantService.get(event.tenantId)
 
         val configs = configurationService.search(tenantId = event.tenantId, keyword = "invoice.")
             .map { config -> config.name to config.value }.toMap()
@@ -137,11 +172,11 @@ class InvoiceNotificationWorker(
                     type = invoice.customerAccountId?.let { ObjectType.ACCOUNT } ?: ObjectType.UNKNOWN,
                 ),
 
-                subject = configs[ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT]
+                subject = configs[ConfigurationName.INVOICE_EMAIL_SUBJECT]
                     ?: TenantInvoiceInitializer.INVOICE_SUBJECT,
 
-                body = configs[ConfigurationName.INVOICE_EMAIL_OPENED_BODY] ?: "",
-                data = createData(invoice, business),
+                body = configs[ConfigurationName.INVOICE_EMAIL_BODY] ?: "",
+                data = createData(invoice, business, tenant),
                 owner = ObjectReference(id = invoice.id!!, type = ObjectType.INVOICE),
                 attachmentFileIds = listOf(file.id!!),
             ),
@@ -149,19 +184,61 @@ class InvoiceNotificationWorker(
         )
     }
 
-    private fun createData(invoice: InvoiceEntity, business: BusinessEntity): Map<String, Any> {
-        val fmt = CurrencyUtil.getNumberFormat(invoice.currency)
+    private fun createData(
+        invoice: InvoiceEntity,
+        business: BusinessEntity,
+        tenant: TenantEntity
+    ): Map<String, Any> {
+        val configs = configurationService.search(tenantId = invoice.tenantId, keyword = "payment.")
+            .map { config -> config.name to config.value }.toMap()
+
+        val moneyFormat = CurrencyUtil.getNumberFormat(invoice.currency)
+        val dateFormat = SimpleDateFormat(tenant.dateFormat)
         return mapOf(
             "businessName" to business.companyName,
             "invoiceNumber" to invoice.number,
-            "invoiceAmountDue" to fmt.format(invoice.amountDue),
-            "invoiceTotalAmount" to fmt.format(invoice.totalAmount),
+            "invoiceDate" to dateFormat.format(invoice.invoicedAt),
+            "invoiceDueDate" to dateFormat.format(invoice.dueAt),
+            "invoicePayUponReception" to isSameDay(invoice.invoicedAt, invoice.dueAt),
+            "invoiceAmountDue" to moneyFormat.format(invoice.amountDue),
+            "invoiceTotalAmount" to moneyFormat.format(invoice.totalAmount),
+
+            "portalPaymentURL" to "$portalUrl/checkout/${invoice.id}",
+
+            "paymentMethodInterac" to configs[ConfigurationName.PAYMENT_METHOD_INTERAC_ENABLED],
+            "interacEmail" to configs[ConfigurationName.PAYMENT_METHOD_INTERAC_EMAIL],
+            "interacQuestion" to configs[ConfigurationName.PAYMENT_METHOD_INTERAC_QUESTION],
+            "interacAnswer" to configs[ConfigurationName.PAYMENT_METHOD_INTERAC_ANSWER],
+
+            "paymentMethodCreditCard" to configs[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_ENABLED],
+            "creditCardOfflinePhoneNumber" to configs[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_OFFLINE_PHONE_NUMBER],
+
+            "paymentMethodMobile" to configs[ConfigurationName.PAYMENT_METHOD_MOBILE_ENABLED],
+            "mobileOfflinePhoneNumber" to configs[ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_PHONE_NUMBER],
+
+            "paymentMethodPaypal" to configs[ConfigurationName.PAYMENT_METHOD_PAYPAL_ENABLED],
+
+            "paymentMethodCheck" to configs[ConfigurationName.PAYMENT_METHOD_CHECK_ENABLED],
+            "checkPayTo" to configs[ConfigurationName.PAYMENT_METHOD_CHECK_PAYEE],
+            "checkInstructions" to configs[ConfigurationName.PAYMENT_METHOD_CHECK_INSTRUCTIONS],
+
+            "paymentMethodCash" to configs[ConfigurationName.PAYMENT_METHOD_CASH_ENABLED],
+            "cashInstructions" to configs[ConfigurationName.PAYMENT_METHOD_CASH_INSTRUCTIONS],
         )
+            .filter { entry -> entry.value != null } as Map<String, Any>
+    }
+
+    private fun isSameDay(date1: Date?, date2: Date?): Boolean {
+        if (date1 == null || date2 == null) {
+            return false
+        } else {
+            return Math.abs(date1.time - date2.time) <= 86400000L
+        }
     }
 
     private fun isEnabled(configs: Map<String, String>, event: InvoiceStatusChangedEvent): Boolean {
         return when (event.status) {
-            InvoiceStatus.OPENED -> configs[ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED] != null
+            InvoiceStatus.OPENED -> configs[ConfigurationName.INVOICE_EMAIL_ENABLED] != null
             InvoiceStatus.PAID -> configs[ConfigurationName.INVOICE_EMAIL_PAID_ENABLED] != null
             else -> false
         }
@@ -169,7 +246,7 @@ class InvoiceNotificationWorker(
 
     private fun getSubject(configs: Map<String, String>, event: InvoiceStatusChangedEvent): String {
         return when (event.status) {
-            InvoiceStatus.OPENED -> configs[ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT]
+            InvoiceStatus.OPENED -> configs[ConfigurationName.INVOICE_EMAIL_SUBJECT]
                 ?: TenantInvoiceInitializer.INVOICE_SUBJECT
 
             InvoiceStatus.PAID -> configs[ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT]
@@ -181,7 +258,7 @@ class InvoiceNotificationWorker(
 
     private fun getBody(configs: Map<String, String>, event: InvoiceStatusChangedEvent): String {
         return when (event.status) {
-            InvoiceStatus.OPENED -> configs[ConfigurationName.INVOICE_EMAIL_OPENED_BODY] ?: ""
+            InvoiceStatus.OPENED -> configs[ConfigurationName.INVOICE_EMAIL_BODY] ?: ""
 
             InvoiceStatus.PAID -> configs[ConfigurationName.INVOICE_EMAIL_PAID_BODY] ?: ""
 

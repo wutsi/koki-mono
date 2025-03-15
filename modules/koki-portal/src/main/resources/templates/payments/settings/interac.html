@@ -13,19 +13,31 @@
     </div>
     <div class="settings-content padding">
         <div
-            th:replace="~{__components/settings :: settings-title('Configure Check Payments', '/settings/payments')}"></div>
+            th:replace="~{__components/settings :: settings-title('Configure Interac Payments', '/settings/payments')}"></div>
 
         <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
         <form class="form" method="post" onsubmit="on_submit()"
-              th:action="@{/settings/payments/check/save}"
+              th:action="@{/settings/payments/interac/save}"
               th:object="${form}">
 
             <table class="table">
                 <tr>
-                    <td width="30%"><b>Pay To<span class="required">*</span></b></td>
+                    <td width="30%"><b>Email<span class="required">*</span></b></td>
                     <td>
-                        <input required th:field="*{payee}"/>
+                        <input required th:field="*{email}" type="email"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Security Question<span class="required">*</span></b></td>
+                    <td>
+                        <input required th:field="*{question}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Answer<span class="required">*</span></b></td>
+                    <td>
+                        <input required th:field="*{answer}"/>
                     </td>
                 </tr>
             </table>

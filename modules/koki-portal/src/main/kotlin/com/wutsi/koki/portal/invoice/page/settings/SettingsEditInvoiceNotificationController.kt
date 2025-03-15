@@ -4,7 +4,6 @@ import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.invoice.form.InvoiceNotificationSettingsForm
-import com.wutsi.koki.portal.invoice.model.InvoiceNotificationType
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import com.wutsi.koki.tenant.dto.ConfigurationName
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
 
@@ -21,32 +19,15 @@ import org.springframework.web.client.HttpClientErrorException
 class SettingsEditInvoiceNotificationController(
     private val service: ConfigurationService
 ) : AbstractPageController() {
-    @GetMapping("/settings/invoices/notifications/{type}")
-    fun edit(@PathVariable type: InvoiceNotificationType, model: Model): String {
+    @GetMapping("/settings/invoices/notifications")
+    fun edit(model: Model): String {
         val configs = service.configurations(keyword = "invoice.")
-        val form = createForm(type, configs)
-        return edit(form, model)
-    }
-
-    private fun createForm(
-        type: InvoiceNotificationType,
-        configs: Map<String, String>
-    ): InvoiceNotificationSettingsForm {
-        return InvoiceNotificationSettingsForm(
-            type = type,
-            enabled = when (type) {
-                InvoiceNotificationType.paid -> !configs[ConfigurationName.INVOICE_EMAIL_PAID_ENABLED].isNullOrEmpty()
-                InvoiceNotificationType.opened -> !configs[ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED].isNullOrEmpty()
-            },
-            subject = when (type) {
-                InvoiceNotificationType.paid -> configs[ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT]
-                InvoiceNotificationType.opened -> configs[ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT]
-            },
-            body = when (type) {
-                InvoiceNotificationType.paid -> configs[ConfigurationName.INVOICE_EMAIL_PAID_BODY]
-                InvoiceNotificationType.opened -> configs[ConfigurationName.INVOICE_EMAIL_OPENED_BODY]
-            },
+        val form = InvoiceNotificationSettingsForm(
+            enabled = !configs[ConfigurationName.INVOICE_EMAIL_ENABLED].isNullOrEmpty(),
+            subject = configs[ConfigurationName.INVOICE_EMAIL_SUBJECT],
+            body = configs[ConfigurationName.INVOICE_EMAIL_BODY],
         )
+        return edit(form, model)
     }
 
     private fun edit(form: InvoiceNotificationSettingsForm, model: Model): String {
@@ -67,7 +48,7 @@ class SettingsEditInvoiceNotificationController(
     fun save(@ModelAttribute form: InvoiceNotificationSettingsForm, model: Model): String {
         try {
             service.save(form)
-            return "redirect:/settings/invoices?_toast=1&_ts=" + System.currentTimeMillis()
+            return "redirect:/settings/invoices"
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)

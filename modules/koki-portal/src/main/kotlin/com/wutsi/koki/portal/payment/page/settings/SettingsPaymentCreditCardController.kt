@@ -26,11 +26,16 @@ class SettingsPaymentCreditCardController(
         val configs = service.configurations(keyword = "payment.")
 
         val form = PaymentSettingsCreditCardForm(
-            gateway = when (configs[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_GATEWAY]?.lowercase()) {
-                "stripe" -> PaymentGateway.STRIPE
-                else -> null
-            },
+            offlinePhoneNumber = configs[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_OFFLINE_PHONE_NUMBER],
+            offline = (configs[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_OFFLINE_PHONE_NUMBER] != null),
             stripeApiKey = configs[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_GATEWAY_STRIPE_API_KEY],
+            gateway = configs[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_GATEWAY]?.let { gateway ->
+                try {
+                    PaymentGateway.valueOf(gateway.uppercase())
+                } catch (ex: Throwable) {
+                    null
+                }
+            },
         )
 
         return edit(form, model)
