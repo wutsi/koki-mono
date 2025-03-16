@@ -6,8 +6,10 @@ import com.wutsi.koki.portal.email.model.SMTPForm
 import com.wutsi.koki.portal.file.form.StorageForm
 import com.wutsi.koki.portal.invoice.form.InvoiceNotificationSettingsForm
 import com.wutsi.koki.portal.invoice.form.InvoiceSettingsForm
-import com.wutsi.koki.portal.invoice.model.InvoiceNotificationType
+import com.wutsi.koki.portal.payment.form.PaymentSettingsCashForm
+import com.wutsi.koki.portal.payment.form.PaymentSettingsCheckForm
 import com.wutsi.koki.portal.payment.form.PaymentSettingsCreditCardForm
+import com.wutsi.koki.portal.payment.form.PaymentSettingsInteracForm
 import com.wutsi.koki.portal.payment.form.PaymentSettingsMobileForm
 import com.wutsi.koki.portal.payment.form.PaymentSettingsPaypalForm
 import com.wutsi.koki.sdk.KokiConfiguration
@@ -28,9 +30,7 @@ ConfigurationService(
         return koki.configurations(
             names = names,
             keyword = keyword,
-        ).configurations
-            .map { config -> config.name to config.value }
-            .toMap()
+        ).configurations.map { config -> config.name to config.value }.toMap()
     }
 
     fun save(form: SMTPForm) {
@@ -87,32 +87,18 @@ ConfigurationService(
     fun save(form: InvoiceNotificationSettingsForm) {
         koki.save(
             SaveConfigurationRequest(
-                values = if (form.type == InvoiceNotificationType.paid) {
-                    mapOf(
-                        ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT to (form.subject ?: ""),
-                        ConfigurationName.INVOICE_EMAIL_PAID_BODY to (form.body ?: ""),
-                    )
-                } else if (form.type == InvoiceNotificationType.opened) {
-                    mapOf(
-                        ConfigurationName.INVOICE_EMAIL_OPENED_SUBJECT to (form.subject ?: ""),
-                        ConfigurationName.INVOICE_EMAIL_OPENED_BODY to (form.body ?: ""),
-                    )
-                } else {
-                    emptyMap()
-                }
+                values = mapOf(
+                    ConfigurationName.INVOICE_EMAIL_SUBJECT to (form.subject ?: ""),
+                    ConfigurationName.INVOICE_EMAIL_BODY to (form.body ?: ""),
+                )
             )
         )
     }
 
-    fun enable(type: InvoiceNotificationType, status: Boolean) {
-        val name = when (type) {
-            InvoiceNotificationType.paid -> ConfigurationName.INVOICE_EMAIL_PAID_ENABLED
-            InvoiceNotificationType.opened -> ConfigurationName.INVOICE_EMAIL_OPENED_ENABLED
-            else -> return
-        }
+    fun enable(status: Boolean) {
         koki.save(
             SaveConfigurationRequest(
-                values = mapOf(name to (if (status) "1" else ""))
+                values = mapOf(ConfigurationName.INVOICE_EMAIL_ENABLED to (if (status) "1" else ""))
             )
         )
     }
@@ -142,6 +128,11 @@ ConfigurationService(
                     ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_ENABLED to "1",
                     ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_GATEWAY to (form.gateway?.name ?: ""),
                     ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_GATEWAY_STRIPE_API_KEY to (form.stripeApiKey ?: ""),
+                    ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_OFFLINE_PHONE_NUMBER to if (form.offline) {
+                        (form.offlinePhoneNumber ?: "")
+                    } else {
+                        ""
+                    },
                 )
             )
         )
@@ -159,13 +150,55 @@ ConfigurationService(
         )
     }
 
+    fun save(form: PaymentSettingsCashForm) {
+        koki.save(
+            SaveConfigurationRequest(
+                values = mapOf(
+                    ConfigurationName.PAYMENT_METHOD_CASH_ENABLED to "1",
+                    ConfigurationName.PAYMENT_METHOD_CASH_INSTRUCTIONS to (form.instructions?.trim() ?: ""),
+                )
+            )
+        )
+    }
+
+    fun save(form: PaymentSettingsCheckForm) {
+        koki.save(
+            SaveConfigurationRequest(
+                values = mapOf(
+                    ConfigurationName.PAYMENT_METHOD_CHECK_ENABLED to "1",
+                    ConfigurationName.PAYMENT_METHOD_CHECK_PAYEE to (form.payee?.trim()?.uppercase() ?: ""),
+                    ConfigurationName.PAYMENT_METHOD_CHECK_INSTRUCTIONS to (form.instructions?.trim() ?: ""),
+                )
+            )
+        )
+    }
+
+    fun save(form: PaymentSettingsInteracForm) {
+        koki.save(
+            SaveConfigurationRequest(
+                values = mapOf(
+                    ConfigurationName.PAYMENT_METHOD_INTERAC_ENABLED to "1",
+                    ConfigurationName.PAYMENT_METHOD_INTERAC_EMAIL to (form.email ?: ""),
+                    ConfigurationName.PAYMENT_METHOD_INTERAC_QUESTION to (form.question ?: ""),
+                    ConfigurationName.PAYMENT_METHOD_INTERAC_ANSWER to (form.answer ?: ""),
+                )
+            )
+        )
+    }
+
     fun save(form: PaymentSettingsMobileForm) {
         koki.save(
             SaveConfigurationRequest(
                 values = mapOf(
                     ConfigurationName.PAYMENT_METHOD_MOBILE_ENABLED to "1",
                     ConfigurationName.PAYMENT_METHOD_MOBILE_GATEWAY to (form.gateway?.name ?: ""),
-                    ConfigurationName.PAYMENT_METHOD_MOBILE_GATEWAY_FLUTTERWAVE_SECRET_KEY to (form.flutterwaveSecretKey ?: ""),
+                    ConfigurationName.PAYMENT_METHOD_MOBILE_GATEWAY_FLUTTERWAVE_SECRET_KEY to
+                        (form.flutterwaveSecretKey ?: ""),
+                    ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_PHONE_NUMBER to if (form.offline) {
+                        (form.offlinePhoneNumber ?: "")
+                    } else {
+                        ""
+                    },
                 )
             )
         )

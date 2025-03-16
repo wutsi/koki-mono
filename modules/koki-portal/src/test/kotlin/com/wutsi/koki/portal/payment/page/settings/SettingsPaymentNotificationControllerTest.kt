@@ -21,7 +21,7 @@ class SettingsInvoiceNotificationControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.INVOICE_SETTINGS_NOTIFICATION)
 
         input("#subject", "This is the subject {{invoiceNumber}}")
-        inputCodeMiror("<p>Hello</p>")
+        inputCodeMirror("<p>Hello</p>")
         click("button[type=submit]", 1000)
 
         val request = argumentCaptor<SaveConfigurationRequest>()

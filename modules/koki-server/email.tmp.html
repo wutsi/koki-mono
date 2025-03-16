@@ -1,24 +1,87 @@
-<html>
-<head>
-    <meta charset="utf-8">
-</head>
-<body>
-<table role="presentation"
-       style="max-width: 800px; width: 96%; border-spacing: 0; font-size: 18px; margin: 16px auto 0 auto; border: 1px solid gray;">
-    <tr>
-        <td style="text-align: right; padding: 32px;">
-            <a href="https://www.test.com" style="text-decoration: none;">
-                <img height="64"
-                     src="https://prod-wutsi.s3.amazonaws.com/static/wutsi-blog-web/assets/wutsi/img/logo/logo_512x512.png"
-                     style="height: 64px; max-width: 64px"/>
-            </a>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding: 16px">
-            Hello world
-        </td>
-    </tr>
-</table>
-</body>
-</html>
+Dear {{recipientName}}
+<br/><br/>
+
+I hope this email finds you well.
+<br/><br/>
+
+Attached to this email, you will find the invoice #{{invoiceNumber}}.<br/>
+The invoice includes a detailed breakdown of the work performed, along with the associated costs.
+
+<h4>Invoice Details</h4>
+<ul>
+    <li>Invoice Number: {{invoiceNumber}}</li>
+    <li>Invoice Date: {{invoiceDate}}</li>
+    <li>Total Amount Due: {{invoiceAmountDue}}</li>
+    <li>
+        {{#invoicePayUponReception}}
+        Pay upon reception
+        {{/invoicePayUponReception}}
+        {{^invoicePayUponReception}}
+        Due Date: {{invoiceDueDate}}
+        {{/invoicePayUponReception}}
+    </li>
+</ul>
+
+<h4>Payment Methods</h4>
+We accept the following payment methods:
+<ol>
+    <li>
+        <b>Interac e-Transfer</b>
+        <ul>
+            <li>
+                Send your payment to: <b>{{interacEmail}}</b>
+            </li>
+            <li>
+                Please use the following as the security question: <b>{{interacQuestion}}</b>
+            </li>
+            <li>
+                Answer: <b>{{interacAnswer}}</b>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <b>Mobile Money</b>
+        <ul>
+            <li>
+                Pay securely online via our payment portal.
+                Click <a href="{{paymentPortalUrl}}" style="font-size: larger">here</a> to pay online.
+            </li>
+        </ul>
+    </li>
+    <li>
+        <b>Credit Card</b>
+        <ul>
+            <li>
+                Pay securely online via our payment portal.
+                Click <a href="{{paymentPortalUrl}}" style="font-size: larger">here</a> to pay online.
+            </li>
+            <li>
+                Alternatively, you can call us at <b>{{creditCardPhoneNumber}}</b> to process your payment over the
+                phone.
+            </li>
+        </ul>
+    </li>
+    <li>
+        <b>Paypal</b>
+        <ul>
+            <li>
+                Pay securely online via our payment portal.
+                Click <a href="{{paymentPortalUrl}}" style="font-size: larger">here</a> to pay online.
+            </li>
+        </ul>
+    </li>
+    <li>
+        <b>Check</b>
+        <ul>
+            <li>
+                Please make checks payable to {{checkCompanyName}}.
+            </li>
+        </ul>
+    </li>
+</ol>
+
+<br/><br/>
+Thank you once again for your trust in {{businessName}}. We look forward to serving you again in the future!
+
+<br/><br/>
+Best regards,

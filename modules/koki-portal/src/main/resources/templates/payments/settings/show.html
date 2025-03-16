@@ -38,8 +38,13 @@
                     <span class="badge text-bg-danger" th:if="!${form.cash}">Disabled</span>
                 </td>
                 <td align="right">
+                    <a class="btn btn-sm btn-light btn-cash-configure"
+                       href="/settings/payments/cash"
+                       th:if="${form.cash}">
+                        Configure
+                    </a>
                     <a class="btn btn-sm btn-primary btn-cash-enable"
-                       href="/settings/payments/enable?status=true&type=CASH"
+                       href="/settings/payments/cash"
                        th:if="!${form.cash}">
                         Enable
                     </a>
@@ -67,8 +72,13 @@
                     <span class="badge text-bg-danger" th:if="!${form.check}">Disabled</span>
                 </td>
                 <td align="right">
+                    <a class="btn btn-sm btn-light btn-check-configure"
+                       href="/settings/payments/check"
+                       th:if="${form.check}">
+                        Configure
+                    </a>
                     <a class="btn btn-sm btn-primary btn-check-enable"
-                       href="/settings/payments/enable?status=true&type=CHECK"
+                       href="/settings/payments/check"
                        th:if="!${form.check}">
                         Enable
                     </a>
@@ -96,8 +106,13 @@
                     <span class="badge text-bg-danger" th:if="!${form.interac}">Disabled</span>
                 </td>
                 <td align="right">
+                    <a class="btn btn-sm btn-light btn-interac-configure"
+                       href="/settings/payments/interac"
+                       th:if="${form.interac}">
+                        Configure
+                    </a>
                     <a class="btn btn-sm btn-primary btn-interac-enable"
-                       href="/settings/payments/enable?status=true&type=INTERAC"
+                       href="/settings/payments/interac"
                        th:if="!${form.interac}">
                         Enable
                     </a>

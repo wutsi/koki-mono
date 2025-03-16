@@ -13,27 +13,21 @@
     </div>
     <div class="settings-content padding">
         <div
-            th:replace="~{__components/settings :: settings-title('Configure Check Payments', '/settings/payments')}"></div>
+            th:replace="~{__components/settings :: settings-title('Configure Cash Payments', '/settings/payments')}"></div>
 
         <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
         <form class="form" method="post" onsubmit="on_submit()"
-              th:action="@{/settings/payments/check/save}"
+              th:action="@{/settings/payments/cash/save}"
               th:object="${form}">
 
             <table class="table">
-                <tr>
-                    <td width="30%"><b>Pay To<span class="required">*</span></b></td>
-                    <td>
-                        <input required th:field="*{payee}"/>
-                    </td>
-                </tr>
                 <tr>
                     <td><b>Payment Instructions</b></td>
                     <td>
                         <textarea cols="3" maxlength="1000" th:field="*{instructions}"></textarea>
                         <div class="text-small">
-                            Instructions to send to customer to help them to make payments by check.
+                            Instructions to send to customers to help them to make payments in cash.
                         </div>
                     </td>
                 </tr>

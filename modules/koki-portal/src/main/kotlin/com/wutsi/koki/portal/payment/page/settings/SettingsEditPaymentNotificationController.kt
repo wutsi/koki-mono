@@ -23,7 +23,6 @@ class SettingsEditInvoiceNotificationController(
     fun edit(model: Model): String {
         val configs = service.configurations(keyword = "invoice.")
         val form = InvoiceNotificationSettingsForm(
-            enabled = !configs[ConfigurationName.INVOICE_EMAIL_ENABLED].isNullOrEmpty(),
             subject = configs[ConfigurationName.INVOICE_EMAIL_SUBJECT],
             body = configs[ConfigurationName.INVOICE_EMAIL_BODY],
         )

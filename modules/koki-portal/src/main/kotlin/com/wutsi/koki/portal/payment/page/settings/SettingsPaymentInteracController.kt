@@ -3,7 +3,7 @@ package com.wutsi.koki.portal.payment.page.settings
 import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
-import com.wutsi.koki.portal.payment.form.PaymentSettingsCheckForm
+import com.wutsi.koki.portal.payment.form.PaymentSettingsInteracForm
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import com.wutsi.koki.tenant.dto.ConfigurationName
@@ -16,35 +16,37 @@ import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 @RequiresPermission(["payment:admin"])
-class SettingsPaymentCheckController(
+class SettingsPaymentInteracController(
     private val service: ConfigurationService
 ) : AbstractPageController() {
 
-    @GetMapping("/settings/payments/check")
+    @GetMapping("/settings/payments/interac")
     fun edit(model: Model): String {
         val configs = service.configurations(keyword = "payment.")
 
-        val form = PaymentSettingsCheckForm(
-            payee = configs[ConfigurationName.PAYMENT_METHOD_CHECK_PAYEE],
+        val form = PaymentSettingsInteracForm(
+            email = configs[ConfigurationName.PAYMENT_METHOD_INTERAC_EMAIL],
+            question = configs[ConfigurationName.PAYMENT_METHOD_INTERAC_QUESTION],
+            answer = configs[ConfigurationName.PAYMENT_METHOD_INTERAC_ANSWER],
         )
 
         return edit(form, model)
     }
 
-    fun edit(form: PaymentSettingsCheckForm, model: Model): String {
+    fun edit(form: PaymentSettingsInteracForm, model: Model): String {
         model.addAttribute("form", form)
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.PAYMENT_SETTINGS_CHECK,
-                title = "Check Payments"
+                name = PageName.PAYMENT_SETTINGS_INTERAC,
+                title = "Interac Payments"
             )
         )
-        return "payments/settings/check"
+        return "payments/settings/interac"
     }
 
-    @PostMapping("/settings/payments/check/save")
-    fun save(@ModelAttribute form: PaymentSettingsCheckForm, model: Model): String {
+    @PostMapping("/settings/payments/interac/save")
+    fun save(@ModelAttribute form: PaymentSettingsInteracForm, model: Model): String {
         try {
             service.save(form)
             return "redirect:/settings/payments"

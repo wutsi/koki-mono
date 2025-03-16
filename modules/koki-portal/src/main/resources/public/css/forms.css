@@ -111,6 +111,7 @@ input:read-only {
 
 .section-item textarea,
 .section-item input:not([type]),
+.section-item input[type=tel],
 .section-item input[type=text],
 .section-item input[type=email],
 .section-item input[type=password],

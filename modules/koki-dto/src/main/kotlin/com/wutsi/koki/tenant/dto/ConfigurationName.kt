@@ -16,18 +16,10 @@ object ConfigurationName {
     // INVOICE
     const val INVOICE_START_NUMBER = "invoice.start.number"
     const val INVOICE_DUE_DAYS = "invoice.due.days"
+
     const val INVOICE_EMAIL_ENABLED = "invoice.email.enabled"
     const val INVOICE_EMAIL_BODY = "invoice.email.body"
     const val INVOICE_EMAIL_SUBJECT = "invoice.email.subject"
-
-    @Deprecated("")
-    const val INVOICE_EMAIL_PAID_ENABLED = "invoice.email.paid.enabled"
-
-    @Deprecated("")
-    const val INVOICE_EMAIL_PAID_BODY = "invoice.email.paid.body"
-
-    @Deprecated("")
-    const val INVOICE_EMAIL_PAID_SUBJECT = "invoice.email.paid.subject"
 
     // Payment
     const val PAYMENT_EMAIL_ENABLED = "payment.email.enabled"
