@@ -61,6 +61,7 @@ jobs:
                     coverage-badge-filename: koki-server-jococo.svg
 
             -   name: Commit the badge (if it changed)
+                continue-on-error: true
                 run: |
                     if [[ `git status --porcelain` ]]; then
                       git config user.email "actions@github.com"
