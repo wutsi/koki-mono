@@ -38,7 +38,7 @@ class CheckoutConfirmationController(
 
     private fun sendEmailNotificationOnPaid(): Boolean {
         return configurationService.configurations(
-            names = listOf(ConfigurationName.INVOICE_EMAIL_PAID_ENABLED)
+            names = listOf(ConfigurationName.PAYMENT_EMAIL_ENABLED)
         ).isNotEmpty()
     }
 }

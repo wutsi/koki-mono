@@ -47,11 +47,11 @@ class TenantInvoiceInitializerTest {
             request.allValues[0].values[ConfigurationName.INVOICE_EMAIL_ENABLED]
         )
         assertEquals(
-            TenantInvoiceInitializer.INVOICE_SUBJECT,
+            TenantInvoiceInitializer.EMAIL_SUBJECT,
             request.allValues[1].values[ConfigurationName.INVOICE_EMAIL_SUBJECT]
         )
         assertEquals(
-            getContent(TenantInvoiceInitializer.INVOICE_BODY_PATH),
+            getContent(TenantInvoiceInitializer.EMAIL_BODY_PATH),
             request.allValues[2].values[ConfigurationName.INVOICE_EMAIL_BODY]
         )
     }

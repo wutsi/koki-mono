@@ -44,7 +44,7 @@
 
         <p>&nbsp;</p>
 
-        <table class="table border-light">
+        <table class="table table-stripe border-light">
             <tr>
                 <td colspan="3">
                     <h4 class="margin-none">Email Notifications</h4>
@@ -54,27 +54,27 @@
                 <td>
                     <b>When an invoice is approved</b>
                     <div class="text-small margin-left">
-                        Subject: <span th:text="${openedNotification.subject}">SUBJECT</span>
+                        Subject: <span th:text="${notification.subject}">SUBJECT</span>
                     </div>
                 </td>
-                <td align="right">
-                    <span class="badge text-bg-success" th:if="${openedNotification.enabled}">Enabled</span>
-                    <span class="badge text-bg-danger" th:if="!${openedNotification.enabled}">Disabled</span>
+                <td align="right" width="1%">
+                    <span class="badge text-bg-success" th:if="${notification.enabled}">Enabled</span>
+                    <span class="badge text-bg-danger" th:if="!${notification.enabled}">Disabled</span>
                 </td>
-                <td align="right">
+                <td align="right" width="30%">
                     <a class="btn btn-sm btn-light btn-notification"
                        href="/settings/invoices/notifications"
-                       th:if="${openedNotification.enabled}">
+                       th:if="${notification.enabled}">
                         Configure
                     </a>
                     <a class="btn btn-sm btn-primary btn-notification-enable"
                        href="/settings/invoices/notifications/enable?status=true"
-                       th:if="!${openedNotification.enabled}">
+                       th:if="!${notification.enabled}">
                         Enable
                     </a>
                     <a class="btn btn-sm btn-danger btn-notification-disable"
                        href="/settings/invoices/notifications/enable?status=false"
-                       th:if="${openedNotification.enabled}">
+                       th:if="${notification.enabled}">
                         Disable
                     </a>
                 </td>

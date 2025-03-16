@@ -9,17 +9,17 @@
 
 <div class="settings-container">
     <div class="settings-sidebar">
-        <div th:replace="~{__components/settings :: settings-menu('invoice')}"></div>
+        <div th:replace="~{__components/settings :: settings-menu('payment')}"></div>
     </div>
     <div class="settings-content padding">
-        <div th:replace="~{__components/settings :: settings-title('Email Notification', '/settings/invoices')}"></div>
+        <div th:replace="~{__components/settings :: settings-title('Email Notification', '/settings/payments')}"></div>
 
         <div th:replace="~{__components/layout :: error-message(${error})}"></div>
-        <form class="form" method="post" th:action="@{/settings/invoices/notifications/save}" th:object="${form}">
+        <form class="form" method="post" th:action="@{/settings/payments/notifications/save}" th:object="${form}">
             <table class="table">
                 <tr>
                     <td colspan="2">
-                        <h4>When an invoice is approved</h4>
+                        <h4>When an payment is received</h4>
                     </td>
                 </tr>
                 <tr id="tr-subject">

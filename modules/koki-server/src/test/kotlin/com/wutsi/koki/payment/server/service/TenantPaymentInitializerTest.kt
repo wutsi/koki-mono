@@ -9,11 +9,11 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.invoice.server.service.TenantInvoiceInitializer
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import com.wutsi.koki.tenant.server.domain.ConfigurationEntity
 import com.wutsi.koki.tenant.server.service.ConfigurationService
+import org.apache.commons.io.IOUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.bean.override.mockito.MockitoBean
@@ -41,7 +41,10 @@ class TenantPaymentInitializerTest {
         val request = argumentCaptor<SaveConfigurationRequest>()
         verify(configurationService, times(3)).save(request.capture(), eq(tenantId))
 
-        assertEquals("1", request.allValues[0].values[ConfigurationName.PAYMENT_EMAIL_ENABLED])
+        assertEquals(
+            "1",
+            request.allValues[0].values[ConfigurationName.PAYMENT_EMAIL_ENABLED]
+        )
         assertEquals(
             TenantPaymentInitializer.EMAIL_SUBJECT,
             request.allValues[1].values[ConfigurationName.PAYMENT_EMAIL_SUBJECT]

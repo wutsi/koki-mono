@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.invoice.page.settings
+package com.wutsi.koki.portal.payment.page.settings
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
@@ -14,13 +14,13 @@ import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class SettingsInvoiceNotificationControllerTest : AbstractPageControllerTest() {
+class SettingsPaymentNotificationControllerTest : AbstractPageControllerTest() {
     @Test
     fun edit() {
-        navigateTo("/settings/invoices/notifications")
-        assertCurrentPageIs(PageName.INVOICE_SETTINGS_NOTIFICATION)
+        navigateTo("/settings/payments/notifications")
+        assertCurrentPageIs(PageName.PAYMENT_SETTINGS_NOTIFICATION)
 
-        input("#subject", "This is the subject {{invoiceNumber}}")
+        input("#subject", "This is the subject {{paymentNumber}}")
         inputCodeMirror("<p>Hello</p>")
         click("button[type=submit]", 1000)
 
@@ -31,12 +31,12 @@ class SettingsInvoiceNotificationControllerTest : AbstractPageControllerTest() {
             eq(Any::class.java)
         )
         assertEquals(
-            "This is the subject {{invoiceNumber}}",
-            request.firstValue.values[ConfigurationName.INVOICE_EMAIL_SUBJECT]
+            "This is the subject {{paymentNumber}}",
+            request.firstValue.values[ConfigurationName.PAYMENT_EMAIL_SUBJECT]
         )
-        assertEquals("<p>Hello</p>", request.firstValue.values[ConfigurationName.INVOICE_EMAIL_BODY])
+        assertEquals("<p>Hello</p>", request.firstValue.values[ConfigurationName.PAYMENT_EMAIL_BODY])
 
-        assertCurrentPageIs(PageName.INVOICE_SETTINGS)
+        assertCurrentPageIs(PageName.PAYMENT_SETTINGS)
     }
 
     @Test
@@ -49,31 +49,31 @@ class SettingsInvoiceNotificationControllerTest : AbstractPageControllerTest() {
                 eq(Any::class.java)
             )
 
-        navigateTo("/settings/invoices/notifications")
+        navigateTo("/settings/payments/notifications")
         click("button[type=submit]", 1000)
 
-        assertCurrentPageIs(PageName.INVOICE_SETTINGS_NOTIFICATION)
+        assertCurrentPageIs(PageName.PAYMENT_SETTINGS_NOTIFICATION)
         assertElementPresent("#alert-error")
     }
 
     @Test
     fun back() {
-        navigateTo("/settings/invoices/notifications")
+        navigateTo("/settings/payments/notifications")
         click(".btn-back")
-        assertCurrentPageIs(PageName.INVOICE_SETTINGS)
+        assertCurrentPageIs(PageName.PAYMENT_SETTINGS)
     }
 
     @Test
-    fun `edit - without permission invoice-admin`() {
-        setUpUserWithoutPermissions(listOf("invoice:admin"))
-        navigateTo("/settings/invoices/notifications")
+    fun `edit - without permission payment-admin`() {
+        setUpUserWithoutPermissions(listOf("payment:admin"))
+        navigateTo("/settings/payments/notifications")
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 
     @Test
     fun `required login`() {
         setUpAnonymousUser()
-        navigateTo("/settings/invoices/notifications")
+        navigateTo("/settings/payments/notifications")
         assertCurrentPageIs(PageName.LOGIN)
     }
 }

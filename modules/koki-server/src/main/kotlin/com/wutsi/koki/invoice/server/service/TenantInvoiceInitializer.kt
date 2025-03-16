@@ -9,11 +9,8 @@ import org.springframework.stereotype.Service
 @Service
 class TenantInvoiceInitializer : AbstractTenantModuleInitializer() {
     companion object {
-        const val INVOICE_SUBJECT = "Invoice #{{invoiceNumber}} from {{businessName}}"
-        const val INVOICE_BODY_PATH = "/invoice/email/default/invoice.html"
-
-        const val RECEIPT_SUBJECT = "Thank you for your payment - Invoice #{{invoiceNumber}} from {{businessName}}"
-        const val RECEIPT_BODY_PATH = "/payment/email/default/payment.html"
+        const val EMAIL_SUBJECT = "Invoice #{{invoiceNumber}} from {{businessName}}"
+        const val EMAIL_BODY_PATH = "/invoice/email/default/invoice.html"
     }
 
     override fun init(tenantId: Long) {
@@ -24,13 +21,13 @@ class TenantInvoiceInitializer : AbstractTenantModuleInitializer() {
         )
         setConfigurationIfMissing(
             name = ConfigurationName.INVOICE_EMAIL_SUBJECT,
-            value = INVOICE_SUBJECT,
+            value = EMAIL_SUBJECT,
             tenantId = tenantId,
         )
         setConfigurationIfMissing(
             name = ConfigurationName.INVOICE_EMAIL_BODY,
             value = IOUtils.toString(
-                TenantEmailInitializer::class.java.getResourceAsStream(INVOICE_BODY_PATH), "utf-8"
+                TenantEmailInitializer::class.java.getResourceAsStream(EMAIL_BODY_PATH), "utf-8"
             ),
             tenantId = tenantId,
         )
