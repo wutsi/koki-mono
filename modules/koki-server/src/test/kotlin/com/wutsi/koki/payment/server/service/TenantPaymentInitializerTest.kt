@@ -51,7 +51,7 @@ class TenantPaymentInitializerTest {
         )
         assertEquals(
             getContent(TenantPaymentInitializer.EMAIL_BODY_PATH),
-            request.allValues[1].values[ConfigurationName.PAYMENT_EMAIL_BODY]
+            request.allValues[2].values[ConfigurationName.PAYMENT_EMAIL_BODY]
         )
     }
 
