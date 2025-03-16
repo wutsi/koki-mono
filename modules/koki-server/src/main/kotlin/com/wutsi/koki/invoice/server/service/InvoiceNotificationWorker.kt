@@ -22,7 +22,6 @@ import com.wutsi.koki.tenant.server.service.BusinessService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import com.wutsi.koki.tenant.server.service.TenantService
 import com.wutsi.koki.util.CurrencyUtil
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.io.File
@@ -78,10 +77,6 @@ class InvoiceNotificationWorker(
 
     @Value("\${koki.portal-url}") private val portalUrl: String
 ) : AbstractNotificationWorker(registry) {
-    companion object {
-        private val LOGGER = LoggerFactory.getLogger(InvoiceNotificationWorker::class.java)
-    }
-
     override fun notify(event: Any): Boolean {
         if (event is InvoiceStatusChangedEvent) {
             onStatusChanged(event)
@@ -97,13 +92,11 @@ class InvoiceNotificationWorker(
         logger.add("event_status", event.status)
         logger.add("event_invoice_id", event.invoiceId)
         logger.add("event_tenant_id", event.tenantId)
-
-        if (event.status == InvoiceStatus.OPENED) {
-            send(event)
+        if (event.status != InvoiceStatus.OPENED) {
+            return
         }
-    }
 
-    private fun send(event: InvoiceStatusChangedEvent) {
+        // Invoice
         val invoice = invoiceService.get(id = event.invoiceId, tenantId = event.tenantId)
         logger.add("invoice_status", invoice.status)
         if (invoice.status != event.status) {
@@ -117,15 +110,17 @@ class InvoiceNotificationWorker(
             return
         }
 
+        // Configs
         val configs = configurationService.search(tenantId = event.tenantId, keyword = "invoice.")
-            .map { config -> config.name to config.value }.toMap()
-        if (!isEnabled(configs, event)) {
-            if (LOGGER.isDebugEnabled) {
-                LOGGER.debug("Email notification not enabled for status: ${event.status}")
-            }
+            .map { config -> config.name to config.value }
+            .toMap()
+        if (configs[ConfigurationName.INVOICE_EMAIL_ENABLED] == null) {
+            logger.add("email_sent", false)
+            logger.add("email_reason", "EmailDisabled")
             return
         }
 
+        // Send
         val business = businessService.get(tenantId = event.tenantId)
         val tenant = tenantService.get(event.tenantId)
         val file = pdfFile(invoice, business)
@@ -137,8 +132,8 @@ class InvoiceNotificationWorker(
                     id = invoice.customerAccountId,
                     type = invoice.customerAccountId?.let { ObjectType.ACCOUNT } ?: ObjectType.UNKNOWN,
                 ),
-                subject = getSubject(configs, event),
-                body = getBody(configs, event),
+                subject = configs[ConfigurationName.INVOICE_EMAIL_SUBJECT] ?: TenantInvoiceInitializer.EMAIL_SUBJECT,
+                body = configs[ConfigurationName.INVOICE_EMAIL_BODY] ?: "",
                 data = createData(invoice, business, tenant),
                 owner = ObjectReference(id = invoice.id!!, type = ObjectType.INVOICE),
                 attachmentFileIds = listOf(file.id!!),
@@ -151,16 +146,13 @@ class InvoiceNotificationWorker(
         logger.add("event_invoice_id", event.invoiceId)
         logger.add("event_tenant_id", event.tenantId)
 
-        send(event)
-    }
-
-    private fun send(event: SendInvoiceCommand) {
         val invoice = invoiceService.get(id = event.invoiceId, tenantId = event.tenantId)
         val business = businessService.get(tenantId = event.tenantId)
         val tenant = tenantService.get(event.tenantId)
 
         val configs = configurationService.search(tenantId = event.tenantId, keyword = "invoice.")
-            .map { config -> config.name to config.value }.toMap()
+            .map { config -> config.name to config.value }
+            .toMap()
 
         val file = pdfFile(invoice, business)
         emailService.send(
@@ -172,9 +164,7 @@ class InvoiceNotificationWorker(
                     type = invoice.customerAccountId?.let { ObjectType.ACCOUNT } ?: ObjectType.UNKNOWN,
                 ),
 
-                subject = configs[ConfigurationName.INVOICE_EMAIL_SUBJECT]
-                    ?: TenantInvoiceInitializer.INVOICE_SUBJECT,
-
+                subject = configs[ConfigurationName.INVOICE_EMAIL_SUBJECT] ?: TenantInvoiceInitializer.EMAIL_SUBJECT,
                 body = configs[ConfigurationName.INVOICE_EMAIL_BODY] ?: "",
                 data = createData(invoice, business, tenant),
                 owner = ObjectReference(id = invoice.id!!, type = ObjectType.INVOICE),
@@ -195,6 +185,7 @@ class InvoiceNotificationWorker(
         val moneyFormat = CurrencyUtil.getNumberFormat(invoice.currency)
         val dateFormat = SimpleDateFormat(tenant.dateFormat)
         return mapOf(
+            "customerName" to invoice.customerName,
             "businessName" to business.companyName,
             "invoiceNumber" to invoice.number,
             "invoiceDate" to dateFormat.format(invoice.invoicedAt),
@@ -233,36 +224,6 @@ class InvoiceNotificationWorker(
             return false
         } else {
             return Math.abs(date1.time - date2.time) <= 86400000L
-        }
-    }
-
-    private fun isEnabled(configs: Map<String, String>, event: InvoiceStatusChangedEvent): Boolean {
-        return when (event.status) {
-            InvoiceStatus.OPENED -> configs[ConfigurationName.INVOICE_EMAIL_ENABLED] != null
-            InvoiceStatus.PAID -> configs[ConfigurationName.INVOICE_EMAIL_PAID_ENABLED] != null
-            else -> false
-        }
-    }
-
-    private fun getSubject(configs: Map<String, String>, event: InvoiceStatusChangedEvent): String {
-        return when (event.status) {
-            InvoiceStatus.OPENED -> configs[ConfigurationName.INVOICE_EMAIL_SUBJECT]
-                ?: TenantInvoiceInitializer.INVOICE_SUBJECT
-
-            InvoiceStatus.PAID -> configs[ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT]
-                ?: TenantInvoiceInitializer.RECEIPT_SUBJECT
-
-            else -> throw IllegalStateException("Not supported: ${event.status}")
-        }
-    }
-
-    private fun getBody(configs: Map<String, String>, event: InvoiceStatusChangedEvent): String {
-        return when (event.status) {
-            InvoiceStatus.OPENED -> configs[ConfigurationName.INVOICE_EMAIL_BODY] ?: ""
-
-            InvoiceStatus.PAID -> configs[ConfigurationName.INVOICE_EMAIL_PAID_BODY] ?: ""
-
-            else -> throw IllegalStateException("Not supported: ${event.status}")
         }
     }
 

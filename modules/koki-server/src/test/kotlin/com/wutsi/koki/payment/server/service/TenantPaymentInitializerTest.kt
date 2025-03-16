@@ -13,6 +13,7 @@ import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import com.wutsi.koki.tenant.server.domain.ConfigurationEntity
 import com.wutsi.koki.tenant.server.service.ConfigurationService
+import org.apache.commons.io.IOUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.bean.override.mockito.MockitoBean
@@ -38,10 +39,20 @@ class TenantPaymentInitializerTest {
         initializer.init(tenantId)
 
         val request = argumentCaptor<SaveConfigurationRequest>()
-        verify(configurationService, times(2)).save(request.capture(), eq(tenantId))
+        verify(configurationService, times(3)).save(request.capture(), eq(tenantId))
 
-        assertEquals("1", request.allValues[0].values[ConfigurationName.PAYMENT_METHOD_CASH_ENABLED])
-        assertEquals("1", request.allValues[1].values[ConfigurationName.PAYMENT_METHOD_CHECK_ENABLED])
+        assertEquals(
+            "1",
+            request.allValues[0].values[ConfigurationName.PAYMENT_EMAIL_ENABLED]
+        )
+        assertEquals(
+            TenantPaymentInitializer.EMAIL_SUBJECT,
+            request.allValues[1].values[ConfigurationName.PAYMENT_EMAIL_SUBJECT]
+        )
+        assertEquals(
+            getContent(TenantPaymentInitializer.EMAIL_BODY_PATH),
+            request.allValues[2].values[ConfigurationName.PAYMENT_EMAIL_BODY]
+        )
     }
 
     @Test
@@ -53,5 +64,11 @@ class TenantPaymentInitializerTest {
         initializer.init(tenantId)
 
         verify(configurationService, never()).save(any(), any())
+    }
+
+    private fun getContent(path: String): String {
+        return IOUtils.toString(
+            TenantPaymentInitializer::class.java.getResourceAsStream(path), "utf-8"
+        )
     }
 }

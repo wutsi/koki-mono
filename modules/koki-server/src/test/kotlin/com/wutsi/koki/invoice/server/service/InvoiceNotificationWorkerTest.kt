@@ -72,9 +72,6 @@ class InvoiceNotificationWorkerTest {
         ConfigurationName.INVOICE_EMAIL_SUBJECT to "New Invoice #{{invoiceNumber}} from {{businessName}}",
         ConfigurationName.INVOICE_EMAIL_BODY to "You have a new invoice!",
 
-        ConfigurationName.INVOICE_EMAIL_PAID_SUBJECT to "Thank you for your payment - Invoice #{{invoiceNumber}}",
-        ConfigurationName.INVOICE_EMAIL_PAID_BODY to "Thank you!",
-
         ConfigurationName.PAYMENT_METHOD_BANK_ENABLED to "1",
 
         ConfigurationName.PAYMENT_METHOD_CASH_ENABLED to "1",
@@ -130,7 +127,7 @@ class InvoiceNotificationWorkerTest {
 
     private fun createEvent(status: InvoiceStatus): InvoiceStatusChangedEvent {
         return InvoiceStatusChangedEvent(
-            tenantId = 111L,
+            tenantId = tenant.id!!,
             invoiceId = invoiceId,
             status = status,
         )
@@ -149,7 +146,7 @@ class InvoiceNotificationWorkerTest {
             totalAmount = 500.0,
             amountDue = 500.0,
             currency = "CAD",
-            tenantId = 111L,
+            tenantId = tenant.id!!,
             invoicedAt = DateUtils.addDays(Date(), -10),
             dueAt = Date(),
         )
@@ -190,6 +187,7 @@ class InvoiceNotificationWorkerTest {
         assertEquals(ObjectType.INVOICE, request.firstValue.owner?.type)
 
         val fmt = SimpleDateFormat(tenant.dateFormat)
+        assertEquals(invoice.customerName, request.firstValue.data["customerName"])
         assertEquals(business.companyName, request.firstValue.data["businessName"])
         assertEquals(invoice.number, request.firstValue.data["invoiceNumber"])
         assertEquals(fmt.format(invoice.invoicedAt), request.firstValue.data["invoiceDate"])
@@ -311,7 +309,7 @@ class InvoiceNotificationWorkerTest {
         assertEquals(invoice.customerName, request.firstValue.recipient.displayName)
         assertEquals(invoice.customerAccountId, request.firstValue.recipient.id)
         assertEquals(ObjectType.UNKNOWN, request.firstValue.recipient.type)
-        assertEquals(TenantInvoiceInitializer.INVOICE_SUBJECT, request.firstValue.subject)
+        assertEquals(TenantInvoiceInitializer.EMAIL_SUBJECT, request.firstValue.subject)
         assertEquals("", request.firstValue.body)
         assertEquals(listOf(file.id), request.firstValue.attachmentFileIds)
         assertEquals(invoice.id, request.firstValue.owner?.id)

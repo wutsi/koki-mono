@@ -84,7 +84,6 @@
 
 - [] Invoice Widget
 - [] Add locale to invoice
-- [] Send email for unpaid invoices
 - [x] Update amount due on successfull payment
 - [x] Download invoices
 - [x] Send invoice manually via email
@@ -121,12 +120,13 @@
 
 ## Payment
 
-- [] Capture online payments Stripe
 - [] Settings: Validate Stripe configuration
 - [] Capture online payments Paypal
 - [] Settings: Validate Paypal configuration
 - [] Capture online payments Flutterwave
 - [] Settings: Validate Flutterwave configuration
+- [x] Send email notification on payment
+- [x] Capture online payments Stripe
 - [x] Settings: Configure the supported payment method
     - [x] Cash
     - [x] Check

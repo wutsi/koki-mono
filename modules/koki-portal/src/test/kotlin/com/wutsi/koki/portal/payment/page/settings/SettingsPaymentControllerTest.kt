@@ -1,8 +1,14 @@
 package com.wutsi.koki.portal.payment.page.settings
 
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
+import com.wutsi.koki.tenant.dto.ConfigurationName
+import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class SettingsPaymentControllerTest : AbstractPageControllerTest() {
     @Test
@@ -30,5 +36,55 @@ class SettingsPaymentControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/payments")
         click(".btn-back")
         assertCurrentPageIs(PageName.SETTINGS)
+    }
+
+    @Test
+    fun `enable notification`() {
+        disableConfig(listOf(ConfigurationName.PAYMENT_EMAIL_ENABLED))
+
+        navigateTo("/settings/payments")
+        scrollToBottom()
+        click(".btn-notification-enable")
+
+        val request = argumentCaptor<SaveConfigurationRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/configurations"),
+            request.capture(),
+            eq(Any::class.java)
+        )
+        assertEquals(
+            "1",
+            request.firstValue.values[ConfigurationName.PAYMENT_EMAIL_ENABLED]
+        )
+
+        assertCurrentPageIs(PageName.PAYMENT_SETTINGS)
+    }
+
+    @Test
+    fun `disable notification`() {
+        navigateTo("/settings/payments")
+        scrollToBottom()
+        click(".btn-notification-disable")
+
+        val request = argumentCaptor<SaveConfigurationRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/configurations"),
+            request.capture(),
+            eq(Any::class.java)
+        )
+        assertEquals(
+            "",
+            request.firstValue.values[ConfigurationName.PAYMENT_EMAIL_ENABLED]
+        )
+
+        assertCurrentPageIs(PageName.PAYMENT_SETTINGS)
+    }
+
+    @Test
+    fun notification() {
+        navigateTo("/settings/payments")
+        scrollToBottom()
+        click(".btn-notification")
+        assertCurrentPageIs(PageName.PAYMENT_SETTINGS_NOTIFICATION)
     }
 }

@@ -77,7 +77,7 @@ class SettingsEmailDecoratorEditControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/email/decorator/edit")
         assertCurrentPageIs(PageName.EMAIL_SETTINGS_EMAIL_DECORATOR_EDIT)
 
-        inputCodeMiror(code)
+        inputCodeMirror(code)
         click("button[type=submit]", 1000)
 
         verify(rest).postForEntity(
@@ -104,7 +104,7 @@ class SettingsEmailDecoratorEditControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/email/decorator/edit")
         assertCurrentPageIs(PageName.EMAIL_SETTINGS_EMAIL_DECORATOR_EDIT)
 
-        inputCodeMiror(code)
+        inputCodeMirror(code)
         click("button[type=submit]", 1000)
         assertElementPresent(".alert-danger")
 

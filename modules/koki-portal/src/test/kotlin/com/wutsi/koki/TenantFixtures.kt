@@ -25,6 +25,9 @@ object TenantFixtures {
         ConfigurationName.INVOICE_EMAIL_SUBJECT to "Invoice #{{invoiceNumber}}",
         ConfigurationName.INVOICE_EMAIL_BODY to "You have a new invoice!",
 
+        ConfigurationName.PAYMENT_EMAIL_ENABLED to "1",
+        ConfigurationName.PAYMENT_EMAIL_SUBJECT to "Thank you for your payment - Invoice #{{invoiceNumber}}",
+        ConfigurationName.PAYMENT_EMAIL_BODY to "Thank you!",
         ConfigurationName.PAYMENT_METHOD_BANK_ENABLED to "1",
         ConfigurationName.PAYMENT_METHOD_CASH_ENABLED to "1",
         ConfigurationName.PAYMENT_METHOD_CASH_INSTRUCTIONS to "You can send your email at address:\n3030 Linton",

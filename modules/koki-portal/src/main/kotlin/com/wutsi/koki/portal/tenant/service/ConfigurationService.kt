@@ -6,6 +6,7 @@ import com.wutsi.koki.portal.email.model.SMTPForm
 import com.wutsi.koki.portal.file.form.StorageForm
 import com.wutsi.koki.portal.invoice.form.InvoiceNotificationSettingsForm
 import com.wutsi.koki.portal.invoice.form.InvoiceSettingsForm
+import com.wutsi.koki.portal.payment.form.PaymentNotificationSettingsForm
 import com.wutsi.koki.portal.payment.form.PaymentSettingsCashForm
 import com.wutsi.koki.portal.payment.form.PaymentSettingsCheckForm
 import com.wutsi.koki.portal.payment.form.PaymentSettingsCreditCardForm
@@ -95,10 +96,21 @@ ConfigurationService(
         )
     }
 
-    fun enable(status: Boolean) {
+    fun save(form: PaymentNotificationSettingsForm) {
         koki.save(
             SaveConfigurationRequest(
-                values = mapOf(ConfigurationName.INVOICE_EMAIL_ENABLED to (if (status) "1" else ""))
+                values = mapOf(
+                    ConfigurationName.PAYMENT_EMAIL_SUBJECT to (form.subject ?: ""),
+                    ConfigurationName.PAYMENT_EMAIL_BODY to (form.body ?: ""),
+                )
+            )
+        )
+    }
+
+    fun enable(name: String, status: Boolean) {
+        koki.save(
+            SaveConfigurationRequest(
+                values = mapOf(name to (if (status) "1" else ""))
             )
         )
     }
