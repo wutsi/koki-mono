@@ -11,7 +11,6 @@ import com.wutsi.koki.payment.server.service.PaymentGatewayException
 import com.wutsi.koki.payment.server.service.PaymentGatewayService
 import com.wutsi.koki.refdata.server.service.SalesTaxService
 import com.wutsi.koki.tenant.server.service.TenantService
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import kotlin.collections.flatMap
 
