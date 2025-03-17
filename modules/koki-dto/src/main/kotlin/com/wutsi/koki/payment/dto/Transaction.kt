@@ -16,6 +16,7 @@ data class Transaction(
     val supplierTransactionId: String? = null,
     val supplierStatus: String? = null,
     val supplierErrorCode: String? = null,
+    val supplierErrorMessage: String? = null,
     val description: String? = null,
     val createdAt: Date = Date(),
     val paymentMethod: PaymentMethod = PaymentMethod(),
