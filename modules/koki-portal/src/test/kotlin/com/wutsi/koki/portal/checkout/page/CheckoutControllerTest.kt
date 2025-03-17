@@ -45,7 +45,7 @@ class CheckoutControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun error() {
-        val ex = createHttpClientErrorException(statusCode = 409, errorCode = "Failed")
+        val ex = createHttpClientErrorException(statusCode = 409, errorCode = "Failed", message = "Transaction failed")
         doThrow(ex).whenever(rest)
             .postForEntity(
                 any<String>(),

@@ -29,6 +29,7 @@ data class TransactionEntity(
     val currency: String = "",
     var checkoutUrl: String? = null,
     var errorCode: String? = null,
+    var supplierErrorMessage: String? = null,
     var supplierTransactionId: String? = null,
     var supplierStatus: String? = null,
     var supplierErrorCode: String? = null,

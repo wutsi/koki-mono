@@ -51,6 +51,7 @@ class TransactionMapper {
             supplierTransactionId = entity.supplierTransactionId,
             supplierStatus = entity.supplierStatus,
             supplierErrorCode = entity.supplierErrorCode,
+            supplierErrorMessage = entity.supplierErrorMessage,
             paymentMethod = PaymentMethod(
                 cash = cash?.let { toPaymentMethodCash(cash) },
                 interact = interact?.let { toPaymentMethodInteract(interact) },

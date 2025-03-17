@@ -52,6 +52,7 @@ class TransactionService(
             tx.status = TransactionStatus.FAILED
             tx.errorCode = ex.errorCode
             tx.supplierErrorCode = ex.supplierErrorCode
+            tx.supplierErrorMessage = ex.message
         }
         return dao.save(tx)
     }

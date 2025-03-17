@@ -216,16 +216,19 @@ class PaymentService(
             tx.status = TransactionStatus.FAILED
             tx.errorCode = ex.errorCode
             tx.supplierErrorCode = ex.supplierErrorCode
+            tx.supplierErrorMessage = ex.message
         } catch (ex: WutsiException) {
             LOGGER.warn("Payment failed", ex)
 
             tx.status = TransactionStatus.FAILED
             tx.errorCode = ex.error.code
+            tx.supplierErrorMessage = ex.message
         } catch (ex: Throwable) {
             LOGGER.warn("Payment failed", ex)
 
             tx.status = TransactionStatus.FAILED
             tx.errorCode = ErrorCode.TRANSACTION_PAYMENT_FAILED
+            tx.supplierErrorMessage = ex.message
         }
 
         dao.save(tx)

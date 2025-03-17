@@ -144,6 +144,10 @@
                                     <td><b>Supplier Error Code</b></td>
                                     <td th:utext="${payment.supplierErrorCode}">SUPPLIER-ERROR-CODE</td>
                                 </tr>
+                                <tr th:if="${payment.supplierErrorMessage}">
+                                    <td><b>Supplier Error Message</b></td>
+                                    <td th:utext="${payment.supplierErrorMessage}">SUPPLIER-ERROR-MESSAGE</td>
+                                </tr>
 
                                 <tr th:if="${payment.description}">
                                     <td><b>Description</b></td>
