@@ -7,10 +7,10 @@ import com.wutsi.koki.payment.dto.TransactionStatus
 import com.wutsi.koki.payment.dto.TransactionType
 import com.wutsi.koki.payment.server.dao.TransactionRepository
 import com.wutsi.koki.payment.server.domain.TransactionEntity
-import com.wutsi.koki.platform.logger.KVLogger
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.slf4j.LoggerFactory
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import java.util.Date
 import kotlin.jvm.optionals.getOrNull
@@ -20,7 +20,6 @@ class TransactionService(
     private val dao: TransactionRepository,
     private val em: EntityManager,
     private val paymentGatewayServiceProvider: PaymentGatewayServiceProvider,
-    private val logger: KVLogger,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(TransactionService::class.java)
@@ -41,8 +40,12 @@ class TransactionService(
     @Transactional
     fun sync(tx: TransactionEntity): TransactionEntity {
         try {
-            val gatewayService = paymentGatewayServiceProvider.get(tx.gateway)
-            gatewayService.sync(tx)
+            val gatewayService = paymentGatewayServiceProvider.getOrNull(tx.gateway)
+            if (gatewayService == null) {
+                return tx
+            } else {
+                gatewayService.sync(tx)
+            }
         } catch (ex: PaymentGatewayException) {
             LOGGER.warn("Failure", ex)
 
@@ -110,5 +113,18 @@ class TransactionService(
         query.firstResult = offset
         query.maxResults = limit
         return query.resultList
+    }
+
+    fun findByStatusAndCreatedAtBefore(
+        status: TransactionStatus,
+        createdAt: Date,
+        limit: Int = 20,
+        offset: Int = 0
+    ): List<TransactionEntity> {
+        return dao.findByStatusAndCreatedAtBefore(
+            status = status,
+            createdAt = createdAt,
+            pageable = PageRequest.of(offset / limit, limit)
+        )
     }
 }

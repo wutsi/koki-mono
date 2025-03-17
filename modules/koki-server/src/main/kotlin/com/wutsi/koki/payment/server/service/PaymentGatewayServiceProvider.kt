@@ -11,13 +11,17 @@ class PaymentGatewayServiceProvider(
 ) {
     @Throws(PaymentGatewayException::class)
     fun get(gateway: PaymentGateway): PaymentGatewayService {
+        return getOrNull(gateway) ?: throw PaymentGatewayException(
+            errorCode = ErrorCode.TRANSACTION_PAYMENT_METHOD_NOT_SUPPORTED,
+            supplierErrorCode = null,
+            message = "Gateway not supported: $gateway"
+        )
+    }
+
+    fun getOrNull(gateway: PaymentGateway): PaymentGatewayService? {
         return when (gateway) {
             PaymentGateway.STRIPE -> stripe
-            else -> throw PaymentGatewayException(
-                errorCode = ErrorCode.TRANSACTION_PAYMENT_METHOD_NOT_SUPPORTED,
-                supplierErrorCode = null,
-                message = "Gateway not supported: $gateway"
-            )
+            else -> null
         }
     }
 }
