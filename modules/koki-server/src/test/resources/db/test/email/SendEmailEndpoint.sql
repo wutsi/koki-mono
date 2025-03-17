@@ -2,6 +2,9 @@ INSERT INTO T_TENANT(id, status, name, domain_name, locale, number_format, curre
     VALUES
         (1, 1, 'test', 'localhost', 'fr_FR', '#,###,###',    'CAD', 'CA$',  'CA$ #,###,###.#0', 'yyyy-MM-dd', 'hh:mm a', 'yyyy-MM-dd hh:mm a', 'https://prod-wutsi.s3.amazonaws.com/static/wutsi-blog-web/assets/wutsi/img/logo/name-104x50.png', 'https://prod-wutsi.s3.amazonaws.com/static/wutsi-blog-web/assets/wutsi/img/logo/logo_512x512.png', 'http://localhost:8081');
 
+INSERT INTO T_BUSINESS(id, tenant_fk, company_name, phone, fax, email, website, address_city_fk, address_state_fk, address_country, address_postal_code, address_street)
+    VALUES (100, 1, 'Business Inc', '+5147580100', '+5147580111', 'info@my-biz.com', 'https://my-biz.com', 111, 100, 'CA', 'H7K1C6', '340 Pascal');
+
 INSERT INTO T_CONFIGURATION(tenant_fk, name, value)
     VALUES (1, 'email.decorator',   '<table> <tr><td>{{tenant_name}}</td></tr> <tr><td>{{{body}}}</td></tr> </table>');
 

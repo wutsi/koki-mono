@@ -35,7 +35,7 @@ class StripeGatewayService(
             .setSuccessUrl(redirectUrl)
             .setCancelUrl(redirectUrl)
             .setMode(SessionCreateParams.Mode.PAYMENT)
-            .setExpiresAt(System.currentTimeMillis() + (timeout * 60 * 1000L))
+            .setExpiresAt(System.currentTimeMillis() + (timeout * 60))
             .setCurrency(tx.currency)
             .putMetadata("tenant_id", tx.tenantId.toString())
             .putMetadata("invoice_id", tx.invoiceId.toString())

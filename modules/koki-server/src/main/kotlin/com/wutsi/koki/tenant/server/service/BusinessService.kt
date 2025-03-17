@@ -22,10 +22,12 @@ class BusinessService(
     private val locationService: LocationService,
 ) {
     fun get(tenantId: Long): BusinessEntity {
+        return getOrNull(tenantId)
+            ?: throw NotFoundException(error = Error(ErrorCode.BUSINESS_NOT_FOUND))
+    }
+
+    fun getOrNull(tenantId: Long): BusinessEntity? {
         return dao.findByTenantId(tenantId)
-            ?: throw NotFoundException(
-                error = Error(ErrorCode.BUSINESS_NOT_FOUND)
-            )
     }
 
     @Transactional

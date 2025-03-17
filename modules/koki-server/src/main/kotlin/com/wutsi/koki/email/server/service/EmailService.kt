@@ -22,8 +22,12 @@ import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
 import com.wutsi.koki.platform.messaging.MessagingType
 import com.wutsi.koki.platform.messaging.Party
 import com.wutsi.koki.platform.messaging.smtp.SMTPMessagingServiceBuilder
+import com.wutsi.koki.platform.messaging.smtp.SMTPType
 import com.wutsi.koki.platform.templating.TemplatingEngine
 import com.wutsi.koki.security.server.service.SecurityService
+import com.wutsi.koki.tenant.dto.ConfigurationName
+import com.wutsi.koki.tenant.server.domain.BusinessEntity
+import com.wutsi.koki.tenant.server.service.BusinessService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
@@ -45,6 +49,7 @@ class EmailService(
     private val templatingEngine: TemplatingEngine,
     private val configurationService: ConfigurationService,
     private val messagingServiceBuilder: MessagingServiceBuilder,
+    private val businessService: BusinessService,
     private val fileService: FileService,
     private val filterSet: EmailFilterSet,
     private val em: EntityManager,
@@ -149,9 +154,15 @@ class EmailService(
             )
         }
 
+        // Config
+        val config = configurationService.search(
+            names = SMTPMessagingServiceBuilder.CONFIG_NAMES, tenantId = tenantId
+        ).map { cfg -> cfg.name to cfg.value }.toMap()
+
         // Send email
         try {
-            val message = createMessage(request, email)
+            val business = businessService.getOrNull(tenantId)
+            val message = createMessage(request, email, config, business)
             try {
                 logger.add("recipient_email", message.recipient.email)
                 if (message.recipient.email.isEmpty()) {
@@ -160,7 +171,7 @@ class EmailService(
                     )
                 }
 
-                createMessagingService(tenantId).send(message)
+                createMessagingService(config).send(message)
                 logger.add("email_sent", true)
                 logger.add("email_address", request.recipient.email)
                 return email
@@ -185,7 +196,12 @@ class EmailService(
         }
     }
 
-    private fun createMessage(request: SendEmailRequest, email: EmailEntity): Message {
+    private fun createMessage(
+        request: SendEmailRequest,
+        email: EmailEntity,
+        config: Map<String, String>,
+        business: BusinessEntity?,
+    ): Message {
         return Message(
             subject = email.subject,
             body = filterSet.filter(email.body, email.tenantId),
@@ -200,8 +216,20 @@ class EmailService(
                     LOGGER.debug("Adding attachment ${file.absolutePath}")
                 }
                 file
-            }
+            },
+            sender = Party(
+                displayName = if (isSMTPKoki(config)) {
+                    config[ConfigurationName.SMTP_FROM_PERSONAL] ?: business?.companyName
+                } else {
+                    ""
+                },
+            )
         )
+    }
+
+    private fun isSMTPKoki(config: Map<String, String>): Boolean {
+        val type = config[ConfigurationName.SMTP_TYPE]
+        return type == null || type.equals(SMTPType.KOKI.name, true)
     }
 
     private fun download(fileId: Long, tenantId: Long): File {
@@ -230,10 +258,7 @@ class EmailService(
         }
     }
 
-    private fun createMessagingService(tenantId: Long): MessagingService {
-        val config = configurationService.search(
-            names = SMTPMessagingServiceBuilder.CONFIG_NAMES, tenantId = tenantId
-        ).map { cfg -> cfg.name to cfg.value }.toMap()
+    private fun createMessagingService(config: Map<String, String>): MessagingService {
         return messagingServiceBuilder.build(MessagingType.EMAIL, config)
     }
 
