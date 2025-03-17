@@ -11,7 +11,7 @@ import com.wutsi.koki.payment.dto.TransactionStatus
 import com.wutsi.koki.payment.dto.event.TransactionCompletedEvent
 import com.wutsi.koki.payment.server.dao.TransactionRepository
 import com.wutsi.koki.payment.server.domain.TransactionEntity
-import com.wutsi.koki.payment.server.service.gateway.StripeGatewayService
+import com.wutsi.koki.payment.server.service.stripe.StripeGatewayService
 import com.wutsi.koki.platform.mq.Publisher
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

@@ -18,7 +18,7 @@ import com.wutsi.koki.payment.dto.TransactionType
 import com.wutsi.koki.payment.dto.event.TransactionCompletedEvent
 import com.wutsi.koki.payment.server.domain.TransactionEntity
 import com.wutsi.koki.payment.server.service.PaymentGatewayException
-import com.wutsi.koki.payment.server.service.gateway.StripeGatewayService
+import com.wutsi.koki.payment.server.service.stripe.StripeGatewayService
 import com.wutsi.koki.platform.mq.Publisher
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.bean.override.mockito.MockitoBean

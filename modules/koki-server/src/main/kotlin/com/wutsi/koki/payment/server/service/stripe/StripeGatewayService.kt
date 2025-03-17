@@ -1,4 +1,4 @@
-package com.wutsi.koki.payment.server.service.gateway
+package com.wutsi.koki.payment.server.service.stripe
 
 import com.stripe.exception.StripeException
 import com.stripe.param.checkout.SessionCreateParams
@@ -11,6 +11,7 @@ import com.wutsi.koki.payment.server.service.PaymentGatewayException
 import com.wutsi.koki.payment.server.service.PaymentGatewayService
 import com.wutsi.koki.refdata.server.service.SalesTaxService
 import com.wutsi.koki.tenant.server.service.TenantService
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import kotlin.collections.flatMap
 
@@ -20,6 +21,8 @@ class StripeGatewayService(
     private val invoiceService: InvoiceService,
     private val salesTaxService: SalesTaxService,
     private val tenantService: TenantService,
+
+    @Value("\${koki.payment-gateway.stripe.session.timeout-minutes}") private val timeout: Long
 ) : PaymentGatewayService {
     @Throws(PaymentGatewayException::class)
     override fun checkout(tx: TransactionEntity) {
@@ -32,6 +35,7 @@ class StripeGatewayService(
             .setSuccessUrl(redirectUrl)
             .setCancelUrl(redirectUrl)
             .setMode(SessionCreateParams.Mode.PAYMENT)
+            .setExpiresAt(System.currentTimeMillis() + (timeout * 60 * 1000L))
             .setCurrency(tx.currency)
             .putMetadata("tenant_id", tx.tenantId.toString())
             .putMetadata("invoice_id", tx.invoiceId.toString())

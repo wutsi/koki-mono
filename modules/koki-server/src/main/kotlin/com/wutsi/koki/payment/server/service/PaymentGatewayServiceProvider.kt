@@ -2,7 +2,7 @@ package com.wutsi.koki.payment.server.service
 
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.payment.dto.PaymentGateway
-import com.wutsi.koki.payment.server.service.gateway.StripeGatewayService
+import com.wutsi.koki.payment.server.service.stripe.StripeGatewayService
 import org.springframework.stereotype.Service
 
 @Service

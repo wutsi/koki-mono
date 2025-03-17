@@ -1,4 +1,4 @@
-package com.wutsi.koki.payment.server.service.gateway
+package com.wutsi.koki.payment.server.service.stripe
 
 import com.stripe.StripeClient
 import com.wutsi.koki.error.dto.ErrorCode
@@ -25,7 +25,7 @@ class StripeClientBuilder(
             ?: throw PaymentGatewayException(
                 errorCode = ErrorCode.TRANSACTION_PAYMENT_METHOD_NOT_SUPPORTED,
                 supplierErrorCode = null,
-                message = "No API Kpi",
+                message = "No API Key",
             )
     }
 }

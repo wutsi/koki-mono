@@ -180,6 +180,11 @@ koki:
         password: secret
         from: no-reply@wutsi.com
 
+    payment-gateway:
+        stripe:
+            session:
+                timeout-minutes: 30
+
     module:
         invoice:
             mq:

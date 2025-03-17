@@ -5,7 +5,6 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.payment.server.service.PaymentGatewayException
-import com.wutsi.koki.payment.server.service.gateway.StripeClientBuilder
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.domain.ConfigurationEntity
 import com.wutsi.koki.tenant.server.service.ConfigurationService

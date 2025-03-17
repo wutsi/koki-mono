@@ -21,8 +21,6 @@ import com.wutsi.koki.invoice.server.service.InvoiceService
 import com.wutsi.koki.payment.dto.TransactionStatus
 import com.wutsi.koki.payment.server.domain.TransactionEntity
 import com.wutsi.koki.payment.server.service.PaymentGatewayException
-import com.wutsi.koki.payment.server.service.gateway.StripeClientBuilder
-import com.wutsi.koki.payment.server.service.gateway.StripeGatewayService
 import com.wutsi.koki.refdata.server.domain.JuridictionEntity
 import com.wutsi.koki.refdata.server.domain.SalesTaxEntity
 import com.wutsi.koki.refdata.server.service.SalesTaxService
@@ -97,6 +95,7 @@ class StripeGatewayServiceTest {
         invoiceService,
         salesTaxService,
         tenantService,
+        timeout = 35L,
     )
 
     @BeforeEach
@@ -121,6 +120,7 @@ class StripeGatewayServiceTest {
 
     @Test
     fun checkout() {
+        val now = System.currentTimeMillis()
         val session = setupSession("open")
 
         service.checkout(transaction)
@@ -136,6 +136,7 @@ class StripeGatewayServiceTest {
         assertEquals(transaction.tenantId.toString(), params.firstValue.metadata["tenant_id"])
         assertEquals(transaction.invoiceId.toString(), params.firstValue.metadata["invoice_id"])
         assertEquals(transaction.currency, params.firstValue.currency)
+        assertEquals(35 * 60L, (params.firstValue.expiresAt - now) / 1000L)
         assertEquals(SessionCreateParams.Mode.PAYMENT, params.firstValue.mode)
         assertEquals(
             "http://localhost:8081/checkout/confirmation?transaction-id=${transaction.id}",

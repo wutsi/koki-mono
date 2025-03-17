@@ -2,7 +2,7 @@ package com.wutsi.koki.payment.server.service
 
 import com.nhaarman.mockitokotlin2.mock
 import com.wutsi.koki.payment.dto.PaymentGateway
-import com.wutsi.koki.payment.server.service.gateway.StripeGatewayService
+import com.wutsi.koki.payment.server.service.stripe.StripeGatewayService
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
@@ -10,7 +10,7 @@ import kotlin.test.assertEquals
 class PaymentGatewayServiceProviderTest {
     val stripeGateway = mock<StripeGatewayService>()
     val provider = PaymentGatewayServiceProvider(
-        stripe = stripeGateway
+        stripe = stripeGateway,
     )
 
     @Test

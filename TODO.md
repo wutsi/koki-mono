@@ -25,6 +25,7 @@
 
 ## Business
 
+- [] Record TaxIDs
 - [] Integrate [int-tel](https://intl-tel-input.com/) for phone number input
 - [x] Business entity
 - [x] Settings: Setup business information
