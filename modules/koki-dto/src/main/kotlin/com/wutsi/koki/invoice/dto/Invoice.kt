@@ -4,7 +4,7 @@ import com.wutsi.koki.refdata.dto.Address
 import java.util.Date
 
 data class Invoice(
-    val id: String = "",
+    val id: Long = -1,
     val orderId: Long? = null,
     val taxId: Long? = null,
     val number: Long = -1,

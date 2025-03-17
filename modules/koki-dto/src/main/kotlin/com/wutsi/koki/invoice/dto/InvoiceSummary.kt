@@ -3,7 +3,7 @@ package com.wutsi.koki.invoice.dto
 import java.util.Date
 
 data class InvoiceSummary(
-    val id: String = "",
+    val id: Long = -1,
     val number: Long = -1,
     val taxId: Long? = null,
     val orderId: Long? = null,
