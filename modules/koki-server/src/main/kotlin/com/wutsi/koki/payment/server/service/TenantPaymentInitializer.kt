@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 @Service
 class TenantPaymentInitializer : AbstractTenantModuleInitializer() {
     companion object {
-        const val EMAIL_SUBJECT = "Payment Received – Thank You!"
+        const val EMAIL_SUBJECT = "Payment Received – Invoice #{{invoiceNumber}}"
         const val EMAIL_BODY_PATH = "/payment/email/default/payment.html"
     }
 

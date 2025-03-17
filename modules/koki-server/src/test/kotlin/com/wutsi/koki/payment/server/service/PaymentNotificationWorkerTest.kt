@@ -1,5 +1,6 @@
 package com.wutsi.koki.payment.server.service
 
+import com.github.mustachejava.DefaultMustacheFactory
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
@@ -19,6 +20,7 @@ import com.wutsi.koki.payment.dto.TransactionStatus
 import com.wutsi.koki.payment.dto.event.TransactionCompletedEvent
 import com.wutsi.koki.payment.server.domain.TransactionEntity
 import com.wutsi.koki.platform.logger.DefaultKVLogger
+import com.wutsi.koki.platform.templating.MustacheTemplatingEngine
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.domain.BusinessEntity
 import com.wutsi.koki.tenant.server.domain.ConfigurationEntity
@@ -26,6 +28,7 @@ import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.service.BusinessService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import com.wutsi.koki.tenant.server.service.TenantService
+import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.time.DateUtils
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
@@ -57,7 +60,7 @@ class PaymentNotificationWorkerTest {
     )
 
     private val transactionId = "fdoifodi-fd"
-    private val tenant = TenantEntity(id = 555L, dateFormat = "dd/MM/yyyy")
+    private val tenant = TenantEntity(id = 555L, dateFormat = "dd/MM/yyyy", monetaryFormat = "C\$ #,###,##0.00")
     private val business = BusinessEntity(companyName = "Olive Inc", tenantId = tenant.id!!)
     private val invoice = InvoiceEntity(
         id = 111L,
@@ -125,7 +128,7 @@ class PaymentNotificationWorkerTest {
         assertEquals(business.companyName, request.firstValue.data["businessName"])
         assertEquals(invoice.number, request.firstValue.data["invoiceNumber"])
         assertEquals(fmt.format(tx.createdAt), request.firstValue.data["paymentDate"])
-        assertEquals("500,00 \$ CA", request.firstValue.data["paymentAmount"])
+        assertEquals("C\$ 500.00", request.firstValue.data["paymentAmount"])
         assertEquals("Credit Card", request.firstValue.data["paymentMethod"])
     }
 
@@ -141,6 +144,24 @@ class PaymentNotificationWorkerTest {
         worker.notify(createEvent(TransactionStatus.PENDING))
 
         verify(emailService, never()).send(any(), any())
+    }
+
+    @Test
+    fun `test email`() {
+        createTransaction(TransactionStatus.SUCCESSFUL)
+        worker.notify(createEvent(TransactionStatus.SUCCESSFUL))
+
+        val request = argumentCaptor<SendEmailRequest>()
+        verify(emailService).send(request.capture(), any())
+
+        val body = IOUtils.toString(
+            PaymentNotificationWorker::class.java.getResourceAsStream(TenantPaymentInitializer.EMAIL_BODY_PATH),
+            "utf-8"
+        )
+        val template = MustacheTemplatingEngine(DefaultMustacheFactory())
+        val xbody = template.apply(body, request.firstValue.data)
+
+        println(xbody)
     }
 
     private fun createEvent(status: TransactionStatus): TransactionCompletedEvent {

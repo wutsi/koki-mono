@@ -3,6 +3,10 @@ package com.wutsi.koki.portal.tenant.model
 import com.wutsi.koki.portal.module.model.ModuleModel
 import com.wutsi.koki.portal.module.model.PermissionModel
 import com.wutsi.koki.tenant.dto.TenantStatus
+import java.text.DateFormat
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.util.Date
 
 data class TenantModel(
@@ -31,5 +35,17 @@ data class TenantModel(
 
     fun hasModule(name: String): Boolean {
         return modules.find { module -> module.name == name } != null
+    }
+
+    fun createMoneyFormat(): NumberFormat {
+        return DecimalFormat(monetaryFormat)
+    }
+
+    fun createDateFormat(): DateFormat {
+        return SimpleDateFormat(dateFormat)
+    }
+
+    fun createDateTimeFormat(): DateFormat {
+        return SimpleDateFormat(dateTimeFormat)
     }
 }

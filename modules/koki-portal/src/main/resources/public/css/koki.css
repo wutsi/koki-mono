@@ -346,7 +346,7 @@ tr.activity-running {
 }
 
 .settings-sidebar {
-    width: 30vw;
+    width: 20vw;
     height: 100vh;
     background: #f8f8f8;
     border-right: 1px solid gray;
@@ -389,7 +389,7 @@ tr.activity-running {
 }
 
 .settings-content {
-    width: 70vw;
+    width: 80vw;
     height: 100vh;
     background: white;
 }

@@ -24,6 +24,10 @@ class MoneyMapper : TenantAwareMapper() {
     }
 
     private fun getCurrencyFormatter(currency: String): NumberFormat {
+        if (currentTenant.get()?.currency == currency) {
+            return createMoneyFormat()
+        }
+
         NumberFormat.getAvailableLocales().forEach { locale ->
             val fmt = NumberFormat.getCurrencyInstance(locale)
             if (fmt.getCurrency().getCurrencyCode() == currency) {

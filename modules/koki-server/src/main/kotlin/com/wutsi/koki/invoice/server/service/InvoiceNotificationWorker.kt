@@ -21,13 +21,12 @@ import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.service.BusinessService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import com.wutsi.koki.tenant.server.service.TenantService
-import com.wutsi.koki.util.CurrencyUtil
+import org.apache.commons.text.StringEscapeUtils
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.text.SimpleDateFormat
 import java.util.Date
 
 /**
@@ -182,8 +181,8 @@ class InvoiceNotificationWorker(
         val configs = configurationService.search(tenantId = invoice.tenantId, keyword = "payment.")
             .map { config -> config.name to config.value }.toMap()
 
-        val moneyFormat = CurrencyUtil.getNumberFormat(invoice.currency)
-        val dateFormat = SimpleDateFormat(tenant.dateFormat)
+        val moneyFormat = tenant.createMoneyFormat()
+        val dateFormat = tenant.createDateFormat()
         return mapOf(
             "customerName" to invoice.customerName,
             "businessName" to business.companyName,
@@ -194,7 +193,7 @@ class InvoiceNotificationWorker(
             "invoiceAmountDue" to moneyFormat.format(invoice.amountDue),
             "invoiceTotalAmount" to moneyFormat.format(invoice.totalAmount),
 
-            "portalPaymentURL" to "$portalUrl/checkout/${invoice.id}",
+            "paymentPortalUrl" to "$portalUrl/checkout/${invoice.id}",
 
             "paymentMethodInterac" to configs[ConfigurationName.PAYMENT_METHOD_INTERAC_ENABLED],
             "interacEmail" to configs[ConfigurationName.PAYMENT_METHOD_INTERAC_EMAIL],
@@ -211,10 +210,10 @@ class InvoiceNotificationWorker(
 
             "paymentMethodCheck" to configs[ConfigurationName.PAYMENT_METHOD_CHECK_ENABLED],
             "checkPayTo" to configs[ConfigurationName.PAYMENT_METHOD_CHECK_PAYEE],
-            "checkInstructions" to configs[ConfigurationName.PAYMENT_METHOD_CHECK_INSTRUCTIONS],
+            "checkInstructions" to toHtml(configs[ConfigurationName.PAYMENT_METHOD_CHECK_INSTRUCTIONS]),
 
             "paymentMethodCash" to configs[ConfigurationName.PAYMENT_METHOD_CASH_ENABLED],
-            "cashInstructions" to configs[ConfigurationName.PAYMENT_METHOD_CASH_INSTRUCTIONS],
+            "cashInstructions" to toHtml(configs[ConfigurationName.PAYMENT_METHOD_CASH_INSTRUCTIONS]),
         )
             .filter { entry -> entry.value != null } as Map<String, Any>
     }
@@ -265,5 +264,13 @@ class InvoiceNotificationWorker(
         } finally {
             file.delete()
         }
+    }
+
+    fun toHtml(str: String?): String? {
+        if (str == null) {
+            return null
+        }
+
+        return StringEscapeUtils.escapeHtml4(str).replace("\n", "<br/>")
     }
 }

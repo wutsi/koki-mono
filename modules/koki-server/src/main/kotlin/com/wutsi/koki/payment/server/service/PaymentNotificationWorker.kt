@@ -19,10 +19,8 @@ import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.service.BusinessService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import com.wutsi.koki.tenant.server.service.TenantService
-import com.wutsi.koki.util.CurrencyUtil
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
-import java.text.SimpleDateFormat
 import java.util.Locale
 
 /**
@@ -112,8 +110,8 @@ class PaymentNotificationWorker(
         business: BusinessEntity,
         tenant: TenantEntity,
     ): Map<String, Any> {
-        val moneyFormat = CurrencyUtil.getNumberFormat(tx.currency)
-        val dateFormat = SimpleDateFormat(tenant.dateFormat)
+        val moneyFormat = tenant.createMoneyFormat()
+        val dateFormat = tenant.createDateFormat()
         return mapOf(
             "customerName" to invoice.customerName,
             "businessName" to business.companyName,

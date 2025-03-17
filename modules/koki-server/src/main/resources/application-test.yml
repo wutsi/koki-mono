@@ -39,9 +39,7 @@ koki:
         invoice:
             mq:
                 consumer-delay-seconds: 60
-                dlq-cron: "0 */15 * * * *"  # Every 15 mins
 
         notification:
             mq:
                 consumer-delay-seconds: 60
-                dlq-cron: "0 */15 * * * *"  # Every 15 mins

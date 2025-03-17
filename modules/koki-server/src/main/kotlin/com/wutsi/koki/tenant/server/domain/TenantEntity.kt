@@ -8,6 +8,10 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
+import java.text.DateFormat
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.util.Date
 
 @Entity
@@ -22,10 +26,7 @@ data class TenantEntity(
     val numberFormat: String = "",
     val currency: String = "",
     val currencySymbol: String = "",
-
-    @Deprecated("Infer money format from currency")
     val monetaryFormat: String = "",
-
     val dateFormat: String = "",
     val timeFormat: String = "",
     val dateTimeFormat: String = "",
@@ -43,4 +44,12 @@ data class TenantEntity(
         inverseJoinColumns = arrayOf(JoinColumn(name = "module_fk")),
     )
     val modules: List<ModuleEntity> = mutableListOf(),
-)
+) {
+    fun createMoneyFormat(): NumberFormat {
+        return DecimalFormat(monetaryFormat)
+    }
+
+    fun createDateFormat(): DateFormat {
+        return SimpleDateFormat(dateFormat)
+    }
+}

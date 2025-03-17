@@ -10,7 +10,6 @@ import com.wutsi.koki.refdata.server.service.SalesTaxService
 import com.wutsi.koki.refdata.server.service.UnitService
 import com.wutsi.koki.tenant.server.domain.BusinessEntity
 import com.wutsi.koki.tenant.server.service.TenantService
-import com.wutsi.koki.util.CurrencyUtil
 import org.apache.commons.io.IOUtils
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -105,9 +104,7 @@ class InvoiceHtmlExporter {
         // Data
         val tenant = tenantService.get(invoice.tenantId)
         val dateFormat = SimpleDateFormat(tenant.dateFormat)
-        val moneyFormat = CurrencyUtil.getNumberFormat(
-            items.firstOrNull()?.currency ?: tenant.currency
-        )
+        val moneyFormat = tenant.createMoneyFormat()
         val data = mutableMapOf<String, Any>()
         data["businessName"] = business.companyName
         data["businessPhone"] = (business.phone ?: "")

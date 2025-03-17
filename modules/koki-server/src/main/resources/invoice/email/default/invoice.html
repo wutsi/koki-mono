@@ -33,7 +33,7 @@ We accept the following payment methods:
                 Send your payment to: <b>{{interacEmail}}</b>
             </li>
             <li>
-                Please use the following as the security question: <b>{{interacQuestion}}</b>
+                Security question: <b>{{interacQuestion}}</b>
             </li>
             <li>
                 Answer: <b>{{interacAnswer}}</b>
@@ -47,16 +47,13 @@ We accept the following payment methods:
         <b>Credit Card</b>
         <ul>
             <li>
-                Pay securely online via our payment portal.
-                Click <a href="{{paymentPortalUrl}}" style="font-size: larger">here</a> to pay online.
+                Pay securely online via our <a href="{{paymentPortalUrl}}" style="font-size: larger">Payment Portal</a>.
             </li>
             {{#creditCardOfflinePhoneNumber}}
             <li>
-                Alternatively, you can call us at <b>{{creditCardOfflinePhoneNumber}}</b> to process your payment over
-                the
-                phone.
+                Or call us at <b>{{creditCardOfflinePhoneNumber}}</b> to process your payment over the phone.
             </li>
-            {{\creditCardOfflinePhoneNumber}}
+            {{/creditCardOfflinePhoneNumber}}
         </ul>
     </li>
     {{/paymentMethodCreditCard}}
@@ -66,14 +63,13 @@ We accept the following payment methods:
         <b>Mobile Money</b>
         <ul>
             <li>
-                Pay securely online via our payment portal.
-                Click <a href="{{paymentPortalUrl}}" style="font-size: larger">here</a> to pay online.
+                Pay securely online via our <a href="{{paymentPortalUrl}}" style="font-size: larger">Payment Portal</a>.
             </li>
             {{#mobileOfflinePhoneNumber}}
             <li>
-                Alternatively, you send send the mobile payment at <b>{{creditCardOfflinePhoneNumber}}</b>.
+                Or send your mobile payment to <b>{{mobileOfflinePhoneNumber}}</b>.
             </li>
-            {{\mobileOfflinePhoneNumber}}
+            {{/mobileOfflinePhoneNumber}}
         </ul>
     </li>
     {{/paymentMethodMobile}}
@@ -83,8 +79,7 @@ We accept the following payment methods:
         <b>Paypal</b>
         <ul>
             <li>
-                Pay securely online via our payment portal.
-                Click <a href="{{paymentPortalUrl}}" style="font-size: larger">here</a> to pay online.
+                Pay securely online via our <a href="{{paymentPortalUrl}}" style="font-size: larger">Payment Portal</a>.
             </li>
         </ul>
     </li>
@@ -95,14 +90,12 @@ We accept the following payment methods:
         <b>Check</b>
         <ul>
             <li>
-                Please make checks payable to {{checkPayTo}}
+                Please make checks payable to {{checkPayTo}}.
+                {{#checkInstructions}}
+                <br/>
+                {{{checkInstructions}}}
+                {{/checkInstructions}}
             </li>
-            {{#checkInstructions}}
-            <li>
-                Here are the instruction for paying by check:<br/>
-                {{checkInstructions}}
-            </li>
-            {{/checkInstructions}}
         </ul>
     </li>
     {{/paymentMethodCheck}}
@@ -113,20 +106,20 @@ We accept the following payment methods:
         <ul>
             <li>
                 You can pay in cash.
+                {{#cashInstructions}}
+                <br/>
+                {{{cashInstructions}}}
+                {{/cashInstructions}}
             </li>
-            {{#cashInstructions}}
-            <li>
-                Here are the instruction for paying in cash:<br/>
-                {{cashInstructions}}
-            </li>
-            {{/cashInstructions}}
         </ul>
     </li>
-    {{#paymentMethodCash}}
+    {{/paymentMethodCash}}
 </ol>
 
 <br/><br/>
-Thank you once again for your trust in {{businessName}}. We look forward to serving you again in the future!
+Thank you once again for your trust in {{businessName}}.
+<br/>
+We look forward to serving you again in the future!
 
 <br/><br/>
 Best regards,

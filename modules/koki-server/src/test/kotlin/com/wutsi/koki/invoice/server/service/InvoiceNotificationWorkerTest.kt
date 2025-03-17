@@ -1,5 +1,6 @@
 package com.wutsi.koki.invoice.server.service
 
+import com.github.mustachejava.DefaultMustacheFactory
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
@@ -20,6 +21,7 @@ import com.wutsi.koki.invoice.server.domain.InvoiceEntity
 import com.wutsi.koki.invoice.server.io.pdf.InvoicePdfExporter
 import com.wutsi.koki.notification.server.service.NotificationConsumer
 import com.wutsi.koki.platform.logger.DefaultKVLogger
+import com.wutsi.koki.platform.templating.MustacheTemplatingEngine
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.domain.BusinessEntity
 import com.wutsi.koki.tenant.server.domain.ConfigurationEntity
@@ -27,6 +29,7 @@ import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.service.BusinessService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import com.wutsi.koki.tenant.server.service.TenantService
+import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.time.DateUtils
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -64,7 +67,7 @@ class InvoiceNotificationWorkerTest {
     )
 
     private val invoiceId = 111L
-    private val tenant = TenantEntity(id = 555L, dateFormat = "dd/MM/yyyy")
+    private val tenant = TenantEntity(id = 555L, dateFormat = "dd/MM/yyyy", monetaryFormat = "C\$ #,###,##0.00")
     private val business = BusinessEntity(companyName = "Olive Inc", tenantId = tenant.id!!)
 
     val config = mapOf(
@@ -75,11 +78,24 @@ class InvoiceNotificationWorkerTest {
         ConfigurationName.PAYMENT_METHOD_BANK_ENABLED to "1",
 
         ConfigurationName.PAYMENT_METHOD_CASH_ENABLED to "1",
-        ConfigurationName.PAYMENT_METHOD_CASH_INSTRUCTIONS to "Instruction for cash payment",
+        ConfigurationName.PAYMENT_METHOD_CASH_INSTRUCTIONS to """
+            Cash payment are done at our office at the address:
+            3030 Linton
+            Montreal, H7K 1L1
+            Quebec, Canada
+
+            Open hours: Monday-Friday, 9:00AM to 5:30PM
+        """.trimIndent(),
 
         ConfigurationName.PAYMENT_METHOD_CHECK_ENABLED to "1",
         ConfigurationName.PAYMENT_METHOD_CHECK_PAYEE to "Ray Inc.",
-        ConfigurationName.PAYMENT_METHOD_CHECK_INSTRUCTIONS to "Instruction for check payment",
+        ConfigurationName.PAYMENT_METHOD_CHECK_INSTRUCTIONS to """
+            You can send you check via mail at the following address:
+            RAY INC
+            3030 Linton
+            Montreal, H7K 1L1
+            Quebec, Canada
+        """.trimIndent(),
 
         ConfigurationName.PAYMENT_METHOD_INTERAC_ENABLED to "1",
         ConfigurationName.PAYMENT_METHOD_INTERAC_QUESTION to "Color of the bench",
@@ -193,16 +209,16 @@ class InvoiceNotificationWorkerTest {
         assertEquals(fmt.format(invoice.invoicedAt), request.firstValue.data["invoiceDate"])
         assertEquals(fmt.format(invoice.dueAt), request.firstValue.data["invoiceDueDate"])
         assertEquals(false, request.firstValue.data["invoicePayUponReception"])
-        assertEquals("500,00 \$ CA", request.firstValue.data["invoiceTotalAmount"])
-        assertEquals("500,00 \$ CA", request.firstValue.data["invoiceAmountDue"])
-        assertEquals("http://localhost:8081/checkout/${invoice.id}", request.firstValue.data["portalPaymentURL"])
+        assertEquals("C\$ 500.00", request.firstValue.data["invoiceTotalAmount"])
+        assertEquals("C\$ 500.00", request.firstValue.data["invoiceAmountDue"])
+        assertEquals("http://localhost:8081/checkout/${invoice.id}", request.firstValue.data["paymentPortalUrl"])
 
         assertEquals(
             config[ConfigurationName.PAYMENT_METHOD_CASH_ENABLED],
             request.firstValue.data["paymentMethodCash"]
         )
         assertEquals(
-            config[ConfigurationName.PAYMENT_METHOD_CASH_INSTRUCTIONS],
+            worker.toHtml(config[ConfigurationName.PAYMENT_METHOD_CASH_INSTRUCTIONS]),
             request.firstValue.data["cashInstructions"]
         )
 
@@ -215,7 +231,7 @@ class InvoiceNotificationWorkerTest {
             request.firstValue.data["checkPayTo"]
         )
         assertEquals(
-            config[ConfigurationName.PAYMENT_METHOD_CHECK_INSTRUCTIONS],
+            worker.toHtml(config[ConfigurationName.PAYMENT_METHOD_CHECK_INSTRUCTIONS]),
             request.firstValue.data["checkInstructions"]
         )
 
@@ -360,5 +376,23 @@ class InvoiceNotificationWorkerTest {
         worker.notify(event)
 
         verify(emailService, never()).send(any(), any())
+    }
+
+    @Test
+    fun `test email`() {
+        val invoice = createInvoice(InvoiceStatus.OPENED)
+        worker.notify(SendInvoiceCommand(invoiceId = invoiceId, tenantId = invoice.tenantId))
+
+        val request = argumentCaptor<SendEmailRequest>()
+        verify(emailService).send(request.capture(), any())
+
+        val body = IOUtils.toString(
+            InvoiceNotificationWorker::class.java.getResourceAsStream(TenantInvoiceInitializer.EMAIL_BODY_PATH),
+            "utf-8"
+        )
+        val template = MustacheTemplatingEngine(DefaultMustacheFactory())
+        val xbody = template.apply(body, request.firstValue.data)
+
+        println(xbody)
     }
 }
