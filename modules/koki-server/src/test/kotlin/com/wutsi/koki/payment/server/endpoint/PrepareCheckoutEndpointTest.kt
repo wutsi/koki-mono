@@ -79,7 +79,7 @@ class PrepareCheckoutEndpointTest : AuthorizationAwareEndpointTest() {
         val ex = PaymentGatewayException(
             errorCode = "1111",
             supplierErrorCode = "xxxx",
-            message = "Error"
+            message = "Transaction failed",
         )
         doThrow(ex).whenever(stripe).checkout(any())
 
@@ -105,6 +105,7 @@ class PrepareCheckoutEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(820.0, tx.amount)
         assertEquals(ex.errorCode, tx.errorCode)
         assertEquals(ex.supplierErrorCode, tx.supplierErrorCode)
+        assertEquals(ex.message, tx.supplierErrorMessage)
         assertEquals(null, tx.supplierTransactionId)
         assertEquals(null, tx.supplierStatus)
         assertEquals(null, tx.checkoutUrl)
