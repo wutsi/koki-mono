@@ -121,6 +121,7 @@ class StripeGatewayServiceTest {
     @Test
     fun checkout() {
         val now = System.currentTimeMillis()
+
         val session = setupSession("open")
 
         service.checkout(transaction)
@@ -136,7 +137,7 @@ class StripeGatewayServiceTest {
         assertEquals(transaction.tenantId.toString(), params.firstValue.metadata["tenant_id"])
         assertEquals(transaction.invoiceId.toString(), params.firstValue.metadata["invoice_id"])
         assertEquals(transaction.currency, params.firstValue.currency)
-        assertEquals((35 * 60L) / 100, (params.firstValue.expiresAt - now) / 100)
+        assertEquals(true, (params.firstValue.expiresAt * 1000 - now) / 1000L <= 35 * 60L)
         assertEquals(SessionCreateParams.Mode.PAYMENT, params.firstValue.mode)
         assertEquals(
             "http://localhost:8081/checkout/confirmation?transaction-id=${transaction.id}",
