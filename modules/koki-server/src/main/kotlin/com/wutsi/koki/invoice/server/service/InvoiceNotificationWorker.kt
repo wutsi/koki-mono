@@ -22,7 +22,6 @@ import com.wutsi.koki.tenant.server.service.BusinessService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import com.wutsi.koki.tenant.server.service.TenantService
 import org.apache.commons.text.StringEscapeUtils
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.io.File
 import java.io.FileInputStream
@@ -73,8 +72,6 @@ class InvoiceNotificationWorker(
     private val fileService: FileService,
     private val invoicePdfExporter: InvoicePdfExporter,
     private val tenantService: TenantService,
-
-    @Value("\${koki.portal-url}") private val portalUrl: String
 ) : AbstractNotificationWorker(registry) {
     override fun notify(event: Any): Boolean {
         if (event is InvoiceStatusChangedEvent) {
@@ -176,7 +173,7 @@ class InvoiceNotificationWorker(
     private fun createData(
         invoice: InvoiceEntity,
         business: BusinessEntity,
-        tenant: TenantEntity
+        tenant: TenantEntity,
     ): Map<String, Any> {
         val configs = configurationService.search(tenantId = invoice.tenantId, keyword = "payment.")
             .map { config -> config.name to config.value }.toMap()
@@ -193,7 +190,7 @@ class InvoiceNotificationWorker(
             "invoiceAmountDue" to moneyFormat.format(invoice.amountDue),
             "invoiceTotalAmount" to moneyFormat.format(invoice.totalAmount),
 
-            "paymentPortalUrl" to "$portalUrl/checkout/${invoice.id}",
+            "paymentPortalUrl" to "${tenant.portalUrl}/checkout/${invoice.id}",
 
             "paymentMethodInterac" to configs[ConfigurationName.PAYMENT_METHOD_INTERAC_ENABLED],
             "interacEmail" to configs[ConfigurationName.PAYMENT_METHOD_INTERAC_EMAIL],

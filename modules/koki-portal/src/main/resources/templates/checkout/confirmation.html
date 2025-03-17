@@ -28,10 +28,9 @@
                             Thank you for your payment!
                         </h2>
                         <div>
-                            <p th:if="${notificationSent}">
-                                Your invoice has been sent to
-                                <b th:text="${tx.invoice.customer.email}">xxx@xxx</b>
-                            </p>
+                            We have successfully received your payment of
+                            <b th:text="${tx.amount}">$$$</b> for the invoice #<span
+                            th:text="${tx.invoice.number}">000</span>.
                         </div>
                     </div>
                     <div class="margin-top-2x" th:if="${tx.failed}">
@@ -48,10 +47,10 @@
                     </div>
 
                     <div class="margin-top flex flex-space-between margin-top-2x">
-                        <div th:style="!${tx.invoice.paid} ? 'width: 60%' : 'width:100%'">
+                        <div th:style="!${tx.successful} ? 'width: 60%' : 'width:100%'">
                             <div th:replace="~{__components/checkout :: checkout-invoice(${tx.invoice})}"></div>
                         </div>
-                        <div style="width:35%" th:if="!${tx.invoice.paid}">
+                        <div style="width:35%" th:if="!${tx.successful}">
                             <div
                                 th:replace="~{__components/checkout :: checkout-buttons(${tx.invoice}, ${paymentMethodTypes})}"></div>
                         </div>

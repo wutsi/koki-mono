@@ -63,11 +63,15 @@ class InvoiceNotificationWorkerTest {
         invoicePdfExporter = invoicePdfExporter,
         tenantService = tenantService,
         logger = logger,
-        portalUrl = "http://localhost:8081"
     )
 
     private val invoiceId = 111L
-    private val tenant = TenantEntity(id = 555L, dateFormat = "dd/MM/yyyy", monetaryFormat = "C\$ #,###,##0.00")
+    private val tenant = TenantEntity(
+        id = 555L,
+        dateFormat = "dd/MM/yyyy",
+        monetaryFormat = "C\$ #,###,##0.00",
+        portalUrl = "http://localhost:8081",
+    )
     private val business = BusinessEntity(companyName = "Olive Inc", tenantId = tenant.id!!)
 
     val config = mapOf(

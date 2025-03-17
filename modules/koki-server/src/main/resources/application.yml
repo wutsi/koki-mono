@@ -151,7 +151,6 @@ logging:
 
 koki:
     server-url: http://localhost:${server.port}
-    portal-url: http://localhost:8081
 
     executor:
         thread-pool-size: 16

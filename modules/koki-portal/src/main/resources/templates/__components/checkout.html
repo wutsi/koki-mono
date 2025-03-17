@@ -7,7 +7,6 @@
         Invoice #<b th:text="${invoice.number}">0000</b>
     </div>
     <div th:if="!${invoice.paid}">
-        <div>Pay</div>
         <h1 th:text="${invoice.amountDue}">$$$</h1>
     </div>
     <div th:if="${invoice.paid}">

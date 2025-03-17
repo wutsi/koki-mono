@@ -82,6 +82,7 @@
 
 ## Invoice
 
+- [] Change ID from Long to UUID
 - [] Invoice Widget
 - [] Add locale to invoice
 - [x] Update amount due on successfull payment
