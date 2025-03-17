@@ -26,6 +26,8 @@ import com.wutsi.koki.payment.server.service.gateway.StripeGatewayService
 import com.wutsi.koki.refdata.server.domain.JuridictionEntity
 import com.wutsi.koki.refdata.server.domain.SalesTaxEntity
 import com.wutsi.koki.refdata.server.service.SalesTaxService
+import com.wutsi.koki.tenant.server.domain.TenantEntity
+import com.wutsi.koki.tenant.server.service.TenantService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
@@ -41,10 +43,17 @@ class StripeGatewayServiceTest {
         juridiction = JuridictionEntity(id = 111L)
     )
 
+    private val tenant = TenantEntity(
+        id = 555L,
+        dateFormat = "dd/MM/yyyy",
+        monetaryFormat = "C\$ #,###,##0.00",
+        portalUrl = "http://localhost:8081",
+    )
+
     private var transaction = TransactionEntity()
     private val invoice = InvoiceEntity(
         id = transaction.invoiceId,
-        tenantId = 111L,
+        tenantId = tenant.id!!,
         currency = "CAD",
         totalAmount = transaction.amount - 50.0,
         totalTaxAmount = 50.0,
@@ -82,11 +91,12 @@ class StripeGatewayServiceTest {
     private val stripeClientBuilder = mock<StripeClientBuilder>()
     private val invoiceService = mock<InvoiceService>()
     private val salesTaxService = mock<SalesTaxService>()
+    private val tenantService = mock<TenantService>()
     private val service = StripeGatewayService(
         stripeClientBuilder,
         invoiceService,
         salesTaxService,
-        "http://localhost:8081"
+        tenantService,
     )
 
     @BeforeEach
@@ -102,7 +112,7 @@ class StripeGatewayServiceTest {
 
         doReturn(checkoutService).whenever(stripe).checkout()
         doReturn(sessionService).whenever(checkoutService).sessions()
-
+        doReturn(tenant).whenever(tenantService).get(any())
         doReturn(stripe).whenever(stripeClientBuilder).build(any())
         doReturn(invoice).whenever(invoiceService).get(any(), any())
         doReturn(listOf(salesTax)).whenever(salesTaxService)

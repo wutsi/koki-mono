@@ -10,6 +10,7 @@ import com.wutsi.koki.payment.server.domain.TransactionEntity
 import com.wutsi.koki.payment.server.service.PaymentGatewayException
 import com.wutsi.koki.payment.server.service.PaymentGatewayService
 import com.wutsi.koki.refdata.server.service.SalesTaxService
+import com.wutsi.koki.tenant.server.service.TenantService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import kotlin.collections.flatMap
@@ -19,14 +20,14 @@ class StripeGatewayService(
     private val stripeClientBuilder: StripeClientBuilder,
     private val invoiceService: InvoiceService,
     private val salesTaxService: SalesTaxService,
-
-    @Value("\${koki.portal-url}") private val portalUrl: String,
+    private val tenantService: TenantService,
 ) : PaymentGatewayService {
     @Throws(PaymentGatewayException::class)
     override fun checkout(tx: TransactionEntity) {
         val invoice = invoiceService.get(tx.invoiceId, tx.tenantId)
+        val tenant = tenantService.get(tx.tenantId)
         val client = stripeClientBuilder.build(tx.tenantId)
-        val redirectUrl = "$portalUrl/checkout/confirmation?transaction-id=${tx.id}"
+        val redirectUrl = "${tenant.portalUrl}/checkout/confirmation?transaction-id=${tx.id}"
 
         val params = SessionCreateParams.builder()
             .setSuccessUrl(redirectUrl)
