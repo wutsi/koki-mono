@@ -107,6 +107,7 @@ class InvoiceNotificationWorkerTest {
         ConfigurationName.PAYMENT_METHOD_INTERAC_EMAIL to "ray@gmail.com",
 
         ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_ENABLED to "1",
+        ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_OFFLINE_ENABLED to "1",
         ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_OFFLINE_PHONE_NUMBER to "5147580111",
         ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_GATEWAY to "STRIPE",
         ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_GATEWAY_STRIPE_API_KEY to "SRP.1234567890",
@@ -115,7 +116,10 @@ class InvoiceNotificationWorkerTest {
         ConfigurationName.PAYMENT_METHOD_PAYPAL_CLIENT_ID to "PP.1234567890",
 
         ConfigurationName.PAYMENT_METHOD_MOBILE_ENABLED to "1",
+        ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_ENABLED to "1",
         ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_PHONE_NUMBER to "5147580100",
+        ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_ACCOUNT_NAME to "Ray Sponsible",
+        ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_PROVIDER to "MTN",
         ConfigurationName.PAYMENT_METHOD_MOBILE_GATEWAY to "FLUTTERWAVE",
         ConfigurationName.PAYMENT_METHOD_MOBILE_GATEWAY_FLUTTERWAVE_SECRET_KEY to "FLT.1234567890",
     )
@@ -266,6 +270,10 @@ class InvoiceNotificationWorkerTest {
             request.firstValue.data["paymentMethodCreditCard"]
         )
         assertEquals(
+            config[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_OFFLINE_ENABLED],
+            request.firstValue.data["creditCardOfflineEnabled"]
+        )
+        assertEquals(
             config[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_OFFLINE_PHONE_NUMBER],
             request.firstValue.data["creditCardOfflinePhoneNumber"]
         )
@@ -275,8 +283,20 @@ class InvoiceNotificationWorkerTest {
             request.firstValue.data["paymentMethodMobile"]
         )
         assertEquals(
+            config[ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_ENABLED],
+            request.firstValue.data["mobileOfflineEnabled"]
+        )
+        assertEquals(
             config[ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_PHONE_NUMBER],
             request.firstValue.data["mobileOfflinePhoneNumber"]
+        )
+        assertEquals(
+            config[ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_PROVIDER],
+            request.firstValue.data["mobileOfflineProvider"]
+        )
+        assertEquals(
+            config[ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_ACCOUNT_NAME],
+            request.firstValue.data["mobileOfflineAccountName"]
         )
     }
 

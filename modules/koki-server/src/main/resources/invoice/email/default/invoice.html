@@ -49,11 +49,11 @@ We accept the following payment methods:
             <li>
                 Pay securely online via our <a href="{{paymentPortalUrl}}" style="font-size: larger">Payment Portal</a>.
             </li>
-            {{#creditCardOfflinePhoneNumber}}
+            {{#creditCardOfflineEnabled}}
             <li>
                 Or call us at <b>{{creditCardOfflinePhoneNumber}}</b> to process your payment over the phone.
             </li>
-            {{/creditCardOfflinePhoneNumber}}
+            {{/creditCardOfflineEnabled}}
         </ul>
     </li>
     {{/paymentMethodCreditCard}}
@@ -65,11 +65,16 @@ We accept the following payment methods:
             <li>
                 Pay securely online via our <a href="{{paymentPortalUrl}}" style="font-size: larger">Payment Portal</a>.
             </li>
-            {{#mobileOfflinePhoneNumber}}
+            {{#mobileOfflineEnabled}}
             <li>
-                Or send your mobile payment to <b>{{mobileOfflinePhoneNumber}}</b>.
+                Or send your payment via mobile using the following information:
+                <ul>
+                    <li>Provider: {{mobileOfflineProvider}}</li>
+                    <li>Phone number: {{mobileOfflinePhoneNumber}}</li>
+                    <li>Account Name: {{mobileOfflineAccountName}}</li>
+                </ul>
             </li>
-            {{/mobileOfflinePhoneNumber}}
+            {{/mobileOfflineEnabled}}
         </ul>
     </li>
     {{/paymentMethodMobile}}

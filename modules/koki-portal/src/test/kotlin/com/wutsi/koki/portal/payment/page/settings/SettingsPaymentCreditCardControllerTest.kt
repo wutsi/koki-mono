@@ -41,11 +41,12 @@ class SettingsPaymentCreditCardControllerTest : AbstractPageControllerTest() {
             eq(Any::class.java)
         )
         assertEquals("1", request.firstValue.values[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_ENABLED])
-        assertEquals("STRIPE", request.firstValue.values[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_GATEWAY])
+        assertEquals("1", request.firstValue.values[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_OFFLINE_ENABLED])
         assertEquals(
             "5457580000",
             request.firstValue.values[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_OFFLINE_PHONE_NUMBER]
         )
+        assertEquals("STRIPE", request.firstValue.values[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_GATEWAY])
         assertEquals(
             "ST.123456780",
             request.firstValue.values[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_GATEWAY_STRIPE_API_KEY]
@@ -71,7 +72,7 @@ class SettingsPaymentCreditCardControllerTest : AbstractPageControllerTest() {
             request.capture(),
             eq(Any::class.java)
         )
-        assertEquals("", request.firstValue.values[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_OFFLINE_PHONE_NUMBER])
+        assertEquals("", request.firstValue.values[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_OFFLINE_ENABLED])
         assertEquals("1", request.firstValue.values[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_ENABLED])
         assertEquals("STRIPE", request.firstValue.values[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_GATEWAY])
         assertEquals(
