@@ -47,10 +47,14 @@ import java.util.Date
  * - interacAnswer: Secret answer
  *
  * - paymentMethodCreditCard: TRUE if the merchant support CreditCard payment
+ * - creditCardOfflineEnabled: TRUE if we can pay offline
  * - creditCardOfflinePhoneNumber: Phone number where to call for capturing the payment via phone
  *
  * - paymentMethodMobile: TRUE if the merchant support Mobile-Money payment
  * - mobileOfflinePhoneNumber: Phone number where to send mobile payment offline
+ * - mobileOfflineAccountName: Name associate with the number
+ * - mobileOfflinePhoneNumber: Phone number where to call for capturing the payment via phone
+ * - mobileOfflineProvider: Phone number provider
  *
  * - paymentMethodPaypal: TRUE if the merchant support PayPal payment
  *
@@ -198,10 +202,14 @@ class InvoiceNotificationWorker(
             "interacAnswer" to configs[ConfigurationName.PAYMENT_METHOD_INTERAC_ANSWER],
 
             "paymentMethodCreditCard" to configs[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_ENABLED],
+            "creditCardOfflineEnabled" to configs[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_OFFLINE_ENABLED],
             "creditCardOfflinePhoneNumber" to configs[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_OFFLINE_PHONE_NUMBER],
 
             "paymentMethodMobile" to configs[ConfigurationName.PAYMENT_METHOD_MOBILE_ENABLED],
+            "mobileOfflineEnabled" to configs[ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_ENABLED],
             "mobileOfflinePhoneNumber" to configs[ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_PHONE_NUMBER],
+            "mobileOfflineAccountName" to configs[ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_ACCOUNT_NAME],
+            "mobileOfflineProvider" to configs[ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_PROVIDER],
 
             "paymentMethodPaypal" to configs[ConfigurationName.PAYMENT_METHOD_PAYPAL_ENABLED],
 

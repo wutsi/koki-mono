@@ -140,6 +140,7 @@ ConfigurationService(
                     ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_ENABLED to "1",
                     ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_GATEWAY to (form.gateway?.name ?: ""),
                     ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_GATEWAY_STRIPE_API_KEY to (form.stripeApiKey ?: ""),
+                    ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_OFFLINE_ENABLED to if (form.offline) "1" else "",
                     ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_OFFLINE_PHONE_NUMBER to if (form.offline) {
                         (form.offlinePhoneNumber ?: "")
                     } else {
@@ -206,11 +207,10 @@ ConfigurationService(
                     ConfigurationName.PAYMENT_METHOD_MOBILE_GATEWAY to (form.gateway?.name ?: ""),
                     ConfigurationName.PAYMENT_METHOD_MOBILE_GATEWAY_FLUTTERWAVE_SECRET_KEY to
                         (form.flutterwaveSecretKey ?: ""),
-                    ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_PHONE_NUMBER to if (form.offline) {
-                        (form.offlinePhoneNumber ?: "")
-                    } else {
-                        ""
-                    },
+                    ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_ENABLED to if (form.offline) "1" else "",
+                    ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_PHONE_NUMBER to (form.offlinePhoneNumber ?: ""),
+                    ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_ACCOUNT_NAME to (form.offlineAccountName ?: ""),
+                    ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_PROVIDER to (form.offlineProvider ?: ""),
                 )
             )
         )

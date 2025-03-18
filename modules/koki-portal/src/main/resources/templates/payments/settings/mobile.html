@@ -33,11 +33,35 @@
                     </td>
                 </tr>
                 <tr class="offline" th:classappend="!${form.offline} ? 'hidden'">
-                    <td><b>Phone Number</b></td>
+                    <td><b>Provider<span class="required">*</span></b></td>
+                    <td>
+                        <select th:field="*{offlineProvider}" th:required="${form.offline}">
+                            <option value=""></option>
+                            <option value="Airtel">Airtel</option>
+                            <option value="Free">Free</option>
+                            <option value="MTN">MTN</option>
+                            <option value="Moov">Moov</option>
+                            <option value="Nexttel">Nexttel</option>
+                            <option value="Orange">Orange</option>
+                            <option value="Tigo">Tigo</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="offline" th:classappend="!${form.offline} ? 'hidden'">
+                    <td><b>Phone Number<span class="required">*</span></b></td>
                     <td>
                         <input th:field="*{offlinePhoneNumber}" th:required="${form.offline}" type="tel"/>
                         <div class="text-small">
                             Phone number for sending mobile money.
+                        </div>
+                    </td>
+                </tr>
+                <tr class="offline" th:classappend="!${form.offline} ? 'hidden'">
+                    <td><b>Account Name<span class="required">*</span></b></td>
+                    <td>
+                        <input th:field="*{offlineAccountName}" th:required="${form.offline}" type="tel"/>
+                        <div class="text-small">
+                            Name associated with this number
                         </div>
                     </td>
                 </tr>
@@ -98,6 +122,8 @@
                 elt.classList.add('hidden');
             }
             document.getElementById('offlinePhoneNumber').required = offline;
+            document.getElementById('offlineAccountName').required = offline;
+            document.getElementById('offlineProvider').required = offline;
         });
     }
 </script>

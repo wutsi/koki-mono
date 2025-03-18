@@ -27,7 +27,7 @@ class SettingsPaymentCreditCardController(
 
         val form = PaymentSettingsCreditCardForm(
             offlinePhoneNumber = configs[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_OFFLINE_PHONE_NUMBER],
-            offline = (configs[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_OFFLINE_PHONE_NUMBER] != null),
+            offline = (configs[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_OFFLINE_ENABLED] != null),
             stripeApiKey = configs[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_GATEWAY_STRIPE_API_KEY],
             gateway = configs[ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_GATEWAY]?.let { gateway ->
                 try {
