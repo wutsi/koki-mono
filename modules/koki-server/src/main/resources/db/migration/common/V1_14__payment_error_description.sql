@@ -1,1 +1,0 @@
-ALTER TABLE T_TRANSACTION ADD COLUMN supplier_error_message TEXT;
