@@ -16,6 +16,7 @@ CREATE TABLE T_TRANSACTION(
   supplier_status         VARCHAR(30),
   error_code              VARCHAR(255),
   supplier_error_code     VARCHAR(255),
+  supplier_error_message  TEXT,
   description             TEXT,
 
   created_at              DATETIME DEFAULT NOW(),
