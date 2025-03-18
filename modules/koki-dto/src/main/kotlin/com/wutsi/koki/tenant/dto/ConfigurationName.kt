@@ -41,12 +41,16 @@ object ConfigurationName {
     const val PAYMENT_METHOD_BANK_ENABLED = "payment.method.bank.enabled"
 
     const val PAYMENT_METHOD_CREDIT_CARD_ENABLED = "payment.method.credit_card.enabled"
+    const val PAYMENT_METHOD_CREDIT_CARD_OFFLINE_ENABLED = "payment.method.credit_card.offline.enabled"
     const val PAYMENT_METHOD_CREDIT_CARD_OFFLINE_PHONE_NUMBER = "payment.method.credit_card.offline.phone_number"
     const val PAYMENT_METHOD_CREDIT_CARD_GATEWAY = "payment.method.credit_card.gateway"
     const val PAYMENT_METHOD_CREDIT_CARD_GATEWAY_STRIPE_API_KEY = "payment.method.credit_card.gateway.stripe.api_key"
 
     const val PAYMENT_METHOD_MOBILE_ENABLED = "payment.method.mobile.enabled"
+    const val PAYMENT_METHOD_MOBILE_OFFLINE_ENABLED = "payment.method.mobile.offline.enabled"
     const val PAYMENT_METHOD_MOBILE_OFFLINE_PHONE_NUMBER = "payment.method.mobile.offline.phone_number"
+    const val PAYMENT_METHOD_MOBILE_OFFLINE_ACCOUNT_NAME = "payment.method.mobile.offline.account_name"
+    const val PAYMENT_METHOD_MOBILE_OFFLINE_PROVIDER = "payment.method.mobile.offline.provider"
     const val PAYMENT_METHOD_MOBILE_GATEWAY = "payment.method.mobile.gateway"
     const val PAYMENT_METHOD_MOBILE_GATEWAY_FLUTTERWAVE_SECRET_KEY =
         "payment.method.mobile.gateway.flutterwave_secret_key"
