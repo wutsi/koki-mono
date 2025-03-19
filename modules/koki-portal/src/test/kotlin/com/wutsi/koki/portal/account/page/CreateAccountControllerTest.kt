@@ -119,7 +119,7 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
         assertEquals("340 Pascal", request.firstValue.shippingStreet)
         assertEquals("H0H 0H0", request.firstValue.shippingPostalCode)
         assertEquals(locations[3].id, request.firstValue.shippingCityId)
-        assertEquals("DK", request.firstValue.shippingCountry)
+        assertEquals("DZ", request.firstValue.shippingCountry)
         assertEquals(true, request.firstValue.billingSameAsShippingAddress)
         attributes.forEach { attribute ->
             assertEquals("${attribute.id}11111", request.firstValue.attributes[attribute.id])
