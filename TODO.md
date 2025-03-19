@@ -2,6 +2,7 @@
 
 ## Account
 
+- [x] Add account required fields: email, postal-address, billing-same-as-shipping-address
 - [] Add AccountUser/AccountUserRole to manage relation ship between Account and User per module. Ex: Accountant,
   Technician
 - [] Settings: Import Accounts from CSV
@@ -69,6 +70,7 @@
 
 ## Files
 
+- [] Make S3 bucket non-public
 - [] Integrate AI to describe the file
 - [] Add Metadata to files: id, tenant-id, owner-type, owner-id
 - [x] Validate S3 configuration
@@ -83,6 +85,7 @@
 
 ## Invoice
 
+- [] Change URL of checkout page to "hide" the invoice ID
 - [] Invoice Widget
 - [] Add locale to invoice
 - [x] Update amount due on successfull payment
@@ -189,7 +192,6 @@
 
 ## Tenant
 
-- [] Tenant should have a list of currencies
 - [] Add tenant healthcheck for S3, Email
 - [x] Init a tenant
 

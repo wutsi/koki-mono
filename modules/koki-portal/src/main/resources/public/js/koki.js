@@ -167,7 +167,6 @@ function koki_address_editor(countryId, cityId) {
     $('#' + countryId).select2();
     $('#' + countryId).on('select2:select', function (e) {
         console.log('country changed....');
-        $('#' + cityId).attr('disabled', false);
         $('#' + cityId).val('').trigger('change');
     });
 
@@ -196,7 +195,6 @@ function koki_address_editor(countryId, cityId) {
             minimumInputLength: 3,
         }
     );
-    $('#' + cityId).attr('disabled', !country || country.length === 0);
 }
 
 /**

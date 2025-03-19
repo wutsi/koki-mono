@@ -51,6 +51,7 @@ class EditAccountController(
             billingCountry = account.billingAddress?.country,
             billingPostalCode = account.billingAddress?.postalCode,
             billingCityId = account.billingAddress?.city?.id,
+            billingSameAsShippingAddress = account.billingSameAsShippingAddress,
         )
         return edit(model, form, account)
     }

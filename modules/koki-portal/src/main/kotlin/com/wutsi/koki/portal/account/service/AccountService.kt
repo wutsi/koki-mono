@@ -153,6 +153,7 @@ class AccountService(
             billingStreet = form.billingStreet,
             billingCityId = if (form.billingCityId == -1L) null else form.billingCityId,
             billingPostalCode = form.billingPostalCode,
+            billingSameAsShippingAddress = form.billingSameAsShippingAddress,
         )
         return koki.create(request).accountId
     }
@@ -177,6 +178,7 @@ class AccountService(
             billingStreet = form.billingStreet,
             billingCityId = if (form.billingCityId == -1L) null else form.billingCityId,
             billingPostalCode = form.billingPostalCode,
+            billingSameAsShippingAddress = form.billingSameAsShippingAddress
         )
         koki.update(id, request)
     }

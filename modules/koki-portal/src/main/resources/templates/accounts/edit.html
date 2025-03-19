@@ -53,8 +53,8 @@
                                 <script th:replace="~{__components/user :: user-selector('managedById', null, 'accout:manage')}"></script>
                             </div>
                             <div class="section-item">
-                                <label class="title">Email</label>
-                                <input maxlength="100" th:field="*{email}" type="email"/>
+                                <label class="title">Email<span class="required">*</span></label>
+                                <input required maxlength="100" th:field="*{email}" type="email"/>
                             </div>
                             <div class="section-item">
                                 <label class="title">Mobile</label>
@@ -95,8 +95,8 @@
                     </div>
                     <div class="section-body">
                         <div class="section-item">
-                            <label class="title">Country</label>
-                            <select th:field="*{shippingCountry}">
+                            <label class="title">Country<span class="required">*</span></label>
+                            <select required th:field="*{shippingCountry}">
                                 <option value=""></option>
                                 <option th:each="country : ${countries}"
                                         th:value="${country.country}"
@@ -105,8 +105,8 @@
                             </select>
                         </div>
                         <div class="section-item">
-                            <label class="title">City</label>
-                            <select th:field="*{shippingCityId}">
+                            <label class="title">City<span class="required">*</span></label>
+                            <select required th:field="*{shippingCityId}">
                                 <option selected
                                         th:if="${account.shippingAddress?.city}"
                                         th:text="${account.shippingAddress?.city?.name}"
@@ -131,8 +131,15 @@
                     </div>
                     <div class="section-body">
                         <div class="section-item">
-                            <label class="title">Country</label>
-                            <select th:field="*{billingCountry}">
+                            <label class="title">Same as shipping address?</label>
+                            <select th:field="*{billingSameAsShippingAddress}" onchange="return koki_address_same_changed()">
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+                        <div class="section-item billing-address" th:classappend="${form.billingSameAsShippingAddress} ? 'hidden'">
+                            <label class="title">Country<span class="required">*</span></label>
+                            <select th:field="*{billingCountry}" th:required="!${form.billingSameAsShippingAddress}">
                                 <option value=""></option>
                                 <option th:each="country : ${countries}"
                                         th:value="${country.country}"
@@ -140,27 +147,21 @@
                                 >COUNTRY</option>
                             </select>
                         </div>
-                        <div class="section-item">
-                            <label class="title">City</label>
-                            <select th:field="*{billingCityId}">
-                                <option selected
-                                        th:if="${account.billingAddress?.city}"
-                                        th:text="${account.billingAddress?.city?.name}"
-                                        th:value="${account.billingAddress?.city?.id}">
-                                    BILLING CITY
-                                </option>
-                            </select>
+                        <div class="section-item billing-address" th:classappend="${form.billingSameAsShippingAddress} ? 'hidden'">
+                            <label required class="title">City<span class="required">*</span></label>
+                            <select th:field="*{billingCityId}" th:required="!${form.billingSameAsShippingAddress}"></select>
                         </div>
-                        <div class="section-item">
+                        <div class="section-item billing-address" th:classappend="${form.billingSameAsShippingAddress} ? 'hidden'">
                             <label class="title">Street</label>
                             <input th:field="*{billingStreet}" />
                         </div>
-                        <div class="section-item">
+                        <div class="section-item billing-address" th:classappend="${form.billingSameAsShippingAddress} ? 'hidden'">
                             <label class="title">Postal Code</label>
                             <input maxlength="30" th:field="*{billingPostalCode}" />
                         </div>
                     </div>
                 </div>
+
 
                 <div class="section" th:if="${attributes}">
                     <div class="section-body">
@@ -214,8 +215,31 @@
 </div>
 
 <script>
+    let billingAddressInitialized = false;
+    const same = document.querySelector('.billing-address').classList.contains('hidden');
+
     koki_address_editor('shippingCountry', 'shippingCityId');
-    koki_address_editor('billingCountry', 'billingCityId');
+    if (!same){
+        koki_address_editor('billingCountry', 'billingCityId');
+        billingAddressInitialized = true
+    }
+
+    function koki_address_same_changed(){
+        const same = (document.getElementById('billingSameAsShippingAddress').value === 'true');
+        document.querySelectorAll('.billing-address').forEach((elt) => {
+            if (same) {
+                elt.classList.add('hidden');
+            } else {
+                elt.classList.remove('hidden');
+            }
+        });
+        if (!same && !billingAddressInitialized) {
+            koki_address_editor('billingCountry', 'billingCityId');
+            billingAddressInitialized = true
+        }
+        document.getElementById('billingCountry').required = !same;
+        document.getElementById('billingCityId').required = !same;
+    }
 </script>
 </body>
 </html>
