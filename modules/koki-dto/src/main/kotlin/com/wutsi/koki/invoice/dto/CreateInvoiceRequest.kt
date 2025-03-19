@@ -14,6 +14,7 @@ data class CreateInvoiceRequest(
     @get:NotEmpty @get:Email val customerEmail: String = "",
     val customerPhone: String? = null,
     val customerMobile: String? = null,
+    val locale: String? = null,
 
     @get:NotEmpty @get:Size(min = 3, max = 3) val currency: String = "",
 

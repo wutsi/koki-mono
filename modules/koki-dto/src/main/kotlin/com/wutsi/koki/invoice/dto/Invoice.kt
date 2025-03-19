@@ -11,7 +11,7 @@ data class Invoice(
     val status: InvoiceStatus = InvoiceStatus.UNKNOWN,
     val description: String? = null,
     val customer: Customer = Customer(),
-
+    val locale: String? = null,
     val subTotalAmount: Double = 0.0,
     val totalTaxAmount: Double = 0.0,
     val totalDiscountAmount: Double = 0.0,
