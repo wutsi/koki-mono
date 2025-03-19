@@ -72,7 +72,6 @@
                             <div class="section-item">
                                 <label class="title">Language</label>
                                 <select th:field="*{language}">
-                                    <option value=""></option>
                                     <option th:each="language : ${languages}"
                                             th:text="${language.displayName}"
                                             th:value="${language.language}">

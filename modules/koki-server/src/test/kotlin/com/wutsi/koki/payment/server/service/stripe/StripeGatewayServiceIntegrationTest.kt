@@ -51,6 +51,7 @@ class StripeGatewayServiceIntegrationTest {
         currency = "CAD",
         totalAmount = transaction.amount - 50.0,
         totalTaxAmount = 50.0,
+        locale = "fr_CA",
         items = listOf(
             InvoiceItemEntity(
                 unitPriceId = 111L,
@@ -89,11 +90,13 @@ class StripeGatewayServiceIntegrationTest {
     private val tenantService = mock<TenantService>()
     private val configurationService = mock<ConfigurationService>()
     private val stripeClientBuilder = StripeClientBuilder(configurationService)
+    private val localeTranslator = StripeLocaleTranslator()
     private val service = StripeGatewayService(
         stripeClientBuilder,
         invoiceService,
         salesTaxService,
         tenantService,
+        localeTranslator,
         timeout = 35L,
     )
 

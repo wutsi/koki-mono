@@ -42,8 +42,7 @@ class InvoiceService(
         }
 
         return koki.create(
-            CreateInvoiceRequest(
-                taxId = tax.id,
+            CreateInvoiceRequest(taxId = tax.id,
 
                 customerAccountId = account.id,
                 customerName = account.name,
@@ -61,8 +60,12 @@ class InvoiceService(
                 billingCityId = billingAddress?.city?.id,
                 billingPostalCode = billingAddress?.postalCode,
 
-                currency = taxProducts.firstOrNull()?.unitPrice?.currency
-                    ?: currentTenant.get()!!.currency,
+                currency = taxProducts.firstOrNull()?.unitPrice?.currency ?: currentTenant.get()!!.currency,
+
+                locale = listOf(
+                    account.language,
+                    account.shippingAddress?.country,
+                ).filterNotNull().joinToString("_").ifEmpty { null },
 
                 items = taxProducts.map { taxProduct ->
                     Item(
@@ -73,8 +76,7 @@ class InvoiceService(
                         description = taxProduct.description,
                         quantity = taxProduct.quantity,
                     )
-                }
-            )
+                })
         ).invoiceId
     }
 
@@ -96,15 +98,12 @@ class InvoiceService(
         }
 
         // Users
-        val userIds = listOf(invoice.createdById, invoice.modifiedById)
-            .filterNotNull()
-            .distinct()
+        val userIds = listOf(invoice.createdById, invoice.modifiedById).filterNotNull().distinct()
         val users = if (userIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
             userService.users(
-                ids = userIds,
-                limit = userIds.size
+                ids = userIds, limit = userIds.size
             ).associateBy { user -> user.id }
         }
 
@@ -122,17 +121,14 @@ class InvoiceService(
             invoice.shippingAddress?.cityId,
             invoice.billingAddress?.stateId,
             invoice.billingAddress?.cityId,
-        )
-            .filterNotNull()
-            .distinct()
+        ).filterNotNull().distinct()
         val locations = if (locationIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
             locationService.locations(
                 ids = locationIds,
                 limit = locationIds.size,
-            )
-                .associateBy { location -> location.id }
+            ).associateBy { location -> location.id }
         }
 
         // Products
@@ -148,9 +144,7 @@ class InvoiceService(
         }
 
         // Sales Taxes
-        val salesTaxIds = invoice.items.flatMap { item -> item.taxes }
-            .map { tax -> tax.salesTaxId }
-            .distinct()
+        val salesTaxIds = invoice.items.flatMap { item -> item.taxes }.map { tax -> tax.salesTaxId }.distinct()
         val salesTaxes = if (salesTaxIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
@@ -210,20 +204,17 @@ class InvoiceService(
             emptyMap()
         } else {
             accountService.accounts(
-                ids = accountIds,
-                limit = accountIds.size
+                ids = accountIds, limit = accountIds.size
             ).associateBy { account -> account.id }
         }
 
-        val userIds = invoices.flatMap { invoice -> listOf(invoice.createdById, invoice.modifiedById) }
-            .filterNotNull()
-            .distinct()
+        val userIds =
+            invoices.flatMap { invoice -> listOf(invoice.createdById, invoice.modifiedById) }.filterNotNull().distinct()
         val users = if (userIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
             userService.users(
-                ids = userIds,
-                limit = userIds.size
+                ids = userIds, limit = userIds.size
             ).associateBy { user -> user.id }
         }
 
@@ -239,8 +230,7 @@ class InvoiceService(
 
     fun setStatus(id: Long, status: InvoiceStatus) {
         koki.setStatus(
-            id,
-            UpdateInvoiceStatusRequest(
+            id, UpdateInvoiceStatusRequest(
                 status = status,
             )
         )

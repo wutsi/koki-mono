@@ -229,7 +229,7 @@ class InvoiceService(
                 customerEmail = request.customerEmail,
                 customerPhone = request.customerPhone,
                 customerMobile = request.customerMobile,
-
+                locale = request.locale,
                 status = InvoiceStatus.DRAFT,
                 currency = request.currency,
                 number = number,

@@ -57,6 +57,7 @@ class CreateInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
         customerPhone = "+5141110000",
         customerMobile = "+5141110011",
         customerEmail = "info@ray-sponsible-inc.com",
+        locale = "en_US",
 
         currency = "CAD",
         description = "Sample invoice",
@@ -110,6 +111,7 @@ class CreateInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.customerEmail, invoice.customerEmail)
         assertEquals(request.customerPhone, invoice.customerPhone)
         assertEquals(request.customerMobile, invoice.customerMobile)
+        assertEquals(request.locale, invoice.locale)
         assertEquals(119.80, invoice.totalTaxAmount)
         assertEquals(0.00, invoice.totalDiscountAmount)
         assertEquals(800.00, invoice.subTotalAmount)

@@ -58,7 +58,7 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
         assertEquals("+5147580011", request.firstValue.mobile)
         assertEquals("info@ray-construction.com", request.firstValue.email)
         assertEquals("https://www.ray-construction.com", request.firstValue.website)
-        assertEquals("af", request.firstValue.language)
+        assertEquals("ak", request.firstValue.language)
         assertEquals("This is the description", request.firstValue.description)
         assertEquals("340 Pascal", request.firstValue.shippingStreet)
         assertEquals("H0H 0H0", request.firstValue.shippingPostalCode)
@@ -68,7 +68,7 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
         assertEquals("340 Nicolet", request.firstValue.billingStreet)
         assertEquals("HzH zHz", request.firstValue.billingPostalCode)
         assertEquals(locations[2].id, request.firstValue.billingCityId)
-        assertEquals("DZ", request.firstValue.billingCountry)
+        assertEquals("AS", request.firstValue.billingCountry)
         attributes.forEach { attribute ->
             assertEquals("${attribute.id}11111", request.firstValue.attributes[attribute.id])
         }
@@ -114,12 +114,12 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
         assertEquals("+5147580011", request.firstValue.mobile)
         assertEquals("info@ray-construction.com", request.firstValue.email)
         assertEquals("https://www.ray-construction.com", request.firstValue.website)
-        assertEquals("af", request.firstValue.language)
+        assertEquals("ak", request.firstValue.language)
         assertEquals("This is the description", request.firstValue.description)
         assertEquals("340 Pascal", request.firstValue.shippingStreet)
         assertEquals("H0H 0H0", request.firstValue.shippingPostalCode)
         assertEquals(locations[3].id, request.firstValue.shippingCityId)
-        assertEquals("DZ", request.firstValue.shippingCountry)
+        assertEquals("AS", request.firstValue.shippingCountry)
         assertEquals(true, request.firstValue.billingSameAsShippingAddress)
         attributes.forEach { attribute ->
             assertEquals("${attribute.id}11111", request.firstValue.attributes[attribute.id])

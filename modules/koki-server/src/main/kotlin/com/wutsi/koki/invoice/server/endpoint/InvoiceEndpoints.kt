@@ -17,7 +17,6 @@ import com.wutsi.koki.invoice.server.mapper.InvoiceMapper
 import com.wutsi.koki.invoice.server.service.InvoiceService
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.tenant.server.service.BusinessService
-import com.wutsi.koki.tenant.server.service.TenantService
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
 import org.springframework.http.ContentDisposition
@@ -35,7 +34,6 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/v1/invoices")
 class InvoiceEndpoints(
     private val service: InvoiceService,
-    private val tenantService: TenantService,
     private val businessService: BusinessService,
     private val mapper: InvoiceMapper,
     private val invoicePdfExporter: InvoicePdfExporter,
@@ -56,9 +54,8 @@ class InvoiceEndpoints(
         @PathVariable id: Long,
     ): GetInvoiceResponse {
         val invoice = service.get(id, tenantId)
-        val tenant = tenantService.get(tenantId)
         return GetInvoiceResponse(
-            invoice = mapper.toInvoice(invoice, tenant)
+            invoice = mapper.toInvoice(invoice)
         )
     }
 
