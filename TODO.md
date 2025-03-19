@@ -70,6 +70,7 @@
 
 ## Files
 
+- [] Make S3 bucket non-public
 - [] Integrate AI to describe the file
 - [] Add Metadata to files: id, tenant-id, owner-type, owner-id
 - [x] Validate S3 configuration
@@ -191,7 +192,6 @@
 
 ## Tenant
 
-- [] Tenant should have a list of currencies
 - [] Add tenant healthcheck for S3, Email
 - [x] Init a tenant
 
