@@ -21,4 +21,5 @@ data class Account(
     val managedById: Long? = null,
     val shippingAddress: Address? = null,
     val billingAddress: Address? = null,
+    val billingSameAsShippingAddress: Boolean = false,
 )

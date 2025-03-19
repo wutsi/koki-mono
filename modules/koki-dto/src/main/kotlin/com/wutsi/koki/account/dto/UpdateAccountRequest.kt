@@ -27,4 +27,5 @@ data class UpdateAccountRequest(
     @get:Size(max = 2) val billingCountry: String? = null,
     val billingStreet: String? = null,
     val billingCityId: Long? = null,
+    val billingSameAsShippingAddress: Boolean = false,
 )
