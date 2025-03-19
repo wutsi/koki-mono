@@ -43,7 +43,8 @@ class CreateAccountEndpointTest : AuthorizationAwareEndpointTest() {
         billingStreet = "333 Nicolet",
         billingPostalCode = "222 222",
         billingCityId = 222L,
-        billingCountry = "fr"
+        billingCountry = "fr",
+        billingSameAsShippingAddress = false,
     )
 
     @Test
@@ -74,6 +75,7 @@ class CreateAccountEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("CA", account.billingCountry)
         assertEquals(request.billingStreet, account.billingStreet)
         assertEquals(request.billingPostalCode, account.billingPostalCode)
+        assertEquals(request.billingSameAsShippingAddress, account.billingSameAsShippingAddress)
 
         assertEquals(USER_ID, account.createdById)
         assertEquals(USER_ID, account.modifiedById)
@@ -114,5 +116,58 @@ class CreateAccountEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("FR", account.billingCountry)
         assertEquals(request.shippingStreet, account.shippingStreet)
         assertEquals(request.shippingPostalCode, account.shippingPostalCode)
+        assertEquals(request.billingSameAsShippingAddress, account.billingSameAsShippingAddress)
+    }
+
+    @Test
+    fun `shipping same as billing`() {
+        val response = rest.postForEntity(
+            "/v1/accounts",
+            request.copy(billingSameAsShippingAddress = true),
+            CreateAccountResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val accountId = response.body!!.accountId
+        val account = dao.findById(accountId).get()
+        assertEquals(request.accountTypeId, account.accountTypeId)
+        assertEquals(request.name, account.name)
+        assertEquals(request.description, account.description)
+        assertEquals(request.phone, account.phone)
+        assertEquals(request.mobile, account.mobile)
+        assertEquals(request.email, account.email)
+        assertEquals(request.website, account.website)
+        assertEquals(request.language, account.language)
+
+        assertEquals(request.shippingCityId, account.shippingCityId)
+        assertEquals(333L, account.shippingStateId)
+        assertEquals("CA", account.shippingCountry)
+        assertEquals(request.shippingStreet, account.shippingStreet)
+        assertEquals(request.shippingPostalCode, account.shippingPostalCode)
+
+        assertEquals(null, account.billingCityId)
+        assertEquals(null, account.billingStateId)
+        assertEquals(null, account.billingCountry)
+        assertEquals(null, account.billingStreet)
+        assertEquals(null, account.billingPostalCode)
+        assertEquals(true, account.billingSameAsShippingAddress)
+
+        assertEquals(USER_ID, account.createdById)
+        assertEquals(USER_ID, account.modifiedById)
+        assertFalse(account.deleted)
+        assertNull(account.deletedAt)
+        assertNull(account.deletedById)
+
+        val attrs = attrDao.findByAccountId(accountId).sortedBy { it.attributeId }
+        assertEquals(2, attrs.size)
+
+        assertEquals(accountId, attrs[0].accountId)
+        assertEquals(100L, attrs[0].attributeId)
+        assertEquals(request.attributes[100], attrs[0].value)
+
+        assertEquals(accountId, attrs[1].accountId)
+        assertEquals(101L, attrs[1].attributeId)
+        assertEquals(request.attributes[101], attrs[1].value)
     }
 }

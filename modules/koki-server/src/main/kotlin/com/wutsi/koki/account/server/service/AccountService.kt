@@ -62,11 +62,15 @@ class AccountService(
                 shippingCountry = (shippingCity?.country ?: request.shippingCountry)?.uppercase(),
                 shippingPostalCode = request.shippingPostalCode,
 
-                billingStreet = request.billingStreet,
-                billingCityId = billingCity?.id,
-                billingStateId = billingCity?.parentId,
-                billingCountry = (billingCity?.country ?: request.billingCountry)?.uppercase(),
-                billingPostalCode = request.billingPostalCode,
+                billingSameAsShippingAddress = request.billingSameAsShippingAddress,
+                billingStreet = nullIfTrue(request.billingSameAsShippingAddress, request.billingStreet),
+                billingCityId = nullIfTrue(request.billingSameAsShippingAddress, billingCity?.id),
+                billingStateId = nullIfTrue(request.billingSameAsShippingAddress, billingCity?.parentId),
+                billingCountry = nullIfTrue(
+                    request.billingSameAsShippingAddress,
+                    (billingCity?.country ?: request.billingCountry)?.uppercase()
+                ),
+                billingPostalCode = nullIfTrue(request.billingSameAsShippingAddress, request.billingPostalCode),
             )
         )
 
@@ -105,11 +109,15 @@ class AccountService(
         account.shippingPostalCode = request.shippingPostalCode
         account.shippingCountry = (shippingCity?.country ?: request.shippingCountry)?.uppercase()
 
-        account.billingStreet = request.billingStreet
-        account.billingCityId = billingCity?.id
-        account.billingStateId = billingCity?.parentId
-        account.billingPostalCode = request.billingPostalCode
-        account.billingCountry = (billingCity?.country ?: request.billingCountry)?.uppercase()
+        account.billingSameAsShippingAddress = request.billingSameAsShippingAddress
+        account.billingStreet = nullIfTrue(request.billingSameAsShippingAddress, request.billingStreet)
+        account.billingCityId = nullIfTrue(request.billingSameAsShippingAddress, billingCity?.id)
+        account.billingStateId = nullIfTrue(request.billingSameAsShippingAddress, billingCity?.parentId)
+        account.billingPostalCode = nullIfTrue(request.billingSameAsShippingAddress, request.billingPostalCode)
+        account.billingCountry = nullIfTrue(
+            request.billingSameAsShippingAddress,
+            (billingCity?.country ?: request.billingCountry)?.uppercase()
+        )
 
         account.description = request.description
         account.managedById = request.managedById
@@ -149,6 +157,10 @@ class AccountService(
         if (save.isNotEmpty()) {
             attributeDao.saveAll(save)
         }
+    }
+
+    private fun <T> nullIfTrue(flag: Boolean, value: T): T? {
+        return if (flag) null else value
     }
 
     @Transactional

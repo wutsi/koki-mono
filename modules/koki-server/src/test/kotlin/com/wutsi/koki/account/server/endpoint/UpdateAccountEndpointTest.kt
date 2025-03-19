@@ -43,7 +43,8 @@ class UpdateAccountEndpointTest : AuthorizationAwareEndpointTest() {
         billingStreet = "333 Nicolet",
         billingPostalCode = "222 222",
         billingCityId = 222L,
-        billingCountry = "fr"
+        billingCountry = "fr",
+        billingSameAsShippingAddress = false
     )
 
     @Test
@@ -67,6 +68,7 @@ class UpdateAccountEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.shippingCityId, account.shippingCityId)
         assertEquals(333L, account.shippingStateId)
         assertEquals("CA", account.shippingCountry)
+        assertEquals(request.billingSameAsShippingAddress, account.billingSameAsShippingAddress)
         assertEquals(request.billingStreet, account.billingStreet)
         assertEquals(request.billingPostalCode, account.billingPostalCode)
         assertEquals(request.billingCityId, account.billingCityId)
@@ -114,11 +116,46 @@ class UpdateAccountEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.billingStreet, account.billingStreet)
         assertEquals(request.billingPostalCode, account.billingPostalCode)
 
+        assertEquals(request.billingSameAsShippingAddress, account.billingSameAsShippingAddress)
         assertEquals(null, account.billingCityId)
         assertEquals(null, account.billingStateId)
         assertEquals("FR", account.billingCountry)
         assertEquals(request.shippingStreet, account.shippingStreet)
         assertEquals(request.shippingPostalCode, account.shippingPostalCode)
+    }
+
+    @Test
+    fun `billing same as shipping`() {
+        val response = rest.postForEntity(
+            "/v1/accounts/1000",
+            request.copy(billingSameAsShippingAddress = true),
+            Any::class.java
+        )
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val accountId = 1000L
+        val account = dao.findById(accountId).get()
+        assertEquals(request.accountTypeId, account.accountTypeId)
+        assertEquals(request.name, account.name)
+        assertEquals(request.description, account.description)
+        assertEquals(request.phone, account.phone)
+        assertEquals(request.mobile, account.mobile)
+        assertEquals(request.email, account.email)
+        assertEquals(request.website, account.website)
+        assertEquals(request.language, account.language)
+        assertEquals(request.shippingStreet, account.shippingStreet)
+        assertEquals(request.shippingPostalCode, account.shippingPostalCode)
+        assertEquals(request.shippingCityId, account.shippingCityId)
+        assertEquals(333L, account.shippingStateId)
+        assertEquals("CA", account.shippingCountry)
+        assertEquals(null, account.billingCityId)
+        assertEquals(null, account.billingStateId)
+        assertEquals(null, account.billingCountry)
+        assertEquals(null, account.billingStreet)
+        assertEquals(null, account.billingPostalCode)
+        assertEquals(true, account.billingSameAsShippingAddress)
+        assertEquals(USER_ID, account.modifiedById)
     }
 
     @Test

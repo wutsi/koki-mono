@@ -58,6 +58,7 @@ data class AccountEntity(
     var billingStreet: String? = null,
     var billingPostalCode: String? = null,
     var billingCountry: String? = null,
+    var billingSameAsShippingAddress: Boolean = false,
 
     var deleted: Boolean = false,
     val createdAt: Date = Date(),

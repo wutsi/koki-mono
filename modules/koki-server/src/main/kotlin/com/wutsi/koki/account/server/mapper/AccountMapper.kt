@@ -42,7 +42,7 @@ class AccountMapper {
             } else {
                 null
             },
-            billingAddress = if (entity.hasBillingAddress()) {
+            billingAddress = if (!entity.billingSameAsShippingAddress && entity.hasBillingAddress()) {
                 Address(
                     street = entity.billingStreet,
                     postalCode = entity.billingPostalCode,
@@ -53,6 +53,7 @@ class AccountMapper {
             } else {
                 null
             },
+            billingSameAsShippingAddress = entity.billingSameAsShippingAddress,
         )
     }
 
