@@ -85,6 +85,7 @@ class AccountMapper(
             billingAddress = entity.billingAddress?.let { address ->
                 refDataMapper.toAddressModel(address, locations)
             },
+            billingSameAsShippingAddress = entity.billingSameAsShippingAddress,
         )
     }
 

@@ -26,4 +26,5 @@ data class AccountModel(
     val attributes: List<AccountAttributeModel> = emptyList(),
     val shippingAddress: AddressModel? = null,
     val billingAddress: AddressModel? = null,
+    val billingSameAsShippingAddress: Boolean = true,
 )

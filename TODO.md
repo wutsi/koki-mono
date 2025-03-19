@@ -2,6 +2,7 @@
 
 ## Account
 
+- [x] Add account required fields: email, postal-address, billing-same-as-shipping-address
 - [] Add AccountUser/AccountUserRole to manage relation ship between Account and User per module. Ex: Accountant,
   Technician
 - [] Settings: Import Accounts from CSV
@@ -83,6 +84,7 @@
 
 ## Invoice
 
+- [] Change URL of checkout page to "hide" the invoice ID
 - [] Invoice Widget
 - [] Add locale to invoice
 - [x] Update amount due on successfull payment

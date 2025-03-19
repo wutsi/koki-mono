@@ -34,25 +34,32 @@ class InvoiceService(
     private val taxService: TaxService,
 ) {
     fun createInvoice(tax: TaxModel, taxProducts: List<TaxProductModel>): Long {
+        val account = tax.account
+        val billingAddress = if (account.billingSameAsShippingAddress) {
+            account.shippingAddress
+        } else {
+            account.billingAddress
+        }
+
         return koki.create(
             CreateInvoiceRequest(
                 taxId = tax.id,
 
-                customerAccountId = tax.account.id,
-                customerName = tax.account.name,
-                customerEmail = tax.account.email ?: "",
-                customerPhone = tax.account.phone,
-                customerMobile = tax.account.mobile,
+                customerAccountId = account.id,
+                customerName = account.name,
+                customerEmail = account.email ?: "",
+                customerPhone = account.phone,
+                customerMobile = account.mobile,
 
-                shippingCountry = tax.account.shippingAddress?.country,
-                shippingStreet = tax.account.shippingAddress?.street,
-                shippingCityId = tax.account.shippingAddress?.city?.id,
-                shippingPostalCode = tax.account.shippingAddress?.postalCode,
+                shippingCountry = account.shippingAddress?.country,
+                shippingStreet = account.shippingAddress?.street,
+                shippingCityId = account.shippingAddress?.city?.id,
+                shippingPostalCode = account.shippingAddress?.postalCode,
 
-                billingCountry = tax.account.billingAddress?.country,
-                billingStreet = tax.account.billingAddress?.street,
-                billingCityId = tax.account.billingAddress?.city?.id,
-                billingPostalCode = tax.account.billingAddress?.postalCode,
+                billingCountry = billingAddress?.country,
+                billingStreet = billingAddress?.street,
+                billingCityId = billingAddress?.city?.id,
+                billingPostalCode = billingAddress?.postalCode,
 
                 currency = taxProducts.firstOrNull()?.unitPrice?.currency
                     ?: currentTenant.get()!!.currency,

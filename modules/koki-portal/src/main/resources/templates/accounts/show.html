@@ -111,13 +111,15 @@
                             <td><b>Description</b></td>
                             <td th:text="${account.description}">DESCRIPTION</td>
                         </tr>
-                        <tr th:if="${account.shippingAddress}">
+                        <tr>
                             <td><b>Shipping Address</b></td>
                             <td th:utext="${account.shippingAddress.toHtml()}">SHIPPING ADDRESS</td>
                         </tr>
-                        <tr th:if="${account.billingAddress}">
+                        <tr>
                             <td><b>Billing Address</b></td>
-                            <td th:utext="${account.billingAddress.toHtml()}">BILLING ADDRESS</td>
+                            <td th:if="${account.billingSameAsShippingAddress}">Same as shipping address</td>
+                            <td th:if="!${account.billingSameAsShippingAddress}"
+                                th:utext="${account.billingAddress.toHtml()}"></td>
                         </tr>
 
 
