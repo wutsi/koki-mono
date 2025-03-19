@@ -38,7 +38,7 @@ data class InvoiceEntity(
     val customerEmail: String = "",
     val customerPhone: String? = null,
     val customerMobile: String? = null,
-
+    val locale: String? = null,
     var number: Long = -1,
     var status: InvoiceStatus = InvoiceStatus.UNKNOWN,
     val description: String? = null,

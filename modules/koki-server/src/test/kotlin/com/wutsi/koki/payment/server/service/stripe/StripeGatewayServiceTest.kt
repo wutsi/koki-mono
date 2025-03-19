@@ -11,6 +11,7 @@ import com.stripe.StripeClient
 import com.stripe.exception.ApiException
 import com.stripe.model.checkout.Session
 import com.stripe.param.checkout.SessionCreateParams
+import com.stripe.param.checkout.SessionCreateParams.Locale
 import com.stripe.service.CheckoutService
 import com.stripe.service.checkout.SessionService
 import com.wutsi.koki.error.dto.ErrorCode
@@ -90,11 +91,13 @@ class StripeGatewayServiceTest {
     private val invoiceService = mock<InvoiceService>()
     private val salesTaxService = mock<SalesTaxService>()
     private val tenantService = mock<TenantService>()
+    private val localeTranslator = mock<StripeLocaleTranslator>()
     private val service = StripeGatewayService(
         stripeClientBuilder,
         invoiceService,
         salesTaxService,
         tenantService,
+        localeTranslator,
         timeout = 35L,
     )
 
@@ -109,6 +112,7 @@ class StripeGatewayServiceTest {
             status = TransactionStatus.PENDING,
         )
 
+        doReturn(Locale.FR_CA).whenever(localeTranslator).translate(anyOrNull())
         doReturn(checkoutService).whenever(stripe).checkout()
         doReturn(sessionService).whenever(checkoutService).sessions()
         doReturn(tenant).whenever(tenantService).get(any())
@@ -144,6 +148,7 @@ class StripeGatewayServiceTest {
             params.firstValue.successUrl
         )
         assertEquals(params.firstValue.successUrl, params.firstValue.cancelUrl)
+        assertEquals(Locale.FR_CA, params.firstValue.locale)
         assertEquals(invoice.items.size + 1, params.firstValue.lineItems.size)
         assertEquals(invoice.items[0].quantity.toLong(), params.firstValue.lineItems[0].quantity)
         assertEquals(invoice.items[0].currency, params.firstValue.lineItems[0].priceData.currency)

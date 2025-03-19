@@ -147,6 +147,10 @@ class InvoiceTabControllerTest : AbstractPageControllerTest() {
         assertEquals(AccountFixtures.account.email, request.firstValue.customerEmail)
         assertEquals(AccountFixtures.account.phone, request.firstValue.customerPhone)
         assertEquals(AccountFixtures.account.mobile, request.firstValue.customerMobile)
+        assertEquals(
+            "${AccountFixtures.account.language}_${AccountFixtures.account.shippingAddress?.country}",
+            request.firstValue.locale
+        )
 
         assertEquals(AccountFixtures.account.shippingAddress?.street, request.firstValue.shippingStreet)
         assertEquals(AccountFixtures.account.shippingAddress?.postalCode, request.firstValue.shippingPostalCode)

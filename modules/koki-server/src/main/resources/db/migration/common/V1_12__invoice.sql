@@ -33,6 +33,7 @@ CREATE TABLE T_INVOICE(
   amount_paid             DECIMAL(10, 2) NOT NULL DEFAULT 0,
   amount_due              DECIMAL(10, 2) NOT NULL DEFAULT 0,
   currency                VARCHAR(3) NOT NULL,
+  locale                  VARCHAR(5),
 
   shipping_street         TEXT,
   shipping_postal_code    VARCHAR(30),

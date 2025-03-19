@@ -45,6 +45,7 @@ CREATE TABLE T_ACCOUNT(
   billing_city_fk         BIGINT,
   billing_state_fk        BIGINT,
   billing_country         VARCHAR(2),
+  billing_same_as_shipping_address BOOLEAN NOT NULL DEFAULT false,
 
   deleted                 BOOLEAN NOT NULL DEFAULT false,
   created_at              DATETIME DEFAULT NOW(),

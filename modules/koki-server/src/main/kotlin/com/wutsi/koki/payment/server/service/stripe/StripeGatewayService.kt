@@ -21,6 +21,7 @@ class StripeGatewayService(
     private val invoiceService: InvoiceService,
     private val salesTaxService: SalesTaxService,
     private val tenantService: TenantService,
+    private val localeTranslator: StripeLocaleTranslator,
 
     @Value("\${koki.payment-gateway.stripe.session.timeout-minutes}") private val timeout: Long
 ) : PaymentGatewayService {
@@ -37,6 +38,7 @@ class StripeGatewayService(
             .setMode(SessionCreateParams.Mode.PAYMENT)
             .setExpiresAt((System.currentTimeMillis() + (timeout * 60 * 1000)) / 1000L)
             .setCurrency(tx.currency)
+            .setLocale(localeTranslator.translate(invoice.locale))
             .putMetadata("tenant_id", tx.tenantId.toString())
             .putMetadata("invoice_id", tx.invoiceId.toString())
             .putMetadata("transaction_id", tx.id)

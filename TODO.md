@@ -2,11 +2,11 @@
 
 ## Account
 
-- [x] Add account required fields: email, postal-address, billing-same-as-shipping-address
 - [] Add AccountUser/AccountUserRole to manage relation ship between Account and User per module. Ex: Accountant,
   Technician
 - [] Settings: Import Accounts from CSV
 - [] Integrate [int-tel](https://intl-tel-input.com/) for phone number input
+- [x] Add account required fields: email, postal-address, billing-same-as-shipping-address
 - [x] List account invoices
 - [x] Add additional information to accounts: address
 - [x] The account manager must have the permission 'account:manage'
@@ -71,8 +71,8 @@
 ## Files
 
 - [] Make S3 bucket non-public
-- [] Integrate AI to describe the file
 - [] Add Metadata to files: id, tenant-id, owner-type, owner-id
+- [] Integrate AI to describe the file
 - [x] Validate S3 configuration
 - [x] Settings: Configure storage type: S3, Local
 - [x] Apply RBAC security on UI
@@ -87,7 +87,7 @@
 
 - [] Change URL of checkout page to "hide" the invoice ID
 - [] Invoice Widget
-- [] Add locale to invoice
+- [x] Add locale to invoice
 - [x] Update amount due on successfull payment
 - [x] Download invoices
 - [x] Send invoice manually via email

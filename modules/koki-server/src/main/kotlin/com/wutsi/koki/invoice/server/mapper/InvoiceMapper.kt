@@ -7,12 +7,11 @@ import com.wutsi.koki.invoice.dto.InvoiceSalesTax
 import com.wutsi.koki.invoice.dto.InvoiceSummary
 import com.wutsi.koki.invoice.server.domain.InvoiceEntity
 import com.wutsi.koki.refdata.dto.Address
-import com.wutsi.koki.tenant.server.domain.TenantEntity
 import org.springframework.stereotype.Service
 
 @Service
 class InvoiceMapper {
-    fun toInvoice(entity: InvoiceEntity, tenant: TenantEntity): Invoice {
+    fun toInvoice(entity: InvoiceEntity): Invoice {
         return Invoice(
             id = entity.id!!,
             number = entity.number,
@@ -33,6 +32,7 @@ class InvoiceMapper {
             dueAt = entity.dueAt,
             createdById = entity.createdById,
             modifiedById = entity.modifiedById,
+            locale = entity.locale,
             shippingAddress = if (entity.hasShippingAddress()) {
                 Address(
                     street = entity.shippingStreet,
