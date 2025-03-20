@@ -13,6 +13,8 @@ import kotlin.test.assertEquals
 class SettingsAIEditControllerTest : AbstractPageControllerTest() {
     @Test
     fun koki() {
+        disableAllConfigs()
+
         navigateTo("/settings/ai/edit")
         assertCurrentPageIs(PageName.AI_SETTINGS_EDIT)
 
@@ -30,6 +32,8 @@ class SettingsAIEditControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun gemini() {
+        disableAllConfigs()
+
         navigateTo("/settings/ai/edit")
         assertCurrentPageIs(PageName.AI_SETTINGS_EDIT)
 
