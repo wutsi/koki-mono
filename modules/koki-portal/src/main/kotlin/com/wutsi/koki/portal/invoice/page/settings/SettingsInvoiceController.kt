@@ -11,6 +11,7 @@ import com.wutsi.koki.tenant.dto.ConfigurationName
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestParam
 
 @Controller()
 @RequiresPermission(["invoice:admin"])
@@ -47,5 +48,13 @@ class SettingsInvoiceController(
         )
 
         return "invoices/settings/show"
+    }
+
+    @GetMapping("/settings/invoices/notifications/enable")
+    fun enable(
+        @RequestParam status: Boolean,
+    ): String {
+        service.enable(ConfigurationName.INVOICE_EMAIL_ENABLED, status)
+        return "redirect:/settings/invoices"
     }
 }
