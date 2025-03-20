@@ -82,7 +82,7 @@ class StripeGatewayServiceIntegrationTest {
     )
 
     private val configs = mapOf(
-        ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_GATEWAY_STRIPE_API_KEY to "sk_kWkNGw85HwgjC8gxK90sWlZuLchMP"
+        ConfigurationName.PAYMENT_METHOD_CREDIT_CARD_GATEWAY_STRIPE_API_KEY to System.getenv("STRIPE_API_KEY")
     )
 
     private val invoiceService = mock<InvoiceService>()
