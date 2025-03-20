@@ -9,62 +9,54 @@
 
 <div class="settings-container">
     <div class="settings-sidebar">
-        <div th:replace="~{__components/settings :: settings-menu('file')}"></div>
+        <div th:replace="~{__components/settings :: settings-menu('ai')}"></div>
     </div>
-    <div class="settings-content padding">
+    <div class="settings-content">
         <div
-            th:replace="~{__components/settings :: settings-title('File Storage', '/settings/files/storage')}"></div>
+            th:replace="~{__components/settings :: settings-title('AI', '/settings/ai')}"></div>
 
         <div th:replace="~{__components/layout :: error-message(${error})}"></div>
-        <form class="form" method="post" onsubmit="return on_submit()" th:action="@{/settings/files/storage/save}"
+        <form class="form" method="post" onsubmit="return on_submit()" th:action="@{/settings/ai/save}"
               th:object="${form}">
             <table class="table">
                 <tr>
                     <td width="20%"><b>Type <span class="required">*</span></b></td>
                     <td>
-                        <select onchange="koki_files_storage_type_changed()" required th:field="*{type}">
+                        <select onchange="koki_ai_type_changed()" th:field="*{type}">
                             <option value=""></option>
                             <option th:each="type : ${types}"
-                                    th:text="#{'storage-type.' + ${type}}"
+                                    th:text="#{'ai-type.' + ${type}}"
                                     th:value="${type}">
                                 TYPE
                             </option>
                         </select>
                     </td>
                 </tr>
-                <tr class="s3" th:classappend="${form.type} != 'S3' ? 'hidden'">
-                    <td><b>Bucket <span class="required">*</span></b></td>
+                <tr class="gemini" th:classappend="${form.type} != 'GEMINI' ? 'hidden'">
+                    <td><b>API Key <span class="required">*</span></b></td>
                     <td>
-                        <input maxlength="100" required th:field="*{s3Bucket}"/>
+                        <input maxlength="100" required th:field="*{geminiApiKey}"/>
                     </td>
                 </tr>
-                <tr class="s3" th:classappend="${form.type} != 'S3' ? 'hidden'">
-                    <td><b>Region <span class="required">*</span></b></td>
+                <tr class="gemini" th:classappend="${form.type} != 'GEMINI' ? 'hidden'">
+                    <td><b>Model <span class="required">*</span></b></td>
                     <td>
-                        <select required th:field="*{s3Region}">
+                        <select required th:field="*{geminiModel}">
                             <option value=""></option>
-                            <option th:each="region : ${s3Regions}"
-                                    th:text="${region}"
-                                    th:value="${region}">
-                                REGION
-                            </option>
+                            <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                            <option value="gemini-2.0-flash-lite">Gemini 2.0 Flash Lite</option>
+                            <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                            <option value="gemini-1.5-flash-8b">Gemini 1.5 Flash-8B</option>
+                            <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
                         </select>
                     </td>
                 </tr>
-                <tr class="s3" th:classappend="${form.type} != 'S3' ? 'hidden'">
-                    <td><b>Access Key <span class="required">*</span></b></td>
-                    <td>
-                        <input required th:field="*{s3AccessKey}"/>
-                    </td>
-                </tr>
-                <tr class="s3" th:classappend="${form.type} != 'S3' ? 'hidden'">
-                    <td><b>Secret Key <span class="required">*</span></b></td>
-                    <td>
-                        <input required th:field="*{s3SecretKey}"/>
+                <tr>
+                    <td colspan="2">
+                        <button id="btn-submit" type="submit">Submit</button>
                     </td>
                 </tr>
             </table>
-            <button id="btn-submit" type="submit">Submit</button>
         </form>
     </div>
 </div>
@@ -75,11 +67,11 @@
         return true
     }
 
-    function koki_files_storage_type_changed() {
+    function koki_ai_type_changed() {
         const type = document.getElementById('type').value;
-        const s3 = (type === 'S3');
-        document.querySelectorAll('.s3').forEach((elt) => {
-            if (s3) {
+        const gemini = (type === 'GEMINI');
+        document.querySelectorAll('.gemini').forEach((elt) => {
+            if (gemini) {
                 elt.classList.remove('hidden');
             } else {
                 elt.classList.add('hidden');

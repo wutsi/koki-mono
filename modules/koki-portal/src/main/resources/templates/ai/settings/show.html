@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="settings-container">
+    <div class="settings-sidebar">
+        <div th:replace="~{__components/settings :: settings-menu('ai')}"></div>
+    </div>
+    <div class="settings-content">
+        <ul>
+            <li class="menu-item">
+                <h3>AI</h3>
+            </li>
+        </ul>
+
+        <table class="table">
+            <tr>
+                <td width="20%"><b>Type</b></td>
+                <td th:text="#{'ai-type.' + ${form.type}}">STORAGE</td>
+            </tr>
+            <tr class="s3" th:if="${form.type == 'GEMINI'}">
+                <td><b>Model</b></td>
+                <td th:text="${form.getGeminiModel()}">MODEL</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <a class="btn-edit btn btn-secondary" href="/settings/ai/edit">Configure</a>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+
+
+</body>
+</html>

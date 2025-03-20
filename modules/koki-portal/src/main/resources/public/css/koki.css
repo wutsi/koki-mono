@@ -377,6 +377,12 @@ tr.activity-running {
     width: 100%;
 }
 
+.settings-sidebar ul li.menu-item a.back,
+.settings-content ul li.menu-item a.back {
+    width: auto;
+}
+
+
 .settings-sidebar ul li.menu-item h3,
 .settings-content ul li.menu-item h3 {
     margin-bottom: 0;

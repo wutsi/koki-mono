@@ -1,7 +1,7 @@
 package com.wutsi.koki.portal.ai.form
 
-data class AIForm (
+data class AISettingsForm(
     val type: String? = null,
     val geminiApiKey: String? = null,
-    val gemimiModel: String? = null,
+    val geminiModel: String? = null,
 )
