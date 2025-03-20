@@ -1,14 +1,10 @@
 package com.wutsi.koki.tenant.dto
 
 object ConfigurationName {
-    // SMTP CONFIGURATION
-    const val SMTP_TYPE = "smtp.type"
-    const val SMTP_USERNAME = "smtp.username"
-    const val SMTP_PASSWORD = "smtp.password"
-    const val SMTP_HOST = "smtp.host"
-    const val SMTP_PORT = "smtp.port"
-    const val SMTP_FROM_ADDRESS = "smtp.from.address"
-    const val SMTP_FROM_PERSONAL = "smtp.from.personal"
+    // AI
+    const val AI_PROVIDER = "ai.provider"
+    const val AI_PROVIDER_GEMINI_API_KEY = "ai.provider.gemini.api_key"
+    const val AI_PROVIDER_GEMINI_MODEL = "ai.provider.gemini.model"
 
     // EMAIL
     const val EMAIL_DECORATOR = "email.decorator"
@@ -21,7 +17,7 @@ object ConfigurationName {
     const val INVOICE_EMAIL_BODY = "invoice.email.body"
     const val INVOICE_EMAIL_SUBJECT = "invoice.email.subject"
 
-    // Payment
+    // PAYMENT
     const val PAYMENT_EMAIL_ENABLED = "payment.email.enabled"
     const val PAYMENT_EMAIL_BODY = "payment.email.body"
     const val PAYMENT_EMAIL_SUBJECT = "payment.email.subject"
@@ -59,7 +55,16 @@ object ConfigurationName {
     const val PAYMENT_METHOD_PAYPAL_CLIENT_ID = "payment.method.paypal.client_id"
     const val PAYMENT_METHOD_PAYPAL_SECRET_KEY = "payment.method.paypal.secret_key"
 
-    // Storage
+    // SMTP CONFIGURATION
+    const val SMTP_TYPE = "smtp.type"
+    const val SMTP_USERNAME = "smtp.username"
+    const val SMTP_PASSWORD = "smtp.password"
+    const val SMTP_HOST = "smtp.host"
+    const val SMTP_PORT = "smtp.port"
+    const val SMTP_FROM_ADDRESS = "smtp.from.address"
+    const val SMTP_FROM_PERSONAL = "smtp.from.personal"
+
+    // STORAGE
     const val STORAGE_TYPE = "storage.type"
     const val STORAGE_LOCAL_DIRECTORY = "storage.local.directory"
     const val STORAGE_LOCAL_BASE_URL = "storage.local.base_url"
