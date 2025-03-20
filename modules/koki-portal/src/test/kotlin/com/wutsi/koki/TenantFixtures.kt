@@ -12,12 +12,9 @@ import com.wutsi.koki.tenant.dto.TypeSummary
 
 object TenantFixtures {
     val config = mapOf(
-        ConfigurationName.SMTP_PORT to "25",
-        ConfigurationName.SMTP_HOST to "smtp.gmail.com",
-        ConfigurationName.SMTP_USERNAME to "ray.sponsible",
-        ConfigurationName.SMTP_PASSWORD to "secret",
-        ConfigurationName.SMTP_FROM_ADDRESS to "no-reply@koki.com",
-        ConfigurationName.SMTP_FROM_PERSONAL to "Koki",
+        ConfigurationName.AI_PROVIDER to "GEMINI",
+        ConfigurationName.AI_PROVIDER_GEMINI_MODEL to "gemini-2.0-flash",
+        ConfigurationName.AI_PROVIDER_GEMINI_API_KEY to "kk-1203923-4390r-erf00943",
 
         ConfigurationName.INVOICE_DUE_DAYS to "30",
         ConfigurationName.INVOICE_START_NUMBER to "1550",
@@ -41,6 +38,13 @@ object TenantFixtures {
         ConfigurationName.PAYMENT_METHOD_MOBILE_ENABLED to "1",
         ConfigurationName.PAYMENT_METHOD_MOBILE_GATEWAY to "FLUTTERWAVE",
         ConfigurationName.PAYMENT_METHOD_MOBILE_GATEWAY_FLUTTERWAVE_SECRET_KEY to "FLT.1234567890",
+
+        ConfigurationName.SMTP_PORT to "25",
+        ConfigurationName.SMTP_HOST to "smtp.gmail.com",
+        ConfigurationName.SMTP_USERNAME to "ray.sponsible",
+        ConfigurationName.SMTP_PASSWORD to "secret",
+        ConfigurationName.SMTP_FROM_ADDRESS to "no-reply@koki.com",
+        ConfigurationName.SMTP_FROM_PERSONAL to "Koki",
 
         ConfigurationName.STORAGE_TYPE to "S3",
         ConfigurationName.STORAGE_S3_BUCKET to "tenant-koki",

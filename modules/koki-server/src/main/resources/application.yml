@@ -155,6 +155,14 @@ koki:
     executor:
         thread-pool-size: 16
 
+    genai:
+        rest:
+            read-timeout: 60000 # 1 minute
+            connect-timeout: 60000 # 1 miniute
+        gemini:
+            api-key: ${env.GEMINI_API_KEY}
+            model: gemini-2.0-flash
+
     rabbitmq:
         url: amqp://localhost
         exchange-name: koki

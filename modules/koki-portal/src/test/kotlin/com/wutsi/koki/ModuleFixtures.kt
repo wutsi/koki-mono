@@ -126,6 +126,16 @@ object ModuleFixtures {
             jsUrl = "/js/payments.js",
             objectType = ObjectType.PAYMENT,
         ),
+
+        Module(
+            id = 220,
+            name = "ai",
+            title = "AI",
+            homeUrl = null,
+            tabUrl = null,
+            settingsUrl = "/settings/ai",
+            jsUrl = null,
+        ),
     )
 
     val permissions = listOf(
@@ -176,5 +186,7 @@ object ModuleFixtures {
         Permission(id = 2101, moduleId = 210, name = "payment", description = "Access payment"),
         Permission(id = 2102, moduleId = 210, name = "payment:admin", description = "Configure payment"),
         Permission(id = 2103, moduleId = 210, name = "payment:manage", description = "Manage payment"),
+
+        Permission(id = 2200, moduleId = 220, name = "ai:admin", description = "Configure AI"),
     )
 }
