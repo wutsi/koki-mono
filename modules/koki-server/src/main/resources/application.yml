@@ -160,7 +160,7 @@ koki:
             read-timeout: 60000 # 1 minute
             connect-timeout: 60000 # 1 miniute
         gemini:
-            api-key: ${env.GEMINI_API_KEY}
+            api-key:
             model: gemini-2.0-flash
 
     rabbitmq:
