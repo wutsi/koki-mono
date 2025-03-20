@@ -11,7 +11,7 @@
     <div class="settings-sidebar">
         <div th:replace="~{__components/settings :: settings-menu('payment')}"></div>
     </div>
-    <div class="settings-content padding">
+    <div class="settings-content">
         <div
             th:replace="~{__components/settings :: settings-title('Configure Paypal Payments', '/settings/payments')}"></div>
 
@@ -34,9 +34,12 @@
                         <input required th:field="*{secretKey}"/>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="2">
+                        <button id="btn-submit" type="submit">Save</button>
+                    </td>
+                </tr>
             </table>
-            <button id="btn-submit" type="submit">Save</button>
-
         </form>
     </div>
 </div>

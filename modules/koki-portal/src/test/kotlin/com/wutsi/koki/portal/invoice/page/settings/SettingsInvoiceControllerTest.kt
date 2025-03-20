@@ -59,18 +59,7 @@ class SettingsInvoiceControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/invoices")
         click(".btn-notification-enable")
 
-        val request = argumentCaptor<SaveConfigurationRequest>()
-        verify(rest).postForEntity(
-            eq("$sdkBaseUrl/v1/configurations"),
-            request.capture(),
-            eq(Any::class.java)
-        )
-        assertEquals(
-            "1",
-            request.firstValue.values[ConfigurationName.INVOICE_EMAIL_ENABLED]
-        )
-
-        assertCurrentPageIs(PageName.INVOICE_SETTINGS)
+        disableConfig(listOf(PageName.INVOICE_SETTINGS_NOTIFICATION))
     }
 
     @Test

@@ -11,7 +11,7 @@
     <div class="settings-sidebar">
         <div th:replace="~{__components/settings :: settings-menu('payment')}"></div>
     </div>
-    <div class="settings-content padding">
+    <div class="settings-content">
         <div
             th:replace="~{__components/settings :: settings-title('Configure Credit Card Payments', '/settings/payments')}"></div>
 
@@ -21,8 +21,12 @@
               th:action="@{/settings/payments/credit-card/save}"
               th:object="${form}">
 
-            <h4>Offline Payment</h4>
             <table class="table">
+                <tr>
+                    <td colspan="2">
+                        <h4>Offline Payment</h4>
+                    </td>
+                </tr>
                 <tr>
                     <td width="30%"><b>Accept offline payment?</b></td>
                     <td>
@@ -43,8 +47,12 @@
                 </tr>
             </table>
 
-            <h4 class="margin-top">Online Payment</h4>
             <table class="table">
+                <tr>
+                    <td colspan="2">
+                        <h4 class="margin-top">Online Payment</h4>
+                    </td>
+                </tr>
                 <tr>
                     <td width="30%"><b>Payment Gateway<span class="required">*</span></b></td>
                     <td>
@@ -60,8 +68,12 @@
                         <input required th:field="*{stripeApiKey}"/>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="2">
+                        <button id="btn-submit" type="submit">Save</button>
+                    </td>
+                </tr>
             </table>
-            <button id="btn-submit" type="submit">Save</button>
         </form>
     </div>
 </div>

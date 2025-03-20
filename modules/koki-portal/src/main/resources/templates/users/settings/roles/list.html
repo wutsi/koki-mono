@@ -11,10 +11,12 @@
     <div class="settings-sidebar">
         <div th:replace="~{__components/settings :: settings-menu('security')}"></div>
     </div>
-    <div class="settings-content padding">
+    <div class="settings-content">
         <div th:replace="~{__components/settings :: settings-title('Roles', '/settings/security')}"></div>
 
-        <a class="btn btn-secondary btn-create" href="/settings/roles/create">Create Role</a>
+        <div class="padding">
+            <a class="btn btn-sm btn-secondary btn-create" href="/settings/roles/create">Create Role</a>
+        </div>
         <table class="table table-striped">
             <thead>
             <tr>

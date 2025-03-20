@@ -8,11 +8,9 @@ import com.wutsi.koki.portal.invoice.form.InvoiceSettingsForm
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import com.wutsi.koki.tenant.dto.ConfigurationName
-import org.aspectj.weaver.tools.cache.SimpleCacheFactory.enabled
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestParam
 
 @Controller()
 @RequiresPermission(["invoice:admin"])
@@ -35,8 +33,8 @@ class SettingsInvoiceController(
             "notification",
             InvoiceNotificationSettingsForm(
                 enabled = configs[ConfigurationName.INVOICE_EMAIL_ENABLED] != null,
-                subject = configs[ConfigurationName.INVOICE_EMAIL_SUBJECT] ?: "",
-                body = configs[ConfigurationName.INVOICE_EMAIL_BODY] ?: "",
+                subject = configs[ConfigurationName.INVOICE_EMAIL_SUBJECT],
+                body = configs[ConfigurationName.INVOICE_EMAIL_BODY],
             )
         )
 
@@ -49,13 +47,5 @@ class SettingsInvoiceController(
         )
 
         return "invoices/settings/show"
-    }
-
-    @GetMapping("/settings/invoices/notifications/enable")
-    fun enable(
-        @RequestParam status: Boolean,
-    ): String {
-        service.enable(ConfigurationName.INVOICE_EMAIL_ENABLED, status)
-        return "redirect:/settings/invoices"
     }
 }

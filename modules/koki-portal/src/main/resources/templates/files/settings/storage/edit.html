@@ -11,7 +11,7 @@
     <div class="settings-sidebar">
         <div th:replace="~{__components/settings :: settings-menu('file')}"></div>
     </div>
-    <div class="settings-content padding">
+    <div class="settings-content">
         <div
             th:replace="~{__components/settings :: settings-title('File Storage', '/settings/files/storage')}"></div>
 
@@ -35,13 +35,13 @@
                 <tr class="s3" th:classappend="${form.type} != 'S3' ? 'hidden'">
                     <td><b>Bucket <span class="required">*</span></b></td>
                     <td>
-                        <input maxlength="100" required th:field="*{s3Bucket}"/>
+                        <input maxlength="100" th:field="*{s3Bucket}" th:required="${form.type} == 'S3'"/>
                     </td>
                 </tr>
                 <tr class="s3" th:classappend="${form.type} != 'S3' ? 'hidden'">
                     <td><b>Region <span class="required">*</span></b></td>
                     <td>
-                        <select required th:field="*{s3Region}">
+                        <select th:field="*{s3Region}" th:required="${form.type} == 'S3'">
                             <option value=""></option>
                             <option th:each="region : ${s3Regions}"
                                     th:text="${region}"
@@ -54,17 +54,21 @@
                 <tr class="s3" th:classappend="${form.type} != 'S3' ? 'hidden'">
                     <td><b>Access Key <span class="required">*</span></b></td>
                     <td>
-                        <input required th:field="*{s3AccessKey}"/>
+                        <input th:field="*{s3AccessKey}" th:required="${form.type} == 'S3'"/>
                     </td>
                 </tr>
                 <tr class="s3" th:classappend="${form.type} != 'S3' ? 'hidden'">
                     <td><b>Secret Key <span class="required">*</span></b></td>
                     <td>
-                        <input required th:field="*{s3SecretKey}"/>
+                        <input th:field="*{s3SecretKey}" th:required="${form.type} == 'S3'"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button id="btn-submit" type="submit">Submit</button>
                     </td>
                 </tr>
             </table>
-            <button id="btn-submit" type="submit">Submit</button>
         </form>
     </div>
 </div>
@@ -84,6 +88,9 @@
             } else {
                 elt.classList.add('hidden');
             }
+            document.querySelectorAll('.s3 input, .s3 select').forEach((elt) => {
+                elt.required = s3;
+            });
         });
     }
 </script>

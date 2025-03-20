@@ -54,8 +54,8 @@ class SettingsPaymentController(
             "notification",
             PaymentNotificationSettingsForm(
                 enabled = configs[ConfigurationName.PAYMENT_EMAIL_ENABLED] != null,
-                subject = configs[ConfigurationName.PAYMENT_EMAIL_SUBJECT] ?: "",
-                body = configs[ConfigurationName.PAYMENT_EMAIL_BODY] ?: "",
+                subject = configs[ConfigurationName.PAYMENT_EMAIL_SUBJECT],
+                body = configs[ConfigurationName.PAYMENT_EMAIL_BODY],
             )
         )
 

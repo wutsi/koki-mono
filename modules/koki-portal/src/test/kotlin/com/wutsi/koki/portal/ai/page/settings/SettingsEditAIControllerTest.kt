@@ -10,7 +10,7 @@ import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class SettingsAIEditControllerTest : AbstractPageControllerTest() {
+class SettingsEditAIControllerTest : AbstractPageControllerTest() {
     @Test
     fun koki() {
         disableAllConfigs()

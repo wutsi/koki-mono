@@ -16,7 +16,7 @@ import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 @RequiresPermission(permissions = ["ai:admin"])
-class SettingsAIEditController(
+class SettingsEditAIController(
     private val service: ConfigurationService
 ) : AbstractPageController() {
     @GetMapping("/settings/ai/edit")

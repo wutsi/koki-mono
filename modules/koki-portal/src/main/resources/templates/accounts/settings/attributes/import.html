@@ -11,7 +11,7 @@
     <div class="settings-sidebar">
         <div th:replace="~{__components/settings :: settings-menu('account')}"></div>
     </div>
-    <div class="settings-content padding">
+    <div class="settings-content">
         <div
             th:replace="~{__components/settings :: settings-title('Acccount Attributes', '/settings/accounts/attributes')}"></div>
 
@@ -19,19 +19,25 @@
             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
             <div th:replace="~{__components/layout :: import-response(${response})}"></div>
 
-            <div class="margin-bottom">
-                Import the account attributes from a CSV file.<br/>
-                Learn more about the format of the file <a href="#">here</a>.
-            </div>
             <table class="table">
+                <tr>
+                    <td colspan="2">
+                        Import the account attributes from a CSV file.<br/>
+                        Learn more about the format of the file <a href="#">here</a>.
+                    </td>
+                </tr>
                 <tr>
                     <td width="20%"><b>File<span class="required">*</span></b></td>
                     <td>
                         <input name="file" required type="file"/>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="2">
+                        <button type="submit">Submit</button>
+                    </td>
+                </tr>
             </table>
-            <button type="submit">Submit</button>
         </form>
     </div>
 </div>

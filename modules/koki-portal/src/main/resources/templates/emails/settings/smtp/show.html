@@ -12,45 +12,43 @@
         <div th:replace="~{__components/settings :: settings-menu('email')}"></div>
     </div>
     <div class="settings-content">
-        <div class="padding">
-            <div th:replace="~{__components/settings :: settings-title('SMTP', '/settings/email')}"></div>
+        <div th:replace="~{__components/settings :: settings-title('SMTP', '/settings/email')}"></div>
 
-            <div>
-                <table class="table" th:if="${form}">
-                    <tr>
-                        <td width="20%"><b>Type</b></td>
-                        <td th:text="#{'smtp-type.' + ${form.type}}">STORAGE</td>
-                    </tr>
-                    <tr th:if="${form.type == 'EXTERNAL'}">
-                        <td width="20%"><b>Host</b></td>
-                        <td th:text="${form.host}">HOST</td>
-                    </tr>
-                    <tr th:if="${form.type == 'EXTERNAL'}">
-                        <td><b>Port</b></td>
-                        <td th:text="${form.port}">PORT</td>
-                    </tr>
-                    <tr th:if="${form.type == 'EXTERNAL'}">
-                        <td><b>Username</b></td>
-                        <td th:text="${form.username}">USERNAME</td>
-                    </tr>
-                    <tr th:if="${form.type == 'EXTERNAL'}">
-                        <td><b>Password</b></td>
-                        <td>******</td>
-                    </tr>
-                    <tr th:if="${form.type == 'EXTERNAL'}">
-                        <td><b>Sender</b></td>
-                        <td>
+        <table class="table" th:if="${form}">
+            <tr>
+                <td width="20%"><b>Type</b></td>
+                <td th:text="#{'smtp-type.' + ${form.type}}">STORAGE</td>
+            </tr>
+            <tr th:if="${form.type == 'EXTERNAL'}">
+                <td width="20%"><b>Host</b></td>
+                <td th:text="${form.host}">HOST</td>
+            </tr>
+            <tr th:if="${form.type == 'EXTERNAL'}">
+                <td><b>Port</b></td>
+                <td th:text="${form.port}">PORT</td>
+            </tr>
+            <tr th:if="${form.type == 'EXTERNAL'}">
+                <td><b>Username</b></td>
+                <td th:text="${form.username}">USERNAME</td>
+            </tr>
+            <tr th:if="${form.type == 'EXTERNAL'}">
+                <td><b>Password</b></td>
+                <td>******</td>
+            </tr>
+            <tr th:if="${form.type == 'EXTERNAL'}">
+                <td><b>Sender</b></td>
+                <td>
                         <span th:if="!${form.fromPersonal.isEmpty()}"
                               th:text="${form.fromPersonal} + ' <' + ${form.fromAddress} + '>'">SENDER</span>
-                            <span th:if="${form.fromPersonal.isEmpty()}" th:text="${form.fromAddress}">SENDER</span>
-                        </td>
-                    </tr>
-                </table>
-                <div class="margin-top">
-                    <a class="btn-edit btn btn-secondary" href="/settings/email/smtp/edit">Configure</a>
-                </div>
-            </div>
-        </div>
+                    <span th:if="${form.fromPersonal.isEmpty()}" th:text="${form.fromAddress}">SENDER</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <a class="btn-edit btn btn-sm btn-secondary" href="/settings/email/smtp/edit">Configure</a>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 

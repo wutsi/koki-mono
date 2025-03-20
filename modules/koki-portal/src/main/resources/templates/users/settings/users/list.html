@@ -11,12 +11,12 @@
     <div class="settings-sidebar">
         <div th:replace="~{__components/settings :: settings-menu('security')}"></div>
     </div>
-    <div class="settings-content padding">
+    <div class="settings-content">
         <div th:replace="~{__components/settings :: settings-title('Users', '/settings/security')}"></div>
 
-        <div class="flex flex-space-between">
+        <div class="flex flex-space-between padding">
             <div>
-                <a class="btn btn-secondary btn-create" href="/settings/users/create">Create User</a>
+                <a class="btn btn-sm btn-secondary btn-create" href="/settings/users/create">Create User</a>
             </div>
             <div class="btn-group">
                 <select class="btn btn-sm btn-light" id="filter-role-id" onchange="koki_users_on_filter_changed()"

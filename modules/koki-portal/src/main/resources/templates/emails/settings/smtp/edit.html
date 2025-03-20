@@ -12,66 +12,71 @@
         <div th:replace="~{__components/settings :: settings-menu('email')}"></div>
     </div>
     <div class="settings-content">
-        <div class="padding">
-            <div th:replace="~{__components/settings :: settings-title('SMTP', '/settings/email')}"></div>
+        <div th:replace="~{__components/settings :: settings-title('SMTP', '/settings/email')}"></div>
 
-            <div th:replace="~{__components/layout :: error-message(${error})}"></div>
-            <form class="form" method="post" onsubmit="on_submit()" th:action="@{/settings/email/smtp/save}"
-                  th:object="${form}">
-                <table class="table">
-                    <tr>
-                        <td width="20%"><b>Type <span class="required">*</span></b></td>
-                        <td>
-                            <select onchange="koki_emails_smtp_type_changed()" required th:field="*{type}">
-                                <option value=""></option>
-                                <option th:each="type : ${types}"
-                                        th:text="#{'smtp-type.' + ${type}}"
-                                        th:value="${type}">
-                                    TYPE
-                                </option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr class="external" th:classappend="${form.type} != 'EXTERNAL' ? 'hidden'">
-                        <td width="20%"><b>Host<span class="required">*</span></b></td>
-                        <td>
-                            <input maxlength="100" required th:field="*{host}"/>
-                        </td>
-                    </tr>
-                    <tr class="external" th:classappend="${form.type} != 'EXTERNAL' ? 'hidden'">
-                        <td><b>Port<span class="required">*</span></b></td>
-                        <td>
-                            <input maxlength="4" required step="1" th:field="*{port}" type="number"/>
-                        </td>
-                    </tr>
-                    <tr class="external" th:classappend="${form.type} != 'EXTERNAL' ? 'hidden'">
-                        <td><b>Username<span class="required">*</span></b></td>
-                        <td>
-                            <input maxlength="100" required th:field="*{username}"/>
-                        </td>
-                    </tr>
-                    <tr class="external" th:classappend="${form.type} != 'EXTERNAL' ? 'hidden'">
-                        <td><b>Password<span class="required">*</span></b></td>
-                        <td>
-                            <input maxlength="100" required th:field="*{password}"/>
-                        </td>
-                    </tr>
-                    <tr class="external" th:classappend="${form.type} != 'EXTERNAL' ? 'hidden'">
-                        <td><b>Sender Email</b></td>
-                        <td>
-                            <input maxlength="100" required th:field="*{fromAddress}" type="email"/>
-                        </td>
-                    </tr>
-                    <tr class="external" th:classappend="${form.type} != 'EXTERNAL' ? 'hidden'">
-                        <td><b>Sender Name</b></td>
-                        <td>
-                            <input maxlength="100" th:field="*{fromPersonal}"/>
-                        </td>
-                    </tr>
-                </table>
-                <button id="btn-submit" type="submit">Submit</button>
-            </form>
-        </div>
+        <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+
+        <form class="form" method="post" onsubmit="on_submit()" th:action="@{/settings/email/smtp/save}"
+              th:object="${form}">
+            <table class="table">
+                <tr>
+                    <td width="20%"><b>Type <span class="required">*</span></b></td>
+                    <td>
+                        <select onchange="koki_emails_smtp_type_changed()" required th:field="*{type}">
+                            <option value=""></option>
+                            <option th:each="type : ${types}"
+                                    th:text="#{'smtp-type.' + ${type}}"
+                                    th:value="${type}">
+                                TYPE
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="external" th:classappend="${form.type} != 'EXTERNAL' ? 'hidden'">
+                    <td width="20%"><b>Host<span class="required">*</span></b></td>
+                    <td>
+                        <input maxlength="100" th:field="*{host}" th:required="${form.type} == 'EXTERNAL'"/>
+                    </td>
+                </tr>
+                <tr class="external" th:classappend="${form.type} != 'EXTERNAL' ? 'hidden'">
+                    <td><b>Port<span class="required">*</span></b></td>
+                    <td>
+                        <input maxlength="4" step="1" th:field="*{port}" th:required="${form.type} == 'EXTERNAL'"
+                               type="number"/>
+                    </td>
+                </tr>
+                <tr class="external" th:classappend="${form.type} != 'EXTERNAL' ? 'hidden'">
+                    <td><b>Username<span class="required">*</span></b></td>
+                    <td>
+                        <input maxlength="100" th:field="*{username}" th:required="${form.type} == 'EXTERNAL'"/>
+                    </td>
+                </tr>
+                <tr class="external" th:classappend="${form.type} != 'EXTERNAL' ? 'hidden'">
+                    <td><b>Password<span class="required">*</span></b></td>
+                    <td>
+                        <input maxlength="100" th:field="*{password}" th:required="${form.type} == 'EXTERNAL'"/>
+                    </td>
+                </tr>
+                <tr class="external" th:classappend="${form.type} != 'EXTERNAL' ? 'hidden'">
+                    <td><b>Sender Email<span class="required">*</span></b></td>
+                    <td>
+                        <input maxlength="100" th:field="*{fromAddress}" th:required="${form.type} == 'EXTERNAL'"
+                               type="email"/>
+                    </td>
+                </tr>
+                <tr class="external" th:classappend="${form.type} != 'EXTERNAL' ? 'hidden'">
+                    <td><b>Sender Name</b></td>
+                    <td>
+                        <input maxlength="100" th:field="*{fromPersonal}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button id="btn-submit" type="submit">Submit</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
     </div>
 </div>
 
@@ -89,6 +94,12 @@
                 elt.classList.remove('hidden');
             } else {
                 elt.classList.add('hidden');
+            }
+        });
+
+        document.querySelectorAll('.external input, .external select').forEach((elt) => {
+            if (elt.id !== 'fromPersonal') {
+                elt.required = external;
             }
         });
     }
