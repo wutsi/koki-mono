@@ -20,7 +20,7 @@
 
             <div class="widget margin-top-4x">
                 <div class="widget-body">
-                    <div th:replace="~{__components/checkout :: checkout-header(${tx.invoice})}"></div>
+                    <div th:replace="~{__components/paynow :: header(${tx.invoice})}"></div>
 
                     <div class="margin-top-2x" th:if="${tx.successful}">
                         <h2>
@@ -47,13 +47,7 @@
                     </div>
 
                     <div class="margin-top flex flex-space-between margin-top-2x">
-                        <div th:style="!${tx.successful} ? 'width: 60%' : 'width:100%'">
-                            <div th:replace="~{__components/checkout :: checkout-invoice(${tx.invoice})}"></div>
-                        </div>
-                        <div style="width:35%" th:if="!${tx.successful}">
-                            <div
-                                th:replace="~{__components/checkout :: checkout-buttons(${tx.invoice}, ${paymentMethodTypes})}"></div>
-                        </div>
+                        <div th:replace="~{__components/paynow :: invoice(${tx.invoice})}"></div>
                     </div>
                 </div>
             </div>

@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
-class CheckoutConfirmationController(
+class PaynowConfirmationController(
     private val transactionService: TransactionService,
-) : AbstractCheckoutController() {
-    @GetMapping("/checkout/confirmation")
+) : AbstractPaynowController() {
+    @GetMapping("/paynow/confirmation")
     fun create(
         @RequestParam(name = "transaction-id") transactionId: String,
         model: Model,
@@ -24,10 +24,10 @@ class CheckoutConfirmationController(
         model.addAttribute(
             "page",
             createPageModel(
-                name = PageName.CHECKOUT_CONFIRMATION,
+                name = PageName.PAYNOW_CONFIRMATION,
                 title = "Confirmation",
             )
         )
-        return "checkout/confirmation"
+        return "paynow/confirmation"
     }
 }

@@ -5,30 +5,30 @@ INSERT INTO T_BUSINESS(id, tenant_fk, company_name, phone, fax, email, website, 
     VALUES (100, 1, 'Business Inc', '+5147580100', '+5147580111', 'info@my-biz.com', 'https://my-biz.com', 111, 100, 'CA', 'H7K1C6', '340 Pascal');
 
 
-INSERT INTO T_INVOICE(id, tenant_fk, tax_fk, order_fk, number, status, customer_account_fk, customer_name, customer_email, amount_due, currency)
+INSERT INTO T_INVOICE(id, paynow_id, tenant_fk, tax_fk, order_fk, number, status, customer_account_fk, customer_name, customer_email, amount_due, currency)
     VALUES
-        (100, 1, null, null, 10955, 1, 1,    'Ray Sponsible', 'ray.sponsible@gmail.com', 0, 'CAD'),
-        (101, 1, null, null, 10956, 1, 1,    'Ray Sponsible', 'ray.sponsible@gmail.com', 0, 'CAD'),
-        (102, 1, null, null, 10957, 1, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
-        (103, 1, null, null, 10958, 1, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
-        (104, 1, null, null, 10959, 1, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
+        (100, 'paynow100', 1, null, null, 10955, 1, 1,    'Ray Sponsible', 'ray.sponsible@gmail.com', 0, 'CAD'),
+        (101, 'paynow101', 1, null, null, 10956, 1, 1,    'Ray Sponsible', 'ray.sponsible@gmail.com', 0, 'CAD'),
+        (102, 'paynow102', 1, null, null, 10957, 1, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
+        (103, 'paynow103', 1, null, null, 10958, 1, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
+        (104, 'paynow104', 1, null, null, 10959, 1, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
 
-        (110, 1, null, null, 10910, 2, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
-        (111, 1, null, null, 10911, 2, null, 'Roger', 'roger.milla@gmail.com', 10, 'CAD'),
-        (112, 1, null, null, 10912, 2, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
-        (113, 1, null, null, 10913, 2, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
+        (110, 'paynow110', 1, null, null, 10910, 2, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
+        (111, 'paynow111', 1, null, null, 10911, 2, null, 'Roger', 'roger.milla@gmail.com', 10, 'CAD'),
+        (112, 'paynow112', 1, null, null, 10912, 2, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
+        (113, 'paynow113', 1, null, null, 10913, 2, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
 
-        (120, 1, null, null, 10920, 3, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
-        (121, 1, null, null, 10921, 3, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
-        (122, 1, null, null, 10922, 3, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
+        (120, 'paynow120', 1, null, null, 10920, 3, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
+        (121, 'paynow121', 1, null, null, 10921, 3, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
+        (122, 'paynow122', 1, null, null, 10922, 3, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
 
-        (130, 1, null, null, 10930, 4, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
-        (131, 1, null, null, 10931, 4, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
-        (132, 1, null, null, 10932, 4, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
+        (130, 'paynow130', 1, null, null, 10930, 4, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
+        (131, 'paynow131', 1, null, null, 10931, 4, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
+        (132, 'paynow132', 1, null, null, 10932, 4, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
 
-        (140, 1, 1400, null, 10940, 2, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
+        (140, 'paynow140', 1, 1400, null, 10940, 2, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD'),
 
-        (200, 2, null, null, 10957, 1, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD')
+        (200, 'paynow200', 2, null, null, 10957, 1, null, 'Roger', 'roger.milla@gmail.com', 0, 'CAD')
 ;
 
 INSERT INTO T_TAX(id, tenant_fk, account_fk, invoice_fk, fiscal_year)

@@ -34,6 +34,7 @@ import jakarta.transaction.Transactional
 import org.apache.commons.lang3.time.DateUtils
 import org.springframework.stereotype.Service
 import java.util.Date
+import java.util.UUID
 
 @Service
 class InvoiceService(
@@ -220,6 +221,7 @@ class InvoiceService(
         return dao.save(
             InvoiceEntity(
                 tenantId = tenantId,
+                paynowId = UUID.randomUUID().toString(),
                 taxId = request.taxId,
                 orderId = request.orderId,
                 description = request.description,

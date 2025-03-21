@@ -49,7 +49,7 @@ class CreatePaymentController(
             if (paymentMethod(paymentMethodType, config) == null) {
                 return "redirect:/error/payment-not-supported?payment-method-type=$paymentMethodType"
             } else if (paymentMethodType.online) {
-                val redirectUrl = paymentService.checkout(invoiceId, paymentMethodType)
+                val redirectUrl = paymentService.checkout(invoiceId, null, paymentMethodType)
                 return "redirect:$redirectUrl"
             } else {
                 val invoice = invoiceService.invoice(invoiceId, fullGraph = false)

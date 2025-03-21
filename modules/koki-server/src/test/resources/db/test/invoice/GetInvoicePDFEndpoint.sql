@@ -51,7 +51,7 @@ INSERT INTO T_BUSINESS(id, tenant_fk, company_name, phone, fax, email, website, 
     VALUES (100, 1, 'My Business', '+5147580100', '+5147580111', 'info@my-biz.com', 'https://my-biz.com', 111, 100, 'CA', 'H9H 9H9', '3030 Linton');
 
 INSERT INTO T_INVOICE(
-    id, tenant_fk, tax_fk, order_fk,
+    id, paynow_id, tenant_fk, tax_fk, order_fk,
     number, status, description,
     sub_total_amount, total_tax_amount, total_discount_amount, total_amount, amount_paid, amount_due, currency,
     customer_account_fk, customer_name, customer_email, customer_phone, customer_mobile,
@@ -60,7 +60,7 @@ INSERT INTO T_INVOICE(
     invoiced_at, due_at)
   VALUES
       (
-        100, 1, 7777, 9999,
+        100, 'paynow100', 1, 7777, 9999,
         10955, 2, 'Sample description',
         800.00, 40.00, 20.00, 820.00, 810.00, 10.00, 'CAD',
         111, 'Ray Sponsible', 'ray.sponsible@gmail.com', '+5147580111', '+514758000',
@@ -69,7 +69,7 @@ INSERT INTO T_INVOICE(
         '2025-01-01', '2025-01-30'
       ),
       (
-          200, 1, 7777, 9999,
+          200, 'paynow200', 1, 7777, 9999,
           10956, 3, 'Sample description',
           800.00, 40.00, 20.00, 820.00, 810.00, 10.00, 'CAD',
           111, 'Ray Sponsible', 'ray.sponsible@gmail.com', '+5147580111', '+514758000',

@@ -16,8 +16,8 @@ object PageName {
     const val AI_SETTINGS = "page.settings.ai"
     const val AI_SETTINGS_EDIT = "page.settings.ai.edit"
 
-    const val CHECKOUT = "page.checkout"
-    const val CHECKOUT_CONFIRMATION = "page.checkout.confirmation"
+    const val PAYNOW = "page.paynow"
+    const val PAYNOW_CONFIRMATION = "page.paynow.confirmation"
 
     const val CONTACT = "page.contact"
     const val CONTACT_LIST = "page.contact.list"

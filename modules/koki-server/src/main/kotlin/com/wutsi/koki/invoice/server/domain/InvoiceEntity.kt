@@ -17,6 +17,8 @@ data class InvoiceEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
+    val paynowId: String = "",
+
     @Column(name = "tenant_fk")
     val tenantId: Long = -1,
 

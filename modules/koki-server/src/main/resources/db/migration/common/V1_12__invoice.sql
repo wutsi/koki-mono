@@ -11,6 +11,8 @@ CREATE TABLE T_INVOICE_SEQUENCE(
 CREATE TABLE T_INVOICE(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
+  paynow_id               VARCHAR(36) NOT NULL,
+
   tenant_fk               BIGINT NOT NULL,
   customer_account_fk     BIGINT,
   order_fk                BIGINT,
@@ -53,6 +55,7 @@ CREATE TABLE T_INVOICE(
   due_days                INT,
 
   UNIQUE(tenant_fk, number),
+  UNIQUE(paynow_id),
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
@@ -61,7 +64,6 @@ CREATE INDEX I_INVOICE_status ON T_INVOICE(status);
 CREATE INDEX I_INVOICE_account ON T_INVOICE(customer_account_fk);
 CREATE INDEX I_INVOICE_tax ON T_INVOICE(tax_fk);
 CREATE INDEX I_INVOICE_order ON T_INVOICE(order_fk);
-
 
 CREATE TABLE T_INVOICE_ITEM(
   id                      BIGINT NOT NULL AUTO_INCREMENT,

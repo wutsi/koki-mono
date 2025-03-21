@@ -1,9 +1,11 @@
 package com.wutsi.koki.portal.checkout.page
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.InvoiceFixtures.invoice
@@ -12,18 +14,23 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.invoice.dto.GetInvoiceResponse
 import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.payment.dto.GetTransactionResponse
+import com.wutsi.koki.payment.dto.PaymentMethodType
 import com.wutsi.koki.payment.dto.PrepareCheckoutRequest
 import com.wutsi.koki.payment.dto.PrepareCheckoutResponse
 import com.wutsi.koki.payment.dto.TransactionStatus
 import com.wutsi.koki.portal.common.page.PageName
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import java.util.UUID
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
-class CheckoutControllerTest : AbstractPageControllerTest() {
+class PaynowControllerTest : AbstractPageControllerTest() {
+    private val paynowId = UUID.randomUUID().toString()
+
     @Test
-    fun checkout() {
-        navigateTo("/checkout/${invoice.id}")
+    fun `paynow width credit card`() {
+        navigateTo("/paynow/$paynowId.${invoice.id}")
         assertCurrentPageIs(PageName.PAYNOW)
 
         assertElementNotPresent(".alert-danger")
@@ -32,8 +39,18 @@ class CheckoutControllerTest : AbstractPageControllerTest() {
         assertElementPresent(".btn-checkout-mobile")
 
         setupInvoice(InvoiceStatus.PAID)
-        setupCheckoutURL("/checkout/confirmation?transaction-id=${transaction.id}")
+        setupCheckoutURL("/paynow/confirmation?transaction-id=${transaction.id}")
         click(".btn-checkout-credit_card")
+
+        val request = argumentCaptor<PrepareCheckoutRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/payments/checkout"),
+            request.capture(),
+            eq(PrepareCheckoutResponse::class.java)
+        )
+        assertEquals(invoice.id, request.firstValue.invoiceId)
+        assertEquals(paynowId, request.firstValue.paynowId)
+        assertEquals(PaymentMethodType.CREDIT_CARD, request.firstValue.paymentMethodType)
 
         assertCurrentPageIs(PageName.PAYNOW_CONFIRMATION)
         assertElementPresent(".fa-circle-check")
@@ -53,7 +70,7 @@ class CheckoutControllerTest : AbstractPageControllerTest() {
                 eq(PrepareCheckoutResponse::class.java)
             )
 
-        navigateTo("/checkout/${invoice.id}")
+        navigateTo("/paynow/$paynowId.${invoice.id}")
         assertCurrentPageIs(PageName.PAYNOW)
         click(".btn-checkout-credit_card")
 
@@ -62,7 +79,7 @@ class CheckoutControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `payment failed`() {
-        navigateTo("/checkout/${invoice.id}")
+        navigateTo("/paynow/$paynowId.${invoice.id}")
         assertCurrentPageIs(PageName.PAYNOW)
 
         assertElementNotPresent(".alert-danger")
@@ -72,22 +89,19 @@ class CheckoutControllerTest : AbstractPageControllerTest() {
 
         setupInvoice(InvoiceStatus.OPENED)
         setupTransaction(TransactionStatus.FAILED)
-        setupCheckoutURL("/checkout/confirmation?transaction-id=${transaction.id}")
+        setupCheckoutURL("/paynow/confirmation?transaction-id=${transaction.id}")
         click(".btn-checkout-credit_card")
 
         assertCurrentPageIs(PageName.PAYNOW_CONFIRMATION)
         assertElementPresent(".fa-triangle-exclamation")
         assertElementPresent(".alert-danger")
-        assertElementPresent(".btn-checkout-credit_card")
-        assertElementPresent(".btn-checkout-paypal")
-        assertElementPresent(".btn-checkout-mobile")
     }
 
     @Test
     fun `already paid`() {
         setupInvoice(InvoiceStatus.PAID)
 
-        navigateTo("/checkout/${invoice.id}")
+        navigateTo("/paynow/$paynowId.${invoice.id}")
         assertCurrentPageIs(PageName.PAYNOW)
 
         assertElementNotPresent(".alert-danger")
@@ -145,7 +159,7 @@ class CheckoutControllerTest : AbstractPageControllerTest() {
             )
         ).whenever(rest)
             .postForEntity(
-                any<String>(),
+                eq("$sdkBaseUrl/v1/payments/checkout"),
                 any<PrepareCheckoutRequest>(),
                 eq(PrepareCheckoutResponse::class.java)
             )

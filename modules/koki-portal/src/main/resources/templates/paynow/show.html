@@ -20,7 +20,7 @@
 
             <div class="widget margin-top-4x">
                 <div class="widget-body">
-                    <div th:replace="~{__components/checkout :: checkout-header(${invoice})}"></div>
+                    <div th:replace="~{__components/paynow :: header(${invoice})}"></div>
 
                     <div class="alert alert-danger margin" th:if="${error}">
                         An unexpected error has occurred. Please try again.
@@ -28,11 +28,11 @@
 
                     <div class="margin-top flex flex-space-between margin-top-2x">
                         <div th:style="!${invoice.paid} ? 'width: 60%' : 'width:100%'">
-                            <div th:replace="~{__components/checkout :: checkout-invoice(${invoice})}"></div>
+                            <div th:replace="~{__components/paynow :: invoice(${invoice})}"></div>
                         </div>
                         <div style="width:35%" th:if="!${invoice.paid}">
                             <div
-                                th:replace="~{__components/checkout :: checkout-buttons(${invoice}, ${paymentMethodTypes})}"></div>
+                                th:replace="~{__components/paynow :: buttons(${invoice}, ${paynowId}, ${paymentMethodTypes})}"></div>
                         </div>
                     </div>
                 </div>
