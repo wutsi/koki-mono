@@ -42,7 +42,8 @@ class InvoiceService(
         }
 
         return koki.create(
-            CreateInvoiceRequest(taxId = tax.id,
+            CreateInvoiceRequest(
+                taxId = tax.id,
 
                 customerAccountId = account.id,
                 customerName = account.name,
@@ -80,8 +81,12 @@ class InvoiceService(
         ).invoiceId
     }
 
-    fun invoice(id: Long, fullGraph: Boolean = true): InvoiceModel {
-        val invoice = koki.invoice(id).invoice
+    fun invoice(
+        id: Long,
+        paynowId: String? = null,
+        fullGraph: Boolean = true
+    ): InvoiceModel {
+        val invoice = koki.invoice(id, paynowId).invoice
 
         // Account
         val account = if (invoice.customer.accountId == null || !fullGraph) {

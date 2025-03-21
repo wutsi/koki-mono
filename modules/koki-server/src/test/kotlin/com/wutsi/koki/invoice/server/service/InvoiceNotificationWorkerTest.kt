@@ -37,6 +37,7 @@ import org.mockito.Mockito.mock
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -162,6 +163,7 @@ class InvoiceNotificationWorkerTest {
     ): InvoiceEntity {
         val invoice = InvoiceEntity(
             id = invoiceId,
+            paynowId = UUID.randomUUID().toString(),
             number = 1445L,
             customerAccountId = customerAccountId,
             customerEmail = email,
@@ -219,7 +221,7 @@ class InvoiceNotificationWorkerTest {
         assertEquals(false, request.firstValue.data["invoicePayUponReception"])
         assertEquals("C\$ 500.00", request.firstValue.data["invoiceTotalAmount"])
         assertEquals("C\$ 500.00", request.firstValue.data["invoiceAmountDue"])
-        assertEquals("http://localhost:8081/checkout/${invoice.id}", request.firstValue.data["paymentPortalUrl"])
+        assertEquals("${tenant.portalUrl}/paynow/${invoice.id}#${invoice.paynowId}", request.firstValue.data["paymentPortalUrl"])
 
         assertEquals(
             config[ConfigurationName.PAYMENT_METHOD_CASH_ENABLED],

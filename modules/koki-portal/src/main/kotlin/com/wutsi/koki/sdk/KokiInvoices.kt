@@ -22,8 +22,13 @@ class KokiInvoices(
         return rest.postForEntity(url, request, CreateInvoiceResponse::class.java).body
     }
 
-    fun invoice(id: Long): GetInvoiceResponse {
-        val url = urlBuilder.build("$INVOICE_PATH_PREFIX/$id")
+    fun invoice(id: Long, paynowId: String?): GetInvoiceResponse {
+        val url = urlBuilder.build(
+            path = "$INVOICE_PATH_PREFIX/$id",
+            parameters = mapOf(
+                "paynow-id" to paynowId
+            )
+        )
         return rest.getForEntity(url, GetInvoiceResponse::class.java).body
     }
 

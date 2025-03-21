@@ -14,10 +14,16 @@ import java.text.SimpleDateFormat
 class PaymentService(
     private val koki: KokiPayments,
 ) {
-    fun checkout(invoiceId: Long, paymentMethodType: PaymentMethodType): String? {
+    fun checkout(
+        invoiceId: Long,
+        paynowId: String?,
+        paymentMethodType: PaymentMethodType
+    ): String? {
         return koki.checkout(
             PrepareCheckoutRequest(
-                invoiceId = invoiceId, paymentMethodType = paymentMethodType
+                invoiceId = invoiceId,
+                paynowId = paynowId,
+                paymentMethodType = paymentMethodType
             )
         ).redirectUrl
     }
@@ -26,41 +32,44 @@ class PaymentService(
         val fmt = SimpleDateFormat("yyyy-MM-dd")
 
         val response = when (form.paymentMethodType) {
-            PaymentMethodType.CASH -> koki.cashPayment(request = CreateCashPaymentRequest(
-                invoiceId = form.invoiceId,
-                amount = form.amount,
-                currency = form.currency,
-                description = form.description,
+            PaymentMethodType.CASH -> koki.cashPayment(
+                request = CreateCashPaymentRequest(
+                    invoiceId = form.invoiceId,
+                    amount = form.amount,
+                    currency = form.currency,
+                    description = form.description,
 
-                collectedAt = form.collectedAt?.ifEmpty { null }?.let { date -> fmt.parse(date) },
-                collectedById = form.collectedById,
-            )
-            )
-
-            PaymentMethodType.CHECK -> koki.checkPayment(request = CreateCheckPaymentRequest(
-                invoiceId = form.invoiceId,
-                amount = form.amount,
-                currency = form.currency,
-                description = form.description,
-
-                checkNumber = form.checkNumber,
-                bankName = form.bankName.uppercase(),
-                checkDate = form.checkDate?.ifEmpty { null }?.let { date -> fmt.parse(date) },
-                clearedAt = form.clearedAt?.ifEmpty { null }?.let { date -> fmt.parse(date) },
-            )
+                    collectedAt = form.collectedAt?.ifEmpty { null }?.let { date -> fmt.parse(date) },
+                    collectedById = form.collectedById,
+                )
             )
 
-            PaymentMethodType.INTERAC -> koki.interacPayment(request = CreateInteracPaymentRequest(
-                invoiceId = form.invoiceId,
-                amount = form.amount,
-                currency = form.currency,
-                description = form.description,
+            PaymentMethodType.CHECK -> koki.checkPayment(
+                request = CreateCheckPaymentRequest(
+                    invoiceId = form.invoiceId,
+                    amount = form.amount,
+                    currency = form.currency,
+                    description = form.description,
 
-                referenceNumber = form.referenceNumber,
-                bankName = form.bankName.uppercase(),
-                sentAt = form.sentAt?.ifEmpty { null }?.let { date -> fmt.parse(date) },
-                clearedAt = form.clearedAt?.ifEmpty { null }?.let { date -> fmt.parse(date) },
+                    checkNumber = form.checkNumber,
+                    bankName = form.bankName.uppercase(),
+                    checkDate = form.checkDate?.ifEmpty { null }?.let { date -> fmt.parse(date) },
+                    clearedAt = form.clearedAt?.ifEmpty { null }?.let { date -> fmt.parse(date) },
+                )
             )
+
+            PaymentMethodType.INTERAC -> koki.interacPayment(
+                request = CreateInteracPaymentRequest(
+                    invoiceId = form.invoiceId,
+                    amount = form.amount,
+                    currency = form.currency,
+                    description = form.description,
+
+                    referenceNumber = form.referenceNumber,
+                    bankName = form.bankName.uppercase(),
+                    sentAt = form.sentAt?.ifEmpty { null }?.let { date -> fmt.parse(date) },
+                    clearedAt = form.clearedAt?.ifEmpty { null }?.let { date -> fmt.parse(date) },
+                )
             )
 
             else -> TODO()

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<div th:fragment="checkout-header(invoice)">
+<div th:fragment="header(invoice)">
     <div class="text-small">
         Invoice #<b th:text="${invoice.number}">0000</b>
     </div>
@@ -14,7 +14,7 @@
     </div>
 </div>
 
-<table class="table" th:fragment="checkout-invoice(invoice)">
+<table class="table" th:fragment="invoice(invoice)">
     <tr th:each="item : ${invoice.items}">
         <td valign="top">
             <div th:text="${item.description}">ITEM</div>
@@ -40,13 +40,16 @@
     </tr>
 </table>
 
-<div th:fragment="checkout-buttons(invoice, paynowId, paymentMethodTypes)">
+<div th:fragment="buttons(invoice, paynowId, paymentMethodTypes)">
     <h5 class="text-center">Pay With</h5>
-    <div th:each="type : ${paymentMethodTypes}">
-        <a class="entity-title" th:classappend="'btn-checkout-' + ${type.name.toLowerCase()}"
-           th:href="'/paynow/' + ${invoice.id} + '#' + ${paynowId} + '/submit?payment-method-type=' + ${type.name}">
+    <form id="paynow-form" method="POST" onclick="return koki_paynow_form_on_submit()"
+          th:action="'/paynow/' + ${paynowId} + '.' + ${invoice.id} + '?payment-method-type=' + ${type.name}"
+          th:each="type : ${paymentMethodTypes}">
 
-            <div class="border border-rounded margin-bottom padding-small flex background-lightgray">
+        <button class="btn btn-primary w-100 margin-top"
+                th:classappend="'btn-checkout-' + ${type.name.toLowerCase()}"
+                type="submit">
+            <div class="flex">
                 <div class="text-larger" style="width: 50px">
                     <div th:replace="~{__components/payment :: payment-method-icon(${type.name})}"></div>
                 </div>
@@ -54,8 +57,16 @@
                     TYPE
                 </div>
             </div>
-        </a>
-    </div>
+        </button>
+
+    </form>
+    <script>
+        function koki_paynow_form_on_submit() {
+            document.querySelectorAll('#paynow-form button').forEach((elt) => {
+                elt.enabled = false;
+            });
+        }
+    </script>
 </div>
 
 </body>

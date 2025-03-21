@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.payment.dto.PaymentGateway
 import com.wutsi.koki.payment.dto.PaymentMethodType
 import com.wutsi.koki.payment.dto.PrepareCheckoutRequest
@@ -46,6 +47,7 @@ class PrepareCheckoutEndpointTest : AuthorizationAwareEndpointTest() {
 
         val request = PrepareCheckoutRequest(
             invoiceId = 100L,
+            paynowId = null,
             paymentMethodType = PaymentMethodType.CREDIT_CARD,
         )
         val response = rest.postForEntity("/v1/payments/checkout", request, PrepareCheckoutResponse::class.java)
@@ -72,6 +74,61 @@ class PrepareCheckoutEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(USER_ID, tx.createdById)
         assertEquals(fmt.format(Date()), fmt.format(tx.createdAt))
         assertEquals(fmt.format(Date()), fmt.format(tx.modifiedAt))
+    }
+
+    @Test
+    fun `checkout with paynowId`() {
+        doAnswer { inv ->
+            val tx = inv.getArgument<TransactionEntity>(0)
+            tx.status = TransactionStatus.PENDING
+            tx.supplierTransactionId = "STR-140394309"
+            tx.supplierStatus = "opened"
+            tx.checkoutUrl = "https://localhost:3209329/checkout"
+            tx
+        }.whenever(stripe).checkout(any())
+
+        val request = PrepareCheckoutRequest(
+            invoiceId = 110L,
+            paynowId = "paynow110",
+            paymentMethodType = PaymentMethodType.CREDIT_CARD,
+        )
+        val response = rest.postForEntity("/v1/payments/checkout", request, PrepareCheckoutResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val fmt = SimpleDateFormat("yyyy-MM-dd")
+        val transactionId = response.body!!.transactionId
+        val tx = dao.findById(transactionId).get()
+        assertEquals(TENANT_ID, tx.tenantId)
+        assertEquals(TransactionType.PAYMENT, tx.type)
+        assertEquals(request.paymentMethodType, tx.paymentMethodType)
+        assertEquals(PaymentGateway.STRIPE, tx.gateway)
+        assertEquals(TransactionStatus.PENDING, tx.status)
+        assertEquals(request.invoiceId, tx.invoiceId)
+        assertEquals("Sample description", tx.description)
+        assertEquals("CAD", tx.currency)
+        assertEquals(820.0, tx.amount)
+        assertEquals(null, tx.errorCode)
+        assertEquals(null, tx.supplierErrorCode)
+        assertEquals("STR-140394309", tx.supplierTransactionId)
+        assertEquals("opened", tx.supplierStatus)
+        assertEquals("https://localhost:3209329/checkout", tx.checkoutUrl)
+        assertEquals(USER_ID, tx.createdById)
+        assertEquals(fmt.format(Date()), fmt.format(tx.createdAt))
+        assertEquals(fmt.format(Date()), fmt.format(tx.modifiedAt))
+    }
+
+    @Test
+    fun `checkout with invalid paynowId`() {
+        val request = PrepareCheckoutRequest(
+            invoiceId = 120L,
+            paynowId = "xxxx",
+            paymentMethodType = PaymentMethodType.MOBILE,
+        )
+        val response = rest.postForEntity("/v1/payments/checkout", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertEquals(ErrorCode.INVOICE_NOT_FOUND, response.body?.error?.code)
     }
 
     @Test

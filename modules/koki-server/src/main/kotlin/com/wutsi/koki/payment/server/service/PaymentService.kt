@@ -183,8 +183,15 @@ class PaymentService(
 
     @Transactional
     fun checkout(request: PrepareCheckoutRequest, tenantId: Long): TransactionEntity {
-        // Create transaction
+        // invoice
         val invoice = invoiceService.get(request.invoiceId, tenantId)
+        if (request.paynowId != null && invoice.paynowId != request.paynowId) {
+            throw NotFoundException(
+                error = Error(code = ErrorCode.INVOICE_NOT_FOUND)
+            )
+        }
+
+        // Create transaction
         val userId = securityService.getCurrentUserIdOrNull()
         val now = Date()
         val tx = dao.save(

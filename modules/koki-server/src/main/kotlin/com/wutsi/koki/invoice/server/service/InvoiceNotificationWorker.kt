@@ -194,7 +194,7 @@ class InvoiceNotificationWorker(
             "invoiceAmountDue" to moneyFormat.format(invoice.amountDue),
             "invoiceTotalAmount" to moneyFormat.format(invoice.totalAmount),
 
-            "paymentPortalUrl" to "${tenant.portalUrl}/checkout/${invoice.id}",
+            "paymentPortalUrl" to "${tenant.portalUrl}/paynow/${invoice.id}#${invoice.paynowId}",
 
             "paymentMethodInterac" to configs[ConfigurationName.PAYMENT_METHOD_INTERAC_ENABLED],
             "interacEmail" to configs[ConfigurationName.PAYMENT_METHOD_INTERAC_EMAIL],

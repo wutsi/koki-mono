@@ -104,7 +104,7 @@ class InvoiceController(
 
     @GetMapping("/i{id}/{uuid}.pdf", produces = ["application/pdf"])
     fun pdf(@PathVariable id: Long, @PathVariable uuid: String): ResponseEntity<ByteArray> {
-        val invoice = service.invoice(id, false)
+        val invoice = service.invoice(id, fullGraph = false)
         val filename = "Invoice-${invoice.number}.pdf"
 
         val headers = HttpHeaders()

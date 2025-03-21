@@ -51,9 +51,15 @@ class InvoiceEndpoints(
     @GetMapping("/{id}")
     fun get(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @RequestParam(required = false, name = "paynow-id") paynowId: String? = null,
         @PathVariable id: Long,
     ): GetInvoiceResponse {
         val invoice = service.get(id, tenantId)
+        if (paynowId != null && invoice.paynowId != paynowId) {
+            throw NotFoundException(
+                error = Error(code = ErrorCode.INVOICE_NOT_FOUND)
+            )
+        }
         return GetInvoiceResponse(
             invoice = mapper.toInvoice(invoice)
         )
