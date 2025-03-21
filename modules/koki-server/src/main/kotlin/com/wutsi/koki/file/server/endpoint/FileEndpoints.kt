@@ -1,11 +1,15 @@
 package com.wutsi.koki.file.server.endpoint
 
+import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.file.dto.UploadFileResponse
+import com.wutsi.koki.file.dto.event.FileDeletedEvent
+import com.wutsi.koki.file.dto.event.FileUploadedEvent
 import com.wutsi.koki.file.server.mapper.FileMapper
 import com.wutsi.koki.file.server.service.FileService
+import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.security.dto.JWTDecoder
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.MediaType
@@ -26,6 +30,7 @@ class FileEndpoints(
     private val service: FileService,
     private val mapper: FileMapper,
     private val response: HttpServletResponse,
+    private val publisher: Publisher,
 ) {
     @GetMapping("/{id}")
     fun get(
@@ -66,6 +71,12 @@ class FileEndpoints(
         @PathVariable id: Long,
     ) {
         service.delete(id, tenantId)
+        publisher.publish(
+            FileDeletedEvent(
+                fileId = id,
+                tenantId = tenantId,
+            )
+        )
     }
 
     @PostMapping("/upload", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
@@ -85,8 +96,19 @@ class FileEndpoints(
             ownerId = ownerId,
             ownerType = ownerType,
         )
+
+        publisher.publish(
+            FileUploadedEvent(
+                fileId = file.id!!,
+                tenantId = tenantId,
+                owner = ownerId?.let { id ->
+                    ownerType?.let { type -> ObjectReference(id, type) }
+                }
+            )
+        )
+
         return UploadFileResponse(
-            id = file.id!!,
+            id = file.id,
             name = file.name,
         )
     }
