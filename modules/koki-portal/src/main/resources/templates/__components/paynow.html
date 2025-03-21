@@ -40,11 +40,11 @@
     </tr>
 </table>
 
-<div th:fragment="checkout-buttons(invoice, paymentMethodTypes)">
+<div th:fragment="checkout-buttons(invoice, paynowId, paymentMethodTypes)">
     <h5 class="text-center">Pay With</h5>
     <div th:each="type : ${paymentMethodTypes}">
         <a class="entity-title" th:classappend="'btn-checkout-' + ${type.name.toLowerCase()}"
-           th:href="'/checkout/prepare?payment-method-type=' + ${type.name} + '&invoice-id=' + ${invoice.id}">
+           th:href="'/paynow/' + ${invoice.id} + '#' + ${paynowId} + '/submit?payment-method-type=' + ${type.name}">
 
             <div class="border border-rounded margin-bottom padding-small flex background-lightgray">
                 <div class="text-larger" style="width: 50px">

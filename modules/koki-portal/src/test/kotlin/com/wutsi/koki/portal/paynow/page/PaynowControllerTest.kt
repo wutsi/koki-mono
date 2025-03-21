@@ -24,7 +24,7 @@ class CheckoutControllerTest : AbstractPageControllerTest() {
     @Test
     fun checkout() {
         navigateTo("/checkout/${invoice.id}")
-        assertCurrentPageIs(PageName.CHECKOUT)
+        assertCurrentPageIs(PageName.PAYNOW)
 
         assertElementNotPresent(".alert-danger")
         assertElementPresent(".btn-checkout-credit_card")
@@ -35,7 +35,7 @@ class CheckoutControllerTest : AbstractPageControllerTest() {
         setupCheckoutURL("/checkout/confirmation?transaction-id=${transaction.id}")
         click(".btn-checkout-credit_card")
 
-        assertCurrentPageIs(PageName.CHECKOUT_CONFIRMATION)
+        assertCurrentPageIs(PageName.PAYNOW_CONFIRMATION)
         assertElementPresent(".fa-circle-check")
         assertElementNotPresent(".alert-danger")
         assertElementNotPresent(".btn-checkout-credit_card")
@@ -54,7 +54,7 @@ class CheckoutControllerTest : AbstractPageControllerTest() {
             )
 
         navigateTo("/checkout/${invoice.id}")
-        assertCurrentPageIs(PageName.CHECKOUT)
+        assertCurrentPageIs(PageName.PAYNOW)
         click(".btn-checkout-credit_card")
 
         assertElementPresent(".alert-danger")
@@ -63,7 +63,7 @@ class CheckoutControllerTest : AbstractPageControllerTest() {
     @Test
     fun `payment failed`() {
         navigateTo("/checkout/${invoice.id}")
-        assertCurrentPageIs(PageName.CHECKOUT)
+        assertCurrentPageIs(PageName.PAYNOW)
 
         assertElementNotPresent(".alert-danger")
         assertElementPresent(".btn-checkout-credit_card")
@@ -75,7 +75,7 @@ class CheckoutControllerTest : AbstractPageControllerTest() {
         setupCheckoutURL("/checkout/confirmation?transaction-id=${transaction.id}")
         click(".btn-checkout-credit_card")
 
-        assertCurrentPageIs(PageName.CHECKOUT_CONFIRMATION)
+        assertCurrentPageIs(PageName.PAYNOW_CONFIRMATION)
         assertElementPresent(".fa-triangle-exclamation")
         assertElementPresent(".alert-danger")
         assertElementPresent(".btn-checkout-credit_card")
@@ -88,7 +88,7 @@ class CheckoutControllerTest : AbstractPageControllerTest() {
         setupInvoice(InvoiceStatus.PAID)
 
         navigateTo("/checkout/${invoice.id}")
-        assertCurrentPageIs(PageName.CHECKOUT)
+        assertCurrentPageIs(PageName.PAYNOW)
 
         assertElementNotPresent(".alert-danger")
         assertElementNotPresent(".btn-checkout-credit_card")

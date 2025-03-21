@@ -6,7 +6,7 @@ import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.ui.Model
 
-abstract class AbstractCheckoutController : AbstractPaymentController() {
+abstract class AbstractPaynowController : AbstractPaymentController() {
     @Autowired
     protected lateinit var configurationService: ConfigurationService
 
