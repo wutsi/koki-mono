@@ -12,21 +12,24 @@
         <div th:replace="~{__components/settings :: settings-menu('email')}"></div>
     </div>
     <div class="settings-content">
-        <div class="padding">
-            <div th:replace="~{__components/settings :: settings-title('Email Layout', '/settings/email')}"></div>
+        <div th:replace="~{__components/settings :: settings-title('Email Layout', '/settings/email')}"></div>
 
-            <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+        <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
-            <form class="form" method="post" th:action="@{/settings/email/decorator/update}" th:object="${form}">
-                <div>
-                    <b>Code</b>
-                </div>
-                <div class="margin-bottom">
-                    <textarea rows="15" th:field="*{content}"></textarea>
-                </div>
-                <button type="submit">Submit</button>
-            </form>
-        </div>
+        <form class="form" method="post" th:action="@{/settings/email/decorator/update}" th:object="${form}">
+            <table class="table">
+                <tr>
+                    <td>
+                        <textarea rows="15" th:field="*{content}"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="submit">Submit</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
     </div>
 </div>
 

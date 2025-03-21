@@ -30,6 +30,7 @@ class SettingsInvoiceNotificationControllerTest : AbstractPageControllerTest() {
             request.capture(),
             eq(Any::class.java)
         )
+        assertEquals("1", request.firstValue.values[ConfigurationName.INVOICE_EMAIL_ENABLED])
         assertEquals(
             "This is the subject {{invoiceNumber}}",
             request.firstValue.values[ConfigurationName.INVOICE_EMAIL_SUBJECT]

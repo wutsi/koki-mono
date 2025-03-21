@@ -11,7 +11,7 @@
     <div class="settings-sidebar">
         <div th:replace="~{__components/settings :: settings-menu('security')}"></div>
     </div>
-    <div class="settings-content padding">
+    <div class="settings-content">
         <div th:replace="~{__components/settings :: settings-title('Roles', '/settings/roles')}"></div>
 
         <form class="form" method="post" th:action="@{/settings/roles/add-new}" th:object="${form}">
@@ -74,8 +74,12 @@
                         </div>
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <button type="submit">Submit</button>
+                    </td>
+                </tr>
             </table>
-            <button type="submit">Submit</button>
         </form>
 
     </div>

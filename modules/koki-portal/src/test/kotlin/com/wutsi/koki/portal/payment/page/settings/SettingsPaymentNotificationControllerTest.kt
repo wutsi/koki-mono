@@ -30,6 +30,7 @@ class SettingsPaymentNotificationControllerTest : AbstractPageControllerTest() {
             request.capture(),
             eq(Any::class.java)
         )
+        assertEquals("1", request.firstValue.values[ConfigurationName.PAYMENT_EMAIL_ENABLED])
         assertEquals(
             "This is the subject {{paymentNumber}}",
             request.firstValue.values[ConfigurationName.PAYMENT_EMAIL_SUBJECT]

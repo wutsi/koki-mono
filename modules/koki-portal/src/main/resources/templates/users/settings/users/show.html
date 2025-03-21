@@ -11,11 +11,11 @@
     <div class="settings-sidebar">
         <div th:replace="~{__components/settings :: settings-menu('security')}"></div>
     </div>
-    <div class="settings-content padding">
+    <div class="settings-content">
         <div th:replace="~{__components/settings :: settings-title('Users', '/settings/users')}"></div>
 
-        <div class="margin-bottom">
-            <a class="btn btn-secondary btn-edit" th:href="'/settings/users/' + ${me.id} + '/edit'">Edit</a>
+        <div class="padding">
+            <a class="btn btn-sm btn-secondary btn-edit" th:href="'/settings/users/' + ${me.id} + '/edit'">Edit</a>
         </div>
         <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 

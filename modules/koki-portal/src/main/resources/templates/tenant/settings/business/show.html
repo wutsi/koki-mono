@@ -12,57 +12,65 @@
         <div th:replace="~{__components/settings :: settings-menu('tenant')}"></div>
     </div>
     <div class="settings-content">
-        <div class="padding">
-            <div th:replace="~{__components/settings :: settings-title('Business Entity', '/settings/tenant')}"></div>
+        <div th:replace="~{__components/settings :: settings-title('Business Entity', '/settings/tenant')}"></div>
 
-            <div>
-                <table class="table" th:if="${business}">
-                    <tr>
-                        <td width="20%"><b>Company Name</b></td>
-                        <td th:text="${business.companyName}">COMPANY</td>
-                    </tr>
-                    <tr th:if="!${business.juridictions.isEmpty()}">
-                        <td><b>Juridictions</b></td>
-                        <td>
-                            <div class="margin-none" th:each="juridiction : ${business.juridictions}">
-                                <span>-</span>
-                                <span th:text="${juridiction.name}">JURIDICTION</span>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr th:if="${business.email}">
-                        <td><b>Email</b></td>
-                        <td>
-                            <a th:href="'mailto:' + ${business.email}" th:text="${business.email}">EMAIL</a>
-                        </td>
-                    </tr>
-                    <tr th:if="${business.phone}">
-                        <td><b>Phone</b></td>
-                        <td th:text="${business.phone}">PHONE</td>
-                    </tr>
-                    <tr th:if="${business.fax}">
-                        <td><b>Fax</b></td>
-                        <td th:text="${business.fax}">FAX</td>
-                    </tr>
-                    <tr th:if="${business.website}">
-                        <td><b>Website</b></td>
-                        <td>
-                            <a target="_blank" th:href="${business.website}" th:text="${business.website}">WEBSITE</a>
-                        </td>
-                    </tr>
-                    <tr th:if="${business.address}">
-                        <td><b>Address</b></td>
-                        <td th:utext="${business.address.toHtml()}">ADDRESS</td>
-                    </tr>
-                </table>
-                <div class="empty text-center" th:if="!${business}">
+        <table class="table" th:if="${business}">
+            <tr>
+                <td width="20%"><b>Company Name</b></td>
+                <td th:text="${business.companyName}">COMPANY</td>
+            </tr>
+            <tr th:if="!${business.juridictions.isEmpty()}">
+                <td><b>Juridictions</b></td>
+                <td>
+                    <div class="margin-none" th:each="juridiction : ${business.juridictions}">
+                        <span>-</span>
+                        <span th:text="${juridiction.name}">JURIDICTION</span>
+                    </div>
+                </td>
+            </tr>
+            <tr th:if="${business.email}">
+                <td><b>Email</b></td>
+                <td>
+                    <a th:href="'mailto:' + ${business.email}" th:text="${business.email}">EMAIL</a>
+                </td>
+            </tr>
+            <tr th:if="${business.phone}">
+                <td><b>Phone</b></td>
+                <td th:text="${business.phone}">PHONE</td>
+            </tr>
+            <tr th:if="${business.fax}">
+                <td><b>Fax</b></td>
+                <td th:text="${business.fax}">FAX</td>
+            </tr>
+            <tr th:if="${business.website}">
+                <td><b>Website</b></td>
+                <td>
+                    <a target="_blank" th:href="${business.website}" th:text="${business.website}">WEBSITE</a>
+                </td>
+            </tr>
+            <tr th:if="${business.address}">
+                <td><b>Address</b></td>
+                <td th:utext="${business.address.toHtml()}">ADDRESS</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <a class="btn-edit btn btn-sm btn-secondary" href="/settings/tenant/business/edit">Configure</a>
+                </td>
+            </tr>
+        </table>
+        <table class="empty table" th:if="!${business}">
+            <tr>
+                <td>
                     The Business Entity has not been configured
-                </div>
-                <div class="margin-top">
-                    <a class="btn-edit btn btn-secondary" href="/settings/tenant/business/edit">Configure</a>
-                </div>
-            </div>
-        </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a class="btn-edit btn btn-sm btn-secondary" href="/settings/tenant/business/edit">Configure</a>
+                </td>
+            </tr>
+        </table>
+
     </div>
 </div>
 

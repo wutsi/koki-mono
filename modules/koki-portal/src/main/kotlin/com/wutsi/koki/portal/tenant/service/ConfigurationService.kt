@@ -90,6 +90,7 @@ ConfigurationService(
         koki.save(
             SaveConfigurationRequest(
                 values = mapOf(
+                    ConfigurationName.INVOICE_EMAIL_ENABLED to "1",
                     ConfigurationName.INVOICE_EMAIL_SUBJECT to (form.subject ?: ""),
                     ConfigurationName.INVOICE_EMAIL_BODY to (form.body ?: ""),
                 )
@@ -101,6 +102,7 @@ ConfigurationService(
         koki.save(
             SaveConfigurationRequest(
                 values = mapOf(
+                    ConfigurationName.PAYMENT_EMAIL_ENABLED to "1",
                     ConfigurationName.PAYMENT_EMAIL_SUBJECT to (form.subject ?: ""),
                     ConfigurationName.PAYMENT_EMAIL_BODY to (form.body ?: ""),
                 )

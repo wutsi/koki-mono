@@ -11,7 +11,7 @@
     <div class="settings-sidebar">
         <div th:replace="~{__components/settings :: settings-menu('file')}"></div>
     </div>
-    <div class="settings-content padding">
+    <div class="settings-content">
         <div
             th:replace="~{__components/settings :: settings-title('File Storage', '/settings/files')}"></div>
 
@@ -36,10 +36,12 @@
                 <td><b>Secret Key</b></td>
                 <td id="s3-secret-key">*****</td>
             </tr>
+            <tr>
+                <td colspan="2">
+                    <a class="btn-edit btn btn-sm btn-secondary" href="/settings/files/storage/edit">Configure</a>
+                </td>
+            </tr>
         </table>
-        <div class="margin-top">
-            <a class="btn-edit btn btn-secondary" href="/settings/files/storage/edit">Configure</a>
-        </div>
     </div>
 </div>
 

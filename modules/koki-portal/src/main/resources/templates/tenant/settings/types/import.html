@@ -11,18 +11,20 @@
     <div class="settings-sidebar">
         <div th:replace="~{__components/settings :: settings-menu('tenant')}"></div>
     </div>
-    <div class="settings-content padding">
+    <div class="settings-content">
         <div th:replace="~{__components/settings :: settings-title('Object Types', '/settings/tenant/types')}"></div>
 
         <form action="/settings/tenant/types/import" class="form" enctype="multipart/form-data" method="post">
             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
             <div th:replace="~{__components/layout :: import-response(${response})}"></div>
 
-            <div class="margin-bottom">
-                Import the types from a CSV file.<br/>
-                Learn more about the format of the file <a href="#">here</a>.
-            </div>
             <table class="table">
+                <tr>
+                    <td colspan="2">
+                        Import the types from a CSV file.<br/>
+                        Learn more about the format of the file <a href="#">here</a>.
+                    </td>
+                </tr>
                 <tr>
                     <td><b>Object Type<span class="required">*</span></b></td>
                     <td>
@@ -44,8 +46,12 @@
                         <input name="file" required type="file"/>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="2">
+                        <button type="submit">Submit</button>
+                    </td>
+                </tr>
             </table>
-            <button type="submit">Submit</button>
         </form>
     </div>
 </div>

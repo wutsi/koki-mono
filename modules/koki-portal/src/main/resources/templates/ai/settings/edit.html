@@ -13,7 +13,7 @@
     </div>
     <div class="settings-content">
         <div
-            th:replace="~{__components/settings :: settings-title('AI', '/settings/ai')}"></div>
+            th:replace="~{__components/settings :: settings-title('AI Settings', '/settings/ai')}"></div>
 
         <div th:replace="~{__components/layout :: error-message(${error})}"></div>
         <form class="form" method="post" onsubmit="return on_submit()" th:action="@{/settings/ai/save}"
@@ -35,13 +35,13 @@
                 <tr class="gemini" th:classappend="${form.type} != 'GEMINI' ? 'hidden'">
                     <td><b>API Key <span class="required">*</span></b></td>
                     <td>
-                        <input maxlength="100" required th:field="*{geminiApiKey}"/>
+                        <input maxlength="100" th:field="*{geminiApiKey}" th:required="${form.type} == 'GEMINI'"/>
                     </td>
                 </tr>
                 <tr class="gemini" th:classappend="${form.type} != 'GEMINI' ? 'hidden'">
                     <td><b>Model <span class="required">*</span></b></td>
                     <td>
-                        <select required th:field="*{geminiModel}">
+                        <select th:field="*{geminiModel}" th:required="${form.type} == 'GEMINI'">
                             <option value=""></option>
                             <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
                             <option value="gemini-2.0-flash-lite">Gemini 2.0 Flash Lite</option>
@@ -76,6 +76,9 @@
             } else {
                 elt.classList.add('hidden');
             }
+        });
+        document.querySelectorAll('.gemini input, .gemini select').forEach((elt) => {
+            elt.required = gemini;
         });
     }
 </script>

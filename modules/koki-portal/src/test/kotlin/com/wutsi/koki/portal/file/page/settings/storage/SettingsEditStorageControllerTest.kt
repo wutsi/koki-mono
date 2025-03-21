@@ -23,6 +23,8 @@ class SettingsEditStorageControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun native() {
+        disableAllConfigs()
+
         navigateTo("/settings/files/storage/edit")
         assertCurrentPageIs(PageName.FILE_SETTINGS_STORAGE_EDIT)
         select("#type", 1)
@@ -44,6 +46,8 @@ class SettingsEditStorageControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun s3() {
+        disableAllConfigs()
+
         navigateTo("/settings/files/storage/edit")
         assertCurrentPageIs(PageName.FILE_SETTINGS_STORAGE_EDIT)
         select("#type", 2)

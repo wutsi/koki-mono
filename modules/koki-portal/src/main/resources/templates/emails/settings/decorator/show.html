@@ -12,24 +12,28 @@
         <div th:replace="~{__components/settings :: settings-menu('email')}"></div>
     </div>
     <div class="settings-content">
-        <div class="padding">
-            <div th:replace="~{__components/settings :: settings-title('Email Layout', '/settings/email')}"></div>
+        <div th:replace="~{__components/settings :: settings-title('Email Layout', '/settings/email')}"></div>
 
-            <div>
-                <div>
-                    <a class="btn-edit btn btn-secondary" href="/settings/email/decorator/edit">Configure</a>
-                </div>
-                <div th:if="${form}">
+        <table class="table">
+            <tr>
+                <td>
+                    <a class="btn-edit btn btn-sm btn-secondary" href="/settings/email/decorator/edit">Configure</a>
+                </td>
+            </tr>
+            <tr th:if="${form}">
+                <td>
                     <pre>
                         <code class='language-html' th:text="${form.content}">CODE</code>
                     </pre>
-                </div>
-                <div class="empty text-center margin-top" th:if="!${form}">
+                </td>
+            </tr>
+            <tr th:if="!${form}" class="empty">
+                <td>
                     Your email layout has not been configured.<br/>
                     The default layout will be used.
-                </div>
-            </div>
-        </div>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 

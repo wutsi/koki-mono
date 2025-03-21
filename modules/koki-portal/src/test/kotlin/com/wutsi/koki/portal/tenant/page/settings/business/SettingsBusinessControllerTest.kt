@@ -16,8 +16,7 @@ class SettingsBusinessControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/tenant/business")
         assertCurrentPageIs(PageName.TENANT_SETTINGS_BUSINESS)
 
-        assertElementPresent(".table")
-        assertElementNotPresent(".empty")
+        assertElementNotPresent("table.empty")
     }
 
     @Test
@@ -32,8 +31,7 @@ class SettingsBusinessControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/tenant/business")
         assertCurrentPageIs(PageName.TENANT_SETTINGS_BUSINESS)
 
-        assertElementNotPresent(".table")
-        assertElementPresent(".empty")
+        assertElementPresent("table.empty")
     }
 
     @Test

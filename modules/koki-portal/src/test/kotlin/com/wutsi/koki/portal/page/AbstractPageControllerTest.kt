@@ -1171,4 +1171,17 @@ abstract class AbstractPageControllerTest {
                 eq(SearchConfigurationResponse::class.java)
             )
     }
+
+    protected fun disableAllConfigs() {
+        doReturn(
+            ResponseEntity(
+                SearchConfigurationResponse(),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchConfigurationResponse::class.java)
+            )
+    }
 }

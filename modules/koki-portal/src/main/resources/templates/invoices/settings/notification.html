@@ -11,7 +11,7 @@
     <div class="settings-sidebar">
         <div th:replace="~{__components/settings :: settings-menu('invoice')}"></div>
     </div>
-    <div class="settings-content padding">
+    <div class="settings-content">
         <div th:replace="~{__components/settings :: settings-title('Email Notification', '/settings/invoices')}"></div>
 
         <div th:replace="~{__components/layout :: error-message(${error})}"></div>
@@ -34,8 +34,12 @@
                         <textarea rows="15" th:field="*{body}"></textarea>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="2">
+                        <button type="submit">Save</button>
+                    </td>
+                </tr>
             </table>
-            <button type="submit">Save</button>
         </form>
     </div>
 </div>

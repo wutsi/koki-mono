@@ -46,18 +46,7 @@ class SettingsPaymentControllerTest : AbstractPageControllerTest() {
         scrollToBottom()
         click(".btn-notification-enable")
 
-        val request = argumentCaptor<SaveConfigurationRequest>()
-        verify(rest).postForEntity(
-            eq("$sdkBaseUrl/v1/configurations"),
-            request.capture(),
-            eq(Any::class.java)
-        )
-        assertEquals(
-            "1",
-            request.firstValue.values[ConfigurationName.PAYMENT_EMAIL_ENABLED]
-        )
-
-        assertCurrentPageIs(PageName.PAYMENT_SETTINGS)
+        assertCurrentPageIs(PageName.PAYMENT_SETTINGS_NOTIFICATION)
     }
 
     @Test

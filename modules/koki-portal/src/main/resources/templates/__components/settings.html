@@ -32,10 +32,12 @@
 
 <ul th:fragment="settings-title(title, backUrl)">
     <li class="menu-item">
-        <h3>
-            <a class="btn-back" th:href="${backUrl}">
-                <i class="fa-solid fa-arrow-left"></i>
-            </a>
+        <h3 class="flex">
+            <span>
+                <a class="btn-back" th:href="${backUrl}">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+            </span>
             <span class="margin-left" th:text="${title}">TITLE</span>
         </h3>
     </li>

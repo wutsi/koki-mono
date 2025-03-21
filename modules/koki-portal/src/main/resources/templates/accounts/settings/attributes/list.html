@@ -11,10 +11,12 @@
     <div class="settings-sidebar">
         <div th:replace="~{__components/settings :: settings-menu('account')}"></div>
     </div>
-    <div class="settings-content padding">
+    <div class="settings-content">
         <div th:replace="~{__components/settings :: settings-title('Acccount Attributes', '/settings/accounts')}"></div>
 
-        <a class="btn btn-secondary btn-import" href="/settings/accounts/attributes/import">Import</a>
+        <div class="padding">
+            <a class="btn btn-sm btn-secondary btn-import" href="/settings/accounts/attributes/import">Import</a>
+        </div>
         <table class="table table-striped">
             <thead>
             <tr>
