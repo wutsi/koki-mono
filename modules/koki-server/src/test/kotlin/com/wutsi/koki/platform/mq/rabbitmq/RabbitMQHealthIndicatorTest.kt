@@ -16,7 +16,7 @@ class RabbitMQHealthIndicatorTest {
     private lateinit var channel: Channel
     private lateinit var connection: Connection
     private lateinit var properties: Map<String, Any>
-    private lateinit var heath: HealthIndicator
+    private lateinit var health: HealthIndicator
 
     @BeforeEach
     fun setUp() {
@@ -26,14 +26,14 @@ class RabbitMQHealthIndicatorTest {
 
         doReturn(connection).whenever(channel).connection
 
-        heath = RabbitMQHealthIndicator(channel)
+        health = RabbitMQHealthIndicator(channel)
     }
 
     @Test
     fun up() {
         doReturn(properties).whenever(connection).serverProperties
 
-        val result = heath.health()
+        val result = health.health()
 
         assertEquals(Status.UP, result.status)
     }
@@ -42,7 +42,7 @@ class RabbitMQHealthIndicatorTest {
     fun down() {
         doThrow(RuntimeException("yo")).whenever(connection).serverProperties
 
-        val result = heath.health()
+        val result = health.health()
 
         assertEquals(Status.DOWN, result.status)
     }
