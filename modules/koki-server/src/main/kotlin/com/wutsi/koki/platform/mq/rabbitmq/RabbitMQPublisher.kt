@@ -49,7 +49,7 @@ class RabbitMQPublisher(
                 val response = channel.basicGet(dlq, false) ?: break
                 val retries: Int = (response.props.headers["x-retries"] as Int?) ?: 0
                 if (retries >= maxRetries) {
-                    channel.basicAck(response.envelope.deliveryTag, false) // Reject + Drop
+                    channel.basicReject(response.envelope.deliveryTag, false) // Reject + Drop
                     archive(dlq, response)
                     expired++
                 } else {
@@ -101,12 +101,15 @@ class RabbitMQPublisher(
     }
 
     private fun properties(retries: Int = 0): BasicProperties {
-        return AMQP.BasicProperties().builder().headers(
+        return BasicProperties().builder().headers(
             mapOf(
                 "x-max-retries" to maxRetries,
                 "x-retries" to retries,
             ),
-        ).expiration((ttl * 1000).toString()).contentType("application/json").contentEncoding("utf-8").build()
+        ).expiration((ttl * 1000).toString())
+            .contentType("application/json")
+            .contentEncoding("utf-8")
+            .build()
     }
 
     private fun getStorageService(): StorageService {
