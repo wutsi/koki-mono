@@ -1,7 +1,6 @@
 package com.wutsi.koki.platform.mq.rabbitmq
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.rabbitmq.client.AMQP
 import com.rabbitmq.client.AMQP.BasicProperties
 import com.rabbitmq.client.Channel
 import com.rabbitmq.client.GetResponse
