@@ -10,4 +10,6 @@ data class FileSummary(
     val contentType: String = "",
     val contentLength: Long = -1,
     val createdAt: Date = Date(),
+    val modifiedAt: Date = Date(),
+    val labels: List<LabelSummary> = emptyList(),
 )

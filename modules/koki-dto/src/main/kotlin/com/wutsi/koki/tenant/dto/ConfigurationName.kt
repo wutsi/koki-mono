@@ -2,9 +2,9 @@ package com.wutsi.koki.tenant.dto
 
 object ConfigurationName {
     // AI
-    const val AI_PROVIDER = "ai.provider"
-    const val AI_PROVIDER_GEMINI_API_KEY = "ai.provider.gemini.api_key"
-    const val AI_PROVIDER_GEMINI_MODEL = "ai.provider.gemini.model"
+    const val AI_MODEL = "ai.model"
+    const val AI_MODEL_GEMINI_API_KEY = "ai.model.gemini.api_key"
+    const val AI_MODEL_GEMINI_MODEL = "ai.model.gemini.model"
 
     // EMAIL
     const val EMAIL_DECORATOR = "email.decorator"
@@ -72,4 +72,7 @@ object ConfigurationName {
     const val STORAGE_S3_REGION = "storage.s3.region"
     const val STORAGE_S3_ACCESS_KEY = "storage.s3.access-key"
     const val STORAGE_S3_SECRET_KEY = "storage.s3.secret-key"
+
+    // TAX
+    const val TAX_AI_AGENT_ENABLED = "tax.ai.agent.enabled"
 }

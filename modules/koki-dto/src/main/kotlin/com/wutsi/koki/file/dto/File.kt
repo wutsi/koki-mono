@@ -10,4 +10,7 @@ data class File(
     val contentLength: Long = -1,
     val url: String = "",
     val createdAt: Date = Date(),
+    val modifiedAt: Date = Date(),
+    val description: String? = null,
+    val labels: List<LabelSummary> = emptyList(),
 )
