@@ -1150,6 +1150,10 @@ abstract class AbstractPageControllerTest {
         assertEquals(expectedValue, request.firstValue.values[name])
     }
 
+    protected fun disableConfig(name: String) {
+        disableConfig(listOf(name))
+    }
+
     protected fun disableConfig(names: List<String>) {
         doReturn(
             ResponseEntity(

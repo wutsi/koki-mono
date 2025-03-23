@@ -32,7 +32,7 @@ object ModuleFixtures {
             title = "Taxes",
             homeUrl = "/taxes",
             tabUrl = "/taxes/tab",
-            settingsUrl = null,
+            settingsUrl = "settings/taxes",
             objectType = ObjectType.TAX,
             jsUrl = null,
         ),
@@ -152,6 +152,7 @@ object ModuleFixtures {
         Permission(id = 1202, moduleId = 120, name = "tax:manage", description = "Manage taxes"),
         Permission(id = 1203, moduleId = 120, name = "tax:delete", description = "Delete taxes"),
         Permission(id = 1204, moduleId = 120, name = "tax:status", description = "Manage taxes status and assignment"),
+        Permission(id = 1205, moduleId = 120, name = "tax:admin", description = "Configure Tax module"),
 
         Permission(id = 1301, moduleId = 130, name = "email", description = "Access emails"),
         Permission(id = 1302, moduleId = 130, name = "email:send", description = "Send emails"),

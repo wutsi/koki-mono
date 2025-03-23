@@ -12,11 +12,14 @@ import com.wutsi.koki.platform.ai.genai.Document
 import com.wutsi.koki.platform.ai.genai.GenAIRequest
 import com.wutsi.koki.platform.ai.genai.GenAIService
 import com.wutsi.koki.platform.ai.genai.GenAIServiceBuilder
+import com.wutsi.koki.platform.ai.genai.GenAIType
 import com.wutsi.koki.platform.ai.genai.Message
 import com.wutsi.koki.platform.ai.genai.Role
 import com.wutsi.koki.platform.ai.genai.gemini.GenAIConfig
+import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
+import com.wutsi.koki.platform.storage.StorageType
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import org.springframework.http.MediaType
@@ -33,6 +36,7 @@ class TaxAIAgent(
     private val genAIBuilder: GenAIServiceBuilder,
     private val configurationService: ConfigurationService,
     private val objectMapper: ObjectMapper,
+    private val logger: KVLogger,
 
     registry: AIConsumer,
 ) : AbstractAIAgent(registry) {
@@ -61,6 +65,11 @@ class TaxAIAgent(
     }
 
     private fun process(event: FileUploadedEvent) {
+        logger.add("file_id", event.fileId)
+        logger.add("tenant_id", event.tenantId)
+        logger.add("owner_id", event.owner?.id)
+        logger.add("owner_type", event.owner?.type)
+
         if (event.owner?.type != ObjectType.TAX || isEnabled(event.tenantId)) {
             return
         }
@@ -68,23 +77,24 @@ class TaxAIAgent(
         val file = fileService.get(event.fileId, event.tenantId)
         val f = downloadFile(file) ?: return
         try {
-
             val result = extractInformation(file, f)
             val labels = listOf(
-                result["type"],
-                result["recipientName"],
-                result["year"]
+                result["type"]
             ).filterNotNull()
                 .map { label -> label.toString() }
 
-            fileService.setLabels(file, labels)
+            logger.add("processed", true)
+            logger.add("file_label_type", result["type"])
+            logger.add("file_label_year", result["year"])
+            logger.add("file_description", result["description"])
+            fileService.setLabels(file, labels, result["description"]?.toString())
         } finally {
             f.delete()
         }
     }
 
     private fun extractInformation(file: FileEntity, f: File): Map<String, Any> {
-        val genAI = getGenAIService(file.tenantId)
+        val genAI = getGenAIService(file.tenantId) ?: return emptyMap()
         val content = FileInputStream(f)
         content.use {
             val response = genAI.generateContent(
@@ -93,14 +103,14 @@ class TaxAIAgent(
                         Message(
                             role = Role.MODEL,
                             text = SYSTEM_INSTRUCTION,
-                            document = Document(
-                                contentType = MediaType.valueOf(file.contentType),
-                                content = content
-                            )
                         ),
                         Message(
                             role = Role.USER,
                             text = PROMPT,
+                            document = Document(
+                                contentType = MediaType.valueOf(file.contentType),
+                                content = content
+                            )
                         ),
                     ),
                     config = GenAIConfig(
@@ -110,7 +120,7 @@ class TaxAIAgent(
             )
 
             val json = response.messages[0].text
-                ?: emptyMap<String, Any>()
+                ?: return emptyMap<String, Any>()
 
             return objectMapper.readValue<Map<String, Any>>(json)
         }
@@ -138,7 +148,7 @@ class TaxAIAgent(
         val configs = configurationService.search(
             tenantId = tenantId,
             names = listOf(
-                ConfigurationName.AI_PROVIDER,
+                ConfigurationName.AI_MODEL,
                 ConfigurationName.TAX_AI_AGENT_ENABLED,
             )
         )
@@ -146,10 +156,22 @@ class TaxAIAgent(
     }
 
     private fun getStorageService(tenantId: Long): StorageService {
-        TODO()
+        val configs = configurationService.search(keyword = "storage.", tenantId = tenantId)
+            .map { config -> config.name to config.value }
+            .toMap()
+
+        val type = configs[ConfigurationName.STORAGE_TYPE]?.let { type -> StorageType.valueOf(type) }
+            ?: StorageType.KOKI
+        return storageBuilder.build(type, configs)
     }
 
-    private fun getGenAIService(tenantId: Long): GenAIService {
-        TODO()
+    private fun getGenAIService(tenantId: Long): GenAIService? {
+        val configs = configurationService.search(keyword = "ai.", tenantId = tenantId)
+            .map { config -> config.name to config.value }
+            .toMap()
+
+        val type = configs[ConfigurationName.AI_MODEL]?.let { type -> GenAIType.valueOf(type) }
+            ?: return null
+        return genAIBuilder.build(type, configs)
     }
 }

@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
+import jakarta.persistence.JoinTable
+import jakarta.persistence.ManyToMany
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import java.util.Date
@@ -36,5 +38,15 @@ data class FileEntity(
     val url: String = "",
     var deleted: Boolean = false,
     val createdAt: Date = Date(),
+    var modifiedAt: Date = Date(),
     var deletedAt: Date? = null,
+    var description: String? = null,
+
+    @ManyToMany
+    @JoinTable(
+        name = "T_FILE_LABEL",
+        joinColumns = arrayOf(JoinColumn(name = "file_fk")),
+        inverseJoinColumns = arrayOf(JoinColumn(name = "label_fk")),
+    )
+    var labels: List<LabelEntity> = emptyList(),
 )

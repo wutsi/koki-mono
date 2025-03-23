@@ -26,6 +26,7 @@ class Moment(
         val minutes = ChronoUnit.MINUTES.between(now, localDate)
         val hours = ChronoUnit.HOURS.between(now, localDate)
         val days = ChronoUnit.DAYS.between(now, localDate)
+        val weeks = ChronoUnit.WEEKS.between(now, localDate)
 
         if (minutes == 0L) {
             return getMessage("moment.now")
@@ -53,6 +54,14 @@ class Moment(
             return getMessage("moment.yesterday")
         } else if (days == 1L) {
             return getMessage("moment.tomorrow")
+        } else if (days > -7L) {
+            return getMessage("moment.ago_days", arrayOf(-days))
+        } else if (days < 7L) {
+            return getMessage("moment.in_days", arrayOf(days))
+        } else if (weeks >= -4L) {
+            return getMessage("moment.ago_weeks", arrayOf(-weeks))
+        } else if (weeks <= 4L) {
+            return getMessage("moment.in_weeks", arrayOf(weeks))
         } else {
             val fmt = DateFormat.getDateInstance(DateFormat.MEDIUM, LocaleContextHolder.getLocale())
             return fmt.format(date)
@@ -61,10 +70,6 @@ class Moment(
 
     private fun toLocalDateTime(date: Date): LocalDateTime {
         return date.toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime()
-    }
-
-    private fun getMessage(key: String, args: Array<Any>? = null): String {
-        return getMessage(key, args)
     }
 
     fun getMessage(key: String, args: Array<Any>? = null, locale: Locale? = null): String {

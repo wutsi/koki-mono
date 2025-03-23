@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface LabelRepository : CrudRepository<LabelEntity, Long>{
-    fun findByNameIn(names: List<String>): List<LabelEntity>
+interface LabelRepository : CrudRepository<LabelEntity, Long> {
+    fun findByNameInAndTenantId(names: List<String>, tenantId: Long): List<LabelEntity>
 }

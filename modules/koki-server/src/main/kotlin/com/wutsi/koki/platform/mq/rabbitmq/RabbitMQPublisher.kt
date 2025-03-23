@@ -1,7 +1,6 @@
 package com.wutsi.koki.platform.mq.rabbitmq
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.rabbitmq.client.AMQP
 import com.rabbitmq.client.AMQP.BasicProperties
 import com.rabbitmq.client.Channel
 import com.rabbitmq.client.GetResponse
@@ -71,11 +70,8 @@ class RabbitMQPublisher(
     private fun archive(dlq: String, response: GetResponse) {
         val fmt = SimpleDateFormat("yyyy/MM/dd")
         val contentType = response.props.contentType
-        val path = "rabbitmq/queues/$dlq/" +
-            fmt.format(Date()) +
-            "/" +
-            response.envelope.deliveryTag +
-            extension(contentType)
+        val path =
+            "rabbitmq/queues/$dlq/" + fmt.format(Date()) + "/" + response.envelope.deliveryTag + extension(contentType)
 
         try {
             getStorageService().store(
@@ -104,16 +100,12 @@ class RabbitMQPublisher(
     }
 
     private fun properties(retries: Int = 0): BasicProperties {
-        return AMQP
-            .BasicProperties()
-            .builder()
-            .headers(
-                mapOf(
-                    "x-max-retries" to maxRetries,
-                    "x-retries" to retries,
-                ),
-            )
-            .expiration((ttl * 1000).toString())
+        return BasicProperties().builder().headers(
+            mapOf(
+                "x-max-retries" to maxRetries,
+                "x-retries" to retries,
+            ),
+        ).expiration((ttl * 1000).toString())
             .contentType("application/json")
             .contentEncoding("utf-8")
             .build()

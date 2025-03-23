@@ -6,11 +6,13 @@ CREATE TABLE T_FILE(
   deleted_by_fk           BIGINT,
 
   name                    VARCHAR(100) NOT NULL,
+  description             TEXT,
   content_type            VARCHAR(100) NOT NULL,
   content_length          LONG NOT NULL,
   url                     TEXT NOT NULL,
   deleted                 BOOL NOT NULL DEFAULT false,
-  created_at              DATETIME DEFAULT NOW(),
+  created_at              DATETIME NOT NULL DEFAULT NOW(),
+  modified_at             DATETIME NOT NULL DEFAULT NOW(),
   deleted_at              DATETIME,
 
   PRIMARY KEY(id)
@@ -27,6 +29,30 @@ CREATE TABLE T_FILE_OWNER(
 
   UNIQUE(file_fk, owner_fk, owner_type),
   PRIMARY KEY(id)
+) ENGINE = InnoDB;
+
+
+CREATE TABLE T_LABEL(
+  id                      BIGINT NOT NULL AUTO_INCREMENT,
+
+  tenant_fk               BIGINT NOT NULL,
+
+  name                    VARCHAR(255) NOT NULL,
+  display_name            VARCHAR(255) NOT NULL,
+  created_at              DATETIME NOT NULL DEFAULT NOW(),
+
+  UNIQUE(tenant_fk, name),
+  PRIMARY KEY(id)
+) ENGINE = InnoDB;
+
+
+CREATE TABLE T_FILE_LABEL(
+  file_fk              BIGINT NOT NULL REFERENCES T_FILE(id),
+  label_fk             BIGINT NOT NULL REFERENCES T_LABEL(id),
+
+  created_at           DATETIME DEFAULT NOW(),
+
+  PRIMARY KEY (file_fk, label_fk)
 ) ENGINE = InnoDB;
 
 

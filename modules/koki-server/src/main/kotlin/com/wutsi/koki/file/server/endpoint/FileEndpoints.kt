@@ -60,8 +60,9 @@ class FileEndpoints(
             limit = limit,
             offset = offset
         )
+        val labels = service.getLabels(files)
         return SearchFileResponse(
-            files = files.map { file -> mapper.toFileSummary(file) }
+            files = files.map { file -> mapper.toFileSummary(file, labels) }
         )
     }
 

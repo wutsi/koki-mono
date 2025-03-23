@@ -67,11 +67,12 @@ CREATE INDEX I_TAX_PRODUCT_product ON T_TAX_PRODUCT(product_fk, tenant_fk);
 
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url)
-    VALUES (180, 8, 'tax', 'Taxes', '/taxes', '/taxes/tab', null, '/js/taxes.js');
+    VALUES (180, 8, 'tax', 'Taxes', '/taxes', '/taxes/tab', '/settings/taxes', '/js/taxes.js');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
     VALUES (1800, 180, 'tax',        'View tax reports'),
            (1801, 180, 'tax:manage', 'Add/Edit tax reports'),
            (1802, 180, 'tax:delete', 'Delete tax reports'),
+           (1803, 180, 'tax:admin',  'Configure tax module'),
            (1804, 180, 'tax:status', 'Change tax report status and assignment');
 

@@ -12,8 +12,8 @@ class KokiBuilder(
     fun build(): GenAIService {
         return delegate.build(
             mapOf(
-                ConfigurationName.AI_PROVIDER_GEMINI_MODEL to model,
-                ConfigurationName.AI_PROVIDER_GEMINI_API_KEY to apiKey,
+                ConfigurationName.AI_MODEL_GEMINI_MODEL to model,
+                ConfigurationName.AI_MODEL_GEMINI_API_KEY to apiKey,
             )
         )
     }

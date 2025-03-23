@@ -20,12 +20,13 @@
 
         <table class="table">
             <tr>
-                <td width="20%"><b>Type</b></td>
+                <td width="20%"><b>Model</b></td>
                 <td>
-                    <span th:if="${form.type}" th:text="#{'ai-type.' + ${form.type}}">TYPE</span>
+                    <span th:if="!${form.model}">None</span>
+                    <span th:if="${form.model}" th:text="#{'ai-model.' + ${form.model}}">TYPE</span>
                 </td>
             </tr>
-            <tr th:if="${form.type == 'GEMINI'}">
+            <tr th:if="${form.model == 'GEMINI'}">
                 <td><b>Model</b></td>
                 <td th:text="${form.getGeminiModel()}">MODEL</td>
             </tr>

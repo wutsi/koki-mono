@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="settings-container">
+    <div class="settings-sidebar">
+        <div th:replace="~{__components/settings :: settings-menu('tax')}"></div>
+    </div>
+    <div class="settings-content">
+        <div
+            th:replace="~{__components/settings :: settings-title('Configure Taxes', '/settings')}"></div>
+
+        <table class="table table-striped border-light">
+            <tr>
+                <td>
+                    <b class="margin-right">AI Assistant</b>
+                    <span class="badge text-bg-success" th:if="${aiAgent.enabled}">Enabled</span>
+                    <span class="badge text-bg-danger" th:if="!${aiAgent.enabled}">Disabled</span>
+                </td>
+                <td align="right">
+                    <a class="btn btn-sm btn-primary btn-agent-enable"
+                       href="/settings/taxes/agent/enable?status=true"
+                       th:if="!${aiAgent.enabled}">
+                        Enable
+                    </a>
+                    <a class="btn btn-sm btn-danger btn-agent-disable"
+                       href="/settings/taxes/agent/enable?status=false"
+                       th:if="${aiAgent.enabled}">
+                        Disable
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    </div>
+</div>
+
+<script>
+    function on_submit() {
+        document.getElementById('btn-submit').disabled = true;
+        return true
+    }
+</script>
+
+</body>
+</html>

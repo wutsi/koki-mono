@@ -3,7 +3,6 @@ package com.wutsi.koki.portal.file.page
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.file.service.FileService
 import com.wutsi.koki.portal.security.RequiresPermission
-import jakarta.servlet.http.HttpServletResponse
 import org.apache.commons.io.IOUtils
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -21,7 +20,6 @@ import java.net.URL
 @RequiresPermission(["file"])
 class FileController(
     private val service: FileService,
-    private val response: HttpServletResponse,
 ) : AbstractPageController() {
     @GetMapping("/files/{id}/delete")
     @RequiresPermission(["file:delete"])

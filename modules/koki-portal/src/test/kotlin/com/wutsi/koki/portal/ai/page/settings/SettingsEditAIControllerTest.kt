@@ -18,7 +18,7 @@ class SettingsEditAIControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/ai/edit")
         assertCurrentPageIs(PageName.AI_SETTINGS_EDIT)
 
-        select("#type", 1)
+        select("#model", 1)
         click("button[type=submit]")
 
         val request = argumentCaptor<SaveConfigurationRequest>()
@@ -27,7 +27,7 @@ class SettingsEditAIControllerTest : AbstractPageControllerTest() {
             request.capture(),
             eq(Any::class.java)
         )
-        assertEquals("KOKI", request.firstValue.values[ConfigurationName.AI_PROVIDER])
+        assertEquals("KOKI", request.firstValue.values[ConfigurationName.AI_MODEL])
     }
 
     @Test
@@ -37,7 +37,7 @@ class SettingsEditAIControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/ai/edit")
         assertCurrentPageIs(PageName.AI_SETTINGS_EDIT)
 
-        select("#type", 2)
+        select("#model", 2)
         input("#geminiApiKey", "1111")
         select("#geminiModel", 2)
         click("button[type=submit]")
@@ -48,9 +48,9 @@ class SettingsEditAIControllerTest : AbstractPageControllerTest() {
             request.capture(),
             eq(Any::class.java)
         )
-        assertEquals("GEMINI", request.firstValue.values[ConfigurationName.AI_PROVIDER])
-        assertEquals("1111", request.firstValue.values[ConfigurationName.AI_PROVIDER_GEMINI_API_KEY])
-        assertEquals("gemini-2.0-flash-lite", request.firstValue.values[ConfigurationName.AI_PROVIDER_GEMINI_MODEL])
+        assertEquals("GEMINI", request.firstValue.values[ConfigurationName.AI_MODEL])
+        assertEquals("1111", request.firstValue.values[ConfigurationName.AI_MODEL_GEMINI_API_KEY])
+        assertEquals("gemini-2.0-flash-lite", request.firstValue.values[ConfigurationName.AI_MODEL_GEMINI_MODEL])
     }
 
     @Test

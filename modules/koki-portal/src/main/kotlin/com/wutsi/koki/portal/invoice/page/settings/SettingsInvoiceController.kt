@@ -22,7 +22,14 @@ class SettingsInvoiceController(
     fun show(
         model: Model
     ): String {
-        val configs = service.configurations(keyword = "invoice.")
+        val configs = service.configurations(
+            names = listOf(
+                ConfigurationName.INVOICE_DUE_DAYS,
+                ConfigurationName.INVOICE_START_NUMBER,
+                ConfigurationName.INVOICE_EMAIL_ENABLED,
+                ConfigurationName.INVOICE_EMAIL_SUBJECT,
+            )
+        )
         model.addAttribute(
             "form",
             InvoiceSettingsForm(
@@ -35,7 +42,6 @@ class SettingsInvoiceController(
             InvoiceNotificationSettingsForm(
                 enabled = configs[ConfigurationName.INVOICE_EMAIL_ENABLED] != null,
                 subject = configs[ConfigurationName.INVOICE_EMAIL_SUBJECT],
-                body = configs[ConfigurationName.INVOICE_EMAIL_BODY],
             )
         )
 

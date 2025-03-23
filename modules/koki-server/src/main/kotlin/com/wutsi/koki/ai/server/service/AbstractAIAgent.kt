@@ -5,7 +5,7 @@ import jakarta.annotation.PreDestroy
 
 abstract class AbstractAIAgent(
     private val registry: AIConsumer
-): AIAgent {
+) : AIAgent {
     @PostConstruct
     fun setUp() {
         registry.register(this)

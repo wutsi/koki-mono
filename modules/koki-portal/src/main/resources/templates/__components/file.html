@@ -10,15 +10,19 @@
         <div th:replace="~{__components/file :: file-icon(${file})}"></div>
     </td>
     <td>
-        <a class="btn-download" target="_blank" th:href="'/files/' + ${file.id} + '/download'" th:text="${file.name}">
-            FILE
+        <a class="btn-download" target="_blank">
+            <span class="badge text-bg-success margin-right-small"
+                  th:each="label : ${file.labels}"
+                  th:text="${label.displayName}"
+            >LABEL</span>
+            <span th:href="'/files/' + ${file.id} + '/download'" th:text="${file.name}">NAME</span>
         </a>
     </td>
     <td th:text="${file.contentLengthText}">SIZE</td>
     <td>
         <span th:if="${file.createdBy}" th:text="${file.createdBy.displayName}">CREATED</span>
     </td>
-    <td th:text="${file.createdAtText}">CREATED</td>
+    <td th:text="${file.createdAtMoment}">CREATED</td>
     <td class="toolbar text-right">
         <a class="btn-email" th:href="'javascript: koki_emails_compose(' + ${file.id} + ')'"
            th:if="${user?.hasPermission('email:send')}">Email</a>
