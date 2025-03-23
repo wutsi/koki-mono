@@ -23,6 +23,12 @@ class GetFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("application/pdf", file.contentType)
         assertEquals(1000L, file.contentLength)
         assertEquals(USER_ID, file.createdById)
+
+        assertEquals(2, file.labels.size)
+        assertEquals(1L, file.labels[0].id)
+        assertEquals("2023", file.labels[0].displayName)
+        assertEquals(3L, file.labels[1].id)
+        assertEquals("T5", file.labels[1].displayName)
     }
 
     @Test

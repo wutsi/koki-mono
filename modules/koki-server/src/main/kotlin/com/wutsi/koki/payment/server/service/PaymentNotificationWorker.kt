@@ -46,10 +46,9 @@ class PaymentNotificationWorker(
     override fun notify(event: Any): Boolean {
         if (event is TransactionCompletedEvent) {
             onPayment(event)
-        } else {
-            return false
+            return true
         }
-        return true
+        return false
     }
 
     private fun onPayment(event: TransactionCompletedEvent) {

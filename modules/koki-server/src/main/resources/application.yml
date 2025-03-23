@@ -160,7 +160,7 @@ koki:
             read-timeout: 60000 # 1 minute
             connect-timeout: 60000 # 1 miniute
         gemini:
-            api-key:
+            api-key: ${GEMINI_API_KEY}
             model: gemini-2.0-flash
 
     rabbitmq:
@@ -194,6 +194,13 @@ koki:
                 timeout-minutes: 30
 
     module:
+        ai:
+            mq:
+                consumer-delay-seconds: 1
+                queue: koki-ai-queue
+                dlq: koki-ai-dlq
+                dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
+
         invoice:
             mq:
                 consumer-delay-seconds: 1

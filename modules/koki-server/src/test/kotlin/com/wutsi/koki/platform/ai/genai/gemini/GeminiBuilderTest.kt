@@ -8,8 +8,8 @@ import kotlin.test.Test
 
 class GeminiBuilderTest {
     val config = mapOf(
-        ConfigurationName.AI_PROVIDER_GEMINI_MODEL to "model-xyz",
-        ConfigurationName.AI_PROVIDER_GEMINI_API_KEY to "sk-43904309340"
+        ConfigurationName.AI_MODEL_GEMINI_MODEL to "model-xyz",
+        ConfigurationName.AI_MODEL_GEMINI_API_KEY to "sk-43904309340"
     )
 
     val builder = GeminiBuilder(1000, 1000)
@@ -23,14 +23,14 @@ class GeminiBuilderTest {
     @Test
     fun missingModel() {
         assertThrows<GenAINotConfiguredException> {
-            builder.build(config.filter { entry -> entry.key != ConfigurationName.AI_PROVIDER_GEMINI_MODEL })
+            builder.build(config.filter { entry -> entry.key != ConfigurationName.AI_MODEL_GEMINI_MODEL })
         }
     }
 
     @Test
     fun missingApiKey() {
         assertThrows<GenAINotConfiguredException> {
-            builder.build(config.filter { entry -> entry.key != ConfigurationName.AI_PROVIDER_GEMINI_API_KEY })
+            builder.build(config.filter { entry -> entry.key != ConfigurationName.AI_MODEL_GEMINI_API_KEY })
         }
     }
 }

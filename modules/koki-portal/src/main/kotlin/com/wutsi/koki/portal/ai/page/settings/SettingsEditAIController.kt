@@ -31,9 +31,9 @@ class SettingsEditAIController(
 
         val configs = service.configurations(keyword = "ai.")
         val form = AISettingsForm(
-            type = configs[ConfigurationName.AI_PROVIDER],
-            geminiModel = configs[ConfigurationName.AI_PROVIDER_GEMINI_MODEL],
-            geminiApiKey = configs[ConfigurationName.AI_PROVIDER_GEMINI_API_KEY],
+            model = configs[ConfigurationName.AI_MODEL],
+            geminiModel = configs[ConfigurationName.AI_MODEL_GEMINI_MODEL],
+            geminiApiKey = configs[ConfigurationName.AI_MODEL_GEMINI_API_KEY],
         )
 
         return edit(form, model)
@@ -49,7 +49,7 @@ class SettingsEditAIController(
         )
 
         model.addAttribute("form", form)
-        model.addAttribute("types", listOf("KOKI", "GEMINI"))
+        model.addAttribute("models", listOf("KOKI", "GEMINI"))
 
         return "ai/settings/edit"
     }

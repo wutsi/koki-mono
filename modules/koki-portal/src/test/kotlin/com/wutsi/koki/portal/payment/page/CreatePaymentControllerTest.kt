@@ -214,8 +214,4 @@ class CreatePaymentControllerTest : AbstractPageControllerTest() {
         navigateTo("/payments/create?invoice-id=${invoice.id}")
         assertCurrentPageIs(PageName.ERROR_PAYMENT_NOT_SUPPORTED)
     }
-
-    private fun disableConfig(name: String) {
-        disableConfig(listOf(name))
-    }
 }

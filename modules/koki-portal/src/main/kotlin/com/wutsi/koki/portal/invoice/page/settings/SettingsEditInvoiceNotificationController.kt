@@ -21,7 +21,12 @@ class SettingsEditInvoiceNotificationController(
 ) : AbstractPageController() {
     @GetMapping("/settings/invoices/notifications")
     fun edit(model: Model): String {
-        val configs = service.configurations(keyword = "invoice.")
+        val configs = service.configurations(
+            names = listOf(
+                ConfigurationName.INVOICE_EMAIL_SUBJECT,
+                ConfigurationName.INVOICE_EMAIL_BODY
+            )
+        )
         val form = InvoiceNotificationSettingsForm(
             subject = configs[ConfigurationName.INVOICE_EMAIL_SUBJECT],
             body = configs[ConfigurationName.INVOICE_EMAIL_BODY],

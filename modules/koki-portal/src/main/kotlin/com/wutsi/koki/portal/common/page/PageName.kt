@@ -96,4 +96,5 @@ object PageName {
     const val TAX_EDIT = "page.tax.edit"
     const val TAX_CREATE = "page.tax.create"
     const val TAX_STATUS = "page.tax.status"
+    const val TAX_SETTINGS = "page.tax.settings"
 }

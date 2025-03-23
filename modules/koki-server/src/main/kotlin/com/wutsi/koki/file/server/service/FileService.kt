@@ -1,6 +1,5 @@
 package com.wutsi.koki.file.server.service
 
-import com.lowagie.text.pdf.PdfFileSpecification.url
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
@@ -9,6 +8,7 @@ import com.wutsi.koki.file.server.dao.FileOwnerRepository
 import com.wutsi.koki.file.server.dao.FileRepository
 import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.domain.FileOwnerEntity
+import com.wutsi.koki.file.server.domain.LabelEntity
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.platform.storage.StorageType
@@ -32,6 +32,7 @@ class FileService(
     private val storageBuilder: StorageServiceBuilder,
     private val configurationService: ConfigurationService,
     private val securityService: SecurityService,
+    private val labelService: LabelService,
     private val em: EntityManager,
 ) {
     fun get(id: Long, tenantId: Long): FileEntity {
@@ -41,6 +42,24 @@ class FileService(
             throw NotFoundException(Error(ErrorCode.FILE_NOT_FOUND))
         }
         return file
+    }
+
+    fun getLabels(files: List<FileEntity>): Map<Long, List<LabelEntity>> {
+        val fileIds = files.mapNotNull { file -> file.id }.distinct()
+        if (fileIds.isEmpty()) {
+            return emptyMap()
+        }
+
+        val pairs = dao.findLabelsByIds(fileIds)
+        return pairs.map { item ->
+            Pair<Long, LabelEntity>(
+                item[0] as Long,
+                item[1] as LabelEntity,
+            )
+        }.map { pair -> pair.first to pair.second } // Pair<Long,LabelEntity>
+            .groupBy { pair -> pair.first } // Iterable<Long, List<Pair<Long,LabelEntity>>>
+            .map { entry -> entry.key to entry.value.map { pair -> pair.second } } // Map<Long, List<LabelEntity>>
+            .toMap()
     }
 
     fun search(
@@ -137,7 +156,6 @@ class FileService(
                 url = url.toString(),
                 contentType = contentType ?: "application/octet-stream",
                 contentLength = contentLength,
-                createdAt = Date(),
             )
         )
 
@@ -154,6 +172,7 @@ class FileService(
         return file
     }
 
+    @Transactional
     fun store(
         filename: String,
         contentType: String?,
@@ -192,6 +211,14 @@ class FileService(
         dao.saveAll(files)
     }
 
+    @Transactional
+    fun setLabels(file: FileEntity, labels: List<String>, description: String?) {
+        file.labels = labelService.findOrCreate(labels, file.tenantId)
+        file.description = description
+        file.modifiedAt = Date()
+        dao.save(file)
+    }
+
     private fun toPath(
         filename: String,
         fileId: String,
@@ -220,13 +247,10 @@ class FileService(
 
     private fun getStorageService(tenantId: Long): StorageService {
         val configs = configurationService.search(
-            tenantId = tenantId,
-            keyword = "storage."
-        ).map { config -> config.name to config.value }
-            .toMap()
+            tenantId = tenantId, keyword = "storage."
+        ).map { config -> config.name to config.value }.toMap()
 
-        val type = configs.get(ConfigurationName.STORAGE_TYPE)
-            ?.let { value -> StorageType.valueOf(value.uppercase()) }
+        val type = configs.get(ConfigurationName.STORAGE_TYPE)?.let { value -> StorageType.valueOf(value.uppercase()) }
             ?: StorageType.KOKI
 
         return storageBuilder.build(type, configs)

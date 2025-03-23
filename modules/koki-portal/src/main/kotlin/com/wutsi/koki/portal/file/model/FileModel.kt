@@ -15,8 +15,13 @@ data class FileModel(
     val contentLengthText: String = "",
     val createdAt: Date = Date(),
     val createdAtText: String = "",
+    val createdAtMoment: String = "",
     val createdBy: UserModel? = null,
+    val modifiedAt: Date = Date(),
+    val modifiedAtText: String = "",
+    val description: String? = null,
     val extension: String = "",
+    val labels: List<LabelModel> = emptyList()
 ) {
     fun buildViewUrl(returnUrl: String?): String {
         return returnUrl

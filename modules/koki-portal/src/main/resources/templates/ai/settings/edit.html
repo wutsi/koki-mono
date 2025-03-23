@@ -20,28 +20,28 @@
               th:object="${form}">
             <table class="table">
                 <tr>
-                    <td width="20%"><b>Type <span class="required">*</span></b></td>
+                    <td width="20%"><b>Model <span class="required">*</span></b></td>
                     <td>
-                        <select onchange="koki_ai_type_changed()" th:field="*{type}">
-                            <option value=""></option>
-                            <option th:each="type : ${types}"
-                                    th:text="#{'ai-type.' + ${type}}"
-                                    th:value="${type}">
+                        <select onchange="koki_ai_model_changed()" th:field="*{model}">
+                            <option value="">None</option>
+                            <option th:each="model : ${models}"
+                                    th:text="#{'ai-model.' + ${model}}"
+                                    th:value="${model}">
                                 TYPE
                             </option>
                         </select>
                     </td>
                 </tr>
-                <tr class="gemini" th:classappend="${form.type} != 'GEMINI' ? 'hidden'">
+                <tr class="gemini" th:classappend="${form.model} != 'GEMINI' ? 'hidden'">
                     <td><b>API Key <span class="required">*</span></b></td>
                     <td>
-                        <input maxlength="100" th:field="*{geminiApiKey}" th:required="${form.type} == 'GEMINI'"/>
+                        <input maxlength="100" th:field="*{geminiApiKey}" th:required="${form.model} == 'GEMINI'"/>
                     </td>
                 </tr>
-                <tr class="gemini" th:classappend="${form.type} != 'GEMINI' ? 'hidden'">
+                <tr class="gemini" th:classappend="${form.model} != 'GEMINI' ? 'hidden'">
                     <td><b>Model <span class="required">*</span></b></td>
                     <td>
-                        <select th:field="*{geminiModel}" th:required="${form.type} == 'GEMINI'">
+                        <select th:field="*{geminiModel}" th:required="${form.model} == 'GEMINI'">
                             <option value=""></option>
                             <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
                             <option value="gemini-2.0-flash-lite">Gemini 2.0 Flash Lite</option>
@@ -67,8 +67,8 @@
         return true
     }
 
-    function koki_ai_type_changed() {
-        const type = document.getElementById('type').value;
+    function koki_ai_model_changed() {
+        const type = document.getElementById('model').value;
         const gemini = (type === 'GEMINI');
         document.querySelectorAll('.gemini').forEach((elt) => {
             if (gemini) {

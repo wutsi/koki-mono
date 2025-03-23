@@ -46,4 +46,11 @@ class SettingsControllerTest : AbstractPageControllerTest() {
         click(".btn-ai")
         assertCurrentPageIs(PageName.AI_SETTINGS)
     }
+
+    @Test
+    fun taxes() {
+        navigateTo("/settings")
+        click(".btn-tax")
+        assertCurrentPageIs(PageName.TAX_SETTINGS)
+    }
 }

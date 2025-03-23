@@ -4,11 +4,14 @@ import com.wutsi.koki.platform.ai.genai.Document
 import com.wutsi.koki.platform.ai.genai.GenAIRequest
 import com.wutsi.koki.platform.ai.genai.GenAIService
 import com.wutsi.koki.platform.ai.genai.Message
+import com.wutsi.koki.platform.ai.genai.Role
 import org.springframework.http.MediaType
 import org.springframework.web.client.RestTemplate
+import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.net.URL
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class GeminiTest {
     private val gemini: GenAIService = Gemini(
@@ -41,9 +44,15 @@ class GeminiTest {
                         text = "Can you share an example of json of the request from Gemini API. Only the JSON please"
                     )
                 ),
+                config = GenAIConfig(
+                    responseType = MediaType.APPLICATION_JSON,
+                )
             )
         )
         println("${response.messages.size} message(s)")
+        assertEquals(true, response.messages[0].text?.startsWith("{"))
+        assertEquals(true, response.messages[0].text?.endsWith("}"))
+
         response.messages.forEach { message -> println(message.text) }
     }
 
@@ -60,6 +69,32 @@ class GeminiTest {
                     temperature = .9,
                     maxOutputTokens = 100
                 )
+            )
+        )
+        println("${response.messages.size} message(s)")
+        response.messages.forEach { message -> println(message.text) }
+    }
+
+    @Test
+    fun generateWithSystemInstructions() {
+        val response = gemini.generateContent(
+            request = GenAIRequest(
+                messages = listOf(
+                    Message(
+                        role = Role.MODEL,
+                        text = """
+                            You are a senior software developer, your name is Joe.
+                            You should just produce code, nothing else.
+                        """.trimIndent()
+                    ),
+                    Message(
+                        role = Role.USER,
+                        text = """
+                            Can you write code to count the number of words in a text in Kotlin.
+                            Add also unit tests en ensure that the code works as expected.
+                        """.trimIndent()
+                    )
+                ),
             )
         )
         println("${response.messages.size} message(s)")
@@ -93,7 +128,6 @@ class GeminiTest {
                     Message(
                         text = """
                             Can you extract the information of this image.
-                            The response must be in JSON.
                         """.trimIndent(),
                         document = Document(
                             contentType = MediaType.IMAGE_JPEG,
@@ -110,14 +144,14 @@ class GeminiTest {
         response.messages.forEach { message -> println(message.text) }
     }
 
-    private fun downloadDocument(url: String): ByteArray {
+    private fun downloadDocument(url: String): ByteArrayInputStream {
         println("Downloading...")
         val inputStream: InputStream = URL(url).openStream()
         inputStream.use {
             val result = inputStream.readAllBytes()
 
             println("Downloaded...")
-            return result
+            return ByteArrayInputStream(result)
         }
     }
 }

@@ -2,7 +2,9 @@ package com.wutsi.koki.file.server.mapper
 
 import com.wutsi.koki.file.dto.File
 import com.wutsi.koki.file.dto.FileSummary
+import com.wutsi.koki.file.dto.LabelSummary
 import com.wutsi.koki.file.server.domain.FileEntity
+import com.wutsi.koki.file.server.domain.LabelEntity
 import org.springframework.stereotype.Service
 
 @Service
@@ -16,10 +18,13 @@ class FileMapper {
             contentType = entity.contentType,
             createdAt = entity.createdAt,
             createdById = entity.createdById,
+            modifiedAt = entity.modifiedAt,
+            description = entity.description,
+            labels = entity.labels.map { label -> toLabelSummary(label) }
         )
     }
 
-    fun toFileSummary(entity: FileEntity): FileSummary {
+    fun toFileSummary(entity: FileEntity, labels: Map<Long, List<LabelEntity>>): FileSummary {
         return FileSummary(
             id = entity.id!!,
             name = entity.name,
@@ -28,6 +33,18 @@ class FileMapper {
             contentType = entity.contentType,
             createdAt = entity.createdAt,
             createdById = entity.createdById,
+            modifiedAt = entity.modifiedAt,
+            labels = labels[entity.id]?.let { items ->
+                items.map { label -> toLabelSummary(label) }
+            } ?: emptyList()
+        )
+    }
+
+    private fun toLabelSummary(entity: LabelEntity): LabelSummary {
+        return LabelSummary(
+            id = entity.id!!,
+            displayName = entity.displayName,
+            createdAt = entity.createdAt,
         )
     }
 }

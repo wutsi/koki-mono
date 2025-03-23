@@ -223,9 +223,9 @@ ConfigurationService(
         koki.save(
             SaveConfigurationRequest(
                 values = mapOf(
-                    ConfigurationName.AI_PROVIDER to (form.type ?: ""),
-                    ConfigurationName.AI_PROVIDER_GEMINI_MODEL to (form.geminiModel ?: ""),
-                    ConfigurationName.AI_PROVIDER_GEMINI_API_KEY to (form.geminiApiKey ?: ""),
+                    ConfigurationName.AI_MODEL to (form.model ?: ""),
+                    ConfigurationName.AI_MODEL_GEMINI_MODEL to (form.geminiModel ?: ""),
+                    ConfigurationName.AI_MODEL_GEMINI_API_KEY to (form.geminiApiKey ?: ""),
                 )
             )
         )

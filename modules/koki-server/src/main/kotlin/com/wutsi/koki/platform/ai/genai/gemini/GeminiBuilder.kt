@@ -14,16 +14,16 @@ class GeminiBuilder(
 ) {
     companion object {
         val CONFIG_NAMES = listOf(
-            ConfigurationName.AI_PROVIDER_GEMINI_MODEL,
-            ConfigurationName.AI_PROVIDER_GEMINI_API_KEY,
+            ConfigurationName.AI_MODEL_GEMINI_MODEL,
+            ConfigurationName.AI_MODEL_GEMINI_API_KEY,
         )
     }
 
     fun build(config: Map<String, String>): GenAIService {
         validate(config)
         return Gemini(
-            apiKey = config[ConfigurationName.AI_PROVIDER_GEMINI_API_KEY]!!,
-            model = config[ConfigurationName.AI_PROVIDER_GEMINI_MODEL]!!,
+            apiKey = config[ConfigurationName.AI_MODEL_GEMINI_API_KEY]!!,
+            model = config[ConfigurationName.AI_MODEL_GEMINI_MODEL]!!,
             rest = createRestTemplate()
         )
     }

@@ -35,8 +35,8 @@ class SettingsAIController(
         val configs = service.configurations(keyword = "ai.")
         model.addAttribute(
             "form", AISettingsForm(
-                type = configs[ConfigurationName.AI_PROVIDER],
-                geminiModel = configs[ConfigurationName.AI_PROVIDER_GEMINI_MODEL],
+                model = configs[ConfigurationName.AI_MODEL],
+                geminiModel = configs[ConfigurationName.AI_MODEL_GEMINI_MODEL],
             )
         )
 

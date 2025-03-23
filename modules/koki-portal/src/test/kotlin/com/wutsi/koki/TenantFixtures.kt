@@ -12,9 +12,9 @@ import com.wutsi.koki.tenant.dto.TypeSummary
 
 object TenantFixtures {
     val config = mapOf(
-        ConfigurationName.AI_PROVIDER to "GEMINI",
-        ConfigurationName.AI_PROVIDER_GEMINI_MODEL to "gemini-2.0-flash",
-        ConfigurationName.AI_PROVIDER_GEMINI_API_KEY to "kk-1203923-4390r-erf00943",
+        ConfigurationName.AI_MODEL to "GEMINI",
+        ConfigurationName.AI_MODEL_GEMINI_MODEL to "gemini-2.0-flash",
+        ConfigurationName.AI_MODEL_GEMINI_API_KEY to "kk-1203923-4390r-erf00943",
 
         ConfigurationName.INVOICE_DUE_DAYS to "30",
         ConfigurationName.INVOICE_START_NUMBER to "1550",
@@ -51,6 +51,8 @@ object TenantFixtures {
         ConfigurationName.STORAGE_S3_REGION to "us-west-2",
         ConfigurationName.STORAGE_S3_SECRET_KEY to "SEC-43430409-340430-490109",
         ConfigurationName.STORAGE_S3_ACCESS_KEY to "ACC-f000ffff-340430-490109",
+
+        ConfigurationName.TAX_AI_AGENT_ENABLED to "1",
     )
 
     // Tenants

@@ -7,6 +7,7 @@ import com.wutsi.koki.portal.invoice.form.InvoiceSettingsForm
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import com.wutsi.koki.tenant.dto.ConfigurationName
+import org.apache.logging.log4j.message.MapMessage.MapFormat.names
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -21,7 +22,12 @@ class SettingsEditInvoiceController(
 ) : AbstractPageController() {
     @GetMapping("/settings/invoices/edit")
     fun edit(model: Model): String {
-        val configs = service.configurations(keyword = "invoice.")
+        val configs = service.configurations(
+            names = listOf(
+                ConfigurationName.INVOICE_DUE_DAYS,
+                ConfigurationName.INVOICE_START_NUMBER,
+            )
+        )
         val form = InvoiceSettingsForm(
             dueDays = (configs[ConfigurationName.INVOICE_DUE_DAYS]?.toInt() ?: 0),
             startNumber = (configs[ConfigurationName.INVOICE_START_NUMBER]?.toLong() ?: 0L),

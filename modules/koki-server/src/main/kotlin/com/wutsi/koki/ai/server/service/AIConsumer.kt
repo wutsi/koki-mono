@@ -2,8 +2,10 @@ package com.wutsi.koki.ai.server.service
 
 import com.wutsi.koki.platform.mq.Consumer
 import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Service
 
-class AIConsumer: Consumer {
+@Service
+class AIConsumer : Consumer {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(AIConsumer::class.java)
     }
