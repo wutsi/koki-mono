@@ -58,7 +58,7 @@
           th:text="#{'tax-status.' + ${status}}">DONE</span>
 
     <span class="badge text-bg-warning"
-          th:if="${status == 'SIGNING'} OR ${status == 'SUBMITTING'}"
+          th:if="${status == 'SUBMITTING'}"
           th:text="#{'tax-status.' + ${status}}">DONE</span>
 
     <span class="badge text-bg-info"
@@ -82,5 +82,42 @@
            th:if="${user?.hasPermission('tax:manage')}">Remove</a>
     </td>
 </tr>
+
+<div class="flex" th:fragment="tax-header(tax, showChangeButtons)">
+    <div class="margin-right-2x">
+        <b>Fiscal Year</b><br/>
+        <span th:text="${tax.fiscalYear}">FISCAL YEAR</span>
+    </div>
+    <div class="margin-right-2x" th:if="${tax.taxType}">
+        <b>Type</b><br/>
+        <span th:text="${tax.taxType.title}">TAX TYPE</span>
+    </div>
+    <div class="margin-right-2x">
+        <b>Account</b><br/>
+        <a class="entity-title" th:href="'/accounts/' + ${tax.account.id}">
+            <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
+            <span th:text="${tax.account.name}">ACCOUNT</span>
+        </a>
+    </div>
+    <div class="margin-right-2x">
+        <b>Status</b><br/>
+        <span th:replace="~{__components/tax :: tax-status(${tax.status.name()})}">STATUS</span>
+        <div th:if="${user?.hasPermission('tax:manage')} AND ${showChangeButtons}">
+            <a class="btn-status text-small"
+               th:href="'/taxes/' + ${tax.id} + '/status'"
+            >Change</a>
+        </div>
+    </div>
+    <div class="margin-right-2x">
+        <b>Assigned To</b><br/>
+        <span th:if="${tax.assignee}" th:text="${tax.assignee.displayName}">ASSIGNEE</span>
+        <i th:if="!${tax.assignee}">Unassigned</i>
+        <div th:if="${user?.hasPermission('tax:manage')} AND ${showChangeButtons}">
+            <a class="btn-assignee text-small"
+               th:href="'/taxes/' + ${tax.id} + '/assignee'"
+            >Change</a>
+        </div>
+    </div>
+</div>
 
 </body>

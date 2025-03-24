@@ -3,11 +3,9 @@ package com.wutsi.koki.portal.tax.page
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tax.form.TaxAssigneeForm
-import com.wutsi.koki.portal.tax.form.TaxStatusForm
 import com.wutsi.koki.portal.tax.model.TaxModel
 import com.wutsi.koki.portal.tax.service.TaxService
 import com.wutsi.koki.portal.user.service.UserService
-import com.wutsi.koki.tax.dto.TaxStatus
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -18,8 +16,9 @@ import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 @RequiresPermission(["tax:manage"])
-class ChangeTaxAssigneeController(
-    private val service: TaxService
+class TaxAssigneeController(
+    private val service: TaxService,
+    private val userService: UserService,
 ) : AbstractTaxController() {
     @GetMapping("/taxes/{id}/assignee")
     fun edit(
@@ -27,15 +26,19 @@ class ChangeTaxAssigneeController(
         model: Model
     ): String {
         val tax = service.tax(id)
-        val form = TaxAssigneeForm(
-            assigneeId = tax.assignee?.id,
-        )
+        val form = TaxAssigneeForm(assigneeId = -1)
         return edit(tax, form, model)
     }
 
     private fun edit(tax: TaxModel, form: TaxAssigneeForm, model: Model): String {
         model.addAttribute("tax", tax)
         model.addAttribute("form", form)
+
+        if (form.assigneeId != null && form.assigneeId != -1L) {
+            val assignee = userService.user(form.assigneeId, fullGraph = false)
+            model.addAttribute("assignee", assignee)
+        }
+
         model.addAttribute(
             "page",
             createPageModel(

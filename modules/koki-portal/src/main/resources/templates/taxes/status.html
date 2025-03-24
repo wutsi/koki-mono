@@ -19,31 +19,7 @@
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
-                    <div class="flex">
-                        <div class="margin-right-2x">
-                            <b>Fiscal Year</b><br/>
-                            <span th:text="${tax.fiscalYear}">FISCAL YEAR</span>
-                        </div>
-                        <div class="margin-right-2x" th:if="${tax.taxType}">
-                            <b>Type</b><br/>
-                            <span th:text="${tax.taxType.title}">TAX TYPE</span>
-                        </div>
-                        <div class="margin-right-2x">
-                            <b>Status</b><br/>
-                            <span th:replace="~{__components/tax :: tax-status(${tax.status.name()})}">STATUS</span>
-                        </div>
-                        <div class="margin-right-2x">
-                            <b>Account</b><br/>
-                            <a class="entity-title" th:href="'/accounts/' + ${tax.account.id}">
-                                <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
-                                <span th:text="${tax.account.name}">ACCOUNT</span>
-                            </a>
-                        </div>
-                        <div class="margin-right-2x" th:if="${tax.assignee}">
-                            <b>Assigned To</b><br/>
-                            <span th:text="${tax.assignee.displayName}">ASSIGNEE</span>
-                        </div>
-                    </div>
+                    <div th:replace="~{__components/tax :: tax-header(${tax}, false)}"></div>
                 </div>
             </div>
         </div>
@@ -57,7 +33,12 @@
                             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
                             <div class="section-item">
-                                <label class="title">Status</label>
+                                <label class="title">Current Status</label>
+                                <span th:replace="~{__components/tax :: tax-status(${tax.status.name})}">STATUS</span>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title">New Status</label>
                                 <select th:field="*{status}">
                                     <option th:each="status : ${statuses}"
                                             th:text="#{'tax-status.' + ${status.name()}}"
@@ -65,12 +46,6 @@
                                         ASSIGNEE
                                     </option>
                                 </select>
-                            </div>
-                            <div class="section-item">
-                                <label class="title">Assigned To <span class="required">*</span></label>
-                                <select required th:field="*{assigneeId}"></select>
-                                <script
-                                    th:replace="~{__components/user :: user-selector('assigneeId', null, 'tax:status')}"></script>
                             </div>
                         </div>
                     </div>

@@ -32,4 +32,7 @@ data class TaxModel(
 ) {
     val name: String
         get() = (taxType?.let { type -> "$fiscalYear - ${type.title}" } ?: fiscalYear.toString())
+
+    val done: Boolean
+        get() = status == TaxStatus.DONE
 }

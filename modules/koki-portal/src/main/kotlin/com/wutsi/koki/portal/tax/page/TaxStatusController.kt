@@ -5,7 +5,6 @@ import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tax.form.TaxStatusForm
 import com.wutsi.koki.portal.tax.model.TaxModel
 import com.wutsi.koki.portal.tax.service.TaxService
-import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.tax.dto.TaxStatus
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -13,21 +12,23 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-@RequiresPermission(["tax:status"])
-class ChangeTaxStatusController(
+@RequiresPermission(["tax:manage"])
+class TaxStatusController(
     private val service: TaxService
 ) : AbstractTaxController() {
     @GetMapping("/taxes/{id}/status")
     fun edit(
         @PathVariable id: Long,
+        @RequestParam status: TaxStatus? = null,
         model: Model
     ): String {
         val tax = service.tax(id)
         val form = TaxStatusForm(
-            status = tax.status,
+            status = status ?: TaxStatus.NEW,
         )
         return edit(tax, form, model)
     }
@@ -43,7 +44,6 @@ class ChangeTaxStatusController(
                 title = tax.name
             )
         )
-
         return "taxes/status"
     }
 

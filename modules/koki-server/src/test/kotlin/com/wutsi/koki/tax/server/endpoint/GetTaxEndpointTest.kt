@@ -29,7 +29,7 @@ class GetTaxEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(110, tax.accountantId)
         assertEquals(111, tax.technicianId)
         assertEquals(112, tax.assigneeId)
-        assertEquals(TaxStatus.PREPARING, tax.status)
+        assertEquals(TaxStatus.GATHERING_DOCUMENTS, tax.status)
         assertEquals(500.0, tax.totalRevenue)
         assertEquals("CAD", tax.currency)
         assertEquals(2, tax.productCount)

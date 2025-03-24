@@ -27,44 +27,53 @@
                         <div>
                             <a class="btn-edit btn btn-light btn-sm"
                                th:href="'/taxes/' + ${tax.id} + '/edit'"
-                               th:if="${user?.hasPermission('tax:manage')}">Edit</a>
-
-                            <a class="btn-status btn btn-light btn-sm"
-                               th:href="'/taxes/' + ${tax.id} + '/status'"
-                               th:if="${user?.hasPermission('tax:status')}">Update Status</a>
+                               th:if="!${tax.done} AND ${user?.hasPermission('tax:manage')}">Edit</a>
 
                             <a class="btn-delete btn btn-danger btn-sm"
                                onclick="return confirm('Are you sure you want to delete the tax report?')"
                                th:href="'/taxes/' + ${tax.id} + '/delete'"
-                               th:if="${user?.hasPermission('tax:delete')}">Delete</a>
+                               th:if="!${tax.done} AND ${user?.hasPermission('tax:delete')}">Delete</a>
                         </div>
                     </div>
-                    <div class="flex">
-                        <div class="margin-right-2x">
-                            <b>Fiscal Year</b><br/>
-                            <span th:text="${tax.fiscalYear}">FISCAL YEAR</span>
-                        </div>
-                        <div class="margin-right-2x" th:if="${tax.taxType}">
-                            <b>Type</b><br/>
-                            <span th:text="${tax.taxType.title}">TAX TYPE</span>
-                        </div>
-                        <div class="margin-right-2x">
-                            <b>Status</b><br/>
-                            <span th:replace="~{__components/tax :: tax-status(${tax.status.name()})}">STATUS</span>
-                        </div>
-                        <div class="margin-right-2x">
-                            <b>Account</b><br/>
-                            <a class="entity-title" target="_blank" th:href="'/accounts/' + ${tax.account.id}">
-                                <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
-                                <span th:text="${tax.account.name}">ACCOUNT</span>
-                            </a>
-                        </div>
-                        <div class="margin-right-2x" th:if="${tax.assignee}">
-                            <b>Assigned To</b><br/>
-                            <span th:text="${tax.assignee.displayName}">ASSIGNEE</span>
-                        </div>
-                    </div>
+
+                    <div th:replace="~{__components/tax :: tax-header(${tax}, !${tax.done})}"></div>
+
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <ul class="steps-progress-bar">
+                        <li th:class="${status.ordinal() == tax.status.ordinal()} ? 'active'"
+                            th:each="status : ${statuses}">
+                            <p>
+                                <i class="fa-solid fa-circle-check success"
+                                   th:if="${status.ordinal() < tax.status.ordinal()}"></i>
+                                <i class="fa-regular fa-circle"
+                                   th:if="${status.ordinal() > tax.status.ordinal()}"></i>
+                                <i class="fa-solid fa-circle info"
+                                   th:if="${status.ordinal() == tax.status.ordinal()}"></i>
+                            </p>
+                            <p>
+                                <a th:class="'btn-status-' + ${status.name}"
+                                   th:href="'/taxes/' + ${tax.id} + '/status?status=' + ${status.name}"
+                                   th:if="${status.ordinal() > tax.status.ordinal()} AND ${user?.hasPermission('tax:manage')}"
+                                   th:text="#{'tax-status.' + ${status.name}}">
+                                    STATUS
+                                </a>
+                                <span th:if="${status.ordinal() <= tax.status.ordinal()}"
+                                      th:text="#{'tax-status.' + ${status.name}}">
+                                    STATUS
+                                </span>
+                            </p>
+
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -144,9 +153,13 @@
                                     <td><b>Technician</b></td>
                                     <td th:text="${tax.technician.displayName}">TECHNICIAN</td>
                                 </tr>
-                                <tr th:if="${tax.assignee}">
+                                <tr>
                                     <td><b>Assigned To</b></td>
-                                    <td th:text="${tax.assignee.displayName}">ASSIGNED_TO</td>
+                                    <td>
+                                        <span th:if="${tax.assignee}"
+                                              th:text="${tax.assignee.displayName}">ASSIGNEE</span>
+                                        <i th:if="!${tax.assignee}">Unassigned</i>
+                                    </td>
                                 </tr>
 
                                 <tr th:if="${tax.description}">

@@ -11,15 +11,13 @@ import com.wutsi.koki.TaxFixtures.tax
 import com.wutsi.koki.UserFixtures
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.common.page.PageName
-import com.wutsi.koki.tax.dto.TaxStatus
 import com.wutsi.koki.tax.dto.UpdateTaxAssigneeRequest
-import com.wutsi.koki.tax.dto.UpdateTaxStatusRequest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ChangeTaxAssigneeControllerTest : AbstractPageControllerTest() {
+class TaxAssigneeControllerTest : AbstractPageControllerTest() {
     @Test
-    fun assignee() {
+    fun assign() {
         navigateTo("/taxes/${tax.id}/assignee")
         assertCurrentPageIs(PageName.TAX_ASSIGNEE)
 
@@ -42,7 +40,6 @@ class ChangeTaxAssigneeControllerTest : AbstractPageControllerTest() {
         navigateTo("/taxes/${tax.id}/assignee")
         assertCurrentPageIs(PageName.TAX_ASSIGNEE)
 
-        select("#status", 3)
         select2("#assigneeId", UserFixtures.users[0].displayName)
         click(".btn-cancel", 1000)
 
@@ -64,7 +61,7 @@ class ChangeTaxAssigneeControllerTest : AbstractPageControllerTest() {
         select2("#assigneeId", UserFixtures.users[2].displayName)
         click("button[type=submit]", 1000)
 
-        assertCurrentPageIs(PageName.TAX_STATUS)
+        assertCurrentPageIs(PageName.TAX_ASSIGNEE)
         assertElementPresent(".alert-danger")
     }
 

@@ -59,7 +59,7 @@ class SearchTaxEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun `by status`() {
         val result = rest.getForEntity(
-            "/v1/taxes?status=PREPARING&status=FINALIZING",
+            "/v1/taxes?status=GATHERING_DOCUMENTS&status=REVIEWING",
             SearchTaxResponse::class.java
         )
 
