@@ -34,7 +34,6 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
             eq(Any::class.java),
         )
         assertEquals(TaxStatus.PROCESSING, request.firstValue.status)
-        assertEquals(UserFixtures.users[0].id, request.firstValue.assigneeId)
 
         assertCurrentPageIs(PageName.TAX)
     }

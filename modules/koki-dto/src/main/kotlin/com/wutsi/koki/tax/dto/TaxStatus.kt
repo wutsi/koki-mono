@@ -1,11 +1,11 @@
 package com.wutsi.koki.tax.dto
 
 enum class TaxStatus {
+    UNKNOWN,
     NEW,
-    CONTACTING,
-    PREPARING,
+    GATHERING_DOCUMENTS,
     PROCESSING,
-    FINALIZING,
+    REVIEWING,
     SUBMITTING,
     DONE,
 }
