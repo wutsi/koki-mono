@@ -6,6 +6,7 @@ import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tax.dto.CreateTaxRequest
 import com.wutsi.koki.tax.dto.TaxStatus
+import com.wutsi.koki.tax.dto.UpdateTaxAssigneeRequest
 import com.wutsi.koki.tax.dto.UpdateTaxRequest
 import com.wutsi.koki.tax.dto.UpdateTaxStatusRequest
 import com.wutsi.koki.tax.server.dao.TaxProductRepository
@@ -179,18 +180,25 @@ class TaxService(
     }
 
     @Transactional
-    fun status(id: Long, request: UpdateTaxStatusRequest, tenantId: Long) {
-        // Update
-        val tax = get(id, tenantId)
+    fun status(tax: TaxEntity, request: UpdateTaxStatusRequest): TaxEntity {
         val now = Date()
         tax.status = request.status
         tax.assigneeId = request.assigneeId
-        tax.modifiedAt = now
         tax.modifiedById = securityService.getCurrentUserId()
+        tax.modifiedAt = now
         if (request.status.ordinal > TaxStatus.NEW.ordinal && tax.startAt == null) {
             tax.startAt = now
         }
-        dao.save(tax)
+        return dao.save(tax)
+    }
+
+    @Transactional
+    fun assignee(tax: TaxEntity, request: UpdateTaxAssigneeRequest): TaxEntity {
+        val now = Date()
+        tax.assigneeId = request.assigneeId
+        tax.modifiedById = securityService.getCurrentUserId()
+        tax.modifiedAt = now
+        return dao.save(tax)
     }
 
     @Transactional

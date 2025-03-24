@@ -9,6 +9,7 @@ import com.wutsi.koki.tax.dto.GetTaxResponse
 import com.wutsi.koki.tax.dto.SearchTaxProductResponse
 import com.wutsi.koki.tax.dto.SearchTaxResponse
 import com.wutsi.koki.tax.dto.TaxStatus
+import com.wutsi.koki.tax.dto.UpdateTaxAssigneeRequest
 import com.wutsi.koki.tax.dto.UpdateTaxProductRequest
 import com.wutsi.koki.tax.dto.UpdateTaxRequest
 import com.wutsi.koki.tax.dto.UpdateTaxStatusRequest
@@ -79,6 +80,11 @@ class KokiTaxes(
 
     fun status(id: Long, request: UpdateTaxStatusRequest) {
         val url = urlBuilder.build("$TAX_PATH_PREFIX/$id/status")
+        rest.postForEntity(url, request, Any::class.java)
+    }
+
+    fun assignee(id: Long, request: UpdateTaxAssigneeRequest) {
+        val url = urlBuilder.build("$TAX_PATH_PREFIX/$id/assignee")
         rest.postForEntity(url, request, Any::class.java)
     }
 

@@ -21,14 +21,7 @@ class TaxWidgetController(
         if (user != null) {
             val taxes = service.taxes(
                 assigneeIds = listOf(user.id),
-                statuses = listOf(
-                    TaxStatus.NEW,
-                    TaxStatus.PROCESSING,
-                    TaxStatus.FINALIZING,
-                    TaxStatus.CONTACTING,
-                    TaxStatus.SUBMITTING,
-                    TaxStatus.PREPARING,
-                ),
+                statuses = TaxStatus.entries.filter { status -> status != TaxStatus.DONE },
                 limit = 5,
             )
             if (taxes.isNotEmpty()) {

@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.tax.service
 
 import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.account.service.AccountService
+import com.wutsi.koki.portal.tax.form.TaxAssigneeForm
 import com.wutsi.koki.portal.tax.form.TaxForm
 import com.wutsi.koki.portal.tax.form.TaxStatusForm
 import com.wutsi.koki.portal.tax.mapper.TaxMapper
@@ -11,6 +12,7 @@ import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.sdk.KokiTaxes
 import com.wutsi.koki.tax.dto.CreateTaxRequest
 import com.wutsi.koki.tax.dto.TaxStatus
+import com.wutsi.koki.tax.dto.UpdateTaxAssigneeRequest
 import com.wutsi.koki.tax.dto.UpdateTaxRequest
 import com.wutsi.koki.tax.dto.UpdateTaxStatusRequest
 import org.springframework.stereotype.Service
@@ -171,9 +173,15 @@ class TaxService(
 
     fun status(id: Long, form: TaxStatusForm) {
         val request = UpdateTaxStatusRequest(
-            assigneeId = form.assigneeId,
             status = form.status,
         )
         koki.status(id, request)
+    }
+
+    fun assignee(id: Long, form: TaxAssigneeForm) {
+        val request = UpdateTaxAssigneeRequest(
+            assigneeId = if (form.assigneeId == -1L) null else form.assigneeId,
+        )
+        koki.assignee(id, request)
     }
 }

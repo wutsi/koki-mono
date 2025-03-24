@@ -59,7 +59,7 @@ object TaxFixtures {
         assigneeId = users[0].id,
         taxTypeId = TenantFixtures.types[0].id,
         fiscalYear = 2022,
-        status = TaxStatus.PREPARING,
+        status = TaxStatus.GATHERING_DOCUMENTS,
         startAt = DateUtils.addYears(Date(), -2),
         modifiedById = users[0].id,
         createdById = users[0].id,

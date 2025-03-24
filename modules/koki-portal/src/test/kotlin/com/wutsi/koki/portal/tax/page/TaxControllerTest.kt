@@ -1,7 +1,9 @@
 package com.wutsi.koki.portal.tax.page
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -14,6 +16,10 @@ import com.wutsi.koki.TaxFixtures
 import com.wutsi.koki.TaxFixtures.tax
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.common.page.PageName
+import com.wutsi.koki.tax.dto.GetTaxResponse
+import com.wutsi.koki.tax.dto.TaxStatus
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import kotlin.test.Test
 
 class TaxControllerTest : AbstractPageControllerTest() {
@@ -114,6 +120,14 @@ class TaxControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun assignee() {
+        navigateTo("/taxes/${tax.id}")
+
+        click(".btn-assignee")
+        assertCurrentPageIs(PageName.TAX_ASSIGNEE)
+    }
+
+    @Test
     fun status() {
         navigateTo("/taxes/${tax.id}")
 
@@ -135,14 +149,30 @@ class TaxControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/taxes/${tax.id}")
         assertElementNotPresent(".tax-summary .btn-edit")
+        assertElementNotPresent(".tax-summary .btn-status")
+        assertElementNotPresent(".tax-summary .btn-assignee")
     }
 
     @Test
-    fun `show - without permission tax-status`() {
-        setUpUserWithoutPermissions(listOf("tax:status"))
+    fun `show - done`() {
+        doReturn(
+            ResponseEntity(
+                GetTaxResponse(tax.copy(status = TaxStatus.DONE)),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetTaxResponse::class.java)
+            )
+
+        setUpUserWithoutPermissions(listOf("tax:manage"))
 
         navigateTo("/taxes/${tax.id}")
+        assertElementNotPresent(".tax-summary .btn-edit")
         assertElementNotPresent(".tax-summary .btn-status")
+        assertElementNotPresent(".tax-summary .btn-assignee")
+        assertElementNotPresent(".tax-summary .btn-delete")
     }
 
     @Test
@@ -162,7 +192,7 @@ class TaxControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun `delete - without permission prodict`() {
+    fun `delete - without permission product`() {
         setUpUserWithoutPermissions(listOf("product"))
 
         navigateTo("/taxes/${tax.id}")

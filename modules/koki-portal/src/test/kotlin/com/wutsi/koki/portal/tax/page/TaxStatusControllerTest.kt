@@ -8,7 +8,6 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.TaxFixtures.tax
-import com.wutsi.koki.UserFixtures
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.tax.dto.TaxStatus
@@ -16,7 +15,7 @@ import com.wutsi.koki.tax.dto.UpdateTaxStatusRequest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
+class TaxStatusControllerTest : AbstractPageControllerTest() {
     @Test
     fun status() {
         navigateTo("/taxes/${tax.id}/status")
@@ -24,7 +23,6 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.TAX_STATUS)
 
         select("#status", 3)
-        select2("#assigneeId", UserFixtures.users[0].displayName)
         click("button[type=submit]", 1000)
 
         val request = argumentCaptor<UpdateTaxStatusRequest>()
@@ -33,7 +31,7 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
             request.capture(),
             eq(Any::class.java),
         )
-        assertEquals(TaxStatus.PROCESSING, request.firstValue.status)
+        assertEquals(TaxStatus.REVIEWING, request.firstValue.status)
 
         assertCurrentPageIs(PageName.TAX)
     }
@@ -45,7 +43,6 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.TAX_STATUS)
 
         select("#status", 3)
-        select2("#assigneeId", UserFixtures.users[0].displayName)
         click(".btn-cancel", 1000)
 
         assertCurrentPageIs(PageName.TAX)
@@ -65,7 +62,6 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.TAX_STATUS)
 
         select("#status", 3)
-        select2("#assigneeId", UserFixtures.users[0].displayName)
         click("button[type=submit]", 1000)
 
         assertCurrentPageIs(PageName.TAX_STATUS)
@@ -81,8 +77,8 @@ class ChangeTaxStatusControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun `status - without permission tax-status`() {
-        setUpUserWithoutPermissions(listOf("tax:status"))
+    fun `status - without permission tax-manage`() {
+        setUpUserWithoutPermissions(listOf("tax:manage"))
 
         navigateTo("/taxes/${tax.id}/status")
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)

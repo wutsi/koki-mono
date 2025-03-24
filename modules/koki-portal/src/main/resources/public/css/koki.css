@@ -177,6 +177,7 @@ a.entity-title {
 .margin-right-small {
     margin-right: 0.5em;
 }
+
 .margin-right-2x {
     margin-right: 2em;
 }
@@ -475,6 +476,60 @@ a.btn-back {
 .bg-danger a,
 .bg-primary a {
     color: white;
+}
+
+/* ============================= */
+/* step progress bar             */
+/* ============================= */
+.steps-progress-bar {
+    overflow: hidden;
+    counter-reset: step; /*CSS counters to number the steps*/
+    width: 100%;
+    padding: 0;
+    margin: 0 auto;
+}
+
+.steps-progress-bar li {
+    list-style-type: none;
+    color: white;
+    font-size: 14px;
+    width: 16%;
+    float: left;
+    position: relative;
+    text-align: center;
+}
+
+/*progressbar connectors*/
+.steps-progress-bar li:after {
+    content: '';
+    width: 92%;
+    height: 2px;
+    background: #404040;
+    position: absolute;
+    left: -46%;
+    top: 10px;
+}
+
+.steps-progress-bar li:first-child:after {
+    /*connector not needed before the first step*/
+    content: none;
+}
+
+/*marking active/completed steps green*/
+/*The number of the step and the connector before it = green*/
+.steps-progress-bar li.active:before,
+.steps-progress-bar li.active:after {
+    background: #0072DC;
+    color: white;
+}
+
+.steps-progress-bar li.active p {
+    font-weight: bold;
+}
+
+.steps-progress-bar li p {
+    color: black;
+    margin-bottom: 0;
 }
 
 

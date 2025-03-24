@@ -4,6 +4,7 @@ import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tax.model.TaxModel
 import com.wutsi.koki.portal.tax.service.TaxService
+import com.wutsi.koki.tax.dto.TaxStatus
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -37,6 +38,8 @@ class TaxController(
 
     fun show(tax: TaxModel, model: Model): String {
         model.addAttribute("tax", tax)
+        model.addAttribute("statuses", TaxStatus.entries.filter { status -> status != TaxStatus.UNKNOWN })
+
         model.addAttribute(
             "page",
             createPageModel(

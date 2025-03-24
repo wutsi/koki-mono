@@ -118,6 +118,8 @@ class ListTaxController(
                 emptyList()
             },
 
+            taxTypeIds = typeId?.let { listOf(typeId) } ?: emptyList(),
+
             statuses = status?.let { listOf(status) } ?: emptyList(),
             fiscalYear = year,
             startAtFrom = if (xview == VIEW_CALENDAR) startAtFrom else null,

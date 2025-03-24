@@ -1,12 +1,16 @@
 package com.wutsi.koki.tax.server.endpoint
 
+import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.tax.dto.CreateTaxRequest
 import com.wutsi.koki.tax.dto.CreateTaxResponse
 import com.wutsi.koki.tax.dto.GetTaxResponse
 import com.wutsi.koki.tax.dto.SearchTaxResponse
 import com.wutsi.koki.tax.dto.TaxStatus
+import com.wutsi.koki.tax.dto.UpdateTaxAssigneeRequest
 import com.wutsi.koki.tax.dto.UpdateTaxRequest
 import com.wutsi.koki.tax.dto.UpdateTaxStatusRequest
+import com.wutsi.koki.tax.dto.event.TaxAssigneeChangedEvent
+import com.wutsi.koki.tax.dto.event.TaxStatusChangedEvent
 import com.wutsi.koki.tax.server.mapper.TaxMapper
 import com.wutsi.koki.tax.server.service.TaxService
 import jakarta.validation.Valid
@@ -27,6 +31,7 @@ import java.util.Date
 class TaxEndpoints(
     private val service: TaxService,
     private val mapper: TaxMapper,
+    private val publisher: Publisher,
 ) {
     @GetMapping("/{id}")
     fun get(
@@ -122,6 +127,35 @@ class TaxEndpoints(
         @PathVariable id: Long,
         @Valid @RequestBody request: UpdateTaxStatusRequest,
     ) {
-        service.status(id, request, tenantId)
+        val tax = service.get(id, tenantId)
+        if (tax.status != request.status) {
+            service.status(tax, request)
+            publisher.publish(
+                TaxStatusChangedEvent(
+                    taxId = id,
+                    tenantId = tax.tenantId,
+                    status = request.status,
+                )
+            )
+        }
+    }
+
+    @PostMapping("/{id}/assignee")
+    fun assignee(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
+        @Valid @RequestBody request: UpdateTaxAssigneeRequest,
+    ) {
+        val tax = service.get(id, tenantId)
+        if (tax.assigneeId != request.assigneeId) {
+            service.assignee(tax, request)
+            publisher.publish(
+                TaxAssigneeChangedEvent(
+                    taxId = id,
+                    tenantId = tax.tenantId,
+                    assigneeId = request.assigneeId,
+                )
+            )
+        }
     }
 }
