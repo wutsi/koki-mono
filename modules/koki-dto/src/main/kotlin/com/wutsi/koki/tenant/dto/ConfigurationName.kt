@@ -75,4 +75,16 @@ object ConfigurationName {
 
     // TAX
     const val TAX_AI_AGENT_ENABLED = "tax.ai.agent.enabled"
+
+    const val TAX_EMAIL_ASSIGNEE_ENABLED = "tax.email.assignee.enabled"
+    const val TAX_EMAIL_ASSIGNEE_SUBJECT = "tax.email.assignee.subject"
+    const val TAX_EMAIL_ASSIGNEE_BODY = "tax.email.assignee.body"
+
+    const val TAX_EMAIL_GATHERING_DOCUMENTS_ENABLED = "tax.email.gathering-documents.enabled"
+    const val TAX_EMAIL_GATHERING_DOCUMENTS_SUBJECT = "tax.email.gathering-documents.subject"
+    const val TAX_EMAIL_GATHERING_DOCUMENTS_BODY = "tax.email.gathering-documents.body"
+
+    const val TAX_EMAIL_DONE_ENABLED = "tax.email.done.enabled"
+    const val TAX_EMAIL_DONE_SUBJECT = "tax.email.done.subject"
+    const val TAX_EMAIL_DONE_BODY = "tax.email.done.body"
 }
