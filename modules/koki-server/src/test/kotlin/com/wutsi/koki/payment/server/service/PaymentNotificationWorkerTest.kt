@@ -30,6 +30,7 @@ import com.wutsi.koki.tenant.server.service.ConfigurationService
 import com.wutsi.koki.tenant.server.service.TenantService
 import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.time.DateUtils
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import org.springframework.context.support.ResourceBundleMessageSource
@@ -85,12 +86,14 @@ class PaymentNotificationWorkerTest {
     @BeforeEach
     fun setUp() {
         doReturn(tenant).whenever(tenantService).get(any())
-
         doReturn(business).whenever(businessService).get(any())
-
         doReturn(configurations).whenever(configurationService).search(anyOrNull(), anyOrNull(), anyOrNull())
-
         doReturn(invoice).whenever(invoiceService).get(any(), any())
+    }
+
+    @AfterEach
+    fun tearDown() {
+        logger.log()
     }
 
     @Test

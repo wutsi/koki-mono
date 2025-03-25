@@ -57,6 +57,16 @@ class PaymentNotificationWorker(
         logger.add("event_tenant_id", event.tenantId)
 
         if (event.status != TransactionStatus.SUCCESSFUL) {
+            logger.add("email_skipped_reason", "TransactionNotSuccessful")
+            return
+        }
+
+        // Config
+        val configs = configurationService.search(tenantId = event.tenantId, keyword = "payment.")
+            .map { config -> config.name to config.value }
+            .toMap()
+        if (configs[ConfigurationName.PAYMENT_EMAIL_ENABLED] == null) {
+            logger.add("email_skipped_reason", "NotificationDisabled")
             return
         }
 
@@ -66,19 +76,9 @@ class PaymentNotificationWorker(
 
         // Invoice
         val invoice = invoiceService.get(id = tx.invoiceId, tenantId = event.tenantId)
+        logger.add("invoice_email", invoice.customerEmail)
         if (invoice.customerEmail.isEmpty()) {
-            logger.add("email_sent", false)
-            logger.add("email_reason", "NoEmail")
-            return
-        }
-
-        // Config
-        val configs = configurationService.search(tenantId = event.tenantId, keyword = "payment.")
-            .map { config -> config.name to config.value }
-            .toMap()
-        if (configs[ConfigurationName.PAYMENT_EMAIL_ENABLED] == null) {
-            logger.add("email_sent", false)
-            logger.add("email_reason", "EmailDisabled")
+            logger.add("email_skipped_reason", "NoCustomerEmail")
             return
         }
 
