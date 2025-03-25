@@ -3,10 +3,12 @@ package com.wutsi.koki.invoice.server.service
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.service.AbstractTenantModuleInitializer
 import org.apache.commons.io.IOUtils
+import org.springframework.stereotype.Service
 
+@Service
 class TenantTaxInitializer : AbstractTenantModuleInitializer() {
     companion object {
-        const val EMAIL_ASSIGNEE_SUBJECT = "You've been assigned a new task"
+        const val EMAIL_ASSIGNEE_SUBJECT = "You have a new task"
         const val EMAIL_ASSIGNEE_BODY_PATH = "/tax/email/default/assignee.html"
     }
 
@@ -29,5 +31,4 @@ class TenantTaxInitializer : AbstractTenantModuleInitializer() {
             tenantId = tenantId,
         )
     }
-
 }

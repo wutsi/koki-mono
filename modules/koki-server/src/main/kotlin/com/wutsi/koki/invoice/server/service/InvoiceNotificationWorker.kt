@@ -100,13 +100,11 @@ class InvoiceNotificationWorker(
         val invoice = invoiceService.get(id = event.invoiceId, tenantId = event.tenantId)
         logger.add("invoice_status", invoice.status)
         if (invoice.status != event.status) {
-            logger.add("email_sent", false)
-            logger.add("email_reason", "StatusMismatch")
+            logger.add("email_skipped_reason", "StatusMismatch")
             return
         }
         if (invoice.customerEmail.isEmpty()) {
-            logger.add("email_sent", false)
-            logger.add("email_reason", "NoEmail")
+            logger.add("email_skipped_reason", "NoCustomerEmail")
             return
         }
 
@@ -115,8 +113,7 @@ class InvoiceNotificationWorker(
             .map { config -> config.name to config.value }
             .toMap()
         if (configs[ConfigurationName.INVOICE_EMAIL_ENABLED] == null) {
-            logger.add("email_sent", false)
-            logger.add("email_reason", "EmailDisabled")
+            logger.add("email_skipped_reason", "NotificationDisabled")
             return
         }
 
