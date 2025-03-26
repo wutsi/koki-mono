@@ -54,22 +54,21 @@
                 <td>
                     <div>
                         <b>When an invoice is approved</b>
-
-                        <span class="badge text-bg-success margin-left" th:if="${notification.enabled}">Enabled</span>
-                        <span class="badge text-bg-danger margin-left" th:if="!${notification.enabled}">Disabled</span>
+                        <span
+                            th:replace="~{__components/settings :: enabled-badge(${notification.enabled})}"></span>
                     </div>
                     <div class="text-small margin-left" th:if="${notification.subject}">
                         Subject: <span th:text="${notification.subject}">SUBJECT</span>
                     </div>
                 </td>
                 <td align="right">
-                    <a class="btn btn-sm btn-light btn-notification"
+                    <a class="btn btn-sm btn-light btn-configure"
                        href="/settings/invoices/notifications"
                        th:if="${notification.enabled}">
                         Configure
                     </a>
                     <a class="btn btn-sm btn-primary btn-notification-enable"
-                       href="/settings/invoices/notifications"
+                       href="/settings/invoices/notifications/enable?status=true"
                        th:if="!${notification.enabled}">
                         Enable
                     </a>

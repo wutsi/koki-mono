@@ -21,6 +21,7 @@ import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.templating.MustacheTemplatingEngine
 import com.wutsi.koki.tax.dto.TaxStatus
 import com.wutsi.koki.tax.dto.event.TaxAssigneeChangedEvent
+import com.wutsi.koki.tax.dto.event.TaxStatusChangedEvent
 import com.wutsi.koki.tax.server.domain.TaxEntity
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.domain.ConfigurationEntity
@@ -62,7 +63,12 @@ class TaxNotificationWorkerTest {
         logger = logger,
     )
 
-    private val tenant = TenantEntity(id = 555L, dateFormat = "dd/MM/yyyy", monetaryFormat = "C\$ #,###,##0.00")
+    private val tenant = TenantEntity(
+        id = 555L,
+        dateFormat = "dd/MM/yyyy",
+        monetaryFormat = "C\$ #,###,##0.00",
+        portalUrl = "https://localhost:8081"
+    )
     private val user = UserEntity(
         id = 111L,
         displayName = "Ray Sponsible",
@@ -71,6 +77,7 @@ class TaxNotificationWorkerTest {
     private val account = AccountEntity(
         id = 777L,
         name = "Roger Milla",
+        email = "roger.milla@gmail.com",
     )
     private val type = TypeEntity(
         id = 999L,
@@ -90,6 +97,14 @@ class TaxNotificationWorkerTest {
         ConfigurationName.TAX_EMAIL_ASSIGNEE_ENABLED to "1",
         ConfigurationName.TAX_EMAIL_ASSIGNEE_SUBJECT to "You have a new task",
         ConfigurationName.TAX_EMAIL_ASSIGNEE_BODY to "Thank you!",
+
+        ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_ENABLED to "1",
+        ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_SUBJECT to "The {{taxFiscalYear}} tax season is started",
+        ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_BODY to "Get ready for the tax season",
+
+        ConfigurationName.TAX_EMAIL_DONE_ENABLED to "1",
+        ConfigurationName.TAX_EMAIL_DONE_SUBJECT to "Your {{taxFiscalYear}} tax return are ready",
+        ConfigurationName.TAX_EMAIL_DONE_BODY to "Thank you for your business"
     )
     private val configurations = config.entries.map { entry ->
         ConfigurationEntity(name = entry.key, value = entry.value)
@@ -226,7 +241,227 @@ class TaxNotificationWorkerTest {
     }
 
     @Test
-    fun `assignee changed - event not supported`() {
+    fun `tax gathering-documents`() {
+        val result = worker.notify(
+            TaxStatusChangedEvent(
+                taxId = tax.id!!,
+                tenantId = tax.tenantId,
+                status = TaxStatus.GATHERING_DOCUMENTS,
+            )
+        )
+
+        assertEquals(true, result)
+
+        val request = argumentCaptor<SendEmailRequest>()
+        verify(emailService).send(request.capture(), eq(tax.tenantId))
+
+        assertEquals(account.email, request.firstValue.recipient.email)
+        assertEquals(account.name, request.firstValue.recipient.displayName)
+        assertEquals(account.id, request.firstValue.recipient.id)
+        assertEquals(ObjectType.ACCOUNT, request.firstValue.recipient.type)
+        assertEquals(config[ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_SUBJECT], request.firstValue.subject)
+        assertEquals(config[ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_BODY], request.firstValue.body)
+        assertEquals(emptyList(), request.firstValue.attachmentFileIds)
+
+        assertEquals(account.name, request.firstValue.data["recipientName"])
+        assertEquals(tax.fiscalYear, request.firstValue.data["taxFiscalYear"])
+        assertEquals(tenant.portalUrl, request.firstValue.data["clientPortalUrl"])
+    }
+
+    @Test
+    fun `tax gathering-documents - notification not enabled`() {
+        doReturn(
+            configurations.filter { config -> config.name != ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_ENABLED }
+        )
+            .whenever(configurationService).search(anyOrNull(), anyOrNull(), anyOrNull())
+
+        val result = worker.notify(
+            TaxStatusChangedEvent(
+                taxId = tax.id!!,
+                tenantId = tax.tenantId,
+                status = TaxStatus.GATHERING_DOCUMENTS,
+            )
+        )
+
+        assertEquals(true, result)
+        verify(emailService, never()).send(any(), any())
+    }
+
+    @Test
+    fun `tax gathering-documents - account without email`() {
+        doReturn(account.copy(email = null)).whenever(accountService).get(anyOrNull(), anyOrNull())
+
+        val result = worker.notify(
+            TaxStatusChangedEvent(
+                taxId = tax.id!!,
+                tenantId = tax.tenantId,
+                status = TaxStatus.GATHERING_DOCUMENTS,
+            )
+        )
+
+        assertEquals(true, result)
+        verify(emailService, never()).send(any(), any())
+    }
+
+    @Test
+    fun `tax gathering-documents - email`() {
+        worker.notify(
+            TaxStatusChangedEvent(
+                taxId = tax.id!!,
+                tenantId = tax.tenantId,
+                status = TaxStatus.GATHERING_DOCUMENTS,
+            )
+        )
+
+        val request = argumentCaptor<SendEmailRequest>()
+        verify(emailService).send(request.capture(), any())
+
+        val body = IOUtils.toString(
+            TaxNotificationWorker::class.java.getResourceAsStream(TenantTaxInitializer.EMAIL_GATHERING_DOCUMENTS_BODY_PATH),
+            "utf-8"
+        )
+        val template = MustacheTemplatingEngine(DefaultMustacheFactory())
+        val xbody = template.apply(body, request.firstValue.data)
+
+        println(xbody)
+    }
+
+    @Test
+    fun `tax done`() {
+        val result = worker.notify(
+            TaxStatusChangedEvent(
+                taxId = tax.id!!,
+                tenantId = tax.tenantId,
+                status = TaxStatus.DONE,
+            )
+        )
+
+        assertEquals(true, result)
+
+        val request = argumentCaptor<SendEmailRequest>()
+        verify(emailService).send(request.capture(), eq(tax.tenantId))
+
+        assertEquals(account.email, request.firstValue.recipient.email)
+        assertEquals(account.name, request.firstValue.recipient.displayName)
+        assertEquals(account.id, request.firstValue.recipient.id)
+        assertEquals(ObjectType.ACCOUNT, request.firstValue.recipient.type)
+        assertEquals(config[ConfigurationName.TAX_EMAIL_DONE_SUBJECT], request.firstValue.subject)
+        assertEquals(config[ConfigurationName.TAX_EMAIL_DONE_BODY], request.firstValue.body)
+        assertEquals(emptyList(), request.firstValue.attachmentFileIds)
+
+        assertEquals(account.name, request.firstValue.data["recipientName"])
+        assertEquals(tax.fiscalYear, request.firstValue.data["taxFiscalYear"])
+        assertEquals(tenant.portalUrl, request.firstValue.data["clientPortalUrl"])
+    }
+
+    @Test
+    fun `tax done - notification not enabled`() {
+        doReturn(
+            configurations.filter { config -> config.name != ConfigurationName.TAX_EMAIL_DONE_ENABLED }
+        )
+            .whenever(configurationService).search(anyOrNull(), anyOrNull(), anyOrNull())
+
+        val result = worker.notify(
+            TaxStatusChangedEvent(
+                taxId = tax.id!!,
+                tenantId = tax.tenantId,
+                status = TaxStatus.DONE,
+            )
+        )
+
+        assertEquals(true, result)
+        verify(emailService, never()).send(any(), any())
+    }
+
+    @Test
+    fun `tax done - account without email`() {
+        doReturn(account.copy(email = null)).whenever(accountService).get(anyOrNull(), anyOrNull())
+
+        val result = worker.notify(
+            TaxStatusChangedEvent(
+                taxId = tax.id!!,
+                tenantId = tax.tenantId,
+                status = TaxStatus.DONE,
+            )
+        )
+
+        assertEquals(true, result)
+        verify(emailService, never()).send(any(), any())
+    }
+
+    @Test
+    fun `tax done - email`() {
+        worker.notify(
+            TaxStatusChangedEvent(
+                taxId = tax.id!!,
+                tenantId = tax.tenantId,
+                status = TaxStatus.DONE,
+            )
+        )
+
+        val request = argumentCaptor<SendEmailRequest>()
+        verify(emailService).send(request.capture(), any())
+
+        val body = IOUtils.toString(
+            TaxNotificationWorker::class.java.getResourceAsStream(TenantTaxInitializer.EMAIL_DONE_BODY_PATH),
+            "utf-8"
+        )
+        val template = MustacheTemplatingEngine(DefaultMustacheFactory())
+        val xbody = template.apply(body, request.firstValue.data)
+
+        println(xbody)
+    }
+
+    @Test
+    fun `tax new`() {
+        doReturn(account.copy(email = null)).whenever(accountService).get(anyOrNull(), anyOrNull())
+
+        val result = worker.notify(
+            TaxStatusChangedEvent(
+                taxId = tax.id!!,
+                tenantId = tax.tenantId,
+                status = TaxStatus.NEW,
+            )
+        )
+
+        assertEquals(true, result)
+        verify(emailService, never()).send(any(), any())
+    }
+
+    @Test
+    fun `tax reviewing`() {
+        doReturn(account.copy(email = null)).whenever(accountService).get(anyOrNull(), anyOrNull())
+
+        val result = worker.notify(
+            TaxStatusChangedEvent(
+                taxId = tax.id!!,
+                tenantId = tax.tenantId,
+                status = TaxStatus.REVIEWING,
+            )
+        )
+
+        assertEquals(true, result)
+        verify(emailService, never()).send(any(), any())
+    }
+
+    @Test
+    fun `tax unknown`() {
+        doReturn(account.copy(email = null)).whenever(accountService).get(anyOrNull(), anyOrNull())
+
+        val result = worker.notify(
+            TaxStatusChangedEvent(
+                taxId = tax.id!!,
+                tenantId = tax.tenantId,
+                status = TaxStatus.UNKNOWN,
+            )
+        )
+
+        assertEquals(true, result)
+        verify(emailService, never()).send(any(), any())
+    }
+
+    @Test
+    fun `event not supported`() {
         val result = worker.notify(FileUploadedEvent())
 
         assertEquals(false, result)

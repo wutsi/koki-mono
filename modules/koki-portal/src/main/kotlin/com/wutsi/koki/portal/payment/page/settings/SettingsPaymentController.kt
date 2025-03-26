@@ -5,7 +5,7 @@ import com.wutsi.koki.payment.dto.PaymentMethodType
 import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
-import com.wutsi.koki.portal.payment.form.PaymentNotificationSettingsForm
+import com.wutsi.koki.portal.payment.form.PaymentNotificationForm
 import com.wutsi.koki.portal.payment.form.PaymentSettingsForm
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.ConfigurationService
@@ -52,7 +52,7 @@ class SettingsPaymentController(
 
         model.addAttribute(
             "notification",
-            PaymentNotificationSettingsForm(
+            PaymentNotificationForm(
                 enabled = configs[ConfigurationName.PAYMENT_EMAIL_ENABLED] != null,
                 subject = configs[ConfigurationName.PAYMENT_EMAIL_SUBJECT],
                 body = configs[ConfigurationName.PAYMENT_EMAIL_BODY],

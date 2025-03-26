@@ -1,6 +1,6 @@
-package com.wutsi.koki.portal.payment.form
+package com.wutsi.koki.portal.invoice.form
 
-data class PaymentNotificationSettingsForm(
+data class InvoiceNotificationForm(
     val enabled: Boolean = false,
     val subject: String? = null,
     val body: String? = null,

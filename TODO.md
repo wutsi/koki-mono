@@ -70,6 +70,7 @@
 
 ## Files
 
+- [] Secure file download (with expiration)
 - [] Make S3 bucket non-public
 - [] Add Metadata to files: id, tenant-id, owner-type, owner-id
 - [] Integrate AI to describe the file
@@ -169,7 +170,11 @@
 
 ## Taxes
 
+- [] Settings: Tax Forms
 - [] Settings: Setup email notification
+    - [x] When task assigned
+    - [] When starting document collection
+    - [] When done
 - [] Taxes KPI
     - [] Time spent by Tax report
     - [] Time spent on Tax report by user
