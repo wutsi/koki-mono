@@ -46,6 +46,30 @@ class SettingsPaymentControllerTest : AbstractPageControllerTest() {
         scrollToBottom()
         click(".btn-notification-enable")
 
+        val request = argumentCaptor<SaveConfigurationRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/configurations"),
+            request.capture(),
+            eq(Any::class.java)
+        )
+        assertEquals("1", request.firstValue.values[ConfigurationName.PAYMENT_EMAIL_ENABLED])
+        assertCurrentPageIs(PageName.PAYMENT_SETTINGS)
+    }
+
+    @Test
+    fun `enable notification not configured`() {
+        disableConfig(
+            listOf(
+                ConfigurationName.PAYMENT_EMAIL_ENABLED,
+                ConfigurationName.PAYMENT_EMAIL_SUBJECT,
+                ConfigurationName.PAYMENT_EMAIL_BODY,
+            )
+        )
+
+        navigateTo("/settings/payments")
+        scrollToBottom()
+        click(".btn-notification-enable")
+
         assertCurrentPageIs(PageName.PAYMENT_SETTINGS_NOTIFICATION)
     }
 
@@ -61,11 +85,7 @@ class SettingsPaymentControllerTest : AbstractPageControllerTest() {
             request.capture(),
             eq(Any::class.java)
         )
-        assertEquals(
-            "",
-            request.firstValue.values[ConfigurationName.PAYMENT_EMAIL_ENABLED]
-        )
-
+        assertEquals("", request.firstValue.values[ConfigurationName.PAYMENT_EMAIL_ENABLED])
         assertCurrentPageIs(PageName.PAYMENT_SETTINGS)
     }
 

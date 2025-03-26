@@ -77,12 +77,4 @@ class SettingsPaymentController(
         service.enable(type, status)
         return "redirect:/settings/payments"
     }
-
-    @GetMapping("/settings/payments/notifications/enable")
-    fun enable(
-        @RequestParam status: Boolean,
-    ): String {
-        service.enable(ConfigurationName.PAYMENT_EMAIL_ENABLED, status)
-        return "redirect:/settings/payments"
-    }
 }

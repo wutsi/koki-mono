@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller()
@@ -23,22 +24,28 @@ class SettingsPaymentNotificationController(
 ) : AbstractPageController() {
     @GetMapping
     fun edit(model: Model): String {
-        val configs = service.configurations(keyword = "payment.")
-        val form = PaymentNotificationForm(
+        return edit(loadForm(), model)
+    }
+
+    private fun loadForm(): PaymentNotificationForm {
+        val configs = service.configurations(
+            names = listOf(
+                ConfigurationName.PAYMENT_EMAIL_SUBJECT,
+                ConfigurationName.PAYMENT_EMAIL_BODY,
+            )
+        )
+        return PaymentNotificationForm(
             subject = configs[ConfigurationName.PAYMENT_EMAIL_SUBJECT],
             body = configs[ConfigurationName.PAYMENT_EMAIL_BODY],
         )
-        return edit(form, model)
     }
 
     private fun edit(form: PaymentNotificationForm, model: Model): String {
         model.addAttribute("form", form)
 
         model.addAttribute(
-            "page",
-            PageModel(
-                name = PageName.PAYMENT_SETTINGS_NOTIFICATION,
-                title = "Payment Notifications"
+            "page", PageModel(
+                name = PageName.PAYMENT_SETTINGS_NOTIFICATION, title = "Payment Notifications"
             )
         )
 
@@ -55,5 +62,19 @@ class SettingsPaymentNotificationController(
             model.addAttribute("error", errorResponse.error.code)
             return edit(form, model)
         }
+    }
+
+    @GetMapping("/enable")
+    fun enable(
+        @RequestParam status: Boolean,
+    ): String {
+        if (status == true) {
+            val form = loadForm()
+            if (form.subject.isNullOrEmpty() || form.body.isNullOrEmpty()) {
+                return "redirect:/settings/payments/notifications"
+            }
+        }
+        service.enable(ConfigurationName.PAYMENT_EMAIL_ENABLED, status)
+        return "redirect:/settings/payments"
     }
 }

@@ -171,10 +171,10 @@
 ## Taxes
 
 - [] Settings: Tax Forms
-- [] Settings: Setup email notification
+- [x] Settings: Setup email notification
     - [x] When task assigned
-    - [] When starting document collection
-    - [] When done
+    - [x] When starting document collection
+    - [x] When done
 - [] Taxes KPI
     - [] Time spent by Tax report
     - [] Time spent on Tax report by user

@@ -29,8 +29,7 @@
                 </td>
                 <td class="padding-right" valign="top">
                     <b class="text-larger margin-right">Cash</b>
-                    <span class="badge text-bg-success" th:if="${form.cash}">Enabled</span>
-                    <span class="badge text-bg-danger" th:if="!${form.cash}">Disabled</span>
+                    <span th:replace="~{__components/settings :: enabled-badge(${form.cash})}"></span>
                 </td>
                 <td align="right">
                     <a class="btn btn-sm btn-light btn-cash-configure"
@@ -58,8 +57,7 @@
                 </td>
                 <td class="padding-right">
                     <b class="text-larger margin-right">Check</b>
-                    <span class="badge text-bg-success" th:if="${form.check}">Enabled</span>
-                    <span class="badge text-bg-danger" th:if="!${form.check}">Disabled</span>
+                    <span th:replace="~{__components/settings :: enabled-badge(${form.check})}"></span>
                 </td>
                 <td align="right">
                     <a class="btn btn-sm btn-light btn-check-configure"
@@ -87,8 +85,7 @@
                 </td>
                 <td class="padding-right">
                     <b class="text-larger margin-right">Interact</b>
-                    <span class="badge text-bg-success" th:if="${form.interac}">Enabled</span>
-                    <span class="badge text-bg-danger" th:if="!${form.interac}">Disabled</span>
+                    <span th:replace="~{__components/settings :: enabled-badge(${form.interac})}"></span>
                 </td>
                 <td align="right">
                     <a class="btn btn-sm btn-light btn-interac-configure"
@@ -117,8 +114,7 @@
                 <td class="padding-right">
                     <div>
                         <b class="text-larger margin-right">Credit Card</b>
-                        <span class="badge text-bg-success" th:if="${form.creditCard}">Enabled</span>
-                        <span class="badge text-bg-danger" th:if="!${form.creditCard}">Disabled</span>
+                        <span th:replace="~{__components/settings :: enabled-badge(${form.creditCard})}"></span>
                     </div>
                     <div th:if="${form.creditCard} AND ${form.creditCardGateway}">
                         <img height="24" src="/image/payment/stripe.png"
@@ -151,8 +147,7 @@
                 </td>
                 <td class="padding-right">
                     <b class="text-larger margin-right">PayPal</b>
-                    <span class="badge text-bg-success" th:if="${form.paypal}">Enabled</span>
-                    <span class="badge text-bg-danger" th:if="!${form.paypal}">Disabled</span>
+                    <span th:replace="~{__components/settings :: enabled-badge(${form.paypal})}"></span>
                 </td>
                 <td align="right">
                     <a class="btn btn-sm btn-light btn-paypal-configure"
@@ -181,8 +176,7 @@
                 <td class="padding-right">
                     <div>
                         <b class="text-larger margin-right">Mobile</b>
-                        <span class="badge text-bg-success" th:if="${form.mobile}">Enabled</span>
-                        <span class="badge text-bg-danger" th:if="!${form.mobile}">Disabled</span>
+                        <span th:replace="~{__components/settings :: enabled-badge(${form.mobile})}"></span>
                     </div>
                     <div th:if="${form.mobile} AND ${form.mobileGateway}">
                         <img height="24" src="/image/payment/flutterwave.png"
@@ -221,8 +215,7 @@
                 <td>
                     <div>
                         <b class="margin-right">When a payment is received</b>
-                        <span class="badge text-bg-success" th:if="${notification.enabled}">Enabled</span>
-                        <span class="badge text-bg-danger" th:if="!${notification.enabled}">Disabled</span>
+                        <span th:replace="~{__components/settings :: enabled-badge(${notification.enabled})}"></span>
                     </div>
                     <div class="text-small margin-left" th:if="${notification.subject}">
                         Subject: <span th:text="${notification.subject}">SUBJECT</span>
@@ -235,7 +228,7 @@
                         Configure
                     </a>
                     <a class="btn btn-sm btn-primary btn-notification-enable"
-                       href="/settings/payments/notifications"
+                       href="/settings/payments/notifications/enable?status=true"
                        th:if="!${notification.enabled}">
                         Enable
                     </a>
