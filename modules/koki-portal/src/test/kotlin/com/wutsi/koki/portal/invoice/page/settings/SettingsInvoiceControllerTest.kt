@@ -46,15 +46,39 @@ class SettingsInvoiceControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun `notification opened`() {
+    fun `notification configure`() {
         navigateTo("/settings/invoices")
-        click(".btn-notification")
+        click(".btn-configure")
         assertCurrentPageIs(PageName.INVOICE_SETTINGS_NOTIFICATION)
     }
 
     @Test
-    fun `enable notification`() {
+    fun `notification enable`() {
         disableConfig(listOf(ConfigurationName.INVOICE_EMAIL_ENABLED))
+
+        navigateTo("/settings/invoices")
+        click(".btn-notification-enable")
+
+        val request = argumentCaptor<SaveConfigurationRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/configurations"),
+            request.capture(),
+            eq(Any::class.java)
+        )
+        assertEquals("1", request.firstValue.values[ConfigurationName.INVOICE_EMAIL_ENABLED])
+
+        assertCurrentPageIs(PageName.INVOICE_SETTINGS)
+    }
+
+    @Test
+    fun `notification enable and configure`() {
+        disableConfig(
+            listOf(
+                ConfigurationName.INVOICE_EMAIL_ENABLED,
+                ConfigurationName.INVOICE_EMAIL_SUBJECT,
+                ConfigurationName.INVOICE_EMAIL_BODY,
+            )
+        )
 
         navigateTo("/settings/invoices")
         click(".btn-notification-enable")
@@ -63,7 +87,7 @@ class SettingsInvoiceControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun `disable notification`() {
+    fun `notification disable`() {
         navigateTo("/settings/invoices")
         click(".btn-notification-disable")
 
@@ -73,10 +97,7 @@ class SettingsInvoiceControllerTest : AbstractPageControllerTest() {
             request.capture(),
             eq(Any::class.java)
         )
-        assertEquals(
-            "",
-            request.firstValue.values[ConfigurationName.INVOICE_EMAIL_ENABLED]
-        )
+        assertEquals("", request.firstValue.values[ConfigurationName.INVOICE_EMAIL_ENABLED])
 
         assertCurrentPageIs(PageName.INVOICE_SETTINGS)
     }

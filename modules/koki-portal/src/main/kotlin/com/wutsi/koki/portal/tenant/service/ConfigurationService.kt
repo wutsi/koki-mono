@@ -5,7 +5,7 @@ import com.wutsi.koki.portal.ai.form.AISettingsForm
 import com.wutsi.koki.portal.email.model.EmailDecoratorForm
 import com.wutsi.koki.portal.email.model.SMTPForm
 import com.wutsi.koki.portal.file.form.StorageForm
-import com.wutsi.koki.portal.invoice.form.InvoiceNotificationSettingsForm
+import com.wutsi.koki.portal.invoice.form.InvoiceNotificationForm
 import com.wutsi.koki.portal.invoice.form.InvoiceSettingsForm
 import com.wutsi.koki.portal.payment.form.PaymentNotificationForm
 import com.wutsi.koki.portal.payment.form.PaymentSettingsCashForm
@@ -88,7 +88,7 @@ ConfigurationService(
         )
     }
 
-    fun save(form: InvoiceNotificationSettingsForm) {
+    fun save(form: InvoiceNotificationForm) {
         koki.save(
             SaveConfigurationRequest(
                 values = mapOf(
