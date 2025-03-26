@@ -10,7 +10,9 @@ import com.wutsi.koki.invoice.server.service.TenantTaxInitializer
 import com.wutsi.koki.notification.server.service.AbstractNotificationWorker
 import com.wutsi.koki.notification.server.service.NotificationConsumer
 import com.wutsi.koki.platform.logger.KVLogger
+import com.wutsi.koki.tax.dto.TaxStatus
 import com.wutsi.koki.tax.dto.event.TaxAssigneeChangedEvent
+import com.wutsi.koki.tax.dto.event.TaxStatusChangedEvent
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import com.wutsi.koki.tenant.server.service.TenantService
@@ -37,12 +39,23 @@ class TaxNotificationWorker(
     override fun notify(event: Any): Boolean {
         if (event is TaxAssigneeChangedEvent) {
             onAssigneeChanged(event)
+        } else if (event is TaxStatusChangedEvent) {
+            onStatusChanged(event)
         } else {
             return false
         }
         return true
     }
 
+    /**
+     * Template variables:
+     * - recipientName
+     * - accountName
+     * - taxFiscalYear
+     * - taxType
+     * - taxUrl
+     * - taxStatus
+     */
     private fun onAssigneeChanged(event: TaxAssigneeChangedEvent) {
         logger.add("event_assignee_id", event.assigneeId)
         logger.add("event_tax_id", event.taxId)
@@ -78,7 +91,7 @@ class TaxNotificationWorker(
         // Account
         val account = accountService.get(tax.accountId, event.tenantId)
 
-        // Data
+        // Send
         val tenant = tenantService.get(event.tenantId)
         emailService.send(
             request = SendEmailRequest(
@@ -106,6 +119,122 @@ class TaxNotificationWorker(
                         LocaleContextHolder.getLocale()
                     ),
                 ).filter { entry -> entry.value != null } as Map<String, Any>
+            ),
+            tenantId = event.tenantId,
+        )
+    }
+
+    private fun onStatusChanged(event: TaxStatusChangedEvent) {
+        logger.add("event_status", event.status)
+        logger.add("event_tax_id", event.taxId)
+        logger.add("event_tenant_id", event.tenantId)
+
+        when (event.status) {
+            TaxStatus.DONE -> onTaxReturnCompleted(event)
+            TaxStatus.GATHERING_DOCUMENTS -> onTaxGatheringDocuments(event)
+            else -> return
+        }
+    }
+
+    /**
+     * Template variables:
+     * - recipientName
+     * - taxFiscalYear
+     * - clientPortalUrl
+     */
+    private fun onTaxReturnCompleted(event: TaxStatusChangedEvent) {
+        // Config
+        val configs = configurationService.search(tenantId = event.tenantId, keyword = "tax.")
+            .map { config -> config.name to config.value }
+            .toMap()
+        if (configs[ConfigurationName.TAX_EMAIL_DONE_ENABLED] == null) {
+            logger.add("email_skipped_reason", "NotificationDisabled")
+            return
+        }
+
+        // Tax
+        val tax = taxService.get(event.taxId, event.tenantId)
+        val account = accountService.get(tax.accountId, tax.tenantId)
+        if (account.email.isNullOrEmpty()) {
+            logger.add("email_skipped_reason", "AccountWithoutEmail")
+            return
+        }
+
+        // Send
+        val tenant = tenantService.get(event.tenantId)
+        emailService.send(
+            request = SendEmailRequest(
+                subject = configs[ConfigurationName.TAX_EMAIL_DONE_SUBJECT]
+                    ?: TenantTaxInitializer.EMAIL_DONE_SUBJECT,
+
+                body = configs[ConfigurationName.TAX_EMAIL_DONE_BODY] ?: "",
+
+                owner = ObjectReference(id = event.taxId, type = ObjectType.TAX),
+
+                recipient = Recipient(
+                    displayName = account.name,
+                    email = account.email!!,
+                    type = ObjectType.ACCOUNT,
+                    id = account.id,
+                ),
+
+                data = mapOf(
+                    "recipientName" to account.name,
+                    "taxFiscalYear" to tax.fiscalYear,
+                    "clientPortalUrl" to tenant.portalUrl,
+                )
+            ),
+            tenantId = event.tenantId
+        )
+    }
+
+    /**
+     * Template variables:
+     * - recipientName
+     * - taxFiscalYear
+     * - clientPortalUrl
+     */
+    private fun onTaxGatheringDocuments(event: TaxStatusChangedEvent) {
+        // Config
+        val configs = configurationService.search(tenantId = event.tenantId, keyword = "tax.")
+            .map { config -> config.name to config.value }
+            .toMap()
+        if (configs[ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_ENABLED] == null) {
+            logger.add("email_skipped_reason", "NotificationDisabled")
+            return
+        }
+
+        // Tax
+        val tax = taxService.get(event.taxId, event.tenantId)
+        val account = accountService.get(tax.accountId, tax.tenantId)
+        if (account.email.isNullOrEmpty()) {
+            logger.add("email_skipped_reason", "AccountWithoutEmail")
+            return
+        }
+
+        // Send
+        val tenant = tenantService.get(event.tenantId)
+        emailService.send(
+            request = SendEmailRequest(
+                subject = configs[ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_SUBJECT]
+                    ?: TenantTaxInitializer.EMAIL_GATHERING_DOCUMENTS_SUBJECT,
+
+                body = configs[ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_BODY] ?: "",
+
+                owner = ObjectReference(id = event.taxId, type = ObjectType.TAX),
+
+                recipient = Recipient(
+                    displayName = account.name,
+                    email = account.email!!,
+                    type = ObjectType.ACCOUNT,
+                    id = account.id,
+                ),
+
+                data = mapOf(
+                    "recipientName" to account.name,
+                    "taxFiscalYear" to tax.fiscalYear,
+                    "clientPortalUrl" to tenant.portalUrl,
+                )
             ),
             tenantId = event.tenantId
         )

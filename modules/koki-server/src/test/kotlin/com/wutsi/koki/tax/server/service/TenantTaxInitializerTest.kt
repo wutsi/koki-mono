@@ -41,7 +41,7 @@ class TenantTaxInitializerTest {
         initializer.init(tenantId)
 
         val request = argumentCaptor<SaveConfigurationRequest>()
-        verify(configurationService, times(3)).save(request.capture(), eq(tenantId))
+        verify(configurationService, times(9)).save(request.capture(), eq(tenantId))
 
         assertEquals(
             "1",
@@ -54,6 +54,32 @@ class TenantTaxInitializerTest {
         assertEquals(
             getContent(TenantTaxInitializer.EMAIL_ASSIGNEE_BODY_PATH),
             request.allValues[2].values[ConfigurationName.TAX_EMAIL_ASSIGNEE_BODY]
+        )
+
+        assertEquals(
+            "1",
+            request.allValues[3].values[ConfigurationName.TAX_EMAIL_DONE_ENABLED]
+        )
+        assertEquals(
+            TenantTaxInitializer.EMAIL_DONE_SUBJECT,
+            request.allValues[4].values[ConfigurationName.TAX_EMAIL_DONE_SUBJECT]
+        )
+        assertEquals(
+            getContent(TenantTaxInitializer.EMAIL_DONE_BODY_PATH),
+            request.allValues[5].values[ConfigurationName.TAX_EMAIL_DONE_BODY]
+        )
+
+        assertEquals(
+            "1",
+            request.allValues[6].values[ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_ENABLED]
+        )
+        assertEquals(
+            TenantTaxInitializer.EMAIL_GATHERING_DOCUMENTS_SUBJECT,
+            request.allValues[7].values[ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_SUBJECT]
+        )
+        assertEquals(
+            getContent(TenantTaxInitializer.EMAIL_GATHERING_DOCUMENTS_BODY_PATH),
+            request.allValues[8].values[ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_BODY]
         )
     }
 

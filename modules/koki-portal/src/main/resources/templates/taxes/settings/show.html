@@ -17,10 +17,14 @@
 
         <table class="table table-striped border-light">
             <tr>
+                <td colspan="2">
+                    <h4>General Settings</h4>
+                </td>
+            </tr>
+            <tr>
                 <td>
                     <b class="margin-right">AI Assistant</b>
-                    <span class="badge text-bg-success" th:if="${aiAgent.enabled}">Enabled</span>
-                    <span class="badge text-bg-danger" th:if="!${aiAgent.enabled}">Disabled</span>
+                    <div th:replace="~{__components/settings :: enabled-badge(${aiAgent.enabled})}"></div>
                 </td>
                 <td align="right">
                     <a class="btn btn-sm btn-primary btn-agent-enable"
@@ -36,17 +40,109 @@
                 </td>
             </tr>
         </table>
+
+        <p>&nbsp;</p>
+
+        <table class="table table-striped border-light">
+            <tr>
+                <td colspan="2">
+                    <h4>Email Notifications</h4>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <b class="margin-right" th:text="#{tax-notification.assigned.title}">TITLE</b>
+                        <span
+                            th:replace="~{__components/settings :: enabled-badge(${assigneeNotification.enabled})}"></span>
+                    </div>
+                    <div th:if="${assigneeNotification.subject}">
+                        Subject: <span th:text="${assigneeNotification.subject}">SUBJECT</span>
+                    </div>
+                </td>
+                <td align="right">
+                    <a class="btn btn-sm btn-light btn-assignee-configure"
+                       href="/settings/taxes/notifications?type=assignee"
+                       th:if="${assigneeNotification.enabled}">
+                        Configure
+                    </a>
+                    <a class="btn btn-sm btn-primary btn-assignee-enable"
+                       href="/settings/taxes/notifications/enable?status=true&type=assignee"
+                       th:if="!${assigneeNotification.enabled}">
+                        Enable
+                    </a>
+                    <a class="btn btn-sm btn-danger btn-assignee-disable"
+                       href="/settings/taxes/notifications/enable?status=false&type=assignee"
+                       th:if="${assigneeNotification.enabled}">
+                        Disable
+                    </a>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <b class="margin-right" th:text="#{tax-notification.document.title}">TITLE</b>
+                        <span
+                            th:replace="~{__components/settings :: enabled-badge(${documentNotification.enabled})}"></span>
+                    </div>
+                    <div th:if="${documentNotification.subject}">
+                        Subject: <span th:text="${documentNotification.subject}">SUBJECT</span>
+                    </div>
+                </td>
+                <td align="right">
+                    <a class="btn btn-sm btn-light btn-document-configure"
+                       href="/settings/taxes/notifications?type=document"
+                       th:if="${documentNotification.enabled}">
+                        Configure
+                    </a>
+                    <a class="btn btn-sm btn-primary btn-document-enable"
+                       href="/settings/taxes/notifications/enable?status=true&type=document"
+                       th:if="!${documentNotification.enabled}">
+                        Enable
+                    </a>
+                    <a class="btn btn-sm btn-danger btn-document-disable"
+                       href="/settings/taxes/notifications/enable?status=false&type=document"
+                       th:if="${documentNotification.enabled}">
+                        Disable
+                    </a>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <b class="margin-right" th:text="#{tax-notification.done.title}">TITLE</b>
+                        <span
+                            th:replace="~{__components/settings :: enabled-badge(${doneNotification.enabled})}"></span>
+                    </div>
+                    <div th:if="${doneNotification.subject}">
+                        Subject: <span th:text="${doneNotification.subject}">SUBJECT</span>
+                    </div>
+                </td>
+                <td align="right">
+                    <a class="btn btn-sm btn-light btn-done-configure"
+                       href="/settings/taxes/notifications?type=done"
+                       th:if="!${doneNotification.enabled}">
+                        Configure
+                    </a>
+                    <a class="btn btn-sm btn-primary btn-done-enable"
+                       href="/settings/taxes/notifications/enable?status=true&type=done"
+                       th:if="!${doneNotification.enabled}">
+                        Enable
+                    </a>
+                    <a class="btn btn-sm btn-danger btn-done-disable"
+                       href="/settings/taxes/notifications/enable?status=false&type=done"
+                       th:if="${doneNotification.enabled}">
+                        Disable
+                    </a>
+                </td>
+            </tr>
+        </table>
     </div>
 
-    </div>
 </div>
-
-<script>
-    function on_submit() {
-        document.getElementById('btn-submit').disabled = true;
-        return true
-    }
-</script>
 
 </body>
 </html>

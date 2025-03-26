@@ -5,6 +5,7 @@ import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tax.form.TaxAIAgentForm
+import com.wutsi.koki.portal.tax.form.TaxNotificationForm
 import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import org.springframework.stereotype.Controller
@@ -23,6 +24,12 @@ class SettingsTaxController(
             names = listOf(
                 ConfigurationName.AI_MODEL,
                 ConfigurationName.TAX_AI_AGENT_ENABLED,
+                ConfigurationName.TAX_EMAIL_ASSIGNEE_ENABLED,
+                ConfigurationName.TAX_EMAIL_ASSIGNEE_SUBJECT,
+                ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_ENABLED,
+                ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_SUBJECT,
+                ConfigurationName.TAX_EMAIL_DONE_ENABLED,
+                ConfigurationName.TAX_EMAIL_DONE_SUBJECT,
             )
         )
         model.addAttribute(
@@ -30,6 +37,27 @@ class SettingsTaxController(
             TaxAIAgentForm(
                 aiModel = configs[ConfigurationName.AI_MODEL],
                 enabled = configs[ConfigurationName.TAX_AI_AGENT_ENABLED] != null,
+            )
+        )
+        model.addAttribute(
+            "assigneeNotification",
+            TaxNotificationForm(
+                enabled = configs[ConfigurationName.TAX_EMAIL_ASSIGNEE_ENABLED] != null,
+                subject = configs[ConfigurationName.TAX_EMAIL_ASSIGNEE_SUBJECT],
+            )
+        )
+        model.addAttribute(
+            "documentNotification",
+            TaxNotificationForm(
+                enabled = configs[ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_ENABLED] != null,
+                subject = configs[ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_SUBJECT],
+            )
+        )
+        model.addAttribute(
+            "doneNotification",
+            TaxNotificationForm(
+                enabled = configs[ConfigurationName.TAX_EMAIL_DONE_ENABLED] != null,
+                subject = configs[ConfigurationName.TAX_EMAIL_DONE_SUBJECT],
             )
         )
 

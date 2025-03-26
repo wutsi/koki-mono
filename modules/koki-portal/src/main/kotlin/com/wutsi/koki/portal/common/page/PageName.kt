@@ -98,4 +98,5 @@ object PageName {
     const val TAX_ASSIGNEE = "page.tax.assignee"
     const val TAX_STATUS = "page.tax.status"
     const val TAX_SETTINGS = "page.tax.settings"
+    const val TAX_SETTINGS_NOTIFICATION = "page.tax.settings.notification"
 }

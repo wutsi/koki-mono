@@ -53,6 +53,15 @@ object TenantFixtures {
         ConfigurationName.STORAGE_S3_ACCESS_KEY to "ACC-f000ffff-340430-490109",
 
         ConfigurationName.TAX_AI_AGENT_ENABLED to "1",
+        ConfigurationName.TAX_EMAIL_ASSIGNEE_ENABLED to "1",
+        ConfigurationName.TAX_EMAIL_ASSIGNEE_SUBJECT to "You have a new task",
+        ConfigurationName.TAX_EMAIL_ASSIGNEE_BODY to "You have a new task assigned to you",
+        ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_ENABLED to "1",
+//        ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_SUBJECT to "The tax season has started",
+//        ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_BODY to "<p>Get ready for the {{taxFiscalYear}} season</p>",
+        ConfigurationName.TAX_EMAIL_DONE_ENABLED to "1",
+        ConfigurationName.TAX_EMAIL_DONE_SUBJECT to "The tax season has started",
+        ConfigurationName.TAX_EMAIL_DONE_BODY to "<p>Get ready for the {{taxFiscalYear}} season</p>",
     )
 
     // Tenants
