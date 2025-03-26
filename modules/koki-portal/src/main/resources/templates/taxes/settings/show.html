@@ -124,7 +124,7 @@
                 <td align="right">
                     <a class="btn btn-sm btn-light btn-done-configure"
                        href="/settings/taxes/notifications?type=done"
-                       th:if="!${doneNotification.enabled}">
+                       th:if="${doneNotification.enabled}">
                         Configure
                     </a>
                     <a class="btn btn-sm btn-primary btn-done-enable"
