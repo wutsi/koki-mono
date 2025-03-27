@@ -39,26 +39,27 @@
     </repositories>
 
     <properties>
-        <jacoco.threshold.line>0.74</jacoco.threshold.line>
-        <jacoco.threshold.class>0.74</jacoco.threshold.class>
+        <jacoco.threshold.line>0.86</jacoco.threshold.line>
+        <jacoco.threshold.class>0.86</jacoco.threshold.class>
     </properties>
 
     <dependencies>
+        <!--
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-core</artifactId>
             <version>${aws.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-s3</artifactId>
-            <version>${aws.version}</version>
-        </dependency>
-
+        -->
         <dependency>
             <groupId>com.wutsi.koki</groupId>
             <artifactId>koki-dto</artifactId>
             <version>${wutsi-dto.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.wutsi.koki</groupId>
+            <artifactId>koki-platform</artifactId>
+            <version>${wutsi-platform.version}</version>
         </dependency>
 
         <!-- SPRING -->
