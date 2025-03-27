@@ -89,7 +89,7 @@
 - [] Change URL of checkout page to "hide" the invoice ID
 - [] Invoice Widget
 - [x] Add locale to invoice
-- [x] Update amount due on successfull payment
+- [x] Update amount due on successful payment
 - [x] Download invoices
 - [x] Send invoice manually via email
 - [x] Send invoice by email when approved
