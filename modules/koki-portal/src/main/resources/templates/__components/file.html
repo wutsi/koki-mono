@@ -15,7 +15,7 @@
                   th:each="label : ${file.labels}"
                   th:text="${label.displayName}"
             >LABEL</span>
-            <span th:href="'/files/' + ${file.id} + '/download'" th:text="${file.name}">NAME</span>
+            <a th:href="'/files/' + ${file.id} + '/download'" th:text="${file.name}">NAME</a>
         </a>
     </td>
     <td th:text="${file.contentLengthText}">SIZE</td>

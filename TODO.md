@@ -70,10 +70,9 @@
 
 ## Files
 
-- [] Secure file download (with expiration)
-- [] Make S3 bucket non-public
+- [x] Make S3 bucket non-public
 - [] Add Metadata to files: id, tenant-id, owner-type, owner-id
-- [] Integrate AI to describe the file
+- [x] Integrate AI to describe the file
 - [x] Validate S3 configuration
 - [x] Settings: Configure storage type: S3, Local
 - [x] Apply RBAC security on UI
