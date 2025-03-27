@@ -28,47 +28,11 @@
             <version>${wutsi-dto.version}</version>
         </dependency>
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.spullara.mustache.java</groupId>
-            <artifactId>compiler</artifactId>
-            <version>${mustache.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.rabbitmq</groupId>
-            <artifactId>amqp-client</artifactId>
-            <version>${amqp-client.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-s3</artifactId>
-            <version>${aws.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${commons-lang3.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.vladmihalcea</groupId>
-            <artifactId>hibernate-types-60</artifactId>
-            <version>${hibernate-types-60.version}</version>
+            <groupId>com.wutsi.koki</groupId>
+            <artifactId>koki-platform</artifactId>
+            <version>${wutsi-platform.version}</version>
         </dependency>
 
-
-        <dependency>
-            <groupId>au.com.flyingkite</groupId>
-            <artifactId>mobiledetect</artifactId>
-            <version>${mobiledetect.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.googlecode.libphonenumber</groupId>
-            <artifactId>libphonenumber</artifactId>
-            <version>${libphonenumber.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
