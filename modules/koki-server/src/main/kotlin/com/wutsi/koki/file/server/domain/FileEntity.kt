@@ -41,6 +41,8 @@ data class FileEntity(
     var modifiedAt: Date = Date(),
     var deletedAt: Date? = null,
     var description: String? = null,
+    var language: String? = null,
+    var numberOfPages: Int? = null,
 
     @ManyToMany
     @JoinTable(

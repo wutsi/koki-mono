@@ -1,4 +1,4 @@
-package com.wutsi.koki.file.server.service.info
+package com.wutsi.koki.file.server.service.extractor
 
 import com.wutsi.koki.file.server.service.FileInfo
 import com.wutsi.koki.file.server.service.FileInfoExtractor
@@ -12,17 +12,14 @@ import java.io.FileInputStream
 class DOCInfoExtractor(
     private val languageDetector: LanguageDetector
 ) : FileInfoExtractor {
-
     override fun extract(file: File): FileInfo {
         val input = FileInputStream(file)
         input.use {
             val doc = HWPFDocument(input)
-            doc.get
             return FileInfo(
-                numberOfPages = doc.pa,
+                numberOfPages = null,
                 language = languageDetector.detect(doc.text).language
             )
-
         }
     }
 }

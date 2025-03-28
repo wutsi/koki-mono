@@ -52,7 +52,7 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
     override fun setUp() {
         super.setUp()
 
-        doReturn(messagingService).whenever(messagingServiceBuilder).build(any(), any())
+        doReturn(messagingService).whenever(messagingServiceBuilder).build(any())
         doReturn("xxxx").whenever(messagingService).send(any())
     }
 

@@ -1,6 +1,5 @@
 package com.wutsi.koki.invoice.server.endpoint
 
-import com.ibm.icu.text.SimpleDateFormat
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.invoice.dto.CreateInvoiceRequest
 import com.wutsi.koki.invoice.dto.CreateInvoiceResponse
@@ -16,10 +15,10 @@ import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import org.apache.commons.lang3.time.DateUtils
-import org.bouncycastle.oer.OERDefinition.seq
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
+import java.text.SimpleDateFormat
 import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -17,9 +17,7 @@ import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.messaging.Message
 import com.wutsi.koki.platform.messaging.MessagingException
 import com.wutsi.koki.platform.messaging.MessagingNotConfiguredException
-import com.wutsi.koki.platform.messaging.MessagingService
 import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
-import com.wutsi.koki.platform.messaging.MessagingType
 import com.wutsi.koki.platform.messaging.Party
 import com.wutsi.koki.platform.messaging.smtp.SMTPMessagingServiceBuilder
 import com.wutsi.koki.platform.messaging.smtp.SMTPType
@@ -171,7 +169,7 @@ class EmailService(
                     )
                 }
 
-                createMessagingService(config).send(message)
+                messagingServiceBuilder.build(config).send(message)
                 logger.add("email_sent", true)
                 logger.add("email_address", request.recipient.email)
                 return email
@@ -256,10 +254,6 @@ class EmailService(
                 LOGGER.warn("Unable to delete ${file.absolutePath}", ex)
             }
         }
-    }
-
-    private fun createMessagingService(config: Map<String, String>): MessagingService {
-        return messagingServiceBuilder.build(MessagingType.EMAIL, config)
     }
 
     private fun toSummary(html: String): String {

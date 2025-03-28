@@ -11,14 +11,15 @@ import com.wutsi.koki.file.server.domain.FileOwnerEntity
 import com.wutsi.koki.file.server.domain.LabelEntity
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
-import com.wutsi.koki.platform.storage.StorageType
 import com.wutsi.koki.security.server.service.SecurityService
-import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import jakarta.persistence.EntityManager
+import org.apache.poi.hssf.usermodel.HeaderFooter.file
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
+import java.io.File
+import java.io.FileOutputStream
 import java.io.InputStream
 import java.net.URL
 import java.net.URLEncoder
@@ -33,6 +34,7 @@ class FileService(
     private val configurationService: ConfigurationService,
     private val securityService: SecurityService,
     private val labelService: LabelService,
+    private val extractorProvider: FileInfoExtractorProvider,
     private val em: EntityManager,
 ) {
     fun get(id: Long, tenantId: Long): FileEntity {
@@ -207,8 +209,9 @@ class FileService(
     }
 
     @Transactional
-    fun save(files: List<FileEntity>) {
-        dao.saveAll(files)
+    fun save(file: FileEntity) {
+        file.modifiedAt = Date()
+        dao.save(file)
     }
 
     @Transactional
@@ -245,14 +248,19 @@ class FileService(
         return path.toString()
     }
 
+    private fun download(entity: FileEntity): File {
+        val file = File.createTempFile("file-${entity.id}", "tmp")
+        val output = FileOutputStream(file)
+        output.use {
+            getStorageService(entity.tenantId).get(URL(entity.url), output)
+        }
+        return file
+    }
+
     private fun getStorageService(tenantId: Long): StorageService {
         val configs = configurationService.search(
             tenantId = tenantId, keyword = "storage."
         ).map { config -> config.name to config.value }.toMap()
-
-        val type = configs.get(ConfigurationName.STORAGE_TYPE)?.let { value -> StorageType.valueOf(value.uppercase()) }
-            ?: StorageType.KOKI
-
-        return storageBuilder.build(type, configs)
+        return storageBuilder.build(configs)
     }
 }

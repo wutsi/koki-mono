@@ -19,6 +19,7 @@
         </a>
     </td>
     <td th:text="${file.contentLengthText}">SIZE</td>
+    <td th:text="${file.languageText}">LANGUAGE</td>
     <td>
         <span th:if="${file.createdBy}" th:text="${file.createdBy.displayName}">CREATED</span>
     </td>
@@ -34,7 +35,7 @@
 </tr>
 
 <tr id="file-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
-    <td class="text-center" colspan="6">
+    <td class="text-center" colspan="7">
         <a href="javascript: koki_load_more('file-load-more')" th:data-url="${moreUrl}">Load more...</a>
     </td>
 </tr>

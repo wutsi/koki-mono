@@ -141,6 +141,7 @@ logging:
         com.icegreen.greenmail.smtp.SmtpManager: ERROR
         org.springframework: INFO
         org.hibernate: ERROR
+        org.apache.poi: ERROR
         org.hibernate.engine.jdbc.spi.SqlExceptionHelper: OFF
         com.wutsi: DEBUG
         springfox: ERROR
@@ -199,6 +200,13 @@ koki:
                 consumer-delay-seconds: 1
                 queue: koki-ai-queue
                 dlq: koki-ai-dlq
+                dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
+
+        file:
+            mq:
+                consumer-delay-seconds: 1
+                queue: koki-file-queue
+                dlq: koki-file-dlq
                 dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
 
         invoice:

@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.Scheduled
 
 @Configuration
-class FileConfiguration (
+class FileMQConfiguration(
     private val invoiceConsumer: FileConsumer,
     channel: Channel,
     objectMapper: ObjectMapper,
