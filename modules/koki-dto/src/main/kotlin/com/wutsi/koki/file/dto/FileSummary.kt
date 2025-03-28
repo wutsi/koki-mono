@@ -11,5 +11,7 @@ data class FileSummary(
     val contentLength: Long = -1,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
+    val language: String? = null,
+    val numberOfPages: Int? = null,
     val labels: List<LabelSummary> = emptyList(),
 )
