@@ -16,7 +16,6 @@ import com.rabbitmq.client.Envelope
 import com.rabbitmq.client.GetResponse
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
-import com.wutsi.koki.platform.storage.StorageType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
@@ -54,7 +53,7 @@ class RabbitMQPublisherTest {
 
         doReturn(body.toByteArray()).whenever(response).body
 
-        doReturn(storage).whenever(storageBuilder).build(eq(StorageType.KOKI), any())
+        doReturn(storage).whenever(storageBuilder).default()
     }
 
     @Test
@@ -144,7 +143,7 @@ class RabbitMQPublisherTest {
 
     @Test
     fun `process DLQ - expired - storage error`() {
-        doThrow(IllegalStateException::class).whenever(storageBuilder).build(any(), anyOrNull())
+        doThrow(IllegalStateException::class).whenever(storageBuilder).default()
 
         doReturn("text/plain").whenever(properties).contentType
         doReturn(mapOf("x-retries" to (maxRetries + 1))).whenever(properties).headers

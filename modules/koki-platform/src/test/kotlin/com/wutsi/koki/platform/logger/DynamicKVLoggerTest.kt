@@ -87,6 +87,11 @@ class DynamicKVLoggerTest {
     fun noLogger() {
         RequestContextHolder.resetRequestAttributes()
         kv.add("foo", "bar")
+        kv.add("foo", 11L)
+        kv.add("foo", 11.0)
+        kv.add("foo", Optional.of(11))
+        kv.add("foo", listOf(11))
+        kv.add("foo", Object())
 
         verify(delegate, never()).add(any(), any<String>())
     }

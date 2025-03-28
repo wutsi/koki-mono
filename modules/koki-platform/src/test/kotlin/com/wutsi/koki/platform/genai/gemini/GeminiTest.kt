@@ -7,9 +7,6 @@ import com.wutsi.koki.platform.ai.genai.Message
 import com.wutsi.koki.platform.ai.genai.Role
 import org.springframework.http.MediaType
 import org.springframework.web.client.RestTemplate
-import java.io.ByteArrayInputStream
-import java.io.InputStream
-import java.net.URL
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -110,7 +107,7 @@ class GeminiTest {
                         text = "Can you summarize in 500 word the content of this document",
                         document = Document(
                             contentType = MediaType.APPLICATION_PDF,
-                            content = downloadDocument("https://discovery.ucl.ac.uk/id/eprint/10089234/1/343019_3_art_0_py4t4l_convrt.pdf")
+                            content = GeminiTest::class.java.getResourceAsStream("/file/document-en.pdf")!!
                         )
                     )
                 )
@@ -131,7 +128,7 @@ class GeminiTest {
                         """.trimIndent(),
                         document = Document(
                             contentType = MediaType.IMAGE_JPEG,
-                            content = downloadDocument("https://as1.ftcdn.net/v2/jpg/04/06/03/36/1000_F_406033645_AcLheutjL6TN3LcR0kIEeL5XyJCLcgEc.jpg")
+                            content = GeminiTest::class.java.getResourceAsStream("/file/document.jpg")!!
                         )
                     ),
                 ),
@@ -142,16 +139,5 @@ class GeminiTest {
         )
         println("${response.messages.size} message(s)")
         response.messages.forEach { message -> println(message.text) }
-    }
-
-    private fun downloadDocument(url: String): ByteArrayInputStream {
-        println("Downloading...")
-        val inputStream: InputStream = URL(url).openStream()
-        inputStream.use {
-            val result = inputStream.readAllBytes()
-
-            println("Downloaded...")
-            return ByteArrayInputStream(result)
-        }
     }
 }

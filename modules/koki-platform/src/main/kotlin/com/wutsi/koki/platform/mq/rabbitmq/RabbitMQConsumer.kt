@@ -33,6 +33,10 @@ class RabbitMQConsumer(
             val payload = extractPayload(event, logger)
             if (delegate.consume(payload)) {
                 logger.add("rabbitmq_consumer_tag", consumerTag)
+                logger.add("rabbitmq_exchange", envelope.exchange)
+                logger.add("rabbitmq_routing_key", envelope.routingKey)
+                logger.add("rabbitmq_consumer_class", delegate::class.java.name)
+                logger.add("rabbitmq_payload_class", payload::class.java.name)
             }
             channel.basicAck(envelope.deliveryTag, false)
         } catch (ex: Exception) {

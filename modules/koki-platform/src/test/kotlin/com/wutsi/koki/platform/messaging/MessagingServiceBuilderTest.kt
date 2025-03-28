@@ -23,7 +23,7 @@ class MessagingServiceBuilderTest {
 
     @Test
     fun `SMTP messaging`() {
-        val messaging = builder.build(MessagingType.EMAIL, config)
+        val messaging = builder.build(config)
         assertEquals(smtp, messaging)
     }
 }

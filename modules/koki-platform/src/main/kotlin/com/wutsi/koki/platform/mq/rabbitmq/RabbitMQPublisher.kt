@@ -7,7 +7,6 @@ import com.rabbitmq.client.GetResponse
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
-import com.wutsi.koki.platform.storage.StorageType
 import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
 import java.nio.charset.Charset
@@ -63,7 +62,9 @@ class RabbitMQPublisher(
                 }
             }
         } finally {
-            LOGGER.info("DLQ=$dlq - $processed message(s) processed, $expired message(s) expired")
+            if (processed > 0 || expired > 0) {
+                LOGGER.info("DLQ=$dlq - $processed message(s) processed, $expired message(s) expired")
+            }
         }
     }
 
@@ -112,6 +113,6 @@ class RabbitMQPublisher(
     }
 
     private fun getStorageService(): StorageService {
-        return storageBuilder.build(StorageType.KOKI, emptyMap())
+        return storageBuilder.default()
     }
 }

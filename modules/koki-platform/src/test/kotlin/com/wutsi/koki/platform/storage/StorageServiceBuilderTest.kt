@@ -8,6 +8,7 @@ import com.wutsi.koki.platform.storage.local.LocalStorageService
 import com.wutsi.koki.platform.storage.local.LocalStorageServiceBuilder
 import com.wutsi.koki.platform.storage.s3.S3StorageService
 import com.wutsi.koki.platform.storage.s3.S3StorageServiceBuilder
+import com.wutsi.koki.tenant.dto.ConfigurationName
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import kotlin.test.Test
@@ -38,19 +39,25 @@ class StorageServiceBuilderTest {
 
     @Test
     fun `local storage`() {
-        val storage = builder.build(StorageType.LOCAL, emptyMap())
+        val storage = builder.build(mapOf(ConfigurationName.STORAGE_TYPE to "LOCAL"))
         assertEquals(local, storage)
     }
 
     @Test
     fun `s3 storage`() {
-        val storage = builder.build(StorageType.S3, emptyMap())
+        val storage = builder.build(mapOf(ConfigurationName.STORAGE_TYPE to "S3"))
         assertEquals(s3, storage)
     }
 
     @Test
     fun `koki storage`() {
-        val storage = builder.build(StorageType.KOKI, emptyMap())
+        val storage = builder.build(mapOf(ConfigurationName.STORAGE_TYPE to "KOKI"))
+        assertEquals(koki, storage)
+    }
+
+    @Test
+    fun `default storage`() {
+        val storage = builder.default()
         assertEquals(koki, storage)
     }
 }
