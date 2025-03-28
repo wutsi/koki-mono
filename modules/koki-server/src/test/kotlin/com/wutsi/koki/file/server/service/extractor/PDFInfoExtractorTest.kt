@@ -1,4 +1,4 @@
-package com.wutsi.koki.file.server.service.info
+package com.wutsi.koki.file.server.service.extractor
 
 import org.apache.tika.language.detect.LanguageDetector
 import org.junit.jupiter.api.Assertions.assertEquals

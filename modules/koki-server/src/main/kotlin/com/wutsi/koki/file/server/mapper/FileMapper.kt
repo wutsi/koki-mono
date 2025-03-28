@@ -20,6 +20,8 @@ class FileMapper {
             createdById = entity.createdById,
             modifiedAt = entity.modifiedAt,
             description = entity.description,
+            language = entity.language,
+            numberOfPages = entity.numberOfPages,
             labels = entity.labels.map { label -> toLabelSummary(label) }
         )
     }
@@ -34,6 +36,8 @@ class FileMapper {
             createdAt = entity.createdAt,
             createdById = entity.createdById,
             modifiedAt = entity.modifiedAt,
+            language = entity.language,
+            numberOfPages = entity.numberOfPages,
             labels = labels[entity.id]?.let { items ->
                 items.map { label -> toLabelSummary(label) }
             } ?: emptyList()

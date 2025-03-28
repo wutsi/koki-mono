@@ -1,4 +1,4 @@
-package com.wutsi.koki.file.server.service.info
+package com.wutsi.koki.file.server.service.extractor
 
 import com.wutsi.koki.file.server.service.FileInfo
 import com.wutsi.koki.file.server.service.FileInfoExtractor

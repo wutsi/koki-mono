@@ -7,12 +7,12 @@ import kotlin.test.Test
 
 class DOCInfoExtractorTest {
     private val languageDetector = LanguageDetector.getDefaultLanguageDetector().loadModels()
-    private val extractor = DOCInfoExtractor(languageDetector)
+    private val extractor = TXTInfoExtractor(languageDetector)
 
     @Test
     fun fr() {
         // GIVEN
-        val uri = PDFInfoExtractorTest::class.java.getResource("/file/document-fr.doc")!!.toURI()
+        val uri = PDFInfoExtractorTest::class.java.getResource("/file/document-fr.txt")!!.toURI()
         val file = File(uri)
 
         // WHEN

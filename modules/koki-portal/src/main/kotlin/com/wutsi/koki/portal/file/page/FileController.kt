@@ -2,12 +2,10 @@ package com.wutsi.koki.portal.file.page
 
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
-import com.wutsi.koki.platform.storage.StorageType
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.file.service.FileService
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.ConfigurationService
-import com.wutsi.koki.tenant.dto.ConfigurationName
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.ContentDisposition
 import org.springframework.http.HttpHeaders
@@ -78,12 +76,6 @@ class FileController(
 
     private fun getStorageService(): StorageService {
         val configs = configurationService.configurations(keyword = "storage.")
-        val type = try {
-            configs[ConfigurationName.STORAGE_TYPE]?.let { type -> StorageType.valueOf(type.uppercase()) }
-        } catch (ex: Exception) {
-            null
-        }
-
-        return storageServiceBuilder.build((type ?: StorageType.KOKI), configs)
+        return storageServiceBuilder.build(configs)
     }
 }

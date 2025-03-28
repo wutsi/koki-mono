@@ -21,6 +21,9 @@ data class FileModel(
     val modifiedAtText: String = "",
     val description: String? = null,
     val extension: String = "",
+    val language: String? = null,
+    val languageText: String? = null,
+    val numberOfPages: Int? = null,
     val labels: List<LabelModel> = emptyList()
 ) {
     fun buildViewUrl(returnUrl: String?): String {

@@ -7,8 +7,10 @@ CREATE TABLE T_FILE(
 
   name                    VARCHAR(100) NOT NULL,
   description             TEXT,
-  content_type            VARCHAR(100) NOT NULL,
+  content_type            VARCHAR(255) NOT NULL,
   content_length          LONG NOT NULL,
+  language                VARCHAR(2),
+  number_of_pages         INT,
   url                     TEXT NOT NULL,
   deleted                 BOOL NOT NULL DEFAULT false,
   created_at              DATETIME NOT NULL DEFAULT NOW(),

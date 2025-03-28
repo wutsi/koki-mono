@@ -48,6 +48,11 @@ koki:
                 consumer-delay-seconds: 60
                 dlq-cron: "0 */15 * * * *"  # Every 15 mins
 
+        file:
+            mq:
+                consumer-delay-seconds: 60
+                dlq-cron: "0 */15 * * * *"  # Every 15 mins
+
         invoice:
             mq:
                 consumer-delay-seconds: 60

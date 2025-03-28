@@ -1,6 +1,5 @@
 package com.wutsi.koki.employee.server.endpoint
 
-import com.ibm.icu.text.SimpleDateFormat
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.employee.dto.CreateEmployeeRequest
 import com.wutsi.koki.employee.dto.CreateEmployeeResponse
@@ -15,6 +14,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
+import java.text.SimpleDateFormat
 import java.util.Date
 import kotlin.test.assertEquals
 

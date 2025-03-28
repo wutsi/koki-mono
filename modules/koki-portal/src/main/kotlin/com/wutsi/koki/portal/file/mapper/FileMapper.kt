@@ -12,6 +12,7 @@ import org.apache.commons.io.FilenameUtils
 import org.springframework.stereotype.Service
 import java.text.DecimalFormat
 import java.text.StringCharacterIterator
+import java.util.Locale
 
 @Service
 class FileMapper(private val moment: Moment) : TenantAwareMapper() {
@@ -34,6 +35,9 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
             extension = FilenameUtils.getExtension(entity.name).lowercase(),
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.modifiedAt),
+            numberOfPages = entity.numberOfPages,
+            language = entity.language,
+            languageText = entity.language?.let { lang -> Locale(lang).displayLanguage },
             labels = entity.labels.map { label -> toLabelModel(label) }
         )
     }
@@ -58,6 +62,9 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.modifiedAt),
             description = entity.description,
+            numberOfPages = entity.numberOfPages,
+            language = entity.language,
+            languageText = entity.language?.let { lang -> Locale(lang).displayLanguage },
             labels = entity.labels.map { label -> toLabelModel(label) }
         )
     }

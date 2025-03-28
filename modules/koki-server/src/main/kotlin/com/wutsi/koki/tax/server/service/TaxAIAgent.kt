@@ -19,7 +19,6 @@ import com.wutsi.koki.platform.ai.genai.gemini.GenAIConfig
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
-import com.wutsi.koki.platform.storage.StorageType
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import org.springframework.http.MediaType
@@ -159,10 +158,7 @@ class TaxAIAgent(
         val configs = configurationService.search(keyword = "storage.", tenantId = tenantId)
             .map { config -> config.name to config.value }
             .toMap()
-
-        val type = configs[ConfigurationName.STORAGE_TYPE]?.let { type -> StorageType.valueOf(type) }
-            ?: StorageType.KOKI
-        return storageBuilder.build(type, configs)
+        return storageBuilder.build(configs)
     }
 
     private fun getGenAIService(tenantId: Long): GenAIService? {

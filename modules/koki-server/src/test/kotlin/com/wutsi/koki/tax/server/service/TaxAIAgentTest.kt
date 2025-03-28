@@ -91,7 +91,7 @@ class TaxAIAgentTest {
             .search(any(), anyOrNull(), anyOrNull())
 
         doReturn(file).whenever(fileService).get(any(), any())
-        doReturn(storage).whenever(storageBuilder).build(any(), any())
+        doReturn(storage).whenever(storageBuilder).build(any())
         doAnswer { inv ->
             val output = inv.getArgument<OutputStream>(1)
             IOUtils.copy(ByteArrayInputStream(fileContent.toByteArray()), output)
