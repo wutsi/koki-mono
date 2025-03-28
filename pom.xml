@@ -117,7 +117,7 @@
         <mustache.version>0.9.14</mustache.version>
         <mysql.version>8.0.33</mysql.version>
         <paypal.version>1.0.0</paypal.version>
-        <pdfbox.vesion>3.0.3</pdfbox.vesion>
+        <pdfbox.vesion>3.0.4</pdfbox.vesion>
         <plexus-utils.version>4.0.2</plexus-utils.version>
         <poi.version>5.4.0</poi.version>
         <qrcode-kotlin.version>4.2.0</qrcode-kotlin.version>
