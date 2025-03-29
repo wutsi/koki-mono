@@ -8,6 +8,6 @@ data class CreateNoteRequest(
     @get:NotEmpty @get:Size(max = 255) val subject: String = "",
     @get:NotEmpty val body: String = "",
     val type: NoteType = NoteType.UNKNOWN,
-    val reference: ObjectReference? = null,
+    val owner: ObjectReference? = null,
     val duration: Int = 0,
 )

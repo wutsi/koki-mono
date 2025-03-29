@@ -1,0 +1,223 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('account')}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/account :: account-breadcrumb(null)}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <form class="form" method="post" th:action="@{/accounts/add-new}" th:object="${form}">
+                <div class="form-body">
+                    <div class="section">
+                        <div class="section-body">
+                            <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+
+                            <div class="section-item">
+                                <label class="title">Name <span class="required">*</span></label>
+                                <input maxlength="100" required th:field="*{name}"/>
+                            </div>
+                            <div class="section-item" th:if="${accountTypes}">
+                                <label class="title">Type <span class="required">*</span></label>
+                                <select required id="accountTypeId" name="accountTypeId">
+                                    <option value=""></option>
+                                    <option th:each="accountType : ${accountTypes}"
+                                            th:text="${accountType.title}"
+                                            th:value="${accountType.id}"
+                                            th:selected="${form.accountTypeId} == ${accountType.id}">
+                                        ACCOUNT TYPE
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Account Manager</label>
+                                <select th:field="*{managedById}"></select>
+                                <script th:replace="~{__components/user :: user-selector('managedById', null, 'accout:manage')}"></script>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Email <span class="required">*</span></label>
+                                <input required maxlength="100" th:field="*{email}" type="email"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Mobile</label>
+                                <input maxlength="30" th:field="*{mobile}"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Phone</label>
+                                <input maxlength="30" th:field="*{phone}"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Website</label>
+                                <input maxlength="100" placeholder="https://" th:field="*{website}" type="url"/>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title">Language</label>
+                                <select th:field="*{language}">
+                                    <option th:each="language : ${languages}"
+                                            th:text="${language.displayName}"
+                                            th:value="${language.language}">
+                                        LANGUAGE
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title">Description</label>
+                                <textarea rows="3" th:field="*{description}"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <h3 class="section-title">Shipping Address</h3>
+                    </div>
+                    <div class="section-body">
+                        <div class="section-item">
+                            <label class="title">Country<span class="required">*</span></label>
+                            <select required th:field="*{shippingCountry}">
+                                <option value=""></option>
+                                <option th:each="country : ${countries}"
+                                        th:value="${country.country}"
+                                        th:text="${country.displayCountry}"
+                                >COUNTRY</option>
+                            </select>
+                        </div>
+                        <div class="section-item">
+                            <label class="title">City<span class="required">*</span></label>
+                            <select required th:field="*{shippingCityId}"></select>
+                        </div>
+                        <div class="section-item">
+                            <label class="title">Street</label>
+                            <input th:field="*{shippingStreet}" />
+                        </div>
+                        <div class="section-item">
+                            <label class="title">Postal Code</label>
+                            <input maxlength="30" th:field="*{shippingPostalCode}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-header">
+                        <h3 class="section-title">Billing Address</h3>
+                    </div>
+                    <div class="section-body">
+                        <div class="section-item">
+                            <label class="title">Same as shipping address?</label>
+                            <select th:field="*{billingSameAsShippingAddress}" onchange="return koki_address_same_changed()">
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+                        <div class="section-item billing-address" th:classappend="${form.billingSameAsShippingAddress} ? 'hidden'">
+                            <label class="title">Country<span class="required">*</span></label>
+                            <select th:field="*{billingCountry}" th:required="!${form.billingSameAsShippingAddress}">
+                                <option value=""></option>
+                                <option th:each="country : ${countries}"
+                                        th:value="${country.country}"
+                                        th:text="${country.displayCountry}"
+                                >COUNTRY</option>
+                            </select>
+                        </div>
+                        <div class="section-item billing-address" th:classappend="${form.billingSameAsShippingAddress} ? 'hidden'">
+                            <label required class="title">City<span class="required">*</span></label>
+                            <select th:field="*{billingCityId}" th:required="!${form.billingSameAsShippingAddress}"></select>
+                        </div>
+                        <div class="section-item billing-address" th:classappend="${form.billingSameAsShippingAddress} ? 'hidden'">
+                            <label class="title">Street</label>
+                            <input th:field="*{billingStreet}" />
+                        </div>
+                        <div class="section-item billing-address" th:classappend="${form.billingSameAsShippingAddress} ? 'hidden'">
+                            <label class="title">Postal Code</label>
+                            <input maxlength="30" th:field="*{billingPostalCode}" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section" th:if="${attributes}">
+                    <div class="section-body">
+                        <div class="section-item" th:each="attribute : ${attributes}">
+                            <label class="title">
+                                <span th:text="${attribute.label}">LABEL</span>
+                                <span class="required" th:if="${attribute.required}">*</span>
+                            </label>
+                            <div class="description"
+                                 th:if="${attribute.description}"
+                                 th:text="${attribute.description}">
+                                DESCRIPTION
+                            </div>
+                            <input
+                                th:required="${attribute.required} ? 'required': null"
+                                th:if="${attribute.htmlInput}"
+                                th:type="${attribute.htmlInputType}"
+                                th:id="'attribute-' + ${attribute.id}"
+                                th:name="'attribute-' + ${attribute.id}"
+                                th:value="${form.attributes[attribute.id]}"
+                                th:step="${attribute.type == 'NUMBER'} ? 1"
+                            />
+                            <textarea rows="3"
+                                  th:required="${attribute.required} ? 'required': null"
+                                th:if="${attribute.type.name == 'LONGTEXT'}"
+                                th:id="'attribute-' + ${attribute.id}"
+                                th:name="'attribute-' + ${attribute.id}"
+                                th:text="${form.attributes[attribute.id]}"
+                            /></textarea>
+                            <select
+                                th:required="${attribute.required} ? 'required': null"
+                                th:if="${attribute.type.name == 'BOOLEAN'}"
+                                th:id="'attribute-' + ${attribute.id}"
+                                th:name="'attribute-' + ${attribute.id}">
+                                <option value="false" th:attrappend="!${form.attributes[attribute.id]} ? 'selected'">No</option>
+                                <option value="true" th:attrappend="${form.attributes[attribute.id]} ? 'selected'">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit">Submit</button>
+                    <a class="btn-cancel" href="/accounts">Cancel</a>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    let billingAddressInitialized = false;
+
+    koki_address_editor('shippingCountry', 'shippingCityId');
+
+    function koki_address_same_changed(){
+        const same = (document.getElementById('billingSameAsShippingAddress').value === 'true');
+        document.querySelectorAll('.billing-address').forEach((elt) => {
+            if (same) {
+                elt.classList.add('hidden');
+            } else {
+                elt.classList.remove('hidden');
+            }
+        });
+        if (!same && !billingAddressInitialized) {
+            koki_address_editor('billingCountry', 'billingCityId');
+            billingAddressInitialized = true
+        }
+        document.getElementById('billingCountry').required = !same;
+        document.getElementById('billingCityId').required = !same;
+    }
+</script>
+</body>
+</html>

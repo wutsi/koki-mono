@@ -37,6 +37,9 @@ object ErrorCode {
 
     val FILE_NOT_FOUND: String = "$PREFIX:file:not-found"
 
+    val FORM_NOT_FOUND: String = "$PREFIX:form:not-found"
+    val FORM_IN_USE: String = "$PREFIX:form:in-use"
+
     val HTTP_MISSING_PARAMETER = "$PREFIX:http:missing-parameter"
     val HTTP_INVALID_PARAMETER = "$PREFIX:http:invalid-parameter"
     val HTTP_INTERNAL = "$PREFIX:http:unexpected-error"

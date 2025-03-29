@@ -12,4 +12,5 @@ enum class ObjectType {
     TAX,
     INVOICE,
     PAYMENT,
+    FORM,
 }
