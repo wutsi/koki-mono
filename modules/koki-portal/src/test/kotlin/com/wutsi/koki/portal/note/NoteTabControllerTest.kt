@@ -108,8 +108,8 @@ class NoteTabControllerTest : AbstractPageControllerTest() {
         assertEquals("<p>Hello man</p>", request.firstValue.body)
         assertEquals(NoteType.IN_PERSON_MEETING, request.firstValue.type)
         assertEquals(70, request.firstValue.duration)
-        assertEquals(ObjectType.ACCOUNT, request.firstValue.reference?.type)
-        assertEquals(111L, request.firstValue.reference?.id)
+        assertEquals(ObjectType.ACCOUNT, request.firstValue.owner?.type)
+        assertEquals(111L, request.firstValue.owner?.id)
     }
 
     @Test

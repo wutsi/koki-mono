@@ -1,31 +1,29 @@
 package com.wutsi.koki.form.server.service
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.dto.Parameter
-import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
-import com.wutsi.koki.form.dto.FormContent
-import com.wutsi.koki.form.dto.FormElement
-import com.wutsi.koki.form.dto.FormElementType
-import com.wutsi.koki.form.dto.SaveFormRequest
+import com.wutsi.koki.file.server.dao.FormOwnerRepository
+import com.wutsi.koki.form.dto.CreateFormRequest
+import com.wutsi.koki.form.dto.UpdateFormRequest
 import com.wutsi.koki.form.server.dao.FormRepository
 import com.wutsi.koki.form.server.domain.FormEntity
-import com.wutsi.koki.workflow.dto.FormSortBy
+import com.wutsi.koki.form.server.domain.FormOwnerEntity
+import com.wutsi.koki.security.server.service.SecurityService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.Date
-import java.util.UUID
 
 @Service
 class FormService(
     private val dao: FormRepository,
+    private val ownerDao: FormOwnerRepository,
     private val em: EntityManager,
-    private val objectMapper: ObjectMapper
+    private val securityService: SecurityService,
 ) {
-    fun get(id: String, tenantId: Long): FormEntity {
+    fun get(id: Long, tenantId: Long): FormEntity {
         val form = dao.findById(id)
             .orElseThrow { NotFoundException(Error(ErrorCode.FORM_NOT_FOUND)) }
 
@@ -35,50 +33,20 @@ class FormService(
         return form
     }
 
-    fun getByName(name: String, tenantId: Long): FormEntity {
-        val form = dao.findByNameIgnoreCaseAndTenantId(name, tenantId)
-            ?: throw NotFoundException(
-                Error(
-                    ErrorCode.FORM_NOT_FOUND,
-                    parameter = Parameter(value = name),
-                )
-            )
-
-        if (form.tenantId != tenantId || form.deleted) {
-            throw NotFoundException(
-                Error(
-                    ErrorCode.FORM_NOT_FOUND,
-                    parameter = Parameter(value = name),
-                )
-            )
-        }
-        return form
-    }
-
-    fun extractInputName(form: FormEntity, type: FormElementType? = null): List<String> {
-        val names = mutableListOf<String>()
-        val content = objectMapper.readValue(form.content, FormContent::class.java)
-        content.elements.forEach { elt -> extractInputName(elt, type, names) }
-        return names
-    }
-
-    fun extractInputName(element: FormElement, type: FormElementType?, names: MutableList<String>) {
-        if (!element.name.isEmpty() && (type == null || element.type == type)) {
-            names.add(element.name)
-        }
-        element.elements?.forEach { elt -> extractInputName(elt, type, names) }
-    }
-
     fun search(
         tenantId: Long,
-        ids: List<String>,
+        ids: List<Long>,
         active: Boolean?,
+        ownerId: Long?,
+        ownerType: ObjectType?,
         limit: Int,
         offset: Int,
-        sortBy: FormSortBy?,
-        ascending: Boolean,
     ): List<FormEntity> {
         val jql = StringBuilder("SELECT F FROM FormEntity F")
+        if (ownerId != null || ownerType != null) {
+            jql.append(" JOIN F.formOwners AS O")
+        }
+
         jql.append(" WHERE F.deleted=false AND F.tenantId = :tenantId")
         if (ids.isNotEmpty()) {
             jql.append(" AND F.id IN :ids")
@@ -86,18 +54,13 @@ class FormService(
         if (active != null) {
             jql.append(" AND F.active = :active")
         }
-        if (sortBy != null) {
-            val column = when (sortBy) {
-                FormSortBy.NAME -> "name"
-                FormSortBy.TITLE -> "title"
-                FormSortBy.CREATED_AT -> "createdAt"
-                FormSortBy.MODIFIED_AT -> "modifiedAt"
-            }
-            jql.append(" ORDER BY F.$column")
-            if (!ascending) {
-                jql.append(" DESC")
-            }
+        if (ownerId != null) {
+            jql.append(" AND O.ownerId = :ownerId")
         }
+        if (ownerType != null) {
+            jql.append(" AND O.ownerType = :ownerType")
+        }
+        jql.append(" ORDER BY LOWER(F.name)")
 
         val query = em.createQuery(jql.toString(), FormEntity::class.java)
         query.setParameter("tenantId", tenantId)
@@ -107,35 +70,67 @@ class FormService(
         if (active != null) {
             query.setParameter("active", active)
         }
+        if (ownerId != null) {
+            query.setParameter("ownerId", ownerId)
+        }
+        if (ownerType != null) {
+            query.setParameter("ownerType", ownerType)
+        }
         query.firstResult = offset
         query.maxResults = limit
         return query.resultList
     }
 
     @Transactional
-    fun save(form: FormEntity, request: SaveFormRequest): FormEntity {
-        val duplicate = dao.findByNameIgnoreCaseAndTenantId(request.content.name, form.tenantId)
-        if (duplicate != null && duplicate.id != form.id) {
-            throw ConflictException(
-                error = Error(code = ErrorCode.FORM_DUPLICATE_NAME)
+    fun create(request: CreateFormRequest, tenantId: Long): FormEntity {
+        val userId = securityService.getCurrentUserIdOrNull()
+        val now = Date()
+
+        val form = dao.save(
+            FormEntity(
+                tenantId = tenantId,
+                name = request.name,
+                description = request.description,
+                active = request.active,
+                createdAt = now,
+                modifiedAt = now,
+                createdById = userId,
+                modifiedById = userId
+            )
+        )
+
+        if (request.owner != null) {
+            ownerDao.save(
+                FormOwnerEntity(
+                    formId = form.id!!,
+                    ownerId = request.owner!!.id,
+                    ownerType = request.owner!!.type
+                )
             )
         }
+        return form
+    }
 
-        form.name = request.content.name
-        form.title = request.content.title
-        form.description = request.content.description
-        form.content = objectMapper.writeValueAsString(request.content)
+    @Transactional
+    fun update(id: Long, request: UpdateFormRequest, tenantId: Long): FormEntity {
+        val userId = securityService.getCurrentUserIdOrNull()
+        val now = Date()
+
+        val form = get(id, tenantId)
+        form.name = request.name
+        form.description = request.description
         form.active = request.active
-        form.modifiedAt = Date()
+        form.modifiedAt = now
+        form.modifiedById = userId
         return dao.save(form)
     }
 
     @Transactional
-    fun delete(id: String, tenantId: Long) {
+    fun delete(id: Long, tenantId: Long) {
         val form = get(id, tenantId)
-        form.name = "##-" + form.name + "-" + UUID.randomUUID().toString()
         form.deleted = true
         form.deletedAt = Date()
+        form.deletedById = securityService.getCurrentUserIdOrNull()
         dao.save(form)
     }
 }

@@ -70,8 +70,8 @@
 
 ## Files
 
-- [x] Make S3 bucket non-public
 - [] Add Metadata to files: id, tenant-id, owner-type, owner-id
+- [x] Make S3 bucket non-public
 - [x] Integrate AI to describe the file
 - [x] Validate S3 configuration
 - [x] Settings: Configure storage type: S3, Local
@@ -83,10 +83,16 @@
 - [x] Upload files
 - [x] Show file icons
 
+## Form
+
+- [x] Form API
+- [x] Form UI
+- [] Never Delete a form in use
+
 ## Invoice
 
-- [] Change URL of checkout page to "hide" the invoice ID
 - [] Invoice Widget
+- [x] Change URL of checkout page to "hide" the invoice ID
 - [x] Add locale to invoice
 - [x] Update amount due on successful payment
 - [x] Download invoices
@@ -169,17 +175,18 @@
 
 ## Taxes
 
-- [] Settings: Tax Forms
-- [x] Settings: Setup email notification
-    - [x] When task assigned
-    - [x] When starting document collection
-    - [x] When done
+- [] Link a tax with a form
+- [] Send the form to customer when status=GATHERING_DOCUMENTS
 - [] Taxes KPI
     - [] Time spent by Tax report
     - [] Time spent on Tax report by user
     - [] Labor cost by Tax report
     - [] Total time spent on Tax Report per user
 - [] Add Kanban view
+- [x] Settings: Setup email notification
+    - [x] When task assigned
+    - [x] When starting document collection
+    - [x] When done
 - [x] Create Invoices
 - [x] Link taxes with products
 - [x] Filter Accountant and Technician based on the permission 'tax:manage'

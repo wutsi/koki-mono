@@ -18,10 +18,16 @@ class GetFormEndpointTest : TenantAwareEndpointTest() {
 
         val form = result.body!!.form
         assertEquals("f-100", form.name)
-        assertEquals("Form 100", form.title)
-        assertEquals("Love it", form.description)
-        assertEquals("Sample Form", form.content.title)
-        assertEquals("Description of the form", form.content.description)
+        assertEquals("This is the F-100 form", form.description)
+        assertEquals(false, form.active)
+    }
+
+    @Test
+    fun deleted() {
+        val result = rest.getForEntity("/v1/forms/199", ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
+        assertEquals(ErrorCode.FORM_NOT_FOUND, result.body?.error?.code)
     }
 
     @Test

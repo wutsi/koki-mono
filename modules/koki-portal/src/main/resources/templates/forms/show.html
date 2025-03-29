@@ -6,58 +6,41 @@
 
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
-<div th:replace="~{__components/layout :: menubar('account')}"></div>
+<div th:replace="~{__components/layout :: menubar('form')}"></div>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/account :: account-breadcrumb(${account})}"></div>
+            <div th:replace="~{__components/form :: form-breadcrumb(${form})}"></div>
         </div>
     </div>
 
     <div class="row">
         <div class="col-12">
             <div class="widget">
-                <div class="widget-body account-summary">
+                <div class="widget-body form-summary">
                     <div class="flex flex-space-between">
                         <h1 class="entity-title">
-                            <img align="absmiddle" src="/image/account.png"/>
-                            <span th:text="${account.name}">NAME</span>
+                            <img align="absmiddle" src="/image/form.png"/>
+                            <span th:text="${form.name}">NAME</span>
                         </h1>
                         <div>
                             <a class="btn-edit btn btn-light btn-sm"
-                               th:href="'/accounts/' + ${account.id} + '/edit'"
-                               th:if="${user?.hasPermission('account:manage')}">Edit</a>
+                               th:href="'/forms/' + ${form.id} + '/edit'"
+                               th:if="${user?.hasPermission('form:manage')}">Edit</a>
+
+                            <a class="btn-create btn btn-primary btn-sm" href="/forms/create"
+                               th:if="${user?.hasPermission('form:manage')}">
+                                Create New Form
+                            </a>
 
                             <a class="btn-delete btn btn-danger btn-sm"
-                               onclick="return confirm('Are you sure you want to delete the account?')"
-                               th:href="'/accounts/' + ${account.id} + '/delete'"
-                               th:if="${user?.hasPermission('account:delete')}">Delete</a>
+                               onclick="return confirm('Are you sure you want to delete the form?')"
+                               th:href="'/forms/' + ${form.id} + '/delete'"
+                               th:if="${user?.hasPermission('form:delete')}">Delete</a>
                         </div>
                     </div>
 
-                    <div class="flex">
-                        <div class="margin-right-2x" th:if="${account.accountType}">
-                            <b>Type</b><br/>
-                            <span th:text="${account.accountType.title}">ACCOUNT TYPE</span>
-                        </div>
-                        <div class="margin-right-2x" th:if="${account.managedBy}">
-                            <b>Account Manager</b><br/>
-                            <span th:text="${account.managedBy.displayName}">ACCOUNT MANAGER</span>
-                        </div>
-                        <div class="margin-right-2x" th:if="${account.email}">
-                            <b>Email</b><br/>
-                            <a th:href="'mailto:' + ${account.email}" th:text="${account.email}">EMAIL</a>
-                        </div>
-                        <div class="margin-right-2x" th:if="${account.mobile}">
-                            <b>Mobile</b><br/>
-                            <span th:text="${account.mobile}">MOBILE</span>
-                        </div>
-                        <div class="margin-right-2x" th:if="${account.phone}">
-                            <b>Phone</b><br/>
-                            <span th:text="${account.phone}">PHONE</span>
-                        </div>
-                    </div>
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
                 </div>
             </div>
@@ -65,101 +48,47 @@
     </div>
 
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-12">
             <div class="widget">
                 <div class="widget-body">
                     <div th:replace="~{__components/module :: tabs('main', true)}"></div>
-                    <div th:replace="~{__components/module :: tabs-content('main', true, ${account}, ${module})}"></div>
+                    <div th:replace="~{__components/module :: tabs-content('main', true, ${form}, ${module})}"></div>
                     <table class="table hidden" id="tab-details-content">
                         <tr>
                             <td width="20%"><b>Name</b></td>
-                            <td th:text="${account.name}">NAME</td>
+                            <td th:text="${form.name}">NAME</td>
                         </tr>
-                        <tr th:if="${account.accountType}">
-                            <td><b>Type</b></td>
-                            <td th:text="${account.accountType?.title}">TYPE</td>
-                        </tr>
-                        <tr th:if="${account.managedBy}">
-                            <td><b>Account Manager</b></td>
-                            <td th:text="${account.managedBy?.displayName}">ACCOUNT MANAGER</td>
-                        </tr>
-                        <tr th:if="${account.phone}">
-                            <td><b>Phone</b></td>
-                            <td th:text="${account.phone}">PHONE</td>
-                        </tr>
-                        <tr th:if="${account.mobile}">
-                            <td><b>Mobile</b></td>
-                            <td th:text="${account.mobile}">MOBILE</td>
-                        </tr>
-                        <tr th:if="${account.email}">
-                            <td><b>Email</b></td>
+                        <tr>
+                            <td><b>Active</b></td>
                             <td>
-                                <a th:href="'mailto:' + ${account.email}" th:text="${account.email}">EMAIL</a>
+                                <span th:if="${form.active}">Yes</span>
+                                <span th:if="!${form.active}">No</span>
                             </td>
                         </tr>
-                        <tr th:if="${account.website}">
-                            <td><b>Website</b></td>
-                            <td>
-                                <a target="_blank" th:href="${account.website}" th:text="${account.website}">LINK</a>
-                            </td>
-                        </tr>
-                        <tr th:if="${account.language}">
-                            <td><b>Language</b></td>
-                            <td th:text="${account.languageText}">LANGUAGE</td>
-                        </tr>
-                        <tr th:if="${account.description}">
+                        <tr th:if="${form.description}">
                             <td><b>Description</b></td>
-                            <td th:text="${account.description}">DESCRIPTION</td>
-                        </tr>
-                        <tr>
-                            <td><b>Shipping Address</b></td>
-                            <td th:utext="${account.shippingAddress.toHtml()}">SHIPPING ADDRESS</td>
-                        </tr>
-                        <tr>
-                            <td><b>Billing Address</b></td>
-                            <td th:if="${account.billingSameAsShippingAddress}">Same as shipping address</td>
-                            <td th:if="!${account.billingSameAsShippingAddress}"
-                                th:utext="${account.billingAddress.toHtml()}"></td>
+                            <td th:text="${form.description}">DESCRIPTION</td>
                         </tr>
 
-
-                        <tr th:if="!${account.attributes.isEmpty()}">
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr th:each="attr : ${account.attributes}">
-                            <td><b th:text="${attr.attribute.label}">NAME</b></td>
-                            <td th:text="${attr.value}">DESCRIPTION</td>
-                        </tr>
-
-                        <tr>
-                            <td colspan="2"></td>
-                        </tr>
                         <tr>
                             <td><b>Created</b></td>
                             <td>
-                                <span th:text="${account.createdAtText}">DATE</span>
-                                <span th:if="${account.createdBy}">by</span>
-                                <span th:if="${account.createdBy}" th:text="${account.createdBy.displayName}">MODIFIED BY</span>
+                                <span th:text="${form.createdAtText}">DATE</span>
+                                <span th:if="${form.createdBy}">by</span>
+                                <span th:if="${form.createdBy}"
+                                      th:text="${form.createdBy.displayName}">MODIFIED BY</span>
                             </td>
                         </tr>
                         <tr>
                             <td><b>Modified</b></td>
                             <td>
-                                <span th:text="${account.modifiedAtText}">DATE</span>
-                                <span th:if="${account.modifiedBy}">by</span>
-                                <span th:if="${account.modifiedBy}" th:text="${account.modifiedBy.displayName}">MODIFIED BY</span>
+                                <span th:text="${form.modifiedAtText}">DATE</span>
+                                <span th:if="${form.modifiedBy}">by</span>
+                                <span th:if="${form.modifiedBy}"
+                                      th:text="${form.modifiedBy.displayName}">MODIFIED BY</span>
                             </td>
                         </tr>
                     </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-5">
-            <div class="widget">
-                <div class="widget-body">
-                    <div th:replace="~{__components/module :: tabs('side', false)}"></div>
-                    <div
-                        th:replace="~{__components/module :: tabs-content('side', false, ${account}, ${module})}"></div>
                 </div>
             </div>
         </div>

@@ -6,12 +6,12 @@
 
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
-<div th:replace="~{__components/layout :: menubar('invoice')}"></div>
+<div th:replace="~{__components/layout :: menubar('form')}"></div>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/invoice :: invoice-breadcrumb(null)}"></div>
+            <div th:replace="~{__components/form :: form-breadcrumb(null)}"></div>
         </div>
     </div>
 
@@ -20,24 +20,19 @@
             <div class="widget">
                 <div class="widget-body">
                     <div class="flex flex-space-between">
-                        <div class="btn-group border margin-bottom">
-                            <button aria-expanded="false"
-                                    class="btn padding"
-                                    type="button">
-                                <img height="24" src="/image/invoice.png" width="24"/>
-                                <span>Invoices</span>
-                            </button>
+                        <div>
+                            <a class="btn-create btn btn-primary btn-sm" href="/forms/create"
+                               th:if="${user?.hasPermission('form:manage')}">
+                                Create New Form
+                            </a>
                         </div>
                         <div>
-                            <select class="btn btn-sm btn-light" id="filter-status"
-                                    onchange="koki_invoices_on_filter_changed()"
+                            <select class="btn btn-sm btn-light" id="filter-active"
+                                    onchange="koki_forms_on_filter_changed()"
                                     style="width: auto">
-                                <option value="">All Statuses</option>
-                                <option th:each="ss : ${statuses}"
-                                        th:selected="${ss.name()} == ${status?.name()}"
-                                        th:text="#{'invoice-status.' + ${ss.name()}}"
-                                        th:value="${ss.name()}">STATUS
-                                </option>
+                                <option value="">All</option>
+                                <option value="true">Active</option>
+                                <option value="false">Inactive</option>
                             </select>
                         </div>
                     </div>
@@ -45,20 +40,15 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th>Number</th>
-                            <th>Date</th>
-                            <th>Customer</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-right">Total Amount</th>
-                            <th class="text-right">Amount Due</th>
-                            <td></td>
+                            <th>Name</th>
+                            <th align="center" width="1%">Active</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="invoice" th:each="invoice : ${invoices}">
-                            <div th:replace="~{__components/invoice :: columns(${invoice})}"></div>
+                        <tr class="form" th:each="form : ${forms}">
+                            <div th:replace="~{__components/form :: columns(${form})}"></div>
                         </tr>
-                        <tr th:replace="~{__components/invoice :: load-more(${moreUrl})}"></tr>
+                        <tr th:replace="~{__components/form :: load-more(${moreUrl})}"></tr>
                         </tbody>
                     </table>
                 </div>
@@ -70,9 +60,9 @@
 <div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
 
 <script>
-    function koki_invoices_on_filter_changed() {
-        const status = document.getElementById('filter-status').value;
-        document.location.href = '/invoices?' +
+    function koki_forms_on_filter_changed() {
+        const status = document.getElementById('filter-active').value;
+        document.location.href = '/forms?' +
             (status && status.length > 0 ? '&status=' + status : '');
     }
 </script>

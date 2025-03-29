@@ -11,13 +11,13 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/form :: form-breadcrumb(null)}"></div>
+            <div th:replace="~{__components/form :: form-breadcrumb(${form})}"></div>
         </div>
     </div>
 
     <div class="row">
         <div class="col-12">
-            <form class="form" method="post" th:action="@{/forms/add-new}" th:object="${form}">
+            <form class="form" method="post" th:action="@{'/forms/' + ${entity.id} + '/update'}" th:object="${form}">
                 <div class="form-body">
                     <div class="section">
                         <div class="section-body">

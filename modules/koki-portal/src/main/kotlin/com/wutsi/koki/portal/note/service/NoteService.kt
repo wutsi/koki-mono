@@ -72,7 +72,7 @@ class NoteService(
             body = form.body,
             type = form.type,
             duration = form.durationHours * 60 + form.durationMinutes,
-            reference = form.ownerId?.let {
+            owner = form.ownerId?.let {
                 ObjectReference(
                     id = form.ownerId, type = form.ownerType
                 )

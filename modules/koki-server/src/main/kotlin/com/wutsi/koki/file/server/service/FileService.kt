@@ -14,12 +14,9 @@ import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import jakarta.persistence.EntityManager
-import org.apache.poi.hssf.usermodel.HeaderFooter.file
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
-import java.io.File
-import java.io.FileOutputStream
 import java.io.InputStream
 import java.net.URL
 import java.net.URLEncoder
@@ -34,7 +31,6 @@ class FileService(
     private val configurationService: ConfigurationService,
     private val securityService: SecurityService,
     private val labelService: LabelService,
-    private val extractorProvider: FileInfoExtractorProvider,
     private val em: EntityManager,
 ) {
     fun get(id: Long, tenantId: Long): FileEntity {
@@ -246,15 +242,6 @@ class FileService(
         path.append("/$fileId")
         path.append("/$filename")
         return path.toString()
-    }
-
-    private fun download(entity: FileEntity): File {
-        val file = File.createTempFile("file-${entity.id}", "tmp")
-        val output = FileOutputStream(file)
-        output.use {
-            getStorageService(entity.tenantId).get(URL(entity.url), output)
-        }
-        return file
     }
 
     private fun getStorageService(tenantId: Long): StorageService {
