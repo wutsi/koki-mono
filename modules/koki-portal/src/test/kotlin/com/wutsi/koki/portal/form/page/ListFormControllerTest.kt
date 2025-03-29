@@ -60,7 +60,7 @@ class ListFormControllerTest : AbstractPageControllerTest() {
     @Test
     fun show() {
         navigateTo("/forms")
-        click("tr.form a")
+        click("tr.form a", 2000)
         assertCurrentPageIs(PageName.FORM)
     }
 

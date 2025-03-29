@@ -42,7 +42,7 @@ class EditFormController(
         model: Model
     ): String {
         try {
-            val id = service.update(id, form)
+            service.update(id, form)
             return "redirect:/forms/$id?_toast=$id&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
