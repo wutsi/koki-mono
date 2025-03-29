@@ -7,7 +7,6 @@ import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/form/DeleteFormEndpoint.sql"])
@@ -19,22 +18,15 @@ class DeleteFormEndpointTest : TenantAwareEndpointTest() {
     fun delete() {
         rest.delete("/v1/forms/100")
 
-        val message = dao.findById("100").get()
+        val message = dao.findById(100).get()
         assertTrue(message.deleted)
         assertNotNull(message.deletedAt)
     }
 
     @Test
-    fun `in use`() {
-        rest.delete("/v1/forms/110")
-
-        val message = dao.findById("110").get()
-        assertFalse(message.deleted)
-        assertNull(message.deletedAt)
-    }
-
-    @Test
     fun `other tenant`() {
         rest.delete("/v1/forms/200")
+        val message = dao.findById(200).get()
+        assertFalse(message.deleted)
     }
 }

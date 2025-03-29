@@ -29,11 +29,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
         "com.wutsi.koki.payment.server.domain",
         "com.wutsi.koki.product.server.domain",
         "com.wutsi.koki.refdata.server.domain",
-        "com.wutsi.koki.service.server.domain",
-        "com.wutsi.koki.script.server.domain",
         "com.wutsi.koki.tax.server.domain",
         "com.wutsi.koki.tenant.server.domain",
-        "com.wutsi.koki.workflow.server.domain",
     ],
 )
 @EnableJpaRepositories(
@@ -45,17 +42,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
         "com.wutsi.koki.file.server.dao",
         "com.wutsi.koki.form.server.dao",
         "com.wutsi.koki.invoice.server.dao",
-        "com.wutsi.koki.message.server.dao",
         "com.wutsi.koki.module.server.dao",
         "com.wutsi.koki.note.server.dao",
         "com.wutsi.koki.payment.server.dao",
         "com.wutsi.koki.product.server.dao",
         "com.wutsi.koki.refdata.server.dao",
-        "com.wutsi.koki.service.server.dao",
-        "com.wutsi.koki.script.server.dao",
         "com.wutsi.koki.tax.server.dao",
         "com.wutsi.koki.tenant.server.dao",
-        "com.wutsi.koki.workflow.server.dao",
     ],
 )
 class Application

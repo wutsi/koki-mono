@@ -7,26 +7,30 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.FormFixtures.form
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.form.dto.CreateFormRequest
-import com.wutsi.koki.form.dto.CreateFormResponse
+import com.wutsi.koki.form.dto.UpdateFormRequest
 import com.wutsi.koki.portal.common.page.PageName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class CreateFormControllerTest : AbstractPageControllerTest() {
+class EditFormControllerTest : AbstractPageControllerTest() {
     @Test
-    fun create() {
-        navigateTo("/forms/create")
-        assertCurrentPageIs(PageName.FORM_CREATE)
+    fun edit() {
+        navigateTo("/forms/${form.id}/edit")
+        assertCurrentPageIs(PageName.FORM_EDIT)
 
         input("#name", "T-100")
         select("#active", 0)
         input("#description", "This is the description")
         click("[type=submit]")
 
-        val request = argumentCaptor<CreateFormRequest>()
-        verify(rest).postForEntity(eq("$sdkBaseUrl/v1/forms"), request.capture(), eq(CreateFormResponse::class.java))
+        val request = argumentCaptor<UpdateFormRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/forms/${form.id}"),
+            request.capture(),
+            eq(Any::class.java)
+        )
 
         assertEquals("T-100", request.firstValue.name)
         assertEquals("This is the description", request.firstValue.description)
@@ -38,8 +42,7 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun cancel() {
-        navigateTo("/forms/create")
-        assertCurrentPageIs(PageName.FORM_CREATE)
+        navigateTo("/forms/${form.id}/edit")
 
         input("#name", "T-100")
         select("#active", 0)
@@ -53,16 +56,16 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.ACCOUNT_IN_USE)
         doThrow(ex).whenever(rest)
-            .postForEntity(any<String>(), any<CreateFormRequest>(), eq(CreateFormResponse::class.java))
+            .postForEntity(any<String>(), any<UpdateFormRequest>(), eq(Any::class.java))
 
-        navigateTo("/forms/create")
+        navigateTo("/forms/${form.id}/edit")
 
         input("#name", "T-100")
         select("#active", 0)
         input("#description", "This is the description")
         click("button[type=submit]")
 
-        assertCurrentPageIs(PageName.FORM_CREATE)
+        assertCurrentPageIs(PageName.FORM_EDIT)
         assertElementPresent(".alert-danger")
     }
 
@@ -70,7 +73,7 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
     fun `login required`() {
         setUpAnonymousUser()
 
-        navigateTo("/forms/create")
+        navigateTo("/forms/${form.id}/edit")
         assertCurrentPageIs(PageName.LOGIN)
     }
 
@@ -78,7 +81,7 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
     fun `create - without permission form-manage`() {
         setUpUserWithoutPermissions(listOf("form:manage"))
 
-        navigateTo("/forms/create")
+        navigateTo("/forms/${form.id}/edit")
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 }

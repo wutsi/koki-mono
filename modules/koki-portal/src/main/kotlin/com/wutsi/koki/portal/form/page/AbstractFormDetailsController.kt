@@ -1,13 +1,9 @@
 package com.wutsi.koki.portal.form.page
 
-import com.wutsi.koki.portal.module.page.AbstractModulePageController
+import com.wutsi.koki.portal.module.page.AbstractModuleDetailsPageController
 
-abstract class AbstractFormController : AbstractModulePageController() {
-    companion object {
-        const val MODULE_NAME = "form"
-    }
-
+abstract class AbstractFormDetailsController : AbstractModuleDetailsPageController() {
     override fun getModuleName(): String {
-        return MODULE_NAME
+        return AbstractFormController.MODULE_NAME
     }
 }

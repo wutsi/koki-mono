@@ -86,6 +86,10 @@ springdoc:
             display-name: File API
             paths-to-match: /v1/files, /v1/files/**
 
+        -   group: forms
+            display-name: Form API
+            paths-to-match: /v1/forms, /v1/forms/**
+
         -   group: invoices
             display-name: Invoice API
             paths-to-match: /v1/invoices, /v1/invoices/**

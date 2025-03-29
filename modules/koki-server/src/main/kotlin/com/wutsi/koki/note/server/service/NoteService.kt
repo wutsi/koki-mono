@@ -94,8 +94,8 @@ class NoteService(
             )
         )
 
-        if (request.reference != null) {
-            val ref = request.reference!!
+        if (request.owner != null) {
+            val ref = request.owner!!
             ownerDao.save(
                 NoteOwnerEntity(
                     noteId = note.id,

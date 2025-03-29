@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.config
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.portal.rest.AuthorizationInterceptor
 import com.wutsi.koki.portal.rest.DebugRestInterceptor
 import com.wutsi.koki.portal.rest.TenantRestInterceptor
@@ -13,6 +12,7 @@ import com.wutsi.koki.sdk.KokiContacts
 import com.wutsi.koki.sdk.KokiEmails
 import com.wutsi.koki.sdk.KokiEmployees
 import com.wutsi.koki.sdk.KokiFiles
+import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiInvoices
 import com.wutsi.koki.sdk.KokiModules
 import com.wutsi.koki.sdk.KokiNotes
@@ -37,7 +37,6 @@ import java.time.Duration
 class KokiSDKConfiguration(
     private val tenantProvider: TenantProvider,
     private val accessTokenProvider: AccessTokenProvider,
-    private val objectMapper: ObjectMapper,
     private val tenantRestInterceptor: TenantRestInterceptor,
     private val authorizationInterceptor: AuthorizationInterceptor,
     private val debugRestInterceptor: DebugRestInterceptor,
@@ -87,8 +86,13 @@ class KokiSDKConfiguration(
     }
 
     @Bean
-    fun kokiFile(): KokiFiles {
+    fun kokiFiles(): KokiFiles {
         return KokiFiles(urlBuilder(), rest(), tenantProvider, accessTokenProvider)
+    }
+
+    @Bean
+    fun kokiForms(): KokiForms {
+        return KokiForms(urlBuilder(), rest())
     }
 
     @Bean

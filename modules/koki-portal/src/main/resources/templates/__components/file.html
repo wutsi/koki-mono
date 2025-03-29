@@ -10,12 +10,12 @@
         <div th:replace="~{__components/file :: file-icon(${file})}"></div>
     </td>
     <td>
-        <a class="btn-download" target="_blank">
+        <a class="btn-download" target="_blank" th:href="'/files/' + ${file.id} + '/download'">
             <span class="badge text-bg-success margin-right-small"
                   th:each="label : ${file.labels}"
                   th:text="${label.displayName}"
             >LABEL</span>
-            <a th:href="'/files/' + ${file.id} + '/download'" th:text="${file.name}">NAME</a>
+            <span th:text="${file.name}">NAME</span>
         </a>
     </td>
     <td th:text="${file.contentLengthText}">SIZE</td>

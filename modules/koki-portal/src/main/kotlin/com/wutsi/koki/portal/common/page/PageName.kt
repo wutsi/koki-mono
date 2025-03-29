@@ -44,6 +44,11 @@ object PageName {
     const val FILE_SETTINGS_STORAGE = "page.settings.file.storage"
     const val FILE_SETTINGS_STORAGE_EDIT = "page.settings.file.storage.edit"
 
+    const val FORM = "page.form"
+    const val FORM_CREATE = "page.form.create"
+    const val FORM_EDIT = "page.form.edit"
+    const val FORM_LIST = "page.form.list"
+
     const val HOME = "page.home"
 
     const val INVOICE = "page.invoice"

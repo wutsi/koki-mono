@@ -1,9 +1,9 @@
-package com.wutsi.koki.portal.form.form
+package com.wutsi.koki.portal.form.model
 
 import com.wutsi.koki.portal.user.model.UserModel
 import java.util.Date
 
-data class FormModel (
+data class FormModel(
     val id: Long = -1,
     val name: String = "",
     var description: String? = null,
@@ -14,4 +14,6 @@ data class FormModel (
     val createdBy: UserModel? = null,
     val modifiedAt: Date = Date(),
     val modifiedAtText: String = "",
+    val modifiedAtMoment: String = "",
+    val modifiedBy: UserModel? = null,
 )

@@ -82,7 +82,7 @@ class CreateNoteEndpointTest : AuthorizationAwareEndpointTest() {
             body = "<p>This is the body of the note</p>",
             duration = 15,
             type = NoteType.ONLINE_MEETING,
-            reference = ObjectReference(id = 1111L, type = ObjectType.TAX),
+            owner = ObjectReference(id = 1111L, type = ObjectType.TAX),
         )
         val response = rest.postForEntity("/v1/notes", request, CreateNoteResponse::class.java)
 
@@ -104,7 +104,7 @@ class CreateNoteEndpointTest : AuthorizationAwareEndpointTest() {
 
         val owners = ownerDao.findByNoteId(noteId)
         assertEquals(1, owners.size)
-        assertEquals(request.reference!!.id, owners[0].ownerId)
-        assertEquals(request.reference!!.type, owners[0].ownerType)
+        assertEquals(request.owner!!.id, owners[0].ownerId)
+        assertEquals(request.owner!!.type, owners[0].ownerType)
     }
 }

@@ -4,43 +4,34 @@
 
 <div class="widget" th:fragment="form-breadcrumb(form)">
     <div class="widget-body">
-        <a href="/">Home</a>
-        &gt;
-        <a href="/settings">Settings</a>
-        &gt;
-        <a href="/settings/forms" th:if="${form}">Forms</a>
-        <span th:if="${form}">&gt;</span>
-        <span th:if="${form}" th:text="${form.longTitle}">TITLE</span>
-        <span th:if="!${form}">Forms</span>
+        <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item" th:if="${form}"><a href="/forms">Forms</a></li>
+                <li class="breadcrumb-item active" th:if="${form}">
+                    <img align="absmiddle" height="24" src="/image/form.png" width="24"/>
+                    <span th:text="${form.name}">FORM</span>
+                </li>
+                <li class="breadcrumb-item active" th:if="!${form}">Forms</li>
+            </ol>
+        </nav>
     </div>
 </div>
 
-<tr class="submission" th:fragment="submission-columns(submission)" th:remove="tag">
-    <td th:text="${submission.submittedAtText}">SUMITTED</td>
-    <td th:text="${submission.submittedBy?.displayName}">SUBMITTED</td>
+<tr class="form" th:fragment="columns(form)" th:remove="tag">
     <td>
-        <a class="btn-view" target="_new" th:href="${submission.url}">View</a>
+        <a th:href="'/forms/' + ${form.id} " th:text="${form.name}">NAME</a>
+    </td>
+    <td align="center">
+        <span th:if="${form.active}">Yes</span>
+        <span th:if="!${form.active}">No</span>
     </td>
 </tr>
 
-<tr id="submission-load-more" th:fragment="submission-load-more(moreUrl)" th:if="${moreUrl}">
-    <td class="text-center" th:colspan="3">
-        <a href="javascript: koki_load_more('submission-load-more')" th:data-url="${moreUrl}">Load more...</a>
+<tr id="form-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
+    <td class="text-center" colspan="2">
+        <a href="javascript: koki_load_more('form-load-more')" th:data-url="${moreUrl}">Load more...</a>
     </td>
 </tr>
-
-<div class="widget" th:fragment="form-submission-breadcrumb(submission)">
-    <div class="widget-body">
-        <a href="/">Home</a>
-        &gt;
-        <a href="/settings">Settings</a>
-        &gt;
-        <a href="/settings/forms">Forms</a>
-        &gt;
-        <a th:href="'/settings/forms/' + ${submission.form.id}" th:text="${submission.form.longTitle}">FORM</a>
-        &gt;
-        <span>Submissions</span>
-    </div>
-</div>
 
 </body>

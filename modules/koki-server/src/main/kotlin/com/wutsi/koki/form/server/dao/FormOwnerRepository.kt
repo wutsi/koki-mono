@@ -1,10 +1,10 @@
 package com.wutsi.koki.file.server.dao
 
-import com.wutsi.koki.file.server.domain.FileOwnerEntity
+import com.wutsi.koki.form.server.domain.FormOwnerEntity
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface FileOwnerRepository : CrudRepository<FileOwnerEntity, Long> {
-    fun findByFileId(fileId: Long): List<FileOwnerEntity>
+interface FormOwnerRepository : CrudRepository<FormOwnerEntity, Long> {
+    fun findByFormId(formId: Long): List<FormOwnerEntity>
 }
