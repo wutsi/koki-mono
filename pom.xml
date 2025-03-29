@@ -138,7 +138,7 @@
         <ua-java.version>1.6.1</ua-java.version>
         <xmemcached.version>2.4.8</xmemcached.version>
 
-        <wutsi-dto.version>0.0.169</wutsi-dto.version>
+        <wutsi-dto.version>0.0.170</wutsi-dto.version>
         <wutsi-platform.version>0.0.2</wutsi-platform.version>
     </properties>
 
