@@ -151,7 +151,7 @@ class TaxAIAgent(
                 ConfigurationName.TAX_AI_AGENT_ENABLED,
             )
         )
-        return configs.size == 2
+        return configs.size >= 2
     }
 
     private fun getStorageService(tenantId: Long): StorageService {
