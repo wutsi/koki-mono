@@ -6,6 +6,8 @@ import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.email.dto.Recipient
 import com.wutsi.koki.email.dto.SendEmailRequest
 import com.wutsi.koki.email.server.service.EmailService
+import com.wutsi.koki.file.server.domain.FileEntity
+import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.invoice.server.service.TenantTaxInitializer
 import com.wutsi.koki.notification.server.service.AbstractNotificationWorker
 import com.wutsi.koki.notification.server.service.NotificationConsumer
@@ -32,6 +34,7 @@ class TaxNotificationWorker(
     private val emailService: EmailService,
     private val taxService: TaxService,
     private val tenantService: TenantService,
+    private val fileService: FileService,
     private val userService: UserService,
     private val messages: MessageSource,
     private val logger: KVLogger,
@@ -234,13 +237,15 @@ class TaxNotificationWorker(
                     "recipientName" to account.name,
                     "taxFiscalYear" to tax.fiscalYear,
                     "clientPortalUrl" to tenant.portalUrl,
-                )
+                ),
+
+                attachmentFileIds = getFormFile(event, account.language)
+                    ?.let { file -> listOf(file.id!!) }
+                    ?: emptyList()
             ),
             tenantId = event.tenantId
         )
     }
-<<<<<<< Updated upstream
-=======
 
     private fun getFormFile(event: TaxStatusChangedEvent, language: String?): FileEntity? {
         if (event.status != TaxStatus.GATHERING_DOCUMENTS || event.formId == null) {
@@ -249,12 +254,11 @@ class TaxNotificationWorker(
 
         val files = fileService.search(
             tenantId = event.tenantId,
-            ownerType = ObjectType.FORM,
-            ownerId = event.formId,
+            ownerType = ObjectType.TAX,
+            ownerId = event.taxId,
         )
 
         return files.find { file -> file.language == language }
             ?: files.firstOrNull()
     }
->>>>>>> Stashed changes
 }

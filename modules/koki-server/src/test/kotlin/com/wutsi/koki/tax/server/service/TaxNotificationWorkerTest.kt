@@ -14,6 +14,8 @@ import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.email.dto.SendEmailRequest
 import com.wutsi.koki.email.server.service.EmailService
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
+import com.wutsi.koki.file.server.domain.FileEntity
+import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.form.server.domain.AccountEntity
 import com.wutsi.koki.invoice.server.service.TenantTaxInitializer
 import com.wutsi.koki.notification.server.service.NotificationConsumer
@@ -50,6 +52,7 @@ class TaxNotificationWorkerTest {
     private val logger = DefaultKVLogger()
     private val emailService = mock<EmailService>()
     private val typeService = mock<TypeService>()
+    private val fileService = mock<FileService>()
     private val worker = TaxNotificationWorker(
         registry = registry,
         configurationService = configurationService,
@@ -60,6 +63,7 @@ class TaxNotificationWorkerTest {
         messages = createMessageSource(),
         typeService = typeService,
         accountService = accountService,
+        fileService = fileService,
         logger = logger,
     )
 
@@ -78,6 +82,7 @@ class TaxNotificationWorkerTest {
         id = 777L,
         name = "Roger Milla",
         email = "roger.milla@gmail.com",
+        language = "en"
     )
     private val type = TypeEntity(
         id = 999L,
@@ -91,6 +96,11 @@ class TaxNotificationWorkerTest {
         taxTypeId = type.id,
         fiscalYear = 2024,
         status = TaxStatus.REVIEWING,
+    )
+    private val files = listOf(
+        FileEntity(id = 111L, language = "fr"),
+        FileEntity(id = 222L, language = "en"),
+        FileEntity(id = 333L, language = null),
     )
 
     val config = mapOf(
@@ -118,6 +128,14 @@ class TaxNotificationWorkerTest {
         doReturn(configurations).whenever(configurationService).search(anyOrNull(), anyOrNull(), anyOrNull())
         doReturn(tax).whenever(taxService).get(any(), any())
         doReturn(type).whenever(typeService).get(any(), any())
+        doReturn(files).whenever(fileService).search(
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+        )
     }
 
     @AfterEach
@@ -247,6 +265,36 @@ class TaxNotificationWorkerTest {
                 taxId = tax.id!!,
                 tenantId = tax.tenantId,
                 status = TaxStatus.GATHERING_DOCUMENTS,
+                formId = 11L
+            )
+        )
+
+        assertEquals(true, result)
+
+        val request = argumentCaptor<SendEmailRequest>()
+        verify(emailService).send(request.capture(), eq(tax.tenantId))
+
+        assertEquals(account.email, request.firstValue.recipient.email)
+        assertEquals(account.name, request.firstValue.recipient.displayName)
+        assertEquals(account.id, request.firstValue.recipient.id)
+        assertEquals(ObjectType.ACCOUNT, request.firstValue.recipient.type)
+        assertEquals(config[ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_SUBJECT], request.firstValue.subject)
+        assertEquals(config[ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_BODY], request.firstValue.body)
+        assertEquals(listOf(files[1].id), request.firstValue.attachmentFileIds)
+
+        assertEquals(account.name, request.firstValue.data["recipientName"])
+        assertEquals(tax.fiscalYear, request.firstValue.data["taxFiscalYear"])
+        assertEquals(tenant.portalUrl, request.firstValue.data["clientPortalUrl"])
+    }
+
+    @Test
+    fun `tax gathering-documents without form`() {
+        val result = worker.notify(
+            TaxStatusChangedEvent(
+                taxId = tax.id!!,
+                tenantId = tax.tenantId,
+                status = TaxStatus.GATHERING_DOCUMENTS,
+                formId = null
             )
         )
 

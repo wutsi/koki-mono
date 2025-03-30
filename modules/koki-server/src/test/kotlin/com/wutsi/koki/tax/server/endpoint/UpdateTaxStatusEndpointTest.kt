@@ -25,7 +25,7 @@ class UpdateTaxStatusEndpointTest : AuthorizationAwareEndpointTest() {
     @MockitoBean
     private lateinit var publisher: Publisher
 
-    private val request = UpdateTaxStatusRequest(status = TaxStatus.SUBMITTING)
+    private val request = UpdateTaxStatusRequest(status = TaxStatus.SUBMITTING, formId = 111L)
 
     @Test
     fun update() {
@@ -41,6 +41,7 @@ class UpdateTaxStatusEndpointTest : AuthorizationAwareEndpointTest() {
         val event = argumentCaptor<TaxStatusChangedEvent>()
         verify(publisher).publish(event.capture())
         assertEquals(request.status, event.firstValue.status)
+        assertEquals(request.formId, event.firstValue.formId)
         assertEquals(taxId, event.firstValue.taxId)
         assertEquals(TENANT_ID, event.firstValue.tenantId)
     }
