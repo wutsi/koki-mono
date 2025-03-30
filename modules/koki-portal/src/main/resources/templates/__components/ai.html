@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="ai-model(model)" th:remove="tag">
+    <img height="24" src="/image/gemini.png" th:if="${model == 'GEMINI'}" width="24"/>
+
+    <span th:if="!${model}">None</span>
+    <span th:if="${model}" th:text="#{'ai-model.' + ${model}}">TYPE</span>
+</div>
+
+
+</body>
+</html>

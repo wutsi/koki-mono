@@ -57,14 +57,15 @@
                         <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Type</th>
-                            <th>Status</th>
+                            <th th:if="!${types.isEmpty()}">Type</th>
                             <th>Job Title</th>
+                            <th>Status</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr class="employee" th:each="employee : ${employees}" th:if="${employees}">
-                            <div th:replace="~{__components/employee :: columns(${employee})}"></div>
+                            <div
+                                th:replace="~{__components/employee :: columns(${employee}, !${types.isEmpty()})}"></div>
                         </tr>
                         <tr th:if="${employees}"
                             th:replace="~{__components/employee :: load-more(${moreUrl})}"></tr>

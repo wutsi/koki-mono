@@ -144,7 +144,7 @@ class StripeGatewayServiceTest {
         assertEquals(true, (params.firstValue.expiresAt * 1000 - now) / 1000L <= 35 * 60L)
         assertEquals(SessionCreateParams.Mode.PAYMENT, params.firstValue.mode)
         assertEquals(
-            "http://localhost:8081/checkout/confirmation?transaction-id=${transaction.id}",
+            "http://localhost:8081/paynow/confirmation?transaction-id=${transaction.id}",
             params.firstValue.successUrl
         )
         assertEquals(params.firstValue.successUrl, params.firstValue.cancelUrl)

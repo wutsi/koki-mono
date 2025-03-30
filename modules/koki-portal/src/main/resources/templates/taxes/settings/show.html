@@ -23,8 +23,19 @@
             </tr>
             <tr>
                 <td>
-                    <b class="margin-right">AI Assistant</b>
-                    <div th:replace="~{__components/settings :: enabled-badge(${aiAgent.enabled})}"></div>
+                    <div>
+                        <b class="margin-right">AI Assistant</b>
+                        <div th:replace="~{__components/settings :: enabled-badge(${aiAgent.enabled})}"></div>
+                    </div>
+                    <div>
+                        AI Model:
+                        <div th:replace="~{__components/ai :: ai-model(${aiAgent.model})}"></div>
+                    </div>
+                    <div class="alert alert-warning margi-top" th:if="!${aiAgent.model} AND ${aiAgent.enabled}">
+                        You must configure the AI model for your assistant to work.
+                        <br/>
+                        <a href="/settings/ai">Configure</a>
+                    </div>
                 </td>
                 <td align="right">
                     <a class="btn btn-sm btn-primary btn-agent-enable"

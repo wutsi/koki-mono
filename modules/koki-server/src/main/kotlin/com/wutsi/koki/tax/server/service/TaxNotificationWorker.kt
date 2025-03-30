@@ -239,4 +239,22 @@ class TaxNotificationWorker(
             tenantId = event.tenantId
         )
     }
+<<<<<<< Updated upstream
+=======
+
+    private fun getFormFile(event: TaxStatusChangedEvent, language: String?): FileEntity? {
+        if (event.status != TaxStatus.GATHERING_DOCUMENTS || event.formId == null) {
+            return null
+        }
+
+        val files = fileService.search(
+            tenantId = event.tenantId,
+            ownerType = ObjectType.FORM,
+            ownerId = event.formId,
+        )
+
+        return files.find { file -> file.language == language }
+            ?: files.firstOrNull()
+    }
+>>>>>>> Stashed changes
 }

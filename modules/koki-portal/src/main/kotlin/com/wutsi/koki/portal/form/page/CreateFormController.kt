@@ -22,7 +22,7 @@ class CreateFormController(
     fun create(
         model: Model,
     ): String {
-        val form = FormForm()
+        val form = FormForm(active = true)
         return create(form, model)
     }
 

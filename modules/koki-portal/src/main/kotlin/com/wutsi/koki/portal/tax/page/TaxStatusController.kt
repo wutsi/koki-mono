@@ -28,9 +28,14 @@ class TaxStatusController(
     ): String {
         val tax = service.tax(id)
         val form = TaxStatusForm(
-            status = status ?: TaxStatus.NEW,
+            status = status ?: nextStatus(tax.status)
         )
         return edit(tax, form, model)
+    }
+
+    private fun nextStatus(status: TaxStatus): TaxStatus {
+        return TaxStatus.entries.find { value -> value.ordinal == status.ordinal + 1 }
+            ?: status
     }
 
     private fun edit(tax: TaxModel, form: TaxStatusForm, model: Model): String {

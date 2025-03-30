@@ -30,7 +30,7 @@ class StripeGatewayService(
         val invoice = invoiceService.get(tx.invoiceId, tx.tenantId)
         val tenant = tenantService.get(tx.tenantId)
         val client = stripeClientBuilder.build(tx.tenantId)
-        val redirectUrl = "${tenant.portalUrl}/checkout/confirmation?transaction-id=${tx.id}"
+        val redirectUrl = "${tenant.portalUrl}/paynow/confirmation?transaction-id=${tx.id}"
 
         val params = SessionCreateParams.builder()
             .setSuccessUrl(redirectUrl)

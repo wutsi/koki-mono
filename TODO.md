@@ -176,14 +176,25 @@
 
 ## Taxes
 
+<<<<<<< Updated upstream
 - [] Link a tax with a form
 - [] Send the form to customer when status=GATHERING_DOCUMENTS
+=======
+- [] Compile for every tax report the total hours (from notes)
+- [] Compile for every tax report the total cost (from employee)
+- [] Compile for every tax report the total revenu (from product)
+>>>>>>> Stashed changes
 - [] Taxes KPI
     - [] Time spent by Tax report
     - [] Time spent on Tax report by user
     - [] Labor cost by Tax report
     - [] Total time spent on Tax Report per user
 - [] Add Kanban view
+<<<<<<< Updated upstream
+=======
+- [] Send email notification when files are uploaded
+- [x] Send the form to customer when status=GATHERING_DOCUMENTS
+>>>>>>> Stashed changes
 - [x] Settings: Setup email notification
     - [x] When task assigned
     - [x] When starting document collection
@@ -221,5 +232,6 @@
 
 ## Web
 
+- [] After user logs-out, he can access any page without login
 - [] Sort the tabs of the menu
 - [] serve all static resource from external site

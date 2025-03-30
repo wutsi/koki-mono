@@ -49,15 +49,15 @@
             <div class="widget">
                 <div class="widget-body">
                     <ul class="steps-progress-bar steps-progress-bar-invoice">
-                        <li th:class="${status.ordinal() == tax.status.ordinal()} ? 'active'"
+                        <li th:class="${status.ordinal() == tax.status.ordinal()} AND ${tax.status.name != 'DONE'} ? 'active'"
                             th:each="status : ${statuses}">
                             <p>
                                 <i class="fa-solid fa-circle-check success"
-                                   th:if="${status.ordinal() < tax.status.ordinal()}"></i>
+                                   th:if="${status.ordinal() < tax.status.ordinal()} OR ${tax.status.name == 'DONE'}"></i>
                                 <i class="fa-regular fa-circle"
                                    th:if="${status.ordinal() > tax.status.ordinal()}"></i>
                                 <i class="fa-solid fa-circle info"
-                                   th:if="${status.ordinal() == tax.status.ordinal()}"></i>
+                                   th:if="${status.ordinal() == tax.status.ordinal()} AND ${tax.status.name != 'DONE'}"></i>
                             </p>
                             <p>
                                 <a th:class="'btn-status-' + ${status.name}"
