@@ -2,7 +2,7 @@ package com.wutsi.koki.payment.dto
 
 import java.util.Date
 
-data class PaymentMethodInteract(
+data class PaymentMethodInterac(
     val id: String = "",
     val referenceNumber: String = "",
     val bankName: String = "",
