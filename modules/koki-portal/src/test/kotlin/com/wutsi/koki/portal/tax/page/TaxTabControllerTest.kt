@@ -24,7 +24,7 @@ class TaxTabControllerTest : AbstractPageControllerTest() {
     @Test
     fun view() {
         navigateTo("/taxes/tab?test-mode=true&owner-id=111&owner-type=ACCOUNT")
-        click(".btn-view")
+        click("tr.tax a")
 
         assertCurrentPageIs(PageName.TAX)
     }

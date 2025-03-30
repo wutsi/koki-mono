@@ -5,7 +5,7 @@ INSERT INTO T_TRANSACTION(id, tenant_fk, type, payment_method_type, status, invo
            (120, 1, 1, 2, 2, 1111, 500, 'CAD', 0, null, null, null, 'check'),
            (129, 1, 1, 2, 2, 1111, 500, 'CAD', 0, null, null, null, 'check'),
 
-           (130, 1, 3, 3, 1, 1111, 500, 'CAD', 0, null, null, null, 'interact'),
+           (130, 1, 3, 3, 1, 1111, 500, 'CAD', 0, null, null, null, 'interac'),
            (139, 1, 1, 3, 1, 1111, 500, 'CAD', 0, null, null, null, null),
 
            (140, 1, 1, 4, 1, 1111, 500, 'CAD', 1, null, null, 'STRIPE.140', 'credit-card PENDING'),

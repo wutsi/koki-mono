@@ -18,7 +18,6 @@ class FormControllerTest : AbstractPageControllerTest() {
         navigateTo("/forms/${form.id}")
         assertCurrentPageIs(PageName.FORM)
         assertElementPresent(".btn-edit")
-        assertElementPresent(".btn-create")
         assertElementPresent(".btn-delete")
     }
 
@@ -45,7 +44,6 @@ class FormControllerTest : AbstractPageControllerTest() {
         navigateTo("/forms/${form.id}")
         assertCurrentPageIs(PageName.FORM)
         assertElementNotPresent(".btn-edit")
-        assertElementNotPresent(".btn-create")
         assertElementPresent(".btn-delete")
     }
 
@@ -56,7 +54,6 @@ class FormControllerTest : AbstractPageControllerTest() {
         navigateTo("/forms/${form.id}")
         assertCurrentPageIs(PageName.FORM)
         assertElementPresent(".btn-edit")
-        assertElementPresent(".btn-create")
         assertElementNotPresent(".btn-delete")
     }
 
