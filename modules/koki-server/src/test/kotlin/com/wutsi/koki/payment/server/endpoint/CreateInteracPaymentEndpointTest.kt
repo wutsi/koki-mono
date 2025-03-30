@@ -9,7 +9,7 @@ import com.wutsi.koki.payment.dto.PaymentMethodType
 import com.wutsi.koki.payment.dto.TransactionStatus
 import com.wutsi.koki.payment.dto.TransactionType
 import com.wutsi.koki.payment.dto.event.TransactionCompletedEvent
-import com.wutsi.koki.payment.server.dao.PaymentMethodInteractRepository
+import com.wutsi.koki.payment.server.dao.PaymentMethodInteracRepository
 import com.wutsi.koki.payment.server.dao.TransactionRepository
 import com.wutsi.koki.platform.mq.Publisher
 import org.apache.commons.lang3.time.DateUtils
@@ -28,7 +28,7 @@ class CreateInteracPaymentEndpointTest : AuthorizationAwareEndpointTest() {
     private lateinit var dao: TransactionRepository
 
     @Autowired
-    private lateinit var interactDao: PaymentMethodInteractRepository
+    private lateinit var interactDao: PaymentMethodInteracRepository
 
     @MockitoBean
     private lateinit var publisher: Publisher

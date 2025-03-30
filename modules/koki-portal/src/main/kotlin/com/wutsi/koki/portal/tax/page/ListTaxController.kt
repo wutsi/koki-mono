@@ -75,7 +75,7 @@ class ListTaxController(
         model.addAttribute("view", getView(view))
         model.addAttribute("month", getMonth(month))
 
-        model.addAttribute("statuses", TaxStatus.entries)
+        model.addAttribute("statuses", TaxStatus.entries.filter { status -> status != TaxStatus.UNKNOWN })
         model.addAttribute("status", status)
 
         model.addAttribute(

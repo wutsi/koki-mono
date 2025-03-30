@@ -81,7 +81,7 @@ class ListPaymentControllerTest : AbstractPageControllerTest() {
     @Test
     fun show() {
         navigateTo("/payments")
-        click(".btn-view")
+        click("tr.payment a")
 
         assertCurrentPageIs(PageName.PAYMENT)
     }

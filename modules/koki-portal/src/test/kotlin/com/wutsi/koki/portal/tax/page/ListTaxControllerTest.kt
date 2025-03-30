@@ -61,7 +61,7 @@ class ListTaxControllerTest : AbstractPageControllerTest() {
     @Test
     fun show() {
         navigateTo("/taxes")
-        click(".btn-view")
+        click("tr.tax a")
         assertCurrentPageIs(PageName.TAX)
     }
 
@@ -70,13 +70,6 @@ class ListTaxControllerTest : AbstractPageControllerTest() {
         navigateTo("/taxes")
         click(".btn-create")
         assertCurrentPageIs(PageName.TAX_CREATE)
-    }
-
-    @Test
-    fun edit() {
-        navigateTo("/taxes")
-        click(".btn-edit")
-        assertCurrentPageIs(PageName.TAX_EDIT)
     }
 
     @Test

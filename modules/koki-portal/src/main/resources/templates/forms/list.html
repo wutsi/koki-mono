@@ -19,7 +19,7 @@
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
-                    <div class="flex flex-space-between">
+                    <div class="flex flex-space-between margin-bottom">
                         <div>
                             <a class="btn-create btn btn-primary btn-sm" href="/forms/create"
                                th:if="${user?.hasPermission('form:manage')}">
@@ -31,8 +31,8 @@
                                     onchange="koki_forms_on_filter_changed()"
                                     style="width: auto">
                                 <option value="">All</option>
-                                <option value="true">Active</option>
-                                <option value="false">Inactive</option>
+                                <option th:selected="${active} == true" value="true">Active</option>
+                                <option th:selected="${active} == false" value="false">Inactive</option>
                             </select>
                         </div>
                     </div>
@@ -61,9 +61,9 @@
 
 <script>
     function koki_forms_on_filter_changed() {
-        const status = document.getElementById('filter-active').value;
+        const active = document.getElementById('filter-active').value;
         document.location.href = '/forms?' +
-            (status && status.length > 0 ? '&status=' + status : '');
+            (active && active.length > 0 ? '&active=' + active : '');
     }
 </script>
 </body>

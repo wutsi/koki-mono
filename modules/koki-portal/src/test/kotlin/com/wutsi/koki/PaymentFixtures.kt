@@ -3,11 +3,14 @@ package com.wutsi.koki
 import com.wutsi.koki.payment.dto.PaymentGateway
 import com.wutsi.koki.payment.dto.PaymentMethod
 import com.wutsi.koki.payment.dto.PaymentMethodCash
+import com.wutsi.koki.payment.dto.PaymentMethodCheck
+import com.wutsi.koki.payment.dto.PaymentMethodInterac
 import com.wutsi.koki.payment.dto.PaymentMethodType
 import com.wutsi.koki.payment.dto.Transaction
 import com.wutsi.koki.payment.dto.TransactionStatus
 import com.wutsi.koki.payment.dto.TransactionSummary
 import com.wutsi.koki.payment.dto.TransactionType
+import org.apache.commons.lang3.time.DateUtils
 import java.util.Date
 import java.util.UUID
 
@@ -112,6 +115,18 @@ object PaymentFixtures {
                 collectedAt = Date(),
                 collectedById = UserFixtures.users[0].id,
             ),
+            interac = PaymentMethodInterac(
+                clearedAt = Date(),
+                sentAt = DateUtils.addDays(Date(), -3),
+                bankName = "DESJARDINS",
+                referenceNumber = "1293029-1092019"
+            ),
+            check = PaymentMethodCheck(
+                checkNumber = "135",
+                bankName = "CIBC",
+//                checkDate = DateUtils.addDays(Date(), -1),
+                clearedAt = Date(),
+            )
         )
     )
 }

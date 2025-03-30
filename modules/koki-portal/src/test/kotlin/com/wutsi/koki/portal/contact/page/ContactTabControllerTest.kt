@@ -32,17 +32,9 @@ class ContactTabControllerTest : AbstractPageControllerTest() {
     @Test
     fun view() {
         navigateTo("/contacts/tab?test-mode=true&owner-id=111&owner-type=ACCOUNT")
-        click(".btn-view")
+        click("tr.contact a")
 
         assertCurrentPageIs(PageName.CONTACT)
-    }
-
-    @Test
-    fun edit() {
-        navigateTo("/contacts/tab?test-mode=true&owner-id=111&owner-type=ACCOUNT")
-        click(".btn-edit")
-
-        assertCurrentPageIs(PageName.CONTACT_EDIT)
     }
 
     @Test

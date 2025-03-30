@@ -18,11 +18,11 @@
     </div>
 </div>
 
-<tr class="contact" th:fragment="columns(contact, showAccount)" th:remove="tag">
+<tr class="contact" th:fragment="columns(contact, showAccount, showType)" th:remove="tag">
     <td>
         <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.name}">NAME</a>
     </td>
-    <td th:text="${contact.contactType?.title}">CONTACT TYPE</td>
+    <td th:if="${showType}" th:text="${contact.contactType?.title}">CONTACT TYPE</td>
     <td>
         <a th:href="'mailto:' + ${contact.email}" th:if="${contact.email}" th:text="${contact.email}">EMAIL</a>
     </td>
@@ -33,17 +33,10 @@
            th:if="${contact.account}"
            th:text="${contact.account.name}">CONTACT</a>
     </td>
-    <td class="toolbar">
-        <a class="btn-view" th:href="'/contacts/' + ${contact.id}"
-           th:if="${user?.hasPermission('contact')}">View</a>
-
-        <a class="btn-edit" th:href="'/contacts/' + ${contact.id} + '/edit'"
-           th:if="${user?.hasPermission('contact:manage')}">Edit</a>
-    </td>
 </tr>
 
-<tr id="contact-load-more" th:fragment="load-more(moreUrl, showContact)" th:if="${moreUrl}">
-    <td class="text-center" th:colspan="${showContact} ? 7 : 6">
+<tr id="contact-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
+    <td class="text-center" th:colspan="7">
         <a href="javascript: koki_load_more('contact-load-more')" th:data-url="${moreUrl}">Load more...</a>
     </td>
 </tr>

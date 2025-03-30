@@ -17,11 +17,11 @@ import com.wutsi.koki.payment.dto.TransactionStatus
 import com.wutsi.koki.payment.dto.TransactionType
 import com.wutsi.koki.payment.server.dao.PaymentMethodCashRepository
 import com.wutsi.koki.payment.server.dao.PaymentMethodCheckRepository
-import com.wutsi.koki.payment.server.dao.PaymentMethodInteractRepository
+import com.wutsi.koki.payment.server.dao.PaymentMethodInteracRepository
 import com.wutsi.koki.payment.server.dao.TransactionRepository
 import com.wutsi.koki.payment.server.domain.PaymentMethodCashEntity
 import com.wutsi.koki.payment.server.domain.PaymentMethodCheckEntity
-import com.wutsi.koki.payment.server.domain.PaymentMethodInteractEntity
+import com.wutsi.koki.payment.server.domain.PaymentMethodInteracEntity
 import com.wutsi.koki.payment.server.domain.TransactionEntity
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
@@ -35,7 +35,7 @@ import java.util.UUID
 class PaymentService(
     private val dao: TransactionRepository,
     private val cashDao: PaymentMethodCashRepository,
-    private val interactDao: PaymentMethodInteractRepository,
+    private val interactDao: PaymentMethodInteracRepository,
     private val checkDao: PaymentMethodCheckRepository,
     private val securityService: SecurityService,
     private val invoiceService: InvoiceService,
@@ -70,7 +70,7 @@ class PaymentService(
         return paymentMethod
     }
 
-    fun getInteracByTransactionId(transactionId: String): PaymentMethodInteractEntity {
+    fun getInteracByTransactionId(transactionId: String): PaymentMethodInteracEntity {
         val paymentMethod = interactDao.findByTransactionId(transactionId)
         if (paymentMethod == null) {
             throw NotFoundException(
@@ -115,7 +115,7 @@ class PaymentService(
     }
 
     @Transactional
-    fun interact(request: CreateInteracPaymentRequest, tenantId: Long): TransactionEntity {
+    fun interac(request: CreateInteracPaymentRequest, tenantId: Long): TransactionEntity {
         val userId = securityService.getCurrentUserIdOrNull()
         val now = Date()
         val tx = dao.save(
@@ -135,7 +135,7 @@ class PaymentService(
             )
         )
         interactDao.save(
-            PaymentMethodInteractEntity(
+            PaymentMethodInteracEntity(
                 id = UUID.randomUUID().toString(),
                 tenantId = tenantId,
                 transactionId = tx.id!!,

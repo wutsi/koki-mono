@@ -3,12 +3,12 @@ package com.wutsi.koki.payment.server.mapper
 import com.wutsi.koki.payment.dto.PaymentMethod
 import com.wutsi.koki.payment.dto.PaymentMethodCash
 import com.wutsi.koki.payment.dto.PaymentMethodCheck
-import com.wutsi.koki.payment.dto.PaymentMethodInteract
+import com.wutsi.koki.payment.dto.PaymentMethodInterac
 import com.wutsi.koki.payment.dto.Transaction
 import com.wutsi.koki.payment.dto.TransactionSummary
 import com.wutsi.koki.payment.server.domain.PaymentMethodCashEntity
 import com.wutsi.koki.payment.server.domain.PaymentMethodCheckEntity
-import com.wutsi.koki.payment.server.domain.PaymentMethodInteractEntity
+import com.wutsi.koki.payment.server.domain.PaymentMethodInteracEntity
 import com.wutsi.koki.payment.server.domain.TransactionEntity
 import org.springframework.stereotype.Service
 
@@ -32,7 +32,7 @@ class TransactionMapper {
     fun toTransaction(
         entity: TransactionEntity,
         cash: PaymentMethodCashEntity?,
-        interact: PaymentMethodInteractEntity?,
+        interact: PaymentMethodInteracEntity?,
         check: PaymentMethodCheckEntity?
     ): Transaction {
         return Transaction(
@@ -54,7 +54,7 @@ class TransactionMapper {
             supplierErrorMessage = entity.supplierErrorMessage,
             paymentMethod = PaymentMethod(
                 cash = cash?.let { toPaymentMethodCash(cash) },
-                interact = interact?.let { toPaymentMethodInteract(interact) },
+                interac = interact?.let { toPaymentMethodInteract(interact) },
                 check = check?.let { toPaymentMethodCheck(check) },
             )
         )
@@ -68,8 +68,8 @@ class TransactionMapper {
         )
     }
 
-    private fun toPaymentMethodInteract(entity: PaymentMethodInteractEntity): PaymentMethodInteract {
-        return PaymentMethodInteract(
+    private fun toPaymentMethodInteract(entity: PaymentMethodInteracEntity): PaymentMethodInterac {
+        return PaymentMethodInterac(
             id = entity.id!!,
             referenceNumber = entity.referenceNumber,
             sentAt = entity.sentAt,

@@ -29,11 +29,6 @@
                                th:href="'/forms/' + ${form.id} + '/edit'"
                                th:if="${user?.hasPermission('form:manage')}">Edit</a>
 
-                            <a class="btn-create btn btn-primary btn-sm" href="/forms/create"
-                               th:if="${user?.hasPermission('form:manage')}">
-                                Create New Form
-                            </a>
-
                             <a class="btn-delete btn btn-danger btn-sm"
                                onclick="return confirm('Are you sure you want to delete the form?')"
                                th:href="'/forms/' + ${form.id} + '/delete'"

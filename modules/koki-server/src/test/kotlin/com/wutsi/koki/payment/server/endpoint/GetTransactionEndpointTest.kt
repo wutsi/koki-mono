@@ -56,7 +56,7 @@ class GetTransactionEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(null, tx.supplierErrorCode)
         assertEquals("credit-card PENDING", tx.description)
 
-        assertEquals(null, tx.paymentMethod.interact)
+        assertEquals(null, tx.paymentMethod.interac)
         assertEquals(null, tx.paymentMethod.check)
         assertEquals(null, tx.paymentMethod.cash)
 
@@ -89,7 +89,7 @@ class GetTransactionEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(ex.supplierErrorCode, tx.supplierErrorCode)
         assertEquals("credit-card PENDING", tx.description)
 
-        assertEquals(null, tx.paymentMethod.interact)
+        assertEquals(null, tx.paymentMethod.interac)
         assertEquals(null, tx.paymentMethod.check)
         assertEquals(null, tx.paymentMethod.cash)
 
@@ -115,7 +115,7 @@ class GetTransactionEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(null, tx.supplierErrorCode)
         assertEquals("credit-card SUCCESSFUL", tx.description)
 
-        assertEquals(null, tx.paymentMethod.interact)
+        assertEquals(null, tx.paymentMethod.interac)
         assertEquals(null, tx.paymentMethod.check)
         assertEquals(null, tx.paymentMethod.cash)
 
@@ -138,7 +138,7 @@ class GetTransactionEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(null, tx.supplierErrorCode)
         assertEquals("credit-card FAILED", tx.description)
 
-        assertEquals(null, tx.paymentMethod.interact)
+        assertEquals(null, tx.paymentMethod.interac)
         assertEquals(null, tx.paymentMethod.check)
         assertEquals(null, tx.paymentMethod.cash)
 
@@ -163,7 +163,7 @@ class GetTransactionEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("insufisant-funds", tx.supplierErrorCode)
         assertEquals("cash", tx.description)
 
-        assertEquals(null, tx.paymentMethod.interact)
+        assertEquals(null, tx.paymentMethod.interac)
         assertEquals(null, tx.paymentMethod.check)
         assertEquals(555, tx.paymentMethod.cash?.collectedById)
         assertNotNull(tx.paymentMethod.cash?.collectedAt)
@@ -194,7 +194,7 @@ class GetTransactionEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(null, tx.supplierErrorCode)
         assertEquals("check", tx.description)
 
-        assertEquals(null, tx.paymentMethod.interact)
+        assertEquals(null, tx.paymentMethod.interac)
         assertEquals(null, tx.paymentMethod.cash)
         assertEquals("1234", tx.paymentMethod.check?.checkNumber)
         assertEquals("TD Bank", tx.paymentMethod.check?.bankName)
@@ -210,7 +210,7 @@ class GetTransactionEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun interact() {
+    fun interac() {
         val response = rest.getForEntity("/v1/transactions/130", GetTransactionResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
@@ -224,18 +224,18 @@ class GetTransactionEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("CAD", tx.currency)
         assertEquals(null, tx.errorCode)
         assertEquals(null, tx.supplierErrorCode)
-        assertEquals("interact", tx.description)
+        assertEquals("interac", tx.description)
 
         assertEquals(null, tx.paymentMethod.check)
         assertEquals(null, tx.paymentMethod.cash)
-        assertEquals("1234", tx.paymentMethod.interact?.referenceNumber)
-        assertEquals("TD Bank", tx.paymentMethod.interact?.bankName)
-        assertNotNull(tx.paymentMethod.interact?.sentAt)
-        assertNotNull(tx.paymentMethod.interact?.clearedAt)
+        assertEquals("1234", tx.paymentMethod.interac?.referenceNumber)
+        assertEquals("TD Bank", tx.paymentMethod.interac?.bankName)
+        assertNotNull(tx.paymentMethod.interac?.sentAt)
+        assertNotNull(tx.paymentMethod.interac?.clearedAt)
     }
 
     @Test
-    fun `interact without payment method details`() {
+    fun `interac without payment method details`() {
         val response = rest.getForEntity("/v1/transactions/139", ErrorResponse::class.java)
 
         assertEquals(HttpStatus.NOT_FOUND, response.statusCode)

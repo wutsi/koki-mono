@@ -2,12 +2,16 @@ package com.wutsi.koki.portal.payment.mapper
 
 import com.wutsi.koki.payment.dto.PaymentMethod
 import com.wutsi.koki.payment.dto.PaymentMethodCash
+import com.wutsi.koki.payment.dto.PaymentMethodCheck
+import com.wutsi.koki.payment.dto.PaymentMethodInterac
 import com.wutsi.koki.payment.dto.Transaction
 import com.wutsi.koki.payment.dto.TransactionSummary
 import com.wutsi.koki.portal.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.invoice.model.InvoiceModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.payment.model.PaymentMethodCashModel
+import com.wutsi.koki.portal.payment.model.PaymentMethodCheckModel
+import com.wutsi.koki.portal.payment.model.PaymentMethodInteracModel
 import com.wutsi.koki.portal.payment.model.PaymentMethodModel
 import com.wutsi.koki.portal.payment.model.TransactionModel
 import com.wutsi.koki.portal.user.model.UserModel
@@ -70,7 +74,9 @@ class PaymentMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() 
         users: Map<Long, UserModel>
     ): PaymentMethodModel {
         return PaymentMethodModel(
-            cash = entity.cash?.let { cash -> toPaymentMethodCashModel(cash, users) }
+            cash = entity.cash?.let { cash -> toPaymentMethodCashModel(cash, users) },
+            interac = entity.interac?.let { interac -> toPaymentMethodInteracModel(interac) },
+            check = entity.check?.let { check -> toPaymentMethodCheckModel(check) }
         )
     }
 
@@ -78,12 +84,36 @@ class PaymentMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() 
         entity: PaymentMethodCash,
         users: Map<Long, UserModel>
     ): PaymentMethodCashModel {
-        val fmt = createDateTimeFormat()
+        val fmt = createDateFormat()
         return PaymentMethodCashModel(
             id = entity.id,
             collectedBy = entity.collectedById?.let { id -> users[id] },
             collectedAt = entity.collectedAt,
             collectedAtText = entity.collectedAt?.let { date -> fmt.format(date) },
+        )
+    }
+
+    fun toPaymentMethodInteracModel(entity: PaymentMethodInterac): PaymentMethodInteracModel {
+        val fmt = createDateFormat()
+        return PaymentMethodInteracModel(
+            id = entity.id,
+            referenceNumber = entity.referenceNumber,
+            sentAt = entity.sentAt,
+            sentAtText = entity.sentAt?.let { date -> fmt.format(date) },
+            clearedAt = entity.clearedAt,
+            clearedAtText = entity.clearedAt?.let { date -> fmt.format(date) },
+            bankName = entity.bankName,
+        )
+    }
+
+    fun toPaymentMethodCheckModel(entity: PaymentMethodCheck): PaymentMethodCheckModel {
+        val fmt = createDateFormat()
+        return PaymentMethodCheckModel(
+            id = entity.id,
+            bankName = entity.bankName,
+            checkNumber = entity.checkNumber,
+            clearedAt = entity.clearedAt,
+            clearedAtText = entity.clearedAt?.let { date -> fmt.format(date) },
         )
     }
 }

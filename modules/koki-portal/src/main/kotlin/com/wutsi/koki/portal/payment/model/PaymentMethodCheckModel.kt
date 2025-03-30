@@ -2,12 +2,10 @@ package com.wutsi.koki.portal.payment.model
 
 import java.util.Date
 
-data class PaymentMethodInteracModel(
+data class PaymentMethodCheckModel(
     val id: String = "",
-    val referenceNumber: String = "",
+    val checkNumber: String = "",
     val bankName: String = "",
-    val sentAt: Date? = null,
-    val sentAtText: String? = null,
     val clearedAt: Date? = null,
     val clearedAtText: String? = null,
 )

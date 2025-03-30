@@ -39,6 +39,7 @@ class ListFormController(
             )
         )
 
+        model.addAttribute("active", active)
         loadToast(referer, toast, timestamp, model)
         more(active, limit, offset, model)
         return "forms/list"

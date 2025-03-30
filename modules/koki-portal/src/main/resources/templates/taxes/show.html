@@ -48,7 +48,7 @@
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
-                    <ul class="steps-progress-bar">
+                    <ul class="steps-progress-bar steps-progress-bar-invoice">
                         <li th:class="${status.ordinal() == tax.status.ordinal()} ? 'active'"
                             th:each="status : ${statuses}">
                             <p>

@@ -76,7 +76,7 @@ class PaymentTabControllerTest : AbstractPageControllerTest() {
     @Test
     fun show() {
         navigateTo("/payments/tab?test-mode=true&owner-type=INVOICE&owner-id=" + invoice.id)
-        click(".btn-view")
+        click("tr.payment a")
 
         assertCurrentPageIs(PageName.PAYMENT)
     }
