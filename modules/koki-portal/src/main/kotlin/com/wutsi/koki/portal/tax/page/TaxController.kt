@@ -1,8 +1,12 @@
 package com.wutsi.koki.portal.tax.page
 
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.portal.common.page.PageName
+import com.wutsi.koki.portal.invoice.service.InvoiceService
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tax.model.TaxModel
+import com.wutsi.koki.portal.tax.service.TaxProductService
 import com.wutsi.koki.portal.tax.service.TaxService
 import com.wutsi.koki.tax.dto.TaxStatus
 import org.springframework.stereotype.Controller
@@ -17,6 +21,8 @@ import org.springframework.web.client.HttpClientErrorException
 @RequiresPermission(["tax"])
 class TaxController(
     private val service: TaxService,
+    private val invoiceService: InvoiceService,
+    private val taxProductService: TaxProductService,
 ) : AbstractTaxDetailsController() {
     @GetMapping("/taxes/{id}")
     fun show(
@@ -40,6 +46,15 @@ class TaxController(
         model.addAttribute("tax", tax)
         model.addAttribute("statuses", TaxStatus.entries.filter { status -> status != TaxStatus.UNKNOWN })
 
+        val invoices = invoiceService.invoices(
+            taxId = tax.id,
+            statuses = InvoiceStatus.entries.filter { status ->
+                status != InvoiceStatus.UNKNOWN && status != InvoiceStatus.VOIDED
+            },
+            limit = 1,
+        )
+        model.addAttribute("invoice", invoices.firstOrNull())
+
         model.addAttribute(
             "page",
             createPageModel(
@@ -57,6 +72,29 @@ class TaxController(
         try {
             service.delete(id)
             return "redirect:/taxes?_op=del&_toast=$id&_ts=" + System.currentTimeMillis()
+        } catch (ex: HttpClientErrorException) {
+            val errorResponse = toErrorResponse(ex)
+            model.addAttribute("error", errorResponse.error.code)
+            return show(tax, model)
+        }
+    }
+
+    @GetMapping("/taxes/{id}/create-invoice")
+    @RequiresPermission(["invoice:manage"])
+    fun createInvoice(@PathVariable id: Long, model: Model): String {
+        val tax = service.tax(id)
+        val taxProducts = taxProductService.products(
+            taxIds = listOf(id),
+            limit = Integer.MAX_VALUE
+        )
+        if (taxProducts.isEmpty()) {
+            model.addAttribute("error", ErrorCode.INVOICE_NO_PRODUCT)
+            return show(tax, model)
+        }
+
+        try {
+            val id = invoiceService.createInvoice(tax, taxProducts)
+            return "redirect:/invoices/$id?op=create&_toast=$id&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)

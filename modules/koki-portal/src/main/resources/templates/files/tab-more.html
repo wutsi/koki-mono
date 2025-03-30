@@ -1,4 +1,4 @@
 <tr class="file" th:each="file : ${files}">
-    <td th:replace="~{__components/file :: columns(${file})}"></td>
+    <td th:replace="~{__components/file :: columns(${file}, ${readOnly})}"></td>
 </tr>
 <tr th:replace="~{__components/file :: load-more(${moreUrl})}"></tr>

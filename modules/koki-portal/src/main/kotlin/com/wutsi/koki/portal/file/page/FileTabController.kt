@@ -18,6 +18,7 @@ class FileTabController(private val service: FileService) : AbstractPageControll
         @RequestParam(name = "owner-id") ownerId: Long,
         @RequestParam(name = "owner-type") ownerType: ObjectType,
         @RequestParam(required = false, name = "test-mode") testMode: String? = null,
+        @RequestParam(required = false, name = "read-only") readOnly: Boolean? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model
@@ -32,7 +33,7 @@ class FileTabController(private val service: FileService) : AbstractPageControll
         model.addAttribute("testMode", testMode)
         model.addAttribute("ownerId", ownerId)
         model.addAttribute("ownerType", ownerType)
-        more(ownerId, ownerType, limit, offset, model)
+        more(ownerId, ownerType, readOnly, limit, offset, model)
         return "files/tab"
     }
 
@@ -40,6 +41,7 @@ class FileTabController(private val service: FileService) : AbstractPageControll
     fun more(
         @RequestParam(required = false, name = "owner-id") ownerId: Long,
         @RequestParam(required = false, name = "owner-type") ownerType: ObjectType,
+        @RequestParam(required = false, name = "read-only") readOnly: Boolean? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model
@@ -48,12 +50,16 @@ class FileTabController(private val service: FileService) : AbstractPageControll
             ownerId = ownerId,
             ownerType = ownerType,
         )
+        model.addAttribute("readOnly", readOnly)
         if (files.isNotEmpty()) {
             model.addAttribute("files", files)
 
             if (files.size >= limit) {
                 val nextOffset = offset + limit
-                val url = "/files/tab/more?limit=$limit&offset=$nextOffset&owner-id=$ownerId&owner-type=$ownerType"
+                var url = "/files/tab/more?limit=$limit&offset=$nextOffset&owner-id=$ownerId&owner-type=$ownerType"
+                if (readOnly != null) {
+                    url = "$url&read-only=$readOnly"
+                }
                 model.addAttribute("moreUrl", url)
             }
         }

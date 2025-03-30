@@ -25,6 +25,7 @@ data class ContactModel(
     val modifiedAtText: String = "",
     val createdBy: UserModel? = null,
     val modifiedBy: UserModel? = null,
+    val readOnly: Boolean = false,
 ) {
     val name: String
         get() = ((salutation ?: "") + " $firstName $lastName").trim()

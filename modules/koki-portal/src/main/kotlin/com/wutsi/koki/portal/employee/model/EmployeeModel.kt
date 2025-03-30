@@ -22,6 +22,7 @@ data class EmployeeModel(
     val modifiedAtText: String = "",
     val createdBy: UserModel? = null,
     val modifiedBy: UserModel? = null,
+    val readOnly: Boolean = false,
 ) {
     val id: Long
         get() = user.id

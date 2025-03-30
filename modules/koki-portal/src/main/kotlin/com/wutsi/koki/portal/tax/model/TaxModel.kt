@@ -35,4 +35,7 @@ data class TaxModel(
 
     val done: Boolean
         get() = status == TaxStatus.DONE
+
+    val readOnly: Boolean
+        get() = done
 }

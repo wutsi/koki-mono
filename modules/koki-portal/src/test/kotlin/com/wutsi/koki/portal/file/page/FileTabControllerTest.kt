@@ -12,6 +12,19 @@ class FileTabControllerTest : AbstractPageControllerTest() {
     fun list() {
         navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
 
+        assertElementPresent(".btn-upload")
+        assertElementPresent(".btn-delete")
+        assertElementCount(".tab-files tr.file", files.size)
+        assertElementAttribute("#file-list", "data-owner-id", "111")
+        assertElementAttribute("#file-list", "data-owner-type", "ACCOUNT")
+    }
+
+    @Test
+    fun `read-only`() {
+        navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true&read-only=true")
+
+        assertElementNotPresent(".btn-upload")
+        assertElementNotPresent(".btn-delete")
         assertElementCount(".tab-files tr.file", files.size)
         assertElementAttribute("#file-list", "data-owner-id", "111")
         assertElementAttribute("#file-list", "data-owner-type", "ACCOUNT")

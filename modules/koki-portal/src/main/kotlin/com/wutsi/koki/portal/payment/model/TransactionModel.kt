@@ -27,6 +27,7 @@ data class TransactionModel(
     val createdAtText: String = "",
     val paymentMethod: PaymentMethodModel = PaymentMethodModel(),
     val createdBy: UserModel? = null,
+    val readOnly: Boolean = false,
 ) {
     val successful: Boolean
         get() = status == TransactionStatus.SUCCESSFUL

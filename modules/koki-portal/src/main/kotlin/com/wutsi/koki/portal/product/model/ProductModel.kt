@@ -19,5 +19,6 @@ data class ProductModel(
     val createdBy: UserModel? = null,
     val modifiedBy: UserModel? = null,
     val category: CategoryModel? = null,
-    val serviceDetails: ServiceDetailsModel? = null
+    val serviceDetails: ServiceDetailsModel? = null,
+    val readOnly: Boolean = false,
 )

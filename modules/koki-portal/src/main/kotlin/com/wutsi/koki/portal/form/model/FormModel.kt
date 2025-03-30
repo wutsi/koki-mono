@@ -16,4 +16,5 @@ data class FormModel(
     val modifiedAtText: String = "",
     val modifiedAtMoment: String = "",
     val modifiedBy: UserModel? = null,
+    val readOnly: Boolean = false,
 )

@@ -27,16 +27,27 @@
                         <div>
                             <a class="btn-edit btn btn-light btn-sm"
                                th:href="'/taxes/' + ${tax.id} + '/edit'"
-                               th:if="!${tax.done} AND ${user?.hasPermission('tax:manage')}">Edit</a>
+                               th:if="!${tax.readOnly} AND ${user?.hasPermission('tax:manage')}">
+                                Edit
+                            </a>
 
                             <a class="btn-delete btn btn-danger btn-sm"
                                onclick="return confirm('Are you sure you want to delete the tax report?')"
                                th:href="'/taxes/' + ${tax.id} + '/delete'"
-                               th:if="!${tax.done} AND ${user?.hasPermission('tax:delete')}">Delete</a>
+                               th:if=" !${tax.readOnly} AND ${user?.hasPermission('tax:delete')}">
+                                Delete
+                            </a>
+
+                            <a class="btn-create-invoice btn btn-primary btn-sm"
+                               onclick="return confirm('Are you sure your want to create the invoice?')"
+                               th:href="'/taxes/' + ${tax.id} + '/create-invoice'"
+                               th:if="${tax.done} AND !${invoice} AND ${user?.hasPermission('invoice:manage')}">
+                                Create Invoice
+                            </a>
                         </div>
                     </div>
 
-                    <div th:replace="~{__components/tax :: tax-header(${tax}, !${tax.done})}"></div>
+                    <div th:replace="~{__components/tax :: tax-header(${tax}, !${tax.readOnly})}"></div>
 
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
                 </div>
@@ -187,12 +198,12 @@
                         </div>
                         <div aria-labelledby="pills-tax-product-tab" class="tab-pane fade" id="pills-tax-product"
                              role="tabpanel"
-                             th:data-url="'/tax-products/tab?tax-id=' + ${tax.id}"
+                             th:data-url="'/tax-products/tab?tax-id=' + ${tax.id} + '&read-only=' + ${invoice != null}"
                              th:if="${user?.hasPermission('product')}">
                         </div>
                         <div class="tab-pane fade" role="tabpanel"
                              th:aria-labelledby="'pills-' + ${tab.name} + '-tab'"
-                             th:data-url="${tab.toTabUrl(tax.id, module)}"
+                             th:data-url="${tab.toTabUrl(tax.id, module, tax.readOnly)}"
                              th:each="tab : ${page.tabs.get('main')}"
                              th:id="'pills-' + ${tab.name}">
                         </div>

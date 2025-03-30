@@ -1,12 +1,4 @@
 <div class="tab-invoices">
-    <div class="margin-bottom" th:if="${createUrl} AND ${user?.hasPermission('invoice:manage')}">
-        <a class="btn btn-light btn-sm btn-create-invoice" id="btn-create-invoice"
-           onclick="return confirm('Are you ready to invoice your client?')"
-           th:href="${createUrl}">
-            Create Invoice
-        </a>
-    </div>
-
     <div class="tab-invoices">
         <table class="table table-striped">
             <thead>
