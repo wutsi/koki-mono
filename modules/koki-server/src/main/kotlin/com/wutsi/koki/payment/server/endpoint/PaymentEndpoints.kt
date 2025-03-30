@@ -37,7 +37,7 @@ class PaymentEndpoints(
     }
 
     @PostMapping("/interac")
-    fun interact(
+    fun interac(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @Valid @RequestBody request: CreateInteracPaymentRequest,
     ): CreatePaymentResponse {
