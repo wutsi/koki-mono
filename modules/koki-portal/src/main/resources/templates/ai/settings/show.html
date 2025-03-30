@@ -22,8 +22,7 @@
             <tr>
                 <td width="20%"><b>Model</b></td>
                 <td>
-                    <span th:if="!${form.model}">None</span>
-                    <span th:if="${form.model}" th:text="#{'ai-model.' + ${form.model}}">TYPE</span>
+                    <div th:replace="~{__components/ai :: ai-model(${form.model})}"></div>
                 </td>
             </tr>
             <tr th:if="${form.model == 'GEMINI'}">

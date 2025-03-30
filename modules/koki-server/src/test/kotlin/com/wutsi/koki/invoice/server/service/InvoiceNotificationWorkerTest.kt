@@ -221,7 +221,10 @@ class InvoiceNotificationWorkerTest {
         assertEquals(false, request.firstValue.data["invoicePayUponReception"])
         assertEquals("C\$ 500.00", request.firstValue.data["invoiceTotalAmount"])
         assertEquals("C\$ 500.00", request.firstValue.data["invoiceAmountDue"])
-        assertEquals("${tenant.portalUrl}/paynow/${invoice.id}#${invoice.paynowId}", request.firstValue.data["paymentPortalUrl"])
+        assertEquals(
+            "${tenant.portalUrl}/paynow/${invoice.paynowId}.${invoice.id}",
+            request.firstValue.data["paymentPortalUrl"]
+        )
 
         assertEquals(
             config[ConfigurationName.PAYMENT_METHOD_CASH_ENABLED],

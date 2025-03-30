@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.config
 
+import com.wutsi.koki.portal.security.LogoutSuccessHandlerImpl
 import com.wutsi.koki.portal.security.service.AccessTokenHolder
 import com.wutsi.koki.portal.security.servlet.JWTAuthenticationFilter
 import com.wutsi.koki.security.dto.JWTDecoder
@@ -15,7 +16,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 @Configuration
 @EnableWebSecurity
 class SecurityConfiguration(
-    private val accessTokenHolder: AccessTokenHolder
+    private val accessTokenHolder: AccessTokenHolder,
+    private val logoutSuccessHandler: LogoutSuccessHandlerImpl,
 ) {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
@@ -48,6 +50,9 @@ class SecurityConfiguration(
             .httpBasic { customizer -> customizer.disable() }
             .formLogin { customizer ->
                 customizer.loginPage("/login")
+            }
+            .logout { customizer ->
+                customizer.logoutSuccessHandler(logoutSuccessHandler)
             }
             .build()
     }

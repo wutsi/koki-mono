@@ -39,7 +39,7 @@ import java.util.Date
  * - invoiceDate
  * - invoiceDueDate
  * - invoicePayUponReception
- * - portalPaymentURL: URL where to pay online
+ * - paymentPortalUrl: URL where to pay online
  *
  * - paymentMethodInterac: TRUE if the merchant support Interact Transfer
  * - interacEmail: Email of the interac account
@@ -191,7 +191,7 @@ class InvoiceNotificationWorker(
             "invoiceAmountDue" to moneyFormat.format(invoice.amountDue),
             "invoiceTotalAmount" to moneyFormat.format(invoice.totalAmount),
 
-            "paymentPortalUrl" to "${tenant.portalUrl}/paynow/${invoice.id}#${invoice.paynowId}",
+            "paymentPortalUrl" to "${tenant.portalUrl}/paynow/${invoice.paynowId}.${invoice.id}",
 
             "paymentMethodInterac" to configs[ConfigurationName.PAYMENT_METHOD_INTERAC_ENABLED],
             "interacEmail" to configs[ConfigurationName.PAYMENT_METHOD_INTERAC_EMAIL],

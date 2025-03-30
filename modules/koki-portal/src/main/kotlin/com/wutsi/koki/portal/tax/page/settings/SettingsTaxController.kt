@@ -35,7 +35,7 @@ class SettingsTaxController(
         model.addAttribute(
             "aiAgent",
             TaxAIAgentForm(
-                aiModel = configs[ConfigurationName.AI_MODEL],
+                model = configs[ConfigurationName.AI_MODEL],
                 enabled = configs[ConfigurationName.TAX_AI_AGENT_ENABLED] != null,
             )
         )

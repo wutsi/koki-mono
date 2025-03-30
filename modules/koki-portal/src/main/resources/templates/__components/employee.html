@@ -18,13 +18,13 @@
     </div>
 </div>
 
-<tr class="employee" th:fragment="columns(employee)" th:remove="tag">
+<tr class="employee" th:fragment="columns(employee, showType)" th:remove="tag">
     <td>
         <a th:href="'/employees/' + ${employee.user.id}" th:text="${employee.user.displayName}">NAME</a>
     </td>
-    <td th:text="${employee.employeeType?.title}">EMPLOYEE_TYPE</td>
-    <td th:text="#{'employee-status.' + ${employee.status}}">STATUS</td>
+    <td th:if="${showType}" th:text="${employee.employeeType?.title}">TYPE</td>
     <td th:text="${employee.jobTitle}">JOB</td>
+    <td th:text="#{'employee-status.' + ${employee.status}}">STATUS</td>
 </tr>
 
 <tr id="employee-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">

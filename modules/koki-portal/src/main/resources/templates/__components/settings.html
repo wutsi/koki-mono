@@ -44,6 +44,10 @@
 </ul>
 
 
-<div th:fragment="enabled-badge(enabled)" th:remove="tag"></body>
-    <span class="badge text-bg-success" th:if="${enabled}">Enabled</span></html>
+<div th:fragment="enabled-badge(enabled)" th:remove="tag">
+    <span class="badge text-bg-success" th:if="${enabled}">Enabled</span>
     <span class="badge text-bg-danger" th:if="!${enabled}">Disabled</span>
+</div>
+
+</body>
+</html>

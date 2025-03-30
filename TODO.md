@@ -215,5 +215,6 @@
 
 ## Web
 
+- [] After user logs-out, he can access any page without login
 - [] Sort the tabs of the menu
 - [] serve all static resource from external site

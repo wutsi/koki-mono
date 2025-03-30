@@ -98,7 +98,7 @@
                             <td width="20%"><b>Last Name</b></td>
                             <td th:text="${contact.lastName}">TYPE</td>
                         </tr>
-                        <tr th:if="${contact.gender}">
+                        <tr th:if="${contact.gender.name != 'UNKNOWN'}">
                             <td><b>Gender</b></td>
                             <td th:text="#{'gender.' + ${contact.gender.name}}">GENDER</td>
                         </tr>

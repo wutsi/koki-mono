@@ -45,11 +45,6 @@ class ListEmployeeController(
 
         model.addAttribute("statuses", EmployeeStatus.entries.filter { entry -> entry != EmployeeStatus.UNKNOWN })
         model.addAttribute("status", status)
-
-        model.addAttribute(
-            "types",
-            typeService.types(objectType = ObjectType.EMPLOYEE, active = true, limit = Integer.MAX_VALUE)
-        )
         model.addAttribute("typeId", typeId)
 
         loadToast(referer, toast, timestamp, model)
@@ -71,6 +66,12 @@ class ListEmployeeController(
             limit = limit,
             offset = offset
         )
+
+        model.addAttribute(
+            "types",
+            typeService.types(objectType = ObjectType.EMPLOYEE, active = true, limit = Integer.MAX_VALUE)
+        )
+
         if (employees.isNotEmpty()) {
             model.addAttribute("employees", employees)
             if (employees.size >= limit) {

@@ -9,15 +9,17 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
+@RequestMapping("/paynow")
 class PaynowController(
     private val invoiceService: InvoiceService,
     private val paymentService: PaymentService,
 ) : AbstractPaynowController() {
-    @GetMapping("/paynow/{paynow-id}.{invoice-id}")
+    @GetMapping("/{paynow-id}.{invoice-id}")
     fun show(
         @PathVariable(name = "invoice-id") invoiceId: Long,
         @PathVariable(name = "paynow-id") paynowId: String,
@@ -39,7 +41,7 @@ class PaynowController(
         return "paynow/show"
     }
 
-    @PostMapping("/paynow/{paynow-id}.{invoice-id}")
+    @PostMapping("/{paynow-id}.{invoice-id}")
     fun submit(
         @PathVariable(name = "paynow-id") paynowId: String,
         @PathVariable(name = "invoice-id") invoiceId: Long,

@@ -69,7 +69,7 @@ class TaxAIAgent(
         logger.add("owner_id", event.owner?.id)
         logger.add("owner_type", event.owner?.type)
 
-        if (event.owner?.type != ObjectType.TAX || isEnabled(event.tenantId)) {
+        if (event.owner?.type != ObjectType.TAX || !isEnabled(event.tenantId)) {
             return
         }
 
@@ -151,7 +151,7 @@ class TaxAIAgent(
                 ConfigurationName.TAX_AI_AGENT_ENABLED,
             )
         )
-        return configs.size == 2
+        return configs.size >= 2
     }
 
     private fun getStorageService(tenantId: Long): StorageService {
