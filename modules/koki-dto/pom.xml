@@ -9,12 +9,12 @@
     </parent>
 
     <artifactId>koki-dto</artifactId>
-    <version>0.0.171</version>
+    <version>0.0.172-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <scm>
         <developerConnection>scm:git:https://github.com/wutsi/koki-mono.git</developerConnection>
-        <tag>koki-dto-0.0.171</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
