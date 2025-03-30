@@ -29,13 +29,6 @@
         <span th:if="${product.active}">Yes</span>
         <span th:if="!${product.active}">No</span>
     </td>
-    <td class="toolbar">
-        <a class="btn-view" th:href="'/products/' + ${product.id}"
-           th:if="${user?.hasPermission('product')}">View</a>
-
-        <a class="btn-edit" th:href="'/products/' + ${product.id} + '/edit'"
-           th:if="${user?.hasPermission('product:manage')}">Edit</a>
-    </td>
 </tr>
 
 <tr id="product-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">

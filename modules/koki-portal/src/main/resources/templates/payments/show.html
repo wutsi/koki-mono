@@ -49,13 +49,13 @@
                                 th:replace="~{__components/payment :: payment-status(${payment.status.name})}">STATUS</span>
                         </div>
                         <div class="margin-right-2x">
+                            <b>Amount</b><br/>
+                            <span th:text="${payment.amount}">$$$</span>
+                        </div>
+                        <div class="margin-right-2x">
                             <b>Payment Method</b><br/>
                             <span
                                 th:replace="~{__components/payment :: payment-method-type(${payment.paymentMethodType.name})}"></span>
-                        </div>
-                        <div class="margin-right-2x">
-                            <b>Amount</b><br/>
-                            <span th:text="${payment.amount}">$$$</span>
                         </div>
                     </div>
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
@@ -119,6 +119,12 @@
                                             th:replace="~{__components/payment :: payment-status(${payment.status.name()})}">STATUS</span>
                                     </td>
                                 </tr>
+
+                                <tr>
+                                    <td><b>Amount</b></td>
+                                    <td th:text="${payment.amount}">$$</td>
+                                </tr>
+
                                 <tr>
                                     <td><b>Payment Method</b></td>
                                     <td>
@@ -131,9 +137,46 @@
                                     <td th:text="#{'payment-gateway.' + ${payment.gateway.name}}">GATEWAY</td>
                                 </tr>
 
-                                <tr>
-                                    <td><b>Amount</b></td>
-                                    <td th:text="${payment.amount}">$$</td>
+                                <!-- Cash -->
+                                <tr th:if="${payment.paymentMethod.cash} AND ${payment.paymentMethod.cash.collectedBy}">
+                                    <td><b>Collected By</b></td>
+                                    <td th:text="${payment.paymentMethod.cash.collectedBy.displayName}">$$</td>
+                                </tr>
+                                <tr th:if="${payment.paymentMethod.cash} AND ${payment.paymentMethod.cash.collectedAt}">
+                                    <td><b>Payment Date</b></td>
+                                    <td th:text="${payment.paymentMethod.cash.collectedAtText}">$$</td>
+                                </tr>
+
+                                <!-- Check -->
+                                <tr th:if="${payment.paymentMethod.check} AND ${payment.paymentMethod.check.checkNumber}">
+                                    <td><b>Check Number</b></td>
+                                    <td th:text="${payment.paymentMethod.check.checkNumber}">$$</td>
+                                </tr>
+                                <tr th:if="${payment.paymentMethod.check} AND ${payment.paymentMethod.check.bankName}">
+                                    <td><b>Bank</b></td>
+                                    <td th:text="${payment.paymentMethod.check.bankName}">$$</td>
+                                </tr>
+                                <tr th:if="${payment.paymentMethod.check} AND ${payment.paymentMethod.check.clearedAt}">
+                                    <td><b>Cleared</b></td>
+                                    <td th:text="${payment.paymentMethod.check.clearedAtText}">$$</td>
+                                </tr>
+
+                                <!-- Interac -->
+                                <tr th:if="${payment.paymentMethod.interac} AND ${payment.paymentMethod.interac.referenceNumber}">
+                                    <td><b>Reference Number</b></td>
+                                    <td th:text="${payment.paymentMethod.interac.referenceNumber}">$$</td>
+                                </tr>
+                                <tr th:if="${payment.paymentMethod.interac} AND ${payment.paymentMethod.interac.bankName}">
+                                    <td><b>Bank</b></td>
+                                    <td th:text="${payment.paymentMethod.interac.bankName}">$$</td>
+                                </tr>
+                                <tr th:if="${payment.paymentMethod.interac} AND ${payment.paymentMethod.interac.sentAt}">
+                                    <td><b>Sent</b></td>
+                                    <td th:text="${payment.paymentMethod.interac.sentAtText}">$$</td>
+                                </tr>
+                                <tr th:if="${payment.paymentMethod.interac} AND ${payment.paymentMethod.interac.clearedAt}">
+                                    <td><b>Cleared</b></td>
+                                    <td th:text="${payment.paymentMethod.interac.clearedAtText}">$$</td>
                                 </tr>
 
                                 <tr th:if="${payment.errorCode}">

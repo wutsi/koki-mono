@@ -9,19 +9,18 @@
         <thead>
         <tr>
             <th>Name</th>
-            <th>Type</th>
+            <th th:if="!${types.isEmpty()}">Type</th>
             <th>Email</th>
             <th>Phone</th>
             <th>Mobile</th>
             <th th:if="${showAccount}">Account</th>
-            <td></td>
         </tr>
         </thead>
         <tbody>
         <tr class="contact" th:each="contact : ${contacts}" th:if="${contacts}">
-            <div th:replace="~{__components/contact :: columns(${contact}, ${showAccount})}"></div>
+            <div th:replace="~{__components/contact :: columns(${contact}, ${showAccount}, !${types.isEmpty()})}"></div>
         </tr>
-        <tr th:if="${contacts}" th:replace="~{__components/contact :: load-more(${moreUrl}, ${showAccount})}"></tr>
+        <tr th:if="${contacts}" th:replace="~{__components/contact :: load-more(${moreUrl})}"></tr>
         </tbody>
     </table>
 </div>

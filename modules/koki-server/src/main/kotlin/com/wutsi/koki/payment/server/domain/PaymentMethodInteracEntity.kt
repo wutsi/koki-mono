@@ -7,8 +7,8 @@ import jakarta.persistence.Table
 import java.util.Date
 
 @Entity
-@Table(name = "T_PAYMENT_METHOD_INTERACT")
-data class PaymentMethodInteractEntity(
+@Table(name = "T_PAYMENT_METHOD_INTERAC")
+data class PaymentMethodInteracEntity(
     @Id
     val id: String? = null,
 

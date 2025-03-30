@@ -130,6 +130,7 @@
 
 ## Payment
 
+- [] Record the check date
 - [] Settings: Validate Stripe configuration
 - [] Capture online payments Paypal
 - [] Settings: Validate Paypal configuration
@@ -220,4 +221,5 @@
 
 ## Web
 
+- [] Sort the tabs of the menu
 - [] serve all static resource from external site

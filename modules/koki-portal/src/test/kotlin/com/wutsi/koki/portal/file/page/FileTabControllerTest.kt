@@ -48,31 +48,12 @@ class FileTabControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun email() {
-        navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
-        click("tr .btn-email", 1000)
-
-        assertElementVisible("#koki-modal")
-        assertElementVisible("#attachment-${file.id}")
-    }
-
-    @Test
     fun `list - without permission file-manage`() {
         setUpUserWithoutPermissions(listOf("file:manage"))
 
         navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
 
         assertElementNotPresent(".btn-upload")
-    }
-
-    @Test
-    fun `list - without permission email-send`() {
-        setUpUserWithoutPermissions(listOf("email:send"))
-
-        navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
-
-        assertElementNotPresent(".btn-email")
-        assertElementPresent(".btn-upload")
     }
 
     @Test

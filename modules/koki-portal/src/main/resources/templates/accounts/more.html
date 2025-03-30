@@ -1,4 +1,4 @@
 <tr class="account" th:each="account : ${accounts}">
-    <div th:replace="~{__components/account :: columns(${account})}"></div>
+    <div th:replace="~{__components/account :: columns(${account}, !${types.isEmpty()})}"></div>
 </tr>
 <tr th:replace="~{__components/account :: load-more(${moreUrl})}"></tr>

@@ -61,15 +61,8 @@ class ListContactControllerTest : AbstractPageControllerTest() {
     @Test
     fun show() {
         navigateTo("/contacts")
-        click(".btn-view")
+        click("tr.contact a")
         assertCurrentPageIs(PageName.CONTACT)
-    }
-
-    @Test
-    fun edit() {
-        navigateTo("/contacts")
-        click(".btn-edit")
-        assertCurrentPageIs(PageName.CONTACT_EDIT)
     }
 
     @Test

@@ -24,8 +24,7 @@
     </td>
     <td th:text="${invoice.createdAtText}">DATE</td>
     <td>
-        <a target="_blank"
-           th:href="'/accounts/' + ${invoice.customer.account.id}"
+        <a th:href="'/accounts/' + ${invoice.customer.account.id}"
            th:if="${invoice.customer.account}"
            th:text="${invoice.customer.name}">
             CUSTOMER
@@ -37,9 +36,6 @@
     </td>
     <td class="text-right" th:text="${invoice.totalAmount}">$$$</td>
     <td class="text-right" th:text="${invoice.amountDue}">$$$</td>
-    <td class="toolbar">
-        <a class="btn-view" th:href="'/invoices/' + ${invoice.id}">View</a>
-    </td>
 </tr>
 
 <tr id="invoice-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">

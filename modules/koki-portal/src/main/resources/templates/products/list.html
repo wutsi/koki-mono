@@ -19,15 +19,12 @@
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
-                    <div class="flex flex-space-between">
-                        <div class="btn-group border margin-bottom">
-                            <button aria-expanded="false"
-                                    class="btn padding"
-                                    data-bs-toggle="dropdown"
-                                    type="button">
-                                <img height="24" src="/image/product.png" width="24"/>
-                                <span>All Products</span>
-                            </button>
+                    <div class="flex flex-space-between margin-bottom">
+                        <div>
+                            <a class="btn-create btn btn-primary btn-sm" href="/products/create"
+                               th:if="${user?.hasPermission('product:manage')}">
+                                Create New Product
+                            </a>
                         </div>
                         <div>
                             <select class="btn btn-sm btn-light" id="filter-type"
@@ -51,10 +48,6 @@
                                 <option th:selected="${active == 1}" value="1">Active</option>
                                 <option th:selected="${active == 0}" value="0">Not Active</option>
                             </select>
-                            <a class="btn-create btn btn-primary btn-sm" href="/products/create"
-                               th:if="${user?.hasPermission('product:manage')}">
-                                Create New Product
-                            </a>
                         </div>
                     </div>
 
@@ -66,7 +59,6 @@
                             <th>Type</th>
                             <th>Category</th>
                             <th>Active</th>
-                            <td></td>
                         </tr>
                         </thead>
                         <tbody>

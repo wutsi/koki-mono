@@ -61,7 +61,7 @@ class ListProductControllerTest : AbstractPageControllerTest() {
     @Test
     fun show() {
         navigateTo("/products")
-        click(".btn-view")
+        click("tr.product a")
         assertCurrentPageIs(PageName.PRODUCT)
     }
 
@@ -70,13 +70,6 @@ class ListProductControllerTest : AbstractPageControllerTest() {
         navigateTo("/products")
         click(".btn-create")
         assertCurrentPageIs(PageName.PRODUCT_CREATE)
-    }
-
-    @Test
-    fun edit() {
-        navigateTo("/products")
-        click(".btn-edit")
-        assertCurrentPageIs(PageName.PRODUCT_EDIT)
     }
 
     @Test

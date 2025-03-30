@@ -28,7 +28,7 @@
                                 <div class="description">Enter the email of the employee</div>
                                 <input required th:field="*{email}" type="email"/>
                             </div>
-                            <div class="section-item">
+                            <div class="section-item" th:if="!${types.isEmpty()}">
                                 <label class="title">Type <span class="required">*</span></label>
                                 <select required th:field="*{employeeTypeId}">
                                     <option value=""></option>

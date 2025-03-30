@@ -53,7 +53,7 @@ class ListInvoiceControllerTest : AbstractPageControllerTest() {
     @Test
     fun show() {
         navigateTo("/invoices")
-        click(".btn-view")
+        click("tr.invoice a")
         assertCurrentPageIs(PageName.INVOICE)
     }
 

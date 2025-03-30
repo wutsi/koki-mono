@@ -20,5 +20,5 @@ INSERT INTO T_PAYMENT_METHOD_CASH(id, tenant_fk, transaction_fk, collected_by_fk
 INSERT INTO T_PAYMENT_METHOD_CHECK(id, tenant_fk, transaction_fk, check_number, bank_name, cleared_at) VALUES
     (120, 1, 120, '1234', 'TD Bank', '2020-03-30');
 
-INSERT INTO T_PAYMENT_METHOD_INTERACT(id, tenant_fk, transaction_fk, reference_number, bank_name, sent_at, cleared_at) VALUES
+INSERT INTO T_PAYMENT_METHOD_INTERAC(id, tenant_fk, transaction_fk, reference_number, bank_name, sent_at, cleared_at) VALUES
     (130, 1, 130, '1234', 'TD Bank', '2020-01-03', '2020-01-30');

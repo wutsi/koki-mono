@@ -66,10 +66,10 @@ class ListAccountControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun edit() {
+    fun show() {
         navigateTo("/accounts")
-        click(".btn-edit")
-        assertCurrentPageIs(PageName.ACCOUNT_EDIT)
+        click("tr.account a")
+        assertCurrentPageIs(PageName.ACCOUNT)
     }
 
     @Test

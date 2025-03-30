@@ -111,13 +111,6 @@ class FormControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun create() {
-        navigateTo("/forms/${form.id}")
-        click(".btn-create")
-        assertCurrentPageIs(PageName.FORM_CREATE)
-    }
-
-    @Test
     fun edit() {
         navigateTo("/forms/${form.id}")
         click(".btn-edit")

@@ -49,6 +49,8 @@ class InvoiceController(
             )
         )
 
+        model.addAttribute("statuses", InvoiceStatus.entries.filter { entry -> entry != InvoiceStatus.UNKNOWN })
+
         loadToast(invoice, referer, toast, timestamp, operation, model)
         return "invoices/show"
     }

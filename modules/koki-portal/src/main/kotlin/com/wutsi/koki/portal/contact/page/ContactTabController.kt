@@ -4,6 +4,7 @@ import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.security.RequiresPermission
+import com.wutsi.koki.portal.tenant.service.TypeService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -13,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 @RequestMapping("/contacts/tab")
 @RequiresPermission(["contact"])
-class ContactTabController(private val service: ContactService) : AbstractPageController() {
+class ContactTabController(
+    private val service: ContactService,
+    private val typeService: TypeService,
+) : AbstractPageController() {
     @GetMapping
     fun list(
         @RequestParam(name = "owner-id") ownerId: Long,
@@ -48,6 +52,12 @@ class ContactTabController(private val service: ContactService) : AbstractPageCo
         } else {
             null
         }
+
+        model.addAttribute(
+            "types",
+            typeService.types(objectType = ObjectType.CONTACT, active = true, limit = Integer.MAX_VALUE)
+        )
+
         if (accountId != null) {
             val contacts = service.contacts(
                 accountIds = listOf(accountId),

@@ -22,28 +22,23 @@
     <td>
         <a th:href="'/taxes/' + ${tax.id}" th:text="${tax.fiscalYear}">NAME</a>
     </td>
-    <td th:text="${tax.taxType.title}">TYPE</td>
+    <td>
+        <a th:href="'/taxes/' + ${tax.id}" th:text="${tax.taxType.title}">TYPE</a>
+    </td>
     <td>
         <span th:replace="~{__components/tax :: tax-status(${tax.status.name})}"></span>
     </td>
     <td th:text="${tax.startAtText}">START_DATE</td>
     <td th:if="${showAccount}">
-        <a target="_blank" th:href="'/accounts/' + ${tax.account.id}" th:text="${tax.account.name}">ACCOUNT</a>
+        <a th:href="'/accounts/' + ${tax.account.id}" th:text="${tax.account.name}">ACCOUNT</a>
     </td>
     <td th:text="${tax.accountant?.displayName}">ACCOUNTANT</td>
     <td th:text="${tax.technician?.displayName}">ACCOUNTANT</td>
     <td th:text="${tax.assignee?.displayName}">ASSIGNEE</td>
-    <td class="toolbar" th:if="!${smallView}">
-        <a class="btn-view" th:href="'/taxes/' + ${tax.id}"
-           th:if="${user?.hasPermission('tax')}">View</a>
-
-        <a class="btn-edit" th:href="'/taxes/' + ${tax.id} + '/edit'"
-           th:if="${user?.hasPermission('tax:manage')}">Edit</a>
-    </td>
 </tr>
 
 <tr id="tax-load-more" th:fragment="load-more(moreUrl, showAccount)" th:if="${moreUrl}">
-    <td class="text-center" th:colspan="${showAccount} ? 9 : 8">
+    <td class="text-center" th:colspan="${showAccount} ? 8 : 7">
         <a href="javascript: koki_load_more('tax-load-more')" th:data-url="${moreUrl}">Load more...</a>
     </td>
 </tr>

@@ -60,15 +60,8 @@ class ListEmployeeControllerTest : AbstractPageControllerTest() {
     @Test
     fun show() {
         navigateTo("/employees")
-        click(".btn-view")
+        click("tr.employee a")
         assertCurrentPageIs(PageName.EMPLOYEE)
-    }
-
-    @Test
-    fun edit() {
-        navigateTo("/employees")
-        click(".btn-edit")
-        assertCurrentPageIs(PageName.EMPLOYEE_EDIT)
     }
 
     @Test

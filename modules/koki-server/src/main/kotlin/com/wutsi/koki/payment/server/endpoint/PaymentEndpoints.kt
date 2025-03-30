@@ -41,7 +41,7 @@ class PaymentEndpoints(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @Valid @RequestBody request: CreateInteracPaymentRequest,
     ): CreatePaymentResponse {
-        val tx = service.interact(request, tenantId)
+        val tx = service.interac(request, tenantId)
         publish(tx)
         return CreatePaymentResponse(
             transactionId = tx.id!!,

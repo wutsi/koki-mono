@@ -24,14 +24,7 @@
     </td>
     <td th:text="${employee.employeeType?.title}">EMPLOYEE_TYPE</td>
     <td th:text="#{'employee-status.' + ${employee.status}}">STATUS</td>
-    <td th:text="${employee.jobTitle}">CONTACT TYPE</td>
-    <td class="toolbar">
-        <a class="btn-view" th:href="'/employees/' + ${employee.id}"
-           th:if="${user?.hasPermission('employee')}">View</a>
-
-        <a class="btn-edit" th:href="'/employees/' + ${employee.id} + '/edit'"
-           th:if="${user?.hasPermission('employee:manage')}">Edit</a>
-    </td>
+    <td th:text="${employee.jobTitle}">JOB</td>
 </tr>
 
 <tr id="employee-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">

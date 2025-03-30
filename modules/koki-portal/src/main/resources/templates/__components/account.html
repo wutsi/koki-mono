@@ -18,24 +18,17 @@
     </div>
 </div>
 
-<tr class="account" th:fragment="columns(account)" th:remove="tag">
+<tr class="account" th:fragment="columns(account, showType)" th:remove="tag">
     <td>
         <a th:href="'/accounts/' + ${account.id}" th:text="${account.name}">NAME</a>
     </td>
-    <td th:text="${account.accountType?.title}">ACCOUNT TYPE</td>
+    <td th:if="${showType}" th:text="${account.accountType?.title}">ACCOUNT TYPE</td>
     <td>
         <a th:href="'mailto:' + ${account.email}" th:if="${account.email}" th:text="${account.email}">EMAIL</a>
     </td>
     <td th:text="${account.mobile}">MOBILE</td>
     <td th:text="${account.phone}">PHONE</td>
     <td th:text="${account.managedBy?.displayName}">MANAGER</td>
-    <td class="toolbar">
-        <a class="btn-view" th:href="'/accounts/' + ${account.id}"
-           th:if="${user?.hasPermission('account')}">View</a>
-
-        <a class="btn-edit" th:href="'/accounts/' + ${account.id} + '/edit'"
-           th:if="${user?.hasPermission('account:manage')}">Edit</a>
-    </td>
 </tr>
 
 <tr id="account-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
