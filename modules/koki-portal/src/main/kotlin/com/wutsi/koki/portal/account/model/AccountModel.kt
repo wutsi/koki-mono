@@ -27,4 +27,5 @@ data class AccountModel(
     val shippingAddress: AddressModel? = null,
     val billingAddress: AddressModel? = null,
     val billingSameAsShippingAddress: Boolean = true,
+    val readOnly: Boolean = false,
 )

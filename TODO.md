@@ -172,10 +172,9 @@
 ## Taxes
 
 - [] Taxes KPI
-    - [] Time spent by Tax report
-    - [] Time spent on Tax report by user
-    - [] Labor cost by Tax report
-    - [] Total time spent on Tax Report per user
+    - [] Labor cost
+    - [] Labor hours
+    - [] Revenu
 - [] Add Kanban view
 - [x] Send the form to customer when status=GATHERING_DOCUMENTS
 - [x] Settings: Setup email notification
@@ -215,6 +214,6 @@
 
 ## Web
 
-- [] After user logs-out, he can access any page without login
+- [x] After user logs-out, he can access any page without login
 - [] Sort the tabs of the menu
 - [] serve all static resource from external site

@@ -17,8 +17,13 @@ data class ModuleModel(
     val permissions: List<PermissionModel> = emptyList(),
 ) {
     fun toTabUrl(id: Long, module: ModuleModel): String? {
+        return toTabUrl(id, module, false)
+    }
+
+    fun toTabUrl(id: Long, module: ModuleModel, readOnly: Boolean): String? {
         return tabUrl?.let { url ->
-            "$url?owner-id=$id&owner-type=${module.objectType}"
+            "$url?owner-id=$id&owner-type=${module.objectType}" +
+                if (readOnly) "&read-only=$readOnly" else ""
         }
     }
 }

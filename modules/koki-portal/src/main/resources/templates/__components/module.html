@@ -33,7 +33,7 @@
     <div class="tab-pane fade" role="tabpanel"
          th:aria-labelledby="'pills-' + ${tab.name} + '-tab'"
          th:classappend="!${showDetails} AND ${it.index == 0} ? 'show active'"
-         th:data-url="${tab.toTabUrl(ownerEntity.id, ownerModule)}"
+         th:data-url="${tab.toTabUrl(ownerEntity.id, ownerModule, ownerEntity.readOnly)}"
          th:each="tab,it : ${page.tabs.get(name)}"
          th:id="'pills-' + ${tab.name}">
     </div>

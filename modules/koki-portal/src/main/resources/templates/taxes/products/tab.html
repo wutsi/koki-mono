@@ -1,5 +1,5 @@
 <div class="tab-tax-products">
-    <div class="margin-bottom">
+    <div class="margin-bottom" th:if="!${readOnly}">
         <a class="btn btn-light btn-sm btn-add-product"
            th:href="'javascript: koki_taxes_add_product(' + ${tax.id} + ')'"
            th:if="${user?.hasPermission('tax:manage')}">
@@ -14,12 +14,12 @@
             <th>Unit Price</th>
             <th>Quantity</th>
             <th>Sub Total</th>
-            <th></th>
+            <th th:if="!${readOnly}"></th>
         </tr>
         </thead>
         <tbody id="tax-product-list" th:data-tax-id="${tax.id}">
         <tr class="tax-product" th:each="taxProduct : ${taxProducts}" th:id="'tax-product-' + ${taxProduct.id}">
-            <td th:replace="~{__components/tax :: tax-product-columns(${taxProduct})}"></td>
+            <td th:replace="~{__components/tax :: tax-product-columns(${taxProduct}, ${readOnly})}"></td>
         </tr>
         </tbody>
     </table>

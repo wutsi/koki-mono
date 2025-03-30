@@ -17,7 +17,7 @@ class TaxProductService(
 ) {
     fun product(id: Long): TaxProductModel {
         val taxProduct = koki.product(id).taxProduct
-        val product = productService.product(id, fullGraph = false)
+        val product = productService.product(taxProduct.productId, fullGraph = false)
         return mapper.toTaxProductModel(taxProduct, mapOf(product.id to product))
     }
 

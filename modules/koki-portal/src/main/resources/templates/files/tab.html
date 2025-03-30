@@ -1,5 +1,5 @@
 <div class="tab-files">
-    <div>
+    <div th:if="!${readOnly}">
         <a class="btn-upload btn btn-light btn-sm margin-bottom" href="javascript: koki_files_upload()"
            th:if="${user?.hasPermission('file:manage')}">Upload Files</a>
     </div>
@@ -12,12 +12,12 @@
             <th>Language</th>
             <th>Uploaded by</th>
             <th>Upload Date</th>
-            <th></th>
+            <th th:if="!${readOnly}"></th>
         </tr>
         </thead>
         <tbody id="file-list" th:data-owner-id="${ownerId}" th:data-owner-type="${ownerType}">
         <tr class="file" th:each="file : ${files}" th:id="'file-' + ${file.id}" th:if="${files}">
-            <td th:replace="~{__components/file :: columns(${file})}"></td>
+            <td th:replace="~{__components/file :: columns(${file}, ${readOnly})}"></td>
         </tr>
         <tr th:if="${files}" th:replace="~{__components/file :: load-more(${moreUrl})}"></tr>
         </tbody>

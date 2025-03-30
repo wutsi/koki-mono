@@ -61,7 +61,7 @@
           th:text="#{'tax-status.' + ${status}}">NEW</span>
 </div>
 
-<tr th:fragment="tax-product-columns(taxProduct)" th:remove="tag">
+<tr th:fragment="tax-product-columns(taxProduct, readOnly)" th:remove="tag">
     <td>
         <a target="_blank" th:href="'/products/' + ${taxProduct.product.id}" th:text="${taxProduct.product.code}">PRODUCT</a>
     </td>
@@ -69,7 +69,7 @@
     <td th:text="${taxProduct.unitPrice}">$$$</td>
     <td th:text="${taxProduct.quantity}">1111</td>
     <td th:text="${taxProduct.subTotal}">$$$</td>
-    <td class="toolbar">
+    <td class="toolbar" th:if="!${readOnly}">
         <a class="btn-edit" th:href="'javascript: koki_taxes_edit_product(' + ${taxProduct.id} + ')'"
            th:if="${user?.hasPermission('tax:manage')}">Edit</a>
 

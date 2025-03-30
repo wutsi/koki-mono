@@ -17,6 +17,20 @@ class TaxProductTabControllerTest : AbstractPageControllerTest() {
     @Test
     fun list() {
         navigateTo("/tax-products/tab?test-mode=true&tax-id=" + TaxFixtures.tax.id)
+
+        assertElementPresent(".btn-add-product")
+        assertElementPresent(".btn-edit")
+        assertElementPresent(".btn-delete")
+        assertElementCount("tr.tax-product", TaxFixtures.taxProducts.size)
+    }
+
+    @Test
+    fun `read only`() {
+        navigateTo("/tax-products/tab?test-mode=true&read-only=true&tax-id=" + TaxFixtures.tax.id)
+
+        assertElementNotPresent(".btn-add-product")
+        assertElementNotPresent(".btn-edit")
+        assertElementNotPresent(".btn-delete")
         assertElementCount("tr.tax-product", TaxFixtures.taxProducts.size)
     }
 
