@@ -5,7 +5,6 @@
 - [] Add AccountUser/AccountUserRole to manage relation ship between Account and User per module. Ex: Accountant,
   Technician
 - [] Settings: Import Accounts from CSV
-- [] Integrate [int-tel](https://intl-tel-input.com/) for phone number input
 - [x] Add account required fields: email, postal-address, billing-same-as-shipping-address
 - [x] List account invoices
 - [x] Add additional information to accounts: address
@@ -27,14 +26,12 @@
 ## Business
 
 - [] Record TaxIDs
-- [] Integrate [int-tel](https://intl-tel-input.com/) for phone number input
 - [x] Business entity
 - [x] Settings: Setup business information
 
 ## Contact
 
 - [] Add additional information: address, SSN, Date of birth
-- [] Integrate [int-tel](https://intl-tel-input.com/) for phone number input
 - [x] Add contact filters
 - [x] Configure validation on DTO
 - [x] Apply RBAC security on UI
@@ -49,7 +46,6 @@
 ## Email
 
 - [] Auto-translate email
-- [] Attach multiple files to email
 - [x] Add native SMTP configuration
 - [x] Configure validation on DTO
 - [x] Show email summary
@@ -63,7 +59,6 @@
 ## Employees
 
 - [] Send email to employee
-- [] Integrate [int-tel](https://intl-tel-input.com/) for phone number input
 - [x] Employee API
 - [x] Link Employee with User
 - [x] Employee UI
@@ -176,14 +171,13 @@
 
 ## Taxes
 
-- [] Link a tax with a form
-- [] Send the form to customer when status=GATHERING_DOCUMENTS
 - [] Taxes KPI
     - [] Time spent by Tax report
     - [] Time spent on Tax report by user
     - [] Labor cost by Tax report
     - [] Total time spent on Tax Report per user
 - [] Add Kanban view
+- [x] Send the form to customer when status=GATHERING_DOCUMENTS
 - [x] Settings: Setup email notification
     - [x] When task assigned
     - [x] When starting document collection

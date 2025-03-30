@@ -183,7 +183,6 @@ class TaxService(
     fun status(tax: TaxEntity, request: UpdateTaxStatusRequest): TaxEntity {
         val now = Date()
         tax.status = request.status
-        tax.assigneeId = request.assigneeId
         tax.modifiedById = securityService.getCurrentUserId()
         tax.modifiedAt = now
         if (request.status.ordinal > TaxStatus.NEW.ordinal && tax.startAt == null) {
