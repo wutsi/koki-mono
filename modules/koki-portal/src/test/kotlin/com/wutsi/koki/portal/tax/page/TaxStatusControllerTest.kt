@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.FormFixtures.forms
 import com.wutsi.koki.TaxFixtures.tax
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.common.page.PageName
@@ -16,6 +17,28 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class TaxStatusControllerTest : AbstractPageControllerTest() {
+    @Test
+    fun `gathering document`() {
+        navigateTo("/taxes/${tax.id}/status")
+
+        assertCurrentPageIs(PageName.TAX_STATUS)
+
+        select("#status", 1)
+        select("#formId", 1)
+        click("button[type=submit]", 1000)
+
+        val request = argumentCaptor<UpdateTaxStatusRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/taxes/${tax.id}/status"),
+            request.capture(),
+            eq(Any::class.java),
+        )
+        assertEquals(TaxStatus.GATHERING_DOCUMENTS, request.firstValue.status)
+        assertEquals(forms[0].id, request.firstValue.formId)
+
+        assertCurrentPageIs(PageName.TAX)
+    }
+
     @Test
     fun status() {
         navigateTo("/taxes/${tax.id}/status")
@@ -32,6 +55,7 @@ class TaxStatusControllerTest : AbstractPageControllerTest() {
             eq(Any::class.java),
         )
         assertEquals(TaxStatus.REVIEWING, request.firstValue.status)
+        assertEquals(null, request.firstValue.formId)
 
         assertCurrentPageIs(PageName.TAX)
     }

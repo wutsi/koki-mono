@@ -174,6 +174,7 @@ class TaxService(
     fun status(id: Long, form: TaxStatusForm) {
         val request = UpdateTaxStatusRequest(
             status = form.status,
+            formId = if (form.formId == -1L) null else form.formId,
         )
         koki.status(id, request)
     }
