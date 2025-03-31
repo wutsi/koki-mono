@@ -31,11 +31,13 @@ object ErrorCode {
     val EMAIL_DELIVERY_FAILED: String = "$PREFIX:email:delivery-failed"
     val EMAIL_RECIPIENT_EMAIL_MISSING: String = "$PREFIX:email:recipient-email-missing"
     val EMAIL_SMTP_NOT_CONFIGURED: String = "$PREFIX:email:smtp-not-configured"
+    val EMAIL_INVALID_SMTP_CONFIGURATION: String = "$PREFIX:email:invalid-smtp-configuration"
 
     val EMPLOYEE_ALREADY_EXIST: String = "$PREFIX:employee:already-exist"
     val EMPLOYEE_NOT_FOUND: String = "$PREFIX:employee:not-found"
 
     val FILE_NOT_FOUND: String = "$PREFIX:file:not-found"
+    val FILE_INVALID_S3_CONFIGURATION: String = "$PREFIX:file:invalid-s3-configuration"
 
     val FORM_NOT_FOUND: String = "$PREFIX:form:not-found"
     val FORM_IN_USE: String = "$PREFIX:form:in-use"
@@ -88,6 +90,7 @@ object ErrorCode {
     val TRANSACTION_PAYMENT_METHOD_NOT_FOUND: String = "$PREFIX:transaction:payment-method-not-found"
     val TRANSACTION_PAYMENT_METHOD_NOT_SUPPORTED: String = "$PREFIX:transaction:payment-method-not-supported"
     val TRANSACTION_PAYMENT_FAILED: String = "$PREFIX:transaction:failed"
+    val TRANSACTION_PAYMENT_INVALID_STRIPE_CONFIGURATION: String = "$PREFIX:transaction:invalid-stripe-configuration"
 
     val TYPE_NOT_FOUND: String = "$PREFIX:type:not-found"
     val TYPE_NAME_MISSING: String = "$PREFIX:type:name-missing"
