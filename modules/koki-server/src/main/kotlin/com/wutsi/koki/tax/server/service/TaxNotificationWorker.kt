@@ -10,7 +10,7 @@ import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.invoice.server.service.TenantTaxInitializer
 import com.wutsi.koki.notification.server.service.AbstractNotificationWorker
-import com.wutsi.koki.notification.server.service.NotificationConsumer
+import com.wutsi.koki.notification.server.service.NotificationMQConsumer
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.tax.dto.TaxStatus
 import com.wutsi.koki.tax.dto.event.TaxAssigneeChangedEvent
@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class TaxNotificationWorker(
-    registry: NotificationConsumer,
+    registry: NotificationMQConsumer,
 
     private val configurationService: ConfigurationService,
     private val typeService: TypeService,
@@ -254,8 +254,8 @@ class TaxNotificationWorker(
 
         val files = fileService.search(
             tenantId = event.tenantId,
-            ownerType = ObjectType.TAX,
-            ownerId = event.taxId,
+            ownerType = ObjectType.FORM,
+            ownerId = event.formId,
         )
 
         return files.find { file -> file.language == language }

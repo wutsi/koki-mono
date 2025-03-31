@@ -101,7 +101,7 @@ class TaxProductService(
             )
         )
 
-        taxService.updateTotalAmount(request.taxId, tenantId)
+        taxService.updateMetrics(request.taxId, tenantId)
         return taxProduct
     }
 
@@ -123,7 +123,7 @@ class TaxProductService(
         taxProduct.modifiedAt = Date()
         dao.save(taxProduct)
 
-        taxService.updateTotalAmount(taxProduct.taxId, tenantId)
+        taxService.updateMetrics(taxProduct.taxId, tenantId)
     }
 
     @Transactional

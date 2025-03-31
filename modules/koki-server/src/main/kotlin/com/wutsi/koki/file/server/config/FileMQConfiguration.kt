@@ -3,7 +3,7 @@ package com.wutsi.koki.file.server.config
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.client.Channel
 import com.wutsi.koki.config.AbstractRabbitMQConsumerConfiguration
-import com.wutsi.koki.file.server.service.FileConsumer
+import com.wutsi.koki.file.server.service.FileMQConsumer
 import com.wutsi.koki.platform.mq.Publisher
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Value
@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled
 
 @Configuration
 class FileMQConfiguration(
-    private val invoiceConsumer: FileConsumer,
+    private val invoiceConsumer: FileMQConsumer,
     channel: Channel,
     objectMapper: ObjectMapper,
     publisher: Publisher,

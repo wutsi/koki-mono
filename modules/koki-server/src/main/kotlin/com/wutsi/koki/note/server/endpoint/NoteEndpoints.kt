@@ -6,8 +6,12 @@ import com.wutsi.koki.note.dto.CreateNoteResponse
 import com.wutsi.koki.note.dto.GetNoteResponse
 import com.wutsi.koki.note.dto.SearchNoteResponse
 import com.wutsi.koki.note.dto.UpdateNoteRequest
+import com.wutsi.koki.note.dto.event.NoteCreatedEvent
+import com.wutsi.koki.note.dto.event.NoteDeletedEvent
+import com.wutsi.koki.note.dto.event.NoteUpdatedEvent
 import com.wutsi.koki.note.server.mapper.NoteMapper
 import com.wutsi.koki.note.server.service.NoteService
+import com.wutsi.koki.platform.mq.Publisher
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -24,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController
 class NoteEndpoints(
     private val service: NoteService,
     private val mapper: NoteMapper,
+    private val publisher: Publisher,
 ) {
     @PostMapping
     fun create(
@@ -31,7 +36,14 @@ class NoteEndpoints(
         @Valid @RequestBody request: CreateNoteRequest,
     ): CreateNoteResponse {
         val note = service.create(request, tenantId)
-        return CreateNoteResponse(note.id!!)
+        val response = CreateNoteResponse(note.id!!)
+        publisher.publish(
+            NoteCreatedEvent(
+                noteId = note.id,
+                tenantId = tenantId,
+            )
+        )
+        return response
     }
 
     @PostMapping("/{id}")
@@ -41,6 +53,12 @@ class NoteEndpoints(
         @Valid @RequestBody request: UpdateNoteRequest,
     ) {
         service.update(id, request, tenantId)
+        publisher.publish(
+            NoteUpdatedEvent(
+                noteId = id,
+                tenantId = tenantId,
+            )
+        )
     }
 
     @DeleteMapping("/{id}")
@@ -49,6 +67,12 @@ class NoteEndpoints(
         @PathVariable id: Long,
     ) {
         service.delete(id, tenantId)
+        publisher.publish(
+            NoteDeletedEvent(
+                noteId = id,
+                tenantId = tenantId,
+            )
+        )
     }
 
     @GetMapping("/{id}")

@@ -17,6 +17,7 @@ class NoteTabController(private val service: NoteService) : AbstractPageControll
         @RequestParam(name = "owner-id") ownerId: Long,
         @RequestParam(name = "owner-type") ownerType: ObjectType,
         @RequestParam(name = "test-mode", required = false) testMode: String? = null,
+        @RequestParam(required = false, name = "read-only") readOnly: String? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model
@@ -24,7 +25,7 @@ class NoteTabController(private val service: NoteService) : AbstractPageControll
         model.addAttribute("ownerId", ownerId)
         model.addAttribute("ownerType", ownerType)
         model.addAttribute("testMode", testMode)
-        more(ownerId, ownerType, limit, offset, model)
+        more(ownerId, ownerType, readOnly, limit, offset, model)
         return "notes/tab"
     }
 
@@ -32,6 +33,7 @@ class NoteTabController(private val service: NoteService) : AbstractPageControll
     fun more(
         @RequestParam(required = false, name = "owner-id") ownerId: Long,
         @RequestParam(required = false, name = "owner-type") ownerType: ObjectType,
+        @RequestParam(required = false, name = "read-only") readOnly: String? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model
@@ -43,6 +45,7 @@ class NoteTabController(private val service: NoteService) : AbstractPageControll
             offset = offset,
         )
         model.addAttribute("notes", notes)
+        model.addAttribute("readOnly", readOnly)
         if (notes.size >= limit) {
             val nextOffset = offset + limit
             val url = "/notes/tab/more?limit=$limit&offset=$nextOffset&owner-id=$ownerId&owner-id=$ownerType"

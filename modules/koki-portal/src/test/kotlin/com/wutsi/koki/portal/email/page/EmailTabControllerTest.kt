@@ -21,9 +21,17 @@ class EmailTabControllerTest : AbstractPageControllerTest() {
     fun list() {
         navigateTo("/emails/tab?test-mode=true&owner-id=111&owner-type=TAX")
 
+        assertElementPresent("#btn-email-compose")
         assertElementCount(".tab-emails .email", emails.size)
         assertElementAttribute("#email-list", "data-owner-id", "111")
         assertElementAttribute("#email-list", "data-owner-type", "TAX")
+    }
+
+    @Test
+    fun `list - readOnly`() {
+        navigateTo("/emails/tab?test-mode=true&owner-id=111&owner-type=TAX&read-only=true")
+
+        assertElementNotPresent("#btn-email-compose")
     }
 
     @Test

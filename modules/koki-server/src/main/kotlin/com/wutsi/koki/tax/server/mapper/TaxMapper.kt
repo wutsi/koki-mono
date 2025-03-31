@@ -24,9 +24,11 @@ class TaxMapper {
             assigneeId = entity.assigneeId,
             accountId = entity.accountId,
             description = entity.description,
-            totalRevenue = entity.totalRevenue,
             currency = entity.currency,
-            productCount = entity.productCount
+            productCount = entity.productCount,
+            totalRevenue = entity.totalRevenue,
+            totalLaborDuration = entity.totalLaborDuration,
+            totalLaborCost = entity.totalLaborCost,
         )
     }
 

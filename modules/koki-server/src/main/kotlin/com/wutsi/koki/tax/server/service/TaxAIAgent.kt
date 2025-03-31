@@ -2,7 +2,7 @@ package com.wutsi.koki.tax.server.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.wutsi.koki.ai.server.service.AIConsumer
+import com.wutsi.koki.ai.server.service.AIMQConsumer
 import com.wutsi.koki.ai.server.service.AbstractAIAgent
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
@@ -37,7 +37,7 @@ class TaxAIAgent(
     private val objectMapper: ObjectMapper,
     private val logger: KVLogger,
 
-    registry: AIConsumer,
+    registry: AIMQConsumer,
 ) : AbstractAIAgent(registry) {
     companion object {
         const val SYSTEM_INSTRUCTION = """

@@ -19,7 +19,7 @@ import com.wutsi.koki.invoice.dto.event.InvoiceStatusChangedEvent
 import com.wutsi.koki.invoice.server.command.SendInvoiceCommand
 import com.wutsi.koki.invoice.server.domain.InvoiceEntity
 import com.wutsi.koki.invoice.server.io.pdf.InvoicePdfExporter
-import com.wutsi.koki.notification.server.service.NotificationConsumer
+import com.wutsi.koki.notification.server.service.NotificationMQConsumer
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.templating.MustacheTemplatingEngine
 import com.wutsi.koki.tenant.dto.ConfigurationName
@@ -42,7 +42,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class InvoiceNotificationWorkerTest {
-    private val registry = mock<NotificationConsumer>()
+    private val registry = mock<NotificationMQConsumer>()
     private val configurationService = mock<ConfigurationService>()
     private val invoiceService = mock<InvoiceService>()
     private val businessService = mock<BusinessService>()

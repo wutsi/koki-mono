@@ -28,6 +28,8 @@ data class TaxModel(
     val createdBy: UserModel? = null,
     val modifiedBy: UserModel? = null,
     val totalRevenue: MoneyModel? = null,
+    val totalLaborCost: MoneyModel? = null,
+    val totalLaborDuration: Int = 0,
     val productCount: Int = 0,
 ) {
     val name: String
@@ -38,4 +40,22 @@ data class TaxModel(
 
     val readOnly: Boolean
         get() = done
+
+    val totalLaborDurationMinutes: Int
+        get() = totalLaborDuration % 60
+
+    val totalLaborDurationHours: Int
+        get() = totalLaborDuration / 60
+
+    val totalLaborDurationText: String
+        get() = durationToText(totalLaborDurationHours, totalLaborDurationMinutes)
+
+    private fun durationToText(durationHours: Int, durationMinutes: Int): String {
+        val hh = durationHours
+        val mm = durationMinutes
+        val hhText = if (hh < 10) "0$hh" else "$hh"
+        val mmText = if (mm < 10) "0$mm" else "$mm"
+
+        return "$hhText:$mmText"
+    }
 }

@@ -67,6 +67,9 @@ function _koki_notes_on_modal_opened() {
     );
     htmlBody.on('text-change', _koki_notes_on_change);
 
+    document.getElementById("durationHours").addEventListener('change', _koki_notes_on_change);
+    document.getElementById("durationMinutes").addEventListener('change', _koki_notes_on_change);
+
     /* Cancel */
     document.getElementById('btn-note-cancel').addEventListener('click', koki_modal_close)
 }
@@ -77,6 +80,8 @@ function _koki_notes_on_modal_closed() {
     /* remove all event listeners */
     document.getElementById('note-form').removeEventListener('submit', _koki_notes_on_form_submitted);
     document.getElementById("subject").removeEventListener('keydown', _koki_notes_on_change);
+    document.getElementById("durationHours").removeEventListener('change', _koki_notes_on_change);
+    document.getElementById("durationMinutes").removeEventListener('change', _koki_notes_on_change);
     document.getElementById("btn-note-cancel").removeEventListener('click', koki_modal_close)
 }
 
@@ -123,8 +128,7 @@ function _koki_notes_on_change() {
     // console.log('subject=' + subject.value, ' - body=' + editor.innerHTML, editor.textContent);
 
     document.getElementById('body').value = editor.innerHTML;
-    document.getElementById('btn-note-submit').disabled = subject.value.size === 0 ||
-        !editor.textContent;
+    document.getElementById('btn-note-submit').disabled = subject.value.size === 0;
 }
 
 function _koki_notes_refresh_parent_window(id) {

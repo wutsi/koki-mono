@@ -17,6 +17,7 @@ class EmailTabController(private val service: EmailService) : AbstractPageContro
         @RequestParam(required = false, name = "owner-id") ownerId: Long,
         @RequestParam(required = false, name = "owner-type") ownerType: ObjectType,
         @RequestParam(required = false, name = "test-mode") testMode: String? = null,
+        @RequestParam(required = false, name = "read-only") readOnly: String? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model,
@@ -24,7 +25,7 @@ class EmailTabController(private val service: EmailService) : AbstractPageContro
         model.addAttribute("ownerId", ownerId)
         model.addAttribute("ownerType", ownerType)
         model.addAttribute("testMode", testMode)
-        more(ownerId, ownerType, limit, offset, model)
+        more(ownerId, ownerType, readOnly, limit, offset, model)
         return "emails/tab"
     }
 
@@ -32,6 +33,7 @@ class EmailTabController(private val service: EmailService) : AbstractPageContro
     fun more(
         @RequestParam(required = false, name = "owner-id") ownerId: Long,
         @RequestParam(required = false, name = "owner-type") ownerType: ObjectType,
+        @RequestParam(required = false, name = "read-only") readOnly: String? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model,
@@ -43,6 +45,7 @@ class EmailTabController(private val service: EmailService) : AbstractPageContro
             offset = offset,
         )
         model.addAttribute("emails", emails)
+        model.addAttribute("readOnly", readOnly)
 
         if (emails.size >= limit) {
             val nextOffset = offset + limit

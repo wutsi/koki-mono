@@ -86,7 +86,7 @@
 
 ## Invoice
 
-- [] Invoice Widget
+- [] Due Invoices Widget
 - [x] Change URL of checkout page to "hide" the invoice ID
 - [x] Add locale to invoice
 - [x] Update amount due on successful payment
@@ -171,11 +171,13 @@
 
 ## Taxes
 
-- [] Taxes KPI
-    - [] Labor cost
-    - [] Labor hours
-    - [] Revenu
+- [] Widget: Tax Monthly stats
+- [] Compile taxes monthly stats
 - [] Add Kanban view
+- [x] Taxes Metrics
+    - [x] Labor cost
+    - [x] Labor hours
+    - [x] Revenu
 - [x] Send the form to customer when status=GATHERING_DOCUMENTS
 - [x] Settings: Setup email notification
     - [x] When task assigned

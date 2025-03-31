@@ -10,7 +10,7 @@
     <i class="fa-solid fa-video" th:if="${type.name() == 'ONLINE_MEETING'}"></i>
 </span>
 
-<div class="note" th:fragment="columns(note)" th:remove="tag">
+<div class="note" th:fragment="columns(note, readOnly)" th:remove="tag">
     <div>
         <div class="note-subject">
             <span th:text="${note.modifiedAtMoment}">00:00</span>
@@ -34,11 +34,11 @@
 
         <a class="btn-edit margin-left"
            th:href="'javascript: koki_notes_edit(' + ${note.id} + ')'"
-           th:if="${user?.hasPermission('note:manage')}">Edit</a>
+           th:if="!${readOnly} AND ${user?.hasPermission('note:manage')}">Edit</a>
 
         <a class="btn-delete margin-left"
            th:href="'javascript: koki_notes_delete(' + ${note.id} + ')'"
-           th:if="${user?.hasPermission('note:delete')}">Delete</a>
+           th:if="!${readOnly} AND ${user?.hasPermission('note:delete')}">Delete</a>
     </div>
 </div>
 

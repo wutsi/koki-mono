@@ -9,7 +9,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.ai.server.service.AIConsumer
+import com.wutsi.koki.ai.server.service.AIMQConsumer
 import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.event.FileDeletedEvent
@@ -41,7 +41,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 class TaxAIAgentTest {
-    private val registry = mock<AIConsumer>()
+    private val registry = mock<AIMQConsumer>()
     private val fileService = mock<FileService>()
     private val storageBuilder = mock<StorageServiceBuilder>()
     private val genAIBuilder = mock<GenAIServiceBuilder>()

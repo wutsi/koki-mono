@@ -227,6 +227,13 @@ koki:
                 dlq: koki-notification-dlq
                 dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
 
+        tax:
+            mq:
+                consumer-delay-seconds: 1
+                queue: koki-tax-queue
+                dlq: koki-tax-dlq
+                dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
+
         transaction:
             pending:
                 cron: "0 */30 * * * *"     # Update PENDING transactions every 30 mins

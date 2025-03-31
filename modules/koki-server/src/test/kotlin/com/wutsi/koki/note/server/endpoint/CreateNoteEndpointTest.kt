@@ -1,16 +1,21 @@
 package com.wutsi.koki.note.server.endpoint
 
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.note.dto.CreateNoteRequest
 import com.wutsi.koki.note.dto.CreateNoteResponse
 import com.wutsi.koki.note.dto.NoteType
+import com.wutsi.koki.note.dto.event.NoteCreatedEvent
 import com.wutsi.koki.note.server.dao.NoteOwnerRepository
 import com.wutsi.koki.note.server.dao.NoteRepository
+import com.wutsi.koki.platform.mq.Publisher
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -23,6 +28,9 @@ class CreateNoteEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Autowired
     private lateinit var ownerDao: NoteOwnerRepository
+
+    @MockitoBean
+    private lateinit var publisher: Publisher
 
     @Test
     fun create() {
@@ -73,6 +81,11 @@ class CreateNoteEndpointTest : AuthorizationAwareEndpointTest() {
 
         val owners = ownerDao.findByNoteId(noteId)
         assertEquals(0, owners.size)
+
+        val event = argumentCaptor<NoteCreatedEvent>()
+        verify(publisher).publish(event.capture())
+        assertEquals(note.id, event.firstValue.noteId)
+        assertEquals(TENANT_ID, event.firstValue.tenantId)
     }
 
     @Test
@@ -106,5 +119,10 @@ class CreateNoteEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(1, owners.size)
         assertEquals(request.owner!!.id, owners[0].ownerId)
         assertEquals(request.owner!!.type, owners[0].ownerType)
+
+        val event = argumentCaptor<NoteCreatedEvent>()
+        verify(publisher).publish(event.capture())
+        assertEquals(note.id, event.firstValue.noteId)
+        assertEquals(TENANT_ID, event.firstValue.tenantId)
     }
 }

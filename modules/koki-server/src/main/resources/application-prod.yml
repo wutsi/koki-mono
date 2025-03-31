@@ -62,3 +62,8 @@ koki:
             mq:
                 consumer-delay-seconds: 60
                 dlq-cron: "0 */15 * * * *"  # Every 15 mins
+
+        tax:
+            mq:
+                consumer-delay-seconds: 60
+                dlq-cron: "0 */15 * * * *"  # Every 15 mins
