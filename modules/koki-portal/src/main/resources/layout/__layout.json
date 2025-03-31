@@ -1,0 +1,12 @@
+{
+  "tabs": [
+    "account",
+    "contact",
+    "employee",
+    "form",
+    "product",
+    "tax",
+    "invoice",
+    "payment"
+  ]
+}
