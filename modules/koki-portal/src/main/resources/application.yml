@@ -82,3 +82,10 @@ koki:
             region: us-east-1
             access-key: ""
             secret-key: ""
+<<<<<<< Updated upstream
+=======
+
+    toggles:
+        paypal: true
+        mobile-money: true
+>>>>>>> Stashed changes

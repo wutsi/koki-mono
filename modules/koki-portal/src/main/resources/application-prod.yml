@@ -9,3 +9,10 @@ koki:
             region: us-east-1
             access-key: ${AWS_ACCESS_KEY}
             secret-key: ${AWS_SECRET_KEY}
+<<<<<<< Updated upstream
+=======
+
+    toggles:
+        paypal: false
+        mobile-money: false
+>>>>>>> Stashed changes
