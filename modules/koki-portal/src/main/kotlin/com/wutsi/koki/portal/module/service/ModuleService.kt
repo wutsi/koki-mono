@@ -53,7 +53,14 @@ class ModuleService(
                     entity = module,
                     permissions = permissions[module.id] ?: emptyList()
                 )
-            }.sortedBy { module -> layoutDescriptor.tabs.indexOf(module.name) }
+            }.sortedBy { module ->
+                val index = layoutDescriptor.tabs.indexOf(module.name)
+                if (index >= 0) {
+                    index
+                } else {
+                    Integer.MAX_VALUE
+                }
+            }
         }
         return all!!
     }
