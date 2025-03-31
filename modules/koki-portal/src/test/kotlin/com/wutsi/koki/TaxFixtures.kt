@@ -65,6 +65,8 @@ object TaxFixtures {
         createdById = users[0].id,
         description = "This is the description of the Tax Report",
         totalRevenue = 600.0,
+        totalLaborCost = 350.0,
+        totalLaborDuration = 25,
         currency = "CAD",
         productCount = 3
     )

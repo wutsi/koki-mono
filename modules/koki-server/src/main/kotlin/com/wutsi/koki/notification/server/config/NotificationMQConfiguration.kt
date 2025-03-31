@@ -3,7 +3,7 @@ package com.wutsi.koki.notification.server.config
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.client.Channel
 import com.wutsi.koki.config.AbstractRabbitMQConsumerConfiguration
-import com.wutsi.koki.notification.server.service.NotificationConsumer
+import com.wutsi.koki.notification.server.service.NotificationMQConsumer
 import com.wutsi.koki.platform.mq.Publisher
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Value
@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled
 
 @Configuration
 class NotificationMQConfiguration(
-    private val invoiceConsumer: NotificationConsumer,
+    private val invoiceConsumer: NotificationMQConsumer,
     channel: Channel,
     objectMapper: ObjectMapper,
     publisher: Publisher,

@@ -119,6 +119,13 @@
                                 TAB
                             </button>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-content" aria-selected="true" class="nav-link"
+                                    data-bs-target="#pills-metric" data-bs-toggle="pill" id="pills-metric-tab"
+                                    role="tab" type="button">
+                                Metrics
+                            </button>
+                        </li>
                     </ul>
                     <div class="tab-content" id="tab-main-content">
                         <div aria-labelledby="pills-details-tab" class="tab-pane fade show active" id="pills-details"
@@ -172,7 +179,6 @@
                                         <i th:if="!${tax.assignee}">Unassigned</i>
                                     </td>
                                 </tr>
-
                                 <tr th:if="${tax.description}">
                                     <td><b>Description</b></td>
                                     <td th:text="${tax.description}">DESCRIPTION</td>
@@ -206,6 +212,10 @@
                              th:data-url="${tab.toTabUrl(tax.id, module, tax.readOnly)}"
                              th:each="tab : ${page.tabs.get('main')}"
                              th:id="'pills-' + ${tab.name}">
+                        </div>
+                        <div aria-labelledby="pills-metric-tab" class="tab-pane fade show" id="pills-metric"
+                             role="tabpanel"
+                             th:data-url="'/taxes/' + ${tax.id} + '/metrics'">
                         </div>
                     </div>
                 </div>

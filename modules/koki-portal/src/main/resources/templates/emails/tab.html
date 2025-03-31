@@ -1,5 +1,5 @@
 <div class="tab-emails">
-    <div>
+    <div th:if="!${readOnly}">
         <a class="btn btn-light btn-sm" href="javascript: koki_emails_compose()"
            id="btn-email-compose"
            th:if="${user?.hasPermission('email:send')}">

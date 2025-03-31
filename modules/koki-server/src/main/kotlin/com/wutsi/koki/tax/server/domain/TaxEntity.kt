@@ -46,8 +46,6 @@ data class TaxEntity(
     var fiscalYear: Int = -1,
     var status: TaxStatus = TaxStatus.NEW,
     var description: String? = null,
-    var totalRevenue: Double? = null,
-    var productCount: Int = 0,
     var currency: String? = null,
 
     var deleted: Boolean = false,
@@ -56,4 +54,9 @@ data class TaxEntity(
     var deletedAt: Date? = null,
     var startAt: Date? = null,
     var dueAt: Date? = null,
+
+    var totalLaborDuration: Int? = null,
+    var totalLaborCost: Double? = null,
+    var productCount: Int = 0,
+    var totalRevenue: Double? = null,
 )

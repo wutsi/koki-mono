@@ -1,14 +1,21 @@
 package com.wutsi.koki.note.server.endpoint
 
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.note.dto.NoteType
 import com.wutsi.koki.note.dto.UpdateNoteRequest
+import com.wutsi.koki.note.dto.event.NoteUpdatedEvent
 import com.wutsi.koki.note.server.dao.NoteRepository
+import com.wutsi.koki.platform.mq.Publisher
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -18,6 +25,9 @@ import kotlin.test.assertNull
 class UpdateNoteEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var dao: NoteRepository
+
+    @MockitoBean
+    private lateinit var publisher: Publisher
 
     private val request = UpdateNoteRequest(
         subject = "New note",
@@ -65,6 +75,11 @@ class UpdateNoteEndpointTest : AuthorizationAwareEndpointTest() {
         assertFalse(note.deleted)
         assertNull(note.deletedAt)
         assertNull(note.deletedById)
+
+        val event = argumentCaptor<NoteUpdatedEvent>()
+        verify(publisher).publish(event.capture())
+        assertEquals(note.id, event.firstValue.noteId)
+        assertEquals(TENANT_ID, event.firstValue.tenantId)
     }
 
     @Test
@@ -73,6 +88,8 @@ class UpdateNoteEndpointTest : AuthorizationAwareEndpointTest() {
 
         assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
         assertEquals(ErrorCode.NOTE_NOT_FOUND, response.body!!.error.code)
+
+        verify(publisher, never()).publish(any())
     }
 
     @Test
@@ -81,6 +98,8 @@ class UpdateNoteEndpointTest : AuthorizationAwareEndpointTest() {
 
         assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
         assertEquals(ErrorCode.NOTE_NOT_FOUND, response.body!!.error.code)
+
+        verify(publisher, never()).publish(any())
     }
 
     @Test
@@ -89,5 +108,7 @@ class UpdateNoteEndpointTest : AuthorizationAwareEndpointTest() {
 
         assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
         assertEquals(ErrorCode.NOTE_NOT_FOUND, response.body!!.error.code)
+
+        verify(publisher, never()).publish(any())
     }
 }

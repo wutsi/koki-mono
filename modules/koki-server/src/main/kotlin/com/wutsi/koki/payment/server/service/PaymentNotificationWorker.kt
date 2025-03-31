@@ -8,7 +8,7 @@ import com.wutsi.koki.email.server.service.EmailService
 import com.wutsi.koki.invoice.server.domain.InvoiceEntity
 import com.wutsi.koki.invoice.server.service.InvoiceService
 import com.wutsi.koki.notification.server.service.AbstractNotificationWorker
-import com.wutsi.koki.notification.server.service.NotificationConsumer
+import com.wutsi.koki.notification.server.service.NotificationMQConsumer
 import com.wutsi.koki.payment.dto.TransactionStatus
 import com.wutsi.koki.payment.dto.event.TransactionCompletedEvent
 import com.wutsi.koki.payment.server.domain.TransactionEntity
@@ -33,7 +33,7 @@ import java.util.Locale
  */
 @Service
 class PaymentNotificationWorker(
-    registry: NotificationConsumer,
+    registry: NotificationMQConsumer,
     private val configurationService: ConfigurationService,
     private val transactionService: TransactionService,
     private val invoiceService: InvoiceService,

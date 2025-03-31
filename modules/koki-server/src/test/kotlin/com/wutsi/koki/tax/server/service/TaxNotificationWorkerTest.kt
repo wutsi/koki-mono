@@ -18,7 +18,7 @@ import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.form.server.domain.AccountEntity
 import com.wutsi.koki.invoice.server.service.TenantTaxInitializer
-import com.wutsi.koki.notification.server.service.NotificationConsumer
+import com.wutsi.koki.notification.server.service.NotificationMQConsumer
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.templating.MustacheTemplatingEngine
 import com.wutsi.koki.tax.dto.TaxStatus
@@ -43,7 +43,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class TaxNotificationWorkerTest {
-    private val registry = mock<NotificationConsumer>()
+    private val registry = mock<NotificationMQConsumer>()
     private val configurationService = mock<ConfigurationService>()
     private val taxService = mock<TaxService>()
     private val userService = mock<UserService>()

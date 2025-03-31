@@ -14,7 +14,7 @@ import com.wutsi.koki.email.dto.SendEmailRequest
 import com.wutsi.koki.email.server.service.EmailService
 import com.wutsi.koki.invoice.server.domain.InvoiceEntity
 import com.wutsi.koki.invoice.server.service.InvoiceService
-import com.wutsi.koki.notification.server.service.NotificationConsumer
+import com.wutsi.koki.notification.server.service.NotificationMQConsumer
 import com.wutsi.koki.payment.dto.PaymentMethodType
 import com.wutsi.koki.payment.dto.TransactionStatus
 import com.wutsi.koki.payment.dto.event.TransactionCompletedEvent
@@ -40,7 +40,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class PaymentNotificationWorkerTest {
-    private val registry = mock<NotificationConsumer>()
+    private val registry = mock<NotificationMQConsumer>()
     private val configurationService = mock<ConfigurationService>()
     private val invoiceService = mock<InvoiceService>()
     private val businessService = mock<BusinessService>()

@@ -103,6 +103,11 @@ class TaxControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun metric() {
+        navigateTo("/taxes/${tax.id}?tab=metric")
+    }
+
+    @Test
     fun invoices() {
         navigateTo("/taxes/${tax.id}?tab=invoice")
 

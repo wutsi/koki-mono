@@ -13,7 +13,7 @@ import com.wutsi.koki.invoice.server.command.SendInvoiceCommand
 import com.wutsi.koki.invoice.server.domain.InvoiceEntity
 import com.wutsi.koki.invoice.server.io.pdf.InvoicePdfExporter
 import com.wutsi.koki.notification.server.service.AbstractNotificationWorker
-import com.wutsi.koki.notification.server.service.NotificationConsumer
+import com.wutsi.koki.notification.server.service.NotificationMQConsumer
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.domain.BusinessEntity
@@ -67,7 +67,7 @@ import java.util.Date
  */
 @Service
 class InvoiceNotificationWorker(
-    registry: NotificationConsumer,
+    registry: NotificationMQConsumer,
     private val configurationService: ConfigurationService,
     private val invoiceService: InvoiceService,
     private val businessService: BusinessService,

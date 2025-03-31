@@ -4,7 +4,7 @@ import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 
 abstract class AbstractNotificationWorker(
-    private val registry: NotificationConsumer
+    private val registry: NotificationMQConsumer
 ) : NotificationWorker {
     @PostConstruct
     fun setUp() {

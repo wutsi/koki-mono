@@ -1,8 +1,11 @@
 package com.wutsi.koki.tax.server.service
 
+import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.employee.server.service.EmployeeService
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.note.server.service.NoteService
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tax.dto.CreateTaxRequest
 import com.wutsi.koki.tax.dto.TaxStatus
@@ -21,6 +24,8 @@ import java.util.Date
 class TaxService(
     private val dao: TaxRepository,
     private val taxProductDao: TaxProductRepository,
+    private val noteService: NoteService,
+    private val employeeService: EmployeeService,
     private val securityService: SecurityService,
     private val em: EntityManager,
 ) {
@@ -201,17 +206,45 @@ class TaxService(
     }
 
     @Transactional
-    fun updateTotalAmount(id: Long, tenantId: Long) {
+    fun updateMetrics(id: Long, tenantId: Long) {
         val tax = get(id, tenantId)
-        val taxProducts = taxProductDao.findByTaxId(id)
-        if (taxProducts.isEmpty()) {
-            tax.totalRevenue = null
-            tax.currency = null
-        } else {
-            tax.totalRevenue = taxProducts.sumOf { taxProduct -> taxProduct.subTotal }
-            tax.currency = taxProducts.first().currency
-        }
+        val taxProducts = taxProductDao.findByTaxId(tax.id!!)
+
+        // Number of products
         tax.productCount = taxProducts.size
+
+        // Revenu
+        tax.totalRevenue = taxProducts.sumOf { taxProduct -> taxProduct.subTotal }
+        tax.currency = taxProducts.firstOrNull()?.currency
+
+        // Labor duration
+        val notes = noteService.search(
+            tenantId = tax.tenantId,
+            ownerId = tax.id,
+            ownerType = ObjectType.TAX,
+        )
+        tax.totalLaborDuration = notes.sumOf { note -> note.duration }
+
+        // Labor cost
+        val userIds = notes.map { note -> note.createdById }.filterNotNull().distinct()
+        val notesByUserId = notes.groupBy { note -> note.createdById }
+        val employees = employeeService.search(
+            tenantId = tax.tenantId,
+            ids = userIds,
+            limit = userIds.size
+        ).associateBy { employee -> employee.id }
+
+        var totalLaborCost = 0.0
+        notesByUserId.forEach { entry ->
+            val employee = employees[entry.key]
+            if (employee != null) {
+                val userDuration = entry.value.sumOf { note -> note.duration } // Duration in minutes
+                employee.hourlyWage?.let { wage ->
+                    totalLaborCost += wage * userDuration.toDouble() / 60.0
+                }
+            }
+        }
+        tax.totalLaborCost = totalLaborCost
         dao.save(tax)
     }
 }

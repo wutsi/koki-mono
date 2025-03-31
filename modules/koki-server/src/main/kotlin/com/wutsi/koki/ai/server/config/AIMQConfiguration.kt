@@ -2,7 +2,7 @@ package com.wutsi.koki.ai.server.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.client.Channel
-import com.wutsi.koki.ai.server.service.AIConsumer
+import com.wutsi.koki.ai.server.service.AIMQConsumer
 import com.wutsi.koki.config.AbstractRabbitMQConsumerConfiguration
 import com.wutsi.koki.platform.mq.Publisher
 import jakarta.annotation.PostConstruct
@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled
 
 @Configuration
 class AIMQConfiguration(
-    private val invoiceConsumer: AIConsumer,
+    private val invoiceConsumer: AIMQConsumer,
     channel: Channel,
     objectMapper: ObjectMapper,
     publisher: Publisher,

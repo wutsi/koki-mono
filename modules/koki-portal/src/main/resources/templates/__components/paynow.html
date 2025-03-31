@@ -10,6 +10,9 @@
         <h1 th:text="${invoice.amountDue}">$$$</h1>
     </div>
     <div th:if="${invoice.paid}">
+        <h1 class="success" th:text="${invoice.totalAmount}">$$$</h1>
+    </div>
+    <div th:if="${invoice.paid}">
         <div th:replace="~{__components/invoice :: invoice-status(${invoice.status.name})}"></div>
     </div>
 </div>
@@ -19,7 +22,7 @@
         <td valign="top">
             <div th:text="${item.description}">ITEM</div>
             <div class="text-small" th:if="${item.quantity > 1}">
-                Quantity: <span th:text="${item.quantity}">1111</span>
+                Unit Price: <span th:text="${item.unitPrice}">1111</span>
             </div>
         </td>
         <td align="right" valign="top">

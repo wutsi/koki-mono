@@ -53,6 +53,7 @@ class TaxMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
     ): TaxModel {
         val fmt = createDateTimeFormat()
         val dateFormat = createDateFormat()
+        val currency = entity.currency ?: currentTenant.get()!!.currency
         return TaxModel(
             id = entity.id,
             taxType = taxType,
@@ -74,8 +75,12 @@ class TaxMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             account = account,
             description = entity.description,
             totalRevenue = entity.totalRevenue?.let { amount ->
-                moneyMapper.toMoneyModel(amount, entity.currency!!)
+                moneyMapper.toMoneyModel(amount, currency)
             },
+            totalLaborCost = entity.totalLaborCost?.let { amount ->
+                moneyMapper.toMoneyModel(amount, currency)
+            },
+            totalLaborDuration = entity.totalLaborDuration ?: 0,
             productCount = entity.productCount,
         )
     }

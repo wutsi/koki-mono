@@ -1,16 +1,16 @@
 <div class="tab-notes">
-    <div>
+    <div th:if="!${readOnly}">
         <a class="btn-create btn btn-light btn-sm" href="javascript: koki_notes_create()"
            th:if="${user?.hasPermission('note:manage')}">
             Add New Note
         </a>
+    </div>
         <div id="note-list" th:data-owner-id="${ownerId}" th:data-owner-type="${ownerType}">
             <div class="border-top padding-top margin-top note" th:each="note : ${notes}" th:id="'note-' + ${note.id}">
-                <div th:replace="~{__components/note :: columns(${note})}"></div>
+                <div th:replace="~{__components/note :: columns(${note}, ${readOnly})}"></div>
             </div>
             <div th:replace="~{__components/note :: load-more(${moreUrl})}"></div>
         </div>
-    </div>
 </div>
 
 <div th:if="${testMode}">

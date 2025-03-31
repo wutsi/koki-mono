@@ -19,6 +19,25 @@ class NoteTabControllerTest : AbstractPageControllerTest() {
     fun list() {
         navigateTo("/notes/tab?test-mode=1&owner-id=111&owner-type=ACCOUNT")
 
+        assertElementPresent(".btn-create")
+        assertElementPresent(".btn-view")
+        assertElementPresent(".btn-edit")
+        assertElementPresent(".btn-delete")
+
+        assertElementCount(".tab-notes .note", notes.size)
+        assertElementAttribute("#note-list", "data-owner-id", "111")
+        assertElementAttribute("#note-list", "data-owner-type", "ACCOUNT")
+    }
+
+    @Test
+    fun `list - readOnly`() {
+        navigateTo("/notes/tab?test-mode=1&owner-id=111&owner-type=ACCOUNT&read-only=true")
+
+        assertElementNotPresent(".btn-create")
+        assertElementPresent(".btn-view")
+        assertElementNotPresent(".btn-edit")
+        assertElementNotPresent(".btn-delete")
+
         assertElementCount(".tab-notes .note", notes.size)
         assertElementAttribute("#note-list", "data-owner-id", "111")
         assertElementAttribute("#note-list", "data-owner-type", "ACCOUNT")
