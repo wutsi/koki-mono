@@ -8,4 +8,6 @@ data class PaymentMethodCheckModel(
     val bankName: String = "",
     val clearedAt: Date? = null,
     val clearedAtText: String? = null,
+    val checkDate: Date? = null,
+    val checkDateText: String? = null,
 )

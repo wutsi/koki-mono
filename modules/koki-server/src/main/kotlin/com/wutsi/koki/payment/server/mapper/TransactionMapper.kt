@@ -84,6 +84,7 @@ class TransactionMapper {
             bankName = entity.bankName,
             checkNumber = entity.checkNumber,
             clearedAt = entity.clearedAt,
+            checkDate = entity.checkDate,
         )
     }
 }

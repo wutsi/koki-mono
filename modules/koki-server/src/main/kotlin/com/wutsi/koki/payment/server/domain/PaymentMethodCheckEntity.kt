@@ -20,5 +20,6 @@ data class PaymentMethodCheckEntity(
 
     val checkNumber: String = "",
     val bankName: String = "",
+    val checkDate: Date? = null,
     val clearedAt: Date? = null,
 )

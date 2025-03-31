@@ -173,6 +173,7 @@ class PaymentService(
                 id = UUID.randomUUID().toString(),
                 tenantId = tenantId,
                 transactionId = tx.id!!,
+                checkDate = request.checkDate,
                 clearedAt = request.clearedAt,
                 checkNumber = request.checkNumber,
                 bankName = request.bankName,

@@ -42,6 +42,7 @@ class CreateCheckPaymentEndpointTest : AuthorizationAwareEndpointTest() {
             bankName = "Desjardins",
             amount = 500.0,
             currency = "CAD",
+            checkDate = DateUtils.addDays(Date(), -5),
             clearedAt = DateUtils.addDays(Date(), -3)
         )
         val response = rest.postForEntity("/v1/payments/check", request, CreatePaymentResponse::class.java)
@@ -70,6 +71,7 @@ class CreateCheckPaymentEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.checkNumber, paymentMethod?.checkNumber)
         assertEquals(request.bankName, paymentMethod?.bankName)
         assertEquals(fmt.format(request.clearedAt), fmt.format(paymentMethod?.clearedAt))
+        assertEquals(fmt.format(request.checkDate), fmt.format(paymentMethod?.checkDate))
 
         val event = argumentCaptor<TransactionCompletedEvent>()
         verify(publisher).publish(event.capture())

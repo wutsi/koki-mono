@@ -148,15 +148,19 @@
                                 </tr>
 
                                 <!-- Check -->
-                                <tr th:if="${payment.paymentMethod.check} AND ${payment.paymentMethod.check.checkNumber}">
+                                <tr th:if="${payment.paymentMethod.check?.checkNumber}">
                                     <td><b>Check Number</b></td>
                                     <td th:text="${payment.paymentMethod.check.checkNumber}">$$</td>
                                 </tr>
-                                <tr th:if="${payment.paymentMethod.check} AND ${payment.paymentMethod.check.bankName}">
+                                <tr th:if="${payment.paymentMethod.check?.bankName}">
                                     <td><b>Bank</b></td>
                                     <td th:text="${payment.paymentMethod.check.bankName}">$$</td>
                                 </tr>
-                                <tr th:if="${payment.paymentMethod.check} AND ${payment.paymentMethod.check.clearedAt}">
+                                <tr th:if="${payment.paymentMethod.check?.checkDate}">
+                                    <td><b>Check Date</b></td>
+                                    <td th:text="${payment.paymentMethod.check.checkDateText}">$$</td>
+                                </tr>
+                                <tr th:if="${payment.paymentMethod.check?.clearedAt}">
                                     <td><b>Cleared</b></td>
                                     <td th:text="${payment.paymentMethod.check.clearedAtText}">$$</td>
                                 </tr>

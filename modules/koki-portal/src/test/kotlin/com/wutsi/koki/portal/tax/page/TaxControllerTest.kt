@@ -213,6 +213,15 @@ class TaxControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun `show - without permission tax-metric`() {
+        setUpUserWithoutPermissions(listOf("tax:metric"))
+
+        navigateTo("/taxes/${tax.id}")
+        assertElementNotPresent("#pills-tax-metric")
+        assertElementNotPresent("#pills-tax-metric-tab")
+    }
+
+    @Test
     fun `create invoice`() {
         // GIVEN
         doReturn(
