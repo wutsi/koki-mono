@@ -7,6 +7,6 @@ import org.springframework.stereotype.Service
 @EnableConfigurationProperties(Toggles::class)
 class TogglesHolder(
     private val toggles: Toggles
-){
+) {
     fun get(): Toggles = toggles
 }
