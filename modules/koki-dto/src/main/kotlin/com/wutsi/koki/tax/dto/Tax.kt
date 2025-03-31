@@ -6,9 +6,7 @@ data class Tax(
     val id: Long = -1,
     val fiscalYear: Int = -1,
     val description: String? = null,
-    val totalRevenue: Double? = null,
     val currency: String? = null,
-    var productCount: Int = 0,
     val taxTypeId: Long? = null,
     val accountId: Long = -1,
     val accountantId: Long? = null,
@@ -21,4 +19,8 @@ data class Tax(
     val dueAt: Date? = null,
     val createdById: Long? = null,
     val modifiedById: Long? = null,
+    val totalLaborDuration: Int? = null,
+    val totalLaborCost: Double? = null,
+    val totalRevenue: Double? = null,
+    val productCount: Int = 0,
 )
