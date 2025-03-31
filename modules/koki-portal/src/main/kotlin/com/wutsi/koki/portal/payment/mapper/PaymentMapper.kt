@@ -114,6 +114,8 @@ class PaymentMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() 
             checkNumber = entity.checkNumber,
             clearedAt = entity.clearedAt,
             clearedAtText = entity.clearedAt?.let { date -> fmt.format(date) },
+            checkDate = entity.checkDate,
+            checkDateText = entity.checkDate?.let { date -> fmt.format(date) },
         )
     }
 }

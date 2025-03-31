@@ -119,7 +119,7 @@
                                 TAB
                             </button>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" th:if="${user?.hasPermission('tax:metric')}">
                             <button aria-controls="pills-content" aria-selected="true" class="nav-link"
                                     data-bs-target="#pills-metric" data-bs-toggle="pill" id="pills-metric-tab"
                                     role="tab" type="button">
@@ -215,7 +215,8 @@
                         </div>
                         <div aria-labelledby="pills-metric-tab" class="tab-pane fade show" id="pills-metric"
                              role="tabpanel"
-                             th:data-url="'/taxes/' + ${tax.id} + '/metrics'">
+                             th:data-url="'/taxes/' + ${tax.id} + '/metrics'"
+                             th:if="${user?.hasPermission('tax:metric')}">
                         </div>
                     </div>
                 </div>

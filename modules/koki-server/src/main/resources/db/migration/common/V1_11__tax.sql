@@ -75,4 +75,5 @@ INSERT INTO T_PERMISSION(id, module_fk, name, description)
     VALUES (1800, 180, 'tax',        'View tax reports'),
            (1801, 180, 'tax:manage', 'Add/Edit tax reports'),
            (1802, 180, 'tax:delete', 'Delete tax reports'),
-           (1803, 180, 'tax:admin',  'Configure tax module');
+           (1803, 180, 'tax:metric', 'View tax metrics'),
+           (1804, 180, 'tax:admin',  'Configure tax module');

@@ -124,7 +124,7 @@ object PaymentFixtures {
             check = PaymentMethodCheck(
                 checkNumber = "135",
                 bankName = "CIBC",
-//                checkDate = DateUtils.addDays(Date(), -1),
+                checkDate = DateUtils.addDays(Date(), -1),
                 clearedAt = Date(),
             )
         )

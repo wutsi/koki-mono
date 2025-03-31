@@ -125,12 +125,12 @@
 
 ## Payment
 
-- [] Record the check date
 - [] Settings: Validate Stripe configuration
 - [] Capture online payments Paypal
 - [] Settings: Validate Paypal configuration
 - [] Capture online payments Flutterwave
 - [] Settings: Validate Flutterwave configuration
+- [x] Record the check date
 - [x] Send email notification on payment
 - [x] Capture online payments Stripe
 - [x] Settings: Configure the supported payment method
@@ -174,6 +174,7 @@
 - [] Widget: Tax Monthly stats
 - [] Compile taxes monthly stats
 - [] Add Kanban view
+- [x] Add metric permission
 - [x] Taxes Metrics
     - [x] Labor cost
     - [x] Labor hours
@@ -217,5 +218,5 @@
 ## Web
 
 - [x] After user logs-out, he can access any page without login
-- [] Sort the tabs of the menu
+- [x] Sort the tabs of the menu
 - [] serve all static resource from external site

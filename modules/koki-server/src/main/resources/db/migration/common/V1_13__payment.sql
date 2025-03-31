@@ -68,6 +68,7 @@ CREATE TABLE T_PAYMENT_METHOD_CHECK(
 
   check_number            VARCHAR(30) NOT NULL,
   bank_name               VARCHAR(100) NOT NULL,
+  check_date              DATE,
   cleared_at              DATE,
 
   PRIMARY KEY(id)

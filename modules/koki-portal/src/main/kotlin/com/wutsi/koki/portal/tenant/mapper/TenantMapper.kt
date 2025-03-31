@@ -37,7 +37,9 @@ class TenantMapper(
             logoUrl = entity.logoUrl?.ifEmpty { null },
             portalUrl = entity.portalUrl,
             websiteUrl = entity.websiteUrl,
-            modules = entity.moduleIds.mapNotNull { id -> modules[id] },
+            modules = modules.values.filter { module ->
+                entity.moduleIds.contains(module.id)
+            },
         )
     }
 
