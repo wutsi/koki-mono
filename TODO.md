@@ -58,7 +58,6 @@
 
 ## Employees
 
-- [] Send email to employee
 - [x] Employee API
 - [x] Link Employee with User
 - [x] Employee UI
@@ -82,7 +81,6 @@
 
 - [x] Form API
 - [x] Form UI
-- [] Never Delete a form in use
 
 ## Invoice
 
@@ -125,11 +123,11 @@
 
 ## Payment
 
-- [] Settings: Validate Stripe configuration
 - [] Capture online payments Paypal
 - [] Settings: Validate Paypal configuration
 - [] Capture online payments Flutterwave
 - [] Settings: Validate Flutterwave configuration
+- [x] Settings: Validate Stripe configuration
 - [x] Record the check date
 - [x] Send email notification on payment
 - [x] Capture online payments Stripe
@@ -207,7 +205,7 @@
 
 - [] Settings: Import users from CSV
 - [] Settings: Update my password
-- [] Settings: Change password of user
+- [x] Settings: Change password of user
 - [x] Settings: Filter user by role, status
 - [x] Set roles on create/update users
 - [x] Set permission on create/update roles
