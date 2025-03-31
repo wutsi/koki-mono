@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.page.settings.smtp
 
+import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
@@ -66,7 +67,7 @@ class SettingsSMTPEditController(
             return "redirect:/settings/email/smtp?_toast=1&_ts=" + System.currentTimeMillis()
         } catch (ex: IOException) {
             LOGGER.error("Bad SMTP configuration", ex)
-            model.addAttribute("error", "Your settings are not valid. Unable to connect to the Mail Server")
+            model.addAttribute("error", ErrorCode.EMAIL_INVALID_SMTP_CONFIGURATION)
             return edit(form, model)
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)

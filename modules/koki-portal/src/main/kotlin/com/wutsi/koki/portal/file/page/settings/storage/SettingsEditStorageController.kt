@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.file.page.settings
 
 import com.amazonaws.AmazonClientException
 import com.amazonaws.regions.Regions
+import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
@@ -68,7 +69,7 @@ class SettingsEditStorageController(
             return "redirect:/settings/files/storage?_toast=1&_ts=" + System.currentTimeMillis()
         } catch (ex: AmazonClientException) {
             LOGGER.error("Bad S3 configuration", ex)
-            model.addAttribute("error", "Your settings are not valid. Unable to connect to Amazon S3")
+            model.addAttribute("error", ErrorCode.FILE_INVALID_S3_CONFIGURATION)
             return edit(form, model)
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
