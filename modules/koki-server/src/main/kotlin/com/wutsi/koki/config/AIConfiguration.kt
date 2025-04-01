@@ -1,10 +1,9 @@
 package com.wutsi.koki.config
 
-import com.wutsi.koki.platform.ai.genai.GenAIServiceBuilder
-import com.wutsi.koki.platform.ai.genai.gemini.Gemini
-import com.wutsi.koki.platform.ai.genai.gemini.GeminiBuilder
-import com.wutsi.koki.platform.ai.genai.gemini.GeminiHealthIndicator
-import com.wutsi.koki.platform.ai.genai.koki.KokiBuilder
+import com.wutsi.koki.platform.ai.llm.gemini.Gemini
+import com.wutsi.koki.platform.ai.llm.gemini.GeminiBuilder
+import com.wutsi.koki.platform.ai.llm.gemini.GeminiHealthIndicator
+import com.wutsi.koki.platform.ai.llm.koki.KokiBuilder
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.actuate.health.HealthIndicator
 import org.springframework.context.annotation.Bean
@@ -19,8 +18,8 @@ class GenAIConfiguration(
     @Value("\${koki.genai.gemini.api-key}") private val geminiApiKey: String,
 ) {
     @Bean
-    fun genAIServiceBuilder(): GenAIServiceBuilder {
-        return GenAIServiceBuilder(
+    fun LLMBuilder(): LLMBuilder {
+        return LLMBuilder(
             gemini = geminiBuilder(),
             koki = kokiBuilder(),
         )

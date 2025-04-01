@@ -9,11 +9,11 @@ import org.mockito.Mockito.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class LLMServiceBuilderTest {
+class LLMBuilderTest {
     private val geminiBuilder = mock<GeminiBuilder>()
     private val kokiBuilder = mock<KokiBuilder>()
     private val config = mapOf("x" to "xxx")
-    private val builder = LLMServiceBuilder(
+    private val builder = LLMBuilder(
         gemini = geminiBuilder,
         koki = kokiBuilder
     )

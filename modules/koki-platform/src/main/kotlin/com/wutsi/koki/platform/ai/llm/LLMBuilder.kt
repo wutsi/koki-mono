@@ -3,7 +3,7 @@ package com.wutsi.koki.platform.ai.llm
 import com.wutsi.koki.platform.ai.llm.gemini.GeminiBuilder
 import com.wutsi.koki.platform.ai.llm.koki.KokiBuilder
 
-class LLMServiceBuilder(
+class LLMBuilder(
     private val gemini: GeminiBuilder,
     private val koki: KokiBuilder,
 ) {
