@@ -21,6 +21,7 @@ import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
 import com.wutsi.koki.platform.messaging.Party
 import com.wutsi.koki.platform.messaging.smtp.SMTPMessagingServiceBuilder
 import com.wutsi.koki.platform.messaging.smtp.SMTPType
+import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.platform.templating.TemplatingEngine
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.dto.ConfigurationName
@@ -29,7 +30,6 @@ import com.wutsi.koki.tenant.server.service.BusinessService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
-import org.apache.commons.io.IOUtils
 import org.jsoup.Jsoup
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -47,6 +47,7 @@ class EmailService(
     private val templatingEngine: TemplatingEngine,
     private val configurationService: ConfigurationService,
     private val messagingServiceBuilder: MessagingServiceBuilder,
+    private val storageServiceBuilder: StorageServiceBuilder,
     private val businessService: BusinessService,
     private val fileService: FileService,
     private val filterSet: EmailFilterSet,
@@ -236,12 +237,18 @@ class EmailService(
         parent.mkdirs()
         val localFile = File(parent, file.name)
 
+        val configs = configurationService.search(
+            keyword = "storage.",
+            tenantId = tenantId
+        ).map { cfg -> cfg.name to cfg.value }.toMap()
+        val storageService = storageServiceBuilder.build(configs)
+
         if (LOGGER.isDebugEnabled) {
-            LOGGER.debug("Downloading File#$fileId: ${file.url} -> ${localFile.absolutePath}")
+            LOGGER.debug("Downloading File#$fileId -> ${localFile.absolutePath}")
         }
         val fout = FileOutputStream(localFile)
         fout.use {
-            IOUtils.copy(URL(file.url).openStream(), fout)
+            storageService.get(URL(file.url), fout)
         }
         return localFile
     }
