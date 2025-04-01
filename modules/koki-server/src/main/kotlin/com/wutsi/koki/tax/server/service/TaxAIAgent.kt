@@ -15,7 +15,7 @@ import com.wutsi.koki.platform.ai.genai.GenAIServiceBuilder
 import com.wutsi.koki.platform.ai.genai.GenAIType
 import com.wutsi.koki.platform.ai.genai.Message
 import com.wutsi.koki.platform.ai.genai.Role
-import com.wutsi.koki.platform.ai.genai.gemini.GenAIConfig
+import com.wutsi.koki.platform.ai.genai.gemini.Config
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
@@ -112,7 +112,7 @@ class TaxAIAgent(
                             )
                         ),
                     ),
-                    config = GenAIConfig(
+                    config = Config(
                         responseType = MediaType.APPLICATION_JSON,
                     )
                 )
