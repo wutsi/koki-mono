@@ -17,7 +17,7 @@ logging:
         com.wutsi: INFO
 
 koki:
-    genai:
+    ai:
         gemini:
             api-key: ${GEMINI_API_KEY}
 

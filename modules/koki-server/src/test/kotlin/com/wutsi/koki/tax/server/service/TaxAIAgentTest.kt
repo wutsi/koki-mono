@@ -16,13 +16,13 @@ import com.wutsi.koki.file.dto.event.FileDeletedEvent
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
 import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
-import com.wutsi.koki.platform.ai.genai.GenAIRequest
-import com.wutsi.koki.platform.ai.genai.GenAIResponse
-import com.wutsi.koki.platform.ai.genai.GenAIService
-import com.wutsi.koki.platform.ai.genai.GenAIServiceBuilder
-import com.wutsi.koki.platform.ai.genai.GenAIType
-import com.wutsi.koki.platform.ai.genai.Message
-import com.wutsi.koki.platform.ai.genai.Role
+import com.wutsi.koki.platform.ai.llm.LLM
+import com.wutsi.koki.platform.ai.llm.LLMBuilder
+import com.wutsi.koki.platform.ai.llm.LLMRequest
+import com.wutsi.koki.platform.ai.llm.LLMResponse
+import com.wutsi.koki.platform.ai.llm.LLMType
+import com.wutsi.koki.platform.ai.llm.Message
+import com.wutsi.koki.platform.ai.llm.Role
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
@@ -44,14 +44,14 @@ class TaxAIAgentTest {
     private val registry = mock<AIMQConsumer>()
     private val fileService = mock<FileService>()
     private val storageBuilder = mock<StorageServiceBuilder>()
-    private val genAIBuilder = mock<GenAIServiceBuilder>()
+    private val llmBuilder = mock<LLMBuilder>()
     private val configurationService = mock<ConfigurationService>()
     private val objectMapper = ObjectMapper()
     private val logger = DefaultKVLogger()
     private val agent = TaxAIAgent(
         fileService = fileService,
         storageBuilder = storageBuilder,
-        genAIBuilder = genAIBuilder,
+        llmBuilder = llmBuilder,
         configurationService = configurationService,
         objectMapper = objectMapper,
         registry = registry,
@@ -59,7 +59,7 @@ class TaxAIAgentTest {
     )
 
     private val configs = mapOf(
-        ConfigurationName.AI_MODEL to GenAIType.GEMINI,
+        ConfigurationName.AI_MODEL to LLMType.GEMINI,
 
         ConfigurationName.TAX_AI_AGENT_ENABLED to "1",
 
@@ -76,7 +76,7 @@ class TaxAIAgentTest {
     )
     private val fileContent = "Hello world"
 
-    private val gemini = mock<GenAIService>()
+    private val gemini = mock<LLM>()
 
     @BeforeEach
     fun setUp() {
@@ -97,7 +97,7 @@ class TaxAIAgentTest {
             IOUtils.copy(ByteArrayInputStream(fileContent.toByteArray()), output)
         }.whenever(storage).get(any(), any())
 
-        doReturn(gemini).whenever(genAIBuilder).build(any(), any())
+        doReturn(gemini).whenever(llmBuilder).build(any(), any())
     }
 
     @Test
@@ -127,7 +127,7 @@ class TaxAIAgentTest {
                 "description": "This is a nice description"
             }
         """.trimIndent()
-        doReturn(createGenAIResponse(text)).whenever(gemini).generateContent(any())
+        doReturn(createLLMResponse(text)).whenever(gemini).generateContent(any())
 
         // WHEN
         val event = createFileUploadedEvent()
@@ -136,7 +136,7 @@ class TaxAIAgentTest {
         // THEN
         assertEquals(true, result)
 
-        val request = argumentCaptor<GenAIRequest>()
+        val request = argumentCaptor<LLMRequest>()
         verify(gemini).generateContent(request.capture())
         assertEquals(MediaType.APPLICATION_JSON, request.firstValue.config?.responseType)
         assertEquals(2, request.firstValue.messages.size)
@@ -221,8 +221,8 @@ class TaxAIAgentTest {
         )
     }
 
-    private fun createGenAIResponse(text: String): GenAIResponse {
-        return GenAIResponse(
+    private fun createLLMResponse(text: String): LLMResponse {
+        return LLMResponse(
             messages = listOf(Message(text = text))
         )
     }

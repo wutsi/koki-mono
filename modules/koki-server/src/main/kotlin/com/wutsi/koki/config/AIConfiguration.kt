@@ -1,5 +1,6 @@
 package com.wutsi.koki.config
 
+import com.wutsi.koki.platform.ai.llm.LLMBuilder
 import com.wutsi.koki.platform.ai.llm.gemini.Gemini
 import com.wutsi.koki.platform.ai.llm.gemini.GeminiBuilder
 import com.wutsi.koki.platform.ai.llm.gemini.GeminiHealthIndicator
@@ -11,11 +12,11 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.web.client.RestTemplate
 
 @Configuration
-class GenAIConfiguration(
-    @Value("\${koki.genai.rest.read-timeout}") private val restReadTimeout: Long,
+class AIConfiguration(
+    @Value("\${koki.ai.rest.read-timeout}") private val restReadTimeout: Long,
     @Value("\${koki.genai.rest.connect-timeout}") private val restConnectTimeout: Long,
-    @Value("\${koki.genai.gemini.model}") private val geminiModel: String,
-    @Value("\${koki.genai.gemini.api-key}") private val geminiApiKey: String,
+    @Value("\${koki.ai.gemini.model}") private val geminiModel: String,
+    @Value("\${koki.ai.gemini.api-key}") private val geminiApiKey: String,
 ) {
     @Bean
     fun LLMBuilder(): LLMBuilder {

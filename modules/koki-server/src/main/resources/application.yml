@@ -157,16 +157,16 @@ logging:
 koki:
     server-url: http://localhost:${server.port}
 
-    executor:
-        thread-pool-size: 16
-
-    genai:
+    ai:
         rest:
             read-timeout: 60000 # 1 minute
             connect-timeout: 60000 # 1 miniute
         gemini:
             api-key: ${GEMINI_API_KEY}
             model: gemini-2.0-flash
+
+    executor:
+        thread-pool-size: 16
 
     rabbitmq:
         url: amqp://localhost
