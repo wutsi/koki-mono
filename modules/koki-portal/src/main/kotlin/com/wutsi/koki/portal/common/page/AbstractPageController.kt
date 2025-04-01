@@ -2,6 +2,8 @@ package com.wutsi.koki.portal.common.page
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.portal.common.service.Toggles
+import com.wutsi.koki.portal.common.service.TogglesHolder
 import com.wutsi.koki.portal.tenant.model.TenantModel
 import com.wutsi.koki.portal.tenant.service.CurrentTenantHolder
 import com.wutsi.koki.portal.user.model.UserModel
@@ -24,6 +26,9 @@ abstract class AbstractPageController {
     @Autowired
     protected lateinit var tenantHolder: CurrentTenantHolder
 
+    @Autowired
+    protected lateinit var togglesHolder: TogglesHolder
+
     @ModelAttribute("user")
     fun getUser(): UserModel? {
         return userHolder.get()
@@ -32,6 +37,11 @@ abstract class AbstractPageController {
     @ModelAttribute("tenant")
     fun getTenant(): TenantModel? {
         return tenantHolder.get()
+    }
+
+    @ModelAttribute("toggles")
+    fun getToggles(): Toggles {
+        return togglesHolder.get()
     }
 
     protected fun toErrorResponse(ex: HttpClientErrorException): ErrorResponse {

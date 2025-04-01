@@ -12,4 +12,4 @@ koki:
 
     toggles:
         paypal: false
-        flutterwave: false
+        mobile-money: false

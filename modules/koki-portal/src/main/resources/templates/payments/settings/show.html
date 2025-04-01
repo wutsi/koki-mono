@@ -141,7 +141,7 @@
             </tr>
 
             <!-- PAYPAL -->
-            <tr>
+            <tr th:if="${toggles.paypal}">
                 <td class="text-x-large" valign="top" width="1">
                     <div th:replace="~{__components/payment :: payment-method-icon('PAYPAL')}"></div>
                 </td>
@@ -169,7 +169,7 @@
             </tr>
 
             <!-- MOBILE -->
-            <tr>
+            <tr th:if="${toggles.mobileMoney}">
                 <td class="text-x-large" valign="top" width="1">
                     <div th:replace="~{__components/payment :: payment-method-icon('MOBILE')}"></div>
                 </td>

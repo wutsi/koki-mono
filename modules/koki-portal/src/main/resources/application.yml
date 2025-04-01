@@ -85,4 +85,4 @@ koki:
 
     toggles:
         paypal: true
-        flutterwave: true
+        mobile-money: true
