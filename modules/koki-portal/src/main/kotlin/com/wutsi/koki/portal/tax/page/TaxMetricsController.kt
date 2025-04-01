@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 
 @Controller
-@RequiresPermission(["tax"])
+@RequiresPermission(["tax:metric"])
 class TaxMetricsController(
     private val service: TaxService,
 ) : AbstractTaxDetailsController() {

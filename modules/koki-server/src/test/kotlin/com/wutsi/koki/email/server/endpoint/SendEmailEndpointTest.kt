@@ -22,6 +22,9 @@ import com.wutsi.koki.platform.messaging.MessagingException
 import com.wutsi.koki.platform.messaging.MessagingNotConfiguredException
 import com.wutsi.koki.platform.messaging.MessagingService
 import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
+import com.wutsi.koki.platform.storage.StorageService
+import com.wutsi.koki.platform.storage.StorageServiceBuilder
+import okio.IOException
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -48,12 +51,20 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
     @MockitoBean
     private lateinit var messagingServiceBuilder: MessagingServiceBuilder
 
+    @MockitoBean
+    private lateinit var storageService: StorageService
+
+    @MockitoBean
+    private lateinit var storageServiceBuilder: StorageServiceBuilder
+
     @BeforeEach
     override fun setUp() {
         super.setUp()
 
         doReturn(messagingService).whenever(messagingServiceBuilder).build(any())
         doReturn("xxxx").whenever(messagingService).send(any())
+
+        doReturn(storageService).whenever(storageServiceBuilder).build(any())
     }
 
     @Test
@@ -269,6 +280,8 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Test
     fun `send with invalid attachment`() {
+        doThrow(IOException()).whenever(storageService).get(any(), any())
+
         val request = SendEmailRequest(
             subject = "Hello man - Invoice #{{invoiceNumber}}",
             body = "<p>Hello {{recipientName}}<br/>This is an example of email</p>",
