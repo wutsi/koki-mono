@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate
 @Configuration
 class AIConfiguration(
     @Value("\${koki.ai.rest.read-timeout}") private val restReadTimeout: Long,
-    @Value("\${koki.genai.rest.connect-timeout}") private val restConnectTimeout: Long,
+    @Value("\${koki.ai.rest.connect-timeout}") private val restConnectTimeout: Long,
     @Value("\${koki.ai.gemini.model}") private val geminiModel: String,
     @Value("\${koki.ai.gemini.api-key}") private val geminiApiKey: String,
 ) {
