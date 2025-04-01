@@ -12,9 +12,11 @@ import com.wutsi.koki.platform.ai.genai.gemini.model.GGenerateContentResponse
 import com.wutsi.koki.platform.ai.genai.gemini.model.GGenerationConfig
 import com.wutsi.koki.platform.ai.genai.gemini.model.GInlineData
 import com.wutsi.koki.platform.ai.genai.gemini.model.GPart
+import com.wutsi.koki.platform.genai.FunctionCall
+import com.wutsi.koki.platform.genai.Usage
 import org.apache.commons.io.IOUtils
 import org.springframework.http.MediaType
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
 import java.util.Base64
 
@@ -49,22 +51,47 @@ class Gemini(
                     topK = config.topK,
                     maxOutputTokens = config.maxOutputTokens,
                 )
-            }
+            },
+            tools = request.tools,
         )
         try {
             val resp = rest.postForEntity(
-                "https://generativelanguage.googleapis.com/v1/models/$model:generateContent?key=$apiKey",
+                "https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent?key=$apiKey",
                 req,
                 GGenerateContentResponse::class.java
-            ).body
+            ).body!!
             return GenAIResponse(
                 messages = resp.candidates
                     .flatMap { candidate -> candidate.content.parts }
-                    .map { part -> Message(text = encodeResponse(request.config?.responseType, part.text)) }
+                    .map { part ->
+                        Message(
+                            text = encodeResponse(request.config?.responseType, part.text),
+                            functionCall = part.functionCall?.let { function ->
+                                FunctionCall(
+                                    name = function.name,
+                                    args = function.args,
+                                )
+                            }
+                        )
+                    },
+
+                usage = resp.usageMetadata?.let { usage ->
+                    Usage(
+                        totalTokenCount = usage.totalTokenCount,
+                        promptTokenCount = usage.promptTokenCount,
+                        responseTokenCount = usage.promptTokenCount,
+                    )
+                }
             )
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: HttpStatusCodeException) {
             throw GenAIException(
                 statusCode = ex.statusCode.value(),
+                message = ex.message,
+                cause = ex,
+            )
+        } catch (ex: Exception) {
+            throw GenAIException(
+                statusCode = -1,
                 message = ex.message,
                 cause = ex,
             )

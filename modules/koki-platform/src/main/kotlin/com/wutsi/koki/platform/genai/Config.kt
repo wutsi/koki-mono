@@ -2,7 +2,7 @@ package com.wutsi.koki.platform.ai.genai.gemini
 
 import org.springframework.http.MediaType
 
-data class GenAIConfig(
+data class Config(
     val responseType: MediaType? = null,
     val temperature: Double? = null,
     val topP: Double? = null,
