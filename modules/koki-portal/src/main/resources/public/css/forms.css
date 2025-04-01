@@ -5,17 +5,17 @@ input:read-only {
 
 *:user-invalid,
 .user-invalid,
-select:invalid + .select2-container > span.selection > span.select2-selection,
-select:invalid + .select2-container--focus > span.selection > span.select2-selection,
-select:valid + .select2-container > span.selection > span.select2-selection,
-select:valid + .select2-container--focus > span.selection > span.select2-selection {
+select:user-invalid + .select2-container > span.selection > span.select2-selection,
+select:user-invalid + .select2-container--focus > span.selection > span.select2-selection {
     border: 2px solid red !important;
 }
 
 @supports not selector(:user-invalid) {
     input:invalid,
     select:invalid,
-    textarea:invalid {
+    textarea:invalid
+    select:invalid + .select2-container > span.selection > span.select2-selection,
+    select:invalid + .select2-container--focus > span.selection > span.select2-selection {
         border: 2px solid red;
     }
 }

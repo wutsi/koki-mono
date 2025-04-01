@@ -50,6 +50,9 @@ function _koki_notes_on_modal_opened() {
     /* Form */
     document.getElementById('note-form').addEventListener('submit', _koki_notes_on_form_submitted);
 
+    /* Type */
+    document.getElementById('type').addEventListener('change', _koki_notes_on_change);
+
     /* Subject */
     document.getElementById('subject').addEventListener('keydown', _koki_notes_on_change);
 
@@ -80,6 +83,7 @@ function _koki_notes_on_modal_closed() {
     /* remove all event listeners */
     document.getElementById('note-form').removeEventListener('submit', _koki_notes_on_form_submitted);
     document.getElementById("subject").removeEventListener('keydown', _koki_notes_on_change);
+    document.getElementById("type").removeEventListener('change', _koki_notes_on_change);
     document.getElementById("durationHours").removeEventListener('change', _koki_notes_on_change);
     document.getElementById("durationMinutes").removeEventListener('change', _koki_notes_on_change);
     document.getElementById("btn-note-cancel").removeEventListener('click', koki_modal_close)
