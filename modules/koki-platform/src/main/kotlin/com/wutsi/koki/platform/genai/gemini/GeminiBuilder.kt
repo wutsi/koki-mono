@@ -37,8 +37,8 @@ class GeminiBuilder(
 
     private fun createRestTemplate(): RestTemplate {
         return RestTemplateBuilder()
-            .setReadTimeout(Duration.of(restReadTimeout, ChronoUnit.MILLIS))
-            .setConnectTimeout(Duration.of(restConnectTimeout, ChronoUnit.MILLIS))
+            .readTimeout(Duration.of(restReadTimeout, ChronoUnit.MILLIS))
+            .connectTimeout(Duration.of(restConnectTimeout, ChronoUnit.MILLIS))
             .build()
     }
 }
