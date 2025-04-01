@@ -8,14 +8,14 @@ import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
 import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
-import com.wutsi.koki.platform.ai.genai.Document
-import com.wutsi.koki.platform.ai.genai.GenAIRequest
-import com.wutsi.koki.platform.ai.genai.GenAIService
-import com.wutsi.koki.platform.ai.genai.GenAIServiceBuilder
-import com.wutsi.koki.platform.ai.genai.GenAIType
-import com.wutsi.koki.platform.ai.genai.Message
-import com.wutsi.koki.platform.ai.genai.Role
-import com.wutsi.koki.platform.ai.genai.gemini.GenAIConfig
+import com.wutsi.koki.platform.ai.llm.Config
+import com.wutsi.koki.platform.ai.llm.Document
+import com.wutsi.koki.platform.ai.llm.LLM
+import com.wutsi.koki.platform.ai.llm.LLMBuilder
+import com.wutsi.koki.platform.ai.llm.LLMRequest
+import com.wutsi.koki.platform.ai.llm.LLMType
+import com.wutsi.koki.platform.ai.llm.Message
+import com.wutsi.koki.platform.ai.llm.Role
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
@@ -32,7 +32,7 @@ import java.net.URL
 class TaxAIAgent(
     private val fileService: FileService,
     private val storageBuilder: StorageServiceBuilder,
-    private val genAIBuilder: GenAIServiceBuilder,
+    private val llmBuilder: LLMBuilder,
     private val configurationService: ConfigurationService,
     private val objectMapper: ObjectMapper,
     private val logger: KVLogger,
@@ -93,11 +93,11 @@ class TaxAIAgent(
     }
 
     private fun extractInformation(file: FileEntity, f: File): Map<String, Any> {
-        val genAI = getGenAIService(file.tenantId) ?: return emptyMap()
+        val llm = getLLM(file.tenantId) ?: return emptyMap()
         val content = FileInputStream(f)
         content.use {
-            val response = genAI.generateContent(
-                request = GenAIRequest(
+            val response = llm.generateContent(
+                request = LLMRequest(
                     messages = listOf(
                         Message(
                             role = Role.MODEL,
@@ -112,7 +112,7 @@ class TaxAIAgent(
                             )
                         ),
                     ),
-                    config = GenAIConfig(
+                    config = Config(
                         responseType = MediaType.APPLICATION_JSON,
                     )
                 )
@@ -161,13 +161,13 @@ class TaxAIAgent(
         return storageBuilder.build(configs)
     }
 
-    private fun getGenAIService(tenantId: Long): GenAIService? {
+    private fun getLLM(tenantId: Long): LLM? {
         val configs = configurationService.search(keyword = "ai.", tenantId = tenantId)
             .map { config -> config.name to config.value }
             .toMap()
 
-        val type = configs[ConfigurationName.AI_MODEL]?.let { type -> GenAIType.valueOf(type) }
+        val type = configs[ConfigurationName.AI_MODEL]?.let { type -> LLMType.valueOf(type) }
             ?: return null
-        return genAIBuilder.build(type, configs)
+        return llmBuilder.build(type, configs)
     }
 }
