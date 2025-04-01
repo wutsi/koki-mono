@@ -112,7 +112,7 @@ class TaxAIAgent(
                             )
                         ),
                     ),
-                    config = Config(
+                    config = GenAIConfig(
                         responseType = MediaType.APPLICATION_JSON,
                     )
                 )
