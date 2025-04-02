@@ -1,0 +1,20 @@
+Can you generate a JSON of 10 bookings to Hotels, Flights
+
+For the flight, I would like to have the following information:
+- Air carrier code
+- Departure airport code
+- Arrival airport code
+- seat class: economic, first, business etc.
+- price
+
+For the hotel
+- hotel ID
+- hotel name
+- short description
+- User rating
+- number of reviews
+- Image URL
+- Price per night
+- amenities
+- checkin date
+- checkout date

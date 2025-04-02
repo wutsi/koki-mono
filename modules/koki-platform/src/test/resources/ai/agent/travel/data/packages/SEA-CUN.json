@@ -1,0 +1,318 @@
+{
+  "trips": [
+    {
+      "trip_id": "a1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8",
+      "start_date": "2025-06-05",
+      "end_date": "2025-06-12",
+      "total_price": 3250,
+      "flight": {
+        "carrier_code": "AS",
+        "carrier_name": "Alaska Airlines",
+        "departure_airport": "SEA",
+        "arrival_airport": "CUN",
+        "seat_class": "Economy",
+        "price": 650
+      },
+      "hotel": {
+        "hotel_id": "CUN101",
+        "name": "Oasis Palm",
+        "description": "Budget-friendly all-inclusive resort with beach access",
+        "rating": 3.9,
+        "reviews": 2450,
+        "image_url": "https://example.com/hotels/oasis_palm.jpg",
+        "price_per_night": 371,
+        "amenities": [
+          "Free WiFi",
+          "Swimming pool",
+          "All-inclusive dining",
+          "Beach access",
+          "Daily entertainment"
+        ]
+      }
+    },
+    {
+      "trip_id": "b2c3d4e5-f6g7-8901-h2i3-j4k5l6m7n8o9",
+      "start_date": "2025-06-10",
+      "end_date": "2025-06-17",
+      "total_price": 4200,
+      "flight": {
+        "carrier_code": "DL",
+        "carrier_name": "Delta Airlines",
+        "departure_airport": "SEA",
+        "arrival_airport": "CUN",
+        "seat_class": "Premium Economy",
+        "price": 850
+      },
+      "hotel": {
+        "hotel_id": "CUN102",
+        "name": "Crown Paradise Club",
+        "description": "Family-friendly all-inclusive with water park",
+        "rating": 4.2,
+        "reviews": 3870,
+        "image_url": "https://example.com/hotels/crown_paradise.jpg",
+        "price_per_night": 479,
+        "amenities": [
+          "Water park",
+          "Kids club",
+          "Multiple restaurants",
+          "Nightly shows",
+          "Beach volleyball"
+        ]
+      }
+    },
+    {
+      "trip_id": "c3d4e5f6-g7h8-9012-i3j4-k5l6m7n8o9p0",
+      "start_date": "2025-06-15",
+      "end_date": "2025-06-22",
+      "total_price": 5375,
+      "flight": {
+        "carrier_code": "AA",
+        "carrier_name": "American Airlines",
+        "departure_airport": "SEA",
+        "arrival_airport": "CUN",
+        "seat_class": "Business",
+        "price": 1400
+      },
+      "hotel": {
+        "hotel_id": "CUN103",
+        "name": "Hyatt Ziva Cancun",
+        "description": "Luxury all-inclusive with oceanfront pools",
+        "rating": 4.7,
+        "reviews": 4250,
+        "image_url": "https://example.com/hotels/hyatt_ziva.jpg",
+        "price_per_night": 568,
+        "amenities": [
+          "Private beach",
+          "Spa services",
+          "Gourmet dining",
+          "Swim-up bar",
+          "24-hour room service"
+        ]
+      }
+    },
+    {
+      "trip_id": "d4e5f6g7-h8i9-0123-j4k5-l6m7n8o9p0q1",
+      "start_date": "2025-06-08",
+      "end_date": "2025-06-15",
+      "total_price": 6250,
+      "flight": {
+        "carrier_code": "AS",
+        "carrier_name": "Alaska Airlines",
+        "departure_airport": "SEA",
+        "arrival_airport": "CUN",
+        "seat_class": "Business",
+        "price": 1450
+      },
+      "hotel": {
+        "hotel_id": "CUN104",
+        "name": "Secrets The Vine",
+        "description": "Adults-only luxury resort with gourmet dining",
+        "rating": 4.8,
+        "reviews": 3120,
+        "image_url": "https://example.com/hotels/secrets_vine.jpg",
+        "price_per_night": 686,
+        "amenities": [
+          "Unlimited premium drinks",
+          "24-hour concierge",
+          "Oceanview rooms",
+          "Wine bar",
+          "Fitness classes"
+        ]
+      }
+    },
+    {
+      "trip_id": "e5f6g7h8-i9j0-1234-k5l6-m7n8o9p0q1r2",
+      "start_date": "2025-06-20",
+      "end_date": "2025-06-27",
+      "total_price": 7250,
+      "flight": {
+        "carrier_code": "DL",
+        "carrier_name": "Delta Airlines",
+        "departure_airport": "SEA",
+        "arrival_airport": "CUN",
+        "seat_class": "Business",
+        "price": 1750
+      },
+      "hotel": {
+        "hotel_id": "CUN105",
+        "name": "Le Blanc Spa Resort",
+        "description": "Award-winning luxury with butler service",
+        "rating": 4.9,
+        "reviews": 1950,
+        "image_url": "https://example.com/hotels/le_blanc.jpg",
+        "price_per_night": 786,
+        "amenities": [
+          "Butler service",
+          "Luxury spa",
+          "Pillow menu",
+          "Champagne upon arrival",
+          "Private cabanas"
+        ]
+      }
+    },
+    {
+      "trip_id": "f6g7h8i9-j0k1-2345-l6m7-n8o9p0q1r2s3",
+      "start_date": "2025-06-12",
+      "end_date": "2025-06-19",
+      "total_price": 4850,
+      "flight": {
+        "carrier_code": "UA",
+        "carrier_name": "United Airlines",
+        "departure_airport": "SEA",
+        "arrival_airport": "CUN",
+        "seat_class": "Premium Economy",
+        "price": 950
+      },
+      "hotel": {
+        "hotel_id": "CUN106",
+        "name": "Riu Palace Las Americas",
+        "description": "Elegant all-inclusive with spa and nightclub",
+        "rating": 4.5,
+        "reviews": 3420,
+        "image_url": "https://example.com/hotels/riu_palace.jpg",
+        "price_per_night": 557,
+        "amenities": [
+          "24-hour sports bar",
+          "Renova Spa",
+          "Nightclub",
+          "Water activities",
+          "Theme nights"
+        ]
+      }
+    },
+    {
+      "trip_id": "g7h8i9j0-k1l2-3456-m7n8-o9p0q1r2s3t4",
+      "start_date": "2025-06-18",
+      "end_date": "2025-06-25",
+      "total_price": 8650,
+      "flight": {
+        "carrier_code": "AA",
+        "carrier_name": "American Airlines",
+        "departure_airport": "SEA",
+        "arrival_airport": "CUN",
+        "seat_class": "First",
+        "price": 2550
+      },
+      "hotel": {
+        "hotel_id": "CUN107",
+        "name": "Nizuc Resort & Spa",
+        "description": "Ultra-luxury with private beach and world-class spa",
+        "rating": 4.9,
+        "reviews": 1050,
+        "image_url": "https://example.com/hotels/nizuc.jpg",
+        "price_per_night": 871,
+        "amenities": [
+          "Private plunge pools",
+          "Six restaurants",
+          "ESPA spa",
+          "Personal concierge",
+          "Chauffeured transfers"
+        ]
+      }
+    },
+    {
+      "trip_id": "h8i9j0k1-l2m3-4567-n8o9-p0q1r2s3t4u5",
+      "start_date": "2025-06-25",
+      "end_date": "2025-07-02",
+      "total_price": 5800,
+      "flight": {
+        "carrier_code": "DL",
+        "carrier_name": "Delta Airlines",
+        "departure_airport": "SEA",
+        "arrival_airport": "CUN",
+        "seat_class": "Business",
+        "price": 1500
+      },
+      "hotel": {
+        "hotel_id": "CUN108",
+        "name": "Live Aqua Beach Resort",
+        "description": "Sophisticated adults-only all-inclusive",
+        "rating": 4.6,
+        "reviews": 2670,
+        "image_url": "https://example.com/hotels/live_aqua.jpg",
+        "price_per_night": 614,
+        "amenities": [
+          "Aqua Bar",
+          "Temazcal ritual",
+          "Yoga classes",
+          "Gourmet restaurants",
+          "Beach butler service"
+        ]
+      }
+    },
+    {
+      "trip_id": "i9j0k1l2-m3n4-5678-o9p0-q1r2s3t4u5v6",
+      "start_date": "2025-06-03",
+      "end_date": "2025-06-10",
+      "total_price": 9450,
+      "flight": {
+        "carrier_code": "AS",
+        "carrier_name": "Alaska Airlines",
+        "departure_airport": "SEA",
+        "arrival_airport": "CUN",
+        "seat_class": "First",
+        "price": 2850
+      },
+      "hotel": {
+        "hotel_id": "CUN109",
+        "name": "The Ritz-Carlton, Cancun",
+        "description": "Iconic luxury hotel with exceptional service",
+        "rating": 4.8,
+        "reviews": 1650,
+        "image_url": "https://example.com/hotels/ritz_cancun.jpg",
+        "price_per_night": 943,
+        "amenities": [
+          "Club Level access",
+          "Personal butlers",
+          "Five-star spa",
+          "Fine dining",
+          "Beachfront infinity pool"
+        ]
+      }
+    },
+    {
+      "trip_id": "j0k1l2m3-n4o5-6789-p0q1-r2s3t4u5v6w7",
+      "start_date": "2025-06-22",
+      "end_date": "2025-06-29",
+      "total_price": 7150,
+      "flight": {
+        "carrier_code": "UA",
+        "carrier_name": "United Airlines",
+        "departure_airport": "SEA",
+        "arrival_airport": "CUN",
+        "seat_class": "Business",
+        "price": 1700
+      },
+      "hotel": {
+        "hotel_id": "CUN110",
+        "name": "Fiesta Americana Condesa",
+        "description": "Vibrant all-inclusive with excellent entertainment",
+        "rating": 4.4,
+        "reviews": 4020,
+        "image_url": "https://example.com/hotels/fiesta_americana.jpg",
+        "price_per_night": 779,
+        "amenities": [
+          "11 restaurants",
+          "Full-service spa",
+          "Nightly entertainment",
+          "Water sports",
+          "Teen club"
+        ]
+      }
+    }
+  ],
+  "destination_info": {
+    "city": "Cancun",
+    "country": "Mexico",
+    "season": "June offers warm tropical weather with average highs of 90°F (32°C)",
+    "travel_time": "Approximately 6.5 hour flight from Seattle",
+    "attractions": [
+      "Chichen Itza Mayan ruins",
+      "Tulum archaeological site",
+      "Xcaret eco-park",
+      "Isla Mujeres island getaway",
+      "Cenote swimming in natural pools"
+    ]
+  },
+  "disclaimer": "All prices are simulated for June 2025 and may vary based on availability. Trip IDs use version 4 UUID format. Hotel images are placeholder URLs. Amenities may vary by room type."
+}

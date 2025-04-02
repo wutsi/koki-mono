@@ -1,0 +1,318 @@
+{
+  "trips": [
+    {
+      "trip_id": "8a9b0c1d-2e3f-4a5b-6c7d-8e9f0a1b2c3d",
+      "start_date": "2025-06-10",
+      "end_date": "2025-06-17",
+      "total_price": 3150,
+      "flight": {
+        "carrier_code": "TS",
+        "carrier_name": "Air Transat",
+        "departure_airport": "YUL",
+        "arrival_airport": "CUN",
+        "seat_class": "Economy",
+        "price": 550
+      },
+      "hotel": {
+        "hotel_id": "CUN201",
+        "name": "Sandos Cancun",
+        "description": "Value all-inclusive resort on the beach",
+        "rating": 4.1,
+        "reviews": 3250,
+        "image_url": "https://example.com/hotels/sandos_cancun.jpg",
+        "price_per_night": 371,
+        "amenities": [
+          "All-inclusive dining",
+          "Beachfront location",
+          "Swim-up bar",
+          "Daily activities",
+          "Nightly entertainment"
+        ]
+      }
+    },
+    {
+      "trip_id": "9b0c1d2e-3f4a-5b6c-7d8e-9f0a1b2c3d4e",
+      "start_date": "2025-06-15",
+      "end_date": "2025-06-22",
+      "total_price": 4250,
+      "flight": {
+        "carrier_code": "AC",
+        "carrier_name": "Air Canada",
+        "departure_airport": "YUL",
+        "arrival_airport": "CUN",
+        "seat_class": "Premium Economy",
+        "price": 900
+      },
+      "hotel": {
+        "hotel_id": "CUN202",
+        "name": "Occidental Tucancún",
+        "description": "Family-friendly resort with great pools",
+        "rating": 4.3,
+        "reviews": 2870,
+        "image_url": "https://example.com/hotels/occidental_tucancun.jpg",
+        "price_per_night": 479,
+        "amenities": [
+          "Kids club",
+          "Water sports",
+          "3 swimming pools",
+          "Tennis courts",
+          "Mexican cooking classes"
+        ]
+      }
+    },
+    {
+      "trip_id": "0c1d2e3f-4a5b-6c7d-8e9f-0a1b2c3d4e5f",
+      "start_date": "2025-06-05",
+      "end_date": "2025-06-12",
+      "total_price": 5400,
+      "flight": {
+        "carrier_code": "WS",
+        "carrier_name": "WestJet",
+        "departure_airport": "YUL",
+        "arrival_airport": "CUN",
+        "seat_class": "Business",
+        "price": 1450
+      },
+      "hotel": {
+        "hotel_id": "CUN203",
+        "name": "Hyatt Ziva Cancun",
+        "description": "Luxury all-inclusive with stunning ocean views",
+        "rating": 4.7,
+        "reviews": 4125,
+        "image_url": "https://example.com/hotels/hyatt_ziva.jpg",
+        "price_per_night": 564,
+        "amenities": [
+          "Private beach area",
+          "Gourmet restaurants",
+          "24-hour room service",
+          "Swim-up suites",
+          "Dolphin experience"
+        ]
+      }
+    },
+    {
+      "trip_id": "1d2e3f4a-5b6c-7d8e-9f0a-1b2c3d4e5f6a",
+      "start_date": "2025-06-18",
+      "end_date": "2025-06-25",
+      "total_price": 6350,
+      "flight": {
+        "carrier_code": "AC",
+        "carrier_name": "Air Canada",
+        "departure_airport": "YUL",
+        "arrival_airport": "CUN",
+        "seat_class": "Business",
+        "price": 1550
+      },
+      "hotel": {
+        "hotel_id": "CUN204",
+        "name": "Secrets The Vine Cancun",
+        "description": "Adults-only luxury resort with gourmet dining",
+        "rating": 4.8,
+        "reviews": 2987,
+        "image_url": "https://example.com/hotels/secrets_vine.jpg",
+        "price_per_night": 686,
+        "amenities": [
+          "Unlimited premium drinks",
+          "24-hour concierge",
+          "Wine cellar",
+          "Infinity pools",
+          "Cooking classes"
+        ]
+      }
+    },
+    {
+      "trip_id": "2e3f4a5b-6c7d-8e9f-0a1b-2c3d4e5f6a7b",
+      "start_date": "2025-06-22",
+      "end_date": "2025-06-29",
+      "total_price": 7350,
+      "flight": {
+        "carrier_code": "AC",
+        "carrier_name": "Air Canada",
+        "departure_airport": "YUL",
+        "arrival_airport": "CUN",
+        "seat_class": "Business",
+        "price": 1850
+      },
+      "hotel": {
+        "hotel_id": "CUN205",
+        "name": "Le Blanc Spa Resort",
+        "description": "Award-winning luxury with butler service",
+        "rating": 4.9,
+        "reviews": 1876,
+        "image_url": "https://example.com/hotels/le_blanc.jpg",
+        "price_per_night": 786,
+        "amenities": [
+          "Personal butler service",
+          "Lavish spa treatments",
+          "Pillow menu",
+          "Bulgari toiletries",
+          "Private beach cabanas"
+        ]
+      }
+    },
+    {
+      "trip_id": "3f4a5b6c-7d8e-9f0a-1b2c-3d4e5f6a7b8c",
+      "start_date": "2025-06-08",
+      "end_date": "2025-06-15",
+      "total_price": 4850,
+      "flight": {
+        "carrier_code": "TS",
+        "carrier_name": "Air Transat",
+        "departure_airport": "YUL",
+        "arrival_airport": "CUN",
+        "seat_class": "Premium Economy",
+        "price": 850
+      },
+      "hotel": {
+        "hotel_id": "CUN206",
+        "name": "Riu Palace Las Americas",
+        "description": "Elegant all-inclusive with spa and nightclub",
+        "rating": 4.5,
+        "reviews": 3254,
+        "image_url": "https://example.com/hotels/riu_palace.jpg",
+        "price_per_night": 571,
+        "amenities": [
+          "24-hour sports bar",
+          "Renova Spa",
+          "Nightclub",
+          "Water activities",
+          "Theme nights"
+        ]
+      }
+    },
+    {
+      "trip_id": "4a5b6c7d-8e9f-0a1b-2c3d-4e5f6a7b8c9d",
+      "start_date": "2025-06-12",
+      "end_date": "2025-06-19",
+      "total_price": 8750,
+      "flight": {
+        "carrier_code": "AC",
+        "carrier_name": "Air Canada",
+        "departure_airport": "YUL",
+        "arrival_airport": "CUN",
+        "seat_class": "First",
+        "price": 2550
+      },
+      "hotel": {
+        "hotel_id": "CUN207",
+        "name": "Nizuc Resort & Spa",
+        "description": "Ultra-luxury resort with private beach",
+        "rating": 4.9,
+        "reviews": 976,
+        "image_url": "https://example.com/hotels/nizuc.jpg",
+        "price_per_night": 886,
+        "amenities": [
+          "Private plunge pools",
+          "Six gourmet restaurants",
+          "ESPA spa",
+          "Personal concierge",
+          "Chauffeured transfers"
+        ]
+      }
+    },
+    {
+      "trip_id": "5b6c7d8e-9f0a-1b2c-3d4e-5f6a7b8c9d0e",
+      "start_date": "2025-06-25",
+      "end_date": "2025-07-02",
+      "total_price": 5850,
+      "flight": {
+        "carrier_code": "WS",
+        "carrier_name": "WestJet",
+        "departure_airport": "YUL",
+        "arrival_airport": "CUN",
+        "seat_class": "Business",
+        "price": 1500
+      },
+      "hotel": {
+        "hotel_id": "CUN208",
+        "name": "Live Aqua Beach Resort",
+        "description": "Sophisticated adults-only all-inclusive",
+        "rating": 4.6,
+        "reviews": 2543,
+        "image_url": "https://example.com/hotels/live_aqua.jpg",
+        "price_per_night": 621,
+        "amenities": [
+          "Aqua Bar",
+          "Temazcal ritual",
+          "Yoga classes",
+          "8 gourmet restaurants",
+          "Beach butler service"
+        ]
+      }
+    },
+    {
+      "trip_id": "6c7d8e9f-0a1b-2c3d-4e5f-6a7b8c9d0e1f",
+      "start_date": "2025-06-03",
+      "end_date": "2025-06-10",
+      "total_price": 9450,
+      "flight": {
+        "carrier_code": "AC",
+        "carrier_name": "Air Canada",
+        "departure_airport": "YUL",
+        "arrival_airport": "CUN",
+        "seat_class": "First",
+        "price": 2850
+      },
+      "hotel": {
+        "hotel_id": "CUN209",
+        "name": "The Ritz-Carlton, Cancun",
+        "description": "Iconic luxury hotel with exceptional service",
+        "rating": 4.8,
+        "reviews": 1567,
+        "image_url": "https://example.com/hotels/ritz_cancun.jpg",
+        "price_per_night": 943,
+        "amenities": [
+          "Club Level access",
+          "Personal butlers",
+          "Five-star spa",
+          "Fine dining",
+          "Beachfront infinity pool"
+        ]
+      }
+    },
+    {
+      "trip_id": "7d8e9f0a-1b2c-3d4e-5f6a-7b8c9d0e1f2a",
+      "start_date": "2025-06-20",
+      "end_date": "2025-06-27",
+      "total_price": 7250,
+      "flight": {
+        "carrier_code": "WS",
+        "carrier_name": "WestJet",
+        "departure_airport": "YUL",
+        "arrival_airport": "CUN",
+        "seat_class": "Business",
+        "price": 1700
+      },
+      "hotel": {
+        "hotel_id": "CUN210",
+        "name": "Fiesta Americana Condesa Cancun",
+        "description": "Vibrant all-inclusive with excellent entertainment",
+        "rating": 4.4,
+        "reviews": 3876,
+        "image_url": "https://example.com/hotels/fiesta_americana.jpg",
+        "price_per_night": 793,
+        "amenities": [
+          "11 restaurants",
+          "Full-service spa",
+          "Nightly entertainment",
+          "Water sports",
+          "Teen club"
+        ]
+      }
+    }
+  ],
+  "destination_info": {
+    "city": "Cancun",
+    "country": "Mexico",
+    "season": "June offers warm tropical weather with average highs of 90°F (32°C)",
+    "travel_time": "Approximately 4.5 hour flight from Montreal",
+    "attractions": [
+      "Chichen Itza Mayan ruins",
+      "Tulum archaeological site",
+      "Xcaret eco-park",
+      "Isla Mujeres island getaway",
+      "Cenote swimming in natural pools"
+    ]
+  },
+  "disclaimer": "All prices are simulated for June 2025 and may vary based on availability. Trip IDs use version 4 UUID format. Hotel images are placeholder URLs. Amenities may vary by room type."
+}

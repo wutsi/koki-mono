@@ -102,6 +102,7 @@ class Gemini(
         return when (role) {
             Role.USER -> "user"
             Role.MODEL -> "model"
+            Role.SYSTEM -> "system"
         }
     }
 
