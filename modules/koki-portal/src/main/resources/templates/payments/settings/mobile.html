@@ -104,7 +104,10 @@
 
 <script>
     function on_submit() {
-        document.getElementById('btn-submit').disabled = true;
+        const form = document.querySelector("form");
+        if (form.checkValidity()) {
+            document.getElementById('btn-submit').disabled = true;
+        }
         return true
     }
 
