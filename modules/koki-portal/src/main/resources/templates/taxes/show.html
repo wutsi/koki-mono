@@ -77,8 +77,9 @@
                                    th:text="#{'tax-status.' + ${status.name}}">
                                     STATUS
                                 </a>
-                                <span th:if="${status.ordinal() <= tax.status.ordinal()}"
-                                      th:text="#{'tax-status.' + ${status.name}}">
+                                <span
+                                    th:if="${status.ordinal() <= tax.status.ordinal()} OR !${user?.hasPermission('tax:manage')}"
+                                    th:text="#{'tax-status.' + ${status.name}}">
                                     STATUS
                                 </span>
                             </p>

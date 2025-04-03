@@ -139,7 +139,7 @@
         <xmemcached.version>2.4.8</xmemcached.version>
 
         <wutsi-dto.version>0.0.176</wutsi-dto.version>
-        <wutsi-platform.version>0.0.5</wutsi-platform.version>
+        <wutsi-platform.version>0.0.6</wutsi-platform.version>
     </properties>
 
     <dependencies>
