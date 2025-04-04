@@ -5,6 +5,8 @@ object ConfigurationName {
     const val AI_MODEL = "ai.model"
     const val AI_MODEL_GEMINI_API_KEY = "ai.model.gemini.api_key"
     const val AI_MODEL_GEMINI_MODEL = "ai.model.gemini.model"
+    const val AI_MODEL_DEEPSEEK_API_KEY = "ai.model.deepseek.api_key"
+    const val AI_MODEL_DEEPSEEK_MODEL = "ai.model.deepseek.model"
 
     // EMAIL
     const val EMAIL_DECORATOR = "email.decorator"
