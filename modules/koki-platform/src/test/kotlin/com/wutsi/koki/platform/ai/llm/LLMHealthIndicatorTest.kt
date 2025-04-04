@@ -1,22 +1,22 @@
-package com.wutsi.koki.platform.ai.llm.gemini
+package com.wutsi.koki.platform.ai.llm
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.platform.ai.llm.LLMResponse
 import org.mockito.Mockito.mock
 import org.springframework.boot.actuate.health.Status
+import java.lang.RuntimeException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class GeminiHealthIndicatorTest {
-    private val gemini = mock<Gemini>()
-    private val health = GeminiHealthIndicator(gemini)
+class LLMHealthIndicatorTest {
+    private val llm = mock<LLM>()
+    private val health = LLMHealthIndicator(llm)
 
     @Test
     fun up() {
-        doReturn(LLMResponse()).whenever(gemini).generateContent(any())
+        doReturn(LLMResponse()).whenever(llm).generateContent(any())
 
         val result = health.health()
 
@@ -25,7 +25,7 @@ class GeminiHealthIndicatorTest {
 
     @Test
     fun down() {
-        doThrow(RuntimeException("yo")).whenever(gemini).generateContent(any())
+        doThrow(RuntimeException("yo")).whenever(llm).generateContent(any())
 
         val result = health.health()
 

@@ -1,12 +1,12 @@
 package com.wutsi.koki.platform.ai.agent.react
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.koki.platform.ai.agent.Tool
 import com.wutsi.koki.platform.ai.llm.Config
 import com.wutsi.koki.platform.ai.llm.LLM
 import com.wutsi.koki.platform.ai.llm.LLMRequest
 import com.wutsi.koki.platform.ai.llm.Message
 import com.wutsi.koki.platform.ai.llm.Role
-import com.wutsi.koki.platform.ai.llm.Tool
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
@@ -15,10 +15,10 @@ import java.lang.IllegalStateException
 /**
  * Implementation of <a href="https://medium.com/google-cloud/building-react-agents-from-scratch-a-hands-on-guide-using-gemini-ffe4621d90ae">ReAct</a> agents
  */
-class Agent(
+class ReactAgent(
     private val llm: LLM,
     private val query: String,
-    private val agentTools: List<AgentTool>,
+    private val agentTools: List<Tool>,
     private val objectMapper: ObjectMapper,
     private val memory: MutableList<String> = mutableListOf(),
     private val template: String = TEMPLATE,
@@ -70,11 +70,7 @@ class Agent(
     }
 
     private var iteration: Int = 0
-    private val tools: Map<String, AgentTool>
-
-    init {
-        this.tools = agentTools.associateBy { tool -> tool.function().name }.toMap()
-    }
+    private val toolMap = agentTools.associateBy { tool -> tool.function().name }.toMap()
 
     fun think() {
         if (++iteration > maxIterations) {
@@ -103,6 +99,8 @@ class Agent(
         val logger = getLogger()
         logger.info("--------------------------------------------------------------------")
         logger.info("Iteration: $iteration")
+        logger.info("> agent: " + this::class.java.name)
+        logger.info("> model: " + llm::class.java.name)
 
         try {
             val resp: Response = objectMapper.readValue(response, Response::class.java)
@@ -128,7 +126,7 @@ class Agent(
     }
 
     private fun act(action: Action) {
-        val tool = tools[action.name]
+        val tool = toolMap[action.name]
         if (tool != null) {
             try {
                 val result = tool.use(action.inputs)
@@ -156,7 +154,7 @@ class Agent(
             )
             .replace(
                 "{{tools}}",
-                tools.values.map { tool -> "- ${tool.function().name}: ${tool.function().description}" }
+                toolMap.values.map { tool -> "- ${tool.function().name}: ${tool.function().description}" }
                     .joinToString(separator = "\n")
             )
             .trimIndent()
@@ -168,8 +166,8 @@ class Agent(
                 messages = listOf(
                     Message(text = prompt)
                 ),
-                tools = tools.values.map { tool ->
-                    Tool(
+                tools = toolMap.values.map { tool ->
+                    com.wutsi.koki.platform.ai.llm.Tool(
                         functionDeclarations = listOf(tool.function())
                     )
                 },
