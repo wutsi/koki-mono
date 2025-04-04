@@ -1,24 +1,46 @@
 package com.wutsi.koki.platform.ai.agent.react.examples
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.wutsi.koki.platform.ai.agent.react.Agent
-import com.wutsi.koki.platform.ai.agent.react.AgentTool
+import com.wutsi.koki.platform.ai.agent.DefaultAgent
+import com.wutsi.koki.platform.ai.agent.Tool
+import com.wutsi.koki.platform.ai.agent.react.ReactAgent
 import com.wutsi.koki.platform.ai.llm.FunctionDeclaration
 import com.wutsi.koki.platform.ai.llm.FunctionParameterProperty
 import com.wutsi.koki.platform.ai.llm.FunctionParameters
 import com.wutsi.koki.platform.ai.llm.Type
+import com.wutsi.koki.platform.ai.llm.deepseek.Deepseek
 import com.wutsi.koki.platform.ai.llm.gemini.Gemini
+import org.apache.commons.io.output.ByteArrayOutputStream
 import org.springframework.web.client.RestTemplate
 
 fun main(args: Array<String>) {
     val agent = WeatherAgent()
 
-    agent.run()
+    // agent.run()
+    agent.run2()
 }
 
 class WeatherAgent {
+    val agent = DefaultAgent(
+        llm = Deepseek(
+            apiKey = System.getenv("DEEPSEEK_API_KEY"),
+            model = "deepseek-chat",
+            rest = RestTemplate(),
+            objectMapper = ObjectMapper(),
+        ),
+        tools = listOf(
+            WeatherTool()
+        ),
+        systemInstructions = """
+            You are a weather assistant, helping people to know the temperature of cities.
+            Instructions:
+            - Be very concise in your answers.
+        """.trimIndent(),
+        maxIterations = 5,
+    )
+
     fun run() {
-        val weather = Agent(
+        val weather = ReactAgent(
             llm = Gemini(
                 apiKey = System.getenv("GEMINI_API_KEY"),
                 model = "gemini-2.0-flash",
@@ -33,9 +55,18 @@ class WeatherAgent {
 
         weather.think()
     }
+
+    fun run2() {
+        val output = ByteArrayOutputStream()
+        agent.run(
+            query = "Which city is hotter, Yaounde or Montreal?",
+            output = output
+        )
+        println(String(output.toByteArray()))
+    }
 }
 
-class WeatherTool : AgentTool {
+class WeatherTool : Tool {
     override fun function(): FunctionDeclaration {
         return FunctionDeclaration(
             name = "get_weather",

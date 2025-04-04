@@ -63,17 +63,22 @@ class Gemini(
             return LLMResponse(
                 messages = resp.candidates
                     .flatMap { candidate -> candidate.content.parts }
-                    .map { part ->
+                    .mapNotNull { part ->
                         Message(
+                            role = Role.MODEL,
                             text = encodeResponse(request.config?.responseType, part.text),
                             functionCall = part.functionCall?.let { function ->
                                 FunctionCall(
-                                    name = function.name,
+                                    name = if (function.name.startsWith("default_api.")) {
+                                        function.name.substring(12)
+                                    } else {
+                                        function.name
+                                    },
                                     args = function.args,
                                 )
                             }
                         )
-                    },
+                    }.filter { message -> message.text != null || message.functionCall != null },
 
                 usage = resp.usageMetadata?.let { usage ->
                     Usage(
@@ -101,8 +106,7 @@ class Gemini(
     private fun toRole(role: Role): String {
         return when (role) {
             Role.USER -> "user"
-            Role.MODEL -> "model"
-            Role.SYSTEM -> "system"
+            Role.MODEL, Role.SYSTEM -> "model"
         }
     }
 

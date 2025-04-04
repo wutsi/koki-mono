@@ -1,8 +1,8 @@
-package com.wutsi.koki.platform.ai.agent.react
+package com.wutsi.koki.platform.ai.agent
 
 import com.wutsi.koki.platform.ai.llm.FunctionDeclaration
 
-interface AgentTool {
+interface Tool {
     fun function(): FunctionDeclaration
     fun use(args: Map<String, Any>): String
 }

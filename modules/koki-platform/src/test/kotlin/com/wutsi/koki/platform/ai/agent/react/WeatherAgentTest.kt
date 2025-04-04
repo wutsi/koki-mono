@@ -1,35 +1,37 @@
 package com.wutsi.koki.platform.ai.agent.react
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.koki.platform.ai.agent.DefaultAgent
+import com.wutsi.koki.platform.ai.agent.Tool
 import com.wutsi.koki.platform.ai.llm.FunctionDeclaration
 import com.wutsi.koki.platform.ai.llm.FunctionParameterProperty
 import com.wutsi.koki.platform.ai.llm.FunctionParameters
 import com.wutsi.koki.platform.ai.llm.Type
 import com.wutsi.koki.platform.ai.llm.gemini.Gemini
 import org.springframework.web.client.RestTemplate
+import java.io.ByteArrayOutputStream
 import kotlin.test.Test
 
 class WeatherAgentTest {
     @Test
     fun run() {
-        val weather = Agent(
+        val weather = DefaultAgent(
             llm = Gemini(
                 apiKey = System.getenv("GEMINI_API_KEY"),
                 model = "gemini-2.0-flash",
                 rest = RestTemplate(),
             ),
-            agentTools = listOf(
+            tools = listOf(
                 WeatherTool()
             ),
-            query = "Which city is hotter, Yaounde or Montreal?",
-            objectMapper = ObjectMapper(),
         )
 
-        weather.think()
+        val output = ByteArrayOutputStream()
+        weather.run(query = "Which city is hotter, Yaounde or Montreal?", output)
+        println(String(output.toByteArray()))
     }
 }
 
-class WeatherTool : AgentTool {
+class WeatherTool : Tool {
     override fun function(): FunctionDeclaration {
         return FunctionDeclaration(
             name = "get_weather",
