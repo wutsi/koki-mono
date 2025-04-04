@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>koki-dto</artifactId>
-    <version>0.0.178-SNAPSHOT</version>
+    <version>0.0.179-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <scm>
