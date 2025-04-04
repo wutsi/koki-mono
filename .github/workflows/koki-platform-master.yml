@@ -29,6 +29,7 @@ jobs:
                     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
                     GEMINI_API_KEY: ${{secrets.GEMINI_API_KEY_TEST}}
                     STRIPE_API_KEY: ${{secrets.STRIPE_API_KEY_TEST}}
+                    DEEPSEEK_API_KEY: ${{secrets.DEEPSEEK_API_KEY_TEST}}
                 run: |
                     mvn -s settings.xml --non-recursive install
                     cd modules/koki-platform
