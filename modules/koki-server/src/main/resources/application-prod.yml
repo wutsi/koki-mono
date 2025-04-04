@@ -21,8 +21,11 @@ logging:
 
 koki:
     ai:
-        gemini:
-            api-key: ${GEMINI_API_KEY}
+        model:
+            deepseek:
+                api-key: ${DEEPSEEK_API_KEY}
+            gemini:
+                api-key: ${GEMINI_API_KEY}
 
     rabbitmq:
         url: ${CLOUDAMQP_URL}

@@ -23,3 +23,4 @@ For the overall trip, include the following information
 - Total price
 - start date
 - end date
+- Use UUID for ID of the trip
