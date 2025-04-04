@@ -1,4 +1,4 @@
-package com.wutsi.koki.platform.translation
+package com.wutsi.koki.platform.translation.ai
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
@@ -12,6 +12,7 @@ import com.wutsi.koki.platform.ai.llm.LLMRequest
 import com.wutsi.koki.platform.ai.llm.LLMResponse
 import com.wutsi.koki.platform.ai.llm.Message
 import com.wutsi.koki.platform.ai.llm.Role
+import com.wutsi.koki.platform.translation.TranslationException
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 import kotlin.test.Test
@@ -54,20 +55,20 @@ class AITranslationServiceTest {
     fun `no transaction`() {
         doReturn(LLMResponse()).whenever(llm).generateContent(any())
 
-        assertThrows<TranslationException> {  service.translate("Hello world", "en") }
+        assertThrows<TranslationException> { service.translate("Hello world", "en") }
     }
 
     @Test
     fun `empty transaction`() {
         doReturn(LLMResponse(messages = listOf(Message(text = "")))).whenever(llm).generateContent(any())
 
-        assertThrows<TranslationException> {  service.translate("Hello world", "en") }
+        assertThrows<TranslationException> { service.translate("Hello world", "en") }
     }
 
     @Test
     fun exception() {
         doThrow(LLMException(-1, "Failed")).whenever(llm).generateContent(any())
 
-        assertThrows<TranslationException> {  service.translate("Hello world", "en") }
+        assertThrows<TranslationException> { service.translate("Hello world", "en") }
     }
 }

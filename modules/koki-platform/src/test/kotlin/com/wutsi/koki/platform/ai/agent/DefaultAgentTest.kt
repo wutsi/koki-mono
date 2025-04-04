@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.platform.ai.llm.Document
 import com.wutsi.koki.platform.ai.llm.FunctionCall
 import com.wutsi.koki.platform.ai.llm.FunctionDeclaration
 import com.wutsi.koki.platform.ai.llm.FunctionParameterProperty
@@ -21,6 +22,7 @@ import com.wutsi.koki.platform.ai.llm.Type
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 import org.springframework.http.MediaType
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -152,7 +154,7 @@ class DefaultAgentTest {
     }
 
     @Test
-    fun finalResult() {
+    fun finalText() {
         val output = ByteArrayOutputStream()
         val inputs = mapOf("email" to "ray.sponsible@gmail.com")
 
@@ -207,6 +209,50 @@ class DefaultAgentTest {
     }
 
     @Test
+    fun finalDocument() {
+        val output = ByteArrayOutputStream()
+
+        // THEN
+        val agent = createAgent(responseType = MediaType.TEXT_PLAIN)
+
+        setupDocumentResponse("Done")
+        val result = agent.step(QUERY, output, memory)
+
+        // Continue
+        assertEquals(true, result)
+
+        // LLM Called
+        val request = argumentCaptor<LLMRequest>()
+        verify(llm).generateContent(request.capture())
+
+        assertEquals(MediaType.TEXT_PLAIN, request.firstValue.config?.responseType)
+
+        // Result
+        assertEquals("Done", String(output.toByteArray()))
+    }
+
+    @Test
+    fun empty() {
+        val output = ByteArrayOutputStream()
+
+        // THEN
+        val agent = createAgent(responseType = MediaType.TEXT_PLAIN)
+
+        setupTextResponse(null)
+        val result = agent.step(QUERY, output, memory)
+
+        // Continue
+        assertEquals(false, result)
+
+        // LLM Called
+        val request = argumentCaptor<LLMRequest>()
+        verify(llm).generateContent(request.capture())
+
+        // Result
+        assertEquals("", String(output.toByteArray()))
+    }
+
+    @Test
     fun `too many iterations`() {
         val output = ByteArrayOutputStream()
         val inputs = mapOf("email" to "ray.sponsible@gmail.com")
@@ -247,11 +293,27 @@ class DefaultAgentTest {
         ).whenever(llm).generateContent(any())
     }
 
-    private fun setupTextResponse(text: String) {
+    private fun setupTextResponse(text: String?) {
         doReturn(
             LLMResponse(
                 messages = listOf(
                     Message(text = text, role = Role.MODEL),
+                ),
+            )
+        ).whenever(llm).generateContent(any())
+    }
+
+    private fun setupDocumentResponse(text: String) {
+        doReturn(
+            LLMResponse(
+                messages = listOf(
+                    Message(
+                        document = Document(
+                            contentType = MediaType.TEXT_PLAIN,
+                            content = ByteArrayInputStream(text.toByteArray()),
+                        ),
+                        role = Role.MODEL
+                    ),
                 ),
             )
         ).whenever(llm).generateContent(any())

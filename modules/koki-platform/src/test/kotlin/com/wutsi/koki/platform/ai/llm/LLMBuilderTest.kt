@@ -6,6 +6,8 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.platform.ai.llm.deepseek.DeepseekBuilder
 import com.wutsi.koki.platform.ai.llm.gemini.GeminiBuilder
 import com.wutsi.koki.platform.ai.llm.koki.KokiBuilder
+import com.wutsi.koki.tenant.dto.ConfigurationName
+import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -14,7 +16,6 @@ class LLMBuilderTest {
     private val geminiBuilder = mock<GeminiBuilder>()
     private val kokiBuilder = mock<KokiBuilder>()
     private val deepseekBuilder = mock<DeepseekBuilder>()
-    private val config = mapOf("x" to "xxx")
     private val builder = LLMBuilder(
         gemini = geminiBuilder,
         koki = kokiBuilder,
@@ -26,7 +27,8 @@ class LLMBuilderTest {
         val service = mock<LLM>()
         doReturn(service).whenever(geminiBuilder).build(any())
 
-        assertEquals(service, builder.build(LLMType.GEMINI, config))
+        val config = mapOf(ConfigurationName.AI_MODEL to LLMType.GEMINI.name)
+        assertEquals(service, builder.build(config))
     }
 
     @Test
@@ -34,7 +36,8 @@ class LLMBuilderTest {
         val service = mock<LLM>()
         doReturn(service).whenever(deepseekBuilder).build(any())
 
-        assertEquals(service, builder.build(LLMType.DEEPSEEK, config))
+        val config = mapOf(ConfigurationName.AI_MODEL to LLMType.DEEPSEEK.name)
+        assertEquals(service, builder.build(config))
     }
 
     @Test
@@ -42,6 +45,16 @@ class LLMBuilderTest {
         val service = mock<LLM>()
         doReturn(service).whenever(kokiBuilder).build()
 
-        assertEquals(service, builder.build(LLMType.KOKI, config))
+        val config = mapOf(ConfigurationName.AI_MODEL to LLMType.KOKI.name)
+        assertEquals(service, builder.build(config))
+    }
+
+    @Test
+    fun error() {
+        val service = mock<LLM>()
+        doReturn(service).whenever(kokiBuilder).build()
+
+        val config = mapOf(ConfigurationName.AI_MODEL to "xxx")
+        assertThrows<LLMNotConfiguredException> { builder.build(config) }
     }
 }

@@ -1,4 +1,7 @@
 package com.wutsi.koki.platform.translation
 
-class TranslationProvider {
+enum class TranslationProvider {
+    UNKNOWN,
+    AI,
+    AWS,
 }

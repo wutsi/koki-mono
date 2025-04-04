@@ -1,4 +1,4 @@
-package com.wutsi.koki.platform.translation
+package com.wutsi.koki.platform.translation.aws
 
 import com.amazonaws.services.translate.AmazonTranslate
 import com.amazonaws.services.translate.model.TranslateTextRequest
@@ -9,6 +9,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.platform.translation.TranslationException
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 import kotlin.test.Test

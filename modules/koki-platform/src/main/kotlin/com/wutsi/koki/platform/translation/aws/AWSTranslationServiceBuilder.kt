@@ -1,30 +1,41 @@
 package com.wutsi.koki.platform.translation.aws
 
-import com.amazonaws.services.translate.AmazonTranslate
-import com.amazonaws.services.translate.AmazonTranslateClient
-import com.amazonaws.services.translate.model.TranslateTextRequest
-import com.wutsi.koki.platform.ai.llm.LLM
-import com.wutsi.koki.platform.ai.llm.LLMRequest
-import com.wutsi.koki.platform.ai.llm.Message
-import com.wutsi.koki.platform.ai.llm.Role
-import com.wutsi.koki.platform.translation.TranslationException
+import com.amazonaws.auth.AWSStaticCredentialsProvider
+import com.amazonaws.auth.BasicAWSCredentials
+import com.amazonaws.services.translate.AmazonTranslateClientBuilder
+import com.wutsi.koki.platform.translation.TranslationNotConfiguredException
 import com.wutsi.koki.platform.translation.TranslationService
-import java.util.Locale
+import com.wutsi.koki.tenant.dto.ConfigurationName
 
-class AWSTranslationService(
-    private val translator: AmazonTranslate
-) : TranslationService {
-    @Throws(TranslationException::class)
-    override fun translate(text: String, language: String): String {
-        val request = TranslateTextRequest()
-        request.text = text
-        request.targetLanguageCode = language
+class AWSTranslationServiceBuilder {
+    companion object {
+        val CONFIG_NAMES = listOf(
+            ConfigurationName.TRANSLATION_PROVIDER_AWS_REGION,
+            ConfigurationName.TRANSLATION_PROVIDER_AWS_ACCESS_KEY,
+            ConfigurationName.TRANSLATION_PROVIDER_AWS_SECRET_KEY,
+        )
+    }
 
-        try {
-            val response = translator.translateText(request)
-            return response.translatedText
-        } catch (ex: Exception) {
-            throw TranslationException("Translation failed", ex)
+    fun build(config: Map<String, String>): TranslationService {
+        validate(config)
+        val client = AmazonTranslateClientBuilder.standard()
+            .withRegion(config[ConfigurationName.TRANSLATION_PROVIDER_AWS_REGION]!!)
+            .withCredentials(
+                AWSStaticCredentialsProvider(
+                    BasicAWSCredentials(
+                        config[ConfigurationName.TRANSLATION_PROVIDER_AWS_ACCESS_KEY]!!,
+                        config[ConfigurationName.TRANSLATION_PROVIDER_AWS_SECRET_KEY]!!,
+                    )
+                )
+            )
+            .build()
+        return AWSTranslationService(client)
+    }
+
+    private fun validate(config: Map<String, String>) {
+        val missing = CONFIG_NAMES.filter { name -> config[name].isNullOrEmpty() }
+        if (missing.isNotEmpty()) {
+            throw TranslationNotConfiguredException("Translation not configured. Missing config: $missing")
         }
     }
 }

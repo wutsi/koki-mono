@@ -1,13 +1,9 @@
-package com.wutsi.koki.platform.translation
+package com.wutsi.koki.platform.translation.aws
 
 import com.amazonaws.services.translate.AmazonTranslate
-import com.amazonaws.services.translate.AmazonTranslateClient
 import com.amazonaws.services.translate.model.TranslateTextRequest
-import com.wutsi.koki.platform.ai.llm.LLM
-import com.wutsi.koki.platform.ai.llm.LLMRequest
-import com.wutsi.koki.platform.ai.llm.Message
-import com.wutsi.koki.platform.ai.llm.Role
-import java.util.Locale
+import com.wutsi.koki.platform.translation.TranslationException
+import com.wutsi.koki.platform.translation.TranslationService
 
 class AWSTranslationService(
     private val translator: AmazonTranslate

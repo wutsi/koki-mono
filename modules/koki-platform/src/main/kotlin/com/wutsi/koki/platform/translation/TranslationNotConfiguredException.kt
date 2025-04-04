@@ -1,4 +1,3 @@
 package com.wutsi.koki.platform.translation
 
-class TranslationNotConfiguredException {
-}
+class TranslationNotConfiguredException(message: String) : TranslationException(message)
