@@ -8,4 +8,5 @@ data class Recipient(
     val type: ObjectType = ObjectType.UNKNOWN,
     @get:NotNull val email: String = "",
     val displayName: String? = null,
+    val language: String? = null,
 )
