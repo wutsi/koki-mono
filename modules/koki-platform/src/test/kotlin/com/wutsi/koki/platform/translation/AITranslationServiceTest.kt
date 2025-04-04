@@ -46,4 +46,20 @@ class AITranslationServiceTest {
             messages[1].text
         )
     }
+
+    @Test
+    fun `no transaction`() {
+        doReturn(LLMResponse()).whenever(llm).generateContent(any())
+
+        val result = service.translate("Hello world", "en")
+        assertEquals(null, result)
+    }
+
+    @Test
+    fun `empty transaction`() {
+        doReturn(LLMResponse(messages = listOf(Message(text = "")))).whenever(llm).generateContent(any())
+
+        val result = service.translate("Hello world", "en")
+        assertEquals(null, result)
+    }
 }

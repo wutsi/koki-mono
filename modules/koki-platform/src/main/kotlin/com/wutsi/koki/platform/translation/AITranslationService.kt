@@ -16,6 +16,7 @@ class AITranslationService(
             - Return only the translation, nothing else.
             - Do not translate text enclosed in "{{" and "}}" as they represent variables. Example: {{orderNumber}} is the variable that represent teh order number.
             - If the text contains HTML tags, keep them as is.
+            - If you can't translate, just return an empty string (nothing else)
         """
 
         const val PROMPT = """
@@ -37,6 +38,6 @@ class AITranslationService(
                 )
             )
         )
-        return response.messages.firstOrNull()?.text
+        return response.messages.firstOrNull()?.text?.ifEmpty { null }
     }
 }
