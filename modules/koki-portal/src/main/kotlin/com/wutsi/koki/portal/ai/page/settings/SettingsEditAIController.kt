@@ -7,6 +7,7 @@ import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import com.wutsi.koki.tenant.dto.ConfigurationName
+import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -34,6 +35,8 @@ class SettingsEditAIController(
             model = configs[ConfigurationName.AI_MODEL],
             geminiModel = configs[ConfigurationName.AI_MODEL_GEMINI_MODEL],
             geminiApiKey = configs[ConfigurationName.AI_MODEL_GEMINI_API_KEY],
+            deepseekModel = configs[ConfigurationName.AI_MODEL_DEEPSEEK_MODEL],
+            deepseekApiKey = configs[ConfigurationName.AI_MODEL_DEEPSEEK_API_KEY],
         )
 
         return edit(form, model)
@@ -49,7 +52,7 @@ class SettingsEditAIController(
         )
 
         model.addAttribute("form", form)
-        model.addAttribute("models", listOf("KOKI", "GEMINI"))
+        model.addAttribute("models", listOf("KOKI", "GEMINI", "DEEPSEEK"))
 
         return "ai/settings/edit"
     }
@@ -57,7 +60,25 @@ class SettingsEditAIController(
     @PostMapping("/settings/ai/save")
     fun save(@ModelAttribute form: AISettingsForm, model: Model): String {
         try {
-            service.save(form)
+            service.save(
+                configs = when (form.model) {
+                    "GEMINI" -> mapOf(
+                        ConfigurationName.AI_MODEL to (form.model ?: ""),
+                        ConfigurationName.AI_MODEL_GEMINI_MODEL to (form.geminiModel ?: ""),
+                        ConfigurationName.AI_MODEL_GEMINI_API_KEY to (form.geminiApiKey ?: ""),
+                    )
+
+                    "DEEPSEEK" -> mapOf(
+                        ConfigurationName.AI_MODEL to (form.model ?: ""),
+                        ConfigurationName.AI_MODEL_DEEPSEEK_MODEL to (form.deepseekModel ?: ""),
+                        ConfigurationName.AI_MODEL_DEEPSEEK_API_KEY to (form.deepseekApiKey ?: ""),
+                    )
+
+                    else -> mapOf(
+                        ConfigurationName.AI_MODEL to (form.model ?: ""),
+                    )
+                }
+            )
             return "redirect:/settings/ai?_toast=1&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)

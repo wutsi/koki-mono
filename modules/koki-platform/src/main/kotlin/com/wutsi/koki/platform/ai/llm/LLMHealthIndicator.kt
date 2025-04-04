@@ -1,22 +1,20 @@
-package com.wutsi.koki.platform.ai.llm.gemini
+package com.wutsi.koki.platform.ai.llm
 
-import com.wutsi.koki.platform.ai.llm.LLMRequest
-import com.wutsi.koki.platform.ai.llm.Message
 import org.slf4j.LoggerFactory
 import org.springframework.boot.actuate.health.Health
 import org.springframework.boot.actuate.health.HealthIndicator
 
-class GeminiHealthIndicator(
-    private val gemini: Gemini
+class LLMHealthIndicator(
+    private val llm: LLM
 ) : HealthIndicator {
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(GeminiHealthIndicator::class.java)
+        private val LOGGER = LoggerFactory.getLogger(LLMHealthIndicator::class.java)
     }
 
     override fun health(): Health {
         try {
             val now = System.currentTimeMillis()
-            gemini.generateContent(
+            llm.generateContent(
                 LLMRequest(
                     messages = listOf(
                         Message(text = "Say hi!")

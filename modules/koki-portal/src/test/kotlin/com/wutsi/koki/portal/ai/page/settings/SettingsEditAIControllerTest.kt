@@ -27,6 +27,7 @@ class SettingsEditAIControllerTest : AbstractPageControllerTest() {
             request.capture(),
             eq(Any::class.java)
         )
+        assertEquals(1, request.firstValue.values.size)
         assertEquals("KOKI", request.firstValue.values[ConfigurationName.AI_MODEL])
     }
 
@@ -48,9 +49,34 @@ class SettingsEditAIControllerTest : AbstractPageControllerTest() {
             request.capture(),
             eq(Any::class.java)
         )
+        assertEquals(3, request.firstValue.values.size)
         assertEquals("GEMINI", request.firstValue.values[ConfigurationName.AI_MODEL])
         assertEquals("1111", request.firstValue.values[ConfigurationName.AI_MODEL_GEMINI_API_KEY])
         assertEquals("gemini-2.0-flash-lite", request.firstValue.values[ConfigurationName.AI_MODEL_GEMINI_MODEL])
+    }
+
+    @Test
+    fun deepseek() {
+        disableAllConfigs()
+
+        navigateTo("/settings/ai/edit")
+        assertCurrentPageIs(PageName.AI_SETTINGS_EDIT)
+
+        select("#model", 3)
+        input("#deepseekApiKey", "1111")
+        select("#deepseekModel", 1)
+        click("button[type=submit]")
+
+        val request = argumentCaptor<SaveConfigurationRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/configurations"),
+            request.capture(),
+            eq(Any::class.java)
+        )
+        assertEquals(3, request.firstValue.values.size)
+        assertEquals("DEEPSEEK", request.firstValue.values[ConfigurationName.AI_MODEL])
+        assertEquals("1111", request.firstValue.values[ConfigurationName.AI_MODEL_DEEPSEEK_API_KEY])
+        assertEquals("deepseek-chat", request.firstValue.values[ConfigurationName.AI_MODEL_DEEPSEEK_MODEL])
     }
 
     @Test

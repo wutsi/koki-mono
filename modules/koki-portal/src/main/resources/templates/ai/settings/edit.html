@@ -51,6 +51,22 @@
                         </select>
                     </td>
                 </tr>
+
+                <tr class="deepseek" th:classappend="${form.model} != 'DEEPSEEK' ? 'hidden'">
+                    <td><b>API Key <span class="required">*</span></b></td>
+                    <td>
+                        <input maxlength="100" th:field="*{deepseekApiKey}" th:required="${form.model} == 'DEEPSEEK'"/>
+                    </td>
+                </tr>
+                <tr class="deepseek" th:classappend="${form.model} != 'DEEPSEEK' ? 'hidden'">
+                    <td><b>Model <span class="required">*</span></b></td>
+                    <td>
+                        <select th:field="*{deepseekModel}" th:required="${form.model} == 'DEEPSEEK'">
+                            <option value=""></option>
+                            <option value="deepseek-chat">Deepseek Chat</option>
+                        </select>
+                    </td>
+                </tr>
                 <tr>
                     <td colspan="2">
                         <button id="btn-submit" type="submit">Submit</button>
@@ -73,15 +89,24 @@
     function koki_ai_model_changed() {
         const type = document.getElementById('model').value;
         const gemini = (type === 'GEMINI');
-        document.querySelectorAll('.gemini').forEach((elt) => {
-            if (gemini) {
+        const deepseek = (type === 'DEEPSEEK');
+        toggle('gemini', gemini)
+        toggle('deepseek', deepseek)
+    }
+
+    function toggle(clazz, selected) {
+        document.querySelectorAll('.' + clazz).forEach((elt) => {
+            if (selected) {
                 elt.classList.remove('hidden');
             } else {
                 elt.classList.add('hidden');
             }
         });
-        document.querySelectorAll('.gemini input, .gemini select').forEach((elt) => {
-            elt.required = gemini;
+        document.querySelectorAll('.' + clazz + ' input').forEach((elt) => {
+            elt.required = selected;
+        });
+        document.querySelectorAll('.' + clazz + ' select').forEach((elt) => {
+            elt.required = selected;
         });
     }
 </script>

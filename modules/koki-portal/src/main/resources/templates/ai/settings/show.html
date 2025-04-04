@@ -27,7 +27,11 @@
             </tr>
             <tr th:if="${form.model == 'GEMINI'}">
                 <td><b>Model</b></td>
-                <td th:text="${form.getGeminiModel()}">MODEL</td>
+                <td th:text="${form.geminiModel}">MODEL</td>
+            </tr>
+            <tr th:if="${form.model == 'DEEPSEEK'}">
+                <td><b>Model</b></td>
+                <td th:text="${form.deepseekModel}">MODEL</td>
             </tr>
             <tr>
                 <td colspan="2">

@@ -8,6 +8,7 @@ import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.platform.ai.agent.Tool
 import com.wutsi.koki.platform.ai.llm.FunctionDeclaration
 import com.wutsi.koki.platform.ai.llm.LLM
 import com.wutsi.koki.platform.ai.llm.LLMRequest
@@ -19,7 +20,7 @@ import org.springframework.http.MediaType
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class AgentTest {
+class ReactAgentTest {
     private val function1 = FunctionDeclaration(
         name = "tool1",
         description = "This is the description of tool1",
@@ -31,8 +32,8 @@ class AgentTest {
         parameters = null,
     )
 
-    private val tool1 = mock<AgentTool>()
-    private val tool2 = mock<AgentTool>()
+    private val tool1 = mock<Tool>()
+    private val tool2 = mock<Tool>()
     private val llm = mock<LLM>()
     private val memory: MutableList<String> = mutableListOf()
     private val template: String = """
@@ -304,8 +305,8 @@ class AgentTest {
             .whenever(llm).generateContent(any())
     }
 
-    private fun createAgent(query: String, maxIterations: Int = 5): Agent {
-        return Agent(
+    private fun createAgent(query: String, maxIterations: Int = 5): ReactAgent {
+        return ReactAgent(
             llm = llm,
             agentTools = listOf(tool1, tool2),
             objectMapper = ObjectMapper(),

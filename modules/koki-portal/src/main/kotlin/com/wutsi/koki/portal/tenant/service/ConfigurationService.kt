@@ -1,7 +1,6 @@
 package com.wutsi.koki.portal.tenant.service
 
 import com.wutsi.koki.payment.dto.PaymentMethodType
-import com.wutsi.koki.portal.ai.form.AISettingsForm
 import com.wutsi.koki.portal.email.model.EmailDecoratorForm
 import com.wutsi.koki.portal.email.model.SMTPForm
 import com.wutsi.koki.portal.file.form.StorageForm
@@ -35,6 +34,12 @@ ConfigurationService(
             names = names,
             keyword = keyword,
         ).configurations.map { config -> config.name to config.value }.toMap()
+    }
+
+    fun save(configs: Map<String, String>) {
+        koki.save(
+            SaveConfigurationRequest(configs)
+        )
     }
 
     fun save(form: SMTPForm) {
@@ -227,18 +232,6 @@ ConfigurationService(
                     ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_PHONE_NUMBER to (form.offlinePhoneNumber ?: ""),
                     ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_ACCOUNT_NAME to (form.offlineAccountName ?: ""),
                     ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_PROVIDER to (form.offlineProvider ?: ""),
-                )
-            )
-        )
-    }
-
-    fun save(form: AISettingsForm) {
-        koki.save(
-            SaveConfigurationRequest(
-                values = mapOf(
-                    ConfigurationName.AI_MODEL to (form.model ?: ""),
-                    ConfigurationName.AI_MODEL_GEMINI_MODEL to (form.geminiModel ?: ""),
-                    ConfigurationName.AI_MODEL_GEMINI_API_KEY to (form.geminiApiKey ?: ""),
                 )
             )
         )

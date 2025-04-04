@@ -161,9 +161,14 @@ koki:
         rest:
             read-timeout: 60000 # 1 minute
             connect-timeout: 60000 # 1 miniute
-        gemini:
-            api-key: ${GEMINI_API_KEY}
-            model: gemini-2.0-flash
+        model:
+            type: gemini
+            gemini:
+                api-key: ${GEMINI_API_KEY}
+                model: gemini-2.0-flash
+            deepseek:
+                api-key: ${DEEPSEEK_API_KEY}
+                model: deepseek-chat
 
     executor:
         thread-pool-size: 16
