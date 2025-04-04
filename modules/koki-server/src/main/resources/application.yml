@@ -163,12 +163,12 @@ koki:
             connect-timeout: 60000 # 1 miniute
         model:
             type: gemini
-            gemini:
-                api-key: ${GEMINI_API_KEY}
-                model: gemini-2.0-flash
             deepseek:
                 api-key: ${DEEPSEEK_API_KEY}
                 model: deepseek-chat
+            gemini:
+                api-key: ${GEMINI_API_KEY}
+                model: gemini-2.0-flash
 
     executor:
         thread-pool-size: 16

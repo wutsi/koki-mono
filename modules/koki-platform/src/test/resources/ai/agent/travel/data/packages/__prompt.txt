@@ -1,4 +1,4 @@
-Can you generate a JSON of 10 trips from Montreal to Windhoek, with total price from $3000 to $15000 and the dates in June 2025.
+Can you generate a JSON of 10 trip from Montreal to Cancun, with total price from $3000 to $10000.
 The data should include information about flight and hotel.
 
 For the flight, I would like to have the following information:
