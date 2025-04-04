@@ -89,4 +89,11 @@ object ConfigurationName {
     const val TAX_EMAIL_DONE_ENABLED = "tax.email.done.enabled"
     const val TAX_EMAIL_DONE_SUBJECT = "tax.email.done.subject"
     const val TAX_EMAIL_DONE_BODY = "tax.email.done.body"
+
+    // TRANSACTION
+    const val TRANSLATION_ENABLED = "translation.enabled"
+    const val TRANSLATION_PROVIDER = "translation.provider"
+    const val TRANSLATION_PROVIDER_AWS_ACCESS_KEY = "translation.provider.aws.access-key"
+    const val TRANSLATION_PROVIDER_AWS_SECRET_KEY = "translation.provider.aws.secret-key"
+    const val TRANSLATION_PROVIDER_AWS_REGION = "translation.provider.aws.region"
 }
