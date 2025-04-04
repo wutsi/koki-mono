@@ -92,5 +92,4 @@ class AIConfiguration(
             .connectTimeout(Duration.of(restConnectTimeout, ChronoUnit.MILLIS))
             .build()
     }
-
 }
