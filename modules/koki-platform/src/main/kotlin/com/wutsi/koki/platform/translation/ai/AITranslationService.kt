@@ -25,19 +25,28 @@ class AITranslationService(
         """
     }
 
-    override fun translate(text: String, language: String): String? {
+    @Throws(TranslationException::class)
+    override fun translate(text: String, language: String): String {
         val prompt = PROMPT
             .replace("{{language}}", Locale(language).getDisplayLanguage(Locale.ENGLISH))
             .replace("{{text}}", text)
 
-        val response = llm.generateContent(
-            LLMRequest(
-                messages = listOf(
-                    Message(role = Role.SYSTEM, text = SYSTEM_INSTRUCTIONS.trimIndent()),
-                    Message(role = Role.USER, text = prompt.trimIndent()),
+        try {
+            val response = llm.generateContent(
+                LLMRequest(
+                    messages = listOf(
+                        Message(role = Role.SYSTEM, text = SYSTEM_INSTRUCTIONS.trimIndent()),
+                        Message(role = Role.USER, text = prompt.trimIndent()),
+                    )
                 )
             )
-        )
-        return response.messages.firstOrNull()?.text?.ifEmpty { null }
+            return response.messages
+                .firstOrNull()
+                ?.text
+                ?.ifEmpty { null }
+                ?: throw TranslationException("None")
+        } catch (ex: Exception) {
+            throw TranslationException("Translation failed", ex)
+        }
     }
 }
