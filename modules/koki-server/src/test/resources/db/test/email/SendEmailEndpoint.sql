@@ -6,7 +6,10 @@ INSERT INTO T_BUSINESS(id, tenant_fk, company_name, phone, fax, email, website, 
     VALUES (100, 1, 'Business Inc', '+5147580100', '+5147580111', 'info@my-biz.com', 'https://my-biz.com', 111, 100, 'CA', 'H7K1C6', '340 Pascal');
 
 INSERT INTO T_CONFIGURATION(tenant_fk, name, value)
-    VALUES (1, 'email.decorator',   '<table> <tr><td>{{tenant_name}}</td></tr> <tr><td>{{{body}}}</td></tr> </table>');
+    VALUES (1, 'email.decorator',          '<table> <tr><td>{{tenant_name}}</td></tr> <tr><td>{{{body}}}</td></tr> </table>'),
+           (1, 'translation.provider',     'AI'),
+           (1, 'ai.model',                 'GEMINI'),
+           (1, 'ai.model.gemini.model',    'gemini-2.0-flash');
 
 INSERT INTO T_FILE(id, tenant_fk, created_by_fk, name, content_type, content_length, url)
     VALUES (100, 1, 11, 'image.png',    'image/ong',       1000, 'https://picsum.photos/200/300'),

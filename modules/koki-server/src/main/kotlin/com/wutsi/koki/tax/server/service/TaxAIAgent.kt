@@ -4,16 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.wutsi.koki.ai.server.service.AIMQConsumer
 import com.wutsi.koki.ai.server.service.AbstractAIAgent
+import com.wutsi.koki.ai.server.service.LLMProvider
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
 import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.platform.ai.llm.Config
 import com.wutsi.koki.platform.ai.llm.Document
-import com.wutsi.koki.platform.ai.llm.LLM
-import com.wutsi.koki.platform.ai.llm.LLMBuilder
 import com.wutsi.koki.platform.ai.llm.LLMRequest
-import com.wutsi.koki.platform.ai.llm.LLMType
 import com.wutsi.koki.platform.ai.llm.Message
 import com.wutsi.koki.platform.ai.llm.Role
 import com.wutsi.koki.platform.logger.KVLogger
@@ -32,9 +30,9 @@ import java.net.URL
 class TaxAIAgent(
     private val fileService: FileService,
     private val storageBuilder: StorageServiceBuilder,
-    private val llmBuilder: LLMBuilder,
     private val configurationService: ConfigurationService,
     private val objectMapper: ObjectMapper,
+    private val llmProvider: LLMProvider,
     private val logger: KVLogger,
 
     registry: AIMQConsumer,
@@ -93,7 +91,7 @@ class TaxAIAgent(
     }
 
     private fun extractInformation(file: FileEntity, f: File): Map<String, Any> {
-        val llm = getLLM(file.tenantId) ?: return emptyMap()
+        val llm = llmProvider.get(file.tenantId)
         val content = FileInputStream(f)
         content.use {
             val response = llm.generateContent(
@@ -159,15 +157,5 @@ class TaxAIAgent(
             .map { config -> config.name to config.value }
             .toMap()
         return storageBuilder.build(configs)
-    }
-
-    private fun getLLM(tenantId: Long): LLM? {
-        val configs = configurationService.search(keyword = "ai.", tenantId = tenantId)
-            .map { config -> config.name to config.value }
-            .toMap()
-
-        val type = configs[ConfigurationName.AI_MODEL]?.let { type -> LLMType.valueOf(type) }
-            ?: return null
-        return llmBuilder.build(type, configs)
     }
 }

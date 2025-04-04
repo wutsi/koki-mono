@@ -191,6 +191,13 @@ koki:
             access-key: ""
             secret-key: ""
 
+    translation:
+        type: ai  # AI | AWS
+        aws:
+            region: us-east-1
+            access-key: ""
+            secret-key: ""
+
     smtp:
         host: localhost
         port: 3025

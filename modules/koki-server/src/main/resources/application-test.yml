@@ -42,6 +42,13 @@ koki:
         password: ${SMTP_PASSWORD}
         from: no-reply@wutsi.com
 
+    translation:
+        type: aws
+        aws:
+            region: us-east-1
+            access-key: ${AWS_ACCESS_KEY}
+            secret-key: ${AWS_SECRET_KEY}
+
     module:
         ai:
             mq:

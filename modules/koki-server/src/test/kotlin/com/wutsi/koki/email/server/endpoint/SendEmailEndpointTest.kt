@@ -24,7 +24,11 @@ import com.wutsi.koki.platform.messaging.MessagingService
 import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
+import com.wutsi.koki.tenant.dto.ConfigurationName
+import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
+import com.wutsi.koki.tenant.server.service.ConfigurationService
 import okio.IOException
+import org.apache.tika.language.detect.LanguageDetector
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -44,6 +48,12 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Autowired
     private lateinit var ownerDao: EmailOwnerRepository
+
+    @Autowired
+    private lateinit var configurationService: ConfigurationService
+
+    @Autowired
+    private lateinit var languageDetector: LanguageDetector
 
     @MockitoBean
     private lateinit var messagingService: MessagingService
@@ -302,5 +312,80 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
 
         val owners = ownerDao.findByOwnerIdAndOwnerType(request.owner!!.id, request.owner!!.type)
         assertEquals(0, owners.size)
+    }
+
+    @Test
+    fun translate() {
+        configurationService.save(
+            SaveConfigurationRequest(
+                values = mapOf(ConfigurationName.AI_MODEL_GEMINI_API_KEY to System.getenv("GEMINI_API_KEY"))
+            ),
+            tenantId = TENANT_ID,
+        )
+
+        val request = SendEmailRequest(
+            subject = "Invoice #{{invoiceNumber}} is ready",
+            body = """
+                Dear {{customerName}},
+
+                <br/><br/>
+                I hope this email finds you well.
+
+                <br/><br/>
+                We are writing to confirm that we have successfully received your payment of
+                <b>{{paymentAmount}}</b> for the invoice #{{invoiceNumber}}.
+                Thank you for your prompt payment!
+
+                <br/><br/>
+                Below are the details of the transaction for your records:
+                <ul>
+                    <li>Invoice Number: {{invoiceNumber}}</li>
+                    <li>Amount Paid: {{paymentAmount}}</li>
+                    <li>Payment Method: {{paymentMethod}}</li>
+                    <li>Payment Method: {{paymentDate}}</li>
+                </ul>
+
+                <br/><br/>
+                We truly value your business and look forward to serving you again in the future.
+                If there’s anything else we can assist you with, please let us know!
+
+                <br/><br/>
+                Thank you once again for choosing {{businessName}}.
+
+                <br/><br/>
+                Best regards
+            """.trimIndent(),
+            recipient = Recipient(
+                id = 110,
+                type = ObjectType.CONTACT,
+                email = "ray.sponsible@gmail.com",
+                displayName = "Ray Sponsible",
+                language = "fr",
+            ),
+            owner = null,
+            data = mapOf(
+                "invoiceNumber" to "1111",
+                "customerName" to "Ray Sponsible",
+                "paymentAmount" to "$1,500",
+                "paymentMethod" to "Credit Card",
+                "paymentDate" to "23 Jun 2024",
+                "businessName" to "Windo LLC"
+            )
+        )
+        val response = rest.postForEntity("/v1/emails", request, SendEmailResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val id = response.body!!.emailId
+        val email = dao.findById(id).get()
+        assertEquals("fr", languageDetector.detect(email.summary).language)
+        assertEquals("fr", languageDetector.detect(email.subject).language)
+        assertEquals("fr", languageDetector.detect(email.body).language)
+
+        verify(messagingService).send(any())
+
+        println("Subject: ${email.subject}")
+        println("Summary: ${email.summary}")
+        println("\n${email.body}")
     }
 }

@@ -23,13 +23,16 @@ import com.wutsi.koki.platform.messaging.smtp.SMTPMessagingServiceBuilder
 import com.wutsi.koki.platform.messaging.smtp.SMTPType
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.platform.templating.TemplatingEngine
+import com.wutsi.koki.platform.translation.TranslationService
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.domain.BusinessEntity
 import com.wutsi.koki.tenant.server.service.BusinessService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
+import com.wutsi.koki.translation.server.service.TranslationServiceProvider
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
+import org.apache.tika.language.detect.LanguageDetector
 import org.jsoup.Jsoup
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -51,6 +54,8 @@ class EmailService(
     private val businessService: BusinessService,
     private val fileService: FileService,
     private val filterSet: EmailFilterSet,
+    private val languageDetector: LanguageDetector,
+    private val translationServiceProvider: TranslationServiceProvider,
     private val em: EntityManager,
     private val logger: KVLogger,
 ) {
@@ -111,15 +116,24 @@ class EmailService(
 
     @Transactional
     fun send(request: SendEmailRequest, tenantId: Long): EmailEntity {
+        // AI api-key
+
         // Data
         val data = mutableMapOf<String, Any>()
         data.putAll(request.data)
         request.recipient.displayName?.let { name -> data["recipientName"] = name }
 
+        // Translation
+        val fromLanguage = detectLanguage(request)
+        val toLanguage = request.recipient.language
+        val translationService = getTranslationService(tenantId)
+
         // Save email
         val id = UUID.randomUUID().toString()
         val subject = templatingEngine.apply(request.subject, data)
         val body = templatingEngine.apply(request.body, data)
+        val xsubject = translate(subject, fromLanguage, toLanguage, translationService)
+        val xbody = translate(body, fromLanguage, toLanguage, translationService)
         val email = dao.save(
             EmailEntity(
                 tenantId = tenantId,
@@ -129,9 +143,9 @@ class EmailService(
                 recipientId = request.recipient.id,
                 recipientDisplayName = request.recipient.displayName,
                 recipientEmail = request.recipient.email,
-                subject = subject,
-                body = body,
-                summary = toSummary(body),
+                subject = xsubject,
+                body = xbody,
+                summary = toSummary(xbody),
                 attachmentCount = request.attachmentFileIds.size,
             )
         )
@@ -192,6 +206,38 @@ class EmailService(
                 error = Error(code = ErrorCode.EMAIL_DELIVERY_FAILED),
                 ex = ex,
             )
+        }
+    }
+
+    private fun detectLanguage(request: SendEmailRequest): String {
+        val text = request.subject + ".\n" + Jsoup.parse(request.body).text()
+        return languageDetector.detect(text).language
+    }
+
+    private fun getTranslationService(tenantId: Long): TranslationService? {
+        return try {
+            translationServiceProvider.get(tenantId)
+        } catch (ex: Exception) {
+            LOGGER.warn("Unable to get translation service", ex)
+            null
+        }
+    }
+
+    private fun translate(
+        text: String,
+        fromLanguage: String,
+        toLanguage: String?,
+        translationService: TranslationService?,
+    ): String {
+        if (fromLanguage == toLanguage || toLanguage == null || translationService == null) {
+            return text
+        }
+
+        try {
+            return translationService.translate(text, toLanguage).trimIndent()
+        } catch (ex: Exception) {
+            LOGGER.warn("Unable to translate: ${text.take(80)}...", ex)
+            return text
         }
     }
 
