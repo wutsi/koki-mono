@@ -44,6 +44,12 @@
             <version>${aws.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-translate</artifactId>
+            <version>${aws.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.spullara.mustache.java</groupId>
             <artifactId>compiler</artifactId>
             <version>${mustache.version}</version>

@@ -1,9 +1,11 @@
-package com.wutsi.koki.platform.translation
+package com.wutsi.koki.platform.translation.ai
 
 import com.wutsi.koki.platform.ai.llm.LLM
 import com.wutsi.koki.platform.ai.llm.LLMRequest
 import com.wutsi.koki.platform.ai.llm.Message
 import com.wutsi.koki.platform.ai.llm.Role
+import com.wutsi.koki.platform.translation.TranslationException
+import com.wutsi.koki.platform.translation.TranslationService
 import java.util.Locale
 
 class AITranslationService(
@@ -25,19 +27,28 @@ class AITranslationService(
         """
     }
 
-    override fun translate(text: String, language: String): String? {
+    @Throws(TranslationException::class)
+    override fun translate(text: String, language: String): String {
         val prompt = PROMPT
             .replace("{{language}}", Locale(language).getDisplayLanguage(Locale.ENGLISH))
             .replace("{{text}}", text)
 
-        val response = llm.generateContent(
-            LLMRequest(
-                messages = listOf(
-                    Message(role = Role.SYSTEM, text = SYSTEM_INSTRUCTIONS.trimIndent()),
-                    Message(role = Role.USER, text = prompt.trimIndent()),
+        try {
+            val response = llm.generateContent(
+                LLMRequest(
+                    messages = listOf(
+                        Message(role = Role.SYSTEM, text = SYSTEM_INSTRUCTIONS.trimIndent()),
+                        Message(role = Role.USER, text = prompt.trimIndent()),
+                    )
                 )
             )
-        )
-        return response.messages.firstOrNull()?.text?.ifEmpty { null }
+            return response.messages
+                .firstOrNull()
+                ?.text
+                ?.ifEmpty { null }
+                ?: throw TranslationException("None")
+        } catch (ex: Exception) {
+            throw TranslationException("Translation failed", ex)
+        }
     }
 }
