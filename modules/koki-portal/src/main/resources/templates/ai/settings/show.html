@@ -20,16 +20,16 @@
 
         <table class="table">
             <tr>
-                <td width="20%"><b>Model</b></td>
+                <td width="20%"><b>Provider</b></td>
                 <td>
-                    <div th:replace="~{__components/ai :: ai-model(${form.model})}"></div>
+                    <div th:replace="~{__components/ai :: ai-provider(${form.provider})}"></div>
                 </td>
             </tr>
-            <tr th:if="${form.model == 'GEMINI'}">
+            <tr th:if="${form.provider == 'GEMINI'}">
                 <td><b>Model</b></td>
                 <td th:text="${form.geminiModel}">MODEL</td>
             </tr>
-            <tr th:if="${form.model == 'DEEPSEEK'}">
+            <tr th:if="${form.provider == 'DEEPSEEK'}">
                 <td><b>Model</b></td>
                 <td th:text="${form.deepseekModel}">MODEL</td>
             </tr>

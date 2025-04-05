@@ -1,7 +1,9 @@
 package com.wutsi.koki.portal.translation.page.settings
 
 import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.TenantFixtures.config
 import com.wutsi.koki.portal.common.page.PageName
+import com.wutsi.koki.tenant.dto.ConfigurationName
 import kotlin.test.Test
 
 class SettingsTranslationControllerTest : AbstractPageControllerTest() {
@@ -9,6 +11,16 @@ class SettingsTranslationControllerTest : AbstractPageControllerTest() {
     fun show() {
         navigateTo("/settings/translations")
         assertCurrentPageIs(PageName.TRANSLATION_SETTINGS)
+        assertElementPresent(".translation-" + config[ConfigurationName.TRANSLATION_PROVIDER])
+        assertElementNotPresent(".translation-none")
+    }
+
+    @Test
+    fun `show - none`() {
+        disableConfig(ConfigurationName.TRANSLATION_PROVIDER)
+        navigateTo("/settings/translations")
+        assertCurrentPageIs(PageName.TRANSLATION_SETTINGS)
+        assertElementPresent(".translation-none")
     }
 
     @Test

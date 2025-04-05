@@ -318,7 +318,7 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
     fun translate() {
         configurationService.save(
             SaveConfigurationRequest(
-                values = mapOf(ConfigurationName.AI_MODEL_GEMINI_API_KEY to System.getenv("GEMINI_API_KEY"))
+                values = mapOf(ConfigurationName.AI_PROVIDER_GEMINI_API_KEY to System.getenv("GEMINI_API_KEY"))
             ),
             tenantId = TENANT_ID,
         )

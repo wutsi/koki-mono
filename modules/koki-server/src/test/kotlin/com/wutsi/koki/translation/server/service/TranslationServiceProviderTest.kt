@@ -63,9 +63,9 @@ class TranslationServiceProviderTest {
         ).whenever(configurationService).search(any(), anyOrNull(), eq("translation."))
 
         val config2 = mapOf(
-            ConfigurationName.AI_MODEL to LLMType.DEEPSEEK.name,
-            ConfigurationName.AI_MODEL_DEEPSEEK_MODEL to "deepseek-chat",
-            ConfigurationName.AI_MODEL_DEEPSEEK_API_KEY to "sk-540905490549",
+            ConfigurationName.AI_PROVIDER to LLMType.DEEPSEEK.name,
+            ConfigurationName.AI_PROVIDER_DEEPSEEK_MODEL to "deepseek-chat",
+            ConfigurationName.AI_PROVIDER_DEEPSEEK_API_KEY to "sk-540905490549",
         )
         doReturn(
             config2.map { entry ->

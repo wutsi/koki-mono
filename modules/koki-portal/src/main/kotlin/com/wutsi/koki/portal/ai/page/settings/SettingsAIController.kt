@@ -36,9 +36,9 @@ class SettingsAIController(
         model.addAttribute(
             "form",
             AISettingsForm(
-                model = configs[ConfigurationName.AI_MODEL] ?: "",
-                geminiModel = configs[ConfigurationName.AI_MODEL_GEMINI_MODEL],
-                deepseekModel = configs[ConfigurationName.AI_MODEL_DEEPSEEK_MODEL],
+                provider = configs[ConfigurationName.AI_PROVIDER],
+                geminiModel = configs[ConfigurationName.AI_PROVIDER_GEMINI_MODEL],
+                deepseekModel = configs[ConfigurationName.AI_PROVIDER_DEEPSEEK_MODEL],
             )
         )
 

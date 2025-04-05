@@ -3,11 +3,13 @@
 <body>
 
 <div th:fragment="translation-provider(provider)" th:remove="tag">
-    <img height="24" src="/image/ai.png" th:if="${provider == 'AI'}" width="24"/>
     <img height="24" src="/image/aws.png" th:if="${provider == 'AWS'}" width="24"/>
 
-    <span th:if="!${provider}">None</span>
-    <span th:if="${provider}" th:text="#{'translation-provider.' + ${provider}}">PROVIDER</span>
+    <span class="translation-none" th:if="!${provider}">None</span>
+    <span th:class="'translation-' + ${provider}" th:if="${provider}"
+          th:text="#{'translation-provider.' + ${provider}}">
+        PROVIDER
+    </span>
 </div>
 
 

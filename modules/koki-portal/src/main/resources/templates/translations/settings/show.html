@@ -20,11 +20,15 @@
                 <td width="20%"><b>Provider</b></td>
                 <td>
                     <div th:replace="~{__components/translation :: translation-provider(${form.provider})}"></div>
-
-                    <div class="alert alert-warning margi-top" th:if="!${form.aiModel} AND ${form.provider == 'AI'}">
-                        You must configure the AI model for the translations to work.
-                        <br/>
-                        <a href="/settings/ai">Configure</a>
+                    <div class="margin-top-small" th:if="${form.provider == 'AI'}">
+                        <div class="margin-left text-small" th:if="${form.aiProvider}">
+                            <div th:replace="~{__components/ai :: ai-provider(${form.aiProvider})}"></div>
+                        </div>
+                        <div class="alert alert-warning margi-top" th:if="!${form.aiProvider}">
+                            For the AI Translation to work, you must configure your AI provider.
+                            <br/>
+                            <a class="btn btn-light sm-sm margin-top-small" href="/settings/ai">Configure</a>
+                        </div>
                     </div>
                 </td>
             </tr>

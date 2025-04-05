@@ -27,14 +27,15 @@
                         <b class="margin-right">AI Assistant</b>
                         <div th:replace="~{__components/settings :: enabled-badge(${aiAgent.enabled})}"></div>
                     </div>
-                    <div class="text-small margin-left">
-                        AI Model:
-                        <div th:replace="~{__components/ai :: ai-model(${aiAgent.model})}"></div>
-                    </div>
-                    <div class="alert alert-warning margi-top" th:if="!${aiAgent.model} AND ${aiAgent.enabled}">
-                        You must configure the AI model for your assistant to work.
-                        <br/>
-                        <a href="/settings/ai">Configure</a>
+                    <div class="text-small margin-left margin-top-small" th:if="${aiAgent.enabled}">
+                        <div class="margin-left text-small" th:if="${aiAgent.aiProvider}">
+                            <div th:replace="~{__components/ai :: ai-provider(${aiAgent.aiProvider})}"></div>
+                        </div>
+                        <div class="alert alert-warning margi-top" th:if="!${aiAgent.aiProvider}">
+                            For the AI Assitant to work, you must configure your AI provider.
+                            <br/>
+                            <a class="btn btn-light btn-sm margin-top-small" href="/settings/ai">Configure</a>
+                        </div>
                     </div>
                 </td>
                 <td align="right">
@@ -68,7 +69,7 @@
                         <span
                             th:replace="~{__components/settings :: enabled-badge(${assigneeNotification.enabled})}"></span>
                     </div>
-                    <div class="text-small margin-left" th:if="${assigneeNotification.subject}">
+                    <div class="text-small margin-left margin-top-small" th:if="${assigneeNotification.subject}">
                         Subject: <span th:text="${assigneeNotification.subject}">SUBJECT</span>
                     </div>
                 </td>
@@ -98,7 +99,7 @@
                         <span
                             th:replace="~{__components/settings :: enabled-badge(${documentNotification.enabled})}"></span>
                     </div>
-                    <div class="text-small margin-left" th:if="${documentNotification.subject}">
+                    <div class="text-small margin-left margin-top-small" th:if="${documentNotification.subject}">
                         Subject: <span th:text="${documentNotification.subject}">SUBJECT</span>
                     </div>
                 </td>
@@ -128,7 +129,7 @@
                         <span
                             th:replace="~{__components/settings :: enabled-badge(${doneNotification.enabled})}"></span>
                     </div>
-                    <div class="text-small margin-left" th:if="${doneNotification.subject}">
+                    <div class="text-small margin-left margin-top-small" th:if="${doneNotification.subject}">
                         Subject: <span th:text="${doneNotification.subject}">SUBJECT</span>
                     </div>
                 </td>

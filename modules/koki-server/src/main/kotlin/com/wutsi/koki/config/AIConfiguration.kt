@@ -9,17 +9,13 @@ import com.wutsi.koki.platform.ai.llm.gemini.GeminiBuilder
 import com.wutsi.koki.platform.ai.llm.koki.KokiBuilder
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.actuate.health.HealthIndicator
-import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.web.client.RestTemplate
-import java.time.Duration
-import java.time.temporal.ChronoUnit
 
 @Configuration
 class AIConfiguration(
-    @Value("\${koki.ai.rest.read-timeout}") private val restReadTimeout: Long,
-    @Value("\${koki.ai.rest.connect-timeout}") private val restConnectTimeout: Long,
+    @Value("\${koki.ai.rest.read-timeout}") private val restReadTimeoutMillis: Long,
+    @Value("\${koki.ai.rest.connect-timeout}") private val restConnectTimeoutMillis: Long,
     @Value("\${koki.ai.model.type}") private val model: String,
     @Value("\${koki.ai.model.gemini.model}") private val geminiModel: String,
     @Value("\${koki.ai.model.gemini.api-key}") private val geminiApiKey: String,
@@ -51,16 +47,16 @@ class AIConfiguration(
     @Bean
     fun geminiBuilder(): GeminiBuilder {
         return GeminiBuilder(
-            restConnectTimeout = restConnectTimeout,
-            restReadTimeout = restReadTimeout,
+            connectTimeoutMillis = restConnectTimeoutMillis,
+            readTimeoutMillis = restReadTimeoutMillis,
         )
     }
 
     @Bean
     fun deepseekBuilder(): DeepseekBuilder {
         return DeepseekBuilder(
-            restConnectTimeout = restConnectTimeout,
-            restReadTimeout = restReadTimeout,
+            connectTimeoutMillis = restConnectTimeoutMillis,
+            readTimeoutMillis = restReadTimeoutMillis,
         )
     }
 
@@ -70,7 +66,6 @@ class AIConfiguration(
             llm = Gemini(
                 apiKey = geminiApiKey,
                 model = geminiModel,
-                rest = createRestTemplate(),
             )
         )
     }
@@ -81,15 +76,7 @@ class AIConfiguration(
             llm = Gemini(
                 apiKey = deepseekApiKey,
                 model = deepseekModel,
-                rest = createRestTemplate(),
             )
         )
-    }
-
-    private fun createRestTemplate(): RestTemplate {
-        return RestTemplateBuilder()
-            .readTimeout(Duration.of(restReadTimeout, ChronoUnit.MILLIS))
-            .connectTimeout(Duration.of(restConnectTimeout, ChronoUnit.MILLIS))
-            .build()
     }
 }

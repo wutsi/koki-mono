@@ -1,6 +1,8 @@
 package com.wutsi.koki.portal.ai.page.settings
 
 import com.wutsi.koki.platform.ai.llm.LLMType
+import com.wutsi.koki.platform.ai.llm.deepseek.Deepseek
+import com.wutsi.koki.platform.ai.llm.gemini.Gemini
 import com.wutsi.koki.portal.ai.form.AISettingsForm
 import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
@@ -24,11 +26,11 @@ class SettingsEditAIController(
     fun edit(model: Model): String {
         val configs = service.configurations(keyword = "ai.")
         val form = AISettingsForm(
-            model = configs[ConfigurationName.AI_MODEL] ?: "",
-            geminiModel = configs[ConfigurationName.AI_MODEL_GEMINI_MODEL],
-            geminiApiKey = configs[ConfigurationName.AI_MODEL_GEMINI_API_KEY],
-            deepseekModel = configs[ConfigurationName.AI_MODEL_DEEPSEEK_MODEL],
-            deepseekApiKey = configs[ConfigurationName.AI_MODEL_DEEPSEEK_API_KEY],
+            provider = configs[ConfigurationName.AI_PROVIDER] ?: "",
+            geminiModel = configs[ConfigurationName.AI_PROVIDER_GEMINI_MODEL],
+            geminiApiKey = configs[ConfigurationName.AI_PROVIDER_GEMINI_API_KEY],
+            deepseekModel = configs[ConfigurationName.AI_PROVIDER_DEEPSEEK_MODEL],
+            deepseekApiKey = configs[ConfigurationName.AI_PROVIDER_DEEPSEEK_API_KEY],
         )
 
         return edit(form, model)
@@ -45,14 +47,15 @@ class SettingsEditAIController(
 
         model.addAttribute("form", form)
         model.addAttribute(
-            "models",
+            "providers",
             listOf(
                 LLMType.KOKI,
                 LLMType.GEMINI,
                 LLMType.DEEPSEEK,
             )
         )
-
+        model.addAttribute("geminiModels", Gemini("", "").models())
+        model.addAttribute("deepseekModels", Deepseek("", "").models())
         return "ai/settings/edit"
     }
 
@@ -60,21 +63,21 @@ class SettingsEditAIController(
     fun save(@ModelAttribute form: AISettingsForm, model: Model): String {
         try {
             service.save(
-                configs = when (form.model) {
+                configs = when (form.provider) {
                     LLMType.GEMINI.name -> mapOf(
-                        ConfigurationName.AI_MODEL to form.model,
-                        ConfigurationName.AI_MODEL_GEMINI_MODEL to (form.geminiModel ?: ""),
-                        ConfigurationName.AI_MODEL_GEMINI_API_KEY to (form.geminiApiKey ?: ""),
+                        ConfigurationName.AI_PROVIDER to (form.provider ?: ""),
+                        ConfigurationName.AI_PROVIDER_GEMINI_MODEL to (form.geminiModel ?: ""),
+                        ConfigurationName.AI_PROVIDER_GEMINI_API_KEY to (form.geminiApiKey ?: ""),
                     )
 
                     LLMType.DEEPSEEK.name -> mapOf(
-                        ConfigurationName.AI_MODEL to form.model,
-                        ConfigurationName.AI_MODEL_DEEPSEEK_MODEL to (form.deepseekModel ?: ""),
-                        ConfigurationName.AI_MODEL_DEEPSEEK_API_KEY to (form.deepseekApiKey ?: ""),
+                        ConfigurationName.AI_PROVIDER to (form.provider ?: ""),
+                        ConfigurationName.AI_PROVIDER_DEEPSEEK_MODEL to (form.deepseekModel ?: ""),
+                        ConfigurationName.AI_PROVIDER_DEEPSEEK_API_KEY to (form.deepseekApiKey ?: ""),
                     )
 
                     else -> mapOf(
-                        ConfigurationName.AI_MODEL to form.model,
+                        ConfigurationName.AI_PROVIDER to (form.provider ?: ""),
                     )
                 }
             )

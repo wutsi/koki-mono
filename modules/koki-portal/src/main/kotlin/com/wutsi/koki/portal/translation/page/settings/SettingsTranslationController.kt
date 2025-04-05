@@ -34,7 +34,7 @@ class SettingsTranslationController(
 
         val configs = service.configurations(
             names = listOf(
-                ConfigurationName.AI_MODEL,
+                ConfigurationName.AI_PROVIDER,
                 ConfigurationName.TRANSLATION_PROVIDER,
                 ConfigurationName.TRANSLATION_PROVIDER_AWS_REGION,
             )
@@ -42,8 +42,8 @@ class SettingsTranslationController(
         model.addAttribute(
             "form",
             TranslationSettingsForm(
-                aiModel = configs[ConfigurationName.AI_MODEL],
-                provider = (configs[ConfigurationName.TRANSLATION_PROVIDER] ?: ""),
+                aiProvider = configs[ConfigurationName.AI_PROVIDER],
+                provider = configs[ConfigurationName.TRANSLATION_PROVIDER],
                 awsRegion = configs[ConfigurationName.TRANSLATION_PROVIDER_AWS_REGION],
             )
         )

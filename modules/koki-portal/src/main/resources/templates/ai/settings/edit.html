@@ -13,57 +13,62 @@
     </div>
     <div class="settings-content">
         <div
-            th:replace="~{__components/settings :: settings-title('AI Settings', '/settings/ai')}"></div>
+            th:replace="~{__components/settings :: settings-title('AI', '/settings/ai')}"></div>
 
         <div th:replace="~{__components/layout :: error-message(${error})}"></div>
         <form class="form" method="post" onsubmit="return on_submit()" th:action="@{/settings/ai/save}"
               th:object="${form}">
             <table class="table">
                 <tr>
-                    <td width="20%"><b>Model <span class="required">*</span></b></td>
+                    <td width="20%"><b>Model</b></td>
                     <td>
-                        <select onchange="koki_ai_model_changed()" th:field="*{model}">
+                        <select onchange="koki_ai_provider_changed()" th:field="*{provider}">
                             <option value="">None</option>
-                            <option th:each="model : ${models}"
-                                    th:text="#{'ai-model.' + ${model}}"
-                                    th:value="${model}">
+                            <option th:each="provider : ${providers}"
+                                    th:text="#{'ai-provider.' + ${provider}}"
+                                    th:value="${provider}">
                                 TYPE
                             </option>
                         </select>
                     </td>
                 </tr>
-                <tr class="gemini" th:classappend="${form.model} != 'GEMINI' ? 'hidden'">
+                <tr class="gemini" th:classappend="${form.provider} != 'GEMINI' ? 'hidden'">
                     <td><b>API Key <span class="required">*</span></b></td>
                     <td>
-                        <input maxlength="100" th:field="*{geminiApiKey}" th:required="${form.model} == 'GEMINI'"/>
+                        <input maxlength="100" th:field="*{geminiApiKey}" th:required="${form.provider} == 'GEMINI'"/>
                     </td>
                 </tr>
-                <tr class="gemini" th:classappend="${form.model} != 'GEMINI' ? 'hidden'">
-                    <td><b>Model <span class="required">*</span></b></td>
+                <tr class="gemini" th:classappend="${form.provider} != 'GEMINI' ? 'hidden'">
+                    <td><b>Provider <span class="required">*</span></b></td>
                     <td>
-                        <select th:field="*{geminiModel}" th:required="${form.model} == 'GEMINI'">
+                        <select th:field="*{geminiModel}" th:required="${form.provider} == 'GEMINI'">
                             <option value=""></option>
-                            <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
-                            <option value="gemini-2.0-flash-lite">Gemini 2.0 Flash Lite</option>
-                            <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
-                            <option value="gemini-1.5-flash-8b">Gemini 1.5 Flash-8B</option>
-                            <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                            <option th:each="model : ${geminiModels}"
+                                    th:text="#{'ai-model.' + ${model}}"
+                                    th:value="${model}">
+                                MODEL
+                            </option>
                         </select>
                     </td>
                 </tr>
 
-                <tr class="deepseek" th:classappend="${form.model} != 'DEEPSEEK' ? 'hidden'">
+                <tr class="deepseek" th:classappend="${form.provider} != 'DEEPSEEK' ? 'hidden'">
                     <td><b>API Key <span class="required">*</span></b></td>
                     <td>
-                        <input maxlength="100" th:field="*{deepseekApiKey}" th:required="${form.model} == 'DEEPSEEK'"/>
+                        <input maxlength="100" th:field="*{deepseekApiKey}"
+                               th:required="${form.provider} == 'DEEPSEEK'"/>
                     </td>
                 </tr>
-                <tr class="deepseek" th:classappend="${form.model} != 'DEEPSEEK' ? 'hidden'">
+                <tr class="deepseek" th:classappend="${form.provider} != 'DEEPSEEK' ? 'hidden'">
                     <td><b>Model <span class="required">*</span></b></td>
                     <td>
-                        <select th:field="*{deepseekModel}" th:required="${form.model} == 'DEEPSEEK'">
+                        <select th:field="*{deepseekModel}" th:required="${form.provider} == 'DEEPSEEK'">
                             <option value=""></option>
-                            <option value="deepseek-chat">Deepseek Chat</option>
+                            <option th:each="model : ${deepseekModels}"
+                                    th:text="#{'ai-model.' + ${model}}"
+                                    th:value="${model}">
+                                MODEL
+                            </option>
                         </select>
                     </td>
                 </tr>
@@ -86,8 +91,8 @@
         return true
     }
 
-    function koki_ai_model_changed() {
-        const type = document.getElementById('model').value;
+    function koki_ai_provider_changed() {
+        const type = document.getElementById('provider').value;
         const gemini = (type === 'GEMINI');
         const deepseek = (type === 'DEEPSEEK');
         toggle('gemini', gemini)
