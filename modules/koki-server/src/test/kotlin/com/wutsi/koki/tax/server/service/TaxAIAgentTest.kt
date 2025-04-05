@@ -10,6 +10,7 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.ai.server.service.AIMQConsumer
+import com.wutsi.koki.ai.server.service.LLMProvider
 import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.event.FileDeletedEvent
@@ -17,7 +18,6 @@ import com.wutsi.koki.file.dto.event.FileUploadedEvent
 import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.platform.ai.llm.LLM
-import com.wutsi.koki.platform.ai.llm.LLMBuilder
 import com.wutsi.koki.platform.ai.llm.LLMRequest
 import com.wutsi.koki.platform.ai.llm.LLMResponse
 import com.wutsi.koki.platform.ai.llm.LLMType
@@ -42,16 +42,16 @@ import kotlin.test.assertNotNull
 
 class TaxAIAgentTest {
     private val registry = mock<AIMQConsumer>()
+    private val llmProvider = mock<LLMProvider>()
     private val fileService = mock<FileService>()
     private val storageBuilder = mock<StorageServiceBuilder>()
-    private val llmBuilder = mock<LLMBuilder>()
     private val configurationService = mock<ConfigurationService>()
     private val objectMapper = ObjectMapper()
     private val logger = DefaultKVLogger()
     private val agent = TaxAIAgent(
         fileService = fileService,
         storageBuilder = storageBuilder,
-        llmBuilder = llmBuilder,
+        llmProvider = llmProvider,
         configurationService = configurationService,
         objectMapper = objectMapper,
         registry = registry,
@@ -97,7 +97,7 @@ class TaxAIAgentTest {
             IOUtils.copy(ByteArrayInputStream(fileContent.toByteArray()), output)
         }.whenever(storage).get(any(), any())
 
-        doReturn(gemini).whenever(llmBuilder).build(any(), any())
+        doReturn(gemini).whenever(llmProvider).get(any())
     }
 
     @Test
