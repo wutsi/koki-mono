@@ -13,19 +13,33 @@ import com.wutsi.koki.platform.ai.llm.deepseek.model.DSCompletionRequest
 import com.wutsi.koki.platform.ai.llm.deepseek.model.DSCompletionResponse
 import com.wutsi.koki.platform.ai.llm.deepseek.model.DSMessage
 import com.wutsi.koki.platform.ai.llm.deepseek.model.DSTool
+import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.web.client.HttpStatusCodeException
-import org.springframework.web.client.RestTemplate
+import java.time.Duration
+import java.time.temporal.ChronoUnit
 import kotlin.collections.flatMap
 
 class Deepseek(
     private val apiKey: String,
     private val model: String,
-    private val rest: RestTemplate,
-    private val objectMapper: ObjectMapper,
+    private val readTimeoutMillis: Long = 60000,
+    private val connectTimeoutMillis: Long = 30000,
 ) : LLM {
+    private val objectMapper = ObjectMapper()
+    private val rest = RestTemplateBuilder()
+        .readTimeout(Duration.of(readTimeoutMillis, ChronoUnit.MILLIS))
+        .connectTimeout(Duration.of(connectTimeoutMillis, ChronoUnit.MILLIS))
+        .build()
+
+    override fun models(): List<String> {
+        return listOf(
+            "deepseek-chat"
+        )
+    }
+
     override fun generateContent(request: LLMRequest): LLMResponse {
         val req = DSCompletionRequest(
             model = model,
@@ -98,7 +112,7 @@ class Deepseek(
                         functionCall = choice.message.toolCalls.firstOrNull()?.let { call ->
                             FunctionCall(
                                 name = call.function.name,
-                                args = if (call.function.arguments.isNullOrEmpty()) {
+                                args = if (call.function.arguments.isEmpty()) {
                                     emptyMap()
                                 } else {
                                     objectMapper.readValue(

@@ -11,12 +11,12 @@ class LLMBuilder(
     private val deepseek: DeepseekBuilder
 ) {
     fun build(config: Map<String, String>): LLM {
-        val model = config.get(ConfigurationName.AI_MODEL)
-        return when (model?.uppercase()) {
+        val provider = config.get(ConfigurationName.AI_PROVIDER)
+        return when (provider?.uppercase()) {
             LLMType.KOKI.name -> koki.build()
             LLMType.GEMINI.name -> gemini.build(config)
             LLMType.DEEPSEEK.name -> deepseek.build(config)
-            else -> throw LLMNotConfiguredException("LLM Model not supported: $model")
+            else -> throw LLMNotConfiguredException("LLM Model not supported: $provider")
         }
     }
 }

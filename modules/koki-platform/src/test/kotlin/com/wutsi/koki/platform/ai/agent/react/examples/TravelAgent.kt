@@ -12,7 +12,6 @@ import com.wutsi.koki.platform.ai.llm.Type
 import com.wutsi.koki.platform.ai.llm.deepseek.Deepseek
 import com.wutsi.koki.platform.ai.llm.gemini.Gemini
 import org.apache.commons.io.IOUtils
-import org.springframework.web.client.RestTemplate
 import java.io.ByteArrayOutputStream
 
 fun main(args: Array<String>) {
@@ -81,7 +80,6 @@ class TravelAgent {
             llm = Gemini(
                 apiKey = System.getenv("GEMINI_API_KEY"),
                 model = "gemini-2.0-flash",
-                rest = RestTemplate(),
             ),
             agentTools = listOf(
                 BookingTool(),
@@ -118,8 +116,6 @@ class TravelAgent {
         return Deepseek(
             apiKey = System.getenv("DEEPSEEK_API_KEY"),
             model = "deepseek-chat",
-            rest = RestTemplate(),
-            objectMapper = ObjectMapper(),
         )
     }
 
@@ -127,7 +123,6 @@ class TravelAgent {
         return Gemini(
             apiKey = System.getenv("GEMINI_API_KEY"),
             model = "gemini-2.0-flash",
-            rest = RestTemplate(),
         )
     }
 

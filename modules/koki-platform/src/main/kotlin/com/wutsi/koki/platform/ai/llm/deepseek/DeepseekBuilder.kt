@@ -2,30 +2,26 @@ package com.wutsi.koki.platform.ai.llm.deepseek
 
 import com.wutsi.koki.platform.ai.llm.LLM
 import com.wutsi.koki.platform.ai.llm.LLMNotConfiguredException
-import com.wutsi.koki.platform.ai.llm.gemini.Gemini
 import com.wutsi.koki.tenant.dto.ConfigurationName
-import org.springframework.boot.web.client.RestTemplateBuilder
-import org.springframework.web.client.RestTemplate
-import java.time.Duration
-import java.time.temporal.ChronoUnit
 
 class DeepseekBuilder(
-    private val restReadTimeout: Long,
-    private val restConnectTimeout: Long,
+    private val readTimeoutMillis: Long,
+    private val connectTimeoutMillis: Long,
 ) {
     companion object {
         val CONFIG_NAMES = listOf(
-            ConfigurationName.AI_MODEL_DEEPSEEK_MODEL,
-            ConfigurationName.AI_MODEL_DEEPSEEK_API_KEY,
+            ConfigurationName.AI_PROVIDER_DEEPSEEK_MODEL,
+            ConfigurationName.AI_PROVIDER_DEEPSEEK_API_KEY,
         )
     }
 
     fun build(config: Map<String, String>): LLM {
         validate(config)
-        return Gemini(
-            apiKey = config[ConfigurationName.AI_MODEL_DEEPSEEK_API_KEY]!!,
-            model = config[ConfigurationName.AI_MODEL_DEEPSEEK_MODEL]!!,
-            rest = createRestTemplate()
+        return Deepseek(
+            apiKey = config[ConfigurationName.AI_PROVIDER_DEEPSEEK_API_KEY]!!,
+            model = config[ConfigurationName.AI_PROVIDER_DEEPSEEK_MODEL]!!,
+            readTimeoutMillis = readTimeoutMillis,
+            connectTimeoutMillis = connectTimeoutMillis,
         )
     }
 
@@ -34,12 +30,5 @@ class DeepseekBuilder(
         if (missing.isNotEmpty()) {
             throw LLMNotConfiguredException("Gemini not configured. Missing config: $missing")
         }
-    }
-
-    private fun createRestTemplate(): RestTemplate {
-        return RestTemplateBuilder()
-            .readTimeout(Duration.of(restReadTimeout, ChronoUnit.MILLIS))
-            .connectTimeout(Duration.of(restConnectTimeout, ChronoUnit.MILLIS))
-            .build()
     }
 }

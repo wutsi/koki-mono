@@ -1,39 +1,42 @@
 package com.wutsi.koki.platform.ai.llm.gemini
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.doThrow
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.platform.ai.llm.Config
 import com.wutsi.koki.platform.ai.llm.Document
 import com.wutsi.koki.platform.ai.llm.FunctionDeclaration
 import com.wutsi.koki.platform.ai.llm.FunctionParameterProperty
 import com.wutsi.koki.platform.ai.llm.FunctionParameters
 import com.wutsi.koki.platform.ai.llm.LLM
-import com.wutsi.koki.platform.ai.llm.LLMException
 import com.wutsi.koki.platform.ai.llm.LLMRequest
 import com.wutsi.koki.platform.ai.llm.LLMResponse
 import com.wutsi.koki.platform.ai.llm.Message
 import com.wutsi.koki.platform.ai.llm.Role
 import com.wutsi.koki.platform.ai.llm.Tool
 import com.wutsi.koki.platform.ai.llm.Type
-import com.wutsi.koki.platform.ai.llm.gemini.model.GGenerateContentResponse
-import org.junit.jupiter.api.assertThrows
-import org.mockito.Mockito.mock
-import org.springframework.http.HttpStatusCode
 import org.springframework.http.MediaType
-import org.springframework.web.client.HttpStatusCodeException
-import org.springframework.web.client.RestTemplate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class GeminiTest {
-    private val gemini = createGemini(RestTemplate())
+    private val llm = createGemini()
+
+    @Test
+    fun models() {
+        val models = llm.models()
+        assertEquals(
+            listOf(
+                "gemini-2.0-flash",
+                "gemini-2.0-flash-lite",
+                "gemini-1.5-pro",
+                "gemini-1.5-flash",
+                "gemini-1.5-flash-8b"
+            ),
+            models,
+        )
+    }
 
     @Test
     fun generateText() {
-        val response = gemini.generateContent(
+        val response = llm.generateContent(
             request = LLMRequest(
                 messages = listOf(
                     Message(
@@ -48,7 +51,7 @@ class GeminiTest {
 
     @Test
     fun generateJson() {
-        val response = gemini.generateContent(
+        val response = llm.generateContent(
             request = LLMRequest(
                 messages = listOf(
                     Message(
@@ -69,7 +72,7 @@ class GeminiTest {
 
     @Test
     fun generateWithConfig() {
-        val response = gemini.generateContent(
+        val response = llm.generateContent(
             request = LLMRequest(
                 messages = listOf(
                     Message(
@@ -88,7 +91,7 @@ class GeminiTest {
 
     @Test
     fun generateWithSystemInstructions() {
-        val response = gemini.generateContent(
+        val response = llm.generateContent(
             request = LLMRequest(
                 messages = listOf(
                     Message(
@@ -114,7 +117,7 @@ class GeminiTest {
 
     @Test
     fun processPDF() {
-        val response = gemini.generateContent(
+        val response = llm.generateContent(
             request = LLMRequest(
                 messages = listOf(
                     Message(
@@ -133,7 +136,7 @@ class GeminiTest {
 
     @Test
     fun processImage() {
-        val response = gemini.generateContent(
+        val response = llm.generateContent(
             request = LLMRequest(
                 messages = listOf(
                     Message(
@@ -157,7 +160,7 @@ class GeminiTest {
 
     @Test
     fun functionCall() {
-        val response = gemini.generateContent(
+        val response = llm.generateContent(
             request = LLMRequest(
                 messages = listOf(
                     Message(
@@ -198,61 +201,10 @@ class GeminiTest {
         print(response)
     }
 
-    @Test
-    fun httpError() {
-        val ex = mock<HttpStatusCodeException>()
-        doReturn(HttpStatusCode.valueOf(400)).whenever(ex).statusCode
-        doReturn("Failed").whenever(ex).message
-
-        val rest = mock<RestTemplate>()
-        doThrow(ex).whenever(rest).postForEntity(any<String>(), any(), eq(GGenerateContentResponse::class.java))
-
-        val result = assertThrows<LLMException> {
-            createGemini(rest).generateContent(
-                request = LLMRequest(
-                    messages = listOf(
-                        Message(
-                            text = "What is an API"
-                        )
-                    )
-                )
-            )
-        }
-
-        assertEquals(400, result.statusCode)
-        assertEquals("Failed", result.message)
-        assertEquals(ex, result.cause)
-    }
-
-    @Test
-    fun error() {
-        val ex = IllegalStateException("Failed")
-
-        val rest = mock<RestTemplate>()
-        doThrow(ex).whenever(rest).postForEntity(any<String>(), any(), eq(GGenerateContentResponse::class.java))
-
-        val result = assertThrows<LLMException> {
-            createGemini(rest).generateContent(
-                request = LLMRequest(
-                    messages = listOf(
-                        Message(
-                            text = "What is an API"
-                        )
-                    )
-                )
-            )
-        }
-
-        assertEquals(-1, result.statusCode)
-        assertEquals("Failed", result.message)
-        assertEquals(ex, result.cause)
-    }
-
-    private fun createGemini(rest: RestTemplate): LLM {
+    private fun createGemini(): LLM {
         return Gemini(
             apiKey = System.getenv("GEMINI_API_KEY"),
             model = "gemini-2.0-flash",
-            rest = rest
         )
     }
 

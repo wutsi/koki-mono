@@ -27,7 +27,7 @@ class LLMBuilderTest {
         val service = mock<LLM>()
         doReturn(service).whenever(geminiBuilder).build(any())
 
-        val config = mapOf(ConfigurationName.AI_MODEL to LLMType.GEMINI.name)
+        val config = mapOf(ConfigurationName.AI_PROVIDER to LLMType.GEMINI.name)
         assertEquals(service, builder.build(config))
     }
 
@@ -36,7 +36,7 @@ class LLMBuilderTest {
         val service = mock<LLM>()
         doReturn(service).whenever(deepseekBuilder).build(any())
 
-        val config = mapOf(ConfigurationName.AI_MODEL to LLMType.DEEPSEEK.name)
+        val config = mapOf(ConfigurationName.AI_PROVIDER to LLMType.DEEPSEEK.name)
         assertEquals(service, builder.build(config))
     }
 
@@ -45,7 +45,7 @@ class LLMBuilderTest {
         val service = mock<LLM>()
         doReturn(service).whenever(kokiBuilder).build()
 
-        val config = mapOf(ConfigurationName.AI_MODEL to LLMType.KOKI.name)
+        val config = mapOf(ConfigurationName.AI_PROVIDER to LLMType.KOKI.name)
         assertEquals(service, builder.build(config))
     }
 
@@ -54,7 +54,7 @@ class LLMBuilderTest {
         val service = mock<LLM>()
         doReturn(service).whenever(kokiBuilder).build()
 
-        val config = mapOf(ConfigurationName.AI_MODEL to "xxx")
+        val config = mapOf(ConfigurationName.AI_PROVIDER to "xxx")
         assertThrows<LLMNotConfiguredException> { builder.build(config) }
     }
 }

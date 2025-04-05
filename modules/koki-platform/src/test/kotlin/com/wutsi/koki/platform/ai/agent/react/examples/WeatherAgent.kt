@@ -11,7 +11,6 @@ import com.wutsi.koki.platform.ai.llm.Type
 import com.wutsi.koki.platform.ai.llm.deepseek.Deepseek
 import com.wutsi.koki.platform.ai.llm.gemini.Gemini
 import org.apache.commons.io.output.ByteArrayOutputStream
-import org.springframework.web.client.RestTemplate
 
 fun main(args: Array<String>) {
     val agent = WeatherAgent()
@@ -25,8 +24,6 @@ class WeatherAgent {
         llm = Deepseek(
             apiKey = System.getenv("DEEPSEEK_API_KEY"),
             model = "deepseek-chat",
-            rest = RestTemplate(),
-            objectMapper = ObjectMapper(),
         ),
         tools = listOf(
             WeatherTool()
@@ -44,7 +41,6 @@ class WeatherAgent {
             llm = Gemini(
                 apiKey = System.getenv("GEMINI_API_KEY"),
                 model = "gemini-2.0-flash",
-                rest = RestTemplate(),
             ),
             agentTools = listOf(
                 WeatherTool()

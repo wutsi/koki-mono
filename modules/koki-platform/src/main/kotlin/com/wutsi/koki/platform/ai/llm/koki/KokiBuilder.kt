@@ -19,15 +19,15 @@ class KokiBuilder(
         return when (type) {
             LLMType.GEMINI -> geminiBuilder.build(
                 mapOf(
-                    ConfigurationName.AI_MODEL_GEMINI_MODEL to geminiModel,
-                    ConfigurationName.AI_MODEL_GEMINI_API_KEY to geminiApiKey,
+                    ConfigurationName.AI_PROVIDER_GEMINI_MODEL to geminiModel,
+                    ConfigurationName.AI_PROVIDER_GEMINI_API_KEY to geminiApiKey,
                 )
             )
 
             LLMType.DEEPSEEK -> deepseekBuilder.build(
                 mapOf(
-                    ConfigurationName.AI_MODEL_DEEPSEEK_MODEL to deepseekModel,
-                    ConfigurationName.AI_MODEL_DEEPSEEK_API_KEY to deepseekApiKey,
+                    ConfigurationName.AI_PROVIDER_DEEPSEEK_MODEL to deepseekModel,
+                    ConfigurationName.AI_PROVIDER_DEEPSEEK_API_KEY to deepseekApiKey,
                 )
             )
 

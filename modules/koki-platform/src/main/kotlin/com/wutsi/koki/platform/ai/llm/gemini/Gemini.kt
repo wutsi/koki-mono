@@ -15,16 +15,34 @@ import com.wutsi.koki.platform.ai.llm.gemini.model.GGenerationConfig
 import com.wutsi.koki.platform.ai.llm.gemini.model.GInlineData
 import com.wutsi.koki.platform.ai.llm.gemini.model.GPart
 import org.apache.commons.io.IOUtils
+import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.http.MediaType
 import org.springframework.web.client.HttpStatusCodeException
-import org.springframework.web.client.RestTemplate
+import java.time.Duration
+import java.time.temporal.ChronoUnit
 import java.util.Base64
 
 class Gemini(
     private val apiKey: String,
     private val model: String,
-    private val rest: RestTemplate,
+    private val readTimeoutMillis: Long = 60000,
+    private val connectTimeoutMillis: Long = 30000,
 ) : LLM {
+    private val rest = RestTemplateBuilder()
+        .readTimeout(Duration.of(readTimeoutMillis, ChronoUnit.MILLIS))
+        .connectTimeout(Duration.of(connectTimeoutMillis, ChronoUnit.MILLIS))
+        .build()
+
+    override fun models(): List<String> {
+        return listOf(
+            "gemini-2.0-flash",
+            "gemini-2.0-flash-lite",
+            "gemini-1.5-pro",
+            "gemini-1.5-flash",
+            "gemini-1.5-flash-8b"
+        )
+    }
+
     override fun generateContent(request: LLMRequest): LLMResponse {
         val req = GGenerateContentRequest(
             contents = request.messages.map { message ->

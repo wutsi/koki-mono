@@ -34,8 +34,8 @@ class KokiBuilderTest {
 
         val arg = argumentCaptor<Map<String, String>>()
         verify(deepseek).build(arg.capture())
-        assertEquals("2222", arg.firstValue[ConfigurationName.AI_MODEL_DEEPSEEK_API_KEY])
-        assertEquals("yyy", arg.firstValue[ConfigurationName.AI_MODEL_DEEPSEEK_MODEL])
+        assertEquals("2222", arg.firstValue[ConfigurationName.AI_PROVIDER_DEEPSEEK_API_KEY])
+        assertEquals("yyy", arg.firstValue[ConfigurationName.AI_PROVIDER_DEEPSEEK_MODEL])
     }
 
     @Test
@@ -50,8 +50,8 @@ class KokiBuilderTest {
 
         val arg = argumentCaptor<Map<String, String>>()
         verify(gemini).build(arg.capture())
-        assertEquals("1111", arg.firstValue[ConfigurationName.AI_MODEL_GEMINI_API_KEY])
-        assertEquals("xxx", arg.firstValue[ConfigurationName.AI_MODEL_GEMINI_MODEL])
+        assertEquals("1111", arg.firstValue[ConfigurationName.AI_PROVIDER_GEMINI_API_KEY])
+        assertEquals("xxx", arg.firstValue[ConfigurationName.AI_PROVIDER_GEMINI_MODEL])
     }
 
     @Test
