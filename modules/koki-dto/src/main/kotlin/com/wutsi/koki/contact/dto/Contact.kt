@@ -13,6 +13,7 @@ data class Contact(
     val mobile: String? = null,
     val email: String? = null,
     val gender: Gender = Gender.UNKNOWN,
+    val language: String? = null,
     val profession: String? = null,
     val employer: String? = null,
     val createdAt: Date = Date(),
