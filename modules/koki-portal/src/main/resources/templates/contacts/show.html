@@ -98,10 +98,6 @@
                             <td width="20%"><b>Last Name</b></td>
                             <td th:text="${contact.lastName}">TYPE</td>
                         </tr>
-                        <tr th:if="${contact.gender.name != 'UNKNOWN'}">
-                            <td><b>Gender</b></td>
-                            <td th:text="#{'gender.' + ${contact.gender.name}}">GENDER</td>
-                        </tr>
                         <tr th:if="${contact.email}">
                             <td><b>Email</b></td>
                             <td>
@@ -124,6 +120,10 @@
                         <tr th:if="${contact.employer}">
                             <td><b>Employer</b></td>
                             <td th:text="${contact.employer}">EMPLOYER</td>
+                        </tr>
+                        <tr th:if="${contact.language}">
+                            <td><b>Language</b></td>
+                            <td th:text="${contact.languageText}">LANGUAGE</td>
                         </tr>
                         <tr>
                             <td><b>Created</b></td>

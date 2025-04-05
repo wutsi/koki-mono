@@ -2,13 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<div th:fragment="ai-model(model)" th:remove="tag">
-    <img height="24" src="/image/ai.png" th:if="${model == 'KOKI'}" width="24"/>
-    <img height="24" src="/image/gemini.png" th:if="${model == 'GEMINI'}" width="24"/>
-    <img height="24" src="/image/deepseek.png" th:if="${model == 'DEEPSEEK'}" width="24"/>
+<div th:fragment="translation-provider(provider)" th:remove="tag">
+    <img height="24" src="/image/ai.png" th:if="${provider == 'AI'}" width="24"/>
+    <img height="24" src="/image/aws.png" th:if="${provider == 'AWS'}" width="24"/>
 
-    <span th:if="!${model}">None</span>
-    <span th:if="${model}" th:text="#{'ai-model.' + ${model}}">TYPE</span>
+    <span th:if="!${provider}">None</span>
+    <span th:if="${provider}" th:text="#{'translation-provider.' + ${provider}}">PROVIDER</span>
 </div>
 
 

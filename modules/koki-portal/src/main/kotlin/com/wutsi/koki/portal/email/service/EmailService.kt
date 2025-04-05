@@ -46,17 +46,11 @@ class EmailService(
         fullGraph: Boolean = true,
     ): List<EmailModel> {
         val emails = koki.emails(
-            ids = ids,
-            ownerId = ownerId,
-            ownerType = ownerType,
-            limit = limit,
-            offset = offset
+            ids = ids, ownerId = ownerId, ownerType = ownerType, limit = limit, offset = offset
         ).emails
 
         // Senders
-        val senderIds = emails.map { email -> email.senderId }
-            .filterNotNull()
-            .toSet()
+        val senderIds = emails.map { email -> email.senderId }.filterNotNull().toSet()
         val senders = if (senderIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
@@ -76,12 +70,12 @@ class EmailService(
 
     fun send(form: EmailForm): String {
         val account = if (form.recipientType == ObjectType.ACCOUNT && form.accountId != null) {
-            accountService.account(form.accountId!!, fullGraph = false)
+            accountService.account(form.accountId, fullGraph = false)
         } else {
             null
         }
         val contact = if (form.recipientType == ObjectType.CONTACT && form.contactId != null) {
-            contactService.contact(form.contactId!!, fullGraph = false)
+            contactService.contact(form.contactId, fullGraph = false)
         } else {
             null
         }
@@ -106,7 +100,12 @@ class EmailService(
                         ObjectType.ACCOUNT -> account?.email ?: ""
                         ObjectType.CONTACT -> contact?.email ?: ""
                         else -> ""
-                    }
+                    },
+                    language = when (form.recipientType) {
+                        ObjectType.ACCOUNT -> account?.language
+                        ObjectType.CONTACT -> contact?.language
+                        else -> null
+                    },
                 ),
                 owner = if (form.ownerId == null || form.ownerType == null) {
                     null

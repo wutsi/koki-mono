@@ -217,6 +217,7 @@
     let billingAddressInitialized = false;
     const same = document.querySelector('.billing-address').classList.contains('hidden');
 
+    $('#language').select2();
     koki_address_editor('shippingCountry', 'shippingCityId');
     if (!same){
         koki_address_editor('billingCountry', 'billingCityId');

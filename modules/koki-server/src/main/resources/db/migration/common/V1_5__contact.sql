@@ -17,6 +17,7 @@ CREATE TABLE T_CONTACT(
   phone                   VARCHAR(30),
   mobile                  VARCHAR(30),
   email                   VARCHAR(255),
+  language                VARCHAR(2),
   deleted                 BOOLEAN NOT NULL DEFAULT false,
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),

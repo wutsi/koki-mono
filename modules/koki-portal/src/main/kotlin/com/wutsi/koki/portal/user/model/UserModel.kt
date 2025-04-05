@@ -12,6 +12,8 @@ data class UserModel(
     val status: UserStatus = UserStatus.ACTIVE,
     val type: UserType = UserType.UNKNOWN,
     val roles: List<RoleModel> = emptyList(),
+    val language: String? = null,
+    val languageText: String? = null,
     val createdAt: Date = Date(),
     val createdAtText: String = "",
     val modifiedAt: Date = Date(),

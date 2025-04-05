@@ -35,6 +35,18 @@
                         <input required th:field="*{password}" type="password"/>
                     </td>
                 </tr>
+                <tr>
+                    <td><b>Language</b></td>
+                    <td>
+                        <select th:field="*{language}">
+                            <option th:each="language : ${languages}"
+                                    th:text="${language.displayName}"
+                                    th:value="${language.language}">
+                                LANGUAGE
+                            </option>
+                        </select>
+                    </td>
+                </tr>
                 <tr th:if="!${roles.isEmpty()}">
                     <td><b>Roles</b></td>
                     <td>
@@ -67,6 +79,9 @@
     </div>
 </div>
 
+<script>
+    $('#language').select2();
+</script>
 
 </body>
 </html>

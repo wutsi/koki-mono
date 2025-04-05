@@ -55,8 +55,9 @@ class UserService(
             CreateUserRequest(
                 displayName = form.displayName,
                 email = form.email,
-                password = form.password,
                 roleIds = form.roleIds,
+                language = form.language,
+                password = form.password,
             )
         ).userId
     }
@@ -69,6 +70,7 @@ class UserService(
                 email = form.email,
                 status = form.status,
                 roleIds = form.roleIds,
+                language = form.language,
             )
         )
     }

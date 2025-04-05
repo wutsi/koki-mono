@@ -30,6 +30,7 @@ class CreateContactEndpointTest : AuthorizationAwareEndpointTest() {
         profession = "Director",
         employer = "Google",
         gender = Gender.MALE,
+        language = "fr",
     )
 
     @Test
@@ -51,6 +52,7 @@ class CreateContactEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.profession, contact.profession)
         assertEquals(request.employer, contact.employer)
         assertEquals(request.gender, contact.gender)
+        assertEquals(request.language, contact.language)
         assertEquals(USER_ID, contact.createdById)
         assertEquals(USER_ID, contact.modifiedById)
         assertFalse(contact.deleted)

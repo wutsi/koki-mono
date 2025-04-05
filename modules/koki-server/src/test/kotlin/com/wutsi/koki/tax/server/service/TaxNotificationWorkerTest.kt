@@ -77,16 +77,17 @@ class TaxNotificationWorkerTest {
         id = 111L,
         displayName = "Ray Sponsible",
         email = "ray.sponsible@gmail.com",
+        language = "ru",
     )
     private val account = AccountEntity(
         id = 777L,
         name = "Roger Milla",
         email = "roger.milla@gmail.com",
-        language = "en"
+        language = "fr",
     )
     private val type = TypeEntity(
         id = 999L,
-        name = "T1 - Personal Taxes"
+        name = "T1 - Personal Taxes",
     )
     private val tax = TaxEntity(
         id = 333L,
@@ -98,8 +99,8 @@ class TaxNotificationWorkerTest {
         status = TaxStatus.REVIEWING,
     )
     private val files = listOf(
-        FileEntity(id = 111L, language = "fr"),
-        FileEntity(id = 222L, language = "en"),
+        FileEntity(id = 111L, language = "en"),
+        FileEntity(id = 222L, language = "fr"),
         FileEntity(id = 333L, language = null),
     )
 
@@ -173,6 +174,7 @@ class TaxNotificationWorkerTest {
         assertEquals(user.email, request.firstValue.recipient.email)
         assertEquals(user.displayName, request.firstValue.recipient.displayName)
         assertEquals(null, request.firstValue.recipient.id)
+        assertEquals(user.language, request.firstValue.recipient.language)
         assertEquals(ObjectType.UNKNOWN, request.firstValue.recipient.type)
         assertEquals(config[ConfigurationName.TAX_EMAIL_ASSIGNEE_SUBJECT], request.firstValue.subject)
         assertEquals(config[ConfigurationName.TAX_EMAIL_ASSIGNEE_BODY], request.firstValue.body)
@@ -277,6 +279,7 @@ class TaxNotificationWorkerTest {
         assertEquals(account.email, request.firstValue.recipient.email)
         assertEquals(account.name, request.firstValue.recipient.displayName)
         assertEquals(account.id, request.firstValue.recipient.id)
+        assertEquals(account.language, request.firstValue.recipient.language)
         assertEquals(ObjectType.ACCOUNT, request.firstValue.recipient.type)
         assertEquals(config[ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_SUBJECT], request.firstValue.subject)
         assertEquals(config[ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_BODY], request.firstValue.body)
@@ -306,6 +309,7 @@ class TaxNotificationWorkerTest {
         assertEquals(account.email, request.firstValue.recipient.email)
         assertEquals(account.name, request.firstValue.recipient.displayName)
         assertEquals(account.id, request.firstValue.recipient.id)
+        assertEquals(account.language, request.firstValue.recipient.language)
         assertEquals(ObjectType.ACCOUNT, request.firstValue.recipient.type)
         assertEquals(config[ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_SUBJECT], request.firstValue.subject)
         assertEquals(config[ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_BODY], request.firstValue.body)
@@ -392,6 +396,7 @@ class TaxNotificationWorkerTest {
         assertEquals(account.email, request.firstValue.recipient.email)
         assertEquals(account.name, request.firstValue.recipient.displayName)
         assertEquals(account.id, request.firstValue.recipient.id)
+        assertEquals(account.language, request.firstValue.recipient.language)
         assertEquals(ObjectType.ACCOUNT, request.firstValue.recipient.type)
         assertEquals(config[ConfigurationName.TAX_EMAIL_DONE_SUBJECT], request.firstValue.subject)
         assertEquals(config[ConfigurationName.TAX_EMAIL_DONE_BODY], request.firstValue.body)

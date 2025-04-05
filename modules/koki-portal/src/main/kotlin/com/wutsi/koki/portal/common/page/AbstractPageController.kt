@@ -9,8 +9,11 @@ import com.wutsi.koki.portal.tenant.service.CurrentTenantHolder
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.i18n.LocaleContextHolder
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.client.HttpClientErrorException
+import java.util.Locale
 
 abstract class AbstractPageController {
     companion object {
@@ -64,5 +67,20 @@ abstract class AbstractPageController {
         }
 
         return false
+    }
+
+    protected fun loadLanguages(model: Model, name: String? = "languages") {
+        val languages = Locale.getISOLanguages()
+            .map { lang -> Locale(lang) }
+            .toSet()
+            .sortedBy { locale -> locale.getDisplayLanguage() }
+        model.addAttribute(name, languages)
+    }
+
+    protected fun loadCountries(model: Model, name: String? = "countries") {
+        val countries = Locale.getISOCountries()
+            .map { country -> Locale(LocaleContextHolder.getLocale().language, country) }
+            .sortedBy { country -> country.getDisplayCountry() }
+        model.addAttribute(name, countries)
     }
 }

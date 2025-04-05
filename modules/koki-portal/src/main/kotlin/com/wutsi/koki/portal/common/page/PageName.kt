@@ -104,4 +104,7 @@ object PageName {
     const val TAX_STATUS = "page.tax.status"
     const val TAX_SETTINGS = "page.tax.settings"
     const val TAX_SETTINGS_NOTIFICATION = "page.tax.settings.notification"
+
+    const val TRANSLATION_SETTINGS = "settings.translation"
+    const val TRANSLATION_SETTINGS_EDIT = "settings.translation.edit"
 }

@@ -64,6 +64,7 @@ class UserService(
                 password = passwordService.hash(request.password, salt),
                 createdById = currentUserId,
                 modifiedById = currentUserId,
+                language = request.language,
             )
         )
 
@@ -86,6 +87,7 @@ class UserService(
         val user = get(userId, tenantId)
         user.email = email
         user.displayName = request.displayName
+        user.language = request.language
         request.status?.let { status -> user.status = status }
         user.modifiedById = securityService.getCurrentUserIdOrNull()
         user.modifiedAt = Date()

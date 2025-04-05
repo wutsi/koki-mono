@@ -175,6 +175,7 @@ class InvoiceNotificationWorkerTest {
             tenantId = tenant.id!!,
             invoicedAt = DateUtils.addDays(Date(), -10),
             dueAt = Date(),
+            locale = "fr_CA"
         )
         doReturn(invoice).whenever(invoiceService).get(any(), any())
         return invoice
@@ -206,6 +207,7 @@ class InvoiceNotificationWorkerTest {
         assertEquals(invoice.customerName, request.firstValue.recipient.displayName)
         assertEquals(invoice.customerAccountId, request.firstValue.recipient.id)
         assertEquals(ObjectType.ACCOUNT, request.firstValue.recipient.type)
+        assertEquals("fr", request.firstValue.recipient.language)
         assertEquals(config[ConfigurationName.INVOICE_EMAIL_SUBJECT], request.firstValue.subject)
         assertEquals(config[ConfigurationName.INVOICE_EMAIL_BODY], request.firstValue.body)
         assertEquals(listOf(file.id), request.firstValue.attachmentFileIds)
@@ -317,6 +319,7 @@ class InvoiceNotificationWorkerTest {
         assertEquals(invoice.customerEmail, request.firstValue.recipient.email)
         assertEquals(invoice.customerName, request.firstValue.recipient.displayName)
         assertEquals(invoice.customerAccountId, request.firstValue.recipient.id)
+        assertEquals("fr", request.firstValue.recipient.language)
         assertEquals(ObjectType.ACCOUNT, request.firstValue.recipient.type)
         assertEquals(config[ConfigurationName.INVOICE_EMAIL_SUBJECT], request.firstValue.subject)
         assertEquals(config[ConfigurationName.INVOICE_EMAIL_BODY], request.firstValue.body)
@@ -353,6 +356,7 @@ class InvoiceNotificationWorkerTest {
         assertEquals(invoice.customerEmail, request.firstValue.recipient.email)
         assertEquals(invoice.customerName, request.firstValue.recipient.displayName)
         assertEquals(invoice.customerAccountId, request.firstValue.recipient.id)
+        assertEquals("fr", request.firstValue.recipient.language)
         assertEquals(ObjectType.UNKNOWN, request.firstValue.recipient.type)
         assertEquals(TenantInvoiceInitializer.EMAIL_SUBJECT, request.firstValue.subject)
         assertEquals("", request.firstValue.body)

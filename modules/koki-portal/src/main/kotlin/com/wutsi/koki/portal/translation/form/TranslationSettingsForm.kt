@@ -1,9 +1,9 @@
-package com.wutsi.koki.portal.ai.form
+package com.wutsi.koki.portal.translation.form
 
-data class AISettingsForm(
-    val model: String? = null,
-    val geminiApiKey: String? = null,
-    val geminiModel: String? = null,
-    val deepseekApiKey: String? = null,
-    val deepseekModel: String? = null,
+data class TranslationSettingsForm(
+    val aiModel: String? = null,
+    val provider: String = "",
+    val awsRegion: String? = null,
+    val awsAccessKey: String? = null,
+    val awsSecretKey: String? = null,
 )

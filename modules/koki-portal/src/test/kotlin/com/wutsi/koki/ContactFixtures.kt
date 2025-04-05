@@ -73,5 +73,6 @@ object ContactFixtures {
         employer = "Google",
         salutation = "Mr.",
         gender = Gender.MALE,
+        language = "ru",
     )
 }

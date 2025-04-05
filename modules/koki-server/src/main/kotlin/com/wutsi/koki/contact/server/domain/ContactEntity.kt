@@ -41,6 +41,7 @@ data class ContactEntity(
     var mobile: String? = null,
     var email: String? = null,
     var gender: Gender = Gender.UNKNOWN,
+    var language: String? = null,
     var profession: String? = null,
     var employer: String? = null,
 

@@ -3,6 +3,7 @@
 <body>
 
 <div th:fragment="ai-model(model)" th:remove="tag">
+    <img height="24" src="/image/ai.png" th:if="${model == 'KOKI'}" width="24"/>
     <img height="24" src="/image/gemini.png" th:if="${model == 'GEMINI'}" width="24"/>
     <img height="24" src="/image/deepseek.png" th:if="${model == 'DEEPSEEK'}" width="24"/>
 

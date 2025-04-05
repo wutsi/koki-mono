@@ -14,4 +14,5 @@ data class ContactForm(
     val gender: Gender = Gender.UNKNOWN,
     val profession: String? = null,
     val employer: String? = null,
+    val language: String? = null,
 )

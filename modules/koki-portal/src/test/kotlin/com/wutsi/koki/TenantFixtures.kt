@@ -2,6 +2,8 @@ package com.wutsi.koki
 
 import com.wutsi.koki.ModuleFixtures.modules
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.platform.ai.llm.LLMType
+import com.wutsi.koki.platform.translation.TranslationProvider
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.tenant.dto.Business
 import com.wutsi.koki.tenant.dto.ConfigurationName
@@ -12,7 +14,7 @@ import com.wutsi.koki.tenant.dto.TypeSummary
 
 object TenantFixtures {
     val config = mapOf(
-        ConfigurationName.AI_MODEL to "GEMINI",
+        ConfigurationName.AI_MODEL to LLMType.KOKI.name,
         ConfigurationName.AI_MODEL_GEMINI_MODEL to "gemini-2.0-flash",
         ConfigurationName.AI_MODEL_GEMINI_API_KEY to "kk-1203923-4390r-erf00943",
 
@@ -62,6 +64,11 @@ object TenantFixtures {
         ConfigurationName.TAX_EMAIL_DONE_ENABLED to "1",
         ConfigurationName.TAX_EMAIL_DONE_SUBJECT to "The tax season has started",
         ConfigurationName.TAX_EMAIL_DONE_BODY to "<p>Get ready for the {{taxFiscalYear}} season</p>",
+
+        ConfigurationName.TRANSLATION_PROVIDER to TranslationProvider.AWS.name,
+        ConfigurationName.TRANSLATION_PROVIDER_AWS_REGION to "us-east-1",
+        ConfigurationName.TRANSLATION_PROVIDER_AWS_ACCESS_KEY to "sk-540954-xoioi",
+        ConfigurationName.TRANSLATION_PROVIDER_AWS_SECRET_KEY to "sk-439093049",
     )
 
     // Tenants

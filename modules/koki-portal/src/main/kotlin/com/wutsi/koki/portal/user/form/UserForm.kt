@@ -7,5 +7,6 @@ data class UserForm(
     val email: String = "",
     val status: UserStatus = UserStatus.ACTIVE,
     val password: String = "",
-    val roleIds: List<Long> = emptyList()
+    val language: String? = null,
+    val roleIds: List<Long> = emptyList(),
 )
