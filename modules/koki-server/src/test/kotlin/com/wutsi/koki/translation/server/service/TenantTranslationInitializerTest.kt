@@ -26,7 +26,7 @@ class TenantTranslationInitializerTest {
     private lateinit var configurationService: ConfigurationService
 
     @Autowired
-    private lateinit var initializer: TenantFileInitializer
+    private lateinit var initializer: TenantTranslationInitializer
 
     private val tenantId = 111L
 
