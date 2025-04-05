@@ -8,14 +8,12 @@ import com.wutsi.koki.portal.refdata.service.LocationService
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.form.BusinessForm
 import com.wutsi.koki.portal.tenant.service.BusinessService
-import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
-import java.util.Locale
 
 @Controller
 @RequiresPermission(["tenant:admin"])
@@ -53,10 +51,7 @@ class SettingsEditBusinessController(
         val juridictions = juridictionService.juridictions(limit = Integer.MAX_VALUE)
         model.addAttribute("juridictions", juridictions)
 
-        val countries = Locale.getISOCountries()
-            .map { country -> Locale(LocaleContextHolder.getLocale().language, country) }
-            .sortedBy { country -> country.getDisplayCountry() }
-        model.addAttribute("countries", countries)
+        loadCountries(model)
 
         val city = form.addressCityId?.let { id -> locationService.location(id) }
         model.addAttribute("city", city)

@@ -24,9 +24,9 @@ class SettingsCreateUserControllerTest : AbstractPageControllerTest() {
         input("#displayName", "Yo Man")
         input("#email", "yoman@gmail.com")
         input("#password", "secret")
+        select2("#language", "French")
         click("#role-" + RoleFixtures.roles[0].id)
         click("#role-" + RoleFixtures.roles[2].id)
-        input("#password", "secret")
         click("button[type=submit]", 1000)
 
         val request = argumentCaptor<CreateUserRequest>()
@@ -39,6 +39,7 @@ class SettingsCreateUserControllerTest : AbstractPageControllerTest() {
         assertEquals("Yo Man", request.firstValue.displayName)
         assertEquals("yoman@gmail.com", request.firstValue.email)
         assertEquals("secret", request.firstValue.password)
+        assertEquals("fr", request.firstValue.language)
         assertEquals(listOf(RoleFixtures.roles[0].id, RoleFixtures.roles[2].id), request.firstValue.roleIds)
 
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_LIST)

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
-import java.util.Locale
 
 @Controller
 @RequiresPermission(permissions = ["account:manage"])
@@ -56,15 +55,8 @@ class CreateAccountController(
             model.addAttribute("accountTypes", accountTypes)
         }
 
-        val languages = Locale.getISOLanguages()
-            .map { lang -> Locale(lang) }
-            .sortedBy { lang -> lang.getDisplayLanguage() }
-        model.addAttribute("languages", languages)
-
-        val countries = Locale.getISOCountries()
-            .map { country -> Locale(LocaleContextHolder.getLocale().language, country) }
-            .sortedBy { country -> country.getDisplayCountry() }
-        model.addAttribute("countries", countries)
+        loadLanguages(model)
+        loadCountries(model)
 
         model.addAttribute(
             "page",

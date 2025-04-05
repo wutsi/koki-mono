@@ -19,6 +19,7 @@ import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.service.BusinessService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import com.wutsi.koki.tenant.server.service.TenantService
+import org.apache.commons.lang3.LocaleUtils
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
 import java.util.Locale
@@ -92,6 +93,7 @@ class PaymentNotificationWorker(
                     email = invoice.customerEmail,
                     id = invoice.customerAccountId,
                     type = invoice.customerAccountId?.let { ObjectType.ACCOUNT } ?: ObjectType.UNKNOWN,
+                    language = invoice.locale?.let { locale -> LocaleUtils.toLocale(locale).language }
                 ),
 
                 subject = configs[ConfigurationName.PAYMENT_EMAIL_SUBJECT] ?: TenantPaymentInitializer.EMAIL_SUBJECT,

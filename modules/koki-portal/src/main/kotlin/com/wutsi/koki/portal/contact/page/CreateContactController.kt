@@ -7,6 +7,7 @@ import com.wutsi.koki.portal.contact.form.ContactForm
 import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.TypeService
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -32,11 +33,13 @@ class CreateContactController(
 
         val form = ContactForm(
             accountId = accountId ?: -1,
+            language = account?.language ?: LocaleContextHolder.getLocale().language
         )
         return create(form, model)
     }
 
     fun create(form: ContactForm, model: Model): String {
+        loadLanguages(model)
         model.addAttribute("form", form)
 
         model.addAttribute(

@@ -8,6 +8,7 @@ import com.wutsi.koki.tenant.dto.Role
 import com.wutsi.koki.tenant.dto.User
 import com.wutsi.koki.tenant.dto.UserSummary
 import org.springframework.stereotype.Service
+import java.util.Locale
 import kotlin.collections.flatMap
 
 @Service
@@ -20,6 +21,8 @@ class UserMapper : TenantAwareMapper() {
             displayName = entity.displayName,
             status = entity.status,
             type = entity.type,
+            language = entity.language,
+            languageText = entity.language?.let { lang -> Locale(lang).displayName },
             createdAt = entity.createdAt,
             createdAtText = fmt.format(entity.createdAt),
             modifiedAt = entity.modifiedAt,

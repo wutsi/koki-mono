@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.file.page.settings
 import com.amazonaws.AmazonClientException
 import com.amazonaws.regions.Regions
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.platform.storage.StorageType
 import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
@@ -55,17 +56,38 @@ class SettingsEditStorageController(
         )
 
         model.addAttribute("s3Regions", Regions.entries.map { region -> region.getName() }.sorted())
-        model.addAttribute("types", listOf("KOKI", "S3"))
+        model.addAttribute(
+            "types",
+            listOf(
+                StorageType.KOKI.name,
+                StorageType.S3.name,
+            )
+        )
         return "files/settings/storage/edit"
     }
 
     @PostMapping("/settings/files/storage/save")
     fun save(@ModelAttribute form: StorageForm, model: Model): String {
         try {
-            if (form.type == "S3") {
+            if (form.type == StorageType.S3.name) {
                 validator.validate(form.s3Bucket, form.s3Region, form.s3AccessKey, form.s3SecretKey)
             }
-            service.save(form)
+
+            service.save(
+                configs = when (form.type) {
+                    StorageType.S3.name -> mapOf(
+                        ConfigurationName.STORAGE_TYPE to form.type,
+                        ConfigurationName.STORAGE_S3_BUCKET to form.s3Bucket,
+                        ConfigurationName.STORAGE_S3_REGION to form.s3Region,
+                        ConfigurationName.STORAGE_S3_SECRET_KEY to form.s3SecretKey,
+                        ConfigurationName.STORAGE_S3_ACCESS_KEY to form.s3AccessKey,
+                    )
+
+                    else -> mapOf(
+                        ConfigurationName.STORAGE_TYPE to form.type,
+                    )
+                }
+            )
             return "redirect:/settings/files/storage?_toast=1&_ts=" + System.currentTimeMillis()
         } catch (ex: AmazonClientException) {
             LOGGER.error("Bad S3 configuration", ex)

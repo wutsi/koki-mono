@@ -1,36 +1,36 @@
-package com.wutsi.koki.portal.ai.page.settings
+package com.wutsi.koki.portal.translation.page.settings
 
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
 import kotlin.test.Test
 
-class SettingsAIControllerTest : AbstractPageControllerTest() {
+class SettingsTranslationControllerTest : AbstractPageControllerTest() {
     @Test
     fun show() {
-        navigateTo("/settings/ai")
-        assertCurrentPageIs(PageName.AI_SETTINGS)
+        navigateTo("/settings/translations")
+        assertCurrentPageIs(PageName.TRANSLATION_SETTINGS)
     }
 
     @Test
-    fun `show - without permission ai-admin`() {
-        setUpUserWithoutPermissions(listOf("ai:admin"))
-        navigateTo("/settings/ai")
+    fun `show - without permission translation-admin`() {
+        setUpUserWithoutPermissions(listOf("translation:admin"))
+        navigateTo("/settings/translations")
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 
     @Test
     fun `required login`() {
         setUpAnonymousUser()
-        navigateTo("/settings/ai")
+        navigateTo("/settings/translations")
         assertCurrentPageIs(PageName.LOGIN)
     }
 
     @Test
     fun configure() {
-        navigateTo("/settings/ai")
-        assertCurrentPageIs(PageName.AI_SETTINGS)
+        navigateTo("/settings/translations")
+        assertCurrentPageIs(PageName.TRANSLATION_SETTINGS)
 
         click(".btn-edit")
-        assertCurrentPageIs(PageName.AI_SETTINGS_EDIT)
+        assertCurrentPageIs(PageName.TRANSLATION_SETTINGS_EDIT)
     }
 }

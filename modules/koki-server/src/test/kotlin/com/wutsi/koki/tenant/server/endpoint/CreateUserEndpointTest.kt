@@ -67,7 +67,8 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
             email = "thomas.nkono@hotmail.com",
             displayName = "Thomas Nkono",
             password = "secret",
-            roleIds = listOf(11L, 12L)
+            roleIds = listOf(11L, 12L),
+            language = "fr"
         )
 
         val result = rest.postForEntity("/v1/users", request, CreateUserResponse::class.java)
@@ -78,6 +79,7 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
         val user = dao.findById(userId).get()
         assertEquals(request.displayName, user.displayName)
         assertEquals(request.email, user.email)
+        assertEquals(request.language, user.language)
         assertEquals(UserStatus.ACTIVE, user.status)
         assertEquals(UserType.UNKNOWN, user.type)
         assertEquals(36, user.salt.length)
@@ -139,6 +141,7 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals(36, user.salt.length)
         assertEquals(HASHED_PASSWORD, user.password)
         assertEquals(TENANT_ID, user.tenantId)
+        assertEquals(request.language, user.language)
 
         verify(passwordService).hash(request.password, user.salt)
     }

@@ -17,6 +17,8 @@ data class ContactModel(
     val mobile: String? = null,
     val email: String? = null,
     val gender: Gender = Gender.UNKNOWN,
+    val language: String? = null,
+    val languageText: String? = null,
     val profession: String? = null,
     val employer: String? = null,
     val createdAt: Date = Date(),

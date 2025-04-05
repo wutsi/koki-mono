@@ -3,7 +3,6 @@ package com.wutsi.koki.portal.tenant.service
 import com.wutsi.koki.payment.dto.PaymentMethodType
 import com.wutsi.koki.portal.email.model.EmailDecoratorForm
 import com.wutsi.koki.portal.email.model.SMTPForm
-import com.wutsi.koki.portal.file.form.StorageForm
 import com.wutsi.koki.portal.invoice.form.InvoiceNotificationForm
 import com.wutsi.koki.portal.invoice.form.InvoiceSettingsForm
 import com.wutsi.koki.portal.payment.form.PaymentNotificationForm
@@ -63,20 +62,6 @@ ConfigurationService(
             SaveConfigurationRequest(
                 values = mapOf(
                     ConfigurationName.EMAIL_DECORATOR to form.content,
-                )
-            )
-        )
-    }
-
-    fun save(form: StorageForm) {
-        koki.save(
-            SaveConfigurationRequest(
-                values = mapOf(
-                    ConfigurationName.STORAGE_TYPE to form.type,
-                    ConfigurationName.STORAGE_S3_BUCKET to form.s3Bucket,
-                    ConfigurationName.STORAGE_S3_REGION to form.s3Region,
-                    ConfigurationName.STORAGE_S3_SECRET_KEY to form.s3SecretKey,
-                    ConfigurationName.STORAGE_S3_ACCESS_KEY to form.s3AccessKey,
                 )
             )
         )

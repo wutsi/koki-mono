@@ -64,15 +64,6 @@
                                 <input maxlength="100" required th:field="*{lastName}"/>
                             </div>
                             <div class="section-item">
-                                <label class="title">Gender</label>
-                                <select th:field="*{gender}">
-                                    <option value=""></option>
-                                    <option value="MALE">Male</option>
-                                    <option value="FEMALE">Female</option>
-                                </select>
-                            </div>
-
-                            <div class="section-item">
                                 <label class="title">Email</label>
                                 <input maxlength="100" th:field="*{email}" type="email"/>
                             </div>
@@ -92,6 +83,16 @@
                                 <label class="title">Employer</label>
                                 <input maxlength="100" th:field="*{employer}"/>
                             </div>
+                            <div class="section-item">
+                                <label class="title">Language</label>
+                                <select th:field="*{language}">
+                                    <option th:each="language : ${languages}"
+                                            th:text="${language.displayName}"
+                                            th:value="${language.language}">
+                                        LANGUAGE
+                                    </option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -106,5 +107,9 @@
 
     </div>
 </div>
+
+<script>
+    $('#language').select2();
+</script>
 </body>
 </html>

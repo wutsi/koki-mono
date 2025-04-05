@@ -36,6 +36,7 @@ data class UserEntity(
     var status: UserStatus = UserStatus.ACTIVE,
     var type: UserType = UserType.UNKNOWN,
     var displayName: String = "",
+    var language: String? = null,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
 

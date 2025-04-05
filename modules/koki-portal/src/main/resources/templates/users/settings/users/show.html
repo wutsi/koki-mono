@@ -40,6 +40,10 @@
                     <span th:replace="~{__components/user :: user-status(${me.status})}"></span>
                 </td>
             </tr>
+            <tr th:if="${me.language}">
+                <td><b>Language</b></td>
+                <td th:text="${me.languageText}">LANG</td>
+            </tr>
             <tr>
                 <td><b>Roles</b></td>
                 <td>

@@ -45,7 +45,8 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
             email = "thomas.nkono@hotmail.com",
             displayName = "Thomas Nkono",
             status = UserStatus.TERMINATED,
-            roleIds = listOf(11L, 12L)
+            roleIds = listOf(11L, 12L),
+            language = "fr",
         )
 
         val result = rest.postForEntity("/v1/users/11", request, Any::class.java)
@@ -58,6 +59,7 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.email, user.email)
         assertEquals(request.status, user.status)
         assertEquals(request.roleIds.size, roleCount(userId))
+        assertEquals(request.language, user.language)
     }
 
     @Test
@@ -76,6 +78,7 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
         val user = dao.findById(userId).get()
         assertEquals(request.email.lowercase(), user.email)
         assertEquals(0, roleCount(userId))
+        assertEquals(request.language, user.language)
     }
 
     @Test

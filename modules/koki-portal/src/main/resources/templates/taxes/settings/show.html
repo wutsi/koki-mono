@@ -27,7 +27,7 @@
                         <b class="margin-right">AI Assistant</b>
                         <div th:replace="~{__components/settings :: enabled-badge(${aiAgent.enabled})}"></div>
                     </div>
-                    <div>
+                    <div class="text-small margin-left">
                         AI Model:
                         <div th:replace="~{__components/ai :: ai-model(${aiAgent.model})}"></div>
                     </div>
@@ -68,7 +68,7 @@
                         <span
                             th:replace="~{__components/settings :: enabled-badge(${assigneeNotification.enabled})}"></span>
                     </div>
-                    <div th:if="${assigneeNotification.subject}">
+                    <div class="text-small margin-left" th:if="${assigneeNotification.subject}">
                         Subject: <span th:text="${assigneeNotification.subject}">SUBJECT</span>
                     </div>
                 </td>
@@ -98,7 +98,7 @@
                         <span
                             th:replace="~{__components/settings :: enabled-badge(${documentNotification.enabled})}"></span>
                     </div>
-                    <div th:if="${documentNotification.subject}">
+                    <div class="text-small margin-left" th:if="${documentNotification.subject}">
                         Subject: <span th:text="${documentNotification.subject}">SUBJECT</span>
                     </div>
                 </td>
@@ -128,7 +128,7 @@
                         <span
                             th:replace="~{__components/settings :: enabled-badge(${doneNotification.enabled})}"></span>
                     </div>
-                    <div th:if="${doneNotification.subject}">
+                    <div class="text-small margin-left" th:if="${doneNotification.subject}">
                         Subject: <span th:text="${doneNotification.subject}">SUBJECT</span>
                     </div>
                 </td>

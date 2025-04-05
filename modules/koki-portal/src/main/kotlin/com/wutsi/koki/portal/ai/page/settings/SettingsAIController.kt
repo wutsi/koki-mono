@@ -34,8 +34,9 @@ class SettingsAIController(
 
         val configs = service.configurations(keyword = "ai.")
         model.addAttribute(
-            "form", AISettingsForm(
-                model = configs[ConfigurationName.AI_MODEL],
+            "form",
+            AISettingsForm(
+                model = configs[ConfigurationName.AI_MODEL] ?: "",
                 geminiModel = configs[ConfigurationName.AI_MODEL_GEMINI_MODEL],
                 deepseekModel = configs[ConfigurationName.AI_MODEL_DEEPSEEK_MODEL],
             )

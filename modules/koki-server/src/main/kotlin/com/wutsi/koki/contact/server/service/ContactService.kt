@@ -91,6 +91,7 @@ class ContactService(
                 firstName = request.firstName,
                 lastName = request.lastName,
                 gender = request.gender,
+                language = request.language,
                 salutation = request.salutations,
                 phone = request.phone,
                 email = request.email,
@@ -111,6 +112,7 @@ class ContactService(
         contact.firstName = request.firstName
         contact.lastName = request.lastName
         contact.gender = request.gender
+        contact.language = request.language
         contact.salutation = request.salutations
         contact.phone = request.phone
         contact.email = request.email

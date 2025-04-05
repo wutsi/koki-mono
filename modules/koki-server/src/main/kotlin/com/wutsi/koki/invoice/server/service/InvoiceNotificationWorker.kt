@@ -21,6 +21,7 @@ import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.service.BusinessService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import com.wutsi.koki.tenant.server.service.TenantService
+import org.apache.commons.lang3.LocaleUtils
 import org.apache.commons.text.StringEscapeUtils
 import org.springframework.stereotype.Service
 import java.io.File
@@ -128,6 +129,7 @@ class InvoiceNotificationWorker(
                     email = invoice.customerEmail,
                     id = invoice.customerAccountId,
                     type = invoice.customerAccountId?.let { ObjectType.ACCOUNT } ?: ObjectType.UNKNOWN,
+                    language = invoice.locale?.let { locale -> LocaleUtils.toLocale(locale).language }
                 ),
                 subject = configs[ConfigurationName.INVOICE_EMAIL_SUBJECT] ?: TenantInvoiceInitializer.EMAIL_SUBJECT,
                 body = configs[ConfigurationName.INVOICE_EMAIL_BODY] ?: "",
@@ -159,6 +161,7 @@ class InvoiceNotificationWorker(
                     email = invoice.customerEmail,
                     id = invoice.customerAccountId,
                     type = invoice.customerAccountId?.let { ObjectType.ACCOUNT } ?: ObjectType.UNKNOWN,
+                    language = invoice.locale?.let { locale -> LocaleUtils.toLocale(locale).language }
                 ),
 
                 subject = configs[ConfigurationName.INVOICE_EMAIL_SUBJECT] ?: TenantInvoiceInitializer.EMAIL_SUBJECT,

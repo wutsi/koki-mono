@@ -27,6 +27,7 @@ class GetUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals("ray.sponsible@gmail.com", user.email)
         assertEquals(UserStatus.ACTIVE, user.status)
         assertEquals(UserType.EMPLOYEE, user.type)
+        assertEquals("fr", user.language)
 
         assertEquals(3, user.roleIds.size)
         assertEquals(10, user.roleIds[0])

@@ -60,7 +60,6 @@
                                 <label class="title">Website</label>
                                 <input maxlength="100" placeholder="https://" th:field="*{website}" type="url"/>
                             </div>
-
                             <div class="section-item">
                                 <label class="title">Language</label>
                                 <select th:field="*{language}">
@@ -71,7 +70,6 @@
                                     </option>
                                 </select>
                             </div>
-
                             <div class="section-item">
                                 <label class="title">Description</label>
                                 <textarea rows="3" th:field="*{description}"></textarea>
@@ -200,6 +198,7 @@
 <script>
     let billingAddressInitialized = false;
 
+    $('#language').select2();
     koki_address_editor('shippingCountry', 'shippingCityId');
 
     function koki_address_same_changed(){

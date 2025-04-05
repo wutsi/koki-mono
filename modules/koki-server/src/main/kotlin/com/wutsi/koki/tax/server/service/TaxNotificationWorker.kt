@@ -108,6 +108,7 @@ class TaxNotificationWorker(
                 recipient = Recipient(
                     displayName = assignee.displayName,
                     email = assignee.email,
+                    language = assignee.language,
                 ),
 
                 data = mapOf(
@@ -179,6 +180,7 @@ class TaxNotificationWorker(
                     email = account.email!!,
                     type = ObjectType.ACCOUNT,
                     id = account.id,
+                    language = account.language,
                 ),
 
                 data = mapOf(
@@ -231,6 +233,7 @@ class TaxNotificationWorker(
                     email = account.email!!,
                     type = ObjectType.ACCOUNT,
                     id = account.id,
+                    language = account.language,
                 ),
 
                 data = mapOf(

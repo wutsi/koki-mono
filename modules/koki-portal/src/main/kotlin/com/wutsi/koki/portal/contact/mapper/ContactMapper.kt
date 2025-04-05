@@ -8,6 +8,7 @@ import com.wutsi.koki.portal.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.tenant.model.TypeModel
 import com.wutsi.koki.portal.user.model.UserModel
 import org.springframework.stereotype.Service
+import java.util.Locale
 
 @Service
 class ContactMapper : TenantAwareMapper() {
@@ -62,6 +63,8 @@ class ContactMapper : TenantAwareMapper() {
             employer = entity.employer,
             gender = entity.gender,
             salutation = entity.salutation,
+            language = entity.language,
+            languageText = entity.language?.let { lang -> Locale(lang).displayName },
         )
     }
 }

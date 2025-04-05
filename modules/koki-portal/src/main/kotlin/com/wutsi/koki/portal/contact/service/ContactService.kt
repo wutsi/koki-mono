@@ -145,6 +145,7 @@ class ContactService(
             gender = form.gender,
             profession = form.profession?.trim()?.ifEmpty { null },
             employer = form.employer?.trim()?.ifEmpty { null },
+            language = form.language,
         )
         return koki.create(request).contactId
     }
@@ -162,6 +163,7 @@ class ContactService(
             gender = form.gender,
             profession = form.profession?.trim()?.ifEmpty { null },
             employer = form.employer?.trim()?.ifEmpty { null },
+            language = form.language,
         )
         koki.update(id, request)
     }

@@ -9,7 +9,6 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.contact.dto.CreateContactRequest
 import com.wutsi.koki.contact.dto.CreateContactResponse
-import com.wutsi.koki.contact.dto.Gender
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.common.page.PageName
 import kotlin.test.Test
@@ -26,13 +25,13 @@ class CreateContactControllerTest : AbstractPageControllerTest() {
         input("#firstName", "Yo")
         input("#lastName", "Man")
         select("#salutation", 2)
-        select("#gender", 2)
-        scrollToBottom()
         input("#phone", "+5147580000")
+        scrollToBottom()
         input("#mobile", "+5147580011")
         input("#email", "yo@gmail.com")
         input("#profession", "XX")
         input("#employer", "EG")
+        select2("#language", "French")
         click("button[type=submit]")
 
         val request = argumentCaptor<CreateContactRequest>()
@@ -45,7 +44,7 @@ class CreateContactControllerTest : AbstractPageControllerTest() {
         assertEquals("Yo", request.firstValue.firstName)
         assertEquals("Man", request.firstValue.lastName)
         assertEquals("Ms.", request.firstValue.salutations)
-        assertEquals(Gender.FEMALE, request.firstValue.gender)
+        assertEquals("fr", request.firstValue.language)
         assertEquals("+5147580000", request.firstValue.phone)
         assertEquals("+5147580011", request.firstValue.mobile)
         assertEquals("yo@gmail.com", request.firstValue.email)
@@ -66,7 +65,6 @@ class CreateContactControllerTest : AbstractPageControllerTest() {
         input("#firstName", "Yo")
         input("#lastName", "Man")
         select("#salutation", 2)
-        select("#gender", 2)
         scrollToBottom()
         input("#phone", "+5147580000")
         input("#mobile", "+5147580011")
@@ -95,7 +93,6 @@ class CreateContactControllerTest : AbstractPageControllerTest() {
         input("#firstName", "Yo")
         input("#lastName", "Man")
         select("#salutation", 2)
-        select("#gender", 2)
         scrollToBottom()
         input("#phone", "+5147580000")
         input("#mobile", "+5147580011")

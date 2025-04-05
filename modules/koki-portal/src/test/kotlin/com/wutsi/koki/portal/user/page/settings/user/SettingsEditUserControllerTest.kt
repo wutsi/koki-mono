@@ -25,6 +25,7 @@ class SettingsEditUserControllerTest : AbstractPageControllerTest() {
         input("#displayName", "Yo Man")
         input("#email", "yoman@gmail.com")
         select("#status", 2)
+        select2("#language", "French")
         click("#role-" + RoleFixtures.roles[0].id)
         click("#role-" + RoleFixtures.roles[2].id)
         click("button[type=submit]", 1000)
@@ -39,6 +40,7 @@ class SettingsEditUserControllerTest : AbstractPageControllerTest() {
         assertEquals("Yo Man", request.firstValue.displayName)
         assertEquals("yoman@gmail.com", request.firstValue.email)
         assertEquals(UserStatus.SUSPENDED, request.firstValue.status)
+        assertEquals("fr", request.firstValue.language)
         assertEquals(
             RoleFixtures.roles.filter { role ->
                 role.id != RoleFixtures.roles[0].id && role.id != RoleFixtures.roles[2].id

@@ -46,6 +46,7 @@ class EditContactController(
     }
 
     fun edit(contact: ContactModel, form: ContactForm, model: Model): String {
+        loadLanguages(model)
         model.addAttribute("contact", contact)
         model.addAttribute("form", form)
 

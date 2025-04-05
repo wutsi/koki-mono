@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.ai.page.settings
 
+import com.wutsi.koki.platform.ai.llm.LLMType
 import com.wutsi.koki.portal.ai.form.AISettingsForm
 import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
@@ -21,17 +22,9 @@ class SettingsEditAIController(
 ) : AbstractPageController() {
     @GetMapping("/settings/ai/edit")
     fun edit(model: Model): String {
-        model.addAttribute(
-            "page",
-            PageModel(
-                name = PageName.AI_SETTINGS_EDIT,
-                title = "AI Settings",
-            )
-        )
-
         val configs = service.configurations(keyword = "ai.")
         val form = AISettingsForm(
-            model = configs[ConfigurationName.AI_MODEL],
+            model = configs[ConfigurationName.AI_MODEL] ?: "",
             geminiModel = configs[ConfigurationName.AI_MODEL_GEMINI_MODEL],
             geminiApiKey = configs[ConfigurationName.AI_MODEL_GEMINI_API_KEY],
             deepseekModel = configs[ConfigurationName.AI_MODEL_DEEPSEEK_MODEL],
@@ -51,7 +44,14 @@ class SettingsEditAIController(
         )
 
         model.addAttribute("form", form)
-        model.addAttribute("models", listOf("KOKI", "GEMINI", "DEEPSEEK"))
+        model.addAttribute(
+            "models",
+            listOf(
+                LLMType.KOKI,
+                LLMType.GEMINI,
+                LLMType.DEEPSEEK,
+            )
+        )
 
         return "ai/settings/edit"
     }
@@ -61,20 +61,20 @@ class SettingsEditAIController(
         try {
             service.save(
                 configs = when (form.model) {
-                    "GEMINI" -> mapOf(
-                        ConfigurationName.AI_MODEL to (form.model ?: ""),
+                    LLMType.GEMINI.name -> mapOf(
+                        ConfigurationName.AI_MODEL to form.model,
                         ConfigurationName.AI_MODEL_GEMINI_MODEL to (form.geminiModel ?: ""),
                         ConfigurationName.AI_MODEL_GEMINI_API_KEY to (form.geminiApiKey ?: ""),
                     )
 
-                    "DEEPSEEK" -> mapOf(
-                        ConfigurationName.AI_MODEL to (form.model ?: ""),
+                    LLMType.DEEPSEEK.name -> mapOf(
+                        ConfigurationName.AI_MODEL to form.model,
                         ConfigurationName.AI_MODEL_DEEPSEEK_MODEL to (form.deepseekModel ?: ""),
                         ConfigurationName.AI_MODEL_DEEPSEEK_API_KEY to (form.deepseekApiKey ?: ""),
                     )
 
                     else -> mapOf(
-                        ConfigurationName.AI_MODEL to (form.model ?: ""),
+                        ConfigurationName.AI_MODEL to form.model,
                     )
                 }
             )

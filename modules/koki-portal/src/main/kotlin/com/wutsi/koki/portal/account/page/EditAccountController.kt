@@ -10,7 +10,6 @@ import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.TypeService
 import com.wutsi.koki.portal.user.service.UserService
 import jakarta.servlet.http.HttpServletRequest
-import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
-import java.util.Locale
 
 @Controller
 @RequiresPermission(permissions = ["account:manage"])
@@ -83,16 +81,8 @@ class EditAccountController(
             model.addAttribute("manager", userService.user(id = form.managedById, fullGraph = false))
         }
 
-        val languages = Locale.getISOLanguages()
-            .map { lang -> Locale(lang) }
-            .toSet()
-            .sortedBy { it.getDisplayLanguage() }
-        model.addAttribute("languages", languages)
-
-        val countries = Locale.getISOCountries()
-            .map { country -> Locale(LocaleContextHolder.getLocale().language, country) }
-            .sortedBy { country -> country.getDisplayCountry() }
-        model.addAttribute("countries", countries)
+        loadLanguages(model)
+        loadCountries(model)
 
         model.addAttribute(
             "page",

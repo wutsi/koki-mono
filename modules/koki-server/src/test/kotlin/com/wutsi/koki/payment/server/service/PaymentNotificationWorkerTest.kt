@@ -72,6 +72,7 @@ class PaymentNotificationWorkerTest {
         tenantId = tenant.id!!,
         currency = "CAD",
         totalAmount = 500.00,
+        locale = "fr_CA",
     )
 
     val config = mapOf(
@@ -119,6 +120,7 @@ class PaymentNotificationWorkerTest {
         assertEquals(invoice.customerEmail, request.firstValue.recipient.email)
         assertEquals(invoice.customerName, request.firstValue.recipient.displayName)
         assertEquals(invoice.customerAccountId, request.firstValue.recipient.id)
+        assertEquals("fr", request.firstValue.recipient.language)
         assertEquals(ObjectType.ACCOUNT, request.firstValue.recipient.type)
         assertEquals(config[ConfigurationName.PAYMENT_EMAIL_SUBJECT], request.firstValue.subject)
         assertEquals(config[ConfigurationName.PAYMENT_EMAIL_BODY], request.firstValue.body)

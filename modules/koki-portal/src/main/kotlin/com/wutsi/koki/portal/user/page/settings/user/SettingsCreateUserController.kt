@@ -7,6 +7,7 @@ import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.user.model.UserForm
 import com.wutsi.koki.portal.user.service.RoleService
 import com.wutsi.koki.portal.user.service.UserService
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -24,16 +25,22 @@ class SettingsCreateUserController(
 ) : AbstractPageController() {
     @GetMapping("/create")
     fun create(model: Model): String {
-        val form = UserForm()
+        val form = UserForm(
+            language = LocaleContextHolder.getLocale().language
+        )
         return create(form, model)
     }
 
     private fun create(form: UserForm, model: Model): String {
         model.addAttribute("form", form)
+
         model.addAttribute(
             "roles",
             roleService.roles(limit = Integer.MAX_VALUE)
         )
+
+        loadLanguages(model)
+
         model.addAttribute(
             "page",
             PageModel(

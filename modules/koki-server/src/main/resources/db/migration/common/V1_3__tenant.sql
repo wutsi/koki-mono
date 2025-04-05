@@ -59,6 +59,7 @@ CREATE TABLE T_USER(
   password                VARCHAR(32) NOT NULL,
   salt                    VARCHAR(36) NOT NULL DEFAULT '',
   display_name            VARCHAR(255) NOT NULL,
+  language                VARCHAR(2),
   status                  INT NOT NULL DEFAULT 0,
   type                    INT NOT NULL DEFAULT 0,
   created_at              DATETIME DEFAULT NOW(),

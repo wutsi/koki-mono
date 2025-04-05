@@ -39,10 +39,14 @@ class SettingsEditUserController(
     private fun edit(user: UserModel, form: UserForm, model: Model): String {
         model.addAttribute("me", user)
         model.addAttribute("form", form)
+
         model.addAttribute(
             "roles",
             roleService.roles(limit = Integer.MAX_VALUE)
         )
+
+        loadLanguages(model)
+
         model.addAttribute(
             "page",
             PageModel(
