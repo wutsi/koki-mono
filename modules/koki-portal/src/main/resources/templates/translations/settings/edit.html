@@ -13,7 +13,7 @@
     </div>
     <div class="settings-content">
         <div
-            th:replace="~{__components/settings :: settings-title('Translation', '/settings/translation')}"></div>
+            th:replace="~{__components/settings :: settings-title('Translation', '/settings/translations')}"></div>
 
         <div th:replace="~{__components/layout :: error-message(${error})}"></div>
         <form class="form" method="post" onsubmit="return on_submit()" th:action="@{/settings/translations/save}"
@@ -22,8 +22,8 @@
                 <tr>
                     <td width="20%"><b>Type <span class="required">*</span></b></td>
                     <td>
-                        <select onchange="koki_translation_provider_changed()" required th:field="*{provider}">
-                            <option value=""></option>
+                        <select onchange="koki_translation_provider_changed()" th:field="*{provider}">
+                            <option value="">None</option>
                             <option th:each="provider : ${providers}"
                                     th:text="#{'translation-provider.' + ${provider}}"
                                     th:value="${provider}">

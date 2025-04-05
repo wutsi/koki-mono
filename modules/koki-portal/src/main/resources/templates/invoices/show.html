@@ -43,7 +43,6 @@
 
                             <a class="btn-send btn btn-light btn-sm"
                                onclick="return confirm('Are you sure you want to send the invoice to the customer?')"
-                               target="_blank"
                                th:href="'/invoices/' + ${invoice.id} + '/send'"
                                th:if="${invoice.status.name} != 'DRAFT' AND ${user?.hasPermission('invoice:manage')}"
                             >

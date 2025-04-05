@@ -18,7 +18,7 @@ class SettingsEditAIControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/ai/edit")
         assertCurrentPageIs(PageName.AI_SETTINGS_EDIT)
 
-        select("#model", 1)
+        select("#provider", 1)
         click("button[type=submit]")
 
         val request = argumentCaptor<SaveConfigurationRequest>()
@@ -28,7 +28,7 @@ class SettingsEditAIControllerTest : AbstractPageControllerTest() {
             eq(Any::class.java)
         )
         assertEquals(1, request.firstValue.values.size)
-        assertEquals("KOKI", request.firstValue.values[ConfigurationName.AI_MODEL])
+        assertEquals("KOKI", request.firstValue.values[ConfigurationName.AI_PROVIDER])
     }
 
     @Test
@@ -38,7 +38,7 @@ class SettingsEditAIControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/ai/edit")
         assertCurrentPageIs(PageName.AI_SETTINGS_EDIT)
 
-        select("#model", 2)
+        select("#provider", 2)
         input("#geminiApiKey", "1111")
         select("#geminiModel", 2)
         click("button[type=submit]")
@@ -50,9 +50,9 @@ class SettingsEditAIControllerTest : AbstractPageControllerTest() {
             eq(Any::class.java)
         )
         assertEquals(3, request.firstValue.values.size)
-        assertEquals("GEMINI", request.firstValue.values[ConfigurationName.AI_MODEL])
-        assertEquals("1111", request.firstValue.values[ConfigurationName.AI_MODEL_GEMINI_API_KEY])
-        assertEquals("gemini-2.0-flash-lite", request.firstValue.values[ConfigurationName.AI_MODEL_GEMINI_MODEL])
+        assertEquals("GEMINI", request.firstValue.values[ConfigurationName.AI_PROVIDER])
+        assertEquals("1111", request.firstValue.values[ConfigurationName.AI_PROVIDER_GEMINI_API_KEY])
+        assertEquals("gemini-2.0-flash-lite", request.firstValue.values[ConfigurationName.AI_PROVIDER_GEMINI_MODEL])
     }
 
     @Test
@@ -62,7 +62,7 @@ class SettingsEditAIControllerTest : AbstractPageControllerTest() {
         navigateTo("/settings/ai/edit")
         assertCurrentPageIs(PageName.AI_SETTINGS_EDIT)
 
-        select("#model", 3)
+        select("#provider", 3)
         input("#deepseekApiKey", "1111")
         select("#deepseekModel", 1)
         click("button[type=submit]")
@@ -74,9 +74,9 @@ class SettingsEditAIControllerTest : AbstractPageControllerTest() {
             eq(Any::class.java)
         )
         assertEquals(3, request.firstValue.values.size)
-        assertEquals("DEEPSEEK", request.firstValue.values[ConfigurationName.AI_MODEL])
-        assertEquals("1111", request.firstValue.values[ConfigurationName.AI_MODEL_DEEPSEEK_API_KEY])
-        assertEquals("deepseek-chat", request.firstValue.values[ConfigurationName.AI_MODEL_DEEPSEEK_MODEL])
+        assertEquals("DEEPSEEK", request.firstValue.values[ConfigurationName.AI_PROVIDER])
+        assertEquals("1111", request.firstValue.values[ConfigurationName.AI_PROVIDER_DEEPSEEK_API_KEY])
+        assertEquals("deepseek-chat", request.firstValue.values[ConfigurationName.AI_PROVIDER_DEEPSEEK_MODEL])
     }
 
     @Test

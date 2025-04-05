@@ -59,7 +59,7 @@ class TaxAIAgentTest {
     )
 
     private val configs = mapOf(
-        ConfigurationName.AI_MODEL to LLMType.GEMINI,
+        ConfigurationName.AI_PROVIDER to LLMType.GEMINI,
 
         ConfigurationName.TAX_AI_AGENT_ENABLED to "1",
 
@@ -159,7 +159,7 @@ class TaxAIAgentTest {
                     name = entry.key,
                     value = entry.value.toString()
                 )
-            }.filter { config -> config.name != ConfigurationName.AI_MODEL }
+            }.filter { config -> config.name != ConfigurationName.AI_PROVIDER }
         ).whenever(configurationService)
             .search(any(), anyOrNull(), anyOrNull())
 

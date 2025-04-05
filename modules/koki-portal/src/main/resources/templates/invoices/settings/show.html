@@ -57,7 +57,7 @@
                         <span
                             th:replace="~{__components/settings :: enabled-badge(${notification.enabled})}"></span>
                     </div>
-                    <div class="text-small margin-left" th:if="${notification.subject}">
+                    <div class="text-small margin-left margin-top-small" th:if="${notification.subject}">
                         Subject: <span th:text="${notification.subject}">SUBJECT</span>
                     </div>
                 </td>

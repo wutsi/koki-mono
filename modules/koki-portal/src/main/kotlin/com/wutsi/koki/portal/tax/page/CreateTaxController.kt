@@ -68,8 +68,8 @@ class CreateTaxController(
     @PostMapping("/taxes/add-new")
     fun addNew(@ModelAttribute form: TaxForm, model: Model): String {
         try {
-            val taxId = service.create(form)
-            return "redirect:/taxes?_toast=$taxId&_ts=" + System.currentTimeMillis()
+            val id = service.create(form)
+            return "redirect:/taxes/$id?_toast=$id&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)

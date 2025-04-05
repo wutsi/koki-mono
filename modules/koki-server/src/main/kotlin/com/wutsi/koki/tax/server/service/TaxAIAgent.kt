@@ -145,7 +145,7 @@ class TaxAIAgent(
         val configs = configurationService.search(
             tenantId = tenantId,
             names = listOf(
-                ConfigurationName.AI_MODEL,
+                ConfigurationName.AI_PROVIDER,
                 ConfigurationName.TAX_AI_AGENT_ENABLED,
             )
         )

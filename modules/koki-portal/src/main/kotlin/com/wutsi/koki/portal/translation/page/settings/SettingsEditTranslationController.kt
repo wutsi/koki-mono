@@ -25,7 +25,7 @@ class SettingsEditTranslationController(
     fun edit(model: Model): String {
         val configs = service.configurations(
             names = listOf(
-                ConfigurationName.AI_MODEL,
+                ConfigurationName.AI_PROVIDER,
                 ConfigurationName.TRANSLATION_PROVIDER,
                 ConfigurationName.TRANSLATION_PROVIDER_AWS_REGION,
                 ConfigurationName.TRANSLATION_PROVIDER_AWS_SECRET_KEY,
@@ -33,7 +33,7 @@ class SettingsEditTranslationController(
             )
         )
         val form = TranslationSettingsForm(
-            aiModel = configs[ConfigurationName.AI_MODEL],
+            aiProvider = configs[ConfigurationName.AI_PROVIDER],
             provider = configs[ConfigurationName.TRANSLATION_PROVIDER] ?: "",
             awsRegion = configs[ConfigurationName.TRANSLATION_PROVIDER_AWS_REGION],
             awsSecretKey = configs[ConfigurationName.TRANSLATION_PROVIDER_AWS_SECRET_KEY],
@@ -70,14 +70,14 @@ class SettingsEditTranslationController(
             service.save(
                 configs = when (form.provider) {
                     TranslationProvider.AWS.name -> mapOf(
-                        ConfigurationName.TRANSLATION_PROVIDER to form.provider,
+                        ConfigurationName.TRANSLATION_PROVIDER to (form.provider ?: ""),
                         ConfigurationName.TRANSLATION_PROVIDER_AWS_REGION to (form.awsRegion ?: ""),
                         ConfigurationName.TRANSLATION_PROVIDER_AWS_ACCESS_KEY to (form.awsAccessKey ?: ""),
                         ConfigurationName.TRANSLATION_PROVIDER_AWS_SECRET_KEY to (form.awsSecretKey ?: ""),
                     )
 
                     else -> mapOf(
-                        ConfigurationName.TRANSLATION_PROVIDER to form.provider,
+                        ConfigurationName.TRANSLATION_PROVIDER to (form.provider ?: ""),
                     )
                 }
             )

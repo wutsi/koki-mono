@@ -22,7 +22,7 @@ class SettingsTaxController(
     fun show(model: Model): String {
         val configs = service.configurations(
             names = listOf(
-                ConfigurationName.AI_MODEL,
+                ConfigurationName.AI_PROVIDER,
                 ConfigurationName.TAX_AI_AGENT_ENABLED,
                 ConfigurationName.TAX_EMAIL_ASSIGNEE_ENABLED,
                 ConfigurationName.TAX_EMAIL_ASSIGNEE_SUBJECT,
@@ -35,7 +35,7 @@ class SettingsTaxController(
         model.addAttribute(
             "aiAgent",
             TaxAIAgentForm(
-                model = configs[ConfigurationName.AI_MODEL],
+                aiProvider = configs[ConfigurationName.AI_PROVIDER],
                 enabled = configs[ConfigurationName.TAX_AI_AGENT_ENABLED] != null,
             )
         )
