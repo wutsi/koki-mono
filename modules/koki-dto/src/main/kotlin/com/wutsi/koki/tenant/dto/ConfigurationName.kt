@@ -2,11 +2,11 @@ package com.wutsi.koki.tenant.dto
 
 object ConfigurationName {
     // AI
-    const val AI_MODEL = "ai.model"
-    const val AI_MODEL_GEMINI_API_KEY = "ai.model.gemini.api_key"
-    const val AI_MODEL_GEMINI_MODEL = "ai.model.gemini.model"
-    const val AI_MODEL_DEEPSEEK_API_KEY = "ai.model.deepseek.api_key"
-    const val AI_MODEL_DEEPSEEK_MODEL = "ai.model.deepseek.model"
+    const val AI_PROVIDER = "ai.provider"
+    const val AI_PROVIDER_GEMINI_API_KEY = "ai.provider.gemini.api_key"
+    const val AI_PROVIDER_GEMINI_MODEL = "ai.provider.gemini.model"
+    const val AI_PROVIDER_DEEPSEEK_API_KEY = "ai.provider.deepseek.api_key"
+    const val AI_PROVIDER_DEEPSEEK_MODEL = "ai.provider.deepseek.model"
 
     // EMAIL
     const val EMAIL_DECORATOR = "email.decorator"
