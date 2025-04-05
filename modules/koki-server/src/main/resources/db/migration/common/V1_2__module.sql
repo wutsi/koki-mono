@@ -1,7 +1,7 @@
 CREATE TABLE T_MODULE(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
-  name                    VARCHAR(10) NOT NULL,
+  name                    VARCHAR(30) NOT NULL,
   title                   VARCHAR(30) NOT NULL,
   description             TEXT,
   object_type             INT DEFAULT 0,
