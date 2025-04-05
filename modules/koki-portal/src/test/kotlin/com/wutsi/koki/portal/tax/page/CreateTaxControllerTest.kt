@@ -47,7 +47,7 @@ class CreateTaxControllerTest : AbstractPageControllerTest() {
 //        assertEquals("2020-12-21", fmt.format(tax.dueAt))
         assertEquals("This is a nice description", tax.description)
 
-        assertCurrentPageIs(PageName.TAX_EDIT)
+        assertCurrentPageIs(PageName.TAX)
         assertElementVisible("#koki-toast")
     }
 
