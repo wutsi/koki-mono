@@ -191,7 +191,7 @@ class TravelAgent {
         )
 
         val output = ByteArrayOutputStream()
-        agent.run(query, output)
+        agent.run(query, null, output)
         println(String(output.toByteArray()))
     }
 }

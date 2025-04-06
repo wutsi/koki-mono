@@ -56,6 +56,7 @@ class WeatherAgent {
         val output = ByteArrayOutputStream()
         agent.run(
             query = "Which city is hotter, Yaounde or Montreal?",
+            file = null,
             output = output
         )
         println(String(output.toByteArray()))

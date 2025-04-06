@@ -73,7 +73,7 @@ class DefaultAgentTest {
 
         // THEN
         val agent = createAgent(responseType = MediaType.APPLICATION_JSON)
-        val result = agent.step(QUERY, output, memory)
+        val result = agent.step(QUERY, null, output, memory)
 
         // Continue
         assertEquals(false, result)
@@ -115,8 +115,8 @@ class DefaultAgentTest {
 
         // THEN
         val agent = createAgent(responseType = MediaType.APPLICATION_JSON)
-        agent.step(QUERY, output, memory)
-        val result = agent.step(QUERY, output, memory)
+        agent.step(QUERY, null, output, memory)
+        val result = agent.step(QUERY, null, output, memory)
 
         // Continue
         assertEquals(false, result)
@@ -162,13 +162,13 @@ class DefaultAgentTest {
         val agent = createAgent(responseType = MediaType.TEXT_PLAIN)
 
         setupFunctionCallResponse("1st step", function1.name, inputs)
-        agent.step(QUERY, output, memory)
+        agent.step(QUERY, null, output, memory)
 
         setupFunctionCallResponse("2nd step", function2.name, emptyMap())
-        agent.step(QUERY, output, memory)
+        agent.step(QUERY, null, output, memory)
 
         setupTextResponse("Done")
-        val result = agent.step(QUERY, output, memory)
+        val result = agent.step(QUERY, null, output, memory)
 
         // Continue
         assertEquals(true, result)
@@ -216,7 +216,7 @@ class DefaultAgentTest {
         val agent = createAgent(responseType = MediaType.TEXT_PLAIN)
 
         setupDocumentResponse("Done")
-        val result = agent.step(QUERY, output, memory)
+        val result = agent.step(QUERY, null, output, memory)
 
         // Continue
         assertEquals(true, result)
@@ -239,7 +239,7 @@ class DefaultAgentTest {
         val agent = createAgent(responseType = MediaType.TEXT_PLAIN)
 
         setupTextResponse(null)
-        val result = agent.step(QUERY, output, memory)
+        val result = agent.step(QUERY, null, output, memory)
 
         // Continue
         assertEquals(false, result)
@@ -260,7 +260,7 @@ class DefaultAgentTest {
 
         // THEN
         val agent = createAgent(responseType = MediaType.APPLICATION_JSON, maxIterations = 2)
-        assertThrows<TooManyIterationsException> { agent.run(QUERY, output) }
+        assertThrows<TooManyIterationsException> { agent.run(QUERY, null, output) }
     }
 
     @Test
@@ -268,7 +268,7 @@ class DefaultAgentTest {
         doThrow(LLMException::class).whenever(llm).generateContent(any())
 
         // THEN
-        assertThrows<AgentException> { createAgent().run(QUERY, ByteArrayOutputStream()) }
+        assertThrows<AgentException> { createAgent().run(QUERY, null, ByteArrayOutputStream()) }
     }
 
     private fun setupFunctionCallResponse(

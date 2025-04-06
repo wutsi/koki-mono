@@ -1,6 +1,7 @@
 package com.wutsi.koki.platform.ai.agent
 
 import com.wutsi.koki.platform.ai.llm.Config
+import com.wutsi.koki.platform.ai.llm.Document
 import com.wutsi.koki.platform.ai.llm.LLM
 import com.wutsi.koki.platform.ai.llm.LLMRequest
 import com.wutsi.koki.platform.ai.llm.LLMResponse
@@ -24,7 +25,7 @@ class DefaultAgent(
         .map { tool -> tool.function().name to tool }
         .toMap()
 
-    override fun run(query: String, output: OutputStream) {
+    override fun run(query: String, file: Document?, output: OutputStream) {
         var iteration = 0
         val logger = getLogger()
         val memory: MutableList<String> = mutableListOf()
@@ -40,7 +41,7 @@ class DefaultAgent(
             }
 
             try {
-                if (step(query, output, memory)) {
+                if (step(query, file, output, memory)) {
                     break
                 }
             } catch (ex: Exception) {
@@ -49,8 +50,8 @@ class DefaultAgent(
         }
     }
 
-    fun step(query: String, output: OutputStream, memory: MutableList<String>): Boolean {
-        val response = ask(query, memory)
+    fun step(query: String, file: Document?, output: OutputStream, memory: MutableList<String>): Boolean {
+        val response = ask(query, file, memory)
         return decide(response, memory, output)
     }
 
@@ -96,8 +97,8 @@ class DefaultAgent(
         return false
     }
 
-    private fun ask(query: String, memory: List<String>): LLMResponse {
-        val prompt = buildPrompt(query, memory)
+    private fun ask(query: String, file: Document?, memory: List<String>): LLMResponse {
+        val prompt = buildPrompt(query)
 //        getLogger().info("> prompt: $prompt")
 
         val messages = mutableListOf<Message>()
@@ -105,6 +106,9 @@ class DefaultAgent(
             messages.add(Message(role = Role.SYSTEM, text = systemInstructions))
         }
         messages.add(Message(role = Role.USER, text = prompt))
+        file?.let {
+            messages.add(Message(role = Role.USER, document = file))
+        }
         messages.addAll(
             memory.map { text -> Message(role = Role.USER, text = text) }
         )
@@ -124,7 +128,7 @@ class DefaultAgent(
         )
     }
 
-    private fun buildPrompt(query: String, memory: List<String>): String {
+    private fun buildPrompt(query: String): String {
         val tools = toolMap.values.map { tool -> "- ${tool.function().name}: ${tool.function().description}" }
             .joinToString(separator = "\n")
 
