@@ -41,6 +41,7 @@ object ErrorCode {
 
     val FORM_NOT_FOUND: String = "$PREFIX:form:not-found"
     val FORM_IN_USE: String = "$PREFIX:form:in-use"
+    val FORM_DUPLICATE_CODE: String = "$PREFIX:form:duplicate-code"
 
     val HTTP_MISSING_PARAMETER = "$PREFIX:http:missing-parameter"
     val HTTP_INVALID_PARAMETER = "$PREFIX:http:invalid-parameter"

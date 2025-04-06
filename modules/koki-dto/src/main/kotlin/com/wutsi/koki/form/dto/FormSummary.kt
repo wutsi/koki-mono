@@ -4,6 +4,7 @@ import java.util.Date
 
 data class FormSummary(
     val id: Long = -1,
+    val code: String = "",
     val name: String = "",
     var active: Boolean = true,
     val createdAt: Date = Date(),
