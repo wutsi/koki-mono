@@ -51,6 +51,9 @@
     </repositories>
 
     <properties>
+        <wutsi-dto.version>0.0.181</wutsi-dto.version>
+        <wutsi-platform.version>0.0.12</wutsi-platform.version>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <kotlin.code.style>official</kotlin.code.style>
@@ -137,9 +140,6 @@
         <tika.version>3.1.0</tika.version>
         <ua-java.version>1.6.1</ua-java.version>
         <xmemcached.version>2.4.8</xmemcached.version>
-
-        <wutsi-dto.version>0.0.181</wutsi-dto.version>
-        <wutsi-platform.version>0.0.11</wutsi-platform.version>
     </properties>
 
     <dependencies>
