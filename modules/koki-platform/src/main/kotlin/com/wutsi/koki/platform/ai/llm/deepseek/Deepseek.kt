@@ -3,6 +3,7 @@ package com.wutsi.koki.platform.ai.llm.deepseek
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.platform.ai.llm.FunctionCall
 import com.wutsi.koki.platform.ai.llm.LLM
+import com.wutsi.koki.platform.ai.llm.LLMDocumentTypeNotSupportedException
 import com.wutsi.koki.platform.ai.llm.LLMException
 import com.wutsi.koki.platform.ai.llm.LLMRequest
 import com.wutsi.koki.platform.ai.llm.LLMResponse
@@ -176,6 +177,8 @@ class Deepseek(
                         role = role
                     )
                 )
+            } else {
+                throw LLMDocumentTypeNotSupportedException(contentType)
             }
         }
         return result

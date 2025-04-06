@@ -6,6 +6,7 @@ import com.wutsi.koki.platform.ai.llm.FunctionDeclaration
 import com.wutsi.koki.platform.ai.llm.FunctionParameterProperty
 import com.wutsi.koki.platform.ai.llm.FunctionParameters
 import com.wutsi.koki.platform.ai.llm.LLM
+import com.wutsi.koki.platform.ai.llm.LLMDocumentTypeNotSupportedException
 import com.wutsi.koki.platform.ai.llm.LLMRequest
 import com.wutsi.koki.platform.ai.llm.LLMResponse
 import com.wutsi.koki.platform.ai.llm.Message
@@ -14,6 +15,8 @@ import com.wutsi.koki.platform.ai.llm.Tool
 import com.wutsi.koki.platform.ai.llm.Type
 import com.wutsi.koki.platform.ai.llm.deepseek.Deepseek
 import com.wutsi.koki.platform.ai.llm.gemini.GeminiTest
+import jdk.internal.joptsimple.internal.Messages.message
+import org.junit.jupiter.api.assertThrows
 import org.springframework.http.MediaType
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -95,6 +98,28 @@ class DeepseekTest {
             )
         )
         print(response)
+    }
+
+    @Test
+    fun processImage() {
+        assertThrows<LLMDocumentTypeNotSupportedException> {
+            val response = llm.generateContent(
+                request = LLMRequest(
+                    messages = listOf(
+                        Message(
+                            text = "Can you extract the information of this image:",
+                            document = Document(
+                                contentType = MediaType.IMAGE_JPEG,
+                                content = GeminiTest::class.java.getResourceAsStream("/file/document.jpg")!!
+                            )
+                        ),
+                    ),
+                    config = Config(
+                        responseType = MediaType.APPLICATION_JSON,
+                    )
+                )
+            )
+        }
     }
 
     @Test
