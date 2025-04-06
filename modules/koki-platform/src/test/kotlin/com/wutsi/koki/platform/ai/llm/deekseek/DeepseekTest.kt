@@ -1,6 +1,7 @@
 package com.wutsi.koki.platform.ai.llm.deekseek
 
 import com.wutsi.koki.platform.ai.llm.Config
+import com.wutsi.koki.platform.ai.llm.Document
 import com.wutsi.koki.platform.ai.llm.FunctionDeclaration
 import com.wutsi.koki.platform.ai.llm.FunctionParameterProperty
 import com.wutsi.koki.platform.ai.llm.FunctionParameters
@@ -12,6 +13,7 @@ import com.wutsi.koki.platform.ai.llm.Role
 import com.wutsi.koki.platform.ai.llm.Tool
 import com.wutsi.koki.platform.ai.llm.Type
 import com.wutsi.koki.platform.ai.llm.deepseek.Deepseek
+import com.wutsi.koki.platform.ai.llm.gemini.GeminiTest
 import org.springframework.http.MediaType
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -75,6 +77,24 @@ class DeepseekTest {
         assertEquals(true, response.messages[0].text?.endsWith("}"))
 
         response.messages.forEach { message -> println(message.text) }
+    }
+
+    @Test
+    fun processPDF() {
+        val response = llm.generateContent(
+            request = LLMRequest(
+                messages = listOf(
+                    Message(
+                        text = "Can you summarize in 500 word the following text:",
+                        document = Document(
+                            contentType = MediaType.APPLICATION_PDF,
+                            content = GeminiTest::class.java.getResourceAsStream("/file/document-en.pdf")!!
+                        )
+                    )
+                )
+            )
+        )
+        print(response)
     }
 
     @Test

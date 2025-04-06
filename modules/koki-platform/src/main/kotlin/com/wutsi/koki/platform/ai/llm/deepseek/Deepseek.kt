@@ -13,13 +13,20 @@ import com.wutsi.koki.platform.ai.llm.deepseek.model.DSCompletionRequest
 import com.wutsi.koki.platform.ai.llm.deepseek.model.DSCompletionResponse
 import com.wutsi.koki.platform.ai.llm.deepseek.model.DSMessage
 import com.wutsi.koki.platform.ai.llm.deepseek.model.DSTool
+import org.apache.commons.io.IOUtils
+import org.apache.pdfbox.Loader
+import org.apache.pdfbox.text.PDFTextStripper
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.web.client.HttpStatusCodeException
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
 import java.time.Duration
 import java.time.temporal.ChronoUnit
+import java.util.UUID
 import kotlin.collections.flatMap
 
 class Deepseek(
@@ -43,17 +50,7 @@ class Deepseek(
     override fun generateContent(request: LLMRequest): LLMResponse {
         val req = DSCompletionRequest(
             model = model,
-            messages = request.messages.mapNotNull { message ->
-                message.text?.let { text ->
-                    DSMessage(
-                        content = text,
-                        role = when (message.role) {
-                            Role.USER -> "user"
-                            Role.SYSTEM, Role.MODEL -> "system"
-                        }
-                    )
-                }
-            },
+            messages = request.messages.flatMap { message -> toDSMessage(message) },
             temperature = request.config?.temperature,
             topP = request.config?.topP,
             tools = request.tools?.let { tools ->
@@ -144,6 +141,63 @@ class Deepseek(
                 message = ex.message,
                 cause = ex,
             )
+        }
+    }
+
+    private fun toDSMessage(message: Message): List<DSMessage> {
+        val role = when (message.role) {
+            Role.USER -> "user"
+            Role.SYSTEM, Role.MODEL -> "system"
+        }
+
+        val result = mutableListOf<DSMessage>()
+
+        if (message.text != null) {
+            result.add(
+                DSMessage(
+                    content = message.text,
+                    role = role
+                )
+            )
+        }
+        if (message.document != null) {
+            val contentType = message.document.contentType
+            if (contentType.toString().startsWith("text/") || contentType == MediaType.APPLICATION_JSON) {
+                result.add(
+                    DSMessage(
+                        content = IOUtils.toString(message.document.content, "utf-8"),
+                        role = role
+                    )
+                )
+            } else if (contentType == MediaType.APPLICATION_PDF) {
+                result.add(
+                    DSMessage(
+                        content = pdf2Text(message.document.content),
+                        role = role
+                    )
+                )
+            }
+        }
+        return result
+    }
+
+    private fun pdf2Text(input: InputStream): String {
+        val file = File.createTempFile(UUID.randomUUID().toString(), ".pdf")
+        try {
+            // Copy to file
+            val output = FileOutputStream(file)
+            output.use {
+                IOUtils.copy(input, output)
+            }
+
+            // Extract the text
+            val doc = Loader.loadPDF(file)
+            val stripper = PDFTextStripper()
+            stripper.startPage = 1
+            stripper.endPage = doc.numberOfPages
+            return stripper.getText(doc)
+        } finally {
+            file.delete()
         }
     }
 }
