@@ -10,6 +10,7 @@ class FormMapper {
     fun toForm(entity: FormEntity): Form {
         return Form(
             id = entity.id!!,
+            code = entity.code,
             name = entity.name,
             description = entity.description,
             active = entity.active,
@@ -23,6 +24,7 @@ class FormMapper {
     fun toFormSummary(entity: FormEntity): FormSummary {
         return FormSummary(
             id = entity.id!!,
+            code = entity.code,
             name = entity.name,
             active = entity.active,
             createdAt = entity.createdAt,

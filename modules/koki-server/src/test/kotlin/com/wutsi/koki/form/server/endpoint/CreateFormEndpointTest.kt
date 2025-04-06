@@ -3,6 +3,8 @@ package com.wutsi.koki.form.server.endpoint
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.file.server.dao.FormOwnerRepository
 import com.wutsi.koki.form.dto.CreateFormRequest
 import com.wutsi.koki.form.dto.CreateFormResponse
@@ -13,7 +15,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql"])
+@Sql(value = ["/db/test/clean.sql", "/db/test/form/CreateFormEndpoint.sql"])
 class CreateFormEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var formDao: FormRepository
@@ -24,7 +26,8 @@ class CreateFormEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
     fun create() {
         val request = CreateFormRequest(
-            name = "T-100",
+            code = "T-100",
+            name = "Form",
             description = "This is a form for entering information",
             active = true
         )
@@ -34,6 +37,7 @@ class CreateFormEndpointTest : AuthorizationAwareEndpointTest() {
 
         val formId = result.body!!.formId
         val form = formDao.findById(formId).get()
+        assertEquals(request.code, form.code)
         assertEquals(request.name, form.name)
         assertEquals(request.description, form.description)
         assertEquals(request.active, form.active)
@@ -48,7 +52,8 @@ class CreateFormEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
     fun `create with owner`() {
         val request = CreateFormRequest(
-            name = "T-100",
+            code = "T-100",
+            name = "Form 2",
             description = "This is a form for entering information",
             active = true,
             owner = ObjectReference(
@@ -62,6 +67,7 @@ class CreateFormEndpointTest : AuthorizationAwareEndpointTest() {
 
         val formId = result.body!!.formId
         val form = formDao.findById(formId).get()
+        assertEquals(request.code, form.code)
         assertEquals(request.name, form.name)
         assertEquals(request.description, form.description)
         assertEquals(request.active, form.active)
@@ -74,5 +80,20 @@ class CreateFormEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(form.id, owners[0].formId)
         assertEquals(request.owner?.id, owners[0].ownerId)
         assertEquals(request.owner?.type, owners[0].ownerType)
+    }
+
+    @Test
+    fun `duplicate code`() {
+        val request = CreateFormRequest(
+            code = "T-500",
+            name = "Form",
+            description = "This is a form for entering information",
+            active = true
+        )
+
+        val result = rest.postForEntity("/v1/forms", request, ErrorResponse::class.java)
+        assertEquals(HttpStatus.CONFLICT, result.statusCode)
+
+        assertEquals(ErrorCode.FORM_DUPLICATE_CODE, result.body?.error?.code)
     }
 }

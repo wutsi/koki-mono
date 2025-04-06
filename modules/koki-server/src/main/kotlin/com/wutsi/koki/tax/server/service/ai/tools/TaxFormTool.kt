@@ -1,4 +1,4 @@
-package com.wutsi.koki.tax.server.agent.form
+package com.wutsi.koki.tax.server.service.ai.tools
 
 import com.wutsi.koki.platform.ai.agent.Tool
 import com.wutsi.koki.platform.ai.llm.FunctionDeclaration

@@ -20,7 +20,8 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
         navigateTo("/forms/create")
         assertCurrentPageIs(PageName.FORM_CREATE)
 
-        input("#name", "T-100")
+        input("#code", "T-100")
+        input("#name", "Control List")
         select("#active", 0)
         input("#description", "This is the description")
         click("[type=submit]")
@@ -28,7 +29,8 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
         val request = argumentCaptor<CreateFormRequest>()
         verify(rest).postForEntity(eq("$sdkBaseUrl/v1/forms"), request.capture(), eq(CreateFormResponse::class.java))
 
-        assertEquals("T-100", request.firstValue.name)
+        assertEquals("T-100", request.firstValue.code)
+        assertEquals("Control List", request.firstValue.name)
         assertEquals("This is the description", request.firstValue.description)
         assertEquals(true, request.firstValue.active)
 
@@ -41,7 +43,8 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
         navigateTo("/forms/create")
         assertCurrentPageIs(PageName.FORM_CREATE)
 
-        input("#name", "T-100")
+        input("#code", "T-100")
+        input("#name", "Control List")
         select("#active", 0)
         input("#description", "This is the description")
         click(".btn-cancel")
@@ -57,7 +60,8 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/forms/create")
 
-        input("#name", "T-100")
+        input("#code", "T-100")
+        input("#name", "Control List")
         select("#active", 0)
         input("#description", "This is the description")
         click("button[type=submit]")

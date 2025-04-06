@@ -20,7 +20,8 @@ class EditFormControllerTest : AbstractPageControllerTest() {
         navigateTo("/forms/${form.id}/edit")
         assertCurrentPageIs(PageName.FORM_EDIT)
 
-        input("#name", "T-100")
+        input("#code", "T-100")
+        input("#name", "Control List")
         select("#active", 0)
         input("#description", "This is the description")
         click("[type=submit]")
@@ -32,7 +33,8 @@ class EditFormControllerTest : AbstractPageControllerTest() {
             eq(Any::class.java)
         )
 
-        assertEquals("T-100", request.firstValue.name)
+        assertEquals("T-100", request.firstValue.code)
+        assertEquals("Control List", request.firstValue.name)
         assertEquals("This is the description", request.firstValue.description)
         assertEquals(true, request.firstValue.active)
 
@@ -44,7 +46,8 @@ class EditFormControllerTest : AbstractPageControllerTest() {
     fun cancel() {
         navigateTo("/forms/${form.id}/edit")
 
-        input("#name", "T-100")
+        input("#code", "T-100")
+        input("#name", "Control List")
         select("#active", 0)
         input("#description", "This is the description")
         click(".btn-cancel")
@@ -60,7 +63,8 @@ class EditFormControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/forms/${form.id}/edit")
 
-        input("#name", "T-100")
+        input("#code", "T-100")
+        input("#name", "Control List")
         select("#active", 0)
         input("#description", "This is the description")
         click("button[type=submit]")

@@ -17,6 +17,7 @@ class GetFormEndpointTest : TenantAwareEndpointTest() {
         assertEquals(HttpStatus.OK, result.statusCode)
 
         val form = result.body!!.form
+        assertEquals("T-100", form.code)
         assertEquals("f-100", form.name)
         assertEquals("This is the F-100 form", form.description)
         assertEquals(false, form.active)

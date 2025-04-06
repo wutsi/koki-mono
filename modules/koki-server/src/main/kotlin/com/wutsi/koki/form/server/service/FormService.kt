@@ -3,6 +3,8 @@ package com.wutsi.koki.form.server.service
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.Parameter
+import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.file.server.dao.FormOwnerRepository
 import com.wutsi.koki.form.dto.CreateFormRequest
@@ -35,12 +37,12 @@ class FormService(
 
     fun search(
         tenantId: Long,
-        ids: List<Long>,
-        active: Boolean?,
-        ownerId: Long?,
-        ownerType: ObjectType?,
-        limit: Int,
-        offset: Int,
+        ids: List<Long> = emptyList(),
+        active: Boolean? = null,
+        ownerId: Long? = null,
+        ownerType: ObjectType? = null,
+        limit: Int = 20,
+        offset: Int = 0,
     ): List<FormEntity> {
         val jql = StringBuilder("SELECT F FROM FormEntity F")
         if (ownerId != null || ownerType != null) {
@@ -83,12 +85,15 @@ class FormService(
 
     @Transactional
     fun create(request: CreateFormRequest, tenantId: Long): FormEntity {
+        ensureCodeUnique(null, request.code, tenantId)
+
         val userId = securityService.getCurrentUserIdOrNull()
         val now = Date()
 
         val form = dao.save(
             FormEntity(
                 tenantId = tenantId,
+                code = request.code,
                 name = request.name,
                 description = request.description,
                 active = request.active,
@@ -113,10 +118,13 @@ class FormService(
 
     @Transactional
     fun update(id: Long, request: UpdateFormRequest, tenantId: Long): FormEntity {
+        ensureCodeUnique(id, request.code, tenantId)
+
         val userId = securityService.getCurrentUserIdOrNull()
         val now = Date()
 
         val form = get(id, tenantId)
+        form.code = request.code
         form.name = request.name
         form.description = request.description
         form.active = request.active
@@ -132,5 +140,17 @@ class FormService(
         form.deletedAt = Date()
         form.deletedById = securityService.getCurrentUserIdOrNull()
         dao.save(form)
+    }
+
+    private fun ensureCodeUnique(id: Long?, code: String, tenantId: Long) {
+        val form = dao.findByCodeAndTenantId(code, tenantId)
+        if (form != null && form.id != id) {
+            throw ConflictException(
+                error = Error(
+                    code = ErrorCode.FORM_DUPLICATE_CODE,
+                    parameter = Parameter(value = code),
+                )
+            )
+        }
     }
 }

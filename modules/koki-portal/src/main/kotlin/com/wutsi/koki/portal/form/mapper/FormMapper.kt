@@ -17,6 +17,7 @@ class FormMapper(private val moment: Moment) : TenantAwareMapper() {
         val fmt = createDateTimeFormat()
         return FormModel(
             id = entity.id,
+            code = entity.code,
             name = entity.name,
             description = entity.description,
             active = entity.active,
@@ -38,6 +39,7 @@ class FormMapper(private val moment: Moment) : TenantAwareMapper() {
         val fmt = createDateTimeFormat()
         return FormModel(
             id = entity.id,
+            code = entity.code,
             name = entity.name,
             active = entity.active,
             createdAt = entity.createdAt,

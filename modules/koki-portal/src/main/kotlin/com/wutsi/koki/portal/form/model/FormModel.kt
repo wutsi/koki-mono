@@ -5,6 +5,7 @@ import java.util.Date
 
 data class FormModel(
     val id: Long = -1,
+    val code: String = "",
     val name: String = "",
     var description: String? = null,
     var active: Boolean = true,

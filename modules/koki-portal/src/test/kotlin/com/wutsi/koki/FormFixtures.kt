@@ -10,24 +10,28 @@ object FormFixtures {
     val forms = listOf(
         FormSummary(
             id = 100,
-            name = "T1 - Personal Taxes Control List",
+            code = "T1",
+            name = "Personal Taxes Control List",
             active = true,
         ),
         FormSummary(
             id = 101,
-            name = "T2 - Corporate Taxes Control List",
+            code = "T2",
+            name = "Corporate Taxes Control List",
             active = true,
         ),
         FormSummary(
             id = 103,
-            name = "GHS/PST - GHS/PST Control List",
+            code = "GHS_PST",
+            name = "GHS/PST Control List",
             active = false,
         ),
     )
 
     val form = Form(
         id = 100,
-        name = "T1 - Personal Taxes Control List",
+        code = "T1",
+        name = "Personal Taxes Control List",
         description = "Form for client to fill in before we process their taxes",
         createdAt = DateUtils.addDays(Date(), -30),
         createdById = users[0].id,

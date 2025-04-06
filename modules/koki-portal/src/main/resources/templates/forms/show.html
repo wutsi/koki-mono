@@ -50,7 +50,11 @@
                     <div th:replace="~{__components/module :: tabs-content('main', true, ${form}, ${module})}"></div>
                     <table class="table hidden" id="tab-details-content">
                         <tr>
-                            <td width="20%"><b>Name</b></td>
+                            <td width="20%"><b>Code</b></td>
+                            <td th:text="${form.code}">CODE</td>
+                        </tr>
+                        <tr>
+                            <td><b>Name</b></td>
                             <td th:text="${form.name}">NAME</td>
                         </tr>
                         <tr>

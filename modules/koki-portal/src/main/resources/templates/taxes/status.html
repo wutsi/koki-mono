@@ -54,7 +54,7 @@
                                 <select th:field="*{formId}">
                                     <option value="-1"></option>
                                     <option th:each="form : ${forms}"
-                                            th:text="${form.name}"
+                                            th:text="${form.code} + ': ' + ${form.name}"
                                             th:value="${form.id}">
                                         FORM
                                     </option>

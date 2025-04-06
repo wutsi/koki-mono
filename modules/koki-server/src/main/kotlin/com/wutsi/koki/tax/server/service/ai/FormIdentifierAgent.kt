@@ -1,4 +1,4 @@
-package com.wutsi.koki.tax.server.service
+package com.wutsi.koki.tax.server.service.ai
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.account.server.service.AccountService
@@ -15,6 +15,7 @@ import com.wutsi.koki.form.server.service.FormService
 import com.wutsi.koki.platform.ai.agent.DefaultAgent
 import com.wutsi.koki.platform.ai.llm.Document
 import com.wutsi.koki.platform.logger.KVLogger
+import com.wutsi.koki.tax.server.service.TaxService
 import com.wutsi.koki.tax.server.service.ai.tools.TaxFormTool
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.service.ConfigurationService
@@ -152,9 +153,7 @@ class FormIdentifierAgent(
                 if (forms.isEmpty()) {
                     "No internal form!"
                 } else {
-                    forms.map { form ->
-                        "- ${form.code}:" + (form.description?.take(100)?.replace("\n", "") ?: "")
-                    }.joinToString("\n")
+                    forms.map { form -> "- ${form.code}: ${form.name}" }.joinToString("\n")
                 }
             )
     }
