@@ -161,7 +161,7 @@ class FormIdentifierAgent(
             return null
         }
         val extension = FilenameUtils.getExtension(file.url)
-        val f = File.createTempFile(file.name, ".${extension}")
+        val f = File.createTempFile(file.name, ".$extension")
         val output = FileOutputStream(f)
         storageServiceProvider.get(file.tenantId).get(URL(file.url), output)
         return f

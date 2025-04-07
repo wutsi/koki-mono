@@ -24,9 +24,11 @@ import org.mockito.Mockito.mock
 import org.springframework.http.MediaType
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class DefaultAgentTest {
     companion object {
@@ -91,10 +93,13 @@ class DefaultAgentTest {
         assertEquals(function2.parameters, request.firstValue.tools?.get(1)?.functionDeclarations?.get(0)?.parameters)
 
         assertEquals(2, request.firstValue.messages.size)
-        assertEquals(SYSTEM_INSTRUCTIONS, request.firstValue.messages[0].text)
         assertEquals(Role.SYSTEM, request.firstValue.messages[0].role)
-        assertEquals(true, request.firstValue.messages[1].text?.contains(QUERY))
+        assertEquals(SYSTEM_INSTRUCTIONS, request.firstValue.messages[0].text)
+        assertEquals(null, request.firstValue.messages[0].document)
+
         assertEquals(Role.USER, request.firstValue.messages[1].role)
+        assertEquals(true, request.firstValue.messages[1].text?.contains(QUERY))
+        assertEquals(null, request.firstValue.messages[1].document)
 
         // function is called
         verify(tool1).use(inputs)
@@ -113,10 +118,13 @@ class DefaultAgentTest {
         val inputs = mapOf("email" to "ray.sponsible@gmail.com")
         setupFunctionCallResponse("1st step", function1.name, inputs)
 
+        val file = File.createTempFile("foo", ".txt")
+        file.writeText("Yo man")
+
         // THEN
         val agent = createAgent(responseType = MediaType.APPLICATION_JSON)
         agent.step(QUERY, null, output, memory)
-        val result = agent.step(QUERY, null, output, memory)
+        val result = agent.step(QUERY, file, output, memory)
 
         // Continue
         assertEquals(false, result)
@@ -133,13 +141,23 @@ class DefaultAgentTest {
         assertEquals(function2.name, request.secondValue.tools?.get(1)?.functionDeclarations?.get(0)?.name)
         assertEquals(function2.parameters, request.secondValue.tools?.get(1)?.functionDeclarations?.get(0)?.parameters)
 
-        assertEquals(3, request.secondValue.messages.size)
-        assertEquals(SYSTEM_INSTRUCTIONS, request.secondValue.messages[0].text)
+        assertEquals(4, request.secondValue.messages.size)
         assertEquals(Role.SYSTEM, request.secondValue.messages[0].role)
-        assertEquals(true, request.secondValue.messages[1].text?.contains(QUERY))
+        assertEquals(SYSTEM_INSTRUCTIONS, request.secondValue.messages[0].text)
+        assertEquals(null, request.secondValue.messages[0].document)
+
         assertEquals(Role.USER, request.secondValue.messages[1].role)
-        assertEquals(FUNCTION1_RESULT, request.secondValue.messages[2].text)
+        assertEquals(true, request.secondValue.messages[1].text?.contains(QUERY))
+        assertEquals(null, request.secondValue.messages[1].document)
+
         assertEquals(Role.USER, request.secondValue.messages[2].role)
+        assertEquals(null, request.secondValue.messages[2].text)
+        assertEquals(MediaType.TEXT_PLAIN, request.secondValue.messages[2].document?.contentType)
+        assertNotNull(request.secondValue.messages[2].document?.content)
+
+        assertEquals(Role.USER, request.secondValue.messages[3].role)
+        assertEquals(FUNCTION1_RESULT, request.secondValue.messages[3].text)
+        assertEquals(null, request.secondValue.messages[3].document)
 
         // function is called
         verify(tool1, times(2)).use(inputs)
@@ -186,14 +204,21 @@ class DefaultAgentTest {
         assertEquals(function2.parameters, request.thirdValue.tools?.get(1)?.functionDeclarations?.get(0)?.parameters)
 
         assertEquals(4, request.thirdValue.messages.size)
-        assertEquals(SYSTEM_INSTRUCTIONS, request.thirdValue.messages[0].text)
         assertEquals(Role.SYSTEM, request.thirdValue.messages[0].role)
-        assertEquals(true, request.thirdValue.messages[1].text?.contains(QUERY))
+        assertEquals(SYSTEM_INSTRUCTIONS, request.thirdValue.messages[0].text)
+        assertEquals(null, request.thirdValue.messages[0].document)
+
         assertEquals(Role.USER, request.thirdValue.messages[1].role)
+        assertEquals(true, request.thirdValue.messages[1].text?.contains(QUERY))
+        assertEquals(null, request.thirdValue.messages[1].document)
+
         assertEquals(FUNCTION1_RESULT, request.thirdValue.messages[2].text)
         assertEquals(Role.USER, request.thirdValue.messages[2].role)
+        assertEquals(null, request.thirdValue.messages[2].document)
+
         assertEquals(FUNCTION2_RESULT, request.thirdValue.messages[3].text)
         assertEquals(Role.USER, request.thirdValue.messages[3].role)
+        assertEquals(null, request.thirdValue.messages[3].document)
 
         // function is called
         verify(tool1).use(inputs)
