@@ -20,8 +20,9 @@
 
 <tr class="form" th:fragment="columns(form)" th:remove="tag">
     <td>
-        <a th:href="'/forms/' + ${form.id} " th:text="${form.name}">NAME</a>
+        <a th:href="'/forms/' + ${form.id} " th:text="${form.code}">CODE</a>
     </td>
+    <td th:text="${form.name}">NAME</td>
     <td align="center">
         <span th:if="${form.active}">Yes</span>
         <span th:if="!${form.active}">No</span>

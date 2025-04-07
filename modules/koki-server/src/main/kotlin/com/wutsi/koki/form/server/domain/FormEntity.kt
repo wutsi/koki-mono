@@ -29,6 +29,7 @@ data class FormEntity(
     @Column(name = "deleted_by_fk")
     var deletedById: Long? = null,
 
+    var code: String = "",
     var name: String = "",
     var description: String? = null,
     var active: Boolean = true,

@@ -6,7 +6,8 @@ CREATE TABLE T_FORM(
   modified_by_fk          BIGINT,
   deleted_by_fk           BIGINT,
 
-  name                    VARCHAR(100) NOT NULL ,
+  code                    VARCHAR(10) NOT NULL,
+  name                    VARCHAR(100) NOT NULL,
   description             TEXT,
   active                  BOOL NOT NULL DEFAULT true,
 
@@ -15,6 +16,7 @@ CREATE TABLE T_FORM(
   modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
   deleted_at              DATETIME,
 
+  UNIQUE(tenant_fk, code),
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 

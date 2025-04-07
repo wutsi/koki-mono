@@ -1,4 +1,4 @@
-package com.wutsi.koki.tax.server.agent.form
+package com.wutsi.koki.tax.server.service.ai.tools
 
 import com.wutsi.koki.platform.ai.agent.Tool
 import com.wutsi.koki.platform.ai.llm.FunctionDeclaration
@@ -15,14 +15,13 @@ import org.slf4j.LoggerFactory
 class TaxFormTool : Tool {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(TaxFormTool::class.java)
+        const val NAME = "tax_form_list"
     }
 
     override fun function(): FunctionDeclaration {
         return FunctionDeclaration(
-            name = "tax_form_list",
-            description = """
-                Return the list of official forms required by Revenue Services and Agencies in CSV format. The returned CSV has following informations: form_code (official code of the form), form_description (description of the form)
-            """.trimIndent(),
+            name = NAME,
+            description = "Return the list of the official fiscal documents in CSV format for a given country.".trimIndent(),
             parameters = FunctionParameters(
                 properties = mapOf(
                     "country_code" to FunctionParameterProperty(

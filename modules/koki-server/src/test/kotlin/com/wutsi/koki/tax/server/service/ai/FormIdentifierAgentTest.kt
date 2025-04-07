@@ -1,9 +1,10 @@
-package com.wutsi.koki.tax.server.service
+package com.wutsi.koki.tax.server.service.ai
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.account.server.service.AccountService
@@ -24,8 +25,8 @@ import com.wutsi.koki.platform.ai.llm.gemini.Gemini
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.storage.local.LocalStorageService
 import com.wutsi.koki.tax.server.domain.TaxEntity
-import com.wutsi.koki.tax.server.service.FormIdentifierAgent.Companion.EXPENSE_CODE
-import com.wutsi.koki.tax.server.service.ai.FormIdentifierAgent
+import com.wutsi.koki.tax.server.service.TaxService
+import com.wutsi.koki.tax.server.service.ai.FormIdentifierAgent.Companion.EXPENSE_CODE
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.domain.ConfigurationEntity
 import com.wutsi.koki.tenant.server.service.ConfigurationService
@@ -81,16 +82,16 @@ class FormIdentifierAgentTest {
         FormEntity(
             id = 1,
             code = "INT-T1",
-            description = "This form collects the client (parent, children) information and the list of documents included in their tax declaration"
+            name = "Client information and and list of documents"
         ),
         FormEntity(
             id = 1,
             code = "INT-T2",
-            description = "This form collects the business information and the list of documents included in their tax declaration"
+            name = "Business Information"
         ),
     )
 
-    private val gemini = Gemini(
+    private val llm = Gemini(
         apiKey = System.getenv("GEMINI_API_KEY"),
         model = "gemini-2.0-flash",
     )
@@ -110,7 +111,7 @@ class FormIdentifierAgentTest {
         doReturn(account).whenever(accountService).get(any(), any())
         doReturn(tax).whenever(taxService).get(any(), any())
         doReturn(storage).whenever(storageServiceProvider).get(any())
-        doReturn(gemini).whenever(llmProvider).get(any())
+        doReturn(llm).whenever(llmProvider).get(any())
         doReturn(forms).whenever(formService).search(
             any(),
             anyOrNull(),
@@ -194,7 +195,6 @@ class FormIdentifierAgentTest {
         fileUploaded("INT-T1", "/tax/ai/Control_List-Filled.pdf")
     }
 
-
     private fun fileUploaded(expectedLabel: String, path: String, contentType: String = "application/pdf") {
         // GIVEN
         val file = setupFile(path, contentType)
@@ -208,53 +208,58 @@ class FormIdentifierAgentTest {
         verify(fileService).setLabels(eq(file), eq(listOf(expectedLabel)), anyOrNull())
     }
 
-//
-//    @Test
-//    fun `ignore event when AI not enabled`() {
-//        doReturn(
-//            configs.map { entry ->
-//                ConfigurationEntity(
-//                    name = entry.key,
-//                    value = entry.value.toString()
-//                )
-//            }.filter { config -> config.name != ConfigurationName.AI_PROVIDER }
-//        ).whenever(configurationService)
-//            .search(any(), anyOrNull(), anyOrNull())
-//
-//        val event = createFileUploadedEvent(ownerType = ObjectType.ACCOUNT)
-//        val result = agent.notify(event)
-//
-//        assertEquals(true, result)
-//        verify(gemini, never()).generateContent(any())
-//    }
-//
-//    @Test
-//    fun `ignore event when TAX AI Agent not enabled`() {
-//        doReturn(
-//            configs.map { entry ->
-//                ConfigurationEntity(
-//                    name = entry.key,
-//                    value = entry.value.toString()
-//                )
-//            }.filter { config -> config.name != ConfigurationName.TAX_AI_AGENT_ENABLED }
-//        ).whenever(configurationService)
-//            .search(any(), anyOrNull(), anyOrNull())
-//
-//        val event = createFileUploadedEvent(ownerType = ObjectType.ACCOUNT)
-//        val result = agent.notify(event)
-//
-//        assertEquals(true, result)
-//        verify(gemini, never()).generateContent(any())
-//    }
-//
-//    @Test
-//    fun `ignore non TAX events`() {
-//        val event = createFileUploadedEvent(ownerType = ObjectType.ACCOUNT)
-//        val result = agent.notify(event)
-//
-//        assertEquals(true, result)
-//        verify(gemini, never()).generateContent(any())
-//    }
+    @Test
+    fun `file uploaded - AI not enabled`() {
+        doReturn(
+            configs.map { entry ->
+                ConfigurationEntity(
+                    name = entry.key,
+                    value = entry.value.toString()
+                )
+            }.filter { config -> config.name != ConfigurationName.AI_PROVIDER }
+        ).whenever(configurationService)
+            .search(any(), anyOrNull(), anyOrNull())
+
+        val file = setupFile("/tax/ai/Control_List-Filled.pdf")
+
+        val event = createFileUploadedEvent(file)
+        val result = agent.notify(event)
+
+        assertEquals(true, result)
+        verify(fileService, never()).setLabels(any(), any(), anyOrNull())
+    }
+
+    @Test
+    fun `ignore event when TAX AI Agent not enabled`() {
+        doReturn(
+            configs.map { entry ->
+                ConfigurationEntity(
+                    name = entry.key,
+                    value = entry.value.toString()
+                )
+            }.filter { config -> config.name != ConfigurationName.TAX_AI_AGENT_ENABLED }
+        ).whenever(configurationService)
+            .search(any(), anyOrNull(), anyOrNull())
+
+        val file = setupFile("/tax/ai/Control_List-Filled.pdf")
+
+        val event = createFileUploadedEvent(file)
+        val result = agent.notify(event)
+
+        assertEquals(true, result)
+        verify(fileService, never()).setLabels(any(), any(), anyOrNull())
+    }
+
+    @Test
+    fun `ignore non TAX events`() {
+        val file = setupFile("/tax/ai/Control_List-Filled.pdf")
+
+        val event = createFileUploadedEvent(file, ownerType = ObjectType.ACCOUNT)
+        val result = agent.notify(event)
+
+        assertEquals(true, result)
+        verify(fileService, never()).setLabels(any(), any(), anyOrNull())
+    }
 
     @Test
     fun `ignore non FileDeletedEvent`() {
@@ -266,7 +271,8 @@ class FormIdentifierAgentTest {
 
     private fun setupFile(path: String, contentType: String = "application/pdf"): FileEntity {
         val input = FormIdentifierAgentTest::class.java.getResourceAsStream(path)
-        val path = "tax-ai-agent/" + UUID.randomUUID().toString()
+        val extension = contentType.substring(contentType.indexOf("/") + 1)
+        val path = "tax-ai-agent/" + UUID.randomUUID().toString() + "." + extension
         val url = storage.store(path = path, content = input!!, contentType, -1)
 
         val file = FileEntity(

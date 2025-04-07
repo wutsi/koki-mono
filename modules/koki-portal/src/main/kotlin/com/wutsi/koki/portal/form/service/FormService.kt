@@ -66,6 +66,7 @@ class FormService(
     fun create(form: FormForm): Long {
         return koki.create(
             request = CreateFormRequest(
+                code = form.code,
                 name = form.name,
                 description = form.description,
                 active = form.active
@@ -77,6 +78,7 @@ class FormService(
         koki.update(
             id = id,
             request = UpdateFormRequest(
+                code = form.code,
                 name = form.name,
                 description = form.description,
                 active = form.active
