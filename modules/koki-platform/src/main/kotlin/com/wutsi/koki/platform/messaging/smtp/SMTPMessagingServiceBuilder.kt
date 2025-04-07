@@ -50,16 +50,19 @@ class SMTPMessagingServiceBuilder(
                 password = config.get(ConfigurationName.SMTP_PASSWORD)!!
             ),
             fromAddress = config.get(ConfigurationName.SMTP_FROM_ADDRESS)!!,
-            fromPersonal = config.get(ConfigurationName.SMTP_FROM_PERSONAL)!!
+            fromPersonal = config.get(ConfigurationName.SMTP_FROM_PERSONAL)
         )
     }
 
     private fun validate(config: Map<String, String>) {
-        val missing = CONFIG_NAMES.filter { name ->
-            name != ConfigurationName.SMTP_TYPE && config[name].isNullOrEmpty()
-        }
-        if (missing.isNotEmpty()) {
-            throw MessagingNotConfiguredException("SMTP not configured. Missing config: $missing")
+        val required = CONFIG_NAMES.filter { name -> name != ConfigurationName.SMTP_TYPE }
+            .filter { name -> name != ConfigurationName.SMTP_FROM_PERSONAL }
+
+        val available = required.mapNotNull { name -> config[name] }
+        if (available.size != required.size) {
+            throw MessagingNotConfiguredException(
+                "SMTP not configured. Missing config: " + required.filter { name -> config[name] == null }
+            )
         }
     }
 }

@@ -87,9 +87,7 @@ class SMTPMessagingServiceBuilderTest {
 
     @Test
     fun `missing from-personal`() {
-        assertThrows<MessagingNotConfiguredException> {
-            builder.build(createConfigExcluding(ConfigurationName.SMTP_FROM_PERSONAL))
-        }
+        builder.build(createConfigExcluding(ConfigurationName.SMTP_FROM_PERSONAL))
     }
 
     @Test
