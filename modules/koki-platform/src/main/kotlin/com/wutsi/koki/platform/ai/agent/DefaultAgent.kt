@@ -12,7 +12,10 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
 import java.io.ByteArrayInputStream
+import java.io.File
+import java.io.FileInputStream
 import java.io.OutputStream
+import java.net.URLConnection
 
 class DefaultAgent(
     private val llm: LLM,
@@ -25,7 +28,7 @@ class DefaultAgent(
         .map { tool -> tool.function().name to tool }
         .toMap()
 
-    override fun run(query: String, file: Document?, output: OutputStream) {
+    override fun run(query: String, file: File?, output: OutputStream) {
         var iteration = 0
         val logger = getLogger()
         val memory: MutableList<String> = mutableListOf()
@@ -50,7 +53,7 @@ class DefaultAgent(
         }
     }
 
-    fun step(query: String, file: Document?, output: OutputStream, memory: MutableList<String>): Boolean {
+    fun step(query: String, file: File?, output: OutputStream, memory: MutableList<String>): Boolean {
         val response = ask(query, file, memory)
         return decide(response, memory, output)
     }
@@ -97,7 +100,7 @@ class DefaultAgent(
         return false
     }
 
-    private fun ask(query: String, file: Document?, memory: List<String>): LLMResponse {
+    private fun ask(query: String, file: File?, memory: List<String>): LLMResponse {
         val prompt = buildPrompt(query)
 //        getLogger().info("> prompt: $prompt")
 
@@ -106,26 +109,41 @@ class DefaultAgent(
             messages.add(Message(role = Role.SYSTEM, text = systemInstructions))
         }
         messages.add(Message(role = Role.USER, text = prompt))
-        file?.let {
-            messages.add(Message(role = Role.USER, document = file))
-        }
-        messages.addAll(
-            memory.map { text -> Message(role = Role.USER, text = text) }
-        )
 
-        return llm.generateContent(
-            request = LLMRequest(
-                messages = messages,
-                tools = tools.map { tool ->
-                    com.wutsi.koki.platform.ai.llm.Tool(
-                        functionDeclarations = listOf(tool.function())
+        val input = file?.let { FileInputStream(file) }
+        try {
+            input?.let {
+                val mimeType = URLConnection.guessContentTypeFromName(file.path)
+                messages.add(
+                    Message(
+                        role = Role.USER,
+                        document = Document(
+                            content = input,
+                            contentType = MediaType.valueOf(mimeType)
+                        )
                     )
-                },
-                config = Config(
-                    responseType = responseType,
-                ),
+                )
+            }
+            messages.addAll(
+                memory.map { text -> Message(role = Role.USER, text = text) }
             )
-        )
+
+            return llm.generateContent(
+                request = LLMRequest(
+                    messages = messages,
+                    tools = tools.map { tool ->
+                        com.wutsi.koki.platform.ai.llm.Tool(
+                            functionDeclarations = listOf(tool.function())
+                        )
+                    },
+                    config = Config(
+                        responseType = responseType,
+                    ),
+                )
+            )
+        } finally {
+            input?.close()
+        }
     }
 
     private fun buildPrompt(query: String): String {
