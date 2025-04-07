@@ -13,20 +13,20 @@ import com.wutsi.koki.file.server.service.StorageServiceProvider
 import com.wutsi.koki.form.server.domain.AccountEntity
 import com.wutsi.koki.form.server.service.FormService
 import com.wutsi.koki.platform.ai.agent.DefaultAgent
-import com.wutsi.koki.platform.ai.llm.Document
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.tax.server.service.TaxService
 import com.wutsi.koki.tax.server.service.ai.tools.TaxFormTool
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.service.ConfigurationService
+import org.apache.commons.io.FilenameUtils
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
-import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
+import java.util.Collections.emptyList
 import java.util.Locale
 
 /**
@@ -59,19 +59,19 @@ class FormIdentifierAgent(
             Return the result in JSON format.
         """
         const val PROMPT = """
-            Can you analyse the provided document submitted by a user from {{country}} for whom we want to prepare his taxes.
-            Return the result in the following JSON format:
-            {
-               "code": "Code of the document. Example: T1",
-               "description": "Short summary of the document content in 255 characters or less"
-            }
+            Goal: Identify the code of a given document provided by a person from {{country}} for the preparation of his tax return.
 
-            The type of form you will identify are the following:
-            - Official forms from the Revenue Agency of the country.
-            - Internal forms.
-            - Common expenses (medical expense, charitable or political donation, exam for professional certification, etc.). Use the code "$EXPENSE_CODE"
+            Instructions:
+              1. Always refer the list of the official fiscal document to get the most up-to-date document codes.
+              2. If the document is not an official governmental, check if it's an internal form.
+              3. For common expenses document (medical expense, donations etc.), use the code "$EXPENSE_CODE" for categorization.
+              4. Return the final answer in JSON, that looks like:
 
-            List of Internal forms (in the format CODE: DESCRIPTION):
+              {
+                "code": "Code of the document. Example: T1",
+              }
+
+            Here is the list of internal forms (in the format CODE: DESCRIPTION):
             {{internal_forms}}
         """
     }
@@ -118,8 +118,8 @@ class FormIdentifierAgent(
         val output = ByteArrayOutputStream()
         output.use {
             val prompt = buildPrompt(account)
-            if (LOGGER.isDebugEnabled) {
-                LOGGER.debug("Prompt: $prompt")
+            if (LOGGER.isInfoEnabled) {
+                LOGGER.info("Prompt: $prompt")
             }
 
             DefaultAgent(
@@ -129,10 +129,7 @@ class FormIdentifierAgent(
                 systemInstructions = SYSTEM_INSTRUCTIONS,
             ).run(
                 query = prompt,
-                file = Document(
-                    contentType = MediaType.valueOf(file.contentType),
-                    content = ByteArrayInputStream(f.readBytes())
-                ),
+                file = f,
                 output = output,
             )
             return ObjectMapper().readValue(output.toByteArray(), Any::class.java) as Map<String, Any>
@@ -147,6 +144,7 @@ class FormIdentifierAgent(
             limit = Integer.MAX_VALUE,
         )
         return PROMPT
+            .trimIndent()
             .replace("{{country}}", Locale("en", country).displayCountry)
             .replace(
                 "{{internal_forms}}",
@@ -162,7 +160,8 @@ class FormIdentifierAgent(
         if (!isContentTypeSupported(file.contentType)) {
             return null
         }
-        val f = File.createTempFile(file.name, "tmp")
+        val extension = FilenameUtils.getExtension(file.url)
+        val f = File.createTempFile(file.name, ".${extension}")
         val output = FileOutputStream(f)
         storageServiceProvider.get(file.tenantId).get(URL(file.url), output)
         return f

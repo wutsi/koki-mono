@@ -271,7 +271,8 @@ class FormIdentifierAgentTest {
 
     private fun setupFile(path: String, contentType: String = "application/pdf"): FileEntity {
         val input = FormIdentifierAgentTest::class.java.getResourceAsStream(path)
-        val path = "tax-ai-agent/" + UUID.randomUUID().toString()
+        val extension = contentType.substring(contentType.indexOf("/") + 1)
+        val path = "tax-ai-agent/" + UUID.randomUUID().toString() + "." + extension
         val url = storage.store(path = path, content = input!!, contentType, -1)
 
         val file = FileEntity(
