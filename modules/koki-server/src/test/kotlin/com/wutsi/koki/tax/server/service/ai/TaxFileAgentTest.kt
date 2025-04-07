@@ -2,6 +2,7 @@ package com.wutsi.koki.tax.server.service.ai
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
+import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
@@ -26,7 +27,7 @@ import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.storage.local.LocalStorageService
 import com.wutsi.koki.tax.server.domain.TaxEntity
 import com.wutsi.koki.tax.server.service.TaxService
-import com.wutsi.koki.tax.server.service.ai.FormIdentifierAgent.Companion.EXPENSE_CODE
+import com.wutsi.koki.tax.server.service.ai.TaxFileAgent.Companion.EXPENSE_CODE
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.domain.ConfigurationEntity
 import com.wutsi.koki.tenant.server.service.ConfigurationService
@@ -36,7 +37,7 @@ import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class FormIdentifierAgentTest {
+class TaxFileAgentTest {
     private val registry = mock<AIMQConsumer>()
     private val llmProvider = mock<LLMProvider>()
     private val fileService = mock<FileService>()
@@ -46,7 +47,7 @@ class FormIdentifierAgentTest {
     private val formService = mock<FormService>()
     private val taxService = mock<TaxService>()
     private val logger = DefaultKVLogger()
-    private val agent = FormIdentifierAgent(
+    private val agent = TaxFileAgent(
         accountService = accountService,
         fileService = fileService,
         taxService = taxService,
@@ -157,32 +158,32 @@ class FormIdentifierAgentTest {
 
     @Test
     fun `file uploaded - CA - TP-1`() {
-        fileUploaded("TP-1.D", "/tax/ai/TP-1.D.pdf")
+        fileUploaded("TP-1.D", "/tax/ai/TP-1.D.pdf", expectedLanguage = "fr")
     }
 
     @Test
     fun `file uploaded - CA - RL-1`() {
-        fileUploaded("RL-1", "/tax/ai/RL-1.pdf")
+        fileUploaded("RL-1", "/tax/ai/RL-1.pdf", expectedLanguage = "fr")
     }
 
     @Test
     fun `file uploaded - CA - RL-10`() {
-        fileUploaded("RL-10", "/tax/ai/RL-10.png", "image/png")
+        fileUploaded("RL-10", "/tax/ai/RL-10.png", "image/png", expectedLanguage = "fr")
     }
 
     @Test
     fun `file uploaded - CA - RL-24`() {
-        fileUploaded("RL-24", "/tax/ai/RL-24.pdf")
+        fileUploaded("RL-24", "/tax/ai/RL-24.pdf", expectedLanguage = "fr")
     }
 
     @Test
     fun `file uploaded - CA - RL-3`() {
-        fileUploaded("RL-3", "/tax/ai/RL-3.pdf")
+        fileUploaded("RL-3", "/tax/ai/RL-3.pdf", expectedLanguage = "fr")
     }
 
     @Test
     fun `file uploaded - CA - RL-31`() {
-        fileUploaded("RL-31", "/tax/ai/RL-31.pdf")
+        fileUploaded("RL-31", "/tax/ai/RL-31.pdf", expectedLanguage = "fr")
     }
 
     @Test
@@ -192,10 +193,15 @@ class FormIdentifierAgentTest {
 
     @Test
     fun `file uploaded - internal form INT-T1`() {
-        fileUploaded("INT-T1", "/tax/ai/Control_List-Filled.pdf")
+        fileUploaded("INT-T1", "/tax/ai/Control_List-Filled.pdf", expectedLanguage = "fr")
     }
 
-    private fun fileUploaded(expectedLabel: String, path: String, contentType: String = "application/pdf") {
+    private fun fileUploaded(
+        expectedLabel: String,
+        path: String,
+        contentType: String = "application/pdf",
+        expectedLanguage: String = "en"
+    ) {
         // GIVEN
         val file = setupFile(path, contentType)
 
@@ -205,7 +211,11 @@ class FormIdentifierAgentTest {
 
         // THEN
         assertEquals(true, result)
-        verify(fileService).setLabels(eq(file), eq(listOf(expectedLabel)), anyOrNull())
+
+        val data = argumentCaptor<Map<String, Any>>()
+        verify(fileService).setData(eq(file), data.capture())
+        assertEquals(expectedLabel, data.firstValue["code"].toString())
+        assertEquals(expectedLanguage, data.firstValue["language"].toString())
     }
 
     @Test
@@ -226,7 +236,7 @@ class FormIdentifierAgentTest {
         val result = agent.notify(event)
 
         assertEquals(true, result)
-        verify(fileService, never()).setLabels(any(), any(), anyOrNull())
+        verify(fileService, never()).setData(any(), any())
     }
 
     @Test
@@ -247,7 +257,7 @@ class FormIdentifierAgentTest {
         val result = agent.notify(event)
 
         assertEquals(true, result)
-        verify(fileService, never()).setLabels(any(), any(), anyOrNull())
+        verify(fileService, never()).setData(any(), any())
     }
 
     @Test
@@ -258,7 +268,7 @@ class FormIdentifierAgentTest {
         val result = agent.notify(event)
 
         assertEquals(true, result)
-        verify(fileService, never()).setLabels(any(), any(), anyOrNull())
+        verify(fileService, never()).setData(any(), any())
     }
 
     @Test
@@ -270,7 +280,7 @@ class FormIdentifierAgentTest {
     }
 
     private fun setupFile(path: String, contentType: String = "application/pdf"): FileEntity {
-        val input = FormIdentifierAgentTest::class.java.getResourceAsStream(path)
+        val input = TaxFileAgentTest::class.java.getResourceAsStream(path)
         val extension = contentType.substring(contentType.indexOf("/") + 1)
         val path = "tax-ai-agent/" + UUID.randomUUID().toString() + "." + extension
         val url = storage.store(path = path, content = input!!, contentType, -1)

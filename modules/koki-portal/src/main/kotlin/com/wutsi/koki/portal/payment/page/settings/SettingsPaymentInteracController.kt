@@ -5,6 +5,7 @@ import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.payment.form.PaymentSettingsInteracForm
 import com.wutsi.koki.portal.security.RequiresPermission
+import com.wutsi.koki.portal.tenant.service.BusinessService
 import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import org.springframework.stereotype.Controller
@@ -17,7 +18,8 @@ import org.springframework.web.client.HttpClientErrorException
 @Controller
 @RequiresPermission(["payment:admin"])
 class SettingsPaymentInteracController(
-    private val service: ConfigurationService
+    private val service: ConfigurationService,
+    private val businessService: BusinessService,
 ) : AbstractPageController() {
 
     @GetMapping("/settings/payments/interac")
@@ -25,7 +27,7 @@ class SettingsPaymentInteracController(
         val configs = service.configurations(keyword = "payment.")
 
         val form = PaymentSettingsInteracForm(
-            email = configs[ConfigurationName.PAYMENT_METHOD_INTERAC_EMAIL],
+            email = configs[ConfigurationName.PAYMENT_METHOD_INTERAC_EMAIL] ?: getDefaultEmail(),
             question = configs[ConfigurationName.PAYMENT_METHOD_INTERAC_QUESTION],
             answer = configs[ConfigurationName.PAYMENT_METHOD_INTERAC_ANSWER],
         )
@@ -54,6 +56,14 @@ class SettingsPaymentInteracController(
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)
             return edit(form, model)
+        }
+    }
+
+    private fun getDefaultEmail(): String? {
+        return try {
+            businessService.business().email
+        } catch (ex: Exception) {
+            null
         }
     }
 }

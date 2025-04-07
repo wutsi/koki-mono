@@ -1,11 +1,14 @@
 package com.wutsi.koki.ai.server.service
 
+import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.mq.Consumer
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
-class AIMQConsumer : Consumer {
+class AIMQConsumer(
+    private val logger: KVLogger
+) : Consumer {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(AIMQConsumer::class.java)
     }
@@ -24,8 +27,13 @@ class AIMQConsumer : Consumer {
 
     override fun consume(event: Any): Boolean {
         agents.forEach { worker ->
-            if (worker.notify(event)) {
-                return true
+            val duration = System.currentTimeMillis()
+            try {
+                if (worker.notify(event)) {
+                    return true
+                }
+            } finally {
+                logger.add("duration", System.currentTimeMillis() - duration)
             }
         }
         return false

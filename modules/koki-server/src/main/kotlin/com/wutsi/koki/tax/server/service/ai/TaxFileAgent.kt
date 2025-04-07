@@ -26,17 +26,22 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
-import java.util.Collections.emptyList
 import java.util.Locale
 
 /**
- * Identify the Tax forms.
- * Here are the sources:
+ * This is the agent to extract information from document uploaded.
+ * The information includes:
+ *   - Document code
+ *   - Document language
+ *   - Document short description
+ *   - Document contacts: information about all the people listed into the document
+ *
+ * For fiscal documents, here are the source used for the code:
  *  - Canada: https://www.canada.ca/en/revenue-agency/services/forms-publications/forms.html
  *  - Quebec: https://www.revenuquebec.ca/fr/services-en-ligne/formulaires-et-publications/citoyens/
  */
 @Service
-class FormIdentifierAgent(
+class TaxFileAgent(
     private val fileService: FileService,
     private val taxService: TaxService,
     private val accountService: AccountService,
@@ -49,7 +54,7 @@ class FormIdentifierAgent(
     registry: AIMQConsumer,
 ) : AbstractAIAgent(registry) {
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(FormIdentifierAgent::class.java)
+        private val LOGGER = LoggerFactory.getLogger(TaxFileAgent::class.java)
 
         const val EXPENSE_CODE = "EXP"
 
@@ -59,17 +64,37 @@ class FormIdentifierAgent(
             Return the result in JSON format.
         """
         const val PROMPT = """
-            Goal: Identify the code of a given document provided by a person from {{country}} for the preparation of his tax return.
+            Goal: Extract information from the given document provided by a person from {{country}} for the preparation of his tax return.
 
             Instructions:
-              1. Always refer the list of the official fiscal document to get the most up-to-date document codes.
-              2. If the document is not an official governmental, check if it's an internal form.
-              3. For common expenses document (medical expense, donations etc.), use the code "$EXPENSE_CODE" for categorization.
-              4. Return the final answer in JSON, that looks like:
+              1. Here are the instructions for identifying the document code
+                 - Always refer the list of the official fiscal document to get the most up-to-date document codes.
+                 - If the document is not an official governmental, check if it's an internal form.
+                 - For common expenses document (medical expense, donations etc.), use the code "$EXPENSE_CODE" for categorization.
+              2. Extract the contact information from the document
+              3. Return the final answer in JSON, that looks like:
 
               {
                 "code": "Code of the document. Example: T1",
+                "language": "two-letter code of the language",
+                "description": "Short description of the file (255 character of less)",
+                "contacts":[
+                    {
+                        "firstName": "First Name",
+                        "lastName": "Last Name",
+                        "birthDate": "Birth date in the format yyyy-MM-dd",
+                        "phone": "Phone number",
+                        "cellphone": "Cellphone number",
+                        "address": "Street",
+                        "postalCode": "Postal code",
+                        "city": "Name of the city",
+                        "state": "State",
+                        "country": "two-letter country code"
+                        "role": "PRIMARY, SPOUSE, CHILD or VENDOR"
+                    }
+                ]
               }
+              NOTE: Do not include in the JSON null fields.
 
             Here is the list of internal forms (in the format CODE: DESCRIPTION):
             {{internal_forms}}
@@ -103,10 +128,9 @@ class FormIdentifierAgent(
             if (data.isNotEmpty()) {
                 logger.add("file_code", data["code"])
 
-                fileService.setLabels(
+                fileService.setData(
                     file = file,
-                    labels = data["code"]?.let { code -> listOf(code.toString()) } ?: emptyList(),
-                    description = data["description"].toString(),
+                    data = data,
                 )
             }
         } finally {
@@ -118,8 +142,8 @@ class FormIdentifierAgent(
         val output = ByteArrayOutputStream()
         output.use {
             val prompt = buildPrompt(account)
-            if (LOGGER.isInfoEnabled) {
-                LOGGER.info("Prompt: $prompt")
+            if (LOGGER.isDebugEnabled) {
+                LOGGER.debug("Prompt: $prompt")
             }
 
             DefaultAgent(
