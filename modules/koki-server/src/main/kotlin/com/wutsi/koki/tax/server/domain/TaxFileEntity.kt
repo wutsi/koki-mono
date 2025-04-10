@@ -13,6 +13,9 @@ data class TaxFileEntity(
     @Column("file_fk")
     val id: Long? = null,
 
+    @Column(name = "tax_fk")
+    val taxId: Long = -1,
+
     @Column(name = "tenant_fk")
     val tenantId: Long = -1,
 

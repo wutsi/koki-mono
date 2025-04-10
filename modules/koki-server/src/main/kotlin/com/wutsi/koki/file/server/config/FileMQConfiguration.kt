@@ -29,7 +29,7 @@ class FileMQConfiguration(
         setupConsumer(queue, invoiceConsumer, consumerDelay)
     }
 
-    @Scheduled(cron = "\${koki.module.ai.mq.dlq-cron}")
+    @Scheduled(cron = "\${koki.module.file.mq.dlq-cron}")
     fun processNotificationDlq() {
         processDlq(queue, dlq)
     }
