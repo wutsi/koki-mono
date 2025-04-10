@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 class TaxFileMapper(private val objectMapper: ObjectMapper) {
     fun toTaxFile(entity: TaxFileEntity): TaxFile {
         return TaxFile(
-            id = entity.id!!,
+            fileId = entity.id!!,
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
             data = objectMapper.readValue(entity.data, TaxFileData::class.java)
