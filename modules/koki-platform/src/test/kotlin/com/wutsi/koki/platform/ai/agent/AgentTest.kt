@@ -23,14 +23,13 @@ import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 import org.springframework.http.MediaType
 import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
 import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-class DefaultAgentTest {
+class AgentTest {
     companion object {
         const val SYSTEM_INSTRUCTIONS = "I'm a travel agent who help people to live memorable experience by travelling"
         const val QUERY = "Inspire me for vacation under the sun"
@@ -69,13 +68,12 @@ class DefaultAgentTest {
 
     @Test
     fun step0() {
-        val output = ByteArrayOutputStream()
         val inputs = mapOf("email" to "ray.sponsible@gmail.com")
         setupFunctionCallResponse("1st step", function1.name, inputs)
 
         // THEN
-        val agent = createAgent(responseType = MediaType.APPLICATION_JSON)
-        val result = agent.step(QUERY, null, output, memory)
+        val agent = createAgent()
+        val result = agent.run(QUERY, memory)
 
         // Continue
         assertEquals(false, result)
@@ -83,8 +81,6 @@ class DefaultAgentTest {
         // LLM is called
         val request = argumentCaptor<LLMRequest>()
         verify(llm).generateContent(request.capture())
-
-        assertEquals(MediaType.APPLICATION_JSON, request.firstValue.config?.responseType)
 
         assertEquals(2, request.firstValue.tools?.size)
         assertEquals(function1.name, request.firstValue.tools?.get(0)?.functionDeclarations?.get(0)?.name)
@@ -105,26 +101,24 @@ class DefaultAgentTest {
         verify(tool1).use(inputs)
 
         // result is added into the memory
-        assertEquals(1, memory.size)
-        assertEquals(true, memory.contains(FUNCTION1_RESULT))
-
-        // No Result
-        assertEquals("", String(output.toByteArray()))
+        assertEquals(2, memory.size)
+        assertEquals(listOf("1st step", FUNCTION1_RESULT), memory)
     }
 
     @Test
     fun step1() {
-        val output = ByteArrayOutputStream()
         val inputs = mapOf("email" to "ray.sponsible@gmail.com")
-        setupFunctionCallResponse("1st step", function1.name, inputs)
 
         val file = File.createTempFile("foo", ".txt")
         file.writeText("Yo man")
 
         // THEN
-        val agent = createAgent(responseType = MediaType.APPLICATION_JSON)
-        agent.step(QUERY, null, output, memory)
-        val result = agent.step(QUERY, file, output, memory)
+        val agent = createAgent()
+        setupFunctionCallResponse("1st step", function1.name, inputs)
+        agent.run(QUERY, memory)
+
+        setupFunctionCallResponse("2nd step", function2.name, emptyMap())
+        val result = agent.run(QUERY, memory, file)
 
         // Continue
         assertEquals(false, result)
@@ -133,15 +127,7 @@ class DefaultAgentTest {
         val request = argumentCaptor<LLMRequest>()
         verify(llm, times(2)).generateContent(request.capture())
 
-        assertEquals(MediaType.APPLICATION_JSON, request.secondValue.config?.responseType)
-
-        assertEquals(2, request.secondValue.tools?.size)
-        assertEquals(function1.name, request.secondValue.tools?.get(0)?.functionDeclarations?.get(0)?.name)
-        assertEquals(function1.parameters, request.secondValue.tools?.get(0)?.functionDeclarations?.get(0)?.parameters)
-        assertEquals(function2.name, request.secondValue.tools?.get(1)?.functionDeclarations?.get(0)?.name)
-        assertEquals(function2.parameters, request.secondValue.tools?.get(1)?.functionDeclarations?.get(0)?.parameters)
-
-        assertEquals(4, request.secondValue.messages.size)
+        assertEquals(3, request.secondValue.messages.size)
         assertEquals(Role.SYSTEM, request.secondValue.messages[0].role)
         assertEquals(SYSTEM_INSTRUCTIONS, request.secondValue.messages[0].text)
         assertEquals(null, request.secondValue.messages[0].document)
@@ -155,137 +141,45 @@ class DefaultAgentTest {
         assertEquals(MediaType.TEXT_PLAIN, request.secondValue.messages[2].document?.contentType)
         assertNotNull(request.secondValue.messages[2].document?.content)
 
-        assertEquals(Role.USER, request.secondValue.messages[3].role)
-        assertEquals(FUNCTION1_RESULT, request.secondValue.messages[3].text)
-        assertEquals(null, request.secondValue.messages[3].document)
-
         // function is called
-        verify(tool1, times(2)).use(inputs)
+        verify(tool1).use(any())
+        verify(tool2).use(any())
 
         // result is added into the memory
-        assertEquals(2, memory.size)
-        assertEquals(true, memory.contains(FUNCTION1_RESULT))
-        assertEquals(true, memory.contains(FUNCTION1_RESULT))
-
-        // No Result
-        assertEquals("", String(output.toByteArray()))
+        assertEquals(
+            listOf("1st step", FUNCTION1_RESULT, "2nd step", FUNCTION2_RESULT),
+            memory,
+        )
     }
 
     @Test
     fun finalText() {
-        val output = ByteArrayOutputStream()
         val inputs = mapOf("email" to "ray.sponsible@gmail.com")
 
         // THEN
-        val agent = createAgent(responseType = MediaType.TEXT_PLAIN)
+        val agent = createAgent()
 
         setupFunctionCallResponse("1st step", function1.name, inputs)
-        agent.step(QUERY, null, output, memory)
+        agent.run(QUERY, memory)
 
         setupFunctionCallResponse("2nd step", function2.name, emptyMap())
-        agent.step(QUERY, null, output, memory)
+        agent.run(QUERY, memory)
 
         setupTextResponse("Done")
-        val result = agent.step(QUERY, null, output, memory)
+        val result = agent.run(QUERY)
 
         // Continue
-        assertEquals(true, result)
-
-        // LLM Called
-        val request = argumentCaptor<LLMRequest>()
-        verify(llm, times(3)).generateContent(request.capture())
-
-        assertEquals(MediaType.TEXT_PLAIN, request.thirdValue.config?.responseType)
-
-        assertEquals(2, request.thirdValue.tools?.size)
-        assertEquals(function1.name, request.thirdValue.tools?.get(0)?.functionDeclarations?.get(0)?.name)
-        assertEquals(function1.parameters, request.thirdValue.tools?.get(0)?.functionDeclarations?.get(0)?.parameters)
-        assertEquals(function2.name, request.thirdValue.tools?.get(1)?.functionDeclarations?.get(0)?.name)
-        assertEquals(function2.parameters, request.thirdValue.tools?.get(1)?.functionDeclarations?.get(0)?.parameters)
-
-        assertEquals(4, request.thirdValue.messages.size)
-        assertEquals(Role.SYSTEM, request.thirdValue.messages[0].role)
-        assertEquals(SYSTEM_INSTRUCTIONS, request.thirdValue.messages[0].text)
-        assertEquals(null, request.thirdValue.messages[0].document)
-
-        assertEquals(Role.USER, request.thirdValue.messages[1].role)
-        assertEquals(true, request.thirdValue.messages[1].text?.contains(QUERY))
-        assertEquals(null, request.thirdValue.messages[1].document)
-
-        assertEquals(FUNCTION1_RESULT, request.thirdValue.messages[2].text)
-        assertEquals(Role.USER, request.thirdValue.messages[2].role)
-        assertEquals(null, request.thirdValue.messages[2].document)
-
-        assertEquals(FUNCTION2_RESULT, request.thirdValue.messages[3].text)
-        assertEquals(Role.USER, request.thirdValue.messages[3].role)
-        assertEquals(null, request.thirdValue.messages[3].document)
-
-        // function is called
-        verify(tool1).use(inputs)
-        verify(tool2).use(emptyMap())
-
-        // result is added into the memory
-        assertEquals(2, memory.size)
-        assertEquals(true, memory.contains(FUNCTION1_RESULT))
-        assertEquals(true, memory.contains(FUNCTION2_RESULT))
-
-        // Result
-        assertEquals("Done", String(output.toByteArray()))
-    }
-
-    @Test
-    fun finalDocument() {
-        val output = ByteArrayOutputStream()
-
-        // THEN
-        val agent = createAgent(responseType = MediaType.TEXT_PLAIN)
-
-        setupDocumentResponse("Done")
-        val result = agent.step(QUERY, null, output, memory)
-
-        // Continue
-        assertEquals(true, result)
-
-        // LLM Called
-        val request = argumentCaptor<LLMRequest>()
-        verify(llm).generateContent(request.capture())
-
-        assertEquals(MediaType.TEXT_PLAIN, request.firstValue.config?.responseType)
-
-        // Result
-        assertEquals("Done", String(output.toByteArray()))
-    }
-
-    @Test
-    fun empty() {
-        val output = ByteArrayOutputStream()
-
-        // THEN
-        val agent = createAgent(responseType = MediaType.TEXT_PLAIN)
-
-        setupTextResponse(null)
-        val result = agent.step(QUERY, null, output, memory)
-
-        // Continue
-        assertEquals(false, result)
-
-        // LLM Called
-        val request = argumentCaptor<LLMRequest>()
-        verify(llm).generateContent(request.capture())
-
-        // Result
-        assertEquals("", String(output.toByteArray()))
+        assertEquals("Done", result)
     }
 
     @Test
     fun `too many iterations`() {
-        val output = ByteArrayOutputStream()
         val inputs = mapOf("email" to "ray.sponsible@gmail.com")
         setupFunctionCallResponse("1st step", function1.name, inputs)
 
         // THEN
-        val agent = createAgent(responseType = MediaType.APPLICATION_JSON, maxIterations = 2)
-        assertThrows<TooManyIterationsException> { agent.run(QUERY, null, output) }
+        val agent = createAgent(maxIterations = 2)
+        assertThrows<TooManyIterationsException> { agent.run(QUERY, null) }
     }
 
     @Test
@@ -293,7 +187,7 @@ class DefaultAgentTest {
         doThrow(LLMException::class).whenever(llm).generateContent(any())
 
         // THEN
-        assertThrows<AgentException> { createAgent().run(QUERY, null, ByteArrayOutputStream()) }
+        assertThrows<AgentException> { createAgent().run(QUERY) }
     }
 
     private fun setupFunctionCallResponse(
@@ -344,16 +238,27 @@ class DefaultAgentTest {
         ).whenever(llm).generateContent(any())
     }
 
-    private fun createAgent(
-        maxIterations: Int = 5,
-        responseType: MediaType? = MediaType.APPLICATION_JSON,
-    ): DefaultAgent {
-        return DefaultAgent(
+    private fun createAgent(maxIterations: Int = 5): Agent {
+        return AgentImpl(
             llm = llm,
-            tools = listOf(tool1, tool2),
             maxIterations = maxIterations,
-            responseType = responseType,
-            systemInstructions = SYSTEM_INSTRUCTIONS
+            systemInstructions = SYSTEM_INSTRUCTIONS,
+            tools = listOf(tool1, tool2)
         )
     }
+}
+
+class AgentImpl(
+    val systemInstructions: String,
+    val tools: List<Tool>,
+    llm: LLM,
+    maxIterations: Int
+) : Agent(llm, maxIterations) {
+    override fun systemInstructions() = systemInstructions
+
+    override fun buildPrompt(query: String, memory: List<String>) =
+        "Query: $query\n\n" +
+            "Observations:\n" + memory.map { "- $it" }.joinToString("\n")
+
+    override fun tools() = tools
 }
