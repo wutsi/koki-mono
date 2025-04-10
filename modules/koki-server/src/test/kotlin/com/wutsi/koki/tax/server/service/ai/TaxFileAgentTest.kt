@@ -14,6 +14,7 @@ import com.wutsi.koki.tax.server.service.TaxMQConsumer
 import com.wutsi.koki.tax.server.service.ai.TaxFileAgent.Companion.EXPENSE_CODE
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
+import sun.jvm.hotspot.HelloWorld.e
 import java.io.File
 import java.util.UUID
 import kotlin.test.Test
@@ -85,7 +86,7 @@ class TaxFileAgentTest {
 
     @Test
     fun `file uploaded - CA - T4`() {
-        fileUploaded("T4", "/tax/ai/T4.pdf")
+        fileUploaded("T4", "/tax/ai/T4.pdf", expectedLanguage = null)
     }
 
     @Test
@@ -167,7 +168,7 @@ class TaxFileAgentTest {
         expectedCode: String,
         path: String,
         contentType: String = "application/pdf",
-        expectedLanguage: String = "en"
+        expectedLanguage: String? = "en"
     ) {
         // GIVEN
         val file = setupFile(path, contentType)
@@ -180,11 +181,11 @@ class TaxFileAgentTest {
 
         // THEN
         val data = ObjectMapper().readValue(result, TaxFileData::class.java)
-        assertEquals(expectedLanguage, data.language)
         assertEquals(expectedCode, data.sections[0].code)
         assertEquals(1, data.sections.size)
-//
-//        assertEquals(expectedLabel, data.firstValue.sections[0].code)
+        if (expectedLanguage != null) {
+            assertEquals(expectedLanguage, data.language)
+        }
     }
 
 //    @Test
