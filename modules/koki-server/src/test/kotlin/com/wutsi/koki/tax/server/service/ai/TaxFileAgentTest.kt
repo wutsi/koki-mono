@@ -14,7 +14,6 @@ import com.wutsi.koki.tax.server.service.TaxMQConsumer
 import com.wutsi.koki.tax.server.service.ai.TaxFileAgent.Companion.EXPENSE_CODE
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
-import sun.jvm.hotspot.HelloWorld.e
 import java.io.File
 import java.util.UUID
 import kotlin.test.Test
@@ -188,67 +187,6 @@ class TaxFileAgentTest {
         }
     }
 
-//    @Test
-//    fun `file uploaded - AI not enabled`() {
-//        doReturn(
-//            configs.map { entry ->
-//                ConfigurationEntity(
-//                    name = entry.key,
-//                    value = entry.value.toString()
-//                )
-//            }.filter { config -> config.name != ConfigurationName.AI_PROVIDER }
-//        ).whenever(configurationService)
-//            .search(any(), anyOrNull(), anyOrNull())
-//
-//        val file = setupFile("/tax/ai/Control_List-Filled.pdf")
-//
-//        val event = createFileUploadedEvent(file)
-//        val result = agent.notify(event)
-//
-//        assertEquals(true, result)
-//        verify(taxFileService, never()).save(any(), any())
-//    }
-//
-//    @Test
-//    fun `ignore event when TAX AI Agent not enabled`() {
-//        doReturn(
-//            configs.map { entry ->
-//                ConfigurationEntity(
-//                    name = entry.key,
-//                    value = entry.value.toString()
-//                )
-//            }.filter { config -> config.name != ConfigurationName.TAX_AI_AGENT_ENABLED }
-//        ).whenever(configurationService)
-//            .search(any(), anyOrNull(), anyOrNull())
-//
-//        val file = setupFile("/tax/ai/Control_List-Filled.pdf")
-//
-//        val event = createFileUploadedEvent(file)
-//        val result = agent.notify(event)
-//
-//        assertEquals(true, result)
-//        verify(taxFileService, never()).save(any(), any())
-//    }
-//
-//    @Test
-//    fun `ignore non TAX events`() {
-//        val file = setupFile("/tax/ai/Control_List-Filled.pdf")
-//
-//        val event = createFileUploadedEvent(file, ownerType = ObjectType.ACCOUNT)
-//        val result = agent.notify(event)
-//
-//        assertEquals(true, result)
-//        verify(taxFileService, never()).save(any(), any())
-//    }
-//
-//    @Test
-//    fun `ignore non FileDeletedEvent`() {
-//        val event = createFileUDeletedEvent()
-//        val result = agent.notify(event)
-//
-//        assertEquals(false, result)
-//    }
-
     private fun setupFile(path: String, contentType: String = "application/pdf"): File {
         val input = TaxFileAgentTest::class.java.getResourceAsStream(path)
         val extension = contentType.substring(contentType.indexOf("/") + 1)
@@ -257,23 +195,4 @@ class TaxFileAgentTest {
 
         return File("$directory/$path")
     }
-
-//    private fun createFileUploadedEvent(
-//        file: FileEntity,
-//        ownerId: Long = tax.id!!,
-//        ownerType: ObjectType? = ObjectType.TAX
-//    ): FileUploadedEvent {
-//        return FileUploadedEvent(
-//            fileId = file.id!!,
-//            tenantId = file.tenantId,
-//            owner = ownerType?.let { ObjectReference(id = ownerId, type = ownerType) },
-//        )
-//    }
-//
-//    private fun createFileUDeletedEvent(): FileDeletedEvent {
-//        return FileDeletedEvent(
-//            fileId = 11L,
-//            tenantId = 222L
-//        )
-//    }
 }
