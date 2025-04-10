@@ -1,89 +1,48 @@
 package com.wutsi.koki.tax.server.service.ai
 
-import com.nhaarman.mockitokotlin2.any
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.anyOrNull
-import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.account.server.service.AccountService
-import com.wutsi.koki.ai.server.service.AIMQConsumer
-import com.wutsi.koki.ai.server.service.LLMProvider
-import com.wutsi.koki.common.dto.ObjectReference
-import com.wutsi.koki.common.dto.ObjectType
-import com.wutsi.koki.file.dto.event.FileDeletedEvent
-import com.wutsi.koki.file.dto.event.FileUploadedEvent
-import com.wutsi.koki.file.server.domain.FileEntity
-import com.wutsi.koki.file.server.service.FileService
-import com.wutsi.koki.file.server.service.StorageServiceProvider
 import com.wutsi.koki.form.server.domain.AccountEntity
 import com.wutsi.koki.form.server.domain.FormEntity
 import com.wutsi.koki.form.server.service.FormService
-import com.wutsi.koki.platform.ai.llm.LLMType
 import com.wutsi.koki.platform.ai.llm.gemini.Gemini
-import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.storage.local.LocalStorageService
-import com.wutsi.koki.tax.server.domain.TaxEntity
-import com.wutsi.koki.tax.server.service.TaxService
+import com.wutsi.koki.tax.dto.TaxFileData
+import com.wutsi.koki.tax.server.service.TaxMQConsumer
 import com.wutsi.koki.tax.server.service.ai.TaxFileAgent.Companion.EXPENSE_CODE
-import com.wutsi.koki.tenant.dto.ConfigurationName
-import com.wutsi.koki.tenant.server.domain.ConfigurationEntity
-import com.wutsi.koki.tenant.server.service.ConfigurationService
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
+import java.io.File
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class TaxFileAgentTest {
-    private val registry = mock<AIMQConsumer>()
-    private val llmProvider = mock<LLMProvider>()
-    private val fileService = mock<FileService>()
-    private val storageServiceProvider = mock<StorageServiceProvider>()
-    private val configurationService = mock<ConfigurationService>()
-    private val accountService = mock<AccountService>()
     private val formService = mock<FormService>()
-    private val taxService = mock<TaxService>()
-    private val logger = DefaultKVLogger()
-    private val agent = TaxFileAgent(
-        accountService = accountService,
-        fileService = fileService,
-        taxService = taxService,
-        formService = formService,
-        configurationService = configurationService,
-        storageServiceProvider = storageServiceProvider,
-        llmProvider = llmProvider,
-        registry = registry,
-        logger = logger,
+
+    private val directory = System.getProperty("user.home") + "/__wutsi"
+    private val storage = LocalStorageService(
+        directory = directory,
+        baseUrl = "http://localhost:8080/storage"
     )
 
     private val account = AccountEntity(
-        id = 777L,
-        shippingCountry = "CA"
-    )
-
-    private val tax = TaxEntity(
-        id = 333L,
-        accountId = account.id!!
-    )
-
-    private val configs = mapOf(
-        ConfigurationName.AI_PROVIDER to LLMType.GEMINI,
-        ConfigurationName.TAX_AI_AGENT_ENABLED to "1",
-    )
-
-    private val storage = LocalStorageService(
-        directory = System.getProperty("user.home") + "/__wutsi",
-        baseUrl = "http://localhost:8080/storage"
+        shippingCountry = "CA",
+        tenantId = 111L,
     )
 
     private val forms = listOf(
         FormEntity(
             id = 1,
             code = "INT-T1",
-            name = "Client information and and list of documents"
+            name = "LISTE DE CONTROLE - IMPOTS PERSONNEL",
+            description = """
+                This for is used for:
+                 1) Collecting information about the client's household (client, spouse, children).
+                 2) Collecting the list of fiscal form that will be provided for the tax declaration.
+            """.trimIndent()
         ),
         FormEntity(
             id = 1,
@@ -97,24 +56,19 @@ class TaxFileAgentTest {
         model = "gemini-2.0-flash",
     )
 
+    private val agent = TaxFileAgent(
+        account = account,
+        formService = formService,
+        llm = llm,
+        maxIterations = 10,
+    )
+
     @BeforeEach
     fun setUp() {
-        doReturn(
-            configs.map { entry ->
-                ConfigurationEntity(
-                    name = entry.key,
-                    value = entry.value.toString()
-                )
-            }
-        ).whenever(configurationService)
-            .search(any(), anyOrNull(), anyOrNull())
+        Thread.sleep(12000) // Pause to support the 5 RPM limit from Gemini - see https://ai.google.dev/gemini-api/docs/rate-limits
 
-        doReturn(account).whenever(accountService).get(any(), any())
-        doReturn(tax).whenever(taxService).get(any(), any())
-        doReturn(storage).whenever(storageServiceProvider).get(any())
-        doReturn(llm).whenever(llmProvider).get(any())
         doReturn(forms).whenever(formService).search(
-            any(),
+            anyOrNull(),
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
@@ -122,23 +76,6 @@ class TaxFileAgentTest {
             anyOrNull(),
             anyOrNull(),
         )
-    }
-
-    @Test
-    fun tearDown() {
-        logger.log()
-    }
-
-    @Test
-    fun init() {
-        agent.setUp()
-        verify(registry).register(agent)
-    }
-
-    @Test
-    fun destroy() {
-        agent.tearDown()
-        verify(registry).unregister(agent)
     }
 
     @Test
@@ -196,8 +133,38 @@ class TaxFileAgentTest {
         fileUploaded("INT-T1", "/tax/ai/Control_List-Filled.pdf", expectedLanguage = "fr")
     }
 
+    @Test
+    fun `file uploaded - multi`() {
+        // GIVEN
+        val file = setupFile("/tax/ai/T1_RL1_medic.pdf", "application/pdf")
+
+        // WHEN
+        val result = agent.run(
+            query = TaxMQConsumer.TAX_FILE_AGENT_QUERY,
+            file = file
+        )
+
+        // THEN
+        val data = ObjectMapper().readValue(result, TaxFileData::class.java)
+        assertEquals("en", data.language)
+        assertEquals(10, data.numberOfPages)
+        assertEquals(3, data.sections.size)
+
+        assertEquals(EXPENSE_CODE, data.sections[0].code)
+        assertEquals(1, data.sections[0].startPage)
+        assertEquals(1, data.sections[0].endPage)
+
+        assertEquals("T1", data.sections[1].code)
+        assertEquals(2, data.sections[1].startPage)
+        assertEquals(9, data.sections[1].endPage)
+
+        assertEquals("RL-1", data.sections[2].code)
+        assertEquals(10, data.sections[2].startPage)
+        assertEquals(10, data.sections[2].endPage)
+    }
+
     private fun fileUploaded(
-        expectedLabel: String,
+        expectedCode: String,
         path: String,
         contentType: String = "application/pdf",
         expectedLanguage: String = "en"
@@ -206,112 +173,106 @@ class TaxFileAgentTest {
         val file = setupFile(path, contentType)
 
         // WHEN
-        val event = createFileUploadedEvent(file)
-        val result = agent.notify(event)
+        val result = agent.run(
+            query = TaxMQConsumer.TAX_FILE_AGENT_QUERY,
+            file = file
+        )
 
         // THEN
-        assertEquals(true, result)
-
-        val data = argumentCaptor<Map<String, Any>>()
-        verify(fileService).setData(eq(file), data.capture())
-        assertEquals(expectedLabel, data.firstValue["code"].toString())
-        assertEquals(expectedLanguage, data.firstValue["language"].toString())
+        val data = ObjectMapper().readValue(result, TaxFileData::class.java)
+        assertEquals(expectedLanguage, data.language)
+        assertEquals(expectedCode, data.sections[0].code)
+        assertEquals(1, data.sections.size)
+//
+//        assertEquals(expectedLabel, data.firstValue.sections[0].code)
     }
 
-    @Test
-    fun `file uploaded - AI not enabled`() {
-        doReturn(
-            configs.map { entry ->
-                ConfigurationEntity(
-                    name = entry.key,
-                    value = entry.value.toString()
-                )
-            }.filter { config -> config.name != ConfigurationName.AI_PROVIDER }
-        ).whenever(configurationService)
-            .search(any(), anyOrNull(), anyOrNull())
+//    @Test
+//    fun `file uploaded - AI not enabled`() {
+//        doReturn(
+//            configs.map { entry ->
+//                ConfigurationEntity(
+//                    name = entry.key,
+//                    value = entry.value.toString()
+//                )
+//            }.filter { config -> config.name != ConfigurationName.AI_PROVIDER }
+//        ).whenever(configurationService)
+//            .search(any(), anyOrNull(), anyOrNull())
+//
+//        val file = setupFile("/tax/ai/Control_List-Filled.pdf")
+//
+//        val event = createFileUploadedEvent(file)
+//        val result = agent.notify(event)
+//
+//        assertEquals(true, result)
+//        verify(taxFileService, never()).save(any(), any())
+//    }
+//
+//    @Test
+//    fun `ignore event when TAX AI Agent not enabled`() {
+//        doReturn(
+//            configs.map { entry ->
+//                ConfigurationEntity(
+//                    name = entry.key,
+//                    value = entry.value.toString()
+//                )
+//            }.filter { config -> config.name != ConfigurationName.TAX_AI_AGENT_ENABLED }
+//        ).whenever(configurationService)
+//            .search(any(), anyOrNull(), anyOrNull())
+//
+//        val file = setupFile("/tax/ai/Control_List-Filled.pdf")
+//
+//        val event = createFileUploadedEvent(file)
+//        val result = agent.notify(event)
+//
+//        assertEquals(true, result)
+//        verify(taxFileService, never()).save(any(), any())
+//    }
+//
+//    @Test
+//    fun `ignore non TAX events`() {
+//        val file = setupFile("/tax/ai/Control_List-Filled.pdf")
+//
+//        val event = createFileUploadedEvent(file, ownerType = ObjectType.ACCOUNT)
+//        val result = agent.notify(event)
+//
+//        assertEquals(true, result)
+//        verify(taxFileService, never()).save(any(), any())
+//    }
+//
+//    @Test
+//    fun `ignore non FileDeletedEvent`() {
+//        val event = createFileUDeletedEvent()
+//        val result = agent.notify(event)
+//
+//        assertEquals(false, result)
+//    }
 
-        val file = setupFile("/tax/ai/Control_List-Filled.pdf")
-
-        val event = createFileUploadedEvent(file)
-        val result = agent.notify(event)
-
-        assertEquals(true, result)
-        verify(fileService, never()).setData(any(), any())
-    }
-
-    @Test
-    fun `ignore event when TAX AI Agent not enabled`() {
-        doReturn(
-            configs.map { entry ->
-                ConfigurationEntity(
-                    name = entry.key,
-                    value = entry.value.toString()
-                )
-            }.filter { config -> config.name != ConfigurationName.TAX_AI_AGENT_ENABLED }
-        ).whenever(configurationService)
-            .search(any(), anyOrNull(), anyOrNull())
-
-        val file = setupFile("/tax/ai/Control_List-Filled.pdf")
-
-        val event = createFileUploadedEvent(file)
-        val result = agent.notify(event)
-
-        assertEquals(true, result)
-        verify(fileService, never()).setData(any(), any())
-    }
-
-    @Test
-    fun `ignore non TAX events`() {
-        val file = setupFile("/tax/ai/Control_List-Filled.pdf")
-
-        val event = createFileUploadedEvent(file, ownerType = ObjectType.ACCOUNT)
-        val result = agent.notify(event)
-
-        assertEquals(true, result)
-        verify(fileService, never()).setData(any(), any())
-    }
-
-    @Test
-    fun `ignore non FileDeletedEvent`() {
-        val event = createFileUDeletedEvent()
-        val result = agent.notify(event)
-
-        assertEquals(false, result)
-    }
-
-    private fun setupFile(path: String, contentType: String = "application/pdf"): FileEntity {
+    private fun setupFile(path: String, contentType: String = "application/pdf"): File {
         val input = TaxFileAgentTest::class.java.getResourceAsStream(path)
         val extension = contentType.substring(contentType.indexOf("/") + 1)
         val path = "tax-ai-agent/" + UUID.randomUUID().toString() + "." + extension
-        val url = storage.store(path = path, content = input!!, contentType, -1)
+        storage.store(path = path, content = input!!, contentType, -1)
 
-        val file = FileEntity(
-            id = 555L,
-            tenantId = 1111L,
-            name = url.file,
-            url = url.toString(),
-            contentType = contentType,
-        )
-        doReturn(file).whenever(fileService).get(any(), any())
-        return file
+        return File("$directory/$path")
     }
 
-    private fun createFileUploadedEvent(
-        file: FileEntity,
-        ownerId: Long = tax.id!!,
-        ownerType: ObjectType? = ObjectType.TAX
-    ): FileUploadedEvent {
-        return FileUploadedEvent(
-            fileId = file.id!!,
-            tenantId = file.tenantId,
-            owner = ownerType?.let { ObjectReference(id = ownerId, type = ownerType) },
-        )
-    }
-
-    private fun createFileUDeletedEvent(): FileDeletedEvent {
-        return FileDeletedEvent(
-            fileId = 11L,
-            tenantId = 222L
-        )
-    }
+//    private fun createFileUploadedEvent(
+//        file: FileEntity,
+//        ownerId: Long = tax.id!!,
+//        ownerType: ObjectType? = ObjectType.TAX
+//    ): FileUploadedEvent {
+//        return FileUploadedEvent(
+//            fileId = file.id!!,
+//            tenantId = file.tenantId,
+//            owner = ownerType?.let { ObjectReference(id = ownerId, type = ownerType) },
+//        )
+//    }
+//
+//    private fun createFileUDeletedEvent(): FileDeletedEvent {
+//        return FileDeletedEvent(
+//            fileId = 11L,
+//            tenantId = 222L
+//        )
+//    }
 }

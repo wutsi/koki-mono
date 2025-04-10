@@ -71,6 +71,7 @@ class Gemini(
                 )
             },
             tools = request.tools,
+            toolConfig = request.toolConfig,
         )
         try {
             val resp = rest.postForEntity(

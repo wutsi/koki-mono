@@ -43,7 +43,6 @@ data class FileEntity(
     var description: String? = null,
     var language: String? = null,
     var numberOfPages: Int? = null,
-    var data: String? = null,
 
     @ManyToMany
     @JoinTable(

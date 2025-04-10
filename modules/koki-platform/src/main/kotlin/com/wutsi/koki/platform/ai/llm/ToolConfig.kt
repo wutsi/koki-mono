@@ -1,4 +1,5 @@
 package com.wutsi.koki.platform.ai.llm
 
-class ToolConfig {
-}
+data class ToolConfig(
+    val functionCallingConfig: FunctionCallingConfig? = null,
+)

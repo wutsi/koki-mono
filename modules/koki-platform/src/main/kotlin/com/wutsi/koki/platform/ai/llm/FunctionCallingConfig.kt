@@ -1,6 +1,6 @@
 package com.wutsi.koki.platform.ai.llm
 
-data class FunctionCalling(
+data class FunctionCallingConfig(
     val mode: FunctionCallingMode = FunctionCallingMode.AUTO,
-        val allowedFunctionNames: List<String> = emptyList(),
+    val allowedFunctionNames: List<String>? = null,
 )

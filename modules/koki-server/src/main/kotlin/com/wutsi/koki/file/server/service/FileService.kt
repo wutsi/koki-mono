@@ -1,6 +1,5 @@
 package com.wutsi.koki.file.server.service
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
@@ -31,8 +30,6 @@ class FileService(
     private val storageBuilder: StorageServiceBuilder,
     private val configurationService: ConfigurationService,
     private val securityService: SecurityService,
-    private val labelService: LabelService,
-    private val objectMapper: ObjectMapper,
     private val em: EntityManager,
 ) {
     fun get(id: Long, tenantId: Long): FileEntity {
@@ -208,25 +205,6 @@ class FileService(
 
     @Transactional
     fun save(file: FileEntity) {
-        file.modifiedAt = Date()
-        dao.save(file)
-    }
-
-    /**
-     * Set the structured data of the file. It contains:
-     * - code: Document code, that should be store are label
-     * - language: Language of the document
-     * - description: Short description of the document
-     * - contacts: List of all the contacts identified in the file
-     */
-    @Transactional
-    fun setData(file: FileEntity, data: Map<String, Any>) {
-        file.labels = data["code"]?.let { code ->
-            labelService.findOrCreate(listOf(code.toString()), file.tenantId)
-        } ?: emptyList()
-        file.description = data["description"]?.toString()
-        file.language = data["language"]?.toString()
-        file.data = if (data.isEmpty()) null else  objectMapper.writeValueAsString(data)
         file.modifiedAt = Date()
         dao.save(file)
     }

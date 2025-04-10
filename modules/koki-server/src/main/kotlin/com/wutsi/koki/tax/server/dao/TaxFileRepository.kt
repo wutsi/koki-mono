@@ -1,10 +1,8 @@
 package com.wutsi.koki.tax.server.dao
 
-import com.wutsi.koki.tax.server.domain.TaxProductEntity
+import com.wutsi.koki.tax.server.domain.TaxFileEntity
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface TaxProductRepository : CrudRepository<TaxProductEntity, Long> {
-    fun findByTaxId(taxId: Long): List<TaxProductEntity>
-}
+interface TaxFileRepository : CrudRepository<TaxFileEntity, Long>
