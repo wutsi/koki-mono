@@ -170,6 +170,10 @@ a.entity-title {
     margin-left: 1em;
 }
 
+.margin-left-small {
+    margin-left: .5em;
+}
+
 .margin-right {
     margin-right: 1em;
 }

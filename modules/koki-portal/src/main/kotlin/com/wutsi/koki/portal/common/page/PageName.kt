@@ -40,6 +40,7 @@ object PageName {
     const val ERROR_ACCESS_DENIED = "page.error.access-denied"
     const val ERROR_PAYMENT_NOT_SUPPORTED = "page.error.payment.not-supported"
 
+    const val FILE = "page.file"
     const val FILE_SETTINGS = "page.settings.file"
     const val FILE_SETTINGS_STORAGE = "page.settings.file.storage"
     const val FILE_SETTINGS_STORAGE_EDIT = "page.settings.file.storage.edit"

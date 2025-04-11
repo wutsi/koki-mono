@@ -2,14 +2,12 @@ package com.wutsi.koki.tax.server.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.account.server.service.AccountService
-import com.wutsi.koki.ai.server.service.LLMProvider
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
 import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.file.server.service.StorageServiceProvider
 import com.wutsi.koki.form.server.domain.AccountEntity
-import com.wutsi.koki.form.server.service.FormService
 import com.wutsi.koki.note.dto.event.NoteCreatedEvent
 import com.wutsi.koki.note.dto.event.NoteDeletedEvent
 import com.wutsi.koki.note.dto.event.NoteUpdatedEvent
@@ -17,12 +15,11 @@ import com.wutsi.koki.note.server.service.NoteOwnerService
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.mq.Consumer
 import com.wutsi.koki.tax.dto.TaxFileData
-import com.wutsi.koki.tax.server.service.ai.TaxFileAgent
+import com.wutsi.koki.tax.server.service.ai.TaxAgentFactory
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import org.apache.commons.io.FilenameUtils
 import org.springframework.stereotype.Service
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
@@ -35,10 +32,9 @@ class TaxMQConsumer(
     private val fileService: FileService,
     private val accountService: AccountService,
     private val taxFileService: TaxFileService,
-    private val formService: FormService,
     private val storageServiceProvider: StorageServiceProvider,
-    private val llmProvider: LLMProvider,
     private val objectMapper: ObjectMapper,
+    private val taxAgentFactory: TaxAgentFactory,
     private val logger: KVLogger,
 ) : Consumer {
     companion object {
@@ -101,23 +97,17 @@ class TaxMQConsumer(
         val account = accountService.get(tax.accountId, event.tenantId)
         val f = download(file) ?: return
         try {
-            val data = extract(file, account, f)
+            val data = extract(account, f)
             taxFileService.save(file, data)
         } finally {
             f.delete()
         }
     }
 
-    private fun extract(file: FileEntity, account: AccountEntity, f: File): TaxFileData {
-        val output = ByteArrayOutputStream()
-        output.use {
-            TaxFileAgent(
-                llm = llmProvider.get(file.tenantId),
-                formService = formService,
-                account = account,
-            ).run(TAX_FILE_AGENT_QUERY, f)
-            return objectMapper.readValue(output.toByteArray(), TaxFileData::class.java)
-        }
+    private fun extract(account: AccountEntity, f: File): TaxFileData {
+        val agent = taxAgentFactory.createTaxFileAgent(account)
+        val data = agent.run(TAX_FILE_AGENT_QUERY, f)
+        return objectMapper.readValue(data, TaxFileData::class.java)
     }
 
     private fun download(file: FileEntity): File? {

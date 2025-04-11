@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar(${ownerModule.name})}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body form-summary">
+                    <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/">Home</a></li>
+                            <li class="breadcrumb-item">
+                                <a th:href="${ownerModule.homeUrl}" th:text="${ownerModule.title}">Forms</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a th:href="${ownerUrl}" th:text="${ownerName}">NAME</a>
+                            </li>
+                            <li class="breadcrumb-item active">
+                                <div th:replace="~{__components/file :: file-icon(${file})}"></div>
+                                <span class="margin-left-small" th:text="${file.name}">NAME</span>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body form-summary">
+                    <div class="flex flex-space-between">
+                        <h1 class="entity-title">
+                            <a class="btn-back margin-right entity-title" th:href="${ownerUrl}">
+                                <i class="fa-solid fa-arrow-left"></i>
+                            </a>
+                            <div th:replace="~{__components/file :: file-icon(${file})}"></div>
+                            <span class="margin-left-small" th:text="${file.name}">NAME</span>
+                        </h1>
+                        <div>
+                            <a class="btn-download btn btn-primary btn-sm" target="_blank"
+                               th:href="'/files/' + ${file.id} + '/download'">Download</a>
+
+                            <a class="btn-delete btn btn-danger btn-sm"
+                               onclick="return confirm('Are you sure you want to delete the file?')"
+                               th:href="'/files/' + ${file.id} + '/delete?owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}"
+                               th:if="!${readOnly} AND ${user?.hasPermission('file:delete')}">Delete</a>
+                        </div>
+                    </div>
+
+                    <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <table class="table" id="tab-details-content">
+                        <tr>
+                            <td width="20%"><b>Name</b></td>
+                            <td>
+                                <div th:replace="~{__components/file :: file-icon(${file})}"></div>
+                                <span th:text="${file.name}">NAME</span>
+                            </td>
+                        </tr>
+                        <tr th:if="!${file.labels.isEmpty()}">
+                            <td width="20%"><b>Labels</b></td>
+                            <td>
+                                <span class="badge text-bg-success margin-right-small"
+                                      th:each="label : ${file.labels}"
+                                      th:text="${label.displayName}"
+                                >LABEL</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Size</b></td>
+                            <td th:text="${file.contentLengthText}">SIZE</td>
+                        </tr>
+                        <tr>
+                            <td><b>Language</b></td>
+                            <td th:text="${file.languageText}">LANG</td>
+                        </tr>
+                        <tr th:if="${file.numberOfPages}">
+                            <td><b>Number of Pages</b></td>
+                            <td th:text="${file.numberOfPages}">LANG</td>
+                        </tr>
+                        <tr th:if="${file.description}">
+                            <td><b>Description</b></td>
+                            <td th:text="${file.description}">DESCRIPTION</td>
+                        </tr>
+
+                        <tr>
+                            <td><b>Uploaded</b></td>
+                            <td>
+                                <span th:text="${file.createdAtText}">DATE</span>
+                                <span th:if="${file.createdBy}">by</span>
+                                <span th:if="${file.createdBy}"
+                                      th:text="${file.createdBy.displayName}">MODIFIED BY</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
+
+</body>
+</html>
