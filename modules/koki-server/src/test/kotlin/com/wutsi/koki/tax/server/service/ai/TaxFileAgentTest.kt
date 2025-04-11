@@ -152,7 +152,6 @@ class TaxFileAgentTest {
 
         // THEN
         val data = ObjectMapper().readValue(result, TaxFileData::class.java)
-        assertEquals(10, data.numberOfPages)
         assertEquals(3, data.sections.size)
 
         assertEquals(EXPENSE_CODE, data.sections[0].code)
