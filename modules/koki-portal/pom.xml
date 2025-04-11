@@ -54,6 +54,11 @@
             <artifactId>koki-platform</artifactId>
             <version>${wutsi-platform.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.wutsi.koki</groupId>
+            <artifactId>koki-sdk</artifactId>
+            <version>${wutsi-sdk.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.stripe</groupId>
