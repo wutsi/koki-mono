@@ -22,7 +22,6 @@ import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import org.apache.commons.io.FilenameUtils
 import org.springframework.stereotype.Service
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
@@ -109,15 +108,12 @@ class TaxMQConsumer(
     }
 
     private fun extract(file: FileEntity, account: AccountEntity, f: File): TaxFileData {
-        val output = ByteArrayOutputStream()
-        output.use {
-            TaxFileAgent(
-                llm = llmProvider.get(file.tenantId),
-                formService = formService,
-                account = account,
-            ).run(TAX_FILE_AGENT_QUERY, f)
-            return objectMapper.readValue(output.toByteArray(), TaxFileData::class.java)
-        }
+        val data = TaxFileAgent(
+            llm = llmProvider.get(file.tenantId),
+            formService = formService,
+            account = account,
+        ).run(TAX_FILE_AGENT_QUERY, f)
+        return objectMapper.readValue(data, TaxFileData::class.java)
     }
 
     private fun download(file: FileEntity): File? {
