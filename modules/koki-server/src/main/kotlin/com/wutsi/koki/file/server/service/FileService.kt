@@ -30,7 +30,6 @@ class FileService(
     private val storageBuilder: StorageServiceBuilder,
     private val configurationService: ConfigurationService,
     private val securityService: SecurityService,
-    private val labelService: LabelService,
     private val em: EntityManager,
 ) {
     fun get(id: Long, tenantId: Long): FileEntity {
@@ -206,14 +205,6 @@ class FileService(
 
     @Transactional
     fun save(file: FileEntity) {
-        file.modifiedAt = Date()
-        dao.save(file)
-    }
-
-    @Transactional
-    fun setLabels(file: FileEntity, labels: List<String>, description: String?) {
-        file.labels = labelService.findOrCreate(labels, file.tenantId)
-        file.description = description
         file.modifiedAt = Date()
         dao.save(file)
     }
