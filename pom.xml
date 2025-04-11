@@ -54,7 +54,7 @@
     <properties>
         <wutsi-dto.version>0.0.185</wutsi-dto.version>
         <wutsi-platform.version>0.0.16</wutsi-platform.version>
-        <wutsi-ask.version>0.0.1</wutsi-ask.version>
+        <wutsi-sdk.version>0.0.1</wutsi-sdk.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
