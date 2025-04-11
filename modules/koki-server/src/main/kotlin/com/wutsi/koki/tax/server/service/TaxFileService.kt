@@ -59,7 +59,6 @@ class TaxFileService(
         // Update file
         file.language = data.language
         file.description = data.description
-        file.numberOfPages = data.numberOfPages
 
         val codes = data.sections.mapNotNull { section -> section.code }
         file.labels = if (codes.isEmpty()) {
