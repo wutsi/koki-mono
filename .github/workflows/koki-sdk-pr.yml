@@ -1,0 +1,29 @@
+name: koki-sdk-pr
+
+on:
+    pull_request:
+        paths:
+            - 'modules/koki-sdk/**'
+            - '.github/workflows/koki-sdk-pr.yml'
+
+jobs:
+    build:
+
+        runs-on: ubuntu-latest
+
+        steps:
+            -   uses: actions/checkout@v4
+
+            -   name: JDK
+                uses: actions/setup-java@v4
+                with:
+                    distribution: 'zulu'
+                    java-version: 17
+
+            -   name: Build
+                env:
+                    GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+                run: |
+                    mvn -s settings.xml --non-recursive install
+                    cd modules/koki-sdk
+                    mvn -s ../../settings.xml package
