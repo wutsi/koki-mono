@@ -16,7 +16,7 @@ class FileControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun readOnly() {
-        navigateTo("/files/${file.id}?owner-id=555&owner-type=ACCOUNT&read-only")
+        navigateTo("/files/${file.id}?owner-id=555&owner-type=ACCOUNT&read-only=true")
 
         assertCurrentPageIs(PageName.FILE)
         assertElementNotPresent(".btn-delete")
@@ -47,7 +47,7 @@ class FileControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission file-delete`() {
-        setUpUserWithoutPermissions(listOf("file:manage"))
+        setUpUserWithoutPermissions(listOf("file:delete"))
 
         navigateTo("/files/${file.id}?owner-id=555&owner-type=ACCOUNT")
 
