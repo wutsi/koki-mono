@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import java.io.File
 import java.util.UUID
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -65,8 +66,6 @@ class TaxFileAgentTest {
 
     @BeforeEach
     fun setUp() {
-        Thread.sleep(12000) // Pause to support the 5 RPM limit from Gemini - see https://ai.google.dev/gemini-api/docs/rate-limits
-
         doReturn(forms).whenever(formService).search(
             anyOrNull(),
             anyOrNull(),
@@ -89,36 +88,43 @@ class TaxFileAgentTest {
     }
 
     @Test
+    @Ignore // Because of limits
     fun `file uploaded - CA - T3-RCA`() {
         fileUploaded("T3-RCA", "/tax/ai/T3-RCA.pdf")
     }
 
     @Test
+    @Ignore // Because of limits
     fun `file uploaded - CA - TP-1`() {
         fileUploaded("TP-1.D", "/tax/ai/TP-1.D.pdf", expectedLanguage = "fr")
     }
 
     @Test
+    @Ignore // Because of limits
     fun `file uploaded - CA - RL-1`() {
         fileUploaded("RL-1", "/tax/ai/RL-1.pdf", expectedLanguage = "fr")
     }
 
     @Test
+    @Ignore // Because of limits
     fun `file uploaded - CA - RL-10`() {
         fileUploaded("RL-10", "/tax/ai/RL-10.png", "image/png", expectedLanguage = "fr")
     }
 
     @Test
+    @Ignore // Because of limits
     fun `file uploaded - CA - RL-24`() {
         fileUploaded("RL-24", "/tax/ai/RL-24.pdf", expectedLanguage = "fr")
     }
 
     @Test
+    @Ignore // Because of limits
     fun `file uploaded - CA - RL-3`() {
         fileUploaded("RL-3", "/tax/ai/RL-3.pdf", expectedLanguage = "fr")
     }
 
     @Test
+    @Ignore // Because of limits
     fun `file uploaded - CA - RL-31`() {
         fileUploaded("RL-31", "/tax/ai/RL-31.pdf", expectedLanguage = "fr")
     }
@@ -189,7 +195,7 @@ class TaxFileAgentTest {
     private fun setupFile(path: String, contentType: String = "application/pdf"): File {
         val input = TaxFileAgentTest::class.java.getResourceAsStream(path)
         val extension = contentType.substring(contentType.indexOf("/") + 1)
-        val path = "tax-ai-agent/" + UUID.randomUUID().toString() + "." + extension
+        val path = "tax/" + UUID.randomUUID().toString() + "." + extension
         storage.store(path = path, content = input!!, contentType, -1)
 
         return File("$directory/$path")

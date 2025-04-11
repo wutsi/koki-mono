@@ -1,18 +1,29 @@
 package com.wutsi.koki.portal.file.page
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
+import com.wutsi.koki.portal.account.service.AccountService
+import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
+import com.wutsi.koki.portal.common.page.PageName
+import com.wutsi.koki.portal.contact.service.ContactService
+import com.wutsi.koki.portal.employee.service.EmployeeService
 import com.wutsi.koki.portal.file.service.FileService
+import com.wutsi.koki.portal.form.service.FormService
+import com.wutsi.koki.portal.product.service.ProductService
 import com.wutsi.koki.portal.security.RequiresPermission
+import com.wutsi.koki.portal.tax.service.TaxService
 import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.ContentDisposition
 import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -26,16 +37,72 @@ class FileController(
     private val service: FileService,
     private val configurationService: ConfigurationService,
     private val storageServiceBuilder: StorageServiceBuilder,
+    private val accountService: AccountService,
+    private val contactService: ContactService,
+    private val formService: FormService,
+    private val employeeService: EmployeeService,
+    private val taxService: TaxService,
+    private val productService: ProductService,
 ) : AbstractPageController() {
+    @GetMapping("/files/{id}")
+    fun show(
+        @PathVariable id: Long,
+        @RequestParam("owner-id") ownerId: Long,
+        @RequestParam("owner-type") ownerType: ObjectType,
+        @RequestParam("read-only", required = false) readOnly: Boolean = false,
+        model: Model
+    ): String {
+        val file = service.file(id)
+        model.addAttribute("file", file)
+
+        model.addAttribute("ownerType", ownerType)
+        model.addAttribute("ownerId", ownerId)
+        model.addAttribute("readOnly", readOnly)
+
+        model.addAttribute(
+            "page",
+            PageModel(
+                name = PageName.FILE,
+                title = file.name
+            )
+        )
+
+        val ownerModule = tenantHolder.get()!!.modules.find { module -> module.objectType == ownerType }!!
+        model.addAttribute("ownerModule", ownerModule)
+        model.addAttribute("ownerUrl", "${ownerModule.homeUrl}/$ownerId?tab=file")
+        model.addAttribute(
+            "ownerName",
+            when (ownerType) {
+                ObjectType.ACCOUNT -> accountService.account(ownerId, fullGraph = false).name
+                ObjectType.CONTACT -> contactService.contact(ownerId, fullGraph = false).name
+                ObjectType.EMPLOYEE -> employeeService.employee(ownerId, fullGraph = false).name
+                ObjectType.FORM -> formService.form(ownerId, fullGraph = false).name
+                ObjectType.TAX -> taxService.tax(ownerId, fullGraph = false).name
+                ObjectType.PRODUCT -> productService.product(ownerId, fullGraph = false).name
+                else -> null
+            }
+        )
+        return "files/show"
+    }
+
     @GetMapping("/files/{id}/delete")
     @RequiresPermission(["file:delete"])
-    fun delete(@PathVariable id: Long): String {
+    fun delete(
+        @PathVariable id: Long,
+        @RequestParam("owner-id") ownerId: Long,
+        @RequestParam("owner-type") ownerType: ObjectType,
+    ): String {
         service.delete(id)
-        return "files/deleted"
+
+        val module = tenantHolder.get()!!.modules.find { module -> module.objectType == ownerType }!!
+        return "redirect:${module.homeUrl}/$ownerId?tab=file"
     }
 
     @GetMapping("/files/{id}/download")
-    fun download(@PathVariable id: Long, response: HttpServletResponse) {
+    fun download(
+        @PathVariable id: Long,
+        response: HttpServletResponse
+    ) {
         // File
         val file = service.file(id)
 

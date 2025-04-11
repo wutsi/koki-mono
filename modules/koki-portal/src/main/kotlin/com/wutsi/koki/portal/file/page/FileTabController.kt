@@ -50,7 +50,9 @@ class FileTabController(private val service: FileService) : AbstractPageControll
             ownerId = ownerId,
             ownerType = ownerType,
         )
-        model.addAttribute("readOnly", readOnly)
+        model.addAttribute("readOnly", readOnly ?: false)
+        model.addAttribute("ownerId", ownerId)
+        model.addAttribute("ownerType", ownerType)
         if (files.isNotEmpty()) {
             model.addAttribute("files", files)
 
