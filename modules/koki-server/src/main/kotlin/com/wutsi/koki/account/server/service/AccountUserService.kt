@@ -66,7 +66,6 @@ class AccountUserService(
 
         val user = get(id, tenantId)
         user.username = request.username.lowercase()
-        user.password = passwordService.hash(request.password, user.salt)
         user.status = request.status
         user.modifiedAt = Date()
         return dao.save(user)

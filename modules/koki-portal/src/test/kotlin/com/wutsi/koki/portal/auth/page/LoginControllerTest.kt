@@ -88,7 +88,11 @@ class LoginControllerTest : AbstractPageControllerTest() {
 
         verify(rest).postForEntity(
             "$sdkBaseUrl/v1/auth/login",
-            LoginRequest("ray.sponsible@gmail.com", "secret"),
+            LoginRequest(
+                username = "ray.sponsible@gmail.com",
+                password = "secret",
+                application = ApplicationName.PORTAL,
+            ),
             LoginResponse::class.java
         )
 
@@ -113,7 +117,11 @@ class LoginControllerTest : AbstractPageControllerTest() {
 
         verify(rest).postForEntity(
             "$sdkBaseUrl/v1/auth/login",
-            LoginRequest("ray.sponsible@gmail.com", "secret"),
+            LoginRequest(
+                username = "ray.sponsible@gmail.com",
+                password = "secret",
+                application = ApplicationName.PORTAL,
+            ),
             LoginResponse::class.java
         )
 

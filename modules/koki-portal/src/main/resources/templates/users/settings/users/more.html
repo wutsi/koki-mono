@@ -4,9 +4,6 @@
     </td>
     <td th:text="${me.email}">EMAIL</td>
     <td>
-        <span th:replace="~{__components/user :: user-type(${me.type})}"></span>
-    </td>
-    <td>
         <span th:replace="~{__components/user :: user-status(${me.status})}"></span>
     </td>
     <td th:text="${me.modifiedAtText}">MODIFIED</td>
