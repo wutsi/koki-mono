@@ -19,7 +19,7 @@ data class InvitationEntity(
     val accountId: Long = -1,
 
     @Column(name = "created_by_fk")
-    val createById: Long = -1,
+    val createById: Long? = null,
 
     val createdAt: Date = Date(),
 )

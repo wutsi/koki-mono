@@ -5,6 +5,7 @@ import com.wutsi.koki.account.dto.UpdateAccountRequest
 import com.wutsi.koki.account.server.dao.AccountAttributeRepository
 import com.wutsi.koki.account.server.dao.AccountRepository
 import com.wutsi.koki.account.server.domain.AccountUserEntity
+import com.wutsi.koki.account.server.domain.InvitationEntity
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
@@ -228,6 +229,13 @@ class AccountService(
     fun setUser(accountId: Long, user: AccountUserEntity): AccountEntity {
         val account = get(accountId, user.tenantId)
         account.userId = user.id
+        return dao.save(account)
+    }
+
+    @Transactional
+    fun setInvitation(accountId: Long, invitation: InvitationEntity): AccountEntity {
+        val account = get(accountId, invitation.tenantId)
+        account.invitationId = invitation.id
         return dao.save(account)
     }
 }

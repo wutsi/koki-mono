@@ -36,6 +36,7 @@ data class TenantEntity(
     val createdAt: Date = Date(),
     val portalUrl: String = "",
     val websiteUrl: String? = null,
+    val clientPortalUrl: String? = null,
 
     @ManyToMany
     @JoinTable(

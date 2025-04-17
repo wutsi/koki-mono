@@ -42,12 +42,12 @@ class TenantAccountInitializerTest {
         verify(configurationService, times(2)).save(request.capture(), eq(tenantId))
 
         assertEquals(
-            TenantAccountInitializer.EMAIL_SUBJECT,
-            request.allValues[0].values[ConfigurationName.ACCOUNT_INVITE_EMAIL_SUBJECT]
+            TenantAccountInitializer.INVITATION_EMAIL_SUBJECT,
+            request.allValues[0].values[ConfigurationName.ACCOUNT_INVITATION_EMAIL_SUBJECT]
         )
         assertEquals(
-            getContent(TenantAccountInitializer.EMAIL_BODY_PATH),
-            request.allValues[1].values[ConfigurationName.ACCOUNT_INVITE_EMAIL_BODY]
+            getContent(TenantAccountInitializer.INVITATION_EMAIL_BODY_PATH),
+            request.allValues[1].values[ConfigurationName.ACCOUNT_INVITATION_EMAIL_BODY]
         )
     }
 
