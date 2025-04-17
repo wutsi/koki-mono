@@ -41,6 +41,7 @@ class AccountUserService(
             throw ConflictException(Error(ErrorCode.USER_DUPLICATE_USERNAME))
         }
 
+        val account = accountService.get(request.accountId, tenantId)
         val salt = UUID.randomUUID().toString()
         val user = dao.save(
             AccountUserEntity(
@@ -53,7 +54,7 @@ class AccountUserService(
             )
         )
 
-        accountService.setUser(request.accountId, user)
+        accountService.setUser(account, user)
         return user
     }
 

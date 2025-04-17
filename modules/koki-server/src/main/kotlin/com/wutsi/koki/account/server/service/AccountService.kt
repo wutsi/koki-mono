@@ -226,15 +226,13 @@ class AccountService(
     }
 
     @Transactional
-    fun setUser(accountId: Long, user: AccountUserEntity): AccountEntity {
-        val account = get(accountId, user.tenantId)
+    fun setUser(account: AccountEntity, user: AccountUserEntity): AccountEntity {
         account.userId = user.id
         return dao.save(account)
     }
 
     @Transactional
-    fun setInvitation(accountId: Long, invitation: InvitationEntity): AccountEntity {
-        val account = get(accountId, invitation.tenantId)
+    fun setInvitation(account: AccountEntity, invitation: InvitationEntity): AccountEntity {
         account.invitationId = invitation.id
         return dao.save(account)
     }
