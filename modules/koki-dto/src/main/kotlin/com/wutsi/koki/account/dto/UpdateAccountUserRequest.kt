@@ -6,6 +6,5 @@ import jakarta.validation.constraints.Size
 
 data class UpdateAccountUserRequest(
     @get:NotEmpty @get:Size(max = 100) val username: String = "",
-    @get:NotEmpty val password: String = "",
     val status: UserStatus = UserStatus.NEW,
 )
