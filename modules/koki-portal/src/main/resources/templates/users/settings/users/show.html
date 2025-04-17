@@ -28,12 +28,6 @@
                 <td><b>Email</b></td>
                 <td th:text="${me.email}">EMAIL</td>
             </tr>
-            <tr th:if="${me.type.name != 'UNKNOWN'}">
-                <td><b>Type</b></td>
-                <td>
-                    <span th:replace="~{__components/user :: user-type(${me.type})}"></span>
-                </td>
-            </tr>
             <tr>
                 <td><b>Status</b></td>
                 <td>

@@ -6,10 +6,6 @@
     STATUS
 </span>
 
-<span th:fragment="user-type(type)" th:if="${type}" th:text="#{'user-type.' + ${type.name}}">
-    TYPE
-</span>
-
 <script th:fragment="user-selector(id, roleId, permission)" th:inline="javascript">
     document.addEventListener("DOMContentLoaded", function () {
         const selector = /*[[${id}]]*/ '';

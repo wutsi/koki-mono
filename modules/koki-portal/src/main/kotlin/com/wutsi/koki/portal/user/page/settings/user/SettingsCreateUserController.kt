@@ -45,7 +45,7 @@ class SettingsCreateUserController(
             "page",
             PageModel(
                 name = PageName.SECURITY_SETTINGS_USER_CREATE,
-                title = "Create User",
+                title = "Create AccountUser",
             )
 
         )

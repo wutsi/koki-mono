@@ -1,7 +1,7 @@
 package com.wutsi.koki
 
-import com.wutsi.koki.security.server.service.AuthenticationService
-import com.wutsi.koki.tenant.server.domain.UserEntity
+import com.wutsi.koki.security.dto.ApplicationName
+import com.wutsi.koki.security.server.service.AccessTokenService
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
@@ -15,7 +15,7 @@ abstract class AuthorizationAwareEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Autowired
-    private lateinit var authenticationService: AuthenticationService
+    private lateinit var accessTokenService: AccessTokenService
 
     protected var anonymousUser: Boolean = false
 
@@ -39,12 +39,13 @@ abstract class AuthorizationAwareEndpointTest : TenantAwareEndpointTest() {
         return super.intercept(request, body, execution)
     }
 
-    protected fun createAccessToken(): String {
-        return authenticationService.createAccessToken(
-            UserEntity(
-                id = USER_ID,
-                tenantId = TENANT_ID,
-            )
+    protected fun createAccessToken(application: String = ApplicationName.PORTAL): String {
+        return accessTokenService.create(
+            application = application,
+            tenantId = TENANT_ID,
+            userId = USER_ID,
+            subject = "Ray Sponsible",
+            subjectType = "USER",
         )
     }
 }

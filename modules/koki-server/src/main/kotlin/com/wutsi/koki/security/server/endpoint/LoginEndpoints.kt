@@ -1,7 +1,7 @@
 package com.wutsi.koki.security.server.endpoint
 
-import com.wutsi.koki.party.dto.LoginRequest
-import com.wutsi.koki.party.dto.LoginResponse
+import com.wutsi.koki.security.dto.LoginRequest
+import com.wutsi.koki.security.dto.LoginResponse
 import com.wutsi.koki.security.server.service.AuthenticationService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.PostMapping
@@ -18,7 +18,7 @@ class LoginEndpoints(private val service: AuthenticationService) {
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @Valid @RequestBody request: LoginRequest
     ): LoginResponse {
-        val accessToken = service.authenticate(request.email, request.password, tenantId)
+        val accessToken = service.authenticate(request, tenantId)
         return LoginResponse(accessToken)
     }
 }

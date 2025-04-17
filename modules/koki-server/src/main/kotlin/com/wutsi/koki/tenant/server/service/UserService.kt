@@ -8,7 +8,6 @@ import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
-import com.wutsi.koki.tenant.dto.UserType
 import com.wutsi.koki.tenant.server.dao.UserRepository
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import jakarta.persistence.EntityManager
@@ -88,7 +87,7 @@ class UserService(
         user.email = email
         user.displayName = request.displayName
         user.language = request.language
-        request.status?.let { status -> user.status = status }
+        user.status = request.status
         user.modifiedById = securityService.getCurrentUserIdOrNull()
         user.modifiedAt = Date()
         dao.save(user)
@@ -111,24 +110,12 @@ class UserService(
         dao.save(user)
     }
 
-    fun setType(user: UserEntity, type: UserType): UserEntity {
-        if (user.type == UserType.UNKNOWN) {
-            user.type = type
-            return dao.save(user)
-        } else {
-            throw ConflictException(
-                error = Error(code = ErrorCode.USER_ALREADY_ASSIGNED)
-            )
-        }
-    }
-
     fun search(
         tenantId: Long,
         keyword: String? = null,
         ids: List<Long> = emptyList(),
         roleIds: List<Long> = emptyList(),
         status: UserStatus? = null,
-        type: UserType? = null,
         permissions: List<String> = emptyList(),
         limit: Int = 20,
         offset: Int = 0,
@@ -151,9 +138,6 @@ class UserService(
         if (status != null) {
             jql.append(" AND U.status = :status")
         }
-        if (type != null) {
-            jql.append(" AND U.type = :type")
-        }
         if (roleIds.isNotEmpty()) {
             jql.append(" AND R.id IN :roleIds")
         }
@@ -175,9 +159,6 @@ class UserService(
         }
         if (status != null) {
             query.setParameter("status", status)
-        }
-        if (type != null) {
-            query.setParameter("type", type)
         }
         if (permissions.isNotEmpty()) {
             query.setParameter("permissions", permissions)

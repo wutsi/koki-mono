@@ -72,7 +72,7 @@ springdoc:
 
         -   group: accounts
             display-name: Account API
-            paths-to-match: /v1/attributes, /v1/attributes/**, /v1/accounts, /v1/accounts/**
+            paths-to-match: /v1/attributes, /v1/attributes/**, /v1/accounts, /v1/accounts/**, /v1/account-users, /v1/account-users/**, /v1/invitations, /v1/invitations/**
 
         -   group: contacts
             display-name: Contact API
@@ -238,6 +238,10 @@ koki:
                 queue: koki-tax-queue
                 dlq: koki-tax-dlq
                 dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
+
+        security:
+            access-token:
+                ttl: 3600 # 1 hour
 
         transaction:
             pending:

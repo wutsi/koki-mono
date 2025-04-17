@@ -7,8 +7,6 @@ import com.wutsi.koki.employee.dto.EmployeeStatus
 import com.wutsi.koki.employee.server.dao.EmployeeRepository
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.tenant.dto.UserType
-import com.wutsi.koki.tenant.server.dao.UserRepository
 import org.apache.commons.lang3.time.DateUtils
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,9 +20,6 @@ import kotlin.test.assertEquals
 class CreateEmployeeEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var dao: EmployeeRepository
-
-    @Autowired
-    private lateinit var userDao: UserRepository
 
     private val request = CreateEmployeeRequest(
         email = "ray.sponsible@gmail.com",
@@ -57,9 +52,6 @@ class CreateEmployeeEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(USER_ID, employee.createdById)
         assertEquals(USER_ID, employee.modifiedById)
         assertEquals(request.employeeTypeId, employee.employeeTypeId)
-
-        val user = userDao.findById(employeeId).get()
-        assertEquals(UserType.EMPLOYEE, user.type)
     }
 
     @Test

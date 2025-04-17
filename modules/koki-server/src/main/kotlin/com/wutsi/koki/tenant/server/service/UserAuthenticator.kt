@@ -4,25 +4,41 @@ import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
-import com.wutsi.koki.party.dto.LoginRequest
 import com.wutsi.koki.security.dto.ApplicationName
+import com.wutsi.koki.security.dto.LoginRequest
 import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.server.service.PasswordService
 import com.wutsi.koki.tenant.server.service.UserService
+import jakarta.annotation.PostConstruct
+import jakarta.annotation.PreDestroy
+import org.springframework.stereotype.Service
 
-abstract class EmailPasswordAuthenticator(
+@Service
+class UserAuthenticator(
+    private val authenticatorService: AuthenticationService,
     private val userService: UserService,
     private val passwordService: PasswordService,
     private val accessTokenService: AccessTokenService,
 ) : Authenticator {
+    @PostConstruct
+    fun init() {
+        authenticatorService.register(this)
+    }
+
+    @PreDestroy
+    fun destroy() {
+        authenticatorService.unregister(this)
+    }
+
+    override fun supports(request: LoginRequest): Boolean {
+        return request.application == ApplicationName.PORTAL
+    }
+
     override fun authenticate(request: LoginRequest, tenantId: Long): String {
         try {
-            val user = userService.getByEmail(request.email, request.userType, tenantId)
+            val user = userService.getByEmail(request.username, tenantId)
             if (user.status != UserStatus.ACTIVE) {
                 throw ConflictException(error = Error(ErrorCode.AUTHENTICATION_USER_NOT_ACTIVE))
-            }
-            if (user.type != request.userType) {
-                throw ConflictException(error = Error(ErrorCode.AUTHENTICATION_FAILED))
             }
             if (!passwordService.matches(request.password, user.password, user.salt)) {
                 throw ConflictException(error = Error(ErrorCode.AUTHENTICATION_FAILED))
@@ -30,8 +46,8 @@ abstract class EmailPasswordAuthenticator(
             return accessTokenService.create(
                 application = request.application,
                 userId = user.id ?: -1,
-                userType = request.userType,
                 subject = user.displayName,
+                subjectType = "USER",
                 tenantId = tenantId
             )
         } catch (ex: NotFoundException) {

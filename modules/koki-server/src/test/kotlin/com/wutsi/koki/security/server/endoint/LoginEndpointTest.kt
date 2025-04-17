@@ -1,12 +1,10 @@
 package com.wutsi.koki.security.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
-import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.party.dto.LoginRequest
-import com.wutsi.koki.party.dto.LoginResponse
-import com.wutsi.koki.security.server.service.AuthenticationService
-import com.wutsi.koki.tenant.dto.CreateUserRequest
+import com.wutsi.koki.security.dto.ApplicationName
+import com.wutsi.koki.security.dto.LoginRequest
+import com.wutsi.koki.security.dto.LoginResponse
+import com.wutsi.koki.security.server.service.AccessTokenService
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -18,13 +16,14 @@ import kotlin.test.assertEquals
 @Sql(value = ["/db/test/clean.sql", "/db/test/security/LoginEndpoint.sql"])
 class LoginEndpointTest : TenantAwareEndpointTest() {
     @Autowired
-    private lateinit var authenticationService: AuthenticationService
+    private lateinit var accessTokenService: AccessTokenService
 
     @Test
-    fun login() {
+    fun portal() {
         val request = LoginRequest(
-            email = "ray.sponsible@gmail.com",
-            password = "secret"
+            username = "ray.sponsible@gmail.com",
+            password = "secret",
+            application = ApplicationName.PORTAL,
         )
 
         val result = rest.postForEntity("/v1/auth/login", request, LoginResponse::class.java)
@@ -32,62 +31,32 @@ class LoginEndpointTest : TenantAwareEndpointTest() {
         assertEquals(HttpStatus.OK, result.statusCode)
 
         val accessToken = result.body!!.accessToken
-        val principal = authenticationService.decodeAccessToken(accessToken)
+        val principal = accessTokenService.decode(accessToken)
         assertEquals(11L, principal.getUserId())
         assertEquals(TENANT_ID, principal.getTenantId())
+        assertEquals(request.application, principal.getApplication())
         assertEquals("Ray Sponsible", principal.getSubject())
+        assertEquals("USER", principal.getSubjectType())
     }
 
     @Test
-    fun `invalid email`() {
-        val request = CreateUserRequest(
-            email = "OMAM.MBIYICK@hotmail.com",
-            displayName = "Omam Mbiyick",
-            password = "secret"
-        )
-
-        val result = rest.postForEntity("/v1/auth/login", request, ErrorResponse::class.java)
-
-        assertEquals(HttpStatus.CONFLICT, result.statusCode)
-        assertEquals(ErrorCode.AUTHENTICATION_FAILED, result.body?.error?.code)
-    }
-
-    @Test
-    fun `invalid password`() {
+    fun client() {
         val request = LoginRequest(
-            email = "ray.sponsible@gmail.com",
-            password = "xxxx"
+            username = "woo.llc",
+            password = "secret",
+            application = ApplicationName.CLIENT,
         )
 
-        val result = rest.postForEntity("/v1/auth/login", request, ErrorResponse::class.java)
+        val result = rest.postForEntity("/v1/auth/login", request, LoginResponse::class.java)
 
-        assertEquals(HttpStatus.CONFLICT, result.statusCode)
-        assertEquals(ErrorCode.AUTHENTICATION_FAILED, result.body?.error?.code)
-    }
+        assertEquals(HttpStatus.OK, result.statusCode)
 
-    @Test
-    fun `not active`() {
-        val request = LoginRequest(
-            email = "not-active@gmail.com",
-            password = "secret"
-        )
-
-        val result = rest.postForEntity("/v1/auth/login", request, ErrorResponse::class.java)
-
-        assertEquals(HttpStatus.CONFLICT, result.statusCode)
-        assertEquals(ErrorCode.AUTHENTICATION_USER_NOT_ACTIVE, result.body?.error?.code)
-    }
-
-    @Test
-    fun `user of another tenant`() {
-        val request = LoginRequest(
-            email = "roger.milla@gmail.com",
-            password = "secret"
-        )
-
-        val result = rest.postForEntity("/v1/auth/login", request, ErrorResponse::class.java)
-
-        assertEquals(HttpStatus.CONFLICT, result.statusCode)
-        assertEquals(ErrorCode.AUTHENTICATION_FAILED, result.body?.error?.code)
+        val accessToken = result.body!!.accessToken
+        val principal = accessTokenService.decode(accessToken)
+        assertEquals(100L, principal.getUserId())
+        assertEquals(TENANT_ID, principal.getTenantId())
+        assertEquals(request.application, principal.getApplication())
+        assertEquals("WOO LLC", principal.getSubject())
+        assertEquals("ACCOUNT", principal.getSubjectType())
     }
 }

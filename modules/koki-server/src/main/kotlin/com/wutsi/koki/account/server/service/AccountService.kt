@@ -4,6 +4,7 @@ import com.wutsi.koki.account.dto.CreateAccountRequest
 import com.wutsi.koki.account.dto.UpdateAccountRequest
 import com.wutsi.koki.account.server.dao.AccountAttributeRepository
 import com.wutsi.koki.account.server.dao.AccountRepository
+import com.wutsi.koki.account.server.domain.AccountUserEntity
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
@@ -221,5 +222,12 @@ class AccountService(
         query.firstResult = offset
         query.maxResults = limit
         return query.resultList
+    }
+
+    @Transactional
+    fun setUser(accountId: Long, user: AccountUserEntity): AccountEntity {
+        val account = get(accountId, user.tenantId)
+        account.userId = user.id
+        return dao.save(account)
     }
 }

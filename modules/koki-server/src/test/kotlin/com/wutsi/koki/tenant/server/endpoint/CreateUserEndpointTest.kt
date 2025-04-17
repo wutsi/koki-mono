@@ -10,7 +10,6 @@ import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
 import com.wutsi.koki.tenant.dto.UserStatus
-import com.wutsi.koki.tenant.dto.UserType
 import com.wutsi.koki.tenant.server.dao.UserRepository
 import com.wutsi.koki.tenant.server.service.PasswordService
 import org.junit.jupiter.api.BeforeEach
@@ -68,7 +67,7 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
             displayName = "Thomas Nkono",
             password = "secret",
             roleIds = listOf(11L, 12L),
-            language = "fr"
+            language = "fr",
         )
 
         val result = rest.postForEntity("/v1/users", request, CreateUserResponse::class.java)
@@ -81,7 +80,6 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.email, user.email)
         assertEquals(request.language, user.language)
         assertEquals(UserStatus.ACTIVE, user.status)
-        assertEquals(UserType.UNKNOWN, user.type)
         assertEquals(36, user.salt.length)
         assertEquals(HASHED_PASSWORD, user.password)
         assertEquals(TENANT_ID, user.tenantId)
@@ -95,7 +93,7 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
         val request = CreateUserRequest(
             email = "OMAM.MBIYICK@hotmail.com",
             displayName = "Omam Mbiyick",
-            password = "secret"
+            password = "secret",
         )
 
         val result = rest.postForEntity("/v1/users", request, CreateUserResponse::class.java)
@@ -112,7 +110,7 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
         val request = CreateUserRequest(
             email = "RAY.sponsible@gmail.com",
             displayName = "Ray",
-            password = "secret"
+            password = "secret",
         )
 
         val result = rest.postForEntity("/v1/users", request, ErrorResponse::class.java)
@@ -126,7 +124,7 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
         val request = CreateUserRequest(
             email = "roger.milla@gmail.com",
             displayName = "Roger Milla",
-            password = "secret"
+            password = "secret",
         )
 
         val result = rest.postForEntity("/v1/users", request, CreateUserResponse::class.java)

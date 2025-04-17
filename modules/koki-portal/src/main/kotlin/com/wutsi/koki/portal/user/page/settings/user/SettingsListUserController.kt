@@ -8,7 +8,6 @@ import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.user.service.RoleService
 import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.tenant.dto.UserStatus
-import com.wutsi.koki.tenant.dto.UserType
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -34,7 +33,6 @@ class SettingsListUserController(
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         @RequestParam(required = false, name = "role-id") roleId: Long? = null,
-        @RequestParam(required = false, name = "type") type: UserType? = null,
         @RequestParam(required = false, name = "status") status: UserStatus? = null,
         @RequestParam(required = false, name = "_toast") toast: Long? = null,
         @RequestParam(required = false, name = "_ts") timestamp: Long? = null,
@@ -56,21 +54,17 @@ class SettingsListUserController(
         model.addAttribute("roles", roles)
         model.addAttribute("roleId", roleId)
 
-        model.addAttribute("types", UserType.entries.filter { entry -> entry != UserType.UNKNOWN })
-        model.addAttribute("type", type)
-
         model.addAttribute("statuses", UserStatus.entries)
         model.addAttribute("status", status)
 
         loadToast(referer, toast, timestamp, operation, model)
-        more(roleId, type, status, limit, offset, model)
+        more(roleId, status, limit, offset, model)
         return "users/settings/users/list"
     }
 
     @GetMapping("/more")
     fun more(
         @RequestParam(required = false, name = "role-id") roleId: Long? = null,
-        @RequestParam(required = false, name = "type") type: UserType? = null,
         @RequestParam(required = false, name = "status") status: UserStatus? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
@@ -79,7 +73,6 @@ class SettingsListUserController(
         val users = service.users(
             roleIds = if (roleId == null || roleId == -1L) emptyList() else listOf(roleId),
             status = status,
-            type = type,
             limit = limit,
             offset = offset
         )
@@ -89,7 +82,6 @@ class SettingsListUserController(
             var moreUrl = "/settings/users/more?limit=$limit&offset=$nextOffset"
             roleId?.let { moreUrl = "$moreUrl&role-id=$roleId" }
             status?.let { moreUrl = "$moreUrl&status=$status" }
-            type?.let { moreUrl = "$moreUrl&type=$type" }
             model.addAttribute("moreUrl", moreUrl)
         }
         return "users/settings/users/more"
@@ -116,7 +108,7 @@ class SettingsListUserController(
                         "<a href='/settings/users/${user.id}'>${user.displayName}</a> has been saved!"
                     )
                 } catch (ex: Exception) { // I
-                    LOGGER.warn("Unable to load toast information for User#$toast", ex)
+                    LOGGER.warn("Unable to load toast information for AccountUser#$toast", ex)
                 }
             }
         }

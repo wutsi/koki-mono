@@ -10,9 +10,10 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.AccountFixtures.account
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.party.dto.LoginRequest
-import com.wutsi.koki.party.dto.LoginResponse
 import com.wutsi.koki.portal.common.page.PageName
+import com.wutsi.koki.security.dto.ApplicationName
+import com.wutsi.koki.security.dto.LoginRequest
+import com.wutsi.koki.security.dto.LoginResponse
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -50,7 +51,11 @@ class LoginControllerTest : AbstractPageControllerTest() {
 
         verify(rest).postForEntity(
             "$sdkBaseUrl/v1/auth/login",
-            LoginRequest("ray.sponsible@gmail.com", "secret"),
+            LoginRequest(
+                username = "ray.sponsible@gmail.com",
+                password = "secret",
+                application = ApplicationName.PORTAL,
+            ),
             LoginResponse::class.java
         )
 
