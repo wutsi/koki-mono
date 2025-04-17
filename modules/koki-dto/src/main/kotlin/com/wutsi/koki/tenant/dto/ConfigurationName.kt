@@ -1,6 +1,10 @@
 package com.wutsi.koki.tenant.dto
 
 object ConfigurationName {
+    // ACCOUNT
+    const val ACCOUNT_INVITE_EMAIL_BODY = "account.invite.email.body"
+    const val ACCOUNT_INVITE_EMAIL_SUBJECT = "account.invite.email.subject"
+
     // AI
     const val AI_PROVIDER = "ai.provider"
     const val AI_PROVIDER_GEMINI_API_KEY = "ai.provider.gemini.api_key"

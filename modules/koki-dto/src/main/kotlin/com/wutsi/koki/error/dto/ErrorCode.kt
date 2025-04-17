@@ -7,6 +7,7 @@ object ErrorCode {
 
     val ACCOUNT_NOT_FOUND: String = "$PREFIX:account:not-found"
     val ACCOUNT_IN_USE: String = "$PREFIX:account:in-use"
+    val ACCOUNT_INVITATION_NOT_FOUND: String = "$PREFIX:account-invitation:not-found"
 
     val ATTRIBUTE_NOT_FOUND: String = "$PREFIX:attribute:not-found"
     val ATTRIBUTE_NAME_MISSING: String = "$PREFIX:attribute:name-missing"
