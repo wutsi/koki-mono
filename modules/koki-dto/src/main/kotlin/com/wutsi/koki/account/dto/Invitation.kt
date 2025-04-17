@@ -6,5 +6,5 @@ data class Invitation(
     val id: String = "",
     val accountId: Long = -1,
     val createdAt: Date = Date(),
-    val createdById: Long = -1,
+    val createdById: Long? = null,
 )
