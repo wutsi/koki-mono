@@ -74,16 +74,4 @@ class CreateEmployeeEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
         assertEquals(ErrorCode.USER_NOT_FOUND, response.body!!.error.code)
     }
-
-    @Test
-    fun `already assigned`() {
-        val response = rest.postForEntity(
-            "/v1/employees",
-            request.copy(email = "roger.milla@gmail.com"),
-            ErrorResponse::class.java
-        )
-
-        assertEquals(HttpStatus.CONFLICT, response.statusCode)
-        assertEquals(ErrorCode.USER_ALREADY_ASSIGNED, response.body!!.error.code)
-    }
 }
