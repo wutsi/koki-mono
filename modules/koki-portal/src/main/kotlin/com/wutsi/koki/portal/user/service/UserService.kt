@@ -7,7 +7,6 @@ import com.wutsi.koki.sdk.KokiUsers
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
-import com.wutsi.koki.tenant.dto.UserType
 import org.springframework.stereotype.Service
 
 @Service
@@ -32,7 +31,6 @@ class UserService(
         roleIds: List<Long> = emptyList(),
         permissions: List<String> = emptyList(),
         status: UserStatus? = null,
-        type: UserType? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): List<UserModel> {
@@ -42,7 +40,6 @@ class UserService(
             roleIds = roleIds,
             permissions = permissions,
             status = status,
-            type = type,
             limit = limit,
             offset = offset
         ).users

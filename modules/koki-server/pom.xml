@@ -31,6 +31,12 @@
             <groupId>com.wutsi.koki</groupId>
             <artifactId>koki-platform</artifactId>
             <version>${wutsi-platform.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.wutsi.koki</groupId>
+                    <artifactId>koki-dto</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>

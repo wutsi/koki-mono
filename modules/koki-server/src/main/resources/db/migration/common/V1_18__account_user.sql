@@ -17,3 +17,19 @@ CREATE TABLE T_ACCOUNT_USER(
   UNIQUE (tenant_fk, account_fk),
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
+
+ALTER TABLE T_ACCOUNT ADD COLUMN user_fk BIGINT;
+
+CREATE TABLE T_INVITATION(
+  id                VARCHAR(36) NOT NULL,
+
+  tenant_fk         BIGINT NOT NULL,
+  account_fk        BIGINT NOT NULL REFERENCES T_ACCOUNT(id),
+  created_by_fk     BIGINT NOT NULL,
+
+  created_at        DATETIME DEFAULT NOW(),
+
+  PRIMARY KEY(id)
+) ENGINE = InnoDB;
+
+ALTER TABLE T_ACCOUNT ADD COLUMN invitation_fk VARCHAR(36);

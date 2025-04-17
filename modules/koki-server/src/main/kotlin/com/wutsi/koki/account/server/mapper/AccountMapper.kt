@@ -54,6 +54,8 @@ class AccountMapper {
                 null
             },
             billingSameAsShippingAddress = entity.billingSameAsShippingAddress,
+            userId = entity.userId,
+            invitationId = entity.invitationId,
         )
     }
 

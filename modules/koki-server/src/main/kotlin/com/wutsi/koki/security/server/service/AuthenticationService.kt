@@ -1,61 +1,33 @@
 package com.wutsi.koki.security.server.service
 
-import com.auth0.jwt.JWT
-import com.auth0.jwt.algorithms.Algorithm
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
-import com.wutsi.koki.error.exception.NotFoundException
-import com.wutsi.koki.security.dto.JWTDecoder
-import com.wutsi.koki.security.dto.JWTPrincipal
-import com.wutsi.koki.tenant.dto.UserStatus
-import com.wutsi.koki.tenant.server.domain.UserEntity
-import com.wutsi.koki.tenant.server.service.PasswordService
-import com.wutsi.koki.tenant.server.service.UserService
-import org.apache.commons.lang3.time.DateUtils
+import com.wutsi.koki.security.dto.LoginRequest
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import java.util.Date
 
 @Service
-open class AuthenticationService(
-    private val userService: UserService,
-    private val passwordService: PasswordService,
-) {
-    private val jwtDecoder = JWTDecoder()
-
-    fun authenticate(email: String, password: String, tenantId: Long): String {
-        try {
-            val user = userService.getByEmail(email, tenantId)
-            if (!passwordService.matches(password, user.password, user.salt)) {
-                throw ConflictException(error = Error(ErrorCode.AUTHENTICATION_FAILED))
-            }
-            if (user.status != UserStatus.ACTIVE) {
-                throw ConflictException(error = Error(ErrorCode.AUTHENTICATION_USER_NOT_ACTIVE))
-            }
-            return createAccessToken(user)
-        } catch (ex: NotFoundException) {
-            throw ConflictException(error = Error(ErrorCode.AUTHENTICATION_FAILED), ex)
-        }
+open class AuthenticationService {
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(AuthenticationService::class.java)
     }
 
-    fun decodeAccessToken(accessToken: String): JWTPrincipal {
-        return jwtDecoder.decode(accessToken)
+    private val authenticators = mutableListOf<Authenticator>()
+
+    fun register(authenticator: Authenticator) {
+        LOGGER.info(">>> Registering authenticator: $authenticator")
+        authenticators.add(authenticator)
     }
 
-    fun createAccessToken(user: UserEntity, ttlSeconds: Int = 86400): String {
-        val algo = getAlgorithm()
-        val now = Date()
-        return JWT.create()
-            .withIssuer(JWTDecoder.ISSUER)
-            .withSubject(user.displayName)
-            .withClaim(JWTPrincipal.CLAIM_USER_ID, user.id)
-            .withClaim(JWTPrincipal.CLAIM_TENANT_ID, user.tenantId)
-            .withIssuedAt(now)
-            .withExpiresAt(DateUtils.addSeconds(now, ttlSeconds))
-            .sign(algo)
+    fun unregister(authenticator: Authenticator) {
+        LOGGER.info(">>> Unregistering authenticator: $authenticator")
+        authenticators.remove(authenticator)
     }
 
-    private fun getAlgorithm(): Algorithm {
-        return Algorithm.none()
+    fun authenticate(request: LoginRequest, tenantId: Long): String {
+        return authenticators.find { authenticator -> authenticator.supports(request) }
+            ?.authenticate(request, tenantId)
+            ?: throw ConflictException(Error(ErrorCode.AUTHENTICATION_NO_AUTHENTICATOR))
     }
 }

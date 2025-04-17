@@ -38,7 +38,7 @@ INSERT INTO T_USER(id, tenant_fk, email, password, display_name, status)
            (18, 1, 'pf1970@gmail.com', '---', 'Henry Fonda', 1),
 
            (22, 2, 'roger.milla@gmail.com', '---', 'Roger Milla', 1),
-           (23, 1, 'user.23@gmail.com', '---', 'User 23', 1)
+           (23, 1, 'user.23@gmail.com', '---', 'AccountUser 23', 1)
 ;
 
 INSERT INTO T_USER_ROLE(user_fk, role_fk)

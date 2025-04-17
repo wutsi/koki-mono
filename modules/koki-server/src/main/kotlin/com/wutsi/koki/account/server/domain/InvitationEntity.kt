@@ -7,8 +7,8 @@ import jakarta.persistence.Table
 import java.util.Date
 
 @Entity
-@Table(name = "T_ACCOUNT_INVITATION")
-data class AccountInvitationEntity(
+@Table(name = "T_INVITATION")
+data class InvitationEntity(
     @Id
     val id: String? = null,
 

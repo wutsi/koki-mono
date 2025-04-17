@@ -64,6 +64,12 @@ data class AccountEntity(
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
     var deletedAt: Date? = null,
+
+    @Column("user_fk")
+    var userId: Long? = null,
+
+    @Column("invitation_fk")
+    var invitationId: String? = null,
 ) {
     fun hasShippingAddress(): Boolean {
         return shippingCityId != null ||

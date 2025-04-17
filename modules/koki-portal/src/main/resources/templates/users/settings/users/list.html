@@ -31,17 +31,6 @@
                     >ROLE
                     </option>
                 </select>
-                <select class="btn btn-sm btn-light" id="filter-type" onchange="koki_users_on_filter_changed()"
-                        style="width: auto">
-                    <option value="">All Types</option>
-                    <option
-                        th:each="tt : ${types}"
-                        th:selected="${tt} == ${type}"
-                        th:text="#{'user-type.' + ${tt}}"
-                        th:value="${tt}"
-                    >TYPE
-                    </option>
-                </select>
                 <select class="btn btn-sm btn-light" id="filter-status" onchange="koki_users_on_filter_changed()"
                         style="width: auto">
                     <option value="">All Statuses</option>
@@ -61,7 +50,6 @@
             <tr>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Type</th>
                 <th>Status</th>
                 <th>Modified</th>
                 <th></th>
@@ -73,9 +61,6 @@
                     <a th:href="'/settings/users/' + ${me.id}" th:text="${me.displayName}">NAME</a>
                 </td>
                 <td th:text="${me.email}">EMAIL</td>
-                <td>
-                    <span th:replace="~{__components/user :: user-type(${me.type})}"></span>
-                </td>
                 <td>
                     <span th:replace="~{__components/user :: user-status(${me.status})}"></span>
                 </td>
@@ -100,12 +85,10 @@
 <script>
     function koki_users_on_filter_changed() {
         const roleId = document.getElementById('filter-role-id').value;
-        const type = document.getElementById('filter-type').value;
         const status = document.getElementById('filter-status').value;
 
         document.location.href = '/settings/users?' +
             (roleId && roleId.length > 0 ? '&role-id=' + roleId : '') +
-            (type && type.length > 0 ? '&type=' + type : '') +
             (status && status.length > 0 ? '&status=' + status : '');
     }
 

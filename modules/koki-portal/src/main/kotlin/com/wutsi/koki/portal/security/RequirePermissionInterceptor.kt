@@ -21,7 +21,7 @@ RequirePermissionInterceptor(private val currentUser: CurrentUserHolder) : Handl
             val permissionNames = user?.permissionNames
             if (permissionNames == null || !permissionNames.containsAll(permissions)) {
                 if (LOGGER.isDebugEnabled) {
-                    LOGGER.debug("Expecting permissions $permissions, but User#${user?.id} has $permissionNames")
+                    LOGGER.debug("Expecting permissions $permissions, but AccountUser#${user?.id} has $permissionNames")
                 }
                 response.sendRedirect("/error/access-denied")
                 return false

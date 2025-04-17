@@ -13,9 +13,13 @@ import java.util.Date
 open class AccessTokenService(
     @Value("\${koki.module.security.access-token.ttl}") private val ttl: Int,
 ) {
+    private val jwtDecoder = JWTDecoder()
+
     fun create(
         application: String,
         userId: Long,
+        subject: String,
+        subjectType: String,
         tenantId: Long,
     ): String {
         val algo = getAlgorithm()
@@ -23,11 +27,17 @@ open class AccessTokenService(
         return JWT.create()
             .withIssuer(JWTDecoder.ISSUER)
             .withClaim(JWTPrincipal.CLAIM_USER_ID, userId)
+            .withClaim(JWTPrincipal.CLAIM_SUBJECT_TYPE, subjectType)
             .withClaim(JWTPrincipal.CLAIM_TENANT_ID, tenantId)
             .withClaim(JWTPrincipal.CLAIM_APPLICATION, application)
+            .withSubject(subject)
             .withIssuedAt(now)
             .withExpiresAt(DateUtils.addSeconds(now, ttl))
             .sign(algo)
+    }
+
+    fun decode(accessToken: String): JWTPrincipal {
+        return jwtDecoder.decode(accessToken)
     }
 
     private fun getAlgorithm(): Algorithm {

@@ -1,4 +1,8 @@
 package com.wutsi.koki.security.server.service
 
-class Authenticator {
+import com.wutsi.koki.security.dto.LoginRequest
+
+interface Authenticator {
+    fun supports(request: LoginRequest): Boolean
+    fun authenticate(request: LoginRequest, tenantId: Long): String
 }

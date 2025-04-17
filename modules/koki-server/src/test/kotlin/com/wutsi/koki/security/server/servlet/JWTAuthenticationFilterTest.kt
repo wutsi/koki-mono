@@ -7,10 +7,8 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.common.dto.HttpHeader
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.security.dto.JWTPrincipal
-import com.wutsi.koki.security.server.service.AuthenticationService
+import com.wutsi.koki.security.server.service.AccessTokenService
 import com.wutsi.koki.tenant.server.domain.UserEntity
-import com.wutsi.koki.tenant.server.service.PasswordService
-import com.wutsi.koki.tenant.server.service.UserService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -27,19 +25,15 @@ class JWTAuthenticationFilterTest {
     private val request = mock<HttpServletRequest>()
     private val response = mock<HttpServletResponse>()
     private val filterChain = mock<FilterChain>()
+    private val accessTokenService = AccessTokenService(60)
 
-    private val authenticationService = AuthenticationService(
-        mock<UserService>(),
-        PasswordService()
-    )
-
-    private val filter = JWTAuthenticationFilter(authenticationService)
+    private val filter = JWTAuthenticationFilter(accessTokenService)
 
     private val user = UserEntity(
         id = 11L,
         displayName = "Ray Sponsible",
         email = "ray.sponsible@gmail.com",
-        tenantId = 1L
+        tenantId = 1L,
     )
 
     private var accessToken: String? = null
@@ -53,7 +47,7 @@ class JWTAuthenticationFilterTest {
 
     @Test
     fun authenticated() {
-        accessToken = authenticationService.createAccessToken(user)
+        accessToken = accessTokenService.create("foo", user.id!!, user.displayName, "USER", user.tenantId)
         doReturn("Bearer $accessToken").whenever(request).getHeader(HttpHeaders.AUTHORIZATION)
         doReturn(user.tenantId.toString()).whenever(request).getHeader(HttpHeader.TENANT_ID)
 
@@ -73,7 +67,7 @@ class JWTAuthenticationFilterTest {
 
     @Test
     fun `no tenant in header`() {
-        accessToken = authenticationService.createAccessToken(user)
+        accessToken = accessTokenService.create("foo", user.id!!, user.displayName, "USER", user.tenantId)
         doReturn("Bearer $accessToken").whenever(request).getHeader(HttpHeaders.AUTHORIZATION)
         doReturn(null).whenever(request).getHeader(HttpHeader.TENANT_ID)
 
@@ -91,7 +85,7 @@ class JWTAuthenticationFilterTest {
 
     @Test
     fun `bad tenant`() {
-        accessToken = authenticationService.createAccessToken(user)
+        accessToken = accessTokenService.create("foo", user.id!!, user.displayName, "USER", user.tenantId)
         doReturn("Bearer $accessToken").whenever(request).getHeader(HttpHeaders.AUTHORIZATION)
         doReturn("11").whenever(request).getHeader(HttpHeader.TENANT_ID)
 
@@ -103,7 +97,7 @@ class JWTAuthenticationFilterTest {
 
     @Test
     fun `expired token`() {
-        accessToken = authenticationService.createAccessToken(user, -1000)
+        accessToken = AccessTokenService(-60).create("foo", user.id!!, user.displayName, "USER", user.tenantId)
         doReturn("Bearer $accessToken").whenever(request).getHeader(HttpHeaders.AUTHORIZATION)
         doReturn("11").whenever(request).getHeader(HttpHeader.TENANT_ID)
 

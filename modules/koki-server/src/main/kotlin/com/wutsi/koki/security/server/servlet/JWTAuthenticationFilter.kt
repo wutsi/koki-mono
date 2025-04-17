@@ -4,7 +4,7 @@ import com.auth0.jwt.exceptions.TokenExpiredException
 import com.wutsi.koki.common.dto.HttpHeader
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.security.dto.JWTPrincipal
-import com.wutsi.koki.security.server.service.AuthenticationService
+import com.wutsi.koki.security.server.service.AccessTokenService
 import com.wutsi.koki.security.server.service.JWTAuthentication
 import jakarta.servlet.Filter
 import jakarta.servlet.FilterChain
@@ -19,7 +19,7 @@ import org.springframework.security.core.context.SecurityContextImpl
 import org.springframework.stereotype.Service
 
 @Service
-class JWTAuthenticationFilter(private val authenticationService: AuthenticationService) : Filter {
+class JWTAuthenticationFilter(private val accessTokenService: AccessTokenService) : Filter {
     override fun doFilter(
         request: ServletRequest,
         response: ServletResponse,
@@ -38,7 +38,7 @@ class JWTAuthenticationFilter(private val authenticationService: AuthenticationS
             SecurityContextHolder.clearContext()
         } else {
             try {
-                val principal = authenticationService.decodeAccessToken(accessToken)
+                val principal = accessTokenService.decode(accessToken)
                 validate(principal, request)
 
                 val auth = JWTAuthentication(principal)
