@@ -4,6 +4,7 @@ import com.wutsi.koki.account.dto.CreateAccountRequest
 import com.wutsi.koki.account.dto.CreateAccountResponse
 import com.wutsi.koki.account.dto.GetAccountResponse
 import com.wutsi.koki.account.dto.GetAttributeResponse
+import com.wutsi.koki.account.dto.SaveUserRequest
 import com.wutsi.koki.account.dto.SearchAccountResponse
 import com.wutsi.koki.account.dto.SearchAttributeResponse
 import com.wutsi.koki.account.dto.UpdateAccountRequest
@@ -17,7 +18,6 @@ class KokiAccounts(
 ) : AbstractKokiModule(rest) {
     companion object {
         private const val ACCOUNT_PATH_PREFIX = "/v1/accounts"
-        private const val ACCOUNT_TYPE_PATH_PREFIX = "/v1/account-types"
         private const val ATTRIBUTE_PATH_PREFIX = "/v1/attributes"
     }
 
@@ -93,5 +93,10 @@ class KokiAccounts(
     fun uploadAttributes(file: MultipartFile): ImportResponse {
         val url = urlBuilder.build("$ATTRIBUTE_PATH_PREFIX/csv")
         return upload(url, file)
+    }
+
+    fun saveUser(accountId: Long, request: SaveUserRequest) {
+        val url = urlBuilder.build("$ACCOUNT_PATH_PREFIX/$accountId")
+        rest.postForEntity(url, request, Any::class.java)
     }
 }
