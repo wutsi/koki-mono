@@ -8,7 +8,6 @@ data class User(
     val status: UserStatus = UserStatus.ACTIVE,
     val displayName: String = "",
     val language: String? = null,
-    val type: UserType = UserType.UNKNOWN,
     val roleIds: List<Long> = emptyList(),
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),

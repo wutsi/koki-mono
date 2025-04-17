@@ -14,6 +14,8 @@ object ErrorCode {
 
     val AUTHENTICATION_FAILED: String = "$PREFIX:auth:failed"
     val AUTHENTICATION_USER_NOT_ACTIVE: String = "$PREFIX:auth:user-not-active"
+    val AUTHENTICATION_ACCESS_DENIED: String = "$PREFIX:auth:access-denied"
+    val AUTHENTICATION_NO_AUTHENTICATOR: String = "$PREFIX:auth:no-authenticator"
 
     val AUTHORIZATION_PERMISSION_DENIED: String = "$PREFIX:auth:permission-denied"
     val AUTHORIZATION_SCHEME_NOT_SUPPORTED: String = "$PREFIX:auth:scheme-not-supported"
@@ -99,5 +101,6 @@ object ErrorCode {
 
     val USER_NOT_FOUND: String = "$PREFIX:user:not-found"
     val USER_DUPLICATE_EMAIL: String = "$PREFIX:user:duplicate-email"
+    val USER_DUPLICATE_USERNAME: String = "$PREFIX:user:duplicate-username"
     val USER_ALREADY_ASSIGNED: String = "$PREFIX:user:already-assigned"
 }

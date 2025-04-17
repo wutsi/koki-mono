@@ -7,7 +7,6 @@ data class UserSummary(
     val email: String = "",
     val status: UserStatus = UserStatus.NEW,
     val displayName: String = "",
-    val type: UserType = UserType.UNKNOWN,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
 )
