@@ -41,7 +41,7 @@ class AccountAuthenticator(
         try {
             val user = accountUserService.getByUsernameOrNull(request.username, tenantId)
             if (user == null) {
-                throw ConflictException(error = Error(ErrorCode.USER_NOT_FOUND))
+                throw ConflictException(error = Error(ErrorCode.AUTHENTICATION_FAILED))
             }
             if (user.status != UserStatus.ACTIVE) {
                 throw ConflictException(error = Error(ErrorCode.AUTHENTICATION_USER_NOT_ACTIVE))
