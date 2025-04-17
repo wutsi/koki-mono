@@ -2,9 +2,13 @@ package com.wutsi.koki.sdk
 
 import com.wutsi.koki.account.dto.CreateAccountRequest
 import com.wutsi.koki.account.dto.CreateAccountResponse
+import com.wutsi.koki.account.dto.CreateAccountUserRequest
+import com.wutsi.koki.account.dto.CreateInvitationRequest
+import com.wutsi.koki.account.dto.CreateInvitationResponse
 import com.wutsi.koki.account.dto.GetAccountResponse
+import com.wutsi.koki.account.dto.GetAccountUserResponse
 import com.wutsi.koki.account.dto.GetAttributeResponse
-import com.wutsi.koki.account.dto.SaveUserRequest
+import com.wutsi.koki.account.dto.GetInvitationResponse
 import com.wutsi.koki.account.dto.SearchAccountResponse
 import com.wutsi.koki.account.dto.SearchAttributeResponse
 import com.wutsi.koki.account.dto.UpdateAccountRequest
@@ -18,7 +22,9 @@ class KokiAccounts(
 ) : AbstractKokiModule(rest) {
     companion object {
         private const val ACCOUNT_PATH_PREFIX = "/v1/accounts"
+        private const val ACCOUNT_USER_PATH_PREFIX = "/v1/account-users"
         private const val ATTRIBUTE_PATH_PREFIX = "/v1/attributes"
+        private const val INVITATION_PATH_PREFIX = "/v1/invitations"
     }
 
     fun create(request: CreateAccountRequest): CreateAccountResponse {
@@ -95,8 +101,28 @@ class KokiAccounts(
         return upload(url, file)
     }
 
-    fun saveUser(accountId: Long, request: SaveUserRequest) {
-        val url = urlBuilder.build("$ACCOUNT_PATH_PREFIX/$accountId")
+    fun createUser(request: CreateAccountUserRequest): CreateAccountResponse {
+        val url = urlBuilder.build(ACCOUNT_USER_PATH_PREFIX)
+        return rest.postForEntity(url, request, CreateAccountResponse::class.java).body
+    }
+
+    fun updateUser(id: Long, request: UpdateAccountRequest) {
+        val url = urlBuilder.build("$ACCOUNT_USER_PATH_PREFIX/$id")
         rest.postForEntity(url, request, Any::class.java)
+    }
+
+    fun user(id: Long): GetAccountUserResponse {
+        val url = urlBuilder.build("$ACCOUNT_USER_PATH_PREFIX/$id")
+        return rest.getForEntity(url, GetAccountUserResponse::class.java).body
+    }
+
+    fun createInvitation(request: CreateInvitationRequest): CreateInvitationResponse {
+        val url = urlBuilder.build(INVITATION_PATH_PREFIX)
+        return rest.postForEntity(url, request, CreateInvitationResponse::class.java).body
+    }
+
+    fun invitation(id: String): GetInvitationResponse {
+        val url = urlBuilder.build("$INVITATION_PATH_PREFIX/$id")
+        return rest.getForEntity(url, GetInvitationResponse::class.java).body
     }
 }
