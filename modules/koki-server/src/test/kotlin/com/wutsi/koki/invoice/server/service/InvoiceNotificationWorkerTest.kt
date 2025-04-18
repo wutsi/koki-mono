@@ -183,13 +183,13 @@ class InvoiceNotificationWorkerTest {
 
     @Test
     fun postConstruct() {
-        worker.setUp()
+        worker.init()
         verify(registry).register(worker)
     }
 
     @Test
     fun preDestroy() {
-        worker.tearDown()
+        worker.destroy()
         verify(registry).unregister(worker)
     }
 

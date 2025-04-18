@@ -25,5 +25,6 @@ class TenantMapper {
         portalUrl = entity.portalUrl,
         websiteUrl = entity.websiteUrl,
         moduleIds = entity.modules.map { module -> module.id },
+        clientPortalUrl = entity.clientPortalUrl ?: "",
     )
 }

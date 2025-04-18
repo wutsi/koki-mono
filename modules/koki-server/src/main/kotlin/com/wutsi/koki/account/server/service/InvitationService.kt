@@ -28,6 +28,7 @@ class InvitationService(
     }
 
     fun create(request: CreateInvitationRequest, tenantId: Long): InvitationEntity {
+        val account = accountService.get(request.accountId, tenantId)
          val invitation = dao.save(
             InvitationEntity(
                 id = UUID.randomUUID().toString(),
@@ -37,7 +38,7 @@ class InvitationService(
                 createById = securityService.getCurrentUserIdOrNull(),
             )
         )
-        accountService.setInvitation(request.accountId, invitation)
+        accountService.setInvitation(account, invitation)
         return invitation
     }
 }

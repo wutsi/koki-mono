@@ -13,6 +13,7 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.server.service.PasswordService
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -39,15 +40,20 @@ class CreateAccountUserEndpointTest : AuthorizationAwareEndpointTest() {
         status = UserStatus.ACTIVE,
     )
 
+    @BeforeEach
+    override fun setUp() {
+        super.setUp()
+        doReturn("__secret__").whenever(passwordService).hash(any(), any())
+    }
+
     @Test
     fun create() {
-        doReturn("__secret__").whenever(passwordService).hash(any(), any())
-
         val response = rest.postForEntity("/v1/account-users", request, CreateAccountUserResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val user = dao.findById(response.body!!.accountUserId).get()
+        assertEquals(TENANT_ID, user.tenantId)
         assertEquals(request.username, user.username)
         assertEquals(request.status, user.status)
         assertEquals("__secret__", user?.password)
@@ -69,5 +75,17 @@ class CreateAccountUserEndpointTest : AuthorizationAwareEndpointTest() {
 
         assertEquals(HttpStatus.CONFLICT, response.statusCode)
         assertEquals(ErrorCode.USER_DUPLICATE_USERNAME, response.body?.error?.code)
+    }
+
+    @Test
+    fun `create - invalid account`() {
+        val response = rest.postForEntity(
+            "/v1/account-users",
+            request.copy(accountId = 9999, username = "invalid.accouot"),
+            ErrorResponse::class.java
+        )
+
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertEquals(ErrorCode.ACCOUNT_NOT_FOUND, response.body?.error?.code)
     }
 }

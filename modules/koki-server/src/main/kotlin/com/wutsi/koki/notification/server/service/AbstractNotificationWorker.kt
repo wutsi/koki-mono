@@ -7,12 +7,12 @@ abstract class AbstractNotificationWorker(
     private val registry: NotificationMQConsumer
 ) : NotificationWorker {
     @PostConstruct
-    fun setUp() {
+    fun init() {
         registry.register(this)
     }
 
     @PreDestroy
-    fun tearDown() {
+    fun destroy() {
         registry.unregister(this)
     }
 }
