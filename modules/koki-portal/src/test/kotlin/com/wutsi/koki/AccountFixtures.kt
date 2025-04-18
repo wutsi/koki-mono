@@ -2,10 +2,15 @@ package com.wutsi.koki
 
 import com.wutsi.koki.account.dto.Account
 import com.wutsi.koki.account.dto.AccountSummary
+import com.wutsi.koki.account.dto.AccountUser
 import com.wutsi.koki.account.dto.Attribute
 import com.wutsi.koki.account.dto.AttributeSummary
 import com.wutsi.koki.account.dto.AttributeType
+import com.wutsi.koki.account.dto.Invitation
 import com.wutsi.koki.refdata.dto.Address
+import org.apache.commons.lang3.time.DateUtils
+import java.util.Date
+import java.util.UUID
 
 object AccountFixtures {
     // Attributes
@@ -87,6 +92,17 @@ object AccountFixtures {
         ),
     )
 
+    val accountUser = AccountUser(
+        id = 555L,
+        username = "ray.sponsible",
+        createdAt = DateUtils.addDays(Date(), -3),
+        modifiedAt = DateUtils.addDays(Date(), -3),
+    )
+    val invitation = Invitation(
+        id = UUID.randomUUID().toString(),
+        createdAt = DateUtils.addDays(Date(), -1),
+        createdById = UserFixtures.user.id,
+    )
     val account = Account(
         id = 100,
         accountTypeId = TenantFixtures.types[0].id,
@@ -119,5 +135,9 @@ object AccountFixtures {
             stateId = RefDataFixtures.locations[3].parentId,
             country = "CA",
         ),
+        userId = accountUser.id,
+        invitationId = invitation.id,
+        createdAt = DateUtils.addDays(Date(), -10),
+        modifiedAt = DateUtils.addDays(Date(), -1),
     )
 }

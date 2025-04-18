@@ -45,14 +45,26 @@ class AccountController(
     @RequiresPermission(permissions = ["account:delete"])
     @GetMapping("/accounts/{id}/delete")
     fun delete(@PathVariable id: Long, model: Model): String {
-        val account = service.account(id)
         try {
             service.delete(id)
             return "redirect:/accounts?_op=del&_toast=$id&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)
-            return show(account, model)
+            return show(id = id, model = model)
+        }
+    }
+
+    @RequiresPermission(permissions = ["account:manage"])
+    @GetMapping("/accounts/{id}/invite")
+    fun invite(@PathVariable id: Long, model: Model): String {
+        try {
+            service.invite(id)
+            return "redirect:/accounts/$id?tab=user"
+        } catch (ex: HttpClientErrorException) {
+            val errorResponse = toErrorResponse(ex)
+            model.addAttribute("error", errorResponse.error.code)
+            return show(id = id, model = model)
         }
     }
 
@@ -63,8 +75,10 @@ class AccountController(
         timestamp: Long?,
         model: Model
     ) {
-        if (toast == id && canShowToasts(timestamp, referer, listOf("/accounts/$id/edit", "/accounts/create"))) {
-            model.addAttribute("toast", "Saved")
+        if (toast == id) {
+            if (canShowToasts(timestamp, referer, listOf("/accounts/$id/edit", "/accounts/create"))) {
+                model.addAttribute("toast", "Saved")
+            }
         }
     }
 }

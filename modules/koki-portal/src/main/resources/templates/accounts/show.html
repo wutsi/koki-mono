@@ -68,89 +68,175 @@
         <div class="col-md-7">
             <div class="widget">
                 <div class="widget-body">
-                    <div th:replace="~{__components/module :: tabs('main', true)}"></div>
-                    <div th:replace="~{__components/module :: tabs-content('main', true, ${account}, ${module})}"></div>
-                    <table class="table hidden" id="tab-details-content">
-                        <tr>
-                            <td width="20%"><b>Name</b></td>
-                            <td th:text="${account.name}">NAME</td>
-                        </tr>
-                        <tr th:if="${account.accountType}">
-                            <td><b>Type</b></td>
-                            <td th:text="${account.accountType?.title}">TYPE</td>
-                        </tr>
-                        <tr th:if="${account.managedBy}">
-                            <td><b>Account Manager</b></td>
-                            <td th:text="${account.managedBy?.displayName}">ACCOUNT MANAGER</td>
-                        </tr>
-                        <tr th:if="${account.phone}">
-                            <td><b>Phone</b></td>
-                            <td th:text="${account.phone}">PHONE</td>
-                        </tr>
-                        <tr th:if="${account.mobile}">
-                            <td><b>Mobile</b></td>
-                            <td th:text="${account.mobile}">MOBILE</td>
-                        </tr>
-                        <tr th:if="${account.email}">
-                            <td><b>Email</b></td>
-                            <td>
-                                <a th:href="'mailto:' + ${account.email}" th:text="${account.email}">EMAIL</a>
-                            </td>
-                        </tr>
-                        <tr th:if="${account.website}">
-                            <td><b>Website</b></td>
-                            <td>
-                                <a target="_blank" th:href="${account.website}" th:text="${account.website}">LINK</a>
-                            </td>
-                        </tr>
-                        <tr th:if="${account.language}">
-                            <td><b>Language</b></td>
-                            <td th:text="${account.languageText}">LANGUAGE</td>
-                        </tr>
-                        <tr th:if="${account.description}">
-                            <td><b>Description</b></td>
-                            <td th:text="${account.description}">DESCRIPTION</td>
-                        </tr>
-                        <tr>
-                            <td><b>Shipping Address</b></td>
-                            <td th:utext="${account.shippingAddress.toHtml()}">SHIPPING ADDRESS</td>
-                        </tr>
-                        <tr>
-                            <td><b>Billing Address</b></td>
-                            <td th:if="${account.billingSameAsShippingAddress}">Same as shipping address</td>
-                            <td th:if="!${account.billingSameAsShippingAddress}"
-                                th:utext="${account.billingAddress.toHtml()}"></td>
-                        </tr>
+                    <ul class="nav nav-pills mb-3" id="tab-main" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-content" aria-selected="true" class="nav-link active"
+                                    data-bs-target="#pills-details" data-bs-toggle="pill" id="pills-details-tab"
+                                    role="tab" type="button">
+                                Details
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation" th:each="tab : ${page.tabs.get('main')}">
+                            <button aria-selected="false" class="nav-link" data-bs-toggle="pill" role="tab"
+                                    th:aria-controls="'pills-' + ${tab.name}"
+                                    th:data-bs-target="'#pills-' + ${tab.name}"
+                                    th:id="'pills-' + ${tab.name} + '-tab'"
+                                    th:text="${tab.title}"
+                                    type="button">
+                                TAB
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation"
+                            th:if="${tenant.clientPortalUrl} AND ${user?.hasPermission('account:manage')}">
+                            <button aria-controls="pills-content" aria-selected="true" class="nav-link"
+                                    data-bs-target="#pills-user" data-bs-toggle="pill" id="pills-user-tab"
+                                    role="tab" type="button">
+                                User
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="tab-main-content">
+                        <div aria-labelledby="pills-details-tab" class="tab-pane fade show active" id="pills-details"
+                             role="tabpanel">
+                            <table class="table hidden" id="tab-details-content">
+                                <tr>
+                                    <td width="20%"><b>Name</b></td>
+                                    <td th:text="${account.name}">NAME</td>
+                                </tr>
+                                <tr th:if="${account.accountType}">
+                                    <td><b>Type</b></td>
+                                    <td th:text="${account.accountType?.title}">TYPE</td>
+                                </tr>
+                                <tr th:if="${account.managedBy}">
+                                    <td><b>Account Manager</b></td>
+                                    <td th:text="${account.managedBy?.displayName}">ACCOUNT MANAGER</td>
+                                </tr>
+                                <tr th:if="${account.phone}">
+                                    <td><b>Phone</b></td>
+                                    <td th:text="${account.phone}">PHONE</td>
+                                </tr>
+                                <tr th:if="${account.mobile}">
+                                    <td><b>Mobile</b></td>
+                                    <td th:text="${account.mobile}">MOBILE</td>
+                                </tr>
+                                <tr th:if="${account.email}">
+                                    <td><b>Email</b></td>
+                                    <td>
+                                        <a th:href="'mailto:' + ${account.email}" th:text="${account.email}">EMAIL</a>
+                                    </td>
+                                </tr>
+                                <tr th:if="${account.website}">
+                                    <td><b>Website</b></td>
+                                    <td>
+                                        <a target="_blank" th:href="${account.website}" th:text="${account.website}">LINK</a>
+                                    </td>
+                                </tr>
+                                <tr th:if="${account.language}">
+                                    <td><b>Language</b></td>
+                                    <td th:text="${account.languageText}">LANGUAGE</td>
+                                </tr>
+                                <tr th:if="${account.description}">
+                                    <td><b>Description</b></td>
+                                    <td th:text="${account.description}">DESCRIPTION</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Shipping Address</b></td>
+                                    <td th:utext="${account.shippingAddress.toHtml()}">SHIPPING ADDRESS</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Billing Address</b></td>
+                                    <td th:if="${account.billingSameAsShippingAddress}">Same as shipping address</td>
+                                    <td th:if="!${account.billingSameAsShippingAddress}"
+                                        th:utext="${account.billingAddress.toHtml()}"></td>
+                                </tr>
 
 
-                        <tr th:if="!${account.attributes.isEmpty()}">
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr th:each="attr : ${account.attributes}">
-                            <td><b th:text="${attr.attribute.label}">NAME</b></td>
-                            <td th:text="${attr.value}">DESCRIPTION</td>
-                        </tr>
+                                <tr th:if="!${account.attributes.isEmpty()}">
+                                    <td colspan="2"></td>
+                                </tr>
+                                <tr th:each="attr : ${account.attributes}">
+                                    <td><b th:text="${attr.attribute.label}">NAME</b></td>
+                                    <td th:text="${attr.value}">DESCRIPTION</td>
+                                </tr>
 
-                        <tr>
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr>
-                            <td><b>Created</b></td>
-                            <td>
-                                <span th:text="${account.createdAtText}">DATE</span>
-                                <span th:if="${account.createdBy}">by</span>
-                                <span th:if="${account.createdBy}" th:text="${account.createdBy.displayName}">MODIFIED BY</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><b>Modified</b></td>
-                            <td>
-                                <span th:text="${account.modifiedAtText}">DATE</span>
-                                <span th:if="${account.modifiedBy}">by</span>
-                                <span th:if="${account.modifiedBy}" th:text="${account.modifiedBy.displayName}">MODIFIED BY</span>
-                            </td>
-                        </tr>
-                    </table>
+                                <tr>
+                                    <td colspan="2"></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Created</b></td>
+                                    <td>
+                                        <span th:text="${account.createdAtText}">DATE</span>
+                                        <span th:if="${account.createdBy}">by</span>
+                                        <span th:if="${account.createdBy}" th:text="${account.createdBy.displayName}">MODIFIED BY</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><b>Modified</b></td>
+                                    <td>
+                                        <span th:text="${account.modifiedAtText}">DATE</span>
+                                        <span th:if="${account.modifiedBy}">by</span>
+                                        <span th:if="${account.modifiedBy}" th:text="${account.modifiedBy.displayName}">MODIFIED BY</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel"
+                             th:aria-labelledby="'pills-' + ${tab.name} + '-tab'"
+                             th:data-url="${tab.toTabUrl(account.id, module, account.readOnly)}"
+                             th:each="tab : ${page.tabs.get('main')}"
+                             th:id="'pills-' + ${tab.name}">
+                        </div>
+                        <div aria-labelledby="pills-user-tab" class="tab-pane fade show" id="pills-user" role="tabpanel"
+                             th:if="${tenant.clientPortalUrl} AND ${user?.hasPermission('account:manage')}">
+
+                            <table class="user" th:if="${account.accountUser}">
+                                <tr>
+                                    <td width="20%"><b>Username</b></td>
+                                    <td th:text="${account.accountUser.username}">USERNAME</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Status</b></td>
+                                    <td th:text="#{'user-status.' + ${account.accountUser.status}}">STATUS</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Created</b></td>
+                                    <td th:text="${account.accountUser.createdAtText}">CREATED</td>
+                                </tr>
+                            </table>
+
+                            <div class="invitation" th:if="!${account.accountUser}">
+                                <div class="alert alert-warning flex" id="invitation-none"
+                                     th:if="!${account.invitation}">
+                                    <div class="margin-right">
+                                        <i class="fa-xl fa-solid fa-circle-exclamation"></i>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            The account doesn't have access to the Portal.
+                                        </div>
+                                        <div class="margin-top-small">
+                                            <a class="btn btn-light btn-sm btn-invite"
+                                               th:href="'/accounts/' + ${account.id} + '/invite'">Send invite</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="alert alert-primary"
+                                     th:id="'invitation-' + ${account.invitation.id}"
+                                     th:if="${account.invitation}">
+                                    <div>
+                                        Invitation sent
+                                        <span style="text-transform: lowercase"
+                                              th:text="${account.invitation.createdAtMoment}">TTT</span>
+                                    </div>
+                                    <div class="margin-top-small">
+                                        <a class="btn btn-light btn-sm btn-invite"
+                                           th:href="'/accounts/' + ${account.id} + '/invite'">Resend invite</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

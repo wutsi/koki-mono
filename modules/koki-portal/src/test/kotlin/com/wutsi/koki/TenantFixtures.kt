@@ -91,6 +91,7 @@ object TenantFixtures {
             moduleIds = modules.map { module -> module.id },
             websiteUrl = "https://www.google.com",
             portalUrl = "http://localhost:8080",
+            clientPortalUrl = "https://localhost:8082",
         ),
         Tenant(
             id = 2,
