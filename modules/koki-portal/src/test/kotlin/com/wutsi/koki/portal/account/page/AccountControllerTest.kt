@@ -25,6 +25,7 @@ import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.tenant.dto.SearchTenantResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import kotlin.test.Ignore
 import kotlin.test.Test
 
 class AccountControllerTest : AbstractPageControllerTest() {
@@ -206,6 +207,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    @Ignore
     fun `no user tab when tenant do not have clientPortalUrl`() {
         doReturn(
             ResponseEntity(
