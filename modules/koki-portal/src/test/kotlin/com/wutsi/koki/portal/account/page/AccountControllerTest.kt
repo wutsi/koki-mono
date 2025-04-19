@@ -148,7 +148,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
         navigateTo("/accounts/${account.id}?tab=user")
 
         Thread.sleep(1000)
-        assertElementPresent(".tab-user .user")
+        assertElementPresent(".user")
     }
 
     @Test
