@@ -16,7 +16,6 @@ import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.InvoiceFixtures
 import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.TaxFixtures
-import com.wutsi.koki.TenantFixtures
 import com.wutsi.koki.TenantFixtures.tenants
 import com.wutsi.koki.account.dto.CreateInvitationRequest
 import com.wutsi.koki.account.dto.CreateInvitationResponse
@@ -26,7 +25,6 @@ import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.tenant.dto.SearchTenantResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import kotlin.test.Ignore
 import kotlin.test.Test
 
 class AccountControllerTest : AbstractPageControllerTest() {
