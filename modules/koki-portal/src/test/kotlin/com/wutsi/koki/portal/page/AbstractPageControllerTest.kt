@@ -25,8 +25,12 @@ import com.wutsi.koki.TenantFixtures
 import com.wutsi.koki.UserFixtures
 import com.wutsi.koki.account.dto.CreateAccountRequest
 import com.wutsi.koki.account.dto.CreateAccountResponse
+import com.wutsi.koki.account.dto.CreateInvitationRequest
+import com.wutsi.koki.account.dto.CreateInvitationResponse
 import com.wutsi.koki.account.dto.GetAccountResponse
+import com.wutsi.koki.account.dto.GetAccountUserResponse
 import com.wutsi.koki.account.dto.GetAttributeResponse
+import com.wutsi.koki.account.dto.GetInvitationResponse
 import com.wutsi.koki.account.dto.SearchAccountResponse
 import com.wutsi.koki.account.dto.SearchAttributeResponse
 import com.wutsi.koki.common.dto.ImportMessage
@@ -571,6 +575,42 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(GetAttributeResponse::class.java)
+            )
+
+        // Account User
+        doReturn(
+            ResponseEntity(
+                GetAccountUserResponse(AccountFixtures.accountUser),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetAccountUserResponse::class.java)
+            )
+
+        // Invitation
+        doReturn(
+            ResponseEntity(
+                GetInvitationResponse(AccountFixtures.invitation),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetInvitationResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreateInvitationResponse(UUID.randomUUID().toString()),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateInvitationRequest>(),
+                eq(CreateInvitationResponse::class.java)
             )
 
         // Accounts

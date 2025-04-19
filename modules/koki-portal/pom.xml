@@ -53,11 +53,23 @@
             <groupId>com.wutsi.koki</groupId>
             <artifactId>koki-platform</artifactId>
             <version>${wutsi-platform.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.wutsi.koki</groupId>
+                    <artifactId>koki-dto</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.wutsi.koki</groupId>
             <artifactId>koki-sdk</artifactId>
             <version>${wutsi-sdk.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.wutsi.koki</groupId>
+                    <artifactId>koki-dto</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -66,11 +78,6 @@
             <version>${stripe.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
-        </dependency>
         <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
@@ -103,11 +110,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${commons-lang3.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>

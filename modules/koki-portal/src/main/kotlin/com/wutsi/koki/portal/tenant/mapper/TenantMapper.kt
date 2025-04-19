@@ -40,6 +40,7 @@ class TenantMapper(
             modules = modules.values.filter { module ->
                 entity.moduleIds.contains(module.id)
             },
+            clientPortalUrl = entity.clientPortalUrl,
         )
     }
 

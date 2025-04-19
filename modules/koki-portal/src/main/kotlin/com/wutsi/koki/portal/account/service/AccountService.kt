@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.account.service
 
 import com.wutsi.koki.account.dto.CreateAccountRequest
+import com.wutsi.koki.account.dto.CreateInvitationRequest
 import com.wutsi.koki.account.dto.UpdateAccountRequest
 import com.wutsi.koki.portal.account.form.AccountForm
 import com.wutsi.koki.portal.account.mapper.AccountMapper
@@ -64,8 +65,26 @@ class AccountService(
             ).associateBy { location -> location.id }
         }
 
+        val accountUser = if (fullGraph) {
+            account.userId?.let { id ->
+                mapper.toAccountUserModel(koki.user(id).accountUser)
+            }
+        } else {
+            null
+        }
+
+        val invitation = if (fullGraph) {
+            account.invitationId?.let { id ->
+                mapper.toInvitationModel(koki.invitation(id).invitation)
+            }
+        } else {
+            null
+        }
+
         return mapper.toAccountModel(
             entity = account,
+            accountUser = accountUser,
+            invitation = invitation,
             accountTypes = accountTypeMap,
             users = userMap,
             attributes = attributeMap,
@@ -181,5 +200,9 @@ class AccountService(
             billingSameAsShippingAddress = form.billingSameAsShippingAddress
         )
         koki.update(id, request)
+    }
+
+    fun invite(id: Long): String {
+        return koki.createInvitation(CreateInvitationRequest(id)).invitationId
     }
 }

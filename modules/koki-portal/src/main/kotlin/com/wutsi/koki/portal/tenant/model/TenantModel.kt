@@ -27,7 +27,8 @@ data class TenantModel(
     val portalUrl: String = "",
     val websiteUrl: String? = null,
     val createdAt: Date = Date(),
-    val modules: List<ModuleModel> = emptyList()
+    val modules: List<ModuleModel> = emptyList(),
+    val clientPortalUrl: String? = null,
 ) {
     val permissions: List<PermissionModel>
         get() = modules.flatMap { module -> module.permissions }
