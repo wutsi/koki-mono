@@ -1,7 +1,6 @@
 package com.wutsi.koki.portal.tenant.model
 
-import com.wutsi.koki.portal.module.model.ModuleModel
-import com.wutsi.koki.portal.module.model.PermissionModel
+import com.wutsi.koki.portal.client.module.model.ModuleModel
 import com.wutsi.koki.tenant.dto.TenantStatus
 import java.text.DateFormat
 import java.text.DecimalFormat
@@ -27,17 +26,9 @@ data class TenantModel(
     val portalUrl: String = "",
     val websiteUrl: String? = null,
     val createdAt: Date = Date(),
-    val modules: List<ModuleModel> = emptyList(),
     val clientPortalUrl: String? = null,
+    val modules: List<ModuleModel> = emptyList(),
 ) {
-    val permissions: List<PermissionModel>
-        get() = modules.flatMap { module -> module.permissions }
-            .sortedBy { permission -> permission.name }
-
-    fun hasModule(name: String): Boolean {
-        return modules.find { module -> module.name == name } != null
-    }
-
     fun createMoneyFormat(): NumberFormat {
         return DecimalFormat(monetaryFormat)
     }

@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.invoice.model
 
-import com.vladmihalcea.hibernate.type.range.Range.closed
 import com.wutsi.blog.portal.common.model.MoneyModel
 import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.portal.refdata.model.AddressModel

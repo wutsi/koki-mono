@@ -20,7 +20,8 @@ import org.springframework.http.ResponseEntity
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class LoginControllerTest : AbstractPageControllerTest() {
+class
+LoginControllerTest : AbstractPageControllerTest() {
     @BeforeEach
     override fun setUp() {
         super.setUp()
