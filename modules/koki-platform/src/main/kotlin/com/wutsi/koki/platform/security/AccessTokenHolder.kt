@@ -1,4 +1,7 @@
 package com.wutsi.koki.platform.security
 
-class AccessTokenHolder {
+interface AccessTokenHolder {
+    fun set(accessToken: String)
+    fun remove()
+    fun get(): String?
 }

@@ -1,37 +1,34 @@
 package com.wutsi.koki.platform.security
 
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.security.dto.JWTPrincipal
-import org.springframework.security.core.Authentication
-import org.springframework.security.core.GrantedAuthority
+import org.mockito.Mockito.mock
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
-class JWTAuthentication(private val principal: JWTPrincipal) : Authentication {
-    private var authenticated: Boolean = true
+class JWTAuthenticationTest {
+    val principal = mock<JWTPrincipal>()
 
-    override fun getName(): String? {
-        return principal.name
+    @Test
+    fun authenticated() {
+        doReturn("yo").whenever(principal).name
+
+        val auth = JWTAuthentication(principal)
+
+        assertEquals("yo", auth.name)
+        assertEquals(principal, auth.principal)
+        assertEquals(null, auth.credentials)
+        assertEquals(null, auth.details)
+        assertEquals(0, auth.authorities?.size)
+        assertEquals(true, auth.isAuthenticated)
     }
 
-    override fun getPrincipal(): Any? {
-        return principal
-    }
+    @Test
+    fun anonymous() {
+        val auth = JWTAuthentication(principal)
+        auth.isAuthenticated = false
 
-    override fun getCredentials(): Any? {
-        return null
-    }
-
-    override fun getDetails(): Any? {
-        return null
-    }
-
-    override fun getAuthorities(): Collection<GrantedAuthority?>? {
-        return emptyList()
-    }
-
-    override fun isAuthenticated(): Boolean {
-        return authenticated
-    }
-
-    override fun setAuthenticated(isAuthenticated: Boolean) {
-        authenticated = isAuthenticated
+        assertEquals(false, auth.isAuthenticated)
     }
 }

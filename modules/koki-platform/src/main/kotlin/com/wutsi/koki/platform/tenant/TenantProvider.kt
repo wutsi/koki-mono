@@ -1,4 +1,5 @@
 package com.wutsi.koki.platform.tenant
 
-class TenantProvider {
+interface TenantProvider {
+    fun id(): Long?
 }

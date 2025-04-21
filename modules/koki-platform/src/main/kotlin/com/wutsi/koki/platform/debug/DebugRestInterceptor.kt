@@ -1,4 +1,4 @@
-package com.wutsi.koki.platform.rest
+package com.wutsi.koki.platform.debug
 
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpRequest

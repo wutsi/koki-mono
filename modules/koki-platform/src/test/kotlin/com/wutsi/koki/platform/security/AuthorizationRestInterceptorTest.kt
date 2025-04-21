@@ -7,22 +7,20 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.platform.security.AccessTokenHolder
-import com.wutsi.koki.platform.security.AuthorizationHttpRequestInterceptor
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpRequest
 import org.springframework.http.client.ClientHttpRequestExecution
 import org.springframework.http.client.ClientHttpResponse
 import kotlin.test.Test
 
-class AuthorizationHttpRequestInterceptorTest {
+class AuthorizationRestInterceptorTest {
     private val headers = mock<HttpHeaders>()
     private val request = mock<HttpRequest>()
     private val response = mock<ClientHttpResponse>()
     private val execution = mock<ClientHttpRequestExecution>()
 
     private val accessTokenHolder = mock<AccessTokenHolder>()
-    private val interceptor = AuthorizationHttpRequestInterceptor(accessTokenHolder)
+    private val interceptor = AuthorizationRestInterceptor(accessTokenHolder)
 
     private val body = ByteArray(10)
 

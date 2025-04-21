@@ -1,4 +1,4 @@
-package com.wutsi.koki.platform.rest
+package com.wutsi.koki.platform.debug
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn

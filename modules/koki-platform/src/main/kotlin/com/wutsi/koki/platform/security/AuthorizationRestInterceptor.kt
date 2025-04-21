@@ -6,7 +6,7 @@ import org.springframework.http.client.ClientHttpRequestExecution
 import org.springframework.http.client.ClientHttpRequestInterceptor
 import org.springframework.http.client.ClientHttpResponse
 
-class AuthorizationHttpRequestInterceptor(
+class AuthorizationRestInterceptor(
     private val accessTokenHolder: AccessTokenHolder,
 ) : ClientHttpRequestInterceptor {
     override fun intercept(
