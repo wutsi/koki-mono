@@ -6,6 +6,7 @@ import com.wutsi.koki.invoice.dto.GetInvoiceResponse
 import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.invoice.dto.SearchInvoiceResponse
 import com.wutsi.koki.invoice.dto.UpdateInvoiceStatusRequest
+import com.wutsi.koki.platform.tenant.TenantProvider
 import org.springframework.web.client.RestTemplate
 
 class KokiInvoices(

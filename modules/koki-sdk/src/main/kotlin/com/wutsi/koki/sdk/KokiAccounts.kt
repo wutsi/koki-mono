@@ -3,6 +3,7 @@ package com.wutsi.koki.sdk
 import com.wutsi.koki.account.dto.CreateAccountRequest
 import com.wutsi.koki.account.dto.CreateAccountResponse
 import com.wutsi.koki.account.dto.CreateAccountUserRequest
+import com.wutsi.koki.account.dto.CreateAccountUserResponse
 import com.wutsi.koki.account.dto.CreateInvitationRequest
 import com.wutsi.koki.account.dto.CreateInvitationResponse
 import com.wutsi.koki.account.dto.GetAccountResponse
@@ -101,9 +102,9 @@ class KokiAccounts(
         return upload(url, file)
     }
 
-    fun createUser(request: CreateAccountUserRequest): CreateAccountResponse {
+    fun createUser(request: CreateAccountUserRequest): CreateAccountUserResponse {
         val url = urlBuilder.build(ACCOUNT_USER_PATH_PREFIX)
-        return rest.postForEntity(url, request, CreateAccountResponse::class.java).body
+        return rest.postForEntity(url, request, CreateAccountUserResponse::class.java).body
     }
 
     fun updateUser(id: Long, request: UpdateAccountRequest) {

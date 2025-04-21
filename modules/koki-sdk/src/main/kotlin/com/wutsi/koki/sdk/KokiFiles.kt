@@ -3,13 +3,15 @@ package com.wutsi.koki.sdk
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.file.dto.SearchFileResponse
+import com.wutsi.koki.platform.security.AccessTokenHolder
+import com.wutsi.koki.platform.tenant.TenantProvider
 import org.springframework.web.client.RestTemplate
 
 class KokiFiles(
     private val urlBuilder: URLBuilder,
     private val rest: RestTemplate,
     private val tenantProvider: TenantProvider,
-    private val accessTokenProvider: AccessTokenProvider,
+    private val accessTokenHolder: AccessTokenHolder,
 ) {
     companion object {
         private const val PATH_PREFIX = "/v1/files"
@@ -39,7 +41,7 @@ class KokiFiles(
                 "owner-id" to ownerId,
                 "owner-type" to ownerType,
                 "tenant-id" to tenantProvider.id(),
-                "access-token" to accessTokenProvider.accessToken()
+                "access-token" to accessTokenHolder.get()
             )
         )
     }
