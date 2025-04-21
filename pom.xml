@@ -18,10 +18,11 @@
 
     <modules>
         <module>modules/koki-dto</module>
-        <module>modules/koki-server</module>
-        <module>modules/koki-portal</module>
         <module>modules/koki-platform</module>
         <module>modules/koki-sdk</module>
+        <module>modules/koki-server</module>
+        <module>modules/koki-portal</module>
+        <module>modules/koki-client-portal</module>
     </modules>
 
     <scm>
@@ -52,8 +53,8 @@
     </repositories>
 
     <properties>
-        <wutsi-dto.version>0.0.190</wutsi-dto.version>
-        <wutsi-platform.version>0.0.16</wutsi-platform.version>
+        <wutsi-dto.version>0.0.191</wutsi-dto.version>
+        <wutsi-platform.version>0.0.18</wutsi-platform.version>
         <wutsi-sdk.version>0.0.3</wutsi-sdk.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
