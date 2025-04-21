@@ -1,28 +1,23 @@
 package com.wutsi.koki.portal.client.config
 
 import com.wutsi.koki.platform.security.AccessTokenHolder
-import com.wutsi.koki.platform.security.AuthorizationRestInterceptor
-import com.wutsi.koki.platform.security.CookieAccessTokenHolder
 import com.wutsi.koki.platform.security.servlet.JWTAuthenticationFilter
 import com.wutsi.koki.portal.client.security.LogoutSuccessHandlerImpl
 import com.wutsi.koki.security.dto.JWTDecoder
 import jakarta.servlet.Filter
-import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletResponse
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfiguration(
-    private val request: HttpServletRequest,
-    private val response: HttpServletResponse,
+    private val logoutSuccessHandler: LogoutSuccessHandlerImpl,
+    private val accessTokenHolder: AccessTokenHolder,
 ) {
     companion object {
         const val COOKIE = "__atk"
@@ -45,33 +40,18 @@ class SecurityConfiguration(
                 customizer.loginPage("/login")
             }
             .logout { customizer ->
-                customizer.logoutSuccessHandler(logoutSuccessHandler())
+                customizer.logoutSuccessHandler(logoutSuccessHandler)
             }
             .build()
     }
 
     @Bean
     fun authorizationFilter(): Filter {
-        return JWTAuthenticationFilter(accessTokenHolder(), jwtDecoder())
+        return JWTAuthenticationFilter(accessTokenHolder, jwtDecoder())
     }
 
     @Bean
     fun jwtDecoder(): JWTDecoder {
         return JWTDecoder()
-    }
-
-    @Bean
-    fun accessTokenHolder(): AccessTokenHolder {
-        return CookieAccessTokenHolder(COOKIE, TTL, request, response)
-    }
-
-    @Bean
-    fun logoutSuccessHandler(): LogoutSuccessHandler {
-        return LogoutSuccessHandlerImpl(accessTokenHolder())
-    }
-
-    @Bean
-    fun authorizationRestInterceptor(): AuthorizationRestInterceptor {
-        return AuthorizationRestInterceptor(accessTokenHolder())
     }
 }

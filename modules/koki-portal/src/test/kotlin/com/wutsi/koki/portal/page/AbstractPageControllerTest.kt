@@ -72,7 +72,7 @@ import com.wutsi.koki.payment.dto.CreateInteracPaymentRequest
 import com.wutsi.koki.payment.dto.CreatePaymentResponse
 import com.wutsi.koki.payment.dto.GetTransactionResponse
 import com.wutsi.koki.payment.dto.SearchTransactionResponse
-import com.wutsi.koki.portal.security.service.AccessTokenHolder
+import com.wutsi.koki.platform.security.AccessTokenHolder
 import com.wutsi.koki.product.dto.CreatePriceRequest
 import com.wutsi.koki.product.dto.CreatePriceResponse
 import com.wutsi.koki.product.dto.CreateProductRequest
@@ -184,7 +184,7 @@ abstract class AbstractPageControllerTest {
     protected val downloadDir = java.io.File(System.getProperty("user.home") + "/__wutsi/selenuim/downloads")
 
     fun setUpAnonymousUser() {
-        doReturn(null).whenever(accessTokenHolder).get(any())
+        doReturn(null).whenever(accessTokenHolder).get()
     }
 
     fun getResourceAsString(path: String): String {
@@ -422,7 +422,7 @@ abstract class AbstractPageControllerTest {
             )
 
         // Access Token
-        doReturn(accessToken).whenever(accessTokenHolder).get(any())
+        doReturn(accessToken).whenever(accessTokenHolder).get()
         val principal = mock<JWTPrincipal>()
         doReturn(USER_ID).whenever(principal).getUserId()
         doReturn(USER_ID.toString()).whenever(principal).name

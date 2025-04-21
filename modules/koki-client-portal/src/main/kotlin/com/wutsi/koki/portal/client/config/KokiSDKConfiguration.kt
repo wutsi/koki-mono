@@ -37,6 +37,8 @@ import java.time.Duration
 class KokiSDKConfiguration(
     private val tenantProvider: TenantProvider,
     private val accessTokenHolder: AccessTokenHolder,
+    private val tenantRestInterceptor: TenantRestInterceptor,
+    private val debugRestInterceptor: DebugRestInterceptor,
     private val authorizationRestInterceptor: AuthorizationRestInterceptor,
 
     @Value("\${koki.rest.connection-timeout}") private val connectionTimeout: Long,
@@ -147,8 +149,8 @@ class KokiSDKConfiguration(
     @Primary
     fun rest(): RestTemplate = RestTemplateBuilder().connectTimeout(Duration.ofMillis(connectionTimeout))
         .readTimeout(Duration.ofMillis(readTimeout)).interceptors(
-            debugRestInterceptor(),
-            tenantRestInterceptor(),
+            debugRestInterceptor,
+            tenantRestInterceptor,
             authorizationRestInterceptor,
         ).build()
 
@@ -156,17 +158,7 @@ class KokiSDKConfiguration(
     fun restWithoutTenantHeader(): RestTemplate =
         RestTemplateBuilder().connectTimeout(Duration.ofMillis(connectionTimeout))
             .readTimeout(Duration.ofMillis(readTimeout)).interceptors(
-                debugRestInterceptor(),
+                debugRestInterceptor,
                 authorizationRestInterceptor,
             ).build()
-
-    @Bean
-    fun debugRestInterceptor(): DebugRestInterceptor {
-        return DebugRestInterceptor()
-    }
-
-    @Bean
-    fun tenantRestInterceptor(): TenantRestInterceptor {
-        return TenantRestInterceptor(tenantProvider)
-    }
 }

@@ -1,9 +1,10 @@
 package com.wutsi.koki.portal.config
 
-import com.wutsi.koki.portal.rest.AuthorizationInterceptor
-import com.wutsi.koki.portal.rest.DebugRestInterceptor
-import com.wutsi.koki.portal.rest.TenantRestInterceptor
-import com.wutsi.koki.sdk.AccessTokenProvider
+import com.wutsi.koki.platform.debug.DebugRestInterceptor
+import com.wutsi.koki.platform.security.AccessTokenHolder
+import com.wutsi.koki.platform.security.AuthorizationRestInterceptor
+import com.wutsi.koki.platform.tenant.TenantProvider
+import com.wutsi.koki.platform.tenant.TenantRestInterceptor
 import com.wutsi.koki.sdk.KokiAccounts
 import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.sdk.KokiBusinesses
@@ -23,7 +24,6 @@ import com.wutsi.koki.sdk.KokiTaxes
 import com.wutsi.koki.sdk.KokiTenants
 import com.wutsi.koki.sdk.KokiTypes
 import com.wutsi.koki.sdk.KokiUsers
-import com.wutsi.koki.sdk.TenantProvider
 import com.wutsi.koki.sdk.URLBuilder
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.client.RestTemplateBuilder
@@ -36,10 +36,10 @@ import java.time.Duration
 @Configuration
 class KokiSDKConfiguration(
     private val tenantProvider: TenantProvider,
-    private val accessTokenProvider: AccessTokenProvider,
+    private val accessTokenHolder: AccessTokenHolder,
     private val tenantRestInterceptor: TenantRestInterceptor,
-    private val authorizationInterceptor: AuthorizationInterceptor,
     private val debugRestInterceptor: DebugRestInterceptor,
+    private val authorizationRestInterceptor: AuthorizationRestInterceptor,
 
     @Value("\${koki.rest.connection-timeout}") private val connectionTimeout: Long,
     @Value("\${koki.rest.read-timeout}") private val readTimeout: Long,
@@ -87,7 +87,7 @@ class KokiSDKConfiguration(
 
     @Bean
     fun kokiFiles(): KokiFiles {
-        return KokiFiles(urlBuilder(), rest(), tenantProvider, accessTokenProvider)
+        return KokiFiles(urlBuilder(), rest(), tenantProvider, accessTokenHolder)
     }
 
     @Bean
@@ -151,7 +151,7 @@ class KokiSDKConfiguration(
         .readTimeout(Duration.ofMillis(readTimeout)).interceptors(
             debugRestInterceptor,
             tenantRestInterceptor,
-            authorizationInterceptor,
+            authorizationRestInterceptor,
         ).build()
 
     @Bean("RestWithoutTenantHeader")
@@ -159,6 +159,6 @@ class KokiSDKConfiguration(
         RestTemplateBuilder().connectTimeout(Duration.ofMillis(connectionTimeout))
             .readTimeout(Duration.ofMillis(readTimeout)).interceptors(
                 debugRestInterceptor,
-                authorizationInterceptor,
+                authorizationRestInterceptor,
             ).build()
 }

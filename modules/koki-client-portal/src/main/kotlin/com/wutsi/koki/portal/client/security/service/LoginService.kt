@@ -22,4 +22,8 @@ class LoginService(
         ).accessToken
         accessTokenHolder.set(accessToken)
     }
+
+    fun logout() {
+        accessTokenHolder.remove()
+    }
 }
