@@ -54,6 +54,8 @@ object ErrorCode {
     val HTTP_DOWNSTREAM_ERROR = "$PREFIX:http:downstream-error"
 
     val INVITATION_NOT_FOUND: String = "$PREFIX:invitation:not-found"
+    val INVITATION_PASSWORD_MISMATCH: String = "$PREFIX:invitation:password-mismatch"
+    val INVITATION_INVALID_EMAIL: String = "$PREFIX:invitation:invalid_email"
 
     val INVOICE_NOT_FOUND: String = "$PREFIX:invoice:not-found"
     val INVOICE_BAD_STATUS: String = "$PREFIX:invoice:bad-status"

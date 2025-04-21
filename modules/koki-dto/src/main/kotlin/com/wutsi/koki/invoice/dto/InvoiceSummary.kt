@@ -7,6 +7,7 @@ data class InvoiceSummary(
     val number: Long = -1,
     val taxId: Long? = null,
     val orderId: Long? = null,
+    val paynowId: String = "",
     val status: InvoiceStatus = InvoiceStatus.UNKNOWN,
     val totalAmount: Double = 0.0,
     val amountPaid: Double = 0.0,

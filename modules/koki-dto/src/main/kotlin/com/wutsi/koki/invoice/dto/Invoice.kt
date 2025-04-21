@@ -7,6 +7,7 @@ data class Invoice(
     val id: Long = -1,
     val orderId: Long? = null,
     val taxId: Long? = null,
+    val paynowId: String = "",
     val number: Long = -1,
     val status: InvoiceStatus = InvoiceStatus.UNKNOWN,
     val description: String? = null,
