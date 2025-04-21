@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="widget" th:fragment="invoice-breadcrumb()">
+    <div class="widget-body">
+        <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active">Invoices</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<tr class="invoice" th:fragment="columns(invoice)" th:remove="tag">
+    <td th:text="${invoice.number}">NUMBER</td>
+    <td th:text="${invoice.createdAtText}">DATE</td>
+    <td class="text-center">
+        <span th:replace="~{__components/invoice :: invoice-status(${invoice.status.name})}"></span>
+    </td>
+    <td class="text-right" th:text="${invoice.totalAmount}">$$$</td>
+    <td class="text-right" th:text="${invoice.amountDue}">$$$</td>
+    <td align="right">
+        <a class="btn-paynow btn btn-sm btn-primary margin-right" target="_blank" th:href="${invoice.paynowUrl}"
+           th:if="${invoice.paynowUrl}">
+            Make Payment
+        </a>
+        <a class="btn-download btn btn-sm btn-light" target="_blank" th:href="${invoice.downloadUrl}">
+            <span class="fiv-viv fiv-icon-pdf"></span>
+            Download
+        </a>
+    </td>
+</tr>
+
+<tr id="invoice-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
+    <td class="text-center" colspan="7">
+        <button
+            class="btn btn-sm btn-light"
+            data-component-id='load-more'
+            data-container-id="invoice-load-more"
+            th:data-url="${moreUrl}"
+        >
+            Load more...
+        </button>
+    </td>
+</tr>
+
+<div th:fragment="invoice-status(status)">
+    <span class="badge text-bg-secondary"
+          th:if="${status == 'DRAFT'}"
+          th:text="#{'invoice-status.' + ${status}}">NEW</span>
+
+    <span class="badge text-bg-success"
+          th:if="${status == 'PAID'}"
+          th:text="#{'invoice-status.' + ${status}}">PAID</span>
+
+    <span class="badge text-bg-info"
+          th:if="${status == 'OPENED'}"
+          th:text="#{'invoice-status.' + ${status}}">OPENED</span>
+
+    <span class="badge text-bg-danger"
+          th:if="${status == 'VOIDED'}"
+          th:text="#{'invoice-status.' + ${status}}">CANCELLED</span>
+</div>
+
+
+</body>

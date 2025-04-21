@@ -19,28 +19,57 @@
     <div class="row">
         <div class="col-12 col-md-6 offset-md-3">
 
-            <form class="form" method="post" th:action="@{/login/submit}" th:object="${form}">
+            <form class="form" method="post"
+                  th:action="@{'/invitations/' + ${invitation.id} + '/submit'}" th:object="${form}">
+                <input th:field="*{accountId}" type="hidden"/>
                 <div class="form-body">
                     <div class="section">
                         <div class="section-body">
-                            <div class="section-item" th:if="${failed}">
-                                <div class="alert alert-danger">
-                                    Authentication failed!
+                            <div class="section-item">
+                                <div>
+                                    Hello <span th:text="${invitation.account.name}">NAME</span>,
+                                </div>
+                                <div>
+                                    Please fill the form below to join the Portal.
                                 </div>
                             </div>
+                            <div class="section-item" th:if="${error}">
+                                <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+                            </div>
                             <div class="section-item">
-                                <label class="title">Username</label>
+                                <label class="title">
+                                    Validate your email <span th:text="${maskedEmail}">EMAIL</span>
+                                    <span class="required">*</span>
+                                </label>
+                                <input required th:field="*{email}" type="email"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Username <span class="required">*</span></label>
                                 <input required th:field="*{username}"/>
                             </div>
                             <div class="section-item">
-                                <label class="title">Password</label>
-                                <input required th:field="*{password}" type="password"/>
+                                <label class="title">Password <span class="required">*</span></label>
+                                <input minlength="8"
+                                       pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                                       required
+                                       th:field="*{password}"
+                                       type="password"/>
+                                <div class="text-small">
+                                    Has minimum 8 characters in length
+                                    <br/>
+                                    At least one uppercase letter, one lowercase letter, one digit and on special
+                                    character
+                                </div>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Confirm Password <span class="required">*</span></label>
+                                <input id="confirm" minlength="8" required th:field="*{confirm}" type="password"/>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="form-footer">
-                    <button type="submit">Login</button>
+                    <button id="btn-submit" type="submit">Create my Account</button>
                 </div>
             </form>
 

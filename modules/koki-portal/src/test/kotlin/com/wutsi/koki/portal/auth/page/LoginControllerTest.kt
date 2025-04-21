@@ -1,7 +1,6 @@
 package com.wutsi.koki.portal.auth.page
 
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
@@ -18,9 +17,9 @@ import org.junit.jupiter.api.BeforeEach
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
-class LoginControllerTest : AbstractPageControllerTest() {
+class
+LoginControllerTest : AbstractPageControllerTest() {
     @BeforeEach
     override fun setUp() {
         super.setUp()
@@ -59,9 +58,7 @@ class LoginControllerTest : AbstractPageControllerTest() {
             LoginResponse::class.java
         )
 
-        val accessTokenArg = argumentCaptor<String>()
-        verify(accessTokenHolder).set(accessTokenArg.capture(), any(), any())
-        assertEquals(accessToken, accessTokenArg.firstValue)
+        verify(accessTokenHolder).set(accessToken)
 
         assertCurrentPageIs(PageName.HOME)
         assertElementNotPresent(".alert-danger")
@@ -125,9 +122,7 @@ class LoginControllerTest : AbstractPageControllerTest() {
             LoginResponse::class.java
         )
 
-        val accessTokenArg = argumentCaptor<String>()
-        verify(accessTokenHolder).set(accessTokenArg.capture(), any(), any())
-        assertEquals(accessToken, accessTokenArg.firstValue)
+        verify(accessTokenHolder).set(accessToken)
 
         assertCurrentPageIs(PageName.ACCOUNT)
     }

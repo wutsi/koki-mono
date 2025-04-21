@@ -1,121 +1,32 @@
-package com.wutsi.koki.portal.client.account
+package com.wutsi.koki.portal.client.account.mapper
 
+import com.wutsi.koki.account.dto.Account
+import com.wutsi.koki.account.dto.AccountUser
+import com.wutsi.koki.account.dto.Invitation
+import com.wutsi.koki.portal.client.account.model.AccountModel
+import com.wutsi.koki.portal.client.account.model.AccountUserModel
+import com.wutsi.koki.portal.client.account.model.InvitationModel
+import com.wutsi.koki.portal.client.common.mapper.TenantAwareMapper
 import org.springframework.stereotype.Service
+import java.util.Locale
 
 @Service
-class AccountMapper {
-    fun toAccountModel(
-        entity: AccountSummary,
-        accountTypes: Map<Long, TypeModel>,
-        users: Map<Long, UserModel>
-    ): AccountModel {
+class AccountMapper : TenantAwareMapper() {
+    fun toInvitationModel(entity: Invitation, account: Account): InvitationModel {
         val fmt = createDateTimeFormat()
-        return AccountModel(
+        return InvitationModel(
             id = entity.id,
-            accountType = entity.accountTypeId?.let { id -> accountTypes[id] },
-            name = entity.name,
-            phone = entity.phone,
-            email = entity.email,
-            mobile = entity.mobile,
-            modifiedAt = entity.modifiedAt,
-            modifiedAtText = fmt.format(entity.modifiedAt),
-            modifiedBy = entity.modifiedById?.let { id -> users[id] },
+            account = toAccountModel(account),
             createdAt = entity.createdAt,
             createdAtText = fmt.format(entity.createdAt),
-            createdBy = entity.createdById?.let { id -> users[id] },
-            managedBy = entity.managedById?.let { id -> users[id] },
         )
     }
 
-    fun toAccountModel(
-        entity: Account,
-        accountTypes: Map<Long, TypeModel>,
-        users: Map<Long, UserModel>,
-        attributes: Map<Long, AttributeModel>,
-        locations: Map<Long, LocationModel>,
-        accountUser: AccountUserModel?,
-        invitation: InvitationModel?,
-    ): AccountModel {
-        val fmt = createDateTimeFormat()
-        return AccountModel(
-            id = entity.id,
-            accountType = entity.accountTypeId?.let { id -> accountTypes[id] },
-            name = entity.name,
-            phone = entity.phone,
-            email = entity.email,
-            mobile = entity.mobile,
-            modifiedAt = entity.modifiedAt,
-            modifiedAtText = fmt.format(entity.modifiedAt),
-            modifiedBy = entity.modifiedById?.let { id -> users[id] },
-            createdAt = entity.createdAt,
-            createdAtText = fmt.format(entity.createdAt),
-            createdBy = entity.createdById?.let { id -> users[id] },
-            managedBy = entity.managedById?.let { id -> users[id] },
-            description = entity.description,
-            language = entity.language,
-            languageText = entity.language?.let { lang -> Locale(lang).displayName },
-            website = entity.website,
-            attributes = entity.attributes.mapNotNull { entry ->
-                val attribute = attributes[entry.key]
-                if (attribute == null) {
-                    null
-                } else {
-                    AccountAttributeModel(
-                        attribute = attribute,
-                        value = entity.attributes[entry.key] ?: ""
-                    )
-                }
-            },
-            shippingAddress = entity.shippingAddress?.let { address ->
-                refDataMapper.toAddressModel(address, locations)
-            },
-            billingAddress = entity.billingAddress?.let { address ->
-                refDataMapper.toAddressModel(address, locations)
-            },
-            billingSameAsShippingAddress = entity.billingSameAsShippingAddress,
-            accountUser = accountUser,
-            invitation = invitation,
-        )
-    }
-
-    fun toAttributeModel(entity: Attribute): AttributeModel {
-        val fmt = createDateTimeFormat()
-        return AttributeModel(
-            id = entity.id,
-            name = entity.name,
-            type = entity.type,
-            label = entity.label ?: entity.name,
-            required = entity.required,
-            active = entity.active,
-            choices = entity.choices,
-            description = entity.description?.trim()?.ifEmpty { null },
-            createdAt = entity.createdAt,
-            createdAtText = fmt.format(entity.createdAt),
-            modifiedAt = entity.modifiedAt,
-            modifiedAtText = fmt.format(entity.createdAt),
-        )
-    }
-
-    fun toAttributeModel(entity: AttributeSummary): AttributeModel {
-        val fmt = createDateTimeFormat()
-        return AttributeModel(
-            id = entity.id,
-            name = entity.name,
-            type = entity.type,
-            label = entity.label ?: entity.name,
-            required = entity.required,
-            active = entity.active,
-            createdAt = entity.createdAt,
-            createdAtText = fmt.format(entity.createdAt),
-            modifiedAt = entity.modifiedAt,
-            modifiedAtText = fmt.format(entity.createdAt),
-        )
-    }
-
-    fun toAccountUserModel(entity: AccountUser): AccountUserModel {
+    fun toAccountUserModel(entity: AccountUser, account: Account): AccountUserModel {
         val fmt = createDateTimeFormat()
         return AccountUserModel(
             id = entity.id,
+            account = toAccountModel(account),
             username = entity.username,
             status = entity.status,
             createdAt = entity.createdAt,
@@ -125,13 +36,20 @@ class AccountMapper {
         )
     }
 
-    fun toInvitationModel(entity: Invitation): InvitationModel {
+    private fun toAccountModel(entity: Account): AccountModel {
         val fmt = createDateTimeFormat()
-        return InvitationModel(
+        return AccountModel(
             id = entity.id,
+            name = entity.name,
+            email = entity.email,
+            modifiedAt = entity.modifiedAt,
+            modifiedAtText = fmt.format(entity.modifiedAt),
             createdAt = entity.createdAt,
             createdAtText = fmt.format(entity.createdAt),
-            createdAtMoment = moment.format(entity.createdAt),
+            language = entity.language,
+            languageText = entity.language?.let { lang -> Locale(lang).displayName },
+            accountUserId = entity.accountTypeId,
+            invitationId = entity.invitationId,
         )
     }
 }

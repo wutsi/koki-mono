@@ -1,0 +1,545 @@
+/* === VARIABLES ===== */
+
+/* === CORE ===== */
+body {
+    background: #f8f8f8;
+    margin-top: 4.8em;
+}
+
+.flex {
+    display: flex;
+}
+
+.hidden {
+    display: none;
+}
+
+.background-lightgray {
+    background: #f8f8f8;
+}
+
+.background-white {
+    background: white;
+}
+
+.flex-center {
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-space-between {
+    justify-content: space-between;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-small {
+    font-size: small;
+}
+
+.text-larger {
+    font-size: larger;
+}
+
+.text-x-large {
+    font-size: x-large;
+}
+
+.padding {
+    padding: 1em;
+}
+
+.padding-2x {
+    padding: 2em;
+}
+
+.padding-small {
+    padding: 0.5em;
+}
+
+.padding-top {
+    padding-top: 1em;
+}
+
+.padding-top-small {
+    padding-top: 0.5em;
+}
+
+.padding-bottom {
+    padding-bottom: 1em;
+}
+
+.padding-left {
+    padding-left: 1em;
+}
+
+.padding-left-small {
+    padding-left: 0.5em;
+}
+
+.padding-right {
+    padding-right: 1em;
+}
+
+.padding-right-small {
+    padding-right: 0.5em;
+}
+
+.padding-none {
+    padding: 0;
+}
+
+.margin {
+    margin: 1em;
+}
+
+.margin-small {
+    margin: 0.5em;
+}
+
+.margin-2x {
+    margin: 2em;
+}
+
+.margin-none {
+    margin: 0;
+}
+
+.margin-top {
+    margin-top: 1em;
+}
+
+.margin-top-small {
+    margin-top: 0.5em;
+}
+
+.margin-top-2x {
+    margin-top: 2em;
+}
+
+.margin-top-4x {
+    margin-top: 4em;
+}
+
+.margin-bottom {
+    margin-bottom: 1em;
+}
+
+.margin-bottom-small {
+    margin-top: 0.5em;
+}
+
+.margin-left {
+    margin-left: 1em;
+}
+
+.margin-left-small {
+    margin-left: .5em;
+}
+
+.margin-right {
+    margin-right: 1em;
+}
+
+.margin-right-small {
+    margin-right: 0.5em;
+}
+
+.margin-right-2x {
+    margin-right: 2em;
+}
+
+/* === NAVBAR ====== */
+.navbar {
+    border-bottom: 1px solid gray;
+    background: white;
+}
+
+.navbar .brand-name {
+    padding: .5em !important;
+    font-size: .8em !important;
+    font-weight: bold !important;
+}
+
+.navbar img.brand-logo {
+    margin-left: .5em !important;
+    height: 50px;
+}
+
+.navbar .nav-link {
+    border: 1px solid gray;
+    margin-right: .5em;
+}
+
+.navbar .dropdown-menu {
+    position: fixed;
+    float: none;
+    left: auto;
+    width: 350px;
+    right: 10px;
+    border-radius: 0;
+    margin-top: -1em;
+}
+
+.navbar .dropdown-menu .user-hi {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+/* === MENU ====== */
+#menubar {
+    padding-top: 0;
+    padding-bottom: 0;
+    background: #1D7EDF;
+}
+
+#menubar ul.navbar-nav li a {
+    color: white;
+}
+
+#menubar ul.navbar-nav li.active {
+    background: #f8f8f8;
+}
+
+#menubar ul.navbar-nav li.active a {
+    color: black;
+}
+
+#menubar .nav-link {
+    border: 0;
+    margin-right: 0;
+}
+
+/* === FORMS ====== */
+textarea:read-only,
+input:read-only {
+    background: #f8f8f8;
+}
+
+*:user-invalid,
+.user-invalid,
+select:user-invalid + .select2-container > span.selection > span.select2-selection,
+select:user-invalid + .select2-container--focus > span.selection > span.select2-selection {
+    border: 2px solid red !important;
+}
+
+@supports not selector(:user-invalid) {
+    input:invalid,
+    select:invalid,
+    textarea:invalid
+    select:invalid + .select2-container > span.selection > span.select2-selection,
+    select:invalid + .select2-container--focus > span.selection > span.select2-selection {
+        border: 2px solid red;
+    }
+}
+
+.error {
+    color: red;
+}
+
+.success {
+    color: darkgreen;
+}
+
+.info {
+    color: blue;
+}
+
+.required {
+    color: darkred;
+}
+
+.form-header {
+    background: white;
+    border-radius: 10px;
+    border: 1px solid gray;
+    padding: 1em;
+}
+
+.form-footer {
+    background: white;
+    border-radius: 10px;
+    border: 1px solid gray;
+    margin-top: 1em;
+    padding: 1em;
+}
+
+.float-right {
+    float: right;
+}
+
+.section {
+    background: white;
+    border-radius: 10px;
+    border: 1px solid gray;
+    margin-top: 1em;
+}
+
+.section-read-only {
+    background: #f8f8f8;
+}
+
+.section-header {
+    background: #f8f8f8;
+    border-radius: .6em .6em 0 0;
+    border-bottom: 1px solid gray;
+    padding: .5em;
+}
+
+.section-header .section-title {
+    font-size: 1em;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    text-transform: uppercase;
+}
+
+.section-item {
+    padding: 1em;
+    border-bottom: 1px solid lightgray;
+}
+
+.section-item:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.section-item table.table:last-child {
+    margin-bottom: 0;
+}
+
+.section-item label.title {
+    font-weight: bold;
+    font-size: larger;
+    display: block
+}
+
+.section-item .description {
+    font-size: small;
+}
+
+.section-item textarea,
+.section-item input,
+.section-item select {
+    padding: .5em;
+}
+
+.section-item textarea,
+.section-item input:not([type]),
+.section-item input[type=tel],
+.section-item input[type=text],
+.section-item input[type=email],
+.section-item input[type=password],
+.section-item input[type=url],
+.section-item select {
+    width: 100%;
+}
+
+.section-item .file-upload-container input[type=file] {
+    display: none;
+}
+
+.section-item .file-upload-container .filename {
+    margin-left: 1em;
+}
+
+.file-upload-container .file-upload-container .btn-close {
+    margin-left: 0.5em;
+}
+
+.checkbox-container,
+.radio-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+/* === WIDGET ===== */
+.widget {
+    background: white;
+    border-radius: 10px;
+    border: 1px solid gray;
+    margin-top: 1em;
+}
+
+.widget-header {
+    background: #f8f8f8;
+    border-radius: .6em .6em 0 0;
+    border-bottom: 1px solid gray;
+    padding: 0.5em;
+}
+
+.widget-header .widget-title {
+    font-size: 1em;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
+.widget-body {
+    padding: 1em
+}
+
+.widget-body table.table:last-child {
+    margin-bottom: 0;
+}
+
+.widget-body .widget-toolbar {
+    background: #f8f8f8;
+    margin-bottom: 1em;
+    padding: 0.5em;
+}
+
+.widget-toolbar a,
+.toolbar a {
+    margin-right: .5em;
+}
+
+.widget-toolbar a:last-child,
+.toolbar a:last-child {
+    margin-right: 0;
+}
+
+.widget .tab-content .widget {
+    border: 0;
+}
+
+.widget .tab-content .widget-header {
+    display: none
+}
+
+.widget .tab-content .widget-body {
+    padding: 0;
+}
+
+
+.navbar {
+    border-bottom: 1px solid gray;
+    background: white;
+}
+
+.navbar .brand-name {
+    padding: .5em !important;
+    font-size: .8em !important;
+    font-weight: bold !important;
+}
+
+.navbar img.brand-logo {
+    margin-left: .5em !important;
+    height: 50px;
+}
+
+.navbar .nav-link {
+    border: 1px solid gray;
+    margin-right: .5em;
+}
+
+.navbar .dropdown-menu {
+    position: fixed;
+    float: none;
+    left: auto;
+    width: 350px;
+    right: 10px;
+    border-radius: 0;
+    margin-top: -1em;
+}
+
+.navbar .dropdown-menu .user-hi {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+
+/* ============================= */
+/* bootstrap                     */
+/* ============================= */
+.border {
+    border: 1px solid gray !important;
+}
+
+.border-rounded {
+    border-radius: 4px 4px 4px 4px;
+}
+
+.border-light {
+    border: 1px solid lightgray !important;
+}
+
+.border-right {
+    border-right: 1px solid gray !important;
+}
+
+.border-top {
+    border-top: 1px solid gray !important;
+}
+
+.btn-light {
+    border: 1px solid gray;
+}
+
+a.btn-back {
+    color: black
+}
+
+.widget-body ol.breadcrumb {
+    margin-bottom: 0;
+    padding-bottom: 0
+}
+
+.modal-dialog form input,
+.modal-dialog form select {
+    width: 100%;
+    padding: 0.5em;
+}
+
+
+.modal-dialog form div.quilljs {
+    height: 15em;
+}
+
+.bg-success a,
+.bg-danger a,
+.bg-primary a {
+    color: white;
+}
+
+/* ============================= */
+/* highlightjs line-number       */
+/* ============================= */
+.hljs-ln-numbers {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-align: center;
+    color: #ccc;
+    border-right: 1px solid #CCC;
+    vertical-align: top;
+    padding-right: 5px;
+}
+
+.hljs-ln-code {
+    padding-left: 10px !important;
+}
+
+/* ============================= */
+/* select2                       */
+/* ============================= */
+.select2-container .select2-selection--single {
+    height: 34px !important;
+}
+
+/* ============================= */
+/* codemiror                     */
+/* ============================= */
+div.CodeMirror {
+    border: 1px solid gray;
+}

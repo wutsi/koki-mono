@@ -1,4 +1,9 @@
 package com.wutsi.koki.portal.client.account.form
 
-class InvitationForm {
-}
+data class InvitationForm(
+    val accountId: Long = -1,
+    val email: String = "",
+    val username: String = "",
+    val password: String = "",
+    val confirm: String = "",
+)

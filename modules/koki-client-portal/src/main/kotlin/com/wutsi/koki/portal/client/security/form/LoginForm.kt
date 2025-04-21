@@ -1,4 +1,6 @@
 package com.wutsi.koki.portal.client.security.form
 
-class LoginForm {
-}
+data class LoginForm(
+    val username: String = "",
+    val password: String = "",
+)

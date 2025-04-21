@@ -17,7 +17,6 @@ class ListInvoiceControllerTest : AbstractPageControllerTest() {
     @Test
     fun list() {
         navigateTo("/invoices")
-
         assertCurrentPageIs(PageName.INVOICE_LIST)
         assertElementCount("tr.invoice", invoices.size)
     }
