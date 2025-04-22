@@ -22,6 +22,6 @@ data class Account(
     val shippingAddress: Address? = null,
     val billingAddress: Address? = null,
     val billingSameAsShippingAddress: Boolean = false,
-    val userId: Long? = null,
+    val accountUserId: Long? = null,
     val invitationId: String? = null,
 )
