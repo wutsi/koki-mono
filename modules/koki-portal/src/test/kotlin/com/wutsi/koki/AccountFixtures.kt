@@ -135,7 +135,7 @@ object AccountFixtures {
             stateId = RefDataFixtures.locations[3].parentId,
             country = "CA",
         ),
-        userId = accountUser.id,
+        accountUserId = accountUser.id,
         invitationId = invitation.id,
         createdAt = DateUtils.addDays(Date(), -10),
         modifiedAt = DateUtils.addDays(Date(), -1),

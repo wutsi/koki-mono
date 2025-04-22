@@ -23,6 +23,7 @@ import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.invoice.dto.SearchInvoiceResponse
 import com.wutsi.koki.module.dto.SearchModuleResponse
 import com.wutsi.koki.platform.security.AccessTokenHolder
+import com.wutsi.koki.portal.client.TenantFixtures.tenants
 import com.wutsi.koki.security.dto.ApplicationName
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
@@ -201,7 +202,9 @@ abstract class AbstractPageControllerTest {
         // Tenant
         doReturn(
             ResponseEntity(
-                SearchTenantResponse(TenantFixtures.tenants),
+                SearchTenantResponse(
+                    tenants.map { tenant -> tenant.copy(clientPortalUrl = "http://localhost:$port") }
+                ),
                 HttpStatus.OK,
             )
         ).whenever(restWithoutTenantHeader)

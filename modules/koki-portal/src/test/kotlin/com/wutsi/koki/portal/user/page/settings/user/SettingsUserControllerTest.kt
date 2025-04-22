@@ -1,7 +1,7 @@
 package com.wutsi.koki.portal.user.page.settings.user
 
-import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.UserFixtures.user
+import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
 import kotlin.test.Test
 

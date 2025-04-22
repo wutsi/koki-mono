@@ -66,7 +66,7 @@ class AccountService(
         }
 
         val accountUser = if (fullGraph) {
-            account.userId?.let { id ->
+            account.accountUserId?.let { id ->
                 mapper.toAccountUserModel(koki.user(id).accountUser)
             }
         } else {

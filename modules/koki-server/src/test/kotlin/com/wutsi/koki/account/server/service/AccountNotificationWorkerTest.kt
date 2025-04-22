@@ -71,7 +71,7 @@ class AccountNotificationWorkerTest {
         tenantId = tenant.id!!,
         name = "Ray Sponsible",
         email = "ray.sponsible@gmail.com",
-        userId = null,
+        accountUserId = null,
         language = "fr",
     )
     val invitation = InvitationEntity(
@@ -183,7 +183,7 @@ class AccountNotificationWorkerTest {
 
     @Test
     fun `invitation created - account as user`() {
-        doReturn(account.copy(userId = 333L)).whenever(accountService).get(any(), any())
+        doReturn(account.copy(accountUserId = 333L)).whenever(accountService).get(any(), any())
 
         val result = worker.notify(invitationEvent)
 

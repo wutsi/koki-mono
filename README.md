@@ -19,3 +19,7 @@
 [![koki-portal-pr](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-pr.yml)
 ![Coverage](.github/badges/koki-portal-jococo.svg)
 
+[![koki-client-portal](https://github.com/wutsi/koki-mono/actions/workflows/koki-client-portal-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-client-portal-master.yml)
+[![koki-client-portal-pr](https://github.com/wutsi/koki-mono/actions/workflows/koki-client-portal-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-client-portal-pr.yml)
+![Coverage](.github/badges/koki-client-portal-jococo.svg)
+

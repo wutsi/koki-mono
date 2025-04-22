@@ -16,10 +16,31 @@
             </h1>
         </div>
     </div>
-    <div class="row">
+
+    <div class="row" th:if="${invitation.account.accountUserId}">
+        <div class="col-12 col-md-6 offset-md-3">
+            <div class="section" id="already-invited">
+                <div class="section-body">
+                    <div class="section-item">
+                        <div>
+                            Already invited,
+                        </div>
+                        <div>
+                            You have already an account
+                        </div>
+                    </div>
+                    <div class="section-item text-center">
+                        <a class="btn btn-primary" href="/login" id="btn-login">Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" th:if="!${invitation.account.accountUserId}">
         <div class="col-12 col-md-6 offset-md-3">
 
-            <form class="form" method="post"
+            <form class="form" id="invitation-form" method="post"
                   th:action="@{'/invitations/' + ${invitation.id} + '/submit'}" th:object="${form}">
                 <input th:field="*{accountId}" type="hidden"/>
                 <div class="form-body">

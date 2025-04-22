@@ -5,7 +5,6 @@ import jakarta.servlet.http.HttpServletRequest
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.stereotype.Service
-import java.net.URI
 
 @Service
 @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -17,8 +16,10 @@ class CurrentTenantHolder(
 
     fun get(): TenantModel? {
         if (model == null) {
-            val host = URI(request.requestURL.toString()).host
-            model = service.tenants().find { tenant -> tenant.domainName == host }
+            val url = request.requestURL.toString()
+            model = service.tenants().find { tenant ->
+                tenant.clientPortalUrl != null && url.startsWith(tenant.clientPortalUrl)
+            }
         }
         return model
     }

@@ -3,10 +3,10 @@ package com.wutsi.koki.portal.product.page
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
-import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.ProductFixtures.prices
 import com.wutsi.koki.ProductFixtures.product
 import com.wutsi.koki.TenantFixtures.tenants
+import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.product.dto.CreatePriceRequest
 import com.wutsi.koki.product.dto.CreatePriceResponse
 import com.wutsi.koki.product.dto.UpdatePriceRequest

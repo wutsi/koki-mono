@@ -65,8 +65,8 @@ data class AccountEntity(
     var modifiedAt: Date = Date(),
     var deletedAt: Date? = null,
 
-    @Column("user_fk")
-    var userId: Long? = null,
+    @Column("account_user_fk")
+    var accountUserId: Long? = null,
 
     @Column("invitation_fk")
     var invitationId: String? = null,
