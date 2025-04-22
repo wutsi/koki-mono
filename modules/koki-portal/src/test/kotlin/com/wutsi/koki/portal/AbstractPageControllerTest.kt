@@ -300,7 +300,7 @@ abstract class AbstractPageControllerTest {
         doReturn(
             ResponseEntity(
                 SearchTenantResponse(
-                    TenantFixtures.tenants.map { tenant -> tenant.copy(clientPortalUrl = "http://localhost:$port") }
+                    TenantFixtures.tenants.map { tenant -> tenant.copy(portalUrl = "http://localhost:$port") }
                 ),
                 HttpStatus.OK,
             )
