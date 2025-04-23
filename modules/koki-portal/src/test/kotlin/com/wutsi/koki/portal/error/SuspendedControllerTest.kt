@@ -16,10 +16,13 @@ import kotlin.test.Test
 class SuspendedControllerTest : AbstractPageControllerTest() {
     @Test
     fun suspended() {
-        val tenant = tenants[0].copy(status = TenantStatus.SUSPENDED)
         doReturn(
             ResponseEntity(
-                SearchTenantResponse(listOf(tenant)),
+                SearchTenantResponse(
+                    tenants = tenants.map { tenant ->
+                        tenant.copy(status = TenantStatus.SUSPENDED, portalUrl = "http://localhost:$port")
+                    }
+                ),
                 HttpStatus.OK,
             )
         ).whenever(restWithoutTenantHeader)
