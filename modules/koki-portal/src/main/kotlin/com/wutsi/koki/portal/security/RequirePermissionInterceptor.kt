@@ -21,7 +21,7 @@ class RequirePermissionInterceptor(private val currentUser: CurrentUserHolder) :
                 if (LOGGER.isDebugEnabled) {
                     LOGGER.debug("Expecting permissions $permissions, but AccountUser#${user?.id} has $permissionNames")
                 }
-                response.sendError(403)
+                response.sendRedirect("/error/access-denied")
                 return false
             }
         }
