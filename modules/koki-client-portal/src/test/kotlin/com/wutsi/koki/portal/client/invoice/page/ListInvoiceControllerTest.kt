@@ -33,9 +33,20 @@ class ListInvoiceControllerTest : AbstractPageControllerTest() {
         repeat(20) {
             entries.add(invoices[0].copy())
         }
+
         doReturn(
             ResponseEntity(
                 SearchInvoiceResponse(entries),
+                HttpStatus.OK,
+            )
+        ).doReturn(
+            ResponseEntity(
+                SearchInvoiceResponse(entries),
+                HttpStatus.OK,
+            )
+        ).doReturn(
+            ResponseEntity(
+                SearchInvoiceResponse(invoices),
                 HttpStatus.OK,
             )
         ).whenever(rest)
@@ -53,5 +64,19 @@ class ListInvoiceControllerTest : AbstractPageControllerTest() {
 
         click("#invoice-load-more button")
         assertElementCount("tr.invoice", 2 * entries.size)
+
+        scrollToBottom()
+
+        click("#invoice-load-more button")
+        assertElementCount("tr.invoice", 2 * entries.size + invoices.size)
+    }
+
+    @Test
+    fun `access denied`() {
+        disableModule("invoice")
+
+        navigateTo("/invoices")
+
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

@@ -40,4 +40,8 @@ data class TenantModel(
     fun createDateTimeFormat(): DateFormat {
         return SimpleDateFormat(dateTimeFormat)
     }
+
+    fun hasModule(name: String): Boolean {
+        return modules.find { module -> module.name == name } != null
+    }
 }

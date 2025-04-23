@@ -9,11 +9,12 @@ class Koki {
         document.querySelectorAll('[data-component-id=load-more]')
             .forEach((elt) => {
                 count++
+                elt.removeEventListener('click', this.onLoadMore);
                 elt.addEventListener('click', this.onLoadMore);
             });
         console.log(count + ' load-more component(s) found');
     }
-    
+
     onLoadMore() {
         console.log('onLoadMore()');
 
@@ -29,6 +30,7 @@ class Koki {
         fetch(url).then(function (response) {
             response.text().then(function (html) {
                 $('#' + containerId).replaceWith(html);
+                koki.initLoadMore();
             });
         });
     }
