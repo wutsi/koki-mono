@@ -8,7 +8,6 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.AccountFixtures
 import com.wutsi.koki.EmailFixtures
 import com.wutsi.koki.FileFixtures
@@ -20,6 +19,7 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.invoice.dto.CreateInvoiceRequest
 import com.wutsi.koki.invoice.dto.CreateInvoiceResponse
 import com.wutsi.koki.invoice.dto.SearchInvoiceResponse
+import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.tax.dto.GetTaxResponse
 import com.wutsi.koki.tax.dto.SearchTaxProductResponse

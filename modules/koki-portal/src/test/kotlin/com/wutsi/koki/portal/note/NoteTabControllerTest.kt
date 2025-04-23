@@ -3,13 +3,13 @@ package com.wutsi.koki.portal.note
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
-import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.NoteFixtures.notes
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.note.dto.CreateNoteRequest
 import com.wutsi.koki.note.dto.CreateNoteResponse
 import com.wutsi.koki.note.dto.NoteType
 import com.wutsi.koki.note.dto.UpdateNoteRequest
+import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
 import kotlin.test.Test
 import kotlin.test.assertEquals

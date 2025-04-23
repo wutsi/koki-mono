@@ -10,7 +10,7 @@ INSERT INTO T_ATTRIBUTE(id, tenant_fk, name, label, description, choices, type, 
            (103, 1, 'client_since', 'Client Since', null, null, 4, false)
 ;
 
-INSERT INTO T_ACCOUNT(id, tenant_fk, account_type_fk, name, phone, mobile, email, website, language, description, deleted, created_by_fk, modified_by_fk, managed_by_fk, user_fk, invitation_fk)
+INSERT INTO T_ACCOUNT(id, tenant_fk, account_type_fk, name, phone, mobile, email, website, language, description, deleted, created_by_fk, modified_by_fk, managed_by_fk, account_user_fk, invitation_fk)
     VALUES(1000, 1, 101, 'Inc', '+5147580000', '+5147580011', 'info@inc.com', 'https://www.inc.com', 'fr', 'This is the description of account', false, 11, 12, 13, 333, 'aaaa-bbbb'),
           (1010, 1, null, 'Sponsible', null, null, null, null, null, null, false, null, null, null, null, null),
           (1999, 1, 100, 'Deleted', null, null, null, null, null, null, true, null, null, null, null, null),

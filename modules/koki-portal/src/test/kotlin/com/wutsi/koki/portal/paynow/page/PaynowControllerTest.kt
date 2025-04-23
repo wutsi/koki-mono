@@ -7,7 +7,6 @@ import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.InvoiceFixtures.invoice
 import com.wutsi.koki.PaymentFixtures.transaction
 import com.wutsi.koki.error.dto.ErrorCode
@@ -18,6 +17,7 @@ import com.wutsi.koki.payment.dto.PaymentMethodType
 import com.wutsi.koki.payment.dto.PrepareCheckoutRequest
 import com.wutsi.koki.payment.dto.PrepareCheckoutResponse
 import com.wutsi.koki.payment.dto.TransactionStatus
+import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

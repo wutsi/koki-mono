@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 @Service
 class TenantAccountInitializer : AbstractTenantModuleInitializer() {
     companion object {
-        const val INVITATION_EMAIL_SUBJECT = "Invitation to join #{{businessName}} Portal"
+        const val INVITATION_EMAIL_SUBJECT = "Invitation to join {{businessName}} Portal"
         const val INVITATION_EMAIL_BODY_PATH = "/account/email/invite.html"
     }
 

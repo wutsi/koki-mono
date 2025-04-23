@@ -48,7 +48,7 @@ class AccountMapper : TenantAwareMapper() {
             createdAtText = fmt.format(entity.createdAt),
             language = entity.language,
             languageText = entity.language?.let { lang -> Locale(lang).displayName },
-            accountUserId = entity.accountTypeId,
+            accountUserId = entity.accountUserId,
             invitationId = entity.invitationId,
         )
     }

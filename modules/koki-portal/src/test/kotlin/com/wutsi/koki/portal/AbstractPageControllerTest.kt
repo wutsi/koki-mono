@@ -1,4 +1,4 @@
-package com.wutsi.blog.app.page
+package com.wutsi.koki.portal
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
@@ -299,7 +299,9 @@ abstract class AbstractPageControllerTest {
         // Tenant
         doReturn(
             ResponseEntity(
-                SearchTenantResponse(TenantFixtures.tenants),
+                SearchTenantResponse(
+                    TenantFixtures.tenants.map { tenant -> tenant.copy(portalUrl = "http://localhost:$port") }
+                ),
                 HttpStatus.OK,
             )
         ).whenever(restWithoutTenantHeader)

@@ -93,21 +93,6 @@ object TenantFixtures {
             portalUrl = "http://localhost:8080",
             clientPortalUrl = "https://localhost:8082",
         ),
-        Tenant(
-            id = 2,
-            name = "test.cm",
-            domainName = "test.cm",
-            locale = "fr_CM",
-            currency = "XAF",
-            currencySymbol = "FCFA",
-            timeFormat = "HH:mm",
-            dateFormat = "yyyy-MM-dd",
-            dateTimeFormat = "yyyy-MM-dd HH:mm",
-            numberFormat = "#,###,###.#0",
-            monetaryFormat = "#,###,### FCFA",
-            status = TenantStatus.ACTIVE,
-            moduleIds = modules.map { module -> module.id }
-        ),
     )
 
     // Types

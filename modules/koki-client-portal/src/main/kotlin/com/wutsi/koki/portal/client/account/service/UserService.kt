@@ -5,6 +5,7 @@ import com.wutsi.koki.portal.client.account.form.InvitationForm
 import com.wutsi.koki.portal.client.account.mapper.AccountMapper
 import com.wutsi.koki.portal.client.account.model.AccountUserModel
 import com.wutsi.koki.sdk.KokiAccounts
+import com.wutsi.koki.tenant.dto.UserStatus
 import org.springframework.stereotype.Service
 
 @Service
@@ -23,7 +24,8 @@ class UserService(
             CreateAccountUserRequest(
                 username = form.username,
                 password = form.password,
-                accountId = form.accountId
+                accountId = form.accountId,
+                status = UserStatus.ACTIVE,
             )
         ).accountUserId
     }

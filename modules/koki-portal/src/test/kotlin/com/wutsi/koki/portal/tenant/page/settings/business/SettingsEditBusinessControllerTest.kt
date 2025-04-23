@@ -2,7 +2,7 @@ package com.wutsi.koki.portal.tenant.page.settings
 
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.verify
-import com.wutsi.blog.app.page.AbstractPageControllerTest
+import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.tenant.dto.SaveBusinessRequest
 import org.mockito.ArgumentMatchers.eq

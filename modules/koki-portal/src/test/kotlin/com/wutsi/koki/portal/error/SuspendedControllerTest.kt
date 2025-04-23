@@ -4,8 +4,8 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.TenantFixtures.tenants
+import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.tenant.dto.SearchTenantResponse
 import com.wutsi.koki.tenant.dto.TenantStatus
@@ -16,10 +16,13 @@ import kotlin.test.Test
 class SuspendedControllerTest : AbstractPageControllerTest() {
     @Test
     fun suspended() {
-        val tenant = tenants[0].copy(status = TenantStatus.SUSPENDED)
         doReturn(
             ResponseEntity(
-                SearchTenantResponse(listOf(tenant)),
+                SearchTenantResponse(
+                    tenants = tenants.map { tenant ->
+                        tenant.copy(status = TenantStatus.SUSPENDED, portalUrl = "http://localhost:$port")
+                    }
+                ),
                 HttpStatus.OK,
             )
         ).whenever(restWithoutTenantHeader)

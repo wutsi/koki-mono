@@ -6,10 +6,10 @@ import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.contact.dto.CreateContactRequest
 import com.wutsi.koki.contact.dto.CreateContactResponse
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
 import kotlin.test.Test
 import kotlin.test.assertEquals

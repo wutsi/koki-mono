@@ -7,7 +7,6 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.blog.app.page.AbstractPageControllerTest
 import com.wutsi.koki.AccountFixtures.account
 import com.wutsi.koki.AccountFixtures.invitation
 import com.wutsi.koki.ContactFixtures
@@ -21,8 +20,10 @@ import com.wutsi.koki.account.dto.CreateInvitationRequest
 import com.wutsi.koki.account.dto.CreateInvitationResponse
 import com.wutsi.koki.account.dto.GetAccountResponse
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.tenant.dto.SearchTenantResponse
+import org.bouncycastle.pqc.legacy.math.linearalgebra.PolynomialRingGF2.rest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import kotlin.test.Ignore
@@ -156,7 +157,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
     fun `user - no invitation`() {
         doReturn(
             ResponseEntity(
-                GetAccountResponse(account.copy(userId = null, invitationId = null)),
+                GetAccountResponse(account.copy(accountUserId = null, invitationId = null)),
                 HttpStatus.OK,
             )
         ).whenever(rest)
@@ -183,7 +184,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
     fun `user - with invitation`() {
         doReturn(
             ResponseEntity(
-                GetAccountResponse(account.copy(userId = null, invitationId = invitation.id)),
+                GetAccountResponse(account.copy(accountUserId = null, invitationId = invitation.id)),
                 HttpStatus.OK,
             )
         ).whenever(rest)

@@ -60,7 +60,7 @@ class CreateAccountUserEndpointTest : AuthorizationAwareEndpointTest() {
         assertNotNull(user.salt)
 
         val account = accountDao.findById(request.accountId).get()
-        assertEquals(user.id, account.userId)
+        assertEquals(user.id, account.accountUserId)
 
         verify(passwordService).hash(request.password, user.salt)
     }

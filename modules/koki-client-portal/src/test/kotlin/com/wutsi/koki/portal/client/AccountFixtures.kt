@@ -48,6 +48,7 @@ object AccountFixtures {
     )
     val account = Account(
         id = 100,
+        accountUserId = accountUser.id,
         name = "Yahoo Inc",
         managedById = UserFixtures.users[0].id,
         email = "info@yahoo.com",
@@ -58,7 +59,6 @@ object AccountFixtures {
         description = "This is an example of account",
         language = "en",
         website = "https://yahoo.com",
-        userId = accountUser.id,
         invitationId = invitation.id,
         createdAt = DateUtils.addDays(Date(), -10),
         modifiedAt = DateUtils.addDays(Date(), -1),

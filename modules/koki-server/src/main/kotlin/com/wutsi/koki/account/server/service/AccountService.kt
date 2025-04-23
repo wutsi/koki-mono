@@ -227,7 +227,7 @@ class AccountService(
 
     @Transactional
     fun setUser(account: AccountEntity, user: AccountUserEntity): AccountEntity {
-        account.userId = user.id
+        account.accountUserId = user.id
         return dao.save(account)
     }
 
