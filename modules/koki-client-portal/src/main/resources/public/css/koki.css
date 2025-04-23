@@ -59,6 +59,10 @@ body {
     padding: 2em;
 }
 
+.padding-4x {
+    padding: 4em;
+}
+
 .padding-small {
     padding: 0.5em;
 }
@@ -190,6 +194,11 @@ body {
 .navbar .dropdown-menu .user-hi {
     font-weight: bold;
     font-size: 1.2em;
+}
+
+/* === ERROR ====== */
+.error-container h1 {
+    font-size: 8em;
 }
 
 /* === MENU ====== */

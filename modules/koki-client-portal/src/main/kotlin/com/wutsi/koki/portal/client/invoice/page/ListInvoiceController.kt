@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.client.invoice.page
 import com.wutsi.koki.portal.client.common.page.AbstractPageController
 import com.wutsi.koki.portal.client.common.page.PageName
 import com.wutsi.koki.portal.client.invoice.service.InvoiceService
+import com.wutsi.koki.portal.client.security.RequiresModule
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
 @RequestMapping("/invoices")
+@RequiresModule(name = "invoice")
 class ListInvoiceController(
     private val service: InvoiceService,
 ) : AbstractPageController() {
@@ -29,8 +31,8 @@ class ListInvoiceController(
 
     @GetMapping("/more")
     fun more(
-        @RequestParam(required = false) limit: Int = 20,
-        @RequestParam(required = false) offset: Int = 0,
+        @RequestParam limit: Int,
+        @RequestParam offset: Int,
         model: Model
     ): String {
         val invoices = service.invoices(

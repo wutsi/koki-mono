@@ -7,14 +7,6 @@ import java.text.NumberFormat
 
 @Service
 class MoneyMapper : TenantAwareMapper() {
-    fun toMoneyModel(amount: Double): MoneyModel {
-        return MoneyModel(
-            value = amount,
-            currency = currentTenant.get()?.currency ?: "",
-            text = createMoneyFormat().format(amount)
-        )
-    }
-
     fun toMoneyModel(amount: Double, currency: String): MoneyModel {
         return MoneyModel(
             value = amount,

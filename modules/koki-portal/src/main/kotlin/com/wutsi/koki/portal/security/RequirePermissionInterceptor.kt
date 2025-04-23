@@ -7,9 +7,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.HandlerInterceptor
 
-class
-
-RequirePermissionInterceptor(private val currentUser: CurrentUserHolder) : HandlerInterceptor {
+class RequirePermissionInterceptor(private val currentUser: CurrentUserHolder) : HandlerInterceptor {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(RequirePermissionInterceptor::class.java)
     }

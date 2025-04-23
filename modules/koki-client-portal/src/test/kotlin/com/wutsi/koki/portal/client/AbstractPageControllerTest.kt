@@ -538,42 +538,30 @@ abstract class AbstractPageControllerTest {
         assertEquals(expectedValue, request.firstValue.values[name])
     }
 
-    protected fun disableConfig(name: String) {
-        disableConfig(listOf(name))
-    }
-
-    protected fun disableConfig(names: List<String>) {
+    protected fun disableModule(name: String) {
+        val modulesById = ModuleFixtures.modules.associateBy { module -> module.id }
         doReturn(
             ResponseEntity(
-                SearchConfigurationResponse(
-                    configurations = TenantFixtures.config
-                        .filter { cfg -> !names.contains(cfg.key) }
-                        .map { cfg ->
-                            Configuration(
-                                name = cfg.key,
-                                value = cfg.value
-                            )
-                        }
+                SearchTenantResponse(
+                    tenants.map { tenant ->
+                        tenant.copy(
+                            clientPortalUrl = "http://localhost:$port",
+                            moduleIds = tenant.moduleIds.mapNotNull { moduleId ->
+                                if (modulesById[moduleId]?.name == name) {
+                                    null
+                                } else {
+                                    moduleId
+                                }
+                            }
+                        )
+                    }
                 ),
                 HttpStatus.OK,
             )
-        ).whenever(rest)
+        ).whenever(restWithoutTenantHeader)
             .getForEntity(
                 any<String>(),
-                eq(SearchConfigurationResponse::class.java)
-            )
-    }
-
-    protected fun disableAllConfigs() {
-        doReturn(
-            ResponseEntity(
-                SearchConfigurationResponse(),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchConfigurationResponse::class.java)
+                eq(SearchTenantResponse::class.java)
             )
     }
 }
