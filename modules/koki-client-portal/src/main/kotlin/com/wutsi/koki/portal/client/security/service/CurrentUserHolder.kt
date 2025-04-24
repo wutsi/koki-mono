@@ -3,7 +3,7 @@ package com.wutsi.koki.portal.client.security.service
 import com.wutsi.koki.platform.security.AccessTokenHolder
 import com.wutsi.koki.platform.security.JWTAuthentication
 import com.wutsi.koki.portal.client.account.model.AccountUserModel
-import com.wutsi.koki.portal.client.account.service.UserService
+import com.wutsi.koki.portal.client.account.service.AccountUserService
 import com.wutsi.koki.security.dto.JWTPrincipal
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service
 @Service
 @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 class CurrentUserHolder(
-    private val service: UserService,
+    private val service: AccountUserService,
     private val accessTokenHolder: AccessTokenHolder,
 ) {
     private var model: AccountUserModel? = null

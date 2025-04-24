@@ -3,8 +3,8 @@ package com.wutsi.koki.portal.client.account.page
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.client.account.form.InvitationForm
 import com.wutsi.koki.portal.client.account.model.InvitationModel
+import com.wutsi.koki.portal.client.account.service.AccountUserService
 import com.wutsi.koki.portal.client.account.service.InvitationService
-import com.wutsi.koki.portal.client.account.service.UserService
 import com.wutsi.koki.portal.client.common.page.AbstractPageController
 import com.wutsi.koki.portal.client.common.page.PageName
 import org.springframework.stereotype.Controller
@@ -20,7 +20,7 @@ import org.springframework.web.client.HttpClientErrorException
 @RequestMapping("/invitations")
 class InvitationController(
     private val service: InvitationService,
-    private val userService: UserService,
+    private val accountUserService: AccountUserService,
 ) : AbstractPageController() {
     @GetMapping("/{id}")
     fun show(@PathVariable id: String, model: Model): String {
@@ -57,7 +57,7 @@ class InvitationController(
         }
 
         try {
-            val userId = userService.create(form)
+            val userId = accountUserService.create(form)
             model.addAttribute("userId", userId)
             model.addAttribute("invitation", invitation)
             model.addAttribute(

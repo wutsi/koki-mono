@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('tax')}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/tax :: tax-breadcrumb(null)}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th width="1%">Year</th>
+                            <th>Type</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-right">Last Modified</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="tax" th:each="tax : ${taxes}">
+                            <div th:replace="~{__components/tax :: columns(${tax})}"></div>
+                        </tr>
+                        <tr th:replace="~{__components/tax :: load-more(${moreUrl})}"></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

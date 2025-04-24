@@ -14,4 +14,7 @@ object PageName {
     val INVOICE_LIST: String = "page.invoice.list"
 
     val LOGIN: String = "page.login"
+
+    val TAX: String = "page.tax"
+    val TAX_LIST: String = "page.tax.list"
 }

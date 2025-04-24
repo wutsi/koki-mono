@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.client.account.mapper
 
 import com.wutsi.koki.account.dto.Account
+import com.wutsi.koki.account.dto.AccountSummary
 import com.wutsi.koki.account.dto.AccountUser
 import com.wutsi.koki.account.dto.Invitation
 import com.wutsi.koki.portal.client.account.model.AccountModel
@@ -36,7 +37,7 @@ class AccountMapper : TenantAwareMapper() {
         )
     }
 
-    private fun toAccountModel(entity: Account): AccountModel {
+    fun toAccountModel(entity: Account): AccountModel {
         val fmt = createDateTimeFormat()
         return AccountModel(
             id = entity.id,
@@ -50,6 +51,19 @@ class AccountMapper : TenantAwareMapper() {
             languageText = entity.language?.let { lang -> Locale(lang).displayName },
             accountUserId = entity.accountUserId,
             invitationId = entity.invitationId,
+        )
+    }
+
+    fun toAccountModel(entity: AccountSummary): AccountModel {
+        val fmt = createDateTimeFormat()
+        return AccountModel(
+            id = entity.id,
+            name = entity.name,
+            email = entity.email,
+            modifiedAt = entity.modifiedAt,
+            modifiedAtText = fmt.format(entity.modifiedAt),
+            createdAt = entity.createdAt,
+            createdAtText = fmt.format(entity.createdAt),
         )
     }
 }
