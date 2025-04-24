@@ -72,7 +72,7 @@ class ListInvoiceControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun `access denied`() {
+    fun `no access to module`() {
         disableModule("invoice")
 
         navigateTo("/invoices")

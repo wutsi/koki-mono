@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="widget" th:fragment="tax-breadcrumb(tax)">
+    <div class="widget-body">
+        <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item" th:if="${tax}"><a href="/taxes">Taxes</a></li>
+                <li class="breadcrumb-item active" th:if="${tax}">
+                    <img align="absmiddle" height="24" src="/image/tax.png" width="24"/>
+                    <span th:text="${tax.name}">NAME</span>
+                </li>
+                <li class="breadcrumb-item active" th:if="!${tax}">Taxes</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<tr class="tax" th:fragment="columns(tax)" th:remove="tag">
+    <td>
+        <a th:href="'/taxes/' + ${tax.id}" th:text="${tax.fiscalYear}">NAME</a>
+    </td>
+    <td>
+        <a th:href="'/taxes/' + ${tax.id}" th:text="${tax.taxType.title}">TYPE</a>
+    </td>
+    <td class="text-center">
+        <span th:replace="~{__components/tax :: tax-status(${tax.status.name})}"></span>
+    </td>
+    <td class="text-right" th:text="${tax.modifiedAtText}">YYYY-MM-DD</td>
+</tr>
+
+<tr id="tax-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
+    <td class="text-center" th:colspan="4">
+        <button
+            class="btn btn-sm btn-light"
+            data-component-id='load-more'
+            data-container-id="tax-load-more"
+            th:data-url="${moreUrl}"
+        >
+            Load more...
+        </button>
+    </td>
+</tr>
+
+<div th:fragment="tax-status(status)">
+    <span class="badge text-bg-secondary"
+          th:if="${status == 'NEW'}"
+          th:text="#{'tax-status.' + ${status}}">NEW</span>
+
+    <span class="badge text-bg-success"
+          th:if="${status == 'DONE'}"
+          th:text="#{'tax-status.' + ${status}}">DONE</span>
+
+    <span class="badge text-bg-warning"
+          th:if="${status == 'SUBMITTING'}"
+          th:text="#{'tax-status.' + ${status}}">DONE</span>
+
+    <span class="badge text-bg-info"
+          th:if="${status != 'NEW'} AND ${status != 'DONE'}  AND ${status != 'SUBMITTING'}"
+          th:text="#{'tax-status.' + ${status}}">NEW</span>
+</div>
+
+<div class="flex" th:fragment="tax-header(tax)">
+    <div class="margin-right-2x">
+        <b>Fiscal Year</b><br/>
+        <span th:text="${tax.fiscalYear}">FISCAL YEAR</span>
+    </div>
+    <div class="margin-right-2x" th:if="${tax.taxType}">
+        <b>Type</b><br/>
+        <span th:text="${tax.taxType.title}">TAX TYPE</span>
+    </div>
+    <div>
+        <b>Status</b><br/>
+        <span th:replace="~{__components/tax :: tax-status(${tax.status.name()})}">STATUS</span>
+    </div>
+</div>
+
+</body>

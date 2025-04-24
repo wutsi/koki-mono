@@ -1,10 +1,13 @@
 package com.wutsi.koki.portal.client
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.platform.ai.llm.LLMType
 import com.wutsi.koki.platform.translation.TranslationProvider
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.Tenant
 import com.wutsi.koki.tenant.dto.TenantStatus
+import com.wutsi.koki.tenant.dto.Type
+import com.wutsi.koki.tenant.dto.TypeSummary
 
 object TenantFixtures {
     val config = mapOf(
@@ -87,5 +90,24 @@ object TenantFixtures {
             clientPortalUrl = "https://localhost:8082",
             moduleIds = ModuleFixtures.modules.map { module -> module.id },
         ),
+    )
+
+    // Types
+    val types = listOf(
+        TypeSummary(id = 110, objectType = ObjectType.EMPLOYEE, name = "F", title = "Full-Time"),
+        TypeSummary(id = 111, objectType = ObjectType.EMPLOYEE, name = "P", title = "Part-Time"),
+        TypeSummary(id = 112, objectType = ObjectType.EMPLOYEE, name = "C", title = "Contractor"),
+        TypeSummary(id = 113, objectType = ObjectType.EMPLOYEE, name = "I", title = "Intern"),
+
+        TypeSummary(id = 120, objectType = ObjectType.ACCOUNT, name = "Business"),
+        TypeSummary(id = 121, objectType = ObjectType.ACCOUNT, name = "Household"),
+    )
+
+    val type = Type(
+        id = 110,
+        objectType = ObjectType.EMPLOYEE,
+        name = "F",
+        title = "Full-Time",
+        description = "Full Time Employee"
     )
 }

@@ -9,7 +9,7 @@ import com.wutsi.koki.tenant.dto.UserStatus
 import org.springframework.stereotype.Service
 
 @Service
-class UserService(
+class AccountUserService(
     private val koki: KokiAccounts,
     private val mapper: AccountMapper
 ) {

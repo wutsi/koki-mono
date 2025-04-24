@@ -189,7 +189,7 @@
                         <div aria-labelledby="pills-user-tab" class="tab-pane fade show" id="pills-user" role="tabpanel"
                              th:if="${tenant.clientPortalUrl} AND ${user?.hasPermission('account:manage')}">
 
-                            <table class="user" th:if="${account.accountUser}">
+                            <table class="user table" th:if="${account.accountUser}">
                                 <tr>
                                     <td width="20%"><b>Username</b></td>
                                     <td th:text="${account.accountUser.username}">USERNAME</td>

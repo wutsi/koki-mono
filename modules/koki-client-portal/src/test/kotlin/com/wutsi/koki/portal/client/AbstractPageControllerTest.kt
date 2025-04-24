@@ -27,13 +27,17 @@ import com.wutsi.koki.portal.client.TenantFixtures.tenants
 import com.wutsi.koki.security.dto.ApplicationName
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
+import com.wutsi.koki.tax.dto.GetTaxResponse
+import com.wutsi.koki.tax.dto.SearchTaxResponse
 import com.wutsi.koki.tenant.dto.Configuration
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
+import com.wutsi.koki.tenant.dto.GetTypeResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
 import com.wutsi.koki.tenant.dto.SearchTenantResponse
+import com.wutsi.koki.tenant.dto.SearchTypeResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
 import io.eotsevych.select2.Select2
 import org.apache.commons.io.IOUtils
@@ -160,6 +164,7 @@ abstract class AbstractPageControllerTest {
         setupUserModule()
         setupAccountModule()
         setupInvoiceModule()
+        setupTaxModule()
     }
 
     protected fun setupFileUploads() {
@@ -230,6 +235,29 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(SearchConfigurationResponse::class.java)
+            )
+
+        // Types
+        doReturn(
+            ResponseEntity(
+                SearchTypeResponse(TenantFixtures.types),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchTypeResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetTypeResponse(TenantFixtures.type),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetTypeResponse::class.java)
             )
     }
 
@@ -351,7 +379,7 @@ abstract class AbstractPageControllerTest {
             )
     }
 
-    fun setupInvoiceModule() {
+    private fun setupInvoiceModule() {
         // Invoice
         doReturn(
             ResponseEntity(
@@ -362,6 +390,31 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(SearchInvoiceResponse::class.java)
+            )
+    }
+
+    private fun setupTaxModule() {
+        // Tax
+        doReturn(
+            ResponseEntity(
+                SearchTaxResponse(TaxFixtures.taxes),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchTaxResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetTaxResponse(TaxFixtures.tax),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetTaxResponse::class.java)
             )
     }
 
