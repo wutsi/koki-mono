@@ -23,13 +23,12 @@ class LoadMoreWidget {
         const container = document.querySelector('#' + containerId);
         container.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></div>';
 
-        const me = this;
         const url = elt.getAttribute('data-url');
         console.log('Loading ' + url);
         fetch(url).then(function (response) {
             response.text().then(function (html) {
                 $('#' + containerId).replaceWith(html);
-                me.init();
+                koki.widgets.loadMore.init();
             });
         });
     }
