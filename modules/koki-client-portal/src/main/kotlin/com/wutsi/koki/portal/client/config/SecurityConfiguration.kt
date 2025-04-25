@@ -19,11 +19,6 @@ class SecurityConfiguration(
     private val logoutSuccessHandler: LogoutSuccessHandlerImpl,
     private val accessTokenHolder: AccessTokenHolder,
 ) {
-    companion object {
-        const val COOKIE = "__atk"
-        const val TTL = 3600
-    }
-
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
@@ -31,6 +26,7 @@ class SecurityConfiguration(
                 customizer
                     .requestMatchers(AntPathRequestMatcher("/")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/invoices")).authenticated()
+                    .requestMatchers(AntPathRequestMatcher("/invoices/**")).authenticated()
                     .anyRequest().permitAll()
             }
             .addFilterBefore(authorizationFilter(), AnonymousAuthenticationFilter::class.java)

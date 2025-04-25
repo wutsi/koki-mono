@@ -20,6 +20,7 @@ import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
+import com.wutsi.koki.invoice.dto.GetInvoiceResponse
 import com.wutsi.koki.invoice.dto.SearchInvoiceResponse
 import com.wutsi.koki.module.dto.SearchModuleResponse
 import com.wutsi.koki.platform.security.AccessTokenHolder
@@ -381,6 +382,17 @@ abstract class AbstractPageControllerTest {
 
     private fun setupInvoiceModule() {
         // Invoice
+        doReturn(
+            ResponseEntity(
+                GetInvoiceResponse(InvoiceFixtures.invoice),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetInvoiceResponse::class.java)
+            )
+
         doReturn(
             ResponseEntity(
                 SearchInvoiceResponse(InvoiceFixtures.invoices),
