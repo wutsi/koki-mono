@@ -27,6 +27,8 @@ class SecurityConfiguration(
                     .requestMatchers(AntPathRequestMatcher("/")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/invoices")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/invoices/**")).authenticated()
+                    .requestMatchers(AntPathRequestMatcher("/taxes")).authenticated()
+                    .requestMatchers(AntPathRequestMatcher("/taxes/**")).authenticated()
                     .anyRequest().permitAll()
             }
             .addFilterBefore(authorizationFilter(), AnonymousAuthenticationFilter::class.java)

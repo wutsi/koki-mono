@@ -9,6 +9,7 @@ import com.wutsi.koki.account.dto.GetAccountResponse
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.client.AbstractPageControllerTest
 import com.wutsi.koki.portal.client.AccountFixtures.account
+import com.wutsi.koki.portal.client.InvoiceFixtures.invoice
 import com.wutsi.koki.portal.client.TaxFixtures.tax
 import com.wutsi.koki.portal.client.common.page.PageName
 import com.wutsi.koki.tax.dto.GetTaxResponse
@@ -82,5 +83,15 @@ class TaxControllerTest : AbstractPageControllerTest() {
         navigateTo("/taxes/four-hundred")
 
         assertCurrentPageIs(PageName.ERROR_404)
+    }
+
+
+    @Test
+    fun anonymous() {
+        setUpAnonymousUser()
+
+        navigateTo("/taxes/${tax.id}")
+
+        assertCurrentPageIs(PageName.LOGIN)
     }
 }
