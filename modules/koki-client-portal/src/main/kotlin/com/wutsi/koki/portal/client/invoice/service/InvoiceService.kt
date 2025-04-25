@@ -12,6 +12,11 @@ class InvoiceService(
     private val koki: KokiInvoices,
     private val mapper: InvoiceMapper,
 ) : AbstractPageController() {
+    fun invoice(id: Long): InvoiceModel {
+        val invoice = koki.invoice(id, null).invoice
+        return mapper.toInvoiceModel(invoice)
+    }
+
     fun invoices(limit: Int = 20, offset: Int = 0): List<InvoiceModel> {
         val invoices = koki.invoices(
             statuses = listOf(
@@ -29,5 +34,9 @@ class InvoiceService(
             orderId = null
         ).invoices
         return invoices.map { invoice -> mapper.toInvoiceModel(invoice) }
+    }
+
+    fun pdfUrl(id: Long): String {
+        return koki.url(id)
     }
 }

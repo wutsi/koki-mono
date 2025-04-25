@@ -7,6 +7,7 @@ import java.util.Date
 data class InvoiceModel(
     val id: Long = -1,
     val paynowId: String = "",
+    val customerAccountId: Long? = null,
     val number: Long = -1,
     val status: InvoiceStatus = InvoiceStatus.UNKNOWN,
     val totalAmount: MoneyModel = MoneyModel(),
@@ -16,6 +17,5 @@ data class InvoiceModel(
     val modifiedAt: Date = Date(),
     val createdAtText: String = "",
     val modifiedAtText: String = "",
-    val downloadUrl: String = "",
-    val paynowUrl: String? = null
+    val paynowUrl: String? = null,
 )

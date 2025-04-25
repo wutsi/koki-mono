@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.client
 
 import com.wutsi.koki.invoice.dto.Customer
+import com.wutsi.koki.invoice.dto.Invoice
 import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.invoice.dto.InvoiceSummary
 import org.apache.commons.lang3.time.DateUtils
@@ -74,5 +75,25 @@ object InvoiceFixtures {
             totalAmount = 500.0,
             amountDue = 0.0,
         ),
+    )
+
+    val invoice = Invoice(
+        id = 103L,
+        number = 12039221L,
+        createdAt = Date(),
+        invoicedAt = Date(),
+        dueAt = DateUtils.addDays(Date(), 10),
+        customer = Customer(name = "Ray Sponsible", accountId = AccountFixtures.account.id),
+        status = InvoiceStatus.OPENED,
+        currency = "CAD",
+        amountPaid = 800.0,
+        totalAmount = 840.0,
+        amountDue = 40.0,
+        subTotalAmount = 800.0,
+        totalTaxAmount = 40.0,
+        description = "This is an example of description",
+        modifiedAt = Date(),
+        modifiedById = UserFixtures.users[0].id,
+        createdById = UserFixtures.users[0].id,
     )
 }

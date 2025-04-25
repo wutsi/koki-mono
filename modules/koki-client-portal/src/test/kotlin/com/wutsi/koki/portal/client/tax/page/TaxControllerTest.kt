@@ -83,4 +83,13 @@ class TaxControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.ERROR_404)
     }
+
+    @Test
+    fun anonymous() {
+        setUpAnonymousUser()
+
+        navigateTo("/taxes/${tax.id}")
+
+        assertCurrentPageIs(PageName.LOGIN)
+    }
 }

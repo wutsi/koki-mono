@@ -22,11 +22,11 @@
     <td class="text-right" th:text="${invoice.totalAmount}">$$$</td>
     <td class="text-right" th:text="${invoice.amountDue}">$$$</td>
     <td align="right">
-        <a class="btn-paynow btn btn-sm btn-primary margin-right" target="_blank" th:href="${invoice.paynowUrl}"
+        <a class="btn-paynow btn btn-sm btn-primary margin-right" th:href="${invoice.paynowUrl}"
            th:if="${invoice.paynowUrl}">
             Make Payment
         </a>
-        <a class="btn-download btn btn-sm btn-light" target="_blank" th:href="${invoice.downloadUrl}">
+        <a class="btn-download btn btn-sm btn-light" target="_blank" th:href="'/invoices/' + ${invoice.id} + '/download'">
             <span class="fiv-viv fiv-icon-pdf"></span>
             Download
         </a>
