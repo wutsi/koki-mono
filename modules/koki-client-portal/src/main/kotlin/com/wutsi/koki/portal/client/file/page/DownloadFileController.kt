@@ -48,7 +48,7 @@ class DownloadFileController(
             response.sendError(404)
             return
         }
-        if (isOwner(ownerId, ownerType)) {
+        if (!isOwner(ownerId, ownerType)) {
             response.sendError(403)
             return
         }

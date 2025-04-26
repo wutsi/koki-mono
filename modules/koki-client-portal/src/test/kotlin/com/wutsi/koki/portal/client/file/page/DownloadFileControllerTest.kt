@@ -3,17 +3,12 @@ package com.wutsi.koki.portal.client.file.page
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.account.dto.GetAccountResponse
 import com.wutsi.koki.file.dto.SearchFileResponse
-import com.wutsi.koki.invoice.dto.GetInvoiceResponse
-import com.wutsi.koki.module.dto.SearchModuleResponse
 import com.wutsi.koki.portal.client.AbstractPageControllerTest
+import com.wutsi.koki.portal.client.AccountFixtures.account
 import com.wutsi.koki.portal.client.FileFixtures.file
-import com.wutsi.koki.portal.client.FileFixtures.files
-import com.wutsi.koki.portal.client.InvoiceFixtures.invoice
-import com.wutsi.koki.portal.client.ModuleFixtures
 import com.wutsi.koki.portal.client.TaxFixtures.tax
 import com.wutsi.koki.portal.client.common.page.PageName
 import com.wutsi.koki.tax.dto.GetTaxResponse
@@ -28,16 +23,27 @@ class DownloadFileControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun `now owner`() {
+    fun `now owner of associated tax`() {
         doReturn(
             ResponseEntity(
-                GetTaxResponse(tax = tax.copy(accountId = 999999)),
+                GetTaxResponse(tax = tax.copy(accountId = 999)),
                 HttpStatus.OK,
             )
         ).whenever(rest)
             .getForEntity(
                 any<String>(),
                 eq(GetTaxResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetAccountResponse(account = account.copy(id = 999)),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                eq("$sdkBaseUrl/v1/accounts/999"),
+                eq(GetAccountResponse::class.java)
             )
 
         navigateTo("/files/${file.id}/download?owner-id=${tax.id}&owner-type=TAX&test-mode=true")

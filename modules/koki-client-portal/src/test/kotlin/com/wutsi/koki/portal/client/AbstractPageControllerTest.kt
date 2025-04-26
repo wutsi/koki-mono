@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.client
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
@@ -24,6 +25,8 @@ import com.wutsi.koki.file.dto.UploadFileResponse
 import com.wutsi.koki.invoice.dto.SearchInvoiceResponse
 import com.wutsi.koki.module.dto.SearchModuleResponse
 import com.wutsi.koki.platform.security.AccessTokenHolder
+import com.wutsi.koki.platform.storage.StorageService
+import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.portal.client.TenantFixtures.tenants
 import com.wutsi.koki.security.dto.ApplicationName
 import com.wutsi.koki.security.dto.JWTDecoder
@@ -68,7 +71,9 @@ import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.io.OutputStream
 import java.nio.charset.Charset
 import java.time.Duration
 import java.util.UUID
@@ -109,6 +114,12 @@ abstract class AbstractPageControllerTest {
     @MockitoBean
     protected lateinit var jwtDecoder: JWTDecoder
 
+    @MockitoBean
+    protected lateinit var storageService: StorageService
+
+    @MockitoBean
+    protected lateinit var storageBuilder: StorageServiceBuilder
+
     @Autowired
     protected lateinit var objectMapper: ObjectMapper
 
@@ -133,6 +144,7 @@ abstract class AbstractPageControllerTest {
     @BeforeEach
     fun setUp() {
         setupSelenium()
+        setupStorage()
         setupDefaultApiResponses()
     }
 
@@ -160,6 +172,14 @@ abstract class AbstractPageControllerTest {
         if (System.getProperty("headless") == "true") { // In headless mode, set a size that will not require vertical scrolling
             driver.manage().window().size = Dimension(1920, 1280)
         }
+    }
+
+    private fun setupStorage() {
+        doReturn(storageService).whenever(storageBuilder).build(any())
+        doAnswer { invocation ->
+            val output = invocation.getArgument<OutputStream>(1)
+            IOUtils.copy(ByteArrayInputStream("Hello world".toByteArray()), output)
+        }.whenever(storageService).get(any(), any())
     }
 
     private fun setupDefaultApiResponses() {
