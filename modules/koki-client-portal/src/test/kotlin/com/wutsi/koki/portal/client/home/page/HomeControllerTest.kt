@@ -10,4 +10,12 @@ class HomeControllerTest : AbstractPageControllerTest() {
         navigateTo("/")
         assertCurrentPageIs(PageName.HOME)
     }
+
+    @Test
+    fun `login required`() {
+        setUpAnonymousUser()
+
+        navigateTo("/")
+        assertCurrentPageIs(PageName.LOGIN)
+    }
 }

@@ -57,7 +57,7 @@ class KokiSDKConfiguration(
 
     @Bean
     fun kokiAuthentication(): KokiAuthentication {
-        return KokiAuthentication(urlBuilder(), rest())
+        return KokiAuthentication(urlBuilder(), restForAuthentication())
     }
 
     @Bean
@@ -122,7 +122,7 @@ class KokiSDKConfiguration(
 
     @Bean
     fun kokiRefData(): KokiRefData {
-        return KokiRefData(urlBuilder(), rest())
+        return KokiRefData(urlBuilder(), restWithoutTenantHeader())
     }
 
     @Bean
@@ -159,6 +159,14 @@ class KokiSDKConfiguration(
         RestTemplateBuilder().connectTimeout(Duration.ofMillis(connectionTimeout))
             .readTimeout(Duration.ofMillis(readTimeout)).interceptors(
                 debugRestInterceptor,
-                authorizationRestInterceptor,
+//                authorizationRestInterceptor,
+            ).build()
+
+    @Bean("RestForAuthentication")
+    fun restForAuthentication(): RestTemplate =
+        RestTemplateBuilder().connectTimeout(Duration.ofMillis(connectionTimeout))
+            .readTimeout(Duration.ofMillis(readTimeout)).interceptors(
+                tenantRestInterceptor,
+                debugRestInterceptor,
             ).build()
 }

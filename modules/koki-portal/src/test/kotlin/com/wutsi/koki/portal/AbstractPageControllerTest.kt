@@ -170,6 +170,10 @@ abstract class AbstractPageControllerTest {
     protected lateinit var restWithoutTenantHeader: RestTemplate
 
     @MockitoBean
+    @Qualifier("RestForAuthentication")
+    protected lateinit var restForAuthentication: RestTemplate
+
+    @MockitoBean
     protected lateinit var accessTokenHolder: AccessTokenHolder
 
     @MockitoBean
@@ -658,7 +662,7 @@ abstract class AbstractPageControllerTest {
                 SearchUnitResponse(RefDataFixtures.units),
                 HttpStatus.OK,
             )
-        ).whenever(rest)
+        ).whenever(restWithoutTenantHeader)
             .getForEntity(
                 any<String>(),
                 eq(SearchUnitResponse::class.java)
@@ -670,7 +674,7 @@ abstract class AbstractPageControllerTest {
                 SearchLocationResponse(RefDataFixtures.locations),
                 HttpStatus.OK,
             )
-        ).whenever(rest)
+        ).whenever(restWithoutTenantHeader)
             .getForEntity(
                 any<String>(),
                 eq(SearchLocationResponse::class.java)
@@ -682,7 +686,7 @@ abstract class AbstractPageControllerTest {
                 SearchCategoryResponse(RefDataFixtures.categories),
                 HttpStatus.OK,
             )
-        ).whenever(rest)
+        ).whenever(restWithoutTenantHeader)
             .getForEntity(
                 any<String>(),
                 eq(SearchCategoryResponse::class.java)
@@ -694,7 +698,7 @@ abstract class AbstractPageControllerTest {
                 SearchJuridictionResponse(RefDataFixtures.juridictions),
                 HttpStatus.OK,
             )
-        ).whenever(rest)
+        ).whenever(restWithoutTenantHeader)
             .getForEntity(
                 any<String>(),
                 eq(SearchJuridictionResponse::class.java)
@@ -706,7 +710,7 @@ abstract class AbstractPageControllerTest {
                 SearchSalesTaxResponse(RefDataFixtures.salesTaxes),
                 HttpStatus.OK,
             )
-        ).whenever(rest)
+        ).whenever(restWithoutTenantHeader)
             .getForEntity(
                 any<String>(),
                 eq(SearchSalesTaxResponse::class.java)

@@ -28,7 +28,7 @@ LoginControllerTest : AbstractPageControllerTest() {
                 LoginResponse(accessToken),
                 HttpStatus.OK,
             )
-        ).whenever(rest)
+        ).whenever(restForAuthentication)
             .postForEntity(
                 eq("$sdkBaseUrl/v1/auth/login"),
                 any<LoginRequest>(),
@@ -47,7 +47,7 @@ LoginControllerTest : AbstractPageControllerTest() {
         input("#password", "secret")
         click("BUTTON")
 
-        verify(rest).postForEntity(
+        verify(restForAuthentication).postForEntity(
             "$sdkBaseUrl/v1/auth/login",
             LoginRequest(
                 username = "ray.sponsible",
@@ -67,7 +67,7 @@ LoginControllerTest : AbstractPageControllerTest() {
     fun `login failure`() {
         // GIVEN
         val ex = createHttpClientErrorException(409, ErrorCode.AUTHENTICATION_FAILED)
-        doThrow(ex).whenever(rest).postForEntity(
+        doThrow(ex).whenever(restForAuthentication).postForEntity(
             eq("$sdkBaseUrl/v1/auth/login"),
             any<LoginRequest>(),
             eq(LoginResponse::class.java)
@@ -82,7 +82,7 @@ LoginControllerTest : AbstractPageControllerTest() {
         input("#password", "secret")
         click("BUTTON")
 
-        verify(rest).postForEntity(
+        verify(restForAuthentication).postForEntity(
             "$sdkBaseUrl/v1/auth/login",
             LoginRequest(
                 username = "ray.sponsible",
@@ -111,7 +111,7 @@ LoginControllerTest : AbstractPageControllerTest() {
         input("#password", "secret")
         click("BUTTON")
 
-        verify(rest).postForEntity(
+        verify(restForAuthentication).postForEntity(
             "$sdkBaseUrl/v1/auth/login",
             LoginRequest(
                 username = "ray.sponsible",

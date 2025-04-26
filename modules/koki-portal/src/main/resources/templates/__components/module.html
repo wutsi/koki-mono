@@ -17,6 +17,7 @@
                 th:classappend="!${showDetails} AND ${it.index == 0} ? 'active'"
                 th:data-bs-target="'#pills-' + ${tab.name}"
                 th:id="'pills-' + ${tab.name} + '-tab'"
+                th:if="${tab.tabUrl}"
                 th:text="${tab.title}"
                 type="button">
             TAB
@@ -36,7 +37,7 @@
          th:data-url="${tab.toTabUrl(ownerEntity.id, ownerModule, ownerEntity.readOnly)}"
          th:each="tab,it : ${page.tabs.get(name)}"
          th:id="'pills-' + ${tab.name}"
-         th:if="${tab.homeUrl}"
+         th:if="${tab.tabUrl}"
     >
     </div>
 

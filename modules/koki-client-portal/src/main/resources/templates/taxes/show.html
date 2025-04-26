@@ -38,7 +38,7 @@
                     <div data-callback="filesCallback"
                          data-component-id="ajax-fragment"
                          id="file-container"
-                         th:data-url="'/files/tab?owner-type=TAX&owner-id=' + ${tax.id}">
+                         th:data-url="'/files/tab?owner-type=TAX&owner-id=' + ${tax.id} + '&read-only=' + ${tax.readOnly}">
                     </div>
                 </div>
             </div>

@@ -79,4 +79,12 @@ class ListInvoiceControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.ERROR_403)
     }
+
+    @Test
+    fun `login required`() {
+        setUpAnonymousUser()
+
+        navigateTo("/invoices")
+        assertCurrentPageIs(PageName.LOGIN)
+    }
 }

@@ -61,7 +61,7 @@ class DownloadInvoiceControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun anonymous() {
+    fun `login required`() {
         setUpAnonymousUser()
 
         navigateTo("/invoices/${invoice.id}/download")

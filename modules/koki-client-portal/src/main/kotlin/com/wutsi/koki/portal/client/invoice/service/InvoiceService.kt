@@ -37,6 +37,6 @@ class InvoiceService(
     }
 
     fun pdfUrl(id: Long): String {
-        return koki.url(id)
+        return koki.pdfUrl(id)
     }
 }
