@@ -5,6 +5,7 @@ import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.payment.form.PaymentSettingsCheckForm
 import com.wutsi.koki.portal.security.RequiresPermission
+import com.wutsi.koki.portal.tenant.service.BusinessService
 import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import org.springframework.stereotype.Controller
@@ -17,7 +18,8 @@ import org.springframework.web.client.HttpClientErrorException
 @Controller
 @RequiresPermission(["payment:admin"])
 class SettingsPaymentCheckController(
-    private val service: ConfigurationService
+    private val service: ConfigurationService,
+    private val businessService: BusinessService,
 ) : AbstractPageController() {
 
     @GetMapping("/settings/payments/check")
@@ -25,7 +27,7 @@ class SettingsPaymentCheckController(
         val configs = service.configurations(keyword = "payment.")
 
         val form = PaymentSettingsCheckForm(
-            payee = configs[ConfigurationName.PAYMENT_METHOD_CHECK_PAYEE],
+            payee = configs[ConfigurationName.PAYMENT_METHOD_CHECK_PAYEE] ?: getDefaultPayee(),
             instructions = configs[ConfigurationName.PAYMENT_METHOD_CHECK_INSTRUCTIONS],
         )
 
@@ -55,4 +57,13 @@ class SettingsPaymentCheckController(
             return edit(form, model)
         }
     }
+
+    private fun getDefaultPayee(): String? {
+        return try {
+            businessService.business().companyName
+        } catch (ex: Exception) {
+            null
+        }
+    }
+
 }

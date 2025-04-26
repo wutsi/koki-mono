@@ -64,7 +64,7 @@ class KokiInvoices(
         rest.postForEntity(url, request, Any::class.java)
     }
 
-    fun url(id: Long): String {
+    fun pdfUrl(id: Long): String {
         return urlBuilder.build("$INVOICE_PATH_PREFIX/pdf/${tenantProvider.id()}.$id.pdf")
     }
 

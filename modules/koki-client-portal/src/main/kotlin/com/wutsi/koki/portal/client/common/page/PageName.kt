@@ -7,6 +7,9 @@ object PageName {
     const val ERROR_SUSPENDED = "page.error.suspended"
     const val ERROR_UNDER_CONSTRUCTION = "page.error.under-construction"
 
+    const val FILE_LIST = "page.list"
+    const val FILE_TAB = "page.tab"
+
     val HOME: String = "page.home"
 
     val INVITATION: String = "page.invitation"

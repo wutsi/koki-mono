@@ -35,7 +35,9 @@
          th:classappend="!${showDetails} AND ${it.index == 0} ? 'show active'"
          th:data-url="${tab.toTabUrl(ownerEntity.id, ownerModule, ownerEntity.readOnly)}"
          th:each="tab,it : ${page.tabs.get(name)}"
-         th:id="'pills-' + ${tab.name}">
+         th:id="'pills-' + ${tab.name}"
+         th:if="${tab.homeUrl}"
+    >
     </div>
 
     <script th:if="${showDetails}" th:inline="javascript">

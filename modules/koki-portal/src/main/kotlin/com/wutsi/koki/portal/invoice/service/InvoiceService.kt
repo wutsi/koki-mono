@@ -241,8 +241,8 @@ class InvoiceService(
         )
     }
 
-    fun url(id: Long): String {
-        return koki.url(id)
+    fun pdfUrl(id: Long): String {
+        return koki.pdfUrl(id)
     }
 
     fun send(id: Long) {

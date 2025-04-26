@@ -31,8 +31,26 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div data-callback="filesCallback"
+                         data-component-id="ajax-fragment"
+                         id="file-container"
+                         th:data-url="'/files/tab?owner-type=TAX&owner-id=' + ${tax.id}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
+<script>
+    function filesCallback() {
+        kokiFiles.initTab();
+    }
+</script>
 </body>
 
 </html>

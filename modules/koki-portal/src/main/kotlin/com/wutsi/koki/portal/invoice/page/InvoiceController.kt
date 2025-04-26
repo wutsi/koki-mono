@@ -113,7 +113,7 @@ class InvoiceController(
         headers.contentType = MediaType.APPLICATION_PDF
         headers.setContentDispositionFormData(filename, filename)
 
-        val url = service.url(id)
+        val url = service.pdfUrl(id)
         val output = ByteArrayOutputStream()
         URL(url).openStream().use { input ->
             IOUtils.copy(input, output)

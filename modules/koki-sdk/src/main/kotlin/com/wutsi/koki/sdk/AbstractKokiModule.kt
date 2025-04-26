@@ -1,6 +1,5 @@
 package com.wutsi.koki.sdk
 
-import com.wutsi.koki.common.dto.ImportResponse
 import org.apache.commons.io.IOUtils
 import org.springframework.http.ContentDisposition
 import org.springframework.http.HttpEntity
@@ -15,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile
 abstract class AbstractKokiModule(
     protected val rest: RestTemplate,
 ) {
-    protected fun upload(url: String, file: MultipartFile): ImportResponse {
+    protected fun <T> upload(url: String, file: MultipartFile, responseType: Class<T>): T {
         val headers = HttpHeaders()
         headers.contentType = MediaType.MULTIPART_FORM_DATA
 
@@ -36,7 +35,7 @@ abstract class AbstractKokiModule(
             url,
             HttpMethod.POST,
             requestEntity,
-            ImportResponse::class.java,
-        ).body!!
+            responseType,
+        ).body
     }
 }

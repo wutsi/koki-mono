@@ -23,7 +23,6 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.tenant.dto.SearchTenantResponse
-import org.bouncycastle.pqc.legacy.math.linearalgebra.PolynomialRingGF2.rest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import kotlin.test.Ignore

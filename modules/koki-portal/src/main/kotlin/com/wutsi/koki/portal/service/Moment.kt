@@ -56,7 +56,7 @@ class Moment(
             return getMessage("moment.tomorrow")
         } else if (days > -7L) {
             return getMessage("moment.ago_days", arrayOf(-days))
-        } else if (days < 7L) {
+        } else if (days > 1 && days < 7L) {
             return getMessage("moment.in_days", arrayOf(days))
         } else if (weeks >= -4L) {
             return getMessage("moment.ago_weeks", arrayOf(-weeks))

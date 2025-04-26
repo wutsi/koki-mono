@@ -99,7 +99,7 @@ class KokiAccounts(
 
     fun uploadAttributes(file: MultipartFile): ImportResponse {
         val url = urlBuilder.build("$ATTRIBUTE_PATH_PREFIX/csv")
-        return upload(url, file)
+        return upload(url, file, ImportResponse::class.java)
     }
 
     fun createUser(request: CreateAccountUserRequest): CreateAccountUserResponse {

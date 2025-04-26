@@ -49,6 +49,6 @@ class KokiTypes(
                 "object-type" to objectType,
             )
         )
-        return upload(url, file)
+        return upload(url, file, ImportResponse::class.java)
     }
 }

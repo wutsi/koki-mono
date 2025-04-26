@@ -9,6 +9,7 @@ import com.wutsi.koki.account.dto.GetAccountResponse
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.client.AbstractPageControllerTest
 import com.wutsi.koki.portal.client.AccountFixtures.account
+import com.wutsi.koki.portal.client.FileFixtures.files
 import com.wutsi.koki.portal.client.TaxFixtures.tax
 import com.wutsi.koki.portal.client.common.page.PageName
 import com.wutsi.koki.tax.dto.GetTaxResponse
@@ -22,6 +23,9 @@ class TaxControllerTest : AbstractPageControllerTest() {
         navigateTo("/taxes/${tax.id}")
 
         assertCurrentPageIs(PageName.TAX)
+
+        Thread.sleep(1000)
+        assertElementCount(".tab-files tr.file", files.size)
     }
 
     @Test
@@ -29,7 +33,6 @@ class TaxControllerTest : AbstractPageControllerTest() {
         disableModule("tax")
 
         navigateTo("/taxes/${tax.id}")
-
         assertCurrentPageIs(PageName.ERROR_403)
     }
 
@@ -58,7 +61,6 @@ class TaxControllerTest : AbstractPageControllerTest() {
             )
 
         navigateTo("/taxes/${tax.id}")
-
         assertCurrentPageIs(PageName.ERROR_403)
     }
 
@@ -73,14 +75,12 @@ class TaxControllerTest : AbstractPageControllerTest() {
             )
 
         navigateTo("/taxes/${tax.id}")
-
         assertCurrentPageIs(PageName.ERROR_404)
     }
 
     @Test
     fun `invalid id`() {
         navigateTo("/taxes/four-hundred")
-
         assertCurrentPageIs(PageName.ERROR_404)
     }
 

@@ -62,14 +62,10 @@ class FileService(
     fun uploadUrl(
         ownerId: Long? = null,
         ownerType: ObjectType? = null,
-        workflowInstanceId: String? = null,
-        formId: String? = null,
     ): String {
         return koki.uploadUrl(
             ownerId = ownerId,
             ownerType = ownerType,
-            workflowInstanceId = workflowInstanceId,
-            formId = formId
         )
     }
 
