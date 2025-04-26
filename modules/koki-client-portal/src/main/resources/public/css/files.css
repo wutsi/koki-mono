@@ -1,7 +1,8 @@
 .dropzone {
-    min-height: auto !important;
+    background: #f8f8f8;
     border: 1px solid gray !important;
     border-radius: 0 !important;
+    min-height: auto !important;
     padding: 1em !important;
 }
 

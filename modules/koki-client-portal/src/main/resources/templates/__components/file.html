@@ -5,7 +5,7 @@
 <span th:class="'fiv-viv fiv-icon-' + ${file.extension}" th:fragment="file-icon(file)">
 </span>
 
-<tr class="file" th:fragment="columns(file)" th:id="'file-' + ${file.id}" th:remove="tag">
+<tr class="file" th:fragment="columns(file, readOnly)" th:id="'file-' + ${file.id}" th:remove="tag">
     <td>
         <div th:replace="~{__components/file :: file-icon(${file})}"></div>
     </td>
@@ -21,6 +21,7 @@
         <a class="btn-delete btn btn-sm btn-danger margin-left"
            onclick="return confirm('Are you sure you want to delete the file?')"
            th:href="'javascript: kokiFiles.delete(' + ${file.id} + ')'"
+           th:if="!${readOnly}"
         >
             Delete
         </a>
