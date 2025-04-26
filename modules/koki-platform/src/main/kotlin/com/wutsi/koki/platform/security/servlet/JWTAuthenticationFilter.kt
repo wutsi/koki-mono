@@ -1,7 +1,6 @@
 package com.wutsi.koki.platform.security.servlet
 
 import com.auth0.jwt.exceptions.TokenExpiredException
-import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.platform.security.AccessTokenHolder
 import com.wutsi.koki.platform.security.JWTAuthentication
 import com.wutsi.koki.security.dto.JWTDecoder
@@ -12,7 +11,6 @@ import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
-import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.context.SecurityContextImpl
 
