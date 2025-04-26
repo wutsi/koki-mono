@@ -25,6 +25,7 @@ class FileTabController(
     fun list(
         @RequestParam(name = "owner-id") ownerId: Long,
         @RequestParam(name = "owner-type") ownerType: ObjectType,
+        @RequestParam(required = false, name = "read-only") readOnly: Boolean? = null,
         @RequestParam(required = false, name = "test-mode") testMode: String? = null,
         model: Model
     ): String {
@@ -39,7 +40,7 @@ class FileTabController(
                 title = "Files",
             )
         )
-        more(ownerId, ownerType, model = model)
+        more(ownerId, ownerType, readOnly = readOnly, model = model)
         return "files/tab/list"
     }
 
@@ -47,6 +48,7 @@ class FileTabController(
     fun more(
         @RequestParam(required = false, name = "owner-id") ownerId: Long,
         @RequestParam(required = false, name = "owner-type") ownerType: ObjectType,
+        @RequestParam(required = false, name = "read-only") readOnly: Boolean? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model
@@ -59,6 +61,7 @@ class FileTabController(
         )
         model.addAttribute("ownerId", ownerId)
         model.addAttribute("ownerType", ownerType)
+        model.addAttribute("readOnly", readOnly)
         if (files.isNotEmpty()) {
             model.addAttribute("files", files)
 

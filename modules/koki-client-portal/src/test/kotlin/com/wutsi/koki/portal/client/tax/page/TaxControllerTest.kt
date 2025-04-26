@@ -85,7 +85,7 @@ class TaxControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun anonymous() {
+    fun `login required`() {
         setUpAnonymousUser()
 
         navigateTo("/taxes/${tax.id}")

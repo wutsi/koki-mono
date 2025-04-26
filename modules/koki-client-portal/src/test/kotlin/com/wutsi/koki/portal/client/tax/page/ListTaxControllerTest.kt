@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.portal.client.AbstractPageControllerTest
+import com.wutsi.koki.portal.client.TaxFixtures.tax
 import com.wutsi.koki.portal.client.TaxFixtures.taxes
 import com.wutsi.koki.portal.client.common.page.PageName
 import com.wutsi.koki.tax.dto.SearchTaxResponse
@@ -73,5 +74,13 @@ class ListTaxControllerTest : AbstractPageControllerTest() {
         navigateTo("/taxes")
 
         assertCurrentPageIs(PageName.ERROR_403)
+    }
+
+    @Test
+    fun `login required`() {
+        setUpAnonymousUser()
+
+        navigateTo("/taxes")
+        assertCurrentPageIs(PageName.LOGIN)
     }
 }

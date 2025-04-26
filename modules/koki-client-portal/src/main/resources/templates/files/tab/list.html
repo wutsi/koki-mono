@@ -4,6 +4,7 @@
          data-target-id="file-list"
          id="dropzone"
          th:data-upload-url="${uploadUrl}"
+         th:if="!${readOnly}"
     >
     </div>
 
@@ -26,7 +27,7 @@
         </thead>
         <tbody id="file-list" th:data-owner-id="${ownerId}" th:data-owner-type="${ownerType}">
         <tr class="file" th:each="file : ${files}" th:id="'file-' + ${file.id}" th:if="${files}">
-            <td th:replace="~{__components/file :: columns(${file})}"></td>
+            <td th:replace="~{__components/file :: columns(${file}, ${readOnly})}"></td>
         </tr>
         <tr th:if="${files}" th:replace="~{__components/file :: load-more(${moreUrl})}"></tr>
         </tbody>

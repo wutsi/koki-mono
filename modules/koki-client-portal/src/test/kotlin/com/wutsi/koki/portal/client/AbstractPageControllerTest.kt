@@ -15,13 +15,12 @@ import com.wutsi.koki.account.dto.GetAccountResponse
 import com.wutsi.koki.account.dto.GetAccountUserResponse
 import com.wutsi.koki.account.dto.GetInvitationResponse
 import com.wutsi.koki.account.dto.SearchAccountResponse
-import com.wutsi.koki.common.dto.ImportMessage
-import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.file.dto.SearchFileResponse
+import com.wutsi.koki.file.dto.UploadFileResponse
 import com.wutsi.koki.invoice.dto.SearchInvoiceResponse
 import com.wutsi.koki.module.dto.SearchModuleResponse
 import com.wutsi.koki.platform.security.AccessTokenHolder
@@ -101,6 +100,10 @@ abstract class AbstractPageControllerTest {
     protected lateinit var restWithoutTenantHeader: RestTemplate
 
     @MockitoBean
+    @Qualifier("RestForAuthentication")
+    protected lateinit var restForAuthentication: RestTemplate
+
+    @MockitoBean
     protected lateinit var accessTokenHolder: AccessTokenHolder
 
     @MockitoBean
@@ -160,36 +163,13 @@ abstract class AbstractPageControllerTest {
     }
 
     private fun setupDefaultApiResponses() {
-        setupFileUploads()
+        setupFileModule()
         setupModuleModule()
         setupTenantModule()
         setupUserModule()
         setupAccountModule()
         setupInvoiceModule()
         setupTaxModule()
-    }
-
-    protected fun setupFileUploads() {
-        doReturn(
-            ResponseEntity(
-                ImportResponse(
-                    added = 4,
-                    updated = 5,
-                    errors = 3,
-                    errorMessages = listOf(
-                        ImportMessage(location = "1", code = "INVALID_NAME"),
-                        ImportMessage(location = "2", code = "INVALID_ADDRESS", "LocationModel is not valid"),
-                    )
-                ),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .exchange(
-                any<String>(),
-                any<HttpMethod>(),
-                any(),
-                any<Class<ImportResponse>>(),
-            )
     }
 
     protected fun setupModuleModule() {
@@ -402,6 +382,22 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(GetFileResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                UploadFileResponse(
+                    id = 120923009,
+                    name = "Foo.pdf",
+                ),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .exchange(
+                any<String>(),
+                any<HttpMethod>(),
+                any(),
+                any<Class<UploadFileResponse>>(),
             )
     }
 

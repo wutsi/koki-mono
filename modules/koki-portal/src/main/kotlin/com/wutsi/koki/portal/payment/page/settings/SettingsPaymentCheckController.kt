@@ -65,5 +65,4 @@ class SettingsPaymentCheckController(
             null
         }
     }
-
 }
