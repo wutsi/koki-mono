@@ -239,8 +239,8 @@ class TaxNotificationWorker(
                 data = mapOf(
                     "recipientName" to account.name,
                     "taxFiscalYear" to tax.fiscalYear,
-                    "clientPortalUrl" to tenant.portalUrl,
-                ),
+                    "clientPortalUrl" to tenant.clientPortalUrl,
+                ).filter { entry -> entry.value != null } as Map<String, Any>,
 
                 attachmentFileIds = getFormFile(event, account.language)
                     ?.let { file -> listOf(file.id!!) }
