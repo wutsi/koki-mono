@@ -2,6 +2,7 @@ package com.wutsi.koki.security.server.service
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.lowagie.text.pdf.PdfPKCS7.getAlgorithm
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
 import org.apache.commons.lang3.time.DateUtils
@@ -11,10 +12,9 @@ import java.util.Date
 
 @Service
 open class AccessTokenService(
+    private val jwtDecoder: JWTDecoder,
     @Value("\${koki.module.security.access-token.ttl}") private val ttl: Int,
 ) {
-    private val jwtDecoder = JWTDecoder()
-
     fun create(
         application: String,
         userId: Long,
