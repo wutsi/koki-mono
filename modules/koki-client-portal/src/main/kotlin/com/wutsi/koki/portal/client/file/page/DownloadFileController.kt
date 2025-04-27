@@ -9,6 +9,7 @@ import com.wutsi.koki.portal.client.file.service.FileService
 import com.wutsi.koki.portal.client.security.RequiresModule
 import com.wutsi.koki.portal.client.tax.service.TaxService
 import jakarta.servlet.http.HttpServletResponse
+import org.apache.commons.io.IOUtils
 import org.springframework.http.ContentDisposition
 import org.springframework.http.HttpHeaders
 import org.springframework.web.bind.annotation.GetMapping
@@ -72,17 +73,8 @@ class DownloadFileController(
                     .toString()
             )
 
-            val buff = ByteArray(1024 * 1024) // 1Mb
             val input = FileInputStream(f)
-            input.use { input ->
-                response.outputStream.use { output ->
-                    var bytes = input.read(buff)
-                    while (bytes > 0) {
-                        output.write(buff, 0, bytes)
-                        bytes = input.read(buff)
-                    }
-                }
-            }
+            input.use { input -> IOUtils.copy(input, response.outputStream) }
         } finally {
             f.delete()
         }
