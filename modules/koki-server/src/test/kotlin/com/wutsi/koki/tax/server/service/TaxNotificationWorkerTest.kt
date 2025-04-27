@@ -287,7 +287,7 @@ class TaxNotificationWorkerTest {
 
         assertEquals(account.name, request.firstValue.data["recipientName"])
         assertEquals(tax.fiscalYear, request.firstValue.data["taxFiscalYear"])
-        assertEquals(tenant.portalUrl, request.firstValue.data["clientPortalUrl"])
+        assertEquals(tenant.clientPortalUrl, request.firstValue.data["clientPortalUrl"])
     }
 
     @Test
@@ -317,7 +317,7 @@ class TaxNotificationWorkerTest {
 
         assertEquals(account.name, request.firstValue.data["recipientName"])
         assertEquals(tax.fiscalYear, request.firstValue.data["taxFiscalYear"])
-        assertEquals(tenant.portalUrl, request.firstValue.data["clientPortalUrl"])
+        assertEquals(tenant.clientPortalUrl, request.firstValue.data["clientPortalUrl"])
     }
 
     @Test
@@ -404,7 +404,7 @@ class TaxNotificationWorkerTest {
 
         assertEquals(account.name, request.firstValue.data["recipientName"])
         assertEquals(tax.fiscalYear, request.firstValue.data["taxFiscalYear"])
-        assertEquals(tenant.portalUrl, request.firstValue.data["clientPortalUrl"])
+        assertEquals(tenant.clientPortalUrl, request.firstValue.data["clientPortalUrl"])
     }
 
     @Test
