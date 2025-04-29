@@ -4,8 +4,10 @@ import java.util.Date
 
 data class User(
     val id: Long = -1,
+    var username: String = "",
     val email: String = "",
     val status: UserStatus = UserStatus.ACTIVE,
+    val type: UserType = UserType.UNKNOWN,
     val displayName: String = "",
     val language: String? = null,
     val roleIds: List<Long> = emptyList(),

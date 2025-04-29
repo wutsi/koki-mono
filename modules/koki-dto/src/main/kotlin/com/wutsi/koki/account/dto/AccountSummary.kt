@@ -8,7 +8,7 @@ data class AccountSummary(
     val name: String = "",
     val phone: String? = null,
     val mobile: String? = null,
-    val email: String? = null,
+    val email: String = "",
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
     val createdById: Long? = null,

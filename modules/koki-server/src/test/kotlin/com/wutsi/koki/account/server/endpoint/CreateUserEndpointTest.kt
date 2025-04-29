@@ -11,7 +11,10 @@ import com.wutsi.koki.account.server.dao.AccountRepository
 import com.wutsi.koki.account.server.dao.AccountUserRepository
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
+import com.wutsi.koki.tenant.dto.UserType
+import com.wutsi.koki.tenant.server.dao.UserRepository
 import com.wutsi.koki.tenant.server.service.PasswordService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -25,7 +28,7 @@ import kotlin.test.assertNotNull
 @Sql(value = ["/db/test/clean.sql", "/db/test/account/CreateAccountUserEndpoint.sql"])
 class CreateAccountUserEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
-    private lateinit var dao: AccountUserRepository
+    private lateinit var dao: UserRepository
 
     @Autowired
     private lateinit var accountDao: AccountRepository
@@ -33,11 +36,12 @@ class CreateAccountUserEndpointTest : AuthorizationAwareEndpointTest() {
     @MockitoBean
     private lateinit var passwordService: PasswordService
 
-    val request = CreateAccountUserRequest(
-        accountId = 100,
+    val request = CreateUserRequest(
         username = "ray.sponsible",
         password = "secret",
         status = UserStatus.ACTIVE,
+        type = UserType.EMPLOYEE,
+        displayName = "Yo Man",
     )
 
     @BeforeEach

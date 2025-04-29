@@ -9,7 +9,7 @@ data class Account(
     val name: String = "",
     val phone: String? = null,
     val mobile: String? = null,
-    val email: String? = null,
+    val email: String = "",
     val website: String? = null,
     val language: String? = null,
     val description: String? = null,
@@ -22,6 +22,6 @@ data class Account(
     val shippingAddress: Address? = null,
     val billingAddress: Address? = null,
     val billingSameAsShippingAddress: Boolean = false,
-    val accountUserId: Long? = null,
     val invitationId: String? = null,
+    val userId: Long? = null,
 )

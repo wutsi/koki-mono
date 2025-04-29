@@ -10,7 +10,7 @@ data class UpdateAccountRequest(
     @get:NotEmpty @get:Size(max = 100) val name: String = "",
     @get:Size(max = 30) val phone: String? = null,
     @get:Size(max = 30) val mobile: String? = null,
-    @get:Email @get:Size(max = 255) val email: String? = null,
+    @get:NotEmpty @get:Email @get:Size(max = 255) val email: String = "",
     @get:Size(max = 2) val language: String? = null,
 
     val website: String? = null,
