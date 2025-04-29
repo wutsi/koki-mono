@@ -2,12 +2,11 @@ package com.wutsi.koki.sdk
 
 import com.wutsi.koki.account.dto.CreateAccountRequest
 import com.wutsi.koki.account.dto.CreateAccountResponse
-import com.wutsi.koki.account.dto.CreateAccountUserRequest
-import com.wutsi.koki.account.dto.CreateAccountUserResponse
 import com.wutsi.koki.account.dto.CreateInvitationRequest
 import com.wutsi.koki.account.dto.CreateInvitationResponse
+import com.wutsi.koki.account.dto.CreateUserRequest
+import com.wutsi.koki.account.dto.CreateUserResponse
 import com.wutsi.koki.account.dto.GetAccountResponse
-import com.wutsi.koki.account.dto.GetAccountUserResponse
 import com.wutsi.koki.account.dto.GetAttributeResponse
 import com.wutsi.koki.account.dto.GetInvitationResponse
 import com.wutsi.koki.account.dto.SearchAccountResponse
@@ -23,7 +22,6 @@ class KokiAccounts(
 ) : AbstractKokiModule(rest) {
     companion object {
         private const val ACCOUNT_PATH_PREFIX = "/v1/accounts"
-        private const val ACCOUNT_USER_PATH_PREFIX = "/v1/account-users"
         private const val ATTRIBUTE_PATH_PREFIX = "/v1/attributes"
         private const val INVITATION_PATH_PREFIX = "/v1/invitations"
     }
@@ -54,6 +52,7 @@ class KokiAccounts(
         accountTypeIds: List<Long>,
         managedByIds: List<Long>,
         createdByIds: List<Long>,
+        userIds: List<Long>,
         limit: Int,
         offset: Int,
     ): SearchAccountResponse {
@@ -65,6 +64,7 @@ class KokiAccounts(
                 "account-type-id" to accountTypeIds,
                 "managed-by-id" to managedByIds,
                 "created-by-id" to createdByIds,
+                "user-id" to userIds,
                 "limit" to limit,
                 "offset" to offset,
             )
@@ -102,19 +102,9 @@ class KokiAccounts(
         return upload(url, file, ImportResponse::class.java)
     }
 
-    fun createUser(request: CreateAccountUserRequest): CreateAccountUserResponse {
-        val url = urlBuilder.build(ACCOUNT_USER_PATH_PREFIX)
-        return rest.postForEntity(url, request, CreateAccountUserResponse::class.java).body
-    }
-
-    fun updateUser(id: Long, request: UpdateAccountRequest) {
-        val url = urlBuilder.build("$ACCOUNT_USER_PATH_PREFIX/$id")
-        rest.postForEntity(url, request, Any::class.java)
-    }
-
-    fun user(id: Long): GetAccountUserResponse {
-        val url = urlBuilder.build("$ACCOUNT_USER_PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetAccountUserResponse::class.java).body
+    fun createUser(accountId: Long, request: CreateUserRequest): CreateUserResponse {
+        val url = urlBuilder.build("$ACCOUNT_PATH_PREFIX/$accountId/user")
+        return rest.postForEntity(url, request, CreateUserResponse::class.java).body
     }
 
     fun createInvitation(request: CreateInvitationRequest): CreateInvitationResponse {
