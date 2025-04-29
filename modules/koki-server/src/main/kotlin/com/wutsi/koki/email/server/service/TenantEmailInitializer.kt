@@ -8,20 +8,20 @@ import org.springframework.stereotype.Service
 
 @Service
 class TenantEmailInitializer : AbstractTenantModuleInitializer() {
-    override fun init(tenatId: Long) {
+    override fun init(tenantId: Long) {
         setConfigurationIfMissing(
             name = ConfigurationName.EMAIL_DECORATOR,
             value = IOUtils.toString(
                 TenantEmailInitializer::class.java.getResourceAsStream("/email/decorator.html"),
                 "utf-8"
             ),
-            tenantId = tenatId
+            tenantId = tenantId
         )
 
         setConfigurationIfMissing(
             name = ConfigurationName.SMTP_TYPE,
             value = SMTPType.KOKI.name,
-            tenantId = tenatId
+            tenantId = tenantId
         )
     }
 }

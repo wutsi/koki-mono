@@ -43,7 +43,7 @@ class AccountNotificationWorker(
 
         val invitation = invitationService.get(event.invitationId, event.tenantId)
         val account = accountService.get(invitation.accountId, event.tenantId)
-        if (account.accountUserId != null) {
+        if (account.userId != null) {
             logger.add("email_skipped_reason", "AccountHasUser")
             return
         }

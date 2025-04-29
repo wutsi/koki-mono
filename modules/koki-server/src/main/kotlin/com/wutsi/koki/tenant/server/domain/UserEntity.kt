@@ -1,6 +1,7 @@
 package com.wutsi.koki.tenant.server.domain
 
 import com.wutsi.koki.tenant.dto.UserStatus
+import com.wutsi.koki.tenant.dto.UserType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -29,10 +30,12 @@ data class UserEntity(
     @Column(name = "modified_by_fk")
     var modifiedById: Long? = null,
 
+    var username: String = "",
     var email: String = "",
     val password: String = "",
     val salt: String = "",
     var status: UserStatus = UserStatus.ACTIVE,
+    val type: UserType = UserType.UNKNOWN,
     var displayName: String = "",
     var language: String? = null,
     val createdAt: Date = Date(),

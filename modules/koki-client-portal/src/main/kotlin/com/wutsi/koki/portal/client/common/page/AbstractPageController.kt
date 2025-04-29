@@ -2,10 +2,10 @@ package com.wutsi.koki.portal.client.common.page
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.portal.client.account.model.AccountUserModel
 import com.wutsi.koki.portal.client.common.model.PageModel
 import com.wutsi.koki.portal.client.security.service.CurrentUserHolder
 import com.wutsi.koki.portal.client.tenant.service.CurrentTenantHolder
+import com.wutsi.koki.portal.client.user.model.UserModel
 import com.wutsi.koki.portal.tenant.model.TenantModel
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -26,7 +26,7 @@ abstract class AbstractPageController {
     protected lateinit var tenantHolder: CurrentTenantHolder
 
     @ModelAttribute("user")
-    fun getUser(): AccountUserModel? {
+    fun getUser(): UserModel? {
         return userHolder.get()
     }
 

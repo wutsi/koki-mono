@@ -21,7 +21,7 @@ class LoginEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun portal() {
         val request = LoginRequest(
-            username = "ray.sponsible@gmail.com",
+            username = "ray.sponsible",
             password = "secret",
             application = ApplicationName.PORTAL,
         )

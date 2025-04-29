@@ -39,6 +39,6 @@ class TaxController(
 
     private fun isOwner(tax: TaxModel): Boolean {
         val user = userHolder.get()
-        return tax.account.id == user?.account?.id
+        return tax.account.id == user?.accountId
     }
 }

@@ -2,10 +2,8 @@ package com.wutsi.koki.portal.client.account.mapper
 
 import com.wutsi.koki.account.dto.Account
 import com.wutsi.koki.account.dto.AccountSummary
-import com.wutsi.koki.account.dto.AccountUser
 import com.wutsi.koki.account.dto.Invitation
 import com.wutsi.koki.portal.client.account.model.AccountModel
-import com.wutsi.koki.portal.client.account.model.AccountUserModel
 import com.wutsi.koki.portal.client.account.model.InvitationModel
 import com.wutsi.koki.portal.client.common.mapper.TenantAwareMapper
 import org.springframework.stereotype.Service
@@ -23,24 +21,11 @@ class AccountMapper : TenantAwareMapper() {
         )
     }
 
-    fun toAccountUserModel(entity: AccountUser, account: Account): AccountUserModel {
-        val fmt = createDateTimeFormat()
-        return AccountUserModel(
-            id = entity.id,
-            account = toAccountModel(account),
-            username = entity.username,
-            status = entity.status,
-            createdAt = entity.createdAt,
-            createdAtText = fmt.format(entity.createdAt),
-            modifiedAt = entity.modifiedAt,
-            modifiedAtText = fmt.format(entity.modifiedAt),
-        )
-    }
-
     fun toAccountModel(entity: Account): AccountModel {
         val fmt = createDateTimeFormat()
         return AccountModel(
             id = entity.id,
+            userId = entity.userId,
             name = entity.name,
             email = entity.email,
             modifiedAt = entity.modifiedAt,
@@ -49,7 +34,6 @@ class AccountMapper : TenantAwareMapper() {
             createdAtText = fmt.format(entity.createdAt),
             language = entity.language,
             languageText = entity.language?.let { lang -> Locale(lang).displayName },
-            accountUserId = entity.accountUserId,
             invitationId = entity.invitationId,
         )
     }

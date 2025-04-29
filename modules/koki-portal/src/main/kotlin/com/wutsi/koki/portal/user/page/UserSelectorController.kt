@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.user.page
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.portal.user.service.UserService
+import com.wutsi.koki.tenant.dto.UserType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -23,6 +24,7 @@ class UserSelectorController(
             keyword = keyword,
             roleIds = roleId,
             permissions = permissions,
+            type = UserType.EMPLOYEE,
             limit = limit,
             offset = offset
         )

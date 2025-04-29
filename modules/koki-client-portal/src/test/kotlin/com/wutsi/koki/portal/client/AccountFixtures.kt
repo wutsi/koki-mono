@@ -2,7 +2,6 @@ package com.wutsi.koki.portal.client
 
 import com.wutsi.koki.account.dto.Account
 import com.wutsi.koki.account.dto.AccountSummary
-import com.wutsi.koki.account.dto.AccountUser
 import com.wutsi.koki.account.dto.Invitation
 import org.apache.commons.lang3.time.DateUtils
 import java.util.Date
@@ -35,20 +34,16 @@ object AccountFixtures {
         ),
     )
 
-    val accountUser = AccountUser(
-        id = 555L,
-        username = "ray.sponsible",
-        createdAt = DateUtils.addDays(Date(), -3),
-        modifiedAt = DateUtils.addDays(Date(), -3),
-    )
     val invitation = Invitation(
         id = UUID.randomUUID().toString(),
+        accountId = 100,
         createdAt = DateUtils.addDays(Date(), -1),
         createdById = UserFixtures.user.id,
     )
+
     val account = Account(
         id = 100,
-        accountUserId = accountUser.id,
+        userId = UserFixtures.user.id,
         name = "Yahoo Inc",
         managedById = UserFixtures.users[0].id,
         email = "info@yahoo.com",

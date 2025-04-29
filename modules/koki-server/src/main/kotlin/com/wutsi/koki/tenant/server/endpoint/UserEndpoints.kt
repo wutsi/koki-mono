@@ -6,6 +6,7 @@ import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
+import com.wutsi.koki.tenant.dto.UserType
 import com.wutsi.koki.tenant.server.mapper.UserMapper
 import com.wutsi.koki.tenant.server.service.UserService
 import jakarta.validation.Valid
@@ -45,6 +46,7 @@ class UserEndpoints(
         @RequestParam(required = false, name = "role-id") roleId: List<Long> = emptyList(),
         @RequestParam(required = false, name = "permission") permissions: List<String> = emptyList(),
         @RequestParam(required = false) status: UserStatus? = null,
+        @RequestParam(required = false) type: UserType? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
     ): SearchUserResponse {
@@ -54,6 +56,7 @@ class UserEndpoints(
             roleIds = roleId,
             tenantId = tenantId,
             status = status,
+            type = type,
             permissions = permissions.map { permission -> URLDecoder.decode(permission, "utf-8") },
             limit = limit,
             offset = offset,

@@ -10,8 +10,10 @@ class UserMapper {
     fun toUser(entity: UserEntity) = User(
         id = entity.id!!,
         displayName = entity.displayName,
+        username = entity.username,
         email = entity.email,
         status = entity.status,
+        type = entity.type,
         createdAt = entity.createdAt,
         modifiedAt = entity.modifiedAt,
         roleIds = entity.roles.mapNotNull { role -> role.id },
@@ -21,8 +23,10 @@ class UserMapper {
     fun toUserSummary(entity: UserEntity) = UserSummary(
         id = entity.id!!,
         displayName = entity.displayName,
+        username = entity.username,
         email = entity.email,
         status = entity.status,
+        type = entity.type,
         createdAt = entity.createdAt,
         modifiedAt = entity.modifiedAt,
     )

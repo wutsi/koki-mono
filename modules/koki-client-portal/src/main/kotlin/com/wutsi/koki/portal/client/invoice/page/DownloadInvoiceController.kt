@@ -43,6 +43,6 @@ class DownloadInvoiceController(
 
     private fun isOwner(invoice: InvoiceModel): Boolean {
         val user = userHolder.get()
-        return invoice.customerAccountId == user?.account?.id
+        return invoice.customerAccountId == user?.accountId
     }
 }

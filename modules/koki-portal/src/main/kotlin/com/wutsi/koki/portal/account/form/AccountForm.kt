@@ -5,7 +5,7 @@ data class AccountForm(
     val name: String = "",
     val phone: String? = null,
     val mobile: String? = null,
-    val email: String? = null,
+    val email: String = "",
     val website: String? = null,
     val language: String? = null,
     val description: String? = null,

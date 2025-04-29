@@ -29,9 +29,9 @@ INSERT INTO T_SALES_TAX(id, juridiction_fk, name, rate, active)
           (2001, 237,  'VAT', 19.75, true),
           (2002, 237,  'VAT-old', 30.0, false);
 
-INSERT INTO T_TENANT(id, name, domain_name, locale, currency, portal_url)
-    VALUES (1, 'tenant-1', 'tenant-1.com', 'en_US', 'USD', 'https://tenant-1.com'),
-           (2, 'tenant-2', 'tenant-2.com', 'en_US', 'USD', 'https://tenant-1.com');
+INSERT INTO T_TENANT(id, name, domain_name, locale, currency, portal_url, client_portal_url)
+    VALUES (1, 'tenant-1', 'tenant-1.com', 'en_US', 'USD', 'https://tenant-1.com','https://client.tenant-1.com'),
+           (2, 'tenant-2', 'tenant-2.com', 'en_US', 'USD', 'https://tenant-1.com','https://client.tenant-1.com');
 
 INSERT INTO T_CONFIGURATION(tenant_fk, name, value)
     VALUES (1, 'payment.method.credit_card.enabled', '1'),

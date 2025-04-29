@@ -8,6 +8,7 @@ import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.user.service.RoleService
 import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.tenant.dto.UserStatus
+import com.wutsi.koki.tenant.dto.UserType
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -73,6 +74,7 @@ class SettingsListUserController(
         val users = service.users(
             roleIds = if (roleId == null || roleId == -1L) emptyList() else listOf(roleId),
             status = status,
+            type = UserType.EMPLOYEE,
             limit = limit,
             offset = offset
         )

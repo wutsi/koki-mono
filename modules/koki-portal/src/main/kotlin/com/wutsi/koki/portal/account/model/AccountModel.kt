@@ -11,7 +11,7 @@ data class AccountModel(
     val name: String = "",
     val phone: String? = null,
     val mobile: String? = null,
-    val email: String? = null,
+    val email: String = "",
     val website: String? = null,
     val language: String? = null,
     val languageText: String? = null,
@@ -28,6 +28,6 @@ data class AccountModel(
     val billingAddress: AddressModel? = null,
     val billingSameAsShippingAddress: Boolean = true,
     val readOnly: Boolean = false,
-    val accountUser: AccountUserModel? = null,
+    val user: UserModel? = null,
     val invitation: InvitationModel? = null,
 )

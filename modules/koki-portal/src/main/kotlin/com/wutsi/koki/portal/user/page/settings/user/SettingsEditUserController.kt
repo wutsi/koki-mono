@@ -29,6 +29,7 @@ class SettingsEditUserController(
         val user = service.user(id)
         val form = UserForm(
             displayName = user.displayName,
+            username = user.username,
             email = user.email,
             status = user.status,
             roleIds = user.roles.map { role -> role.id }

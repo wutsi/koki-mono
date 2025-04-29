@@ -29,7 +29,7 @@ class GetAccountEndpointTest : TenantAwareEndpointTest() {
         assertEquals(11L, account.createdById)
         assertEquals(12L, account.modifiedById)
         assertEquals(13L, account.managedById)
-        assertEquals(333L, account.accountUserId)
+        assertEquals(333L, account.userId)
         assertEquals("aaaa-bbbb", account.invitationId)
 
         assertEquals(2, account.attributes.size)

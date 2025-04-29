@@ -15,7 +15,7 @@ class LoginService(
     fun login(form: LoginForm) {
         val accessToken = kokiAuthentication.login(
             request = LoginRequest(
-                username = form.email,
+                username = form.username,
                 password = form.password,
                 application = ApplicationName.PORTAL,
             )

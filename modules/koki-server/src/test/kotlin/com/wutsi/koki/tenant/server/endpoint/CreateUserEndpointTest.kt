@@ -10,6 +10,7 @@ import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
 import com.wutsi.koki.tenant.dto.UserStatus
+import com.wutsi.koki.tenant.dto.UserType
 import com.wutsi.koki.tenant.server.dao.UserRepository
 import com.wutsi.koki.tenant.server.service.PasswordService
 import org.junit.jupiter.api.BeforeEach
@@ -63,11 +64,14 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun create() {
         val request = CreateUserRequest(
+            username = "thomas.nkono",
             email = "thomas.nkono@hotmail.com",
             displayName = "Thomas Nkono",
             password = "secret",
             roleIds = listOf(11L, 12L),
             language = "fr",
+            type = UserType.EMPLOYEE,
+            status = UserStatus.ACTIVE,
         )
 
         val result = rest.postForEntity("/v1/users", request, CreateUserResponse::class.java)
@@ -77,9 +81,11 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
         val userId = result.body!!.userId
         val user = dao.findById(userId).get()
         assertEquals(request.displayName, user.displayName)
+        assertEquals(request.username, user.username)
         assertEquals(request.email, user.email)
         assertEquals(request.language, user.language)
-        assertEquals(UserStatus.ACTIVE, user.status)
+        assertEquals(request.status, user.status)
+        assertEquals(request.type, user.type)
         assertEquals(36, user.salt.length)
         assertEquals(HASHED_PASSWORD, user.password)
         assertEquals(TENANT_ID, user.tenantId)
@@ -89,11 +95,14 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
-    fun `email is saved in lowercase`() {
+    fun `username and email is saved in lowercase`() {
         val request = CreateUserRequest(
-            email = "OMAM.MBIYICK@hotmail.com",
+            username = "OMAM.MBIYICK",
+            email = "OMAM.mbiyick@hotmail.com",
             displayName = "Omam Mbiyick",
             password = "secret",
+            type = UserType.EMPLOYEE,
+            status = UserStatus.ACTIVE,
         )
 
         val result = rest.postForEntity("/v1/users", request, CreateUserResponse::class.java)
@@ -102,15 +111,36 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
 
         val userId = result.body!!.userId
         val user = dao.findById(userId).get()
+        assertEquals(request.username.lowercase(), user.username)
         assertEquals(request.email.lowercase(), user.email)
+    }
+
+    @Test
+    fun `duplicate username`() {
+        val request = CreateUserRequest(
+            username = "RAY.sponsible",
+            email = "RAY00.sponsible@gmail.com",
+            displayName = "Ray",
+            password = "secret",
+            type = UserType.EMPLOYEE,
+            status = UserStatus.ACTIVE,
+        )
+
+        val result = rest.postForEntity("/v1/users", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.CONFLICT, result.statusCode)
+        assertEquals(ErrorCode.USER_DUPLICATE_USERNAME, result.body!!.error.code)
     }
 
     @Test
     fun `duplicate email`() {
         val request = CreateUserRequest(
+            username = "RAY00.sponsible",
             email = "RAY.sponsible@gmail.com",
             displayName = "Ray",
             password = "secret",
+            type = UserType.EMPLOYEE,
+            status = UserStatus.ACTIVE,
         )
 
         val result = rest.postForEntity("/v1/users", request, ErrorResponse::class.java)
@@ -122,9 +152,12 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun `same user on multiple tenant`() {
         val request = CreateUserRequest(
+            username = "roger.milla",
             email = "roger.milla@gmail.com",
             displayName = "Roger Milla",
             password = "secret",
+            type = UserType.EMPLOYEE,
+            status = UserStatus.SUSPENDED,
         )
 
         val result = rest.postForEntity("/v1/users", request, CreateUserResponse::class.java)
@@ -133,9 +166,11 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
 
         val userId = result.body!!.userId
         val user = dao.findById(userId).get()
+        assertEquals(request.username, user.username)
         assertEquals(request.displayName, user.displayName)
         assertEquals(request.email, user.email)
-        assertEquals(UserStatus.ACTIVE, user.status)
+        assertEquals(request.status, user.status)
+        assertEquals(request.type, user.type)
         assertEquals(36, user.salt.length)
         assertEquals(HASHED_PASSWORD, user.password)
         assertEquals(TENANT_ID, user.tenantId)

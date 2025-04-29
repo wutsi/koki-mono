@@ -1,5 +1,5 @@
-INSERT INTO T_USER(id, tenant_fk, email, password, display_name)
-    VALUES (21, 1, 'ray.sponsible@gmail.com', '---', 'Ray');
+INSERT INTO T_USER(id, tenant_fk, username, email, password, display_name)
+    VALUES (21, 1, 'ray.sponsible','ray.sponsible@gmail.com', '---', 'Ray');
 
 INSERT INTO T_ROLE(id, tenant_fk, name)
     VALUES (10, 1, 'admin'),

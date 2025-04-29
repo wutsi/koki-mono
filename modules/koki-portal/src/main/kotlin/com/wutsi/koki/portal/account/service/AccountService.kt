@@ -25,7 +25,7 @@ class AccountService(
     fun account(id: Long, fullGraph: Boolean = true): AccountModel {
         val account = koki.account(id).account
 
-        val userIds = listOf(account.createdById, account.modifiedById, account.managedById)
+        val userIds = listOf(account.createdById, account.modifiedById, account.managedById, account.userId)
             .filterNotNull()
             .toSet()
         val userMap = if (userIds.isEmpty() || !fullGraph) {
@@ -65,14 +65,6 @@ class AccountService(
             ).associateBy { location -> location.id }
         }
 
-        val accountUser = if (fullGraph) {
-            account.accountUserId?.let { id ->
-                mapper.toAccountUserModel(koki.user(id).accountUser)
-            }
-        } else {
-            null
-        }
-
         val invitation = if (fullGraph) {
             account.invitationId?.let { id ->
                 mapper.toInvitationModel(koki.invitation(id).invitation)
@@ -83,7 +75,6 @@ class AccountService(
 
         return mapper.toAccountModel(
             entity = account,
-            accountUser = accountUser,
             invitation = invitation,
             accountTypes = accountTypeMap,
             users = userMap,
@@ -98,6 +89,7 @@ class AccountService(
         accountTypeIds: List<Long> = emptyList(),
         managedByIds: List<Long> = emptyList(),
         createdByIds: List<Long> = emptyList(),
+        userIds: List<Long> = emptyList(),
         limit: Int = 20,
         offset: Int = 0,
         fullGraph: Boolean = true,
@@ -108,6 +100,7 @@ class AccountService(
             accountTypeIds = accountTypeIds,
             managedByIds = managedByIds,
             createdByIds = createdByIds,
+            userIds = userIds,
             limit = limit,
             offset = offset
         ).accounts
@@ -159,7 +152,7 @@ class AccountService(
             description = form.description?.trim()?.ifEmpty { null },
             phone = form.phone?.trim()?.ifEmpty { null },
             mobile = form.mobile?.trim()?.ifEmpty { null },
-            email = form.email?.trim()?.ifEmpty { null },
+            email = form.email.trim(),
             website = form.website?.trim()?.ifEmpty { null },
             language = form.language?.trim()?.ifEmpty { null },
             managedById = if (form.managedById == -1L) null else form.managedById,
@@ -184,7 +177,7 @@ class AccountService(
             description = form.description?.trim()?.ifEmpty { null },
             phone = form.phone?.trim()?.ifEmpty { null },
             mobile = form.mobile?.trim()?.ifEmpty { null },
-            email = form.email?.trim()?.ifEmpty { null },
+            email = form.email.trim(),
             website = form.website?.trim()?.ifEmpty { null },
             language = form.language?.trim()?.ifEmpty { null },
             managedById = if (form.managedById == -1L) null else form.managedById,

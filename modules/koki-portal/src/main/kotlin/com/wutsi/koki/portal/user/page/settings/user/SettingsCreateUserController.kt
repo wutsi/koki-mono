@@ -47,7 +47,6 @@ class SettingsCreateUserController(
                 name = PageName.SECURITY_SETTINGS_USER_CREATE,
                 title = "Create AccountUser",
             )
-
         )
         return "users/settings/users/create"
     }

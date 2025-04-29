@@ -10,6 +10,7 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.security.server.service.SecurityService
+import com.wutsi.koki.tenant.dto.UserType
 import com.wutsi.koki.tenant.server.service.UserService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
@@ -72,7 +73,7 @@ class EmployeeService(
 
     @Transactional
     fun create(request: CreateEmployeeRequest, tenantId: Long): EmployeeEntity {
-        val user = userService.getByEmail(request.email, tenantId)
+        val user = userService.getByEmail(request.email, UserType.EMPLOYEE, tenantId)
         val employee = user.id?.let { id -> dao.findById(id).getOrNull() }
         if (employee != null) {
             throw ConflictException(

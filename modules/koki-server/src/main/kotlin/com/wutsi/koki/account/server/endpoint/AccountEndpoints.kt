@@ -2,6 +2,8 @@ package com.wutsi.koki.account.server.endpoint
 
 import com.wutsi.koki.account.dto.CreateAccountRequest
 import com.wutsi.koki.account.dto.CreateAccountResponse
+import com.wutsi.koki.account.dto.CreateUserRequest
+import com.wutsi.koki.account.dto.CreateUserResponse
 import com.wutsi.koki.account.dto.GetAccountResponse
 import com.wutsi.koki.account.dto.SearchAccountResponse
 import com.wutsi.koki.account.dto.UpdateAccountRequest
@@ -84,6 +86,7 @@ class AccountEndpoints(
         @RequestParam(required = false, name = "account-type-id") accountTypeIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "managed-by-id") managedByIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "created-by-id") createdByIds: List<Long> = emptyList(),
+        @RequestParam(required = false, name = "user-id") userIds: List<Long> = emptyList(),
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0
     ): SearchAccountResponse {
@@ -94,11 +97,22 @@ class AccountEndpoints(
             accountTypeIds = accountTypeIds,
             managedByIds = managedByIds,
             createdByIds = createdByIds,
+            userIds = userIds,
             limit = limit,
             offset = offset,
         )
         return SearchAccountResponse(
             accounts = accounts.map { account -> mapper.toAccountSummary(account) }
         )
+    }
+
+    @PostMapping("/{id}/user")
+    fun createUser(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
+        @RequestBody @Valid request: CreateUserRequest
+    ): CreateUserResponse {
+        val account = service.createUser(id, request, tenantId)
+        return CreateUserResponse(userId = account.userId ?: -1)
     }
 }

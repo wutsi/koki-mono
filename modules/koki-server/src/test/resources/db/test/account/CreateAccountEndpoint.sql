@@ -12,3 +12,6 @@ INSERT INTO T_TYPE(id, tenant_fk, object_type, name, title, active)
            (101, 1, 1, 'T2', 'Tier 2', true),
            (102, 1, 1, 'T4', null, true);
 
+INSERT INTO T_ACCOUNT(tenant_fk, name, email, deleted)
+    VALUES(1, 'Inc', 'info@inc1.com', false);
+

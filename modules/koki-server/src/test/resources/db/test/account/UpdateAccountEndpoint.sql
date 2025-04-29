@@ -14,10 +14,11 @@ INSERT INTO T_TYPE(id, tenant_fk, object_type, name, title, active)
            (101, 1, 1, 'T2', 'Tier 2', true),
            (102, 1, 1, 'T4', null, true);
 
-INSERT INTO T_ACCOUNT(id, tenant_fk, name, deleted)
-    VALUES(1000, 1, 'Inc', false),
-          (1999, 1, 'Inc', true),
-          (2000, 2, 'Inc', false);
+INSERT INTO T_ACCOUNT(id, tenant_fk, name, email, deleted)
+    VALUES(1000, 1, 'Inc', 'info@inc1.com', false),
+          (1200, 1, 'Inc', 'info@inc2.com', false),
+          (1999, 1, 'Inc', 'info@inc3.com', true),
+          (2000, 2, 'Inc', 'info@inc4.com', false);
 
 INSERT INTO T_ACCOUNT_ATTRIBUTE(account_fk, attribute_fk, value)
     VALUES (1000, 100, 'NE-00000'),

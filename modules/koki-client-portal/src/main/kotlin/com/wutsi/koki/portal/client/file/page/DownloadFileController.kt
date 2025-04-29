@@ -90,7 +90,7 @@ class DownloadFileController(
 
         if (ownerType == ObjectType.TAX) {
             val tax = taxService.tax(ownerId)
-            return tax.account.id == user.account.id
+            return tax.account.id == user.accountId
         }
         return false
     }

@@ -28,7 +28,6 @@ import com.wutsi.koki.account.dto.CreateAccountResponse
 import com.wutsi.koki.account.dto.CreateInvitationRequest
 import com.wutsi.koki.account.dto.CreateInvitationResponse
 import com.wutsi.koki.account.dto.GetAccountResponse
-import com.wutsi.koki.account.dto.GetAccountUserResponse
 import com.wutsi.koki.account.dto.GetAttributeResponse
 import com.wutsi.koki.account.dto.GetInvitationResponse
 import com.wutsi.koki.account.dto.SearchAccountResponse
@@ -581,18 +580,6 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(GetAttributeResponse::class.java)
-            )
-
-        // Account User
-        doReturn(
-            ResponseEntity(
-                GetAccountUserResponse(AccountFixtures.accountUser),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetAccountUserResponse::class.java)
             )
 
         // Invitation

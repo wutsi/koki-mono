@@ -24,6 +24,7 @@ class DeleteAccountEndpointTest : AuthorizationAwareEndpointTest() {
         assertTrue(account.deleted)
         assertNotNull(account.deletedAt)
         assertEquals(USER_ID, account.deletedById)
+        assertEquals(true, account.email.endsWith("-info@inc.com"))
     }
 
     @Test

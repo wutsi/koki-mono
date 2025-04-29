@@ -24,7 +24,7 @@ class InvoiceService(
                 InvoiceStatus.VOIDED,
                 InvoiceStatus.OPENED,
             ),
-            accountId = userHolder.get()!!.account.id,
+            accountId = userHolder.get()!!.accountId,
             limit = limit,
             offset = offset,
 

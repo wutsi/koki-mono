@@ -14,7 +14,8 @@ CREATE TABLE T_TENANT(
   status                  INT NOT NULL DEFAULT 0,
   logo_url                TEXT,
   icon_url                TEXT,
-  portal_url              TEXT NOT NULL,
+  portal_url              VARCHAR(255) NOT NULL,
+  client_portal_url       VARCHAR(255) NOT NULL,
   website_url             TEXT,
   created_at              DATETIME DEFAULT NOW(),
 
@@ -55,6 +56,7 @@ CREATE TABLE T_USER(
   created_by_fk           BIGINT,
   modified_by_fk          BIGINT,
 
+  username                VARCHAR(100) NOT NULL,
   email                   VARCHAR(255) NOT NULL,
   password                VARCHAR(32) NOT NULL,
   salt                    VARCHAR(36) NOT NULL DEFAULT '',
@@ -65,7 +67,8 @@ CREATE TABLE T_USER(
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now(),
 
-  UNIQUE (tenant_fk, email),
+  UNIQUE (tenant_fk, type, username),
+  UNIQUE (tenant_fk, type, email),
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 

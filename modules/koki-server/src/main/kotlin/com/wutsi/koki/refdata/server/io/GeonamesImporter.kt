@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File
 import java.io.FileOutputStream
+import java.net.URI
 import java.net.URL
 import java.nio.file.Files
 import java.util.Locale
@@ -49,7 +50,10 @@ class GeonamesImporter(private val service: LocationService) {
         val admin1Codes = importAdmin1Codes(country.uppercase())
 
         // Import Location
-        val file = download(URL("https://download.geonames.org/export/dump/${country.uppercase()}.zip"), "$country.txt")
+        val file = download(
+            URI("https://download.geonames.org/export/dump/${country.uppercase()}.zip").toURL(),
+            "$country.txt"
+        )
         val parser = createParser(file)
         var countryId: Long = -1
         var stateIds = mutableListOf<Long>()

@@ -35,6 +35,9 @@ data class AccountEntity(
     @Column(name = "managed_by_fk")
     var managedById: Long? = null,
 
+    @Column(name = "user_fk")
+    var userId: Long? = null,
+
     @OneToMany()
     @JoinColumn("account_fk")
     var accountAttributes: List<AccountAttributeEntity> = emptyList(),
@@ -42,7 +45,7 @@ data class AccountEntity(
     var name: String = "",
     var phone: String? = null,
     var mobile: String? = null,
-    var email: String? = null,
+    var email: String = "",
     var website: String? = null,
     var language: String? = null,
     var description: String? = null,
@@ -64,9 +67,6 @@ data class AccountEntity(
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
     var deletedAt: Date? = null,
-
-    @Column("account_user_fk")
-    var accountUserId: Long? = null,
 
     @Column("invitation_fk")
     var invitationId: String? = null,

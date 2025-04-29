@@ -2,8 +2,8 @@ package com.wutsi.koki.portal.client.security.service
 
 import com.wutsi.koki.platform.security.AccessTokenHolder
 import com.wutsi.koki.platform.security.JWTAuthentication
-import com.wutsi.koki.portal.client.account.model.AccountUserModel
-import com.wutsi.koki.portal.client.account.service.AccountUserService
+import com.wutsi.koki.portal.client.user.model.UserModel
+import com.wutsi.koki.portal.client.user.service.UserService
 import com.wutsi.koki.security.dto.JWTPrincipal
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode
@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service
 @Service
 @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 class CurrentUserHolder(
-    private val service: AccountUserService,
+    private val service: UserService,
     private val accessTokenHolder: AccessTokenHolder,
 ) {
-    private var model: AccountUserModel? = null
+    private var model: UserModel? = null
 
     fun id(): Long? {
         val auth = SecurityContextHolder.getContext().authentication
@@ -27,7 +27,7 @@ class CurrentUserHolder(
         }
     }
 
-    fun get(): AccountUserModel? {
+    fun get(): UserModel? {
         val id = id() ?: return null
 
         if (model?.id == id) {
