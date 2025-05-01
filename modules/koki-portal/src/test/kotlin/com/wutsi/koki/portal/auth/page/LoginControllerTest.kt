@@ -115,7 +115,7 @@ LoginControllerTest : AbstractPageControllerTest() {
         verify(restForAuthentication).postForEntity(
             "$sdkBaseUrl/v1/auth/login",
             LoginRequest(
-                username = "ray.sponsible@gmail.com",
+                username = "ray.sponsible",
                 password = "secret",
                 application = ApplicationName.PORTAL,
             ),
