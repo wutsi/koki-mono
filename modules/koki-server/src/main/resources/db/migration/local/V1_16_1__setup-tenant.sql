@@ -8,7 +8,7 @@ INSERT INTO T_ROLE(id, tenant_fk, name) VALUES(1, 1, 'Administrator');
 
 INSERT INTO T_ROLE_PERMISSION(role_fk, permission_fk) SELECT 1, P.id from T_PERMISSION P;
 
-INSERT INTO T_USER(id, tenant_fk, username, email, password, display_name, status, salt)
-    VALUES (1,  1, 'herve.tchepannou', 'herve.tchepannou@gmail.com', '607e0b9e5496964b1385b7c10e3e2403', 'Herve Tchepannou', 1, '...143.,..');
+INSERT INTO T_USER(id, tenant_fk, type, username, email, password, display_name, status, salt)
+    VALUES (1,  1, 1, 'herve.tchepannou', 'herve.tchepannou@gmail.com', '607e0b9e5496964b1385b7c10e3e2403', 'Herve Tchepannou', 1, '...143.,..');
 
 INSERT INTO T_USER_ROLE values(1, 1);

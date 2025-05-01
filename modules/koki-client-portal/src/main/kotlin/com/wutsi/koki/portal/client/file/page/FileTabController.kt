@@ -88,7 +88,6 @@ class FileTabController(
         @RequestPart file: MultipartFile,
         model: Model
     ): String {
-
         val response = service.upload(ownerId, ownerType, file)
         model.addAttribute("response", response)
         return "files/tab/uploaded"
