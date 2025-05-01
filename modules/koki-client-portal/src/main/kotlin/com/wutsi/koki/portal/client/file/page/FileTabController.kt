@@ -82,7 +82,7 @@ class FileTabController(
     }
 
     @PostMapping("/upload", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
-    fun import(
+    fun upload(
         @RequestParam(required = false, name = "owner-id") ownerId: Long,
         @RequestParam(required = false, name = "owner-type") ownerType: ObjectType,
         @RequestPart file: MultipartFile,

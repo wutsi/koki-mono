@@ -7,13 +7,13 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.account.dto.CreateAccountUserRequest
-import com.wutsi.koki.account.dto.CreateAccountUserResponse
+import com.wutsi.koki.account.dto.CreateUserRequest
+import com.wutsi.koki.account.dto.CreateUserResponse
 import com.wutsi.koki.account.dto.GetAccountResponse
 import com.wutsi.koki.portal.client.AbstractPageControllerTest
 import com.wutsi.koki.portal.client.AccountFixtures.account
-import com.wutsi.koki.portal.client.AccountFixtures.accountUser
 import com.wutsi.koki.portal.client.AccountFixtures.invitation
+import com.wutsi.koki.portal.client.UserFixtures.user
 import com.wutsi.koki.portal.client.common.page.PageName
 import com.wutsi.koki.tenant.dto.UserStatus
 import org.junit.jupiter.api.BeforeEach
@@ -31,7 +31,7 @@ class InvitationControllerTest : AbstractPageControllerTest() {
 
         doReturn(
             ResponseEntity(
-                GetAccountResponse(account.copy(accountUserId = null)),
+                GetAccountResponse(account.copy(userId = null)),
                 HttpStatus.OK,
             )
         ).whenever(rest)
@@ -56,15 +56,14 @@ class InvitationControllerTest : AbstractPageControllerTest() {
         input("#confirm", "!Qwerty123")
         click("#btn-submit")
 
-        val request = argumentCaptor<CreateAccountUserRequest>()
+        val request = argumentCaptor<CreateUserRequest>()
         verify(rest).postForEntity(
-            eq("$sdkBaseUrl/v1/account-users"),
+            eq("$sdkBaseUrl/v1/accounts/${invitation.accountId}/user"),
             request.capture(),
-            eq(CreateAccountUserResponse::class.java)
+            eq(CreateUserResponse::class.java)
         )
         assertEquals("ray.sponsible", request.firstValue.username)
         assertEquals("!Qwerty123", request.firstValue.password)
-        assertEquals(account.id, request.firstValue.accountId)
         assertEquals(UserStatus.ACTIVE, request.firstValue.status)
 
         click("#btn-login")
@@ -85,8 +84,8 @@ class InvitationControllerTest : AbstractPageControllerTest() {
 
         verify(rest, never()).postForEntity(
             any<String>(),
-            any<CreateAccountUserRequest>(),
-            eq(CreateAccountUserResponse::class.java)
+            any<CreateUserRequest>(),
+            eq(CreateUserResponse::class.java)
         )
 
         assertCurrentPageIs(PageName.INVITATION)
@@ -107,8 +106,8 @@ class InvitationControllerTest : AbstractPageControllerTest() {
 
         verify(rest, never()).postForEntity(
             any<String>(),
-            any<CreateAccountUserRequest>(),
-            eq(CreateAccountUserResponse::class.java)
+            any<CreateUserRequest>(),
+            eq(CreateUserResponse::class.java)
         )
 
         assertCurrentPageIs(PageName.INVITATION)
@@ -129,8 +128,8 @@ class InvitationControllerTest : AbstractPageControllerTest() {
 
         verify(rest, never()).postForEntity(
             any<String>(),
-            any<CreateAccountUserRequest>(),
-            eq(CreateAccountUserResponse::class.java)
+            any<CreateUserRequest>(),
+            eq(CreateUserResponse::class.java)
         )
     }
 
@@ -138,7 +137,7 @@ class InvitationControllerTest : AbstractPageControllerTest() {
     fun `already invited`() {
         doReturn(
             ResponseEntity(
-                GetAccountResponse(account.copy(accountTypeId = accountUser.id)),
+                GetAccountResponse(account.copy(accountTypeId = user.id)),
                 HttpStatus.OK,
             )
         ).whenever(rest)

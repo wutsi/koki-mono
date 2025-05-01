@@ -10,7 +10,7 @@ import com.wutsi.koki.tenant.server.service.ConfigurationService
 import org.springframework.stereotype.Service
 import java.io.File
 import java.io.FileOutputStream
-import java.net.URL
+import java.net.URI
 
 @Service
 class FileMQConsumer(
@@ -51,7 +51,7 @@ class FileMQConsumer(
         val f = File.createTempFile("file-${file.id}", "tmp")
         val output = FileOutputStream(f)
         output.use {
-            getStorageService(file.tenantId).get(URL(file.url), output)
+            getStorageService(file.tenantId).get(URI(file.url).toURL(), output)
         }
         return f
     }

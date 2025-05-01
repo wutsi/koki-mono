@@ -1,6 +1,6 @@
 class KokiFileModule {
     initTab() {
-        koki.widgets.dropzone.init();
+        koki.widgets.uploader.init();
         koki.widgets.loadMore.init();
     }
 

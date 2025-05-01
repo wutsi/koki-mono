@@ -5,6 +5,8 @@ import com.wutsi.koki.account.dto.CreateAccountRequest
 import com.wutsi.koki.account.dto.CreateAccountResponse
 import com.wutsi.koki.account.server.dao.AccountAttributeRepository
 import com.wutsi.koki.account.server.dao.AccountRepository
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -169,5 +171,18 @@ class CreateAccountEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(accountId, attrs[1].accountId)
         assertEquals(101L, attrs[1].attributeId)
         assertEquals(request.attributes[101], attrs[1].value)
+    }
+
+    @Test
+    fun `duplicate-email`() {
+        val response = rest.postForEntity(
+            "/v1/accounts",
+            request.copy(email = "info@inc1.com"),
+            ErrorResponse::class.java
+        )
+
+        assertEquals(HttpStatus.CONFLICT, response.statusCode)
+
+        assertEquals(ErrorCode.ACCOUNT_DUPLICATE_EMAIL, response.body?.error?.code)
     }
 }

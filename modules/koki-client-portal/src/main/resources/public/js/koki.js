@@ -42,7 +42,6 @@ class AjaxFragmentWidget {
         let count = 0;
         document.querySelectorAll('[data-component-id=ajax-fragment]')
             .forEach((elt) => {
-                count++
                 let url = elt.getAttribute('data-url');
                 if (url) {
                     fetch(url).then(function (response) {
@@ -55,6 +54,8 @@ class AjaxFragmentWidget {
                             }
                         });
                     });
+
+                    count++
                 }
             });
         console.log(count + ' ajax-fragment component(s) found');
@@ -64,38 +65,55 @@ class AjaxFragmentWidget {
 /**
  * Dropzone widget
  */
-class DropzoneWidget {
+class UploaderWidget {
     init() {
         let count = 0;
-        document.querySelectorAll('[data-component-id=dropzone]')
+        document.querySelectorAll('[data-component-id=uploader]')
             .forEach((elt) => {
-                let id = elt.getAttribute('id');
-                console.log('...dropzone #' + id + ' found');
-                if (id) {
-                    let dz = new Dropzone("#" + id, {
-                        maxFiles: 10,
-                        maxFilesize: 10,
-                        createImageThumbnails: false,
-                        url: elt.getAttribute('data-upload-url'),
-                        dictDefaultMessage: "Drag and drop files you want to upload here, or click to select files",
-
-                        addedfile: file => {
-                            console.log("addedfile()", file);
-                        },
-
-                        complete: file => {
-                            console.log("complete()", file);
-                            if (dz.getUploadingFiles().length === 0 && dz.getQueuedFiles().length === 0) {
-                                let targetId = elt.getAttribute('data-target-id');
-                                kokiFiles.refresh(targetId);
-                            }
-                        }
-                    });
+                let file = elt.querySelector("input[type=file]");
+                if (file) {
+                    elt.addEventListener('click', koki.widgets.uploader.onClick);
+                    file.addEventListener('change', koki.widgets.uploader.onUploaded);
 
                     count++
                 }
             });
-        console.log(count + ' dropzone component(s) found');
+        console.log(count + ' uploader component(s) found');
+    }
+
+    onClick() {
+        const elt = window.event.target;
+        let file = elt.querySelector("input[type=file]");
+        if (file) {
+            file.click()
+        }
+    }
+
+    async onUploaded() {
+        const elt = window.event.target;
+
+        // Upload
+        let uploadUrl = elt.getAttribute('data-upload-url');
+        for (var i = 0; i < elt.files.length; i++) {
+            const file = elt.files[i];
+            console.log('Uploading ', file);
+            const data = new FormData();
+            data.append('file', file);
+            const response = await fetch(uploadUrl, {
+                method: 'POST',
+                body: data
+            });
+            if (response.ok || response.status === 0) {
+                console.log("SUCCESS - Uploading " + file.name + " to " + uploadUrl);
+            } else {
+                console.log("ERROR - Uploading " + file.name + " to " + uploadUrl, response.statusText);
+            }
+
+            // _koki_files_update_progress(i + 1, fileDiv.files.length);
+        }
+
+        let targetId = elt.getAttribute('data-target-id');
+        kokiFiles.refresh(targetId);
     }
 }
 
@@ -106,7 +124,7 @@ class KokiWidgets {
     constructor() {
         this.loadMore = new LoadMoreWidget();
         this.ajaxFragment = new AjaxFragmentWidget();
-        this.dropzone = new DropzoneWidget();
+        this.uploader = new UploaderWidget();
     }
 }
 
@@ -122,7 +140,7 @@ class Koki {
         console.log('init()');
         this.widgets.loadMore.init();
         this.widgets.ajaxFragment.init();
-        this.widgets.dropzone.init();
+        this.widgets.uploader.init();
     }
 }
 

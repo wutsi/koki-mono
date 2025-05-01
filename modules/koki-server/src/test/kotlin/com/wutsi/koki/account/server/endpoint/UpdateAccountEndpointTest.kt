@@ -181,4 +181,17 @@ class UpdateAccountEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
         assertEquals(ErrorCode.ACCOUNT_NOT_FOUND, response.body?.error?.code)
     }
+
+    @Test
+    fun `duplicate-email`() {
+        val response = rest.postForEntity(
+            "/v1/accounts/1000",
+            request.copy(email = "info@inc2.com"),
+            ErrorResponse::class.java
+        )
+
+        assertEquals(HttpStatus.CONFLICT, response.statusCode)
+
+        assertEquals(ErrorCode.ACCOUNT_DUPLICATE_EMAIL, response.body?.error?.code)
+    }
 }

@@ -21,12 +21,16 @@
 
         <table class="table">
             <tr>
-                <td width="20%"><b>Name</b></td>
-                <td th:text="${me.displayName}">NAME</td>
+                <td width="20%"><b>Username</b></td>
+                <td th:text="${me.username}">NAME</td>
             </tr>
             <tr>
                 <td><b>Email</b></td>
                 <td th:text="${me.email}">EMAIL</td>
+            </tr>
+            <tr>
+                <td width="20%"><b>Full Name</b></td>
+                <td th:text="${me.displayName}">NAME</td>
             </tr>
             <tr>
                 <td><b>Status</b></td>

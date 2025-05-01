@@ -1,6 +1,6 @@
-INSERT INTO T_TENANT(id, name, domain_name, locale, currency, portal_url)
-    VALUES (1, 'tenant-1', 'tenant-1.com', 'en_US', 'USD', 'https://tenant-1.com'),
-           (2, 'tenant-2', 'tenant-2.com', 'en_US', 'USD', 'https://tenant-1.com');
+INSERT INTO T_TENANT(id, name, domain_name, locale, currency, portal_url, client_portal_url)
+    VALUES (1, 'tenant-1', 'tenant-1.com', 'en_US', 'USD', 'https://tenant-1.com', 'https://client.test.com'),
+           (2, 'tenant-2', 'tenant-2.com', 'en_US', 'USD', 'https://tenant-1.com', 'https://client.test.com');
 
 INSERT T_MODULE(id, name, title, description, home_url, tab_url, settings_url)
     VALUES
@@ -27,18 +27,18 @@ INSERT INTO T_ROLE_PERMISSION(role_fk, permission_fk)
     VALUES (11, 101);
 
 
-INSERT INTO T_USER(id, tenant_fk, email, password, display_name, status)
-    VALUES (11, 1, 'ray.sponsible@gmail.com', '---', 'Ray Sponsible', 1),
-           (12, 1, 'john.smith@gmail.com', '---', 'John Smith', 1),
-           (13, 1, 'raymond-rougeau@gmail.com', '---', 'Raymond Rougeau', 2),
-           (14, 1, 'hulk@gmail.com', '---', 'Hulk Hogan', 3),
-           (15, 1, 'pp@gmail.com', '---', 'Peter Pan', 1),
-           (16, 1, 'spiderman@gmail.com', '---', 'Peter Parker', 1),
-           (17, 1, 'pf1969@gmail.com', '---', 'Peter Fonda', 1),
-           (18, 1, 'pf1970@gmail.com', '---', 'Henry Fonda', 1),
+INSERT INTO T_USER(id, tenant_fk, type, username, email, password, display_name, status)
+    VALUES (11, 1, 1, 'ray.sponsible', 'ray.sponsible@gmail.com', '---', 'Ray Sponsible', 1),
+           (12, 1, 1, 'john.smith', 'john.smith@gmail.com', '---', 'John Smith', 1),
+           (13, 1, 1, 'raymond-rougeau','raymond-rougeau@gmail.com', '---', 'Raymond Rougeau', 2),
+           (14, 1, 2, 'hulk','hulk@gmail.com', '---', 'Hulk Hogan', 3),
+           (15, 1, 1, 'pp','pp@gmail.com', '---', 'Peter Pan', 1),
+           (16, 1, 2, 'spiderman','spiderman@gmail.com', '---', 'Peter Parker', 1),
+           (17, 1, 1, 'pf1969','pf1969@gmail.com', '---', 'Peter Fonda', 1),
+           (18, 1, 2, 'pf1970','pf1970@gmail.com', '---', 'Henry Fonda', 1),
 
-           (22, 2, 'roger.milla@gmail.com', '---', 'Roger Milla', 1),
-           (23, 1, 'user.23@gmail.com', '---', 'AccountUser 23', 1)
+           (22, 2, 1, 'roger.milla','roger.milla@gmail.com', '---', 'Roger Milla', 1),
+           (23, 2, 2, 'user.23', 'user.23@gmail.com', '---', 'AccountUser 23', 1)
 ;
 
 INSERT INTO T_USER_ROLE(user_fk, role_fk)

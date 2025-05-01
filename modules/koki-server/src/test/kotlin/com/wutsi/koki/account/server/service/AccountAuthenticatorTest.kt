@@ -1,11 +1,12 @@
 package com.wutsi.koki.account.server.service
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.account.server.domain.AccountUserEntity
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
@@ -16,7 +17,10 @@ import com.wutsi.koki.security.dto.LoginRequest
 import com.wutsi.koki.security.server.service.AccessTokenService
 import com.wutsi.koki.security.server.service.AuthenticationService
 import com.wutsi.koki.tenant.dto.UserStatus
+import com.wutsi.koki.tenant.dto.UserType
+import com.wutsi.koki.tenant.server.domain.UserEntity
 import com.wutsi.koki.tenant.server.service.PasswordService
+import com.wutsi.koki.tenant.server.service.UserService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
@@ -31,26 +35,27 @@ class AccountAuthenticatorTest {
     private val accountService = mock<AccountService>()
     private val passwordService = mock<PasswordService>()
     private val accessTokenService = mock<AccessTokenService>()
-    private val accountUserService = mock<AccountUserService>()
+    private val userService = mock<UserService>()
     private val authenticator = AccountAuthenticator(
         authenticatorService = authenticatorService,
         accountService = accountService,
         passwordService = passwordService,
         accessTokenService = accessTokenService,
-        accountUserService = accountUserService,
+        userService = userService,
+    )
+
+    private val user = UserEntity(
+        id = 333L,
+        username = "ray.sponsible",
+        password = "__secret__",
+        status = UserStatus.ACTIVE,
+        type = UserType.ACCOUNT
     )
 
     private val account = AccountEntity(
         id = 111L,
-        name = "Ray Sponsible"
-    )
-
-    private val user = AccountUserEntity(
-        id = 333L,
-        accountId = account.id!!,
-        username = "ray.sponsible",
-        password = "__secret__",
-        status = UserStatus.ACTIVE,
+        name = "Ray Sponsible",
+        userId = user.id
     )
 
     private val accessToken = UUID.randomUUID().toString()
@@ -62,9 +67,24 @@ class AccountAuthenticatorTest {
 
     @BeforeEach
     fun setup() {
-        doReturn(user).whenever(accountUserService).getByUsernameOrNull(any(), any())
-        doReturn(account).whenever(accountService).get(any(), any())
+        doReturn(user).whenever(userService).getByUsername(any(), eq(UserType.ACCOUNT), any())
+
+        doReturn(listOf(account))
+            .whenever(accountService)
+            .search(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull()
+            )
+
         doReturn(accessToken).whenever(accessTokenService).create(any(), any(), any(), any(), any())
+
         doReturn(true).whenever(passwordService).matches(any(), any(), any())
     }
 
@@ -94,14 +114,17 @@ class AccountAuthenticatorTest {
             request.application,
             user.id ?: -1,
             account.name,
-            "ACCOUNT",
+            UserType.ACCOUNT,
             user.tenantId,
         )
     }
 
     @Test
     fun `user not found`() {
-        doReturn(null).whenever(accountUserService).getByUsernameOrNull(any(), any())
+        doThrow(
+            NotFoundException(error = Error(ErrorCode.USER_NOT_FOUND))
+        )
+            .whenever(userService).getByUsername(any(), any(), any())
 
         val ex = assertThrows<ConflictException> {
             authenticator.authenticate(request, user.tenantId)
@@ -121,8 +144,9 @@ class AccountAuthenticatorTest {
 
     @Test
     fun `user not active`() {
-        doReturn(user.copy(status = UserStatus.TERMINATED)).whenever(accountUserService)
-            .getByUsernameOrNull(any(), any())
+        doReturn(user.copy(status = UserStatus.TERMINATED))
+            .whenever(userService)
+            .getByUsername(any(), any(), any())
 
         val ex = assertThrows<ConflictException> {
             authenticator.authenticate(request, user.tenantId)
@@ -132,7 +156,19 @@ class AccountAuthenticatorTest {
 
     @Test
     fun `account not found`() {
-        doThrow(NotFoundException(Error())).whenever(accountService).get(any(), any())
+        doReturn(emptyList<AccountEntity>())
+            .whenever(accountService)
+            .search(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull()
+            )
 
         val ex = assertThrows<ConflictException> {
             authenticator.authenticate(request, user.tenantId)

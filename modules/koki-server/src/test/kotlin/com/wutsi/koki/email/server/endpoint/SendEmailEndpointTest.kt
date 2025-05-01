@@ -24,16 +24,15 @@ import com.wutsi.koki.platform.messaging.MessagingService
 import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
-import com.wutsi.koki.tenant.dto.ConfigurationName
-import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
-import com.wutsi.koki.tenant.server.service.ConfigurationService
-import okio.IOException
-import org.apache.tika.language.detect.LanguageDetector
+import com.wutsi.koki.platform.translation.TranslationService
+import com.wutsi.koki.translation.server.service.TranslationServiceProvider
 import org.junit.jupiter.api.BeforeEach
+import org.mockito.Mockito.mock
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
+import java.io.IOException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -49,12 +48,6 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var ownerDao: EmailOwnerRepository
 
-    @Autowired
-    private lateinit var configurationService: ConfigurationService
-
-    @Autowired
-    private lateinit var languageDetector: LanguageDetector
-
     @MockitoBean
     private lateinit var messagingService: MessagingService
 
@@ -67,6 +60,11 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
     @MockitoBean
     private lateinit var storageServiceBuilder: StorageServiceBuilder
 
+    @MockitoBean
+    private lateinit var translationServiceProvider: TranslationServiceProvider
+
+    private val translationService: TranslationService = mock<TranslationService>()
+
     @BeforeEach
     override fun setUp() {
         super.setUp()
@@ -75,6 +73,8 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
         doReturn("xxxx").whenever(messagingService).send(any())
 
         doReturn(storageService).whenever(storageServiceBuilder).build(any())
+
+        doReturn(translationService).whenever(translationServiceProvider).get(any())
     }
 
     @Test
@@ -316,12 +316,9 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Test
     fun translate() {
-        configurationService.save(
-            SaveConfigurationRequest(
-                values = mapOf(ConfigurationName.AI_PROVIDER_GEMINI_API_KEY to System.getenv("GEMINI_API_KEY"))
-            ),
-            tenantId = TENANT_ID,
-        )
+        doReturn("Ze subject")
+            .doReturn("Ze body")
+            .whenever(translationService).translate(any(), any())
 
         val request = SendEmailRequest(
             subject = "Invoice #{{invoiceNumber}} is ready",
@@ -378,9 +375,9 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
 
         val id = response.body!!.emailId
         val email = dao.findById(id).get()
-        assertEquals("fr", languageDetector.detect(email.summary).language)
-        assertEquals("fr", languageDetector.detect(email.subject).language)
-        assertEquals("fr", languageDetector.detect(email.body).language)
+        assertEquals("Ze body", email.summary)
+        assertEquals("Ze subject", email.subject)
+        assertEquals("Ze body", email.body)
 
         verify(messagingService).send(any())
 

@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File
 import java.io.FileOutputStream
-import java.net.URL
+import java.net.URI
 import java.util.UUID
 
 @Service
@@ -294,7 +294,7 @@ class EmailService(
         }
         val fout = FileOutputStream(localFile)
         fout.use {
-            storageService.get(URL(file.url), fout)
+            storageService.get(URI(file.url).toURL(), fout)
         }
         return localFile
     }

@@ -41,18 +41,6 @@
                                 </select>
                             </div>
                             <div class="section-item">
-                                <label class="title">Account Manager</label>
-                                <select th:field="*{managedById}">
-                                    <option selected
-                                            th:if="${manager}"
-                                            th:text="${manager.displayName}"
-                                            th:value="${manager.id}">
-                                        MANAGER
-                                    </option>
-                                </select>
-                                <script th:replace="~{__components/user :: user-selector('managedById', null, null)}"></script>
-                            </div>
-                            <div class="section-item">
                                 <label class="title">Email<span class="required">*</span></label>
                                 <input required maxlength="100" th:field="*{email}" type="email"/>
                             </div>

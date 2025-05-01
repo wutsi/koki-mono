@@ -340,22 +340,6 @@ class TaxNotificationWorkerTest {
     }
 
     @Test
-    fun `tax gathering-documents - account without email`() {
-        doReturn(account.copy(email = null)).whenever(accountService).get(anyOrNull(), anyOrNull())
-
-        val result = worker.notify(
-            TaxStatusChangedEvent(
-                taxId = tax.id!!,
-                tenantId = tax.tenantId,
-                status = TaxStatus.GATHERING_DOCUMENTS,
-            )
-        )
-
-        assertEquals(true, result)
-        verify(emailService, never()).send(any(), any())
-    }
-
-    @Test
     fun `tax gathering-documents - email`() {
         worker.notify(
             TaxStatusChangedEvent(
@@ -427,22 +411,6 @@ class TaxNotificationWorkerTest {
     }
 
     @Test
-    fun `tax done - account without email`() {
-        doReturn(account.copy(email = null)).whenever(accountService).get(anyOrNull(), anyOrNull())
-
-        val result = worker.notify(
-            TaxStatusChangedEvent(
-                taxId = tax.id!!,
-                tenantId = tax.tenantId,
-                status = TaxStatus.DONE,
-            )
-        )
-
-        assertEquals(true, result)
-        verify(emailService, never()).send(any(), any())
-    }
-
-    @Test
     fun `tax done - email`() {
         worker.notify(
             TaxStatusChangedEvent(
@@ -467,8 +435,6 @@ class TaxNotificationWorkerTest {
 
     @Test
     fun `tax new`() {
-        doReturn(account.copy(email = null)).whenever(accountService).get(anyOrNull(), anyOrNull())
-
         val result = worker.notify(
             TaxStatusChangedEvent(
                 taxId = tax.id!!,
@@ -483,8 +449,6 @@ class TaxNotificationWorkerTest {
 
     @Test
     fun `tax reviewing`() {
-        doReturn(account.copy(email = null)).whenever(accountService).get(anyOrNull(), anyOrNull())
-
         val result = worker.notify(
             TaxStatusChangedEvent(
                 taxId = tax.id!!,
@@ -499,8 +463,6 @@ class TaxNotificationWorkerTest {
 
     @Test
     fun `tax unknown`() {
-        doReturn(account.copy(email = null)).whenever(accountService).get(anyOrNull(), anyOrNull())
-
         val result = worker.notify(
             TaxStatusChangedEvent(
                 taxId = tax.id!!,

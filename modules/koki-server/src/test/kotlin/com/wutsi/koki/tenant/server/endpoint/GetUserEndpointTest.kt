@@ -5,6 +5,7 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.UserStatus
+import com.wutsi.koki.tenant.dto.UserType
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
@@ -23,8 +24,10 @@ class GetUserEndpointTest : TenantAwareEndpointTest() {
         val user = result.body!!.user
         assertEquals(11L, user.id)
         assertEquals("Ray Sponsible", user.displayName)
+        assertEquals("ray.sponsible", user.username)
         assertEquals("ray.sponsible@gmail.com", user.email)
         assertEquals(UserStatus.ACTIVE, user.status)
+        assertEquals(UserType.ACCOUNT, user.type)
         assertEquals("fr", user.language)
 
         assertEquals(3, user.roleIds.size)

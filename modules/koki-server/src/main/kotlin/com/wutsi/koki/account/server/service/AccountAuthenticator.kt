@@ -10,14 +10,17 @@ import com.wutsi.koki.security.server.service.AccessTokenService
 import com.wutsi.koki.security.server.service.AuthenticationService
 import com.wutsi.koki.security.server.service.Authenticator
 import com.wutsi.koki.tenant.dto.UserStatus
+import com.wutsi.koki.tenant.dto.UserType
 import com.wutsi.koki.tenant.server.service.PasswordService
+import com.wutsi.koki.tenant.server.service.UserService
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
+import jdk.internal.joptsimple.internal.Messages.message
 import org.springframework.stereotype.Service
 
 @Service
 class AccountAuthenticator(
-    private val accountUserService: AccountUserService,
+    private val userService: UserService,
     private val passwordService: PasswordService,
     private val accessTokenService: AccessTokenService,
     private val authenticatorService: AuthenticationService,
@@ -39,22 +42,30 @@ class AccountAuthenticator(
 
     override fun authenticate(request: LoginRequest, tenantId: Long): String {
         try {
-            val user = accountUserService.getByUsernameOrNull(request.username, tenantId)
-            if (user == null) {
-                throw ConflictException(error = Error(ErrorCode.AUTHENTICATION_FAILED))
-            }
+            val user = userService.getByUsername(request.username, UserType.ACCOUNT, tenantId)
             if (user.status != UserStatus.ACTIVE) {
                 throw ConflictException(error = Error(ErrorCode.AUTHENTICATION_USER_NOT_ACTIVE))
             }
             if (!passwordService.matches(request.password, user.password, user.salt)) {
                 throw ConflictException(error = Error(ErrorCode.AUTHENTICATION_FAILED))
             }
-            val account = accountService.get(user.accountId, user.tenantId)
+            val account = accountService.search(
+                userIds = listOf(user.id ?: -1),
+                tenantId = user.tenantId,
+                limit = 1,
+            ).firstOrNull()
+                ?: throw ConflictException(
+                    error = Error(
+                        code = ErrorCode.AUTHENTICATION_FAILED,
+                        message = "No account associated with the user"
+                    )
+                )
+
             return accessTokenService.create(
                 application = request.application,
                 userId = user.id ?: -1,
                 subject = account.name,
-                subjectType = "ACCOUNT",
+                subjectType = UserType.ACCOUNT,
                 tenantId = tenantId
             )
         } catch (ex: NotFoundException) {

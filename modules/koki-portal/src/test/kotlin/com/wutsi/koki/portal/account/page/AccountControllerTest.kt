@@ -15,17 +15,14 @@ import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.InvoiceFixtures
 import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.TaxFixtures
-import com.wutsi.koki.TenantFixtures.tenants
 import com.wutsi.koki.account.dto.CreateInvitationRequest
 import com.wutsi.koki.account.dto.CreateInvitationResponse
 import com.wutsi.koki.account.dto.GetAccountResponse
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
-import com.wutsi.koki.tenant.dto.SearchTenantResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import kotlin.test.Ignore
 import kotlin.test.Test
 
 class AccountControllerTest : AbstractPageControllerTest() {
@@ -156,7 +153,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
     fun `user - no invitation`() {
         doReturn(
             ResponseEntity(
-                GetAccountResponse(account.copy(accountUserId = null, invitationId = null)),
+                GetAccountResponse(account.copy(userId = null, invitationId = null)),
                 HttpStatus.OK,
             )
         ).whenever(rest)
@@ -183,7 +180,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
     fun `user - with invitation`() {
         doReturn(
             ResponseEntity(
-                GetAccountResponse(account.copy(accountUserId = null, invitationId = invitation.id)),
+                GetAccountResponse(account.copy(userId = null, invitationId = invitation.id)),
                 HttpStatus.OK,
             )
         ).whenever(rest)
@@ -204,25 +201,6 @@ class AccountControllerTest : AbstractPageControllerTest() {
             CreateInvitationRequest(account.id),
             CreateInvitationResponse::class.java
         )
-    }
-
-    @Test
-    @Ignore
-    fun `no user tab when tenant do not have clientPortalUrl`() {
-        doReturn(
-            ResponseEntity(
-                SearchTenantResponse(tenants.map { tenant -> tenant.copy(clientPortalUrl = null) }),
-                HttpStatus.OK,
-            )
-        ).whenever(restWithoutTenantHeader)
-            .getForEntity(
-                any<String>(),
-                eq(SearchTenantResponse::class.java)
-            )
-
-        navigateTo("/accounts/${account.id}")
-        assertElementNotPresent("#pills-user-tab")
-        assertElementNotPresent("#pills-user")
     }
 
     @Test

@@ -4,6 +4,7 @@ import java.util.Date
 
 data class AccountModel(
     val id: Long = -1,
+    val userId: Long? = null,
     val name: String = "",
     val email: String? = null,
     val language: String? = null,
@@ -12,6 +13,5 @@ data class AccountModel(
     val modifiedAt: Date = Date(),
     val createdAtText: String = "",
     val modifiedAtText: String = "",
-    val accountUserId: Long? = null,
     val invitationId: String? = null,
 )

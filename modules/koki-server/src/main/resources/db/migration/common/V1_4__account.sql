@@ -21,16 +21,18 @@ CREATE TABLE T_ACCOUNT(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
   tenant_fk               BIGINT NOT NULL,
+  user_fk                 BIGINT,
   account_type_fk         BIGINT,
   created_by_fk           BIGINT,
   modified_by_fk          BIGINT,
   deleted_by_fk           BIGINT,
   managed_by_fk           BIGINT,
+  invitation_fk           VARCHAR(36),
 
   name                    VARCHAR(100) NOT NULL,
   phone                   VARCHAR(30),
   mobile                  VARCHAR(30),
-  email                   VARCHAR(255),
+  email                   VARCHAR(255) NOT NULL,
   website                 TEXT,
   language                VARCHAR(2),
   description             TEXT,
@@ -52,6 +54,7 @@ CREATE TABLE T_ACCOUNT(
   modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
   deleted_at              DATETIME,
 
+  UNIQUE(tenant_fk, email),
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 

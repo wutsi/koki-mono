@@ -23,6 +23,7 @@ class SettingsEditUserControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_EDIT)
 
         input("#displayName", "Yo Man")
+        input("#username", "yoman")
         input("#email", "yoman@gmail.com")
         select("#status", 2)
         select2("#language", "French")
@@ -38,6 +39,7 @@ class SettingsEditUserControllerTest : AbstractPageControllerTest() {
         )
 
         assertEquals("Yo Man", request.firstValue.displayName)
+        assertEquals("yoman", request.firstValue.username)
         assertEquals("yoman@gmail.com", request.firstValue.email)
         assertEquals(UserStatus.SUSPENDED, request.firstValue.status)
         assertEquals("fr", request.firstValue.language)

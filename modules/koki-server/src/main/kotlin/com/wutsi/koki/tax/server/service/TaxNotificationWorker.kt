@@ -159,10 +159,6 @@ class TaxNotificationWorker(
         // Tax
         val tax = taxService.get(event.taxId, event.tenantId)
         val account = accountService.get(tax.accountId, tax.tenantId)
-        if (account.email.isNullOrEmpty()) {
-            logger.add("email_skipped_reason", "AccountWithoutEmail")
-            return
-        }
 
         // Send
         val tenant = tenantService.get(event.tenantId)
@@ -187,7 +183,7 @@ class TaxNotificationWorker(
                     "recipientName" to account.name,
                     "taxFiscalYear" to tax.fiscalYear,
                     "clientPortalUrl" to tenant.clientPortalUrl,
-                ).filter { entry -> entry.value != null } as Map<String, Any>
+                )
             ),
             tenantId = event.tenantId
         )
@@ -240,7 +236,7 @@ class TaxNotificationWorker(
                     "recipientName" to account.name,
                     "taxFiscalYear" to tax.fiscalYear,
                     "clientPortalUrl" to tenant.clientPortalUrl,
-                ).filter { entry -> entry.value != null } as Map<String, Any>,
+                ),
 
                 attachmentFileIds = getFormFile(event, account.language)
                     ?.let { file -> listOf(file.id!!) }

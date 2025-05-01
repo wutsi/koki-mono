@@ -15,6 +15,7 @@ import com.wutsi.koki.security.server.service.AccessTokenService
 import com.wutsi.koki.security.server.service.AuthenticationService
 import com.wutsi.koki.security.server.service.UserAuthenticator
 import com.wutsi.koki.tenant.dto.UserStatus
+import com.wutsi.koki.tenant.dto.UserType
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertThrows
@@ -54,7 +55,7 @@ class UserAuthenticatorTest {
 
     @BeforeEach
     fun setup() {
-        doReturn(user).whenever(userService).getByEmail(any(), any())
+        doReturn(user).whenever(userService).getByUsername(any(), any(), any())
         doReturn(accessToken).whenever(accessTokenService).create(any(), any(), any(), any(), any())
         doReturn(true).whenever(passwordService).matches(any(), any(), any())
     }
@@ -85,14 +86,14 @@ class UserAuthenticatorTest {
             request.application,
             user.id ?: -1,
             user.displayName,
-            "USER",
+            UserType.EMPLOYEE,
             user.tenantId,
         )
     }
 
     @Test
     fun `user not found`() {
-        doThrow(NotFoundException(Error())).whenever(userService).getByEmail(any(), any())
+        doThrow(NotFoundException(Error())).whenever(userService).getByUsername(any(), any(), any())
 
         val ex = assertThrows<ConflictException> {
             authenticator.authenticate(request, user.tenantId)
@@ -112,7 +113,7 @@ class UserAuthenticatorTest {
 
     @Test
     fun `user not active`() {
-        doReturn(user.copy(status = UserStatus.TERMINATED)).whenever(userService).getByEmail(any(), any())
+        doReturn(user.copy(status = UserStatus.TERMINATED)).whenever(userService).getByUsername(any(), any(), any())
 
         val ex = assertThrows<ConflictException> {
             authenticator.authenticate(request, user.tenantId)

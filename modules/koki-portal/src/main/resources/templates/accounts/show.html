@@ -41,10 +41,6 @@
                             <b>Type</b><br/>
                             <span th:text="${account.accountType.title}">ACCOUNT TYPE</span>
                         </div>
-                        <div class="margin-right-2x" th:if="${account.managedBy}">
-                            <b>Account Manager</b><br/>
-                            <span th:text="${account.managedBy.displayName}">ACCOUNT MANAGER</span>
-                        </div>
                         <div class="margin-right-2x" th:if="${account.email}">
                             <b>Email</b><br/>
                             <a th:href="'mailto:' + ${account.email}" th:text="${account.email}">EMAIL</a>
@@ -106,10 +102,6 @@
                                 <tr th:if="${account.accountType}">
                                     <td><b>Type</b></td>
                                     <td th:text="${account.accountType?.title}">TYPE</td>
-                                </tr>
-                                <tr th:if="${account.managedBy}">
-                                    <td><b>Account Manager</b></td>
-                                    <td th:text="${account.managedBy?.displayName}">ACCOUNT MANAGER</td>
                                 </tr>
                                 <tr th:if="${account.phone}">
                                     <td><b>Phone</b></td>
@@ -189,22 +181,22 @@
                         <div aria-labelledby="pills-user-tab" class="tab-pane fade show" id="pills-user" role="tabpanel"
                              th:if="${tenant.clientPortalUrl} AND ${user?.hasPermission('account:manage')}">
 
-                            <table class="user table" th:if="${account.accountUser}">
+                            <table class="user table" th:if="${account.user}">
                                 <tr>
                                     <td width="20%"><b>Username</b></td>
-                                    <td th:text="${account.accountUser.username}">USERNAME</td>
+                                    <td th:text="${account.user.username}">USERNAME</td>
                                 </tr>
                                 <tr>
                                     <td><b>Status</b></td>
-                                    <td th:text="#{'user-status.' + ${account.accountUser.status}}">STATUS</td>
+                                    <td th:text="#{'user-status.' + ${account.user.status}}">STATUS</td>
                                 </tr>
                                 <tr>
                                     <td><b>Created</b></td>
-                                    <td th:text="${account.accountUser.createdAtText}">CREATED</td>
+                                    <td th:text="${account.user.createdAtText}">CREATED</td>
                                 </tr>
                             </table>
 
-                            <div class="invitation" th:if="!${account.accountUser}">
+                            <div class="invitation" th:if="!${account.user}">
                                 <div class="alert alert-warning flex" id="invitation-none"
                                      th:if="!${account.invitation}">
                                     <div class="margin-right">

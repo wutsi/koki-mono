@@ -36,7 +36,7 @@ class TaxService(
         val taxes = koki.taxes(
             ids = emptyList(),
             taxTypeIds = emptyList(),
-            accountIds = listOf(user.account.id),
+            accountIds = listOf(user.accountId),
             participantIds = emptyList(),
             assigneeIds = emptyList(),
             createdByIds = emptyList(),
@@ -57,10 +57,13 @@ class TaxService(
             limit = taxTypeIds.size
         ).associateBy { taxType -> taxType.id }
 
+        // Account
+        val account = accountService.account(user.accountId)
+
         return taxes.map { tax ->
             mapper.toTax(
                 entity = tax,
-                account = user.account,
+                account = account,
                 taxType = taxTypes[tax.taxTypeId]
             )
         }

@@ -8,12 +8,9 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.account.dto.CreateAccountUserRequest
-import com.wutsi.koki.account.dto.CreateAccountUserResponse
 import com.wutsi.koki.account.dto.CreateInvitationRequest
 import com.wutsi.koki.account.dto.CreateInvitationResponse
 import com.wutsi.koki.account.dto.GetAccountResponse
-import com.wutsi.koki.account.dto.GetAccountUserResponse
 import com.wutsi.koki.account.dto.GetInvitationResponse
 import com.wutsi.koki.account.dto.SearchAccountResponse
 import com.wutsi.koki.error.dto.Error
@@ -309,30 +306,6 @@ abstract class AbstractPageControllerTest {
     }
 
     private fun setupAccountModule() {
-        // Account User
-        doReturn(
-            ResponseEntity(
-                GetAccountUserResponse(AccountFixtures.accountUser),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetAccountUserResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                CreateAccountUserResponse(123223),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .postForEntity(
-                any<String>(),
-                any<CreateAccountUserRequest>(),
-                eq(CreateAccountUserResponse::class.java)
-            )
-
         // Invitation
         doReturn(
             ResponseEntity(
@@ -378,6 +351,19 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(GetAccountResponse::class.java)
+            )
+
+        // Account User
+        doReturn(
+            ResponseEntity(
+                com.wutsi.koki.account.dto.CreateUserResponse(1111),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<com.wutsi.koki.account.dto.CreateUserRequest>(),
+                eq(com.wutsi.koki.account.dto.CreateUserResponse::class.java)
             )
     }
 

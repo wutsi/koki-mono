@@ -2,13 +2,16 @@ package com.wutsi.koki.portal.user.model
 
 import com.wutsi.koki.portal.module.model.ModuleModel
 import com.wutsi.koki.tenant.dto.UserStatus
+import com.wutsi.koki.tenant.dto.UserType
 import java.util.Date
 
 data class UserModel(
     val id: Long = -1,
+    val username: String = "",
     val email: String = "",
     val displayName: String = "",
     val status: UserStatus = UserStatus.ACTIVE,
+    val type: UserType = UserType.UNKNOWN,
     val roles: List<RoleModel> = emptyList(),
     val language: String? = null,
     val languageText: String? = null,

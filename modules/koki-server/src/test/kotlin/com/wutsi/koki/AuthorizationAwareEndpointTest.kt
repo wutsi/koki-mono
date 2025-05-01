@@ -2,6 +2,7 @@ package com.wutsi.koki
 
 import com.wutsi.koki.security.dto.ApplicationName
 import com.wutsi.koki.security.server.service.AccessTokenService
+import com.wutsi.koki.tenant.dto.UserType
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
@@ -45,7 +46,7 @@ abstract class AuthorizationAwareEndpointTest : TenantAwareEndpointTest() {
             tenantId = TENANT_ID,
             userId = USER_ID,
             subject = "Ray Sponsible",
-            subjectType = "USER",
+            subjectType = UserType.EMPLOYEE,
         )
     }
 }

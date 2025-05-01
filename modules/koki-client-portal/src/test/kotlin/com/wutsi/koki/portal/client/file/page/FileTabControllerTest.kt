@@ -21,7 +21,6 @@ class FileTabControllerTest : AbstractPageControllerTest() {
     fun list() {
         navigateTo("/files/tab?owner-id=111&owner-type=TAX&test-mode=true")
 
-        assertElementPresent(".dropzone")
         assertElementPresent(".btn-refresh")
         assertElementCount(".tab-files tr.file", files.size)
         assertElementPresent(".btn-download")

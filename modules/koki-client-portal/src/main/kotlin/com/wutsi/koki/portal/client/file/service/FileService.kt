@@ -46,4 +46,8 @@ class FileService(
     fun delete(id: Long) {
         koki.delete(id)
     }
+
+    fun uploadUrl(ownerId: Long, ownerType: ObjectType): String {
+        return koki.uploadUrl(ownerId, ownerType)
+    }
 }

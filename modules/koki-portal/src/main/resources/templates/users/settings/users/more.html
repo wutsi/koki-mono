@@ -1,8 +1,7 @@
 <tr class="user" th:each="me : ${users}">
-    <td>
-        <a th:href="'/settings/users/' + ${me.id}" th:text="${me.displayName}">NAME</a>
-    </td>
+    <td th:text="${me.username}">USERNAME</td>
     <td th:text="${me.email}">EMAIL</td>
+    <td th:text="${me.displayName}">NAME</td>
     <td>
         <span th:replace="~{__components/user :: user-status(${me.status})}"></span>
     </td>

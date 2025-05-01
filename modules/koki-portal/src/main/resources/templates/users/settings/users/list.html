@@ -48,8 +48,9 @@
         <table class="table table-striped">
             <thead>
             <tr>
-                <th>Name</th>
+                <th>Username</th>
                 <th>Email</th>
+                <th>Full Name</th>
                 <th>Status</th>
                 <th>Modified</th>
                 <th></th>
@@ -57,10 +58,9 @@
             </thead>
             <tbody>
             <tr class="user" th:each="me : ${users}">
-                <td>
-                    <a th:href="'/settings/users/' + ${me.id}" th:text="${me.displayName}">NAME</a>
-                </td>
+                <td th:text="${me.username}">USERNAME</td>
                 <td th:text="${me.email}">EMAIL</td>
+                <td th:text="${me.displayName}">NAME</td>
                 <td>
                     <span th:replace="~{__components/user :: user-status(${me.status})}"></span>
                 </td>

@@ -28,7 +28,6 @@
     </td>
     <td th:text="${account.mobile}">MOBILE</td>
     <td th:text="${account.phone}">PHONE</td>
-    <td th:text="${account.managedBy?.displayName}">MANAGER</td>
 </tr>
 
 <tr id="account-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">

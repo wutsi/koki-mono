@@ -2,13 +2,11 @@ package com.wutsi.koki.portal.account.mapper
 
 import com.wutsi.koki.account.dto.Account
 import com.wutsi.koki.account.dto.AccountSummary
-import com.wutsi.koki.account.dto.AccountUser
 import com.wutsi.koki.account.dto.Attribute
 import com.wutsi.koki.account.dto.AttributeSummary
 import com.wutsi.koki.account.dto.Invitation
 import com.wutsi.koki.portal.account.model.AccountAttributeModel
 import com.wutsi.koki.portal.account.model.AccountModel
-import com.wutsi.koki.portal.account.model.AccountUserModel
 import com.wutsi.koki.portal.account.model.AttributeModel
 import com.wutsi.koki.portal.account.model.InvitationModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
@@ -54,7 +52,6 @@ class AccountMapper(
         users: Map<Long, UserModel>,
         attributes: Map<Long, AttributeModel>,
         locations: Map<Long, LocationModel>,
-        accountUser: AccountUserModel?,
         invitation: InvitationModel?,
     ): AccountModel {
         val fmt = createDateTimeFormat()
@@ -94,8 +91,8 @@ class AccountMapper(
                 refDataMapper.toAddressModel(address, locations)
             },
             billingSameAsShippingAddress = entity.billingSameAsShippingAddress,
-            accountUser = accountUser,
             invitation = invitation,
+            user = entity.userId?.let { id -> users[id] }
         )
     }
 
@@ -130,19 +127,6 @@ class AccountMapper(
             createdAtText = fmt.format(entity.createdAt),
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.createdAt),
-        )
-    }
-
-    fun toAccountUserModel(entity: AccountUser): AccountUserModel {
-        val fmt = createDateTimeFormat()
-        return AccountUserModel(
-            id = entity.id,
-            username = entity.username,
-            status = entity.status,
-            createdAt = entity.createdAt,
-            createdAtText = fmt.format(entity.createdAt),
-            modifiedAt = entity.modifiedAt,
-            modifiedAtText = fmt.format(entity.modifiedAt),
         )
     }
 

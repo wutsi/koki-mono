@@ -12,6 +12,8 @@ import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
+import com.wutsi.koki.tenant.dto.UserStatus
+import com.wutsi.koki.tenant.dto.UserType
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -22,6 +24,7 @@ class SettingsCreateUserControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_CREATE)
 
         input("#displayName", "Yo Man")
+        input("#username", "yoman")
         input("#email", "yoman@gmail.com")
         input("#password", "secret")
         select2("#language", "French")
@@ -37,9 +40,12 @@ class SettingsCreateUserControllerTest : AbstractPageControllerTest() {
         )
 
         assertEquals("Yo Man", request.firstValue.displayName)
+        assertEquals("yoman", request.firstValue.username)
         assertEquals("yoman@gmail.com", request.firstValue.email)
         assertEquals("secret", request.firstValue.password)
         assertEquals("fr", request.firstValue.language)
+        assertEquals(UserStatus.ACTIVE, request.firstValue.status)
+        assertEquals(UserType.EMPLOYEE, request.firstValue.type)
         assertEquals(listOf(RoleFixtures.roles[0].id, RoleFixtures.roles[2].id), request.firstValue.roleIds)
 
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_LIST)
@@ -59,6 +65,7 @@ class SettingsCreateUserControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_CREATE)
 
         input("#displayName", "Yo Man")
+        input("#username", "yoman")
         input("#email", "yoman@gmail.com")
         input("#password", "secret")
         click("button[type=submit]", 1000)

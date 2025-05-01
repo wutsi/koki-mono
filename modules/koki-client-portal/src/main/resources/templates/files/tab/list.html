@@ -1,11 +1,14 @@
 <div class="tab-files">
-    <div class="dropzone text-center"
-         data-component-id="dropzone"
-         data-target-id="file-list"
+    <div class="uploader padding text-center"
+         data-component-id="uploader"
          id="dropzone"
-         th:data-upload-url="${uploadUrl}"
          th:if="!${readOnly}"
     >
+        Click to select files to upload
+        <input data-target-id="file-list" multiple style="display:none"
+               th:data-upload-url="${uploadUrl}"
+               type="file"
+        />
     </div>
 
     <div class="flex margin-top">

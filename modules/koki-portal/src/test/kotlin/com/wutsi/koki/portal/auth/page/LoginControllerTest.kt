@@ -44,14 +44,14 @@ LoginControllerTest : AbstractPageControllerTest() {
 
         // THEN
         assertCurrentPageIs(PageName.LOGIN)
-        input("INPUT[name=email]", "ray.sponsible@gmail.com")
+        input("INPUT[name=username]", "ray.sponsible")
         input("INPUT[name=password]", "secret")
         click("BUTTON")
 
         verify(restForAuthentication).postForEntity(
             "$sdkBaseUrl/v1/auth/login",
             LoginRequest(
-                username = "ray.sponsible@gmail.com",
+                username = "ray.sponsible",
                 password = "secret",
                 application = ApplicationName.PORTAL,
             ),
@@ -79,14 +79,14 @@ LoginControllerTest : AbstractPageControllerTest() {
 
         // THEN
         assertCurrentPageIs(PageName.LOGIN)
-        input("INPUT[name=email]", "ray.sponsible@gmail.com")
+        input("INPUT[name=username]", "ray.sponsible")
         input("INPUT[name=password]", "secret")
         click("BUTTON")
 
         verify(restForAuthentication).postForEntity(
             "$sdkBaseUrl/v1/auth/login",
             LoginRequest(
-                username = "ray.sponsible@gmail.com",
+                username = "ray.sponsible",
                 password = "secret",
                 application = ApplicationName.PORTAL,
             ),
@@ -108,14 +108,14 @@ LoginControllerTest : AbstractPageControllerTest() {
 
         // THEN
         assertCurrentPageIs(PageName.LOGIN)
-        input("INPUT[name=email]", "ray.sponsible@gmail.com")
+        input("INPUT[name=username]", "ray.sponsible")
         input("INPUT[name=password]", "secret")
         click("BUTTON", 1000)
 
         verify(restForAuthentication).postForEntity(
             "$sdkBaseUrl/v1/auth/login",
             LoginRequest(
-                username = "ray.sponsible@gmail.com",
+                username = "ray.sponsible",
                 password = "secret",
                 application = ApplicationName.PORTAL,
             ),

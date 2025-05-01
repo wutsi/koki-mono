@@ -1,23 +1,27 @@
 package com.wutsi.koki.account.server.service
 
 import com.wutsi.koki.account.dto.CreateAccountRequest
+import com.wutsi.koki.account.dto.CreateUserRequest
 import com.wutsi.koki.account.dto.UpdateAccountRequest
 import com.wutsi.koki.account.server.dao.AccountAttributeRepository
 import com.wutsi.koki.account.server.dao.AccountRepository
-import com.wutsi.koki.account.server.domain.AccountUserEntity
 import com.wutsi.koki.account.server.domain.InvitationEntity
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.form.server.domain.AccountAttributeEntity
 import com.wutsi.koki.form.server.domain.AccountEntity
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.security.server.service.SecurityService
+import com.wutsi.koki.tenant.dto.UserType
+import com.wutsi.koki.tenant.server.service.UserService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.Date
+import java.util.UUID
 
 @Service
 class AccountService(
@@ -25,6 +29,7 @@ class AccountService(
     private val attributeDao: AccountAttributeRepository,
     private val securityService: SecurityService,
     private val locationService: LocationService,
+    private val userService: UserService,
     private var em: EntityManager,
 ) {
     fun get(id: Long, tenantId: Long): AccountEntity {
@@ -39,6 +44,8 @@ class AccountService(
 
     @Transactional
     fun create(request: CreateAccountRequest, tenantId: Long): AccountEntity {
+        checkDuplicateEmail(null, request.email, tenantId)
+
         val userId = securityService.getCurrentUserIdOrNull()
         val shippingCity = request.shippingCityId?.let { id -> locationService.get(id, LocationType.CITY) }
         val billingCity = request.billingCityId?.let { id -> locationService.get(id, LocationType.CITY) }
@@ -49,7 +56,7 @@ class AccountService(
                 accountTypeId = request.accountTypeId,
                 name = request.name,
                 phone = request.phone,
-                email = request.email,
+                email = request.email.lowercase(),
                 mobile = request.mobile,
                 website = request.website,
                 language = request.language?.lowercase(),
@@ -93,6 +100,8 @@ class AccountService(
 
     @Transactional
     fun update(id: Long, request: UpdateAccountRequest, tenantId: Long) {
+        checkDuplicateEmail(id, request.email, tenantId)
+
         val account = get(id, tenantId)
         val shippingCity = request.shippingCityId?.let { id -> locationService.get(id, LocationType.CITY) }
         val billingCity = request.billingCityId?.let { id -> locationService.get(id, LocationType.CITY) }
@@ -100,7 +109,7 @@ class AccountService(
         account.name = request.name
         account.phone = request.phone
         account.accountTypeId = request.accountTypeId
-        account.email = request.email
+        account.email = request.email.lowercase()
         account.mobile = request.mobile
         account.website = request.website
         account.language = request.language?.lowercase()
@@ -171,6 +180,7 @@ class AccountService(
         account.deleted = true
         account.deletedAt = Date()
         account.deletedById = securityService.getCurrentUserIdOrNull()
+        account.email = UUID.randomUUID().toString() + "-${account.email}"
         dao.save(account)
     }
 
@@ -181,6 +191,7 @@ class AccountService(
         accountTypeIds: List<Long> = emptyList(),
         managedByIds: List<Long> = emptyList(),
         createdByIds: List<Long> = emptyList(),
+        userIds: List<Long> = emptyList(),
         limit: Int = 20,
         offset: Int = 0
     ): List<AccountEntity> {
@@ -199,6 +210,9 @@ class AccountService(
         }
         if (accountTypeIds.isNotEmpty()) {
             jql.append(" AND A.accountTypeId IN :accountTypeIds")
+        }
+        if (userIds.isNotEmpty()) {
+            jql.append(" AND A.userId IN :userIds")
         }
         jql.append(" ORDER BY A.name")
 
@@ -219,6 +233,9 @@ class AccountService(
         if (accountTypeIds.isNotEmpty()) {
             query.setParameter("accountTypeIds", accountTypeIds)
         }
+        if (userIds.isNotEmpty()) {
+            query.setParameter("userIds", userIds)
+        }
 
         query.firstResult = offset
         query.maxResults = limit
@@ -226,14 +243,42 @@ class AccountService(
     }
 
     @Transactional
-    fun setUser(account: AccountEntity, user: AccountUserEntity): AccountEntity {
-        account.accountUserId = user.id
+    fun setInvitation(account: AccountEntity, invitation: InvitationEntity): AccountEntity {
+        account.invitationId = invitation.id
         return dao.save(account)
     }
 
     @Transactional
-    fun setInvitation(account: AccountEntity, invitation: InvitationEntity): AccountEntity {
-        account.invitationId = invitation.id
-        return dao.save(account)
+    fun createUser(id: Long, request: CreateUserRequest, tenantId: Long): AccountEntity {
+        val account = get(id, tenantId)
+        if (account.userId == null) {
+            val user = userService.create(
+                request = com.wutsi.koki.tenant.dto.CreateUserRequest(
+                    username = request.username,
+                    password = request.password,
+                    status = request.status,
+                    type = UserType.ACCOUNT,
+                    displayName = account.name,
+                    language = account.language,
+                    email = account.email ?: "",
+                ),
+                tenantId = tenantId
+            )
+
+            account.userId = user.id
+            return dao.save(account)
+        }
+        return account
+    }
+
+    private fun checkDuplicateEmail(accountId: Long?, email: String, tenantId: Long) {
+        val duplicate = dao.findByEmailAndTenantId(email.lowercase(), tenantId)
+        if (duplicate != null && duplicate.id != accountId) {
+            throw ConflictException(
+                error = Error(
+                    code = ErrorCode.ACCOUNT_DUPLICATE_EMAIL
+                )
+            )
+        }
     }
 }

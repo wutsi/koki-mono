@@ -8,6 +8,7 @@ import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
+import com.wutsi.koki.tenant.dto.UserType
 import com.wutsi.koki.tenant.server.dao.UserRepository
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import jakarta.persistence.EntityManager
@@ -34,36 +35,36 @@ class UserService(
         return user
     }
 
-    fun getByEmail(email: String, tenantId: Long): UserEntity {
-        return dao.findByEmailAndTenantId(email, tenantId)
+    fun getByEmail(email: String, type: UserType, tenantId: Long): UserEntity {
+        return dao.findByEmailAndTypeAndTenantId(email.lowercase(), type, tenantId)
+            ?: throw NotFoundException(Error(ErrorCode.USER_NOT_FOUND))
+    }
+
+    fun getByUsername(username: String, type: UserType, tenantId: Long): UserEntity {
+        return dao.findByUsernameAndTypeAndTenantId(username.lowercase(), type, tenantId)
             ?: throw NotFoundException(Error(ErrorCode.USER_NOT_FOUND))
     }
 
     @Transactional
     fun create(request: CreateUserRequest, tenantId: Long): UserEntity {
-        val email = request.email.lowercase()
-        val duplicate = dao.findByEmailAndTenantId(email, tenantId)
-        if (duplicate != null) {
-            throw ConflictException(
-                error = Error(
-                    code = ErrorCode.USER_DUPLICATE_EMAIL
-                )
-            )
-        }
+        checkDuplicateUsername(null, request.type, request.username, tenantId)
+        checkDuplicateEmail(null, request.type, request.email, tenantId)
 
         val salt = UUID.randomUUID().toString()
         val currentUserId = securityService.getCurrentUserIdOrNull()
         val user = dao.save(
             UserEntity(
                 tenantId = tenantId,
-                email = email,
+                username = request.username.lowercase(),
+                email = request.email.lowercase(),
                 displayName = request.displayName,
-                status = UserStatus.ACTIVE,
+                status = request.status,
                 salt = salt,
                 password = passwordService.hash(request.password, salt),
                 createdById = currentUserId,
                 modifiedById = currentUserId,
                 language = request.language,
+                type = request.type,
             )
         )
 
@@ -73,18 +74,12 @@ class UserService(
 
     @Transactional
     fun update(userId: Long, request: UpdateUserRequest, tenantId: Long) {
-        val email = request.email.lowercase()
-        val duplicate = dao.findByEmailAndTenantId(email, tenantId)
-        if (duplicate != null && duplicate.id != userId) {
-            throw ConflictException(
-                error = Error(
-                    code = ErrorCode.USER_DUPLICATE_EMAIL
-                )
-            )
-        }
-
         val user = get(userId, tenantId)
-        user.email = email
+        checkDuplicateUsername(userId, user.type, request.username, tenantId)
+        checkDuplicateEmail(userId, user.type, request.email, tenantId)
+
+        user.username = request.username.lowercase()
+        user.email = request.email.lowercase()
         user.displayName = request.displayName
         user.language = request.language
         user.status = request.status
@@ -93,6 +88,28 @@ class UserService(
         dao.save(user)
 
         setRoles(user, request.roleIds.distinct())
+    }
+
+    private fun checkDuplicateUsername(userId: Long?, type: UserType, username: String, tenantId: Long) {
+        val duplicate = dao.findByUsernameAndTypeAndTenantId(username.lowercase(), type, tenantId)
+        if (duplicate != null && duplicate.id != userId) {
+            throw ConflictException(
+                error = Error(
+                    code = ErrorCode.USER_DUPLICATE_USERNAME
+                )
+            )
+        }
+    }
+
+    private fun checkDuplicateEmail(userId: Long?, type: UserType, email: String, tenantId: Long) {
+        val duplicate = dao.findByEmailAndTypeAndTenantId(email.lowercase(), type, tenantId)
+        if (duplicate != null && duplicate.id != userId) {
+            throw ConflictException(
+                error = Error(
+                    code = ErrorCode.USER_DUPLICATE_EMAIL
+                )
+            )
+        }
     }
 
     private fun setRoles(user: UserEntity, roleIds: List<Long>) {
@@ -116,6 +133,7 @@ class UserService(
         ids: List<Long> = emptyList(),
         roleIds: List<Long> = emptyList(),
         status: UserStatus? = null,
+        type: UserType? = null,
         permissions: List<String> = emptyList(),
         limit: Int = 20,
         offset: Int = 0,
@@ -138,6 +156,9 @@ class UserService(
         if (status != null) {
             jql.append(" AND U.status = :status")
         }
+        if (type != null) {
+            jql.append(" AND U.type IN :type")
+        }
         if (roleIds.isNotEmpty()) {
             jql.append(" AND R.id IN :roleIds")
         }
@@ -159,6 +180,9 @@ class UserService(
         }
         if (status != null) {
             query.setParameter("status", status)
+        }
+        if (type != null) {
+            query.setParameter("type", type)
         }
         if (permissions.isNotEmpty()) {
             query.setParameter("permissions", permissions)

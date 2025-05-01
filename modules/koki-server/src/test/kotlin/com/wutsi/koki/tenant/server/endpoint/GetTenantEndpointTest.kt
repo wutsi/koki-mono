@@ -52,6 +52,7 @@ class GetTenantEndpointTest {
             tenant.iconUrl
         )
         assertEquals("https://test.com", tenant.portalUrl)
+        assertEquals("https://client.tenant-1.com", tenant.clientPortalUrl)
     }
 
     @Test
