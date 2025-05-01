@@ -5,8 +5,8 @@ INSERT INTO T_USER(id, tenant_fk, type, username, email, password, display_name,
            (22, 2, 1, 'roger.milla','roger.milla@gmail.com', '607e0b9e5496964b1385b7c10e3e2403', 'Roger Milla', 1, '...143.,..');
 
 
-INSERT INTO T_ACCOUNT(id, tenant_fk, name, deleted)
-    VALUES(100, 1, 'WOO LLC', false);
+INSERT INTO T_ACCOUNT(id, tenant_fk, name, email, deleted)
+    VALUES(100, 1, 'WOO LLC', 'ray1@gmail.com', false);
 
 INSERT INTO T_ACCOUNT_USER(id, tenant_fk, account_fk, status, username, password, salt)
     VALUES (100, 1, 100, 1, 'woo.llc', '607e0b9e5496964b1385b7c10e3e2403', '...143.,..');
