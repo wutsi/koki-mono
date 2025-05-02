@@ -4,6 +4,6 @@ data class Amenity(
     val id: Long = -1,
     val categoryId: Long = -1,
     val name: String = "",
-    val icon: String = "",
+    val icon: String? = null,
     val active: Boolean = true,
 )
