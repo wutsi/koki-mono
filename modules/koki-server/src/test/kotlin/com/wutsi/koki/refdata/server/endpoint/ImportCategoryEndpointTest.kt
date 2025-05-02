@@ -70,6 +70,24 @@ class ImportCategoryEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("Office Supplies > Office Furniture > Cabinets", category.longName)
     }
 
+    @Sql(value = ["/db/test/clean.sql"])
+    @Test
+    fun amenities() {
+        val response = rest.getForEntity("/v1/categories/import?type=AMENITY", ImportResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val categories = dao.findByType(CategoryType.AMENITY)
+        assertEquals(15, categories.size)
+
+        val category = dao.findById(40001).get()
+        assertEquals(null, category.parentId)
+        assertEquals(0, category.level)
+        assertEquals(true, category.active)
+        assertEquals("Kitchen & Dining", category.name)
+        assertEquals("Kitchen & Dining", category.longName)
+    }
+
     @Test
     fun `bad type`() {
         val response = rest.getForEntity("/v1/categories/import?type=UNKNOWN", ErrorResponse::class.java)

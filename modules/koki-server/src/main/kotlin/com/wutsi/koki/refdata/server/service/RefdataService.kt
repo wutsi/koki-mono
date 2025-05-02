@@ -1,6 +1,7 @@
 package com.wutsi.koki.refdata.server.service
 
 import com.wutsi.koki.refdata.dto.CategoryType
+import com.wutsi.koki.refdata.server.io.AmenityImporter
 import com.wutsi.koki.refdata.server.io.CategoryImporter
 import com.wutsi.koki.refdata.server.io.GeonamesImporter
 import com.wutsi.koki.refdata.server.io.JuridictionImporter
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service
 @Service
 class RefdataService(
     private val categoryImporter: CategoryImporter,
+    private val amenityImporter: AmenityImporter,
     private val juridictionImporter: JuridictionImporter,
     private val geonamesImporter: GeonamesImporter,
     private val salesTaxImporter: SalesTaxImporter,
@@ -23,16 +25,17 @@ class RefdataService(
         )
     }
 
-    fun load() {
+    fun import() {
         LOGGER.info("Initializing")
 
-        loadCategories()
-        loadCountryData()
+        importCategories()
+        importAmenities()
+        importCountryData()
 
         LOGGER.info("Initialized")
     }
 
-    private fun loadCategories() {
+    private fun importCategories() {
         CategoryType.entries.forEach { type ->
             if (type != CategoryType.UNKNOWN) {
                 LOGGER.info("$type - Loading categories")
@@ -41,7 +44,11 @@ class RefdataService(
         }
     }
 
-    private fun loadCountryData() {
+    private fun importAmenities() {
+        amenityImporter.import()
+    }
+
+    private fun importCountryData() {
         COUNTRIES.forEach { country ->
             LOGGER.info("$country - Loading locations")
             geonamesImporter.import(country)

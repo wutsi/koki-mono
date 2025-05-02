@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController
 class RefdataEndpoints(
     val service: RefdataService,
 ) {
-    @GetMapping("/load")
-    fun load() {
-        service.load()
+    @GetMapping("/import")
+    fun import() {
+        service.import()
     }
 }

@@ -5,4 +5,5 @@ enum class CategoryType {
     SERVICE,
     DIGITAL,
     PHYSICAL,
+    AMENITY,
 }

@@ -32,7 +32,7 @@ class CategoryImporter(
         var errors = mutableListOf<ImportMessage>()
 
         /* import */
-        val filename = "/refdata/categories/${type.name.lowercase()}.csv"
+        val filename = "/refdata/category/${type.name.lowercase()}.csv"
         val input = SalesTaxImporter::class.java.getResourceAsStream(filename)
             ?: throw ConflictException(
                 error = Error(

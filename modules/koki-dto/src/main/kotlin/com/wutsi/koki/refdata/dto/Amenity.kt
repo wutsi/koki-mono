@@ -1,0 +1,9 @@
+package com.wutsi.koki.refdata.dto
+
+data class Amenity(
+    val id: Long = -1,
+    val categoryId: Long = -1,
+    val name: String = "",
+    val icon: String = "",
+    val active: Boolean = true,
+)
