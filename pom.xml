@@ -53,7 +53,7 @@
     </repositories>
 
     <properties>
-        <wutsi-dto.version>0.0.194</wutsi-dto.version>
+        <wutsi-dto.version>0.0.195</wutsi-dto.version>
         <wutsi-platform.version>0.0.21</wutsi-platform.version>
         <wutsi-sdk.version>0.0.6</wutsi-sdk.version>
 
@@ -113,7 +113,7 @@
         <jgrapht.version>1.5.2</jgrapht.version>
         <jython.version>2.7.4</jython.version>
         <kotlin.version>2.1.20</kotlin.version>
-        <kotlin-jackson.version>2.19.0</kotlin-jackson.version>
+        <kotlin-jackson.version>2.18.3</kotlin-jackson.version>
         <kotlin-mockito.version>2.2.0</kotlin-mockito.version>
         <kotlinpoet.version>1.18.1</kotlinpoet.version>
         <ktlint.version>1.5.0</ktlint.version>
