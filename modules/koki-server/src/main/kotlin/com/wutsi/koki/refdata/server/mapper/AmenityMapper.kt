@@ -11,7 +11,8 @@ class AmenityMapper {
             id = entity.id,
             active = entity.active,
             categoryId = entity.categoryId,
-            name = entity.name
+            name = entity.name,
+            icon = entity.icon,
         )
     }
 }
