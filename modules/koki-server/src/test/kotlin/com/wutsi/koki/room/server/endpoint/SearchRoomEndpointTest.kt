@@ -21,7 +21,7 @@ class SearchRoomEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Test
     fun `by type`() {
-        val response = rest.getForEntity("/v1/rooms?type=PROPERTY", SearchRoomResponse::class.java)
+        val response = rest.getForEntity("/v1/rooms?type=HOUSE", SearchRoomResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
