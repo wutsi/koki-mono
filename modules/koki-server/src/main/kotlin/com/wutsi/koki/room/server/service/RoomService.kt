@@ -201,7 +201,7 @@ class RoomService(
     }
 
     @Transactional
-    fun addFiles(id: Long, request: AddImageRequest, tenantId: Long): List<FileEntity> {
+    fun addImage(id: Long, request: AddImageRequest, tenantId: Long): List<FileEntity> {
         val room = get(id, tenantId)
         val files = fileService.search(
             tenantId = tenantId,
@@ -224,11 +224,11 @@ class RoomService(
     }
 
     @Transactional
-    fun removeFile(id: Long, fileId: Long, tenantId: Long): Boolean {
+    fun removeImage(id: Long, fileId: Long, tenantId: Long): Boolean {
         val room = get(id, tenantId)
-        val amenity = fileService.get(fileId, tenantId)
-        if (room.images.contains(amenity)) {
-            room.images.remove(amenity)
+        val file = fileService.get(fileId, tenantId)
+        if (room.images.contains(file)) {
+            room.images.remove(file)
             dao.save(room)
             return true
         } else {

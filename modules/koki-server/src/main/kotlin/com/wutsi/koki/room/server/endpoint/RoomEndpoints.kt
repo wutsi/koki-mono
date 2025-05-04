@@ -117,7 +117,7 @@ class RoomEndpoints(
         @PathVariable id: Long,
         @RequestBody @Valid request: AddImageRequest
     ) {
-        service.addFiles(id, request, tenantId)
+        service.addImage(id, request, tenantId)
     }
 
     @DeleteMapping("/{id}/images/{fileId}")
@@ -126,6 +126,6 @@ class RoomEndpoints(
         @PathVariable id: Long,
         @PathVariable fileId: Long,
     ) {
-        service.removeFile(id, fileId, tenantId)
+        service.removeImage(id, fileId, tenantId)
     }
 }

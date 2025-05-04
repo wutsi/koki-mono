@@ -12,8 +12,6 @@ import com.wutsi.koki.TenantFixtures.tenants
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
-import com.wutsi.koki.room.dto.CreateRoomRequest
-import com.wutsi.koki.room.dto.CreateRoomResponse
 import com.wutsi.koki.room.dto.RoomType
 import com.wutsi.koki.room.dto.UpdateRoomRequest
 import kotlin.test.Test
@@ -64,7 +62,7 @@ class EditRoomControllerTest : AbstractPageControllerTest() {
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.ACCOUNT_IN_USE)
         doThrow(ex).whenever(rest).postForEntity(
-            any<String>(), any<CreateRoomRequest>(), eq(CreateRoomResponse::class.java)
+            any<String>(), any<UpdateRoomRequest>(), eq(Any::class.java)
         )
 
         navigateTo("/rooms/${room.id}/edit")
@@ -84,7 +82,7 @@ class EditRoomControllerTest : AbstractPageControllerTest() {
         input("#postalCode", "HzH zHz")
         click("button[type=submit]")
 
-        assertCurrentPageIs(PageName.ROOM_CREATE)
+        assertCurrentPageIs(PageName.ROOM_EDIT)
         assertElementPresent(".alert-danger")
     }
 
@@ -98,7 +96,7 @@ class EditRoomControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun `create - without permission room-manage`() {
+    fun `edit - without permission room-manage`() {
         setUpUserWithoutPermissions(listOf("room:manage"))
 
         navigateTo("/rooms/${room.id}/edit")

@@ -33,7 +33,7 @@ class RemoveImageEndpointTest : AuthorizationAwareEndpointTest() {
     fun delete() {
         rest.delete("/v1/rooms/111/images/11")
 
-        val ids = getFileIds(11L)
+        val ids = getFileIds(111L)
         assertEquals(1, ids.size)
         assertEquals(listOf(22L), ids)
     }
