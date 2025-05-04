@@ -1,0 +1,14 @@
+{
+  "tabs": {
+    "main": [
+      "contact",
+      "file",
+      "tax",
+      "invoice"
+    ],
+    "side": [
+      "note",
+      "email"
+    ]
+  }
+}

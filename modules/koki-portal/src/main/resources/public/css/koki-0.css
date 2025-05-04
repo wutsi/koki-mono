@@ -1,9 +1,19 @@
-/* === VARIABLES ===== */
-
-/* === CORE ===== */
 body {
     background: #f8f8f8;
     margin-top: 4.8em;
+}
+
+h1.entity-title {
+    font-size: 1.25em;
+}
+
+h1.entity-title img {
+    width: 32px;
+    height: 32px
+}
+
+a.entity-title {
+    text-decoration: none;
 }
 
 .flex {
@@ -51,16 +61,33 @@ body {
     font-size: x-large;
 }
 
+.share-panel {
+    border-radius: 0.5em;
+    border: 1px solid gray;
+    display: inline-block;
+    max-width: 100%;
+    padding: 0.5em;
+}
+
+.share-panel .share-link {
+    background: #f8f8f8;
+    margin-right: 0.5em;
+    max-width: 85%;
+    overflow: clip;
+    padding: 0.5em;
+    text-wrap: nowrap;
+}
+
+.share-panel .btn {
+    margin-top: .4em;
+}
+
 .padding {
     padding: 1em;
 }
 
 .padding-2x {
     padding: 2em;
-}
-
-.padding-4x {
-    padding: 4em;
 }
 
 .padding-small {
@@ -159,7 +186,7 @@ body {
     margin-right: 2em;
 }
 
-/* === NAVBAR ====== */
+
 .navbar {
     border-bottom: 1px solid gray;
     background: white;
@@ -196,12 +223,6 @@ body {
     font-size: 1.2em;
 }
 
-/* === ERROR ====== */
-.error-container h1 {
-    font-size: 8em;
-}
-
-/* === MENU ====== */
 #menubar {
     padding-top: 0;
     padding-bottom: 0;
@@ -225,151 +246,6 @@ body {
     margin-right: 0;
 }
 
-/* === FORMS ====== */
-textarea:read-only,
-input:read-only {
-    background: #f8f8f8;
-}
-
-*:user-invalid,
-.user-invalid,
-select:user-invalid + .select2-container > span.selection > span.select2-selection,
-select:user-invalid + .select2-container--focus > span.selection > span.select2-selection {
-    border: 2px solid red !important;
-}
-
-@supports not selector(:user-invalid) {
-    input:invalid,
-    select:invalid,
-    textarea:invalid
-    select:invalid + .select2-container > span.selection > span.select2-selection,
-    select:invalid + .select2-container--focus > span.selection > span.select2-selection {
-        border: 2px solid red;
-    }
-}
-
-.error {
-    color: red;
-}
-
-.success {
-    color: darkgreen;
-}
-
-.info {
-    color: blue;
-}
-
-.required {
-    color: darkred;
-}
-
-.form-header {
-    background: white;
-    border-radius: 10px;
-    border: 1px solid gray;
-    padding: 1em;
-}
-
-.form-footer {
-    background: white;
-    border-radius: 10px;
-    border: 1px solid gray;
-    margin-top: 1em;
-    padding: 1em;
-}
-
-.float-right {
-    float: right;
-}
-
-.section {
-    background: white;
-    border-radius: 10px;
-    border: 1px solid gray;
-    margin-top: 1em;
-}
-
-.section-read-only {
-    background: #f8f8f8;
-}
-
-.section-header {
-    background: #f8f8f8;
-    border-radius: .6em .6em 0 0;
-    border-bottom: 1px solid gray;
-    padding: .5em;
-}
-
-.section-header .section-title {
-    font-size: 1em;
-    font-weight: bold;
-    margin: 0;
-    padding: 0;
-    text-transform: uppercase;
-}
-
-.section-item {
-    padding: 1em;
-    border-bottom: 1px solid lightgray;
-}
-
-.section-item:last-child {
-    margin-bottom: 0;
-    border-bottom: none;
-}
-
-.section-item table.table:last-child {
-    margin-bottom: 0;
-}
-
-.section-item label.title {
-    font-weight: bold;
-    font-size: larger;
-    display: block
-}
-
-.section-item .description {
-    font-size: small;
-}
-
-.section-item textarea,
-.section-item input,
-.section-item select {
-    padding: .5em;
-}
-
-.section-item textarea,
-.section-item input:not([type]),
-.section-item input[type=tel],
-.section-item input[type=text],
-.section-item input[type=email],
-.section-item input[type=password],
-.section-item input[type=url],
-.section-item select {
-    width: 100%;
-}
-
-.section-item .file-upload-container input[type=file] {
-    display: none;
-}
-
-.section-item .file-upload-container .filename {
-    margin-left: 1em;
-}
-
-.file-upload-container .file-upload-container .btn-close {
-    margin-left: 0.5em;
-}
-
-.checkbox-container,
-.radio-container {
-    display: flex;
-    justify-content: space-between;
-}
-
-
-/* === WIDGET ===== */
 .widget {
     background: white;
     border-radius: 10px;
@@ -415,6 +291,15 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
     margin-right: 0;
 }
 
+td.toolbar {
+    text-align: right;
+}
+
+.widget-toolbar a:last-child,
+.toolbar a:last-child {
+    margin-right: 0;
+}
+
 .widget .tab-content .widget {
     border: 0;
 }
@@ -427,43 +312,122 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
     padding: 0;
 }
 
+.workflow-image {
+    margin: 0 auto;
+    text-align: center;
+}
 
-.navbar {
+.workflow-image img {
+    padding: 1em;
+    max-width: 100%;
+}
+
+
+.status-done,
+.status-approved,
+.status-success {
+    color: darkgreen;
+}
+
+.status-running {
+    color: darkblue;
+}
+
+.status-cancelled,
+.status-rejected {
+    color: darkred;
+}
+
+tr.activity-running {
+    border: 4px solid black;
+}
+
+/* Notes */
+.note-body p {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+/* Settings */
+.settings-container {
+    display: flex;
+}
+
+.settings-sidebar {
+    width: 20vw;
+    height: 100vh;
+    background: #f8f8f8;
+    border-right: 1px solid gray;
+}
+
+.settings-sidebar ul,
+.settings-content ul {
+    margin: 0;
+    padding: 0;
+}
+
+.settings-sidebar ul li,
+.settings-content ul li {
     border-bottom: 1px solid gray;
+    padding: 0.5em;
+    list-style: none;
+}
+
+.settings-content ul li {
+    padding-left: 1em;
+}
+
+.settings-sidebar ul li.menu-item a,
+.settings-content ul li.menu-item a {
+    color: black;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+}
+
+.settings-sidebar ul li.menu-item a.back,
+.settings-content ul li.menu-item a.back {
+    width: auto;
+}
+
+
+.settings-sidebar ul li.menu-item h3,
+.settings-content ul li.menu-item h3 {
+    margin-bottom: 0;
+}
+
+
+.settings-sidebar ul li.active a,
+.settings-content ul li.active a {
+    font-weight: bold;
+}
+
+.settings-content {
+    width: 80vw;
+    height: 100vh;
     background: white;
 }
 
-.navbar .brand-name {
-    padding: .5em !important;
-    font-size: .8em !important;
-    font-weight: bold !important;
+.settings-content textarea,
+.settings-content input,
+.settings-content select {
+    padding: .5em;
 }
 
-.navbar img.brand-logo {
-    margin-left: .5em !important;
-    height: 50px;
+.settings-content textarea,
+.settings-content input:not([type]),
+.settings-content input[type=text],
+.settings-content input[type=tel],
+.settings-content input[type=email],
+.settings-content input[type=password],
+.settings-content input[type=url],
+.settings-content select {
+    width: 100%;
 }
 
-.navbar .nav-link {
-    border: 1px solid gray;
-    margin-right: .5em;
+.settings-content .input-group input {
+    width: auto;
 }
-
-.navbar .dropdown-menu {
-    position: fixed;
-    float: none;
-    left: auto;
-    width: 350px;
-    right: 10px;
-    border-radius: 0;
-    margin-top: -1em;
-}
-
-.navbar .dropdown-menu .user-hi {
-    font-weight: bold;
-    font-size: 1.2em;
-}
-
 
 /* ============================= */
 /* bootstrap                     */
@@ -517,6 +481,61 @@ a.btn-back {
 .bg-primary a {
     color: white;
 }
+
+/* ============================= */
+/* step progress bar             */
+/* ============================= */
+.steps-progress-bar {
+    overflow: hidden;
+    counter-reset: step; /*CSS counters to number the steps*/
+    width: 100%;
+    padding: 0;
+    margin: 0 auto;
+}
+
+.steps-progress-bar li {
+    list-style-type: none;
+    color: white;
+    font-size: 14px;
+    width: 16%;
+    float: left;
+    position: relative;
+    text-align: center;
+}
+
+/*progressbar connectors*/
+.steps-progress-bar li:after {
+    content: '';
+    width: 92%;
+    height: 2px;
+    background: #404040;
+    position: absolute;
+    left: -46%;
+    top: 10px;
+}
+
+.steps-progress-bar li:first-child:after {
+    /*connector not needed before the first step*/
+    content: none;
+}
+
+/*marking active/completed steps green*/
+/*The number of the step and the connector before it = green*/
+.steps-progress-bar li.active:before,
+.steps-progress-bar li.active:after {
+    background: #0072DC;
+    color: white;
+}
+
+.steps-progress-bar li.active p {
+    font-weight: bold;
+}
+
+.steps-progress-bar li p {
+    color: black;
+    margin-bottom: 0;
+}
+
 
 /* ============================= */
 /* highlightjs line-number       */

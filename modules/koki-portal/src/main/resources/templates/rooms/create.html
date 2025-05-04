@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('product')}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/product :: product-breadcrumb(null)}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <form class="form" method="post" th:action="@{/products/add-new}" th:object="${form}">
+                <div class="form-body">
+                    <div class="section">
+                        <div class="section-body">
+                            <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+
+                            <div class="section-item">
+                                <label class="title">Name <span class="required">*</span></label>
+                                <input maxlength="100" required th:field="*{name}"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Code <span class="required">*</span></label>
+                                <input maxlength="30" required th:field="*{code}"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Type <span class="required">*</span></label>
+                                <select required th:field="*{type}">
+                                    <option value=""></option>
+                                    <option th:each="type : ${types}"
+                                            th:text="#{'product-type.' + ${type}}"
+                                            th:value="${type}">
+                                        TYPE
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Category</label>
+                                <select th:field="*{categoryId}"></select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Unit Price: <span class="required">*</span></label>
+                                <input required step="0.01" th:field="*{unitPrice}" type="number"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Currency: <span class="required">*</span></label>
+                                <select th:field="*{currency}">
+                                    <option th:each="currency : ${currencies}"
+                                            th:text="${currency.displayName}"
+                                            th:value="${currency.currencyCode}"
+                                    >CURRENCY
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Description</label>
+                                <textarea rows="3" th:field="*{description}"></textarea>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Active</label>
+                                <select th:field="*{active}">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section" id="section-service" style="display: none">
+                    <div class="section-header">
+                        <h3 class="section-title">Service Details</h3>
+                    </div>
+                    <div class="section-body">
+                        <div class="section-item">
+                            <label class="title">Unit</label>
+                            <select required th:field="*{unitId}">
+                                <option value="-1"></option>
+                                <option th:each="unit : ${units}"
+                                        th:text="${unit.name}"
+                                        th:value="${unit.id}">
+                                    UNIT
+                                </option>
+                            </select>
+                        </div>
+                        <div class="section-item">
+                            <label class="title">Quantity</label>
+                            <input step="0" th:field="*{quantity}" type="number"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit">Submit</button>
+                    <a class="btn-cancel" href="/products">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', koki_product_editor_ready, false);
+</script>
+</body>
+</html>

@@ -9,6 +9,8 @@ object ErrorCode {
     val ACCOUNT_IN_USE: String = "$PREFIX:account:in-use"
     val ACCOUNT_DUPLICATE_EMAIL: String = "$PREFIX:account:duplicate-email"
 
+    val AMENITY_NOT_FOUND: String = "$PREFIX:ameniry:amenity-not-found"
+
     val ATTRIBUTE_NOT_FOUND: String = "$PREFIX:attribute:not-found"
     val ATTRIBUTE_NAME_MISSING: String = "$PREFIX:attribute:name-missing"
     val ATTRIBUTE_TYPE_INVALID: String = "$PREFIX:attribute:type-invalid"
@@ -84,6 +86,8 @@ object ErrorCode {
     val ROLE_NOT_FOUND: String = "$PREFIX:role:not-found"
     val ROLE_NAME_MISSING: String = "$PREFIX:role:name-missing"
     val ROLE_IN_USE: String = "$PREFIX:role:in-use"
+
+    val ROOM_NOT_FOUND: String = "$PREFIX:room:room-not-found"
 
     val SALES_TAX_COUNTRY_NOT_SUPPORTED: String = "$PREFIX:sales-tax:country-not-supported"
     val SALES_TAX_STATE_NOT_FOUND: String = "$PREFIX:sales-tax:state-not-found"

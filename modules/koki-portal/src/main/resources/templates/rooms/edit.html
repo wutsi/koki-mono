@@ -1,0 +1,158 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('room')}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/room :: breadcrumb(null)}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <form class="form" method="post" th:action="@{/rooms/add-new}" th:object="${form}">
+                <div class="form-body">
+                    <div class="section">
+                        <div class="section-body">
+                            <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+
+                            <div class="section-item">
+                                <label class="title">Title <span class="required">*</span></label>
+                                <input maxlength="100" required th:field="*{title}"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Type <span class="required">*</span></label>
+                                <select th:field="*{type}">
+                                    <option value=""></option>
+                                    <option th:each="type : ${types}"
+                                            th:text="#{'room-type.' + ${type}}"
+                                            th:value="${type.name}"
+                                    >
+                                        TYPE
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Rooms</label>
+                                <select th:field="*{numberOfRooms}">
+                                    <option th:each="i : ${rooms}"
+                                            th:text="${i}"
+                                            th:value="${i}">
+                                        TYPE
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Baths</label>
+                                <select th:field="*{numberOfBathrooms}">
+                                    <option th:each="i : ${rooms}"
+                                            th:text="${i}"
+                                            th:value="${i}">
+                                        00
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Beds</label>
+                                <select th:field="*{numberOfBeds}">
+                                    <option th:each="i : ${rooms}"
+                                            th:text="${i}"
+                                            th:value="${i}">
+                                        00
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Max Guests</label>
+                                <select th:field="*{maxGuests}">
+                                    <option th:each="i : ${rooms}"
+                                            th:text="${i}"
+                                            th:value="${i}">
+                                        00
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title">Price per night<span class="required">*</span></label>
+                                <input required step="0.01" th:field="*{pricePerNight}" type="number"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Currency: <span class="required">*</span></label>
+                                <select th:field="*{currency}">
+                                    <option th:each="currency : ${currencies}"
+                                            th:text="${currency.displayName}"
+                                            th:value="${currency.currencyCode}"
+                                    >CURRENCY
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title">Description</label>
+                                <textarea rows="3" th:field="*{description}"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <h3 class="section-title">Address</h3>
+                    </div>
+                    <div class="section-body">
+                        <div class="section-item">
+                            <label class="title">Country<span class="required">*</span></label>
+                            <select required th:field="*{country}">
+                                <option value=""></option>
+                                <option th:each="country : ${countries}"
+                                        th:text="${country.displayCountry}"
+                                        th:value="${country.country}"
+                                >
+                                    COUNTRY
+                                </option>
+                            </select>
+                        </div>
+                        <div class="section-item">
+                            <label class="title">City<span class="required">*</span></label>
+                            <select required th:field="*{cityId}">
+                                <option selected
+                                        th:if="${city}"
+                                        th:text="${city?.name}"
+                                        th:value="${city?.id}">
+                                    CITY
+                                </option>
+                            </select>
+                        </div>
+                        <div class="section-item">
+                            <label class="title">Street</label>
+                            <input th:field="*{street}"/>
+                        </div>
+                        <div class="section-item">
+                            <label class="title">Postal Code</label>
+                            <input maxlength="30" th:field="*{postalCode}"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit">Submit</button>
+                    <a class="btn-cancel" href="/rooms">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    koki_address_editor('country', 'cityId');
+</script>
+</body>
+</html>

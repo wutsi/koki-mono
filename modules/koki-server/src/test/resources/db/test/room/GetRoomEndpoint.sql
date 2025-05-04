@@ -1,0 +1,31 @@
+INSERT INTO T_LOCATION (id, parent_fk, type, name, ascii_name, country)
+    VALUES (100, null, 2, 'Quebec',   'Quebec', 'CA'),
+           (1001, 100, 3, 'Montreal', 'Montreal', 'CA'),
+           (200, null, 2, 'Ontario',  'Ontario', 'CA'),
+           (2001, 200, 3, 'Toronto',  'Toronto', 'CA');
+
+INSERT INTO T_AMENITY(id, category_fk, name)
+    VALUES (1, 100, 'A'),
+           (2, 100, 'B');
+
+INSERT INTO T_FILE(id, tenant_fk, created_by_fk, name, content_type, content_length, url, deleted)
+    VALUES (11, 1, 11,   'foo.png', 'image/png',  1000, 'https://www.file.com/foo.pdf', false),
+           (22, 1, null, 'bar.png', 'image/png',  1000, 'https://www.file.com/bar.pdf', false),
+           (33, 1, null, 'foo.png', 'image/png',  1000, 'https://www.file.com/foo.pdf', false),
+           (99, 1, null, 'foo.jph', 'image/jpeg', 1000, 'https://www.file.com/foo.pdf', true);
+
+
+INSERT INTO T_ROOM(id, tenant_fk, type, status, city_fk, state_fk, country, title, description, number_of_bathrooms, number_of_beds, number_of_rooms, max_guests, postal_code, street, deleted, deleted_at, deleted_by_fk, price_per_night, currency)
+    VALUES (111, 1, 1, 2, 1001, 100, 'CA', 'Room A', 'This is the title of the room', 2, 4, 6, 10, '11111', '3030 Linton', false, null, null, 35, 'CAD'),
+           (112, 1, 1, 2, 1001, 100, 'CA', 'Room A', null, 1, 1, 1, 1, null, null, true, null, 3333, null, null),
+           (200, 2, 1, 2, 1001, 100, 'CA', 'Room A', null, 1, 1, 1, 1, null, null, true, null, 3333, null, null);
+
+INSERT INTO T_ROOM_AMENITY(room_fk, amenity_fk)
+    VALUES (111, 1),
+           (111, 2);
+
+INSERT INTO T_ROOM_IMAGE(room_fk, file_fk)
+    VALUES (111, 11),
+           (111, 22),
+           (111, 33),
+           (111, 99);

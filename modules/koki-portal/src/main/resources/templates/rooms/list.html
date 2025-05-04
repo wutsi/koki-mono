@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('product')}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/product :: product-breadcrumb(null)}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div class="flex flex-space-between margin-bottom">
+                        <div>
+                            <a class="btn-create btn btn-primary btn-sm" href="/products/create"
+                               th:if="${user?.hasPermission('product:manage')}">
+                                Create New Product
+                            </a>
+                        </div>
+                        <div>
+                            <select class="btn btn-sm btn-light" id="filter-type"
+                                    onchange="koki_products_on_filter_changed()"
+                                    style="width: auto"
+                                    th:if="!${types.isEmpty()}"
+                            >
+                                <option value="">All Types</option>
+                                <option th:each="tt : ${types}"
+                                        th:selected="${tt} == ${type}"
+                                        th:text="#{'product-type.' + ${tt}}"
+                                        th:value="${tt}"
+                                >TYPE
+                                </option>
+                            </select>
+                            <select class="btn btn-sm btn-light" id="filter-active"
+                                    onchange="koki_products_on_filter_changed()"
+                                    style="width: auto"
+                            >
+                                <option value="">All Statuses</option>
+                                <option th:selected="${active == 1}" value="1">Active</option>
+                                <option th:selected="${active == 0}" value="0">Not Active</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Code</th>
+                            <th>Type</th>
+                            <th>Category</th>
+                            <th>Active</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="product" th:each="product : ${products}">
+                            <div th:replace="~{__components/product :: columns(${product})}"></div>
+                        </tr>
+                        <tr th:replace="~{__components/product :: load-more(${moreUrl})}"></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
+<script>
+    function koki_products_on_filter_changed() {
+        const type = document.getElementById('filter-type').value;
+        const active = document.getElementById('filter-active').value;
+
+        document.location.href = '/products?' +
+            (type && type.length > 0 ? '&type=' + type : '') +
+            (active && active.length > 0 ? '&active=' + active : '');
+    }
+
+</script>
+</body>
+</html>

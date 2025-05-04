@@ -1,0 +1,9 @@
+package com.wutsi.koki.room.dto
+
+enum class RoomType {
+    UNKNOWN,
+    HOUSE,
+    APARTMENT,
+    HOTEL,
+    ROOM,
+}
