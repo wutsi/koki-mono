@@ -11,13 +11,13 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/room :: breadcrumb(null)}"></div>
+            <div th:replace="~{__components/room :: breadcrumb(${room})}"></div>
         </div>
     </div>
 
     <div class="row">
         <div class="col-12">
-            <form class="form" method="post" th:action="@{/rooms/add-new}" th:object="${form}">
+            <form class="form" method="post" th:action="@{'/rooms/' + ${room.id} + '/update'}" th:object="${form}">
                 <div class="form-body">
                     <div class="section">
                         <div class="section-body">
@@ -144,7 +144,7 @@
 
                 <div class="form-footer">
                     <button type="submit">Submit</button>
-                    <a class="btn-cancel" href="/rooms">Cancel</a>
+                    <a class="btn-cancel" th:href="'/rooms/' + ${room.id}">Cancel</a>
                 </div>
             </form>
         </div>

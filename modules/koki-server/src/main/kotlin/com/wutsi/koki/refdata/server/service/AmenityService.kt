@@ -1,5 +1,8 @@
 package com.wutsi.koki.refdata.server.service
 
+import com.wutsi.koki.error.dto.Error
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.refdata.server.dao.AmenityRepository
 import com.wutsi.koki.refdata.server.domain.AmenityEntity
 import jakarta.persistence.EntityManager
@@ -14,6 +17,11 @@ class AmenityService(
 ) {
     fun all(): List<AmenityEntity> {
         return dao.findAll().toList()
+    }
+
+    fun get(id: Long): AmenityEntity {
+        return getByIdOrNull(id)
+            ?: throw NotFoundException(error = Error(ErrorCode.AMENITY_NOT_FOUND))
     }
 
     fun getByIdOrNull(id: Long): AmenityEntity? {

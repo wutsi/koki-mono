@@ -1,13 +1,9 @@
 {
   "tabs": {
     "main": [
-      "contact",
-      "file",
-      "tax",
-      "invoice"
+      "file"
     ],
     "side": [
-      "note",
       "email"
     ]
   }

@@ -26,7 +26,7 @@ class LocationService(
         return dao.findById(id).getOrNull()
     }
 
-    fun get(id: Long, type: LocationType): LocationEntity? {
+    fun get(id: Long, type: LocationType): LocationEntity {
         val location = dao.findById(id).getOrNull()
             ?: throw NotFoundException(error = Error(ErrorCode.LOCATION_NOT_FOUND, parameter = Parameter(value = id)))
 

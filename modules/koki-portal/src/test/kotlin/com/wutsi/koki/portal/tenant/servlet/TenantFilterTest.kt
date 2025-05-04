@@ -86,7 +86,7 @@ class TenantFilterTest {
 
     @Test
     fun `ignore js`() {
-        doReturn("/js/foo/koki.js").whenever(request).requestURI
+        doReturn("/js/foo/koki-0.js").whenever(request).requestURI
 
         filter.doFilter(request, response, chain)
 

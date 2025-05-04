@@ -1,12 +1,7 @@
-package com.wutsi.koki.lodging.server.endpoint
+package com.wutsi.koki.room.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.lodging.dto.AddAmenityRequest
-import com.wutsi.koki.lodging.dto.CreateRoomRequest
-import com.wutsi.koki.lodging.dto.CreateRoomResponse
-import com.wutsi.koki.lodging.dto.RoomStatus
-import com.wutsi.koki.lodging.dto.RoomType
-import com.wutsi.koki.lodging.server.dao.RoomRepository
+import com.wutsi.koki.room.dto.AddAmenityRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
@@ -14,7 +9,7 @@ import javax.sql.DataSource
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/lodging/AddAmenityEndpoint.sql"])
+@Sql(value = ["/db/test/clean.sql", "/db/test/room/AddAmenityEndpoint.sql"])
 class AddAmenityEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var ds: DataSource
@@ -39,21 +34,21 @@ class AddAmenityEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
     fun add() {
         val request = AddAmenityRequest(
-            amenityId = 100
+            amenityIds = listOf(5, 100)
         )
         val response = rest.postForEntity("/v1/rooms/111/amenities", request, Any::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val amenityIds = getAmenityIds(111L)
-        assertEquals(5, amenityIds.size)
-        assertEquals(listOf(1L, 2L, 3L, 4L, 100L), amenityIds)
+        assertEquals(6, amenityIds.size)
+        assertEquals(listOf(1L, 2L, 3L, 4L, 5, 100L), amenityIds)
     }
 
     @Test
     fun `add again`() {
         val request = AddAmenityRequest(
-            amenityId = 1
+            amenityIds = listOf(1L)
         )
         val response = rest.postForEntity("/v1/rooms/112/amenities", request, Any::class.java)
 

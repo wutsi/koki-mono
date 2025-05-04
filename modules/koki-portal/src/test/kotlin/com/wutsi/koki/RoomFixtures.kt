@@ -1,13 +1,13 @@
 package com.wutsi.koki
 
-import com.wutsi.koki.lodging.dto.Room
-import com.wutsi.koki.lodging.dto.RoomStatus
-import com.wutsi.koki.lodging.dto.RoomSummary
-import com.wutsi.koki.lodging.dto.RoomType
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.Money
+import com.wutsi.koki.room.dto.Room
+import com.wutsi.koki.room.dto.RoomStatus
+import com.wutsi.koki.room.dto.RoomSummary
+import com.wutsi.koki.room.dto.RoomType
 
-object LodgingFixtures {
+object RoomFixtures {
     val rooms = listOf(
         RoomSummary(
             id = 1111,

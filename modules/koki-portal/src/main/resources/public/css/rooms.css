@@ -1,3 +1,6 @@
-table.room-list td.room {
-    cursor: pointer;
+/* == DATA ROW === */
+table tr.room td a {
+    display: block !important;
+    color: black !important;
+    text-decoration: none !important;
 }

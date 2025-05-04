@@ -6,25 +6,22 @@ import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.AccountFixtures.attributes
 import com.wutsi.koki.RefDataFixtures.locations
+import com.wutsi.koki.RoomFixtures.room
 import com.wutsi.koki.TenantFixtures.tenants
-import com.wutsi.koki.account.dto.CreateAccountRequest
-import com.wutsi.koki.account.dto.CreateAccountResponse
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.lodging.dto.CreateRoomRequest
-import com.wutsi.koki.lodging.dto.CreateRoomResponse
-import com.wutsi.koki.lodging.dto.RoomType
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
+import com.wutsi.koki.room.dto.RoomType
+import com.wutsi.koki.room.dto.UpdateRoomRequest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class CreateRoomControllerTest : AbstractPageControllerTest() {
+class EditRoomControllerTest : AbstractPageControllerTest() {
     @Test
-    fun create() {
-        navigateTo("/rooms/create")
-        assertCurrentPageIs(PageName.ROOM_CREATE)
+    fun edit() {
+        navigateTo("/rooms/${room.id}/edit")
+        assertCurrentPageIs(PageName.ROOM_EDIT)
 
         input("#title", "Belle villa")
         select("#type", 2)
@@ -42,9 +39,9 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
         input("#postalCode", "HzH zHz")
         click("button[type=submit]")
 
-        val request = argumentCaptor<CreateRoomRequest>()
+        val request = argumentCaptor<UpdateRoomRequest>()
         verify(rest).postForEntity(
-            eq("$sdkBaseUrl/v1/rooms"), request.capture(), eq(CreateRoomResponse::class.java)
+            eq("$sdkBaseUrl/v1/rooms/${room.id}"), request.capture(), eq(Any::class.java)
         )
         assertEquals("Belle villa", request.firstValue.title)
         assertEquals(RoomType.APARTMENT, request.firstValue.type)
@@ -65,12 +62,10 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.ACCOUNT_IN_USE)
         doThrow(ex).whenever(rest).postForEntity(
-            any<String>(), any<CreateRoomRequest>(), eq(CreateRoomResponse::class.java)
+            any<String>(), any<UpdateRoomRequest>(), eq(Any::class.java)
         )
 
-        navigateTo("/rooms/create")
-        assertCurrentPageIs(PageName.ROOM_CREATE)
-
+        navigateTo("/rooms/${room.id}/edit")
         input("#title", "Belle villa")
         select("#type", 2)
         select("#numberOfRooms", 3)
@@ -87,15 +82,24 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
         input("#postalCode", "HzH zHz")
         click("button[type=submit]")
 
-        assertCurrentPageIs(PageName.ROOM_CREATE)
+        assertCurrentPageIs(PageName.ROOM_EDIT)
         assertElementPresent(".alert-danger")
     }
 
     @Test
-    fun `create - without permission room-manage`() {
+    fun cancel() {
+        navigateTo("/rooms/${room.id}/edit")
+        scrollToBottom()
+        click(".btn-cancel")
+
+        assertCurrentPageIs(PageName.ROOM)
+    }
+
+    @Test
+    fun `edit - without permission room-manage`() {
         setUpUserWithoutPermissions(listOf("room:manage"))
 
-        navigateTo("/rooms/create")
+        navigateTo("/rooms/${room.id}/edit")
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 
@@ -103,7 +107,7 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
     fun `login required`() {
         setUpAnonymousUser()
 
-        navigateTo("/rooms/create")
+        navigateTo("/rooms/${room.id}/edit")
         assertCurrentPageIs(PageName.LOGIN)
     }
 }

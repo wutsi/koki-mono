@@ -1,70 +1,70 @@
 package com.wutsi.koki.portal.room.page
 
-import com.wutsi.koki.lodging.dto.RoomStatus
-import com.wutsi.koki.lodging.dto.RoomType
 import com.wutsi.koki.portal.common.page.PageName
+import com.wutsi.koki.portal.refdata.service.LocationService
+import com.wutsi.koki.portal.room.form.RoomForm
 import com.wutsi.koki.portal.room.service.RoomService
 import com.wutsi.koki.portal.security.RequiresPermission
+import com.wutsi.koki.room.dto.RoomType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.client.HttpClientErrorException
+import java.util.Currency
 
 @Controller
 @RequestMapping("/rooms")
-@RequiresPermission(["room"])
-class ListRoomController(private val service: RoomService) : AbstractRoomController() {
-    @GetMapping
-    fun list(
-        @RequestParam(required = false) type: RoomType? = null,
-        @RequestParam(required = false) status: RoomStatus? = null,
+@RequiresPermission(["room:manage"])
+class CreateRoomController(
+    private val service: RoomService,
+    private val locationService: LocationService,
+) : AbstractRoomController() {
+    @GetMapping("/create")
+    fun create(model: Model): String {
+        return create(RoomForm(currency = tenantHolder.get()?.currency ?: ""), model)
+    }
+
+    @PostMapping("/add-new")
+    fun addNew(
+        @ModelAttribute form: RoomForm,
         model: Model
     ): String {
+        try {
+            val id = service.create(form)
+            return "redirect:/rooms/$id?_toast=$id&_ts=" + System.currentTimeMillis()
+        } catch (ex: HttpClientErrorException) {
+            val errorResponse = toErrorResponse(ex)
+            model.addAttribute("error", errorResponse.error.code)
+            return create(form, model)
+        }
+    }
+
+    private fun create(form: RoomForm, model: Model): String {
+        model.addAttribute("form", form)
+
         model.addAttribute(
             "page",
             createPageModel(
-                name = PageName.ROOM_LIST,
-                title = "Rooms",
+                name = PageName.ROOM_CREATE,
+                title = "Create Room",
             )
         )
 
-        model.addAttribute("type", type)
+        loadCountries(model)
         model.addAttribute("types", RoomType.entries.filter { entry -> entry != RoomType.UNKNOWN })
 
-        model.addAttribute("status", status)
-        model.addAttribute("statuses", RoomStatus.entries.filter { entry -> entry != RoomStatus.UNKNOWN })
+        val currency = Currency.getInstance(tenantHolder.get()!!.currency)
+        model.addAttribute("currencies", listOf(currency))
+        model.addAttribute("rooms", (1..20).toList())
 
-        more(type, status, model = model)
-        return "rooms/list"
-    }
-
-    @GetMapping("/more")
-    fun more(
-        @RequestParam(required = false) type: RoomType? = null,
-        @RequestParam(required = false) status: RoomStatus? = null,
-        @RequestParam(required = false) limit: Int = 20,
-        @RequestParam(required = false) offset: Int = 0,
-        model: Model
-    ): String {
-        val rooms = service.rooms(
-            type = type,
-            status = status,
-            limit = limit,
-            offset = offset
-        )
-
-        if (rooms.isNotEmpty()) {
-            model.addAttribute("rooms", rooms)
-            if (rooms.size >= limit) {
-                val nextOffset = offset + limit
-                var url = "/rooms/more?limit=$limit&offset=$nextOffset"
-                type?.let { url = "$url&type=$type" }
-                status?.let { url = "$url&status=$status" }
-                model.addAttribute("moreUrl", url)
-            }
+        if (form.cityId != null) {
+            val city = locationService.location(form.cityId)
+            model.addAttribute("city", city)
         }
 
-        return "rooms/more"
+        return "rooms/create"
     }
 }

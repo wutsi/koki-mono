@@ -11,92 +11,86 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/room :: room-breadcrumb(null)}"></div>
+            <div th:replace="~{__components/room :: breadcrumb(${room})}"></div>
         </div>
     </div>
 
     <div class="row">
         <div class="col-12">
             <div class="widget">
-                <div class="widget-body">
-                    <div class="flex flex-space-between margin-bottom">
+                <div class="widget-body room-summary">
+                    <div class="flex flex-space-between">
+                        <h1 class="entity-title">
+                            <img align="absmiddle" src="/image/room.png"/>
+                            <span th:text="${room.title}">NAME</span>
+                        </h1>
                         <div>
-                            <a class="btn-create btn btn-primary btn-sm" href="/rooms/create"
-                               th:if="${user?.hasPermission('room:manage')}">
-                                Create New Room
-                            </a>
-                        </div>
-                        <div>
-                            <select class="btn btn-sm btn-light" id="filter-type"
-                                    onchange="koki_rooms_on_filter_changed()"
-                                    style="width: auto"
-                                    th:if="!${types.isEmpty()}"
-                            >
-                                <option value="">All Types</option>
-                                <option th:each="tt : ${types}"
-                                        th:selected="${tt} == ${type}"
-                                        th:text="#{'room-type.' + ${tt}}"
-                                        th:value="${tt}"
-                                >
-                                    TYPE
-                                </option>
-                            </select>
-                            <select class="btn btn-sm btn-light" id="filter-status"
-                                    onchange="koki_rooms_on_filter_changed()"
-                                    style="width: auto"
-                                    th:if="!${statuses.isEmpty()}"
-                            >
-                                <option value="">All Statuses</option>
-                                <option th:each="tt : ${statuses}"
-                                        th:selected="${tt} == ${status}"
-                                        th:text="#{'room-status.' + ${tt}}"
-                                        th:value="${tt}"
-                                >
-                                    STATUS
-                                </option>
-                            </select>
+                            <a class="btn-edit btn btn-light btn-sm"
+                               th:href="'/rooms/' + ${room.id} + '/edit'"
+                               th:if="${user?.hasPermission('room:manage')}">Edit</a>
+
+                            <a class="btn-delete btn btn-danger btn-sm"
+                               onclick="return confirm('Are you sure you want to delete the room?')"
+                               th:href="'/rooms/' + ${room.id} + '/delete'"
+                               th:if="${user?.hasPermission('room:manage')}">Delete</a>
                         </div>
                     </div>
 
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Status</th>
-                            <th>Type</th>
-                            <th class="text-center">Rooms</th>
-                            <th class="text-center">Beds</th>
-                            <th class="text-center">Max Guests</th>
-                            <th>Price</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr class="room"
-                            data-component-id='data-row'
-                            th:data-url="'/rooms/' + ${room.id}"
-                            th:each="room : ${rooms}"
-                        >
-                            <div th:replace="~{__components/room :: columns(${room})}"></div>
-                        </tr>
-                        <tr th:replace="~{__components/room :: load-more(${moreUrl})}"></tr>
-                        </tbody>
-                    </table>
+                    <div class="flex">
+                        <div class="margin-right-2x">
+                            <b>Title</b><br/>
+                            <span th:text="${room.title}">TITLE</span>
+                        </div>
+                        <div class="margin-right-2x">
+                            <b>Status</b><br/>
+                            <div th:replace="~{__components/room :: status(${room.status})}"></div>
+                        </div>
+                        <div class="margin-right-2x">
+                            <b>Type</b><br/>
+                            <span th:text="#{'room-type.' + ${room.type}}">TYPE</span>
+                        </div>
+                        <div class="margin-right-2x">
+                            <b>Price/night</b><br/>
+                            <span th:text="${room.pricePerNight}">$$</span>
+                        </div>
+                    </div>
+                    <div th:replace="~{__components/layout :: error-message(${error})}"></div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="row">
+            <div class="col-12 col-md-7">
+                <div class="widget">
+                    <div class="widget-body">
+                        <div th:replace="~{__components/module :: tabs('main', true)}"></div>
+                        <div
+                            th:replace="~{__components/module :: tabs-content('main', true, ${room}, ${module})}"></div>
+                        <table class="table hidden" id="tab-details-content">
+                            <tr>
+                                <td>DETAILS</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-5">
+                <div class="widget">
+                    <div class="widget-body">
+                        <div th:replace="~{__components/module :: tabs('side', false)}"></div>
+                        <div
+                            th:replace="~{__components/module :: tabs-content('side', false, ${room}, ${module})}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
-<script>
-    function koki_rooms_on_filter_changed() {
-        const type = document.getElementById('filter-type').value;
-        const status = document.getElementById('filter-status').value;
 
-        document.location.href = '/rooms?' +
-            (type && type.length > 0 ? '&type=' + type : '') +
-            (status && status.length > 0 ? '&status=' + status : '');
-    }
-</script>
 </body>
 </html>

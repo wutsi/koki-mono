@@ -1,4 +1,4 @@
-package com.wutsi.koki.lodging.server.endpoint
+package com.wutsi.koki.room.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import org.springframework.beans.factory.annotation.Autowired
@@ -7,7 +7,7 @@ import javax.sql.DataSource
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/lodging/RemoveAmenityEndpoint.sql"])
+@Sql(value = ["/db/test/clean.sql", "/db/test/room/RemoveAmenityEndpoint.sql"])
 class RemoveAmenityEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var ds: DataSource

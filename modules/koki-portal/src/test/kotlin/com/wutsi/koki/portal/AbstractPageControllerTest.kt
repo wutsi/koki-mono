@@ -20,6 +20,7 @@ import com.wutsi.koki.PaymentFixtures
 import com.wutsi.koki.ProductFixtures
 import com.wutsi.koki.RefDataFixtures
 import com.wutsi.koki.RoleFixtures
+import com.wutsi.koki.RoomFixtures
 import com.wutsi.koki.TaxFixtures
 import com.wutsi.koki.TenantFixtures
 import com.wutsi.koki.UserFixtures
@@ -85,6 +86,10 @@ import com.wutsi.koki.refdata.dto.SearchJuridictionResponse
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
 import com.wutsi.koki.refdata.dto.SearchSalesTaxResponse
 import com.wutsi.koki.refdata.dto.SearchUnitResponse
+import com.wutsi.koki.room.dto.CreateRoomRequest
+import com.wutsi.koki.room.dto.CreateRoomResponse
+import com.wutsi.koki.room.dto.GetRoomResponse
+import com.wutsi.koki.room.dto.SearchRoomResponse
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
 import com.wutsi.koki.tax.dto.CreateTaxProductRequest
@@ -247,6 +252,7 @@ abstract class AbstractPageControllerTest {
         setupTaxModule()
         setupInvoiceModule()
         setupPaymentModule()
+        setupRoomModule()
     }
 
     protected fun setupFileUploads() {
@@ -1050,6 +1056,42 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any<CreateInteracPaymentRequest>(),
                 eq(CreatePaymentResponse::class.java)
+            )
+    }
+
+    fun setupRoomModule() {
+        doReturn(
+            ResponseEntity(
+                SearchRoomResponse(RoomFixtures.rooms),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchRoomResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetRoomResponse(RoomFixtures.room),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetRoomResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreateRoomResponse(1111),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateRoomRequest>(),
+                eq(CreateRoomResponse::class.java)
             )
     }
 

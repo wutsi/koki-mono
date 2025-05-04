@@ -4,6 +4,9 @@ INSERT INTO T_LOCATION (id, parent_fk, type, name, ascii_name, country)
            (200, null, 2, 'Ontario',  'Ontario', 'CA'),
            (2001, 200, 3, 'Toronto',  'Toronto', 'CA');
 
+INSERT INTO T_CATEGORY(id, parent_fk, type, level, name, long_name, active)
+    VALUES (100, null, 1, 0, 'A',  'A', true);
+
 INSERT INTO T_AMENITY(id, category_fk, name)
     VALUES (1, 100, 'A'),
            (2, 100, 'B');

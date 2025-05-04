@@ -1,17 +1,17 @@
-package com.wutsi.koki.lodging.server.endpoint
+package com.wutsi.koki.room.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.lodging.dto.GetRoomResponse
-import com.wutsi.koki.lodging.dto.RoomStatus
-import com.wutsi.koki.lodging.dto.RoomType
+import com.wutsi.koki.room.dto.GetRoomResponse
+import com.wutsi.koki.room.dto.RoomStatus
+import com.wutsi.koki.room.dto.RoomType
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/lodging/GetRoomEndpoint.sql"])
+@Sql(value = ["/db/test/clean.sql", "/db/test/room/GetRoomEndpoint.sql"])
 class GetRoomEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
     fun get() {
@@ -21,7 +21,7 @@ class GetRoomEndpointTest : AuthorizationAwareEndpointTest() {
 
         val room = response.body!!.room
         assertEquals(RoomStatus.UNDER_REVIEW, room.status)
-        assertEquals(RoomType.PROPERTY, room.type)
+        assertEquals(RoomType.HOUSE, room.type)
         assertEquals("Room A", room.title)
         assertEquals("This is the title of the room", room.description)
         assertEquals(10, room.maxGuests)
@@ -35,6 +35,8 @@ class GetRoomEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("CA", room.address.country)
         assertEquals(35.0, room.pricePerNight.amount)
         assertEquals("CAD", room.pricePerNight.currency)
+        assertEquals(listOf(1L, 2L), room.amenityIds)
+        assertEquals(listOf(11L, 22L, 33L), room.imageFileIds)
     }
 
     @Test
