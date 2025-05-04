@@ -1,109 +1,95 @@
 package com.wutsi.koki.portal.room.page
 
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.LodgingFixtures.rooms
-import com.wutsi.koki.lodging.dto.RoomSummary
-import com.wutsi.koki.lodging.dto.SearchRoomResponse
+import com.wutsi.koki.RoomFixtures.room
+import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import kotlin.test.Test
 
-class ListRoomControllerTest : AbstractPageControllerTest() {
-    @Test
-    fun list() {
-        navigateTo("/rooms")
-
-        assertCurrentPageIs(PageName.ROOM_LIST)
-        assertElementCount("tr.room", rooms.size)
-    }
-
-    @Test
-    fun loadMore() {
-        var entries = mutableListOf<RoomSummary>()
-        var seed = System.currentTimeMillis()
-        repeat(20) {
-            entries.add(rooms[0].copy(id = ++seed))
-        }
-        doReturn(
-            ResponseEntity(
-                SearchRoomResponse(entries),
-                HttpStatus.OK,
-            )
-        ).doReturn(
-            ResponseEntity(
-                SearchRoomResponse(entries),
-                HttpStatus.OK,
-            )
-        ).doReturn(
-            ResponseEntity(
-                SearchRoomResponse(rooms),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchRoomResponse::class.java)
-            )
-
-        navigateTo("/rooms")
-
-        assertCurrentPageIs(PageName.ROOM_LIST)
-        assertElementCount("tr.room", entries.size)
-
-        scrollToBottom()
-        click("#room-load-more button", 1000)
-        assertElementCount("tr.room", 2 * entries.size)
-
-        scrollToBottom()
-        click("#room-load-more button", 1000)
-        assertElementCount("tr.room", 2 * entries.size + rooms.size)
-    }
-
+class RoomControllerTest : AbstractPageControllerTest() {
     @Test
     fun show() {
-        navigateTo("/rooms")
-        click("tr.room td a")
-
+        navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ROOM)
     }
 
     @Test
-    fun create() {
-        navigateTo("/rooms")
-        click(".btn-create")
+    fun delete() {
+        navigateTo("/rooms/${room.id}")
+        click(".btn-delete")
 
-        assertCurrentPageIs(PageName.ROOM_CREATE)
+        val alert = driver.switchTo().alert()
+        alert.accept()
+        driver.switchTo().parentFrame()
+
+        verify(rest).delete("$sdkBaseUrl/v1/rooms/${room.id}")
+        assertCurrentPageIs(PageName.ROOM_LIST)
+        assertElementVisible("#koki-toast")
     }
 
     @Test
-    fun `list - without permission room`() {
+    fun `delete - dismiss`() {
+        navigateTo("/rooms/${room.id}")
+        click(".btn-delete")
+
+        val alert = driver.switchTo().alert()
+        alert.dismiss()
+        driver.switchTo().parentFrame()
+
+        verify(rest, never()).delete(any<String>())
+        assertCurrentPageIs(PageName.ROOM)
+    }
+
+    @Test
+    fun `delete - error`() {
+        val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.ACCOUNT_IN_USE)
+        doThrow(ex).whenever(rest).delete(any<String>())
+
+        navigateTo("/rooms/${room.id}")
+        click(".btn-delete")
+
+        val alert = driver.switchTo().alert()
+        alert.accept()
+
+        assertCurrentPageIs(PageName.ROOM)
+        assertElementPresent(".alert-danger")
+    }
+
+    @Test
+    fun edit() {
+        navigateTo("/rooms/${room.id}")
+        click(".btn-edit")
+
+        assertCurrentPageIs(PageName.ROOM_EDIT)
+    }
+
+    @Test
+    fun `show - without permission room`() {
         setUpUserWithoutPermissions(listOf("room"))
 
-        navigateTo("/rooms")
-
+        navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 
     @Test
-    fun `list - without permission room-manage`() {
+    fun `show - without permission room-manage`() {
         setUpUserWithoutPermissions(listOf("room:manage"))
 
-        navigateTo("/rooms")
-
-        assertCurrentPageIs(PageName.ROOM_LIST)
-        assertElementNotPresent(".btn-create")
+        navigateTo("/rooms/${room.id}")
+        assertCurrentPageIs(PageName.ROOM)
+        assertElementNotPresent(".btn-edit")
     }
 
     @Test
     fun `login required`() {
         setUpAnonymousUser()
 
-        navigateTo("/rooms")
+        navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.LOGIN)
     }
 }

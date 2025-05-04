@@ -6,12 +6,12 @@
 
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
-<div th:replace="~{__components/layout :: menubar('product')}"></div>
+<div th:replace="~{__components/layout :: menubar('room')}"></div>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/product :: product-breadcrumb(null)}"></div>
+            <div th:replace="~{__components/room :: breadcrumb(null)}"></div>
         </div>
     </div>
 
@@ -21,32 +21,39 @@
                 <div class="widget-body">
                     <div class="flex flex-space-between margin-bottom">
                         <div>
-                            <a class="btn-create btn btn-primary btn-sm" href="/products/create"
-                               th:if="${user?.hasPermission('product:manage')}">
-                                Create New Product
+                            <a class="btn-create btn btn-primary btn-sm" href="/rooms/create"
+                               th:if="${user?.hasPermission('room:manage')}">
+                                Create New Room
                             </a>
                         </div>
                         <div>
                             <select class="btn btn-sm btn-light" id="filter-type"
-                                    onchange="koki_products_on_filter_changed()"
+                                    onchange="koki_rooms_on_filter_changed()"
                                     style="width: auto"
                                     th:if="!${types.isEmpty()}"
                             >
                                 <option value="">All Types</option>
                                 <option th:each="tt : ${types}"
                                         th:selected="${tt} == ${type}"
-                                        th:text="#{'product-type.' + ${tt}}"
+                                        th:text="#{'room-type.' + ${tt}}"
                                         th:value="${tt}"
-                                >TYPE
+                                >
+                                    TYPE
                                 </option>
                             </select>
-                            <select class="btn btn-sm btn-light" id="filter-active"
-                                    onchange="koki_products_on_filter_changed()"
+                            <select class="btn btn-sm btn-light" id="filter-status"
+                                    onchange="koki_rooms_on_filter_changed()"
                                     style="width: auto"
+                                    th:if="!${statuses.isEmpty()}"
                             >
                                 <option value="">All Statuses</option>
-                                <option th:selected="${active == 1}" value="1">Active</option>
-                                <option th:selected="${active == 0}" value="0">Not Active</option>
+                                <option th:each="tt : ${statuses}"
+                                        th:selected="${tt} == ${status}"
+                                        th:text="#{'room-status.' + ${tt}}"
+                                        th:value="${tt}"
+                                >
+                                    STATUS
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -54,18 +61,20 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Code</th>
+                            <th>Title</th>
+                            <th>Status</th>
                             <th>Type</th>
-                            <th>Category</th>
-                            <th>Active</th>
+                            <th class="text-center">Rooms</th>
+                            <th class="text-center">Beds</th>
+                            <th class="text-center">Max Guests</th>
+                            <th>Price</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="product" th:each="product : ${products}">
-                            <div th:replace="~{__components/product :: columns(${product})}"></div>
+                        <tr class="room" th:each="room : ${rooms}">
+                            <div th:replace="~{__components/room :: columns(${room})}"></div>
                         </tr>
-                        <tr th:replace="~{__components/product :: load-more(${moreUrl})}"></tr>
+                        <tr th:replace="~{__components/room :: load-more(${moreUrl})}"></tr>
                         </tbody>
                     </table>
                 </div>
@@ -76,15 +85,14 @@
 
 <div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
 <script>
-    function koki_products_on_filter_changed() {
+    function koki_rooms_on_filter_changed() {
         const type = document.getElementById('filter-type').value;
-        const active = document.getElementById('filter-active').value;
+        const status = document.getElementById('filter-status').value;
 
-        document.location.href = '/products?' +
+        document.location.href = '/rooms?' +
             (type && type.length > 0 ? '&type=' + type : '') +
-            (active && active.length > 0 ? '&active=' + active : '');
+            (status && status.length > 0 ? '&status=' + status : '');
     }
-
 </script>
 </body>
 </html>

@@ -1,15 +1,17 @@
 package com.wutsi.koki.portal.room.page
 
-import com.wutsi.koki.lodging.dto.RoomType
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.refdata.service.LocationService
 import com.wutsi.koki.portal.room.form.RoomForm
+import com.wutsi.koki.portal.room.model.RoomModel
 import com.wutsi.koki.portal.room.service.RoomService
 import com.wutsi.koki.portal.security.RequiresPermission
+import com.wutsi.koki.room.dto.RoomType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.client.HttpClientErrorException
@@ -18,38 +20,60 @@ import java.util.Currency
 @Controller
 @RequestMapping("/rooms")
 @RequiresPermission(["room:manage"])
-class CreateRoomController(
+class EditRoomController(
     private val service: RoomService,
     private val locationService: LocationService,
 ) : AbstractRoomController() {
-    @GetMapping("/create")
-    fun create(model: Model): String {
-        return create(RoomForm(currency = tenantHolder.get()?.currency ?: ""), model)
+    @GetMapping("/{id}/edit")
+    fun edit(
+        @PathVariable id: Long,
+        model: Model
+    ): String {
+        val room = service.room(id)
+        val form = RoomForm(
+            type = room.type,
+            title = room.title,
+            description = room.description,
+            numberOfRooms = room.numberOfRooms,
+            numberOfBathrooms = room.numberOfBathrooms,
+            numberOfBeds = room.numberOfRooms,
+            maxGuests = room.maxGuests,
+            pricePerNight = room.pricePerNight.value,
+            currency = room.pricePerNight.currency,
+            cityId = room.address.city?.id,
+            country = room.address.country,
+            street = room.address.street,
+            postalCode = room.address.postalCode,
+        )
+        return edit(room, form, model)
     }
 
-    @PostMapping("/add-new")
-    fun addNew(
+    @PostMapping("/{id}/update")
+    fun update(
+        @PathVariable id: Long,
         @ModelAttribute form: RoomForm,
         model: Model
     ): String {
         try {
-            val id = service.create(form)
+            service.update(id, form)
             return "redirect:/rooms/$id?_toast=$id&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)
-            return create(form, model)
+            val room = service.room(id)
+            return edit(room, form, model)
         }
     }
 
-    private fun create(form: RoomForm, model: Model): String {
+    private fun edit(room: RoomModel, form: RoomForm, model: Model): String {
+        model.addAttribute("room", room)
         model.addAttribute("form", form)
 
         model.addAttribute(
             "page",
             createPageModel(
-                name = PageName.ROOM_CREATE,
-                title = "Create Room",
+                name = PageName.ROOM_EDIT,
+                title = room.title,
             )
         )
 
@@ -65,6 +89,6 @@ class CreateRoomController(
             model.addAttribute("city", city)
         }
 
-        return "rooms/create"
+        return "rooms/edit"
     }
 }

@@ -61,7 +61,7 @@ class FileService(
 
     fun search(
         tenantId: Long,
-        ids: List<String> = emptyList(),
+        ids: List<Long> = emptyList(),
         ownerId: Long? = null,
         ownerType: ObjectType? = null,
         limit: Int = 20,

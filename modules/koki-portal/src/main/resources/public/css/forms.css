@@ -23,11 +23,9 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 .error {
     color: red;
 }
-
 .success {
     color: darkgreen;
 }
-
 .info {
     color: blue;
 }

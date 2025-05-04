@@ -96,7 +96,7 @@ springdoc:
 
         -   group: lodging
             display-name: Lodging API
-            paths-to-match: /v1/properties, /v1/properties/**
+            paths-to-match: /v1/rooms, /v1/rooms/**
 
         -   group: modules
             display-name: Module API

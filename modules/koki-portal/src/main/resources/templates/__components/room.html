@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="widget" th:fragment="breadcrumb(room)">
+    <div class="widget-body">
+        <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item" th:if="${room}"><a href="/rooms">Rooms</a></li>
+                <li class="breadcrumb-item active" th:if="${room}">
+                    <img align="absmiddle" height="24" src="/image/room.png" width="24"/>
+                    <span th:text="${room.title}">ROOM</span>
+                </li>
+                <li class="breadcrumb-item active" th:if="!${room}">Rooms</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<tr class="room" th:fragment="columns(room)" th:remove="tag">
+    <td>
+        <a th:href="'/rooms/' + ${room.id}" th:text="${room.title}">TITLE</a>
+    </td>
+    <td>
+        <a th:href="'/rooms/' + ${room.id}">
+            <div th:replace="~{__components/room :: status(${room.status})}"></div>
+        </a>
+    </td>
+    <td>
+        <a th:href="'/rooms/' + ${room.id}" th:text="#{'room-type.' + ${room.type}}">X</a>
+    </td>
+    <td class="text-center">
+        <a th:href="'/rooms/' + ${room.id}" th:text="${room.numberOfRooms}">X</a>
+    </td>
+    <td class="text-center">
+        <a th:href="'/rooms/' + ${room.id}" th:text="${room.numberOfBathrooms}">X</a>
+    </td>
+    <td class="text-center">
+        <a th:href="'/rooms/' + ${room.id}" th:text="${room.maxGuests}">X</a>
+    </td>
+    <td>
+        <a th:href="'/rooms/' + ${room.id}">
+            <span th:text="${room.pricePerNight}">$$$</span>/night
+        </a>
+    </td>
+</tr>
+
+
+<tr id="room-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
+    <td class="text-center" colspan="7">
+        <button
+            class="btn btn-sm btn-light"
+            data-component-id='load-more'
+            data-container-id="room-load-more"
+            th:data-url="${moreUrl}"
+        >
+            Load more...
+        </button>
+    </td>
+</tr>
+
+<div th:fragment="status(status)">
+    <i class="fa-solid fa-circle success" th:if="${status.name} == 'PUBLISHED'"></i>
+    <i class="fa-solid fa-circle warning" th:if="${status.name} == 'UNDER_REVIEW'"></i>
+    <i class="fa-solid fa-circle error" th:if="${status.name} == 'UNAVAILABLE'"></i>
+    <span th:text="#{'room-status.' + ${status}}">STATUS</span>
+</div>
+
+</body>

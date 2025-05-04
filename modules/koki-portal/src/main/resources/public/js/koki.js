@@ -28,7 +28,7 @@ class LoadMoreWidget {
         fetch(url).then(function (response) {
             response.text().then(function (html) {
                 $('#' + containerId).replaceWith(html);
-                koki.widgets.loadMore.init();
+                koki.init();
             });
         });
     }
@@ -63,7 +63,7 @@ class AjaxFragmentWidget {
 }
 
 /**
- * Dropzone widget
+ * Uploader widget
  */
 class UploaderWidget {
     init() {

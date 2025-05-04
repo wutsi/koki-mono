@@ -25,6 +25,11 @@ object RefDataFixtures {
         Location(id = 120, type = LocationType.CITY, name = "Saint Isidore", parentId = 100, country = "CA"),
         Location(id = 210, type = LocationType.CITY, name = "Toronto", parentId = 200, country = "CA"),
     )
+    val cities = listOf(
+        Location(id = 110, type = LocationType.CITY, name = "Montreal", parentId = 100, country = "CA"),
+        Location(id = 120, type = LocationType.CITY, name = "Saint Isidore", parentId = 100, country = "CA"),
+        Location(id = 210, type = LocationType.CITY, name = "Toronto", parentId = 200, country = "CA"),
+    )
 
     // Categories
     val categories = listOf(

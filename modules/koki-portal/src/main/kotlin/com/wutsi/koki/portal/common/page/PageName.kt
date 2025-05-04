@@ -78,6 +78,11 @@ object PageName {
     const val PRODUCT_EDIT = "page.product.edit"
     const val PRODUCT_LIST = "page.product.list"
 
+    const val ROOM = "page.room"
+    const val ROOM_CREATE = "page.room.create"
+    const val ROOM_EDIT = "page.room.edit"
+    const val ROOM_LIST = "page.room.list"
+
     const val TENANT_SETTINGS = "page.settings.tenant"
     const val TENANT_SETTINGS_ABOUT = "page.settings.tenant.about"
     const val TENANT_SETTINGS_BUSINESS = "page.settings.tenant.business"

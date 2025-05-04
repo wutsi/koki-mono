@@ -1,10 +1,10 @@
-package com.wutsi.koki.portal.lodging.model
+package com.wutsi.koki.portal.room.model
 
 import com.wutsi.blog.portal.common.model.MoneyModel
-import com.wutsi.koki.lodging.dto.RoomStatus
-import com.wutsi.koki.lodging.dto.RoomType
 import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.user.model.UserModel
+import com.wutsi.koki.room.dto.RoomStatus
+import com.wutsi.koki.room.dto.RoomType
 import java.util.Date
 
 data class RoomModel(
@@ -25,4 +25,5 @@ data class RoomModel(
     val modifiedAt: Date = Date(),
     val modifiedAtText: String = "",
     val modifiedBy: UserModel? = null,
+    val readOnly: Boolean = false,
 )

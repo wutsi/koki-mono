@@ -156,6 +156,16 @@ object ModuleFixtures {
             settingsUrl = "/settings/translations",
             jsUrl = null,
         ),
+        Module(
+            id = 250,
+            name = "room",
+            title = "Rooms",
+            homeUrl = "/rooms",
+            tabUrl = null,
+            settingsUrl = null,
+            jsUrl = "/js/rooms.js",
+            cssUrl = "/css/rooms.css",
+        ),
     )
 
     val permissions = listOf(
@@ -215,5 +225,8 @@ object ModuleFixtures {
         Permission(id = 2303, moduleId = 230, name = "form:delete", description = "Delete forms"),
 
         Permission(id = 2400, moduleId = 240, name = "translation:admin", description = "Configure Translation"),
+
+        Permission(id = 2500, moduleId = 250, name = "room", description = "View Properties"),
+        Permission(id = 2501, moduleId = 250, name = "room:manage", description = "Manage Properties"),
     )
 }
