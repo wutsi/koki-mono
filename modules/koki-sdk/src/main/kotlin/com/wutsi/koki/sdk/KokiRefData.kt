@@ -2,6 +2,7 @@ package com.wutsi.koki.sdk
 
 import com.wutsi.koki.refdata.dto.CategoryType
 import com.wutsi.koki.refdata.dto.LocationType
+import com.wutsi.koki.refdata.dto.SearchAmenityResponse
 import com.wutsi.koki.refdata.dto.SearchCategoryResponse
 import com.wutsi.koki.refdata.dto.SearchJuridictionResponse
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
@@ -19,6 +20,7 @@ class KokiRefData(
         private const val CATEGORY_PATH_PREFIX = "/v1/categories"
         private const val JURIDICTION_PATH_PREFIX = "/v1/juridictions"
         private const val SALES_TAXES_PATH_PREFIX = "/v1/sales-taxes"
+        private const val AMENITIES_PATH_PREFIX = "/v1/amenities"
     }
 
     fun units(): SearchUnitResponse {
@@ -110,5 +112,24 @@ class KokiRefData(
             )
         )
         return rest.getForEntity(url, SearchSalesTaxResponse::class.java).body
+    }
+
+    fun amenities(
+        ids: List<Long>,
+        categoryId: Long?,
+        active: Boolean?,
+        limit: Int,
+        offset: Int,
+    ): SearchAmenityResponse {
+        val url = urlBuilder.build(
+            AMENITIES_PATH_PREFIX, mapOf(
+                "id" to ids,
+                "category-id" to categoryId,
+                "active" to active,
+                "limit" to limit,
+                "offset" to offset,
+            )
+        )
+        return rest.getForEntity(url, SearchAmenityResponse::class.java).body
     }
 }

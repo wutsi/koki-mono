@@ -1,5 +1,6 @@
 package com.wutsi.koki.sdk
 
+import com.wutsi.koki.room.dto.AddAmenityRequest
 import com.wutsi.koki.room.dto.CreateRoomRequest
 import com.wutsi.koki.room.dto.CreateRoomResponse
 import com.wutsi.koki.room.dto.GetRoomResponse
@@ -59,5 +60,15 @@ class KokiRooms(
             )
         )
         return rest.getForEntity(url, SearchRoomResponse::class.java).body
+    }
+
+    fun addAmenities(roomId: Long, request: AddAmenityRequest) {
+        val url = urlBuilder.build("$ROOM_PATH_PREFIX/$roomId/amenities")
+        rest.postForEntity(url, request, Any::class.java)
+    }
+
+    fun removeAmenity(roomId: Long, amenityId: Long) {
+        val url = urlBuilder.build("$ROOM_PATH_PREFIX/$roomId/amenities/$amenityId")
+        rest.delete(url)
     }
 }
