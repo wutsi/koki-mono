@@ -1,5 +1,7 @@
 package com.wutsi.koki.portal.refdata.model
 
+import com.wutsi.koki.portal.common.HtmlUtils
+
 data class AddressModel(
     val street: String? = null,
     val postalCode: String? = null,
@@ -9,7 +11,7 @@ data class AddressModel(
     val countryName: String? = null,
 ) {
     fun toHtml(): String {
-        return toString().replace("\n", "<br>")
+        return HtmlUtils.toHtml(toString())
     }
 
     override fun toString(): String {

@@ -81,6 +81,7 @@ import com.wutsi.koki.product.dto.GetPriceResponse
 import com.wutsi.koki.product.dto.GetProductResponse
 import com.wutsi.koki.product.dto.SearchPriceResponse
 import com.wutsi.koki.product.dto.SearchProductResponse
+import com.wutsi.koki.refdata.dto.SearchAmenityResponse
 import com.wutsi.koki.refdata.dto.SearchCategoryResponse
 import com.wutsi.koki.refdata.dto.SearchJuridictionResponse
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
@@ -148,6 +149,7 @@ import java.time.Duration
 import java.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -649,6 +651,18 @@ abstract class AbstractPageControllerTest {
     }
 
     private fun setupRefDataModule() {
+        // Units
+        doReturn(
+            ResponseEntity(
+                SearchAmenityResponse(RefDataFixtures.amenities),
+                HttpStatus.OK,
+            )
+        ).whenever(restWithoutTenantHeader)
+            .getForEntity(
+                any<String>(),
+                eq(SearchAmenityResponse::class.java)
+            )
+
         // Units
         doReturn(
             ResponseEntity(
@@ -1170,6 +1184,14 @@ abstract class AbstractPageControllerTest {
         } else {
             assertEquals(value, driver.findElement(By.cssSelector(selector)).getDomAttribute(name))
         }
+    }
+
+    protected fun assertElementHasAttribute(selector: String, name: String) {
+        assertNotNull(driver.findElement(By.cssSelector(selector)).getDomAttribute(name))
+    }
+
+    protected fun assertElementHasNotAttribute(selector: String, name: String) {
+        assertNull(driver.findElement(By.cssSelector(selector)).getDomAttribute(name)?.ifEmpty { null })
     }
 
     protected fun waitForPresenceOf(selector: String, timeout: Long = 30, sleep: Long = 1) {

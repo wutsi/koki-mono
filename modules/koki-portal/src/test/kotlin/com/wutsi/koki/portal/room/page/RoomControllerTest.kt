@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.RefDataFixtures
 import com.wutsi.koki.RoomFixtures.room
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.AbstractPageControllerTest
@@ -16,6 +17,17 @@ class RoomControllerTest : AbstractPageControllerTest() {
     fun show() {
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ROOM)
+
+        room.amenityIds.forEach { id ->
+            assertElementHasNotAttribute(".amenity input", "readonly") // Amenity not disabled
+            assertElementHasAttribute("#amenity-$id input", "checked") // Amenity checked
+        }
+        RefDataFixtures.amenities
+            .filter { amenity -> !room.amenityIds.contains(amenity.id) }
+            .forEach { amenity ->
+                assertElementHasNotAttribute(".amenity input", "readonly") // Amenity not disabled
+                assertElementHasNotAttribute("#amenity-${amenity.id} input", "checked") // Amenity not checked
+            }
     }
 
     @Test
@@ -83,6 +95,11 @@ class RoomControllerTest : AbstractPageControllerTest() {
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ROOM)
         assertElementNotPresent(".btn-edit")
+
+        RefDataFixtures.amenities
+            .forEach { amenity ->
+                assertElementHasAttribute(".amenity input", "readonly") // Amenity not disabled
+            }
     }
 
     @Test

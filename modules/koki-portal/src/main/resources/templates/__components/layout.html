@@ -28,7 +28,8 @@
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet"/>
     <link href="/css/koki-0.css" rel="stylesheet"/>
     <link href="/css/forms.css" rel="stylesheet"/>
-    <link th:each="modulz : ${tenant.modules}"
+    <link rel="stylesheet"
+          th:each="modulz : ${tenant.modules}"
           th:href="${modulz.cssUrl}"
           th:if="${modulz.cssUrl}"
     />

@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.room.model
 
 import com.wutsi.blog.portal.common.model.MoneyModel
 import com.wutsi.koki.portal.refdata.model.AddressModel
+import com.wutsi.koki.portal.refdata.model.AmenityModel
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
@@ -13,6 +14,7 @@ data class RoomModel(
     val status: RoomStatus = RoomStatus.UNKNOWN,
     val title: String = "",
     val description: String? = null,
+    val descriptionHtml: String? = null,
     val numberOfRooms: Int = -1,
     val numberOfBathrooms: Int = -1,
     val numberOfBeds: Int = -1,
@@ -26,4 +28,9 @@ data class RoomModel(
     val modifiedAtText: String = "",
     val modifiedBy: UserModel? = null,
     val readOnly: Boolean = false,
-)
+    val amenities: List<AmenityModel> = emptyList(),
+) {
+    fun hasAmenity(amenityId: Long): Boolean {
+        return amenities.find { amenity -> amenity.id == amenityId } != null
+    }
+}

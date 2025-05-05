@@ -1,4 +1,7 @@
 package com.wutsi.koki.portal.common
 
-class HtmlUtils {
+object HtmlUtils {
+    fun toHtml(str: String): String {
+        return str.replace("\n", "<br>")
+    }
 }

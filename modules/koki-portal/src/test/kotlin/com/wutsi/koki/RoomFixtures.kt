@@ -128,5 +128,11 @@ object RoomFixtures {
         ),
         createdById = UserFixtures.USER_ID,
         modifiedById = UserFixtures.USER_ID,
+        amenityIds = listOf(
+            RefDataFixtures.amenities[0].id,
+            RefDataFixtures.amenities[1].id,
+            RefDataFixtures.amenities[2].id,
+            RefDataFixtures.amenities[3].id,
+        )
     )
 }

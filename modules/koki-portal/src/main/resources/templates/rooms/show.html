@@ -47,7 +47,7 @@
                         </div>
                         <div class="margin-right-2x">
                             <b>Type</b><br/>
-                            <span th:text="#{'room-type.' + ${room.type}}">TYPE</span>
+                            <div th:replace="~{__components/room :: type(${room.type})}"></div>
                         </div>
                         <div class="margin-right-2x">
                             <b>Price/night</b><br/>
@@ -68,20 +68,126 @@
                         <div th:replace="~{__components/module :: tabs('main', true)}"></div>
                         <div
                             th:replace="~{__components/module :: tabs-content('main', true, ${room}, ${module})}"></div>
+
                         <table class="table hidden" id="tab-details-content">
                             <tr>
-                                <td>DETAILS</td>
+                                <td width="15%"><b>Type</b></td>
+                                <td th:text="${room.title}">TITLE</td>
+                            </tr>
+                            <tr>
+                                <td><b>Type</b></td>
+                                <td>
+                                    <div th:replace="~{__components/room :: type(${room.type})}"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Status</b></td>
+                                <td>
+                                    <div th:replace="~{__components/room :: status(${room.status})}"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Rooms</b></td>
+                                <td th:text="${room.numberOfRooms}">00</td>
+                            </tr>
+                            <tr>
+                                <td><b>Baths</b></td>
+                                <td th:text="${room.numberOfBathrooms}">00</td>
+                            </tr>
+                            <tr>
+                                <td><b>Beds</b></td>
+                                <td th:text="${room.numberOfBeds}">00</td>
+                            </tr>
+                            <tr>
+                                <td><b>Max Guests</b></td>
+                                <td th:text="${room.maxGuests}">00</td>
+                            </tr>
+                            <tr>
+                                <td><b>Price/night</b></td>
+                                <td th:text="${room.pricePerNight}">$$</td>
+                            </tr>
+                            <tr>
+                                <td><b>Amenities</b></td>
+                                <td>
+                                    <div class="row" id="room-amenity-container">
+                                        <div class="col-12 col-md-4"
+                                             th:each="amenity : ${room.amenities}"
+                                             th:text="${amenity.name}"
+                                        >
+                                            AMENITY
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:if="${room.description}">
+                                <td><b>Description</b></td>
+                                <td th:utext="${room.descriptionHtml}">00</td>
+                            </tr>
+                            <tr>
+                                <td><b>Address</b></td>
+                                <td th:utext="${room.address.toHtml()}">ADDRESS</td>
+                            </tr>
+                            <tr>
+                                <td><b>Created</b></td>
+                                <td>
+                                    <span th:text="${room.createdAtText}">DATE</span>
+                                    <span th:if="${room.createdBy}">by</span>
+                                    <span th:if="${room.createdBy}"
+                                          th:text="${room.createdBy.displayName}">MODIFIED BY</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Modified</b></td>
+                                <td>
+                                    <span th:text="${room.modifiedAtText}">DATE</span>
+                                    <span th:if="${room.modifiedBy}">by</span>
+                                    <span th:if="${room.modifiedBy}" th:text="${room.modifiedBy.displayName}">MODIFIED BY</span>
+                                </td>
                             </tr>
                         </table>
                     </div>
                 </div>
             </div>
+
             <div class="col-12 col-md-5">
                 <div class="widget">
                     <div class="widget-body">
-                        <div th:replace="~{__components/module :: tabs('side', false)}"></div>
-                        <div
-                            th:replace="~{__components/module :: tabs-content('side', false, ${room}, ${module})}"></div>
+                        <ul class="nav nav-pills mb-3" id="tab-amenity" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button aria-controls="pills-content" aria-selected="true" class="nav-link active"
+                                        data-bs-target="#pills-amenity" data-bs-toggle="pill" id="pills-amenity-tab"
+                                        role="tab" type="button">
+                                    Amenities
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="tab-amenity-content">
+                            <div aria-labelledby="pills-amenity-tab" class="tab-pane fade show active"
+                                 id="pills-amenity" role="tabpanel">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-12 col-md-6 margin-bottom"
+                                             th:each="category : ${amenityCategories}">
+                                            <b th:text="${category.name}">CATEGORY</b>
+                                            <ul class="amenities">
+                                                <li class="amenity"
+                                                    th:each="amenity : ${amenitiesByCategoryId[category.id]}"
+                                                    th:id="'amenity-' + ${amenity.id}"
+                                                >
+                                                    <input onclick="onAmenitySelected()"
+                                                           th:checked="${room.hasAmenity(amenity.id)}"
+                                                           th:readonly="!${user?.hasPermission('room:manage')}"
+                                                           th:value="${amenity.id}"
+                                                           type="checkbox"
+                                                    />
+                                                    <span class="margin-left" th:text="${amenity.name}">AMENITY</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -90,6 +196,37 @@
 
 </div>
 
+<script th:inline="javascript">
+    function onAmenitySelected() {
+        // Update the backend
+        const elt = event.target;
+        const roomId = /*[[${room.id}]]*/ '';
+        const amenityId = elt.value;
+        const checked = elt.checked;
+        const url = '/rooms/' + roomId + '/amenities/' + amenityId + '/toggle?value=' + checked;
+        fetch(url);
+
+        // Update the list of amenities
+        const container = document.getElementById('room-amenity-container');
+        if (container) {
+            const shadow = document.createElement('div');
+            const items = document.querySelectorAll(".amenity");
+            items.forEach((item) => {
+                const checkbox = item.querySelector(".amenity input");
+                const span = item.querySelector(".amenity span");
+                if (checkbox && span && checkbox.checked) {
+                    let elt = document.createElement('div')
+                    elt.classList.add('col-6');
+                    elt.classList.add('col-md-4');
+                    elt.innerHTML = span.innerHTML
+                    shadow.appendChild(elt);
+                }
+            });
+
+            container.innerHTML = shadow.innerHTML;
+        }
+    }
+</script>
 <div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
 
 </body>
