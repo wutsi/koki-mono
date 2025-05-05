@@ -28,7 +28,9 @@
         </a>
     </td>
     <td>
-        <a th:href="'/rooms/' + ${room.id}" th:text="#{'room-type.' + ${room.type}}">X</a>
+        <a th:href="'/rooms/' + ${room.id}">
+            <div th:replace="~{__components/room :: type(${room.type})}"></div>
+        </a>
     </td>
     <td class="text-center">
         <a th:href="'/rooms/' + ${room.id}" th:text="${room.numberOfRooms}">X</a>
@@ -65,6 +67,14 @@
     <i class="fa-solid fa-circle warning" th:if="${status.name} == 'UNDER_REVIEW'"></i>
     <i class="fa-solid fa-circle error" th:if="${status.name} == 'UNAVAILABLE'"></i>
     <span th:text="#{'room-status.' + ${status}}">STATUS</span>
+</div>
+
+<div th:fragment="type(type)">
+    <i class="fa-solid fa-house" th:if="${type.name} == 'HOUSE'"></i>
+    <i class="fa-solid fa-building" th:if="${type.name} == 'APARTMENT'"></i>
+    <i class="fa-solid fa-hotel" th:if="${type.name} == 'HOTEL'"></i>
+    <i class="fa-solid fa-bed" th:if="${type.name} == 'ROOM'"></i>
+    <span th:text="#{'room-type.' + ${type}}">TYPE</span>
 </div>
 
 </body>

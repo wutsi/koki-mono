@@ -2,12 +2,14 @@ package com.wutsi.koki.portal.refdata.mapper
 
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.refdata.model.AddressModel
+import com.wutsi.koki.portal.refdata.model.AmenityModel
 import com.wutsi.koki.portal.refdata.model.CategoryModel
 import com.wutsi.koki.portal.refdata.model.JuridictionModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.refdata.model.SalesTaxModel
 import com.wutsi.koki.portal.refdata.model.UnitModel
 import com.wutsi.koki.refdata.dto.Address
+import com.wutsi.koki.refdata.dto.Amenity
 import com.wutsi.koki.refdata.dto.Category
 import com.wutsi.koki.refdata.dto.Juridiction
 import com.wutsi.koki.refdata.dto.Location
@@ -80,8 +82,18 @@ class RefDataMapper : TenantAwareMapper() {
             rate = entity.rate,
             priority = entity.priority,
             name = entity.name,
-            juridictionId = entity.juridictionId ?: -1L,
+            juridictionId = entity.juridictionId,
             active = entity.active,
+        )
+    }
+
+    fun toAmenityModel(entity: Amenity): AmenityModel {
+        return AmenityModel(
+            id = entity.id,
+            active = entity.active,
+            categoryId = entity.categoryId,
+            name = entity.name,
+            icon = entity.icon,
         )
     }
 }

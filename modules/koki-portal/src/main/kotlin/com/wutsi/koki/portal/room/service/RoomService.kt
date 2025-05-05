@@ -1,12 +1,15 @@
 package com.wutsi.koki.portal.room.service
 
+import com.wutsi.koki.portal.refdata.model.AmenityModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
+import com.wutsi.koki.portal.refdata.service.AmenityService
 import com.wutsi.koki.portal.refdata.service.LocationService
 import com.wutsi.koki.portal.room.form.RoomForm
 import com.wutsi.koki.portal.room.mapper.RoomMapper
 import com.wutsi.koki.portal.room.model.RoomModel
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.portal.user.service.UserService
+import com.wutsi.koki.room.dto.AddAmenityRequest
 import com.wutsi.koki.room.dto.CreateRoomRequest
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
@@ -20,6 +23,7 @@ class RoomService(
     private val mapper: RoomMapper,
     private val locationService: LocationService,
     private val userService: UserService,
+    private val amenityService: AmenityService,
 ) {
     fun room(id: Long, fullGraph: Boolean = true): RoomModel {
         val room = koki.room(id).room
@@ -48,10 +52,20 @@ class RoomService(
             ).associateBy { user -> user.id }
         }
 
+        val amenities = if (!fullGraph || room.amenityIds.isEmpty()) {
+            emptyMap<Long, AmenityModel>()
+        } else {
+            amenityService.amenities(
+                ids = room.amenityIds,
+                limit = room.amenityIds.size
+            ).associateBy { amenity -> amenity.id }
+        }
+
         return mapper.toRoomModel(
             entity = room,
             locations = locations,
             users = users,
+            amenities = amenities,
         )
     }
 
@@ -136,5 +150,16 @@ class RoomService(
 
     fun delete(id: Long) {
         koki.delete(id)
+    }
+
+    fun addAmenity(roomId: Long, amenityId: Long) {
+        koki.addAmenities(
+            roomId,
+            AddAmenityRequest(amenityIds = listOf(amenityId))
+        )
+    }
+
+    fun removeAmenity(roomId: Long, amenityId: Long) {
+        koki.removeAmenity(roomId, amenityId)
     }
 }

@@ -1,5 +1,6 @@
 package com.wutsi.koki
 
+import com.wutsi.koki.refdata.dto.Amenity
 import com.wutsi.koki.refdata.dto.Category
 import com.wutsi.koki.refdata.dto.CategoryType
 import com.wutsi.koki.refdata.dto.Juridiction
@@ -7,6 +8,7 @@ import com.wutsi.koki.refdata.dto.Location
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.dto.SalesTax
 import com.wutsi.koki.refdata.dto.Unit
+import org.openqa.selenium.By.id
 
 object RefDataFixtures {
     // Units
@@ -64,4 +66,26 @@ object RefDataFixtures {
         SalesTax(id = 10101, name = "PST", rate = 9.975, juridictionId = 101),
         SalesTax(id = 10200, name = "HST", rate = 13.0, juridictionId = 102),
     )
+
+    // Amenities
+    private var amenityIdCounter = System.currentTimeMillis()
+    val amenities = categories.flatMap { category ->
+        listOf(
+            Amenity(
+                id = amenityIdCounter++,
+                categoryId = category.id,
+                name = "Amenity #$amenityIdCounter",
+            ),
+            Amenity(
+                id = amenityIdCounter++,
+                categoryId = category.id,
+                name = "Amenity #$amenityIdCounter",
+            ),
+            Amenity(
+                id = amenityIdCounter++,
+                categoryId = category.id,
+                name = "Amenity #$amenityIdCounter",
+            ),
+        )
+    }
 }
