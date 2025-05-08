@@ -12,7 +12,9 @@ class FileMapper {
     fun toFile(entity: FileEntity): File {
         return File(
             id = entity.id!!,
+            fileType = entity.fileType,
             name = entity.name,
+            title = entity.title,
             url = entity.url,
             contentLength = entity.contentLength,
             contentType = entity.contentType,
@@ -29,7 +31,9 @@ class FileMapper {
     fun toFileSummary(entity: FileEntity, labels: Map<Long, List<LabelEntity>>): FileSummary {
         return FileSummary(
             id = entity.id!!,
+            fileType = entity.fileType,
             name = entity.name,
+            title = entity.title,
             url = entity.url,
             contentLength = entity.contentLength,
             contentType = entity.contentType,

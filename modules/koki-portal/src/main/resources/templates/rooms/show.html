@@ -21,7 +21,7 @@
                 <div class="widget-body room-summary">
                     <div class="flex flex-space-between">
                         <h1 class="entity-title">
-                            <img align="absmiddle" src="/image/room.png"/>
+                            <img align="absmiddle" src="/image/room.png" width="48"/>
                             <span th:text="${room.title}">NAME</span>
                         </h1>
                         <div>
@@ -227,7 +227,8 @@
         }
     }
 </script>
-<div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
 
+<div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
+<div th:replace="~{__components/bootstrap :: modal}"></div>
 </body>
 </html>

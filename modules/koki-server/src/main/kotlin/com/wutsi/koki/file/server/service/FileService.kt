@@ -4,10 +4,8 @@ import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
-import com.wutsi.koki.file.server.dao.FileOwnerRepository
 import com.wutsi.koki.file.server.dao.FileRepository
 import com.wutsi.koki.file.server.domain.FileEntity
-import com.wutsi.koki.file.server.domain.FileOwnerEntity
 import com.wutsi.koki.file.server.domain.LabelEntity
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
@@ -19,14 +17,12 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 import java.io.InputStream
 import java.net.URL
-import java.net.URLEncoder
 import java.util.Date
 import java.util.UUID
 
 @Service
 class FileService(
     private val dao: FileRepository,
-    private val ownerDao: FileOwnerRepository,
     private val storageBuilder: StorageServiceBuilder,
     private val configurationService: ConfigurationService,
     private val securityService: SecurityService,
@@ -64,25 +60,26 @@ class FileService(
         ids: List<Long> = emptyList(),
         ownerId: Long? = null,
         ownerType: ObjectType? = null,
+        fileType: ObjectType? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): List<FileEntity> {
         val jql = StringBuilder("SELECT F FROM FileEntity AS F")
-        if (ownerId != null || ownerType != null) {
-            jql.append(" JOIN F.fileOwners AS O")
-        }
 
         jql.append(" WHERE F.deleted=false AND F.tenantId=:tenantId")
         if (ids.isNotEmpty()) {
             jql.append(" AND F.id IN :ids")
         }
         if (ownerId != null) {
-            jql.append(" AND O.ownerId = :ownerId")
+            jql.append(" AND F.ownerId = :ownerId")
         }
         if (ownerType != null) {
-            jql.append(" AND O.ownerType = :ownerType")
+            jql.append(" AND F.ownerType = :ownerType")
         }
-        jql.append(" ORDER BY LOWER(F.name)")
+        if (fileType != null) {
+            jql.append(" AND F.fileType = :fileType")
+        }
+        jql.append(" ORDER BY F.name")
 
         val query = em.createQuery(jql.toString(), FileEntity::class.java)
         query.setParameter("tenantId", tenantId)
@@ -95,6 +92,9 @@ class FileService(
         if (ownerType != null) {
             query.setParameter("ownerType", ownerType)
         }
+        if (fileType != null) {
+            query.setParameter("fileType", fileType)
+        }
 
         query.firstResult = offset
         query.maxResults = limit
@@ -105,13 +105,14 @@ class FileService(
     fun upload(
         userId: Long?,
         file: MultipartFile,
+        fileType: ObjectType?,
         ownerId: Long?,
         ownerType: ObjectType?,
         tenantId: Long,
     ): FileEntity {
         // Store
         val url = store(
-            filename = URLEncoder.encode(file.originalFilename, "utf-8"),
+            filename = file.originalFilename ?: file.name,
             content = file.inputStream,
             contentType = file.contentType,
             contentLength = file.size,
@@ -129,7 +130,8 @@ class FileService(
             url = url,
             ownerId = ownerId,
             ownerType = ownerType,
-            tenantId = tenantId
+            tenantId = tenantId,
+            fileType = fileType,
         )
     }
 
@@ -142,10 +144,10 @@ class FileService(
         url: URL,
         ownerId: Long?,
         ownerType: ObjectType?,
+        fileType: ObjectType?,
         tenantId: Long,
     ): FileEntity {
-        // Create the file
-        val file = dao.save(
+        return dao.save(
             FileEntity(
                 createdById = userId ?: securityService.getCurrentUserIdOrNull(),
                 tenantId = tenantId,
@@ -153,20 +155,11 @@ class FileService(
                 url = url.toString(),
                 contentType = contentType ?: "application/octet-stream",
                 contentLength = contentLength,
+                fileType = fileType ?: ObjectType.FILE,
+                ownerId = ownerId,
+                ownerType = ownerType,
             )
         )
-
-        // Link with owner
-        if (ownerId != null && ownerType != null) {
-            ownerDao.save(
-                FileOwnerEntity(
-                    fileId = file.id!!,
-                    ownerId = ownerId,
-                    ownerType = ownerType,
-                )
-            )
-        }
-        return file
     }
 
     @Transactional

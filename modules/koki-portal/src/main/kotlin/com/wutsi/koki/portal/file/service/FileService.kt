@@ -27,6 +27,7 @@ class FileService(
         ids: List<Long> = emptyList(),
         ownerId: Long? = null,
         ownerType: ObjectType? = null,
+        fileType: ObjectType? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): List<FileModel> {
@@ -62,10 +63,12 @@ class FileService(
     fun uploadUrl(
         ownerId: Long? = null,
         ownerType: ObjectType? = null,
+        fileType: ObjectType,
     ): String {
         return koki.uploadUrl(
             ownerId = ownerId,
             ownerType = ownerType,
+            fileType = fileType,
         )
     }
 

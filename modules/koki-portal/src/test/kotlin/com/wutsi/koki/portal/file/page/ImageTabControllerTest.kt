@@ -1,54 +1,67 @@
 package com.wutsi.koki.portal.file.page
 
-import com.wutsi.koki.FileFixtures.files
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.FileFixtures.images
+import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
+import org.junit.jupiter.api.BeforeEach
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import kotlin.test.Test
 
-class FileTabControllerTest : AbstractPageControllerTest() {
+class ImageTabControllerTest : AbstractPageControllerTest() {
+    @BeforeEach
+    override fun setUp() {
+        super.setUp()
+
+        doReturn(
+            ResponseEntity(
+                SearchFileResponse(images),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchFileResponse::class.java)
+            )
+    }
+
     @Test
     fun list() {
-        navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
+        navigateTo("/images/tab?owner-id=111&owner-type=ACCOUNT")
 
-        assertElementPresent(".btn-upload")
-        assertElementCount(".tab-files tr.file", files.size)
-        assertElementAttribute("#file-list", "data-owner-id", "111")
-        assertElementAttribute("#file-list", "data-owner-type", "ACCOUNT")
+        assertElementCount(".tab-images tr.image", images.size)
+        assertElementPresent(".btn-refresh")
+        assertElementPresent(".uploader")
     }
 
     @Test
     fun `read-only`() {
-        navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true&read-only=true")
+        navigateTo("/images/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true&read-only=true")
 
-        assertElementNotPresent(".btn-upload")
-        assertElementCount(".tab-files tr.file", files.size)
-        assertElementAttribute("#file-list", "data-owner-id", "111")
-        assertElementAttribute("#file-list", "data-owner-type", "ACCOUNT")
-    }
-
-    @Test
-    fun upload() {
-        navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
-        click(".btn-upload", 1000)
-
-        assertElementVisible("#koki-modal")
-    }
-
-    @Test
-    fun `list - without permission file-manage`() {
-        setUpUserWithoutPermissions(listOf("file:manage"))
-
-        navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
-
+        assertElementCount(".tab-images tr.image", images.size)
+        assertElementPresent(".btn-refresh")
         assertElementNotPresent(".btn-upload")
     }
 
     @Test
-    fun `list - without permission file`() {
-        setUpUserWithoutPermissions(listOf("file"))
+    fun `list - without permission image-manage`() {
+        setUpUserWithoutPermissions(listOf("image:manage"))
 
-        navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
+        navigateTo("/images/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
+        assertElementPresent(".btn-refresh")
+        assertElementNotPresent(".uploader")
+    }
 
+    @Test
+    fun `list - without permission image`() {
+        setUpUserWithoutPermissions(listOf("image"))
+
+        navigateTo("/images/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
         assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
     }
 }

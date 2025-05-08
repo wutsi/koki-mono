@@ -23,7 +23,7 @@ spring:
         clean-disabled: false
         locations: "classpath:db/migration/common,classpath:db/migration/local"
     jpa:
-        show-sql: false
+        show-sql: true
         hibernate:
             ddl-auto: none
             naming:

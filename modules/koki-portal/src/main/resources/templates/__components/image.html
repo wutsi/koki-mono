@@ -2,34 +2,67 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<span th:class="'fiv-viv fiv-icon-' + ${file.extension}" th:fragment="file-icon(file)">
-</span>
+<div class="widget" th:fragment="breadcrumb(image, owner, ownerModule)">
+    <div class="widget-body">
+        <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item" th:if="${ownerModule} AND ${ownerModule.homeUrl}">
+                    <a href="${ownerModule.homeUrl}" th:text="${ownerModule.title}">MODULE</a>
+                </li>
+                <li class="breadcrumb-item" th:if="${ownerModule} AND ${ownerModule.homeUrl}">
+                    <a th:href="${ownerModule.homeUrl} + '/' + ${owner.id} + '&tab=image'"
+                       th:text="${owner.title}">OWNER</a>
+                </li>
+                <li class="breadcrumb-item" th:if="${image}"><a href="/images">Images</a></li>
+                <li class="breadcrumb-item active" th:if="${image}">
+                    <span th:if="${image.title}" th:text="${image.title}">IMAGE</span>
+                    <span th:if="!${image.title}" th:text="${image.name}">IMAGE</span>
+                </li>
+                <li class="breadcrumb-item active" th:if="!${image}">Forms</li>
+            </ol>
+        </nav>
+    </div>
+</div>
 
 <tr class="file" th:fragment="columns(file, readOnly, ownerId, ownerType)" th:remove="tag">
     <td>
-        <div th:replace="~{__components/file :: file-icon(${file})}"></div>
+        <a th:href="'/images/' + ${file.id} + '&read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
+            <img style="max-height: 64px" th:src="${file.contentUrl}" width="64"/>
+        </a>
     </td>
     <td>
-        <a class="btn-view"
-           th:href="'/files/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
-            <span class="badge text-bg-success margin-right-small"
-                  th:each="label : ${file.labels}"
-                  th:text="${label.displayName}"
-            >LABEL</span>
+        <a th:href="'/images/' + ${file.id} + '&read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
             <span th:text="${file.name}">NAME</span>
         </a>
     </td>
-    <td th:text="${file.contentLengthText}">SIZE</td>
-    <td th:text="${file.languageText}">LANGUAGE</td>
     <td>
-        <span th:if="${file.createdBy}" th:text="${file.createdBy.displayName}">CREATED</span>
+        <a th:href="'/images/' + ${file.id} + '&read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
+            <span th:text="${file.contentLengthText}">000</span>
+        </a>
     </td>
-    <td th:text="${file.createdAtMoment}">CREATED</td>
+    <td>
+        <a th:href="'/images/' + ${file.id} + '&read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
+            <span th:if="${file.createdBy}" th:text="${file.createdBy.displayName}">CREATED</span>
+        </a>
+    </td>
+    <td>
+        <a th:href="'/images/' + ${file.id} + '&read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
+            <span th:text="${file.createdAtMoment}">MOMENT</span>
+        </a>
+    </td>
 </tr>
 
-<tr id="file-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
-    <td class="text-center" colspan="6">
-        <a href="javascript: koki_load_more('file-load-more')" th:data-url="${moreUrl}">Load more...</a>
+<tr id="image-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
+    <td class="text-center" colspan="5">
+        <button
+            class="btn btn-sm btn-light"
+            data-component-id='load-more'
+            data-container-id="image-load-more"
+            th:data-url="${moreUrl}"
+        >
+            Load more...
+        </button>
     </td>
 </tr>
 

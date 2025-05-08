@@ -7,5 +7,6 @@ data class PageModel(
     val name: String = "",
     val title: String = "",
     val description: String? = null,
-    val tabs: Map<String, List<ModuleModel>> = emptyMap()
+    val tabs: Map<String, List<ModuleModel>> = emptyMap(),
+    val assetUrl: String = "",
 )

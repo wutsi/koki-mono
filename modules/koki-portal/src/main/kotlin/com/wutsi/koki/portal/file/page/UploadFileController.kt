@@ -22,6 +22,7 @@ class UploadFileController(private val service: FileService) {
         val uploadUrl = service.uploadUrl(
             ownerId = ownerId,
             ownerType = ownerType,
+            fileType = ObjectType.FILE,
         )
         model.addAttribute("uploadUrl", uploadUrl)
         return "files/upload"

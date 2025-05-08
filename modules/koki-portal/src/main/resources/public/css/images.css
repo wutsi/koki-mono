@@ -1,17 +1,6 @@
 /* == DATA ROW === */
-table tr.room td a {
+table tr.image td a {
     display: block !important;
     color: black !important;
     text-decoration: none !important;
-}
-
-ul.amenities {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-ul.amenities li {
-    margin: 0;
-    padding: 0;
 }

@@ -23,6 +23,7 @@ class ListFileWidgetController(private val service: FileService) {
         val url = service.uploadUrl(
             ownerId = ownerId,
             ownerType = ownerType,
+            fileType = ObjectType.FILE,
         )
 
         var uploadUrl = "/files/upload?upload-url=" + URLEncoder.encode(url, "utf-8")

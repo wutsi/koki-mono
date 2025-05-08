@@ -5,7 +5,11 @@ CREATE TABLE T_FILE(
   created_by_fk           BIGINT,
   deleted_by_fk           BIGINT,
 
-  name                    VARCHAR(100) NOT NULL,
+  owner_fk                BIGINT,
+  owner_type              INT,
+  file_type               BIGINT NOT NULL DEFAULT 0,
+  name                    VARCHAR(255) NOT NULL,
+  title                   VARCHAR(100),
   description             TEXT,
   content_type            VARCHAR(255) NOT NULL,
   content_length          LONG NOT NULL,
@@ -20,18 +24,9 @@ CREATE TABLE T_FILE(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
-
-CREATE TABLE T_FILE_OWNER(
-  id                    BIGINT NOT NULL AUTO_INCREMENT,
-
-  file_fk               BIGINT NOT NULL REFERENCES T_FILE(id),
-  owner_fk              BIGINT NOT NULL,
-
-  owner_type            INT NOT NULL DEFAULT 0,
-
-  UNIQUE(file_fk, owner_fk, owner_type),
-  PRIMARY KEY(id)
-) ENGINE = InnoDB;
+CREATE INDEX tenant ON T_FILE (tenant_fk);
+CREATE INDEX file_type ON T_FILE (file_type);
+CREATE INDEX owner ON T_FILE (owner_fk, owner_type);
 
 
 CREATE TABLE T_LABEL(
@@ -59,11 +54,16 @@ CREATE TABLE T_FILE_LABEL(
 
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url)
-    VALUES (130, 3, 'file', 'Files', null, '/files/tab', '/settings/files', '/js/files.js');
+    VALUES (130, 3, 'file',  'Files',  null, '/files/tab', '/settings/files', '/js/files.js'),
+           (131, 3, 'image', 'Images', null, '/images/tab', null, '/js/images.js');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
     VALUES (1300, 130, 'file',         'Download files'),
            (1301, 130, 'file:manage',  'Upload files'),
            (1302, 130, 'file:delete',  'Delete files'),
-           (1303, 130, 'file:admin',   'Configure file module');
+           (1303, 130, 'file:admin',   'Configure file module'),
+
+           (1310, 130, 'image',         'View images'),
+           (1311, 130, 'image:manage',  'Upload images'),
+           (1313, 130, 'image:admin',   'Configure image module');
 

@@ -52,6 +52,8 @@ object PageName {
 
     const val HOME = "page.home"
 
+    const val IMAGE = "page.image"
+
     const val INVOICE = "page.invoice"
     const val INVOICE_LIST = "page.invoice.list"
     const val INVOICE_SETTINGS = "page.settings.invoice"

@@ -488,6 +488,10 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
     border-right: 1px solid gray !important;
 }
 
+.border-bottom {
+    border-bottom: 1px solid gray !important;
+}
+
 .border-top {
     border-top: 1px solid gray !important;
 }
@@ -520,6 +524,13 @@ a.btn-back {
 .bg-danger a,
 .bg-primary a {
     color: white;
+}
+
+/* =====  UPLOADER  ===== */
+.uploader {
+    background: #f8f8f8;
+    border: 1px solid gray !important;
+    cursor: pointer;
 }
 
 /* ============================= */
