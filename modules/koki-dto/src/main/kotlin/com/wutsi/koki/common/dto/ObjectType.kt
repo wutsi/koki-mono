@@ -13,5 +13,6 @@ enum class ObjectType {
     INVOICE,
     PAYMENT,
     FORM,
-    ROOM
+    ROOM,
+    IMAGE,
 }

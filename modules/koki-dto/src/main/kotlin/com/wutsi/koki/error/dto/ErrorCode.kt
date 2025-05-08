@@ -42,6 +42,7 @@ object ErrorCode {
     val EMPLOYEE_NOT_FOUND: String = "$PREFIX:employee:not-found"
 
     val FILE_NOT_FOUND: String = "$PREFIX:file:not-found"
+    val FILE_NOT_IMAGE: String = "$PREFIX:file:not-image"
     val FILE_INVALID_S3_CONFIGURATION: String = "$PREFIX:file:invalid-s3-configuration"
 
     val FORM_NOT_FOUND: String = "$PREFIX:form:not-found"
