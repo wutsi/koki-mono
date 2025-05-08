@@ -30,21 +30,28 @@ class KokiFiles(
     }
 
     fun uploadUrl(
-        ownerId: Long? = null,
-        ownerType: ObjectType? = null,
+        ownerId: Long?,
+        ownerType: ObjectType?,
+        fileType: ObjectType
     ): String {
         return urlBuilder.build(
             "$PATH_PREFIX/upload", mapOf(
                 "owner-id" to ownerId,
                 "owner-type" to ownerType,
+                "file-type" to fileType,
                 "tenant-id" to tenantProvider.id(),
                 "access-token" to accessTokenHolder.get()
             )
         )
     }
 
-    fun upload(ownerId: Long?, ownerType: ObjectType?, file: MultipartFile): UploadFileResponse {
-        val url = uploadUrl(ownerId, ownerType)
+    fun upload(
+        ownerId: Long?,
+        ownerType: ObjectType?,
+        fileType: ObjectType,
+        file: MultipartFile
+    ): UploadFileResponse {
+        val url = uploadUrl(ownerId, ownerType, fileType)
         return upload(url, file, UploadFileResponse::class.java)
     }
 
