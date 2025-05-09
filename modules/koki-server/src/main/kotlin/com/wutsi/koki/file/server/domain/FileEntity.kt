@@ -1,5 +1,6 @@
 package com.wutsi.koki.file.server.domain
 
+import com.wutsi.koki.common.dto.ObjectType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -8,7 +9,6 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
-import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import java.util.Date
 
@@ -28,10 +28,11 @@ data class FileEntity(
     @Column(name = "deleted_by_fk")
     var deletedById: Long? = null,
 
-    @OneToMany()
-    @JoinColumn(name = "file_fk")
-    val fileOwners: List<FileOwnerEntity> = emptyList(),
+    @Column(name = "owner_fk")
+    val ownerId: Long? = null,
 
+    val ownerType: ObjectType? = null,
+    val fileType: ObjectType = ObjectType.UNKNOWN,
     val name: String = "",
     val contentType: String = "",
     val contentLength: Long = -1,
@@ -40,6 +41,7 @@ data class FileEntity(
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
     var deletedAt: Date? = null,
+    var title: String? = null,
     var description: String? = null,
     var language: String? = null,
     var numberOfPages: Int? = null,

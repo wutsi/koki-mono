@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar(${ownerModule.name})}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/image :: breadcrumb(${image}, ${owner}, ${ownerModule})}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div class="flex flex-space-between">
+                        <div>
+                            <a th:href="${ownerUrl}">
+                                <i class="fa-solid fa-arrow-left-long"></i>
+                                Back to <span th:text="${owner.title}">OWNER</span>
+                            </a>
+                        </div>
+                        <div>
+                            <a class="btn-delete btn btn-danger btn-sm"
+                               onclick="return confirm('Are you sure you want to delete the image?')"
+                               th:href="'/images/' + ${image.id} + '/delete?owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}"
+                               th:if="!${readOnly} AND ${user?.hasPermission('image:manage')}">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div class="text-center">
+                        <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+
+                        <img th:src="${image.contentUrl}" th:title="${image.title}"/>
+                        <div>
+                            <div th:if="${image.title}" th:text="${image.title}">TITLE</div>
+                            <div th:if="${image.description}" th:text="${image.description}">TITLE</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

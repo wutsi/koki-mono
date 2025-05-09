@@ -265,6 +265,7 @@ class InvoiceNotificationWorker(
                 ownerType = null,
                 tenantId = invoice.tenantId,
                 url = url,
+                fileType = ObjectType.FILE,
             )
         } finally {
             file.delete()

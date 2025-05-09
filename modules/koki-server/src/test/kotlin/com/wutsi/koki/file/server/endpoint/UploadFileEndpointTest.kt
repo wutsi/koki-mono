@@ -4,9 +4,10 @@ import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.file.dto.UploadFileResponse
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
-import com.wutsi.koki.file.server.dao.FileOwnerRepository
 import com.wutsi.koki.file.server.dao.FileRepository
 import com.wutsi.koki.platform.mq.Publisher
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,9 +27,6 @@ import kotlin.test.assertEquals
 class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var dao: FileRepository
-
-    @Autowired
-    private lateinit var ownerDao: FileOwnerRepository
 
     @MockitoBean
     private lateinit var publisher: Publisher
@@ -53,6 +51,9 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("text/plain", file.contentType)
         assertEquals(12, file.contentLength)
         assertEquals(USER_ID, file.createdById)
+        assertEquals(ObjectType.FILE, file.fileType)
+        assertEquals(null, file.ownerId)
+        assertEquals(null, file.ownerType)
 
         val event = argumentCaptor<FileUploadedEvent>()
         verify(publisher).publish(event.capture())
@@ -81,11 +82,8 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("text/plain", file.contentType)
         assertEquals(12, file.contentLength)
         assertEquals(USER_ID, file.createdById)
-
-        val fileOwners = ownerDao.findByFileId(fileId)
-        assertEquals(1, fileOwners.size)
-        assertEquals(111L, fileOwners[0].ownerId)
-        assertEquals(ObjectType.ACCOUNT, fileOwners[0].ownerType)
+        assertEquals(111L, file.ownerId)
+        assertEquals(ObjectType.ACCOUNT, file.ownerType)
 
         val event = argumentCaptor<FileUploadedEvent>()
         verify(publisher).publish(event.capture())
@@ -117,6 +115,8 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("text/plain", file.contentType)
         assertEquals(12, file.contentLength)
         assertEquals(USER_ID, file.createdById)
+        assertEquals(null, file.ownerId)
+        assertEquals(null, file.ownerType)
 
         val event = argumentCaptor<FileUploadedEvent>()
         verify(publisher).publish(event.capture())
@@ -147,6 +147,8 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("text/plain", file.contentType)
         assertEquals(12, file.contentLength)
         assertEquals(null, file.createdById)
+        assertEquals(null, file.ownerId)
+        assertEquals(null, file.ownerType)
 
         val event = argumentCaptor<FileUploadedEvent>()
         verify(publisher).publish(event.capture())
@@ -155,9 +157,55 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(null, event.firstValue.owner)
     }
 
-    private fun createEntity(): HttpEntity<LinkedMultiValueMap<String, Any>> {
+    @Test
+    fun `upload image`() {
+        val entity = createEntity("file/document.jpg")
+        val response = rest.exchange(
+            "/v1/files/upload?tenant-id=1&file-type=IMAGE",
+            HttpMethod.POST,
+            entity,
+            UploadFileResponse::class.java,
+            "",
+        )
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+        assertEquals(listOf("*"), response.headers.get("Access-Control-Allow-Origin"))
+
+        val fileId = response.body!!.id
+        val file = dao.findById(fileId).get()
+        assertEquals("document.jpg", file.name)
+        assertEquals("image/jpeg", file.contentType)
+        assertEquals(242755, file.contentLength)
+        assertEquals(USER_ID, file.createdById)
+        assertEquals(ObjectType.IMAGE, file.fileType)
+        assertEquals(null, file.ownerId)
+        assertEquals(null, file.ownerType)
+
+        val event = argumentCaptor<FileUploadedEvent>()
+        verify(publisher).publish(event.capture())
+        assertEquals(file.id, event.firstValue.fileId)
+        assertEquals(file.tenantId, event.firstValue.tenantId)
+        assertEquals(null, event.firstValue.owner)
+    }
+
+    @Test
+    fun `upload invalid image`() {
+        val entity = createEntity()
+        val response = rest.exchange(
+            "/v1/files/upload?tenant-id=1&file-type=IMAGE",
+            HttpMethod.POST,
+            entity,
+            ErrorResponse::class.java,
+            "",
+        )
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
+        assertEquals(ErrorCode.FILE_NOT_IMAGE, response.body?.error?.code)
+    }
+
+    private fun createEntity(file: String = "file.txt"): HttpEntity<LinkedMultiValueMap<String, Any>> {
         val parameters = LinkedMultiValueMap<String, Any>()
-        parameters.add("file", ClassPathResource("file.txt"))
+        parameters.add("file", ClassPathResource(file))
 
         val headers = HttpHeaders()
         headers.setContentType(MediaType.MULTIPART_FORM_DATA)

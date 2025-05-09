@@ -2,6 +2,9 @@ package com.wutsi.koki.file.server.endpoint
 
 import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.error.dto.Error
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.BadRequestException
 import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.file.dto.UploadFileResponse
@@ -49,6 +52,7 @@ class FileEndpoints(
         @RequestParam(required = false, name = "id") ids: List<Long> = emptyList(),
         @RequestParam(required = false, name = "owner-id") ownerId: Long? = null,
         @RequestParam(required = false, name = "owner-type") ownerType: ObjectType? = null,
+        @RequestParam(name = "file-type") fileType: ObjectType? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
     ): SearchFileResponse {
@@ -57,6 +61,7 @@ class FileEndpoints(
             ids = ids,
             ownerId = ownerId,
             ownerType = ownerType,
+            fileType = fileType,
             limit = limit,
             offset = offset
         )
@@ -86,14 +91,18 @@ class FileEndpoints(
         @RequestParam(required = false, name = "access-token") accessToken: String? = null,
         @RequestParam(required = false, name = "owner-id") ownerId: Long? = null,
         @RequestParam(required = false, name = "owner-type") ownerType: ObjectType? = null,
+        @RequestParam(name = "file-type") fileType: ObjectType? = null,
         @RequestPart file: MultipartFile,
     ): UploadFileResponse {
+        validate(file, fileType)
+
         response.addHeader("Access-Control-Allow-Origin", "*")
 
         val file = service.upload(
             tenantId = tenantId,
             file = file,
             userId = accessToken?.let { toUserId(accessToken) },
+            fileType = fileType,
             ownerId = ownerId,
             ownerType = ownerType,
         )
@@ -112,6 +121,19 @@ class FileEndpoints(
             id = file.id,
             name = file.name,
         )
+    }
+
+    private fun validate(file: MultipartFile, fileType: ObjectType?) {
+        if (fileType == ObjectType.IMAGE && file.contentType?.startsWith("image/") == false) {
+            throw BadRequestException(
+                error = Error(
+                    code = ErrorCode.FILE_NOT_IMAGE,
+                    data = file.contentType?.let { contentType ->
+                        mapOf("contentType" to contentType)
+                    }
+                )
+            )
+        }
     }
 
     private fun toUserId(accessToken: String): Long? {

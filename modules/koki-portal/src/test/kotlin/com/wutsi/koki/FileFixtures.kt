@@ -1,21 +1,70 @@
 package com.wutsi.koki
 
 import com.wutsi.koki.UserFixtures.users
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.File
 import com.wutsi.koki.file.dto.FileSummary
 import com.wutsi.koki.file.dto.LabelSummary
 import org.apache.commons.lang3.time.DateUtils
+import org.springframework.web.servlet.function.RequestPredicates.contentType
 import java.util.Date
 
 object FileFixtures {
+    val images = listOf(
+        FileSummary(
+            id = 100,
+            name = "T1.png",
+            title = "Living room",
+            contentType = "image/png",
+            contentLength = 1024L * 1024,
+            createdAt = DateUtils.addDays(Date(), -5),
+            url = "https://picsum.photos/800/600",
+            fileType = ObjectType.IMAGE,
+        ),
+        FileSummary(
+            id = 100,
+            name = "T2.png",
+            title = null,
+            contentType = "image/png",
+            contentLength = 1024L * 1024,
+            createdAt = DateUtils.addDays(Date(), -5),
+            url = "https://picsum.photos/600/600",
+            fileType = ObjectType.IMAGE,
+        ),
+        FileSummary(
+            id = 100,
+            name = "T3.png",
+            title = null,
+            contentType = "image/png",
+            contentLength = 1024L * 1024,
+            createdAt = DateUtils.addDays(Date(), -2),
+            url = "https://picsum.photos/600/600",
+            fileType = ObjectType.IMAGE,
+        ),
+    )
+
+    val image = File(
+        id = 100,
+        name = "T1.png",
+        title = "Living room",
+        description = "Cosy living room",
+        contentType = "application/pdf",
+        contentLength = 800L * 600 * 64L,
+        createdAt = DateUtils.addDays(Date(), -5),
+        createdById = users[0].id,
+        url = "https://picsum.photos/800/600",
+        fileType = ObjectType.IMAGE,
+    )
+
     val files = listOf(
         FileSummary(
             id = 100,
-            name = "T1.pdf",
-            contentType = "application/pdf",
+            name = "T1.png",
+            title = "Living room",
+            contentType = "image/png",
             contentLength = 1024L * 1024,
             createdAt = DateUtils.addDays(Date(), -5),
-            url = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+            url = "https://picsum.photos/800/600",
             language = "en",
             numberOfPages = 540,
             labels = listOf(
@@ -74,8 +123,10 @@ object FileFixtures {
     val file = File(
         id = 100,
         name = "T1.pdf",
+        title = "Tax Report",
+        description = "Cosy living room",
         contentType = "application/pdf",
-        contentLength = 1024L * 1024,
+        contentLength = 800L * 600 * 64L,
         createdAt = DateUtils.addDays(Date(), -5),
         createdById = users[0].id,
         url = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",

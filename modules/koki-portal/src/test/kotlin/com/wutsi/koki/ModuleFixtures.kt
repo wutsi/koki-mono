@@ -67,6 +67,17 @@ object ModuleFixtures {
             jsUrl = "/js/files.js",
         ),
         Module(
+            id = 151L,
+            name = "image",
+            title = "Images",
+            homeUrl = null,
+            tabUrl = "/images/tab",
+            settingsUrl = null,
+            objectType = ObjectType.IMAGE,
+            jsUrl = "/js/images.js",
+            cssUrl = "/css/images.css",
+        ),
+        Module(
             id = 160,
             name = "security",
             title = "Security",
@@ -158,6 +169,7 @@ object ModuleFixtures {
         ),
         Module(
             id = 250,
+            objectType = ObjectType.ROOM,
             name = "room",
             title = "Rooms",
             homeUrl = "/rooms",
@@ -196,6 +208,10 @@ object ModuleFixtures {
         Permission(id = 1502, moduleId = 150, name = "file:admin", description = "Configure files"),
         Permission(id = 1503, moduleId = 150, name = "file:manage", description = "Manage files"),
         Permission(id = 1504, moduleId = 150, name = "file:delete", description = "Delete files"),
+
+        Permission(id = 1511, moduleId = 151, name = "image", description = "Access images"),
+        Permission(id = 1512, moduleId = 151, name = "image:manage", description = "Manage images"),
+        Permission(id = 1513, moduleId = 151, name = "image:admin", description = "Configure images"),
 
         Permission(id = 1601, moduleId = 160, name = "security:admin", description = "Configure system security"),
 

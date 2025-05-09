@@ -23,7 +23,9 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
         val fmt = createDateTimeFormat()
         return FileModel(
             id = entity.id,
+            fileType = entity.fileType,
             name = entity.name,
+            title = entity.title,
             contentUrl = entity.url,
             contentType = entity.contentType,
             contentLength = entity.contentLength,
@@ -49,7 +51,9 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
         val fmt = createDateTimeFormat()
         return FileModel(
             id = entity.id,
+            fileType = entity.fileType,
             name = entity.name,
+            title = entity.title,
             contentUrl = entity.url,
             contentType = entity.contentType,
             contentLength = entity.contentLength,

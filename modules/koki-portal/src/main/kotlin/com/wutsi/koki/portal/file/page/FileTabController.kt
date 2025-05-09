@@ -26,6 +26,7 @@ class FileTabController(private val service: FileService) : AbstractPageControll
         val url = service.uploadUrl(
             ownerId = ownerId,
             ownerType = ownerType,
+            fileType = ObjectType.FILE,
         )
 
         var uploadUrl = "/files/upload?upload-url=" + URLEncoder.encode(url, "utf-8")
@@ -49,6 +50,8 @@ class FileTabController(private val service: FileService) : AbstractPageControll
         val files = service.files(
             ownerId = ownerId,
             ownerType = ownerType,
+            limit = limit,
+            offset = offset
         )
         model.addAttribute("readOnly", readOnly ?: false)
         model.addAttribute("ownerId", ownerId)

@@ -60,6 +60,9 @@ function _koki_tabs_load(tabSelector) {
                 response.text()
                     .then(function (text) {
                         content.innerHTML = text
+                        if (koki) {
+                            koki.init();
+                        }
                     });
             });
     }

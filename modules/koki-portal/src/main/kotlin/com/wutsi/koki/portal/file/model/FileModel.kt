@@ -1,14 +1,15 @@
 package com.wutsi.koki.portal.file.model
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.user.model.UserModel
 import java.net.URLEncoder
 import java.util.Date
 
 data class FileModel(
     val id: Long = -1,
-    val workflowInstanceId: String? = null,
-    val formId: String? = null,
+    val fileType: ObjectType = ObjectType.UNKNOWN,
     val name: String = "",
+    val title: String? = null,
     val contentUrl: String = "",
     val contentType: String = "",
     val contentLength: Long = -1,
