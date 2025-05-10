@@ -6,6 +6,11 @@ import com.wutsi.koki.room.dto.Room
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomSummary
 import com.wutsi.koki.room.dto.RoomType
+import com.wutsi.koki.room.dto.RoomUnit
+import com.wutsi.koki.room.dto.RoomUnitStatus
+import com.wutsi.koki.room.dto.RoomUnitSummary
+import org.apache.commons.lang3.time.DateUtils
+import java.util.Date
 
 object RoomFixtures {
     val rooms = listOf(
@@ -134,5 +139,55 @@ object RoomFixtures {
             RefDataFixtures.amenities[2].id,
             RefDataFixtures.amenities[3].id,
         )
+    )
+
+    val roomUnits = listOf(
+        RoomUnitSummary(
+            id = 100,
+            roomId = rooms[0].id,
+            floor = 1,
+            number = "100",
+            status = RoomUnitStatus.AVAILABLE,
+        ),
+        RoomUnitSummary(
+            id = 101,
+            roomId = rooms[0].id,
+            floor = 1,
+            number = "101",
+            status = RoomUnitStatus.AVAILABLE,
+        ),
+        RoomUnitSummary(
+            id = 102,
+            roomId = rooms[0].id,
+            floor = 1,
+            number = "102",
+            status = RoomUnitStatus.AVAILABLE,
+        ),
+        RoomUnitSummary(
+            id = 200,
+            roomId = rooms[0].id,
+            floor = 2,
+            number = "200",
+            status = RoomUnitStatus.UNDER_MAINTENANCE,
+        ),
+        RoomUnitSummary(
+            id = 201,
+            roomId = rooms[0].id,
+            floor = 2,
+            number = "201",
+            status = RoomUnitStatus.UNDER_MAINTENANCE,
+        ),
+    )
+
+    val roomUnit = RoomUnit(
+        id = 201,
+        roomId = rooms[0].id,
+        floor = 2,
+        number = "201",
+        status = RoomUnitStatus.UNDER_MAINTENANCE,
+        createdAt = DateUtils.addDays(Date(), -5),
+        createdById = UserFixtures.USER_ID,
+        modifiedAt = DateUtils.addDays(Date(), -1),
+        modifiedById = UserFixtures.USER_ID,
     )
 }

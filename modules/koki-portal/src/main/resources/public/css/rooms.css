@@ -1,5 +1,6 @@
 /* == DATA ROW === */
-table tr.room td a {
+table tr.room td a,
+table tr.room-unit td a{
     display: block !important;
     color: black !important;
     text-decoration: none !important;

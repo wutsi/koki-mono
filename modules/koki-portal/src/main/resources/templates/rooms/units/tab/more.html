@@ -1,0 +1,5 @@
+<tr class="room-unit" th:each="roomUnit : ${roomUnits}" th:id="'room-unit-' + ${roomUnit.id}"
+    th:if="${roomUnits}">
+    <td th:replace="~{__components/room-unit :: columns(${roomUnit}, ${readOnly})}"></td>
+</tr>
+<tr th:if="${roomUnits}" th:replace="~{__components/room-unit :: load-more(${moreUrl})}"></tr>

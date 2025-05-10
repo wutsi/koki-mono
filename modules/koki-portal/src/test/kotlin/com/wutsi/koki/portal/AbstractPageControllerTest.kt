@@ -89,8 +89,12 @@ import com.wutsi.koki.refdata.dto.SearchSalesTaxResponse
 import com.wutsi.koki.refdata.dto.SearchUnitResponse
 import com.wutsi.koki.room.dto.CreateRoomRequest
 import com.wutsi.koki.room.dto.CreateRoomResponse
+import com.wutsi.koki.room.dto.CreateRoomUnitRequest
+import com.wutsi.koki.room.dto.CreateRoomUnitResponse
 import com.wutsi.koki.room.dto.GetRoomResponse
+import com.wutsi.koki.room.dto.GetRoomUnitResponse
 import com.wutsi.koki.room.dto.SearchRoomResponse
+import com.wutsi.koki.room.dto.SearchRoomUnitResponse
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
 import com.wutsi.koki.tax.dto.CreateTaxProductRequest
@@ -1074,6 +1078,7 @@ abstract class AbstractPageControllerTest {
     }
 
     fun setupRoomModule() {
+        // Room
         doReturn(
             ResponseEntity(
                 SearchRoomResponse(RoomFixtures.rooms),
@@ -1106,6 +1111,41 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any<CreateRoomRequest>(),
                 eq(CreateRoomResponse::class.java)
+            )
+
+        // RoomUnit
+        doReturn(
+            ResponseEntity(
+                SearchRoomUnitResponse(RoomFixtures.roomUnits),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchRoomUnitResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetRoomUnitResponse(RoomFixtures.roomUnit),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetRoomUnitResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreateRoomUnitResponse(1111),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateRoomUnitRequest>(),
+                eq(CreateRoomUnitResponse::class.java)
             )
     }
 

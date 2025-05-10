@@ -1,7 +1,8 @@
 {
   "tabs": {
     "main": [
-      "image"
+      "image",
+      "room-unit"
     ]
   }
 }

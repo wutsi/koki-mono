@@ -119,7 +119,17 @@ class UploaderWidget {
 }
 
 /**
- * Uploader widget
+ * Ajax button
+ *
+ * Attributes:
+ *   - data-action-confirm: Confirmation message
+ *   - data-action-url: URL of the action to execute. This URL must return the json:
+ *      {
+ *          success: true | false
+ *          error: Error (if success=false)
+ *      }
+ *   - data-target-id: ID of the element to refresh
+ *   - data-refresh-url: URL where to load the data to refresh
  */
 class AjaxButtonWidget {
     init() {
@@ -139,26 +149,46 @@ class AjaxButtonWidget {
     onClick() {
         console.log('onClick()');
         const elt = window.event.target;
-        const href = elt.getAttribute('data-href');
-        console.log('data-href=' + href);
-        if (href) {
-            fetch(href)
-                .then(response => {
-                    response.text()
-                        .then(html => {
-                            koki.widgets.ajaxButton.refresh(elt);
-                        })
-                });
+        const actionUrl = elt.getAttribute('data-action-url');
+        if (actionUrl) {
+            // Confirm
+            const confirmMsg = elt.getAttribute('data-action-confirm');
+            if (confirmMsg && !confirm(confirmMsg)) {
+                return
+            }
 
+            // Execute
+            koki.widgets.ajaxButton.execute(actionUrl, elt);
         } else {
             koki.widgets.ajaxButton.refresh(elt)
         }
+    }
+
+    execute(actionUrl, elt) {
+        console.log('Executing action ' + actionUrl);
+        fetch(actionUrl)
+            .then(response => {
+                if (response.ok) {
+                    response.json().then(json => {
+                        console.log('Executed', json);
+                        if (json.success) {
+                            koki.widgets.ajaxButton.refresh(elt);
+                        } else {
+                            alert('Failed: ' + json.error);
+                        }
+                    });
+                } else {
+                    console.log('Failed to submit to ' + form.action, response.statusText);
+                    alert('Failed');
+                }
+            });
     }
 
     refresh(elt) {
         const targetId = elt.getAttribute('data-target-id');
         const refreshUrl = elt.getAttribute('data-refresh-url');
         if (targetId && refreshUrl) {
+            console.log('Refreshing #' + targetId + ' from ' + refreshUrl);
             const container = document.getElementById(targetId);
             if (container) {
                 fetch(refreshUrl)
@@ -169,6 +199,8 @@ class AjaxButtonWidget {
                                 koki.init();
                             })
                     });
+            } else {
+                console.log('#' + targetId + ' not found in the DOM')
             }
         }
     }
@@ -188,29 +220,38 @@ class ModalWidget {
         console.log(count + ' modal component(s) found');
     }
 
-    open(url, title, open_callback) {
-        fetch(url)
-            .then(response => {
-                if (response.ok) {
-                    response.text()
-                        .then(html => {
-                            // Set the body
-                            document.getElementById("koki-modal-body").innerHTML = html;
-                            if (open_callback) {
-                                open_callback();
-                            }
+    open(url, title, open_callback, close_callback) {
+        const modal = document.getElementById('koki-modal');
+        if (modal) {
+            modal.addEventListener('hidden.bs.modal', close_callback);
 
-                            // Set the title
-                            document.getElementById("koki-modal-title").innerHTML = title;
+            fetch(url)
+                .then(response => {
+                    if (response.ok) {
+                        response.text()
+                            .then(html => {
+                                // Set the body
+                                document.getElementById("koki-modal-body").innerHTML = html;
+                                if (open_callback) {
+                                    open_callback();
+                                }
 
-                            // Show
-                            const modal = new bootstrap.Modal('#koki-modal');
-                            modal.show();
-                        })
-                } else {
-                    console.log('Unable to fetch the modal', response.text());
-                }
-            });
+                                // Set the title
+                                document.getElementById("koki-modal-title").innerHTML = title;
+
+                                // Show
+                                const modal = new bootstrap.Modal('#koki-modal');
+                                modal.show();
+                            })
+                    } else {
+                        console.log('Unable to fetch the modal', response.text());
+                    }
+                });
+        }
+    }
+
+    close() {
+        document.querySelector('#koki-modal .btn-close').click();
     }
 }
 

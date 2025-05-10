@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<tr th:fragment="columns(roomUnit, readOnly)" th:remove="tag">
+    <td>
+        <div th:with="_href='javascript: kokiRoomUnitEditor.edit(' + ${roomUnit.id} + ')'"></div>
+        <div th:with="_canEdit=!${readOnly} AND ${user?.hasPermission('room-unit:manage')}"></div>
+
+        <a class="btn-edit"
+           th:href="${_href}"
+           th:if="${_canEdit}"
+           th:text="${roomUnit.number}"
+        >
+            NUMBER
+        </a>
+        <span
+            th:if="!${_canEdit}"
+            th:text="${roomUnit.number}"
+        >
+            NUMBER
+        </span>
+    </td>
+    <td>
+        <a class="btn-edit"
+           th:href="${_href}"
+           th:if="${_canEdit}"
+           th:text="${roomUnit.floorText}"
+        >
+            NUMBER
+        </a>
+        <span
+            th:if="!${_canEdit}"
+            th:text="${roomUnit.floorText}"
+        >
+            NUMBER
+        </span>
+    </td>
+    <td>
+        <a class="btn-edit"
+           th:href="${_href}"
+           th:if="${_canEdit}"
+        >
+            <div th:replace="~{__components/room-unit :: status(${roomUnit.status})}"></div>
+        </a>
+        <div th:if="!${_canEdit}">
+            <div th:replace="~{__components/room-unit :: status(${roomUnit.status})}"></div>
+        </div>
+    </td>
+    <th class="text-right">
+        <button class="btn btn-sm btn-danger btn-delete"
+                data-component-id="ajax-button"
+                data-target-id="room-unit-list"
+                th:data-action-confirm="'Are you sure you want to delete the room #' + ${roomUnit.number}"
+                th:data-action-url="'/room-units/tab/delete?id=' + ${roomUnit.id}"
+                th:data-refresh-url="'/room-units/tab/more?owner-id=' + ${roomUnit.roomId} + '&owner-type=ROOM'"
+                th:if="${_canEdit}"
+        >
+            Delete
+        </button>
+    </th>
+</tr>
+
+<tr id="room-unit-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
+    <td class="text-center" colspan="4">
+        <button
+            class="btn btn-sm btn-light"
+            data-component-id='load-more'
+            data-container-id="room-unit-load-more"
+            th:data-url="${moreUrl}"
+        >
+            Load more...
+        </button>
+    </td>
+</tr>
+
+<div th:fragment="status(status)">
+    <i class="fa-solid fa-circle fa-xs success" th:if="${status.name} == 'AVAILABLE'"></i>
+    <i class="fa-solid fa-circle fa-xs warning" th:if="${status.name} == 'UNDER_MAINTENANCE'"></i>
+    <i class="fa-solid fa-circle fa-xs error" th:if="${status.name} == 'BLOCKED'"></i>
+    <span th:text="#{'room-unit-status.' + ${status}}" th:title="${status}">STATUS</span>
+</div>
+
+</body>
