@@ -88,7 +88,9 @@ object ErrorCode {
     val ROLE_NAME_MISSING: String = "$PREFIX:role:name-missing"
     val ROLE_IN_USE: String = "$PREFIX:role:in-use"
 
-    val ROOM_NOT_FOUND: String = "$PREFIX:room:room-not-found"
+    val ROOM_NOT_FOUND: String = "$PREFIX:room:not-found"
+    val ROOM_UNIT_NOT_FOUND: String = "$PREFIX:room-unit:not-found"
+    val ROOM_UNIT_DUPLICATE_NUMBER: String = "$PREFIX:room-unit:duplicate-number"
 
     val SALES_TAX_COUNTRY_NOT_SUPPORTED: String = "$PREFIX:sales-tax:country-not-supported"
     val SALES_TAX_STATE_NOT_FOUND: String = "$PREFIX:sales-tax:state-not-found"

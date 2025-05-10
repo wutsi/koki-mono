@@ -39,25 +39,43 @@ CREATE INDEX city ON T_ROOM(city_fk);
 
 
 CREATE TABLE T_ROOM_AMENITY(
-  room_fk        BIGINT NOT NULL REFERENCES T_ROOM(id),
-  amenity_fk     BIGINT,
+  room_fk                   BIGINT NOT NULL REFERENCES T_ROOM(id),
+  amenity_fk                BIGINT,
 
-  created_at     DATETIME DEFAULT NOW(),
+  created_at                DATETIME DEFAULT NOW(),
+
   PRIMARY KEY(room_fk, amenity_fk)
 ) ENGINE = InnoDB;
 
-CREATE TABLE T_ROOM_IMAGE(
-  room_fk        BIGINT NOT NULL REFERENCES T_ROOM(id),
-  file_fk        BIGINT,
+CREATE TABLE T_UNIT(
+  id                        BIGINT NOT NULL AUTO_INCREMENT,
 
-  created_at     DATETIME DEFAULT NOW(),
-  PRIMARY KEY(room_fk, file_fk)
+  room_fk                   BIGINT NOT NULL REFERENCES T_ROOM(id),
+  tenant_fk                 BIGINT NOT NULL,
+  created_by_fk             BIGINT,
+  modified_by_fk            BIGINT,
+  deleted_by_fk             BIGINT,
+
+  number                    VARCHAR(10) NOT NULL ,
+  floor                     INT NOT NULL DEFAULT 0,
+  status                    INT NOT NULL DEFAULT 0,
+
+  created_at                DATETIME DEFAULT NOW(),
+  modified_at               DATETIME DEFAULT NOW(),
+  deleted_at                DATETIME,
+
+  UNIQUE(room_fk, number),
+  PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
+
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url, css_url)
-    VALUES (250, 12, 'room', 'Rooms', '/rooms', null, null, '/js/rooms.js', '/css/rooms.css');
+    VALUES (250, 12, 'room', 'Rooms', '/rooms', null,         null, '/js/rooms.js', '/css/rooms.css'),
+           (251, 14, 'unit', 'Units', null,     '/units/tab', null, '/js/rooms.js', '/css/rooms.css');
+
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
     VALUES (2500, 250, 'room',        'View Properties'),
            (2501, 250, 'room:manage', 'Add/Edit Property information'),
-           (2502, 250, 'room:delete', 'Delete Properties');
+           (2510, 250, 'unit',        'View Properties'),
+           (2511, 250, 'unit:manage', 'Add/Edit Property information');

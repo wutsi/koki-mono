@@ -21,5 +21,4 @@ data class Room(
     val modifiedById: Long? = null,
     val modifiedAt: Date = Date(),
     val amenityIds: List<Long> = emptyList(),
-    val imageFileIds: List<Long> = emptyList(),
 )

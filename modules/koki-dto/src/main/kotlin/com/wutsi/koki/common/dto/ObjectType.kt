@@ -15,4 +15,5 @@ enum class ObjectType {
     FORM,
     ROOM,
     IMAGE,
+    ROOM_UNIT
 }
