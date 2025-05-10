@@ -53,7 +53,7 @@
     </repositories>
 
     <properties>
-        <wutsi-dto.version>0.0.197</wutsi-dto.version>
+        <wutsi-dto.version>0.0.198</wutsi-dto.version>
         <wutsi-platform.version>0.0.21</wutsi-platform.version>
         <wutsi-sdk.version>0.0.9</wutsi-sdk.version>
 
