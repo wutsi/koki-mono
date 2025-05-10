@@ -36,7 +36,6 @@ class GetRoomEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(35.0, room.pricePerNight.amount)
         assertEquals("CAD", room.pricePerNight.currency)
         assertEquals(listOf(1L, 2L), room.amenityIds)
-        assertEquals(listOf(11L, 22L, 33L), room.imageFileIds)
     }
 
     @Test

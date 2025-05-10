@@ -1,6 +1,5 @@
 package com.wutsi.koki.room.server.domain
 
-import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.refdata.server.domain.AmenityEntity
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
@@ -66,12 +65,4 @@ data class RoomEntity(
         inverseJoinColumns = arrayOf(JoinColumn(name = "amenity_fk")),
     )
     var amenities: MutableList<AmenityEntity> = mutableListOf(),
-
-    @ManyToMany
-    @JoinTable(
-        name = "T_ROOM_IMAGE",
-        joinColumns = arrayOf(JoinColumn(name = "room_fk")),
-        inverseJoinColumns = arrayOf(JoinColumn(name = "file_fk")),
-    )
-    var images: MutableList<FileEntity> = mutableListOf()
 )

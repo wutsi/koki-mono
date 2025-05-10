@@ -47,7 +47,7 @@ CREATE TABLE T_ROOM_AMENITY(
   PRIMARY KEY(room_fk, amenity_fk)
 ) ENGINE = InnoDB;
 
-CREATE TABLE T_UNIT(
+CREATE TABLE T_ROOM_UNIT(
   id                        BIGINT NOT NULL AUTO_INCREMENT,
 
   room_fk                   BIGINT NOT NULL REFERENCES T_ROOM(id),
@@ -59,6 +59,7 @@ CREATE TABLE T_UNIT(
   number                    VARCHAR(10) NOT NULL ,
   floor                     INT NOT NULL DEFAULT 0,
   status                    INT NOT NULL DEFAULT 0,
+  deleted                   BOOL DEFAULT false,
 
   created_at                DATETIME DEFAULT NOW(),
   modified_at               DATETIME DEFAULT NOW(),
@@ -70,12 +71,13 @@ CREATE TABLE T_UNIT(
 
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url, css_url)
-    VALUES (250, 12, 'room', 'Rooms', '/rooms', null,         null, '/js/rooms.js', '/css/rooms.css'),
-           (251, 14, 'unit', 'Units', null,     '/units/tab', null, '/js/rooms.js', '/css/rooms.css');
+    VALUES (250, 12, 'room',      'Rooms', '/rooms', null,         null, '/js/rooms.js', '/css/rooms.css'),
+           (251, 14, 'room-unit', 'Units', null,     '/units/tab', null, '/js/rooms.js', '/css/rooms.css');
 
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
     VALUES (2500, 250, 'room',        'View Properties'),
            (2501, 250, 'room:manage', 'Add/Edit Property information'),
-           (2510, 250, 'unit',        'View Properties'),
-           (2511, 250, 'unit:manage', 'Add/Edit Property information');
+
+           (2510, 250, 'room-unit',        'View Properties'),
+           (2511, 250, 'room-unit:manage', 'Add/Edit Property information');

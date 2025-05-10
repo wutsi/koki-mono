@@ -1,7 +1,6 @@
 package com.wutsi.koki.room.server.endpoint
 
 import com.wutsi.koki.room.dto.AddAmenityRequest
-import com.wutsi.koki.room.dto.AddImageRequest
 import com.wutsi.koki.room.dto.CreateRoomRequest
 import com.wutsi.koki.room.dto.CreateRoomResponse
 import com.wutsi.koki.room.dto.GetRoomResponse
@@ -109,23 +108,5 @@ class RoomEndpoints(
         @PathVariable amenityId: Long,
     ) {
         service.removeAmenity(id, amenityId, tenantId)
-    }
-
-    @PostMapping("/{id}/images")
-    fun addImages(
-        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-        @PathVariable id: Long,
-        @RequestBody @Valid request: AddImageRequest
-    ) {
-        service.addImage(id, request, tenantId)
-    }
-
-    @DeleteMapping("/{id}/images/{fileId}")
-    fun removeImage(
-        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-        @PathVariable id: Long,
-        @PathVariable fileId: Long,
-    ) {
-        service.removeImage(id, fileId, tenantId)
     }
 }

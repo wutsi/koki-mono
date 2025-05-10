@@ -11,3 +11,7 @@ INSERT INTO T_ROOM(id, tenant_fk, type, status, city_fk, state_fk, country, titl
     VALUES (111, 1, 1, 2, 1001, 100, 'CA', 'Room A', 'This is the title of the room', 2, 4, 6, 10, '11111', '3030 Linton', false, null, null, 35, 'CAD'),
            (112, 1, 1, 2, 1001, 100, 'CA', 'Room A', null, 1, 1, 1, 1, null, null, true, null, 3333, null, null),
            (200, 2, 1, 2, 1001, 100, 'CA', 'Room A', null, 1, 1, 1, 1, null, null, true, null, 3333, null, null);
+
+INSERT INTO T_ROOM_UNIT(id, tenant_fk, room_fk, floor, number, status)
+    VALUES (1110, 1, 111, 1, '123', 2),
+           (1111, 1, 111, 5, '555', 1);

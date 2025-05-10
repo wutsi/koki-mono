@@ -1,23 +1,17 @@
 package com.wutsi.koki.room.server.domain
 
-import com.wutsi.koki.file.server.domain.FileEntity
-import com.wutsi.koki.refdata.server.domain.AmenityEntity
-import com.wutsi.koki.room.dto.RoomStatus
-import com.wutsi.koki.room.dto.RoomType
+import com.wutsi.koki.room.dto.RoomUnitStatus
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.JoinTable
-import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
 import java.util.Date
 
 @Entity
-@Table(name = "T_ROOM")
-data class RoomEntity(
+@Table(name = "T_ROOM_UNIT")
+data class RoomUnitEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
@@ -34,44 +28,15 @@ data class RoomEntity(
     @Column(name = "deleted_by_fk")
     var deleteById: Long? = null,
 
-    var type: RoomType = RoomType.UNKNOWN,
-    var status: RoomStatus = RoomStatus.UNKNOWN,
+    @Column(name = "room_fk")
+    val roomId: Long = -1,
+
+    var number: String = "",
+    var floor: Int = 0,
+    var status: RoomUnitStatus = RoomUnitStatus.UNKNOWN,
     var deleted: Boolean = false,
-    var title: String = "",
-    var description: String? = null,
-    var numberOfRooms: Int = 0,
-    var numberOfBathrooms: Int = 0,
-    var numberOfBeds: Int = 0,
-    var maxGuests: Int = 0,
-
-    var pricePerNight: Double? = null,
-    var currency: String? = null,
-
-    @Column("city_fk") var cityId: Long = 0,
-    @Column("state_fk") var stateId: Long? = null,
-    var street: String? = null,
-    var postalCode: String? = null,
-    var country: String = "",
-    var latitude: Double? = null,
-    var longitude: Double? = null,
 
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
     var deletedAt: Date? = null,
-
-    @ManyToMany
-    @JoinTable(
-        name = "T_ROOM_AMENITY",
-        joinColumns = arrayOf(JoinColumn(name = "room_fk")),
-        inverseJoinColumns = arrayOf(JoinColumn(name = "amenity_fk")),
-    )
-    var amenities: MutableList<AmenityEntity> = mutableListOf(),
-
-    @ManyToMany
-    @JoinTable(
-        name = "T_ROOM_IMAGE",
-        joinColumns = arrayOf(JoinColumn(name = "room_fk")),
-        inverseJoinColumns = arrayOf(JoinColumn(name = "file_fk")),
-    )
-    var images: MutableList<FileEntity> = mutableListOf()
 )

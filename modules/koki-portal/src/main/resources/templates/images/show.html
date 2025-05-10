@@ -44,7 +44,7 @@
                     <div class="text-center">
                         <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
-                        <img th:src="${image.contentUrl}" th:title="${image.title}"/>
+                        <img class="img-fluid" th:src="${image.contentUrl}" th:title="${image.title}"/>
                         <div>
                             <div th:if="${image.title}" th:text="${image.title}">TITLE</div>
                             <div th:if="${image.description}" th:text="${image.description}">TITLE</div>
