@@ -211,6 +211,7 @@ class RoomUnitTabControllerTest : AbstractPageControllerTest() {
         alert.accept()
         driver.switchTo().parentFrame()
 
+        Thread.sleep(1000)
         verify(rest).delete("$sdkBaseUrl/v1/room-units/${roomUnits[0].id}")
     }
 

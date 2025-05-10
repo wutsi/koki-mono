@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<tr th:fragment="columns(roomUnit, readOnly)" th:remove="tag">
+<tr th:fragment="columns(roomUnit, readOnly)"
+    th:remove="tag"
+    th:with="_canEdit=!${readOnly} AND ${user?.hasPermission('room-unit:manage')}"
+>
     <td>
-        <div th:with="_href='javascript: kokiRoomUnitEditor.edit(' + ${roomUnit.id} + ')'"></div>
-        <div th:with="_canEdit=!${readOnly} AND ${user?.hasPermission('room-unit:manage')}"></div>
-
         <a class="btn-edit"
-           th:href="${_href}"
+           th:href="'javascript:kokiRoomUnitEditor.edit(' + ${roomUnit.id} + ')'"
            th:if="${_canEdit}"
            th:text="${roomUnit.number}"
         >
@@ -23,7 +23,7 @@
     </td>
     <td>
         <a class="btn-edit"
-           th:href="${_href}"
+           th:href="'javascript:kokiRoomUnitEditor.edit(' + ${roomUnit.id} + ')'"
            th:if="${_canEdit}"
            th:text="${roomUnit.floorText}"
         >
@@ -38,7 +38,7 @@
     </td>
     <td>
         <a class="btn-edit"
-           th:href="${_href}"
+           th:href="'javascript:kokiRoomUnitEditor.edit(' + ${roomUnit.id} + ')'"
            th:if="${_canEdit}"
         >
             <div th:replace="~{__components/room-unit :: status(${roomUnit.status})}"></div>
