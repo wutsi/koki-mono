@@ -1,62 +1,57 @@
 package com.wutsi.koki.room.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.room.dto.CreateRoomRequest
-import com.wutsi.koki.room.dto.CreateRoomResponse
-import com.wutsi.koki.room.dto.RoomStatus
-import com.wutsi.koki.room.dto.RoomType
-import com.wutsi.koki.room.server.dao.RoomRepository
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.room.dto.CreateRoomUnitRequest
+import com.wutsi.koki.room.dto.CreateRoomUnitResponse
+import com.wutsi.koki.room.dto.RoomUnitStatus
+import com.wutsi.koki.room.server.dao.RoomUnitRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/room/CreateRoomEndpoint.sql"])
-class CreateRoomEndpointTest : AuthorizationAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/room/CreateRoomUnitEndpoint.sql"])
+class CreateRoomUnitEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
-    private lateinit var dao: RoomRepository
+    private lateinit var dao: RoomUnitRepository
 
     @Test
     fun create() {
-        val request = CreateRoomRequest(
-            type = RoomType.APARTMENT,
-            title = "Beautiful Cottage",
-            description = "This is a nice cottage located in Yaounde",
-            maxGuests = 7,
-            numberOfRooms = 4,
-            numberOfBathrooms = 2,
-            numberOfBeds = 8,
-            street = "3030 Pascal",
-            postalCode = "H1H13kj",
-            cityId = 1001,
-            pricePerNight = 35.0,
-            currency = "CAD"
+        val request = CreateRoomUnitRequest(
+            roomId = 111L,
+            floor = 1,
+            number = "123",
+            status = RoomUnitStatus.AVAILABLE,
         )
-        val response = rest.postForEntity("/v1/rooms", request, CreateRoomResponse::class.java)
+        val response = rest.postForEntity("/v1/room-units", request, CreateRoomUnitResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val roomId = response.body!!.roomId
-        val room = dao.findById(roomId).get()
+        val roomUnitId = response.body!!.roomUnitId
+        val roomUnit = dao.findById(roomUnitId).get()
 
-        assertEquals(TENANT_ID, room.tenantId)
-        assertEquals(RoomStatus.DRAFT, room.status)
-        assertEquals(USER_ID, room.createdById)
-        assertEquals(USER_ID, room.modifiedById)
-        assertEquals(request.type, room.type)
-        assertEquals(request.title, room.title)
-        assertEquals(request.description, room.description)
-        assertEquals(request.maxGuests, room.maxGuests)
-        assertEquals(request.numberOfRooms, room.numberOfRooms)
-        assertEquals(request.numberOfBathrooms, room.numberOfBathrooms)
-        assertEquals(request.numberOfBeds, room.numberOfBeds)
-        assertEquals(request.street, room.street)
-        assertEquals(request.postalCode, room.postalCode)
-        assertEquals(request.cityId, room.cityId)
-        assertEquals(100, room.stateId)
-        assertEquals("CA", room.country)
-        assertEquals(request.pricePerNight, room.pricePerNight)
-        assertEquals(request.currency, room.currency)
+        assertEquals(TENANT_ID, roomUnit.tenantId)
+        assertEquals(USER_ID, roomUnit.createdById)
+        assertEquals(USER_ID, roomUnit.modifiedById)
+        assertEquals(request.floor, roomUnit.floor)
+        assertEquals(request.number, roomUnit.number)
+        assertEquals(request.status, roomUnit.status)
+    }
+
+    @Test
+    fun `duplicate number`() {
+        val request = CreateRoomUnitRequest(
+            roomId = 111L,
+            floor = 33,
+            number = "333",
+            status = RoomUnitStatus.AVAILABLE,
+        )
+        val response = rest.postForEntity("/v1/room-units", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.CONFLICT, response.statusCode)
+        assertEquals(ErrorCode.ROOM_UNIT_DUPLICATE_NUMBER, response.body?.error?.code)
     }
 }

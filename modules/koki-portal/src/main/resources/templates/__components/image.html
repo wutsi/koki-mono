@@ -27,27 +27,27 @@
 
 <tr class="file" th:fragment="columns(file, readOnly, ownerId, ownerType)" th:remove="tag">
     <td>
-        <a th:href="'/images/' + ${file.id} + '&read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
-            <img style="max-height: 64px" th:src="${file.contentUrl}" width="64"/>
+        <a th:href="'/images/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
+            <img class="img-fluid" th:src="${file.contentUrl}"/>
         </a>
     </td>
     <td>
-        <a th:href="'/images/' + ${file.id} + '&read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
+        <a th:href="'/images/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
             <span th:text="${file.name}">NAME</span>
         </a>
     </td>
     <td>
-        <a th:href="'/images/' + ${file.id} + '&read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
+        <a th:href="'/images/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
             <span th:text="${file.contentLengthText}">000</span>
         </a>
     </td>
     <td>
-        <a th:href="'/images/' + ${file.id} + '&read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
+        <a th:href="'/images/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
             <span th:if="${file.createdBy}" th:text="${file.createdBy.displayName}">CREATED</span>
         </a>
     </td>
     <td>
-        <a th:href="'/images/' + ${file.id} + '&read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
+        <a th:href="'/images/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
             <span th:text="${file.createdAtMoment}">MOMENT</span>
         </a>
     </td>

@@ -36,9 +36,6 @@ class RoomMapper {
                 currency = (entity.currency ?: "")
             ),
             amenityIds = entity.amenities.map { amenity -> amenity.id },
-            imageFileIds = entity.images
-                .filter { image -> !image.deleted }
-                .mapNotNull { image -> image.id }
         )
     }
 

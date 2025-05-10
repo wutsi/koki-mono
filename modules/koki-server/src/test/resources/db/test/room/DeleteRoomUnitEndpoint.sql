@@ -12,5 +12,6 @@ INSERT INTO T_ROOM(id, tenant_fk, type, status, city_fk, state_fk, country, titl
            (112, 1, 1, 2, 1001, 100, 'CA', 'Room A', null, 1, 1, 1, 1, null, null, true, null, 3333, null, null),
            (200, 2, 1, 2, 1001, 100, 'CA', 'Room A', null, 1, 1, 1, 1, null, null, true, null, 3333, null, null);
 
-INSERT INTO T_ROOM_UNIT(id, tenant_fk, room_fk, floor, number, status)
-    VALUES (1110, 1, 1, 1, '123', 2);
+INSERT INTO T_ROOM_UNIT(id, tenant_fk, room_fk, floor, number, status, deleted, deleted_by_fk, deleted_at)
+    VALUES (1110, 1, 111, 1, '123', 2, false, null, null),
+           (1111, 1, 111, 1, '124', 2, true,  3333, '2020-02-01 14:30');

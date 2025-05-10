@@ -14,5 +14,10 @@ INSERT INTO T_ROOM(id, tenant_fk, type, status, city_fk, state_fk, country, titl
 
 INSERT INTO T_ROOM_UNIT(id, tenant_fk, room_fk, floor, number, status, deleted)
     VALUES (1110, 1, 111, 1, '123', 2, false),
-           (1111, 1, 111, 5, '555', 1, true),
-           (2000, 1, 200, 5, '555', 1, true);
+           (1111, 1, 111, 1, '124', 1, false),
+           (1112, 1, 111, 1, '125', 2, false),
+           (1113, 1, 111, 2, '211', 1, false),
+           (1120, 1, 112, 2, '212', 2, false),
+           (1121, 1, 112, 2, '333', 1, false),
+           (1122, 1, 112, 2, '334', 1, true),
+           (2000, 2, 200, 5, '555', 1, false);

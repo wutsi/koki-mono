@@ -3,14 +3,11 @@ package com.wutsi.koki.room.server.service
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
-import com.wutsi.koki.file.server.domain.FileEntity
-import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.domain.AmenityEntity
 import com.wutsi.koki.refdata.server.service.AmenityService
 import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.room.dto.AddAmenityRequest
-import com.wutsi.koki.room.dto.AddImageRequest
 import com.wutsi.koki.room.dto.CreateRoomRequest
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
@@ -30,7 +27,6 @@ class RoomService(
     private val securityService: SecurityService,
     private val locationService: LocationService,
     private val amenityService: AmenityService,
-    private val fileService: FileService,
 ) {
     fun get(id: Long, tenantId: Long): RoomEntity {
         val room = dao.findById(id).orElseThrow { NotFoundException(Error(ErrorCode.ROOM_NOT_FOUND)) }
@@ -193,42 +189,6 @@ class RoomService(
         val amenity = amenityService.get(amenityId)
         if (room.amenities.contains(amenity)) {
             room.amenities.remove(amenity)
-            dao.save(room)
-            return true
-        } else {
-            return false
-        }
-    }
-
-    @Transactional
-    fun addImage(id: Long, request: AddImageRequest, tenantId: Long): List<FileEntity> {
-        val room = get(id, tenantId)
-        val files = fileService.search(
-            tenantId = tenantId,
-            ids = request.fileIds,
-            limit = request.fileIds.size,
-        ).filter { file -> file.contentType.startsWith("image/") }
-
-        val added = mutableListOf<FileEntity>()
-        files.forEach { file ->
-            if (!room.images.contains(file)) {
-                room.images.add(file)
-                added.add(file)
-            }
-        }
-
-        if (added.isNotEmpty()) {
-            dao.save(room)
-        }
-        return added
-    }
-
-    @Transactional
-    fun removeImage(id: Long, fileId: Long, tenantId: Long): Boolean {
-        val room = get(id, tenantId)
-        val file = fileService.get(fileId, tenantId)
-        if (room.images.contains(file)) {
-            room.images.remove(file)
             dao.save(room)
             return true
         } else {
