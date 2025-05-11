@@ -1,0 +1,37 @@
+<div class="tab-amenities">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-md-4 margin-bottom"
+                 th:each="category : ${amenityCategories}">
+                <b th:text="${category.name}">CATEGORY</b>
+                <ul class="amenities">
+                    <li class="amenity"
+                        th:each="amenity : ${amenitiesByCategoryId[category.id]}"
+                        th:id="'amenity-' + ${amenity.id}"
+                    >
+                        <input
+                            data-component-id='ajax-checkbox'
+                            th:checked="${room.hasAmenity(amenity.id)}"
+                            th:data-action-url="'/room-amenities/tab/toggle?room-id=' + ${room.id} + '&amenity-id=' + ${amenity.id}"
+                            th:readonly="${readOnly} OR !${user?.hasPermission('room-amenity:manage')}"
+                            th:value="${amenity.id}"
+                            type="checkbox"
+                        />
+                        <span class="margin-left" th:text="${amenity.name}">AMENITY</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:if="${testMode}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/css/koki.css" rel="stylesheet"/>
+    <link href="/css/rooms.css" rel="stylesheet"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/koki.js"></script>
+    <script src="/js/rooms.js"></script>
+</div>

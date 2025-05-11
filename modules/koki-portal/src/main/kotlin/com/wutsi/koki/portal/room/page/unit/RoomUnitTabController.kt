@@ -74,6 +74,7 @@ class RoomUnitTabController(
 
     @GetMapping("/delete")
     @ResponseBody
+    @RequiresPermission(["room-unit:manage"])
     fun delete(@RequestParam id: Long): Map<String, Any> {
         try {
             service.delete(id)

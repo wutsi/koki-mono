@@ -1,4 +1,4 @@
 <tr class="image" th:each="image : ${images}" th:id="'image-' + ${image.id}" th:if="${images}">
-    <td th:replace="~{__components/image :: columns(${image}, ${readOnly}, ${ownerId}, ${ownerType})}"></td>
+    <td th:replace="~{__components/image :: columns(${image}, ${readOnly})}"></td>
 </tr>
 <tr th:if="${images}" th:replace="~{__components/image :: load-more(${moreUrl})}"></tr>
