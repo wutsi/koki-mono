@@ -36,6 +36,9 @@ class LoadMoreWidget {
 
 /**
  * Widget for loading content asynchronously
+ *
+ * Attributes
+ *  - data-url: URL of the fragment to load
  */
 class AjaxFragmentWidget {
     init() {
@@ -119,10 +122,13 @@ class UploaderWidget {
 }
 
 /**
- * Ajax button
+ * AjaxButton
+ * When this button is clicked:
+ *  1. It will execute an action by calling the endpoint defined by attribute "data-action-url"
+ *  2. IT will refresh a fragment of the page if the attributes "data-target-id" and "data-refresh-url" are  provided
  *
  * Attributes:
- *   - data-action-confirm: Confirmation message
+ *   - data-action-confirm: Confirmation message displayed before executing the action. The action is executed if user click OK
  *   - data-action-url: URL of the action to execute. This URL must return the json:
  *      {
  *          success: true | false
@@ -158,13 +164,13 @@ class AjaxButtonWidget {
             }
 
             // Execute
-            koki.widgets.ajaxButton.execute(actionUrl, elt);
+            koki.widgets.ajaxButton._execute(actionUrl, elt);
         } else {
             koki.widgets.ajaxButton.refresh(elt)
         }
     }
 
-    execute(actionUrl, elt) {
+    _execute(actionUrl, elt) {
         console.log('Executing action ' + actionUrl);
         fetch(actionUrl)
             .then(response => {
@@ -203,6 +209,71 @@ class AjaxButtonWidget {
                 console.log('#' + targetId + ' not found in the DOM')
             }
         }
+    }
+}
+
+/**
+ * Ajax checkbox
+ * When this button is clicked:
+ * 1. It will execute an action by calling the endpoint defined by attribute "data-action-url"
+ *
+ * Attributes:
+ *   - data-action-url: URL of the action to execute. The query parameter "checked" is appended to the query parameters of the URL
+ *     This URL must return the json:
+ *      {
+ *          success: true | false
+ *          error: Error (if success=false)
+ *      }
+ */
+class AjaxCheckboxWidget {
+    init() {
+        let count = 0;
+        let me = this;
+        document.querySelectorAll('[data-component-id=ajax-checkbox]')
+            .forEach((elt) => {
+                    elt.removeEventListener('click', koki.widgets.ajaxCheckbox.onClick);
+                    elt.addEventListener('click', koki.widgets.ajaxCheckbox.onClick);
+
+                    count++
+                }
+            );
+        console.log(count + ' ajax-checkbox component(s) found');
+    }
+
+    onClick() {
+        console.log('onClick()');
+        const elt = window.event.target;
+        const actionUrl = elt.getAttribute('data-action-url');
+        if (actionUrl) {
+            // Confirm
+            const confirmMsg = elt.getAttribute('data-action-confirm');
+            if (confirmMsg && !confirm(confirmMsg)) {
+                return
+            }
+
+            // Execute
+            const separator = actionUrl.indexOf('?') > 0 ? '&' : '?';
+            const url = actionUrl + separator + 'checked=' + elt.checked
+            koki.widgets.ajaxCheckbox._execute(url);
+        }
+    }
+
+    _execute(actionUrl) {
+        console.log('Executing action ' + actionUrl);
+        fetch(actionUrl)
+            .then(response => {
+                if (response.ok) {
+                    response.json().then(json => {
+                        console.log('Executed', json);
+                        if (!json.success) {
+                            alert('Failed: ' + json.error);
+                        }
+                    });
+                } else {
+                    console.log('Failed to submit to ' + form.action, response.statusText);
+                    alert('Failed');
+                }
+            });
     }
 }
 
@@ -264,6 +335,7 @@ class KokiWidgets {
         this.ajaxFragment = new AjaxFragmentWidget();
         this.uploader = new UploaderWidget();
         this.ajaxButton = new AjaxButtonWidget();
+        this.ajaxCheckbox = new AjaxCheckboxWidget();
         this.modal = new ModalWidget();
     }
 }
@@ -282,6 +354,7 @@ class Koki {
         this.widgets.ajaxFragment.init();
         this.widgets.uploader.init();
         this.widgets.ajaxButton.init();
+        this.widgets.ajaxCheckbox.init();
         this.widgets.modal.init();
     }
 }

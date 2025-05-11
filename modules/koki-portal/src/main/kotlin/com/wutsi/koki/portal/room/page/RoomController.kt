@@ -11,7 +11,6 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
 import java.net.URLEncoder
 
@@ -55,7 +54,7 @@ class RoomController(
     }
 
     @GetMapping("/{id}/delete")
-    @RequiresPermission(["product:manage"])
+    @RequiresPermission(["room:manage"])
     fun delete(@PathVariable id: Long, model: Model): String {
         try {
             val room = service.room(id, fullGraph = false)
@@ -67,20 +66,5 @@ class RoomController(
             model.addAttribute("error", errorResponse.error.code)
             return show(id, model)
         }
-    }
-
-    @GetMapping("/{id}/amenities/{amenityId}/toggle")
-    @RequiresPermission(["product:manage"])
-    fun toggleAmenity(
-        @PathVariable id: Long,
-        @PathVariable amenityId: Long,
-        @RequestParam value: Boolean,
-    ): String {
-        if (value) {
-            service.addAmenity(id, amenityId)
-        } else {
-            service.removeAmenity(id, amenityId)
-        }
-        return "rooms/amenities/toggle"
     }
 }

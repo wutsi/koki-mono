@@ -71,13 +71,17 @@ CREATE TABLE T_ROOM_UNIT(
 
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url, css_url)
-    VALUES (250, 12, 'room',      'Rooms', '/rooms', null,              null, '/js/rooms.js', '/css/rooms.css'),
-           (251, 14, 'room-unit', 'Units', null,     '/room-units/tab', null, null,           null);
+    VALUES (250, 12, 'room',         'Rooms',    '/rooms', null,                   null, '/js/rooms.js', '/css/rooms.css'),
+           (251, 14, 'room-unit',    'Units',     null,     '/room-units/tab',     null, null,           null),
+           (252, 0,  'room-amenity', 'Amenities', null,     '/room-amenities/tab', null, null,           null);
 
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
-    VALUES (2500, 250, 'room',        'View Properties'),
-           (2501, 250, 'room:manage', 'Add/Edit Property information'),
+    VALUES (2500, 250, 'room',        'View rooms'),
+           (2501, 250, 'room:manage', 'Add/Edit rooms'),
 
-           (2510, 250, 'room-unit',        'View Properties'),
-           (2511, 250, 'room-unit:manage', 'Add/Edit Property information');
+           (2510, 251, 'room-unit',        'View room units'),
+           (2511, 251, 'room-unit:manage', 'Add/Edit room unis'),
+
+           (2520, 252, 'room-amenity',        'View room amenities'),
+           (2521, 252, 'room-amenity:manage', 'Add/Edit room amenities');

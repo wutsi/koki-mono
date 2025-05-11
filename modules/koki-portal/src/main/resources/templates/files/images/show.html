@@ -1,0 +1,9 @@
+<div class="text-center">
+    <img class="img-fluid" th:src="${image.contentUrl}" th:title="${image.title}"/>
+    <div>
+        <div th:if="${image.title}">
+            <b th:text="${image.title}">TITLE</b>
+        </div>
+        <div th:if="${image.description}" th:text="${image.description}">TITLE</div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.file.page
+package com.wutsi.koki.portal.file.page.image
 
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.common.page.AbstractPageController
@@ -9,6 +9,8 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 @RequestMapping("/images/tab")
@@ -36,7 +38,7 @@ class ImageTabController(private val service: FileService) : AbstractPageControl
         model.addAttribute("ownerId", ownerId)
         model.addAttribute("ownerType", ownerType)
         more(ownerId, ownerType, readOnly, limit, offset, model)
-        return "images/tab/list"
+        return "files/images/tab/list"
     }
 
     @GetMapping("/more")
@@ -70,6 +72,24 @@ class ImageTabController(private val service: FileService) : AbstractPageControl
                 model.addAttribute("moreUrl", url)
             }
         }
-        return "images/tab/more"
+        return "files/images/tab/more"
+    }
+
+    @GetMapping("/delete")
+    @ResponseBody
+    @RequiresPermission(["image:manage"])
+    fun delete(@RequestParam id: Long): Map<String, Any> {
+        try {
+            service.delete(id)
+            return mapOf(
+                "success" to true,
+            )
+        } catch (ex: HttpClientErrorException) {
+            val errorResponse = toErrorResponse(ex)
+            return mapOf(
+                "success" to false,
+                "error" to errorResponse.error.code
+            )
+        }
     }
 }

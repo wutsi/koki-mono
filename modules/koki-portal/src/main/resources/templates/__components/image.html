@@ -25,31 +25,35 @@
     </div>
 </div>
 
-<tr class="file" th:fragment="columns(file, readOnly, ownerId, ownerType)" th:remove="tag">
+<tr class="file" th:fragment="columns(file, readOnly)" th:remove="tag">
     <td>
-        <a th:href="'/images/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
+        <a th:href="'javascript: kokiImageEditor.show(' + ${file.id} + ')'">
             <img class="img-fluid" th:src="${file.contentUrl}"/>
         </a>
     </td>
     <td>
-        <a th:href="'/images/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
-            <span th:text="${file.name}">NAME</span>
+        <a th:href="'javascript: kokiImageEditor.show(' + ${file.id} + ')'">
+            <div th:text="${image.title}"><b th:if="${image.title}">TITLE</b></div>
+            <div th:if="${image.description}" th:text="${image.description}">DESCRIPTION</div>
+            <div th:if="!${image.title} AND !${image.description}" th:text="${file.name}">NAME</div>
         </a>
     </td>
     <td>
-        <a th:href="'/images/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
+        <a th:href="'javascript: kokiImageEditor.show(' + ${file.id} + ')'">
             <span th:text="${file.contentLengthText}">000</span>
         </a>
     </td>
-    <td>
-        <a th:href="'/images/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
-            <span th:if="${file.createdBy}" th:text="${file.createdBy.displayName}">CREATED</span>
-        </a>
-    </td>
-    <td>
-        <a th:href="'/images/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
-            <span th:text="${file.createdAtMoment}">MOMENT</span>
-        </a>
+    <td class="text-right">
+        <button class="btn btn-sm btn-danger btn-delete"
+                data-action-confirm="Are you sure you want to delete the image"
+                data-component-id="ajax-button"
+                data-target-id="room-unit-list"
+                th:data-action-url="'/images/tab/delete?id=' + ${file.id}"
+                th:data-refresh-url="'/images/tab/more?owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}"
+                th:if="!${readOnly} AND ${user?.hasPermission('image:manage')}"
+        >
+            Delete
+        </button>
     </td>
 </tr>
 
