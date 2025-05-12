@@ -93,7 +93,7 @@ class RoomService(
     fun create(request: CreateRoomRequest, tenantId: Long): RoomEntity {
         val now = Date()
         val userId = securityService.getCurrentUserIdOrNull()
-        val city = locationService.get(request.cityId, LocationType.CITY)
+        val city = request.cityId?.let { id -> locationService.get(id, LocationType.CITY) }
         return dao.save(
             RoomEntity(
                 tenantId = tenantId,
@@ -107,12 +107,16 @@ class RoomService(
                 numberOfBeds = request.numberOfBeds,
                 pricePerNight = request.pricePerNight,
                 currency = request.currency,
+                checkinTime = request.checkinTime,
+                checkoutTime = request.checkoutTime,
 
                 street = request.street,
                 postalCode = request.postalCode,
                 cityId = request.cityId,
-                stateId = city.parentId,
-                country = city.country,
+                stateId = city?.parentId,
+                neighborhoodId = request.neighborhoodId,
+
+                country = city?.country,
 
                 createdById = userId,
                 modifiedById = userId,
@@ -127,7 +131,7 @@ class RoomService(
         val room = get(id, tenantId)
         val now = Date()
         val userId = securityService.getCurrentUserIdOrNull()
-        val city = locationService.get(request.cityId, LocationType.CITY)
+        val city = request.cityId?.let { id -> locationService.get(id, LocationType.CITY) }
 
         room.type = request.type
         room.title = request.title
@@ -138,12 +142,15 @@ class RoomService(
         room.numberOfBeds = request.numberOfBeds
         room.pricePerNight = request.pricePerNight
         room.currency = request.currency
+        room.checkinTime = request.checkinTime
+        room.checkoutTime = request.checkoutTime
 
         room.street = request.street
         room.postalCode = request.postalCode
         room.cityId = request.cityId
-        room.stateId = city.parentId
-        room.country = city.country
+        room.neighborhoodId = request.neighborhoodId
+        room.stateId = city?.parentId
+        room.country = city?.country
 
         room.modifiedById = userId
         room.modifiedAt = now

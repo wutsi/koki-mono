@@ -28,7 +28,7 @@ class RoomService(
     fun room(id: Long, fullGraph: Boolean = true): RoomModel {
         val room = koki.room(id).room
 
-        val locationIds = listOf(room.address.cityId, room.address.stateId)
+        val locationIds = listOf(room.address?.cityId, room.address?.stateId, room.neighborhoodId)
             .filterNotNull()
             .distinct()
         val locations = if (!fullGraph || locationIds.isEmpty()) {
@@ -89,9 +89,10 @@ class RoomService(
             offset = offset,
         ).rooms
 
-        val locationIds = rooms.flatMap { room -> listOf(room.address.cityId, room.address.stateId) }
-            .filterNotNull()
-            .distinct()
+        val locationIds =
+            rooms.flatMap { room -> listOf(room.address?.cityId, room.address?.stateId, room.neighborhoodId) }
+                .filterNotNull()
+                .distinct()
         val locations = if (!fullGraph || locationIds.isEmpty()) {
             emptyMap<Long, LocationModel>()
         } else {
@@ -114,7 +115,7 @@ class RoomService(
             request = CreateRoomRequest(
                 type = form.type,
                 title = form.title,
-                description = form.description,
+                description = form.description?.ifEmpty { null },
                 numberOfRooms = form.numberOfRooms,
                 numberOfBeds = form.numberOfBeds,
                 numberOfBathrooms = form.numberOfBathrooms,
@@ -124,6 +125,9 @@ class RoomService(
                 cityId = form.cityId ?: -1,
                 postalCode = form.postalCode,
                 street = form.street,
+                checkoutTime = form.checkoutTime?.ifEmpty { null },
+                checkinTime = form.checkinTime?.ifEmpty { null },
+                neighborhoodId = form.neighborhoodId,
             )
         ).roomId
     }
@@ -134,7 +138,7 @@ class RoomService(
             request = UpdateRoomRequest(
                 type = form.type,
                 title = form.title,
-                description = form.description,
+                description = form.description?.ifEmpty { null },
                 numberOfRooms = form.numberOfRooms,
                 numberOfBeds = form.numberOfBeds,
                 numberOfBathrooms = form.numberOfBathrooms,
@@ -144,6 +148,9 @@ class RoomService(
                 cityId = form.cityId ?: -1,
                 postalCode = form.postalCode,
                 street = form.street,
+                checkoutTime = form.checkoutTime?.ifEmpty { null },
+                checkinTime = form.checkinTime?.ifEmpty { null },
+                neighborhoodId = form.neighborhoodId,
             )
         )
     }

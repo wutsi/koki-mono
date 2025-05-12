@@ -24,6 +24,10 @@ object RefDataFixtures {
         Location(id = 100, type = LocationType.STATE, name = "Quebec", country = "CA"),
         Location(id = 200, type = LocationType.STATE, name = "Ontario", country = "CA"),
         Location(id = 110, type = LocationType.CITY, name = "Montreal", parentId = 100, country = "CA"),
+        Location(id = 111, type = LocationType.NEIGHBORHOOD, name = "Centre-Ville", parentId = 110, country = "CA"),
+        Location(id = 112, type = LocationType.NEIGHBORHOOD, name = "Ahunsic", parentId = 110, country = "CA"),
+        Location(id = 113, type = LocationType.NEIGHBORHOOD, name = "Mont-Royal", parentId = 110, country = "CA"),
+        Location(id = 114, type = LocationType.NEIGHBORHOOD, name = "Cote des Neiges", parentId = 110, country = "CA"),
         Location(id = 120, type = LocationType.CITY, name = "Saint Isidore", parentId = 100, country = "CA"),
         Location(id = 210, type = LocationType.CITY, name = "Toronto", parentId = 200, country = "CA"),
     )
@@ -31,6 +35,12 @@ object RefDataFixtures {
         Location(id = 110, type = LocationType.CITY, name = "Montreal", parentId = 100, country = "CA"),
         Location(id = 120, type = LocationType.CITY, name = "Saint Isidore", parentId = 100, country = "CA"),
         Location(id = 210, type = LocationType.CITY, name = "Toronto", parentId = 200, country = "CA"),
+    )
+    val neighborhoods = listOf(
+        Location(id = 111, type = LocationType.NEIGHBORHOOD, name = "Centre-Ville", parentId = 110, country = "CA"),
+        Location(id = 112, type = LocationType.NEIGHBORHOOD, name = "Ahunsic", parentId = 110, country = "CA"),
+        Location(id = 113, type = LocationType.NEIGHBORHOOD, name = "Mont-Royal", parentId = 110, country = "CA"),
+        Location(id = 114, type = LocationType.NEIGHBORHOOD, name = "Cote des Neiges", parentId = 110, country = "CA"),
     )
 
     // Categories

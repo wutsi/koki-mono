@@ -24,18 +24,15 @@ class RoomMapper {
             modifiedAt = entity.modifiedAt,
             createdById = entity.createdById,
             modifiedById = entity.createdById,
-            address = Address(
-                cityId = entity.cityId,
-                stateId = entity.stateId,
-                street = entity.street,
-                postalCode = entity.postalCode,
-                country = entity.country,
-            ),
+            neighborhoodId = entity.neighborhoodId,
+            address = toAddress(entity),
             pricePerNight = Money(
                 amount = entity.pricePerNight ?: 0.0,
                 currency = (entity.currency ?: "")
             ),
             amenityIds = entity.amenities.map { amenity -> amenity.id },
+            checkinTime = entity.checkinTime,
+            checkoutTime = entity.checkoutTime,
         )
     }
 
@@ -49,17 +46,26 @@ class RoomMapper {
             numberOfBathrooms = entity.numberOfBathrooms,
             numberOfBeds = entity.numberOfBeds,
             maxGuests = entity.maxGuests,
+            neighborhoodId = entity.neighborhoodId,
+            address = toAddress(entity),
             pricePerNight = Money(
                 amount = entity.pricePerNight ?: 0.0,
                 currency = (entity.currency ?: "")
             ),
-            address = Address(
+        )
+    }
+
+    fun toAddress(entity: RoomEntity): Address? {
+        return if (entity.hasAddress()) {
+            Address(
                 cityId = entity.cityId,
                 stateId = entity.stateId,
                 street = entity.street,
                 postalCode = entity.postalCode,
                 country = entity.country,
-            ),
-        )
+            )
+        } else {
+            null
+        }
     }
 }

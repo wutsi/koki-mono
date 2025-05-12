@@ -40,10 +40,11 @@ class EditRoomController(
             maxGuests = room.maxGuests,
             pricePerNight = room.pricePerNight.value,
             currency = room.pricePerNight.currency,
-            cityId = room.address.city?.id,
-            country = room.address.country,
-            street = room.address.street,
-            postalCode = room.address.postalCode,
+            cityId = room.address?.city?.id,
+            country = room.address?.country,
+            street = room.address?.street,
+            postalCode = room.address?.postalCode,
+            neighborhoodId = room.neighborhood?.id,
         )
         return edit(room, form, model)
     }
@@ -77,6 +78,7 @@ class EditRoomController(
             )
         )
 
+        loadCheckinCheckoutTime(model)
         loadCountries(model)
         model.addAttribute("types", RoomType.entries.filter { entry -> entry != RoomType.UNKNOWN })
 

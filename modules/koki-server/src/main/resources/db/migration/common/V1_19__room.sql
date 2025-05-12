@@ -17,12 +17,15 @@ CREATE TABLE T_ROOM(
   max_guests                INT NOT NULL DEFAULT 0,
   price_per_night           DECIMAL(10, 2),
   currency                  VARCHAR(3),
+  checkin_time              VARCHAR(5),
+  checkout_time             VARCHAR(5),
 
   street                    TEXT,
   postal_code               VARCHAR(30),
-  city_fk                   BIGINT NOT NULL,
+  city_fk                   BIGINT,
   state_fk                  BIGINT,
-  country                   VARCHAR(2) NOT NULL,
+  neighborhood_fk           BIGINT,
+  country                   VARCHAR(2),
   latitude                  DOUBLE,
   longitude                 DOUBLE,
 

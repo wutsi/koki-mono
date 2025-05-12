@@ -24,7 +24,14 @@ class CreateRoomController(
 ) : AbstractRoomController() {
     @GetMapping("/create")
     fun create(model: Model): String {
-        return create(RoomForm(currency = tenantHolder.get()?.currency ?: ""), model)
+        return create(
+            RoomForm(
+                currency = tenantHolder.get()?.currency ?: "",
+                checkinTime = "15:00",
+                checkoutTime = "12:00",
+            ),
+            model,
+        )
     }
 
     @PostMapping("/add-new")
@@ -53,6 +60,7 @@ class CreateRoomController(
             )
         )
 
+        loadCheckinCheckoutTime(model)
         loadCountries(model)
         model.addAttribute("types", RoomType.entries.filter { entry -> entry != RoomType.UNKNOWN })
 

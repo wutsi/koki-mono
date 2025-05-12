@@ -84,6 +84,32 @@
                                 <label class="title">Price per night<span class="required">*</span></label>
                                 <input required step="0.01" th:field="*{pricePerNight}" type="number"/>
                             </div>
+
+                            <div class="section-item">
+                                <label class="title">Checkin Time</label>
+                                <select th:field="*{checkinTime}">
+                                    <option value=""></option>
+                                    <option th:each="time : ${checkInOutTimes}"
+                                            th:text="${time}"
+                                            th:value="${time}"
+                                    >
+                                        00:00
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Checkout Time</label>
+                                <select th:field="*{checkoutTime}">
+                                    <option value=""></option>
+                                    <option th:each="time : ${checkInOutTimes}"
+                                            th:text="${time}"
+                                            th:value="${time}"
+                                    >
+                                        00:00
+                                    </option>
+                                </select>
+                            </div>
+
                             <div class="section-item">
                                 <label class="title">Currency: <span class="required">*</span></label>
                                 <select th:field="*{currency}">
@@ -109,8 +135,8 @@
                     </div>
                     <div class="section-body">
                         <div class="section-item">
-                            <label class="title">Country<span class="required">*</span></label>
-                            <select required th:field="*{country}">
+                            <label class="title">Country</label>
+                            <select th:field="*{country}">
                                 <option value=""></option>
                                 <option th:each="country : ${countries}"
                                         th:text="${country.displayCountry}"
@@ -121,8 +147,8 @@
                             </select>
                         </div>
                         <div class="section-item">
-                            <label class="title">City<span class="required">*</span></label>
-                            <select required th:field="*{cityId}">
+                            <label class="title">City</label>
+                            <select th:field="*{cityId}">
                                 <option selected
                                         th:if="${city}"
                                         th:text="${city?.name}"

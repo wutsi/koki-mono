@@ -89,6 +89,9 @@ object ErrorCode {
     val ROLE_IN_USE: String = "$PREFIX:role:in-use"
 
     val ROOM_NOT_FOUND: String = "$PREFIX:room:not-found"
+    val ROOM_IMAGE_MISSING: String = "$PREFIX:room:image-missing"
+    val ROOM_PRICE_MISSING: String = "$PREFIX:room:price-missing"
+    val ROOM_CITY_MISSING: String = "$PREFIX:room:address-city-missing"
     val ROOM_UNIT_NOT_FOUND: String = "$PREFIX:room-unit:not-found"
     val ROOM_UNIT_DUPLICATE_NUMBER: String = "$PREFIX:room-unit:duplicate-number"
 

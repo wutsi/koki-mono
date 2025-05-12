@@ -5,4 +5,5 @@ enum class LocationType {
     COUNTRY,
     STATE,
     CITY,
+    NEIGHBORHOOD,
 }
