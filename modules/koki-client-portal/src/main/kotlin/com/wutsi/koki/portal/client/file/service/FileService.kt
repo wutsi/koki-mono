@@ -40,7 +40,7 @@ class FileService(
     }
 
     fun upload(ownerId: Long?, ownerType: ObjectType?, file: MultipartFile): UploadFileResponse {
-        return koki.upload(ownerId, ownerType, file)
+        return koki.upload(ownerId, ownerType, ObjectType.FILE, file)
     }
 
     fun delete(id: Long) {
@@ -48,6 +48,6 @@ class FileService(
     }
 
     fun uploadUrl(ownerId: Long, ownerType: ObjectType): String {
-        return koki.uploadUrl(ownerId, ownerType)
+        return koki.uploadUrl(ownerId, ownerType, ObjectType.FILE)
     }
 }
