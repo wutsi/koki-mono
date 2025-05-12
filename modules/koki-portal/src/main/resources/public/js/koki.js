@@ -67,19 +67,30 @@ class AjaxFragmentWidget {
 
 /**
  * Uploader widget
+ *
+ * Attributes
+ * - data-upload-button-id: ID of the button to click for selecting the files
  */
 class UploaderWidget {
     init() {
         let count = 0;
         document.querySelectorAll('[data-component-id=uploader]')
             .forEach((elt) => {
-                let file = elt.querySelector("input[type=file]");
+                const file = elt.querySelector("input[type=file]");
                 if (file) {
-                    elt.removeEventListener('click', koki.widgets.uploader.onClick);
-                    elt.addEventListener('click', koki.widgets.uploader.onClick);
-
                     file.removeEventListener('change', koki.widgets.uploader.onUploaded);
                     file.addEventListener('change', koki.widgets.uploader.onUploaded);
+
+                    const btnId = elt.getAttribute("data-upload-button-id");
+                    if (btnId) {
+                        const btn = document.getElementById(btnId);
+                        if (btn) {
+                            btn.removeEventListener('click', koki.widgets.uploader.onClick);
+                            btn.addEventListener('click', koki.widgets.uploader.onClick);
+                        }
+                    } else {
+                        console.log('No upload button' + (btnId ? ' <#' + fileId + '>' : ''))
+                    }
 
                     count++
                 }
@@ -89,30 +100,65 @@ class UploaderWidget {
 
     onClick() {
         const elt = window.event.target;
-        let file = elt.querySelector("input[type=file]");
-        if (file) {
-            file.click()
+        const fileId = elt.getAttribute("data-file-button-id");
+        if (fileId) {
+            let file = document.getElementById(fileId);
+            if (file) {
+                file.click()
+            }
+        } else {
+            console.log('No file input' + (fileId ? ' <#' + fileId + '>' : ''))
         }
     }
 
     async onUploaded() {
         const elt = window.event.target;
 
+        // Init progress bar
+        const progressId = elt.getAttribute("data-progress-id");
+        const progressBar = progressId ? document.querySelector('#' + progressId + ' .progress-bar') : null;
+        if (progressBar) {
+            progressBar.style.display = 'block';
+            progressBar.setAttribute("aria-valuenow", 0);
+            progressBar.setAttribute("aria-valuemax", elt.files.length);
+            progressBar.style.width = "0%";
+        } else {
+            console.log('No progress bar' + (progressId ? ' <#' + progressId + ' .progress-bar>' : ''))
+        }
+
         // Upload
         let uploadUrl = elt.getAttribute('data-upload-url');
+        let maxMb = elt.getAttribute('data-max-file-size');
+        if (!maxMb || maxMb.length === 0) {
+            maxMb = 1
+        }
         for (var i = 0; i < elt.files.length; i++) {
+            // Uploading...
             const file = elt.files[i];
-            console.log('Uploading ', file);
-            const data = new FormData();
-            data.append('file', file);
-            const response = await fetch(uploadUrl, {
-                method: 'POST',
-                body: data
-            });
-            if (response.ok || response.status === 0) {
-                console.log("SUCCESS - Uploading " + file.name + " to " + uploadUrl);
+            if (file.size <= maxMb * 1024 * 1024) {
+                console.log('Uploading ', file);
+                const data = new FormData();
+                data.append('file', file);
+                const response = await fetch(uploadUrl, {
+                    method: 'POST',
+                    body: data
+                });
+                if (response.ok || response.status === 0) {
+                    console.log("SUCCESS - Uploading " + file.name);
+                } else {
+                    console.log("FAILED - Uploading " + file.name);
+                }
             } else {
-                console.log("ERROR - Uploading " + file.name + " to " + uploadUrl, response.statusText);
+                console.log("FAILED - " + file.name + " is too big. size=" + (file.size / (1024 * 1024)) + "Mb - max size=" + maxMb + "Mb");
+            }
+
+            // Progress
+            let now = i + 1
+            let percent = 100 * now / elt.files.length;
+            if (progressBar) {
+                console.log('Updating the progress bar. now=' + now + ' - percent=' + percent);
+                progressBar.setAttribute("aria-valuenow", now);
+                progressBar.style.width = percent + "%";
             }
         }
 
