@@ -47,7 +47,7 @@
         <button class="btn btn-sm btn-danger btn-delete"
                 data-action-confirm="Are you sure you want to delete the image"
                 data-component-id="ajax-button"
-                data-target-id="room-unit-list"
+                data-target-id="image-list"
                 th:data-action-url="'/images/tab/delete?id=' + ${file.id}"
                 th:data-refresh-url="'/images/tab/more?owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}"
                 th:if="!${readOnly} AND ${user?.hasPermission('image:manage')}"
