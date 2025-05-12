@@ -12,10 +12,14 @@ data class CreateRoomRequest(
     val numberOfBeds: Int = -1,
     val maxGuests: Int = -1,
 
-    val cityId: Long = -1,
+    val cityId: Long? = null,
     @get:Size(max = 30) val postalCode: String? = null,
     val street: String? = null,
+    val neighborhoodId: Long? = null,
 
     val pricePerNight: Double = 0.0,
-    @get:NotEmpty @get:Size(max = 3) val currency: String = ""
+    @get:NotEmpty @get:Size(max = 3) val currency: String = "",
+
+    @get:Size(max = 5) val checkinTime: String? = null,
+    @get:Size(max = 5) val checkoutTime: String? = null,
 )
