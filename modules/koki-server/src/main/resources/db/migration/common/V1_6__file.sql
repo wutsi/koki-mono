@@ -7,7 +7,8 @@ CREATE TABLE T_FILE(
 
   owner_fk                BIGINT,
   owner_type              INT,
-  file_type               BIGINT NOT NULL DEFAULT 0,
+  type                    INT NOT NULL DEFAULT 0,
+  status                  INT NOT NULL DEFAULT 0,
   name                    VARCHAR(255) NOT NULL,
   title                   VARCHAR(100),
   description             TEXT,
@@ -15,6 +16,7 @@ CREATE TABLE T_FILE(
   content_length          LONG NOT NULL,
   language                VARCHAR(2),
   number_of_pages         INT,
+  rejection_reason        TEXT,
   url                     TEXT NOT NULL,
   deleted                 BOOL NOT NULL DEFAULT false,
   created_at              DATETIME NOT NULL DEFAULT NOW(),
@@ -25,7 +27,8 @@ CREATE TABLE T_FILE(
 ) ENGINE = InnoDB;
 
 CREATE INDEX tenant ON T_FILE (tenant_fk);
-CREATE INDEX file_type ON T_FILE (file_type);
+CREATE INDEX type ON T_FILE (type);
+CREATE INDEX status ON T_FILE (status);
 CREATE INDEX owner ON T_FILE (owner_fk, owner_type);
 
 

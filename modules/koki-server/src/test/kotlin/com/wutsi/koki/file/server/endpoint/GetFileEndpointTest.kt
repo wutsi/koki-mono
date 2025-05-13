@@ -3,6 +3,8 @@ package com.wutsi.koki.file.server.endpoint
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.file.dto.FileStatus
+import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.dto.GetFileResponse
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
@@ -23,6 +25,9 @@ class GetFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("application/pdf", file.contentType)
         assertEquals(1000L, file.contentLength)
         assertEquals(USER_ID, file.createdById)
+        assertEquals(FileType.IMAGE, file.type)
+        assertEquals(FileStatus.REJECTED, file.status)
+        assertEquals("Invalid file", file.rejectionReason)
 
         assertEquals(2, file.labels.size)
         assertEquals(1L, file.labels[0].id)

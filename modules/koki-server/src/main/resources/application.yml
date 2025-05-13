@@ -236,6 +236,13 @@ koki:
                 dlq: koki-notification-dlq
                 dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
 
+        room:
+            mq:
+                consumer-delay-seconds: 1
+                queue: koki-room-queue
+                dlq: koki-room-dlq
+                dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
+
         tax:
             mq:
                 consumer-delay-seconds: 1

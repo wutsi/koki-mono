@@ -34,7 +34,7 @@ class TaxFileService(
     @Transactional
     fun save(file: FileEntity, data: TaxFileData): TaxFileEntity {
         // Update file data
-        if (file.ownerId == null || file.fileType != ObjectType.TAX) {
+        if (file.ownerId == null || file.ownerType != ObjectType.TAX) {
             throw NotFoundException(error = Error(ErrorCode.TAX_NOT_FOUND))
         }
 

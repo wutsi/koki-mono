@@ -33,4 +33,11 @@
     </td>
 </tr>
 
+<div th:fragment="status(status)">
+    <i class="fa-solid fa-check success" th:if="${status.name} == 'APPROVED'"></i>
+    <i class="fa-solid fa-circle-xmark error" th:if="${status.name} == 'REJECTED'"></i>
+    <i class="fa-solid fa-circle warning" th:if="${status.name} == 'UNDER_REVIEW'"></i>
+    <span th:text="#{'file-status.' + ${status}}">STATUS</span>
+</div>
+
 </body>

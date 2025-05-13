@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.file.page.image
 
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.file.service.FileService
 import com.wutsi.koki.portal.security.RequiresPermission
@@ -31,7 +32,7 @@ class ImageTabController(private val service: FileService) : AbstractPageControl
             service.uploadUrl(
                 ownerId = ownerId,
                 ownerType = ownerType,
-                fileType = ObjectType.IMAGE,
+                type = FileType.IMAGE,
             )
         )
         model.addAttribute("testMode", testMode)
@@ -53,7 +54,7 @@ class ImageTabController(private val service: FileService) : AbstractPageControl
         val files = service.files(
             ownerId = ownerId,
             ownerType = ownerType,
-            fileType = ObjectType.IMAGE,
+            type = FileType.IMAGE,
             limit = limit,
             offset = offset
         )

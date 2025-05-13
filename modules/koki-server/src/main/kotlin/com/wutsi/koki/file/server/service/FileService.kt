@@ -4,9 +4,10 @@ import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.file.dto.FileStatus
+import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.server.dao.FileRepository
 import com.wutsi.koki.file.server.domain.FileEntity
-import com.wutsi.koki.file.server.domain.LabelEntity
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.security.server.service.SecurityService
@@ -37,30 +38,13 @@ class FileService(
         return file
     }
 
-    fun getLabels(files: List<FileEntity>): Map<Long, List<LabelEntity>> {
-        val fileIds = files.mapNotNull { file -> file.id }.distinct()
-        if (fileIds.isEmpty()) {
-            return emptyMap()
-        }
-
-        val pairs = dao.findLabelsByIds(fileIds)
-        return pairs.map { item ->
-            Pair<Long, LabelEntity>(
-                item[0] as Long,
-                item[1] as LabelEntity,
-            )
-        }.map { pair -> pair.first to pair.second } // Pair<Long,LabelEntity>
-            .groupBy { pair -> pair.first } // Iterable<Long, List<Pair<Long,LabelEntity>>>
-            .map { entry -> entry.key to entry.value.map { pair -> pair.second } } // Map<Long, List<LabelEntity>>
-            .toMap()
-    }
-
     fun search(
         tenantId: Long,
         ids: List<Long> = emptyList(),
         ownerId: Long? = null,
         ownerType: ObjectType? = null,
-        fileType: ObjectType? = null,
+        type: FileType? = null,
+        status: FileStatus? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): List<FileEntity> {
@@ -76,8 +60,11 @@ class FileService(
         if (ownerType != null) {
             jql.append(" AND F.ownerType = :ownerType")
         }
-        if (fileType != null) {
-            jql.append(" AND F.fileType = :fileType")
+        if (type != null) {
+            jql.append(" AND F.type = :type")
+        }
+        if (status != null) {
+            jql.append(" AND F.status = :status")
         }
         jql.append(" ORDER BY F.name")
 
@@ -92,8 +79,11 @@ class FileService(
         if (ownerType != null) {
             query.setParameter("ownerType", ownerType)
         }
-        if (fileType != null) {
-            query.setParameter("fileType", fileType)
+        if (type != null) {
+            query.setParameter("type", type)
+        }
+        if (status != null) {
+            query.setParameter("status", status)
         }
 
         query.firstResult = offset
@@ -105,7 +95,7 @@ class FileService(
     fun upload(
         userId: Long?,
         file: MultipartFile,
-        fileType: ObjectType?,
+        type: FileType?,
         ownerId: Long?,
         ownerType: ObjectType?,
         tenantId: Long,
@@ -131,7 +121,7 @@ class FileService(
             ownerId = ownerId,
             ownerType = ownerType,
             tenantId = tenantId,
-            fileType = fileType,
+            type = type,
         )
     }
 
@@ -144,7 +134,7 @@ class FileService(
         url: URL,
         ownerId: Long?,
         ownerType: ObjectType?,
-        fileType: ObjectType?,
+        type: FileType?,
         tenantId: Long,
     ): FileEntity {
         return dao.save(
@@ -155,9 +145,10 @@ class FileService(
                 url = url.toString(),
                 contentType = contentType ?: "application/octet-stream",
                 contentLength = contentLength,
-                fileType = fileType ?: ObjectType.FILE,
+                type = type ?: FileType.FILE,
                 ownerId = ownerId,
                 ownerType = ownerType,
+                status = FileStatus.UNDER_REVIEW,
             )
         )
     }

@@ -121,7 +121,7 @@ class RoomService(
                 maxGuests = form.maxGuests,
                 currency = form.currency,
                 pricePerNight = form.pricePerNight,
-                cityId = form.cityId ?: -1,
+                cityId = form.cityId,
                 postalCode = form.postalCode,
                 street = form.street,
             )
@@ -141,7 +141,7 @@ class RoomService(
                 maxGuests = form.maxGuests,
                 currency = form.currency,
                 pricePerNight = form.pricePerNight,
-                cityId = form.cityId ?: -1,
+                cityId = form.cityId,
                 postalCode = form.postalCode,
                 street = form.street,
             )

@@ -6,6 +6,8 @@ import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.file.dto.FileStatus
+import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.dto.UploadFileResponse
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
 import com.wutsi.koki.file.server.dao.FileRepository
@@ -51,9 +53,10 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("text/plain", file.contentType)
         assertEquals(12, file.contentLength)
         assertEquals(USER_ID, file.createdById)
-        assertEquals(ObjectType.FILE, file.fileType)
+        assertEquals(FileType.FILE, file.type)
         assertEquals(null, file.ownerId)
         assertEquals(null, file.ownerType)
+        assertEquals(FileStatus.UNDER_REVIEW, file.status)
 
         val event = argumentCaptor<FileUploadedEvent>()
         verify(publisher).publish(event.capture())
@@ -84,6 +87,7 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(USER_ID, file.createdById)
         assertEquals(111L, file.ownerId)
         assertEquals(ObjectType.ACCOUNT, file.ownerType)
+        assertEquals(FileStatus.UNDER_REVIEW, file.status)
 
         val event = argumentCaptor<FileUploadedEvent>()
         verify(publisher).publish(event.capture())
@@ -117,6 +121,7 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(USER_ID, file.createdById)
         assertEquals(null, file.ownerId)
         assertEquals(null, file.ownerType)
+        assertEquals(FileStatus.UNDER_REVIEW, file.status)
 
         val event = argumentCaptor<FileUploadedEvent>()
         verify(publisher).publish(event.capture())
@@ -149,6 +154,7 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(null, file.createdById)
         assertEquals(null, file.ownerId)
         assertEquals(null, file.ownerType)
+        assertEquals(FileStatus.UNDER_REVIEW, file.status)
 
         val event = argumentCaptor<FileUploadedEvent>()
         verify(publisher).publish(event.capture())
@@ -161,7 +167,7 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
     fun `upload image`() {
         val entity = createEntity("file/document.jpg")
         val response = rest.exchange(
-            "/v1/files/upload?tenant-id=1&file-type=IMAGE",
+            "/v1/files/upload?tenant-id=1&type=IMAGE",
             HttpMethod.POST,
             entity,
             UploadFileResponse::class.java,
@@ -177,9 +183,10 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("image/jpeg", file.contentType)
         assertEquals(242755, file.contentLength)
         assertEquals(USER_ID, file.createdById)
-        assertEquals(ObjectType.IMAGE, file.fileType)
+        assertEquals(FileType.IMAGE, file.type)
         assertEquals(null, file.ownerId)
         assertEquals(null, file.ownerType)
+        assertEquals(FileStatus.UNDER_REVIEW, file.status)
 
         val event = argumentCaptor<FileUploadedEvent>()
         verify(publisher).publish(event.capture())
@@ -192,7 +199,7 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
     fun `upload invalid image`() {
         val entity = createEntity()
         val response = rest.exchange(
-            "/v1/files/upload?tenant-id=1&file-type=IMAGE",
+            "/v1/files/upload?tenant-id=1&type=IMAGE",
             HttpMethod.POST,
             entity,
             ErrorResponse::class.java,

@@ -13,7 +13,7 @@ import com.wutsi.koki.file.server.service.StorageServiceProvider
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.mq.Consumer
 import com.wutsi.koki.room.server.service.ai.RoomImageAgent
-import com.wutsi.koki.room.server.service.ai.RoomImageAgentData
+import com.wutsi.koki.room.server.service.data.RoomImageAgentData
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import org.apache.commons.io.FilenameUtils

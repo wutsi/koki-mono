@@ -1,6 +1,8 @@
 package com.wutsi.koki.file.server.domain
 
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.file.dto.FileStatus
+import com.wutsi.koki.file.dto.FileType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -32,7 +34,7 @@ data class FileEntity(
     val ownerId: Long? = null,
 
     val ownerType: ObjectType? = null,
-    val fileType: ObjectType = ObjectType.UNKNOWN,
+    val type: FileType = FileType.UNKNOWN,
     val name: String = "",
     val contentType: String = "",
     val contentLength: Long = -1,
@@ -45,6 +47,8 @@ data class FileEntity(
     var description: String? = null,
     var language: String? = null,
     var numberOfPages: Int? = null,
+    var status: FileStatus = FileStatus.UNKNOWN,
+    var rejectionReason: String? = null,
 
     @ManyToMany
     @JoinTable(
