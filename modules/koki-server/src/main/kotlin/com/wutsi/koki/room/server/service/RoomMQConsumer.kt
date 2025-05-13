@@ -12,6 +12,7 @@ import com.wutsi.koki.file.server.service.LabelService
 import com.wutsi.koki.file.server.service.StorageServiceProvider
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.mq.Consumer
+import com.wutsi.koki.room.server.service.ai.RoomAgentFactory
 import com.wutsi.koki.room.server.service.ai.RoomImageAgent
 import com.wutsi.koki.room.server.service.data.RoomImageAgentData
 import com.wutsi.koki.tenant.dto.ConfigurationName
@@ -28,7 +29,7 @@ class RoomMQConsumer(
     private val configurationService: ConfigurationService,
     private val labelService: LabelService,
     private val storageServiceProvider: StorageServiceProvider,
-    private val llmProvider: LLMProvider,
+    private val agentFactory: RoomAgentFactory,
     private val logger: KVLogger,
     private val objectMapper: ObjectMapper,
 ) : Consumer {
@@ -58,8 +59,7 @@ class RoomMQConsumer(
         }
 
         // Extract
-        val llm = llmProvider.get(event.tenantId)
-        val agent = RoomImageAgent(llm = llm)
+        val agent = agentFactory.createRoomImageAgent(event.tenantId)
         val f = download(file) ?: return
         try {
             val query = "CExtract the information from the image provided"
