@@ -1,6 +1,7 @@
 package com.wutsi.koki.sdk
 
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.file.dto.UploadFileResponse
@@ -32,13 +33,13 @@ class KokiFiles(
     fun uploadUrl(
         ownerId: Long?,
         ownerType: ObjectType?,
-        fileType: ObjectType
+        type: FileType,
     ): String {
         return urlBuilder.build(
             "$PATH_PREFIX/upload", mapOf(
                 "owner-id" to ownerId,
                 "owner-type" to ownerType,
-                "file-type" to fileType,
+                "type" to type,
                 "tenant-id" to tenantProvider.id(),
                 "access-token" to accessTokenHolder.get()
             )
@@ -48,10 +49,10 @@ class KokiFiles(
     fun upload(
         ownerId: Long?,
         ownerType: ObjectType?,
-        fileType: ObjectType,
+        type: FileType,
         file: MultipartFile
     ): UploadFileResponse {
-        val url = uploadUrl(ownerId, ownerType, fileType)
+        val url = uploadUrl(ownerId, ownerType, type)
         return upload(url, file, UploadFileResponse::class.java)
     }
 
@@ -59,6 +60,7 @@ class KokiFiles(
         ids: List<Long>,
         ownerId: Long?,
         ownerType: ObjectType?,
+        type: FileType?,
         limit: Int,
         offset: Int,
     ): SearchFileResponse {
@@ -67,6 +69,7 @@ class KokiFiles(
                 "id" to ids,
                 "owner-id" to ownerId,
                 "owner-type" to ownerType,
+                "type" to type,
                 "limit" to limit,
                 "offset" to offset,
             )
