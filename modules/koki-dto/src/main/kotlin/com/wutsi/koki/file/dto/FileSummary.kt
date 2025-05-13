@@ -1,11 +1,11 @@
 package com.wutsi.koki.file.dto
 
-import com.wutsi.koki.common.dto.ObjectType
 import java.util.Date
 
 data class FileSummary(
     val id: Long = -1L,
-    val fileType: ObjectType = ObjectType.UNKNOWN,
+    val type: FileType = FileType.UNKNOWN,
+    val status: FileStatus = FileStatus.UNKNOWN,
     val createdById: Long? = null,
     val name: String = "",
     val title: String? = null,
@@ -16,5 +16,5 @@ data class FileSummary(
     val modifiedAt: Date = Date(),
     val language: String? = null,
     val numberOfPages: Int? = null,
-    val labels: List<LabelSummary> = emptyList(),
+    val rejectionReason: String? = null,
 )
