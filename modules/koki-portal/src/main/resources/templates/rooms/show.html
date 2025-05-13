@@ -106,13 +106,25 @@
                                 <td><b>Price/night</b></td>
                                 <td th:text="${room.pricePerNight}">$$</td>
                             </tr>
+                            <tr th:if="${room.checkinTime}">
+                                <td><b>Checkin Time</b></td>
+                                <td th:text="${room.checkinTime}">00:00</td>
+                            </tr>
+                            <tr th:if="${room.checkoutTime}">
+                                <td><b>Checkout Time</b></td>
+                                <td th:text="${room.checkoutTime}">00:00</td>
+                            </tr>
                             <tr th:if="${room.description}">
                                 <td><b>Description</b></td>
                                 <td th:utext="${room.descriptionHtml}">00</td>
                             </tr>
-                            <tr>
+                            <tr th:if="${room.address}">
                                 <td><b>Address</b></td>
                                 <td th:utext="${room.address.toHtml()}">ADDRESS</td>
+                            </tr>
+                            <tr th:if="${room.neighborhood}">
+                                <td><b>Neighborhood</b></td>
+                                <td th:utext="${room.neighborhood.name}">NEIBORHOOD</td>
                             </tr>
                             <tr>
                                 <td><b>Created</b></td>

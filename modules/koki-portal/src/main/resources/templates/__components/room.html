@@ -62,9 +62,8 @@
 </tr>
 
 <div th:fragment="status(status)">
-    <i class="fa-solid fa-circle success" th:if="${status.name} == 'PUBLISHED'"></i>
-    <i class="fa-solid fa-circle warning" th:if="${status.name} == 'UNDER_REVIEW'"></i>
-    <i class="fa-solid fa-circle error" th:if="${status.name} == 'UNAVAILABLE'"></i>
+    <i class="fa-solid fa-circle fa-xs success" th:if="${status.name} == 'PUBLISHED'"></i>
+    <i class="fa-solid fa-circle fa-xs warning" th:if="${status.name} == 'UNDER_REVIEW'"></i>
     <span th:text="#{'room-status.' + ${status}}">STATUS</span>
 </div>
 

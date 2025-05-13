@@ -28,14 +28,17 @@ class GetRoomEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(6, room.numberOfRooms)
         assertEquals(2, room.numberOfBathrooms)
         assertEquals(4, room.numberOfBeds)
-        assertEquals("3030 Linton", room.address.street)
-        assertEquals("11111", room.address.postalCode)
-        assertEquals(1001L, room.address.cityId)
-        assertEquals(100, room.address.stateId)
-        assertEquals("CA", room.address.country)
+        assertEquals("3030 Linton", room.address?.street)
+        assertEquals("11111", room.address?.postalCode)
+        assertEquals(1001L, room.address?.cityId)
+        assertEquals(100111L, room.neighborhoodId)
+        assertEquals(100, room.address?.stateId)
+        assertEquals("CA", room.address?.country)
         assertEquals(35.0, room.pricePerNight.amount)
         assertEquals("CAD", room.pricePerNight.currency)
         assertEquals(listOf(1L, 2L), room.amenityIds)
+        assertEquals("16:00", room.checkinTime)
+        assertEquals("12:00", room.checkoutTime)
     }
 
     @Test

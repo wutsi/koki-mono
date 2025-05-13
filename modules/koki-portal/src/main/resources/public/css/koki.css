@@ -526,6 +526,12 @@ a.btn-back {
     color: white;
 }
 
+/* ===== ENTITIES ====== */
+.entity-title img {
+    width: 48px;
+    height: 48px;
+}
+
 /* ===== SETTINGS ====== */
 .settings-container {
     display: flex;

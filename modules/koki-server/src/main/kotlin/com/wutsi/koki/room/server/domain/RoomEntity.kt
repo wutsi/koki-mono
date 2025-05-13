@@ -42,15 +42,18 @@ data class RoomEntity(
     var numberOfBathrooms: Int = 0,
     var numberOfBeds: Int = 0,
     var maxGuests: Int = 0,
+    var checkinTime: String? = null,
+    var checkoutTime: String? = null,
 
     var pricePerNight: Double? = null,
     var currency: String? = null,
 
-    @Column("city_fk") var cityId: Long = 0,
+    @Column("city_fk") var cityId: Long? = null,
     @Column("state_fk") var stateId: Long? = null,
+    @Column("neighborhood_fk") var neighborhoodId: Long? = null,
     var street: String? = null,
     var postalCode: String? = null,
-    var country: String = "",
+    var country: String? = null,
     var latitude: Double? = null,
     var longitude: Double? = null,
 
@@ -65,4 +68,12 @@ data class RoomEntity(
         inverseJoinColumns = arrayOf(JoinColumn(name = "amenity_fk")),
     )
     var amenities: MutableList<AmenityEntity> = mutableListOf(),
-)
+) {
+    fun hasAddress(): Boolean {
+        return cityId != null ||
+            stateId != null ||
+            !postalCode.isNullOrEmpty() ||
+            !street.isNullOrEmpty() ||
+            !country.isNullOrEmpty()
+    }
+}

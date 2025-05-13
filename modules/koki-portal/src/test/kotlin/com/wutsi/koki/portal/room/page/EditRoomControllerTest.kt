@@ -31,6 +31,9 @@ class EditRoomControllerTest : AbstractPageControllerTest() {
         select("#maxGuests", 6)
         scroll(.25)
         input("#pricePerNight", "75")
+        select("#checkinTime", 14)
+        select("#checkoutTime", 10)
+        scrollToBottom()
         input("#description", "Nice residence")
         scrollToBottom()
         select("#country", 3)
@@ -54,6 +57,8 @@ class EditRoomControllerTest : AbstractPageControllerTest() {
         assertEquals(locations[2].id, request.firstValue.cityId)
         assertEquals("340 Nicolet", request.firstValue.street)
         assertEquals("HzH zHz", request.firstValue.postalCode)
+        assertEquals("13:00", request.firstValue.checkinTime)
+        assertEquals("09:00", request.firstValue.checkoutTime)
 
         assertCurrentPageIs(PageName.ROOM)
     }

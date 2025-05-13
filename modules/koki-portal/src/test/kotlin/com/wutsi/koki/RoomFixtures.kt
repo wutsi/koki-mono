@@ -61,7 +61,7 @@ object RoomFixtures {
         ),
         RoomSummary(
             id = 1114,
-            status = RoomStatus.UNAVAILABLE,
+            status = RoomStatus.PUBLISHED,
             type = RoomType.HOTEL,
             title = "Standard Single Room, 1 Queen Bed",
             maxGuests = 2,
@@ -126,11 +126,12 @@ object RoomFixtures {
         numberOfRooms = 3,
         pricePerNight = Money(amount = 350.0, currency = "CAD"),
         address = Address(
-            cityId = RefDataFixtures.cities[1].id,
-            country = RefDataFixtures.cities[1].country,
-            stateId = RefDataFixtures.cities[1].parentId,
+            cityId = RefDataFixtures.cities[0].id,
+            country = RefDataFixtures.cities[0].country,
+            stateId = RefDataFixtures.cities[0].parentId,
             street = "3030 Linton",
         ),
+        neighborhoodId = RefDataFixtures.neighborhoods[0].id,
         createdById = UserFixtures.USER_ID,
         modifiedById = UserFixtures.USER_ID,
         amenityIds = listOf(
@@ -138,7 +139,9 @@ object RoomFixtures {
             RefDataFixtures.amenities[1].id,
             RefDataFixtures.amenities[2].id,
             RefDataFixtures.amenities[3].id,
-        )
+        ),
+        checkinTime = "11:00",
+        checkoutTime = "15:00",
     )
 
     val roomUnits = listOf(
