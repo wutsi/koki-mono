@@ -13,7 +13,10 @@ data class RoomForm(
     val currency: String = "",
     val country: String? = null,
     val cityId: Long? = null,
+    val neighborhoodId: Long? = null,
     val street: String? = null,
     val postalCode: String? = null,
     val description: String? = null,
+    val checkinTime: String? = null,
+    val checkoutTime: String? = null,
 )

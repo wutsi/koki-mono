@@ -30,8 +30,11 @@ class CreateRoomEndpointTest : AuthorizationAwareEndpointTest() {
             street = "3030 Pascal",
             postalCode = "H1H13kj",
             cityId = 1001,
+            neighborhoodId = 100111,
             pricePerNight = 35.0,
-            currency = "CAD"
+            currency = "CAD",
+            checkoutTime = "15:00",
+            checkinTime = "12:00",
         )
         val response = rest.postForEntity("/v1/rooms", request, CreateRoomResponse::class.java)
 
@@ -54,9 +57,12 @@ class CreateRoomEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.street, room.street)
         assertEquals(request.postalCode, room.postalCode)
         assertEquals(request.cityId, room.cityId)
+        assertEquals(request.neighborhoodId, room.neighborhoodId)
         assertEquals(100, room.stateId)
         assertEquals("CA", room.country)
         assertEquals(request.pricePerNight, room.pricePerNight)
         assertEquals(request.currency, room.currency)
+        assertEquals(request.checkinTime, room.checkinTime)
+        assertEquals(request.checkoutTime, room.checkoutTime)
     }
 }

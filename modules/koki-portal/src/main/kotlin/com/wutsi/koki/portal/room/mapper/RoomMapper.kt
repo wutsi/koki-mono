@@ -27,13 +27,16 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             numberOfBathrooms = entity.numberOfBathrooms,
             numberOfBeds = entity.numberOfBeds,
             maxGuests = entity.maxGuests,
-            address = AddressModel(
-                city = entity.address.cityId?.let { id -> locations[id] },
-                state = entity.address.stateId?.let { id -> locations[id] },
-                street = entity.address.street,
-                postalCode = entity.address.postalCode,
-                country = entity.address.country,
-            ),
+            neighborhood = entity.neighborhoodId?.let { id -> locations[id] },
+            address = entity.address?.let { address ->
+                AddressModel(
+                    city = address.cityId?.let { id -> locations[id] },
+                    state = address.stateId?.let { id -> locations[id] },
+                    street = address.street,
+                    postalCode = address.postalCode,
+                    country = address.country,
+                )
+            },
             pricePerNight = moneyMapper.toMoneyModel(entity.pricePerNight.amount, entity.pricePerNight.currency),
         )
     }
@@ -56,14 +59,19 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             numberOfBathrooms = entity.numberOfBathrooms,
             numberOfBeds = entity.numberOfBeds,
             maxGuests = entity.maxGuests,
-            address = AddressModel(
-                city = entity.address.cityId?.let { id -> locations[id] },
-                state = entity.address.stateId?.let { id -> locations[id] },
-                street = entity.address.street,
-                postalCode = entity.address.postalCode,
-                country = entity.address.country,
-            ),
+            neighborhood = entity.neighborhoodId?.let { id -> locations[id] },
+            address = entity.address?.let { address ->
+                AddressModel(
+                    city = address.cityId?.let { id -> locations[id] },
+                    state = address.stateId?.let { id -> locations[id] },
+                    street = address.street,
+                    postalCode = address.postalCode,
+                    country = address.country,
+                )
+            },
             pricePerNight = moneyMapper.toMoneyModel(entity.pricePerNight.amount, entity.pricePerNight.currency),
+            checkinTime = entity.checkinTime,
+            checkoutTime = entity.checkoutTime,
             amenities = entity.amenityIds.mapNotNull { id -> amenities[id] },
             createdAt = entity.createdAt,
             createdAtText = fmt.format(entity.createdAt),
