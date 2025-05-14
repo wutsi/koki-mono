@@ -18,10 +18,6 @@ object FileFixtures {
             url = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
             language = "en",
             numberOfPages = 540,
-            labels = listOf(
-                LabelSummary(id = 1, displayName = "2024"),
-                LabelSummary(id = 1, displayName = "T4"),
-            ),
         ),
         FileSummary(
             id = 101,
@@ -33,10 +29,6 @@ object FileFixtures {
             url = "https://pdfobject.com/pdf/sample.pdf",
             language = "fr",
             numberOfPages = 115,
-            labels = listOf(
-                LabelSummary(id = 1, displayName = "2024"),
-                LabelSummary(id = 1, displayName = "T5"),
-            ),
         ),
         FileSummary(
             id = 103,
@@ -64,9 +56,6 @@ object FileFixtures {
             createdById = null,
             createdAt = DateUtils.addDays(Date(), -5),
             url = "https://picsum.photos/800/100.txt",
-            labels = listOf(
-                LabelSummary(id = 1, displayName = "Invoice"),
-            ),
             language = "ru",
         ),
     )
