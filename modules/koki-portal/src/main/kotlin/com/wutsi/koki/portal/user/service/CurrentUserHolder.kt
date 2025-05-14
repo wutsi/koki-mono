@@ -1,7 +1,7 @@
 package com.wutsi.koki.portal.user.service
 
 import com.wutsi.koki.platform.security.JWTAuthentication
-import com.wutsi.koki.portal.auth.service.LoginService
+import com.wutsi.koki.portal.security.service.LoginService
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.security.dto.JWTPrincipal
 import org.springframework.context.annotation.Scope

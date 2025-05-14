@@ -96,6 +96,6 @@ class EditEmployeeControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("employee:manage"))
 
         navigateTo("/employees/${employee.userId}/edit")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

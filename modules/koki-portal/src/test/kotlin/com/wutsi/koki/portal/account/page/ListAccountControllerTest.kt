@@ -78,7 +78,7 @@ class ListAccountControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/accounts")
 
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

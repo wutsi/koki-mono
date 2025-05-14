@@ -73,7 +73,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("room"))
 
         navigateTo("/rooms/${room.id}")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

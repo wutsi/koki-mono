@@ -52,6 +52,6 @@ class ContactTabControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("contact"))
 
         navigateTo("/contacts/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

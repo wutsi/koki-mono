@@ -59,6 +59,6 @@ class InvoiceTabControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("invoice"))
 
         navigateTo("/invoices/tab?test-mode=true&owner-type=TAX&owner-id=" + TaxFixtures.tax.id)
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

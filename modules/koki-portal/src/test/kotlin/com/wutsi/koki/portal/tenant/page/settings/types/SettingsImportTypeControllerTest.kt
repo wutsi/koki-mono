@@ -43,6 +43,6 @@ class SettingsImportTypeControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("tenant:admin"))
 
         navigateTo("/settings/tenant/types/import")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

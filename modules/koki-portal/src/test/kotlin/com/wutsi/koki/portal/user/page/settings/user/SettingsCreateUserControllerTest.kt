@@ -87,6 +87,6 @@ class SettingsCreateUserControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("security:admin"))
 
         navigateTo("/settings/users/create")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

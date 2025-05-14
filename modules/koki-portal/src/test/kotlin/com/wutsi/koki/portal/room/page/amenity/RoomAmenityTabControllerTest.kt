@@ -67,7 +67,7 @@ class RoomAmenityTabControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("room-amenity"))
 
         navigateTo("/room-amenities/tab?owner-id=${room.id}&owner-type=ROOM&test-mode=true&read-only=true")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

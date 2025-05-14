@@ -11,7 +11,7 @@ class NoteControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("note"))
 
         navigateTo("/notes/${note.id}")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test
@@ -19,6 +19,6 @@ class NoteControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("note:delete"))
 
         navigateTo("/notes/${note.id}/delete")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

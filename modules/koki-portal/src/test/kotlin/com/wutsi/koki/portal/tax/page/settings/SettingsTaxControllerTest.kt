@@ -21,7 +21,7 @@ class SettingsTaxControllerTest : AbstractPageControllerTest() {
     fun `show - without permission tax-admin`() {
         setUpUserWithoutPermissions(listOf("tax:admin"))
         navigateTo("/settings/taxes")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

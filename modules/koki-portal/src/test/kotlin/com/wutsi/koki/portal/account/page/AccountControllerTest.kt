@@ -209,7 +209,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/accounts/${account.id}")
 
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test
@@ -238,6 +238,6 @@ class AccountControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/accounts/${account.id}/delete")
 
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

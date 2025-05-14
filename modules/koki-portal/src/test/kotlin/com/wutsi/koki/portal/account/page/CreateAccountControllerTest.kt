@@ -196,6 +196,6 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/accounts/create")
 
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

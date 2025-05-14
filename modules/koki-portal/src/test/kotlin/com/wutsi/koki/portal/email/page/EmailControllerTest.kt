@@ -11,6 +11,6 @@ class EmailControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("email"))
 
         navigateTo("/emails/${email.id}")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

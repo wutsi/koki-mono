@@ -18,6 +18,6 @@ class TaxWidgetControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("tax"))
 
         navigateTo("/taxes/widget")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

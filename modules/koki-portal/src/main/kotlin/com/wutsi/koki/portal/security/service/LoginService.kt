@@ -1,7 +1,7 @@
-package com.wutsi.koki.portal.auth.service
+package com.wutsi.koki.portal.security.service
 
 import com.wutsi.koki.platform.security.AccessTokenHolder
-import com.wutsi.koki.portal.auth.form.LoginForm
+import com.wutsi.koki.portal.security.form.LoginForm
 import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.security.dto.ApplicationName
 import com.wutsi.koki.security.dto.LoginRequest

@@ -165,6 +165,6 @@ class NoteTabControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/notes/tab?test-mode=1&owner-id=111&owner-type=ACCOUNT")
 
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

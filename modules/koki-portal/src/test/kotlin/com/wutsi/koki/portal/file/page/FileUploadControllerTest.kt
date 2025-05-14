@@ -11,6 +11,6 @@ class FileUploadControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/files/upload")
 
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

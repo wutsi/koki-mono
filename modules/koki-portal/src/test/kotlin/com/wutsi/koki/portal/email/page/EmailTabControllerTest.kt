@@ -146,7 +146,7 @@ class EmailTabControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("email"))
 
         navigateTo("/emails/tab?test-mode=true&owner-id=${tax.id}&owner-type=TAX")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

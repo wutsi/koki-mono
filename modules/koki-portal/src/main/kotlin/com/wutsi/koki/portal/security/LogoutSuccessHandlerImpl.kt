@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.security
 
-import com.wutsi.koki.portal.auth.service.LoginService
+import com.wutsi.koki.portal.security.service.LoginService
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.core.Authentication

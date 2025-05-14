@@ -70,7 +70,7 @@ class PaymentTabControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/payments/tab?test-mode=true&owner-type=INVOICE&owner-id=" + invoice.id)
 
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

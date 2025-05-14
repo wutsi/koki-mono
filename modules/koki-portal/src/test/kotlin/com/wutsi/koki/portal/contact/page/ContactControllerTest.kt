@@ -91,7 +91,7 @@ class ContactControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("contact"))
 
         navigateTo("/contacts/${contact.id}")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test
@@ -115,6 +115,6 @@ class ContactControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("contact:delete"))
 
         navigateTo("/contacts/${contact.id}/delete")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

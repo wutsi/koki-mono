@@ -105,7 +105,7 @@ class EditRoomControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("room:manage"))
 
         navigateTo("/rooms/${room.id}/edit")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

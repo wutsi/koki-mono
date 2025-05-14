@@ -24,6 +24,6 @@ class SettingsAttributeControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("account:admin"))
 
         navigateTo("/settings/accounts/attributes/${attribute.id}")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

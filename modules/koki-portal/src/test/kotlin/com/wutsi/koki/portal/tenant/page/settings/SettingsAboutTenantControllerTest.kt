@@ -32,6 +32,6 @@ class SettingsAboutTenantControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/settings/tenant/about")
 
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

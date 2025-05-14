@@ -100,6 +100,6 @@ class EditTaxControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("tax:manage"))
 
         navigateTo("/taxes/${tax.id}/edit")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

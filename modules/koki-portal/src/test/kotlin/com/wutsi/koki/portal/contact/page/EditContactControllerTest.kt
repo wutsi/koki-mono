@@ -118,6 +118,6 @@ class EditContactControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("contact:manage"))
 
         navigateTo("/contacts/${contact.id}/edit")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }
