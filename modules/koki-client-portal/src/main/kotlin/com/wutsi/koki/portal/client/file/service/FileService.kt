@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.client.file.service
 
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.dto.UploadFileResponse
 import com.wutsi.koki.portal.client.file.mapper.FileMapper
 import com.wutsi.koki.portal.client.file.model.FileModel
@@ -22,6 +23,7 @@ class FileService(
         ids: List<Long> = emptyList(),
         ownerId: Long? = null,
         ownerType: ObjectType? = null,
+        type: FileType? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): List<FileModel> {
@@ -29,6 +31,7 @@ class FileService(
             ids = ids,
             ownerId = ownerId,
             ownerType = ownerType,
+            type = type,
             limit = limit,
             offset = offset
         ).files
@@ -40,7 +43,7 @@ class FileService(
     }
 
     fun upload(ownerId: Long?, ownerType: ObjectType?, file: MultipartFile): UploadFileResponse {
-        return koki.upload(ownerId, ownerType, ObjectType.FILE, file)
+        return koki.upload(ownerId, ownerType, FileType.FILE, file)
     }
 
     fun delete(id: Long) {
@@ -48,6 +51,6 @@ class FileService(
     }
 
     fun uploadUrl(ownerId: Long, ownerType: ObjectType): String {
-        return koki.uploadUrl(ownerId, ownerType, ObjectType.FILE)
+        return koki.uploadUrl(ownerId, ownerType, FileType.FILE)
     }
 }

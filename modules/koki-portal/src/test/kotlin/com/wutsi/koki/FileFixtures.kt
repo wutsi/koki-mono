@@ -1,7 +1,6 @@
 package com.wutsi.koki
 
 import com.wutsi.koki.UserFixtures.users
-import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.File
 import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileSummary
