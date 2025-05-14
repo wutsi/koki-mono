@@ -75,7 +75,7 @@ CREATE TABLE T_ROOM_UNIT(
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url, css_url)
     VALUES (250, 12, 'room',         'Rooms',    '/rooms', null,                   null, '/js/rooms.js', '/css/rooms.css'),
-           (251, 14, 'room-unit',    'Units',     null,     '/room-units/tab',     null, null,           null),
+           (251, 12, 'room-unit',    'Units',     null,     '/room-units/tab',     null, null,           null),
            (252, 0,  'room-amenity', 'Amenities', null,     '/room-amenities/tab', null, null,           null);
 
 

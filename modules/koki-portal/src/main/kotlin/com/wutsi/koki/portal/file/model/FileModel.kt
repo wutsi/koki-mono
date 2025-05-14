@@ -1,13 +1,13 @@
 package com.wutsi.koki.portal.file.model
 
-import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.file.dto.FileStatus
+import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.portal.user.model.UserModel
-import java.net.URLEncoder
 import java.util.Date
 
 data class FileModel(
     val id: Long = -1,
-    val fileType: ObjectType = ObjectType.UNKNOWN,
+    val type: FileType = FileType.UNKNOWN,
     val name: String = "",
     val title: String? = null,
     val contentUrl: String = "",
@@ -25,20 +25,10 @@ data class FileModel(
     val language: String? = null,
     val languageText: String? = null,
     val numberOfPages: Int? = null,
-    val labels: List<LabelModel> = emptyList()
+    val labels: List<LabelModel> = emptyList(),
+    val status: FileStatus = FileStatus.UNKNOWN,
+    val rejectionReason: String? = null,
 ) {
-    fun buildViewUrl(returnUrl: String?): String {
-        return returnUrl
-            ?.let { u -> "$url?return-url=" + URLEncoder.encode(u, "utf-8") }
-            ?: url
-    }
-
-    fun buildDeleteUrl(returnUrl: String?): String {
-        return returnUrl
-            ?.let { u -> "$url/delete?return-url=" + URLEncoder.encode(u, "utf-8") }
-            ?: "$url/delete"
-    }
-
-    val url: String
-        get() = "/files/$id"
+    val rejected: Boolean
+        get() = status == FileStatus.REJECTED
 }

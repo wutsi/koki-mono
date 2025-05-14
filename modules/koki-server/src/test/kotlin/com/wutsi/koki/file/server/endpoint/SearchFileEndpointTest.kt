@@ -43,7 +43,7 @@ class SearchFileEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Test
     fun `by type`() {
-        val response = rest.getForEntity("/v1/files?file-type=IMAGE", SearchFileResponse::class.java)
+        val response = rest.getForEntity("/v1/files?type=IMAGE", SearchFileResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
@@ -51,5 +51,17 @@ class SearchFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(2, files.size)
         assertEquals(103L, files[0].id)
         assertEquals(102L, files[1].id)
+    }
+
+    @Test
+    fun `by status`() {
+        val response = rest.getForEntity("/v1/files?status=APPROVED", SearchFileResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val files = response.body!!.files
+        assertEquals(2, files.size)
+        assertEquals(101L, files[0].id)
+        assertEquals(103L, files[1].id)
     }
 }
