@@ -64,7 +64,7 @@ class ListPaymentControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/payments")
 
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

@@ -152,7 +152,7 @@ class TaxControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("tax"))
 
         navigateTo("/taxes/${tax.id}")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test
@@ -200,7 +200,7 @@ class TaxControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("tax:delete"))
 
         navigateTo("/taxes/${tax.id}/delete")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

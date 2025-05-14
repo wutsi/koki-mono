@@ -10,6 +10,6 @@ class CreateNoteControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("note:manage"))
 
         navigateTo("/notes/create")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

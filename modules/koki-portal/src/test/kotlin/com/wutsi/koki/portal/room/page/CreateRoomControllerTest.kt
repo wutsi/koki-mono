@@ -105,7 +105,7 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("room:manage"))
 
         navigateTo("/rooms/create")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

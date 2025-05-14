@@ -42,6 +42,6 @@ class SettingsImportAttributeControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("account:admin"))
 
         navigateTo("/settings/accounts/attributes/import")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

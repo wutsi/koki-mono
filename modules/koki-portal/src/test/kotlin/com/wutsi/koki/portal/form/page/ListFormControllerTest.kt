@@ -76,7 +76,7 @@ class ListFormControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("form"))
 
         navigateTo("/forms")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

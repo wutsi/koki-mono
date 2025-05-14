@@ -27,6 +27,6 @@ class PaymentControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/payments/" + transaction.id)
 
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

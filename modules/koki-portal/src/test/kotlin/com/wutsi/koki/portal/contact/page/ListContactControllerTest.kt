@@ -77,7 +77,7 @@ class ListContactControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("contact"))
 
         navigateTo("/contacts")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

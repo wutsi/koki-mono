@@ -58,7 +58,7 @@ class SettingsEditTranslationControllerTest : AbstractPageControllerTest() {
     fun `edit - without permission translation-admin`() {
         setUpUserWithoutPermissions(listOf("translation:admin"))
         navigateTo("/settings/translations/edit")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

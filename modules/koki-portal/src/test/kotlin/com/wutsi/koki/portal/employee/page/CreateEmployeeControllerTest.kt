@@ -101,6 +101,6 @@ class CreateEmployeeControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("employee:manage"))
 
         navigateTo("/employees/create")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

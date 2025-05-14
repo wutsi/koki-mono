@@ -67,8 +67,8 @@ class TenantFilterTest {
 
         filter.doFilter(request, response, chain)
 
-        verify(response).sendError(404)
-        verify(response, never()).sendRedirect(any())
+        verify(response, never()).sendError(any())
+        verify(response).sendRedirect("/error/under-construction")
         verify(chain).doFilter(request, response)
     }
 

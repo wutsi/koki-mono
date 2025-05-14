@@ -43,7 +43,7 @@ class EmployeeControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("employee"))
 
         navigateTo("/employees/${employee.userId}")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

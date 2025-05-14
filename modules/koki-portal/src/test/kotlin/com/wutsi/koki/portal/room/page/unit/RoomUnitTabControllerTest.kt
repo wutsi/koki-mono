@@ -104,7 +104,7 @@ class RoomUnitTabControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("room-unit"))
 
         navigateTo("/room-units/tab?owner-id=${room.id}&owner-type=ROOM&test-mode=true")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

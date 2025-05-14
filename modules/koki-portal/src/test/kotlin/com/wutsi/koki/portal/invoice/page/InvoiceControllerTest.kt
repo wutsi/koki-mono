@@ -73,7 +73,7 @@ class InvoiceControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/invoices/${invoice.id}")
 
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test
@@ -146,7 +146,7 @@ class InvoiceControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("invoice:manage"))
 
         navigateTo("/invoices/${invoice.id}/approve")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test
@@ -178,7 +178,7 @@ class InvoiceControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("invoice:manage"))
 
         navigateTo("/invoices/${invoice.id}/void")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test
@@ -186,7 +186,7 @@ class InvoiceControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("invoice"))
 
         navigateTo("/invoices/i${invoice.id}/${UUID.randomUUID()}.pdf")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

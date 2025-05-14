@@ -8,15 +8,10 @@ import jakarta.servlet.ServletRequest
 import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
 class TenantFilter(private val currentTenant: CurrentTenantHolder) : Filter {
-    companion object {
-        private val LOGGER = LoggerFactory.getLogger(TenantFilter::class.java)
-    }
-
     override fun doFilter(req: ServletRequest, resp: ServletResponse, chain: FilterChain) {
         try {
             if (!shouldIgnore(req)) {
@@ -27,14 +22,11 @@ class TenantFilter(private val currentTenant: CurrentTenantHolder) : Filter {
 
                 // Check status
                 if (tenant == null) {
-                    LOGGER.error("No tenant found")
                     response.sendError(404)
                 } else if (tenant.status == TenantStatus.SUSPENDED) {
-                    LOGGER.error("Tenant#${tenant.name} is suspended")
                     response.sendRedirect("/error/suspended")
                 } else if (tenant.status != TenantStatus.ACTIVE) {
-                    LOGGER.error("Tenant#${tenant.name} is not active")
-                    response.sendError(404)
+                    response.sendRedirect("/error/under-construction")
                 }
             }
         } finally {

@@ -34,7 +34,7 @@ class FormControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("form"))
 
         navigateTo("/forms/${form.id}")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

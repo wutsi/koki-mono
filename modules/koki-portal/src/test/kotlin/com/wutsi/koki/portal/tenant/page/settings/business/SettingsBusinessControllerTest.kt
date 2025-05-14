@@ -53,6 +53,6 @@ class SettingsBusinessControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("tenant:admin"))
 
         navigateTo("/settings/tenant/business")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

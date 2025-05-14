@@ -35,6 +35,6 @@ class SettingsSMTPControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("email:admin"))
 
         navigateTo("/settings/email/smtp/edit")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

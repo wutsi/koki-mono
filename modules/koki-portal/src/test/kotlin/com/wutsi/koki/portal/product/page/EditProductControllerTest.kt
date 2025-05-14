@@ -97,6 +97,6 @@ class EditProductControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("product:manage"))
 
         navigateTo("/products/${product.id}/edit")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

@@ -100,7 +100,7 @@ class ProductControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/products/${product.id}")
 
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test
@@ -129,6 +129,6 @@ class ProductControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/products/${product.id}/delete")
 
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

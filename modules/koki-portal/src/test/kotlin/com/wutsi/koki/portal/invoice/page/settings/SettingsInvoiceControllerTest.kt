@@ -28,7 +28,7 @@ class SettingsInvoiceControllerTest : AbstractPageControllerTest() {
     fun `show - without permission invoice-admin`() {
         setUpUserWithoutPermissions(listOf("invoice:admin"))
         navigateTo("/settings/invoices")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

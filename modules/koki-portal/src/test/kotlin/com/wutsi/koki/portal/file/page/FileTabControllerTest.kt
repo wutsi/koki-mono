@@ -49,6 +49,6 @@ class FileTabControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
 
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

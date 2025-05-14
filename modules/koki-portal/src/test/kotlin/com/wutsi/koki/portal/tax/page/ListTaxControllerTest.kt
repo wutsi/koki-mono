@@ -77,7 +77,7 @@ class ListTaxControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("tax"))
 
         navigateTo("/taxes")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

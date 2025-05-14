@@ -105,6 +105,6 @@ class TaxStatusControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("tax:manage"))
 
         navigateTo("/taxes/${tax.id}/status")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

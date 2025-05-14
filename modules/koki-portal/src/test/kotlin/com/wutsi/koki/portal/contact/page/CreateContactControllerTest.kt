@@ -118,6 +118,6 @@ class CreateContactControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("contact:manage"))
 
         navigateTo("/contacts/create")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

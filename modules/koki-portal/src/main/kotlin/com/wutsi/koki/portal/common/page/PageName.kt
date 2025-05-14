@@ -36,8 +36,11 @@ object PageName {
     const val EMPLOYEE_CREATE = "page.employee.create"
 
     const val ERROR = "page.error"
+    const val ERROR_403 = "page.error.403"
+    const val ERROR_404 = "page.error.404"
+    const val ERROR_500 = "page.error.500"
+    const val ERROR_UNDER_CONSTRUCTION = "page.error.under-construction"
     const val ERROR_SUSPENDED = "page.error.suspended"
-    const val ERROR_ACCESS_DENIED = "page.error.access-denied"
     const val ERROR_PAYMENT_NOT_SUPPORTED = "page.error.payment.not-supported"
 
     const val FILE = "page.file"

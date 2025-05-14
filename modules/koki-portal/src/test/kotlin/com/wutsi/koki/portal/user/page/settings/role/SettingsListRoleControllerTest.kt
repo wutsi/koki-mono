@@ -83,6 +83,6 @@ class SettingsListRoleControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("security:admin"))
 
         navigateTo("/settings/roles")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

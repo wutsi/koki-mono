@@ -107,6 +107,6 @@ class CreateTaxControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("tax:manage"))
 
         navigateTo("/taxes/create")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

@@ -6,20 +6,18 @@ import com.wutsi.koki.portal.common.page.PageName
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
-@RequestMapping
-class AccessDeniedController : AbstractPageController() {
-    @GetMapping("/error/access-denied")
-    fun error(model: Model): String {
+class UnderConstructionController : AbstractPageController() {
+    @GetMapping("/error/under-construction")
+    fun suspended(model: Model): String {
         model.addAttribute(
             "page",
             PageModel(
-                name = PageName.ERROR_403,
-                title = "Access Denied"
+                name = PageName.ERROR_UNDER_CONSTRUCTION,
+                title = "Under Construction"
             )
         )
-        return "error/access-denied"
+        return "/error/under-construction"
     }
 }

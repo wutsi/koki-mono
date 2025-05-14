@@ -21,7 +21,7 @@ class SettingsPaymentControllerTest : AbstractPageControllerTest() {
     fun `show - without permission payment-admin`() {
         setUpUserWithoutPermissions(listOf("payment:admin"))
         navigateTo("/settings/payments")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

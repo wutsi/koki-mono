@@ -115,6 +115,6 @@ class TaxProductTabControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("tax"))
 
         navigateTo("/tax-products/tab?test-mode=true&tax-id=" + TaxFixtures.tax.id)
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

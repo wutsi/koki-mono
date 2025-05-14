@@ -83,6 +83,6 @@ class CreateFormControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("form:manage"))
 
         navigateTo("/forms/create")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

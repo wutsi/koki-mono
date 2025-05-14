@@ -201,6 +201,6 @@ class EditAccountControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/accounts/${account.id}/edit")
 
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

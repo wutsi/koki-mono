@@ -55,7 +55,7 @@ class SettingsStorageControllerTest : AbstractPageControllerTest() {
     fun `show - without permission file-admin`() {
         setUpUserWithoutPermissions(listOf("file:admin"))
         navigateTo("/settings/files/storage")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

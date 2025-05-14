@@ -11,6 +11,6 @@ class EditNoteControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("note:manage"))
 
         navigateTo("/notes/${note.id}/edit")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

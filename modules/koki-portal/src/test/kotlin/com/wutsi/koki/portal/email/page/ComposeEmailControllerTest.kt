@@ -10,6 +10,6 @@ class ComposeEmailControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("email:send"))
 
         navigateTo("/emails/compose")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

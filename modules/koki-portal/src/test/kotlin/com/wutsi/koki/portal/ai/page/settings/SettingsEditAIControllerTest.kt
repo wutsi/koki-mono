@@ -83,7 +83,7 @@ class SettingsEditAIControllerTest : AbstractPageControllerTest() {
     fun `edit - without permission ai-admin`() {
         setUpUserWithoutPermissions(listOf("ai:admin"))
         navigateTo("/settings/ai/edit")
-        assertCurrentPageIs(PageName.ERROR_ACCESS_DENIED)
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test
