@@ -5,6 +5,7 @@ import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.File
 import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileSummary
+import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.dto.LabelSummary
 import org.apache.commons.lang3.time.DateUtils
 import java.util.Date
@@ -19,7 +20,7 @@ object FileFixtures {
             contentLength = 1024L * 1024,
             createdAt = DateUtils.addDays(Date(), -5),
             url = "https://picsum.photos/800/600",
-            type = ObjectType.IMAGE,
+            type = FileType.IMAGE,
             status = FileStatus.APPROVED,
         ),
         FileSummary(
@@ -30,7 +31,7 @@ object FileFixtures {
             contentLength = 1024L * 1024,
             createdAt = DateUtils.addDays(Date(), -5),
             url = "https://picsum.photos/600/600",
-            type = ObjectType.IMAGE,
+            type = FileType.IMAGE,
             status = FileStatus.APPROVED,
         ),
         FileSummary(
@@ -41,7 +42,7 @@ object FileFixtures {
             contentLength = 1024L * 1024,
             createdAt = DateUtils.addDays(Date(), -2),
             url = "https://picsum.photos/600/600",
-            type = ObjectType.IMAGE,
+            type = FileType.IMAGE,
             status = FileStatus.REJECTED,
             rejectionReason = "Unable to process the file"
         ),
@@ -53,7 +54,7 @@ object FileFixtures {
             contentLength = 1024L * 1024,
             createdAt = DateUtils.addDays(Date(), -2),
             url = "https://picsum.photos/400/400",
-            type = ObjectType.IMAGE,
+            type = FileType.IMAGE,
             status = FileStatus.UNDER_REVIEW,
         ),
     )
@@ -68,7 +69,7 @@ object FileFixtures {
         createdAt = DateUtils.addDays(Date(), -5),
         createdById = users[0].id,
         url = "https://picsum.photos/800/600",
-        type = ObjectType.IMAGE,
+        type = FileType.IMAGE,
         status = FileStatus.APPROVED,
         labels = listOf(
             LabelSummary(displayName = "spa"),

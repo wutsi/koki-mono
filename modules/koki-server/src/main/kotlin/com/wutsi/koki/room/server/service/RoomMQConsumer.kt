@@ -1,7 +1,6 @@
 package com.wutsi.koki.room.server.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.wutsi.koki.ai.server.service.LLMProvider
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileType
@@ -13,7 +12,6 @@ import com.wutsi.koki.file.server.service.StorageServiceProvider
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.mq.Consumer
 import com.wutsi.koki.room.server.service.ai.RoomAgentFactory
-import com.wutsi.koki.room.server.service.ai.RoomImageAgent
 import com.wutsi.koki.room.server.service.data.RoomImageAgentData
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.service.ConfigurationService
@@ -33,6 +31,9 @@ class RoomMQConsumer(
     private val logger: KVLogger,
     private val objectMapper: ObjectMapper,
 ) : Consumer {
+    companion object {
+        const val IMAGE_AGENT_QUERY = "Extract the information from the image provided"
+    }
     override fun consume(event: Any): Boolean {
         if (event is FileUploadedEvent) {
             onFileUploaded(event)
@@ -53,7 +54,7 @@ class RoomMQConsumer(
         }
 
         val file = fileService.get(event.fileId, event.tenantId)
-        logger.add("file_type", file.type)
+        logger.add("type", file.type)
         if (file.type != FileType.IMAGE) {
             return
         }
@@ -62,8 +63,7 @@ class RoomMQConsumer(
         val agent = agentFactory.createRoomImageAgent(event.tenantId)
         val f = download(file) ?: return
         try {
-            val query = "CExtract the information from the image provided"
-            val result = agent.run(query, f)
+            val result = agent.run(IMAGE_AGENT_QUERY, f)
 
             // Update file
             val data = objectMapper.readValue(result, RoomImageAgentData::class.java)
@@ -82,9 +82,6 @@ class RoomMQConsumer(
     }
 
     private fun download(file: FileEntity): File? {
-        if (!isContentTypeSupported(file.contentType)) {
-            return null
-        }
         val extension = FilenameUtils.getExtension(file.url)
         val f = File.createTempFile(file.name, ".$extension")
         val output = FileOutputStream(f)
@@ -92,10 +89,6 @@ class RoomMQConsumer(
             storageServiceProvider.get(file.tenantId).get(URI(file.url).toURL(), output)
             return f
         }
-    }
-
-    private fun isContentTypeSupported(contentType: String): Boolean {
-        return contentType.startsWith("text/") || contentType.startsWith("image/") || contentType == "application/pdf"
     }
 
     private fun isAIEnabled(tenantId: Long): Boolean {
