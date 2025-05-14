@@ -1,10 +1,10 @@
 package com.wutsi.koki.portal.security.page
 
-import com.wutsi.koki.portal.security.service.LoginService
 import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.form.LoginForm
+import com.wutsi.koki.portal.security.service.LoginService
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory

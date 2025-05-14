@@ -50,7 +50,6 @@ class WutsiErrorController : ErrorController, AbstractPageController() {
         }
     }
 
-
     private fun handleException(ex: Throwable, model: Model): String {
         return if (ex is HttpClientErrorException) {
             handleStatusCode(ex.statusCode.value(), model)
