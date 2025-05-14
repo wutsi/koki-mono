@@ -12,7 +12,7 @@ class FileMapper {
     fun toFile(entity: FileEntity): File {
         return File(
             id = entity.id!!,
-            fileType = entity.fileType,
+            type = entity.type,
             name = entity.name,
             title = entity.title,
             url = entity.url,
@@ -24,14 +24,16 @@ class FileMapper {
             description = entity.description,
             language = entity.language,
             numberOfPages = entity.numberOfPages,
-            labels = entity.labels.map { label -> toLabelSummary(label) }
+            labels = entity.labels.map { label -> toLabelSummary(label) },
+            status = entity.status,
+            rejectionReason = entity.rejectionReason,
         )
     }
 
-    fun toFileSummary(entity: FileEntity, labels: Map<Long, List<LabelEntity>>): FileSummary {
+    fun toFileSummary(entity: FileEntity): FileSummary {
         return FileSummary(
             id = entity.id!!,
-            fileType = entity.fileType,
+            type = entity.type,
             name = entity.name,
             title = entity.title,
             url = entity.url,
@@ -42,9 +44,8 @@ class FileMapper {
             modifiedAt = entity.modifiedAt,
             language = entity.language,
             numberOfPages = entity.numberOfPages,
-            labels = labels[entity.id]?.let { items ->
-                items.map { label -> toLabelSummary(label) }
-            } ?: emptyList()
+            status = entity.status,
+            rejectionReason = entity.rejectionReason,
         )
     }
 

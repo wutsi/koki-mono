@@ -40,12 +40,3 @@ class RoomImageAgent(
 
     override fun tools(): List<Tool> = emptyList<Tool>()
 }
-
-data class RoomImageAgentData(
-    val title: String? = null,
-    val description: String? = null,
-    val hashtags: List<String>? = null,
-    val quality: Int = 0,
-    val valid: Boolean = false,
-    val reason: String? = null,
-)

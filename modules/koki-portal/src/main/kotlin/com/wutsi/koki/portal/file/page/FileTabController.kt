@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.file.page
 
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.file.service.FileService
 import com.wutsi.koki.portal.security.RequiresPermission
@@ -26,7 +27,7 @@ class FileTabController(private val service: FileService) : AbstractPageControll
         val url = service.uploadUrl(
             ownerId = ownerId,
             ownerType = ownerType,
-            fileType = ObjectType.FILE,
+            type = FileType.FILE,
         )
 
         var uploadUrl = "/files/upload?upload-url=" + URLEncoder.encode(url, "utf-8")

@@ -73,7 +73,7 @@ object ModuleFixtures {
             homeUrl = null,
             tabUrl = "/images/tab",
             settingsUrl = null,
-            objectType = ObjectType.IMAGE,
+            objectType = ObjectType.FILE,
             jsUrl = "/js/images.js",
             cssUrl = "/css/images.css",
         ),

@@ -1,12 +1,12 @@
 package com.wutsi.koki
 
 import com.wutsi.koki.UserFixtures.users
-import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.File
+import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileSummary
+import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.dto.LabelSummary
 import org.apache.commons.lang3.time.DateUtils
-import org.springframework.web.servlet.function.RequestPredicates.contentType
 import java.util.Date
 
 object FileFixtures {
@@ -19,27 +19,42 @@ object FileFixtures {
             contentLength = 1024L * 1024,
             createdAt = DateUtils.addDays(Date(), -5),
             url = "https://picsum.photos/800/600",
-            fileType = ObjectType.IMAGE,
+            type = FileType.IMAGE,
+            status = FileStatus.APPROVED,
         ),
         FileSummary(
-            id = 100,
+            id = 101,
             name = "T2.png",
             title = null,
             contentType = "image/png",
             contentLength = 1024L * 1024,
             createdAt = DateUtils.addDays(Date(), -5),
             url = "https://picsum.photos/600/600",
-            fileType = ObjectType.IMAGE,
+            type = FileType.IMAGE,
+            status = FileStatus.APPROVED,
         ),
         FileSummary(
-            id = 100,
+            id = 102,
             name = "T3.png",
             title = null,
             contentType = "image/png",
             contentLength = 1024L * 1024,
             createdAt = DateUtils.addDays(Date(), -2),
             url = "https://picsum.photos/600/600",
-            fileType = ObjectType.IMAGE,
+            type = FileType.IMAGE,
+            status = FileStatus.REJECTED,
+            rejectionReason = "Unable to process the file"
+        ),
+        FileSummary(
+            id = 104,
+            name = "T4.png",
+            title = null,
+            contentType = "image/png",
+            contentLength = 1024L * 1024,
+            createdAt = DateUtils.addDays(Date(), -2),
+            url = "https://picsum.photos/400/400",
+            type = FileType.IMAGE,
+            status = FileStatus.UNDER_REVIEW,
         ),
     )
 
@@ -53,7 +68,13 @@ object FileFixtures {
         createdAt = DateUtils.addDays(Date(), -5),
         createdById = users[0].id,
         url = "https://picsum.photos/800/600",
-        fileType = ObjectType.IMAGE,
+        type = FileType.IMAGE,
+        status = FileStatus.APPROVED,
+        labels = listOf(
+            LabelSummary(displayName = "spa"),
+            LabelSummary(displayName = "relaxation"),
+            LabelSummary(displayName = "massage"),
+        )
     )
 
     val files = listOf(
@@ -67,10 +88,6 @@ object FileFixtures {
             url = "https://picsum.photos/800/600",
             language = "en",
             numberOfPages = 540,
-            labels = listOf(
-                LabelSummary(id = 1, displayName = "2024"),
-                LabelSummary(id = 1, displayName = "T4"),
-            ),
         ),
         FileSummary(
             id = 101,
@@ -82,10 +99,6 @@ object FileFixtures {
             url = "https://pdfobject.com/pdf/sample.pdf",
             language = "fr",
             numberOfPages = 115,
-            labels = listOf(
-                LabelSummary(id = 1, displayName = "2024"),
-                LabelSummary(id = 1, displayName = "T5"),
-            ),
         ),
         FileSummary(
             id = 103,
@@ -113,9 +126,6 @@ object FileFixtures {
             createdById = null,
             createdAt = DateUtils.addDays(Date(), -5),
             url = "https://picsum.photos/800/100.txt",
-            labels = listOf(
-                LabelSummary(id = 1, displayName = "Invoice"),
-            ),
             language = "ru",
         ),
     )

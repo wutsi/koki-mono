@@ -33,9 +33,15 @@
     </td>
     <td>
         <a th:href="'javascript: kokiImageEditor.show(' + ${file.id} + ')'">
-            <div th:text="${image.title}"><b th:if="${image.title}">TITLE</b></div>
-            <div th:if="${image.description}" th:text="${image.description}">DESCRIPTION</div>
-            <div th:if="!${image.title} AND !${image.description}" th:text="${file.name}">NAME</div>
+            <div th:if="${file.title}" th:text="${file.title}">TITLE</div>
+            <div th:if="!${file.title}">Processing the image...</div>
+            <div class="alert alert-warning margin" th:if="${file.rejectionReason}"
+                 th:text="${file.rejectionReason}"></div>
+        </a>
+    </td>
+    <td>
+        <a th:href="'javascript: kokiImageEditor.show(' + ${file.id} + ')'">
+            <div th:replace="~{__components/file :: status(${file.status})}"></div>
         </a>
     </td>
     <td>
@@ -60,10 +66,10 @@
 <tr id="image-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
     <td class="text-center" colspan="5">
         <button
-            class="btn btn-sm btn-light"
-            data-component-id='load-more'
-            data-container-id="image-load-more"
-            th:data-url="${moreUrl}"
+                class="btn btn-sm btn-light"
+                data-component-id='load-more'
+                data-container-id="image-load-more"
+                th:data-url="${moreUrl}"
         >
             Load more...
         </button>

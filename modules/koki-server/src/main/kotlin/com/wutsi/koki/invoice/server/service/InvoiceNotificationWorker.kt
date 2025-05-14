@@ -5,6 +5,7 @@ import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.email.dto.Recipient
 import com.wutsi.koki.email.dto.SendEmailRequest
 import com.wutsi.koki.email.server.service.EmailService
+import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.invoice.dto.InvoiceStatus
@@ -265,7 +266,7 @@ class InvoiceNotificationWorker(
                 ownerType = null,
                 tenantId = invoice.tenantId,
                 url = url,
-                fileType = ObjectType.FILE,
+                type = FileType.FILE,
             )
         } finally {
             file.delete()

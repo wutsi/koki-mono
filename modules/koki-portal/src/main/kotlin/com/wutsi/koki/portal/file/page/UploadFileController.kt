@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.file.page
 
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.portal.file.service.FileService
 import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller
@@ -22,7 +23,7 @@ class UploadFileController(private val service: FileService) {
         val uploadUrl = service.uploadUrl(
             ownerId = ownerId,
             ownerType = ownerType,
-            fileType = ObjectType.FILE,
+            type = FileType.FILE,
         )
         model.addAttribute("uploadUrl", uploadUrl)
         return "files/upload"

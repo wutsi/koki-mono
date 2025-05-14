@@ -23,7 +23,7 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
         val fmt = createDateTimeFormat()
         return FileModel(
             id = entity.id,
-            fileType = entity.fileType,
+            type = entity.type,
             name = entity.name,
             title = entity.title,
             contentUrl = entity.url,
@@ -40,7 +40,8 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
             numberOfPages = entity.numberOfPages,
             language = entity.language,
             languageText = entity.language?.let { lang -> Locale(lang).displayLanguage },
-            labels = entity.labels.map { label -> toLabelModel(label) }
+            status = entity.status,
+            rejectionReason = entity.rejectionReason,
         )
     }
 
@@ -51,7 +52,7 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
         val fmt = createDateTimeFormat()
         return FileModel(
             id = entity.id,
-            fileType = entity.fileType,
+            type = entity.type,
             name = entity.name,
             title = entity.title,
             contentUrl = entity.url,
@@ -69,7 +70,9 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
             numberOfPages = entity.numberOfPages,
             language = entity.language,
             languageText = entity.language?.let { lang -> Locale(lang).displayLanguage },
-            labels = entity.labels.map { label -> toLabelModel(label) }
+            labels = entity.labels.map { label -> toLabelModel(label) },
+            status = entity.status,
+            rejectionReason = entity.rejectionReason,
         )
     }
 
