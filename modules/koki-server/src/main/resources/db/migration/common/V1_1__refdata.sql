@@ -36,6 +36,8 @@ CREATE TABLE T_LOCATION(
   type        INT NOT NULL DEFAULT 0,
   country     VARCHAR(2) NOT NULL,
   population  BIGINT,
+  latitude    DOUBLE,
+  longitude   DOUBLE,
 
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;

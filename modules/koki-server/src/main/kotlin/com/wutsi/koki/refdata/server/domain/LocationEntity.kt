@@ -20,4 +20,6 @@ data class LocationEntity(
     var asciiName: String = "",
     var country: String = "",
     var population: Long? = null,
+    var latitude: Double? = null,
+    var longitude: Double? = null,
 )

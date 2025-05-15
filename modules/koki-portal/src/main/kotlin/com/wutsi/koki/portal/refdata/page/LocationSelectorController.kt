@@ -12,15 +12,19 @@ class LocationSelectorController(private val service: LocationService) {
     fun search(
         @RequestParam(required = false, name = "q") keyword: String? = null,
         @RequestParam(required = false, name = "country") country: String? = null,
+        @RequestParam(required = false, name = "parent-id") parentId: Long? = null,
         @RequestParam(required = false) type: LocationType = LocationType.CITY,
     ): List<Map<String, Any>> {
+        // Find the location
         val locations = service.locations(
             keyword = keyword,
             country = country,
+            parentId = parentId,
             type = type,
             limit = 20,
         )
 
+        // Find the parents
         val parentIds = locations.map { location -> location.parentId }.filterNotNull().toSet()
         val parents = if (parentIds.isEmpty()) {
             emptyMap()

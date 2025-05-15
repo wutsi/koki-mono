@@ -64,7 +64,7 @@ class AmenityImporter(
         amenities.filter { amenity -> !amenityIds.contains(amenity.id) }
             .forEach { amenity -> deactivate(amenity) }
 
-        LOGGER.info("${added + updated} amenity(ies) imported with $errors error(s)")
+        LOGGER.info("${added + updated} amenity(ies) imported with ${errors.size} error(s)")
         return ImportResponse(
             added = added,
             updated = updated,

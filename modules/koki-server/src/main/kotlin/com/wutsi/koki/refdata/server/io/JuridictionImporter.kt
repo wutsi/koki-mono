@@ -36,15 +36,14 @@ class JuridictionImporter(
 
         /* import */
         val filename = "/refdata/juridiction/$country.csv"
-        val input = JuridictionImporter::class.java.getResourceAsStream(filename)
-            ?: throw ConflictException(
-                error = Error(
-                    code = ErrorCode.JURIDICTION_COUNTRY_NOT_SUPPORTED,
-                    message = "Resource not found $filename",
-                )
+        val input = JuridictionImporter::class.java.getResourceAsStream(filename) ?: throw ConflictException(
+            error = Error(
+                code = ErrorCode.JURIDICTION_COUNTRY_NOT_SUPPORTED,
+                message = "Resource not found $filename",
             )
+        )
 
-        val states = locationService.search(country = country, type = LocationType.STATE)
+        val states = locationService.search(country = country, type = LocationType.STATE, limit = Integer.MAX_VALUE)
             .associateBy { state -> state.asciiName.uppercase() }
 
         val parser = createParser(input)
@@ -75,12 +74,9 @@ class JuridictionImporter(
             }
         }
 
-        LOGGER.info("${added + updated} juridiction(s) for $country imported with $errors error(s)")
+        LOGGER.info("${added + updated} juridiction(s) for $country imported with ${errors.size} error(s)")
         return ImportResponse(
-            added = added,
-            updated = updated,
-            errors = errors.size,
-            errorMessages = errors
+            added = added, updated = updated, errors = errors.size, errorMessages = errors
         )
     }
 
@@ -88,9 +84,7 @@ class JuridictionImporter(
         return CSVParser.parse(
             input,
             Charsets.UTF_8,
-            CSVFormat.Builder.create()
-                .setDelimiter(",")
-                .get(),
+            CSVFormat.Builder.create().setDelimiter(",").get(),
         )
     }
 

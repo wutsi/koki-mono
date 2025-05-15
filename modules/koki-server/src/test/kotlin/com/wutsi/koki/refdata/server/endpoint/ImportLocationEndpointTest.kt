@@ -8,9 +8,11 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
+import org.springframework.util.Assert.state
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class ImportLocationEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
@@ -35,6 +37,12 @@ class ImportLocationEndpointTest : AuthorizationAwareEndpointTest() {
         val stateIds = states.map { it.id }
         val cities = dao.findByType(LocationType.CITY)
         cities.forEach { city -> assertTrue(stateIds.contains(city.parentId)) }
+
+        val neighbourhoods = dao.findByType(LocationType.NEIGHBORHOOD)
+        assertEquals(182, neighbourhoods.size)
+        neighbourhoods.forEach { neighbourhood ->
+            assertNotNull(cities.find { city -> city.id == neighbourhood.parentId })
+        }
     }
 
     @Sql(value = ["/db/test/clean.sql"])
@@ -56,6 +64,12 @@ class ImportLocationEndpointTest : AuthorizationAwareEndpointTest() {
         val stateIds = states.map { it.id }
         val cities = dao.findByType(LocationType.CITY)
         cities.forEach { city -> assertTrue(stateIds.contains(city.parentId)) }
+
+        val neighbourhoods = dao.findByType(LocationType.NEIGHBORHOOD)
+        assertEquals(83, neighbourhoods.size)
+        neighbourhoods.forEach { neighbourhood ->
+            assertNotNull(cities.find { city -> city.id == neighbourhood.parentId })
+        }
     }
 
     @Sql(value = ["/db/test/clean.sql"])

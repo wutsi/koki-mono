@@ -72,6 +72,10 @@ class CreateRoomController(
             val city = locationService.location(form.cityId)
             model.addAttribute("city", city)
         }
+        if (form.neighborhoodId != null) {
+            val neighborhood = locationService.location(form.neighborhoodId)
+            model.addAttribute("neighborhood", neighborhood)
+        }
 
         return "rooms/create"
     }
