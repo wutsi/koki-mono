@@ -7,4 +7,6 @@ data class Location(
     val type: LocationType = LocationType.UNKNOWN,
     val country: String = "",
     val population: Long = 0,
+    val latitude: Double? = null,
+    val longitude: Double? = null,
 )
