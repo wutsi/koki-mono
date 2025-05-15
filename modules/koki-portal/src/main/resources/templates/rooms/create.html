@@ -128,7 +128,12 @@
                     </div>
                 </div>
 
-                <div class="section">
+                <div class="section"
+                     data-city-id="cityId"
+                     data-component-id=address
+                     data-country-id="country"
+                     data-neighborhood-id="neighborhoodId"
+                >
                     <div class="section-header">
                         <h3 class="section-title">Address</h3>
                     </div>
@@ -157,6 +162,17 @@
                             </select>
                         </div>
                         <div class="section-item">
+                            <label class="title">Neighborhood</label>
+                            <select th:field="*{neighborhoodId}">
+                                <option selected
+                                        th:if="${neighborhood}"
+                                        th:text="${neighborhood?.name}"
+                                        th:value="${neighborhood?.id}">
+                                    neighborhood
+                                </option>
+                            </select>
+                        </div>
+                        <div class="section-item">
                             <label class="title">Street</label>
                             <input th:field="*{street}"/>
                         </div>
@@ -176,8 +192,5 @@
     </div>
 </div>
 
-<script>
-    koki_address_editor('country', 'cityId');
-</script>
 </body>
 </html>

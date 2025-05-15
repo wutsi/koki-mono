@@ -62,7 +62,7 @@ class CategoryImporter(
         categories.filter { category -> !categoryIds.contains(category.id) }
             .forEach { category -> deactivate(category) }
 
-        LOGGER.info("${added + updated} category(ies) of type $type imported with $errors error(s)")
+        LOGGER.info("${added + updated} category(ies) of type $type imported with ${errors.size} error(s)")
         return ImportResponse(
             added = added,
             updated = updated,

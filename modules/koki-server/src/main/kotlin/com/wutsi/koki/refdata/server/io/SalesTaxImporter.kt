@@ -86,7 +86,7 @@ class SalesTaxImporter(
                 updated++
             }
 
-        LOGGER.info("${added + updated} tax(es) for $country imported with $errors error(s)")
+        LOGGER.info("${added + updated} tax(es) for $country imported with ${errors.size} error(s)")
         return ImportResponse(
             added = added,
             updated = updated,

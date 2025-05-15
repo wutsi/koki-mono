@@ -86,7 +86,7 @@ class GeonamesImporter(private val service: LocationService) {
         // Link states -> countries
         stateIds.forEach { stateId -> service.link(countryId, stateId) }
 
-        LOGGER.info("${added + updated} location(s) imported with $errors error(s)")
+        LOGGER.info("${added + updated} location(s) imported with ${errors.size} error(s)")
         return ImportResponse(
             added = added,
             updated = updated,
@@ -148,6 +148,8 @@ class GeonamesImporter(private val service: LocationService) {
                 type = type,
                 population = record.get(RECORD_POPULATION).toLong(),
                 parentId = if (type == LocationType.CITY) getStateId(record, admin1Codes) else null,
+                latitude = record.get(RECORD_LATITUDE).toDouble(),
+                longitude = record.get(RECORD_LONGITUDE).toDouble(),
             )
         )
     }
@@ -162,6 +164,8 @@ class GeonamesImporter(private val service: LocationService) {
         location.type = type
         location.population = record.get(RECORD_POPULATION).toLong()
         location.parentId = if (type == LocationType.CITY) getStateId(record, admin1Codes) else location.parentId
+        location.latitude = record.get(RECORD_LATITUDE).toDouble()
+        location.longitude = record.get(RECORD_LONGITUDE).toDouble()
 
         service.save(location)
     }

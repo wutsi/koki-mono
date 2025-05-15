@@ -527,6 +527,11 @@ a.btn-back {
 }
 
 /* ===== ENTITIES ====== */
+h1.entity-title {
+    font-size: 1.5em;
+    margin-bottom: 1em;
+}
+
 .entity-title img {
     width: 48px;
     height: 48px;

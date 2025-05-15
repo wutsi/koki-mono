@@ -4,6 +4,7 @@ import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
 import com.wutsi.koki.refdata.server.io.GeonamesImporter
+import com.wutsi.koki.refdata.server.io.NeighbourhoodImporter
 import com.wutsi.koki.refdata.server.mapper.LocationMapper
 import com.wutsi.koki.refdata.server.service.LocationService
 import org.springframework.web.bind.annotation.GetMapping
@@ -14,13 +15,23 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/v1/locations")
 class LocationEndpoints(
-    private val importer: GeonamesImporter,
+    private val geonamesImporter: GeonamesImporter,
+    private val neighbourhoodImporter: NeighbourhoodImporter,
     private val service: LocationService,
     private val mapper: LocationMapper,
 ) {
     @GetMapping("/import")
     fun import(@RequestParam country: String): ImportResponse {
-        return importer.import(country)
+        val result1 = geonamesImporter.import(country)
+        val result2 = neighbourhoodImporter.import(country)
+        val errorMessages = result1.errorMessages.toMutableList()
+        errorMessages.addAll(result2.errorMessages)
+        return ImportResponse(
+            added = result1.added + result2.added,
+            updated = result1.updated + result2.updated,
+            errors = result1.errors + result2.errors,
+            errorMessages = errorMessages
+        )
     }
 
     @GetMapping
