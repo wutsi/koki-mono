@@ -2,6 +2,7 @@ package com.wutsi.koki.room.server.service
 
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.domain.AmenityEntity
@@ -17,6 +18,7 @@ import com.wutsi.koki.room.server.domain.RoomEntity
 import com.wutsi.koki.security.server.service.SecurityService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
+import jakarta.validation.ValidationException
 import org.springframework.stereotype.Service
 import java.util.Date
 
@@ -27,6 +29,7 @@ class RoomService(
     private val securityService: SecurityService,
     private val locationService: LocationService,
     private val amenityService: AmenityService,
+    private val validator: RoomPublisherValidator,
 ) {
     fun get(id: Long, tenantId: Long): RoomEntity {
         val room = dao.findById(id).orElseThrow { NotFoundException(Error(ErrorCode.ROOM_NOT_FOUND)) }
@@ -105,7 +108,7 @@ class RoomService(
                 numberOfBathrooms = request.numberOfBathrooms,
                 numberOfRooms = request.numberOfRooms,
                 numberOfBeds = request.numberOfBeds,
-                pricePerNight = request.pricePerNight,
+                pricePerNight = if (request.pricePerNight == 0.0) null else request.pricePerNight,
                 currency = request.currency,
                 checkinTime = request.checkinTime,
                 checkoutTime = request.checkoutTime,
@@ -140,7 +143,7 @@ class RoomService(
         room.numberOfBathrooms = request.numberOfBathrooms
         room.numberOfRooms = request.numberOfRooms
         room.numberOfBeds = request.numberOfBeds
-        room.pricePerNight = request.pricePerNight
+        room.pricePerNight = if (request.pricePerNight == 0.0) null else request.pricePerNight
         room.currency = request.currency
         room.checkinTime = request.checkinTime
         room.checkoutTime = request.checkoutTime
@@ -167,6 +170,11 @@ class RoomService(
             room.deleted = true
             dao.save(room)
         }
+    }
+
+    @Transactional
+    fun save(room: RoomEntity): RoomEntity {
+        return dao.save(room)
     }
 
     @Transactional
@@ -200,6 +208,35 @@ class RoomService(
             return true
         } else {
             return false
+        }
+    }
+
+    @Transactional
+    fun startPublishing(id: Long, tenantId: Long): RoomEntity? {
+        val room = get(id, tenantId)
+        try {
+            validator.validate(room)
+            if (room.status == RoomStatus.DRAFT) {
+                room.status = RoomStatus.PUBLISHING
+                room.publishedAt = Date()
+                room.publishedById = securityService.getCurrentUserIdOrNull()
+                return dao.save(room)
+            } else if (room.status == RoomStatus.PUBLISHING || room.status == RoomStatus.PUBLISHED) {
+                return null
+            } else {
+                throw ConflictException(
+                    error = Error(
+                        code = ErrorCode.ROOM_INVALID_STATUS,
+                        data = mapOf("status" to room.status)
+                    )
+                )
+            }
+        } catch (ex: ValidationException) {
+            throw ConflictException(
+                error = Error(
+                    code = ex.message ?: ""
+                )
+            )
         }
     }
 }

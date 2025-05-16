@@ -1,5 +1,6 @@
 package com.wutsi.koki.room.server.endpoint
 
+import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.room.dto.AddAmenityRequest
 import com.wutsi.koki.room.dto.CreateRoomRequest
 import com.wutsi.koki.room.dto.CreateRoomResponse
@@ -8,6 +9,7 @@ import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
 import com.wutsi.koki.room.dto.SearchRoomResponse
 import com.wutsi.koki.room.dto.UpdateRoomRequest
+import com.wutsi.koki.room.server.command.PublishRoomCommand
 import com.wutsi.koki.room.server.mapper.RoomMapper
 import com.wutsi.koki.room.server.service.RoomService
 import jakarta.validation.Valid
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController
 class RoomEndpoints(
     private val service: RoomService,
     private val mapper: RoomMapper,
+    private val publisher: Publisher,
 ) {
     @PostMapping
     fun create(
@@ -87,9 +90,7 @@ class RoomEndpoints(
             limit = limit,
             offset = offset,
         )
-        return SearchRoomResponse(
-            rooms = rooms.map { room -> mapper.toRoomSummary(room) }
-        )
+        return SearchRoomResponse(rooms = rooms.map { room -> mapper.toRoomSummary(room) })
     }
 
     @PostMapping("/{id}/amenities")
@@ -108,5 +109,18 @@ class RoomEndpoints(
         @PathVariable amenityId: Long,
     ) {
         service.removeAmenity(id, amenityId, tenantId)
+    }
+
+    @GetMapping("/{id}/publish")
+    fun publish(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
+    ) {
+        val room = service.startPublishing(id, tenantId)
+        if (room != null) {
+            publisher.publish(
+                PublishRoomCommand(roomId = id, tenantId = tenantId)
+            )
+        }
     }
 }

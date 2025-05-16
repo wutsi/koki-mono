@@ -106,7 +106,7 @@ class TaxMQConsumer(
 
     private fun extract(account: AccountEntity, f: File): TaxFileData {
         val agent = taxAgentFactory.createTaxFileAgent(account)
-        val data = agent.run(TAX_FILE_AGENT_QUERY, f)
+        val data = agent.run(TAX_FILE_AGENT_QUERY, listOf(f))
         return objectMapper.readValue(data, TaxFileData::class.java)
     }
 

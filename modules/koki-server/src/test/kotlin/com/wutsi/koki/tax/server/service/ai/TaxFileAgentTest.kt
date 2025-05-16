@@ -148,7 +148,7 @@ class TaxFileAgentTest {
         // WHEN
         val result = agent.run(
             query = TaxMQConsumer.TAX_FILE_AGENT_QUERY,
-            file = file
+            files = listOf(file)
         )
 
         // THEN
@@ -180,7 +180,7 @@ class TaxFileAgentTest {
         // WHEN
         val result = agent.run(
             query = TaxMQConsumer.TAX_FILE_AGENT_QUERY,
-            file = file
+            files = listOf(file)
         )
 
         // THEN

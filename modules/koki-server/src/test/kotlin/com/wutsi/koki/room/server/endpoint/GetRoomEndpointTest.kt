@@ -20,7 +20,7 @@ class GetRoomEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val room = response.body!!.room
-        assertEquals(RoomStatus.UNDER_REVIEW, room.status)
+        assertEquals(RoomStatus.PUBLISHING, room.status)
         assertEquals(RoomType.HOUSE, room.type)
         assertEquals("Room A", room.title)
         assertEquals("This is the title of the room", room.description)

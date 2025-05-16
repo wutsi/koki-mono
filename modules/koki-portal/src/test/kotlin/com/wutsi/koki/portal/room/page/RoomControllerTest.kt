@@ -1,21 +1,92 @@
 package com.wutsi.koki.portal.room.page
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.FileFixtures.images
 import com.wutsi.koki.RoomFixtures.room
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
+import com.wutsi.koki.room.dto.GetRoomResponse
+import com.wutsi.koki.room.dto.RoomStatus
+import org.junit.jupiter.api.BeforeEach
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import kotlin.test.Test
 
 class RoomControllerTest : AbstractPageControllerTest() {
+    @BeforeEach
+    override fun setUp() {
+        super.setUp()
+
+        doReturn(
+            ResponseEntity(
+                SearchFileResponse(images),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchFileResponse::class.java)
+            )
+    }
+
     @Test
     fun show() {
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ROOM)
+
+        assertElementPresent(".btn-edit")
+        assertElementPresent(".btn-publish")
+        assertElementPresent(".btn-delete")
+    }
+
+    @Test
+    fun publishing() {
+        doReturn(
+            ResponseEntity(
+                GetRoomResponse(room.copy(status = RoomStatus.PUBLISHING)),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetRoomResponse::class.java)
+            )
+
+        navigateTo("/rooms/${room.id}")
+        assertCurrentPageIs(PageName.ROOM)
+
+        assertElementNotPresent(".btn-edit")
+        assertElementNotPresent(".btn-publish")
+        assertElementNotPresent(".btn-delete")
+    }
+
+    @Test
+    fun published() {
+        doReturn(
+            ResponseEntity(
+                GetRoomResponse(room.copy(status = RoomStatus.PUBLISHED)),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetRoomResponse::class.java)
+            )
+
+        navigateTo("/rooms/${room.id}")
+        assertCurrentPageIs(PageName.ROOM)
+
+        assertElementPresent(".btn-edit")
+        assertElementNotPresent(".btn-publish")
+        assertElementNotPresent(".btn-delete")
     }
 
     @Test
@@ -82,7 +153,10 @@ class RoomControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ROOM)
+
         assertElementNotPresent(".btn-edit")
+        assertElementNotPresent(".btn-publish")
+        assertElementNotPresent(".btn-delete")
     }
 
     @Test

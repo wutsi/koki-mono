@@ -1,5 +1,12 @@
 <div class="tab-roomUnits">
-    <div class="flex flex-space-between margin-top margin-bottom">
+    <div class="flex margin-top margin-bottom">
+        <button class="btn btn-primary btn-sm btn-create margin-right"
+                th:if="!${readOnly} AND ${user?.hasPermission('room-unit:manage')}"
+                th:onclick="'kokiRoomUnitEditor.create(' + ${ownerId} + ')'"
+        >
+            Create a Unit
+        </button>
+
         <button class="btn btn-sm btn-light btn-refresh"
                 data-component-id="ajax-button"
                 data-target-id="room-unit-list"
@@ -7,13 +14,6 @@
         >
             <i class="fa-solid fa-rotate"></i>
             Refresh
-        </button>
-
-        <button class="btn btn-primary btn-sm btn-create margin-right"
-                th:if="!${readOnly} AND ${user?.hasPermission('room-unit:manage')}"
-                th:onclick="'kokiRoomUnitEditor.create(' + ${ownerId} + ')'"
-        >
-            Create a Unit
         </button>
     </div>
 

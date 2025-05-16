@@ -13,7 +13,7 @@
                             data-component-id='ajax-checkbox'
                             th:checked="${room.hasAmenity(amenity.id)}"
                             th:data-action-url="'/room-amenities/tab/toggle?room-id=' + ${room.id} + '&amenity-id=' + ${amenity.id}"
-                            th:readonly="${readOnly} OR !${user?.hasPermission('room-amenity:manage')}"
+                            th:disabled="${readOnly} OR !${user?.hasPermission('room-amenity:manage')}"
                             th:value="${amenity.id}"
                             type="checkbox"
                         />

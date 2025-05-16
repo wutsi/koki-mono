@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.room.mapper
 
 import com.wutsi.koki.portal.common.HtmlUtils
 import com.wutsi.koki.portal.common.mapper.MoneyMapper
+import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.AmenityModel
@@ -16,13 +17,15 @@ import org.springframework.stereotype.Service
 class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
     fun toRoomModel(
         entity: RoomSummary,
-        locations: Map<Long, LocationModel>
+        locations: Map<Long, LocationModel>,
+        images: Map<Long, FileModel>,
     ): RoomModel {
         return RoomModel(
             id = entity.id,
             type = entity.type,
             status = entity.status,
             title = entity.title,
+            summary = entity.summary?.ifEmpty { null },
             numberOfRooms = entity.numberOfRooms,
             numberOfBathrooms = entity.numberOfBathrooms,
             numberOfBeds = entity.numberOfBeds,
@@ -38,6 +41,7 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
                 )
             },
             pricePerNight = moneyMapper.toMoneyModel(entity.pricePerNight.amount, entity.pricePerNight.currency),
+            heroImage = entity.heroImageId?.let { id -> images[id] },
         )
     }
 
@@ -45,14 +49,17 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
         entity: Room,
         locations: Map<Long, LocationModel>,
         users: Map<Long, UserModel>,
-        amenities: Map<Long, AmenityModel>
+        amenities: Map<Long, AmenityModel>,
+        image: FileModel?,
     ): RoomModel {
         val fmt = createDateTimeFormat()
         return RoomModel(
             id = entity.id,
+            heroImage = image,
             type = entity.type,
             status = entity.status,
             title = entity.title,
+            summary = entity.summary?.ifEmpty { null },
             description = entity.description?.ifEmpty { null },
             descriptionHtml = entity.description?.let { text -> HtmlUtils.toHtml(text) },
             numberOfRooms = entity.numberOfRooms,
@@ -79,6 +86,9 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.modifiedAt),
             modifiedBy = entity.modifiedById?.let { id -> users[id] },
+            publishedAt = entity.publishedAt,
+            publishedAtText = entity.publishedAt?.let { date -> fmt.format(date) },
+            publishedBy = entity.publishedById?.let { id -> users[id] },
         )
     }
 }

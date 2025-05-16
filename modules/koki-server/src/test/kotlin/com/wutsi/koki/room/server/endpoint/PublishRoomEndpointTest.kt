@@ -1,76 +1,100 @@
 package com.wutsi.koki.room.server.endpoint
 
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.room.dto.SearchRoomResponse
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.platform.mq.Publisher
+import com.wutsi.koki.room.dto.RoomStatus
+import com.wutsi.koki.room.server.command.PublishRoomCommand
+import com.wutsi.koki.room.server.dao.RoomRepository
+import com.wutsi.koki.room.server.service.RoomPublisherValidator
+import jakarta.validation.ValidationException
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/room/SearchRoomEndpoint.sql"])
-class SearchRoomEndpointTest : AuthorizationAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/room/PublishRoomEndpoint.sql"])
+class PublishRoomEndpointTest : AuthorizationAwareEndpointTest() {
+    @MockitoBean
+    private lateinit var publisher: Publisher
+
+    @MockitoBean
+    private lateinit var validator: RoomPublisherValidator
+
+    @Autowired
+    private lateinit var dao: RoomRepository
+
     @Test
-    fun all() {
-        val response = rest.getForEntity("/v1/rooms", SearchRoomResponse::class.java)
+    fun unknown() {
+        val response = rest.getForEntity("/v1/rooms/100/publish", ErrorResponse::class.java)
 
-        assertEquals(HttpStatus.OK, response.statusCode)
+        assertEquals(HttpStatus.CONFLICT, response.statusCode)
+        assertEquals(ErrorCode.ROOM_INVALID_STATUS, response.body?.error?.code)
 
-        val rooms = response.body!!.rooms
-        assertEquals(6, rooms.size)
+        verify(publisher, never()).publish(any())
     }
 
     @Test
-    fun `by type`() {
-        val response = rest.getForEntity("/v1/rooms?type=HOUSE", SearchRoomResponse::class.java)
+    fun draft() {
+        val response = rest.getForEntity("/v1/rooms/101/publish", Any::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val rooms = response.body!!.rooms
-        assertEquals(4, rooms.size)
-        assertEquals(listOf(111L, 112L, 113L, 115L), rooms.map { room -> room.id }.sorted())
+        val room = dao.findById(101L).get()
+        assertEquals(RoomStatus.PUBLISHING, room.status)
+        assertEquals(USER_ID, room.publishedById)
+
+        val cmd = argumentCaptor<PublishRoomCommand>()
+        verify(publisher).publish(cmd.capture())
+        assertEquals(101L, cmd.firstValue.roomId)
+        assertEquals(TENANT_ID, cmd.firstValue.tenantId)
     }
 
     @Test
-    fun `by status`() {
-        val response = rest.getForEntity("/v1/rooms?status=UNDER_REVIEW", SearchRoomResponse::class.java)
+    fun publishing() {
+        val response = rest.getForEntity("/v1/rooms/102/publish", Any::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val rooms = response.body!!.rooms
-        assertEquals(2, rooms.size)
-        assertEquals(listOf(111L, 113L), rooms.map { room -> room.id }.sorted())
+        val room = dao.findById(102L).get()
+        assertEquals(RoomStatus.PUBLISHING, room.status)
+        assertEquals(null, room.publishedById)
+
+        verify(publisher, never()).publish(any())
     }
 
     @Test
-    fun `by city`() {
-        val response = rest.getForEntity("/v1/rooms?city-id=2001", SearchRoomResponse::class.java)
+    fun published() {
+        val response = rest.getForEntity("/v1/rooms/103/publish", Any::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val rooms = response.body!!.rooms
-        assertEquals(2, rooms.size)
-        assertEquals(listOf(115L, 116L), rooms.map { room -> room.id }.sorted())
+        val room = dao.findById(103L).get()
+        assertEquals(RoomStatus.PUBLISHED, room.status)
+        assertEquals(null, room.publishedById)
+
+        verify(publisher, never()).publish(any())
     }
 
     @Test
-    fun `total guest`() {
-        val response = rest.getForEntity("/v1/rooms?total-guests=3", SearchRoomResponse::class.java)
+    fun `validation error`() {
+        val ex = ValidationException(ErrorCode.ROOM_GEOLOCATION_MISSING)
+        doThrow(ex).whenever(validator).validate(any())
 
-        assertEquals(HttpStatus.OK, response.statusCode)
+        val response = rest.getForEntity("/v1/rooms/103/publish", ErrorResponse::class.java)
 
-        val rooms = response.body!!.rooms
-        assertEquals(3, rooms.size)
-        assertEquals(listOf(113L, 114L, 115L), rooms.map { room -> room.id }.sorted())
-    }
+        assertEquals(HttpStatus.CONFLICT, response.statusCode)
+        assertEquals(ErrorCode.ROOM_GEOLOCATION_MISSING, response.body?.error?.code)
 
-    @Test
-    fun `by ids`() {
-        val response = rest.getForEntity("/v1/rooms?id=111&id=113&id=200", SearchRoomResponse::class.java)
-
-        assertEquals(HttpStatus.OK, response.statusCode)
-
-        val rooms = response.body!!.rooms
-        assertEquals(2, rooms.size)
-        assertEquals(listOf(111L, 113L), rooms.map { room -> room.id }.sorted())
+        verify(publisher, never()).publish(any())
     }
 }

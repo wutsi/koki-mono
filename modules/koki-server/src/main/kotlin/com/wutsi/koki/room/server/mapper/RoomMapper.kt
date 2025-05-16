@@ -12,10 +12,12 @@ class RoomMapper {
     fun toRoom(entity: RoomEntity): Room {
         return Room(
             id = entity.id ?: -1,
+            heroImageId = entity.heroImageId,
             type = entity.type,
             status = entity.status,
             title = entity.title,
             description = entity.description,
+            summary = entity.summary,
             numberOfRooms = entity.numberOfRooms,
             numberOfBathrooms = entity.numberOfBathrooms,
             numberOfBeds = entity.numberOfBeds,
@@ -24,6 +26,8 @@ class RoomMapper {
             modifiedAt = entity.modifiedAt,
             createdById = entity.createdById,
             modifiedById = entity.createdById,
+            publishedAt = entity.publishedAt,
+            publishedById = entity.publishedById,
             neighborhoodId = entity.neighborhoodId,
             address = toAddress(entity),
             pricePerNight = Money(
@@ -39,9 +43,11 @@ class RoomMapper {
     fun toRoomSummary(entity: RoomEntity): RoomSummary {
         return RoomSummary(
             id = entity.id ?: -1,
+            heroImageId = entity.heroImageId,
             type = entity.type,
             status = entity.status,
             title = entity.title,
+            summary = entity.summary,
             numberOfRooms = entity.numberOfRooms,
             numberOfBathrooms = entity.numberOfBathrooms,
             numberOfBeds = entity.numberOfBeds,

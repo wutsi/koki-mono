@@ -36,7 +36,7 @@ class EditRoomController(
             description = room.description,
             numberOfRooms = room.numberOfRooms,
             numberOfBathrooms = room.numberOfBathrooms,
-            numberOfBeds = room.numberOfRooms,
+            numberOfBeds = room.numberOfBeds,
             maxGuests = room.maxGuests,
             pricePerNight = room.pricePerNight.value,
             currency = room.pricePerNight.currency,

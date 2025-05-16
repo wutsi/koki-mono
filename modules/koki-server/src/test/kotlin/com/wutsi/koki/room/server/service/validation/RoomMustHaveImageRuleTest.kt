@@ -1,4 +1,4 @@
-package com.wutsi.koki.room.server.service.rule
+package com.wutsi.koki.room.server.service.validation
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
@@ -8,7 +8,6 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.room.server.domain.RoomEntity
-import com.wutsi.koki.room.server.service.validation.RoomMustHaveImageRule
 import jakarta.validation.ValidationException
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock

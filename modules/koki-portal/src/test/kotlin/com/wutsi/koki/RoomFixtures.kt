@@ -19,6 +19,8 @@ object RoomFixtures {
             status = RoomStatus.PUBLISHED,
             type = RoomType.HOTEL,
             title = "Classic Double Room",
+            summary = "Nice double room",
+            heroImageId = FileFixtures.images[0].id,
             maxGuests = 2,
             numberOfBeds = 1,
             numberOfBathrooms = 1,
@@ -34,6 +36,8 @@ object RoomFixtures {
             status = RoomStatus.PUBLISHED,
             type = RoomType.HOTEL,
             title = "Comfort Double Room",
+            summary = "Comfortable room with stunning view",
+            heroImageId = FileFixtures.images[1].id,
             maxGuests = 3,
             numberOfBeds = 2,
             numberOfBathrooms = 1,
@@ -49,6 +53,7 @@ object RoomFixtures {
             status = RoomStatus.PUBLISHED,
             type = RoomType.HOTEL,
             title = "Deluxe Double Room",
+            heroImageId = FileFixtures.images[2].id,
             maxGuests = 3,
             numberOfBeds = 2,
             numberOfBathrooms = 1,
@@ -76,7 +81,7 @@ object RoomFixtures {
         ),
         RoomSummary(
             id = 1115,
-            status = RoomStatus.UNDER_REVIEW,
+            status = RoomStatus.PUBLISHING,
             type = RoomType.HOTEL,
             title = "Presidential Suite",
             maxGuests = 6,
@@ -110,7 +115,7 @@ object RoomFixtures {
 
     val room = Room(
         id = 1115,
-        status = RoomStatus.PUBLISHED,
+        status = RoomStatus.DRAFT,
         type = RoomType.APARTMENT,
         title = "Windmill in Ponta Delgada",
         description = """
@@ -120,6 +125,8 @@ object RoomFixtures {
             Private parking inside the premises, providing extra security.
             Perfect for an unforgettable honeymoon experience.
         """.trimIndent(),
+        summary = "Built in the 19th century, with 3 bed rooms, 2 bathroom an a stunning view",
+        heroImageId = FileFixtures.images[0].id,
         maxGuests = 6,
         numberOfBeds = 3,
         numberOfBathrooms = 3,
