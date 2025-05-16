@@ -28,7 +28,12 @@ abstract class Agent(
     abstract fun tools(): List<Tool>
 
     @Throws(AgentException::class)
-    fun run(query: String, file: File? = null): String {
+    fun run(query: String): String {
+        return run(query, emptyList())
+    }
+
+    @Throws(AgentException::class)
+    fun run(query: String, files: List<File>): String {
         var iteration = 0
         val logger = getLogger()
         val memory: MutableList<String> = mutableListOf()
@@ -47,7 +52,7 @@ abstract class Agent(
             }
 
             try {
-                if (run(query, memory, file)) {
+                if (run(query, memory, files)) {
                     break
                 }
             } catch (ex: Exception) {
@@ -57,8 +62,8 @@ abstract class Agent(
         return memory.lastOrNull() ?: ""
     }
 
-    internal fun run(prompt: String, memory: MutableList<String>, file: File? = null): Boolean {
-        val response = ask(prompt, file, memory)
+    internal fun run(prompt: String, memory: MutableList<String>, files: List<File>): Boolean {
+        val response = ask(prompt, files, memory)
         return decide(response, memory)
     }
 
@@ -100,26 +105,34 @@ abstract class Agent(
             ?.use(call.args)
     }
 
-    private fun ask(query: String, file: File?, memory: List<String>): LLMResponse {
-        val input = file?.let { FileInputStream(file) }
+    private fun ask(query: String, files: List<File>, memory: List<String>): LLMResponse {
+        // System instruction
+        val messages = mutableListOf<Message>()
+        systemInstructions()?.let { instructions -> messages.add(Message(role = Role.SYSTEM, text = instructions)) }
+
+        // prompts
+        val prompt = buildPrompt(query, memory)
+        getLogger().info("> prompt: $prompt")
+        messages.add(Message(role = Role.USER, text = buildPrompt(query, memory)))
+
+        // Files
+        val inputs = files.map { file -> file to FileInputStream(file) }.toMap()
+        inputs.forEach { input ->
+            val mimeType = URLConnection.guessContentTypeFromName(input.key.path)
+            messages.add(
+                Message(
+                    role = Role.USER,
+                    document = Document(
+                        content = input.value,
+                        contentType = MediaType.valueOf(mimeType)
+                    )
+                )
+            )
+        }
+
         try {
-            val prompt = buildPrompt(query, memory)
-            getLogger().info("> prompt: $prompt")
             val request = LLMRequest(
-                messages = listOf(
-                    systemInstructions()?.let { instructions -> Message(role = Role.SYSTEM, text = instructions) },
-                    Message(role = Role.USER, text = prompt),
-                    input?.let {
-                        val mimeType = URLConnection.guessContentTypeFromName(file.path)
-                        Message(
-                            role = Role.USER,
-                            document = Document(
-                                content = input,
-                                contentType = MediaType.valueOf(mimeType)
-                            )
-                        )
-                    }
-                ).filterNotNull(),
+                messages = messages,
                 tools = tools().map { tool ->
                     com.wutsi.koki.platform.ai.llm.Tool(
                         functionDeclarations = listOf(tool.function()),
@@ -127,11 +140,17 @@ abstract class Agent(
                 },
                 config = Config(
                     responseType = responseType
-                )
+                ),
             )
             return llm.generateContent(request)
         } finally {
-            input?.close()
+            inputs.forEach { input ->
+                try {
+                    input.value.close()
+                } catch (ex: Exception) {
+                    // Ignore
+                }
+            }
         }
     }
 

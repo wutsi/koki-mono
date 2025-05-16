@@ -73,7 +73,7 @@ class AgentTest {
 
         // THEN
         val agent = createAgent()
-        val result = agent.run(QUERY, memory)
+        val result = agent.run(QUERY, memory, emptyList())
 
         // Continue
         assertEquals(false, result)
@@ -115,10 +115,10 @@ class AgentTest {
         // THEN
         val agent = createAgent()
         setupFunctionCallResponse("1st step", function1.name, inputs)
-        agent.run(QUERY, memory)
+        agent.run(QUERY, memory, emptyList())
 
         setupFunctionCallResponse("2nd step", function2.name, emptyMap())
-        val result = agent.run(QUERY, memory, file)
+        val result = agent.run(QUERY, memory, listOf(file))
 
         // Continue
         assertEquals(false, result)
@@ -127,7 +127,8 @@ class AgentTest {
         val request = argumentCaptor<LLMRequest>()
         verify(llm, times(2)).generateContent(request.capture())
 
-        assertEquals(3, request.secondValue.messages.size)
+        val messages = request.secondValue.messages
+        assertEquals(3, messages.size)
         assertEquals(Role.SYSTEM, request.secondValue.messages[0].role)
         assertEquals(SYSTEM_INSTRUCTIONS, request.secondValue.messages[0].text)
         assertEquals(null, request.secondValue.messages[0].document)
@@ -160,10 +161,10 @@ class AgentTest {
         val agent = createAgent()
 
         setupFunctionCallResponse("1st step", function1.name, inputs)
-        agent.run(QUERY, memory)
+        agent.run(QUERY, memory, emptyList())
 
         setupFunctionCallResponse("2nd step", function2.name, emptyMap())
-        agent.run(QUERY, memory)
+        agent.run(QUERY, memory, emptyList())
 
         setupTextResponse("Done")
         val result = agent.run(QUERY)
@@ -179,7 +180,7 @@ class AgentTest {
 
         // THEN
         val agent = createAgent(maxIterations = 2)
-        assertThrows<TooManyIterationsException> { agent.run(QUERY, null) }
+        assertThrows<TooManyIterationsException> { agent.run(QUERY) }
     }
 
     @Test
