@@ -32,7 +32,7 @@ class SearchRoomEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Test
     fun `by status`() {
-        val response = rest.getForEntity("/v1/rooms?status=UNDER_REVIEW", SearchRoomResponse::class.java)
+        val response = rest.getForEntity("/v1/rooms?status=PUBLISHING", SearchRoomResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
