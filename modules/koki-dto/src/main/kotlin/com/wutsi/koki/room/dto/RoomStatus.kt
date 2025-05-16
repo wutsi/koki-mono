@@ -3,6 +3,6 @@ package com.wutsi.koki.room.dto
 enum class RoomStatus {
     UNKNOWN,
     DRAFT,
-    UNDER_REVIEW,
+    PUBLISHING,
     PUBLISHED,
 }

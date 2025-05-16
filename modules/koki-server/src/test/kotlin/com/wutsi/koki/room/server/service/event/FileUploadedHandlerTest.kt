@@ -1,4 +1,4 @@
-package com.wutsi.koki.room.service
+package com.wutsi.koki.room.server.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
@@ -20,8 +20,10 @@ import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.file.server.service.LabelService
 import com.wutsi.koki.file.server.service.StorageServiceProvider
 import com.wutsi.koki.platform.logger.DefaultKVLogger
+import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.platform.storage.local.LocalStorageService
-import com.wutsi.koki.room.server.service.RoomMQConsumer
+import com.wutsi.koki.refdata.server.service.AmenityService
+import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.room.server.service.ai.RoomAgentFactory
 import com.wutsi.koki.room.server.service.ai.RoomImageAgent
 import com.wutsi.koki.room.server.service.data.RoomImageAgentData
@@ -42,6 +44,8 @@ class RoomMQConsumerTest {
     private val labelService = mock<LabelService>()
     private val storageServiceProvider = mock<StorageServiceProvider>()
     private val agentFactory = mock<RoomAgentFactory>()
+    private val roomService = mock<RoomService>()
+    private val publisher = mock<Publisher>()
     private val logger = DefaultKVLogger()
     private val objectMapper = ObjectMapper()
 
@@ -51,14 +55,15 @@ class RoomMQConsumerTest {
         labelService = labelService,
         storageServiceProvider = storageServiceProvider,
         agentFactory = agentFactory,
+        roomService = roomService,
         logger = logger,
-        objectMapper = objectMapper
+        objectMapper = objectMapper,
+        publisher = publisher,
     )
 
     private val directory = System.getProperty("user.home") + "/__wutsi"
     private val storage = LocalStorageService(
-        directory = directory,
-        baseUrl = "http://localhost:8080/storage"
+        directory = directory, baseUrl = "http://localhost:8080/storage"
     )
 
     val tenantId = 111L
@@ -74,8 +79,7 @@ class RoomMQConsumerTest {
     )
 
     private val configs = mapOf(
-        ConfigurationName.AI_PROVIDER to "GEMINI",
-        ConfigurationName.TAX_AI_AGENT_ENABLED to "1"
+        ConfigurationName.AI_PROVIDER to "GEMINI", ConfigurationName.TAX_AI_AGENT_ENABLED to "1"
     )
 
     val data = RoomImageAgentData(
@@ -99,9 +103,9 @@ class RoomMQConsumerTest {
         doReturn(imageAgent).whenever(agentFactory).createRoomImageAgent(any())
         doReturn(storage).whenever(storageServiceProvider).get(any())
         doReturn(file).whenever(fileService).get(any(), any())
-        doReturn(
-            configs.map { entry -> ConfigurationEntity(name = entry.key, value = entry.value) }
-        ).whenever(configurationService).search(any(), anyOrNull(), anyOrNull())
+        doReturn(configs.map { entry -> ConfigurationEntity(name = entry.key, value = entry.value) }).whenever(
+            configurationService
+        ).search(any(), anyOrNull(), anyOrNull())
 
         doReturn(objectMapper.writeValueAsString(data)).whenever(imageAgent).run(any(), anyOrNull())
 
@@ -128,7 +132,7 @@ class RoomMQConsumerTest {
         // THEN
         assertTrue(result)
 
-        verify(imageAgent).run(eq(RoomMQConsumer.IMAGE_AGENT_QUERY), any<File>())
+        verify(imageAgent).run(eq(RoomMQConsumer.IMAGE_AGENT_QUERY), any())
 
         val file1 = argumentCaptor<FileEntity>()
         verify(fileService).save(file1.capture())

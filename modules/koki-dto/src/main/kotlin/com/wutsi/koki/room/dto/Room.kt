@@ -6,9 +6,11 @@ import java.util.Date
 
 data class Room(
     val id: Long = -1,
+    val heroImageId: Long? = null,
     val type: RoomType = RoomType.UNKNOWN,
     val status: RoomStatus = RoomStatus.UNKNOWN,
     val title: String = "",
+    val summary: String? = null,
     val description: String? = null,
     val numberOfRooms: Int = -1,
     val numberOfBathrooms: Int = -1,
@@ -23,5 +25,7 @@ data class Room(
     val createdAt: Date = Date(),
     val modifiedById: Long? = null,
     val modifiedAt: Date = Date(),
+    val publishedById: Long? = null,
+    val publishedAt: Date? = null,
     val amenityIds: List<Long> = emptyList(),
 )
