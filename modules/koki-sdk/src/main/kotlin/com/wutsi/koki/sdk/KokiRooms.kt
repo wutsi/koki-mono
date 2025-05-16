@@ -71,4 +71,9 @@ class KokiRooms(
         val url = urlBuilder.build("$ROOM_PATH_PREFIX/$roomId/amenities/$amenityId")
         rest.delete(url)
     }
+
+    fun publish(roomId: Long) {
+        val url = urlBuilder.build("$ROOM_PATH_PREFIX/$roomId/publish")
+        rest.getForEntity(url, Any::class.java)
+    }
 }
