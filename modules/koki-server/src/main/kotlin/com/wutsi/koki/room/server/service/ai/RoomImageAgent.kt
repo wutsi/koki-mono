@@ -14,7 +14,7 @@ class RoomImageAgent(
 ) : Agent(llm, maxIterations, MediaType.APPLICATION_JSON) {
     override fun systemInstructions() =
         """
-            You are a real estate agent helping customers to rent or by properties.
+            You are a real estate agent helping customers to rent or buy properties.
             You analyze pictures provided to extract informations to describe the property.
             Provide accurate and detailed information about the picture, in a format that is SEO friendly and suitable for websites like AirBnB, VRBO or Bookings.com.
 
@@ -26,16 +26,19 @@ class RoomImageAgent(
             - valid: (true|false) "true" when the image is valid for an online property listing
             - reason: If the image is not valid, explain why.
 
-            If you cannot extract the information fro the provide image, you should return valid as "false", and the title, description and hashtag as null
+            If you cannot extract the information from the provide image, you should return valid as "false", and all the other fields as "null"
     """.trimIndent()
 
     override fun buildPrompt(query: String, memory: List<String>): String {
         return """
             Goal: Extract informations from the provided image.
             Query: {{query}}
+
+            Observations:
+            {{observations}}
         """.trimIndent()
             .replace("{{query}}", query)
-            .replace("{{observation}}", memory.map { entry -> "- $entry" }.joinToString("\n"))
+            .replace("{{observations}}", memory.map { entry -> "- $entry" }.joinToString("\n"))
     }
 
     override fun tools(): List<Tool> = emptyList<Tool>()

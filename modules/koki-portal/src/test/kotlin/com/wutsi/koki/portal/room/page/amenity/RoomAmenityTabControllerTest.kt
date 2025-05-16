@@ -33,13 +33,13 @@ class RoomAmenityTabControllerTest : AbstractPageControllerTest() {
         navigateTo("/room-amenities/tab?owner-id=${room.id}&owner-type=ROOM&test-mode=true&read-only=true")
 
         room.amenityIds.forEach { id ->
-            assertElementHasAttribute(".amenity input", "readonly") // Amenity not disabled
+            assertElementHasAttribute(".amenity input", "disabled") // Amenity not disabled
             assertElementHasAttribute("#amenity-$id input", "checked") // Amenity checked
         }
         RefDataFixtures.amenities
             .filter { amenity -> !room.amenityIds.contains(amenity.id) }
             .forEach { amenity ->
-                assertElementHasAttribute(".amenity input", "readonly") // Amenity not disabled
+                assertElementHasAttribute(".amenity input", "disabled") // Amenity not disabled
                 assertElementHasNotAttribute("#amenity-${amenity.id} input", "checked") // Amenity not checked
             }
     }
@@ -51,13 +51,13 @@ class RoomAmenityTabControllerTest : AbstractPageControllerTest() {
         navigateTo("/room-amenities/tab?owner-id=${room.id}&owner-type=ROOM&test-mode=true&read-only=true")
 
         room.amenityIds.forEach { id ->
-            assertElementHasAttribute(".amenity input", "readonly") // Amenity not disabled
+            assertElementHasAttribute(".amenity input", "disabled") // Amenity not disabled
             assertElementHasAttribute("#amenity-$id input", "checked") // Amenity checked
         }
         RefDataFixtures.amenities
             .filter { amenity -> !room.amenityIds.contains(amenity.id) }
             .forEach { amenity ->
-                assertElementHasAttribute(".amenity input", "readonly") // Amenity not disabled
+                assertElementHasAttribute(".amenity input", "disabled") // Amenity not disabled
                 assertElementHasNotAttribute("#amenity-${amenity.id} input", "checked") // Amenity not checked
             }
     }

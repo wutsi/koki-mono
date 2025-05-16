@@ -11,31 +11,30 @@ import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.room.dto.AddAmenityRequest
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.event.RoomPublishedEvent
+import com.wutsi.koki.room.server.command.PublishRoomCommand
 import com.wutsi.koki.room.server.domain.RoomEntity
 import com.wutsi.koki.room.server.service.ai.RoomAgentFactory
 import com.wutsi.koki.room.server.service.data.RoomInformationAgentData
-import org.apache.commons.io.FilenameUtils
+import com.wutsi.koki.room.server.service.event.AbstractRoomEventHandler
 import org.springframework.stereotype.Service
-import java.io.File
-import java.io.FileOutputStream
-import java.net.URI
 import java.util.Date
 
 @Service
-class RoomPublisher(
+class PublishRoomCommandHandler(
     private val fileService: FileService,
-    private val storageServiceProvider: StorageServiceProvider,
     private val roomService: RoomService,
     private val agentFactory: RoomAgentFactory,
     private val publisher: Publisher,
     private val objectMapper: ObjectMapper,
-) {
+
+    storageServiceProvider: StorageServiceProvider,
+) : AbstractRoomEventHandler(storageServiceProvider) {
     companion object {
-        const val INFORMATION_AGENT_QUERY = "Extract the information from the images provided for this property"
+        const val QUERY = "Extract the information from the images provided for this property"
     }
 
-    fun publish(roomId: Long, tenantId: Long) {
-        val room = roomService.get(roomId, tenantId)
+    fun handle(cmd: PublishRoomCommand) {
+        val room = roomService.get(cmd.roomId, cmd.tenantId)
         if (room.status != RoomStatus.PUBLISHING) {
             return
         }
@@ -52,7 +51,7 @@ class RoomPublisher(
         val data = extractRoomInformationFromImages(room, images)
         update(room, images, data)
 
-        publisher.publish(RoomPublishedEvent(roomId, tenantId))
+        publisher.publish(RoomPublishedEvent(cmd.roomId, cmd.tenantId))
     }
 
     private fun extractRoomInformationFromImages(
@@ -64,7 +63,7 @@ class RoomPublisher(
         // Download images
         val files = images.map { image -> download(image) }
         try {
-            val result = agent.run(INFORMATION_AGENT_QUERY, files)
+            val result = agent.run(QUERY, files)
             return objectMapper.readValue(result, RoomInformationAgentData::class.java)
         } finally {
             files.forEach { file -> file.delete() }
@@ -76,6 +75,7 @@ class RoomPublisher(
         if (data != null && data.valid) {
             room.title = data.title
             room.description = data.description
+            room.summary = data.summary
             room.heroImageId = images[data.heroImageIndex].id
             room.heroImageReason = data.heroImageReason
         }
@@ -90,16 +90,6 @@ class RoomPublisher(
                 AddAmenityRequest(amenityIds = data.amenityIds),
                 room.tenantId,
             )
-        }
-    }
-
-    private fun download(file: FileEntity): File {
-        val extension = FilenameUtils.getExtension(file.url)
-        val f = File.createTempFile(file.name, ".$extension")
-        val output = FileOutputStream(f)
-        output.use {
-            storageServiceProvider.get(file.tenantId).get(URI(file.url).toURL(), output)
-            return f
         }
     }
 }

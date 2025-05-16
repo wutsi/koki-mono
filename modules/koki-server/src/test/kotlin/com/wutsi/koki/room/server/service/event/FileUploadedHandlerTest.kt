@@ -19,46 +19,30 @@ import com.wutsi.koki.file.server.domain.LabelEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.file.server.service.LabelService
 import com.wutsi.koki.file.server.service.StorageServiceProvider
-import com.wutsi.koki.platform.logger.DefaultKVLogger
-import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.platform.storage.local.LocalStorageService
-import com.wutsi.koki.refdata.server.service.AmenityService
-import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.room.server.service.ai.RoomAgentFactory
 import com.wutsi.koki.room.server.service.ai.RoomImageAgent
 import com.wutsi.koki.room.server.service.data.RoomImageAgentData
-import com.wutsi.koki.tenant.dto.ConfigurationName
-import com.wutsi.koki.tenant.server.domain.ConfigurationEntity
-import com.wutsi.koki.tenant.server.service.ConfigurationService
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertTrue
+import com.wutsi.koki.room.server.service.event.FileUploadedHandler
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class RoomMQConsumerTest {
+class FileUploadedHandlerTest {
     private val fileService = mock<FileService>()
-    private val configurationService = mock<ConfigurationService>()
     private val labelService = mock<LabelService>()
     private val storageServiceProvider = mock<StorageServiceProvider>()
     private val agentFactory = mock<RoomAgentFactory>()
-    private val roomService = mock<RoomService>()
-    private val publisher = mock<Publisher>()
-    private val logger = DefaultKVLogger()
     private val objectMapper = ObjectMapper()
 
-    private val consumer = RoomMQConsumer(
+    private val handler = FileUploadedHandler(
         fileService = fileService,
-        configurationService = configurationService,
         labelService = labelService,
         storageServiceProvider = storageServiceProvider,
         agentFactory = agentFactory,
-        roomService = roomService,
-        logger = logger,
         objectMapper = objectMapper,
-        publisher = publisher,
     )
 
     private val directory = System.getProperty("user.home") + "/__wutsi"
@@ -78,10 +62,6 @@ class RoomMQConsumerTest {
         type = FileType.IMAGE,
     )
 
-    private val configs = mapOf(
-        ConfigurationName.AI_PROVIDER to "GEMINI", ConfigurationName.TAX_AI_AGENT_ENABLED to "1"
-    )
-
     val data = RoomImageAgentData(
         title = "This is the title",
         description = "The description",
@@ -96,25 +76,17 @@ class RoomMQConsumerTest {
         LabelEntity(displayName = "Z"),
     )
 
-    private val imageAgent = mock<RoomImageAgent>()
+    private val agent = mock<RoomImageAgent>()
 
     @BeforeEach
     fun setup() {
-        doReturn(imageAgent).whenever(agentFactory).createRoomImageAgent(any())
+        doReturn(agent).whenever(agentFactory).createRoomImageAgent(any())
         doReturn(storage).whenever(storageServiceProvider).get(any())
         doReturn(file).whenever(fileService).get(any(), any())
-        doReturn(configs.map { entry -> ConfigurationEntity(name = entry.key, value = entry.value) }).whenever(
-            configurationService
-        ).search(any(), anyOrNull(), anyOrNull())
 
-        doReturn(objectMapper.writeValueAsString(data)).whenever(imageAgent).run(any(), anyOrNull())
+        doReturn(objectMapper.writeValueAsString(data)).whenever(agent).run(any(), anyOrNull())
 
         doReturn(labels).whenever(labelService).findOrCreate(any(), any())
-    }
-
-    @AfterEach
-    fun tearDown() {
-        logger.log()
     }
 
     @Test
@@ -127,12 +99,10 @@ class RoomMQConsumerTest {
             fileId = file.id!!,
             owner = ObjectReference(id = file.ownerId!!, type = ObjectType.ROOM),
         )
-        val result = consumer.consume(event)
+        handler.handle(event)
 
         // THEN
-        assertTrue(result)
-
-        verify(imageAgent).run(eq(RoomMQConsumer.IMAGE_AGENT_QUERY), any())
+        verify(agent).run(eq(FileUploadedHandler.IMAGE_AGENT_QUERY), any())
 
         val file1 = argumentCaptor<FileEntity>()
         verify(fileService).save(file1.capture())
@@ -151,52 +121,40 @@ class RoomMQConsumerTest {
 
         // GIVEN
         val event = FileUploadedEvent(
-            fileId = file.id!!,
-            owner = ObjectReference(id = file.ownerId!!, type = ObjectType.ROOM),
+            fileId = file.id!!
         )
-        val result = consumer.consume(event)
+        handler.handle(event)
 
         // THEN
-        assertTrue(result)
-
-        verify(imageAgent, never()).run(any(), anyOrNull())
+        verify(agent, never()).run(any(), anyOrNull())
         verify(fileService, never()).save(any())
     }
 
     @Test
-    fun `no AI`() {
+    fun `no AI agent`() {
         // GIVEN
-        doReturn(emptyList<ConfigurationEntity>()).whenever(configurationService)
-            .search(any(), anyOrNull(), anyOrNull())
+        doReturn(null).whenever(agentFactory).createRoomImageAgent(any())
 
         // GIVEN
-        val event = FileUploadedEvent(
-            fileId = file.id!!,
-            owner = ObjectReference(id = file.ownerId!!, type = ObjectType.ROOM),
-        )
-        val result = consumer.consume(event)
+        val event = FileUploadedEvent(fileId = file.id!!)
+        handler.handle(event)
 
         // THEN
-        assertTrue(result)
-
-        verify(imageAgent, never()).run(any(), anyOrNull())
+        verify(agent, never()).run(any(), anyOrNull())
         verify(fileService, never()).save(any())
     }
 
     @Test
     fun `non-room image`() {
         // GIVEN
-        // GIVEN
-        val event = FileUploadedEvent(
-            fileId = file.id!!,
-            owner = ObjectReference(id = 999L, type = ObjectType.ACCOUNT),
-        )
-        val result = consumer.consume(event)
+        doReturn(file.copy(ownerType = ObjectType.UNKNOWN)).whenever(fileService).get(any(), any())
+
+        // WHEN
+        val event = FileUploadedEvent(fileId = file.id!!)
+        handler.handle(event)
 
         // THEN
-        assertTrue(result)
-
-        verify(imageAgent, never()).run(any(), anyOrNull())
+        verify(agent, never()).run(any(), anyOrNull())
         verify(fileService, never()).save(any())
     }
 

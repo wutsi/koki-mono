@@ -1,18 +1,14 @@
-package com.wutsi.koki.room.server.service.rule
+package com.wutsi.koki.room.server.service.validation
 
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.room.server.domain.RoomEntity
-import com.wutsi.koki.room.server.service.validation.RoomMustHaveImageRule
 import jakarta.validation.ValidationException
 import org.junit.jupiter.api.assertThrows
-import org.mockito.Mockito.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class RoomMustHaveImageRuleTest {
-    private val fileService = mock<FileService>()
-    private val rule = RoomMustHaveImageRule(fileService)
+class RoomMustHaveGeolocationRuleTest {
+    private val rule = RoomMustHaveGeolocationRule()
 
     @Test
     fun success() {

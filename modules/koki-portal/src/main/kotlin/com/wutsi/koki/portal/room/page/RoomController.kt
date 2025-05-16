@@ -67,4 +67,17 @@ class RoomController(
             return show(id, model)
         }
     }
+
+    @GetMapping("/{id}/publish")
+    @RequiresPermission(["room:manage"])
+    fun publish(@PathVariable id: Long, model: Model): String {
+        try {
+            service.publish(id)
+            return "redirect:/rooms/$id?_op=published&_toast=$id&_ts=" + System.currentTimeMillis()
+        } catch (ex: HttpClientErrorException) {
+            val errorResponse = toErrorResponse(ex)
+            model.addAttribute("error", errorResponse.error.code)
+            return show(id, model)
+        }
+    }
 }

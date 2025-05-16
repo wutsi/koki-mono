@@ -33,10 +33,14 @@ data class RoomEntity(
     @Column(name = "deleted_by_fk")
     var deleteById: Long? = null,
 
+    @Column(name = "published_by_fk")
+    var publishedById: Long? = null,
+
     var type: RoomType = RoomType.UNKNOWN,
     var status: RoomStatus = RoomStatus.UNKNOWN,
     var deleted: Boolean = false,
     var title: String = "",
+    var summary: String? = null,
     var description: String? = null,
     var numberOfRooms: Int = 0,
     var numberOfBathrooms: Int = 0,
@@ -60,6 +64,11 @@ data class RoomEntity(
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
     var deletedAt: Date? = null,
+    var publishedAt: Date? = null,
+
+    @Column("hero_image_fk")
+    var heroImageId: Long? = null,
+    var heroImageReason: String? = null,
 
     @ManyToMany
     @JoinTable(

@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.room.model
 
 import com.wutsi.blog.portal.common.model.MoneyModel
+import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.AmenityModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
@@ -11,9 +12,11 @@ import java.util.Date
 
 data class RoomModel(
     val id: Long = -1,
+    val heroImage: FileModel? = null,
     val type: RoomType = RoomType.UNKNOWN,
     val status: RoomStatus = RoomStatus.UNKNOWN,
     val title: String = "",
+    val summary: String? = null,
     val description: String? = null,
     val descriptionHtml: String? = null,
     val numberOfRooms: Int = -1,
@@ -29,7 +32,9 @@ data class RoomModel(
     val modifiedAt: Date = Date(),
     val modifiedAtText: String = "",
     val modifiedBy: UserModel? = null,
-    val readOnly: Boolean = false,
+    val publishedAt: Date? = null,
+    val publishedAtText: String? = null,
+    val publishedBy: UserModel? = null,
     val amenities: List<AmenityModel> = emptyList(),
     val checkinTime: String? = null,
     val checkoutTime: String? = null,
@@ -37,4 +42,10 @@ data class RoomModel(
     fun hasAmenity(amenityId: Long): Boolean {
         return amenities.find { amenity -> amenity.id == amenityId } != null
     }
+
+    val draft: Boolean
+        get() = (status == RoomStatus.DRAFT)
+
+    val readOnly: Boolean
+        get() = (status == RoomStatus.PUBLISHING)
 }

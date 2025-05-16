@@ -20,7 +20,15 @@
 
 <tr class="room" th:fragment="columns(room)" th:remove="tag">
     <td>
-        <a th:href="'/rooms/' + ${room.id}" th:text="${room.title}">TITLE</a>
+        <a th:href="'/rooms/' + ${room.id}" th:if="${room.heroImage}">
+            <img class="img-fluid" th:src="${room.heroImage.contentUrl}"/>
+        </a>
+    </td>
+    <td>
+        <a th:href="'/rooms/' + ${room.id}">
+            <b th:text="${room.title}">TITLE</b>
+            <div class="margin-top-small" th:if="${room.summary}" th:text="${room.summary}">SUMMARY</div>
+        </a>
     </td>
     <td>
         <a th:href="'/rooms/' + ${room.id}">
@@ -63,7 +71,7 @@
 
 <div th:fragment="status(status)">
     <i class="fa-solid fa-circle fa-xs success" th:if="${status.name} == 'PUBLISHED'"></i>
-    <i class="fa-solid fa-circle fa-xs warning" th:if="${status.name} == 'UNDER_REVIEW'"></i>
+    <i class="fa-solid fa-circle fa-xs warning" th:if="${status.name} == 'PUBLISHING'"></i>
     <span th:text="#{'room-status.' + ${status}}">STATUS</span>
 </div>
 

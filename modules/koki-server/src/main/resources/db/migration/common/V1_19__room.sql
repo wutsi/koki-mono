@@ -5,11 +5,14 @@ CREATE TABLE T_ROOM(
   created_by_fk             BIGINT,
   modified_by_fk            BIGINT,
   deleted_by_fk             BIGINT,
+  published_by_fk           BIGINT,
+  hero_image_fk             BIGINT,
 
   type                      INT NOT NULL DEFAULT 0,
   status                    INT NOT NULL DEFAULT 0,
   deleted                   BOOLEAN NOT NULL DEFAULT false,
   title                     VARCHAR(100) NOT NULL,
+  summary                   VARCHAR(255),
   description               TEXT,
   number_of_rooms           INT NOT NULL DEFAULT 0,
   number_of_bathrooms       INT NOT NULL DEFAULT 0,
@@ -28,10 +31,12 @@ CREATE TABLE T_ROOM(
   country                   VARCHAR(2),
   latitude                  DOUBLE,
   longitude                 DOUBLE,
+  hero_image_reason         TEXT,
 
   created_at                DATETIME DEFAULT NOW(),
   modified_at               DATETIME DEFAULT NOW(),
   deleted_at                DATETIME,
+  published_at              DATETIME,
 
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;

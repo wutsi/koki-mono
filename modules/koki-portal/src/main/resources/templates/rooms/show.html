@@ -24,15 +24,20 @@
                             <img align="absmiddle" src="/image/room.png" width="48"/>
                             <span th:text="${room.title}">NAME</span>
                         </h1>
-                        <div>
+                        <div th:if="!${room.readOnly}">
                             <a class="btn-edit btn btn-light btn-sm"
                                th:href="'/rooms/' + ${room.id} + '/edit'"
                                th:if="${user?.hasPermission('room:manage')}">Edit</a>
 
+                            <a class="btn-publish btn btn-primary btn-sm"
+                               onclick="return confirm('Are you sure you want to publish this listing online?')"
+                               th:href="'/rooms/' + ${room.id} + '/publish'"
+                               th:if="${room.draft} AND ${user?.hasPermission('room:manage')}">Publish Online</a>
+
                             <a class="btn-delete btn btn-danger btn-sm"
-                               onclick="return confirm('Are you sure you want to delete the room?')"
+                               onclick="return confirm('Are you sure you want to delete?')"
                                th:href="'/rooms/' + ${room.id} + '/delete'"
-                               th:if="${user?.hasPermission('room:manage')}">Delete</a>
+                               th:if="${room.draft} AND ${user?.hasPermission('room:manage')}">Delete</a>
                         </div>
                     </div>
 
@@ -72,6 +77,10 @@
                         <tr>
                             <td width="15%"><b>Type</b></td>
                             <td th:text="${room.title}">TITLE</td>
+                        </tr>
+                        <tr th:if="${room.summary}">
+                            <td><b>Summary</b></td>
+                            <td th:text="${room.summary}">SUMMARY</td>
                         </tr>
                         <tr>
                             <td><b>Type</b></td>
@@ -141,6 +150,15 @@
                                 <span th:if="${room.modifiedBy}">by</span>
                                 <span th:if="${room.modifiedBy}"
                                       th:text="${room.modifiedBy.displayName}">MODIFIED BY</span>
+                            </td>
+                        </tr>
+                        <tr th:if="${room.publishedAt}">
+                            <td><b>Published</b></td>
+                            <td>
+                                <span th:text="${room.publishedAtText}">DATE</span>
+                                <span th:if="${room.publishedBy}">by</span>
+                                <span th:if="${room.publishedBy}"
+                                      th:text="${room.publishedBy.displayName}">MODIFIED BY</span>
                             </td>
                         </tr>
                     </table>
