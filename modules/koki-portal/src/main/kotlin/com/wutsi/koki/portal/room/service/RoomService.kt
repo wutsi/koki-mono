@@ -7,6 +7,7 @@ import com.wutsi.koki.portal.refdata.model.AmenityModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.refdata.service.AmenityService
 import com.wutsi.koki.portal.refdata.service.LocationService
+import com.wutsi.koki.portal.room.form.GeoLocationForm
 import com.wutsi.koki.portal.room.form.RoomForm
 import com.wutsi.koki.portal.room.mapper.RoomMapper
 import com.wutsi.koki.portal.room.model.RoomModel
@@ -16,6 +17,7 @@ import com.wutsi.koki.room.dto.AddAmenityRequest
 import com.wutsi.koki.room.dto.CreateRoomRequest
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
+import com.wutsi.koki.room.dto.SaveRoomGeoLocationRequest
 import com.wutsi.koki.room.dto.UpdateRoomRequest
 import com.wutsi.koki.sdk.KokiRooms
 import org.springframework.stereotype.Service
@@ -183,5 +185,15 @@ class RoomService(
 
     fun publish(roomId: Long) {
         koki.publish(roomId)
+    }
+
+    fun save(roomId: Long, form: GeoLocationForm) {
+        koki.saveGeolocation(
+            roomId,
+            SaveRoomGeoLocationRequest(
+                longitude = form.longitude!!,
+                latitude = form.latitude!!,
+            )
+        )
     }
 }

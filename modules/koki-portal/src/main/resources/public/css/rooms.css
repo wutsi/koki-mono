@@ -1,9 +1,13 @@
 /* == DATA ROW === */
 table tr.room td a,
-table tr.room-unit td a{
+table tr.room-unit td a {
     display: block !important;
     color: black !important;
     text-decoration: none !important;
+}
+
+table tr.room td .room-image {
+    max-height: 128px;
 }
 
 ul.amenities {

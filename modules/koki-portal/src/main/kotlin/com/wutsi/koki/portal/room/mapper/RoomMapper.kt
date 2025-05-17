@@ -42,6 +42,8 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             },
             pricePerNight = moneyMapper.toMoneyModel(entity.pricePerNight.amount, entity.pricePerNight.currency),
             heroImage = entity.heroImageId?.let { id -> images[id] },
+            longitude = entity.longitude,
+            latitude = entity.latitude,
         )
     }
 
@@ -89,6 +91,8 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             publishedAt = entity.publishedAt,
             publishedAtText = entity.publishedAt?.let { date -> fmt.format(date) },
             publishedBy = entity.publishedById?.let { id -> users[id] },
+            longitude = entity.longitude,
+            latitude = entity.latitude,
         )
     }
 }

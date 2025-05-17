@@ -4,3 +4,7 @@ table tr.image td a {
     color: black !important;
     text-decoration: none !important;
 }
+
+table tr.image td a img.img-fluid {
+    max-height: 128px;
+}

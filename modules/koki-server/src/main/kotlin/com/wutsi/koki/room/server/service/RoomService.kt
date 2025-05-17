@@ -12,6 +12,7 @@ import com.wutsi.koki.room.dto.AddAmenityRequest
 import com.wutsi.koki.room.dto.CreateRoomRequest
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
+import com.wutsi.koki.room.dto.SaveRoomGeoLocationRequest
 import com.wutsi.koki.room.dto.UpdateRoomRequest
 import com.wutsi.koki.room.server.dao.RoomRepository
 import com.wutsi.koki.room.server.domain.RoomEntity
@@ -170,6 +171,16 @@ class RoomService(
             room.deleted = true
             dao.save(room)
         }
+    }
+
+    @Transactional
+    fun geo(id: Long, request: SaveRoomGeoLocationRequest, tenantId: Long) {
+        val room = get(id, tenantId)
+        room.latitude = request.latitude
+        room.longitude = request.longitude
+        room.modifiedById = securityService.getCurrentUserIdOrNull()
+        room.modifiedAt = Date()
+        save(room)
     }
 
     @Transactional
