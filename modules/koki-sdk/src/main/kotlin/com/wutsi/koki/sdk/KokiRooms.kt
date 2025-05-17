@@ -6,6 +6,7 @@ import com.wutsi.koki.room.dto.CreateRoomResponse
 import com.wutsi.koki.room.dto.GetRoomResponse
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
+import com.wutsi.koki.room.dto.SaveRoomGeoLocationRequest
 import com.wutsi.koki.room.dto.SearchRoomResponse
 import com.wutsi.koki.room.dto.UpdateRoomRequest
 import org.springframework.web.client.RestTemplate
@@ -60,6 +61,11 @@ class KokiRooms(
             )
         )
         return rest.getForEntity(url, SearchRoomResponse::class.java).body
+    }
+
+    fun saveGeolocation(roomId: Long, request: SaveRoomGeoLocationRequest) {
+        val url = urlBuilder.build("$ROOM_PATH_PREFIX/$roomId/geolocation")
+        rest.postForEntity(url, request, Any::class.java)
     }
 
     fun addAmenities(roomId: Long, request: AddAmenityRequest) {
