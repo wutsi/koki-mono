@@ -36,6 +36,8 @@ class RefDataMapper : TenantAwareMapper() {
             parentId = entity.parentId,
             type = entity.type,
             country = entity.country,
+            longitude = entity.longitude,
+            latitude = entity.latitude,
         )
     }
 

@@ -51,7 +51,7 @@ class RoomInformationAgent(
               - Start with Compelling Opening: Your first sentence or two should immediately grab attention and reinforce your unique selling proposition from your title.
               - Expand on Key Features and Amenities: Now's the time to elaborate on the highlights mentioned in your title and introduce other enticing features. Be specific and descriptive.
               - Highlight the Guest Experience: Think about what makes staying at your property special. Is it the peace and quiet, the convenience to attractions, the luxurious amenities, or the thoughtful touches you provide?
-              - Aim for around 250-300 words.
+              - Aim for around 600-800 words.
             - Instructions for crafting the summary:
               - Expand on the Title and Hook
               - Focus on the Benefits for the Sharer's Audience: Why should someone click on this link? What kind of experience awaits the customer?
@@ -72,7 +72,13 @@ class RoomInformationAgent(
             Goal: Create the detailed description of a property listing.
             Query: {{query}}
 
-            Location: {{location}}
+            Property Information:
+            - Location: {{location}}
+            - Type: ${room.type}
+            - Bedrooms: ${room.numberOfRooms}
+            - Beds: ${room.numberOfBeds}
+            - Baths: ${room.numberOfBathrooms}
+            - Max guests: ${room.maxGuests}
 
             Amenities:
             Here are all the amenities in CSV format:

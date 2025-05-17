@@ -149,6 +149,8 @@ object RoomFixtures {
         ),
         checkinTime = "11:00",
         checkoutTime = "15:00",
+        latitude = 11.43094309,
+        longitude = 3.430954,
     )
 
     val roomUnits = listOf(

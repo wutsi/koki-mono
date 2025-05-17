@@ -37,6 +37,8 @@ class RoomMapper {
             amenityIds = entity.amenities.map { amenity -> amenity.id },
             checkinTime = entity.checkinTime,
             checkoutTime = entity.checkoutTime,
+            longitude = entity.longitude,
+            latitude = entity.latitude,
         )
     }
 
@@ -58,6 +60,8 @@ class RoomMapper {
                 amount = entity.pricePerNight ?: 0.0,
                 currency = (entity.currency ?: "")
             ),
+            longitude = entity.longitude,
+            latitude = entity.latitude,
         )
     }
 

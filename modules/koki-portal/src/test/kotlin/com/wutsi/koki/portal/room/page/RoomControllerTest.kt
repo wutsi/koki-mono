@@ -42,7 +42,12 @@ class RoomControllerTest : AbstractPageControllerTest() {
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ROOM)
 
+        assertElementAttribute("[data-component-id=map]", "data-latitude", room.latitude.toString())
+        assertElementAttribute("[data-component-id=map]", "data-longitude", room.longitude.toString())
+        assertElementAttribute("[data-component-id=map]", "data-show-marker", "true")
+
         assertElementPresent(".btn-edit")
+        assertElementPresent(".btn-map")
         assertElementPresent(".btn-publish")
         assertElementPresent(".btn-delete")
     }
@@ -66,6 +71,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent(".btn-edit")
         assertElementNotPresent(".btn-publish")
         assertElementNotPresent(".btn-delete")
+        assertElementNotPresent(".btn-map")
     }
 
     @Test
@@ -85,6 +91,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.ROOM)
 
         assertElementPresent(".btn-edit")
+        assertElementPresent(".btn-map")
         assertElementNotPresent(".btn-publish")
         assertElementNotPresent(".btn-delete")
     }
@@ -140,6 +147,15 @@ class RoomControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun map() {
+        navigateTo("/rooms/${room.id}")
+        scrollToBottom()
+        click(".btn-map")
+
+        assertCurrentPageIs(PageName.ROOM_MAP)
+    }
+
+    @Test
     fun `show - without permission room`() {
         setUpUserWithoutPermissions(listOf("room"))
 
@@ -155,6 +171,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.ROOM)
 
         assertElementNotPresent(".btn-edit")
+        assertElementNotPresent(".btn-map")
         assertElementNotPresent(".btn-publish")
         assertElementNotPresent(".btn-delete")
     }

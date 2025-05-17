@@ -1,38 +1,90 @@
 /**
- * Button for loading additional data
+ * Address widget
  */
-class LoadMoreWidget {
+class AddressWidget {
     init() {
         let count = 0;
-        document.querySelectorAll('[data-component-id=load-more]')
+        document.querySelectorAll('[data-component-id=address]')
             .forEach((elt) => {
-                count++
-                elt.removeEventListener('click', this.onClick);
-                elt.addEventListener('click', this.onClick);
-            });
-        console.log(count + ' load-more component(s) found');
-    }
+                    const countryId = elt.getAttribute("data-country-id");
+                    const cityId = elt.getAttribute("data-city-id");
+                    const neighborhoodId = elt.getAttribute("data-neighborhood-id");
 
-    onClick() {
-        console.log('onLoadMore()');
+                    $('#' + countryId).select2();
+                    $('#' + countryId).on('select2:select', function (e) {
+                        console.log('country changed....');
+                        $('#' + cityId).val('').trigger('change');
+                        if (neighborhoodId) {
+                            $('#' + neighborhoodId).val('').trigger('change');
+                        }
+                    });
 
-        const elt = window.event.target;
-        console.log('elt', elt);
+                    $('#' + cityId).select2({
+                            ajax: {
+                                url: function () {
+                                    return '/locations/selector/search?type=CITY&country=' + document.getElementById(countryId).value;
+                                },
+                                dataType: 'json',
+                                delay: 1000,
+                                processResults: function (item) {
+                                    const xitems = item.map(function (item) {
+                                        return {
+                                            id: item.id,
+                                            text: item.name,
+                                        }
+                                    });
+                                    return {
+                                        results: xitems
+                                    };
+                                }
+                            },
+                            placeholder: 'Select an city',
+                            allowClear: true,
+                            tokenSeparators: [','],
+                            minimumInputLength: 2,
+                        }
+                    );
+                    if (neighborhoodId) {
+                        $('#' + cityId).on('select2:select', function (e) {
+                            console.log('city changed....');
+                            $('#' + neighborhoodId).val('').trigger('change');
+                        });
 
-        const containerId = elt.getAttribute('data-container-id');
-        const container = document.querySelector('#' + containerId);
-        container.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></div>';
-
-        const url = elt.getAttribute('data-url');
-        console.log('Loading ' + url);
-        fetch(url).then(function (response) {
-            response.text().then(function (html) {
-                $('#' + containerId).replaceWith(html);
-                koki.init();
-            });
-        });
+                        $('#' + neighborhoodId).select2({
+                                ajax: {
+                                    url: function () {
+                                        return '/locations/selector/search?type=NEIGHBORHOOD&' +
+                                            '&parent-id=' + document.getElementById(cityId).value +
+                                            '&country=' + document.getElementById(countryId).value;
+                                    },
+                                    dataType: 'json',
+                                    delay: 1000,
+                                    processResults: function (item) {
+                                        const xitems = item.map(function (item) {
+                                            return {
+                                                id: item.id,
+                                                text: item.name,
+                                            }
+                                        });
+                                        return {
+                                            results: xitems
+                                        };
+                                    }
+                                },
+                                placeholder: 'Select a neighborhood',
+                                allowClear: true,
+                                tokenSeparators: [','],
+                                minimumInputLength: 2,
+                            }
+                        );
+                    }
+                    count++
+                }
+            );
+        console.log(count + ' address component(s) found');
     }
 }
+
 
 /**
  * Widget for loading content asynchronously
@@ -327,6 +379,42 @@ class AjaxCheckboxWidget {
 }
 
 /**
+ * Button for loading additional data
+ */
+class LoadMoreWidget {
+    init() {
+        let count = 0;
+        document.querySelectorAll('[data-component-id=load-more]')
+            .forEach((elt) => {
+                count++
+                elt.removeEventListener('click', this.onClick);
+                elt.addEventListener('click', this.onClick);
+            });
+        console.log(count + ' load-more component(s) found');
+    }
+
+    onClick() {
+        console.log('onLoadMore()');
+
+        const elt = window.event.target;
+        console.log('elt', elt);
+
+        const containerId = elt.getAttribute('data-container-id');
+        const container = document.querySelector('#' + containerId);
+        container.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></div>';
+
+        const url = elt.getAttribute('data-url');
+        console.log('Loading ' + url);
+        fetch(url).then(function (response) {
+            response.text().then(function (html) {
+                $('#' + containerId).replaceWith(html);
+                koki.init();
+            });
+        });
+    }
+}
+
+/**
  * Modal widget
  */
 class ModalWidget {
@@ -376,89 +464,70 @@ class ModalWidget {
 }
 
 /**
- * Address widget
+ * Map widget based on https://leafletjs.com
+ *
+ * Attributes:
+ *  - id: ID of the map
+ *  - data-latitude, data-longitude: Lat/Long of the center of the map
+ *  - data-zoom: Initial zoom of the map viewport (Default: 10)
+ *  - data-max-zoom: Initial zoom of the map viewport (Default: 20)
+ *  - data-show-marker: Show marker in the center of the map? (Default: false)
+ *  - data-onlick: Name of the callback called when user click. The callback will receive mouse event. See https://leafletjs.com/reference.html#mouseevent
  */
-class AddressWidget {
+class MapWidget {
     init() {
         let count = 0;
-        document.querySelectorAll('[data-component-id=address]')
+        document.querySelectorAll('[data-component-id=map]')
             .forEach((elt) => {
-                    const countryId = elt.getAttribute("data-country-id");
-                    const cityId = elt.getAttribute("data-city-id");
-                    const neighborhoodId = elt.getAttribute("data-neighborhood-id");
+                const id = elt.getAttribute("id");
+                if (id) {
+                    const latitude = elt.getAttribute("data-latitude");
+                    const longitude = elt.getAttribute("data-longitude");
+                    const zoom = elt.getAttribute("data-zoom");
+                    const center = latitude && longitude ? [latitude, longitude] : null;
+                    const mapOptions = {
+                        center: center,
+                        zoom: zoom && zoom.length > 0 ? zoom : 10,
+                    };
 
-                    $('#' + countryId).select2();
-                    $('#' + countryId).on('select2:select', function (e) {
-                        console.log('country changed....');
-                        $('#' + cityId).val('').trigger('change');
-                        if (neighborhoodId) {
-                            $('#' + neighborhoodId).val('').trigger('change');
-                        }
-                    });
-
-                    $('#' + cityId).select2({
-                            ajax: {
-                                url: function () {
-                                    return '/locations/selector/search?type=CITY&country=' + document.getElementById(countryId).value;
-                                },
-                                dataType: 'json',
-                                delay: 1000,
-                                processResults: function (item) {
-                                    const xitems = item.map(function (item) {
-                                        return {
-                                            id: item.id,
-                                            text: item.name,
-                                        }
-                                    });
-                                    return {
-                                        results: xitems
-                                    };
-                                }
-                            },
-                            placeholder: 'Select an city',
-                            allowClear: true,
-                            tokenSeparators: [','],
-                            minimumInputLength: 2,
-                        }
-                    );
-                    if (neighborhoodId) {
-                        $('#' + cityId).on('select2:select', function (e) {
-                            console.log('city changed....');
-                            $('#' + neighborhoodId).val('').trigger('change');
-                        });
-
-                        $('#' + neighborhoodId).select2({
-                                ajax: {
-                                    url: function () {
-                                        return '/locations/selector/search?type=NEIGHBORHOOD&' +
-                                            '&parent-id=' + document.getElementById(cityId).value +
-                                            '&country=' + document.getElementById(countryId).value;
-                                    },
-                                    dataType: 'json',
-                                    delay: 1000,
-                                    processResults: function (item) {
-                                        const xitems = item.map(function (item) {
-                                            return {
-                                                id: item.id,
-                                                text: item.name,
-                                            }
-                                        });
-                                        return {
-                                            results: xitems
-                                        };
-                                    }
-                                },
-                                placeholder: 'Select a neighborhood',
-                                allowClear: true,
-                                tokenSeparators: [','],
-                                minimumInputLength: 2,
-                            }
-                        );
+                    // Kill previous instance - see https://stackoverflow.com/questions/19186428/refresh-leaflet-map-map-container-is-already-initialized
+                    var container = L.DomUtil.get(id);
+                    if (container != null) {
+                        container._leaflet_id = null;
                     }
+
+                    // Create new map instance
+                    let map = L.map(id, mapOptions);
+
+                    const maxZoom = elt.getAttribute("data-max-zoom");
+                    let layer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: maxZoom && maxZoom.length > 0 ? zoom : 20,
+                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                    });
+                    map.addLayer(layer);
+
+                    const showMarker = elt.getAttribute("data-show-marker");
+                    if (showMarker) {
+                        let marker = L.marker([latitude, longitude]);
+                        map.addLayer(marker);
+                    }
+
+                    let onclick = elt.getAttribute('data-onclick');
+                    if (onclick) {
+                        map.on('click', function (evt) {
+                            eval(onclick)(evt);
+                        });
+                    }
+
+                    setTimeout(
+                        function () {
+                            map.invalidateSize(true);
+                        },
+                        500);
                     count++
                 }
-            );
-        console.log(count + ' address component(s) found');
+            });
+        console.log(count + ' map component(s) found');
     }
 }
 
@@ -472,6 +541,7 @@ class KokiWidgets {
         this.ajaxCheckbox = new AjaxCheckboxWidget();
         this.ajaxFragment = new AjaxFragmentWidget();
         this.loadMore = new LoadMoreWidget();
+        this.map = new MapWidget();
         this.modal = new ModalWidget();
         this.uploader = new UploaderWidget();
     }
@@ -492,6 +562,7 @@ class Koki {
         this.widgets.ajaxCheckbox.init();
         this.widgets.ajaxFragment.init();
         this.widgets.loadMore.init();
+        this.widgets.map.init();
         this.widgets.modal.init();
         this.widgets.uploader.init();
     }

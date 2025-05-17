@@ -3,6 +3,7 @@ package com.wutsi.koki.room.server.config
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.room.server.service.RoomPublisherValidator
 import com.wutsi.koki.room.server.service.RoomUnitService
+import com.wutsi.koki.room.server.service.validation.RoomMustHaveGeolocationRule
 import com.wutsi.koki.room.server.service.validation.RoomMustHaveImageRule
 import com.wutsi.koki.room.server.service.validation.RoomMustHavePriceRule
 import com.wutsi.koki.room.server.service.validation.RoomMustHaveUnitRule
@@ -19,7 +20,7 @@ class RoomPublisherConfiguration(
         return RoomPublisherValidator(
             listOf(
                 RoomMustHavePriceRule(),
-                /* RoomMustHaveGeolocationRule(), */
+                RoomMustHaveGeolocationRule(),
                 RoomMustHaveUnitRule(roomUnitService),
                 RoomMustHaveImageRule(fileService)
             )

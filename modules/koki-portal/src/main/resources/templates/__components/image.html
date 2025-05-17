@@ -26,7 +26,7 @@
 </div>
 
 <tr class="file" th:fragment="columns(file, readOnly)" th:remove="tag">
-    <td>
+    <td class="text-center">
         <a th:href="'javascript: kokiImageEditor.show(' + ${file.id} + ')'">
             <img class="img-fluid" th:src="${file.contentUrl}"/>
         </a>
@@ -66,10 +66,10 @@
 <tr id="image-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
     <td class="text-center" colspan="5">
         <button
-                class="btn btn-sm btn-light"
-                data-component-id='load-more'
-                data-container-id="image-load-more"
-                th:data-url="${moreUrl}"
+            class="btn btn-sm btn-light"
+            data-component-id='load-more'
+            data-container-id="image-load-more"
+            th:data-url="${moreUrl}"
         >
             Load more...
         </button>
