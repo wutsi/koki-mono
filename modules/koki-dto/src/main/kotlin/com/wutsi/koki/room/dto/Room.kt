@@ -21,6 +21,8 @@ data class Room(
     val pricePerNight: Money = Money(),
     val checkinTime: String? = null,
     val checkoutTime: String? = null,
+    val longitude: Double? = null,
+    val latitude: Double? = null,
     val createdById: Long? = null,
     val createdAt: Date = Date(),
     val modifiedById: Long? = null,

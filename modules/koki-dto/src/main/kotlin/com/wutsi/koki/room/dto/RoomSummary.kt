@@ -16,5 +16,7 @@ data class RoomSummary(
     val maxGuests: Int = -1,
     val pricePerNight: Money = Money(),
     val neighborhoodId: Long? = null,
+    val longitude: Double? = null,
+    val latitude: Double? = null,
     val address: Address? = null,
 )
