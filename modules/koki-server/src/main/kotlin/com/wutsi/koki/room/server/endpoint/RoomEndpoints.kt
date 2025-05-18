@@ -7,6 +7,7 @@ import com.wutsi.koki.room.dto.CreateRoomResponse
 import com.wutsi.koki.room.dto.GetRoomResponse
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
+import com.wutsi.koki.room.dto.SaveRoomGeoLocationRequest
 import com.wutsi.koki.room.dto.SearchRoomResponse
 import com.wutsi.koki.room.dto.UpdateRoomRequest
 import com.wutsi.koki.room.server.command.PublishRoomCommand
@@ -48,6 +49,15 @@ class RoomEndpoints(
         @Valid @RequestBody request: UpdateRoomRequest,
     ) {
         service.update(id, request, tenantId)
+    }
+
+    @PostMapping("/{id}/geolocation")
+    fun geo(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
+        @Valid @RequestBody request: SaveRoomGeoLocationRequest,
+    ) {
+        service.geo(id, request, tenantId)
     }
 
     @DeleteMapping("/{id}")

@@ -25,6 +25,8 @@ data class RoomModel(
     val maxGuests: Int = -1,
     val neighborhood: LocationModel? = null,
     val address: AddressModel? = null,
+    val longitude: Double? = null,
+    val latitude: Double? = null,
     val pricePerNight: MoneyModel = MoneyModel(),
     val createdAt: Date = Date(),
     val createdAtText: String = "",
@@ -48,4 +50,7 @@ data class RoomModel(
 
     val readOnly: Boolean
         get() = (status == RoomStatus.PUBLISHING)
+
+    val hasGeoLocation: Boolean
+        get() = (latitude != null && longitude != null)
 }

@@ -18,77 +18,70 @@
     <div class="row">
         <div class="col-12">
             <div class="widget">
-                <div class="widget-body room-summary">
-                    <div class="flex flex-space-between">
-                        <h1 class="entity-title">
-                            <img align="absmiddle" src="/image/room.png" width="48"/>
-                            <span th:text="${room.title}">NAME</span>
-                        </h1>
-                        <div th:if="!${room.readOnly}">
-                            <a class="btn-edit btn btn-light btn-sm"
-                               th:href="'/rooms/' + ${room.id} + '/edit'"
-                               th:if="${user?.hasPermission('room:manage')}">Edit</a>
+                <div class="widget-body container-fluid">
+                    <div class="row">
+                        <div class="col-3">
+                            <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
-                            <a class="btn-publish btn btn-primary btn-sm"
-                               onclick="return confirm('Are you sure you want to publish this listing online?')"
-                               th:href="'/rooms/' + ${room.id} + '/publish'"
-                               th:if="${room.draft} AND ${user?.hasPermission('room:manage')}">Publish Online</a>
-
-                            <a class="btn-delete btn btn-danger btn-sm"
-                               onclick="return confirm('Are you sure you want to delete?')"
-                               th:href="'/rooms/' + ${room.id} + '/delete'"
-                               th:if="${room.draft} AND ${user?.hasPermission('room:manage')}">Delete</a>
+                            <form class="form" method="post" th:action="@{'/rooms/' + ${room.id} + '/map'}"
+                                  th:object="${form}">
+                                <table class="table">
+                                    <tr>
+                                        <td>
+                                            <a th:href="'/rooms/' + ${room.id}">
+                                                <i class="fa-solid fa-arrow-left-long"></i>
+                                                <b th:text="${room.title}">TITLE</b>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${room.address}">
+                                        <td>
+                                            <b>Address</b>
+                                            <div th:utext="${room.address.toHtml()}">ADDRESS</div>
+                                            <div th:if="${room.neighborhood}" th:text="${room.neighborhood.name}">
+                                                NEIGHBORHOOD
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${room.hasGeoLocation}">
+                                        <td>
+                                            <b>Current Location</b>
+                                            <div>
+                                                <span th:text="${room.latitude}">LAT</span>
+                                                <span class="margin-left" th:text="${room.longitude}">LONG</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>New Location</b>
+                                            <div class="flex">
+                                                <input class="border-none" readonly required th:field="*{latitude}"/>
+                                                <input class="border-none" readonly required th:field="*{longitude}"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <button type="submit">Save GeoLocation</button>
+                                            <a class="btn-cancel margin-left"
+                                               th:href="'/rooms/' + ${room.id}">Cancel</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
                         </div>
-                    </div>
-
-                    <div class="flex">
-                        <div class="margin-right-2x">
-                            <b>Title</b><br/>
-                            <span th:text="${room.title}">TITLE</span>
-                        </div>
-                        <div class="margin-right-2x">
-                            <b>Status</b><br/>
-                            <div th:replace="~{__components/room :: status(${room.status})}"></div>
-                        </div>
-                        <div class="margin-right-2x">
-                            <b>Type</b><br/>
-                            <div th:replace="~{__components/room :: type(${room.type})}"></div>
-                        </div>
-                        <div class="margin-right-2x">
-                            <b>Price/night</b><br/>
-                            <span th:text="${room.pricePerNight}">$$</span>
-                        </div>
-                    </div>
-                    <div th:replace="~{__components/layout :: error-message(${error})}"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12">
-            <div class="widget">
-                <div class="widget-body">
-                    <div th:replace="~{__components/module :: tabs('main', true)}"></div>
-                    <div
-                        th:replace="~{__components/module :: tabs-content('main', true, ${room}, ${module})}"></div>
-
-                    <div class="hidden" id="tab-details-content">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-12 col-md-7">
-                                    <div th:replace="~{__components/room :: details(${room})}"></div>
-                                </div>
-                                <div class="col-12 col-md-5">
-                                    <div data-component-id="map"
-                                         id="map"
-                                         style="height:600px"
-                                         th:data-latitude="${room.latitude} ? ${room.latitude} : ${room.address?.city?.latitude}"
-                                         th:data-longitude="${room.longitude} ? ${room.longitude} : ${room.address?.city?.longitude}"
-                                         th:show-marker="${room.latitude} AND ${room.longitude}"
-                                    ></div>
-                                </div>
-                            </div>
+                        <div class="col-9">
+                            <div data-component-id="map"
+                                 data-zoom=13
+                                 id="map"
+                                 style="height:800px"
+                                 th:data-latitude="${room.hasGeoLocation} ? ${room.latitude} : ${room.address?.city?.latitude}"
+                                 th:data-longitude="${room.hasGeoLocation} ? ${room.longitude} : ${room.address?.city?.longitude}"
+                                 th:data-onclick="on_map_click"
+                                 th:data-show-marker="${room.hasGeoLocation}"
+                                 th:data-zoom="${room.hasGeoLocation} ? 17 : 13"
+                            ></div>
                         </div>
                     </div>
                 </div>
@@ -100,5 +93,36 @@
 
 <div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
 <div th:replace="~{__components/bootstrap :: modal}"></div>
+
+<script>
+    let marker = null;
+
+    function on_map_click(e) {
+        const icon = new L.Icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        // Store position
+        console.log('on_map_click', e);
+        document.getElementById('latitude').value = e.latlng.lat;
+        document.getElementById('longitude').value = e.latlng.lng;
+
+        // Remove previous marker
+        const map = e.target;
+        if (marker) {
+            map.removeLayer(marker);
+        }
+
+        // Add new marker
+        marker = L.marker([e.latlng.lat, e.latlng.lng], {icon: icon});
+        map.addLayer(marker);
+        marker._icon.classList.add("success");
+    }
+</script>
 </body>
 </html>

@@ -14,6 +14,8 @@ class LocationMapper {
             type = entity.type,
             parentId = entity.parentId,
             population = entity.population ?: 0L,
+            longitude = entity.longitude,
+            latitude = entity.latitude,
         )
     }
 }

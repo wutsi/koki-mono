@@ -476,6 +476,10 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
     border: 1px solid gray !important;
 }
 
+.border-none {
+    border: none;
+}
+
 .border-rounded {
     border-radius: 4px 4px 4px 4px;
 }
