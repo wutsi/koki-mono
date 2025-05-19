@@ -1,0 +1,11 @@
+koki:
+    sdk:
+        base-url: ${KOKI_SERVER_URL}
+
+    storage:
+        type: s3
+        s3:
+            bucket: com-wutsi-koki-prod
+            region: us-east-1
+            access-key: ${AWS_ACCESS_KEY}
+            secret-key: ${AWS_SECRET_KEY}

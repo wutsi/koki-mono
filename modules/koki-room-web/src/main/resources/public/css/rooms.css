@@ -1,0 +1,91 @@
+/* ============================= */
+/* ROOM                          */
+/* ============================= */
+.room-info {
+    max-width: 800px;
+    margin: 6em auto 6em auto;
+}
+
+.room-info-details {
+    margin-top: 1em;
+}
+
+
+.room-info .carousel-indicators [data-bs-target] {
+    width: 4px;
+    height: 4px;
+}
+
+.room-info .carousel-control-next-icon,
+.room-info .carousel-control-prev-icon {
+    background-color: #000;
+}
+
+.room-info .carousel-inner {
+    height: 45vh;
+    background: #000;
+}
+
+.room-info .carousel-inner .image-count {
+    background: white;
+    display: inline-block;
+    border: 1px solid #444;
+    padding: 1px 3px;
+    border-radius: 3px;
+    position: absolute;
+    top: .5em;
+    right: .5em;
+}
+
+.room-info .carousel-inner .carousel-item {
+    margin: auto;
+}
+
+.room-info ul.occupancy-container,
+.room-info ul.location-container,
+.room-info ul.host-summary-container {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.room-info ul.occupancy-container li,
+.room-info ul.location-container li,
+.room-info ul.host-summary-container li {
+    display: inline-block;
+}
+
+.room-info #map {
+    height: 680px;
+}
+
+/* ======================================================================== */
+/*                                                                          */
+/*  MEDIA QUERIES                                                           */
+/*                                                                          */
+/* ======================================================================== */
+@media only screen
+and (max-width: 800px)
+and (orientation: portrait) {
+    .room-info {
+        max-width: 100%;
+        width: 100%;
+        margin: 0;
+    }
+
+    .room-info .carousel-inner {
+        height: auto;
+    }
+
+    .room-info-details {
+        margin: 1em;
+    }
+}
+
+@media only screen
+and (max-width: 600px)
+and (orientation: portrait) {
+    .room-info .carousel-inner {
+        height: auto;
+    }
+}
