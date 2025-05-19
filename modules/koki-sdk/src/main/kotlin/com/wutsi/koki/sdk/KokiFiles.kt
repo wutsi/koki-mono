@@ -1,6 +1,7 @@
 package com.wutsi.koki.sdk
 
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.file.dto.SearchFileResponse
@@ -61,6 +62,7 @@ class KokiFiles(
         ownerId: Long?,
         ownerType: ObjectType?,
         type: FileType?,
+        status: FileStatus?,
         limit: Int,
         offset: Int,
     ): SearchFileResponse {
@@ -70,6 +72,7 @@ class KokiFiles(
                 "owner-id" to ownerId,
                 "owner-type" to ownerType,
                 "type" to type,
+                "status" to status,
                 "limit" to limit,
                 "offset" to offset,
             )
