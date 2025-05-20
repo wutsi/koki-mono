@@ -66,7 +66,7 @@
 
             <div aria-hidden="true" aria-labelledby="room-description-modal-label" class="modal fade"
                  id="room-description-modal" tabindex="-1">
-                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="room-description-modal-label">About this space</h1>
@@ -95,7 +95,7 @@
 
             <div aria-hidden="true" aria-labelledby="room-amenities-modal-label" class="modal fade"
                  id="room-amenities-modal" tabindex="-1">
-                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="room-amenities-modal-label">What this place offers</h1>
@@ -145,17 +145,13 @@
         </div>
 
         <div class="margin-top border-top padding-top host-container">
-            <h2>Your host</h2>
+            <h2>The Host</h2>
             <div>
                 <h3>Ray Sponsible</h3>
                 <ul class="host-summary-container">
                     <li>
                         <i class="fa-solid fa-certificate success"></i>
                         Verified
-                    </li>
-                    <li>
-                        <span>&#x2022;</span>
-                        5 reservation(s)
                     </li>
                     <li>
                         <span>&#x2022;</span>
@@ -168,9 +164,39 @@
                     Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
                     consequat.
                 </div>
-                <button class="btn btn-secondary margin-top">
-                    Message the Host
+                <button class="btn btn-secondary margin-top" data-bs-target="#room-message-modal"
+                        data-bs-toggle="modal">
+                    Send a Message
                 </button>
+                <div aria-hidden="true" aria-labelledby="room-message-modal-label" class="modal fade"
+                     id="room-message-modal" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="room-message-modal-label">Send a Message</h1>
+                                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                                        type="button"></button>
+                            </div>
+                            <div class="modal-body padding-2x">
+                                <form method="post">
+                                    <div class="form-group">
+                                        <input class="form-control" placeholder="Your Name" required/>
+                                    </div>
+                                    <div class="form-group margin-top">
+                                        <input class="form-control" placeholder="Your Email" required type="email"/>
+                                    </div>
+                                    <div class="form-group margin-top">
+                                        <textarea class="form-control" placeholder="Your Name" rows="3"></textarea>
+                                    </div>
+                                    <div class="form-group margin-top">
+                                        <button class="btn btn-primary" type="submit">Send</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
