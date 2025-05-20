@@ -18,6 +18,11 @@ class RoomController(
     private val service: RoomService,
     private val categoryService: CategoryService,
 ) : AbstractPageController() {
+    @GetMapping("/{id}/{title}")
+    fun show(@PathVariable id: Long, @PathVariable title: String, model: Model): String {
+        return show(id, model)
+    }
+
     @GetMapping("/{id}")
     fun show(@PathVariable id: Long, model: Model): String {
         val room = service.room(id)

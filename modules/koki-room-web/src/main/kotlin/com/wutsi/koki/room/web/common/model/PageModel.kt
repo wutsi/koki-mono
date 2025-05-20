@@ -5,5 +5,7 @@ data class PageModel(
     val name: String = "",
     val title: String = "",
     val description: String? = null,
+    val type: String? = null,
+    val image: String? = null,
     val assetUrl: String = "",
 )
