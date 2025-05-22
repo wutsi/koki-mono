@@ -5,4 +5,5 @@ enum class RoomStatus {
     DRAFT,
     PUBLISHING,
     PUBLISHED,
+    EXPIRED
 }
