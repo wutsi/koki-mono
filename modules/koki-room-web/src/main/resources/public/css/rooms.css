@@ -66,19 +66,19 @@
 
 .room-contact-details {
     width: 380px;
-    position: sticky;
-    top: 6.5em;
 }
 
 .room-contact-details-inner {
-    width: 100%;
+    background: white;
+    box-shadow: 0 4px 25px #00000014;
     border: none;
     border-top: 1px solid lightgray;
     border-radius: 10px 10px 10px 10px;
     padding: 1em;
-    box-shadow: 0 4px 25px #00000014;
-    background: white;
+    position: sticky;
+    top: 6.5em;
     text-align: center;
+    width: 100%;
 }
 
 .room-contact-details-inner button {

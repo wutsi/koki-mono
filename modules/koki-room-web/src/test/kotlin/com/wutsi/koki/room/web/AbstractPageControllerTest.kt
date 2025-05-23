@@ -23,6 +23,8 @@ import com.wutsi.koki.refdata.dto.SearchJuridictionResponse
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
 import com.wutsi.koki.refdata.dto.SearchSalesTaxResponse
 import com.wutsi.koki.refdata.dto.SearchUnitResponse
+import com.wutsi.koki.room.dto.GetRoomResponse
+import com.wutsi.koki.room.dto.SearchRoomResponse
 import com.wutsi.koki.room.web.TenantFixtures.tenants
 import com.wutsi.koki.security.dto.ApplicationName
 import com.wutsi.koki.security.dto.JWTDecoder
@@ -180,6 +182,7 @@ abstract class AbstractPageControllerTest {
         setupFileModule()
         setupTenantModule()
         setupUserModule()
+        setupRoomModule()
     }
 
     private fun setupRefDataModule() {
@@ -396,6 +399,31 @@ abstract class AbstractPageControllerTest {
                 any<HttpMethod>(),
                 any(),
                 any<Class<UploadFileResponse>>(),
+            )
+    }
+
+    fun setupRoomModule() {
+        // Room
+        doReturn(
+            ResponseEntity(
+                SearchRoomResponse(RoomFixtures.rooms),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchRoomResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetRoomResponse(RoomFixtures.room),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetRoomResponse::class.java)
             )
     }
 

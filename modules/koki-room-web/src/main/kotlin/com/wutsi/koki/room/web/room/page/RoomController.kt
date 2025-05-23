@@ -55,6 +55,8 @@ class RoomController(
                 name = PageName.ROOM,
                 title = room.title ?: "",
                 description = room.summary,
+                image = room.heroImage?.contentUrl,
+                url = "$baseUrl${room.url}",
             )
         )
         return "rooms/show"

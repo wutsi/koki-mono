@@ -2,9 +2,10 @@ package com.wutsi.koki.room.web.room.mapper
 
 import com.wutsi.koki.room.dto.Room
 import com.wutsi.koki.room.dto.RoomSummary
-import com.wutsi.koki.room.web.common.HtmlUtils
 import com.wutsi.koki.room.web.common.mapper.MoneyMapper
 import com.wutsi.koki.room.web.common.mapper.TenantAwareMapper
+import com.wutsi.koki.room.web.common.util.HtmlUtils
+import com.wutsi.koki.room.web.common.util.StringUtils
 import com.wutsi.koki.room.web.file.model.FileModel
 import com.wutsi.koki.room.web.refdata.model.AddressModel
 import com.wutsi.koki.room.web.refdata.model.AmenityModel
@@ -115,6 +116,7 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             longitude = entity.longitude,
             latitude = entity.latitude,
             images = images,
+            url = StringUtils.toSlug("/rooms/${entity.id}", entity.title)
         )
     }
 }

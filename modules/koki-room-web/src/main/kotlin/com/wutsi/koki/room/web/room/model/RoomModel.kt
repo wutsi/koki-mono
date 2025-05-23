@@ -40,6 +40,7 @@ data class RoomModel(
     val leaseType: LeaseType = LeaseType.UNKNOWN,
     val category: CategoryModel? = null,
     val area: Int? = null,
+    val url: String = "",
 ) {
     fun hasAmenity(amenityId: Long): Boolean {
         return amenities.find { amenity -> amenity.id == amenityId } != null

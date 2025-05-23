@@ -8,6 +8,12 @@
     <title th:text="${page.title}">TITLE</title>
     <meta name="description" th:content="${page.description}" th:if="${page.description}"/>
     <meta name="wutsi:page_name" th:content="${page.name}"/>
+    <meta property="og:site_name" th:content="${tenant.name}"/>
+    <meta property="og:type" th:content="${page.type}"/>
+    <meta property="og:url" th:content="${page.url}"/>
+    <meta property="og:title" th:content="${page.title}"/>
+    <meta property="og:description" th:content="${page.description}"/>
+    <meta property="og:image" th:content="${page.image}" th:if="${page.image}"/>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
