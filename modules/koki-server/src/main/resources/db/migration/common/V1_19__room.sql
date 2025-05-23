@@ -7,21 +7,27 @@ CREATE TABLE T_ROOM(
   deleted_by_fk             BIGINT,
   published_by_fk           BIGINT,
   hero_image_fk             BIGINT,
+  category_fk               BIGINT,
 
   type                      INT NOT NULL DEFAULT 0,
   status                    INT NOT NULL DEFAULT 0,
   deleted                   BOOLEAN NOT NULL DEFAULT false,
-  title                     VARCHAR(100) NOT NULL,
+  title                     VARCHAR(100),
   summary                   VARCHAR(255),
   description               TEXT,
   number_of_rooms           INT NOT NULL DEFAULT 0,
   number_of_bathrooms       INT NOT NULL DEFAULT 0,
   number_of_beds            INT NOT NULL DEFAULT 0,
   max_guests                INT NOT NULL DEFAULT 0,
+  area                      INT NOT NULL DEFAULT 0,
   price_per_night           DECIMAL(10, 2),
+  price_per_month           DECIMAL(10, 2),
   currency                  VARCHAR(3),
   checkin_time              VARCHAR(5),
   checkout_time             VARCHAR(5),
+  lease_type                INT NOT NULL DEFAULT 0,
+  lease_term                INT NOT NULL DEFAULT 0,
+  furnished_type            INT NOT NULL DEFAULT 0,
 
   street                    TEXT,
   postal_code               VARCHAR(30),
@@ -43,7 +49,11 @@ CREATE TABLE T_ROOM(
 
 CREATE INDEX tenant ON T_ROOM(tenant_fk);
 CREATE INDEX `status` ON T_ROOM(status);
+CREATE INDEX `type` ON T_ROOM(type);
 CREATE INDEX city ON T_ROOM(city_fk);
+CREATE INDEX neighborhood ON T_ROOM(neighborhood_fk);
+CREATE INDEX number_of_rooms ON T_ROOM(number_of_rooms);
+CREATE INDEX number_of_bathrooms ON T_ROOM(number_of_bathrooms);
 
 
 CREATE TABLE T_ROOM_AMENITY(

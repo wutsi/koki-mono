@@ -13,12 +13,13 @@ class RoomMustHavePriceRuleTest {
     @Test
     fun success() {
         rule.validate(RoomEntity(pricePerNight = 150000.0))
+        rule.validate(RoomEntity(pricePerMonth = 150000.0))
     }
 
     @Test
     fun noPrice() {
         val ex = assertThrows<ValidationException> {
-            rule.validate(RoomEntity(pricePerNight = null))
+            rule.validate(RoomEntity(pricePerNight = null, pricePerMonth = null))
         }
         assertEquals(ErrorCode.ROOM_PRICE_MISSING, ex.message)
     }
@@ -26,7 +27,7 @@ class RoomMustHavePriceRuleTest {
     @Test
     fun free() {
         val ex = assertThrows<ValidationException> {
-            rule.validate(RoomEntity(pricePerNight = 0.0))
+            rule.validate(RoomEntity(pricePerNight = 0.0, pricePerMonth = 0.0))
         }
         assertEquals(ErrorCode.ROOM_PRICE_MISSING, ex.message)
     }

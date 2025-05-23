@@ -22,6 +22,7 @@ class RoomMapper {
             numberOfBathrooms = entity.numberOfBathrooms,
             numberOfBeds = entity.numberOfBeds,
             maxGuests = entity.maxGuests,
+            area = entity.area,
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
             createdById = entity.createdById,
@@ -30,15 +31,17 @@ class RoomMapper {
             publishedById = entity.publishedById,
             neighborhoodId = entity.neighborhoodId,
             address = toAddress(entity),
-            pricePerNight = Money(
-                amount = entity.pricePerNight ?: 0.0,
-                currency = (entity.currency ?: "")
-            ),
+            pricePerNight = toMoney(entity.pricePerNight, entity.currency),
+            pricePerMonth = toMoney(entity.pricePerMonth, entity.currency),
             amenityIds = entity.amenities.map { amenity -> amenity.id },
             checkinTime = entity.checkinTime,
             checkoutTime = entity.checkoutTime,
             longitude = entity.longitude,
             latitude = entity.latitude,
+            leaseType = entity.leaseType,
+            leaseTerm = entity.leaseTerm,
+            categoryId = entity.categoryId,
+            furnishedType = entity.furnishedType,
         )
     }
 
@@ -56,10 +59,8 @@ class RoomMapper {
             maxGuests = entity.maxGuests,
             neighborhoodId = entity.neighborhoodId,
             address = toAddress(entity),
-            pricePerNight = Money(
-                amount = entity.pricePerNight ?: 0.0,
-                currency = (entity.currency ?: "")
-            ),
+            pricePerNight = toMoney(entity.pricePerNight, entity.currency),
+            pricePerMonth = toMoney(entity.pricePerMonth, entity.currency),
             longitude = entity.longitude,
             latitude = entity.latitude,
         )
@@ -76,6 +77,14 @@ class RoomMapper {
             )
         } else {
             null
+        }
+    }
+
+    fun toMoney(amount: Double?, currency: String?): Money? {
+        return if (amount == null || currency == null) {
+            null
+        } else {
+            Money(amount, currency)
         }
     }
 }

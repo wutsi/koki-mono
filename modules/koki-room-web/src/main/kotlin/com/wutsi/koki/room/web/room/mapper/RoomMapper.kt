@@ -43,7 +43,18 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
                     countryName = Locale(locale.language, address.country).displayCountry
                 )
             },
-            pricePerNight = moneyMapper.toMoneyModel(entity.pricePerNight.amount, entity.pricePerNight.currency),
+            pricePerNight = entity.pricePerNight?.let { price ->
+                moneyMapper.toMoneyModel(
+                    price.amount,
+                    price.currency
+                )
+            },
+            pricePerMonth = entity.pricePerMonth?.let { price ->
+                moneyMapper.toMoneyModel(
+                    price.amount,
+                    price.currency
+                )
+            },
             heroImage = heroImage,
             longitude = entity.longitude,
             latitude = entity.latitude,
@@ -72,6 +83,10 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             numberOfBeds = entity.numberOfBeds,
             maxGuests = entity.maxGuests,
             neighborhood = entity.neighborhoodId?.let { id -> locations[id] },
+            leaseTerm = entity.leaseTerm,
+            leaseType = entity.leaseType,
+            furnishedType = entity.furnishedType,
+            area = entity.area,
             address = entity.address?.let { address ->
                 AddressModel(
                     city = address.cityId?.let { id -> locations[id] },
@@ -82,7 +97,18 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
                     countryName = Locale(locale.language, address.country).displayCountry
                 )
             },
-            pricePerNight = moneyMapper.toMoneyModel(entity.pricePerNight.amount, entity.pricePerNight.currency),
+            pricePerNight = entity.pricePerNight?.let { price ->
+                moneyMapper.toMoneyModel(
+                    price.amount,
+                    price.currency
+                )
+            },
+            pricePerMonth = entity.pricePerMonth?.let { price ->
+                moneyMapper.toMoneyModel(
+                    price.amount,
+                    price.currency
+                )
+            },
             checkinTime = entity.checkinTime,
             checkoutTime = entity.checkoutTime,
             amenities = entity.amenityIds.mapNotNull { id -> amenities[id] },

@@ -42,7 +42,7 @@
                     </div>
 
                     <div class="flex">
-                        <div class="margin-right-2x">
+                        <div class="margin-right-2x" th:if="${room.title}">
                             <b>Title</b><br/>
                             <span th:text="${room.title}">TITLE</span>
                         </div>
@@ -54,9 +54,14 @@
                             <b>Type</b><br/>
                             <div th:replace="~{__components/room :: type(${room.type})}"></div>
                         </div>
-                        <div class="margin-right-2x">
-                            <b>Price/night</b><br/>
-                            <span th:text="${room.pricePerNight}">$$</span>
+                        <div class="margin-right-2x" th:if="${room.hasPrice}">
+                            <b>Price</b><br/>
+                            <div th:if="${room.pricePerNight}">
+                                <span th:text="${room.pricePerNight}">$$</span> per night
+                            </div>
+                            <div th:if="${room.pricePerMonth}">
+                                <span th:text="${room.pricePerMonth}">$$</span> per month
+                            </div>
                         </div>
                     </div>
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>

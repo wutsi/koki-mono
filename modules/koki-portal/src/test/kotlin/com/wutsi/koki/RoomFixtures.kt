@@ -2,6 +2,9 @@ package com.wutsi.koki
 
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.Money
+import com.wutsi.koki.room.dto.FurnishedType
+import com.wutsi.koki.room.dto.LeaseTerm
+import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.Room
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomSummary
@@ -17,7 +20,7 @@ object RoomFixtures {
         RoomSummary(
             id = 1111,
             status = RoomStatus.PUBLISHED,
-            type = RoomType.HOTEL,
+            type = RoomType.ROOM,
             title = "Classic Double Room",
             summary = "Nice double room",
             heroImageId = FileFixtures.images[0].id,
@@ -34,7 +37,7 @@ object RoomFixtures {
         RoomSummary(
             id = 1112,
             status = RoomStatus.PUBLISHED,
-            type = RoomType.HOTEL,
+            type = RoomType.ROOM,
             title = "Comfort Double Room",
             summary = "Comfortable room with stunning view",
             heroImageId = FileFixtures.images[1].id,
@@ -43,6 +46,7 @@ object RoomFixtures {
             numberOfBathrooms = 1,
             numberOfRooms = 1,
             pricePerNight = Money(amount = 100.0, currency = "CAD"),
+            pricePerMonth = Money(amount = 1500.0, currency = "CAD"),
             address = Address(
                 cityId = RefDataFixtures.cities[0].id,
                 country = RefDataFixtures.cities[0].country,
@@ -51,7 +55,7 @@ object RoomFixtures {
         RoomSummary(
             id = 1113,
             status = RoomStatus.PUBLISHED,
-            type = RoomType.HOTEL,
+            type = RoomType.ROOM,
             title = "Deluxe Double Room",
             heroImageId = FileFixtures.images[2].id,
             maxGuests = 3,
@@ -67,7 +71,7 @@ object RoomFixtures {
         RoomSummary(
             id = 1114,
             status = RoomStatus.PUBLISHED,
-            type = RoomType.HOTEL,
+            type = RoomType.ROOM,
             title = "Standard Single Room, 1 Queen Bed",
             maxGuests = 2,
             numberOfBeds = 2,
@@ -82,7 +86,7 @@ object RoomFixtures {
         RoomSummary(
             id = 1115,
             status = RoomStatus.PUBLISHING,
-            type = RoomType.HOTEL,
+            type = RoomType.ROOM,
             title = "Presidential Suite",
             maxGuests = 6,
             numberOfBeds = 3,
@@ -151,6 +155,12 @@ object RoomFixtures {
         checkoutTime = "15:00",
         latitude = 11.43094309,
         longitude = 3.430954,
+        leaseTerm = LeaseTerm.YEARLY,
+        leaseType = LeaseType.SHORT_TERM,
+        furnishedType = FurnishedType.FULLY_FURNISHED,
+        pricePerMonth = Money(1500.0, "CAD"),
+        area = 750,
+        categoryId = RefDataFixtures.categories[0].id,
     )
 
     val roomUnits = listOf(

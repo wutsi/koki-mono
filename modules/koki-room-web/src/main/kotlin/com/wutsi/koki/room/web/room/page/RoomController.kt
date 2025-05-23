@@ -43,11 +43,17 @@ class RoomController(
         }
         model.addAttribute("topAmenities", topAmenities)
 
+        val heroImages = room.images
+            .filter { image -> image.id != room.heroImage?.id }
+            .take(4)
+        model.addAttribute("heroImages21", heroImages.take(2))
+        model.addAttribute("heroImages22", heroImages.subList(2, 4))
+
         model.addAttribute(
             "page",
             createPageModel(
                 name = PageName.ROOM,
-                title = room.title,
+                title = room.title ?: "",
                 description = room.summary,
             )
         )

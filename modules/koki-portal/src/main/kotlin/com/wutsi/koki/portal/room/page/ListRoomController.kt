@@ -55,7 +55,7 @@ class ListRoomController(private val service: RoomService) : AbstractRoomControl
         model: Model
     ): String {
         val rooms = service.rooms(
-            type = type,
+            types = type?.let { listOf(type) } ?: emptyList(),
             status = status,
             limit = limit,
             offset = offset

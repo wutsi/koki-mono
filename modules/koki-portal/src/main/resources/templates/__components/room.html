@@ -10,7 +10,8 @@
                 <li class="breadcrumb-item" th:if="${room}"><a href="/rooms">Rooms</a></li>
                 <li class="breadcrumb-item active" th:if="${room}">
                     <img align="absmiddle" height="24" src="/image/room.png" width="24"/>
-                    <span th:text="${room.title}">ROOM</span>
+                    <span th:if="${room.title}" th:text="${room.title}">ROOM</span>
+                    <span th:if="!${room.title}" th:text="#{'room-type.' + ${room.type}}">TYPE</span>
                 </li>
                 <li class="breadcrumb-item active" th:if="!${room}">Rooms</li>
             </ol>
@@ -53,7 +54,12 @@
     </td>
     <td>
         <a th:href="'/rooms/' + ${room.id}">
-            <span th:text="${room.pricePerNight}">$$$</span>/night
+            <div th:if="${room.pricePerNight}">
+                <span th:text="${room.pricePerNight}">$$</span> per night
+            </div>
+            <div th:if="${room.pricePerMonth}">
+                <span th:text="${room.pricePerMonth}">$$</span> per month
+            </div>
         </a>
     </td>
 </tr>
@@ -86,8 +92,8 @@
 </div>
 
 <table class="table" th:fragment="details(room)">
-    <tr>
-        <td width="15%"><b>Type</b></td>
+    <tr th:if="${room.title}">
+        <td width="15%"><b>Title</b></td>
         <td th:text="${room.title}">TITLE</td>
     </tr>
     <tr th:if="${room.summary}">
@@ -99,6 +105,14 @@
         <td>
             <div th:replace="~{__components/room :: type(${room.type})}"></div>
         </td>
+    </tr>
+    <tr th:if="${room.leaseType.name != 'UNKNOWN'}">
+        <td><b>Lease Type</b></td>
+        <td th:text="#{'lease-type.' + ${room.leaseType}}">TYPE</td>
+    </tr>
+    <tr th:if="${room.furnishedType.name != 'UNKNOWN'}">
+        <td><b>Furnished</b></td>
+        <td th:text="#{'furnished-type.' + ${room.furnishedType}}">TYPE</td>
     </tr>
     <tr>
         <td><b>Status</b></td>
@@ -122,9 +136,23 @@
         <td><b>Max Guests</b></td>
         <td th:text="${room.maxGuests}">00</td>
     </tr>
+    <tr th:if="${room.area > 0}">
+        <td><b>Area</b></td>
+        <td>
+            <span th:text="${room.area}">00</span>
+            m<sup>2</sup>
+        </td>
+    </tr>
     <tr>
-        <td><b>Price/night</b></td>
-        <td th:text="${room.pricePerNight}">$$</td>
+        <td><b>Price</b></td>
+        <td>
+            <div th:if="${room.pricePerNight}">
+                <span th:text="${room.pricePerNight}">$$</span>/night
+            </div>
+            <div th:if="${room.pricePerMonth}">
+                <span th:text="${room.pricePerMonth}">$$</span>/month
+            </div>
+        </td>
     </tr>
     <tr th:if="${room.checkinTime}">
         <td><b>Checkin Time</b></td>

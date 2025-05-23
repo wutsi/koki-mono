@@ -40,7 +40,7 @@ class RoomController(
             "page",
             createPageModel(
                 name = PageName.ROOM,
-                title = room.title,
+                title = room.title ?: "Room",
             )
         )
 
