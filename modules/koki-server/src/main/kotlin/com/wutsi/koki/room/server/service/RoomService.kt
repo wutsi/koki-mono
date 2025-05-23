@@ -46,29 +46,61 @@ class RoomService(
         ids: List<Long> = emptyList(),
         cityId: Long? = null,
         status: RoomStatus? = null,
-        type: RoomType? = null,
+        types: List<RoomType> = emptyList(),
         totalGuests: Int? = null,
+        amenityIds: List<Long> = emptyList(),
+        minRooms: Int? = null,
+        maxRooms: Int? = null,
+        minBathrooms: Int? = null,
+        maxBathrooms: Int? = null,
+        neighborhoodId: Long? = null,
+        categoryIds: List<Long> = emptyList(),
         limit: Int = 20,
         offset: Int = 0
     ): List<RoomEntity> {
-        val jql = StringBuilder("SELECT A FROM RoomEntity A WHERE A.deleted=false AND A.tenantId = :tenantId")
+        val jql = StringBuilder("SELECT R FROM RoomEntity R")
+        if (amenityIds.isNotEmpty()) {
+            jql.append(" JOIN R.amenities A")
+        }
 
+        jql.append(" WHERE R.deleted=false AND R.tenantId = :tenantId")
         if (ids.isNotEmpty()) {
-            jql.append(" AND A.id IN :ids")
+            jql.append(" AND R.id IN :ids")
         }
         if (cityId != null) {
-            jql.append(" AND A.cityId IN :cityId")
+            jql.append(" AND R.cityId IN :cityId")
+        }
+        if (neighborhoodId != null) {
+            jql.append(" AND R.neighborhoodId IN :neighborhoodId")
         }
         if (status != null) {
-            jql.append(" AND A.status IN :status")
+            jql.append(" AND R.status IN :status")
         }
-        if (type != null) {
-            jql.append(" AND A.type IN :type")
+        if (types.isNotEmpty()) {
+            jql.append(" AND R.type IN :types")
         }
         if (totalGuests != null) {
-            jql.append(" AND A.maxGuests >= :totalGuests")
+            jql.append(" AND R.maxGuests >= :totalGuests")
         }
-        jql.append(" ORDER BY A.pricePerNight")
+        if (minRooms != null) {
+            jql.append(" AND R.numberOfRooms >= :minRooms")
+        }
+        if (maxRooms != null) {
+            jql.append(" AND R.numberOfRooms <= :maxRooms")
+        }
+        if (minBathrooms != null) {
+            jql.append(" AND R.numberOfBathrooms >= :minBathrooms")
+        }
+        if (maxBathrooms != null) {
+            jql.append(" AND R.numberOfBathrooms <= :maxBathrooms")
+        }
+        if (categoryIds.isNotEmpty()) {
+            jql.append(" AND R.categoryId IN :categoryIds")
+        }
+        if (amenityIds.isNotEmpty()) {
+            jql.append(" AND A.id IN :amenityIds")
+        }
+        jql.append(" ORDER BY R.pricePerNight")
 
         val query = em.createQuery(jql.toString(), RoomEntity::class.java)
         query.setParameter("tenantId", tenantId)
@@ -78,14 +110,35 @@ class RoomService(
         if (cityId != null) {
             query.setParameter("cityId", cityId)
         }
+        if (neighborhoodId != null) {
+            query.setParameter("neighborhoodId", neighborhoodId)
+        }
         if (status != null) {
             query.setParameter("status", status)
         }
-        if (type != null) {
-            query.setParameter("type", type)
+        if (types.isNotEmpty()) {
+            query.setParameter("types", types)
         }
         if (totalGuests != null) {
             query.setParameter("totalGuests", totalGuests)
+        }
+        if (minRooms != null) {
+            query.setParameter("minRooms", minRooms)
+        }
+        if (maxRooms != null) {
+            query.setParameter("maxRooms", maxRooms)
+        }
+        if (minBathrooms != null) {
+            query.setParameter("minBathrooms", minBathrooms)
+        }
+        if (maxBathrooms != null) {
+            query.setParameter("maxBathrooms", maxBathrooms)
+        }
+        if (amenityIds.isNotEmpty()) {
+            query.setParameter("amenityIds", amenityIds)
+        }
+        if (categoryIds.isNotEmpty()) {
+            query.setParameter("categoryIds", categoryIds)
         }
 
         query.firstResult = offset
@@ -103,23 +156,26 @@ class RoomService(
                 tenantId = tenantId,
                 type = request.type,
                 status = RoomStatus.DRAFT,
-                title = request.title,
-                description = request.description,
                 maxGuests = request.maxGuests,
                 numberOfBathrooms = request.numberOfBathrooms,
                 numberOfRooms = request.numberOfRooms,
                 numberOfBeds = request.numberOfBeds,
+                area = request.area,
                 pricePerNight = if (request.pricePerNight == 0.0) null else request.pricePerNight,
+                pricePerMonth = if (request.pricePerMonth == 0.0) null else request.pricePerMonth,
                 currency = request.currency,
                 checkinTime = request.checkinTime,
                 checkoutTime = request.checkoutTime,
+                leaseTerm = request.leaseTerm,
+                furnishedType = request.furnishedType,
+                categoryId = request.categoryId,
+                leaseType = request.leaseType,
 
                 street = request.street,
                 postalCode = request.postalCode,
                 cityId = request.cityId,
                 stateId = city?.parentId,
                 neighborhoodId = request.neighborhoodId,
-
                 country = city?.country,
 
                 createdById = userId,
@@ -140,14 +196,21 @@ class RoomService(
         room.type = request.type
         room.title = request.title
         room.description = request.description
+        room.summary = request.summary
         room.maxGuests = request.maxGuests
         room.numberOfBathrooms = request.numberOfBathrooms
         room.numberOfRooms = request.numberOfRooms
         room.numberOfBeds = request.numberOfBeds
+        room.area = request.area
         room.pricePerNight = if (request.pricePerNight == 0.0) null else request.pricePerNight
+        room.pricePerMonth = if (request.pricePerMonth == 0.0) null else request.pricePerMonth
         room.currency = request.currency
         room.checkinTime = request.checkinTime
         room.checkoutTime = request.checkoutTime
+        room.leaseTerm = request.leaseTerm
+        room.furnishedType = request.furnishedType
+        room.categoryId = request.categoryId
+        room.leaseType = request.leaseType
 
         room.street = request.street
         room.postalCode = request.postalCode

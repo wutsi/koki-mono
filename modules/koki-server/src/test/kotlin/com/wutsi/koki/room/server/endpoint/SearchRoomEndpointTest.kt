@@ -73,4 +73,59 @@ class SearchRoomEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(2, rooms.size)
         assertEquals(listOf(111L, 113L), rooms.map { room -> room.id }.sorted())
     }
+
+    @Test
+    fun `by rooms`() {
+        val response = rest.getForEntity("/v1/rooms?min-rooms=2&max-rooms=3", SearchRoomResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val rooms = response.body!!.rooms
+        assertEquals(4, rooms.size)
+        assertEquals(listOf(111L, 112L, 113L, 114L), rooms.map { room -> room.id }.sorted())
+    }
+
+    @Test
+    fun `by bathrooms`() {
+        val response = rest.getForEntity("/v1/rooms?min-bathrooms=5&max-bathrooms=6", SearchRoomResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val rooms = response.body!!.rooms
+        assertEquals(2, rooms.size)
+        assertEquals(listOf(115L, 116L), rooms.map { room -> room.id }.sorted())
+    }
+
+    @Test
+    fun `by neighborhood`() {
+        val response = rest.getForEntity("/v1/rooms?neighborhood-id=100112", SearchRoomResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val rooms = response.body!!.rooms
+        assertEquals(2, rooms.size)
+        assertEquals(listOf(112L, 114L), rooms.map { room -> room.id }.sorted())
+    }
+
+    @Test
+    fun `by category-id`() {
+        val response = rest.getForEntity("/v1/rooms?category-id=55&category-id=33", SearchRoomResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val rooms = response.body!!.rooms
+        assertEquals(3, rooms.size)
+        assertEquals(listOf(111L, 115L, 116L), rooms.map { it.id })
+    }
+
+    @Test
+    fun `by amenity-id`() {
+        val response = rest.getForEntity("/v1/rooms?amenity-id=1&amenity-id=2", SearchRoomResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val rooms = response.body!!.rooms
+        assertEquals(3, rooms.size)
+        assertEquals(listOf(111L, 114L, 115L), rooms.map { it.id })
+    }
 }

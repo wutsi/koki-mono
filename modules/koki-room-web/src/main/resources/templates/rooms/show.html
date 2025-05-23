@@ -8,37 +8,49 @@
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
 
-<div class="room-info">
-    <div class="carousel slide" id="image-gallery">
-        <div class="carousel-indicators">
-            <button data-bs-target="#image-gallery" th:aria-label="${image.title}"
-                    th:classappend="${it.index == 0} ? 'active'"
-                    th:data-bs-slide-to="${it.index}"
-                    th:each="image,it: ${room.images}"
-                    type="button"
-            ></button>
-        </div>
-        <div class="carousel-inner">
-            <div class="carousel-item" th:classappend="${it.index == 0} ? 'active'" th:each="image,it: ${room.images}">
-                <img class="d-block w-100" th:alt="${image.title}" th:src="${image.contentUrl}">
-            </div>
-            <div class="image-count">
-                <i class="fa-regular fa-images"></i>
-                <span th:text="${room.images.size()}">00</span>
-            </div>
-        </div>
-        <button class="carousel-control-prev" data-bs-slide="prev" data-bs-target="#image-gallery" type="button">
-            <span aria-hidden="true" class="carousel-control-prev-icon"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" data-bs-slide="next" data-bs-target="#image-gallery" type="button">
-            <span aria-hidden="true" class="carousel-control-next-icon"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
+<!-- images -->
+<div class="hero-image-container">
+    <div class="hero-1">
+        <a data-bs-target="#room-image-modal" data-bs-toggle="modal" href="#" role="button">
+            <img th:src="${room.heroImage.contentUrl}"/>
+        </a>
     </div>
+    <div class="hero-2">
+        <div class="hero-21">
+            <a data-bs-target="#room-image-modal" data-bs-toggle="modal" href="#" role="button">
+                <img th:each="img : ${heroImages21}" th:src="${img.contentUrl}"/>
+            </a>
+        </div>
+        <div class="hero-22">
+            <a data-bs-target="#room-image-modal" data-bs-toggle="modal" href="#" role="button">
+                <img th:each="img : ${heroImages22}" th:src="${img.contentUrl}"/>
+            </a>
+        </div>
+    </div>
+</div>
+<button class="image-counter" data-bs-target="#room-image-modal" data-bs-toggle="modal">
+    <i class="fa-solid fa-grip"></i>
+    Show all <span th:text="${room.images.size()}">00</span> photos
+</button>
+<div aria-hidden="true" aria-labelledby="room-image-modal-label" class="modal fade"
+     id="room-image-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="room-image-modal-label"></h1>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+            </div>
+            <div class="modal-body padding">
+                PHOTOS
+            </div>
+        </div>
+    </div>
+</div>
 
+<div class="room-info">
+    <!-- infos -->
     <div class="room-info-details">
-        <h1 th:text="${room.title}">TITLE</h1>
+        <h1 id="room-title" th:if="${room.title}" th:text="${room.title}">TITLE</h1>
         <ul class="occupancy-container">
             <li>
                 <span th:text="${room.maxGuests}">00</span> guest(s)
@@ -55,12 +67,16 @@
                 <span>&#x2022;</span>
                 <span th:text="${room.numberOfRooms}">00</span> baths
             </li>
+            <li th:if="${room.area > 0}">
+                <span>&#x2022;</span>
+                <span th:text="${room.area}">00</span> m<sup>2</sup>
+            </li>
         </ul>
 
-        <div class="margin-top border-top padding-top description-container">
-            <div th:utext="${room.summary}">DESCRIPTION</div>
-            <button class="btn btn-secondary margin-top" data-bs-target="#room-description-modal"
-                    data-bs-toggle="modal">
+        <div class="margin-top border-top padding-top description-container" th:if="${room.description}">
+            <div id="room-summary" th:utext="${room.summary}">SUMMARY</div>
+            <button class="btn btn-secondary margin-top" data-bs-target="#room-description-modal" data-bs-toggle="modal"
+                    id="btn-description">
                 Show More
             </button>
 
@@ -70,7 +86,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="room-description-modal-label">About this space</h1>
-                            <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                            <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                                    type="button"></button>
                         </div>
                         <div class="modal-body padding-2x" th:utext="${room.descriptionHtml}">DESCRIPTION</div>
                     </div>
@@ -82,6 +99,15 @@
             <h2>What this place offers</h2>
             <div class="container-fluid">
                 <div class="row">
+                    <div class="col-6" th:if="${room.furnishedType.name() == 'FULLY_FURNISHED'}">
+                        <i class="fa-solid fa-couch"></i>
+                        <span>Fully Furnished</span>
+                    </div>
+                    <div class="col-6" th:if="${room.furnishedType.name() == 'SEMI_FURNISHED'}">
+                        <i class="fa-solid fa-chair"></i>
+                        <span>Semi Furnished</span>
+                    </div>
+
                     <div class="col-6" th:each="amenity:${topAmenities}">
                         <i th:class="${amenity.icon}" th:if="${amenity.icon}"></i>
                         <span th:text="${amenity.name}">AMENITY</span>
@@ -89,7 +115,8 @@
                 </div>
             </div>
             <button class="btn btn-secondary margin-top" data-bs-target="#room-amenities-modal" data-bs-toggle="modal"
-                    th:if="${topAmenities.size() < room.amenities.size()}">
+                    id="btn-amenities"
+                    th:if="!${room.amenities.isEmpty()} AND ${topAmenities.size() < room.amenities.size()}">
                 Show all <span th:text="${room.amenities.size()}"></span> amenities
             </button>
 
@@ -99,14 +126,17 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="room-amenities-modal-label">What this place offers</h1>
-                            <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                            <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                                    type="button"></button>
                         </div>
                         <div class="modal-body padding-2x">
                             <div class="row">
                                 <div class="col-md-6 col-12" th:each="category : ${categories}">
                                     <h3 th:text="${category.name}">CATEGORY</h3>
                                     <ul>
-                                        <li th:each="amenity:${room.amenitiesByCategoryId(category.id)}"
+                                        <li class="amenity"
+                                            th:each="amenity:${room.amenitiesByCategoryId(category.id)}"
+                                            th:id="'amenity-' + ${amenity.id}"
                                             th:text="${amenity.name}">
                                             AMENITY
                                         </li>
@@ -134,7 +164,7 @@
                 </li>
             </ul>
             <div class="margin-top" data-component-id="map"
-                 id="map"
+                 id="room-map"
                  th:data-latitude="${room.latitude}"
                  th:data-longitude="${room.longitude}"
                  th:data-show-marker="true"
@@ -143,60 +173,55 @@
             >
             </div>
         </div>
+    </div>
 
-        <div class="margin-top border-top padding-top host-container">
-            <h2>The Host</h2>
-            <div>
-                <h3>Ray Sponsible</h3>
-                <ul class="host-summary-container">
-                    <li>
-                        <i class="fa-solid fa-certificate success"></i>
-                        Verified
-                    </li>
-                    <li>
-                        <span>&#x2022;</span>
-                        Respond within 2 hours
-                    </li>
-                </ul>
-                <div class="margin-top">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua.
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat.
+    <!-- Contact -->
+    <div class="room-contact-details">
+        <div class="room-contact-details-inner">
+            <div id="room-price">
+                <div th:if="${room.pricePerMonth}">
+                    <div class="text-x-large text-primary" th:text="${room.pricePerMonth}">$$$$</div>
+                    <div class="text-small">per month</div>
                 </div>
-                <button class="btn btn-secondary margin-top" data-bs-target="#room-message-modal"
-                        data-bs-toggle="modal">
+                <div th:if="!${room.pricePerMonth} AND ${room.pricePerNight}">
+                    <div class="text-x-large text-primary" th:text="${room.pricePerNight}">$$$$</div>
+                    <div class="text-small">per night</div>
+                </div>
+            </div>
+            <div>
+                <button class="btn btn-primary" data-bs-target="#room-message-modal" data-bs-toggle="modal"
+                        id="btn-contact-us">
                     Send a Message
                 </button>
-                <div aria-hidden="true" aria-labelledby="room-message-modal-label" class="modal fade"
-                     id="room-message-modal" tabindex="-1">
-                    <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="room-message-modal-label">Send a Message</h1>
-                                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
-                                        type="button"></button>
-                            </div>
-                            <div class="modal-body padding-2x">
-                                <form method="post">
-                                    <div class="form-group">
-                                        <input class="form-control" placeholder="Your Name" required/>
-                                    </div>
-                                    <div class="form-group margin-top">
-                                        <input class="form-control" placeholder="Your Email" required type="email"/>
-                                    </div>
-                                    <div class="form-group margin-top">
-                                        <textarea class="form-control" placeholder="Your Name" rows="3"></textarea>
-                                    </div>
-                                    <div class="form-group margin-top">
-                                        <button class="btn btn-primary" type="submit">Send</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+<div aria-hidden="true" aria-labelledby="room-message-modal-label" class="modal fade"
+     id="room-message-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="room-message-modal-label">Send a Message</h1>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                        type="button"></button>
+            </div>
+            <div class="modal-body padding-2x">
+                <form method="post">
+                    <div class="form-group">
+                        <input class="form-control" placeholder="Your Name" required/>
+                    </div>
+                    <div class="form-group margin-top">
+                        <input class="form-control" placeholder="Your Email" required type="email"/>
+                    </div>
+                    <div class="form-group margin-top">
+                        <textarea class="form-control" placeholder="Enter your message" rows="3"></textarea>
+                    </div>
+                    <div class="form-group margin-top">
+                        <button class="btn btn-primary" type="submit">Send</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

@@ -1,6 +1,9 @@
 package com.wutsi.koki.room.server.domain
 
 import com.wutsi.koki.refdata.server.domain.AmenityEntity
+import com.wutsi.koki.room.dto.FurnishedType
+import com.wutsi.koki.room.dto.LeaseTerm
+import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
 import jakarta.persistence.Column
@@ -39,17 +42,19 @@ data class RoomEntity(
     var type: RoomType = RoomType.UNKNOWN,
     var status: RoomStatus = RoomStatus.UNKNOWN,
     var deleted: Boolean = false,
-    var title: String = "",
+    var title: String? = null,
     var summary: String? = null,
     var description: String? = null,
     var numberOfRooms: Int = 0,
     var numberOfBathrooms: Int = 0,
     var numberOfBeds: Int = 0,
     var maxGuests: Int = 0,
+    var area: Int = 0,
     var checkinTime: String? = null,
     var checkoutTime: String? = null,
 
     var pricePerNight: Double? = null,
+    var pricePerMonth: Double? = null,
     var currency: String? = null,
 
     @Column("city_fk") var cityId: Long? = null,
@@ -60,6 +65,12 @@ data class RoomEntity(
     var country: String? = null,
     var latitude: Double? = null,
     var longitude: Double? = null,
+    var leaseTerm: LeaseTerm = LeaseTerm.UNKNOWN,
+    var furnishedType: FurnishedType = FurnishedType.UNKNOWN,
+    var leaseType: LeaseType = LeaseType.UNKNOWN,
+
+    @Column("category_fk")
+    var categoryId: Long? = null,
 
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),

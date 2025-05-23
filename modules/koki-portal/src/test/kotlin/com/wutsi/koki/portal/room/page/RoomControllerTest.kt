@@ -90,8 +90,8 @@ class RoomControllerTest : AbstractPageControllerTest() {
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ROOM)
 
-        assertElementPresent(".btn-edit")
-        assertElementPresent(".btn-map")
+        assertElementNotPresent(".btn-edit")
+        assertElementNotPresent(".btn-map")
         assertElementNotPresent(".btn-publish")
         assertElementNotPresent(".btn-delete")
     }

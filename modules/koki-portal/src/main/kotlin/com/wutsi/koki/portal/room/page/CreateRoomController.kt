@@ -5,6 +5,9 @@ import com.wutsi.koki.portal.refdata.service.LocationService
 import com.wutsi.koki.portal.room.form.RoomForm
 import com.wutsi.koki.portal.room.service.RoomService
 import com.wutsi.koki.portal.security.RequiresPermission
+import com.wutsi.koki.room.dto.FurnishedType
+import com.wutsi.koki.room.dto.LeaseTerm
+import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -25,11 +28,7 @@ class CreateRoomController(
     @GetMapping("/create")
     fun create(model: Model): String {
         return create(
-            RoomForm(
-                currency = tenantHolder.get()?.currency ?: "",
-                checkinTime = "15:00",
-                checkoutTime = "12:00",
-            ),
+            RoomForm(currency = tenantHolder.get()?.currency,),
             model,
         )
     }
@@ -62,7 +61,10 @@ class CreateRoomController(
 
         loadCheckinCheckoutTime(model)
         loadCountries(model)
-        model.addAttribute("types", RoomType.entries.filter { entry -> entry != RoomType.UNKNOWN })
+        model.addAttribute("types", RoomType.entries)
+        model.addAttribute("leaseTerms", LeaseTerm.entries)
+        model.addAttribute("leaseTypes", LeaseType.entries)
+        model.addAttribute("furnishedTypes", FurnishedType.entries)
 
         val currency = Currency.getInstance(tenantHolder.get()!!.currency)
         model.addAttribute("currencies", listOf(currency))

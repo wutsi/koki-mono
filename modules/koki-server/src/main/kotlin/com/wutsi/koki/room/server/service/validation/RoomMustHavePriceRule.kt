@@ -7,8 +7,12 @@ import jakarta.validation.ValidationException
 
 class RoomMustHavePriceRule : PublishRule {
     override fun validate(room: RoomEntity) {
-        if (room.pricePerNight == null || room.pricePerNight == 0.0) {
+        if (!isAvailable(room.pricePerMonth) && !isAvailable(room.pricePerNight)) {
             throw ValidationException(ErrorCode.ROOM_PRICE_MISSING)
         }
+    }
+
+    private fun isAvailable(price: Double?): Boolean {
+        return price != null && price > 0
     }
 }

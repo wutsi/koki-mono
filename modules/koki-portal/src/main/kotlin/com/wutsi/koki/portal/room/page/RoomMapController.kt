@@ -31,7 +31,7 @@ class RoomMapController(
             "page",
             createPageModel(
                 name = PageName.ROOM_MAP,
-                title = room.title,
+                title = room.title ?: "Room - Title",
             )
         )
 

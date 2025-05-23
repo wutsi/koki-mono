@@ -6,6 +6,7 @@ import com.wutsi.koki.portal.file.service.FileService
 import com.wutsi.koki.portal.refdata.model.AmenityModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.refdata.service.AmenityService
+import com.wutsi.koki.portal.refdata.service.CategoryService
 import com.wutsi.koki.portal.refdata.service.LocationService
 import com.wutsi.koki.portal.room.form.GeoLocationForm
 import com.wutsi.koki.portal.room.form.RoomForm
@@ -30,6 +31,7 @@ class RoomService(
     private val userService: UserService,
     private val amenityService: AmenityService,
     private val fileService: FileService,
+    private val categoryService: CategoryService,
 ) {
     fun room(id: Long, fullGraph: Boolean = true): RoomModel {
         val room = koki.room(id).room
@@ -64,7 +66,17 @@ class RoomService(
         val image = if (!fullGraph || room.heroImageId == null) {
             null
         } else {
-            fileService.file(room.heroImageId!!)
+            try {
+                fileService.file(room.heroImageId!!)
+            } catch (ex: Exception) {
+                null
+            }
+        }
+
+        val category = if (!fullGraph || room.categoryId == null) {
+            null
+        } else {
+            categoryService.category(room.categoryId!!)
         }
 
         return mapper.toRoomModel(
@@ -73,6 +85,7 @@ class RoomService(
             users = users,
             amenities = amenities,
             image = image,
+            category = category
         )
     }
 
@@ -80,8 +93,7 @@ class RoomService(
         ids: List<Long> = emptyList(),
         cityId: Long? = null,
         status: RoomStatus? = null,
-        type: RoomType? = null,
-        totalGuests: Int? = null,
+        types: List<RoomType> = emptyList(),
         limit: Int = 20,
         offset: Int = 0,
         fullGraph: Boolean = true,
@@ -90,8 +102,15 @@ class RoomService(
             ids = ids,
             cityId = cityId,
             status = status,
-            type = type,
-            totalGuests = totalGuests,
+            types = types,
+            maxRooms = null,
+            minRooms = null,
+            maxBathrooms = null,
+            minBathrooms = null,
+            amenityIds = emptyList(),
+            neighborhoodId = null,
+            categoryIds = emptyList(),
+            totalGuests = null,
             limit = limit,
             offset = offset,
         ).rooms
@@ -129,20 +148,24 @@ class RoomService(
         return koki.create(
             request = CreateRoomRequest(
                 type = form.type,
-                title = form.title,
-                description = form.description?.ifEmpty { null },
                 numberOfRooms = form.numberOfRooms,
                 numberOfBeds = form.numberOfBeds,
                 numberOfBathrooms = form.numberOfBathrooms,
                 maxGuests = form.maxGuests,
-                currency = form.currency,
+                currency = form.currency ?: "",
                 pricePerNight = form.pricePerNight,
+                pricePerMonth = form.pricePerMonth,
                 cityId = form.cityId,
                 postalCode = form.postalCode,
                 street = form.street,
                 checkoutTime = form.checkoutTime?.ifEmpty { null },
                 checkinTime = form.checkinTime?.ifEmpty { null },
                 neighborhoodId = form.neighborhoodId,
+                area = form.area ?: 0,
+                leaseTerm = form.leaseTerm,
+                leaseType = form.leaseType,
+                categoryId = form.categoryId,
+                furnishedType = form.furnishedType,
             )
         ).roomId
     }
@@ -159,12 +182,18 @@ class RoomService(
                 maxGuests = form.maxGuests,
                 currency = form.currency,
                 pricePerNight = form.pricePerNight,
+                pricePerMonth = form.pricePerMonth,
                 cityId = form.cityId,
                 postalCode = form.postalCode,
                 street = form.street,
                 checkoutTime = form.checkoutTime?.ifEmpty { null },
                 checkinTime = form.checkinTime?.ifEmpty { null },
                 neighborhoodId = form.neighborhoodId,
+                area = form.area ?: 0,
+                leaseTerm = form.leaseTerm,
+                leaseType = form.leaseType,
+                categoryId = form.categoryId,
+                furnishedType = form.furnishedType,
             )
         )
     }

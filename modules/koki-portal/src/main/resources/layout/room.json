@@ -2,8 +2,7 @@
   "tabs": {
     "main": [
       "image",
-      "room-amenity",
-      "room-unit"
+      "room-amenity"
     ]
   }
 }

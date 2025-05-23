@@ -7,6 +7,7 @@ import com.wutsi.koki.room.web.tenant.model.TenantModel
 import com.wutsi.koki.room.web.tenant.service.CurrentTenantHolder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.client.HttpClientErrorException
 
@@ -17,6 +18,9 @@ abstract class AbstractPageController {
     @Value("\${koki.webapp.asset-url}")
     protected lateinit var assetUrl: String
 
+    @Value("\${koki.webapp.base-url}")
+    protected lateinit var baseUrl: String
+
     @Autowired
     protected lateinit var tenantHolder: CurrentTenantHolder
 
@@ -25,12 +29,21 @@ abstract class AbstractPageController {
         return tenantHolder.get()
     }
 
-    protected open fun createPageModel(name: String, title: String, description: String? = null): PageModel {
+    protected open fun createPageModel(
+        name: String,
+        title: String,
+        description: String? = null,
+        image: String? = null,
+        url: String? = null,
+    ): PageModel {
         return PageModel(
             name = name,
             title = title,
             description = description,
+            image = image,
+            url = url,
             assetUrl = assetUrl,
+            language = LocaleContextHolder.getLocale().language
         )
     }
 

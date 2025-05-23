@@ -6,6 +6,9 @@ import com.wutsi.koki.portal.room.form.RoomForm
 import com.wutsi.koki.portal.room.model.RoomModel
 import com.wutsi.koki.portal.room.service.RoomService
 import com.wutsi.koki.portal.security.RequiresPermission
+import com.wutsi.koki.room.dto.FurnishedType
+import com.wutsi.koki.room.dto.LeaseTerm
+import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -32,19 +35,25 @@ class EditRoomController(
         val room = service.room(id)
         val form = RoomForm(
             type = room.type,
-            title = room.title,
-            description = room.description,
             numberOfRooms = room.numberOfRooms,
             numberOfBathrooms = room.numberOfBathrooms,
             numberOfBeds = room.numberOfBeds,
             maxGuests = room.maxGuests,
-            pricePerNight = room.pricePerNight.value,
-            currency = room.pricePerNight.currency,
+            pricePerNight = room.pricePerNight?.value,
+            currency = room.pricePerNight?.currency,
             cityId = room.address?.city?.id,
             country = room.address?.country,
             street = room.address?.street,
             postalCode = room.address?.postalCode,
             neighborhoodId = room.neighborhood?.id,
+            area = room.area,
+            categoryId = room.category?.id,
+            leaseTerm = room.leaseTerm,
+            leaseType = room.leaseType,
+            furnishedType = room.furnishedType,
+            title = room.title,
+            description = room.description,
+            summary = room.summary,
         )
         return edit(room, form, model)
     }
@@ -74,13 +83,16 @@ class EditRoomController(
             "page",
             createPageModel(
                 name = PageName.ROOM_EDIT,
-                title = room.title,
+                title = room.title ?: "Edit Room",
             )
         )
 
         loadCheckinCheckoutTime(model)
         loadCountries(model)
-        model.addAttribute("types", RoomType.entries.filter { entry -> entry != RoomType.UNKNOWN })
+        model.addAttribute("types", RoomType.entries)
+        model.addAttribute("leaseTerms", LeaseTerm.entries)
+        model.addAttribute("leaseTypes", LeaseType.entries)
+        model.addAttribute("furnishedTypes", FurnishedType.entries)
 
         val currency = Currency.getInstance(tenantHolder.get()!!.currency)
         model.addAttribute("currencies", listOf(currency))
