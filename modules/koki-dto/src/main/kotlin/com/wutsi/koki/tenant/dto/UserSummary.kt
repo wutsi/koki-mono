@@ -4,6 +4,7 @@ import java.util.Date
 
 data class UserSummary(
     val id: Long = -1,
+    val accountId: Long? = null,
     var username: String = "",
     val email: String = "",
     val status: UserStatus = UserStatus.NEW,

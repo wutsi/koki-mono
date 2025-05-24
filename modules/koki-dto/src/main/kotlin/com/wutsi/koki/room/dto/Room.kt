@@ -6,6 +6,7 @@ import java.util.Date
 
 data class Room(
     val id: Long = -1,
+    val accountId: Long = -1,
     val heroImageId: Long? = null,
     val type: RoomType = RoomType.UNKNOWN,
     val status: RoomStatus = RoomStatus.UNKNOWN,

@@ -13,4 +13,5 @@ data class CreateUserRequest(
     val status: UserStatus = UserStatus.NEW,
     val type: UserType = UserType.UNKNOWN,
     val roleIds: List<Long> = emptyList(),
+    val accountId: Long? = null,
 )

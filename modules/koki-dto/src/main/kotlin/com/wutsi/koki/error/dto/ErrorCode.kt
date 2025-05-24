@@ -120,4 +120,6 @@ object ErrorCode {
     val USER_DUPLICATE_EMAIL: String = "$PREFIX:user:duplicate-email"
     val USER_DUPLICATE_USERNAME: String = "$PREFIX:user:duplicate-username"
     val USER_ALREADY_ASSIGNED: String = "$PREFIX:user:already-assigned"
+    val USER_ACCOUNT_ID_MISSING: String = "$PREFIX:user:account-id-missing"
+    val USER_ACCOUNT_ID_SHOULD_BE_NULL: String = "$PREFIX:user:account-id-should-be-null"
 }

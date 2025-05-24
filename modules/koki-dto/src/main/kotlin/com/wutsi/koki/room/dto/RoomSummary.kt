@@ -5,6 +5,7 @@ import com.wutsi.koki.refdata.dto.Money
 
 data class RoomSummary(
     val id: Long = -1,
+    val accountId: Long = -1,
     val heroImageId: Long? = null,
     val type: RoomType = RoomType.UNKNOWN,
     val status: RoomStatus = RoomStatus.UNKNOWN,

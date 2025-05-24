@@ -2,6 +2,7 @@ CREATE TABLE T_ROOM(
   id                        BIGINT NOT NULL AUTO_INCREMENT,
 
   tenant_fk                 BIGINT NOT NULL,
+  account_fk                BIGINT NOT NULL,
   created_by_fk             BIGINT,
   modified_by_fk            BIGINT,
   deleted_by_fk             BIGINT,
@@ -51,6 +52,7 @@ CREATE INDEX tenant ON T_ROOM(tenant_fk);
 CREATE INDEX `status` ON T_ROOM(status);
 CREATE INDEX `type` ON T_ROOM(type);
 CREATE INDEX city ON T_ROOM(city_fk);
+CREATE INDEX account ON T_ROOM(account_fk);
 CREATE INDEX neighborhood ON T_ROOM(neighborhood_fk);
 CREATE INDEX number_of_rooms ON T_ROOM(number_of_rooms);
 CREATE INDEX number_of_bathrooms ON T_ROOM(number_of_bathrooms);

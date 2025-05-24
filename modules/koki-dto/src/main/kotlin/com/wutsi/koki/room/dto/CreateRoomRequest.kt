@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Size
 
 data class CreateRoomRequest(
+    val accountId: Long = -1,
     val type: RoomType = RoomType.UNKNOWN,
     val numberOfRooms: Int = -1,
     val numberOfBathrooms: Int = -1,
