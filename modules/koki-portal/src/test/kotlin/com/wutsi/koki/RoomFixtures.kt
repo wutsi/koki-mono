@@ -19,6 +19,7 @@ object RoomFixtures {
     val rooms = listOf(
         RoomSummary(
             id = 1111,
+            accountId = AccountFixtures.accounts[0].id,
             status = RoomStatus.PUBLISHED,
             type = RoomType.ROOM,
             title = "Classic Double Room",
@@ -36,6 +37,7 @@ object RoomFixtures {
         ),
         RoomSummary(
             id = 1112,
+            accountId = AccountFixtures.accounts[0].id,
             status = RoomStatus.PUBLISHED,
             type = RoomType.ROOM,
             title = "Comfort Double Room",
@@ -54,6 +56,7 @@ object RoomFixtures {
         ),
         RoomSummary(
             id = 1113,
+            accountId = AccountFixtures.accounts[0].id,
             status = RoomStatus.PUBLISHED,
             type = RoomType.ROOM,
             title = "Deluxe Double Room",
@@ -70,6 +73,7 @@ object RoomFixtures {
         ),
         RoomSummary(
             id = 1114,
+            accountId = AccountFixtures.accounts[0].id,
             status = RoomStatus.PUBLISHED,
             type = RoomType.ROOM,
             title = "Standard Single Room, 1 Queen Bed",
@@ -85,6 +89,7 @@ object RoomFixtures {
         ),
         RoomSummary(
             id = 1115,
+            accountId = AccountFixtures.accounts[0].id,
             status = RoomStatus.PUBLISHING,
             type = RoomType.ROOM,
             title = "Presidential Suite",
@@ -100,6 +105,7 @@ object RoomFixtures {
         ),
         RoomSummary(
             id = 1116,
+            accountId = AccountFixtures.accounts[0].id,
             status = RoomStatus.PUBLISHED,
             type = RoomType.APARTMENT,
             title = "Windmill in Ponta Delgada",
@@ -119,6 +125,7 @@ object RoomFixtures {
 
     val room = Room(
         id = 1115,
+        accountId = AccountFixtures.accounts[0].id,
         status = RoomStatus.DRAFT,
         type = RoomType.APARTMENT,
         title = "Windmill in Ponta Delgada",

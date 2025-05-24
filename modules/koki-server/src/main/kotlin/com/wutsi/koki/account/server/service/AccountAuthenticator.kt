@@ -16,6 +16,7 @@ import com.wutsi.koki.tenant.server.service.UserService
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import jdk.internal.joptsimple.internal.Messages.message
+import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import org.springframework.stereotype.Service
 
 @Service
@@ -49,11 +50,7 @@ class AccountAuthenticator(
             if (!passwordService.matches(request.password, user.password, user.salt)) {
                 throw ConflictException(error = Error(ErrorCode.AUTHENTICATION_FAILED))
             }
-            val account = accountService.search(
-                userIds = listOf(user.id ?: -1),
-                tenantId = user.tenantId,
-                limit = 1,
-            ).firstOrNull()
+            val account = user.accountId?.let { accountId -> accountService.get(accountId, user.tenantId) }
                 ?: throw ConflictException(
                     error = Error(
                         code = ErrorCode.AUTHENTICATION_FAILED,

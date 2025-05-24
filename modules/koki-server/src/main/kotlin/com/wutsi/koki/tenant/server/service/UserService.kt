@@ -2,6 +2,7 @@ package com.wutsi.koki.tenant.server.service
 
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.BadRequestException
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.security.server.service.SecurityService
@@ -49,6 +50,7 @@ class UserService(
     fun create(request: CreateUserRequest, tenantId: Long): UserEntity {
         checkDuplicateUsername(null, request.type, request.username, tenantId)
         checkDuplicateEmail(null, request.type, request.email, tenantId)
+        checkAccountId(request)
 
         val salt = UUID.randomUUID().toString()
         val currentUserId = securityService.getCurrentUserIdOrNull()
@@ -65,6 +67,7 @@ class UserService(
                 modifiedById = currentUserId,
                 language = request.language,
                 type = request.type,
+                accountId = request.accountId,
             )
         )
 
@@ -109,6 +112,14 @@ class UserService(
                     code = ErrorCode.USER_DUPLICATE_EMAIL
                 )
             )
+        }
+    }
+
+    private fun checkAccountId(request: CreateUserRequest) {
+        if (request.type == UserType.ACCOUNT && request.accountId == null) {
+            throw BadRequestException(error = Error(ErrorCode.USER_ACCOUNT_ID_MISSING))
+        } else if (request.type != UserType.ACCOUNT && request.accountId != null) {
+            throw BadRequestException(error = Error(ErrorCode.USER_ACCOUNT_ID_SHOULD_BE_NULL))
         }
     }
 

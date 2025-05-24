@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
 <body>
 
 <div class="widget" th:fragment="breadcrumb(room)">
@@ -55,10 +55,12 @@
     <td>
         <a th:href="'/rooms/' + ${room.id}">
             <div th:if="${room.pricePerNight}">
-                <span th:text="${room.pricePerNight}">$$</span> per night
+                <span th:text="${room.pricePerNight}">$$</span>
+                <span class="text-small">per night</span>
             </div>
             <div th:if="${room.pricePerMonth}">
-                <span th:text="${room.pricePerMonth}">$$</span> per month
+                <span th:text="${room.pricePerMonth}">$$</span>
+                <span class="text-small">per month</span>
             </div>
         </a>
     </td>
@@ -92,6 +94,19 @@
 </div>
 
 <table class="table" th:fragment="details(room)">
+    <tr>
+        <td><b>Account</b></td>
+        <td>
+            <a class="entity-title"
+               th:href="'/accounts/' + ${room.account.id}"
+               th:if="${user?.hasPermission('account')}"
+            >
+                <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
+                <span th:text="${room.account.name}">ACCOUNT</span>
+            </a>
+            <span th:if="!${user?.hasPermission('account')}" th:text="${room.account.name}">ACCOUNT</span>
+        </td>
+    </tr>
     <tr th:if="${room.title}">
         <td width="15%"><b>Title</b></td>
         <td th:text="${room.title}">TITLE</td>

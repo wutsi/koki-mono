@@ -13,9 +13,9 @@ INSERT INTO T_AMENITY(id, category_fk, name)
            (5, 100, 'E'),
            (100, 100, 'Z');
 
-INSERT INTO T_ROOM(id, tenant_fk, type, city_fk, state_fk, country, title)
-    VALUES (111, 1, 1, 1001, 100, 'CA', 'Room A'),
-           (112, 1, 1, 1001, 100, 'CA', 'Room B');
+INSERT INTO T_ROOM(id, tenant_fk, account_fk, type, city_fk, state_fk, country, title)
+    VALUES (111, 1, 33, 1, 1001, 100, 'CA', 'Room A'),
+           (112, 1, 33, 1, 1001, 100, 'CA', 'Room B');
 
 
 INSERT INTO T_ROOM_AMENITY(room_fk, amenity_fk)

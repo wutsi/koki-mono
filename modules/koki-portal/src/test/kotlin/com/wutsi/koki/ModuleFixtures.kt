@@ -173,7 +173,7 @@ object ModuleFixtures {
             name = "room",
             title = "Rooms",
             homeUrl = "/rooms",
-            tabUrl = null,
+            tabUrl = "/rooms/tab",
             settingsUrl = null,
             jsUrl = "/js/rooms.js",
             cssUrl = "/css/rooms.css",

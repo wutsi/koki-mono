@@ -1,0 +1,5 @@
+<tr class="room" th:each="room : ${rooms}">
+    <div th:replace="~{__components/room :: columns(${room})}"></div>
+</tr>
+<tr th:replace="~{__components/room :: load-more(${moreUrl})}"></tr>
+

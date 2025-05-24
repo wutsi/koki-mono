@@ -83,13 +83,14 @@ class RoomEndpoints(
     fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false, name = "id") ids: List<Long> = emptyList(),
+        @RequestParam(required = false, name = "account-id") accountIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "city-id") cityId: Long? = null,
+        @RequestParam(required = false, name = "neighborhood-id") neighborhoodId: Long? = null,
         @RequestParam(required = false, name = "total-guests") totalGuests: Int? = null,
         @RequestParam(required = false, name = "min-rooms") minRooms: Int? = null,
         @RequestParam(required = false, name = "max-rooms") maxRooms: Int? = null,
         @RequestParam(required = false, name = "min-bathrooms") minBathrooms: Int? = null,
         @RequestParam(required = false, name = "max-bathrooms") maxBathrooms: Int? = null,
-        @RequestParam(required = false, name = "neighborhood-id") neighborhoodId: Long? = null,
         @RequestParam(required = false, name = "amenity-id") amenityIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "category-id") categoryIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "type") types: List<RoomType> = emptyList(),
@@ -100,6 +101,7 @@ class RoomEndpoints(
         val rooms = service.search(
             tenantId = tenantId,
             ids = ids,
+            accountIds = accountIds,
             cityId = cityId,
             neighborhoodId = neighborhoodId,
             status = status,

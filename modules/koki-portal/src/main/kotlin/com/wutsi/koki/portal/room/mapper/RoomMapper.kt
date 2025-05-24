@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.room.mapper
 
+import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.common.HtmlUtils
 import com.wutsi.koki.portal.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.file.model.FileModel
@@ -20,11 +21,13 @@ import org.springframework.stereotype.Service
 class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
     fun toRoomModel(
         entity: RoomSummary,
+        accounts: Map<Long, AccountModel>,
         locations: Map<Long, LocationModel>,
         images: Map<Long, FileModel>,
     ): RoomModel {
         return RoomModel(
             id = entity.id,
+            account = accounts[entity.accountId] ?: AccountModel(id = entity.accountId),
             type = entity.type,
             status = entity.status,
             title = entity.title?.ifEmpty { null },
@@ -64,6 +67,7 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
 
     fun toRoomModel(
         entity: Room,
+        account: AccountModel,
         locations: Map<Long, LocationModel>,
         users: Map<Long, UserModel>,
         amenities: Map<Long, AmenityModel>,
@@ -73,6 +77,7 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
         val fmt = createDateTimeFormat()
         return RoomModel(
             id = entity.id,
+            account = account,
             heroImage = image,
             type = entity.type,
             status = entity.status,

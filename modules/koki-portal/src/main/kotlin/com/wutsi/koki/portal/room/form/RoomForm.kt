@@ -6,6 +6,7 @@ import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomType
 
 data class RoomForm(
+    val accountId: Long = -1,
     val type: RoomType = RoomType.UNKNOWN,
     val title: String? = null,
     val description: String? = null,

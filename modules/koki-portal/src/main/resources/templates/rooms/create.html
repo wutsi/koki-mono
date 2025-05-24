@@ -24,6 +24,22 @@
                             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
                             <div class="section-item">
+                                <label class="title">Account <span class="required">*</span></label>
+                                <select required th:field="*{accountId}">
+                                    <option selected
+                                            th:if="${account}"
+                                            th:text="${account.name}"
+                                            th:value="${account.id}">
+                                        ACCOUNT
+                                    </option>
+                                </select>
+                                <div th:if="${user?.hasPermission('account')}">
+                                    <script
+                                        th:replace="~{__components/account :: account-selector('accountId')}"></script>
+                                </div>
+                            </div>
+
+                            <div class="section-item">
                                 <label class="title">Type <span class="required">*</span></label>
                                 <select required th:field="*{type}">
                                     <option value=""></option>

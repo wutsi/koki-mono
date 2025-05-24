@@ -1,7 +1,6 @@
 package com.wutsi.koki.portal.account.service
 
 import com.wutsi.koki.account.dto.CreateAccountRequest
-import com.wutsi.koki.account.dto.CreateInvitationRequest
 import com.wutsi.koki.account.dto.UpdateAccountRequest
 import com.wutsi.koki.portal.account.form.AccountForm
 import com.wutsi.koki.portal.account.mapper.AccountMapper
@@ -25,7 +24,7 @@ class AccountService(
     fun account(id: Long, fullGraph: Boolean = true): AccountModel {
         val account = koki.account(id).account
 
-        val userIds = listOf(account.createdById, account.modifiedById, account.managedById, account.userId)
+        val userIds = listOf(account.createdById, account.modifiedById, account.managedById)
             .filterNotNull()
             .toSet()
         val userMap = if (userIds.isEmpty() || !fullGraph) {
@@ -65,17 +64,8 @@ class AccountService(
             ).associateBy { location -> location.id }
         }
 
-        val invitation = if (fullGraph) {
-            account.invitationId?.let { id ->
-                mapper.toInvitationModel(koki.invitation(id).invitation)
-            }
-        } else {
-            null
-        }
-
         return mapper.toAccountModel(
             entity = account,
-            invitation = invitation,
             accountTypes = accountTypeMap,
             users = userMap,
             attributes = attributeMap,
@@ -89,7 +79,6 @@ class AccountService(
         accountTypeIds: List<Long> = emptyList(),
         managedByIds: List<Long> = emptyList(),
         createdByIds: List<Long> = emptyList(),
-        userIds: List<Long> = emptyList(),
         limit: Int = 20,
         offset: Int = 0,
         fullGraph: Boolean = true,
@@ -100,7 +89,6 @@ class AccountService(
             accountTypeIds = accountTypeIds,
             managedByIds = managedByIds,
             createdByIds = createdByIds,
-            userIds = userIds,
             limit = limit,
             offset = offset
         ).accounts
@@ -193,9 +181,5 @@ class AccountService(
             billingSameAsShippingAddress = form.billingSameAsShippingAddress
         )
         koki.update(id, request)
-    }
-
-    fun invite(id: Long): String {
-        return koki.createInvitation(CreateInvitationRequest(id)).invitationId
     }
 }

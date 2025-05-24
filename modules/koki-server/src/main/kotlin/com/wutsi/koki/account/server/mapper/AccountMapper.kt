@@ -12,7 +12,6 @@ class AccountMapper {
         return Account(
             id = entity.id ?: -1,
             accountTypeId = entity.accountTypeId,
-            userId = entity.userId,
             name = entity.name,
             description = entity.description,
             phone = entity.phone,
@@ -55,7 +54,6 @@ class AccountMapper {
                 null
             },
             billingSameAsShippingAddress = entity.billingSameAsShippingAddress,
-            invitationId = entity.invitationId,
         )
     }
 

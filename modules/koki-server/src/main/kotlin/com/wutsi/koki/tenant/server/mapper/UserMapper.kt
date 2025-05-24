@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service
 class UserMapper {
     fun toUser(entity: UserEntity) = User(
         id = entity.id!!,
+        accountId = entity.accountId,
         displayName = entity.displayName,
         username = entity.username,
         email = entity.email,
@@ -22,6 +23,7 @@ class UserMapper {
 
     fun toUserSummary(entity: UserEntity) = UserSummary(
         id = entity.id!!,
+        accountId = entity.accountId,
         displayName = entity.displayName,
         username = entity.username,
         email = entity.email,

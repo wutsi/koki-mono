@@ -27,6 +27,9 @@ data class RoomEntity(
     @Column(name = "tenant_fk")
     val tenantId: Long = -1,
 
+    @Column(name = "account_fk")
+    val accountId: Long = -1,
+
     @Column(name = "created_by_fk")
     val createdById: Long? = null,
 

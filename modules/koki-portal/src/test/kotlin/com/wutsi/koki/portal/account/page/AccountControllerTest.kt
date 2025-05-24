@@ -1,28 +1,21 @@
 package com.wutsi.koki.portal.account.page
 
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
-import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AccountFixtures.account
-import com.wutsi.koki.AccountFixtures.invitation
 import com.wutsi.koki.ContactFixtures
 import com.wutsi.koki.EmailFixtures
 import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.InvoiceFixtures
 import com.wutsi.koki.NoteFixtures
+import com.wutsi.koki.RoomFixtures
 import com.wutsi.koki.TaxFixtures
-import com.wutsi.koki.account.dto.CreateInvitationRequest
-import com.wutsi.koki.account.dto.CreateInvitationResponse
-import com.wutsi.koki.account.dto.GetAccountResponse
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import kotlin.test.Test
 
 class AccountControllerTest : AbstractPageControllerTest() {
@@ -102,6 +95,17 @@ class AccountControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun rooms() {
+        navigateTo("/accounts/${account.id}?tab=room")
+
+        Thread.sleep(1000)
+        assertElementCount(".tab-rooms tr.room", RoomFixtures.rooms.size)
+
+        click(".btn-add-room")
+        assertCurrentPageIs(PageName.ROOM_CREATE)
+    }
+
+    @Test
     fun files() {
         navigateTo("/accounts/${account.id}?tab=file")
 
@@ -139,68 +143,6 @@ class AccountControllerTest : AbstractPageControllerTest() {
 
         Thread.sleep(1000)
         assertElementCount(".tab-emails .email", EmailFixtures.emails.size)
-    }
-
-    @Test
-    fun user() {
-        navigateTo("/accounts/${account.id}?tab=user")
-
-        Thread.sleep(1000)
-        assertElementPresent(".user")
-    }
-
-    @Test
-    fun `user - no invitation`() {
-        doReturn(
-            ResponseEntity(
-                GetAccountResponse(account.copy(userId = null, invitationId = null)),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetAccountResponse::class.java)
-            )
-
-        navigateTo("/accounts/${account.id}?tab=user")
-
-        Thread.sleep(1000)
-        assertElementPresent("#invitation-none")
-
-        click(".btn-invite")
-
-        verify(rest).postForEntity(
-            "$sdkBaseUrl/v1/invitations",
-            CreateInvitationRequest(account.id),
-            CreateInvitationResponse::class.java
-        )
-    }
-
-    @Test
-    fun `user - with invitation`() {
-        doReturn(
-            ResponseEntity(
-                GetAccountResponse(account.copy(userId = null, invitationId = invitation.id)),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetAccountResponse::class.java)
-            )
-
-        navigateTo("/accounts/${account.id}?tab=user")
-
-        Thread.sleep(1000)
-        assertElementPresent("#invitation-${invitation.id}")
-
-        click(".btn-invite")
-
-        verify(rest).postForEntity(
-            "$sdkBaseUrl/v1/invitations",
-            CreateInvitationRequest(account.id),
-            CreateInvitationResponse::class.java
-        )
     }
 
     @Test
