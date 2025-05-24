@@ -8,6 +8,7 @@ import java.util.Date
 data class UserModel(
     val id: Long = -1,
     val username: String = "",
+    val accountId: Long? = null,
     val email: String = "",
     val displayName: String = "",
     val status: UserStatus = UserStatus.ACTIVE,

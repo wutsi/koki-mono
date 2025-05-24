@@ -4,11 +4,9 @@ import com.wutsi.koki.account.dto.Account
 import com.wutsi.koki.account.dto.AccountSummary
 import com.wutsi.koki.account.dto.Attribute
 import com.wutsi.koki.account.dto.AttributeSummary
-import com.wutsi.koki.account.dto.Invitation
 import com.wutsi.koki.portal.account.model.AccountAttributeModel
 import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.account.model.AttributeModel
-import com.wutsi.koki.portal.account.model.InvitationModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.refdata.mapper.RefDataMapper
 import com.wutsi.koki.portal.refdata.model.LocationModel
@@ -52,7 +50,6 @@ class AccountMapper(
         users: Map<Long, UserModel>,
         attributes: Map<Long, AttributeModel>,
         locations: Map<Long, LocationModel>,
-        invitation: InvitationModel?,
     ): AccountModel {
         val fmt = createDateTimeFormat()
         return AccountModel(
@@ -91,8 +88,6 @@ class AccountMapper(
                 refDataMapper.toAddressModel(address, locations)
             },
             billingSameAsShippingAddress = entity.billingSameAsShippingAddress,
-            invitation = invitation,
-            user = entity.userId?.let { id -> users[id] }
         )
     }
 
@@ -127,16 +122,6 @@ class AccountMapper(
             createdAtText = fmt.format(entity.createdAt),
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.createdAt),
-        )
-    }
-
-    fun toInvitationModel(entity: Invitation): InvitationModel {
-        val fmt = createDateTimeFormat()
-        return InvitationModel(
-            id = entity.id,
-            createdAt = entity.createdAt,
-            createdAtText = fmt.format(entity.createdAt),
-            createdAtMoment = moment.format(entity.createdAt),
         )
     }
 }

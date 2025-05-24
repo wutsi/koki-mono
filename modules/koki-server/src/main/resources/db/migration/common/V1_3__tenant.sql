@@ -53,6 +53,7 @@ CREATE TABLE T_USER(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
   tenant_fk               BIGINT NOT NULL,
+  account_fk              BIGINT,
   created_by_fk           BIGINT,
   modified_by_fk          BIGINT,
 
@@ -71,6 +72,9 @@ CREATE TABLE T_USER(
   UNIQUE (tenant_fk, type, email),
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
+
+CREATE INDEX account ON T_USER(account_fk);
+
 
 CREATE TABLE T_CONFIGURATION(
   id                      BIGINT NOT NULL AUTO_INCREMENT,

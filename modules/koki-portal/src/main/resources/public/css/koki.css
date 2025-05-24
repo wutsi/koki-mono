@@ -536,9 +536,13 @@ h1.entity-title {
     margin-bottom: 1em;
 }
 
-.entity-title img {
+h1.entity-title img {
     width: 48px;
     height: 48px;
+}
+
+a.entity-title {
+    text-decoration: none;
 }
 
 /* ===== SETTINGS ====== */

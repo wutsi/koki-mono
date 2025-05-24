@@ -44,7 +44,9 @@ class RoomService(
     fun search(
         tenantId: Long,
         ids: List<Long> = emptyList(),
+        accountIds: List<Long> = emptyList(),
         cityId: Long? = null,
+        neighborhoodId: Long? = null,
         status: RoomStatus? = null,
         types: List<RoomType> = emptyList(),
         totalGuests: Int? = null,
@@ -53,7 +55,6 @@ class RoomService(
         maxRooms: Int? = null,
         minBathrooms: Int? = null,
         maxBathrooms: Int? = null,
-        neighborhoodId: Long? = null,
         categoryIds: List<Long> = emptyList(),
         limit: Int = 20,
         offset: Int = 0
@@ -68,10 +69,13 @@ class RoomService(
             jql.append(" AND R.id IN :ids")
         }
         if (cityId != null) {
-            jql.append(" AND R.cityId IN :cityId")
+            jql.append(" AND R.cityId = :cityId")
         }
         if (neighborhoodId != null) {
-            jql.append(" AND R.neighborhoodId IN :neighborhoodId")
+            jql.append(" AND R.neighborhoodId = :neighborhoodId")
+        }
+        if (accountIds.isNotEmpty()) {
+            jql.append(" AND R.accountId IN :accountIds")
         }
         if (status != null) {
             jql.append(" AND R.status IN :status")
@@ -112,6 +116,9 @@ class RoomService(
         }
         if (neighborhoodId != null) {
             query.setParameter("neighborhoodId", neighborhoodId)
+        }
+        if (accountIds.isNotEmpty()) {
+            query.setParameter("accountIds", accountIds)
         }
         if (status != null) {
             query.setParameter("status", status)
@@ -154,6 +161,7 @@ class RoomService(
         return dao.save(
             RoomEntity(
                 tenantId = tenantId,
+                accountId = request.accountId,
                 type = request.type,
                 status = RoomStatus.DRAFT,
                 maxGuests = request.maxGuests,

@@ -22,8 +22,3 @@
 [![koki-room-web](https://github.com/wutsi/koki-mono/actions/workflows/koki-room-web-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-room-web-master.yml)
 [![koki-room-web-pr](https://github.com/wutsi/koki-mono/actions/workflows/koki-room-web-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-room-web-pr.yml)
 ![Coverage](.github/badges/koki-room-web-jococo.svg)
-
-[![koki-client-portal](https://github.com/wutsi/koki-mono/actions/workflows/koki-client-portal-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-client-portal-master.yml)
-[![koki-client-portal-pr](https://github.com/wutsi/koki-mono/actions/workflows/koki-client-portal-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-client-portal-pr.yml)
-![Coverage](.github/badges/koki-client-portal-jococo.svg)
-

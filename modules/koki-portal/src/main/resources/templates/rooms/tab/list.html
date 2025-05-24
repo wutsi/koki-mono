@@ -1,0 +1,37 @@
+<div class="tab-rooms">
+    <div class="margin-bottom"
+         th:if="!${readOnly} AND ${user.hasPermission('room:manage')} AND ${ownerType.name() == 'ACCOUNT'}">
+        <a class="btn btn-light btn-sm btn-add-room" th:href="'/rooms/create?account-id=' + ${ownerId}"
+           th:if="${user?.hasPermission('tax:manage')}">
+            New Tax Report
+        </a>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th width="15%"></th>
+            <th>Description</th>
+            <th width="10%">Status</th>
+            <th width="15%">Type</th>
+            <th width="15%">Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="room" th:each="room : ${rooms}">
+            <div th:replace="~{__components/room :: columns(${room})}"></div>
+        </tr>
+        <tr th:replace="~{__components/room :: load-more(${moreUrl})}"></tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:if="${testMode}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/css/koki.css" rel="stylesheet"/>
+    <link href="/css/rooms.css" rel="stylesheet"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/koki.js"></script>
+    <script src="/js/rooms.js"></script>
+</div>

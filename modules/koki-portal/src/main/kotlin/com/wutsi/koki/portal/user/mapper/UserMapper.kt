@@ -17,6 +17,7 @@ class UserMapper : TenantAwareMapper() {
         val fmt = createDateTimeFormat()
         return UserModel(
             id = entity.id,
+            accountId = entity.accountId,
             username = entity.username,
             email = entity.email,
             displayName = entity.displayName,
@@ -39,6 +40,7 @@ class UserMapper : TenantAwareMapper() {
         val fmt = createDateTimeFormat()
         return UserModel(
             id = entity.id,
+            accountId = entity.accountId,
             username = entity.username,
             email = entity.email,
             displayName = entity.displayName,

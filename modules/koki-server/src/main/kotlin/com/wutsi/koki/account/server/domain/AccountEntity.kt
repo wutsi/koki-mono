@@ -35,9 +35,6 @@ data class AccountEntity(
     @Column(name = "managed_by_fk")
     var managedById: Long? = null,
 
-    @Column(name = "user_fk")
-    var userId: Long? = null,
-
     @OneToMany()
     @JoinColumn("account_fk")
     var accountAttributes: List<AccountAttributeEntity> = emptyList(),
@@ -67,9 +64,6 @@ data class AccountEntity(
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
     var deletedAt: Date? = null,
-
-    @Column("invitation_fk")
-    var invitationId: String? = null,
 ) {
     fun hasShippingAddress(): Boolean {
         return shippingCityId != null ||

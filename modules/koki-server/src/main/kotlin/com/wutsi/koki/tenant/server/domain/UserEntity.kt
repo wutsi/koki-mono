@@ -24,6 +24,9 @@ data class UserEntity(
     @Column(name = "tenant_fk")
     val tenantId: Long = -1,
 
+    @Column(name = "account_fk")
+    val accountId: Long? = null,
+
     @Column(name = "created_by_fk")
     var createdById: Long? = null,
 
