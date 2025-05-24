@@ -114,7 +114,7 @@ object RoomFixtures {
 
     val room = Room(
         id = 1115,
-        status = RoomStatus.DRAFT,
+        status = RoomStatus.PUBLISHED,
         type = RoomType.APARTMENT,
         title = "Windmill in Ponta Delgada",
         description = """
