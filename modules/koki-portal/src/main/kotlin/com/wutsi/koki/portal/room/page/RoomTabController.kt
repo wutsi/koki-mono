@@ -8,6 +8,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import java.util.Collections.emptyList
 
 @Controller
 @RequestMapping("/rooms/tab")
@@ -45,7 +46,7 @@ class RoomTabController(private val service: RoomService) : AbstractRoomControll
             emptyList()
         }
 
-        model.addAttribute("readOnly", readOnly ?: false)
+        model.addAttribute("readOnly", readOnly == true)
         model.addAttribute("ownerId", ownerId)
         model.addAttribute("ownerType", ownerType)
         if (rooms.isNotEmpty()) {
@@ -62,5 +63,4 @@ class RoomTabController(private val service: RoomService) : AbstractRoomControll
         }
         return "rooms/tab/more"
     }
-
 }

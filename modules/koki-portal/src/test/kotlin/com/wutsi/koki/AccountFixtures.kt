@@ -8,7 +8,6 @@ import com.wutsi.koki.account.dto.AttributeType
 import com.wutsi.koki.refdata.dto.Address
 import org.apache.commons.lang3.time.DateUtils
 import java.util.Date
-import java.util.UUID
 
 object AccountFixtures {
     // Attributes

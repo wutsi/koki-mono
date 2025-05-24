@@ -10,7 +10,6 @@ import com.wutsi.koki.room.dto.FurnishedType
 import com.wutsi.koki.room.dto.LeaseTerm
 import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomType
-import com.wutsi.koki.tenant.dto.UserType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
