@@ -42,6 +42,7 @@ class KokiRooms(
     fun rooms(
         ids: List<Long>,
         cityId: Long?,
+        neighborhoodId: Long?,
         status: RoomStatus?,
         totalGuests: Int?,
         types: List<RoomType>,
@@ -50,8 +51,8 @@ class KokiRooms(
         maxRooms: Int?,
         minBathrooms: Int?,
         maxBathrooms: Int?,
-        neighborhoodId: Long?,
         categoryIds: List<Long>,
+        accountIds: List<Long>,
         limit: Int,
         offset: Int,
     ): SearchRoomResponse {
@@ -70,6 +71,7 @@ class KokiRooms(
                 "max-bathrooms" to maxBathrooms,
                 "neighborhood-id" to neighborhoodId,
                 "category-id" to categoryIds,
+                "account-id" to accountIds,
                 "limit" to limit,
                 "offset" to offset,
             )

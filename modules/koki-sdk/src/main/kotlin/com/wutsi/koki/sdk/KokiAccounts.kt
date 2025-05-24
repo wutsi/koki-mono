@@ -2,13 +2,8 @@ package com.wutsi.koki.sdk
 
 import com.wutsi.koki.account.dto.CreateAccountRequest
 import com.wutsi.koki.account.dto.CreateAccountResponse
-import com.wutsi.koki.account.dto.CreateInvitationRequest
-import com.wutsi.koki.account.dto.CreateInvitationResponse
-import com.wutsi.koki.account.dto.CreateUserRequest
-import com.wutsi.koki.account.dto.CreateUserResponse
 import com.wutsi.koki.account.dto.GetAccountResponse
 import com.wutsi.koki.account.dto.GetAttributeResponse
-import com.wutsi.koki.account.dto.GetInvitationResponse
 import com.wutsi.koki.account.dto.SearchAccountResponse
 import com.wutsi.koki.account.dto.SearchAttributeResponse
 import com.wutsi.koki.account.dto.UpdateAccountRequest
@@ -23,7 +18,6 @@ class KokiAccounts(
     companion object {
         private const val ACCOUNT_PATH_PREFIX = "/v1/accounts"
         private const val ATTRIBUTE_PATH_PREFIX = "/v1/attributes"
-        private const val INVITATION_PATH_PREFIX = "/v1/invitations"
     }
 
     fun create(request: CreateAccountRequest): CreateAccountResponse {
@@ -52,7 +46,6 @@ class KokiAccounts(
         accountTypeIds: List<Long>,
         managedByIds: List<Long>,
         createdByIds: List<Long>,
-        userIds: List<Long>,
         limit: Int,
         offset: Int,
     ): SearchAccountResponse {
@@ -64,7 +57,6 @@ class KokiAccounts(
                 "account-type-id" to accountTypeIds,
                 "managed-by-id" to managedByIds,
                 "created-by-id" to createdByIds,
-                "user-id" to userIds,
                 "limit" to limit,
                 "offset" to offset,
             )
@@ -100,20 +92,5 @@ class KokiAccounts(
     fun uploadAttributes(file: MultipartFile): ImportResponse {
         val url = urlBuilder.build("$ATTRIBUTE_PATH_PREFIX/csv")
         return upload(url, file, ImportResponse::class.java)
-    }
-
-    fun createUser(accountId: Long, request: CreateUserRequest): CreateUserResponse {
-        val url = urlBuilder.build("$ACCOUNT_PATH_PREFIX/$accountId/user")
-        return rest.postForEntity(url, request, CreateUserResponse::class.java).body
-    }
-
-    fun createInvitation(request: CreateInvitationRequest): CreateInvitationResponse {
-        val url = urlBuilder.build(INVITATION_PATH_PREFIX)
-        return rest.postForEntity(url, request, CreateInvitationResponse::class.java).body
-    }
-
-    fun invitation(id: String): GetInvitationResponse {
-        val url = urlBuilder.build("$INVITATION_PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetInvitationResponse::class.java).body
     }
 }
