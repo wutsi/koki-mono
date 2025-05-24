@@ -5,6 +5,8 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.file.dto.SearchFileResponse
+import com.wutsi.koki.room.dto.GetRoomResponse
+import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.web.AbstractPageControllerTest
 import com.wutsi.koki.room.web.FileFixtures.images
 import com.wutsi.koki.room.web.RoomFixtures.room
@@ -102,5 +104,39 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertElementVisible("#room-images-modal")
         assertElementCount("#room-images-modal .modal-body img", images.size)
         click("#room-images-modal .btn-close")
+    }
+
+    @Test
+    fun `show - status=DRAFT`() {
+        setupRoomStatus(RoomStatus.DRAFT)
+        navigateTo("/rooms/${room.id}")
+        assertCurrentPageIs(PageName.ERROR_404)
+    }
+
+    @Test
+    fun `show - status=PUBLISHING`() {
+        setupRoomStatus(RoomStatus.PUBLISHING)
+        navigateTo("/rooms/${room.id}")
+        assertCurrentPageIs(PageName.ERROR_404)
+    }
+
+    @Test
+    fun `show - status=EXPIRED`() {
+        setupRoomStatus(RoomStatus.EXPIRED)
+        navigateTo("/rooms/${room.id}")
+        assertCurrentPageIs(PageName.ERROR_404)
+    }
+
+    private fun setupRoomStatus(status: RoomStatus) {
+        doReturn(
+            ResponseEntity(
+                GetRoomResponse(room.copy(status = status)),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetRoomResponse::class.java)
+            )
     }
 }

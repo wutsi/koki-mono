@@ -1,16 +1,19 @@
 package com.wutsi.koki.room.web.room.page
 
 import com.wutsi.koki.refdata.dto.CategoryType
+import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.web.common.page.AbstractPageController
 import com.wutsi.koki.room.web.common.page.PageName
 import com.wutsi.koki.room.web.refdata.mapper.AmenityMapper
 import com.wutsi.koki.room.web.refdata.service.CategoryService
 import com.wutsi.koki.room.web.room.service.RoomService
+import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 @RequestMapping("/rooms")
@@ -26,6 +29,9 @@ class RoomController(
     @GetMapping("/{id}")
     fun show(@PathVariable id: Long, model: Model): String {
         val room = service.room(id)
+        if (room.status != RoomStatus.PUBLISHED) {
+            throw HttpClientErrorException(HttpStatusCode.valueOf(404), "Room not published: ${room.status}")
+        }
         model.addAttribute("room", room)
 
         val categoryIds = room.amenities.map { amenity -> amenity.categoryId }.distinct()
