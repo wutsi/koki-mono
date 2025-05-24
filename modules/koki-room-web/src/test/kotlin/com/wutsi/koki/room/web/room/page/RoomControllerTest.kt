@@ -90,4 +90,17 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertElementCount("#room-amenities-modal .modal-body li.amenity", room.amenityIds.size)
         click("#room-amenities-modal .btn-close")
     }
+
+    @Test
+    fun `show images`() {
+        navigateTo("/rooms/${room.id}")
+        assertCurrentPageIs(PageName.ROOM)
+
+        scroll(.25)
+        click("#btn-images")
+
+        assertElementVisible("#room-images-modal")
+        assertElementCount("#room-images-modal .modal-body img", images.size)
+        click("#room-images-modal .btn-close")
+    }
 }

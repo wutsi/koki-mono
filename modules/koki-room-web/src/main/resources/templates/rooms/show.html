@@ -17,31 +17,40 @@
     </div>
     <div class="hero-2">
         <div class="hero-21">
-            <a data-bs-target="#room-image-modal" data-bs-toggle="modal" href="#" role="button">
-                <img th:each="img : ${heroImages21}" th:src="${img.contentUrl}"/>
-            </a>
+            <div th:each="img : ${heroImages21}">
+                <a data-bs-target="#room-image-modal" data-bs-toggle="modal" href="#" role="button">
+                    <img th:src="${img.contentUrl}"/>
+                </a>
+            </div>
         </div>
         <div class="hero-22">
-            <a data-bs-target="#room-image-modal" data-bs-toggle="modal" href="#" role="button">
-                <img th:each="img : ${heroImages22}" th:src="${img.contentUrl}"/>
-            </a>
+            <div th:each="img : ${heroImages22}">
+                <a data-bs-target="#room-image-modal" data-bs-toggle="modal" href="#" role="button">
+                    <img th:src="${img.contentUrl}"/>
+                </a>
+            </div>
         </div>
     </div>
 </div>
-<button class="image-counter" data-bs-target="#room-image-modal" data-bs-toggle="modal">
+<button class="image-counter" data-bs-target="#room-images-modal" data-bs-toggle="modal" id="btn-images">
     <i class="fa-solid fa-grip"></i>
     Show all <span th:text="${room.images.size()}">00</span> photos
 </button>
-<div aria-hidden="true" aria-labelledby="room-image-modal-label" class="modal fade"
-     id="room-image-modal" tabindex="-1">
+<div aria-hidden="true" aria-labelledby="room-images-modal-label" class="modal fade"
+     id="room-images-modal" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="room-image-modal-label"></h1>
+                <h1 class="modal-title fs-5" id="room-images-modal-label">Photos</h1>
                 <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
             </div>
             <div class="modal-body padding">
-                PHOTOS
+                <div class="padding text-center" th:each="img : ${room.images}">
+                    <div>
+                        <img loading="lazy" th:alt="${img.title}" th:src="${img.contentUrl}" th:title="${img.title}"/>
+                    </div>
+                    <div th:if="${img.title}" th:text="${img.title}">TITLE</DIV>
+                </div>
             </div>
         </div>
     </div>
