@@ -7,7 +7,6 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.room.dto.GetRoomResponse
 import com.wutsi.koki.room.dto.RoomStatus
-import com.wutsi.koki.room.dto.SearchRoomResponse
 import com.wutsi.koki.room.web.AbstractPageControllerTest
 import com.wutsi.koki.room.web.FileFixtures.images
 import com.wutsi.koki.room.web.RoomFixtures.room
