@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.TimeZone
 import kotlin.test.assertEquals
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/tax/UpdateTaxEndpoint.sql"])
@@ -32,6 +33,8 @@ class UpdateTaxEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
     fun update() {
         val fmt = SimpleDateFormat("yyyy-MM-dd HH:mm")
+        fmt.timeZone = TimeZone.getTimeZone("UTC")
+
         val result = rest.postForEntity("/v1/taxes/100", request, Any::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)

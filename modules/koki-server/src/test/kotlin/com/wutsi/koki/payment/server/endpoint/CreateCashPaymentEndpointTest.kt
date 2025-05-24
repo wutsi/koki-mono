@@ -18,6 +18,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.TimeZone
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -47,6 +48,7 @@ class CreateCashPaymentEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val fmt = SimpleDateFormat("yyyy-MM-dd")
+        fmt.timeZone = TimeZone.getTimeZone("UTC")
         val transactionId = response.body!!.transactionId
         val tx = dao.findById(transactionId).get()
         assertEquals(TENANT_ID, tx.tenantId)

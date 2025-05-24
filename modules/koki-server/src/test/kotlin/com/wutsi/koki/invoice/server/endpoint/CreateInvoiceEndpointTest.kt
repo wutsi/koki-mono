@@ -10,16 +10,17 @@ import com.wutsi.koki.invoice.server.dao.InvoiceLogRepository
 import com.wutsi.koki.invoice.server.dao.InvoiceRepository
 import com.wutsi.koki.invoice.server.dao.InvoiceSequenceRepository
 import com.wutsi.koki.invoice.server.dao.InvoiceTaxRepository
-import com.wutsi.koki.tax.server.dao.TaxRepository
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import org.apache.commons.lang3.time.DateUtils
+import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.TimeZone
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -39,9 +40,6 @@ class CreateInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Autowired
     private lateinit var logDao: InvoiceLogRepository
-
-    @Autowired
-    private lateinit var taxDao: TaxRepository
 
     @Autowired
     private lateinit var configService: ConfigurationService
@@ -90,6 +88,12 @@ class CreateInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
         ),
         dueAt = DateUtils.addDays(Date(), 30)
     )
+
+    @BeforeEach
+    override fun setUp() {
+        super.setUp()
+        fmt.timeZone = TimeZone.getTimeZone("UTC")
+    }
 
     @Test
     fun create() {

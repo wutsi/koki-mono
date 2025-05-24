@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.TimeZone
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -36,6 +37,7 @@ class UpdatePriceEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val fmt = SimpleDateFormat("yyyy-MM-dd")
+        fmt.timeZone = TimeZone.getTimeZone("UTC")
         val price = dao.findById(100L).get()
         assertEquals(TENANT_ID, price.tenantId)
         assertEquals(request.accountTypeId, price.accountTypeId)

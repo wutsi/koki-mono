@@ -18,12 +18,14 @@ import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import org.apache.commons.lang3.time.DateUtils
+import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.TimeZone
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -46,6 +48,14 @@ class UpdateInvoiceStatusEndpointTest : AuthorizationAwareEndpointTest() {
 
     @MockitoBean
     private lateinit var publisher: Publisher
+
+    private val fmt = SimpleDateFormat("yyyy-MM-dd")
+
+    @BeforeEach
+    override fun setUp() {
+        super.setUp()
+        fmt.timeZone = TimeZone.getTimeZone("UTC")
+    }
 
     private fun test(invoiceId: Long, status: InvoiceStatus): InvoiceEntity {
         val request = UpdateInvoiceStatusRequest(
@@ -101,7 +111,6 @@ class UpdateInvoiceStatusEndpointTest : AuthorizationAwareEndpointTest() {
 
         val invoice = test(100, InvoiceStatus.OPENED)
 
-        val fmt = SimpleDateFormat("yyyy-MM-dd")
         val now = Date()
         assertEquals(fmt.format(now), fmt.format(invoice.invoicedAt))
         assertEquals(fmt.format(now), fmt.format(invoice.dueAt))
@@ -118,7 +127,6 @@ class UpdateInvoiceStatusEndpointTest : AuthorizationAwareEndpointTest() {
 
         val invoice = test(101, InvoiceStatus.OPENED)
 
-        val fmt = SimpleDateFormat("yyyy-MM-dd")
         val now = Date()
         assertEquals(fmt.format(now), fmt.format(invoice.invoicedAt))
         assertEquals(fmt.format(DateUtils.addDays(now, 30)), fmt.format(invoice.dueAt))
@@ -135,7 +143,6 @@ class UpdateInvoiceStatusEndpointTest : AuthorizationAwareEndpointTest() {
 
         val invoice = test(102, InvoiceStatus.OPENED)
 
-        val fmt = SimpleDateFormat("yyyy-MM-dd")
         val now = Date()
         assertEquals(fmt.format(now), fmt.format(invoice.invoicedAt))
         assertEquals(fmt.format(now), fmt.format(invoice.dueAt))

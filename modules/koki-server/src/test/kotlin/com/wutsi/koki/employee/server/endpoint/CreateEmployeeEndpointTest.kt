@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.TimeZone
 import kotlin.test.assertEquals
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/employee/CreateEmployeeEndpoint.sql"])
@@ -39,6 +40,7 @@ class CreateEmployeeEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val fmt = SimpleDateFormat("yyyy-MM-dd")
+        fmt.timeZone = TimeZone.getTimeZone("UTC")
         val employeeId = response.body!!.employeeId
         val employee = dao.findById(employeeId).get()
 
