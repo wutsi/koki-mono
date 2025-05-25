@@ -85,6 +85,7 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
         )
 
         navigateTo("/rooms/create")
+        select2("#accountId", accounts[0].name)
         select("#type", 2)
         select("#leaseType", 1)
         select("#furnishedType", 2)
