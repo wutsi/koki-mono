@@ -63,6 +63,13 @@
                                 <span th:text="${room.pricePerMonth}">$$</span> per month
                             </div>
                         </div>
+                        <div class="margin-right-2x">
+                            <b>Account</b><br/>
+                            <a class="entity-title" th:href="'/accounts/' + ${room.account.id}">
+                                <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
+                                <span th:text="${room.account.name}">ACCOUNT</span>
+                            </a>
+                        </div>
                     </div>
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
                 </div>

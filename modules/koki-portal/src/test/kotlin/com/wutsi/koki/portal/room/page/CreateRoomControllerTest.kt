@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.AccountFixtures.accounts
 import com.wutsi.koki.RefDataFixtures.cities
 import com.wutsi.koki.RefDataFixtures.locations
 import com.wutsi.koki.RefDataFixtures.neighborhoods
@@ -28,20 +29,21 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
         navigateTo("/rooms/create")
         assertCurrentPageIs(PageName.ROOM_CREATE)
 
+        select2("#accountId", accounts[0].name)
         select("#type", 2)
         select("#leaseType", 1)
         select("#furnishedType", 2)
         select("#numberOfRooms", 3)
         select("#numberOfBathrooms", 4)
-        select("#numberOfBeds", 5)
         scroll(.25)
+        select("#numberOfBeds", 5)
         select("#maxGuests", 6)
         input("#area", "1500")
         input("#pricePerNight", "75")
         input("#pricePerMonth", "500")
         select("#checkinTime", 14)
-        select("#checkoutTime", 10)
         scrollToBottom()
+        select("#checkoutTime", 10)
         select("#country", 3)
         select2("#cityId", "${locations[2].name}, ${locations[0].name}")
         select2("#neighborhoodId", "${neighborhoods[0].name}, ${cities[0].name}")
@@ -53,6 +55,7 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
         verify(rest).postForEntity(
             eq("$sdkBaseUrl/v1/rooms"), request.capture(), eq(CreateRoomResponse::class.java)
         )
+        assertEquals(accounts[0].id, request.firstValue.accountId)
         assertEquals(RoomType.APARTMENT, request.firstValue.type)
         assertEquals(LeaseType.SHORT_TERM, request.firstValue.leaseType)
         assertEquals(LeaseTerm.UNKNOWN, request.firstValue.leaseTerm)
@@ -82,6 +85,7 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
         )
 
         navigateTo("/rooms/create")
+        select2("#accountId", accounts[0].name)
         select("#type", 2)
         select("#leaseType", 1)
         select("#furnishedType", 2)

@@ -29,5 +29,4 @@ data class AccountModel(
     val billingSameAsShippingAddress: Boolean = true,
     val readOnly: Boolean = false,
     val user: UserModel? = null,
-    val invitation: InvitationModel? = null,
 )

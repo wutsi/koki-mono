@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.room.page
 
+import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.refdata.service.LocationService
 import com.wutsi.koki.portal.room.form.RoomForm
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
 import java.util.Currency
 
@@ -24,11 +26,18 @@ import java.util.Currency
 class CreateRoomController(
     private val service: RoomService,
     private val locationService: LocationService,
+    private val accountService: AccountService,
 ) : AbstractRoomController() {
     @GetMapping("/create")
-    fun create(model: Model): String {
+    fun create(
+        @RequestParam(required = false, name = "account-id") accountId: Long? = null,
+        model: Model
+    ): String {
         return create(
-            RoomForm(currency = tenantHolder.get()?.currency,),
+            RoomForm(
+                currency = tenantHolder.get()?.currency,
+                accountId = accountId ?: -1,
+            ),
             model,
         )
     }
@@ -58,6 +67,13 @@ class CreateRoomController(
                 title = "Create Room",
             )
         )
+
+        if (form.accountId > 0) {
+            model.addAttribute(
+                "account",
+                accountService.account(form.accountId, fullGraph = false)
+            )
+        }
 
         loadCheckinCheckoutTime(model)
         loadCountries(model)

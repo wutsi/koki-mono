@@ -20,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
+import java.util.UUID
 import javax.sql.DataSource
 import kotlin.test.assertEquals
 
@@ -72,6 +73,7 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
             language = "fr",
             type = UserType.EMPLOYEE,
             status = UserStatus.ACTIVE,
+            accountId = null,
         )
 
         val result = rest.postForEntity("/v1/users", request, CreateUserResponse::class.java)
@@ -90,6 +92,42 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals(HASHED_PASSWORD, user.password)
         assertEquals(TENANT_ID, user.tenantId)
         assertEquals(request.roleIds.size, roleCount(userId))
+        assertEquals(request.accountId, user.accountId)
+
+        verify(passwordService).hash(request.password, user.salt)
+    }
+
+    @Test
+    fun `create account user`() {
+        val request = CreateUserRequest(
+            username = "thomas2.nkono",
+            email = "thomas.nkono@hotmail.com",
+            displayName = "Thomas Nkono",
+            password = "secret",
+            roleIds = listOf(11L, 12L),
+            language = "fr",
+            type = UserType.ACCOUNT,
+            status = UserStatus.ACTIVE,
+            accountId = 333L,
+        )
+
+        val result = rest.postForEntity("/v1/users", request, CreateUserResponse::class.java)
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val userId = result.body!!.userId
+        val user = dao.findById(userId).get()
+        assertEquals(request.displayName, user.displayName)
+        assertEquals(request.username, user.username)
+        assertEquals(request.email, user.email)
+        assertEquals(request.language, user.language)
+        assertEquals(request.status, user.status)
+        assertEquals(request.type, user.type)
+        assertEquals(36, user.salt.length)
+        assertEquals(HASHED_PASSWORD, user.password)
+        assertEquals(TENANT_ID, user.tenantId)
+        assertEquals(request.roleIds.size, roleCount(userId))
+        assertEquals(request.accountId, user.accountId)
 
         verify(passwordService).hash(request.password, user.salt)
     }
@@ -147,6 +185,43 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
 
         assertEquals(HttpStatus.CONFLICT, result.statusCode)
         assertEquals(ErrorCode.USER_DUPLICATE_EMAIL, result.body!!.error.code)
+    }
+
+    @Test
+    fun `missing account-id`() {
+        val request = CreateUserRequest(
+            username = "RAY00.sponsible",
+            email = "RAY.sponsible@gmail.com",
+            displayName = "Ray",
+            password = "secret",
+            type = UserType.ACCOUNT,
+            status = UserStatus.ACTIVE,
+            accountId = null,
+        )
+
+        val result = rest.postForEntity("/v1/users", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
+        assertEquals(ErrorCode.USER_ACCOUNT_ID_MISSING, result.body!!.error.code)
+    }
+
+    @Test
+    fun `invalid account-id`() {
+        val username = "roger." + UUID.randomUUID()
+        val request = CreateUserRequest(
+            username = username,
+            email = "$username@gmail.com",
+            displayName = "Ray",
+            password = "secret",
+            type = UserType.EMPLOYEE,
+            status = UserStatus.ACTIVE,
+            accountId = 333L,
+        )
+
+        val result = rest.postForEntity("/v1/users", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
+        assertEquals(ErrorCode.USER_ACCOUNT_ID_SHOULD_BE_NULL, result.body!!.error.code)
     }
 
     @Test

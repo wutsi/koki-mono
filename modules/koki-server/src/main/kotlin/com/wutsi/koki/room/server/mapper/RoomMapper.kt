@@ -12,6 +12,7 @@ class RoomMapper {
     fun toRoom(entity: RoomEntity): Room {
         return Room(
             id = entity.id ?: -1,
+            accountId = entity.accountId,
             heroImageId = entity.heroImageId,
             type = entity.type,
             status = entity.status,
@@ -48,6 +49,7 @@ class RoomMapper {
     fun toRoomSummary(entity: RoomEntity): RoomSummary {
         return RoomSummary(
             id = entity.id ?: -1,
+            accountId = entity.accountId,
             heroImageId = entity.heroImageId,
             type = entity.type,
             status = entity.status,

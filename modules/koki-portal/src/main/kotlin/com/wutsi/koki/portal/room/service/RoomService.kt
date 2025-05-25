@@ -1,6 +1,8 @@
 package com.wutsi.koki.portal.room.service
 
 import com.wutsi.koki.file.dto.FileType
+import com.wutsi.koki.portal.account.model.AccountModel
+import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.file.service.FileService
 import com.wutsi.koki.portal.refdata.model.AmenityModel
@@ -32,6 +34,7 @@ class RoomService(
     private val amenityService: AmenityService,
     private val fileService: FileService,
     private val categoryService: CategoryService,
+    private val accountService: AccountService,
 ) {
     fun room(id: Long, fullGraph: Boolean = true): RoomModel {
         val room = koki.room(id).room
@@ -73,6 +76,8 @@ class RoomService(
             }
         }
 
+        val account = accountService.account(room.accountId, fullGraph = false)
+
         val category = if (!fullGraph || room.categoryId == null) {
             null
         } else {
@@ -81,6 +86,7 @@ class RoomService(
 
         return mapper.toRoomModel(
             entity = room,
+            account = account,
             locations = locations,
             users = users,
             amenities = amenities,
@@ -91,6 +97,7 @@ class RoomService(
 
     fun rooms(
         ids: List<Long> = emptyList(),
+        accountIds: List<Long> = emptyList(),
         cityId: Long? = null,
         status: RoomStatus? = null,
         types: List<RoomType> = emptyList(),
@@ -100,6 +107,7 @@ class RoomService(
     ): List<RoomModel> {
         val rooms = koki.rooms(
             ids = ids,
+            accountIds = accountIds,
             cityId = cityId,
             status = status,
             types = types,
@@ -131,13 +139,26 @@ class RoomService(
             emptyMap<Long, FileModel>()
         } else {
             fileService.files(
-                ids = imageIds, type = FileType.IMAGE, limit = locationIds.size
+                ids = imageIds,
+                type = FileType.IMAGE,
+                limit = locationIds.size
             ).associateBy { image -> image.id }
+        }
+
+        val accountIds = rooms.map { room -> room.accountId }.distinct()
+        val accounts = if (!fullGraph || accountIds.isEmpty()) {
+            emptyMap<Long, AccountModel>()
+        } else {
+            accountService.accounts(
+                ids = accountIds,
+                limit = accountIds.size
+            ).associateBy { account -> account.id }
         }
 
         return rooms.map { room ->
             mapper.toRoomModel(
                 entity = room,
+                accounts = accounts,
                 locations = locations,
                 images = images,
             )
@@ -147,6 +168,7 @@ class RoomService(
     fun create(form: RoomForm): Long {
         return koki.create(
             request = CreateRoomRequest(
+                accountId = form.accountId,
                 type = form.type,
                 numberOfRooms = form.numberOfRooms,
                 numberOfBeds = form.numberOfBeds,

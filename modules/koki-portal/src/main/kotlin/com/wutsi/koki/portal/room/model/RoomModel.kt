@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.room.model
 
 import com.wutsi.blog.portal.common.model.MoneyModel
+import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.AmenityModel
@@ -16,6 +17,7 @@ import java.util.Date
 
 data class RoomModel(
     val id: Long = -1,
+    val account: AccountModel = AccountModel(),
     val heroImage: FileModel? = null,
     val type: RoomType = RoomType.UNKNOWN,
     val status: RoomStatus = RoomStatus.UNKNOWN,

@@ -128,4 +128,15 @@ class SearchRoomEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(3, rooms.size)
         assertEquals(listOf(111L, 114L, 115L), rooms.map { it.id })
     }
+
+    @Test
+    fun `by account-id`() {
+        val response = rest.getForEntity("/v1/rooms?account-id=31&account-id=32", SearchRoomResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val rooms = response.body!!.rooms
+        assertEquals(3, rooms.size)
+        assertEquals(listOf(112L, 114L, 116L), rooms.map { it.id })
+    }
 }

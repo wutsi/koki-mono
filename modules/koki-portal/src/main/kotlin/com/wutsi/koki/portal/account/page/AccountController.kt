@@ -55,19 +55,6 @@ class AccountController(
         }
     }
 
-    @RequiresPermission(permissions = ["account:manage"])
-    @GetMapping("/accounts/{id}/invite")
-    fun invite(@PathVariable id: Long, model: Model): String {
-        try {
-            service.invite(id)
-            return "redirect:/accounts/$id?tab=user"
-        } catch (ex: HttpClientErrorException) {
-            val errorResponse = toErrorResponse(ex)
-            model.addAttribute("error", errorResponse.error.code)
-            return show(id = id, model = model)
-        }
-    }
-
     private fun loadToast(
         id: Long,
         referer: String?,
