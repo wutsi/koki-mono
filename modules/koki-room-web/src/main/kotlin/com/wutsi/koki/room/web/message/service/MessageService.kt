@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service
 
 @Service
 class MessageService(private val koki: KokiMessages) {
-    fun send(form: SendMessageForm){
+    fun send(form: SendMessageForm) {
         koki.send(
             SendMessageRequest(
                 senderName = form.name,
                 senderPhone = form.phone,
                 senderEmail = form.email,
-                owner = ObjectReference(id=form.roomId, type= ObjectType.ROOM),
+                owner = ObjectReference(id = form.roomId, type = ObjectType.ROOM),
                 body = form.body,
             )
         )

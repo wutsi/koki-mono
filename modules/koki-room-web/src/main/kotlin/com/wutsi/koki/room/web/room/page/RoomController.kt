@@ -9,7 +9,6 @@ import com.wutsi.koki.room.web.refdata.mapper.AmenityMapper
 import com.wutsi.koki.room.web.refdata.service.CategoryService
 import com.wutsi.koki.room.web.room.form.SendMessageForm
 import com.wutsi.koki.room.web.room.service.RoomService
-import org.aspectj.bridge.Message
 import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model

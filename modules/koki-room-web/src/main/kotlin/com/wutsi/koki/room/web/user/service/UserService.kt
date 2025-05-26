@@ -3,8 +3,6 @@ package com.wutsi.koki.room.web.user.service
 import com.wutsi.koki.room.web.user.mapper.UserMapper
 import com.wutsi.koki.room.web.user.model.UserModel
 import com.wutsi.koki.sdk.KokiUsers
-import com.wutsi.koki.tenant.dto.CreateUserRequest
-import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.dto.UserType
 import org.springframework.stereotype.Service
