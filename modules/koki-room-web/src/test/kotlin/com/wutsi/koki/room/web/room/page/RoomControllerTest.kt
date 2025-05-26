@@ -1,10 +1,16 @@
 package com.wutsi.koki.room.web.room.page
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.SearchFileResponse
+import com.wutsi.koki.message.dto.SendMessageRequest
+import com.wutsi.koki.message.dto.SendMessageResponse
 import com.wutsi.koki.room.dto.GetRoomResponse
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.web.AbstractPageControllerTest
@@ -71,7 +77,6 @@ class RoomControllerTest : AbstractPageControllerTest() {
     @Test
     fun `show description`() {
         navigateTo("/rooms/${room.id}")
-        assertCurrentPageIs(PageName.ROOM)
 
         click("#btn-description")
 
@@ -83,7 +88,6 @@ class RoomControllerTest : AbstractPageControllerTest() {
     @Test
     fun `show amenities`() {
         navigateTo("/rooms/${room.id}")
-        assertCurrentPageIs(PageName.ROOM)
 
         scroll(.25)
         click("#btn-amenities")
@@ -96,7 +100,6 @@ class RoomControllerTest : AbstractPageControllerTest() {
     @Test
     fun `show images`() {
         navigateTo("/rooms/${room.id}")
-        assertCurrentPageIs(PageName.ROOM)
 
         scroll(.25)
         click("#btn-images")
@@ -104,6 +107,58 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertElementVisible("#room-images-modal")
         assertElementCount("#room-images-modal .modal-body img", images.size)
         click("#room-images-modal .btn-close")
+    }
+
+    @Test
+    fun `send message`() {
+        navigateTo("/rooms/${room.id}")
+
+        click("#btn-contact-us")
+
+        assertElementVisible("#room-message-modal")
+        input("#name", "Ray Sponsible")
+        input("#email", "ray.spomsible@gmail.com")
+        input("#phone", "514 758 0001")
+        input("#body", "This is a nice message... I Love it :-)")
+        click("#btn-send")
+
+        val request = argumentCaptor<SendMessageRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/messages"),
+            request.capture(),
+            eq(SendMessageResponse::class.java)
+        )
+        assertEquals(room.id, request.firstValue.owner?.id)
+        assertEquals(ObjectType.ROOM, request.firstValue.owner?.type)
+        assertEquals("Ray Sponsible", request.firstValue.senderName)
+        assertEquals("ray.spomsible@gmail.com", request.firstValue.senderEmail)
+        assertEquals("514 758 0001", request.firstValue.senderPhone)
+        assertEquals("This is a nice message... I Love it :-)", request.firstValue.body)
+
+        val alert = driver.switchTo().alert()
+        alert.accept()
+        driver.switchTo().parentFrame()
+
+        Thread.sleep(1000)
+        assertElementNotVisible("#room-message-modal")
+    }
+
+    @Test
+    fun `send message with missing fields`() {
+        navigateTo("/rooms/${room.id}")
+
+        click("#btn-contact-us")
+
+        assertElementVisible("#room-message-modal")
+        click("#btn-send")
+
+        verify(rest, never()).postForEntity(
+            any<String>(),
+            any<SendMessageRequest>(),
+            eq(Any::class.java)
+        )
+
+        assertElementVisible("#room-message-modal")
     }
 
     @Test

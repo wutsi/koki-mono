@@ -199,6 +199,16 @@ object ModuleFixtures {
             jsUrl = null,
             cssUrl = null,
         ),
+        Module(
+            id = 260,
+            name = "message",
+            title = "Messages",
+            homeUrl = null,
+            tabUrl = "/messages/tab",
+            settingsUrl = null,
+            jsUrl = "/css/message.js",
+            cssUrl = "/js/messages.css",
+        ),
     )
 
     val permissions = listOf(
@@ -269,5 +279,8 @@ object ModuleFixtures {
         Permission(id = 2511, moduleId = 251, name = "room-unit:manage", description = "Manage Room Units"),
         Permission(id = 2520, moduleId = 252, name = "room-amenity", description = "View Amenities"),
         Permission(id = 2521, moduleId = 252, name = "room-amenity:manage", description = "Manage Amenitires"),
+
+        Permission(id = 2600, moduleId = 260, name = "message", description = "View Messages"),
+        Permission(id = 2601, moduleId = 260, name = "message:manage", description = "Manage Messages"),
     )
 }

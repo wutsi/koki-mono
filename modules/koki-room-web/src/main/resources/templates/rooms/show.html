@@ -213,29 +213,80 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="room-message-modal-label">Send a Message</h1>
-                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
-                        type="button"></button>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
             </div>
             <div class="modal-body padding-2x">
-                <form method="post">
+                <form id="frm-send" method="post" onsubmit="send_message()" th:action="@{/rooms/send}"
+                      th:object="${form}">
+                    <input th:field="*{roomId}" type="hidden"/>
                     <div class="form-group">
-                        <input class="form-control" placeholder="Your Name" required/>
+                        <input class="form-control" placeholder="Name" required th:field="*{name}"/>
                     </div>
                     <div class="form-group margin-top">
-                        <input class="form-control" placeholder="Your Email" required type="email"/>
+                        <input class="form-control" placeholder="Email" required th:field="*{email}" type="email"/>
                     </div>
                     <div class="form-group margin-top">
-                        <textarea class="form-control" placeholder="Enter your message" rows="3"></textarea>
+                        <input class="form-control" placeholder="Phone" th:field="*{phone}"/>
                     </div>
                     <div class="form-group margin-top">
-                        <button class="btn btn-primary" type="submit">Send</button>
+                        <textarea class="form-control" placeholder="Message" required rows="3"
+                                  th:data-body="'During my research, I found this ad for ' + ${room.title} + ', Montreal. I would like to schedule an appointment. What are the next steps?'"
+                                  th:field="*{body}"></textarea>
+                    </div>
+                    <div class="form-group margin-top">
+                        <button class="btn btn-primary" id="btn-send" type="submit">Send</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+<script>
+    function on_message_modal_opened() {
+        console.log('Opening modal.');
 
+        const form = document.getElementById("frm-send");
+        form.reset();
+        document.getElementById("body").value = document.getElementById("body").getAttribute("data-body");
+    }
+
+    function send_message() {
+        console.log('Sending the email');
+
+        event.preventDefault();
+        document.getElementById("btn-send").disabled = true;
+        const form = document.getElementById("frm-send");
+        const data = new FormData(form);
+        fetch(
+            form.action,
+            {
+                method: 'POST',
+                body: new URLSearchParams(data).toString(),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }).then(response => {
+            if (response.ok) {
+                document.querySelector('#room-message-modal .btn-close').click();
+                alert('Your message has been sent');
+            } else {
+                response.text().then(txt => {
+                    console.log('Error', txt);
+                    alert('Failed');
+                });
+            }
+            document.getElementById("btn-send").disabled = false;
+        });
+    }
+
+    document.addEventListener(
+        'DOMContentLoaded',
+        function () {
+            const modal = document.getElementById('room-message-modal')
+            modal.addEventListener('shown.bs.modal', on_message_modal_opened);
+        }
+    );
+</script>
 <link rel="stylesheet" th:href="${page.assetUrl} + '/css/rooms.css'"/>
 <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
 

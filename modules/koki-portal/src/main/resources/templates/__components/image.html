@@ -33,15 +33,13 @@
     </td>
     <td>
         <a th:href="'javascript: kokiImageEditor.show(' + ${file.id} + ')'">
+            <div th:if="!${file.approved}">
+                <div th:replace="~{__components/file :: status(${file.status})}"></div>
+            </div>
             <div th:if="${file.title}" th:text="${file.title}">TITLE</div>
             <div th:if="!${file.title}">Processing the image...</div>
             <div class="alert alert-warning margin" th:if="${file.rejectionReason}"
                  th:text="${file.rejectionReason}"></div>
-        </a>
-    </td>
-    <td>
-        <a th:href="'javascript: kokiImageEditor.show(' + ${file.id} + ')'">
-            <div th:replace="~{__components/file :: status(${file.status})}"></div>
         </a>
     </td>
     <td>

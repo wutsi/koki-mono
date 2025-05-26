@@ -5,6 +5,7 @@ import com.wutsi.koki.room.dto.LeaseTerm
 import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
+import com.wutsi.koki.room.web.account.model.AccountModel
 import com.wutsi.koki.room.web.common.model.MoneyModel
 import com.wutsi.koki.room.web.file.model.FileModel
 import com.wutsi.koki.room.web.refdata.model.AddressModel
@@ -14,6 +15,7 @@ import com.wutsi.koki.room.web.refdata.model.LocationModel
 
 data class RoomModel(
     val id: Long = -1,
+    val account: AccountModel = AccountModel(),
     val heroImage: FileModel? = null,
     val type: RoomType = RoomType.UNKNOWN,
     val status: RoomStatus = RoomStatus.UNKNOWN,
@@ -40,7 +42,7 @@ data class RoomModel(
     val leaseType: LeaseType = LeaseType.UNKNOWN,
     val category: CategoryModel? = null,
     val area: Int? = null,
-    val url: String = "",
+    val listingUrl: String = "",
 ) {
     fun hasAmenity(amenityId: Long): Boolean {
         return amenities.find { amenity -> amenity.id == amenityId } != null

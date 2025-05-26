@@ -1,11 +1,11 @@
 package com.wutsi.koki.room.web.room.mapper
 
+import com.wutsi.koki.platform.util.HtmlUtils
 import com.wutsi.koki.room.dto.Room
 import com.wutsi.koki.room.dto.RoomSummary
+import com.wutsi.koki.room.web.account.model.AccountModel
 import com.wutsi.koki.room.web.common.mapper.MoneyMapper
 import com.wutsi.koki.room.web.common.mapper.TenantAwareMapper
-import com.wutsi.koki.room.web.common.util.HtmlUtils
-import com.wutsi.koki.room.web.common.util.StringUtils
 import com.wutsi.koki.room.web.file.model.FileModel
 import com.wutsi.koki.room.web.refdata.model.AddressModel
 import com.wutsi.koki.room.web.refdata.model.AmenityModel
@@ -19,12 +19,14 @@ import java.util.Locale
 class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
     fun toRoomModel(
         entity: RoomSummary,
-        heroImage: FileModel?,
+        images: Map<Long, FileModel>,
         locations: Map<Long, LocationModel>,
+        accounts: Map<Long, AccountModel>,
     ): RoomModel {
         val locale = LocaleContextHolder.getLocale()
         return RoomModel(
             id = entity.id,
+            account = accounts[entity.accountId] ?: AccountModel(id = entity.accountId),
             type = entity.type,
             status = entity.status,
             title = entity.title,
@@ -56,14 +58,16 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
                     price.currency
                 )
             },
-            heroImage = heroImage,
+            heroImage = entity.heroImageId?.let { id -> images[id] },
             longitude = entity.longitude,
             latitude = entity.latitude,
+            listingUrl = entity.listingUrl ?: "/rooms/${entity.id}"
         )
     }
 
     fun toRoomModel(
         entity: Room,
+        account: AccountModel,
         heroImage: FileModel?,
         locations: Map<Long, LocationModel>,
         images: List<FileModel>,
@@ -72,6 +76,7 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
         val locale = LocaleContextHolder.getLocale()
         return RoomModel(
             id = entity.id,
+            account = account,
             heroImage = heroImage,
             type = entity.type,
             status = entity.status,
@@ -116,7 +121,7 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             longitude = entity.longitude,
             latitude = entity.latitude,
             images = images,
-            url = StringUtils.toSlug("/rooms/${entity.id}", entity.title)
+            listingUrl = entity.listingUrl ?: "/rooms/${entity.id}"
         )
     }
 }

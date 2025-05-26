@@ -1,8 +1,10 @@
 package com.wutsi.koki.room.server.mapper
 
+import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.Money
 import com.wutsi.koki.room.dto.Room
+import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomSummary
 import com.wutsi.koki.room.server.domain.RoomEntity
 import org.springframework.stereotype.Service
@@ -43,6 +45,7 @@ class RoomMapper {
             leaseTerm = entity.leaseTerm,
             categoryId = entity.categoryId,
             furnishedType = entity.furnishedType,
+            listingUrl = toListingUrl(entity),
         )
     }
 
@@ -65,6 +68,7 @@ class RoomMapper {
             pricePerMonth = toMoney(entity.pricePerMonth, entity.currency),
             longitude = entity.longitude,
             latitude = entity.latitude,
+            listingUrl = toListingUrl(entity),
         )
     }
 
@@ -87,6 +91,14 @@ class RoomMapper {
             null
         } else {
             Money(amount, currency)
+        }
+    }
+
+    fun toListingUrl(entity: RoomEntity): String? {
+        return if (entity.status == RoomStatus.PUBLISHED) {
+            StringUtils.toSlug("/rooms/${entity.id}", entity.title)
+        } else {
+            null
         }
     }
 }

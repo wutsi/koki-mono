@@ -11,17 +11,17 @@
             <button class="btn btn-sm btn-primary" data-file-button-id="btn-file" id="btn-upload">
                 Select Images
             </button>
-            <input ,
-                   accept="image/*"
-                   data-max-file-size="1"
-                   data-target-id="image-list"
-                   id="btn-file"
-                   multiple
-                   style="display:none"
-                   th:data-progress-id="upload-progress"
-                   th:data-refresh-url="'/images/tab/more?owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}"
-                   th:data-upload-url="${uploadUrl}"
-                   type="file"
+            <input
+                accept="image/*"
+                data-max-file-size="1"
+                data-target-id="image-list"
+                id="btn-file"
+                multiple
+                style="display:none"
+                th:data-progress-id="upload-progress"
+                th:data-refresh-url="'/images/tab/more?owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}"
+                th:data-upload-url="${uploadUrl}"
+                type="file"
             />
         </div>
         <div class="progress margin-top" id="upload-progress">
@@ -45,7 +45,6 @@
         <tr>
             <th width="15%"></th>
             <th>Description</th>
-            <th>Status</th>
             <th>Size</th>
             <th></th>
         </tr>

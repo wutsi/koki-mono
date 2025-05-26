@@ -2,13 +2,9 @@
   "tabs": {
     "main": [
       "image",
-<<<<<<< Updated upstream
-      "room-amenity"
-=======
       "room-amenity",
       "message",
       "note"
->>>>>>> Stashed changes
     ]
   }
 }

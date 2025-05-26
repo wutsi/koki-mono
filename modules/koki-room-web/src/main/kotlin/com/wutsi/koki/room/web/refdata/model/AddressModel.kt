@@ -1,6 +1,6 @@
 package com.wutsi.koki.room.web.refdata.model
 
-import com.wutsi.koki.room.web.common.util.HtmlUtils
+import com.wutsi.koki.platform.util.HtmlUtils
 
 data class AddressModel(
     val street: String? = null,

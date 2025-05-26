@@ -2,20 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<<<<<<< Updated upstream
-<div class="widget" th:fragment="message-breadcrumb(message)">
-    <div class="widget-body">
-        <a href="/">Home</a>
-        &gt;
-        <a href="/settings">Settings</a>
-        &gt;
-        <a href="/settings/messages" th:if="${message}">Messages</a>
-        <span th:if="${message}">&gt;</span>
-        <span th:if="${message}" th:text="${message.name}">TITLE</span>
-        <span th:if="!${message}">Messages</span>
-    </div>
-</div>
-=======
 <tr class="message" th:fragment="columns(message)" th:remove="tag">
     <td>
         <table style="width:100%">
@@ -72,6 +58,5 @@
         </button>
     </td>
 </tr>
->>>>>>> Stashed changes
 
 </body>

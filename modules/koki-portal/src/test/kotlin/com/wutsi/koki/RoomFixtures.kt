@@ -33,14 +33,15 @@ object RoomFixtures {
             address = Address(
                 cityId = RefDataFixtures.cities[0].id,
                 country = RefDataFixtures.cities[0].country,
-            )
+            ),
+            listingUrl = "/rooms/1111/classic-double-room",
         ),
         RoomSummary(
             id = 1112,
             accountId = AccountFixtures.accounts[0].id,
             status = RoomStatus.PUBLISHED,
             type = RoomType.ROOM,
-            title = "Comfort Double Room",
+            title = "Comfort Single Room",
             summary = "Comfortable room with stunning view",
             heroImageId = FileFixtures.images[1].id,
             maxGuests = 3,
@@ -52,7 +53,8 @@ object RoomFixtures {
             address = Address(
                 cityId = RefDataFixtures.cities[0].id,
                 country = RefDataFixtures.cities[0].country,
-            )
+            ),
+            listingUrl = "/rooms/1112/classic-single-room",
         ),
         RoomSummary(
             id = 1113,
@@ -69,7 +71,8 @@ object RoomFixtures {
             address = Address(
                 cityId = RefDataFixtures.cities[0].id,
                 country = RefDataFixtures.cities[0].country,
-            )
+            ),
+            listingUrl = "/rooms/1113/deluxe-double-room",
         ),
         RoomSummary(
             id = 1114,
@@ -85,7 +88,8 @@ object RoomFixtures {
             address = Address(
                 cityId = RefDataFixtures.cities[1].id,
                 country = RefDataFixtures.cities[1].country,
-            )
+            ),
+            listingUrl = "/rooms/1114/standard-single-room-1-queen-bed",
         ),
         RoomSummary(
             id = 1115,
@@ -101,7 +105,8 @@ object RoomFixtures {
             address = Address(
                 cityId = RefDataFixtures.cities[1].id,
                 country = RefDataFixtures.cities[1].country,
-            )
+            ),
+            listingUrl = null
         ),
         RoomSummary(
             id = 1116,
@@ -120,6 +125,7 @@ object RoomFixtures {
                 stateId = RefDataFixtures.cities[1].parentId,
                 street = "3030 Linton",
             ),
+            listingUrl = "/rooms/1116/windmill-in-ponta-delgada",
         ),
     )
 
@@ -168,6 +174,7 @@ object RoomFixtures {
         pricePerMonth = Money(1500.0, "CAD"),
         area = 750,
         categoryId = RefDataFixtures.categories[0].id,
+        listingUrl = "/rooms/1116/windmill-in-ponta-delgada",
     )
 
     val roomUnits = listOf(

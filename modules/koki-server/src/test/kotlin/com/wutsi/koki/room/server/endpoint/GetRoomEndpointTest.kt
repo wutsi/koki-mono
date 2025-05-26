@@ -43,11 +43,23 @@ class GetRoomEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(listOf(1L, 2L), room.amenityIds)
         assertEquals("16:00", room.checkinTime)
         assertEquals("12:00", room.checkoutTime)
+        assertEquals(null, room.listingUrl)
+    }
+
+    @Test
+    fun published() {
+        val response = rest.getForEntity("/v1/rooms/112", GetRoomResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val room = response.body!!.room
+        assertEquals(RoomStatus.PUBLISHED, room.status)
+        assertEquals("/rooms/112/room-b", room.listingUrl)
     }
 
     @Test
     fun deleted() {
-        val response = rest.getForEntity("/v1/rooms/112", ErrorResponse::class.java)
+        val response = rest.getForEntity("/v1/rooms/199", ErrorResponse::class.java)
 
         assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
         assertEquals(ErrorCode.ROOM_NOT_FOUND, response.body?.error?.code)
