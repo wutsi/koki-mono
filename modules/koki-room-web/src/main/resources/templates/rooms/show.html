@@ -267,9 +267,8 @@
                 }
             }).then(response => {
             if (response.ok) {
+                document.querySelector('#room-message-modal .btn-close').click();
                 alert('Your message has been sent');
-                new bootstrap.Modal('#room-message-modal').hide();
-                // document.querySelector('#room-message-modal .btn-close').click();
             } else {
                 response.text().then(txt => {
                     console.log('Error', txt);

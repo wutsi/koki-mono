@@ -139,6 +139,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
         alert.accept()
         driver.switchTo().parentFrame()
 
+        Thread.sleep(1000)
         assertElementNotVisible("#room-message-modal")
     }
 
