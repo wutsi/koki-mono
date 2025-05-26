@@ -14,6 +14,7 @@ import com.wutsi.koki.EmployeeFixtures
 import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.FormFixtures
 import com.wutsi.koki.InvoiceFixtures
+import com.wutsi.koki.MessageFixtures
 import com.wutsi.koki.ModuleFixtures
 import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.PaymentFixtures
@@ -57,6 +58,10 @@ import com.wutsi.koki.invoice.dto.CreateInvoiceRequest
 import com.wutsi.koki.invoice.dto.CreateInvoiceResponse
 import com.wutsi.koki.invoice.dto.GetInvoiceResponse
 import com.wutsi.koki.invoice.dto.SearchInvoiceResponse
+import com.wutsi.koki.message.dto.GetMessageResponse
+import com.wutsi.koki.message.dto.SearchMessageResponse
+import com.wutsi.koki.message.dto.SendMessageRequest
+import com.wutsi.koki.message.dto.SendMessageResponse
 import com.wutsi.koki.module.dto.SearchModuleResponse
 import com.wutsi.koki.module.dto.SearchPermissionResponse
 import com.wutsi.koki.note.dto.CreateNoteRequest
@@ -246,6 +251,7 @@ abstract class AbstractPageControllerTest {
         setupTenantModule()
         setupFileModule()
         setupEmailModule()
+        setupMessageModule()
         setupNoteModule()
         setupAccountModule()
         setupContactModule()
@@ -529,6 +535,42 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any<SendEmailRequest>(),
                 eq(SendEmailResponse::class.java)
+            )
+    }
+
+    private fun setupMessageModule() {
+        doReturn(
+            ResponseEntity(
+                SearchMessageResponse(MessageFixtures.messages),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchMessageResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetMessageResponse(MessageFixtures.message),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetMessageResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                SendMessageResponse(MessageFixtures.NEW_ID),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<SendMessageRequest>(),
+                eq(SendMessageResponse::class.java)
             )
     }
 

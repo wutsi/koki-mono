@@ -3,6 +3,10 @@
     "main": [
       "image",
       "room-amenity"
+    ],
+    "side": [
+      "message",
+      "note"
     ]
   }
 }

@@ -78,7 +78,7 @@
     </div>
 
     <div class="row">
-        <div class="col-12">
+        <div class="col-12 col-md-7">
             <div class="widget">
                 <div class="widget-body">
                     <div th:replace="~{__components/module :: tabs('main', true)}"></div>
@@ -86,35 +86,39 @@
                         th:replace="~{__components/module :: tabs-content('main', true, ${room}, ${module})}"></div>
 
                     <div class="hidden" id="tab-details-content">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-12 col-md-7">
-                                    <div th:replace="~{__components/room :: details(${room})}"></div>
-                                </div>
-                                <div class="col-12 col-md-5">
-                                    <div data-component-id="map"
-                                         id="map"
-                                         style="height:600px"
-                                         th:data-latitude="${room.hasGeoLocation} ? ${room.latitude} : ${room.address?.city?.latitude}"
-                                         th:data-longitude="${room.hasGeoLocation} ? ${room.longitude} : ${room.address?.city?.longitude}"
-                                         th:data-show-marker="${room.hasGeoLocation}"
-                                         th:data-zoom="${room.hasGeoLocation} ? 18 : 13"
-                                    ></div>
-                                    <div class="margin-top-small text-center">
-                                        <a class="btn-map btn btn-sm btn-light"
-                                           th:href="'/rooms/' + ${room.id} + '/map'"
-                                           th:if="!${room.readOnly} AND ${user?.hasPermission('room:manage')}"
-                                        >
+                        <div th:replace="~{__components/room :: details(${room})}"></div>
+                        <div class="margin-top">
+                            <div data-component-id="map"
+                                 id="map"
+                                 style="height:600px"
+                                 th:data-latitude="${room.hasGeoLocation} ? ${room.latitude} : ${room.address?.city?.latitude}"
+                                 th:data-longitude="${room.hasGeoLocation} ? ${room.longitude} : ${room.address?.city?.longitude}"
+                                 th:data-show-marker="${room.hasGeoLocation}"
+                                 th:data-zoom="${room.hasGeoLocation} ? 18 : 13"
+                            ></div>
+                            <div class="margin-top-small text-center">
+                                <a class="btn-map btn btn-sm btn-light"
+                                   th:href="'/rooms/' + ${room.id} + '/map'"
+                                   th:if="!${room.readOnly} AND ${user?.hasPermission('room:manage')}"
+                                >
                                             <span
                                                 th:if="!${room.latitude} AND !${room.longitude}">Set Geolocation</span>
-                                            <span
-                                                th:if="${room.latitude} OR ${room.longitude}">Update Geolocation</span>
-                                        </a>
-                                    </div>
-                                </div>
+                                    <span
+                                        th:if="${room.latitude} OR ${room.longitude}">Update Geolocation</span>
+                                </a>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-5">
+            <div class="widget">
+                <div class="widget-body">
+                    <div th:replace="~{__components/module :: tabs('side', false)}"></div>
+                    <div
+                        th:replace="~{__components/module :: tabs-content('side', false, ${room}, ${module})}"></div>
                 </div>
             </div>
         </div>

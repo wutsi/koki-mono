@@ -143,7 +143,7 @@ function koki_modal_close() {
 }
 
 /**
- * Load more data
+ * Load more.html data
  * @param containerId ID of the container
  */
 function koki_load_more(containerId) {

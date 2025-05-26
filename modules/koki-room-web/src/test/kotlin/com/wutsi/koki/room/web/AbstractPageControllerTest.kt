@@ -8,12 +8,20 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.account.dto.CreateAccountRequest
+import com.wutsi.koki.account.dto.CreateAccountResponse
+import com.wutsi.koki.account.dto.GetAccountResponse
+import com.wutsi.koki.account.dto.GetAttributeResponse
+import com.wutsi.koki.account.dto.SearchAccountResponse
+import com.wutsi.koki.account.dto.SearchAttributeResponse
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.file.dto.UploadFileResponse
+import com.wutsi.koki.message.dto.SendMessageRequest
+import com.wutsi.koki.message.dto.SendMessageResponse
 import com.wutsi.koki.platform.security.AccessTokenHolder
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
@@ -182,7 +190,9 @@ abstract class AbstractPageControllerTest {
         setupFileModule()
         setupTenantModule()
         setupUserModule()
+        setupAccountModule()
         setupRoomModule()
+        setupMessageModule()
     }
 
     private fun setupRefDataModule() {
@@ -424,6 +434,79 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(GetRoomResponse::class.java)
+            )
+    }
+
+    fun setupMessageModule() {
+        doReturn(
+            ResponseEntity(
+                SendMessageResponse(111),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<SendMessageRequest>(),
+                eq(SendMessageResponse::class.java)
+            )
+    }
+
+    private fun setupAccountModule() {
+        // Attributes
+        doReturn(
+            ResponseEntity(
+                SearchAttributeResponse(AccountFixtures.attributes),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchAttributeResponse::class.java)
+            )
+        doReturn(
+            ResponseEntity(
+                GetAttributeResponse(AccountFixtures.attribute),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetAttributeResponse::class.java)
+            )
+
+        // Accounts
+        doReturn(
+            ResponseEntity(
+                SearchAccountResponse(AccountFixtures.accounts),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchAccountResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetAccountResponse(AccountFixtures.account),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetAccountResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreateAccountResponse(AccountFixtures.NEW_ACCOUNT_ID),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateAccountRequest>(),
+                eq(CreateAccountResponse::class.java)
             )
     }
 

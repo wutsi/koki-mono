@@ -5,9 +5,11 @@ import com.wutsi.koki.platform.security.AccessTokenHolder
 import com.wutsi.koki.platform.security.AuthorizationRestInterceptor
 import com.wutsi.koki.platform.tenant.TenantProvider
 import com.wutsi.koki.platform.tenant.TenantRestInterceptor
+import com.wutsi.koki.sdk.KokiAccounts
 import com.wutsi.koki.sdk.KokiBusinesses
 import com.wutsi.koki.sdk.KokiConfiguration
 import com.wutsi.koki.sdk.KokiFiles
+import com.wutsi.koki.sdk.KokiMessages
 import com.wutsi.koki.sdk.KokiModules
 import com.wutsi.koki.sdk.KokiRefData
 import com.wutsi.koki.sdk.KokiRoomUnits
@@ -42,6 +44,11 @@ class KokiSDKConfiguration(
     }
 
     @Bean
+    fun kokiAccounts(): KokiAccounts {
+        return KokiAccounts(urlBuilder(), rest())
+    }
+
+    @Bean
     fun kokiBusiness(): KokiBusinesses {
         return KokiBusinesses(urlBuilder(), rest())
     }
@@ -54,6 +61,11 @@ class KokiSDKConfiguration(
     @Bean
     fun kokiFiles(): KokiFiles {
         return KokiFiles(urlBuilder(), rest(), tenantProvider, accessTokenHolder)
+    }
+
+    @Bean
+    fun kokiMessages(): KokiMessages {
+        return KokiMessages(urlBuilder(), rest())
     }
 
     @Bean
