@@ -81,7 +81,7 @@ class SettingsListUserController(
         model.addAttribute("users", users)
         if (users.size >= limit) {
             val nextOffset = offset + limit
-            var moreUrl = "/settings/users/more?limit=$limit&offset=$nextOffset"
+            var moreUrl = "/settings/users/more.html?limit=$limit&offset=$nextOffset"
             roleId?.let { moreUrl = "$moreUrl&role-id=$roleId" }
             status?.let { moreUrl = "$moreUrl&status=$status" }
             model.addAttribute("moreUrl", moreUrl)

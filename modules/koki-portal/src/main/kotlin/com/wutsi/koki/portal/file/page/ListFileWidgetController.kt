@@ -54,7 +54,7 @@ class ListFileWidgetController(private val service: FileService) {
             if (files.size >= limit) {
                 val nextOffset = offset + limit
                 val url = listOf(
-                    "/files/widgets/list/more?limit=$limit&offset=$nextOffset",
+                    "/files/widgets/list/more.html?limit=$limit&offset=$nextOffset",
                     ownerId?.let { "owner-id=$ownerId" },
                     ownerType?.let { "owner-type=$ownerType" },
                 ).filterNotNull()

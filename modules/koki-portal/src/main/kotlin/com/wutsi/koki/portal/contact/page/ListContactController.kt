@@ -71,7 +71,7 @@ class ListContactController(
             model.addAttribute("showAccount", showAccount)
             if (contacts.size >= limit) {
                 val nextOffset = offset + limit
-                var url = "/contacts/more?show-account=$showAccount&limit=$limit&offset=$nextOffset"
+                var url = "/contacts/more.html?show-account=$showAccount&limit=$limit&offset=$nextOffset"
                 if (typeId != null) {
                     url = "$url&type-id=$typeId"
                 }

@@ -61,7 +61,7 @@ class ListFormController(
             model.addAttribute("forms", forms)
             if (forms.size >= limit) {
                 val nextOffset = offset + limit
-                var url = "/forms/more?limit=$limit&offset=$nextOffset"
+                var url = "/forms/more.html?limit=$limit&offset=$nextOffset"
                 if (active != null) {
                     url = "$url&active=$active"
                 }

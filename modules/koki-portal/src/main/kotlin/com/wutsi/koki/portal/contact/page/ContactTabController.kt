@@ -70,7 +70,7 @@ class ContactTabController(
                 if (contacts.size >= limit) {
                     val nextOffset = offset + limit
                     var url =
-                        "/contacts/tab/more?owner-id=$ownerId&owner-type=$ownerType&limit=$limit&offset=$nextOffset"
+                        "/contacts/tab/more.html?owner-id=$ownerId&owner-type=$ownerType&limit=$limit&offset=$nextOffset"
                     model.addAttribute("moreUrl", url)
                 }
             }

@@ -1,18 +1,62 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<div class="widget" th:fragment="message-breadcrumb(message)">
-    <div class="widget-body">
-        <a href="/">Home</a>
-        &gt;
-        <a href="/settings">Settings</a>
-        &gt;
-        <a href="/settings/messages" th:if="${message}">Messages</a>
-        <span th:if="${message}">&gt;</span>
-        <span th:if="${message}" th:text="${message.name}">TITLE</span>
-        <span th:if="!${message}">Messages</span>
-    </div>
-</div>
+<tr class="message" th:fragment="columns(message)" th:remove="tag">
+    <td>
+        <table cellspacing="2" style="width:100%">
+            <tr>
+                <td class="text-small" width="1%"><b>Sender:</b></td>
+                <td class="text-small" th:text="${message.senderName}">TITLE</td>
+            </tr>
+            <tr>
+                <td class="text-small"><b>Email:</b></td>
+                <td class="text-small">
+                    <a th:href="'mailto:' + ${message.senderEmail}" th:text="${message.senderEmail}">XXX</a>
+                </td>
+            </tr>
+            <tr th:if="${message.senderPhone}">
+                <td class="text-small"><b>Phone:</b></td>
+                <td class="text-small">
+                    <a th:href="'tel:' + ${message.senderPhone}" th:text="${message.senderPhone}">PHONE</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="padding-top-small" colspan="2" th:text="${message.body}">BODY</td>
+            </tr>
+            <tr th:if="${user?.hasPermission('message:manage')}">
+                <td class="padding-top-small text-right" colspan="2">
+                    <button class="btn btn-sm btn-light btn-archive"
+                            th:id="'btn-archive-' + ${message.id}"
+                            th:if="!${message.archived}"
+                            th:onclick="'kokiMessageTable.archive(' + ${message.id} + ')'"
+                    >
+                        Archive
+                    </button>
+                    <button class="btn btn-sm btn-light btn-unarchive"
+                            th:id="'btn-unarchive-' + ${message.id}"
+                            th:if="${message.archived}"
+                            th:onclick="'kokiMessageTable.unarchive(' + ${message.id} + ')'"
+                    >
+                        Un-archive
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr id="message-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
+    <td class="text-center" colspan="4">
+        <button
+            class="btn btn-sm btn-light"
+            data-component-id="load-more"
+            data-container-id="message-load-more"
+            th:data-url="${moreUrl}"
+        >
+            Load more...
+        </button>
+    </td>
+</tr>
 
 </body>

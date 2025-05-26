@@ -54,7 +54,7 @@ class RoomTabController(private val service: RoomService) : AbstractRoomControll
 
             if (rooms.size >= limit) {
                 val nextOffset = offset + limit
-                var url = "/rooms/tab/more?limit=$limit&offset=$nextOffset&owner-id=$ownerId&owner-type=$ownerType"
+                var url = "/rooms/tab/more.html?limit=$limit&offset=$nextOffset&owner-id=$ownerId&owner-type=$ownerType"
                 if (readOnly != null) {
                     url = "$url&read-only=$readOnly"
                 }

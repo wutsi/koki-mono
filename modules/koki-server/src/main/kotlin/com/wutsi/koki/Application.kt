@@ -43,6 +43,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
         "com.wutsi.koki.file.server.dao",
         "com.wutsi.koki.form.server.dao",
         "com.wutsi.koki.invoice.server.dao",
+        "com.wutsi.koki.message.server.dao",
         "com.wutsi.koki.module.server.dao",
         "com.wutsi.koki.note.server.dao",
         "com.wutsi.koki.payment.server.dao",

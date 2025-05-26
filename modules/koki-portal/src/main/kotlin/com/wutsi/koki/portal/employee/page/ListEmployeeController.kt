@@ -76,7 +76,7 @@ class ListEmployeeController(
             model.addAttribute("employees", employees)
             if (employees.size >= limit) {
                 val nextOffset = offset + limit
-                var url = "/employees/more?limit=$limit&offset=$nextOffset"
+                var url = "/employees/more.html?limit=$limit&offset=$nextOffset"
                 if (status != null) {
                     url = "$url&status=$status"
                 }

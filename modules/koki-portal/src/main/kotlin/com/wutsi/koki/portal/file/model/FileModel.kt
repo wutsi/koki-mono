@@ -31,4 +31,10 @@ data class FileModel(
 ) {
     val rejected: Boolean
         get() = status == FileStatus.REJECTED
+
+    val reviewing: Boolean
+        get() = status == FileStatus.UNDER_REVIEW
+
+    val approved: Boolean
+        get() = status == FileStatus.APPROVED
 }

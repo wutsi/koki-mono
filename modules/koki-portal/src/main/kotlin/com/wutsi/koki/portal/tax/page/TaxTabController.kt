@@ -61,7 +61,7 @@ class TaxTabController(private val service: TaxService) : AbstractPageController
             if (taxes.size >= limit) {
                 val nextOffset = offset + limit
                 val url =
-                    "/taxes/tab/more?limit=$limit&offset=$nextOffset&owner-id=$ownerId&owner-type=$ownerType"
+                    "/taxes/tab/more.html?limit=$limit&offset=$nextOffset&owner-id=$ownerId&owner-type=$ownerType"
                 model.addAttribute("moreUrl", url)
             }
         }

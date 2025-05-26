@@ -56,7 +56,7 @@ class SettingsListTypeController(private val service: TypeService) : AbstractSet
         model.addAttribute("types", types)
         if (types.size >= limit) {
             val nextOffset = offset + limit
-            var moreUrl = "/settings/tenant/types/more?limit=$limit&offset=$nextOffset"
+            var moreUrl = "/settings/tenant/types/more.html?limit=$limit&offset=$nextOffset"
             if (objectType != null) {
                 moreUrl = "$moreUrl&object-type=$objectType"
             }

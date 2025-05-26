@@ -66,7 +66,8 @@ class ImageTabController(private val service: FileService) : AbstractPageControl
 
             if (files.size >= limit) {
                 val nextOffset = offset + limit
-                var url = "/images/tab/more?limit=$limit&offset=$nextOffset&owner-id=$ownerId&owner-type=$ownerType"
+                var url =
+                    "/images/tab/more.html?limit=$limit&offset=$nextOffset&owner-id=$ownerId&owner-type=$ownerType"
                 if (readOnly != null) {
                     url = "$url&read-only=$readOnly"
                 }

@@ -34,10 +34,19 @@
 </tr>
 
 <div th:fragment="status(status)">
-    <i class="fa-solid fa-check success" th:if="${status.name} == 'APPROVED'"></i>
-    <i class="fa-solid fa-circle-xmark error" th:if="${status.name} == 'REJECTED'"></i>
-    <i class="fa-solid fa-circle warning" th:if="${status.name} == 'UNDER_REVIEW'"></i>
-    <span th:text="#{'file-status.' + ${status}}">STATUS</span>
+    <div class="badge rounded-pill text-bg-success" th:if="${status.name} == 'APPROVED'">
+        <i class="fa-solid fa-check" th:if="${status.name} == 'APPROVED'"></i>
+        <span th:text="#{'file-status.' + ${status}}">STATUS</span>
+    </div>
+    <div class="badge rounded-pill text-bg-danger" th:if="${status.name} == 'REJECTED'">
+        <i class="fa-solid fa-circle-xmark"></i>
+        <span th:text="#{'file-status.' + ${status}}">STATUS</span>
+    </div>
+
+    <div class="badge rounded-pill text-bg-warning" th:if="${status.name} == 'UNDER_REVIEW'">
+        <i class="fa-solid fa-circle warning"></i>
+        <span th:text="#{'file-status.' + ${status}}">STATUS</span>
+    </div>
 </div>
 
 </body>

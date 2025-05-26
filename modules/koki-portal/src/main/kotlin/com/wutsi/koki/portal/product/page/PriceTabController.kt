@@ -40,7 +40,7 @@ class PriceTabController(private val service: ProductService) : AbstractProductC
             model.addAttribute("prices", prices)
             if (prices.size >= limit) {
                 val nextOffset = offset + limit
-                var url = "/prices/tab/more?product-id=$productId&limit=$limit&offset=$nextOffset"
+                var url = "/prices/tab/more.html?product-id=$productId&limit=$limit&offset=$nextOffset"
                 model.addAttribute("moreUrl", url)
             }
         }

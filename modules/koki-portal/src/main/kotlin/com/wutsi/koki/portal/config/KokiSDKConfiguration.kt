@@ -15,6 +15,7 @@ import com.wutsi.koki.sdk.KokiEmployees
 import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiForms
 import com.wutsi.koki.sdk.KokiInvoices
+import com.wutsi.koki.sdk.KokiMessages
 import com.wutsi.koki.sdk.KokiModules
 import com.wutsi.koki.sdk.KokiNotes
 import com.wutsi.koki.sdk.KokiPayments
@@ -100,6 +101,11 @@ class KokiSDKConfiguration(
     @Bean
     fun kokiInvoices(): KokiInvoices {
         return KokiInvoices(urlBuilder(), tenantProvider, rest())
+    }
+
+    @Bean
+    fun kokiMessages(): KokiMessages {
+        return KokiMessages(urlBuilder(), rest())
     }
 
     @Bean

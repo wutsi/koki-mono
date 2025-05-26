@@ -37,7 +37,7 @@ class SettingsListAttributeController(private val service: AttributeService) : A
         model.addAttribute("attributes", attributes)
         if (attributes.size >= limit) {
             val nextOffset = offset + limit
-            val moreUrl = "/settings/accounts/attributes/more?limit=$limit&offset=$nextOffset"
+            val moreUrl = "/settings/accounts/attributes/more.html?limit=$limit&offset=$nextOffset"
             model.addAttribute("moreUrl", moreUrl)
         }
         return "accounts/settings/attributes/more"
