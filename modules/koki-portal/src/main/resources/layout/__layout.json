@@ -1,13 +1,13 @@
 {
   "tabs": [
     "account",
-    "room",
     "contact",
+    "room",
+    "product",
+    "invoice",
+    "payment",
     "employee",
     "form",
-    "product",
-    "tax",
-    "invoice",
-    "payment"
+    "tax"
   ]
 }
