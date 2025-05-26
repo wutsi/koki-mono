@@ -71,6 +71,8 @@ object ErrorCode {
     val LOCATION_NOT_FOUND = "$PREFIX:location:not-found"
     val LOCATION_FEED_NOT_FOUND = "$PREFIX:location:feed-not-found"
 
+    val MESSAGE_NOT_FOUND: String = "$PREFIX:message:not-found"
+
     val MODULE_NOT_FOUND: String = "$PREFIX:module:not-found"
 
     val NOTE_NOT_FOUND: String = "$PREFIX:note:not-found"

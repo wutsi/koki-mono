@@ -14,5 +14,6 @@ enum class ObjectType {
     PAYMENT,
     FORM,
     ROOM,
-    ROOM_UNIT
+    ROOM_UNIT,
+    MESSAGE,
 }
