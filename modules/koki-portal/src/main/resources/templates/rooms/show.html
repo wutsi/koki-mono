@@ -54,21 +54,16 @@
                             <b>Type</b><br/>
                             <div th:replace="~{__components/room :: type(${room.type})}"></div>
                         </div>
-                        <div class="margin-right-2x" th:if="${room.hasPrice}">
+                        <div th:if="${room.hasPrice}">
                             <b>Price</b><br/>
                             <div th:if="${room.pricePerNight}">
-                                <span th:text="${room.pricePerNight}">$$</span> per night
+                                <div th:text="${room.pricePerNight}">$$</div>
+                                <div class="text-small">per night</div>
                             </div>
                             <div th:if="${room.pricePerMonth}">
-                                <span th:text="${room.pricePerMonth}">$$</span> per month
+                                <div th:text="${room.pricePerMonth}">$$</div>
+                                <div class="text-small">per night</div>
                             </div>
-                        </div>
-                        <div class="margin-right-2x">
-                            <b>Account</b><br/>
-                            <a class="entity-title" th:href="'/accounts/' + ${room.account.id}">
-                                <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
-                                <span th:text="${room.account.name}">ACCOUNT</span>
-                            </a>
                         </div>
                     </div>
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
@@ -77,8 +72,25 @@
         </div>
     </div>
 
+    <div class="row" id="listing-container" th:if="${listingUrl}">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <table>
+                        <tr>
+                            <td>Listing Address:</td>
+                            <td class="margin-left">
+                                <a target="_blank" th:href="${listingUrl}" th:text="${listingUrl}">URL</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
-        <div class="col-12 col-md-7">
+        <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
                     <div th:replace="~{__components/module :: tabs('main', true)}"></div>
@@ -86,39 +98,35 @@
                         th:replace="~{__components/module :: tabs-content('main', true, ${room}, ${module})}"></div>
 
                     <div class="hidden" id="tab-details-content">
-                        <div th:replace="~{__components/room :: details(${room})}"></div>
-                        <div class="margin-top">
-                            <div data-component-id="map"
-                                 id="map"
-                                 style="height:600px"
-                                 th:data-latitude="${room.hasGeoLocation} ? ${room.latitude} : ${room.address?.city?.latitude}"
-                                 th:data-longitude="${room.hasGeoLocation} ? ${room.longitude} : ${room.address?.city?.longitude}"
-                                 th:data-show-marker="${room.hasGeoLocation}"
-                                 th:data-zoom="${room.hasGeoLocation} ? 18 : 13"
-                            ></div>
-                            <div class="margin-top-small text-center">
-                                <a class="btn-map btn btn-sm btn-light"
-                                   th:href="'/rooms/' + ${room.id} + '/map'"
-                                   th:if="!${room.readOnly} AND ${user?.hasPermission('room:manage')}"
-                                >
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12 col-md-7">
+                                    <div th:replace="~{__components/room :: details(${room})}"></div>
+                                </div>
+                                <div class="col-12 col-md-5">
+                                    <div data-component-id="map"
+                                         id="map"
+                                         style="height:600px"
+                                         th:data-latitude="${room.hasGeoLocation} ? ${room.latitude} : ${room.address?.city?.latitude}"
+                                         th:data-longitude="${room.hasGeoLocation} ? ${room.longitude} : ${room.address?.city?.longitude}"
+                                         th:data-show-marker="${room.hasGeoLocation}"
+                                         th:data-zoom="${room.hasGeoLocation} ? 18 : 13"
+                                    ></div>
+                                    <div class="margin-top-small text-center">
+                                        <a class="btn-map btn btn-sm btn-light"
+                                           th:href="'/rooms/' + ${room.id} + '/map'"
+                                           th:if="!${room.readOnly} AND ${user?.hasPermission('room:manage')}"
+                                        >
                                             <span
                                                 th:if="!${room.latitude} AND !${room.longitude}">Set Geolocation</span>
-                                    <span
-                                        th:if="${room.latitude} OR ${room.longitude}">Update Geolocation</span>
-                                </a>
+                                            <span
+                                                th:if="${room.latitude} OR ${room.longitude}">Update Geolocation</span>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-12 col-md-5">
-            <div class="widget">
-                <div class="widget-body">
-                    <div th:replace="~{__components/module :: tabs('side', false)}"></div>
-                    <div
-                        th:replace="~{__components/module :: tabs-content('side', false, ${room}, ${module})}"></div>
                 </div>
             </div>
         </div>

@@ -80,7 +80,7 @@ class RoomController(
                 title = room.title ?: "",
                 description = room.summary,
                 image = room.heroImage?.contentUrl,
-                url = "$baseUrl${room.url}",
+                url = "$baseUrl${room.listingUrl}",
             )
         )
         return "rooms/show"

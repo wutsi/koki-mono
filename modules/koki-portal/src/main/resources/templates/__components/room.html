@@ -54,13 +54,13 @@
     </td>
     <td>
         <a th:href="'/rooms/' + ${room.id}">
-            <div th:if="${room.pricePerNight}">
-                <span th:text="${room.pricePerNight}">$$</span>
-                <span class="text-small">per night</span>
+            <div class="margin-bottom" th:if="${room.pricePerNight}">
+                <div th:text="${room.pricePerNight}">$$</div>
+                <div class="text-small">per night</div>
             </div>
             <div th:if="${room.pricePerMonth}">
-                <span th:text="${room.pricePerMonth}">$$</span>
-                <span class="text-small">per month</span>
+                <div th:text="${room.pricePerMonth}">$$</div>
+                <div class="text-small">per month</div>
             </div>
         </a>
     </td>

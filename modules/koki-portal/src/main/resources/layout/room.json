@@ -2,9 +2,7 @@
   "tabs": {
     "main": [
       "image",
-      "room-amenity"
-    ],
-    "side": [
+      "room-amenity",
       "message",
       "note"
     ]

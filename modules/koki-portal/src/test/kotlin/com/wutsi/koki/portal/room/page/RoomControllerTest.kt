@@ -46,6 +46,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertElementAttribute("[data-component-id=map]", "data-longitude", room.longitude.toString())
         assertElementAttribute("[data-component-id=map]", "data-show-marker", "true")
 
+        assertElementNotPresent("#listing-container")
         assertElementPresent(".btn-edit")
         assertElementPresent(".btn-map")
         assertElementPresent(".btn-publish")
@@ -68,6 +69,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ROOM)
 
+        assertElementNotPresent("#listing-container")
         assertElementNotPresent(".btn-edit")
         assertElementNotPresent(".btn-publish")
         assertElementNotPresent(".btn-delete")
@@ -90,6 +92,8 @@ class RoomControllerTest : AbstractPageControllerTest() {
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ROOM)
 
+        assertElementPresent("#listing-container")
+        assertElementAttributeEndsWith("#listing-container a", "href", room.listingUrl ?: "")
         assertElementNotPresent(".btn-edit")
         assertElementNotPresent(".btn-map")
         assertElementNotPresent(".btn-publish")

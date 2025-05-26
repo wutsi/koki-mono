@@ -1,7 +1,7 @@
 package com.wutsi.koki.portal.room.mapper
 
+import com.wutsi.koki.platform.util.HtmlUtils
 import com.wutsi.koki.portal.account.model.AccountModel
-import com.wutsi.koki.portal.common.HtmlUtils
 import com.wutsi.koki.portal.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
@@ -13,8 +13,6 @@ import com.wutsi.koki.portal.room.model.RoomModel
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.room.dto.Room
 import com.wutsi.koki.room.dto.RoomSummary
-import io.micrometer.core.instrument.Metrics.summary
-import org.apache.tomcat.jni.Buffer.address
 import org.springframework.stereotype.Service
 
 @Service
@@ -62,6 +60,7 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             longitude = entity.longitude,
             latitude = entity.latitude,
             area = entity.area,
+            listingUrl = entity.listingUrl,
         )
     }
 
@@ -130,6 +129,7 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             category = category,
             furnishedType = entity.furnishedType,
             area = entity.area,
+            listingUrl = entity.listingUrl,
         )
     }
 }

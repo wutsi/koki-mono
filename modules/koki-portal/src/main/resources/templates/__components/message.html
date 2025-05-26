@@ -1,23 +1,23 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <body>
 
 <tr class="message" th:fragment="columns(message)" th:remove="tag">
     <td>
-        <table cellspacing="2" style="width:100%">
+        <table style="width:100%">
             <tr>
-                <td class="text-small" width="1%"><b>Sender:</b></td>
-                <td class="text-small" th:text="${message.senderName}">TITLE</td>
+                <td width="1%"><b>Sender:</b></td>
+                <td class="padding-left" th:text="${message.senderName}">TITLE</td>
             </tr>
             <tr>
-                <td class="text-small"><b>Email:</b></td>
-                <td class="text-small">
+                <td><b>Email:</b></td>
+                <td class="padding-left">
                     <a th:href="'mailto:' + ${message.senderEmail}" th:text="${message.senderEmail}">XXX</a>
                 </td>
             </tr>
             <tr th:if="${message.senderPhone}">
-                <td class="text-small"><b>Phone:</b></td>
-                <td class="text-small">
+                <td><b>Phone:</b></td>
+                <td class="padding-left">
                     <a th:href="'tel:' + ${message.senderPhone}" th:text="${message.senderPhone}">PHONE</a>
                 </td>
             </tr>

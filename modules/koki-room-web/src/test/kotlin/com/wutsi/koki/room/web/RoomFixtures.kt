@@ -14,6 +14,7 @@ object RoomFixtures {
     val rooms = listOf(
         RoomSummary(
             id = 1111,
+            accountId = AccountFixtures.accounts[0].id,
             status = RoomStatus.PUBLISHED,
             type = RoomType.ROOM,
             title = "Classic Double Room",
@@ -27,13 +28,15 @@ object RoomFixtures {
             address = Address(
                 cityId = RefDataFixtures.cities[0].id,
                 country = RefDataFixtures.cities[0].country,
-            )
+            ),
+            listingUrl = "/rooms/1111/classic-double-room",
         ),
         RoomSummary(
             id = 1112,
+            accountId = AccountFixtures.accounts[0].id,
             status = RoomStatus.PUBLISHED,
             type = RoomType.ROOM,
-            title = "Comfort Double Room",
+            title = "Comfort Single Room",
             summary = "Comfortable room with stunning view",
             heroImageId = FileFixtures.images[1].id,
             maxGuests = 3,
@@ -45,10 +48,12 @@ object RoomFixtures {
             address = Address(
                 cityId = RefDataFixtures.cities[0].id,
                 country = RefDataFixtures.cities[0].country,
-            )
+            ),
+            listingUrl = "/rooms/1112/classic-single-room",
         ),
         RoomSummary(
             id = 1113,
+            accountId = AccountFixtures.accounts[0].id,
             status = RoomStatus.PUBLISHED,
             type = RoomType.ROOM,
             title = "Deluxe Double Room",
@@ -61,10 +66,12 @@ object RoomFixtures {
             address = Address(
                 cityId = RefDataFixtures.cities[0].id,
                 country = RefDataFixtures.cities[0].country,
-            )
+            ),
+            listingUrl = "/rooms/1113/deluxe-double-room",
         ),
         RoomSummary(
             id = 1114,
+            accountId = AccountFixtures.accounts[0].id,
             status = RoomStatus.PUBLISHED,
             type = RoomType.ROOM,
             title = "Standard Single Room, 1 Queen Bed",
@@ -76,11 +83,13 @@ object RoomFixtures {
             address = Address(
                 cityId = RefDataFixtures.cities[1].id,
                 country = RefDataFixtures.cities[1].country,
-            )
+            ),
+            listingUrl = "/rooms/1114/standard-single-room-1-queen-bed",
         ),
         RoomSummary(
             id = 1115,
-            status = RoomStatus.PUBLISHING,
+            accountId = AccountFixtures.accounts[0].id,
+            status = RoomStatus.PUBLISHED,
             type = RoomType.ROOM,
             title = "Presidential Suite",
             maxGuests = 6,
@@ -91,10 +100,12 @@ object RoomFixtures {
             address = Address(
                 cityId = RefDataFixtures.cities[1].id,
                 country = RefDataFixtures.cities[1].country,
-            )
+            ),
+            listingUrl = "/rooms/1115/presidential-suite",
         ),
         RoomSummary(
             id = 1116,
+            accountId = AccountFixtures.accounts[0].id,
             status = RoomStatus.PUBLISHED,
             type = RoomType.APARTMENT,
             title = "Windmill in Ponta Delgada",
@@ -109,11 +120,13 @@ object RoomFixtures {
                 stateId = RefDataFixtures.cities[1].parentId,
                 street = "3030 Linton",
             ),
+            listingUrl = "/rooms/1116/windmill-in-ponta-delgada",
         ),
     )
 
     val room = Room(
         id = 1115,
+        accountId = AccountFixtures.accounts[0].id,
         status = RoomStatus.PUBLISHED,
         type = RoomType.APARTMENT,
         title = "Windmill in Ponta Delgada",
@@ -130,6 +143,7 @@ object RoomFixtures {
         numberOfBeds = 3,
         numberOfBathrooms = 3,
         numberOfRooms = 3,
+        pricePerNight = Money(amount = 350.0, currency = "CAD"),
         address = Address(
             cityId = RefDataFixtures.cities[0].id,
             country = RefDataFixtures.cities[0].country,
@@ -150,10 +164,11 @@ object RoomFixtures {
         latitude = 11.43094309,
         longitude = 3.430954,
         leaseTerm = LeaseTerm.YEARLY,
-        leaseType = LeaseType.LONG_TERM,
+        leaseType = LeaseType.SHORT_TERM,
         furnishedType = FurnishedType.FULLY_FURNISHED,
         pricePerMonth = Money(1500.0, "CAD"),
         area = 750,
         categoryId = RefDataFixtures.categories[0].id,
+        listingUrl = "/rooms/1116/windmill-in-ponta-delgada",
     )
 }
