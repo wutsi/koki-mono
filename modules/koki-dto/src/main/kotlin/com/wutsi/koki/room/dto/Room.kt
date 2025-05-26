@@ -37,4 +37,5 @@ data class Room(
     val furnishedType: FurnishedType = FurnishedType.UNKNOWN,
     val leaseType: LeaseType = LeaseType.UNKNOWN,
     val categoryId: Long? = null,
+    val listingUrl: String? = null,
 )

@@ -22,4 +22,5 @@ data class RoomSummary(
     val longitude: Double? = null,
     val latitude: Double? = null,
     val address: Address? = null,
+    val listingUrl: String? = null,
 )
