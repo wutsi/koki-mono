@@ -104,7 +104,7 @@ class InvoiceTabController(
             if (invoices.size >= limit) {
                 val nextOffset = offset + limit
                 var url =
-                    "/invoices/tab/more.html?limit=$limit&offset=$nextOffset&owner-id=$ownerId&owner-type=$ownerType"
+                    "/invoices/tab/more?limit=$limit&offset=$nextOffset&owner-id=$ownerId&owner-type=$ownerType"
                 model.addAttribute("moreUrl", url)
             }
         }

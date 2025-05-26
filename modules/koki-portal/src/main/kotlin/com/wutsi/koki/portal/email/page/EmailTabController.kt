@@ -49,7 +49,7 @@ class EmailTabController(private val service: EmailService) : AbstractPageContro
 
         if (emails.size >= limit) {
             val nextOffset = offset + limit
-            val url = "/emails/tab/more.html?limit=$limit&offset=$nextOffset&owner-id=$ownerId&owner-id=$ownerType"
+            val url = "/emails/tab/more?limit=$limit&offset=$nextOffset&owner-id=$ownerId&owner-id=$ownerType"
             model.addAttribute("moreUrl", url)
         }
         return "emails/tab-more"

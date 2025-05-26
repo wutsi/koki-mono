@@ -65,7 +65,7 @@ class ListProductController(private val service: ProductService) : AbstractProdu
             model.addAttribute("products", products)
             if (products.size >= limit) {
                 val nextOffset = offset + limit
-                var url = "/products/more.html?limit=$limit&offset=$nextOffset"
+                var url = "/products/more?limit=$limit&offset=$nextOffset"
                 if (type != null) {
                     url = "$url&type=$type"
                 }

@@ -133,7 +133,7 @@ class ListTaxController(
 
             if (taxes.size >= limit) {
                 val nextOffset = offset + limit
-                var url = "/taxes/more.html?limit=$limit&offset=$nextOffset"
+                var url = "/taxes/more?limit=$limit&offset=$nextOffset"
                 if (collection != null) {
                     url = "$url&col=$collection"
                 }

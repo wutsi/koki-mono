@@ -52,7 +52,7 @@ class ListInvoiceController(
             model.addAttribute("invoices", invoices)
             if (invoices.size >= limit) {
                 val nextOffset = offset + limit
-                var url = "/invoices/more.html?limit=$limit&offset=$nextOffset"
+                var url = "/invoices/more?limit=$limit&offset=$nextOffset"
                 if (status != null) {
                     url = "$url&status=$status"
                 }

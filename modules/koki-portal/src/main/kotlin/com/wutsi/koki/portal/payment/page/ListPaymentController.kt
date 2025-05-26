@@ -61,7 +61,7 @@ class ListPaymentController(
             model.addAttribute("payments", transactions)
             if (transactions.size >= limit) {
                 val nextOffset = offset + limit
-                var url = "/payments/more.html?limit=$limit&offset=$nextOffset"
+                var url = "/payments/more?limit=$limit&offset=$nextOffset"
                 if (status != null) {
                     url = "$url&status=$status"
                 }

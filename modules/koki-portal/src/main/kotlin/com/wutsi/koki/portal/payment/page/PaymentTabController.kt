@@ -52,7 +52,7 @@ class PaymentTabController(
             if (transactions.size >= limit) {
                 val nextOffset = offset + limit
                 var url =
-                    "/payments/tab/more.html?limit=$limit&offset=$nextOffset&owner-id=$ownerId&owner-type=$ownerType"
+                    "/payments/tab/more?limit=$limit&offset=$nextOffset&owner-id=$ownerId&owner-type=$ownerType"
                 model.addAttribute("moreUrl", url)
             }
         }

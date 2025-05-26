@@ -63,7 +63,7 @@ class RoomUnitTabController(
             if (roomUnits.size >= limit) {
                 val nextOffset = offset + limit
                 var url =
-                    "/room-units/tab/more.html?limit=$limit&offset=$nextOffset&owner-id=$ownerId&owner-type=$ownerType"
+                    "/room-units/tab/more?limit=$limit&offset=$nextOffset&owner-id=$ownerId&owner-type=$ownerType"
                 if (readOnly != null) {
                     url = "$url&read-only=$readOnly"
                 }

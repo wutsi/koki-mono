@@ -78,7 +78,7 @@ class ListAccountController(
 
             if (accounts.size >= limit) {
                 val nextOffset = offset + limit
-                var url = "/accounts/more.html?limit=$limit&offset=$nextOffset"
+                var url = "/accounts/more?limit=$limit&offset=$nextOffset"
                 if (collection != null) {
                     url = "$url&col=$collection"
                 }

@@ -61,7 +61,7 @@ class MessageTabController(private val service: MessageService) : AbstractPageCo
             }
             model.addAttribute("moreUrl", url)
         }
-        return "messages/tab/more.html"
+        return "messages/tab/more"
     }
 
     @ResponseBody

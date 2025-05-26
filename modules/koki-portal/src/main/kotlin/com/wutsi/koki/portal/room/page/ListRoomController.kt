@@ -65,7 +65,7 @@ class ListRoomController(private val service: RoomService) : AbstractRoomControl
             model.addAttribute("rooms", rooms)
             if (rooms.size >= limit) {
                 val nextOffset = offset + limit
-                var url = "/rooms/more.html?limit=$limit&offset=$nextOffset"
+                var url = "/rooms/more?limit=$limit&offset=$nextOffset"
                 type?.let { url = "$url&type=$type" }
                 status?.let { url = "$url&status=$status" }
                 model.addAttribute("moreUrl", url)

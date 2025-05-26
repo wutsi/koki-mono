@@ -59,7 +59,7 @@ class SettingsListRoleController(
         model.addAttribute("roles", roles)
         if (roles.size >= limit) {
             val nextOffset = offset + limit
-            val moreUrl = "/settings/roles/more.html?limit=$limit&offset=$nextOffset"
+            val moreUrl = "/settings/roles/more?limit=$limit&offset=$nextOffset"
             model.addAttribute("moreUrl", moreUrl)
         }
         return "users/settings/roles/more"
