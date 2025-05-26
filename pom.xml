@@ -54,7 +54,7 @@
     </repositories>
 
     <properties>
-        <wutsi-platform.version>0.0.22</wutsi-platform.version>
+        <wutsi-platform.version>0.0.23</wutsi-platform.version>
         <wutsi-dto.version>0.0.208</wutsi-dto.version>
         <wutsi-sdk.version>0.0.17</wutsi-sdk.version>
 
