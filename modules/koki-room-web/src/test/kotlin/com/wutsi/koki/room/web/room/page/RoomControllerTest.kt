@@ -57,7 +57,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertElementAttribute(
             "head meta[property='og:url']",
             "content",
-            "http://localhost:0/rooms/${room.id}/windmill-in-ponta-delgada"
+            "http://localhost:0${room.listingUrl}"
         )
         assertElementAttribute("head meta[property='og:image']", "content", images[0].url)
 
