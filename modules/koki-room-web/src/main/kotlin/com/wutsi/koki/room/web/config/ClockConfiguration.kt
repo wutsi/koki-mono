@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.client.config
+package com.wutsi.koki.room.web.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

@@ -1,5 +1,6 @@
 package com.wutsi.koki.room.web.refdata.mapper
 
+import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.Location
 import com.wutsi.koki.room.web.common.mapper.TenantAwareMapper
@@ -20,6 +21,7 @@ class LocationMapper : TenantAwareMapper() {
             country = entity.country,
             longitude = entity.longitude,
             latitude = entity.latitude,
+            url = StringUtils.toSlug("/locations/${entity.id}", entity.name)
         )
     }
 

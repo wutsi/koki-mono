@@ -13,6 +13,7 @@ import com.wutsi.koki.room.web.refdata.model.AmenityService
 import com.wutsi.koki.room.web.refdata.model.LocationModel
 import com.wutsi.koki.room.web.refdata.model.LocationService
 import com.wutsi.koki.room.web.room.mapper.RoomMapper
+import com.wutsi.koki.room.web.room.model.MapMarkerModel
 import com.wutsi.koki.room.web.room.model.RoomModel
 import com.wutsi.koki.sdk.KokiRooms
 import org.springframework.stereotype.Service
@@ -72,7 +73,7 @@ class RoomService(
         ids: List<Long> = emptyList(),
         accountIds: List<Long> = emptyList(),
         cityId: Long? = null,
-        status: RoomStatus? = null,
+        neighborhoodId: Long? = null,
         types: List<RoomType> = emptyList(),
         limit: Int = 20,
         offset: Int = 0,
@@ -82,23 +83,24 @@ class RoomService(
             ids = ids,
             accountIds = accountIds,
             cityId = cityId,
-            status = status,
+            status = RoomStatus.PUBLISHED,
             types = types,
             maxRooms = null,
             minRooms = null,
             maxBathrooms = null,
             minBathrooms = null,
             amenityIds = emptyList(),
-            neighborhoodId = null,
+            neighborhoodId = neighborhoodId,
             categoryIds = emptyList(),
             totalGuests = null,
             limit = limit,
             offset = offset,
         ).rooms
 
-        val locationIds =
-            rooms.flatMap { room -> listOf(room.address?.cityId, room.address?.stateId, room.neighborhoodId) }
-                .filterNotNull().distinct()
+        val locationIds = rooms
+            .flatMap { room -> listOf(room.address?.cityId, room.address?.stateId, room.neighborhoodId) }
+            .filterNotNull()
+            .distinct()
         val locations = if (!fullGraph || locationIds.isEmpty()) {
             emptyMap<Long, LocationModel>()
         } else {
@@ -107,7 +109,10 @@ class RoomService(
             ).associateBy { location -> location.id }
         }
 
-        val imageIds = rooms.map { room -> room.heroImageId }.filterNotNull().distinct()
+        val imageIds = rooms
+            .map { room -> room.heroImageId }
+            .filterNotNull()
+            .distinct()
         val images = if (!fullGraph || imageIds.isEmpty()) {
             emptyMap<Long, FileModel>()
         } else {
@@ -136,5 +141,34 @@ class RoomService(
                 images = images,
             )
         }
+    }
+
+    fun map(
+        ids: List<Long> = emptyList(),
+        accountIds: List<Long> = emptyList(),
+        cityId: Long? = null,
+        neighborhoodId: Long? = null,
+        types: List<RoomType> = emptyList(),
+        limit: Int = 20,
+        offset: Int = 0,
+    ): List<MapMarkerModel> {
+        val rooms = koki.rooms(
+            ids = ids,
+            accountIds = accountIds,
+            cityId = cityId,
+            status = RoomStatus.PUBLISHED,
+            types = types,
+            maxRooms = null,
+            minRooms = null,
+            maxBathrooms = null,
+            minBathrooms = null,
+            amenityIds = emptyList(),
+            neighborhoodId = neighborhoodId,
+            categoryIds = emptyList(),
+            totalGuests = null,
+            limit = limit,
+            offset = offset,
+        ).rooms
+        return rooms.map { room -> mapper.toMapMarkerModel(room) }
     }
 }

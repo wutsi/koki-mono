@@ -61,6 +61,9 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             latitude = entity.latitude,
             area = entity.area,
             listingUrl = entity.listingUrl,
+            leaseType = entity.leaseType,
+            leaseTerm = entity.leaseTerm,
+            furnishedType = entity.furnishedType,
         )
     }
 

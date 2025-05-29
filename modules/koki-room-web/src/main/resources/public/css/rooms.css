@@ -91,20 +91,6 @@
     margin-top: 1em;
 }
 
-.room-info ul.occupancy-container,
-.room-info ul.location-container,
-.room-info ul.host-summary-container {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.room-info ul.occupancy-container li,
-.room-info ul.location-container li,
-.room-info ul.host-summary-container li {
-    display: inline-block;
-}
-
 .room-info #room-map {
     height: 680px;
 }
@@ -112,6 +98,10 @@
 #room-images-modal img {
     max-width: 100%;
     max-height: 534px;
+}
+
+#room-amenities-modal h3 {
+    font-size: 1.25em;
 }
 
 /* ======================================================================== */

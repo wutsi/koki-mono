@@ -1,4 +1,4 @@
-package com.wutsi.koki.room.web.location.model
+package com.wutsi.koki.room.web.room.model
 
 data class MapMarkerModel(
     val id: Long = -1,

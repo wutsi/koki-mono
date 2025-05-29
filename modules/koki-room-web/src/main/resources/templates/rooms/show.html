@@ -11,21 +11,21 @@
 <!-- images -->
 <div class="hero-image-container">
     <div class="hero-1">
-        <a data-bs-target="#room-image-modal" data-bs-toggle="modal" href="#" role="button">
+        <a data-bs-target="#room-images-modal" data-bs-toggle="modal" href="#" role="button">
             <img th:src="${room.heroImage.contentUrl}"/>
         </a>
     </div>
     <div class="hero-2">
         <div class="hero-21">
             <div th:each="img : ${heroImages21}">
-                <a data-bs-target="#room-image-modal" data-bs-toggle="modal" href="#" role="button">
+                <a data-bs-target="#room-images-modal" data-bs-toggle="modal" href="#" role="button">
                     <img th:src="${img.contentUrl}"/>
                 </a>
             </div>
         </div>
         <div class="hero-22">
             <div th:each="img : ${heroImages22}">
-                <a data-bs-target="#room-image-modal" data-bs-toggle="modal" href="#" role="button">
+                <a data-bs-target="#room-images-modal" data-bs-toggle="modal" href="#" role="button">
                     <img th:src="${img.contentUrl}"/>
                 </a>
             </div>
@@ -59,8 +59,23 @@
 <div class="room-info">
     <!-- infos -->
     <div class="room-info-details">
+        <ul class="breadcrumb">
+            <li>
+                <a href="/">Home</a>
+            </li>
+            <li>
+                <span>&#x2022;</span>
+                <a th:href="${room.address.city.url}" th:if="${room.neighborhood}" th:text="${room.address.city.name}">CITY</a>
+                <span th:if="!${room.neighborhood}" th:text="${room.address.city.name}">CITY</span>
+            </li>
+            <li th:if="${room.neighborhood}">
+                <span>&#x2022;</span>
+                <span th:text="${room.neighborhood.name}">CITY</span>
+            </li>
+        </ul>
+
         <h1 id="room-title" th:if="${room.title}" th:text="${room.title}">TITLE</h1>
-        <ul class="occupancy-container">
+        <ul class="breadcrumb">
             <li>
                 <span th:text="${room.maxGuests}">00</span> guest(s)
             </li>
@@ -160,19 +175,30 @@
 
         <div class="margin-top border-top padding-top map-container">
             <h2>Where you'll be</h2>
-            <ul class="location-container">
+            <ul class="breadcrumb">
                 <li>
-                    <span th:if="${room.neighborhood}" th:text="${room.neighborhood.name}">NEIBORHOOD</span>
+                    <span th:text="${room.address.countryName}">COUNTRY</span>
                 </li>
                 <li>
                     <span th:if="${room.neighborhood}">&#x2022;</span>
-                    <span th:text="${room.address.city.name}">CITY</span></li>
+                    <a class="lnk-city"
+                       th:href="${room.address.city.url}"
+                       th:text="${room.address.city.name}"
+                    >CITY</a>
+                </li>
                 <li>
                     <span>&#x2022;</span>
-                    <span th:text="${room.address.countryName}">COUNTRY</span>
+                    <a class="lnk-neighborhood"
+                       th:href="${room.neighborhood.url}"
+                       th:if="${room.neighborhood}"
+                       th:text="${room.neighborhood.name}"
+                    >NEIGHBORHOOD</a>
                 </li>
             </ul>
-            <div class="margin-top" data-component-id="map"
+            <div class="margin-top"
+                 data-component-id="map"
+                 data-disable-scroll-wheel-zoom="true"
+                 data-disable-touch-zoom="true"
                  id="room-map"
                  th:data-latitude="${room.latitude}"
                  th:data-longitude="${room.longitude}"
@@ -295,3 +321,4 @@
 
 </body>
 </html>
+

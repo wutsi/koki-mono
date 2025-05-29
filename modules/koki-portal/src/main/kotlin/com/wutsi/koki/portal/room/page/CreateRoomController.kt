@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.room.page
 
+import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.refdata.service.LocationService
@@ -33,10 +34,15 @@ class CreateRoomController(
         @RequestParam(required = false, name = "account-id") accountId: Long? = null,
         model: Model
     ): String {
+        val account = accountId?.let { id -> accountService.account(id) }
+
         return create(
+            account,
             RoomForm(
                 currency = tenantHolder.get()?.currency,
                 accountId = accountId ?: -1,
+                country = account?.shippingAddress?.country,
+                cityId = account?.shippingAddress?.city?.id,
             ),
             model,
         )
@@ -53,26 +59,23 @@ class CreateRoomController(
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)
-            return create(form, model)
+
+            val account = accountService.account(form.accountId)
+            return create(account, form, model)
         }
     }
 
-    private fun create(form: RoomForm, model: Model): String {
+    private fun create(account: AccountModel?, form: RoomForm, model: Model): String {
+        model.addAttribute("account", account)
+
         model.addAttribute("form", form)
-
-        model.addAttribute(
-            "page",
-            createPageModel(
-                name = PageName.ROOM_CREATE,
-                title = "Create Room",
-            )
-        )
-
-        if (form.accountId > 0) {
-            model.addAttribute(
-                "account",
-                accountService.account(form.accountId, fullGraph = false)
-            )
+        if (form.cityId != null) {
+            val city = locationService.location(form.cityId)
+            model.addAttribute("city", city)
+        }
+        if (form.neighborhoodId != null) {
+            val neighborhood = locationService.location(form.neighborhoodId)
+            model.addAttribute("neighborhood", neighborhood)
         }
 
         loadCheckinCheckoutTime(model)
@@ -86,15 +89,13 @@ class CreateRoomController(
         model.addAttribute("currencies", listOf(currency))
         model.addAttribute("rooms", (1..20).toList())
 
-        if (form.cityId != null) {
-            val city = locationService.location(form.cityId)
-            model.addAttribute("city", city)
-        }
-        if (form.neighborhoodId != null) {
-            val neighborhood = locationService.location(form.neighborhoodId)
-            model.addAttribute("neighborhood", neighborhood)
-        }
-
+        model.addAttribute(
+            "page",
+            createPageModel(
+                name = PageName.ROOM_CREATE,
+                title = "Create Room",
+            )
+        )
         return "rooms/create"
     }
 }

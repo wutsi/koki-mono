@@ -22,6 +22,12 @@ class LocationService(
         private val REGEX_UNACCENT = "\\p{InCombiningDiacriticalMarks}+".toRegex()
     }
 
+    fun get(id: Long): LocationEntity {
+        return dao.findById(id).orElseThrow {
+            NotFoundException(error = Error(ErrorCode.LOCATION_NOT_FOUND, parameter = Parameter(value = id)))
+        }
+    }
+
     fun getOrNull(id: Long): LocationEntity? {
         return dao.findById(id).getOrNull()
     }

@@ -10,4 +10,8 @@ data class LocationModel(
     val country: String = "",
     var latitude: Double? = null,
     var longitude: Double? = null,
-)
+    val url: String = "",
+) {
+    val hasGeoLocation: Boolean
+        get() = latitude != null && longitude != null
+}

@@ -6,9 +6,11 @@
  *  - data-latitude, data-longitude: Lat/Long of the center of the map
  *  - data-zoom: Initial zoom of the map viewport (Default: 10)
  *  - data-max-zoom: Initial zoom of the map viewport (Default: 20)
- *  - data-show-marker: Show marker in the center of the map? (Default: false)
+ *  - data-show-marker: (true|false) Show marker in the center of the map? (Default: false)
  *  - data-on-click: Name of the callback called when user click. The callback will receive mouse event. See https://leafletjs.com/reference.html#mouseevent
  *  - data-on-ready: Name of the callback called when map created. The callback will receive the id and map object
+ *  - data-disable-touch-zoom: (true|false - Default=false)
+ *  - data-disable-scroll-wheel-zoom:  (true|false - Default=false)
  */
 class KokiMapWidget {
     init() {
@@ -41,11 +43,16 @@ class KokiMapWidget {
                         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                     });
                     map.addLayer(layer);
-                    map.scrollWheelZoom.disable();
-                    map.touchZoom.disable();
+
+                    if (elt.getAttribute("data-disable-touch-zoom") === "true") {
+                        map.touchZoom.disable();
+                    }
+                    if (elt.getAttribute("data-disable-scroll-wheel-zoom") === "true") {
+                        map.scrollWheelZoom.disable();
+                    }
 
                     const showMarker = elt.getAttribute("data-show-marker");
-                    if (showMarker) {
+                    if (showMarker === "true") {
                         let marker = L.marker([latitude, longitude]);
                         map.addLayer(marker);
                     }

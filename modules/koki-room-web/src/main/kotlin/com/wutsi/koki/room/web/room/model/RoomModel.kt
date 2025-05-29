@@ -12,6 +12,7 @@ import com.wutsi.koki.room.web.refdata.model.AddressModel
 import com.wutsi.koki.room.web.refdata.model.AmenityModel
 import com.wutsi.koki.room.web.refdata.model.CategoryModel
 import com.wutsi.koki.room.web.refdata.model.LocationModel
+import java.util.Date
 
 data class RoomModel(
     val id: Long = -1,
@@ -42,7 +43,9 @@ data class RoomModel(
     val leaseType: LeaseType = LeaseType.UNKNOWN,
     val category: CategoryModel? = null,
     val area: Int? = null,
-    val listingUrl: String = "",
+    val url: String = "",
+    val publishedAt: Date? = null,
+    val publishedAtMoment: String? = null,
 ) {
     fun hasAmenity(amenityId: Long): Boolean {
         return amenities.find { amenity -> amenity.id == amenityId } != null

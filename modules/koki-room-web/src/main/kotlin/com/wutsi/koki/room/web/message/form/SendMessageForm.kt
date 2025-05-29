@@ -1,4 +1,4 @@
-package com.wutsi.koki.room.web.room.form
+package com.wutsi.koki.room.web.message.form
 
 data class SendMessageForm(
     val roomId: Long = -1,

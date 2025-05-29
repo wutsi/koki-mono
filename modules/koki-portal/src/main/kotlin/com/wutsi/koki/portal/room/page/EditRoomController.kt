@@ -40,6 +40,7 @@ class EditRoomController(
             numberOfBeds = room.numberOfBeds,
             maxGuests = room.maxGuests,
             pricePerNight = room.pricePerNight?.value,
+            pricePerMonth = room.pricePerMonth?.value,
             currency = room.pricePerNight?.currency,
             cityId = room.address?.city?.id,
             country = room.address?.country,

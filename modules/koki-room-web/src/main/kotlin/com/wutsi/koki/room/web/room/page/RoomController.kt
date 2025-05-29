@@ -4,10 +4,10 @@ import com.wutsi.koki.refdata.dto.CategoryType
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.web.common.page.AbstractPageController
 import com.wutsi.koki.room.web.common.page.PageName
+import com.wutsi.koki.room.web.message.form.SendMessageForm
 import com.wutsi.koki.room.web.message.service.MessageService
 import com.wutsi.koki.room.web.refdata.mapper.AmenityMapper
 import com.wutsi.koki.room.web.refdata.service.CategoryService
-import com.wutsi.koki.room.web.room.form.SendMessageForm
 import com.wutsi.koki.room.web.room.service.RoomService
 import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller
@@ -62,7 +62,9 @@ class RoomController(
             .filter { image -> image.id != room.heroImage?.id }
             .take(4)
         model.addAttribute("heroImages21", heroImages.take(2))
-        model.addAttribute("heroImages22", heroImages.subList(2, 4))
+        if (heroImages.size >= 4) {
+            model.addAttribute("heroImages22", heroImages.subList(2, 4))
+        }
 
         /* Email */
         model.addAttribute(
@@ -80,7 +82,7 @@ class RoomController(
                 title = room.title ?: "",
                 description = room.summary,
                 image = room.heroImage?.contentUrl,
-                url = "$baseUrl${room.listingUrl}",
+                url = "$baseUrl${room.url}",
             )
         )
         return "rooms/show"

@@ -1,187 +1,98 @@
-/* ============================= */
-/* ROOM                          */
-/* ============================= */
-.hero-image-container {
-    width: 100%;
-    height: 534px;
+#main-container {
     display: flex;
+    height: 92vh;
 }
 
-.hero-image-container img {
-    object-fit: cover;
+#map-container {
+    width: 100%;
+    height: 100%;
+    background: black;
+}
+
+#room-list-container {
+    height: 93vh;
+    min-width: 600px;
+    max-width: 600px;
+    overflow-y: scroll;
+}
+
+#map-container #map {
     width: 100%;
     height: 100%;
 }
 
-.hero-image-container .hero-1 {
-    width: 50%;
-    overflow: hidden;
+#map-container #map .map-room-icon {
+    padding: .5em;
+    color: #fff;
+    border: 1px solid #fff;
+    background: green;
+    width: auto !important;
+    height: auto !important;
+    text-wrap: nowrap;
+    border-radius: .5em;
+    font-weight: bold;
 }
 
-.hero-image-container .hero-2 {
-    width: 50%;
+
+#room-list-header {
+    background: #fff;
+    padding: 1em;
+    border-bottom: 1px solid gray;
 }
 
-.hero-image-container .hero-21 {
-    width: 100%;
+#room-list-header h1 {
+    font-size: 1.25em;
+    margin: 0;
+}
+
+#room-list-container-inner {
+    padding: 1em;
+    overflow-y: scroll;
+}
+
+#room-list-container .room {
+    border-radius: .5em;
+    background: #fff;
     display: flex;
+    margin-bottom: 1em;
+    width: 100%
 }
 
-.hero-image-container .hero-22 {
-    width: 100%;
-    display: flex;
-}
-
-.hero-image-container .hero-21 > div,
-.hero-image-container .hero-22 > div {
-    width: 50%;
-    height: 267px;
-    overflow: hidden;
-}
-
-.image-counter {
-    background: white;
-    color: #444;
-    padding: 5px;
-    border: 1px solid #444;
-    border-radius: 5px 5px 5px 5px;
-    position: absolute;
-    left: .5em;
-    margin-top: -3em;
-    display: inline-block;
-    z-index: 100;
-    font-size: small;
-}
-
-.image-counter a {
+#room-list-container-inner a {
     text-decoration: none;
     color: #444;
 }
 
-.room-info {
-    width: 1200px;
-    margin: 1em auto 0 auto;
-    display: flex;
-    justify-content: space-between;
+#room-list-container-inner .room .price {
+    font-size: 1.25em;
 }
 
-.room-info-details {
-    width: 800px;
-    margin-bottom: 10em;
+#room-list-container-inner .room-image {
+    width: 250px;
+    height: 167px;
+    border-radius: .5em 0 0 .5em;
 }
 
-.room-contact-details {
-    width: 380px;
-}
-
-.room-contact-details-inner {
-    background: white;
-    box-shadow: 0 4px 25px #00000014;
-    border: none;
-    border-top: 1px solid lightgray;
-    border-radius: 10px 10px 10px 10px;
-    padding: 1em;
-    position: sticky;
-    top: 6.5em;
-    text-align: center;
+#room-list-container-inner .room-image img {
+    border-radius: .5em 0 0 .5em;
+    object-fit: cover;
+    height: 100%;
     width: 100%;
 }
 
-.room-contact-details-inner button {
-    margin-top: 1em;
+#room-list-container-inner .room-details {
+    padding: .5em;
 }
 
-.room-info ul.occupancy-container,
-.room-info ul.location-container,
-.room-info ul.host-summary-container {
-    margin: 0;
-    padding: 0;
+#room-list-container-inner .room-details ul {
     list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.room-info ul.occupancy-container li,
-.room-info ul.location-container li,
-.room-info ul.host-summary-container li {
-    display: inline-block;
-}
-
-.room-info #room-map {
-    height: 680px;
-}
-
-#room-images-modal img {
-    max-width: 100%;
-    max-height: 534px;
-}
-
-/* ======================================================================== */
-/*                                                                          */
-/*  MEDIA QUERIES                                                           */
-/*                                                                          */
-/* ======================================================================== */
-@media only screen and (max-width: 1200px) and (orientation: portrait) {
-    .room-info {
-        width: 100%;
-        padding: 0 1em;
-    }
-
-    .room-info-details {
-        width: 70%;
-    }
-
-    .room-contact-details {
-        width: 25%;
-    }
-}
-
-/* Tablet */
-@media only screen and (max-width: 820px) and (orientation: portrait) {
-    .room-info {
-        display: block;
-    }
-
-    .room-info-details {
-        width: 100%;
-    }
-
-    .room-contact-details {
-        position: fixed;
-        top: auto;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        margin-left: 0;
-        z-index: 800;
-    }
-
-    .room-contact-details-inner {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        border-radius: 0 0 0 0;
-        box-shadow: none;
-    }
-
-    .room-contact-details-inner button {
-        margin-top: .5em;
-    }
-}
-
-/* Mobile phone */
-@media only screen and (max-width: 479px) and (orientation: portrait) {
-    .hero-image-container {
-        height: 319px;
-    }
-
-    .hero-image-container img {
-        border: none
-    }
-
-    .hero-image-container .hero-1 {
-        width: 100%;
-    }
-
-    .hero-image-container .hero-2 {
-        display: none;
-    }
+#room-list-container-inner .room-details ul li {
+    list-style: none;
+    padding-left: 0;
+    margin-left: 0;
+    font-size: .75em;
 }
