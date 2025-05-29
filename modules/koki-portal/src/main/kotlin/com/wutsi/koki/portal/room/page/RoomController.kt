@@ -62,9 +62,9 @@ class RoomController(
         model.addAttribute(
             "zoom",
             if (room.hasGeoLocation) {
-                18
-            } else if (room.neighborhood?.latitude != null && room.neighborhood.longitude != null) {
                 17
+            } else if (room.neighborhood?.latitude != null && room.neighborhood.longitude != null) {
+                16
             } else {
                 13
             }

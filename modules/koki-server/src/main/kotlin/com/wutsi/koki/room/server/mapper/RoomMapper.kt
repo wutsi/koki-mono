@@ -43,8 +43,8 @@ class RoomMapper {
             latitude = entity.latitude,
             leaseType = entity.leaseType,
             leaseTerm = entity.leaseTerm,
-            categoryId = entity.categoryId,
             furnishedType = entity.furnishedType,
+            categoryId = entity.categoryId,
             listingUrl = toListingUrl(entity),
         )
     }
@@ -69,6 +69,13 @@ class RoomMapper {
             longitude = entity.longitude,
             latitude = entity.latitude,
             listingUrl = toListingUrl(entity),
+            createdAt = entity.createdAt,
+            modifiedAt = entity.modifiedAt,
+            publishedAt = entity.publishedAt,
+            area = entity.area,
+            leaseType = entity.leaseType,
+            leaseTerm = entity.leaseTerm,
+            furnishedType = entity.furnishedType,
         )
     }
 

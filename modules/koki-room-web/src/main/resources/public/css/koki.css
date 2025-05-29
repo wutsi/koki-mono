@@ -2,8 +2,7 @@
 
 /* === CORE ===== */
 body {
-    /*background: #f8f8f8;*/
-    background: #fff;
+    background: #f0f0f0;
     color: #555;
     margin-top: 4.8em;
 }
@@ -21,7 +20,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .background-lightgray {
-    background: #f8f8f8;
+    background: #f0f0f0;
 }
 
 .background-white {
@@ -168,8 +167,8 @@ h1, h2, h3, h4, h5, h6 {
 /* === NAVBAR ====== */
 .navbar {
     border-bottom: 1px solid gray;
-    /*background: white;*/
-    background: #f8f8f8;
+    background: white;
+    /*background: #f0f0f0;*/
 }
 
 .navbar .brand-name {
@@ -220,7 +219,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #menubar ul.navbar-nav li.active {
-    background: #f8f8f8;
+    background: #f0f0f0;
 }
 
 #menubar ul.navbar-nav li.active a {
@@ -235,7 +234,7 @@ h1, h2, h3, h4, h5, h6 {
 /* === FORMS ====== */
 textarea:read-only,
 input:read-only {
-    background: #f8f8f8;
+    background: #f0f0f0;
 }
 
 *:user-invalid,
@@ -298,11 +297,11 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 }
 
 .section-read-only {
-    background: #f8f8f8;
+    background: #f0f0f0;
 }
 
 .section-header {
-    background: #f8f8f8;
+    background: #f0f0f0;
     border-radius: .6em .6em 0 0;
     border-bottom: 1px solid gray;
     padding: .5em;
@@ -385,7 +384,7 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 }
 
 .widget-header {
-    background: #f8f8f8;
+    background: #f0f0f0;
     border-radius: .6em .6em 0 0;
     border-bottom: 1px solid gray;
     padding: 0.5em;
@@ -407,7 +406,7 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 }
 
 .widget-body .widget-toolbar {
-    background: #f8f8f8;
+    background: #f0f0f0;
     margin-bottom: 1em;
     padding: 0.5em;
 }
@@ -471,6 +470,22 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
     font-size: 1.2em;
 }
 
+
+/* === Breadcrumb === */
+ul.breadcrumb {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+ul.breadcrumb li {
+    display: inline-block;
+    margin-left: .5em;
+}
+
+ul.breadcrumb li:first-child {
+    margin-left: 0;
+}
 
 /* ============================= */
 /* bootstrap                     */

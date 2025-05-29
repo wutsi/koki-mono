@@ -9,4 +9,5 @@ object PageName {
 
     val HOME: String = "page.home"
     val ROOM: String = "page.room"
+    val LOCATION: String = "page.location"
 }

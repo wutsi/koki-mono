@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="room" th:fragment="card(room)">
+    <div class="room-image">
+        <img th:alt="${room.title}" th:src="${room.heroImage?.contentUrl}"/>
+    </div>
+    <div class="room-details">
+        <h2 class="text-primary price margin-none" th:if="${room.pricePerMonth}">
+            <span th:text="${room.pricePerMonth}">$$$</span>
+            <span class="text-small">per month</span>
+        </h2>
+        <h2 class="text-primary price margin-none" th:if="!${room.pricePerMonth} AND ${room.pricePerNight}">
+            <span th:text="${room.pricePerNight}">$$$</span>
+            <span class="text-small">per night</span>
+        </h2>
+        <ul>
+            <li>
+                <b th:text="#{'room-type.' + ${room.type.name()}}">TYPE</b>
+                -
+                <span th:text="${room.publishedAtMoment}">YYYYMM</span>
+            </li>
+            <li class="margin-top">
+                <i class="fa-solid fa-bed"></i>
+                <span th:text="${room.numberOfRooms}">00</span>
+                <span>Bedroom(s)</span>
+            </li>
+            <li th:if="${room.area}">
+                <i class="fa-regular fa-square-full"></i>
+                <span th:text="${room.area}">00</span>
+                <span>m<sup>2</sup></span>
+            </li>
+            <li class="margin-top">
+                <i class="fa-solid fa-location-dot"></i>
+                <span th:if="${room.neighborhood}" th:text="${room.neighborhood.name}">XXX</span>
+                <span th:if="${room.neighborhood}">-</span>
+                <span th:text="${room.address?.city?.name}">XXX</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

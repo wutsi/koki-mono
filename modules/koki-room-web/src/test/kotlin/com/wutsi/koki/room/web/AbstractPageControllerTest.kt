@@ -25,6 +25,7 @@ import com.wutsi.koki.message.dto.SendMessageResponse
 import com.wutsi.koki.platform.security.AccessTokenHolder
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
+import com.wutsi.koki.refdata.dto.GetLocationResponse
 import com.wutsi.koki.refdata.dto.SearchAmenityResponse
 import com.wutsi.koki.refdata.dto.SearchCategoryResponse
 import com.wutsi.koki.refdata.dto.SearchJuridictionResponse
@@ -230,6 +231,17 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(SearchLocationResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetLocationResponse(RefDataFixtures.locations[0]),
+                HttpStatus.OK,
+            )
+        ).whenever(restWithoutTenantHeader)
+            .getForEntity(
+                any<String>(),
+                eq(GetLocationResponse::class.java)
             )
 
         // Categories

@@ -1,6 +1,7 @@
 package com.wutsi.koki.refdata.server.endpoint
 
 import com.wutsi.koki.common.dto.ImportResponse
+import com.wutsi.koki.refdata.dto.GetLocationResponse
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
 import com.wutsi.koki.refdata.server.io.GeonamesImporter
@@ -8,6 +9,7 @@ import com.wutsi.koki.refdata.server.io.NeighbourhoodImporter
 import com.wutsi.koki.refdata.server.mapper.LocationMapper
 import com.wutsi.koki.refdata.server.service.LocationService
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -55,6 +57,14 @@ class LocationEndpoints(
         )
         return SearchLocationResponse(
             locations = locations.map { location -> mapper.toLocation(location) }
+        )
+    }
+
+    @GetMapping("/{id}")
+    fun get(@PathVariable id: Long): GetLocationResponse {
+        val location = service.get(id)
+        return GetLocationResponse(
+            location = mapper.toLocation(location)
         )
     }
 }

@@ -1,11 +1,11 @@
-package com.wutsi.koki.room.web.location.page
+package com.wutsi.koki.room.web.room.page
 
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.room.web.common.model.PageModel
 import com.wutsi.koki.room.web.common.page.AbstractPageController
 import com.wutsi.koki.room.web.common.page.PageName
-import com.wutsi.koki.room.web.location.model.MapMarkerModel
 import com.wutsi.koki.room.web.refdata.model.LocationService
+import com.wutsi.koki.room.web.room.model.MapMarkerModel
 import com.wutsi.koki.room.web.room.service.RoomService
 import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller
@@ -67,7 +67,7 @@ class LocationController(
             neighborhoodId = if (location.type == LocationType.NEIGHBORHOOD) id else null,
             model = model,
         )
-        return "locations/show"
+        return "rooms/location"
     }
 
     @GetMapping("/more")
@@ -96,7 +96,7 @@ class LocationController(
             }
             model.addAttribute("moreUrl", url)
         }
-        return "locations/more"
+        return "rooms/more"
     }
 
     @ResponseBody

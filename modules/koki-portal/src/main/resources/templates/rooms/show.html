@@ -62,11 +62,28 @@
                             </div>
                             <div th:if="${room.pricePerMonth}">
                                 <div th:text="${room.pricePerMonth}">$$</div>
-                                <div class="text-small">per night</div>
+                                <div class="text-small">per month</div>
                             </div>
                         </div>
                     </div>
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="listing-container" th:if="${listingUrl}">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <table>
+                        <tr>
+                            <td>Listing Address:</td>
+                            <td class="margin-left">
+                                <a target="_blank" th:href="${listingUrl}" th:text="${listingUrl}">URL</a>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
@@ -81,24 +98,32 @@
                         th:replace="~{__components/module :: tabs-content('main', true, ${room}, ${module})}"></div>
 
                     <div class="hidden" id="tab-details-content">
-                        <div th:replace="~{__components/room :: details(${room})}"></div>
-                        <div class="margin-top">
-                            <div data-component-id="map"
-                                 id="map"
-                                 style="height:600px"
-                                 th:data-latitude="${latitude}"
-                                 th:data-longitude="${longitude}"
-                                 th:data-show-marker="${room.hasGeoLocation}"
-                                 th:data-zoom="${zoom}"
-                            ></div>
-                            <div class="margin-top-small text-center">
-                                <a class="btn-map btn btn-sm btn-light"
-                                   th:href="'/rooms/' + ${room.id} + '/map'"
-                                   th:if="!${room.readOnly} AND ${user?.hasPermission('room:manage')}"
-                                >
-                                    <span th:if="!${room.hasGeoLocation}">Set Geolocation</span>
-                                    <span th:if="${room.hasGeoLocation}">Update Geolocation</span>
-                                </a>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12 col-lg-7">
+                                    <div th:replace="~{__components/room :: details(${room})}"></div>
+                                </div>
+                                <div class="col-12 col-lg-5">
+                                    <div class="margin-top">
+                                        <div data-component-id="map"
+                                             id="map"
+                                             style="height:600px"
+                                             th:data-latitude="${latitude}"
+                                             th:data-longitude="${longitude}"
+                                             th:data-show-marker="${room.hasGeoLocation}"
+                                             th:data-zoom="${zoom}"
+                                        ></div>
+                                        <div class="margin-top-small text-center">
+                                            <a class="btn-map btn btn-sm btn-light"
+                                               th:href="'/rooms/' + ${room.id} + '/map'"
+                                               th:if="!${room.readOnly} AND ${user?.hasPermission('room:manage')}"
+                                            >
+                                                <span th:if="!${room.hasGeoLocation}">Set Geolocation</span>
+                                                <span th:if="${room.hasGeoLocation}">Update Geolocation</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

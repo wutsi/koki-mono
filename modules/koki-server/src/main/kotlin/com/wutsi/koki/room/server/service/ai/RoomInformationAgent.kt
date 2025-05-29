@@ -79,6 +79,7 @@ class RoomInformationAgent(
             - Beds: ${room.numberOfBeds}
             - Baths: ${room.numberOfBathrooms}
             - Max guests: ${room.maxGuests}
+            - Furnished: ${room.furnishedType}
 
             Amenities:
             Here are all the amenities in CSV format:

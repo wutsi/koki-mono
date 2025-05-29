@@ -35,6 +35,29 @@ class RoomMapController(
             )
         )
 
+        model.addAttribute(
+            "latitude",
+            room.latitude
+                ?: room.neighborhood?.latitude
+                ?: room.address?.city?.latitude
+        )
+        model.addAttribute(
+            "longitude",
+            room.longitude
+                ?: room.neighborhood?.longitude
+                ?: room.address?.city?.longitude
+        )
+        model.addAttribute(
+            "zoom",
+            if (room.hasGeoLocation) {
+                17
+            } else if (room.neighborhood?.latitude != null && room.neighborhood.longitude != null) {
+                16
+            } else {
+                13
+            }
+        )
+
         return "rooms/map"
     }
 

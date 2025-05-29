@@ -6,17 +6,22 @@ import com.wutsi.koki.room.dto.RoomSummary
 import com.wutsi.koki.room.web.account.model.AccountModel
 import com.wutsi.koki.room.web.common.mapper.MoneyMapper
 import com.wutsi.koki.room.web.common.mapper.TenantAwareMapper
+import com.wutsi.koki.room.web.common.service.Moment
 import com.wutsi.koki.room.web.file.model.FileModel
 import com.wutsi.koki.room.web.refdata.model.AddressModel
 import com.wutsi.koki.room.web.refdata.model.AmenityModel
 import com.wutsi.koki.room.web.refdata.model.LocationModel
+import com.wutsi.koki.room.web.room.model.MapMarkerModel
 import com.wutsi.koki.room.web.room.model.RoomModel
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
 import java.util.Locale
 
 @Service
-class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
+class RoomMapper(
+    private val moneyMapper: MoneyMapper,
+    private val moment: Moment
+) : TenantAwareMapper() {
     fun toRoomModel(
         entity: RoomSummary,
         images: Map<Long, FileModel>,
@@ -35,6 +40,7 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             numberOfBathrooms = entity.numberOfBathrooms,
             numberOfBeds = entity.numberOfBeds,
             maxGuests = entity.maxGuests,
+            area = if (entity.area > 0) entity.area else null,
             neighborhood = entity.neighborhoodId?.let { id -> locations[id] },
             address = entity.address?.let { address ->
                 AddressModel(
@@ -61,7 +67,12 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             heroImage = entity.heroImageId?.let { id -> images[id] },
             longitude = entity.longitude,
             latitude = entity.latitude,
-            listingUrl = entity.listingUrl ?: "/rooms/${entity.id}"
+            url = entity.listingUrl ?: "/rooms/${entity.id}",
+            publishedAt = entity.publishedAt,
+            publishedAtMoment = entity.publishedAt?.let { date -> moment.format(date) },
+            leaseType = entity.leaseType,
+            leaseTerm = entity.leaseTerm,
+            furnishedType = entity.furnishedType,
         )
     }
 
@@ -121,7 +132,20 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             longitude = entity.longitude,
             latitude = entity.latitude,
             images = images,
-            listingUrl = entity.listingUrl ?: "/rooms/${entity.id}"
+            url = entity.listingUrl ?: "/rooms/${entity.id}",
+            publishedAt = entity.publishedAt,
+            publishedAtMoment = entity.publishedAt?.let { date -> moment.format(date) },
+        )
+    }
+
+    fun toMapMarkerModel(entity: RoomSummary): MapMarkerModel {
+        return MapMarkerModel(
+            id = entity.id,
+            latitude = entity.latitude,
+            longitude = entity.longitude,
+            price = (entity.pricePerMonth ?: entity.pricePerNight)?.let { money ->
+                moneyMapper.toMoneyModel(money.amount, money.currency).toString()
+            }
         )
     }
 }

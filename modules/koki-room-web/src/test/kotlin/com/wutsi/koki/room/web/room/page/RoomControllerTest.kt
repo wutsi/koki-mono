@@ -11,10 +11,12 @@ import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.message.dto.SendMessageRequest
 import com.wutsi.koki.message.dto.SendMessageResponse
+import com.wutsi.koki.refdata.dto.GetLocationResponse
 import com.wutsi.koki.room.dto.GetRoomResponse
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.web.AbstractPageControllerTest
 import com.wutsi.koki.room.web.FileFixtures.images
+import com.wutsi.koki.room.web.RefDataFixtures
 import com.wutsi.koki.room.web.RoomFixtures.room
 import com.wutsi.koki.room.web.common.page.PageName
 import org.junit.jupiter.api.BeforeEach
@@ -162,10 +164,48 @@ class RoomControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun `show - status=DRAFT`() {
-        setupRoomStatus(RoomStatus.DRAFT)
+    fun `click on neighborhood link`() {
+        doReturn(
+            ResponseEntity(
+                GetLocationResponse(RefDataFixtures.neighborhoods[0]),
+                HttpStatus.OK,
+            )
+        ).doReturn(
+            ResponseEntity(
+                GetLocationResponse(RefDataFixtures.cities[0]),
+                HttpStatus.OK,
+            )
+        ).whenever(restWithoutTenantHeader)
+            .getForEntity(
+                any<String>(),
+                eq(GetLocationResponse::class.java)
+            )
+
         navigateTo("/rooms/${room.id}")
-        assertCurrentPageIs(PageName.ERROR_404)
+
+        scrollToMiddle()
+        click(".lnk-neighborhood")
+        assertCurrentPageIs(PageName.LOCATION)
+    }
+
+    @Test
+    fun `click on city link`() {
+        doReturn(
+            ResponseEntity(
+                GetLocationResponse(RefDataFixtures.cities[0]),
+                HttpStatus.OK,
+            )
+        ).whenever(restWithoutTenantHeader)
+            .getForEntity(
+                any<String>(),
+                eq(GetLocationResponse::class.java)
+            )
+
+        navigateTo("/rooms/${room.id}")
+
+        scrollToMiddle()
+        click(".lnk-city")
+        assertCurrentPageIs(PageName.LOCATION)
     }
 
     @Test

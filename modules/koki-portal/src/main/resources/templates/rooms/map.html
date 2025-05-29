@@ -30,7 +30,7 @@
                                         <td>
                                             <a th:href="'/rooms/' + ${room.id}">
                                                 <i class="fa-solid fa-arrow-left-long"></i>
-                                                <b th:text="${room.title}">TITLE</b>
+                                                <b>Back</b>
                                             </a>
                                         </td>
                                     </tr>
@@ -55,9 +55,9 @@
                                     <tr>
                                         <td>
                                             <b>New Location</b>
-                                            <div class="flex">
-                                                <input class="border-none" readonly required th:field="*{latitude}"/>
-                                                <input class="border-none" readonly required th:field="*{longitude}"/>
+                                            <div class="flex flex-space-between">
+                                                <input readonly required th:field="*{latitude}"/>
+                                                <input readonly required th:field="*{longitude}"/>
                                             </div>
                                         </td>
                                     </tr>
@@ -76,11 +76,11 @@
                                  data-zoom=13
                                  id="map"
                                  style="height:800px"
-                                 th:data-latitude="${room.hasGeoLocation} ? ${room.latitude} : ${room.address?.city?.latitude}"
-                                 th:data-longitude="${room.hasGeoLocation} ? ${room.longitude} : ${room.address?.city?.longitude}"
+                                 th:data-latitude="${latitude}"
+                                 th:data-longitude="${longitude}"
                                  th:data-onclick="on_map_click"
                                  th:data-show-marker="${room.hasGeoLocation}"
-                                 th:data-zoom="${room.hasGeoLocation} ? 17 : 13"
+                                 th:data-zoom="${zoom}"
                             ></div>
                         </div>
                     </div>
