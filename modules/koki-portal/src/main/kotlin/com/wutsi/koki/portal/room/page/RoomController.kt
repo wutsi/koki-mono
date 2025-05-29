@@ -48,6 +48,29 @@ class RoomController(
         }
 
         model.addAttribute(
+            "latitude",
+            room.latitude
+                ?: room.neighborhood?.latitude
+                ?: room.address?.city?.latitude
+        )
+        model.addAttribute(
+            "longitude",
+            room.longitude
+                ?: room.neighborhood?.longitude
+                ?: room.address?.city?.longitude
+        )
+        model.addAttribute(
+            "zoom",
+            if (room.hasGeoLocation) {
+                18
+            } else if (room.neighborhood?.latitude != null && room.neighborhood.longitude != null) {
+                17
+            } else {
+                13
+            }
+        )
+
+        model.addAttribute(
             "page",
             createPageModel(
                 name = PageName.ROOM,

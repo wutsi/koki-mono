@@ -2,6 +2,7 @@ package com.wutsi.koki.room.dto
 
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.Money
+import java.util.Date
 
 data class RoomSummary(
     val id: Long = -1,
@@ -21,6 +22,12 @@ data class RoomSummary(
     val neighborhoodId: Long? = null,
     val longitude: Double? = null,
     val latitude: Double? = null,
+    val furnishedType: FurnishedType = FurnishedType.UNKNOWN,
+    val leaseTerm: LeaseTerm = LeaseTerm.UNKNOWN,
+    val leaseType: LeaseType = LeaseType.UNKNOWN,
     val address: Address? = null,
     val listingUrl: String? = null,
+    val publishedAt: Date? = null,
+    val createdAt: Date = Date(),
+    val modifiedAt: Date = Date()
 )

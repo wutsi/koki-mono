@@ -2,6 +2,7 @@ package com.wutsi.koki.refdata.server.io
 
 import com.wutsi.koki.common.dto.ImportMessage
 import com.wutsi.koki.common.dto.ImportResponse
+import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.domain.LocationEntity
 import com.wutsi.koki.refdata.server.service.LocationService
@@ -24,6 +25,8 @@ class NeighbourhoodImporter(
         private const val RECORD_ID = 0
         private const val RECORD_NAME = 1
         private const val RECORD_CITY = 2
+        private const val RECORD_LATITUDE = 3
+        private const val RECORD_LONGITUDE = 4
     }
 
     fun import(country: String): ImportResponse {
@@ -109,10 +112,12 @@ class NeighbourhoodImporter(
             LocationEntity(
                 id = record.get(RECORD_ID).toLong(),
                 name = record.get(RECORD_NAME),
-                asciiName = toAscii(record.get(RECORD_NAME)),
+                asciiName = StringUtils.toAscii(record.get(RECORD_NAME)),
                 parentId = city.id,
                 type = LocationType.NEIGHBORHOOD,
                 country = city.country,
+                latitude = toDouble(record, RECORD_LATITUDE),
+                longitude = toDouble(record, RECORD_LONGITUDE),
             )
         )
     }
@@ -122,11 +127,21 @@ class NeighbourhoodImporter(
         neighbourhood.asciiName = toAscii(record.get(RECORD_NAME))
         neighbourhood.parentId = city.id
         neighbourhood.country = city.country
+        neighbourhood.latitude = toDouble(record, RECORD_LATITUDE)
+        neighbourhood.longitude = toDouble(record, RECORD_LONGITUDE)
         locationService.save(neighbourhood)
     }
 
     private fun toAscii(str: String): String {
         val temp = Normalizer.normalize(str, Normalizer.Form.NFD)
         return REGEX_UNACCENT.replace(temp, "")
+    }
+
+    private fun toDouble(record: CSVRecord, colum: Int): Double? {
+        return try {
+            record.get(colum)?.toDouble()
+        } catch (ex: Exception) {
+            null
+        }
     }
 }

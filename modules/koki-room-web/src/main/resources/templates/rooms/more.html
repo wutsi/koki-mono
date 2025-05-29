@@ -1,0 +1,13 @@
+<a target="_blank" th:each="room : ${rooms}" th:href="${room.url}" th:title="${room.title}">
+    <div th:replace="~{__components/room :: card(${room})}"></div>
+</a>
+<div class="text-center" id="room-load-more" th:if="${moreUrl}">
+    <button
+        class="btn btn-sm btn-light"
+        data-component-id='load-more'
+        data-container-id="room-load-more"
+        th:data-url="${moreUrl}"
+    >
+        Load more...
+    </button>
+</div>

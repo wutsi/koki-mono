@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div id="main-container">
+    <div id="room-list-container">
+        <div id="room-list-header">
+            <h1><span th:text="${location.name}">YYYY</span> Rentals</h1>
+            <ul class="location">
+                <li>
+                    <a href="/public">Home</a>
+                </li>
+                <li>
+                    <span>&#x2022;</span>
+                    <a th:href="${city.url}" th:if="${neighborhood}" th:text="${city.name}">CITY</a>
+                    <span th:if="!${neighborhood}" th:text="${city.name}">CITY</span>
+                </li>
+                <li th:if="${neighborhood}">
+                    <span>&#x2022;</span>
+                    <span th:text="${neighborhood.name}">CITY</span>
+                </li>
+            </ul>
+        </div>
+        <div id="room-list-container-inner">
+            <a target="_blank" th:each="room : ${rooms}" th:href="${room.url}" th:title="${room.title}">
+                <div th:replace="~{__components/room :: card(${room})}"></div>
+            </a>
+            <div class="text-center" id="room-load-more" th:if="${moreUrl}">
+                <button
+                    class="btn btn-sm btn-light"
+                    data-component-id='load-more'
+                    data-container-id="room-load-more"
+                    th:data-url="${moreUrl}"
+                >
+                    Load more...
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="map-container">
+        <div data-component-id="map"
+             data-show-marker="false"
+             id="map"
+             th:data-city-id="${city.id}"
+             th:data-latitude="${latitude}"
+             th:data-longitude="${longitude}"
+             th:data-on-ready="on_map_ready"
+             th:data-zoom="${zoom}"
+        >
+        </div>
+    </div>
+</div>
+
+<script>
+    function on_map_ready(id, map) {
+        console.log('on_map_ready', id, map);
+        const cityId = document.getElementById('map').getAttribute('data-city-id');
+        fetch('/locations/' + cityId + '/map')
+            .then(function (response) {
+                response.json().then(function (json) {
+                    console.log(json);
+                    for (var i = 0; i < json.length; i++) {
+                        let item = json[i];
+                        let marker = L.marker(
+                            [item.latitude, item.longitude],
+                            {
+                                roomId: item.id,
+                                icon: L.divIcon({
+                                    className: 'map-room-icon',
+                                    html: '<span>' + item.price + '</span>',
+                                }),
+                            }
+                        );
+                        marker.on('click', function () {
+                            on_marker_click(item.id)
+                        });
+                        map.addLayer(marker);
+                    }
+                });
+            });
+    }
+
+    function on_marker_click(roomId) {
+        console.log('on_marker_click', roomId);
+    }
+</script>
+
+<link rel="stylesheet" th:href="${page.assetUrl} + '/css/location.css'"/>
+<link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script th:src="${page.assetUrl} + '/js/koki-map.js'"></script>
+<script th:src="${page.assetUrl} + '/js/koki-load-more.js'"></script>
+
+</body>
+</html>
