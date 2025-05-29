@@ -22,7 +22,6 @@
         <module>modules/koki-sdk</module>
         <module>modules/koki-server</module>
         <module>modules/koki-portal</module>
-        <module>modules/koki-client-portal</module>
         <module>modules/koki-room-web</module>
     </modules>
 
