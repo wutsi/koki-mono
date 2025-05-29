@@ -1,6 +1,7 @@
 package com.wutsi.koki.sdk
 
 import com.wutsi.koki.refdata.dto.CategoryType
+import com.wutsi.koki.refdata.dto.GetLocationResponse
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.dto.SearchAmenityResponse
 import com.wutsi.koki.refdata.dto.SearchCategoryResponse
@@ -26,6 +27,11 @@ class KokiRefData(
     fun units(): SearchUnitResponse {
         val url = urlBuilder.build(UNIT_PATH_PREFIX)
         return rest.getForEntity(url, SearchUnitResponse::class.java).body
+    }
+
+    fun location(id: Long): GetLocationResponse {
+        val url = urlBuilder.build("$LOCATION_PATH_PREFIX/$id")
+        return rest.getForEntity(url, GetLocationResponse::class.java).body
     }
 
     fun locations(
