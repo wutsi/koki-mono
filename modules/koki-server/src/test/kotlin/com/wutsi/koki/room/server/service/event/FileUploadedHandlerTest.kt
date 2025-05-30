@@ -20,6 +20,7 @@ import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.file.server.service.LabelService
 import com.wutsi.koki.file.server.service.StorageServiceProvider
 import com.wutsi.koki.platform.storage.local.LocalStorageService
+import com.wutsi.koki.room.server.domain.RoomEntity
 import com.wutsi.koki.room.server.service.ai.RoomAgentFactory
 import com.wutsi.koki.room.server.service.ai.RoomImageAgent
 import com.wutsi.koki.room.server.service.data.RoomImageAgentData
@@ -35,6 +36,7 @@ class FileUploadedHandlerTest {
     private val labelService = mock<LabelService>()
     private val storageServiceProvider = mock<StorageServiceProvider>()
     private val agentFactory = mock<RoomAgentFactory>()
+    private val roomService = mock<RoomService>()
     private val objectMapper = ObjectMapper()
 
     private val handler = FileUploadedHandler(
@@ -43,6 +45,7 @@ class FileUploadedHandlerTest {
         storageServiceProvider = storageServiceProvider,
         agentFactory = agentFactory,
         objectMapper = objectMapper,
+        roomService = roomService,
     )
 
     private val directory = System.getProperty("user.home") + "/__wutsi"
@@ -76,6 +79,11 @@ class FileUploadedHandlerTest {
         LabelEntity(displayName = "Z"),
     )
 
+    val room = RoomEntity(
+        id = 111L,
+        heroImageId = null,
+    )
+
     private val agent = mock<RoomImageAgent>()
 
     @BeforeEach
@@ -83,6 +91,7 @@ class FileUploadedHandlerTest {
         doReturn(agent).whenever(agentFactory).createRoomImageAgent(any())
         doReturn(storage).whenever(storageServiceProvider).get(any())
         doReturn(file).whenever(fileService).get(any(), any())
+        doReturn(room).whenever(roomService).get(any(), any())
 
         doReturn(objectMapper.writeValueAsString(data)).whenever(agent).run(any(), anyOrNull())
 
@@ -94,7 +103,7 @@ class FileUploadedHandlerTest {
         // GIVEN
         setupFile("/file/document.jpg", "image/jpg")
 
-        // GIVEN
+        // WHEN
         val event = FileUploadedEvent(
             fileId = file.id!!,
             owner = ObjectReference(id = file.ownerId!!, type = ObjectType.ROOM),
@@ -112,6 +121,28 @@ class FileUploadedHandlerTest {
         assertEquals(FileStatus.APPROVED, file1.firstValue.status)
         assertEquals(null, file1.firstValue.rejectionReason)
         assertEquals(labels, file1.firstValue.labels)
+
+        val room1 = argumentCaptor<RoomEntity>()
+        verify(roomService).save(room1.capture())
+        assertEquals(file.id, room1.firstValue.heroImageId)
+    }
+
+    @Test
+    fun `image uploaded - room with heroImage`() {
+        // GIVEN
+        setupFile("/file/document.jpg", "image/jpg")
+        doReturn(room.copy(heroImageId = 777L)).whenever(roomService).get(any(), any())
+
+        // WHEN
+        val event = FileUploadedEvent(
+            fileId = file.id!!,
+            owner = ObjectReference(id = file.ownerId!!, type = ObjectType.ROOM),
+        )
+        handler.handle(event)
+
+        // THEN
+        verify(fileService).save(any())
+        verify(roomService, never()).save(any())
     }
 
     @Test

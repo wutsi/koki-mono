@@ -62,7 +62,7 @@ data class RoomModel(
         get() = (status == RoomStatus.DRAFT)
 
     val readOnly: Boolean
-        get() = !draft
+        get() = status == RoomStatus.PUBLISHING
 
     val hasGeoLocation: Boolean
         get() = (latitude != null && longitude != null)

@@ -6,7 +6,11 @@
     <td>
         <table style="width:100%">
             <tr>
-                <td width="1%"><b>Sender:</b></td>
+                <td width="1%"><b>Date:</b></td>
+                <td class="padding-left" th:text="${message.createdAtMoment}">TITLE</td>
+            </tr>
+            <tr>
+                <td width="1%"><b>From:</b></td>
                 <td class="padding-left" th:text="${message.senderName}">TITLE</td>
             </tr>
             <tr>

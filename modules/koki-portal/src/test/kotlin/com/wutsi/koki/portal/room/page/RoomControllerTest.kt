@@ -94,8 +94,8 @@ class RoomControllerTest : AbstractPageControllerTest() {
 
         assertElementPresent("#listing-container")
         assertElementAttributeEndsWith("#listing-container a", "href", room.listingUrl ?: "")
-        assertElementNotPresent(".btn-edit")
-        assertElementNotPresent(".btn-map")
+        assertElementPresent(".btn-edit")
+        assertElementPresent(".btn-map")
         assertElementNotPresent(".btn-publish")
         assertElementNotPresent(".btn-delete")
     }
