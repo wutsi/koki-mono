@@ -24,14 +24,14 @@ import com.wutsi.koki.room.server.domain.RoomEntity
 import com.wutsi.koki.room.server.service.ai.RoomAgentFactory
 import com.wutsi.koki.room.server.service.ai.RoomImageAgent
 import com.wutsi.koki.room.server.service.data.RoomImageAgentData
-import com.wutsi.koki.room.server.service.event.FileUploadedHandler
+import com.wutsi.koki.room.server.service.event.FileUploaderHandler
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class FileUploadedHandlerTest {
+class FileUploaderHandlerTest {
     private val fileService = mock<FileService>()
     private val labelService = mock<LabelService>()
     private val storageServiceProvider = mock<StorageServiceProvider>()
@@ -39,7 +39,7 @@ class FileUploadedHandlerTest {
     private val roomService = mock<RoomService>()
     private val objectMapper = ObjectMapper()
 
-    private val handler = FileUploadedHandler(
+    private val handler = FileUploaderHandler(
         fileService = fileService,
         labelService = labelService,
         storageServiceProvider = storageServiceProvider,
@@ -111,7 +111,7 @@ class FileUploadedHandlerTest {
         handler.handle(event)
 
         // THEN
-        verify(agent).run(eq(FileUploadedHandler.IMAGE_AGENT_QUERY), any())
+        verify(agent).run(eq(FileUploaderHandler.IMAGE_AGENT_QUERY), any())
 
         val file1 = argumentCaptor<FileEntity>()
         verify(fileService).save(file1.capture())
@@ -125,6 +125,43 @@ class FileUploadedHandlerTest {
         val room1 = argumentCaptor<RoomEntity>()
         verify(roomService).save(room1.capture())
         assertEquals(file.id, room1.firstValue.heroImageId)
+    }
+
+    @Test
+    fun `image uploaded - image not valid`() {
+        // GIVEN
+        setupFile("/file/document.jpg", "image/jpg")
+        doReturn(
+            objectMapper.writeValueAsString(
+                data.copy(
+                    valid = false,
+                    reason = "Sexual content!!"
+                )
+            )
+        ).whenever(agent).run(any(), anyOrNull())
+
+        // WHEN
+        val event = FileUploadedEvent(
+            fileId = file.id!!,
+            owner = ObjectReference(id = file.ownerId!!, type = ObjectType.ROOM),
+        )
+        handler.handle(event)
+
+        // THEN
+        verify(agent).run(eq(FileUploaderHandler.IMAGE_AGENT_QUERY), any())
+
+        val file1 = argumentCaptor<FileEntity>()
+        verify(fileService).save(file1.capture())
+        assertEquals(file.id, file1.firstValue.id)
+        assertEquals(data.title, file1.firstValue.title)
+        assertEquals(data.description, file1.firstValue.description)
+        assertEquals(FileStatus.REJECTED, file1.firstValue.status)
+        assertEquals("Sexual content!!", file1.firstValue.rejectionReason)
+        assertEquals(labels, file1.firstValue.labels)
+
+        val room1 = argumentCaptor<RoomEntity>()
+        verify(roomService).save(room1.capture())
+        assertEquals(null, room1.firstValue.heroImageId)
     }
 
     @Test

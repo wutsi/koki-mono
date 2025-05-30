@@ -15,7 +15,7 @@ import com.wutsi.koki.room.server.service.data.RoomImageAgentData
 import org.springframework.stereotype.Service
 
 @Service
-class FileUploadedHandler(
+class FileUploaderHandler(
     private val fileService: FileService,
     private val labelService: LabelService,
     private val agentFactory: RoomAgentFactory,
@@ -41,7 +41,9 @@ class FileUploadedHandler(
         }
 
         // Set room hero image
-        event.owner?.id?.let { id -> setHeroImage(id, image) }
+        if (image.status == FileStatus.APPROVED) {
+            event.owner?.id?.let { id -> setHeroImage(id, image) }
+        }
     }
 
     private fun extractRoomInformationFromImage(image: FileEntity): RoomImageAgentData? {
