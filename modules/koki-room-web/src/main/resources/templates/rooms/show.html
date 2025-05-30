@@ -214,6 +214,7 @@
     <div class="room-contact-details">
         <div class="room-contact-details-inner">
             <div id="room-price">
+                <h3 th:text="${room.account.name}">ACCOUNT</h3>
                 <div th:if="${room.pricePerMonth}">
                     <div class="text-x-large text-primary" th:text="${room.pricePerMonth}">$$$$</div>
                     <div class="text-small">per month</div>

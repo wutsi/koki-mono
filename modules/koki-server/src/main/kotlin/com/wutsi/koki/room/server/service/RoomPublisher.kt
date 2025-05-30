@@ -9,6 +9,7 @@ import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.file.server.service.StorageServiceProvider
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.room.dto.AddAmenityRequest
+import com.wutsi.koki.room.dto.FurnishedType
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.event.RoomPublishedEvent
 import com.wutsi.koki.room.server.domain.RoomEntity
@@ -84,7 +85,7 @@ class RoomPublisher(
         roomService.save(room)
 
         // Update the amenities
-        if (data != null && data.amenityIds.isNotEmpty()) {
+        if (data != null && data.amenityIds.isNotEmpty() && room.furnishedType == FurnishedType.FULLY_FURNISHED) {
             roomService.addAmenities(
                 room.id ?: -1,
                 AddAmenityRequest(amenityIds = data.amenityIds),

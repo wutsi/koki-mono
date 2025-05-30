@@ -21,7 +21,12 @@
                 -
                 <span th:text="${room.publishedAtMoment}">YYYYMM</span>
             </li>
-            <li class="margin-top">
+            <li>&nbsp;</li>
+            <li th:if="${room.type.name() == 'HOTEL_ROOM'}">
+                <i class="fa-solid fa-hotel"></i>
+                <span th:text="${room.account.name}">HOTEL</span>
+            </li>
+            <li>
                 <i class="fa-solid fa-bed"></i>
                 <span th:text="${room.numberOfRooms}">00</span>
                 <span>Bedroom(s)</span>
@@ -31,7 +36,7 @@
                 <span th:text="${room.area}">00</span>
                 <span>m<sup>2</sup></span>
             </li>
-            <li class="margin-top">
+            <li>
                 <i class="fa-solid fa-location-dot"></i>
                 <span th:if="${room.neighborhood}" th:text="${room.neighborhood.name}">XXX</span>
                 <span th:if="${room.neighborhood}">-</span>

@@ -1,10 +1,12 @@
 package com.wutsi.koki.room.server.service.ai
 
+import com.wutsi.koki.account.server.service.AccountService
 import com.wutsi.koki.platform.ai.agent.Agent
 import com.wutsi.koki.platform.ai.agent.Tool
 import com.wutsi.koki.platform.ai.llm.LLM
 import com.wutsi.koki.refdata.server.service.AmenityService
 import com.wutsi.koki.refdata.server.service.LocationService
+import com.wutsi.koki.room.dto.RoomType
 import com.wutsi.koki.room.server.domain.RoomEntity
 import org.springframework.http.MediaType
 import java.util.Locale
@@ -15,6 +17,7 @@ import java.util.Locale
 class RoomInformationAgent(
     val room: RoomEntity,
     val llm: LLM,
+    val accountService: AccountService,
     val amenityService: AmenityService,
     val locationService: LocationService,
     val maxIterations: Int = 5,
@@ -40,7 +43,6 @@ class RoomInformationAgent(
             }
 
             Instructions:
-            - Before analyzing the images, you must ALWAYS fetch the list of all the amenity IDs you can identify in the images
             - Instructions for crafting the title:
               - Highlight the Unique Selling Proposition: What makes your property stand out? Is it a stunning view, a unique amenity, a prime location, or a special experience? Lead with that!
               - Be Specific and Descriptive: Use keywords that potential guests are likely to search for. Include details about the type of property, location, and key features.
@@ -68,9 +70,16 @@ class RoomInformationAgent(
         ).map { loc -> loc.name }.joinToString(",")
         val country = room.country?.let { Locale("en", room.country).displayName }
 
+        val hotel = if (room.type == RoomType.HOTEL_ROOM) {
+            val account = accountService.get(room.accountId, room.tenantId)
+            "- Hotel: ${account.name}"
+        } else {
+            ""
+        }
+
         return """
             Goal: Create the detailed description of a property listing.
-            Query: {{query}}
+            Query: $query
 
             Property Information:
             - Location: {{location}}
@@ -80,6 +89,7 @@ class RoomInformationAgent(
             - Baths: ${room.numberOfBathrooms}
             - Max guests: ${room.maxGuests}
             - Furnished: ${room.furnishedType}
+            {{hotel}}
 
             Amenities:
             Here are all the amenities in CSV format:
@@ -89,7 +99,6 @@ class RoomInformationAgent(
             Observations:
             {{observations}}
         """.trimIndent()
-            .replace("{{query}}", query)
             .replace("{{observations}}", memory.map { entry -> "- $entry" }.joinToString("\n"))
             .replace(
                 "{{amenities}}",
@@ -101,6 +110,7 @@ class RoomInformationAgent(
                 "{{location}}",
                 country?.let { listOf(location, country).joinToString(",") } ?: "Unknown"
             )
+            .replace("{{hotel}}", hotel)
     }
 
     override fun tools(): List<Tool> = emptyList()

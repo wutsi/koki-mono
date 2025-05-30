@@ -15,6 +15,7 @@ import com.wutsi.koki.file.server.service.StorageServiceProvider
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.platform.storage.local.LocalStorageService
 import com.wutsi.koki.room.dto.AddAmenityRequest
+import com.wutsi.koki.room.dto.FurnishedType
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.event.RoomPublishedEvent
 import com.wutsi.koki.room.server.domain.RoomEntity
@@ -57,6 +58,7 @@ class RoomPublisherTest {
         id = roomId,
         tenantId = tenantId,
         status = RoomStatus.PUBLISHING,
+        furnishedType = FurnishedType.FULLY_FURNISHED,
     )
 
     val images = listOf(
