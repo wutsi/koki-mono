@@ -34,7 +34,7 @@ class RoomMapControllerTest : AbstractPageControllerTest() {
     fun back() {
         navigateTo("/rooms/${room.id}/map")
 
-        click("btn-back")
+        click(".btn-back")
         assertCurrentPageIs(PageName.ROOM)
     }
 
@@ -42,12 +42,14 @@ class RoomMapControllerTest : AbstractPageControllerTest() {
     fun `open in google-map`() {
         navigateTo("/rooms/${room.id}/map")
 
+        Thread.sleep(2000) // Wait for the map
         click("#btn-google-map", 2000)
 
         val handles = driver.getWindowHandles().toList()
         assertEquals(2, handles.size)
         driver.switchTo().window(handles[1])
-        assertEquals(true, driver.currentUrl?.startsWith("https://www.google.com/maps/place"))
+
+        assertEquals("https://www.google.com/maps?t=m&z=17&q=loc:${room.latitude}+${room.longitude}", driver.currentUrl)
     }
 
     @Test
