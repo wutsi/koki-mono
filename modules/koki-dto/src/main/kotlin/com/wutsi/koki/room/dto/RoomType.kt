@@ -5,4 +5,5 @@ enum class RoomType {
     HOUSE,
     APARTMENT,
     ROOM,
+    HOTEL_ROOM
 }
