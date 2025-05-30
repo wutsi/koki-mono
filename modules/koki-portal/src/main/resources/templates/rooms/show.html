@@ -29,6 +29,10 @@
                                th:href="'/rooms/' + ${room.id} + '/edit'"
                                th:if="${user?.hasPermission('room:manage')}">Edit</a>
 
+                            <a class="btn-clone btn btn-light btn-sm"
+                               th:href="'/rooms/' + ${room.id} + '/clone'"
+                               th:if="${user?.hasPermission('room:manage')}">Copy</a>
+
                             <a class="btn-publish btn btn-primary btn-sm"
                                onclick="return confirm('Are you sure you want to publish this listing online?')"
                                th:href="'/rooms/' + ${room.id} + '/publish'"

@@ -10,6 +10,7 @@ import com.wutsi.koki.AccountFixtures.accounts
 import com.wutsi.koki.RefDataFixtures.cities
 import com.wutsi.koki.RefDataFixtures.locations
 import com.wutsi.koki.RefDataFixtures.neighborhoods
+import com.wutsi.koki.RoomFixtures.room
 import com.wutsi.koki.TenantFixtures.tenants
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.AbstractPageControllerTest
@@ -150,5 +151,27 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/rooms/create")
         assertCurrentPageIs(PageName.LOGIN)
+    }
+
+    @Test
+    fun clone() {
+        navigateTo("/rooms/create?copy-id=${room.id}")
+
+        assertCurrentPageIs(PageName.ROOM_CREATE)
+        assertSelectValue("#accountId", room.accountId.toString())
+        assertSelectValue("#type", room.type.name)
+        assertSelectValue("#leaseType", room.leaseType.name)
+        assertSelectValue("#furnishedType", room.furnishedType.name)
+        assertSelectValue("#numberOfRooms", room.numberOfRooms.toString())
+        assertSelectValue("#numberOfBathrooms", room.numberOfBathrooms.toString())
+        assertSelectValue("#numberOfBeds", room.numberOfBeds.toString())
+        assertSelectValue("#maxGuests", room.maxGuests.toString())
+        assertElementAttribute("#area", "value", room.area.toString())
+        assertElementAttribute("#pricePerMonth", "value", room.pricePerMonth?.amount?.toString())
+        assertElementAttribute("#pricePerNight", "value", room.pricePerNight?.amount?.toString())
+        assertElementHasAttribute("#country option[value=${room.address?.country}]", "selected")
+        // assertSelectValue("#neighborhoodId", room.neighborhoodId.toString())
+        assertElementAttribute("#street", "value", room.address?.street)
+        assertElementAttribute("#postalCode", "value", room.address?.postalCode)
     }
 }
