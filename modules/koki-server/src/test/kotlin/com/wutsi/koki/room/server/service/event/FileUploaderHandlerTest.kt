@@ -159,9 +159,7 @@ class FileUploaderHandlerTest {
         assertEquals("Sexual content!!", file1.firstValue.rejectionReason)
         assertEquals(labels, file1.firstValue.labels)
 
-        val room1 = argumentCaptor<RoomEntity>()
-        verify(roomService).save(room1.capture())
-        assertEquals(null, room1.firstValue.heroImageId)
+        verify(roomService, never()).save(any())
     }
 
     @Test

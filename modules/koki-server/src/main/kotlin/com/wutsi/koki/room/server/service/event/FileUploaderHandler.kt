@@ -38,11 +38,11 @@ class FileUploaderHandler(
         val data = extractRoomInformationFromImage(image)
         if (data != null) {
             updateImage(image, data)
-        }
 
-        // Set room hero image
-        if (image.status == FileStatus.APPROVED) {
-            event.owner?.id?.let { id -> setHeroImage(id, image) }
+            // Set room hero image
+            if (data.valid) {
+                event.owner?.id?.let { id -> setHeroImage(id, image) }
+            }
         }
     }
 
