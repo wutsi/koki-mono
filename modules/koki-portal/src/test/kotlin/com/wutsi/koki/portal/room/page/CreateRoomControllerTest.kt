@@ -114,7 +114,23 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
     @Test
     fun cancel() {
         navigateTo("/rooms/create")
+        select2("#accountId", accounts[0].name)
+        select("#type", 2)
+        select("#leaseType", 2)
+        select("#furnishedType", 2)
+        select("#numberOfRooms", 3)
+        select("#numberOfBathrooms", 4)
+        select("#numberOfBeds", 5)
+        scroll(.25)
+        select("#maxGuests", 6)
+        input("#area", "1500")
+        input("#pricePerMonth", "500")
         scrollToBottom()
+        select("#country", 3)
+        select2("#cityId", "${locations[2].name}, ${locations[0].name}")
+        select2("#neighborhoodId", "${neighborhoods[0].name}, ${cities[0].name}")
+        input("#street", "340 Nicolet")
+        input("#postalCode", "HzH zHz")
         click(".btn-cancel")
 
         assertCurrentPageIs(PageName.ROOM_LIST)
