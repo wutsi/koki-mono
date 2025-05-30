@@ -1,5 +1,6 @@
 package com.wutsi.koki.room.server.service.ai
 
+import com.wutsi.koki.account.server.service.AccountService
 import com.wutsi.koki.ai.server.service.LLMProvider
 import com.wutsi.koki.refdata.server.service.AmenityService
 import com.wutsi.koki.refdata.server.service.LocationService
@@ -13,6 +14,7 @@ class RoomAgentFactory(
     private val llmProvider: LLMProvider,
     private val amenityService: AmenityService,
     private val locationService: LocationService,
+    private val accountService: AccountService,
     private val configurationService: ConfigurationService,
 ) {
     fun createRoomImageAgent(tenantId: Long): RoomImageAgent? {
@@ -34,7 +36,8 @@ class RoomAgentFactory(
             llm = llm,
             room = room,
             amenityService = amenityService,
-            locationService = locationService
+            locationService = locationService,
+            accountService = accountService,
         )
     }
 
