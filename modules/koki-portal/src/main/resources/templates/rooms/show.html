@@ -113,7 +113,7 @@
                                              th:data-show-marker="${room.hasGeoLocation}"
                                              th:data-zoom="${zoom}"
                                         ></div>
-                                        <div class="margin-top-small text-center">
+                                        <div class="margin-top-small text-center" th:if="${latitude} AND ${longitude}">
                                             <a class="btn-map btn btn-sm btn-light"
                                                th:href="'/rooms/' + ${room.id} + '/map'"
                                                th:if="!${room.readOnly} AND ${user?.hasPermission('room:manage')}"
