@@ -1269,6 +1269,10 @@ abstract class AbstractPageControllerTest {
         assertEquals(true, driver.findElement(By.cssSelector(selector)).getDomAttribute(name)?.endsWith(value))
     }
 
+    protected fun assertElementAttributeEquals(selector: String, name: String, value: String) {
+        assertEquals(value, driver.findElement(By.cssSelector(selector)).getDomAttribute(name))
+    }
+
     protected fun assertElementAttributeContains(selector: String, name: String, value: String) {
         assertEquals(true, driver.findElement(By.cssSelector(selector)).getDomAttribute(name)?.contains(value))
     }
