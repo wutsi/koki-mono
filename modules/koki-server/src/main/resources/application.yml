@@ -246,6 +246,9 @@ koki:
                 queue: koki-room-queue
                 dlq: koki-room-dlq
                 dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
+            validation:
+                publisher:
+                    min-images: 5
 
         tax:
             mq:

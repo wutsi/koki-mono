@@ -9,9 +9,8 @@ import com.wutsi.koki.room.server.domain.RoomEntity
 import com.wutsi.koki.room.server.service.PublishRule
 import jakarta.validation.ValidationException
 
-class RoomMustHaveImageRule(
-    private val fileService: FileService,
-    private val min: Int
+class RoomMustNotHaveImageUnderReviewRule(
+    private val fileService: FileService
 ) : PublishRule {
     override fun validate(room: RoomEntity) {
         val images = fileService.search(
@@ -19,13 +18,11 @@ class RoomMustHaveImageRule(
             ownerId = room.id,
             ownerType = ObjectType.ROOM,
             type = FileType.IMAGE,
-            status = FileStatus.APPROVED,
+            status = FileStatus.UNDER_REVIEW,
             limit = 1
         )
-        if (images.isEmpty()) {
-            throw ValidationException(ErrorCode.ROOM_IMAGE_MISSING)
-        } else if (images.size < 5) {
-            throw ValidationException(ErrorCode.ROOM_IMAGE_THRESHOLD)
+        if (images.isNotEmpty()) {
+            throw ValidationException(ErrorCode.ROOM_IMAGE_UNDER_REVIEW)
         }
     }
 }
