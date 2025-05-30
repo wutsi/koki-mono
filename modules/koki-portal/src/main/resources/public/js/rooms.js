@@ -83,6 +83,9 @@ class KokiEditor {
         const leaseType = document.getElementById('leaseType').value;
 
         document.getElementById('pricePerNight').disabled = (leaseType !== 'SHORT_TERM');
+        document.getElementById('checkinTime').disabled = (leaseType !== 'SHORT_TERM');
+        document.getElementById('checkoutTime').disabled = (leaseType !== 'SHORT_TERM');
+
         document.getElementById('pricePerMonth').disabled = (leaseType !== 'LONG_TERM');
     }
 }
