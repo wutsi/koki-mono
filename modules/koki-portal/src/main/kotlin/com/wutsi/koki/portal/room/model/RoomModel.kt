@@ -61,6 +61,9 @@ data class RoomModel(
     val draft: Boolean
         get() = (status == RoomStatus.DRAFT)
 
+    val published: Boolean
+        get() = (status == RoomStatus.PUBLISHED)
+
     val readOnly: Boolean
         get() = status == RoomStatus.PUBLISHING
 
