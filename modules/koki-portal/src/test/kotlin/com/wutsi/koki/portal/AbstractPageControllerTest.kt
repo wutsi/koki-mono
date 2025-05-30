@@ -83,6 +83,7 @@ import com.wutsi.koki.product.dto.GetPriceResponse
 import com.wutsi.koki.product.dto.GetProductResponse
 import com.wutsi.koki.product.dto.SearchPriceResponse
 import com.wutsi.koki.product.dto.SearchProductResponse
+import com.wutsi.koki.refdata.dto.GetLocationResponse
 import com.wutsi.koki.refdata.dto.SearchAmenityResponse
 import com.wutsi.koki.refdata.dto.SearchCategoryResponse
 import com.wutsi.koki.refdata.dto.SearchJuridictionResponse
@@ -706,6 +707,17 @@ abstract class AbstractPageControllerTest {
                 eq(SearchLocationResponse::class.java)
             )
 
+        doReturn(
+            ResponseEntity(
+                GetLocationResponse(RefDataFixtures.locations[0]),
+                HttpStatus.OK,
+            )
+        ).whenever(restWithoutTenantHeader)
+            .getForEntity(
+                any<String>(),
+                eq(GetLocationResponse::class.java)
+            )
+
         // Categories
         doReturn(
             ResponseEntity(
@@ -1247,6 +1259,12 @@ abstract class AbstractPageControllerTest {
 
     protected fun assertElementHasNotAttribute(selector: String, name: String) {
         assertNull(driver.findElement(By.cssSelector(selector)).getDomAttribute(name)?.ifEmpty { null })
+    }
+
+    protected fun assertSelectValue(selector: String, value: String) {
+        val elt = driver.findElement(By.cssSelector(selector))
+        val select = Select(elt)
+        assertEquals(value, select.firstSelectedOption.getDomAttribute("value"))
     }
 
     protected fun waitForPresenceOf(selector: String, timeout: Long = 30, sleep: Long = 1) {

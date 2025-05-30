@@ -32,19 +32,56 @@ class CreateRoomController(
     @GetMapping("/create")
     fun create(
         @RequestParam(required = false, name = "account-id") accountId: Long? = null,
+        @RequestParam(required = false, name = "copy-id") copyId: Long? = null,
         model: Model
     ): String {
-        val account = accountId?.let { id -> accountService.account(id) }
+        if (copyId != null) {
+            val form = createRoom(copyId)
+            val account = accountService.account(form.accountId)
+            return create(account, form, model)
+        } else {
+            val account = accountId?.let { id -> accountService.account(id) }
+            val form = createRoom(account)
+            return create(account, form, model)
+        }
+    }
 
-        return create(
-            account,
-            RoomForm(
-                currency = tenantHolder.get()?.currency,
-                accountId = accountId ?: -1,
-                country = account?.shippingAddress?.country,
-                cityId = account?.shippingAddress?.city?.id,
-            ),
-            model,
+    private fun createRoom(account: AccountModel?): RoomForm {
+        return RoomForm(
+            currency = tenantHolder.get()?.currency,
+            accountId = account?.id ?: -1,
+            country = account?.shippingAddress?.country,
+            cityId = account?.shippingAddress?.city?.id,
+        )
+    }
+
+    private fun createRoom(copyId: Long): RoomForm {
+        val room = service.room(copyId)
+        return RoomForm(
+            accountId = room.account.id,
+            type = room.type,
+            furnishedType = room.furnishedType,
+            leaseType = room.leaseType,
+            leaseTerm = room.leaseTerm,
+            numberOfRooms = room.numberOfRooms,
+            numberOfBeds = room.numberOfBeds,
+            numberOfBathrooms = room.numberOfBathrooms,
+            maxGuests = room.maxGuests,
+            currency = tenantHolder.get()?.currency,
+            country = room.address?.country,
+            cityId = room.address?.city?.id,
+            street = room.address?.street,
+            postalCode = room.address?.postalCode,
+            neighborhoodId = room.neighborhood?.id,
+            pricePerMonth = room.pricePerMonth?.value,
+            pricePerNight = room.pricePerNight?.value,
+            area = room.area,
+            categoryId = room.category?.id,
+            checkinTime = room.checkinTime,
+            checkoutTime = room.checkinTime,
+            title = null,
+            summary = null,
+            description = null,
         )
     }
 

@@ -128,6 +128,12 @@ class RoomController(
         }
     }
 
+    @GetMapping("/{id}/clone")
+    @RequiresPermission(["room:manage"])
+    fun clone(@PathVariable id: Long): String {
+        return "redirect:/rooms/create?copy-id=$id"
+    }
+
     private fun loadToast(
         id: Long,
         referer: String?,

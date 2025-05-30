@@ -32,7 +32,8 @@ class LocationService(
         return locations.map { location -> mapper.toLocationModel(location) }
     }
 
-    fun location(id: Long): LocationModel? {
-        return locations(ids = listOf(id)).firstOrNull()
+    fun location(id: Long): LocationModel {
+        val location = koki.location(id).location
+        return mapper.toLocationModel(location)
     }
 }
