@@ -9,6 +9,7 @@ import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.file.server.service.LabelService
 import com.wutsi.koki.file.server.service.StorageServiceProvider
+import com.wutsi.koki.room.server.service.RoomService
 import com.wutsi.koki.room.server.service.ai.RoomAgentFactory
 import com.wutsi.koki.room.server.service.data.RoomImageAgentData
 import org.springframework.stereotype.Service
@@ -19,6 +20,7 @@ class FileUploadedHandler(
     private val labelService: LabelService,
     private val agentFactory: RoomAgentFactory,
     private val objectMapper: ObjectMapper,
+    private val roomService: RoomService,
 
     storageServiceProvider: StorageServiceProvider,
 ) : AbstractRoomEventHandler(storageServiceProvider) {
@@ -32,10 +34,14 @@ class FileUploadedHandler(
             return
         }
 
+        // Update Image
         val data = extractRoomInformationFromImage(image)
         if (data != null) {
             updateImage(image, data)
         }
+
+        // Set room hero image
+        event.owner?.id?.let { id -> setHeroImage(id, image) }
     }
 
     private fun extractRoomInformationFromImage(image: FileEntity): RoomImageAgentData? {
@@ -61,5 +67,13 @@ class FileUploadedHandler(
                 names = data.hashtags.map { tag -> if (tag.startsWith("#")) tag.substring(1) else tag })
         }
         fileService.save(image)
+    }
+
+    private fun setHeroImage(roomId: Long, image: FileEntity) {
+        val room = roomService.get(roomId, image.tenantId)
+        if (room.heroImageId == null) {
+            room.heroImageId = image.id
+            roomService.save(room)
+        }
     }
 }

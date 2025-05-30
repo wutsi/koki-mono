@@ -28,6 +28,7 @@ class EditRoomControllerTest : AbstractPageControllerTest() {
         navigateTo("/rooms/${room.id}/edit")
         assertCurrentPageIs(PageName.ROOM_EDIT)
 
+        input("#title", "Premium Room")
         select("#type", 2)
         select("#leaseType", 1)
         select("#furnishedType", 2)
@@ -47,12 +48,14 @@ class EditRoomControllerTest : AbstractPageControllerTest() {
         select2("#neighborhoodId", "${neighborhoods[0].name}, ${cities[0].name}")
         input("#street", "340 Nicolet")
         input("#postalCode", "HzH zHz")
+        input("#description", "This is a description")
         click("button[type=submit]")
 
         val request = argumentCaptor<UpdateRoomRequest>()
         verify(rest).postForEntity(
             eq("$sdkBaseUrl/v1/rooms/${room.id}"), request.capture(), eq(Any::class.java)
         )
+        assertEquals("Premium Room", request.firstValue.title)
         assertEquals(RoomType.HOUSE, request.firstValue.type)
         assertEquals(LeaseType.SHORT_TERM, request.firstValue.leaseType)
         assertEquals(LeaseTerm.UNKNOWN, request.firstValue.leaseTerm)
@@ -70,6 +73,7 @@ class EditRoomControllerTest : AbstractPageControllerTest() {
         assertEquals("HzH zHz", request.firstValue.postalCode)
         assertEquals("13:00", request.firstValue.checkinTime)
         assertEquals("09:00", request.firstValue.checkoutTime)
+        assertEquals("This is a description", request.firstValue.description)
 
         assertCurrentPageIs(PageName.ROOM)
     }
