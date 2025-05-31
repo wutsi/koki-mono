@@ -6,11 +6,6 @@ table tr.room-unit td a {
     text-decoration: none !important;
 }
 
-table tr.room td a img.img-fluid {
-    max-height: 166px;
-    max-width: 250px;
-}
-
 ul.amenities {
     list-style: none;
     margin: 0;
@@ -21,7 +16,6 @@ ul.amenities li {
     margin: 0;
     padding: 0;
 }
-
 
 .map-toolbar {
     display: inline-block;
@@ -34,3 +28,12 @@ ul.amenities li {
     margin-left: .5em;
 }
 
+.hero-image-container {
+    min-width: 250px;
+    display: inline-block;
+}
+
+img.hero-image {
+    max-height: 166px;
+    max-width: 250px;
+}

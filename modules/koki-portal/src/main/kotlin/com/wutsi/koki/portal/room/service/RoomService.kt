@@ -22,6 +22,7 @@ import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
 import com.wutsi.koki.room.dto.SaveRoomGeoLocationRequest
+import com.wutsi.koki.room.dto.SetHeroImageRequest
 import com.wutsi.koki.room.dto.UpdateRoomRequest
 import com.wutsi.koki.sdk.KokiRooms
 import org.springframework.stereotype.Service
@@ -142,7 +143,7 @@ class RoomService(
             fileService.files(
                 ids = imageIds,
                 type = FileType.IMAGE,
-                limit = locationIds.size
+                limit = imageIds.size
             ).associateBy { image -> image.id }
         }
 
@@ -250,5 +251,9 @@ class RoomService(
                 latitude = form.latitude!!,
             )
         )
+    }
+
+    fun setHeroImage(roomId: Long, fileId: Long) {
+        koki.setHeroImage(roomId, SetHeroImageRequest(fileId))
     }
 }

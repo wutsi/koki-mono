@@ -67,6 +67,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertElementPresent(".btn-publish")
         assertElementPresent(".btn-delete")
         assertElementPresent(".btn-clone")
+        assertElementNotPresent(".btn-hero-image")
     }
 
     @Test
@@ -91,6 +92,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent(".btn-delete")
         assertElementNotPresent(".btn-map")
         assertElementNotPresent(".btn-clone")
+        assertElementNotPresent(".btn-hero-image")
     }
 
     @Test
@@ -116,6 +118,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent(".btn-publish")
         assertElementNotPresent(".btn-delete")
         assertElementPresent(".btn-clone")
+        assertElementPresent(".btn-hero-image")
     }
 
     @Test
@@ -174,6 +177,14 @@ class RoomControllerTest : AbstractPageControllerTest() {
         click(".btn-clone")
 
         assertCurrentPageIs(PageName.ROOM_CREATE)
+    }
+
+    @Test
+    fun `change hero image`() {
+        navigateTo("/rooms/${room.id}")
+        click(".btn-hero-image")
+
+        assertCurrentPageIs(PageName.ROOM_HERO_IMAGE)
     }
 
     @Test

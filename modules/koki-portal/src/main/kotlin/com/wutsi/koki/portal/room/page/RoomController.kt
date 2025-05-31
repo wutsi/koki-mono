@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
-import java.net.URLEncoder
 
 @Controller
 @RequestMapping("/rooms")
@@ -106,8 +105,7 @@ class RoomController(
         try {
             val room = service.room(id, fullGraph = false)
             service.delete(id)
-            return "redirect:/rooms?_op=del&_toast=$id&_ts=" + System.currentTimeMillis() +
-                "&_title=" + URLEncoder.encode(room.title, "utf-8")
+            return "redirect:/rooms?_op=del&_toast=$id&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)
