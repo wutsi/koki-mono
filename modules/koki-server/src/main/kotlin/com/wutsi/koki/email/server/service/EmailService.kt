@@ -128,51 +128,51 @@ class EmailService(
         val toLanguage = request.recipient.language
         val translationService = getTranslationService(tenantId)
 
-        // Save email
+        // Email
         val id = UUID.randomUUID().toString()
         val subject = templatingEngine.apply(request.subject, data)
         val body = templatingEngine.apply(request.body, data)
         val xsubject = translate(subject, fromLanguage, toLanguage, translationService)
         val xbody = translate(body, fromLanguage, toLanguage, translationService)
-        val email = dao.save(
-            EmailEntity(
-                tenantId = tenantId,
-                id = id,
-                senderId = securityService.getCurrentUserIdOrNull(),
-                recipientType = request.recipient.type,
-                recipientId = request.recipient.id,
-                recipientDisplayName = request.recipient.displayName,
-                recipientEmail = request.recipient.email,
-                subject = xsubject,
-                body = xbody,
-                summary = toSummary(xbody),
-                attachmentCount = request.attachmentFileIds.size,
-            )
+        val email = EmailEntity(
+            id = id,
+            tenantId = tenantId,
+            senderId = securityService.getCurrentUserIdOrNull(),
+            recipientType = request.recipient.type,
+            recipientId = request.recipient.id,
+            recipientDisplayName = request.recipient.displayName,
+            recipientEmail = request.recipient.email,
+            subject = xsubject,
+            body = xbody,
+            summary = toSummary(xbody),
+            attachmentCount = request.attachmentFileIds.size,
         )
+
+        // Persist
+        if (request.store) {
+            dao.save(email)
+            if (request.owner != null) {
+                ownerDao.save(
+                    EmailOwnerEntity(
+                        emailId = email.id!!, ownerId = request.owner!!.id, ownerType = request.owner!!.type
+                    )
+                )
+            }
+        }
+
+        // Attachments
         request.attachmentFileIds.forEach { fileId ->
-            attachmentDao.save(
-                AttachmentEntity(
-                    emailId = id,
-                    fileId = fileId,
-                )
-            )
+            val att = AttachmentEntity(emailId = id, fileId = fileId)
+            email.attachments.add(att)
+            if (request.store) {
+                attachmentDao.save(att)
+            }
         }
 
-        // Reference
-        if (request.owner != null) {
-            ownerDao.save(
-                EmailOwnerEntity(
-                    emailId = email.id!!, ownerId = request.owner!!.id, ownerType = request.owner!!.type
-                )
-            )
-        }
-
-        // Config
+        // Send
         val config = configurationService.search(
             names = SMTPMessagingServiceBuilder.CONFIG_NAMES, tenantId = tenantId
         ).map { cfg -> cfg.name to cfg.value }.toMap()
-
-        // Send email
         try {
             val business = businessService.getOrNull(tenantId)
             val message = createMessage(request, email, config, business)

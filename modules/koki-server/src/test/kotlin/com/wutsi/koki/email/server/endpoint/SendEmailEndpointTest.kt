@@ -252,6 +252,50 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
+    fun `send without storing `() {
+        val request = SendEmailRequest(
+            subject = "Hello man - Invoice #123",
+            body = "<p>Hello Ray<br/>This is an example of email</p>",
+            recipient = Recipient(
+                id = 100,
+                type = ObjectType.ACCOUNT,
+                email = "info@ray-inc.com",
+                displayName = "Ray Inc"
+            ),
+            owner = ObjectReference(id = 111, type = ObjectType.TAX),
+            attachmentFileIds = listOf(100, 101),
+            data = mapOf(
+                "invoiceNumber" to "1111"
+            ),
+            store = false,
+        )
+        val response = rest.postForEntity("/v1/emails", request, SendEmailResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val id = response.body!!.emailId
+        val email = dao.findById(id)
+        assertEquals(true, email.isEmpty)
+
+        val emailOwners = ownerDao.findByEmailId(id)
+        assertEquals(0, emailOwners.size)
+
+        val attachments = attachmentDao.findByEmailId(id)
+        assertEquals(0, attachments.size)
+
+        val msg = argumentCaptor<Message>()
+        verify(messagingService).send(msg.capture())
+        assertTrue(msg.firstValue.body.contains(request.body))
+        assertEquals(request.subject, msg.firstValue.subject)
+        assertEquals(request.recipient.displayName, msg.firstValue.recipient.displayName)
+        assertEquals(request.recipient.email, msg.firstValue.recipient.email)
+        assertEquals("", msg.firstValue.sender?.email)
+        assertEquals("Business Inc", msg.firstValue.sender?.displayName)
+        assertEquals("text/html", msg.firstValue.mimeType)
+        assertEquals(request.attachmentFileIds.size, msg.firstValue.attachments.size)
+    }
+
+    @Test
     fun `email not saved on MessagingException`() {
         doThrow(MessagingException("failed")).whenever(messagingService).send(any())
 

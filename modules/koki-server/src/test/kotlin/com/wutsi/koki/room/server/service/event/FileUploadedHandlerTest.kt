@@ -24,14 +24,14 @@ import com.wutsi.koki.room.server.domain.RoomEntity
 import com.wutsi.koki.room.server.service.ai.RoomAgentFactory
 import com.wutsi.koki.room.server.service.ai.RoomImageAgent
 import com.wutsi.koki.room.server.service.data.RoomImageAgentData
-import com.wutsi.koki.room.server.service.event.FileUploaderHandler
+import com.wutsi.koki.room.server.service.event.FileUploadedHandler
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class FileUploaderHandlerTest {
+class FileUploadedHandlerTest {
     private val fileService = mock<FileService>()
     private val labelService = mock<LabelService>()
     private val storageServiceProvider = mock<StorageServiceProvider>()
@@ -39,7 +39,7 @@ class FileUploaderHandlerTest {
     private val roomService = mock<RoomService>()
     private val objectMapper = ObjectMapper()
 
-    private val handler = FileUploaderHandler(
+    private val handler = FileUploadedHandler(
         fileService = fileService,
         labelService = labelService,
         storageServiceProvider = storageServiceProvider,
@@ -111,7 +111,7 @@ class FileUploaderHandlerTest {
         handler.handle(event)
 
         // THEN
-        verify(agent).run(eq(FileUploaderHandler.IMAGE_AGENT_QUERY), any())
+        verify(agent).run(eq(FileUploadedHandler.IMAGE_AGENT_QUERY), any())
 
         val file1 = argumentCaptor<FileEntity>()
         verify(fileService).save(file1.capture())
@@ -148,7 +148,7 @@ class FileUploaderHandlerTest {
         handler.handle(event)
 
         // THEN
-        verify(agent).run(eq(FileUploaderHandler.IMAGE_AGENT_QUERY), any())
+        verify(agent).run(eq(FileUploadedHandler.IMAGE_AGENT_QUERY), any())
 
         val file1 = argumentCaptor<FileEntity>()
         verify(fileService).save(file1.capture())
