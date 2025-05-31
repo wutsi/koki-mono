@@ -9,16 +9,17 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th width="15%"></th>
+            <th></th>
             <th>Description</th>
-            <th width="15%">Status</th>
-            <th width="15%">Type</th>
-            <th width="15%">Price</th>
+            <th th:if="${showAccount}">Account</th>
+            <th>Status</th>
+            <th>Type</th>
+            <th class="text-right" width="15%">Price</th>
         </tr>
         </thead>
         <tbody>
         <tr class="room" th:each="room : ${rooms}">
-            <div th:replace="~{__components/room :: columns(${room})}"></div>
+            <div th:replace="~{__components/room :: columns(${room}, ${showAccount})}"></div>
         </tr>
         <tr th:replace="~{__components/room :: load-more(${moreUrl})}"></tr>
         </tbody>
