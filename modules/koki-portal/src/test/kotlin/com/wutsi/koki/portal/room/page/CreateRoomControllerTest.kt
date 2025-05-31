@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.room.page
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
@@ -15,12 +16,15 @@ import com.wutsi.koki.TenantFixtures.tenants
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
+import com.wutsi.koki.refdata.dto.GetLocationResponse
 import com.wutsi.koki.room.dto.CreateRoomRequest
 import com.wutsi.koki.room.dto.CreateRoomResponse
 import com.wutsi.koki.room.dto.FurnishedType
 import com.wutsi.koki.room.dto.LeaseTerm
 import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomType
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -74,6 +78,8 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
         assertEquals("HzH zHz", request.firstValue.postalCode)
         assertEquals("13:00", request.firstValue.checkinTime)
         assertEquals("09:00", request.firstValue.checkoutTime)
+        assertEquals(null, request.firstValue.latitude)
+        assertEquals(null, request.firstValue.longitude)
 
         assertCurrentPageIs(PageName.ROOM)
     }
@@ -155,6 +161,17 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun clone() {
+        doReturn(
+            ResponseEntity(
+                GetLocationResponse(neighborhoods[0]),
+                HttpStatus.OK,
+            )
+        ).whenever(restWithoutTenantHeader)
+            .getForEntity(
+                "$sdkBaseUrl/v1/locations/${room.neighborhoodId}",
+                GetLocationResponse::class.java
+            )
+
         navigateTo("/rooms/create?copy-id=${room.id}")
 
         assertCurrentPageIs(PageName.ROOM_CREATE)
@@ -170,8 +187,20 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
         assertElementAttribute("#pricePerMonth", "value", room.pricePerMonth?.amount?.toString())
         assertElementAttribute("#pricePerNight", "value", room.pricePerNight?.amount?.toString())
         assertElementHasAttribute("#country option[value=${room.address?.country}]", "selected")
-        // assertSelectValue("#neighborhoodId", room.neighborhoodId.toString())
+        assertSelectValue("#neighborhoodId", room.neighborhoodId.toString())
         assertElementAttribute("#street", "value", room.address?.street)
         assertElementAttribute("#postalCode", "value", room.address?.postalCode)
+        assertElementAttribute("#latitude", "value", room.latitude?.toString())
+        assertElementAttribute("#longitude", "value", room.longitude?.toString())
+
+        scrollToBottom()
+        click("button[type=submit]")
+
+        val request = argumentCaptor<CreateRoomRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/rooms"), request.capture(), eq(CreateRoomResponse::class.java)
+        )
+        assertEquals(room.latitude, request.firstValue.latitude)
+        assertEquals(room.longitude, request.firstValue.longitude)
     }
 }

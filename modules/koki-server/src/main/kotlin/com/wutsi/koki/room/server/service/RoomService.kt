@@ -178,6 +178,8 @@ class RoomService(
                 furnishedType = request.furnishedType,
                 categoryId = request.categoryId,
                 leaseType = request.leaseType,
+                latitude = request.latitude,
+                longitude = request.longitude,
 
                 street = request.street,
                 postalCode = request.postalCode,

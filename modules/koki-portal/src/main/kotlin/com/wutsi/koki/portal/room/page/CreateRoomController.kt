@@ -82,6 +82,8 @@ class CreateRoomController(
             title = null,
             summary = null,
             description = null,
+            longitude = room.longitude,
+            latitude = room.latitude,
         )
     }
 

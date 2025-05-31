@@ -43,6 +43,8 @@ class CreateRoomEndpointTest : AuthorizationAwareEndpointTest() {
             leaseType = LeaseType.LONG_TERM,
             categoryId = 777L,
             furnishedType = FurnishedType.FULLY_FURNISHED,
+            latitude = 3.143094,
+            longitude = 11.54090459
         )
         val response = rest.postForEntity("/v1/rooms", request, CreateRoomResponse::class.java)
 
@@ -79,5 +81,7 @@ class CreateRoomEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.leaseType, room.leaseType)
         assertEquals(request.furnishedType, room.furnishedType)
         assertEquals(request.categoryId, room.categoryId)
+        assertEquals(request.latitude, room.latitude)
+        assertEquals(request.longitude, room.longitude)
     }
 }

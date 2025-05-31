@@ -30,4 +30,6 @@ data class RoomForm(
     val leaseType: LeaseType = LeaseType.UNKNOWN,
     val categoryId: Long? = null,
     val area: Int? = null,
+    val latitude: Double? = null,
+    val longitude: Double? = null,
 )
