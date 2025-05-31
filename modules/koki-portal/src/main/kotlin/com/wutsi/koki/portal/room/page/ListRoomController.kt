@@ -25,7 +25,6 @@ class ListRoomController(private val service: RoomService) : AbstractRoomControl
         @RequestParam(required = false, name = "_toast") toast: Long? = null,
         @RequestParam(required = false, name = "_op") operation: String? = null,
         @RequestParam(required = false, name = "_ts") timestamp: Long? = null,
-        @RequestParam(required = false, name = "_title") title: String? = null,
     ): String {
         model.addAttribute(
             "page",
@@ -42,7 +41,7 @@ class ListRoomController(private val service: RoomService) : AbstractRoomControl
         model.addAttribute("statuses", RoomStatus.entries.filter { entry -> entry != RoomStatus.UNKNOWN })
 
         more(type, status, model = model)
-        loadToast(referer, toast, timestamp, operation, title, model)
+        loadToast(referer, toast, timestamp, operation, model)
         return "rooms/list"
     }
 
@@ -80,12 +79,11 @@ class ListRoomController(private val service: RoomService) : AbstractRoomControl
         toast: Long?,
         timestamp: Long?,
         operation: String?,
-        title: String?,
         model: Model
     ) {
         if (toast != null && canShowToasts(timestamp, referer, listOf("/rooms/$toast"))) {
-            if (operation == "del" && title != null) {
-                model.addAttribute("toast", "The room <b>$title</b> has been deleted!")
+            if (operation == "del") {
+                model.addAttribute("toast", "Deleted!")
             }
         }
     }

@@ -72,16 +72,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun publishing() {
-        doReturn(
-            ResponseEntity(
-                GetRoomResponse(room.copy(status = RoomStatus.PUBLISHING)),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetRoomResponse::class.java)
-            )
+        setupRoom(RoomStatus.PUBLISHING)
 
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ROOM)
@@ -97,16 +88,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun published() {
-        doReturn(
-            ResponseEntity(
-                GetRoomResponse(room.copy(status = RoomStatus.PUBLISHED)),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetRoomResponse::class.java)
-            )
+        setupRoom(RoomStatus.PUBLISHED)
 
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ROOM)
@@ -181,6 +163,8 @@ class RoomControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `change hero image`() {
+        setupRoom(RoomStatus.PUBLISHED)
+
         navigateTo("/rooms/${room.id}")
         click(".btn-hero-image")
 
@@ -224,5 +208,18 @@ class RoomControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.LOGIN)
+    }
+
+    private fun setupRoom(status: RoomStatus) {
+        doReturn(
+            ResponseEntity(
+                GetRoomResponse(room.copy(status = status)),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetRoomResponse::class.java)
+            )
     }
 }

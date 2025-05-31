@@ -103,7 +103,6 @@ class RoomController(
     @RequiresPermission(["room:manage"])
     fun delete(@PathVariable id: Long, model: Model): String {
         try {
-            val room = service.room(id, fullGraph = false)
             service.delete(id)
             return "redirect:/rooms?_op=del&_toast=$id&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
@@ -141,10 +140,10 @@ class RoomController(
         model: Model
     ) {
         if (toast == id && canShowToasts(timestamp, referer, listOf("/rooms/$id/edit", "/rooms/$id/map"))) {
-            if (operation == "geo") {
-                model.addAttribute("toast", "The geolocation has been saved")
+            if (operation == "published") {
+                model.addAttribute("toast", "Publishing...")
             } else {
-                model.addAttribute("toast", "Saved")
+                model.addAttribute("toast", "Saved!")
             }
         }
     }
