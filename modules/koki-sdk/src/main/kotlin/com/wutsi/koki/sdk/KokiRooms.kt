@@ -8,6 +8,7 @@ import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
 import com.wutsi.koki.room.dto.SaveRoomGeoLocationRequest
 import com.wutsi.koki.room.dto.SearchRoomResponse
+import com.wutsi.koki.room.dto.SetHeroImageRequest
 import com.wutsi.koki.room.dto.UpdateRoomRequest
 import org.springframework.web.client.RestTemplate
 
@@ -97,5 +98,10 @@ class KokiRooms(
     fun publish(roomId: Long) {
         val url = urlBuilder.build("$ROOM_PATH_PREFIX/$roomId/publish")
         rest.getForEntity(url, Any::class.java)
+    }
+
+    fun setHeroImage(roomId: Long, request: SetHeroImageRequest) {
+        val url = urlBuilder.build("$ROOM_PATH_PREFIX/$roomId/hero-image")
+        rest.postForEntity(url, request, Any::class.java)
     }
 }
