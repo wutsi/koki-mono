@@ -26,7 +26,7 @@ data class EmailEntity(
 
     @OneToMany()
     @JoinColumn(name = "email_fk")
-    val attachments: List<AttachmentEntity> = emptyList(),
+    val attachments: MutableList<AttachmentEntity> = mutableListOf(),
 
     val recipientType: ObjectType = ObjectType.UNKNOWN,
     val recipientEmail: String = "",

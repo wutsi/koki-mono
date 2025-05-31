@@ -18,6 +18,7 @@ import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.room.dto.AddAmenityRequest
 import com.wutsi.koki.room.dto.CreateRoomRequest
+import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
 import com.wutsi.koki.room.dto.SaveRoomGeoLocationRequest
@@ -175,8 +176,8 @@ class RoomService(
                 numberOfBathrooms = form.numberOfBathrooms,
                 maxGuests = form.maxGuests,
                 currency = form.currency ?: "",
-                pricePerNight = form.pricePerNight,
-                pricePerMonth = form.pricePerMonth,
+                pricePerNight = if (form.leaseType == LeaseType.SHORT_TERM) form.pricePerNight else null,
+                pricePerMonth = if (form.leaseType == LeaseType.LONG_TERM) form.pricePerMonth else null,
                 cityId = form.cityId,
                 postalCode = form.postalCode,
                 street = form.street,

@@ -15,7 +15,7 @@ import com.wutsi.koki.room.server.service.data.RoomImageAgentData
 import org.springframework.stereotype.Service
 
 @Service
-class FileUploaderHandler(
+class FileUploadedHandler(
     private val fileService: FileService,
     private val labelService: LabelService,
     private val agentFactory: RoomAgentFactory,

@@ -148,7 +148,8 @@ object RoomFixtures {
         numberOfBeds = 3,
         numberOfBathrooms = 2,
         numberOfRooms = 1,
-        pricePerNight = Money(amount = 350.0, currency = "CAD"),
+        pricePerNight = Money(amount = 55.0, currency = "CAD"),
+        pricePerMonth = Money(amount = 1500.0, currency = "CAD"),
         address = Address(
             cityId = RefDataFixtures.cities[0].id,
             country = RefDataFixtures.cities[0].country,
@@ -172,7 +173,6 @@ object RoomFixtures {
         leaseTerm = LeaseTerm.YEARLY,
         leaseType = LeaseType.SHORT_TERM,
         furnishedType = FurnishedType.FULLY_FURNISHED,
-        pricePerMonth = Money(1500.0, "CAD"),
         area = 750,
         categoryId = RefDataFixtures.categories[0].id,
         listingUrl = "/rooms/1116/windmill-in-ponta-delgada",

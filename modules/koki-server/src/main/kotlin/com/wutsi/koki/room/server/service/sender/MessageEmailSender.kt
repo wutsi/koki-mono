@@ -8,13 +8,12 @@ import com.wutsi.koki.email.server.service.EmailService
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.message.dto.event.MessageSentEvent
 import com.wutsi.koki.message.server.service.MessageService
-import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.tenant.server.service.TenantService
 import org.apache.commons.io.IOUtils
 import org.springframework.stereotype.Service
 
 @Service
-class RoomMessageEmailSender(
+class MessageEmailSender(
     private val messageService: MessageService,
     private val roomService: RoomService,
     private val accountService: AccountService,
@@ -22,16 +21,16 @@ class RoomMessageEmailSender(
     private val tenantService: TenantService,
     private val fileService: FileService,
 ) {
+    companion object {
+        const val SUBJECT = "You have a new message about your property"
+    }
+
     fun send(event: MessageSentEvent) {
         if (event.owner?.type != ObjectType.ROOM) {
             return
         }
 
         val room = roomService.get(event.owner?.id ?: -1L, event.tenantId)
-        if (room.status != RoomStatus.PUBLISHED) {
-            return
-        }
-
         val message = messageService.get(event.messageId, event.tenantId)
         val account = accountService.get(room.accountId, event.tenantId)
         val tenant = tenantService.get(event.tenantId)
@@ -46,19 +45,29 @@ class RoomMessageEmailSender(
                     email = account.email,
                     displayName = account.name,
                 ),
-                subject = "You have a new message about your property",
+                subject = SUBJECT,
                 body = IOUtils.toString(this::class.java.getResourceAsStream("/room/email/message.html"), "utf-8"),
                 data = mapOf(
                     "senderName" to message.senderName,
                     "senderEmail" to message.senderEmail,
                     "senderPhone" to message.senderPhone,
+                    "senderWhatsappUrl" to message.senderPhone?.let { phone -> toWhatstappUrl(phone) },
                     "body" to message.body,
                     "roomUrl" to "${tenant.portalUrl}/rooms/${room.id}",
                     "roomTitle" to room.title,
-                    "roomHeroImageUrl" to heroImage?.url,
-                ).map { entry -> entry.value != null } as Map<String, Any>,
+                    "heroImageUrl" to heroImage?.url,
+                ).filter { entry -> entry.value != null } as Map<String, Any>,
                 store = false,
             )
         )
+    }
+
+    private fun toWhatstappUrl(phone: String): String {
+        return "https://wa.me/" +
+            phone.replace("+", "")
+                .replace(" ", "")
+                .replace("-", "")
+                .replace("(", "")
+                .replace(")", "")
     }
 }

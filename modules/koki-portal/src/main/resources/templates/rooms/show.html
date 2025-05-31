@@ -61,12 +61,12 @@
                         <div class="margin-right-2x" th:if="${room.hasPrice}">
                             <b>Price</b><br/>
                             <div th:if="${room.pricePerNight}">
-                                <div th:text="${room.pricePerNight}">$$</div>
-                                <div class="text-small">per night</div>
+                                <span th:text="${room.pricePerNight}">$$</span>
+                                <span class="text-small">per night</span>
                             </div>
                             <div th:if="${room.pricePerMonth}">
-                                <div th:text="${room.pricePerMonth}">$$</div>
-                                <div class="text-small">per month</div>
+                                <span th:text="${room.pricePerMonth}">$$</span>
+                                <span class="text-small">per month</span>
                             </div>
                         </div>
                     </div>
