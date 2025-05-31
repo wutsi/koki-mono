@@ -198,6 +198,7 @@ class RoomService(
             id = id, request = UpdateRoomRequest(
                 type = form.type,
                 title = form.title,
+                summary = form.summary?.ifEmpty { null },
                 description = form.description?.ifEmpty { null },
                 numberOfRooms = form.numberOfRooms,
                 numberOfBeds = form.numberOfBeds,

@@ -46,6 +46,7 @@ class RoomTabController(private val service: RoomService) : AbstractRoomControll
             emptyList()
         }
 
+        model.addAttribute("showAccount", false)
         model.addAttribute("readOnly", readOnly == true)
         model.addAttribute("ownerId", ownerId)
         model.addAttribute("ownerType", ownerType)
