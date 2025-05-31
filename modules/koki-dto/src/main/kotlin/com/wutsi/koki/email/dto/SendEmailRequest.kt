@@ -11,5 +11,6 @@ data class SendEmailRequest(
     val body: String = "",
     val attachmentFileIds: List<Long> = emptyList(),
     val owner: ObjectReference? = null,
-    val data: Map<String, Any> = emptyMap()
+    val data: Map<String, Any> = emptyMap(),
+    val store: Boolean = true,
 )
