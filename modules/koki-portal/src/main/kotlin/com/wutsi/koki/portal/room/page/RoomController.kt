@@ -49,15 +49,21 @@ class RoomController(
 
         model.addAttribute(
             "latitude",
-            room.latitude
-                ?: room.neighborhood?.latitude
-                ?: room.address?.city?.latitude
+            if (room.hasGeoLocation) {
+                room.latitude
+            } else {
+                room.neighborhood?.latitude
+                    ?: room.address?.city?.latitude
+            }
         )
         model.addAttribute(
             "longitude",
-            room.longitude
-                ?: room.neighborhood?.longitude
-                ?: room.address?.city?.longitude
+            if (room.hasGeoLocation) {
+                room.longitude
+            } else {
+                room.neighborhood?.longitude
+                    ?: room.address?.city?.longitude
+            }
         )
         model.addAttribute(
             "zoom",

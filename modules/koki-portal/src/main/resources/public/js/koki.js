@@ -472,7 +472,8 @@ class ModalWidget {
  *  - data-zoom: Initial zoom of the map viewport (Default: 10)
  *  - data-max-zoom: Initial zoom of the map viewport (Default: 20)
  *  - data-show-marker: (true|false) Show marker in the center of the map? (Default: false)
- *  - data-onlick: Name of the callback called when user click. The callback will receive mouse event. See https://leafletjs.com/reference.html#mouseevent
+ *  - data-on-click: Name of the callback called when user click. The callback will receive mouse event. See https://leafletjs.com/reference.html#mouseevent
+ *  - data-on-ready: Name of the callback called when map is ready
  */
 class MapWidget {
     init() {
@@ -512,16 +513,23 @@ class MapWidget {
                         map.addLayer(marker);
                     }
 
-                    let onclick = elt.getAttribute('data-onclick');
-                    if (onclick) {
-                        map.on('click', function (evt) {
-                            eval(onclick)(evt);
-                        });
-                    }
-
                     setTimeout(
                         function () {
                             map.invalidateSize(true);
+
+                            // on-click
+                            let onclick = elt.getAttribute('data-on-click');
+                            if (onclick) {
+                                map.on('click', function (evt) {
+                                    eval(onclick)(evt);
+                                });
+                            }
+
+                            // on-ready
+                            let onReady = elt.getAttribute('data-on-ready');
+                            if (onReady) {
+                                eval(onReady)(id, map);
+                            }
                         },
                         500);
                     count++
