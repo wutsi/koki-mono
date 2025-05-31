@@ -51,6 +51,7 @@ class EditRoomControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.ROOM_EDIT)
 
         input("#title", "Premium Room")
+        input("#summary", "This is a nice room for 3")
         select("#type", 2)
         select("#leaseType", 1)
         select("#furnishedType", 2)
@@ -78,6 +79,7 @@ class EditRoomControllerTest : AbstractPageControllerTest() {
             eq("$sdkBaseUrl/v1/rooms/${room.id}"), request.capture(), eq(Any::class.java)
         )
         assertEquals("Premium Room", request.firstValue.title)
+        assertEquals("This is a nice room for 3", request.firstValue.summary)
         assertEquals(RoomType.HOUSE, request.firstValue.type)
         assertEquals(LeaseType.SHORT_TERM, request.firstValue.leaseType)
         assertEquals(LeaseTerm.UNKNOWN, request.firstValue.leaseTerm)

@@ -6,8 +6,9 @@ table tr.room-unit td a {
     text-decoration: none !important;
 }
 
-table tr.room td .room-image {
-    max-height: 128px;
+table tr.room td a img.img-fluid {
+    max-height: 166px;
+    max-width: 250px;
 }
 
 ul.amenities {

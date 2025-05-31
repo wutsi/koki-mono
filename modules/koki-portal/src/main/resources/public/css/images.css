@@ -6,5 +6,6 @@ table tr.image td a {
 }
 
 table tr.image td a img.img-fluid {
-    max-height: 128px;
+    max-height: 166px;
+    max-width: 250px;
 }

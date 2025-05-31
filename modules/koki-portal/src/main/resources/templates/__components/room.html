@@ -19,8 +19,8 @@
     </div>
 </div>
 
-<tr class="room" th:fragment="columns(room)" th:remove="tag">
-    <td>
+<tr class="room" th:fragment="columns(room,showAccount)" th:remove="tag">
+    <td class="text-center">
         <a th:href="'/rooms/' + ${room.id}" th:if="${room.heroImage}">
             <img class="img-fluid" th:src="${room.heroImage.contentUrl}"/>
         </a>
@@ -42,6 +42,11 @@
             <div class="margin-top-small" th:if="${room.summary}" th:text="${room.summary}">SUMMARY</div>
         </a>
     </td>
+    <td th:if="${showAccount}">
+        <a th:href="'/rooms/' + ${room.id}" th:text="${room.account.name}">
+            ACCOUNT
+        </a>
+    </td>
     <td>
         <a th:href="'/rooms/' + ${room.id}">
             <div th:replace="~{__components/room :: status(${room.status})}"></div>
@@ -52,7 +57,7 @@
             <div th:replace="~{__components/room :: type(${room.type})}"></div>
         </a>
     </td>
-    <td>
+    <td class="text-right">
         <a th:href="'/rooms/' + ${room.id}">
             <div class="margin-bottom" th:if="${room.pricePerNight}">
                 <div th:text="${room.pricePerNight}">$$</div>
@@ -94,6 +99,15 @@
 </div>
 
 <table class="table" th:fragment="details(room)">
+    <tr th:if="${room.heroImage}">
+        <td><b>Hero Image</b></td>
+        <td>
+            <a target="_blank" th:href="${room.heroImage.contentUrl}">
+                <img class="hero-image" style="max-width: 250px; max-height: 166px" th:alt="${room.heroImage.title}"
+                     th:src="${room.heroImage.contentUrl}"/>
+            </a>
+        </td>
+    </tr>
     <tr>
         <td><b>Account</b></td>
         <td>

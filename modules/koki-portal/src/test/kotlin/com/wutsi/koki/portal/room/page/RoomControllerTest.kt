@@ -7,9 +7,11 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.FileFixtures.image
 import com.wutsi.koki.FileFixtures.images
 import com.wutsi.koki.RoomFixtures.room
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
@@ -27,6 +29,17 @@ class RoomControllerTest : AbstractPageControllerTest() {
 
         doReturn(
             ResponseEntity(
+                GetFileResponse(image),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetFileResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
                 SearchFileResponse(images),
                 HttpStatus.OK,
             )
@@ -41,6 +54,8 @@ class RoomControllerTest : AbstractPageControllerTest() {
     fun show() {
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ROOM)
+
+        assertElementAttribute("img.hero-image", "src", image.url)
 
         assertElementAttribute("[data-component-id=map]", "data-latitude", room.latitude.toString())
         assertElementAttribute("[data-component-id=map]", "data-longitude", room.longitude.toString())
