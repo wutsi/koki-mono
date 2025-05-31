@@ -28,4 +28,6 @@ data class CreateRoomRequest(
     val furnishedType: FurnishedType = FurnishedType.UNKNOWN,
     val leaseType: LeaseType = LeaseType.UNKNOWN,
     val categoryId: Long? = null,
+    val longitude: Double? = null,
+    val latitude: Double? = null,
 )
