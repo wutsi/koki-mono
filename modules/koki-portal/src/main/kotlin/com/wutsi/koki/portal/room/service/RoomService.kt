@@ -189,6 +189,8 @@ class RoomService(
                 leaseType = form.leaseType,
                 categoryId = form.categoryId,
                 furnishedType = form.furnishedType,
+                latitude = form.latitude,
+                longitude = form.longitude,
             )
         ).roomId
     }
