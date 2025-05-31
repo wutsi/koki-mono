@@ -93,6 +93,8 @@ object ErrorCode {
     val ROOM_NOT_FOUND: String = "$PREFIX:room:not-found"
     val ROOM_INVALID_STATUS: String = "$PREFIX:room:invalid-status"
     val ROOM_IMAGE_MISSING: String = "$PREFIX:room:image-missing"
+    val ROOM_IMAGE_NOT_VALID: String = "$PREFIX:room:image-not-valid"
+    val ROOM_IMAGE_NOT_OWNED: String = "$PREFIX:room:image-not-owned"
     val ROOM_IMAGE_UNDER_REVIEW: String = "$PREFIX:room:image-under-review"
     val ROOM_IMAGE_THRESHOLD: String = "$PREFIX:room:image-threshold"
     val ROOM_GEOLOCATION_MISSING: String = "$PREFIX:room:geolocation-missing"
