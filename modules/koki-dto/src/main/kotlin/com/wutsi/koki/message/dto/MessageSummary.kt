@@ -5,6 +5,7 @@ import java.util.Date
 
 data class MessageSummary(
     val id: Long = -1,
+    val senderAccountId: Long? = null,
     val senderName: String = "",
     val senderEmail: String = "",
     val senderPhone: String? = null,
@@ -12,4 +13,6 @@ data class MessageSummary(
     val createdAt: Date = Date(),
     val owner: ObjectReference? = null,
     val body: String = "",
+    val country: String? = null,
+    val language: String? = null,
 )
