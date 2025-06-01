@@ -41,7 +41,7 @@ INSERT INTO T_CONFIGURATION(tenant_fk, name, value)
 ;
 
 INSERT INTO T_INVOICE(
-    id, paynow_id, tenant_fk, tax_fk, order_fk,
+    id, paynow_id, tenant_fk, order_fk,
     number, status, description,
     sub_total_amount, total_tax_amount, total_discount_amount, total_amount, amount_paid, amount_due, currency,
     customer_account_fk, customer_name, customer_email, customer_phone, customer_mobile,
@@ -50,7 +50,7 @@ INSERT INTO T_INVOICE(
     invoiced_at, due_at)
   VALUES
       (
-        100, 'paynow100', 1, 7777, 9999,
+        100, 'paynow100', 1, 9999,
         100, 2, 'Sample description',
         800.00, 40.00, 20.00, 820.00, 810.00, 10.00, 'CAD',
         111, 'Ray Sponsible', 'ray.sponsible@gmail.com', '+5147580111', '+514758000',
@@ -59,7 +59,7 @@ INSERT INTO T_INVOICE(
         '2025-01-01', '2025-01-30'
       ),
       (
-        110, 'paynow110', 1, 7777, 9999,
+        110, 'paynow110', 1, 9999,
         110, 2, 'Sample description',
         800.00, 40.00, 20.00, 820.00, 810.00, 10.00, 'CAD',
         111, 'Ray Sponsible', 'ray.sponsible@gmail.com', '+5147580111', '+514758000',
@@ -68,7 +68,7 @@ INSERT INTO T_INVOICE(
         '2025-01-01', '2025-01-30'
       ),
       (
-        120, 'paynow120', 1, 7777, 9999,
+        120, 'paynow120', 1, 9999,
         120, 2, 'Sample description',
         800.00, 40.00, 20.00, 820.00, 810.00, 10.00, 'CAD',
         111, 'Ray Sponsible', 'ray.sponsible@gmail.com', '+5147580111', '+514758000',
