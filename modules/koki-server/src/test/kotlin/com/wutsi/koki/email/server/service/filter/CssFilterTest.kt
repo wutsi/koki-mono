@@ -18,11 +18,16 @@ class CssFilterTest {
 
         assertEquals(
             """
-                <h1>
-                  Hello
-                  <div class="margin-top" style="margin-top: 16px;">Hello</div>
-                  <button class="btn btn-primary" style="border-radius: 16px;display: inline-block;font-weight: 400;color: #FFFFFF;background-color: #1D7EDF;text-align: center;vertical-align: middle;border: 1px solid transparent;padding: .375rem .75rem;font-size: 1rem;line-height: 1.5;text-decoration: none;">Yo</button>
-                </h1>
+                <html>
+                  <head></head>
+                  <body>
+                    <h1>
+                      Hello
+                      <div class="margin-top" style="margin-top: 16px;">Hello</div>
+                      <button class="btn btn-primary" style="border-radius: 16px;display: inline-block;font-weight: 400;color: #FFFFFF;background-color: #1D7EDF;text-align: center;vertical-align: middle;border: 1px solid transparent;padding: .375rem .75rem;font-size: 1rem;line-height: 1.5;text-decoration: none;">Yo</button>
+                    </h1>
+                  </body>
+                </html>
             """.trimIndent(),
             result.trimIndent(),
         )

@@ -229,7 +229,7 @@ class CssFilter : EmailFilter {
             .indentAmount(2)
             .prettyPrint(true)
             .outline(true)
-        return doc.body().html()
+        return doc.html()
     }
 
     private fun filter(elt: Element) {
