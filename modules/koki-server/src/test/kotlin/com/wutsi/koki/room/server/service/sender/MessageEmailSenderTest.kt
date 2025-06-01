@@ -123,7 +123,7 @@ class MessageEmailSenderTest {
         assertEquals(message.senderEmail, request.firstValue.data["senderEmail"])
         assertEquals(message.senderPhone, request.firstValue.data["senderPhone"])
         assertEquals(
-            "https://wa.me/23799500011?text=https%3A%2F%2Fwww.foo.com%2Frooms%2F777%2Fcozy-appartment%0A",
+            "https://wa.me/23799500011?text=https%3A%2F%2Fwww.foo.com%2Frooms%2F777%2Fcozy-appartment",
             request.firstValue.data["senderWhatsappUrl"]
         )
         assertEquals(message.body, request.firstValue.data["body"])
