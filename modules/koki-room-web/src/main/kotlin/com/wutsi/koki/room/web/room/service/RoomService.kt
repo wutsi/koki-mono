@@ -119,7 +119,7 @@ class RoomService(
             fileService.files(
                 ids = imageIds,
                 type = FileType.IMAGE,
-                limit = locationIds.size
+                limit = imageIds.size
             ).associateBy { image -> image.id }
         }
 
