@@ -15,13 +15,12 @@
             <span th:text="${room.pricePerNight}">$$$</span>
             <span class="text-small">per night</span>
         </h2>
+        <div>
+            <b th:text="#{'room-type.' + ${room.type.name()}}">TYPE</b>
+            -
+            <span th:text="${room.publishedAtMoment}">YYYYMM</span>
+        </div>
         <ul>
-            <li>
-                <b th:text="#{'room-type.' + ${room.type.name()}}">TYPE</b>
-                -
-                <span th:text="${room.publishedAtMoment}">YYYYMM</span>
-            </li>
-            <li>&nbsp;</li>
             <li th:if="${room.type.name() == 'HOTEL_ROOM'}">
                 <i class="fa-solid fa-hotel"></i>
                 <span th:text="${room.account.name}">HOTEL</span>
@@ -37,12 +36,14 @@
                 <span>m<sup>2</sup></span>
             </li>
             <li>
-                <i class="fa-solid fa-location-dot"></i>
-                <span th:if="${room.neighborhood}" th:text="${room.neighborhood.name}">XXX</span>
-                <span th:if="${room.neighborhood}">-</span>
-                <span th:text="${room.address?.city?.name}">XXX</span>
             </li>
         </ul>
+        <div>
+            <i class="fa-solid fa-location-dot"></i>
+            <span th:if="${room.neighborhood}" th:text="${room.neighborhood.name}">XXX</span>
+            <span th:if="${room.neighborhood}">-</span>
+            <span th:text="${room.address?.city?.name}">XXX</span>
+        </div>
     </div>
 </div>
 
