@@ -539,6 +539,31 @@ class MapWidget {
     }
 }
 
+class IntlTel {
+    init() {
+        let count = 0;
+        document.querySelectorAll('input[type=tel]')
+            .forEach((elt) => {
+                    window.intlTelInput(elt, {
+                        initialCountry: "auto",
+                        geoIpLookup: callback => {
+                            fetch("https://ipapi.co/json")
+                                .then(res => res.json())
+                                .then(data => callback(data.country_code))
+                                .catch(() => callback("us"));
+                        },
+                        hiddenInput: () => ({phone: elt.getAttribute("name") + "Full"}),
+                        loadUtils: () => import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/utils.js")
+                    });
+
+                    count++
+                }
+            );
+        console.log(count + ' intl-tel component(s) found');
+    }
+
+}
+
 /**
  * Widget container
  */
@@ -552,6 +577,7 @@ class KokiWidgets {
         this.map = new MapWidget();
         this.modal = new ModalWidget();
         this.uploader = new UploaderWidget();
+        this.intlTel = new IntlTel();
     }
 }
 
@@ -573,6 +599,7 @@ class Koki {
         this.widgets.map.init();
         this.widgets.modal.init();
         this.widgets.uploader.init();
+        this.widgets.intlTel.init();
     }
 }
 

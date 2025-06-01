@@ -1,8 +1,6 @@
 package com.wutsi.koki.portal.invoice.service
 
-import com.wutsi.koki.invoice.dto.CreateInvoiceRequest
 import com.wutsi.koki.invoice.dto.InvoiceStatus
-import com.wutsi.koki.invoice.dto.Item
 import com.wutsi.koki.invoice.dto.UpdateInvoiceStatusRequest
 import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.invoice.mapper.InvoiceMapper
