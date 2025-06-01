@@ -243,7 +243,7 @@
                 <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
             </div>
             <div class="modal-body padding-2x">
-                <form id="frm-send" method="post" onsubmit="send_message()" th:action="@{/rooms/send}"
+                <form id="frm-send" method="post" th:action="@{/rooms/send}"
                       th:object="${form}">
                     <input th:field="*{roomId}" type="hidden"/>
                     <div class="form-group">
@@ -253,7 +253,9 @@
                         <input class="form-control" placeholder="Email" required th:field="*{email}" type="email"/>
                     </div>
                     <div class="form-group margin-top">
-                        <input class="form-control" placeholder="Phone" th:field="*{phone}"/>
+                        <input class="form-control" placeholder="Phone" th:field="*{phone}" type="tel"/>
+                        <input th:field="*{fullPhone}" type="hidden"/>
+                        <input th:field="*{country}" type="hidden"/>
                     </div>
                     <div class="form-group margin-top">
                         <textarea class="form-control" placeholder="Message" required rows="3"
@@ -268,6 +270,9 @@
         </div>
     </div>
 </div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script th:src="${page.assetUrl} + '/js/koki-map.js'"></script>
 <script>
     function on_message_modal_opened() {
         console.log('Opening modal.');
@@ -277,11 +282,14 @@
         document.getElementById("body").value = document.getElementById("body").getAttribute("data-body");
     }
 
-    function send_message() {
+    function on_message_submitted() {
         console.log('Sending the email');
 
         event.preventDefault();
         document.getElementById("btn-send").disabled = true;
+        console.log('fullPhone', document.getElementById('fullPhone').value);
+        console.log('country', document.getElementById('country').value);
+
         const form = document.getElementById("frm-send");
         const data = new FormData(form);
         fetch(
@@ -309,16 +317,32 @@
     document.addEventListener(
         'DOMContentLoaded',
         function () {
+            // Modal
             const modal = document.getElementById('room-message-modal')
             modal.addEventListener('shown.bs.modal', on_message_modal_opened);
+
+            // Phone
+            const tel = document.getElementById("phone");
+            window.intlTelInput(tel, {
+                initialCountry: "auto",
+                geoIpLookup: callback => {
+                    fetch("https://ipapi.co/json")
+                        .then(res => res.json())
+                        .then(data => callback(data.country_code))
+                        .catch(() => callback("us"));
+                },
+                hiddenInput: () => ({phone: "fullPhone", country: "country"}),
+                loadUtils: () => import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/utils.js")
+            });
+
+            // Form
+            const frmSend = document.getElementById('frm-send');
+            frmSend.addEventListener('submit', on_message_submitted);
         }
     );
 </script>
 <link rel="stylesheet" th:href="${page.assetUrl} + '/css/rooms.css'"/>
 <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script th:src="${page.assetUrl} + '/js/koki-map.js'"></script>
 
 </body>
 </html>
