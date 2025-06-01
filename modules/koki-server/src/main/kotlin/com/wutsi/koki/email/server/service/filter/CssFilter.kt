@@ -2,7 +2,7 @@ package com.wutsi.koki.email.server.service.filter
 
 import com.wutsi.koki.email.server.service.EmailFilter
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 import org.jsoup.nodes.Entities.EscapeMode.extended
 import org.springframework.stereotype.Service
 
@@ -214,8 +214,13 @@ class CssFilter : EmailFilter {
 
     override fun filter(html: String, tenantId: Long): String {
         val doc = Jsoup.parse(html)
-        STYLES.keys.forEach {
-            apply(it, doc)
+        val elts = doc.select("[class]")
+        if (elts.isEmpty()) {
+            return html
+        }
+
+        elts.forEach { elt ->
+            filter(elt)
         }
         doc
             .outputSettings()
@@ -224,16 +229,22 @@ class CssFilter : EmailFilter {
             .indentAmount(2)
             .prettyPrint(true)
             .outline(true)
-        return doc.toString()
+        return doc.body().html()
     }
 
-    private fun apply(selector: String, doc: Document) {
-        val style = STYLES[selector]?.replace("\n", "") ?: return
-        doc.select(selector).forEach {
-            if (it.hasAttr("style")) {
-                it.attr("style", it.attr("style") + ";$style")
-            } else {
-                it.attr("style", style)
+    private fun filter(elt: Element) {
+        STYLES.keys.forEach { selector ->
+            val clazz = selector.substring(1)
+            if (elt.hasClass(clazz)) {
+                STYLES[selector]
+                    ?.replace("\n", "")
+                    ?.let { style ->
+                        if (elt.hasAttr("style")) {
+                            elt.attr("style", elt.attr("style") + ";$style")
+                        } else {
+                            elt.attr("style", style)
+                        }
+                    }
             }
         }
     }

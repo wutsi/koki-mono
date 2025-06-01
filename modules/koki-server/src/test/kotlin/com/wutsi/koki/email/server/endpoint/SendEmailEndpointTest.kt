@@ -93,6 +93,7 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
             data = mapOf(
                 "invoiceNumber" to "1111"
             ),
+            store = true,
         )
         val response = rest.postForEntity("/v1/emails", request, SendEmailResponse::class.java)
 
@@ -191,7 +192,7 @@ class SendEmailEndpointTest : AuthorizationAwareEndpointTest() {
         val msg = argumentCaptor<Message>()
         verify(messagingService).send(msg.capture())
         assertEquals(request.subject, msg.firstValue.subject)
-        assertTrue(msg.firstValue.body.contains(request.body))
+        assertTrue(msg.firstValue.body.contains(email.body))
         assertEquals(request.recipient.displayName, msg.firstValue.recipient.displayName)
         assertEquals(request.recipient.email, msg.firstValue.recipient.email)
         assertEquals("text/html", msg.firstValue.mimeType)

@@ -17,9 +17,9 @@ class EmailFilterConfiguration(
     fun emailFilterSet(): EmailFilterSet {
         return EmailFilterSet(
             filters = listOf(
-                cssFilter,
-                emailDecoratorFilter, // Must be before the last
-                htmlEscapeFilter, // Must be the last
+                emailDecoratorFilter,
+                htmlEscapeFilter, // Must be the before last
+                cssFilter, // Must be the last
             )
         )
     }
