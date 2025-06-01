@@ -45,11 +45,11 @@
                             </div>
                             <div class="section-item">
                                 <label class="title">Mobile</label>
-                                <input maxlength="30" th:field="*{mobile}"/>
+                                <input maxlength="30" th:field="*{mobile}" type="tel"/>
                             </div>
                             <div class="section-item">
                                 <label class="title">Phone</label>
-                                <input maxlength="30" th:field="*{phone}"/>
+                                <input maxlength="30" th:field="*{phone}" type="tel"/>
                             </div>
                             <div class="section-item">
                                 <label class="title">Website</label>
@@ -193,9 +193,6 @@
 <script>
     let billingAddressInitialized = false;
 
-    $('#language').select2();
-    koki_address_editor('shippingCountry', 'shippingCityId');
-
     function koki_address_same_changed(){
         const same = (document.getElementById('billingSameAsShippingAddress').value === 'true');
         document.querySelectorAll('.billing-address').forEach((elt) => {
@@ -212,6 +209,15 @@
         document.getElementById('billingCountry').required = !same;
         document.getElementById('billingCityId').required = !same;
     }
+
+    document.addEventListener(
+        'DOMContentLoaded',
+        function () {
+            // Language
+            $('#language').select2();
+            koki_address_editor('shippingCountry', 'shippingCityId');
+        }
+    );
 </script>
 </body>
 </html>

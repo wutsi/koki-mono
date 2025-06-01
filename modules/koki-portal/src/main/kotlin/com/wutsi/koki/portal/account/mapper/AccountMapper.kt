@@ -1,5 +1,7 @@
 package com.wutsi.koki.portal.account.mapper
 
+import com.google.i18n.phonenumbers.NumberParseException
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.wutsi.koki.account.dto.Account
 import com.wutsi.koki.account.dto.AccountSummary
 import com.wutsi.koki.account.dto.Attribute
@@ -10,7 +12,6 @@ import com.wutsi.koki.portal.account.model.AttributeModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.refdata.mapper.RefDataMapper
 import com.wutsi.koki.portal.refdata.model.LocationModel
-import com.wutsi.koki.portal.service.Moment
 import com.wutsi.koki.portal.tenant.model.TypeModel
 import com.wutsi.koki.portal.user.model.UserModel
 import org.springframework.stereotype.Service
@@ -19,7 +20,6 @@ import java.util.Locale
 @Service
 class AccountMapper(
     private val refDataMapper: RefDataMapper,
-    private val moment: Moment,
 ) : TenantAwareMapper() {
     fun toAccountModel(
         entity: AccountSummary,
@@ -27,13 +27,16 @@ class AccountMapper(
         users: Map<Long, UserModel>
     ): AccountModel {
         val fmt = createDateTimeFormat()
+
         return AccountModel(
             id = entity.id,
             accountType = entity.accountTypeId?.let { id -> accountTypes[id] },
             name = entity.name,
             phone = entity.phone,
-            email = entity.email,
             mobile = entity.mobile,
+            phoneFormatted = entity.phone?.let { number -> formatPhoneNumber(number) },
+            mobileFormatted = entity.mobile?.let { number -> formatPhoneNumber(number) },
+            email = entity.email,
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.modifiedAt),
             modifiedBy = entity.modifiedById?.let { id -> users[id] },
@@ -56,9 +59,16 @@ class AccountMapper(
             id = entity.id,
             accountType = entity.accountTypeId?.let { id -> accountTypes[id] },
             name = entity.name,
-            phone = entity.phone,
             email = entity.email,
+            phone = entity.phone,
             mobile = entity.mobile,
+            phoneFormatted = entity.phone?.let { number -> formatPhoneNumber(number, entity.billingAddress?.country) },
+            mobileFormatted = entity.mobile?.let { number ->
+                formatPhoneNumber(
+                    number,
+                    entity.billingAddress?.country
+                )
+            },
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.modifiedAt),
             modifiedBy = entity.modifiedById?.let { id -> users[id] },
@@ -123,5 +133,15 @@ class AccountMapper(
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.createdAt),
         )
+    }
+
+    private fun formatPhoneNumber(number: String, country: String? = null): String {
+        try {
+            val pnu = PhoneNumberUtil.getInstance()
+            val phoneNumber = pnu.parse(number, country ?: "")
+            return pnu.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL)
+        } catch (ex: NumberParseException) {
+            return number
+        }
     }
 }

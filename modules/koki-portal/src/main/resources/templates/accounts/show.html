@@ -47,11 +47,11 @@
                         </div>
                         <div class="margin-right-2x" th:if="${account.mobile}">
                             <b>Mobile</b><br/>
-                            <span th:text="${account.mobile}">MOBILE</span>
+                            <span th:text="${account.mobileFormatted}">MOBILE</span>
                         </div>
                         <div class="margin-right-2x" th:if="${account.phone}">
                             <b>Phone</b><br/>
-                            <span th:text="${account.phone}">PHONE</span>
+                            <span th:text="${account.phoneFormatted}">PHONE</span>
                         </div>
                     </div>
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
@@ -78,11 +78,11 @@
                         </tr>
                         <tr th:if="${account.phone}">
                             <td><b>Phone</b></td>
-                            <td th:text="${account.phone}">PHONE</td>
+                            <td th:text="${account.phoneFormatted}">PHONE</td>
                         </tr>
                         <tr th:if="${account.mobile}">
                             <td><b>Mobile</b></td>
-                            <td th:text="${account.mobile}">MOBILE</td>
+                            <td th:text="${account.mobileFormatted}">MOBILE</td>
                         </tr>
                         <tr th:if="${account.email}">
                             <td><b>Email</b></td>

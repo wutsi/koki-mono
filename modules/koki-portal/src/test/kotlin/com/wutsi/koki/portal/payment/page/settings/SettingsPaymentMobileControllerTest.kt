@@ -53,7 +53,7 @@ class SettingsPaymentMobileControllerTest : AbstractPageControllerTest() {
             request.firstValue.values[ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_ACCOUNT_NAME]
         )
         assertEquals(
-            "5457580000",
+            "+15457580000",
             request.firstValue.values[ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_PHONE_NUMBER]
         )
         assertEquals(

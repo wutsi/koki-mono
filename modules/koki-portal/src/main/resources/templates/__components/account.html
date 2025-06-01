@@ -26,8 +26,8 @@
     <td>
         <a th:href="'mailto:' + ${account.email}" th:if="${account.email}" th:text="${account.email}">EMAIL</a>
     </td>
-    <td th:text="${account.mobile}">MOBILE</td>
-    <td th:text="${account.phone}">PHONE</td>
+    <td th:text="${account.mobileFormatted}">MOBILE</td>
+    <td th:text="${account.phoneFormatted}">PHONE</td>
 </tr>
 
 <tr id="account-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">

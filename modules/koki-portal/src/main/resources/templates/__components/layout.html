@@ -4,6 +4,7 @@
 
 <div th:fragment="head" th:remove="tag">
     <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
 
     <title th:text="${page.title}">TITLE</title>
     <meta name="description" th:content="${page.description}" th:if="${page.description}"/>
@@ -14,6 +15,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/intlTelInput.min.js"></script>
 
     <script th:src="${page.assetUrl} + '/js/koki.js'"></script>
     <script th:src="${page.assetUrl} + '/js/koki-0.js'"></script>
@@ -28,6 +30,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet"/>
     <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/css/intlTelInput.css" rel="stylesheet">
     <link rel="stylesheet" th:href="${page.assetUrl} + '/css/koki.css'"/>
     <link rel="stylesheet" th:href="${page.assetUrl} + '/css/forms.css'"/>
     <link rel="stylesheet"
