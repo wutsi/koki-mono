@@ -11,10 +11,6 @@ import com.wutsi.koki.portal.product.service.ProductService
 import com.wutsi.koki.portal.refdata.service.LocationService
 import com.wutsi.koki.portal.refdata.service.SalesTaxService
 import com.wutsi.koki.portal.refdata.service.UnitService
-import com.wutsi.koki.portal.tax.model.TaxModel
-import com.wutsi.koki.portal.tax.model.TaxProductModel
-import com.wutsi.koki.portal.tax.service.TaxService
-import com.wutsi.koki.portal.tenant.service.CurrentTenantHolder
 import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.sdk.KokiInvoices
 import org.springframework.stereotype.Service
@@ -30,57 +26,7 @@ class InvoiceService(
     private val locationService: LocationService,
     private val productService: ProductService,
     private val salesTaxService: SalesTaxService,
-    private val currentTenant: CurrentTenantHolder,
-    private val taxService: TaxService,
 ) {
-    fun createInvoice(tax: TaxModel, taxProducts: List<TaxProductModel>): Long {
-        val account = tax.account
-        val billingAddress = if (account.billingSameAsShippingAddress) {
-            account.shippingAddress
-        } else {
-            account.billingAddress
-        }
-
-        return koki.create(
-            CreateInvoiceRequest(
-                taxId = tax.id,
-
-                customerAccountId = account.id,
-                customerName = account.name,
-                customerEmail = account.email ?: "",
-                customerPhone = account.phone,
-                customerMobile = account.mobile,
-
-                shippingCountry = account.shippingAddress?.country,
-                shippingStreet = account.shippingAddress?.street,
-                shippingCityId = account.shippingAddress?.city?.id,
-                shippingPostalCode = account.shippingAddress?.postalCode,
-
-                billingCountry = billingAddress?.country,
-                billingStreet = billingAddress?.street,
-                billingCityId = billingAddress?.city?.id,
-                billingPostalCode = billingAddress?.postalCode,
-
-                currency = taxProducts.firstOrNull()?.unitPrice?.currency ?: currentTenant.get()!!.currency,
-
-                locale = listOf(
-                    account.language,
-                    account.shippingAddress?.country,
-                ).filterNotNull().joinToString("_").ifEmpty { null },
-
-                items = taxProducts.map { taxProduct ->
-                    Item(
-                        productId = taxProduct.product.id,
-                        unitId = taxProduct.product.serviceDetails?.unit?.id,
-                        unitPriceId = taxProduct.unitPriceId,
-                        unitPrice = taxProduct.unitPrice.value,
-                        description = taxProduct.description,
-                        quantity = taxProduct.quantity,
-                    )
-                })
-        ).invoiceId
-    }
-
     fun invoice(
         id: Long,
         paynowId: String? = null,
@@ -93,13 +39,6 @@ class InvoiceService(
             null
         } else {
             accountService.account(invoice.customer.accountId!!, false)
-        }
-
-        // Taxes
-        val tax = if (!fullGraph) {
-            invoice.taxId?.let { id -> TaxModel(id = id) }
-        } else {
-            invoice.taxId?.let { id -> taxService.tax(id, false) }
         }
 
         // Users
@@ -161,7 +100,6 @@ class InvoiceService(
 
         return mapper.toInvoiceModel(
             entity = invoice,
-            taxes = tax?.let { mapOf(tax.id to tax) } ?: emptyMap(),
             accounts = account?.let { mapOf(account.id to account) } ?: emptyMap(),
             locations = locations,
             units = units,
@@ -176,7 +114,6 @@ class InvoiceService(
         number: Long? = null,
         statuses: List<InvoiceStatus> = emptyList(),
         accountId: Long? = null,
-        taxId: Long? = null,
         orderId: Long? = null,
         limit: Int = 20,
         offset: Int = 0,
@@ -187,22 +124,10 @@ class InvoiceService(
             number = number,
             statuses = statuses,
             accountId = accountId,
-            taxId = taxId,
             orderId = orderId,
             limit = limit,
             offset = offset,
         ).invoices
-
-        val taxIds = invoices.mapNotNull { invoice -> invoice.taxId }.distinct()
-        val taxes = if (taxIds.isEmpty() || !fullGraph) {
-            emptyMap()
-        } else {
-            taxService.taxes(
-                ids = taxIds,
-                limit = taxIds.size,
-                fullGraph = false,
-            ).associateBy { invoice -> invoice.id }
-        }
 
         val accountIds = invoices.mapNotNull { invoice -> invoice.customer.accountId }.distinct()
         val accounts = if (accountIds.isEmpty() || !fullGraph) {
@@ -226,7 +151,6 @@ class InvoiceService(
         return invoices.map { invoice ->
             mapper.toInvoiceModel(
                 entity = invoice,
-                taxes = taxes,
                 users = users,
                 accounts = accounts,
             )

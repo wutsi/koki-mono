@@ -6,7 +6,6 @@ import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.koki.AccountFixtures.account
 import com.wutsi.koki.ContactFixtures.contact
 import com.wutsi.koki.EmailFixtures.emails
-import com.wutsi.koki.TaxFixtures.tax
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.email.dto.SendEmailRequest
 import com.wutsi.koki.email.dto.SendEmailResponse
@@ -67,7 +66,7 @@ class EmailTabControllerTest : AbstractPageControllerTest() {
 
         assertEquals("Yo man", request.firstValue.subject)
         assertEquals("<p>Hello man</p>", request.firstValue.body)
-        assertEquals(tax.id, request.firstValue.owner?.id)
+        assertEquals(account.id, request.firstValue.owner?.id)
         assertEquals(ObjectType.ACCOUNT, request.firstValue.owner?.type)
         assertEquals(account.id, request.firstValue.recipient.id)
         assertEquals(account.name, request.firstValue.recipient.displayName)
@@ -112,40 +111,10 @@ class EmailTabControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun `send to tax`() {
-        navigateTo("/emails/tab?test-mode=true&owner-id=${tax.id}&owner-type=TAX")
-
-        click("#btn-email-compose", 1000)
-        assertElementVisible("#koki-modal")
-
-        assertElementVisible("#account-selector")
-        assertElementNotVisible("#contact-selector")
-        input("#subject", "Yo man")
-        input("#html-editor .ql-editor", "Hello man")
-        click("#btn-email-submit", 1000)
-
-        val request = argumentCaptor<SendEmailRequest>()
-        verify(rest).postForEntity(
-            eq("$sdkBaseUrl/v1/emails"),
-            request.capture(),
-            eq(SendEmailResponse::class.java),
-        )
-
-        assertEquals("Yo man", request.firstValue.subject)
-        assertEquals("<p>Hello man</p>", request.firstValue.body)
-        assertEquals(tax.id, request.firstValue.owner?.id)
-        assertEquals(ObjectType.TAX, request.firstValue.owner?.type)
-        assertEquals(tax.accountId, request.firstValue.recipient.id)
-        assertEquals(ObjectType.ACCOUNT, request.firstValue.recipient.type)
-
-        assertElementNotVisible("#koki-modal")
-    }
-
-    @Test
     fun `list - without permission email`() {
         setUpUserWithoutPermissions(listOf("email"))
 
-        navigateTo("/emails/tab?test-mode=true&owner-id=${tax.id}&owner-type=TAX")
+        navigateTo("/emails/tab?test-mode=true&owner-id=${account.id}&owner-type=ACCOUNT")
         assertCurrentPageIs(PageName.ERROR_403)
     }
 
@@ -153,7 +122,7 @@ class EmailTabControllerTest : AbstractPageControllerTest() {
     fun `list - without permission email-send`() {
         setUpUserWithoutPermissions(listOf("email:send"))
 
-        navigateTo("/emails/tab?test-mode=true&owner-id=${tax.id}&owner-type=TAX")
+        navigateTo("/emails/tab?test-mode=true&owner-id=${account.id}&owner-type=ACCOUNT")
         assertElementNotPresent(".btn-email-compose")
     }
 }

@@ -13,7 +13,6 @@ import com.wutsi.koki.portal.file.service.FileService
 import com.wutsi.koki.portal.form.service.FormService
 import com.wutsi.koki.portal.product.service.ProductService
 import com.wutsi.koki.portal.security.RequiresPermission
-import com.wutsi.koki.portal.tax.service.TaxService
 import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.ContentDisposition
@@ -41,7 +40,6 @@ class FileController(
     private val contactService: ContactService,
     private val formService: FormService,
     private val employeeService: EmployeeService,
-    private val taxService: TaxService,
     private val productService: ProductService,
 ) : AbstractPageController() {
     @GetMapping("/files/{id}")
@@ -77,7 +75,6 @@ class FileController(
                 ObjectType.CONTACT -> contactService.contact(ownerId, fullGraph = false).name
                 ObjectType.EMPLOYEE -> employeeService.employee(ownerId, fullGraph = false).name
                 ObjectType.FORM -> formService.form(ownerId, fullGraph = false).name
-                ObjectType.TAX -> taxService.tax(ownerId, fullGraph = false).name
                 ObjectType.PRODUCT -> productService.product(ownerId, fullGraph = false).name
                 else -> null
             }

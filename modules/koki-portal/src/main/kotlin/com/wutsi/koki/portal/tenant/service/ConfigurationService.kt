@@ -12,8 +12,6 @@ import com.wutsi.koki.portal.payment.form.PaymentSettingsCreditCardForm
 import com.wutsi.koki.portal.payment.form.PaymentSettingsInteracForm
 import com.wutsi.koki.portal.payment.form.PaymentSettingsMobileForm
 import com.wutsi.koki.portal.payment.form.PaymentSettingsPaypalForm
-import com.wutsi.koki.portal.tax.form.TaxNotificationForm
-import com.wutsi.koki.portal.tax.form.TaxNotificationType
 import com.wutsi.koki.sdk.KokiConfiguration
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
@@ -107,17 +105,6 @@ ConfigurationService(
             SaveConfigurationRequest(
                 values = mapOf(name to (if (status) "1" else ""))
             )
-        )
-    }
-
-    fun enable(type: TaxNotificationType, status: Boolean) {
-        enable(
-            name = when (type) {
-                TaxNotificationType.assignee -> ConfigurationName.TAX_EMAIL_ASSIGNEE_ENABLED
-                TaxNotificationType.document -> ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_ENABLED
-                TaxNotificationType.done -> ConfigurationName.TAX_EMAIL_DONE_ENABLED
-            },
-            status = status
         )
     }
 
@@ -218,34 +205,6 @@ ConfigurationService(
                     ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_ACCOUNT_NAME to (form.offlineAccountName ?: ""),
                     ConfigurationName.PAYMENT_METHOD_MOBILE_OFFLINE_PROVIDER to (form.offlineProvider ?: ""),
                 )
-            )
-        )
-    }
-
-    fun save(form: TaxNotificationForm) {
-        koki.save(
-            SaveConfigurationRequest(
-                values = when (form.type) {
-                    TaxNotificationType.done -> mapOf(
-                        ConfigurationName.TAX_EMAIL_DONE_ENABLED to "1",
-                        ConfigurationName.TAX_EMAIL_DONE_SUBJECT to (form.subject ?: ""),
-                        ConfigurationName.TAX_EMAIL_DONE_BODY to (form.body ?: ""),
-                    )
-
-                    TaxNotificationType.assignee -> mapOf(
-                        ConfigurationName.TAX_EMAIL_ASSIGNEE_ENABLED to "1",
-                        ConfigurationName.TAX_EMAIL_ASSIGNEE_SUBJECT to (form.subject ?: ""),
-                        ConfigurationName.TAX_EMAIL_ASSIGNEE_BODY to (form.body ?: ""),
-                    )
-
-                    TaxNotificationType.document -> mapOf(
-                        ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_ENABLED to "1",
-                        ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_SUBJECT to (form.subject ?: ""),
-                        ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_BODY to (form.body ?: ""),
-                    )
-
-                    else -> emptyMap<String, String>()
-                }
             )
         )
     }

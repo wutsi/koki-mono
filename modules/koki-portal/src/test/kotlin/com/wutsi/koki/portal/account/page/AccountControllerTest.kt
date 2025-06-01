@@ -12,7 +12,6 @@ import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.InvoiceFixtures
 import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.RoomFixtures
-import com.wutsi.koki.TaxFixtures
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
@@ -127,14 +126,6 @@ class AccountControllerTest : AbstractPageControllerTest() {
 
         Thread.sleep(1000)
         assertElementCount(".tab-notes .note", NoteFixtures.notes.size)
-    }
-
-    @Test
-    fun taxes() {
-        navigateTo("/accounts/${account.id}?tab=tax")
-
-        Thread.sleep(1000)
-        assertElementCount(".tab-taxes .tax", TaxFixtures.taxes.size)
     }
 
     @Test

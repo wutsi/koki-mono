@@ -22,7 +22,6 @@ import com.wutsi.koki.ProductFixtures
 import com.wutsi.koki.RefDataFixtures
 import com.wutsi.koki.RoleFixtures
 import com.wutsi.koki.RoomFixtures
-import com.wutsi.koki.TaxFixtures
 import com.wutsi.koki.TenantFixtures
 import com.wutsi.koki.UserFixtures
 import com.wutsi.koki.account.dto.CreateAccountRequest
@@ -100,14 +99,6 @@ import com.wutsi.koki.room.dto.SearchRoomResponse
 import com.wutsi.koki.room.dto.SearchRoomUnitResponse
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
-import com.wutsi.koki.tax.dto.CreateTaxProductRequest
-import com.wutsi.koki.tax.dto.CreateTaxProductResponse
-import com.wutsi.koki.tax.dto.CreateTaxRequest
-import com.wutsi.koki.tax.dto.CreateTaxResponse
-import com.wutsi.koki.tax.dto.GetTaxProductResponse
-import com.wutsi.koki.tax.dto.GetTaxResponse
-import com.wutsi.koki.tax.dto.SearchTaxProductResponse
-import com.wutsi.koki.tax.dto.SearchTaxResponse
 import com.wutsi.koki.tenant.dto.Configuration
 import com.wutsi.koki.tenant.dto.CreateRoleRequest
 import com.wutsi.koki.tenant.dto.CreateRoleResponse
@@ -259,7 +250,6 @@ abstract class AbstractPageControllerTest {
         setupEmployeeModule()
         setupProductModule()
         setupFormModule()
-        setupTaxModule()
         setupInvoiceModule()
         setupPaymentModule()
         setupRoomModule()
@@ -934,78 +924,6 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any<CreateFormRequest>(),
                 eq(CreateFormResponse::class.java)
-            )
-    }
-
-    private fun setupTaxModule() {
-        // Tax
-        doReturn(
-            ResponseEntity(
-                SearchTaxResponse(TaxFixtures.taxes),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchTaxResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                GetTaxResponse(TaxFixtures.tax),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetTaxResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                CreateTaxResponse(TaxFixtures.NEW_TAX_ID),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .postForEntity(
-                any<String>(),
-                any<CreateTaxRequest>(),
-                eq(CreateTaxResponse::class.java)
-            )
-
-        // TaxProduct
-        doReturn(
-            ResponseEntity(
-                SearchTaxProductResponse(TaxFixtures.taxProducts),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchTaxProductResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                GetTaxProductResponse(TaxFixtures.taxProduct),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetTaxProductResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                CreateTaxProductResponse(111L),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .postForEntity(
-                any<String>(),
-                any<CreateTaxProductRequest>(),
-                eq(CreateTaxProductResponse::class.java)
             )
     }
 

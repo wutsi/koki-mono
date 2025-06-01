@@ -76,7 +76,6 @@ class InvoiceService(
         number: Long? = null,
         statuses: List<InvoiceStatus> = emptyList(),
         accountId: Long? = null,
-        taxId: Long? = null,
         orderId: Long? = null,
         limit: Int = 20,
         offset: Int = 0,
@@ -94,9 +93,6 @@ class InvoiceService(
         }
         if (accountId != null) {
             jql.append(" AND I.customerAccountId = :accountId")
-        }
-        if (taxId != null) {
-            jql.append(" AND I.taxId = :taxId")
         }
         if (orderId != null) {
             jql.append(" AND I.orderId = :orderId")
@@ -116,9 +112,6 @@ class InvoiceService(
         }
         if (accountId != null) {
             query.setParameter("accountId", accountId)
-        }
-        if (taxId != null) {
-            query.setParameter("taxId", taxId)
         }
         if (orderId != null) {
             query.setParameter("orderId", orderId)
@@ -222,7 +215,6 @@ class InvoiceService(
             InvoiceEntity(
                 tenantId = tenantId,
                 paynowId = UUID.randomUUID().toString(),
-                taxId = request.taxId,
                 orderId = request.orderId,
                 description = request.description,
 
