@@ -3,13 +3,11 @@ package com.wutsi.koki.portal.invoice.model
 import com.wutsi.blog.portal.common.model.MoneyModel
 import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.portal.refdata.model.AddressModel
-import com.wutsi.koki.portal.tax.model.TaxModel
 import com.wutsi.koki.portal.user.model.UserModel
 import java.util.Date
 
 data class InvoiceModel(
     val id: Long = -1,
-    val tax: TaxModel? = null,
     val number: Long = -1,
     val status: InvoiceStatus = InvoiceStatus.UNKNOWN,
     val description: String? = null,

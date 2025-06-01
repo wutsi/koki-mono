@@ -26,15 +26,6 @@ class SearchInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `by tax-id`() {
-        val response = rest.getForEntity("/v1/invoices?tax-id=7779", SearchInvoiceResponse::class.java)
-
-        val invoices = response.body!!.invoices
-        assertEquals(1, invoices.size)
-        assertEquals(102, invoices[0].id)
-    }
-
-    @Test
     fun `by order-id`() {
         val response = rest.getForEntity("/v1/invoices?order-id=8888", SearchInvoiceResponse::class.java)
 

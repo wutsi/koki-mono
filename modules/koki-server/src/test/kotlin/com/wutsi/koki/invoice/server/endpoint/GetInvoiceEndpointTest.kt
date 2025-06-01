@@ -23,7 +23,6 @@ class GetInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
 
         val invoice = response.body!!.invoice
         assertEquals(10955L, invoice.number)
-        assertEquals(7777L, invoice.taxId)
         assertEquals(9999L, invoice.orderId)
         assertEquals(InvoiceStatus.OPENED, invoice.status)
         assertEquals("Sample description", invoice.description)
@@ -107,7 +106,6 @@ class GetInvoiceEndpointTest : AuthorizationAwareEndpointTest() {
 
         val invoice = response.body!!.invoice
         assertEquals(10955L, invoice.number)
-        assertEquals(7777L, invoice.taxId)
         assertEquals(9999L, invoice.orderId)
         assertEquals(InvoiceStatus.OPENED, invoice.status)
         assertEquals("Sample description", invoice.description)

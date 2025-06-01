@@ -15,7 +15,6 @@ class InvoiceMapper {
         return Invoice(
             id = entity.id!!,
             number = entity.number,
-            taxId = entity.taxId,
             orderId = entity.orderId,
             paynowId = entity.paynowId,
             status = entity.status,
@@ -103,7 +102,6 @@ class InvoiceMapper {
         return InvoiceSummary(
             id = entity.id!!,
             number = entity.number,
-            taxId = entity.taxId,
             orderId = entity.orderId,
             paynowId = entity.paynowId,
             status = entity.status,

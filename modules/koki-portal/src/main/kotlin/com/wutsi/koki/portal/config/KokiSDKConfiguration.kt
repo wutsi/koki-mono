@@ -23,7 +23,6 @@ import com.wutsi.koki.sdk.KokiProducts
 import com.wutsi.koki.sdk.KokiRefData
 import com.wutsi.koki.sdk.KokiRoomUnits
 import com.wutsi.koki.sdk.KokiRooms
-import com.wutsi.koki.sdk.KokiTaxes
 import com.wutsi.koki.sdk.KokiTenants
 import com.wutsi.koki.sdk.KokiTypes
 import com.wutsi.koki.sdk.KokiUsers
@@ -141,11 +140,6 @@ class KokiSDKConfiguration(
     @Bean
     fun kokiRoomUnits(): KokiRoomUnits {
         return KokiRoomUnits(urlBuilder(), rest())
-    }
-
-    @Bean
-    fun kokiTaxes(): KokiTaxes {
-        return KokiTaxes(urlBuilder(), rest())
     }
 
     @Bean

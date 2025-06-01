@@ -22,9 +22,6 @@ data class InvoiceEntity(
     @Column(name = "tenant_fk")
     val tenantId: Long = -1,
 
-    @Column(name = "tax_fk")
-    val taxId: Long? = null,
-
     @Column(name = "order_fk")
     val orderId: Long? = null,
 

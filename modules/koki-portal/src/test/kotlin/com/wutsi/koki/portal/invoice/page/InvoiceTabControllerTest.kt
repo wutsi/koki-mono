@@ -6,7 +6,6 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AccountFixtures
 import com.wutsi.koki.InvoiceFixtures.invoices
-import com.wutsi.koki.TaxFixtures
 import com.wutsi.koki.invoice.dto.InvoiceSummary
 import com.wutsi.koki.invoice.dto.SearchInvoiceResponse
 import com.wutsi.koki.portal.AbstractPageControllerTest
@@ -24,7 +23,7 @@ class InvoiceTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - tax`() {
-        navigateTo("/invoices/tab?test-mode=true&owner-type=TAX&owner-id=" + TaxFixtures.tax.id)
+        navigateTo("/invoices/tab?test-mode=true&owner-type=ACCOUNT&owner-id=" + AccountFixtures.account.id)
         assertElementCount(".tab-invoices tr.invoice", invoices.size)
     }
 
@@ -46,7 +45,7 @@ class InvoiceTabControllerTest : AbstractPageControllerTest() {
                 eq(SearchInvoiceResponse::class.java)
             )
 
-        navigateTo("/invoices/tab?test-mode=true&owner-type=TAX&owner-id=" + TaxFixtures.tax.id)
+        navigateTo("/invoices/tab?test-mode=true&owner-type=ACCOUNT&owner-id=" + AccountFixtures.account.id)
         assertElementCount("tr.invoice", entries.size)
 
         scrollToBottom()
@@ -58,7 +57,7 @@ class InvoiceTabControllerTest : AbstractPageControllerTest() {
     fun `list - without permission invoice`() {
         setUpUserWithoutPermissions(listOf("invoice"))
 
-        navigateTo("/invoices/tab?test-mode=true&owner-type=TAX&owner-id=" + TaxFixtures.tax.id)
+        navigateTo("/invoices/tab?test-mode=true&owner-type=ACCOUNT&owner-id=" + AccountFixtures.account.id)
         assertCurrentPageIs(PageName.ERROR_403)
     }
 }

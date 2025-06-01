@@ -5,7 +5,6 @@ import java.util.Date
 data class InvoiceSummary(
     val id: Long = -1,
     val number: Long = -1,
-    val taxId: Long? = null,
     val orderId: Long? = null,
     val paynowId: String = "",
     val status: InvoiceStatus = InvoiceStatus.UNKNOWN,

@@ -9,7 +9,10 @@ enum class ObjectType {
     EMAIL,
     PRODUCT,
     EMPLOYEE,
+
+    @Deprecated("Module retired")
     TAX,
+
     INVOICE,
     PAYMENT,
     FORM,

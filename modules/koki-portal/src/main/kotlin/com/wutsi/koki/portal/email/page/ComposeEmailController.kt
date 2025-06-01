@@ -8,7 +8,6 @@ import com.wutsi.koki.portal.email.service.EmailService
 import com.wutsi.koki.portal.file.service.FileService
 import com.wutsi.koki.portal.invoice.service.InvoiceService
 import com.wutsi.koki.portal.security.RequiresPermission
-import com.wutsi.koki.portal.tax.service.TaxService
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -25,7 +24,6 @@ class ComposeEmailController(
     private val accountService: AccountService,
     private val contactService: ContactService,
     private val invoiceService: InvoiceService,
-    private val taxService: TaxService,
     private val fileService: FileService,
 ) {
     @GetMapping("/emails/compose")
@@ -41,8 +39,6 @@ class ComposeEmailController(
 
         val account = if (ownerType == ObjectType.ACCOUNT) {
             accountService.account(id = ownerId, fullGraph = false)
-        } else if (ownerType == ObjectType.TAX) {
-            taxService.tax(ownerId).account
         } else if (ownerType == ObjectType.INVOICE) {
             invoiceService.invoice(ownerId).customer.account
         } else {

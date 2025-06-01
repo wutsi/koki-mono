@@ -38,7 +38,7 @@ class DeleteAccountEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `account with taxes`() {
+    fun `account with rooms`() {
         rest.delete("/v1/accounts/1110")
 
         val account = dao.findById(1110L).get()

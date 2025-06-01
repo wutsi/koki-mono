@@ -1,8 +1,5 @@
 package com.wutsi.koki.product.server.endpoint
 
-import com.wutsi.koki.error.dto.Error
-import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.price.server.service.PriceService
 import com.wutsi.koki.product.dto.CreatePriceRequest
 import com.wutsi.koki.product.dto.CreatePriceResponse
@@ -10,7 +7,6 @@ import com.wutsi.koki.product.dto.GetPriceResponse
 import com.wutsi.koki.product.dto.SearchPriceResponse
 import com.wutsi.koki.product.dto.UpdatePriceRequest
 import com.wutsi.koki.product.server.mapper.PriceMapper
-import com.wutsi.koki.tax.server.service.TaxProductService
 import jakarta.validation.Valid
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -29,7 +25,6 @@ import java.util.Date
 class PriceEndpoints(
     private val service: PriceService,
     private val mapper: PriceMapper,
-    private val taxProductService: TaxProductService,
 ) {
     @PostMapping
     fun create(
@@ -54,16 +49,7 @@ class PriceEndpoints(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
     ) {
-        if (isUsed(id, tenantId)) {
-            throw ConflictException(
-                error = Error(code = ErrorCode.PRICE_IN_USE)
-            )
-        }
         service.delete(id, tenantId)
-    }
-
-    private fun isUsed(id: Long, tenantId: Long): Boolean {
-        return taxProductService.search(tenantId = tenantId, unitPriceIds = listOf(id), limit = 1).isNotEmpty()
     }
 
     @GetMapping("/{id}")

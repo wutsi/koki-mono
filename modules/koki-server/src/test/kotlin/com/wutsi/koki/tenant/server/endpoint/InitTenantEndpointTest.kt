@@ -23,7 +23,7 @@ class InitTenantEndpointTest : AuthorizationAwareEndpointTest() {
 
         val names = dao.findByTenantId(1).map { config -> config.name }
 
-        assertEquals(18, names.size)
+        assertEquals(9, names.size)
         assertTrue(names.contains(ConfigurationName.EMAIL_DECORATOR))
         assertTrue(names.contains(ConfigurationName.SMTP_TYPE))
 
@@ -36,15 +36,5 @@ class InitTenantEndpointTest : AuthorizationAwareEndpointTest() {
         assertTrue(names.contains(ConfigurationName.PAYMENT_EMAIL_ENABLED))
         assertTrue(names.contains(ConfigurationName.PAYMENT_EMAIL_SUBJECT))
         assertTrue(names.contains(ConfigurationName.PAYMENT_EMAIL_BODY))
-
-        assertTrue(names.contains(ConfigurationName.TAX_EMAIL_ASSIGNEE_ENABLED))
-        assertTrue(names.contains(ConfigurationName.TAX_EMAIL_ASSIGNEE_SUBJECT))
-        assertTrue(names.contains(ConfigurationName.TAX_EMAIL_ASSIGNEE_BODY))
-        assertTrue(names.contains(ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_ENABLED))
-        assertTrue(names.contains(ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_SUBJECT))
-        assertTrue(names.contains(ConfigurationName.TAX_EMAIL_GATHERING_DOCUMENTS_BODY))
-        assertTrue(names.contains(ConfigurationName.TAX_EMAIL_DONE_ENABLED))
-        assertTrue(names.contains(ConfigurationName.TAX_EMAIL_DONE_SUBJECT))
-        assertTrue(names.contains(ConfigurationName.TAX_EMAIL_DONE_BODY))
     }
 }

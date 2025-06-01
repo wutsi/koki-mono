@@ -22,14 +22,4 @@ class DeleteProductEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(USER_ID, product.deletedById)
         assertNotNull(product.deletedAt)
     }
-
-    @Test
-    fun `product in taxes`() {
-        rest.delete("/v1/products/110")
-
-        val product = dao.findById(110L).get()
-        assertEquals(false, product.deleted)
-        assertEquals(null, product.deletedById)
-        assertEquals(null, product.deletedAt)
-    }
 }

@@ -17,7 +17,6 @@ import com.wutsi.koki.portal.refdata.mapper.RefDataMapper
 import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.refdata.model.SalesTaxModel
 import com.wutsi.koki.portal.refdata.model.UnitModel
-import com.wutsi.koki.portal.tax.model.TaxModel
 import com.wutsi.koki.portal.user.model.UserModel
 import org.springframework.stereotype.Service
 
@@ -28,7 +27,6 @@ class InvoiceMapper(
 ) : TenantAwareMapper() {
     fun toInvoiceModel(
         entity: InvoiceSummary,
-        taxes: Map<Long, TaxModel>,
         users: Map<Long, UserModel>,
         accounts: Map<Long, AccountModel>,
     ): InvoiceModel {
@@ -36,7 +34,6 @@ class InvoiceMapper(
         val dateFormat = createDateFormat()
         return InvoiceModel(
             id = entity.id,
-            tax = entity.taxId?.let { id -> taxes[id] },
             number = entity.number,
             status = entity.status,
 
@@ -58,7 +55,6 @@ class InvoiceMapper(
 
     fun toInvoiceModel(
         entity: Invoice,
-        taxes: Map<Long, TaxModel>,
         accounts: Map<Long, AccountModel>,
         users: Map<Long, UserModel>,
         locations: Map<Long, LocationModel>,
@@ -71,7 +67,6 @@ class InvoiceMapper(
 
         return InvoiceModel(
             id = entity.id,
-            tax = entity.taxId?.let { id -> taxes[id] },
             number = entity.number,
             status = entity.status,
             description = entity.description,

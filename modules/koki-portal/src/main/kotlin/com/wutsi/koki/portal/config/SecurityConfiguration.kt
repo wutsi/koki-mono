@@ -49,8 +49,6 @@ class SecurityConfiguration(
                     .requestMatchers(AntPathRequestMatcher("/rooms-amenities/**/*")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/settings")).authenticated()
                     .requestMatchers(AntPathRequestMatcher("/settings/**/*")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/taxes")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/taxes/**/*")).authenticated()
                     .anyRequest().permitAll()
             }
             .addFilterBefore(authorizationFilter(), AnonymousAuthenticationFilter::class.java)
