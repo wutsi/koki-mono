@@ -23,6 +23,9 @@ data class MessageEntity(
     @Column("tenant_fk")
     val tenantId: Long = -1,
 
+    @Column("sender_account_fk")
+    val senderAccountId: Long? = null,
+
     val ownerType: ObjectType? = null,
     val senderName: String = "",
     val senderEmail: String = "",
@@ -30,4 +33,6 @@ data class MessageEntity(
     val body: String = "",
     val createdAt: Date = Date(),
     var status: MessageStatus = MessageStatus.UNKNOWN,
+    val country: String? = null,
+    val language: String? = null,
 )
