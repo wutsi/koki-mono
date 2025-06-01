@@ -86,16 +86,6 @@
                             </a>
                             <div th:if="!${invoice.customer.account}" th:text="${invoice.customer.name}">CUSTOMER</div>
                         </div>
-                        <div class="margin-right-2x" th:if="${invoice.tax}">
-                            <b>Tax Report</b><br/>
-                            <a class="entity-title" target="_blank"
-                               th:href="'/taxes/' + ${invoice.tax.id}"
-                               th:if="${user?.hasPermission('tax')}">
-                                <img align="absmiddle" height="24" src="/image/tax.png" width="24"/>
-                                <span th:text="${invoice.tax.name}">TAX</span>
-                            </a>
-                            <span th:if="!${user?.hasPermission('tax')}" th:text="${invoice.tax.name}">TAX</span>
-                        </div>
                         <div class="margin-right-2x">
                             <b>Total Amount</b><br/>
                             <span th:text="${invoice.totalAmount}">$$$</span>
@@ -193,19 +183,6 @@
                                         <div th:if="!${invoice.customer.account}" th:text="${invoice.customer.name}">
                                             CUSTOMER
                                         </div>
-                                    </td>
-                                </tr>
-                                <tr th:if="${invoice.tax}">
-                                    <td><b>Tax Report</b></td>
-                                    <td>
-                                        <a class="entity-title" target="_blank"
-                                           th:href="'/taxes/' + ${invoice.tax.id}"
-                                           th:if="${user?.hasPermission('tax')}">
-                                            <img align="absmiddle" height="24" src="/image/tax.png" width="24"/>
-                                            <span th:text="${invoice.tax.name}">TAX</span>
-                                        </a>
-                                        <span th:if="!${user?.hasPermission('tax')}"
-                                              th:text="${invoice.tax.name}">TAX</span>
                                     </td>
                                 </tr>
                                 <tr th:if="${invoice.shippingAddress}">
