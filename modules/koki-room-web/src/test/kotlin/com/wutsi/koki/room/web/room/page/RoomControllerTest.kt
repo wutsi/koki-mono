@@ -134,7 +134,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertEquals(ObjectType.ROOM, request.firstValue.owner?.type)
         assertEquals("Ray Sponsible", request.firstValue.senderName)
         assertEquals("ray.spomsible@gmail.com", request.firstValue.senderEmail)
-        assertEquals("514 758 0001", request.firstValue.senderPhone)
+        assertEquals("+15147580001", request.firstValue.senderPhone)
         assertEquals("This is a nice message... I Love it :-)", request.firstValue.body)
 
         val alert = driver.switchTo().alert()

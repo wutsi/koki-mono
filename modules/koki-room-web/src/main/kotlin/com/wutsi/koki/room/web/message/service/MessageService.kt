@@ -13,7 +13,7 @@ class MessageService(private val koki: KokiMessages) {
         koki.send(
             SendMessageRequest(
                 senderName = form.name,
-                senderPhone = form.phone,
+                senderPhone = form.fullPhone,
                 senderEmail = form.email,
                 owner = ObjectReference(id = form.roomId, type = ObjectType.ROOM),
                 body = form.body,
