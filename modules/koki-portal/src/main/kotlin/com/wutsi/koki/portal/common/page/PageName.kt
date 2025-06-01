@@ -88,6 +88,7 @@ object PageName {
     const val ROOM_EDIT = "page.room.edit"
     const val ROOM_LIST = "page.room.list"
     const val ROOM_MAP = "page.room.map"
+    const val ROOM_HERO_IMAGE = "page.room.hero-image"
 
     const val TENANT_SETTINGS = "page.settings.tenant"
     const val TENANT_SETTINGS_ABOUT = "page.settings.tenant.about"

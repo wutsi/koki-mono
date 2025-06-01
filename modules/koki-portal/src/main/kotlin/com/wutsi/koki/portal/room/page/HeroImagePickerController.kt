@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.room.page
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileType
+import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.file.service.FileService
 import com.wutsi.koki.portal.room.service.RoomService
 import com.wutsi.koki.portal.security.RequiresPermission
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
 @RequestMapping("/rooms")
-@RequiresPermission(["room:manage"])
-class RoomHeroImagePickerController(
+@RequiresPermission(["room", "room:manage"])
+class HeroImagePickerController(
     private val service: RoomService,
     private val fileService: FileService,
 ) : AbstractRoomDetailsController() {
@@ -34,8 +35,16 @@ class RoomHeroImagePickerController(
             ownerId = room.id,
             ownerType = ObjectType.ROOM,
             limit = 200,
-        ).filter{ image -> image.id != room.heroImage?.id }
+        ).filter { image -> image.id != room.heroImage?.id }
         model.addAttribute("images", images)
+
+        model.addAttribute(
+            "page",
+            createPageModel(
+                name = PageName.ROOM_HERO_IMAGE,
+                title = room.title ?: "Room",
+            )
+        )
 
         return "rooms/hero-image-picker"
     }
@@ -43,7 +52,7 @@ class RoomHeroImagePickerController(
     @GetMapping("/{id}/hero-image-picker/select")
     fun select(
         @PathVariable id: Long,
-        @RequestParam fileId: Long,
+        @RequestParam(name = "file-id") fileId: Long,
     ): String {
         service.setHeroImage(id, fileId)
         return "redirect:/rooms/$id"

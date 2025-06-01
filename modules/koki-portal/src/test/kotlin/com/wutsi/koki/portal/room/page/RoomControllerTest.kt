@@ -67,20 +67,12 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertElementPresent(".btn-publish")
         assertElementPresent(".btn-delete")
         assertElementPresent(".btn-clone")
+        assertElementNotPresent(".btn-hero-image")
     }
 
     @Test
     fun publishing() {
-        doReturn(
-            ResponseEntity(
-                GetRoomResponse(room.copy(status = RoomStatus.PUBLISHING)),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetRoomResponse::class.java)
-            )
+        setupRoom(RoomStatus.PUBLISHING)
 
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ROOM)
@@ -91,20 +83,12 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent(".btn-delete")
         assertElementNotPresent(".btn-map")
         assertElementNotPresent(".btn-clone")
+        assertElementNotPresent(".btn-hero-image")
     }
 
     @Test
     fun published() {
-        doReturn(
-            ResponseEntity(
-                GetRoomResponse(room.copy(status = RoomStatus.PUBLISHED)),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetRoomResponse::class.java)
-            )
+        setupRoom(RoomStatus.PUBLISHED)
 
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ROOM)
@@ -116,6 +100,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent(".btn-publish")
         assertElementNotPresent(".btn-delete")
         assertElementPresent(".btn-clone")
+        assertElementPresent(".btn-hero-image")
     }
 
     @Test
@@ -177,6 +162,16 @@ class RoomControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun `change hero image`() {
+        setupRoom(RoomStatus.PUBLISHED)
+
+        navigateTo("/rooms/${room.id}")
+        click(".btn-hero-image")
+
+        assertCurrentPageIs(PageName.ROOM_HERO_IMAGE)
+    }
+
+    @Test
     fun map() {
         navigateTo("/rooms/${room.id}")
         scrollToBottom()
@@ -213,5 +208,18 @@ class RoomControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.LOGIN)
+    }
+
+    private fun setupRoom(status: RoomStatus) {
+        doReturn(
+            ResponseEntity(
+                GetRoomResponse(room.copy(status = status)),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetRoomResponse::class.java)
+            )
     }
 }

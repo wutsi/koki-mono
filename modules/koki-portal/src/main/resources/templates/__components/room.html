@@ -22,7 +22,7 @@
 <tr class="room" th:fragment="columns(room,showAccount)" th:remove="tag">
     <td class="text-center">
         <a th:href="'/rooms/' + ${room.id}" th:if="${room.heroImage}">
-            <img class="img-fluid" th:src="${room.heroImage.contentUrl}"/>
+            <img class="hero-image" th:src="${room.heroImage.contentUrl}"/>
         </a>
     </td>
     <td>
@@ -47,12 +47,12 @@
             ACCOUNT
         </a>
     </td>
-    <td>
+    <td class="text-nowrap">
         <a th:href="'/rooms/' + ${room.id}">
             <div th:replace="~{__components/room :: status(${room.status})}"></div>
         </a>
     </td>
-    <td>
+    <td class="text-nowrap">
         <a th:href="'/rooms/' + ${room.id}">
             <div th:replace="~{__components/room :: type(${room.type})}"></div>
         </a>
@@ -60,11 +60,11 @@
     <td class="text-right">
         <a th:href="'/rooms/' + ${room.id}">
             <div class="margin-bottom" th:if="${room.pricePerNight}">
-                <div th:text="${room.pricePerNight}">$$</div>
+                <div class="text-nowrap" th:text="${room.pricePerNight}">$$</div>
                 <div class="text-small">per night</div>
             </div>
             <div th:if="${room.pricePerMonth}">
-                <div th:text="${room.pricePerMonth}">$$</div>
+                <div class="text-nowrap" th:text="${room.pricePerMonth}">$$</div>
                 <div class="text-small">per month</div>
             </div>
         </a>
@@ -95,17 +95,54 @@
     <i class="fa-solid fa-building" th:if="${type.name} == 'APARTMENT'"></i>
     <i class="fa-solid fa-hotel" th:if="${type.name} == 'HOTEL'"></i>
     <i class="fa-solid fa-bed" th:if="${type.name} == 'ROOM'"></i>
+    <i class="fa-solid fa-hotel" th:if="${type.name} == 'HOTEL_ROOM'"></i>
     <span th:text="#{'room-type.' + ${type}}">TYPE</span>
 </div>
 
+<div class="flex" th:fragment="summary(room)">
+    <div class="margin-right-2x" th:if="${room.title}">
+        <b>Title</b><br/>
+        <span th:text="${room.title}">TITLE</span>
+    </div>
+    <div class="margin-right-2x">
+        <b>Status</b><br/>
+        <div th:replace="~{__components/room :: status(${room.status})}"></div>
+    </div>
+    <div class="margin-right-2x">
+        <b>Type</b><br/>
+        <div th:replace="~{__components/room :: type(${room.type})}"></div>
+    </div>
+    <div class="margin-right-2x" th:if="${room.hasPrice}">
+        <b>Price</b><br/>
+        <div th:if="${room.pricePerNight}">
+            <span class="text-nowrap" th:text="${room.pricePerNight}">$$</span>
+            <span class="text-small">per night</span>
+        </div>
+        <div th:if="${room.pricePerMonth}">
+            <span class="text-nowrap" th:text="${room.pricePerMonth}">$$</span>
+            <span class="text-small">per month</span>
+        </div>
+    </div>
+</div>
+
 <table class="table" th:fragment="details(room)">
-    <tr th:if="${room.heroImage}">
+    <tr>
         <td><b>Hero Image</b></td>
         <td>
-            <a target="_blank" th:href="${room.heroImage.contentUrl}">
-                <img class="hero-image" style="max-width: 250px; max-height: 166px" th:alt="${room.heroImage.title}"
-                     th:src="${room.heroImage.contentUrl}"/>
-            </a>
+            <div class="hero-image-container text-center border">
+                <a target="_blank" th:href="${room.heroImage.contentUrl}" th:if="${room.heroImage}">
+                    <img class="hero-image"
+                         th:alt="${room.heroImage.title}"
+                         th:src="${room.heroImage.contentUrl}"/>
+                </a>
+                <div class="padding-small" th:if="${user?.hasPermission('room:manage')} AND ${room.published}">
+                    <a class="btn-hero-image btn btn-sm btn-light margin-left"
+                       th:href="'/rooms/' + ${room.id} + '/hero-image-picker'">
+                        <span th:if="${room.heroImage}">Change</span>
+                        <span th:if="!${room.heroImage}">Select</span>
+                    </a>
+                </div>
+            </div>
         </td>
     </tr>
     <tr>

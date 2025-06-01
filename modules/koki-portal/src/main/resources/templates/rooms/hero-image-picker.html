@@ -24,25 +24,6 @@
                             <img align="absmiddle" src="/image/room.png" width="48"/>
                             <span th:text="${room.title}">NAME</span>
                         </h1>
-                        <div th:if="!${room.readOnly}">
-                            <a class="btn-edit btn btn-light btn-sm"
-                               th:href="'/rooms/' + ${room.id} + '/edit'"
-                               th:if="${user?.hasPermission('room:manage')}">Edit</a>
-
-                            <a class="btn-clone btn btn-light btn-sm"
-                               th:href="'/rooms/' + ${room.id} + '/clone'"
-                               th:if="${user?.hasPermission('room:manage')}">Copy</a>
-
-                            <a class="btn-publish btn btn-primary btn-sm"
-                               onclick="return confirm('Are you sure you want to publish this listing online?')"
-                               th:href="'/rooms/' + ${room.id} + '/publish'"
-                               th:if="${room.draft} AND ${user?.hasPermission('room:manage')}">Publish Online</a>
-
-                            <a class="btn-delete btn btn-danger btn-sm"
-                               onclick="return confirm('Are you sure you want to delete?')"
-                               th:href="'/rooms/' + ${room.id} + '/delete'"
-                               th:if="${room.draft} AND ${user?.hasPermission('room:manage')}">Delete</a>
-                        </div>
                     </div>
 
                     <div th:replace="~{__components/room :: summary(${room})}"></div>
@@ -52,60 +33,31 @@
         </div>
     </div>
 
-    <div class="row" id="listing-container" th:if="${listingUrl}">
-        <div class="col-12">
-            <div class="widget">
-                <div class="widget-body">
-                    <table>
-                        <tr>
-                            <td>Listing Address:</td>
-                            <td class="margin-left">
-                                <a target="_blank" th:href="${listingUrl}" th:text="${listingUrl}">URL</a>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="row">
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
-                    <div th:replace="~{__components/module :: tabs('main', true)}"></div>
-                    <div
-                        th:replace="~{__components/module :: tabs-content('main', true, ${room}, ${module})}"></div>
-
-                    <div class="hidden" id="tab-details-content">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-12 col-lg-7">
-                                    <div th:replace="~{__components/room :: details(${room})}"></div>
-                                </div>
-                                <div class="col-12 col-lg-5">
-                                    <div class="margin-top">
-                                        <div data-component-id="map"
-                                             id="map"
-                                             style="height:600px"
-                                             th:data-latitude="${latitude}"
-                                             th:data-longitude="${longitude}"
-                                             th:data-show-marker="${room.hasGeoLocation}"
-                                             th:data-zoom="${zoom}"
-                                        ></div>
-                                        <div class="margin-top-small text-center" th:if="${latitude} AND ${longitude}">
-                                            <a class="btn-map btn btn-sm btn-light"
-                                               th:href="'/rooms/' + ${room.id} + '/map'"
-                                               th:if="!${room.readOnly} AND ${user?.hasPermission('room:manage')}"
-                                            >
-                                                <span th:if="!${room.hasGeoLocation}">Set Geolocation</span>
-                                                <span th:if="${room.hasGeoLocation}">Update Geolocation</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+                    <h2>Select Hero Image</h2>
+                    <div>
+                        Select the main image of the room
+                    </div>
+                    <div class="margin-top" id="hero-image-picker">
+                        <div class="hero-image-container text-center margin-right margin-bottom border"
+                             th:each="image : ${images}"
+                             th:id="'image-' + ${image.id}">
+                            <img class="hero-image" th:src="${image.contentUrl}"/>
+                            <div class="padding-small">
+                                <a class="btn btn-sm btn-light btn-select"
+                                   th:href="'/rooms/' + ${room.id} + '/hero-image-picker/select?file-id=' + ${image.id}">
+                                    Select
+                                </a>
                             </div>
                         </div>
+                    </div>
+                    <div class="text-center margin-top">
+                        <a class="btn-cancel btn btn-sm btn-light" th:href="'/rooms/' + ${room.id}">
+                            Cancel
+                        </a>
                     </div>
                 </div>
             </div>
@@ -114,7 +66,5 @@
 
 </div>
 
-<div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
-<div th:replace="~{__components/bootstrap :: modal}"></div>
 </body>
 </html>

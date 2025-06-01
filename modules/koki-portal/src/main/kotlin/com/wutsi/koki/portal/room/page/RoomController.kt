@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
-import java.net.URLEncoder
 
 @Controller
 @RequestMapping("/rooms")
@@ -104,10 +103,8 @@ class RoomController(
     @RequiresPermission(["room:manage"])
     fun delete(@PathVariable id: Long, model: Model): String {
         try {
-            val room = service.room(id, fullGraph = false)
             service.delete(id)
-            return "redirect:/rooms?_op=del&_toast=$id&_ts=" + System.currentTimeMillis() +
-                "&_title=" + URLEncoder.encode(room.title, "utf-8")
+            return "redirect:/rooms?_op=del&_toast=$id&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)
@@ -143,10 +140,10 @@ class RoomController(
         model: Model
     ) {
         if (toast == id && canShowToasts(timestamp, referer, listOf("/rooms/$id/edit", "/rooms/$id/map"))) {
-            if (operation == "geo") {
-                model.addAttribute("toast", "The geolocation has been saved")
+            if (operation == "published") {
+                model.addAttribute("toast", "Publishing...")
             } else {
-                model.addAttribute("toast", "Saved")
+                model.addAttribute("toast", "Saved!")
             }
         }
     }

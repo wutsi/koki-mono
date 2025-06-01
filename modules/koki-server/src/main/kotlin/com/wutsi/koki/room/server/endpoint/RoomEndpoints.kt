@@ -9,6 +9,7 @@ import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
 import com.wutsi.koki.room.dto.SaveRoomGeoLocationRequest
 import com.wutsi.koki.room.dto.SearchRoomResponse
+import com.wutsi.koki.room.dto.SetHeroImageRequest
 import com.wutsi.koki.room.dto.UpdateRoomRequest
 import com.wutsi.koki.room.server.command.PublishRoomCommand
 import com.wutsi.koki.room.server.mapper.RoomMapper
@@ -148,5 +149,14 @@ class RoomEndpoints(
                 PublishRoomCommand(roomId = id, tenantId = tenantId)
             )
         }
+    }
+
+    @PostMapping("/{id}/hero-image")
+    fun setHeroImage(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
+        @RequestBody @Valid request: SetHeroImageRequest
+    ) {
+        service.setHeroImage(id, request, tenantId)
     }
 }

@@ -1,9 +1,12 @@
 package com.wutsi.koki.room.server.service
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.file.dto.FileType
+import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.domain.AmenityEntity
 import com.wutsi.koki.refdata.server.service.AmenityService
@@ -13,6 +16,7 @@ import com.wutsi.koki.room.dto.CreateRoomRequest
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
 import com.wutsi.koki.room.dto.SaveRoomGeoLocationRequest
+import com.wutsi.koki.room.dto.SetHeroImageRequest
 import com.wutsi.koki.room.dto.UpdateRoomRequest
 import com.wutsi.koki.room.server.dao.RoomRepository
 import com.wutsi.koki.room.server.domain.RoomEntity
@@ -30,6 +34,7 @@ class RoomService(
     private val securityService: SecurityService,
     private val locationService: LocationService,
     private val amenityService: AmenityService,
+    private val fileService: FileService,
     private val validator: RoomPublisherValidator,
 ) {
     fun get(id: Long, tenantId: Long): RoomEntity {
@@ -322,5 +327,20 @@ class RoomService(
                 )
             )
         }
+    }
+
+    @Transactional
+    fun setHeroImage(id: Long, request: SetHeroImageRequest, tenantId: Long) {
+        val room = get(id, tenantId)
+        val image = fileService.get(request.fileId, tenantId)
+        if (image.type != FileType.IMAGE) {
+            throw ConflictException(error = Error(ErrorCode.ROOM_IMAGE_NOT_VALID))
+        }
+        if (image.ownerId != id || image.ownerType != ObjectType.ROOM) {
+            throw ConflictException(error = Error(ErrorCode.ROOM_IMAGE_NOT_OWNED))
+        }
+
+        room.heroImageId = request.fileId
+        dao.save(room)
     }
 }
