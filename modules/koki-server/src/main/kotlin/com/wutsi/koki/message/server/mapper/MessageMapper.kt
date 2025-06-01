@@ -21,7 +21,10 @@ class MessageMapper {
                 ObjectReference(entity.ownerId, entity.ownerType)
             } else {
                 null
-            }
+            },
+            language = entity.language,
+            country = entity.country,
+            senderAccountId = entity.senderAccountId,
         )
     }
 
@@ -38,7 +41,10 @@ class MessageMapper {
                 ObjectReference(entity.ownerId, entity.ownerType)
             } else {
                 null
-            }
+            },
+            language = entity.language,
+            country = entity.country,
+            senderAccountId = entity.senderAccountId,
         )
     }
 }

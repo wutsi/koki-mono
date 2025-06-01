@@ -37,6 +37,10 @@ class AccountService(
         return account
     }
 
+    fun getByEmailOrNull(email: String, tenantId: Long): AccountEntity? {
+        return dao.findByEmailAndTenantId(email.lowercase(), tenantId)
+    }
+
     @Transactional
     fun create(request: CreateAccountRequest, tenantId: Long): AccountEntity {
         checkDuplicateEmail(null, request.email, tenantId)
@@ -165,6 +169,13 @@ class AccountService(
         }
     }
 
+    @Transactional
+    fun save(account: AccountEntity): AccountEntity {
+        account.modifiedById = securityService.getCurrentUserIdOrNull()
+        account.modifiedAt = Date()
+        return dao.save(account)
+    }
+
     private fun <T> nullIfTrue(flag: Boolean, value: T): T? {
         return if (flag) null else value
     }
@@ -231,7 +242,7 @@ class AccountService(
     }
 
     private fun checkDuplicateEmail(accountId: Long?, email: String, tenantId: Long) {
-        val duplicate = dao.findByEmailAndTenantId(email.lowercase(), tenantId)
+        val duplicate = getByEmailOrNull(email, tenantId)
         if (duplicate != null && duplicate.id != accountId) {
             throw ConflictException(
                 error = Error(

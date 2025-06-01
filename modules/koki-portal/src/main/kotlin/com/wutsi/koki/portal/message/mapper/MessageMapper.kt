@@ -21,6 +21,8 @@ class MessageMapper(private val moment: Moment) : TenantAwareMapper() {
             createdAt = entity.createdAt,
             createdAtText = fmt.format(entity.createdAt),
             createdAtMoment = moment.format(entity.createdAt),
+            ownerId = entity.owner?.id,
+            ownerType = entity.owner?.type,
         )
     }
 
@@ -36,6 +38,8 @@ class MessageMapper(private val moment: Moment) : TenantAwareMapper() {
             createdAt = entity.createdAt,
             createdAtText = fmt.format(entity.createdAt),
             createdAtMoment = moment.format(entity.createdAt),
+            ownerId = entity.owner?.id,
+            ownerType = entity.owner?.type,
         )
     }
 }

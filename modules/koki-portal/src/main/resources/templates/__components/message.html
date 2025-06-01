@@ -6,44 +6,50 @@
     <td>
         <table style="width:100%">
             <tr>
-                <td width="1%"><b>Date:</b></td>
-                <td class="padding-left" th:text="${message.createdAtMoment}">TITLE</td>
-            </tr>
-            <tr>
-                <td width="1%"><b>From:</b></td>
-                <td class="padding-left" th:text="${message.senderName}">TITLE</td>
-            </tr>
-            <tr>
-                <td><b>Email:</b></td>
-                <td class="padding-left">
-                    <a th:href="'mailto:' + ${message.senderEmail}" th:text="${message.senderEmail}">XXX</a>
-                </td>
-            </tr>
-            <tr th:if="${message.senderPhone}">
-                <td><b>Phone:</b></td>
-                <td class="padding-left">
-                    <a th:href="'tel:' + ${message.senderPhone}" th:text="${message.senderPhone}">PHONE</a>
+                <td>
+                    <span th:text="${message.senderName}">SENDER</span>
+                    -
+                    <span class="text-small" th:text="${message.createdAtMoment}">YYYY</span>
                 </td>
             </tr>
             <tr>
-                <td class="padding-top-small" colspan="2" th:text="${message.body}">BODY</td>
+                <td class="padding-top-small" th:text="${message.body}">BODY</td>
             </tr>
             <tr th:if="${user?.hasPermission('message:manage')}">
-                <td class="padding-top-small text-right" colspan="2">
-                    <button class="btn btn-sm btn-light btn-archive"
-                            th:id="'btn-archive-' + ${message.id}"
-                            th:if="!${message.archived}"
-                            th:onclick="'kokiMessageTable.archive(' + ${message.id} + ')'"
-                    >
-                        Archive
-                    </button>
-                    <button class="btn btn-sm btn-light btn-unarchive"
-                            th:id="'btn-unarchive-' + ${message.id}"
-                            th:if="${message.archived}"
-                            th:onclick="'kokiMessageTable.unarchive(' + ${message.id} + ')'"
-                    >
-                        Un-archive
-                    </button>
+                <td class="padding-top-small">
+                    <div class="flex-space-between flex">
+                        <div>
+                            <a class="btn btn-sm btn-light btn-whatsapp" target="_blank"
+                               th:href="'/messages/' + ${message.id} + '/whatsapp'"
+                               th:if="${message.senderPhone}"
+                            >
+                                <img height="16" th:src="'/image/social/whatsapp.png'" width="16"/>
+                                Reply on Whatsapp
+                            </a>
+                            <a class="btn btn-sm btn-light btn-email" target="_blank"
+                               th:href="'mailto:' + ${message.senderEmail}"
+                            >
+                                <img height="16" th:src="'/image/social/email.png'" width="16"/>
+                                Reply via Email
+                            </a>
+                        </div>
+                        <div>
+                            <button class="btn btn-sm btn-light btn-archive"
+                                    th:id="'btn-archive-' + ${message.id}"
+                                    th:if="!${message.archived}"
+                                    th:onclick="'kokiMessageTable.archive(' + ${message.id} + ')'"
+                            >
+                                Archive
+                            </button>
+                            <button class="btn btn-sm btn-light btn-unarchive"
+                                    th:id="'btn-unarchive-' + ${message.id}"
+                                    th:if="${message.archived}"
+                                    th:onclick="'kokiMessageTable.unarchive(' + ${message.id} + ')'"
+                            >
+                                Un-archive
+                            </button>
+                        </div>
+                    </div>
                 </td>
             </tr>
         </table>

@@ -44,30 +44,20 @@ class MessageEmailSender(
                     type = ObjectType.ACCOUNT,
                     email = account.email,
                     displayName = account.name,
+                    language = account.language,
                 ),
                 subject = SUBJECT,
                 body = IOUtils.toString(this::class.java.getResourceAsStream("/room/email/message.html"), "utf-8"),
                 data = mapOf(
                     "senderName" to message.senderName,
-                    "senderEmail" to message.senderEmail,
-                    "senderPhone" to message.senderPhone,
-                    "senderWhatsappUrl" to message.senderPhone?.let { phone -> toWhatstappUrl(phone) },
                     "body" to message.body,
                     "roomUrl" to "${tenant.portalUrl}/rooms/${room.id}",
                     "roomTitle" to room.title,
+                    "messageUrl" to "${tenant.portalUrl}/rooms/${room.id}?tab=message",
                     "heroImageUrl" to heroImage?.url,
                 ).filter { entry -> entry.value != null } as Map<String, Any>,
                 store = false,
             )
         )
-    }
-
-    private fun toWhatstappUrl(phone: String): String {
-        return "https://wa.me/" +
-            phone.replace("+", "")
-                .replace(" ", "")
-                .replace("-", "")
-                .replace("(", "")
-                .replace(")", "")
     }
 }
