@@ -1,5 +1,6 @@
 package com.wutsi.koki.platform.util
 
+import java.net.URLEncoder
 import java.text.Normalizer
 
 object StringUtils {
@@ -35,5 +36,19 @@ object StringUtils {
             if (c <= '\u007F') sb.append(c)
         }
         return sb.toString()
+    }
+
+    fun toWhatsappUrl(phone: String, text: String? = null): String {
+        val url = "https://wa.me/" +
+            phone.replace("+", "")
+                .replace(" ", "")
+                .replace("-", "")
+                .replace("(", "")
+                .replace(")", "")
+        return if (text.isNullOrEmpty()) {
+            url
+        } else {
+            "$url?text=" + URLEncoder.encode(text, "utf-8")
+        }
     }
 }
