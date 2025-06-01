@@ -11,7 +11,6 @@ import com.wutsi.koki.product.dto.SearchProductResponse
 import com.wutsi.koki.product.dto.UpdateProductRequest
 import com.wutsi.koki.product.server.mapper.ProductMapper
 import com.wutsi.koki.product.server.service.ProductService
-import com.wutsi.koki.tax.server.service.TaxProductService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController
 class ProductEndpoints(
     private val service: ProductService,
     private val mapper: ProductMapper,
-    private val taxProductService: TaxProductService,
 ) {
     @PostMapping
     fun create(
@@ -53,16 +51,7 @@ class ProductEndpoints(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
     ) {
-        if (isUsed(id, tenantId)) {
-            throw ConflictException(
-                error = Error(code = ErrorCode.PRODUCT_IN_USE)
-            )
-        }
         service.delete(id, tenantId)
-    }
-
-    private fun isUsed(id: Long, tenantId: Long): Boolean {
-        return taxProductService.search(tenantId = tenantId, productIds = listOf(id), limit = 1).isNotEmpty()
     }
 
     @GetMapping("/{id}")

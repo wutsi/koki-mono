@@ -5,7 +5,6 @@ import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.file.server.dao.FileRepository
 import com.wutsi.koki.invoice.dto.InvoiceStatus
 import com.wutsi.koki.invoice.dto.UpdateInvoiceStatusRequest
 import com.wutsi.koki.invoice.dto.event.InvoiceStatusChangedEvent
@@ -13,7 +12,6 @@ import com.wutsi.koki.invoice.server.dao.InvoiceLogRepository
 import com.wutsi.koki.invoice.server.dao.InvoiceRepository
 import com.wutsi.koki.invoice.server.domain.InvoiceEntity
 import com.wutsi.koki.platform.mq.Publisher
-import com.wutsi.koki.tax.server.dao.TaxRepository
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import com.wutsi.koki.tenant.server.service.ConfigurationService
@@ -36,12 +34,6 @@ class UpdateInvoiceStatusEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Autowired
     private lateinit var logDao: InvoiceLogRepository
-
-    @Autowired
-    private lateinit var taxDao: TaxRepository
-
-    @Autowired
-    private lateinit var fileDao: FileRepository
 
     @Autowired
     private lateinit var configService: ConfigurationService
