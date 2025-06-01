@@ -157,7 +157,7 @@ class MessageEmailSenderTest {
                     <tr>
                         <td align="center" colspan="2" valign="top">
                             <a href="https://clientX.koki.com/rooms/777">
-                                <img alt="Cozy appartment" src="https://picsum.photos/800/600" style="width: 250px; max-height: 166px"/>
+                                <img alt="Cozy appartment" src="https://picsum.photos/800/600" style="max-width: 250px; max-height: 166px"/>
                                 <div style="margin-top: 4px">Cozy appartment</div>
                             </a>
                         </td>
@@ -173,7 +173,7 @@ class MessageEmailSenderTest {
                                 </tr>
                                 <tr>
                                     <td>
-                                        <a href="https://wa.me/23799500011?text&#61;https%3A%2F%2Fwww.foo.com%2Frooms%2F777%2Fcozy-appartment%0A" style="margin-right:20px">Reply on Whatsapp</a>
+                                        <a href="https://wa.me/23799500011?text&#61;https%3A%2F%2Fwww.foo.com%2Frooms%2F777%2Fcozy-appartment" style="margin-right:20px">Reply on Whatsapp</a>
 
                                         <a href="mailto: ray.sponsible@gmail.com">Reply via Email</a>
                                     </td>
