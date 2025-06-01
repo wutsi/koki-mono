@@ -27,6 +27,9 @@ class GetMessageEndpointTest : TenantAwareEndpointTest() {
         assertEquals("5147580011", message.senderPhone)
         assertEquals(MessageStatus.ARCHIVED, message.status)
         assertEquals("Yo man", message.body)
+        assertEquals("CA", message.country)
+        assertEquals("fr", message.language)
+        assertEquals(111L, message.senderAccountId)
     }
 
     @Test

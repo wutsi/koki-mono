@@ -1,9 +1,12 @@
 package com.wutsi.koki.message.server.service
 
+import com.wutsi.koki.account.dto.CreateAccountRequest
+import com.wutsi.koki.account.server.service.AccountService
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.form.server.domain.AccountEntity
 import com.wutsi.koki.message.dto.MessageStatus
 import com.wutsi.koki.message.dto.SendMessageRequest
 import com.wutsi.koki.message.dto.UpdateMessageStatusRequest
@@ -18,6 +21,7 @@ import java.util.Date
 class MessageService(
     private val dao: MessageRepository,
     private val em: EntityManager,
+    private val accountService: AccountService,
 ) {
     fun get(id: Long, tenantId: Long): MessageEntity {
         val msg = dao.findById(id)
@@ -88,6 +92,9 @@ class MessageService(
                 body = request.body,
                 createdAt = Date(),
                 status = MessageStatus.NEW,
+                country = request.country?.uppercase(),
+                language = request.language,
+                senderAccountId = findOrCreateAccount(request, tenantId).id,
             )
         )
     }
@@ -97,5 +104,36 @@ class MessageService(
         val message = get(id, tenantId)
         message.status = request.status
         return dao.save(message)
+    }
+
+    private fun findOrCreateAccount(request: SendMessageRequest, tenantId: Long): AccountEntity {
+        val account = accountService.getByEmailOrNull(request.senderEmail, tenantId)
+        if (account == null) {
+            return accountService.create(
+                tenantId = tenantId,
+                request = CreateAccountRequest(
+                    name = request.senderName,
+                    email = request.senderEmail,
+                    mobile = request.senderPhone,
+                    language = request.language,
+                    shippingCountry = request.country,
+                    billingSameAsShippingAddress = true,
+                )
+            )
+        } else {
+            var update = 0
+            if (account.mobile == null && request.senderPhone != null) {
+                account.mobile = request.senderPhone
+                update++
+            }
+            if (account.language == null && request.language != null) {
+                account.language = request.language
+                update++
+            }
+            if (account.shippingCountry == null && request.country != null) {
+                account.shippingCountry = request.country?.uppercase()
+            }
+            return accountService.save(account)
+        }
     }
 }

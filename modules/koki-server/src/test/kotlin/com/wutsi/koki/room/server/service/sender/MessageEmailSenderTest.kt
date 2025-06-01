@@ -13,6 +13,7 @@ import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.email.dto.SendEmailRequest
 import com.wutsi.koki.email.server.service.EmailService
+import com.wutsi.koki.email.server.service.filter.CssFilter
 import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.form.server.domain.AccountEntity
@@ -22,7 +23,6 @@ import com.wutsi.koki.message.server.service.MessageService
 import com.wutsi.koki.platform.templating.MustacheTemplatingEngine
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.server.domain.RoomEntity
-import com.wutsi.koki.room.server.mapper.RoomMapper
 import com.wutsi.koki.room.server.service.MessageEmailSender
 import com.wutsi.koki.room.server.service.RoomService
 import com.wutsi.koki.tenant.server.domain.TenantEntity
@@ -47,7 +47,6 @@ class MessageEmailSenderTest {
         emailService = emailService,
         tenantService = tenantService,
         fileService = fileService,
-        roomMapper = RoomMapper(),
     )
 
     private val tenant = TenantEntity(
@@ -69,7 +68,8 @@ class MessageEmailSenderTest {
         id = 444L,
         tenantId = tenant.id!!,
         name = "Realtor Inc",
-        email = "info@realtor.com"
+        email = "info@realtor.com",
+        language = "fr"
     )
     private val image = FileEntity(
         id = 4309,
@@ -114,21 +114,17 @@ class MessageEmailSenderTest {
         )
         assertEquals(account.email, request.firstValue.recipient.email)
         assertEquals(account.name, request.firstValue.recipient.displayName)
+        assertEquals(account.language, request.firstValue.recipient.language)
         assertEquals(account.id, request.firstValue.recipient.id)
         assertEquals(ObjectType.ACCOUNT, request.firstValue.recipient.type)
         assertEquals(false, request.firstValue.store)
 
-        assertEquals(8, request.firstValue.data.size)
+        assertEquals(6, request.firstValue.data.size)
         assertEquals(message.senderName, request.firstValue.data["senderName"])
-        assertEquals(message.senderEmail, request.firstValue.data["senderEmail"])
-        assertEquals(message.senderPhone, request.firstValue.data["senderPhone"])
-        assertEquals(
-            "https://wa.me/23799500011?text=https%3A%2F%2Fwww.foo.com%2Frooms%2F777%2Fcozy-appartment",
-            request.firstValue.data["senderWhatsappUrl"]
-        )
         assertEquals(message.body, request.firstValue.data["body"])
         assertEquals(room.title, request.firstValue.data["roomTitle"])
         assertEquals("${tenant.portalUrl}/rooms/${room.id}", request.firstValue.data["roomUrl"])
+        assertEquals("${tenant.portalUrl}/rooms/${room.id}?tab=message", request.firstValue.data["messageUrl"])
         assertEquals(image.url, request.firstValue.data["heroImageUrl"])
     }
 
@@ -148,41 +144,48 @@ class MessageEmailSenderTest {
 
         val body = IOUtils.toString(this::class.java.getResourceAsStream("/room/email/message.html"), "utf-8")
         val template = MustacheTemplatingEngine(DefaultMustacheFactory())
-        val xbody = template.apply(body, request.firstValue.data)
+        val xbody = CssFilter().filter(
+            template.apply(body, request.firstValue.data),
+            event.tenantId,
+        )
 
         println(xbody)
         assertEquals(
             """
-                <table border="0" cellpadding="8" cellspacing="0" width="100%">
-                    <tr>
-                        <td align="center" colspan="2" valign="top">
+                <html>
+                  <head></head>
+                  <body>
+                    <table border="0" cellpadding="8" cellspacing="0" width="100%">
+                      <tbody>
+                        <tr>
+                          <td align="center" colspan="2" valign="top">
                             <a href="https://clientX.koki.com/rooms/777">
-                                <img alt="Cozy appartment" src="https://picsum.photos/800/600" style="max-width: 250px; max-height: 166px"/>
-                                <div style="margin-top: 4px">Cozy appartment</div>
+                              <img alt="Cozy appartment" src="https://picsum.photos/800/600" style="max-width: 250px; max-height: 166px">
+                              <div class="margin-top-small" style="margin-top: 8px;">Cozy appartment</div>
                             </a>
-                        </td>
-                        <td valign="top" width="100%">
+                          </td>
+                          <td valign="top" width="100%">
                             <table border="0" cellpadding="8" cellspacing="0" width="100%">
+                              <tbody>
                                 <tr>
-                                    <td>Ray Sponsible</td>
+                                  <td>Ray Sponsible</td>
                                 </tr>
                                 <tr>
-                                    <td style="border-bottom: 1px solid gray">
-                                        This is an example of body... love it!
-                                    </td>
+                                  <td>This is an example of body... love it!</td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        <a href="https://wa.me/23799500011?text&#61;https%3A%2F%2Fwww.foo.com%2Frooms%2F777%2Fcozy-appartment" style="margin-right:20px">Reply on Whatsapp</a>
-
-                                        <a href="mailto: ray.sponsible@gmail.com">Reply via Email</a>
-                                    </td>
+                                  <td>
+                                    <a class="btn-primary" href="https://clientX.koki.com/rooms/777?tab=message" style="border-radius: 16px;display: inline-block;font-weight: 400;color: #FFFFFF;background-color: #1D7EDF;text-align: center;vertical-align: middle;border: 1px solid transparent;padding: .375rem .75rem;font-size: 1rem;line-height: 1.5;text-decoration: none;">View Details</a>
+                                  </td>
                                 </tr>
+                              </tbody>
                             </table>
-                        </td>
-                    </tr>
-                </table>
-
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </body>
+                </html>
             """.trimIndent(),
             xbody,
         )

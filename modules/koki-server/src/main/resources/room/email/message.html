@@ -3,7 +3,7 @@
         <td align="center" colspan="2" valign="top">
             <a href="{{roomUrl}}">
                 <img alt="{{roomTitle}}" src="{{heroImageUrl}}" style="max-width: 250px; max-height: 166px"/>
-                <div style="margin-top: 4px">{{roomTitle}}</div>
+                <div class="margin-top-small">{{roomTitle}}</div>
             </a>
         </td>
         <td valign="top" width="100%">
@@ -12,17 +12,11 @@
                     <td>{{senderName}}</td>
                 </tr>
                 <tr>
-                    <td style="border-bottom: 1px solid gray">
-                        {{body}}
-                    </td>
+                    <td>{{body}}</td>
                 </tr>
                 <tr>
                     <td>
-                        {{#senderWhatsappUrl}}
-                        <a href="{{senderWhatsappUrl}}" style="margin-right:20px">Reply on Whatsapp</a>
-                        {{/senderWhatsappUrl}}
-
-                        <a href="mailto: {{senderEmail}}">Reply via Email</a>
+                        <a class="btn-primary" href="{{messageUrl}}">View Details</a>
                     </td>
                 </tr>
             </table>

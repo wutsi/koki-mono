@@ -5,11 +5,14 @@ import java.util.Date
 
 data class Message(
     val id: Long = -1,
+    val senderAccountId: Long? = null,
     val senderName: String = "",
     val senderEmail: String = "",
     val senderPhone: String? = null,
     val status: MessageStatus = MessageStatus.UNKNOWN,
-    val body: String = "",
     val createdAt: Date = Date(),
     val owner: ObjectReference? = null,
+    val body: String = "",
+    val country: String? = null,
+    val language: String? = null,
 )
