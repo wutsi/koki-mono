@@ -20,7 +20,9 @@ import com.wutsi.koki.message.dto.event.MessageSentEvent
 import com.wutsi.koki.message.server.domain.MessageEntity
 import com.wutsi.koki.message.server.service.MessageService
 import com.wutsi.koki.platform.templating.MustacheTemplatingEngine
+import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.server.domain.RoomEntity
+import com.wutsi.koki.room.server.mapper.RoomMapper
 import com.wutsi.koki.room.server.service.MessageEmailSender
 import com.wutsi.koki.room.server.service.RoomService
 import com.wutsi.koki.tenant.server.domain.TenantEntity
@@ -45,11 +47,13 @@ class MessageEmailSenderTest {
         emailService = emailService,
         tenantService = tenantService,
         fileService = fileService,
+        roomMapper = RoomMapper(),
     )
 
     private val tenant = TenantEntity(
         id = 111,
-        portalUrl = "http://clientX.koki.com",
+        portalUrl = "https://clientX.koki.com",
+        clientPortalUrl = "https://www.foo.com"
     )
     private val message = MessageEntity(
         id = 333L,
@@ -78,6 +82,7 @@ class MessageEmailSenderTest {
         accountId = account.id!!,
         title = "Cozy appartment",
         heroImageId = image.id,
+        status = RoomStatus.PUBLISHED,
     )
     private val event = MessageSentEvent(
         messageId = message.id!!,
@@ -117,7 +122,10 @@ class MessageEmailSenderTest {
         assertEquals(message.senderName, request.firstValue.data["senderName"])
         assertEquals(message.senderEmail, request.firstValue.data["senderEmail"])
         assertEquals(message.senderPhone, request.firstValue.data["senderPhone"])
-        assertEquals("https://wa.me/23799500011", request.firstValue.data["senderWhatsappUrl"])
+        assertEquals(
+            "https://wa.me/23799500011?text=https%3A%2F%2Fwww.foo.com%2Frooms%2F777%2Fcozy-appartment%0A",
+            request.firstValue.data["senderWhatsappUrl"]
+        )
         assertEquals(message.body, request.firstValue.data["body"])
         assertEquals(room.title, request.firstValue.data["roomTitle"])
         assertEquals("${tenant.portalUrl}/rooms/${room.id}", request.firstValue.data["roomUrl"])
@@ -148,34 +156,26 @@ class MessageEmailSenderTest {
                 <table border="0" cellpadding="8" cellspacing="0" width="100%">
                     <tr>
                         <td align="center" colspan="2" valign="top">
-                            <a href="http://clientX.koki.com/rooms/777">
+                            <a href="https://clientX.koki.com/rooms/777">
                                 <img alt="Cozy appartment" src="https://picsum.photos/800/600" style="width: 250px; max-height: 166px"/>
+                                <div style="margin-top: 4px">Cozy appartment</div>
                             </a>
                         </td>
                         <td valign="top" width="100%">
-                            <table border="0" cellpadding="4" cellspacing="0" width="100%">
+                            <table border="0" cellpadding="8" cellspacing="0" width="100%">
                                 <tr>
-                                    <td style="border-bottom: 1px solid gray" width="20%"><b>Sender:</b></td>
-                                    <td style="border-bottom: 1px solid gray">Ray Sponsible</td>
+                                    <td>Ray Sponsible</td>
                                 </tr>
                                 <tr>
-                                    <td style="border-bottom: 1px solid gray"><b>Email:</b></td>
-                                    <td style="border-bottom: 1px solid gray"><a href="">ray.sponsible@gmail.com</a></td>
-                                </tr>
-
-                                <tr>
-                                    <td style="border-bottom: 1px solid gray"><b>Phone Number:</b></td>
                                     <td style="border-bottom: 1px solid gray">
-                                        +237 9 950 00 11
-                                        <br/>
-                                        <a href="https://wa.me/23799500011" style="margin-left:20px">Whatsapp</a>
-                                        <a href="tel: +237 9 950 00 11" style="margin-left:20px">Call</a>
+                                        This is an example of body... love it!
                                     </td>
                                 </tr>
-
                                 <tr>
-                                    <td colspan="2" style="padding-top: 10px">
-                                        This is an example of body... love it!
+                                    <td>
+                                        <a href="https://wa.me/23799500011?text&#61;https%3A%2F%2Fwww.foo.com%2Frooms%2F777%2Fcozy-appartment%0A" style="margin-right:20px">Reply on Whatsapp</a>
+
+                                        <a href="mailto: ray.sponsible@gmail.com">Reply via Email</a>
                                     </td>
                                 </tr>
                             </table>

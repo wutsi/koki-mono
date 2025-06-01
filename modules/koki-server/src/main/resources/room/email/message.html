@@ -3,34 +3,26 @@
         <td align="center" colspan="2" valign="top">
             <a href="{{roomUrl}}">
                 <img alt="{{roomTitle}}" src="{{heroImageUrl}}" style="width: 250px; max-height: 166px"/>
+                <div style="margin-top: 4px">{{roomTitle}}</div>
             </a>
         </td>
         <td valign="top" width="100%">
-            <table border="0" cellpadding="4" cellspacing="0" width="100%">
+            <table border="0" cellpadding="8" cellspacing="0" width="100%">
                 <tr>
-                    <td style="border-bottom: 1px solid gray" width="20%"><b>Sender:</b></td>
-                    <td style="border-bottom: 1px solid gray">{{senderName}}</td>
+                    <td>{{senderName}}</td>
                 </tr>
                 <tr>
-                    <td style="border-bottom: 1px solid gray"><b>Email:</b></td>
-                    <td style="border-bottom: 1px solid gray"><a href="">{{senderEmail}}</a></td>
-                </tr>
-
-                {{#senderPhone}}
-                <tr>
-                    <td style="border-bottom: 1px solid gray"><b>Phone Number:</b></td>
                     <td style="border-bottom: 1px solid gray">
-                        {{senderPhone}}
-                        <br/>
-                        <a href="{{senderWhatsappUrl}}" style="margin-left:20px">Whatsapp</a>
-                        <a href="tel: {{senderPhone}}" style="margin-left:20px">Call</a>
+                        {{body}}
                     </td>
                 </tr>
-                {{/senderPhone}}
-
                 <tr>
-                    <td colspan="2" style="padding-top: 10px">
-                        {{body}}
+                    <td>
+                        {{#senderWhatsappUrl}}
+                        <a href="{{senderWhatsappUrl}}" style="margin-right:20px">Reply on Whatsapp</a>
+                        {{/senderWhatsappUrl}}
+
+                        <a href="mailto: {{senderEmail}}">Reply via Email</a>
                     </td>
                 </tr>
             </table>

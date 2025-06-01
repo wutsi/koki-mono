@@ -8,6 +8,8 @@ import com.wutsi.koki.email.server.service.EmailService
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.message.dto.event.MessageSentEvent
 import com.wutsi.koki.message.server.service.MessageService
+import com.wutsi.koki.platform.util.StringUtils
+import com.wutsi.koki.room.server.mapper.RoomMapper
 import com.wutsi.koki.tenant.server.service.TenantService
 import org.apache.commons.io.IOUtils
 import org.springframework.stereotype.Service
@@ -20,6 +22,7 @@ class MessageEmailSender(
     private val emailService: EmailService,
     private val tenantService: TenantService,
     private val fileService: FileService,
+    private val roomMapper: RoomMapper,
 ) {
     companion object {
         const val SUBJECT = "You have a new message about your property"
@@ -51,7 +54,12 @@ class MessageEmailSender(
                     "senderName" to message.senderName,
                     "senderEmail" to message.senderEmail,
                     "senderPhone" to message.senderPhone,
-                    "senderWhatsappUrl" to message.senderPhone?.let { phone -> toWhatstappUrl(phone) },
+                    "senderWhatsappUrl" to message.senderPhone?.let { phone ->
+                        StringUtils.toWhatsappUrl(
+                            phone,
+                            tenant.clientPortalUrl + roomMapper.toListingUrl(room),
+                        )
+                    },
                     "body" to message.body,
                     "roomUrl" to "${tenant.portalUrl}/rooms/${room.id}",
                     "roomTitle" to room.title,
@@ -60,14 +68,5 @@ class MessageEmailSender(
                 store = false,
             )
         )
-    }
-
-    private fun toWhatstappUrl(phone: String): String {
-        return "https://wa.me/" +
-            phone.replace("+", "")
-                .replace(" ", "")
-                .replace("-", "")
-                .replace("(", "")
-                .replace(")", "")
     }
 }
