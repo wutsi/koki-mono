@@ -1,22 +1,31 @@
-<table border="0" cellpadding="8" cellspacing="0" width="100%">
+<table border="0" cellpadding="8" cellspacing="0" class="border" style="margin: 0 auto; max-width: 80%; ">
     <tr>
-        <td align="center" colspan="2" valign="top">
-            <a href="{{roomUrl}}">
-                <img alt="{{roomTitle}}" src="{{heroImageUrl}}" style="max-width: 250px; max-height: 166px"/>
-                <div class="margin-top-small">{{roomTitle}}</div>
-            </a>
-        </td>
         <td valign="top" width="100%">
             <table border="0" cellpadding="8" cellspacing="0" width="100%">
                 <tr>
-                    <td><b>From:</b> {{senderName}}</td>
+                    <td width="1%"><b>From:</b></td>
+                    <td>{{senderName}}</td>
                 </tr>
                 <tr>
-                    <td>{{body}}</td>
-                </tr>
-                <tr>
+                    <td><b>Property:</b></td>
                     <td>
-                        <a class="btn-primary" href="{{messageUrl}}">View Details</a>
+                        <a href="{{roomUrl}}">{{roomTitle}}</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <a href="{{roomUrl}}">
+                            <img alt="{{roomTitle}}" class="border" src="{{heroImageUrl}}"
+                                 style="max-width: 400px; max-height: 233px"/>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">{{body}}</td>
+                </tr>
+                <tr>
+                    <td class="text-center" colspan="2">
+                        <a class="btn btn-primary" href="{{messageUrl}}">View Details</a>
                     </td>
                 </tr>
             </table>
