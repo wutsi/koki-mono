@@ -50,32 +50,18 @@ koki:
             secret-key: ${AWS_SECRET_KEY}
 
     module:
-        ai:
-            mq:
-                consumer-delay-seconds: 60
-                dlq-cron: "0 */15 * * * *"  # Every 15 mins
-
         file:
             mq:
                 consumer-delay-seconds: 60
-                dlq-cron: "0 */15 * * * *"  # Every 15 mins
 
         invoice:
             mq:
                 consumer-delay-seconds: 60
-                dlq-cron: "0 */15 * * * *"  # Every 15 mins
 
         notification:
             mq:
                 consumer-delay-seconds: 60
-                dlq-cron: "0 */15 * * * *"  # Every 15 mins
 
         room:
             mq:
                 consumer-delay-seconds: 60
-                dlq-cron: "0 */15 * * * *"  # Every 15 mins
-
-        tax:
-            mq:
-                consumer-delay-seconds: 60
-                dlq-cron: "0 */15 * * * *"  # Every 15 mins

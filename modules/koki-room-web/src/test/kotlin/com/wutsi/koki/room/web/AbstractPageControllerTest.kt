@@ -35,6 +35,7 @@ import com.wutsi.koki.refdata.dto.SearchUnitResponse
 import com.wutsi.koki.room.dto.GetRoomResponse
 import com.wutsi.koki.room.dto.SearchRoomResponse
 import com.wutsi.koki.room.web.TenantFixtures.tenants
+import com.wutsi.koki.room.web.location.model.GeoIpModel
 import com.wutsi.koki.security.dto.ApplicationName
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
@@ -187,6 +188,7 @@ abstract class AbstractPageControllerTest {
     }
 
     private fun setupDefaultApiResponses() {
+        setupGeoIp()
         setupRefDataModule()
         setupFileModule()
         setupTenantModule()
@@ -194,6 +196,19 @@ abstract class AbstractPageControllerTest {
         setupAccountModule()
         setupRoomModule()
         setupMessageModule()
+    }
+
+    private fun setupGeoIp(){
+        doReturn(
+            ResponseEntity(
+                GeoIpFixtures.geoip,
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                "https://ipapi.co/json",
+                GeoIpModel::class.java
+            )
     }
 
     private fun setupRefDataModule() {

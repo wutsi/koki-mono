@@ -26,6 +26,9 @@ data class MessageEntity(
     @Column("sender_account_fk")
     val senderAccountId: Long? = null,
 
+    @Column("city_fk")
+    val cityId: Long? = null,
+
     val ownerType: ObjectType? = null,
     val senderName: String = "",
     val senderEmail: String = "",

@@ -7,6 +7,7 @@
         <table style="width:100%">
             <tr>
                 <td>
+                    <b>From:</b>
                     <span th:text="${message.senderName}">SENDER</span>
                     -
                     <span class="text-small" th:text="${message.createdAtMoment}">YYYY</span>
@@ -16,7 +17,7 @@
                 <td class="padding-top-small" th:text="${message.body}">BODY</td>
             </tr>
             <tr th:if="${user?.hasPermission('message:manage')}">
-                <td class="padding-top-small">
+                <td class="padding-top">
                     <div class="flex-space-between flex">
                         <div>
                             <a class="btn btn-sm btn-light btn-whatsapp" target="_blank"
