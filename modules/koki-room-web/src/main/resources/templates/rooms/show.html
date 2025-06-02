@@ -261,8 +261,9 @@
                     </div>
                     <div class="form-group margin-top">
                         <textarea class="form-control" placeholder="Message" required rows="3"
-                                  th:data-body="'During my research, I found this ad for ' + ${room.title} + ', Montreal. I would like to schedule an appointment. What are the next steps?'"
-                                  th:field="*{body}"></textarea>
+                                  th:data-body="#{page.room.contact-us}"
+                                  th:field="*{body}">
+                        </textarea>
                     </div>
                     <div class="form-group margin-top">
                         <button class="btn btn-primary" id="btn-send" type="submit">Send</button>
