@@ -11,5 +11,6 @@ data class SendMessageRequest(
     @get:Size(max = 2) val country: String? = null,
     @get:Size(max = 2) val language: String? = null,
     @get:NotEmpty val body: String = "",
-    val owner: ObjectReference? = null
+    val owner: ObjectReference? = null,
+    val cityId: Long? = null,
 )

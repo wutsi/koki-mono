@@ -13,6 +13,7 @@ data class Message(
     val createdAt: Date = Date(),
     val owner: ObjectReference? = null,
     val body: String = "",
+    val cityId: Long? = null,
     val country: String? = null,
     val language: String? = null,
 )
