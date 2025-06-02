@@ -12,6 +12,9 @@ import com.wutsi.koki.message.dto.SendMessageRequest
 import com.wutsi.koki.message.dto.UpdateMessageStatusRequest
 import com.wutsi.koki.message.server.dao.MessageRepository
 import com.wutsi.koki.message.server.domain.MessageEntity
+import com.wutsi.koki.refdata.dto.LocationType
+import com.wutsi.koki.refdata.server.domain.LocationEntity
+import com.wutsi.koki.refdata.server.service.LocationService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -22,6 +25,7 @@ class MessageService(
     private val dao: MessageRepository,
     private val em: EntityManager,
     private val accountService: AccountService,
+    private val locationService: LocationService,
 ) {
     fun get(id: Long, tenantId: Long): MessageEntity {
         val msg = dao.findById(id)
@@ -81,6 +85,8 @@ class MessageService(
 
     @Transactional
     fun send(request: SendMessageRequest, tenantId: Long): MessageEntity {
+        val city = request.cityId?.let { id -> locationService.get(id, LocationType.CITY) }
+
         return dao.save(
             MessageEntity(
                 tenantId = tenantId,
@@ -92,9 +98,10 @@ class MessageService(
                 body = request.body,
                 createdAt = Date(),
                 status = MessageStatus.NEW,
-                country = request.country?.uppercase(),
+                country = city?.country ?: request.country?.uppercase(),
                 language = request.language,
-                senderAccountId = findOrCreateAccount(request, tenantId).id,
+                cityId = city?.id,
+                senderAccountId = findOrCreateAccount(request, city, tenantId).id,
             )
         )
     }
@@ -106,7 +113,7 @@ class MessageService(
         return dao.save(message)
     }
 
-    private fun findOrCreateAccount(request: SendMessageRequest, tenantId: Long): AccountEntity {
+    private fun findOrCreateAccount(request: SendMessageRequest, city: LocationEntity?, tenantId: Long): AccountEntity {
         val account = accountService.getByEmailOrNull(request.senderEmail, tenantId)
         if (account == null) {
             return accountService.create(
@@ -116,7 +123,8 @@ class MessageService(
                     email = request.senderEmail,
                     mobile = request.senderPhone,
                     language = request.language,
-                    shippingCountry = request.country,
+                    shippingCountry = city?.country ?: request.country?.uppercase(),
+                    shippingCityId = city?.id,
                     billingSameAsShippingAddress = true,
                 )
             )
@@ -131,7 +139,11 @@ class MessageService(
                 update++
             }
             if (account.shippingCountry == null && request.country != null) {
-                account.shippingCountry = request.country?.uppercase()
+                account.shippingCountry = city?.country ?: request.country?.uppercase()
+            }
+            if (account.shippingCityId == null) {
+                account.shippingCityId = city?.id
+                account.shippingCountry = city?.country ?: request.country?.uppercase()
             }
             return accountService.save(account)
         }

@@ -3,6 +3,8 @@ CREATE TABLE T_MESSAGE(
 
   tenant_fk               BIGINT NOT NULL,
   owner_fk                BIGINT,
+  city_fk                 BIGINT,
+  sender_account_fk       BIGINT,
 
   owner_type              INT,
   sender_name             VARCHAR(100) NOT NULL,
@@ -10,6 +12,8 @@ CREATE TABLE T_MESSAGE(
   sender_phone            VARCHAR(30),
   status                  INT NOT NULL DEFAULT 0,
   body                    TEXT NOT NULL,
+  country                 VARCHAR(2),
+  language                VARCHAR(2),
   created_at              DATETIME DEFAULT NOW(),
 
   PRIMARY KEY(id)
@@ -17,6 +21,7 @@ CREATE TABLE T_MESSAGE(
 
 CREATE INDEX tenant ON T_MESSAGE(tenant_fk);
 CREATE INDEX created ON T_MESSAGE(created_at);
+CREATE INDEX sender_account ON T_MESSAGE(sender_account_fk);
 CREATE INDEX owner ON T_MESSAGE(owner_fk, owner_type);
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url, css_url)

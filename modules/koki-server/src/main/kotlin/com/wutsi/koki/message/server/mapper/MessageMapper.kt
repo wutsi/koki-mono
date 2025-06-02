@@ -24,6 +24,7 @@ class MessageMapper {
             },
             language = entity.language,
             country = entity.country,
+            cityId = entity.cityId,
             senderAccountId = entity.senderAccountId,
         )
     }
@@ -42,8 +43,6 @@ class MessageMapper {
             } else {
                 null
             },
-            language = entity.language,
-            country = entity.country,
             senderAccountId = entity.senderAccountId,
         )
     }

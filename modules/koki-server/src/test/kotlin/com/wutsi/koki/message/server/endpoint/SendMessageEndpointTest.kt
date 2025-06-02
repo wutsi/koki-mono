@@ -40,7 +40,7 @@ class SendMessageEndpointTest : TenantAwareEndpointTest() {
             senderPhone = "+15147580011",
             body = "Hello world",
             country = "ca",
-            language = "fr"
+            language = "fr",
         )
         val response = rest.postForEntity("/v1/messages", request, SendMessageResponse::class.java)
 
@@ -55,8 +55,9 @@ class SendMessageEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.senderPhone, message.senderPhone)
         assertEquals(MessageStatus.NEW, message.status)
         assertEquals(request.body, message.body)
-        assertEquals(request.country?.uppercase(), message.country)
         assertEquals(request.language, message.language)
+        assertEquals(request.cityId, message.cityId)
+        assertEquals(request.country?.uppercase(), message.country)
         assertNotNull(message.senderAccountId)
 
         val account = accountDao.findById(message.senderAccountId).get()
@@ -64,6 +65,7 @@ class SendMessageEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.senderEmail.lowercase(), account.email)
         assertEquals(request.senderPhone, account.mobile)
         assertEquals(request.language, account.language)
+        assertEquals(request.cityId, account.shippingCityId)
         assertEquals(request.country?.uppercase(), account.shippingCountry)
         assertEquals(true, account.billingSameAsShippingAddress)
 
@@ -75,6 +77,31 @@ class SendMessageEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
+    fun `send with cityId`() {
+        val request = SendMessageRequest(
+            owner = ObjectReference(id = 111, type = ObjectType.ROOM),
+            senderName = "Ray Sponsible",
+            senderEmail = "Ray.Sponsible@gmail.com",
+            senderPhone = "+15148880011",
+            body = "Hello world",
+            country = "ca",
+            cityId = 2370101,
+            language = "fr",
+        )
+        val response = rest.postForEntity("/v1/messages", request, SendMessageResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val message = dao.findById(response.body!!.messageId).get()
+        assertEquals(request.cityId, message.cityId)
+        assertEquals("CM", message.country)
+
+        val account = accountDao.findById(message.senderAccountId).get()
+        assertEquals(request.cityId, account.shippingCityId)
+        assertEquals("CM", account.shippingCountry)
+    }
+
+    @Test
     fun `send and update account`() {
         val request = SendMessageRequest(
             owner = ObjectReference(id = 111, type = ObjectType.ROOM),
@@ -83,6 +110,7 @@ class SendMessageEndpointTest : TenantAwareEndpointTest() {
             senderPhone = "+15147580011",
             body = "Hello world",
             country = "ca",
+            cityId = null,
             language = "fr"
         )
         val response = rest.postForEntity("/v1/messages", request, SendMessageResponse::class.java)
@@ -114,5 +142,59 @@ class SendMessageEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.owner, event.firstValue.owner)
         assertEquals(TENANT_ID, event.firstValue.tenantId)
         assertEquals(message.id, event.firstValue.messageId)
+    }
+
+    @Test
+    fun `send and update account with cityId`() {
+        val request = SendMessageRequest(
+            owner = ObjectReference(id = 111, type = ObjectType.ROOM),
+            senderName = "Foo Bar",
+            senderEmail = "Info@foobar.com",
+            senderPhone = "+15147583333",
+            body = "Hello world",
+            country = "ca",
+            cityId = 2370101L,
+            language = "fr"
+        )
+        val response = rest.postForEntity("/v1/messages", request, SendMessageResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val message = dao.findById(response.body!!.messageId).get()
+        assertEquals(request.cityId, message.cityId)
+        assertEquals("CM", message.country)
+
+        val account = accountDao.findById(message.senderAccountId).get()
+        assertEquals(request.cityId, account.shippingCityId)
+        assertEquals("CM", account.shippingCountry)
+    }
+
+    @Test
+    fun `send and never update account with mobile-country-city-language already set`() {
+        val request = SendMessageRequest(
+            owner = ObjectReference(id = 111, type = ObjectType.ROOM),
+            senderName = "Roger Milla",
+            senderEmail = "info@yoman.com",
+            senderPhone = "+15147586666",
+            body = "Hello world",
+            country = "ca",
+            cityId = 2370101L,
+            language = "en"
+        )
+        val response = rest.postForEntity("/v1/messages", request, SendMessageResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val message = dao.findById(response.body!!.messageId).get()
+        assertEquals(request.cityId, message.cityId)
+        assertEquals("CM", message.country)
+
+        val account = accountDao.findById(message.senderAccountId).get()
+        assertEquals("YoMan", account.name)
+        assertEquals(request.senderEmail.lowercase(), account.email)
+        assertEquals("+18001111111", account.mobile)
+        assertEquals("fr", account.language)
+        assertEquals(2370102, account.shippingCityId)
+        assertEquals("CM", account.shippingCountry)
     }
 }

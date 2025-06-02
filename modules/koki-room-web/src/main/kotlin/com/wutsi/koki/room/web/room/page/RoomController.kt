@@ -4,6 +4,7 @@ import com.wutsi.koki.refdata.dto.CategoryType
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.web.common.page.AbstractPageController
 import com.wutsi.koki.room.web.common.page.PageName
+import com.wutsi.koki.room.web.location.service.CurrentGeoIPHolder
 import com.wutsi.koki.room.web.message.form.SendMessageForm
 import com.wutsi.koki.room.web.message.service.MessageService
 import com.wutsi.koki.room.web.refdata.mapper.AmenityMapper
@@ -26,6 +27,7 @@ class RoomController(
     private val service: RoomService,
     private val categoryService: CategoryService,
     private val messageService: MessageService,
+    private val currentGeoIp: CurrentGeoIPHolder,
 ) : AbstractPageController() {
     @GetMapping("/{id}/{title}")
     fun show(@PathVariable id: Long, @PathVariable title: String, model: Model): String {
@@ -73,6 +75,9 @@ class RoomController(
                 roomId = room.id
             )
         )
+
+        /* Geo IP */
+        model.addAttribute("geoip", currentGeoIp.get())
 
         /* Page */
         model.addAttribute(

@@ -16,6 +16,7 @@ import com.wutsi.koki.room.dto.GetRoomResponse
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.web.AbstractPageControllerTest
 import com.wutsi.koki.room.web.FileFixtures.images
+import com.wutsi.koki.room.web.GeoIpFixtures
 import com.wutsi.koki.room.web.RefDataFixtures
 import com.wutsi.koki.room.web.RoomFixtures.room
 import com.wutsi.koki.room.web.common.page.PageName
@@ -115,6 +116,8 @@ class RoomControllerTest : AbstractPageControllerTest() {
     fun `send message`() {
         navigateTo("/rooms/${room.id}")
 
+        assertElementNotVisible("#room-message-modal")
+        assertElementAttribute("#phone", "data-country", GeoIpFixtures.geoip.countryCode)
         click("#btn-contact-us")
 
         assertElementVisible("#room-message-modal")
@@ -136,6 +139,9 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertEquals("ray.spomsible@gmail.com", request.firstValue.senderEmail)
         assertEquals("+15147580001", request.firstValue.senderPhone)
         assertEquals("This is a nice message... I Love it :-)", request.firstValue.body)
+        assertEquals("en", request.firstValue.language)
+        assertEquals("ca", request.firstValue.country)
+        assertEquals(RefDataFixtures.locations[0].id, request.firstValue.cityId)
 
         val alert = driver.switchTo().alert()
         alert.accept()

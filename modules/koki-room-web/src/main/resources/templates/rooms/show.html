@@ -253,7 +253,9 @@
                         <input class="form-control" placeholder="Email" required th:field="*{email}" type="email"/>
                     </div>
                     <div class="form-group margin-top">
-                        <input class="form-control" placeholder="Phone" th:field="*{phone}" type="tel"/>
+                        <input class="form-control" placeholder="Phone" th:data-country="${geoip.countryCode}"
+                               th:field="*{phone}"
+                               type="tel"/>
                         <input th:field="*{fullPhone}" type="hidden"/>
                         <input th:field="*{country}" type="hidden"/>
                     </div>
@@ -325,13 +327,7 @@
             // Phone
             const tel = document.getElementById("phone");
             window.intlTelInput(tel, {
-                initialCountry: "auto",
-                geoIpLookup: callback => {
-                    fetch("https://ipapi.co/json")
-                        .then(res => res.json())
-                        .then(data => callback(data.country_code))
-                        .catch(() => callback("us"));
-                },
+                initialCountry: tel.getAttribute("data-country"),
                 hiddenInput: () => ({phone: "fullPhone", country: "country"}),
                 loadUtils: () => import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/utils.js")
             });

@@ -1,4 +1,5 @@
 name,title,description
-Hotel,,Hotels
-Agent,Real Estate Agent,
-Property Owner,Property Owner,
+HOTEL,Hotel,
+REA,Real Estate Agent,
+PROPERTY_OWNER,Property Owner,
+UNDEFINED,Undefined,

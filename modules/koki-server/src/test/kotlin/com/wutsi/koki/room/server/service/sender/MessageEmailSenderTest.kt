@@ -168,7 +168,10 @@ class MessageEmailSenderTest {
                             <table border="0" cellpadding="8" cellspacing="0" width="100%">
                               <tbody>
                                 <tr>
-                                  <td>Ray Sponsible</td>
+                                  <td>
+                                    <b>From:</b>
+                                    Ray Sponsible
+                                  </td>
                                 </tr>
                                 <tr>
                                   <td>This is an example of body... love it!</td>

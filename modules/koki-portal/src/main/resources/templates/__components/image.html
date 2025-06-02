@@ -37,9 +37,10 @@
                 <div th:replace="~{__components/file :: status(${file.status})}"></div>
             </div>
             <div th:if="${file.title}" th:text="${file.title}">TITLE</div>
-            <div th:if="!${file.title}">Processing the image...</div>
-            <div class="alert alert-warning margin" th:if="${file.rejectionReason}"
-                 th:text="${file.rejectionReason}"></div>
+            <div th:if="${file.reviewing}">Processing the image...</div>
+            <div class="alert alert-warning margin"
+                 th:if="${file.rejectionReason} AND ${file.rejected}" th:text="${file.rejectionReason}">REASON
+            </div>
         </a>
     </td>
     <td>
