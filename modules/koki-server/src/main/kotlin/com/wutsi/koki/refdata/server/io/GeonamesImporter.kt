@@ -11,19 +11,27 @@ import com.wutsi.koki.refdata.server.service.LocationService
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVRecord
+import org.apache.poi.hssf.usermodel.HeaderFooter.file
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.io.File
 import java.io.FileOutputStream
+import java.net.HttpURLConnection
 import java.net.URI
 import java.net.URL
 import java.nio.file.Files
 import java.util.Locale
+import java.util.UUID
 import java.util.zip.ZipFile
 import kotlin.io.outputStream
 
 @Service
-class GeonamesImporter(private val service: LocationService) {
+class GeonamesImporter(
+    private val service: LocationService,
+    @Value("\${koki.module.ref-data.geonames.connect-timeout}") private val connectTimeout: Int,
+    @Value("\${koki.module.ref-data.geonames.read-timeout}") private val readTimeout: Int
+) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(GeonamesImporter::class.java)
 
@@ -50,7 +58,7 @@ class GeonamesImporter(private val service: LocationService) {
         val admin1Codes = importAdmin1Codes(country.uppercase())
 
         // Import Location
-        val file = download(
+        val file = downloadZip(
             URI("https://download.geonames.org/export/dump/${country.uppercase()}.zip").toURL(),
             "$country.txt"
         )
@@ -98,7 +106,7 @@ class GeonamesImporter(private val service: LocationService) {
     private fun importAdmin1Codes(country: String): Map<String, Long> {
         val result = mutableMapOf<String, Long>()
         val url = URL("https://download.geonames.org/export/dump/admin1CodesASCII.txt")
-        val file = downloadAdminCode1(url)
+        val file = download(url, ".txt")
         val parser = createParser(file)
         for (record in parser) {
             val code = record.get(0)
@@ -110,19 +118,6 @@ class GeonamesImporter(private val service: LocationService) {
 
         LOGGER.info(" ${result.size} admin1 loaded")
         return result
-    }
-
-    fun downloadAdminCode1(url: URL): File {
-        LOGGER.info("Downloading $url")
-
-        val file = Files.createTempFile("admin1CodesASCII", ".txt").toFile()
-        url.openStream().use { input ->
-            val output = FileOutputStream(file)
-            output.use {
-                input.copyTo(output)
-            }
-        }
-        return file
     }
 
     private fun createParser(file: File): CSVParser {
@@ -230,19 +225,11 @@ class GeonamesImporter(private val service: LocationService) {
                     (record.get(RECORD_FEATURE_CODE) == "ADM1" || record.get(RECORD_FEATURE_CODE) == "PCLI"))
     }
 
-    private fun download(url: URL, filename: String): File {
-        LOGGER.info("Downloading $url")
-
-        val zip = Files.createTempFile("file", ".zip")
-        url.openStream().use { input ->
-            val output = FileOutputStream(zip.toFile())
-            output.use {
-                input.copyTo(output)
-            }
-        }
+    private fun downloadZip(url: URL, filename: String): File {
+        val zip = download(url, ".zip")
 
         // Extract
-        ZipFile(zip.toFile()).use { zip ->
+        ZipFile(zip).use { zip ->
             val entry = zip.entries().asSequence().find { it.name == filename }
             if (entry != null) {
                 val file = Files.createTempFile("file", ".txt").toFile()
@@ -261,5 +248,28 @@ class GeonamesImporter(private val service: LocationService) {
                 data = mapOf("url" to url.toString())
             )
         )
+    }
+
+    private fun download(url: URL, extension: String): File {
+        LOGGER.info("Downloading $url")
+        val cnn = url.openConnection() as HttpURLConnection
+        try {
+            cnn.connectTimeout = readTimeout
+            cnn.readTimeout = connectTimeout
+            val input = cnn.inputStream
+            input.use {
+                val file = Files.createTempFile(UUID.randomUUID().toString(), extension).toFile()
+                LOGGER.info("...Storing $url to ${file.absolutePath}")
+
+                val output = FileOutputStream(file)
+                output.use {
+                    input.copyTo(output)
+                }
+
+                return file
+            }
+        } finally {
+            cnn.disconnect()
+        }
     }
 }

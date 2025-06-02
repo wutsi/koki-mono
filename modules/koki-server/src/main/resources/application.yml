@@ -219,6 +219,10 @@ koki:
                 timeout-minutes: 30
 
     module:
+        ref-data:
+            geonames:
+                connect-timeout: 30000
+                read-timeout: 60000
         file:
             mq:
                 consumer-delay-seconds: 1
