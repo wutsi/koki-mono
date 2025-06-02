@@ -198,7 +198,7 @@ abstract class AbstractPageControllerTest {
         setupMessageModule()
     }
 
-    private fun setupGeoIp(){
+    private fun setupGeoIp() {
         doReturn(
             ResponseEntity(
                 GeoIpFixtures.geoip,

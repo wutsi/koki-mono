@@ -39,7 +39,7 @@ class ImportLocationEndpointTest : AuthorizationAwareEndpointTest() {
         cities.forEach { city -> assertTrue(stateIds.contains(city.parentId)) }
 
         val neighbourhoods = dao.findByType(LocationType.NEIGHBORHOOD)
-        assertEquals(182, neighbourhoods.size)
+        assertEquals(183, neighbourhoods.size)
         neighbourhoods.forEach { neighbourhood ->
             assertNotNull(cities.find { city -> city.id == neighbourhood.parentId })
         }

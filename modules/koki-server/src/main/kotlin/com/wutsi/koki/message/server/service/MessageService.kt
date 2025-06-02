@@ -123,7 +123,7 @@ class MessageService(
                     email = request.senderEmail,
                     mobile = request.senderPhone,
                     language = request.language,
-                    shippingCountry = city?.country ?: request.country,
+                    shippingCountry = city?.country ?: request.country?.uppercase(),
                     shippingCityId = city?.id,
                     billingSameAsShippingAddress = true,
                 )
@@ -139,11 +139,11 @@ class MessageService(
                 update++
             }
             if (account.shippingCountry == null && request.country != null) {
-                account.shippingCountry = city?.country ?: request.country
+                account.shippingCountry = city?.country ?: request.country?.uppercase()
             }
             if (account.shippingCityId == null) {
                 account.shippingCityId = city?.id
-                account.shippingCountry = city?.country ?: request.country
+                account.shippingCountry = city?.country ?: request.country?.uppercase()
             }
             return accountService.save(account)
         }
