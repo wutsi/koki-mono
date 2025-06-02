@@ -14,48 +14,33 @@ class CssFilter : EmailFilter {
                 text-decoration: none
             """.trimIndent(),
 
-            ".btn-primary" to """
-                border-radius: 16px;
+            ".btn" to """
+                border-radius: 4px;
+                padding: 4px 8px;
                 display: inline-block;
                 font-weight: 400;
-                color: #FFFFFF;
-                background-color: #1D7EDF;
                 text-align: center;
                 vertical-align: middle;
                 border: 1px solid transparent;
-                padding: .375rem .75rem;
                 font-size: 1rem;
                 line-height: 1.5;
                 text-decoration: none;
+            """.trimIndent(),
+
+            ".btn-primary" to """
+                color: #FFFFFF;
+                background-color: #1D7EDF;
+                border: 1px solid transparent;
             """.trimIndent(),
 
             ".btn-success" to """
-                border-radius: 16px;
-                display: inline-block;
-                font-weight: 400;
                 color: #FFFFFF;
                 background-color: #4CAF50;
-                text-align: center;
-                vertical-align: middle;
-                border: 1px solid transparent;
-                padding: .375rem .75rem;
-                font-size: 1rem;
-                line-height: 1.5;
-                text-decoration: none;
             """.trimIndent(),
 
             ".btn-secondary" to """
-                border-radius: 16px;
-                display: inline-block;
-                font-weight: 400;
                 color: gray;
                 background-color: #e4edf7;
-                text-align: center;
-                vertical-align: middle;
-                border: 1px solid lightgray;
-                padding: .375rem .75rem;
-                line-height: 1.5;
-                text-decoration: none;
             """.trimIndent(),
 
             ".text-center" to """

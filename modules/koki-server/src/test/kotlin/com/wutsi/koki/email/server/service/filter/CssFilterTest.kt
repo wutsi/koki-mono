@@ -24,7 +24,7 @@ class CssFilterTest {
                     <h1>
                       Hello
                       <div class="margin-top" style="margin-top: 16px;">Hello</div>
-                      <button class="btn btn-primary" style="border-radius: 16px;display: inline-block;font-weight: 400;color: #FFFFFF;background-color: #1D7EDF;text-align: center;vertical-align: middle;border: 1px solid transparent;padding: .375rem .75rem;font-size: 1rem;line-height: 1.5;text-decoration: none;">Yo</button>
+                      <button class="btn btn-primary" style="border-radius: 4px;padding: 4px 8px;display: inline-block;font-weight: 400;text-align: center;vertical-align: middle;border: 1px solid transparent;font-size: 1rem;line-height: 1.5;text-decoration: none;;color: #FFFFFF;background-color: #1D7EDF;border: 1px solid transparent;">Yo</button>
                     </h1>
                   </body>
                 </html>

@@ -60,9 +60,12 @@ class MessageEmailSenderTest {
         senderEmail = "ray.sponsible@gmail.com",
         senderName = "Ray Sponsible",
         senderPhone = "+237 9 950 00 11",
-        body = "This is an example of body... love it!",
         ownerType = ObjectType.ROOM,
         ownerId = 555L,
+        body = """
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        """.trimIndent(),
     )
     private val account = AccountEntity(
         id = 444L,
@@ -155,30 +158,39 @@ class MessageEmailSenderTest {
                 <html>
                   <head></head>
                   <body>
-                    <table border="0" cellpadding="8" cellspacing="0" width="100%">
+                    <table border="0" cellpadding="8" cellspacing="0" class="border" style="margin: 0 auto; max-width: 80%; ;border: 1px solid lightgray;">
                       <tbody>
                         <tr>
-                          <td align="center" colspan="2" valign="top">
-                            <a href="https://clientX.koki.com/rooms/777">
-                              <img alt="Cozy appartment" src="https://picsum.photos/800/600" style="max-width: 250px; max-height: 166px">
-                              <div class="margin-top-small" style="margin-top: 8px;">Cozy appartment</div>
-                            </a>
-                          </td>
                           <td valign="top" width="100%">
                             <table border="0" cellpadding="8" cellspacing="0" width="100%">
                               <tbody>
                                 <tr>
-                                  <td>
+                                  <td width="1%">
                                     <b>From:</b>
-                                    Ray Sponsible
+                                  </td>
+                                  <td>Ray Sponsible</td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    <b>Property:</b>
+                                  </td>
+                                  <td>
+                                    <a href="https://clientX.koki.com/rooms/777">Cozy appartment</a>
                                   </td>
                                 </tr>
                                 <tr>
-                                  <td>This is an example of body... love it!</td>
+                                  <td colspan="2">
+                                    <a href="https://clientX.koki.com/rooms/777">
+                                      <img alt="Cozy appartment" class="border" src="https://picsum.photos/800/600" style="max-width: 400px; max-height: 233px;border: 1px solid lightgray;">
+                                    </a>
+                                  </td>
                                 </tr>
                                 <tr>
-                                  <td>
-                                    <a class="btn-primary" href="https://clientX.koki.com/rooms/777?tab=message" style="border-radius: 16px;display: inline-block;font-weight: 400;color: #FFFFFF;background-color: #1D7EDF;text-align: center;vertical-align: middle;border: 1px solid transparent;padding: .375rem .75rem;font-size: 1rem;line-height: 1.5;text-decoration: none;">View Details</a>
+                                  <td colspan="2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</td>
+                                </tr>
+                                <tr>
+                                  <td class="text-center" colspan="2" style="text-align: center;">
+                                    <a class="btn btn-primary" href="https://clientX.koki.com/rooms/777?tab=message" style="border-radius: 4px;padding: 4px 8px;display: inline-block;font-weight: 400;text-align: center;vertical-align: middle;border: 1px solid transparent;font-size: 1rem;line-height: 1.5;text-decoration: none;;color: #FFFFFF;background-color: #1D7EDF;border: 1px solid transparent;">View Details</a>
                                   </td>
                                 </tr>
                               </tbody>
