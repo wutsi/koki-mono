@@ -28,7 +28,7 @@ id,name,city,latitude,longitude
 237026,Ekounou,Yaoundé,3.832000,11.535000
 237027,Mokolo,Yaoundé,3.875,11.501
 237028,Obili,Yaoundé,3.885000,11.490000
-237029,Etoug-Ebe,Yaoundé,,
+237029,Etoug-Ebe,Yaoundé,3.8543005808801793,11.476789759561948
 237030,Nkolbisson,Yaoundé,,
 237031,Mvog-Beti,Yaoundé,,
 237032,Mvog-Ada,Yaoundé,,
@@ -181,3 +181,4 @@ id,name,city,latitude,longitude
 237180,Wouro Sangue,Ngaoundéré,,
 237181,Camp SIC,Ngaoundéré,,
 237182,Bamyanga III,Ngaoundéré,,
+237183,Hippodrome,Yaoundé,3.8740014504739255,11.517027441828011
