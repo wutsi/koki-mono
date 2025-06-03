@@ -179,7 +179,7 @@ class MessageEmailSenderTest {
                                   </td>
                                 </tr>
                                 <tr>
-                                  <td colspan="2">
+                                  <td class="text-center" colspan="2" style="text-align: center;">
                                     <a href="https://clientX.koki.com/rooms/777">
                                       <img alt="Cozy appartment" class="border" src="https://picsum.photos/800/600" style="max-width: 400px; max-height: 233px;border: 1px solid lightgray;">
                                     </a>
