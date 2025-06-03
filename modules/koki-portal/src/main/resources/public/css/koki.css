@@ -55,6 +55,10 @@ body {
     font-size: x-large;
 }
 
+.text-lower {
+    text-transform: lowercase;
+}
+
 .padding {
     padding: 1em;
 }

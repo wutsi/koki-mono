@@ -79,4 +79,7 @@ data class RoomModel(
 
     val hasPrice: Boolean
         get() = (pricePerNight != null || pricePerMonth != null)
+
+    val leaseTermNegotiable: Boolean
+        get() = leaseTerm == LeaseTerm.NEGOTIABLE
 }
