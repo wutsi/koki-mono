@@ -125,6 +125,16 @@
     </div>
 </div>
 
+<div th:fragment="lease-term(duration, term)">
+    <div th:if="${room.leaseTermNegotiable}">
+        <span th:text="#{lease-term.NEGOTIABLE}">NEGOTIABLE</span>
+    </div>
+    <div th:if="!${room.leaseTermNegotiable}">
+        <span th:text="${room.leaseTermDuration}">00</span>
+        <span class="text-lower" th:text="#{'lease-term.' + ${room.leaseTerm}}">TERM</span>
+    </div>
+</div>
+
 <table class="table" th:fragment="details(room)">
     <tr>
         <td><b>Hero Image</b></td>
@@ -234,17 +244,10 @@
         <td><b>Checkout Time</b></td>
         <td th:text="${room.checkoutTime}">00:00</td>
     </tr>
-    <tr th:if="${room.leaseTermDuration} OR ${room.leaseTerm.name() == 'NEGOTIABLE'}">
+    <tr th:if="${room.leaseTermDuration} OR ${room.leaseTermNegotiable}">
         <td><b>Lease Terms</b></td>
         <td>
-            <div th:if="${room.leaseTerm.name() == 'NEGOTIABLE'}">
-                Negotiable
-            </div>
-            <div th:if="${room.leaseTerm.name() != 'NEGOCIABLE'}">
-                <span th:text="${room.leaseTermDuration}">00</span>
-                <span th:if="${room.leaseTerm.name() == 'YEARLY'}">year(s)</span>
-                <span th:if="${room.leaseTerm.name() == 'MONTHLY'}">month(s)</span>
-                <span th:if="${room.leaseTerm.name() == 'WEEKLY'}">week(s)</span>
+            <div th:replace="~{__components/room :: lease-term(${room.leaseTermDuration}, ${room.leaseTerm.name()})}">
             </div>
         </td>
     </tr>

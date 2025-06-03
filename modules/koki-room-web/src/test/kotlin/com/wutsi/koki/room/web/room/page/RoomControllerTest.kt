@@ -188,7 +188,6 @@ class RoomControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/rooms/${room.id}")
 
-        scrollToMiddle()
         click(".lnk-neighborhood")
         assertCurrentPageIs(PageName.LOCATION)
     }
@@ -208,7 +207,6 @@ class RoomControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/rooms/${room.id}")
 
-        scrollToMiddle()
         click(".lnk-city")
         assertCurrentPageIs(PageName.LOCATION)
     }
