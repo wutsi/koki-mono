@@ -85,6 +85,7 @@ class RoomMapper(
         amenities: Map<Long, AmenityModel>,
     ): RoomModel {
         val locale = LocaleContextHolder.getLocale()
+        val fmtDate = createDateFormat()
         return RoomModel(
             id = entity.id,
             account = account,
@@ -135,6 +136,17 @@ class RoomMapper(
             url = entity.listingUrl ?: "/rooms/${entity.id}",
             publishedAt = entity.publishedAt,
             publishedAtMoment = entity.publishedAt?.let { date -> moment.format(date) },
+            visitFees = entity.visitFees?.let { price ->
+                moneyMapper.toMoneyModel(
+                    price.amount,
+                    price.currency
+                )
+            },
+            yearOfConstruction = entity.yearOfConstruction,
+            dateOfAvailability = entity.dateOfAvailability,
+            dateOfAvailabilityText = entity.dateOfAvailability?.let { date -> fmtDate.format(date) },
+            advanceRent = entity.advanceRent,
+            leaseTermDuration = entity.leaseTermDuration,
         )
     }
 

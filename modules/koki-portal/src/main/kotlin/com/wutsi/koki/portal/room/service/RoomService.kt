@@ -18,6 +18,7 @@ import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.room.dto.AddAmenityRequest
 import com.wutsi.koki.room.dto.CreateRoomRequest
+import com.wutsi.koki.room.dto.LeaseTerm
 import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
@@ -26,6 +27,7 @@ import com.wutsi.koki.room.dto.SetHeroImageRequest
 import com.wutsi.koki.room.dto.UpdateRoomRequest
 import com.wutsi.koki.sdk.KokiRooms
 import org.springframework.stereotype.Service
+import java.text.SimpleDateFormat
 
 @Service
 class RoomService(
@@ -186,12 +188,23 @@ class RoomService(
                 checkinTime = form.checkinTime?.ifEmpty { null },
                 neighborhoodId = form.neighborhoodId,
                 area = form.area ?: 0,
-                leaseTerm = form.leaseTerm,
                 leaseType = form.leaseType,
                 categoryId = form.categoryId,
                 furnishedType = form.furnishedType,
                 latitude = form.latitude,
                 longitude = form.longitude,
+                visitFees = if (form.leaseType == LeaseType.LONG_TERM) form.visitFees else null,
+                leaseTermDuration = if (form.leaseType == LeaseType.LONG_TERM && form.leaseTermDuration != null && form.leaseTermDuration > 0) form.leaseTermDuration else null,
+                leaseTerm = if (form.leaseType == LeaseType.LONG_TERM) form.leaseTerm else LeaseTerm.UNKNOWN,
+                advanceRent = if (form.leaseType == LeaseType.LONG_TERM) form.advanceRent else null,
+                yearOfConstruction = if (form.yearOfConstruction != null && form.yearOfConstruction > 0) form.yearOfConstruction else null,
+                dateOfAvailability = if (form.leaseType == LeaseType.LONG_TERM) {
+                    form.dateOfAvailability
+                        ?.ifEmpty { null }
+                        ?.let { date -> SimpleDateFormat("yyyy-MM-dd").parse(date) }
+                } else {
+                    null
+                },
             )
         ).roomId
     }
@@ -217,10 +230,21 @@ class RoomService(
                 checkinTime = form.checkinTime?.ifEmpty { null },
                 neighborhoodId = form.neighborhoodId,
                 area = form.area ?: 0,
-                leaseTerm = form.leaseTerm,
                 leaseType = form.leaseType,
                 categoryId = form.categoryId,
                 furnishedType = form.furnishedType,
+                visitFees = if (form.leaseType == LeaseType.LONG_TERM) form.visitFees else null,
+                leaseTermDuration = if (form.leaseType == LeaseType.LONG_TERM && form.leaseTermDuration != null && form.leaseTermDuration > 0) form.leaseTermDuration else null,
+                leaseTerm = if (form.leaseType == LeaseType.LONG_TERM) form.leaseTerm else LeaseTerm.UNKNOWN,
+                advanceRent = if (form.leaseType == LeaseType.LONG_TERM) form.advanceRent else null,
+                yearOfConstruction = if (form.yearOfConstruction != null && form.yearOfConstruction > 0) form.yearOfConstruction else null,
+                dateOfAvailability = if (form.leaseType == LeaseType.LONG_TERM) {
+                    form.dateOfAvailability
+                        ?.ifEmpty { null }
+                        ?.let { date -> SimpleDateFormat("yyyy-MM-dd").parse(date) }
+                } else {
+                    null
+                },
             )
         )
     }

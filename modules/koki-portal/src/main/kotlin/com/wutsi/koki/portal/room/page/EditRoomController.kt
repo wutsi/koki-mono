@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.client.HttpClientErrorException
+import java.text.SimpleDateFormat
 import java.util.Currency
 
 @Controller
@@ -55,6 +56,11 @@ class EditRoomController(
             title = room.title,
             description = room.description,
             summary = room.summary,
+            visitFees = room.visitFees?.value,
+            advanceRent = room.advanceRent,
+            yearOfConstruction = room.yearOfConstruction,
+            leaseTermDuration = room.leaseTermDuration,
+            dateOfAvailability = room.dateOfAvailability?.let { date -> SimpleDateFormat("yyyy-MM-dd").format(date) },
         )
         return edit(room, form, model)
     }
@@ -89,6 +95,8 @@ class EditRoomController(
         )
 
         loadCheckinCheckoutTime(model)
+        loadLeaseTermDurations(model)
+        loadYearOfConstructions(model)
         loadCountries(model)
         model.addAttribute("types", RoomType.entries)
         model.addAttribute("leaseTerms", LeaseTerm.entries)

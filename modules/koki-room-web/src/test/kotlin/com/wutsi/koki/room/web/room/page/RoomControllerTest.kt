@@ -104,7 +104,6 @@ class RoomControllerTest : AbstractPageControllerTest() {
     fun `show images`() {
         navigateTo("/rooms/${room.id}")
 
-        scroll(.25)
         click("#btn-images")
 
         assertElementVisible("#room-images-modal")

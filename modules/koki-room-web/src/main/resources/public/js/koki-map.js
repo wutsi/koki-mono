@@ -45,9 +45,11 @@ class KokiMapWidget {
                     map.addLayer(layer);
 
                     if (elt.getAttribute("data-disable-touch-zoom") === "true") {
+                        console.log('data-disable-touch-zoom');
                         map.touchZoom.disable();
                     }
                     if (elt.getAttribute("data-disable-scroll-wheel-zoom") === "true") {
+                        console.log('data-disable-scroll-wheel-zoom');
                         map.scrollWheelZoom.disable();
                     }
 

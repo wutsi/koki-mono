@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service
 class AmenityMapper : TenantAwareMapper() {
     companion object {
         val TOP_AMENITIES_ICONS = mapOf(
+            1001 to "fa-solid fa-droplet", // Runnin Water
             1003L to "fa-solid fa-snowflake", // Air Conditioning
             1005L to "fa-solid fa-wifi", // Wifi
             1030L to "fa-solid fa-lock", // Locker

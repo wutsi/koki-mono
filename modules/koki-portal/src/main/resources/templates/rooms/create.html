@@ -136,6 +136,10 @@
                                 <input step="0" th:field="*{pricePerMonth}" type="number"/>
                             </div>
                             <div class="section-item">
+                                <label class="title">Visit fees</label>
+                                <input step="0" th:field="*{visitFees}" type="number"/>
+                            </div>
+                            <div class="section-item">
                                 <label class="title">Currency: <span class="required">*</span></label>
                                 <select th:field="*{currency}">
                                     <option th:each="currency : ${currencies}"
@@ -167,6 +171,57 @@
                                             th:value="${time}"
                                     >
                                         00:00
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Lease Terms</label>
+                                <div class="flex">
+                                    <select style="width: auto" th:field="*{leaseTermDuration}">
+                                        <option value="-1"></option>
+                                        <option th:each="duration : ${leaseTermDurations}"
+                                                th:text="${duration}"
+                                                th:value="${duration}"
+                                        >
+                                            00
+                                        </option>
+                                    </select>
+                                    <select style="width: auto" th:field="*{leaseTerm}">
+                                        <option value=""></option>
+                                        <option th:each="term : ${leaseTerms}"
+                                                th:if="${term.name != 'UNKNOWN'}"
+                                                th:text="#{'lease-term.' + ${term}}"
+                                                th:value="${term}"
+                                        >
+                                            00
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Advance Rent (months)</label>
+                                <select th:field="*{advanceRent}">
+                                    <option value="-1">None</option>
+                                    <option th:each="duration : ${leaseTermDurations}"
+                                            th:text="${duration == 1} ? '1 month' : ${duration} + ' months'"
+                                            th:value="${duration}"
+                                    >
+                                        00
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Date of Availability</label>
+                                <input th:field="*{dateOfAvailability}" type="date"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Year of Construction</label>
+                                <select th:field="*{yearOfConstruction}">
+                                    <option value="-1"></option>
+                                    <option th:each="year : ${years}"
+                                            th:text="${year}"
+                                            th:value="${year}"
+                                    >
                                     </option>
                                 </select>
                             </div>

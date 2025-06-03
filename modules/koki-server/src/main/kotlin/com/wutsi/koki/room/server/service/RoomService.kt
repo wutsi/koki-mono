@@ -180,6 +180,11 @@ class RoomService(
                 checkinTime = request.checkinTime,
                 checkoutTime = request.checkoutTime,
                 leaseTerm = request.leaseTerm,
+                leaseTermDuration = request.leaseTermDuration,
+                visitFees = request.visitFees,
+                advanceRent = request.advanceRent,
+                yearOfConstruction = request.yearOfConstruction,
+                dateOfAvailability = request.dateOfAvailability,
                 furnishedType = request.furnishedType,
                 categoryId = request.categoryId,
                 leaseType = request.leaseType,
@@ -223,6 +228,11 @@ class RoomService(
         room.checkinTime = request.checkinTime
         room.checkoutTime = request.checkoutTime
         room.leaseTerm = request.leaseTerm
+        room.leaseTermDuration = request.leaseTermDuration
+        room.visitFees = request.visitFees
+        room.advanceRent = request.advanceRent
+        room.yearOfConstruction = request.yearOfConstruction
+        room.dateOfAvailability = request.dateOfAvailability
         room.furnishedType = request.furnishedType
         room.categoryId = request.categoryId
         room.leaseType = request.leaseType

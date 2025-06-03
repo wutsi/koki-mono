@@ -209,6 +209,7 @@
             m<sup>2</sup>
         </td>
     </tr>
+
     <tr>
         <td><b>Price</b></td>
         <td>
@@ -220,6 +221,11 @@
             </div>
         </td>
     </tr>
+    <tr th:if="${room.visitFees}">
+        <td><b>Visit Fees</b></td>
+        <td th:text="${room.visitFees}">$$</td>
+    </tr>
+
     <tr th:if="${room.checkinTime}">
         <td><b>Checkin Time</b></td>
         <td th:text="${room.checkinTime}">00:00</td>
@@ -228,6 +234,35 @@
         <td><b>Checkout Time</b></td>
         <td th:text="${room.checkoutTime}">00:00</td>
     </tr>
+    <tr th:if="${room.leaseTermDuration} OR ${room.leaseTerm.name() == 'NEGOTIABLE'}">
+        <td><b>Lease Terms</b></td>
+        <td>
+            <div th:if="${room.leaseTerm.name() == 'NEGOTIABLE'}">
+                Negotiable
+            </div>
+            <div th:if="${room.leaseTerm.name() != 'NEGOCIABLE'}">
+                <span th:text="${room.leaseTermDuration}">00</span>
+                <span th:if="${room.leaseTerm.name() == 'YEARLY'}">year(s)</span>
+                <span th:if="${room.leaseTerm.name() == 'MONTHLY'}">month(s)</span>
+                <span th:if="${room.leaseTerm.name() == 'WEEKLY'}">week(s)</span>
+            </div>
+        </td>
+    </tr>
+    <tr th:if="${room.advanceRent}">
+        <td><b>Advance Rent</b></td>
+        <td>
+            <span th:text="${room.advanceRent}">00</span> month(s)
+        </td>
+    </tr>
+    <tr th:if="${room.yearOfConstruction}">
+        <td><b>Year of Construction</b></td>
+        <td th:text="${room.yearOfConstruction}">YYY</td>
+    </tr>
+    <tr th:if="${room.dateOfAvailability}">
+        <td><b>Date of Availability</b></td>
+        <td th:text="${room.dateOfAvailabilityText}">YYY</td>
+    </tr>
+
     <tr th:if="${room.address}">
         <td><b>Address</b></td>
         <td th:utext="${room.address.toHtml()}">ADDRESS</td>

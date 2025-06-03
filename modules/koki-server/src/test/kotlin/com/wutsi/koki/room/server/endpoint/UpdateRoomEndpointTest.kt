@@ -9,6 +9,9 @@ import com.wutsi.koki.room.server.dao.RoomRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.TimeZone
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -19,6 +22,9 @@ class UpdateRoomEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Test
     fun update() {
+        val fmt = SimpleDateFormat("yyyy-MM-dd")
+        fmt.timeZone = TimeZone.getTimeZone("UDT")
+
         val request = UpdateRoomRequest(
             title = "Beautiful Cottage",
             description = "This is a nice cottage located in Yaounde",
@@ -37,10 +43,14 @@ class UpdateRoomEndpointTest : AuthorizationAwareEndpointTest() {
             currency = "CAD",
             checkoutTime = "15:00",
             checkinTime = "12:00",
-            leaseTerm = LeaseTerm.YEARLY,
+            leaseTerm = LeaseTerm.WEEKLY,
             leaseType = LeaseType.LONG_TERM,
             categoryId = 777L,
             furnishedType = FurnishedType.FULLY_FURNISHED,
+            leaseTermDuration = 12,
+            visitFees = 5.0,
+            yearOfConstruction = 2000,
+            dateOfAvailability = Date(),
         )
         val response = rest.postForEntity("/v1/rooms/111", request, Any::class.java)
 
@@ -73,5 +83,9 @@ class UpdateRoomEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.leaseType, room.leaseType)
         assertEquals(request.furnishedType, room.furnishedType)
         assertEquals(request.categoryId, room.categoryId)
+        assertEquals(request.leaseTermDuration, room.leaseTermDuration)
+        assertEquals(request.visitFees, room.visitFees)
+        assertEquals(request.yearOfConstruction, room.yearOfConstruction)
+        assertEquals(fmt.format(request.dateOfAvailability), fmt.format(room.dateOfAvailability?.time))
     }
 }

@@ -47,13 +47,20 @@ data class RoomModel(
     val amenities: List<AmenityModel> = emptyList(),
     val checkinTime: String? = null,
     val checkoutTime: String? = null,
-    var leaseTerm: LeaseTerm = LeaseTerm.UNKNOWN,
     val furnishedType: FurnishedType = FurnishedType.UNKNOWN,
     val leaseType: LeaseType = LeaseType.UNKNOWN,
     val category: CategoryModel? = null,
     val area: Int? = null,
     val listingUrl: String? = null,
-) {
+    val leaseTerm: LeaseTerm = LeaseTerm.UNKNOWN,
+    val leaseTermDuration: Int? = null,
+    val advanceRent: Int? = null,
+    val visitFees: MoneyModel? = null,
+    val yearOfConstruction: Int? = null,
+    val dateOfAvailability: Date? = null,
+    val dateOfAvailabilityText: String? = null,
+
+    ) {
     fun hasAmenity(amenityId: Long): Boolean {
         return amenities.find { amenity -> amenity.id == amenityId } != null
     }

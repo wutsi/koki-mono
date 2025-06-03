@@ -9,6 +9,8 @@ import com.wutsi.koki.room.dto.Room
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomSummary
 import com.wutsi.koki.room.dto.RoomType
+import org.apache.commons.lang3.time.DateUtils
+import java.util.Date
 
 object RoomFixtures {
     val rooms = listOf(
@@ -163,12 +165,17 @@ object RoomFixtures {
         checkoutTime = "15:00",
         latitude = 11.43094309,
         longitude = 3.430954,
-        leaseTerm = LeaseTerm.YEARLY,
+        leaseTerm = LeaseTerm.MONTHLY,
         leaseType = LeaseType.SHORT_TERM,
         furnishedType = FurnishedType.FULLY_FURNISHED,
         pricePerMonth = Money(1500.0, "CAD"),
         area = 750,
         categoryId = RefDataFixtures.categories[0].id,
         listingUrl = "/rooms/1116/windmill-in-ponta-delgada",
+        yearOfConstruction = 2010,
+        advanceRent = 6,
+        leaseTermDuration = 12,
+        visitFees = Money(5.0, "CAD"),
+        dateOfAvailability = DateUtils.addMonths(Date(), 6),
     )
 }
