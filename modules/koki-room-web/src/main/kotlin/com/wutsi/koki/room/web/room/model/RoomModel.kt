@@ -1,6 +1,7 @@
 package com.wutsi.koki.room.web.room.model
 
 import com.wutsi.koki.room.dto.FurnishedType
+import com.wutsi.koki.room.dto.LeaseTerm
 import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
@@ -44,6 +45,13 @@ data class RoomModel(
     val url: String = "",
     val publishedAt: Date? = null,
     val publishedAtMoment: String? = null,
+    val leaseTerm: LeaseTerm = LeaseTerm.UNKNOWN,
+    val leaseTermDuration: Int? = null,
+    val advanceRent: Int? = null,
+    val visitFees: MoneyModel? = null,
+    val yearOfConstruction: Int? = null,
+    val dateOfAvailability: Date? = null,
+    val dateOfAvailabilityText: String? = null,
 ) {
     fun hasAmenity(amenityId: Long): Boolean {
         return amenities.find { amenity -> amenity.id == amenityId } != null

@@ -56,8 +56,14 @@ class RoomController(
 
         val topAmenities = room.amenities.filter { amenity ->
             AmenityMapper.TOP_AMENITIES_ICONS.keys.contains(amenity.id)
+        }.toMutableList()
+        if (topAmenities.size < 10) {
+            val amenitiesByCategories = room.amenities.groupBy { amenity -> amenity.categoryId }
+            amenitiesByCategories.keys.forEach { categoryId ->
+                topAmenities.add(amenitiesByCategories[categoryId]!!.first())
+            }
         }
-        model.addAttribute("topAmenities", topAmenities)
+        model.addAttribute("topAmenities", topAmenities.distinctBy { amenity -> amenity.id })
 
         /* Images */
         val heroImages = room.images
