@@ -65,12 +65,23 @@
             </li>
             <li>
                 <span>&#x2022;</span>
-                <a th:href="${room.address.city.url}" th:if="${room.neighborhood}" th:text="${room.address.city.name}">CITY</a>
+                <a class="lnk-city"
+                   th:href="${room.address.city.url}"
+                   th:if="${room.neighborhood}"
+                   th:text="${room.address.city.name}"
+                >
+                    CITY
+                </a>
                 <span th:if="!${room.neighborhood}" th:text="${room.address.city.name}">CITY</span>
             </li>
             <li th:if="${room.neighborhood}">
                 <span>&#x2022;</span>
-                <a th:href="${room.neighborhood.url}" th:text="${room.neighborhood.name}">NEIGHBORHOOD</a>
+                <a class="lnk-neighborhood"
+                   th:href="${room.neighborhood.url}"
+                   th:text="${room.neighborhood.name}"
+                >
+                    NEIGHBORHOOD
+                </a>
             </li>
         </ul>
 
@@ -183,7 +194,9 @@
                     <a class="lnk-city"
                        th:href="${room.address.city.url}"
                        th:text="${room.address.city.name}"
-                    >CITY</a>
+                    >
+                        CITY
+                    </a>
                 </li>
                 <li>
                     <span>&#x2022;</span>
@@ -191,7 +204,9 @@
                        th:href="${room.neighborhood.url}"
                        th:if="${room.neighborhood}"
                        th:text="${room.neighborhood.name}"
-                    >NEIGHBORHOOD</a>
+                    >
+                        NEIGHBORHOOD
+                    </a>
                 </li>
             </ul>
             <div class="margin-top"
