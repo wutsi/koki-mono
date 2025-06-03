@@ -174,7 +174,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
     @Test
     fun map() {
         navigateTo("/rooms/${room.id}")
-        scrollToBottom()
+        scrollToMiddle()
         click(".btn-map")
 
         assertCurrentPageIs(PageName.ROOM_MAP)
