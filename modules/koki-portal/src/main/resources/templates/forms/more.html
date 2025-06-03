@@ -1,5 +1,0 @@
-<tr class="form" th:each="form : ${forms}">
-    <div th:replace="~{__components/form :: columns(${form})}"></div>
-</tr>
-<tr th:replace="~{__components/form :: load-more(${moreUrl})}"></tr>
-

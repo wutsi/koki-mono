@@ -15,7 +15,10 @@ enum class ObjectType {
 
     INVOICE,
     PAYMENT,
+
+    @Deprecated("Module retired")
     FORM,
+
     ROOM,
     ROOM_UNIT,
     MESSAGE,
