@@ -158,7 +158,7 @@ class MessageEmailSenderTest {
                 <html>
                   <head></head>
                   <body>
-                    <table border="0" cellpadding="8" cellspacing="0" class="border" style="margin: 0 auto; max-width: 80%; ;border: 1px solid lightgray;">
+                    <table border="0" cellpadding="2" cellspacing="0" class="border" style="margin: 0 auto; max-width: 96%; ;border: 1px solid lightgray;">
                       <tbody>
                         <tr>
                           <td valign="top" width="100%">

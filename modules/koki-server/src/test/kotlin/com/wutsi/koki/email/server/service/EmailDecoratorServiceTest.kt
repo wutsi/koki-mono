@@ -90,32 +90,34 @@ class EmailDecoratorServiceTest {
         val result = xdecorator.decorate("Hello world", 1L)
 
         assertEquals(
-            result,
             """
                 <html>
                 <head>
                     <meta charset="utf-8">
                 </head>
-                <body style="background: #f4f4f4">
-                <table role="presentation"
-                       style="max-width: 800px; width: 96%; border-spacing: 0; font-size: 18px; margin: 16px auto 0 auto; background: #ffffff">
-                    <tr>
-                        <td style="text-align: right; padding: 32px">
-                            <a href="https://www.test.com" style="text-decoration: none;">
-                                <img height="64" src="https://prod-wutsi.s3.amazonaws.com/static/wutsi-blog-web/assets/wutsi/img/logo/logo_512x512.png" style="height: 64px; max-width: 64px"/>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 16px">
-                            Hello world
-                        </td>
-                    </tr>
-                </table>
+                <body>
+                <div style="background: #f4f4f4; width:100%">
+                    <table role="presentation"
+                           style="max-width: 800px; width: 96%; border-spacing: 0; font-size: 18px; margin: 16px auto 0 auto; background: #ffffff">
+                        <tr>
+                            <td style="text-align: right; padding: 32px">
+                                <a href="https://www.test.com" style="text-decoration: none;">
+                                    <img height="64" src="https://prod-wutsi.s3.amazonaws.com/static/wutsi-blog-web/assets/wutsi/img/logo/logo_512x512.png" style="height: 64px; max-width: 64px"/>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 16px">
+                                Hello world
+                            </td>
+                        </tr>
+                    </table>
+                </div>
                 </body>
                 </html>
 
-            """.trimIndent()
+            """.trimIndent(),
+            result,
         )
     }
 }
