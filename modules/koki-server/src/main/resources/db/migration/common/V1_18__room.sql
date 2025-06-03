@@ -29,6 +29,11 @@ CREATE TABLE T_ROOM(
   lease_type                INT NOT NULL DEFAULT 0,
   lease_term                INT NOT NULL DEFAULT 0,
   furnished_type            INT NOT NULL DEFAULT 0,
+  lease_term_duration       INT,
+  advance_rent              INT,
+  visit_fees                DECIMAL(10, 2),
+  year_of_construction      INT,
+  date_of_availability      DATE,
 
   street                    TEXT,
   postal_code               VARCHAR(30),

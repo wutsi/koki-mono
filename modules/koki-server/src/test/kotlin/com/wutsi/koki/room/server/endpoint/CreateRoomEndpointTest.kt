@@ -12,6 +12,9 @@ import com.wutsi.koki.room.server.dao.RoomRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.TimeZone
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -22,6 +25,9 @@ class CreateRoomEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Test
     fun create() {
+        val fmt = SimpleDateFormat("yyyy-MM-dd")
+        fmt.timeZone = TimeZone.getTimeZone("UDT")
+
         val request = CreateRoomRequest(
             type = RoomType.APARTMENT,
             accountId = 333L,
@@ -39,12 +45,16 @@ class CreateRoomEndpointTest : AuthorizationAwareEndpointTest() {
             currency = "CAD",
             checkoutTime = "15:00",
             checkinTime = "12:00",
-            leaseTerm = LeaseTerm.YEARLY,
+            leaseTerm = LeaseTerm.MONTHLY,
             leaseType = LeaseType.LONG_TERM,
             categoryId = 777L,
             furnishedType = FurnishedType.FULLY_FURNISHED,
             latitude = 3.143094,
-            longitude = 11.54090459
+            longitude = 11.54090459,
+            leaseTermDuration = 12,
+            visitFees = 5.0,
+            yearOfConstruction = 2000,
+            dateOfAvailability = Date(),
         )
         val response = rest.postForEntity("/v1/rooms", request, CreateRoomResponse::class.java)
 
@@ -83,5 +93,9 @@ class CreateRoomEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.categoryId, room.categoryId)
         assertEquals(request.latitude, room.latitude)
         assertEquals(request.longitude, room.longitude)
+        assertEquals(request.leaseTermDuration, room.leaseTermDuration)
+        assertEquals(request.visitFees, room.visitFees)
+        assertEquals(request.yearOfConstruction, room.yearOfConstruction)
+        assertEquals(fmt.format(request.dateOfAvailability), fmt.format(room.dateOfAvailability?.time))
     }
 }

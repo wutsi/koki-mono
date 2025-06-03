@@ -176,6 +176,11 @@ object RoomFixtures {
         area = 750,
         categoryId = RefDataFixtures.categories[0].id,
         listingUrl = "/rooms/1116/windmill-in-ponta-delgada",
+        yearOfConstruction = 2010,
+        advanceRent = 6,
+        leaseTermDuration = 12,
+        visitFees = Money(5.0, "CAD"),
+        dateOfAvailability = DateUtils.addMonths(Date(), 6),
     )
 
     val roomUnits = listOf(

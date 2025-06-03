@@ -25,11 +25,17 @@ data class RoomForm(
     val postalCode: String? = null,
     val checkinTime: String? = null,
     val checkoutTime: String? = null,
-    var leaseTerm: LeaseTerm = LeaseTerm.UNKNOWN,
     val furnishedType: FurnishedType = FurnishedType.UNKNOWN,
     val leaseType: LeaseType = LeaseType.UNKNOWN,
     val categoryId: Long? = null,
     val area: Int? = null,
     val latitude: Double? = null,
     val longitude: Double? = null,
+    var leaseTerm: LeaseTerm = LeaseTerm.UNKNOWN,
+    val leaseTermDuration: Int? = null,
+    val advanceRent: Int? = null,
+    val visitFees: Double? = null,
+    val yearOfConstruction: Int? = null,
+    val dateOfAvailability: String? = null,
+
 )

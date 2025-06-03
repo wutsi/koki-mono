@@ -46,6 +46,11 @@ class RoomMapper {
             furnishedType = entity.furnishedType,
             categoryId = entity.categoryId,
             listingUrl = toListingUrl(entity),
+            visitFees = toMoney(entity.visitFees, entity.currency),
+            yearOfConstruction = entity.yearOfConstruction,
+            dateOfAvailability = entity.dateOfAvailability,
+            advanceRent = entity.advanceRent,
+            leaseTermDuration = entity.leaseTermDuration,
         )
     }
 

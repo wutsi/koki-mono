@@ -68,9 +68,14 @@ data class RoomEntity(
     var country: String? = null,
     var latitude: Double? = null,
     var longitude: Double? = null,
-    var leaseTerm: LeaseTerm = LeaseTerm.UNKNOWN,
     var furnishedType: FurnishedType = FurnishedType.UNKNOWN,
     var leaseType: LeaseType = LeaseType.UNKNOWN,
+    var leaseTerm: LeaseTerm = LeaseTerm.UNKNOWN,
+    var leaseTermDuration: Int? = null,
+    var advanceRent: Int? = null,
+    var visitFees: Double? = null,
+    var yearOfConstruction: Int? = null,
+    var dateOfAvailability: Date? = null,
 
     @Column("category_fk")
     var categoryId: Long? = null,

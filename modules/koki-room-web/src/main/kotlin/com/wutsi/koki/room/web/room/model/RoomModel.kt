@@ -1,7 +1,6 @@
 package com.wutsi.koki.room.web.room.model
 
 import com.wutsi.koki.room.dto.FurnishedType
-import com.wutsi.koki.room.dto.LeaseTerm
 import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
@@ -38,9 +37,8 @@ data class RoomModel(
     val images: List<FileModel> = emptyList(),
     val checkinTime: String? = null,
     val checkoutTime: String? = null,
-    var leaseTerm: LeaseTerm = LeaseTerm.UNKNOWN,
-    val furnishedType: FurnishedType = FurnishedType.UNKNOWN,
     val leaseType: LeaseType = LeaseType.UNKNOWN,
+    val furnishedType: FurnishedType = FurnishedType.UNKNOWN,
     val category: CategoryModel? = null,
     val area: Int? = null,
     val url: String = "",

@@ -81,12 +81,19 @@ class KokiEditor {
 
     onLeaseTypeChanged() {
         const leaseType = document.getElementById('leaseType').value;
+        const longTerm = leaseType === 'LONG_TERM';
+        const shortTerm = leaseType === 'SHORT_TERM'
 
-        document.getElementById('pricePerNight').disabled = (leaseType !== 'SHORT_TERM');
-        document.getElementById('checkinTime').disabled = (leaseType !== 'SHORT_TERM');
-        document.getElementById('checkoutTime').disabled = (leaseType !== 'SHORT_TERM');
+        document.getElementById('pricePerNight').disabled = longTerm;
+        document.getElementById('checkinTime').disabled = longTerm;
+        document.getElementById('checkoutTime').disabled = longTerm;
 
-        document.getElementById('pricePerMonth').disabled = (leaseType !== 'LONG_TERM');
+        document.getElementById('pricePerMonth').disabled = shortTerm;
+        document.getElementById('visitFees').disabled = shortTerm;
+        document.getElementById('leaseTermDuration').disabled = shortTerm;
+        document.getElementById('leaseTerm').disabled = shortTerm;
+        document.getElementById('advanceRent').disabled = shortTerm;
+        document.getElementById('dateOfAvailability').disabled = shortTerm;
     }
 }
 

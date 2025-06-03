@@ -25,12 +25,13 @@ import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomType
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import java.text.SimpleDateFormat
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class CreateRoomControllerTest : AbstractPageControllerTest() {
     @Test
-    fun create() {
+    fun `create short term`() {
         navigateTo("/rooms/create")
         assertCurrentPageIs(PageName.ROOM_CREATE)
 
@@ -46,9 +47,15 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
         input("#area", "1500")
         input("#pricePerNight", "75")
         assertElementHasAttribute("#pricePerMonth", "disabled")
+        assertElementHasAttribute("#visitFees", "disabled")
         select("#checkinTime", 14)
-        scrollToBottom()
+        scroll(.25)
         select("#checkoutTime", 10)
+        assertElementHasAttribute("#leaseTerm", "disabled")
+        assertElementHasAttribute("#leaseTermDuration", "disabled")
+        assertElementHasAttribute("#dateOfAvailability", "disabled")
+        select("#yearOfConstruction", 10)
+        scrollToBottom()
         select("#country", 3)
         select2("#cityId", "${locations[2].name}, ${locations[0].name}")
         select2("#neighborhoodId", "${neighborhoods[0].name}, ${cities[0].name}")
@@ -71,6 +78,7 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
         assertEquals(7, request.firstValue.maxGuests)
         assertEquals(75.0, request.firstValue.pricePerNight)
         assertEquals(null, request.firstValue.pricePerMonth)
+        assertEquals(null, request.firstValue.visitFees)
         assertEquals(tenants[0].currency, request.firstValue.currency)
         assertEquals(locations[2].id, request.firstValue.cityId)
         assertEquals(neighborhoods[0].id, request.firstValue.neighborhoodId)
@@ -80,6 +88,74 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
         assertEquals("09:00", request.firstValue.checkoutTime)
         assertEquals(null, request.firstValue.latitude)
         assertEquals(null, request.firstValue.longitude)
+        assertEquals(null, request.firstValue.leaseTermDuration)
+        assertEquals(null, request.firstValue.dateOfAvailability)
+        assertEquals(1909, request.firstValue.yearOfConstruction)
+
+        assertCurrentPageIs(PageName.ROOM)
+    }
+
+    @Test
+    fun `create long term`() {
+        navigateTo("/rooms/create")
+        assertCurrentPageIs(PageName.ROOM_CREATE)
+
+        navigateTo("/rooms/create")
+        select2("#accountId", accounts[0].name)
+        select("#type", 2)
+        select("#leaseType", 2)
+        select("#furnishedType", 2)
+        select("#numberOfRooms", 3)
+        select("#numberOfBathrooms", 4)
+        select("#numberOfBeds", 5)
+        scroll(.25)
+        select("#maxGuests", 6)
+        input("#area", "1500")
+        assertElementHasAttribute("#pricePerNight", "disabled")
+        input("#pricePerMonth", "500")
+        input("#visitFees", "5")
+        assertElementHasAttribute("#checkinTime", "disabled")
+        assertElementHasAttribute("#checkinTime", "disabled")
+        scroll(.25)
+        select("#leaseTerm", 1)
+        select("#leaseTermDuration", 11)
+        select("#yearOfConstruction", 10)
+        scrollToBottom()
+        select("#country", 3)
+        select2("#cityId", "${locations[2].name}, ${locations[0].name}")
+        select2("#neighborhoodId", "${neighborhoods[0].name}, ${cities[0].name}")
+        input("#street", "340 Nicolet")
+        input("#postalCode", "HzH zHz")
+        click("button[type=submit]")
+
+        val request = argumentCaptor<CreateRoomRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/rooms"), request.capture(), eq(CreateRoomResponse::class.java)
+        )
+        assertEquals(accounts[0].id, request.firstValue.accountId)
+        assertEquals(RoomType.APARTMENT, request.firstValue.type)
+        assertEquals(LeaseType.LONG_TERM, request.firstValue.leaseType)
+        assertEquals(LeaseTerm.WEEKLY, request.firstValue.leaseTerm)
+        assertEquals(FurnishedType.SEMI_FURNISHED, request.firstValue.furnishedType)
+        assertEquals(4, request.firstValue.numberOfRooms)
+        assertEquals(5, request.firstValue.numberOfBathrooms)
+        assertEquals(6, request.firstValue.numberOfBeds)
+        assertEquals(7, request.firstValue.maxGuests)
+        assertEquals(null, request.firstValue.pricePerNight)
+        assertEquals(500.0, request.firstValue.pricePerMonth)
+        assertEquals(5.0, request.firstValue.visitFees)
+        assertEquals(tenants[0].currency, request.firstValue.currency)
+        assertEquals(locations[2].id, request.firstValue.cityId)
+        assertEquals(neighborhoods[0].id, request.firstValue.neighborhoodId)
+        assertEquals("340 Nicolet", request.firstValue.street)
+        assertEquals("HzH zHz", request.firstValue.postalCode)
+        assertEquals(null, request.firstValue.checkinTime)
+        assertEquals(null, request.firstValue.checkoutTime)
+        assertEquals(null, request.firstValue.latitude)
+        assertEquals(null, request.firstValue.longitude)
+        assertEquals(11, request.firstValue.leaseTermDuration)
+        assertEquals(null, request.firstValue.dateOfAvailability)
+        assertEquals(1909, request.firstValue.yearOfConstruction)
 
         assertCurrentPageIs(PageName.ROOM)
     }
@@ -102,10 +178,12 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
         scroll(.25)
         select("#maxGuests", 6)
         input("#area", "1500")
-        assertElementHasAttribute("#pricePerNight", "disabled")
         input("#pricePerMonth", "500")
-        assertElementHasAttribute("#checkinTime", "disabled")
-        assertElementHasAttribute("#checkinTime", "disabled")
+        input("#visitFees", "5")
+        scroll(.25)
+        select("#leaseTerm", 1)
+        select("#leaseTermDuration", 2)
+        select("#yearOfConstruction", 10)
         scrollToBottom()
         select("#country", 3)
         select2("#cityId", "${locations[2].name}, ${locations[0].name}")
@@ -132,6 +210,11 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
         select("#maxGuests", 6)
         input("#area", "1500")
         input("#pricePerMonth", "500")
+        input("#visitFees", "5")
+        scroll(.25)
+        select("#leaseTerm", 1)
+        select("#leaseTermDuration", 2)
+        select("#yearOfConstruction", 10)
         scrollToBottom()
         select("#country", 3)
         select2("#cityId", "${locations[2].name}, ${locations[0].name}")
@@ -192,6 +275,16 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
         assertElementAttribute("#postalCode", "value", room.address?.postalCode)
         assertElementAttribute("#latitude", "value", room.latitude?.toString())
         assertElementAttribute("#longitude", "value", room.longitude?.toString())
+        assertElementAttribute("#visitFees", "value", room.visitFees?.amount?.toString())
+        assertSelectValue("#leaseTerm", room.leaseTerm.toString())
+        assertSelectValue("#leaseTermDuration", room.leaseTermDuration.toString())
+        assertSelectValue("#advanceRent", room.advanceRent.toString())
+        assertSelectValue("#yearOfConstruction", room.yearOfConstruction.toString())
+        assertElementAttribute(
+            "#dateOfAvailability",
+            "value",
+            SimpleDateFormat("yyyy-MM-dd").format(room.dateOfAvailability)
+        )
 
         scrollToBottom()
         click("button[type=submit]")

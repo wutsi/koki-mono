@@ -1,9 +1,11 @@
 package com.wutsi.koki.portal.room.page
 
 import com.wutsi.koki.portal.module.page.AbstractModulePageController
+import com.wutsi.koki.room.dto.LeaseTerm
 import org.apache.commons.lang3.time.DateUtils
 import org.springframework.ui.Model
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.Calendar
 import java.util.Date
 
@@ -31,5 +33,15 @@ abstract class AbstractRoomController : AbstractModulePageController() {
             checkInOutTimes.add(fmt.format(cur))
         }
         model.addAttribute("checkInOutTimes", checkInOutTimes)
+    }
+
+    protected fun loadLeaseTermDurations(model: Model) {
+        model.addAttribute("leaseTerms", LeaseTerm.entries)
+        model.addAttribute("leaseTermDurations", (1..60).toList())
+    }
+
+    protected fun loadYearOfConstructions(model: Model) {
+        val year = LocalDate.now().year
+        model.addAttribute("years", (1900..year).toList())
     }
 }

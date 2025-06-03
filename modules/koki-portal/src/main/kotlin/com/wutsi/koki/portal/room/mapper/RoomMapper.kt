@@ -77,6 +77,7 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
         category: CategoryModel?,
     ): RoomModel {
         val fmt = createDateTimeFormat()
+        val fmtDate = createDateFormat()
         return RoomModel(
             id = entity.id,
             account = account,
@@ -133,6 +134,17 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             furnishedType = entity.furnishedType,
             area = entity.area,
             listingUrl = entity.listingUrl,
+            visitFees = entity.visitFees?.let { price ->
+                moneyMapper.toMoneyModel(
+                    price.amount,
+                    price.currency
+                )
+            },
+            yearOfConstruction = entity.yearOfConstruction,
+            dateOfAvailability = entity.dateOfAvailability,
+            dateOfAvailabilityText = entity.dateOfAvailability?.let { date -> fmtDate.format(date) },
+            advanceRent = entity.advanceRent,
+            leaseTermDuration = entity.leaseTermDuration,
         )
     }
 }
