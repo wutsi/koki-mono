@@ -12,7 +12,6 @@ import com.wutsi.koki.ContactFixtures
 import com.wutsi.koki.EmailFixtures
 import com.wutsi.koki.EmployeeFixtures
 import com.wutsi.koki.FileFixtures
-import com.wutsi.koki.FormFixtures
 import com.wutsi.koki.InvoiceFixtures
 import com.wutsi.koki.MessageFixtures
 import com.wutsi.koki.ModuleFixtures
@@ -49,10 +48,6 @@ import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.file.dto.SearchFileResponse
-import com.wutsi.koki.form.dto.CreateFormRequest
-import com.wutsi.koki.form.dto.CreateFormResponse
-import com.wutsi.koki.form.dto.GetFormResponse
-import com.wutsi.koki.form.dto.SearchFormResponse
 import com.wutsi.koki.invoice.dto.CreateInvoiceRequest
 import com.wutsi.koki.invoice.dto.CreateInvoiceResponse
 import com.wutsi.koki.invoice.dto.GetInvoiceResponse
@@ -249,7 +244,6 @@ abstract class AbstractPageControllerTest {
         setupContactModule()
         setupEmployeeModule()
         setupProductModule()
-        setupFormModule()
         setupInvoiceModule()
         setupPaymentModule()
         setupRoomModule()
@@ -887,43 +881,6 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any<CreateEmployeeRequest>(),
                 eq(CreateEmployeeResponse::class.java)
-            )
-    }
-
-    private fun setupFormModule() {
-        // Form
-        doReturn(
-            ResponseEntity(
-                SearchFormResponse(FormFixtures.forms),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchFormResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                GetFormResponse(FormFixtures.form),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetFormResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                CreateFormResponse(504954L),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .postForEntity(
-                any<String>(),
-                any<CreateFormRequest>(),
-                eq(CreateFormResponse::class.java)
             )
     }
 
