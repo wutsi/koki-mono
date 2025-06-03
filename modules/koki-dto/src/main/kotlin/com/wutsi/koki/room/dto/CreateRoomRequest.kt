@@ -2,6 +2,7 @@ package com.wutsi.koki.room.dto
 
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Size
+import java.util.Date
 
 data class CreateRoomRequest(
     val accountId: Long = -1,
@@ -24,9 +25,14 @@ data class CreateRoomRequest(
     @get:Size(max = 5) val checkinTime: String? = null,
     @get:Size(max = 5) val checkoutTime: String? = null,
 
-    val leaseTerm: LeaseTerm = LeaseTerm.UNKNOWN,
     val furnishedType: FurnishedType = FurnishedType.UNKNOWN,
     val leaseType: LeaseType = LeaseType.UNKNOWN,
+    val leaseTerm: LeaseTerm = LeaseTerm.UNKNOWN,
+    val leaseTermDuration: Int? = null,
+    val advanceRent: Int? = null,
+    val visitFees: Double? = null,
+    val yearOfConstruction: Int? = null,
+    val dateOfAvailability: Date? = null,
     val categoryId: Long? = null,
     val longitude: Double? = null,
     val latitude: Double? = null,
