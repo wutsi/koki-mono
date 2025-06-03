@@ -93,6 +93,7 @@
             </li>
         </ul>
 
+        <!-- Description -->
         <div class="margin-top border-top padding-top description-container" th:if="${room.description}">
             <div id="room-summary" th:utext="${room.summary}">SUMMARY</div>
             <button class="btn btn-secondary margin-top" data-bs-target="#room-description-modal" data-bs-toggle="modal"
@@ -115,6 +116,7 @@
             </div>
         </div>
 
+        <!-- Amenities -->
         <div class="margin-top border-top padding-top amenity-container">
             <h2>Features &amp; Amenities</h2>
             <div class="container-fluid">
@@ -169,44 +171,7 @@
             </div>
         </div>
 
-        <div class="margin-top border-top padding-small terms-container">
-            <h2>Terms &amp; Condition</h2>
-            <ul>
-                <li th:if="${room.leaseTermDuration} OR ${room.leaseTerm.name() == 'NEGOTIABLE'}">
-                    <div th:if="${room.leaseTerm.name() == 'NEGOTIABLE'}">
-                        <b>Lease Term:</b> Negotiable
-                    </div>
-                    <div th:if="${room.leaseTerm.name() != 'NEGOTIABLE'}">
-                        <b>Lease Term:</b>
-                        <span th:text="${room.leaseTermDuration}">00</span>
-                        <span th:if="${room.leaseTerm.name() == 'YEARLY'}">year(s)</span>
-                        <span th:if="${room.leaseTerm.name() == 'MONTHLY'}">month(s)</span>
-                        <span th:if="${room.leaseTerm.name() == 'WEEKLY'}">week(s)</span>
-                    </div>
-                </li>
-                <li th:if="${room.advanceRent}">
-                    <b>Advance Rent:</b>
-                    <span th:text="${room.advanceRent}">00</span>
-                    <span>month(s)</span>
-                </li>
-                <li th:if="${room.dateOfAvailability}">
-                    <b>Availability Date:</b> <span th:text="${room.dateOfAvailabilityText}">yyyy-mm-dd</span>
-                </li>
-                <li th:if="${room.checkinTime}">
-                    <b>Checkin Time:</b> <span th:text="${room.checkinTime}">00:00</span>
-                </li>
-                <li th:if="${room.checkoutTime}">
-                    <b>Checkout Time:</b> <span th:text="${room.checkoutTime}">00:00</span>
-                </li>
-                <li th:if="${room.yearOfConstruction}">
-                    <b>Construction Year:</b> <span th:text="${room.yearOfConstruction}">yyyy</span>
-                </li>
-                <li th:if="${room.visitFees}">
-                    <b>Visit Fees:</b> <span th:text="${room.visitFees}">$$</span>
-                </li>
-            </ul>
-        </div>
-
+        <!-- Neighborhood -->
         <div class="margin-top border-top padding-top map-container">
             <h2>Map &amp; Neighborhood</h2>
             <ul class="breadcrumb">
@@ -241,6 +206,39 @@
                  th:if="${room.hasGeoLocation}"
             >
             </div>
+        </div>
+
+        <!-- Terms & Conditions -->
+        <div class="margin-top border-top padding-small terms-container">
+            <h2>Terms &amp; Condition</h2>
+            <ul>
+                <li th:if="${room.leaseTermDuration} OR ${room.leaseTermNegotiable}">
+                    <b>Lease Term:</b>
+                    <div
+                        th:replace="~{__components/room :: lease-term(${room.leaseTermDuration}, ${room.leaseTerm.name()})}">
+                    </div>
+                </li>
+                <li th:if="${room.advanceRent}">
+                    <b>Advance Rent:</b>
+                    <span th:text="${room.advanceRent}">00</span>
+                    <span>month(s)</span>
+                </li>
+                <li th:if="${room.dateOfAvailability}">
+                    <b>Availability Date:</b> <span th:text="${room.dateOfAvailabilityText}">yyyy-mm-dd</span>
+                </li>
+                <li th:if="${room.checkinTime}">
+                    <b>Checkin Time:</b> <span th:text="${room.checkinTime}">00:00</span>
+                </li>
+                <li th:if="${room.checkoutTime}">
+                    <b>Checkout Time:</b> <span th:text="${room.checkoutTime}">00:00</span>
+                </li>
+                <li th:if="${room.yearOfConstruction}">
+                    <b>Construction Year:</b> <span th:text="${room.yearOfConstruction}">yyyy</span>
+                </li>
+                <li th:if="${room.visitFees}">
+                    <b>Visit Fees:</b> <span th:text="${room.visitFees}">$$</span>
+                </li>
+            </ul>
         </div>
     </div>
 

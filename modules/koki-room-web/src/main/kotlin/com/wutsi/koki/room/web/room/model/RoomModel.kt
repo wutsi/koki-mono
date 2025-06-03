@@ -63,4 +63,7 @@ data class RoomModel(
 
     val hasGeoLocation: Boolean
         get() = (latitude != null && longitude != null)
+
+    val leaseTermNegotiable: Boolean
+        get() = leaseTerm == LeaseTerm.NEGOTIABLE
 }

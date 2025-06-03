@@ -47,5 +47,13 @@
     </div>
 </div>
 
+<div th:fragment="lease-term(duration, term)" th:remove="tag">
+    <span th:if="${room.leaseTermNegotiable}" th:text="#{lease-term.NEGOTIABLE}">NEGOTIABLE</span>
+
+    <span th:if="!${room.leaseTermNegotiable}" th:text="${room.leaseTermDuration}">00</span>
+    <span class="text-lower" th:if="!${room.leaseTermNegotiable}"
+          th:text="#{'lease-term.' + ${room.leaseTerm}}">TERM</span>
+</div>
+
 </body>
 </html>
