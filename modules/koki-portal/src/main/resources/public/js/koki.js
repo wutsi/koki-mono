@@ -546,6 +546,7 @@ class IntlTel {
             .forEach((elt) => {
                     window.intlTelInput(elt, {
                         initialCountry: "auto",
+                        strictMode: true,
                         geoIpLookup: callback => {
                             fetch("https://ipapi.co/json")
                                 .then(res => res.json())
