@@ -52,6 +52,7 @@ data class RoomModel(
     val yearOfConstruction: Int? = null,
     val dateOfAvailability: Date? = null,
     val dateOfAvailabilityText: String? = null,
+    val displayPrice: MoneyModel? = null,
 ) {
     fun hasAmenity(amenityId: Long): Boolean {
         return amenities.find { amenity -> amenity.id == amenityId } != null

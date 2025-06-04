@@ -1,4 +1,4 @@
-class RoomPage {
+class KokiRoomPage {
     init() {
 
     }
@@ -16,8 +16,6 @@ class RoomPage {
 
         event.preventDefault();
         document.getElementById("btn-send").disabled = true;
-        console.log('fullPhone', document.getElementById('fullPhone').value);
-        console.log('country', document.getElementById('country').value);
 
         const form = document.getElementById("frm-send");
         const data = new FormData(form);
@@ -44,21 +42,18 @@ class RoomPage {
     }
 }
 
+const kokiRoomPage = new KokiRoomPage();
 document.addEventListener(
     'DOMContentLoaded',
     function () {
-        const page = new RoomPage();
+        kokiRoomPage.init();
 
         // Modal
         const modal = document.getElementById('room-message-modal')
-        modal.addEventListener('shown.bs.modal', () => {
-            page.on_message_modal_opened()
-        });
+        modal.addEventListener('shown.bs.modal', kokiRoomPage.on_message_modal_opened);
 
         // Form
         const frmSend = document.getElementById('frm-send');
-        frmSend.addEventListener('submit', () => {
-            page.on_message_submitted()
-        });
+        frmSend.addEventListener('submit', kokiRoomPage.on_message_submitted);
     }
 );

@@ -63,7 +63,7 @@
                 <tr class="offline" th:classappend="!${form.offline} ? 'hidden'">
                     <td><b>Account Name<span class="required">*</span></b></td>
                     <td>
-                        <input th:field="*{offlineAccountName}" th:required="${form.offline}" type="tel"/>
+                        <input th:field="*{offlineAccountName}" th:required="${form.offline}"/>
                         <div class="text-small">
                             Name associated with this number
                         </div>

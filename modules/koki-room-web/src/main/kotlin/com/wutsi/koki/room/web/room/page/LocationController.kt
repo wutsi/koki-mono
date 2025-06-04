@@ -6,6 +6,7 @@ import com.wutsi.koki.room.web.common.page.AbstractPageController
 import com.wutsi.koki.room.web.common.page.PageName
 import com.wutsi.koki.room.web.refdata.model.LocationService
 import com.wutsi.koki.room.web.room.model.MapMarkerModel
+import com.wutsi.koki.room.web.room.model.RoomModel
 import com.wutsi.koki.room.web.room.service.RoomService
 import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller
@@ -106,5 +107,11 @@ class LocationController(
             cityId = cityId,
             limit = 200,
         )
+    }
+
+    @ResponseBody
+    @GetMapping("/map/rooms/{roomId}")
+    fun room(@PathVariable roomId: Long): RoomModel {
+        return roomService.room(roomId, fullGraph = true)
     }
 }

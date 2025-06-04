@@ -6,6 +6,6 @@ data class SendMessageForm(
     val email: String = "",
     val phone: String? = null,
     val body: String = "",
-    val fullPhone: String = "",
-    val country: String = "",
+    val phoneFull: String = "",
+    val phoneCountry: String = "",
 )

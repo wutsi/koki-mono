@@ -25,13 +25,13 @@ class MessageService(
 
         val request = SendMessageRequest(
             senderName = form.name,
-            senderPhone = form.fullPhone.ifEmpty { null },
+            senderPhone = form.phoneFull.ifEmpty { null },
             senderEmail = form.email,
             owner = ObjectReference(id = form.roomId, type = ObjectType.ROOM),
             body = form.body,
             language = LocaleContextHolder.getLocale().language,
             cityId = city?.id,
-            country = form.country
+            country = form.phoneCountry
         )
         koki.send(request)
     }
