@@ -10,6 +10,9 @@ data class AddressModel(
     val country: String? = null,
     val countryName: String? = null,
 ) {
+    val text: String
+        get() = toString()
+
     fun toHtml(): String {
         return HtmlUtils.toHtml(toString())
     }

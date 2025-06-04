@@ -96,6 +96,45 @@
     margin-left: 0;
 }
 
+.leaflet-popup-content {
+    margin: 0 !important;
+}
+
+.leaflet-popup-content .map-room-card {
+    width: 266px;
+}
+
+.leaflet-popup-content .map-room-card-details {
+    margin: 1em;
+    overflow: clip;
+    text-wrap: nowrap;
+}
+
+.leaflet-popup-content .map-room-card a {
+    color: #444;
+    text-decoration: none;
+}
+
+.leaflet-popup-content .map-room-card img {
+    width: 100%;
+    height: 177px;
+    border-radius: 10px 10px 0 0;
+}
+
+.leaflet-popup-content .map-room-card .price {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.leaflet-popup-content .map-room-card .breadcrumb {
+    margin-top: .5em;
+}
+
+.leaflet-popup-content .map-room-card .address {
+    margin-top: .5em;
+}
+
+
 /* ======================================================================== */
 /*                                                                          */
 /*  MEDIA QUERIES                                                           */

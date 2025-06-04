@@ -1,6 +1,8 @@
 package com.wutsi.koki.room.web.room.mapper
 
 import com.wutsi.koki.platform.util.HtmlUtils
+import com.wutsi.koki.refdata.dto.Money
+import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.Room
 import com.wutsi.koki.room.dto.RoomSummary
 import com.wutsi.koki.room.web.account.model.AccountModel
@@ -64,6 +66,13 @@ class RoomMapper(
                     price.currency
                 )
             },
+            displayPrice = toDisplayPrice(entity.leaseType, entity.pricePerNight, entity.pricePerMonth)
+                ?.let { price ->
+                    moneyMapper.toMoneyModel(
+                        price.amount,
+                        price.currency
+                    )
+                },
             heroImage = entity.heroImageId?.let { id -> images[id] },
             longitude = entity.longitude,
             latitude = entity.latitude,
@@ -127,6 +136,13 @@ class RoomMapper(
                     price.currency
                 )
             },
+            displayPrice = toDisplayPrice(entity.leaseType, entity.pricePerNight, entity.pricePerMonth)
+                ?.let { price ->
+                    moneyMapper.toMoneyModel(
+                        price.amount,
+                        price.currency
+                    )
+                },
             checkinTime = entity.checkinTime,
             checkoutTime = entity.checkoutTime,
             amenities = entity.amenityIds.mapNotNull { id -> amenities[id] },
@@ -155,9 +171,21 @@ class RoomMapper(
             id = entity.id,
             latitude = entity.latitude,
             longitude = entity.longitude,
-            price = (entity.pricePerMonth ?: entity.pricePerNight)?.let { money ->
-                moneyMapper.toMoneyModel(money.amount, money.currency).toString()
-            }
+            price = toDisplayPrice(entity.leaseType, entity.pricePerNight, entity.pricePerMonth)
+                ?.let { price ->
+                    moneyMapper.toMoneyModel(
+                        price.amount,
+                        price.currency
+                    )
+                }?.text,
         )
+    }
+
+    fun toDisplayPrice(leaseType: LeaseType, pricePerNight: Money?, pricePerMonth: Money?): Money? {
+        return if (leaseType == LeaseType.SHORT_TERM) {
+            pricePerNight
+        } else {
+            pricePerMonth
+        }
     }
 }
