@@ -101,12 +101,12 @@
                                     <ul class="breadcrumb">
                                         <li>
                                             <i class="fa-solid fa-bed"></i>
-                                            <span th:text="${json.numberOfRooms}">00</span>
+                                            <span>${json.numberOfRooms}</span>
                                         </li>
                                         <li>
                                             <span>&#x2022;</span>
                                             <i class="fa-solid fa-bath"></i>
-                                            <span th:text="${json.numberOfRooms}">00</span> baths
+                                            <span>"${json.numberOfRooms}</span> baths
                                         </li>
                                     </ul>
                                     <div class="address">${json.address.text}</div>
