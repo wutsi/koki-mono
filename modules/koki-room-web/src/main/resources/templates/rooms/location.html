@@ -59,7 +59,7 @@
 
 <script>
     function on_map_ready(id, map) {
-        console.log('on_map_ready', id, map);
+        console.log('on_map_ready()', id, map);
         const cityId = document.getElementById('map').getAttribute('data-city-id');
         fetch('/locations/' + cityId + '/map')
             .then(function (response) {
@@ -78,7 +78,7 @@
                             }
                         );
                         marker.on('click', function () {
-                            on_marker_click(item.id)
+                            on_marker_click(item.id, marker);
                         });
                         map.addLayer(marker);
                     }
@@ -86,8 +86,37 @@
             });
     }
 
-    function on_marker_click(roomId) {
-        console.log('on_marker_click', roomId);
+    function on_marker_click(roomId, marker) {
+        console.log('on_marker_click()', roomId, marker);
+        fetch(`/locations/map/rooms/${roomId}`)
+            .then((response) => {
+                response.json().then((json) => {
+                    html = `<div class="map-room-card">
+                            <a href="${json.url}" target="_blank">
+                                <div>
+                                    <img src="${json.heroImage.contentUrl}" />
+                                </div>
+                                <div class="map-room-card-details">
+                                    <div class="price text-primary">${json.displayPrice.text}</div>
+                                    <ul class="breadcrumb">
+                                        <li>
+                                            <i class="fa-solid fa-bed"></i>
+                                            <span th:text="${json.numberOfRooms}">00</span>
+                                        </li>
+                                        <li>
+                                            <span>&#x2022;</span>
+                                            <i class="fa-solid fa-bath"></i>
+                                            <span th:text="${json.numberOfRooms}">00</span> baths
+                                        </li>
+                                    </ul>
+                                    <div class="address">${json.address.text}</div>
+                                </div>
+                            </a>
+                        </div>`;
+                    marker.bindPopup(html);
+                    marker.openPopup();
+                });
+            });
     }
 </script>
 
