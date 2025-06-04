@@ -196,7 +196,7 @@ class RoomService(
                 visitFees = if (form.leaseType == LeaseType.LONG_TERM) form.visitFees else null,
                 leaseTermDuration = if (form.leaseType == LeaseType.LONG_TERM && form.leaseTermDuration != null && form.leaseTermDuration > 0) form.leaseTermDuration else null,
                 leaseTerm = if (form.leaseType == LeaseType.LONG_TERM) form.leaseTerm else LeaseTerm.UNKNOWN,
-                advanceRent = if (form.leaseType == LeaseType.LONG_TERM && form.advanceRent > 0) form.advanceRent else null,
+                advanceRent = if (form.leaseType == LeaseType.LONG_TERM && form.advanceRent != null && form.advanceRent > 0) form.advanceRent else null,
                 yearOfConstruction = if (form.yearOfConstruction != null && form.yearOfConstruction > 0) form.yearOfConstruction else null,
                 dateOfAvailability = if (form.leaseType == LeaseType.LONG_TERM) {
                     form.dateOfAvailability
@@ -236,7 +236,7 @@ class RoomService(
                 visitFees = if (form.leaseType == LeaseType.LONG_TERM) form.visitFees else null,
                 leaseTermDuration = if (form.leaseType == LeaseType.LONG_TERM && form.leaseTermDuration != null && form.leaseTermDuration > 0) form.leaseTermDuration else null,
                 leaseTerm = if (form.leaseType == LeaseType.LONG_TERM) form.leaseTerm else LeaseTerm.UNKNOWN,
-                advanceRent = if (form.leaseType == LeaseType.LONG_TERM && form.advanceRent > 0) form.advanceRent else null,
+                advanceRent = if (form.leaseType == LeaseType.LONG_TERM && form.advanceRent != null && form.advanceRent > 0) form.advanceRent else null,
                 yearOfConstruction = if (form.yearOfConstruction != null && form.yearOfConstruction > 0) form.yearOfConstruction else null,
                 dateOfAvailability = if (form.leaseType == LeaseType.LONG_TERM) {
                     form.dateOfAvailability
