@@ -26,7 +26,8 @@ object RoomFixtures {
             numberOfBeds = 1,
             numberOfBathrooms = 1,
             numberOfRooms = 1,
-            pricePerNight = Money(amount = 75.0, currency = "CAD"),
+            leaseType = LeaseType.LONG_TERM,
+            pricePerMonth = Money(amount = 375.0, currency = "CAD"),
             address = Address(
                 cityId = RefDataFixtures.cities[0].id,
                 country = RefDataFixtures.cities[0].country,
@@ -45,6 +46,7 @@ object RoomFixtures {
             numberOfBeds = 2,
             numberOfBathrooms = 1,
             numberOfRooms = 1,
+            leaseType = LeaseType.LONG_TERM,
             pricePerNight = Money(amount = 100.0, currency = "CAD"),
             pricePerMonth = Money(amount = 1500.0, currency = "CAD"),
             address = Address(
@@ -52,6 +54,8 @@ object RoomFixtures {
                 country = RefDataFixtures.cities[0].country,
             ),
             listingUrl = "/rooms/1112/classic-single-room",
+            latitude = 45.554082069423316,
+            longitude = -73.66554873383372
         ),
         RoomSummary(
             id = 1113,
@@ -64,12 +68,15 @@ object RoomFixtures {
             numberOfBeds = 2,
             numberOfBathrooms = 1,
             numberOfRooms = 1,
-            pricePerNight = Money(amount = 150.0, currency = "CAD"),
+            leaseType = LeaseType.LONG_TERM,
+            pricePerMonth = Money(amount = 1850.0, currency = "CAD"),
             address = Address(
                 cityId = RefDataFixtures.cities[0].id,
                 country = RefDataFixtures.cities[0].country,
             ),
             listingUrl = "/rooms/1113/deluxe-double-room",
+            latitude = 45.55293917724604,
+            longitude = -73.67104881166603
         ),
         RoomSummary(
             id = 1114,
@@ -81,12 +88,15 @@ object RoomFixtures {
             numberOfBeds = 2,
             numberOfBathrooms = 1,
             numberOfRooms = 1,
-            pricePerNight = Money(amount = 100.0, currency = "CAD"),
+            leaseType = LeaseType.LONG_TERM,
+            pricePerMonth = Money(amount = 1320.0, currency = "CAD"),
             address = Address(
                 cityId = RefDataFixtures.cities[1].id,
                 country = RefDataFixtures.cities[1].country,
             ),
             listingUrl = "/rooms/1114/standard-single-room-1-queen-bed",
+            latitude = 45.551107370073076,
+            longitude = -73.6619714474387
         ),
         RoomSummary(
             id = 1115,
@@ -98,7 +108,8 @@ object RoomFixtures {
             numberOfBeds = 3,
             numberOfBathrooms = 3,
             numberOfRooms = 3,
-            pricePerNight = Money(amount = 500.0, currency = "CAD"),
+            leaseType = LeaseType.LONG_TERM,
+            pricePerMonth = Money(amount = 1500.0, currency = "CAD"),
             address = Address(
                 cityId = RefDataFixtures.cities[1].id,
                 country = RefDataFixtures.cities[1].country,
@@ -115,7 +126,8 @@ object RoomFixtures {
             numberOfBeds = 3,
             numberOfBathrooms = 3,
             numberOfRooms = 3,
-            pricePerNight = Money(amount = 350.0, currency = "CAD"),
+            leaseType = LeaseType.LONG_TERM,
+            pricePerMonth = Money(amount = 1350.0, currency = "CAD"),
             address = Address(
                 cityId = RefDataFixtures.cities[1].id,
                 country = RefDataFixtures.cities[1].country,
@@ -123,6 +135,8 @@ object RoomFixtures {
                 street = "3030 Linton",
             ),
             listingUrl = "/rooms/1116/windmill-in-ponta-delgada",
+            latitude = null,
+            longitude = null,
         ),
     )
 
@@ -145,7 +159,8 @@ object RoomFixtures {
         numberOfBeds = 3,
         numberOfBathrooms = 3,
         numberOfRooms = 3,
-        pricePerNight = Money(amount = 350.0, currency = "CAD"),
+        leaseType = LeaseType.LONG_TERM,
+        pricePerNight = Money(amount = 1375.0, currency = "CAD"),
         address = Address(
             cityId = RefDataFixtures.cities[0].id,
             country = RefDataFixtures.cities[0].country,
@@ -166,7 +181,6 @@ object RoomFixtures {
         latitude = 11.43094309,
         longitude = 3.430954,
         leaseTerm = LeaseTerm.MONTHLY,
-        leaseType = LeaseType.SHORT_TERM,
         furnishedType = FurnishedType.FULLY_FURNISHED,
         pricePerMonth = Money(1500.0, "CAD"),
         area = 750,

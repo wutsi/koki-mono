@@ -12,7 +12,6 @@ import com.wutsi.koki.room.web.AbstractPageControllerTest
 import com.wutsi.koki.room.web.FileFixtures.images
 import com.wutsi.koki.room.web.RefDataFixtures.cities
 import com.wutsi.koki.room.web.RefDataFixtures.neighborhoods
-import com.wutsi.koki.room.web.RoomFixtures.room
 import com.wutsi.koki.room.web.RoomFixtures.rooms
 import com.wutsi.koki.room.web.common.page.PageName
 import org.junit.jupiter.api.BeforeEach
@@ -82,6 +81,15 @@ class LocationControllerTest : AbstractPageControllerTest() {
         assertElementAttribute("#map", "data-latitude", neighborhoods[0].latitude.toString())
         assertElementAttribute("#map", "data-show-marker", "false")
         assertElementAttribute("#map", "data-zoom", "16")
+
+        // Access a room
+        click(".room img")
+
+        val windowHandles = driver.getWindowHandles().toList()
+        assertEquals(2, windowHandles.size)
+        driver.switchTo().window(windowHandles[1])
+
+        assertCurrentPageIs(PageName.ROOM)
     }
 
     @Test
@@ -123,6 +131,15 @@ class LocationControllerTest : AbstractPageControllerTest() {
         assertElementAttribute("#map", "data-latitude", cities[0].latitude.toString())
         assertElementAttribute("#map", "data-show-marker", "false")
         assertElementAttribute("#map", "data-zoom", "14")
+
+        // Access a room
+        click(".room img")
+
+        val windowHandles = driver.getWindowHandles().toList()
+        assertEquals(2, windowHandles.size)
+        driver.switchTo().window(windowHandles[1])
+
+        assertCurrentPageIs(PageName.ROOM)
     }
 
     @Test
@@ -156,5 +173,25 @@ class LocationControllerTest : AbstractPageControllerTest() {
         scrollToBottom()
         click("#room-load-more button", 1000)
         assertElementCount(".room", entries.size + rooms.size)
+    }
+
+    @Test
+    fun map() {
+        navigateTo("/locations/${neighborhoods[0].id}/ffo-bar")
+
+        Thread.sleep(2000)
+        val markers = rooms.filter { room -> room.latitude != null && room.longitude != null }
+        assertElementCount(".map-room-icon", markers.size)
+
+        click(".map-room-icon")
+        assertElementVisible(".map-room-card")
+
+        click(".map-room-card img")
+
+        val windowHandles = driver.getWindowHandles().toList()
+        assertEquals(2, windowHandles.size)
+        driver.switchTo().window(windowHandles[1])
+
+        assertCurrentPageIs(PageName.ROOM)
     }
 }
