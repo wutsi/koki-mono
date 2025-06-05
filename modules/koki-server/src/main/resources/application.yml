@@ -78,10 +78,6 @@ springdoc:
             display-name: Contact API
             paths-to-match: /v1/contacts, /v1/contacts/**
 
-        -   group: employees
-            display-name: Employee API
-            paths-to-match: /v1/employees, /v1/employees/**
-
         -   group: files
             display-name: File API
             paths-to-match: /v1/files, /v1/files/**
