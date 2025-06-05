@@ -55,11 +55,32 @@
         >
         </div>
     </div>
+
+    <div id="map-list-switcher">
+        <ul>
+            <li id="map-switcher">
+                <a href="javascript: show_map()">
+                    <i class="fa-regular fa-map"></i>
+                    View Map
+                </a>
+            </li>
+            <li class="hidden" id="list-switcher">
+                <a href="javascript: show_list()">
+                    <i class="fa-solid fa-list"></i>
+                    View List
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>
 
 <script>
-    function on_map_ready(id, map) {
-        console.log('on_map_ready()', id, map);
+    let map = null;
+
+    function on_map_ready(id, mmap) {
+        console.log('on_map_ready()', id, mmap);
+        map = mmap;
+
         const cityId = document.getElementById('map').getAttribute('data-city-id');
         fetch('/locations/' + cityId + '/map')
             .then(function (response) {
@@ -104,9 +125,9 @@
                                             <span>${json.numberOfRooms}</span>
                                         </li>
                                         <li>
-                                            <span>&#x2022;</span>
+                                            <span>|</span>
                                             <i class="fa-solid fa-bath"></i>
-                                            <span>"${json.numberOfRooms}</span> baths
+                                            <span>${json.numberOfRooms}</span>
                                         </li>
                                     </ul>
                                     <div class="address">${json.address.text}</div>
@@ -117,6 +138,23 @@
                     marker.openPopup();
                 });
             });
+    }
+
+    function show_map() {
+        console.log('show_map()');
+        document.getElementById('map-container').style.display = 'block';
+        document.getElementById('room-list-container').style.display = 'none';
+        document.getElementById('map-switcher').classList.add('hidden');
+        document.getElementById('list-switcher').classList.remove('hidden');
+        map.invalidateSize(true);
+    }
+
+    function show_list() {
+        console.log('show_list()');
+        document.getElementById('map-container').style.display = 'none';
+        document.getElementById('room-list-container').style.display = 'block';
+        document.getElementById('map-switcher').classList.remove('hidden');
+        document.getElementById('list-switcher').classList.add('hidden');
     }
 </script>
 

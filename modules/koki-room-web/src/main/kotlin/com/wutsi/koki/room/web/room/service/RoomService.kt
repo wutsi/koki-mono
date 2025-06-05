@@ -169,6 +169,9 @@ class RoomService(
             limit = limit,
             offset = offset,
         ).rooms
-        return rooms.map { room -> mapper.toMapMarkerModel(room) }
+        return rooms
+            .filter { room -> room.latitude != null && room.longitude != null }
+            .map { room -> mapper.toMapMarkerModel(room) }
+            .filter { room -> room.price != null }
     }
 }
