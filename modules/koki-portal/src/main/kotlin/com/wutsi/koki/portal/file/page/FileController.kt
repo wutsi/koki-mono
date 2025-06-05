@@ -8,7 +8,6 @@ import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.contact.service.ContactService
-import com.wutsi.koki.portal.employee.service.EmployeeService
 import com.wutsi.koki.portal.file.service.FileService
 import com.wutsi.koki.portal.product.service.ProductService
 import com.wutsi.koki.portal.security.RequiresPermission
@@ -37,7 +36,6 @@ class FileController(
     private val storageServiceBuilder: StorageServiceBuilder,
     private val accountService: AccountService,
     private val contactService: ContactService,
-    private val employeeService: EmployeeService,
     private val productService: ProductService,
 ) : AbstractPageController() {
     @GetMapping("/files/{id}")
@@ -71,7 +69,6 @@ class FileController(
             when (ownerType) {
                 ObjectType.ACCOUNT -> accountService.account(ownerId, fullGraph = false).name
                 ObjectType.CONTACT -> contactService.contact(ownerId, fullGraph = false).name
-                ObjectType.EMPLOYEE -> employeeService.employee(ownerId, fullGraph = false).name
                 ObjectType.PRODUCT -> productService.product(ownerId, fullGraph = false).name
                 else -> null
             }

@@ -10,7 +10,6 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AccountFixtures
 import com.wutsi.koki.ContactFixtures
 import com.wutsi.koki.EmailFixtures
-import com.wutsi.koki.EmployeeFixtures
 import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.InvoiceFixtures
 import com.wutsi.koki.MessageFixtures
@@ -39,10 +38,6 @@ import com.wutsi.koki.email.dto.GetEmailResponse
 import com.wutsi.koki.email.dto.SearchEmailResponse
 import com.wutsi.koki.email.dto.SendEmailRequest
 import com.wutsi.koki.email.dto.SendEmailResponse
-import com.wutsi.koki.employee.dto.CreateEmployeeRequest
-import com.wutsi.koki.employee.dto.CreateEmployeeResponse
-import com.wutsi.koki.employee.dto.GetEmployeeResponse
-import com.wutsi.koki.employee.dto.SearchEmployeeResponse
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
@@ -242,7 +237,6 @@ abstract class AbstractPageControllerTest {
         setupNoteModule()
         setupAccountModule()
         setupContactModule()
-        setupEmployeeModule()
         setupProductModule()
         setupInvoiceModule()
         setupPaymentModule()
@@ -845,42 +839,6 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any<CreateContactRequest>(),
                 eq(CreateContactResponse::class.java)
-            )
-    }
-
-    private fun setupEmployeeModule() {
-        doReturn(
-            ResponseEntity(
-                SearchEmployeeResponse(EmployeeFixtures.employees),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchEmployeeResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                GetEmployeeResponse(EmployeeFixtures.employee),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetEmployeeResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                CreateEmployeeResponse(1111L),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .postForEntity(
-                any<String>(),
-                any<CreateEmployeeRequest>(),
-                eq(CreateEmployeeResponse::class.java)
             )
     }
 
