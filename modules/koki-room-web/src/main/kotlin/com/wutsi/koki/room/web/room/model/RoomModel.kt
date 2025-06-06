@@ -41,7 +41,7 @@ data class RoomModel(
     val leaseType: LeaseType = LeaseType.UNKNOWN,
     val furnishedType: FurnishedType = FurnishedType.UNKNOWN,
     val category: CategoryModel? = null,
-    val area: Int? = null,
+    val area: Int = 0,
     val url: String = "",
     val publishedAt: Date? = null,
     val publishedAtMoment: String? = null,

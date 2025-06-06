@@ -30,7 +30,7 @@
                 <span th:text="${room.numberOfRooms}">00</span>
                 <span>Bedroom(s)</span>
             </li>
-            <li th:if="${room.area}">
+            <li th:if="${room.area > 0}">
                 <i class="fa-regular fa-square-full"></i>
                 <span th:text="${room.area}">00</span>
                 <span>m<sup>2</sup></span>

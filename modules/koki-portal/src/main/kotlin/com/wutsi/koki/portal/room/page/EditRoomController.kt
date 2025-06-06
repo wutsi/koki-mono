@@ -105,7 +105,7 @@ class EditRoomController(
 
         val currency = Currency.getInstance(tenantHolder.get()!!.currency)
         model.addAttribute("currencies", listOf(currency))
-        model.addAttribute("rooms", (1..20).toList())
+        model.addAttribute("rooms", (0..20).toList())
 
         if (form.cityId != null) {
             val city = locationService.location(form.cityId)
