@@ -93,11 +93,11 @@
             </li>
             <li>
                 <span>&#x2022;</span>
-                <span th:text="${room.numberOfBeds}">00</span> beds
+                <span th:text="${room.numberOfBathrooms}">00</span> baths
             </li>
-            <li>
+            <li th:if="${room.numberOfBeds > 0}">
                 <span>&#x2022;</span>
-                <span th:text="${room.numberOfRooms}">00</span> baths
+                <span th:text="${room.numberOfBeds}">00</span> beds
             </li>
             <li th:if="${room.area > 0}">
                 <span>&#x2022;</span>

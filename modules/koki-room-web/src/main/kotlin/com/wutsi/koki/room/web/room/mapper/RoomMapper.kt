@@ -42,7 +42,7 @@ class RoomMapper(
             numberOfBathrooms = entity.numberOfBathrooms,
             numberOfBeds = entity.numberOfBeds,
             maxGuests = entity.maxGuests,
-            area = if (entity.area > 0) entity.area else null,
+            area = entity.area,
             neighborhood = entity.neighborhoodId?.let { id -> locations[id] },
             address = entity.address?.let { address ->
                 AddressModel(

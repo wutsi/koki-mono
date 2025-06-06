@@ -86,6 +86,7 @@
                                 <label class="title">Bedrooms</label>
                                 <select th:field="*{numberOfRooms}">
                                     <option th:each="i : ${rooms}"
+                                            th:if="${i > 0}"
                                             th:text="${i}"
                                             th:value="${i}">
                                         TYPE
@@ -96,6 +97,7 @@
                                 <label class="title">Baths</label>
                                 <select th:field="*{numberOfBathrooms}">
                                     <option th:each="i : ${rooms}"
+                                            th:if="${i > 0}"
                                             th:text="${i}"
                                             th:value="${i}">
                                         00
@@ -106,7 +108,7 @@
                                 <label class="title">Beds</label>
                                 <select th:field="*{numberOfBeds}">
                                     <option th:each="i : ${rooms}"
-                                            th:text="${i}"
+                                            th:text="${i > 0} ? ${i}"
                                             th:value="${i}">
                                         00
                                     </option>
@@ -116,7 +118,7 @@
                                 <label class="title">Max Guests</label>
                                 <select th:field="*{maxGuests}">
                                     <option th:each="i : ${rooms}"
-                                            th:text="${i}"
+                                            th:text="${i > 0} ? ${i}"
                                             th:value="${i}">
                                         00
                                     </option>
