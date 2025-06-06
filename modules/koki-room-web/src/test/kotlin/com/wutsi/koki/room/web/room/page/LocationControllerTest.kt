@@ -4,6 +4,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.reset
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.file.dto.SearchFileResponse
@@ -231,8 +232,11 @@ class LocationControllerTest : AbstractPageControllerTest() {
     @Test
     fun `IMPRESSION tracking when clicking on a map marker`() {
         navigateTo("/locations/${neighborhoods[0].id}/ffo-bar")
-
         Thread.sleep(2000)
+
+        verify(publisher).publish(any()) // IMPRESSION of the list
+        reset(publisher)
+
         click(".map-room-icon")
 
         val event = argumentCaptor<TrackSubmittedEvent>()
