@@ -1,4 +1,0 @@
-<tr class="file" th:each="file : ${files}" th:id="'file-' + ${file.id}" th:if="${files}">
-    <td th:replace="~{__components/file :: columns(${file}, ${readOnly}, ${ownerId}, ${ownerType})}"></td>
-</tr>
-<tr th:if="${files}" th:replace="~{__components/file :: load-more(${moreUrl})}"></tr>

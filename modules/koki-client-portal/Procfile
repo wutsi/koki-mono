@@ -1,1 +1,0 @@
-web: java $JAVA_OPTS -Dserver.port=$PORT -jar koki-client-portal.jar --spring.profiles.active=$APP_PROFILE
