@@ -1,4 +1,6 @@
 package com.wutsi.koki.tracking.server.service.filter
 
-class PersisterFilter {
-}
+import org.springframework.stereotype.Service
+
+@Service
+class PersisterFilter

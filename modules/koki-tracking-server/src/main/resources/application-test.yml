@@ -1,67 +1,20 @@
-spring:
-    flyway:
-        clean-disabled: false
-        locations: "classpath:db/migration/common,classpath:db/migration/test"
-    jpa:
-        show-sql: false
-    datasource:
-        url: ${SPRING_DATABASE_URL}
-        username: ${SPRING_DATABASE_USERNAME}
-        password: ${SPRING_DATABASE_PASSWORD}
-
-swagger:
-    protocol: https
-
 logging:
     level:
         com.wutsi: INFO
 
 koki:
-    ai:
-        model:
-            deepseek:
-                api-key: ${DEEPSEEK_API_KEY}
-            gemini:
-                api-key: ${GEMINI_API_KEY}
-
     rabbitmq:
         url: ${CLOUDAMQP_URL}
 
     storage:
         type: s3
         s3:
-            bucket: com-wutsi-koki-test
-            region: us-east-1
-            access-key: ${AWS_ACCESS_KEY}
-            secret-key: ${AWS_SECRET_KEY}
-
-    smtp:
-        host: ${SMTP_HOST}
-        port: ${SMTP_PORT}
-        username: ${SMTP_USER}
-        password: ${SMTP_PASSWORD}
-        from: no-reply@wutsi.com
-
-    translation:
-        type: aws
-        aws:
+            bucket: com-wutsi-koki-track-test
             region: us-east-1
             access-key: ${AWS_ACCESS_KEY}
             secret-key: ${AWS_SECRET_KEY}
 
     module:
-        file:
-            mq:
-                consumer-delay-seconds: 60
-
-        invoice:
-            mq:
-                consumer-delay-seconds: 60
-
-        notification:
-            mq:
-                consumer-delay-seconds: 60
-
-        room:
+        tracking:
             mq:
                 consumer-delay-seconds: 60
