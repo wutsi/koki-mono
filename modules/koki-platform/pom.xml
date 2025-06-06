@@ -9,12 +9,12 @@
     </parent>
 
     <artifactId>koki-platform</artifactId>
-    <version>0.0.25-SNAPSHOT</version>
+    <version>0.0.25</version>
     <packaging>jar</packaging>
 
     <scm>
         <developerConnection>scm:git:https://github.com/wutsi/koki-mono.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>koki-platform-0.0.25</tag>
     </scm>
 
     <distributionManagement>
