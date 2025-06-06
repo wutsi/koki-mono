@@ -208,6 +208,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
         val ids = rooms.map { room -> room.id.toString() }.joinToString("|")
 
         navigateTo("/locations/${neighborhoods[0].id}/ffo-bar")
+        Thread.sleep(1000)
 
         val event = argumentCaptor<TrackSubmittedEvent>()
         verify(publisher).publish(event.capture())

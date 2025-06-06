@@ -67,7 +67,7 @@ koki:
 
     rabbitmq:
         url: amqp://localhost
-        exchange-name: koki
+        exchange-name: koki-tracking
         max-retries: 24
         ttl-seconds: 84600
 
