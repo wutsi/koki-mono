@@ -19,8 +19,13 @@ import com.wutsi.koki.room.web.FileFixtures.images
 import com.wutsi.koki.room.web.GeoIpFixtures
 import com.wutsi.koki.room.web.RefDataFixtures
 import com.wutsi.koki.room.web.RoomFixtures.room
+import com.wutsi.koki.room.web.TenantFixtures
 import com.wutsi.koki.room.web.common.page.PageName
+import com.wutsi.koki.track.dto.ChannelType
+import com.wutsi.koki.track.dto.TrackEvent
+import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.assertNotNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import kotlin.test.Test
@@ -109,6 +114,30 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertElementVisible("#room-images-modal")
         assertElementCount("#room-images-modal .modal-body img", images.size)
         click("#room-images-modal .btn-close")
+    }
+
+    @Test
+    fun `VIEW tracking on page load`() {
+        navigateTo("/rooms/${room.id}/this-is-room")
+
+        val event = argumentCaptor<TrackSubmittedEvent>()
+        verify(publisher).publish(event.capture())
+
+        assertEquals(PageName.ROOM, event.firstValue.track.page)
+        assertNotNull(event.firstValue.track.correlationId)
+        assertNotNull(event.firstValue.track.deviceId)
+        assertEquals(TenantFixtures.tenants[0].id, event.firstValue.track.tenantId)
+        assertEquals(null, event.firstValue.track.component)
+        assertEquals(TrackEvent.READ, event.firstValue.track.event)
+        assertEquals(room.id.toString(), event.firstValue.track.productId)
+        assertEquals(null, event.firstValue.track.value)
+        assertEquals(null, event.firstValue.track.accountId)
+        assertEquals(ChannelType.WEB, event.firstValue.track.channelType)
+        assertEquals(USER_AGENT, event.firstValue.track.ua)
+        assertEquals("0:0:0:0:0:0:0:1", event.firstValue.track.ip)
+        assertEquals(null, event.firstValue.track.lat)
+        assertEquals(null, event.firstValue.track.long)
+        assertEquals("http://localhost:$port/rooms/${room.id}/this-is-room", event.firstValue.track.url)
     }
 
     @Test

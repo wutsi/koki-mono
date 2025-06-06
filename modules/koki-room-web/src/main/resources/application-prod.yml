@@ -2,6 +2,9 @@ koki:
     sdk:
         base-url: ${KOKI_SERVER_URL}
 
+    rabbitmq:
+        url: ${CLOUDAMQP_URL}
+
     storage:
         type: s3
         s3:
