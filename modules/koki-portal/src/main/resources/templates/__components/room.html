@@ -30,14 +30,22 @@
             <div>
                 <b th:text="${room.title}">TITLE</b>
             </div>
-            <div class="margin-top-small">
-                <span th:text="${room.numberOfRooms}">00</span> bedrooms
-                -
-                <span th:text="${room.numberOfBathrooms}">00</span> baths
-                -
-                <span th:if="${room.maxGuests > 0}" th:text="${room.maxGuests}">00</span> Guest
-                -
-                <span th:if="${room.numberOfBeds > 0}" th:text="${room.numberOfBeds}">00</span> beds
+            <div class="margin-top-small flex">
+                <div>
+                    <span th:text="${room.numberOfRooms}">00</span> bedroom(s)
+                </div>
+                <div class="margin-left-small">
+                    -
+                    <span th:text="${room.numberOfBathrooms}">00</span> bath(s)
+                </div>
+                <div class="margin-left-small" th:if="${room.numberOfBeds > 0}">
+                    -
+                    <span th:text="${room.numberOfBeds}">00</span> bed(s)
+                </div>
+                <div class="margin-left-small" th:if="${room.maxGuests > 0}">
+                    -
+                    <span th:text="${room.maxGuests}">00</span> guest(s)
+                </div>
             </div>
             <div class="margin-top-small" th:if="${room.summary}" th:text="${room.summary}">SUMMARY</div>
         </a>
