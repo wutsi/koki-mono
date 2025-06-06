@@ -1,8 +1,7 @@
-package com.wutsi.koki.platform.tracing
+package com.wutsi.koki.platform.tracing.spring
 
 import com.wutsi.koki.common.dto.HttpHeader
-import com.wutsi.koki.platform.tenant.TenantProvider
-import jakarta.servlet.http.HttpServletRequest
+import com.wutsi.koki.platform.tracing.ClientProvider
 import org.springframework.http.HttpRequest
 import org.springframework.http.client.ClientHttpRequestExecution
 import org.springframework.http.client.ClientHttpRequestInterceptor

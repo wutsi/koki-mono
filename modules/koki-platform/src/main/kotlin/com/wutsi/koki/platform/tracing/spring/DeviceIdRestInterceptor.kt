@@ -1,6 +1,7 @@
-package com.wutsi.koki.platform.tracing
+package com.wutsi.koki.platform.tracing.spring
 
 import com.wutsi.koki.common.dto.HttpHeader
+import com.wutsi.koki.platform.tracing.DeviceIdProvider
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpRequest
 import org.springframework.http.client.ClientHttpRequestExecution
@@ -15,7 +16,7 @@ class DeviceIdRestInterceptor(
         request: HttpRequest, body: ByteArray, execution: ClientHttpRequestExecution
     ): ClientHttpResponse {
         deviceIdProvider.get(req)?.let { id ->
-            request.headers.add(HttpHeader.CLIENT_ID, id)
+            request.headers.add(HttpHeader.DEVICE_ID, id)
         }
         return execution.execute(request, body)
     }
