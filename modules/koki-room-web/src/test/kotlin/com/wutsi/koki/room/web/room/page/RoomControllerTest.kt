@@ -128,7 +128,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertNotNull(event.firstValue.track.deviceId)
         assertEquals(TenantFixtures.tenants[0].id, event.firstValue.track.tenantId)
         assertEquals(null, event.firstValue.track.component)
-        assertEquals(TrackEvent.READ, event.firstValue.track.event)
+        assertEquals(TrackEvent.VIEW, event.firstValue.track.event)
         assertEquals(room.id.toString(), event.firstValue.track.productId)
         assertEquals(null, event.firstValue.track.value)
         assertEquals(null, event.firstValue.track.accountId)

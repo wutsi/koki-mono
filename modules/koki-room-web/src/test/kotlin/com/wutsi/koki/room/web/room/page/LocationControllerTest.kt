@@ -14,7 +14,6 @@ import com.wutsi.koki.room.web.AbstractPageControllerTest
 import com.wutsi.koki.room.web.FileFixtures.images
 import com.wutsi.koki.room.web.RefDataFixtures.cities
 import com.wutsi.koki.room.web.RefDataFixtures.neighborhoods
-import com.wutsi.koki.room.web.RoomFixtures.room
 import com.wutsi.koki.room.web.RoomFixtures.rooms
 import com.wutsi.koki.room.web.TenantFixtures
 import com.wutsi.koki.room.web.common.page.PageName
