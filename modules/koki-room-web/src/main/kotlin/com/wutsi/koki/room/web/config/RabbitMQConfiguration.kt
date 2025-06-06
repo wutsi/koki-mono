@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration
 import java.util.concurrent.ExecutorService
 
 @Configuration
-class RabbitMQConfiguration (
+class RabbitMQConfiguration(
     private val executorService: ExecutorService,
     private val objectMapper: ObjectMapper,
     private val storageServiceBuilder: StorageServiceBuilder,
@@ -33,9 +33,7 @@ class RabbitMQConfiguration (
 
     @Bean(destroyMethod = "close")
     open fun channel(): Channel {
-        val result = connectionFactory()
-            .newConnection(executorService)
-            .createChannel()
+        val result = connectionFactory().newConnection(executorService).createChannel()
         return result
     }
 
