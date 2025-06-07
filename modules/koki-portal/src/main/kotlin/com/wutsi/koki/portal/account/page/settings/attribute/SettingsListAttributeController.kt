@@ -17,7 +17,7 @@ class SettingsListAttributeController(private val service: AttributeService) : A
     fun show(model: Model): String {
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.ACCOUNT_SETTINGS_ATTRIBUTE_LIST,
                 title = "Account Attributes",
             )

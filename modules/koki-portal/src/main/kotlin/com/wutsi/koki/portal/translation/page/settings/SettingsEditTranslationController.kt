@@ -45,7 +45,7 @@ class SettingsEditTranslationController(
     private fun edit(form: TranslationSettingsForm, model: Model): String {
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.TRANSLATION_SETTINGS_EDIT,
                 title = "Translation Settings",
             )

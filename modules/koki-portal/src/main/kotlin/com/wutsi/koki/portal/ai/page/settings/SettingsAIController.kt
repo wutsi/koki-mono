@@ -26,7 +26,7 @@ class SettingsAIController(
         model: Model
     ): String {
         model.addAttribute(
-            "page", PageModel(
+            "page", createPageModel(
                 name = PageName.AI_SETTINGS,
                 title = "AI Settings",
             )

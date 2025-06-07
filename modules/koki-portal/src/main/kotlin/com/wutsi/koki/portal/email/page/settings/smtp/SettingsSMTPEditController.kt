@@ -48,7 +48,7 @@ class SettingsSMTPEditController(
         model.addAttribute("form", form)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.EMAIL_SETTINGS_SMTP_EDIT,
                 title = "Mail Server"
             )

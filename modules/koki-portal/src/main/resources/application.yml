@@ -14,10 +14,6 @@ spring:
         pathmatch:
             matching-strategy: ANT_PATH_MATCHER
 
-    #    security:
-    #        basic:
-    #            enabled: false
-
     servlet:
         multipart:
             max-file-size: 50MB
@@ -63,6 +59,7 @@ logging:
 koki:
     webapp:
         base-url: http://localhost:${server.port}
+        assert-url: ""
 
     rest:
         connection-timeout: 15000

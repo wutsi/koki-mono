@@ -32,7 +32,7 @@ class LoginController(
         model.addAttribute("form", LoginForm())
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.LOGIN,
                 title = "Login",
             )

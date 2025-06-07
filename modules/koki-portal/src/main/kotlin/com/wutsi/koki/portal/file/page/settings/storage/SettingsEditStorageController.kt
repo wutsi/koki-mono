@@ -49,7 +49,7 @@ class SettingsEditStorageController(
         model.addAttribute("form", form)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.FILE_SETTINGS_STORAGE_EDIT,
                 title = "File Settings"
             )

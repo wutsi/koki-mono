@@ -15,7 +15,7 @@ class SettingsSecurityController : AbstractPageController() {
     fun show(model: Model): String {
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.SECURITY_SETTINGS,
                 title = "Security Settings",
             )

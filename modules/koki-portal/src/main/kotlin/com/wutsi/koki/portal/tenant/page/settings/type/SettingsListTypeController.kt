@@ -23,7 +23,7 @@ class SettingsListTypeController(private val service: TypeService) : AbstractSet
     ): String {
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.TENANT_SETTINGS_TYPE_LIST,
                 title = "Types",
             )

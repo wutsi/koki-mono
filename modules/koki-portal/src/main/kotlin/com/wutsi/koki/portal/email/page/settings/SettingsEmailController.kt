@@ -15,7 +15,7 @@ class SettingsEmailController : AbstractPageController() {
     fun show(model: Model): String {
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.EMAIL_SETTINGS,
                 title = "Email Settings",
             )

@@ -24,7 +24,7 @@ class SettingsImportTypeController(private val service: TypeService) : AbstractS
     fun show(model: Model): String {
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.TENANT_SETTINGS_TYPE_IMPORT,
                 title = "Import Types",
             )

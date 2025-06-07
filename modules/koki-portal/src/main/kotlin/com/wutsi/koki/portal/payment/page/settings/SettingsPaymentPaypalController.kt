@@ -36,7 +36,7 @@ class SettingsPaymentPaypalController(
         model.addAttribute("form", form)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.PAYMENT_SETTINGS_PAYPAL,
                 title = "PayPal Payments"
             )

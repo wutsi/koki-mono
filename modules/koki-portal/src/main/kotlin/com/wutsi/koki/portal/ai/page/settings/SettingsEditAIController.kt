@@ -39,7 +39,7 @@ class SettingsEditAIController(
     private fun edit(form: AISettingsForm, model: Model): String {
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.AI_SETTINGS_EDIT,
                 title = "AI Settings",
             )

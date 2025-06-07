@@ -40,7 +40,7 @@ class SettingsEditInvoiceController(
 
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.INVOICE_SETTINGS_EDIT,
                 title = "Invoices"
             )

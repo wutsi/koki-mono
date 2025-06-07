@@ -34,7 +34,7 @@ class SettingsEmailDecoratorController(
         }
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.EMAIL_SETTINGS_EMAIL_DECORATOR,
                 title = "Email Layout"
             )

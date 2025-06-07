@@ -42,7 +42,7 @@ class SettingsListUserController(
     ): String {
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.SECURITY_SETTINGS_USER_LIST,
                 title = "Security Settings",
             )

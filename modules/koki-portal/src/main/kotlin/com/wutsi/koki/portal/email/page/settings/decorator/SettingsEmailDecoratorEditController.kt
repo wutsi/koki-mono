@@ -30,7 +30,7 @@ class SettingsEmailDecoratorEditController(
     fun edit(form: EmailDecoratorForm, model: Model): String {
         model.addAttribute("form", form)
         model.addAttribute(
-            "page", PageModel(
+            "page", createPageModel(
                 name = PageName.EMAIL_SETTINGS_EMAIL_DECORATOR_EDIT, title = "Email Layout"
             )
         )

@@ -39,7 +39,7 @@ class SettingsPaymentInteracController(
         model.addAttribute("form", form)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.PAYMENT_SETTINGS_INTERAC,
                 title = "Interac Payments"
             )

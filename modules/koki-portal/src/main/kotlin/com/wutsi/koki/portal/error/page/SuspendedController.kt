@@ -15,7 +15,7 @@ class SuspendedController : AbstractPageController() {
     fun error(model: Model): String {
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.ERROR_SUSPENDED,
                 title = "Suspended"
             )

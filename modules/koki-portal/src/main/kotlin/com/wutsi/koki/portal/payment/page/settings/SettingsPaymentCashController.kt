@@ -35,7 +35,7 @@ class SettingsPaymentCashController(
         model.addAttribute("form", form)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.PAYMENT_SETTINGS_CASH,
                 title = "Cash Payments"
             )

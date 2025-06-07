@@ -33,7 +33,7 @@ class SettingsInvoiceNotificationController(
 
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.INVOICE_SETTINGS_NOTIFICATION,
                 title = "Invoice Notifications"
             )

@@ -58,7 +58,7 @@ class SettingsEditBusinessController(
 
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.TENANT_SETTINGS_BUSINESS_EDIT,
                 title = "Business",
             )

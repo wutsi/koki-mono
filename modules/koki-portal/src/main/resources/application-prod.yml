@@ -1,4 +1,7 @@
 koki:
+    webapp:
+        asset-url: https://com-wutsi-koki-prod.s3.amazonaws.com/static/koki-portal
+
     sdk:
         base-url: ${KOKI_SERVER_URL}
 

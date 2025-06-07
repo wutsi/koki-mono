@@ -35,7 +35,7 @@ class SettingsListRoleController(
     ): String {
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.SECURITY_SETTINGS_ROLE_LIST,
                 title = "Security Settings",
             )

@@ -13,7 +13,7 @@ class SettingsController : AbstractPageController() {
     fun show(model: Model): String {
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.SETTINGS,
                 title = "Settings"
             )

@@ -53,7 +53,7 @@ class SettingsPaymentCreditCardController(
         model.addAttribute("form", form)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.PAYMENT_SETTINGS_CREDIT_CARD,
                 title = "Credit Card Payments"
             )

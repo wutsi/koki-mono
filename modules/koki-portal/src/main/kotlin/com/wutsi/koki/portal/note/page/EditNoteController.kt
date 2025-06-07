@@ -32,7 +32,7 @@ class EditNoteController(private val service: NoteService) {
         )
         model.addAttribute(
             "page",
-            PageModel()
+            createPageModel()
         )
         return "notes/edit"
     }

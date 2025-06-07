@@ -34,7 +34,7 @@ class SettingsStorageController(private val service: ConfigurationService) : Abs
         model.addAttribute("form", form)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.FILE_SETTINGS_STORAGE,
                 title = "File Settings"
             )

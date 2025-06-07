@@ -22,7 +22,7 @@ class PaymentNotSupportedController : AbstractPageController() {
 
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.ERROR_PAYMENT_NOT_SUPPORTED,
                 title = "Payment Not Supported"
             )

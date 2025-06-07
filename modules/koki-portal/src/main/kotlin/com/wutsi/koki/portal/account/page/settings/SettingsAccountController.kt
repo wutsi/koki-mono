@@ -15,7 +15,7 @@ class SettingsAccountController : AbstractPageController() {
     fun show(model: Model): String {
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.ACCOUNT_SETTINGS,
                 title = "Account Settings",
             )

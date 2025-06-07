@@ -22,7 +22,7 @@ class SettingsImportAttributeController(private val service: AttributeService) :
     @GetMapping
     fun show(model: Model): String {
         model.addAttribute(
-            "page", PageModel(
+            "page", createPageModel(
                 name = PageName.ACCOUNT_SETTINGS_ATTRIBUTE_IMPORT,
                 title = "Import Account Attributes",
             )

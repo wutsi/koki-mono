@@ -38,7 +38,7 @@ class SettingsPaymentCheckController(
         model.addAttribute("form", form)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.PAYMENT_SETTINGS_CHECK,
                 title = "Check Payments"
             )

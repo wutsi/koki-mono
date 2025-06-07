@@ -50,7 +50,7 @@ class SettingsEditUserController(
 
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.SECURITY_SETTINGS_USER_EDIT,
                 title = user.displayName,
             )

@@ -38,7 +38,7 @@ class SettingsRoleController(
         model.addAttribute("role", role)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.SECURITY_SETTINGS_ROLE,
                 title = role.title ?: role.name,
             )

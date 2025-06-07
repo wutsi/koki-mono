@@ -32,7 +32,7 @@ class SettingsBusinessController(
 
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.TENANT_SETTINGS_BUSINESS,
                 title = "Business",
             )

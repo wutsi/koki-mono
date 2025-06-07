@@ -43,7 +43,7 @@ class SettingsCreateUserController(
 
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.SECURITY_SETTINGS_USER_CREATE,
                 title = "Create AccountUser",
             )

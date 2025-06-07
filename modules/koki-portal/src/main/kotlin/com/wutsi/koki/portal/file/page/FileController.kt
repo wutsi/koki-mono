@@ -55,7 +55,7 @@ class FileController(
 
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.FILE,
                 title = file.name
             )

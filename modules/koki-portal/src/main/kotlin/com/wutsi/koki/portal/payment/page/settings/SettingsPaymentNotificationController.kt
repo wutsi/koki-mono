@@ -44,7 +44,7 @@ class SettingsPaymentNotificationController(
         model.addAttribute("form", form)
 
         model.addAttribute(
-            "page", PageModel(
+            "page", createPageModel(
                 name = PageName.PAYMENT_SETTINGS_NOTIFICATION, title = "Payment Notifications"
             )
         )

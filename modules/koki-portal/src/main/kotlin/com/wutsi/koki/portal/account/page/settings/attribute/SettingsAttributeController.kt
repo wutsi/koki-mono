@@ -19,7 +19,7 @@ class SettingsAttributeController(private val service: AttributeService) : Abstr
         model.addAttribute("attr", attr)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.ACCOUNT_SETTINGS_ATTRIBUTE,
                 title = attr.name,
             )

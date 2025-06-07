@@ -15,7 +15,7 @@ class SettingsTenantController : AbstractPageController() {
     fun show(model: Model): String {
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.TENANT_SETTINGS,
                 title = "Tenant Settings",
             )

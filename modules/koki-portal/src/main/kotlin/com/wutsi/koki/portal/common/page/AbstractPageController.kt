@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.common.page
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.service.Toggles
 import com.wutsi.koki.portal.common.service.TogglesHolder
 import com.wutsi.koki.portal.tenant.model.TenantModel
@@ -9,6 +10,7 @@ import com.wutsi.koki.portal.tenant.service.CurrentTenantHolder
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.ModelAttribute
@@ -31,6 +33,9 @@ abstract class AbstractPageController {
 
     @Autowired
     protected lateinit var togglesHolder: TogglesHolder
+
+    @Value("\${koki.webapp.asset-url}")
+    protected lateinit var assetUrl: String
 
     @ModelAttribute("user")
     fun getUser(): UserModel? {
@@ -82,5 +87,13 @@ abstract class AbstractPageController {
             .map { country -> Locale(LocaleContextHolder.getLocale().language, country) }
             .sortedBy { country -> country.getDisplayCountry() }
         model.addAttribute(name, countries)
+    }
+
+    protected open fun createPageModel(name: String, title: String): PageModel {
+        return PageModel(
+            name = name,
+            title = title,
+            assetUrl = assetUrl,
+        )
     }
 }

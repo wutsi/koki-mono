@@ -37,7 +37,7 @@ class SettingsUserController(
         model.addAttribute("me", user)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.SECURITY_SETTINGS_USER,
                 title = user.displayName,
             )

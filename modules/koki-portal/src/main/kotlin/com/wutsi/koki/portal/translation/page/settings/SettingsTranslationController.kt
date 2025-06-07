@@ -26,7 +26,7 @@ class SettingsTranslationController(
         model: Model
     ): String {
         model.addAttribute(
-            "page", PageModel(
+            "page", createPageModel(
                 name = PageName.TRANSLATION_SETTINGS,
                 title = "Translation Settings",
             )

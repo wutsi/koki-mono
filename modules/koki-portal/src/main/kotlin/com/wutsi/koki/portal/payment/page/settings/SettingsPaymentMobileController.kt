@@ -45,7 +45,7 @@ class SettingsPaymentMobileController(
         model.addAttribute("form", form)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.PAYMENT_SETTINGS_MOBILE,
                 title = "Mobile Payments"
             )

@@ -61,7 +61,7 @@ class SettingsPaymentController(
 
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.PAYMENT_SETTINGS,
                 title = "Payments"
             )

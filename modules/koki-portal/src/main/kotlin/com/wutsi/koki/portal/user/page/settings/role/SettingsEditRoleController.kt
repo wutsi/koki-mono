@@ -40,7 +40,7 @@ class SettingsEditRoleController(
         model.addAttribute("form", form)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.SECURITY_SETTINGS_ROLE_EDIT,
                 title = role.title ?: role.name,
             )

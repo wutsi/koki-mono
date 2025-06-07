@@ -13,7 +13,7 @@ class UnderConstructionController : AbstractPageController() {
     fun suspended(model: Model): String {
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.ERROR_UNDER_CONSTRUCTION,
                 title = "Under Construction"
             )
