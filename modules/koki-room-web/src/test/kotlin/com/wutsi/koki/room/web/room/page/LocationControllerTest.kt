@@ -1,8 +1,11 @@
 package com.wutsi.koki.room.web.room.page
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.reset
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.refdata.dto.GetLocationResponse
@@ -13,8 +16,13 @@ import com.wutsi.koki.room.web.FileFixtures.images
 import com.wutsi.koki.room.web.RefDataFixtures.cities
 import com.wutsi.koki.room.web.RefDataFixtures.neighborhoods
 import com.wutsi.koki.room.web.RoomFixtures.rooms
+import com.wutsi.koki.room.web.TenantFixtures
 import com.wutsi.koki.room.web.common.page.PageName
+import com.wutsi.koki.track.dto.ChannelType
+import com.wutsi.koki.track.dto.TrackEvent
+import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.assertNotNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import kotlin.test.Test
@@ -193,5 +201,62 @@ class LocationControllerTest : AbstractPageControllerTest() {
         driver.switchTo().window(windowHandles[1])
 
         assertCurrentPageIs(PageName.ROOM)
+    }
+
+    @Test
+    fun `IMPRESSION tracking on page load`() {
+        val ids = rooms.map { room -> room.id.toString() }.joinToString("|")
+
+        navigateTo("/locations/${neighborhoods[0].id}/ffo-bar")
+        Thread.sleep(1000)
+
+        val event = argumentCaptor<TrackSubmittedEvent>()
+        verify(publisher).publish(event.capture())
+
+        assertEquals(PageName.LOCATION, event.firstValue.track.page)
+        assertNotNull(event.firstValue.track.correlationId)
+        assertNotNull(event.firstValue.track.deviceId)
+        assertEquals(TenantFixtures.tenants[0].id, event.firstValue.track.tenantId)
+        assertEquals(null, event.firstValue.track.component)
+        assertEquals(TrackEvent.IMPRESSION, event.firstValue.track.event)
+        assertEquals(ids, event.firstValue.track.productId)
+        assertEquals(null, event.firstValue.track.value)
+        assertEquals(null, event.firstValue.track.accountId)
+        assertEquals(ChannelType.WEB, event.firstValue.track.channelType)
+        assertEquals(USER_AGENT, event.firstValue.track.ua)
+        assertEquals("0:0:0:0:0:0:0:1", event.firstValue.track.ip)
+        assertEquals(null, event.firstValue.track.lat)
+        assertEquals(null, event.firstValue.track.long)
+        assertEquals("http://localhost:$port/locations/${neighborhoods[0].id}/ffo-bar", event.firstValue.track.url)
+    }
+
+    @Test
+    fun `IMPRESSION tracking when clicking on a map marker`() {
+        navigateTo("/locations/${neighborhoods[0].id}/ffo-bar")
+        Thread.sleep(2000)
+
+        verify(publisher).publish(any()) // IMPRESSION of the list
+        reset(publisher)
+
+        click(".map-room-icon")
+
+        val event = argumentCaptor<TrackSubmittedEvent>()
+        verify(publisher).publish(event.capture())
+
+        assertEquals(PageName.LOCATION, event.firstValue.track.page)
+        assertNotNull(event.firstValue.track.correlationId)
+        assertNotNull(event.firstValue.track.deviceId)
+        assertEquals(TenantFixtures.tenants[0].id, event.firstValue.track.tenantId)
+        assertEquals("map", event.firstValue.track.component)
+        assertEquals(TrackEvent.IMPRESSION, event.firstValue.track.event)
+        assertEquals(rooms[1].id.toString(), event.firstValue.track.productId)
+        assertEquals(null, event.firstValue.track.value)
+        assertEquals(null, event.firstValue.track.accountId)
+        assertEquals(ChannelType.WEB, event.firstValue.track.channelType)
+        assertEquals(USER_AGENT, event.firstValue.track.ua)
+        assertEquals("0:0:0:0:0:0:0:1", event.firstValue.track.ip)
+        assertEquals(null, event.firstValue.track.lat)
+        assertEquals(null, event.firstValue.track.long)
+        assertEquals("http://localhost:$port/locations/${neighborhoods[0].id}/ffo-bar", event.firstValue.track.url)
     }
 }

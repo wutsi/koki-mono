@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<div class="room" th:fragment="card(room)">
+<div class="room" th:data-id="${room.id}" th:fragment="card(room)">
     <div class="room-image">
         <img th:alt="${room.title}" th:src="${room.heroImage?.contentUrl}"/>
     </div>
