@@ -22,6 +22,7 @@ import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.file.dto.UploadFileResponse
 import com.wutsi.koki.message.dto.SendMessageRequest
 import com.wutsi.koki.message.dto.SendMessageResponse
+import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.platform.security.AccessTokenHolder
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
@@ -92,6 +93,7 @@ import kotlin.test.assertTrue
 abstract class AbstractPageControllerTest {
     companion object {
         val USER_ID = UserFixtures.USER_ID
+        val USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246"
     }
 
     @LocalServerPort
@@ -124,6 +126,9 @@ abstract class AbstractPageControllerTest {
 
     @MockitoBean
     protected lateinit var storageBuilder: StorageServiceBuilder
+
+    @MockitoBean
+    protected lateinit var publisher: Publisher
 
     @Autowired
     protected lateinit var objectMapper: ObjectMapper
@@ -159,7 +164,7 @@ abstract class AbstractPageControllerTest {
         options.addArguments("--lang=en")
         options.addArguments("--allowed-ips=")
         options.addArguments("--remote-allow-origins=*")
-        options.addArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246")
+        options.addArguments("--user-agent=$USER_AGENT")
         if (System.getProperty("headless") == "true") {
             options.addArguments("--headless")
             options.addArguments("--no-sandbox")

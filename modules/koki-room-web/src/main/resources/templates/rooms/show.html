@@ -330,7 +330,15 @@
 <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/css/intlTelInput.css" rel="stylesheet">
 <link rel="stylesheet" th:href="${page.assetUrl} + '/css/rooms.css'"/>
-
+<script th:inline="javascript">
+    document.addEventListener(
+        'DOMContentLoaded',
+        function () {
+            track('VIEW', /*[[${room.id}]]*/'0');
+        },
+        false
+    );
+</script>
 </body>
 </html>
 

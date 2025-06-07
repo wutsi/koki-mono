@@ -58,8 +58,18 @@ logging:
 
 koki:
     webapp:
+        client-id: koki-room
         base-url: http://localhost:${server.port}
         asset-url: ""
+
+    executor:
+        thread-pool-size: 16
+
+    rabbitmq:
+        url: amqp://localhost
+        exchange-name: koki-tracking
+        max-retries: 24
+        ttl-seconds: 84600
 
     rest:
         connection-timeout: 15000

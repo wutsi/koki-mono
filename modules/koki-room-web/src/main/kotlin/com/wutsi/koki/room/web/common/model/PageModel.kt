@@ -1,5 +1,7 @@
 package com.wutsi.koki.room.web.common.model
 
+import java.util.UUID
+
 data class PageModel(
     val language: String = "en",
     val name: String = "",
@@ -9,4 +11,5 @@ data class PageModel(
     val image: String? = null,
     val assetUrl: String = "",
     val url: String? = null,
+    val hitId: String = UUID.randomUUID().toString(),
 )

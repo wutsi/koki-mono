@@ -136,6 +136,8 @@
                         </div>`;
                     marker.bindPopup(html);
                     marker.openPopup();
+
+                    track('IMPRESSION', roomId, 'map');
                 });
             });
     }
@@ -164,6 +166,28 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script th:src="${page.assetUrl} + '/js/koki-map.js'"></script>
 <script th:src="${page.assetUrl} + '/js/koki-load-more.js'"></script>
+<script>
+
+    document.addEventListener(
+        'DOMContentLoaded',
+        function () {
+            let ids = '';
+            let rooms = document.querySelectorAll('.room');
+            rooms.forEach((elt) => {
+                const id = elt.getAttribute("data-id");
+                if (id && id.length > 0) {
+                    if (ids.length > 0) ids = ids + '|'
+                    ids = ids + id;
+                }
+            });
+
+            if (ids.length > 0) {
+                track('IMPRESSION', ids);
+            }
+        },
+        false
+    );
+</script>
 
 </body>
 </html>

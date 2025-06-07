@@ -5,6 +5,8 @@ import com.wutsi.koki.platform.security.AccessTokenHolder
 import com.wutsi.koki.platform.security.AuthorizationRestInterceptor
 import com.wutsi.koki.platform.tenant.TenantProvider
 import com.wutsi.koki.platform.tenant.TenantRestInterceptor
+import com.wutsi.koki.platform.tracing.spring.ClientRestInterceptor
+import com.wutsi.koki.platform.tracing.spring.DeviceIdRestInterceptor
 import com.wutsi.koki.sdk.KokiAccounts
 import com.wutsi.koki.sdk.KokiBusinesses
 import com.wutsi.koki.sdk.KokiConfiguration
@@ -33,6 +35,8 @@ class KokiSDKConfiguration(
     private val tenantRestInterceptor: TenantRestInterceptor,
     private val debugRestInterceptor: DebugRestInterceptor,
     private val authorizationRestInterceptor: AuthorizationRestInterceptor,
+    private val deviceIdRestInterceptor: DeviceIdRestInterceptor,
+    private val clientRestInterceptor: ClientRestInterceptor,
 
     @Value("\${koki.rest.connection-timeout}") private val connectionTimeout: Long,
     @Value("\${koki.rest.read-timeout}") private val readTimeout: Long,
@@ -108,6 +112,8 @@ class KokiSDKConfiguration(
     fun rest(): RestTemplate = RestTemplateBuilder().connectTimeout(Duration.ofMillis(connectionTimeout))
         .readTimeout(Duration.ofMillis(readTimeout)).interceptors(
             debugRestInterceptor,
+            deviceIdRestInterceptor,
+            clientRestInterceptor,
             tenantRestInterceptor,
             authorizationRestInterceptor,
         ).build()
@@ -117,6 +123,8 @@ class KokiSDKConfiguration(
         RestTemplateBuilder().connectTimeout(Duration.ofMillis(connectionTimeout))
             .readTimeout(Duration.ofMillis(readTimeout)).interceptors(
                 debugRestInterceptor,
+                deviceIdRestInterceptor,
+                clientRestInterceptor,
             ).build()
 
     @Bean("RestForAuthentication")
@@ -125,5 +133,7 @@ class KokiSDKConfiguration(
             .readTimeout(Duration.ofMillis(readTimeout)).interceptors(
                 tenantRestInterceptor,
                 debugRestInterceptor,
+                deviceIdRestInterceptor,
+                clientRestInterceptor,
             ).build()
 }
