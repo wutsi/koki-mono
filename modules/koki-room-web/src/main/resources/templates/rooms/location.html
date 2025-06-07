@@ -74,6 +74,9 @@
     </div>
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script th:src="${page.assetUrl} + '/js/koki-map.js'"></script>
+<script th:src="${page.assetUrl} + '/js/koki-load-more.js'"></script>
 <script>
     let map = null;
 
@@ -166,36 +169,32 @@
         document.getElementById('map-switcher').classList.remove('hidden');
         document.getElementById('list-switcher').classList.add('hidden');
     }
-</script>
 
-<link rel="stylesheet" th:href="${page.assetUrl} + '/css/location.css'"/>
-<link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script th:src="${page.assetUrl} + '/js/koki-map.js'"></script>
-<script th:src="${page.assetUrl} + '/js/koki-load-more.js'"></script>
-<script>
+    function track_impressions() {
+        let ids = '';
+        let rooms = document.querySelectorAll('.room');
+        rooms.forEach((elt) => {
+            const id = elt.getAttribute("data-id");
+            if (id && id.length > 0) {
+                if (ids.length > 0) ids = ids + '|'
+                ids = ids + id;
+            }
+        });
+        if (ids.length > 0) {
+            track('IMPRESSION', ids);
+        }
+    }
 
     document.addEventListener(
         'DOMContentLoaded',
         function () {
-            let ids = '';
-            let rooms = document.querySelectorAll('.room');
-            rooms.forEach((elt) => {
-                const id = elt.getAttribute("data-id");
-                if (id && id.length > 0) {
-                    if (ids.length > 0) ids = ids + '|'
-                    ids = ids + id;
-                }
-            });
-
-            if (ids.length > 0) {
-                track('IMPRESSION', ids);
-            }
+            track_impressions();
         },
         false
     );
 </script>
 
+<link rel="stylesheet" th:href="${page.assetUrl} + '/css/location.css'"/>
+<link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
 </body>
 </html>
