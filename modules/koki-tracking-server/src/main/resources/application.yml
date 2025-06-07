@@ -1,0 +1,85 @@
+spring:
+    jackson:
+        default-property-inclusion: non_null
+        deserialization:
+            FAIL_ON_UNKNOWN_PROPERTIES: false
+            ACCEPT_EMPTY_STRING_AS_NULL_OBJECT: true
+        mapper:
+            ACCEPT_CASE_INSENSITIVE_ENUMS: true
+            ACCEPT_CASE_INSENSITIVE_PROPERTIES: true
+        parser:
+            INCLUDE_SOURCE_IN_LOCATION: true
+
+    mvc:
+        pathmatch:
+            matching-strategy: ANT_PATH_MATCHER
+    servlet:
+        multipart:
+            max-file-size: 10240KB
+            max-request-size: 10240KB
+
+server:
+    port: 8083
+    compression:
+        enabled: true
+        mime-types: application/json,application/xml,text/html,text/xml,text/plain
+        min-response-size: 512
+
+management:
+    endpoint:
+        health:
+            show-details: always
+        info:
+            git:
+                mode: full
+    endpoints:
+        web:
+            exposure:
+                include: "beans,health,info,scheduledtasks,mappings"
+
+logging:
+    level:
+        root: INFO
+        com.amazonaws: ERROR
+        org.springframework: INFO
+        com.wutsi: DEBUG
+
+    pattern:
+        console: "%d Type=%level Logger=%c Thread=%thread %m%n"
+        file: "%d Type=%level Logger=%c Thread=%thread %m%n"
+
+koki:
+    server-url: http://localhost:${server.port}
+
+    executor:
+        thread-pool-size: 16
+
+    persister:
+        cron: "0 0 * * * *" # every hour
+        buffer-size: 10000
+
+    rabbitmq:
+        url: amqp://localhost
+        exchange-name: koki-tracking
+        max-retries: 24
+        ttl-seconds: 84600
+
+    storage:
+        type: local # local | s3
+        local:
+            directory: ${user.home}/__wutsi
+            base-url: http://localhost:${server.port}
+            servlet-path: /local-storage
+        s3:
+            bucket: koki-test
+            region: us-east-1
+            access-key: ""
+            secret-key: ""
+
+    module:
+        tracking:
+            mq:
+                consumer-delay-seconds: 1
+                queue: koki-tracking-queue
+                dlq: koki-tracking-dlq
+                dlq-cron: "0 */15 * * * *"  # Process DLQ Every 15 mins

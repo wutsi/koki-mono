@@ -23,6 +23,7 @@
         <module>modules/koki-server</module>
         <module>modules/koki-portal</module>
         <module>modules/koki-room-web</module>
+        <module>modules/koki-tracking-server</module>
     </modules>
 
     <scm>
