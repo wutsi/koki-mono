@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.module.page
 
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.module.model.ModuleModel
 import org.springframework.web.bind.annotation.ModelAttribute

@@ -4,7 +4,6 @@ import com.wutsi.koki.platform.ai.llm.LLMType
 import com.wutsi.koki.platform.ai.llm.deepseek.Deepseek
 import com.wutsi.koki.platform.ai.llm.gemini.Gemini
 import com.wutsi.koki.portal.ai.form.AISettingsForm
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission

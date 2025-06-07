@@ -4,7 +4,6 @@ import com.amazonaws.AmazonClientException
 import com.amazonaws.regions.Regions
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.platform.storage.StorageType
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.file.form.StorageForm

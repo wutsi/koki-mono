@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.note.page
 
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.note.form.NoteForm
 import com.wutsi.koki.portal.note.service.NoteService
 import com.wutsi.koki.portal.security.RequiresPermission

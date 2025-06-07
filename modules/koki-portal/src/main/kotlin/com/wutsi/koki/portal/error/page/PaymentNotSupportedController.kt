@@ -1,7 +1,6 @@
 package com.wutsi.koki.portal.error.page
 
 import com.wutsi.koki.payment.dto.PaymentMethodType
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import org.springframework.stereotype.Controller

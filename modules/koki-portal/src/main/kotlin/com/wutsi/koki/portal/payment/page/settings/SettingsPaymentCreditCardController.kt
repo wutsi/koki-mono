@@ -3,7 +3,6 @@ package com.wutsi.koki.portal.payment.page.settings
 import com.stripe.exception.StripeException
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.payment.dto.PaymentGateway
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.payment.form.PaymentSettingsCreditCardForm

@@ -4,7 +4,6 @@ import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.portal.account.service.AccountService
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.contact.service.ContactService

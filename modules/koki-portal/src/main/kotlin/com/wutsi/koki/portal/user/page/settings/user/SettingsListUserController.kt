@@ -1,7 +1,6 @@
 package com.wutsi.koki.portal.user.page.settings.user
 
 import com.wutsi.koki.portal.account.page.ListAccountController
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
