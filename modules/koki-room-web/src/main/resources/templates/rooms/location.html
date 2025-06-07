@@ -112,7 +112,15 @@
         fetch(`/locations/map/rooms/${roomId}`)
             .then((response) => {
                 response.json().then((json) => {
-                    html = `<div class="map-room-card">
+                    let location = '';
+                    if (json.neighborhood) {
+                        location = json.neighborhood.name + ', ' + json.address.city.name;
+                    } else {
+                        location = json.address.city.name;
+                    }
+
+
+                    const html = `<div class="map-room-card">
                             <a href="${json.url}" target="_blank">
                                 <div>
                                     <img src="${json.heroImage.contentUrl}" />
@@ -125,12 +133,12 @@
                                             <span>${json.numberOfRooms}</span>
                                         </li>
                                         <li>
-                                            <span>|</span>
+                                            <span>-</span>
                                             <i class="fa-solid fa-bath"></i>
                                             <span>${json.numberOfRooms}</span>
                                         </li>
                                     </ul>
-                                    <div class="address">${json.address.text}</div>
+                                    <div class="address">${location}</div>
                                 </div>
                             </a>
                         </div>`;
