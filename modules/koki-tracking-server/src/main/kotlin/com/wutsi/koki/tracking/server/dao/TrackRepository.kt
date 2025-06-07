@@ -1,6 +1,6 @@
 package com.wutsi.koki.tracking.server.dao
 
-import com.wutsi.koki.platform.storage.StorageService
+import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.tracking.server.domain.TrackEntity
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVPrinter
@@ -19,7 +19,7 @@ import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 @Service
-class TrackRepository(private val storage: StorageService) {
+class TrackRepository(private val storageServiceBuilder: StorageServiceBuilder) {
     companion object {
         private val HEADERS = arrayOf(
             "time",
@@ -72,10 +72,7 @@ class TrackRepository(private val storage: StorageService) {
         writer.use {
             val printer = CSVPrinter(
                 writer,
-                CSVFormat.DEFAULT
-                    .builder()
-                    .setHeader(*HEADERS)
-                    .build(),
+                CSVFormat.DEFAULT.builder().setHeader(*HEADERS).build(),
             )
             printer.use {
                 items.forEach {
@@ -110,6 +107,6 @@ class TrackRepository(private val storage: StorageService) {
 
     private fun storeToCloud(input: InputStream, date: LocalDate, filename: String): URL {
         val folder = "track/" + date.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
-        return storage.store("$folder/$filename", input, "text/csv", Long.MAX_VALUE)
+        return storageServiceBuilder.default().store("$folder/$filename", input, "text/csv", Long.MAX_VALUE)
     }
 }

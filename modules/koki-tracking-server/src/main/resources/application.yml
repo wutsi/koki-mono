@@ -82,4 +82,4 @@ koki:
                 consumer-delay-seconds: 1
                 queue: koki-tracking-queue
                 dlq: koki-tracking-dlq
-                dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
+                dlq-cron: "0 */15 * * * *"  # Process DLQ Every 15 mins

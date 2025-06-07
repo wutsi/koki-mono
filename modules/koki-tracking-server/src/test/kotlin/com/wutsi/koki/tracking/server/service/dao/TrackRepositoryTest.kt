@@ -1,6 +1,10 @@
 package com.wutsi.koki.tracking.server.service.dao
 
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.platform.storage.StorageService
+import com.wutsi.koki.platform.storage.StorageServiceBuilder
+import com.wutsi.koki.platform.storage.local.LocalStorageService
 import com.wutsi.koki.track.dto.ChannelType
 import com.wutsi.koki.track.dto.DeviceType
 import com.wutsi.koki.track.dto.TrackEvent
@@ -10,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import java.io.ByteArrayOutputStream
 import java.io.File
 import kotlin.test.Test
@@ -20,15 +25,20 @@ class TrackRepositoryTest {
     @Autowired
     private lateinit var dao: TrackRepository
 
-    @Autowired
-    private lateinit var storageService: StorageService
+    @MockitoBean
+    private lateinit var storageServiceBuilder: StorageServiceBuilder
 
     @Value("\${koki.storage.local.directory}")
-    private lateinit var storageDirectory: String
+    private lateinit var directory: String
+
+    private lateinit var storage: StorageService
 
     @BeforeEach
     fun setUp() {
-        File("$storageDirectory/track").deleteRecursively()
+        File("$directory/track").deleteRecursively()
+
+        storage = LocalStorageService(directory, "http://localhost:8083/local-storage")
+        doReturn(storage).whenever(storageServiceBuilder).default()
     }
 
     @Test
@@ -38,7 +48,7 @@ class TrackRepositoryTest {
 
         // THEN
         val out = ByteArrayOutputStream()
-        storageService.get(url, out)
+        storage.get(url, out)
         assertEquals(
             """
                 time,correlation_id,tenant_id,device_id,account_id,product_id,page,event,value,ip,long,lat,bot,device_type,channel_type,source,campaign,url,referrer,ua,country
