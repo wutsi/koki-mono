@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class CountryFilter(private val service: IpApiService) : Filter {
-    companion object{
+    companion object {
         private val LOGGER = LoggerFactory.getLogger(CountryFilter::class.java)
     }
 
@@ -16,7 +16,7 @@ class CountryFilter(private val service: IpApiService) : Filter {
         if (track.ip != null) {
             try {
                 return track.copy(country = service.resolveCountry(track.ip))
-            } catch(ex: Exception){
+            } catch (ex: Exception) {
                 LOGGER.warn("Unable to resolve location information from ${track.ip}", ex)
                 return track
             }

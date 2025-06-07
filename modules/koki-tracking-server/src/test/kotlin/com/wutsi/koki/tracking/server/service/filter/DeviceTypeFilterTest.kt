@@ -2,7 +2,6 @@ package com.wutsi.koki.tracking.server.service.filter
 
 import com.wutsi.koki.track.dto.DeviceType
 import com.wutsi.koki.tracking.server.domain.TrackEntity
-import org.junit.jupiter.api.assertNull
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

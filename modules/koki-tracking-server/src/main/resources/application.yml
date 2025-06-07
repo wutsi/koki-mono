@@ -54,6 +54,10 @@ koki:
     executor:
         thread-pool-size: 16
 
+    persister:
+        cron: "0 0 * * * *" # every hour
+        buffer-size: 10000
+
     rabbitmq:
         url: amqp://localhost
         exchange-name: koki-tracking

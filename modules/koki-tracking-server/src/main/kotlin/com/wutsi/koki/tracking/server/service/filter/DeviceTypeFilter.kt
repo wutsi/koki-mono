@@ -33,5 +33,4 @@ class DeviceTypeFilter : Filter {
             DeviceType.DESKTOP
         }
     }
-
 }
