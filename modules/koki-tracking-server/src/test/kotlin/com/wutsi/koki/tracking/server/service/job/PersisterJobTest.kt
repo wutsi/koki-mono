@@ -15,4 +15,10 @@ class PersisterJobTest {
         job.run()
         verify(filter).flush()
     }
+
+    @Test
+    fun destroy() {
+        job.destroy()
+        verify(filter).flush()
+    }
 }
