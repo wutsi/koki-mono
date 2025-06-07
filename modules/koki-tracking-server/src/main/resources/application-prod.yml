@@ -3,6 +3,9 @@ logging:
         com.wutsi: INFO
 
 koki:
+    persister:
+        cron: "0 0 * * * *"  # Flush every hour
+
     rabbitmq:
         url: ${CLOUDAMQP_URL}
 

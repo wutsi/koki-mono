@@ -55,7 +55,7 @@ koki:
         thread-pool-size: 16
 
     persister:
-        cron: "0 0 * * * *" # every hour
+        cron: "0 */15 * * * *"  # Flush every 15 mins
         buffer-size: 10000
 
     rabbitmq:
