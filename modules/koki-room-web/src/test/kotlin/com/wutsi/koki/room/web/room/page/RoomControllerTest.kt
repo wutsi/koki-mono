@@ -53,7 +53,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ROOM)
 
-        // Opengraph
+        // Meta
         assertElementAttribute("html", "lang", "en")
         assertEquals(room.title, driver.title)
         assertElementAttribute("head meta[name='description']", "content", room.summary)
