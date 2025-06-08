@@ -59,16 +59,16 @@
         </div>
     </div>
 
-    <div id="map-list-switcher">
+    <div id="view-switcher">
         <ul>
-            <li id="map-switcher">
-                <a href="javascript: show_map()">
+            <li id="view-switcher-map">
+                <a href="#" role="button">
                     <i class="fa-regular fa-map"></i>
                     View Map
                 </a>
             </li>
-            <li class="hidden" id="list-switcher">
-                <a href="javascript: show_list()">
+            <li class="hidden" id="view-switcher-list">
+                <a href="#" role="button">
                     <i class="fa-solid fa-list"></i>
                     View List
                 </a>
@@ -80,131 +80,16 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script th:src="${page.assetUrl} + '/js/koki-map.js'"></script>
 <script th:src="${page.assetUrl} + '/js/koki-load-more.js'"></script>
+<script th:src="${page.assetUrl} + '/js/location.js'"></script>
+
 <script>
-    let map = null;
-
-    function on_map_ready(id, mmap) {
-        console.log('on_map_ready()', id, mmap);
-        map = mmap;
-
-        const cityId = document.getElementById('map').getAttribute('data-city-id');
-        fetch('/locations/' + cityId + '/map')
-            .then(function (response) {
-                response.json().then(function (json) {
-                    console.log(json);
-                    for (var i = 0; i < json.length; i++) {
-                        let item = json[i];
-                        let marker = L.marker(
-                            [item.latitude, item.longitude],
-                            {
-                                roomId: item.id,
-                                icon: L.divIcon({
-                                    className: 'map-room-icon',
-                                    html: '<span>' + item.price + '</span>',
-                                }),
-                            }
-                        );
-                        marker.on('click', function () {
-                            on_marker_click(item.id, marker);
-                        });
-                        map.addLayer(marker);
-                    }
-                });
-            });
-    }
-
-    function on_marker_click(roomId, marker) {
-        console.log('on_marker_click()', roomId, marker);
-        fetch(`/locations/map/rooms/${roomId}`)
-            .then((response) => {
-                response.json().then((json) => {
-                    let location = '';
-                    if (json.neighborhood) {
-                        location = json.neighborhood.name + ', ' + json.address.city.name;
-                    } else {
-                        location = json.address.city.name;
-                    }
-
-
-                    const html = `<div class="map-room-card">
-                            <a href="${json.url}" target="_blank">
-                                <div>
-                                    <img src="${json.heroImage.contentUrl}" />
-                                </div>
-                                <div class="map-room-card-details">
-                                    <div class="price text-primary">${json.displayPrice.text}</div>
-                                    <ul class="breadcrumb">
-                                        <li>
-                                            <i class="fa-solid fa-bed"></i>
-                                            <span>${json.numberOfRooms}</span>
-                                        </li>
-                                        <li>
-                                            <span>-</span>
-                                            <i class="fa-solid fa-bath"></i>
-                                            <span>${json.numberOfBathrooms}</span>
-                                        </li>
-                                    </ul>
-                                    <div class="address">${location}</div>
-                                </div>
-                            </a>
-                        </div>`;
-                    marker.bindPopup(html);
-                    marker.openPopup();
-
-                    track('IMPRESSION', roomId, 'map');
-                });
-            });
-    }
-
-    function show_map() {
-        console.log('show_map()');
-        document.getElementById('map-container').style.display = 'block';
-        document.getElementById('room-list-container').style.display = 'none';
-        document.getElementById('map-switcher').classList.add('hidden');
-        document.getElementById('list-switcher').classList.remove('hidden');
-        map.invalidateSize(true);
-    }
-
-    function show_list() {
-        console.log('show_list()');
-        document.getElementById('map-container').style.display = 'none';
-        document.getElementById('room-list-container').style.display = 'block';
-        document.getElementById('map-switcher').classList.remove('hidden');
-        document.getElementById('list-switcher').classList.add('hidden');
-    }
-
-    function track_impressions() {
-        let ids = '';
-        let rooms = document.querySelectorAll('.room');
-        rooms.forEach((elt) => {
-            const id = elt.getAttribute("data-id");
-            if (id && id.length > 0) {
-                if (ids.length > 0) ids = ids + '|'
-                ids = ids + id;
-            }
-        });
-        if (ids.length > 0) {
-            track('IMPRESSION', ids);
-        }
+    function on_map_ready(id, map) {
+        kokiLocationPage.on_map_ready(id, map);
     }
 
     function on_load_more() {
-        console.log('on_load_more()');
-        let elt = document.getElementById('track-room-ids');
-        if (elt) {
-            let ids = elt.getAttribute("data-room-ids")
-            track('IMPRESSION', ids);
-            elt.parentNode.removeChild(elt); // Tracking complete, remove the element from the DOM
-        }
+        kokiLocationPage.on_load_more();
     }
-
-    document.addEventListener(
-        'DOMContentLoaded',
-        function () {
-            track_impressions();
-        },
-        false
-    );
 </script>
 
 <link rel="stylesheet" th:href="${page.assetUrl} + '/css/location.css'"/>

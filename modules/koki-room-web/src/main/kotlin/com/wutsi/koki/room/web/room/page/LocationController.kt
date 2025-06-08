@@ -55,7 +55,7 @@ class LocationController(
 
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.LOCATION,
                 title = "${location.name} Rentals",
                 description = "Find a house, apartment or room to rent in ${location.name}",
