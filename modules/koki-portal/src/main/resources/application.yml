@@ -59,7 +59,7 @@ logging:
 koki:
     webapp:
         base-url: http://localhost:${server.port}
-        assert-url: ""
+        asset-url: ""
 
     rest:
         connection-timeout: 15000
