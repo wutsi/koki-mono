@@ -60,7 +60,7 @@ class TrackRepository(private val storageServiceBuilder: StorageServiceBuilder) 
             val input = FileInputStream(file)
             input.use {
                 val date = LocalDate.now(ZoneId.of("UTC"))
-                return storeToCloud(input, date, filename)
+                return storeToCloud(input, date, filename, file.length())
             }
         } finally {
             file.delete()
@@ -105,8 +105,8 @@ class TrackRepository(private val storageServiceBuilder: StorageServiceBuilder) 
         }
     }
 
-    private fun storeToCloud(input: InputStream, date: LocalDate, filename: String): URL {
+    private fun storeToCloud(input: InputStream, date: LocalDate, filename: String, filesize: Long): URL {
         val folder = "track/" + date.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
-        return storageServiceBuilder.default().store("$folder/$filename", input, "text/csv", Long.MAX_VALUE)
+        return storageServiceBuilder.default().store("$folder/$filename", input, "text/csv", filesize)
     }
 }

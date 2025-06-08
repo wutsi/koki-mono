@@ -29,11 +29,12 @@ class TrackingConsumer(
         logger.add("track_component", event.track.component)
         logger.add("track_channel_type", event.track.channelType)
 
-        pipeline.filter(toTrackEntity(event.track))
+        val entities = toTrackEntity(event.track)
+        entities.forEach { entity -> pipeline.filter(entity) }
     }
 
-    private fun toTrackEntity(track: Track): TrackEntity {
-        return TrackEntity(
+    private fun toTrackEntity(track: Track): List<TrackEntity> {
+        val entity = TrackEntity(
             time = track.time,
             correlationId = track.correlationId,
             tenantId = track.tenantId,
@@ -52,5 +53,15 @@ class TrackingConsumer(
             value = track.value,
             channelType = track.channelType,
         )
+        if (entity.productId == null) {
+            return listOf(entity)
+        } else {
+            val productIds = entity.productId.split("|")
+            if (productIds.size <= 1) {
+                return listOf(entity)
+            } else {
+                return productIds.map { productId -> entity.copy(productId = productId) }
+            }
+        }
     }
 }
