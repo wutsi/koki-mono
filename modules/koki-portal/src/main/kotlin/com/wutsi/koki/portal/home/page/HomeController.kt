@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.home.page
 
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import org.springframework.stereotype.Controller
@@ -13,7 +12,7 @@ class HomeController : AbstractPageController() {
     fun show(model: Model): String {
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.HOME,
                 title = "Home",
             )

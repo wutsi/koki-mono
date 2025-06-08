@@ -85,6 +85,16 @@ jobs:
                     cp modules/koki-portal/Procfile .
                     heroku deploy:jar koki-portal.jar --app ${HEROKU_APP}
 
+            -   name: S3-Deploy-Test
+                env:
+                    AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_TEST }}
+                    AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY_TEST }}
+                run: |
+                    aws s3 sync \
+                      --acl public-read \
+                      --region us-east-1 \
+                      modules/koki-portal/target/classes/public/ s3://com-wutsi-koki-test/static/koki-portal
+
             -   name: Health check
                 env:
                     APP_URL: ${{secrets.KOKI_PORTAL_URL_TEST}}

@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.security.page
 
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.form.LoginForm
@@ -32,7 +31,7 @@ class LoginController(
         model.addAttribute("form", LoginForm())
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.LOGIN,
                 title = "Login",
             )

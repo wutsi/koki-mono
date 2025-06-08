@@ -2,7 +2,6 @@ package com.wutsi.koki.portal.translation.page.settings
 
 import com.amazonaws.regions.Regions
 import com.wutsi.koki.platform.translation.TranslationProvider
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
@@ -45,7 +44,7 @@ class SettingsEditTranslationController(
     private fun edit(form: TranslationSettingsForm, model: Model): String {
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.TRANSLATION_SETTINGS_EDIT,
                 title = "Translation Settings",
             )

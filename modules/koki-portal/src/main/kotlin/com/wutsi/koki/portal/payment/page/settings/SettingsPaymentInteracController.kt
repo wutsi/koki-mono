@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.payment.page.settings
 
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.payment.form.PaymentSettingsInteracForm
@@ -39,7 +38,7 @@ class SettingsPaymentInteracController(
         model.addAttribute("form", form)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.PAYMENT_SETTINGS_INTERAC,
                 title = "Interac Payments"
             )

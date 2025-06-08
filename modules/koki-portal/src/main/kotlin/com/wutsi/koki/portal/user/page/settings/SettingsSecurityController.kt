@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.user.page.settings
 
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
@@ -15,7 +14,7 @@ class SettingsSecurityController : AbstractPageController() {
     fun show(model: Model): String {
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.SECURITY_SETTINGS,
                 title = "Security Settings",
             )

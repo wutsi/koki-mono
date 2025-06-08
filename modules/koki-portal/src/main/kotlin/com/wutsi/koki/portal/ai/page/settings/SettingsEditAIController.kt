@@ -4,7 +4,6 @@ import com.wutsi.koki.platform.ai.llm.LLMType
 import com.wutsi.koki.platform.ai.llm.deepseek.Deepseek
 import com.wutsi.koki.platform.ai.llm.gemini.Gemini
 import com.wutsi.koki.portal.ai.form.AISettingsForm
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
@@ -39,7 +38,7 @@ class SettingsEditAIController(
     private fun edit(form: AISettingsForm, model: Model): String {
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.AI_SETTINGS_EDIT,
                 title = "AI Settings",
             )

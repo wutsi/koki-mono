@@ -1,7 +1,6 @@
 package com.wutsi.koki.portal.ai.page.settings
 
 import com.wutsi.koki.portal.ai.form.AISettingsForm
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
@@ -26,7 +25,7 @@ class SettingsAIController(
         model: Model
     ): String {
         model.addAttribute(
-            "page", PageModel(
+            "page", createPageModel(
                 name = PageName.AI_SETTINGS,
                 title = "AI Settings",
             )

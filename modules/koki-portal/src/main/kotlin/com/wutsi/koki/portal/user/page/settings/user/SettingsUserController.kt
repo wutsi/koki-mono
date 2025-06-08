@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.user.page.settings.user
 
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
@@ -37,7 +36,7 @@ class SettingsUserController(
         model.addAttribute("me", user)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.SECURITY_SETTINGS_USER,
                 title = user.displayName,
             )

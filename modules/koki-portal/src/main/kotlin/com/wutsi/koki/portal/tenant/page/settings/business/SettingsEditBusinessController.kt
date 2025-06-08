@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.tenant.page.settings.type
 
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.refdata.service.JuridictionService
@@ -58,7 +57,7 @@ class SettingsEditBusinessController(
 
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.TENANT_SETTINGS_BUSINESS_EDIT,
                 title = "Business",
             )

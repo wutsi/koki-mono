@@ -65,6 +65,8 @@ object PageName {
 
     const val LOGIN = "page.login"
 
+    const val NOTE_EDIT = "page.note.edit"
+
     const val PAYMENT = "page.payment"
     const val PAYMENT_CREATE = "page.payment.create"
     const val PAYMENT_LIST = "page.payment.list"

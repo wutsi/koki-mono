@@ -1,7 +1,6 @@
 package com.wutsi.koki.portal.tenant.page.settings.type
 
 import com.wutsi.koki.common.dto.ObjectType
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.TypeService
@@ -23,7 +22,7 @@ class SettingsListTypeController(private val service: TypeService) : AbstractSet
     ): String {
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.TENANT_SETTINGS_TYPE_LIST,
                 title = "Types",
             )

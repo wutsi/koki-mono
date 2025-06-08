@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.payment.page.settings
 
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.payment.form.PaymentNotificationForm
@@ -44,7 +43,7 @@ class SettingsPaymentNotificationController(
         model.addAttribute("form", form)
 
         model.addAttribute(
-            "page", PageModel(
+            "page", createPageModel(
                 name = PageName.PAYMENT_SETTINGS_NOTIFICATION, title = "Payment Notifications"
             )
         )

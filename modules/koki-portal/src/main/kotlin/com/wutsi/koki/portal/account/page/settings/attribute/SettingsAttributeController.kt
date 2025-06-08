@@ -1,7 +1,6 @@
 package com.wutsi.koki.portal.account.page.settings.attribute
 
 import com.wutsi.koki.portal.account.service.AttributeService
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
@@ -19,7 +18,7 @@ class SettingsAttributeController(private val service: AttributeService) : Abstr
         model.addAttribute("attr", attr)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.ACCOUNT_SETTINGS_ATTRIBUTE,
                 title = attr.name,
             )

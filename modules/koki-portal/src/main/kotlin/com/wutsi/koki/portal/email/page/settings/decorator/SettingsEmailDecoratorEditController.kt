@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.email.page.settings.decorator
 
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.email.model.EmailDecoratorForm
@@ -30,7 +29,7 @@ class SettingsEmailDecoratorEditController(
     fun edit(form: EmailDecoratorForm, model: Model): String {
         model.addAttribute("form", form)
         model.addAttribute(
-            "page", PageModel(
+            "page", createPageModel(
                 name = PageName.EMAIL_SETTINGS_EMAIL_DECORATOR_EDIT, title = "Email Layout"
             )
         )

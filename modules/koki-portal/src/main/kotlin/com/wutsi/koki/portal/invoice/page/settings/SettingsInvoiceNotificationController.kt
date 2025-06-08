@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.invoice.page.settings
 
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.invoice.form.InvoiceNotificationForm
@@ -33,7 +32,7 @@ class SettingsInvoiceNotificationController(
 
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.INVOICE_SETTINGS_NOTIFICATION,
                 title = "Invoice Notifications"
             )

@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.page.settings.smtp
 
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.email.model.SMTPForm
@@ -37,7 +36,7 @@ class SettingsSMTPController(
         model.addAttribute("form", form)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.EMAIL_SETTINGS_SMTP,
                 title = "SMTP Settings"
             )

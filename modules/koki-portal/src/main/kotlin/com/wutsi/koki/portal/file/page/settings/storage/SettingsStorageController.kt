@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.file.page.settings
 
-import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.file.form.StorageForm
@@ -34,7 +33,7 @@ class SettingsStorageController(private val service: ConfigurationService) : Abs
         model.addAttribute("form", form)
         model.addAttribute(
             "page",
-            PageModel(
+            createPageModel(
                 name = PageName.FILE_SETTINGS_STORAGE,
                 title = "File Settings"
             )
