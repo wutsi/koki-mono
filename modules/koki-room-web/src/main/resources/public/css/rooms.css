@@ -15,6 +15,7 @@
 
 .hero-image-container .hero-1 {
     width: 50%;
+    padding-right: 2px;
     overflow: hidden;
 }
 
@@ -27,10 +28,23 @@
     display: flex;
 }
 
+.hero-image-container .hero-21 div:first-child {
+    padding-right: 2px;
+}
+
+.hero-image-container .hero-21 div {
+    padding-bottom: 2px;
+}
+
 .hero-image-container .hero-22 {
     width: 100%;
     display: flex;
 }
+
+.hero-image-container .hero-22 div:first-child {
+    padding-right: 2px;
+}
+
 
 .hero-image-container .hero-21 > div,
 .hero-image-container .hero-22 > div {
