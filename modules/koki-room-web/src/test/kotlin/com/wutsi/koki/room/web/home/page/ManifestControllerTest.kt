@@ -17,7 +17,7 @@ class ManifestControllerTest : AbstractPageControllerTest() {
         val manifest = response.body as Map<String, Any>
         assertEquals(TenantFixtures.tenants[0].name, manifest["name"])
         assertEquals(TenantFixtures.tenants[0].name, manifest["shortName"])
-        assertEquals("fullscreen", manifest["display"])
+        assertEquals("standalone", manifest["display"])
         assertEquals("/", manifest["scope"])
         assertEquals("any", manifest["orientation"])
     }

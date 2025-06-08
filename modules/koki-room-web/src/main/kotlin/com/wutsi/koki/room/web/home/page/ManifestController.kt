@@ -15,7 +15,7 @@ class ManifestController : AbstractPageController() {
             "name" to tenant.name,
             "shortName" to tenant.name,
             "start_url" to tenant.clientPortalUrl,
-            "display" to "fullscreen",
+            "display" to "standalone",
             "scope" to "/",
             "orientation" to "any",
             "icons" to listOf(
