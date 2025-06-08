@@ -4,6 +4,7 @@
  * Attributes:
  * - data-container-id: Container of the content to fetch
  * - data-url: URL from where to fetch the content
+ * - data-on-ready: Function to call on ready
  */
 class KokiLoadMoreWidget {
     init() {
@@ -26,13 +27,18 @@ class KokiLoadMoreWidget {
         const container = document.querySelector('#' + containerId);
         container.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></div>';
 
+        const onReady = elt.getAttribute('data-on-ready');
         const url = elt.getAttribute('data-url');
-        console.log('Loading ' + url);
+        console.log('Loading url=' + url + ", onReady=" + onReady);
         fetch(url).then(function (response) {
             response.text().then(function (html) {
                 container.innerHTML = html;
                 // $('#' + containerId).replaceWith(html);
                 kokiLoadMore.init();
+
+                if (onReady) {
+                    eval(onReady)();
+                }
             });
         });
     }

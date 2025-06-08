@@ -259,4 +259,54 @@ class LocationControllerTest : AbstractPageControllerTest() {
         assertEquals(null, event.firstValue.track.long)
         assertEquals("http://localhost:$port/locations/${neighborhoods[0].id}/ffo-bar", event.firstValue.track.url)
     }
+
+    @Test
+    fun `IMPRESSION tracking on load more`() {
+        var entries = mutableListOf<RoomSummary>()
+        var seed = System.currentTimeMillis()
+        repeat(20) {
+            entries.add(rooms[0].copy(id = ++seed))
+        }
+        doReturn(
+            ResponseEntity(
+                SearchRoomResponse(entries),
+                HttpStatus.OK,
+            )
+        ).doReturn(
+            ResponseEntity(
+                SearchRoomResponse(rooms),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchRoomResponse::class.java)
+            )
+
+        navigateTo("/locations/${neighborhoods[0].id}/ffo-bar")
+        scrollToBottom()
+        reset(publisher)
+        click("#room-load-more button")
+
+        val productIds = rooms.map { room -> room.id }.joinToString("|")
+
+        val event = argumentCaptor<TrackSubmittedEvent>()
+        verify(publisher).publish(event.capture())
+
+        assertEquals(PageName.LOCATION, event.firstValue.track.page)
+        assertNotNull(event.firstValue.track.correlationId)
+        assertNotNull(event.firstValue.track.deviceId)
+        assertEquals(TenantFixtures.tenants[0].id, event.firstValue.track.tenantId)
+        assertEquals(null, event.firstValue.track.component)
+        assertEquals(TrackEvent.IMPRESSION, event.firstValue.track.event)
+        assertEquals(productIds, event.firstValue.track.productId)
+        assertEquals(null, event.firstValue.track.value)
+        assertEquals(null, event.firstValue.track.accountId)
+        assertEquals(ChannelType.WEB, event.firstValue.track.channelType)
+        assertEquals(USER_AGENT, event.firstValue.track.ua)
+        assertEquals("0:0:0:0:0:0:0:1", event.firstValue.track.ip)
+        assertEquals(null, event.firstValue.track.lat)
+        assertEquals(null, event.firstValue.track.long)
+        assertEquals("http://localhost:$port/locations/${neighborhoods[0].id}/ffo-bar", event.firstValue.track.url)
+    }
 }

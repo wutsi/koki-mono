@@ -31,15 +31,18 @@
             <a target="_blank" th:each="room : ${rooms}" th:href="${room.url}" th:title="${room.title}">
                 <div th:replace="~{__components/room :: card(${room})}"></div>
             </a>
-            <div class="text-center" id="room-load-more" th:if="${moreUrl}">
-                <button
-                    class="btn btn-sm btn-light"
-                    data-component-id='load-more'
-                    data-container-id="room-load-more"
-                    th:data-url="${moreUrl}"
-                >
-                    Load more...
-                </button>
+            <div id="room-load-more" th:if="${moreUrl}">
+                <div class="text-center">
+                    <button
+                        class="btn btn-sm btn-light"
+                        data-component-id='load-more'
+                        data-container-id="room-load-more"
+                        data-on-ready="on_load_more"
+                        th:data-url="${moreUrl}"
+                    >
+                        Load more...
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -182,6 +185,16 @@
         });
         if (ids.length > 0) {
             track('IMPRESSION', ids);
+        }
+    }
+
+    function on_load_more() {
+        console.log('on_load_more()');
+        let elt = document.getElementById('track-room-ids');
+        if (elt) {
+            let ids = elt.getAttribute("data-room-ids")
+            track('IMPRESSION', ids);
+            elt.parentNode.removeChild(elt); // Tracking complete, remove the element from the DOM
         }
     }
 
