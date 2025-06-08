@@ -1,7 +1,6 @@
 package com.wutsi.koki.room.web.room.page
 
 import com.wutsi.koki.refdata.dto.LocationType
-import com.wutsi.koki.room.web.common.model.PageModel
 import com.wutsi.koki.room.web.common.page.AbstractPageController
 import com.wutsi.koki.room.web.common.page.PageName
 import com.wutsi.koki.room.web.refdata.model.LocationService

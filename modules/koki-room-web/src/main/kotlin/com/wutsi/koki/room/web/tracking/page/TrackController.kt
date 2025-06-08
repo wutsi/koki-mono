@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ResponseBody
 
 @Controller
 class TrackController(private val service: TrackService) {
-    @PostMapping("/track")
     @ResponseBody
+    @PostMapping("/track")
     fun track(@RequestBody form: TrackForm): Map<String, Any> {
         service.track(form)
         return mapOf("success" to true)

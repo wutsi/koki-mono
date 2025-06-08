@@ -54,6 +54,7 @@ class KokiLocationPage {
 
     on_marker_click(roomId, marker) {
         console.log('open_marker_popup()', roomId, marker);
+
         fetch(`/locations/map/rooms/${roomId}`)
             .then((response) => {
                 response.json().then((json) => {
@@ -100,7 +101,7 @@ class KokiLocationPage {
         document.getElementById('room-list-container').style.display = 'none';
         document.getElementById('view-switcher-map').classList.add('hidden');
         document.getElementById('view-switcher-list').classList.remove('hidden');
-        this.map.invalidateSize(true);
+        kokiLocationPage.map.invalidateSize(true);
     }
 
     on_view_switched_to_list() {
