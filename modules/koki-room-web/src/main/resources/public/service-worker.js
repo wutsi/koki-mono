@@ -45,6 +45,8 @@ self.addEventListener('fetch', event => {
             event.request.destination === 'font'
         )
     ) {
+        const cacheName = _sw_get_cache_name(event);
+        
         // Cache First
         event.respondWith(
             caches.match(event.request)
@@ -54,10 +56,10 @@ self.addEventListener('fetch', event => {
                             // console.log('SW Resolving from the Cache', event.request.url);
                             return cachedResponse;
                         } else {
-                            console.log('SW Resolving from the Network', event.request.method, event.request.url, event.request.destination);
+                            console.log('1. SW Resolving from the Network', event.request.method, event.request.url, event.request.destination);
                             return fetch(event.request).then((response) => {
                                 const cloneResponse = response.clone();
-                                caches.open('RUNTIME').then(cache => {
+                                caches.open(cacheName).then(cache => {
                                     // console.log('SW Caching', event.request.url);
                                     cache.put(event.request.url, cloneResponse);
                                 });
@@ -69,9 +71,17 @@ self.addEventListener('fetch', event => {
         )
     } else {
         // Network Only
-        console.log('SW Resolving from the Network', event.request.method, event.request.url, event.request.destination);
+        console.log('2. SW Resolving from the Network', event.request.method, event.request.url, event.request.destination);
         event.respondWith(
             fetch(event.request)
         );
     }
 });
+
+function _sw_get_cache_name(event) {
+    if (event.request.method === 'image' && event.request.url.startsWith('https://tile.openstreetmap.org')) {
+        return 'MAP'
+    } else {
+        return 'RUNTIME'
+    }
+}
