@@ -55,6 +55,7 @@ class KokiLocationPage {
     on_marker_click(roomId, marker) {
         console.log('open_marker_popup()', roomId, marker);
 
+        fetch(`/l/map/rooms/${roomId}`)
             .then((response) => {
                 response.json().then((json) => {
                     let location = '';

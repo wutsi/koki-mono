@@ -21,7 +21,7 @@ class LocationMapper : TenantAwareMapper() {
             country = entity.country,
             longitude = entity.longitude,
             latitude = entity.latitude,
-            url = StringUtils.toSlug("/locations/${entity.id}", entity.name)
+            url = StringUtils.toSlug("/l/${entity.id}", entity.name)
         )
     }
 
