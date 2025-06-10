@@ -25,27 +25,30 @@
     </div>
 </div>
 
-<tr class="file" th:fragment="columns(file, readOnly)" th:remove="tag">
+<tr th:fragment="columns(file, readOnly)" th:remove="tag">
     <td class="text-center">
         <a th:href="'javascript: kokiImageEditor.show(' + ${file.id} + ')'">
             <img class="img-fluid" th:src="${file.contentUrl}"/>
         </a>
+        <div class="file-status-container" th:if="!${file.approved}">
+            <div th:replace="~{__components/file :: status(${file.status})}"></div>
+        </div>
     </td>
-    <td>
+    <td class="d-none d-md-table-cell">
         <a th:href="'javascript: kokiImageEditor.show(' + ${file.id} + ')'">
-            <div th:if="!${file.approved}">
-                <div th:replace="~{__components/file :: status(${file.status})}"></div>
-            </div>
             <div th:if="${file.title}" th:text="${file.title}">TITLE</div>
-            <div th:if="${file.reviewing}">Processing the image...</div>
+            <div class="margin-top-small" th:if="${file.description}" th:text="${file.description}">
+                DESCRIPTION
+            </div>
             <div class="alert alert-warning margin"
-                 th:if="${file.rejectionReason} AND ${file.rejected}" th:text="${file.rejectionReason}">REASON
+                 th:if="${file.rejectionReason} AND ${file.rejected}" th:text="${file.rejectionReason}">
+                REASON
             </div>
         </a>
     </td>
-    <td>
+    <td class="d-none d-md-table-cell">
         <a th:href="'javascript: kokiImageEditor.show(' + ${file.id} + ')'">
-            <span th:text="${file.contentLengthText}">000</span>
+            <span class="text-nowrap" th:text="${file.contentLengthText}">000</span>
         </a>
     </td>
     <td class="text-right">
