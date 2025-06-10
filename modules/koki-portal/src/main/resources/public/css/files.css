@@ -1,0 +1,6 @@
+table tr.file td a {
+    display: block !important;
+    color: black !important;
+    text-decoration: none !important;
+}
+

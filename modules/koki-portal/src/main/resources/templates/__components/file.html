@@ -19,12 +19,24 @@
             <span th:text="${file.name}">NAME</span>
         </a>
     </td>
-    <td th:text="${file.contentLengthText}">SIZE</td>
-    <td th:text="${file.languageText}">LANGUAGE</td>
-    <td>
-        <span th:if="${file.createdBy}" th:text="${file.createdBy.displayName}">CREATED</span>
+    <td class="d-none d-sm-table-cell">
+        <a class="btn-view"
+           th:href="'/files/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
+            <span class="text-nowrap" th:text="${file.contentLengthText}">SIZE</span>
+        </a>
     </td>
-    <td th:text="${file.createdAtMoment}">CREATED</td>
+    <td class="d-none d-xl-table-cell">
+        <a class="btn-view"
+           th:href="'/files/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
+            <span th:if="${file.createdBy}" th:text="${file.createdBy.displayName}">CREATED BY</span>
+        </a>
+    </td>
+    <td class="d-none d-xl-table-cell">
+        <a class="btn-view"
+           th:href="'/files/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
+            <span th:text="${file.createdAtMoment}">CREATED</span>
+        </a>
+    </td>
 </tr>
 
 <tr id="file-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">

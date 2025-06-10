@@ -38,12 +38,14 @@
             <div class="widget">
                 <div class="widget-body form-summary">
                     <div class="flex flex-space-between">
-                        <h1 class="entity-title">
+                        <h1 class="entity-title flex">
                             <a class="btn-back margin-right entity-title" th:href="${ownerUrl}">
                                 <i class="fa-solid fa-arrow-left"></i>
                             </a>
-                            <div th:replace="~{__components/file :: file-icon(${file})}"></div>
-                            <span class="margin-left-small" th:text="${file.name}">NAME</span>
+                            <div class="d-none d-md-inline">
+                                <div th:replace="~{__components/file :: file-icon(${file})}"></div>
+                                <span class="margin-left-small" th:text="${file.name}">NAME</span>
+                            </div>
                         </h1>
                         <div>
                             <a class="btn-download btn btn-primary btn-sm" target="_blank"
@@ -67,11 +69,22 @@
             <div class="widget">
                 <div class="widget-body">
                     <table class="table" id="tab-details-content">
+                        <tr th:if="${file.type.name() == 'IMAGE'}">
+                            <td class="text-center" colspan="2">
+                                <img class="img-fluid" th:src="${file.contentUrl}"/>
+                            </td>
+                        </tr>
                         <tr>
-                            <td width="20%"><b>Name</b></td>
+                            <td width="10%"><b>Name</b></td>
                             <td>
                                 <div th:replace="~{__components/file :: file-icon(${file})}"></div>
                                 <span th:text="${file.name}">NAME</span>
+                            </td>
+                        </tr>
+                        <tr th:if="${file.title}">
+                            <td><b>Title</b></td>
+                            <td th:text="${file.title}">
+                                TITLE
                             </td>
                         </tr>
                         <tr th:if="!${file.labels.isEmpty()}">
@@ -87,7 +100,7 @@
                             <td><b>Size</b></td>
                             <td th:text="${file.contentLengthText}">SIZE</td>
                         </tr>
-                        <tr>
+                        <tr th:if="${file.language}">
                             <td><b>Language</b></td>
                             <td th:text="${file.languageText}">LANG</td>
                         </tr>
@@ -99,7 +112,6 @@
                             <td><b>Description</b></td>
                             <td th:text="${file.description}">DESCRIPTION</td>
                         </tr>
-
                         <tr>
                             <td><b>Uploaded</b></td>
                             <td>
