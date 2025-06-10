@@ -22,16 +22,22 @@
     <td>
         <a th:href="'/accounts/' + ${account.id}" th:text="${account.name}">NAME</a>
     </td>
-    <td th:if="${showType}" th:text="${account.accountType?.title}">ACCOUNT TYPE</td>
-    <td>
-        <a th:href="'mailto:' + ${account.email}" th:if="${account.email}" th:text="${account.email}">EMAIL</a>
+    <td class="d-none d-lg-table-cell" th:if="${showType}">
+        <a th:href="'/accounts/' + ${account.id}" th:text="${account.accountType?.title}">ACCOUNT TYPE</a>
     </td>
-    <td th:text="${account.mobileFormatted}">MOBILE</td>
-    <td th:text="${account.phoneFormatted}">PHONE</td>
+    <td class="d-none d-md-table-cell">
+        <a th:href="'/accounts/' + ${account.id}" th:text="${account.email}">EMAIL</a>
+    </td>
+    <td class="d-none d-sm-table-cell">
+        <a th:href="'/accounts/' + ${account.id}" th:text="${account.mobileFormatted}">MOBILE</a>
+    </td>
+    <td class="d-none d-lg-table-cell">
+        <a th:href="'/accounts/' + ${account.id}" th:text="${account.phoneFormatted}">PHONE</a>
+    </td>
 </tr>
 
 <tr id="account-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
-    <td class="text-center" colspan="7">
+    <td class="text-center" colspan="5">
         <a href="javascript: koki_load_more('account-load-more')" th:data-url="${moreUrl}">Load more...</a>
     </td>
 </tr>

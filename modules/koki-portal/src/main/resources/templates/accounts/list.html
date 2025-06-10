@@ -47,14 +47,14 @@
                         <thead>
                         <tr>
                             <th>Name</th>
-                            <th th:if="!${types.isEmpty()}">Type</th>
-                            <th>Email</th>
-                            <th>Mobile</th>
-                            <th>Phone</th>
+                            <th class="d-none d-lg-table-cell" th:if="!${types.isEmpty()}">Type</th>
+                            <th class="d-none d-md-table-cell">Email</th>
+                            <th class="d-none d-sm-table-cell">Mobile</th>
+                            <th class="d-none d-lg-table-cell">Phone</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="account" th:each="account : ${accounts}">
+                        <tr class="account entity" th:each="account : ${accounts}">
                             <div th:replace="~{__components/account :: columns(${account}, !${types.isEmpty()})}"></div>
                         </tr>
                         <tr th:replace="~{__components/account :: load-more(${moreUrl})}"></tr>

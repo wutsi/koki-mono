@@ -553,6 +553,12 @@ a.entity-title {
     text-decoration: none;
 }
 
+table tr.entity td a {
+    display: block !important;
+    color: black !important;
+    text-decoration: none !important;
+}
+
 /* ===== SETTINGS ====== */
 .settings-container {
     display: flex;
