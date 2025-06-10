@@ -68,60 +68,78 @@
         <div class="col-md-12">
             <div class="widget">
                 <div class="widget-body">
-                    <table class="table" id="tab-details-content">
-                        <tr th:if="${file.type.name() == 'IMAGE'}">
-                            <td class="text-center" colspan="2">
-                                <img class="img-fluid" th:src="${file.contentUrl}"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td width="10%"><b>Name</b></td>
-                            <td>
-                                <div th:replace="~{__components/file :: file-icon(${file})}"></div>
-                                <span th:text="${file.name}">NAME</span>
-                            </td>
-                        </tr>
-                        <tr th:if="${file.title}">
-                            <td><b>Title</b></td>
-                            <td th:text="${file.title}">
-                                TITLE
-                            </td>
-                        </tr>
-                        <tr th:if="!${file.labels.isEmpty()}">
-                            <td width="20%"><b>Labels</b></td>
-                            <td>
+                    <div id="tab-details-content">
+                        <table class="table">
+                            <tr th:if="${file.type.name() == 'IMAGE'}">
+                                <td width="20%"><b>Image</b></td>
+                                <td class="text-center">
+                                    <img class="img-fluid" th:src="${file.contentUrl}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="20%"><b>Name</b></td>
+                                <td>
+                                    <div class="flex">
+                                        <div>
+                                            <span th:replace="~{__components/file :: file-icon(${file})}"></span>
+                                        </div>
+                                        <div class="margin-left-small" th:text="${file.name}">NAME</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:if="${file.title}">
+                                <td><b>Title</b></td>
+                                <td th:text="${file.title}">
+                                    TITLE
+                                </td>
+                            </tr>
+                            <tr th:if="!${file.approved}">
+                                <td><b>Status</b></td>
+                                <td>
+                                    <div>
+                                        <span th:replace="~{__components/file :: status(${file.status})}"></span>
+                                    </div>
+                                    <div class="alert alert-warning margin-top-small" th:if="${file.rejected}"
+                                         th:text="${file.rejectionReason}">REASON
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:if="!${file.labels.isEmpty()}">
+                                <td width="20%"><b>Labels</b></td>
+                                <td>
                                 <span class="badge text-bg-success margin-right-small"
                                       th:each="label : ${file.labels}"
                                       th:text="${label.displayName}"
                                 >LABEL</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><b>Size</b></td>
-                            <td th:text="${file.contentLengthText}">SIZE</td>
-                        </tr>
-                        <tr th:if="${file.language}">
-                            <td><b>Language</b></td>
-                            <td th:text="${file.languageText}">LANG</td>
-                        </tr>
-                        <tr th:if="${file.numberOfPages}">
-                            <td><b>Number of Pages</b></td>
-                            <td th:text="${file.numberOfPages}">LANG</td>
-                        </tr>
-                        <tr th:if="${file.description}">
-                            <td><b>Description</b></td>
-                            <td th:text="${file.description}">DESCRIPTION</td>
-                        </tr>
-                        <tr>
-                            <td><b>Uploaded</b></td>
-                            <td>
-                                <span th:text="${file.createdAtText}">DATE</span>
-                                <span th:if="${file.createdBy}">by</span>
-                                <span th:if="${file.createdBy}"
-                                      th:text="${file.createdBy.displayName}">MODIFIED BY</span>
-                            </td>
-                        </tr>
-                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Size</b></td>
+                                <td th:text="${file.contentLengthText}">SIZE</td>
+                            </tr>
+                            <tr th:if="${file.language}">
+                                <td><b>Language</b></td>
+                                <td th:text="${file.languageText}">LANG</td>
+                            </tr>
+                            <tr th:if="${file.numberOfPages}">
+                                <td><b>Number of Pages</b></td>
+                                <td th:text="${file.numberOfPages}">LANG</td>
+                            </tr>
+                            <tr th:if="${file.description}">
+                                <td><b>Description</b></td>
+                                <td th:text="${file.description}">DESCRIPTION</td>
+                            </tr>
+                            <tr>
+                                <td><b>Uploaded</b></td>
+                                <td>
+                                    <span th:text="${file.createdAtText}">DATE</span>
+                                    <span th:if="${file.createdBy}">by</span>
+                                    <span th:if="${file.createdBy}"
+                                          th:text="${file.createdBy.displayName}">MODIFIED BY</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

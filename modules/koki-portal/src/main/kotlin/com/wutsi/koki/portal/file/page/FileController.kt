@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.file.page
 
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.portal.account.service.AccountService
@@ -9,6 +10,7 @@ import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.file.service.FileService
 import com.wutsi.koki.portal.product.service.ProductService
+import com.wutsi.koki.portal.room.service.RoomService
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import jakarta.servlet.http.HttpServletResponse
@@ -35,6 +37,7 @@ class FileController(
     private val storageServiceBuilder: StorageServiceBuilder,
     private val accountService: AccountService,
     private val contactService: ContactService,
+    private val roomService: RoomService,
     private val productService: ProductService,
 ) : AbstractPageController() {
     @GetMapping("/files/{id}")
@@ -69,6 +72,7 @@ class FileController(
                 ObjectType.ACCOUNT -> accountService.account(ownerId, fullGraph = false).name
                 ObjectType.CONTACT -> contactService.contact(ownerId, fullGraph = false).name
                 ObjectType.PRODUCT -> productService.product(ownerId, fullGraph = false).name
+                ObjectType.ROOM -> roomService.room(ownerId, fullGraph = false).title
                 else -> null
             }
         )
@@ -82,10 +86,16 @@ class FileController(
         @RequestParam("owner-id") ownerId: Long,
         @RequestParam("owner-type") ownerType: ObjectType,
     ): String {
+        val file = service.file(id)
         service.delete(id)
 
         val module = tenantHolder.get()!!.modules.find { module -> module.objectType == ownerType }!!
-        return "redirect:${module.homeUrl}/$ownerId?tab=file"
+        val tab = if (file.type == FileType.IMAGE) {
+            "image"
+        } else {
+            "file"
+        }
+        return "redirect:${module.homeUrl}/$ownerId?tab=$tab"
     }
 
     @GetMapping("/files/{id}/download")

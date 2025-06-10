@@ -63,13 +63,4 @@ img.hero-image-empty {
     tr.room td {
         font-size: .90em;
     }
-
-    #tab-details-content table tr td {
-        display: block;
-    }
-
-    #tab-details-content table tr td:first-child {
-        border-bottom: 0;
-        padding-bottom: 0;
-    }
 }
