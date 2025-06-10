@@ -5,6 +5,7 @@
 <div th:fragment="head" th:remove="tag">
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta content="yes" name="mobile-web-app-capable"/>
 
     <title th:text="${page.title}">TITLE</title>
     <meta name="description" th:content="${page.description}" th:if="${page.description}"/>
