@@ -29,20 +29,21 @@ ul.amenities li {
 }
 
 .hero-image-container {
-    width: 250px;
-    padding: 2px;
+    width: 302px;
+    padding: 1px;
     display: inline-block;
 }
 
 img.hero-image {
-    max-width: 250px;
-    max-height: 166px;
+    max-width: 300px;
+    max-height: 200px;
 }
 
 img.hero-image-empty {
     max-width: 48px !important;
     max-height: 48px !important;
 }
+
 
 /* ======================================================================== */
 /*                                                                          */
@@ -51,14 +52,6 @@ img.hero-image-empty {
 /* ======================================================================== */
 /* Large Tablet */
 @media only screen and (max-width: 1024px) and (orientation: portrait) {
-    .hero-image-container {
-        width: 175px;
-    }
-
-    img.hero-image {
-        max-width: 175px;
-        max-height: 116px;
-    }
 }
 
 /* Mini Tablet */

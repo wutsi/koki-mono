@@ -5,7 +5,8 @@
          th:if="!${readOnly} AND ${user.hasPermission('image:manage')}"
     >
         <div>
-            Select the images to upload. Max file size: <b>1Mb</b>
+            Select the images to upload.<br/>
+            Max file size: <b>1Mb</b>
         </div>
         <div class="margin-top-small">
             <button class="btn btn-sm btn-primary" data-file-button-id="btn-file" id="btn-upload">
@@ -43,9 +44,9 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th width="15%"></th>
-            <th>Description</th>
-            <th>Size</th>
+            <th width="1%"></th>
+            <th class="d-none d-md-table-cell">Description</th>
+            <th class="d-none d-md-table-cell">Size</th>
             <th></th>
         </tr>
         </thead>

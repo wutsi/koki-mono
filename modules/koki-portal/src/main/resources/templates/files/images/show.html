@@ -4,14 +4,10 @@
         <div th:if="${image.title}">
             <b th:text="${image.title}">TITLE</b>
         </div>
-        <div th:if="${image.description}" th:text="${image.description}">TITLE</div>
-        <div class="margin-top">
-            <span class="badge text-bg-primary margin-right-small"
-                  th:each="label : ${image.labels}"
-                  th:if="!${image.rejected}"
-                  th:text="${label.displayName}"
-            >LABEL</span>
+        <div class="file-status-container" th:if="!${image.approved}">
+            <div th:replace="~{__components/file :: status(${image.status})}"></div>
         </div>
+        <div th:if="${image.description}" th:text="${image.description}">TITLE</div>
         <div class="alert alert-warning margin" th:if="${image.rejected} AND ${image.rejectionReason}"
              th:text="${image.rejectionReason}">
             REASON
