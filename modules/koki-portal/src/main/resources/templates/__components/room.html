@@ -303,7 +303,9 @@
     </tr>
     <tr th:if="${room.description}">
         <td><b>Description</b></td>
-        <td th:utext="${room.descriptionHtml}">00</td>
+        <td>
+            <div class="description-container" th:utext="${room.descriptionHtml}">DESCRIPTION</div>
+        </td>
     </tr>
     <tr>
         <td><b>Created</b></td>

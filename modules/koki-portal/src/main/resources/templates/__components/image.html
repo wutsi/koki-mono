@@ -25,9 +25,10 @@
     </div>
 </div>
 
-<tr th:fragment="columns(file, readOnly)" th:remove="tag">
+<tr th:fragment="columns(file, readOnly, ownerId, ownerType)" th:remove="tag">
     <td class="text-center">
-        <a th:href="'javascript: kokiImageEditor.show(' + ${file.id} + ')'">
+        <a class="btn-view"
+           th:href="'/files/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
             <img class="img-fluid" th:src="${file.contentUrl}"/>
         </a>
         <div class="file-status-container" th:if="!${file.approved}">
@@ -35,7 +36,8 @@
         </div>
     </td>
     <td class="d-none d-md-table-cell">
-        <a th:href="'javascript: kokiImageEditor.show(' + ${file.id} + ')'">
+        <a class="btn-view"
+           th:href="'/files/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
             <div th:if="${file.title}" th:text="${file.title}">TITLE</div>
             <div class="margin-top-small" th:if="${file.description}" th:text="${file.description}">
                 DESCRIPTION
@@ -47,10 +49,12 @@
         </a>
     </td>
     <td class="d-none d-md-table-cell">
-        <a th:href="'javascript: kokiImageEditor.show(' + ${file.id} + ')'">
+        <a class="btn-view"
+           th:href="'/files/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
             <span class="text-nowrap" th:text="${file.contentLengthText}">000</span>
         </a>
     </td>
+    <!--
     <td class="text-right">
         <button class="btn btn-sm btn-danger btn-delete"
                 data-action-confirm="Are you sure you want to delete the image"
@@ -63,10 +67,11 @@
             Delete
         </button>
     </td>
+    -->
 </tr>
 
 <tr id="image-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
-    <td class="text-center" colspan="5">
+    <td class="text-center" colspan="4">
         <button
             class="btn btn-sm btn-light"
             data-component-id='load-more'

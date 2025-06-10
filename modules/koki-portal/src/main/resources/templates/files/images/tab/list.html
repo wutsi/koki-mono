@@ -47,12 +47,11 @@
             <th width="1%"></th>
             <th class="d-none d-md-table-cell">Description</th>
             <th class="d-none d-md-table-cell">Size</th>
-            <th></th>
         </tr>
         </thead>
         <tbody id="image-list">
         <tr class="image" th:each="image : ${images}" th:id="'image-' + ${image.id}" th:if="${images}">
-            <td th:replace="~{__components/image :: columns(${image}, ${readOnly})}"></td>
+            <td th:replace="~{__components/image :: columns(${image}, ${readOnly}, ${ownerId}, ${ownerType})}"></td>
         </tr>
         <tr th:if="${images}" th:replace="~{__components/image :: load-more(${moreUrl})}"></tr>
         </tbody>

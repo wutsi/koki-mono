@@ -3,8 +3,6 @@ package com.wutsi.koki.portal.file.page.image
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.FileFixtures.image
 import com.wutsi.koki.FileFixtures.images
@@ -51,7 +49,6 @@ class ImageTabControllerTest : AbstractPageControllerTest() {
 
         assertElementCount(".tab-images tr.image", images.size)
         assertElementPresent(".btn-refresh")
-        assertElementPresent(".btn-delete")
         assertElementPresent(".uploader")
     }
 
@@ -61,7 +58,6 @@ class ImageTabControllerTest : AbstractPageControllerTest() {
 
         assertElementCount(".tab-images tr.image", images.size)
         assertElementPresent(".btn-refresh")
-        assertElementNotPresent(".btn-delete")
         assertElementNotPresent(".uploader")
     }
 
@@ -72,7 +68,6 @@ class ImageTabControllerTest : AbstractPageControllerTest() {
         navigateTo("/images/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
         assertElementPresent(".btn-refresh")
         assertElementNotPresent(".uploader")
-        assertElementNotPresent(".btn-delete")
     }
 
     @Test
@@ -84,35 +79,10 @@ class ImageTabControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun delete() {
-        navigateTo("/images/tab?owner-id=111&owner-type=ROOM&test-mode=true")
-        click("#image-${images[0].id} .btn-delete")
-
-        val alert = driver.switchTo().alert()
-        alert.accept()
-        driver.switchTo().parentFrame()
-
-        Thread.sleep(1000)
-        verify(rest).delete("$sdkBaseUrl/v1/files/${images[0].id}")
-    }
-
-    @Test
-    fun `delete cancel`() {
-        navigateTo("/images/tab?owner-id=111&owner-type=ROOM&test-mode=true")
-        click("#image-${images[0].id} .btn-delete")
-
-        val alert = driver.switchTo().alert()
-        alert.dismiss()
-        driver.switchTo().parentFrame()
-
-        verify(rest, never()).delete(any<String>())
-    }
-
-    @Test
     fun show() {
         navigateTo("/images/tab?owner-id=111&owner-type=ROOM&test-mode=true")
         click("#image-${images[0].id} a")
 
-        assertElementVisible("#koki-modal")
+        assertCurrentPageIs(PageName.FILE)
     }
 }
