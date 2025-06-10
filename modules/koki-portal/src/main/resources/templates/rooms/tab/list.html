@@ -9,11 +9,12 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th></th>
+            <th class="d-none d-sm-table-cell" width="1%"></th>
+            <th class="d-table-cell d-xl-none" width="1%"> <!-- Status icon --> </th>
             <th>Description</th>
-            <th th:if="${showAccount}">Account</th>
-            <th>Status</th>
-            <th>Type</th>
+            <th class="d-none d-xl-table-cell" th:if="${showAccount}">Account</th>
+            <th class="d-none d-xl-table-cell">Status</th>
+            <th class="d-none d-lg-table-cell">Type</th>
             <th class="text-right">Price</th>
         </tr>
         </thead>

@@ -9,7 +9,7 @@
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
                 <li class="breadcrumb-item" th:if="${account}"><a href="/accounts">Accounts</a></li>
                 <li class="breadcrumb-item active" th:if="${account}">
-                    <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
+                    <img align="absmiddle" height="24" th:src="${page.assetUrl} + '/image/account.png'" width="24"/>
                     <span th:text="${account.name}">ACCOUNT</span>
                 </li>
                 <li class="breadcrumb-item active" th:if="!${account}">Accounts</li>
