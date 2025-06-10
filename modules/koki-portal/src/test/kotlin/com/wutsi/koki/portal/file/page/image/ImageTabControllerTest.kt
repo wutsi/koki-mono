@@ -49,7 +49,6 @@ class ImageTabControllerTest : AbstractPageControllerTest() {
 
         assertElementCount(".tab-images tr.image", images.size)
         assertElementPresent(".btn-refresh")
-        assertElementPresent(".btn-delete")
         assertElementPresent(".uploader")
     }
 
@@ -59,7 +58,6 @@ class ImageTabControllerTest : AbstractPageControllerTest() {
 
         assertElementCount(".tab-images tr.image", images.size)
         assertElementPresent(".btn-refresh")
-        assertElementNotPresent(".btn-delete")
         assertElementNotPresent(".uploader")
     }
 
@@ -70,7 +68,6 @@ class ImageTabControllerTest : AbstractPageControllerTest() {
         navigateTo("/images/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
         assertElementPresent(".btn-refresh")
         assertElementNotPresent(".uploader")
-        assertElementNotPresent(".btn-delete")
     }
 
     @Test

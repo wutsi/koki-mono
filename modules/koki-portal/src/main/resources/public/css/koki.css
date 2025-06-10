@@ -696,6 +696,13 @@ div.CodeMirror {
 /* ======================================================================== */
 /* Large Tablet */
 @media only screen and (max-width: 1024px) and (orientation: portrait) {
+    .widget-body {
+        padding: .5em;
+    }
+
+    #tab-details-content .container-fluid {
+        padding: 0;
+    }
 }
 
 /* Mini Tablet */
