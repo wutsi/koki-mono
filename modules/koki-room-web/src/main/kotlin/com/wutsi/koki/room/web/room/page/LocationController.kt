@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-@RequestMapping("/locations")
+@RequestMapping("/l")
 class LocationController(
     private val roomService: RoomService,
     private val service: LocationService,
@@ -58,7 +58,7 @@ class LocationController(
                 name = PageName.LOCATION,
                 title = "${location.name} Rentals",
                 description = "Find a house, apartment or room to rent in ${location.name}",
-                url = "$baseUrl/locations/$id/$title",
+                url = "$baseUrl${location.url}",
             )
         )
 
@@ -88,7 +88,7 @@ class LocationController(
         model.addAttribute("roomIds", rooms.map { room -> room.id }.joinToString("|"))
 
         if (rooms.size >= limit) {
-            var url = "/locations/more?limit=$limit&offset=$offset"
+            var url = "/l/more?limit=$limit&offset=$offset"
             if (cityId != null) {
                 url = "$url&city-id=$cityId"
             }

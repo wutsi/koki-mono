@@ -63,7 +63,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun neighborhood() {
-        navigateTo("/locations/${neighborhoods[0].id}/ffo-bar")
+        navigateTo("/l/${neighborhoods[0].id}/montreal")
 
         assertCurrentPageIs(PageName.LOCATION)
         assertElementCount(".room", rooms.size)
@@ -80,7 +80,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
         assertElementAttribute(
             "head meta[property='og:url']",
             "content",
-            "http://localhost:0/locations/${neighborhoods[0].id}/ffo-bar"
+            "http://localhost:0/l/${neighborhoods[0].id}/centre-ville"
         )
         assertElementNotPresent("head meta[property='og:image']")
 
@@ -113,7 +113,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
                 eq(GetLocationResponse::class.java)
             )
 
-        navigateTo("/locations/${cities[0].id}/ffo-bar")
+        navigateTo("/l/${cities[0].id}/montreal")
 
         assertCurrentPageIs(PageName.LOCATION)
         assertElementCount(".room", rooms.size)
@@ -130,7 +130,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
         assertElementAttribute(
             "head meta[property='og:url']",
             "content",
-            "http://localhost:0/locations/${cities[0].id}/ffo-bar"
+            "http://localhost:0/l/${cities[0].id}/montreal"
         )
         assertElementNotPresent("head meta[property='og:image']")
 
@@ -173,7 +173,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
                 eq(SearchRoomResponse::class.java)
             )
 
-        navigateTo("/locations/${neighborhoods[0].id}/ffo-bar")
+        navigateTo("/l/${neighborhoods[0].id}/montreal")
 
         assertCurrentPageIs(PageName.LOCATION)
         assertElementCount(".room", entries.size)
@@ -185,7 +185,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun map() {
-        navigateTo("/locations/${neighborhoods[0].id}/ffo-bar")
+        navigateTo("/l/${neighborhoods[0].id}/montreal")
 
         Thread.sleep(2000)
         val markers = rooms.filter { room -> room.latitude != null && room.longitude != null }
@@ -207,7 +207,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
     fun `IMPRESSION tracking on page load`() {
         val ids = rooms.map { room -> room.id.toString() }.joinToString("|")
 
-        navigateTo("/locations/${neighborhoods[0].id}/ffo-bar")
+        navigateTo("/l/${neighborhoods[0].id}/montreal")
         Thread.sleep(1000)
 
         val event = argumentCaptor<TrackSubmittedEvent>()
@@ -227,12 +227,12 @@ class LocationControllerTest : AbstractPageControllerTest() {
         assertEquals("0:0:0:0:0:0:0:1", event.firstValue.track.ip)
         assertEquals(null, event.firstValue.track.lat)
         assertEquals(null, event.firstValue.track.long)
-        assertEquals("http://localhost:$port/locations/${neighborhoods[0].id}/ffo-bar", event.firstValue.track.url)
+        assertEquals("http://localhost:$port/l/${neighborhoods[0].id}/montreal", event.firstValue.track.url)
     }
 
     @Test
     fun `IMPRESSION tracking when clicking on a map marker`() {
-        navigateTo("/locations/${neighborhoods[0].id}/ffo-bar")
+        navigateTo("/l/${neighborhoods[0].id}/montreal")
         Thread.sleep(2000)
 
         verify(publisher).publish(any()) // IMPRESSION of the list
@@ -257,7 +257,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
         assertEquals("0:0:0:0:0:0:0:1", event.firstValue.track.ip)
         assertEquals(null, event.firstValue.track.lat)
         assertEquals(null, event.firstValue.track.long)
-        assertEquals("http://localhost:$port/locations/${neighborhoods[0].id}/ffo-bar", event.firstValue.track.url)
+        assertEquals("http://localhost:$port/l/${neighborhoods[0].id}/montreal", event.firstValue.track.url)
     }
 
     @Test
@@ -283,7 +283,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
                 eq(SearchRoomResponse::class.java)
             )
 
-        navigateTo("/locations/${neighborhoods[0].id}/ffo-bar")
+        navigateTo("/l/${neighborhoods[0].id}/montreal")
         scrollToBottom()
         reset(publisher)
         click("#room-load-more button")
@@ -307,6 +307,6 @@ class LocationControllerTest : AbstractPageControllerTest() {
         assertEquals("0:0:0:0:0:0:0:1", event.firstValue.track.ip)
         assertEquals(null, event.firstValue.track.lat)
         assertEquals(null, event.firstValue.track.long)
-        assertEquals("http://localhost:$port/locations/${neighborhoods[0].id}/ffo-bar", event.firstValue.track.url)
+        assertEquals("http://localhost:$port/l/${neighborhoods[0].id}/montreal", event.firstValue.track.url)
     }
 }
