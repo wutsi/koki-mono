@@ -22,4 +22,5 @@ data class Tenant(
     val createdAt: Date = Date(),
     val moduleIds: List<Long> = emptyList(),
     val clientPortalUrl: String = "",
+    val country: String = "",
 )
