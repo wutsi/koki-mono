@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.room.page
 
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.room.service.RoomService
 import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller
@@ -23,6 +24,10 @@ class RoomTabController(private val service: RoomService) : AbstractRoomControll
         model: Model
     ): String {
         model.addAttribute("testMode", testMode)
+        model.addAttribute(
+            "page",
+            createPageModel(PageName.ROOM_TAB, "Rooms")
+        )
         more(ownerId, ownerType, readOnly, model = model)
         return "rooms/tab/list"
     }

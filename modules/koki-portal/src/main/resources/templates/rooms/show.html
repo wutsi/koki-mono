@@ -21,8 +21,8 @@
                 <div class="widget-body room-summary">
                     <div class="flex flex-space-between">
                         <h1 class="entity-title">
-                            <img align="absmiddle" src="/image/room.png" width="48"/>
-                            <span th:text="${room.title}">NAME</span>
+                            <img align="absmiddle" th:src="${page.assetUrl} + '/image/room.png'" width="48"/>
+                            <span class="d-none d-md-inline" th:text="${room.title}">NAME</span>
                         </h1>
                         <div th:if="!${room.readOnly}">
                             <a class="btn-publish btn btn-primary btn-sm"
@@ -45,7 +45,9 @@
                         </div>
                     </div>
 
-                    <div th:replace="~{__components/room :: summary(${room})}"></div>
+                    <div class=" d-none d-md-flex">
+                        <div th:replace="~{__components/room :: summary(${room})}"></div>
+                    </div>
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
                 </div>
             </div>
@@ -58,7 +60,7 @@
                 <div class="widget-body">
                     <table>
                         <tr>
-                            <td>Listing Address:</td>
+                            <td>Public Listing:</td>
                             <td class="margin-left">
                                 <a target="_blank" th:href="${listingUrl}" th:text="${listingUrl}">URL</a>
                             </td>

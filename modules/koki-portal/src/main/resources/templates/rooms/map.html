@@ -20,7 +20,7 @@
             <div class="widget">
                 <div class="widget-body container-fluid">
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-12 col-md-3 margin-bottom">
                             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
                             <form class="form" method="post" th:action="@{'/rooms/' + ${room.id} + '/map'}"
@@ -69,14 +69,14 @@
                                 </table>
                             </form>
                         </div>
-                        <div class="col-9">
+                        <div class="col-12 col-md-9">
                             <div class="map-toolbar padding">
                                 <button class="btn btn-small btn-light" id="btn-google-map"
                                         onclick="open_in_google_map()">
-                                    Open in GoogleMap
+                                    Open GoogleMap
                                 </button>
                                 <button class="btn btn-small btn-light" id="btn-lat-long" onclick="set_lat_long()">
-                                    Set Geo-Position
+                                    Set Position
                                 </button>
                             </div>
                             <div data-component-id="map"
