@@ -33,7 +33,7 @@
     </td>
 </tr>
 
-<div th:fragment="status(status)">
+<div class="file-status" th:fragment="status(status)">
     <div class="badge rounded-pill text-bg-success" th:if="${status.name} == 'APPROVED'">
         <i class="fa-solid fa-check" th:if="${status.name} == 'APPROVED'"></i>
         <span th:text="#{'file-status.' + ${status}}">STATUS</span>

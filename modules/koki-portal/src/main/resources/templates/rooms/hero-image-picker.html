@@ -25,8 +25,9 @@
                             <span th:text="${room.title}">NAME</span>
                         </h1>
                     </div>
-
-                    <div th:replace="~{__components/room :: summary(${room})}"></div>
+                    <div class=" d-none d-md-flex">
+                        <div th:replace="~{__components/room :: summary(${room})}"></div>
+                    </div>
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
                 </div>
             </div>
@@ -41,7 +42,7 @@
                     <div>
                         Select the main image of the room
                     </div>
-                    <div class="margin-top" id="hero-image-picker">
+                    <div class="margin-top text-center" id="hero-image-picker">
                         <div class="hero-image-container text-center margin-right margin-bottom border"
                              th:each="image : ${images}"
                              th:id="'image-' + ${image.id}">
