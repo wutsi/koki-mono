@@ -541,7 +541,7 @@ a.btn-back {
 /* ===== ENTITIES ====== */
 h1.entity-title {
     font-size: 1.5em;
-    margin-bottom: 1em;
+    margin-bottom: 0;
 }
 
 h1.entity-title img {
