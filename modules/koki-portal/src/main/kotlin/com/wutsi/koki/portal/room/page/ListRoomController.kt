@@ -26,14 +26,6 @@ class ListRoomController(private val service: RoomService) : AbstractRoomControl
         @RequestParam(required = false, name = "_op") operation: String? = null,
         @RequestParam(required = false, name = "_ts") timestamp: Long? = null,
     ): String {
-        model.addAttribute(
-            "page",
-            createPageModel(
-                name = PageName.ROOM_LIST,
-                title = "Rooms",
-            )
-        )
-
         model.addAttribute("type", type)
         model.addAttribute("types", RoomType.entries.filter { entry -> entry != RoomType.UNKNOWN })
 
@@ -58,6 +50,14 @@ class ListRoomController(private val service: RoomService) : AbstractRoomControl
             status = status,
             limit = limit,
             offset = offset
+        )
+
+        model.addAttribute(
+            "page",
+            createPageModel(
+                name = PageName.ROOM_LIST,
+                title = "Rooms",
+            )
         )
 
         if (rooms.isNotEmpty()) {

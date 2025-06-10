@@ -24,10 +24,6 @@ class RoomTabController(private val service: RoomService) : AbstractRoomControll
         model: Model
     ): String {
         model.addAttribute("testMode", testMode)
-        model.addAttribute(
-            "page",
-            createPageModel(PageName.ROOM_TAB, "Rooms")
-        )
         more(ownerId, ownerType, readOnly, model = model)
         return "rooms/tab/list"
     }
@@ -55,6 +51,14 @@ class RoomTabController(private val service: RoomService) : AbstractRoomControll
         model.addAttribute("readOnly", readOnly == true)
         model.addAttribute("ownerId", ownerId)
         model.addAttribute("ownerType", ownerType)
+        model.addAttribute(
+            "page",
+            createPageModel(
+                name = PageName.ROOM_TAB,
+                title = "Rooms"
+            )
+        )
+
         if (rooms.isNotEmpty()) {
             model.addAttribute("rooms", rooms)
 

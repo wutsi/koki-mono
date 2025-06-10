@@ -183,6 +183,12 @@
         </td>
     </tr>
     <tr>
+        <td><b>Status</b></td>
+        <td>
+            <div th:replace="~{__components/room :: status(${room.status})}"></div>
+        </td>
+    </tr>
+    <tr>
         <td><b>Account</b></td>
         <td>
             <a class="entity-title"
@@ -195,6 +201,12 @@
             <span th:if="!${user?.hasPermission('account')}" th:text="${room.account.name}">ACCOUNT</span>
         </td>
     </tr>
+    <tr>
+        <td><b>Type</b></td>
+        <td>
+            <div th:replace="~{__components/room :: type(${room.type})}"></div>
+        </td>
+    </tr>
     <tr th:if="${room.title}">
         <td width="15%"><b>Title</b></td>
         <td th:text="${room.title}">TITLE</td>
@@ -203,12 +215,6 @@
         <td><b>Summary</b></td>
         <td th:text="${room.summary}">SUMMARY</td>
     </tr>
-    <tr>
-        <td><b>Type</b></td>
-        <td>
-            <div th:replace="~{__components/room :: type(${room.type})}"></div>
-        </td>
-    </tr>
     <tr th:if="${room.leaseType.name != 'UNKNOWN'}">
         <td><b>Lease Type</b></td>
         <td th:text="#{'lease-type.' + ${room.leaseType}}">TYPE</td>
@@ -216,12 +222,6 @@
     <tr th:if="${room.furnishedType.name != 'UNKNOWN'}">
         <td><b>Furnished</b></td>
         <td th:text="#{'furnished-type.' + ${room.furnishedType}}">TYPE</td>
-    </tr>
-    <tr>
-        <td><b>Status</b></td>
-        <td>
-            <div th:replace="~{__components/room :: status(${room.status})}"></div>
-        </td>
     </tr>
     <tr>
         <td><b>Bedrooms</b></td>
