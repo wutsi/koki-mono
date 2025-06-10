@@ -27,7 +27,7 @@ class KokiLocationPage {
 
         // Load the marker in the city
         const cityId = document.getElementById('map').getAttribute('data-city-id');
-        fetch('/locations/' + cityId + '/map')
+        fetch('/l/' + cityId + '/map')
             .then((response) => {
                 response.json().then((json) => {
                     console.log(json);
@@ -55,7 +55,6 @@ class KokiLocationPage {
     on_marker_click(roomId, marker) {
         console.log('open_marker_popup()', roomId, marker);
 
-        fetch(`/locations/map/rooms/${roomId}`)
             .then((response) => {
                 response.json().then((json) => {
                     let location = '';
