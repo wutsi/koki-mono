@@ -18,20 +18,26 @@
     </div>
 </div>
 
-<tr class="contact" th:fragment="columns(contact, showAccount, showType)" th:remove="tag">
+<tr th:fragment="columns(contact, showAccount, showType)" th:remove="tag">
     <td>
         <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.name}">NAME</a>
     </td>
-    <td th:if="${showType}" th:text="${contact.contactType?.title}">CONTACT TYPE</td>
-    <td>
-        <a th:href="'mailto:' + ${contact.email}" th:if="${contact.email}" th:text="${contact.email}">EMAIL</a>
+    <td class="d-none d-lg-table-cell" th:if="${showType}">
+        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.contactType?.title}">
+            TYPE
+        </a>
     </td>
-    <td th:text="${contact.mobile}">MOBILE</td>
-    <td th:text="${contact.phone}">PHONE</td>
-    <td th:if="${showAccount}">
-        <a th:href="'/accounts/' + ${contact.account.id}"
-           th:if="${contact.account}"
-           th:text="${contact.account.name}">CONTACT</a>
+    <td class="d-none d-md-table-cell">
+        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.email}">EMAIL</a>
+    </td>
+    <td class="d-none d-sm-table-cell">
+        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.mobile}">MOBILE</a>
+    </td>
+    <td class="d-none d-md-table-cell">
+        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.phone}">PHONE</a>
+    </td>
+    <td class="d-none d-lg-table-cell" th:if="${showAccount}">
+        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.account.name}">ACCOUNT</a>
     </td>
 </tr>
 

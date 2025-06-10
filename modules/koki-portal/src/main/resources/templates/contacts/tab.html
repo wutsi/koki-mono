@@ -9,15 +9,15 @@
         <thead>
         <tr>
             <th>Name</th>
-            <th th:if="!${types.isEmpty()}">Type</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Mobile</th>
-            <th th:if="${showAccount}">Account</th>
+            <th class="d-none d-lg-table-cell" th:if="!${types.isEmpty()}">Type</th>
+            <th class="d-none d-md-table-cell">Email</th>
+            <th class="d-none d-sm-table-cell">Phone</th>
+            <th class="d-none d-md-table-cell">Mobile</th>
+            <th class="d-none d-lg-table-cell" th:if="${showAccount}">Account</th>
         </tr>
         </thead>
         <tbody>
-        <tr class="contact" th:each="contact : ${contacts}" th:if="${contacts}">
+        <tr class="contact entity" th:each="contact : ${contacts}" th:if="${contacts}">
             <div th:replace="~{__components/contact :: columns(${contact}, ${showAccount}, !${types.isEmpty()})}"></div>
         </tr>
         <tr th:if="${contacts}" th:replace="~{__components/contact :: load-more(${moreUrl})}"></tr>

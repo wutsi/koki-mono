@@ -711,16 +711,17 @@ div.CodeMirror {
 
 /* Mobile phone */
 @media only screen and (max-width: 479px) and (orientation: portrait) {
+    table#tab-details-content,
     #tab-details-content table {
         table-layout: fixed;
     }
 
-    #tab-details-content table tr td {
+    #tab-details-content tr td {
         display: block;
         overflow: hidden;
     }
 
-    #tab-details-content table tr td:first-child {
+    #tab-details-content tr td:first-child {
         border-bottom: 0;
         padding-bottom: 0;
     }

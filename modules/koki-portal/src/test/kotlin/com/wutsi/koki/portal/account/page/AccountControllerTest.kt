@@ -7,7 +7,6 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AccountFixtures.account
 import com.wutsi.koki.ContactFixtures
-import com.wutsi.koki.EmailFixtures
 import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.InvoiceFixtures
 import com.wutsi.koki.NoteFixtures
@@ -126,14 +125,6 @@ class AccountControllerTest : AbstractPageControllerTest() {
 
         Thread.sleep(1000)
         assertElementCount(".tab-notes .note", NoteFixtures.notes.size)
-    }
-
-    @Test
-    fun emails() {
-        navigateTo("/accounts/${account.id}?tab=email")
-
-        Thread.sleep(1000)
-        assertElementCount(".tab-emails .email", EmailFixtures.emails.size)
     }
 
     @Test

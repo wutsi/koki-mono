@@ -5,11 +5,8 @@
       "room",
       "file",
       "tax",
-      "invoice"
-    ],
-    "side": [
-      "note",
-      "email"
+      "invoice",
+      "note"
     ]
   }
 }
