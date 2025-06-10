@@ -14,6 +14,7 @@ import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiMessages
 import com.wutsi.koki.sdk.KokiModules
 import com.wutsi.koki.sdk.KokiRefData
+import com.wutsi.koki.sdk.KokiRoomLocationMetrics
 import com.wutsi.koki.sdk.KokiRoomUnits
 import com.wutsi.koki.sdk.KokiRooms
 import com.wutsi.koki.sdk.KokiTenants
@@ -90,6 +91,11 @@ class KokiSDKConfiguration(
     @Bean
     fun kokiRoomUnits(): KokiRoomUnits {
         return KokiRoomUnits(urlBuilder(), rest())
+    }
+
+    @Bean
+    fun kokiRoomLocationMetrics(): KokiRoomLocationMetrics {
+        return KokiRoomLocationMetrics(urlBuilder(), rest())
     }
 
     @Bean
