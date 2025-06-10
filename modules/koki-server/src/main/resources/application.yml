@@ -242,6 +242,9 @@ koki:
                 queue: koki-room-queue
                 dlq: koki-room-dlq
                 dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
+            metric:
+                location:
+                    cron: "0 0 0 * * *"  # Daily at midnight
             validation:
                 publisher:
                     min-images: 5
