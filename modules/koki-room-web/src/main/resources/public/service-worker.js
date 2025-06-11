@@ -57,7 +57,7 @@ self.addEventListener('fetch', event => {
                             // console.log('SW Resolving from the Cache', event.request.url);
                             return cachedResponse;
                         } else {
-                            console.log('1. SW Resolving from the Network', event.request.method, event.request.url, event.request.destination);
+                            // console.log('1. SW Resolving from the Network', event.request.method, event.request.url, event.request.destination);
                             return fetch(event.request).then((response) => {
                                 const cloneResponse = response.clone();
                                 caches.open(cacheName).then(cache => {
@@ -72,7 +72,7 @@ self.addEventListener('fetch', event => {
         )
     } else {
         // Network Only
-        console.log('2. SW Resolving from the Network', event.request.method, event.request.url, event.request.destination);
+        // console.log('2. SW Resolving from the Network', event.request.method, event.request.url, event.request.destination);
         event.respondWith(
             fetch(event.request)
         );
