@@ -254,7 +254,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
 
         scrollToBottom()
         click("#room-load-more button", 1000)
-        assertElementCount(".room", entries.size + rooms.size)
+        assertElementCount("div.room", entries.size + rooms.size)
     }
 
     @Test
