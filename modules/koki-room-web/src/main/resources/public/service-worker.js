@@ -46,7 +46,8 @@ self.addEventListener('fetch', event => {
         )
     ) {
         const cacheName = _sw_get_cache_name(event);
-        
+        console.log(event.request.url, 'destination=' + event.request.destination, 'cache=' + cacheName);
+
         // Cache First
         event.respondWith(
             caches.match(event.request)
@@ -79,7 +80,7 @@ self.addEventListener('fetch', event => {
 });
 
 function _sw_get_cache_name(event) {
-    if (event.request.method === 'image' && event.request.url.startsWith('https://tile.openstreetmap.org')) {
+    if (event.request.destination === 'image' && event.request.url.startsWith('https://tile.openstreetmap.org')) {
         return 'MAP'
     } else {
         return 'RUNTIME'
