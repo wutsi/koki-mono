@@ -4,15 +4,6 @@ table tr.file td a {
     text-decoration: none !important;
 }
 
-#tab-details-content table tr td {
-    display: block !important;
-}
-
-#tab-details-content table tr td:first-child {
-    border-bottom: 0 !important;
-    padding-bottom: 0 !important;
-}
-
 /* ======================================================================== */
 /*                                                                          */
 /*  MEDIA QUERIES                                                           */
