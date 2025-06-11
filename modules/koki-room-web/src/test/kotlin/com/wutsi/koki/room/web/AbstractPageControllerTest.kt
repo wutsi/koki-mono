@@ -34,9 +34,10 @@ import com.wutsi.koki.refdata.dto.SearchLocationResponse
 import com.wutsi.koki.refdata.dto.SearchSalesTaxResponse
 import com.wutsi.koki.refdata.dto.SearchUnitResponse
 import com.wutsi.koki.room.dto.GetRoomResponse
+import com.wutsi.koki.room.dto.SearchRoomLocationMetricResponse
 import com.wutsi.koki.room.dto.SearchRoomResponse
 import com.wutsi.koki.room.web.TenantFixtures.tenants
-import com.wutsi.koki.room.web.location.model.GeoIpModel
+import com.wutsi.koki.room.web.geoip.model.GeoIpModel
 import com.wutsi.koki.security.dto.ApplicationName
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
@@ -93,7 +94,8 @@ import kotlin.test.assertTrue
 abstract class AbstractPageControllerTest {
     companion object {
         val USER_ID = UserFixtures.USER_ID
-        val USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246"
+        val USER_AGENT =
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246"
     }
 
     @LocalServerPort
@@ -466,6 +468,18 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(GetRoomResponse::class.java)
+            )
+
+        // Location Metrics
+        doReturn(
+            ResponseEntity(
+                SearchRoomLocationMetricResponse(RoomFixtures.metrics),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchRoomLocationMetricResponse::class.java)
             )
     }
 

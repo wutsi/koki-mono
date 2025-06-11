@@ -26,6 +26,7 @@ data class TenantModel(
     val websiteUrl: String? = null,
     val createdAt: Date = Date(),
     val clientPortalUrl: String = "",
+    val country: String = "",
 ) {
     fun createMoneyFormat(): NumberFormat {
         return DecimalFormat(monetaryFormat)

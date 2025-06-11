@@ -28,20 +28,40 @@
             </ul>
         </div>
         <div id="room-list-container-inner">
-            <a target="_blank" th:each="room : ${rooms}" th:href="${room.url}" th:title="${room.title}">
-                <div th:replace="~{__components/room :: card(${room})}"></div>
-            </a>
-            <div id="room-load-more" th:if="${moreUrl}">
-                <div class="text-center">
-                    <button
-                        class="btn btn-sm btn-light"
-                        data-component-id='load-more'
-                        data-container-id="room-load-more"
-                        data-on-ready="on_load_more"
-                        th:data-url="${moreUrl}"
-                    >
-                        Load more...
-                    </button>
+            <div class="room-list-empty" th:if="${rooms.isEmpty()}">
+                <div>
+                    No property found in <span th:text="${location.name}">LOCATION</span>
+                </div>
+                <div class="popular-locations" th:if="!${popularLocations.isEmpty()}">
+                    <hr/>
+                    We recommend you the following searches instead:
+                    <ul>
+                        <li th:each="loc : ${popularLocations}">
+                            <a th:href="${loc.url}">
+                                <b th:text="${loc.name}">LOCATION</b> Rentals
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div th:if="!${rooms.isEmpty()}" th:remove="tag">
+                <a class="room" target="_blank" th:each="room : ${rooms}" th:href="${room.url}"
+                   th:title="${room.title}">
+                    <div th:replace="~{__components/room :: card(${room})}"></div>
+                </a>
+                <div id="room-load-more" th:if="${moreUrl}">
+                    <div class="text-center">
+                        <button
+                            class="btn btn-sm btn-light"
+                            data-component-id='load-more'
+                            data-container-id="room-load-more"
+                            data-on-ready="on_load_more"
+                            th:data-url="${moreUrl}"
+                        >
+                            Load more...
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -59,7 +79,7 @@
         </div>
     </div>
 
-    <div id="view-switcher">
+    <div id="view-switcher" th:if="!${rooms.isEmpty()}">
         <ul>
             <li id="view-switcher-map">
                 <a href="#" role="button">

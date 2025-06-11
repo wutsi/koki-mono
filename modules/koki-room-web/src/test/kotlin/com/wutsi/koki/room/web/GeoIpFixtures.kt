@@ -1,6 +1,6 @@
 package com.wutsi.koki.room.web
 
-import com.wutsi.koki.room.web.location.model.GeoIpModel
+import com.wutsi.koki.room.web.geoip.model.GeoIpModel
 
 object GeoIpFixtures {
     val geoip = GeoIpModel(

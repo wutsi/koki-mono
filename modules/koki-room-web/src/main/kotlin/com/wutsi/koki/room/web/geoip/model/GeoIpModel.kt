@@ -1,4 +1,4 @@
-package com.wutsi.koki.room.web.location.model
+package com.wutsi.koki.room.web.geoip.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

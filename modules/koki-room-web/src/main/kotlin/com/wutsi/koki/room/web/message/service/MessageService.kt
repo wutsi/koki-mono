@@ -3,7 +3,7 @@ package com.wutsi.koki.room.web.message.service
 import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.message.dto.SendMessageRequest
-import com.wutsi.koki.room.web.location.service.CurrentGeoIPHolder
+import com.wutsi.koki.room.web.geoip.service.CurrentGeoIPHolder
 import com.wutsi.koki.room.web.message.form.SendMessageForm
 import com.wutsi.koki.room.web.refdata.model.LocationService
 import com.wutsi.koki.sdk.KokiMessages
