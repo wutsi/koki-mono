@@ -3,12 +3,16 @@ package com.wutsi.koki.room.web.room.page
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.reset
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.file.dto.SearchFileResponse
+import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.refdata.dto.GetLocationResponse
+import com.wutsi.koki.refdata.dto.Location
+import com.wutsi.koki.refdata.dto.SearchLocationResponse
 import com.wutsi.koki.room.dto.RoomSummary
 import com.wutsi.koki.room.dto.SearchRoomResponse
 import com.wutsi.koki.room.web.AbstractPageControllerTest
@@ -18,13 +22,16 @@ import com.wutsi.koki.room.web.RefDataFixtures.neighborhoods
 import com.wutsi.koki.room.web.RoomFixtures.rooms
 import com.wutsi.koki.room.web.TenantFixtures
 import com.wutsi.koki.room.web.common.page.PageName
+import com.wutsi.koki.room.web.geoip.model.GeoIpModel
 import com.wutsi.koki.track.dto.ChannelType
 import com.wutsi.koki.track.dto.TrackEvent
 import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertNotNull
 import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
+import org.springframework.web.client.HttpClientErrorException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -62,8 +69,75 @@ class LocationControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun neighborhood() {
-        navigateTo("/l/${neighborhoods[0].id}/montreal")
+    fun `show - resolved from geo-ip`() {
+        // GIVEN
+        val city = cities[1]
+        doReturn(
+            ResponseEntity(
+                SearchLocationResponse(listOf(city)),
+                HttpStatus.OK,
+            )
+        ).whenever(restWithoutTenantHeader)
+            .getForEntity(
+                any<String>(),
+                eq(SearchLocationResponse::class.java)
+            )
+
+        // WHEN
+        navigateTo("/l")
+
+        // THEN
+        assertCurrentPageIs(PageName.LOCATION)
+        assertEquals("http://localhost:$port" + StringUtils.toSlug("/l/${city.id}", city.name), driver.currentUrl)
+    }
+
+    @Test
+    fun `show - no geo-ip, fallback to popular city`() {
+        // GIVEN
+        doThrow(HttpClientErrorException(HttpStatusCode.valueOf(404)))
+            .whenever(rest).getForEntity("https://ipapi.co/json", GeoIpModel::class.java)
+
+        // WHEN
+        navigateTo("/l")
+
+        // THEN
+        assertEquals(true, driver.currentUrl?.startsWith("http://localhost:$port/l/"))
+    }
+
+    @Test
+    fun `show - no geo-ip, no popular city`() {
+        doReturn(
+            ResponseEntity(
+                SearchLocationResponse(emptyList<Location>()),
+                HttpStatus.OK,
+            )
+        ).whenever(restWithoutTenantHeader)
+            .getForEntity(
+                any<String>(),
+                eq(SearchLocationResponse::class.java)
+            )
+
+        // WHEN
+        navigateTo("/l")
+
+        // THEN
+        assertCurrentPageIs(PageName.ERROR_404)
+    }
+
+    @Test
+    fun `list - neighborhood`() {
+        doReturn(
+            ResponseEntity(
+                GetLocationResponse(neighborhoods[0]),
+                HttpStatus.OK,
+            )
+        ).whenever(restWithoutTenantHeader)
+            .getForEntity(
+                any<String>(),
+                eq(GetLocationResponse::class.java)
+            )
+
+        navigateTo("/l/${neighborhoods[0].id}/centre-ville")
 
         assertCurrentPageIs(PageName.LOCATION)
         assertElementCount(".room", rooms.size)
@@ -101,7 +175,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun city() {
+    fun `list - city`() {
         doReturn(
             ResponseEntity(
                 GetLocationResponse(cities[0]),

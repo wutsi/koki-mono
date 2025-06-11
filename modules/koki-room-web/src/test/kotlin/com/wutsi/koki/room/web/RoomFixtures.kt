@@ -6,6 +6,7 @@ import com.wutsi.koki.room.dto.FurnishedType
 import com.wutsi.koki.room.dto.LeaseTerm
 import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.Room
+import com.wutsi.koki.room.dto.RoomLocationMetric
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomSummary
 import com.wutsi.koki.room.dto.RoomType
@@ -192,4 +193,11 @@ object RoomFixtures {
         visitFees = Money(5.0, "CAD"),
         dateOfAvailability = DateUtils.addMonths(Date(), 6),
     )
+
+    val metrics = RefDataFixtures.locations.reversed().map { location ->
+        RoomLocationMetric(
+            locationId = location.id,
+            totalPublishedRentals = (100 * Math.random()).toInt()
+        )
+    }
 }

@@ -57,7 +57,7 @@
     width: 100%
 }
 
-#room-list-container-inner a {
+#room-list-container-inner a.room {
     text-decoration: none;
     color: #444;
 }

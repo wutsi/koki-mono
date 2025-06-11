@@ -9,7 +9,7 @@ class KokiRoomLocationMetrics(
     rest: RestTemplate,
 ) : AbstractKokiModule(rest) {
     companion object {
-        private const val PATH_PREFIX = "/v1/room/metrics/locations"
+        private const val PATH_PREFIX = "/v1/rooms/metrics/locations"
     }
 
     fun metrics(

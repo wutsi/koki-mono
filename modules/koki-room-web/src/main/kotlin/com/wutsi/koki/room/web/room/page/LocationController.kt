@@ -3,9 +3,12 @@ package com.wutsi.koki.room.web.room.page
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.room.web.common.page.AbstractPageController
 import com.wutsi.koki.room.web.common.page.PageName
+import com.wutsi.koki.room.web.geoip.service.CurrentGeoIPHolder
+import com.wutsi.koki.room.web.refdata.model.LocationModel
 import com.wutsi.koki.room.web.refdata.model.LocationService
 import com.wutsi.koki.room.web.room.model.MapMarkerModel
 import com.wutsi.koki.room.web.room.model.RoomModel
+import com.wutsi.koki.room.web.room.service.RoomLocationMetricService
 import com.wutsi.koki.room.web.room.service.RoomService
 import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller
@@ -21,8 +24,39 @@ import org.springframework.web.client.HttpClientErrorException
 @RequestMapping("/l")
 class LocationController(
     private val roomService: RoomService,
+    private val locationService: LocationService,
+    private val metricService: RoomLocationMetricService,
     private val service: LocationService,
+    private val geoIp: CurrentGeoIPHolder
 ) : AbstractPageController() {
+    @GetMapping
+    fun show(): String {
+        var city = getGeoLocalizedCity()
+            ?: getMostPopularCities(1).firstOrNull()
+            ?: throw HttpClientErrorException(HttpStatusCode.valueOf(404), "Unable to resolve geoIp data")
+        return "redirect:${city.url}"
+    }
+
+    private fun getGeoLocalizedCity(): LocationModel? {
+        val geo = geoIp.get()
+            ?: return null
+
+        return locationService.locations(
+            country = tenantHolder.get()?.country, // Limit in the current tenant
+            keyword = geo.city,
+            limit = 1
+        ).firstOrNull()
+    }
+
+    private fun getMostPopularCities(limit: Int): List<LocationModel> {
+        val metrics = metricService.metrics(
+            country = tenantHolder.get()?.country,
+            locationType = LocationType.CITY,
+            limit = limit,
+        )
+        return metrics.map { metric -> metric.location }
+    }
+
     @GetMapping("/{id}/{title}")
     fun list(
         @PathVariable id: Long,
@@ -67,6 +101,12 @@ class LocationController(
             neighborhoodId = if (location.type == LocationType.NEIGHBORHOOD) id else null,
             model = model,
         )
+
+        val rooms = model.getAttribute("rooms") as List<RoomModel>
+        if (rooms.isEmpty()) {
+            val popularLocations = getMostPopularCities(10)
+            model.addAttribute("popularLocations", popularLocations)
+        }
         return "rooms/location"
     }
 
