@@ -140,7 +140,7 @@ class LocationController(
             ?: return null
 
         return locationService.locations(
-            country = tenantHolder.get()?.country, // Limit in the current tenant
+            country = geo.countryCode,
             keyword = geo.city,
             limit = 1
         ).firstOrNull()

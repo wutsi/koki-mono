@@ -46,24 +46,21 @@ self.addEventListener('fetch', event => {
         )
     ) {
         const cacheName = _sw_get_cache_name(event);
-        
+        // console.log(event.request.url, 'destination=' + event.request.destination, 'cache=' + cacheName);
+
         // Cache First
         event.respondWith(
             caches.match(event.request)
                 .then(cachedResponse => {
-                        // It can update the cache to serve updated content on the next request                     s
                         if (cachedResponse) {
-                            // console.log('SW Resolving from the Cache', event.request.url);
                             return cachedResponse;
                         } else {
-                            console.log('1. SW Resolving from the Network', event.request.method, event.request.url, event.request.destination);
                             return fetch(event.request).then((response) => {
                                 const cloneResponse = response.clone();
                                 caches.open(cacheName).then(cache => {
-                                    // console.log('SW Caching', event.request.url);
                                     cache.put(event.request.url, cloneResponse);
                                 });
-                                return response
+                                return response;
                             });
                         }
                     }
@@ -71,7 +68,6 @@ self.addEventListener('fetch', event => {
         )
     } else {
         // Network Only
-        console.log('2. SW Resolving from the Network', event.request.method, event.request.url, event.request.destination);
         event.respondWith(
             fetch(event.request)
         );
@@ -79,8 +75,10 @@ self.addEventListener('fetch', event => {
 });
 
 function _sw_get_cache_name(event) {
-    if (event.request.method === 'image' && event.request.url.startsWith('https://tile.openstreetmap.org')) {
+    if (event.request.destination === 'image' && event.request.url.startsWith('https://tile.openstreetmap.org')) {
         return 'MAP'
+    } else if (event.request.destination === 'document') {
+        return 'DOCUMENT'
     } else {
         return 'RUNTIME'
     }
