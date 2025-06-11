@@ -4,7 +4,7 @@ import com.wutsi.koki.refdata.dto.CategoryType
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.web.common.page.AbstractPageController
 import com.wutsi.koki.room.web.common.page.PageName
-import com.wutsi.koki.room.web.location.service.CurrentGeoIPHolder
+import com.wutsi.koki.room.web.geoip.service.CurrentGeoIPHolder
 import com.wutsi.koki.room.web.message.form.SendMessageForm
 import com.wutsi.koki.room.web.message.service.MessageService
 import com.wutsi.koki.room.web.refdata.mapper.AmenityMapper

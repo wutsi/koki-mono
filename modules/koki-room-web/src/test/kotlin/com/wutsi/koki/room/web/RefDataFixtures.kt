@@ -87,9 +87,17 @@ object RefDataFixtures {
             parentId = 100,
             country = "CA",
             latitude = 45.508888,
-            longitude = -73.561668
+            longitude = -73.561668,
         ),
-        Location(id = 120, type = LocationType.CITY, name = "Saint Isidore", parentId = 100, country = "CA"),
+        Location(
+            id = 120,
+            type = LocationType.CITY,
+            name = "Saint Isidore",
+            parentId = 100,
+            country = "CA",
+            latitude = 45.30078966757618,
+            longitude = -73.68129885390888,
+        ),
         Location(id = 210, type = LocationType.CITY, name = "Toronto", parentId = 200, country = "CA"),
     )
     val neighborhoods = listOf(

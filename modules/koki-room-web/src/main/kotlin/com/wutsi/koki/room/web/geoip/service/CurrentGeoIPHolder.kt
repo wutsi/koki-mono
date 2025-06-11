@@ -1,7 +1,7 @@
-package com.wutsi.koki.room.web.location.service
+package com.wutsi.koki.room.web.geoip.service
 
 import com.wutsi.koki.platform.logger.KVLogger
-import com.wutsi.koki.room.web.location.model.GeoIpModel
+import com.wutsi.koki.room.web.geoip.model.GeoIpModel
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode

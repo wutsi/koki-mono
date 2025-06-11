@@ -28,6 +28,7 @@ class TenantMapper {
             portalUrl = entity.portalUrl,
             websiteUrl = entity.websiteUrl,
             clientPortalUrl = entity.clientPortalUrl,
+            country = entity.country,
         )
     }
 }
