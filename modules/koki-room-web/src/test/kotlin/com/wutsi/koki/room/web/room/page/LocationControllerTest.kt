@@ -140,7 +140,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
         navigateTo("/l/${neighborhoods[0].id}/centre-ville")
 
         assertCurrentPageIs(PageName.LOCATION)
-        assertElementCount(".room", rooms.size)
+        assertElementCount("div.room", rooms.size)
 
         // Opengraph
         assertElementAttribute("html", "lang", "en")
@@ -190,7 +190,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
         navigateTo("/l/${cities[0].id}/montreal")
 
         assertCurrentPageIs(PageName.LOCATION)
-        assertElementCount(".room", rooms.size)
+        assertElementCount("div.room", rooms.size)
 
         // Opengraph
         assertElementAttribute("html", "lang", "en")
@@ -250,7 +250,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
         navigateTo("/l/${neighborhoods[0].id}/montreal")
 
         assertCurrentPageIs(PageName.LOCATION)
-        assertElementCount(".room", entries.size)
+        assertElementCount("div.room", entries.size)
 
         scrollToBottom()
         click("#room-load-more button", 1000)

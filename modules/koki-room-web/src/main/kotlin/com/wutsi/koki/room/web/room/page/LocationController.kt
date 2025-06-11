@@ -37,26 +37,6 @@ class LocationController(
         return "redirect:${city.url}"
     }
 
-    private fun getGeoLocalizedCity(): LocationModel? {
-        val geo = geoIp.get()
-            ?: return null
-
-        return locationService.locations(
-            country = tenantHolder.get()?.country, // Limit in the current tenant
-            keyword = geo.city,
-            limit = 1
-        ).firstOrNull()
-    }
-
-    private fun getMostPopularCities(limit: Int): List<LocationModel> {
-        val metrics = metricService.metrics(
-            country = tenantHolder.get()?.country,
-            locationType = LocationType.CITY,
-            limit = limit,
-        )
-        return metrics.map { metric -> metric.location }
-    }
-
     @GetMapping("/{id}/{title}")
     fun list(
         @PathVariable id: Long,
@@ -153,5 +133,25 @@ class LocationController(
     @GetMapping("/map/rooms/{roomId}")
     fun room(@PathVariable roomId: Long): RoomModel {
         return roomService.room(roomId, fullGraph = true)
+    }
+
+    private fun getGeoLocalizedCity(): LocationModel? {
+        val geo = geoIp.get()
+            ?: return null
+
+        return locationService.locations(
+            country = tenantHolder.get()?.country, // Limit in the current tenant
+            keyword = geo.city,
+            limit = 1
+        ).firstOrNull()
+    }
+
+    private fun getMostPopularCities(limit: Int): List<LocationModel> {
+        val metrics = metricService.metrics(
+            country = tenantHolder.get()?.country,
+            locationType = LocationType.CITY,
+            limit = limit,
+        )
+        return metrics.map { metric -> metric.location }
     }
 }
