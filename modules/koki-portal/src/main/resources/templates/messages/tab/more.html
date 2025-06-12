@@ -1,5 +1,5 @@
-<tr class="message" th:each="message : ${messages}" th:id="'message-' + ${message.id}">
-    <div th:replace="~{__components/message :: columns(${message})}"></div>
+<tr class="message entity" th:each="message : ${messages}" th:id="'message-' + ${message.id}">
+    <div th:replace="~{__components/message :: columns(${message}, false)}"></div>
 </tr>
 <tr th:replace="~{__components/message :: load-more(${moreUrl})}"></tr>
 

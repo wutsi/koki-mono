@@ -1,0 +1,36 @@
+.message-owner-image {
+    max-width: 250px;
+    max-height: 166px;
+}
+
+.message-status-NEW {
+    font-weight: bold;
+}
+
+.message-status-READ {
+    font-weight: normal;
+}
+
+/* ======================================================================== */
+/*                                                                          */
+/*  MEDIA QUERIES                                                           */
+/*                                                                          */
+/* ======================================================================== */
+/* Large Tablet */
+@media only screen and (max-width: 1024px) and (orientation: portrait) {
+}
+
+/* Mini Tablet */
+@media only screen and (max-width: 820px) and (orientation: portrait) {
+    .message-owner-image {
+        max-width: 200px;
+        max-height: 133px;
+    }
+}
+
+/* Mobile phone */
+@media only screen and (max-width: 479px) and (orientation: portrait) {
+    tr.message td {
+        font-size: 0.9em;
+    }
+}

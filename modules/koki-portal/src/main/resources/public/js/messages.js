@@ -1,4 +1,17 @@
-class KokiMessageTable {
+class KokiMessage {
+    show(id) {
+        koki.widgets.modal.open(
+            '/messages/' + id,
+            'Message',
+            null,
+            function () {
+                const elts = document.querySelectorAll('#message-' + id + ' td');
+                elts.forEach((elt) => {
+                    elt.classList.remove('message-status-NEW');
+                });
+            });
+    }
+
     archive(id) {
         this._update_status(id, '/messages/' + id + '/archive');
     }
@@ -11,17 +24,19 @@ class KokiMessageTable {
         const me = this;
         fetch(url)
             .then(() => {
-                const elt = document.getElementById('message-' + id);
-                elt.parentNode.removeChild(elt);
+                me.refresh();
             });
     }
 
     refresh() {
         const container = document.getElementById('message-container');
-        const ownerId = container.getAttribute("data-owner-id");
-        const ownerType = container.getAttribute("data-owner-type");
         const folder = document.getElementById("message-folder").value;
-        fetch('/messages/tab/more?owner-id=' + ownerId + '&owner-type=' + ownerType + '&folder=' + folder)
+        let url = container.getAttribute("data-refresh-url");
+        if (folder) {
+            url = url + '&folder=' + folder;
+        }
+        console.log('Reloading ' + url + ' to #message-container');
+        fetch(url)
             .then(response => {
                 response.text()
                     .then(html => {
@@ -31,4 +46,4 @@ class KokiMessageTable {
     }
 }
 
-const kokiMessageTable = new KokiMessageTable();
+const kokiMessage = new KokiMessage();

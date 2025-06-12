@@ -1,7 +1,7 @@
 package com.wutsi.koki.portal.message.model
 
-import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.message.dto.MessageStatus
+import com.wutsi.koki.portal.common.model.ObjectReferenceModel
 import java.util.Date
 
 data class MessageModel(
@@ -14,9 +14,12 @@ data class MessageModel(
     val createdAt: Date = Date(),
     val createdAtText: String = "",
     val createdAtMoment: String = "",
-    val ownerId: Long? = null,
-    val ownerType: ObjectType? = null,
+    val country: String? = null,
+    val owner: ObjectReferenceModel? = null,
 ) {
     val archived: Boolean
         get() = status == MessageStatus.ARCHIVED
+
+    val countryFlag: String?
+        get() = country?.let { "https://flagcdn.com/w20/${country.lowercase()}.png" }
 }

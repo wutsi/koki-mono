@@ -13,4 +13,5 @@ data class MessageSummary(
     val createdAt: Date = Date(),
     val owner: ObjectReference? = null,
     val body: String = "",
+    val country: String? = null,
 )

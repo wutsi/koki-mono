@@ -1,21 +1,27 @@
 <div class="tab-messages">
     <div class="margin-bottom flex flex-space-between">
         <button class="btn btn-sm btn-light" id="btn-message-refresh"
-                onclick="kokiMessageTable.refresh()"
+                onclick="kokiMessage.refresh()"
         >
             <i class="fa-solid fa-rotate"></i>
             Refresh
         </button>
 
-        <select class="btn btn-sm btn-light" id="message-folder" onchange="kokiMessageTable.refresh()">
+        <select class="btn btn-sm btn-light" id="message-folder" onchange="kokiMessage.refresh()">
             <option value="inbox">Inbox</option>
             <option th:selected="${folder == 'archive'}" value="archive">Archive</option>
         </select>
     </div>
     <table class="table table-striped">
-        <tbody id="message-container" th:data-owner-id="${ownerId}" th:data-owner-type="${ownerType}">
-        <tr class="message" th:each="message : ${messages}" th:id="'message-' + ${message.id}">
-            <div th:replace="~{__components/message :: columns(${message})}"></div>
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th colspan="2">From</th>
+        </tr>
+        </thead>
+        <tbody id="message-container" th:data-refresh-url="${refreshUrl}">
+        <tr class="message entity" th:each="message : ${messages}" th:id="'message-' + ${message.id}">
+            <div th:replace="~{__components/message :: columns(${message}, false)}"></div>
         </tr>
         <tr th:replace="~{__components/message :: load-more(${moreUrl})}"></tr>
         </tbody>

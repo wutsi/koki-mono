@@ -44,6 +44,7 @@ class MessageMapper {
                 null
             },
             senderAccountId = entity.senderAccountId,
+            country = entity.country,
         )
     }
 }

@@ -1,7 +1,9 @@
 package com.wutsi.koki.portal.room.model
 
 import com.wutsi.blog.portal.common.model.MoneyModel
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.account.model.AccountModel
+import com.wutsi.koki.portal.common.model.ObjectReferenceModel
 import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.AmenityModel
@@ -82,4 +84,14 @@ data class RoomModel(
 
     val leaseTermNegotiable: Boolean
         get() = leaseTerm == LeaseTerm.NEGOTIABLE
+
+    fun toObjectReference(): ObjectReferenceModel {
+        return ObjectReferenceModel(
+            id = this.id,
+            title = this.title ?: "",
+            type = ObjectType.ROOM,
+            imageUrl = this.heroImage?.contentUrl,
+            url = "/rooms/${this.id}"
+        )
+    }
 }

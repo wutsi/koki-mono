@@ -48,11 +48,6 @@ object PageName {
     const val FILE_SETTINGS_STORAGE = "page.settings.file.storage"
     const val FILE_SETTINGS_STORAGE_EDIT = "page.settings.file.storage.edit"
 
-    const val FORM = "page.form"
-    const val FORM_CREATE = "page.form.create"
-    const val FORM_EDIT = "page.form.edit"
-    const val FORM_LIST = "page.form.list"
-
     const val HOME = "page.home"
 
     const val IMAGE = "page.image"
@@ -66,6 +61,10 @@ object PageName {
     const val LOGIN = "page.login"
 
     const val NOTE_EDIT = "page.note.edit"
+
+    const val MESSAGE = "page.message"
+    const val MESSAGE_TAB = "page.message.tab"
+    const val MESSAGE_WIDGET = "page.message.widget"
 
     const val PAYMENT = "page.payment"
     const val PAYMENT_CREATE = "page.payment.create"

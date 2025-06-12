@@ -2,63 +2,32 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<tr class="message" th:fragment="columns(message)" th:remove="tag">
-    <td>
-        <table style="width:100%">
-            <tr>
-                <td>
-                    <b>From:</b>
-                    <span th:text="${message.senderName}">SENDER</span>
-                    -
-                    <span class="text-small" th:text="${message.createdAtMoment}">YYYY</span>
-                </td>
-            </tr>
-            <tr>
-                <td class="padding-top-small" th:text="${message.body}">BODY</td>
-            </tr>
-            <tr th:if="${user?.hasPermission('message:manage')}">
-                <td class="padding-top">
-                    <div class="flex-space-between flex">
-                        <div>
-                            <a class="btn btn-light btn-whatsapp" target="_blank"
-                               th:href="'/messages/' + ${message.id} + '/whatsapp'"
-                               th:if="${message.senderPhone}"
-                            >
-                                <img height="24" th:src="'/image/social/whatsapp.png'" width="24"/>
-                                Reply
-                            </a>
-                            <a class="btn btn-light btn-email" target="_blank"
-                               th:href="'mailto:' + ${message.senderEmail}"
-                            >
-                                <img height="24" th:src="'/image/social/email.png'" width="24"/>
-                                Reply
-                            </a>
-                        </div>
-                        <div>
-                            <button class="btn btn-light btn-archive"
-                                    th:id="'btn-archive-' + ${message.id}"
-                                    th:if="!${message.archived}"
-                                    th:onclick="'kokiMessageTable.archive(' + ${message.id} + ')'"
-                            >
-                                Archive
-                            </button>
-                            <button class="btn btn-light btn-unarchive"
-                                    th:id="'btn-unarchive-' + ${message.id}"
-                                    th:if="${message.archived}"
-                                    th:onclick="'kokiMessageTable.unarchive(' + ${message.id} + ')'"
-                            >
-                                Un-archive
-                            </button>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </table>
+<tr th:fragment="columns(message, showSubject)" th:remove="tag">
+    <td th:class="'message-status-' + ${message.status}">
+        <a th:href="'javascript: kokiMessage.show(' + ${message.id} + ')'">
+            <span th:text="${message.createdAtMoment}">DATE</span>
+        </a>
+    </td>
+    <td width="1%">
+        <img align="absmiddle" class="margin-left-small"
+             th:if="${message.country}"
+             th:src="${message.countryFlag}"
+        />
+    </td>
+    <td th:class="'message-status-' + ${message.status}">
+        <a th:href="'javascript: kokiMessage.show(' + ${message.id} + ')'">
+            <span th:text="${message.senderName}">SENDER</span>
+        </a>
+    </td>
+    <td class="d-none d-sm-table-cell" th:classappend="'message-status-' + ${message.status}" th:if="${showSubject}">
+        <a th:href="'javascript: kokiMessage.show(' + ${message.id} + ')'" th:if="${message.owner}">
+            <span th:text="${message.owner.title}">TITLE</span>
+        </a>
     </td>
 </tr>
 
 <tr id="message-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
-    <td class="text-center" colspan="4">
+    <td class="text-center" colspan="3">
         <button
             class="btn btn-sm btn-light"
             data-component-id="load-more"
