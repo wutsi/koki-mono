@@ -206,7 +206,7 @@ object ModuleFixtures {
             homeUrl = null,
             tabUrl = "/messages/tab",
             settingsUrl = null,
-            jsUrl = "/js/message.js",
+            jsUrl = "/js/messages.js",
             cssUrl = "/css/messages.css",
         ),
     )
