@@ -61,7 +61,7 @@ class MessageController(
     @GetMapping("/{id}/unarchive")
     @RequiresPermission(["message:manage"])
     fun unarchive(@PathVariable id: Long): Map<String, Any> {
-        service.status(id, MessageStatus.NEW)
+        service.status(id, MessageStatus.READ)
         return mapOf("success" to true)
     }
 

@@ -1,0 +1,3 @@
+<tr class="message entity" th:each="message : ${messages}" th:id="'message-' + ${message.id}">
+    <div th:replace="~{__components/message :: columns(${message}, true)}"></div>
+</tr>

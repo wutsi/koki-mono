@@ -25,15 +25,16 @@ class KokiMessage {
         fetch(url)
             .then(() => {
                 me.refresh();
+                koki.widgets.modal.close();
             });
     }
 
     refresh() {
         const container = document.getElementById('message-container');
-        const folder = document.getElementById("message-folder").value;
+        const folder = document.getElementById("message-folder");
         let url = container.getAttribute("data-refresh-url");
         if (folder) {
-            url = url + '&folder=' + folder;
+            url = url + '&folder=' + folder.value;
         }
         console.log('Reloading ' + url + ' to #message-container');
         fetch(url)

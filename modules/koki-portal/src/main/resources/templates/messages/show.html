@@ -11,11 +11,11 @@
     <tr>
         <td><b>From:</b></td>
         <td>
-            <span th:text="${message.senderName}">SENDER</span>
             <img align="absmiddle" class="margin-left-small"
                  th:if="${message.country}"
                  th:src="${message.countryFlag}"
             />
+            <span th:text="${message.senderName}">SENDER</span>
         </td>
     </tr>
     <tr>
@@ -42,13 +42,13 @@
                 <div>
                     <button class="btn btn-light btn-archive"
                             th:if="!${message.archived}"
-                            th:onclick="'kokiMessageTable.archive(' + ${message.id} + ')'"
+                            th:onclick="'kokiMessage.archive(' + ${message.id} + ')'"
                     >
                         Archive
                     </button>
                     <button class="btn btn-light btn-unarchive"
                             th:if="${message.archived}"
-                            th:onclick="'kokiMessageTable.unarchive(' + ${message.id} + ')'"
+                            th:onclick="'kokiMessage.unarchive(' + ${message.id} + ')'"
                     >
                         Un-archive
                     </button>

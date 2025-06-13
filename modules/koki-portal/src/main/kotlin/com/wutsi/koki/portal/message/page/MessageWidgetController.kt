@@ -22,19 +22,27 @@ class MessageWidgetController(
         @RequestParam(required = false, name = "test-mode") testMode: String? = null,
         model: Model,
     ): String {
+        model.addAttribute("testMode", testMode)
+        model.addAttribute("refreshUrl", "/messages/widget/body")
+        model.addAttribute(
+            "page",
+            createPageModel(PageName.MESSAGE_WIDGET, "Messages")
+        )
+
+        body(model)
+        return "messages/widget/show"
+    }
+
+    @GetMapping("/body")
+    fun body(
+        model: Model,
+    ): String {
         val messages = service.messages(
             statuses = listOf(MessageStatus.NEW, MessageStatus.READ),
             limit = 5,
             offset = 0,
         )
         model.addAttribute("messages", messages)
-        model.addAttribute("testMode", testMode)
-        model.addAttribute("refreshUrl", "/messages/widget")
-        model.addAttribute(
-            "page",
-            createPageModel(PageName.MESSAGE_WIDGET, "Messages")
-        )
-
-        return "messages/widget"
+        return "messages/widget/body"
     }
 }

@@ -20,7 +20,8 @@ object MessageFixtures {
             createdAt = Date(),
             status = MessageStatus.NEW,
             owner = ObjectReference(rooms[0].id, ObjectType.ROOM),
-            body = "Lorem Ipsum is simply dummy text of the printing and typesetting industry"
+            body = "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+            country = "CM",
         ),
         MessageSummary(
             id = 101L,
@@ -30,7 +31,8 @@ object MessageFixtures {
             createdAt = DateUtils.addDays(Date(), -1),
             status = MessageStatus.ARCHIVED,
             owner = ObjectReference(rooms[0].id, ObjectType.ROOM),
-            body = "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,"
+            body = "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,",
+            country = "CA",
         ),
         MessageSummary(
             id = 102L,
@@ -40,7 +42,8 @@ object MessageFixtures {
             createdAt = DateUtils.addDays(Date(), -1),
             status = MessageStatus.NEW,
             owner = ObjectReference(rooms[0].id, ObjectType.ROOM),
-            body = "Hello, Im interested in your appartment on xxx"
+            body = "Hello, Im interested in your appartment on xxx",
+            country = "CM",
         ),
         MessageSummary(
             id = 103L,
@@ -50,7 +53,8 @@ object MessageFixtures {
             createdAt = DateUtils.addDays(Date(), -2),
             status = MessageStatus.NEW,
             owner = ObjectReference(rooms[0].id, ObjectType.ROOM),
-            body = "It has survived not only five centuries, but also the leap into electronic typesetting"
+            body = "It has survived not only five centuries, but also the leap into electronic typesetting",
+            country = "CM",
         ),
         MessageSummary(
             id = 104L,
@@ -60,7 +64,8 @@ object MessageFixtures {
             createdAt = DateUtils.addDays(Date(), -3),
             status = MessageStatus.NEW,
             owner = ObjectReference(rooms[0].id, ObjectType.ROOM),
-            body = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+            body = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+            country = "GB",
         ),
     )
 
@@ -76,5 +81,6 @@ object MessageFixtures {
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                 Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
         """.trimIndent(),
+        country = "CM",
     )
 }
