@@ -10,7 +10,7 @@ class MessageWidgetControllerTest : AbstractPageControllerTest() {
     fun show() {
         navigateTo("/messages/widget?test-mode=true")
         assertElementCount(".message", messages.size)
-        assertElementAttribute("#message-container", "data-refresh-url", "/messages/widget")
+        assertElementAttribute("#message-container", "data-refresh-url", "/messages/widget/body")
     }
 
     @Test
