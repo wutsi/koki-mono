@@ -42,13 +42,13 @@
                 <div>
                     <button class="btn btn-light btn-archive"
                             th:if="!${message.archived}"
-                            th:onclick="'kokiMessageTable.archive(' + ${message.id} + ')'"
+                            th:onclick="'kokiMessage.archive(' + ${message.id} + ')'"
                     >
                         Archive
                     </button>
                     <button class="btn btn-light btn-unarchive"
                             th:if="${message.archived}"
-                            th:onclick="'kokiMessageTable.unarchive(' + ${message.id} + ')'"
+                            th:onclick="'kokiMessage.unarchive(' + ${message.id} + ')'"
                     >
                         Un-archive
                     </button>
