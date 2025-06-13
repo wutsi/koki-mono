@@ -1,10 +1,9 @@
 <table class="table">
     <tr>
-        <td width="1%"><b>Subject:</b></td>
-        <td th:if="${message.owner}">
+        <td class="text-center" colspan="2" th:if="${message.owner}">
             <a th:href="${message.owner.url}">
-                <div th:text="${message.owner.title}">TITLE</div>
                 <img class="message-owner-image" th:src="${message.owner.imageUrl}"/>
+                <div class="margin-top-small" th:text="${message.owner.title}">TITLE</div>
             </a>
         </td>
     </tr>
