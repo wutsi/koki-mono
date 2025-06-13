@@ -87,7 +87,7 @@ class MessageControllerTest : AbstractPageControllerTest() {
             request.capture(),
             eq(Any::class.java)
         )
-        assertEquals(MessageStatus.NEW, request.firstValue.status)
+        assertEquals(MessageStatus.READ, request.firstValue.status)
     }
 
     @Test

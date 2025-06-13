@@ -11,11 +11,11 @@
     <tr>
         <td><b>From:</b></td>
         <td>
-            <span th:text="${message.senderName}">SENDER</span>
             <img align="absmiddle" class="margin-left-small"
                  th:if="${message.country}"
                  th:src="${message.countryFlag}"
             />
+            <span th:text="${message.senderName}">SENDER</span>
         </td>
     </tr>
     <tr>
