@@ -10,6 +10,7 @@ import com.wutsi.koki.room.web.room.model.MapMarkerModel
 import com.wutsi.koki.room.web.room.model.RoomModel
 import com.wutsi.koki.room.web.room.service.RoomLocationMetricService
 import com.wutsi.koki.room.web.room.service.RoomService
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -66,12 +67,14 @@ class LocationController(
             if (location.hasGeoLocation && location.type == LocationType.NEIGHBORHOOD) 16 else 14
         )
 
+        val tenant = tenantHolder.get()!!
+        val locale = LocaleContextHolder.getLocale()
         model.addAttribute(
             "page",
             createPageModel(
                 name = PageName.LOCATION,
-                title = "${location.name} Rentals",
-                description = "Find a house, apartment or room to rent in ${location.name}",
+                title = getMessage("page.location.html.title", arrayOf(location.name)),
+                description = getMessage("page.location.html.description", arrayOf(tenant.name, location.name), locale),
                 url = "$baseUrl${location.url}",
             )
         )
@@ -148,7 +151,6 @@ class LocationController(
 
     private fun getMostPopularCities(limit: Int): List<LocationModel> {
         val metrics = metricService.metrics(
-            country = tenantHolder.get()?.country,
             locationType = LocationType.CITY,
             limit = limit,
         )

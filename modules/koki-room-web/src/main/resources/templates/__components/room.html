@@ -9,11 +9,11 @@
     <div class="room-details">
         <h2 class="text-primary price margin-none" th:if="${room.pricePerMonth}">
             <span th:text="${room.pricePerMonth}">$$$</span>
-            <span class="text-small">per month</span>
+            <span class="text-small" th:text="#{price.per-month}">per month</span>
         </h2>
         <h2 class="text-primary price margin-none" th:if="!${room.pricePerMonth} AND ${room.pricePerNight}">
             <span th:text="${room.pricePerNight}">$$$</span>
-            <span class="text-small">per night</span>
+            <span class="text-small" th:text="#{price.per-night}">per night</span>
         </h2>
         <div>
             <b th:text="#{'room-type.' + ${room.type.name()}}">TYPE</b>
@@ -25,15 +25,17 @@
                 <i class="fa-solid fa-hotel"></i>
                 <span th:text="${room.account.name}">HOTEL</span>
             </li>
-            <li>
+            <li th:if="${room.numberOfRooms > 0}">
                 <i class="fa-solid fa-bed"></i>
                 <span th:text="${room.numberOfRooms}">00</span>
-                <span>Bedroom(s)</span>
+                <span th:if="${room.numberOfRooms == 1}" th:text="#{room.bedroom}">Bedroom</span>
+                <span th:if="${room.numberOfRooms > 1}" th:text="#{room.bedrooms}">Bedroom</span>
             </li>
-            <li>
+            <li th:if="${room.numberOfBathrooms > 0}">
                 <i class="fa-solid fa-bath"></i>
                 <span th:text="${room.numberOfBathrooms}">00</span>
-                <span>Bathroom(s)</span>
+                <span th:if="${room.numberOfBathrooms == 1}" th:text="#{room.bathroom}">Bathroom</span>
+                <span th:if="${room.numberOfBathrooms > 1}" th:text="#{room.bathrooms}">Bathrooms</span>
             </li>
             <li th:if="${room.area > 0}">
                 <i class="fa-regular fa-square-full"></i>
@@ -54,8 +56,10 @@
     <span th:if="${room.leaseTermNegotiable}" th:text="#{lease-term.NEGOTIABLE}">NEGOTIABLE</span>
 
     <span th:if="!${room.leaseTermNegotiable}" th:text="${room.leaseTermDuration}">00</span>
-    <span class="text-lower" th:if="!${room.leaseTermNegotiable}"
-          th:text="#{'lease-term.' + ${room.leaseTerm}}">TERM</span>
+    <span class="text-lower" th:if="${room.leaseTerm.name() == 'WEEKLY'}" th:text="#{label.weeks}">weeks</span>
+    <span class="text-lower" th:if="${room.leaseTerm.name() == 'MONTHLY'}" th:text="#{label.months}">months</span>
+    <span class="text-lower" th:if="${room.leaseTerm.name() == 'YEARLY'}" th:text="#{label.years}">years</span>
+
 </div>
 
 </body>

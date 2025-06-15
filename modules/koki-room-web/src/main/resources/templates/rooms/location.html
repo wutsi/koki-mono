@@ -3,6 +3,14 @@
 
 <head>
     <div th:replace="~{__components/layout :: head}"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script th:src="${page.assetUrl} + '/js/koki-map.js'"></script>
+    <script th:src="${page.assetUrl} + '/js/koki-load-more.js'"></script>
+    <script th:src="${page.assetUrl} + '/js/page/location.js'"></script>
+
+    <link rel="stylesheet" th:href="${page.assetUrl} + '/css/page/location.css'"/>
+    <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
 </head>
 
 <body>
@@ -11,10 +19,10 @@
 <div id="main-container">
     <div id="room-list-container">
         <div id="room-list-header">
-            <h1><span th:text="${location.name}">YYYY</span> Rentals</h1>
+            <h1 th:text="#{page.location.section.listings.title(${location.name})}">Laval Rentals</h1>
             <ul class="breadcrumb">
                 <li>
-                    <a href="/">Home</a>
+                    <a href="/" th:text="#{navigation.home}">Home</a>
                 </li>
                 <li>
                     <span>&#x2022;</span>
@@ -29,16 +37,19 @@
         </div>
         <div id="room-list-container-inner">
             <div class="room-list-empty" th:if="${rooms.isEmpty()}">
-                <div>
-                    No property found in <span th:text="${location.name}">LOCATION</span>
+                <div th:text="#{page.location.section.not-found.title(${location.name})}">
+                    No property found in Laval
                 </div>
                 <div class="popular-locations" th:if="!${popularLocations.isEmpty()}">
                     <hr/>
-                    We recommend you the following searches instead:
+                    <span th:text="#{page.location.section.not-found.alternate-searches}">
+                        We recommend you the following searches instead:
+                    </span>
                     <ul>
                         <li th:each="loc : ${popularLocations}">
-                            <a th:href="${loc.url}">
-                                <b th:text="${loc.name}">LOCATION</b> Rentals
+                            <a th:href="${loc.url}"
+                               th:text="#{page.location.section.not-found.alternate-searches.for-rent(${loc.name})}">
+                                Laval Rentals
                             </a>
                         </li>
                     </ul>
@@ -58,6 +69,7 @@
                             data-container-id="room-load-more"
                             data-on-ready="on_load_more"
                             th:data-url="${moreUrl}"
+                            th:text="#{button.load_more}"
                         >
                             Load more...
                         </button>
@@ -84,23 +96,18 @@
             <li id="view-switcher-map">
                 <a href="#" role="button">
                     <i class="fa-regular fa-map"></i>
-                    View Map
+                    <span th:text="#{page.location.section.view.map}">Map</span>
                 </a>
             </li>
             <li class="hidden" id="view-switcher-list">
                 <a href="#" role="button">
                     <i class="fa-solid fa-list"></i>
-                    View List
+                    <span th:text="#{page.location.section.view.list}">List</span>
                 </a>
             </li>
         </ul>
     </div>
 </div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script th:src="${page.assetUrl} + '/js/koki-map.js'"></script>
-<script th:src="${page.assetUrl} + '/js/koki-load-more.js'"></script>
-<script th:src="${page.assetUrl} + '/js/page/location.js'"></script>
 
 <script>
     function on_map_ready(id, map) {
@@ -111,8 +118,5 @@
         kokiLocationPage.on_load_more();
     }
 </script>
-
-<link rel="stylesheet" th:href="${page.assetUrl} + '/css/page/location.css'"/>
-<link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
 </body>
 </html>

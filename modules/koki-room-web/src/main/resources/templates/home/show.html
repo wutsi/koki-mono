@@ -3,6 +3,7 @@
 
 <head>
     <div th:replace="~{__components/layout :: head}"></div>
+    <link rel="stylesheet" th:href="${page.assetUrl} + '/css/page/home.css'"/>
 </head>
 
 <body>
@@ -11,22 +12,21 @@
 <div class="container">
     <div class="row">
         <div class="col-12 margin-top-4x padding">
-            <h1>The Key for your New Start</h1>
-            <p>Find house, apartment for rent</p>
+            <h1 th:text="#{page.home.section.main.title}">The Key for your New Start</h1>
+            <p th:text="#{page.home.section.main.description}">Find house, apartment for rent</p>
         </div>
     </div>
     <div class="row">
-        <div class="box col-10 offset-1 col-md-4 offset-md-4 border border-shadow border-rounded text-center padding">
-            <h1>Rent a Home</h1>
-            <p>Find house, apartment for rent</p>
+        <div
+            class="box col-10 offset-1 col-md-8 offset-md-2 border border-shadow border-rounded text-center padding-2x margin-top-2x">
+            <h1 th:text="#{page.home.section.rental.title}">Rent a Home</h1>
+            <p th:text="#{page.home.section.rental.description}">Find house, apartment for rent</p>
             <b>
-                <a class="btn btn-primary" href="/l">Start Now</a>
+                <a class="btn btn-primary" href="/l" th:text="#{page.home.section.rental.cta}">Start Now</a>
             </b>
         </div>
     </div>
 </div>
-
-<link rel="stylesheet" th:href="${page.assetUrl} + '/css/page/home.css'"/>
 
 </body>
 

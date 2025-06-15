@@ -7,9 +7,11 @@ import com.wutsi.koki.room.web.tenant.model.TenantModel
 import com.wutsi.koki.room.web.tenant.service.CurrentTenantHolder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.client.HttpClientErrorException
+import java.util.Locale
 
 abstract class AbstractPageController {
     @Autowired
@@ -23,6 +25,9 @@ abstract class AbstractPageController {
 
     @Autowired
     protected lateinit var tenantHolder: CurrentTenantHolder
+
+    @Autowired
+    protected lateinit var messages: MessageSource
 
     @ModelAttribute("tenant")
     fun getTenant(): TenantModel? {
@@ -49,5 +54,14 @@ abstract class AbstractPageController {
 
     protected fun toErrorResponse(ex: HttpClientErrorException): ErrorResponse {
         return objectMapper.readValue(ex.responseBodyAsString, ErrorResponse::class.java)
+    }
+
+    protected fun getMessage(key: String, args: Array<Any>? = null, locale: Locale? = null): String {
+        try {
+            val loc = locale ?: LocaleContextHolder.getLocale()
+            return messages.getMessage(key, args, loc)
+        } catch (ex: Exception) {
+            return key
+        }
     }
 }
