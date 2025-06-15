@@ -54,7 +54,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.ROOM)
 
         // Meta
-        assertElementAttribute("html", "lang", "en")
+        assertElementAttribute("html", "lang", "fr")
         assertEquals(room.title, driver.title)
         assertElementAttribute("head meta[name='description']", "content", room.summary)
 
@@ -167,7 +167,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertEquals("ray.spomsible@gmail.com", request.firstValue.senderEmail)
         assertEquals("+15147580001", request.firstValue.senderPhone)
         assertEquals("This is a nice message... I Love it :-)", request.firstValue.body)
-        assertEquals("en", request.firstValue.language)
+        assertEquals("fr", request.firstValue.language)
         assertEquals("ca", request.firstValue.country)
         assertEquals(RefDataFixtures.locations[0].id, request.firstValue.cityId)
 

@@ -143,12 +143,12 @@ class LocationControllerTest : AbstractPageControllerTest() {
         assertElementCount("div.room", rooms.size)
 
         // Opengraph
-        assertElementAttribute("html", "lang", "en")
-        assertEquals("${neighborhoods[0].name} Rentals", driver.title)
+        assertElementAttribute("html", "lang", "fr")
+        assertEquals("${neighborhoods[0].name} à Louer", driver.title)
         assertElementPresent("head meta[name='description']")
 
         // Opengraph
-        assertElementAttribute("head meta[property='og:title']", "content", "${neighborhoods[0].name} Rentals")
+        assertElementAttribute("head meta[property='og:title']", "content", "${neighborhoods[0].name} à Louer")
         assertElementPresent("head meta[property='og:description']")
         assertElementAttribute("head meta[property='og:type']", "content", "website")
         assertElementAttribute(
@@ -193,12 +193,12 @@ class LocationControllerTest : AbstractPageControllerTest() {
         assertElementCount("div.room", rooms.size)
 
         // Opengraph
-        assertElementAttribute("html", "lang", "en")
-        assertEquals("${cities[0].name} Rentals", driver.title)
+        assertElementAttribute("html", "lang", "fr")
+        assertEquals("${cities[0].name} à Louer", driver.title)
         assertElementPresent("head meta[name='description']")
 
         // Opengraph
-        assertElementAttribute("head meta[property='og:title']", "content", "${cities[0].name} Rentals")
+        assertElementAttribute("head meta[property='og:title']", "content", "${cities[0].name} à Louer")
         assertElementPresent("head meta[property='og:description']")
         assertElementAttribute("head meta[property='og:type']", "content", "website")
         assertElementAttribute(

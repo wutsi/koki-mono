@@ -6,6 +6,7 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <meta content="yes" name="mobile-web-app-capable"/>
+    <meta http-equiv="content-language" th:content="${page.language}">
 
     <title th:text="${page.title}">TITLE</title>
     <meta name="description" th:content="${page.description}" th:if="${page.description}"/>
