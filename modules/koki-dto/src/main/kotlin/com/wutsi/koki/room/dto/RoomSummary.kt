@@ -12,6 +12,8 @@ data class RoomSummary(
     val status: RoomStatus = RoomStatus.UNKNOWN,
     val title: String? = null,
     val summary: String? = null,
+    var titleFr: String? = null,
+    var summaryFr: String? = null,
     val numberOfRooms: Int = -1,
     val numberOfBathrooms: Int = -1,
     val numberOfBeds: Int = -1,

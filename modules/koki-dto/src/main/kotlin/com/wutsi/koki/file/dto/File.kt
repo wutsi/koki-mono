@@ -14,6 +14,8 @@ data class File(
     val modifiedAt: Date = Date(),
     val title: String? = null,
     val description: String? = null,
+    val titleFr: String? = null,
+    val descriptionFr: String? = null,
     val language: String? = null,
     val numberOfPages: Int? = null,
     val labels: List<LabelSummary> = emptyList(),

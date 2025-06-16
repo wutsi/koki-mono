@@ -6,6 +6,8 @@ data class Category(
     val parentId: Long? = null,
     val name: String = "",
     val longName: String = "",
+    val nameFr: String? = null,
+    val longNameFr: String? = null,
     val level: Int = 0,
     val active: Boolean = true,
 )
