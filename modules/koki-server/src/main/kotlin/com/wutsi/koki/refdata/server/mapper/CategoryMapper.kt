@@ -11,6 +11,8 @@ class CategoryMapper {
             id = entity.id!!,
             name = entity.name,
             longName = entity.longName,
+            nameFr = entity.nameFr,
+            longNameFr = entity.longNameFr,
             type = entity.type,
             parentId = entity.parentId,
             level = entity.level,

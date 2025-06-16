@@ -188,7 +188,7 @@
                                             00
                                         </option>
                                     </select>
-                                    <select style="width: auto" th:field="*{leaseTerm}">
+                                    <select required style="width: auto" th:field="*{leaseTerm}">
                                         <option value=""></option>
                                         <option th:each="term : ${leaseTerms}"
                                                 th:if="${term.name != 'UNKNOWN'}"

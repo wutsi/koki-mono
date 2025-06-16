@@ -21,6 +21,8 @@ class RoomImageAgent(
             Return the information in JSON with the following information:
             - title: Title of the image. If this image represent a room of a property, Include the name of room in the title
             - description: Short description of the image that has a maximum of 255 characters.
+            - titleFr: Title translated in french
+            - descriptionFr: Description translated in french
             - hashtags: List of hashtags (up to 5)
             - quality: Quality of the image, with the values 0=LOW, 1=MEDIUM or 2=HIGH
             - valid: (true|false) "true" when the image is valid for an online property listing

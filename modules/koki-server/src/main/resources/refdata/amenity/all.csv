@@ -1,98 +1,98 @@
-id,category,amenity
-1000,Basic Essentials,Electricity
-1001,Basic Essentials,Running Water
-1002,Basic Essentials,Heating
-1003,Basic Essentials,Air Conditioning
-1004,Basic Essentials,Hot Water
-1005,Basic Essentials,Wi-Fi
-1006,Basic Essentials,Basic Toiletries
-1007,Kitchen & Dining,Refrigerator
-1008,Kitchen & Dining,Microwave
-1009,Kitchen & Dining,Stove
-1010,Kitchen & Dining,Oven
-1011,Kitchen & Dining,Dishwasher
-1012,Kitchen & Dining,Coffee Maker
-1013,Kitchen & Dining,Cooking Basics
-1014,Kitchen & Dining,Dining Table
-1015,Kitchen & Dining,Toaster
-1016,Kitchen & Dining,Blender
-1017,Bathroom Amenities,Hair Dryer
-1018,Bathroom Amenities,Bath Towels
-1019,Bathroom Amenities,Shower Gel/Shampoo
-1020,Bathroom Amenities,Bidet
-1021,Bathroom Amenities,Bathtub
-1022,Bathroom Amenities,Jacuzzi
-1023,Bedroom Amenities,Bed Linens
-1024,Bedroom Amenities,Pillows
-1025,Bedroom Amenities,Wardrobe
-1026,Bedroom Amenities,Closet
-1027,Bedroom Amenities,Dresser
-1028,Bedroom Amenities,Blackout Curtains
-1029,Bedroom Amenities,Safe
-1030,Bedroom Amenities,Locker
-1031,Entertainment & Electronics,TV
-1032,Entertainment & Electronics,Cable/Satellite
-1033,Entertainment & Electronics,Streaming Services
-1034,Entertainment & Electronics,Sound System
-1035,Entertainment & Electronics,Speakers
-1036,Entertainment & Electronics,Board Games
-1037,Entertainment & Electronics,Books
-1038,Entertainment & Electronics,DVD Player
-1039,Entertainment & Electronics,Video Game Console
-1040,Laundry & Cleaning,Washing Machine
-1041,Laundry & Cleaning,Dryer
-1042,Laundry & Cleaning,Iron
-1043,Laundry & Cleaning,Ironing Board
-1044,Laundry & Cleaning,Vacuum Cleaner
-1045,Laundry & Cleaning,Laundry Detergent
-1046,Outdoor & Recreational,Swimming Pool
-1047,Outdoor & Recreational,Garden
-1048,Outdoor & Recreational,Yard
-1049,Outdoor & Recreational,BBQ Grill
-1050,Outdoor & Recreational,Patio
-1051,Outdoor & Recreational,Balcony
-1052,Outdoor & Recreational,Beach Access
-1053,Outdoor & Recreational,Hiking Trails
-1054,Outdoor & Recreational,Bicycles
-1055,Parking & Transportation,Free Parking
-1056,Parking & Transportation,Garage
-1057,Parking & Transportation,EV Charging Station
-1058,Parking & Transportation,Bike Storage
-1059,Parking & Transportation,Shuttle Service
-1060,Safety & Security,Smoke Detector
-1061,Safety & Security,Carbon Monoxide Detector
-1062,Safety & Security,First Aid Kit
-1063,Safety & Security,Fire Extinguisher
-1064,Safety & Security,Security Cameras
-1065,Safety & Security,Smart Lock
-1066,Safety & Security,Keyless Entry
-1067,Accessibility Features,Wheelchair Ramp
-1068,Accessibility Features,Elevator Access
-1069,Accessibility Features,Grab Bars
-1070,Accessibility Features,Step-Free Entry
-1071,Accessibility Features,Wide Doorways
-1072,Business & Workspace,Dedicated Workspace
-1073,Business & Workspace,High-Speed Internet
-1074,Business & Workspace,Printer
-1075,Business & Workspace,Scanner
-1076,Business & Workspace,Meeting Room
-1077,Pet-Friendly Amenities,Pet Bowls
-1078,Pet-Friendly Amenities,Pet Bed
-1079,Pet-Friendly Amenities,Fenced Yard
-1080,Pet-Friendly Amenities,Pet Park Nearby
-1081,Luxury & Premium,Hot Tub
-1082,Luxury & Premium,Spa
-1083,Luxury & Premium,Sauna
-1084,Luxury & Premium,Home Theater
-1085,Luxury & Premium,Wine Cooler
-1086,Luxury & Premium,Smart Home System
-1087,Luxury & Premium,Concierge Service
-1088,Eco-Friendly Amenities,Solar Panels
-1089,Eco-Friendly Amenities,Rainwater Harvesting
-1090,Eco-Friendly Amenities,Compost Bin
-1091,Eco-Friendly Amenities,Energy-Efficient Appliances
-1092,Local Experience & Extras,Welcome Basket
-1093,Local Experience & Extras,Local Guidebooks
-1094,Local Experience & Extras,Bicycle Rentals
-1095,Local Experience & Extras,Tour Assistance
-1096,Local Experience & Extras,Ticket Assistance
+id,category,amenity,fr
+1000,Basic Essentials,Electricity,Électricité
+1001,Basic Essentials,Running Water,Eau courante
+1002,Basic Essentials,Heating,Chauffage
+1003,Basic Essentials,Air Conditioning,Climatisation
+1004,Basic Essentials,Hot Water,Eau chaude
+1005,Basic Essentials,Wi-Fi,Wi-Fi
+1006,Basic Essentials,Basic Toiletries,Articles de toilette de base
+1007,Kitchen & Dining,Refrigerator,Réfrigérateur
+1008,Kitchen & Dining,Microwave,Micro-ondes
+1009,Kitchen & Dining,Stove,Cuisinière
+1010,Kitchen & Dining,Oven,Four
+1011,Kitchen & Dining,Dishwasher,Lave-vaisselle
+1012,Kitchen & Dining,Coffee Maker,Cafetière
+1013,Kitchen & Dining,Cooking Basics,Nécessaire de cuisine de base
+1014,Kitchen & Dining,Dining Table,Table à manger
+1015,Kitchen & Dining,Toaster,Grille-pain
+1016,Kitchen & Dining,Blender,Mixeur
+1017,Bathroom Amenities,Hair Dryer,Sèche-cheveux
+1018,Bathroom Amenities,Bath Towels,Serviettes de bain
+1019,Bathroom Amenities,Shower Gel/Shampoo,Gel douche/Shampoing
+1020,Bathroom Amenities,Bidet,Bidet
+1021,Bathroom Amenities,Bathtub,Baignoire
+1022,Bathroom Amenities,Jacuzzi,Jacuzzi
+1023,Bedroom Amenities,Bed Linens,Draps
+1024,Bedroom Amenities,Pillows,Oreillers
+1025,Bedroom Amenities,Wardrobe,Armoire
+1026,Bedroom Amenities,Closet,Placard
+1027,Bedroom Amenities,Dresser,Commode
+1028,Bedroom Amenities,Blackout Curtains,Rideaux occultants
+1029,Bedroom Amenities,Safe,Coffre-fort
+1030,Bedroom Amenities,Locker,Casier
+1031,Entertainment & Electronics,TV,Télévision
+1032,Entertainment & Electronics,Cable/Satellite,Câble/Satellite
+1033,Entertainment & Electronics,Streaming Services,Services de streaming
+1034,Entertainment & Electronics,Sound System,Système de son
+1035,Entertainment & Electronics,Speakers,Haut-parleurs
+1036,Entertainment & Electronics,Board Games,Jeux de société
+1037,Entertainment & Electronics,Books,Livres
+1038,Entertainment & Electronics,DVD Player,Lecteur DVD
+1039,Entertainment & Electronics,Video Game Console,Console de jeux vidéo
+1040,Laundry & Cleaning,Washing Machine,Machine à laver
+1041,Laundry & Cleaning,Dryer,Sécheuse
+1042,Laundry & Cleaning,Iron,Fer à repasser
+1043,Laundry & Cleaning,Ironing Board,Planche à repasser
+1044,Laundry & Cleaning,Vacuum Cleaner,Aspirateur
+1045,Laundry & Cleaning,Laundry Detergent,Lessive
+1046,Outdoor & Recreational,Swimming Pool,Piscine
+1047,Outdoor & Recreational,Garden,Jardin
+1048,Outdoor & Recreational,Yard,Cour
+1049,Outdoor & Recreational,BBQ Grill,Barbecue
+1050,Outdoor & Recreational,Patio,Terrasse
+1051,Outdoor & Recreational,Balcony,Balcon
+1052,Outdoor & Recreational,Beach Access,Accès à la plage
+1053,Outdoor & Recreational,Hiking Trails,Sentiers de randonnée
+1054,Outdoor & Recreational,Bicycles,Vélos
+1055,Parking & Transportation,Free Parking,Stationnement gratuit
+1056,Parking & Transportation,Garage,Garage
+1057,Parking & Transportation,EV Charging Station,Borne de recharge pour véhicules électriques
+1058,Parking & Transportation,Bike Storage,Rangement pour vélos
+1059,Parking & Transportation,Shuttle Service,Service de navette
+1060,Safety & Security,Smoke Detector,Détecteur de fumée
+1061,Safety & Security,Carbon Monoxide Detector,Détecteur de monoxyde de carbone
+1062,Safety & Security,First Aid Kit,Trousse de premiers secours
+1063,Safety & Security,Fire Extinguisher,Extincteur
+1064,Safety & Security,Security Cameras,Caméras de sécurité
+1065,Safety & Security,Smart Lock,Serrure intelligente
+1066,Safety & Security,Keyless Entry,Accès sans clé
+1067,Accessibility Features,Wheelchair Ramp,Rampe pour fauteuil roulant
+1068,Accessibility Features,Elevator Access,Accès par ascenseur
+1069,Accessibility Features,Grab Bars,Barres d'appui
+1070,Accessibility Features,Step-Free Entry,Entrée sans marche
+1071,Accessibility Features,Wide Doorways,Portes larges
+1072,Business & Workspace,Dedicated Workspace,Espace de travail dédié
+1073,Business & Workspace,High-Speed Internet,Internet haut débit
+1074,Business & Workspace,Printer,Imprimante
+1075,Business & Workspace,Scanner,Scanner
+1076,Business & Workspace,Meeting Room,Salle de réunion
+1077,Pet-Friendly Amenities,Pet Bowls,Gamelles pour animaux
+1078,Pet-Friendly Amenities,Pet Bed,Lit pour animaux
+1079,Pet-Friendly Amenities,Fenced Yard,Cour clôturée
+1080,Pet-Friendly Amenities,Pet Park Nearby,Parc pour animaux à proximité
+1081,Luxury & Premium,Hot Tub,Bain à remous
+1082,Luxury & Premium,Spa,Spa
+1083,Luxury & Premium,Sauna,Sauna
+1084,Luxury & Premium,Home Theater,Home cinéma
+1085,Luxury & Premium,Wine Cooler,Cave à vin
+1086,Luxury & Premium,Smart Home System,Système de maison intelligente
+1087,Luxury & Premium,Concierge Service,Service de conciergerie
+1088,Eco-Friendly Amenities,Solar Panels,Panneaux solaires
+1089,Eco-Friendly Amenities,Rainwater Harvesting,Récupération de l'eau de pluie
+1090,Eco-Friendly Amenities,Compost Bin,Bac à compost
+1091,Eco-Friendly Amenities,Energy-Efficient Appliances,Appareils électroménagers écoénergétiques
+1092,Local Experience & Extras,Welcome Basket,Panier de bienvenue
+1093,Local Experience & Extras,Local Guidebooks,Guides locaux
+1094,Local Experience & Extras,Bicycle Rentals,Location de vélos
+1095,Local Experience & Extras,Tour Assistance,Assistance pour les visites
+1096,Local Experience & Extras,Ticket Assistance,Assistance pour les billets

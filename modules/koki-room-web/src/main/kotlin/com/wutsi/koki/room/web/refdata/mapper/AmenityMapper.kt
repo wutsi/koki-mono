@@ -3,6 +3,7 @@ package com.wutsi.koki.room.web.refdata.mapper
 import com.wutsi.koki.refdata.dto.Amenity
 import com.wutsi.koki.room.web.common.mapper.TenantAwareMapper
 import com.wutsi.koki.room.web.refdata.model.AmenityModel
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
 
 @Service
@@ -25,12 +26,16 @@ class AmenityMapper : TenantAwareMapper() {
     }
 
     fun toAmenityModel(entity: Amenity): AmenityModel {
+        val language = LocaleContextHolder.getLocale().language
         return AmenityModel(
             id = entity.id,
             active = entity.active,
             categoryId = entity.categoryId,
-            name = entity.name,
             icon = entity.icon ?: TOP_AMENITIES_ICONS[entity.id],
+            name = when (language) {
+                "fr" -> entity.nameFr ?: entity.name
+                else -> entity.name
+            },
         )
     }
 }

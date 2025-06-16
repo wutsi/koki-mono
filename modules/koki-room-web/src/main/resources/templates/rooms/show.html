@@ -141,11 +141,11 @@
                 <div class="row">
                     <div class="col-6" th:if="${room.furnishedType.name() == 'FULLY_FURNISHED'}">
                         <i class="fa-solid fa-couch"></i>
-                        <span>Fully Furnished</span>
+                        <span th:text="#{furnished-type.FULLY_FURNISHED}">Fully Furnished</span>
                     </div>
                     <div class="col-6" th:if="${room.furnishedType.name() == 'SEMI_FURNISHED'}">
                         <i class="fa-solid fa-chair"></i>
-                        <span>Semi Furnished</span>
+                        <span th:text="#{furnished-type.SEMI_FURNISHED}">Semi Furnished</span>
                     </div>
 
                     <div class="col-6" th:each="amenity:${topAmenities}">

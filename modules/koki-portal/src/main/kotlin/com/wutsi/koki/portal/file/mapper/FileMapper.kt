@@ -9,6 +9,7 @@ import com.wutsi.koki.portal.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.service.Moment
 import com.wutsi.koki.portal.user.model.UserModel
 import org.apache.commons.io.FilenameUtils
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
 import java.text.DecimalFormat
 import java.text.StringCharacterIterator
@@ -20,12 +21,16 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
         entity: FileSummary,
         createdBy: UserModel?,
     ): FileModel {
+        val language = LocaleContextHolder.getLocale().language
         val fmt = createDateTimeFormat()
         return FileModel(
             id = entity.id,
             type = entity.type,
             name = entity.name,
-            title = entity.title,
+            title = when (language) {
+                "fr" -> entity.titleFr ?: entity.title
+                else -> entity.title
+            },
             contentUrl = entity.url,
             contentType = entity.contentType,
             contentLength = entity.contentLength,
@@ -49,12 +54,20 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
         entity: File,
         createdBy: UserModel?,
     ): FileModel {
+        val language = LocaleContextHolder.getLocale().language
         val fmt = createDateTimeFormat()
         return FileModel(
             id = entity.id,
             type = entity.type,
             name = entity.name,
-            title = entity.title,
+            title = when (language) {
+                "fr" -> entity.titleFr ?: entity.title
+                else -> entity.title
+            },
+            description = when (language) {
+                "fr" -> entity.descriptionFr ?: entity.description?.ifEmpty { null }
+                else -> entity.description?.ifEmpty { null }
+            },
             contentUrl = entity.url,
             contentType = entity.contentType,
             contentLength = entity.contentLength,
@@ -66,7 +79,6 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
             extension = FilenameUtils.getExtension(entity.name).lowercase(),
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.modifiedAt),
-            description = entity.description,
             numberOfPages = entity.numberOfPages,
             language = entity.language,
             languageText = entity.language?.let { lang -> Locale(lang).displayLanguage },

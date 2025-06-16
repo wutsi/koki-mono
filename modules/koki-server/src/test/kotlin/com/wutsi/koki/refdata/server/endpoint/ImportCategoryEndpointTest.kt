@@ -32,6 +32,8 @@ class ImportCategoryEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(true, category.active)
         assertEquals("Lawn Mowing", category.name)
         assertEquals("Home Services > Landscaping > Lawn Mowing", category.longName)
+        assertEquals("Tonte de Pelouse", category.nameFr)
+        assertEquals("Services à Domicile > Aménagement Paysager > Tonte de Pelouse", category.longNameFr)
     }
 
     @Sql(value = ["/db/test/clean.sql"])
@@ -50,6 +52,8 @@ class ImportCategoryEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(true, category.active)
         assertEquals("Research & Data", category.name)
         assertEquals("Educational & Informational > Research & Data", category.longName)
+        assertEquals("Recherche et Données", category.nameFr)
+        assertEquals("Éducatif et Informatif > Recherche et Données", category.longNameFr)
     }
 
     @Sql(value = ["/db/test/clean.sql"])
@@ -86,6 +90,8 @@ class ImportCategoryEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(true, category.active)
         assertEquals("Kitchen & Dining", category.name)
         assertEquals("Kitchen & Dining", category.longName)
+        assertEquals("Cuisine et salle à manger", category.nameFr)
+        assertEquals("Cuisine et salle à manger", category.longNameFr)
     }
 
     @Test

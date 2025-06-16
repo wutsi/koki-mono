@@ -1,96 +1,96 @@
-30000,Electronics
-30001,Electronics > Smartphones
-30002,Electronics > Laptops
-30003,Electronics > Tablets
-30004,Electronics > Cameras
-30005,Electronics > Accessories
-30006,Electronics > Accessories > Chargers
-30007,Electronics > Accessories > Headphones
-30008,Electronics > Accessories > Cases
-30009,Electronics > Accessories > Cables
-30010,Home & Kitchen
-30011,Home & Kitchen > Furniture
-30012,Home & Kitchen > Furniture > Sofas
-30013,Home & Kitchen > Furniture > Tables
-30014,Home & Kitchen > Furniture > Chairs
-30015,Home & Kitchen > Appliances
-30016,Home & Kitchen > Appliances > Refrigerators
-30017,Home & Kitchen > Appliances > Washing Machines
-30018,Home & Kitchen > Appliances > Microwaves
-30019,Home & Kitchen > Appliances > Vacuum Cleaners
-30020,Home & Kitchen > Decor
-30021,Home & Kitchen > Decor > Lighting
-30022,Home & Kitchen > Decor > Wall Art
-30023,Home & Kitchen > Decor > Rugs
-30024,Clothing & Apparel
-30025,Clothing & Apparel > Men's Clothing
-30026,Clothing & Apparel > Men's Clothing > Shirts
-30027,Clothing & Apparel > Men's Clothing > Pants
-30028,Clothing & Apparel > Men's Clothing > Jackets
-30029,Clothing & Apparel > Women's Clothing
-30030,Clothing & Apparel > Women's Clothing > Dresses
-30031,Clothing & Apparel > Women's Clothing > Tops
-30032,Clothing & Apparel > Women's Clothing > Jeans
-30033,Clothing & Apparel > Shoes
-30034,Clothing & Apparel > Shoes > Men's Shoes
-30035,Clothing & Apparel > Shoes > Women's Shoes
-30036,Clothing & Apparel > Shoes > Kids' Shoes
-30037,Beauty & Personal Care
-30038,Beauty & Personal Care > Skincare
-30039,Beauty & Personal Care > Skincare > Moisturizers
-30040,Beauty & Personal Care > Skincare > Cleansers
-30041,Beauty & Personal Care > Skincare > Serums
-30042,Beauty & Personal Care > Haircare
-30043,Beauty & Personal Care > Haircare > Shampoos
-30044,Beauty & Personal Care > Haircare > Conditioners
-30045,Beauty & Personal Care > Haircare > Styling Products
-30046,Beauty & Personal Care > Makeup
-30047,Beauty & Personal Care > Makeup > Foundation
-30048,Beauty & Personal Care > Makeup > Lipstick
-30049,Beauty & Personal Care > Makeup > Eyeshadow
-30050,Sports & Outdoors
-30051,Sports & Outdoors > Exercise Equipment
-30052,Sports & Outdoors > Exercise Equipment > Treadmills
-30053,Sports & Outdoors > Exercise Equipment > Dumbbells
-30054,Sports & Outdoors > Exercise Equipment > Yoga Mats
-30055,Sports & Outdoors > Outdoor Gear
-30056,Sports & Outdoors > Outdoor Gear > Tents
-30057,Sports & Outdoors > Outdoor Gear > Backpacks
-30058,Sports & Outdoors > Outdoor Gear > Sleeping Bags
-30059,Toys & Games
-30060,Toys & Games > Board Games
-30061,Toys & Games > Puzzles
-30062,Toys & Games > Action Figures
-30063,Toys & Games > Dolls
-30064,Automotive
-30065,Automotive > Car Parts
-30066,Automotive > Car Parts > Tires
-30067,Automotive > Car Parts > Batteries
-30068,Automotive > Car Parts > Brake Pads
-30069,Automotive > Car Accessories
-30070,Automotive > Car Accessories > Seat Covers
-30071,Automotive > Car Accessories > Phone Mounts
-30072,Automotive > Car Accessories > Dash Cams
-30073,Books
-30074,Books > Fiction
-30075,Books > Non-Fiction
-30076,Books > Children's Books
-30077,Books > Textbooks
-30078,Office Supplies
-30079,Office Supplies > Stationery
-30080,Office Supplies > Stationery > Pens
-30081,Office Supplies > Stationery > Notebooks
-30082,Office Supplies > Stationery > Sticky Notes
-30083,Office Supplies > Office Furniture
-30084,Office Supplies > Office Furniture > Desks
-30085,Office Supplies > Office Furniture > Chairs
-30086,Office Supplies > Office Furniture > Cabinets
-30087,Pet Supplies
-30088,Pet Supplies > Dog Supplies
-30089,Pet Supplies > Dog Supplies > Food
-30090,Pet Supplies > Dog Supplies > Toys
-30091,Pet Supplies > Dog Supplies > Beds
-30092,Pet Supplies > Cat Supplies
-30093,Pet Supplies > Cat Supplies > Food
-30094,Pet Supplies > Cat Supplies > Toys
-30095,Pet Supplies > Cat Supplies > Litter Boxes
+30000,Electronics,Électronique
+30001,Electronics > Smartphones,Électronique > Smartphones
+30002,Electronics > Laptops,Électronique > Ordinateurs Portables
+30003,Electronics > Tablets,Électronique > Tablettes
+30004,Electronics > Cameras,Électronique > Appareils Photo
+30005,Electronics > Accessories,Électronique > Accessoires
+30006,Electronics > Accessories > Chargers,Électronique > Accessoires > Chargeurs
+30007,Electronics > Accessories > Headphones,Électronique > Accessoires > Écouteurs
+30008,Electronics > Accessories > Cases,Électronique > Accessoires > Étuis
+30009,Electronics > Accessories > Cables,Électronique > Accessoires > Câbles
+30010,Home & Kitchen,Maison & Cuisine
+30011,Home & Kitchen > Furniture,Maison & Cuisine > Meubles
+30012,Home & Kitchen > Furniture > Sofas,Maison & Cuisine > Meubles > Canapés
+30013,Home & Kitchen > Furniture > Tables,Maison & Cuisine > Meubles > Tables
+30014,Home & Kitchen > Furniture > Chairs,Maison & Cuisine > Meubles > Chaises
+30015,Home & Kitchen > Appliances,Maison & Cuisine > Électroménager
+30016,Home & Kitchen > Appliances > Refrigerators,Maison & Cuisine > Électroménager > Réfrigérateurs
+30017,Home & Kitchen > Appliances > Washing Machines,Maison & Cuisine > Électroménager > Machines à Laver
+30018,Home & Kitchen > Appliances > Microwaves,Maison & Cuisine > Électroménager > Micro-ondes
+30019,Home & Kitchen > Appliances > Vacuum Cleaners,Maison & Cuisine > Électroménager > Aspirateurs
+30020,Home & Kitchen > Decor,Maison & Cuisine > Décoration
+30021,Home & Kitchen > Decor > Lighting,Maison & Cuisine > Décoration > Éclairage
+30022,Home & Kitchen > Decor > Wall Art,Maison & Cuisine > Décoration > Art Mural
+30023,Home & Kitchen > Decor > Rugs,Maison & Cuisine > Décoration > Tapis
+30024,Clothing & Apparel,Vêtements & Mode
+30025,Clothing & Apparel > Men's Clothing,Vêtements & Mode > Vêtements pour Hommes
+30026,Clothing & Apparel > Men's Clothing > Shirts,Vêtements & Mode > Vêtements pour Hommes > Chemises
+30027,Clothing & Apparel > Men's Clothing > Pants,Vêtements & Mode > Vêtements pour Hommes > Pantalons
+30028,Clothing & Apparel > Men's Clothing > Jackets,Vêtements & Mode > Vêtements pour Hommes > Vestes
+30029,Clothing & Apparel > Women's Clothing,Vêtements & Mode > Vêtements pour Femmes
+30030,Clothing & Apparel > Women's Clothing > Dresses,Vêtements & Mode > Vêtements pour Femmes > Robes
+30031,Clothing & Apparel > Women's Clothing > Tops,Vêtements & Mode > Vêtements pour Femmes > Hauts
+30032,Clothing & Apparel > Women's Clothing > Jeans,Vêtements & Mode > Vêtements pour Femmes > Jeans
+30033,Clothing & Apparel > Shoes,Vêtements & Mode > Chaussures
+30034,Clothing & Apparel > Shoes > Men's Shoes,Vêtements & Mode > Chaussures > Chaussures pour Hommes
+30035,Clothing & Apparel > Shoes > Women's Shoes,Vêtements & Mode > Chaussures > Chaussures pour Femmes
+30036,Clothing & Apparel > Shoes > Kids' Shoes,Vêtements & Mode > Chaussures > Chaussures pour Enfants
+30037,Beauty & Personal Care,Beauté & Soins Personnels
+30038,Beauty & Personal Care > Skincare,Beauté & Soins Personnels > Soins de la Peau
+30039,Beauty & Personal Care > Skincare > Moisturizers,Beauté & Soins Personnels > Soins de la Peau > Hydratants
+30040,Beauty & Personal Care > Skincare > Cleansers,Beauté & Soins Personnels > Soins de la Peau > Nettoyants
+30041,Beauty & Personal Care > Skincare > Serums,Beauté & Soins Personnels > Soins de la Peau > Sérums
+30042,Beauty & Personal Care > Haircare,Beauté & Soins Personnels > Soins des Cheveux
+30043,Beauty & Personal Care > Haircare > Shampoos,Beauté & Soins Personnels > Soins des Cheveux > Shampoings
+30044,Beauty & Personal Care > Haircare > Conditioners,Beauté & Soins Personnels > Soins des Cheveux > Après-Shampoings
+30045,Beauty & Personal Care > Haircare > Styling Products,Beauté & Soins Personnels > Soins des Cheveux > Produits Coiffants
+30046,Beauty & Personal Care > Makeup,Beauté & Soins Personnels > Maquillage
+30047,Beauty & Personal Care > Makeup > Foundation,Beauté & Soins Personnels > Maquillage > Fond de Teint
+30048,Beauty & Personal Care > Makeup > Lipstick,Beauté & Soins Personnels > Maquillage > Rouge à Lèvres
+30049,Beauty & Personal Care > Makeup > Eyeshadow,Beauté & Soins Personnels > Maquillage > Fard à Paupières
+30050,Sports & Outdoors,Sports & Plein Air
+30051,Sports & Outdoors > Exercise Equipment,Sports & Plein Air > Équipement d'Exercice
+30052,Sports & Outdoors > Exercise Equipment > Treadmills,Sports & Plein Air > Équipement d'Exercice > Tapis de Course
+30053,Sports & Outdoors > Exercise Equipment > Dumbbells,Sports & Plein Air > Équipement d'Exercice > Haltères
+30054,Sports & Outdoors > Exercise Equipment > Yoga Mats,Sports & Plein Air > Équipement d'Exercice > Tapis de Yoga
+30055,Sports & Outdoors > Outdoor Gear,Sports & Plein Air > Équipement Extérieur
+30056,Sports & Outdoors > Outdoor Gear > Tents,Sports & Plein Air > Équipement Extérieur > Tentes
+30057,Sports & Outdoors > Outdoor Gear > Backpacks,Sports & Plein Air > Équipement Extérieur > Sacs à Dos
+30058,Sports & Outdoors > Outdoor Gear > Sleeping Bags,Sports & Plein Air > Équipement Extérieur > Sacs de Couchage
+30059,Toys & Games,Jouets & Jeux
+30060,Toys & Games > Board Games,Jouets & Jeux > Jeux de Société
+30061,Toys & Games > Puzzles,Jouets & Jeux > Puzzles
+30062,Toys & Games > Action Figures,Jouets & Jeux > Figurines d'Action
+30063,Toys & Games > Dolls,Jouets & Jeux > Poupées
+30064,Automotive,Automobile
+30065,Automotive > Car Parts,Automobile > Pièces de Voiture
+30066,Automotive > Car Parts > Tires,Automobile > Pièces de Voiture > Pneus
+30067,Automotive > Car Parts > Batteries,Automobile > Pièces de Voiture > Batteries
+30068,Automotive > Car Parts > Brake Pads,Automobile > Pièces de Voiture > Plaquettes de Frein
+30069,Automotive > Car Accessories,Automobile > Accessoires pour Voiture
+30070,Automotive > Car Accessories > Seat Covers,Automobile > Accessoires pour Voiture > Housses de Siège
+30071,Automotive > Car Accessories > Phone Mounts,Automobile > Accessoires pour Voiture > Supports pour Téléphone
+30072,Automotive > Car Accessories > Dash Cams,Automobile > Accessoires pour Voiture > Caméras de Tableau de Bord
+30073,Books,Livres
+30074,Books > Fiction,Livres > Fiction
+30075,Books > Non-Fiction,Livres > Non-Fiction
+30076,Books > Children's Books,Livres > Livres pour Enfants
+30077,Books > Textbooks,Livres > Manuels Scolaires
+30078,Office Supplies,Fournitures de Bureau
+30079,Office Supplies > Stationery,Fournitures de Bureau > Papeterie
+30080,Office Supplies > Stationery > Pens,Fournitures de Bureau > Papeterie > Stylos
+30081,Office Supplies > Stationery > Notebooks,Fournitures de Bureau > Papeterie > Cahiers
+30082,Office Supplies > Stationery > Sticky Notes,Fournitures de Bureau > Papeterie > Notes Autocollantes
+30083,Office Supplies > Office Furniture,Fournitures de Bureau > Meubles de Bureau
+30084,Office Supplies > Office Furniture > Desks,Fournitures de Bureau > Meubles de Bureau > Bureaux
+30085,Office Supplies > Office Furniture > Chairs,Fournitures de Bureau > Meubles de Bureau > Chaises
+30086,Office Supplies > Office Furniture > Cabinets,Fournitures de Bureau > Meubles de Bureau > Armoires
+30087,Pet Supplies,Articles pour Animaux
+30088,Pet Supplies > Dog Supplies,Articles pour Animaux > Accessoires pour Chiens
+30089,Pet Supplies > Dog Supplies > Food,Articles pour Animaux > Accessoires pour Chiens > Nourriture
+30090,Pet Supplies > Dog Supplies > Toys,Articles pour Animaux > Accessoires pour Chiens > Jouets
+30091,Pet Supplies > Dog Supplies > Beds,Articles pour Animaux > Accessoires pour Chiens > Lits
+30092,Pet Supplies > Cat Supplies,Articles pour Animaux > Accessoires pour Chats
+30093,Pet Supplies > Cat Supplies > Food,Articles pour Animaux > Accessoires pour Chats > Nourriture
+30094,Pet Supplies > Cat Supplies > Toys,Articles pour Animaux > Accessoires pour Chats > Jouets
+30095,Pet Supplies > Cat Supplies > Litter Boxes,Articles pour Animaux > Accessoires pour Chats > Litières

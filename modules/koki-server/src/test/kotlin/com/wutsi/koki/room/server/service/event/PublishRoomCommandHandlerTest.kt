@@ -108,6 +108,9 @@ class PublishRoomCommandHandlerTest {
         title = "This is the AI title",
         description = "This is AI description",
         summary = "This is the AI summary",
+        titleFr = "Titre",
+        descriptionFr = "La description",
+        summaryFr = "Le sommaire",
         valid = true,
         amenityIds = listOf(11L, 33L, 55L),
         numberOfBeds = 3,
@@ -149,6 +152,9 @@ class PublishRoomCommandHandlerTest {
         assertEquals(data.title, room1.firstValue.title)
         assertEquals(data.description, room1.firstValue.description)
         assertEquals(data.summary, room1.firstValue.summary)
+        assertEquals(data.titleFr, room1.firstValue.titleFr)
+        assertEquals(data.descriptionFr, room1.firstValue.descriptionFr)
+        assertEquals(data.summaryFr, room1.firstValue.summaryFr)
         assertEquals(files[data.heroImageIndex].id, room1.firstValue.heroImageId)
         assertEquals(data.heroImageReason, room1.firstValue.heroImageReason)
         assertEquals(RoomStatus.PUBLISHED, room1.firstValue.status)

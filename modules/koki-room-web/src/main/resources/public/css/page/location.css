@@ -53,13 +53,13 @@
     border-radius: .5em;
     background: #fff;
     display: flex;
-    margin-bottom: 1em;
     width: 100%
 }
 
 #room-list-container-inner a.room {
     text-decoration: none;
     color: #444;
+    margin-bottom: 1em;
 }
 
 #room-list-container-inner .room .price {
