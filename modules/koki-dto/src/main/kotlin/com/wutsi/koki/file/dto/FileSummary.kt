@@ -9,6 +9,7 @@ data class FileSummary(
     val createdById: Long? = null,
     val name: String = "",
     val title: String? = null,
+    val titleFr: String? = null,
     val url: String = "",
     val contentType: String = "",
     val contentLength: Long = -1,
