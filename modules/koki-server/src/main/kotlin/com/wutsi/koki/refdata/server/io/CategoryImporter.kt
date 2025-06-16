@@ -24,6 +24,7 @@ class CategoryImporter(
 
         private const val RECORD_ID = 0
         private const val RECORD_LONG_NAME = 1
+        private const val RECORD_LONG_NAME_FR = 2
     }
 
     fun import(type: CategoryType): ImportResponse {
@@ -88,14 +89,17 @@ class CategoryImporter(
     ): CategoryEntity {
         val id = record.get(RECORD_ID).toLong()
         val longName = record.get(RECORD_LONG_NAME)
+        val longNameFr = record.get(RECORD_LONG_NAME_FR)
         val parentName = extractParentName(longName)
         return service.save(
             CategoryEntity(
                 id = id,
                 type = type,
                 longName = longName,
-                active = true,
                 name = extractName(longName),
+                longNameFr = longNameFr,
+                nameFr = extractName(longNameFr),
+                active = true,
                 level = computeLevel(longName),
                 parentId = parentName?.let { name -> findParent(name, categories) }?.id
             )
@@ -109,11 +113,14 @@ class CategoryImporter(
         categories: List<CategoryEntity>
     ) {
         val longName = record.get(RECORD_LONG_NAME)
+        val longNameFr = record.get(RECORD_LONG_NAME_FR)
         val parentName = extractParentName(longName)
 
         category.type = type
         category.longName = longName
         category.name = extractName(longName)
+        category.longNameFr = longNameFr
+        category.nameFr = extractName(longNameFr)
         category.level = computeLevel(longName)
         category.active = true
         category.parentId = parentName?.let { name -> findParent(name, categories) }?.id

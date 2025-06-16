@@ -76,6 +76,9 @@ class PublishRoomCommandHandler(
             room.title = data.title
             room.description = data.description
             room.summary = data.summary
+            room.titleFr = data.titleFr
+            room.descriptionFr = data.descriptionFr
+            room.summaryFr = data.summaryFr
             room.heroImageId = images[data.heroImageIndex].id
             room.heroImageReason = data.heroImageReason
         }

@@ -68,6 +68,8 @@ class FileUploadedHandlerTest {
     val data = RoomImageAgentData(
         title = "This is the title",
         description = "The description",
+        titleFr = "Le titre",
+        descriptionFr = "La description",
         valid = true,
         hashtags = listOf("#A", "#B", "#C"),
         quality = 2,
@@ -118,6 +120,8 @@ class FileUploadedHandlerTest {
         assertEquals(file.id, file1.firstValue.id)
         assertEquals(data.title, file1.firstValue.title)
         assertEquals(data.description, file1.firstValue.description)
+        assertEquals(data.titleFr, file1.firstValue.titleFr)
+        assertEquals(data.descriptionFr, file1.firstValue.descriptionFr)
         assertEquals(FileStatus.APPROVED, file1.firstValue.status)
         assertEquals(null, file1.firstValue.rejectionReason)
         assertEquals(labels, file1.firstValue.labels)

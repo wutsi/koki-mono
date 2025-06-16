@@ -62,6 +62,8 @@ class FileUploadedHandler(
     private fun updateImage(image: FileEntity, data: RoomImageAgentData) {
         image.title = data.title
         image.description = data.description
+        image.titleFr = data.titleFr
+        image.descriptionFr = data.descriptionFr
         image.status = if (data.valid) FileStatus.APPROVED else FileStatus.REJECTED
         image.rejectionReason = if (!data.valid) data.reason else null
         if (data.hashtags?.isNotEmpty() == true) {

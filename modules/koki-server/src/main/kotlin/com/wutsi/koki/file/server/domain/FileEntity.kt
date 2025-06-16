@@ -49,6 +49,8 @@ data class FileEntity(
     var numberOfPages: Int? = null,
     var status: FileStatus = FileStatus.UNKNOWN,
     var rejectionReason: String? = null,
+    var titleFr: String? = null,
+    var descriptionFr: String? = null,
 
     @ManyToMany
     @JoinTable(

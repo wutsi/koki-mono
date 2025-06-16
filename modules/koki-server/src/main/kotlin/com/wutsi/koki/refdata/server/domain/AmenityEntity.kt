@@ -15,6 +15,7 @@ data class AmenityEntity(
     var categoryId: Long = -1,
 
     var name: String = "",
+    var nameFr: String? = null,
     var icon: String? = null,
     var active: Boolean = false,
 )

@@ -32,6 +32,9 @@ class RoomInformationAgent(
               "title": "Title of the property",
               "summary": "Short summary",
               "description": "A more comprehensive description",
+              "titleFr": "Title translated in french",
+              "summaryFr": "Short summary translated in french",
+              "descriptionFr": "Description  translated in french",
               "heroImageIndex": "Index of the hero image (0 based index),
               "heroImageReason": "Reason why you have chosen the image",
               "amenityIds": [1001, 1002, 1003],
@@ -51,9 +54,9 @@ class RoomInformationAgent(
               - Keep it Concise and Readable: Aim for a title that is easy to scan and understand quickly. Aim for a maximum of 50 characters
             - Instructions for crafting the description:
               - Start with Compelling Opening: Your first sentence or two should immediately grab attention and reinforce your unique selling proposition from your title.
-              - Expand on Key Features and Amenities: Now's the time to elaborate on the highlights mentioned in your title and introduce other enticing features. Be specific and descriptive.
-              - Highlight the Guest Experience: Think about what makes staying at your property special. Is it the peace and quiet, the convenience to attractions, the luxurious amenities, or the thoughtful touches you provide?
-              - Aim for around 600-800 words.
+              - For fully furnished properties, expand on key Features and amenities: Now's the time to elaborate on the highlights mentioned in your title and introduce other enticing features. Be specific and descriptive.
+              - Highlight the experience: Think about what makes your property special. Is it the peace and quiet, the convenience to attractions, the luxurious amenities (for fully furnished properties), or the thoughtful touches you provide?
+              - Aim for around 300-400 words.
             - Instructions for crafting the summary:
               - Expand on the Title and Hook
               - Focus on the Benefits for the Sharer's Audience: Why should someone click on this link? What kind of experience awaits the customer?

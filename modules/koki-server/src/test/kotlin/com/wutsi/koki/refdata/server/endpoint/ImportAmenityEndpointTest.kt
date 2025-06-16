@@ -28,5 +28,6 @@ class ImportAmenityEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(40014, amenity.categoryId)
         assertEquals(true, amenity.active)
         assertEquals("Tour Assistance", amenity.name)
+        assertEquals("Assistance pour les visites", amenity.nameFr)
     }
 }

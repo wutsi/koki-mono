@@ -16,6 +16,8 @@ data class CategoryEntity(
 
     var name: String = "",
     var longName: String = "",
+    var nameFr: String? = null,
+    var longNameFr: String? = null,
     var level: Int = 0,
     var active: Boolean = true,
 )

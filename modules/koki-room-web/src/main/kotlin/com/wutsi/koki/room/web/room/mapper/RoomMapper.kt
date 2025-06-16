@@ -31,13 +31,20 @@ class RoomMapper(
         accounts: Map<Long, AccountModel>,
     ): RoomModel {
         val locale = LocaleContextHolder.getLocale()
+        val language = locale.language
         return RoomModel(
             id = entity.id,
             account = accounts[entity.accountId] ?: AccountModel(id = entity.accountId),
             type = entity.type,
             status = entity.status,
-            title = entity.title,
-            summary = entity.summary?.ifEmpty { null },
+            title = when (language) {
+                "fr" -> entity.titleFr ?: entity.title
+                else -> entity.title
+            },
+            summary = when (language) {
+                "fr" -> entity.summaryFr ?: entity.summary
+                else -> entity.summary?.ifEmpty { null }
+            },
             numberOfRooms = entity.numberOfRooms,
             numberOfBathrooms = entity.numberOfBathrooms,
             numberOfBeds = entity.numberOfBeds,
@@ -94,6 +101,7 @@ class RoomMapper(
         amenities: Map<Long, AmenityModel>,
     ): RoomModel {
         val locale = LocaleContextHolder.getLocale()
+        val language = locale.language
         val fmtDate = createDateFormat()
         return RoomModel(
             id = entity.id,
@@ -101,9 +109,18 @@ class RoomMapper(
             heroImage = heroImage,
             type = entity.type,
             status = entity.status,
-            title = entity.title,
-            summary = entity.summary?.ifEmpty { null },
-            description = entity.description?.ifEmpty { null },
+            title = when (language) {
+                "fr" -> entity.titleFr ?: entity.title
+                else -> entity.title
+            },
+            summary = when (language) {
+                "fr" -> entity.summaryFr ?: entity.summary?.ifEmpty { null }
+                else -> entity.summary?.ifEmpty { null }
+            },
+            description = when (language) {
+                "fr" -> entity.descriptionFr ?: entity.description?.ifEmpty { null }
+                else -> entity.description?.ifEmpty { null }
+            },
             descriptionHtml = entity.description?.let { text -> HtmlUtils.toHtml(text) },
             numberOfRooms = entity.numberOfRooms,
             numberOfBathrooms = entity.numberOfBathrooms,
