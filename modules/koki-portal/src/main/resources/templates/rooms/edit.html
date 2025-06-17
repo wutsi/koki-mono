@@ -180,7 +180,7 @@
                                         </option>
                                     </select>
                                     <select style="width: auto" th:field="*{leaseTerm}">
-                                        <option value=""></option>
+                                        <option value="UNKNOWN"></option>
                                         <option th:each="term : ${leaseTerms}"
                                                 th:if="${term.name != 'UNKNOWN'}"
                                                 th:text="#{'lease-term.' + ${term}}"

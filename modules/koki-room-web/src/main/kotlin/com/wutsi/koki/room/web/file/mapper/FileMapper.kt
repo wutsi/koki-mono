@@ -5,6 +5,7 @@ import com.wutsi.koki.file.dto.FileSummary
 import com.wutsi.koki.room.web.common.mapper.TenantAwareMapper
 import com.wutsi.koki.room.web.file.model.FileModel
 import org.apache.commons.io.FilenameUtils
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
 import java.text.DecimalFormat
 import java.text.StringCharacterIterator
@@ -12,12 +13,15 @@ import java.text.StringCharacterIterator
 @Service
 class FileMapper : TenantAwareMapper() {
     fun toFileModel(entity: FileSummary): FileModel {
-        val fmt = createDateTimeFormat()
+        val language = LocaleContextHolder.getLocale().language
         return FileModel(
             id = entity.id,
             type = entity.type,
             name = entity.name,
-            title = entity.title,
+            title = when (language) {
+                "fr" -> entity.titleFr ?: entity.title
+                else -> entity.title
+            },
             contentUrl = entity.url,
             contentType = entity.contentType,
             contentLength = entity.contentLength,
@@ -27,12 +31,15 @@ class FileMapper : TenantAwareMapper() {
     }
 
     fun toFileModel(entity: File): FileModel {
-        val fmt = createDateTimeFormat()
+        val language = LocaleContextHolder.getLocale().language
         return FileModel(
             id = entity.id,
             type = entity.type,
             name = entity.name,
-            title = entity.title,
+            title = when (language) {
+                "fr" -> entity.titleFr ?: entity.title
+                else -> entity.title
+            },
             contentUrl = entity.url,
             contentType = entity.contentType,
             contentLength = entity.contentLength,
