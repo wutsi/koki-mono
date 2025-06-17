@@ -67,82 +67,85 @@
                     <div th:replace="~{__components/module :: tabs('main', true)}"></div>
                     <div th:replace="~{__components/module :: tabs-content('main', true, ${account}, ${module})}">
                     </div>
-                    <table class="table hidden" id="tab-details-content">
-                        <tr>
-                            <td width="20%"><b>Name</b></td>
-                            <td th:text="${account.name}">NAME</td>
-                        </tr>
-                        <tr th:if="${account.accountType}">
-                            <td><b>Type</b></td>
-                            <td th:text="${account.accountType?.title}">TYPE</td>
-                        </tr>
-                        <tr th:if="${account.phone}">
-                            <td><b>Phone</b></td>
-                            <td th:text="${account.phoneFormatted}">PHONE</td>
-                        </tr>
-                        <tr th:if="${account.mobile}">
-                            <td><b>Mobile</b></td>
-                            <td th:text="${account.mobileFormatted}">MOBILE</td>
-                        </tr>
-                        <tr th:if="${account.email}">
-                            <td><b>Email</b></td>
-                            <td>
-                                <a th:href="'mailto:' + ${account.email}" th:text="${account.email}">EMAIL</a>
-                            </td>
-                        </tr>
-                        <tr th:if="${account.website}">
-                            <td><b>Website</b></td>
-                            <td>
-                                <a target="_blank" th:href="${account.website}" th:text="${account.website}">LINK</a>
-                            </td>
-                        </tr>
-                        <tr th:if="${account.language}">
-                            <td><b>Language</b></td>
-                            <td th:text="${account.languageText}">LANGUAGE</td>
-                        </tr>
-                        <tr th:if="${account.description}">
-                            <td><b>Description</b></td>
-                            <td th:text="${account.description}">DESCRIPTION</td>
-                        </tr>
-                        <tr th:if="${account.shippingAddress}">
-                            <td><b>Shipping Address</b></td>
-                            <td th:utext="${account.shippingAddress?.toHtml()}">SHIPPING ADDRESS</td>
-                        </tr>
-                        <tr th:if="${account.billingAddress} OR ${account.billingSameAsShippingAddress}">
-                            <td><b>Billing Address</b></td>
-                            <td th:if="${account.billingSameAsShippingAddress}">Same as shipping address</td>
-                            <td th:utext="${account.billingAddress?.toHtml()}"></td>
-                        </tr>
+                    <div class="hidden" id="tab-details-content">
+                        <table class="table">
+                            <tr>
+                                <td width="20%"><b>Name</b></td>
+                                <td th:text="${account.name}">NAME</td>
+                            </tr>
+                            <tr th:if="${account.accountType}">
+                                <td><b>Type</b></td>
+                                <td th:text="${account.accountType?.title}">TYPE</td>
+                            </tr>
+                            <tr th:if="${account.phone}">
+                                <td><b>Phone</b></td>
+                                <td th:text="${account.phoneFormatted}">PHONE</td>
+                            </tr>
+                            <tr th:if="${account.mobile}">
+                                <td><b>Mobile</b></td>
+                                <td th:text="${account.mobileFormatted}">MOBILE</td>
+                            </tr>
+                            <tr th:if="${account.email}">
+                                <td><b>Email</b></td>
+                                <td>
+                                    <a th:href="'mailto:' + ${account.email}" th:text="${account.email}">EMAIL</a>
+                                </td>
+                            </tr>
+                            <tr th:if="${account.website}">
+                                <td><b>Website</b></td>
+                                <td>
+                                    <a target="_blank" th:href="${account.website}"
+                                       th:text="${account.website}">LINK</a>
+                                </td>
+                            </tr>
+                            <tr th:if="${account.language}">
+                                <td><b>Language</b></td>
+                                <td th:text="${account.languageText}">LANGUAGE</td>
+                            </tr>
+                            <tr th:if="${account.description}">
+                                <td><b>Description</b></td>
+                                <td th:text="${account.description}">DESCRIPTION</td>
+                            </tr>
+                            <tr th:if="${account.shippingAddress}">
+                                <td><b>Shipping Address</b></td>
+                                <td th:utext="${account.shippingAddress?.toHtml()}">SHIPPING ADDRESS</td>
+                            </tr>
+                            <tr th:if="${account.billingAddress} OR ${account.billingSameAsShippingAddress}">
+                                <td><b>Billing Address</b></td>
+                                <td th:if="${account.billingSameAsShippingAddress}">Same as shipping address</td>
+                                <td th:utext="${account.billingAddress?.toHtml()}"></td>
+                            </tr>
 
 
-                        <tr th:if="!${account.attributes.isEmpty()}">
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr th:each="attr : ${account.attributes}">
-                            <td><b th:text="${attr.attribute.label}">NAME</b></td>
-                            <td th:text="${attr.value}">DESCRIPTION</td>
-                        </tr>
+                            <tr th:if="!${account.attributes.isEmpty()}">
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr th:each="attr : ${account.attributes}">
+                                <td><b th:text="${attr.attribute.label}">NAME</b></td>
+                                <td th:text="${attr.value}">DESCRIPTION</td>
+                            </tr>
 
-                        <tr>
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr>
-                            <td><b>Created</b></td>
-                            <td>
-                                <span th:text="${account.createdAtText}">DATE</span>
-                                <span th:if="${account.createdBy}">by</span>
-                                <span th:if="${account.createdBy}" th:text="${account.createdBy.displayName}">MODIFIED BY</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><b>Modified</b></td>
-                            <td>
-                                <span th:text="${account.modifiedAtText}">DATE</span>
-                                <span th:if="${account.modifiedBy}">by</span>
-                                <span th:if="${account.modifiedBy}" th:text="${account.modifiedBy.displayName}">MODIFIED BY</span>
-                            </td>
-                        </tr>
-                    </table>
+                            <tr>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td><b>Created</b></td>
+                                <td>
+                                    <span th:text="${account.createdAtText}">DATE</span>
+                                    <span th:if="${account.createdBy}">by</span>
+                                    <span th:if="${account.createdBy}" th:text="${account.createdBy.displayName}">MODIFIED BY</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Modified</b></td>
+                                <td>
+                                    <span th:text="${account.modifiedAtText}">DATE</span>
+                                    <span th:if="${account.modifiedBy}">by</span>
+                                    <span th:if="${account.modifiedBy}" th:text="${account.modifiedBy.displayName}">MODIFIED BY</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

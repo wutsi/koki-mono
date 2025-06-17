@@ -12,6 +12,7 @@ import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.room.model.RoomModel
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.room.dto.Room
+import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomSummary
 import org.springframework.stereotype.Service
 
@@ -60,7 +61,7 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             longitude = entity.longitude,
             latitude = entity.latitude,
             area = entity.area,
-            listingUrl = entity.listingUrl,
+            listingUrl = buildListingUrl(entity.listingUrl, entity.status),
             leaseType = entity.leaseType,
             leaseTerm = entity.leaseTerm,
             furnishedType = entity.furnishedType,
@@ -133,7 +134,7 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             category = category,
             furnishedType = entity.furnishedType,
             area = entity.area,
-            listingUrl = entity.listingUrl,
+            listingUrl = buildListingUrl(entity.listingUrl, entity.status),
             visitFees = entity.visitFees?.let { price ->
                 moneyMapper.toMoneyModel(
                     price.amount,
@@ -146,5 +147,15 @@ class RoomMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             advanceRent = entity.advanceRent,
             leaseTermDuration = entity.leaseTermDuration,
         )
+    }
+
+    private fun buildListingUrl(url: String?, status: RoomStatus): String? {
+        if (url != null && status == RoomStatus.PUBLISHED) {
+            val tenant = currentTenant.get()
+            if (tenant != null) {
+                return "${tenant.clientPortalUrl}$url"
+            }
+        }
+        return null
     }
 }

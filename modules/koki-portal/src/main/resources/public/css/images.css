@@ -16,6 +16,11 @@ table tr.image td .file-status-container {
     z-index: 100;
 }
 
+.tab-images .toolbar {
+    margin-top: 0.5em;
+}
+
+
 /* ======================================================================== */
 /*                                                                          */
 /*  MEDIA QUERIES                                                           */
@@ -38,5 +43,13 @@ table tr.image td .file-status-container {
     table tr.image td a img.img-fluid {
         max-width: 250px;
         max-height: 166px;
+    }
+
+    .tab-images {
+        margin: -0.5em;
+    }
+
+    .tab-images .toolbar {
+        margin: 0.5em;
     }
 }

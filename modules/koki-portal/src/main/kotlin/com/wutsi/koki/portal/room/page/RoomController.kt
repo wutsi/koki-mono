@@ -36,16 +36,6 @@ class RoomController(
         val room = service.room(id)
         model.addAttribute("room", room)
 
-        if (room.listingUrl != null && room.status == RoomStatus.PUBLISHED) {
-            val tenant = tenantHolder.get()
-            if (tenant != null) {
-                model.addAttribute(
-                    "listingUrl",
-                    "${tenant.clientPortalUrl}${room.listingUrl}"
-                )
-            }
-        }
-
         model.addAttribute(
             "latitude",
             if (room.hasGeoLocation) {

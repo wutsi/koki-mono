@@ -160,6 +160,13 @@
 </div>
 
 <table class="table" th:fragment="details(room)">
+    <tr th:if="${room.listingUrl}">
+        <td><b>Listing</b></td>
+        <td>
+            <i class="fa-solid fa-up-right-from-square"></i>
+            <a target="_blank" th:href="${room.listingUrl}">Link</a>
+        </td>
+    </tr>
     <tr>
         <td><b>Hero Image</b></td>
         <td>

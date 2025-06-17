@@ -103,6 +103,10 @@ class RoomMapper(
         val locale = LocaleContextHolder.getLocale()
         val language = locale.language
         val fmtDate = createDateFormat()
+        val description = when (language) {
+            "fr" -> entity.descriptionFr ?: entity.description?.ifEmpty { null }
+            else -> entity.description?.ifEmpty { null }
+        }
         return RoomModel(
             id = entity.id,
             account = account,
@@ -117,11 +121,8 @@ class RoomMapper(
                 "fr" -> entity.summaryFr ?: entity.summary?.ifEmpty { null }
                 else -> entity.summary?.ifEmpty { null }
             },
-            description = when (language) {
-                "fr" -> entity.descriptionFr ?: entity.description?.ifEmpty { null }
-                else -> entity.description?.ifEmpty { null }
-            },
-            descriptionHtml = entity.description?.let { text -> HtmlUtils.toHtml(text) },
+            description = description,
+            descriptionHtml = description?.let { text -> HtmlUtils.toHtml(text) },
             numberOfRooms = entity.numberOfRooms,
             numberOfBathrooms = entity.numberOfBathrooms,
             numberOfBeds = entity.numberOfBeds,

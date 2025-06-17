@@ -87,6 +87,10 @@ body {
     padding-bottom: 1em;
 }
 
+.padding-bottom-small {
+    padding-bottom: 0.5em;
+}
+
 .padding-left {
     padding-left: 1em;
 }
@@ -651,7 +655,7 @@ table tr.entity td a {
 /* =====  UPLOADER  ===== */
 .uploader {
     background: #f8f8f8;
-    border: 1px solid gray !important;
+    border: 1px solid gray;
 }
 
 /* ============================= */
@@ -711,6 +715,16 @@ div.CodeMirror {
 
 /* Mobile phone */
 @media only screen and (max-width: 479px) and (orientation: portrait) {
+    h1.entity-title img {
+        height: 24px;
+        width: 24px;
+    }
+
+    #tab-details-content {
+        margin: -0.5em;
+        margin-bottom: 0.5em;
+    }
+
     table#tab-details-content,
     #tab-details-content table {
         table-layout: fixed;
@@ -724,5 +738,11 @@ div.CodeMirror {
     #tab-details-content tr td:first-child {
         border-bottom: 0;
         padding-bottom: 0;
+    }
+
+    .uploader {
+        border: 0;
+        border-top: 1px solid gray;
+        border-bottom: 1px solid gray;
     }
 }

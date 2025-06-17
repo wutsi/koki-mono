@@ -72,78 +72,81 @@
                 <div class="widget-body">
                     <div th:replace="~{__components/module :: tabs('main', true)}"></div>
                     <div th:replace="~{__components/module :: tabs-content('main', true, ${contact}, ${module})}"></div>
-                    <table class="table hidden" id="tab-details-content">
-                        <tr th:if="${contact.account}">
-                            <td><b>Account</b></td>
-                            <td>
-                                <a class="entity-title" target="_blank" th:href="'/accounts/' + ${contact.account.id}">
-                                    <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
-                                    <span th:text="${contact.account.name}">ACCOUNT</span>
-                                </a>
-                            </td>
-                        </tr>
-                        <tr th:if="${contact.contactType}">
-                            <td><b>Contact Type</b></td>
-                            <td th:text="${contact.contactType?.title}">TYPE</td>
-                        </tr>
-                        <tr th:if="${contact.salutation}">
-                            <td><b>Salutations</b></td>
-                            <td th:text="${contact.salutation}">TYPE</td>
-                        </tr>
-                        <tr>
-                            <td width="20%"><b>First Name</b></td>
-                            <td th:text="${contact.firstName}">TYPE</td>
-                        </tr>
-                        <tr>
-                            <td width="20%"><b>Last Name</b></td>
-                            <td th:text="${contact.lastName}">TYPE</td>
-                        </tr>
-                        <tr th:if="${contact.email}">
-                            <td><b>Email</b></td>
-                            <td>
-                                <a th:href="'mailto:' + ${contact.email}"
-                                   th:text="${contact.email}">EMAIL</a>
-                            </td>
-                        </tr>
-                        <tr th:if="${contact.mobile}">
-                            <td><b>Mobile</b></td>
-                            <td th:text="${contact.mobile}">MOBILE</td>
-                        </tr>
-                        <tr th:if="${contact.phone}">
-                            <td><b>Phone</b></td>
-                            <td th:text="${contact.phone}">PHONE</td>
-                        </tr>
-                        <tr th:if="${contact.profession}">
-                            <td><b>Profession</b></td>
-                            <td th:text="${contact.profession}">PROFESSION</td>
-                        </tr>
-                        <tr th:if="${contact.employer}">
-                            <td><b>Employer</b></td>
-                            <td th:text="${contact.employer}">EMPLOYER</td>
-                        </tr>
-                        <tr th:if="${contact.language}">
-                            <td><b>Language</b></td>
-                            <td th:text="${contact.languageText}">LANGUAGE</td>
-                        </tr>
-                        <tr>
-                            <td><b>Created</b></td>
-                            <td>
-                                <span th:text="${contact.createdAtText}">DATE</span>
-                                <span th:if="${contact.createdBy}">by</span>
-                                <span th:if="${contact.createdBy}"
-                                      th:text="${contact.createdBy.displayName}">MODIFIED BY</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><b>Modified</b></td>
-                            <td>
-                                <span th:text="${contact.modifiedAtText}">DATE</span>
-                                <span th:if="${contact.modifiedBy}">by</span>
-                                <span th:if="${contact.modifiedBy}"
-                                      th:text="${contact.modifiedBy.displayName}">MODIFIED BY</span>
-                            </td>
-                        </tr>
-                    </table>
+                    <div class="hidden" id="tab-details-content">
+                        <table class="table">
+                            <tr th:if="${contact.account}">
+                                <td><b>Account</b></td>
+                                <td>
+                                    <a class="entity-title" target="_blank"
+                                       th:href="'/accounts/' + ${contact.account.id}">
+                                        <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
+                                        <span th:text="${contact.account.name}">ACCOUNT</span>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr th:if="${contact.contactType}">
+                                <td><b>Contact Type</b></td>
+                                <td th:text="${contact.contactType?.title}">TYPE</td>
+                            </tr>
+                            <tr th:if="${contact.salutation}">
+                                <td><b>Salutations</b></td>
+                                <td th:text="${contact.salutation}">TYPE</td>
+                            </tr>
+                            <tr>
+                                <td width="20%"><b>First Name</b></td>
+                                <td th:text="${contact.firstName}">TYPE</td>
+                            </tr>
+                            <tr>
+                                <td width="20%"><b>Last Name</b></td>
+                                <td th:text="${contact.lastName}">TYPE</td>
+                            </tr>
+                            <tr th:if="${contact.email}">
+                                <td><b>Email</b></td>
+                                <td>
+                                    <a th:href="'mailto:' + ${contact.email}"
+                                       th:text="${contact.email}">EMAIL</a>
+                                </td>
+                            </tr>
+                            <tr th:if="${contact.mobile}">
+                                <td><b>Mobile</b></td>
+                                <td th:text="${contact.mobile}">MOBILE</td>
+                            </tr>
+                            <tr th:if="${contact.phone}">
+                                <td><b>Phone</b></td>
+                                <td th:text="${contact.phone}">PHONE</td>
+                            </tr>
+                            <tr th:if="${contact.profession}">
+                                <td><b>Profession</b></td>
+                                <td th:text="${contact.profession}">PROFESSION</td>
+                            </tr>
+                            <tr th:if="${contact.employer}">
+                                <td><b>Employer</b></td>
+                                <td th:text="${contact.employer}">EMPLOYER</td>
+                            </tr>
+                            <tr th:if="${contact.language}">
+                                <td><b>Language</b></td>
+                                <td th:text="${contact.languageText}">LANGUAGE</td>
+                            </tr>
+                            <tr>
+                                <td><b>Created</b></td>
+                                <td>
+                                    <span th:text="${contact.createdAtText}">DATE</span>
+                                    <span th:if="${contact.createdBy}">by</span>
+                                    <span th:if="${contact.createdBy}"
+                                          th:text="${contact.createdBy.displayName}">MODIFIED BY</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Modified</b></td>
+                                <td>
+                                    <span th:text="${contact.modifiedAtText}">DATE</span>
+                                    <span th:if="${contact.modifiedBy}">by</span>
+                                    <span th:if="${contact.modifiedBy}"
+                                          th:text="${contact.modifiedBy.displayName}">MODIFIED BY</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
