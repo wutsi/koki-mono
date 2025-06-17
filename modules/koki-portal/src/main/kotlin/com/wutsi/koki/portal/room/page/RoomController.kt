@@ -6,7 +6,6 @@ import com.wutsi.koki.portal.refdata.service.CategoryService
 import com.wutsi.koki.portal.room.service.RoomService
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.refdata.dto.CategoryType
-import com.wutsi.koki.room.dto.RoomStatus
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
