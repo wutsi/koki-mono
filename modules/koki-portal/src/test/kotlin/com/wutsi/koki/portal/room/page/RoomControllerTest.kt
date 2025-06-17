@@ -77,7 +77,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ROOM)
 
-        assertElementNotPresent("#listing-container")
+        assertElementNotPresent("a.listing-url")
         assertElementNotPresent(".btn-edit")
         assertElementNotPresent(".btn-publish")
         assertElementNotPresent(".btn-delete")
@@ -93,8 +93,8 @@ class RoomControllerTest : AbstractPageControllerTest() {
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ROOM)
 
-        assertElementPresent("#listing-container")
-        assertElementAttributeEndsWith("#listing-container a", "href", room.listingUrl ?: "")
+        assertElementPresent("a.listing-url")
+        assertElementAttributeEndsWith("a.listing-url", "href", room.listingUrl ?: "")
         assertElementPresent(".btn-edit")
         assertElementPresent(".btn-map")
         assertElementNotPresent(".btn-publish")
