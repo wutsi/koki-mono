@@ -429,9 +429,9 @@ abstract class AbstractPageControllerTest {
     }
 
     protected fun setUpUserWithoutPermissions(names: List<String>) {
-        val xpermissions = ModuleFixtures.permissions.filter { permission ->
-            !names.contains(permission.name)
-        }
+        val xpermissions = ModuleFixtures.permissions
+            .filter { permission -> !names.contains(permission.name) }
+            .filter { permission -> !permission.name.endsWith(":full_access") }
         val xrole = RoleFixtures.role.copy(permissionIds = xpermissions.map { permission -> permission.id })
         doReturn(
             ResponseEntity(

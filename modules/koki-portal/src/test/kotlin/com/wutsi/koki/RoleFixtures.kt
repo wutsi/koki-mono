@@ -12,7 +12,7 @@ object RoleFixtures {
             description = "This is an example of role",
             active = true,
             permissionIds = permissions
-                .filter { permission -> !permission.name.endsWith(":full_access") } // Exclude all full access
+                .filter { permission -> !permission.name.endsWith(":full_access") } // Exclude full access permissions
                 .map { permission -> permission.id }
         ),
         Role(id = 2L, name = "hr", title = "Human Resource", active = true),
