@@ -216,16 +216,11 @@ object ModuleFixtures {
         Permission(id = 1002, moduleId = 100, name = "account:admin", description = "Configure accounts"),
         Permission(id = 1003, moduleId = 100, name = "account:manage", description = "Manage accounts"),
         Permission(id = 1004, moduleId = 100, name = "account:delete", description = "Delete accounts"),
+        Permission(id = 1005, moduleId = 100, name = "account:full_access", description = "Full access to accounts"),
 
         Permission(id = 1101, moduleId = 110, name = "contact", description = "Access contacts"),
         Permission(id = 1102, moduleId = 110, name = "contact:manage", description = "Manage contacts"),
         Permission(id = 1103, moduleId = 110, name = "contact:delete", description = "Delete contacts"),
-
-        Permission(id = 1201, moduleId = 120, name = "tax", description = "Access taxes"),
-        Permission(id = 1202, moduleId = 120, name = "tax:manage", description = "Manage taxes"),
-        Permission(id = 1203, moduleId = 120, name = "tax:delete", description = "Delete taxes"),
-        Permission(id = 1204, moduleId = 120, name = "tax:admin", description = "Configure Tax module"),
-        Permission(id = 1205, moduleId = 120, name = "tax:metric", description = "Access Tax metrics"),
 
         Permission(id = 1301, moduleId = 130, name = "email", description = "Access emails"),
         Permission(id = 1302, moduleId = 130, name = "email:send", description = "Send emails"),
@@ -245,9 +240,6 @@ object ModuleFixtures {
         Permission(id = 1513, moduleId = 151, name = "image:admin", description = "Configure images"),
 
         Permission(id = 1601, moduleId = 160, name = "security:admin", description = "Configure system security"),
-
-        Permission(id = 1701, moduleId = 170, name = "employee", description = "Access employees"),
-        Permission(id = 1702, moduleId = 170, name = "employee:manage", description = "Manage employees"),
 
         Permission(id = 1801, moduleId = 180, name = "tenant:admin", description = "Manage Tenant"),
 
@@ -275,6 +267,7 @@ object ModuleFixtures {
 
         Permission(id = 2500, moduleId = 250, name = "room", description = "View Properties"),
         Permission(id = 2501, moduleId = 250, name = "room:manage", description = "Manage Properties"),
+        Permission(id = 2502, moduleId = 250, name = "room:full_access", description = "Full Access"),
         Permission(id = 2510, moduleId = 251, name = "room-unit", description = "View Room Unit"),
         Permission(id = 2511, moduleId = 251, name = "room-unit:manage", description = "Manage Room Units"),
         Permission(id = 2520, moduleId = 252, name = "room-amenity", description = "View Amenities"),

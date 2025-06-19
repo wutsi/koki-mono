@@ -457,6 +457,36 @@ abstract class AbstractPageControllerTest {
             )
     }
 
+    protected fun setUpUserWithFullAccessPermissions(module: String) {
+        val permissionId = ModuleFixtures.permissions
+            .find { permission -> permission.name == "$module:full_access" }
+            ?.id
+            ?: -1
+        val xrole = RoleFixtures.role.copy(permissionIds = listOf(permissionId))
+        doReturn(
+            ResponseEntity(
+                SearchRoleResponse(listOf(xrole)),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchRoleResponse::class.java)
+            )
+
+        val xuser = UserFixtures.user.copy(roleIds = listOf(xrole.id))
+        doReturn(
+            ResponseEntity(
+                GetUserResponse(xuser),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetUserResponse::class.java)
+            )
+    }
+
     private fun setupFileModule() {
         doReturn(
             ResponseEntity(

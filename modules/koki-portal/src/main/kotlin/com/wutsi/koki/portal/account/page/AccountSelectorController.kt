@@ -14,8 +14,10 @@ class AccountSelectorController(private val service: AccountService) : AbstractA
     fun search(
         @RequestParam(required = false, name = "q") keyword: String? = null,
     ): List<AccountModel> {
+        val user = userHolder.get()
         return service.accounts(
             keyword = keyword,
+            managedByIds = if (user?.hasFullAccess("account") == true) emptyList() else listOf(user?.id ?: -1),
             fullGraph = false,
         )
     }
