@@ -32,7 +32,7 @@ class MessageEmailSender(
 
         val room = roomService.get(event.owner?.id ?: -1L, event.tenantId)
         val message = messageService.get(event.messageId, event.tenantId)
-        val account = accountService.get(room.accountId, event.tenantId)
+        val account = accountService.get(room.account.id ?: -1L, event.tenantId)
         val tenant = tenantService.get(event.tenantId)
         val heroImage = room.heroImageId?.let { id -> fileService.get(id, event.tenantId) }
 

@@ -30,7 +30,7 @@ class CreateRoomEndpointTest : AuthorizationAwareEndpointTest() {
 
         val request = CreateRoomRequest(
             type = RoomType.APARTMENT,
-            accountId = 333L,
+            accountId = 33L,
             maxGuests = 7,
             numberOfRooms = 4,
             numberOfBathrooms = 2,
@@ -67,7 +67,7 @@ class CreateRoomEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(RoomStatus.DRAFT, room.status)
         assertEquals(USER_ID, room.createdById)
         assertEquals(USER_ID, room.modifiedById)
-        assertEquals(request.accountId, room.accountId)
+        assertEquals(request.accountId, room.account.id)
         assertEquals(request.type, room.type)
         assertEquals(null, room.title)
         assertEquals(null, room.description)

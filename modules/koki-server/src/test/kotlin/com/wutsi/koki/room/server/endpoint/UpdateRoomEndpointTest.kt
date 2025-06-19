@@ -59,7 +59,7 @@ class UpdateRoomEndpointTest : AuthorizationAwareEndpointTest() {
         val room = dao.findById(111).get()
 
         assertEquals(USER_ID, room.modifiedById)
-        assertEquals(33L, room.accountId)
+        assertEquals(33L, room.account.id)
         assertEquals(request.title, room.title)
         assertEquals(request.description, room.description)
         assertEquals(request.summary, room.summary)

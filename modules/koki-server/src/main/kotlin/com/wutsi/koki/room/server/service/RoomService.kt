@@ -1,5 +1,6 @@
 package com.wutsi.koki.room.server.service
 
+import com.wutsi.koki.account.server.service.AccountService
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
@@ -34,6 +35,7 @@ class RoomService(
     private val securityService: SecurityService,
     private val locationService: LocationService,
     private val amenityService: AmenityService,
+    private val accountService: AccountService,
     private val fileService: FileService,
     private val validator: RoomPublisherValidator,
 ) {
@@ -50,6 +52,7 @@ class RoomService(
         tenantId: Long,
         ids: List<Long> = emptyList(),
         accountIds: List<Long> = emptyList(),
+        accountManagerIds: List<Long> = emptyList(),
         cityId: Long? = null,
         neighborhoodId: Long? = null,
         status: RoomStatus? = null,
@@ -80,7 +83,10 @@ class RoomService(
             jql.append(" AND R.neighborhoodId = :neighborhoodId")
         }
         if (accountIds.isNotEmpty()) {
-            jql.append(" AND R.accountId IN :accountIds")
+            jql.append(" AND R.account.id IN :accountIds")
+        }
+        if (accountManagerIds.isNotEmpty()) {
+            jql.append(" AND R.account.managedById IN :accountManagerIds")
         }
         if (status != null) {
             jql.append(" AND R.status IN :status")
@@ -125,6 +131,9 @@ class RoomService(
         if (accountIds.isNotEmpty()) {
             query.setParameter("accountIds", accountIds)
         }
+        if (accountManagerIds.isNotEmpty()) {
+            query.setParameter("accountManagerIds", accountManagerIds)
+        }
         if (status != null) {
             query.setParameter("status", status)
         }
@@ -166,7 +175,7 @@ class RoomService(
         return dao.save(
             RoomEntity(
                 tenantId = tenantId,
-                accountId = request.accountId,
+                account = accountService.get(request.accountId, tenantId),
                 type = request.type,
                 status = RoomStatus.DRAFT,
                 maxGuests = request.maxGuests,

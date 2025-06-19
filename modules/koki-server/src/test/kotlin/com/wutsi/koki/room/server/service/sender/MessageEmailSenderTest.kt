@@ -82,7 +82,7 @@ class MessageEmailSenderTest {
     private val room = RoomEntity(
         id = 777L,
         tenantId = tenant.id!!,
-        accountId = account.id!!,
+        account = account,
         title = "Cozy appartment",
         heroImageId = image.id,
         status = RoomStatus.PUBLISHED,
