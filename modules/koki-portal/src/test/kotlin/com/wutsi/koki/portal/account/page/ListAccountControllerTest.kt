@@ -21,6 +21,7 @@ class ListAccountControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.ACCOUNT_LIST)
         assertElementCount("tr.account", accounts.size)
+        assertElementPresent(".btn-create")
     }
 
     @Test
@@ -29,6 +30,7 @@ class ListAccountControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/accounts")
         assertCurrentPageIs(PageName.ACCOUNT_LIST)
+        assertElementPresent(".btn-create")
     }
 
     @Test

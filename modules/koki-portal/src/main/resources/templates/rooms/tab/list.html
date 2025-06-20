@@ -1,8 +1,8 @@
 <div class="tab-rooms">
-    <div class="margin-bottom"
-         th:if="!${readOnly} AND ${user.hasPermission('room:manage')} AND ${ownerType.name() == 'ACCOUNT'}">
-        <a class="btn btn-light btn-sm btn-add-room" th:href="'/rooms/create?account-id=' + ${ownerId}"
-           th:if="${user?.hasPermission('room:manage')}">
+    <div th:if="!${readOnly} AND ${ownerType.name() == 'ACCOUNT'}">
+        <a class="btn btn-light btn-sm btn-add-room margin-bottom"
+           th:href="'/rooms/create?account-id=' + ${ownerId}"
+           th:if="${user?.canManage('room')} OR ${user?.hasFullAccess('room')}">
             New Room
         </a>
     </div>

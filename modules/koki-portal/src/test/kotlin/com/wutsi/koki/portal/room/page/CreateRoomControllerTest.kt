@@ -96,6 +96,14 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun `create - with full_access permission`() {
+        setUpUserWithFullAccessPermissions("room")
+
+        navigateTo("/rooms/create")
+        assertCurrentPageIs(PageName.ROOM_CREATE)
+    }
+
+    @Test
     fun `create long term`() {
         navigateTo("/rooms/create")
         assertCurrentPageIs(PageName.ROOM_CREATE)

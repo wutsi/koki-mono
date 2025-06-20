@@ -20,6 +20,16 @@ class ListRoomControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.ROOM_LIST)
         assertElementCount("tr.room", rooms.size)
+        assertElementPresent(".btn-create")
+    }
+
+    @Test
+    fun `list - with full_access permission`() {
+        setUpUserWithFullAccessPermissions("room")
+
+        navigateTo("/rooms")
+        assertCurrentPageIs(PageName.ROOM_LIST)
+        assertElementPresent(".btn-create")
     }
 
     @Test

@@ -24,7 +24,7 @@ import java.util.Currency
 
 @Controller
 @RequestMapping("/rooms")
-@RequiresPermission(["room:manage"])
+@RequiresPermission(["room:manage", "room:full_access"])
 class CreateRoomController(
     private val service: RoomService,
     private val locationService: LocationService,
@@ -48,9 +48,19 @@ class CreateRoomController(
     }
 
     private fun createRoom(account: AccountModel?): RoomForm {
+        var accountId = account?.id
+        if (accountId == null) {
+            val accounts = accountService.accounts(
+                managedByIds = userHolder.get()?.let { user -> listOf(user.id) } ?: emptyList(),
+                limit = 2,
+            )
+            if (accounts.size == 1) {
+                accountId = accounts.first().id
+            }
+        }
         return RoomForm(
             currency = tenantHolder.get()?.currency,
-            accountId = account?.id ?: -1,
+            accountId = accountId ?: -1,
             country = account?.shippingAddress?.country,
             cityId = account?.shippingAddress?.city?.id,
         )
@@ -121,6 +131,9 @@ class CreateRoomController(
         if (form.neighborhoodId != null) {
             val neighborhood = locationService.location(form.neighborhoodId)
             model.addAttribute("neighborhood", neighborhood)
+        }
+        if (form.accountId > 0) {
+            model.addAttribute("account", accountService.account(id = form.accountId, fullGraph = false))
         }
 
         loadCheckinCheckoutTime(model)

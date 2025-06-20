@@ -71,6 +71,28 @@ class RoomControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun `show - full_access`() {
+        setUpUserWithFullAccessPermissions("room")
+
+        navigateTo("/rooms/${room.id}")
+        assertCurrentPageIs(PageName.ROOM)
+
+        assertElementAttribute("img.hero-image", "src", image.url)
+
+        assertElementAttribute("[data-component-id=map]", "data-latitude", room.latitude.toString())
+        assertElementAttribute("[data-component-id=map]", "data-longitude", room.longitude.toString())
+        assertElementAttribute("[data-component-id=map]", "data-show-marker", "true")
+
+        assertElementNotPresent("#listing-container")
+        assertElementPresent(".btn-edit")
+        assertElementPresent(".btn-map")
+        assertElementPresent(".btn-publish")
+        assertElementPresent(".btn-delete")
+        assertElementPresent(".btn-clone")
+        assertElementNotPresent(".btn-hero-image")
+    }
+
+    @Test
     fun publishing() {
         setupRoom(RoomStatus.PUBLISHING)
 
@@ -118,6 +140,22 @@ class RoomControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun `delete - with full_access`() {
+        setUpUserWithFullAccessPermissions("room")
+
+        navigateTo("/rooms/${room.id}")
+        click(".btn-delete")
+
+        val alert = driver.switchTo().alert()
+        alert.accept()
+        driver.switchTo().parentFrame()
+
+        verify(rest).delete("$sdkBaseUrl/v1/rooms/${room.id}")
+        assertCurrentPageIs(PageName.ROOM_LIST)
+        assertElementVisible("#koki-toast")
+    }
+
+    @Test
     fun `delete - dismiss`() {
         navigateTo("/rooms/${room.id}")
         click(".btn-delete")
@@ -143,6 +181,18 @@ class RoomControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.ROOM)
         assertElementPresent(".alert-danger")
+    }
+
+    @Test
+    fun `delete - without permission room-delete`() {
+        setUpUserWithoutPermissions(listOf("room:delete"))
+
+        navigateTo("/rooms/${room.id}")
+        assertElementNotPresent(".btn-delete")
+
+        navigateTo("/rooms/${room.id}/delete")
+
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test
@@ -198,8 +248,22 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent(".btn-edit")
         assertElementNotPresent(".btn-map")
         assertElementNotPresent(".btn-publish")
-        assertElementNotPresent(".btn-delete")
+        assertElementPresent(".btn-delete")
         assertElementNotPresent(".btn-clone")
+    }
+
+    @Test
+    fun `show - without permission room-delete`() {
+        setUpUserWithoutPermissions(listOf("room:delete"))
+
+        navigateTo("/rooms/${room.id}")
+        assertCurrentPageIs(PageName.ROOM)
+
+        assertElementPresent(".btn-edit")
+        assertElementPresent(".btn-map")
+        assertElementPresent(".btn-publish")
+        assertElementNotPresent(".btn-delete")
+        assertElementPresent(".btn-clone")
     }
 
     @Test

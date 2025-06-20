@@ -22,7 +22,7 @@
                     <div class="flex flex-space-between margin-bottom">
                         <div>
                             <a class="btn-create btn btn-primary btn-sm" href="/accounts/create"
-                               th:if="${user?.hasPermission('account:manage')}">
+                               th:if="${user?.canManage('account')} OR ${user.hasFullAccess('account')}">
                                 Create New Account
                             </a>
                         </div>

@@ -1,5 +1,6 @@
 package com.wutsi.koki.room.server.domain
 
+import com.wutsi.koki.form.server.domain.AccountEntity
 import com.wutsi.koki.refdata.server.domain.AmenityEntity
 import com.wutsi.koki.room.dto.FurnishedType
 import com.wutsi.koki.room.dto.LeaseTerm
@@ -14,6 +15,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
+import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import java.util.Date
 
@@ -27,8 +29,9 @@ data class RoomEntity(
     @Column(name = "tenant_fk")
     val tenantId: Long = -1,
 
-    @Column(name = "account_fk")
-    val accountId: Long = -1,
+    @ManyToOne()
+    @JoinColumn(name = "account_fk")
+    val account: AccountEntity = AccountEntity(),
 
     @Column(name = "created_by_fk")
     val createdById: Long? = null,

@@ -90,7 +90,6 @@ class RoomMapControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("room:manage"))
 
         navigateTo("/rooms/${room.id}/map")
-        click("button[type=submit]")
         assertCurrentPageIs(PageName.ERROR_403)
     }
 

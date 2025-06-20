@@ -4,5 +4,8 @@ INSERT INTO T_LOCATION (id, parent_fk, type, name, ascii_name, country)
            (200, null, 2, 'Ontario',  'Ontario', 'CA'),
            (2001, 200, 3, 'Toronto',  'Toronto', 'CA');
 
+INSERT INTO T_ACCOUNT(id, tenant_fk, name, email, deleted)
+    VALUES(33, 1, 'Inc', 'info@inc1.com', false);
+
 INSERT INTO T_ROOM(id, tenant_fk, account_fk, type, city_fk, state_fk, country, title, description)
     VALUES (111, 1, 33, 1, 1001, 100, 'CA', 'Room A', 'Love it');

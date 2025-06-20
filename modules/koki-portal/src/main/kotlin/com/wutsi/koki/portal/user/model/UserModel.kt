@@ -42,8 +42,12 @@ data class UserModel(
         return permissionNames.contains("$module:manage")
     }
 
+    fun canDelete(module: String): Boolean {
+        return permissionNames.contains("$module:delete")
+    }
+
     fun canAccess(module: ModuleModel): Boolean {
-        return hasPermission(module.name)
+        return hasPermission(module.name) || hasFullAccess(module.name)
     }
 
     fun canAdmin(module: ModuleModel): Boolean {

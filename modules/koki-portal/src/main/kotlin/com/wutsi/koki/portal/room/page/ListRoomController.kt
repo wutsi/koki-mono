@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
 @RequestMapping("/rooms")
-@RequiresPermission(["room"])
+@RequiresPermission(["room", "room:full_access"])
 class ListRoomController(private val service: RoomService) : AbstractRoomController() {
     @GetMapping
     fun list(
@@ -45,8 +45,10 @@ class ListRoomController(private val service: RoomService) : AbstractRoomControl
         @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
+        val user = userHolder.get()!!
         val rooms = service.rooms(
             types = type?.let { listOf(type) } ?: emptyList(),
+            accountManagerIds = if (user.hasFullAccess("room")) emptyList() else listOf(user.id),
             status = status,
             limit = limit,
             offset = offset

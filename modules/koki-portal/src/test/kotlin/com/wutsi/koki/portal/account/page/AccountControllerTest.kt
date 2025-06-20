@@ -27,6 +27,8 @@ class AccountControllerTest : AbstractPageControllerTest() {
         navigateTo("/accounts/${account.id}")
 
         assertCurrentPageIs(PageName.ACCOUNT)
+        assertElementPresent(".btn-edit")
+        assertElementPresent(".btn-delete")
     }
 
     @Test

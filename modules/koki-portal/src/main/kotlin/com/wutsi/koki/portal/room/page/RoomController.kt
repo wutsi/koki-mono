@@ -17,7 +17,7 @@ import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 @RequestMapping("/rooms")
-@RequiresPermission(["room"])
+@RequiresPermission(["room", "room:full_access"])
 class RoomController(
     private val service: RoomService,
     private val categoryService: CategoryService,
@@ -89,7 +89,7 @@ class RoomController(
     }
 
     @GetMapping("/{id}/delete")
-    @RequiresPermission(["room:manage"])
+    @RequiresPermission(["room:delete", "room:full_access"])
     fun delete(@PathVariable id: Long, model: Model): String {
         try {
             service.delete(id)

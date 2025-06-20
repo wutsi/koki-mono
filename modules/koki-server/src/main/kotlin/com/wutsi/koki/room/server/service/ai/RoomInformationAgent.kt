@@ -74,7 +74,7 @@ class RoomInformationAgent(
         val country = room.country?.let { Locale("en", room.country).displayName }
 
         val hotel = if (room.type == RoomType.HOTEL_ROOM) {
-            val account = accountService.get(room.accountId, room.tenantId)
+            val account = accountService.get(room.account.id ?: -1, room.tenantId)
             "- Hotel: ${account.name}"
         } else {
             ""

@@ -13,7 +13,7 @@ import java.util.Collections.emptyList
 
 @Controller
 @RequestMapping("/rooms/tab")
-@RequiresPermission(["room"])
+@RequiresPermission(["room", "room:full_access"])
 class RoomTabController(private val service: RoomService) : AbstractRoomController() {
     @GetMapping
     fun list(
