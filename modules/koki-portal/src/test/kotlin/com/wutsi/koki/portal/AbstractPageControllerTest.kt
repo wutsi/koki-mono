@@ -1213,6 +1213,11 @@ abstract class AbstractPageControllerTest {
         val select = Select(driver.findElement(by))
         select.selectByIndex(index)
     }
+    protected fun selectByValue(selector: String, value: String) {
+        val by = By.cssSelector(selector)
+        val select = Select(driver.findElement(by))
+        select.selectByValue(value)
+    }
 
     protected fun select2(selector: String, text: String) {
         val by = By.cssSelector(selector)

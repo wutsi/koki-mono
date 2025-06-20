@@ -69,8 +69,8 @@ object RoomFixtures {
             numberOfBeds = 2,
             numberOfBathrooms = 1,
             numberOfRooms = 1,
-            leaseType = LeaseType.LONG_TERM,
-            pricePerMonth = Money(amount = 1850.0, currency = "CAD"),
+            leaseType = LeaseType.SHORT_TERM,
+            pricePerNight = Money(amount = 1850.0, currency = "CAD"),
             address = Address(
                 cityId = RefDataFixtures.cities[0].id,
                 country = RefDataFixtures.cities[0].country,

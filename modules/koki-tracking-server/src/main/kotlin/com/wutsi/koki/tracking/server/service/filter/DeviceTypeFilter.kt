@@ -20,15 +20,17 @@ class DeviceTypeFilter : Filter {
     private fun detect(ua: String): DeviceType {
         if (ua.contains("(dart:io)", true)) {
             return DeviceType.MOBILE
-        } else if (ua.lowercase().contains("tablet") || ua.lowercase().contains("ipad")) {
+        } else if ((ua.contains("Android", true) && !ua.contains("Mobile", true)) || ua.contains("iPad", true)) {
             return DeviceType.TABLET
         }
 
         val client = uaParser.parse(ua)
-        return if (client.device?.family.equals("spider", true)) { // Bot
+        return if (client.device.family.equals("spider", true)) { // Bot
             DeviceType.UNKNOWN
-        } else if (client.userAgent.family?.contains("mobile", true) == true) {
+        } else if (client.userAgent.family.contains("mobile", true)) {
             DeviceType.MOBILE
+        } else if (client.userAgent.family.contains("other", true)) {
+            DeviceType.UNKNOWN
         } else {
             DeviceType.DESKTOP
         }

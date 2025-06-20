@@ -60,17 +60,6 @@ class WutsiErrorController : ErrorController, AbstractPageController() {
 
     private fun handleStatusCode(code: Int?, model: Model): String {
         when (code) {
-            403 -> {
-                model.addAttribute(
-                    "page",
-                    PageModel(
-                        name = PageName.ERROR_403,
-                        title = "Access Denied"
-                    )
-                )
-                return "error/403"
-            }
-
             400, 404 -> {
                 model.addAttribute(
                     "page",

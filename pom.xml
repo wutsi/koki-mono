@@ -75,7 +75,7 @@
         <maven-failsafe-plugin.version>3.5.3</maven-failsafe-plugin.version>
 
         <amqp-client.version>5.25.0</amqp-client.version>
-        <aws.version>1.12.785</aws.version>
+        <aws.version>1.12.787</aws.version>
         <commons-cli.version>1.9.0</commons-cli.version>
         <commons-codec.version>1.17.1</commons-codec.version>
         <commons-csv.version>1.14.0</commons-csv.version>
@@ -94,7 +94,7 @@
         <hikari-cp.version>6.3.0</hikari-cp.version>
         <jackson.version>2.17.2</jackson.version>
         <firebase-admin.version>9.3.0</firebase-admin.version>
-        <flying-saucer-pdf.version>9.12.0</flying-saucer-pdf.version>
+        <flying-saucer-pdf.version>9.12.1</flying-saucer-pdf.version>
         <graalvm.version>24.2.0</graalvm.version>
         <javax-activation.version>1.1.1</javax-activation.version>
         <javax-validation.version>2.0.1.Final</javax-validation.version>
@@ -135,7 +135,7 @@
         <spring.version>6.2.8</spring.version>
         <spring-boot.version>3.5.0</spring-boot.version>
         <spring-mobile-device.version>2.0.0.M3</spring-mobile-device.version>
-        <spring-security.version>6.5.0</spring-security.version>
+        <spring-security.version>6.5.1</spring-security.version>
         <spring-tx.version>2.4.5</spring-tx.version>
         <springdoc-openapi.version>2.8.9</springdoc-openapi.version>
         <stripe.version>29.2.0</stripe.version>
@@ -277,6 +277,14 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco-maven-plugin.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>/com/wutsi/koki/**/ApplicationKt.*</exclude>
+                        <exclude>/com/wutsi/koki/**/config/*</exclude>
+                        <exclude>/com/wutsi/koki/**/domain/*</exclude>
+                        <exclude>/com/wutsi/koki/**/model/*</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>default-prepare-agent</id>
@@ -297,11 +305,6 @@
                             <goal>check</goal>
                         </goals>
                         <configuration>
-                            <excludes>
-                                <exclude>**/*Configuration.*</exclude>
-                                <exclude>**/Application.*</exclude>
-                                <exclude>**/enums/*</exclude>
-                            </excludes>
                             <rules>
                                 <rule implementation="org.jacoco.maven.RuleConfiguration">
                                     <element>BUNDLE</element>

@@ -38,7 +38,7 @@ class SettingsEditTranslationControllerTest : AbstractPageControllerTest() {
         select("#provider", 2)
         input("#awsAccessKey", "11111")
         input("#awsSecretKey", "xxxxx")
-        select("#awsRegion", 3)
+        selectByValue("#awsRegion", "us-west-2")
         click("button[type=submit]")
 
         val request = argumentCaptor<SaveConfigurationRequest>()
@@ -49,7 +49,7 @@ class SettingsEditTranslationControllerTest : AbstractPageControllerTest() {
         )
         assertEquals(4, request.firstValue.values.size)
         assertEquals(TranslationProvider.AWS.name, request.firstValue.values[ConfigurationName.TRANSLATION_PROVIDER])
-        assertEquals("ap-northeast-1", request.firstValue.values[ConfigurationName.TRANSLATION_PROVIDER_AWS_REGION])
+        assertEquals("us-west-2", request.firstValue.values[ConfigurationName.TRANSLATION_PROVIDER_AWS_REGION])
         assertEquals("11111", request.firstValue.values[ConfigurationName.TRANSLATION_PROVIDER_AWS_ACCESS_KEY])
         assertEquals("xxxxx", request.firstValue.values[ConfigurationName.TRANSLATION_PROVIDER_AWS_SECRET_KEY])
     }

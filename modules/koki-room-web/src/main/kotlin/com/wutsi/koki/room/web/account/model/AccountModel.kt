@@ -1,9 +1,7 @@
 package com.wutsi.koki.room.web.account.model
 
-import com.wutsi.koki.room.web.refdata.model.AddressModel
 import com.wutsi.koki.room.web.tenant.model.TypeModel
 import com.wutsi.koki.room.web.user.model.UserModel
-import java.util.Date
 
 data class AccountModel(
     val id: Long = -1,
@@ -16,16 +14,6 @@ data class AccountModel(
     val language: String? = null,
     val languageText: String? = null,
     val description: String? = null,
-    val createdAt: Date = Date(),
-    val modifiedAt: Date = Date(),
-    val createdAtText: String = "",
-    val modifiedAtText: String = "",
-    val createdBy: UserModel? = null,
-    val modifiedBy: UserModel? = null,
-    val managedBy: UserModel? = null,
-    val shippingAddress: AddressModel? = null,
-    val billingAddress: AddressModel? = null,
-    val billingSameAsShippingAddress: Boolean = true,
     val readOnly: Boolean = false,
     val user: UserModel? = null,
 )

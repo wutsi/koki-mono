@@ -18,6 +18,7 @@ import com.wutsi.koki.room.dto.SearchRoomResponse
 import com.wutsi.koki.room.web.AbstractPageControllerTest
 import com.wutsi.koki.room.web.FileFixtures.images
 import com.wutsi.koki.room.web.RefDataFixtures.cities
+import com.wutsi.koki.room.web.RefDataFixtures.countries
 import com.wutsi.koki.room.web.RefDataFixtures.neighborhoods
 import com.wutsi.koki.room.web.RoomFixtures.rooms
 import com.wutsi.koki.room.web.TenantFixtures
@@ -141,6 +142,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.LOCATION)
         assertElementCount("div.room", rooms.size)
+        assertElementNotPresent(".room-list-empty")
 
         // Opengraph
         assertElementAttribute("html", "lang", "fr")
@@ -191,6 +193,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.LOCATION)
         assertElementCount("div.room", rooms.size)
+        assertElementNotPresent(".room-list-empty")
 
         // Opengraph
         assertElementAttribute("html", "lang", "fr")
@@ -222,6 +225,63 @@ class LocationControllerTest : AbstractPageControllerTest() {
         driver.switchTo().window(windowHandles[1])
 
         assertCurrentPageIs(PageName.ROOM)
+    }
+
+    @Test
+    fun `list - country`() {
+        doReturn(
+            ResponseEntity(
+                GetLocationResponse(countries[0]),
+                HttpStatus.OK,
+            )
+        ).whenever(restWithoutTenantHeader)
+            .getForEntity(
+                any<String>(),
+                eq(GetLocationResponse::class.java)
+            )
+
+        navigateTo("/l/${countries[0].id}/canada")
+
+        assertCurrentPageIs(PageName.ERROR_404)
+    }
+
+    @Test
+    fun `list - english`() {
+        doReturn(
+            ResponseEntity(
+                GetLocationResponse(cities[0]),
+                HttpStatus.OK,
+            )
+        ).whenever(restWithoutTenantHeader)
+            .getForEntity(
+                any<String>(),
+                eq(GetLocationResponse::class.java)
+            )
+
+        navigateTo("/l/${cities[0].id}/montreal?lang=en")
+
+        assertElementAttribute("html", "lang", "en")
+        assertElementAttribute("head meta[property='og:title']", "content", "${cities[0].name} Rentals")
+
+        assertCurrentPageIs(PageName.LOCATION)
+    }
+
+    @Test
+    fun `list - empty`() {
+        doReturn(
+            ResponseEntity(
+                SearchRoomResponse(emptyList<RoomSummary>()),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchRoomResponse::class.java)
+            )
+
+        navigateTo("/l/${neighborhoods[0].id}/canada")
+
+        assertElementPresent(".room-list-empty")
     }
 
     @Test

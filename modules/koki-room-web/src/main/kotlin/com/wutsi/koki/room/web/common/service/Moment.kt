@@ -50,18 +50,30 @@ class Moment(
             }
         } else if (days == 0L) {
             return getMessage("moment.today")
-        } else if (days == -1L) {
-            return getMessage("moment.yesterday")
-        } else if (days == 1L) {
-            return getMessage("moment.tomorrow")
-        } else if (days > -7L) {
-            return getMessage("moment.ago_days", arrayOf(-days))
-        } else if (days > 1 && days < 7L) {
-            return getMessage("moment.in_days", arrayOf(days))
-        } else if (weeks >= -4L) {
-            return getMessage("moment.ago_weeks", arrayOf(-weeks))
-        } else if (weeks <= 4L) {
-            return getMessage("moment.in_weeks", arrayOf(weeks))
+        } else if (Math.abs(days) == 1L) {
+            if (hours < 0) {
+                return getMessage("moment.yesterday")
+            } else {
+                return getMessage("moment.tomorrow")
+            }
+        } else if (Math.abs(days) < 7) {
+            if (days < 0) {
+                return getMessage("moment.ago_days", arrayOf(-days))
+            } else {
+                return getMessage("moment.in_days", arrayOf(days))
+            }
+        } else if (Math.abs(weeks) == 1L) {
+            if (weeks < 0) {
+                return getMessage("moment.last_week", arrayOf(-weeks))
+            } else {
+                return getMessage("moment.next_week", arrayOf(weeks))
+            }
+        } else if (Math.abs(weeks) <= 4L) {
+            if (weeks < 0) {
+                return getMessage("moment.ago_weeks", arrayOf(-weeks))
+            } else {
+                return getMessage("moment.in_weeks", arrayOf(weeks))
+            }
         } else {
             val fmt = DateFormat.getDateInstance(DateFormat.MEDIUM, LocaleContextHolder.getLocale())
             return fmt.format(date)

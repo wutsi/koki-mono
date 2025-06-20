@@ -67,7 +67,7 @@ class RoomController(
 
         /* Images */
         val heroImages = room.images
-            .filter { image -> image.id != room.heroImage?.id }
+            .filter { image -> image.id != room.heroImage.id }
             .take(4)
         model.addAttribute("heroImages21", heroImages.take(2))
         if (heroImages.size >= 4) {
@@ -90,9 +90,9 @@ class RoomController(
             "page",
             createPageModel(
                 name = PageName.ROOM,
-                title = room.title ?: "",
+                title = room.title,
                 description = room.summary,
-                image = room.heroImage?.contentUrl,
+                image = room.heroImage.contentUrl,
                 url = "$baseUrl${room.url}",
             )
         )

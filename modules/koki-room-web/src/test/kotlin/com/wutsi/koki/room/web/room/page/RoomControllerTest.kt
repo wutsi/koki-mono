@@ -3,11 +3,13 @@ package com.wutsi.koki.room.web.room.page
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.message.dto.SendMessageRequest
 import com.wutsi.koki.message.dto.SendMessageResponse
@@ -83,6 +85,14 @@ class RoomControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun `show - english translation`() {
+        navigateTo("/rooms/${room.id}?lang=en")
+        assertCurrentPageIs(PageName.ROOM)
+
+        assertElementAttribute("html", "lang", "en")
+    }
+
+    @Test
     fun `show description`() {
         navigateTo("/rooms/${room.id}")
 
@@ -120,6 +130,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
     fun `VIEW tracking on page load`() {
         navigateTo("/rooms/${room.id}/this-is-room")
 
+        Thread.sleep(1000)
         val event = argumentCaptor<TrackSubmittedEvent>()
         verify(publisher).publish(event.capture())
 
@@ -193,6 +204,33 @@ class RoomControllerTest : AbstractPageControllerTest() {
             any<SendMessageRequest>(),
             eq(Any::class.java)
         )
+
+        assertElementVisible("#room-message-modal")
+    }
+
+    @Test
+    fun `send message with error`() {
+        val ex = createHttpClientErrorException(409, errorCode = ErrorCode.HTTP_DOWNSTREAM_ERROR)
+        doThrow(ex).whenever(rest)
+            .postForEntity(
+                eq("$sdkBaseUrl/v1/messages"),
+                any<SendMessageRequest>(),
+                eq(SendMessageResponse::class.java)
+            )
+
+        navigateTo("/rooms/${room.id}")
+        click("#btn-contact-us")
+
+        assertElementVisible("#room-message-modal")
+        input("#name", "Ray Sponsible")
+        input("#email", "ray.spomsible@gmail.com")
+        input("#phone", "514 758 0001")
+        input("#body", "This is a nice message... I Love it :-)")
+        click("#btn-send")
+
+        val alert = driver.switchTo().alert()
+        alert.accept()
+        driver.switchTo().parentFrame()
 
         assertElementVisible("#room-message-modal")
     }
