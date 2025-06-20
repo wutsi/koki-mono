@@ -47,7 +47,7 @@ data class UserModel(
     }
 
     fun canAccess(module: ModuleModel): Boolean {
-        return hasPermission(module.name)
+        return hasPermission(module.name) || hasFullAccess(module.name)
     }
 
     fun canAdmin(module: ModuleModel): Boolean {
