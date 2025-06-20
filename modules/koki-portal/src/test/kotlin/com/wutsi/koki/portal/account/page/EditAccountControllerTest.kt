@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.account.page
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
@@ -9,16 +10,19 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AccountFixtures.account
 import com.wutsi.koki.AccountFixtures.attributes
 import com.wutsi.koki.RefDataFixtures.locations
+import com.wutsi.koki.account.dto.GetAccountResponse
 import com.wutsi.koki.account.dto.UpdateAccountRequest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class EditAccountControllerTest : AbstractPageControllerTest() {
     @Test
-    fun update() {
+    fun edit() {
         navigateTo("/accounts/${account.id}/edit")
         assertCurrentPageIs(PageName.ACCOUNT_EDIT)
 
@@ -77,6 +81,14 @@ class EditAccountControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.ACCOUNT)
         assertElementVisible("#koki-toast")
+    }
+
+    @Test
+    fun `edit - with full_access permission`() {
+        setUpUserWithFullAccessPermissions("account")
+
+        navigateTo("/accounts/${account.id}/edit")
+        assertCurrentPageIs(PageName.ACCOUNT_EDIT)
     }
 
     @Test
@@ -198,6 +210,24 @@ class EditAccountControllerTest : AbstractPageControllerTest() {
     @Test
     fun `edit - without permission account-manage`() {
         setUpUserWithoutPermissions(listOf("account:manage"))
+
+        navigateTo("/accounts/${account.id}/edit")
+
+        assertCurrentPageIs(PageName.ERROR_403)
+    }
+
+    @Test
+    fun `edit - not manager`() {
+        doReturn(
+            ResponseEntity(
+                GetAccountResponse(account.copy(managedById = -1)),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetAccountResponse::class.java)
+            )
 
         navigateTo("/accounts/${account.id}/edit")
 

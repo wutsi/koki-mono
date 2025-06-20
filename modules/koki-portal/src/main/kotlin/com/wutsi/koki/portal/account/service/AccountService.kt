@@ -7,6 +7,7 @@ import com.wutsi.koki.portal.account.mapper.AccountMapper
 import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.refdata.service.LocationService
 import com.wutsi.koki.portal.tenant.service.TypeService
+import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.sdk.KokiAccounts
 import org.springframework.stereotype.Service
@@ -27,8 +28,10 @@ class AccountService(
         val userIds = listOf(account.createdById, account.modifiedById, account.managedById)
             .filterNotNull()
             .toSet()
-        val userMap = if (userIds.isEmpty() || !fullGraph) {
+        val userMap = if (userIds.isEmpty()) {
             emptyMap()
+        } else if (!fullGraph) {
+            userIds.map { id -> id to UserModel(id = id) }.toMap()
         } else {
             userService.users(ids = userIds.toList(), limit = userIds.size)
                 .associateBy { user -> user.id }

@@ -93,7 +93,7 @@ object AccountFixtures {
         id = 100,
         accountTypeId = TenantFixtures.types[0].id,
         name = "Yahoo Inc",
-        managedById = UserFixtures.users[0].id,
+        managedById = UserFixtures.user.id,
         email = "info@yahoo.com",
         phone = "+15147050100",
         mobile = "+15147050111",

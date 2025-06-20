@@ -8,6 +8,7 @@ import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.TypeService
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
+import com.wutsi.koki.portal.user.service.UserService
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Controller
@@ -18,11 +19,12 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-@RequiresPermission(permissions = ["account:manage"])
+@RequiresPermission(permissions = ["account:manage", "account:full_access"])
 class CreateAccountController(
     private val service: AccountService,
     private val attributeService: AttributeService,
     private val accountTypeService: TypeService,
+    private val userService: UserService,
     private val currentUser: CurrentUserHolder,
     private val request: HttpServletRequest,
 ) : AbstractAccountController() {
@@ -53,6 +55,10 @@ class CreateAccountController(
         )
         if (accountTypes.isNotEmpty()) {
             model.addAttribute("accountTypes", accountTypes)
+        }
+
+        if (form.managedById != null) {
+            model.addAttribute("manager", userService.user(id = form.managedById, fullGraph = false))
         }
 
         loadLanguages(model)

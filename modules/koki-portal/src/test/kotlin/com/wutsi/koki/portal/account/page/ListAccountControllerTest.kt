@@ -4,6 +4,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.AccountFixtures.account
 import com.wutsi.koki.AccountFixtures.accounts
 import com.wutsi.koki.account.dto.AccountSummary
 import com.wutsi.koki.account.dto.SearchAccountResponse
@@ -20,6 +21,14 @@ class ListAccountControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.ACCOUNT_LIST)
         assertElementCount("tr.account", accounts.size)
+    }
+
+    @Test
+    fun `list - with full_access permission`() {
+        setUpUserWithFullAccessPermissions("account")
+
+        navigateTo("/accounts")
+        assertCurrentPageIs(PageName.ACCOUNT_LIST)
     }
 
     @Test

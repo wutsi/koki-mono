@@ -27,12 +27,12 @@
                         <div>
                             <a class="btn-edit btn btn-light btn-sm"
                                th:href="'/accounts/' + ${account.id} + '/edit'"
-                               th:if="${user?.hasPermission('account:manage')}">Edit</a>
+                               th:if="${account.canBeManagedBy(user)}">Edit</a>
 
                             <a class="btn-delete btn btn-danger btn-sm"
                                onclick="return confirm('Are you sure you want to delete the account?')"
                                th:href="'/accounts/' + ${account.id} + '/delete'"
-                               th:if="${user?.hasPermission('account:delete')}">Delete</a>
+                               th:if="${account.canBeDeletedBy(user)}">Delete</a>
                         </div>
                     </div>
 
@@ -69,6 +69,17 @@
                     </div>
                     <div class="hidden" id="tab-details-content">
                         <table class="table">
+                            <tr th:if="${account.managedBy}">
+                                <td width="20%"><b>Account Manager</b></td>
+                                <td>
+                                    <a th:href="'/settings/users/' + ${account.managedBy.id}"
+                                       th:if="${user?.hasPermission('security:admin')}"
+                                       th:text="${account.managedBy.displayName}"
+                                    >ACCOUNT MANAGER</a>
+                                    <span th:if="!${user?.hasPermission('security:admin')}"
+                                          th:text="${account.managedBy.displayName}">ACCOUNT MANAGER</span>
+                                </td>
+                            </tr>
                             <tr>
                                 <td width="20%"><b>Name</b></td>
                                 <td th:text="${account.name}">NAME</td>
@@ -79,11 +90,17 @@
                             </tr>
                             <tr th:if="${account.phone}">
                                 <td><b>Phone</b></td>
-                                <td th:text="${account.phoneFormatted}">PHONE</td>
+                                <td>
+                                    <a th:href="'tel:' + ${account.phone}"
+                                       th:text="${account.phoneFormatted}">MOBILE</a>
+                                </td>
                             </tr>
                             <tr th:if="${account.mobile}">
                                 <td><b>Mobile</b></td>
-                                <td th:text="${account.mobileFormatted}">MOBILE</td>
+                                <td>
+                                    <a th:href="'tel:' + ${account.mobile}"
+                                       th:text="${account.mobileFormatted}">MOBILE</a>
+                                </td>
                             </tr>
                             <tr th:if="${account.email}">
                                 <td><b>Email</b></td>
