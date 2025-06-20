@@ -41,6 +41,7 @@ class KokiContacts(
         contactTypeIds: List<Long>,
         accountIds: List<Long>,
         createdByIds: List<Long>,
+        accountManagerIds: List<Long>,
         limit: Int,
         offset: Int,
     ): SearchContactResponse {
@@ -52,6 +53,7 @@ class KokiContacts(
                 "contact-type-id" to contactTypeIds,
                 "account-id" to accountIds,
                 "created-by-id" to createdByIds,
+                "account-manager-id" to accountManagerIds,
                 "limit" to limit,
                 "offset" to offset,
             )
