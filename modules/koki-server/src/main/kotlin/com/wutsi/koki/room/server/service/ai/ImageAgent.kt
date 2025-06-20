@@ -3,17 +3,18 @@ package com.wutsi.koki.room.server.service.ai
 import com.wutsi.koki.platform.ai.agent.Agent
 import com.wutsi.koki.platform.ai.agent.Tool
 import com.wutsi.koki.platform.ai.llm.LLM
+import com.wutsi.koki.platform.translation.ai.AITranslationService.Companion.SYSTEM_INSTRUCTIONS
 import org.springframework.http.MediaType
 
 /**
  * This agent extract information from room images
  */
-class RoomImageAgent(
+class ImageAgent(
     val llm: LLM,
     val maxIterations: Int = 5,
 ) : Agent(llm, maxIterations, MediaType.APPLICATION_JSON) {
-    override fun systemInstructions() =
-        """
+    companion object {
+        val SYSTEM_INSTRUCTIONS = """
             You are a real estate agent helping customers to rent or buy properties.
             You analyze pictures provided to extract informations to describe the property.
             Provide accurate and detailed information about the picture, in a format that is SEO friendly and suitable for websites like AirBnB, VRBO or Bookings.com.
@@ -29,16 +30,23 @@ class RoomImageAgent(
             - reason: If the image is not valid, explain why.
 
             If you cannot extract the information from the provide image, you should return valid as "false", and all the other fields as "null"
-    """.trimIndent()
+        """.trimIndent()
 
-    override fun buildPrompt(query: String, memory: List<String>): String {
-        return """
+        val PROMPT = """
             Goal: Extract informations from the provided image.
             Query: {{query}}
 
             Observations:
             {{observations}}
         """.trimIndent()
+    }
+
+    override fun systemInstructions(): String {
+        return SYSTEM_INSTRUCTIONS
+    }
+
+    override fun buildPrompt(query: String, memory: List<String>): String {
+        return PROMPT
             .replace("{{query}}", query)
             .replace("{{observations}}", memory.map { entry -> "- $entry" }.joinToString("\n"))
     }

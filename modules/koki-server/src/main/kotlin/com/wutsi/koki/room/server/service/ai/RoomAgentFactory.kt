@@ -17,22 +17,22 @@ class RoomAgentFactory(
     private val accountService: AccountService,
     private val configurationService: ConfigurationService,
 ) {
-    fun createRoomImageAgent(tenantId: Long): RoomImageAgent? {
+    fun createRoomImageAgent(tenantId: Long): ImageAgent? {
         if (!isAIEnabled(tenantId)) {
             return null
         }
 
         val llm = llmProvider.get(tenantId)
-        return RoomImageAgent(llm = llm)
+        return ImageAgent(llm = llm)
     }
 
-    fun createRoomInformationFactory(room: RoomEntity): RoomInformationAgent? {
+    fun createRoomInformationFactory(room: RoomEntity): RoomAgent? {
         if (!isAIEnabled(room.tenantId)) {
             return null
         }
 
         val llm = llmProvider.get(room.tenantId)
-        return RoomInformationAgent(
+        return RoomAgent(
             llm = llm,
             room = room,
             amenityService = amenityService,
@@ -43,9 +43,10 @@ class RoomAgentFactory(
 
     private fun isAIEnabled(tenantId: Long): Boolean {
         val configs = configurationService.search(
-            tenantId = tenantId, names = listOf(
+            tenantId = tenantId,
+            names = listOf(
                 ConfigurationName.AI_PROVIDER,
-            )
+            ),
         )
         return configs.size >= 1
     }

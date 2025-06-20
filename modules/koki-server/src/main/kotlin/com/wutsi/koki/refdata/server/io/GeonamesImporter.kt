@@ -188,19 +188,16 @@ class GeonamesImporter(
 
     private fun toLocationType(record: CSVRecord): LocationType {
         val code = record.get(RECORD_FEATURE_CODE)
-        return if (record.get(RECORD_FEATURE_CLASS) == "P") {
-            LocationType.CITY
+        if (record.get(RECORD_FEATURE_CLASS) == "P") {
+            return LocationType.CITY
         } else if (record.get(RECORD_FEATURE_CLASS) == "A") {
             if (code == "ADM1") {
-                LocationType.STATE
+                return LocationType.STATE
             } else if (code == "PCLI") {
-                LocationType.COUNTRY
-            } else {
-                LocationType.UNKNOWN
+                return LocationType.COUNTRY
             }
-        } else {
-            LocationType.UNKNOWN
         }
+        return LocationType.UNKNOWN
     }
 
     private fun accept(record: CSVRecord, country: String): Boolean {

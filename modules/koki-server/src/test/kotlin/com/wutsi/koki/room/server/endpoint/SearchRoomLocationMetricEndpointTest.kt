@@ -8,7 +8,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/room/SearchRoomLocationMetricEndpoint.sql"])
-class SearchRoomLocationMetricEndpoint : TenantAwareEndpointTest() {
+class SearchRoomLocationMetricEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun all() {
         val response = rest.getForEntity("/v1/rooms/metrics/locations", SearchRoomLocationMetricResponse::class.java)

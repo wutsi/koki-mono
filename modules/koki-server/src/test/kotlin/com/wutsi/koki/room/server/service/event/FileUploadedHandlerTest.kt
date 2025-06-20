@@ -21,9 +21,9 @@ import com.wutsi.koki.file.server.service.LabelService
 import com.wutsi.koki.file.server.service.StorageServiceProvider
 import com.wutsi.koki.platform.storage.local.LocalStorageService
 import com.wutsi.koki.room.server.domain.RoomEntity
+import com.wutsi.koki.room.server.service.ai.ImageAgent
 import com.wutsi.koki.room.server.service.ai.RoomAgentFactory
-import com.wutsi.koki.room.server.service.ai.RoomImageAgent
-import com.wutsi.koki.room.server.service.data.RoomImageAgentData
+import com.wutsi.koki.room.server.service.data.ImageAgentData
 import com.wutsi.koki.room.server.service.event.FileUploadedHandler
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
@@ -65,7 +65,7 @@ class FileUploadedHandlerTest {
         type = FileType.IMAGE,
     )
 
-    val data = RoomImageAgentData(
+    val data = ImageAgentData(
         title = "This is the title",
         description = "The description",
         titleFr = "Le titre",
@@ -86,7 +86,7 @@ class FileUploadedHandlerTest {
         heroImageId = null,
     )
 
-    private val agent = mock<RoomImageAgent>()
+    private val agent = mock<ImageAgent>()
 
     @BeforeEach
     fun setup() {

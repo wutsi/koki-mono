@@ -1,6 +1,6 @@
 package com.wutsi.koki.room.server.service.data
 
-data class RoomImageAgentData(
+data class ImageAgentData(
     val title: String? = null,
     val description: String? = null,
     val titleFr: String? = null,

@@ -96,7 +96,7 @@ class RoomLocationMetricService(
         execute(sql)
     }
 
-    fun execute(sql: String) {
+    private fun execute(sql: String) {
         val cnn = ds.connection
         cnn.use {
             val stmt = cnn.prepareStatement(sql)
