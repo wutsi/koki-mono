@@ -115,7 +115,7 @@ class RoomController(
     }
 
     @GetMapping("/{id}/publish")
-    @RequiresPermission(["room:manage"])
+    @RequiresPermission(["room:manage", "room:full_access"])
     fun publish(@PathVariable id: Long, model: Model): String {
         try {
             service.publish(id)
@@ -128,7 +128,7 @@ class RoomController(
     }
 
     @GetMapping("/{id}/clone")
-    @RequiresPermission(["room:manage"])
+    @RequiresPermission(["room:manage", "room:full_access"])
     fun clone(@PathVariable id: Long): String {
         return "redirect:/rooms/create?copy-id=$id"
     }
