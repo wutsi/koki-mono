@@ -42,7 +42,7 @@ class CreateContactEndpointTest : AuthorizationAwareEndpointTest() {
         val contactId = response.body!!.contactId
         val contact = dao.findById(contactId).get()
         assertEquals(request.contactTypeId, contact.contactTypeId)
-        assertEquals(request.accountId, contact.accountId)
+        assertEquals(request.accountId, contact.account?.id)
         assertEquals(request.salutations, contact.salutation)
         assertEquals(request.firstName, contact.firstName)
         assertEquals(request.lastName, contact.lastName)

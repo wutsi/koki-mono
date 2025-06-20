@@ -7,7 +7,7 @@ import kotlin.test.Test
 class CreateNoteControllerTest : AbstractPageControllerTest() {
     @Test
     fun `create - without permission note-manage`() {
-        setUpUserWithoutPermissions(listOf("note:manage"))
+        setupUserWithoutPermissions(listOf("note:manage"))
 
         navigateTo("/notes/create")
         assertCurrentPageIs(PageName.ERROR_403)

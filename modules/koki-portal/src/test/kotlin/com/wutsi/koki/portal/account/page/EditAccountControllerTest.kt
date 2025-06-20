@@ -85,7 +85,7 @@ class EditAccountControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `edit - with full_access permission`() {
-        setUpUserWithFullAccessPermissions("account")
+        setupUserWithFullAccessPermissions("account")
 
         navigateTo("/accounts/${account.id}/edit")
         assertCurrentPageIs(PageName.ACCOUNT_EDIT)
@@ -209,7 +209,7 @@ class EditAccountControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `edit - without permission account-manage`() {
-        setUpUserWithoutPermissions(listOf("account:manage"))
+        setupUserWithoutPermissions(listOf("account:manage"))
 
         navigateTo("/accounts/${account.id}/edit")
 

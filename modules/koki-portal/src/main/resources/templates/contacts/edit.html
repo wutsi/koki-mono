@@ -25,11 +25,14 @@
                             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
                             <div class="section-item">
-                                <label class="title">Account</label>
-                                <select th:field="*{accountId}">
-                                    <option th:if="${contact.account}"
-                                            th:text="${contact.account.name}"
-                                            th:value="${contact.account?.id}">
+                                <label class="title">
+                                    Account
+                                    <span class="required" th:if="!${user?.hasFullAccess('contact')}">*</span>
+                                </label>
+                                <select th:field="*{accountId}" th:required="!${user?.hasFullAccess('contact')}">
+                                    <option th:if="${account}"
+                                            th:text="${account.name}"
+                                            th:value="${account.id}">
                                         ACCOUNT
                                     </option>
                                 </select>

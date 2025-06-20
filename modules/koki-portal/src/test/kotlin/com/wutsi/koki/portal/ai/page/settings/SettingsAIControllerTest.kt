@@ -26,7 +26,7 @@ class SettingsAIControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission ai-admin`() {
-        setUpUserWithoutPermissions(listOf("ai:admin"))
+        setupUserWithoutPermissions(listOf("ai:admin"))
         navigateTo("/settings/ai")
         assertCurrentPageIs(PageName.ERROR_403)
     }

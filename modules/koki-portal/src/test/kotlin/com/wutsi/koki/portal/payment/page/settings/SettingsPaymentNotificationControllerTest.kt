@@ -66,7 +66,7 @@ class SettingsPaymentNotificationControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `edit - without permission payment-admin`() {
-        setUpUserWithoutPermissions(listOf("payment:admin"))
+        setupUserWithoutPermissions(listOf("payment:admin"))
         navigateTo("/settings/payments/notifications")
         assertCurrentPageIs(PageName.ERROR_403)
     }

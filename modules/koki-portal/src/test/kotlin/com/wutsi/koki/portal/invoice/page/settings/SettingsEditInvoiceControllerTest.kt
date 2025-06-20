@@ -66,7 +66,7 @@ class SettingsEditInvoiceControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `edit - without permission invoice-admin`() {
-        setUpUserWithoutPermissions(listOf("invoice:admin"))
+        setupUserWithoutPermissions(listOf("invoice:admin"))
         navigateTo("/settings/invoices/edit")
         assertCurrentPageIs(PageName.ERROR_403)
     }

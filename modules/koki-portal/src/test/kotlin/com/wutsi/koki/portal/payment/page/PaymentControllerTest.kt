@@ -23,7 +23,7 @@ class PaymentControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission payment`() {
-        setUpUserWithoutPermissions(listOf("payment"))
+        setupUserWithoutPermissions(listOf("payment"))
 
         navigateTo("/payments/" + transaction.id)
 

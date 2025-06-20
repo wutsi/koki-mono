@@ -7,7 +7,7 @@ import kotlin.test.Test
 class FileUploadControllerTest : AbstractPageControllerTest() {
     @Test
     fun `download - without permission file-manage`() {
-        setUpUserWithoutPermissions(listOf("file:manage"))
+        setupUserWithoutPermissions(listOf("file:manage"))
 
         navigateTo("/files/upload")
 

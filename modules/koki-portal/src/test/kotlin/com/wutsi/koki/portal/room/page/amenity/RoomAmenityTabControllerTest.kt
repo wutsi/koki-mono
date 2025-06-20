@@ -46,7 +46,7 @@ class RoomAmenityTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission room-amenity-manage`() {
-        setUpUserWithoutPermissions(listOf("room-amenity:manage"))
+        setupUserWithoutPermissions(listOf("room-amenity:manage"))
 
         navigateTo("/room-amenities/tab?owner-id=${room.id}&owner-type=ROOM&test-mode=true&read-only=true")
 
@@ -64,7 +64,7 @@ class RoomAmenityTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission room-amenity`() {
-        setUpUserWithoutPermissions(listOf("room-amenity"))
+        setupUserWithoutPermissions(listOf("room-amenity"))
 
         navigateTo("/room-amenities/tab?owner-id=${room.id}&owner-type=ROOM&test-mode=true&read-only=true")
         assertCurrentPageIs(PageName.ERROR_403)

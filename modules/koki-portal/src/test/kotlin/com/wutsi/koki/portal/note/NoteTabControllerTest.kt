@@ -142,7 +142,7 @@ class NoteTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission note-manage`() {
-        setUpUserWithoutPermissions(listOf("note:manage"))
+        setupUserWithoutPermissions(listOf("note:manage"))
 
         navigateTo("/notes/tab?test-mode=1&owner-id=111&owner-type=ACCOUNT")
 
@@ -152,7 +152,7 @@ class NoteTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission note-delete`() {
-        setUpUserWithoutPermissions(listOf("note:delete"))
+        setupUserWithoutPermissions(listOf("note:delete"))
 
         navigateTo("/notes/tab?test-mode=1&owner-id=111&owner-type=ACCOUNT")
 
@@ -161,7 +161,7 @@ class NoteTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission note`() {
-        setUpUserWithoutPermissions(listOf("note"))
+        setupUserWithoutPermissions(listOf("note"))
 
         navigateTo("/notes/tab?test-mode=1&owner-id=111&owner-type=ACCOUNT")
 

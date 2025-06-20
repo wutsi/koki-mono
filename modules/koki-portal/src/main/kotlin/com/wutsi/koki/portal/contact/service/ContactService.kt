@@ -61,6 +61,7 @@ class ContactService(
         contactTypeIds: List<Long> = emptyList(),
         accountIds: List<Long> = emptyList(),
         createdByIds: List<Long> = emptyList(),
+        accountManagerIds: List<Long> = emptyList(),
         limit: Int = 20,
         offset: Int = 0,
         fullGraph: Boolean = true,
@@ -72,6 +73,7 @@ class ContactService(
             contactTypeIds = contactTypeIds,
             accountIds = accountIds,
             createdByIds = createdByIds,
+            accountManagerIds = accountManagerIds,
             limit = limit,
             offset = offset,
         ).contacts

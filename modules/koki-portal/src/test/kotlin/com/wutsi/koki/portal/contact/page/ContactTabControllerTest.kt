@@ -15,6 +15,16 @@ class ContactTabControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun `list - full_access`() {
+        setupUserWithFullAccessPermissions("contact")
+
+        navigateTo("/contacts/tab?test-mode=true&owner-id=111&owner-type=ACCOUNT")
+
+        assertElementCount("tr.contact", contacts.size)
+        assertElementPresent(".btn-add-contact")
+    }
+
+    @Test
     fun `AddContact button not displayed from Tax`() {
         navigateTo("/contacts/tab?test-mode=true&owner-id=111&owner-type=TAX")
 
@@ -39,7 +49,7 @@ class ContactTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission contact-manage`() {
-        setUpUserWithoutPermissions(listOf("contact:manage"))
+        setupUserWithoutPermissions(listOf("contact:manage"))
 
         navigateTo("/contacts/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
 
@@ -49,7 +59,7 @@ class ContactTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission contact`() {
-        setUpUserWithoutPermissions(listOf("contact"))
+        setupUserWithoutPermissions(listOf("contact"))
 
         navigateTo("/contacts/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
         assertCurrentPageIs(PageName.ERROR_403)

@@ -1,11 +1,14 @@
 package com.wutsi.koki.contact.server.domain
 
 import com.wutsi.koki.contact.dto.Gender
+import com.wutsi.koki.form.server.domain.AccountEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import java.util.Date
 
@@ -31,8 +34,9 @@ data class ContactEntity(
     @Column(name = "deleted_by_fk")
     var deletedById: Long? = null,
 
-    @Column(name = "account_fk")
-    var accountId: Long? = null,
+    @ManyToOne()
+    @JoinColumn(name = "account_fk")
+    var account: AccountEntity? = null,
 
     var salutation: String? = null,
     var firstName: String = "",

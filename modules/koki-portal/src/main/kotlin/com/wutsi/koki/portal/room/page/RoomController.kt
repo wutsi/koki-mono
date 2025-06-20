@@ -6,6 +6,7 @@ import com.wutsi.koki.portal.refdata.service.CategoryService
 import com.wutsi.koki.portal.room.service.RoomService
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.refdata.dto.CategoryType
+import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -32,9 +33,14 @@ class RoomController(
         @RequestParam(required = false, name = "_ts") timestamp: Long? = null,
         @RequestParam(required = false, name = "_op") operation: String? = null,
     ): String {
+        // Check Permission
         val room = service.room(id)
-        model.addAttribute("room", room)
+        if (!room.viewedBy(userHolder.get())) {
+            throw HttpClientErrorException(HttpStatusCode.valueOf(403))
+        }
 
+        // Search
+        model.addAttribute("room", room)
         model.addAttribute(
             "latitude",
             if (room.hasGeoLocation) {
@@ -91,6 +97,13 @@ class RoomController(
     @GetMapping("/{id}/delete")
     @RequiresPermission(["room:delete", "room:full_access"])
     fun delete(@PathVariable id: Long, model: Model): String {
+        // Check Permission
+        val account = service.room(id, fullGraph = false)
+        if (!account.deletedBy(userHolder.get())) {
+            throw HttpClientErrorException(HttpStatusCode.valueOf(403))
+        }
+
+        // Delete
         try {
             service.delete(id)
             return "redirect:/rooms?_op=del&_toast=$id&_ts=" + System.currentTimeMillis()

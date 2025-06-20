@@ -55,7 +55,7 @@ class InvoiceTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission invoice`() {
-        setUpUserWithoutPermissions(listOf("invoice"))
+        setupUserWithoutPermissions(listOf("invoice"))
 
         navigateTo("/invoices/tab?test-mode=true&owner-type=ACCOUNT&owner-id=" + AccountFixtures.account.id)
         assertCurrentPageIs(PageName.ERROR_403)

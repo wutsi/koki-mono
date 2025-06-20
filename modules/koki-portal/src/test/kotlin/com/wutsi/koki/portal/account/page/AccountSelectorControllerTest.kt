@@ -28,7 +28,7 @@ class AccountSelectorControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun fullAccess() {
-        setUpUserWithFullAccessPermissions("account")
+        setupUserWithFullAccessPermissions("account")
 
         navigateTo("/accounts/selector/search?q=Real")
 

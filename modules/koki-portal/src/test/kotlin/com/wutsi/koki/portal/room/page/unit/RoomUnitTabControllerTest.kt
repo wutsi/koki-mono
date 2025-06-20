@@ -90,7 +90,7 @@ class RoomUnitTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission room-unit-manage`() {
-        setUpUserWithoutPermissions(listOf("room-unit:manage"))
+        setupUserWithoutPermissions(listOf("room-unit:manage"))
 
         navigateTo("/room-units/tab?owner-id=${room.id}&owner-type=ROOM&test-mode=true")
         assertElementNotPresent(".btn-create")
@@ -101,7 +101,7 @@ class RoomUnitTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission room-unit`() {
-        setUpUserWithoutPermissions(listOf("room-unit"))
+        setupUserWithoutPermissions(listOf("room-unit"))
 
         navigateTo("/room-units/tab?owner-id=${room.id}&owner-type=ROOM&test-mode=true")
         assertCurrentPageIs(PageName.ERROR_403)

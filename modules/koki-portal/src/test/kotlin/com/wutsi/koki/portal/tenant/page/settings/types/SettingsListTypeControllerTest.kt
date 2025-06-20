@@ -57,7 +57,7 @@ class SettingsListTypeControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission tenant-admin`() {
-        setUpUserWithoutPermissions(listOf("tenant:admin"))
+        setupUserWithoutPermissions(listOf("tenant:admin"))
 
         navigateTo("/settings/tenant/types")
         assertCurrentPageIs(PageName.ERROR_403)

@@ -23,6 +23,15 @@ class ListContactControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun `list - with full_access permission`() {
+        setupUserWithFullAccessPermissions("contact")
+
+        navigateTo("/contacts")
+        assertCurrentPageIs(PageName.CONTACT_LIST)
+        assertElementPresent(".btn-create")
+    }
+
+    @Test
     fun loadMore() {
         var entries = mutableListOf<ContactSummary>()
         var seed = System.currentTimeMillis()
@@ -74,7 +83,7 @@ class ListContactControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission contact`() {
-        setUpUserWithoutPermissions(listOf("contact"))
+        setupUserWithoutPermissions(listOf("contact"))
 
         navigateTo("/contacts")
         assertCurrentPageIs(PageName.ERROR_403)
@@ -82,7 +91,7 @@ class ListContactControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission contact-manage`() {
-        setUpUserWithoutPermissions(listOf("contact:manage"))
+        setupUserWithoutPermissions(listOf("contact:manage"))
 
         navigateTo("/contacts")
 

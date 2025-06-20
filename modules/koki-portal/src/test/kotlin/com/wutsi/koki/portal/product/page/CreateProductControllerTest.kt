@@ -97,7 +97,7 @@ class CreateProductControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `create - without permission product-manage`() {
-        setUpUserWithoutPermissions(listOf("product:manage"))
+        setupUserWithoutPermissions(listOf("product:manage"))
 
         navigateTo("/products/create")
 

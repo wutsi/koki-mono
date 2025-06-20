@@ -79,7 +79,7 @@ class RoomMapControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission room`() {
-        setUpUserWithoutPermissions(listOf("room"))
+        setupUserWithoutPermissions(listOf("room"))
 
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ERROR_403)
@@ -87,7 +87,7 @@ class RoomMapControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission room-manage`() {
-        setUpUserWithoutPermissions(listOf("room:manage"))
+        setupUserWithoutPermissions(listOf("room:manage"))
 
         navigateTo("/rooms/${room.id}/map")
         assertCurrentPageIs(PageName.ERROR_403)

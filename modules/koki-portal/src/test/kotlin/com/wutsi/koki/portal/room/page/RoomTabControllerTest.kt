@@ -24,7 +24,7 @@ class RoomTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - with full_access permission`() {
-        setUpUserWithFullAccessPermissions("room")
+        setupUserWithFullAccessPermissions("room")
 
         navigateTo("/rooms/tab?test-mode=true&owner-id=111&owner-type=ACCOUNT")
 
@@ -98,7 +98,7 @@ class RoomTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission room-manage`() {
-        setUpUserWithoutPermissions(listOf("room:manage"))
+        setupUserWithoutPermissions(listOf("room:manage"))
 
         navigateTo("/rooms/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
 
@@ -107,7 +107,7 @@ class RoomTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission room`() {
-        setUpUserWithoutPermissions(listOf("room"))
+        setupUserWithoutPermissions(listOf("room"))
 
         navigateTo("/rooms/tab?test-mode=true&owner-id=111&owner-type=ACCOUNT")
         assertCurrentPageIs(PageName.ERROR_403)

@@ -190,7 +190,7 @@ class EditRoomControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `edit - with full_access permission`() {
-        setUpUserWithFullAccessPermissions("room")
+        setupUserWithFullAccessPermissions("room")
 
         navigateTo("/rooms/${room.id}/edit")
         assertCurrentPageIs(PageName.ROOM_EDIT)
@@ -258,7 +258,7 @@ class EditRoomControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `edit - without permission room-manage`() {
-        setUpUserWithoutPermissions(listOf("room:manage"))
+        setupUserWithoutPermissions(listOf("room:manage"))
 
         navigateTo("/rooms/${room.id}/edit")
         assertCurrentPageIs(PageName.ERROR_403)

@@ -40,7 +40,7 @@ class SettingsImportTypeControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `import - without permission tenant-admin`() {
-        setUpUserWithoutPermissions(listOf("tenant:admin"))
+        setupUserWithoutPermissions(listOf("tenant:admin"))
 
         navigateTo("/settings/tenant/types/import")
         assertCurrentPageIs(PageName.ERROR_403)

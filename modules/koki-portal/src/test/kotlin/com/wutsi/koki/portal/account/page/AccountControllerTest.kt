@@ -174,7 +174,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission account`() {
-        setUpUserWithoutPermissions(listOf("account"))
+        setupUserWithoutPermissions(listOf("account"))
 
         navigateTo("/accounts/${account.id}")
 
@@ -183,7 +183,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - with full_access permission`() {
-        setUpUserWithFullAccessPermissions("account")
+        setupUserWithFullAccessPermissions("account")
 
         navigateTo("/accounts/${account.id}")
 
@@ -194,7 +194,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission account-manage`() {
-        setUpUserWithoutPermissions(listOf("account:manage"))
+        setupUserWithoutPermissions(listOf("account:manage"))
 
         navigateTo("/accounts/${account.id}")
 
@@ -204,7 +204,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission account-delete`() {
-        setUpUserWithoutPermissions(listOf("account:delete"))
+        setupUserWithoutPermissions(listOf("account:delete"))
 
         navigateTo("/accounts/${account.id}")
 
@@ -214,7 +214,7 @@ class AccountControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `delete - without permission account-delete`() {
-        setUpUserWithoutPermissions(listOf("account:delete"))
+        setupUserWithoutPermissions(listOf("account:delete"))
 
         navigateTo("/accounts/${account.id}/delete")
 

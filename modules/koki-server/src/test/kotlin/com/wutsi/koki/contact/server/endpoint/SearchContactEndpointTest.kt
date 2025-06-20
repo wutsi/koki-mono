@@ -32,7 +32,7 @@ class SearchContactEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `by account type`() {
+    fun `by account id`() {
         val response = rest.getForEntity("/v1/contacts?account-id=1000", SearchContactResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
@@ -66,5 +66,17 @@ class SearchContactEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(100L, contacts[0].id)
         assertEquals(101L, contacts[1].id)
         assertEquals(102L, contacts[2].id)
+    }
+
+    @Test
+    fun `by account-manager-id`() {
+        val response = rest.getForEntity("/v1/contacts?account-manager-id=11", SearchContactResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val contacts = response.body!!.contacts
+        assertEquals(2, contacts.size)
+        assertEquals(100L, contacts[0].id)
+        assertEquals(103L, contacts[1].id)
     }
 }

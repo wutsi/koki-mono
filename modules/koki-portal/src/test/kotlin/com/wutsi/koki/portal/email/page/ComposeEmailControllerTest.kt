@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class ComposeEmailControllerTest : AbstractPageControllerTest() {
     @Test
     fun `compose - without permission email-send`() {
-        setUpUserWithoutPermissions(listOf("email:send"))
+        setupUserWithoutPermissions(listOf("email:send"))
 
         navigateTo("/emails/compose")
         assertCurrentPageIs(PageName.ERROR_403)

@@ -72,7 +72,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - full_access`() {
-        setUpUserWithFullAccessPermissions("room")
+        setupUserWithFullAccessPermissions("room")
 
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ROOM)
@@ -141,7 +141,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `delete - with full_access`() {
-        setUpUserWithFullAccessPermissions("room")
+        setupUserWithFullAccessPermissions("room")
 
         navigateTo("/rooms/${room.id}")
         click(".btn-delete")
@@ -185,7 +185,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `delete - without permission room-delete`() {
-        setUpUserWithoutPermissions(listOf("room:delete"))
+        setupUserWithoutPermissions(listOf("room:delete"))
 
         navigateTo("/rooms/${room.id}")
         assertElementNotPresent(".btn-delete")
@@ -232,7 +232,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission room`() {
-        setUpUserWithoutPermissions(listOf("room"))
+        setupUserWithoutPermissions(listOf("room"))
 
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ERROR_403)
@@ -240,7 +240,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission room-manage`() {
-        setUpUserWithoutPermissions(listOf("room:manage"))
+        setupUserWithoutPermissions(listOf("room:manage"))
 
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ROOM)
@@ -254,7 +254,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission room-delete`() {
-        setUpUserWithoutPermissions(listOf("room:delete"))
+        setupUserWithoutPermissions(listOf("room:delete"))
 
         navigateTo("/rooms/${room.id}")
         assertCurrentPageIs(PageName.ROOM)

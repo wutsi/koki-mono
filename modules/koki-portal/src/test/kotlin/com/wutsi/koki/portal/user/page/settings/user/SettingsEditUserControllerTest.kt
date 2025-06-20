@@ -85,7 +85,7 @@ class SettingsEditUserControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `edit - without permission security-admin`() {
-        setUpUserWithoutPermissions(listOf("security:admin"))
+        setupUserWithoutPermissions(listOf("security:admin"))
 
         navigateTo("/settings/users/${user.id}/edit")
         assertCurrentPageIs(PageName.ERROR_403)

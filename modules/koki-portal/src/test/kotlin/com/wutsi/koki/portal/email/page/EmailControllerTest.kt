@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class EmailControllerTest : AbstractPageControllerTest() {
     @Test
     fun `show - without permission email`() {
-        setUpUserWithoutPermissions(listOf("email"))
+        setupUserWithoutPermissions(listOf("email"))
 
         navigateTo("/emails/${email.id}")
         assertCurrentPageIs(PageName.ERROR_403)

@@ -80,7 +80,7 @@ class SettingsListRoleControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission security-admin`() {
-        setUpUserWithoutPermissions(listOf("security:admin"))
+        setupUserWithoutPermissions(listOf("security:admin"))
 
         navigateTo("/settings/roles")
         assertCurrentPageIs(PageName.ERROR_403)

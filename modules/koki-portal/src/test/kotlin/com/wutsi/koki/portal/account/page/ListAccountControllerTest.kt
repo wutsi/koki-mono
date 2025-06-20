@@ -4,7 +4,6 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.AccountFixtures.account
 import com.wutsi.koki.AccountFixtures.accounts
 import com.wutsi.koki.account.dto.AccountSummary
 import com.wutsi.koki.account.dto.SearchAccountResponse
@@ -26,7 +25,7 @@ class ListAccountControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - with full_access permission`() {
-        setUpUserWithFullAccessPermissions("account")
+        setupUserWithFullAccessPermissions("account")
 
         navigateTo("/accounts")
         assertCurrentPageIs(PageName.ACCOUNT_LIST)
@@ -85,7 +84,7 @@ class ListAccountControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission account`() {
-        setUpUserWithoutPermissions(listOf("account"))
+        setupUserWithoutPermissions(listOf("account"))
 
         navigateTo("/accounts")
 
@@ -94,7 +93,7 @@ class ListAccountControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission account-manage`() {
-        setUpUserWithoutPermissions(listOf("account:manage"))
+        setupUserWithoutPermissions(listOf("account:manage"))
 
         navigateTo("/accounts")
 

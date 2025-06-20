@@ -428,7 +428,7 @@ abstract class AbstractPageControllerTest {
         doReturn(principal).whenever(jwtDecoder).decode(any())
     }
 
-    protected fun setUpUserWithoutPermissions(names: List<String>) {
+    protected fun setupUserWithoutPermissions(names: List<String>) {
         val xpermissions = ModuleFixtures.permissions
             .filter { permission -> !names.contains(permission.name) }
             .filter { permission -> !permission.name.endsWith(":full_access") }
@@ -457,7 +457,7 @@ abstract class AbstractPageControllerTest {
             )
     }
 
-    protected fun setUpUserWithFullAccessPermissions(module: String) {
+    protected fun setupUserWithFullAccessPermissions(module: String) {
         val permissionId = ModuleFixtures.permissions
             .find { permission -> permission.name == "$module:full_access" }
             ?.id
@@ -1213,6 +1213,7 @@ abstract class AbstractPageControllerTest {
         val select = Select(driver.findElement(by))
         select.selectByIndex(index)
     }
+
     protected fun selectByValue(selector: String, value: String) {
         val by = By.cssSelector(selector)
         val select = Select(driver.findElement(by))

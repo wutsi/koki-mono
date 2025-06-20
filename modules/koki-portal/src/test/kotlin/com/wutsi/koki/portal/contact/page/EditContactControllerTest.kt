@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.AccountFixtures.accounts
 import com.wutsi.koki.ContactFixtures.contact
 import com.wutsi.koki.contact.dto.UpdateContactRequest
 import com.wutsi.koki.error.dto.ErrorCode
@@ -19,6 +20,50 @@ class EditContactControllerTest : AbstractPageControllerTest() {
     fun edit() {
         navigateTo("/contacts/${contact.id}/edit")
 
+        assertCurrentPageIs(PageName.CONTACT_EDIT)
+
+        select2("#accountId", accounts[1].name)
+        select("#contactTypeId", 3)
+        input("#firstName", "Yo")
+        input("#lastName", "Man")
+        select("#salutation", 2)
+        input("#phone", "+5147580000")
+        scrollToBottom()
+        input("#mobile", "+5147580011")
+        input("#email", "yo@gmail.com")
+        input("#profession", "XX")
+        input("#employer", "EG")
+        select2("#language", "French")
+        click("button[type=submit]")
+
+        val request = argumentCaptor<UpdateContactRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/contacts/${contact.id}"),
+            request.capture(),
+            eq(Any::class.java),
+        )
+
+        assertEquals(accounts[1].id, request.firstValue.accountId)
+        assertEquals(110L, request.firstValue.contactTypeId)
+        assertEquals("Yo", request.firstValue.firstName)
+        assertEquals("Man", request.firstValue.lastName)
+        assertEquals("Ms.", request.firstValue.salutations)
+        assertEquals("fr", request.firstValue.language)
+        assertEquals("+5147580000", request.firstValue.phone)
+        assertEquals("+5147580011", request.firstValue.mobile)
+        assertEquals("yo@gmail.com", request.firstValue.email)
+        assertEquals("XX", request.firstValue.profession)
+        assertEquals("EG", request.firstValue.employer)
+
+        assertCurrentPageIs(PageName.CONTACT)
+        assertElementVisible("#koki-toast")
+    }
+
+    @Test
+    fun `edit - full_access`() {
+        setupUserWithFullAccessPermissions("contact")
+
+        navigateTo("/contacts/${contact.id}/edit")
         assertCurrentPageIs(PageName.CONTACT_EDIT)
 
         select("#contactTypeId", 3)
@@ -40,6 +85,8 @@ class EditContactControllerTest : AbstractPageControllerTest() {
             request.capture(),
             eq(Any::class.java),
         )
+
+        assertEquals(contact.accountId, request.firstValue.accountId)
         assertEquals(110L, request.firstValue.contactTypeId)
         assertEquals("Yo", request.firstValue.firstName)
         assertEquals("Man", request.firstValue.lastName)
@@ -61,6 +108,7 @@ class EditContactControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.CONTACT_EDIT)
 
+        select2("#accountId", accounts[1].name)
         select("#contactTypeId", 3)
         input("#firstName", "Yo")
         input("#lastName", "Man")
@@ -89,6 +137,7 @@ class EditContactControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.CONTACT_EDIT)
 
+        select2("#accountId", accounts[1].name)
         select("#contactTypeId", 3)
         input("#firstName", "Yo")
         input("#lastName", "Man")
@@ -115,7 +164,7 @@ class EditContactControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `edit - without permission contact-manage`() {
-        setUpUserWithoutPermissions(listOf("contact:manage"))
+        setupUserWithoutPermissions(listOf("contact:manage"))
 
         navigateTo("/contacts/${contact.id}/edit")
         assertCurrentPageIs(PageName.ERROR_403)

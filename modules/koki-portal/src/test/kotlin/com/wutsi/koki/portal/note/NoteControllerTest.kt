@@ -8,7 +8,7 @@ import kotlin.test.Test
 class NoteControllerTest : AbstractPageControllerTest() {
     @Test
     fun `show - without permission note`() {
-        setUpUserWithoutPermissions(listOf("note"))
+        setupUserWithoutPermissions(listOf("note"))
 
         navigateTo("/notes/${note.id}")
         assertCurrentPageIs(PageName.ERROR_403)
@@ -16,7 +16,7 @@ class NoteControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `delete - without permission note-delete`() {
-        setUpUserWithoutPermissions(listOf("note:delete"))
+        setupUserWithoutPermissions(listOf("note:delete"))
 
         navigateTo("/notes/${note.id}/delete")
         assertCurrentPageIs(PageName.ERROR_403)

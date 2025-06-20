@@ -192,6 +192,7 @@ object ModuleFixtures {
         Permission(id = 1101, moduleId = 110, name = "contact", description = "Access contacts"),
         Permission(id = 1102, moduleId = 110, name = "contact:manage", description = "Manage contacts"),
         Permission(id = 1103, moduleId = 110, name = "contact:delete", description = "Delete contacts"),
+        Permission(id = 1104, moduleId = 110, name = "contact:full_access", description = "Full access to contacts"),
 
         Permission(id = 1301, moduleId = 130, name = "email", description = "Access emails"),
         Permission(id = 1302, moduleId = 130, name = "email:send", description = "Send emails"),

@@ -15,7 +15,7 @@ class MessageWidgetControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission message`() {
-        setUpUserWithoutPermissions(listOf("message"))
+        setupUserWithoutPermissions(listOf("message"))
 
         navigateTo("/messages/widget?test-mode=true")
         assertCurrentPageIs(PageName.ERROR_403)

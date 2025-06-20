@@ -22,7 +22,8 @@
                     <div class="flex flex-space-between margin-bottom">
                         <div>
                             <a class="btn-create btn btn-primary btn-sm" href="/contacts/create"
-                               th:if="${user?.hasPermission('contact:manage')}">Create New Contact</a>
+                               th:if="${user?.hasPermission('contact:manage')} OR ${user.hasFullAccess('contact')}"
+                            >Create New Contact</a>
                         </div>
                         <div>
                             <select class="btn btn-sm btn-light" id="filter-type-id"

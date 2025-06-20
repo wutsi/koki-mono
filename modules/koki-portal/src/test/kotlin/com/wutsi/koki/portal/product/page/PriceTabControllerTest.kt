@@ -91,7 +91,7 @@ class PriceTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission product-manage`() {
-        setUpUserWithoutPermissions(listOf("product:manage"))
+        setupUserWithoutPermissions(listOf("product:manage"))
 
         navigateTo("/prices/tab?test-mode=true&product-id=${product.id}")
         assertElementNotPresent(".btn-add-price")

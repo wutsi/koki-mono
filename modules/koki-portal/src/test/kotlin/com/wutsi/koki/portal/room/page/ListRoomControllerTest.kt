@@ -25,7 +25,7 @@ class ListRoomControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - with full_access permission`() {
-        setUpUserWithFullAccessPermissions("room")
+        setupUserWithFullAccessPermissions("room")
 
         navigateTo("/rooms")
         assertCurrentPageIs(PageName.ROOM_LIST)
@@ -92,7 +92,7 @@ class ListRoomControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission room`() {
-        setUpUserWithoutPermissions(listOf("room"))
+        setupUserWithoutPermissions(listOf("room"))
 
         navigateTo("/rooms")
 
@@ -101,7 +101,7 @@ class ListRoomControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission room-manage`() {
-        setUpUserWithoutPermissions(listOf("room:manage"))
+        setupUserWithoutPermissions(listOf("room:manage"))
 
         navigateTo("/rooms")
 

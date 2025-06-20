@@ -119,7 +119,7 @@ class SettingsSMTPEditControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `without permission email-admin`() {
-        setUpUserWithoutPermissions(listOf("email:admin"))
+        setupUserWithoutPermissions(listOf("email:admin"))
 
         navigateTo("/settings/email/smtp/edit")
         assertCurrentPageIs(PageName.ERROR_403)
