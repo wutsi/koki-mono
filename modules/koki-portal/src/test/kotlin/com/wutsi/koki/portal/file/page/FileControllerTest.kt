@@ -82,7 +82,7 @@ class FileControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission file-delete`() {
-        setUpUserWithoutPermissions(listOf("file:delete"))
+        setupUserWithoutPermissions(listOf("file:delete"))
 
         navigateTo("/files/${file.id}?owner-id=555&owner-type=ACCOUNT")
 

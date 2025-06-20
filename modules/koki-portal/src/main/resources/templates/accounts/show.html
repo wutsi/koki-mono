@@ -27,12 +27,12 @@
                         <div>
                             <a class="btn-edit btn btn-light btn-sm"
                                th:href="'/accounts/' + ${account.id} + '/edit'"
-                               th:if="${account.canBeManagedBy(user)}">Edit</a>
+                               th:if="${account.managedBy(user)}">Edit</a>
 
                             <a class="btn-delete btn btn-danger btn-sm"
                                onclick="return confirm('Are you sure you want to delete the account?')"
                                th:href="'/accounts/' + ${account.id} + '/delete'"
-                               th:if="${account.canBeDeletedBy(user)}">Delete</a>
+                               th:if="${account.deletedBy(user)}">Delete</a>
                         </div>
                     </div>
 

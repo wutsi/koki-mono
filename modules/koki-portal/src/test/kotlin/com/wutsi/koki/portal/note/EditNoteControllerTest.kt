@@ -8,7 +8,7 @@ import kotlin.test.Test
 class EditNoteControllerTest : AbstractPageControllerTest() {
     @Test
     fun `edit - without permission note-manage`() {
-        setUpUserWithoutPermissions(listOf("note:manage"))
+        setupUserWithoutPermissions(listOf("note:manage"))
 
         navigateTo("/notes/${note.id}/edit")
         assertCurrentPageIs(PageName.ERROR_403)

@@ -74,7 +74,7 @@ class ListProductControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission product`() {
-        setUpUserWithoutPermissions(listOf("product"))
+        setupUserWithoutPermissions(listOf("product"))
 
         navigateTo("/products")
 
@@ -83,7 +83,7 @@ class ListProductControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission product-manage`() {
-        setUpUserWithoutPermissions(listOf("product:manage"))
+        setupUserWithoutPermissions(listOf("product:manage"))
 
         navigateTo("/products")
 

@@ -97,7 +97,7 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `create - with full_access permission`() {
-        setUpUserWithFullAccessPermissions("room")
+        setupUserWithFullAccessPermissions("room")
 
         navigateTo("/rooms/create")
         assertCurrentPageIs(PageName.ROOM_CREATE)
@@ -236,7 +236,7 @@ class CreateRoomControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `create - without permission room-manage`() {
-        setUpUserWithoutPermissions(listOf("room:manage"))
+        setupUserWithoutPermissions(listOf("room:manage"))
 
         navigateTo("/rooms/create")
         assertCurrentPageIs(PageName.ERROR_403)

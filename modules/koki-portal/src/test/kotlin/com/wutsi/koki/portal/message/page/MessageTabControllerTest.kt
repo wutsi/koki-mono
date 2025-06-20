@@ -67,7 +67,7 @@ class MessageTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission message`() {
-        setUpUserWithoutPermissions(listOf("message"))
+        setupUserWithoutPermissions(listOf("message"))
 
         navigateTo("/messages/tab?test-mode=true&owner-id=111&owner-type=TAX")
         assertCurrentPageIs(PageName.ERROR_403)

@@ -67,7 +67,7 @@ class SettingsRoleControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission security-admin`() {
-        setUpUserWithoutPermissions(listOf("security:admin"))
+        setupUserWithoutPermissions(listOf("security:admin"))
 
         navigateTo("/settings/roles/${role.id}")
         assertCurrentPageIs(PageName.ERROR_403)

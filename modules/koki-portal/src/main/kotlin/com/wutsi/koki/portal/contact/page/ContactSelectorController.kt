@@ -15,8 +15,10 @@ class ContactSelectorController(private val service: ContactService) : AbstractP
     fun search(
         @RequestParam(required = false, name = "q") keyword: String? = null,
     ): List<ContactModel> {
+        val user = userHolder.get()
         return service.contacts(
             keyword = keyword,
+            accountManagerIds = if (user?.hasFullAccess("contact") == true) emptyList() else listOf(user?.id ?: -1),
             fullGraph = false,
         )
     }

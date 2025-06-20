@@ -32,7 +32,7 @@ class EditAccountController(
     fun edit(@PathVariable id: Long, model: Model): String {
         // Check Permission
         val account = service.account(id)
-        if (!account.canBeDeletedBy(userHolder.get())) {
+        if (!account.deletedBy(userHolder.get())) {
             throw HttpClientErrorException(HttpStatusCode.valueOf(403))
         }
 

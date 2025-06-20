@@ -28,7 +28,7 @@ class AccountController(
     ): String {
         // Check Permission
         val account = service.account(id)
-        if (!account.canBeViewedBy(userHolder.get())) {
+        if (!account.viewedBy(userHolder.get())) {
             throw HttpClientErrorException(HttpStatusCode.valueOf(403))
         }
 
@@ -54,7 +54,7 @@ class AccountController(
     fun delete(@PathVariable id: Long, model: Model): String {
         // Check Permission
         val account = service.account(id, fullGraph = false)
-        if (!account.canBeDeletedBy(userHolder.get())) {
+        if (!account.deletedBy(userHolder.get())) {
             throw HttpClientErrorException(HttpStatusCode.valueOf(403))
         }
 

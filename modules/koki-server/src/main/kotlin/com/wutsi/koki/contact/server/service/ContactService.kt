@@ -1,5 +1,6 @@
 package com.wutsi.koki.contact.server.service
 
+import com.wutsi.koki.account.server.service.AccountService
 import com.wutsi.koki.contact.dto.CreateContactRequest
 import com.wutsi.koki.contact.dto.UpdateContactRequest
 import com.wutsi.koki.contact.server.dao.ContactRepository
@@ -18,6 +19,7 @@ class ContactService(
     private val dao: ContactRepository,
     private val em: EntityManager,
     private val securityService: SecurityService,
+    private val accountService: AccountService,
 ) {
     fun get(id: Long, tenantId: Long): ContactEntity {
         val account = dao.findById(id)
@@ -36,6 +38,7 @@ class ContactService(
         contactTypeIds: List<Long> = emptyList(),
         accountIds: List<Long> = emptyList(),
         createdByIds: List<Long> = emptyList(),
+        accountManagerIds: List<Long> = emptyList(),
         limit: Int = 20,
         offset: Int = 0,
     ): List<ContactEntity> {
@@ -50,10 +53,13 @@ class ContactService(
             jql.append(" AND C.contactTypeId IN :contactTypeIds")
         }
         if (accountIds.isNotEmpty()) {
-            jql.append(" AND C.accountId IN :accountIds")
+            jql.append(" AND C.account.id IN :accountIds")
         }
         if (createdByIds.isNotEmpty()) {
             jql.append(" AND C.createdById IN :createdByIds")
+        }
+        if (accountManagerIds.isNotEmpty()) {
+            jql.append(" AND C.account.managedById IN :accountManagerIds")
         }
         jql.append(" ORDER BY C.firstName, C.lastName")
 
@@ -74,6 +80,9 @@ class ContactService(
         if (createdByIds.isNotEmpty()) {
             query.setParameter("createdByIds", createdByIds)
         }
+        if (accountManagerIds.isNotEmpty()) {
+            query.setParameter("accountManagerIds", accountManagerIds)
+        }
 
         query.firstResult = offset
         query.maxResults = limit
@@ -86,7 +95,7 @@ class ContactService(
         return dao.save(
             ContactEntity(
                 tenantId = tenantId,
-                accountId = request.accountId,
+                account = request.accountId?.let { id -> accountService.get(id, tenantId) },
                 contactTypeId = request.contactTypeId,
                 firstName = request.firstName,
                 lastName = request.lastName,
@@ -107,7 +116,7 @@ class ContactService(
     @Transactional
     fun update(id: Long, request: UpdateContactRequest, tenantId: Long): ContactEntity {
         val contact = get(id, tenantId)
-        contact.accountId = request.accountId
+        contact.account = request.accountId?.let { id -> accountService.get(id, tenantId) }
         contact.contactTypeId = request.contactTypeId
         contact.firstName = request.firstName
         contact.lastName = request.lastName

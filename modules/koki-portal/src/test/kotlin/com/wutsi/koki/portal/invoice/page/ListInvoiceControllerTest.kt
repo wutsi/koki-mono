@@ -66,7 +66,7 @@ class ListInvoiceControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission invoice`() {
-        setUpUserWithoutPermissions(listOf("invoice"))
+        setupUserWithoutPermissions(listOf("invoice"))
 
         navigateTo("/invoices")
         assertCurrentPageIs(PageName.ERROR_403)
@@ -74,7 +74,7 @@ class ListInvoiceControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission invoice-manage`() {
-        setUpUserWithoutPermissions(listOf("invoice:manage"))
+        setupUserWithoutPermissions(listOf("invoice:manage"))
 
         navigateTo("/invoices")
 

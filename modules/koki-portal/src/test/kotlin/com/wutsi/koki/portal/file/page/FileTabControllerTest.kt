@@ -36,7 +36,7 @@ class FileTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission file-manage`() {
-        setUpUserWithoutPermissions(listOf("file:manage"))
+        setupUserWithoutPermissions(listOf("file:manage"))
 
         navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
 
@@ -45,7 +45,7 @@ class FileTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission file`() {
-        setUpUserWithoutPermissions(listOf("file"))
+        setupUserWithoutPermissions(listOf("file"))
 
         navigateTo("/files/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
 

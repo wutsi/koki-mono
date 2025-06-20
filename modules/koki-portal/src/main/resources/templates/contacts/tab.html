@@ -2,7 +2,7 @@
     <div class="margin-bottom">
         <a class="btn btn-light btn-sm btn-add-contact"
            th:href="${addUrl}"
-           th:if="${addUrl} AND ${user?.hasPermission('contact:manage')}"
+           th:if="${addUrl} AND (${user?.hasPermission('contact:manage')} OR ${user?.hasFullAccess('contact')})"
         >Add New Contact</a>
     </div>
     <table class="table table-striped">

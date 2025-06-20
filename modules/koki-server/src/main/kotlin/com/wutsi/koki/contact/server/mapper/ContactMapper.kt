@@ -10,7 +10,7 @@ class ContactMapper {
     fun toContact(entity: ContactEntity): Contact {
         return Contact(
             id = entity.id!!,
-            accountId = entity.accountId,
+            accountId = entity.account?.id ?: -1,
             contactTypeId = entity.contactTypeId,
             firstName = entity.firstName,
             lastName = entity.lastName,
@@ -32,7 +32,7 @@ class ContactMapper {
     fun toContactSummary(entity: ContactEntity): ContactSummary {
         return ContactSummary(
             id = entity.id!!,
-            accountId = entity.accountId,
+            accountId = entity.account?.id ?: -1,
             contactTypeId = entity.contactTypeId,
             firstName = entity.firstName,
             lastName = entity.lastName,

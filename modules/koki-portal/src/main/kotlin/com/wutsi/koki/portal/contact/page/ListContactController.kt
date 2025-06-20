@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
-@RequiresPermission(["contact"])
+@RequiresPermission(["contact", "contact:full_access"])
 class ListContactController(
     private val service: ContactService,
     private val typeService: TypeService,
@@ -61,8 +61,10 @@ class ListContactController(
             typeService.types(objectType = ObjectType.CONTACT, active = true, limit = Integer.MAX_VALUE)
         )
 
+        val user = userHolder.get()!!
         val contacts = service.contacts(
             contactTypeIds = typeId?.let { listOf(typeId) } ?: emptyList(),
+            accountManagerIds = if (user.hasFullAccess("contact")) emptyList() else listOf(user.id),
             limit = limit,
             offset = offset
         )

@@ -60,7 +60,7 @@ class ListPaymentControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission payment`() {
-        setUpUserWithoutPermissions(listOf("payment"))
+        setupUserWithoutPermissions(listOf("payment"))
 
         navigateTo("/payments")
 
@@ -69,7 +69,7 @@ class ListPaymentControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission payment-manage`() {
-        setUpUserWithoutPermissions(listOf("payment:manage"))
+        setupUserWithoutPermissions(listOf("payment:manage"))
 
         navigateTo("/payments")
 

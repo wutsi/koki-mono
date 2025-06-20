@@ -18,6 +18,20 @@ class ContactControllerTest : AbstractPageControllerTest() {
     fun show() {
         navigateTo("/contacts/${contact.id}")
         assertCurrentPageIs(PageName.CONTACT)
+
+        assertElementPresent(".btn-edit")
+        assertElementPresent(".btn-delete")
+    }
+
+    @Test
+    fun `show - full_access`() {
+        setupUserWithFullAccessPermissions("contact")
+
+        navigateTo("/contacts/${contact.id}")
+        assertCurrentPageIs(PageName.CONTACT)
+
+        assertElementPresent(".btn-edit")
+        assertElementPresent(".btn-delete")
     }
 
     @Test
@@ -30,6 +44,22 @@ class ContactControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun delete() {
+        navigateTo("/contacts/${contact.id}")
+        click(".btn-delete")
+
+        val alert = driver.switchTo().alert()
+        alert.accept()
+        driver.switchTo().parentFrame()
+
+        verify(rest).delete("$sdkBaseUrl/v1/contacts/${contact.id}")
+        assertCurrentPageIs(PageName.CONTACT_LIST)
+        assertElementVisible("#koki-toast")
+    }
+
+    @Test
+    fun `delete - with full_access`() {
+        setupUserWithFullAccessPermissions("contact")
+
         navigateTo("/contacts/${contact.id}")
         click(".btn-delete")
 
@@ -88,7 +118,7 @@ class ContactControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission contact`() {
-        setUpUserWithoutPermissions(listOf("contact"))
+        setupUserWithoutPermissions(listOf("contact"))
 
         navigateTo("/contacts/${contact.id}")
         assertCurrentPageIs(PageName.ERROR_403)
@@ -96,7 +126,7 @@ class ContactControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission contact-manage`() {
-        setUpUserWithoutPermissions(listOf("contact:manage"))
+        setupUserWithoutPermissions(listOf("contact:manage"))
 
         navigateTo("/contacts/${contact.id}")
         assertElementNotPresent(".contact-summary .btn-edit")
@@ -104,7 +134,7 @@ class ContactControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission contact-delete`() {
-        setUpUserWithoutPermissions(listOf("contact:delete"))
+        setupUserWithoutPermissions(listOf("contact:delete"))
 
         navigateTo("/contacts/${contact.id}")
         assertElementNotPresent(".contact-summary .btn-delete")
@@ -112,7 +142,7 @@ class ContactControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `delete - without permission contact-delete`() {
-        setUpUserWithoutPermissions(listOf("contact:delete"))
+        setupUserWithoutPermissions(listOf("contact:delete"))
 
         navigateTo("/contacts/${contact.id}/delete")
         assertCurrentPageIs(PageName.ERROR_403)

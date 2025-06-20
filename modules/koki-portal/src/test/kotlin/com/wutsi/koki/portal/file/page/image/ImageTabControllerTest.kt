@@ -63,7 +63,7 @@ class ImageTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission image-manage`() {
-        setUpUserWithoutPermissions(listOf("image:manage"))
+        setupUserWithoutPermissions(listOf("image:manage"))
 
         navigateTo("/images/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
         assertElementPresent(".btn-refresh")
@@ -72,7 +72,7 @@ class ImageTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission image`() {
-        setUpUserWithoutPermissions(listOf("image"))
+        setupUserWithoutPermissions(listOf("image"))
 
         navigateTo("/images/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
         assertCurrentPageIs(PageName.ERROR_403)

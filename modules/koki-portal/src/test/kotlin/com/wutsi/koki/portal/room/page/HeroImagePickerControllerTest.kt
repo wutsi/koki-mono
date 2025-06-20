@@ -67,7 +67,7 @@ class HeroImagePickerControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `pick - with full_access permission`() {
-        setUpUserWithFullAccessPermissions("room")
+        setupUserWithFullAccessPermissions("room")
 
         navigateTo("/rooms/${room.id}/hero-image-picker")
         assertCurrentPageIs(PageName.ROOM_HERO_IMAGE)
@@ -88,7 +88,7 @@ class HeroImagePickerControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission room`() {
-        setUpUserWithoutPermissions(listOf("room"))
+        setupUserWithoutPermissions(listOf("room"))
 
         navigateTo("/rooms/${room.id}/hero-image-picker")
         assertCurrentPageIs(PageName.ERROR_403)
@@ -96,7 +96,7 @@ class HeroImagePickerControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission room-manage`() {
-        setUpUserWithoutPermissions(listOf("room:manage"))
+        setupUserWithoutPermissions(listOf("room:manage"))
 
         navigateTo("/rooms/${room.id}/hero-image-picker")
 

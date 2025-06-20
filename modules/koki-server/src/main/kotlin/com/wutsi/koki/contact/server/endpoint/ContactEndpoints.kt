@@ -69,6 +69,7 @@ class ContactEndpoints(
         @RequestParam(required = false, name = "contact-type-id") contactTypeIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "account-id") accountIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "created-by-id") createdByIds: List<Long> = emptyList(),
+        @RequestParam(required = false, name = "account-manager-id") accountManagerIds: List<Long> = emptyList(),
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0
     ): SearchContactResponse {
@@ -79,6 +80,7 @@ class ContactEndpoints(
             contactTypeIds = contactTypeIds,
             accountIds = accountIds,
             createdByIds = createdByIds,
+            accountManagerIds = accountManagerIds,
             limit = limit,
             offset = offset
         )

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-@RequiresPermission(["contact:manage"])
+@RequiresPermission(["contact:manage", "contact:full_access"])
 class CreateContactController(
     private val service: ContactService,
     private val accountService: AccountService,
@@ -28,11 +28,19 @@ class CreateContactController(
         @RequestParam(required = false, name = "account-id") accountId: Long? = null,
         model: Model,
     ): String {
-        val account = accountId?.let { id -> accountService.account(id) }
-        model.addAttribute("account", account)
+        var account = accountId?.let { id -> accountService.account(id) }
+        if (account == null) {
+            val accounts = accountService.accounts(
+                managedByIds = userHolder.get()?.let { user -> listOf(user.id) } ?: emptyList(),
+                limit = 2,
+            )
+            if (accounts.size == 1) {
+                account = accounts.firstOrNull()
+            }
+        }
 
         val form = ContactForm(
-            accountId = accountId ?: -1,
+            accountId = account?.id ?: -1,
             language = account?.language ?: LocaleContextHolder.getLocale().language
         )
         return create(form, model)
@@ -57,6 +65,9 @@ class CreateContactController(
         )
         if (contactTypes.isNotEmpty()) {
             model.addAttribute("contactTypes", contactTypes)
+        }
+        if (form.accountId > 0) {
+            model.addAttribute("account", accountService.account(id = form.accountId, fullGraph = false))
         }
 
         return "contacts/create"

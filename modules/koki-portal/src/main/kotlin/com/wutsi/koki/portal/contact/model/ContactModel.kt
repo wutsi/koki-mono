@@ -31,4 +31,19 @@ data class ContactModel(
 ) {
     val name: String
         get() = ((salutation ?: "") + " $firstName $lastName").trim()
+
+    fun viewedBy(user: UserModel?): Boolean {
+        return user != null &&
+            (user.hasFullAccess("contact") || (user.canAccess("contact") == true && account?.managedBy?.id == user.id))
+    }
+
+    fun managedBy(user: UserModel?): Boolean {
+        return user != null &&
+            (user.hasFullAccess("contact") || (user.canManage("contact") == true && account?.managedBy?.id == user.id))
+    }
+
+    fun deletedBy(user: UserModel?): Boolean {
+        return user != null &&
+            (user.hasFullAccess("contact") || (user.canDelete("contact") == true && account?.managedBy?.id == user.id))
+    }
 }

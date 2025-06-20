@@ -112,7 +112,7 @@ class EmailTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission email`() {
-        setUpUserWithoutPermissions(listOf("email"))
+        setupUserWithoutPermissions(listOf("email"))
 
         navigateTo("/emails/tab?test-mode=true&owner-id=${account.id}&owner-type=ACCOUNT")
         assertCurrentPageIs(PageName.ERROR_403)
@@ -120,7 +120,7 @@ class EmailTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission email-send`() {
-        setUpUserWithoutPermissions(listOf("email:send"))
+        setupUserWithoutPermissions(listOf("email:send"))
 
         navigateTo("/emails/tab?test-mode=true&owner-id=${account.id}&owner-type=ACCOUNT")
         assertElementNotPresent(".btn-email-compose")

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
 @RequestMapping("/contacts/tab")
-@RequiresPermission(["contact"])
+@RequiresPermission(["contact", "contact:full_access"])
 class ContactTabController(
     private val service: ContactService,
     private val typeService: TypeService,

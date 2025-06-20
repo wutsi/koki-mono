@@ -27,7 +27,7 @@ class SettingsListAttributeControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `without permission account-admin`() {
-        setUpUserWithoutPermissions(listOf("account:admin"))
+        setupUserWithoutPermissions(listOf("account:admin"))
 
         navigateTo("/settings/accounts/attributes")
         assertCurrentPageIs(PageName.ERROR_403)

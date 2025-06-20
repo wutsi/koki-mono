@@ -19,7 +19,7 @@ class SettingsPaymentControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission payment-admin`() {
-        setUpUserWithoutPermissions(listOf("payment:admin"))
+        setupUserWithoutPermissions(listOf("payment:admin"))
         navigateTo("/settings/payments")
         assertCurrentPageIs(PageName.ERROR_403)
     }

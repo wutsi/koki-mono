@@ -4,6 +4,7 @@ import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.security.RequiresPermission
+import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-@RequiresPermission(["contact"])
+@RequiresPermission(["contact", "contact:full_access"])
 class ContactController(
     private val service: ContactService
 ) : AbstractContactDetailsController() {
@@ -25,7 +26,13 @@ class ContactController(
         @RequestParam(required = false, name = "_ts") timestamp: Long? = null,
         model: Model
     ): String {
+        // Check Permission
         val contact = service.contact(id)
+        if (!contact.viewedBy(userHolder.get())) {
+            throw HttpClientErrorException(HttpStatusCode.valueOf(403))
+        }
+
+        // Get
         if (toast == id && canShowToasts(timestamp, referer, listOf("/contacts/$id/edit", "/contacts/create"))) {
             model.addAttribute("toast", "Saved")
         }
@@ -46,9 +53,15 @@ class ContactController(
     }
 
     @GetMapping("/contacts/{id}/delete")
-    @RequiresPermission(["contact:delete"])
+    @RequiresPermission(["contact:delete", "contact:full_access"])
     fun delete(@PathVariable id: Long, model: Model): String {
+        // Check Permission
         val contact = service.contact(id)
+        if (!contact.deletedBy(userHolder.get())) {
+            throw HttpClientErrorException(HttpStatusCode.valueOf(403))
+        }
+
+        // Delete
         try {
             service.delete(id)
             return "redirect:/contacts?_op=del&_toast=$id&_ts=" + System.currentTimeMillis()

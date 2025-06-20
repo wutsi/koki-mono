@@ -92,7 +92,7 @@ class MessageControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission message`() {
-        setUpUserWithoutPermissions(listOf("message"))
+        setupUserWithoutPermissions(listOf("message"))
 
         navigateTo("/messages/${message.id}")
         assertCurrentPageIs(PageName.ERROR_403)
@@ -100,7 +100,7 @@ class MessageControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission message-manage`() {
-        setUpUserWithoutPermissions(listOf("message"))
+        setupUserWithoutPermissions(listOf("message"))
 
         navigateTo("/messages/${message.id}")
         assertElementNotPresent(".btn-archive")

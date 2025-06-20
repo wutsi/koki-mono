@@ -66,7 +66,7 @@ class PaymentTabControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `list - without permission payment`() {
-        setUpUserWithoutPermissions(listOf("payment"))
+        setupUserWithoutPermissions(listOf("payment"))
 
         navigateTo("/payments/tab?test-mode=true&owner-type=INVOICE&owner-id=" + invoice.id)
 

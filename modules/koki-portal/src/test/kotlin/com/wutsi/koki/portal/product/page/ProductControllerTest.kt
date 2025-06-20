@@ -96,7 +96,7 @@ class ProductControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission product`() {
-        setUpUserWithoutPermissions(listOf("product"))
+        setupUserWithoutPermissions(listOf("product"))
 
         navigateTo("/products/${product.id}")
 
@@ -105,7 +105,7 @@ class ProductControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission product-manage`() {
-        setUpUserWithoutPermissions(listOf("product:manage"))
+        setupUserWithoutPermissions(listOf("product:manage"))
 
         navigateTo("/products/${product.id}")
 
@@ -115,7 +115,7 @@ class ProductControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show - without permission product-delete`() {
-        setUpUserWithoutPermissions(listOf("product:delete"))
+        setupUserWithoutPermissions(listOf("product:delete"))
 
         navigateTo("/products/${product.id}")
 
@@ -125,7 +125,7 @@ class ProductControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `delete - without permission product-delete`() {
-        setUpUserWithoutPermissions(listOf("product:delete"))
+        setupUserWithoutPermissions(listOf("product:delete"))
 
         navigateTo("/products/${product.id}/delete")
 

@@ -1,12 +1,14 @@
 package com.wutsi.koki.portal.contact.page
 
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.contact.form.ContactForm
 import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.TypeService
+import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,18 +18,24 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-@RequiresPermission(["contact:manage"])
+@RequiresPermission(["contact:manage", "contact:full_access"])
 class EditContactController(
     private val service: ContactService,
     private val typeService: TypeService,
+    private val accountService: AccountService,
 ) : AbstractContactController() {
     @GetMapping("/contacts/{id}/edit")
     fun edit(
         @PathVariable id: Long,
         model: Model
     ): String {
+        // Check Permission
         val contact = service.contact(id)
+        if (!contact.deletedBy(userHolder.get())) {
+            throw HttpClientErrorException(HttpStatusCode.valueOf(403))
+        }
 
+        // Edit
         val form = ContactForm(
             salutation = contact.salutation,
             profession = contact.profession,
@@ -67,6 +75,9 @@ class EditContactController(
         if (contactTypes.isNotEmpty()) {
             model.addAttribute("contactTypes", contactTypes)
         }
+        if (form.accountId > 0) {
+            model.addAttribute("account", accountService.account(id = form.accountId, fullGraph = false))
+        }
 
         return "contacts/edit"
     }
@@ -77,12 +88,13 @@ class EditContactController(
         @ModelAttribute form: ContactForm,
         model: Model
     ): String {
-        val contact = ContactModel(
-            id = id,
-            firstName = form.firstName,
-            lastName = form.lastName,
-            salutation = form.salutation
-        )
+        // Check Permission
+        val contact = service.contact(id)
+        if (!contact.deletedBy(userHolder.get())) {
+            throw HttpClientErrorException(HttpStatusCode.valueOf(403))
+        }
+
+        // Update
         try {
             service.update(id, form)
             return "redirect:/contacts/$id?_toast=$id&_ts=" + System.currentTimeMillis()
