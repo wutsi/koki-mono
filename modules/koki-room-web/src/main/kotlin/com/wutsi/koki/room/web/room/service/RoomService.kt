@@ -48,7 +48,7 @@ class RoomService(
             ).associateBy { amenity -> amenity.id }
         }
 
-        val account = accountService.account(room.accountId, fullGraph = false)
+        val account = accountService.account(room.accountId)
 
         val images = fileService.files(
             type = FileType.IMAGE,
@@ -93,6 +93,7 @@ class RoomService(
             neighborhoodId = neighborhoodId,
             categoryIds = emptyList(),
             totalGuests = null,
+            accountManagerIds = emptyList(),
             limit = limit,
             offset = offset,
         ).rooms
@@ -165,6 +166,7 @@ class RoomService(
             amenityIds = emptyList(),
             neighborhoodId = neighborhoodId,
             categoryIds = emptyList(),
+            accountManagerIds = emptyList(),
             totalGuests = null,
             limit = limit,
             offset = offset,

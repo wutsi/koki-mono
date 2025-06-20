@@ -9,5 +9,15 @@ class HomeControllerTest : AbstractPageControllerTest() {
     fun home() {
         navigateTo("/")
         assertCurrentPageIs(PageName.HOME)
+
+        assertElementAttribute("html", "lang", "fr")
+    }
+
+    @Test
+    fun `home - english translation`() {
+        navigateTo("/?lang=en")
+        assertCurrentPageIs(PageName.HOME)
+
+        assertElementAttribute("html", "lang", "en")
     }
 }

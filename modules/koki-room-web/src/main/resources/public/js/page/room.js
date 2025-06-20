@@ -29,15 +29,22 @@ class KokiRoomPage {
                 }
             }).then(response => {
             if (response.ok) {
-                document.querySelector('#room-message-modal .btn-close').click();
-                alert('Your message has been sent');
+                response.json().then(json => {
+                    if (json.success) {
+                        document.querySelector('#room-message-modal .btn-close').click();
+                        alert('Your message has been sent');
+                        document.getElementById("btn-send").disabled = false;
+                    } else {
+                        console.log('Error', json);
+                        alert('Failed');
+                    }
+                });
             } else {
                 response.text().then(txt => {
                     console.log('Error', txt);
                     alert('Failed');
                 });
             }
-            document.getElementById("btn-send").disabled = false;
         });
     }
 }

@@ -51,13 +51,10 @@ class LocationController(
             location
         } else if (location.type == LocationType.NEIGHBORHOOD) {
             model.addAttribute("neighborhood", location)
-            location.parentId?.let { parentId ->
-                service.location(parentId)
-            } ?: throw HttpClientErrorException(HttpStatusCode.valueOf(404))
+            service.location(location.parentId ?: -1)
         } else {
-            null
+            throw HttpClientErrorException(HttpStatusCode.valueOf(404))
         }
-            ?: throw HttpClientErrorException(HttpStatusCode.valueOf(404))
 
         model.addAttribute("city", city)
         model.addAttribute("latitude", if (location.hasGeoLocation) location.latitude else city.latitude)

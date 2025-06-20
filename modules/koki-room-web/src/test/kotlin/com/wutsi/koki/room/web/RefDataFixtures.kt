@@ -123,6 +123,16 @@ object RefDataFixtures {
         Location(id = 114, type = LocationType.NEIGHBORHOOD, name = "Cote des Neiges", parentId = 110, country = "CA"),
     )
 
+    val countries = listOf(
+        Location(
+            id = 888888,
+            type = LocationType.COUNTRY,
+            name = "Canada",
+            parentId = null,
+            country = "CA",
+        ),
+    )
+
     // Categories
     val categories = listOf(
         Category(id = 1000, type = CategoryType.SERVICE, name = "Automotive", longName = "Automotive"),

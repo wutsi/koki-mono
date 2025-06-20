@@ -38,8 +38,8 @@ class RoomMapper(
             type = entity.type,
             status = entity.status,
             title = when (language) {
-                "fr" -> entity.titleFr ?: entity.title
-                else -> entity.title
+                "fr" -> entity.titleFr ?: entity.title ?: ""
+                else -> entity.title ?: ""
             },
             summary = when (language) {
                 "fr" -> entity.summaryFr ?: entity.summary
@@ -80,7 +80,7 @@ class RoomMapper(
                         price.currency
                     )
                 },
-            heroImage = entity.heroImageId?.let { id -> images[id] },
+            heroImage = entity.heroImageId?.let { id -> images[id] } ?: defaultHeroImage(),
             longitude = entity.longitude,
             latitude = entity.latitude,
             url = entity.listingUrl ?: "/rooms/${entity.id}",
@@ -110,12 +110,12 @@ class RoomMapper(
         return RoomModel(
             id = entity.id,
             account = account,
-            heroImage = heroImage,
+            heroImage = heroImage ?: defaultHeroImage(),
             type = entity.type,
             status = entity.status,
             title = when (language) {
-                "fr" -> entity.titleFr ?: entity.title
-                else -> entity.title
+                "fr" -> entity.titleFr ?: entity.title ?: ""
+                else -> entity.title ?: ""
             },
             summary = when (language) {
                 "fr" -> entity.summaryFr ?: entity.summary?.ifEmpty { null }
@@ -205,5 +205,9 @@ class RoomMapper(
         } else {
             pricePerMonth
         }
+    }
+
+    private fun defaultHeroImage(): FileModel {
+        return FileModel()
     }
 }

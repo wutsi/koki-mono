@@ -17,10 +17,10 @@ import java.util.Date
 data class RoomModel(
     val id: Long = -1,
     val account: AccountModel = AccountModel(),
-    val heroImage: FileModel? = null,
+    val heroImage: FileModel = FileModel(),
     val type: RoomType = RoomType.UNKNOWN,
     val status: RoomStatus = RoomStatus.UNKNOWN,
-    val title: String? = null,
+    val title: String = "",
     val summary: String? = null,
     val description: String? = null,
     val descriptionHtml: String? = null,

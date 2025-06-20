@@ -14,7 +14,7 @@ class BotFilter : Filter {
             return track
         }
         val client = uaParser.parse(track.ua)
-        val bot = client.device?.family.equals("spider", true)
+        val bot = client.device.family.equals("spider", true)
         return track.copy(bot = bot)
     }
 }
