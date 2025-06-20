@@ -14,7 +14,7 @@ import java.util.Locale
 /**
  * This agent the describe properties
  */
-class RoomInformationAgent(
+class RoomAgent(
     val room: RoomEntity,
     val llm: LLM,
     val accountService: AccountService,
@@ -22,8 +22,8 @@ class RoomInformationAgent(
     val locationService: LocationService,
     val maxIterations: Int = 5,
 ) : Agent(llm, maxIterations, MediaType.APPLICATION_JSON) {
-    override fun systemInstructions() =
-        """
+    companion object {
+        val SYSTEM_INSTRUCTIONS = """
             You are a real estate agent helping customers to rent or buy properties.
             You analyze all the images provided to provide an accurate and detailed information of the property.
 
@@ -62,16 +62,21 @@ class RoomInformationAgent(
               - Focus on the Benefits for the Sharer's Audience: Why should someone click on this link? What kind of experience awaits the customer?
               - Use Action-Oriented Language: Encourage clicks and create a sense of desire.
               - Aim for around 150-160 characters.
+        """.trimIndent()
+    }
 
-    """.trimIndent()
+    override fun systemInstructions(): String {
+        return SYSTEM_INSTRUCTIONS
+    }
 
     override fun buildPrompt(query: String, memory: List<String>): String {
         val locationIds = listOf(room.neighborhoodId, room.cityId).filterNotNull()
-        val location = locationService.search(
+        val locations = locationService.search(
             ids = locationIds,
             limit = locationIds.size
-        ).map { loc -> loc.name }.joinToString(",")
-        val country = room.country?.let { Locale("en", room.country).displayName }
+        )
+        val location = locations.map { loc -> loc.name }.toMutableList()
+        room.country?.let { location.add(Locale("en", room.country).displayCountry) }
 
         val hotel = if (room.type == RoomType.HOTEL_ROOM) {
             val account = accountService.get(room.account.id ?: -1, room.tenantId)
@@ -109,10 +114,7 @@ class RoomInformationAgent(
                     .map { entry -> "${entry.id},${entry.name}" }
                     .joinToString("\n")
             )
-            .replace(
-                "{{location}}",
-                country?.let { listOf(location, country).joinToString(",") } ?: "Unknown"
-            )
+            .replace("{{location}}", location.joinToString(","))
             .replace("{{hotel}}", hotel)
     }
 

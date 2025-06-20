@@ -18,7 +18,7 @@ class ImportLocationEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var dao: LocationRepository
 
-    @Sql(value = ["/db/test/clean.sql"])
+    @Sql(value = ["/db/test/clean.sql", "/db/test/refdata/ImportLocationEndpoint.sql"])
     @Test
     fun cm() {
         val response = rest.getForEntity("/v1/locations/import?country=CM", ImportResponse::class.java)
@@ -112,5 +112,12 @@ class ImportLocationEndpointTest : AuthorizationAwareEndpointTest() {
         val stateIds = states.map { it.id }
         val cities = dao.findByType(LocationType.CITY)
         cities.forEach { city -> assertTrue(stateIds.contains(city.parentId)) }
+    }
+
+    @Test
+    fun invalid() {
+        val response = rest.getForEntity("/v1/locations/import?country=xx", ImportResponse::class.java)
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.statusCode)
     }
 }

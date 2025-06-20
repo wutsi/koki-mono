@@ -11,7 +11,7 @@ import com.wutsi.koki.file.server.service.LabelService
 import com.wutsi.koki.file.server.service.StorageServiceProvider
 import com.wutsi.koki.room.server.service.RoomService
 import com.wutsi.koki.room.server.service.ai.RoomAgentFactory
-import com.wutsi.koki.room.server.service.data.RoomImageAgentData
+import com.wutsi.koki.room.server.service.data.ImageAgentData
 import org.springframework.stereotype.Service
 
 @Service
@@ -46,20 +46,20 @@ class FileUploadedHandler(
         }
     }
 
-    private fun extractRoomInformationFromImage(image: FileEntity): RoomImageAgentData? {
+    private fun extractRoomInformationFromImage(image: FileEntity): ImageAgentData? {
         val agent = agentFactory.createRoomImageAgent(image.tenantId) ?: return null
 
         // Download images
         val f = download(image)
         try {
             val result = agent.run(IMAGE_AGENT_QUERY, listOf(f))
-            return objectMapper.readValue(result, RoomImageAgentData::class.java)
+            return objectMapper.readValue(result, ImageAgentData::class.java)
         } finally {
             f.delete()
         }
     }
 
-    private fun updateImage(image: FileEntity, data: RoomImageAgentData) {
+    private fun updateImage(image: FileEntity, data: ImageAgentData) {
         image.title = data.title
         image.description = data.description
         image.titleFr = data.titleFr

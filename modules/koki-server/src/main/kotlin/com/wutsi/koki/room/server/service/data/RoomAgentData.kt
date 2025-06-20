@@ -1,6 +1,6 @@
 package com.wutsi.koki.room.server.service.data
 
-data class RoomInformationAgentData(
+data class RoomAgentData(
     val title: String = "",
     val summary: String? = null,
     val description: String? = null,

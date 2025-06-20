@@ -14,7 +14,7 @@ import com.wutsi.koki.room.dto.event.RoomPublishedEvent
 import com.wutsi.koki.room.server.command.PublishRoomCommand
 import com.wutsi.koki.room.server.domain.RoomEntity
 import com.wutsi.koki.room.server.service.ai.RoomAgentFactory
-import com.wutsi.koki.room.server.service.data.RoomInformationAgentData
+import com.wutsi.koki.room.server.service.data.RoomAgentData
 import com.wutsi.koki.room.server.service.event.AbstractRoomEventHandler
 import org.springframework.stereotype.Service
 import java.util.Date
@@ -57,20 +57,20 @@ class PublishRoomCommandHandler(
     private fun extractRoomInformationFromImages(
         room: RoomEntity,
         images: List<FileEntity>
-    ): RoomInformationAgentData? {
+    ): RoomAgentData? {
         val agent = agentFactory.createRoomInformationFactory(room) ?: return null
 
         // Download images
         val files = images.map { image -> download(image) }
         try {
             val result = agent.run(QUERY, files)
-            return objectMapper.readValue(result, RoomInformationAgentData::class.java)
+            return objectMapper.readValue(result, RoomAgentData::class.java)
         } finally {
             files.forEach { file -> file.delete() }
         }
     }
 
-    private fun update(room: RoomEntity, images: List<FileEntity>, data: RoomInformationAgentData?) {
+    private fun update(room: RoomEntity, images: List<FileEntity>, data: RoomAgentData?) {
         // Update the room
         if (data != null && data.valid) {
             room.title = data.title

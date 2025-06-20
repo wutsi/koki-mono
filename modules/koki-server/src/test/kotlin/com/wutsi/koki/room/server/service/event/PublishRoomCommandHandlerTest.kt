@@ -25,9 +25,9 @@ import com.wutsi.koki.room.server.domain.RoomEntity
 import com.wutsi.koki.room.server.service.PublishRoomCommandHandler
 import com.wutsi.koki.room.server.service.RoomMQConsumer
 import com.wutsi.koki.room.server.service.RoomService
+import com.wutsi.koki.room.server.service.ai.RoomAgent
 import com.wutsi.koki.room.server.service.ai.RoomAgentFactory
-import com.wutsi.koki.room.server.service.ai.RoomInformationAgent
-import com.wutsi.koki.room.server.service.data.RoomInformationAgentData
+import com.wutsi.koki.room.server.service.data.RoomAgentData
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import java.io.File
@@ -104,7 +104,7 @@ class PublishRoomCommandHandlerTest {
         )
     )
 
-    private val data = RoomInformationAgentData(
+    private val data = RoomAgentData(
         title = "This is the AI title",
         description = "This is AI description",
         summary = "This is the AI summary",
@@ -120,7 +120,7 @@ class PublishRoomCommandHandlerTest {
         heroImageReason = null,
     )
 
-    private val agent = mock<RoomInformationAgent>()
+    private val agent = mock<RoomAgent>()
 
     @BeforeEach
     fun setup() {
