@@ -43,3 +43,16 @@ jobs:
                     token: ${{ secrets.GITHUB_TOKEN }}
                     min-coverage-overall: 90
                     min-coverage-changed-files: 90
+
+            -   name: Compress code coverage report
+                if: ${{ always() }}
+                working-directory: ./target
+                run: zip -r "Coverage-Report.zip" jacoco
+
+            -   name: Upload code coverage report
+                if: ${{ always() }}
+                uses: actions/upload-artifact@v3
+                with:
+                    name: Coverage Report
+                    path: target/Coverage-Report.zip
+                    retention-days: 1
