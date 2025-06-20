@@ -30,6 +30,18 @@ data class UserModel(
         return permissionNames.contains(name)
     }
 
+    fun canAccess(module: String): Boolean {
+        return permissionNames.contains(module)
+    }
+
+    fun hasFullAccess(module: String): Boolean {
+        return permissionNames.contains("$module:full_access")
+    }
+
+    fun canManage(module: String): Boolean {
+        return permissionNames.contains("$module:manage")
+    }
+
     fun canAccess(module: ModuleModel): Boolean {
         return hasPermission(module.name)
     }

@@ -78,6 +78,9 @@ class HeroImagePickerControllerTest : AbstractPageControllerTest() {
         setUpUserWithoutPermissions(listOf("room:manage"))
 
         navigateTo("/rooms/${room.id}/hero-image-picker")
+
+        val imageId = images.find { img -> img.id != room.heroImageId }!!.id
+        click("#image-$imageId .btn-select")
         assertCurrentPageIs(PageName.ERROR_403)
     }
 

@@ -31,4 +31,19 @@ data class AccountModel(
     val billingSameAsShippingAddress: Boolean = true,
     val readOnly: Boolean = false,
     val user: UserModel? = null,
-)
+) {
+    fun canBeViewedBy(user: UserModel?): Boolean {
+        return user != null &&
+            (user.hasFullAccess("account") || (user.canAccess("account") == true && user.id == managedBy?.id))
+    }
+
+    fun canBeManagedBy(user: UserModel?): Boolean {
+        return user != null &&
+            (user.hasFullAccess("account") == true || (user.canManage("account") == true && user.id == managedBy?.id))
+    }
+
+    fun canBeDeletedBy(user: UserModel?): Boolean {
+        return user != null &&
+            (user.hasFullAccess("account") == true || (user.hasPermission("account:delete") == true && user.id == managedBy?.id))
+    }
+}

@@ -43,7 +43,7 @@ class UserEndpoints(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false, name = "q") keyword: String? = null,
         @RequestParam(required = false) id: List<Long> = emptyList(),
-        @RequestParam(required = false, name = "role-id") roleId: List<Long> = emptyList(),
+        @RequestParam(required = false, name = "role-id") roleIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "permission") permissions: List<String> = emptyList(),
         @RequestParam(required = false) status: UserStatus? = null,
         @RequestParam(required = false) type: UserType? = null,
@@ -53,7 +53,7 @@ class UserEndpoints(
         val users = service.search(
             keyword = keyword,
             ids = id,
-            roleIds = roleId,
+            roleIds = roleIds,
             tenantId = tenantId,
             status = status,
             type = type,

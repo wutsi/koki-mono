@@ -10,6 +10,7 @@ import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.TypeService
 import com.wutsi.koki.portal.user.service.UserService
 import jakarta.servlet.http.HttpServletRequest
+import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-@RequiresPermission(permissions = ["account:manage"])
+@RequiresPermission(permissions = ["account:manage", "account:full_access"])
 class EditAccountController(
     private val service: AccountService,
     private val attributeService: AttributeService,
@@ -29,7 +30,13 @@ class EditAccountController(
 ) : AbstractAccountController() {
     @GetMapping("/accounts/{id}/edit")
     fun edit(@PathVariable id: Long, model: Model): String {
+        // Check Permission
         val account = service.account(id)
+        if (!account.canBeDeletedBy(userHolder.get())) {
+            throw HttpClientErrorException(HttpStatusCode.valueOf(403))
+        }
+
+        // Edit
         val form = AccountForm(
             managedById = account.managedBy?.id,
             accountTypeId = account.accountType?.id,

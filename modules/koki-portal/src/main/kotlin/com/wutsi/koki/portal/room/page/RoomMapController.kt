@@ -15,7 +15,7 @@ import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 @RequestMapping("/rooms")
-@RequiresPermission(["room", "room:manage"])
+@RequiresPermission(["room"])
 class RoomMapController(
     private val service: RoomService,
 ) : AbstractRoomDetailsController() {
@@ -61,6 +61,7 @@ class RoomMapController(
         return "rooms/map"
     }
 
+    @RequiresPermission(["room:manage"])
     @PostMapping("/{id}/map")
     fun save(
         @PathVariable id: Long,

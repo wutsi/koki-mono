@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
-@RequiresPermission(permissions = ["account"])
+@RequiresPermission(permissions = ["account", "account:full_access"])
 class ListAccountController(
     private val service: AccountService,
     private val typeService: TypeService,
@@ -68,8 +68,10 @@ class ListAccountController(
             typeService.types(objectType = ObjectType.ACCOUNT, active = true, limit = Integer.MAX_VALUE)
         )
 
+        val user = userHolder.get()
         val accounts = service.accounts(
             accountTypeIds = typeId?.let { listOf(typeId) } ?: emptyList(),
+            managedByIds = if (user?.hasFullAccess("account") == true) emptyList() else listOf(user?.id ?: -1),
             limit = limit,
             offset = offset,
         )

@@ -24,6 +24,18 @@
                             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
                             <div class="section-item">
+                                <label class="title">Account Manager</label>
+                                <select th:field="*{managedById}">
+                                    <option value="-1"></option>
+                                    <option th:if="${manager}"
+                                            th:text="${manager.displayName}"
+                                            th:value="${manager.id}">
+                                        MANAGER
+                                    </option>
+                                </select>
+                                <script th:replace="~{__components/user :: user-selector('managedById', null, 'account:manage')}"></script>
+                            </div>
+                            <div class="section-item">
                                 <label class="title">Name <span class="required">*</span></label>
                                 <input maxlength="100" required th:field="*{name}"/>
                             </div>

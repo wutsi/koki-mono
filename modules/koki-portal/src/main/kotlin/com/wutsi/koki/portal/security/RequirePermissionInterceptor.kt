@@ -17,7 +17,7 @@ class RequirePermissionInterceptor(private val currentUser: CurrentUserHolder) :
         if (permissions.isNotEmpty()) {
             val user = currentUser.get()
             val permissionNames = user?.permissionNames
-            if (permissionNames == null || !permissionNames.containsAll(permissions)) {
+            if (!matches(permissionNames, permissions)) {
                 if (LOGGER.isDebugEnabled) {
                     LOGGER.debug("Expecting permissions $permissions, but AccountUser#${user?.id} has $permissionNames")
                 }
@@ -40,5 +40,13 @@ class RequirePermissionInterceptor(private val currentUser: CurrentUserHolder) :
             }
         }
         return emptyList()
+    }
+
+    private fun matches(names: List<String>?, permissions: List<String>): Boolean {
+        if (names == null) {
+            return true
+        } else {
+            return names.find { name -> permissions.contains(name) } != null
+        }
     }
 }

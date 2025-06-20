@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.AccountFixtures.account
 import com.wutsi.koki.AccountFixtures.attributes
 import com.wutsi.koki.RefDataFixtures.locations
 import com.wutsi.koki.account.dto.CreateAccountRequest
@@ -75,6 +76,14 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.ACCOUNT_LIST)
         assertElementVisible("#koki-toast")
+    }
+
+    @Test
+    fun `create - with full_access permission`() {
+        setUpUserWithFullAccessPermissions("account")
+
+        navigateTo("/accounts/create")
+        assertCurrentPageIs(PageName.ACCOUNT_CREATE)
     }
 
     @Test

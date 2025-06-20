@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
 @RequestMapping("/rooms")
-@RequiresPermission(["room", "room:manage"])
+@RequiresPermission(["room"])
 class HeroImagePickerController(
     private val service: RoomService,
     private val fileService: FileService,
@@ -49,6 +49,7 @@ class HeroImagePickerController(
         return "rooms/hero-image-picker"
     }
 
+    @RequiresPermission(["room:manage"])
     @GetMapping("/{id}/hero-image-picker/select")
     fun select(
         @PathVariable id: Long,
