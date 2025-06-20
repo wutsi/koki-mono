@@ -22,7 +22,7 @@
                     <div class="flex flex-space-between margin-bottom">
                         <div>
                             <a class="btn-create btn btn-primary btn-sm" href="/rooms/create"
-                               th:if="${user?.hasPermission('room:manage')}">
+                               th:if="${user?.canManage('room')} OR ${user?.hasFullAccess('room')}">
                                 Create New Room
                             </a>
                         </div>

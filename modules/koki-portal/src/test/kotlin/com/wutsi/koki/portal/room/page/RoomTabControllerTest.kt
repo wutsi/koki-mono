@@ -19,6 +19,17 @@ class RoomTabControllerTest : AbstractPageControllerTest() {
         navigateTo("/rooms/tab?test-mode=true&owner-id=111&owner-type=ACCOUNT")
 
         assertElementCount(".tab-rooms tr.room", rooms.size)
+        assertElementPresent(".btn-add-room")
+    }
+
+    @Test
+    fun `list - with full_access permission`() {
+        setUpUserWithFullAccessPermissions("room")
+
+        navigateTo("/rooms/tab?test-mode=true&owner-id=111&owner-type=ACCOUNT")
+
+        assertElementCount(".tab-rooms tr.room", rooms.size)
+        assertElementPresent(".btn-add-room")
     }
 
     @Test

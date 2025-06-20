@@ -94,4 +94,24 @@ data class RoomModel(
             url = "/rooms/${this.id}"
         )
     }
+
+    fun viewedBy(user: UserModel?): Boolean {
+        return user != null &&
+            (user.hasFullAccess("room") || (user.canAccess("room") == true && account.managedBy?.id == user.id))
+    }
+
+    fun managedBy(user: UserModel?): Boolean {
+        return user != null &&
+            (user.hasFullAccess("room") || (user.canManage("room") == true && account.managedBy?.id == user.id))
+    }
+
+    fun deletedBy(user: UserModel?): Boolean {
+        return user != null &&
+            (user.hasFullAccess("room") || (user.canDelete("room") == true && account.managedBy?.id == user.id))
+    }
+
+    fun amenitiesManagedBy(user: UserModel?): Boolean {
+        return user != null &&
+            (user.hasFullAccess("room") || (user.hasPermission("room-amenity:manage") && account.managedBy?.id == user.id))
+    }
 }

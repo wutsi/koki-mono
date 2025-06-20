@@ -102,6 +102,7 @@ class RoomService(
     fun rooms(
         ids: List<Long> = emptyList(),
         accountIds: List<Long> = emptyList(),
+        accountManagerIds: List<Long> = emptyList(),
         cityId: Long? = null,
         status: RoomStatus? = null,
         types: List<RoomType> = emptyList(),
@@ -112,6 +113,7 @@ class RoomService(
         val rooms = koki.rooms(
             ids = ids,
             accountIds = accountIds,
+            accountManagerIds = accountManagerIds,
             cityId = cityId,
             status = status,
             types = types,

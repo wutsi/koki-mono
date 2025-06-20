@@ -23,7 +23,7 @@ import java.util.Currency
 
 @Controller
 @RequestMapping("/rooms")
-@RequiresPermission(["room:manage"])
+@RequiresPermission(["room:manage", "room:full_access"])
 class EditRoomController(
     private val service: RoomService,
     private val locationService: LocationService,

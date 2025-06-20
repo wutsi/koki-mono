@@ -189,6 +189,14 @@ class EditRoomControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun `edit - with full_access permission`() {
+        setUpUserWithFullAccessPermissions("room")
+
+        navigateTo("/rooms/${room.id}/edit")
+        assertCurrentPageIs(PageName.ROOM_EDIT)
+    }
+
+    @Test
     fun error() {
         val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.ACCOUNT_IN_USE)
         doThrow(ex).whenever(rest).postForEntity(

@@ -28,20 +28,20 @@
                             <a class="btn-publish btn btn-primary btn-sm"
                                onclick="return confirm('Are you sure you want to publish this listing online?')"
                                th:href="'/rooms/' + ${room.id} + '/publish'"
-                               th:if="${room.draft} AND ${user?.hasPermission('room:manage')}">Publish</a>
+                               th:if="${room.draft} AND ${room?.managedBy(user)}">Publish</a>
 
                             <a class="btn-edit btn btn-light btn-sm"
                                th:href="'/rooms/' + ${room.id} + '/edit'"
-                               th:if="${user?.hasPermission('room:manage')}">Edit</a>
+                               th:if="${room?.managedBy(user)}">Edit</a>
 
                             <a class="btn-clone btn btn-light btn-sm"
                                th:href="'/rooms/' + ${room.id} + '/clone'"
-                               th:if="${user?.hasPermission('room:manage')}">Copy</a>
+                               th:if="${room?.managedBy(user)}">Copy</a>
 
                             <a class="btn-delete btn btn-danger btn-sm"
                                onclick="return confirm('Are you sure you want to delete?')"
                                th:href="'/rooms/' + ${room.id} + '/delete'"
-                               th:if="${room.draft} AND ${user?.hasPermission('room:manage')}">Delete</a>
+                               th:if="${room.draft} AND ${room?.deletedBy(user)}">Delete</a>
                         </div>
                     </div>
 
@@ -81,7 +81,7 @@
                                         <div class="margin-top-small text-center" th:if="${latitude} AND ${longitude}">
                                             <a class="btn-map btn btn-sm btn-light"
                                                th:href="'/rooms/' + ${room.id} + '/map'"
-                                               th:if="!${room.readOnly} AND ${user?.hasPermission('room:manage')}"
+                                               th:if="!${room.readOnly} AND ${room.managedBy(user)}"
                                             >
                                                 <span th:if="!${room.hasGeoLocation}">Set Geolocation</span>
                                                 <span th:if="${room.hasGeoLocation}">Update Geolocation</span>

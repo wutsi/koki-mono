@@ -66,6 +66,27 @@ class HeroImagePickerControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun `pick - with full_access permission`() {
+        setUpUserWithFullAccessPermissions("room")
+
+        navigateTo("/rooms/${room.id}/hero-image-picker")
+        assertCurrentPageIs(PageName.ROOM_HERO_IMAGE)
+
+        assertElementCount("img.hero-image", images.size - 1)
+
+        val imageId = images.find { img -> img.id != room.heroImageId }!!.id
+        click("#image-$imageId .btn-select")
+
+        verify(rest).postForEntity(
+            "$sdkBaseUrl/v1/rooms/${room.id}/hero-image",
+            SetHeroImageRequest(imageId),
+            Any::class.java
+        )
+
+        assertCurrentPageIs(PageName.ROOM)
+    }
+
+    @Test
     fun `show - without permission room`() {
         setUpUserWithoutPermissions(listOf("room"))
 
@@ -79,8 +100,10 @@ class HeroImagePickerControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/rooms/${room.id}/hero-image-picker")
 
+        assertElementNotPresent(".btn-select")
+
         val imageId = images.find { img -> img.id != room.heroImageId }!!.id
-        click("#image-$imageId .btn-select")
+        navigateTo("/rooms/${room.id}/hero-image-picker/select?file-id=$imageId")
         assertCurrentPageIs(PageName.ERROR_403)
     }
 

@@ -54,6 +54,7 @@ class KokiRooms(
         maxBathrooms: Int?,
         categoryIds: List<Long>,
         accountIds: List<Long>,
+        accountManagerIds: List<Long>,
         limit: Int,
         offset: Int,
     ): SearchRoomResponse {
@@ -73,6 +74,7 @@ class KokiRooms(
                 "neighborhood-id" to neighborhoodId,
                 "category-id" to categoryIds,
                 "account-id" to accountIds,
+                "account-manager-id" to accountManagerIds,
                 "limit" to limit,
                 "offset" to offset,
             )
