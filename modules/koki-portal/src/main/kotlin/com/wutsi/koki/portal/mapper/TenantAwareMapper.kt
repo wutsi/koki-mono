@@ -1,5 +1,7 @@
 package com.wutsi.koki.portal.mapper
 
+import com.google.i18n.phonenumbers.NumberParseException
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.wutsi.koki.portal.tenant.service.CurrentTenantHolder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
@@ -51,6 +53,16 @@ abstract class TenantAwareMapper {
             messages.getMessage("moment.yesterday", emptyArray(), locale) + " - " + timeFormat.format(date)
         } else {
             dateTimeFormat.format(date)
+        }
+    }
+
+    protected fun formatPhoneNumber(number: String, country: String? = null): String {
+        try {
+            val pnu = PhoneNumberUtil.getInstance()
+            val phoneNumber = pnu.parse(number, country ?: "")
+            return pnu.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL)
+        } catch (ex: NumberParseException) {
+            return number
         }
     }
 }

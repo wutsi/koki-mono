@@ -34,6 +34,9 @@
     <td class="d-none d-lg-table-cell">
         <a th:href="'/accounts/' + ${account.id}" th:text="${account.phoneFormatted}">PHONE</a>
     </td>
+    <td class="d-none d-lg-table-cell">
+        <a th:href="'/accounts/' + ${account.id}" th:text="${account.managedBy?.displayName}">MANAGER</a>
+    </td>
 </tr>
 
 <tr id="account-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">

@@ -65,14 +65,14 @@ object ContactFixtures {
         firstName = "Ray",
         lastName = "Sponsible",
         email = "ray.sponsible@gmail.com",
-        phone = "+9188880000",
-        mobile = "+9188880011",
+        phone = "+15147551122",
+        mobile = "+15147551133",
         modifiedById = UserFixtures.users[1].id,
         createdById = UserFixtures.users[1].id,
         profession = "Engineer",
         employer = "Google",
         salutation = "Mr.",
         gender = Gender.MALE,
-        language = "ru",
+        language = "fr",
     )
 }
