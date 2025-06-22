@@ -31,10 +31,10 @@
         <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.email}">EMAIL</a>
     </td>
     <td class="d-none d-sm-table-cell">
-        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.mobile}">MOBILE</a>
+        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.mobileFormatted}">MOBILE</a>
     </td>
     <td class="d-none d-md-table-cell">
-        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.phone}">PHONE</a>
+        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.phoneFormatted}">PHONE</a>
     </td>
     <td class="d-none d-lg-table-cell" th:if="${showAccount}">
         <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.account.name}">ACCOUNT</a>

@@ -40,24 +40,30 @@
                             <b>Contact Type</b><br/>
                             <span th:text="${contact.contactType?.title}">CONTACT TYPE</span>
                         </div>
-                        <div class="margin-right-2x" th:if="${contact.phone}">
-                            <b>Phone</b><br/>
-                            <span th:text="${contact.phone}">PHONE</span>
-                        </div>
-                        <div class="margin-right-2x" th:if="${contact.mobile}">
-                            <b>Mobile</b><br/>
-                            <span th:text="${contact.mobile}">MOBILE</span>
-                        </div>
                         <div class="margin-right-2x" th:if="${contact.email}">
                             <b>Email</b><br/>
                             <a th:href="'mailto:' + ${contact.email}" th:text="${contact.email}">EMAIL</a>
                         </div>
+                        <div class="margin-right-2x" th:if="${contact.mobile}">
+                            <b>Mobile</b><br/>
+                            <a th:href="'tel:' + ${contact.mobile}" th:text="${contact.mobileFormatted}">MOBILE</a>
+                        </div>
+                        <div class="margin-right-2x" th:if="${contact.phone}">
+                            <b>Phone</b><br/>
+                            <a th:href="'tel:' + ${contact.phone}" th:text="${contact.phoneFormatted}">PHONE</a>
+                        </div>
                         <div class="margin-right-2x" th:if="${contact.account}">
                             <b>Account</b><br/>
-                            <a class="entity-title" target="_blank" th:href="'/accounts/' + ${contact.account.id}">
+                            <a class="entity-title"
+                               th:href="'/accounts/' + ${contact.account.id}"
+                               th:if="${contact.account.viewedBy(user)}"
+                            >
                                 <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
                                 <span th:text="${contact.account.name}">ACCOUNT</span>
                             </a>
+                            <span th:if="!${contact.account.viewedBy(user)}"
+                                  th:text="${contact.account.name}"
+                            >ACCOUNT</span>
                         </div>
                     </div>
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
@@ -77,11 +83,14 @@
                             <tr th:if="${contact.account}">
                                 <td><b>Account</b></td>
                                 <td>
-                                    <a class="entity-title" target="_blank"
-                                       th:href="'/accounts/' + ${contact.account.id}">
+                                    <a class="entity-title"
+                                       th:href="'/accounts/' + ${contact.account.id}"
+                                       th:if="${contact.account.viewedBy(user)}">
                                         <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
                                         <span th:text="${contact.account.name}">ACCOUNT</span>
                                     </a>
+                                    <span th:if="!${contact.account.viewedBy(user)}"
+                                          th:text="${contact.account.name}">ACCOUNT</span>
                                 </td>
                             </tr>
                             <tr th:if="${contact.contactType}">
@@ -109,11 +118,17 @@
                             </tr>
                             <tr th:if="${contact.mobile}">
                                 <td><b>Mobile</b></td>
-                                <td th:text="${contact.mobile}">MOBILE</td>
+                                <td>
+                                    <a th:href="'tel:' + ${contact.mobile}"
+                                       th:text="${contact.mobileFormatted}">MOBILE</a>
+                                </td>
                             </tr>
                             <tr th:if="${contact.phone}">
                                 <td><b>Phone</b></td>
-                                <td th:text="${contact.phone}">PHONE</td>
+                                <td>
+                                    <a th:href="'tel:' + ${contact.phone}"
+                                       th:text="${contact.phoneFormatted}">PHONE</a>
+                                </td>
                             </tr>
                             <tr th:if="${contact.profession}">
                                 <td><b>Profession</b></td>

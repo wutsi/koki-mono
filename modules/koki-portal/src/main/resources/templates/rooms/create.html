@@ -36,10 +36,8 @@
                                         ACCOUNT
                                     </option>
                                 </select>
-                                <div th:if="${user?.hasPermission('account')}">
-                                    <script
-                                        th:replace="~{__components/account :: account-selector('accountId')}"></script>
-                                </div>
+                                <script
+                                    th:replace="~{__components/account :: account-selector('accountId')}"></script>
                             </div>
 
                             <div class="section-item">

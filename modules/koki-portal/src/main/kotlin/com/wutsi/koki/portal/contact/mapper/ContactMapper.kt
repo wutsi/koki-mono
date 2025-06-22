@@ -33,6 +33,8 @@ class ContactMapper : TenantAwareMapper() {
             lastName = entity.lastName,
             phone = entity.phone,
             mobile = entity.mobile,
+            phoneFormatted = entity.phone?.let { number -> formatPhoneNumber(number) },
+            mobileFormatted = entity.mobile?.let { number -> formatPhoneNumber(number) },
             email = entity.email,
         )
     }
@@ -58,6 +60,8 @@ class ContactMapper : TenantAwareMapper() {
             lastName = entity.lastName,
             phone = entity.phone,
             mobile = entity.mobile,
+            phoneFormatted = entity.phone?.let { number -> formatPhoneNumber(number) },
+            mobileFormatted = entity.mobile?.let { number -> formatPhoneNumber(number) },
             email = entity.email,
             profession = entity.profession,
             employer = entity.employer,

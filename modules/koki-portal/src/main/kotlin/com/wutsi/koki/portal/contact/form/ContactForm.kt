@@ -10,6 +10,8 @@ data class ContactForm(
     val lastName: String = "",
     val phone: String? = null,
     val mobile: String? = null,
+    val phoneFull: String? = null,
+    val mobileFull: String? = null,
     val email: String? = null,
     val gender: Gender = Gender.UNKNOWN,
     val profession: String? = null,

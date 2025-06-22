@@ -15,6 +15,8 @@ data class ContactModel(
     val lastName: String = "",
     val phone: String? = null,
     val mobile: String? = null,
+    val phoneFormatted: String? = null,
+    val mobileFormatted: String? = null,
     val email: String? = null,
     val gender: Gender = Gender.UNKNOWN,
     val language: String? = null,

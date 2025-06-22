@@ -49,20 +49,28 @@ class CreateRoomController(
 
     private fun createRoom(account: AccountModel?): RoomForm {
         var accountId = account?.id
+        var country = account?.shippingAddress?.country
+        var cityId = account?.shippingAddress?.city?.id
         if (accountId == null) {
+            // Get all the accounts of the user
             val accounts = accountService.accounts(
                 managedByIds = userHolder.get()?.let { user -> listOf(user.id) } ?: emptyList(),
                 limit = 2,
             )
+
+            // Get the primary account details
             if (accounts.size == 1) {
                 accountId = accounts.first().id
+                val act = accountService.account(accountId)
+                country = act.shippingAddress?.country
+                cityId = act.shippingAddress?.city?.id
             }
         }
         return RoomForm(
             currency = tenantHolder.get()?.currency,
             accountId = accountId ?: -1,
-            country = account?.shippingAddress?.country,
-            cityId = account?.shippingAddress?.city?.id,
+            country = country,
+            cityId = cityId,
         )
     }
 
