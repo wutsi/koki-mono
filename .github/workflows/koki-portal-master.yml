@@ -101,4 +101,4 @@ jobs:
                 run: |
                     sleep 45
                     echo ${APP_URL}
-                    curl -sSf ${APP_URL}/actuator/health >> /dev/null || sleep 30 || curl -sSf ${APP_URL}/actuator/health >> /dev/null
+                    curl -sSf ${APP_URL}/actuator/health >> /dev/null
