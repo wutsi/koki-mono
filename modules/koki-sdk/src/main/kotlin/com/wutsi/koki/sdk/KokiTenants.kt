@@ -1,5 +1,6 @@
 package com.wutsi.koki.sdk
 
+import com.wutsi.koki.tenant.dto.GetTenantResponse
 import com.wutsi.koki.tenant.dto.SearchTenantResponse
 import org.springframework.web.client.RestTemplate
 
@@ -9,6 +10,11 @@ class KokiTenants(
 ) {
     companion object {
         private const val PATH_PREFIX = "/v1/tenants"
+    }
+
+    fun tenant(id: Long): GetTenantResponse {
+        val url = urlBuilder.build("$PATH_PREFIX/$id")
+        return rest.getForEntity(url, GetTenantResponse::class.java).body
     }
 
     fun tenants(): SearchTenantResponse {
