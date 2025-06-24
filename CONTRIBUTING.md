@@ -48,9 +48,12 @@ Setup the following environment variable need for building and running the appli
 
 - **GEMINI_API_KEY**: API Key of [Google Gemini](https://gemini.google.com). You can obtain you API
   key [here](https://aistudio.google.com/app/apikey)
-
 - **STRIPE_API_KEY**: API Key of [Stripe](https://stripe.com/). You can obtain your API
   key [here](https://dashboard.stripe.com/test/apikeys)
+- **DEEPSEEK_API_KEY**: API Key of [Deepseek](https://www.deepseek.com).
+- **TELEGRAM_TOKEN**: Token of Telegram Chatbot.
+- **TELEGRAM_CHATBOT**: Name of the Telegram Chatbot.
+- **BITLY_API_KEY**: API key of [Bitly](https://www.bitly.com) service.
 
 ------------------------------------------------------------
 
