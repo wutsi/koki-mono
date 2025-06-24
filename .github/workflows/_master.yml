@@ -47,6 +47,8 @@ jobs:
                     STRIPE_API_KEY: ${{secrets.STRIPE_API_KEY_TEST}}
                     DEEPSEEK_API_KEY: ${{secrets.DEEPSEEK_API_KEY_TEST}}
                     BITLY_API_KEY: ${{secrets.BITLY_API_KEY_TEST}}
+                    TELEGRAM_TOKEN: ${{secrets.TELEGRAM_TOKEN_TEST}}
+                    TELEGRAM_CHATBOT: ${{secrets.TELEGRAM_CHATBOT_TEST}}
                 run: |
                     mvn -s settings.xml validate
                     mvn -s settings.xml --non-recursive install
