@@ -70,8 +70,6 @@ jobs:
                 env:
                     HEROKU_APP: koki-chatbot-telegram-test
                     HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY_TEST}}
-                    AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY_TEST}}
-                    AWS_SECRET_KEY: ${{secrets.AWS_SECRET_KEY_TEST}}
                     DEEPSEEK_API_KEY: ${{secrets.DEEPSEEK_API_KEY_TEST}}
                     TELEGRAM_TOKEN: ${{secrets.TELEGRAM_TOKEN_TEST}}
                     TELEGRAM_CHATBOT: ${{secrets.TELEGRAM_CHATBOT_TEST}}
@@ -80,8 +78,6 @@ jobs:
                     heroku buildpacks:clear --app ${HEROKU_APP}
                     heroku buildpacks:add heroku/jvm --app ${HEROKU_APP}
                     heroku config:set --app ${HEROKU_APP} APP_PROFILE=test
-                    heroku config:set --app ${HEROKU_APP} AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
-                    heroku config:set --app ${HEROKU_APP} AWS_SECRET_KEY=${AWS_SECRET_KEY}
                     heroku config:set --app ${HEROKU_APP} TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
                     heroku config:set --app ${HEROKU_APP} TELEGRAM_CHATBOT=${TELEGRAM_CHATBOT}
                     heroku config:set --app ${HEROKU_APP} DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
@@ -92,7 +88,7 @@ jobs:
 
             -   name: Health check
                 env:
-                    APP_URL: ${{secrets.KOKI_SERVER_URL_TEST}}
+                    APP_URL: ${{secrets.KOKI_CHATBOT_TELEGRAM_URL_TEST}}
                 run: |
                     sleep 45
                     echo ${APP_URL}
