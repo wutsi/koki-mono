@@ -12,7 +12,9 @@ import com.wutsi.koki.platform.ai.llm.Message
 import com.wutsi.koki.platform.ai.llm.Role
 import com.wutsi.koki.platform.ai.llm.Tool
 import com.wutsi.koki.platform.ai.llm.Type
+import org.junit.jupiter.api.AfterEach
 import org.springframework.http.MediaType
+import kotlin.system.measureTimeMillis
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -24,6 +26,7 @@ class GeminiTest {
         val models = llm.models()
         assertEquals(
             listOf(
+                "gemini-2.5-flash",
                 "gemini-2.0-flash",
                 "gemini-2.0-flash-lite",
                 "gemini-1.5-pro",
@@ -34,18 +37,44 @@ class GeminiTest {
         )
     }
 
+    @AfterEach
+    fun tearDown() {
+        Thread.sleep(10000)
+    }
+
     @Test
     fun generateText() {
-        val response = llm.generateContent(
-            request = LLMRequest(
-                messages = listOf(
-                    Message(
-                        text = "What is an API"
+        var response: LLMResponse = LLMResponse()
+        val time = measureTimeMillis {
+            response = llm.generateContent(
+                request = LLMRequest(
+                    messages = listOf(
+                        Message(
+                            text = "What is an API"
+                        )
                     )
                 )
             )
-        )
-        println("${response.messages.size} message(s)")
+        }
+        println("${response.messages.size} message(s). duration=$time ms")
+        response.messages.forEach { message -> println(message.text) }
+    }
+
+    @Test
+    fun gemeni25() {
+        var response: LLMResponse = LLMResponse()
+        val time = measureTimeMillis {
+            response = createGemini("gemini-2.5-flash").generateContent(
+                request = LLMRequest(
+                    messages = listOf(
+                        Message(
+                            text = "What is an API"
+                        )
+                    )
+                )
+            )
+        }
+        println("${response.messages.size} message(s). duration=$time ms")
         response.messages.forEach { message -> println(message.text) }
     }
 
@@ -201,10 +230,10 @@ class GeminiTest {
         print(response)
     }
 
-    private fun createGemini(): LLM {
+    private fun createGemini(model: String = "gemini-2.0-flash"): LLM {
         return Gemini(
             apiKey = System.getenv("GEMINI_API_KEY"),
-            model = "gemini-2.0-flash",
+            model = model,
         )
     }
 
