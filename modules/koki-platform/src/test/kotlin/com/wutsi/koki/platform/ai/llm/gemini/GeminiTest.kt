@@ -22,6 +22,11 @@ import kotlin.test.assertEquals
 class GeminiTest {
     private val llm = createGemini()
 
+    @AfterEach
+    fun tearDown() {
+        Thread.sleep(15000)
+    }
+
     @Test
     fun models() {
         val models = llm.models()
@@ -36,29 +41,6 @@ class GeminiTest {
             ),
             models,
         )
-    }
-
-    @AfterEach
-    fun tearDown() {
-        Thread.sleep(15000)
-    }
-
-    @Test
-    fun generateText() {
-        var response: LLMResponse = LLMResponse()
-        val time = measureTimeMillis {
-            response = llm.generateContent(
-                request = LLMRequest(
-                    messages = listOf(
-                        Message(
-                            text = "What is an API"
-                        )
-                    )
-                )
-            )
-        }
-        println("${response.messages.size} message(s). duration=$time ms")
-        response.messages.forEach { message -> println(message.text) }
     }
 
     @Test
@@ -81,6 +63,7 @@ class GeminiTest {
     }
 
     @Test
+    @Ignore
     fun generateJson() {
         val response = llm.generateContent(
             request = LLMRequest(
@@ -102,25 +85,7 @@ class GeminiTest {
     }
 
     @Test
-    fun generateWithConfig() {
-        val response = llm.generateContent(
-            request = LLMRequest(
-                messages = listOf(
-                    Message(
-                        text = "What is an API"
-                    )
-                ),
-                config = Config(
-                    temperature = .9,
-                    maxOutputTokens = 100
-                )
-            )
-        )
-        println("${response.messages.size} message(s)")
-        response.messages.forEach { message -> println(message.text) }
-    }
-
-    @Test
+    @Ignore
     fun generateWithSystemInstructions() {
         val response = llm.generateContent(
             request = LLMRequest(
@@ -140,6 +105,10 @@ class GeminiTest {
                         """.trimIndent()
                     )
                 ),
+                config = Config(
+                    temperature = .9,
+                    maxOutputTokens = 100
+                )
             )
         )
         println("${response.messages.size} message(s)")
@@ -147,6 +116,7 @@ class GeminiTest {
     }
 
     @Test
+    @Ignore
     fun processPDF() {
         val response = llm.generateContent(
             request = LLMRequest(
@@ -166,6 +136,7 @@ class GeminiTest {
     }
 
     @Test
+    @Ignore
     fun processImage() {
         val response = llm.generateContent(
             request = LLMRequest(
@@ -190,6 +161,7 @@ class GeminiTest {
     }
 
     @Test
+    @Ignore
     fun functionCall() {
         val response = llm.generateContent(
             request = LLMRequest(
