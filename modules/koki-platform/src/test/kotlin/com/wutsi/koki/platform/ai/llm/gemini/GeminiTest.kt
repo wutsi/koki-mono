@@ -39,7 +39,7 @@ class GeminiTest {
 
     @AfterEach
     fun tearDown() {
-        Thread.sleep(10000)
+        Thread.sleep(15000)
     }
 
     @Test
