@@ -1,0 +1,39 @@
+name: koki-chatbot-telegram-pr
+
+on:
+    pull_request:
+        paths:
+            - 'modules/koki-chatbot-telegram/**'
+            - '.github/workflows/koki-chatbot-telegram-pr.yml'
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            -   uses: actions/checkout@v4
+            -   name: JDK
+                uses: actions/setup-java@v4
+                with:
+                    distribution: 'zulu'
+                    java-version: 17
+            -   name: Build
+                env:
+                    GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+                    DEEPSEEK_API_KEY: ${{secrets.DEEPSEEK_API_KEY_TEST}}
+                    TELEGRAM_TOKEN: ${{secrets.TELEGRAM_TOKEN_TEST}}
+                    TELEGRAM_CHATBOT: ${{secrets.TELEGRAM_CHATBOT_TEST}}
+                run: |
+                    mvn -q -s settings.xml --non-recursive install
+                    cd modules/koki-chatbot-telegram
+                    mvn -q -s ../../settings.xml package
+
+            -   name: Add coverage to PR
+                id: jacoco
+                uses: madrapps/jacoco-report@v1.7.2
+                with:
+                    paths: |
+                        ${{ github.workspace }}/modules/koki-chatbot-telegram/target/site/jacoco/jacoco.xml
+                    token: ${{ secrets.GITHUB_TOKEN }}
+                    min-coverage-overall: 90
+                    min-coverage-changed-files: 90

@@ -26,3 +26,7 @@
 [![koki-room-web](https://github.com/wutsi/koki-mono/actions/workflows/koki-room-web-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-room-web-master.yml)
 [![koki-room-web-pr](https://github.com/wutsi/koki-mono/actions/workflows/koki-room-web-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-room-web-pr.yml)
 ![Coverage](.github/badges/koki-room-web-jococo.svg)
+
+[![koki-chatbot-telegram](https://github.com/wutsi/koki-mono/actions/workflows/koki-chatbot-telegram-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-chatbot-telegram-master.yml)
+[![koki-chatbot-telegram-pr](https://github.com/wutsi/koki-mono/actions/workflows/koki-chatbot-telegram-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-chatbot-telegram-pr.yml)
+![Coverage](.github/badges/koki-chatbot-telegram-jococo.svg)
