@@ -52,7 +52,7 @@ class SettingsEditAIControllerTest : AbstractPageControllerTest() {
         assertEquals(3, request.firstValue.values.size)
         assertEquals("GEMINI", request.firstValue.values[ConfigurationName.AI_PROVIDER])
         assertEquals("1111", request.firstValue.values[ConfigurationName.AI_PROVIDER_GEMINI_API_KEY])
-        assertEquals("gemini-2.0-flash-lite", request.firstValue.values[ConfigurationName.AI_PROVIDER_GEMINI_MODEL])
+        assertEquals("gemini-2.0-flash", request.firstValue.values[ConfigurationName.AI_PROVIDER_GEMINI_MODEL])
     }
 
     @Test
