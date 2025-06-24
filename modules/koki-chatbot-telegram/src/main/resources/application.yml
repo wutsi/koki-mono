@@ -83,3 +83,7 @@ koki:
     telegram:
         bot-name: ${TELEGRAM_CHATBOT}
         token: ${TELEGRAM_TOKEN}
+
+    url:
+        bitly:
+            api-key: ${BITLY_API_KEY}

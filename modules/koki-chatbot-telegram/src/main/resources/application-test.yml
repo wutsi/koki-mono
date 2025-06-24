@@ -1,3 +1,7 @@
 logging:
     level:
         com.wutsi: INFO
+
+koki:
+    sdk:
+        base-url: ${KOKI_SERVER_URL}

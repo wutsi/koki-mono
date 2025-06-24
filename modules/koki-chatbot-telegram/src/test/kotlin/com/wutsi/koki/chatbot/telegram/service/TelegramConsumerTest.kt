@@ -15,10 +15,12 @@ import com.wutsi.koki.chatbot.ai.data.SearchAgentData
 import com.wutsi.koki.chatbot.telegram.tenant.mapper.TenantMapper
 import com.wutsi.koki.chatbot.telegram.tenant.service.TenantService
 import com.wutsi.koki.platform.tenant.TenantProvider
+import com.wutsi.koki.platform.url.UrlShortener
 import com.wutsi.koki.sdk.KokiTenants
 import com.wutsi.koki.tenant.dto.GetTenantResponse
 import com.wutsi.koki.tenant.dto.Tenant
 import com.wutsi.koki.tenant.dto.TenantStatus
+import jdk.jfr.internal.consumer.EventLog.update
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
@@ -39,6 +41,7 @@ class TelegramConsumerTest {
     private val tenantService = TenantService(koki = kokiTenants, mapper = TenantMapper())
     private val objectMapper = ObjectMapper()
     private val agentFactory = mock<AgentFactory>()
+    private val urlShortener = mock<UrlShortener>()
     private val consumer = TelegramConsumer(
         client = client,
         agentFactory = agentFactory,
@@ -46,6 +49,7 @@ class TelegramConsumerTest {
         tenantService = tenantService,
         objectMapper = objectMapper,
         executorService = Executors.newSingleThreadExecutor(),
+        urlShortener = urlShortener,
     )
 
     private val agent = mock<SearchAgent>()
@@ -136,7 +140,14 @@ class TelegramConsumerTest {
 
     @Test
     fun search() {
-        consumer.consume(listOf(createUpdate("/search Im looking for apartment in Yaounde")))
+        val url1 = "https://bit.ly/1"
+        val url2 = "https://bit.ly/2"
+        doReturn(url1)
+            .doReturn(url2)
+            .whenever(urlShortener).shorten(any())
+
+        val update = createUpdate("/search Im looking for apartment in Yaounde", language = "en")
+        consumer.consume(listOf(update))
         Thread.sleep(1000)
 
         verify(agent).run("Im looking for apartment in Yaounde")
@@ -144,8 +155,11 @@ class TelegramConsumerTest {
         val msg = argumentCaptor<SendMessage>()
         verify(client, times(data.properties.size + 1)).execute(msg.capture())
         assertEquals(TelegramConsumer.ANSWER_SEARCHING, msg.firstValue.text)
-        assertEquals(true, msg.secondValue.text.contains(tenant.clientPortalUrl + data.properties[0].url))
-        assertEquals(true, msg.thirdValue.text.contains(tenant.clientPortalUrl + data.properties[1].url))
+        assertEquals(true, msg.secondValue.text.contains(url1))
+        assertEquals(true, msg.thirdValue.text.contains(url2))
+
+        verify(urlShortener).shorten("${tenant.clientPortalUrl}${data.properties[0].url}?lang=en&utm-medium=telegram")
+        verify(urlShortener).shorten("${tenant.clientPortalUrl}${data.properties[1].url}?lang=en&utm-medium=telegram")
     }
 
     @Test
@@ -176,11 +190,11 @@ class TelegramConsumerTest {
         assertEquals(TelegramConsumer.ANSWER_FAILURE, msg.secondValue.text)
     }
 
-    private fun createUpdate(text: String, bot: Boolean = false): Update {
+    private fun createUpdate(text: String, bot: Boolean = false, language: String = "en"): Update {
         val update = Update()
         update.message = Message()
         update.message.from = User(11L, "Ray Sponsible", bot)
-        update.message.from.languageCode = "en"
+        update.message.from.languageCode = language
         update.message.chat = Chat(123, "channel")
         update.message.text = text
 
