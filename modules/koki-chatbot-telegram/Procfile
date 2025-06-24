@@ -1,0 +1,1 @@
+web: java $JAVA_OPTS -Dserver.port=$PORT -jar koki-chatbot-telegram.jar --spring.profiles.active=$APP_PROFILE
