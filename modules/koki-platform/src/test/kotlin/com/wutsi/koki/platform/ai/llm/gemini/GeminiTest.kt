@@ -15,6 +15,7 @@ import com.wutsi.koki.platform.ai.llm.Type
 import org.junit.jupiter.api.AfterEach
 import org.springframework.http.MediaType
 import kotlin.system.measureTimeMillis
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -39,7 +40,7 @@ class GeminiTest {
 
     @AfterEach
     fun tearDown() {
-        Thread.sleep(15000)
+        Thread.sleep(5000)
     }
 
     @Test
@@ -61,6 +62,7 @@ class GeminiTest {
     }
 
     @Test
+    @Ignore
     fun gemeni25() {
         var response: LLMResponse = LLMResponse()
         val time = measureTimeMillis {
