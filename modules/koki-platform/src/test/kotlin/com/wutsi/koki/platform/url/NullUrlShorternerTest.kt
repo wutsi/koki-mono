@@ -7,7 +7,7 @@ class NullUrlShorternerTest {
     val shortener = NullUrlShortener()
 
     @Test
-    fun shorten(){
+    fun shorten() {
         val url = "https://www.google.ca"
         assertEquals(url, shortener.shorten(url))
     }

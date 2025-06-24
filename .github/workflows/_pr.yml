@@ -46,6 +46,7 @@ jobs:
                     GEMINI_API_KEY: ${{secrets.GEMINI_API_KEY_TEST}}
                     STRIPE_API_KEY: ${{secrets.STRIPE_API_KEY_TEST}}
                     DEEPSEEK_API_KEY: ${{secrets.DEEPSEEK_API_KEY_TEST}}
+                    BITLY_API_KEY: ${{secrets.BITLY_API_KEY_TEST}}
                 run: |
                     mvn -s settings.xml validate
                     mvn -q -s settings.xml --non-recursive install
