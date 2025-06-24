@@ -6,6 +6,7 @@ import com.wutsi.koki.chatbot.ai.data.SearchAgentData
 import com.wutsi.koki.chatbot.telegram.tenant.model.TenantModel
 import com.wutsi.koki.chatbot.telegram.tenant.service.TenantService
 import com.wutsi.koki.platform.tenant.TenantProvider
+import com.wutsi.koki.platform.url.UrlShortener
 import org.slf4j.LoggerFactory
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer
 import org.telegram.telegrambots.meta.api.methods.ParseMode
@@ -23,6 +24,7 @@ class TelegramConsumer(
     private val tenantService: TenantService,
     private val objectMapper: ObjectMapper,
     private val executorService: ExecutorService,
+    private val urlShortener: UrlShortener,
 ) : LongPollingUpdateConsumer {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(TelegramConsumer::class.java)
@@ -115,7 +117,9 @@ class TelegramConsumer(
                 val location = listOf(property.neighborhood, property.city).filterNotNull().joinToString(", ")
 
                 // URL
-                val url = "${tenant.clientPortalUrl}${property.url}?lang=$language"
+                val url = urlShortener.shorten(
+                    "${tenant.clientPortalUrl}${property.url}?lang=$language&utm-medium=telegram"
+                )
 
                 sendText("$title\n$location\n\n$url", update)
             }

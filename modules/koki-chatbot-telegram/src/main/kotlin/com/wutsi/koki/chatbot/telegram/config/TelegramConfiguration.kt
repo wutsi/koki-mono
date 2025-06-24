@@ -7,6 +7,7 @@ import com.wutsi.koki.chatbot.telegram.service.TelegramConsumer
 import com.wutsi.koki.chatbot.telegram.tenant.service.TenantService
 import com.wutsi.koki.platform.ai.llm.LLM
 import com.wutsi.koki.platform.tenant.TenantProvider
+import com.wutsi.koki.platform.url.UrlShortener
 import com.wutsi.koki.sdk.KokiRefData
 import com.wutsi.koki.sdk.KokiRooms
 import org.springframework.beans.factory.annotation.Value
@@ -26,6 +27,7 @@ class TelegramConfiguration(
     private val tenantService: TenantService,
     private val objectMapper: ObjectMapper,
     private val executorService: ExecutorService,
+    private val urlShortener: UrlShortener,
 
     @Value("\${koki.telegram.token}") private val token: String,
 ) {
@@ -47,7 +49,8 @@ class TelegramConfiguration(
             tenantService = tenantService,
             objectMapper = objectMapper,
             executorService = executorService,
-            agentFactory = agentFactory()
+            agentFactory = agentFactory(),
+            urlShortener = urlShortener,
         )
     }
 
