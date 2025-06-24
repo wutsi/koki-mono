@@ -5,4 +5,5 @@ data class GGenerationConfig(
     val topP: Double? = null,
     val topK: Double? = null,
     val maxOutputTokens: Int? = null,
+    val thinkingConfig: GThinkingConfig? = null,
 )

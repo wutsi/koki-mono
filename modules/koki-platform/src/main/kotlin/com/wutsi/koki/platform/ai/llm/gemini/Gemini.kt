@@ -1,5 +1,6 @@
 package com.wutsi.koki.platform.ai.llm.gemini
 
+import com.wutsi.koki.platform.ai.llm.Config
 import com.wutsi.koki.platform.ai.llm.FunctionCall
 import com.wutsi.koki.platform.ai.llm.LLM
 import com.wutsi.koki.platform.ai.llm.LLMException
@@ -14,6 +15,7 @@ import com.wutsi.koki.platform.ai.llm.gemini.model.GGenerateContentResponse
 import com.wutsi.koki.platform.ai.llm.gemini.model.GGenerationConfig
 import com.wutsi.koki.platform.ai.llm.gemini.model.GInlineData
 import com.wutsi.koki.platform.ai.llm.gemini.model.GPart
+import com.wutsi.koki.platform.ai.llm.gemini.model.GThinkingConfig
 import org.apache.commons.io.IOUtils
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.http.MediaType
@@ -35,6 +37,7 @@ class Gemini(
 
     override fun models(): List<String> {
         return listOf(
+            "gemini-2.5-flash",
             "gemini-2.0-flash",
             "gemini-2.0-flash-lite",
             "gemini-1.5-pro",
@@ -62,14 +65,7 @@ class Gemini(
                     ).filterNotNull()
                 )
             },
-            generationConfig = request.config?.let { config ->
-                GGenerationConfig(
-                    temperature = config.temperature,
-                    topP = config.topP,
-                    topK = config.topK,
-                    maxOutputTokens = config.maxOutputTokens,
-                )
-            },
+            generationConfig = createConfig(request.config),
             tools = request.tools,
             toolConfig = request.toolConfig,
         )
@@ -122,6 +118,33 @@ class Gemini(
         }
     }
 
+    private fun createConfig(config: Config?): GGenerationConfig? {
+        if (config == null) {
+            if (supportsThinking()) {
+                return GGenerationConfig(
+                    thinkingConfig = GThinkingConfig(
+                        thinkingBudget = 0
+                    )
+                )
+            }
+        } else {
+            return GGenerationConfig(
+                temperature = config.temperature,
+                topP = config.topP,
+                topK = config.topK,
+                maxOutputTokens = config.maxOutputTokens,
+                thinkingConfig = if (supportsThinking()) {
+                    GThinkingConfig(
+                        thinkingBudget = 0
+                    )
+                } else {
+                    null
+                }
+            )
+        }
+        return null
+    }
+
     private fun toRole(role: Role): String {
         return when (role) {
             Role.USER -> "user"
@@ -148,5 +171,17 @@ class Gemini(
         }
 
         return text.substring(startIndex, endIndex + 1)
+    }
+
+    private fun supportsThinking(): Boolean {
+        val version = getModelVersion().toDouble()
+        return version >= 2.5
+    }
+
+    private fun getModelVersion(): String {
+        // gemini-2.5-flash
+        val i = "gemini-".length
+        val j = model.indexOf("-", i)
+        return model.substring(i, j)
     }
 }
