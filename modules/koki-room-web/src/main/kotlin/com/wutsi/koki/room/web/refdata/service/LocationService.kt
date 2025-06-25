@@ -1,7 +1,8 @@
-package com.wutsi.koki.room.web.refdata.model
+package com.wutsi.koki.room.web.refdata.service
 
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.room.web.refdata.mapper.LocationMapper
+import com.wutsi.koki.room.web.refdata.model.LocationModel
 import com.wutsi.koki.sdk.KokiRefData
 import org.springframework.stereotype.Service
 

@@ -5,15 +5,9 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.platform.security.AccessTokenHolder
 import com.wutsi.koki.refdata.dto.GetLocationResponse
-import com.wutsi.koki.refdata.dto.SearchAmenityResponse
-import com.wutsi.koki.refdata.dto.SearchCategoryResponse
-import com.wutsi.koki.refdata.dto.SearchJuridictionResponse
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
-import com.wutsi.koki.refdata.dto.SearchSalesTaxResponse
-import com.wutsi.koki.refdata.dto.SearchUnitResponse
-import com.wutsi.koki.security.dto.JWTDecoder
+import com.wutsi.koki.room.dto.SearchRoomLocationMetricResponse
 import com.wutsi.koki.tenant.dto.GetTenantResponse
 import com.wutsi.koki.tenant.dto.SearchTenantResponse
 import org.junit.jupiter.api.BeforeEach
@@ -30,7 +24,7 @@ import org.springframework.web.client.RestTemplate
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-abstract class AbstractControllerTest {
+abstract class AbstractTest {
     @LocalServerPort
     protected val port: Int = 0
 
@@ -59,6 +53,7 @@ abstract class AbstractControllerTest {
     protected fun setupDefaultApiResponses() {
         setupRefDataModule()
         setupTenantModule()
+        setupRoomModule()
     }
 
     private fun setupRefDataModule() {
@@ -86,13 +81,11 @@ abstract class AbstractControllerTest {
             )
     }
 
-    private fun setupTenantModule(){
+    private fun setupTenantModule() {
         // Tenant
         doReturn(
             ResponseEntity(
-                SearchTenantResponse(
-                    TenantFixtures.tenants.map { tenant -> tenant.copy(clientPortalUrl = "http://localhost:$port") }
-                ),
+                SearchTenantResponse(TenantFixtures.tenants),
                 HttpStatus.OK,
             )
         ).whenever(restWithoutTenantHeader)
@@ -103,15 +96,27 @@ abstract class AbstractControllerTest {
 
         doReturn(
             ResponseEntity(
-                GetTenantResponse(
-                    TenantFixtures.tenants[0].copy(clientPortalUrl = "http://localhost:$port")
-                ),
+                GetTenantResponse(TenantFixtures.tenants[0]),
                 HttpStatus.OK,
             )
         ).whenever(restWithoutTenantHeader)
             .getForEntity(
                 any<String>(),
                 eq(GetTenantResponse::class.java)
+            )
+    }
+
+    fun setupRoomModule() {
+        // Location Metrics
+        doReturn(
+            ResponseEntity(
+                SearchRoomLocationMetricResponse(RoomFixtures.metrics),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchRoomLocationMetricResponse::class.java)
             )
     }
 }

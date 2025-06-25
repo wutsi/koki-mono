@@ -16,6 +16,15 @@ class SearchAgent(
 
             Return the properties found in an JSON array with the following information for each entry:
             {
+              "searchParameters": {
+                 "cityId": 111,  /* ID of the city requested by the user in the query */
+                 "city": "Name of city requested by the user in the query",
+                 "neighborhoodId": 222, /* ID of the neighborhood requested by the user in the query */
+                 "neighborhood": "Name of the neighborhood requested by the user in the query",
+                 "propertyType": "Property type searched"
+                 "minBedrooms": 4,
+                 "maxBedrooms": null
+              }
               "properties":[
                 {
                     "url": "URL of the property listing",

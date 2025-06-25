@@ -28,6 +28,7 @@ class RoomLocationMetricEndpoints(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false, name = "id") ids: List<Long> = emptyList(),
         @RequestParam(name = "location-type", required = false) locationType: LocationType? = null,
+        @RequestParam(name = "location-id", required = false) locationId: Long? = null,
         @RequestParam(name = "parent-location-id", required = false) parentLocationId: Long? = null,
         @RequestParam(required = false) country: String? = null,
         @RequestParam(required = false) limit: Int = 20,
@@ -36,6 +37,7 @@ class RoomLocationMetricEndpoints(
         val entities = service.search(
             tenantId = tenantId,
             ids = ids,
+            locationId = locationId,
             parentLocationId = parentLocationId,
             locationType = locationType,
             country = country,

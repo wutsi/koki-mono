@@ -1,8 +1,8 @@
-package com.wutsi.koki.room.web.room.mapper
+package com.wutsi.koki.chatbot.telegram.room.mapper
 
+import com.wutsi.koki.chatbot.telegram.refdata.model.LocationModel
+import com.wutsi.koki.chatbot.telegram.room.model.RoomLocationMetricModel
 import com.wutsi.koki.room.dto.RoomLocationMetric
-import com.wutsi.koki.room.web.refdata.model.LocationModel
-import com.wutsi.koki.room.web.room.model.RoomLocationMetricModel
 import org.springframework.stereotype.Service
 
 @Service
