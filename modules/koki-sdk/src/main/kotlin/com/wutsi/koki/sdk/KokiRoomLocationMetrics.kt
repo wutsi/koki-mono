@@ -14,6 +14,7 @@ class KokiRoomLocationMetrics(
 
     fun metrics(
         ids: List<Long>,
+        locationId: Long?,
         parentLocationId: Long?,
         locationType: LocationType?,
         country: String?,
@@ -24,6 +25,7 @@ class KokiRoomLocationMetrics(
             PATH_PREFIX,
             mapOf(
                 "id" to ids,
+                "location-id" to locationId,
                 "parent-location-id" to parentLocationId,
                 "location-type" to locationType,
                 "country" to country,
