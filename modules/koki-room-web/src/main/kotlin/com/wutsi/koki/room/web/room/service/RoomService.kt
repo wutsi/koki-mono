@@ -9,9 +9,9 @@ import com.wutsi.koki.room.web.account.service.AccountService
 import com.wutsi.koki.room.web.file.model.FileModel
 import com.wutsi.koki.room.web.file.service.FileService
 import com.wutsi.koki.room.web.refdata.model.AmenityModel
-import com.wutsi.koki.room.web.refdata.model.AmenityService
 import com.wutsi.koki.room.web.refdata.model.LocationModel
-import com.wutsi.koki.room.web.refdata.model.LocationService
+import com.wutsi.koki.room.web.refdata.service.AmenityService
+import com.wutsi.koki.room.web.refdata.service.LocationService
 import com.wutsi.koki.room.web.room.mapper.RoomMapper
 import com.wutsi.koki.room.web.room.model.MapMarkerModel
 import com.wutsi.koki.room.web.room.model.RoomModel

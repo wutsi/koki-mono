@@ -1,7 +1,7 @@
 package com.wutsi.koki.room.web.room.service
 
 import com.wutsi.koki.refdata.dto.LocationType
-import com.wutsi.koki.room.web.refdata.model.LocationService
+import com.wutsi.koki.room.web.refdata.service.LocationService
 import com.wutsi.koki.room.web.room.mapper.RoomLocationMetricMapper
 import com.wutsi.koki.room.web.room.model.RoomLocationMetricModel
 import com.wutsi.koki.sdk.KokiRoomLocationMetrics
@@ -15,6 +15,7 @@ class RoomLocationMetricService(
 ) {
     fun metrics(
         ids: List<Long> = emptyList(),
+        locationId: Long? = null,
         parentLocationId: Long? = null,
         locationType: LocationType? = null,
         country: String? = null,
@@ -23,6 +24,7 @@ class RoomLocationMetricService(
     ): List<RoomLocationMetricModel> {
         val entities = koki.metrics(
             ids = ids,
+            locationId = locationId,
             parentLocationId = parentLocationId,
             locationType = locationType,
             country = country,

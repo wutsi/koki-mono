@@ -1,12 +1,11 @@
 package com.wutsi.koki.chatbot.telegram.service
 
-import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
-import org.checkerframework.checker.units.qual.t
+import com.wutsi.koki.chatbot.telegram.AbstractTest
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.mockito.Mockito.mock
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.User
@@ -15,33 +14,33 @@ import org.telegram.telegrambots.meta.api.objects.message.Message
 import org.telegram.telegrambots.meta.generics.TelegramClient
 import kotlin.test.Test
 
-class BotHandlerTest {
-    private val client = mock<TelegramClient>()
-    private val handler = BotHandler(client = client)
+class HelpHandlerTest : AbstractTest() {
+    @MockitoBean
+    private lateinit var client: TelegramClient
+
+    @Autowired
+    private lateinit var handler: HelpHandler
 
     @Test
-    fun bot() {
-        handler.handle(createUpdate("yo", bot = true))
+    fun handle() {
+        handler.handle(createUpdate())
 
         val msg = argumentCaptor<SendMessage>()
         verify(client).execute(msg.capture())
 
-        assertEquals(BotHandler.ANSWER, msg.firstValue.text)
+        assertEquals(
+            HelpHandler.ANSWER.trimIndent().replace("{{country}}", "Canada"),
+            msg.firstValue.text,
+        )
     }
 
-    @Test
-    fun `not bot`() {
-        handler.handle(createUpdate("yo", bot = false))
-
-        verify(client, never()).execute(any<SendMessage>())
-    }
-
-    private fun createUpdate(text: String, bot: Boolean = false): Update {
+    private fun createUpdate(): Update {
         val update = Update()
         update.message = Message()
-        update.message.from = User(11L, "Ray Sponsible", bot)
+        update.message.from = User(11L, "Ray Sponsible", false)
+        update.message.from.languageCode = "fr"
         update.message.chat = Chat(123, "channel")
-        update.message.text = text
+        update.message.text = "yo"
         return update
     }
 }

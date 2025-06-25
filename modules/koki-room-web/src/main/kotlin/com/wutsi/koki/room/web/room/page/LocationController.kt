@@ -5,7 +5,7 @@ import com.wutsi.koki.room.web.common.page.AbstractPageController
 import com.wutsi.koki.room.web.common.page.PageName
 import com.wutsi.koki.room.web.geoip.service.CurrentGeoIPHolder
 import com.wutsi.koki.room.web.refdata.model.LocationModel
-import com.wutsi.koki.room.web.refdata.model.LocationService
+import com.wutsi.koki.room.web.refdata.service.LocationService
 import com.wutsi.koki.room.web.room.model.MapMarkerModel
 import com.wutsi.koki.room.web.room.model.RoomModel
 import com.wutsi.koki.room.web.room.service.RoomLocationMetricService
@@ -25,7 +25,6 @@ import org.springframework.web.client.HttpClientErrorException
 @RequestMapping("/l")
 class LocationController(
     private val roomService: RoomService,
-    private val locationService: LocationService,
     private val metricService: RoomLocationMetricService,
     private val service: LocationService,
     private val geoIp: CurrentGeoIPHolder
@@ -139,7 +138,7 @@ class LocationController(
         val geo = geoIp.get()
             ?: return null
 
-        return locationService.locations(
+        return service.locations(
             country = geo.countryCode,
             keyword = geo.city,
             limit = 1

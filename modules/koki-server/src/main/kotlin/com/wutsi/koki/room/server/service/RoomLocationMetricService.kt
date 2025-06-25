@@ -17,6 +17,7 @@ class RoomLocationMetricService(
         tenantId: Long,
         ids: List<Long> = emptyList(),
         locationType: LocationType? = null,
+        locationId: Long? = null,
         parentLocationId: Long? = null,
         country: String? = null,
         limit: Int = 20,
@@ -31,6 +32,9 @@ class RoomLocationMetricService(
         }
         if (locationType != null) {
             jql.append(" AND R.location.type IN :locationType")
+        }
+        if (locationId != null) {
+            jql.append(" AND R.location.id IN :locationId")
         }
         if (parentLocationId != null) {
             jql.append(" AND R.location.parentId IN :parentLocationId")
@@ -50,6 +54,9 @@ class RoomLocationMetricService(
         }
         if (parentLocationId != null) {
             query.setParameter("parentLocationId", parentLocationId)
+        }
+        if (locationId != null) {
+            query.setParameter("locationId", locationId)
         }
         if (country != null) {
             query.setParameter("country", country)

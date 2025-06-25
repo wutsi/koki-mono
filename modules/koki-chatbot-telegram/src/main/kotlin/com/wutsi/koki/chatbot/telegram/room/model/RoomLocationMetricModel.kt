@@ -1,6 +1,6 @@
-package com.wutsi.koki.room.web.room.model
+package com.wutsi.koki.chatbot.telegram.room.model
 
-import com.wutsi.koki.room.web.refdata.model.LocationModel
+import com.wutsi.koki.chatbot.telegram.refdata.model.LocationModel
 
 data class RoomLocationMetricModel(
     val location: LocationModel = LocationModel(),

@@ -9,6 +9,7 @@ import com.wutsi.koki.sdk.KokiAccounts
 import com.wutsi.koki.sdk.KokiConfiguration
 import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiRefData
+import com.wutsi.koki.sdk.KokiRoomLocationMetrics
 import com.wutsi.koki.sdk.KokiRooms
 import com.wutsi.koki.sdk.KokiTenants
 import com.wutsi.koki.sdk.URLBuilder
@@ -60,6 +61,11 @@ class KokiSDKConfiguration(
     @Bean
     fun kokiRooms(): KokiRooms {
         return KokiRooms(urlBuilder(), rest())
+    }
+
+    @Bean
+    fun kokiRoomLocationMetrics(): KokiRoomLocationMetrics {
+        return KokiRoomLocationMetrics(urlBuilder(), rest())
     }
 
     @Bean

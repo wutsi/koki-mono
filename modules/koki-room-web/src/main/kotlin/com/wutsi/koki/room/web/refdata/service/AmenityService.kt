@@ -1,6 +1,7 @@
-package com.wutsi.koki.room.web.refdata.model
+package com.wutsi.koki.room.web.refdata.service
 
 import com.wutsi.koki.room.web.refdata.mapper.AmenityMapper
+import com.wutsi.koki.room.web.refdata.model.AmenityModel
 import com.wutsi.koki.sdk.KokiRefData
 import org.springframework.stereotype.Service
 
