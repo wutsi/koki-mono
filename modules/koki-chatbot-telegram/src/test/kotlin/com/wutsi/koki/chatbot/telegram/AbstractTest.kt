@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.refdata.dto.GetLocationResponse
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
 import com.wutsi.koki.room.dto.SearchRoomLocationMetricResponse
@@ -44,6 +45,9 @@ abstract class AbstractTest {
 
     @Autowired
     protected lateinit var objectMapper: ObjectMapper
+
+    @MockitoBean
+    protected lateinit var publisher: Publisher
 
     @BeforeEach
     fun setUp() {

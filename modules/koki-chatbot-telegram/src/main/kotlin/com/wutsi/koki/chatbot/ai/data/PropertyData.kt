@@ -1,6 +1,7 @@
 package com.wutsi.koki.chatbot.ai.data
 
 data class PropertyData(
+    val id: Long = -1,
     val url: String = "",
     val pricePerMonth: Double? = null,
     val pricePerNight: Double? = null,

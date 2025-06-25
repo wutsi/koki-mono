@@ -27,6 +27,7 @@ class SearchAgent(
               }
               "properties":[
                 {
+                    "id": 111, /* ID of the property */
                     "url": "URL of the property listing",
                     "pricePerMonth": 1289,
                     "pricePerNight": 75,

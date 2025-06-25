@@ -69,6 +69,8 @@ jobs:
             -   name: Heroku-Deploy-Test
                 env:
                     HEROKU_APP: koki-chatbot-telegram-test
+                    AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY_TEST}}
+                    AWS_SECRET_KEY: ${{secrets.AWS_SECRET_KEY_TEST}}
                     KOKI_SERVER_URL: ${{secrets.KOKI_SERVER_URL_TEST}}
                     HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY_TEST}}
                     DEEPSEEK_API_KEY: ${{secrets.DEEPSEEK_API_KEY_TEST}}
@@ -80,6 +82,8 @@ jobs:
                     heroku buildpacks:clear --app ${HEROKU_APP}
                     heroku buildpacks:add heroku/jvm --app ${HEROKU_APP}
                     heroku config:set --app ${HEROKU_APP} APP_PROFILE=test
+                    heroku config:set --app ${HEROKU_APP} AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
+                    heroku config:set --app ${HEROKU_APP} AWS_SECRET_KEY=${AWS_SECRET_KEY}
                     heroku config:set --app ${HEROKU_APP} TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
                     heroku config:set --app ${HEROKU_APP} TELEGRAM_CHATBOT=${TELEGRAM_CHATBOT}
                     heroku config:set --app ${HEROKU_APP} DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
@@ -96,4 +100,4 @@ jobs:
                 run: |
                     sleep 45
                     echo ${APP_URL}
-                    curl -sSf ${APP_URL}/actuator/health >> /dev/null
+                    curl -sSf ${APP_URL}/actuator/health >> /dev/null || curl -sSf ${APP_URL}/actuator/health >> /dev/null
