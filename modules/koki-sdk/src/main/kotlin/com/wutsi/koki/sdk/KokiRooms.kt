@@ -3,7 +3,9 @@ package com.wutsi.koki.sdk
 import com.wutsi.koki.room.dto.AddAmenityRequest
 import com.wutsi.koki.room.dto.CreateRoomRequest
 import com.wutsi.koki.room.dto.CreateRoomResponse
+import com.wutsi.koki.room.dto.FurnishedType
 import com.wutsi.koki.room.dto.GetRoomResponse
+import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
 import com.wutsi.koki.room.dto.SaveRoomGeoLocationRequest
@@ -55,6 +57,10 @@ class KokiRooms(
         categoryIds: List<Long>,
         accountIds: List<Long>,
         accountManagerIds: List<Long>,
+        minBudget: Double? = null,
+        maxBudget: Double? = null,
+        leaseType: LeaseType? = null,
+        furnishedType: FurnishedType? = null,
         limit: Int,
         offset: Int,
     ): SearchRoomResponse {
@@ -75,6 +81,10 @@ class KokiRooms(
                 "category-id" to categoryIds,
                 "account-id" to accountIds,
                 "account-manager-id" to accountManagerIds,
+                "min-budget" to minBudget,
+                "max-budget" to maxBudget,
+                "lease-type" to leaseType,
+                "furnished-type" to furnishedType,
                 "limit" to limit,
                 "offset" to offset,
             )
