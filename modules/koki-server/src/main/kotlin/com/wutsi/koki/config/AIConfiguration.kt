@@ -3,6 +3,7 @@ package com.wutsi.koki.config
 import com.wutsi.koki.platform.ai.llm.LLMBuilder
 import com.wutsi.koki.platform.ai.llm.LLMHealthIndicator
 import com.wutsi.koki.platform.ai.llm.LLMType
+import com.wutsi.koki.platform.ai.llm.deepseek.Deepseek
 import com.wutsi.koki.platform.ai.llm.deepseek.DeepseekBuilder
 import com.wutsi.koki.platform.ai.llm.gemini.Gemini
 import com.wutsi.koki.platform.ai.llm.gemini.GeminiBuilder
@@ -73,7 +74,7 @@ class AIConfiguration(
     @Bean
     fun deepseekHealthCheck(): HealthIndicator {
         return LLMHealthIndicator(
-            llm = Gemini(
+            llm = Deepseek(
                 apiKey = deepseekApiKey,
                 model = deepseekModel,
             )
