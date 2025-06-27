@@ -62,6 +62,9 @@ class RoomAgent(
               - Focus on the Benefits for the Sharer's Audience: Why should someone click on this link? What kind of experience awaits the customer?
               - Use Action-Oriented Language: Encourage clicks and create a sense of desire.
               - Aim for around 150-160 characters.
+            - Instructions for French translation:
+              - The french abbreviation for "bedroom" is CAC. Example: "1BR" should be translate to "1CAC"
+              - The french translation for "bathroom" is CDB. Example: "2BA" should be translate to "2SDB"
         """.trimIndent()
     }
 
