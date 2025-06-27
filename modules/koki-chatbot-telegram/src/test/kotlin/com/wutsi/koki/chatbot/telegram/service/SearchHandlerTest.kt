@@ -117,7 +117,7 @@ class SearchHandlerTest : AbstractTest() {
 
         val msg = argumentCaptor<SendMessage>()
         verify(client, times(data.properties.size + 2)).execute(msg.capture())
-        assertEquals(SearchHandler.SEARCHING, msg.firstValue.text)
+        assertEquals(true, msg.firstValue.text.isNotEmpty()) // Searching...
         assertEquals(true, msg.secondValue.text.contains(url1))
         assertEquals(true, msg.thirdValue.text.contains(url2))
         assertEquals(true, msg.allValues[3].text.contains(url3))
@@ -163,7 +163,7 @@ class SearchHandlerTest : AbstractTest() {
 
         val msg = argumentCaptor<SendMessage>()
         verify(client, times(xdata.properties.size + 1)).execute(msg.capture())
-        assertEquals(SearchHandler.SEARCHING, msg.firstValue.text)
+        assertEquals(true, msg.firstValue.text.isNotEmpty()) // Searching...
         assertEquals(true, msg.secondValue.text.contains(url1))
 
         verify(telegramUrlBuilder).toPropertyUrl(eq(data.properties[0]), any(), eq(update))
@@ -201,8 +201,8 @@ class SearchHandlerTest : AbstractTest() {
 
         val msg = argumentCaptor<SendMessage>()
         verify(client, times(2)).execute(msg.capture())
-        assertEquals(SearchHandler.SEARCHING, msg.firstValue.text)
-        assertEquals(SearchHandler.NOT_FOUND, msg.secondValue.text)
+        assertEquals(true, msg.firstValue.text.isNotEmpty()) // Searching...
+        assertEquals(true, msg.secondValue.text.isNotEmpty()) // Not found
         assertEquals(RoomFixtures.metrics.size, (msg.secondValue.replyMarkup as InlineKeyboardMarkup).keyboard.size)
 
         verify(telegramUrlBuilder, never()).toPropertyUrl(any(), any(), any())

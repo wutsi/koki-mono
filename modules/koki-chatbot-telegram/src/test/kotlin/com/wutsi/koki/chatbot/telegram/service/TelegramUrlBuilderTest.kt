@@ -7,8 +7,10 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.chatbot.ai.data.PropertyData
 import com.wutsi.koki.chatbot.ai.data.SearchAgentData
 import com.wutsi.koki.chatbot.ai.data.SearchParameters
+import com.wutsi.koki.chatbot.telegram.refdata.model.LocationModel
 import com.wutsi.koki.chatbot.telegram.tenant.model.TenantModel
 import com.wutsi.koki.platform.url.UrlShortener
+import com.wutsi.koki.refdata.dto.LocationType
 import org.mockito.Mockito.mock
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.User
@@ -25,7 +27,24 @@ class TelegramUrlBuilderTest {
     private val property = PropertyData(
         url = "/rooms/1"
     )
+    private val location = LocationModel(
+        id = 123,
+        type = LocationType.CITY,
+        name = "Yaounde"
+    )
     private val update = createUpdate()
+
+    @Test
+    fun toLocationUrl() {
+        doReturn("http://bit.ly/123").whenever(urlShortener).shorten(any())
+
+        val result = builder.toLocationUrl(location, tenant, update)
+
+        assertEquals("http://bit.ly/123", result)
+
+        val url = "${tenant.clientPortalUrl}/l/${location.id}/yaounde?lang=fr&utm-medium=telegram"
+        verify(urlShortener).shorten(url)
+    }
 
     @Test
     fun toPropertyUrl() {

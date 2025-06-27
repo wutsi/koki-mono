@@ -14,9 +14,9 @@ import com.wutsi.koki.chatbot.telegram.tenant.model.TenantModel
 import com.wutsi.koki.chatbot.telegram.tenant.service.TenantService
 import com.wutsi.koki.chatbot.telegram.tracking.service.TrackService
 import com.wutsi.koki.platform.tenant.TenantProvider
-import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.track.dto.TrackEvent
+import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
@@ -24,6 +24,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow
 import org.telegram.telegrambots.meta.generics.TelegramClient
+import java.util.Locale
 
 @Service
 class SearchHandler(
@@ -36,10 +37,17 @@ class SearchHandler(
     private val locationService: LocationService,
     private val telegramUrlBuilder: TelegramUrlBuilder,
     private val trackService: TrackService,
+    private val messages: MessageSource,
 ) : CommandHandler {
     companion object {
-        const val SEARCHING = "Searching..."
-        const val NOT_FOUND = "No properties found."
+        const val SEARCHING = "handler.search.searching"
+        const val LOCATION_FOR_RENTAL = "handler.search.for-rental"
+        const val PRICE_PER_MONTH = "handler.search.price-per-month"
+        const val PRICE_PER_NIGHT = "handler.search.price-per-night"
+        const val BEDROOM = "handler.search.n-bedroom"
+        const val BATHROOM = "handler.search.n-bathroom"
+        const val NOT_FOUND = "handler.search.not-found"
+        const val FIND_MORE = "handler.search.find-more"
     }
 
     override fun handle(update: Update) {
@@ -50,22 +58,28 @@ class SearchHandler(
 
     private fun search(query: String, update: Update, tenant: TenantModel) {
         // Searching....
-        client.execute(SendMessage(update.message.chatId.toString(), SEARCHING))
+        val locale = Locale(update.message.from.languageCode)
+        client.execute(
+            SendMessage(
+                update.message.chatId.toString(),
+                messages.getMessage(SEARCHING, emptyArray(), locale),
+            )
+        )
 
         // Search
         val result = findProperties(query)
         if (result.properties.isEmpty()) {
-            notFound(result.searchParameters, update)
+            notFound(result.searchParameters, update, locale)
         } else {
-            result.properties.map { property -> sendProperty(property, tenant, update) }
+            result.properties.map { property -> sendProperty(property, tenant, update, locale) }
             if (result.properties.size >= SearchRoomTool.MAX_RECOMMENDATIONS) {
-                sendViewMoreCTA(result, tenant, update)
+                sendViewMoreCTA(result, tenant, update, locale)
             }
             track(result.properties, update)
         }
     }
 
-    private fun notFound(search: SearchParameters, update: Update) {
+    private fun notFound(search: SearchParameters, update: Update, locale: Locale) {
         val tenantId = tenantProvider.id() ?: -1
         val tenant = tenantService.tenant(tenantId)
 
@@ -90,10 +104,10 @@ class SearchHandler(
         if (metrics.isNotEmpty()) {
             msg.replyMarkup = InlineKeyboardMarkup(
                 metrics.map { metric ->
-                    val button = InlineKeyboardButton("Find properties in ${metric.location.name}")
-                    button.url =
-                        "${tenant.clientPortalUrl}/l/${metric.location.id}/" + StringUtils.toAscii(metric.location.name)
-                            .lowercase()
+                    val button = InlineKeyboardButton(
+                        messages.getMessage(LOCATION_FOR_RENTAL, arrayOf(metric.location.name), locale)
+                    )
+                    button.url = telegramUrlBuilder.toLocationUrl(metric.location, tenant, update)
                     InlineKeyboardRow(button)
                 }
             )
@@ -107,21 +121,21 @@ class SearchHandler(
         return objectMapper.readValue(json, SearchAgentData::class.java)
     }
 
-    private fun sendProperty(property: PropertyData, tenant: TenantModel, update: Update) {
+    private fun sendProperty(property: PropertyData, tenant: TenantModel, update: Update, locale: Locale) {
         // Price
         val fmt = tenant.createMoneyFormat()
         val price = if (property.pricePerMonth != null) {
-            fmt.format(property.pricePerMonth) + "/month"
+            messages.getMessage(PRICE_PER_MONTH, arrayOf(fmt.format(property.pricePerMonth)), locale)
         } else {
-            fmt.format(property.pricePerNight) + "/night"
+            messages.getMessage(PRICE_PER_NIGHT, arrayOf(fmt.format(property.pricePerNight)), locale)
         }
 
         // Bedroom
-        val bedroom = "${property.bedrooms} BR"
+        val bedroom = messages.getMessage(BEDROOM, arrayOf(property.bedrooms), locale)
 
         // bathroom
         val bathroom = if (property.bathrooms > 0) {
-            "${property.bathrooms} BA"
+            messages.getMessage(BATHROOM, arrayOf(property.bathrooms), locale)
         } else {
             null
         }
@@ -138,14 +152,17 @@ class SearchHandler(
         client.execute(msg)
     }
 
-    private fun sendViewMoreCTA(data: SearchAgentData, tenant: TenantModel, update: Update) {
-        val cta = InlineKeyboardButton("Find More Properties...")
+    private fun sendViewMoreCTA(data: SearchAgentData, tenant: TenantModel, update: Update, locale: Locale) {
+        val cta = InlineKeyboardButton(messages.getMessage(FIND_MORE, emptyArray(), locale))
         cta.url = telegramUrlBuilder.toViewMoreUrl(data, tenant, update)
 
         val locationId = (data.searchParameters.neighborhoodId ?: data.searchParameters.cityId) ?: return
         val location = locationService.location(locationId)
 
-        val msg = SendMessage(update.message.chatId.toString(), "Explore more properties in ${location.name}")
+        val msg = SendMessage(
+            update.message.chatId.toString(),
+            messages.getMessage(LOCATION_FOR_RENTAL, arrayOf(location.name), locale)
+        )
         msg.replyMarkup = InlineKeyboardMarkup(
             listOf(
                 InlineKeyboardRow(cta)

@@ -1,7 +1,9 @@
 package com.wutsi.koki.chatbot.telegram.service
 
+import com.sun.org.apache.xml.internal.serializer.utils.Utils.messages
 import com.wutsi.koki.chatbot.telegram.tenant.service.TenantService
 import com.wutsi.koki.platform.tenant.TenantProvider
+import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
@@ -13,17 +15,10 @@ class HelpHandler(
     private val client: TelegramClient,
     private val tenantProvider: TenantProvider,
     private val tenantService: TenantService,
+    private val messages: MessageSource,
 ) : CommandHandler {
     companion object {
-        const val ANSWER = """
-            Hello!
-
-            I'm your assistant, and can help you to find properties for rent in {{country}}.
-
-            You can control me with these commands:
-            - `/search`: To search properties available for rental.
-            - `/help`: To get help about this service
-        """
+        const val ANSWER = "handler.help"
     }
 
     override fun handle(update: Update) {
@@ -31,8 +26,7 @@ class HelpHandler(
 
         val language = update.message.from.languageCode
         val country = Locale(language, tenant.country).displayCountry
-
-        val text = ANSWER
+        val text = messages.getMessage(ANSWER, emptyArray(), Locale(language))
             .trimIndent()
             .replace("{{country}}", country)
 

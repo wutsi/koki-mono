@@ -23,22 +23,28 @@ class HelpHandlerTest : AbstractTest() {
 
     @Test
     fun handle() {
-        handler.handle(createUpdate())
+        handler.handle(createUpdate("en"))
 
         val msg = argumentCaptor<SendMessage>()
         verify(client).execute(msg.capture())
 
         assertEquals(
-            HelpHandler.ANSWER.trimIndent().replace("{{country}}", "Canada"),
+            """
+                Hello!
+                I'm your assistant, and can help you to find properties for rent in Canada.
+                You can control me with these commands:
+                - `/search`: To search properties available for rental.
+                - `/help`: To get help about this service
+            """.trimIndent(),
             msg.firstValue.text,
         )
     }
 
-    private fun createUpdate(): Update {
+    private fun createUpdate(language: String): Update {
         val update = Update()
         update.message = Message()
         update.message.from = User(11L, "Ray Sponsible", false)
-        update.message.from.languageCode = "fr"
+        update.message.from.languageCode = language
         update.message.chat = Chat(123, "channel")
         update.message.text = "yo"
         return update
