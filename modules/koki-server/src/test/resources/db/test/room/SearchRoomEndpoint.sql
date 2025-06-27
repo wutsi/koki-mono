@@ -11,15 +11,15 @@ INSERT INTO T_ACCOUNT(id, tenant_fk, name, email, deleted, managed_by_fk)
            (33, 1, 'Inc', 'info@inc33.com', false, 1);
 
 
-INSERT INTO T_ROOM(id, tenant_fk, account_fk, type, status, neighborhood_fk, city_fk, state_fk, country, title, deleted, max_guests, number_of_rooms, number_of_bathrooms, category_fk)
-    VALUES (111, 1, 33, 1, 2, 100111, 1001, 100, 'CA', 'Room A', false, 2, 2, 1, 33),
-           (112, 1, 31, 1, 1, 100112, 1001, 100, 'CA', 'Room A', false, 2, 2, 1, null),
-           (113, 1, 33, 1, 2, 100111, 1001, 100, 'CA', 'Room A', false, 4, 3, 2, null),
-           (114, 1, 31, 2, 3, 100112, 1001, 100, 'CA', 'Room A', false, 5, 2, 1, null),
-           (115, 1, 33, 1, 3, 200111, 2001, 100, 'CA', 'Room A', false, 6, 5, 5, 55),
-           (116, 1, 32, 2, 3, 200112, 2001, 100, 'CA', 'Room A', false, 1, 6, 6, 55),
-           (199, 1, 33, 1, 2, 200111, 2001, 100, 'CA', 'Room A', true, 10, 2, 1, null),
-           (200, 2, 22, 1, 1, 200112, 1001, 100, 'CA', 'Room A', false, 20, 2, 1, null);
+INSERT INTO T_ROOM(id, tenant_fk, account_fk, type, status, neighborhood_fk, city_fk, state_fk, country, title, deleted, max_guests, number_of_rooms, number_of_bathrooms, category_fk, lease_type, furnished_type, price_per_night, price_per_month)
+    VALUES (111, 1, 33, 1, 2, 100111, 1001, 100, 'CA', 'Room A', false, 2, 2, 1, 33,    0, 3, 750,  12000),
+           (112, 1, 31, 1, 1, 100112, 1001, 100, 'CA', 'Room A', false, 2, 2, 1, null,  1, 3, 350,  null),
+           (113, 1, 33, 1, 2, 100111, 1001, 100, 'CA', 'Room A', false, 4, 3, 2, null,  0, 0, null, 15000),
+           (114, 1, 31, 2, 3, 100112, 1001, 100, 'CA', 'Room A', false, 5, 2, 1, null,  0, 0, null, 22000),
+           (115, 1, 33, 1, 3, 200111, 2001, 100, 'CA', 'Room A', false, 6, 5, 5, 55,    0, 0, null, 30000),
+           (116, 1, 32, 2, 3, 200112, 2001, 100, 'CA', 'Room A', false, 1, 6, 6, 55,    1, 3, 950,  null),
+           (199, 1, 33, 1, 2, 200111, 2001, 100, 'CA', 'Room A', true, 10, 2, 1, null,  1, 0, 900,  null),
+           (200, 2, 22, 1, 1, 200112, 1001, 100, 'CA', 'Room A', false, 20, 2, 1, null, 0, 0, null, 50000);
 
 INSERT INTO T_ROOM_AMENITY(room_fk, amenity_fk)
     VALUES (111, 1),

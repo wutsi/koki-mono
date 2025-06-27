@@ -68,7 +68,9 @@ class TelegramUrlBuilderTest {
                 cityId = 11,
                 city = "Yaounde",
                 leaseType = "SHORT_TERM",
-                furnishedType = "NONE"
+                furnishedType = "NONE",
+                minBudget = 1000.0,
+                maxBudget = 2000.0,
             )
         )
 
@@ -78,7 +80,7 @@ class TelegramUrlBuilderTest {
         assertEquals("http://bit.ly/123", result)
 
         val url =
-            "${tenant.clientPortalUrl}/l/11/yaounde?lang=fr&utm-medium=telegram&min-bedroom=1&max-bedroom=2&type=APARTMENT&lease-type=SHORT_TERM&furnished-type=NONE"
+            "${tenant.clientPortalUrl}/l/11/yaounde?lang=fr&utm-medium=telegram&min-bedroom=1&max-bedroom=2&type=APARTMENT&lease-type=SHORT_TERM&furnished-type=NONE&min-budget=1000.0&max-budget=2000.0"
         verify(urlShortener).shorten(url)
     }
 

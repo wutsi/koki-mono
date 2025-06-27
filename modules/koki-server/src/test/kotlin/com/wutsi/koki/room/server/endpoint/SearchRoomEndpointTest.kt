@@ -150,4 +150,48 @@ class SearchRoomEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(3, rooms.size)
         assertEquals(listOf(112L, 114L, 116L), rooms.map { it.id })
     }
+
+    @Test
+    fun `by lease-type`() {
+        val response = rest.getForEntity("/v1/rooms?lease-type=SHORT_TERM", SearchRoomResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val rooms = response.body!!.rooms
+        assertEquals(2, rooms.size)
+        assertEquals(listOf(112L, 116L), rooms.map { it.id })
+    }
+
+    @Test
+    fun `by furnished-type`() {
+        val response = rest.getForEntity("/v1/rooms?furnished-type=FULLY_FURNISHED", SearchRoomResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val rooms = response.body!!.rooms
+        assertEquals(3, rooms.size)
+        assertEquals(listOf(111L, 112L, 116L), rooms.map { it.id })
+    }
+
+    @Test
+    fun `by min-max-budget by night`() {
+        val response = rest.getForEntity("/v1/rooms?min-budget=400&max-budget=1000", SearchRoomResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val rooms = response.body!!.rooms
+        assertEquals(2, rooms.size)
+        assertEquals(listOf(111L, 116L), rooms.map { it.id })
+    }
+
+    @Test
+    fun `by min-max-budget by month`() {
+        val response = rest.getForEntity("/v1/rooms?min-budget=15000&max-budget=30000", SearchRoomResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val rooms = response.body!!.rooms
+        assertEquals(3, rooms.size)
+        assertEquals(listOf(113L, 114L, 115L), rooms.map { it.id })
+    }
 }

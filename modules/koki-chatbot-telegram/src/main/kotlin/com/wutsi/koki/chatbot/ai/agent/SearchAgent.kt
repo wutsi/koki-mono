@@ -23,7 +23,11 @@ class SearchAgent(
                  "neighborhood": "Name of the neighborhood requested by the user in the query",
                  "propertyType": "Property type searched"
                  "minBedrooms": 4,
-                 "maxBedrooms": null
+                 "maxBedrooms": null,
+                 "minBudget": 50000, /* min Rental price */
+                 "maxBudget": 100000, /* max Rental price */
+                 "leaseType": "SHORT_TERM", /* Type of rental */
+                 "furnishedType": "NONE", /* Furnished rental or not? */
               }
               "properties":[
                 {

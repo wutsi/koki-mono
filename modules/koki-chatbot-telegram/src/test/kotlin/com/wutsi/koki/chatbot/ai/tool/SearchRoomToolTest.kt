@@ -10,6 +10,8 @@ import com.wutsi.koki.platform.ai.llm.Type
 import com.wutsi.koki.refdata.dto.Location
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
+import com.wutsi.koki.room.dto.FurnishedType
+import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomSummary
 import com.wutsi.koki.room.dto.RoomType
@@ -36,7 +38,7 @@ class SearchRoomToolTest {
         assertEquals(SearchRoomTool.NAME, tool.function().name)
         assertEquals(SearchRoomTool.DESCRIPTION, tool.function().description)
         assertEquals(Type.OBJECT, tool.function().parameters?.type)
-        assertEquals(6, tool.function().parameters?.properties?.size)
+        assertEquals(10, tool.function().parameters?.properties?.size)
     }
 
     @Test
@@ -69,6 +71,10 @@ class SearchRoomToolTest {
                 "city" to city.name,
                 "minBedrooms" to 2,
                 "maxBedrooms" to 4,
+                "minBudget" to 100,
+                "maxBudget" to 1000,
+                "leaseType" to LeaseType.SHORT_TERM.name,
+                "furnishedType" to FurnishedType.FULLY_FURNISHED.name,
             )
         )
 
@@ -87,6 +93,10 @@ class SearchRoomToolTest {
             emptyList(), // categoryIds
             emptyList(), // accountIds
             emptyList(), // accountManagerIds
+            100.0, // min-budget
+            1000.0, // max-budget
+            LeaseType.SHORT_TERM, // lease-type
+            FurnishedType.FULLY_FURNISHED, // furnished-type
             SearchRoomTool.MAX_RECOMMENDATIONS, // limit
             0, // offset
         )
@@ -135,6 +145,10 @@ class SearchRoomToolTest {
             emptyList(), // categoryIds
             emptyList(), // accountIds
             emptyList(), // accountManagerIds
+            null, // min-budget
+            null, // max-budget
+            null, // lease-type
+            null, // furnished-type
             SearchRoomTool.MAX_RECOMMENDATIONS, // limit
             0, // offset
         )
@@ -187,6 +201,10 @@ class SearchRoomToolTest {
     private fun setupRooms(rooms: List<RoomSummary>) {
         doReturn(SearchRoomResponse(rooms))
             .whenever(kokiRooms).rooms(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),

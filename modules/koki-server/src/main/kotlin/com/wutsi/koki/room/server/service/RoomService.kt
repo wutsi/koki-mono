@@ -14,6 +14,8 @@ import com.wutsi.koki.refdata.server.service.AmenityService
 import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.room.dto.AddAmenityRequest
 import com.wutsi.koki.room.dto.CreateRoomRequest
+import com.wutsi.koki.room.dto.FurnishedType
+import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
 import com.wutsi.koki.room.dto.SaveRoomGeoLocationRequest
@@ -64,6 +66,10 @@ class RoomService(
         minBathrooms: Int? = null,
         maxBathrooms: Int? = null,
         categoryIds: List<Long> = emptyList(),
+        minBudget: Double? = null,
+        maxBudget: Double? = null,
+        leaseType: LeaseType? = null,
+        furnishedType: FurnishedType? = null,
         limit: Int = 20,
         offset: Int = 0
     ): List<RoomEntity> {
@@ -115,6 +121,18 @@ class RoomService(
         if (amenityIds.isNotEmpty()) {
             jql.append(" AND A.id IN :amenityIds")
         }
+        if (leaseType != null) {
+            jql.append(" AND R.leaseType = :leaseType")
+        }
+        if (furnishedType != null) {
+            jql.append(" AND R.furnishedType = :furnishedType")
+        }
+        if (minBudget != null) {
+            jql.append(" AND (R.pricePerMonth >= :minBudget OR R.pricePerNight >= :minBudget)")
+        }
+        if (maxBudget != null) {
+            jql.append(" AND (R.pricePerMonth <= :maxBudget OR R.pricePerNight <= :maxBudget)")
+        }
         jql.append(" ORDER BY R.pricePerNight")
 
         val query = em.createQuery(jql.toString(), RoomEntity::class.java)
@@ -160,6 +178,18 @@ class RoomService(
         }
         if (categoryIds.isNotEmpty()) {
             query.setParameter("categoryIds", categoryIds)
+        }
+        if (leaseType != null) {
+            query.setParameter("leaseType", leaseType)
+        }
+        if (furnishedType != null) {
+            query.setParameter("furnishedType", furnishedType)
+        }
+        if (minBudget != null) {
+            query.setParameter("minBudget", minBudget)
+        }
+        if (maxBudget != null) {
+            query.setParameter("maxBudget", maxBudget)
         }
 
         query.firstResult = offset

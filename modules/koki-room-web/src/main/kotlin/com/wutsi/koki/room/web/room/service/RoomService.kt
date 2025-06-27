@@ -2,6 +2,8 @@ package com.wutsi.koki.room.web.room.service
 
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.FileType
+import com.wutsi.koki.room.dto.FurnishedType
+import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
 import com.wutsi.koki.room.web.account.model.AccountModel
@@ -75,6 +77,10 @@ class RoomService(
         cityId: Long? = null,
         neighborhoodId: Long? = null,
         types: List<RoomType> = emptyList(),
+        minBudget: Double? = null,
+        maxBudget: Double? = null,
+        leaseType: LeaseType? = null,
+        furnishedType: FurnishedType? = null,
         limit: Int = 20,
         offset: Int = 0,
         fullGraph: Boolean = true,
@@ -94,6 +100,10 @@ class RoomService(
             categoryIds = emptyList(),
             totalGuests = null,
             accountManagerIds = emptyList(),
+            minBudget = minBudget,
+            maxBudget = maxBudget,
+            leaseType = leaseType,
+            furnishedType = furnishedType,
             limit = limit,
             offset = offset,
         ).rooms
