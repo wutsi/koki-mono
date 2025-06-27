@@ -16,6 +16,9 @@ import com.wutsi.koki.chatbot.ai.data.SearchParameters
 import com.wutsi.koki.chatbot.telegram.AbstractTest
 import com.wutsi.koki.chatbot.telegram.RoomFixtures
 import com.wutsi.koki.room.dto.RoomType
+import com.wutsi.koki.track.dto.ChannelType
+import com.wutsi.koki.track.dto.TrackEvent
+import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertNotNull
 import org.mockito.Mockito.mock
@@ -50,6 +53,7 @@ class SearchHandlerTest : AbstractTest() {
     val data = SearchAgentData(
         properties = listOf(
             PropertyData(
+                id = 1,
                 url = "/rooms/1",
                 pricePerMonth = 1550.0,
                 currency = "CAD",
@@ -57,6 +61,7 @@ class SearchHandlerTest : AbstractTest() {
                 bedrooms = 5,
             ),
             PropertyData(
+                id = 2,
                 url = "/rooms/2",
                 pricePerNight = 550.0,
                 currency = "CAD",
@@ -64,6 +69,7 @@ class SearchHandlerTest : AbstractTest() {
                 bedrooms = 1,
             ),
             PropertyData(
+                id = 3,
                 url = "/rooms/3",
                 pricePerNight = 950.0,
                 currency = "CAD",
@@ -121,6 +127,21 @@ class SearchHandlerTest : AbstractTest() {
         verify(telegramUrlBuilder).toPropertyUrl(eq(data.properties[1]), any(), eq(update))
         verify(telegramUrlBuilder).toPropertyUrl(eq(data.properties[2]), any(), eq(update))
         verify(telegramUrlBuilder).toViewMoreUrl(eq(data), any(), eq(update))
+
+        val track = argumentCaptor<TrackSubmittedEvent>()
+        verify(publisher).publish(track.capture())
+        assertEquals("1|2|3", track.firstValue.track.productId)
+        assertEquals(update.message.from.id.toString(), track.firstValue.track.deviceId)
+        assertEquals(null, track.firstValue.track.accountId)
+        assertEquals(1L, track.firstValue.track.tenantId)
+        assertEquals(ChannelType.MESSAGING, track.firstValue.track.channelType)
+        assertEquals("telegram", track.firstValue.track.page)
+        assertEquals(TrackEvent.IMPRESSION, track.firstValue.track.event)
+        assertEquals(null, track.firstValue.track.referrer)
+        assertEquals(null, track.firstValue.track.ip)
+        assertEquals(null, track.firstValue.track.ua)
+        assertEquals(null, track.firstValue.track.value)
+        assertEquals(null, track.firstValue.track.url)
     }
 
     @Test
@@ -147,6 +168,21 @@ class SearchHandlerTest : AbstractTest() {
 
         verify(telegramUrlBuilder).toPropertyUrl(eq(data.properties[0]), any(), eq(update))
         verify(telegramUrlBuilder, never()).toViewMoreUrl(any(), any(), any())
+
+        val track = argumentCaptor<TrackSubmittedEvent>()
+        verify(publisher).publish(track.capture())
+        assertEquals("1", track.firstValue.track.productId)
+        assertEquals(update.message.from.id.toString(), track.firstValue.track.deviceId)
+        assertEquals(null, track.firstValue.track.accountId)
+        assertEquals(1L, track.firstValue.track.tenantId)
+        assertEquals(ChannelType.MESSAGING, track.firstValue.track.channelType)
+        assertEquals("telegram", track.firstValue.track.page)
+        assertEquals(TrackEvent.IMPRESSION, track.firstValue.track.event)
+        assertEquals(null, track.firstValue.track.referrer)
+        assertEquals(null, track.firstValue.track.ip)
+        assertEquals(null, track.firstValue.track.ua)
+        assertEquals(null, track.firstValue.track.value)
+        assertEquals(null, track.firstValue.track.url)
     }
 
     @Test
@@ -171,6 +207,7 @@ class SearchHandlerTest : AbstractTest() {
 
         verify(telegramUrlBuilder, never()).toPropertyUrl(any(), any(), any())
         verify(telegramUrlBuilder, never()).toViewMoreUrl(any(), any(), any())
+        verify(publisher, never()).publish(any())
     }
 
     private fun createUpdate(text: String, language: String = "en"): Update {

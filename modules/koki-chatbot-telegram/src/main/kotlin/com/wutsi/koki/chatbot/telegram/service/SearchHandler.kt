@@ -6,14 +6,17 @@ import com.wutsi.koki.chatbot.ai.data.PropertyData
 import com.wutsi.koki.chatbot.ai.data.SearchAgentData
 import com.wutsi.koki.chatbot.ai.data.SearchParameters
 import com.wutsi.koki.chatbot.ai.tool.SearchRoomTool
+import com.wutsi.koki.chatbot.telegram.form.TrackForm
 import com.wutsi.koki.chatbot.telegram.refdata.service.LocationService
 import com.wutsi.koki.chatbot.telegram.room.model.RoomLocationMetricModel
 import com.wutsi.koki.chatbot.telegram.room.service.RoomLocationMetricService
 import com.wutsi.koki.chatbot.telegram.tenant.model.TenantModel
 import com.wutsi.koki.chatbot.telegram.tenant.service.TenantService
+import com.wutsi.koki.chatbot.telegram.tracking.service.TrackService
 import com.wutsi.koki.platform.tenant.TenantProvider
 import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.refdata.dto.LocationType
+import com.wutsi.koki.track.dto.TrackEvent
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
@@ -32,6 +35,7 @@ class SearchHandler(
     private val metricService: RoomLocationMetricService,
     private val locationService: LocationService,
     private val telegramUrlBuilder: TelegramUrlBuilder,
+    private val trackService: TrackService,
 ) : CommandHandler {
     companion object {
         const val SEARCHING = "Searching..."
@@ -57,6 +61,7 @@ class SearchHandler(
             if (result.properties.size >= SearchRoomTool.MAX_RECOMMENDATIONS) {
                 sendViewMoreCTA(result, tenant, update)
             }
+            track(result.properties, update)
         }
     }
 
@@ -147,5 +152,16 @@ class SearchHandler(
             )
         )
         client.execute(msg)
+    }
+
+    private fun track(properties: List<PropertyData>, update: Update) {
+        trackService.track(
+            TrackForm(
+                time = System.currentTimeMillis(),
+                deviceId = update.message.from.id.toString(),
+                event = TrackEvent.IMPRESSION,
+                productId = properties.map { property -> property.id.toString() }.joinToString("|"),
+            )
+        )
     }
 }
