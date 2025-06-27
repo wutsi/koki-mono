@@ -2,6 +2,7 @@ package com.wutsi.koki.chatbot.telegram.service
 
 import com.wutsi.koki.chatbot.ai.data.PropertyData
 import com.wutsi.koki.chatbot.ai.data.SearchAgentData
+import com.wutsi.koki.chatbot.telegram.refdata.model.LocationModel
 import com.wutsi.koki.chatbot.telegram.tenant.model.TenantModel
 import com.wutsi.koki.platform.url.UrlShortener
 import com.wutsi.koki.platform.util.StringUtils
@@ -10,6 +11,15 @@ import org.telegram.telegrambots.meta.api.objects.Update
 
 @Service
 class TelegramUrlBuilder(private val urlShortener: UrlShortener) {
+    fun toLocationUrl(location: LocationModel, tenant: TenantModel, update: Update): String {
+        val locationId = location.id
+        val location = StringUtils.toAscii(location.name).lowercase()
+        val language = update.message.from.languageCode
+        val url = "${tenant.clientPortalUrl}/l/$locationId/$location?lang=$language&utm-medium=telegram"
+
+        return urlShortener.shorten(url)
+    }
+
     fun toPropertyUrl(property: PropertyData, tenant: TenantModel, update: Update): String {
         val language = update.message.from.languageCode
         val url = "${tenant.clientPortalUrl}${property.url}?lang=$language&utm-medium=telegram"
