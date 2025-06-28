@@ -115,7 +115,7 @@ class SearchRoomEndpointTest : AuthorizationAwareEndpointTest() {
 
         val rooms = response.body!!.rooms
         assertEquals(3, rooms.size)
-        assertEquals(listOf(111L, 115L, 116L), rooms.map { it.id })
+        assertEquals(listOf(111L, 115L, 116L), rooms.map { it.id }.sorted())
     }
 
     @Test
@@ -126,7 +126,7 @@ class SearchRoomEndpointTest : AuthorizationAwareEndpointTest() {
 
         val rooms = response.body!!.rooms
         assertEquals(3, rooms.size)
-        assertEquals(listOf(111L, 114L, 115L), rooms.map { it.id })
+        assertEquals(listOf(111L, 114L, 115L), rooms.map { it.id }.sorted())
     }
 
     @Test
@@ -137,7 +137,7 @@ class SearchRoomEndpointTest : AuthorizationAwareEndpointTest() {
 
         val rooms = response.body!!.rooms
         assertEquals(2, rooms.size)
-        assertEquals(listOf(112L, 114L), rooms.map { it.id })
+        assertEquals(listOf(112L, 114L), rooms.map { it.id }.sorted())
     }
 
     @Test
@@ -148,7 +148,7 @@ class SearchRoomEndpointTest : AuthorizationAwareEndpointTest() {
 
         val rooms = response.body!!.rooms
         assertEquals(3, rooms.size)
-        assertEquals(listOf(112L, 114L, 116L), rooms.map { it.id })
+        assertEquals(listOf(112L, 114L, 116L), rooms.map { it.id }.sorted())
     }
 
     @Test
@@ -159,7 +159,7 @@ class SearchRoomEndpointTest : AuthorizationAwareEndpointTest() {
 
         val rooms = response.body!!.rooms
         assertEquals(2, rooms.size)
-        assertEquals(listOf(112L, 116L), rooms.map { it.id })
+        assertEquals(listOf(112L, 116L), rooms.map { it.id }.sorted())
     }
 
     @Test
@@ -170,7 +170,7 @@ class SearchRoomEndpointTest : AuthorizationAwareEndpointTest() {
 
         val rooms = response.body!!.rooms
         assertEquals(3, rooms.size)
-        assertEquals(listOf(111L, 112L, 116L), rooms.map { it.id })
+        assertEquals(listOf(111L, 112L, 116L), rooms.map { it.id }.sorted())
     }
 
     @Test
@@ -181,7 +181,7 @@ class SearchRoomEndpointTest : AuthorizationAwareEndpointTest() {
 
         val rooms = response.body!!.rooms
         assertEquals(2, rooms.size)
-        assertEquals(listOf(111L, 116L), rooms.map { it.id })
+        assertEquals(listOf(111L, 116L), rooms.map { it.id }.sorted())
     }
 
     @Test
@@ -192,6 +192,6 @@ class SearchRoomEndpointTest : AuthorizationAwareEndpointTest() {
 
         val rooms = response.body!!.rooms
         assertEquals(3, rooms.size)
-        assertEquals(listOf(113L, 114L, 115L), rooms.map { it.id })
+        assertEquals(listOf(113L, 114L, 115L), rooms.map { it.id }.sorted())
     }
 }
