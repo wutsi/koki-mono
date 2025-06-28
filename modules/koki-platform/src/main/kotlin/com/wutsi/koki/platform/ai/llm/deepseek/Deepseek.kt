@@ -54,7 +54,7 @@ class Deepseek(
             messages = request.messages.flatMap { message -> toDSMessage(message) },
             temperature = request.config?.temperature,
             topP = request.config?.topP,
-            tools = request.tools?.let { tools ->
+            tools = request.tools?.ifEmpty { null }?.let { tools ->
                 tools.flatMap { tool -> tool.functionDeclarations }
                     .map { function ->
                         DSTool(

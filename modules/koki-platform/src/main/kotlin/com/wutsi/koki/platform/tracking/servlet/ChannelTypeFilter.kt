@@ -31,7 +31,7 @@ class ChannelTypeFilter(
             }
 
             val ua = request.getHeader("User-Agent")
-            val url = request.requestURL?.toString() ?: ""
+            val url = (request.requestURL?.toString() ?: "") + "?" + (request.queryString ?: "")
             val channelType = detector.detect(url, referer ?: "", ua)
             logger.add("http_channel", channelType)
             provider.set(channelType, request, response)
