@@ -42,6 +42,8 @@ class TelegramUrlBuilder(private val urlShortener: UrlShortener) {
             data.searchParameters.propertyType?.let { value -> "type=$value" },
             data.searchParameters.leaseType?.let { value -> "lease-type=$value" },
             data.searchParameters.furnishedType?.let { value -> "furnished-type=$value" },
+            data.searchParameters.minBudget?.let { value -> "min-budget=$value" },
+            data.searchParameters.maxBudget?.let { value -> "max-budget=$value" },
         )
             .filterNotNull()
             .joinToString("&")

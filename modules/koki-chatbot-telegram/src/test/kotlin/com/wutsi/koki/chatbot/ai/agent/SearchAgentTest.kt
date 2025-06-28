@@ -11,8 +11,12 @@ import com.wutsi.koki.platform.ai.llm.deepseek.Deepseek
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.Location
 import com.wutsi.koki.refdata.dto.LocationType
+import com.wutsi.koki.refdata.dto.Money
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
+import com.wutsi.koki.room.dto.FurnishedType
+import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomSummary
+import com.wutsi.koki.room.dto.RoomType
 import com.wutsi.koki.room.dto.SearchRoomResponse
 import com.wutsi.koki.sdk.KokiRefData
 import com.wutsi.koki.sdk.KokiRooms
@@ -42,9 +46,16 @@ class SearchAgentTest {
         setupLocation(city)
 
         val rooms = listOf(
-            createRoom(id = 1, numberOfRooms = 2, numberOfBathrooms = 1, city = city),
-            createRoom(id = 2, numberOfRooms = 3, numberOfBathrooms = 2, city = city),
-            createRoom(id = 3, numberOfRooms = 4, numberOfBathrooms = 3, city = city, neighborhood = neighborhood),
+            createRoom(id = 1, numberOfRooms = 2, numberOfBathrooms = 1, city = city, type = RoomType.APARTMENT),
+            createRoom(id = 2, numberOfRooms = 3, numberOfBathrooms = 2, city = city, type = RoomType.APARTMENT),
+            createRoom(
+                id = 3,
+                numberOfRooms = 4,
+                numberOfBathrooms = 3,
+                city = city,
+                neighborhood = neighborhood,
+                type = RoomType.APARTMENT
+            ),
         )
         setupRooms(rooms)
 
@@ -60,6 +71,8 @@ class SearchAgentTest {
         assertEquals("APARTMENT", result.searchParameters.propertyType)
         assertEquals(null, result.searchParameters.minBedrooms)
         assertEquals(null, result.searchParameters.maxBedrooms)
+        assertEquals(null, result.searchParameters.minBudget)
+        assertEquals(null, result.searchParameters.maxBudget)
     }
 
     @Test
@@ -69,22 +82,101 @@ class SearchAgentTest {
         setupLocation(neighborhood, city)
 
         val rooms = listOf(
-            createRoom(id = 1, numberOfRooms = 2, numberOfBathrooms = 1, city = city, neighborhood = neighborhood),
-            createRoom(id = 2, numberOfRooms = 3, numberOfBathrooms = 2, city = city, neighborhood = neighborhood),
-            createRoom(id = 3, numberOfRooms = 4, numberOfBathrooms = 3, city = city, neighborhood = neighborhood),
+            createRoom(
+                id = 1,
+                numberOfRooms = 2,
+                numberOfBathrooms = 1,
+                city = city,
+                neighborhood = neighborhood,
+                type = RoomType.APARTMENT
+            ),
+            createRoom(
+                id = 2,
+                numberOfRooms = 3,
+                numberOfBathrooms = 2,
+                city = city,
+                neighborhood = neighborhood,
+                type = RoomType.HOUSE
+            ),
+            createRoom(
+                id = 3,
+                numberOfRooms = 4,
+                numberOfBathrooms = 3,
+                city = city,
+                neighborhood = neighborhood,
+                type = RoomType.HOUSE
+            ),
         )
         setupRooms(rooms)
 
-        val json = SearchAgent(llm, tool).run("I look for a 3 bedrooms in Bastos, Yaounde")
+        val json = SearchAgent(llm, tool)
+            .run("I look for a 3 bedrooms in Bastos, Yaounde")
 
         val result = objectMapper.readValue(json, SearchAgentData::class.java)
-        assertEquals(1, result.properties.size)
+        assertEquals(2, result.properties.size)
         assertEquals(rooms[1].listingUrl, result.properties[0].url)
         assertEquals(city.id, result.searchParameters.cityId)
         assertEquals(neighborhood.id, result.searchParameters.neighborhoodId)
         assertEquals(null, result.searchParameters.propertyType)
         assertEquals(3, result.searchParameters.minBedrooms)
         assertEquals(null, result.searchParameters.maxBedrooms)
+        assertEquals(null, result.searchParameters.minBudget)
+        assertEquals(null, result.searchParameters.maxBudget)
+    }
+
+    @Test
+    fun `search in width budget`() {
+        val city = createLocation(id = 11L, name = "Yaounde", type = LocationType.CITY)
+        setupLocation(city)
+
+        val rooms = listOf(
+            createRoom(
+                id = 1,
+                numberOfRooms = 2,
+                numberOfBathrooms = 1,
+                city = city,
+                type = RoomType.ROOM,
+                pricePerMonth = 250000.0,
+                leaseType = LeaseType.SHORT_TERM,
+                furnishedType = FurnishedType.FULLY_FURNISHED,
+            ),
+            createRoom(
+                id = 2,
+                numberOfRooms = 3,
+                numberOfBathrooms = 2,
+                city = city,
+                type = RoomType.ROOM,
+                pricePerNight = 50000.0,
+                leaseType = LeaseType.SHORT_TERM,
+                furnishedType = FurnishedType.FULLY_FURNISHED,
+            ),
+            createRoom(
+                id = 3,
+                numberOfRooms = 4,
+                numberOfBathrooms = 3,
+                city = city,
+                type = RoomType.ROOM,
+                pricePerNight = 90000.0,
+                leaseType = LeaseType.SHORT_TERM,
+                furnishedType = FurnishedType.FULLY_FURNISHED,
+            ),
+        )
+        setupRooms(rooms)
+
+        val json = SearchAgent(llm, tool)
+            .run("I want a fully furnished room in Yaounde for 3 days. Im ready to pay a maximum of 75000/day")
+
+        val result = objectMapper.readValue(json, SearchAgentData::class.java)
+        assertEquals(2, result.properties.size)
+        assertEquals(rooms[1].listingUrl, result.properties[0].url)
+        assertEquals(rooms[2].listingUrl, result.properties[1].url)
+        assertEquals(city.id, result.searchParameters.cityId)
+        assertEquals(null, result.searchParameters.neighborhoodId)
+        assertEquals("ROOM", result.searchParameters.propertyType)
+        assertEquals(null, result.searchParameters.minBedrooms)
+        assertEquals(null, result.searchParameters.maxBedrooms)
+        assertEquals(null, result.searchParameters.minBudget)
+        assertEquals(75000.0, result.searchParameters.maxBudget)
     }
 
     @Test
@@ -113,7 +205,12 @@ class SearchAgentTest {
         numberOfRooms: Int,
         numberOfBathrooms: Int,
         city: Location? = null,
-        neighborhood: Location? = null
+        neighborhood: Location? = null,
+        type: RoomType = RoomType.APARTMENT,
+        pricePerMonth: Double? = null,
+        pricePerNight: Double? = null,
+        leaseType: LeaseType = LeaseType.SHORT_TERM,
+        furnishedType: FurnishedType = FurnishedType.FULLY_FURNISHED,
     ): RoomSummary {
         return RoomSummary(
             id = id,
@@ -123,7 +220,12 @@ class SearchAgentTest {
             address = Address(
                 cityId = city?.id,
             ),
-            neighborhoodId = neighborhood?.id
+            neighborhoodId = neighborhood?.id,
+            type = type,
+            pricePerNight = pricePerNight?.let { Money(pricePerNight, "XAF") },
+            pricePerMonth = pricePerMonth?.let { Money(pricePerMonth, "XAF") },
+            leaseType = leaseType,
+            furnishedType = furnishedType,
         )
     }
 
@@ -157,6 +259,10 @@ class SearchAgentTest {
     private fun setupRooms(rooms: List<RoomSummary>) {
         doReturn(SearchRoomResponse(rooms))
             .whenever(kokiRooms).rooms(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),

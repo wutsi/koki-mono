@@ -8,6 +8,8 @@ import com.wutsi.koki.platform.ai.llm.FunctionParameters
 import com.wutsi.koki.platform.ai.llm.Type
 import com.wutsi.koki.refdata.dto.Location
 import com.wutsi.koki.refdata.dto.LocationType
+import com.wutsi.koki.room.dto.FurnishedType
+import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomSummary
 import com.wutsi.koki.room.dto.RoomType
@@ -63,6 +65,28 @@ class SearchRoomTool(
                         type = Type.INTEGER,
                         description = "Maximum number of bedrooms",
                     ),
+                    "minBudget" to FunctionParameterProperty(
+                        type = Type.NUMBER,
+                        description = "Minimal rental price",
+                    ),
+                    "maxBudget" to FunctionParameterProperty(
+                        type = Type.NUMBER,
+                        description = "Maximum rental price",
+                    ),
+                    "leaseType" to FunctionParameterProperty(
+                        type = Type.STRING,
+                        description = "Short term rental or Long term rental?",
+                        enum = LeaseType.entries
+                            .filter { entry -> entry != LeaseType.UNKNOWN }
+                            .map { entry -> entry.name }
+                    ),
+                    "furnishedType" to FunctionParameterProperty(
+                        type = Type.STRING,
+                        description = "Furnished or not?",
+                        enum = FurnishedType.entries
+                            .filter { entry -> entry != FurnishedType.UNKNOWN }
+                            .map { entry -> entry.name }
+                    ),
                 )
             )
         )
@@ -93,13 +117,17 @@ class SearchRoomTool(
             propertyType = args["propertyType"]?.toString(),
             minBedrooms = args["minBedrooms"]?.toString()?.toInt(),
             maxBedrooms = args["maxBedrooms"]?.toString()?.toInt(),
+            minBudget = args["minBudget"]?.toString()?.toDouble(),
+            maxBudget = args["maxBudget"]?.toString()?.toDouble(),
+            leaseType = args["leaseType"]?.toString(),
+            furnishedType = args["furnishedType"]?.toString(),
         )
         if (rooms.isEmpty()) {
             return notFound()
         } else {
             return """
-                $MESSAGE_FOUND:\n
-                ${objectMapper.writeValueAsString(rooms)}
+                $MESSAGE_FOUND:
+                ${objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(rooms)}
             """.trimIndent()
         }
     }
@@ -131,6 +159,10 @@ class SearchRoomTool(
         propertyType: String?,
         minBedrooms: Int?,
         maxBedrooms: Int?,
+        minBudget: Double?,
+        maxBudget: Double?,
+        leaseType: String?,
+        furnishedType: String?,
     ): List<RoomSummary> {
         return kokiRooms.rooms(
             cityId = city?.id,

@@ -4,7 +4,9 @@ import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.room.dto.AddAmenityRequest
 import com.wutsi.koki.room.dto.CreateRoomRequest
 import com.wutsi.koki.room.dto.CreateRoomResponse
+import com.wutsi.koki.room.dto.FurnishedType
 import com.wutsi.koki.room.dto.GetRoomResponse
+import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.dto.RoomType
 import com.wutsi.koki.room.dto.SaveRoomGeoLocationRequest
@@ -96,6 +98,10 @@ class RoomEndpoints(
         @RequestParam(required = false, name = "amenity-id") amenityIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "category-id") categoryIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "type") types: List<RoomType> = emptyList(),
+        @RequestParam(required = false, name = "min-budget") minBudget: Double? = null,
+        @RequestParam(required = false, name = "max-budget") maxBudget: Double? = null,
+        @RequestParam(required = false, name = "lease-type") leaseType: LeaseType? = null,
+        @RequestParam(required = false, name = "furnished-type") furnishedType: FurnishedType? = null,
         @RequestParam(required = false) status: RoomStatus? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0
@@ -116,6 +122,10 @@ class RoomEndpoints(
             maxBathrooms = maxBathrooms,
             amenityIds = amenityIds,
             categoryIds = categoryIds,
+            leaseType = leaseType,
+            furnishedType = furnishedType,
+            minBudget = minBudget,
+            maxBudget = maxBudget,
             limit = limit,
             offset = offset,
         )
