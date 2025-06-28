@@ -1,65 +1,46 @@
-package com.wutsi.koki.chatbot.telegram.service
+package com.wutsi.koki.chatbot
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.chatbot.ai.data.PropertyData
-import com.wutsi.koki.chatbot.ai.data.SearchAgentData
 import com.wutsi.koki.chatbot.ai.data.SearchParameters
-import com.wutsi.koki.chatbot.telegram.refdata.model.LocationModel
-import com.wutsi.koki.chatbot.telegram.tenant.model.TenantModel
-import com.wutsi.koki.platform.url.UrlShortener
+import com.wutsi.koki.chatbot.telegram.service.UrlBuilder
+import com.wutsi.koki.refdata.dto.Location
 import com.wutsi.koki.refdata.dto.LocationType
-import org.mockito.Mockito.mock
-import org.telegram.telegrambots.meta.api.objects.Update
-import org.telegram.telegrambots.meta.api.objects.User
-import org.telegram.telegrambots.meta.api.objects.message.Message
+import com.wutsi.koki.room.dto.RoomSummary
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class TelegramUrlBuilderTest {
-    private val urlShortener = mock<UrlShortener>()
-    private val builder = TelegramUrlBuilder(urlShortener)
-    private val tenant = TenantModel(
-        clientPortalUrl = "http://localhsot:8082"
+class UrlBuilderTest {
+    private val builder = UrlBuilder("http://localhsot:8082", "telegram")
+    private val property = RoomSummary(
+        listingUrl = "/rooms/1"
     )
-    private val property = PropertyData(
-        url = "/rooms/1"
-    )
-    private val location = LocationModel(
+    private val location = Location(
         id = 123,
         type = LocationType.CITY,
-        name = "Yaounde"
+        name = "Yaounde",
     )
-    private val update = createUpdate()
+    private val request = ChatbotRequest(
+        language = "fr"
+    )
 
     @Test
     fun toLocationUrl() {
-        doReturn("http://bit.ly/123").whenever(urlShortener).shorten(any())
+        val result = builder.toLocationUrl(location, request)
 
-        val result = builder.toLocationUrl(location, tenant, update)
-
-        assertEquals("http://bit.ly/123", result)
-
-        val url = "${tenant.clientPortalUrl}/l/${location.id}/yaounde?lang=fr&utm-medium=telegram"
-        verify(urlShortener).shorten(url)
+        val url = "${builder.baseUrl}/l/${location.id}/yaounde?lang=fr&utm_medium=${builder.medium}"
+        assertEquals(url, result)
     }
 
     @Test
     fun toPropertyUrl() {
-        doReturn("http://bit.ly/123").whenever(urlShortener).shorten(any())
+        val result = builder.toPropertyUrl(property, request)
 
-        val result = builder.toPropertyUrl(property, tenant, update)
-
-        assertEquals("http://bit.ly/123", result)
-
-        val url = "${tenant.clientPortalUrl}${property.url}?lang=fr&utm-medium=telegram"
-        verify(urlShortener).shorten(url)
+        val url = "${builder.baseUrl}${property.listingUrl}?lang=fr&utm_medium=telegram"
+        assertEquals(url, result)
     }
 
     @Test
     fun `toViewUrl - city`() {
+<<<<<<< Updated upstream:modules/koki-chatbot-telegram/src/test/kotlin/com/wutsi/koki/chatbot/telegram/service/TelegramUrlBuilderTest.kt
         val data = SearchAgentData(
             searchParameters = SearchParameters(
                 propertyType = "APARTMENT",
@@ -70,14 +51,24 @@ class TelegramUrlBuilderTest {
                 leaseType = "SHORT_TERM",
                 furnishedType = "NONE"
             )
+=======
+        val params = SearchParameters(
+            propertyType = "APARTMENT",
+            minBedrooms = 1,
+            maxBedrooms = 2,
+            city = "Yaounde",
+            leaseType = "SHORT_TERM",
+            furnishedType = "NONE",
+            minBudget = 1000.0,
+            maxBudget = 2000.0,
+>>>>>>> Stashed changes:modules/koki-chatbot-telegram/src/test/kotlin/com/wutsi/koki/chatbot/UrlBuilderTest.kt
         )
 
-        doReturn("http://bit.ly/123").whenever(urlShortener).shorten(any())
-
-        val result = builder.toViewMoreUrl(data, tenant, update)
-        assertEquals("http://bit.ly/123", result)
+        val location = Location(id = 111, name = "Yaounde")
+        val result = builder.toViewMoreUrl(params, request, location)
 
         val url =
+<<<<<<< Updated upstream:modules/koki-chatbot-telegram/src/test/kotlin/com/wutsi/koki/chatbot/telegram/service/TelegramUrlBuilderTest.kt
             "${tenant.clientPortalUrl}/l/11/yaounde?lang=fr&utm-medium=telegram&min-bedroom=1&max-bedroom=2&type=APARTMENT&lease-type=SHORT_TERM&furnished-type=NONE"
         verify(urlShortener).shorten(url)
     }
@@ -108,5 +99,9 @@ class TelegramUrlBuilderTest {
         update.message.from = User(11L, "Ray Sponsible", false)
         update.message.from.languageCode = "fr"
         return update
+=======
+            "${builder.baseUrl}/l/111/yaounde?lang=fr&utm_medium=telegram&min-bedroom=1&max-bedroom=2&type=APARTMENT&lease-type=SHORT_TERM&furnished-type=NONE&min-budget=1000.0&max-budget=2000.0"
+        assertEquals(url, result)
+>>>>>>> Stashed changes:modules/koki-chatbot-telegram/src/test/kotlin/com/wutsi/koki/chatbot/UrlBuilderTest.kt
     }
 }
