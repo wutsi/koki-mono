@@ -92,6 +92,10 @@ class SearchRoomToolTest {
             emptyList(), // categoryIds
             emptyList(), // accountIds
             emptyList(), // accountManagerIds
+            null,
+            null,
+            null,
+            null,
             SearchRoomTool.MAX_RECOMMENDATIONS, // limit
             0, // offset
         )
@@ -140,6 +144,10 @@ class SearchRoomToolTest {
             emptyList(), // categoryIds
             emptyList(), // accountIds
             emptyList(), // accountManagerIds
+            null,
+            null,
+            null,
+            null,
             SearchRoomTool.MAX_RECOMMENDATIONS, // limit
             0, // offset
         )
@@ -192,6 +200,10 @@ class SearchRoomToolTest {
     private fun setupRooms(rooms: List<RoomSummary>) {
         doReturn(SearchRoomResponse(rooms))
             .whenever(kokiRooms).rooms(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),

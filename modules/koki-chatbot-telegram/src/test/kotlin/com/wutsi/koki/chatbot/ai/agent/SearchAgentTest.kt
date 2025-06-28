@@ -275,6 +275,10 @@ class SearchAgentTest {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
             )
     }
 }
