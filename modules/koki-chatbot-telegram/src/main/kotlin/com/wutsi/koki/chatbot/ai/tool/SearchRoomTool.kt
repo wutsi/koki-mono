@@ -179,10 +179,6 @@ class SearchRoomTool(
             minBathrooms = null,
             maxBathrooms = null,
             totalGuests = null,
-            minBudget = minBudget,
-            maxBudget = maxBudget,
-            leaseType = leaseType?.let { type -> LeaseType.valueOf(type.uppercase()) },
-            furnishedType = furnishedType?.let { type -> FurnishedType.valueOf(type.uppercase()) },
             limit = MAX_RECOMMENDATIONS,
             offset = 0,
         ).rooms

@@ -73,8 +73,6 @@ class SearchAgentTest {
         assertEquals(null, result.searchParameters.maxBedrooms)
         assertEquals(null, result.searchParameters.minBudget)
         assertEquals(null, result.searchParameters.maxBudget)
-        assertEquals(null, result.searchParameters.leaseType)
-        assertEquals(null, result.searchParameters.furnishedType)
     }
 
     @Test
@@ -115,7 +113,7 @@ class SearchAgentTest {
             .run("I look for a 3 bedrooms in Bastos, Yaounde")
 
         val result = objectMapper.readValue(json, SearchAgentData::class.java)
-        assertEquals(1, result.properties.size)
+        assertEquals(2, result.properties.size)
         assertEquals(rooms[1].listingUrl, result.properties[0].url)
         assertEquals(city.id, result.searchParameters.cityId)
         assertEquals(neighborhood.id, result.searchParameters.neighborhoodId)
@@ -124,8 +122,6 @@ class SearchAgentTest {
         assertEquals(null, result.searchParameters.maxBedrooms)
         assertEquals(null, result.searchParameters.minBudget)
         assertEquals(null, result.searchParameters.maxBudget)
-        assertEquals(null, result.searchParameters.leaseType)
-        assertEquals(null, result.searchParameters.furnishedType)
     }
 
     @Test
@@ -181,8 +177,6 @@ class SearchAgentTest {
         assertEquals(null, result.searchParameters.maxBedrooms)
         assertEquals(null, result.searchParameters.minBudget)
         assertEquals(75000.0, result.searchParameters.maxBudget)
-        assertEquals("SHORT_TERM", result.searchParameters.leaseType)
-        assertEquals("FULLY_FURNISHED", result.searchParameters.furnishedType)
     }
 
     @Test
@@ -265,10 +259,6 @@ class SearchAgentTest {
     private fun setupRooms(rooms: List<RoomSummary>) {
         doReturn(SearchRoomResponse(rooms))
             .whenever(kokiRooms).rooms(
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
-                anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
