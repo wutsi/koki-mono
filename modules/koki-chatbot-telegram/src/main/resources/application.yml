@@ -44,11 +44,6 @@ management:
 logging:
     level:
         root: INFO
-        com.amazonaws: ERROR
-        com.icegreen.greenmail.smtp.SmtpManager: ERROR
-        org.springframework: INFO
-        org.hibernate: ERROR
-        org.hibernate.engine.jdbc.spi.SqlExceptionHelper: OFF
         com.wutsi: DEBUG
         springfox: ERROR
 

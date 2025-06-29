@@ -6,6 +6,8 @@ import com.wutsi.koki.chatbot.InvalidQueryException
 import com.wutsi.koki.chatbot.UrlBuilder
 import com.wutsi.koki.chatbot.telegram.tenant.model.TenantModel
 import com.wutsi.koki.chatbot.telegram.tenant.service.TenantService
+import com.wutsi.koki.platform.logger.DefaultKVLogger
+import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.platform.tenant.TenantProvider
 import com.wutsi.koki.room.dto.RoomSummary
@@ -13,7 +15,6 @@ import com.wutsi.koki.track.dto.ChannelType
 import com.wutsi.koki.track.dto.Track
 import com.wutsi.koki.track.dto.TrackEvent
 import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
-import org.slf4j.LoggerFactory
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer
@@ -33,23 +34,40 @@ class TelegramConsumer(
     private val messages: MessageSource,
     private val publisher: Publisher,
 ) : LongPollingUpdateConsumer {
-    companion object {
-        val LOGGER = LoggerFactory.getLogger(TelegramConsumer::class.java)
-    }
-
     override fun consume(updates: List<Update>) {
+        val logger = DefaultKVLogger()
         updates.forEach { update ->
-            consume(update)
+            logger.add("update_message_chat_id", update.message.chat.id)
+            logger.add("update_message_chat_name", update.message.chat.userName)
+            logger.add("update_message_from_language", update.message.from.languageCode)
+            logger.add("update_message_text", update.message.text)
+
+            try {
+                if (accept(update, logger)) {
+                    consume(update, logger)
+                }
+            } finally {
+                logger.log()
+            }
         }
     }
 
-    private fun consume(update: Update) {
+    private fun accept(update: Update, logger: KVLogger): Boolean {
+        if (update.message.text.isNullOrEmpty()) {
+            logger.add("success", false)
+            logger.add("failure_reason", "no_text")
+            return false
+        }
+        return true
+    }
+
+    private fun consume(update: Update, logger: KVLogger) {
         val chatId = update.message.chatId.toString()
-        val tenant = tenantService.tenant(tenantProvider.id() ?: -1)
-        val urlBuilder = UrlBuilder(
-            baseUrl = tenant.clientPortalUrl,
-            medium = "telegram"
-        )
+
+        val tenantId = tenantProvider.id()
+        val tenant = tenantService.tenant(tenantId ?: -1)
+        logger.add("tenant_id", tenantId)
+
         val language = update.message.from.languageCode
         val request = ChatbotRequest(
             query = update.message.text,
@@ -60,7 +78,11 @@ class TelegramConsumer(
 
         try {
             val response = chatbot.process(request)
+            logger.add("room_ids", response.rooms.map { room -> room.id })
+            logger.add("success", true)
+
             if (response.rooms.isNotEmpty()) {
+                val urlBuilder = UrlBuilder(baseUrl = tenant.clientPortalUrl, medium = "telegram")
                 response.rooms.forEach { room ->
                     val title = toTitle(room, tenant, locale)
                     val url = urlBuilder.toPropertyUrl(room, request)
@@ -78,7 +100,9 @@ class TelegramConsumer(
                 )
             }
         } catch (ex: InvalidQueryException) {
-            LOGGER.warn("Invalid query", ex)
+            logger.add("success", false)
+            logger.add("failure_reason", ex.message)
+
             telegram.execute(
                 SendMessage(
                     chatId,
@@ -90,7 +114,8 @@ class TelegramConsumer(
                 )
             )
         } catch (ex: Exception) {
-            LOGGER.warn("Unexpected error", ex)
+            logger.add("success", false)
+            logger.setException(ex)
             telegram.execute(
                 SendMessage(
                     chatId,
