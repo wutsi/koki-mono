@@ -57,4 +57,18 @@ class UrlBuilderTest {
             "${builder.baseUrl}/l/111/yaounde?lang=fr&utm_medium=telegram&min-bedroom=1&max-bedroom=2&type=APARTMENT&lease-type=SHORT_TERM&furnished-type=NONE&min-budget=1000.0&max-budget=2000.0"
         assertEquals(url, result)
     }
+
+    @Test
+    fun `toViewUrl - neighborhood`() {
+        val params = SearchParameters(
+            city = "Yaounde",
+            neighborhood = "Bastos"
+        )
+
+        val location = Location(id = 222, name = "Bastos")
+        val result = builder.toViewMoreUrl(params, request, location)
+
+        val url = "${builder.baseUrl}/l/222/bastos?lang=fr&utm_medium=telegram"
+        assertEquals(url, result)
+    }
 }
