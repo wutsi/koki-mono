@@ -4,13 +4,13 @@ import com.wutsi.koki.chatbot.Chatbot
 import com.wutsi.koki.chatbot.ChatbotRequest
 import com.wutsi.koki.chatbot.InvalidQueryException
 import com.wutsi.koki.chatbot.UrlBuilder
-import com.wutsi.koki.chatbot.telegram.tenant.model.TenantModel
-import com.wutsi.koki.chatbot.telegram.tenant.service.TenantService
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.platform.tenant.TenantProvider
 import com.wutsi.koki.room.dto.RoomSummary
+import com.wutsi.koki.sdk.KokiTenants
+import com.wutsi.koki.tenant.dto.Tenant
 import com.wutsi.koki.track.dto.ChannelType
 import com.wutsi.koki.track.dto.Track
 import com.wutsi.koki.track.dto.TrackEvent
@@ -21,6 +21,7 @@ import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsume
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.generics.TelegramClient
+import java.text.DecimalFormat
 import java.util.Locale
 import java.util.UUID
 import kotlin.collections.forEach
@@ -30,12 +31,16 @@ class TelegramConsumer(
     private val telegram: TelegramClient,
     private val chatbot: Chatbot,
     private val tenantProvider: TenantProvider,
-    private val tenantService: TenantService,
+    private val kokiTenant: KokiTenants,
     private val messages: MessageSource,
     private val publisher: Publisher,
 ) : LongPollingUpdateConsumer {
     override fun consume(updates: List<Update>) {
         val logger = DefaultKVLogger()
+        consume(updates, logger)
+    }
+
+    fun consume(updates: List<Update>, logger: KVLogger) {
         updates.forEach { update ->
             logger.add("update_message_chat_id", update.message.chat.id)
             logger.add("update_message_chat_name", update.message.chat.userName)
@@ -65,7 +70,7 @@ class TelegramConsumer(
         val chatId = update.message.chatId.toString()
 
         val tenantId = tenantProvider.id()
-        val tenant = tenantService.tenant(tenantId ?: -1)
+        val tenant = kokiTenant.tenant(tenantId ?: -1).tenant
         logger.add("tenant_id", tenantId)
 
         val language = update.message.from.languageCode
@@ -125,9 +130,9 @@ class TelegramConsumer(
         }
     }
 
-    private fun toTitle(property: RoomSummary, tenant: TenantModel, locale: Locale): String {
+    private fun toTitle(property: RoomSummary, tenant: Tenant, locale: Locale): String {
         // Price
-        val fmt = tenant.createMoneyFormat()
+        val fmt = DecimalFormat(tenant.monetaryFormat)
         val price = property.pricePerMonth?.let { p ->
             messages.getMessage("price-per-month", arrayOf(fmt.format(p.amount)), locale)
         } ?: property.pricePerNight?.let { p ->

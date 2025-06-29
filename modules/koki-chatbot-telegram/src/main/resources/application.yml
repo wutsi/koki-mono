@@ -96,6 +96,7 @@ koki:
     telegram:
         bot-name: ${TELEGRAM_CHATBOT}
         token: ${TELEGRAM_TOKEN}
+        consumer-type: long-polling # long-polling | webhook
 
     url:
         bitly:
