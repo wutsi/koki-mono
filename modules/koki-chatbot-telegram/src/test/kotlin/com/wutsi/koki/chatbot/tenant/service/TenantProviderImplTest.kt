@@ -1,6 +1,5 @@
-package com.wutsi.koki.chatbot.telegram.service
+package com.wutsi.koki.chatbot.telegram.tenant.service
 
-import com.wutsi.koki.chatbot.telegram.tenant.service.TenantProviderImpl
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
