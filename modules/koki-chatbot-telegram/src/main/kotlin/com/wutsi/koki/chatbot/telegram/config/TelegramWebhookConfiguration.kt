@@ -17,7 +17,7 @@ import org.telegram.telegrambots.meta.generics.TelegramClient
 class TelegramWebhookConfiguration(
     private val telegram: TelegramClient,
 
-    @Value("\${koki.webapp.base-url}") private val baseUrl: Boolean,
+    @Value("\${koki.webapp.base-url}") private val baseUrl: String,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(TelegramWebhookConfiguration::class.java)
@@ -29,6 +29,7 @@ class TelegramWebhookConfiguration(
 
         LOGGER.info(">>> Initializing the webhook: $webhookUrl")
         val result = telegram.execute(SetWebhook(webhookUrl))
+
         LOGGER.info(">>> Webhook initialization. success=$result")
     }
 }
