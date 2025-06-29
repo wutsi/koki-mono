@@ -1,6 +1,5 @@
-package com.wutsi.koki.chatbot.telegram.service
+package com.wutsi.koki.chatbot
 
-import com.wutsi.koki.chatbot.ChatbotRequest
 import com.wutsi.koki.chatbot.ai.data.SearchParameters
 import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.refdata.dto.Location
@@ -25,14 +24,6 @@ class UrlBuilder(
 
     fun toViewMoreUrl(searchParameters: SearchParameters, request: ChatbotRequest, location: Location): String {
         val url = listOf(
-<<<<<<< Updated upstream:modules/koki-chatbot-telegram/src/main/kotlin/com/wutsi/koki/chatbot/telegram/service/TelegramUrlBuilder.kt
-            "${tenant.clientPortalUrl}/l/$locationId/$location?lang=$language&utm-medium=telegram",
-            data.searchParameters.minBedrooms?.let { value -> "min-bedroom=$value" },
-            data.searchParameters.maxBedrooms?.let { value -> "max-bedroom=$value" },
-            data.searchParameters.propertyType?.let { value -> "type=$value" },
-            data.searchParameters.leaseType?.let { value -> "lease-type=$value" },
-            data.searchParameters.furnishedType?.let { value -> "furnished-type=$value" },
-=======
             "$baseUrl/l/${location.id}/${StringUtils.toAscii(location.name).lowercase()}" +
                 "?lang=${request.language}&utm_medium=$medium",
             searchParameters.minBedrooms?.let { value -> "min-bedroom=$value" },
@@ -42,7 +33,6 @@ class UrlBuilder(
             searchParameters.furnishedType?.let { value -> "furnished-type=$value" },
             searchParameters.minBudget?.let { value -> "min-budget=$value" },
             searchParameters.maxBudget?.let { value -> "max-budget=$value" },
->>>>>>> Stashed changes:modules/koki-chatbot-telegram/src/main/kotlin/com/wutsi/koki/chatbot/UrlBuilder.kt
         )
             .filterNotNull()
             .joinToString("&")

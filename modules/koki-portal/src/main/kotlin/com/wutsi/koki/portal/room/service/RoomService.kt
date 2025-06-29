@@ -18,6 +18,7 @@ import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.room.dto.AddAmenityRequest
 import com.wutsi.koki.room.dto.CreateRoomRequest
+import com.wutsi.koki.room.dto.FurnishedType
 import com.wutsi.koki.room.dto.LeaseTerm
 import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomStatus
@@ -106,6 +107,10 @@ class RoomService(
         cityId: Long? = null,
         status: RoomStatus? = null,
         types: List<RoomType> = emptyList(),
+        minBudget: Double? = null,
+        maxBudget: Double? = null,
+        leaseType: LeaseType? = null,
+        furnishedType: FurnishedType? = null,
         limit: Int = 20,
         offset: Int = 0,
         fullGraph: Boolean = true,
@@ -125,6 +130,10 @@ class RoomService(
             neighborhoodId = null,
             categoryIds = emptyList(),
             totalGuests = null,
+            minBudget = minBudget,
+            maxBudget = maxBudget,
+            leaseType = leaseType,
+            furnishedType = furnishedType,
             limit = limit,
             offset = offset,
         ).rooms

@@ -3,6 +3,7 @@ package com.wutsi.koki.chatbot.telegram.service
 import com.wutsi.koki.chatbot.Chatbot
 import com.wutsi.koki.chatbot.ChatbotRequest
 import com.wutsi.koki.chatbot.InvalidQueryException
+import com.wutsi.koki.chatbot.UrlBuilder
 import com.wutsi.koki.chatbot.telegram.tenant.model.TenantModel
 import com.wutsi.koki.chatbot.telegram.tenant.service.TenantService
 import com.wutsi.koki.platform.mq.Publisher

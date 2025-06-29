@@ -6,6 +6,8 @@ data class SearchParameters(
     val propertyType: String? = null,
     val minBedrooms: Int? = null,
     val maxBedrooms: Int? = null,
+    val minBudget: Double? = null,
+    val maxBudget: Double? = null,
     val leaseType: String? = null,
     val furnishedType: String? = null,
     val valid: Boolean = false,
