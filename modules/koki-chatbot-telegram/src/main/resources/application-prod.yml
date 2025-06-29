@@ -3,6 +3,9 @@ logging:
         com.wutsi: INFO
 
 koki:
+    webapp:
+        base-url: ${APP_URL}
+
     rabbitmq:
         url: ${CLOUDAMQP_URL}
 
@@ -16,3 +19,6 @@ koki:
             region: us-east-1
             access-key: ${AWS_ACCESS_KEY}
             secret-key: ${AWS_SECRET_KEY}
+
+    telegram:
+        consumer-type: webhook # long-polling | webhook
