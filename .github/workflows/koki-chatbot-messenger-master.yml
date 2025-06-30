@@ -34,6 +34,8 @@ jobs:
                 env:
                     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
                     DEEPSEEK_API_KEY: ${{secrets.DEEPSEEK_API_KEY_TEST}}
+                    MESSENGER_TOKEN: ${{secrets.MESSENGER_TOKEN_TEST}}
+                    MESSENGER_VERIFY_TOKEN: ${{secrets.MESSENGER_VERIFY_TOKEN_TEST}}
                 run: |
                     mvn -q -s settings.xml --non-recursive install
                     cd modules/koki-chatbot-messenger
@@ -83,6 +85,8 @@ jobs:
                     HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY_TEST}}
                     DEEPSEEK_API_KEY: ${{secrets.DEEPSEEK_API_KEY_TEST}}
                     CLOUDAMQP_URL: ${{secrets.CLOUDAMQP_URL_TEST}}
+                    MESSENGER_TOKEN: ${{secrets.MESSENGER_TOKEN_TEST}}
+                    MESSENGER_VERIFY_TOKEN: ${{secrets.MESSENGER_VERIFY_TOKEN_TEST}}
                 run: |
                     heroku apps | grep ${HEROKU_APP} && echo 'app: ${HEROKU_APP} exists' ||  heroku apps:create ${HEROKU_APP}
                     heroku buildpacks:clear --app ${HEROKU_APP}
@@ -93,7 +97,8 @@ jobs:
                     heroku config:set --app ${HEROKU_APP} AWS_SECRET_KEY=${AWS_SECRET_KEY}
                     heroku config:set --app ${HEROKU_APP} TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
                     heroku config:set --app ${HEROKU_APP} KOKI_SERVER_URL=${KOKI_SERVER_URL}
-                    heroku config:set --app ${HEROKU_APP} CLOUDAMQP_URL=${CLOUDAMQP_URL}
+                    heroku config:set --app ${HEROKU_APP} MESSENGER_TOKEN=${MESSENGER_TOKEN}
+                    heroku config:set --app ${HEROKU_APP} MESSENGER_VERIFY_TOKEN=${MESSENGER_VERIFY_TOKEN}
                     heroku addons -a ${HEROKU_APP} | grep papertrail && echo 'addon: papertrail exists' ||  heroku addons:create papertrail -a ${HEROKU_APP}
                     cp modules/koki-chatbot-messenger/system.properties .
                     cp modules/koki-chatbot-messenger/Procfile .

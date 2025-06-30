@@ -94,5 +94,5 @@ koki:
             secret-key: ""
 
     messenger:
-        bot-name: ${MESSENGER_CHATBOT}
         token: ${MESSENGER_TOKEN}
+        verify-token: ${MESSENGER_VERIFY_TOKEN}

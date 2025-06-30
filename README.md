@@ -33,3 +33,7 @@
 [![koki-chatbot-telegram](https://github.com/wutsi/koki-mono/actions/workflows/koki-chatbot-telegram-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-chatbot-telegram-master.yml)
 [![koki-chatbot-telegram-pr](https://github.com/wutsi/koki-mono/actions/workflows/koki-chatbot-telegram-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-chatbot-telegram-pr.yml)
 ![Coverage](.github/badges/koki-chatbot-telegram-jococo.svg)
+
+[![koki-chatbot-messenger](https://github.com/wutsi/koki-mono/actions/workflows/koki-chatbot-messenger-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-chatbot-messenger-master.yml)
+[![koki-chatbot-messenger-pr](https://github.com/wutsi/koki-mono/actions/workflows/koki-chatbot-messenger-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-chatbot-messenger-pr.yml)
+![Coverage](.github/badges/koki-chatbot-messenger-jococo.svg)
