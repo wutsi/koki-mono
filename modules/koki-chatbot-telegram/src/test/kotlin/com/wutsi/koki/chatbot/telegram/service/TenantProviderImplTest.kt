@@ -1,4 +1,4 @@
-package com.wutsi.koki.chatbot.telegram.tenant.service
+package com.wutsi.koki.chatbot.telegram.service
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -103,14 +103,14 @@ class TelegramConsumer(
 
                 // View more
                 if (response.searchParameters != null && response.searchLocation != null) {
-                    val url = urlBuilder.toViewMoreUrl(response.searchParameters, request, response.searchLocation)
+                    val url = urlBuilder.toViewMoreUrl(response.searchParameters!!, request, response.searchLocation!!)
                     sendLinkKey(
                         "chatbot.location-rental",
                         "chatbot.find-more",
                         url,
                         update,
                         locale,
-                        arrayOf(response.searchLocation.name)
+                        arrayOf(response.searchLocation!!.name)
                     )
                 }
 

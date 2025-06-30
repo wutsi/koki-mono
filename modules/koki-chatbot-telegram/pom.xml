@@ -40,36 +40,19 @@
 
     <properties>
         <jacoco.threshold.line>0.95</jacoco.threshold.line>
-        <jacoco.threshold.class>0.81</jacoco.threshold.class>
+        <jacoco.threshold.class>0.95</jacoco.threshold.class>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.wutsi.koki</groupId>
-            <artifactId>koki-dto</artifactId>
-            <version>${wutsi-dto.version}</version>
+            <artifactId>koki-chatbot</artifactId>
+            <version>${wutsi-chatbot.version}</version>
         </dependency>
         <dependency>
             <groupId>com.wutsi.koki</groupId>
             <artifactId>koki-platform</artifactId>
             <version>${wutsi-platform.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.wutsi.koki</groupId>
-                    <artifactId>koki-dto</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.wutsi.koki</groupId>
-            <artifactId>koki-sdk</artifactId>
-            <version>${wutsi-sdk.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.wutsi.koki</groupId>
-                    <artifactId>koki-dto</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>

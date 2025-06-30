@@ -1,4 +1,4 @@
-package com.wutsi.koki.chatbot.telegram.tenant.service
+package com.wutsi.koki.chatbot.telegram.service
 
 import com.wutsi.koki.platform.tenant.TenantProvider
 import org.springframework.beans.factory.annotation.Value
