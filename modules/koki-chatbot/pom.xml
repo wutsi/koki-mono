@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>koki-mono</artifactId>
+        <groupId>com.wutsi.koki</groupId>
+        <version>1.0.0</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>koki-chatbot</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <scm>
+        <developerConnection>scm:git:https://github.com/wutsi/koki-mono.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Maven Packages</name>
+            <url>https://maven.pkg.github.com/wutsi/koki-mono</url>
+        </repository>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>maven</id>
+            <name>maven</name>
+            <url>https://repo1.maven.org/maven2</url>
+        </repository>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/koki/*</url>
+        </repository>
+    </repositories>
+
+    <properties>
+        <jacoco.threshold.line>0.95</jacoco.threshold.line>
+        <jacoco.threshold.class>0.95</jacoco.threshold.class>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.wutsi.koki</groupId>
+            <artifactId>koki-dto</artifactId>
+            <version>${wutsi-dto.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.wutsi.koki</groupId>
+            <artifactId>koki-platform</artifactId>
+            <version>${wutsi-platform.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.wutsi.koki</groupId>
+            <artifactId>koki-sdk</artifactId>
+            <version>${wutsi-sdk.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>
