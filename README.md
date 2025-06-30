@@ -4,6 +4,9 @@
 [![koki-dto](https://github.com/wutsi/koki-mono/actions/workflows/koki-dto-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-dto-master.yml)
 [![koki-dto-pr](https://github.com/wutsi/koki-mono/actions/workflows/koki-dto-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-dto-pr.yml)
 
+[![koki-chatbot](https://github.com/wutsi/koki-mono/actions/workflows/koki-chatbot-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-chatbot-master.yml)
+[![koki-chatbot-pr](https://github.com/wutsi/koki-mono/actions/workflows/koki-chatbot-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-chatbot-pr.yml)
+
 [![koki-sdk](https://github.com/wutsi/koki-mono/actions/workflows/koki-sdk-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-sdk-master.yml)
 [![koki-sdk-pr](https://github.com/wutsi/koki-mono/actions/workflows/koki-sdk-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-sdk-pr.yml)
 
