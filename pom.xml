@@ -26,6 +26,7 @@
         <module>modules/koki-tracking-server</module>
         <module>modules/koki-chatbot</module>
         <module>modules/koki-chatbot-telegram</module>
+        <module>modules/koki-chatbot-messenger</module>
     </modules>
 
     <scm>
@@ -56,8 +57,9 @@
     </repositories>
 
     <properties>
-        <wutsi-platform.version>0.0.29</wutsi-platform.version>
+        <wutsi-chatbot.version>0.0.1</wutsi-chatbot.version>
         <wutsi-dto.version>0.0.228</wutsi-dto.version>
+        <wutsi-platform.version>0.0.29</wutsi-platform.version>
         <wutsi-sdk.version>0.0.29</wutsi-sdk.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
