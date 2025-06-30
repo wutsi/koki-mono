@@ -83,6 +83,7 @@ class TelegramConsumer(
         val locale = Locale(language)
 
         try {
+            // Loading...
             val response = chatbot.process(request)
             logger.add("room_ids", response.rooms.map { room -> room.id })
             logger.add("success", true)
@@ -95,14 +96,14 @@ class TelegramConsumer(
                     val title = toTitle(room, tenant, locale)
                     val url = urlBuilder.toPropertyUrl(room, request)
 
-                    val text = title + "\n\n" + messages.getMessage("link", arrayOf(url), locale)
+                    val text = title + "\n\n" + messages.getMessage("chatbot.link", arrayOf(url), locale)
                     sendTextKey(text, update, locale)
                 }
 
                 // View more
                 if (response.searchParameters != null && response.searchLocation != null) {
                     val url = urlBuilder.toViewMoreUrl(response.searchParameters, request, response.searchLocation)
-                    sendLinkKey("find-more", url, update, locale)
+                    sendLinkKey("chatbot.find-more", url, update, locale)
                 }
 
                 // Track impression
@@ -125,17 +126,17 @@ class TelegramConsumer(
         // Price
         val fmt = DecimalFormat(tenant.monetaryFormat)
         val price = property.pricePerMonth?.let { p ->
-            messages.getMessage("price-per-month", arrayOf(fmt.format(p.amount)), locale)
+            messages.getMessage("chatbot.price-per-month", arrayOf(fmt.format(p.amount)), locale)
         } ?: property.pricePerNight?.let { p ->
-            messages.getMessage("price-per-night", arrayOf(fmt.format(p.amount)), locale)
+            messages.getMessage("chatbot.price-per-night", arrayOf(fmt.format(p.amount)), locale)
         }
 
         // Bedroom
-        val bedroom = messages.getMessage("n-bedroom", arrayOf(property.numberOfRooms), locale)
+        val bedroom = messages.getMessage("chatbot.n-bedroom", arrayOf(property.numberOfRooms), locale)
 
         // bathroom
         val bathroom = if (property.numberOfBathrooms > 0) {
-            messages.getMessage("n-bathroom", arrayOf(property.numberOfBathrooms), locale)
+            messages.getMessage("chatbot.n-bathroom", arrayOf(property.numberOfBathrooms), locale)
         } else {
             null
         }

@@ -11,7 +11,9 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.chatbot.Chatbot
 import com.wutsi.koki.chatbot.ChatbotResponse
 import com.wutsi.koki.chatbot.InvalidQueryException
+import com.wutsi.koki.chatbot.ai.data.SearchParameters
 import com.wutsi.koki.chatbot.telegram.AbstractTest
+import com.wutsi.koki.refdata.dto.Location
 import com.wutsi.koki.refdata.dto.Money
 import com.wutsi.koki.room.dto.RoomSummary
 import com.wutsi.koki.track.dto.TrackEvent
@@ -116,13 +118,19 @@ class TelegramConsumerTest : AbstractTest() {
                 pricePerNight = Money(85.0, "CAD")
             )
         )
-        doReturn(ChatbotResponse(rooms)).whenever(chatbot).process(any())
+        doReturn(
+            ChatbotResponse(
+                rooms = rooms,
+                searchParameters = SearchParameters(),
+                searchLocation = Location(id = 111, name = "Yaounde")
+            )
+        ).whenever(chatbot).process(any())
 
         val update = createUpdate("yo")
         consumer.consume(listOf(update))
 
         val msg = argumentCaptor<SendMessage>()
-        verify(telegram, times(rooms.size)).execute(msg.capture())
+        verify(telegram, times(rooms.size + 1)).execute(msg.capture())
 
         val event = argumentCaptor<TrackSubmittedEvent>()
         verify(publisher).publish(event.capture())
