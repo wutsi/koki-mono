@@ -49,6 +49,8 @@ jobs:
                     BITLY_API_KEY: ${{secrets.BITLY_API_KEY_TEST}}
                     TELEGRAM_TOKEN: ${{secrets.TELEGRAM_TOKEN_TEST}}
                     TELEGRAM_CHATBOT: ${{secrets.TELEGRAM_CHATBOT_TEST}}
+                    MESSENGER_TOKEN: ${{secrets.MESSENGER_TOKEN_TEST}}
+                    MESSENGER_VERIFY_TOKEN: ${{secrets.MESSENGER_VERIFY_TOKEN_TEST}}
                 run: |
                     mvn -s settings.xml validate
                     mvn -q -s settings.xml --non-recursive install
