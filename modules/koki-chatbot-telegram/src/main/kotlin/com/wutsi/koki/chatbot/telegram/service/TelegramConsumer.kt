@@ -20,6 +20,9 @@ import org.springframework.stereotype.Service
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow
 import org.telegram.telegrambots.meta.generics.TelegramClient
 import java.text.DecimalFormat
 import java.util.Locale
@@ -67,8 +70,6 @@ class TelegramConsumer(
     }
 
     private fun consume(update: Update, logger: KVLogger) {
-        val chatId = update.message.chatId.toString()
-
         val tenantId = tenantProvider.id()
         val tenant = kokiTenant.tenant(tenantId ?: -1).tenant
         logger.add("tenant_id", tenantId)
@@ -88,45 +89,35 @@ class TelegramConsumer(
 
             if (response.rooms.isNotEmpty()) {
                 val urlBuilder = UrlBuilder(baseUrl = tenant.clientPortalUrl, medium = "telegram")
+
+                // Rooms
                 response.rooms.forEach { room ->
                     val title = toTitle(room, tenant, locale)
                     val url = urlBuilder.toPropertyUrl(room, request)
 
                     val text = title + "\n\n" + messages.getMessage("link", arrayOf(url), locale)
-                    telegram.execute(SendMessage(chatId, text))
+                    sendTextKey(text, update, locale)
                 }
+
+                // View more
+                if (response.searchParameters != null && response.searchLocation != null) {
+                    val url = urlBuilder.toViewMoreUrl(response.searchParameters, request, response.searchLocation)
+                    sendLinkKey("find-more", url, update, locale)
+                }
+
+                // Track impression
                 trackImpression(response.rooms, update)
             } else {
-                telegram.execute(
-                    SendMessage(
-                        chatId,
-                        messages.getMessage("chatbot.not_found", arrayOf(), locale),
-                    )
-                )
+                sendTextKey("chatbot.not_found", update, locale)
             }
         } catch (ex: InvalidQueryException) {
             logger.add("success", false)
             logger.add("failure_reason", ex.message)
-
-            telegram.execute(
-                SendMessage(
-                    chatId,
-                    messages.getMessage(
-                        "chatbot.help",
-                        arrayOf(Locale(language, tenant.country).displayCountry),
-                        locale
-                    ),
-                )
-            )
+            sendTextKey("chatbot.help", update, locale, arrayOf(Locale(language, tenant.country).displayCountry))
         } catch (ex: Exception) {
             logger.add("success", false)
             logger.setException(ex)
-            telegram.execute(
-                SendMessage(
-                    chatId,
-                    messages.getMessage("chatbot.error", arrayOf(), locale),
-                )
-            )
+            sendTextKey("chatbot.error", update, locale)
         }
     }
 
@@ -169,5 +160,51 @@ class TelegramConsumer(
                 )
             )
         )
+    }
+
+    private fun sendTextKey(
+        key: String,
+        update: Update,
+        locale: Locale,
+        params: Array<Any> = emptyArray(),
+    ) {
+        val text = messages.getMessage(key, params, locale)
+        return sendText(text, update)
+    }
+
+    private fun sendText(text: String, update: Update) {
+        val msg = SendMessage.builder()
+            .chatId(update.message.chatId.toString())
+            .text(text)
+            .build()
+        telegram.execute(msg)
+    }
+
+    private fun sendLinkKey(
+        key: String,
+        url: String,
+        update: Update,
+        locale: Locale,
+        params: Array<Any> = emptyArray()
+    ) {
+        val text = messages.getMessage(key, params, locale)
+        val msg = SendMessage.builder()
+            .chatId(update.message.chatId.toString())
+            .text(text)
+            .replyMarkup(
+                InlineKeyboardMarkup.builder()
+                    .keyboard(
+                        listOf(
+                            InlineKeyboardRow(
+                                InlineKeyboardButton.builder()
+                                    .url(url)
+                                    .text(text)
+                                    .build()
+                            )
+                        )
+                    ).build()
+            ).build()
+
+        telegram.execute(msg)
     }
 }

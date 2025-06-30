@@ -44,8 +44,8 @@ management:
 logging:
     level:
         root: INFO
-        com.wutsi: DEBUG
         springfox: ERROR
+        com.wutsi: DEBUG
 
     pattern:
         console: "%d Type=%level Logger=%c Thread=%thread %m%n"

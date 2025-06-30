@@ -21,13 +21,14 @@ class Chatbot(
     private val maxRecommendation: Int,
 ) {
     fun process(request: ChatbotRequest): ChatbotResponse {
-        val params = run(request)
-        if (!params.valid) {
-            throw InvalidQueryException(message = params.invalidReason)
+        val searchParameters = run(request)
+        if (!searchParameters.valid) {
+            throw InvalidQueryException(message = searchParameters.invalidReason)
         } else {
-            val city = params.city?.let { location -> getLocation(location, LocationType.CITY, request.country) }
+            val city =
+                searchParameters.city?.let { location -> getLocation(location, LocationType.CITY, request.country) }
 
-            val neighborhood = params.neighborhood?.let { location ->
+            val neighborhood = searchParameters.neighborhood?.let { location ->
                 getLocation(
                     location,
                     LocationType.NEIGHBORHOOD,
@@ -36,10 +37,11 @@ class Chatbot(
                 )
             }
 
-            val rooms = search(city, neighborhood, params)
+            val rooms = search(city, neighborhood, searchParameters)
             return ChatbotResponse(
                 rooms = rooms,
-                searchLocation = neighborhood ?: city
+                searchLocation = neighborhood ?: city,
+                searchParameters = searchParameters
             )
         }
     }

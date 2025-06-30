@@ -106,6 +106,7 @@ class ChatbotTest {
         // THEN
         assertEquals(true, response.rooms.isEmpty())
         assertEquals(neighborhood, response.searchLocation)
+        assertEquals(params, response.searchParameters)
 
         verify(kokiRooms).rooms(
             emptyList(), // ids
@@ -172,6 +173,7 @@ class ChatbotTest {
         // THEN
         assertEquals(rooms, response.rooms)
         assertEquals(city, response.searchLocation)
+        assertEquals(params, response.searchParameters)
 
         verify(kokiRooms).rooms(
             emptyList(), // ids

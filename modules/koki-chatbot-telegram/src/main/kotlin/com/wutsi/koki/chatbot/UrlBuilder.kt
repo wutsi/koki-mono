@@ -28,9 +28,9 @@ class UrlBuilder(
                 "?lang=${request.language}&utm_medium=$medium",
             searchParameters.minBedrooms?.let { value -> "min-bedroom=$value" },
             searchParameters.maxBedrooms?.let { value -> "max-bedroom=$value" },
-            searchParameters.propertyType?.let { value -> "type=$value" },
-            searchParameters.leaseType?.let { value -> "lease-type=$value" },
-            searchParameters.furnishedType?.let { value -> "furnished-type=$value" },
+            searchParameters.propertyType?.let { value -> if (value == "UNKNOWN") null else "type=$value" },
+            searchParameters.leaseType?.let { value -> if (value == "UNKNOWN") null else "lease-type=$value" },
+            searchParameters.furnishedType?.let { value -> if (value == "UNKNOWN") null else "furnished-type=$value" },
             searchParameters.minBudget?.let { value -> "min-budget=$value" },
             searchParameters.maxBudget?.let { value -> "max-budget=$value" },
         )
