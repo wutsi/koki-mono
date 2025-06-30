@@ -8,8 +8,6 @@ import com.wutsi.koki.platform.tenant.TenantProvider
 import com.wutsi.koki.platform.tenant.TenantRestInterceptor
 import com.wutsi.koki.platform.tracing.ClientProvider
 import com.wutsi.koki.platform.tracing.spring.ClientRestInterceptor
-import com.wutsi.koki.platform.url.BitlyUrlShortener
-import com.wutsi.koki.platform.url.UrlShortener
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -20,7 +18,6 @@ class KokiPlatformConfiguration(
     private val objectMapper: ObjectMapper,
 
     @Value("\${koki.webapp.client-id}") private val clientId: String,
-    @Value("\${koki.url.bitly.api-key}") private val bitlyApiKey: String,
 ) {
     @Bean
     fun debugRestInterceptor(): DebugRestInterceptor {
@@ -45,10 +42,5 @@ class KokiPlatformConfiguration(
     @Bean
     fun accessTokenProvider(): AccessTokenHolder {
         return NoAccessTokenHolder()
-    }
-
-    @Bean
-    fun urlShortener(): UrlShortener {
-        return BitlyUrlShortener(accessToken = bitlyApiKey, objectMapper = objectMapper)
     }
 }
