@@ -53,7 +53,6 @@ Setup the following environment variable need for building and running the appli
 - **DEEPSEEK_API_KEY**: API Key of [Deepseek](https://www.deepseek.com).
 - **TELEGRAM_TOKEN**: Token of Telegram Chatbot.
 - **TELEGRAM_CHATBOT**: Name of the Telegram Chatbot.
-- **BITLY_API_KEY**: API key of [Bitly](https://www.bitly.com) service.
 
 ------------------------------------------------------------
 

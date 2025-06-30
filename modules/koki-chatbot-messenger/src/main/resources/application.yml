@@ -20,7 +20,7 @@ spring:
             max-request-size: 50MB
 
 server:
-    port: 8084
+    port: 8085
     error:
         whitelabel:
             enabled: false
@@ -53,7 +53,7 @@ logging:
 
 koki:
     webapp:
-        client-id: koki-chatbot-telegram
+        client-id: koki-chatbot-messenger
         base-url: http://localhost:${server.port}
         tenant-id: 1
 
@@ -93,7 +93,6 @@ koki:
             access-key: ""
             secret-key: ""
 
-    telegram:
-        bot-name: ${TELEGRAM_CHATBOT}
-        token: ${TELEGRAM_TOKEN}
-        consumer-type: long-polling # long-polling | webhook
+    messenger:
+        bot-name: ${MESSENGER_CHATBOT}
+        token: ${MESSENGER_TOKEN}

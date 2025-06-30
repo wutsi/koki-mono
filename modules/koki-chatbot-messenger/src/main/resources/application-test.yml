@@ -1,0 +1,25 @@
+logging:
+    level:
+        root: INFO
+        com.wutsi.koki.chatbot.ai.agent: WARN
+
+koki:
+    webapp:
+        base-url: ${APP_URL}
+
+    rabbitmq:
+        url: ${CLOUDAMQP_URL}
+
+    sdk:
+        base-url: ${KOKI_SERVER_URL}
+
+    storage:
+        type: s3
+        s3:
+            bucket: com-wutsi-koki-test
+            region: us-east-1
+            access-key: ${AWS_ACCESS_KEY}
+            secret-key: ${AWS_SECRET_KEY}
+
+    telegram:
+        consumer-type: webhook # long-polling | webhook

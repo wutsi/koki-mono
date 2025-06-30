@@ -1,4 +1,4 @@
-name: koki-chatbot-telegram
+name: koki-chatbot-messenger
 
 
 on:
@@ -6,8 +6,8 @@ on:
         branches:
             - master
         paths:
-            - 'modules/koki-chatbot-telegram/**'
-            - '.github/workflows/koki-chatbot-telegram-master.yml'
+            - 'modules/koki-chatbot-messenger/**'
+            - '.github/workflows/koki-chatbot-messenger-master.yml'
 
 jobs:
     build:
@@ -34,25 +34,23 @@ jobs:
                 env:
                     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
                     DEEPSEEK_API_KEY: ${{secrets.DEEPSEEK_API_KEY_TEST}}
-                    TELEGRAM_TOKEN: ${{secrets.TELEGRAM_TOKEN_TEST}}
-                    TELEGRAM_CHATBOT: ${{secrets.TELEGRAM_CHATBOT_TEST}}
                 run: |
                     mvn -q -s settings.xml --non-recursive install
-                    cd modules/koki-chatbot-telegram
+                    cd modules/koki-chatbot-messenger
                     mvn -q -s ../../settings.xml install
 
             -   name: Upload app bundle
                 uses: actions/upload-artifact@v4
                 with:
                     name: appbundle
-                    path: modules/koki-chatbot-telegram/target/*.jar
+                    path: modules/koki-chatbot-messenger/target/*.jar
 
             -   name: Generate JaCoCo Badge
                 uses: cicirello/jacoco-badge-generator@v2
                 with:
                     generate-branches-badge: false
-                    jacoco-csv-file: modules/koki-chatbot-telegram/target/site/jacoco/jacoco.csv
-                    coverage-badge-filename: koki-chatbot-telegram-jococo.svg
+                    jacoco-csv-file: modules/koki-chatbot-messenger/target/site/jacoco/jacoco.csv
+                    coverage-badge-filename: koki-chatbot-messenger-jococo.svg
 
             -   name: Commit the badge (if it changed)
                 continue-on-error: true
@@ -77,15 +75,13 @@ jobs:
 
             -   name: Heroku-Deploy-Test
                 env:
-                    HEROKU_APP: koki-chatbot-telegram-test
+                    HEROKU_APP: koki-chatbot-messenger-test
                     APP_URL: ${{secrets.KOKI_CHATBOT_TELEGRAM_URL_TEST}}
                     AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY_TEST}}
                     AWS_SECRET_KEY: ${{secrets.AWS_SECRET_KEY_TEST}}
                     KOKI_SERVER_URL: ${{secrets.KOKI_SERVER_URL_TEST}}
                     HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY_TEST}}
                     DEEPSEEK_API_KEY: ${{secrets.DEEPSEEK_API_KEY_TEST}}
-                    TELEGRAM_TOKEN: ${{secrets.TELEGRAM_TOKEN_TEST}}
-                    TELEGRAM_CHATBOT: ${{secrets.TELEGRAM_CHATBOT_TEST}}
                     CLOUDAMQP_URL: ${{secrets.CLOUDAMQP_URL_TEST}}
                 run: |
                     heroku apps | grep ${HEROKU_APP} && echo 'app: ${HEROKU_APP} exists' ||  heroku apps:create ${HEROKU_APP}
@@ -96,18 +92,16 @@ jobs:
                     heroku config:set --app ${HEROKU_APP} AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
                     heroku config:set --app ${HEROKU_APP} AWS_SECRET_KEY=${AWS_SECRET_KEY}
                     heroku config:set --app ${HEROKU_APP} TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
-                    heroku config:set --app ${HEROKU_APP} TELEGRAM_CHATBOT=${TELEGRAM_CHATBOT}
-                    heroku config:set --app ${HEROKU_APP} DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
                     heroku config:set --app ${HEROKU_APP} KOKI_SERVER_URL=${KOKI_SERVER_URL}
                     heroku config:set --app ${HEROKU_APP} CLOUDAMQP_URL=${CLOUDAMQP_URL}
                     heroku addons -a ${HEROKU_APP} | grep papertrail && echo 'addon: papertrail exists' ||  heroku addons:create papertrail -a ${HEROKU_APP}
-                    cp modules/koki-chatbot-telegram/system.properties .
-                    cp modules/koki-chatbot-telegram/Procfile .
-                    heroku deploy:jar koki-chatbot-telegram.jar --app ${HEROKU_APP}
+                    cp modules/koki-chatbot-messenger/system.properties .
+                    cp modules/koki-chatbot-messenger/Procfile .
+                    heroku deploy:jar koki-chatbot-messenger.jar --app ${HEROKU_APP}
 
             -   name: Health check
                 env:
-                    APP_URL: ${{secrets.KOKI_CHATBOT_TELEGRAM_URL_TEST}}
+                    APP_URL: ${{secrets.KOKI_CHATBOT_MESSENGER_URL_TEST}}
                 run: |
                     sleep 45
                     echo ${APP_URL}
