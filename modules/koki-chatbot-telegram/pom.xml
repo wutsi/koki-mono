@@ -91,10 +91,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
@@ -111,18 +107,6 @@
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots-meta</artifactId>
             <version>${telegrambots.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.nhaarman.mockitokotlin2</groupId>
-            <artifactId>mockito-kotlin</artifactId>
-            <version>${kotlin-mockito.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>7.11.0</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 

@@ -56,10 +56,14 @@ class TelegramConsumerTest : AbstractTest() {
         consumer.consume(listOf(update))
 
         val msg = argumentCaptor<SendMessage>()
-        verify(telegram).execute(msg.capture())
+        verify(telegram, times(2)).execute(msg.capture())
+        assertEquals(
+            messages.getMessage("chatbot.processing", arrayOf(), Locale("en")),
+            msg.firstValue.text
+        )
         assertEquals(
             messages.getMessage("chatbot.help", arrayOf("Canada"), Locale("en")),
-            msg.firstValue.text
+            msg.secondValue.text
         )
 
         verify(publisher, never()).publish(any())
@@ -73,10 +77,14 @@ class TelegramConsumerTest : AbstractTest() {
         consumer.consume(listOf(update))
 
         val msg = argumentCaptor<SendMessage>()
-        verify(telegram).execute(msg.capture())
+        verify(telegram, times(2)).execute(msg.capture())
+        assertEquals(
+            messages.getMessage("chatbot.processing", arrayOf(), Locale("en")),
+            msg.firstValue.text
+        )
         assertEquals(
             messages.getMessage("chatbot.error", arrayOf(), Locale("en")),
-            msg.firstValue.text
+            msg.secondValue.text
         )
 
         verify(publisher, never()).publish(any())
@@ -90,10 +98,14 @@ class TelegramConsumerTest : AbstractTest() {
         consumer.consume(listOf(update))
 
         val msg = argumentCaptor<SendMessage>()
-        verify(telegram).execute(msg.capture())
+        verify(telegram, times(2)).execute(msg.capture())
+        assertEquals(
+            messages.getMessage("chatbot.processing", arrayOf(), Locale("en")),
+            msg.firstValue.text
+        )
         assertEquals(
             messages.getMessage("chatbot.not_found", arrayOf(), Locale("en")),
-            msg.firstValue.text
+            msg.secondValue.text
         )
 
         verify(publisher, never()).publish(any())
@@ -130,7 +142,19 @@ class TelegramConsumerTest : AbstractTest() {
         consumer.consume(listOf(update))
 
         val msg = argumentCaptor<SendMessage>()
-        verify(telegram, times(rooms.size + 1)).execute(msg.capture())
+        verify(telegram, times(rooms.size + 2)).execute(msg.capture())
+        assertEquals(
+            messages.getMessage("chatbot.processing", arrayOf(), Locale("en")),
+            msg.firstValue.text
+        )
+        assertEquals(
+            true,
+            msg.secondValue.text.contains(rooms[0].listingUrl!!, true)
+        )
+        assertEquals(
+            true,
+            msg.thirdValue.text.contains(rooms[1].listingUrl!!, true)
+        )
 
         val event = argumentCaptor<TrackSubmittedEvent>()
         verify(publisher).publish(event.capture())

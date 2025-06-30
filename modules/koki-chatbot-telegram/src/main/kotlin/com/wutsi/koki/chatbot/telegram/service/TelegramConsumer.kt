@@ -84,6 +84,7 @@ class TelegramConsumer(
 
         try {
             // Loading...
+            sendTextKey("chatbot.processing", update, locale)
             val response = chatbot.process(request)
             logger.add("room_ids", response.rooms.map { room -> room.id })
             logger.add("success", true)
@@ -103,7 +104,14 @@ class TelegramConsumer(
                 // View more
                 if (response.searchParameters != null && response.searchLocation != null) {
                     val url = urlBuilder.toViewMoreUrl(response.searchParameters, request, response.searchLocation)
-                    sendLinkKey("chatbot.find-more", url, update, locale)
+                    sendLinkKey(
+                        "chatbot.location-rental",
+                        "chatbot.find-more",
+                        url,
+                        update,
+                        locale,
+                        arrayOf(response.searchLocation.name)
+                    )
                 }
 
                 // Track impression
@@ -182,16 +190,16 @@ class TelegramConsumer(
     }
 
     private fun sendLinkKey(
-        key: String,
+        textKey: String,
+        urlKey: String,
         url: String,
         update: Update,
         locale: Locale,
         params: Array<Any> = emptyArray()
     ) {
-        val text = messages.getMessage(key, params, locale)
         val msg = SendMessage.builder()
             .chatId(update.message.chatId.toString())
-            .text(text)
+            .text(messages.getMessage(textKey, params, locale))
             .replyMarkup(
                 InlineKeyboardMarkup.builder()
                     .keyboard(
@@ -199,7 +207,7 @@ class TelegramConsumer(
                             InlineKeyboardRow(
                                 InlineKeyboardButton.builder()
                                     .url(url)
-                                    .text(text)
+                                    .text(messages.getMessage(urlKey, params, locale))
                                     .build()
                             )
                         )
