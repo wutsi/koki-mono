@@ -154,6 +154,7 @@ class MessengerConsumer(
                                 buttons = listOf(
                                     Button(
                                         type = "web_url",
+                                        title = messages.getMessage("chatbot.view-details", arrayOf(), locale),
                                         url = urlBuilder.toPropertyUrl(room, request),
                                     )
                                 )
