@@ -4,7 +4,11 @@ import com.wutsi.koki.chatbot.Chatbot
 import com.wutsi.koki.chatbot.ChatbotRequest
 import com.wutsi.koki.chatbot.InvalidQueryException
 import com.wutsi.koki.chatbot.UrlBuilder
+import com.wutsi.koki.chatbot.messenger.model.Button
+import com.wutsi.koki.chatbot.messenger.model.Element
 import com.wutsi.koki.chatbot.messenger.model.Messaging
+import com.wutsi.koki.chatbot.messenger.model.Party
+import com.wutsi.koki.chatbot.messenger.model.Payload
 import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileSummary
 import com.wutsi.koki.file.dto.FileType
@@ -131,6 +135,9 @@ class MessengerConsumer(
         )
     }
 
+    /**
+     * See https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic
+     */
     private fun sendProperty(
         room: RoomSummary,
         images: Map<Long, FileSummary>,
@@ -138,16 +145,34 @@ class MessengerConsumer(
         tenant: Tenant,
         locale: Locale,
         urlBuilder: UrlBuilder,
-        messaging: Messaging
+        messaging: Messaging,
     ) {
-        val title = toTitle(room, tenant, locale)
-        val url = urlBuilder.toPropertyUrl(room, request)
-
-        val text = title + "\n\n" + messages.getMessage("chatbot.link", arrayOf(url), locale)
-        sendText(text, messaging)
+        val payload = Payload(
+            messaging_type = "RESPONSE",
+            recipient = Party(messaging.sender.id),
+            template_type = "generic",
+            elements = listOf(
+                Element(
+                    title = if (locale.language == "en") room.title else room.titleFr,
+                    subtitle = toSubTitle(room, tenant, locale),
+                    imageUrl = room.heroImageId?.let { id -> images[id]?.url },
+                    default_action = Button(
+                        type = "web_url",
+                        url = urlBuilder.toPropertyUrl(room, request),
+                    ),
+                    buttons = listOf(
+                        Button(
+                            type = "web_url",
+                            url = urlBuilder.toPropertyUrl(room, request),
+                        )
+                    )
+                )
+            )
+        )
+        messenger.send(messaging.recipient.id, payload)
     }
 
-    private fun toTitle(property: RoomSummary, tenant: Tenant, locale: Locale): String {
+    private fun toSubTitle(property: RoomSummary, tenant: Tenant, locale: Locale): String {
         // Price
         val fmt = DecimalFormat(tenant.monetaryFormat)
         val price = property.pricePerMonth?.let { p ->
