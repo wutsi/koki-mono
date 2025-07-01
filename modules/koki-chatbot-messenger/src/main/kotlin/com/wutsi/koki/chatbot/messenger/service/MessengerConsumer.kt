@@ -147,10 +147,10 @@ class MessengerConsumer(
                                 title = if (locale.language == "en") room.title else room.titleFr,
                                 subtitle = toSubTitle(room, tenant, locale),
                                 imageUrl = room.heroImageId?.let { id -> images[id]?.url },
-                                /*default_action = Button(
+                                default_action = Button(
                                     type = "web_url",
                                     url = urlBuilder.toPropertyUrl(room, request),
-                                ),*/
+                                ),
                                 buttons = listOf(
                                     Button(
                                         type = "web_url",
