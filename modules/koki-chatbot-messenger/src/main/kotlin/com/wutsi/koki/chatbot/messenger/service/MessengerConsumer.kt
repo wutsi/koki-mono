@@ -88,23 +88,17 @@ class MessengerConsumer(
                 val urlBuilder = UrlBuilder(baseUrl = tenant.clientPortalUrl, medium = "messenger")
 
                 // Images
-                val imageIds = response.rooms.mapNotNull { room -> room.heroImageId }
-                val images = if (imageIds.isEmpty()) {
-                    kokiFiles.files(
-                        ids = imageIds,
-                        limit = imageIds.size,
-                        offset = 0,
-                        type = FileType.IMAGE,
-                        status = FileStatus.APPROVED,
-                        ownerId = null,
-                        ownerType = null,
-                    ).files.associateBy { file -> file.id }
-                } else {
-                    emptyMap()
-                }
+                val images = kokiFiles.files(
+                    ids = response.rooms.mapNotNull { room -> room.heroImageId },
+                    limit = response.rooms.size,
+                    offset = 0,
+                    type = FileType.IMAGE,
+                    status = FileStatus.APPROVED,
+                    ownerId = null,
+                    ownerType = null,
+                ).files.associateBy { file -> file.id }
                 println(
-                    ">>> IMAGES $imageIds=" +
-                        ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(images)
+                    ">>> IMAGES=" + ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(images)
                 )
 
                 // Rooms
