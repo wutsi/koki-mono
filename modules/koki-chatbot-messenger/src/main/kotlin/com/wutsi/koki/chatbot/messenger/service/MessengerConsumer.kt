@@ -149,7 +149,6 @@ class MessengerConsumer(
                                 imageUrl = room.heroImageId?.let { id -> images[id]?.url },
                                 default_action = Button(
                                     type = "web_url",
-                                    title = messages.getMessage("chatbot.view-details", arrayOf(), locale),
                                     url = urlBuilder.toPropertyUrl(room, request),
                                 ),
                                 buttons = listOf(
