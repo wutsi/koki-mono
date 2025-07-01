@@ -1,6 +1,7 @@
 package com.wutsi.koki.chatbot.messenger.endpoint
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.koki.chatbot.messenger.model.Event
+import com.wutsi.koki.chatbot.messenger.service.MessengerConsumer
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.bind.annotation.GetMapping
@@ -13,14 +14,15 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/webhook")
 class WebhookController(
+    private val consumer: MessengerConsumer,
+
     @Value("\${koki.messenger.verify-token}") private val verifyToken: String
 ) {
     @PostMapping
-    fun onMessageReceived(@RequestBody event: Map<String, Any>) {
-        println(
-            ">> Received" +
-                ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(event)
-        )
+    fun onEvent(@RequestBody event: Event) {
+        event.entry.forEach { entry ->
+            entry.messaging.forEach { messaging -> consumer.consume(messaging) }
+        }
     }
 
     @GetMapping(produces = ["text/plain"])

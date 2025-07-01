@@ -39,8 +39,8 @@
     </repositories>
 
     <properties>
-        <jacoco.threshold.line>0.70</jacoco.threshold.line>
-        <jacoco.threshold.class>0.70</jacoco.threshold.class>
+        <jacoco.threshold.line>0.95</jacoco.threshold.line>
+        <jacoco.threshold.class>0.95</jacoco.threshold.class>
     </properties>
 
     <dependencies>
@@ -75,21 +75,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.telegram</groupId>
-            <artifactId>telegrambots-client</artifactId>
-            <version>${telegrambots.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.telegram</groupId>
-            <artifactId>telegrambots-longpolling</artifactId>
-            <version>${telegrambots.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.telegram</groupId>
-            <artifactId>telegrambots-meta</artifactId>
-            <version>${telegrambots.version}</version>
         </dependency>
     </dependencies>
 
