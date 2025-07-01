@@ -100,6 +100,7 @@ jobs:
                     heroku config:set --app ${HEROKU_APP} DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
                     heroku config:set --app ${HEROKU_APP} MESSENGER_TOKEN=${MESSENGER_TOKEN}
                     heroku config:set --app ${HEROKU_APP} MESSENGER_VERIFY_TOKEN=${MESSENGER_VERIFY_TOKEN}
+                    heroku config:set --app ${HEROKU_APP} CLOUDAMQP_URL=${CLOUDAMQP_URL}
                     heroku addons -a ${HEROKU_APP} | grep papertrail && echo 'addon: papertrail exists' ||  heroku addons:create papertrail -a ${HEROKU_APP}
                     cp modules/koki-chatbot-messenger/system.properties .
                     cp modules/koki-chatbot-messenger/Procfile .
