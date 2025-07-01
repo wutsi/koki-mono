@@ -49,7 +49,7 @@ class MessengerConsumerTest : AbstractTest() {
     fun `invalid query`() {
         doThrow(InvalidQueryException::class).whenever(chatbot).process(any())
 
-        val update = createMessaging("yo")
+        val update = createMessaging("Hello! How are you doing?")
         consumer.consume(update)
 
         val req = argumentCaptor<SendRequest>()
@@ -70,17 +70,17 @@ class MessengerConsumerTest : AbstractTest() {
     fun error() {
         doThrow(RuntimeException::class).whenever(chatbot).process(any())
 
-        val update = createMessaging("yo")
+        val update = createMessaging("Bonjour. Je cherche des filler pour sortir :-D")
         consumer.consume(update)
 
         val req = argumentCaptor<SendRequest>()
         verify(messenger, times(2)).send(eq(update.recipient.id), req.capture())
         assertEquals(
-            messages.getMessage("chatbot.processing", arrayOf(), Locale("en")),
+            messages.getMessage("chatbot.processing", arrayOf(), Locale("fr")),
             req.firstValue.message?.text
         )
         assertEquals(
-            messages.getMessage("chatbot.error", arrayOf(), Locale("en")),
+            messages.getMessage("chatbot.error", arrayOf(), Locale("fr")),
             req.secondValue.message?.text
         )
 
@@ -91,7 +91,7 @@ class MessengerConsumerTest : AbstractTest() {
     fun `not found`() {
         doReturn(ChatbotResponse()).whenever(chatbot).process(any())
 
-        val update = createMessaging("yo")
+        val update = createMessaging("Im searching for apartments in Yaounde")
         consumer.consume(update)
 
         val req = argumentCaptor<SendRequest>()
@@ -118,11 +118,11 @@ class MessengerConsumerTest : AbstractTest() {
             )
         ).whenever(chatbot).process(any())
 
-        val update = createMessaging("yo")
+        val update = createMessaging("Im searching for apartments in Yaounde")
         consumer.consume(update)
 
         val req = argumentCaptor<SendRequest>()
-        verify(messenger, times(2)).send(eq(update.recipient.id), req.capture())
+        verify(messenger, times(3)).send(eq(update.recipient.id), req.capture())
         assertEquals(
             messages.getMessage("chatbot.processing", arrayOf(), Locale("en")),
             req.firstValue.message?.text

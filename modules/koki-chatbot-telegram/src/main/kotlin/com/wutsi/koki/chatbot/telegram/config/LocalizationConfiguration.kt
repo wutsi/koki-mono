@@ -1,5 +1,6 @@
 package com.wutsi.koki.chatbot.telegram.config
 
+import org.apache.tika.language.detect.LanguageDetector
 import org.springframework.context.MessageSource
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -26,5 +27,10 @@ class LocalizationConfiguration {
         messageSource.setFallbackToSystemLocale(false)
         messageSource.setUseCodeAsDefaultMessage(true)
         return messageSource
+    }
+
+    @Bean
+    fun getLanguageDetector(): LanguageDetector {
+        return LanguageDetector.getDefaultLanguageDetector().loadModels()
     }
 }

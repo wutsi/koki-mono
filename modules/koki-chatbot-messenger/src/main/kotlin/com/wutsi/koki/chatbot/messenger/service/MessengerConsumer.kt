@@ -27,6 +27,7 @@ import com.wutsi.koki.track.dto.ChannelType
 import com.wutsi.koki.track.dto.Track
 import com.wutsi.koki.track.dto.TrackEvent
 import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
+import org.apache.tika.language.detect.LanguageDetector
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
 import java.text.DecimalFormat
@@ -43,6 +44,7 @@ class MessengerConsumer(
     private val messages: MessageSource,
     private val publisher: Publisher,
     private val logger: KVLogger,
+    private val languageDetector: LanguageDetector,
 ) {
     fun consume(messaging: Messaging) {
         logger.add("messaging_sender_id", messaging.sender.id)
@@ -68,7 +70,7 @@ class MessengerConsumer(
         val tenant = kokiTenant.tenant(tenantId ?: -1).tenant
         logger.add("tenant_id", tenantId)
 
-        val language = "en"
+        val language = detectLanguage(messaging)
         val request = ChatbotRequest(
             query = messaging.message?.text ?: "",
             language = language,
@@ -135,43 +137,73 @@ class MessengerConsumer(
         } else {
             null
         }
-        val request = SendRequest(
-            recipient = Party(messaging.sender.id),
-            message = Message(
-                attachment = Attachment(
-                    type = "template",
-                    payload = Payload(
-                        template_type = "generic",
-                        elements = rooms.map { room ->
-                            Element(
-                                title = if (locale.language == "en") room.title else room.titleFr,
-                                subtitle = toSubTitle(room, tenant, locale),
-                                image_url = room.heroImageId?.let { id -> images[id]?.url },
-                                default_action = Button(
-                                    type = "web_url",
-                                    url = urlBuilder.toPropertyUrl(room, request),
-                                ),
+
+        // Properties
+        messenger.send(
+            messaging.recipient.id,
+            SendRequest(
+                recipient = Party(messaging.sender.id),
+                message = Message(
+                    attachment = Attachment(
+                        type = "template",
+                        payload = Payload(
+                            template_type = "generic",
+                            elements = rooms.map { room ->
+                                Element(
+                                    title = if (locale.language == "en") room.title else room.titleFr,
+                                    subtitle = toSubTitle(room, tenant, locale),
+                                    image_url = room.heroImageId?.let { id -> images[id]?.url },
+                                    default_action = Button(
+                                        type = "web_url",
+                                        url = urlBuilder.toPropertyUrl(room, request),
+                                    ),
+                                    buttons = listOf(
+                                        Button(
+                                            type = "web_url",
+                                            title = titleViewDetails,
+                                            url = urlBuilder.toPropertyUrl(room, request),
+                                        ),
+                                        similarUrl?.let { url ->
+                                            Button(
+                                                type = "web_url",
+                                                title = titleSimilarProperties,
+                                                url = url,
+                                            )
+                                        },
+                                    ).filterNotNull()
+                                )
+                            }
+                        ),
+                    )
+                ),
+            )
+        )
+
+        // View more
+        if (similarUrl != null) {
+            messenger.send(
+                messaging.recipient.id,
+                SendRequest(
+                    recipient = Party(messaging.sender.id),
+                    message = Message(
+                        attachment = Attachment(
+                            type = "template",
+                            payload = Payload(
+                                template_type = "button",
+                                text = messages.getMessage("chatbot.view-more-text", arrayOf(), locale),
                                 buttons = listOf(
                                     Button(
                                         type = "web_url",
-                                        title = titleViewDetails,
-                                        url = urlBuilder.toPropertyUrl(room, request),
-                                    ),
-                                    similarUrl?.let { url ->
-                                        Button(
-                                            type = "web_url",
-                                            title = titleSimilarProperties,
-                                            url = url,
-                                        )
-                                    },
-                                ).filterNotNull()
-                            )
-                        }
+                                        title = titleSimilarProperties,
+                                        url = messages.getMessage("chatbot.view-more", arrayOf(), locale),
+                                    )
+                                ),
+                            ),
+                        )
                     ),
                 )
-            ),
-        )
-        messenger.send(messaging.recipient.id, request)
+            )
+        }
     }
 
     private fun toSubTitle(property: RoomSummary, tenant: Tenant, locale: Locale): String {
@@ -230,5 +262,16 @@ class MessengerConsumer(
                 ),
             ),
         )
+    }
+
+    private fun detectLanguage(messaging: Messaging): String {
+        val lang = messaging.message
+            ?.text
+            ?.let { text -> languageDetector.detect(text).language }
+
+        return when (lang) {
+            "en" -> "en"
+            else -> "fr"
+        }
     }
 }

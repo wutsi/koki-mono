@@ -15,6 +15,7 @@ import com.wutsi.koki.track.dto.ChannelType
 import com.wutsi.koki.track.dto.Track
 import com.wutsi.koki.track.dto.TrackEvent
 import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
+import org.apache.tika.language.detect.LanguageDetector
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer
@@ -37,6 +38,7 @@ class TelegramConsumer(
     private val kokiTenant: KokiTenants,
     private val messages: MessageSource,
     private val publisher: Publisher,
+    private val languageDetector: LanguageDetector,
 ) : LongPollingUpdateConsumer {
     override fun consume(updates: List<Update>) {
         val logger = DefaultKVLogger()
@@ -74,7 +76,7 @@ class TelegramConsumer(
         val tenant = kokiTenant.tenant(tenantId ?: -1).tenant
         logger.add("tenant_id", tenantId)
 
-        val language = update.message.from.languageCode
+        val language = detectLanguage(update)
         val request = ChatbotRequest(
             query = update.message.text,
             language = language,
@@ -213,5 +215,14 @@ class TelegramConsumer(
             ).build()
 
         telegram.execute(msg)
+    }
+
+    private fun detectLanguage(update: Update): String {
+        val lang = languageDetector.detect(update.message.text).language
+
+        return when (lang) {
+            "en" -> "en"
+            else -> update.message.from.languageCode
+        }
     }
 }
