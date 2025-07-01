@@ -84,7 +84,6 @@ class MessengerConsumer(
             val response = chatbot.process(request)
             logger.add("room_ids", response.rooms.map { room -> room.id })
             logger.add("room_hero_imageIds", response.rooms.map { room -> room.heroImageId })
-            logger.add("success", true)
 
             if (response.rooms.isNotEmpty()) {
                 val urlBuilder = UrlBuilder(baseUrl = tenant.clientPortalUrl, medium = "messenger")

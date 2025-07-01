@@ -13,20 +13,21 @@ import com.wutsi.koki.chatbot.ChatbotResponse
 import com.wutsi.koki.chatbot.InvalidQueryException
 import com.wutsi.koki.chatbot.ai.data.SearchParameters
 import com.wutsi.koki.chatbot.telegram.AbstractTest
+import com.wutsi.koki.chatbot.telegram.RoomFixtures.rooms
 import com.wutsi.koki.refdata.dto.Location
-import com.wutsi.koki.refdata.dto.Money
-import com.wutsi.koki.room.dto.RoomSummary
 import com.wutsi.koki.track.dto.TrackEvent
 import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto
 import org.telegram.telegrambots.meta.api.objects.MessageEntity
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.User
 import org.telegram.telegrambots.meta.api.objects.chat.Chat
 import org.telegram.telegrambots.meta.api.objects.message.Message
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.generics.TelegramClient
 import java.util.Locale
 import kotlin.test.Test
@@ -113,23 +114,6 @@ class TelegramConsumerTest : AbstractTest() {
 
     @Test
     fun `room found`() {
-        val rooms = listOf(
-            RoomSummary(id = 111, listingUrl = "/rooms/1", numberOfRooms = 1, pricePerMonth = Money(1600.0, "CAD")),
-            RoomSummary(
-                id = 222,
-                listingUrl = "/rooms/2",
-                numberOfRooms = 1,
-                numberOfBathrooms = 1,
-                pricePerNight = Money(80.0, "CAD")
-            ),
-            RoomSummary(
-                id = 333,
-                listingUrl = "/rooms/3",
-                numberOfRooms = 2,
-                numberOfBathrooms = 1,
-                pricePerNight = Money(85.0, "CAD")
-            )
-        )
         doReturn(
             ChatbotResponse(
                 rooms = rooms,
@@ -142,7 +126,39 @@ class TelegramConsumerTest : AbstractTest() {
         consumer.consume(listOf(update))
 
         val msg = argumentCaptor<SendMessage>()
-        verify(telegram, times(rooms.size + 2)).execute(msg.capture())
+        verify(telegram, times(2)).execute(msg.capture())
+        assertEquals(
+            messages.getMessage("chatbot.processing", arrayOf(), Locale("en")),
+            msg.firstValue.text
+        )
+
+        val msg2 = argumentCaptor<SendPhoto>()
+        verify(telegram, times(rooms.size)).execute(msg2.capture())
+
+        val event = argumentCaptor<TrackSubmittedEvent>()
+        verify(publisher).publish(event.capture())
+        assertEquals(TrackEvent.IMPRESSION, event.firstValue.track.event)
+        assertEquals("telegram", event.firstValue.track.page)
+        assertEquals(rooms.map { it.id }.joinToString("|"), event.firstValue.track.productId)
+        assertEquals(userId.toString(), event.firstValue.track.deviceId)
+        assertEquals(1L, event.firstValue.track.tenantId)
+    }
+
+    @Test
+    fun `room without hero-image`() {
+        doReturn(
+            ChatbotResponse(
+                rooms = listOf(rooms[0].copy(heroImageId = null)),
+                searchParameters = SearchParameters(),
+                searchLocation = Location(id = 111, name = "Yaounde")
+            )
+        ).whenever(chatbot).process(any())
+
+        val update = createUpdate("yo")
+        consumer.consume(listOf(update))
+
+        val msg = argumentCaptor<SendMessage>()
+        verify(telegram, times(3)).execute(msg.capture())
         assertEquals(
             messages.getMessage("chatbot.processing", arrayOf(), Locale("en")),
             msg.firstValue.text
@@ -152,17 +168,16 @@ class TelegramConsumerTest : AbstractTest() {
             msg.secondValue.text.contains(rooms[0].listingUrl!!, true)
         )
         assertEquals(
-            true,
-            msg.thirdValue.text.contains(rooms[1].listingUrl!!, true)
+            messages.getMessage("chatbot.find-more-text", arrayOf(), Locale("en")),
+            msg.thirdValue.text
+        )
+        assertEquals(
+            1,
+            (msg.thirdValue.replyMarkup as InlineKeyboardMarkup).keyboard.size,
         )
 
-        val event = argumentCaptor<TrackSubmittedEvent>()
-        verify(publisher).publish(event.capture())
-        assertEquals(TrackEvent.IMPRESSION, event.firstValue.track.event)
-        assertEquals("telegram", event.firstValue.track.page)
-        assertEquals("111|222|333", event.firstValue.track.productId)
-        assertEquals(userId.toString(), event.firstValue.track.deviceId)
-        assertEquals(1L, event.firstValue.track.tenantId)
+        val msg2 = argumentCaptor<SendPhoto>()
+        verify(telegram, never()).execute(msg2.capture())
     }
 
     private fun createUpdate(text: String, language: String = "en"): Update {

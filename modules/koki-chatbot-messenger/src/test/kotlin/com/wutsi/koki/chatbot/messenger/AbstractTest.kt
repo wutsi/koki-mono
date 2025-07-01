@@ -79,7 +79,6 @@ abstract class AbstractTest {
     }
 
     private fun setupFileModule() {
-        // Tenant
         doReturn(
             ResponseEntity(
                 SearchFileResponse(FileFixtures.images),

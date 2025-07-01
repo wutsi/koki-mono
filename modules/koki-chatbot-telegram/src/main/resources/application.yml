@@ -80,6 +80,7 @@ koki:
 
     sdk:
         base-url: http://localhost:8080
+        #base-url: https://koki-server-test-71da83cfcf1a.herokuapp.com/
 
     storage:
         type: local # local | s3

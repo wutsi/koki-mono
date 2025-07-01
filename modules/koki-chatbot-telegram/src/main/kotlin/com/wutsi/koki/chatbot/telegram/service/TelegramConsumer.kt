@@ -2,13 +2,18 @@ package com.wutsi.koki.chatbot.telegram.service
 
 import com.wutsi.koki.chatbot.Chatbot
 import com.wutsi.koki.chatbot.ChatbotRequest
+import com.wutsi.koki.chatbot.ChatbotResponse
 import com.wutsi.koki.chatbot.InvalidQueryException
 import com.wutsi.koki.chatbot.UrlBuilder
+import com.wutsi.koki.file.dto.FileStatus
+import com.wutsi.koki.file.dto.FileSummary
+import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.platform.tenant.TenantProvider
 import com.wutsi.koki.room.dto.RoomSummary
+import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiTenants
 import com.wutsi.koki.tenant.dto.Tenant
 import com.wutsi.koki.track.dto.ChannelType
@@ -20,11 +25,14 @@ import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto
+import org.telegram.telegrambots.meta.api.objects.InputFile
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow
 import org.telegram.telegrambots.meta.generics.TelegramClient
+import java.net.URI
 import java.text.DecimalFormat
 import java.util.Locale
 import java.util.UUID
@@ -35,7 +43,8 @@ class TelegramConsumer(
     private val telegram: TelegramClient,
     private val chatbot: Chatbot,
     private val tenantProvider: TenantProvider,
-    private val kokiTenant: KokiTenants,
+    private val kokiTenants: KokiTenants,
+    private val kokiFiles: KokiFiles,
     private val messages: MessageSource,
     private val publisher: Publisher,
     private val languageDetector: LanguageDetector,
@@ -73,7 +82,7 @@ class TelegramConsumer(
 
     private fun consume(update: Update, logger: KVLogger) {
         val tenantId = tenantProvider.id()
-        val tenant = kokiTenant.tenant(tenantId ?: -1).tenant
+        val tenant = kokiTenants.tenant(tenantId ?: -1).tenant
         logger.add("tenant_id", tenantId)
 
         val language = detectLanguage(update)
@@ -89,32 +98,24 @@ class TelegramConsumer(
             sendTextKey("chatbot.processing", update, locale)
             val response = chatbot.process(request)
             logger.add("room_ids", response.rooms.map { room -> room.id })
-            logger.add("success", true)
+            logger.add("room_hero_imageIds", response.rooms.map { room -> room.heroImageId })
 
             if (response.rooms.isNotEmpty()) {
                 val urlBuilder = UrlBuilder(baseUrl = tenant.clientPortalUrl, medium = "telegram")
 
+                // Images
+                val images = kokiFiles.files(
+                    ids = response.rooms.mapNotNull { room -> room.heroImageId },
+                    limit = response.rooms.size,
+                    offset = 0,
+                    type = FileType.IMAGE,
+                    status = FileStatus.APPROVED,
+                    ownerId = null,
+                    ownerType = null,
+                ).files.associateBy { file -> file.id }
+
                 // Rooms
-                response.rooms.forEach { room ->
-                    val title = toTitle(room, tenant, locale)
-                    val url = urlBuilder.toPropertyUrl(room, request)
-
-                    val text = title + "\n\n" + messages.getMessage("chatbot.link", arrayOf(url), locale)
-                    sendTextKey(text, update, locale)
-                }
-
-                // View more
-                if (response.searchParameters != null && response.searchLocation != null) {
-                    val url = urlBuilder.toViewMoreUrl(response.searchParameters!!, request, response.searchLocation!!)
-                    sendLinkKey(
-                        "chatbot.location-rental",
-                        "chatbot.find-more",
-                        url,
-                        update,
-                        locale,
-                        arrayOf(response.searchLocation!!.name)
-                    )
-                }
+                sendProperties(response.rooms, images, update, request, response, tenant, locale, urlBuilder)
 
                 // Track impression
                 trackImpression(response.rooms, update)
@@ -127,6 +128,54 @@ class TelegramConsumer(
         } catch (ex: Exception) {
             logger.setException(ex)
             sendTextKey("chatbot.error", update, locale)
+        }
+    }
+
+    private fun sendProperties(
+        rooms: List<RoomSummary>,
+        images: Map<Long, FileSummary>,
+        update: Update,
+        request: ChatbotRequest,
+        response: ChatbotResponse,
+        tenant: Tenant,
+        locale: Locale,
+        urlBuilder: UrlBuilder
+    ) {
+        val similarUrl = if (response.searchLocation != null && response.searchParameters != null) {
+            urlBuilder.toViewMoreUrl(response.searchParameters!!, request, response.searchLocation!!)
+        } else {
+            null
+        }
+
+        rooms.forEach { room ->
+            val title = toTitle(room, tenant, locale)
+            val detailsUrl = urlBuilder.toPropertyUrl(room, request)
+            val image = room.heroImageId?.let { id -> images[id] }
+            if (image != null) {
+                sendPhoto(
+                    image = image,
+                    caption = title,
+                    detailsTitle = messages.getMessage("chatbot.view-details", arrayOf(), locale),
+                    detailsUrl = detailsUrl,
+                    similarTitle = messages.getMessage("chatbot.similar-properties", arrayOf(), locale),
+                    similarUrl = similarUrl,
+                    update = update
+                )
+            } else {
+                sendText(
+                    text = "$title\n\n$detailsUrl",
+                    update = update
+                )
+            }
+        }
+
+        if (similarUrl != null) {
+            sendLink(
+                text = messages.getMessage("chatbot.find-more-text", arrayOf(), locale),
+                url = similarUrl,
+                urlTitle = messages.getMessage("chatbot.find-more", arrayOf(), locale),
+                update = update
+            )
         }
     }
 
@@ -189,17 +238,57 @@ class TelegramConsumer(
         telegram.execute(msg)
     }
 
-    private fun sendLinkKey(
-        textKey: String,
-        urlKey: String,
+    private fun sendPhoto(
+        image: FileSummary,
+        caption: String,
+        detailsTitle: String,
+        detailsUrl: String,
+        similarTitle: String,
+        similarUrl: String?,
+        update: Update
+    ) {
+        val photo = InputFile()
+        val stream = URI.create(image.url).toURL().openStream()
+        stream.use {
+            photo.setMedia(stream, image.name)
+            val msg = SendPhoto.builder()
+                .chatId(update.message.chatId.toString())
+                .photo(photo)
+                .caption(caption)
+                .replyMarkup(
+                    InlineKeyboardMarkup.builder()
+                        .keyboard(
+                            listOf(
+                                InlineKeyboardRow(
+                                    InlineKeyboardButton.builder()
+                                        .url(detailsUrl)
+                                        .text(detailsTitle)
+                                        .build(),
+                                ),
+                                similarUrl?.let { url ->
+                                    InlineKeyboardRow(
+                                        InlineKeyboardButton.builder()
+                                            .url(url)
+                                            .text(similarTitle)
+                                            .build()
+                                    )
+                                }
+                            ).filterNotNull()
+                        ).build()
+                ).build()
+            telegram.execute(msg)
+        }
+    }
+
+    private fun sendLink(
+        text: String,
         url: String,
-        update: Update,
-        locale: Locale,
-        params: Array<Any> = emptyArray()
+        urlTitle: String,
+        update: Update
     ) {
         val msg = SendMessage.builder()
             .chatId(update.message.chatId.toString())
-            .text(messages.getMessage(textKey, params, locale))
+            .text(text)
             .replyMarkup(
                 InlineKeyboardMarkup.builder()
                     .keyboard(
@@ -207,13 +296,12 @@ class TelegramConsumer(
                             InlineKeyboardRow(
                                 InlineKeyboardButton.builder()
                                     .url(url)
-                                    .text(messages.getMessage(urlKey, params, locale))
+                                    .text(urlTitle)
                                     .build()
                             )
                         )
                     ).build()
             ).build()
-
         telegram.execute(msg)
     }
 
