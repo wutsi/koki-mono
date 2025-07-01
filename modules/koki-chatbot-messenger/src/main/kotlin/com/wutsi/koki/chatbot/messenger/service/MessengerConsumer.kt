@@ -80,9 +80,6 @@ class MessengerConsumer(
             // Loading...
             sendTextKey("chatbot.processing", messaging, locale)
             val response = chatbot.process(request)
-            println(
-                ">>> rooms" + ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(response)
-            )
             logger.add("room_ids", response.rooms.map { room -> room.id })
             logger.add("room_hero_imageIds", response.rooms.map { room -> room.heroImageId })
             logger.add("success", true)
@@ -105,6 +102,10 @@ class MessengerConsumer(
                 } else {
                     emptyMap()
                 }
+                println(
+                    ">>> IMAGES $imageIds=" +
+                        ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(images)
+                )
 
                 // Rooms
                 sendProperties(response.rooms, images, request, tenant, locale, urlBuilder, messaging)
@@ -149,7 +150,7 @@ class MessengerConsumer(
                             Element(
                                 title = if (locale.language == "en") room.title else room.titleFr,
                                 subtitle = toSubTitle(room, tenant, locale),
-                                imageUrl = room.heroImageId?.let { id -> images[id]?.url },
+                                image_url = room.heroImageId?.let { id -> images[id]?.url },
                                 default_action = Button(
                                     type = "web_url",
                                     url = urlBuilder.toPropertyUrl(room, request),
