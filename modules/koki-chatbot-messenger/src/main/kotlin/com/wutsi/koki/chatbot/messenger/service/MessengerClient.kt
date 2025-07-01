@@ -2,6 +2,7 @@ package com.wutsi.koki.chatbot.messenger.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.chatbot.messenger.model.SendRequest
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.io.IOException
@@ -18,16 +19,20 @@ class MessengerClient(
     @Value("\${koki.messenger.token}") val token: String,
     @Value("\${koki.messenger.api-version}") val apiVersion: String,
 ) {
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(MessengerClient::class.java)
+    }
+
     fun send(pageId: String, request: SendRequest) {
-        println(
+        LOGGER.debug(
             ">>> send $pageId " +
-            objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(request)
+                objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(request)
         )
 
         val url = "https://graph.facebook.com/v$apiVersion/$pageId/messages"
         val request = HttpRequest.newBuilder()
             .uri(URI.create(url))
-            .header("Authorization", "Bearer " + token)
+            .header("Authorization", "Bearer $token")
             .header("Content-Type", "application/json")
             .POST(
                 HttpRequest.BodyPublishers.ofString(

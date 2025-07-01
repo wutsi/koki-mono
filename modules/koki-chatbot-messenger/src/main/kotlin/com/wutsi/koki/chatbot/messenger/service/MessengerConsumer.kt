@@ -87,6 +87,8 @@ class MessengerConsumer(
 
                 // Images
                 val imageIds = response.rooms.mapNotNull { room -> room.heroImageId }
+                logger.add("image_ids", imageIds)
+
                 val images = if (imageIds.isEmpty()) {
                     kokiFiles.files(
                         ids = imageIds,
