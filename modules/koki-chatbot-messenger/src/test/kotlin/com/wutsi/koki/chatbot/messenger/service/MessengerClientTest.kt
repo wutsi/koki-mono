@@ -6,6 +6,9 @@ import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.chatbot.messenger.model.Message
+import com.wutsi.koki.chatbot.messenger.model.Party
+import com.wutsi.koki.chatbot.messenger.model.SendRequest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
@@ -33,7 +36,13 @@ class MessengerClientTest {
         doReturn(200).whenever(respone).statusCode()
         doReturn(respone).whenever(http).send(any<HttpRequest>(), any<BodyHandler<String>>())
 
-        messenger.send("111", "ray.sponsible", "Yo man")
+        messenger.send(
+            "111",
+            SendRequest(
+                recipient = Party(id = "ray.sponsible"),
+                message = Message(text = "Yo man")
+            ),
+        )
 
         val request = argumentCaptor<HttpRequest>()
         val handler = argumentCaptor<BodyHandler<String>>()
@@ -56,7 +65,13 @@ class MessengerClientTest {
         doReturn(respone).whenever(http).send(any<HttpRequest>(), any<BodyHandler<String>>())
 
         assertThrows<IOException> {
-            messenger.send("111", "ray.sponsible", "Yo man")
+            messenger.send(
+                "111",
+                SendRequest(
+                    recipient = Party(id = "ray.sponsible"),
+                    message = Message(text = "Yo man")
+                ),
+            )
         }
     }
 }
