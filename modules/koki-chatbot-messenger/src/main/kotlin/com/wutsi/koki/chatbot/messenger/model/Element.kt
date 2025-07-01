@@ -5,5 +5,5 @@ data class Element(
     val imageUrl: String? = null,
     val subtitle: String? = null,
     val default_action: Button? = null,
-    val buttons: List<Button> = emptyList()
+    val buttons: List<Button>? = null
 )
