@@ -19,6 +19,11 @@ class MessengerClient(
     @Value("\${koki.messenger.api-version}") val apiVersion: String,
 ) {
     fun send(pageId: String, request: SendRequest) {
+        println(
+            ">>> send $pageId " +
+            objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(request)
+        )
+
         val url = "https://graph.facebook.com/v$apiVersion/$pageId/messages"
         val request = HttpRequest.newBuilder()
             .uri(URI.create(url))
