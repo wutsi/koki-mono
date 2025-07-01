@@ -194,8 +194,8 @@ class MessengerConsumer(
                                 buttons = listOf(
                                     Button(
                                         type = "web_url",
-                                        title = titleSimilarProperties,
-                                        url = messages.getMessage("chatbot.find-more", arrayOf(), locale),
+                                        title = messages.getMessage("chatbot.find-more", arrayOf(), locale),
+                                        url = similarUrl,
                                     )
                                 ),
                             ),
