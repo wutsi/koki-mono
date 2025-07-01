@@ -1,4 +1,4 @@
-package com.wutsi.koki.chatbot.telegram
+package com.wutsi.koki.chatbot.messenger
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
