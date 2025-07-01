@@ -1,5 +1,6 @@
 package com.wutsi.koki.chatbot.messenger.service
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.chatbot.Chatbot
 import com.wutsi.koki.chatbot.ChatbotRequest
 import com.wutsi.koki.chatbot.InvalidQueryException
@@ -79,7 +80,11 @@ class MessengerConsumer(
             // Loading...
             sendTextKey("chatbot.processing", messaging, locale)
             val response = chatbot.process(request)
+            println(
+                ">>> rooms" + ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(response)
+            )
             logger.add("room_ids", response.rooms.map { room -> room.id })
+            logger.add("room_hero_imageIds", response.rooms.map { room -> room.heroImageId })
             logger.add("success", true)
 
             if (response.rooms.isNotEmpty()) {
@@ -87,8 +92,6 @@ class MessengerConsumer(
 
                 // Images
                 val imageIds = response.rooms.mapNotNull { room -> room.heroImageId }
-                logger.add("image_ids", imageIds)
-
                 val images = if (imageIds.isEmpty()) {
                     kokiFiles.files(
                         ids = imageIds,
@@ -115,11 +118,9 @@ class MessengerConsumer(
                 sendTextKey("chatbot.not-found", messaging, locale)
             }
         } catch (ex: InvalidQueryException) {
-            logger.add("success", false)
             logger.add("failure_reason", ex.message)
             sendTextKey("chatbot.help", messaging, locale, arrayOf(Locale(language, tenant.country).displayCountry))
         } catch (ex: Exception) {
-            logger.add("success", false)
             logger.setException(ex)
             sendTextKey("chatbot.error", messaging, locale)
         }

@@ -120,11 +120,9 @@ class TelegramConsumer(
                 sendTextKey("chatbot.not-found", update, locale)
             }
         } catch (ex: InvalidQueryException) {
-            logger.add("success", false)
             logger.add("failure_reason", ex.message)
             sendTextKey("chatbot.help", update, locale, arrayOf(Locale(language, tenant.country).displayCountry))
         } catch (ex: Exception) {
-            logger.add("success", false)
             logger.setException(ex)
             sendTextKey("chatbot.error", update, locale)
         }
