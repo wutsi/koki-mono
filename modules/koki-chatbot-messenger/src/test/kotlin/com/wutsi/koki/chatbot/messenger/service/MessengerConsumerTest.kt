@@ -18,6 +18,7 @@ import com.wutsi.koki.chatbot.messenger.RoomFixtures.rooms
 import com.wutsi.koki.chatbot.messenger.model.Message
 import com.wutsi.koki.chatbot.messenger.model.Messaging
 import com.wutsi.koki.chatbot.messenger.model.Party
+import com.wutsi.koki.chatbot.messenger.model.Payload
 import com.wutsi.koki.refdata.dto.Location
 import com.wutsi.koki.track.dto.TrackEvent
 import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
@@ -121,19 +122,14 @@ class MessengerConsumerTest : AbstractTest() {
         consumer.consume(update)
 
         val text = argumentCaptor<String>()
-        verify(messenger, times(rooms.size + 1)).send(eq(update.recipient.id), eq(update.sender.id), text.capture())
+        verify(messenger).send(eq(update.recipient.id), eq(update.sender.id), text.capture())
         assertEquals(
             messages.getMessage("chatbot.processing", arrayOf(), Locale("en")),
             text.firstValue
         )
-        assertEquals(
-            true,
-            text.secondValue.contains(rooms[0].listingUrl!!, true)
-        )
-        assertEquals(
-            true,
-            text.thirdValue.contains(rooms[1].listingUrl!!, true)
-        )
+
+        val payload = argumentCaptor<Payload>()
+        verify(messenger, times(rooms.size)).send(eq(update.recipient.id), payload.capture())
 
         val event = argumentCaptor<TrackSubmittedEvent>()
         verify(publisher).publish(event.capture())
