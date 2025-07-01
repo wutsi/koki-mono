@@ -4,11 +4,14 @@ import com.wutsi.koki.chatbot.Chatbot
 import com.wutsi.koki.chatbot.ChatbotRequest
 import com.wutsi.koki.chatbot.InvalidQueryException
 import com.wutsi.koki.chatbot.UrlBuilder
+import com.wutsi.koki.chatbot.messenger.model.Attachment
 import com.wutsi.koki.chatbot.messenger.model.Button
 import com.wutsi.koki.chatbot.messenger.model.Element
+import com.wutsi.koki.chatbot.messenger.model.Message
 import com.wutsi.koki.chatbot.messenger.model.Messaging
 import com.wutsi.koki.chatbot.messenger.model.Party
 import com.wutsi.koki.chatbot.messenger.model.Payload
+import com.wutsi.koki.chatbot.messenger.model.SendRequest
 import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileSummary
 import com.wutsi.koki.file.dto.FileType
@@ -99,9 +102,7 @@ class MessengerConsumer(
                 }
 
                 // Rooms
-                response.rooms.forEach { room ->
-                    sendProperty(room, images, request, tenant, locale, urlBuilder, messaging)
-                }
+                sendProperties(response.rooms, images, request, tenant, locale, urlBuilder, messaging)
 
                 // View more
                 // TODO
@@ -109,7 +110,7 @@ class MessengerConsumer(
                 // Track impression
                 trackImpression(response.rooms, messaging)
             } else {
-                sendTextKey("chatbot.not_found", messaging, locale)
+                sendTextKey("chatbot.not-found", messaging, locale)
             }
         } catch (ex: InvalidQueryException) {
             logger.add("success", false)
@@ -122,24 +123,11 @@ class MessengerConsumer(
         }
     }
 
-    private fun sendTextKey(key: String, messaging: Messaging, locale: Locale, params: Array<Any> = emptyArray()) {
-        val text = messages.getMessage(key, params, locale)
-        sendText(text, messaging)
-    }
-
-    private fun sendText(text: String, messaging: Messaging) {
-        messenger.send(
-            pageId = messaging.recipient.id,
-            recipientId = messaging.sender.id,
-            text = text
-        )
-    }
-
     /**
      * See https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic
      */
-    private fun sendProperty(
-        room: RoomSummary,
+    private fun sendProperties(
+        rooms: List<RoomSummary>,
         images: Map<Long, FileSummary>,
         request: ChatbotRequest,
         tenant: Tenant,
@@ -147,29 +135,35 @@ class MessengerConsumer(
         urlBuilder: UrlBuilder,
         messaging: Messaging,
     ) {
-        val payload = Payload(
-            messaging_type = "RESPONSE",
+        val request = SendRequest(
             recipient = Party(messaging.sender.id),
-            template_type = "generic",
-            elements = listOf(
-                Element(
-                    title = if (locale.language == "en") room.title else room.titleFr,
-                    subtitle = toSubTitle(room, tenant, locale),
-                    imageUrl = room.heroImageId?.let { id -> images[id]?.url },
-                    default_action = Button(
-                        type = "web_url",
-                        url = urlBuilder.toPropertyUrl(room, request),
+            message = Message(
+                attachment = Attachment(
+                    type = "template",
+                    payload = Payload(
+                        template_type = "generic",
+                        elements = rooms.map { room ->
+                            Element(
+                                title = if (locale.language == "en") room.title else room.titleFr,
+                                subtitle = toSubTitle(room, tenant, locale),
+                                imageUrl = room.heroImageId?.let { id -> images[id]?.url },
+                                default_action = Button(
+                                    type = "web_url",
+                                    url = urlBuilder.toPropertyUrl(room, request),
+                                ),
+                                buttons = listOf(
+                                    Button(
+                                        type = "web_url",
+                                        url = urlBuilder.toPropertyUrl(room, request),
+                                    )
+                                )
+                            )
+                        }
                     ),
-                    buttons = listOf(
-                        Button(
-                            type = "web_url",
-                            url = urlBuilder.toPropertyUrl(room, request),
-                        )
-                    )
                 )
-            )
+            ),
         )
-        messenger.send(messaging.recipient.id, payload)
+        messenger.send(messaging.recipient.id, request)
     }
 
     private fun toSubTitle(property: RoomSummary, tenant: Tenant, locale: Locale): String {
@@ -210,6 +204,23 @@ class MessengerConsumer(
                     channelType = ChannelType.MESSAGING,
                 )
             )
+        )
+    }
+
+    private fun sendTextKey(key: String, messaging: Messaging, locale: Locale, params: Array<Any> = emptyArray()) {
+        val text = messages.getMessage(key, params, locale)
+        sendText(text, messaging)
+    }
+
+    private fun sendText(text: String, messaging: Messaging) {
+        messenger.send(
+            pageId = messaging.recipient.id,
+            request = SendRequest(
+                recipient = Party(messaging.sender.id),
+                message = Message(
+                    text = text,
+                ),
+            ),
         )
     }
 }

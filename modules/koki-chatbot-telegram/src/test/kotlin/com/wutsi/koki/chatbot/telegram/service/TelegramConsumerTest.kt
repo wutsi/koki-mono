@@ -104,7 +104,7 @@ class TelegramConsumerTest : AbstractTest() {
             msg.firstValue.text
         )
         assertEquals(
-            messages.getMessage("chatbot.not_found", arrayOf(), Locale("en")),
+            messages.getMessage("chatbot.not-found", arrayOf(), Locale("en")),
             msg.secondValue.text
         )
 

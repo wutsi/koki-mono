@@ -18,7 +18,7 @@ import com.wutsi.koki.chatbot.messenger.RoomFixtures.rooms
 import com.wutsi.koki.chatbot.messenger.model.Message
 import com.wutsi.koki.chatbot.messenger.model.Messaging
 import com.wutsi.koki.chatbot.messenger.model.Party
-import com.wutsi.koki.chatbot.messenger.model.Payload
+import com.wutsi.koki.chatbot.messenger.model.SendRequest
 import com.wutsi.koki.refdata.dto.Location
 import com.wutsi.koki.track.dto.TrackEvent
 import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
@@ -52,15 +52,15 @@ class MessengerConsumerTest : AbstractTest() {
         val update = createMessaging("yo")
         consumer.consume(update)
 
-        val text = argumentCaptor<String>()
-        verify(messenger, times(2)).send(eq(update.recipient.id), eq(update.sender.id), text.capture())
+        val req = argumentCaptor<SendRequest>()
+        verify(messenger, times(2)).send(eq(update.recipient.id), req.capture())
         assertEquals(
             messages.getMessage("chatbot.processing", arrayOf(), Locale("en")),
-            text.firstValue
+            req.firstValue.message?.text
         )
         assertEquals(
             messages.getMessage("chatbot.help", arrayOf("Canada"), Locale("en")),
-            text.secondValue
+            req.secondValue.message?.text
         )
 
         verify(publisher, never()).publish(any())
@@ -73,15 +73,15 @@ class MessengerConsumerTest : AbstractTest() {
         val update = createMessaging("yo")
         consumer.consume(update)
 
-        val text = argumentCaptor<String>()
-        verify(messenger, times(2)).send(eq(update.recipient.id), eq(update.sender.id), text.capture())
+        val req = argumentCaptor<SendRequest>()
+        verify(messenger, times(2)).send(eq(update.recipient.id), req.capture())
         assertEquals(
             messages.getMessage("chatbot.processing", arrayOf(), Locale("en")),
-            text.firstValue
+            req.firstValue.message?.text
         )
         assertEquals(
             messages.getMessage("chatbot.error", arrayOf(), Locale("en")),
-            text.secondValue
+            req.secondValue.message?.text
         )
 
         verify(publisher, never()).publish(any())
@@ -94,15 +94,15 @@ class MessengerConsumerTest : AbstractTest() {
         val update = createMessaging("yo")
         consumer.consume(update)
 
-        val text = argumentCaptor<String>()
-        verify(messenger, times(2)).send(eq(update.recipient.id), eq(update.sender.id), text.capture())
+        val req = argumentCaptor<SendRequest>()
+        verify(messenger, times(2)).send(eq(update.recipient.id), req.capture())
         assertEquals(
             messages.getMessage("chatbot.processing", arrayOf(), Locale("en")),
-            text.firstValue
+            req.firstValue.message?.text
         )
         assertEquals(
-            messages.getMessage("chatbot.not_found", arrayOf(), Locale("en")),
-            text.secondValue
+            messages.getMessage("chatbot.not-found", arrayOf(), Locale("en")),
+            req.secondValue.message?.text
         )
 
         verify(publisher, never()).publish(any())
@@ -121,15 +121,12 @@ class MessengerConsumerTest : AbstractTest() {
         val update = createMessaging("yo")
         consumer.consume(update)
 
-        val text = argumentCaptor<String>()
-        verify(messenger).send(eq(update.recipient.id), eq(update.sender.id), text.capture())
+        val req = argumentCaptor<SendRequest>()
+        verify(messenger, times(2)).send(eq(update.recipient.id), req.capture())
         assertEquals(
             messages.getMessage("chatbot.processing", arrayOf(), Locale("en")),
-            text.firstValue
+            req.firstValue.message?.text
         )
-
-        val payload = argumentCaptor<Payload>()
-        verify(messenger, times(rooms.size)).send(eq(update.recipient.id), payload.capture())
 
         val event = argumentCaptor<TrackSubmittedEvent>()
         verify(publisher).publish(event.capture())

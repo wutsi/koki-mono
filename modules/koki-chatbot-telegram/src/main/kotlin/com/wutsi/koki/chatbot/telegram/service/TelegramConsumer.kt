@@ -117,7 +117,7 @@ class TelegramConsumer(
                 // Track impression
                 trackImpression(response.rooms, update)
             } else {
-                sendTextKey("chatbot.not_found", update, locale)
+                sendTextKey("chatbot.not-found", update, locale)
             }
         } catch (ex: InvalidQueryException) {
             logger.add("success", false)
