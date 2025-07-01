@@ -1,8 +1,8 @@
 package com.wutsi.koki.chatbot.messenger.service
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.chatbot.Chatbot
 import com.wutsi.koki.chatbot.ChatbotRequest
+import com.wutsi.koki.chatbot.ChatbotResponse
 import com.wutsi.koki.chatbot.InvalidQueryException
 import com.wutsi.koki.chatbot.UrlBuilder
 import com.wutsi.koki.chatbot.messenger.model.Attachment
@@ -97,15 +97,9 @@ class MessengerConsumer(
                     ownerId = null,
                     ownerType = null,
                 ).files.associateBy { file -> file.id }
-                println(
-                    ">>> IMAGES=" + ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(images)
-                )
 
                 // Rooms
-                sendProperties(response.rooms, images, request, tenant, locale, urlBuilder, messaging)
-
-                // View more
-                // TODO
+                sendProperties(response.rooms, images, request, response, tenant, locale, urlBuilder, messaging)
 
                 // Track impression
                 trackImpression(response.rooms, messaging)
@@ -128,11 +122,19 @@ class MessengerConsumer(
         rooms: List<RoomSummary>,
         images: Map<Long, FileSummary>,
         request: ChatbotRequest,
+        response: ChatbotResponse,
         tenant: Tenant,
         locale: Locale,
         urlBuilder: UrlBuilder,
         messaging: Messaging,
     ) {
+        val titleViewDetails = messages.getMessage("chatbot.view-details", arrayOf(), locale)
+        val titleSimilarProperties = messages.getMessage("chatbot.similar-properties", arrayOf(), locale)
+        val similarUrl = if (response.searchLocation != null && response.searchLocation != null) {
+            urlBuilder.toViewMoreUrl(response.searchParameters!!, request, response.searchLocation!!)
+        } else {
+            null
+        }
         val request = SendRequest(
             recipient = Party(messaging.sender.id),
             message = Message(
@@ -152,10 +154,17 @@ class MessengerConsumer(
                                 buttons = listOf(
                                     Button(
                                         type = "web_url",
-                                        title = messages.getMessage("chatbot.view-details", arrayOf(), locale),
+                                        title = titleViewDetails,
                                         url = urlBuilder.toPropertyUrl(room, request),
-                                    )
-                                )
+                                    ),
+                                    similarUrl?.let { url ->
+                                        Button(
+                                            type = "web_url",
+                                            title = titleSimilarProperties,
+                                            url = url,
+                                        )
+                                    },
+                                ).filterNotNull()
                             )
                         }
                     ),

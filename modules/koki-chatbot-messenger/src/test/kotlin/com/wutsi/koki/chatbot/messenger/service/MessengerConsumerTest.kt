@@ -127,6 +127,10 @@ class MessengerConsumerTest : AbstractTest() {
             messages.getMessage("chatbot.processing", arrayOf(), Locale("en")),
             req.firstValue.message?.text
         )
+        assertEquals(
+            rooms.size,
+            req.secondValue.message?.attachment?.payload?.elements?.size
+        )
 
         val event = argumentCaptor<TrackSubmittedEvent>()
         verify(publisher).publish(event.capture())
