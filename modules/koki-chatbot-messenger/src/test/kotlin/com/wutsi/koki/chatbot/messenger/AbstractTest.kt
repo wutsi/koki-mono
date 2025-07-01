@@ -4,6 +4,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.refdata.dto.GetLocationResponse
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
@@ -49,6 +50,7 @@ abstract class AbstractTest {
         setupRefDataModule()
         setupTenantModule()
         setupRoomModule()
+        setupFileModule()
     }
 
     private fun setupRefDataModule() {
@@ -73,6 +75,20 @@ abstract class AbstractTest {
             .getForEntity(
                 any<String>(),
                 eq(GetLocationResponse::class.java)
+            )
+    }
+
+    private fun setupFileModule() {
+        // Tenant
+        doReturn(
+            ResponseEntity(
+                SearchFileResponse(FileFixtures.images),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchFileResponse::class.java)
             )
     }
 

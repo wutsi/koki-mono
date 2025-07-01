@@ -5,17 +5,23 @@ import com.wutsi.koki.chatbot.ChatbotRequest
 import com.wutsi.koki.chatbot.InvalidQueryException
 import com.wutsi.koki.chatbot.UrlBuilder
 import com.wutsi.koki.chatbot.messenger.model.Messaging
+import com.wutsi.koki.file.dto.FileStatus
+import com.wutsi.koki.file.dto.FileSummary
+import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.platform.tenant.TenantProvider
 import com.wutsi.koki.room.dto.RoomSummary
+import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiTenants
+import com.wutsi.koki.tenant.dto.Tenant
 import com.wutsi.koki.track.dto.ChannelType
 import com.wutsi.koki.track.dto.Track
 import com.wutsi.koki.track.dto.TrackEvent
 import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
+import java.text.DecimalFormat
 import java.util.Locale
 import java.util.UUID
 
@@ -25,6 +31,7 @@ class MessengerConsumer(
     private val chatbot: Chatbot,
     private val tenantProvider: TenantProvider,
     private val kokiTenant: KokiTenants,
+    private val kokiFiles: KokiFiles,
     private val messages: MessageSource,
     private val publisher: Publisher,
     private val logger: KVLogger,
@@ -71,10 +78,25 @@ class MessengerConsumer(
             if (response.rooms.isNotEmpty()) {
                 val urlBuilder = UrlBuilder(baseUrl = tenant.clientPortalUrl, medium = "messenger")
 
+                // Images
+                val imageIds = response.rooms.mapNotNull { room -> room.heroImageId }
+                val images = if (imageIds.isEmpty()) {
+                    kokiFiles.files(
+                        ids = imageIds,
+                        limit = imageIds.size,
+                        offset = 0,
+                        type = FileType.IMAGE,
+                        status = FileStatus.APPROVED,
+                        ownerId = null,
+                        ownerType = null,
+                    ).files.associateBy { file -> file.id }
+                } else {
+                    emptyMap()
+                }
+
                 // Rooms
                 response.rooms.forEach { room ->
-                    val url = urlBuilder.toPropertyUrl(room, request)
-                    sendText(url, messaging)
+                    sendProperty(room, images, request, tenant, locale, urlBuilder, messaging)
                 }
 
                 // View more
@@ -103,9 +125,48 @@ class MessengerConsumer(
 
     private fun sendText(text: String, messaging: Messaging) {
         messenger.send(
+            pageId = messaging.recipient.id,
             recipientId = messaging.sender.id,
             text = text
         )
+    }
+
+    private fun sendProperty(
+        room: RoomSummary,
+        images: Map<Long, FileSummary>,
+        request: ChatbotRequest,
+        tenant: Tenant,
+        locale: Locale,
+        urlBuilder: UrlBuilder,
+        messaging: Messaging
+    ) {
+        val title = toTitle(room, tenant, locale)
+        val url = urlBuilder.toPropertyUrl(room, request)
+
+        val text = title + "\n\n" + messages.getMessage("chatbot.link", arrayOf(url), locale)
+        sendText(text, messaging)
+    }
+
+    private fun toTitle(property: RoomSummary, tenant: Tenant, locale: Locale): String {
+        // Price
+        val fmt = DecimalFormat(tenant.monetaryFormat)
+        val price = property.pricePerMonth?.let { p ->
+            messages.getMessage("chatbot.price-per-month", arrayOf(fmt.format(p.amount)), locale)
+        } ?: property.pricePerNight?.let { p ->
+            messages.getMessage("chatbot.price-per-night", arrayOf(fmt.format(p.amount)), locale)
+        }
+
+        // Bedroom
+        val bedroom = messages.getMessage("chatbot.n-bedroom", arrayOf(property.numberOfRooms), locale)
+
+        // bathroom
+        val bathroom = if (property.numberOfBathrooms > 0) {
+            messages.getMessage("chatbot.n-bathroom", arrayOf(property.numberOfBathrooms), locale)
+        } else {
+            null
+        }
+
+        return listOf(price, bedroom, bathroom).filterNotNull().joinToString(" | ")
     }
 
     private fun trackImpression(rooms: List<RoomSummary>, messaging: Messaging) {

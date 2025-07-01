@@ -94,7 +94,6 @@ koki:
             secret-key: ""
 
     messenger:
-        page-id: 678153442053724
         token: ${MESSENGER_TOKEN}
         verify-token: ${MESSENGER_VERIFY_TOKEN}
         api-version: 16.0
