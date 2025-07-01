@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 import java.io.IOException
+import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
@@ -24,7 +25,6 @@ class MessengerClientTest {
         http = http,
         apiVersion = "16.8",
         token = "123430493094",
-        pageId = 11111
     )
 
     @Test
@@ -33,7 +33,7 @@ class MessengerClientTest {
         doReturn(200).whenever(respone).statusCode()
         doReturn(respone).whenever(http).send(any<HttpRequest>(), any<BodyHandler<String>>())
 
-        messenger.send("ray.sponsible", "Yo man")
+        messenger.send("111", "ray.sponsible", "Yo man")
 
         val request = argumentCaptor<HttpRequest>()
         val handler = argumentCaptor<BodyHandler<String>>()
@@ -42,6 +42,10 @@ class MessengerClientTest {
         assertEquals("POST", request.firstValue.method())
         assertEquals("application/json", request.firstValue.headers().firstValue("Content-Type").get())
         assertEquals("Bearer ${messenger.token}", request.firstValue.headers().firstValue("Authorization").get())
+        assertEquals(
+            URI.create("https://graph.facebook.com/v${messenger.apiVersion}/111/messages"),
+            request.firstValue.uri()
+        )
     }
 
     @Test
@@ -52,7 +56,7 @@ class MessengerClientTest {
         doReturn(respone).whenever(http).send(any<HttpRequest>(), any<BodyHandler<String>>())
 
         assertThrows<IOException> {
-            messenger.send("ray.sponsible", "Yo man")
+            messenger.send("111", "ray.sponsible", "Yo man")
         }
     }
 }

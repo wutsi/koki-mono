@@ -103,6 +103,7 @@ class MessengerConsumer(
 
     private fun sendText(text: String, messaging: Messaging) {
         messenger.send(
+            pageId = messaging.recipient.id,
             recipientId = messaging.sender.id,
             text = text
         )

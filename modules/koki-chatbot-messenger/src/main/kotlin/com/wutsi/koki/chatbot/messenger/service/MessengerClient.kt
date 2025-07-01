@@ -14,13 +14,12 @@ class MessengerClient(
     private val objectMapper: ObjectMapper,
     private val http: HttpClient,
 
-    @Value("\${koki.messenger.page-id}") val pageId: Long,
     @Value("\${koki.messenger.token}") val token: String,
     @Value("\${koki.messenger.api-version}") val apiVersion: String,
 ) {
-    private val url = "https://graph.facebook.com/v$apiVersion/$pageId/messages"
 
-    fun send(recipientId: String, text: String) {
+    fun send(pageId: String, recipientId: String, text: String) {
+        val url = "https://graph.facebook.com/v$apiVersion/$pageId/messages"
         val payload = mapOf(
             "messaging_type" to "RESPONSE",
             "recipient" to mapOf("id" to recipientId),
