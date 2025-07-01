@@ -160,6 +160,7 @@ class MessengerConsumerTest : AbstractTest() {
         assertEquals("111|222|333", event.firstValue.track.productId)
         assertEquals(update.sender.id, event.firstValue.track.deviceId)
         assertEquals(1L, event.firstValue.track.tenantId)
+        assertEquals(update.timestamp, event.firstValue.track.time)
     }
 
     private fun createMessaging(text: String?): Messaging {

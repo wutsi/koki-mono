@@ -113,7 +113,7 @@ class MessengerConsumer(
             TrackSubmittedEvent(
                 timestamp = System.currentTimeMillis(),
                 track = Track(
-                    time = System.currentTimeMillis(),
+                    time = messaging.timestamp,
                     correlationId = UUID.randomUUID().toString(),
                     accountId = null,
                     tenantId = tenantProvider.id(),
