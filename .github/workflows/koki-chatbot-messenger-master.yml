@@ -97,6 +97,7 @@ jobs:
                     heroku config:set --app ${HEROKU_APP} AWS_SECRET_KEY=${AWS_SECRET_KEY}
                     heroku config:set --app ${HEROKU_APP} TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
                     heroku config:set --app ${HEROKU_APP} KOKI_SERVER_URL=${KOKI_SERVER_URL}
+                    heroku config:set --app ${HEROKU_APP} DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
                     heroku config:set --app ${HEROKU_APP} MESSENGER_TOKEN=${MESSENGER_TOKEN}
                     heroku config:set --app ${HEROKU_APP} MESSENGER_VERIFY_TOKEN=${MESSENGER_VERIFY_TOKEN}
                     heroku addons -a ${HEROKU_APP} | grep papertrail && echo 'addon: papertrail exists' ||  heroku addons:create papertrail -a ${HEROKU_APP}
