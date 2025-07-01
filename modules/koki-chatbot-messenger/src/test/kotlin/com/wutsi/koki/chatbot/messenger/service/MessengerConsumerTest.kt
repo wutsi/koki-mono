@@ -14,12 +14,11 @@ import com.wutsi.koki.chatbot.ChatbotResponse
 import com.wutsi.koki.chatbot.InvalidQueryException
 import com.wutsi.koki.chatbot.ai.data.SearchParameters
 import com.wutsi.koki.chatbot.messenger.AbstractTest
+import com.wutsi.koki.chatbot.messenger.RoomFixtures.rooms
 import com.wutsi.koki.chatbot.messenger.model.Message
 import com.wutsi.koki.chatbot.messenger.model.Messaging
 import com.wutsi.koki.chatbot.messenger.model.Party
 import com.wutsi.koki.refdata.dto.Location
-import com.wutsi.koki.refdata.dto.Money
-import com.wutsi.koki.room.dto.RoomSummary
 import com.wutsi.koki.track.dto.TrackEvent
 import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
 import org.springframework.beans.factory.annotation.Autowired
@@ -53,7 +52,7 @@ class MessengerConsumerTest : AbstractTest() {
         consumer.consume(update)
 
         val text = argumentCaptor<String>()
-        verify(messenger, times(2)).send(eq(update.sender.id), text.capture())
+        verify(messenger, times(2)).send(eq(update.recipient.id), eq(update.sender.id), text.capture())
         assertEquals(
             messages.getMessage("chatbot.processing", arrayOf(), Locale("en")),
             text.firstValue
@@ -74,7 +73,7 @@ class MessengerConsumerTest : AbstractTest() {
         consumer.consume(update)
 
         val text = argumentCaptor<String>()
-        verify(messenger, times(2)).send(eq(update.sender.id), text.capture())
+        verify(messenger, times(2)).send(eq(update.recipient.id), eq(update.sender.id), text.capture())
         assertEquals(
             messages.getMessage("chatbot.processing", arrayOf(), Locale("en")),
             text.firstValue
@@ -95,7 +94,7 @@ class MessengerConsumerTest : AbstractTest() {
         consumer.consume(update)
 
         val text = argumentCaptor<String>()
-        verify(messenger, times(2)).send(eq(update.sender.id), text.capture())
+        verify(messenger, times(2)).send(eq(update.recipient.id), eq(update.sender.id), text.capture())
         assertEquals(
             messages.getMessage("chatbot.processing", arrayOf(), Locale("en")),
             text.firstValue
@@ -110,23 +109,6 @@ class MessengerConsumerTest : AbstractTest() {
 
     @Test
     fun `room found`() {
-        val rooms = listOf(
-            RoomSummary(id = 111, listingUrl = "/rooms/1", numberOfRooms = 1, pricePerMonth = Money(1600.0, "CAD")),
-            RoomSummary(
-                id = 222,
-                listingUrl = "/rooms/2",
-                numberOfRooms = 1,
-                numberOfBathrooms = 1,
-                pricePerNight = Money(80.0, "CAD")
-            ),
-            RoomSummary(
-                id = 333,
-                listingUrl = "/rooms/3",
-                numberOfRooms = 2,
-                numberOfBathrooms = 1,
-                pricePerNight = Money(85.0, "CAD")
-            )
-        )
         doReturn(
             ChatbotResponse(
                 rooms = rooms,
@@ -139,7 +121,7 @@ class MessengerConsumerTest : AbstractTest() {
         consumer.consume(update)
 
         val text = argumentCaptor<String>()
-        verify(messenger, times(rooms.size + 1)).send(eq(update.sender.id), text.capture())
+        verify(messenger, times(rooms.size + 1)).send(eq(update.recipient.id), eq(update.sender.id), text.capture())
         assertEquals(
             messages.getMessage("chatbot.processing", arrayOf(), Locale("en")),
             text.firstValue
@@ -157,7 +139,7 @@ class MessengerConsumerTest : AbstractTest() {
         verify(publisher).publish(event.capture())
         assertEquals(TrackEvent.IMPRESSION, event.firstValue.track.event)
         assertEquals("messenger", event.firstValue.track.page)
-        assertEquals("111|222|333", event.firstValue.track.productId)
+        assertEquals(rooms.map { it.id }.joinToString("|"), event.firstValue.track.productId)
         assertEquals(update.sender.id, event.firstValue.track.deviceId)
         assertEquals(1L, event.firstValue.track.tenantId)
         assertEquals(update.timestamp, event.firstValue.track.time)

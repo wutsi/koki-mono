@@ -1,6 +1,10 @@
 package com.wutsi.koki.chatbot.messenger.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.koki.chatbot.messenger.model.Message
+import com.wutsi.koki.chatbot.messenger.model.Party
+import com.wutsi.koki.chatbot.messenger.model.Payload
+import jdk.internal.joptsimple.internal.Messages.message
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.io.IOException
@@ -19,12 +23,18 @@ class MessengerClient(
 ) {
 
     fun send(pageId: String, recipientId: String, text: String) {
-        val url = "https://graph.facebook.com/v$apiVersion/$pageId/messages"
-        val payload = mapOf(
-            "messaging_type" to "RESPONSE",
-            "recipient" to mapOf("id" to recipientId),
-            "message" to mapOf("text" to text),
+        send(
+            pageId,
+            Payload(
+                messaging_type = "RESPONSE",
+                recipient = Party(id = recipientId),
+                message = Message(text = text)
+            )
         )
+    }
+
+    fun send(pageId: String, payload: Payload) {
+        val url = "https://graph.facebook.com/v$apiVersion/$pageId/messages"
         val request = HttpRequest.newBuilder()
             .uri(URI.create(url))
             .header("Authorization", "Bearer " + token)
