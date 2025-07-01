@@ -190,12 +190,12 @@ class MessengerConsumer(
                             type = "template",
                             payload = Payload(
                                 template_type = "button",
-                                text = messages.getMessage("chatbot.view-more-text", arrayOf(), locale),
+                                text = messages.getMessage("chatbot.find-more-text", arrayOf(), locale),
                                 buttons = listOf(
                                     Button(
                                         type = "web_url",
                                         title = titleSimilarProperties,
-                                        url = messages.getMessage("chatbot.view-more", arrayOf(), locale),
+                                        url = messages.getMessage("chatbot.find-more", arrayOf(), locale),
                                     )
                                 ),
                             ),
