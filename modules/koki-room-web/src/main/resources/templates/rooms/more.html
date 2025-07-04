@@ -1,4 +1,9 @@
-<a class="room" target="_blank" th:each="room : ${rooms}" th:href="${room.url}" th:title="${room.title}">
+<a class="room" target="_blank"
+   th:each="room,iterator : ${rooms}"
+   th:href="${room.url}"
+   th:koki-track-product-id="${room.id}"
+   th:koki-track-rank="${iterator.index} + ${offset}"
+   th:title="${room.title}">
     <div th:replace="~{__components/room :: card(${room})}"></div>
 </a>
 <div id="room-load-more" th:if="${moreUrl}">

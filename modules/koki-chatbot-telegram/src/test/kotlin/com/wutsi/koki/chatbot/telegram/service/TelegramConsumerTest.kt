@@ -140,8 +140,9 @@ class TelegramConsumerTest : AbstractTest() {
         assertEquals(TrackEvent.IMPRESSION, event.firstValue.track.event)
         assertEquals("telegram", event.firstValue.track.page)
         assertEquals(rooms.map { it.id }.joinToString("|"), event.firstValue.track.productId)
-        assertEquals(userId.toString(), event.firstValue.track.deviceId)
+        assertEquals("tg-$userId", event.firstValue.track.deviceId)
         assertEquals(1L, event.firstValue.track.tenantId)
+        assertEquals(null, event.firstValue.track.rank)
     }
 
     @Test
@@ -165,7 +166,10 @@ class TelegramConsumerTest : AbstractTest() {
         )
         assertEquals(
             true,
-            msg.secondValue.text.contains(rooms[0].listingUrl!!, true)
+            msg.secondValue.text.contains(
+                "http://localhost:0/click?device-id=tg-$userId&product-id=${rooms[0].id}&tenant-id=1&rank=0",
+                true
+            )
         )
         assertEquals(
             messages.getMessage("chatbot.find-more-text", arrayOf(), Locale("en")),

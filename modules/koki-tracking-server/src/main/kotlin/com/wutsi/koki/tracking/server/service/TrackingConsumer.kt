@@ -3,6 +3,7 @@ package com.wutsi.koki.tracking.server.service
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.mq.Consumer
 import com.wutsi.koki.track.dto.Track
+import com.wutsi.koki.track.dto.TrackEvent
 import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
 import com.wutsi.koki.tracking.server.domain.TrackEntity
 import org.springframework.stereotype.Service
@@ -58,6 +59,7 @@ class TrackingConsumer(
             referrer = track.referrer,
             value = track.value,
             channelType = track.channelType,
+            rank = track.rank,
         )
         if (entity.productId == null) {
             return listOf(entity)
@@ -66,7 +68,17 @@ class TrackingConsumer(
             if (productIds.size <= 1) {
                 return listOf(entity)
             } else {
-                return productIds.map { productId -> entity.copy(productId = productId) }
+                var index: Int = 0
+                return productIds.map { productId ->
+                    entity.copy(
+                        productId = productId,
+                        rank = if (track.event == TrackEvent.IMPRESSION) {
+                            index++
+                        } else {
+                            track.rank
+                        }
+                    )
+                }
             }
         }
     }

@@ -94,7 +94,11 @@
             </div>
 
             <div th:if="!${rooms.isEmpty()}" th:remove="tag">
-                <a class="room" target="_blank" th:each="room : ${rooms}" th:href="${room.url}"
+                <a class="room" koki-track target="_blank"
+                   th:each="room,iterator : ${rooms}"
+                   th:href="${room.url}"
+                   th:koki-track-product-id="${room.id}"
+                   th:koki-track-rank="${iterator.index}"
                    th:title="${room.title}">
                     <div th:replace="~{__components/room :: card(${room})}"></div>
                 </a>

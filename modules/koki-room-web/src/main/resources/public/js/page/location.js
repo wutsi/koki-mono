@@ -3,8 +3,8 @@ class KokiLocationPage {
 
     init() {
         // Event handler
-        document.querySelector('#view-switcher-map a').addEventListener('click', kokiLocationPage.on_view_switched_to_map);
-        document.querySelector('#view-switcher-list a').addEventListener('click', kokiLocationPage.on_view_switched_to_list);
+        document.querySelector('#view-switcher-map a')?.addEventListener('click', kokiLocationPage.on_view_switched_to_map);
+        document.querySelector('#view-switcher-list a')?.addEventListener('click', kokiLocationPage.on_view_switched_to_list);
 
         // Track impression
         let ids = '';
@@ -123,7 +123,7 @@ class KokiLocationPage {
     }
 
     _track(ids, component) {
-        track('IMPRESSION', ids, component);
+        kokiTracking.track('IMPRESSION', ids, component);
     }
 }
 

@@ -172,6 +172,7 @@ class LocationController(
         )
         model.addAttribute("rooms", rooms)
         model.addAttribute("roomIds", rooms.map { room -> room.id }.joinToString("|"))
+        model.addAttribute("offset", offset)
 
         if (rooms.size >= limit) {
             var url = "/l/more?limit=$limit&offset=$offset"
