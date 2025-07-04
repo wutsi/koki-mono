@@ -26,12 +26,12 @@ class CookieDeviceIdProvider(private val cookieName: String) : DeviceIdProvider 
         var cookie = getCookie(request)
         if (cookie == null) {
             cookie = Cookie(cookieName, duid)
-            cookie.path = PATH
-            cookie.maxAge = EXPIRES
-            response.addCookie(cookie)
-        } else {
-            cookie.value = duid
         }
+
+        cookie.path = PATH
+        cookie.maxAge = EXPIRES
+        cookie.value = duid
+        response.addCookie(cookie)
     }
 
     private fun getCookie(request: HttpServletRequest): Cookie? =
