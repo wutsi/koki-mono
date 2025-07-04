@@ -1,6 +1,5 @@
 package com.wutsi.koki.room.web.file.mapper
 
-import com.wutsi.koki.file.dto.File
 import com.wutsi.koki.file.dto.FileSummary
 import com.wutsi.koki.room.web.common.mapper.TenantAwareMapper
 import com.wutsi.koki.room.web.file.model.FileModel
@@ -13,24 +12,6 @@ import java.text.StringCharacterIterator
 @Service
 class FileMapper : TenantAwareMapper() {
     fun toFileModel(entity: FileSummary): FileModel {
-        val language = LocaleContextHolder.getLocale().language
-        return FileModel(
-            id = entity.id,
-            type = entity.type,
-            name = entity.name,
-            title = when (language) {
-                "fr" -> entity.titleFr ?: entity.title
-                else -> entity.title
-            },
-            contentUrl = entity.url,
-            contentType = entity.contentType,
-            contentLength = entity.contentLength,
-            contentLengthText = toFileSizeText(entity.contentLength),
-            extension = FilenameUtils.getExtension(entity.name).lowercase(),
-        )
-    }
-
-    fun toFileModel(entity: File): FileModel {
         val language = LocaleContextHolder.getLocale().language
         return FileModel(
             id = entity.id,

@@ -104,10 +104,10 @@ class LocationController(
     }
 
     private fun loadSearchForm(
-        leaseType: String? = null,
-        roomType: String? = null,
-        furnishedType: String? = null,
-        bedrooms: Int? = null,
+        leaseType: String?,
+        roomType: String?,
+        furnishedType: String?,
+        bedrooms: Int?,
         model: Model,
     ) {
         if (
