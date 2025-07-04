@@ -1,9 +1,7 @@
 package com.wutsi.koki.room.web.room.page
 
-import com.sun.jndi.toolkit.dir.SearchFilter
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.room.dto.FurnishedType
-import com.wutsi.koki.room.dto.LeaseTerm
 import com.wutsi.koki.room.dto.LeaseType
 import com.wutsi.koki.room.dto.RoomType
 import com.wutsi.koki.room.web.common.page.AbstractPageController
