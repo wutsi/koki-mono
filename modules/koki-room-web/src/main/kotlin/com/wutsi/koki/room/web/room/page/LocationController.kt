@@ -1,11 +1,17 @@
 package com.wutsi.koki.room.web.room.page
 
+import com.sun.jndi.toolkit.dir.SearchFilter
 import com.wutsi.koki.refdata.dto.LocationType
+import com.wutsi.koki.room.dto.FurnishedType
+import com.wutsi.koki.room.dto.LeaseTerm
+import com.wutsi.koki.room.dto.LeaseType
+import com.wutsi.koki.room.dto.RoomType
 import com.wutsi.koki.room.web.common.page.AbstractPageController
 import com.wutsi.koki.room.web.common.page.PageName
 import com.wutsi.koki.room.web.geoip.service.CurrentGeoIPHolder
 import com.wutsi.koki.room.web.refdata.model.LocationModel
 import com.wutsi.koki.room.web.refdata.service.LocationService
+import com.wutsi.koki.room.web.room.form.SearchForm
 import com.wutsi.koki.room.web.room.model.MapMarkerModel
 import com.wutsi.koki.room.web.room.model.RoomModel
 import com.wutsi.koki.room.web.room.service.RoomLocationMetricService
@@ -41,7 +47,11 @@ class LocationController(
     fun list(
         @PathVariable id: Long,
         @PathVariable title: String,
-        model: Model
+        @RequestParam(name = "lease-type", required = false) leaseType: String? = null,
+        @RequestParam(name = "room-type", required = false) roomType: String? = null,
+        @RequestParam(name = "furnished-type", required = false) furnishedType: String? = null,
+        @RequestParam(required = false) bedrooms: Int? = null,
+        model: Model,
     ): String {
         val location = service.location(id)
         model.addAttribute("location", location)
@@ -75,9 +85,15 @@ class LocationController(
             )
         )
 
+        loadSearchForm(leaseType, roomType, furnishedType, bedrooms, model)
+
         more(
             cityId = if (location.type == LocationType.CITY) id else null,
             neighborhoodId = if (location.type == LocationType.NEIGHBORHOOD) id else null,
+            leaseType = leaseType,
+            roomType = roomType,
+            furnishedType = furnishedType,
+            bedrooms = bedrooms,
             model = model,
         )
 
@@ -89,10 +105,39 @@ class LocationController(
         return "rooms/location"
     }
 
+    private fun loadSearchForm(
+        leaseType: String? = null,
+        roomType: String? = null,
+        furnishedType: String? = null,
+        bedrooms: Int? = null,
+        model: Model,
+    ) {
+        if (
+            !leaseType.isNullOrEmpty() ||
+            !roomType.isNullOrEmpty() ||
+            !furnishedType.isNullOrEmpty() ||
+            (bedrooms != null && bedrooms > 0)
+        ) {
+            model.addAttribute(
+                "searchForm",
+                SearchForm(
+                    roomType = roomType?.ifEmpty { null },
+                    leaseType = leaseType?.ifEmpty { null },
+                    furnishedType = furnishedType?.ifEmpty { null },
+                    bedrooms = if (bedrooms == null || bedrooms < 0) null else bedrooms,
+                )
+            )
+        }
+    }
+
     @GetMapping("/more")
     fun more(
         @RequestParam(required = false, name = "city-id") cityId: Long? = null,
         @RequestParam(required = false, name = "neighborhood-id") neighborhoodId: Long? = null,
+        @RequestParam(name = "lease-type", required = false) leaseType: String? = null,
+        @RequestParam(name = "room-type", required = false) roomType: String? = null,
+        @RequestParam(name = "furnished-type", required = false) furnishedType: String? = null,
+        @RequestParam(required = false) bedrooms: Int? = null,
         @RequestParam limit: Int = 20,
         @RequestParam offset: Int = 0,
         model: Model,
@@ -102,6 +147,30 @@ class LocationController(
             neighborhoodId = neighborhoodId,
             limit = limit,
             offset = offset,
+
+            minBedrooms = if (bedrooms == -1) null else bedrooms,
+            maxBedrooms = if (bedrooms == -1 || bedrooms == 5) null else bedrooms,
+            leaseType = leaseType?.let { value ->
+                try {
+                    LeaseType.valueOf(value)
+                } catch (ex: Exception) {
+                    null
+                }
+            },
+            furnishedType = furnishedType?.let { value ->
+                try {
+                    FurnishedType.valueOf(value)
+                } catch (ex: Exception) {
+                    null
+                }
+            },
+            types = roomType?.let { value ->
+                try {
+                    listOf(RoomType.valueOf(value))
+                } catch (ex: Exception) {
+                    emptyList<RoomType>()
+                }
+            } ?: emptyList<RoomType>(),
         )
         model.addAttribute("rooms", rooms)
         model.addAttribute("roomIds", rooms.map { room -> room.id }.joinToString("|"))
@@ -113,6 +182,18 @@ class LocationController(
             }
             if (neighborhoodId != null) {
                 url = "$url&neighborhood-id=$neighborhoodId"
+            }
+            if (leaseType != null) {
+                url = "$url&lease-type=$leaseType"
+            }
+            if (roomType != null) {
+                url = "$url&room-type=$roomType"
+            }
+            if (furnishedType != null) {
+                url = "$url&furnished-type=$furnishedType"
+            }
+            if (bedrooms != null) {
+                url = "$url&bedrooms=$bedrooms"
             }
             model.addAttribute("moreUrl", url)
         }

@@ -443,4 +443,25 @@ class LocationControllerTest : AbstractPageControllerTest() {
         assertEquals(null, event.firstValue.track.long)
         assertEquals("http://localhost:$port/l/${neighborhoods[0].id}/montreal", event.firstValue.track.url)
     }
+
+    @Test
+    fun filter() {
+        navigateTo("/l/${neighborhoods[0].id}/centre-ville")
+        click("#btn-filter")
+
+        assertElementVisible("#filter-modal")
+        click("#room-type-apartment-label")
+        click("#bedrooms-2-label")
+        click("#furnished-type-none-label")
+        click("#lease-type-short-label")
+        click("#btn-apply-filter")
+
+        assertElementNotVisible("#filter-modal")
+        assertCurrentPageIs(PageName.LOCATION)
+
+        assertElementPresent("#filter-badge-APARTMENT")
+        assertElementPresent("#filter-badge-bedroom-2")
+        assertElementPresent("#filter-badge-SHORT_TERM")
+        assertElementPresent("#filter-badge-NONE")
+    }
 }
