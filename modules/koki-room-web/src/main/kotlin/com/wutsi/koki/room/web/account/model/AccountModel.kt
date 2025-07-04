@@ -1,7 +1,6 @@
 package com.wutsi.koki.room.web.account.model
 
 import com.wutsi.koki.room.web.tenant.model.TypeModel
-import com.wutsi.koki.room.web.user.model.UserModel
 
 data class AccountModel(
     val id: Long = -1,
@@ -15,5 +14,4 @@ data class AccountModel(
     val languageText: String? = null,
     val description: String? = null,
     val readOnly: Boolean = false,
-    val user: UserModel? = null,
 )

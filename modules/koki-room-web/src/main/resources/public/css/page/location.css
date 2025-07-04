@@ -32,6 +32,24 @@
     font-weight: bold;
 }
 
+#filter-container {
+    padding: 1em 1em 0 1em;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#filter-container .title {
+    font-weight: bold;
+}
+
+#filter-container .badge {
+    font-weight: normal;
+    margin-left: 1em;
+}
+
+#filter-container .badge:first-child {
+    margin-left: 0;
+}
 
 #room-list-header {
     background: #fff;
