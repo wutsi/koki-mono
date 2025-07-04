@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.reset
+import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.file.dto.SearchFileResponse
@@ -455,7 +456,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
 
         click(".room:nth-child(2)")
         val event = argumentCaptor<TrackSubmittedEvent>()
-        verify(publisher).publish(event.capture())
+        verify(publisher, times(2)).publish(event.capture()) // 1st event=CLICK, 2nd event=VIEW
 
         assertEquals(PageName.LOCATION, event.firstValue.track.page)
         assertNotNull(event.firstValue.track.correlationId)

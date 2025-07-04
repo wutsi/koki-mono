@@ -30,7 +30,6 @@ class KokiLocationPage {
         fetch('/l/' + cityId + '/map')
             .then((response) => {
                 response.json().then((json) => {
-                    console.log(json);
                     for (var i = 0; i < json.length; i++) {
                         let item = json[i];
                         let marker = L.marker(
