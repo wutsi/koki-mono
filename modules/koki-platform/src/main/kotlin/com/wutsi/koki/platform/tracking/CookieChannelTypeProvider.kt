@@ -33,12 +33,12 @@ class CookieChannelTypeProvider(private val cookieName: String) : ChannelTypePro
         var cookie = getCookie(request)
         if (cookie == null) {
             cookie = Cookie(cookieName, type.name)
-            cookie.path = PATH
-            cookie.maxAge = EXPIRES
-            response.addCookie(cookie)
-        } else {
-            cookie.value = type.name
         }
+
+        cookie.path = PATH
+        cookie.maxAge = EXPIRES
+        cookie.value = type.name
+        response.addCookie(cookie)
     }
 
     private fun getCookie(request: HttpServletRequest): Cookie? =

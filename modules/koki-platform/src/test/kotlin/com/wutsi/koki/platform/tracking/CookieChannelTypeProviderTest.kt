@@ -84,7 +84,7 @@ class CookieChannelTypeProviderTest {
                 Cookie("foo3", "bar3"),
             ),
         ).whenever(request).cookies
-        doReturn(null).whenever(request).getAttribute(COOKIE_NAME)
+        doReturn(duid).whenever(request).getAttribute(COOKIE_NAME)
 
         provider.set(ChannelType.SOCIAL, request, response)
 
