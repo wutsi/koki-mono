@@ -18,4 +18,5 @@ data class Track(
     val value: String? = null,
     val url: String? = null,
     val channelType: ChannelType = ChannelType.UNKNOWN,
+    val rank: Int? = null,
 )
