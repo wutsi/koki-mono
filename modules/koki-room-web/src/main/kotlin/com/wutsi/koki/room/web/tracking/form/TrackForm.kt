@@ -13,4 +13,5 @@ data class TrackForm(
     val referrer: String? = null,
     val page: String? = null,
     val component: String? = null,
+    val rank: Int? = null,
 )

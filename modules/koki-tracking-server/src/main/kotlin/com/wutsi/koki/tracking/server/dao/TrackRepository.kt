@@ -43,6 +43,7 @@ class TrackRepository(private val storageServiceBuilder: StorageServiceBuilder) 
             "referrer",
             "ua",
             "country",
+            "rank",
         )
     }
 
@@ -98,6 +99,7 @@ class TrackRepository(private val storageServiceBuilder: StorageServiceBuilder) 
                         it.referrer,
                         it.ua,
                         it.country,
+                        it.rank,
                     )
                 }
                 printer.flush()

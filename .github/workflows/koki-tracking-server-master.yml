@@ -44,6 +44,12 @@ jobs:
                     name: appbundle
                     path: modules/koki-tracking-server/target/*.jar
 
+            -   name: Upload JaCoCo Report
+                uses: actions/upload-artifact@v4
+                with:
+                    name: jacoco-report
+                    path: modules/koki-tracking-server/target/site/jacoco/**/*
+
             -   name: Generate JaCoCo Badge
                 uses: cicirello/jacoco-badge-generator@v2
                 with:
@@ -98,4 +104,4 @@ jobs:
                 run: |
                     sleep 45
                     echo ${APP_URL}
-                    curl -sSf ${APP_URL}/actuator/health >> /dev/null
+                    curl -sSf ${APP_URL}/actuator/health >> /dev/null || curl -sSf ${APP_URL}/actuator/health >> /dev/null

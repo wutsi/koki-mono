@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.reset
+import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.file.dto.SearchFileResponse
@@ -362,6 +363,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
         assertEquals(null, event.firstValue.track.lat)
         assertEquals(null, event.firstValue.track.long)
         assertEquals("http://localhost:$port/l/${neighborhoods[0].id}/montreal", event.firstValue.track.url)
+        assertEquals(null, event.firstValue.track.rank)
     }
 
     @Test
@@ -392,6 +394,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
         assertEquals(null, event.firstValue.track.lat)
         assertEquals(null, event.firstValue.track.long)
         assertEquals("http://localhost:$port/l/${neighborhoods[0].id}/montreal", event.firstValue.track.url)
+        assertEquals(null, event.firstValue.track.rank)
     }
 
     @Test
@@ -442,6 +445,35 @@ class LocationControllerTest : AbstractPageControllerTest() {
         assertEquals(null, event.firstValue.track.lat)
         assertEquals(null, event.firstValue.track.long)
         assertEquals("http://localhost:$port/l/${neighborhoods[0].id}/montreal", event.firstValue.track.url)
+        assertEquals(null, event.firstValue.track.rank)
+    }
+
+    @Test
+    fun `CLICK tracking when clicking on Room`() {
+        navigateTo("/l/${neighborhoods[0].id}/montreal")
+        Thread.sleep(1000)
+        reset(publisher)
+
+        click(".room:nth-child(2)")
+        val event = argumentCaptor<TrackSubmittedEvent>()
+        verify(publisher, times(2)).publish(event.capture()) // 1st event=CLICK, 2nd event=VIEW
+
+        assertEquals(PageName.LOCATION, event.firstValue.track.page)
+        assertNotNull(event.firstValue.track.correlationId)
+        assertNotNull(event.firstValue.track.deviceId)
+        assertEquals(TenantFixtures.tenants[0].id, event.firstValue.track.tenantId)
+        assertEquals(null, event.firstValue.track.component)
+        assertEquals(TrackEvent.CLICK, event.firstValue.track.event)
+        assertEquals(rooms[1].id.toString(), event.firstValue.track.productId)
+        assertEquals(null, event.firstValue.track.value)
+        assertEquals(null, event.firstValue.track.accountId)
+        assertEquals(ChannelType.WEB, event.firstValue.track.channelType)
+        assertEquals(USER_AGENT, event.firstValue.track.ua)
+        assertEquals("0:0:0:0:0:0:0:1", event.firstValue.track.ip)
+        assertEquals(null, event.firstValue.track.lat)
+        assertEquals(null, event.firstValue.track.long)
+        assertEquals("http://localhost:$port/l/${neighborhoods[0].id}/montreal", event.firstValue.track.url)
+        assertEquals(1, event.firstValue.track.rank)
     }
 
     @Test

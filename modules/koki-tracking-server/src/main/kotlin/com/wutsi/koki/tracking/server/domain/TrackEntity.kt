@@ -27,4 +27,5 @@ data class TrackEntity(
     val channelType: ChannelType = ChannelType.UNKNOWN,
     val deviceType: DeviceType = DeviceType.UNKNOWN,
     val country: String? = null,
+    val rank: Int? = null,
 )

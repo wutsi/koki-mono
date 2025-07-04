@@ -10,17 +10,13 @@ import com.wutsi.koki.file.dto.FileSummary
 import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.logger.KVLogger
-import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.platform.tenant.TenantProvider
 import com.wutsi.koki.room.dto.RoomSummary
 import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiTenants
 import com.wutsi.koki.tenant.dto.Tenant
-import com.wutsi.koki.track.dto.ChannelType
-import com.wutsi.koki.track.dto.Track
-import com.wutsi.koki.track.dto.TrackEvent
-import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
 import org.apache.tika.language.detect.LanguageDetector
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer
@@ -33,6 +29,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow
 import org.telegram.telegrambots.meta.generics.TelegramClient
 import java.net.URI
+import java.net.URLEncoder
 import java.text.DecimalFormat
 import java.util.Locale
 import java.util.UUID
@@ -46,8 +43,10 @@ class TelegramConsumer(
     private val kokiTenants: KokiTenants,
     private val kokiFiles: KokiFiles,
     private val messages: MessageSource,
-    private val publisher: Publisher,
+    private val trackingService: TrackingService,
     private val languageDetector: LanguageDetector,
+
+    @Value("\${koki.webapp.base-url}") private val webappUrl: String
 ) : LongPollingUpdateConsumer {
     override fun consume(updates: List<Update>) {
         val logger = DefaultKVLogger()
@@ -81,8 +80,8 @@ class TelegramConsumer(
     }
 
     private fun consume(update: Update, logger: KVLogger) {
-        val tenantId = tenantProvider.id()
-        val tenant = kokiTenants.tenant(tenantId ?: -1).tenant
+        val tenantId = tenantProvider.id() ?: -1
+        val tenant = kokiTenants.tenant(tenantId).tenant
         logger.add("tenant_id", tenantId)
 
         val language = detectLanguage(update)
@@ -101,6 +100,7 @@ class TelegramConsumer(
             logger.add("room_hero_imageIds", response.rooms.map { room -> room.heroImageId })
 
             if (response.rooms.isNotEmpty()) {
+                val correlationId = UUID.randomUUID().toString()
                 val urlBuilder = UrlBuilder(baseUrl = tenant.clientPortalUrl, medium = "telegram")
 
                 // Images
@@ -115,10 +115,20 @@ class TelegramConsumer(
                 ).files.associateBy { file -> file.id }
 
                 // Rooms
-                sendProperties(response.rooms, images, update, request, response, tenant, locale, urlBuilder)
+                sendProperties(
+                    rooms = response.rooms,
+                    images = images,
+                    update = update,
+                    request = request,
+                    response = response,
+                    tenant = tenant,
+                    locale = locale,
+                    urlBuilder = urlBuilder,
+                    correlationId = correlationId,
+                )
 
                 // Track impression
-                trackImpression(response.rooms, update)
+                trackingService.impression(response.rooms, tenantId, correlationId, update)
             } else {
                 sendTextKey("chatbot.not-found", update, locale)
             }
@@ -139,7 +149,8 @@ class TelegramConsumer(
         response: ChatbotResponse,
         tenant: Tenant,
         locale: Locale,
-        urlBuilder: UrlBuilder
+        urlBuilder: UrlBuilder,
+        correlationId: String,
     ) {
         val similarUrl = if (response.searchLocation != null && response.searchParameters != null) {
             urlBuilder.toViewMoreUrl(response.searchParameters!!, request, response.searchLocation!!)
@@ -147,9 +158,17 @@ class TelegramConsumer(
             null
         }
 
+        var rank = 0
         rooms.forEach { room ->
             val title = toTitle(room, tenant, locale)
-            val detailsUrl = urlBuilder.toPropertyUrl(room, request)
+            val detailsUrl = "$webappUrl/click" +
+                "?device-id=" + trackingService.deviceId(update) +
+                "&product-id=${room.id}" +
+                "&tenant-id=${tenant.id}" +
+                "&rank=" + (rank++) +
+                "&correlation-id=$correlationId" +
+                "&url=" + URLEncoder.encode(urlBuilder.toPropertyUrl(room, request), "utf-8")
+
             val image = room.heroImageId?.let { id -> images[id] }
             if (image != null) {
                 sendPhoto(
@@ -199,25 +218,6 @@ class TelegramConsumer(
         }
 
         return listOf(price, bedroom, bathroom).filterNotNull().joinToString(" | ")
-    }
-
-    private fun trackImpression(rooms: List<RoomSummary>, update: Update) {
-        publisher.publish(
-            TrackSubmittedEvent(
-                timestamp = System.currentTimeMillis(),
-                track = Track(
-                    time = System.currentTimeMillis(),
-                    correlationId = UUID.randomUUID().toString(),
-                    accountId = null,
-                    tenantId = tenantProvider.id(),
-                    productId = rooms.map { room -> room.id }.joinToString("|"),
-                    deviceId = update.message.from.id.toString(),
-                    event = TrackEvent.IMPRESSION,
-                    page = "telegram",
-                    channelType = ChannelType.MESSAGING,
-                )
-            )
-        )
     }
 
     private fun sendTextKey(

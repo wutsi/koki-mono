@@ -51,8 +51,8 @@ class TrackRepositoryTest {
         storage.get(url, out)
         assertEquals(
             """
-                time,correlation_id,tenant_id,device_id,account_id,product_id,page,event,value,ip,long,lat,bot,device_type,channel_type,source,campaign,url,referrer,ua,country
-                3333,123,1,sample-device,333,1234,SR,VIEW,yo,1.1.2.3,111.0,222.0,false,DESKTOP,WEB,facebook,12434554,https://www.wutsi.com/read/123/this-is-nice?utm_source=email&utm_campaign=test&utm_medium=email,https://www.google.ca,Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0),CM
+                time,correlation_id,tenant_id,device_id,account_id,product_id,page,event,value,ip,long,lat,bot,device_type,channel_type,source,campaign,url,referrer,ua,country,rank
+                3333,123,1,sample-device,333,1234,SR,VIEW,yo,1.1.2.3,111.0,222.0,false,DESKTOP,WEB,facebook,12434554,https://www.wutsi.com/read/123/this-is-nice?utm_source=email&utm_campaign=test&utm_medium=email,https://www.google.ca,Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0),CM,11
             """.trimIndent(),
             out.toString().trimIndent(),
         )
@@ -80,5 +80,6 @@ class TrackRepositoryTest {
         source = "facebook",
         campaign = "12434554",
         country = "CM",
+        rank = 11,
     )
 }

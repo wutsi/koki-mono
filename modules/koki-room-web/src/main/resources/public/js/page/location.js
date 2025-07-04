@@ -3,8 +3,8 @@ class KokiLocationPage {
 
     init() {
         // Event handler
-        document.querySelector('#view-switcher-map a').addEventListener('click', kokiLocationPage.on_view_switched_to_map);
-        document.querySelector('#view-switcher-list a').addEventListener('click', kokiLocationPage.on_view_switched_to_list);
+        document.querySelector('#view-switcher-map a')?.addEventListener('click', kokiLocationPage.on_view_switched_to_map);
+        document.querySelector('#view-switcher-list a')?.addEventListener('click', kokiLocationPage.on_view_switched_to_list);
 
         // Track impression
         let ids = '';
@@ -30,7 +30,6 @@ class KokiLocationPage {
         fetch('/l/' + cityId + '/map')
             .then((response) => {
                 response.json().then((json) => {
-                    console.log(json);
                     for (var i = 0; i < json.length; i++) {
                         let item = json[i];
                         let marker = L.marker(
@@ -123,7 +122,7 @@ class KokiLocationPage {
     }
 
     _track(ids, component) {
-        track('IMPRESSION', ids, component);
+        kokiTracking.track('IMPRESSION', ids, component);
     }
 }
 

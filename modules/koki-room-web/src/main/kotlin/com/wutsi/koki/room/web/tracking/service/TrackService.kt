@@ -37,7 +37,8 @@ class TrackService(
                     component = form.component,
                     referrer = form.referrer,
                     ip = remoteIp(),
-                    channelType = channelTypeProvider.get(request)
+                    channelType = channelTypeProvider.get(request),
+                    rank = form.rank
                 )
             )
         )

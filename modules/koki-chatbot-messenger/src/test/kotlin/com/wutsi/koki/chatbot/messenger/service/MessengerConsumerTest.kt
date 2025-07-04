@@ -137,9 +137,10 @@ class MessengerConsumerTest : AbstractTest() {
         assertEquals(TrackEvent.IMPRESSION, event.firstValue.track.event)
         assertEquals("messenger", event.firstValue.track.page)
         assertEquals(rooms.map { it.id }.joinToString("|"), event.firstValue.track.productId)
-        assertEquals(update.sender.id, event.firstValue.track.deviceId)
+        assertEquals("me-" + update.sender.id, event.firstValue.track.deviceId)
         assertEquals(1L, event.firstValue.track.tenantId)
         assertEquals(update.timestamp, event.firstValue.track.time)
+        assertEquals(null, event.firstValue.track.rank)
     }
 
     private fun createMessaging(text: String?): Messaging {

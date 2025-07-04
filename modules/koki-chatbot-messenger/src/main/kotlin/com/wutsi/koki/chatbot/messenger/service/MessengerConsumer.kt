@@ -17,19 +17,16 @@ import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileSummary
 import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.platform.logger.KVLogger
-import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.platform.tenant.TenantProvider
 import com.wutsi.koki.room.dto.RoomSummary
 import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiTenants
 import com.wutsi.koki.tenant.dto.Tenant
-import com.wutsi.koki.track.dto.ChannelType
-import com.wutsi.koki.track.dto.Track
-import com.wutsi.koki.track.dto.TrackEvent
-import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
 import org.apache.tika.language.detect.LanguageDetector
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
+import java.net.URLEncoder
 import java.text.DecimalFormat
 import java.util.Locale
 import java.util.UUID
@@ -42,9 +39,11 @@ class MessengerConsumer(
     private val kokiTenant: KokiTenants,
     private val kokiFiles: KokiFiles,
     private val messages: MessageSource,
-    private val publisher: Publisher,
     private val logger: KVLogger,
     private val languageDetector: LanguageDetector,
+    private val trackingService: TrackingService,
+
+    @Value("\${koki.webapp.base-url}") private val webappUrl: String
 ) {
     fun consume(messaging: Messaging) {
         logger.add("messaging_sender_id", messaging.sender.id)
@@ -66,8 +65,8 @@ class MessengerConsumer(
     }
 
     private fun doConsume(messaging: Messaging) {
-        val tenantId = tenantProvider.id()
-        val tenant = kokiTenant.tenant(tenantId ?: -1).tenant
+        val tenantId = tenantProvider.id() ?: -1
+        val tenant = kokiTenant.tenant(tenantId).tenant
         logger.add("tenant_id", tenantId)
 
         val language = detectLanguage(messaging)
@@ -86,6 +85,7 @@ class MessengerConsumer(
             logger.add("room_hero_imageIds", response.rooms.map { room -> room.heroImageId })
 
             if (response.rooms.isNotEmpty()) {
+                val correlationId = UUID.randomUUID().toString()
                 val urlBuilder = UrlBuilder(baseUrl = tenant.clientPortalUrl, medium = "messenger")
 
                 // Images
@@ -100,10 +100,20 @@ class MessengerConsumer(
                 ).files.associateBy { file -> file.id }
 
                 // Rooms
-                sendProperties(response.rooms, images, request, response, tenant, locale, urlBuilder, messaging)
+                sendProperties(
+                    rooms = response.rooms,
+                    images = images,
+                    request = request,
+                    response = response,
+                    tenant = tenant,
+                    locale = locale,
+                    urlBuilder = urlBuilder,
+                    messaging = messaging,
+                    correlationId = correlationId
+                )
 
                 // Track impression
-                trackImpression(response.rooms, messaging)
+                trackingService.impression(response.rooms, tenantId, correlationId, messaging)
             } else {
                 sendTextKey("chatbot.not-found", messaging, locale)
             }
@@ -128,6 +138,7 @@ class MessengerConsumer(
         locale: Locale,
         urlBuilder: UrlBuilder,
         messaging: Messaging,
+        correlationId: String
     ) {
         val titleViewDetails = messages.getMessage("chatbot.view-details", arrayOf(), locale)
         val titleSimilarProperties = messages.getMessage("chatbot.similar-properties", arrayOf(), locale)
@@ -138,6 +149,7 @@ class MessengerConsumer(
         }
 
         // Properties
+        var rank = 0
         messenger.send(
             messaging.recipient.id,
             SendRequest(
@@ -148,6 +160,14 @@ class MessengerConsumer(
                         payload = Payload(
                             template_type = "generic",
                             elements = rooms.map { room ->
+                                val detailsUrl = "$webappUrl/click" +
+                                    "?device-id=" + trackingService.deviceId(messaging) +
+                                    "&product-id=${room.id}" +
+                                    "&tenant-id=${tenant.id}" +
+                                    "&rank=" + (rank++) +
+                                    "&correlation-id=$correlationId" +
+                                    "&url=" + URLEncoder.encode(urlBuilder.toPropertyUrl(room, request), "utf-8")
+
                                 Element(
                                     title = if (locale.language == "en") room.title else room.titleFr,
                                     subtitle = toSubTitle(room, tenant, locale),
@@ -160,7 +180,7 @@ class MessengerConsumer(
                                         Button(
                                             type = "web_url",
                                             title = titleViewDetails,
-                                            url = urlBuilder.toPropertyUrl(room, request),
+                                            url = detailsUrl,
                                         ),
                                         similarUrl?.let { url ->
                                             Button(
@@ -225,25 +245,6 @@ class MessengerConsumer(
         }
 
         return listOf(price, bedroom, bathroom).filterNotNull().joinToString(" | ")
-    }
-
-    private fun trackImpression(rooms: List<RoomSummary>, messaging: Messaging) {
-        publisher.publish(
-            TrackSubmittedEvent(
-                timestamp = System.currentTimeMillis(),
-                track = Track(
-                    time = messaging.timestamp,
-                    correlationId = UUID.randomUUID().toString(),
-                    accountId = null,
-                    tenantId = tenantProvider.id(),
-                    productId = rooms.map { room -> room.id }.joinToString("|"),
-                    deviceId = messaging.sender.id,
-                    event = TrackEvent.IMPRESSION,
-                    page = "messenger",
-                    channelType = ChannelType.MESSAGING,
-                )
-            )
-        )
     }
 
     private fun sendTextKey(key: String, messaging: Messaging, locale: Locale, params: Array<Any> = emptyArray()) {

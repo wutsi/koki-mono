@@ -46,3 +46,9 @@ jobs:
                     token: ${{ secrets.GITHUB_TOKEN }}
                     min-coverage-overall: 90
                     min-coverage-changed-files: 90
+
+            -   name: Upload JaCoCo Report
+                uses: actions/upload-artifact@v4
+                with:
+                    name: jacoco-report
+                    path: modules/koki-chatbot-messenger/target/site/jacoco/**/*

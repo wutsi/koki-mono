@@ -149,6 +149,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertEquals(null, event.firstValue.track.lat)
         assertEquals(null, event.firstValue.track.long)
         assertEquals("http://localhost:$port/rooms/${room.id}/this-is-room", event.firstValue.track.url)
+        assertEquals(null, event.firstValue.track.rank)
     }
 
     @Test
