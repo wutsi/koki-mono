@@ -101,7 +101,7 @@ class TelegramConsumer(
 
             if (response.rooms.isNotEmpty()) {
                 val correlationId = UUID.randomUUID().toString()
-                val urlBuilder = UrlBuilder(baseUrl = tenant.clientPortalUrl, medium = "telegram")
+                val urlBuilder = UrlBuilder(baseUrl = tenant.clientPortalUrl, source = "telegram")
 
                 // Images
                 val images = kokiFiles.files(
