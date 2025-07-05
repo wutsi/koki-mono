@@ -30,10 +30,12 @@ import com.wutsi.koki.track.dto.TrackEvent
 import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertNotNull
+import org.openqa.selenium.By.id
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.event
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -326,9 +328,11 @@ class LocationControllerTest : AbstractPageControllerTest() {
         val markers = rooms.filter { room -> room.latitude != null && room.longitude != null }
         assertElementCount(".map-room-icon", markers.size)
 
+        // Open card
         click(".map-room-icon")
         assertElementVisible(".map-room-card")
 
+        // Click
         click(".map-room-card img")
 
         val windowHandles = driver.getWindowHandles().toList()
@@ -336,6 +340,66 @@ class LocationControllerTest : AbstractPageControllerTest() {
         driver.switchTo().window(windowHandles[1])
 
         assertCurrentPageIs(PageName.ROOM)
+    }
+
+    @Test
+    fun `map - IMPRESSION when opening card`() {
+        navigateTo("/l/${neighborhoods[0].id}/montreal")
+        Thread.sleep(2000)
+
+        click(".map-room-icon")
+
+        reset(publisher)
+        click(".map-room-card img")
+
+        val event = argumentCaptor<TrackSubmittedEvent>()
+        verify(publisher, times(2)).publish(event.capture()) // CLICK then VIEW
+
+        assertEquals(PageName.LOCATION, event.firstValue.track.page)
+        assertNotNull(event.firstValue.track.correlationId)
+        assertNotNull(event.firstValue.track.deviceId)
+        assertEquals(TenantFixtures.tenants[0].id, event.firstValue.track.tenantId)
+        assertEquals("map", event.firstValue.track.component)
+        assertEquals(TrackEvent.CLICK, event.firstValue.track.event)
+        assertEquals(false, event.firstValue.track.productId.isNullOrEmpty())
+        assertEquals(null, event.firstValue.track.value)
+        assertEquals(null, event.firstValue.track.accountId)
+        assertEquals(ChannelType.WEB, event.firstValue.track.channelType)
+        assertEquals(USER_AGENT, event.firstValue.track.ua)
+        assertEquals("0:0:0:0:0:0:0:1", event.firstValue.track.ip)
+        assertEquals(null, event.firstValue.track.lat)
+        assertEquals(null, event.firstValue.track.long)
+        assertEquals("http://localhost:$port/l/${neighborhoods[0].id}/montreal", event.firstValue.track.url)
+        assertEquals(-1, event.firstValue.track.rank)
+    }
+
+    @Test
+    fun `map - CLICK when click a card`() {
+        navigateTo("/l/${neighborhoods[0].id}/montreal")
+        Thread.sleep(2000)
+
+        reset(publisher)
+        click(".map-room-icon")
+
+        val event = argumentCaptor<TrackSubmittedEvent>()
+        verify(publisher).publish(event.capture())
+
+        assertEquals(PageName.LOCATION, event.firstValue.track.page)
+        assertNotNull(event.firstValue.track.correlationId)
+        assertNotNull(event.firstValue.track.deviceId)
+        assertEquals(TenantFixtures.tenants[0].id, event.firstValue.track.tenantId)
+        assertEquals("map", event.firstValue.track.component)
+        assertEquals(TrackEvent.IMPRESSION, event.firstValue.track.event)
+        assertEquals(false, event.firstValue.track.productId.isNullOrEmpty())
+        assertEquals(null, event.firstValue.track.value)
+        assertEquals(null, event.firstValue.track.accountId)
+        assertEquals(ChannelType.WEB, event.firstValue.track.channelType)
+        assertEquals(USER_AGENT, event.firstValue.track.ua)
+        assertEquals("0:0:0:0:0:0:0:1", event.firstValue.track.ip)
+        assertEquals(null, event.firstValue.track.lat)
+        assertEquals(null, event.firstValue.track.long)
+        assertEquals("http://localhost:$port/l/${neighborhoods[0].id}/montreal", event.firstValue.track.url)
+        assertEquals(-1, event.firstValue.track.rank)
     }
 
     @Test
@@ -394,7 +458,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
         assertEquals(null, event.firstValue.track.lat)
         assertEquals(null, event.firstValue.track.long)
         assertEquals("http://localhost:$port/l/${neighborhoods[0].id}/montreal", event.firstValue.track.url)
-        assertEquals(null, event.firstValue.track.rank)
+        assertEquals(-1, event.firstValue.track.rank)
     }
 
     @Test
