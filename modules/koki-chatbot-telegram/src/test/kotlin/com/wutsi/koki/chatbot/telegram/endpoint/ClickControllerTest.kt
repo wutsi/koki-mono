@@ -26,6 +26,8 @@ class ClickControllerTest {
             deviceId = "333",
             rank = 3,
             url = url,
+            referer = "http://www.t.me",
+            ua = "TelegramBot"
         )
 
         assertEquals("redirect:$url", result)
@@ -38,5 +40,7 @@ class ClickControllerTest {
         assertEquals("333", event.firstValue.track.deviceId)
         assertEquals(1L, event.firstValue.track.tenantId)
         assertEquals(3, event.firstValue.track.rank)
+        assertEquals("TelegramBot", event.firstValue.track.ua)
+        assertEquals("http://www.t.me", event.firstValue.track.referrer)
     }
 }

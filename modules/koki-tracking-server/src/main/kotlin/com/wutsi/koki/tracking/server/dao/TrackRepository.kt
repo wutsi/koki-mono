@@ -44,6 +44,7 @@ class TrackRepository(private val storageServiceBuilder: StorageServiceBuilder) 
             "ua",
             "country",
             "rank",
+            "component",
         )
     }
 
@@ -100,6 +101,7 @@ class TrackRepository(private val storageServiceBuilder: StorageServiceBuilder) 
                         it.ua,
                         it.country,
                         it.rank,
+                        it.component
                     )
                 }
                 printer.flush()
