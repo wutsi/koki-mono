@@ -35,6 +35,7 @@ class TrackingConsumer(
         logger.add("track_tenant_id", event.track.tenantId)
         logger.add("track_ua", event.track.ua)
         logger.add("track_referrer", event.track.referrer)
+        logger.add("track_rank", event.track.rank)
 
         val entities = toTrackEntity(event.track)
         entities.forEach { entity -> pipeline.filter(entity) }
