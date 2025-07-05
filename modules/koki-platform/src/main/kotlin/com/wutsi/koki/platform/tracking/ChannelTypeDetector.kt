@@ -54,7 +54,7 @@ class ChannelTypeDetector {
         val medium = extractParams(url)["utm_medium"]
         if (medium != null) {
             when (medium.lowercase()) {
-                "whatsapp", "telegram", "messenger" -> return ChannelType.MESSAGING
+                "messaging" -> return ChannelType.MESSAGING
                 "email" -> return ChannelType.EMAIL
                 else -> {}
             }

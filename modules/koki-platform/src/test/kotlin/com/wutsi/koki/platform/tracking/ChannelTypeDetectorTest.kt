@@ -32,10 +32,14 @@ class ChannelTypeDetectorTest {
 
     @Test
     fun utmMedium() {
-        assertEquals(ChannelType.MESSAGING, detect(url = "https://www.wutsi.com?utm_medium=whatsapp"))
-        assertEquals(ChannelType.MESSAGING, detect(url = "https://www.wutsi.com?utm_medium=messenger"))
-        assertEquals(ChannelType.MESSAGING, detect(url = "https://www.wutsi.com?utm_medium=telegram"))
+        assertEquals(ChannelType.MESSAGING, detect(url = "https://www.wutsi.com?utm_medium=messaging"))
         assertEquals(ChannelType.EMAIL, detect(url = "https://www.wutsi.com?utm_medium=email"))
+    }
+
+    @Test
+    fun refererMessaging() {
+        assertEquals(ChannelType.MESSAGING, detect(referer = "https://www.telegram.org"))
+        assertEquals(ChannelType.MESSAGING, detect(referer = "https://www.messenger.com"))
     }
 
     @Test
