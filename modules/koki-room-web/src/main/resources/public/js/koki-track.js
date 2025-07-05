@@ -4,9 +4,13 @@ class KokiTracking {
         console.log(elts.length + ' element(s) tracked');
 
         elts.forEach((elt) => {
-            elt.addEventListener('click', kokiTracking.on_click);
-            elt.addEventListener('click', kokiTracking.on_click);
+            this.add_event_listener(elt);
         });
+    }
+
+    add_event_listener(elt) {
+        elt.addEventListener('click', kokiTracking.on_click);
+        elt.addEventListener('click', kokiTracking.on_click);
     }
 
     track(event, productId, component, value, rank) {

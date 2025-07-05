@@ -64,8 +64,8 @@ class KokiLocationPage {
                         location = json.address.city.name;
                     }
 
-                    const html = `<div class="map-room-card">
-                            <a href="${json.url}" target="_blank">
+                    const html = `<div class="map-room-card" id="map-room-card-${json.id}">
+                            <a href="${json.url}" target="_blank" koki-track koki-track-product-id="${json.id}" koki-track-rank="-1" koki-track-component="map">
                                 <div>
                                     <img src="${json.heroImage.contentUrl}" />
                                 </div>
@@ -89,7 +89,12 @@ class KokiLocationPage {
                     marker.bindPopup(html);
                     marker.openPopup();
 
-                    this._track(roomId, 'map');
+                    this._track(roomId, 'map', -1);
+
+                    const elt = document.querySelector('#map-room-card-' + json.id + ' a');
+                    if (elt) {
+                        kokiTracking.add_event_listener(elt);
+                    }
                 });
             });
     }
@@ -121,8 +126,8 @@ class KokiLocationPage {
         }
     }
 
-    _track(ids, component) {
-        kokiTracking.track('IMPRESSION', ids, component);
+    _track(ids, component, rank) {
+        kokiTracking.track('IMPRESSION', ids, component, null, rank);
     }
 }
 
