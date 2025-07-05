@@ -86,7 +86,7 @@ class MessengerConsumer(
 
             if (response.rooms.isNotEmpty()) {
                 val correlationId = UUID.randomUUID().toString()
-                val urlBuilder = UrlBuilder(baseUrl = tenant.clientPortalUrl, medium = "messenger")
+                val urlBuilder = UrlBuilder(baseUrl = tenant.clientPortalUrl, source = "messenger")
 
                 // Images
                 val images = kokiFiles.files(
