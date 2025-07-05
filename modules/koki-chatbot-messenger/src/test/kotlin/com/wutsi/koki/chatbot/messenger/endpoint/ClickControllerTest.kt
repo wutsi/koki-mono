@@ -2,7 +2,6 @@ package com.wutsi.koki.chatbot.messenger.endpoint
 
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.verify
-import com.wutsi.koki.chatbot.messaging.endpoint.ClickController
 import com.wutsi.koki.chatbot.messenger.service.TrackingService
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.track.dto.TrackEvent
