@@ -6,6 +6,7 @@
 
 [![koki-chatbot](https://github.com/wutsi/koki-mono/actions/workflows/koki-chatbot-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-chatbot-master.yml)
 [![koki-chatbot-pr](https://github.com/wutsi/koki-mono/actions/workflows/koki-chatbot-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-chatbot-pr.yml)
+![Coverage](.github/badges/koki-chatbot-jococo.svg)
 
 [![koki-sdk](https://github.com/wutsi/koki-mono/actions/workflows/koki-sdk-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-sdk-master.yml)
 [![koki-sdk-pr](https://github.com/wutsi/koki-mono/actions/workflows/koki-sdk-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-sdk-pr.yml)
