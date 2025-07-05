@@ -25,7 +25,7 @@ class UrlBuilderTest {
     fun toLocationUrl() {
         val result = builder.toLocationUrl(location, request)
 
-        val url = "${builder.baseUrl}/l/${location.id}/yaounde?lang=fr&utm_medium=${builder.medium}"
+        val url = "${builder.baseUrl}/l/${location.id}/yaounde?lang=fr&utm_medium=messaging&utm_source=telegram"
         assertEquals(url, result)
     }
 
@@ -33,7 +33,7 @@ class UrlBuilderTest {
     fun toPropertyUrl() {
         val result = builder.toPropertyUrl(property, request)
 
-        val url = "${builder.baseUrl}${property.listingUrl}?lang=fr&utm_medium=telegram"
+        val url = "${builder.baseUrl}${property.listingUrl}?lang=fr&utm_medium=messaging&utm_source=telegram"
         assertEquals(url, result)
     }
 
@@ -54,7 +54,7 @@ class UrlBuilderTest {
         val result = builder.toViewMoreUrl(params, request, location)
 
         val url =
-            "${builder.baseUrl}/l/111/yaounde?lang=fr&utm_medium=telegram&min-bedroom=1&max-bedroom=2&type=APARTMENT&lease-type=SHORT_TERM&furnished-type=NONE&min-budget=1000.0&max-budget=2000.0"
+            "${builder.baseUrl}/l/111/yaounde?lang=fr&utm_medium=messaging&utm_source=telegram&min-bedroom=1&max-bedroom=2&type=APARTMENT&lease-type=SHORT_TERM&furnished-type=NONE&min-budget=1000.0&max-budget=2000.0"
         assertEquals(url, result)
     }
 
@@ -68,7 +68,7 @@ class UrlBuilderTest {
         val location = Location(id = 222, name = "Bastos")
         val result = builder.toViewMoreUrl(params, request, location)
 
-        val url = "${builder.baseUrl}/l/222/bastos?lang=fr&utm_medium=telegram"
+        val url = "${builder.baseUrl}/l/222/bastos?lang=fr&utm_medium=messaging&utm_source=telegram"
         assertEquals(url, result)
     }
 }

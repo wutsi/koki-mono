@@ -7,25 +7,25 @@ import com.wutsi.koki.room.dto.RoomSummary
 
 class UrlBuilder(
     val baseUrl: String,
-    val medium: String,
+    val source: String,
 ) {
     fun toLocationUrl(location: Location, request: ChatbotRequest): String {
         val locationId = location.id
         val location = StringUtils.toAscii(location.name).lowercase()
-        val url = "$baseUrl/l/$locationId/$location?lang=${request.language}&utm_medium=$medium"
+        val url = "$baseUrl/l/$locationId/$location?lang=${request.language}&utm_medium=messaging&utm_source=$source"
 
         return url
     }
 
     fun toPropertyUrl(property: RoomSummary, request: ChatbotRequest): String {
-        val url = "$baseUrl${property.listingUrl}?lang=${request.language}&utm_medium=$medium"
+        val url = "$baseUrl${property.listingUrl}?lang=${request.language}&utm_medium=messaging&utm_source=$source"
         return url
     }
 
     fun toViewMoreUrl(searchParameters: SearchParameters, request: ChatbotRequest, location: Location): String {
         val url = listOf(
             "$baseUrl/l/${location.id}/${StringUtils.toAscii(location.name).lowercase()}" +
-                "?lang=${request.language}&utm_medium=$medium",
+                "?lang=${request.language}&utm_medium=messaging&utm_source=$source",
             searchParameters.minBedrooms?.let { value -> "min-bedroom=$value" },
             searchParameters.maxBedrooms?.let { value -> "max-bedroom=$value" },
             searchParameters.propertyType?.let { value -> if (value == "UNKNOWN") null else "type=$value" },
