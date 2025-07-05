@@ -458,7 +458,7 @@ class LocationControllerTest : AbstractPageControllerTest() {
         assertEquals(null, event.firstValue.track.lat)
         assertEquals(null, event.firstValue.track.long)
         assertEquals("http://localhost:$port/l/${neighborhoods[0].id}/montreal", event.firstValue.track.url)
-        assertEquals(null, event.firstValue.track.rank)
+        assertEquals(-1, event.firstValue.track.rank)
     }
 
     @Test
