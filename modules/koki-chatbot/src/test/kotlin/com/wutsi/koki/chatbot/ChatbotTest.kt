@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.chatbot.ai.agent.AgentFactory
@@ -133,7 +134,7 @@ class ChatbotTest {
     }
 
     @Test
-    fun `rooms found`() {
+    fun `rooms found in city`() {
         // GIVEN
         val params = SearchParameters(
             valid = true,
@@ -197,6 +198,99 @@ class ChatbotTest {
             maxRecommendation, // limit
             0, // offset
         )
+    }
+
+    @Test
+    fun `rooms found in neighborhood`() {
+        // GIVEN
+        val params = SearchParameters(
+            valid = true,
+            invalidReason = null,
+            city = "Yaounde",
+            neighborhood = "Bastos",
+            leaseType = LeaseType.SHORT_TERM.name,
+            furnishedType = FurnishedType.FULLY_FURNISHED.name,
+            maxBudget = 1000.0,
+            minBudget = 50.0,
+            maxBedrooms = 3,
+            minBedrooms = 1,
+            propertyType = RoomType.APARTMENT.name,
+        )
+        doReturn(
+            objectMapper.writeValueAsString(params)
+        ).whenever(agent).run(any())
+
+        setupLocation(city, neighborhood)
+
+        val rooms = listOf(
+            RoomSummary(id = 1),
+            RoomSummary(id = 2),
+            RoomSummary(id = 3)
+        )
+        setupRooms(rooms)
+
+        // WHEN
+        val response = chatbot.process(
+            ChatbotRequest(
+                query = "Yo",
+                language = "fr",
+                country = "CM",
+            )
+        )
+
+        // THEN
+        assertEquals(rooms, response.rooms)
+        assertEquals(neighborhood, response.searchLocation)
+        assertEquals(params, response.searchParameters)
+
+        verify(kokiRooms).rooms(
+            emptyList(), // ids
+            city.id, // cityId
+            neighborhood.id, // neighborhoodId
+            RoomStatus.PUBLISHED, // status
+            null, // totalGuest
+            listOf(RoomType.valueOf(params.propertyType!!)), // types
+            emptyList(), // amenityIds
+            params.minBedrooms, // minRooms
+            params.maxBedrooms, // maxRooms
+            null, // minBathrooms
+            null, // maxBathrooms
+            emptyList(), // categoryIds
+            emptyList(), // accountIds
+            emptyList(), // accountManagerIds
+            params.minBudget, // min-budget
+            params.maxBudget, // max-budget
+            LeaseType.valueOf(params.leaseType!!), // lease-type
+            FurnishedType.valueOf(params.furnishedType!!), // furnished-type
+            maxRecommendation, // limit
+            0, // offset
+        )
+    }
+
+    @Test
+    fun error() {
+        // GIVEN
+        doThrow(RuntimeException::class).whenever(agent).run(any())
+
+        setupLocation(city)
+
+        val rooms = listOf(
+            RoomSummary(id = 1),
+            RoomSummary(id = 2),
+            RoomSummary(id = 3)
+        )
+        setupRooms(rooms)
+
+        // WHEN
+        assertThrows<ChatbotException> {
+            chatbot.process(
+                ChatbotRequest(
+                    query = "Yo",
+                    language = "fr",
+                    country = "CM",
+                )
+            )
+        }
     }
 
     private fun setupLocation(city: Location) {
