@@ -4,10 +4,6 @@ import java.net.URL
 import java.net.URLDecoder
 
 class TrafficSourceDetector {
-    companion object {
-        const val FACEBOOK_PARAM = "fbclid"
-    }
-
     fun detect(url: String?, referer: String?, ua: String?): String? {
         url?.let {
             val source = extractParams(url)["utm_source"]
@@ -31,9 +27,7 @@ class TrafficSourceDetector {
             "instagram"
         } else if (
             ua?.contains("fbav/", ignoreCase = true) == true ||
-            referer?.contains("facebook.com", ignoreCase = true) == true ||
-            url?.contains(FACEBOOK_PARAM, ignoreCase = true) == true ||
-            referer?.contains(FACEBOOK_PARAM, ignoreCase = true) == true
+            referer?.contains("facebook.com", ignoreCase = true) == true
         ) {
             "facebook"
         } else if (ua?.contains("telegrambot (like twitterbot)", ignoreCase = true) == true) { // Test before Twitter

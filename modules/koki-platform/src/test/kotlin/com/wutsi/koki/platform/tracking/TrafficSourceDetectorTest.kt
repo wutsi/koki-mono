@@ -46,18 +46,6 @@ class TrafficSourceDetectorTest {
     }
 
     @Test
-    fun facebookFromParamager() {
-        assertEquals(
-            "facebook",
-            detector.detect(
-                null,
-                null,
-                "Mozilla/5.0 (Linux; Android 14; T614SP Build/UP1A.231005.007; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/137.0.7151.115 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/513.1.0.46.107;]"
-            )
-        )
-    }
-
-    @Test
     fun reddit() {
         assertEquals("reddit", detector.detect(null, "https://m.reddit.com", null))
         assertEquals("reddit", detector.detect(null, "https://www.reddit.com", null))
