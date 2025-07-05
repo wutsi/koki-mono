@@ -122,6 +122,7 @@ class KokiLocationPage {
         if (elt) {
             let ids = elt.getAttribute("data-room-ids")
             this._track(ids);
+            kokiTracking.init(); // Reset tracking
             elt.parentNode.removeChild(elt); // Tracking complete, remove the element from the DOM
         }
     }

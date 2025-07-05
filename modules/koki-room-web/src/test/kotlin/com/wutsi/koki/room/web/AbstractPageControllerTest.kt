@@ -677,9 +677,13 @@ abstract class AbstractPageControllerTest {
         actions.perform()
     }
 
-    protected fun scrollToBottom() {
+    protected fun scrollToBottom(selector: String? = null) {
         val js = driver as JavascriptExecutor
-        js.executeScript("window.scrollBy(0,document.body.scrollHeight)")
+        if (selector == null) {
+            js.executeScript("window.scrollBy(0,document.body.scrollHeight)")
+        } else {
+            js.executeScript("document.querySelector('$selector').scrollBy(0,document.body.scrollHeight)")
+        }
         Thread.sleep(1000)
     }
 
