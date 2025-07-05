@@ -84,7 +84,7 @@ jobs:
             -   name: Heroku-Deploy-Test
                 env:
                     HEROKU_APP: koki-chatbot-messenger-test
-                    APP_URL: ${{secrets.KOKI_CHATBOT_TELEGRAM_URL_TEST}}
+                    APP_URL: ${{secrets.KOKI_CHATBOT_MESSENGER_URL_TEST}}
                     AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY_TEST}}
                     AWS_SECRET_KEY: ${{secrets.AWS_SECRET_KEY_TEST}}
                     KOKI_SERVER_URL: ${{secrets.KOKI_SERVER_URL_TEST}}
