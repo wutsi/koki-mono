@@ -1,7 +1,8 @@
-package com.wutsi.koki.chatbot.telegram.endpoint
+package com.wutsi.koki.chatbot.messenger.endpoint
 
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.verify
+import com.wutsi.koki.chatbot.telegram.endpoint.ClickController
 import com.wutsi.koki.chatbot.telegram.service.TrackingService
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.track.dto.TrackEvent

@@ -1,4 +1,4 @@
-package com.wutsi.koki.chatbot.messaging.endpoint
+package com.wutsi.koki.chatbot.messenger.endpoint
 
 import com.wutsi.koki.chatbot.messenger.service.TrackingService
 import org.springframework.stereotype.Controller
