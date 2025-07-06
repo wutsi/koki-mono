@@ -41,7 +41,6 @@ class TrackingService(private val publisher: Publisher) {
         correlationId: String,
         rank: Int,
         ua: String?,
-        referer: String?
     ) {
         publisher.publish(
             TrackSubmittedEvent(
@@ -57,7 +56,6 @@ class TrackingService(private val publisher: Publisher) {
                     channelType = ChannelType.MESSAGING,
                     rank = rank,
                     ua = ua,
-                    referrer = referer,
                 )
             )
         )

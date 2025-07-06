@@ -38,7 +38,7 @@ class ClickControllerTest {
         assertEquals("123", event.firstValue.track.productId)
         assertEquals("333", event.firstValue.track.deviceId)
         assertEquals(1L, event.firstValue.track.tenantId)
-        assertEquals("http://me.com", event.firstValue.track.referrer)
+        assertEquals(null, event.firstValue.track.referrer)
         assertEquals("MessengerBot", event.firstValue.track.ua)
     }
 }

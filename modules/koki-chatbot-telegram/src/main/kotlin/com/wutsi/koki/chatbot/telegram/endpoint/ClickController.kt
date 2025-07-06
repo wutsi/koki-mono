@@ -10,12 +10,11 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 @RequestMapping("/click")
 class ClickController(
-    private val trackingService: TrackingService
+    private val trackingService: TrackingService,
 ) {
     @GetMapping
     fun onClick(
         @RequestHeader(name = "User-Agent", required = false) ua: String? = null,
-        @RequestHeader(name = "Referer", required = false) referer: String? = null,
         @RequestParam url: String,
         @RequestParam(name = "product-id") productId: String,
         @RequestParam(name = "correlation-id") correlationId: String,
@@ -30,7 +29,6 @@ class ClickController(
             deviceId = deviceId,
             rank = rank,
             ua = ua,
-            referer = referer,
         )
         return "redirect:$url"
     }

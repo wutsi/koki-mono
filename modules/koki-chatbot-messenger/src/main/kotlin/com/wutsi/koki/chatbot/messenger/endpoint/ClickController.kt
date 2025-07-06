@@ -15,7 +15,6 @@ class ClickController(
     @GetMapping
     fun onClick(
         @RequestHeader(name = "User-Agent", required = false) ua: String? = null,
-        @RequestHeader(name = "Referer", required = false) referer: String? = null,
         @RequestParam url: String,
         @RequestParam(name = "product-id") productId: String,
         @RequestParam(name = "correlation-id") correlationId: String,
@@ -29,7 +28,6 @@ class ClickController(
             correlationId = correlationId,
             deviceId = deviceId,
             rank = rank,
-            referer = referer,
             ua = ua,
         )
         return "redirect:$url"
