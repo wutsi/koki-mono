@@ -16,7 +16,7 @@ class MessageService(
     private val currentGeoIp: CurrentGeoIPHolder,
     private val locationService: LocationService,
 ) {
-    fun send(form: SendMessageForm) {
+    fun send(form: SendMessageForm): Long {
         val geoIp = currentGeoIp.get()
         val city = geoIp?.let {
             locationService.locations(keyword = geoIp.city, limit = 1)
@@ -33,6 +33,6 @@ class MessageService(
             cityId = city?.id,
             country = form.phoneCountry
         )
-        koki.send(request)
+        return koki.send(request).messageId
     }
 }

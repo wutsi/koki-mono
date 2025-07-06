@@ -103,13 +103,17 @@ class RoomController(
     @ResponseBody
     fun send(@ModelAttribute form: SendMessageForm): Map<String, Any> {
         try {
-            messageService.send(form)
-            return mapOf("success" to true)
+            val messageId = messageService.send(form)
+            return mapOf(
+                "success" to true,
+                "roomId" to form.roomId,
+                "messageId" to messageId,
+            )
         } catch (ex: HttpClientErrorException) {
             val response = toErrorResponse(ex)
             return mapOf(
                 "success" to false,
-                "error" to response.error.code
+                "error" to response.error.code,
             )
         }
     }

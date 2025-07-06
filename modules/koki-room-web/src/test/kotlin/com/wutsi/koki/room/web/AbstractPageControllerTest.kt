@@ -486,7 +486,7 @@ abstract class AbstractPageControllerTest {
     fun setupMessageModule() {
         doReturn(
             ResponseEntity(
-                SendMessageResponse(111),
+                SendMessageResponse(MessageFixtures.NEW_ID),
                 HttpStatus.OK,
             )
         ).whenever(rest)
