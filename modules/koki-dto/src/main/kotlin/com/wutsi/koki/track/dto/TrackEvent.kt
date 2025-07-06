@@ -5,4 +5,5 @@ enum class TrackEvent {
     VIEW,
     IMPRESSION,
     CLICK,
+    MESSAGE,
 }
