@@ -3,7 +3,6 @@ package com.wutsi.koki.chatbot.messenger.endpoint
 import com.wutsi.koki.chatbot.messenger.service.TrackingService
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 
@@ -14,7 +13,6 @@ class ClickController(
 ) {
     @GetMapping
     fun onClick(
-        @RequestHeader(name = "User-Agent", required = false) ua: String? = null,
         @RequestParam url: String,
         @RequestParam(name = "product-id") productId: String,
         @RequestParam(name = "correlation-id") correlationId: String,
@@ -28,7 +26,6 @@ class ClickController(
             correlationId = correlationId,
             deviceId = deviceId,
             rank = rank,
-            ua = ua,
         )
         return "redirect:$url"
     }

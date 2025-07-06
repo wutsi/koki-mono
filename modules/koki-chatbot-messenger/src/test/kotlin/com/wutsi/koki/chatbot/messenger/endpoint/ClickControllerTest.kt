@@ -25,7 +25,6 @@ class ClickControllerTest {
             deviceId = "333",
             rank = 3,
             url = url,
-            ua = "MessengerBot"
         )
 
         assertEquals("redirect:$url", result)
@@ -38,6 +37,6 @@ class ClickControllerTest {
         assertEquals("333", event.firstValue.track.deviceId)
         assertEquals(1L, event.firstValue.track.tenantId)
         assertEquals(null, event.firstValue.track.referrer)
-        assertEquals("MessengerBot", event.firstValue.track.ua)
+        assertEquals(null, event.firstValue.track.ua)
     }
 }
