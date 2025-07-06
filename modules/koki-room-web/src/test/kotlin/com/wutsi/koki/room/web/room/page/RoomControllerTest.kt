@@ -22,7 +22,6 @@ import com.wutsi.koki.room.web.FileFixtures.images
 import com.wutsi.koki.room.web.GeoIpFixtures
 import com.wutsi.koki.room.web.MessageFixtures
 import com.wutsi.koki.room.web.RefDataFixtures
-import com.wutsi.koki.room.web.RoomFixtures
 import com.wutsi.koki.room.web.RoomFixtures.room
 import com.wutsi.koki.room.web.TenantFixtures
 import com.wutsi.koki.room.web.common.page.PageName
