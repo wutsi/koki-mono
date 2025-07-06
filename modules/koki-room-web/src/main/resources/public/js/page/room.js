@@ -34,6 +34,8 @@ class KokiRoomPage {
                         document.querySelector('#room-message-modal .btn-close').click();
                         alert('Your message has been sent');
                         document.getElementById("btn-send").disabled = false;
+
+                        kokiTracking.track('MESSAGE', json.roomId, null, json.messageId);
                     } else {
                         console.log('Error', json);
                         alert('Failed');

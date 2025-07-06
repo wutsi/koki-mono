@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.reset
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.common.dto.ObjectType
@@ -19,6 +20,7 @@ import com.wutsi.koki.room.dto.RoomStatus
 import com.wutsi.koki.room.web.AbstractPageControllerTest
 import com.wutsi.koki.room.web.FileFixtures.images
 import com.wutsi.koki.room.web.GeoIpFixtures
+import com.wutsi.koki.room.web.MessageFixtures
 import com.wutsi.koki.room.web.RefDataFixtures
 import com.wutsi.koki.room.web.RoomFixtures.room
 import com.wutsi.koki.room.web.TenantFixtures
@@ -158,6 +160,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
 
         assertElementNotVisible("#room-message-modal")
         assertElementAttribute("#phone", "data-country", GeoIpFixtures.geoip.countryCode)
+        reset(publisher)
         click("#btn-contact-us")
 
         assertElementVisible("#room-message-modal")
@@ -189,6 +192,25 @@ class RoomControllerTest : AbstractPageControllerTest() {
 
         Thread.sleep(1000)
         assertElementNotVisible("#room-message-modal")
+
+        val event = argumentCaptor<TrackSubmittedEvent>()
+        verify(publisher).publish(event.capture())
+        assertEquals(PageName.ROOM, event.firstValue.track.page)
+        assertNotNull(event.firstValue.track.correlationId)
+        assertNotNull(event.firstValue.track.deviceId)
+        assertEquals(TenantFixtures.tenants[0].id, event.firstValue.track.tenantId)
+        assertEquals(null, event.firstValue.track.component)
+        assertEquals(TrackEvent.MESSAGE, event.firstValue.track.event)
+        assertEquals(room.id.toString(), event.firstValue.track.productId)
+        assertEquals(MessageFixtures.NEW_ID.toString(), event.firstValue.track.value)
+        assertEquals(null, event.firstValue.track.accountId)
+        assertEquals(ChannelType.WEB, event.firstValue.track.channelType)
+        assertEquals(USER_AGENT, event.firstValue.track.ua)
+        assertEquals("0:0:0:0:0:0:0:1", event.firstValue.track.ip)
+        assertEquals(null, event.firstValue.track.lat)
+        assertEquals(null, event.firstValue.track.long)
+        assertEquals("http://localhost:$port/rooms/${room.id}", event.firstValue.track.url)
+        assertEquals(null, event.firstValue.track.rank)
     }
 
     @Test
