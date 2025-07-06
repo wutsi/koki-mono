@@ -25,7 +25,6 @@ class ClickControllerTest {
             deviceId = "333",
             rank = 3,
             url = url,
-            referer = "http://me.com",
             ua = "MessengerBot"
         )
 
