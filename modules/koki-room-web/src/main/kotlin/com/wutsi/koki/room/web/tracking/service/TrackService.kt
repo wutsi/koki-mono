@@ -19,6 +19,7 @@ class TrackService(
     private val request: HttpServletRequest,
 ) {
     fun track(form: TrackForm) {
+        val channelType = channelTypeProvider.get(request)
         publisher.publish(
             TrackSubmittedEvent(
                 timestamp = System.currentTimeMillis(),
@@ -37,7 +38,7 @@ class TrackService(
                     component = form.component,
                     referrer = form.referrer,
                     ip = remoteIp(),
-                    channelType = channelTypeProvider.get(request),
+                    channelType = channelType,
                     rank = form.rank
                 )
             )
