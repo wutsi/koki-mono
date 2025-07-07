@@ -2,9 +2,11 @@ package com.wutsi.koki.platform.storage.s3
 
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.model.GetObjectRequest
+import com.amazonaws.services.s3.model.ListObjectsRequest
 import com.amazonaws.services.s3.model.ObjectMetadata
 import com.amazonaws.services.s3.model.PutObjectRequest
 import com.wutsi.koki.platform.storage.StorageService
+import com.wutsi.koki.platform.storage.StorageVisitor
 import org.apache.commons.lang3.StringUtils
 import java.io.IOException
 import java.io.InputStream
@@ -47,6 +49,16 @@ class S3StorageService(
             throw IOException(String.format("Unable to get s3://%s/%s", bucket, path), e)
         }
     }
+
+    override fun visit(path: String, visitor: StorageVisitor) {
+        val request = ListObjectsRequest()
+        request.bucketName = bucket
+        request.prefix = path
+        val listings = s3.listObjects(request)
+        listings.objectSummaries.forEach { visitor.visit(toURL(it.key)) }
+    }
+
+    private fun toURL(path: String) = URL(getUrlPrefix() + "/$path")
 
     private fun getUrlPrefix(): String {
         return "https://s3.amazonaws.com/$bucket"

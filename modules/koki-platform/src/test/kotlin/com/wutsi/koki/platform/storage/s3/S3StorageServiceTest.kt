@@ -2,17 +2,22 @@ package com.wutsi.koki.platform.storage.s3
 
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.model.GetObjectRequest
+import com.amazonaws.services.s3.model.ListObjectsRequest
+import com.amazonaws.services.s3.model.ObjectListing
 import com.amazonaws.services.s3.model.PutObjectRequest
 import com.amazonaws.services.s3.model.S3Object
 import com.amazonaws.services.s3.model.S3ObjectInputStream
+import com.amazonaws.services.s3.model.S3ObjectSummary
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.platform.storage.StorageVisitor
 import org.junit.jupiter.api.assertThrows
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers
+import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -21,6 +26,7 @@ import java.net.URL
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class S3StorageServiceTest {
     private val s3 = mock<AmazonS3>()
@@ -109,5 +115,42 @@ class S3StorageServiceTest {
         val os = ByteArrayOutputStream()
 
         assertThrows<IOException> { storage.get(URL(url), os) }
+    }
+
+    @Test
+    fun visit() {
+        val listings = Mockito.mock(ObjectListing::class.java)
+        doReturn(
+            listOf(
+                createObjectSummary("a/file-a1.txt"),
+                createObjectSummary("a/file-a2.txt"),
+                createObjectSummary("a/b/file-ab1.txt"),
+                createObjectSummary("a/b/c/file-abc1.txt"),
+            ),
+        ).whenever(listings).objectSummaries
+        doReturn(listings).whenever(s3).listObjects(ArgumentMatchers.any(ListObjectsRequest::class.java))
+
+        val urls = mutableListOf<URL>()
+        val visitor = createStorageVisitor(urls)
+        val baseUrl = "https://s3.amazonaws.com/bucket"
+
+        storage.visit("a", visitor)
+        assertEquals(4, urls.size)
+        assertTrue(urls.contains(URL("$baseUrl/a/file-a1.txt")))
+        assertTrue(urls.contains(URL("$baseUrl/a/file-a2.txt")))
+        assertTrue(urls.contains(URL("$baseUrl/a/b/file-ab1.txt")))
+        assertTrue(urls.contains(URL("$baseUrl/a/b/c/file-abc1.txt")))
+    }
+
+    private fun createStorageVisitor(urls: MutableList<URL>) = object : StorageVisitor {
+        override fun visit(url: URL) {
+            urls.add(url)
+        }
+    }
+
+    private fun createObjectSummary(key: String): S3ObjectSummary {
+        val obj = S3ObjectSummary()
+        obj.key = key
+        return obj
     }
 }

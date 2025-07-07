@@ -16,4 +16,6 @@ interface StorageService {
 
     @Throws(IOException::class)
     fun get(url: URL, os: OutputStream)
+
+    fun visit(path: String, visitor: StorageVisitor)
 }

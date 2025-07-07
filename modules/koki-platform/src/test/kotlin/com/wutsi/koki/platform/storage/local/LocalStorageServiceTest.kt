@@ -1,5 +1,6 @@
 package com.wutsi.koki.platform.storage.local
 
+import com.wutsi.koki.platform.storage.StorageVisitor
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -49,5 +50,29 @@ class LocalStorageServiceTest {
 
         // THEN
         assertEquals(content, String(output.toByteArray()))
+    }
+
+    @Test
+    fun visitor() {
+        val content = ByteArrayInputStream("hello".toByteArray())
+        storage.store("file.txt", content, "text/plain", 11L)
+        storage.store("a/file-a1.txt", content, "text/plain", 11L)
+        storage.store("a/file-a2.txt", content, "text/plain", 11L)
+        storage.store("a/b/file-ab1.txt", content, "text/plain", 11L)
+        storage.store("a/b/c/file-abc1.txt", content, "text/plain", 11L)
+
+        val urls = mutableListOf<URL>()
+        val visitor = object : StorageVisitor {
+            override fun visit(url: URL) {
+                urls.add(url)
+            }
+        }
+        storage.visit("a", visitor)
+
+        assertEquals(4, urls.size)
+        assertTrue(urls.contains(URL("$baseUrl/a/file-a1.txt")))
+        assertTrue(urls.contains(URL("$baseUrl/a/file-a2.txt")))
+        assertTrue(urls.contains(URL("$baseUrl/a/b/file-ab1.txt")))
+        assertTrue(urls.contains(URL("$baseUrl/a/b/c/file-abc1.txt")))
     }
 }
