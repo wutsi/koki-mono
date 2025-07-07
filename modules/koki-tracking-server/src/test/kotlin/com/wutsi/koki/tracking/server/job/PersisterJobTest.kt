@@ -1,7 +1,6 @@
-package com.wutsi.koki.tracking.server.service.job
+package com.wutsi.koki.tracking.server.job
 
 import com.nhaarman.mockitokotlin2.verify
-import com.wutsi.koki.tracking.server.job.PersisterJob
 import com.wutsi.koki.tracking.server.service.filter.PersisterFilter
 import org.mockito.Mockito.mock
 import kotlin.test.Test

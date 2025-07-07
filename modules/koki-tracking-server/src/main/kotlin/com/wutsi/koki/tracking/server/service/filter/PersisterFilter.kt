@@ -6,6 +6,8 @@ import com.wutsi.koki.tracking.server.service.Filter
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.Collections
 
 @Service
@@ -38,7 +40,8 @@ class PersisterFilter(
         copy.addAll(buffer)
 
         if (copy.size > 0) {
-            val url = dao.save(copy)
+            val date = LocalDate.now(ZoneId.of("UTC"))
+            val url = dao.save(date, copy)
             LOGGER.info("Storing ${copy.size} tracking events(s): $url")
 
             buffer.removeAll(copy)

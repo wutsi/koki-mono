@@ -54,6 +54,11 @@ koki:
     executor:
         thread-pool-size: 16
 
+    kpi:
+        room:
+            daily-cron: "0 */20 * * * *"  # Flush every 15 mins
+            monthly-cron: "0 0 5 2 * *"   # Every 2nd of each month at 5AM
+
     persister:
         cron: "0 */15 * * * *"  # Flush every 15 mins
         buffer-size: 10000

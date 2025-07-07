@@ -15,8 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.bean.override.mockito.MockitoBean
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.time.LocalDate
+import java.time.ZoneId
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -44,7 +47,8 @@ class TrackRepositoryTest {
     @Test
     fun save() {
         // WHEN
-        val url = dao.save(arrayListOf(createTrack()))
+        val date = LocalDate.now(ZoneId.of("UTC"))
+        val url = dao.save(date, arrayListOf(createTrack()))
 
         // THEN
         val out = ByteArrayOutputStream()
@@ -56,6 +60,49 @@ class TrackRepositoryTest {
             """.trimIndent(),
             out.toString().trimIndent(),
         )
+    }
+
+    @Test
+    fun read() {
+        // GIVEN
+        val csv = """
+                time,correlation_id,tenant_id,device_id,account_id,product_id,page,event,value,ip,long,lat,bot,device_type,channel_type,source,campaign,url,referrer,ua,country,rank,component
+                3333,123,1,sample-device,333,1234,SR,VIEW,yo,1.1.2.3,111.0,222.0,false,DESKTOP,WEB,facebook,12434554,https://www.wutsi.com/read/123/this-is-nice?utm_source=email&utm_campaign=test&utm_medium=email,https://www.google.ca,Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0),CM,11,map
+        """.trimIndent()
+
+        // WHEN
+        val tracks = dao.read(ByteArrayInputStream(csv.toByteArray()))
+
+        // THEN
+        assertEquals(1, tracks.size)
+        assertEquals(3333L, tracks[0].time)
+        assertEquals("123", tracks[0].correlationId)
+        assertEquals("sample-device", tracks[0].deviceId)
+        assertEquals("333", tracks[0].accountId)
+        assertEquals("1234", tracks[0].productId)
+        assertEquals("SR", tracks[0].page)
+        assertEquals(TrackEvent.VIEW, tracks[0].event)
+        assertEquals("yo", tracks[0].value)
+        assertEquals("1.1.2.3", tracks[0].ip)
+        assertEquals(111.0, tracks[0].long)
+        assertEquals(222.0, tracks[0].lat)
+        assertEquals(false, tracks[0].bot)
+        assertEquals(DeviceType.DESKTOP, tracks[0].deviceType)
+        assertEquals(ChannelType.WEB, tracks[0].channelType)
+        assertEquals("facebook", tracks[0].source)
+        assertEquals("12434554", tracks[0].campaign)
+        assertEquals(
+            "https://www.wutsi.com/read/123/this-is-nice?utm_source=email&utm_campaign=test&utm_medium=email",
+            tracks[0].url,
+        )
+        assertEquals("https://www.google.ca", tracks[0].referrer)
+        assertEquals(
+            "Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0)",
+            tracks[0].ua,
+        )
+        assertEquals("CM", tracks[0].country)
+        assertEquals(11, tracks[0].rank)
+        assertEquals("map", tracks[0].component)
     }
 
     private fun createTrack() = TrackEntity(
