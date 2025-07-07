@@ -73,8 +73,9 @@ class ChannelTypeFilter(
     }
 
     private fun accept(request: HttpServletRequest): Boolean {
-        val uri = request.requestURI
-        if (uri != null && ignoreURIPrefixes.find { prefix -> uri.startsWith(prefix) } != null) {
+        if (request.method != "GET") {
+            return false
+        } else if (request.requestURI != null && ignoreURIPrefixes.find { prefix -> request.requestURI.startsWith(prefix) } != null) {
             return false
         } else {
             val referer: String? = request.getHeader("Referer")

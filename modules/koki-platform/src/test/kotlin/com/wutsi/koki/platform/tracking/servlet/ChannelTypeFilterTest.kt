@@ -29,6 +29,7 @@ class ChannelTypeFilterTest {
     fun setUp() {
         doReturn("Googlebot/2.1 (+http://www.google.com/bot.html)").whenever(request).getHeader("User-Agent")
         doReturn(StringBuffer("https://www.wutsi.com/read/123")).whenever(request).requestURL
+        doReturn("GET").whenever(request).method
     }
 
     @Test
@@ -77,6 +78,16 @@ class ChannelTypeFilterTest {
     @Test
     fun `ignored url - well-known`() {
         doReturn("/.well-known/ai-plugin.json").whenever(request).requestURI
+
+        filter.doFilter(request, response, chain)
+
+        verify(provider, never()).set(any(), any(), any())
+        verify(chain).doFilter(request, response)
+    }
+
+    @Test
+    fun `ignored POST`() {
+        doReturn("POST").whenever(request).method
 
         filter.doFilter(request, response, chain)
 
