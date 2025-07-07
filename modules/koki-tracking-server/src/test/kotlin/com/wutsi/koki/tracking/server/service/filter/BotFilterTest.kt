@@ -1,12 +1,13 @@
 package com.wutsi.koki.tracking.server.service.filter
 
+import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.tracking.server.domain.TrackEntity
 import org.junit.jupiter.api.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 internal class BotFilterTest {
-    private val filter = BotFilter()
+    private val filter = BotFilter(DefaultKVLogger())
 
     @Test
     fun web() {

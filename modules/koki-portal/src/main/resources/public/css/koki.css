@@ -733,6 +733,7 @@ div.CodeMirror {
     #tab-details-content tr td {
         display: block;
         overflow: hidden;
+        width: 100%;
     }
 
     #tab-details-content tr td:first-child {

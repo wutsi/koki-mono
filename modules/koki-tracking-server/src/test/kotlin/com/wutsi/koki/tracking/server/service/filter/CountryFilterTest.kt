@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.tracking.server.domain.TrackEntity
 import com.wutsi.koki.tracking.server.service.IpApiService
 import org.junit.jupiter.api.assertNull
@@ -15,7 +16,7 @@ import kotlin.test.assertEquals
 
 class CountryFilterTest {
     private val ipApi = mock<IpApiService>()
-    private val filter = CountryFilter(ipApi)
+    private val filter = CountryFilter(ipApi, DefaultKVLogger())
 
     @Test
     fun filter() {

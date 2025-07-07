@@ -1,11 +1,12 @@
 package com.wutsi.koki.tracking.server.service.filter
 
+import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.tracking.server.domain.TrackEntity
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class SourceFilterTest {
-    private val filter = SourceFilter()
+    private val filter = SourceFilter(DefaultKVLogger())
 
     @Test
     fun empty() {
