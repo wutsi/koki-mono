@@ -3,6 +3,16 @@ logging:
         com.wutsi: INFO
 
 koki:
+    kpi:
+        room:
+            daily-cron: "0 0 * * * *"     # Flush every hour
+            monthly-cron: "0 0 5 2 * *"   # Every 2nd of each month at 5AM
+
+    module:
+        tracking:
+            mq:
+                consumer-delay-seconds: 60
+
     rabbitmq:
         url: ${CLOUDAMQP_URL}
 
@@ -13,8 +23,3 @@ koki:
             region: us-east-1
             access-key: ${AWS_ACCESS_KEY}
             secret-key: ${AWS_SECRET_KEY}
-
-    module:
-        tracking:
-            mq:
-                consumer-delay-seconds: 60

@@ -1,4 +1,4 @@
-package com.wutsi.koki.tracking.server.service.kpi
+package com.wutsi.koki.tracking.server.service
 
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.storage.StorageService

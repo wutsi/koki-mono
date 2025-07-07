@@ -1,4 +1,4 @@
-package com.wutsi.koki.tracking.server.service.kpi
+package com.wutsi.koki.tracking.server.service
 
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
@@ -8,6 +8,7 @@ import com.wutsi.koki.track.dto.ChannelType
 import com.wutsi.koki.track.dto.Track
 import com.wutsi.koki.track.dto.TrackEvent
 import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
+import com.wutsi.koki.tracking.server.service.KpiRoomService
 import com.wutsi.koki.tracking.server.service.TrackingConsumer
 import com.wutsi.koki.tracking.server.service.filter.PersisterFilter
 import org.junit.jupiter.api.BeforeEach

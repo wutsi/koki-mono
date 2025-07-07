@@ -1,23 +1,24 @@
 package com.wutsi.koki.tracking.server.job
 
 import com.nhaarman.mockitokotlin2.verify
-import com.wutsi.koki.tracking.server.service.filter.PersisterFilter
+import com.wutsi.koki.tracking.server.service.KpiRoomService
 import org.mockito.Mockito.mock
+import java.time.LocalDate
 import kotlin.test.Test
 
-class PersisterJobTest {
-    private val filter = mock<PersisterFilter>()
-    private val job = PersisterJob(filter)
+class KpiRoomJobTest {
+    private val service = mock<KpiRoomService>()
+    private val job = KpiRoomJob(service)
 
     @Test
-    fun run() {
-        job.run()
-        verify(filter).flush()
+    fun daily() {
+        job.daily()
+        verify(service).generate(LocalDate.now())
     }
 
     @Test
-    fun destroy() {
-        job.destroy()
-        verify(filter).flush()
+    fun monthly() {
+        job.monthly()
+        verify(service).generate(LocalDate.now().minusMonths(1))
     }
 }
