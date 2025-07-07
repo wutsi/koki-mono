@@ -73,4 +73,14 @@ class ChannelTypeFilterTest {
         verify(provider).set(ChannelType.SOCIAL, request, response)
         verify(chain).doFilter(request, response)
     }
+
+    @Test
+    fun `ignored url - well-known`() {
+        doReturn("/.well-known/ai-plugin.json").whenever(request).requestURI
+
+        filter.doFilter(request, response, chain)
+
+        verify(provider, never()).set(any(), any(), any())
+        verify(chain).doFilter(request, response)
+    }
 }

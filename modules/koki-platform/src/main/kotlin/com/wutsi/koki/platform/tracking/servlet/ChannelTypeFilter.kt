@@ -14,6 +14,15 @@ class ChannelTypeFilter(
     private val logger: KVLogger,
     private val provider: ChannelTypeProvider,
     private val serverUrl: String,
+    private val ignoreURIPrefixes: List<String> = listOf(
+        "/.well-known/",
+        "/error/",
+        "/js/",
+        "/css/",
+        "/image/",
+        "/manifest.json",
+        "/service-worker.js"
+    )
 ) : OncePerRequestFilter() {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ChannelTypeFilter::class.java)
@@ -25,13 +34,13 @@ class ChannelTypeFilter(
         filterChain: FilterChain,
     ) {
         try {
-            val referer: String? = request.getHeader("Referer")
-            if (!isExternal(referer)) {
+            if (!accept(request)) {
                 return
             }
 
             val ua = request.getHeader("User-Agent")
             val url = (request.requestURL?.toString() ?: "") + "?" + (request.queryString ?: "")
+            val referer: String? = request.getHeader("Referer")
             val channelType = detector.detect(url, referer ?: "", ua)
             logger.add("http_channel", channelType)
             provider.set(channelType, request, response)
@@ -61,5 +70,15 @@ class ChannelTypeFilter(
         }
 
         return domainName.replaceFirst("www.", "")
+    }
+
+    private fun accept(request: HttpServletRequest): Boolean {
+        val uri = request.requestURI
+        if (uri != null && ignoreURIPrefixes.find { prefix -> uri.startsWith(prefix) } != null) {
+            return false
+        } else {
+            val referer: String? = request.getHeader("Referer")
+            return isExternal(referer)
+        }
     }
 }
