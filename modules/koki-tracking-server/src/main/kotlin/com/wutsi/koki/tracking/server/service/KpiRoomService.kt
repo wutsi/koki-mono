@@ -55,7 +55,7 @@ class KpiRoomService(
                 try {
                     val tracks = load(url, storage)
                     result.addAll(tracks)
-                } catch(ex: Exception){
+                } catch (ex: Exception) {
                     LOGGER.warn("Error while processing $url", ex)
                 }
             }
