@@ -9,6 +9,7 @@ import com.wutsi.koki.tracking.server.dao.KpiRoomRepository
 import com.wutsi.koki.tracking.server.dao.TrackRepository
 import com.wutsi.koki.tracking.server.domain.KpiRoomEntity
 import com.wutsi.koki.tracking.server.domain.TrackEntity
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File
 import java.io.FileInputStream
@@ -25,6 +26,7 @@ class KpiRoomService(
     private val logger: KVLogger,
 ) {
     companion object {
+        private val LOGGER = LoggerFactory.getLogger(KpiRoomService::class.java)
         private val EVENTS = listOf(
             TrackEvent.IMPRESSION,
             TrackEvent.VIEW,
@@ -50,8 +52,12 @@ class KpiRoomService(
         val result: MutableList<TrackEntity> = mutableListOf()
         val visitor = object : StorageVisitor {
             override fun visit(url: URL) {
-                val tracks = load(url, storage)
-                result.addAll(tracks)
+                try {
+                    val tracks = load(url, storage)
+                    result.addAll(tracks)
+                } catch(ex: Exception){
+                    LOGGER.warn("Error while processing $url", ex)
+                }
             }
         }
 
