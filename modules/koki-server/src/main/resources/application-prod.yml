@@ -27,6 +27,10 @@ koki:
             gemini:
                 api-key: ${GEMINI_API_KEY}
 
+    kpi:
+        daily-cron: "0 30 * * * *"    # Every hour at xx:30
+        monthly-cron: "0 0 7 2 * *"   # Every 2nd of each month at 7:00AM
+
     rabbitmq:
         url: ${CLOUDAMQP_URL}
 

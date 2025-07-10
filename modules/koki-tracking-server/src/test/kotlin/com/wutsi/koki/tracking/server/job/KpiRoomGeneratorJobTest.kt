@@ -1,24 +1,24 @@
 package com.wutsi.koki.tracking.server.job
 
 import com.nhaarman.mockitokotlin2.verify
-import com.wutsi.koki.tracking.server.service.KpiRoomService
+import com.wutsi.koki.tracking.server.service.KpiRoomGenerator
 import org.mockito.Mockito.mock
 import java.time.LocalDate
 import kotlin.test.Test
 
-class KpiRoomJobTest {
-    private val service = mock<KpiRoomService>()
-    private val job = KpiRoomJob(service)
+class KpiRoomGeneratorJobTest {
+    private val generator = mock<KpiRoomGenerator>()
+    private val job = KpiRoomGeneratorJob(generator)
 
     @Test
     fun daily() {
         job.daily()
-        verify(service).generate(LocalDate.now())
+        verify(generator).generate(LocalDate.now())
     }
 
     @Test
     fun monthly() {
         job.monthly()
-        verify(service).generate(LocalDate.now().minusMonths(1))
+        verify(generator).generate(LocalDate.now().minusMonths(1))
     }
 }

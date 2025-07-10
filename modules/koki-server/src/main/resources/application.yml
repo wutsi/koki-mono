@@ -173,6 +173,10 @@ koki:
     executor:
         thread-pool-size: 16
 
+    kpi:
+        daily-cron: "0 */15 * * * *"  # Flush every 15 mins
+        monthly-cron: "0 0 7 2 * *"   # Every 2nd of each month at 7:00AM
+
     rabbitmq:
         url: amqp://localhost
         exchange-name: koki

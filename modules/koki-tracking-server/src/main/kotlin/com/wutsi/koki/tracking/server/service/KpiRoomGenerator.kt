@@ -19,14 +19,14 @@ import java.time.LocalDate
 import java.util.UUID
 
 @Service
-class KpiRoomService(
+class KpiRoomGenerator(
     private val trackDao: TrackRepository,
     private val kpiDao: KpiRoomRepository,
     private val storageServiceBuilder: StorageServiceBuilder,
     private val logger: KVLogger,
 ) {
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(KpiRoomService::class.java)
+        private val LOGGER = LoggerFactory.getLogger(KpiRoomGenerator::class.java)
         private val EVENTS = listOf(
             TrackEvent.IMPRESSION,
             TrackEvent.VIEW,

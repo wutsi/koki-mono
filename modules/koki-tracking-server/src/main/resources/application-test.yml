@@ -3,11 +3,6 @@ logging:
         com.wutsi: INFO
 
 koki:
-    kpi:
-        room:
-            daily-cron: "0 0 * * * *"     # Flush every hour
-            monthly-cron: "0 0 5 2 * *"   # Every 2nd of each month at 5AM
-
     module:
         tracking:
             mq:

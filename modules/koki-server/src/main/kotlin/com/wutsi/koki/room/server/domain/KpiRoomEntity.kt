@@ -6,11 +6,12 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import java.time.LocalDate
 import java.util.Date
 
 @Entity
 @Table(name = "T_KPI_ROOM")
-data class KpiRookEntity(
+data class KpiRoomEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
@@ -21,7 +22,7 @@ data class KpiRookEntity(
     @Column(name = "room_fk")
     val roomId: Long? = null,
 
-    val period: Date = Date(),
+    val period: LocalDate = LocalDate.now(),
     val totalImpressions: Long = 0L,
     val totalViews: Long = 0L,
     val totalClicks: Long = 0L,
