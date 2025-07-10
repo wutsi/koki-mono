@@ -37,6 +37,10 @@ class S3StorageService(
         }
     }
 
+    override fun toURL(path: String): URL {
+        return URL(getUrlPrefix() + "/$path")
+    }
+
     override fun get(url: URL, os: OutputStream) {
         val path = url.path.substring(bucket.length + 2)
         val request = GetObjectRequest(bucket, path)
@@ -57,8 +61,6 @@ class S3StorageService(
         val listings = s3.listObjects(request)
         listings.objectSummaries.forEach { visitor.visit(toURL(it.key)) }
     }
-
-    private fun toURL(path: String) = URL(getUrlPrefix() + "/$path")
 
     private fun getUrlPrefix(): String {
         return "https://s3.amazonaws.com/$bucket"

@@ -45,6 +45,10 @@ class LocalStorageService(
         }
     }
 
+    override fun toURL(path: String): URL {
+        return URL("$baseUrl/$path")
+    }
+
     override fun visit(path: String, visitor: StorageVisitor) {
         val file = toFile(path)
         visit(file, visitor)
@@ -64,6 +68,4 @@ class LocalStorageService(
         val path = file.absolutePath.substring(directory.length + 1)
         return toURL(path)
     }
-
-    private fun toURL(path: String) = URL("$baseUrl/$path")
 }
