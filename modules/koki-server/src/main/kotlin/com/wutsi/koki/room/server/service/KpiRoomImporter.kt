@@ -1,6 +1,5 @@
 package com.wutsi.koki.room.server.service
 
-
 import com.wutsi.koki.common.dto.ImportMessage
 import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.error.dto.ErrorCode
@@ -42,7 +41,7 @@ class KpiRoomImporter(
                     "total_views",
                     "total_messages",
                     "total_visitors",
-                ).build(),
+                ).get(),
         )
 
         // Load kpis
