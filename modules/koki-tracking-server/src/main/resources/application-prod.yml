@@ -5,8 +5,8 @@ logging:
 koki:
     kpi:
         room:
-            daily-cron: "0 0 * * * *"     # Flush every hour
-            monthly-cron: "0 0 5 2 * *"   # Every 2nd of each month at 5AM
+            daily-cron: "0 0 * * * *"     # Every hour
+            monthly-cron: "0 30 5 2 * *"   # Every 2nd of each month at 5:30AM
 
     persister:
         cron: "0 0 * * * *"  # Flush every hour

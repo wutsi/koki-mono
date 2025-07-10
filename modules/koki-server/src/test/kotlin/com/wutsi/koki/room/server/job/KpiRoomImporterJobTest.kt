@@ -1,18 +1,24 @@
 package com.wutsi.koki.room.server.job
 
 import com.nhaarman.mockitokotlin2.verify
-import com.wutsi.koki.room.server.service.RoomLocationMetricService
+import com.wutsi.koki.room.server.service.KpiRoomImporter
 import org.mockito.Mockito.mock
+import java.time.LocalDate
 import kotlin.test.Test
 
-class RoomLocationMetricJobTest {
-    private val service = mock<RoomLocationMetricService>()
-    private val job = RoomLocationMetricJob(service)
+class KpiRoomImporterJobTest {
+    private val service = mock<KpiRoomImporter>()
+    private val job = KpiRoomImporterJob(service)
 
     @Test
-    fun run() {
-        job.run()
+    fun daily() {
+        job.daily()
+        verify(service).import(LocalDate.now())
+    }
 
-        verify(service).compile()
+    @Test
+    fun monthly() {
+        job.monthly()
+        verify(service).import(LocalDate.now().minusMonths(1))
     }
 }

@@ -8,8 +8,6 @@ import com.wutsi.koki.track.dto.ChannelType
 import com.wutsi.koki.track.dto.Track
 import com.wutsi.koki.track.dto.TrackEvent
 import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
-import com.wutsi.koki.tracking.server.service.KpiRoomService
-import com.wutsi.koki.tracking.server.service.TrackingConsumer
 import com.wutsi.koki.tracking.server.service.filter.PersisterFilter
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,7 +22,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class KpiRoomServiceTest {
+class KpiRoomGeneratorTest {
     @MockitoBean
     private lateinit var storageServiceBuilder: StorageServiceBuilder
 
@@ -38,7 +36,7 @@ class KpiRoomServiceTest {
     private lateinit var consumer: TrackingConsumer
 
     @Autowired
-    private lateinit var generator: KpiRoomService
+    private lateinit var generator: KpiRoomGenerator
 
     @BeforeEach
     fun setUp() {
