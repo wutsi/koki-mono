@@ -1,4 +1,4 @@
-package com.wutsi.koki.tracking.server.config
+package com.wutsi.koki.platform.logger.config
 
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.logger.DynamicKVLogger
@@ -13,11 +13,11 @@ import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.core.Ordered
 
 @Configuration
-open class LoggingConfiguration(
+open class LoggerConfiguration(
     private val context: ApplicationContext,
 ) {
     @Bean
-    open fun loggingFilter(): FilterRegistrationBean<KVLoggerFilter> {
+    open fun loggerFilter(): FilterRegistrationBean<KVLoggerFilter> {
         val filter = FilterRegistrationBean(KVLoggerFilter(logger()))
         filter.order = Ordered.LOWEST_PRECEDENCE
         return filter

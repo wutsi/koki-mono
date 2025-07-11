@@ -1,4 +1,4 @@
-package com.wutsi.koki.tracking.server.config
+package com.wutsi.koki.platform.storage.config
 
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.platform.storage.koki.KokiStorageServiceBuilder
@@ -16,14 +16,14 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class StorageConfiguration(
-    @Value("\${koki.storage.type}") private val type: String,
-    @Value("\${koki.storage.local.directory}") private val directory: String,
-    @Value("\${koki.storage.local.base-url}") private val baseUrl: String,
-    @Value("\${koki.storage.local.servlet-path}") private val servletPath: String,
-    @Value("\${koki.storage.s3.bucket}") private val s3Bucket: String,
-    @Value("\${koki.storage.s3.region}") private val s3Region: String,
-    @Value("\${koki.storage.s3.access-key}") private val s3AccessKey: String,
-    @Value("\${koki.storage.s3.secret-key}") private val s3SecretKey: String,
+    @Value("\${wutsi.platform.storage.type}") private val type: String,
+    @Value("\${wutsi.platform.storage.local.directory}") private val directory: String,
+    @Value("\${wutsi.platform.storage.local.base-url}") private val baseUrl: String,
+    @Value("\${wutsi.platform.storage.local.servlet-path}") private val servletPath: String,
+    @Value("\${wutsi.platform.storage.s3.bucket}") private val s3Bucket: String,
+    @Value("\${wutsi.platform.storage.s3.region}") private val s3Region: String,
+    @Value("\${wutsi.platform.storage.s3.access-key}") private val s3AccessKey: String,
+    @Value("\${wutsi.platform.storage.s3.secret-key}") private val s3SecretKey: String,
 ) {
     @Bean
     fun storageServiceBuilder(): StorageServiceBuilder {
