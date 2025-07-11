@@ -1,5 +1,6 @@
 package com.wutsi.koki.platform
 
+import com.wutsi.koki.platform.ai.config.AIConfiguration
 import com.wutsi.koki.platform.cache.config.LocalCacheConfiguration
 import com.wutsi.koki.platform.cache.config.NoCacheConfiguration
 import com.wutsi.koki.platform.cache.config.RedisCacheConfiguration
@@ -14,6 +15,8 @@ import org.springframework.context.annotation.Import
 @Target(AnnotationTarget.CLASS)
 @Import(
     value = [
+        AIConfiguration::class,
+
         LocalCacheConfiguration::class,
         NoCacheConfiguration::class,
         RedisCacheConfiguration::class,
