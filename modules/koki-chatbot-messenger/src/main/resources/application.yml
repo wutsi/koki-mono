@@ -56,7 +56,6 @@ koki:
         client-id: koki-chatbot-messenger
         base-url: http://localhost:${server.port}
         tenant-id: 1
-
     ai:
         rest:
             read-timeout: 60000 # 1 minute
@@ -64,36 +63,43 @@ koki:
         deepseek:
             api-key: ${DEEPSEEK_API_KEY}
             model: deepseek-chat
-
-    executor:
-        thread-pool-size: 16
-
-    rabbitmq:
-        url: amqp://localhost
-        exchange-name: koki-tracking
-        max-retries: 24
-        ttl-seconds: 84600
-
     rest:
         connection-timeout: 15000
         read-timeout: 15000
-
     sdk:
         base-url: http://localhost:8080
-
-    storage:
-        type: local # local | s3
-        local:
-            directory: ${user.home}/__wutsi
-            base-url: http://localhost:${server.port}
-            servlet-path: /local-storage
-        s3:
-            bucket: koki-test
-            region: us-east-1
-            access-key: ""
-            secret-key: ""
-
     messenger:
         token: ${MESSENGER_TOKEN}
         verify-token: ${MESSENGER_VERIFY_TOKEN}
         api-version: 16.0
+
+wutsi:
+    platform:
+        cache:
+            name: koki
+            type: redis
+            ttl: 86400
+            redis:
+                url: redis://:test@localhost:6379
+        executor:
+            thread-pool:
+                name: koki-tracking
+                size: 16
+        mq:
+            type: rabbitmq
+            rabbitmq:
+                url: amqp://localhost
+                exchange-name: koki-tracking
+                max-retries: 24
+                ttl-seconds: 84600
+        storage:
+            type: local # local | s3
+            local:
+                directory: ${user.home}/__wutsi
+                base-url: http://localhost:${server.port}
+                servlet-path: /local-storage
+            s3:
+                bucket: koki-test
+                region: us-east-1
+                access-key: ""
+                secret-key: ""
