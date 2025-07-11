@@ -15,6 +15,11 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
+@ConditionalOnProperty(
+    value = ["wutsi.platform.storage.enabled"],
+    havingValue = "true",
+    matchIfMissing = false,
+)
 class StorageConfiguration(
     @Value("\${wutsi.platform.storage.type}") private val type: String,
     @Value("\${wutsi.platform.storage.local.directory}") private val directory: String,

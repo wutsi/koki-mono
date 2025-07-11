@@ -92,6 +92,7 @@ wutsi:
 
 
         storage:
+            enabled: true
             type: local # local | s3
             local:
                 directory: ${user.home}/__wutsi
