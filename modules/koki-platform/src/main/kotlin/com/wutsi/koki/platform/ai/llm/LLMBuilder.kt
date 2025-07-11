@@ -19,4 +19,8 @@ class LLMBuilder(
             else -> throw LLMNotConfiguredException("LLM Model not supported: $provider")
         }
     }
+
+    fun default(): LLM {
+        return koki.build()
+    }
 }
