@@ -6,20 +6,25 @@ logging:
 koki:
     webapp:
         base-url: ${APP_URL}
-
-    rabbitmq:
-        url: ${CLOUDAMQP_URL}
-
     sdk:
         base-url: ${KOKI_SERVER_URL}
-
-    storage:
-        type: s3
-        s3:
-            bucket: com-wutsi-koki-prod
-            region: us-east-1
-            access-key: ${AWS_ACCESS_KEY}
-            secret-key: ${AWS_SECRET_KEY}
-
     telegram:
         consumer-type: webhook # long-polling | webhook
+
+
+wutsi:
+    platform:
+        cache:
+            redis:
+                url: ${REDISCLOUD_URL}
+        mq:
+            type: rabbitmq
+            rabbitmq:
+                url: ${CLOUDAMQP_URL}
+        storage:
+            type: s3
+            s3:
+                bucket: com-wutsi-koki-prod
+                region: us-east-1
+                access-key: ${AWS_ACCESS_KEY}
+                secret-key: ${AWS_SECRET_KEY}

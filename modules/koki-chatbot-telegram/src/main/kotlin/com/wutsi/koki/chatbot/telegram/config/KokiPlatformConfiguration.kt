@@ -1,6 +1,5 @@
 package com.wutsi.koki.chatbot.telegram.config
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.platform.debug.DebugRestInterceptor
 import com.wutsi.koki.platform.security.AccessTokenHolder
 import com.wutsi.koki.platform.security.NoAccessTokenHolder
@@ -15,7 +14,6 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class KokiPlatformConfiguration(
     private val tenantProvider: TenantProvider,
-    private val objectMapper: ObjectMapper,
 
     @Value("\${koki.webapp.client-id}") private val clientId: String,
 ) {
