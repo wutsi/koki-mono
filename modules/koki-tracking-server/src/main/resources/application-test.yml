@@ -8,13 +8,21 @@ koki:
             mq:
                 consumer-delay-seconds: 60
 
-    rabbitmq:
-        url: ${CLOUDAMQP_URL}
+wutsi:
+    platform:
+        cache:
+            redis:
+                url: ${REDISCLOUD_URL}
 
-    storage:
-        type: s3
-        s3:
-            bucket: com-wutsi-koki-test
-            region: us-east-1
-            access-key: ${AWS_ACCESS_KEY}
-            secret-key: ${AWS_SECRET_KEY}
+        storage:
+            type: s3
+            s3:
+                bucket: com-wutsi-koki-prod
+                region: us-east-1
+                access-key: ${AWS_ACCESS_KEY}
+                secret-key: ${AWS_SECRET_KEY}
+
+        mq:
+            type: rabbitmq
+            rabbitmq:
+                url: ${CLOUDAMQP_URL}

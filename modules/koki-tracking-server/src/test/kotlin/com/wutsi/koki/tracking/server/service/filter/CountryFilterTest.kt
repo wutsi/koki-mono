@@ -6,37 +6,54 @@ import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.platform.geoip.GeoIp
+import com.wutsi.koki.platform.geoip.GeoIpService
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.tracking.server.domain.TrackEntity
-import com.wutsi.koki.tracking.server.service.IpApiService
 import org.junit.jupiter.api.assertNull
 import org.mockito.Mockito.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class CountryFilterTest {
-    private val ipApi = mock<IpApiService>()
+    private val ipApi = mock<GeoIpService>()
     private val filter = CountryFilter(ipApi, DefaultKVLogger())
 
     @Test
     fun filter() {
-        doReturn("CM").whenever(ipApi).resolveCountry(any())
+        doReturn(GeoIp(countryCode = "CM")).whenever(ipApi).resolve(any())
 
         val track = filter.filter(createTrack(ip = "10.2.100.100"))
         assertEquals("CM", track.country)
     }
 
     @Test
-    fun noIp() {
+    fun `ip null`() {
         val track = filter.filter(createTrack(ip = null))
 
-        verify(ipApi, never()).resolveCountry(any())
+        verify(ipApi, never()).resolve(any())
+        assertNull(track.country)
+    }
+
+    @Test
+    fun `ip empty`() {
+        val track = filter.filter(createTrack(ip = ""))
+
+        verify(ipApi, never()).resolve(any())
         assertNull(track.country)
     }
 
     @Test
     fun exception() {
-        doThrow(RuntimeException::class).whenever(ipApi).resolveCountry(any())
+        doThrow(RuntimeException::class).whenever(ipApi).resolve(any())
+
+        val track = filter.filter(createTrack(ip = "10.2.100.100"))
+        assertNull(track.country)
+    }
+
+    @Test
+    fun `null`() {
+        doReturn(null).whenever(ipApi).resolve(any())
 
         val track = filter.filter(createTrack(ip = "10.2.100.100"))
         assertNull(track.country)
