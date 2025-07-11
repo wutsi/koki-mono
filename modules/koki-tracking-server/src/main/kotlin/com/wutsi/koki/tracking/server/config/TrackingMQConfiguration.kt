@@ -16,7 +16,7 @@ class TrackingMQConfiguration(
     objectMapper: ObjectMapper,
     publisher: Publisher,
 
-    @Value("\${koki.rabbitmq.exchange-name}") private val exchangeName: String,
+    @Value("\${wutsi.platform.mq.rabbitmq.exchange-name}") private val exchangeName: String,
     @Value("\${koki.module.tracking.mq.queue}") private val queue: String,
     @Value("\${koki.module.tracking.mq.dlq}") private val dlq: String,
     @Value("\${koki.module.tracking.mq.consumer-delay-seconds}") private val consumerDelay: Int,

@@ -31,7 +31,7 @@ class TrackRepositoryTest {
     @MockitoBean
     private lateinit var storageServiceBuilder: StorageServiceBuilder
 
-    @Value("\${koki.storage.local.directory}")
+    @Value("\${wutsi.platform.storage.local.directory}")
     private lateinit var directory: String
 
     private lateinit var storage: StorageService

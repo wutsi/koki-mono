@@ -51,9 +51,6 @@ logging:
 koki:
     server-url: http://localhost:${server.port}
 
-    executor:
-        thread-pool-size: 16
-
     kpi:
         room:
             daily-cron: "0 */15 * * * *"  # Flush every 15 mins
@@ -63,24 +60,6 @@ koki:
         cron: "0 */15 * * * *"  # Flush every 15 mins
         buffer-size: 10000
 
-    rabbitmq:
-        url: amqp://localhost
-        exchange-name: koki-tracking
-        max-retries: 24
-        ttl-seconds: 84600
-
-    storage:
-        type: local # local | s3
-        local:
-            directory: ${user.home}/__wutsi
-            base-url: http://localhost:${server.port}
-            servlet-path: /local-storage
-        s3:
-            bucket: koki-test
-            region: us-east-1
-            access-key: ""
-            secret-key: ""
-
     module:
         tracking:
             mq:
@@ -88,3 +67,38 @@ koki:
                 queue: koki-tracking-queue
                 dlq: koki-tracking-dlq
                 dlq-cron: "0 */15 * * * *"  # Process DLQ Every 15 mins
+
+wutsi:
+    platform:
+        cache:
+            name: koki
+            type: redis
+            ttl: 86400
+            redis:
+                url: redis://:test@localhost:6379
+
+        executor:
+            thread-pool:
+                name: koki-tracking
+                size: 16
+
+        mq:
+            type: rabbitmq
+            rabbitmq:
+                url: amqp://localhost
+                exchange-name: koki-tracking
+                max-retries: 24
+                ttl-seconds: 84600
+
+
+        storage:
+            type: local # local | s3
+            local:
+                directory: ${user.home}/__wutsi
+                base-url: http://localhost:${server.port}
+                servlet-path: /local-storage
+            s3:
+                bucket: koki-test
+                region: us-east-1
+                access-key: ""
+                secret-key: ""

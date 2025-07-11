@@ -26,7 +26,7 @@ class KpiRoomGeneratorTest {
     @MockitoBean
     private lateinit var storageServiceBuilder: StorageServiceBuilder
 
-    @Value("\${koki.storage.local.directory}")
+    @Value("\${wutsi.platform.storage.local.directory}")
     private lateinit var directory: String
 
     @Autowired
