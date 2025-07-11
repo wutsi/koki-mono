@@ -69,6 +69,7 @@ koki:
 wutsi:
     platform:
         ai:
+            enabled: true
             rest:
                 read-timeout: 60000 # 1 minute
                 connect-timeout: 60000 # 1 miniute
