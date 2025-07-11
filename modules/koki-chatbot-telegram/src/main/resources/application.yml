@@ -91,7 +91,7 @@ wutsi:
                 url: redis://:test@localhost:6379
         executor:
             thread-pool:
-                name: koki-tracking
+                name: ${koki.webapp.client-id}
                 size: 16
         mq:
             type: rabbitmq
