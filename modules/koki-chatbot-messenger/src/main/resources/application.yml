@@ -56,13 +56,6 @@ koki:
         client-id: koki-chatbot-messenger
         base-url: http://localhost:${server.port}
         tenant-id: 1
-    ai:
-        rest:
-            read-timeout: 60000 # 1 minute
-            connect-timeout: 60000 # 1 miniute
-        deepseek:
-            api-key: ${DEEPSEEK_API_KEY}
-            model: deepseek-chat
     rest:
         connection-timeout: 15000
         read-timeout: 15000
@@ -75,6 +68,18 @@ koki:
 
 wutsi:
     platform:
+        ai:
+            rest:
+                read-timeout: 60000 # 1 minute
+                connect-timeout: 60000 # 1 miniute
+            model:
+                type: deepseek
+                deepseek:
+                    api-key: ${DEEPSEEK_API_KEY}
+                    model: deepseek-chat
+                gemini:
+                    api-key: ${GEMINI_API_KEY}
+                    model: gemini-2.0-flash
         cache:
             name: koki
             type: redis
@@ -93,6 +98,7 @@ wutsi:
                 max-retries: 24
                 ttl-seconds: 84600
         storage:
+            enabled: true
             type: local # local | s3
             local:
                 directory: ${user.home}/__wutsi
