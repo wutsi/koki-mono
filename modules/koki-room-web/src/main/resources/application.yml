@@ -75,7 +75,6 @@ wutsi:
             ttl: 86400
             redis:
                 url: redis://:test@localhost:6379
-
         executor:
             thread-pool:
                 name: ${koki.webapp.client-id}
