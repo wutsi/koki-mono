@@ -17,7 +17,7 @@ class NotificationMQConfiguration(
     objectMapper: ObjectMapper,
     publisher: Publisher,
 
-    @Value("\${koki.rabbitmq.exchange-name}") private val exchangeName: String,
+    @Value("\${wutsi.platform.mq.rabbitmq.exchange-name}") private val exchangeName: String,
     @Value("\${koki.module.notification.mq.queue}") private val queue: String,
     @Value("\${koki.module.notification.mq.dlq}") private val dlq: String,
     @Value("\${koki.module.notification.mq.consumer-delay-seconds}") private val consumerDelay: Int,

@@ -1,9 +1,9 @@
 package com.wutsi.koki.room.web
 
-import com.wutsi.koki.room.web.geoip.model.GeoIpModel
+import com.wutsi.koki.platform.geoip.GeoIp
 
 object GeoIpFixtures {
-    val geoip = GeoIpModel(
+    val geoip = GeoIp(
         countryCode = "ca",
         country = "Canada",
         city = "Montreal",

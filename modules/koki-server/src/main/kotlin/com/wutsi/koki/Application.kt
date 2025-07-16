@@ -1,5 +1,6 @@
 package com.wutsi.koki
 
+import com.wutsi.koki.platform.KokiApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.runApplication
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
 @EnableScheduling
 @EnableTransactionManagement
 @EnableCaching
+@KokiApplication
 @EntityScan(
     basePackages = [
         "com.wutsi.koki.account.server.domain",

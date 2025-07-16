@@ -1,18 +1,22 @@
 package com.wutsi.koki.room.web.geoip.service
 
+import com.wutsi.koki.platform.geoip.GeoIpService
 import com.wutsi.koki.platform.logger.KVLogger
+import com.wutsi.koki.room.web.geoip.mapper.GeoIpMapper
 import com.wutsi.koki.room.web.geoip.model.GeoIpModel
+import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.stereotype.Service
-import org.springframework.web.client.RestTemplate
 
 @Service
 @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 class CurrentGeoIPHolder(
-    private val rest: RestTemplate,
-    private val logger: KVLogger
+    private val service: GeoIpService,
+    private val mapper: GeoIpMapper,
+    private val logger: KVLogger,
+    private val request: HttpServletRequest,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(CurrentGeoIPHolder::class.java)
@@ -23,8 +27,10 @@ class CurrentGeoIPHolder(
     fun get(): GeoIpModel? {
         if (data == null) {
             try {
-                data = fetch()
+                val ip = getIp()
+                logger.add("ip", ip)
 
+                data = service.resolve(ip)?.let { geoip -> mapper.toGeoIpMapper(geoip) }
                 logger.add("geoip_country", data?.countryCode)
                 logger.add("geoip_city", data?.city)
                 logger.add("geoip_longitude", data?.longitude)
@@ -36,7 +42,7 @@ class CurrentGeoIPHolder(
         return data
     }
 
-    private fun fetch(): GeoIpModel {
-        return rest.getForEntity("https://ipapi.co/json", GeoIpModel::class.java).body
+    private fun getIp(): String {
+        return request.getHeader("X-FORWARDED-FOR")?.ifEmpty { null } ?: request.remoteAddr
     }
 }

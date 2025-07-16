@@ -17,7 +17,7 @@ class InvoiceMQConfiguration(
     objectMapper: ObjectMapper,
     publisher: Publisher,
 
-    @Value("\${koki.rabbitmq.exchange-name}") private val exchangeName: String,
+    @Value("\${wutsi.platform.mq.rabbitmq.exchange-name}") private val exchangeName: String,
     @Value("\${koki.module.invoice.mq.queue}") private val queue: String,
     @Value("\${koki.module.invoice.mq.dlq}") private val dlq: String,
     @Value("\${koki.module.invoice.mq.consumer-delay-seconds}") private val consumerDelay: Int,

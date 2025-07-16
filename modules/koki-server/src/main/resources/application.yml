@@ -155,45 +155,13 @@ logging:
         file: "%d Type=%level Logger=%c Thread=%thread %m%n"
 
 koki:
-    server-url: http://localhost:${server.port}
-
-    ai:
-        rest:
-            read-timeout: 60000 # 1 minute
-            connect-timeout: 60000 # 1 miniute
-        model:
-            type: gemini
-            deepseek:
-                api-key: ${DEEPSEEK_API_KEY}
-                model: deepseek-chat
-            gemini:
-                api-key: ${GEMINI_API_KEY}
-                model: gemini-2.0-flash
-
-    executor:
-        thread-pool-size: 16
+    webapp:
+        client-id: koki-server
+        server-url: http://localhost:${server.port}
 
     kpi:
         daily-cron: "0 */15 * * * *"  # Flush every 15 mins
         monthly-cron: "0 0 7 2 * *"   # Every 2nd of each month at 7:00AM
-
-    rabbitmq:
-        url: amqp://localhost
-        exchange-name: koki
-        max-retries: 24
-        ttl-seconds: 84600
-
-    storage:
-        type: local # local | s3
-        local:
-            directory: ${user.home}/__wutsi
-            base-url: http://localhost:${server.port}
-            servlet-path: /local-storage
-        s3:
-            bucket: koki-test
-            region: us-east-1
-            access-key: ""
-            secret-key: ""
 
     translation:
         type: ai  # AI | AWS
@@ -260,3 +228,47 @@ koki:
         transaction:
             pending:
                 cron: "0 */30 * * * *"     # Update PENDING transactions every 30 mins
+wutsi:
+    platform:
+        ai:
+            enabled: true
+            rest:
+                read-timeout: 60000 # 1 minute
+                connect-timeout: 60000 # 1 miniute
+            model:
+                type: gemini
+                deepseek:
+                    api-key: ${DEEPSEEK_API_KEY}
+                    model: deepseek-chat
+                gemini:
+                    api-key: ${GEMINI_API_KEY}
+                    model: gemini-2.0-flash
+        cache:
+            name: koki
+            type: redis
+            ttl: 86400
+            redis:
+                url: redis://:test@localhost:6379
+        executor:
+            thread-pool:
+                name: ${koki.webapp.client-id}
+                size: 16
+        mq:
+            type: rabbitmq
+            rabbitmq:
+                url: amqp://localhost
+                exchange-name: koki
+                max-retries: 24
+                ttl-seconds: 84600
+        storage:
+            enabled: true
+            type: local # local | s3
+            local:
+                directory: ${user.home}/__wutsi
+                base-url: http://localhost:${server.port}
+                servlet-path: /local-storage
+            s3:
+                bucket: koki-test
+                region: us-east-1
+                access-key: ""
+                secret-key: ""
