@@ -21,6 +21,13 @@ jobs:
                     RABBITMQ_DEFAULT_PASS: guest
                 ports:
                     - 5672:5672
+            redis:
+                image: redis
+                options: >-
+                    --health-cmd "redis-cli ping"
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
 
         steps:
             -   uses: actions/checkout@v4
@@ -93,6 +100,7 @@ jobs:
                     CLOUDAMQP_URL: ${{secrets.CLOUDAMQP_URL_TEST}}
                     MESSENGER_TOKEN: ${{secrets.MESSENGER_TOKEN_TEST}}
                     MESSENGER_VERIFY_TOKEN: ${{secrets.MESSENGER_VERIFY_TOKEN_TEST}}
+                    REDISCLOUD_URL: ${{secrets.REDISCLOUD_URL_TEST}}
                 run: |
                     heroku apps | grep ${HEROKU_APP} && echo 'app: ${HEROKU_APP} exists' ||  heroku apps:create ${HEROKU_APP}
                     heroku buildpacks:clear --app ${HEROKU_APP}
@@ -101,12 +109,12 @@ jobs:
                     heroku config:set --app ${HEROKU_APP} APP_URL=${APP_URL}
                     heroku config:set --app ${HEROKU_APP} AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
                     heroku config:set --app ${HEROKU_APP} AWS_SECRET_KEY=${AWS_SECRET_KEY}
-                    heroku config:set --app ${HEROKU_APP} TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
                     heroku config:set --app ${HEROKU_APP} KOKI_SERVER_URL=${KOKI_SERVER_URL}
                     heroku config:set --app ${HEROKU_APP} DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
                     heroku config:set --app ${HEROKU_APP} MESSENGER_TOKEN=${MESSENGER_TOKEN}
                     heroku config:set --app ${HEROKU_APP} MESSENGER_VERIFY_TOKEN=${MESSENGER_VERIFY_TOKEN}
                     heroku config:set --app ${HEROKU_APP} CLOUDAMQP_URL=${CLOUDAMQP_URL}
+                    heroku config:set --app ${HEROKU_APP} REDISCLOUD_URL=${REDISCLOUD_URL}
                     heroku addons -a ${HEROKU_APP} | grep papertrail && echo 'addon: papertrail exists' ||  heroku addons:create papertrail -a ${HEROKU_APP}
                     cp modules/koki-chatbot-messenger/system.properties .
                     cp modules/koki-chatbot-messenger/Procfile .

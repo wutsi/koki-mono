@@ -22,6 +22,7 @@ import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.file.dto.UploadFileResponse
 import com.wutsi.koki.message.dto.SendMessageRequest
 import com.wutsi.koki.message.dto.SendMessageResponse
+import com.wutsi.koki.platform.geoip.GeoIpService
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.platform.security.AccessTokenHolder
 import com.wutsi.koki.platform.storage.StorageService
@@ -108,6 +109,9 @@ abstract class AbstractPageControllerTest {
 
     @MockitoBean
     protected lateinit var rest: RestTemplate
+
+    @MockitoBean
+    private lateinit var geoIpService: GeoIpService
 
     @MockitoBean
     @Qualifier("RestWithoutTenantHeader")
@@ -206,16 +210,7 @@ abstract class AbstractPageControllerTest {
     }
 
     private fun setupGeoIp() {
-        doReturn(
-            ResponseEntity(
-                GeoIpFixtures.geoip,
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                "https://ipapi.co/json",
-                GeoIpModel::class.java
-            )
+        doReturn(GeoIpFixtures.geoip).whenever(geoIpService).resolve(any())
     }
 
     private fun setupRefDataModule() {

@@ -17,24 +17,6 @@ logging:
         com.wutsi: INFO
 
 koki:
-    ai:
-        model:
-            deepseek:
-                api-key: ${DEEPSEEK_API_KEY}
-            gemini:
-                api-key: ${GEMINI_API_KEY}
-
-    rabbitmq:
-        url: ${CLOUDAMQP_URL}
-
-    storage:
-        type: s3
-        s3:
-            bucket: com-wutsi-koki-test
-            region: us-east-1
-            access-key: ${AWS_ACCESS_KEY}
-            secret-key: ${AWS_SECRET_KEY}
-
     smtp:
         host: ${SMTP_HOST}
         port: ${SMTP_PORT}
@@ -65,3 +47,20 @@ koki:
         room:
             mq:
                 consumer-delay-seconds: 60
+
+wutsi:
+    platform:
+        cache:
+            redis:
+                url: ${REDISCLOUD_URL}
+        storage:
+            type: s3
+            s3:
+                bucket: com-wutsi-koki-prod
+                region: us-east-1
+                access-key: ${AWS_ACCESS_KEY}
+                secret-key: ${AWS_SECRET_KEY}
+        mq:
+            type: rabbitmq
+            rabbitmq:
+                url: ${CLOUDAMQP_URL}
