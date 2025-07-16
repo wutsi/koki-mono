@@ -183,7 +183,7 @@ class RoomControllerTest : AbstractPageControllerTest() {
         assertEquals("+15147580001", request.firstValue.senderPhone)
         assertEquals("This is a nice message... I Love it :-)", request.firstValue.body)
         assertEquals("fr", request.firstValue.language)
-        assertEquals("ca", request.firstValue.country)
+        assertEquals(GeoIpFixtures.geoip.countryCode, request.firstValue.country)
         assertEquals(RefDataFixtures.locations[0].id, request.firstValue.cityId)
 
         val alert = driver.switchTo().alert()

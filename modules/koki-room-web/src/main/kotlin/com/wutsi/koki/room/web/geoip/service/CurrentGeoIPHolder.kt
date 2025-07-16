@@ -30,7 +30,7 @@ class CurrentGeoIPHolder(
                 val ip = getIp()
                 logger.add("ip", ip)
 
-                val data = service.resolve(ip)?.let { geoip -> mapper.toGeoIpMapper(geoip) }
+                data = service.resolve(ip)?.let { geoip -> mapper.toGeoIpMapper(geoip) }
                 logger.add("geoip_country", data?.countryCode)
                 logger.add("geoip_city", data?.city)
                 logger.add("geoip_longitude", data?.longitude)
@@ -43,11 +43,6 @@ class CurrentGeoIPHolder(
     }
 
     private fun getIp(): String {
-        val ip = request.getHeader("X-FORWARDED-FOR")
-        return if (ip.isNullOrEmpty()) {
-            request.remoteAddr
-        } else {
-            ip
-        }
+        return request.getHeader("X-FORWARDED-FOR")?.ifEmpty { null } ?: request.remoteAddr
     }
 }
