@@ -38,7 +38,6 @@ import com.wutsi.koki.room.dto.GetRoomResponse
 import com.wutsi.koki.room.dto.SearchRoomLocationMetricResponse
 import com.wutsi.koki.room.dto.SearchRoomResponse
 import com.wutsi.koki.room.web.TenantFixtures.tenants
-import com.wutsi.koki.room.web.geoip.model.GeoIpModel
 import com.wutsi.koki.security.dto.ApplicationName
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
