@@ -112,7 +112,7 @@
         <jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
         <jakarta.xml.bind-api.version>4.0.2</jakarta.xml.bind-api.version>
         <jsoup.version>1.21.1</jsoup.version>
-        <junit.version>5.13.3</junit.version>
+        <junit.version>5.13.4</junit.version>
         <junit-platform-commons.version>1.10.0</junit-platform-commons.version>
         <java-jwt.version>4.5.0</java-jwt.version>
         <jgrapht.version>1.5.2</jgrapht.version>
