@@ -7,6 +7,7 @@ import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File
 import java.io.FileOutputStream
@@ -20,12 +21,20 @@ class KpiRoomImporter(
     private val storageServiceBuilder: StorageServiceBuilder,
     private val logger: KVLogger,
 ) {
-    fun import(date: LocalDate): ImportResponse {
-        val file = download(date)
-        return import(date, file)
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(KpiRoomImporter::class.java)
     }
 
-    private fun import(date: LocalDate, file: File): ImportResponse {
+    fun import(date: LocalDate): ImportResponse {
+        val roomIds = mutableSetOf<Long>()
+        val file = download(date)
+        val result = import(date, file, roomIds)
+        aggregate(roomIds)
+
+        return result
+    }
+
+    private fun import(date: LocalDate, file: File, roomIds: MutableSet<Long>): ImportResponse {
         val parser = CSVParser.parse(
             file.toPath(),
             Charsets.UTF_8,
@@ -52,8 +61,10 @@ class KpiRoomImporter(
             for (record in parser) {
                 ++row
                 try {
-                    persister.persist(date, record)
+                    val roomId = persister.persist(date, record)
+                    roomIds.add(roomId)
                     ++updated
+                    LOGGER.info("Imported - Room#$roomId")
                 } catch (ex: Exception) {
                     errorMessages.add(
                         ImportMessage(
@@ -86,5 +97,16 @@ class KpiRoomImporter(
             storage.get(url, fout)
         }
         return file
+    }
+
+    private fun aggregate(roomIds: Collection<Long>) {
+        roomIds.forEach { roomId ->
+            try {
+                LOGGER.info("Aggregating - Room#$roomId")
+                persister.aggregate(roomId)
+            } catch (ex: Exception) {
+                LOGGER.warn("Unable to aggregate Room#$roomId", ex)
+            }
+        }
     }
 }
