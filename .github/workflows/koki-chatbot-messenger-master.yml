@@ -40,6 +40,7 @@ jobs:
             -   name: Build
                 env:
                     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+                    GEMINI_API_KEY: ${{secrets.GEMINI_API_KEY_TEST}}
                     DEEPSEEK_API_KEY: ${{secrets.DEEPSEEK_API_KEY_TEST}}
                     MESSENGER_TOKEN: ${{secrets.MESSENGER_TOKEN_TEST}}
                     MESSENGER_VERIFY_TOKEN: ${{secrets.MESSENGER_VERIFY_TOKEN_TEST}}
@@ -111,10 +112,10 @@ jobs:
                     heroku config:set --app ${HEROKU_APP} AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
                     heroku config:set --app ${HEROKU_APP} AWS_SECRET_KEY=${AWS_SECRET_KEY}
                     heroku config:set --app ${HEROKU_APP} KOKI_SERVER_URL=${KOKI_SERVER_URL}
+                    heroku config:set --app ${HEROKU_APP} GEMINI_API_KEY=${GEMINI_API_KEY}
                     heroku config:set --app ${HEROKU_APP} DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
                     heroku config:set --app ${HEROKU_APP} MESSENGER_TOKEN=${MESSENGER_TOKEN}
                     heroku config:set --app ${HEROKU_APP} MESSENGER_VERIFY_TOKEN=${MESSENGER_VERIFY_TOKEN}
-                    heroku config:set --app ${HEROKU_APP} GEMINI_API_KEY=${GEMINI_API_KEY}
                     heroku config:set --app ${HEROKU_APP} CLOUDAMQP_URL=${CLOUDAMQP_URL}
                     heroku config:set --app ${HEROKU_APP} REDISCLOUD_URL=${REDISCLOUD_URL}
                     heroku addons -a ${HEROKU_APP} | grep papertrail && echo 'addon: papertrail exists' ||  heroku addons:create papertrail -a ${HEROKU_APP}

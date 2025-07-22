@@ -40,6 +40,7 @@ jobs:
             -   name: Build
                 env:
                     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+                    GEMINI_API_KEY: ${{secrets.GEMINI_API_KEY_TEST}}
                     DEEPSEEK_API_KEY: ${{secrets.DEEPSEEK_API_KEY_TEST}}
                     TELEGRAM_TOKEN: ${{secrets.TELEGRAM_TOKEN_TEST}}
                     TELEGRAM_CHATBOT: ${{secrets.TELEGRAM_CHATBOT_TEST}}
