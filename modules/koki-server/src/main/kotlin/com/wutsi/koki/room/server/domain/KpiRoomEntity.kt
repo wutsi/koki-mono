@@ -32,4 +32,8 @@ data class KpiRoomEntity(
     val cvr: Double = 0.0,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
-)
+) {
+    companion object {
+        val OVERALL_PERIOD = LocalDate.of(1900, 1, 1)
+    }
+}
