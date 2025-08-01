@@ -82,7 +82,7 @@
         <aws.version>1.12.788</aws.version>
         <commons-cli.version>1.9.0</commons-cli.version>
         <commons-codec.version>1.17.1</commons-codec.version>
-        <commons-csv.version>1.14.0</commons-csv.version>
+        <commons-csv.version>1.14.1</commons-csv.version>
         <commons-io.version>2.20.0</commons-io.version>
         <commons-lang3.version>3.18.0</commons-lang3.version>
         <commons-math3.version>3.6.1</commons-math3.version>
