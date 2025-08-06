@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-6 offset-md-3">
+            <h1 class="section-title text-center">
+                <img class="align-right" height="50" th:if="${tenant.logoUrl}" th:src="${tenant.logoUrl}"/>
+                <span th:if="!${tenant.logoUrl}" th:text="${tenant.name}"/>
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6 offset-md-3">
+
+            <form class="form" method="post" th:action="@{/signup/profile}" th:object="${form}">
+                <div class="form-body">
+                    <div class="section">
+                        <div class="section-body">
+                            <div class="section-item text-center">
+                                <h1 class="text-center margin-none" th:text="#{page.signup-profile.title}">TITLE</h1>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">
+                                    <span th:text="#{page.signup-profile.name}">NAME</span>
+                                    <span class="required">*</span>
+                                </label>
+                                <input maxlength="100" required th:field="*{name}"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">
+                                    <span th:text="#{page.signup-profile.email}">EMAIL</span>
+                                    <span class="required">*</span>
+                                </label>
+                                <input maxlength="255" required th:field="*{email}" type="email"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">
+                                    <span th:text="#{page.signup-profile.location}">LOCATION</span>
+                                    <span class="required">*</span>
+                                </label>
+                                <select required th:field="*{country}">
+                                    <option value=""></option>
+                                    <option th:each="country : ${countries}"
+                                            th:text="${country.displayCountry}"
+                                            th:value="${country.country}"
+                                    >COUNTRY
+                                    </option>
+                                </select>
+                                <div class="margin-top-small">
+                                    <select required th:field="*{cityId}">
+                                        <option selected
+                                                th:if="${city}"
+                                                th:text="${cityName}"
+                                                th:value="${city.id}">
+                                            CITY
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.signup-profile.whatsapp}">WHATSAPP</label>
+                                <input maxlength="30" th:data-country="*{country}" th:field="*{whatsapp}" type="tel"/>
+                            </div>
+                            <div class="section-item">
+                                <button class="btn btn-primary w-100" id="btn-next" th:text="#{button.next}"
+                                        type="submit">NEXT
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener(
+        'DOMContentLoaded',
+        function () {
+            koki_address_editor('country', 'cityId');
+        }
+    );
+</script>
+</body>
+
+</html>

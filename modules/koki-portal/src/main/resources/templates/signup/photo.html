@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-6 offset-md-3">
+            <h1 class="section-title text-center">
+                <img class="align-right" height="50" th:if="${tenant.logoUrl}" th:src="${tenant.logoUrl}"/>
+                <span th:if="!${tenant.logoUrl}" th:text="${tenant.name}"/>
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6 offset-md-3">
+            <div class="form-body">
+                <div class="section">
+                    <div class="section-body">
+                        <div class="section-item text-center">
+                            <h1 class="text-center" th:text="#{page.signup-photo.title}">TITLE</h1>
+                            <div class="text-center" th:utext="#{page.signup-photo.description}">TITLE</div>
+                        </div>
+                        <div class="section-item text-center">
+                            <div>
+                                <img class="border" height="128" id="my-photo"
+                                     th:src="${page.assetUrl} + '/image/no-photo.png'" width="128"/>
+                            </div>
+                            <div class="margin-top">
+                                <button class="btn btn-light" id="btn-upload" th:text="#{button.upload}">UPLOAD</button>
+                                <input accept="image/*"
+                                       data-max-file-size="2"
+                                       id="file-upload"
+                                       style="display:none"
+                                       th:data-upload-url="${uploadUrl}"
+                                       type="file"
+                                />
+                            </div>
+                        </div>
+                        <div class="section-item text-center">
+                            <form class="form" method="post" th:action="@{/signup/photo}" th:object="${form}">
+                                <input th:field="*{url}" type="hidden"/>
+                                <button class="btn btn-primary w-100" disabled id="btn-next"
+                                        th:text="#{button.next}"
+                                        type="submit">NEXT
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener(
+        'DOMContentLoaded',
+        function () {
+            const btn = document.getElementById("btn-upload");
+            btn.addEventListener("click", on_click);
+
+            const file = document.getElementById("file-upload");
+            file.addEventListener("change", on_file_selected);
+        }
+    );
+
+    function on_click() {
+        const file = document.getElementById("file-upload");
+        file.click();
+    }
+
+    function on_file_selected() {
+        const elt = document.getElementById("file-upload");
+        let uploadUrl = elt.getAttribute('data-upload-url');
+        let maxMb = elt.getAttribute('data-max-file-size');
+        if (!maxMb || maxMb.length === 0) {
+            maxMb = 5;
+        }
+
+        // Uploading...
+        const file = elt.files[0];
+        if (file.size > maxMb * 1024 * 1024) {
+            alert("Image is too big!");
+            return;
+        }
+
+        console.log('Uploading ', file);
+        const data = new FormData();
+        data.append('file', file);
+        fetch(uploadUrl, {
+            method: 'POST',
+            body: data
+        }).then(response => {
+            response.json().then(json => {
+                console.log("File uploaded", json);
+                fetch("/signup/photo/file?id=" + json.id)
+                    .then(response => {
+                        response.json().then(json => {
+                            console.log("File Data", json);
+                            document.getElementById("my-photo").setAttribute("src", json.url);
+                            document.getElementById("url").setAttribute("src", json.url);
+                            document.getElementById("btn-next").disabled = false;
+                        });
+                    });
+            });
+        });
+    }
+</script>
+
+</body>
+</html>
