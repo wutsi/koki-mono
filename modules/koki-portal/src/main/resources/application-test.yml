@@ -10,6 +10,7 @@ koki:
 wutsi:
     platform:
         cache:
+            type: redis
             redis:
                 url: ${REDISCLOUD_URL}
         storage:

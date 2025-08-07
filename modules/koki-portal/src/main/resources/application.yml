@@ -75,7 +75,7 @@ wutsi:
             enabled: false
         cache:
             name: koki
-            type: redis
+            type: none
             ttl: 86400
             redis:
                 url: redis://:test@localhost:6379
