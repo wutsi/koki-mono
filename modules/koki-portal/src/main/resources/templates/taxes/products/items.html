@@ -1,3 +1,0 @@
-<tr class="tax-product" th:each="taxProduct : ${taxProducts}" th:id="'tax-product-' + ${taxProduct.id}">
-    <td th:replace="~{__components/tax :: tax-product-columns(${taxProduct}, ${readOnly})}"></td>
-</tr>

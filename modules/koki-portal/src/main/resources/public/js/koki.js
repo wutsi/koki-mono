@@ -544,8 +544,9 @@ class IntlTel {
         let count = 0;
         document.querySelectorAll('input[type=tel]')
             .forEach((elt) => {
+                    let country = elt.getAttribute("data-country");
                     window.intlTelInput(elt, {
-                        initialCountry: "auto",
+                        initialCountry: (!country || country.length === 0 ? "auto" : country),
                         strictMode: true,
                         geoIpLookup: callback => {
                             fetch("https://ipapi.co/json")

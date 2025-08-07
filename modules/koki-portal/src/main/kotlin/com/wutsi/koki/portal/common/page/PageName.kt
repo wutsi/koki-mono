@@ -30,11 +30,6 @@ object PageName {
     const val EMAIL_SETTINGS_EMAIL_DECORATOR = "page.settings.email.decorator"
     const val EMAIL_SETTINGS_EMAIL_DECORATOR_EDIT = "page.settings.email.decorator.edit"
 
-    const val EMPLOYEE = "page.employee"
-    const val EMPLOYEE_LIST = "page.employee.list"
-    const val EMPLOYEE_EDIT = "page.employee.edit"
-    const val EMPLOYEE_CREATE = "page.employee.create"
-
     const val ERROR = "page.error"
     const val ERROR_403 = "page.error.403"
     const val ERROR_404 = "page.error.404"
@@ -47,6 +42,9 @@ object PageName {
     const val FILE_SETTINGS = "page.settings.file"
     const val FILE_SETTINGS_STORAGE = "page.settings.file.storage"
     const val FILE_SETTINGS_STORAGE_EDIT = "page.settings.file.storage.edit"
+
+    const val FORGOT_USERNAME = "page.forgot.username"
+    const val FORGOT_PASSWORD = "page.forgot.password"
 
     const val HOME = "page.home"
 
@@ -110,6 +108,11 @@ object PageName {
     const val SECURITY_SETTINGS_USER_LIST = "page.settings.security.user.list"
 
     const val SETTINGS = "page.settings"
+
+    const val SIGNUP = "page.signup"
+    const val SIGNUP_PROFILE = "page.signup.profile"
+    const val SIGNUP_PHOTO = "page.signup.photo"
+    const val SIGNUP_DONE = "page.signup.done"
 
     const val TRANSLATION_SETTINGS = "settings.translation"
     const val TRANSLATION_SETTINGS_EDIT = "settings.translation.edit"

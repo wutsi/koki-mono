@@ -23,9 +23,11 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 .error {
     color: red;
 }
+
 .success {
     color: darkgreen;
 }
+
 .info {
     color: blue;
 }
@@ -121,6 +123,17 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
     width: 100%;
 }
 
+.section-item .input-group input {
+    width: auto;
+}
+
+.section-item .input-group input {
+    width: auto;
+}
+
+.section-item .input-group .input-group-text > * {
+    padding: .5em;
+}
 
 .section-item .file-upload-container input[type=file] {
     display: none;

@@ -6,11 +6,9 @@ import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.refdata.service.LocationService
 import com.wutsi.koki.portal.signup.form.ProfileForm
-import com.wutsi.koki.portal.signup.form.SignupForm
 import com.wutsi.koki.refdata.dto.LocationType
 import io.lettuce.core.KillArgs.Builder.id
 import jakarta.servlet.http.HttpServletRequest
-import org.apache.commons.lang3.LocaleUtils
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping

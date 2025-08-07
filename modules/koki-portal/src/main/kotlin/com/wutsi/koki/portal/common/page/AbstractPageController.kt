@@ -9,8 +9,10 @@ import com.wutsi.koki.portal.tenant.model.TenantModel
 import com.wutsi.koki.portal.tenant.service.CurrentTenantHolder
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.ModelAttribute
@@ -36,6 +38,9 @@ abstract class AbstractPageController {
 
     @Value("\${koki.webapp.asset-url}")
     protected lateinit var assetUrl: String
+
+    @Autowired
+    protected lateinit var messages: MessageSource
 
     @ModelAttribute("user")
     fun getUser(): UserModel? {
@@ -95,5 +100,18 @@ abstract class AbstractPageController {
             title = title,
             assetUrl = assetUrl,
         )
+    }
+
+    protected fun getMessage(key: String, args: Array<Any>? = null, locale: Locale? = null): String {
+        try {
+            val loc = locale ?: LocaleContextHolder.getLocale()
+            return messages.getMessage(key, args, loc)
+        } catch (ex: Exception) {
+            return key
+        }
+    }
+
+    protected fun getIp(request: HttpServletRequest): String {
+        return request.getHeader("X-FORWARDED-FOR")?.ifEmpty { null } ?: request.remoteAddr
     }
 }
