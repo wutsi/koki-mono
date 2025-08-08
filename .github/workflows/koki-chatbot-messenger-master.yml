@@ -85,7 +85,7 @@ jobs:
                     heroku plugins:install @heroku-cli/plugin-java
 
             -   name: Get artifact
-                uses: actions/download-artifact@v4
+                uses: actions/download-artifact@v5
                 with:
                     name: appbundle
 
