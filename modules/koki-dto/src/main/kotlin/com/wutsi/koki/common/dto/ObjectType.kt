@@ -8,6 +8,8 @@ enum class ObjectType {
     NOTE,
     EMAIL,
     PRODUCT,
+
+    @Deprecated("Module retired")
     EMPLOYEE,
 
     @Deprecated("Module retired")
@@ -22,4 +24,5 @@ enum class ObjectType {
     ROOM,
     ROOM_UNIT,
     MESSAGE,
+    LISTING,
 }

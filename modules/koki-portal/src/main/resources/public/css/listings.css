@@ -1,0 +1,9 @@
+.contact-mobile {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin-left: 0;
+    z-index: 1000;
+}

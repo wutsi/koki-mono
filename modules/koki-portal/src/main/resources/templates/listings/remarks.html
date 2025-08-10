@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('listing')}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <form class="form" method="post" th:action="@{/listings/edit/address}" th:object="${form}">
+                <input th:field="*{id}" type="hidden"/>
+                <div class="form-body">
+                    <div class="section"
+                         data-city-id="cityId"
+                         data-component-id=address
+                         data-country-id="country"
+                         data-neighborhood-id="neighbourhoodId"
+                    >
+                        <div class="section-body">
+                            <div class="section-item">
+                                <h1 class="margin-none" th:text="#{page.listing.edit.address.title}">TITLE</h1>
+                            </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.country}">TYPE</label>
+                                <select required th:field="*{country}">
+                                    <option value=""></option>
+                                    <option th:each="country : ${countries}"
+                                            th:text="${country.displayCountry}"
+                                            th:value="${country.country}"
+                                    >COUNTRY
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.city}">TYPE</label>
+                                <div class="margin-top-small">
+                                    <select required th:field="*{cityId}">
+                                        <option selected
+                                                th:if="${city}"
+                                                th:text="${cityName}"
+                                                th:value="${city.id}">
+                                            CITY
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.neighbourhood}">TYPE</label>
+                                <div class="margin-top-small">
+                                    <select th:field="*{neighbourhoodId}">
+                                        <option selected
+                                                th:if="${neighbourhood}"
+                                                th:text="${neighbourhood.name}"
+                                                th:value="${neighbourhood.id}">
+                                            CITY
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.street}">STREET</label>
+                                <textarea maxlength="255" rows="2" th:field="*{street}"></textarea>
+                            </div>
+
+                            <div class="section-item flex flex-space-between">
+                                <a class="btn btn-light"
+                                   th:href="'/listings/edit/amenities?id=' + ${form.id}"
+                                   th:text="#{button.previous}"
+                                >PREV</a>
+
+                                <button class="btn btn-primary" th:text="#{button.next}" type="submit">NEXT</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                r
+            </form>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

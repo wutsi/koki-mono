@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('room')}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/room :: breadcrumb(${room})}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body room-summary">
+                    <div class="flex flex-space-between">
+                        <h1 class="entity-title">
+                            <img align="absmiddle" th:src="${page.assetUrl} + '/image/room.png'" width="48"/>
+                            <span class="d-none d-md-inline" th:text="${room.title}">NAME</span>
+                        </h1>
+                        <div th:if="!${room.readOnly}">
+                            <a class="btn-publish btn btn-primary btn-sm"
+                               onclick="return confirm('Are you sure you want to publish this listing online?')"
+                               th:href="'/rooms/' + ${room.id} + '/publish'"
+                               th:if="${room.draft} AND ${room?.managedBy(user)}">Publish</a>
+
+                            <a class="btn-edit btn btn-light btn-sm"
+                               th:href="'/rooms/' + ${room.id} + '/edit'"
+                               th:if="${room?.managedBy(user)}">Edit</a>
+
+                            <a class="btn-clone btn btn-light btn-sm"
+                               th:href="'/rooms/' + ${room.id} + '/clone'"
+                               th:if="${room?.managedBy(user)}">Copy</a>
+
+                            <a class="btn-delete btn btn-danger btn-sm"
+                               onclick="return confirm('Are you sure you want to delete?')"
+                               th:href="'/rooms/' + ${room.id} + '/delete'"
+                               th:if="${room.draft} AND ${room?.deletedBy(user)}">Delete</a>
+                        </div>
+                    </div>
+
+                    <div class=" d-none d-md-flex">
+                        <div th:replace="~{__components/room :: summary(${room})}"></div>
+                    </div>
+                    <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div th:replace="~{__components/module :: tabs('main', true)}"></div>
+                    <div
+                        th:replace="~{__components/module :: tabs-content('main', true, ${room}, ${module})}"></div>
+
+                    <div class="hidden" id="tab-details-content">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12 col-xl-6">
+                                    <div th:replace="~{__components/room :: details(${room})}"></div>
+                                </div>
+                                <div class="col-12 col-xl-6">
+                                    <div class="margin-top">
+                                        <div data-component-id="map"
+                                             id="map"
+                                             style="height:600px"
+                                             th:data-latitude="${latitude}"
+                                             th:data-longitude="${longitude}"
+                                             th:data-show-marker="${room.hasGeoLocation}"
+                                             th:data-zoom="${zoom}"
+                                        ></div>
+                                        <div class="margin-top-small text-center" th:if="${latitude} AND ${longitude}">
+                                            <a class="btn-map btn btn-sm btn-light"
+                                               th:href="'/rooms/' + ${room.id} + '/map'"
+                                               th:if="!${room.readOnly} AND ${room.managedBy(user)}"
+                                            >
+                                                <span th:if="!${room.hasGeoLocation}">Set Geolocation</span>
+                                                <span th:if="${room.hasGeoLocation}">Update Geolocation</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
+<div th:replace="~{__components/bootstrap :: modal}"></div>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('listing')}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <form class="form" method="post" th:action="@{/listings/create}" th:object="${form}">
+                <div class="form-body">
+                    <div class="section">
+                        <div class="section-body">
+                            <div class="section-item">
+                                <h1 th:text="#{page.listing.create.title}">TITLE</h1>
+                            </div>
+
+                            <div class="section-item">
+                                <div class="btn-group" role="group">
+                                    <div th:each="listingType : ${listingTypes}"
+                                         th:if="${listingType.name() != 'UNKNOWN'}"
+                                         th:remove="tag">
+                                        <input autocomplete="off" class="btn-check" name="listingType"
+                                               th:id="'chk-' + ${listingType}"
+                                               th:value="${propertyType}"
+                                               type="radio">
+                                        <label class="btn btn-outline-primary"
+                                               th:for="'chk-' + ${listingType}"
+                                               th:text="#{'listing-type.' + ${listingType}}">Checkbox 1</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="section-item">
+                                <div data-toggle="buttons">
+                                    <div th:each="propertyType : ${propertyTypes}"
+                                         th:if="${propertyType.name() != 'UNKNOWN'}"
+                                         th:remove="tag">
+                                        <input autocomplete="off" class="btn-check" name="propertyType"
+                                               th:id="'chk-' + ${propertyType}"
+                                               th:value="${propertyType}"
+                                               type="radio">
+                                        <label class="btn btn-outline-primary margin-bottom-small"
+                                               th:for="'chk-' + ${propertyType}"
+                                               th:text="#{'property-type.' + ${propertyType}}">Checkbox 1</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="section-item">
+                                <button class="btn btn-primary" th:text="#{button.next}" type="submit">NEXT</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

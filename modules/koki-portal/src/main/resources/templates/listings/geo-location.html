@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('listing')}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <form class="form" method="post" th:action="@{/listings/edit/remarks}" th:object="${form}">
+                <input th:field="*{id}" type="hidden"/>
+                <div class="form-body">
+                    <div class="section">
+                        <div class="section-body">
+                            <div class="section-item">
+                                <h2 class="margin-none" th:text="#{page.listing.edit.remarks.title}">TITLE</h1>
+                            </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.remarks-seller}">TYPE</label>
+                                <textarea class="form-control" maxlength="1000" rows="7"
+                                          th:field="*{remarksSeller}"></textarea>
+                            </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.remarks-agent}">TYPE</label>
+                                <textarea class="form-control" maxlength="1000" rows="7"
+                                          th:field="*{remarksAgent}"></textarea>
+                            </div>
+
+                            <div class="section-item flex flex-space-between">
+                                <a class="btn btn-light"
+                                   th:href="'/listings/edit/address?id=' + ${form.id}"
+                                   th:text="#{button.previous}"
+                                >PREV</a>
+
+                                <button class="btn btn-primary" th:text="#{button.next}" type="submit">NEXT</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
