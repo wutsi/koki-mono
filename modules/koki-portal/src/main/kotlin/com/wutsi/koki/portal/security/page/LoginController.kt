@@ -4,7 +4,6 @@ import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.form.LoginForm
 import com.wutsi.koki.portal.security.service.LoginService
-import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache
@@ -19,7 +18,6 @@ import org.springframework.web.client.HttpClientErrorException
 @Controller
 class LoginController(
     private val service: LoginService,
-    private val request: HttpServletRequest,
     private val response: HttpServletResponse,
 ) : AbstractPageController() {
     companion object {

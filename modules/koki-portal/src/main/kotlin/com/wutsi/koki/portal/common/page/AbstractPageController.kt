@@ -2,13 +2,17 @@ package com.wutsi.koki.portal.common.page
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.platform.geoip.GeoIpService
 import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.service.Toggles
 import com.wutsi.koki.portal.common.service.TogglesHolder
+import com.wutsi.koki.portal.refdata.model.LocationModel
+import com.wutsi.koki.portal.refdata.service.LocationService
 import com.wutsi.koki.portal.tenant.model.TenantModel
 import com.wutsi.koki.portal.tenant.service.CurrentTenantHolder
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
+import com.wutsi.koki.refdata.dto.LocationType
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -41,6 +45,15 @@ abstract class AbstractPageController {
 
     @Autowired
     protected lateinit var messages: MessageSource
+
+    @Autowired
+    protected lateinit var request: HttpServletRequest
+
+    @Autowired
+    protected lateinit var ipService: GeoIpService
+
+    @Autowired
+    protected lateinit var locationService: LocationService
 
     @ModelAttribute("user")
     fun getUser(): UserModel? {
@@ -113,5 +126,32 @@ abstract class AbstractPageController {
 
     protected fun getIp(request: HttpServletRequest): String {
         return request.getHeader("X-FORWARDED-FOR")?.ifEmpty { null } ?: request.remoteAddr
+    }
+
+    protected fun resolveCity(): LocationModel? {
+        try {
+            val ip = getIp(request)
+            val geo = ipService.resolve(ip)
+            return if (geo != null) {
+                locationService.locations(
+                    country = geo.countryCode,
+                    keyword = geo.city,
+                    type = LocationType.CITY,
+                    limit = 1,
+                ).firstOrNull()
+            } else {
+                null
+            }
+        } catch (ex: Exception) {
+            return null
+        }
+    }
+
+    protected fun resolveParent(city: LocationModel?): LocationModel? {
+        try {
+            return city?.parentId?.let { id -> locationService.location(id) }
+        } catch (ex: Exception) {
+            return null
+        }
     }
 }

@@ -1,0 +1,172 @@
+<div>
+    <h4 th:text="#{page.listing.show.description}">NAME</h4>
+    <div th:text="${listing.description}">VALUE</div>
+</div>
+<div class="margin-top padding-top border-top">
+    <h4 th:text="#{page.listing.show.general}">Information Generales</h4>
+    <div class="flex flex-wrap">
+        <div class="col-6 col-md-4 padding-bottom-small">
+            <b class="text-small" th:text="#{page.listing.property-type}">KEY</b>
+            <div th:text="#{'property-type.' + ${listing.propertyType}}">VALUE</div>
+        </div>
+        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.bedrooms}">
+            <b class="text-small" th:text="#{page.listing.bedrooms}">KEY</b>
+            <div th:text="${listing.bedrooms}">VALUE</div>
+        </div>
+        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.bathrooms}">
+            <b class="text-small" th:text="#{page.listing.bathrooms}">KEY</b>
+            <div th:text="${listing.bathrooms}">VALUE</div>
+        </div>
+        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.halfBathrooms}">
+            <b class="text-small" th:text="#{page.listing.half-bathrooms}">KEY</b>
+            <div th:text="${listing.halfBathrooms}">VALUE</div>
+        </div>
+        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.floors}">
+            <b class="text-small" th:text="#{page.listing.floors}">KEY</b>
+            <div th:text="${listing.floors}">VALUE</div>
+        </div>
+        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.level}">
+            <b class="text-small" th:text="#{page.listing.level}">KEY</b>
+            <div th:text="${listing.level}">VALUE</div>
+        </div>
+        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.unit}">
+            <b class="text-small" th:text="#{page.listing.unit}">KEY</b>
+            <div th:text="${listing.unit}">VALUE</div>
+        </div>
+        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.basementType}">
+            <b class="text-small" th:text="#{page.listing.basement}">KEY</b>
+            <div th:text="#{'basement-type.' + ${listing.basementType}}">VALUE</div>
+        </div>
+        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.propertyArea}">
+            <b class="text-small" th:text="#{page.listing.property-area}">KEY</b>
+            <div>
+                <span th:text="${listing.propertyArea}">000</span>
+                <span>m<sup>2</sup></span>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.lotArea}">
+            <b class="text-small" th:text="#{page.listing.lot-area}">KEY</b>
+            <div>
+                <span th:text="${listing.lotArea}">000</span>
+                <span>m<sup>2</sup></span>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.parkingType}">
+            <b class="text-small" th:text="#{page.listing.parking-type}">KEY</b>
+            <div th:text="#{'parking-type.' + ${listing.parkingType}}">VALUE</div>
+        </div>
+        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.parkings}">
+            <b class="text-small" th:text="#{page.listing.parkings}">KEY</b>
+            <div th:text="${listing.parkings}">VALUE</div>
+        </div>
+        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.fenceType}">
+            <b class="text-small" th:text="#{page.listing.fence}">KEY</b>
+            <div th:text="#{'fence-type.' + ${listing.fenceType}}">VALUE</div>
+        </div>
+        <div class="col-6 col-md-4  margin-bottom-small" th:if="${listing.year}">
+            <b class="text-small" th:text="#{page.listing.year}">KEY</b>
+            <div th:text="${listing.year}">VALUE</div>
+        </div>
+        <div class="col-6 col-md-4  margin-bottom-small" th:if="${listing.daysInMarket}">
+            <b class="text-small" th:text="#{page.listing.days-in-market}">KEY</b>
+            <div th:if="${listing.daysInMarket <= 1}" th:text="#{page.listing.days-in-market-today}">VALUE</div>
+            <div th:if="${listing.daysInMarket > 1}">
+                <span th:text="${listing.daysInMarket}">00</span>
+                <span th:text="#{page.listing.days-in-market-suffix}">DAYS</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="margin-top padding-top border-top" th:if="!${amenityCategories.isEmpty()}">
+    <h4 th:text="#{page.listing.show.amenities}">NAME</h4>
+    <div class="row">
+        <div class="col-12 col-md-4 padding-bottom" th:each="category : ${amenityCategories}">
+            <b th:text="${category.name}">CATEGORY</b>
+            <ul>
+                <li th:each="amenity : ${listing.amenitiesByCategoryId(category.id)}"
+                    th:text="${amenity.name}">
+                    AMENITY
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="margin-top padding-top border-top" th:if="${listing.listingType.name() == 'RENTAL'}">
+    <h4 th:text="#{page.listing.show.leasing}">NAME</h4>
+    <div class="flex flex-wrap">
+        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.securityDeposit}">
+            <b class="text-small" th:text="#{page.listing.rental-price}">KEY</b>
+            <div>
+                <span th:text="${listing.price}">00</span>
+                <span th:text="#{page.listing.rental-price-suffix}">00</span>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.leaseTerm}">
+            <b class="text-small" th:text="#{page.listing.lease-terms}">KEY</b>
+            <div>
+                <span th:text="${listing.leaseTerm}">00</span>
+                <span th:text="#{page.listing.lease-terms-unit}">00</span>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.securityDeposit}">
+            <b class="text-small" th:text="#{page.listing.security-deposit}">KEY</b>
+            <div th:text="${listing.securityDeposit}">$$$</div>
+        </div>
+    </div>
+</div>
+
+<div class="margin-top padding-top border-top" th:if="${listing.canViewContract(user)}">
+    <h4 th:text="#{page.listing.show.contract}">NAME</h4>
+    <div class="margin-bottom-small" th:if="${listing.sellerName}">
+        <b class="text-small" th:text="#{page.listing.seller}">KEY</b>
+        <div th:text="${listing.sellerName}">RAY</div>
+        <div th:if="${listing.sellerEmail}" th:text="${listing.sellerEmail}">EMAIL</div>
+        <div th:if="${listing.sellerPhone}" th:text="${listing.sellerPhone}">PHONE</div>
+    </div>
+    <div class="flex flex-wrap">
+        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.contractStartDate}">
+            <b class="text-small" th:text="#{page.listing.contract-start-date}">KEY</b>
+            <div th:text="${listing.contractStartDate}">VAL</div>
+        </div>
+        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.securityDeposit}">
+            <b class="text-small" th:text="#{page.listing.contract-end-date}">KEY</b>
+            <div th:text="${listing.contractEndDate}">VAL</div>
+        </div>
+        <div class="col-6 col-md-4" th:if="${listing.sellerAgentCommission}">
+            <b class="text-small" th:text="#{page.listing.seller-agent-commission}">KEY</b>
+            <div>
+                <span th:text="${listing.sellerAgentCommission}">0.0</span>
+                <span>%</span>
+            </div>
+        </div>
+    </div>
+    <div th:if="${listing.contractRemarks}">
+        <b class="text-small" th:text="#{page.listing.contract-remarks}">KEY</b>
+        <div th:text="${listing.contractRemarks}">VAL</div>
+    </div>
+</div>
+
+
+<div class="margin-top padding-top border-top">
+    <div th:if="${listing.sellerRemarks}">
+        <div class="margin-bottom-small">
+            <b class="text-small" th:text="#{page.listing.public-remarks}">KEY</b>
+            <div th:text="${listing.sellerRemarks}">RAY</div>
+            <i th:if="!${listing.sellerName}" th:text="#{page.listing.show.no-remark}">NONE</i>
+        </div>
+        <div class="margin-bottom-small">
+            <b class="text-small" th:text="#{page.listing.agent-remarks}">KEY</b>
+            <div th:text="${listing.agentRemarks}">RAY</div>
+            <i th:if="!${listing.agentRemarks}" th:text="#{page.listing.show.no-remark}">NONE</i>
+        </div>
+        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.buyerAgentCommission}">
+            <b class="text-small" th:text="#{page.listing.buyer-agent-commission}">KEY</b>
+            <div>
+                <span th:text="${listing.buyerAgentCommission}">0.0</span>
+                <span>%</span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -9,17 +9,33 @@ data class AddressModel(
     val state: LocationModel? = null,
     val country: String? = null,
     val countryName: String? = null,
+    val neighbourhood: LocationModel? = null,
 ) {
     fun toHtml(): String {
-        return HtmlUtils.toHtml(toString())
+        return toHtml(true)
+    }
+
+    fun toHtml(includeCountry: Boolean): String {
+        return HtmlUtils.toHtml(toText(includeCountry))
+    }
+
+    fun toText(includeCountry: Boolean = true): String {
+        val stateAndPostal = listOf(state?.name, postalCode?.ifEmpty { null })
+            .joinToString(" ").ifEmpty { null }
+
+        val cityAndNeighborhood = listOf(
+            city?.name,
+            if (neighbourhood != null) "(${neighbourhood.name})" else null
+        ).joinToString(" ").ifEmpty { null }
+
+        return listOf(
+            street?.ifEmpty { null },
+            listOf(cityAndNeighborhood, stateAndPostal).filterNotNull().joinToString(", ").ifEmpty { null },
+            if (includeCountry) countryName?.ifEmpty { null } else null,
+        ).filterNotNull().joinToString("\n")
     }
 
     override fun toString(): String {
-        return listOf(
-            street?.ifEmpty { null },
-            listOf(city?.name, state?.name).filterNotNull().joinToString(", ").ifEmpty { null },
-            postalCode?.ifEmpty { null },
-            countryName?.ifEmpty { null }
-        ).filterNotNull().joinToString("\n")
+        return toText()
     }
 }

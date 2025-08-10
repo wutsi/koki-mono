@@ -1,14 +1,9 @@
 package com.wutsi.koki.portal.signup.page
 
-import com.wutsi.koki.platform.geoip.GeoIpService
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
-import com.wutsi.koki.portal.refdata.model.LocationModel
-import com.wutsi.koki.portal.refdata.service.LocationService
 import com.wutsi.koki.portal.signup.form.ProfileForm
-import com.wutsi.koki.refdata.dto.LocationType
 import io.lettuce.core.KillArgs.Builder.id
-import jakarta.servlet.http.HttpServletRequest
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -19,11 +14,7 @@ import java.util.Locale
 
 @Controller
 @RequestMapping("/signup/profile")
-class ProfileController(
-    private val ipService: GeoIpService,
-    private val locationService: LocationService,
-    private val request: HttpServletRequest,
-) : AbstractPageController() {
+class ProfileController : AbstractPageController() {
     @GetMapping
     fun index(model: Model): String {
         val city = resolveCity()
@@ -60,32 +51,5 @@ class ProfileController(
     @PostMapping
     fun submit(@ModelAttribute form: ProfileForm, model: Model): String {
         return "redirect:/signup/photo"
-    }
-
-    private fun resolveCity(): LocationModel? {
-        try {
-            val ip = getIp(request)
-            val geo = ipService.resolve(ip)
-            return if (geo != null) {
-                locationService.locations(
-                    country = geo.countryCode,
-                    keyword = geo.city,
-                    type = LocationType.CITY,
-                    limit = 1,
-                ).firstOrNull()
-            } else {
-                null
-            }
-        } catch (ex: Exception) {
-            return null
-        }
-    }
-
-    private fun resolveParent(city: LocationModel?): LocationModel? {
-        try {
-            return city?.parentId?.let { id -> locationService.location(id) }
-        } catch (ex: Exception) {
-            return null
-        }
     }
 }

@@ -11,103 +11,60 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <form class="form" method="post" th:action="@{/listings/edit}" th:object="${form}">
+            <form class="form" method="post" th:action="@{/listings/edit/amenities}" th:object="${form}">
+                <input th:field="*{id}" type="hidden"/>
                 <div class="form-body">
                     <div class="section">
                         <div class="section-body">
                             <div class="section-item">
-                                <h3 class="margin-none" th:text="#{'listing-type.' + ${form.listingType}}">TITLE</h3>
+                                <h2 th:text="#{page.listing.edit.amenities.title}">TITLE</h2>
+                                <div th:text="#{page.listing.edit.amenities.description}">DESCRIPTION</div>
                             </div>
                             <div class="section-item">
-                                <label class="title" th:text="#{page.listing.property-type}">TYPE</label>
-                                <select th:field="*{propertyType}">
-                                    <option th:each="propertyType : ${propertyTypes}"
-                                            th:if="${propertyType.name() != 'UNKNOWN'}"
-                                            th:text="#{'property-type.' + ${propertyType}}"
-                                            th:value="${propertyType}">
+                                <label class="title" th:text="#{page.listing.furniture-type}">TYPE</label>
+                                <select class="form-select" th:field="*{furnitureType}">
+                                    <option th:each="furnitureType : ${furnitureTypes}"
+                                            th:text="#{'furniture-type.' + ${furnitureType}}"
+                                            th:value="${furnitureType}">
                                         TYPE
                                     </option>
                                 </select>
                             </div>
                             <div class="section-item">
-                                <label class="title" th:text="#{page.listing.rooms}">ROOMS</label>
-                                <input step="0" th:field="*{rooms}" type="number"/>
-                            </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.bedrooms}">TYPE</label>
-                                <input step="0" th:field="*{bedrooms}" type="number"/>
-                            </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.bathrooms}">TYPE</label>
-                                <input step="0" th:field="*{bathrooms}" type="number"/>
-                            </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.half-bathrooms}">TYPE</label>
-                                <input step="0" th:field="*{halfBathrooms}" type="number"/>
-                            </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.floors}">TYPE</label>
-                                <input step="0" th:field="*{floors}" type="number"/>
-                            </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.basement}">TYPE</label>
-                                <select th:field="*{basementType}">
-                                    <option th:each="basementType : ${basementTypes}"
-                                            th:text="#{'basement-type.' + ${basementType}}"
-                                            th:value="${basementType}">
-                                        TYPE
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.level}">TYPE</label>
-                                <input step="0" th:field="*{level}" type="number"/>
-                            </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.unit}">TYPE</label>
-                                <input maxlength="5" th:field="*{unit}"/>
-                            </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.parking-type}">TYPE</label>
-                                <select th:field="*{parkingType}">
-                                    <option th:each="parkingType : ${parkingTypes}"
-                                            th:text="#{'parking-type.' + ${parkingType}}"
-                                            th:value="${parkingType}">
-                                        TYPE
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.parkings}">TYPE</label>
-                                <input step="0" th:field="*{parkings}" type="number"/>
-                            </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.fence}">TYPE</label>
-                                <select th:field="*{fenceType}">
-                                    <option th:each="fenceType : ${fenceTypes}"
-                                            th:text="#{'fence-type.' + ${fenceType}}"
-                                            th:value="${fenceType}">
-                                        TYPE
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="section-item">
-                                <label class="title">
-                                    <span th:text="#{page.listing.lot-area}">TYPE</span>
-                                    <span>(m<sup>2</sup>)</span>
-                                </label>
-                                <input step="0" th:field="*{lotArea}" type="number"/>
-                            </div>
-                            <div class="section-item">
-                                <label class="title">
-                                    <span th:text="#{page.listing.property-area}">TYPE</span>
-                                    <span>(m<sup>2</sup>)</span>
-                                </label>
-                                <input step="0" th:field="*{propertyArea}" type="number"/>
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-12 col-md-4 margin-bottom"
+                                             th:each="category : ${amenityCategories}">
+                                            <b th:text="${category.name}">CATEGORY</b>
+                                            <ul class="amenities">
+                                                <li class="amenity"
+                                                    th:each="amenity : ${amenitiesByCategoryId[category.id]}">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input"
+                                                               th:id="'amenity-' + ${amenity.id}"
+                                                               th:value="${amenity.id}"
+                                                               type="checkbox">
+                                                        <label class="form-check-label"
+                                                               th:checked="${form.amenityIds.contains(amenity.id)}"
+                                                               th:for="'amenity-' + ${amenity.id}"
+                                                               th:text="${amenity.name}"
+                                                        >
+                                                            AMENITY
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="section-item flex flex-space-between">
-                                <div>&nbsp;</div>
+                                <a class="btn btn-light"
+                                   th:href="'/listings/edit?id=' + ${form.id}"
+                                   th:text="#{button.previous}"
+                                >PREV</a>
+
                                 <button class="btn btn-primary" th:text="#{button.next}" type="submit">NEXT</button>
                             </div>
                         </div>

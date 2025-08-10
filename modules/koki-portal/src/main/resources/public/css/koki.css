@@ -10,6 +10,10 @@ body {
     display: flex;
 }
 
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
 .hidden {
     display: none;
 }
@@ -361,13 +365,19 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 
 .section-item textarea,
 .section-item input:not([type]),
-.section-item input[type=tel],
 .section-item input[type=text],
 .section-item input[type=email],
 .section-item input[type=password],
 .section-item input[type=url],
 .section-item select {
     width: 100%;
+}
+
+.section-item input[type=date],
+.section-item input[type=datetime-local],
+.section-item input[type=tel],
+.section-item input[type=number] {
+    width: auto !important;
 }
 
 .section-item .file-upload-container input[type=file] {
@@ -640,7 +650,6 @@ table tr.entity td a {
 .settings-content textarea,
 .settings-content input:not([type]),
 .settings-content input[type=text],
-.settings-content input[type=tel],
 .settings-content input[type=email],
 .settings-content input[type=password],
 .settings-content input[type=url],

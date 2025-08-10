@@ -11,61 +11,62 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <form class="form" method="post" th:action="@{/listings/edit/price}" th:object="${form}">
+            <form class="form" method="post" th:action="@{/listings/edit/contract}" th:object="${form}">
                 <input th:field="*{id}" type="hidden"/>
-                <input th:field="*{currency}" type="hidden"/>
 
                 <div class="form-body">
                     <div class="section">
                         <div class="section-body">
                             <div class="section-item">
-                                <h1 class="margin-none" th:text="#{page.listing.edit.price.title}">TITLE</h1>
+                                <h2 th:text="#{page.listing.edit.contract.title}">TITLE</h2>
+                                <div th:text="#{page.listing.edit.contract.description}">DESCRIPTION</div>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.seller}">SELLER</label>
+                                <input class="form-control" maxlength="100" th:field="*{sellerName}"
+                                       th:placeholder="#{page.listing.name}"/>
+
+                                <input class="form-control margin-top-small margin-bottom-small" maxlength="255"
+                                       th:field="*{sellerEmail}"
+                                       th:placeholder="#{page.listing.email}" type="email"/>
+
+                                <input class="form-control" th:data-country="${form.country}"
+                                       th:field="*{sellerPhone}"
+                                       type="tel"/>
                             </div>
                             <div class="section-item">
-                                <label class="title">
-                                    <span th:if="${form.listingType.name() == 'SALE'}" th:text="#{page.listing.price}">PRICE</span>
-                                    <span th:if="${form.listingType.name() == 'RENTAL'}"
-                                          th:text="#{page.listing.rental-price}">PRICE</span>
-                                </label>
-                                <div class="input-group">
-                                    <input class="form-control" step="0" th:field="*{price}" type="number"/>
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span th:text="${tenant.currencySymbol}">XXX</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                <label class="title" th:text="#{page.listing.contract-start-date}">LEASE</label>
+                                <input class="form-control" th:field="*{contractStartDate}" type="date"/>
                             </div>
-                            <div class="section-item" th:if="${form.listingType.name() == 'RENTAL'}">
-                                <label class="title">
-                                    <span th:text="#{page.listing.security-deposit}">LEASE</span>
-                                </label>
-                                <div class="input-group">
-                                    <input class="form-control" step="0" th:field="*{securityDeposit}" type="number"/>
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span th:text="${tenant.currencySymbol}">XXX</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="section-item" th:if="${form.listingType.name() == 'RENTAL'}">
-                                <label class="title" th:text="#{page.listing.lease-terms}">TERMS</label>
-
-                                <div class="input-group">
-                                    <input class="form-control" step="0" th:field="*{leaseTerm}" type="number"/>
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span th:text="#{page.listing.lease-terms-unit}">XXX</span>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.contract-end-date}">LEASE</label>
+                                <input class="form-control" th:field="*{contractEndDate}" type="date"/>
                             </div>
 
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.seller-agent-commission}">LEASE</label>
+                                <div class="text-small"
+                                     th:text="#{page.listing.seller-agent-commission-help}">HELP
+                                </div>
+                                <div class="input-group">
+                                    <input class="form-control" max="100" min="0"
+                                           step="1" th:field="*{sellerAgentCommission}" type="number"/>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span>%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.contract-remarks}">LEASE</label>
+                                <textarea class="form-control" maxlength="1000" rows="3" th:field="*{contractRemarks}">REMARKS</textarea>
+                            </div>
 
                             <div class="section-item flex flex-space-between">
                                 <a class="btn btn-light"
-                                   th:href="'/listings/edit/remarks?id=' + ${form.id}"
+                                   th:href="'/listings/edit/price?id=' + ${form.id}"
                                    th:text="#{button.previous}"
                                 >PREV</a>
 

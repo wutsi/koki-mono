@@ -11,64 +11,67 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <form class="form" method="post" th:action="@{/listings/edit/address}" th:object="${form}">
+            <form class="form" method="post" th:action="@{/listings/edit/price}" th:object="${form}">
                 <input th:field="*{id}" type="hidden"/>
+                <input th:field="*{currency}" type="hidden"/>
+
                 <div class="form-body">
-                    <div class="section"
-                         data-city-id="cityId"
-                         data-component-id=address
-                         data-country-id="country"
-                         data-neighborhood-id="neighbourhoodId"
-                    >
+                    <div class="section">
                         <div class="section-body">
                             <div class="section-item">
-                                <h1 class="margin-none" th:text="#{page.listing.edit.address.title}">TITLE</h1>
-                            </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.country}">TYPE</label>
-                                <select required th:field="*{country}">
-                                    <option value=""></option>
-                                    <option th:each="country : ${countries}"
-                                            th:text="${country.displayCountry}"
-                                            th:value="${country.country}"
-                                    >COUNTRY
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.city}">TYPE</label>
-                                <div class="margin-top-small">
-                                    <select required th:field="*{cityId}">
-                                        <option selected
-                                                th:if="${city}"
-                                                th:text="${cityName}"
-                                                th:value="${city.id}">
-                                            CITY
-                                        </option>
-                                    </select>
+                                <h2 th:text="#{page.listing.edit.price.title}">TITLE</h2>
+                                <div th:if="${form.listingType.name() == 'RENTAL'}"
+                                     th:text="#{page.listing.edit.price-rental.description}">DESCRIPTION
+                                </div>
+                                <div th:if="${form.listingType.name() == 'SALE'}"
+                                     th:text="#{page.listing.edit.price-sale.description}">DESCRIPTION
                                 </div>
                             </div>
                             <div class="section-item">
-                                <label class="title" th:text="#{page.listing.neighbourhood}">TYPE</label>
-                                <div class="margin-top-small">
-                                    <select th:field="*{neighbourhoodId}">
-                                        <option selected
-                                                th:if="${neighbourhood}"
-                                                th:text="${neighbourhood.name}"
-                                                th:value="${neighbourhood.id}">
-                                            CITY
-                                        </option>
-                                    </select>
+                                <label class="title">
+                                    <span th:if="${form.listingType.name() == 'SALE'}" th:text="#{page.listing.price}">PRICE</span>
+                                    <span th:if="${form.listingType.name() == 'RENTAL'}"
+                                          th:text="#{page.listing.rental-price}">PRICE</span>
+                                </label>
+                                <div class="input-group">
+                                    <input class="form-control" step="0" th:field="*{price}" type="number"/>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span th:text="${tenant.currencySymbol}">XXX</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.street}">STREET</label>
-                                <textarea maxlength="255" rows="2" th:field="*{street}"></textarea>
+                            <div class="section-item" th:if="${form.listingType.name() == 'RENTAL'}">
+                                <label class="title">
+                                    <span th:text="#{page.listing.security-deposit}">LEASE</span>
+                                </label>
+                                <div class="input-group">
+                                    <input class="form-control" step="0" th:field="*{securityDeposit}" type="number"/>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span th:text="${tenant.currencySymbol}">XXX</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="section-item" th:if="${form.listingType.name() == 'RENTAL'}">
+                                <label class="title" th:text="#{page.listing.lease-terms}">TERMS</label>
+
+                                <div class="input-group">
+                                    <input class="form-control" step="0" th:field="*{leaseTerm}" type="number"/>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span th:text="#{page.listing.lease-terms-unit}">XXX</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
 
                             <div class="section-item flex flex-space-between">
                                 <a class="btn btn-light"
-                                   th:href="'/listings/edit/amenities?id=' + ${form.id}"
+                                   th:href="'/listings/edit/geo-location?id=' + ${form.id}"
                                    th:text="#{button.previous}"
                                 >PREV</a>
 

@@ -3,7 +3,6 @@ package com.wutsi.koki.portal.tenant.page.settings.type
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.refdata.service.JuridictionService
-import com.wutsi.koki.portal.refdata.service.LocationService
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.form.BusinessForm
 import com.wutsi.koki.portal.tenant.service.BusinessService
@@ -19,7 +18,6 @@ import org.springframework.web.client.HttpClientErrorException
 class SettingsEditBusinessController(
     private val service: BusinessService,
     private val juridictionService: JuridictionService,
-    private val locationService: LocationService,
 ) : AbstractPageController() {
     @GetMapping("/settings/tenant/business/edit")
     fun edit(model: Model): String {
