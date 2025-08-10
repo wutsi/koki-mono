@@ -11,7 +11,11 @@ data class AddressModel(
     val countryName: String? = null,
     val neighbourhood: LocationModel? = null,
 ) {
-    fun toHtml(includeCountry: Boolean = true): String {
+    fun toHtml(): String {
+        return toHtml(true)
+    }
+
+    fun toHtml(includeCountry: Boolean): String {
         return HtmlUtils.toHtml(toText(includeCountry))
     }
 
