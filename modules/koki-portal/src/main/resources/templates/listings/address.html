@@ -11,46 +11,65 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <form class="form" method="post" th:action="@{/listings/edit/amenities}" th:object="${form}">
+            <form class="form" method="post" th:action="@{/listings/edit/address}" th:object="${form}">
                 <input th:field="*{id}" type="hidden"/>
                 <div class="form-body">
-                    <div class="section">
+                    <div class="section"
+                         data-city-id="cityId"
+                         data-component-id=address
+                         data-country-id="country"
+                         data-neighborhood-id="neighbourhoodId"
+                    >
                         <div class="section-body">
                             <div class="section-item">
-                                <h1 class="margin-none" th:text="#{page.listing.edit.amenities.title}">TITLE</h1>
+                                <h2 th:text="#{page.listing.edit.address.title}">TITLE</h2>
+                                <div th:text="#{page.listing.edit.address.description}">DESCRIPTION</div>
                             </div>
                             <div class="section-item">
-                                <div class="container-fluid">
-                                    <div class="row">
-                                        <div class="col-12 col-md-4 margin-bottom"
-                                             th:each="category : ${amenityCategories}">
-                                            <b th:text="${category.name}">CATEGORY</b>
-                                            <ul class="amenities">
-                                                <li class="amenity"
-                                                    th:each="amenity : ${amenitiesByCategoryId[category.id]}">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input"
-                                                               th:id="'amenity-' + ${amenity.id}"
-                                                               th:value="${amenity.id}"
-                                                               type="checkbox">
-                                                        <label class="form-check-label"
-                                                               th:checked="${form.amenityIds.contains(amenity.id)}"
-                                                               th:for="'amenity-' + ${amenity.id}"
-                                                               th:text="${amenity.name}"
-                                                        >
-                                                            AMENITY
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                                <label class="title" th:text="#{page.listing.country}">TYPE</label>
+                                <select required th:field="*{country}">
+                                    <option value=""></option>
+                                    <option th:each="country : ${countries}"
+                                            th:text="${country.displayCountry}"
+                                            th:value="${country.country}"
+                                    >COUNTRY
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.city}">TYPE</label>
+                                <div class="margin-top-small">
+                                    <select required th:field="*{cityId}">
+                                        <option selected
+                                                th:if="${city}"
+                                                th:text="${cityName}"
+                                                th:value="${city.id}">
+                                            CITY
+                                        </option>
+                                    </select>
                                 </div>
+                            </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.neighbourhood}">TYPE</label>
+                                <div class="margin-top-small">
+                                    <select th:field="*{neighbourhoodId}">
+                                        <option selected
+                                                th:if="${neighbourhood}"
+                                                th:text="${neighbourhood.name}"
+                                                th:value="${neighbourhood.id}">
+                                            CITY
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.street}">STREET</label>
+                                <textarea class="form-control" maxlength="255" rows="2" th:field="*{street}"></textarea>
                             </div>
 
                             <div class="section-item flex flex-space-between">
                                 <a class="btn btn-light"
-                                   th:href="'/listings/edit?id=' + ${form.id}"
+                                   th:href="'/listings/edit/amenities?id=' + ${form.id}"
                                    th:text="#{button.previous}"
                                 >PREV</a>
 

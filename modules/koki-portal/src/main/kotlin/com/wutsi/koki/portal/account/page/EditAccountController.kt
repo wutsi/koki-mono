@@ -9,7 +9,6 @@ import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.TypeService
 import com.wutsi.koki.portal.user.service.UserService
-import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -26,7 +25,6 @@ class EditAccountController(
     private val attributeService: AttributeService,
     private val typeService: TypeService,
     private val userService: UserService,
-    private val request: HttpServletRequest,
 ) : AbstractAccountController() {
     @GetMapping("/accounts/{id}/edit")
     fun edit(@PathVariable id: Long, model: Model): String {

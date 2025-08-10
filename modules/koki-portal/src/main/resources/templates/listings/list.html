@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('listing')}"></div>
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div class="flex flex-space-between">
+                        <div>
+                            <a class="btn-create btn btn-primary btn-sm" href="/listings/create"
+                               th:if="${user?.canManage('listing')} OR ${user.hasFullAccess('listing')}"
+                               th:text="#{button.create_listing}">
+                                NEW
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -71,7 +71,7 @@ class AddressWidget {
                                         };
                                     }
                                 },
-                                placeholder: 'Select a neighborhood',
+                                placeholder: 'Select a neighbourhood',
                                 allowClear: true,
                                 tokenSeparators: [','],
                                 minimumInputLength: 2,

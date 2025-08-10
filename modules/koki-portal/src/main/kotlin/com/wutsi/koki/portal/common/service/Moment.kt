@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.service
+package com.wutsi.koki.portal.common.service
 
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder

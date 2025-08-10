@@ -3,7 +3,6 @@ package com.wutsi.koki.portal.room.page
 import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.common.page.PageName
-import com.wutsi.koki.portal.refdata.service.LocationService
 import com.wutsi.koki.portal.room.form.RoomForm
 import com.wutsi.koki.portal.room.service.RoomService
 import com.wutsi.koki.portal.security.RequiresPermission
@@ -27,7 +26,6 @@ import java.util.Currency
 @RequiresPermission(["room:manage", "room:full_access"])
 class CreateRoomController(
     private val service: RoomService,
-    private val locationService: LocationService,
     private val accountService: AccountService,
 ) : AbstractRoomController() {
     @GetMapping("/create")

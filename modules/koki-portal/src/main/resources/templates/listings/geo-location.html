@@ -11,23 +11,37 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <form class="form" method="post" th:action="@{/listings/edit/remarks}" th:object="${form}">
+            <form class="form" method="post" th:action="@{/listings/edit/geo-location}" th:object="${form}">
                 <input th:field="*{id}" type="hidden"/>
                 <div class="form-body">
                     <div class="section">
                         <div class="section-body">
                             <div class="section-item">
-                                <h2 class="margin-none" th:text="#{page.listing.edit.remarks.title}">TITLE</h1>
+                                <h2 th:text="#{page.listing.edit.geo-location.title}">TITLE</h2>
+                                <div th:text="#{page.listing.edit.geo-location.description}">DESCRIPTION</div>
                             </div>
                             <div class="section-item">
-                                <label class="title" th:text="#{page.listing.remarks-seller}">TYPE</label>
-                                <textarea class="form-control" maxlength="1000" rows="7"
-                                          th:field="*{remarksSeller}"></textarea>
-                            </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.remarks-agent}">TYPE</label>
-                                <textarea class="form-control" maxlength="1000" rows="7"
-                                          th:field="*{remarksAgent}"></textarea>
+                                <label class="title" th:text="#{page.listing.latitude_longitude}">LATITUDE</label>
+                                <div class="flex flex-wrap">
+                                    <input class="form-control margin-right" step="any"
+                                           th:field="*{latitude}"
+                                           th:placeholder="#{page.listing.latitude}" type="number"/>
+                                    <input class="form-control" step="any"
+                                           th:field="*{longitude}"
+                                           th:placeholder="#{page.listing.longitude}" type="number"/>
+                                </div>
+                                <div class="margin-top flex">
+                                    <a class="btn btn-light btn-sm" href="javascript: get_current_lat_long()">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                        <span th:text="#{button.set_current_position}">POSITION</span>
+                                    </a>
+
+                                    <a class="btn btn-light btn-sm margin-left-small"
+                                       href="javascript: open_google_map()">
+                                        <i class="fa-solid fa-map"></i>
+                                        <span th:text="#{button.open_google_map}">POSITION</span>
+                                    </a>
+                                </div>
                             </div>
 
                             <div class="section-item flex flex-space-between">
@@ -47,5 +61,46 @@
     </div>
 </div>
 
+<script>
+    function get_current_lat_long() {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                console.log('Position fetched', position);
+                document.getElementById('latitude').value = position.coords.latitude;
+                document.getElementById('longitude').value = position.coords.longitude;
+            }, function (error) {
+                // Handle errors here
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        console.error("User denied the request for Geolocation.");
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        console.error("Location information is unavailable.");
+                        break;
+                    case error.TIMEOUT:
+                        console.error("The request to get user location timed out.");
+                        break;
+                    default:
+                        console.error("An unknown error occurred.", error);
+                        break;
+                }
+            });
+        } else {
+            // Geolocation is not available in this browser
+            console.error("Geolocation is not supported by this browser.");
+        }
+    }
+
+    function open_google_map() {
+        const lat = document.getElementById('latitude').value;
+        const long = document.getElementById('longitude').value;
+
+        const url = lat && lat.length > 0 && long && long.length > 0
+            ? `https://www.google.com/maps/search/?api=1&query=${lat},${long}`
+            : "https://maps.google.com"
+
+        window.open(url, '_blank');
+    }
+</script>
 </body>
 </html>

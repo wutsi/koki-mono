@@ -1,7 +1,6 @@
 package com.wutsi.koki.portal.room.page
 
 import com.wutsi.koki.portal.common.page.PageName
-import com.wutsi.koki.portal.refdata.service.LocationService
 import com.wutsi.koki.portal.room.form.RoomForm
 import com.wutsi.koki.portal.room.model.RoomModel
 import com.wutsi.koki.portal.room.service.RoomService
@@ -26,7 +25,6 @@ import java.util.Currency
 @RequiresPermission(["room:manage", "room:full_access"])
 class EditRoomController(
     private val service: RoomService,
-    private val locationService: LocationService,
 ) : AbstractRoomController() {
     @GetMapping("/{id}/edit")
     fun edit(

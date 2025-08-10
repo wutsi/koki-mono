@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="listing-status-badge(status)" th:remove="tag">
+    <span class="badge text-bg-secondary"
+          th:if="${status.name() == 'DRAFT'}"
+          th:text="#{'listing-status.' + ${status}}">A LOUER</span>
+
+    <span class="badge text-bg-primary" th:if="${status.name() == 'ACTIVE'} OR ${status.name() == 'ACTIVE_WITH_OFFER'}"
+          th:text="#{'listing-status.' + ${status}}">A LOUER</span>
+
+    <span class="badge text-bg-success" th:if="${status.name() == 'PENDING'}"
+          th:text="#{'listing-status.' + ${status}}">A LOUER</span>
+
+    <span class="badge text-bg-success" th:if="${status.name() == 'RENTED'} OR ${status.name() == 'SOLD'}"
+          th:text="#{'listing-status.' + ${status}}">A LOUER</span>
+
+    <span class="badge text-bg-danger"
+          th:if="${status == 'EXPIRED'} OR ${status.name() == 'WITHDRAWN'} OR ${status.name() == 'CANCELLED'}"
+          th:text="#{'listing-status.' + ${status}}">A LOUER</span>
+</div>
+
+<div th:fragment="listing-type-badge(type)" th:remove="tag">
+    <span class="badge text-bg-info margin-right" th:text="#{'listing-type.' + ${type}}">A LOUER</span>
+</div>
+
+</body>
+</html>

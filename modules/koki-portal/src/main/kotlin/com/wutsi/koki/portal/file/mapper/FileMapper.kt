@@ -3,10 +3,10 @@ package com.wutsi.koki.portal.file.mapper
 import com.wutsi.koki.file.dto.File
 import com.wutsi.koki.file.dto.FileSummary
 import com.wutsi.koki.file.dto.LabelSummary
+import com.wutsi.koki.portal.common.service.Moment
 import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.file.model.LabelModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
-import com.wutsi.koki.portal.service.Moment
 import com.wutsi.koki.portal.user.model.UserModel
 import org.apache.commons.io.FilenameUtils
 import org.springframework.context.i18n.LocaleContextHolder

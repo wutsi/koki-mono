@@ -56,6 +56,17 @@ object PageName {
     const val INVOICE_SETTINGS_EDIT = "page.settings.invoice.edit"
     const val INVOICE_SETTINGS_NOTIFICATION = "page.settings.invoice.notification"
 
+    const val LISTING = "page.listing"
+    const val LISTING_CREATE = "page.listing.create"
+    const val LISTING_EDIT = "page.listing.edit"
+    const val LISTING_EDIT_ADDRESS = "listing.edit.address"
+    const val LISTING_EDIT_AMENITIES = "page.listing.edit.amenities"
+    const val LISTING_EDIT_CONTRACT = "listing.edit.price"
+    const val LISTING_EDIT_GEOLOCATION = "listing.edit.geo-location"
+    const val LISTING_EDIT_PRICE = "listing.edit.price"
+    const val LISTING_EDIT_REMARK = "listing.edit.remark"
+    const val LISTING_LIST = "page.listing.list"
+
     const val LOGIN = "page.login"
 
     const val NOTE_EDIT = "page.note.edit"

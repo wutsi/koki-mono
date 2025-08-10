@@ -9,7 +9,6 @@ import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.TypeService
 import com.wutsi.koki.portal.user.service.CurrentUserHolder
 import com.wutsi.koki.portal.user.service.UserService
-import jakarta.servlet.http.HttpServletRequest
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -26,7 +25,6 @@ class CreateAccountController(
     private val accountTypeService: TypeService,
     private val userService: UserService,
     private val currentUser: CurrentUserHolder,
-    private val request: HttpServletRequest,
 ) : AbstractAccountController() {
     @GetMapping("/accounts/create")
     fun create(model: Model): String {

@@ -3,9 +3,9 @@ package com.wutsi.koki.portal.message.mapper
 import com.wutsi.koki.message.dto.Message
 import com.wutsi.koki.message.dto.MessageSummary
 import com.wutsi.koki.portal.common.model.ObjectReferenceModel
+import com.wutsi.koki.portal.common.service.Moment
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.message.model.MessageModel
-import com.wutsi.koki.portal.service.Moment
 import org.springframework.stereotype.Service
 
 @Service
