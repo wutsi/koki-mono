@@ -9,8 +9,7 @@ table tr.listing td img.hero-image {
     max-height: 200px;
 }
 
-table tr.listing td .price {
-    font-weight: bold;
+.listing-price {
     color: darkblue;
 }
 
