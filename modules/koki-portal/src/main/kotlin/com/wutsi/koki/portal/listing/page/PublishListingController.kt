@@ -1,7 +1,6 @@
 package com.wutsi.koki.portal.listing.page
 
 import com.wutsi.blog.portal.common.model.MoneyModel
-import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.listing.dto.BasementType
 import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
@@ -10,50 +9,58 @@ import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.portal.common.page.PageName
+import com.wutsi.koki.portal.listing.form.ListingForm
 import com.wutsi.koki.portal.listing.model.ListingModel
 import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.AmenityModel
-import com.wutsi.koki.portal.refdata.model.CategoryModel
 import com.wutsi.koki.portal.refdata.model.GeoLocationModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
+import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.refdata.dto.LocationType
+import io.lettuce.core.KillArgs.Builder.id
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import java.time.LocalDate
 
 @Controller
-@RequestMapping("/listings")
-class ListingController : AbstractListingDetailsController() {
-    @GetMapping("/{id}")
-    fun show(@PathVariable id: Long, model: Model): String {
+@RequestMapping("/listings/publish")
+@RequiresPermission(["listing:manager", "listing:full_access"])
+class PublishListingController : AbstractListingController() {
+    @GetMapping
+    fun publish(@RequestParam id: Long, model: Model): String {
         val listing = findListing(id)
         model.addAttribute("listing", listing)
-        model.addAttribute(
-            "composeUrl",
-            "/message/compose&to-user-id=${listing.sellerAgentUser.id}&owner-id=$id&owner-type=${ObjectType.LISTING}"
-        )
+        model.addAttribute("form", ListingForm(id = id))
 
         model.addAttribute(
             "page",
             createPageModel(
-                name = PageName.LISTING,
-                title = getMessage("page.listing.show.meta.title", arrayOf(listing.listingNumber)),
+                name = PageName.LISTING_PUBLISH,
+                title = getMessage("page.listing.publish.meta.title"),
             )
         )
-        return "listings/show"
+        return "listings/publish"
     }
 
-    @GetMapping("/tab/details")
-    fun details(@RequestParam id: Long, model: Model): String {
-        val listing = findListing(id)
+    @PostMapping
+    fun submit(@ModelAttribute form: ListingForm, model: Model): String {
+        val listing = findListing(form.id)
         model.addAttribute("listing", listing)
-        model.addAttribute("amenityCategories", findAmenityCategories(listing))
-        return "listings/details"
+
+        model.addAttribute(
+            "page",
+            createPageModel(
+                name = PageName.LISTING_PUBLISH,
+                title = getMessage("page.listing.publish.meta.title"),
+            )
+        )
+        return "listings/published"
     }
 
     private fun findListing(id: Long): ListingModel {
@@ -122,14 +129,6 @@ class ListingController : AbstractListingDetailsController() {
             fenceType = FenceType.CONCRETE,
             daysInMarket = 15,
             publicUrl = "https://www.realtor.ca/immobilier/28714279/5750-rue-carriere-brossard-noms-de-rues-c#view=neighbourhood"
-        )
-    }
-
-    private fun findAmenityCategories(listing: ListingModel): List<CategoryModel> {
-        return listOf(
-            CategoryModel(id = 11, name = "Essentiels de base"),
-            CategoryModel(id = 22, name = "Cuisine et salle à manger"),
-            CategoryModel(id = 33, name = "Divertissement et électronique"),
         )
     }
 }

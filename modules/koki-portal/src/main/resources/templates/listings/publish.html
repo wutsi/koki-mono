@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('listing')}"></div>
+
+<div class="container-fluid padding-bottom-8x">
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <h1 th:text="#{page.listing.publish.title}">TITLE</h1>
+                    <div th:utext="#{page.listing.publish.description}">DESCRIPTION</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div th:replace="~{__components/listing :: listing-summary(${listing})}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div data-component-id="ajax-fragment"
+                         th:data-url="'/listings/tab/details?id=' + ${listing.id} "></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <form class="form" method="post" th:action="@{/listings/publish}" th:object="${form}">
+                        <input th:field="*{id}" type="hidden"/>
+
+                        <div class="alert alert-warning">
+                            <div class="form-check">
+                                <input class="form-check-input" id="chk-confirmation" required type="checkbox">
+                                <label class="form-check-label" for="chk-confirmation"
+                                       th:text="#{page.listing.publish.confirmation}">CONFIRMATION</label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button class="btn btn-primary" th:text="#{button.publish}" type="submit">PUBLISH</button>
+
+                            <a class="btn btn-secondary margin-left" th:href="'/listings/' + ${listing.id}"
+                               th:text="#{button.cancel}">CANCEL</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

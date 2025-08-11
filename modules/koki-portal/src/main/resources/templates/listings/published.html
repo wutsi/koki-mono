@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('listing')}"></div>
+
+<div class="container-fluid padding-bottom-8x">
+    <div class="row">
+        <div class="col-12 col-md-6 offset-md-3">
+            <div class="widget">
+                <div class="widget-body">
+                    <h1 th:text="#{page.listing.publish.title}">TITLE</h1>
+                    <div th:utext="#{page.listing.publish.published(${listing.listingNumber})}">DESCRIPTION</div>
+                    <div class="margin-top">
+                        <a class="btn btn-primary w-100" id="btn-next"
+                           th:href="'/listings/' + ${listing.id}"
+                           th:text="#{button.next}">
+                            NEXT
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
