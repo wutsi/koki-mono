@@ -2,7 +2,8 @@
   "tabs": {
     "main": [
       "image",
-      "file"
+      "file",
+      "message"
     ]
   }
 }

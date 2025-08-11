@@ -1,4 +1,20 @@
-.contact-mobile {
+table tr.listing td a {
+    display: block !important;
+    color: black !important;
+    text-decoration: none !important;
+}
+
+table tr.listing td img.hero-image {
+    max-width: 300px;
+    max-height: 200px;
+}
+
+table tr.listing td .price {
+    font-weight: bold;
+    color: darkblue;
+}
+
+.contact-sticky-bar {
     position: fixed;
     top: auto;
     bottom: 0;

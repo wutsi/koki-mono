@@ -72,6 +72,7 @@ object PageName {
     const val NOTE_EDIT = "page.note.edit"
 
     const val MESSAGE = "page.message"
+    const val MESSAGE_COMPOSE = "page.message.compose"
     const val MESSAGE_TAB = "page.message.tab"
     const val MESSAGE_WIDGET = "page.message.widget"
 

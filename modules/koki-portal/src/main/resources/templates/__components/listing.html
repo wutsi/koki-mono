@@ -25,5 +25,84 @@
     <span class="badge text-bg-info margin-right" th:text="#{'listing-type.' + ${type}}">A LOUER</span>
 </div>
 
+<tr th:fragment="listing-row(listing)" th:remove="tag">
+    <td class="d-none d-sm-table-cell" width="1%">
+        <a class="text-nowrap" th:href="'/listings/' + ${listing.id}">
+            <span th:text="'#' + ${listing.listingNumber}">00000</span>
+        </a>
+    </td>
+    <td class="d-none d-sm-table-cell" width="15%">
+        <a th:href="'/listings/' + ${listing.id}"
+           th:text="#{'property-type.' + ${listing.propertyType}}">
+            PROPERTY_TYPE
+        </a>
+    </td>
+    <td>
+        <a th:href="'/listings/' + ${listing.id}">
+            <div class="d-block d-sm-none text-small">
+                <span th:text="'#' + ${listing.listingNumber}">00000</span>
+                <span>-</span>
+                <span
+                    th:text="#{'property-type.' + ${listing.propertyType}}">
+                    PROPERTY_TYPE
+                </span>
+            </div>
+            <div>
+                <span th:if="${listing.address?.neighbourhood}"
+                      th:text="${listing.address.neighbourhood.name}">
+                    NEIGHBORHOOD
+                </span>
+                <span th:if="${listing.address?.neighbourhood}">,</span>
+                <span th:if="${listing.address?.city}"
+                      th:text="${listing.address.city.name}">
+                    NEIGHBORHOOD
+                </span>
+            </div>
+            <div class="flex">
+                <div class="margin-right" th:if="${listing.bedrooms}">
+                    <i class="fa-solid fa-bed"></i>
+                    <span th:text="${listing.bedrooms}">00</span>
+                </div>
+                <div class="margin-right" th:if="${listing.bathrooms}">
+                    <i class="fa-solid fa-bath"></i>
+                    <span th:text="${listing.bathrooms}">00</span>
+                </div>
+                <div th:if="${listing.lotArea} OR ${listing.propertyArea}">
+                    <span th:if="${listing.propertyArea}" th:text="${listing.propertyArea}">00</span>
+                    <span th:if="${listing.lotArea} AND !${listing.propertyArea}" th:text="${listing.lotArea}">
+                            00
+                        </span>
+                    <span>m<sup>2</sup></span>
+                </div>
+            </div>
+        </a>
+    </td>
+    <td class="text-right">
+        <a th:href="'/listings/' + ${listing.id}">
+            <div class="text-nowrap price">
+                <span th:text="${listing.price}">$$</span>
+                <span th:if="${listing.listingType.name() == 'RENTAL'}"
+                      th:text="#{page.listing.rental-price-suffix}">00</span>
+            </div>
+        </a>
+    </td>
+</tr>
+
+<div th:fragment="listing-list-widget(items, status)">
+    <div class="widget">
+        <div class="widget-body">
+            <div class="margin-bottom-small">
+                <b th:text="#{'listing-status.' + ${status}}">STATUS</b>
+                <span class="badge bg-secondary rounded-pill" th:text="${items.size()}">00</span>
+            </div>
+            <table class="table table-striped">
+                <tr class="listing" th:each="listing : ${items}">
+                    <div th:replace="~{__components/listing :: listing-row(${listing})}"></div>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

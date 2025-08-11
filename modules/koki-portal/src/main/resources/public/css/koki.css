@@ -95,6 +95,10 @@ body {
     padding-bottom: 0.5em;
 }
 
+.padding-bottom-8x {
+    padding-bottom: 8em;
+}
+
 .padding-left {
     padding-left: 1em;
 }
