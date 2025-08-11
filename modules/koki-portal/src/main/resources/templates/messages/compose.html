@@ -1,0 +1,36 @@
+<form class="form" id="message-form" method="post" th:action="@{'/messages/compose'}" th:object="${form}">
+    <input th:field="*{ownerId}" type="hidden"/>
+    <input th:field="*{ownerType}" type="hidden"/>
+    <input th:field="*{toUserId}" type="hidden"/>
+
+    <div class="flex">
+        <div class="text-nowrap" valign="top" width="1%">
+            <label th:text="#{page.message.compose.to}">TO</label>:
+        </div>
+        <div class="flex margin-left">
+            <img height="64" th:src="${to.photoUrl} ? ${to.photoUrl} : '/image/no-photo.png'" width="64"/>
+            <div class="margin-left">
+                <b class="margin-none" th:text="${to.displayName}">NAME</b>
+                <div class="text-small">
+                    <span th:if="${to.employer}" th:text="${to.employer}">EMPLOYER</span>
+                </div>
+                <div class="text-small" th:if="${to.phone}">
+                    <i class="fa-solid fa-phone"></i>
+                    <span th:text="${to.phone}">+1 (514) 7580000</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="margin-top">
+        <label>
+            <span th:text="#{page.message.compose.message}">MESSAGE</span>
+            <span class="required">*</span>:
+        </label>
+        <textarea class="form-control" maxlength="1000" required rows="5" th:field="*{body}"></textarea>
+    </div>
+
+    <div class="margin-top">
+        <button class="btn btn-primary margin-right" id="btn-submit" th:text="#{button.send}">SEND</button>
+        <button class="btn btn-secondary" id="btn-cancel" th:text="#{button.cancel}">CANCEL</button>
+    </div>
+</form>

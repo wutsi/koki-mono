@@ -21,12 +21,15 @@ data class AddressModel(
 
     fun toText(includeCountry: Boolean = true): String {
         val stateAndPostal = listOf(state?.name, postalCode?.ifEmpty { null })
+            .filterNotNull()
             .joinToString(" ").ifEmpty { null }
 
         val cityAndNeighborhood = listOf(
             city?.name,
             if (neighbourhood != null) "(${neighbourhood.name})" else null
-        ).joinToString(" ").ifEmpty { null }
+        )
+            .filterNotNull()
+            .joinToString(" ").ifEmpty { null }
 
         return listOf(
             street?.ifEmpty { null },

@@ -8,14 +8,14 @@
 <div th:replace="~{__components/layout :: navbar}"></div>
 <div th:replace="~{__components/layout :: menubar('listing')}"></div>
 
-<div class="container-fluid">
+<div class="container-fluid padding-bottom-8x">
     <div class="row">
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body flex flex-space-between">
                     <div>&nbsp;</div>
-                    <div class="flex">
-                        <div>
+                    <div class="flex flex-wrap">
+                        <div class="margin-top-small margin-right-small">
                             <a class="btn btn-light btn-sm" id="btn-direction" target="_blank"
                                th:href="${listing.geoLocationUrl}"
                                th:if="${listing.geoLocationUrl}"
@@ -23,8 +23,17 @@
                                 <i class="fa-regular fa-compass"></i>
                                 <span th:text="#{button.direction}">DIRECTION</span>
                             </a>
+                            <button class="btn btn-light btn-sm" id="btn-share"
+                                    th:data-share-message="#{page.listing.show.share-message}"
+                                    th:data-share-url="${listing.publicUrl}"
+                                    th:if="${listing.publicUrl}"
+                            >
+                                <i class="fa-solid fa-share-nodes"></i>
+                                <span th:text="#{button.share}">SHARE</span>
+                            </button>
                         </div>
-                        <div class="padding-left" th:if="${listing.canManage(user)}">
+                        <div class="margin-top-small margin-right-small  margin-bottom-small"
+                             th:if="${listing.canManage(user)}">
                             <a class="btn btn-light btn-sm" id="btn-edit"
                                th:href="'/listings/edit?id=' + ${listing.id}"
                                th:text="#{button.edit}"
@@ -54,8 +63,7 @@
                         <span th:replace="~{__components/listing :: listing-type-badge(${listing.listingType})}"></span>
                         <span th:replace="~{__components/listing :: listing-status-badge(${listing.status})}"></span>
                     </div>
-
-                    <div>
+                    <div class="margin-top-small">
                         <h1 class="margin-none">
                             <span th:text="${listing.price}">0000</span>
                             <span th:if="${listing.listingType.name() == 'RENTAL'}"
@@ -89,10 +97,10 @@
                                     <div class="text-center margin-left"
                                          th:if="${listing.lotArea} OR ${listing.propertyArea}">
                                         <b th:if="${listing.propertyArea}" th:text="${listing.propertyArea}">00</b>
-                                        <div th:if="${listing.lotArea} AND !${listing.propertyArea}"
-                                             th:text="${listing.lotArea}">
+                                        <b th:if="${listing.lotArea} AND !${listing.propertyArea}"
+                                           th:text="${listing.lotArea}">
                                             00
-                                        </div>
+                                        </b>
                                         <div class="text-small">m<sup>2</sup></div>
                                     </div>
                                 </div>
@@ -106,24 +114,21 @@
         <div class="col-12 col-md-4 d-none d-md-block">
             <div class="widget">
                 <div class="widget-body flex">
-                    <img height="128" src="/image/no-photo.png" width="128"/>
+                    <img height="128"
+                         th:src="${listing.sellerAgentUser.photoUrl} ? ${listing.sellerAgentUser.photoUrl} : '/image/no-photo.png'"
+                         width="128"/>
                     <div class="margin-left">
                         <h5 class="margin-none" th:text="${listing.sellerAgentUser.displayName}">NAME</h5>
-                        <div class="text-small">Courtier Immobilier - ImmoMax</div>
-                        <div class="margin-top-small">
-                            <div class="text-small">
-                                <i class="fa-solid fa-phone"></i>
-                                <span>+1 (514) 7580000</span>
-                            </div>
-                            <div class="text-small">
-                                <a href="#" target="_blank">
-                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                                    <span th:text="#{page.listing.show.website}">SITE</span>
-                                </a>
-                            </div>
+                        <div class="text-small">
+                            <span th:if="${listing.sellerAgentUser.employer}"
+                                  th:text="${listing.sellerAgentUser.employer}">EMPLOYER</span>
+                        </div>
+                        <div class="text-small margin-top-small" th:if="${listing.sellerAgentUser.phone}">
+                            <i class="fa-solid fa-phone"></i>
+                            <span th:text="${listing.sellerAgentUser.phone}">+1 (514) 7580000</span>
                         </div>
                         <div class="margin-top">
-                            <a class="btn btn-light" href="#">
+                            <a class="btn btn-primary" href="#" id="compose-message">
                                 <i class="fa-solid fa-envelope"></i>
                                 <span th:text="#{button.message}">MESSAGE</span>
                             </a>
@@ -179,22 +184,49 @@
         </div>
     </div>
 
-    <div class="d-block d-md-none border contact-mobile">
+    <div class="d-block d-md-none border contact-sticky-bar">
         <div class="flex padding-small">
-            <img height="64" src="/image/no-photo.png" width="64"/>
+            <img height="64"
+                 th:src="${listing.sellerAgentUser.photoUrl} ? ${listing.sellerAgentUser.photoUrl} : '/image/no-photo.png'"
+                 width="64"/>
             <div class="margin-left-small">
                 <b class="margin-none" th:text="${listing.sellerAgentUser.displayName}">NAME</b><br/>
-                <a class="btn btn-primary margin-top-small" href="#">
+                <button class="btn btn-primary margin-top-small" id="compose-message-sticky">
                     <i class="fa-solid fa-envelope"></i>
                     <span th:text="#{button.message}">MESSAGE</span>
-                </a>
+                </button>
             </div>
         </div>
     </div>
-
 </div>
 
-<div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
 <div th:replace="~{__components/bootstrap :: modal}"></div>
+
+<script th:inline="javascript">
+    document.getElementById('compose-message').addEventListener('click', compose_message);
+    document.getElementById('compose-message-sticky').addEventListener('click', compose_message);
+
+    const btnShare = document.getElementById('btn-share');
+    if (btnShare) {
+        btnShare.addEventListener('click', share_listing);
+    }
+
+    function compose_message() {
+        kokiMessage.compose(
+            /*[[${listing.sellerAgentUser.id}]]*/ '',
+            /*[[${listing.id}]]*/ '',
+            'LISTING',
+        );
+    }
+
+    function share_listing() {
+        if (navigator.share) {
+            navigator.share({
+                message: btnShare.getAttribute('data-share-message'),
+                url: btnShare.getAttribute('data-share-url')
+            });
+        }
+    }
+</script>
 </body>
 </html>

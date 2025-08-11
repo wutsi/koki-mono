@@ -27,6 +27,28 @@
             </div>
         </div>
     </div>
+
+    <div class="row" th:if="!${draftListings.isEmpty()}">
+        <div class="col-12">
+            <div th:replace="~{__components/listing :: listing-list-widget(${draftListings}, 'DRAFT')}"></div>
+        </div>
+    </div>
+    <div class="row" th:if="!${activeListings.isEmpty()}">
+        <div class="col-12">
+            <div th:replace="~{__components/listing :: listing-list-widget(${activeListings}, 'ACTIVE')}"></div>
+        </div>
+    </div>
+    <div class="row" th:if="!${offerlistings.isEmpty()}">
+        <div class="col-12">
+            <div
+                th:replace="~{__components/listing :: listing-list-widget(${offerlistings}, 'ACTIVE_WITH_OFFER')}"></div>
+        </div>
+    </div>
+    <div class="row" th:if="!${pendingListings.isEmpty()}">
+        <div class="col-12">
+            <div th:replace="~{__components/listing :: listing-list-widget(${pendingListings}, 'PENDING')}"></div>
+        </div>
+    </div>
 </div>
 
 </body>

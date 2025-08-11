@@ -16,6 +16,7 @@ import java.time.LocalDate
 import java.util.Date
 
 data class ListingModel(
+    val heroImageUrl: String? = null,
     val id: Long = -1,
     val status: ListingStatus = ListingStatus.UNKNOWN,
     val listingNumber: String = "",
@@ -39,7 +40,7 @@ data class ListingModel(
     val address: AddressModel? = null,
     val geoLocation: GeoLocationModel? = null,
     val agentRemarks: String? = null,
-    val sellerRemarks: String? = null,
+    val publicRemarks: String? = null,
     val price: MoneyModel? = null,
     val securityDeposit: MoneyModel? = null,
     val leaseTerm: Int? = null,
@@ -55,6 +56,7 @@ data class ListingModel(
     val description: String? = null,
     val published: Date? = null,
     val daysInMarket: Int? = null,
+    val publicUrl: String? = null
 ) {
     val geoLocationUrl: String?
         get() = geoLocation?.let { geo ->

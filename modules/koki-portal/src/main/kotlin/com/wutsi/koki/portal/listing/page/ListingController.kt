@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.listing.page
 
 import com.wutsi.blog.portal.common.model.MoneyModel
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.listing.dto.BasementType
 import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
@@ -30,8 +31,12 @@ import java.time.LocalDate
 class ListingController : AbstractListingDetailsController() {
     @GetMapping("/{id}")
     fun show(@PathVariable id: Long, model: Model): String {
-        val listing = loadListing(id)
+        val listing = findListing(id)
         model.addAttribute("listing", listing)
+        model.addAttribute(
+            "composeUrl",
+            "/message/compose&to-user-id=${listing.sellerAgentUser.id}&owner-id=$id&owner-type=${ObjectType.LISTING}"
+        )
 
         model.addAttribute(
             "page",
@@ -45,13 +50,13 @@ class ListingController : AbstractListingDetailsController() {
 
     @GetMapping("/{id}/details")
     fun details(@RequestParam id: Long, model: Model): String {
-        val listing = loadListing(id)
+        val listing = findListing(id)
         model.addAttribute("listing", listing)
-        model.addAttribute("amenityCategories", loadAmenityCategories(listing))
+        model.addAttribute("amenityCategories", findAmenityCategories(listing))
         return "listings/details"
     }
 
-    private fun loadListing(id: Long): ListingModel {
+    private fun findListing(id: Long): ListingModel {
         return ListingModel(
             id = id,
             listingNumber = "2024.1.00001",
@@ -73,8 +78,8 @@ class ListingController : AbstractListingDetailsController() {
             geoLocation = GeoLocationModel(longitude = 45.506535014340116, latitude = -73.62631210301535),
             year = 1990,
             agentRemarks = "This is the remark of the agent",
-            sellerRemarks = null,
-            price = MoneyModel(value = 1500.0, currency = "CA", text = "$1500,00"),
+            publicRemarks = null,
+            price = MoneyModel(value = 1500.0, currency = "CA", text = "$1,500.00"),
             level = 1,
             floors = 3,
             unit = "303",
@@ -107,16 +112,20 @@ class ListingController : AbstractListingDetailsController() {
             sellerAgentCommission = 6.0,
             buyerAgentCommission = 2.5,
             sellerAgentUser = UserModel(
-                displayName = "Roger Milla",
-                email = "roger.milla@gmail.com",
+                id = 333,
+                displayName = "Ray Sponsible",
+                employer = "Courtier Immobilier SARL",
+                phone = "+15147580100",
+                photoUrl = "https://picsum.photos/128/128"
             ),
             status = ListingStatus.ACTIVE,
             fenceType = FenceType.CONCRETE,
             daysInMarket = 15,
+            publicUrl = "https://www.realtor.ca/immobilier/28714279/5750-rue-carriere-brossard-noms-de-rues-c#view=neighbourhood"
         )
     }
 
-    private fun loadAmenityCategories(listing: ListingModel): List<CategoryModel> {
+    private fun findAmenityCategories(listing: ListingModel): List<CategoryModel> {
         return listOf(
             CategoryModel(id = 11, name = "Essentiels de base"),
             CategoryModel(id = 22, name = "Cuisine et salle à manger"),

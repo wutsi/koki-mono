@@ -150,16 +150,21 @@
 
 
 <div class="margin-top padding-top border-top">
-    <div th:if="${listing.sellerRemarks}">
+    <h4 th:text="#{page.listing.show.remarks}">NAME</h4>
+    <div>
         <div class="margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.public-remarks}">KEY</b>
-            <div th:text="${listing.sellerRemarks}">RAY</div>
-            <i th:if="!${listing.sellerName}" th:text="#{page.listing.show.no-remark}">NONE</i>
+            <div>
+                <span th:if="${listing.publicRemarks}" th:text="${listing.publicRemarks}">VALE</span>
+                <i th:if="!${listing.publicRemarks}" th:text="#{page.listing.show.no-remark}">NONE</i>
+            </div>
         </div>
         <div class="margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.agent-remarks}">KEY</b>
-            <div th:text="${listing.agentRemarks}">RAY</div>
-            <i th:if="!${listing.agentRemarks}" th:text="#{page.listing.show.no-remark}">NONE</i>
+            <div>
+                <span th:if="${listing.agentRemarks}" th:text="${listing.agentRemarks}">VALE</span>
+                <i th:if="!${listing.agentRemarks}" th:text="#{page.listing.show.no-remark}">NONE</i>
+            </div>
         </div>
         <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.buyerAgentCommission}">
             <b class="text-small" th:text="#{page.listing.buyer-agent-commission}">KEY</b>
