@@ -64,17 +64,21 @@ data class ListingModel(
         }
 
     val readOnly: Boolean
-        get() = statusClosed
+        get() = statusOffMarket
 
     val statusDraft: Boolean
         get() = status == ListingStatus.DRAFT
 
-    val statusActive: Boolean
+    val statusOnMarket: Boolean
         get() = status == ListingStatus.ACTIVE ||
             status == ListingStatus.ACTIVE_WITH_OFFER ||
             status == ListingStatus.PENDING
 
-    val statusClosed: Boolean
+    val statusSuccessfulTransaction: Boolean
+        get() = status == ListingStatus.SOLD ||
+            status == ListingStatus.RENTED
+
+    val statusOffMarket: Boolean
         get() = status == ListingStatus.SOLD ||
             status == ListingStatus.RENTED ||
             status == ListingStatus.EXPIRED ||

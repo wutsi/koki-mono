@@ -20,7 +20,8 @@
                             </div>
 
                             <div class="section-item">
-                                <div class="btn-group" role="group">
+                                <label class="title" th:text="#{page.listing.listing-type}">TYPE</label>
+                                <div class="btn-group margin-top-small" role="group">
                                     <div th:each="listingType : ${listingTypes}"
                                          th:if="${listingType.name() != 'UNKNOWN'}"
                                          th:remove="tag">
@@ -51,9 +52,11 @@
                                 </div>
                             </div>
 
-                            <div class="section-item flex flex-space-between">
-                                <div>&nbsp;</div>
-                                <button class="btn btn-primary" th:text="#{button.next}" type="submit">NEXT</button>
+                            <div class="section-item text-right">
+                                <button class="btn btn-primary w-100-mobile" disabled id="btn-next"
+                                        th:text="#{button.next}" type="submit">
+                                    NEXT
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -63,5 +66,29 @@
     </div>
 </div>
 
+<script>
+    let listingType = 0;
+    let propertyType = 0;
+
+    document.querySelectorAll(".btn-check")
+        .forEach((item) => {
+            item.addEventListener("change", on_change);
+        });
+
+    function on_change() {
+        console.log('on_change()', event.target);
+
+        const elt = event.target;
+        const name = elt.getAttribute("name");
+        if (name === "listingType") {
+            listingType = 1;
+        } else if (name === "propertyType") {
+            propertyType = 1;
+        }
+
+        const btn = document.getElementById('btn-next');
+        btn.disabled = (listingType === 0) || (propertyType === 0);
+    }
+</script>
 </body>
 </html>

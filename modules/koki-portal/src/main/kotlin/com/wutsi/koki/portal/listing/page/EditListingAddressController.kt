@@ -43,7 +43,7 @@ class EditListingAddressController : AbstractListingController() {
             )
         )
 
-        return "listings/address"
+        return "listings/edit-address"
     }
 
     @PostMapping

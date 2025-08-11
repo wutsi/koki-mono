@@ -34,7 +34,7 @@ class EditListingContractController : AbstractListingController() {
             )
         )
 
-        return "listings/contract"
+        return "listings/edit-contract"
     }
 
     @PostMapping

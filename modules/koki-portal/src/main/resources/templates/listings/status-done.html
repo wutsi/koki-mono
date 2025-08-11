@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('listing')}"></div>
+
+<div class="container-fluid padding-bottom-8x">
+    <div class="row margin-top-4x">
+        <div class="col-12 col-md-6 offset-md-3">
+            <div class="widget">
+                <div class="widget-body text-center">
+                    <h1 class="margin-none success">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </h1>
+                    <div class="margin-top text-larger"
+                         th:utext="#{page.listing.status.done(${listing.id}, ${listing.listingNumber}, #{'listing-status.' + ${listing.status}})}">
+                        DESCRIPTION
+                    </div>
+                    <div class="margin-top"
+                         th:if="${listing.statusSuccessfulTransaction}"
+                         th:utext="#{page.listing.status.done.sold}">
+                        CONGRATS
+                    </div>
+                    <div class="margin-top"
+                         th:if="${listing.statusOffMarket}"
+                         th:utext="#{page.listing.status.done.off-market}">
+                        OFF_MARKET
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"
+        th:if="${listing.statusSuccessfulTransaction}"></script>
+<script th:if="${listing.statusSuccessfulTransaction}">
+    const jsConfetti = new JSConfetti();
+    jsConfetti.addConfetti();
+</script>
+</body>
+</html>

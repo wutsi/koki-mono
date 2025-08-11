@@ -23,15 +23,20 @@
                             </div>
 
                             <div class="section-item">
-                                <label class="title" th:text="#{page.listing.seller}">SELLER</label>
-                                <input class="form-control" maxlength="100" th:field="*{sellerName}"
+                                <label class="title">
+                                    <span th:text="#{page.listing.seller}">SELLER</span>
+                                    <span class="required">*</span>
+                                </label>
+                                <input class="form-control" maxlength="100" required th:field="*{sellerName}"
                                        th:placeholder="#{page.listing.name}"/>
 
                                 <input class="form-control margin-top-small margin-bottom-small" maxlength="255"
+                                       required
                                        th:field="*{sellerEmail}"
                                        th:placeholder="#{page.listing.email}" type="email"/>
 
-                                <input class="form-control" th:data-country="${form.country}"
+                                <input class="form-control" required
+                                       th:data-country="${form.country}"
                                        th:field="*{sellerPhone}"
                                        type="tel"/>
                             </div>

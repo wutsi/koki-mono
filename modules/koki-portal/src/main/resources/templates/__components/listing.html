@@ -46,11 +46,11 @@
                         <span>-</span>
                         <span th:text="#{'property-type.' + ${listing.propertyType}}">PROPERTY_TYPE</span>
                     </div>
-                    <div class="text-nowrap listing-price d-block d-sm-none">
+                    <b class="text-nowrap listing-price d-block d-sm-none">
                         <span th:text="${listing.price}">$$</span>
                         <span th:if="${listing.listingType.name() == 'RENTAL'}"
                               th:text="#{page.listing.rental-price-suffix}">00</span>
-                    </div>
+                    </b>
                 </div>
             </div>
             <div>

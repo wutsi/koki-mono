@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.listing.form
 import com.wutsi.koki.listing.dto.BasementType
 import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
+import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
@@ -10,6 +11,7 @@ import java.time.LocalDate
 
 data class ListingForm(
     val id: Long = -1,
+    val status: ListingStatus = ListingStatus.UNKNOWN,
     val listingType: ListingType? = null,
     val propertyType: PropertyType? = null,
     val bedrooms: Int? = null,
@@ -47,4 +49,11 @@ data class ListingForm(
     val contractStartDate: LocalDate? = null,
     val contractEndDate: LocalDate? = null,
     val contractRemarks: String? = null,
+    val buyerName: String? = null,
+    val buyerEmail: String? = null,
+    val buyerPhone: String? = null,
+    val buyerAgentUserId: Long? = null,
+    val transactionDate: LocalDate? = null,
+    val transactionRemarks: String? = null,
+    val closureReason: String? = null,
 )

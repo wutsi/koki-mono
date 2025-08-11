@@ -52,7 +52,7 @@ class EditListingAmenitiesController(
             .groupBy { amenity -> amenity.categoryId }
         model.addAttribute("amenitiesByCategoryId", amenities)
 
-        return "listings/amenities"
+        return "listings/edit-amenities"
     }
 
     @PostMapping

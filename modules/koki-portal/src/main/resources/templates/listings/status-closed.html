@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('listing')}"></div>
+
+<div class="container-fluid padding-bottom-8x">
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <h1 th:text="#{page.listing.status.title}">TITLE</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div th:replace="~{__components/listing :: listing-summary(${listing})}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <form class="form" method="post" th:action="@{/listings/status/closed}" th:object="${form}">
+                <input th:field="*{id}" type="hidden"/>
+                <input th:field="*{status}" type="hidden"/>
+
+                <div class="section">
+                    <div class="section-body">
+                        <div class="section-item">
+                            <label class="title" th:text="#{page.listing.new-status}">Status</label>
+                            <span th:replace="~{__components/listing :: listing-status-badge(${form.status})}"></span>
+                        </div>
+                        <div class="section-item">
+                            <label class="title" th:text="#{page.listing.closure-reason}">LEASE</label>
+                            <textarea class="form-control" maxlength="1000" rows="3" th:field="*{closureReason}">
+                                REMARKS
+                            </textarea>
+                        </div>
+                        <div class="section-item">
+                            <div class="alert alert-warning">
+                                <div class="form-check">
+                                    <input class="form-check-input" id="chk-confirmation" required type="checkbox">
+                                    <label class="form-check-label" for="chk-confirmation"
+                                           th:text="#{page.listing.status.confirmation}">CONFIRMATION</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-item">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-6 padding-left-none">
+                                        <a class="btn btn-light w-100-mobile"
+                                           th:href="'/listings/status?id=' + ${listing.id}"
+                                           th:text="#{button.previous}">
+                                            PREVIOUS
+                                        </a>
+                                    </div>
+                                    <div class="col-6 padding-right-none text-right">
+                                        <button class="btn btn-primary w-100-mobile" th:text="#{button.submit}"
+                                                type="submit">
+                                            SUBMIT
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.listing.page
 
+import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.listing.form.ListingForm
 import com.wutsi.koki.portal.security.RequiresPermission
@@ -12,30 +13,35 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
-@RequestMapping("/listings/edit/geo-location")
+@RequestMapping("/listings/status/closed")
 @RequiresPermission(["listing:manage", "listing:full_access"])
-class EditListingGeoLocationController : AbstractListingController() {
+class StatusClosedListingController : AbstractListingController() {
     @GetMapping
-    fun edit(@RequestParam id: Long, model: Model): String {
+    fun sold(@RequestParam id: Long, @RequestParam status: ListingStatus, model: Model): String {
+        val listing = findListing(id)
+        model.addAttribute("listing", listing)
         model.addAttribute(
             "form",
             ListingForm(
                 id = id,
-            )
-        )
-        model.addAttribute(
-            "page",
-            createPageModel(
-                name = PageName.LISTING_EDIT_GEOLOCATION,
-                title = getMessage("page.listing.edit.meta.title"),
+                listingType = listing.listingType,
+                country = listing.address?.city?.country,
+                status = status,
             )
         )
 
-        return "listings/edit-geo-location"
+        model.addAttribute(
+            "page",
+            createPageModel(
+                name = PageName.LISTING_STATUS_SOLD,
+                title = getMessage("page.listing.status.meta.title"),
+            )
+        )
+        return "listings/status-closed"
     }
 
     @PostMapping
     fun submit(@ModelAttribute form: ListingForm, model: Model): String {
-        return "redirect:/listings/edit/price?id=${form.id}"
+        return "redirect:/listings/status/done?id=${form.id}&status=${form.status}"
     }
 }
