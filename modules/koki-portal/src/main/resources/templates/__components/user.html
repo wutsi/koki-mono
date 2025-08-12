@@ -11,9 +11,17 @@
         const selector = /*[[${id}]]*/ '';
         const roleId = /*[[${roleId}]]*/ -1;
         const permission = /*[[${permission}]]*/ '';
-        const url = '/users/selector/search?'
-            + (roleId ? '&role-id=' + roleId : '')
-            + (permission ? '&permission=' + encodeURIComponent(permission) : '');
+
+        let url = '/users/selector/search?'
+            + (roleId ? '&role-id=' + roleId : '');
+
+        const parts = permission ? permission.split(",") : null;
+        if (parts && parts.length > 0) {
+            for (var i = 0; i < parts.length; i++) {
+                url = url + '&permission=' + encodeURIComponent(parts[i]);
+            }
+        }
+
         $('#' + selector).select2({
             ajax: {
                 url: url,

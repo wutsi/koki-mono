@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('listing')}"></div>
+
+<div class="container-fluid padding-bottom-8x">
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <h1 th:text="#{page.listing.status.title}">TITLE</h1>
+                    <div th:utext="#{page.listing.status.description}">DESCRIPTION</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div th:replace="~{__components/listing :: listing-summary(${listing})}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <form class="form" method="post" th:action="@{/listings/status}" th:object="${form}">
+                <input th:field="*{id}" type="hidden"/>
+
+                <div class="section">
+                    <div class="section-body">
+                        <div class="section-item">
+                            <h5 th:text="#{page.listing.status.on-market-status}">TITLE</h5>
+                            <div th:text="#{page.listing.status.on-market-status-help}">HELP</div>
+
+                            <div class="form-check margin-top"
+                                 th:each="status : ${statusesOnMarket}"
+                                 th:if="${status} != ${form.status}"
+                            >
+                                <input class="form-check-input" required
+                                       th:field="*{status}"
+                                       th:id="'chk-status-' + ${status}"
+                                       th:value="${status}"
+                                       type="radio"
+                                />
+                                <label class="form-check-label" th:for="'chk-status-' + ${status}">
+                                    <b th:text="#{'listing-status.' + ${status}}">CONFIRMATION</b>
+                                </label>
+                                <div class="text-small" th:text="#{'listing-status.' + ${status} + '.help'}">HELP</div>
+                            </div>
+                        </div>
+                        <div class="section-item">
+                            <h5 th:text="#{page.listing.status.off-market-status}">TITLE</h5>
+                            <div class="margin-bottom" th:text="#{page.listing.status.off-market-status-help}">HELP
+                            </div>
+
+                            <div class="form-check margin-top"
+                                 th:each="status : ${statusesOffMarket}"
+                                 th:if="${status} != ${form.status}"
+                            >
+                                <input class="form-check-input" required
+                                       th:field="*{status}"
+                                       th:id="'chk-status-' + ${status}"
+                                       th:value="${status}"
+                                       type="radio"
+                                />
+                                <label class="form-check-label" th:for="'chk-status-' + ${status}">
+                                    <b th:text="#{'listing-status.' + ${status}}">CONFIRMATION</b>
+                                </label>
+                                <div class="text-small" th:text="#{'listing-status.' + ${status} + '.help'}">HELP</div>
+                            </div>
+                        </div>
+
+                        <div class="section-item">
+                            <button class="btn btn-primary w-100-mobile" th:text="#{button.next}" type="submit">
+                                NEXT
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

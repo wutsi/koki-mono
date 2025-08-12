@@ -152,12 +152,3 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
     display: flex;
     justify-content: space-between;
 }
-
-@media only screen
-and (max-width: 480px)
-and (orientation: portrait) {
-    .form {
-        width: 98%;
-    }
-}
-

@@ -42,14 +42,21 @@ class RefDataMapper : TenantAwareMapper() {
     }
 
     fun toCategoryModel(entity: Category): CategoryModel {
+        val language = LocaleContextHolder.getLocale().language
         return CategoryModel(
             id = entity.id,
-            name = entity.name,
             parentId = entity.parentId,
             type = entity.type,
             level = entity.level,
             active = entity.active,
-            longName = entity.longName,
+            name = when (language) {
+                "fr" -> entity.nameFr ?: entity.name
+                else -> entity.name
+            },
+            longName = when (language) {
+                "fr" -> entity.longNameFr ?: entity.longName
+                else -> entity.longName
+            },
         )
     }
 
@@ -90,12 +97,16 @@ class RefDataMapper : TenantAwareMapper() {
     }
 
     fun toAmenityModel(entity: Amenity): AmenityModel {
+        val language = LocaleContextHolder.getLocale().language
         return AmenityModel(
             id = entity.id,
             active = entity.active,
             categoryId = entity.categoryId,
-            name = entity.name,
             icon = entity.icon,
+            name = when (language) {
+                "fr" -> entity.nameFr ?: entity.name
+                else -> entity.name
+            },
         )
     }
 }

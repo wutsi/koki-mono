@@ -31,7 +31,7 @@ class EditListingRemarksController : AbstractListingController() {
             )
         )
 
-        return "listings/remarks"
+        return "listings/edit-remarks"
     }
 
     @PostMapping

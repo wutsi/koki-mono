@@ -35,7 +35,7 @@ class EditListingPriceController : AbstractListingController() {
             )
         )
 
-        return "listings/price"
+        return "listings/edit-price"
     }
 
     @PostMapping

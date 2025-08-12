@@ -67,6 +67,10 @@ object PageName {
     const val LISTING_EDIT_REMARK = "listing.edit.remark"
     const val LISTING_LIST = "page.listing.list"
     const val LISTING_PUBLISH = "page.listing.publish"
+    const val LISTING_PUBLISH_DONE = "page.listing.publish.done"
+    const val LISTING_STATUS = "page.listing.status"
+    const val LISTING_STATUS_DONE = "page.listing.status.done"
+    const val LISTING_STATUS_SOLD = "page.listing.status.sold"
 
     const val LOGIN = "page.login"
 
