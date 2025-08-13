@@ -43,6 +43,11 @@ body {
     text-align: center;
 }
 
+.text-left {
+    text-align: left;
+}
+
+
 .text-nowrap {
     text-wrap: nowrap;
 }

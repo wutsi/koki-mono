@@ -35,7 +35,7 @@
                                         </div>
                                     </div>
                                     <input class="form-control" maxlength="100" required th:field="*{name}"
-                                           th:placeholder="#{page.signup-profile.name}"/>
+                                           th:placeholder="#{page.signup.name}"/>
                                 </div>
                             </div>
                             <div class="section-item">
@@ -46,24 +46,40 @@
                                         </div>
                                     </div>
                                     <input class="form-control" maxlength="255" required th:field="*{email}"
-                                           th:placeholder="#{page.signup-profile.email}"
+                                           th:placeholder="#{page.signup.email}"
                                            type="email"/>
+                                    <div class="margin-top-small text-small" th:text="#{page.signup.email.help}">
+                                        EMAIL_HELP
+                                    </div>
                                 </div>
                             </div>
                             <div class="section-item">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
-                                            <i class="fa-brands fa-whatsapp"></i>
+                                            <i class="fa-solid fa-mobile-screen"></i>
                                         </div>
                                     </div>
-                                    <input maxlength="30" th:data-country="*{country}" th:field="*{whatsapp}"
+                                    <input maxlength="30" required th:data-country="*{country}" th:field="*{mobile}"
                                            type="tel"/>
-                                </div>
-                                <div class="margin-top-small text-small"
-                                     th:text="#{page.signup-profile.whatsapp}">WHATSAPP
+                                    <div class="margin-top-small text-small" th:text="#{page.signup.mobile.help}">
+                                        MOBILE_HELP
+                                    </div>
                                 </div>
                             </div>
+                            <div class="section-item">
+                                <select class="select-form" th:field="*{categoryId}">
+                                    <option th:text="#{page.signup.category}" value=""></option>
+                                    <option th:each="category : ${categories}"
+                                            th:text="${category.name}"
+                                            th:value="${category.id}"></option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <input class="form-control" maxlength="50" th:field="*{employer}"
+                                       th:placeholder="#{page.signup.employer}"/>
+                            </div>
+
                             <div class="section-item">
                                 <select required th:field="*{country}">
                                     <option value=""></option>
@@ -83,8 +99,8 @@
                                         </option>
                                     </select>
                                 </div>
-                                <div class="margin-top-small text-small"
-                                     th:text="#{page.signup-profile.location}">LOCATION
+                                <div class="margin-top-small text-small" th:text="#{page.signup.location.help}">
+                                    LOCATION_HELP
                                 </div>
                             </div>
                             <div class="section-item">

@@ -4,7 +4,7 @@ import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.file.service.FileService
-import com.wutsi.koki.portal.signup.form.PhotoForm
+import com.wutsi.koki.portal.signup.form.SignupForm
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -22,7 +22,7 @@ class PhotoController(
     @GetMapping
     fun index(model: Model): String {
         model.addAttribute("uploadUrl", fileService.uploadUrl(type = FileType.IMAGE))
-        model.addAttribute("form", PhotoForm())
+        model.addAttribute("form", SignupForm())
         model.addAttribute(
             "page",
             createPageModel(
@@ -41,7 +41,7 @@ class PhotoController(
     }
 
     @PostMapping
-    fun submit(@ModelAttribute form: PhotoForm, model: Model): String {
+    fun submit(@ModelAttribute form: SignupForm, model: Model): String {
         return "redirect:/signup/done"
     }
 }

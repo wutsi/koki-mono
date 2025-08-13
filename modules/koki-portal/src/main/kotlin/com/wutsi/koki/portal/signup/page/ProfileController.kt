@@ -2,8 +2,8 @@ package com.wutsi.koki.portal.signup.page
 
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
-import com.wutsi.koki.portal.signup.form.ProfileForm
-import io.lettuce.core.KillArgs.Builder.id
+import com.wutsi.koki.portal.refdata.model.CategoryModel
+import com.wutsi.koki.portal.signup.form.SignupForm
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -28,7 +28,7 @@ class ProfileController : AbstractPageController() {
 
         model.addAttribute(
             "form",
-            ProfileForm(
+            SignupForm(
                 name = "Ray Sponsible",
                 email = "ray.sponsible@gmail.com",
                 country = city?.country
@@ -45,11 +45,23 @@ class ProfileController : AbstractPageController() {
             )
         )
         loadCountries(model)
+        loadCategories(model)
         return "signup/profile"
     }
 
     @PostMapping
-    fun submit(@ModelAttribute form: ProfileForm, model: Model): String {
+    fun submit(@ModelAttribute form: SignupForm, model: Model): String {
         return "redirect:/signup/photo"
+    }
+
+    private fun loadCategories(model: Model) {
+        model.addAttribute(
+            "categories",
+            listOf(
+                CategoryModel(id = 10, name = "Agent Immobilier"),
+                CategoryModel(id = 11, name = "Intermédiaire"),
+                CategoryModel(id = 19, name = "Autre"),
+            )
+        )
     }
 }
