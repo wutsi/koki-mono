@@ -6,7 +6,7 @@ class KokiMessage {
             `/messages/compose?to-user-id=${toUserId}&owner-id=${ownerId}&owner-type=${ownerType}`,
             'Send Message',
             kokiMessage._on_compose_opened,
-            null /*kokiMessage._on_compose_closed*/);
+            null);
     }
 
     _on_compose_opened() {
@@ -14,13 +14,6 @@ class KokiMessage {
 
         document.getElementById('btn-submit').addEventListener('click', kokiMessage.send);
         document.getElementById('btn-cancel').addEventListener('click', koki.widgets.modal.close);
-    }
-
-    _on_compose_closed() {
-        console.log('KokiMessage._on_compose_closed()');
-
-        document.getElementById('btn-submit').removeEvent('click', kokiMessage.send);
-        document.getElementById('btn-cancel').removeEventListener('click', koki.widgets.modal.close);
     }
 
     send() {

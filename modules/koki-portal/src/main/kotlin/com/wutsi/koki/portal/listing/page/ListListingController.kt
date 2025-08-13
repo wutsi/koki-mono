@@ -5,6 +5,7 @@ import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.portal.common.page.PageName
+import com.wutsi.koki.portal.listing.form.ListingFilterForm
 import com.wutsi.koki.portal.listing.model.ListingModel
 import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
@@ -13,6 +14,8 @@ import com.wutsi.koki.refdata.dto.LocationType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
@@ -20,15 +23,34 @@ import org.springframework.web.bind.annotation.RequestMapping
 @RequiresPermission(["listing", "listing:full_access"])
 class ListListingController : AbstractListingController() {
     @GetMapping
-    fun list(model: Model): String {
+    fun list(@ModelAttribute form: ListingFilterForm, model: Model): String {
         val listings = loadListings()
-        model.addAttribute("listings", listings)
-        model.addAttribute("draftListings", listings.filter { listing -> listing.status == ListingStatus.DRAFT })
-        model.addAttribute("activeListings", listings.filter { listing -> listing.status == ListingStatus.ACTIVE })
-        model.addAttribute(
-            "offerlistings",
-            listings.filter { listing -> listing.status == ListingStatus.ACTIVE_WITH_OFFER })
-        model.addAttribute("pendingListings", listings.filter { listing -> listing.status == ListingStatus.PENDING })
+        if (!form.isEmpty()) {
+            model.addAttribute("form", form)
+        }
+        return list(listings, model)
+    }
+
+    @GetMapping("/filter")
+    fun filter(model: Model): String {
+        model.addAttribute("form", ListingFilterForm())
+        model.addAttribute("listingTypes", ListingType.entries)
+        model.addAttribute("propertyTypes", PropertyType.entries)
+        model.addAttribute("rooms", listOf("1", "1+", "2", "2+", "3", "3+", "4", "4+"))
+
+        return "listings/filter"
+    }
+
+    @PostMapping
+    fun search(@ModelAttribute form: ListingFilterForm, model: Model): String {
+        model.addAttribute("form", form)
+
+        val listings = loadListings()
+        return list(listings, model)
+    }
+
+    private fun list(listings: List<ListingModel>, model: Model): String {
+        model.addAttribute("listings", listings.sortedBy { listing -> listing.status.ordinal })
 
         model.addAttribute(
             "page",
@@ -103,6 +125,7 @@ class ListListingController : AbstractListingController() {
                 ),
                 price = MoneyModel(value = 40000.0, currency = "CA", text = "$40,000.00"),
                 heroImageUrl = "https://picsum.photos/600/600",
+                totalActiveMessages = 2,
             ),
             ListingModel(
                 id = 21,
@@ -123,6 +146,7 @@ class ListListingController : AbstractListingController() {
                 ),
                 price = MoneyModel(value = 149000.0, currency = "CA", text = "$149,000.00"),
                 heroImageUrl = "https://picsum.photos/600/600",
+                totalActiveMessages = 1,
             ),
             ListingModel(
                 id = 21,
@@ -143,6 +167,7 @@ class ListListingController : AbstractListingController() {
                 ),
                 price = MoneyModel(value = 750.0, currency = "CA", text = "$750.00"),
                 heroImageUrl = "https://picsum.photos/600/600",
+                totalActiveMessages = 7,
             ),
 
             ListingModel(
@@ -165,6 +190,7 @@ class ListListingController : AbstractListingController() {
                 ),
                 price = MoneyModel(value = 1250000.0, currency = "CA", text = "$1,250,000.00"),
                 heroImageUrl = "https://picsum.photos/600/600",
+                totalActiveMessages = 2,
             ),
 
             ListingModel(

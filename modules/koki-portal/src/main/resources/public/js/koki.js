@@ -445,7 +445,12 @@ class ModalWidget {
                                 }
 
                                 // Set the title
-                                document.getElementById("koki-modal-title").innerHTML = title;
+                                if (title && title.length > 0) {
+                                    document.querySelector("#koki-modal .modal-header").style.display = 'block';
+                                    document.getElementById("koki-modal-title").innerHTML = title;
+                                } else {
+                                    document.querySelector("#koki-modal .modal-header").style.display = 'none';
+                                }
 
                                 // Show
                                 const modal = new bootstrap.Modal('#koki-modal');

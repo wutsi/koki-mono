@@ -11,6 +11,12 @@
 <div class="container-fluid padding-bottom-8x">
     <div class="row">
         <div class="col-12">
+            <div th:replace="~{__components/listing :: listing-breadcrumb(${listing})}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
             <div class="widget">
                 <div class="widget-body flex flex-space-between">
                     <div>&nbsp;</div>
@@ -109,7 +115,7 @@
                                     th:data-bs-target="'#pills-' + ${tab.name}"
                                     th:id="'pills-' + ${tab.name} + '-tab'"
                                     th:if="${tab.tabUrl}"
-                                    th:text="${tab.title}"
+                                    th:text="#{'module.' + ${tab.name}}"
                                     type="button">
                                 TAB
                             </button>

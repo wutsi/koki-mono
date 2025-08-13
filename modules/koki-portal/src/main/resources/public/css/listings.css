@@ -11,6 +11,11 @@ table tr.listing td img.hero-image {
 
 .listing-price {
     color: darkblue;
+    font-weight: bold;
+}
+
+h1.listing-price {
+    color: darkblue;
 }
 
 .contact-sticky-bar {
@@ -22,4 +27,16 @@ table tr.listing td img.hero-image {
     margin-left: 0;
     z-index: 1000;
     background: white;
+}
+
+.listing-search-filter-body label {
+    font-weight: bold;
+}
+
+.listing-search-filter-body label.form-check-label {
+    font-weight: inherit;
+}
+
+.listing-search-filter-body .select2 {
+    width: 100% !important;
 }

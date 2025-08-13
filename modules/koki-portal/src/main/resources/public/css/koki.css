@@ -35,9 +35,18 @@ body {
     justify-content: space-between;
 }
 
+.flex-space-evenly {
+    justify-content: space-evenly;
+}
+
 .text-center {
     text-align: center;
 }
+
+.text-left {
+    text-align: left;
+}
+
 
 .text-nowrap {
     text-wrap: nowrap;
@@ -187,6 +196,10 @@ body {
     margin-right: 2em;
 }
 
+.w-49 {
+    width: 49%;
+}
+
 /* === NAVBAR ====== */
 .navbar {
     border-bottom: 1px solid gray;
@@ -234,6 +247,7 @@ body {
     padding-top: 0;
     padding-bottom: 0;
     background: #1D7EDF;
+    overflow: scroll;
 }
 
 #menubar ul.navbar-nav li a {
@@ -390,6 +404,18 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 .section-item input[type=tel],
 .section-item input[type=number] {
     width: auto !important;
+}
+
+.section-item .input-group input {
+    width: auto;
+}
+
+.section-item .input-group input {
+    width: auto;
+}
+
+.section-item .input-group .input-group-text > * {
+    padding: .5em;
 }
 
 .section-item .file-upload-container input[type=file] {
@@ -555,7 +581,11 @@ a.btn-back {
     padding-bottom: 0
 }
 
-.modal-dialog form input,
+.modal-dialog form input:not([type]),
+.modal-dialog form input[type=text],
+.modal-dialog form input[type=email],
+.modal-dialog form input[type=password],
+.modal-dialog form input[type=url],
 .modal-dialog form select {
     width: 100%;
     padding: 0.5em;
@@ -719,10 +749,19 @@ div.CodeMirror {
 /*  MEDIA QUERIES                                                           */
 /*                                                                          */
 /* ======================================================================== */
-/* Large Tablet */
-@media only screen and (max-width: 1024px) and (orientation: portrait) {
+/* Large */
+@media only screen and (max-width: 992px) and (orientation: portrait) {
     .widget-body {
         padding: .5em;
+    }
+
+    .section-item {
+        padding: .5em;
+    }
+
+    .section-item label.title {
+        font-weight: bold;
+        font-size: inherit;
     }
 
     #tab-details-content .container-fluid {
@@ -730,15 +769,15 @@ div.CodeMirror {
     }
 }
 
-/* Mini Tablet */
-@media only screen and (max-width: 820px) and (orientation: portrait) {
+/* Medium */
+@media only screen and (max-width: 768px) and (orientation: portrait) {
     .w-100-mobile {
         width: 100%;
     }
 }
 
-/* Mobile phone */
-@media only screen and (max-width: 479px) and (orientation: portrait) {
+/* Small */
+@media only screen and (max-width: 576px) {
     h1.entity-title img {
         height: 24px;
         width: 24px;
@@ -769,5 +808,10 @@ div.CodeMirror {
         border: 0;
         border-top: 1px solid gray;
         border-bottom: 1px solid gray;
+    }
+
+    .nav button.nav-link {
+        padding: .5em;
+        font-size: smaller;
     }
 }
