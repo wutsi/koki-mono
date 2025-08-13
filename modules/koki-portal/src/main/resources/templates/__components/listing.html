@@ -2,15 +2,32 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
+<div class="widget" th:fragment="listing-breadcrumb(listing)">
+    <div class="widget-body">
+        <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/" th:text="#{module.home}">HOME</a></li>
+                <li class="breadcrumb-item" th:if="${listing}"><a href="/listings"
+                                                                  th:text="#{module.listing}">LISTING</a></li>
+                <li class="breadcrumb-item active" th:if="${listing}">
+                    <span th:text="${listing.listingNumber}">NUMBER</span>
+                </li>
+                <li class="breadcrumb-item active" th:if="!${listing}" th:text="#{module.listing}">Accounts</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+
 <div th:fragment="listing-status-badge(status)" th:remove="tag">
     <span class="badge text-bg-secondary"
           th:if="${status.name() == 'DRAFT'}"
           th:text="#{'listing-status.' + ${status}}">A LOUER</span>
 
-    <span class="badge text-bg-primary" th:if="${status.name() == 'ACTIVE'} OR ${status.name() == 'ACTIVE_WITH_OFFER'}"
+    <span class="badge text-bg-primary" th:if="${status.name() == 'ACTIVE'}"
           th:text="#{'listing-status.' + ${status}}">A LOUER</span>
 
-    <span class="badge text-bg-success" th:if="${status.name() == 'PENDING'}"
+    <span class="badge text-bg-warning" th:if="${status.name() == 'ACTIVE_WITH_OFFER'} OR ${status.name() == 'PENDING'}"
           th:text="#{'listing-status.' + ${status}}">A LOUER</span>
 
     <span class="badge text-bg-success" th:if="${status.name() == 'RENTED'} OR ${status.name() == 'SOLD'}"
@@ -31,10 +48,14 @@
             <span th:text="'#' + ${listing.listingNumber}">00000</span>
         </a>
     </td>
-    <td class="d-none d-sm-table-cell" width="15%">
-        <a th:href="'/listings/' + ${listing.id}"
-           th:text="#{'property-type.' + ${listing.propertyType}}">
+    <td class="d-none d-md-table-cell" width="10%">
+        <a th:href="'/listings/' + ${listing.id}" th:text="#{'property-type.' + ${listing.propertyType}}">
             PROPERTY_TYPE
+        </a>
+    </td>
+    <td class="d-none d-md-table-cell" width="10%">
+        <a th:href="'/listings/' + ${listing.id}">
+            <span th:replace="~{__components/listing :: listing-status-badge(${listing.status})}"></span>
         </a>
     </td>
     <td width="30%">
@@ -43,8 +64,6 @@
                 <div class="flex flex-space-between">
                     <div>
                         <span th:text="'#' + ${listing.listingNumber}">00000</span>
-                        <span>-</span>
-                        <span th:text="#{'property-type.' + ${listing.propertyType}}">PROPERTY_TYPE</span>
                     </div>
                     <b class="text-nowrap listing-price d-block d-sm-none">
                         <span th:text="${listing.price}">$$</span>
@@ -52,6 +71,11 @@
                               th:text="#{page.listing.rental-price-suffix}">00</span>
                     </b>
                 </div>
+            </div>
+            <div class="d-block d-md-none text-small">
+                <span class="margin-right-small"
+                      th:text="#{'property-type.' + ${listing.propertyType}}">PROPERTY_TYPE</span>
+                <span th:replace="~{__components/listing :: listing-status-badge(${listing.status})}"></span>
             </div>
             <div>
                 <span th:if="${listing.address?.neighbourhood}"
@@ -64,44 +88,50 @@
                     NEIGHBORHOOD
                 </span>
             </div>
-            <div class="d-block d-sm-none">
+            <div class="d-block d-lg-none text-small">
                 <div class="flex">
                     <div class="margin-right" th:if="${listing.bedrooms}">
-                        <i class="fa-solid fa-bed"></i>
                         <span th:text="${listing.bedrooms}">00</span>
+                        <i class="fa-solid fa-bed"></i>
                     </div>
                     <div class="margin-right" th:if="${listing.bathrooms}">
-                        <i class="fa-solid fa-bath"></i>
                         <span th:text="${listing.bathrooms}">00</span>
+                        <i class="fa-solid fa-bath"></i>
                     </div>
-                    <div th:if="${listing.lotArea} OR ${listing.propertyArea}">
+                    <div class="margin-right" th:if="${listing.lotArea} OR ${listing.propertyArea}">
                         <span th:if="${listing.propertyArea}" th:text="${listing.propertyArea}">00</span>
                         <span th:if="${listing.lotArea} AND !${listing.propertyArea}" th:text="${listing.lotArea}">
                             00
                         </span>
-                        <span>m<sup>2</sup></span>
+                        m<sup>2</sup>
+                    </div>
+                    <div th:if="${listing.totalActiveMessages} AND ${listing.totalActiveMessages > 0}">
+                        <i class="fa-regular fa-message"></i>
                     </div>
                 </div>
             </div>
         </a>
     </td>
-    <td class="d-none d-sm-table-cell">
+    <td class="d-none d-lg-table-cell">
         <a th:href="'/listings/' + ${listing.id}">
             <div class="flex">
                 <div class="margin-right" th:if="${listing.bedrooms}">
-                    <i class="fa-solid fa-bed"></i>
                     <span th:text="${listing.bedrooms}">00</span>
+                    <i class="fa-solid fa-bed"></i>
                 </div>
                 <div class="margin-right" th:if="${listing.bathrooms}">
-                    <i class="fa-solid fa-bath"></i>
                     <span th:text="${listing.bathrooms}">00</span>
+                    <i class="fa-solid fa-bath"></i>
                 </div>
-                <div th:if="${listing.lotArea} OR ${listing.propertyArea}">
+                <div class="margin-right" th:if="${listing.lotArea} OR ${listing.propertyArea}">
                     <span th:if="${listing.propertyArea}" th:text="${listing.propertyArea}">00</span>
                     <span th:if="${listing.lotArea} AND !${listing.propertyArea}" th:text="${listing.lotArea}">
                             00
                         </span>
-                    <span>m<sup>2</sup></span>
+                    m<sup>2</sup>
+                </div>
+                <div th:if="${listing.totalActiveMessages} AND ${listing.totalActiveMessages > 0}">
+                    <i class="fa-regular fa-message"></i>
                 </div>
             </div>
         </a>
@@ -117,20 +147,12 @@
     </td>
 </tr>
 
-<div th:fragment="listing-list-widget(items, status)">
-    <div class="widget">
-        <div class="widget-body">
-            <div class="margin-bottom-small">
-                <b th:text="#{'listing-status.' + ${status}}">STATUS</b>
-                <span class="badge bg-secondary rounded-pill" th:text="${items.size()}">00</span>
-            </div>
-            <table class="table table-striped">
-                <tr class="listing" th:each="listing : ${items}">
-                    <div th:replace="~{__components/listing :: listing-row(${listing})}"></div>
-                </tr>
-            </table>
-        </div>
-    </div>
+<div th:fragment="listing-table(items)" th:if="!${items.isEmpty()}">
+    <table class="table table-striped">
+        <tr class="listing" th:each="listing : ${items}">
+            <div th:replace="~{__components/listing :: listing-row(${listing})}"></div>
+        </tr>
+    </table>
 </div>
 
 <div th:fragment="listing-summary(listing)" th:remove="tag">

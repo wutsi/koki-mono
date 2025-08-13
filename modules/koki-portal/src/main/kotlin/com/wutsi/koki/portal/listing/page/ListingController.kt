@@ -59,7 +59,7 @@ class ListingController : AbstractListingDetailsController() {
     private fun findListing(id: Long): ListingModel {
         return ListingModel(
             id = id,
-            listingNumber = "2024.1.00001",
+            listingNumber = "54095409",
             listingType = ListingType.SALE,
             propertyType = PropertyType.APARTMENT,
             bedrooms = 4,

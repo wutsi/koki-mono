@@ -56,7 +56,8 @@ data class ListingModel(
     val description: String? = null,
     val published: Date? = null,
     val daysInMarket: Int? = null,
-    val publicUrl: String? = null
+    val publicUrl: String? = null,
+    val totalActiveMessages: Int? = null,
 ) {
     val geoLocationUrl: String?
         get() = geoLocation?.let { geo ->

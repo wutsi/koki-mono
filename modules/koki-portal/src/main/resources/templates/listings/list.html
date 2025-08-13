@@ -9,17 +9,23 @@
 <div th:replace="~{__components/layout :: menubar('listing')}"></div>
 
 <div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/listing :: listing-breadcrumb(null)}"></div>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
                     <div class="flex flex-space-between">
+                        <div class="btn-group" role="group">&nbsp;</div>
                         <div>
-                            <a class="btn-create btn btn-primary btn-sm" href="/listings/create"
-                               th:if="${user?.canManage('listing')} OR ${user.hasFullAccess('listing')}"
-                               th:text="#{button.create_listing}">
-                                NEW
+                            <a class="btn btn-primary btn-sm" href="/listings/create" id="btn-create"
+                               th:if="${user?.canManage('listing')} OR ${user.hasFullAccess('listing')}">
+                                <i class="fa-solid fa-plus"></i>
+                                <span th:text="#{button.listing}">CREATE</span>
                             </a>
                         </div>
                     </div>
@@ -28,28 +34,31 @@
         </div>
     </div>
 
-    <div class="row" th:if="!${draftListings.isEmpty()}">
+    <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/listing :: listing-list-widget(${draftListings}, 'DRAFT')}"></div>
-        </div>
-    </div>
-    <div class="row" th:if="!${activeListings.isEmpty()}">
-        <div class="col-12">
-            <div th:replace="~{__components/listing :: listing-list-widget(${activeListings}, 'ACTIVE')}"></div>
-        </div>
-    </div>
-    <div class="row" th:if="!${offerlistings.isEmpty()}">
-        <div class="col-12">
-            <div
-                th:replace="~{__components/listing :: listing-list-widget(${offerlistings}, 'ACTIVE_WITH_OFFER')}"></div>
-        </div>
-    </div>
-    <div class="row" th:if="!${pendingListings.isEmpty()}">
-        <div class="col-12">
-            <div th:replace="~{__components/listing :: listing-list-widget(${pendingListings}, 'PENDING')}"></div>
+            <div class="widget">
+                <div class="widget-body">
+                    <div class="btn-group margin-bottom" role="group">
+                        <a class="btn btn-sm" href="/listings"
+                           th:classappend="${form} ? 'btn-light' : 'btn-secondary'"
+                           th:text="#{button.my_listings}">
+                            BUTTON
+                        </a>
+                        <a class="btn btn-sm" href="javascript: kokiListing.open_search_modal();"
+                           id="btn-search"
+                           th:classappend="!${form} ? 'btn-light' : 'btn-secondary'">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <span th:text="#{button.search}">SEARCH</span>
+                        </a>
+                    </div>
+
+                    <div th:replace="~{__components/listing :: listing-table(${listings})}"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+<div th:replace="~{__components/bootstrap :: modal}"></div>
 
 </body>
 </html>
