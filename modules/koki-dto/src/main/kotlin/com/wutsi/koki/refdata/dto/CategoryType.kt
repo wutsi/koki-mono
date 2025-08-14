@@ -6,4 +6,5 @@ enum class CategoryType {
     DIGITAL,
     PHYSICAL,
     AMENITY,
+    USER,
 }
