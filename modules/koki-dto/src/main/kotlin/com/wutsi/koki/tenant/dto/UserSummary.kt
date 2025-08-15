@@ -4,12 +4,11 @@ import java.util.Date
 
 data class UserSummary(
     val id: Long = -1,
-    val accountId: Long? = null,
-    var username: String = "",
-    val email: String = "",
     val status: UserStatus = UserStatus.NEW,
-    val type: UserType = UserType.UNKNOWN,
-    val displayName: String = "",
+    var username: String = "",
+    val email: String? = null,
+    val displayName: String? = null,
+    val photoUrl: String? = null,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
 )

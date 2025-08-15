@@ -5,13 +5,16 @@ import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Size
 
 data class CreateUserRequest(
-    @get:NotEmpty @get:Size(max = 100) val username: String = "",
-    @get:NotEmpty @get:Size(max = 255) @get:Email val email: String = "",
+    @get:NotEmpty @get:Size(max = 50) val username: String = "",
     @get:NotEmpty val password: String = "",
-    @get:NotEmpty val displayName: String = "",
+
+    @get:Size(max = 50) val displayName: String? = null,
+    @get:Email @get:Size(max = 255) val email: String? = null,
+    @get:Size(max = 30) val mobile: String? = null,
     @get:Size(max = 2) val language: String? = null,
-    val status: UserStatus = UserStatus.NEW,
-    val type: UserType = UserType.UNKNOWN,
+    @get:Size(max = 50) val employer: String? = null,
+    @get:Size(max = 2) val country: String? = null,
+    val cityId: Long? = null,
+    val categoryId: Long? = null,
     val roleIds: List<Long> = emptyList(),
-    val accountId: Long? = null,
 )
