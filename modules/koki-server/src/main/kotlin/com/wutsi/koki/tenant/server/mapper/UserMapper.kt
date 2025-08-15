@@ -9,26 +9,29 @@ import org.springframework.stereotype.Service
 class UserMapper {
     fun toUser(entity: UserEntity) = User(
         id = entity.id!!,
-        accountId = entity.accountId,
         displayName = entity.displayName,
         username = entity.username,
         email = entity.email,
         status = entity.status,
-        type = entity.type,
+        language = entity.language,
+        employer = entity.employer,
+        mobile = entity.mobile,
+        country = entity.country,
+        photoUrl = entity.photoUrl,
+        categoryId = entity.categoryId,
+        cityId = entity.cityId,
+        roleIds = entity.roles.mapNotNull { role -> role.id },
         createdAt = entity.createdAt,
         modifiedAt = entity.modifiedAt,
-        roleIds = entity.roles.mapNotNull { role -> role.id },
-        language = entity.language,
     )
 
     fun toUserSummary(entity: UserEntity) = UserSummary(
         id = entity.id!!,
-        accountId = entity.accountId,
         displayName = entity.displayName,
         username = entity.username,
         email = entity.email,
         status = entity.status,
-        type = entity.type,
+        photoUrl = entity.photoUrl,
         createdAt = entity.createdAt,
         modifiedAt = entity.modifiedAt,
     )

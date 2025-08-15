@@ -1,14 +1,15 @@
 package com.wutsi.koki.portal.user.page.settings.role
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.RoleFixtures.role
-import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
+import com.wutsi.koki.tenant.dto.ConfigurationName
+import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class SettingsRoleControllerTest : AbstractPageControllerTest() {
     @Test
@@ -27,40 +28,22 @@ class SettingsRoleControllerTest : AbstractPageControllerTest() {
     @Test
     fun edit() {
         navigateTo("/settings/roles/${role.id}")
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE)
-
-        click(".btn-edit")
+        click("#btn-edit")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_EDIT)
     }
 
     @Test
-    fun delete() {
+    fun portalSignupRole() {
         navigateTo("/settings/roles/${role.id}")
-        click(".btn-delete")
+        click("#btn-portal-signup-role")
 
-        val alert = driver.switchTo().alert()
-        alert.accept()
-        driver.switchTo().parentFrame()
-
-        verify(rest).delete("$sdkBaseUrl/v1/roles/${role.id}")
-
-        assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE_LIST)
-        assertElementVisible("#koki-toast")
-    }
-
-    @Test
-    fun `delete failed`() {
-        val ex = createHttpClientErrorException(statusCode = 409, errorCode = ErrorCode.AUTHORIZATION_PERMISSION_DENIED)
-        doThrow(ex).whenever(rest).delete(any<String>())
-
-        navigateTo("/settings/roles/${role.id}")
-        click(".btn-delete")
-
-        val alert = driver.switchTo().alert()
-        alert.accept()
-        driver.switchTo().parentFrame()
-
-        assertElementPresent(".alert-danger")
+        val request = argumentCaptor<SaveConfigurationRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/configurations"),
+            request.capture(),
+            eq(Any::class.java)
+        )
+        assertEquals(role.id.toString(), request.firstValue.values[ConfigurationName.PORTAL_SIGNUP_ROLE_ID])
 
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_ROLE)
     }

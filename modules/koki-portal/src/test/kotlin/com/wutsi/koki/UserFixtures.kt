@@ -13,8 +13,15 @@ object UserFixtures {
         username = "ray.sponsible",
         email = "ray.sponsible@gmail.com",
         displayName = "Ray Sponsible",
-        roleIds = listOf(roles[0].id),
+        roleIds = listOf(roles[0].id, roles[1].id),
         language = "fr",
+        employer = "REIMAX",
+        country = "ca",
+        categoryId = RefDataFixtures.categories[0].id,
+        cityId = RefDataFixtures.cities[0].id,
+        mobile = "+15147580000",
+        status = UserStatus.ACTIVE,
+        photoUrl = "https://picsum.photos/800/600"
     )
 
     val users = listOf(
@@ -50,7 +57,7 @@ object UserFixtures {
             displayName = "Thomas Nkono",
             username = "tnkono",
             email = "tnkono@gmail.com",
-            status = UserStatus.TERMINATED,
+            status = UserStatus.SUSPENDED,
         ),
     )
 }

@@ -94,6 +94,26 @@ class ImportCategoryEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("Cuisine et salle à manger", category.longNameFr)
     }
 
+    @Sql(value = ["/db/test/clean.sql"])
+    @Test
+    fun user() {
+        val response = rest.getForEntity("/v1/categories/import?type=USER", ImportResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val categories = dao.findByType(CategoryType.USER)
+        assertEquals(3, categories.size)
+
+        val category = dao.findById(50000).get()
+        assertEquals(null, category.parentId)
+        assertEquals(0, category.level)
+        assertEquals(true, category.active)
+        assertEquals("Real Estate Agent", category.name)
+        assertEquals("Real Estate Agent", category.longName)
+        assertEquals("Agent Immobilier", category.nameFr)
+        assertEquals("Agent Immobilier", category.longNameFr)
+    }
+
     @Test
     fun `bad type`() {
         val response = rest.getForEntity("/v1/categories/import?type=UNKNOWN", ErrorResponse::class.java)

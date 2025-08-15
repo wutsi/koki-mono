@@ -18,12 +18,21 @@ class SettingsListUserControllerTest : AbstractPageControllerTest() {
     fun list() {
         navigateTo("/settings/users")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_LIST)
+        assertElementCount("tr.user", 0)
+    }
 
+    @Test
+    fun search() {
+        navigateTo("/settings/users")
+        input("#keyword", "hee")
+        click("#btn-search")
+
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_LIST)
         assertElementCount("tr.user", users.size)
     }
 
     @Test
-    fun more() {
+    fun `search more`() {
         var entries = mutableListOf<UserSummary>()
         var seed = System.currentTimeMillis()
         repeat(20) {
@@ -41,6 +50,8 @@ class SettingsListUserControllerTest : AbstractPageControllerTest() {
             )
 
         navigateTo("/settings/users")
+        input("#keyword", "hee")
+        click("#btn-search")
 
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_LIST)
         assertElementCount("tr.user", entries.size)
@@ -60,21 +71,27 @@ class SettingsListUserControllerTest : AbstractPageControllerTest() {
     @Test
     fun create() {
         navigateTo("/settings/users")
-        click(".btn-create")
+        click("#btn-create")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_CREATE)
     }
 
     @Test
     fun edit() {
         navigateTo("/settings/users")
+        input("#keyword", "hee")
+        click("#btn-search")
         click(".btn-edit")
+
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_EDIT)
     }
 
     @Test
     fun view() {
         navigateTo("/settings/users")
+        input("#keyword", "hee")
+        click("#btn-search")
         click(".btn-view")
+
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER)
     }
 

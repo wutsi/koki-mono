@@ -1,5 +1,10 @@
 /**
  * Address widget
+ *
+ * Attributes
+ *  - data-country-id: ID of the dropdown that contains the countries
+ *  - data-city-id: ID of the dropdown that contains the cities
+ *  - data-neighborhood-id: ID of the dropdown that contains the countries
  */
 class AddressWidget {
     init() {
@@ -544,6 +549,12 @@ class MapWidget {
     }
 }
 
+/**
+ * IntlTel
+ *
+ * Attributes:
+ *  - data-country: Default country
+ */
 class IntlTel {
     init() {
         let count = 0;

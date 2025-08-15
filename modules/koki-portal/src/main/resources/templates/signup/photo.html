@@ -17,7 +17,7 @@
             </h1>
         </div>
     </div>
-    <div class="row">
+    <div class="row padding-bottom-8x">
         <div class="col-12 col-md-6 offset-md-3">
             <div class="form-body">
                 <div class="section">
@@ -32,25 +32,28 @@
                                      th:src="${page.assetUrl} + '/image/no-photo.png'" width="128"/>
                             </div>
                             <div class="margin-top">
-                                <button class="btn btn-light" id="btn-upload" th:text="#{button.upload}">UPLOAD</button>
                                 <input accept="image/*"
                                        data-max-file-size="2"
                                        id="file-upload"
-                                       style="display:none"
                                        th:data-upload-url="${uploadUrl}"
                                        type="file"
                                 />
                             </div>
-                            <div class="margin-top text-left">
+                            <div class="margin-top">
                                 <div class="alert alert-info">
-                                    <i class="fa-solid fa-circle-info fa-2x"></i>
-                                    <div class="margin-top-small" th:utext="#{page.signup.photo.help}">HELP
+                                    <div class="text-center">
+                                        <i class="fa-solid fa-circle-info fa-2x"></i>
+                                    </div>
+                                    <div class="margin-top-small  text-left" th:utext="#{page.signup.photo.help}">
+                                        HELP
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="section-item text-center">
-                            <form class="form" method="post" th:action="@{/signup/photo}" th:object="${form}">
+                            <form class="form" method="post" th:action="@{/signup/photo}"
+                                  th:object="${form}">
+                                <input th:field="*{id}" type="hidden"/>
                                 <input th:field="*{photoUrl}" type="hidden"/>
                                 <div class="flex flex-space-between">
                                     <a class="btn btn-light w-49" href="/signup/profile" th:text="#{button.previous}">
@@ -74,18 +77,10 @@
     document.addEventListener(
         'DOMContentLoaded',
         function () {
-            const btn = document.getElementById("btn-upload");
-            btn.addEventListener("click", on_click);
-
             const file = document.getElementById("file-upload");
             file.addEventListener("change", on_file_selected);
         }
     );
-
-    function on_click() {
-        const file = document.getElementById("file-upload");
-        file.click();
-    }
 
     function on_file_selected() {
         const elt = document.getElementById("file-upload");
@@ -116,7 +111,6 @@
                         response.json().then(json => {
                             console.log("File Data", json);
                             document.getElementById("my-photo").setAttribute("src", json.url);
-                            document.getElementById("url").setAttribute("src", json.url);
                             document.getElementById("btn-next").disabled = false;
                         });
                     });

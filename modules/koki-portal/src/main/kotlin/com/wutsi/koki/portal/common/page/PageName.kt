@@ -127,7 +127,6 @@ object PageName {
     const val SETTINGS = "page.settings"
 
     const val SIGNUP = "page.signup"
-    const val SIGNUP_BUSINESS = "page.signup.business"
     const val SIGNUP_PROFILE = "page.signup.profile"
     const val SIGNUP_PHOTO = "page.signup.photo"
     const val SIGNUP_DONE = "page.signup.done"

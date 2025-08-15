@@ -4,7 +4,6 @@ import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
-import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.server.dao.UserRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -42,12 +41,15 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
     @Test
     fun update() {
         val request = UpdateUserRequest(
-            username = "thomas.nkono1",
             email = "thomas.nkono@hotmail.com",
             displayName = "Thomas Nkono",
-            status = UserStatus.TERMINATED,
             roleIds = listOf(11L, 12L),
-            language = "fr",
+            language = "fR",
+            employer = "Koki",
+            categoryId = 111L,
+            mobile = "+15147581111",
+            country = "CA",
+            cityId = 3333L
         )
 
         val result = rest.postForEntity("/v1/users/11", request, Any::class.java)
@@ -56,70 +58,22 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
 
         val userId = 11L
         val user = dao.findById(userId).get()
-        assertEquals(request.username, user.username)
         assertEquals(request.displayName, user.displayName)
-        assertEquals(request.email, user.email)
-        assertEquals(request.status, user.status)
+        assertEquals(request.email?.lowercase(), user.email)
+        assertEquals(request.language?.lowercase(), user.language)
+        assertEquals(request.categoryId, user.categoryId)
+        assertEquals(request.employer?.uppercase(), user.employer)
+        assertEquals(request.mobile, user.mobile)
+        assertEquals(request.country?.lowercase(), user.country)
+        assertEquals(request.cityId, user.cityId)
         assertEquals(request.roleIds.size, roleCount(userId))
-        assertEquals(request.language, user.language)
-    }
-
-    @Test
-    fun `username and email is saved in lowercase`() {
-        val request = UpdateUserRequest(
-            username = "OMAM.MBIYICK",
-            email = "OMAM.MBIYICK@hotmail.com",
-            displayName = "Omam Mbiyick",
-            status = UserStatus.TERMINATED,
-        )
-
-        val result = rest.postForEntity("/v1/users/11", request, Any::class.java)
-
-        assertEquals(HttpStatus.OK, result.statusCode)
-
-        val userId = 11L
-        val user = dao.findById(userId).get()
-        assertEquals(request.username.lowercase(), user.username)
-        assertEquals(request.email.lowercase(), user.email)
-    }
-
-    @Test
-    fun `duplicate username`() {
-        val request = UpdateUserRequest(
-            username = "RAY.sponsible",
-            email = "RAY00.sponsible@gmail.com",
-            displayName = "Duplicate",
-            status = UserStatus.TERMINATED,
-        )
-
-        val result = rest.postForEntity("/v1/users/12", request, ErrorResponse::class.java)
-
-        assertEquals(HttpStatus.CONFLICT, result.statusCode)
-        assertEquals(ErrorCode.USER_DUPLICATE_USERNAME, result.body!!.error.code)
-    }
-
-    @Test
-    fun `duplicate email`() {
-        val request = UpdateUserRequest(
-            username = "RAY00.sponsible",
-            email = "RAY.sponsible@gmail.com",
-            displayName = "Duplicate",
-            status = UserStatus.TERMINATED,
-        )
-
-        val result = rest.postForEntity("/v1/users/12", request, ErrorResponse::class.java)
-
-        assertEquals(HttpStatus.CONFLICT, result.statusCode)
-        assertEquals(ErrorCode.USER_DUPLICATE_EMAIL, result.body!!.error.code)
     }
 
     @Test
     fun `not found`() {
         val request = UpdateUserRequest(
-            username = "foo.bar",
             email = "foo.bar@gmail.com",
             displayName = "Foo Bar",
-            status = UserStatus.TERMINATED,
         )
 
         val result = rest.postForEntity("/v1/users/99", request, ErrorResponse::class.java)
@@ -129,12 +83,23 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
+    fun `duplicate email`() {
+        val request = UpdateUserRequest(
+            email = "RAY.sponsible@gmail.com",
+            displayName = "Duplicate",
+        )
+
+        val result = rest.postForEntity("/v1/users/12", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.CONFLICT, result.statusCode)
+        assertEquals(ErrorCode.USER_DUPLICATE_EMAIL, result.body!!.error.code)
+    }
+
+    @Test
     fun `update user of another tenant`() {
         val request = UpdateUserRequest(
-            username = "foo.bar",
             email = "foo.bar@gmail.com",
             displayName = "Foo Bar",
-            status = UserStatus.TERMINATED,
         )
 
         val result = rest.postForEntity("/v1/users/22", request, ErrorResponse::class.java)

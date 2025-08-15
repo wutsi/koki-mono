@@ -2,14 +2,13 @@ package com.wutsi.koki.tenant.server.service
 
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.exception.BadRequestException
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.dto.CreateUserRequest
+import com.wutsi.koki.tenant.dto.SetUserPhotoRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
-import com.wutsi.koki.tenant.dto.UserType
 import com.wutsi.koki.tenant.server.dao.UserRepository
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import jakarta.persistence.EntityManager
@@ -36,38 +35,33 @@ class UserService(
         return user
     }
 
-    fun getByEmail(email: String, type: UserType, tenantId: Long): UserEntity {
-        return dao.findByEmailAndTypeAndTenantId(email.lowercase(), type, tenantId)
-            ?: throw NotFoundException(Error(ErrorCode.USER_NOT_FOUND))
-    }
-
-    fun getByUsername(username: String, type: UserType, tenantId: Long): UserEntity {
-        return dao.findByUsernameAndTypeAndTenantId(username.lowercase(), type, tenantId)
-            ?: throw NotFoundException(Error(ErrorCode.USER_NOT_FOUND))
-    }
-
     @Transactional
     fun create(request: CreateUserRequest, tenantId: Long): UserEntity {
-        checkDuplicateUsername(null, request.type, request.username, tenantId)
-        checkDuplicateEmail(null, request.type, request.email, tenantId)
-        checkAccountId(request)
+        checkDuplicateUsername(null, request.username, tenantId)
+        checkDuplicateEmail(null, request.email, tenantId)
 
         val salt = UUID.randomUUID().toString()
         val currentUserId = securityService.getCurrentUserIdOrNull()
+        val now = Date()
         val user = dao.save(
             UserEntity(
                 tenantId = tenantId,
                 username = request.username.lowercase(),
-                email = request.email.lowercase(),
-                displayName = request.displayName,
-                status = request.status,
+                email = request.email?.lowercase()?.ifEmpty { null },
+                displayName = request.displayName?.ifEmpty { null },
+                status = UserStatus.ACTIVE,
                 salt = salt,
                 password = passwordService.hash(request.password, salt),
                 createdById = currentUserId,
                 modifiedById = currentUserId,
-                language = request.language,
-                type = request.type,
-                accountId = request.accountId,
+                language = request.language?.lowercase()?.ifEmpty { null },
+                employer = request.employer?.uppercase()?.ifEmpty { null },
+                categoryId = request.categoryId,
+                country = request.country?.lowercase()?.ifEmpty { null },
+                cityId = request.cityId,
+                mobile = request.mobile,
+                createdAt = now,
+                modifiedAt = now,
             )
         )
 
@@ -76,26 +70,34 @@ class UserService(
     }
 
     @Transactional
-    fun update(userId: Long, request: UpdateUserRequest, tenantId: Long) {
-        val user = get(userId, tenantId)
-        checkDuplicateUsername(userId, user.type, request.username, tenantId)
-        checkDuplicateEmail(userId, user.type, request.email, tenantId)
+    fun update(id: Long, request: UpdateUserRequest, tenantId: Long) {
+        checkDuplicateEmail(id, request.email, tenantId)
 
-        user.username = request.username.lowercase()
-        user.email = request.email.lowercase()
-        user.displayName = request.displayName
-        user.language = request.language
-        user.status = request.status
+        val user = get(id, tenantId)
+        user.email = request.email?.lowercase()?.ifEmpty { null }
+        user.displayName = request.displayName?.ifEmpty { null }
+        user.language = request.language?.lowercase()?.ifEmpty { null }
+        user.mobile = request.mobile?.ifEmpty { null }
+        user.categoryId = request.categoryId
+        user.employer = request.employer?.uppercase()?.ifEmpty { null }
         user.modifiedById = securityService.getCurrentUserIdOrNull()
+        user.country = request.country?.lowercase()?.ifEmpty { null }
+        user.cityId = request.cityId
+        user.mobile = request.mobile
         user.modifiedAt = Date()
-        dao.save(user)
-
         setRoles(user, request.roleIds.distinct())
     }
 
-    private fun checkDuplicateUsername(userId: Long?, type: UserType, username: String, tenantId: Long) {
-        val duplicate = dao.findByUsernameAndTypeAndTenantId(username.lowercase(), type, tenantId)
-        if (duplicate != null && duplicate.id != userId) {
+    @Transactional
+    fun setPhoto(id: Long, request: SetUserPhotoRequest, tennatId: Long) {
+        val user = get(id, tennatId)
+        user.photoUrl = request.photoUrl?.ifEmpty { null }
+        dao.save(user)
+    }
+
+    private fun checkDuplicateUsername(id: Long?, username: String, tenantId: Long) {
+        val duplicate = dao.findByUsernameAndTenantId(username.lowercase(), tenantId)
+        if (duplicate != null && duplicate.id != id) {
             throw ConflictException(
                 error = Error(
                     code = ErrorCode.USER_DUPLICATE_USERNAME
@@ -104,22 +106,18 @@ class UserService(
         }
     }
 
-    private fun checkDuplicateEmail(userId: Long?, type: UserType, email: String, tenantId: Long) {
-        val duplicate = dao.findByEmailAndTypeAndTenantId(email.lowercase(), type, tenantId)
-        if (duplicate != null && duplicate.id != userId) {
+    private fun checkDuplicateEmail(id: Long?, email: String?, tenantId: Long) {
+        if (email.isNullOrEmpty()) {
+            return
+        }
+
+        val duplicate = dao.findByEmailAndTenantId(email.lowercase(), tenantId)
+        if (duplicate != null && duplicate.id != id) {
             throw ConflictException(
                 error = Error(
                     code = ErrorCode.USER_DUPLICATE_EMAIL
                 )
             )
-        }
-    }
-
-    private fun checkAccountId(request: CreateUserRequest) {
-        if (request.type == UserType.ACCOUNT && request.accountId == null) {
-            throw BadRequestException(error = Error(ErrorCode.USER_ACCOUNT_ID_MISSING))
-        } else if (request.type != UserType.ACCOUNT && request.accountId != null) {
-            throw BadRequestException(error = Error(ErrorCode.USER_ACCOUNT_ID_SHOULD_BE_NULL))
         }
     }
 
@@ -144,8 +142,8 @@ class UserService(
         ids: List<Long> = emptyList(),
         roleIds: List<Long> = emptyList(),
         status: UserStatus? = null,
-        type: UserType? = null,
         permissions: List<String> = emptyList(),
+        username: String? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): List<UserEntity> {
@@ -159,7 +157,7 @@ class UserService(
 
         jql.append(" WHERE U.tenantId = :tenantId")
         if (keyword != null) {
-            jql.append(" AND UPPER(U.displayName) LIKE :keyword")
+            jql.append(" AND ((UPPER(U.displayName) LIKE :keyword) OR (UPPER(U.username) LIKE :keyword) OR (UPPER(email) LIKE :keyword))")
         }
         if (ids.isNotEmpty()) {
             jql.append(" AND U.id IN :ids")
@@ -167,8 +165,8 @@ class UserService(
         if (status != null) {
             jql.append(" AND U.status = :status")
         }
-        if (type != null) {
-            jql.append(" AND U.type IN :type")
+        if (username != null) {
+            jql.append(" AND U.username = :username")
         }
         if (roleIds.isNotEmpty()) {
             jql.append(" AND R.id IN :roleIds")
@@ -192,8 +190,8 @@ class UserService(
         if (status != null) {
             query.setParameter("status", status)
         }
-        if (type != null) {
-            query.setParameter("type", type)
+        if (username != null) {
+            query.setParameter("username", username.lowercase())
         }
         if (permissions.isNotEmpty()) {
             query.setParameter("permissions", permissions)

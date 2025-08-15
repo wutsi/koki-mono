@@ -14,51 +14,62 @@
     <div class="settings-content">
         <div th:replace="~{__components/settings :: settings-title('Users', '/settings/users')}"></div>
 
-        <div class="padding">
-            <a class="btn btn-sm btn-secondary btn-edit" th:href="'/settings/users/' + ${me.id} + '/edit'">Edit</a>
-        </div>
         <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
-        <table class="table">
-            <tr>
-                <td width="20%"><b>Username</b></td>
-                <td th:text="${me.username}">NAME</td>
-            </tr>
-            <tr>
-                <td><b>Email</b></td>
-                <td th:text="${me.email}">EMAIL</td>
-            </tr>
-            <tr>
-                <td width="20%"><b>Full Name</b></td>
-                <td th:text="${me.displayName}">NAME</td>
-            </tr>
-            <tr>
-                <td><b>Status</b></td>
-                <td>
-                    <span th:replace="~{__components/user :: user-status(${me.status})}"></span>
-                </td>
-            </tr>
-            <tr th:if="${me.language}">
-                <td><b>Language</b></td>
-                <td th:text="${me.languageText}">LANG</td>
-            </tr>
-            <tr>
-                <td><b>Roles</b></td>
-                <td>
-                    <table class="table table-striped" th:if="!${me.roles.isEmpty()}">
-                        <tr th:each="role : ${me.roles}">
-                            <td>
-                                <a th:href="'/settings/roles/' + ${role.id}">
-                                    <span th:if="${role.title}" th:text="${role.title}">TITLE</span>
-                                    <span th:if="!${role.title}" th:text="${role.name}">NAME</span>
-                                </a>
-                            </td>
-                        </tr>
-                    </table>
-                    <em th:if="${me.roles.isEmpty()}">User has no role</em>
-                </td>
-            </tr>
-        </table>
+        <div class="padding">
+            <a class="btn btn-sm btn-light" id="btn-edit" th:href="'/settings/users/' + ${me.id} + '/edit'">
+                Edit
+            </a>
+        </div>
+
+        <div class="flex padding-top border-top">
+            <div class="padding">
+                <img height="128"
+                     th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"
+                     width="128"/>
+            </div>
+
+            <table class="table">
+                <tr>
+                    <td width="20%"><b>Username</b></td>
+                    <td th:text="${me.username}">NAME</td>
+                </tr>
+                <tr>
+                    <td><b>Email</b></td>
+                    <td th:text="${me.email}">EMAIL</td>
+                </tr>
+                <tr>
+                    <td width="20%"><b>Full Name</b></td>
+                    <td th:text="${me.displayName}">NAME</td>
+                </tr>
+                <tr>
+                    <td><b>Status</b></td>
+                    <td>
+                        <span th:replace="~{__components/user :: user-status(${me.status})}"></span>
+                    </td>
+                </tr>
+                <tr th:if="${me.language}">
+                    <td><b>Language</b></td>
+                    <td th:text="${me.languageText}">LANG</td>
+                </tr>
+                <tr>
+                    <td><b>Roles</b></td>
+                    <td>
+                        <table class="table table-striped" th:if="!${me.roles.isEmpty()}">
+                            <tr th:each="role : ${me.roles}">
+                                <td>
+                                    <a th:href="'/settings/roles/' + ${role.id}">
+                                        <span th:if="${role.title}" th:text="${role.title}">TITLE</span>
+                                        <span th:if="!${role.title}" th:text="${role.name}">NAME</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                        <em th:if="${me.roles.isEmpty()}">User has no role</em>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>
 

@@ -5,7 +5,6 @@
     <td>
         <span th:replace="~{__components/user :: user-status(${me.status})}"></span>
     </td>
-    <td th:text="${me.modifiedAtText}">MODIFIED</td>
     <td class="toolbar">
         <a class="btn-view" th:href="'/settings/users/' + ${me.id}">View</a>
         <a class="btn-edit" th:href="'/settings/users/' + ${me.id} + '/edit'">Edit</a>

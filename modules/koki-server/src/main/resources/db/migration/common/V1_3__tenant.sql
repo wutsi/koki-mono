@@ -53,27 +53,32 @@ CREATE TABLE T_USER(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
 
   tenant_fk               BIGINT NOT NULL,
-  account_fk              BIGINT,
+  category_fk             BIGINT,
   created_by_fk           BIGINT,
   modified_by_fk          BIGINT,
+  city_fk                 BIGINT,
 
-  username                VARCHAR(100) NOT NULL,
-  email                   VARCHAR(255) NOT NULL,
+  username                VARCHAR(50) NOT NULL,
   password                VARCHAR(32) NOT NULL,
   salt                    VARCHAR(36) NOT NULL DEFAULT '',
-  display_name            VARCHAR(255) NOT NULL,
+  email                   VARCHAR(255),
+  display_name            VARCHAR(50),
+  mobile                  VARCHAR(30),
   language                VARCHAR(2),
+  country                 VARCHAR(2),
+  employer                VARCHAR(50),
   status                  INT NOT NULL DEFAULT 0,
-  type                    INT NOT NULL DEFAULT 0,
+  photo_url               TEXT,
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now(),
 
-  UNIQUE (tenant_fk, type, username),
-  UNIQUE (tenant_fk, type, email),
+  UNIQUE (tenant_fk, username),
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
-CREATE INDEX account ON T_USER(account_fk);
+CREATE INDEX I_USER_tenant ON T_USER(tenant_fk);
+CREATE INDEX I_USER_category ON T_USER(category_fk);
+CREATE INDEX I_USER_city ON T_USER(city_fk);
 
 
 CREATE TABLE T_CONFIGURATION(

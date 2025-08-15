@@ -1,7 +1,6 @@
 package com.wutsi.koki.portal.signup.page
 
 import com.wutsi.koki.file.dto.FileType
-import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.file.service.FileService
 import com.wutsi.koki.portal.signup.form.SignupForm
@@ -17,12 +16,23 @@ import org.springframework.web.bind.annotation.ResponseBody
 @Controller
 @RequestMapping("/signup/photo")
 class PhotoController(
-    private val fileService: FileService
-) : AbstractPageController() {
+    private val fileService: FileService,
+) : AbstractSignupController() {
     @GetMapping
-    fun index(model: Model): String {
-        model.addAttribute("uploadUrl", fileService.uploadUrl(type = FileType.IMAGE))
-        model.addAttribute("form", SignupForm())
+    fun index(@RequestParam id: Long, model: Model): String {
+        val user = resolveUser(id)
+
+        model.addAttribute(
+            "uploadUrl",
+            fileService.uploadUrl(type = FileType.IMAGE),
+        )
+        model.addAttribute(
+            "form",
+            SignupForm(
+                id = user.id,
+                photoUrl = user.photoUrl,
+            ),
+        )
         model.addAttribute(
             "page",
             createPageModel(
@@ -41,7 +51,8 @@ class PhotoController(
     }
 
     @PostMapping
-    fun submit(@ModelAttribute form: SignupForm, model: Model): String {
-        return "redirect:/signup/done"
+    fun submit(@ModelAttribute form: SignupForm): String {
+        signupService.updatePhoto(form)
+        return "redirect:/signup/done?id=${form.id}"
     }
 }

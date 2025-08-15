@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.signup.page
 
-import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -9,9 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
 @RequestMapping("/signup/done")
-class DoneController : AbstractPageController() {
+class DoneController : AbstractSignupController() {
     @GetMapping
-    fun index(model: Model): String {
+    fun index(id: Long, model: Model): String {
+        val user = resolveUser(id)
+        model.addAttribute("me", user)
+
         model.addAttribute(
             "page",
             createPageModel(

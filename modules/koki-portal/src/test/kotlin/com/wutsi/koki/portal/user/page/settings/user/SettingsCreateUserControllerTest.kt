@@ -12,8 +12,6 @@ import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
-import com.wutsi.koki.tenant.dto.UserStatus
-import com.wutsi.koki.tenant.dto.UserType
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -26,7 +24,8 @@ class SettingsCreateUserControllerTest : AbstractPageControllerTest() {
         input("#displayName", "Yo Man")
         input("#username", "yoman")
         input("#email", "yoman@gmail.com")
-        input("#password", "secret")
+        input("#password", "seCret123")
+        input("#confirm-password", "seCret123")
         select2("#language", "French")
         click("#role-" + RoleFixtures.roles[0].id)
         click("#role-" + RoleFixtures.roles[2].id)
@@ -42,10 +41,8 @@ class SettingsCreateUserControllerTest : AbstractPageControllerTest() {
         assertEquals("Yo Man", request.firstValue.displayName)
         assertEquals("yoman", request.firstValue.username)
         assertEquals("yoman@gmail.com", request.firstValue.email)
-        assertEquals("secret", request.firstValue.password)
+        assertEquals("seCret123", request.firstValue.password)
         assertEquals("fr", request.firstValue.language)
-        assertEquals(UserStatus.ACTIVE, request.firstValue.status)
-        assertEquals(UserType.EMPLOYEE, request.firstValue.type)
         assertEquals(listOf(RoleFixtures.roles[0].id, RoleFixtures.roles[2].id), request.firstValue.roleIds)
 
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_LIST)
@@ -67,7 +64,8 @@ class SettingsCreateUserControllerTest : AbstractPageControllerTest() {
         input("#displayName", "Yo Man")
         input("#username", "yoman")
         input("#email", "yoman@gmail.com")
-        input("#password", "secret")
+        input("#password", "seCret123")
+        input("#confirm-password", "seCret123")
         click("button[type=submit]", 1000)
 
         assertElementPresent(".alert-danger")

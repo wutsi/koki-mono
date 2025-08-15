@@ -115,7 +115,7 @@ class ListingController : AbstractListingDetailsController() {
                 id = 333,
                 displayName = "Ray Sponsible",
                 employer = "Courtier Immobilier SARL",
-                phone = "+15147580100",
+                mobile = "+15147580100",
                 photoUrl = "https://picsum.photos/128/128"
             ),
             status = ListingStatus.ACTIVE,

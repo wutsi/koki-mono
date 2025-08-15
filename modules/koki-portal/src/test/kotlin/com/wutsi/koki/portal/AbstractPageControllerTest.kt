@@ -2,6 +2,7 @@ package com.wutsi.koki.portal
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
@@ -64,6 +65,7 @@ import com.wutsi.koki.payment.dto.CreatePaymentResponse
 import com.wutsi.koki.payment.dto.GetTransactionResponse
 import com.wutsi.koki.payment.dto.SearchTransactionResponse
 import com.wutsi.koki.platform.security.AccessTokenHolder
+import com.wutsi.koki.portal.file.service.FileUploadUrlProvider
 import com.wutsi.koki.product.dto.CreatePriceRequest
 import com.wutsi.koki.product.dto.CreatePriceResponse
 import com.wutsi.koki.product.dto.CreateProductRequest
@@ -168,6 +170,9 @@ abstract class AbstractPageControllerTest {
     protected lateinit var restForAuthentication: RestTemplate
 
     @MockitoBean
+    protected lateinit var fileUploadUrlProvider: FileUploadUrlProvider
+
+    @MockitoBean
     protected lateinit var accessTokenHolder: AccessTokenHolder
 
     @MockitoBean
@@ -228,10 +233,10 @@ abstract class AbstractPageControllerTest {
 
     private fun setupDefaultApiResponses() {
         setupRefDataModule()
-        setupFileUploads()
         setupModuleModule()
         setupTenantModule()
         setupFileModule()
+        setupFileUploads()
         setupEmailModule()
         setupMessageModule()
         setupNoteModule()
@@ -264,6 +269,10 @@ abstract class AbstractPageControllerTest {
                 any(),
                 any<Class<ImportResponse>>(),
             )
+
+        doReturn("http://localhost:$port/file/upload")
+            .whenever(fileUploadUrlProvider)
+            .get(anyOrNull(), anyOrNull(), anyOrNull())
     }
 
     protected fun setupModuleModule() {
@@ -1220,7 +1229,7 @@ abstract class AbstractPageControllerTest {
         select.selectByValue(value)
     }
 
-    protected fun select2(selector: String, text: String) {
+    protected fun select2(selector: String, text: String?) {
         val by = By.cssSelector(selector)
         val select = Select2(driver.findElement(by))
         select.selectByText(text)

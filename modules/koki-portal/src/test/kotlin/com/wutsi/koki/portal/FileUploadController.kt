@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.signup.page
+package com.wutsi.koki.portal
 
 import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.file.dto.UploadFileResponse

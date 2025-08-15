@@ -22,7 +22,7 @@ class SettingsUserControllerTest : AbstractPageControllerTest() {
     @Test
     fun edit() {
         navigateTo("/settings/users/${user.id}")
-        click(".btn-edit")
+        click("#btn-edit")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_EDIT)
     }
 

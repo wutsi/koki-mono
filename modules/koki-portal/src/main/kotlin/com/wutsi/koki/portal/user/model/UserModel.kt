@@ -2,21 +2,19 @@ package com.wutsi.koki.portal.user.model
 
 import com.wutsi.koki.portal.module.model.ModuleModel
 import com.wutsi.koki.portal.refdata.model.CategoryModel
+import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.tenant.dto.UserStatus
-import com.wutsi.koki.tenant.dto.UserType
 import java.util.Date
 
 data class UserModel(
     val id: Long = -1,
     val username: String = "",
-    val accountId: Long? = null,
-    val email: String = "",
-    val displayName: String = "",
+    val email: String? = null,
+    val displayName: String? = null,
     val employer: String? = null,
-    val phone: String? = null,
+    val mobile: String? = null,
     val photoUrl: String? = null,
     val status: UserStatus = UserStatus.ACTIVE,
-    val type: UserType = UserType.UNKNOWN,
     val roles: List<RoleModel> = emptyList(),
     val language: String? = null,
     val languageText: String? = null,
@@ -25,7 +23,9 @@ data class UserModel(
     val modifiedAt: Date = Date(),
     val modifiedAtText: String = "",
     val permissionNames: List<String> = emptyList(),
-    val categoryModel: CategoryModel? = null,
+    val category: CategoryModel? = null,
+    val city: LocationModel? = null,
+    val country: String? = null,
 ) {
     fun hasRole(roleId: Long): Boolean {
         return roles.find { role -> role.id == roleId } != null

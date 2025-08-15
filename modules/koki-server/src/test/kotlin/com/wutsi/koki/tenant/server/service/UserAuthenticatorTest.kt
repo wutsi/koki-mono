@@ -1,21 +1,18 @@
 package com.wutsi.koki.tenant.server.service
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
-import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.security.dto.ApplicationName
 import com.wutsi.koki.security.dto.LoginRequest
 import com.wutsi.koki.security.server.service.AccessTokenService
 import com.wutsi.koki.security.server.service.AuthenticationService
 import com.wutsi.koki.security.server.service.UserAuthenticator
 import com.wutsi.koki.tenant.dto.UserStatus
-import com.wutsi.koki.tenant.dto.UserType
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertThrows
@@ -41,22 +38,35 @@ class UserAuthenticatorTest {
     private val user = UserEntity(
         id = 111,
         tenantId = 222,
+        username = "ray.sponsible",
         displayName = "Ray Sponsible",
         email = "ray.sponsible@gmail.com",
         status = UserStatus.ACTIVE,
         salt = UUID.randomUUID().toString()
     )
+
     private val accessToken = UUID.randomUUID().toString()
+
     private val request = LoginRequest(
-        username = user.email,
-        password = user.password,
+        username = user.username,
+        password = "secret",
         application = ApplicationName.PORTAL,
     )
 
     @BeforeEach
     fun setup() {
-        doReturn(user).whenever(userService).getByUsername(any(), any(), any())
-        doReturn(accessToken).whenever(accessTokenService).create(any(), any(), any(), any(), any())
+        doReturn(listOf(user)).whenever(userService).search(
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+        )
+        doReturn(accessToken).whenever(accessTokenService).create(any(), any(), any(), any())
         doReturn(true).whenever(passwordService).matches(any(), any(), any())
     }
 
@@ -86,14 +96,23 @@ class UserAuthenticatorTest {
             request.application,
             user.id ?: -1,
             user.displayName,
-            UserType.EMPLOYEE,
             user.tenantId,
         )
     }
 
     @Test
     fun `user not found`() {
-        doThrow(NotFoundException(Error())).whenever(userService).getByUsername(any(), any(), any())
+        doReturn(emptyList<UserEntity>()).whenever(userService).search(
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+        )
 
         val ex = assertThrows<ConflictException> {
             authenticator.authenticate(request, user.tenantId)
@@ -113,7 +132,19 @@ class UserAuthenticatorTest {
 
     @Test
     fun `user not active`() {
-        doReturn(user.copy(status = UserStatus.TERMINATED)).whenever(userService).getByUsername(any(), any(), any())
+        doReturn(
+            listOf(user.copy(status = UserStatus.SUSPENDED))
+        ).whenever(userService).search(
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+        )
 
         val ex = assertThrows<ConflictException> {
             authenticator.authenticate(request, user.tenantId)

@@ -12,86 +12,66 @@
         <div th:replace="~{__components/settings :: settings-menu('security')}"></div>
     </div>
     <div class="settings-content">
-        <div th:replace="~{__components/settings :: settings-title('Users', '/settings/security')}"></div>
-
-        <div class="flex flex-space-between padding">
-            <div>
-                <a class="btn btn-sm btn-secondary btn-create" href="/settings/users/create">Create User</a>
+        <form action="/settings/users" method="get" th:object="${form}">
+            <div th:replace="~{__components/settings :: settings-title('Users', '/settings/security')}"></div>
+            <div class="flex flex-space-between padding">
+                <div class="input-group" style="width:auto">
+                    <input class="form-control" name="keyword" placeholder="Enter your keyword" th:field="*{keyword}"/>
+                    <button class="btn btn-light btn-sm" id="btn-search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span>Search</span>
+                    </button>
+                </div>
+                <div>
+                    <a class="btn btn-sm btn-primary" href="/settings/users/create" id="btn-create">Create User</a>
+                </div>
             </div>
-            <div class="btn-group">
-                <select class="btn btn-sm btn-light" id="filter-role-id" onchange="koki_users_on_filter_changed()"
-                        style="width: auto"
-                        th:if="${roles?.isEmpty() == false}">
-                    <option value="">All Roles</option>
-                    <option
-                        th:each="role : ${roles}"
-                        th:selected="${role.id} == ${roleId}"
-                        th:text="${role.name}"
-                        th:value="${role.id}"
-                    >ROLE
-                    </option>
-                </select>
-                <select class="btn btn-sm btn-light" id="filter-status" onchange="koki_users_on_filter_changed()"
-                        style="width: auto">
-                    <option value="">All Statuses</option>
-                    <option
-                        th:each="ss : ${statuses}"
-                        th:selected="${ss} == ${status}"
-                        th:text="#{'user-status.' + ${ss}}"
-                        th:value="${ss}"
-                    >STATUS
-                    </option>
-                </select>
-            </div>
-        </div>
 
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Full Name</th>
-                <th>Status</th>
-                <th>Modified</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr class="user" th:each="me : ${users}">
-                <td th:text="${me.username}">USERNAME</td>
-                <td th:text="${me.email}">EMAIL</td>
-                <td th:text="${me.displayName}">NAME</td>
-                <td>
-                    <span th:replace="~{__components/user :: user-status(${me.status})}"></span>
-                </td>
-                <td th:text="${me.modifiedAtText}">MODIFIED</td>
-                <td class="toolbar">
-                    <a class="btn-view" th:href="'/settings/users/' + ${me.id}">View</a>
-                    <a class="btn-edit" th:href="'/settings/users/' + ${me.id} + '/edit'">Edit</a>
-                </td>
-            </tr>
-            <tr id="user-load-more" th:if="${moreUrl}">
-                <td class="text-center" colspan="5">
-                    <a href="javascript: koki_load_more('user-load-more')" th:data-url="${moreUrl}">Load More...</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+            <div class="padding" th:if="!${users} AND *{keyword?.trim()?.length() > 0}">
+                <div class="alert alert-warning">
+                    No user found!
+                </div>
+            </div>
+
+            <div class="padding-top border-top" th:if="${users}">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Full Name</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="user" th:each="me : ${users}">
+                        <td th:text="${me.username}">USERNAME</td>
+                        <td th:text="${me.email}">EMAIL</td>
+                        <td th:text="${me.displayName}">NAME</td>
+                        <td>
+                            <span th:replace="~{__components/user :: user-status(${me.status})}"></span>
+                        </td>
+                        <td class="text-right">
+                            <a class="btn-view btn btn-light btn-sm" th:href="'/settings/users/' + ${me.id}">View</a>
+                            <a class="btn-edit btn btn-light btn-sm" th:href="'/settings/users/' + ${me.id} + '/edit'">Edit</a>
+                        </td>
+                    </tr>
+                    <tr id="user-load-more" th:if="${moreUrl}">
+                        <td class="text-center" colspan="5">
+                            <a href="javascript: koki_load_more('user-load-more')" th:data-url="${moreUrl}">Load
+                                More...</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
     </div>
+
 </div>
 
 <div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
 
-<script>
-    function koki_users_on_filter_changed() {
-        const roleId = document.getElementById('filter-role-id').value;
-        const status = document.getElementById('filter-status').value;
-
-        document.location.href = '/settings/users?' +
-            (roleId && roleId.length > 0 ? '&role-id=' + roleId : '') +
-            (status && status.length > 0 ? '&status=' + status : '');
-    }
-
-</script>
 </body>
 </html>

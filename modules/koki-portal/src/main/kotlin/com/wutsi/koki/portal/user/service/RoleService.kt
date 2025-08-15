@@ -1,18 +1,18 @@
 package com.wutsi.koki.portal.user.service
 
 import com.wutsi.koki.portal.module.service.ModuleService
-import com.wutsi.koki.portal.user.mapper.UserMapper
+import com.wutsi.koki.portal.user.mapper.RoleMapper
 import com.wutsi.koki.portal.user.model.RoleForm
 import com.wutsi.koki.portal.user.model.RoleModel
-import com.wutsi.koki.sdk.KokiUsers
+import com.wutsi.koki.sdk.KokiRoles
 import com.wutsi.koki.tenant.dto.CreateRoleRequest
 import com.wutsi.koki.tenant.dto.UpdateRoleRequest
 import org.springframework.stereotype.Service
 
 @Service
 class RoleService(
-    private val koki: KokiUsers,
-    private val mapper: UserMapper,
+    private val koki: KokiRoles,
+    private val mapper: RoleMapper,
     private val moduleService: ModuleService,
 ) {
     fun role(id: Long): RoleModel {
@@ -49,7 +49,7 @@ class RoleService(
     }
 
     fun create(form: RoleForm): Long {
-        return koki.createRole(
+        return koki.create(
             CreateRoleRequest(
                 name = form.name,
                 title = form.title,
@@ -61,7 +61,7 @@ class RoleService(
     }
 
     fun update(id: Long, form: RoleForm) {
-        koki.updateRole(
+        koki.update(
             id,
             UpdateRoleRequest(
                 name = form.name,
@@ -74,6 +74,6 @@ class RoleService(
     }
 
     fun delete(id: Long) {
-        koki.deleteRole(id)
+        koki.delete(id)
     }
 }

@@ -27,18 +27,18 @@ INSERT INTO T_ROLE_PERMISSION(role_fk, permission_fk)
     VALUES (11, 101);
 
 
-INSERT INTO T_USER(id, tenant_fk, type, username, email, password, display_name, status)
-    VALUES (11, 1, 1, 'ray.sponsible', 'ray.sponsible@gmail.com', '---', 'Ray Sponsible', 1),
-           (12, 1, 1, 'john.smith', 'john.smith@gmail.com', '---', 'John Smith', 1),
-           (13, 1, 1, 'raymond-rougeau','raymond-rougeau@gmail.com', '---', 'Raymond Rougeau', 2),
-           (14, 1, 2, 'hulk','hulk@gmail.com', '---', 'Hulk Hogan', 3),
-           (15, 1, 1, 'pp','pp@gmail.com', '---', 'Peter Pan', 1),
-           (16, 1, 2, 'spiderman','spiderman@gmail.com', '---', 'Peter Parker', 1),
-           (17, 1, 1, 'pf1969','pf1969@gmail.com', '---', 'Peter Fonda', 1),
-           (18, 1, 2, 'pf1970','pf1970@gmail.com', '---', 'Henry Fonda', 1),
+INSERT INTO T_USER(id, tenant_fk, username, email, password, display_name, status)
+    VALUES (11, 1, 'ray.sponsible', 'ray.sponsible@gmail.com', '---', 'Ray Sponsible', 1),
+           (12, 1, 'john.smith', 'john.smith@gmail.com', '---', 'John Smith', 1),
+           (13, 1, 'raymond-rougeau','raymond-rougeau@gmail.com', '---', 'Raymond Rougeau', 2),
+           (14, 1, 'hulk','hulk@gmail.com', '---', 'Hulk Hogan', 4),
+           (15, 1, 'pp','pp@gmail.com', '---', 'Peter Pan', 1),
+           (16, 1, 'spiderman','spiderman@gmail.com', '---', 'Peter Parker', 1),
+           (17, 1, 'pf1969','pf1969@gmail.com', '---', 'Peter Fonda', 1),
+           (18, 1, 'pf1970','pf1970@gmail.com', '---', 'Henry Fonda', 1),
 
-           (22, 2, 1, 'roger.milla','roger.milla@gmail.com', '---', 'Roger Milla', 1),
-           (23, 2, 2, 'user.23', 'user.23@gmail.com', '---', 'AccountUser 23', 1)
+           (22, 2, 'roger.milla','roger.milla@gmail.com', '---', 'Roger Milla', 1),
+           (23, 2, 'user.23', 'user.23@gmail.com', '---', 'AccountUser 23', 1)
 ;
 
 INSERT INTO T_USER_ROLE(user_fk, role_fk)

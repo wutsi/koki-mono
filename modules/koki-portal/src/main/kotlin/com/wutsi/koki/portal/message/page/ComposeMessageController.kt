@@ -56,7 +56,7 @@ class ComposeMessageController : AbstractPageController() {
         return mapOf(
             "success" to true,
             "errorMessage" to null,
-            "successMessage" to getMessage("page.message.compose.message-sent", arrayOf(recipient.displayName))
+            "successMessage" to getMessage("page.message.compose.message-sent", arrayOf(recipient.displayName ?: ""))
         )
     }
 
@@ -65,7 +65,7 @@ class ComposeMessageController : AbstractPageController() {
             id = id,
             displayName = "Ray Sponsible",
             employer = "Courtier Immobilier SARL",
-            phone = "+15147580100",
+            mobile = "+15147580100",
             photoUrl = "https://picsum.photos/128/128"
         )
     }

@@ -20,7 +20,7 @@
     <div class="row">
         <div class="col-12 col-md-6 offset-md-3">
 
-            <form class="form" method="post" th:action="@{/signup}" th:object="${form}">
+            <form class="form padding-bottom-8x" method="post" th:action="@{/signup}" th:object="${form}">
                 <div class="form-body">
                     <div class="section">
                         <div class="section-body">
@@ -29,7 +29,7 @@
                                 <div class="text-center" th:text="#{page.signup.description}">DESCRIPTION</div>
                             </div>
                             <div class="section-item" th:if="${error}">
-                                <div class="alert alert-danger" th:text="${error}">ERROR</div>
+                                <div class="alert alert-danger" th:utext="${error}">ERROR</div>
                             </div>
                             <div class="section-item">
                                 <div class="input-group">
@@ -60,8 +60,25 @@
                                             <i class="fa-solid fa-lock"></i>
                                         </div>
                                     </div>
-                                    <input class="form-control" required th:field="*{password}"
-                                           th:placeholder="#{page.signup.password}"
+                                    <input class="form-control" minlength="8"
+                                           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                           required
+                                           th:field="*{password}" th:placeholder="#{page.signup.password}"
+                                           type="password"/>
+                                    <div class="margin-top-small text-small" th:text="#{page.signup.password.help}">
+                                        EMAIL_HELP
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="section-item">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="fa-solid fa-lock"></i>
+                                        </div>
+                                    </div>
+                                    <input class="form-control" id="confirm-password" required
+                                           th:placeholder="#{page.signup.confirm-password}"
                                            type="password"/>
                                 </div>
                             </div>
@@ -83,4 +100,20 @@
 </div>
 </body>
 
+<script th:inline="javascript">
+    const newPassword = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirm-password');
+
+    function validatePasswords() {
+        if (newPassword.value !== confirmPassword.value) {
+            confirmPassword.setCustomValidity(/*[[#{error.user.password-mismatch}]]*/ '');
+        } else {
+            confirmPassword.setCustomValidity('');
+        }
+    }
+
+    // Attach the validation function to events
+    newPassword.addEventListener('change', validatePasswords);
+    confirmPassword.addEventListener('keyup', validatePasswords);
+</script>
 </html>
