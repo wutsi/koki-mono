@@ -1,17 +1,9 @@
 package com.wutsi.koki.email.server.service
 
-import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.email.dto.SendEmailRequest
-import com.wutsi.koki.email.server.dao.AttachmentRepository
-import com.wutsi.koki.email.server.dao.EmailOwnerRepository
-import com.wutsi.koki.email.server.dao.EmailRepository
-import com.wutsi.koki.email.server.domain.AttachmentEntity
-import com.wutsi.koki.email.server.domain.EmailEntity
-import com.wutsi.koki.email.server.domain.EmailOwnerEntity
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
-import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.messaging.Message
@@ -24,14 +16,11 @@ import com.wutsi.koki.platform.messaging.smtp.SMTPType
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.platform.templating.TemplatingEngine
 import com.wutsi.koki.platform.translation.TranslationService
-import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.domain.BusinessEntity
 import com.wutsi.koki.tenant.server.service.BusinessService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import com.wutsi.koki.translation.server.service.TranslationServiceProvider
-import jakarta.persistence.EntityManager
-import jakarta.transaction.Transactional
 import org.apache.tika.language.detect.LanguageDetector
 import org.jsoup.Jsoup
 import org.slf4j.LoggerFactory
@@ -43,10 +32,6 @@ import java.util.UUID
 
 @Service
 class EmailService(
-    private val dao: EmailRepository,
-    private val attachmentDao: AttachmentRepository,
-    private val ownerDao: EmailOwnerRepository,
-    private val securityService: SecurityService,
     private val templatingEngine: TemplatingEngine,
     private val configurationService: ConfigurationService,
     private val messagingServiceBuilder: MessagingServiceBuilder,
@@ -56,66 +41,13 @@ class EmailService(
     private val filterSet: EmailFilterSet,
     private val languageDetector: LanguageDetector,
     private val translationServiceProvider: TranslationServiceProvider,
-    private val em: EntityManager,
     private val logger: KVLogger,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(EmailService::class.java)
     }
 
-    fun get(id: String, tenantId: Long): EmailEntity {
-        val account = dao.findById(id).orElseThrow { NotFoundException(Error(ErrorCode.EMAIL_NOT_FOUND)) }
-
-        if (account.tenantId != tenantId) {
-            throw NotFoundException(Error(ErrorCode.EMAIL_NOT_FOUND))
-        }
-        return account
-    }
-
-    fun search(
-        tenantId: Long,
-        ids: List<String> = emptyList(),
-        ownerId: Long? = null,
-        ownerType: ObjectType? = null,
-        limit: Int = 20,
-        offset: Int = 0,
-    ): List<EmailEntity> {
-        val jql = StringBuilder("SELECT E FROM EmailEntity AS E")
-        if (ownerId != null || ownerType != null) {
-            jql.append(" JOIN E.emailOwners AS O")
-        }
-
-        jql.append(" WHERE E.tenantId=:tenantId")
-        if (ids.isNotEmpty()) {
-            jql.append(" AND E.id IN :ids")
-        }
-        if (ownerId != null) {
-            jql.append(" AND O.ownerId = :ownerId")
-        }
-        if (ownerType != null) {
-            jql.append(" AND O.ownerType = :ownerType")
-        }
-        jql.append(" ORDER BY E.createdAt DESC")
-
-        val query = em.createQuery(jql.toString(), EmailEntity::class.java)
-        query.setParameter("tenantId", tenantId)
-        if (ids.isNotEmpty()) {
-            query.setParameter("ids", ids)
-        }
-        if (ownerId != null) {
-            query.setParameter("ownerId", ownerId)
-        }
-        if (ownerType != null) {
-            query.setParameter("ownerType", ownerType)
-        }
-
-        query.firstResult = offset
-        query.maxResults = limit
-        return query.resultList
-    }
-
-    @Transactional
-    fun send(request: SendEmailRequest, tenantId: Long): EmailEntity {
+    fun send(request: SendEmailRequest, tenantId: Long) {
         // AI api-key
 
         // Data
@@ -134,40 +66,6 @@ class EmailService(
         val body = templatingEngine.apply(request.body, data)
         val xsubject = translate(subject, fromLanguage, toLanguage, translationService)
         val xbody = translate(body, fromLanguage, toLanguage, translationService)
-        val email = EmailEntity(
-            id = id,
-            tenantId = tenantId,
-            senderId = securityService.getCurrentUserIdOrNull(),
-            recipientType = request.recipient.type,
-            recipientId = request.recipient.id,
-            recipientDisplayName = request.recipient.displayName,
-            recipientEmail = request.recipient.email,
-            subject = xsubject,
-            body = xbody,
-            summary = toSummary(xbody),
-            attachmentCount = request.attachmentFileIds.size,
-        )
-
-        // Persist
-        if (request.store) {
-            dao.save(email)
-            if (request.owner != null) {
-                ownerDao.save(
-                    EmailOwnerEntity(
-                        emailId = email.id!!, ownerId = request.owner!!.id, ownerType = request.owner!!.type
-                    )
-                )
-            }
-        }
-
-        // Attachments
-        request.attachmentFileIds.forEach { fileId ->
-            val att = AttachmentEntity(emailId = id, fileId = fileId)
-            email.attachments.add(att)
-            if (request.store) {
-                attachmentDao.save(att)
-            }
-        }
 
         // Send
         val config = configurationService.search(
@@ -175,7 +73,7 @@ class EmailService(
         ).map { cfg -> cfg.name to cfg.value }.toMap()
         try {
             val business = businessService.getOrNull(tenantId)
-            val message = createMessage(request, email, config, business)
+            val message = createMessage(request, xsubject, xbody, tenantId, config, business)
             try {
                 logger.add("recipient_email", message.recipient.email)
                 if (message.recipient.email.isEmpty()) {
@@ -187,7 +85,6 @@ class EmailService(
                 messagingServiceBuilder.build(config).send(message)
                 logger.add("email_sent", true)
                 logger.add("email_address", request.recipient.email)
-                return email
             } finally {
                 delete(message.attachments) // Delete all local files downloaded to free up diskspace
             }
@@ -243,20 +140,22 @@ class EmailService(
 
     private fun createMessage(
         request: SendEmailRequest,
-        email: EmailEntity,
+        subject: String,
+        body: String,
+        tenantId: Long,
         config: Map<String, String>,
         business: BusinessEntity?,
     ): Message {
         return Message(
-            subject = email.subject,
-            body = filterSet.filter(email.body, email.tenantId),
+            subject = subject,
+            body = filterSet.filter(body, tenantId),
             mimeType = "text/html",
             recipient = Party(
-                email = email.recipientEmail,
-                displayName = email.recipientDisplayName
+                email = request.recipient.email,
+                displayName = request.recipient.displayName
             ),
             attachments = request.attachmentFileIds.map { fileId ->
-                val file = download(fileId, email.tenantId)
+                val file = download(fileId, tenantId)
                 if (LOGGER.isDebugEnabled) {
                     LOGGER.debug("Adding attachment ${file.absolutePath}")
                 }
@@ -306,15 +205,6 @@ class EmailService(
             } catch (ex: Exception) {
                 LOGGER.warn("Unable to delete ${file.absolutePath}", ex)
             }
-        }
-    }
-
-    private fun toSummary(html: String): String {
-        val text = Jsoup.parse(html).text()
-        return if (text.length > 255) {
-            text.take(252) + "..."
-        } else {
-            text
         }
     }
 }
