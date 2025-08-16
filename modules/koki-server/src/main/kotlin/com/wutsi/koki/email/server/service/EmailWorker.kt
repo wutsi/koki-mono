@@ -1,5 +1,5 @@
-package com.wutsi.koki.notification.server.service
+package com.wutsi.koki.email.server.service
 
-interface NotificationWorker {
+interface EmailWorker {
     fun notify(event: Any): Boolean
 }

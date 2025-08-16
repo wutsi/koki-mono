@@ -4,6 +4,7 @@ import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
+import com.wutsi.koki.tenant.dto.SendUsernameRequest
 import com.wutsi.koki.tenant.dto.SetUserPhotoRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
@@ -92,5 +93,13 @@ class UserEndpoints(
         @RequestBody @Valid request: SetUserPhotoRequest
     ) {
         service.setPhoto(id, request, tenantId)
+    }
+
+    @PostMapping("/username/send")
+    fun sendUsername(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @RequestBody @Valid request: SendUsernameRequest
+    ) {
+        service.sendUsername(request, tenantId)
     }
 }

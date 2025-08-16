@@ -32,21 +32,7 @@ koki:
             secret-key: ${AWS_SECRET_KEY}
 
     module:
-        file:
-            mq:
-                consumer-delay-seconds: 60
-
-        invoice:
-            mq:
-                consumer-delay-seconds: 60
-
-        notification:
-            mq:
-                consumer-delay-seconds: 60
-
-        room:
-            mq:
-                consumer-delay-seconds: 60
+        consumer-delay-seconds: 60
 
 wutsi:
     platform:
