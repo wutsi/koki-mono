@@ -3,27 +3,23 @@ package com.wutsi.koki.portal.signup.page
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.portal.common.page.AbstractPageController
-import com.wutsi.koki.portal.common.page.PageName
-import com.wutsi.koki.portal.refdata.service.CategoryService
 import com.wutsi.koki.portal.signup.form.SignupForm
 import com.wutsi.koki.portal.signup.service.SignupService
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.portal.user.service.UserService
-import com.wutsi.koki.refdata.dto.CategoryType
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
-import java.util.Locale
 
-abstract class AbstractSignupProfileController : AbstractPageController() {
+abstract class AbstractSignupController : AbstractPageController() {
     @Autowired
-    private lateinit var logger: KVLogger
+    protected lateinit var logger: KVLogger
+
+    @Autowired
+    protected lateinit var userService: UserService
+
+    @Autowired
+    protected lateinit var signupService: SignupService
 
     protected fun loadError(form: SignupForm, ex: HttpClientErrorException, model: Model) {
         val response = toErrorResponse(ex)
@@ -36,5 +32,9 @@ abstract class AbstractSignupProfileController : AbstractPageController() {
         } else {
             model.addAttribute("error", getMessage("error.unexpected-error"))
         }
+    }
+
+    protected fun resolveUser(id: Long): UserModel {
+        return userService.user(id)
     }
 }

@@ -1,91 +1,60 @@
-package com.wutsi.koki.portal.user.service
+package com.wutsi.koki.portal.signup.service
 
-import com.wutsi.koki.portal.refdata.service.CategoryService
-import com.wutsi.koki.portal.user.mapper.UserMapper
-import com.wutsi.koki.portal.user.model.UserForm
-import com.wutsi.koki.portal.user.model.UserModel
+import com.wutsi.koki.portal.signup.form.SignupForm
+import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import com.wutsi.koki.sdk.KokiUsers
+import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.CreateUserRequest
+import com.wutsi.koki.tenant.dto.SetUserPhotoRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
-import com.wutsi.koki.tenant.dto.UserStatus
-import com.wutsi.koki.tenant.dto.UserType
+import io.lettuce.core.KillArgs.Builder.id
 import org.springframework.stereotype.Service
 
 @Service
-class UserService(
+class SignupService(
     private val koki: KokiUsers,
-    private val mapper: UserMapper,
-    private val roleService: RoleService,
-    private val categoryService: CategoryService,
+    private val configurationService: ConfigurationService
 ) {
-    fun user(id: Long, fullGraph: Boolean = true): UserModel {
-        val user = koki.user(id).user
-        val roles = if (user.roleIds.isEmpty() || !fullGraph) {
-            emptyList()
-        } else {
-            roleService.roles(user.roleIds)
-        }
-        val category = if (user.categoryId == null || !fullGraph){
-            null
-        } else {
-            categoryService.category(user.categoryId ?: -1)
-        }
-        return mapper.toUserModel(user, roles, category)
-    }
-
-    fun users(
-        keyword: String? = null,
-        ids: List<Long> = emptyList(),
-        roleIds: List<Long> = emptyList(),
-        permissions: List<String> = emptyList(),
-        status: UserStatus? = null,
-        username: String? = null,
-        limit: Int = 20,
-        offset: Int = 0,
-    ): List<UserModel> {
-        val users = koki.users(
-            keyword = keyword,
-            ids = ids,
-            roleIds = roleIds,
-            permissions = permissions,
-            status = status,
-            username = username,
-            limit = limit,
-            offset = offset
-        ).users
-
-        return users.map { user -> mapper.toUserModel(user) }
-    }
-
-    fun create(form: UserForm): Long {
+    fun create(form: SignupForm): Long {
         return koki.create(
             CreateUserRequest(
-                displayName = form.displayName,
+                displayName = form.name,
                 username = form.username,
                 email = form.email,
-                roleIds = form.roleIds,
-                language = form.language,
                 password = form.password,
+                roleIds = getRoleId()?.let { id -> listOf(id) } ?: emptyList()
             )
         ).userId
     }
 
-    fun update(id: Long, form: UserForm) {
-        val user = koki.user(id).user
+    fun updateProfile(form: SignupForm) {
+        val user = koki.user(form.id).user
         koki.update(
-            id,
+            user.id,
             UpdateUserRequest(
-                displayName = form.displayName,
+                displayName = form.name,
                 email = form.email,
-                roleIds = form.roleIds,
-                language = form.language,
+                employer = form.employer,
+                mobile = form.mobileFull,
+                categoryId = form.categoryId,
+                cityId = form.cityId,
+                country = form.country,
 
-                mobile = user.mobile,
-                categoryId = user.categoryId,
-                employer = user.employer,
-                cityId = user.cityId,
-                country = user.country,
+                language = user.language,
+                roleIds = user.roleIds,
             )
         )
+    }
+
+    fun updatePhoto(form: SignupForm) {
+        koki.photo(
+            form.id,
+            SetUserPhotoRequest(photoUrl = form.photoUrl),
+        )
+    }
+
+    private fun getRoleId(): Long? {
+        val configs = configurationService.configurations(listOf(ConfigurationName.PORTAL_SIGNUP_ROLE_ID))
+        return configs[ConfigurationName.PORTAL_SIGNUP_ROLE_ID]?.toLong()
     }
 }

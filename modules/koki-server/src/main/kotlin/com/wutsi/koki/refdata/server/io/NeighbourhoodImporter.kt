@@ -47,7 +47,7 @@ class NeighbourhoodImporter(
 
         var row = 0
         val cities = locationService
-            .search(country = country, type = LocationType.CITY, limit = Integer.MAX_VALUE)
+            .search(country = country, types = listOf(LocationType.CITY), limit = Integer.MAX_VALUE)
             .associateBy { city -> city.asciiName.lowercase() }
 
         val parser = createParser(input)

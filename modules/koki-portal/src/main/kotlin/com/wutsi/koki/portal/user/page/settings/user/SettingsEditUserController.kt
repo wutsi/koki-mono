@@ -31,6 +31,7 @@ class SettingsEditUserController(
             username = user.username,
             email = user.email,
             status = user.status,
+            language = user.language,
             roleIds = user.roles.map { role -> role.id }
         )
         return edit(user, form, model)
@@ -51,7 +52,7 @@ class SettingsEditUserController(
             "page",
             createPageModel(
                 name = PageName.SECURITY_SETTINGS_USER_EDIT,
-                title = user.displayName,
+                title = user.displayName ?: "-",
             )
         )
 

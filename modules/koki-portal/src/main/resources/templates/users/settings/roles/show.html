@@ -14,49 +14,62 @@
     <div class="settings-content">
         <div th:replace="~{__components/settings :: settings-title('Roles', '/settings/roles')}"></div>
 
-        <div class="padding">
-            <a class="btn btn-sm btn-secondary btn-edit" th:href="'/settings/roles/' + ${role.id} + '/edit'">Edit</a>
-
-            <a class="btn btn-sm btn-danger btn-delete float-right"
-               onclick="return confirm('Are you sure you want to delete this role?')"
-               th:href="'/settings/roles/' + ${role.id} + '/delete'">Delete</a>
-        </div>
-
         <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
-        <table class="table">
-            <tr>
-                <td width="20%"><b>Name</b></td>
-                <td th:text="${role.name}">NAME</td>
-            </tr>
-            <tr>
-                <td><b>Title</b></td>
-                <td th:text="${role.title}">TITLE</td>
-            </tr>
-            <tr>
-                <td><b>Active</b></td>
-                <td>
-                    <span th:if="${role.active}">Yes</span>
-                    <span th:if="!${role.active}">No</span>
-                </td>
-            </tr>
-            <tr th:if="${role.description}">
-                <td><b>Description</b></td>
-                <td th:text="${role.description}">DESCRIPTION</td>
-            </tr>
-            <tr>
-                <td><b>Permissions</b></td>
-                <td>
-                    <table class="table table-striped" th:if="!${role.permissions.isEmpty()}">
-                        <tr th:each="permission : ${role.permissions}">
-                            <td th:text="${permission.name}">NAME</td>
-                            <td th:text="${permission.description}">DESCRIPTION</td>
-                        </tr>
-                    </table>
-                    <em th:if="${role.permissions.isEmpty()}">The role has no permission</em>
-                </td>
-            </tr>
-        </table>
+        <div class="padding">
+            <a class="btn btn-sm btn-light" id="btn-edit"
+               th:href="'/settings/roles/' + ${role.id} + '/edit'">
+                Edit
+            </a>
+
+            <a class="btn btn-sm btn-light" id="btn-portal-signup-role"
+               th:href="${portalSignupRoleUrl}"
+               th:if="${portalSignupRoleUrl}">
+                Portal Signup Role
+            </a>
+        </div>
+
+        <div class="padding-top border-top">
+            <table class="table">
+                <tr>
+                    <td width="20%"><b>Name</b></td>
+                    <td>
+                        <span th:text="${role.name}">NAME</span>
+                        <span class="badge rounded-pill text-bg-info margin-left-small"
+                              th:if="${portalSignupRoleId} == ${role.id}">
+                            Portal Signup Role
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Title</b></td>
+                    <td th:text="${role.title}">TITLE</td>
+                </tr>
+                <tr>
+                    <td><b>Active</b></td>
+                    <td>
+                        <span th:if="${role.active}">Yes</span>
+                        <span th:if="!${role.active}">No</span>
+                    </td>
+                </tr>
+                <tr th:if="${role.description}">
+                    <td><b>Description</b></td>
+                    <td th:text="${role.description}">DESCRIPTION</td>
+                </tr>
+                <tr>
+                    <td><b>Permissions</b></td>
+                    <td>
+                        <table class="table table-striped" th:if="!${role.permissions.isEmpty()}">
+                            <tr th:each="permission : ${role.permissions}">
+                                <td th:text="${permission.name}">NAME</td>
+                                <td th:text="${permission.description}">DESCRIPTION</td>
+                            </tr>
+                        </table>
+                        <em th:if="${role.permissions.isEmpty()}">The role has no permission</em>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>
 

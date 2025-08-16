@@ -43,8 +43,9 @@ class JuridictionImporter(
             )
         )
 
-        val states = locationService.search(country = country, type = LocationType.STATE, limit = Integer.MAX_VALUE)
-            .associateBy { state -> state.asciiName.uppercase() }
+        val states =
+            locationService.search(country = country, types = listOf(LocationType.STATE), limit = Integer.MAX_VALUE)
+                .associateBy { state -> state.asciiName.uppercase() }
 
         val parser = createParser(input)
         for (record in parser) {

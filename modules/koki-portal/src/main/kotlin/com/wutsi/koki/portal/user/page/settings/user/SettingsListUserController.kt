@@ -4,14 +4,16 @@ import com.wutsi.koki.portal.account.page.ListAccountController
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
+import com.wutsi.koki.portal.user.form.SearchUserForm
 import com.wutsi.koki.portal.user.service.RoleService
 import com.wutsi.koki.portal.user.service.UserService
-import com.wutsi.koki.tenant.dto.UserStatus
-import com.wutsi.koki.tenant.dto.UserType
+import io.lettuce.core.KillArgs.Builder.user
+import io.micrometer.core.instrument.Metrics.more
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -29,11 +31,8 @@ class SettingsListUserController(
 
     @GetMapping
     fun show(
+        @ModelAttribute form: SearchUserForm,
         @RequestHeader(required = false, name = "Referer") referer: String? = null,
-        @RequestParam(required = false) limit: Int = 20,
-        @RequestParam(required = false) offset: Int = 0,
-        @RequestParam(required = false, name = "role-id") roleId: Long? = null,
-        @RequestParam(required = false, name = "status") status: UserStatus? = null,
         @RequestParam(required = false, name = "_toast") toast: Long? = null,
         @RequestParam(required = false, name = "_ts") timestamp: Long? = null,
         @RequestParam(required = false, name = "_op") operation: String? = null,
@@ -47,43 +46,35 @@ class SettingsListUserController(
             )
         )
 
-        val roles = roleService.roles(
-            active = true,
-            limit = Integer.MAX_VALUE
-        )
-        model.addAttribute("roles", roles)
-        model.addAttribute("roleId", roleId)
-
-        model.addAttribute("statuses", UserStatus.entries)
-        model.addAttribute("status", status)
-
         loadToast(referer, toast, timestamp, operation, model)
-        more(roleId, status, limit, offset, model)
+        more(form, 20, 0, model)
         return "users/settings/users/list"
     }
 
     @GetMapping("/more")
     fun more(
-        @RequestParam(required = false, name = "role-id") roleId: Long? = null,
-        @RequestParam(required = false, name = "status") status: UserStatus? = null,
+        @ModelAttribute form: SearchUserForm,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
-        val users = service.users(
-            roleIds = if (roleId == null || roleId == -1L) emptyList() else listOf(roleId),
-            status = status,
-            type = UserType.EMPLOYEE,
-            limit = limit,
-            offset = offset
-        )
-        model.addAttribute("users", users)
-        if (users.size >= limit) {
-            val nextOffset = offset + limit
-            var moreUrl = "/settings/users/more?limit=$limit&offset=$nextOffset"
-            roleId?.let { moreUrl = "$moreUrl&role-id=$roleId" }
-            status?.let { moreUrl = "$moreUrl&status=$status" }
-            model.addAttribute("moreUrl", moreUrl)
+        model.addAttribute("form", form)
+
+        if (!form.keyword.isNullOrEmpty()) {
+            val users = service.users(
+                keyword = form.keyword,
+                limit = limit,
+                offset = offset
+            )
+            if (!users.isEmpty()) {
+                model.addAttribute("users", users)
+            }
+
+            if (users.size >= limit) {
+                val nextOffset = offset + limit
+                var moreUrl = "/settings/users/more?limit=$limit&offset=$nextOffset&keyword=${form.keyword}"
+                model.addAttribute("moreUrl", moreUrl)
+            }
         }
         return "users/settings/users/more"
     }

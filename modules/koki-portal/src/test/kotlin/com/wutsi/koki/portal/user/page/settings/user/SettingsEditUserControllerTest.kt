@@ -12,7 +12,6 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
-import com.wutsi.koki.tenant.dto.UserStatus
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -23,9 +22,7 @@ class SettingsEditUserControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_EDIT)
 
         input("#displayName", "Yo Man")
-        input("#username", "yoman")
         input("#email", "yoman@gmail.com")
-        select("#status", 2)
         select2("#language", "French")
         click("#role-" + RoleFixtures.roles[0].id)
         click("#role-" + RoleFixtures.roles[2].id)
@@ -39,9 +36,7 @@ class SettingsEditUserControllerTest : AbstractPageControllerTest() {
         )
 
         assertEquals("Yo Man", request.firstValue.displayName)
-        assertEquals("yoman", request.firstValue.username)
         assertEquals("yoman@gmail.com", request.firstValue.email)
-        assertEquals(UserStatus.SUSPENDED, request.firstValue.status)
         assertEquals("fr", request.firstValue.language)
         assertEquals(
             RoleFixtures.roles.filter { role ->
@@ -49,6 +44,11 @@ class SettingsEditUserControllerTest : AbstractPageControllerTest() {
             }.map { role -> role.id },
             request.firstValue.roleIds
         )
+
+        assertEquals(user.cityId, request.firstValue.cityId)
+        assertEquals(user.country, request.firstValue.country)
+        assertEquals(user.employer, request.firstValue.employer)
+        assertEquals(user.mobile, request.firstValue.mobile)
 
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER)
         assertElementVisible("#koki-toast")
@@ -68,7 +68,6 @@ class SettingsEditUserControllerTest : AbstractPageControllerTest() {
 
         input("#displayName", "Yo Man")
         input("#email", "yoman@gmail.com")
-        select("#status", 2)
         click("button[type=submit]", 1000)
 
         assertElementPresent(".alert-danger")

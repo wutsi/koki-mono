@@ -1,7 +1,6 @@
 package com.wutsi.koki.tenant.server.domain
 
 import com.wutsi.koki.tenant.dto.UserStatus
-import com.wutsi.koki.tenant.dto.UserType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -24,25 +23,31 @@ data class UserEntity(
     @Column(name = "tenant_fk")
     val tenantId: Long = -1,
 
-    @Column(name = "account_fk")
-    val accountId: Long? = null,
-
     @Column(name = "created_by_fk")
     var createdById: Long? = null,
 
     @Column(name = "modified_by_fk")
     var modifiedById: Long? = null,
 
+    @Column(name = "city_fk")
+    var cityId: Long? = null,
+
+    @Column(name = "category_fk")
+    var categoryId: Long? = null,
+
     var username: String = "",
-    var email: String = "",
     val password: String = "",
     val salt: String = "",
-    var status: UserStatus = UserStatus.ACTIVE,
-    val type: UserType = UserType.UNKNOWN,
-    var displayName: String = "",
+    var status: UserStatus = UserStatus.UNKNOWN,
+    var email: String? = null,
+    var displayName: String? = null,
     var language: String? = null,
+    var employer: String? = null,
+    var mobile: String? = null,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
+    var country: String? = null,
+    var photoUrl: String? = null,
 
     @ManyToMany
     @JoinTable(

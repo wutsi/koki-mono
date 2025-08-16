@@ -18,9 +18,9 @@
             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
             <table class="table">
                 <tr>
-                    <td width="20%"><b>Name<span class="required">*</span></b></td>
+                    <td width="20%"><b>Full Name<span class="required">*</span></b></td>
                     <td>
-                        <input maxlength="100" required th:field="*{displayName}"/>
+                        <input maxlength="50" required th:field="*{displayName}"/>
                     </td>
                 </tr>
                 <tr>
@@ -32,19 +32,31 @@
                 <tr>
                     <td><b>Email<span class="required">*</span></b></td>
                     <td>
-                        <input maxlength="100" required th:field="*{email}"/>
+                        <input maxlength="255" required th:field="*{email}"/>
                     </td>
                 </tr>
                 <tr>
                     <td><b>Password<span class="required">*</span></b></td>
                     <td>
-                        <input required th:field="*{password}" type="password"/>
+                        <input pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required
+                               th:field="*{password}"
+                               type="password"/>
+                        <div class="margin-top-small text-small" th:text="#{page.signup.password.help}">
+                            EMAIL_HELP
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Confirm Password<span class="required">*</span></b></td>
+                    <td>
+                        <input id="confirm-password" required type="password"/>
                     </td>
                 </tr>
                 <tr>
                     <td><b>Language</b></td>
                     <td>
                         <select th:field="*{language}">
+                            <option value=""></option>
                             <option th:each="language : ${languages}"
                                     th:text="${language.displayName}"
                                     th:value="${language.language}">
@@ -85,8 +97,22 @@
     </div>
 </div>
 
-<script>
+<script th:inline="javascript">
     $('#language').select2();
+
+    const newPassword = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirm-password');
+
+    function validatePasswords() {
+        if (newPassword.value !== confirmPassword.value) {
+            confirmPassword.setCustomValidity(/*[[#{error.user.password-mismatch}]]*/ '');
+        } else {
+            confirmPassword.setCustomValidity('');
+        }
+    }
+
+    newPassword.addEventListener('change', validatePasswords);
+    confirmPassword.addEventListener('keyup', validatePasswords);
 </script>
 
 </body>

@@ -1,5 +1,7 @@
 package com.wutsi.koki.portal.security.page
 
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.form.LoginForm
@@ -19,6 +21,7 @@ import org.springframework.web.client.HttpClientErrorException
 class LoginController(
     private val service: LoginService,
     private val response: HttpServletResponse,
+    private val logger: KVLogger,
 ) : AbstractPageController() {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(LoginController::class.java)
@@ -52,7 +55,13 @@ class LoginController(
                 return "redirect:/"
             }
         } catch (ex: HttpClientErrorException) {
-            LOGGER.warn("Authentication failed", ex)
+            val response = toErrorResponse(ex)
+            if (response.error.code == ErrorCode.AUTHENTICATION_USER_NOT_ACTIVE) {
+                model.addAttribute("error", getMessage("error.account-not-active"))
+            } else {
+                model.addAttribute("error", getMessage("error.authentication-failed"))
+            }
+            logger.add("backend_error", response.error.code)
             model.addAttribute("failed", true)
             return show(model)
         }

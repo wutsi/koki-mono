@@ -61,7 +61,7 @@ class LocationService(
         keyword: String? = null,
         ids: List<Long> = emptyList(),
         parentId: Long? = null,
-        type: LocationType? = null,
+        types: List<LocationType> = emptyList(),
         country: String? = null,
         limit: Int = 20,
         offset: Int = 0,
@@ -77,8 +77,8 @@ class LocationService(
         if (parentId != null) {
             jql.append(" AND L.parentId = :parentId")
         }
-        if (type != null) {
-            jql.append(" AND L.type = :type")
+        if (types.isNotEmpty()) {
+            jql.append(" AND L.type IN :types")
         }
         if (country != null) {
             jql.append(" AND L.country = :country")
@@ -95,8 +95,8 @@ class LocationService(
         if (parentId != null) {
             query.setParameter("parentId", parentId)
         }
-        if (type != null) {
-            query.setParameter("type", type)
+        if (types.isNotEmpty()) {
+            query.setParameter("types", types)
         }
         if (country != null) {
             query.setParameter("country", country)

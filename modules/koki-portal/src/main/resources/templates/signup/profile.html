@@ -20,13 +20,19 @@
     <div class="row">
         <div class="col-12 col-md-6 offset-md-3">
 
-            <form class="form" method="post" th:action="@{/signup/profile}" th:object="${form}">
+            <form class="form padding-bottom-8x" method="post" th:action="@{/signup/profile}" th:object="${form}">
+                <input th:field="*{id}" type="hidden"/>
                 <div class="form-body">
                     <div class="section">
                         <div class="section-body">
                             <div class="section-item text-center">
                                 <h1 class="text-center margin-none" th:text="#{page.signup-profile.title}">TITLE</h1>
                             </div>
+
+                            <div class="section-item" th:if="${error}">
+                                <div class="alert alert-danger" th:utext="${error}">ERROR</div>
+                            </div>
+
                             <div class="section-item">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -34,7 +40,7 @@
                                             <i class="fa-solid fa-id-badge"></i>
                                         </div>
                                     </div>
-                                    <input class="form-control" maxlength="100" required th:field="*{name}"
+                                    <input class="form-control" maxlength="50" required th:field="*{name}"
                                            th:placeholder="#{page.signup.name}"/>
                                 </div>
                             </div>
@@ -60,7 +66,8 @@
                                             <i class="fa-solid fa-mobile-screen"></i>
                                         </div>
                                     </div>
-                                    <input maxlength="30" required th:data-country="*{country}" th:field="*{mobile}"
+                                    <input maxlength="30" required th:data-country="*{country}"
+                                           th:field="*{mobile}"
                                            type="tel"/>
                                     <div class="margin-top-small text-small" th:text="#{page.signup.mobile.help}">
                                         MOBILE_HELP
@@ -68,7 +75,7 @@
                                 </div>
                             </div>
                             <div class="section-item">
-                                <select class="select-form" th:field="*{categoryId}">
+                                <select class="form-select" th:field="*{categoryId}">
                                     <option th:text="#{page.signup.category}" value=""></option>
                                     <option th:each="category : ${categories}"
                                             th:text="${category.name}"
@@ -80,7 +87,11 @@
                                        th:placeholder="#{page.signup.employer}"/>
                             </div>
 
-                            <div class="section-item">
+                            <div class="section-item"
+                                 data-city-id="cityId"
+                                 data-component-id="address"
+                                 data-country-id="country"
+                            >
                                 <select required th:field="*{country}">
                                     <option value=""></option>
                                     <option th:each="country : ${countries}"
@@ -117,14 +128,6 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener(
-        'DOMContentLoaded',
-        function () {
-            koki_address_editor('country', 'cityId');
-        }
-    );
-</script>
 </body>
 
 </html>

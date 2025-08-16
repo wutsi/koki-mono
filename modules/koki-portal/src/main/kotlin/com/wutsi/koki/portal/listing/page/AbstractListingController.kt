@@ -16,7 +16,6 @@ import com.wutsi.koki.portal.refdata.model.GeoLocationModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.refdata.dto.LocationType
-import io.lettuce.core.KillArgs.Builder.id
 import java.time.LocalDate
 
 abstract class AbstractListingController : AbstractModulePageController() {
@@ -88,7 +87,7 @@ abstract class AbstractListingController : AbstractModulePageController() {
                 id = 333,
                 displayName = "Ray Sponsible",
                 employer = "Courtier Immobilier SARL",
-                phone = "+15147580100",
+                mobile = "+15147580100",
                 photoUrl = "https://picsum.photos/128/128"
             ),
             fenceType = FenceType.CONCRETE,

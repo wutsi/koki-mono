@@ -3,7 +3,9 @@ package com.wutsi.koki.portal.user.page.settings.role
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
+import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import com.wutsi.koki.portal.user.service.RoleService
+import com.wutsi.koki.tenant.dto.ConfigurationName
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -16,7 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam
 @RequestMapping("/settings/roles")
 @RequiresPermission(["security:admin"])
 class SettingsListRoleController(
-    private val service: RoleService,
+    private val roleService: RoleService,
+    private val configurationService: ConfigurationService,
 ) : AbstractPageController() {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(SettingsListRoleController::class.java)
@@ -51,7 +54,11 @@ class SettingsListRoleController(
         @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
-        val roles = service.roles(
+        val configs = configurationService.configurations(listOf(ConfigurationName.PORTAL_SIGNUP_ROLE_ID))
+        val portalSignupRoleId = configs[ConfigurationName.PORTAL_SIGNUP_ROLE_ID]
+        model.addAttribute("portalSignupRoleId", portalSignupRoleId)
+
+        val roles = roleService.roles(
             limit = limit,
             offset = offset
         )
@@ -79,7 +86,7 @@ class SettingsListRoleController(
                 model.addAttribute("toast", "Deleted")
             } else {
                 try {
-                    val role = service.role(toast)
+                    val role = roleService.role(toast)
                     model.addAttribute(
                         "toast",
                         "<a href='/settings/roles/${role.id}'>${role.title}</a> has been saved!"

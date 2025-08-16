@@ -1,4 +1,5 @@
 package com.wutsi.koki.portal.user.form
 
-class SearchUserForm {
-}
+data class SearchUserForm(
+    val keyword: String? = null
+)

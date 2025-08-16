@@ -102,21 +102,8 @@ class SearchUserEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
-    fun `by type`() {
-        val result = rest.getForEntity("/v1/users?type=ACCOUNT", SearchUserResponse::class.java)
-
-        assertEquals(HttpStatus.OK, result.statusCode)
-
-        val users = result.body!!.users
-
-        assertEquals(3, users.size)
-
-        assertEquals(true, users.map { user -> user.id }.containsAll(listOf(14L, 16L, 18L)))
-    }
-
-    @Test
     fun `by status`() {
-        val result = rest.getForEntity("/v1/users?status=TERMINATED", SearchUserResponse::class.java)
+        val result = rest.getForEntity("/v1/users?status=SUSPENDED", SearchUserResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
@@ -125,6 +112,19 @@ class SearchUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals(1, users.size)
 
         assertEquals(14L, users[0].id)
+    }
+
+    @Test
+    fun `by username`() {
+        val result = rest.getForEntity("/v1/users?username=ray.sponsible", SearchUserResponse::class.java)
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val users = result.body!!.users
+
+        assertEquals(1, users.size)
+
+        assertEquals(11L, users[0].id)
     }
 
     @Test

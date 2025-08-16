@@ -18,39 +18,22 @@
             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
             <table class="table">
                 <tr>
-                    <td width="20%"><b>Name<span class="required">*</span></b></td>
+                    <td width="20%"><b>Full Name<span class="required">*</span></b></td>
                     <td>
-                        <input maxlength="100" required th:field="*{displayName}"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td><b>Username<span class="required">*</span></b></td>
-                    <td>
-                        <input maxlength="50" required th:field="*{username}"/>
+                        <input maxlength="50" required th:field="*{displayName}"/>
                     </td>
                 </tr>
                 <tr>
                     <td><b>Email<span class="required">*</span></b></td>
                     <td>
-                        <input maxlength="100" required th:field="*{email}"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td><b>Status</b></td>
-                    <td>
-                        <select th:field="*{status}">
-                            <option th:each="value : ${me.status.values()}"
-                                    th:text="#{'user-status.' + ${value.name()}}"
-                                    th:value="${value.name()}">
-                                OPTION
-                            </option>
-                        </select>
+                        <input maxlength="255" required th:field="*{email}"/>
                     </td>
                 </tr>
                 <tr>
                     <td><b>Language</b></td>
                     <td>
                         <select th:field="*{language}">
+                            <option value=""></option>
                             <option th:each="language : ${languages}"
                                     th:text="${language.displayName}"
                                     th:value="${language.language}">

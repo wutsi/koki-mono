@@ -38,7 +38,7 @@ class SettingsUserController(
             "page",
             createPageModel(
                 name = PageName.SECURITY_SETTINGS_USER,
-                title = user.displayName,
+                title = user.displayName ?: "-",
             )
 
         )

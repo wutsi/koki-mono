@@ -115,7 +115,7 @@ abstract class AbstractPageController {
         )
     }
 
-    protected fun getMessage(key: String, args: Array<Any>? = null, locale: Locale? = null): String {
+    protected fun getMessage(key: String, args: Array<Any?>? = null, locale: Locale? = null): String {
         try {
             val loc = locale ?: LocaleContextHolder.getLocale()
             return messages.getMessage(key, args, loc)
@@ -148,10 +148,6 @@ abstract class AbstractPageController {
     }
 
     protected fun resolveParent(city: LocationModel?): LocationModel? {
-        try {
-            return city?.parentId?.let { id -> locationService.location(id) }
-        } catch (ex: Exception) {
-            return null
-        }
+        return city?.parentId?.let { id -> locationService.location(id) }
     }
 }

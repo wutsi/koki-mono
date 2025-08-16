@@ -1,13 +1,13 @@
 <tr class="role" th:each="role : ${roles}">
     <td>
-        <a class="btn-view" th:href="'/settings/roles/' + ${role.id}">
-            <span th:text="${role.name}">NAME</span>
-        </a>
+        <span th:text="${role.name}">NAME</span>
+        <span class="badge badge-pill badge-info"
+              th:if="!${portalSignupRoleId} == ${role.id}">Portal Signup Role</span>
     </td>
+    <td th:text="${role.title}">TITLE</td>
     <td>
         <span th:if="${role.active}">Yes</span>
     </td>
-    <td th:text="${role.modifiedAtText}">MODIFIED</td>
     <td class="toolbar">
         <a class="btn-view" th:href="'/settings/roles/' + ${role.id}">View</a>
         <a class="btn-edit" th:href="'/settings/roles/' + ${role.id} + '/edit'">Edit</a>

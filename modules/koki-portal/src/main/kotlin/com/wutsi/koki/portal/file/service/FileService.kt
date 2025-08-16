@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service
 class FileService(
     private val koki: KokiFiles,
     private val userService: UserService,
+    private val uploadUrlProvider: FileUploadUrlProvider,
     private val mapper: FileMapper,
 ) {
     fun file(id: Long): FileModel {
@@ -70,7 +71,7 @@ class FileService(
         ownerType: ObjectType? = null,
         type: FileType,
     ): String {
-        return koki.uploadUrl(
+        return uploadUrlProvider.get(
             ownerId = ownerId,
             ownerType = ownerType,
             type = type,

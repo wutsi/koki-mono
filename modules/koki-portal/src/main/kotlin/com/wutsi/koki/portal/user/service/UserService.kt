@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.user.service
 
+import com.wutsi.koki.portal.refdata.service.CategoryService
 import com.wutsi.koki.portal.user.mapper.UserMapper
 import com.wutsi.koki.portal.user.model.UserForm
 import com.wutsi.koki.portal.user.model.UserModel
@@ -7,14 +8,14 @@ import com.wutsi.koki.sdk.KokiUsers
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
-import com.wutsi.koki.tenant.dto.UserType
 import org.springframework.stereotype.Service
 
 @Service
 class UserService(
     private val koki: KokiUsers,
     private val mapper: UserMapper,
-    private val roleService: RoleService
+    private val roleService: RoleService,
+    private val categoryService: CategoryService,
 ) {
     fun user(id: Long, fullGraph: Boolean = true): UserModel {
         val user = koki.user(id).user
@@ -23,7 +24,12 @@ class UserService(
         } else {
             roleService.roles(user.roleIds)
         }
-        return mapper.toUserModel(user, roles)
+        val category = if (user.categoryId == null || !fullGraph) {
+            null
+        } else {
+            categoryService.category(user.categoryId ?: -1)
+        }
+        return mapper.toUserModel(user, roles, category)
     }
 
     fun users(
@@ -32,7 +38,7 @@ class UserService(
         roleIds: List<Long> = emptyList(),
         permissions: List<String> = emptyList(),
         status: UserStatus? = null,
-        type: UserType? = null,
+        username: String? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): List<UserModel> {
@@ -42,7 +48,7 @@ class UserService(
             roleIds = roleIds,
             permissions = permissions,
             status = status,
-            type = type,
+            username = username,
             limit = limit,
             offset = offset
         ).users
@@ -51,7 +57,7 @@ class UserService(
     }
 
     fun create(form: UserForm): Long {
-        return koki.createUser(
+        return koki.create(
             CreateUserRequest(
                 displayName = form.displayName,
                 username = form.username,
@@ -59,22 +65,25 @@ class UserService(
                 roleIds = form.roleIds,
                 language = form.language,
                 password = form.password,
-                status = UserStatus.ACTIVE,
-                type = UserType.EMPLOYEE,
             )
         ).userId
     }
 
     fun update(id: Long, form: UserForm) {
-        koki.updateUser(
+        val user = koki.user(id).user
+        koki.update(
             id,
             UpdateUserRequest(
                 displayName = form.displayName,
-                username = form.username,
                 email = form.email,
-                status = form.status,
                 roleIds = form.roleIds,
                 language = form.language,
+
+                mobile = user.mobile,
+                categoryId = user.categoryId,
+                employer = user.employer,
+                cityId = user.cityId,
+                country = user.country,
             )
         )
     }

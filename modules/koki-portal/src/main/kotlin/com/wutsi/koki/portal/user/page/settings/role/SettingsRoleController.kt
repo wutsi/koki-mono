@@ -3,8 +3,10 @@ package com.wutsi.koki.portal.user.page.settings.role
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
+import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import com.wutsi.koki.portal.user.model.RoleModel
 import com.wutsi.koki.portal.user.service.RoleService
+import com.wutsi.koki.tenant.dto.ConfigurationName
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -12,13 +14,13 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 @RequestMapping("/settings/roles")
 @RequiresPermission(["security:admin"])
 class SettingsRoleController(
-    private val service: RoleService,
+    private val roleService: RoleService,
+    private val configurationService: ConfigurationService,
 ) : AbstractPageController() {
     @GetMapping("/{id}")
     fun show(
@@ -28,9 +30,29 @@ class SettingsRoleController(
         @RequestParam(required = false, name = "_ts") timestamp: Long? = null,
         model: Model
     ): String {
-        val role = service.role(id)
+        val role = roleService.role(id)
+
+        val configs = configurationService.configurations(listOf(ConfigurationName.PORTAL_SIGNUP_ROLE_ID))
+        val portalSignupRoleId = configs[ConfigurationName.PORTAL_SIGNUP_ROLE_ID]
+        model.addAttribute("portalSignupRoleId", portalSignupRoleId)
+
+        if (portalSignupRoleId != id.toString()) {
+            model.addAttribute("portalSignupRoleUrl", "/settings/roles/$id/portal-signup-role")
+        }
+
         loadToast(id, referer, toast, timestamp, model)
         return show(role, model)
+    }
+
+    @GetMapping("/{id}/portal-signup-role")
+    fun portalSignupRole(@PathVariable id: Long): String {
+        val role = roleService.role(id)
+        configurationService.save(
+            mapOf(
+                ConfigurationName.PORTAL_SIGNUP_ROLE_ID to role.id.toString(),
+            )
+        )
+        return "redirect:/settings/roles/$id"
     }
 
     private fun show(role: RoleModel, model: Model): String {
@@ -44,20 +66,6 @@ class SettingsRoleController(
 
         )
         return "users/settings/roles/show"
-    }
-
-    @GetMapping("/{id}/delete")
-    fun delete(@PathVariable id: Long, model: Model): String {
-        try {
-            service.delete(id)
-            return "redirect:/settings/roles?_op=del&_toast=$id&_ts=" + System.currentTimeMillis()
-        } catch (ex: HttpClientErrorException) {
-            val response = toErrorResponse(ex)
-            model.addAttribute("error", response.error.code)
-
-            val role = service.role(id)
-            return show(role, model)
-        }
     }
 
     private fun loadToast(
