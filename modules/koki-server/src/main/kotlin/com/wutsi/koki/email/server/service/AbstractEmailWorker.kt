@@ -1,11 +1,13 @@
-package com.wutsi.koki.notification.server.service
+package com.wutsi.koki.email.server.service
 
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
+import org.springframework.beans.factory.annotation.Autowired
 
-abstract class AbstractNotificationWorker(
-    private val registry: NotificationMQConsumer
-) : NotificationWorker {
+abstract class AbstractEmailWorker : EmailWorker {
+    @Autowired
+    protected lateinit var registry: EmailMQConsumer
+
     @PostConstruct
     fun init() {
         registry.register(this)

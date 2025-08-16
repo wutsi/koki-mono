@@ -27,7 +27,7 @@
                                 <h1 class="text-center margin-none" th:text="#{page.forgot.username.title}">TITLE</h1>
                             </div>
                             <div class="section-item" th:if="${error}">
-                                <div class="alert alert-danger" th:text="${error}">ERROR</div>
+                                <div class="alert alert-danger" th:utext="${error}">ERROR</div>
                             </div>
                             <div class="section-item">
                                 <div class="input-group">
@@ -44,8 +44,8 @@
                                      th:text="#{page.forgot.username.description}"></div>
                             </div>
                             <div class="section-item text-center">
-                                <button class="btn btn-primary w-100" id="btn-next" th:text="#{button.next}"
-                                        type="submit">NEXT
+                                <button class="btn btn-primary w-100" th:text="#{button.next}" type="submit">
+                                    NEXT
                                 </button>
                             </div>
                         </div>

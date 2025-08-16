@@ -1,4 +1,7 @@
-package com.wutsi.koki.tenant.server
+package com.wutsi.koki.tenant.server.command
 
-class SendUsernameCommand {
-}
+data class SendUsernameCommand(
+    val userId: Long = -1,
+    val tenantId: Long = -1,
+    val timestamp: Long = System.currentTimeMillis(),
+)

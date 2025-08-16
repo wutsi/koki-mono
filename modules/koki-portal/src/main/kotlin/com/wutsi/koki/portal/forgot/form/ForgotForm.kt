@@ -1,5 +1,5 @@
 package com.wutsi.koki.portal.forgot.form
 
-data class EmailForm(
+data class ForgotForm(
     val email: String = ""
 )

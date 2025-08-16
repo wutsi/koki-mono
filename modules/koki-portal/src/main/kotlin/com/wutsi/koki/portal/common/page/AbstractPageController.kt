@@ -1,8 +1,10 @@
 package com.wutsi.koki.portal.common.page
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.platform.geoip.GeoIpService
+import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.service.Toggles
 import com.wutsi.koki.portal.common.service.TogglesHolder
@@ -54,6 +56,9 @@ abstract class AbstractPageController {
 
     @Autowired
     protected lateinit var locationService: LocationService
+
+    @Autowired
+    protected lateinit var logger: KVLogger
 
     @ModelAttribute("user")
     fun getUser(): UserModel? {
@@ -149,5 +154,27 @@ abstract class AbstractPageController {
 
     protected fun resolveParent(city: LocationModel?): LocationModel? {
         return city?.parentId?.let { id -> locationService.location(id) }
+    }
+
+    protected fun loadError(ex: HttpClientErrorException, model: Model) {
+        val response = toErrorResponse(ex)
+        logger.add("backend_error", response.error.code)
+        loadError(response, model)
+    }
+
+    protected fun loadError(response: ErrorResponse, model: Model) {
+        val error = toErrorMessage(response)
+        model.addAttribute("error", error)
+    }
+
+    protected open fun toErrorMessage(response: ErrorResponse): String {
+        return when (response.error.code) {
+            ErrorCode.AUTHENTICATION_USER_NOT_ACTIVE -> getMessage("error.account-not-active")
+            ErrorCode.AUTHENTICATION_FAILED -> getMessage("error.authentication-failed")
+            ErrorCode.USER_DUPLICATE_EMAIL -> getMessage("error.user.duplicate-email")
+            ErrorCode.USER_DUPLICATE_USERNAME -> getMessage("error.user.duplicate-username")
+            ErrorCode.USER_NOT_FOUND -> getMessage("error.user.not-found")
+            else -> getMessage("error.unexpected-error")
+        }
     }
 }

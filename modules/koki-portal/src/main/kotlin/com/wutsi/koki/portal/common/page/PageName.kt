@@ -44,6 +44,7 @@ object PageName {
     const val FILE_SETTINGS_STORAGE_EDIT = "page.settings.file.storage.edit"
 
     const val FORGOT_USERNAME = "page.forgot.username"
+    const val FORGOT_USERNAME_DONE = "page.forgot.username.done"
     const val FORGOT_PASSWORD = "page.forgot.password"
 
     const val HOME = "page.home"

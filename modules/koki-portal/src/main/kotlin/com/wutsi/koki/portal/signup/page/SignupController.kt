@@ -36,7 +36,7 @@ class SignupController : AbstractSignupController() {
             val id = signupService.create(form)
             return "redirect:/signup/profile?id=$id"
         } catch (ex: HttpClientErrorException) {
-            loadError(form, ex, model)
+            loadError(ex, model)
             return index(form, model)
         }
     }

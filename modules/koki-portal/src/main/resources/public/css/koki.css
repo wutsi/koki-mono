@@ -379,6 +379,10 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
     display: block
 }
 
+.section-item .alert {
+    margin-bottom: 0;
+}
+
 .section-item .description {
     font-size: small;
 }
