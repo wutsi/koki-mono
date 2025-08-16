@@ -137,7 +137,7 @@ LoginControllerTest : AbstractPageControllerTest() {
     @Test
     fun `forgot password`() {
         navigateTo("/login")
-        click("#btn-forgot-pasword")
+        click("#btn-forgot-password")
         assertCurrentPageIs(PageName.FORGOT_PASSWORD)
     }
 }
