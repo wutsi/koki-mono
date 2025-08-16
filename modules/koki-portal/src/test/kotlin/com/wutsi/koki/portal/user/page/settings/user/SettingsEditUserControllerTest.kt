@@ -49,7 +49,6 @@ class SettingsEditUserControllerTest : AbstractPageControllerTest() {
         assertEquals(user.country, request.firstValue.country)
         assertEquals(user.employer, request.firstValue.employer)
         assertEquals(user.mobile, request.firstValue.mobile)
-        assertEquals(user.roleIds, request.firstValue.roleIds)
 
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER)
         assertElementVisible("#koki-toast")

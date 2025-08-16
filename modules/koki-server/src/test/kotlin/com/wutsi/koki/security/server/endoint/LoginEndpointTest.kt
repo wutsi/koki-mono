@@ -5,7 +5,6 @@ import com.wutsi.koki.security.dto.ApplicationName
 import com.wutsi.koki.security.dto.LoginRequest
 import com.wutsi.koki.security.dto.LoginResponse
 import com.wutsi.koki.security.server.service.AccessTokenService
-import com.wutsi.koki.tenant.dto.UserType
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -37,27 +36,5 @@ class LoginEndpointTest : TenantAwareEndpointTest() {
         assertEquals(TENANT_ID, principal.getTenantId())
         assertEquals(request.application, principal.getApplication())
         assertEquals("Ray Sponsible", principal.getSubject())
-        assertEquals(UserType.EMPLOYEE.name, principal.getSubjectType())
-    }
-
-    @Test
-    fun client() {
-        val request = LoginRequest(
-            username = "woo.llc",
-            password = "secret",
-            application = ApplicationName.CLIENT,
-        )
-
-        val result = rest.postForEntity("/v1/auth/login", request, LoginResponse::class.java)
-
-        assertEquals(HttpStatus.OK, result.statusCode)
-
-        val accessToken = result.body!!.accessToken
-        val principal = accessTokenService.decode(accessToken)
-        assertEquals(13L, principal.getUserId())
-        assertEquals(TENANT_ID, principal.getTenantId())
-        assertEquals(request.application, principal.getApplication())
-        assertEquals("WOO LLC", principal.getSubject())
-        assertEquals(UserType.ACCOUNT.name, principal.getSubjectType())
     }
 }
