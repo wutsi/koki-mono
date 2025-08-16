@@ -4,6 +4,7 @@ import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
+import com.wutsi.koki.tenant.dto.SendUsernameRequest
 import com.wutsi.koki.tenant.dto.SetUserPhotoRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
@@ -62,6 +63,11 @@ class KokiUsers(
 
     fun photo(id: Long, request: SetUserPhotoRequest) {
         val url = urlBuilder.build("$PATH_PREFIX/$id/photo")
+        rest.postForEntity(url, request, Any::class.java)
+    }
+
+    fun sendUsername(request: SendUsernameRequest) {
+        val url = urlBuilder.build("$PATH_PREFIX/username/send")
         rest.postForEntity(url, request, Any::class.java)
     }
 }

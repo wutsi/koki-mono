@@ -4,11 +4,14 @@ import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.dto.CreateUserRequest
+import com.wutsi.koki.tenant.dto.SendUsernameRequest
 import com.wutsi.koki.tenant.dto.SetUserPhotoRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
+import com.wutsi.koki.tenant.server.command.SendUsernameCommand
 import com.wutsi.koki.tenant.server.dao.UserRepository
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import jakarta.persistence.EntityManager
@@ -23,7 +26,8 @@ class UserService(
     private val passwordService: PasswordService,
     private val roleService: RoleService,
     private val securityService: SecurityService,
-    private val em: EntityManager
+    private val em: EntityManager,
+    private val publisher: Publisher,
 ) {
     fun get(id: Long, tenantId: Long): UserEntity {
         val user = dao.findById(id)
@@ -89,10 +93,23 @@ class UserService(
     }
 
     @Transactional
-    fun setPhoto(id: Long, request: SetUserPhotoRequest, tennatId: Long) {
-        val user = get(id, tennatId)
+    fun setPhoto(id: Long, request: SetUserPhotoRequest, tenantId: Long) {
+        val user = get(id, tenantId)
         user.photoUrl = request.photoUrl?.ifEmpty { null }
         dao.save(user)
+    }
+
+    fun sendUsername(request: SendUsernameRequest, tenantId: Long) {
+        val user = dao.findByEmailAndTenantId(request.email.lowercase(), tenantId)
+        if (user == null) {
+            throw NotFoundException(Error(ErrorCode.USER_NOT_FOUND))
+        }
+        publisher.publish(
+            SendUsernameCommand(
+                userId = user.id ?: -1,
+                tenantId = user.tenantId,
+            )
+        )
     }
 
     private fun checkDuplicateUsername(id: Long?, username: String, tenantId: Long) {

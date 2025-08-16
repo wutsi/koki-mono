@@ -2,7 +2,7 @@ package com.wutsi.koki.portal.forgot.page
 
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
-import com.wutsi.koki.portal.forgot.form.EmailForm
+import com.wutsi.koki.portal.forgot.form.ForgotForm
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping
 class ForgotPasswordController : AbstractPageController() {
     @GetMapping
     fun index(model: Model): String {
-        model.addAttribute("form", EmailForm())
+        model.addAttribute("form", ForgotForm())
         model.addAttribute(
             "page",
             createPageModel(
-                name = PageName.FORGOT_USERNAME,
+                name = PageName.FORGOT_PASSWORD,
                 title = getMessage("page.forgot.password.meta.title"),
             )
         )
@@ -27,7 +27,7 @@ class ForgotPasswordController : AbstractPageController() {
     }
 
     @PostMapping
-    fun submit(@ModelAttribute form: EmailForm, model: Model): String {
+    fun submit(@ModelAttribute form: ForgotForm, model: Model): String {
         model.addAttribute("email", form.email)
         model.addAttribute(
             "page",
@@ -36,6 +36,6 @@ class ForgotPasswordController : AbstractPageController() {
                 title = getMessage("page.forgot.password.meta.title"),
             )
         )
-        return "forgot/password-done"
+        return "redirect/forgot/password/done?id=$"
     }
 }
