@@ -19,7 +19,7 @@ class ForgotPasswordController : AbstractPageController() {
         model.addAttribute(
             "page",
             createPageModel(
-                name = PageName.FORGOT_USERNAME,
+                name = PageName.FORGOT_PASSWORD,
                 title = getMessage("page.forgot.password.meta.title"),
             )
         )
