@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.signup.page
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -11,6 +12,7 @@ import com.wutsi.koki.RefDataFixtures.categories
 import com.wutsi.koki.RefDataFixtures.locations
 import com.wutsi.koki.TenantFixtures.config
 import com.wutsi.koki.UserFixtures.user
+import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
@@ -53,6 +55,7 @@ class SignupControllerTest : AbstractPageControllerTest() {
 
         // Index
         assertCurrentPageIs(PageName.SIGNUP)
+        assertElementNotPresent(".alert-danger")
         input("#name", "Yo Man")
         input("#username", "yoman")
         input("#password", "seCret123")
@@ -76,6 +79,7 @@ class SignupControllerTest : AbstractPageControllerTest() {
 
         // Profile
         assertCurrentPageIs(PageName.SIGNUP_PROFILE)
+        assertElementNotPresent(".alert-danger")
         input("#name", "Roger Milla")
         input("#email", "roger.milla@gmail.com")
         input("#mobile", "5147580000")
@@ -122,6 +126,62 @@ class SignupControllerTest : AbstractPageControllerTest() {
         click("#btn-next")
 
         assertCurrentPageIs(PageName.LOGIN)
+    }
+
+    @Test
+    fun `username already exist`() {
+        val ex = createHttpClientErrorException(404, ErrorCode.USER_DUPLICATE_USERNAME)
+        doThrow(ex).whenever(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/users"),
+            any(),
+            eq(CreateUserResponse::class.java),
+        )
+
+        navigateTo("/signup")
+
+        // Index
+        input("#name", "Yo Man")
+        input("#username", "yoman")
+        input("#password", "seCret123")
+        input("#confirm-password", "seCret123")
+        click("button[type=submit]", 1000)
+
+        assertCurrentPageIs(PageName.SIGNUP)
+        assertElementPresent(".alert-danger")
+    }
+
+    @Test
+    fun `email already exist`() {
+        val ex = createHttpClientErrorException(404, ErrorCode.USER_DUPLICATE_EMAIL)
+        doThrow(ex).whenever(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/users/${user.id}"),
+            any(),
+            eq(Any::class.java),
+        )
+
+        navigateTo("/signup")
+
+        // Index
+        input("#name", "Yo Man")
+        input("#username", "yoman")
+        input("#password", "seCret123")
+        input("#confirm-password", "seCret123")
+        click("button[type=submit]", 1000)
+
+        // Profile
+        assertElementNotPresent(".alert-danger")
+        input("#name", "Roger Milla")
+        input("#email", "roger.milla@gmail.com")
+        input("#mobile", "5147580000")
+        select("#categoryId", 1)
+        input("#employer", "REIMAX 1")
+        select2("#country", "Canada")
+        select2("#cityId", "${locations[3].name}, ${locations[0].name}")
+        scrollToBottom()
+        click("button[type=submit]")
+
+        assertCurrentPageIs(PageName.SIGNUP_PROFILE)
+        assertElementPresent(".alert-danger")
     }
 
     private fun getImageFile(): File {

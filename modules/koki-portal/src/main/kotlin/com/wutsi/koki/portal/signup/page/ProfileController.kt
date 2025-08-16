@@ -60,7 +60,7 @@ class ProfileController(
             signupService.updateProfile(form)
             return "redirect:/signup/photo?id=${form.id}"
         } catch (ex: HttpClientErrorException) {
-            loadError(form, ex, model)
+            loadError(ex, model)
             return index(form, model, null)
         }
     }

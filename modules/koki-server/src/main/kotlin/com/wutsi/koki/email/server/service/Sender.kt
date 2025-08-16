@@ -9,19 +9,23 @@ import com.wutsi.koki.tenant.server.domain.BusinessEntity
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import com.wutsi.koki.tenant.server.service.BusinessService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
+import org.apache.tika.language.detect.LanguageDetector
 import org.springframework.stereotype.Service
+import java.io.File
 
 @Service
-class EmailSender(
+class Sender(
     private val businessService: BusinessService,
     private val filterSet: EmailFilterSet,
     private val configurationService: ConfigurationService,
     private val messagingServiceBuilder: MessagingServiceBuilder,
+    private val languageDetector: LanguageDetector,
 ) {
     fun send(
         recipient: UserEntity,
         subject: String,
         body: String,
+        attachments: List<File>,
         tenantId: Long,
     ): Boolean {
         if (recipient.email.isNullOrEmpty()) {
@@ -35,7 +39,7 @@ class EmailSender(
 
         val business = businessService.getOrNull(tenantId)
 
-        val message = createMessage(recipient, subject, body, config, business, tenantId)
+        val message = createMessage(recipient, subject, body, attachments, config, business, tenantId)
         messagingServiceBuilder.build(config).send(message)
         return true
     }
@@ -44,21 +48,30 @@ class EmailSender(
         recipient: UserEntity,
         subject: String,
         body: String,
+        attachments: List<File>,
         config: Map<String, String>,
         business: BusinessEntity?,
         tenantId: Long
     ): Message {
+        val body = filterSet.filter(body, tenantId)
         return Message(
             subject = subject,
-            body = filterSet.filter(body, tenantId),
+            body = body,
             mimeType = "text/html",
+            language = detectLanguage(subject, body),
             recipient = Party(
                 email = recipient.email!!,
                 displayName = recipient.displayName,
             ),
             sender = Party(
-                displayName = config[ConfigurationName.SMTP_FROM_PERSONAL] ?: business?.companyName
-            )
+                email = config[ConfigurationName.SMTP_FROM_ADDRESS]?.ifEmpty { null } ?: "",
+                displayName = config[ConfigurationName.SMTP_FROM_PERSONAL]?.ifEmpty { null } ?: business?.companyName
+            ),
+            attachments = attachments
         )
+    }
+
+    private fun detectLanguage(subject: String, body: String): String {
+        return languageDetector.detect("$subject.\n$body").language
     }
 }
