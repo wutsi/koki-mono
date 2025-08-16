@@ -1,4 +1,0 @@
-<div class="border-top padding-top margin-top email" th:each="email : ${emails}">
-    <div th:replace="~{__components/email :: columns(${email})}"></div>
-</div>
-<div th:replace="~{__components/email :: load-more(${moreUrl})}"></div>

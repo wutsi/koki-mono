@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 
 @Configuration
 @EnableWebSecurity
@@ -24,33 +23,29 @@ class SecurityConfiguration(
         return http
             .authorizeHttpRequests { customizer ->
                 customizer
-                    .requestMatchers(AntPathRequestMatcher("/")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/accounts")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/accounts/**/*")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/contacts")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/contacts/**/*")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/employees")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/employees/**/*")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/forms")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/forms/**/*")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/images")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/images/**/*")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/invoices")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/invoices/**/*")).authenticated()
+                    .requestMatchers("/").authenticated()
+                    .requestMatchers("/accounts").authenticated()
+                    .requestMatchers("/accounts/**/*").authenticated()
+                    .requestMatchers("/contacts").authenticated()
+                    .requestMatchers("/contacts/**/*").authenticated()
+                    .requestMatchers("/images").authenticated()
+                    .requestMatchers("/images/**/*").authenticated()
+                    .requestMatchers("/invoices").authenticated()
+                    .requestMatchers("/invoices/**/*").authenticated()
                     .requestMatchers("/listings").authenticated()
                     .requestMatchers("/listings/**/*").authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/payments")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/payments/**/*")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/products")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/products/**/*")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/rooms")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/rooms/**/*")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/rooms-units")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/rooms-units/**/*")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/rooms-amenities")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/rooms-amenities/**/*")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/settings")).authenticated()
-                    .requestMatchers(AntPathRequestMatcher("/settings/**/*")).authenticated()
+                    .requestMatchers("/payments").authenticated()
+                    .requestMatchers("/payments/**/*").authenticated()
+                    .requestMatchers("/products").authenticated()
+                    .requestMatchers("/products/**/*").authenticated()
+                    .requestMatchers("/rooms").authenticated()
+                    .requestMatchers("/rooms/**/*").authenticated()
+                    .requestMatchers("/rooms-units").authenticated()
+                    .requestMatchers("/rooms-units/**/*").authenticated()
+                    .requestMatchers("/rooms-amenities").authenticated()
+                    .requestMatchers("/rooms-amenities/**/*").authenticated()
+                    .requestMatchers("/settings").authenticated()
+                    .requestMatchers("/settings/**/*").authenticated()
                     .anyRequest().permitAll()
             }
             .addFilterBefore(authorizationFilter(), AnonymousAuthenticationFilter::class.java)

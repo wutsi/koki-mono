@@ -10,7 +10,6 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AccountFixtures
 import com.wutsi.koki.ContactFixtures
-import com.wutsi.koki.EmailFixtures
 import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.InvoiceFixtures
 import com.wutsi.koki.MessageFixtures
@@ -35,10 +34,6 @@ import com.wutsi.koki.contact.dto.CreateContactRequest
 import com.wutsi.koki.contact.dto.CreateContactResponse
 import com.wutsi.koki.contact.dto.GetContactResponse
 import com.wutsi.koki.contact.dto.SearchContactResponse
-import com.wutsi.koki.email.dto.GetEmailResponse
-import com.wutsi.koki.email.dto.SearchEmailResponse
-import com.wutsi.koki.email.dto.SendEmailRequest
-import com.wutsi.koki.email.dto.SendEmailResponse
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
@@ -237,7 +232,6 @@ abstract class AbstractPageControllerTest {
         setupTenantModule()
         setupFileModule()
         setupFileUploads()
-        setupEmailModule()
         setupMessageModule()
         setupNoteModule()
         setupAccountModule()
@@ -517,42 +511,6 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(GetFileResponse::class.java)
-            )
-    }
-
-    private fun setupEmailModule() {
-        doReturn(
-            ResponseEntity(
-                SearchEmailResponse(EmailFixtures.emails),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchEmailResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                GetEmailResponse(EmailFixtures.email),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetEmailResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                SendEmailResponse(EmailFixtures.NEW_EMAIL_ID),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .postForEntity(
-                any<String>(),
-                any<SendEmailRequest>(),
-                eq(SendEmailResponse::class.java)
             )
     }
 
