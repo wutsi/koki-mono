@@ -77,6 +77,9 @@ object ErrorCode {
 
     val NOTE_NOT_FOUND: String = "$PREFIX:note:not-found"
 
+    val PASSWORD_RESET_TOKEN_NOT_FOUND = "$PREFIX:password-reset-token:not-found"
+    val PASSWORD_RESET_TOKEN_EXPIRED = "$PREFIX:password-reset-token:expired"
+
     val PRICE_NOT_FOUND: String = "$PREFIX:price:not-found"
     val PRICE_IN_USE: String = "$PREFIX:price:in-use"
     val PRICE_CURRENCY_NOT_VALID: String = "$PREFIX:price:currency-not-valid"
