@@ -46,6 +46,9 @@ object PageName {
     const val FORGOT_USERNAME = "page.forgot.username"
     const val FORGOT_USERNAME_DONE = "page.forgot.username.done"
     const val FORGOT_PASSWORD = "page.forgot.password"
+    const val FORGOT_PASSWORD_DONE = "page.forgot.password.done"
+    const val FORGOT_PASSWORD_RESET = "page.forgot.password.reset"
+    const val FORGOT_PASSWORD_RESET_DONE = "page.forgot.password.reset.done"
 
     const val HOME = "page.home"
 

@@ -4,7 +4,7 @@ import org.apache.commons.codec.digest.DigestUtils
 import org.springframework.stereotype.Service
 
 @Service
-class PasswordService {
+class PasswordEncryptor {
     fun hash(clear: String, salt: String): String {
         return DigestUtils.md5Hex("$clear-$salt")
     }

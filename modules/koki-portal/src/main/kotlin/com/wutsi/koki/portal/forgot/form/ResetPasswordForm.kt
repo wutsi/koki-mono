@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.forgot.form
 
-data class ForgotForm(
-    val email: String = ""
+data class ResetPasswordForm(
+    val tokenId: String = "",
+    val password: String = "",
 )

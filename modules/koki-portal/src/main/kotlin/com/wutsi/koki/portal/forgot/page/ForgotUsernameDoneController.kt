@@ -20,7 +20,7 @@ class ForgotUsernameDoneController : AbstractPageController() {
             "page",
             createPageModel(
                 name = PageName.FORGOT_USERNAME_DONE,
-                title = getMessage("page.forgot.password.meta.title"),
+                title = getMessage("page.forgot.username.meta.title"),
             )
         )
         return "forgot/username-done"

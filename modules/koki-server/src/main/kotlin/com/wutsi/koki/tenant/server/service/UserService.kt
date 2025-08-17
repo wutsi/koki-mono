@@ -12,6 +12,7 @@ import com.wutsi.koki.tenant.dto.SetUserPhotoRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.server.command.SendUsernameCommand
+import com.wutsi.koki.tenant.server.dao.PasswordResetTokenRepository
 import com.wutsi.koki.tenant.server.dao.UserRepository
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import jakarta.persistence.EntityManager
@@ -23,7 +24,8 @@ import java.util.UUID
 @Service
 class UserService(
     private val dao: UserRepository,
-    private val passwordService: PasswordService,
+    private val tokenDao: PasswordResetTokenRepository,
+    private val passwordEncryptor: PasswordEncryptor,
     private val roleService: RoleService,
     private val securityService: SecurityService,
     private val em: EntityManager,
@@ -37,6 +39,11 @@ class UserService(
             throw NotFoundException(Error(ErrorCode.USER_NOT_FOUND))
         }
         return user
+    }
+
+    fun getByEmail(email: String, tenantId: Long): UserEntity {
+        return dao.findByEmailAndTenantId(email.lowercase(), tenantId)
+            ?: throw NotFoundException(Error(ErrorCode.USER_NOT_FOUND))
     }
 
     @Transactional
@@ -55,7 +62,7 @@ class UserService(
                 displayName = request.displayName?.ifEmpty { null },
                 status = UserStatus.ACTIVE,
                 salt = salt,
-                password = passwordService.hash(request.password, salt),
+                password = passwordEncryptor.hash(request.password, salt),
                 createdById = currentUserId,
                 modifiedById = currentUserId,
                 language = request.language?.lowercase()?.ifEmpty { null },
@@ -92,6 +99,12 @@ class UserService(
         setRoles(user, request.roleIds.distinct())
     }
 
+    fun updatePassword(user: UserEntity, password: String) {
+        user.salt = UUID.randomUUID().toString()
+        user.password = passwordEncryptor.hash(password, user.salt)
+        dao.save(user)
+    }
+
     @Transactional
     fun setPhoto(id: Long, request: SetUserPhotoRequest, tenantId: Long) {
         val user = get(id, tenantId)
@@ -99,11 +112,13 @@ class UserService(
         dao.save(user)
     }
 
+    @Transactional
+    fun save(user: UserEntity) {
+        dao.save(user)
+    }
+
     fun sendUsername(request: SendUsernameRequest, tenantId: Long) {
-        val user = dao.findByEmailAndTenantId(request.email.lowercase(), tenantId)
-        if (user == null) {
-            throw NotFoundException(Error(ErrorCode.USER_NOT_FOUND))
-        }
+        val user = getByEmail(request.email, tenantId)
         publisher.publish(
             SendUsernameCommand(
                 userId = user.id ?: -1,

@@ -3,12 +3,16 @@ package com.wutsi.koki.tenant.server.endpoint
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
+import com.wutsi.koki.tenant.dto.ResetPasswordRequest
 import com.wutsi.koki.tenant.dto.SearchUserResponse
+import com.wutsi.koki.tenant.dto.SendPasswordRequest
+import com.wutsi.koki.tenant.dto.SendPasswordResponse
 import com.wutsi.koki.tenant.dto.SendUsernameRequest
 import com.wutsi.koki.tenant.dto.SetUserPhotoRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.server.mapper.UserMapper
+import com.wutsi.koki.tenant.server.service.PasswordResetTokenService
 import com.wutsi.koki.tenant.server.service.UserService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
@@ -25,6 +29,7 @@ import java.net.URLDecoder
 @RequestMapping("/v1/users")
 class UserEndpoints(
     private val service: UserService,
+    private val passwordResetTokenService: PasswordResetTokenService,
     private val mapper: UserMapper,
 ) {
     @GetMapping("/{id}")
@@ -101,5 +106,24 @@ class UserEndpoints(
         @RequestBody @Valid request: SendUsernameRequest
     ) {
         service.sendUsername(request, tenantId)
+    }
+
+    @PostMapping("/password/send")
+    fun sendPassword(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @RequestBody @Valid request: SendPasswordRequest
+    ): SendPasswordResponse {
+        val token = passwordResetTokenService.send(request, tenantId)
+        return SendPasswordResponse(
+            tokenId = token.id ?: ""
+        )
+    }
+
+    @PostMapping("/password/reset")
+    fun resetPassword(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @RequestBody @Valid request: ResetPasswordRequest
+    ) {
+        passwordResetTokenService.reset(request, tenantId)
     }
 }

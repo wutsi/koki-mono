@@ -8,47 +8,52 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.email.server.service.EmailTemplateResolver
 import com.wutsi.koki.email.server.service.Sender
 import com.wutsi.koki.platform.templating.MustacheTemplatingEngine
-import com.wutsi.koki.tenant.server.command.SendUsernameCommand
+import com.wutsi.koki.tenant.server.command.SendPasswordCommand
+import com.wutsi.koki.tenant.server.domain.PasswordResetTokenEntity
 import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.domain.UserEntity
+import com.wutsi.koki.tenant.server.service.PasswordResetTokenService
 import com.wutsi.koki.tenant.server.service.TenantService
-import com.wutsi.koki.tenant.server.service.UserService
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class SendUsernameEmailWorkerTest {
-    private val userService = mock<UserService>()
+class SendPasswordEmailWorkerTest {
+    private val tokenService = mock<PasswordResetTokenService>()
     private val tenantService = mock<TenantService>()
     private val templateResolver = EmailTemplateResolver(
         templateEngine = MustacheTemplatingEngine(DefaultMustacheFactory())
     )
     private val sender = mock<Sender>()
-    private val worker = SendUsernameEmailWorker(userService, tenantService, templateResolver, sender)
+    private val worker = SendPasswordEmailWorker(tokenService, tenantService, templateResolver, sender)
 
     val tenant = TenantEntity(
         id = 1L,
         portalUrl = "https://koki-portal.herokuapp.com"
     )
 
-    val user = UserEntity(
-        id = 111L,
-        displayName = "Ray Sponsible",
-        username = "ray.sponsible",
-        email = "ray.sponsible@gmail.com",
+    val token = PasswordResetTokenEntity(
+        id = "1111",
         tenantId = tenant.id!!,
+        user = UserEntity(
+            id = 111L,
+            displayName = "Ray Sponsible",
+            username = "ray.sponsible",
+            email = "ray.sponsible@gmail.com",
+            tenantId = tenant.id!!,
+        )
     )
 
     @BeforeEach
     fun setUp() {
-        doReturn(user).whenever(userService).get(any(), any())
+        doReturn(token).whenever(tokenService).get(any(), any())
         doReturn(tenant).whenever(tenantService).get(any())
     }
 
     @Test
     fun send() {
-        val command = SendUsernameCommand(userId = user.id!!, tenantId = user.tenantId)
+        val command = SendPasswordCommand(tokenId = token.id!!, tenantId = token.tenantId)
         val result = worker.notify(command)
 
         assertEquals(true, result)
@@ -56,15 +61,17 @@ class SendUsernameEmailWorkerTest {
         val body = """
             Dear Ray Sponsible,<br/><br/>
 
-            Comme vous l'avez demandé, voici le nom d'utilisateur de votre compte: <b>ray.sponsible</b>.<br/><br/>
+            Si vous avez demandé une réinitialisation de votre mot de passe, cliquez sur le bouton ci-dessous.<br/>
+            Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer cet e-mail.<br/><br/>
 
-            Cliquez sur le bouton ci-dessous pour vous connecter a votre compte:<br/><br/>
-            <a class="btn btn-primary" href="https://koki-portal.herokuapp.com/login">Connectez-vous</a>
+            <a class="btn btn-primary" href="https://koki-portal.herokuapp.com/forgot/password/reset?token=1111">Réinitialiser votre mot de passe</a><br/><br/>
+
+            <b>IMPORTANT:</b> Ce lien expire dans 24 heures.
 
         """.trimIndent()
         verify(sender).send(
-            user,
-            SendUsernameEmailWorker.SUBJECT,
+            token.user,
+            SendPasswordEmailWorker.SUBJECT,
             body,
             emptyList(),
             command.tenantId

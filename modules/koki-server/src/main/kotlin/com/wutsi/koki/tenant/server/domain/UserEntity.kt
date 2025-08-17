@@ -36,8 +36,8 @@ data class UserEntity(
     var categoryId: Long? = null,
 
     var username: String = "",
-    val password: String = "",
-    val salt: String = "",
+    var password: String = "",
+    var salt: String = "",
     var status: UserStatus = UserStatus.UNKNOWN,
     var email: String? = null,
     var displayName: String? = null,

@@ -11,7 +11,7 @@ import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
 import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.server.dao.UserRepository
-import com.wutsi.koki.tenant.server.service.PasswordService
+import com.wutsi.koki.tenant.server.service.PasswordEncryptor
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -33,7 +33,7 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
     private lateinit var dao: UserRepository
 
     @MockitoBean
-    private lateinit var passwordService: PasswordService
+    private lateinit var passwordEncryptor: PasswordEncryptor
 
     @Autowired
     protected lateinit var ds: DataSource
@@ -41,7 +41,7 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
     @BeforeEach
     override fun setUp() {
         super.setUp()
-        doReturn(HASHED_PASSWORD).whenever(passwordService).hash(any(), any())
+        doReturn(HASHED_PASSWORD).whenever(passwordEncryptor).hash(any(), any())
     }
 
     private fun roleCount(userId: Long): Int {
@@ -97,7 +97,7 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.country?.lowercase(), user.country)
         assertEquals(request.cityId, user.cityId)
 
-        verify(passwordService).hash(request.password, user.salt)
+        verify(passwordEncryptor).hash(request.password, user.salt)
     }
 
     @Test
@@ -151,6 +151,6 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals(TENANT_ID, user.tenantId)
         assertEquals(request.language, user.language)
 
-        verify(passwordService).hash(request.password, user.salt)
+        verify(passwordEncryptor).hash(request.password, user.salt)
     }
 }

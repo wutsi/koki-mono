@@ -26,8 +26,8 @@ import java.util.Date
 import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/UpdatePasswordEndpoint.sql"])
-class UpdatePasswordEndpointTest : TenantAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/ResetPasswordEndpoint.sql"])
+class ResetPasswordEndpointTest : TenantAwareEndpointTest() {
     companion object {
         const val HASHED_PASSWORD = "607e0b9e5496964b1385b7c10e3e2403"
     }
@@ -56,7 +56,7 @@ class UpdatePasswordEndpointTest : TenantAwareEndpointTest() {
             tokenId = "token-11",
             password = "Secret123"
         )
-        val result = rest.postForEntity("/v1/users/password", request, Any::class.java)
+        val result = rest.postForEntity("/v1/users/password/reset", request, Any::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
@@ -79,7 +79,7 @@ class UpdatePasswordEndpointTest : TenantAwareEndpointTest() {
             tokenId = "token-expired",
             password = "Secret123"
         )
-        val result = rest.postForEntity("/v1/users/password", request, ErrorResponse::class.java)
+        val result = rest.postForEntity("/v1/users/password/reset", request, ErrorResponse::class.java)
 
         verify(publisher, never()).publish(any())
         assertEquals(HttpStatus.CONFLICT, result.statusCode)
@@ -93,7 +93,7 @@ class UpdatePasswordEndpointTest : TenantAwareEndpointTest() {
             tokenId = "xxx",
             password = "Secret123"
         )
-        val result = rest.postForEntity("/v1/users/password", request, ErrorResponse::class.java)
+        val result = rest.postForEntity("/v1/users/password/reset", request, ErrorResponse::class.java)
 
         verify(publisher, never()).publish(any())
         assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
