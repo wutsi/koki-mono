@@ -3,7 +3,10 @@ package com.wutsi.koki.sdk
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
+import com.wutsi.koki.tenant.dto.ResetPasswordRequest
 import com.wutsi.koki.tenant.dto.SearchUserResponse
+import com.wutsi.koki.tenant.dto.SendPasswordRequest
+import com.wutsi.koki.tenant.dto.SendPasswordResponse
 import com.wutsi.koki.tenant.dto.SendUsernameRequest
 import com.wutsi.koki.tenant.dto.SetUserPhotoRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
@@ -68,6 +71,16 @@ class KokiUsers(
 
     fun sendUsername(request: SendUsernameRequest) {
         val url = urlBuilder.build("$PATH_PREFIX/username/send")
+        rest.postForEntity(url, request, Any::class.java)
+    }
+
+    fun sendPassword(request: SendPasswordRequest): SendPasswordResponse {
+        val url = urlBuilder.build("$PATH_PREFIX/password/send")
+        return rest.postForEntity(url, request, SendPasswordResponse::class.java).body
+    }
+
+    fun resetPassword(request: ResetPasswordRequest) {
+        val url = urlBuilder.build("$PATH_PREFIX/password/reset")
         rest.postForEntity(url, request, Any::class.java)
     }
 }
