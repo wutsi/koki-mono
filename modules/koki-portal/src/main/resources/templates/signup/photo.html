@@ -111,6 +111,7 @@
                         response.json().then(json => {
                             console.log("File Data", json);
                             document.getElementById("my-photo").setAttribute("src", json.url);
+                            document.getElementById("photoUrl").value = json.url;
                             document.getElementById("btn-next").disabled = false;
                         });
                     });

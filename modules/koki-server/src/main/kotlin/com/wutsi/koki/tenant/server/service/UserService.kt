@@ -12,7 +12,6 @@ import com.wutsi.koki.tenant.dto.SetUserPhotoRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.server.command.SendUsernameCommand
-import com.wutsi.koki.tenant.server.dao.PasswordResetTokenRepository
 import com.wutsi.koki.tenant.server.dao.UserRepository
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import jakarta.persistence.EntityManager
@@ -24,7 +23,6 @@ import java.util.UUID
 @Service
 class UserService(
     private val dao: UserRepository,
-    private val tokenDao: PasswordResetTokenRepository,
     private val passwordEncryptor: PasswordEncryptor,
     private val roleService: RoleService,
     private val securityService: SecurityService,
