@@ -4,12 +4,14 @@ import com.wutsi.koki.email.server.service.AbstractEmailWorker
 import com.wutsi.koki.email.server.service.EmailTemplateResolver
 import com.wutsi.koki.email.server.service.Sender
 import com.wutsi.koki.tenant.server.command.SendUsernameCommand
+import com.wutsi.koki.tenant.server.service.TenantService
 import com.wutsi.koki.tenant.server.service.UserService
 import org.springframework.stereotype.Service
 
 @Service
 class SendUsernameEmailWorker(
-    private val service: UserService,
+    private val userService: UserService,
+    private val tenantService: TenantService,
     private val templateResolver: EmailTemplateResolver,
     private val sender: Sender,
 ) : AbstractEmailWorker() {
@@ -26,13 +28,17 @@ class SendUsernameEmailWorker(
     }
 
     private fun send(event: SendUsernameCommand) {
-        val user = service.get(event.userId, event.tenantId)
+        val user = userService.get(event.userId, event.tenantId)
         if (user.email.isNullOrEmpty()) {
             return
         }
 
+        val tenant = tenantService.get(event.tenantId)
+
         val data = mapOf(
-            "username" to user.username
+            "username" to user.username,
+            "recipient" to (user.displayName ?: ""),
+            "loginUrl" to "${tenant.portalUrl}/login"
         )
         val body = templateResolver.resolve("/user/email/username.html", data)
 

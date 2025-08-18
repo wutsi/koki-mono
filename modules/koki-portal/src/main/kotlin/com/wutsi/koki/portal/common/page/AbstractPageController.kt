@@ -171,6 +171,10 @@ abstract class AbstractPageController {
         return when (response.error.code) {
             ErrorCode.AUTHENTICATION_USER_NOT_ACTIVE -> getMessage("error.account-not-active")
             ErrorCode.AUTHENTICATION_FAILED -> getMessage("error.authentication-failed")
+
+            ErrorCode.PASSWORD_RESET_TOKEN_EXPIRED -> getMessage("error.password-reset-expired")
+            ErrorCode.PASSWORD_RESET_TOKEN_NOT_FOUND -> getMessage("error.password-reset-not-found")
+
             ErrorCode.USER_DUPLICATE_EMAIL -> getMessage("error.user.duplicate-email")
             ErrorCode.USER_DUPLICATE_USERNAME -> getMessage("error.user.duplicate-username")
             ErrorCode.USER_NOT_FOUND -> getMessage("error.user.not-found")

@@ -26,12 +26,12 @@ import kotlin.test.assertTrue
 class UserAuthenticatorTest {
     private val authenticatorService = mock<AuthenticationService>()
     private val userService = mock<UserService>()
-    private val passwordService = mock<PasswordService>()
+    private val passwordEncryptor = mock<PasswordEncryptor>()
     private val accessTokenService = mock<AccessTokenService>()
     private val authenticator = UserAuthenticator(
         authenticatorService = authenticatorService,
         userService = userService,
-        passwordService = passwordService,
+        passwordEncryptor = passwordEncryptor,
         accessTokenService = accessTokenService,
     )
 
@@ -67,7 +67,7 @@ class UserAuthenticatorTest {
             anyOrNull(),
         )
         doReturn(accessToken).whenever(accessTokenService).create(any(), any(), any(), any())
-        doReturn(true).whenever(passwordService).matches(any(), any(), any())
+        doReturn(true).whenever(passwordEncryptor).matches(any(), any(), any())
     }
 
     @Test
@@ -122,7 +122,7 @@ class UserAuthenticatorTest {
 
     @Test
     fun `password mismatch`() {
-        doReturn(false).whenever(passwordService).matches(any(), any(), any())
+        doReturn(false).whenever(passwordEncryptor).matches(any(), any(), any())
 
         val ex = assertThrows<ConflictException> {
             authenticator.authenticate(request, user.tenantId)

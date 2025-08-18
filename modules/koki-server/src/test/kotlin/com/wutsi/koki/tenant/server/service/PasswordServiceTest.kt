@@ -1,6 +1,6 @@
 package com.wutsi.koki.tenant.server.endpoint
 
-import com.wutsi.koki.tenant.server.service.PasswordService
+import com.wutsi.koki.tenant.server.service.PasswordEncryptor
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -12,7 +12,7 @@ class PasswordServiceTest {
         const val CLEAR = "secret"
     }
 
-    val service = PasswordService()
+    val service = PasswordEncryptor()
 
     @Test
     fun hash() {

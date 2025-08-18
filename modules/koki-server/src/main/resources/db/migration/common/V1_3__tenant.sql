@@ -80,6 +80,21 @@ CREATE INDEX I_USER_tenant ON T_USER(tenant_fk);
 CREATE INDEX I_USER_category ON T_USER(category_fk);
 CREATE INDEX I_USER_city ON T_USER(city_fk);
 
+CREATE TABLE T_PASSWORD_RESET_TOKEN(
+    id              VARCHAR(36),
+
+    tenant_fk       BIGINT NOT NULL,
+    user_fk         BIGINT NOT NULL REFERENCES T_USER(id),
+
+    created_at      DATETIME NOT NULL,
+    expires_at      DATETIME NOT NULL,
+
+    PRIMARY KEY(id)
+) ENGINE = InnoDB;
+
+CREATE INDEX I_PASSWORD_RESET_TOKEN_tenant ON T_PASSWORD_RESET_TOKEN(tenant_fk);
+CREATE INDEX I_PASSWORD_RESET_TOKEN_user ON T_PASSWORD_RESET_TOKEN(user_fk);
+
 
 CREATE TABLE T_CONFIGURATION(
   id                      BIGINT NOT NULL AUTO_INCREMENT,

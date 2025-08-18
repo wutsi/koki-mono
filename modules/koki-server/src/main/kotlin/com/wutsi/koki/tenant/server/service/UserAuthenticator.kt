@@ -7,9 +7,8 @@ import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.security.dto.ApplicationName
 import com.wutsi.koki.security.dto.LoginRequest
 import com.wutsi.koki.tenant.dto.UserStatus
-import com.wutsi.koki.tenant.server.service.PasswordService
+import com.wutsi.koki.tenant.server.service.PasswordEncryptor
 import com.wutsi.koki.tenant.server.service.UserService
-import io.lettuce.core.KillArgs.Builder.user
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import org.springframework.stereotype.Service
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Service
 class UserAuthenticator(
     private val authenticatorService: AuthenticationService,
     private val userService: UserService,
-    private val passwordService: PasswordService,
+    private val passwordEncryptor: PasswordEncryptor,
     private val accessTokenService: AccessTokenService,
 ) : Authenticator {
     @PostConstruct
@@ -47,7 +46,7 @@ class UserAuthenticator(
             if (user.status != UserStatus.ACTIVE) {
                 throw ConflictException(error = Error(ErrorCode.AUTHENTICATION_USER_NOT_ACTIVE))
             }
-            if (!passwordService.matches(request.password, user.password, user.salt)) {
+            if (!passwordEncryptor.matches(request.password, user.password, user.salt)) {
                 throw ConflictException(error = Error(ErrorCode.AUTHENTICATION_FAILED))
             }
             return accessTokenService.create(

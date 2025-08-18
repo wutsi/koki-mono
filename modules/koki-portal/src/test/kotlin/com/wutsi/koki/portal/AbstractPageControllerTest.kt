@@ -100,6 +100,8 @@ import com.wutsi.koki.tenant.dto.SearchRoleResponse
 import com.wutsi.koki.tenant.dto.SearchTenantResponse
 import com.wutsi.koki.tenant.dto.SearchTypeResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
+import com.wutsi.koki.tenant.dto.SendPasswordRequest
+import com.wutsi.koki.tenant.dto.SendPasswordResponse
 import io.eotsevych.select2.Select2
 import org.apache.commons.io.IOUtils
 import org.junit.jupiter.api.AfterEach
@@ -421,6 +423,19 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(GetBusinessResponse::class.java)
+            )
+
+        // Password Request
+        doReturn(
+            ResponseEntity(
+                SendPasswordResponse(UUID.randomUUID().toString()),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<SendPasswordRequest>(),
+                eq(SendPasswordResponse::class.java)
             )
 
         // Access Token

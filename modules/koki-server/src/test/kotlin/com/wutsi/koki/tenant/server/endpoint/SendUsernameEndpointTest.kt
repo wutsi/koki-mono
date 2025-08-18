@@ -24,7 +24,7 @@ class SendUsernameEndpointTest : TenantAwareEndpointTest() {
     private lateinit var publisher: Publisher
 
     @Test
-    fun get() {
+    fun send() {
         val request = SendUsernameRequest(
             email = "ray.sponsible@gmail.com"
         )
@@ -40,7 +40,7 @@ class SendUsernameEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
-    fun notFound() {
+    fun `email not found`() {
         val request = SendUsernameRequest(
             email = "xxx@gmail.com"
         )
