@@ -52,6 +52,8 @@ class ResetPasswordEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun send() {
+        val now = Date()
+
         val request = ResetPasswordRequest(
             tokenId = "token-11",
             password = "Secret123"
@@ -63,7 +65,7 @@ class ResetPasswordEndpointTest : TenantAwareEndpointTest() {
         val tokenId = request.tokenId
 
         val token = dao.findById(tokenId).get()
-        assertEquals(true, token.expiresAt.before(Date()))
+        assertEquals(true, token.expiresAt.before(now))
 
         val salt = argumentCaptor<String>()
         verify(passwordEncryptor).hash(eq(request.password), salt.capture())

@@ -68,7 +68,7 @@ class PasswordResetTokenService(
         userService.updatePassword(token.user, request.password)
 
         // Expire the token
-        token.expiresAt = Date(now.time - 1)
+        token.expiresAt = Date(now.time - 1000)
         dao.save(token)
     }
 }
