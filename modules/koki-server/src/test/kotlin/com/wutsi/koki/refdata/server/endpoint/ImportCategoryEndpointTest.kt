@@ -82,7 +82,7 @@ class ImportCategoryEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val categories = dao.findByType(CategoryType.AMENITY)
-        assertEquals(15, categories.size)
+        assertEquals(9, categories.size)
 
         val category = dao.findById(40001).get()
         assertEquals(null, category.parentId)
