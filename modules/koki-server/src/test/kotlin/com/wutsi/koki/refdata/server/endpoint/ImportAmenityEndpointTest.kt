@@ -24,10 +24,10 @@ class ImportAmenityEndpointTest : AuthorizationAwareEndpointTest() {
 
         assertEquals(67, dao.findAll().toList().size)
 
-        val amenity = dao.findById(1095).get()
-        assertEquals(40014, amenity.categoryId)
+        val amenity = dao.findById(1000).get()
+        assertEquals(40000, amenity.categoryId)
         assertEquals(true, amenity.active)
-        assertEquals("Tour Assistance", amenity.name)
-        assertEquals("Assistance pour les visites", amenity.nameFr)
+        assertEquals("Electricity", amenity.name)
+        assertEquals("Électricité", amenity.nameFr)
     }
 }
