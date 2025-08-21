@@ -68,7 +68,7 @@ class ProfileController(
     private fun loadCategories(model: Model) {
         model.addAttribute(
             "categories",
-            categoryService.categories(
+            categoryService.search(
                 type = CategoryType.USER,
                 limit = Integer.MAX_VALUE,
             )

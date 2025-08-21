@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('listing')}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <form class="form" method="post" th:action="@{/listings/edit/leasing}" th:object="${form}">
+                <input th:field="*{id}" type="hidden"/>
+                <input th:field="*{currency}" type="hidden"/>
+
+                <div class="form-body">
+                    <div class="section">
+                        <div class="section-body">
+                            <div class="section-item">
+                                <h2 th:text="#{page.listing.leasing.title}">TITLE</h2>
+                                <div th:text="#{page.listing.leasing.description}">
+                                    DESCRIPTION
+                                </div>
+                            </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.listing-number}">NUMBER</label>
+                                <div th:text="*{listingNumber}">00000</div>
+                            </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.security-deposit}">LEASE</label>
+                                <div class="text-small" th:text="#{page.listing.security-deposit-help}">HELP</div>
+
+                                <div class="input-group">
+                                    <input class="form-control" step="0" th:field="*{securityDeposit}" type="number"/>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span th:text="${tenant.currencySymbol}">XXX</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.advance-rent}">ADVANCE_TERM</label>
+                                <div class="text-small" th:text="#{page.listing.advance-rent-help}">HELP</div>
+
+                                <div class="input-group">
+                                    <input class="form-control" step="0" th:field="*{advanceRent}" type="number"/>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span th:text="#{page.listing.unit-months}">XXX</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.lease-terms}">TERMS</label>
+                                <div class="text-small" th:text="#{page.listing.lease-terms-help}">HELP</div>
+
+                                <div class="input-group">
+                                    <input class="form-control" step="0" th:field="*{leaseTerm}" type="number"/>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span th:text="#{page.listing.unit-months}">XXX</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.notice-period}">NOTICE_PERIOD</label>
+                                <div class="text-small" th:text="#{page.listing.notice-period-help}">HELP</div>
+
+                                <div class="input-group">
+                                    <input class="form-control" step="0" th:field="*{noticePeriod}" type="number"/>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span th:text="#{page.listing.unit-months}">XXX</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="section-item flex flex-space-between">
+                                <a class="btn btn-light w-49-mobile"
+                                   th:href="'/listings/edit/price?id=' + ${form.id}"
+                                   th:text="#{button.previous}"
+                                >PREV</a>
+                                <button class="btn btn-primary w-49-mobile" th:text="#{button.next}"
+                                        type="submit">NEXT
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

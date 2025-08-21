@@ -180,6 +180,16 @@ object ModuleFixtures {
             jsUrl = "/js/messages.js",
             cssUrl = "/css/messages.css",
         ),
+        Module(
+            id = 270,
+            name = "listing",
+            title = "Listings",
+            homeUrl = "/listings",
+            tabUrl = null,
+            settingsUrl = null,
+            jsUrl = "/js/listings.js",
+            cssUrl = "/css/listings.css",
+        ),
     )
 
     val permissions = listOf(
@@ -194,9 +204,7 @@ object ModuleFixtures {
         Permission(id = 1103, moduleId = 110, name = "contact:delete", description = "Delete contacts"),
         Permission(id = 1104, moduleId = 110, name = "contact:full_access", description = "Full access to contacts"),
 
-        Permission(id = 1301, moduleId = 130, name = "email", description = "Access emails"),
-        Permission(id = 1302, moduleId = 130, name = "email:send", description = "Send emails"),
-        Permission(id = 1303, moduleId = 130, name = "email:admin", description = "Configure emails"),
+        Permission(id = 1300, moduleId = 130, name = "email:admin", description = "Configure emails"),
 
         Permission(id = 1401, moduleId = 140, name = "note", description = "Access notes"),
         Permission(id = 1402, moduleId = 140, name = "note:manage", description = "Manage notes"),
@@ -244,5 +252,9 @@ object ModuleFixtures {
 
         Permission(id = 2600, moduleId = 260, name = "message", description = "View Messages"),
         Permission(id = 2601, moduleId = 260, name = "message:manage", description = "Manage Messages"),
+
+        Permission(id = 2700, moduleId = 270, name = "listing", description = "View Listings"),
+        Permission(id = 2701, moduleId = 270, name = "listing:manage", description = "Manage Listings"),
+        Permission(id = 2702, moduleId = 270, name = "listing:full_access", description = "Full access Listings"),
     )
 }

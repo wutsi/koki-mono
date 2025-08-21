@@ -21,15 +21,12 @@ import org.springframework.web.bind.annotation.RequestParam
 class EditListingAmenitiesController(
     private val categoryService: CategoryService,
     private val amenityService: AmenityService
-) : AbstractListingController() {
+) : AbstractEditListingController() {
     @GetMapping
     fun edit(@RequestParam id: Long, model: Model): String {
-        model.addAttribute(
-            "form",
-            ListingForm(
-                id = id,
-            )
-        )
+        val listing = findListing(id)
+        model.addAttribute("form", toListingForm(listing))
+
         model.addAttribute(
             "page",
             createPageModel(
@@ -40,7 +37,7 @@ class EditListingAmenitiesController(
 
         model.addAttribute("furnitureTypes", FurnitureType.entries)
 
-        val categories = categoryService.categories(
+        val categories = categoryService.search(
             type = CategoryType.AMENITY,
             active = true,
             limit = Integer.MAX_VALUE
@@ -56,7 +53,8 @@ class EditListingAmenitiesController(
     }
 
     @PostMapping
-    fun submit(@ModelAttribute form: ListingForm, model: Model): String {
+    fun submit(@ModelAttribute form: ListingForm): String {
+        listingService.updateAmenities(form)
         return "redirect:/listings/edit/address?id=${form.id}"
     }
 }

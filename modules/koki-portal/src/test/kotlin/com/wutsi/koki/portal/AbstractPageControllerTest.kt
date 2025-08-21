@@ -12,6 +12,7 @@ import com.wutsi.koki.AccountFixtures
 import com.wutsi.koki.ContactFixtures
 import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.InvoiceFixtures
+import com.wutsi.koki.ListingFixtures
 import com.wutsi.koki.MessageFixtures
 import com.wutsi.koki.ModuleFixtures
 import com.wutsi.koki.NoteFixtures
@@ -43,6 +44,9 @@ import com.wutsi.koki.invoice.dto.CreateInvoiceRequest
 import com.wutsi.koki.invoice.dto.CreateInvoiceResponse
 import com.wutsi.koki.invoice.dto.GetInvoiceResponse
 import com.wutsi.koki.invoice.dto.SearchInvoiceResponse
+import com.wutsi.koki.listing.dto.CreateListingRequest
+import com.wutsi.koki.listing.dto.CreateListingResponse
+import com.wutsi.koki.listing.dto.GetListingResponse
 import com.wutsi.koki.message.dto.GetMessageResponse
 import com.wutsi.koki.message.dto.SearchMessageResponse
 import com.wutsi.koki.message.dto.SendMessageRequest
@@ -242,6 +246,7 @@ abstract class AbstractPageControllerTest {
         setupInvoiceModule()
         setupPaymentModule()
         setupRoomModule()
+        setupListingModule()
     }
 
     protected fun setupFileUploads() {
@@ -439,10 +444,14 @@ abstract class AbstractPageControllerTest {
             )
 
         // Access Token
+        setUpAccessToken(USER_ID)
+    }
+
+    protected fun setUpAccessToken(userId: Long) {
         doReturn(accessToken).whenever(accessTokenHolder).get()
         val principal = mock<JWTPrincipal>()
-        doReturn(USER_ID).whenever(principal).getUserId()
-        doReturn(USER_ID.toString()).whenever(principal).name
+        doReturn(userId).whenever(principal).getUserId()
+        doReturn(userId.toString()).whenever(principal).name
         doReturn(principal).whenever(jwtDecoder).decode(any())
     }
 
@@ -1018,6 +1027,43 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any<CreateRoomUnitRequest>(),
                 eq(CreateRoomUnitResponse::class.java)
+            )
+    }
+
+    fun setupListingModule() {
+        // Listing
+//        doReturn(
+//            ResponseEntity(
+//                SearchListingResponse(listings = ListingFixtures.listings),
+//                HttpStatus.OK,
+//            )
+//        ).whenever(rest)
+//            .getForEntity(
+//                any<String>(),
+//                eq(SearchListingResponse::class.java)
+//            )
+
+        doReturn(
+            ResponseEntity(
+                GetListingResponse(ListingFixtures.listing),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetListingResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreateListingResponse(1111),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateListingRequest>(),
+                eq(CreateListingResponse::class.java)
             )
     }
 

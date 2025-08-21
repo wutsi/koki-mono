@@ -54,7 +54,7 @@ class ProductService(
         val categories = if (product.categoryId == null || !fullGraph) {
             emptyMap()
         } else {
-            categoryService.category(product.categoryId!!)
+            categoryService.get(product.categoryId!!)
                 ?.let { category -> mapOf(category.id to category) }
                 ?: emptyMap()
         }
@@ -98,7 +98,7 @@ class ProductService(
         val categories = if (categoryIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
-            categoryService.categories(
+            categoryService.search(
                 ids = categoryIds.toList(),
                 limit = categoryIds.size
             ).associateBy { category -> category.id }

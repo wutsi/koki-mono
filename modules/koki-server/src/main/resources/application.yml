@@ -86,9 +86,9 @@ springdoc:
             display-name: Invoice API
             paths-to-match: /v1/invoices, /v1/invoices/**
 
-        -   group: lodging
-            display-name: Lodging API
-            paths-to-match: /v1/rooms, /v1/rooms/**, /v1/room-units, /v1/room-units/**
+        -   group: Listing
+            display-name: Listing API
+            paths-to-match: /v1/listings, /v1/listings/**
 
         -   group: messages
             display-name: Message API

@@ -68,6 +68,8 @@ object ErrorCode {
     val JURIDICTION_NOT_FOUND: String = "$PREFIX:juridiction:not-found"
     val JURIDICTION_COUNTRY_NOT_SUPPORTED: String = "$PREFIX:juridiction:country-not-supported"
 
+    val LISTING_NOT_FOUND: String = "$PREFIX:listing:not-found"
+
     val LOCATION_NOT_FOUND = "$PREFIX:location:not-found"
     val LOCATION_FEED_NOT_FOUND = "$PREFIX:location:feed-not-found"
 

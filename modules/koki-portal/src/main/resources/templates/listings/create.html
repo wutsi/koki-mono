@@ -26,12 +26,14 @@
                                          th:if="${listingType.name() != 'UNKNOWN'}"
                                          th:remove="tag">
                                         <input autocomplete="off" class="btn-check" name="listingType"
-                                               th:id="'chk-' + ${listingType}"
-                                               th:value="${propertyType}"
+                                               th:id="'chk-listing-type-' + ${listingType}"
+                                               th:value="${listingType}"
                                                type="radio">
                                         <label class="btn btn-outline-primary"
-                                               th:for="'chk-' + ${listingType}"
-                                               th:text="#{'listing-type.' + ${listingType}}">Checkbox 1</label>
+                                               th:for="'chk-listing-type-' + ${listingType}"
+                                               th:id="'lbl-listing-type-' + ${listingType}"
+                                               th:text="#{'listing-type.' + ${listingType}}"
+                                        >Checkbox 1</label>
                                     </div>
                                 </div>
                             </div>
@@ -42,12 +44,14 @@
                                          th:if="${propertyType.name() != 'UNKNOWN'}"
                                          th:remove="tag">
                                         <input autocomplete="off" class="btn-check" name="propertyType"
-                                               th:id="'chk-' + ${propertyType}"
+                                               th:id="'chk-property-type-' + ${propertyType}"
                                                th:value="${propertyType}"
                                                type="radio">
                                         <label class="btn btn-outline-primary margin-bottom-small"
-                                               th:for="'chk-' + ${propertyType}"
-                                               th:text="#{'property-type.' + ${propertyType}}">Checkbox 1</label>
+                                               th:for="'chk-property-type-' + ${propertyType}"
+                                               th:id="'lbl-property-type-' + ${propertyType}"
+                                               th:text="#{'property-type.' + ${propertyType}}"
+                                        >Checkbox 1</label>
                                     </div>
                                 </div>
                             </div>

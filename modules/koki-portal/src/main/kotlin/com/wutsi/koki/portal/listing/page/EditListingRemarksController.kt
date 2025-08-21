@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 @RequestMapping("/listings/edit/remarks")
 @RequiresPermission(["listing:manage", "listing:full_access"])
-class EditListingRemarksController : AbstractListingController() {
+class EditListingRemarksController : AbstractEditListingController() {
     @GetMapping
     fun edit(@RequestParam id: Long, model: Model): String {
         model.addAttribute(
@@ -35,7 +35,8 @@ class EditListingRemarksController : AbstractListingController() {
     }
 
     @PostMapping
-    fun submit(@ModelAttribute form: ListingForm, model: Model): String {
-        return "redirect:/listings/${form.id}"
+    fun submit(@ModelAttribute form: ListingForm): String {
+        listingService.updateRemarks(form)
+        return "redirect:/listings/edit/price?id=${form.id}"
     }
 }

@@ -21,6 +21,10 @@
                                 <div th:text="#{page.listing.edit.amenities.description}">DESCRIPTION</div>
                             </div>
                             <div class="section-item">
+                                <label class="title" th:text="#{page.listing.listing-number}">NUMBER</label>
+                                <div th:text="*{listingNumber}">00000</div>
+                            </div>
+                            <div class="section-item">
                                 <label class="title" th:text="#{page.listing.furniture-type}">TYPE</label>
                                 <select class="form-select" th:field="*{furnitureType}">
                                     <option th:each="furnitureType : ${furnitureTypes}"
@@ -41,12 +45,15 @@
                                                     th:each="amenity : ${amenitiesByCategoryId[category.id]}">
                                                     <div class="form-check">
                                                         <input class="form-check-input"
-                                                               th:id="'amenity-' + ${amenity.id}"
+                                                               th:checked="${form.amenityIds.contains(amenity.id)}"
+                                                               th:field="*{amenityIds}"
+                                                               th:id="'chk-amenity-' + ${amenity.id}"
                                                                th:value="${amenity.id}"
-                                                               type="checkbox">
+                                                               type="checkbox"
+                                                        />
                                                         <label class="form-check-label"
                                                                th:checked="${form.amenityIds.contains(amenity.id)}"
-                                                               th:for="'amenity-' + ${amenity.id}"
+                                                               th:for="'chk-amenity-' + ${amenity.id}"
                                                                th:text="${amenity.name}"
                                                         >
                                                             AMENITY
@@ -60,21 +67,17 @@
                             </div>
 
                             <div class="section-item flex flex-space-between">
-                                <div class="container-fluid">
-                                    <div class="row">
-                                        <div class="col-6 padding-left-none">
-                                            <a class="btn btn-light w-100-mobile"
-                                               th:href="'/listings/edit?id=' + ${form.id}"
-                                               th:text="#{button.previous}"
-                                            >PREV</a>
-                                        </div>
-                                        <div class="col-6 padding-right-none">
-                                            <button class="btn btn-primary w-100-mobile" th:text="#{button.next}"
-                                                    type="submit">NEXT
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                                <a class="btn btn-light w-49-mobile"
+                                   th:href="'/listings/edit?id=' + ${form.id}"
+                                   th:text="#{button.previous}">
+                                    PREV
+                                </a>
+
+                                <button class="btn btn-primary w-49-mobile"
+                                        th:text="#{button.next}"
+                                        type="submit">
+                                    NEXT
+                                </button>
                             </div>
                         </div>
                     </div>

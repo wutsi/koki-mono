@@ -44,7 +44,7 @@ class EditProductController(
         model.addAttribute("form", form)
         model.addAttribute("types", ProductType.entries.filter { entry -> entry != ProductType.UNKNOWN })
         model.addAttribute("units", unitService.units())
-        model.addAttribute("category", form.categoryId?.let { id -> categoryService.category(id) })
+        model.addAttribute("category", form.categoryId?.let { id -> categoryService.get(id) })
 
         model.addAttribute(
             "page",

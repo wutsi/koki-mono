@@ -47,11 +47,13 @@
 
                             <a class="btn btn-primary btn-sm" id="btn-publish"
                                th:href="'/listings/publish?id=' + ${listing.id}"
+                               th:if="${listing.statusDraft}"
                                th:text="#{button.publish}"
                             >PUBLISH</a>
 
                             <a class="btn btn-danger btn-sm" id="btn-status"
                                th:href="'/listings/status?id=' + ${listing.id}"
+                               th:if="!${listing.statusDraft}"
                                th:text="#{button.status}"
                             >STATUS</a>
                         </div>
@@ -69,7 +71,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-4 d-none d-md-block">
+        <div class="col-12 col-md-4 d-none d-md-block" th:if="${listing.sellerAgentUser}">
             <div class="widget">
                 <div class="widget-body flex">
                     <img height="128"
@@ -86,10 +88,10 @@
                             <span th:text="${listing.sellerAgentUser.mobile}">+1 (514) 7580000</span>
                         </div>
                         <div class="margin-top">
-                            <a class="btn btn-primary" href="#" id="compose-message">
+                            <button class="btn btn-primary" id="compose-message" th:if="${composeUrl}">
                                 <i class="fa-solid fa-envelope"></i>
                                 <span th:text="#{button.message}">MESSAGE</span>
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -142,14 +144,14 @@
         </div>
     </div>
 
-    <div class="d-block d-md-none border contact-sticky-bar">
+    <div class="d-block d-md-none border contact-sticky-bar" th:if="${listing.sellerAgentUser}">
         <div class="flex padding-small">
             <img height="64"
                  th:src="${listing.sellerAgentUser.photoUrl} ? ${listing.sellerAgentUser.photoUrl} : '/image/no-photo.png'"
                  width="64"/>
             <div class="margin-left-small">
                 <b class="margin-none" th:text="${listing.sellerAgentUser.displayName}">NAME</b><br/>
-                <button class="btn btn-primary margin-top-small" id="compose-message-sticky">
+                <button class="btn btn-primary margin-top-small" id="compose-message-sticky" th:if="${composeUrl}">
                     <i class="fa-solid fa-envelope"></i>
                     <span th:text="#{button.message}">MESSAGE</span>
                 </button>
@@ -160,14 +162,9 @@
 
 <div th:replace="~{__components/bootstrap :: modal}"></div>
 
-<script th:inline="javascript">
+<script th:if="${composeUrl} AND ${listing.sellerAgentUser}" th:inline="javascript">
     document.getElementById('compose-message').addEventListener('click', compose_message);
     document.getElementById('compose-message-sticky').addEventListener('click', compose_message);
-
-    const btnShare = document.getElementById('btn-share');
-    if (btnShare) {
-        btnShare.addEventListener('click', share_listing);
-    }
 
     function compose_message() {
         kokiMessage.compose(
@@ -175,6 +172,13 @@
             /*[[${listing.id}]]*/ '',
             'LISTING',
         );
+    }
+</script>
+
+<script>
+    const btnShare = document.getElementById('btn-share');
+    if (btnShare) {
+        btnShare.addEventListener('click', share_listing);
     }
 
     function share_listing() {

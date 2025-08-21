@@ -14,15 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 @RequestMapping("/listings/edit/geo-location")
 @RequiresPermission(["listing:manage", "listing:full_access"])
-class EditListingGeoLocationController : AbstractListingController() {
+class EditListingGeoLocationController : AbstractEditListingController() {
     @GetMapping
     fun edit(@RequestParam id: Long, model: Model): String {
-        model.addAttribute(
-            "form",
-            ListingForm(
-                id = id,
-            )
-        )
+        val listing = findListing(id)
+        model.addAttribute("form", toListingForm(listing))
         model.addAttribute(
             "page",
             createPageModel(
@@ -35,7 +31,8 @@ class EditListingGeoLocationController : AbstractListingController() {
     }
 
     @PostMapping
-    fun submit(@ModelAttribute form: ListingForm, model: Model): String {
-        return "redirect:/listings/edit/price?id=${form.id}"
+    fun submit(@ModelAttribute form: ListingForm): String {
+        listingService.updateGeoLocation(form)
+        return "redirect:/listings/edit/remarks?id=${form.id}"
     }
 }

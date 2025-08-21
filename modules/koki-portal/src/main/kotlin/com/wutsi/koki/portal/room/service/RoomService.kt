@@ -86,7 +86,7 @@ class RoomService(
         val category = if (!fullGraph || room.categoryId == null) {
             null
         } else {
-            categoryService.category(room.categoryId!!)
+            categoryService.get(room.categoryId!!)
         }
 
         return mapper.toRoomModel(

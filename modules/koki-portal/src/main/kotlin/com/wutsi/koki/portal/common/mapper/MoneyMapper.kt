@@ -2,11 +2,16 @@ package com.wutsi.koki.portal.common.mapper
 
 import com.wutsi.blog.portal.common.model.MoneyModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
+import com.wutsi.koki.refdata.dto.Money
 import org.springframework.stereotype.Service
 import java.text.NumberFormat
 
 @Service
 class MoneyMapper : TenantAwareMapper() {
+    fun toMoneyModel(money: Money): MoneyModel {
+        return toMoneyModel(money.amount, money.currency)
+    }
+
     fun toMoneyModel(amount: Double): MoneyModel {
         return MoneyModel(
             value = amount,
@@ -16,11 +21,11 @@ class MoneyMapper : TenantAwareMapper() {
     }
 
     fun toMoneyModel(amount: Double, currency: String?): MoneyModel {
-        val currency = currency ?: currentTenant.get()?.currency
+        val xcurrency = currency ?: currentTenant.get()?.currency
         return MoneyModel(
             value = amount,
-            currency = currency ?: "",
-            text = currency?.let { getCurrencyFormatter(currency).format(amount) } ?: amount.toString()
+            currency = xcurrency ?: "",
+            text = xcurrency?.let { getCurrencyFormatter(xcurrency).format(amount) } ?: amount.toString()
         )
     }
 

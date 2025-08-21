@@ -19,17 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 @RequestMapping("/listings/edit")
 @RequiresPermission(["listing:manage", "listing:full_access"])
-class EditListingController : AbstractListingController() {
+class EditListingController : AbstractEditListingController() {
     @GetMapping
-    fun create(@RequestParam id: Long, model: Model): String {
-        model.addAttribute(
-            "form",
-            ListingForm(
-                id = id,
-                listingType = ListingType.SALE,
-                propertyType = PropertyType.HOUSE,
-            )
-        )
+    fun edit(@RequestParam id: Long, model: Model): String {
+        val listing = findListing(id)
+        model.addAttribute("form", toListingForm(listing))
         model.addAttribute(
             "page",
             createPageModel(
@@ -46,7 +40,8 @@ class EditListingController : AbstractListingController() {
     }
 
     @PostMapping
-    fun submit(@ModelAttribute form: ListingForm, model: Model): String {
+    fun submit(@ModelAttribute form: ListingForm): String {
+        listingService.update(form)
         return "redirect:/listings/edit/amenities?id=${form.id}"
     }
 }

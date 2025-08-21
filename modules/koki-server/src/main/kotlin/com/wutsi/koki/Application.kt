@@ -20,11 +20,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
     basePackages = [
         "com.wutsi.koki.account.server.domain",
         "com.wutsi.koki.contact.server.domain",
-        "com.wutsi.koki.email.server.domain",
-        "com.wutsi.koki.employee.server.domain",
         "com.wutsi.koki.file.server.domain",
         "com.wutsi.koki.form.server.domain",
         "com.wutsi.koki.invoice.server.domain",
+        "com.wutsi.koki.listing.server.domain",
         "com.wutsi.koki.message.server.domain",
         "com.wutsi.koki.module.server.domain",
         "com.wutsi.koki.note.server.domain",
@@ -40,11 +39,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
     basePackages = [
         "com.wutsi.koki.account.server.dao",
         "com.wutsi.koki.contact.server.dao",
-        "com.wutsi.koki.email.server.dao",
-        "com.wutsi.koki.employee.server.dao",
         "com.wutsi.koki.file.server.dao",
-        "com.wutsi.koki.form.server.dao",
         "com.wutsi.koki.invoice.server.dao",
+        "com.wutsi.koki.listing.server.dao",
         "com.wutsi.koki.message.server.dao",
         "com.wutsi.koki.module.server.dao",
         "com.wutsi.koki.note.server.dao",
@@ -52,7 +49,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
         "com.wutsi.koki.product.server.dao",
         "com.wutsi.koki.refdata.server.dao",
         "com.wutsi.koki.room.server.dao",
-        "com.wutsi.koki.tax.server.dao",
         "com.wutsi.koki.tenant.server.dao",
     ],
 )

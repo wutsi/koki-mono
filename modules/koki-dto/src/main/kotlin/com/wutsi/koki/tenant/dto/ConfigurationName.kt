@@ -23,6 +23,9 @@ object ConfigurationName {
     const val INVOICE_EMAIL_BODY = "invoice.email.body"
     const val INVOICE_EMAIL_SUBJECT = "invoice.email.subject"
 
+    // LISTINGS
+    const val LISTING_START_NUMBER = "listing.start.number"
+
     // PAYMENT
     const val PAYMENT_EMAIL_ENABLED = "payment.email.enabled"
     const val PAYMENT_EMAIL_BODY = "payment.email.body"

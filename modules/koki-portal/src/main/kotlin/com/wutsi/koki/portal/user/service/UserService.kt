@@ -27,7 +27,7 @@ class UserService(
         val category = if (user.categoryId == null || !fullGraph) {
             null
         } else {
-            categoryService.category(user.categoryId ?: -1)
+            categoryService.get(user.categoryId ?: -1)
         }
         return mapper.toUserModel(user, roles, category)
     }

@@ -13,7 +13,7 @@ class CategorySelectorController(private val service: CategoryService) {
         @RequestParam(required = false, name = "q") keyword: String? = null,
         @RequestParam type: CategoryType,
     ): List<Map<String, Any>> {
-        val categories = service.categories(
+        val categories = service.search(
             keyword = keyword,
             type = type,
             active = true,

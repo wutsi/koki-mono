@@ -38,7 +38,7 @@ class RoomAmenityTabController(
             val room = service.room(ownerId)
             model.addAttribute("room", room)
 
-            val categories = categoryService.categories(
+            val categories = categoryService.search(
                 type = CategoryType.AMENITY,
                 active = true,
                 limit = Integer.MAX_VALUE

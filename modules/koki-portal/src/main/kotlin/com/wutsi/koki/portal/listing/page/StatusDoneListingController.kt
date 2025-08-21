@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam
 class StatusDoneListingController : AbstractListingController() {
     @GetMapping
     fun done(@RequestParam id: Long, @RequestParam status: ListingStatus, model: Model): String {
-        val listing = findListing(id, status = status)
+        val listing = findListing(id)
         model.addAttribute("listing", listing)
 
         model.addAttribute(

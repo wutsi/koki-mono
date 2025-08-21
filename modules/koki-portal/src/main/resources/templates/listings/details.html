@@ -1,9 +1,18 @@
-<div>
+<div id="listing-description-section" th:if="${listing.description}">
     <h4 th:text="#{page.listing.show.description}">NAME</h4>
     <div th:text="${listing.description}">VALUE</div>
+    <hr/>
 </div>
-<div class="margin-top padding-top border-top">
-    <h4 th:text="#{page.listing.show.general}">Information Generales</h4>
+
+<div id="listing-general-section">
+    <h4>
+        <span th:text="#{page.listing.show.general}">GENERAL</span>
+        <a class="text-small"
+           th:href="'/listings/edit?id=' + ${listing.id}"
+           th:if="${listing.canManage(user)}"
+           th:text="#{button.edit}"
+        >EDIT</a>
+    </h4>
     <div class="flex flex-wrap">
         <div class="col-6 col-md-4 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.property-type}">KEY</b>
@@ -76,12 +85,30 @@
             </div>
         </div>
     </div>
+    <hr/>
 </div>
 
-<div class="margin-top padding-top border-top" th:if="!${amenityCategories.isEmpty()}">
-    <h4 th:text="#{page.listing.show.amenities}">NAME</h4>
+<div id="listing-amenity-section" th:if="!${amenityCategories.isEmpty()} OR ${listing.furnitureType}">
+    <h4>
+        <span th:text="#{page.listing.show.amenities}">GENERAL</span>
+        <a class="text-small"
+           th:href="'/listings/edit/amenities?id=' + ${listing.id}"
+           th:if="${listing.canManage(user)}"
+           th:text="#{button.edit}"
+        >EDIT</a>
+    </h4>
+    <div class="row" th:if="${listing.furnitureType}">
+        <div class="col-12 padding-bottom-small">
+            <b class="text-small" th:text="#{page.listing.furniture-type}">KEY</b>
+            <div th:text="#{'furniture-type.' + ${listing.furnitureType}}">FURNITURE</div>
+        </div>
+    </div>
+
     <div class="row">
-        <div class="col-12 col-md-4 padding-bottom" th:each="category : ${amenityCategories}">
+        <div class="col-12 col-md-4 padding-bottom"
+             th:each="category : ${amenityCategories}"
+             th:if="!${listing.amenitiesByCategoryId(category.id).isEmpty()}"
+        >
             <b th:text="${category.name}">CATEGORY</b>
             <ul>
                 <li th:each="amenity : ${listing.amenitiesByCategoryId(category.id)}"
@@ -91,66 +118,18 @@
             </ul>
         </div>
     </div>
+    <hr/>
 </div>
 
-<div class="margin-top padding-top border-top" th:if="${listing.listingType.name() == 'RENTAL'}">
-    <h4 th:text="#{page.listing.show.leasing}">NAME</h4>
-    <div class="flex flex-wrap">
-        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.securityDeposit}">
-            <b class="text-small" th:text="#{page.listing.rental-price}">KEY</b>
-            <div>
-                <span th:text="${listing.price}">00</span>
-                <span th:text="#{page.listing.rental-price-suffix}">00</span>
-            </div>
-        </div>
-        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.leaseTerm}">
-            <b class="text-small" th:text="#{page.listing.lease-terms}">KEY</b>
-            <div>
-                <span th:text="${listing.leaseTerm}">00</span>
-                <span th:text="#{page.listing.lease-terms-unit}">00</span>
-            </div>
-        </div>
-        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.securityDeposit}">
-            <b class="text-small" th:text="#{page.listing.security-deposit}">KEY</b>
-            <div th:text="${listing.securityDeposit}">$$$</div>
-        </div>
-    </div>
-</div>
-
-<div class="margin-top padding-top border-top" th:if="${listing.canViewContract(user)}">
-    <h4 th:text="#{page.listing.show.contract}">NAME</h4>
-    <div class="margin-bottom-small" th:if="${listing.sellerName}">
-        <b class="text-small" th:text="#{page.listing.seller}">KEY</b>
-        <div th:text="${listing.sellerName}">RAY</div>
-        <div th:if="${listing.sellerEmail}" th:text="${listing.sellerEmail}">EMAIL</div>
-        <div th:if="${listing.sellerPhone}" th:text="${listing.sellerPhone}">PHONE</div>
-    </div>
-    <div class="flex flex-wrap">
-        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.contractStartDate}">
-            <b class="text-small" th:text="#{page.listing.contract-start-date}">KEY</b>
-            <div th:text="${listing.contractStartDate}">VAL</div>
-        </div>
-        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.securityDeposit}">
-            <b class="text-small" th:text="#{page.listing.contract-end-date}">KEY</b>
-            <div th:text="${listing.contractEndDate}">VAL</div>
-        </div>
-        <div class="col-6 col-md-4" th:if="${listing.sellerAgentCommission}">
-            <b class="text-small" th:text="#{page.listing.seller-agent-commission}">KEY</b>
-            <div>
-                <span th:text="${listing.sellerAgentCommission}">0.0</span>
-                <span>%</span>
-            </div>
-        </div>
-    </div>
-    <div th:if="${listing.contractRemarks}">
-        <b class="text-small" th:text="#{page.listing.contract-remarks}">KEY</b>
-        <div th:text="${listing.contractRemarks}">VAL</div>
-    </div>
-</div>
-
-
-<div class="margin-top padding-top border-top">
-    <h4 th:text="#{page.listing.show.remarks}">NAME</h4>
+<div id="listing-remarks-section" th:if="${listing.publicRemarks} OR ${listing.agentRemarks}">
+    <h4 th:text="#{page.listing.show.remarks}">
+        <span th:text="#{page.listing.show.remarks}">REMARKS</span>
+        <a class="text-small"
+           th:href="'/listings/edit/remarks?id=' + ${listing.id}"
+           th:if="${listing.canManage(user)}"
+           th:text="#{button.edit}"
+        >EDIT</a>
+    </h4>
     <div>
         <div class="margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.public-remarks}">KEY</b>
@@ -166,6 +145,45 @@
                 <i th:if="!${listing.agentRemarks}" th:text="#{page.listing.show.no-remark}">NONE</i>
             </div>
         </div>
+    </div>
+    <hr/>
+</div>
+
+<div id="listing-price-section">
+    <h4>
+        <span th:text="#{page.listing.show.price}">PRICE</span>
+        <a class="text-small"
+           th:href="'/listings/edit/price?id=' + ${listing.id}"
+           th:if="${listing.canManage(user)}"
+           th:text="#{button.edit}"
+        >EDIT</a>
+    </h4>
+    <div class="flex flex-wrap">
+        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.price}">
+            <b class="text-small" th:if="${listing.listingType.name == 'RENTAL'}"
+               th:text="#{page.listing.rental-price}">KEY</b>
+            <b class="text-small" th:if="${listing.listingType.name != 'RENTAL'}"
+               th:text="#{page.listing.price}">KEY</b>
+            <div>
+                <span th:text="${listing.price}">00</span>
+                <span th:if="${listing.listingType.name == 'RENTAL'}"
+                      th:text="#{page.listing.rental-price-suffix}">00</span>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.price}">
+            <b class="text-small" th:text="#{page.listing.visit-fees}">KEY</b>
+            <div>
+                <span th:text="${listing.visitFees}">00</span>
+            </div>
+        </div>
+        <div class="col-6 col-md-4" id="seller-agent-commission"
+             th:if="${listing.sellerAgentCommission} AND ${listing.canManage(user)}">
+            <b class="text-small" th:text="#{page.listing.seller-agent-commission}">KEY</b>
+            <div>
+                <span th:text="${listing.sellerAgentCommission}">0.0</span>
+                <span>%</span>
+            </div>
+        </div>
         <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.buyerAgentCommission}">
             <b class="text-small" th:text="#{page.listing.buyer-agent-commission}">KEY</b>
             <div>
@@ -173,5 +191,62 @@
                 <span>%</span>
             </div>
         </div>
+    </div>
+    <hr/>
+</div>
+
+<div id="listing-leasing-section" th:if="${listing.listingTypeRental}">
+    <h4>
+        <span th:text="#{page.listing.show.leasing}">LEASING</span>
+        <a class="text-small"
+           th:href="'/listings/edit/leasing?id=' + ${listing.id}"
+           th:if="${listing.canManage(user)}"
+           th:text="#{button.edit}"
+        >EDIT</a>
+    </h4>
+    <div class="flex flex-wrap">
+        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.leaseTerm}">
+            <b class="text-small" th:text="#{page.listing.lease-terms}">KEY</b>
+            <div>
+                <span th:text="${listing.leaseTerm}">00</span>
+                <span th:text="#{page.listing.unit-months}">00</span>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.advanceRent}">
+            <b class="text-small" th:text="#{page.listing.advance-rent}">KEY</b>
+            <div>
+                <span th:text="${listing.advanceRent}">00</span>
+                <span th:text="#{page.listing.unit-months}">00</span>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.securityDeposit}">
+            <b class="text-small" th:text="#{page.listing.security-deposit}">KEY</b>
+            <div th:text="${listing.securityDeposit}">$$$</div>
+        </div>
+        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.noticePeriod}">
+            <b class="text-small" th:text="#{page.listing.notice-period}">KEY</b>
+            <div>
+                <span th:text="${listing.noticePeriod}">00</span>
+                <span th:text="#{page.listing.unit-months}">00</span>
+            </div>
+        </div>
+    </div>
+    <hr/>
+</div>
+
+<div id="listing-seller-section" th:if="${listing.canManage(user)}">
+    <h4>
+        <span th:text="#{page.listing.show.seller}">SELLER</span>
+        <a class="text-small"
+           th:href="'/listings/edit/seller?id=' + ${listing.id}"
+           th:if="${listing.canManage(user)}"
+           th:text="#{button.edit}"
+        >EDIT</a>
+    </h4>
+    <div class="margin-bottom-small" th:if="${listing.sellerName}">
+        <b class="text-small" th:text="#{page.listing.seller}">KEY</b>
+        <div th:text="${listing.sellerName}">RAY</div>
+        <div th:if="${listing.sellerEmail}" th:text="${listing.sellerEmail}">EMAIL</div>
+        <div th:if="${listing.sellerPhone}" th:text="${listing.sellerPhone}">PHONE</div>
     </div>
 </div>

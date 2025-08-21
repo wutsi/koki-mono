@@ -32,7 +32,8 @@ class CreateListingController : AbstractListingController() {
     }
 
     @PostMapping
-    fun addNew(@ModelAttribute form: ListingForm, model: Model): String {
-        return "redirect:/listings/edit?id=1"
+    fun submit(@ModelAttribute form: ListingForm): String {
+        val id = listingService.create(form)
+        return "redirect:/listings/edit?id=$id"
     }
 }

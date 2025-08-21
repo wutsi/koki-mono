@@ -67,7 +67,7 @@ class ListListingController : AbstractListingController() {
             ListingModel(
                 id = 10,
                 status = ListingStatus.DRAFT,
-                listingNumber = "24709709",
+                listingNumber = 24709709,
                 listingType = ListingType.SALE,
                 propertyType = PropertyType.APARTMENT,
                 bedrooms = 2,
@@ -87,7 +87,7 @@ class ListListingController : AbstractListingController() {
             ListingModel(
                 id = 11,
                 status = ListingStatus.DRAFT,
-                listingNumber = "24709709",
+                listingNumber = 24709709,
                 listingType = ListingType.SALE,
                 propertyType = PropertyType.HOUSE,
                 bedrooms = 4,
@@ -110,7 +110,7 @@ class ListListingController : AbstractListingController() {
             ListingModel(
                 id = 20,
                 status = ListingStatus.ACTIVE,
-                listingNumber = "24709709",
+                listingNumber = 24709709,
                 listingType = ListingType.SALE,
                 propertyType = PropertyType.LAND,
                 lotArea = 4000,
@@ -130,7 +130,7 @@ class ListListingController : AbstractListingController() {
             ListingModel(
                 id = 21,
                 status = ListingStatus.ACTIVE,
-                listingNumber = "24709709",
+                listingNumber = 24709709,
                 listingType = ListingType.SALE,
                 propertyType = PropertyType.STUDIO,
                 bedrooms = 1,
@@ -151,7 +151,7 @@ class ListListingController : AbstractListingController() {
             ListingModel(
                 id = 21,
                 status = ListingStatus.ACTIVE,
-                listingNumber = "24709709",
+                listingNumber = 24709709,
                 listingType = ListingType.RENTAL,
                 propertyType = PropertyType.STUDIO,
                 bedrooms = 1,
@@ -173,7 +173,7 @@ class ListListingController : AbstractListingController() {
             ListingModel(
                 id = 30,
                 status = ListingStatus.ACTIVE_WITH_OFFER,
-                listingNumber = "24709709",
+                listingNumber = 24709709,
                 listingType = ListingType.SALE,
                 propertyType = PropertyType.HOUSE,
                 bedrooms = 5,
@@ -196,7 +196,7 @@ class ListListingController : AbstractListingController() {
             ListingModel(
                 id = 30,
                 status = ListingStatus.PENDING,
-                listingNumber = "24709709",
+                listingNumber = 24709709,
                 listingType = ListingType.SALE,
                 propertyType = PropertyType.STUDIO,
                 bedrooms = 1,

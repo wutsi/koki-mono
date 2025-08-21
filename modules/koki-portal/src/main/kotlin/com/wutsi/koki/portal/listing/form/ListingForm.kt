@@ -7,11 +7,13 @@ import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
+import com.wutsi.koki.refdata.dto.IDType
 import java.time.LocalDate
 
 data class ListingForm(
     val id: Long = -1,
     val status: ListingStatus = ListingStatus.UNKNOWN,
+    val listingNumber: Long? = null,
     val listingType: ListingType? = null,
     val propertyType: PropertyType? = null,
     val bedrooms: Int? = null,
@@ -38,14 +40,21 @@ data class ListingForm(
     val agentRemarks: String? = null,
     val publicRemarks: String? = null,
     val price: Long? = null,
-    val securityDeposit: Long? = null,
+    val visitFees: Long? = null,
     val leaseTerm: Int? = null,
+    val noticePeriod: Int? = null,
+    val advanceRent: Int? = null,
+    val securityDeposit: Long? = null,
     val currency: String? = null,
     val sellerName: String? = null,
     val sellerEmail: String? = null,
     val sellerPhone: String? = null,
-    val sellerAgentCommission: Int? = null,
-    val buyerAgentCommission: Int? = null,
+    val sellerPhoneFull: String? = null,
+    var sellerIdNumber: String? = null,
+    var sellerIdType: IDType? = null,
+    var sellerIdCountry: String? = null,
+    val sellerAgentCommission: Double? = null,
+    val buyerAgentCommission: Double? = null,
     val contractStartDate: LocalDate? = null,
     val contractEndDate: LocalDate? = null,
     val contractRemarks: String? = null,

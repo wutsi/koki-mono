@@ -4,6 +4,7 @@ import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.listing.form.ListingForm
 import com.wutsi.koki.portal.security.RequiresPermission
+import io.lettuce.core.KillArgs.Builder.id
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -15,17 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 @RequestMapping("/listings/edit/price")
 @RequiresPermission(["listing:manage", "listing:full_access"])
-class EditListingPriceController : AbstractListingController() {
+class EditListingPriceController : AbstractEditListingController() {
     @GetMapping
     fun edit(@RequestParam id: Long, model: Model): String {
-        model.addAttribute(
-            "form",
-            ListingForm(
-                id = id,
-                listingType = ListingType.RENTAL,
-                currency = tenantHolder.get()?.currency
-            )
-        )
+        val listing = findListing(id)
+        model.addAttribute("form", toListingForm(listing))
 
         model.addAttribute(
             "page",
@@ -39,7 +34,13 @@ class EditListingPriceController : AbstractListingController() {
     }
 
     @PostMapping
-    fun submit(@ModelAttribute form: ListingForm, model: Model): String {
-        return "redirect:/listings/edit/contract?id=${form.id}"
+    fun submit(@ModelAttribute form: ListingForm): String {
+        listingService.updatePrice(form)
+        val listing = findListing(form.id)
+        return if (listing.listingType == ListingType.RENTAL) {
+            "redirect:/listings/edit/leasing?id=${form.id}"
+        } else {
+            "redirect:/listings/edit/seller?id=${form.id}"
+        }
     }
 }

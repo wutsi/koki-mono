@@ -12,14 +12,14 @@ import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.AmenityModel
 import com.wutsi.koki.portal.refdata.model.GeoLocationModel
 import com.wutsi.koki.portal.user.model.UserModel
-import java.time.LocalDate
+import com.wutsi.koki.refdata.dto.IDType
 import java.util.Date
 
 data class ListingModel(
     val heroImageUrl: String? = null,
     val id: Long = -1,
     val status: ListingStatus = ListingStatus.UNKNOWN,
-    val listingNumber: String = "",
+    val listingNumber: Long = -1,
     val listingType: ListingType? = null,
     val propertyType: PropertyType? = null,
     val bedrooms: Int? = null,
@@ -42,22 +42,30 @@ data class ListingModel(
     val agentRemarks: String? = null,
     val publicRemarks: String? = null,
     val price: MoneyModel? = null,
-    val securityDeposit: MoneyModel? = null,
+    var visitFees: MoneyModel? = null,
     val leaseTerm: Int? = null,
+    val securityDeposit: MoneyModel? = null,
+    var advanceRent: Int? = null,
+    var noticePeriod: Int? = null,
     val sellerName: String? = null,
     val sellerEmail: String? = null,
     val sellerPhone: String? = null,
+    var sellerIdNumber: String? = null,
+    var sellerIdType: IDType? = null,
+    var sellerIdCountry: String? = null,
     val sellerAgentCommission: Double? = null,
     val buyerAgentCommission: Double? = null,
-    val contractStartDate: LocalDate? = null,
-    val contractEndDate: LocalDate? = null,
-    val contractRemarks: String? = null,
-    val sellerAgentUser: UserModel = UserModel(),
     val description: String? = null,
     val published: Date? = null,
     val daysInMarket: Int? = null,
     val publicUrl: String? = null,
     val totalActiveMessages: Int? = null,
+    val sellerAgentUser: UserModel? = null,
+    val createdBy: UserModel? = null,
+    val createdAt: Date = Date(),
+    var modifiedAt: Date = Date(),
+    var publishedAt: Date? = null,
+    var closedAt: Date? = null,
 ) {
     val geoLocationUrl: String?
         get() = geoLocation?.let { geo ->
@@ -86,16 +94,28 @@ data class ListingModel(
             status == ListingStatus.WITHDRAWN ||
             status == ListingStatus.CANCELLED
 
+    val listingTypeRental: Boolean
+        get() = listingType == ListingType.RENTAL
+
     fun amenitiesByCategoryId(categoryId: Long): List<AmenityModel> {
         return amenities.filter { amenity -> amenity.categoryId == categoryId }
     }
 
-    fun canViewContract(user: UserModel?): Boolean {
-        return (user?.id == sellerAgentUser.id) || (user?.hasFullAccess("listing") == true)
+    fun canManage(user: UserModel?): Boolean {
+        /**
+         * - User can manage AND user is the seller agent
+         * - user has full access
+         */
+        return ((user?.canManage("listing") == true) && (user.id == sellerAgentUser?.id)) ||
+            (user?.hasFullAccess("listing") == true)
     }
 
-    fun canManage(user: UserModel?): Boolean {
-        return ((user?.id == sellerAgentUser.id) && (user.hasPermission("listing:manage") == true)) ||
-            (user?.hasFullAccess("listing") == true)
+    fun canAccess(user: UserModel?): Boolean {
+        /**
+         * - User can access AND user is the seller agent or listing is not draft
+         * - user has full access
+         */
+        return ((user?.canAccess("listing") == true) && (user.id == sellerAgentUser?.id || !statusDraft))
+        (user?.hasFullAccess("listing") == true)
     }
 }

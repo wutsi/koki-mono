@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 @RequestMapping("/listings/edit/address")
 @RequiresPermission(["listing:manage", "listing:full_access"])
-class EditListingAddressController : AbstractListingController() {
+class EditListingAddressController : AbstractEditListingController() {
     @GetMapping
     fun edit(@RequestParam id: Long, model: Model): String {
         val city = resolveCity()
@@ -27,14 +27,10 @@ class EditListingAddressController : AbstractListingController() {
         )
 
         loadCountries(model)
-        model.addAttribute(
-            "form",
-            ListingForm(
-                id = id,
-                country = city?.country,
-                cityId = city?.id,
-            )
-        )
+
+        val listing = findListing(id)
+        model.addAttribute("form", toListingForm(listing))
+
         model.addAttribute(
             "page",
             createPageModel(
@@ -47,7 +43,8 @@ class EditListingAddressController : AbstractListingController() {
     }
 
     @PostMapping
-    fun submit(@ModelAttribute form: ListingForm, model: Model): String {
+    fun submit(@ModelAttribute form: ListingForm): String {
+        listingService.updateAddress(form)
         return "redirect:/listings/edit/geo-location?id=${form.id}"
     }
 }

@@ -20,6 +20,10 @@
                                 <h2 class="margin-none" th:text="#{page.listing.edit.title}">TITLE</h2>
                             </div>
                             <div class="section-item">
+                                <label class="title" th:text="#{page.listing.listing-number}">TYPE</label>
+                                <div th:text="*{listingNumber}">00000</div>
+                            </div>
+                            <div class="section-item">
                                 <label class="title" th:text="#{page.listing.listing-type}">TYPE</label>
                                 <select class="form-select" th:field="*{listingType}">
                                     <option th:each="listingType : ${listingTypes}"
@@ -126,7 +130,7 @@
                                 <input class="form-control" step="0" th:field="*{year}" type="number"/>
                             </div>
 
-                            <div class="section-item">
+                            <div class="section-item text-right">
                                 <button class="btn btn-primary w-100-mobile" th:text="#{button.next}" type="submit">
                                     NEXT
                                 </button>

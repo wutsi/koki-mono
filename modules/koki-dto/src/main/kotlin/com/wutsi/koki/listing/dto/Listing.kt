@@ -1,0 +1,56 @@
+package com.wutsi.koki.listing.dto
+
+import com.wutsi.koki.refdata.dto.Address
+import com.wutsi.koki.refdata.dto.GeoLocation
+import com.wutsi.koki.refdata.dto.IDType
+import com.wutsi.koki.refdata.dto.Money
+import java.util.Date
+
+data class Listing(
+    val id: Long = -1,
+    val heroImageUrl: String? = null,
+    val status: ListingStatus = ListingStatus.UNKNOWN,
+    val listingNumber: Long = -1,
+    val listingType: ListingType? = null,
+    val propertyType: PropertyType? = null,
+    val bedrooms: Int? = null,
+    val bathrooms: Int? = null,
+    val halfBathrooms: Int? = null,
+    val floors: Int? = null,
+    val basementType: BasementType? = null,
+    val level: Int? = null,
+    val unit: String? = null,
+    val parkingType: ParkingType? = null,
+    val parkings: Int? = null,
+    val fenceType: FenceType? = null,
+    val lotArea: Int? = null,
+    val propertyArea: Int? = null,
+    val year: Int? = null,
+    val furnitureType: FurnitureType? = null,
+    val address: Address? = null,
+    val geoLocation: GeoLocation? = null,
+    val price: Money? = null,
+    val visitFees: Money? = null,
+    val sellerAgentCommission: Double? = null,
+    val buyerAgentCommission: Double? = null,
+    val securityDeposit: Money? = null,
+    val advanceRent: Int? = null,
+    val leaseTerm: Int? = null,
+    val noticePeriod: Int? = null,
+    val sellerName: String? = null,
+    val sellerPhone: String? = null,
+    val sellerEmail: String? = null,
+    val sellerIdNumber: String? = null,
+    val sellerIdType: IDType? = null,
+    val sellerIdCountry: String? = null,
+    val agentRemarks: String? = null,
+    val publicRemarks: String? = null,
+    val description: String? = null,
+    val amenityIds: List<Long> = emptyList(),
+    val sellerAgentUserId: Long? = null,
+    val createdById: Long? = null,
+    val createdAt: Date = Date(),
+    val modifiedAt: Date = Date(),
+    val publishedAt: Date? = null,
+    val closedAt: Date? = null,
+)

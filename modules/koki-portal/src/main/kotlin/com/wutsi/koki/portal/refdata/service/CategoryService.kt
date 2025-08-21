@@ -11,7 +11,7 @@ class CategoryService(
     private val koki: KokiRefData,
     private val mapper: RefDataMapper,
 ) {
-    fun categories(
+    fun search(
         keyword: String? = null,
         ids: List<Long> = emptyList(),
         parentId: Long? = null,
@@ -34,7 +34,7 @@ class CategoryService(
         return categories.map { category -> mapper.toCategoryModel(category) }
     }
 
-    fun category(id: Long): CategoryModel? {
-        return categories(ids = listOf(id)).firstOrNull()
+    fun get(id: Long): CategoryModel? {
+        return search(ids = listOf(id)).firstOrNull()
     }
 }

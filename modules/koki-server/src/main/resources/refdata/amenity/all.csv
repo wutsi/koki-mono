@@ -5,7 +5,6 @@ id,category,amenity,fr
 1003,Basic Essentials,Air Conditioning,Climatisation
 1004,Basic Essentials,Hot Water,Eau chaude
 1005,Basic Essentials,Wi-Fi,Wi-Fi
-1006,Basic Essentials,Basic Toiletries,Articles de toilette de base
 1007,Kitchen & Dining,Refrigerator,Réfrigérateur
 1008,Kitchen & Dining,Microwave,Micro-ondes
 1009,Kitchen & Dining,Stove,Cuisinière
@@ -53,12 +52,6 @@ id,category,amenity,fr
 1051,Outdoor & Recreational,Balcony,Balcon
 1052,Outdoor & Recreational,Beach Access,Accès à la plage
 1053,Outdoor & Recreational,Hiking Trails,Sentiers de randonnée
-1054,Outdoor & Recreational,Bicycles,Vélos
-1055,Parking & Transportation,Free Parking,Stationnement gratuit
-1056,Parking & Transportation,Garage,Garage
-1057,Parking & Transportation,EV Charging Station,Borne de recharge pour véhicules électriques
-1058,Parking & Transportation,Bike Storage,Rangement pour vélos
-1059,Parking & Transportation,Shuttle Service,Service de navette
 1060,Safety & Security,Smoke Detector,Détecteur de fumée
 1061,Safety & Security,Carbon Monoxide Detector,Détecteur de monoxyde de carbone
 1062,Safety & Security,First Aid Kit,Trousse de premiers secours
@@ -66,20 +59,6 @@ id,category,amenity,fr
 1064,Safety & Security,Security Cameras,Caméras de sécurité
 1065,Safety & Security,Smart Lock,Serrure intelligente
 1066,Safety & Security,Keyless Entry,Accès sans clé
-1067,Accessibility Features,Wheelchair Ramp,Rampe pour fauteuil roulant
-1068,Accessibility Features,Elevator Access,Accès par ascenseur
-1069,Accessibility Features,Grab Bars,Barres d'appui
-1070,Accessibility Features,Step-Free Entry,Entrée sans marche
-1071,Accessibility Features,Wide Doorways,Portes larges
-1072,Business & Workspace,Dedicated Workspace,Espace de travail dédié
-1073,Business & Workspace,High-Speed Internet,Internet haut débit
-1074,Business & Workspace,Printer,Imprimante
-1075,Business & Workspace,Scanner,Scanner
-1076,Business & Workspace,Meeting Room,Salle de réunion
-1077,Pet-Friendly Amenities,Pet Bowls,Gamelles pour animaux
-1078,Pet-Friendly Amenities,Pet Bed,Lit pour animaux
-1079,Pet-Friendly Amenities,Fenced Yard,Cour clôturée
-1080,Pet-Friendly Amenities,Pet Park Nearby,Parc pour animaux à proximité
 1081,Luxury & Premium,Hot Tub,Bain à remous
 1082,Luxury & Premium,Spa,Spa
 1083,Luxury & Premium,Sauna,Sauna
@@ -87,12 +66,3 @@ id,category,amenity,fr
 1085,Luxury & Premium,Wine Cooler,Cave à vin
 1086,Luxury & Premium,Smart Home System,Système de maison intelligente
 1087,Luxury & Premium,Concierge Service,Service de conciergerie
-1088,Eco-Friendly Amenities,Solar Panels,Panneaux solaires
-1089,Eco-Friendly Amenities,Rainwater Harvesting,Récupération de l'eau de pluie
-1090,Eco-Friendly Amenities,Compost Bin,Bac à compost
-1091,Eco-Friendly Amenities,Energy-Efficient Appliances,Appareils électroménagers écoénergétiques
-1092,Local Experience & Extras,Welcome Basket,Panier de bienvenue
-1093,Local Experience & Extras,Local Guidebooks,Guides locaux
-1094,Local Experience & Extras,Bicycle Rentals,Location de vélos
-1095,Local Experience & Extras,Tour Assistance,Assistance pour les visites
-1096,Local Experience & Extras,Ticket Assistance,Assistance pour les billets

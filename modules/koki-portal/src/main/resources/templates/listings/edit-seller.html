@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('listing')}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <form class="form" method="post" th:action="@{/listings/edit/seller}" th:object="${form}">
+                <input th:field="*{id}" type="hidden"/>
+
+                <div class="form-body">
+                    <div class="section">
+                        <div class="section-body">
+                            <div class="section-item">
+                                <h2 th:text="#{page.listing.edit.seller.title}">TITLE</h2>
+                                <div th:text="#{page.listing.edit.seller.description}">DESCRIPTION</div>
+                            </div>
+                            <div class="section-item">
+                                <h2 th:text="#{page.listing.edit.remarks.title}">TITLE</h2>
+                                <div th:text="#{page.listing.edit.remarks.description}">DESCRIPTION</div>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">
+                                    <span th:text="#{page.listing.seller}">SELLER</span>
+                                    <span class="required">*</span>
+                                </label>
+                                <input class="form-control margin-bottom-small" maxlength="100" required
+                                       th:field="*{sellerName}"
+                                       th:placeholder="#{page.listing.name}"/>
+
+                                <input class="form-control margin-bottom-small" maxlength="255" required
+                                       th:field="*{sellerEmail}"
+                                       th:placeholder="#{page.listing.email}" type="email"/>
+
+                                <input class="form-control" required
+                                       th:data-country="${form.country}"
+                                       th:field="*{sellerPhone}"
+                                       type="tel"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">
+                                    <span th:text="#{page.listing.id-card}">ID_CARD</span>
+                                </label>
+
+                                <input class="form-control margin-bottom-small" maxlength="30" required
+                                       th:field="*{sellerIdNumber}"
+                                       th:placeholder="#{page.listing.id-card-number}"/>
+
+                                <select class="select-control margin-bottom-small" required th:field="*{sellerIdType}">
+                                    <option th:text="#{page.listing.id-card-type}" value=""></option>
+                                    <option th:each="idType : ${idTypes}"
+                                            th:if="${idType.name() != 'UNKNOWN'}"
+                                            th:text="#{'id-type.' + ${idType}}"
+                                            th:value="${idType}"
+                                    >TYPE
+                                    </option>
+                                </select>
+
+                                <select class="select-control" required th:field="*{sellerIdCountry}">
+                                    <option th:text="#{page.listing.id-card-country}" value=""></option>
+                                    <option th:each="country : ${countries}"
+                                            th:text="${country.displayCountry}"
+                                            th:value="${country.country}"
+                                    >COUNTRY
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="section-item flex flex-space-between">
+                                <a class="btn btn-light"
+                                   th:href="'/listings/edit/leasing?id=' + ${form.id}"
+                                   th:if="*{listingType.name() == 'RENTAL'}"
+                                   th:text="#{button.previous}"
+                                >PREV</a>
+                                <a class="btn btn-light"
+                                   th:href="'/listings/edit/price?id=' + ${form.id}"
+                                   th:if="*{listingType.name() != 'RENTAL'}"
+                                   th:text="#{button.previous}"
+                                >PREV</a>
+
+                                <button class="btn btn-primary" th:text="#{button.next}" type="submit">NEXT</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
