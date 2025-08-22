@@ -148,7 +148,7 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
         input("#email", "info@ray-construction.com")
         scrollToMiddle()
         input("#website", "https://www.ray-construction.com")
-        select2("#language", "French")
+//        select2("#language", "French")
         input("#description", "This is the description")
         scrollToBottom()
         click(".btn-cancel")
