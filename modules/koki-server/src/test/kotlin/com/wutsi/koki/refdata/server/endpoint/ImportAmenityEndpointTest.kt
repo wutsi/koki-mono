@@ -15,19 +15,19 @@ class ImportAmenityEndpointTest : AuthorizationAwareEndpointTest() {
     private lateinit var dao: AmenityRepository
 
     @Test
-    fun service() {
+    fun import() {
         rest.getForEntity("/v1/categories/import?type=AMENITY", ImportResponse::class.java)
 
         val response = rest.getForEntity("/v1/amenities/import", ImportResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        assertEquals(97, dao.findAll().toList().size)
+        assertEquals(67, dao.findAll().toList().size)
 
-        val amenity = dao.findById(1095).get()
-        assertEquals(40014, amenity.categoryId)
+        val amenity = dao.findById(1000).get()
+        assertEquals(40000, amenity.categoryId)
         assertEquals(true, amenity.active)
-        assertEquals("Tour Assistance", amenity.name)
-        assertEquals("Assistance pour les visites", amenity.nameFr)
+        assertEquals("Electricity", amenity.name)
+        assertEquals("Électricité", amenity.nameFr)
     }
 }
