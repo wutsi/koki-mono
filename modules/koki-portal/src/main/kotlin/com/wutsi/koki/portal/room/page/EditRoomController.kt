@@ -106,11 +106,11 @@ class EditRoomController(
         model.addAttribute("rooms", (0..20).toList())
 
         if (form.cityId != null) {
-            val city = locationService.location(form.cityId)
+            val city = locationService.get(form.cityId)
             model.addAttribute("city", city)
         }
         if (form.neighborhoodId != null) {
-            val neighborhood = locationService.location(form.neighborhoodId)
+            val neighborhood = locationService.get(form.neighborhoodId)
             model.addAttribute("neighborhood", neighborhood)
         }
 

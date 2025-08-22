@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.listing.page
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.listing.form.ListingForm
 import com.wutsi.koki.portal.security.RequiresPermission
+import jdk.javadoc.internal.doclets.toolkit.util.DocPath.parent
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,17 +18,22 @@ import org.springframework.web.bind.annotation.RequestParam
 class EditListingAddressController : AbstractEditListingController() {
     @GetMapping
     fun edit(@RequestParam id: Long, model: Model): String {
-        val city = resolveCity()
+        val defaultCity = resolveCity()
         val listing = findListing(id)
-        model.addAttribute("form", toListingForm(listing, city))
+        model.addAttribute("form", toListingForm(listing, defaultCity))
 
-        val parent = resolveParent(city)
-        model.addAttribute("city", city)
-        model.addAttribute("cityName",
-            city?.let {
-                parent?.let { "${city.name}, ${parent.name}" } ?: city.name
+        val city = listing.address?.city ?: defaultCity
+        if (city != null) {
+            val parent = resolveParent(city)
+            model.addAttribute("city", city)
+            model.addAttribute("cityName", parent?.let { "${city.name}, ${parent.name}" } ?: city.name)
+
+            val neighbourhood = listing.address?.neighbourhood
+            if (neighbourhood != null) {
+                model.addAttribute("neighbourhood", neighbourhood)
+                model.addAttribute("neighbourhoodName", "${neighbourhood.name}, ${city.name}")
             }
-        )
+        }
 
         loadCountries(model)
 

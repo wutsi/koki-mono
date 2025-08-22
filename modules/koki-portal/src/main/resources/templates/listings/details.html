@@ -121,6 +121,21 @@
     <hr/>
 </div>
 
+<div id="listing-address-section" th:if="${listing.address}">
+    <h4>
+        <span th:text="#{page.listing.show.address}">ADDRESS</span>
+        <a class="text-small"
+           th:href="'/listings/edit/address?id=' + ${listing.id}"
+           th:if="${listing.canManage(user)}"
+           th:text="#{button.edit}"
+        >EDIT</a>
+    </h4>
+    <div class="row" th:if="${listing.furnitureType}">
+        <div class="col-12 padding-bottom-small" th:utext="${listing.address.toHtml(true)}">COUNTRY</div>
+    </div>
+    <hr/>
+</div>
+
 <div id="listing-remarks-section" th:if="${listing.publicRemarks} OR ${listing.agentRemarks}">
     <h4 th:text="#{page.listing.show.remarks}">
         <span th:text="#{page.listing.show.remarks}">REMARKS</span>

@@ -138,7 +138,7 @@ abstract class AbstractPageController {
             val ip = getIp(request)
             val geo = ipService.resolve(ip)
             return if (geo != null) {
-                locationService.locations(
+                locationService.search(
                     country = geo.countryCode,
                     keyword = geo.city,
                     type = LocationType.CITY,
@@ -153,7 +153,7 @@ abstract class AbstractPageController {
     }
 
     protected fun resolveParent(city: LocationModel?): LocationModel? {
-        return city?.parentId?.let { id -> locationService.location(id) }
+        return city?.parentId?.let { id -> locationService.get(id) }
     }
 
     protected fun loadError(ex: HttpClientErrorException, model: Model) {

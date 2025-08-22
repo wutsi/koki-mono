@@ -17,12 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam
 class EditListingRemarksController : AbstractEditListingController() {
     @GetMapping
     fun edit(@RequestParam id: Long, model: Model): String {
-        model.addAttribute(
-            "form",
-            ListingForm(
-                id = id,
-            )
-        )
+        val listing = findListing(id)
+        model.addAttribute("form", toListingForm(listing))
         model.addAttribute(
             "page",
             createPageModel(

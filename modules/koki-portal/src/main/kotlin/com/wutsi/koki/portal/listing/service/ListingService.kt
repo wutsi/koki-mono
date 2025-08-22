@@ -40,7 +40,7 @@ class ListingService(
         val locations = if (!fullGraph || locationIds.isEmpty()) {
             emptyMap<Long, LocationModel>()
         } else {
-            locationService.locations(
+            locationService.search(
                 ids = locationIds, limit = locationIds.size
             ).associateBy { location -> location.id }
         }
