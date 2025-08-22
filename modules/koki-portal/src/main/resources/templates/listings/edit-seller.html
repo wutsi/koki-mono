@@ -52,7 +52,7 @@
                                        th:field="*{sellerIdNumber}"
                                        th:placeholder="#{page.listing.id-card-number}"/>
 
-                                <select class="select-control margin-bottom-small" required th:field="*{sellerIdType}">
+                                <select class="form-select margin-bottom-small" required th:field="*{sellerIdType}">
                                     <option th:text="#{page.listing.id-card-type}" value=""></option>
                                     <option th:each="idType : ${idTypes}"
                                             th:if="${idType.name() != 'UNKNOWN'}"
@@ -62,7 +62,7 @@
                                     </option>
                                 </select>
 
-                                <select class="select-control" required th:field="*{sellerIdCountry}">
+                                <select class="form-select" required th:field="*{sellerIdCountry}">
                                     <option th:text="#{page.listing.id-card-country}" value=""></option>
                                     <option th:each="country : ${countries}"
                                             th:text="${country.displayCountry}"

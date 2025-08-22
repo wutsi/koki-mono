@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.listing.page
 
 import com.wutsi.koki.portal.listing.model.ListingModel
+import com.wutsi.koki.portal.refdata.model.LocationModel
 import org.springframework.http.HttpStatusCode
 import org.springframework.web.client.HttpClientErrorException
 

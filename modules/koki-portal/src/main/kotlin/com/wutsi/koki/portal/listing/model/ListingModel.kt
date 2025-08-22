@@ -115,7 +115,7 @@ data class ListingModel(
          * - User can access AND user is the seller agent or listing is not draft
          * - user has full access
          */
-        return ((user?.canAccess("listing") == true) && (user.id == sellerAgentUser?.id || !statusDraft))
-        (user?.hasFullAccess("listing") == true)
+        return ((user?.canAccess("listing") == true) && (user.id == sellerAgentUser?.id || !statusDraft)) ||
+            (user?.hasFullAccess("listing") == true)
     }
 }

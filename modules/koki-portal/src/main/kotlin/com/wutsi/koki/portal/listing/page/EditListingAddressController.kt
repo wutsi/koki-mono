@@ -18,6 +18,9 @@ class EditListingAddressController : AbstractEditListingController() {
     @GetMapping
     fun edit(@RequestParam id: Long, model: Model): String {
         val city = resolveCity()
+        val listing = findListing(id)
+        model.addAttribute("form", toListingForm(listing, city))
+
         val parent = resolveParent(city)
         model.addAttribute("city", city)
         model.addAttribute("cityName",
@@ -27,9 +30,6 @@ class EditListingAddressController : AbstractEditListingController() {
         )
 
         loadCountries(model)
-
-        val listing = findListing(id)
-        model.addAttribute("form", toListingForm(listing))
 
         model.addAttribute(
             "page",

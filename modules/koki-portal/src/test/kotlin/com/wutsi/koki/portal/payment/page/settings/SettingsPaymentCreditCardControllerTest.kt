@@ -39,7 +39,7 @@ class SettingsPaymentCreditCardControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.PAYMENT_SETTINGS_CREDIT_CARD)
         select("#offline", 1)
-        input("#offlinePhoneNumber", "5457580000")
+        input("#offlinePhoneNumber", "+15457580000")
         select("#gateway", 1)
         input("#stripeApiKey", "ST.123456780")
         click("button[type=submit]", 1000)
@@ -107,7 +107,7 @@ class SettingsPaymentCreditCardControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.PAYMENT_SETTINGS_CREDIT_CARD)
         select("#offline", 1)
-        input("#offlinePhoneNumber", "5457580000")
+        input("#offlinePhoneNumber", "+15457580000")
         select("#gateway", 1)
         input("#stripeApiKey", "ST.123456780")
         click("button[type=submit]", 1000)
