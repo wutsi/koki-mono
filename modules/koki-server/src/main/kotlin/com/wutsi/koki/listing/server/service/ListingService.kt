@@ -23,7 +23,6 @@ import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.service.ConfigurationService
-import com.wutsi.koki.tenant.server.service.PasswordEncryptor
 import jakarta.transaction.Transactional
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -38,7 +37,6 @@ class ListingService(
     private val amenityService: AmenityService,
     private val locationService: LocationService,
     private val configurationService: ConfigurationService,
-    private val encryptor: PasswordEncryptor,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ListingService::class.java)
@@ -186,14 +184,10 @@ class ListingService(
     fun seller(id: Long, request: UpdateListingSellerRequest, tenantId: Long) {
         val listing = get(id, tenantId)
 
-        if (listing.salt == null) {
-            listing.salt = UUID.randomUUID().toString()
-        }
         listing.sellerName = request.sellerName?.uppercase()?.ifEmpty { null }
         listing.sellerEmail = request.sellerEmail?.lowercase()?.ifEmpty { null }
         listing.sellerPhone = request.sellerPhone?.ifEmpty { null }
-        listing.sellerIdNumber = request.sellerIdNumber?.uppercase()?.ifEmpty { null }
-            ?.let { number -> encryptor.hash(number, listing.salt!!) }
+        listing.sellerIdNumber = request.sellerIdNumber
         listing.sellerIdType = request.sellerIdType
         listing.sellerIdCountry = request.sellerIdCountry?.lowercase()?.ifEmpty { null }
         listing.modifiedAt = Date()

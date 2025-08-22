@@ -24,13 +24,8 @@ class UpdateListingSellerEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var dao: ListingRepository
 
-    @MockitoBean
-    private lateinit var encryptor: PasswordEncryptor
-
     @Test
     fun update() {
-        doReturn("6ac48b7480b745c7a7124a6e0b444290").whenever(encryptor).hash(any(), any())
-
         val id = 100L
         val request = UpdateListingSellerRequest(
             sellerName = "Ray sponsible",
@@ -44,18 +39,13 @@ class UpdateListingSellerEndpointTest : AuthorizationAwareEndpointTest() {
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val hash = argumentCaptor<String>()
-        verify(encryptor).hash(eq(request.sellerIdNumber!!.uppercase()), hash.capture())
-
         val listing = dao.findById(id).get()
         assertEquals(request.sellerName?.uppercase(), listing.sellerName)
         assertEquals(request.sellerEmail?.lowercase(), listing.sellerEmail)
         assertEquals(request.sellerPhone, listing.sellerPhone)
         assertEquals(request.sellerIdType, listing.sellerIdType)
-        assertEquals("6ac48b7480b745c7a7124a6e0b444290", listing.sellerIdNumber)
+        assertEquals(request.sellerIdNumber, listing.sellerIdNumber)
         assertEquals(request.sellerIdCountry?.lowercase(), listing.sellerIdCountry)
-        assertEquals(36, listing.salt?.length)
-        assertEquals(hash.firstValue, listing.salt)
     }
 
     @Test
@@ -73,8 +63,6 @@ class UpdateListingSellerEndpointTest : AuthorizationAwareEndpointTest() {
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        verify(encryptor, never()).hash(any(), any())
-
         val listing = dao.findById(id).get()
         assertEquals(request.sellerName?.uppercase(), listing.sellerName)
         assertEquals(request.sellerEmail?.lowercase(), listing.sellerEmail)
@@ -82,6 +70,5 @@ class UpdateListingSellerEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(null, listing.sellerIdType)
         assertEquals(null, listing.sellerIdNumber)
         assertEquals(null, listing.sellerIdCountry)
-        assertEquals(36, listing.salt?.length)
     }
 }
