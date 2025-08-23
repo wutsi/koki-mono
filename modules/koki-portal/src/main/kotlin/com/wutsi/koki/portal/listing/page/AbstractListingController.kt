@@ -4,6 +4,7 @@ import com.wutsi.koki.portal.listing.form.ListingForm
 import com.wutsi.koki.portal.listing.model.ListingModel
 import com.wutsi.koki.portal.listing.service.ListingService
 import com.wutsi.koki.portal.module.page.AbstractModulePageController
+import com.wutsi.koki.portal.refdata.model.LocationModel
 import io.lettuce.core.KillArgs.Builder.id
 import org.springframework.beans.factory.annotation.Autowired
 
@@ -23,7 +24,7 @@ abstract class AbstractListingController : AbstractModulePageController() {
         return listingService.get(id)
     }
 
-    protected fun toListingForm(listing: ListingModel): ListingForm {
+    protected fun toListingForm(listing: ListingModel, city: LocationModel? = null): ListingForm {
         return ListingForm(
             id = listing.id,
             listingNumber = listing.listingNumber,
@@ -46,8 +47,8 @@ abstract class AbstractListingController : AbstractModulePageController() {
             furnitureType = listing.furnitureType,
             amenityIds = listing.amenities.map { amenity -> amenity.id },
 
-            country = listing.address?.country,
-            cityId = listing.address?.city?.id,
+            country = (listing.address?.country ?: city?.country)?.uppercase(),
+            cityId = listing.address?.city?.id ?: city?.id,
             neighbourhoodId = listing.address?.neighbourhood?.id,
             street = listing.address?.street,
 
@@ -72,7 +73,7 @@ abstract class AbstractListingController : AbstractModulePageController() {
             sellerEmail = listing.sellerEmail,
             sellerIdType = listing.sellerIdType,
             sellerIdNumber = listing.sellerIdNumber,
-            sellerIdCountry = listing.sellerIdCountry,
+            sellerIdCountry = (listing.sellerIdCountry ?: listing.address?.country)?.uppercase(),
         )
     }
 }

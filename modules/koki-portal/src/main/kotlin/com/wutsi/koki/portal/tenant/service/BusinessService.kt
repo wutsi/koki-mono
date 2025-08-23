@@ -28,7 +28,7 @@ class BusinessService(
         val locations = if (locationIds.isEmpty()) {
             emptyMap()
         } else {
-            locationService.locations(
+            locationService.search(
                 ids = locationIds,
                 limit = locationIds.size
             ).associateBy { location -> location.id }

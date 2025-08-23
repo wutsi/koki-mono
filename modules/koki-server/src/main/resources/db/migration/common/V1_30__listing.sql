@@ -62,7 +62,6 @@ CREATE TABLE T_LISTING(
   seller_id_country         VARCHAR(2),
   agent_remarks             TEXT,
   public_remarks            TEXT,
-  salt                      VARCHAR(36),
   description               TEXT,
 
   created_at                DATETIME DEFAULT NOW(),

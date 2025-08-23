@@ -15,7 +15,7 @@ table tr.listing td img.hero-image {
 }
 
 h1.listing-price {
-    color: darkblue;
+    font-weight: normal;
 }
 
 .contact-sticky-bar {

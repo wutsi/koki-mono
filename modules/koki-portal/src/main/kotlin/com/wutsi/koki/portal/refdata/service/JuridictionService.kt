@@ -30,7 +30,7 @@ class JuridictionService(
         val states = if (stateIds.isEmpty()) {
             emptyMap()
         } else {
-            locationService.locations(
+            locationService.search(
                 ids = stateIds.toList(),
                 limit = stateIds.size
             ).associateBy { juridiction -> juridiction.id }

@@ -76,7 +76,7 @@ class ProfileController(
     }
 
     private fun loadCity(id: Long?, model: Model): LocationModel? {
-        val city = id?.let { locationService.location(id) }
+        val city = id?.let { locationService.get(id) }
             ?: resolveCity()
         val parent = resolveParent(city)
 

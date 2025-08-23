@@ -8,7 +8,9 @@ import com.wutsi.koki.portal.refdata.model.AmenityModel
 import com.wutsi.koki.portal.refdata.model.GeoLocationModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.user.model.UserModel
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
+import java.util.Locale
 
 @Service
 class ListingMapper(private val moneyMapper: MoneyMapper) {
@@ -84,6 +86,10 @@ class ListingMapper(private val moneyMapper: MoneyMapper) {
             state = address.stateId?.let { id -> locations[id] },
             street = address.street,
             postalCode = address.postalCode,
+            countryName = listing.address?.country?.let { country ->
+                Locale(LocaleContextHolder.getLocale().language, country).getDisplayCountry()
+            }
+
         )
     }
 

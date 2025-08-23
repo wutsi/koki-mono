@@ -78,7 +78,6 @@ data class ListingEntity(
     var sellerIdType: IDType? = null,
     var sellerIdCountry: String? = null,
     var description: String? = null,
-    var salt: String? = null,
 
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),

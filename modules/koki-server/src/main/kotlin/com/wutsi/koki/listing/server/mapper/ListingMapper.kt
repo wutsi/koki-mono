@@ -97,7 +97,10 @@ class ListingMapper {
         return if (listing.latitude == null || listing.longitude == null) {
             null
         } else {
-            GeoLocation(listing.longitude!!, listing.longitude!!)
+            GeoLocation(
+                latitude = listing.latitude!!,
+                longitude = listing.longitude!!
+            )
         }
     }
 

@@ -50,7 +50,7 @@ class SettingsEditBusinessController(
 
         loadCountries(model)
 
-        val city = form.addressCityId?.let { id -> locationService.location(id) }
+        val city = form.addressCityId?.let { id -> locationService.get(id) }
         model.addAttribute("city", city)
 
         model.addAttribute(

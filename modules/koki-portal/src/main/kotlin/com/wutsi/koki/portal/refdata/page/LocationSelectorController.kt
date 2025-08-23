@@ -16,7 +16,7 @@ class LocationSelectorController(private val service: LocationService) {
         @RequestParam(required = false) type: LocationType = LocationType.CITY,
     ): List<Map<String, Any>> {
         // Find the location
-        val locations = service.locations(
+        val locations = service.search(
             keyword = keyword,
             country = country,
             parentId = parentId,
@@ -29,7 +29,7 @@ class LocationSelectorController(private val service: LocationService) {
         val parents = if (parentIds.isEmpty()) {
             emptyMap()
         } else {
-            service.locations(
+            service.search(
                 ids = parentIds.toList(),
                 limit = parentIds.size,
             ).associateBy { location -> location.id }

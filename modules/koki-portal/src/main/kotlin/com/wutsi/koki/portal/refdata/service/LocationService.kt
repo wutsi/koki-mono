@@ -11,7 +11,7 @@ class LocationService(
     private val koki: KokiRefData,
     private val mapper: RefDataMapper,
 ) {
-    fun locations(
+    fun search(
         keyword: String? = null,
         ids: List<Long> = emptyList(),
         parentId: Long? = null,
@@ -32,7 +32,7 @@ class LocationService(
         return locations.map { location -> mapper.toLocationModel(location) }
     }
 
-    fun location(id: Long): LocationModel {
+    fun get(id: Long): LocationModel {
         val location = koki.location(id).location
         return mapper.toLocationModel(location)
     }

@@ -61,7 +61,7 @@ class AccountService(
         val locations = if (locationIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
-            locationService.locations(
+            locationService.search(
                 ids = locationIds.toList(),
                 limit = locationIds.size
             ).associateBy { location -> location.id }
