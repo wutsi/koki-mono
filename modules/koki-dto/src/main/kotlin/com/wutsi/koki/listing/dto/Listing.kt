@@ -8,7 +8,7 @@ import java.util.Date
 
 data class Listing(
     val id: Long = -1,
-    val heroImageUrl: String? = null,
+    val heroImageId: Long? = null,
     val status: ListingStatus = ListingStatus.UNKNOWN,
     val listingNumber: Long = -1,
     val listingType: ListingType? = null,
@@ -27,6 +27,7 @@ data class Listing(
     val propertyArea: Int? = null,
     val year: Int? = null,
     val furnitureType: FurnitureType? = null,
+    val amenityIds: List<Long> = emptyList(),
     val address: Address? = null,
     val geoLocation: GeoLocation? = null,
     val price: Money? = null,
@@ -46,7 +47,8 @@ data class Listing(
     val agentRemarks: String? = null,
     val publicRemarks: String? = null,
     val description: String? = null,
-    val amenityIds: List<Long> = emptyList(),
+    val totalImages: Long? = null,
+    val totalFiles: Long? = null,
     val sellerAgentUserId: Long? = null,
     val createdById: Long? = null,
     val createdAt: Date = Date(),

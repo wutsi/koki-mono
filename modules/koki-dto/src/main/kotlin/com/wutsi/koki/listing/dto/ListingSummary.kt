@@ -5,7 +5,7 @@ import com.wutsi.koki.refdata.dto.Money
 
 data class ListingSummary(
     val id: Long = -1,
-    val heroImageUrl: String? = null,
+    val heroImageId: Long? = null,
     val status: ListingStatus = ListingStatus.UNKNOWN,
     val listingNumber: Long = -1,
     val listingType: ListingType? = null,

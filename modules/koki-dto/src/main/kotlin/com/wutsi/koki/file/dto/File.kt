@@ -1,5 +1,6 @@
 package com.wutsi.koki.file.dto
 
+import com.wutsi.koki.common.dto.ObjectReference
 import java.util.Date
 
 data class File(
@@ -21,4 +22,8 @@ data class File(
     val labels: List<LabelSummary> = emptyList(),
     val status: FileStatus = FileStatus.UNKNOWN,
     val rejectionReason: String? = null,
+    val owner: ObjectReference? = null,
+    val width: Int? = null,
+    val height: Int? = null,
+    val imageQuality: ImageQuality? = null,
 )
