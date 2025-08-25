@@ -15,7 +15,6 @@ import com.wutsi.koki.platform.ai.llm.Tool
 import com.wutsi.koki.platform.ai.llm.Type
 import com.wutsi.koki.platform.ai.llm.deepseek.Deepseek
 import com.wutsi.koki.platform.ai.llm.gemini.GeminiTest
-import jdk.internal.joptsimple.internal.Messages.message
 import org.junit.jupiter.api.assertThrows
 import org.springframework.http.MediaType
 import kotlin.test.Test
@@ -103,7 +102,7 @@ class DeepseekTest {
     @Test
     fun processImage() {
         assertThrows<LLMDocumentTypeNotSupportedException> {
-            val response = llm.generateContent(
+            llm.generateContent(
                 request = LLMRequest(
                     messages = listOf(
                         Message(
@@ -130,6 +129,7 @@ class DeepseekTest {
                     Message(
                         text = """
                             What's the current weather like in Montreal?
+                            Get me just then result, nothing else
                         """.trimIndent(),
                     ),
                 ),

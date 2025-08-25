@@ -26,13 +26,14 @@ class LocalStorageService(
         contentType: String?,
         contentLength: Long
     ): URL {
-        val file = File("$directory/$path")
+        val xpath = encodePath(path)
+        val file = File("$directory/$xpath")
         file.parentFile.mkdirs()
 
         FileOutputStream(file)
             .use { output ->
                 content.copyTo(output, BUF_SIZE)
-                return URL("$baseUrl/$path")
+                return URL("$baseUrl/$xpath")
             }
     }
 
@@ -67,5 +68,9 @@ class LocalStorageService(
     private fun toURL(file: File): URL {
         val path = file.absolutePath.substring(directory.length + 1)
         return toURL(path)
+    }
+
+    private fun encodePath(path: String): String {
+        return path.replace(" ", "-")
     }
 }
