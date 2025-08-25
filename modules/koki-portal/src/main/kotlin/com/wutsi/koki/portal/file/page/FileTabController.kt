@@ -48,9 +48,10 @@ class FileTabController(private val service: FileService) : AbstractPageControll
         @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
-        val files = service.files(
+        val files = service.search(
             ownerId = ownerId,
             ownerType = ownerType,
+            type = FileType.FILE,
             limit = limit,
             offset = offset
         )

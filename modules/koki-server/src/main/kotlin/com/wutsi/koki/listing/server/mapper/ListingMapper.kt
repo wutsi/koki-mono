@@ -17,7 +17,7 @@ class ListingMapper {
     fun toListing(entity: ListingEntity): Listing {
         return Listing(
             id = entity.id ?: -1,
-            heroImageUrl = entity.heroImageUrl,
+            heroImageId = entity.heroImageId,
             status = entity.status,
             listingNumber = entity.listingNumber,
             listingType = entity.listingType?.takeIf { type -> type != ListingType.UNKNOWN },
@@ -64,6 +64,9 @@ class ListingMapper {
             publicRemarks = entity.publicRemarks?.ifEmpty { null },
 
             description = entity.description?.ifEmpty { null },
+            totalImages = entity.totalImages,
+            totalFiles = entity.totalFiles,
+
             sellerAgentUserId = entity.sellerAgentUserId,
             createdById = entity.createdById,
             createdAt = entity.createdAt,

@@ -11,6 +11,12 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
+            <div th:replace="~{__components/listing :: listing-breadcrumb(${listing})}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
             <form class="form" method="post" th:action="@{/listings/edit/seller}" th:object="${form}">
                 <input th:field="*{id}" type="hidden"/>
 
@@ -73,12 +79,12 @@
                             </div>
 
                             <div class="section-item flex flex-space-between">
-                                <a class="btn btn-light w-49"
+                                <a class="btn btn-light w-49-mobile"
                                    th:href="'/listings/edit/leasing?id=' + ${form.id}"
                                    th:if="*{listingType.name() == 'RENTAL'}"
                                    th:text="#{button.previous}"
                                 >PREV</a>
-                                <a class="btn btn-light w-49"
+                                <a class="btn btn-light w-49-mobile"
                                    th:href="'/listings/edit/price?id=' + ${form.id}"
                                    th:if="*{listingType.name() != 'RENTAL'}"
                                    th:text="#{button.previous}"

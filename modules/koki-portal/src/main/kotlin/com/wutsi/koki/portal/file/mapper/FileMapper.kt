@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.file.mapper
 import com.wutsi.koki.file.dto.File
 import com.wutsi.koki.file.dto.FileSummary
 import com.wutsi.koki.file.dto.LabelSummary
+import com.wutsi.koki.portal.common.model.ObjectReferenceModel
 import com.wutsi.koki.portal.common.service.Moment
 import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.file.model.LabelModel
@@ -85,6 +86,7 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
             labels = entity.labels.map { label -> toLabelModel(label) },
             status = entity.status,
             rejectionReason = entity.rejectionReason,
+            owner = entity.owner?.let { owner -> ObjectReferenceModel(id = owner.id, type = owner.type) }
         )
     }
 

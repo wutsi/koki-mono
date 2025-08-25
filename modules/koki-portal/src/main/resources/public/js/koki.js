@@ -127,47 +127,51 @@ class AjaxFragmentWidget {
  *
  * Attributes
  * - data-upload-button-id: ID of the button to click for selecting the files
- *
- * Upload button attribute
- * - data-file-button-id: ID of the FILE button
+ * - data-upload-button-id: ID of the Upload button
  */
 class UploaderWidget {
     init() {
         let count = 0;
         document.querySelectorAll('[data-component-id=uploader]')
             .forEach((elt) => {
-                const file = elt.querySelector("input[type=file]");
-                if (file) {
-                    file.removeEventListener('change', koki.widgets.uploader.onUploaded);
-                    file.addEventListener('change', koki.widgets.uploader.onUploaded);
+                const fileId = elt.getAttribute("data-file-button-id");
+                const uploadId = elt.getAttribute("data-upload-button-id");
 
-                    const btnId = elt.getAttribute("data-upload-button-id");
-                    if (btnId) {
-                        const btn = document.getElementById(btnId);
-                        if (btn) {
-                            btn.removeEventListener('click', koki.widgets.uploader.onClick);
-                            btn.addEventListener('click', koki.widgets.uploader.onClick);
-                        }
-                    } else {
-                        console.log('No upload button' + (btnId ? ' <#' + fileId + '>' : ''))
+                if (fileId) {
+                    const file = document.getElementById(fileId)
+                    if (file) {
+                        file.removeEventListener('change', koki.widgets.uploader.onUploaded);
+                        file.addEventListener('change', koki.widgets.uploader.onUploaded);
                     }
-
-                    count++
                 }
+                if (uploadId) {
+                    const upload = document.getElementById(uploadId);
+                    if (upload) {
+                        upload.removeEventListener('click', koki.widgets.uploader.onClick);
+                        upload.addEventListener('click', koki.widgets.uploader.onClick);
+                    }
+                }
+
+                count++
             });
         console.log(count + ' uploader component(s) found');
     }
 
+    _findUploaderParent(elt) {
+        return elt.closest('[data-component-id=uploader]');
+    }
+
     onClick() {
         const elt = window.event.target;
-        const fileId = elt.getAttribute("data-file-button-id");
+        const uploader = koki.widgets.uploader._findUploaderParent(elt);
+        const fileId = uploader.getAttribute("data-file-button-id");
         if (fileId) {
             let file = document.getElementById(fileId);
             if (file) {
                 file.click()
             }
         } else {
-            console.log('No file input' + (fileId ? ' <#' + fileId + '>' : ''))
+            console.log('No file input <#' + fileId + '>');
         }
     }
 
@@ -175,10 +179,11 @@ class UploaderWidget {
         const elt = window.event.target;
 
         // Init progress bar
-        const progressId = elt.getAttribute("data-progress-id");
+        const uploader = koki.widgets.uploader._findUploaderParent(elt);
+        const progressId = uploader.getAttribute("data-progress-id");
         const progressBar = progressId ? document.querySelector('#' + progressId + ' .progress-bar') : null;
         if (progressBar) {
-            progressBar.style.display = 'block';
+            progressBar.parentElement.style.display = 'flex';
             progressBar.setAttribute("aria-valuenow", 0);
             progressBar.setAttribute("aria-valuemax", elt.files.length);
             progressBar.style.width = "0%";
@@ -187,8 +192,8 @@ class UploaderWidget {
         }
 
         // Upload
-        let uploadUrl = elt.getAttribute('data-upload-url');
-        let maxMb = elt.getAttribute('data-max-file-size');
+        let uploadUrl = uploader.getAttribute('data-upload-url');
+        let maxMb = uploader.getAttribute('data-max-file-size');
         if (!maxMb || maxMb.length === 0) {
             maxMb = 1
         }
@@ -222,8 +227,16 @@ class UploaderWidget {
             }
         }
 
-        // Refresh
-        koki.widgets.ajaxButton.refresh(elt);
+        setTimeout(
+            function () {
+                // Refresh
+                if (progressBar) {
+                    progressBar.parentElement.style.display = 'none';
+                }
+                koki.widgets.ajaxButton.refresh(uploader);
+            },
+            2000
+        );
     }
 }
 
@@ -299,8 +312,9 @@ class AjaxButtonWidget {
     refresh(elt) {
         const targetId = elt.getAttribute('data-target-id');
         const refreshUrl = elt.getAttribute('data-refresh-url');
+        console.log('Refreshing #' + targetId + ' from ' + refreshUrl, elt);
+
         if (targetId && refreshUrl) {
-            console.log('Refreshing #' + targetId + ' from ' + refreshUrl);
             const container = document.getElementById(targetId);
             if (container) {
                 fetch(refreshUrl)

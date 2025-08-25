@@ -44,7 +44,7 @@ class ListFileWidgetController(private val service: FileService) {
         @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
-        val files = service.files(
+        val files = service.search(
             ownerId = ownerId,
             ownerType = ownerType,
         )

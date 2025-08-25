@@ -32,8 +32,8 @@ data class ListingEntity(
     @Column(name = "modified_by_fk") var modifiedById: Long? = null,
     @Column("seller_agent_user_fk") var sellerAgentUserId: Long? = null,
     @Column("buyer_agent_user_fk") var buyerAgentUserId: Long? = null,
+    @Column("hero_image_fk") var heroImageId: Long? = null,
 
-    val heroImageUrl: String? = null,
     val status: ListingStatus = ListingStatus.UNKNOWN,
     val listingNumber: Long = -1,
     var listingType: ListingType? = null,
@@ -51,38 +51,6 @@ data class ListingEntity(
     var lotArea: Int? = null,
     var propertyArea: Int? = null,
     var year: Int? = null,
-    var furnitureType: FurnitureType? = null,
-    @Column("city_fk") var cityId: Long? = null,
-    @Column("state_fk") var stateId: Long? = null,
-    @Column("neighbourhood_fk") var neighbourhoodId: Long? = null,
-    var street: String? = null,
-    var postalCode: String? = null,
-    var country: String? = null,
-    var latitude: Double? = null,
-    var longitude: Double? = null,
-    var agentRemarks: String? = null,
-    var publicRemarks: String? = null,
-    var price: Long? = null,
-    var visitFees: Long? = null,
-    var currency: String? = null,
-    var sellerAgentCommission: Double? = null,
-    var buyerAgentCommission: Double? = null,
-    var securityDeposit: Long? = null,
-    var advanceRent: Int? = null,
-    var leaseTerm: Int? = null,
-    var noticePeriod: Int? = null,
-    var sellerName: String? = null,
-    var sellerPhone: String? = null,
-    var sellerEmail: String? = null,
-    var sellerIdNumber: String? = null,
-    var sellerIdType: IDType? = null,
-    var sellerIdCountry: String? = null,
-    var description: String? = null,
-
-    val createdAt: Date = Date(),
-    var modifiedAt: Date = Date(),
-    var publishedAt: Date? = null,
-    var closedAt: Date? = null,
 
     @ManyToMany
     @JoinTable(
@@ -91,4 +59,46 @@ data class ListingEntity(
         inverseJoinColumns = arrayOf(JoinColumn(name = "amenity_fk")),
     )
     var amenities: MutableList<AmenityEntity> = mutableListOf(),
+    var furnitureType: FurnitureType? = null,
+
+    @Column("city_fk") var cityId: Long? = null,
+    @Column("state_fk") var stateId: Long? = null,
+    @Column("neighbourhood_fk") var neighbourhoodId: Long? = null,
+    var street: String? = null,
+    var postalCode: String? = null,
+    var country: String? = null,
+
+    var latitude: Double? = null,
+    var longitude: Double? = null,
+
+    var agentRemarks: String? = null,
+    var publicRemarks: String? = null,
+
+    var price: Long? = null,
+    var visitFees: Long? = null,
+    var currency: String? = null,
+    var sellerAgentCommission: Double? = null,
+    var buyerAgentCommission: Double? = null,
+
+    var securityDeposit: Long? = null,
+    var advanceRent: Int? = null,
+    var leaseTerm: Int? = null,
+    var noticePeriod: Int? = null,
+
+    var sellerName: String? = null,
+    var sellerPhone: String? = null,
+    var sellerEmail: String? = null,
+    var sellerIdNumber: String? = null,
+    var sellerIdType: IDType? = null,
+    var sellerIdCountry: String? = null,
+
+    var description: String? = null,
+
+    var totalImages: Long? = null,
+    var totalFiles: Long? = null,
+
+    val createdAt: Date = Date(),
+    var modifiedAt: Date = Date(),
+    var publishedAt: Date? = null,
+    var closedAt: Date? = null,
 )

@@ -75,7 +75,7 @@ class RoomService(
             null
         } else {
             try {
-                fileService.file(room.heroImageId!!)
+                fileService.get(room.heroImageId!!)
             } catch (ex: Exception) {
                 null
             }
@@ -153,7 +153,7 @@ class RoomService(
         val images = if (!fullGraph || imageIds.isEmpty()) {
             emptyMap<Long, FileModel>()
         } else {
-            fileService.files(
+            fileService.search(
                 ids = imageIds,
                 type = FileType.IMAGE,
                 limit = imageIds.size

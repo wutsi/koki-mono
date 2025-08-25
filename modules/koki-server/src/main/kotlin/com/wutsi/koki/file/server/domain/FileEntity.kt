@@ -3,6 +3,7 @@ package com.wutsi.koki.file.server.domain
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileType
+import com.wutsi.koki.file.dto.ImageQuality
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -51,6 +52,9 @@ data class FileEntity(
     var rejectionReason: String? = null,
     var titleFr: String? = null,
     var descriptionFr: String? = null,
+    var width: Int? = null,
+    var height: Int? = null,
+    var imageQuality: ImageQuality? = null,
 
     @ManyToMany
     @JoinTable(

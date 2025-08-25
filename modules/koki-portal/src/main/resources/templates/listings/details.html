@@ -98,19 +98,19 @@
         >EDIT</a>
     </h4>
     <div class="row" th:if="${listing.furnitureType}">
-        <div class="col-12 padding-bottom-small">
+        <div class="col-12">
             <b class="text-small" th:text="#{page.listing.furniture-type}">KEY</b>
             <div th:text="#{'furniture-type.' + ${listing.furnitureType}}">FURNITURE</div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-12 col-md-4 padding-bottom"
+        <div class="col-12 col-md-4 padding-top-small"
              th:each="category : ${amenityCategories}"
              th:if="!${listing.amenitiesByCategoryId(category.id).isEmpty()}"
         >
-            <b th:text="${category.name}">CATEGORY</b>
-            <ul>
+            <b class="text-small" th:text="${category.name}">CATEGORY</b>
+            <ul class="margin-none">
                 <li th:each="amenity : ${listing.amenitiesByCategoryId(category.id)}"
                     th:text="${amenity.name}">
                     AMENITY
@@ -137,7 +137,7 @@
 </div>
 
 <div id="listing-remarks-section" th:if="${listing.publicRemarks} OR ${listing.agentRemarks}">
-    <h4 th:text="#{page.listing.show.remarks}">
+    <h4>
         <span th:text="#{page.listing.show.remarks}">REMARKS</span>
         <a class="text-small"
            th:href="'/listings/edit/remarks?id=' + ${listing.id}"

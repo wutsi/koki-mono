@@ -38,6 +38,10 @@ class FileService(
         return file
     }
 
+    fun countByTypeAndOwnerIdAndOwnerType(type: FileType, ownerId: Long, ownerType: ObjectType): Long? {
+        return dao.countByTypeAndOwnerIdAndOwnerType(type, ownerId, ownerType)
+    }
+
     fun search(
         tenantId: Long,
         ids: List<Long> = emptyList(),
@@ -48,8 +52,11 @@ class FileService(
         limit: Int = 20,
         offset: Int = 0,
     ): List<FileEntity> {
-        val jql = StringBuilder("SELECT F FROM FileEntity AS F")
+        if (limit == 0) {
+            return emptyList()
+        }
 
+        val jql = StringBuilder("SELECT F FROM FileEntity AS F")
         jql.append(" WHERE F.deleted=false AND F.tenantId=:tenantId")
         if (ids.isNotEmpty()) {
             jql.append(" AND F.id IN :ids")
@@ -66,7 +73,7 @@ class FileService(
         if (status != null) {
             jql.append(" AND F.status = :status")
         }
-        jql.append(" ORDER BY F.name")
+        jql.append(" ORDER BY F.id DESC")
 
         val query = em.createQuery(jql.toString(), FileEntity::class.java)
         query.setParameter("tenantId", tenantId)
@@ -188,9 +195,9 @@ class FileService(
     }
 
     @Transactional
-    fun save(file: FileEntity) {
+    fun save(file: FileEntity): FileEntity {
         file.modifiedAt = Date()
-        dao.save(file)
+        return dao.save(file)
     }
 
     private fun toPath(

@@ -11,6 +11,12 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
+            <div th:replace="~{__components/listing :: listing-breadcrumb(${listing})}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
             <form class="form" method="post" th:action="@{/listings/edit}" th:object="${form}">
                 <input th:field="*{id}" type="hidden"/>
                 <div class="form-body">
@@ -18,10 +24,6 @@
                         <div class="section-body">
                             <div class="section-item">
                                 <h2 class="margin-none" th:text="#{page.listing.edit.title}">TITLE</h2>
-                            </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.listing-number}">TYPE</label>
-                                <div th:text="*{listingNumber}">00000</div>
                             </div>
                             <div class="section-item">
                                 <label class="title" th:text="#{page.listing.listing-type}">TYPE</label>

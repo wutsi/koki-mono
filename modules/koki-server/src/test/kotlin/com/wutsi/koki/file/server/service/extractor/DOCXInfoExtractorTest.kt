@@ -12,7 +12,7 @@ class DOCXInfoExtractorTest {
     @Test
     fun fr() {
         // GIVEN
-        val uri = PDFInfoExtractorTest::class.java.getResource("/file/document-fr.docx")!!.toURI()
+        val uri = PDFInfoExtractorTest::class.java.getResource("/fs/file/document-fr.docx")!!.toURI()
         val file = File(uri)
 
         // WHEN
@@ -21,5 +21,7 @@ class DOCXInfoExtractorTest {
         // THEN
         assertEquals(467, info.numberOfPages)
         assertEquals("fr", info.language)
+        assertEquals(null, info.width)
+        assertEquals(null, info.height)
     }
 }

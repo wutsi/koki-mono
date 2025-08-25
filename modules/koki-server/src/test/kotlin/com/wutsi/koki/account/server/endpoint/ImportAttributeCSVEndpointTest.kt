@@ -33,14 +33,14 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
         val fileMap = LinkedMultiValueMap<String, String>()
         val contentDisposition = ContentDisposition
             .builder("form-data")
-            .name("file")
+            .name("fs")
             .filename("test.csv")
             .build()
         fileMap.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString())
         val fileEntity = HttpEntity(body.toByteArray(), fileMap)
 
         val body = LinkedMultiValueMap<String, Any>()
-        body.add("file", fileEntity)
+        body.add("fs", fileEntity)
 
         val requestEntity = HttpEntity<MultiValueMap<String, Any>>(body, headers)
         return rest.exchange(

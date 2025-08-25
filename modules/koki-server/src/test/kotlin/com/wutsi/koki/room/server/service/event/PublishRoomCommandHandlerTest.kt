@@ -137,7 +137,7 @@ class PublishRoomCommandHandlerTest {
     @Test
     fun publish() {
         // GIVEN
-        setupFiles("/file/document.jpg", "image/jpg")
+        setupFiles("/fs/document.jpg", "image/jpg")
 
         // WHEN
         handler.handle(PublishRoomCommand(room.id!!, tenantId))
@@ -170,7 +170,7 @@ class PublishRoomCommandHandlerTest {
     @Test
     fun `no AI agent`() {
         // GIVEN
-        setupFiles("/file/document.jpg", "image/jpg")
+        setupFiles("/fs/document.jpg", "image/jpg")
         doReturn(null).whenever(agentFactory).createRoomInformationFactory(any())
 
         // WHEN

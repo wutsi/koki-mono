@@ -165,7 +165,7 @@ class UploadFileEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Test
     fun `upload image`() {
-        val entity = createEntity("file/document.jpg")
+        val entity = createEntity("fs/file/document.jpg")
         val response = rest.exchange(
             "/v1/files/upload?tenant-id=1&type=IMAGE",
             HttpMethod.POST,

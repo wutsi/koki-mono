@@ -61,7 +61,6 @@ class SearchFileEndpointTest : AuthorizationAwareEndpointTest() {
 
         val files = response.body!!.files
         assertEquals(2, files.size)
-        assertEquals(101L, files[0].id)
-        assertEquals(103L, files[1].id)
+        assertEquals(listOf(101L, 103L), files.map { file -> file.id }.sorted())
     }
 }
