@@ -14,18 +14,6 @@ body {
     flex-wrap: wrap;
 }
 
-.hidden {
-    display: none;
-}
-
-.background-lightgray {
-    background: #f8f8f8;
-}
-
-.background-white {
-    background: white;
-}
-
 .flex-center {
     align-items: center;
     justify-content: center;
@@ -37,6 +25,19 @@ body {
 
 .flex-space-evenly {
     justify-content: space-evenly;
+}
+
+
+.hidden {
+    display: none;
+}
+
+.background-lightgray {
+    background: #f8f8f8;
+}
+
+.background-white {
+    background: white;
 }
 
 .text-center {

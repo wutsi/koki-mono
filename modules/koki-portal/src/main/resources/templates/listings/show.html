@@ -117,9 +117,9 @@
                                     th:data-bs-target="'#pills-' + ${tab.name}"
                                     th:id="'pills-' + ${tab.name} + '-tab'"
                                     th:if="${tab.tabUrl}"
-                                    th:text="#{'module.' + ${tab.name}}"
                                     type="button">
-                                TAB
+                                <span class="name" th:text="#{'module.' + ${tab.name}}">TAB</span>
+                                <div th:replace="~{__components/module :: tab-counter-badge(${listing}, ${tab})}"></div>
                             </button>
                         </li>
                     </ul>

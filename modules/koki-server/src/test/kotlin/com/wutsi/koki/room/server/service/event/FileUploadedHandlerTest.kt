@@ -103,7 +103,7 @@ class FileUploadedHandlerTest {
     @Test
     fun `image uploaded`() {
         // GIVEN
-        setupFile("/file/document.jpg", "image/jpg")
+        setupFile("/fs/file/document.jpg", "image/jpg")
 
         // WHEN
         val event = FileUploadedEvent(
@@ -134,7 +134,7 @@ class FileUploadedHandlerTest {
     @Test
     fun `image uploaded - image not valid`() {
         // GIVEN
-        setupFile("/file/document.jpg", "image/jpg")
+        setupFile("/fs/file/document.jpg", "image/jpg")
         doReturn(
             objectMapper.writeValueAsString(
                 data.copy(
@@ -169,7 +169,7 @@ class FileUploadedHandlerTest {
     @Test
     fun `image uploaded - room with heroImage`() {
         // GIVEN
-        setupFile("/file/document.jpg", "image/jpg")
+        setupFile("/fs/file/document.jpg", "image/jpg")
         doReturn(room.copy(heroImageId = 777L)).whenever(roomService).get(any(), any())
 
         // WHEN

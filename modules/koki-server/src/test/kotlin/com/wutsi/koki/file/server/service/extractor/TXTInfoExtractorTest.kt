@@ -5,14 +5,14 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import java.io.File
 import kotlin.test.Test
 
-class DOCInfoExtractorTest {
+class TXTInfoExtractorTest {
     private val languageDetector = LanguageDetector.getDefaultLanguageDetector().loadModels()
     private val extractor = TXTInfoExtractor(languageDetector)
 
     @Test
     fun fr() {
         // GIVEN
-        val uri = PDFInfoExtractorTest::class.java.getResource("/file/document-fr.txt")!!.toURI()
+        val uri = PDFInfoExtractorTest::class.java.getResource("/fs/file/document-fr.txt")!!.toURI()
         val file = File(uri)
 
         // WHEN
@@ -21,5 +21,7 @@ class DOCInfoExtractorTest {
         // THEN
         assertEquals(null, info.numberOfPages)
         assertEquals("fr", info.language)
+        assertEquals(null, info.width)
+        assertEquals(null, info.height)
     }
 }

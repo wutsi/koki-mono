@@ -56,6 +56,8 @@ data class ListingModel(
     val sellerAgentCommission: Double? = null,
     val buyerAgentCommission: Double? = null,
     val description: String? = null,
+    val totalImages: Long? = null,
+    val totalFiles: Long? = null,
     val published: Date? = null,
     val daysInMarket: Int? = null,
     val publicUrl: String? = null,

@@ -39,7 +39,7 @@ class ImportRoleCSVEndpointTest : TenantAwareEndpointTest() {
         val fileEntity = HttpEntity(body.toByteArray(), fileMap)
 
         val body = LinkedMultiValueMap<String, Any>()
-        body.add("file", fileEntity)
+        body.add("fs", fileEntity)
 
         val requestEntity = HttpEntity<MultiValueMap<String, Any>>(body, headers)
         return rest.exchange(

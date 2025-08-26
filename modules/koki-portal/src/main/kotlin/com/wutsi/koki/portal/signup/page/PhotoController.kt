@@ -46,7 +46,7 @@ class PhotoController(
     @GetMapping("/file")
     @ResponseBody
     fun file(@RequestParam id: Long): Map<String, String> {
-        val file = fileService.file(id)
+        val file = fileService.get(id)
         return mapOf("url" to file.contentUrl)
     }
 

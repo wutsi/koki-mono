@@ -11,6 +11,12 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
+            <div th:replace="~{__components/listing :: listing-breadcrumb(${listing})}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
             <form class="form" method="post" th:action="@{/listings/edit/geo-location}" th:object="${form}">
                 <input th:field="*{id}" type="hidden"/>
                 <input th:data-default="${listing.address?.neighbourhood} ? ${listing.address.neighbourhood.latitude}"
@@ -28,10 +34,6 @@
                             <div class="section-item">
                                 <h2 th:text="#{page.listing.edit.geo-location.title}">TITLE</h2>
                                 <div th:text="#{page.listing.edit.geo-location.description}">DESCRIPTION</div>
-                            </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.listing-number}">NUMBER</label>
-                                <div th:text="*{listingNumber}">00000</div>
                             </div>
                             <div class="section-item">
                                 <label class="title" th:text="#{page.listing.latitude_longitude}">LATITUDE</label>

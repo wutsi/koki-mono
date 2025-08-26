@@ -67,7 +67,7 @@ class ListingService(
                 floors = request.floors,
                 basementType = request.basementType,
                 level = request.level,
-                unit = request.unit,
+                unit = request.unit?.uppercase()?.ifEmpty { null },
                 parkings = request.parkings,
                 parkingType = request.parkingType,
                 fenceType = request.fenceType,
@@ -95,16 +95,14 @@ class ListingService(
         listing.floors = request.floors
         listing.basementType = request.basementType
         listing.level = request.level
-        listing.unit = request.unit
+        listing.unit = request.unit?.uppercase()?.ifEmpty { null }
         listing.parkings = request.parkings
         listing.parkingType = request.parkingType
         listing.fenceType = request.fenceType
         listing.lotArea = request.lotArea
         listing.propertyArea = request.propertyArea
         listing.year = request.year
-        listing.modifiedAt = Date()
-        listing.modifiedById = securityService.getCurrentUserIdOrNull()
-        dao.save(listing)
+        save(listing)
     }
 
     @Transactional
@@ -120,9 +118,7 @@ class ListingService(
                 limit = request.amenityIds.size,
             ).toMutableList()
         }
-        listing.modifiedAt = Date()
-        listing.modifiedById = securityService.getCurrentUserIdOrNull()
-        dao.save(listing)
+        save(listing)
     }
 
     @Transactional
@@ -136,9 +132,7 @@ class ListingService(
         listing.country = request.address?.country?.lowercase()?.ifEmpty { null }
         listing.street = request.address?.street?.ifEmpty { null }
         listing.postalCode = request.address?.postalCode?.uppercase()?.ifEmpty { null }
-        listing.modifiedAt = Date()
-        listing.modifiedById = securityService.getCurrentUserIdOrNull()
-        dao.save(listing)
+        save(listing)
     }
 
     @Transactional
@@ -147,9 +141,7 @@ class ListingService(
 
         listing.latitude = request.geoLocation?.latitude
         listing.longitude = request.geoLocation?.longitude
-        listing.modifiedAt = Date()
-        listing.modifiedById = securityService.getCurrentUserIdOrNull()
-        dao.save(listing)
+        save(listing)
     }
 
     @Transactional
@@ -161,9 +153,7 @@ class ListingService(
         listing.currency = request.currency?.uppercase()?.ifEmpty { null }
         listing.sellerAgentCommission = request.sellerAgentCommission
         listing.buyerAgentCommission = request.buyerAgentCommission
-        listing.modifiedAt = Date()
-        listing.modifiedById = securityService.getCurrentUserIdOrNull()
-        dao.save(listing)
+        save(listing)
     }
 
     @Transactional
@@ -174,9 +164,7 @@ class ListingService(
         listing.noticePeriod = request.noticePeriod
         listing.securityDeposit = request.securityDeposit
         listing.advanceRent = request.advanceRent
-        listing.modifiedAt = Date()
-        listing.modifiedById = securityService.getCurrentUserIdOrNull()
-        dao.save(listing)
+        save(listing)
     }
 
     @Transactional
@@ -189,9 +177,7 @@ class ListingService(
         listing.sellerIdNumber = request.sellerIdNumber
         listing.sellerIdType = request.sellerIdType
         listing.sellerIdCountry = request.sellerIdCountry?.lowercase()?.ifEmpty { null }
-        listing.modifiedAt = Date()
-        listing.modifiedById = securityService.getCurrentUserIdOrNull()
-        dao.save(listing)
+        save(listing)
     }
 
     @Transactional
@@ -200,8 +186,13 @@ class ListingService(
 
         listing.publicRemarks = request.publicRemarks?.ifEmpty { null }
         listing.agentRemarks = request.agentRemarks?.ifEmpty { null }
+        save(listing)
+    }
+
+    @Transactional
+    fun save(listing: ListingEntity, modifyById: Long? = null) {
         listing.modifiedAt = Date()
-        listing.modifiedById = securityService.getCurrentUserIdOrNull()
+        listing.modifiedById = modifyById ?: securityService.getCurrentUserIdOrNull()
         dao.save(listing)
     }
 

@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.file.model
 
 import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileType
+import com.wutsi.koki.portal.common.model.ObjectReferenceModel
 import com.wutsi.koki.portal.user.model.UserModel
 import java.util.Date
 
@@ -28,6 +29,7 @@ data class FileModel(
     val labels: List<LabelModel> = emptyList(),
     val status: FileStatus = FileStatus.UNKNOWN,
     val rejectionReason: String? = null,
+    val owner: ObjectReferenceModel? = null
 ) {
     val rejected: Boolean
         get() = status == FileStatus.REJECTED

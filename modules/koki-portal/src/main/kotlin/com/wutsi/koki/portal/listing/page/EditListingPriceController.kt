@@ -20,6 +20,7 @@ class EditListingPriceController : AbstractEditListingController() {
     @GetMapping
     fun edit(@RequestParam id: Long, model: Model): String {
         val listing = findListing(id)
+        model.addAttribute("listing", listing)
         model.addAttribute("form", toListingForm(listing))
 
         model.addAttribute(

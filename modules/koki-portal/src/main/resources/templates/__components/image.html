@@ -2,85 +2,27 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<div class="widget" th:fragment="breadcrumb(image, owner, ownerModule)">
-    <div class="widget-body">
-        <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item" th:if="${ownerModule} AND ${ownerModule.homeUrl}">
-                    <a href="${ownerModule.homeUrl}" th:text="${ownerModule.title}">MODULE</a>
-                </li>
-                <li class="breadcrumb-item" th:if="${ownerModule} AND ${ownerModule.homeUrl}">
-                    <a th:href="${ownerModule.homeUrl} + '/' + ${owner.id} + '&tab=image'"
-                       th:text="${owner.title}">OWNER</a>
-                </li>
-                <li class="breadcrumb-item" th:if="${image}"><a href="/images">Images</a></li>
-                <li class="breadcrumb-item active" th:if="${image}">
-                    <span th:if="${image.title}" th:text="${image.title}">IMAGE</span>
-                    <span th:if="!${image.title}" th:text="${image.name}">IMAGE</span>
-                </li>
-                <li class="breadcrumb-item active" th:if="!${image}">Forms</li>
-            </ol>
-        </nav>
+<a class="image" th:fragment="image-card(image)"
+   th:href="'/images/' + ${image.id}"
+   th:id="'image-' + ${image.id}"
+>
+    <div class="image-frame">
+        <img th:src="${image.contentUrl}"/>
     </div>
+    <div th:if="!${image.approved}" th:remove="tag">
+        <div th:replace="~{__components/file :: status(${image.status})}"></div>
+    </div>
+</a>
+
+<div class="w-100 text-center" id="image-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
+    <button
+        class="btn btn-sm btn-light w-100-mobile"
+        data-component-id='load-more'
+        data-container-id="image-load-more"
+        th:data-url="${moreUrl}"
+    >
+        Load more...
+    </button>
 </div>
-
-<tr th:fragment="columns(file, readOnly, ownerId, ownerType)" th:remove="tag">
-    <td class="text-center">
-        <a class="btn-view"
-           th:href="'/files/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
-            <img class="img-fluid" th:src="${file.contentUrl}"/>
-        </a>
-        <div class="file-status-container" th:if="!${file.approved}">
-            <div th:replace="~{__components/file :: status(${file.status})}"></div>
-        </div>
-    </td>
-    <td class="d-none d-md-table-cell">
-        <a class="btn-view"
-           th:href="'/files/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
-            <div th:if="${file.title}" th:text="${file.title}">TITLE</div>
-            <div class="margin-top-small" th:if="${file.description}" th:text="${file.description}">
-                DESCRIPTION
-            </div>
-            <div class="alert alert-warning margin"
-                 th:if="${file.rejectionReason} AND ${file.rejected}" th:text="${file.rejectionReason}">
-                REASON
-            </div>
-        </a>
-    </td>
-    <td class="d-none d-md-table-cell">
-        <a class="btn-view"
-           th:href="'/files/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
-            <span class="text-nowrap" th:text="${file.contentLengthText}">000</span>
-        </a>
-    </td>
-    <!--
-    <td class="text-right">
-        <button class="btn btn-sm btn-danger btn-delete"
-                data-action-confirm="Are you sure you want to delete the image"
-                data-component-id="ajax-button"
-                data-target-id="image-list"
-                th:data-action-url="'/images/tab/delete?id=' + ${file.id}"
-                th:data-refresh-url="'/images/tab/more?owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}"
-                th:if="!${readOnly} AND ${user?.hasPermission('image:manage')}"
-        >
-            Delete
-        </button>
-    </td>
-    -->
-</tr>
-
-<tr id="image-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
-    <td class="text-center" colspan="4">
-        <button
-            class="btn btn-sm btn-light"
-            data-component-id='load-more'
-            data-container-id="image-load-more"
-            th:data-url="${moreUrl}"
-        >
-            Load more...
-        </button>
-    </td>
-</tr>
 
 </body>

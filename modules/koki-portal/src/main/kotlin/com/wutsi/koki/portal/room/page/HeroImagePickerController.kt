@@ -29,7 +29,7 @@ class HeroImagePickerController(
         val room = service.room(id)
         model.addAttribute("room", room)
 
-        val images = fileService.files(
+        val images = fileService.search(
             type = FileType.IMAGE,
             status = FileStatus.APPROVED,
             ownerId = room.id,

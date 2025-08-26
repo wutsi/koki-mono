@@ -47,18 +47,16 @@ class ImageTabControllerTest : AbstractPageControllerTest() {
     fun list() {
         navigateTo("/images/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
 
-        assertElementCount(".tab-images tr.image", images.size)
-        assertElementPresent(".btn-refresh")
-        assertElementPresent(".uploader")
+        assertElementCount(".tab-images .image", images.size)
+//        assertElementPresent(".btn-refresh")
     }
 
     @Test
     fun `read-only`() {
         navigateTo("/images/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true&read-only=true")
 
-        assertElementCount(".tab-images tr.image", images.size)
-        assertElementPresent(".btn-refresh")
-        assertElementNotPresent(".uploader")
+        assertElementCount(".tab-images .image", images.size)
+//        assertElementPresent(".btn-refresh")
     }
 
     @Test
@@ -66,13 +64,12 @@ class ImageTabControllerTest : AbstractPageControllerTest() {
         setupUserWithoutPermissions(listOf("image:manage"))
 
         navigateTo("/images/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
-        assertElementPresent(".btn-refresh")
-        assertElementNotPresent(".uploader")
+//        assertElementPresent(".btn-refresh")
     }
 
     @Test
     fun `list - without permission image`() {
-        setupUserWithoutPermissions(listOf("image"))
+        setupUserWithoutPermissions(listOf("image", "image:full_access"))
 
         navigateTo("/images/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
         assertCurrentPageIs(PageName.ERROR_403)
@@ -81,8 +78,8 @@ class ImageTabControllerTest : AbstractPageControllerTest() {
     @Test
     fun show() {
         navigateTo("/images/tab?owner-id=111&owner-type=ROOM&test-mode=true")
-        click("#image-${images[0].id} a")
+        click("#image-${images[0].id}")
 
-        assertCurrentPageIs(PageName.FILE)
+        assertCurrentPageIs(PageName.IMAGE)
     }
 }

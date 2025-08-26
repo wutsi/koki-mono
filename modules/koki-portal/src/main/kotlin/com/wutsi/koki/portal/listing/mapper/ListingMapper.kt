@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.listing.mapper
 
 import com.wutsi.koki.listing.dto.Listing
 import com.wutsi.koki.portal.common.mapper.MoneyMapper
+import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.listing.model.ListingModel
 import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.AmenityModel
@@ -18,7 +19,8 @@ class ListingMapper(private val moneyMapper: MoneyMapper) {
         entity: Listing,
         locations: Map<Long, LocationModel>,
         users: Map<Long, UserModel>,
-        amenities: Map<Long, AmenityModel>
+        amenities: Map<Long, AmenityModel>,
+        images: Map<Long, FileModel>
     ): ListingModel {
         return ListingModel(
             id = entity.id,
@@ -39,6 +41,7 @@ class ListingMapper(private val moneyMapper: MoneyMapper) {
             lotArea = entity.lotArea,
             propertyArea = entity.propertyArea,
             year = entity.year,
+            heroImageUrl = entity.heroImageId?.let { id -> images[id]?.contentUrl },
 
             furnitureType = entity.furnitureType,
             amenities = entity.amenityIds.mapNotNull { id -> amenities[id] },
@@ -68,6 +71,9 @@ class ListingMapper(private val moneyMapper: MoneyMapper) {
             publicRemarks = entity.publicRemarks,
 
             description = entity.description,
+            totalFiles = entity.totalFiles,
+            totalImages = entity.totalImages,
+
             sellerAgentUser = entity.sellerAgentUserId?.let { id -> users[id] },
             createdBy = entity.createdById?.let { id -> users[id] },
             createdAt = entity.createdAt,

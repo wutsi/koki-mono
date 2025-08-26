@@ -69,6 +69,7 @@ class FileEndpoints(
             limit = limit,
             offset = offset
         )
+
         return SearchFileResponse(
             files = files.map { file -> mapper.toFileSummary(file) }
         )

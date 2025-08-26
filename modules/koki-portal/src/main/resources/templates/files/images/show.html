@@ -1,16 +1,39 @@
-<div class="text-center">
-    <img class="img-fluid" th:src="${image.contentUrl}" th:title="${image.title}"/>
-    <div>
-        <div th:if="${image.title}">
-            <b th:text="${image.title}">TITLE</b>
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body class="image-viewer">
+<div>
+    <div class="image-header padding flex flex-space-between">
+        <div>
+            <a th:href="${closeUrl}" th:if="${closeUrl}">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
         </div>
+        <div>
+            <a class="btn btn-sm btn-danger"
+               th:href="'/images/delete?id=' + ${image.id}"
+               th:onclick="'return confirm(\'' + #{page.image.confirm-delete} + '\')'"
+               th:text="#{button.delete}"
+            >DELETE</a>
+        </div>
+    </div>
+    <div class="image-body padding flex flex-center">
+        <img class="img-fluid" th:src="${image.contentUrl}" th:title="${image.title}"/>
+    </div>
+    <div class="image-footer padding" th:if="${image.description} OR !${image.approved}">
+        <div th:if="${image.description}" th:text="${image.description}">DESCRIPTION</div>
+
         <div class="file-status-container" th:if="!${image.approved}">
             <div th:replace="~{__components/file :: status(${image.status})}"></div>
-        </div>
-        <div th:if="${image.description}" th:text="${image.description}">TITLE</div>
-        <div class="alert alert-warning margin" th:if="${image.rejected} AND ${image.rejectionReason}"
-             th:text="${image.rejectionReason}">
-            REASON
+            <div class="alert alert-warning margin" th:if="${image.rejected} AND ${image.rejectionReason}"
+                 th:text="${image.rejectionReason}">
+                REASON
+            </div>
         </div>
     </div>
 </div>
+</body>
+</html>

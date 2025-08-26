@@ -48,7 +48,7 @@ class FileController(
         @RequestParam("read-only", required = false) readOnly: Boolean = false,
         model: Model
     ): String {
-        val file = service.file(id)
+        val file = service.get(id)
         model.addAttribute("file", file)
 
         model.addAttribute("ownerType", ownerType)
@@ -86,7 +86,7 @@ class FileController(
         @RequestParam("owner-id") ownerId: Long,
         @RequestParam("owner-type") ownerType: ObjectType,
     ): String {
-        val file = service.file(id)
+        val file = service.get(id)
         service.delete(id)
 
         val module = tenantHolder.get()!!.modules.find { module -> module.objectType == ownerType }!!
@@ -104,7 +104,7 @@ class FileController(
         response: HttpServletResponse
     ) {
         // File
-        val file = service.file(id)
+        val file = service.get(id)
 
         val f = File.createTempFile(UUID.randomUUID().toString(), "tmp")
         try {

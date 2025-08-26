@@ -3,7 +3,6 @@ package com.wutsi.koki.portal.listing.page
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.listing.form.ListingForm
 import com.wutsi.koki.portal.security.RequiresPermission
-import jdk.javadoc.internal.doclets.toolkit.util.DocPath.parent
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -20,6 +19,7 @@ class EditListingAddressController : AbstractEditListingController() {
     fun edit(@RequestParam id: Long, model: Model): String {
         val defaultCity = resolveCity()
         val listing = findListing(id)
+        model.addAttribute("listing", listing)
         model.addAttribute("form", toListingForm(listing, defaultCity))
 
         val city = listing.address?.city ?: defaultCity

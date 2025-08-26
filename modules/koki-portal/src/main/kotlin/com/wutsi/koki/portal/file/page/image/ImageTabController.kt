@@ -51,7 +51,7 @@ class ImageTabController(private val service: FileService) : AbstractPageControl
         @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
-        val files = service.files(
+        val files = service.search(
             ownerId = ownerId,
             ownerType = ownerType,
             type = FileType.IMAGE,

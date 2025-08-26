@@ -17,8 +17,8 @@ CREATE TABLE T_LISTING(
   modified_by_fk            BIGINT,
   seller_agent_user_fk      BIGINT,
   buyer_agent_user_fk       BIGINT,
+  hero_image_fk             BIGINT,
 
-  hero_image_url            TEXT,
   status                    INT DEFAULT 0,
   listing_number            BIGINT NOT NULL,
   listing_type              INT,
@@ -63,6 +63,8 @@ CREATE TABLE T_LISTING(
   agent_remarks             TEXT,
   public_remarks            TEXT,
   description               TEXT,
+  total_images              BIGINT,
+  total_files               BIGINT,
 
   created_at                DATETIME DEFAULT NOW(),
   modified_at               DATETIME DEFAULT NOW(),
