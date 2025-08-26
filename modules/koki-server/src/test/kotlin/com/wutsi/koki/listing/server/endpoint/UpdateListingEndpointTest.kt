@@ -52,7 +52,7 @@ class UpdateListingEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.propertyArea, listing.propertyArea)
         assertEquals(request.lotArea, listing.lotArea)
         assertEquals(request.level, listing.level)
-        assertEquals(request.unit, listing.unit)
+        assertEquals(request.unit?.uppercase(), listing.unit)
         assertEquals(request.basementType, listing.basementType)
         assertEquals(request.parkingType, listing.parkingType)
         assertEquals(request.parkings, listing.parkings)

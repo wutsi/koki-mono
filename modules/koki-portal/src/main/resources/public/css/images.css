@@ -1,10 +1,10 @@
-.image-container {
+.image {
     width: 400px;
     margin-right: .5em;
     margin-bottom: .5em;
 }
 
-.image-container .image-frame {
+.image .image-frame {
     width: 400px;
     height: 266px;
     display: flex;
@@ -15,13 +15,13 @@
     vertical-align: middle;
 }
 
-.image-container .image-frame img {
+.image .image-frame img {
     max-width: 398px;
     max-height: 264px;
     margin: auto 0;
 }
 
-.image-container .badge {
+.image .badge {
     position: absolute;
     margin-top: -2.5em;
     margin-left: 1em;
@@ -67,7 +67,7 @@ body.image-viewer .image-footer {
 
 /* Small */
 @media only screen and (max-width: 768px) and (orientation: portrait) {
-    .tab-images .image-container {
+    .tab-images .image {
         width: 350px;
     }
 

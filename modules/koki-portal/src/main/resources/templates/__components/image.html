@@ -2,7 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<a class="image-container" th:fragment="image-card(image)" th:href="'/images/' + ${image.id}">
+<a class="image" th:fragment="image-card(image)"
+   th:href="'/images/' + ${image.id}"
+   th:id="'image-' + ${image.id}"
+>
     <div class="image-frame">
         <img th:src="${image.contentUrl}"/>
     </div>

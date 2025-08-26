@@ -36,7 +36,7 @@ class CreateListingEndpointTest : AuthorizationAwareEndpointTest() {
         propertyArea = 1000,
         lotArea = 2000,
         level = 1,
-        unit = "111",
+        unit = "a111",
         basementType = BasementType.FULL,
         parkingType = ParkingType.UNDERGROUND,
         parkings = 2,
@@ -61,7 +61,7 @@ class CreateListingEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.propertyArea, listing.propertyArea)
         assertEquals(request.lotArea, listing.lotArea)
         assertEquals(request.level, listing.level)
-        assertEquals(request.unit, listing.unit)
+        assertEquals(request.unit?.uppercase(), listing.unit)
         assertEquals(request.basementType, listing.basementType)
         assertEquals(request.parkingType, listing.parkingType)
         assertEquals(request.parkings, listing.parkings)

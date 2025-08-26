@@ -67,7 +67,7 @@ class ListingService(
                 floors = request.floors,
                 basementType = request.basementType,
                 level = request.level,
-                unit = request.unit,
+                unit = request.unit?.uppercase()?.ifEmpty { null },
                 parkings = request.parkings,
                 parkingType = request.parkingType,
                 fenceType = request.fenceType,
@@ -95,7 +95,7 @@ class ListingService(
         listing.floors = request.floors
         listing.basementType = request.basementType
         listing.level = request.level
-        listing.unit = request.unit
+        listing.unit = request.unit?.uppercase()?.ifEmpty { null }
         listing.parkings = request.parkings
         listing.parkingType = request.parkingType
         listing.fenceType = request.fenceType
