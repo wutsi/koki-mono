@@ -6,11 +6,12 @@ import java.text.NumberFormat
 
 @Service
 class MoneyMapper : TenantAwareMapper() {
-    fun toMoneyModel(amount: Double, currency: String): MoneyModel {
+    fun toMoneyModel(amount: Double, currency: String?): MoneyModel {
+        val xcurrency = currency ?: currentTenant.get()?.currency
         return MoneyModel(
             value = amount,
-            currency = currentTenant.get()?.currency ?: "",
-            text = getCurrencyFormatter(currency).format(amount)
+            currency = xcurrency ?: "",
+            text = xcurrency?.let { getCurrencyFormatter(xcurrency).format(amount) } ?: amount.toString()
         )
     }
 
