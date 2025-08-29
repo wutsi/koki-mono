@@ -25,7 +25,7 @@ class SendUsernameEmailWorkerTest {
         templateEngine = MustacheTemplatingEngine(DefaultMustacheFactory())
     )
     private val sender = mock<Sender>()
-    private val worker = SendUsernameEmailWorker(userService, tenantService, templateResolver, sender)
+    private val worker = SendUsernameEmailMailet(userService, tenantService, templateResolver, sender)
 
     val tenant = TenantEntity(
         id = 1L,
@@ -64,7 +64,7 @@ class SendUsernameEmailWorkerTest {
         """.trimIndent()
         verify(sender).send(
             user,
-            SendUsernameEmailWorker.SUBJECT,
+            SendUsernameEmailMailet.SUBJECT,
             body,
             emptyList(),
             command.tenantId

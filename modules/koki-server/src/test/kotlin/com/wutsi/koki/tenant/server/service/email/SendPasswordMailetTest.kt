@@ -14,6 +14,7 @@ import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import com.wutsi.koki.tenant.server.service.PasswordResetTokenService
 import com.wutsi.koki.tenant.server.service.TenantService
+import okhttp3.internal.notify
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import kotlin.test.Test
@@ -26,7 +27,7 @@ class SendPasswordEmailWorkerTest {
         templateEngine = MustacheTemplatingEngine(DefaultMustacheFactory())
     )
     private val sender = mock<Sender>()
-    private val worker = SendPasswordEmailWorker(tokenService, tenantService, templateResolver, sender)
+    private val worker = SendPasswordEmailMailet(tokenService, tenantService, templateResolver, sender)
 
     val tenant = TenantEntity(
         id = 1L,
@@ -71,7 +72,7 @@ class SendPasswordEmailWorkerTest {
         """.trimIndent()
         verify(sender).send(
             token.user,
-            SendPasswordEmailWorker.SUBJECT,
+            SendPasswordEmailMailet.SUBJECT,
             body,
             emptyList(),
             command.tenantId

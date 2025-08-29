@@ -1,10 +1,9 @@
 package com.wutsi.koki.listing.dto
 
-import jakarta.validation.constraints.NotNull
 import java.time.LocalDate
 
-data class ChangeListingStatusRequest(
-    @get:NotNull val status: ListingStatus? = null,
+data class UpdateListingStatusRequest(
+    val status: ListingStatus = ListingStatus.UNKNOWN,
     val buyerName: String? = null,
     val buyerEmail: String? = null,
     val buyerPhone: String? = null,

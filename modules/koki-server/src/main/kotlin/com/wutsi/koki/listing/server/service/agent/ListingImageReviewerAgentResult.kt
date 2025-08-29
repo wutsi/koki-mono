@@ -2,7 +2,7 @@ package com.wutsi.koki.room.server.server.agent
 
 import com.wutsi.koki.file.dto.ImageQuality
 
-data class ImageReviewerAgentResult(
+data class ListingImageReviewerAgentResult(
     val title: String? = null,
     val description: String? = null,
     val titleFr: String? = null,

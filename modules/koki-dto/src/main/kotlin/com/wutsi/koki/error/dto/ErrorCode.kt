@@ -69,6 +69,15 @@ object ErrorCode {
     val JURIDICTION_COUNTRY_NOT_SUPPORTED: String = "$PREFIX:juridiction:country-not-supported"
 
     val LISTING_NOT_FOUND: String = "$PREFIX:listing:not-found"
+    val LISTING_INVALID_STATUS: String = "$PREFIX:listing:invalid-status"
+    val LISTING_MISSING_IMAGE: String = "$PREFIX:listing:missing-image"
+    val LISTING_INVALID_IMAGE: String = "$PREFIX:listing:invalid-image"
+    val LISTING_IMAGE_UNDER_REVIEW: String = "$PREFIX:listing:image-under-review"
+    val LISTING_MISSING_GEOLOCATION: String = "$PREFIX:listing:missing-geolocation"
+    val LISTING_MISSING_ADDRESS: String = "$PREFIX:listing:missing-address"
+    val LISTING_MISSING_PRICE: String = "$PREFIX:listing:missing-price"
+    val LISTING_MISSING_SELLER: String = "$PREFIX:listing:missing-seller"
+    val LISTING_FAILED_VALIDATION: String = "$PREFIX:listing:failed-validation"
 
     val LOCATION_NOT_FOUND = "$PREFIX:location:not-found"
     val LOCATION_FEED_NOT_FOUND = "$PREFIX:location:feed-not-found"

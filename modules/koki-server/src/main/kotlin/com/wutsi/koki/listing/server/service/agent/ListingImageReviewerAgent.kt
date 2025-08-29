@@ -3,13 +3,12 @@ package com.wutsi.koki.room.server.server.agent
 import com.wutsi.koki.platform.ai.agent.Agent
 import com.wutsi.koki.platform.ai.agent.Tool
 import com.wutsi.koki.platform.ai.llm.LLM
-import com.wutsi.koki.platform.translation.ai.AITranslationService.Companion.SYSTEM_INSTRUCTIONS
 import org.springframework.http.MediaType
 
 /**
  * This agent review images
  */
-class ImageReviewerAgent(
+class ListingImageReviewerAgent(
     val llm: LLM,
     val maxIterations: Int = 5,
 ) : Agent(llm, maxIterations, MediaType.APPLICATION_JSON) {
