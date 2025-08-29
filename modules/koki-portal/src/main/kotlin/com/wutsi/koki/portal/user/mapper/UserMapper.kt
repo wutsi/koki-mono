@@ -49,7 +49,9 @@ class UserMapper : TenantAwareMapper() {
             createdAtText = fmt.format(entity.createdAt),
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.modifiedAt),
+            employer = entity.employer,
             photoUrl = entity.photoUrl,
+            mobile = entity.mobile,
         )
     }
 }
