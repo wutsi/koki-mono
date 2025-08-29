@@ -1,0 +1,45 @@
+Bonjour {{recipient}},<br/><br/>
+
+Excellente nouvelle! Votre propriété située au <b>{{address}}</b> a été publiée avec succès!<br/>
+Elle est maintenant visible par des tous les agents qui utilisent notre plateforme.<br/><br>
+
+Nous vous aviserons de toute demande de visite ou de toute mise à jour concernant votre propriété.<br/><br>
+
+Si vous avez des questions ou si vous avez besoin de modifier votre annonce,
+n'hésitez pas à contacter votre agent, {{agentDisplayName}}, par courriel ou par téléphone.<br/><br/>
+
+{{#rental}}
+Nous sommes ravis de vous accompagner dans la location de votre propriété!<br/><br/>
+{{/rental}}
+{{^rental}}
+Nous sommes ravis de vous accompagner dans la vente de votre propriété!<br/><br/>
+{{/rental}}
+
+Cordialement,
+
+<hr/>
+<table border="0" cellpadding="10">
+    <tr>
+        {{#agentPhotoUrl}}
+        <td valign="top" width="1">
+            <img height="64" src="{{{agentPhotoUrl}}}" width="64"/>
+        </td>
+        {{/agentPhotoUrl}}
+
+        <td valign="top">
+            <b>{{agentDisplayName}}</b><br/>
+
+            {{#agentEmployer}}
+            <div>{{agentEmployer}}</div>
+            {{/agentEmployer}}
+
+            {{#agentMobile}}
+            <div><a href="tel: {{{agentMobile}}}">{{agentMobile}}</a></div>
+            {{/agentMobile}}
+
+            {{#agentEmail}}
+            <div><a href="email: {{{agentEmail}}}">{{agentEmail}}</a></div>
+            {{/agentEmail}}
+        </td>
+    </tr>
+</table>

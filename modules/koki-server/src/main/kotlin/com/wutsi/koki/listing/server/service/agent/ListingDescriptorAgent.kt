@@ -1,4 +1,4 @@
-package com.wutsi.koki.listing.server.agent
+package com.wutsi.koki.listing.server.service.agent
 
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.platform.ai.agent.Agent

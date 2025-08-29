@@ -13,10 +13,14 @@ import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import jakarta.persistence.EntityManager
+import org.apache.commons.io.FilenameUtils
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
+import java.io.File
+import java.io.FileOutputStream
 import java.io.InputStream
+import java.net.URI
 import java.net.URL
 import java.util.Date
 import java.util.UUID
@@ -27,6 +31,7 @@ class FileService(
     private val storageBuilder: StorageServiceBuilder,
     private val configurationService: ConfigurationService,
     private val securityService: SecurityService,
+    private val storageProvider: StorageProvider,
     private val em: EntityManager,
 ) {
     fun get(id: Long, tenantId: Long): FileEntity {
@@ -198,6 +203,16 @@ class FileService(
     fun save(file: FileEntity): FileEntity {
         file.modifiedAt = Date()
         return dao.save(file)
+    }
+
+    fun download(file: FileEntity): File {
+        val extension = FilenameUtils.getExtension(file.url)
+        val f = File.createTempFile("file-${file.id}", ".$extension")
+        val output = FileOutputStream(f)
+        output.use {
+            storageProvider.get(file.tenantId).get(URI(file.url).toURL(), output)
+        }
+        return f
     }
 
     private fun toPath(

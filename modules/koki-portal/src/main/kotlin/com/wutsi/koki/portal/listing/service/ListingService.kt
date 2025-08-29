@@ -204,4 +204,8 @@ class ListingService(
             )
         )
     }
+
+    fun publish(id: Long) {
+        koki.publish(id)
+    }
 }

@@ -38,7 +38,7 @@ data class InvoiceModel(
     val taxes: List<InvoiceSalesTaxModel> = emptyList(),
 ) {
     val paid: Boolean
-        get() = amountDue.value <= 0
+        get() = amountDue.amount <= 0
 
     val opened: Boolean
         get() = status == InvoiceStatus.OPENED

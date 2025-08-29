@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.listing.mapper
 
+import com.wutsi.blog.portal.common.model.MoneyModel
 import com.wutsi.koki.listing.dto.Listing
 import com.wutsi.koki.portal.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.file.model.FileModel
@@ -9,6 +10,7 @@ import com.wutsi.koki.portal.refdata.model.AmenityModel
 import com.wutsi.koki.portal.refdata.model.GeoLocationModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.user.model.UserModel
+import com.wutsi.koki.refdata.dto.Money
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
 import java.util.Locale
@@ -22,6 +24,8 @@ class ListingMapper(private val moneyMapper: MoneyMapper) {
         amenities: Map<Long, AmenityModel>,
         images: Map<Long, FileModel>
     ): ListingModel {
+        val price = entity.price?.let { money -> moneyMapper.toMoneyModel(money) }
+        val lang = LocaleContextHolder.getLocale().language
         return ListingModel(
             id = entity.id,
             status = entity.status,
@@ -50,10 +54,12 @@ class ListingMapper(private val moneyMapper: MoneyMapper) {
 
             geoLocation = toGeoLocation(entity),
 
-            price = entity.price?.let { money -> moneyMapper.toMoneyModel(money) },
+            price = price,
             visitFees = entity.visitFees?.let { money -> moneyMapper.toMoneyModel(money) },
             sellerAgentCommission = entity.sellerAgentCommission,
             buyerAgentCommission = entity.buyerAgentCommission,
+            sellerAgentCommissionMoney = entity.sellerAgentCommission?.let { pct -> applyPercentage(price, pct) },
+            buyerAgentCommissionMoney = entity.buyerAgentCommission?.let { pct -> applyPercentage(price, pct) },
 
             securityDeposit = entity.securityDeposit?.let { money -> moneyMapper.toMoneyModel(money) },
             advanceRent = entity.advanceRent,
@@ -70,7 +76,11 @@ class ListingMapper(private val moneyMapper: MoneyMapper) {
             agentRemarks = entity.agentRemarks,
             publicRemarks = entity.publicRemarks,
 
-            description = entity.description,
+            description = if (lang == "fr") {
+                entity.descriptionFr ?: entity.description
+            } else {
+                entity.description
+            },
             totalFiles = entity.totalFiles,
             totalImages = entity.totalImages,
 
@@ -104,6 +114,17 @@ class ListingMapper(private val moneyMapper: MoneyMapper) {
             GeoLocationModel(
                 latitude = geo.latitude,
                 longitude = geo.longitude
+            )
+        }
+    }
+
+    private fun applyPercentage(price: MoneyModel?, percent: Double): MoneyModel? {
+        return price?.let {
+            moneyMapper.toMoneyModel(
+                Money(
+                    amount = (price.amount.toDouble() * percent / 100.0).toDouble(),
+                    currency = price.currency
+                )
             )
         }
     }

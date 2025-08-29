@@ -17,12 +17,15 @@
                         <i class="fa-solid fa-circle-check"></i>
                     </h1>
                     <div class="margin-top text-larger"
-                         th:utext="#{page.listing.publish.published(${listing.id},${listing.listingNumber})}">
+                         th:utext="#{page.listing.publish.published(${listing.id},${listing.listingNumber}, ${listing.sellerEmail})}">
                         DESCRIPTION
                     </div>
-                    <div class="margin-top"
-                         th:utext="#{page.listing.publish.published.on-market}">
-                        ON_MARKET
+                    <div class="margin-top-2x">
+                        <a class="btn btn-primary w-100" id="btn-continue"
+                           th:href="'/listings/' + ${listing.id}"
+                           th:text="#{button.continue}">
+                            CONTINUE
+                        </a>
                     </div>
                 </div>
             </div>

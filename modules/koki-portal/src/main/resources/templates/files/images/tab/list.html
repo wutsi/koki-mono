@@ -9,7 +9,9 @@
          th:data-refresh-url="'/images/tab/more?owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}"
          th:data-upload-url="${uploadUrl}"
     >
-        <button class="btn btn-sm btn-light margin-right-small" id="btn-upload">
+        <button class="btn btn-sm btn-light margin-right-small" id="btn-upload"
+                th:if="!${readOnly} AND (${user?.canManage('image')} OR ${user?.hasFullAccess('image')})">
+            <i class="fa-solid fa-plus"></i>
             <span th:text="#{button.upload}">UPLOAD</span>
         </button>
         <input

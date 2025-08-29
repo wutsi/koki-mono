@@ -185,7 +185,7 @@
                       th:text="#{page.listing.rental-price-suffix}">00</span>
             </div>
         </div>
-        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.price}">
+        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.visitFees}">
             <b class="text-small" th:text="#{page.listing.visit-fees}">KEY</b>
             <div>
                 <span th:text="${listing.visitFees}">00</span>
@@ -198,6 +198,7 @@
                 <span th:text="${listing.sellerAgentCommission}">0.0</span>
                 <span>%</span>
             </div>
+            <div class="text-small" th:text="${listing.sellerAgentCommissionMoney}">$$</div>
         </div>
         <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.buyerAgentCommission}">
             <b class="text-small" th:text="#{page.listing.buyer-agent-commission}">KEY</b>
@@ -205,6 +206,7 @@
                 <span th:text="${listing.buyerAgentCommission}">0.0</span>
                 <span>%</span>
             </div>
+            <div class="text-small" th:text="${listing.buyerAgentCommissionMoney}">$$</div>
         </div>
     </div>
     <hr/>

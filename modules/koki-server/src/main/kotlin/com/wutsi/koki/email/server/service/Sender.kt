@@ -28,7 +28,26 @@ class Sender(
         attachments: List<File>,
         tenantId: Long,
     ): Boolean {
-        if (recipient.email.isNullOrEmpty()) {
+        return send(
+            recipient = Party(
+                email = recipient.email ?: "",
+                displayName = recipient.displayName,
+            ),
+            subject = subject,
+            body = body,
+            attachments = attachments,
+            tenantId = tenantId
+        )
+    }
+
+    fun send(
+        recipient: Party,
+        subject: String,
+        body: String,
+        attachments: List<File>,
+        tenantId: Long,
+    ): Boolean {
+        if (recipient.email.isEmpty()) {
             return false
         }
 
@@ -45,7 +64,7 @@ class Sender(
     }
 
     private fun createMessage(
-        recipient: UserEntity,
+        recipient: Party,
         subject: String,
         body: String,
         attachments: List<File>,
@@ -59,10 +78,7 @@ class Sender(
             body = body,
             mimeType = "text/html",
             language = detectLanguage(subject, body),
-            recipient = Party(
-                email = recipient.email!!,
-                displayName = recipient.displayName,
-            ),
+            recipient = recipient,
             sender = Party(
                 email = config[ConfigurationName.SMTP_FROM_ADDRESS]?.ifEmpty { null } ?: "",
                 displayName = config[ConfigurationName.SMTP_FROM_PERSONAL]?.ifEmpty { null } ?: business?.companyName

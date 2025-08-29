@@ -1,7 +1,6 @@
-package com.wutsi.koki.room.server.server.agent
+package com.wutsi.koki.listing.server.service.agent
 
 import com.wutsi.koki.ai.server.service.LLMProvider
-import com.wutsi.koki.listing.server.agent.ListingDescriptorAgent
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.refdata.server.service.LocationService
 import org.springframework.stereotype.Service

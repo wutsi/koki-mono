@@ -34,6 +34,10 @@
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
+                    <div class="margin" th:if="${error}">
+                        <div class="alert alert-danger" th:utext="${error}">ERROR</div>
+                    </div>
+
                     <div data-component-id="ajax-fragment"
                          th:data-url="'/listings/tab/details?id=' + ${listing.id} "></div>
                 </div>
@@ -50,14 +54,18 @@
 
                         <div class="alert alert-warning">
                             <div class="form-check">
-                                <input class="form-check-input" id="chk-confirmation" required type="checkbox">
-                                <label class="form-check-label" for="chk-confirmation"
+                                <input class="form-check-input" id="chk-confirm" onclick="on_approve()" required
+                                       type="checkbox"/>
+                                <label class="form-check-label" for="chk-confirm"
                                        th:text="#{page.listing.publish.confirmation}">CONFIRMATION</label>
                             </div>
                         </div>
 
                         <div>
-                            <button class="btn btn-primary" th:text="#{button.publish}" type="submit">PUBLISH</button>
+                            <button class="btn btn-primary" disabled id="btn-publish" th:text="#{button.publish}"
+                                    type="submit">
+                                PUBLISH
+                            </button>
 
                             <a class="btn btn-secondary margin-left" th:href="'/listings/' + ${listing.id}"
                                th:text="#{button.cancel}">CANCEL</a>
@@ -68,6 +76,24 @@
         </div>
     </div>
 </div>
+
+<script>
+    let listingType = 0;
+    let propertyType = 0;
+
+    document.querySelectorAll(".btn-check")
+        .forEach((item) => {
+            item.addEventListener("change", on_change);
+        });
+
+    function on_approve() {
+        console.log('on_approve()', event.target);
+
+        const elt = document.getElementById("chk-confirm");
+        const btn = document.getElementById('btn-publish');
+        btn.disabled = !elt.checked;
+    }
+</script>
 
 </body>
 </html>

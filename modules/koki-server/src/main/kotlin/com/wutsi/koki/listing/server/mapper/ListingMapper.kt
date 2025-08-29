@@ -63,7 +63,13 @@ class ListingMapper {
             agentRemarks = entity.agentRemarks?.ifEmpty { null },
             publicRemarks = entity.publicRemarks?.ifEmpty { null },
 
+            title = entity.title?.ifEmpty { null },
+            summary = entity.summary?.ifEmpty { null },
             description = entity.description?.ifEmpty { null },
+            titleFr = entity.titleFr?.ifEmpty { null },
+            summaryFr = entity.summaryFr?.ifEmpty { null },
+            descriptionFr = entity.descriptionFr?.ifEmpty { null },
+
             totalImages = entity.totalImages,
             totalFiles = entity.totalFiles,
 

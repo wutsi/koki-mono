@@ -1,6 +1,5 @@
 package com.wutsi.koki.listing.server.endpoint
 
-import com.wutsi.koki.listing.dto.ChangeListingStatusRequest
 import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.FurnitureType
@@ -16,8 +15,10 @@ import com.wutsi.koki.listing.dto.UpdateListingPriceRequest
 import com.wutsi.koki.listing.dto.UpdateListingRemarksRequest
 import com.wutsi.koki.listing.dto.UpdateListingRequest
 import com.wutsi.koki.listing.dto.UpdateListingSellerRequest
+import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
 import com.wutsi.koki.listing.server.mapper.ListingMapper
 import com.wutsi.koki.listing.server.service.ListingService
+import com.wutsi.koki.platform.mq.Publisher
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController
 class ListingEndpoints(
     private val service: ListingService,
     private val mapper: ListingMapper,
+    private val publisher: Publisher,
 ) {
     @PostMapping
     fun create(
@@ -152,12 +154,18 @@ class ListingEndpoints(
         TODO()
     }
 
-    @PostMapping("/{id}/status")
-    fun status(
+    @PostMapping("/{id}/publish")
+    fun publish(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
-        @RequestBody request: ChangeListingStatusRequest
     ) {
-        TODO()
+        val listing = service.publish(id, tenantId)
+        publisher.publish(
+            ListingStatusChangedEvent(
+                listingId = id,
+                tenantId = tenantId,
+                status = listing.status
+            )
+        )
     }
 }

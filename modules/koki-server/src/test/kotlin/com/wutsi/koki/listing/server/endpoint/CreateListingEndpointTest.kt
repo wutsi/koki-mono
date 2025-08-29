@@ -11,6 +11,7 @@ import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.server.dao.ListingRepository
 import com.wutsi.koki.listing.server.dao.ListingSequenceRepository
+import com.wutsi.koki.listing.server.dao.ListingStatusRepository
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.dao.ConfigurationRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,6 +30,9 @@ class CreateListingEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Autowired
     private lateinit var configDao: ConfigurationRepository
+
+    @Autowired
+    private lateinit var statusDao: ListingStatusRepository
 
     private val request = CreateListingRequest(
         listingType = ListingType.SALE,
@@ -82,5 +86,12 @@ class CreateListingEndpointTest : AuthorizationAwareEndpointTest() {
 
         val config = configDao.findByTenantIdAndNameIn(1L, listOf(ConfigurationName.LISTING_START_NUMBER)).first()
         assertEquals("250000", config.value)
+
+        val statuses = statusDao.findByListing(listing)
+        assertEquals(1, statuses.size)
+        assertEquals(listing.status, statuses[0].status)
+        assertEquals(null, statuses[0].comment)
+        assertEquals(listing.createdAt, statuses[0].createdAt)
+        assertEquals(listing.createdById, statuses[0].createdById)
     }
 }

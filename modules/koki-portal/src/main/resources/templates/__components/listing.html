@@ -24,10 +24,11 @@
           th:if="${status.name() == 'DRAFT'}"
           th:text="#{'listing-status.' + ${status}}">A LOUER</span>
 
-    <span class="badge text-bg-primary" th:if="${status.name() == 'ACTIVE'}"
-          th:text="#{'listing-status.' + ${status}}">A LOUER</span>
+    <span class="badge text-bg-warning" th:if="${status.name() == 'PUBLISHING'}"
+          th:text="#{'listing-status.' + ${status}}">PUBLISHING</span>
 
-    <span class="badge text-bg-warning" th:if="${status.name() == 'ACTIVE_WITH_OFFER'} OR ${status.name() == 'PENDING'}"
+    <span class="badge text-bg-primary"
+          th:if="${status.name() == 'ACTIVE'} OR ${status.name() == 'ACTIVE_WITH_OFFER'} OR ${status.name() == 'PENDING'}"
           th:text="#{'listing-status.' + ${status}}">A LOUER</span>
 
     <span class="badge text-bg-success" th:if="${status.name() == 'RENTED'} OR ${status.name() == 'SOLD'}"

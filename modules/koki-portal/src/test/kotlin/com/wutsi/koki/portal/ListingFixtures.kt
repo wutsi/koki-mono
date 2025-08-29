@@ -20,12 +20,23 @@ object ListingFixtures {
         status = ListingStatus.ACTIVE,
         listingType = ListingType.SALE,
         propertyType = PropertyType.APARTMENT,
+        title = "",
+        summary = "",
         description = """
             Built in the 19th century, with a 360 degrees view over the sea and surroundings on the top floor.
             It features a Bedroom, a very well-decorated living room with kitchenette, and a WC.
             Free WiFi, air conditioning, Led TV and DVD player.
             Private parking inside the premises, providing extra security.
             Perfect for an unforgettable honeymoon experience.
+        """.trimIndent(),
+        titleFr = "",
+        summaryFr = "",
+        descriptionFr = """
+            Construit au XIXe siècle, il offre une vue à 360 degrés sur la mer et les environs depuis le dernier étage.
+            Il comprend une chambre, un salon très bien décoré avec kitchenette et des toilettes.
+            Wi-Fi gratuit, climatisation, télévision LED et lecteur DVD.
+            Parking privé à l'intérieur de la propriété, pour une sécurité accrue.
+            Idéal pour une lune de miel inoubliable.
         """.trimIndent(),
         bedrooms = 3,
         bathrooms = 2,
@@ -76,6 +87,7 @@ object ListingFixtures {
         sellerEmail = "ray.sponsible@gmail.com",
         sellerName = "Ray Sponsible",
         sellerIdCountry = "ca",
+        sellerIdNumber = "A4309540F",
         sellerIdType = IDType.PASSPORT,
         sellerPhone = "+15477580001",
 
@@ -88,5 +100,8 @@ object ListingFixtures {
 
         sellerAgentUserId = UserFixtures.USER_ID,
         createdById = UserFixtures.USER_ID,
+        heroImageId = FileFixtures.images[0].id,
+        totalFiles = 10,
+        totalImages = 11,
     )
 }

@@ -1,4 +1,4 @@
-package com.wutsi.koki.room.server.server.agent
+package com.wutsi.koki.listing.server.service.agent
 
 import com.wutsi.koki.platform.ai.agent.Agent
 import com.wutsi.koki.platform.ai.agent.Tool

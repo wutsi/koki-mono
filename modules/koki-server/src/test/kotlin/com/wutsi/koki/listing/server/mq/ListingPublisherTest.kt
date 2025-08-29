@@ -5,40 +5,37 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.dto.ListingStatus
-import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.listing.server.service.agent.ListingAgentFactory
 import com.wutsi.koki.listing.server.service.agent.ListingDescriptorAgent
 import com.wutsi.koki.listing.server.service.agent.ListingDescriptorAgentResult
 import com.wutsi.koki.platform.logger.DefaultKVLogger
-import com.wutsi.koki.platform.mq.Publisher
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.assertNotNull
+import org.junit.jupiter.api.assertNull
 import org.mockito.Mockito.mock
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ListingStatusChangedEventHandlerTest {
+class ListingPublisherTest {
     private val agentFactory = mock<ListingAgentFactory>()
     private val fileService = mock<FileService>()
     private val listingService = mock<ListingService>()
     private val objectMapper = ObjectMapper()
-    private val publisher = mock<Publisher>()
     private val logger = DefaultKVLogger()
-    private val handler = ListingStatusChangedEventHandler(
+    private val handler = ListingPublisher(
         agentFactory = agentFactory,
         fileService = fileService,
         listingService = listingService,
         objectMapper = objectMapper,
-        publisher = publisher,
         logger = logger
     )
 
@@ -93,8 +90,11 @@ class ListingStatusChangedEventHandlerTest {
     }
 
     @Test
-    fun onPublishing() {
-        handler.handle(createEvent(ListingStatus.PUBLISHING))
+    fun publish() {
+        val result = handler.publish(listing.id!!, listing.tenantId)
+
+        assertNotNull(result)
+        assertEquals(listing.id, result.id)
 
         val listingArg = argumentCaptor<ListingEntity>()
         verify(listingService).save(listingArg.capture(), anyOrNull())
@@ -106,12 +106,6 @@ class ListingStatusChangedEventHandlerTest {
         assertEquals(result.titleFr, listingArg.firstValue.titleFr)
         assertEquals(result.summaryFr, listingArg.firstValue.summaryFr)
         assertEquals(result.descriptionFr, listingArg.firstValue.descriptionFr)
-
-        val eventArg = argumentCaptor<ListingStatusChangedEvent>()
-        verify(publisher).publish(eventArg.capture())
-        assertEquals(ListingStatus.ACTIVE, eventArg.firstValue.status)
-        assertEquals(listing.id, eventArg.firstValue.listingId)
-        assertEquals(listing.tenantId, eventArg.firstValue.tenantId)
     }
 
     @Test
@@ -119,17 +113,8 @@ class ListingStatusChangedEventHandlerTest {
         doReturn(listing.copy(status = ListingStatus.ACTIVE))
             .whenever(listingService).get(any(), any())
 
-        handler.handle(createEvent(ListingStatus.PUBLISHING))
+        val result = handler.publish(listing.id!!, listing.tenantId)
 
-        verify(listingService, never()).save(any(), anyOrNull())
-        verify(publisher, never()).publish(any())
-    }
-
-    private fun createEvent(status: ListingStatus): ListingStatusChangedEvent {
-        return ListingStatusChangedEvent(
-            status = status,
-            listingId = listing.id!!,
-            tenantId = listing.tenantId
-        )
+        assertNull(result)
     }
 }
