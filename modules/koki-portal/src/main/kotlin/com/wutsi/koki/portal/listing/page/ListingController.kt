@@ -52,11 +52,11 @@ class ListingController(
     fun details(@RequestParam id: Long, model: Model): String {
         val listing = findListing(id)
         model.addAttribute("listing", listing)
-        model.addAttribute("amenityCategories", findAmenityCategories(listing))
+        model.addAttribute("amenityCategories", findAmenityCategories())
         return "listings/details"
     }
 
-    private fun findAmenityCategories(listing: ListingModel): List<CategoryModel> {
+    private fun findAmenityCategories(): List<CategoryModel> {
         return categoryService.search(
             limit = Integer.MAX_VALUE,
             type = CategoryType.AMENITY,

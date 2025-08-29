@@ -31,6 +31,8 @@ class UserMapper {
         username = entity.username,
         email = entity.email,
         status = entity.status,
+        employer = entity.employer,
+        mobile = entity.mobile,
         photoUrl = entity.photoUrl,
         createdAt = entity.createdAt,
         modifiedAt = entity.modifiedAt,
