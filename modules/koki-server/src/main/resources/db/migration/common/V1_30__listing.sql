@@ -62,7 +62,14 @@ CREATE TABLE T_LISTING(
   seller_id_country         VARCHAR(2),
   agent_remarks             TEXT,
   public_remarks            TEXT,
+
+  title                     TEXT,
+  summary                   TEXT,
   description               TEXT,
+  title_fr                  TEXT,
+  summary_fr                TEXT,
+  description_fr            TEXT,
+
   total_images              BIGINT,
   total_files               BIGINT,
 
@@ -91,6 +98,20 @@ CREATE TABLE T_LISTING_AMENITY(
   created_at                DATETIME DEFAULT NOW(),
 
   PRIMARY KEY(listing_fk, amenity_fk)
+) ENGINE = InnoDB;
+
+CREATE TABLE T_LISTING_STATUS(
+  id                        BIGINT NOT NULL AUTO_INCREMENT,
+
+  tenant_fk                 BIGINT NOT NULL,
+  listing_fk                BIGINT NOT NULL REFERENCES T_LISTING(id),
+  created_by_fk             BIGINT,
+
+  status                    INT NOT NULL DEFAULT 0,
+  comment                   TEXT,
+  created_at                DATETIME DEFAULT NOW(),
+
+  PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url, css_url)

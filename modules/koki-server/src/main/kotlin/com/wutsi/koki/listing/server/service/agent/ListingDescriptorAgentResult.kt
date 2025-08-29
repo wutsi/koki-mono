@@ -1,4 +1,4 @@
-package com.wutsi.koki.listing.server.agent
+package com.wutsi.koki.listing.server.service.agent
 
 data class ListingDescriptorAgentResult(
     val title: String? = null,

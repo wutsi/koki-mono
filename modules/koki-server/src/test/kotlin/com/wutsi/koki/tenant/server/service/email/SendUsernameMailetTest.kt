@@ -18,14 +18,14 @@ import org.mockito.Mockito.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class SendUsernameEmailWorkerTest {
+class SendUsernameMailetTest {
     private val userService = mock<UserService>()
     private val tenantService = mock<TenantService>()
     private val templateResolver = EmailTemplateResolver(
         templateEngine = MustacheTemplatingEngine(DefaultMustacheFactory())
     )
     private val sender = mock<Sender>()
-    private val worker = SendUsernameEmailMailet(userService, tenantService, templateResolver, sender)
+    private val mailet = SendUsernameMailet(userService, tenantService, templateResolver, sender)
 
     val tenant = TenantEntity(
         id = 1L,
@@ -49,7 +49,7 @@ class SendUsernameEmailWorkerTest {
     @Test
     fun send() {
         val command = SendUsernameCommand(userId = user.id!!, tenantId = user.tenantId)
-        val result = worker.notify(command)
+        val result = mailet.service(command)
 
         assertEquals(true, result)
 
@@ -64,7 +64,7 @@ class SendUsernameEmailWorkerTest {
         """.trimIndent()
         verify(sender).send(
             user,
-            SendUsernameEmailMailet.SUBJECT,
+            SendUsernameMailet.SUBJECT,
             body,
             emptyList(),
             command.tenantId
@@ -74,7 +74,7 @@ class SendUsernameEmailWorkerTest {
     @Test
     fun `unsupported command`() {
         val command = mapOf("foo" to "bar")
-        val result = worker.notify(command)
+        val result = mailet.service(command)
 
         assertEquals(false, result)
     }

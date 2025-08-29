@@ -9,7 +9,7 @@ import com.wutsi.koki.tenant.server.service.UserService
 import org.springframework.stereotype.Service
 
 @Service
-class SendUsernameEmailMailet(
+class SendUsernameMailet(
     private val userService: UserService,
     private val tenantService: TenantService,
     private val templateResolver: EmailTemplateResolver,

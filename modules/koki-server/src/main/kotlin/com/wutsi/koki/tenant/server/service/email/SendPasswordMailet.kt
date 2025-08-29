@@ -9,7 +9,7 @@ import com.wutsi.koki.tenant.server.service.TenantService
 import org.springframework.stereotype.Service
 
 @Service
-class SendPasswordEmailMailet(
+class SendPasswordMailet(
     private val passwordResetService: PasswordResetTokenService,
     private val tenantService: TenantService,
     private val templateResolver: EmailTemplateResolver,

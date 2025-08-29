@@ -27,7 +27,7 @@ class EditPriceController(private val service: ProductService) : AbstractPageCon
         val fmt = SimpleDateFormat("yyyy-MM-dd")
         val form = PriceForm(
             name = price.name,
-            amount = price.amount.value,
+            amount = price.amount.amount,
             currency = price.amount.currency,
             active = price.active,
             startAt = price.startAt?.let { date -> fmt.format(date) },

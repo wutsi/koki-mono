@@ -14,20 +14,19 @@ import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import com.wutsi.koki.tenant.server.service.PasswordResetTokenService
 import com.wutsi.koki.tenant.server.service.TenantService
-import okhttp3.internal.notify
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class SendPasswordEmailWorkerTest {
+class SendPasswordMailetTest {
     private val tokenService = mock<PasswordResetTokenService>()
     private val tenantService = mock<TenantService>()
     private val templateResolver = EmailTemplateResolver(
         templateEngine = MustacheTemplatingEngine(DefaultMustacheFactory())
     )
     private val sender = mock<Sender>()
-    private val worker = SendPasswordEmailMailet(tokenService, tenantService, templateResolver, sender)
+    private val mailet = SendPasswordMailet(tokenService, tenantService, templateResolver, sender)
 
     val tenant = TenantEntity(
         id = 1L,
@@ -55,7 +54,7 @@ class SendPasswordEmailWorkerTest {
     @Test
     fun send() {
         val command = SendPasswordCommand(tokenId = token.id!!, tenantId = token.tenantId)
-        val result = worker.notify(command)
+        val result = mailet.service(command)
 
         assertEquals(true, result)
 
@@ -72,7 +71,7 @@ class SendPasswordEmailWorkerTest {
         """.trimIndent()
         verify(sender).send(
             token.user,
-            SendPasswordEmailMailet.SUBJECT,
+            SendPasswordMailet.SUBJECT,
             body,
             emptyList(),
             command.tenantId
@@ -82,7 +81,7 @@ class SendPasswordEmailWorkerTest {
     @Test
     fun `unsupported command`() {
         val command = mapOf("foo" to "bar")
-        val result = worker.notify(command)
+        val result = mailet.service(command)
 
         assertEquals(false, result)
     }

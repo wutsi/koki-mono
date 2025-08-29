@@ -1,10 +1,10 @@
-package com.wutsi.koki.email.server.service
+package com.wutsi.koki.email.server.mq
 
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import org.springframework.beans.factory.annotation.Autowired
 
-abstract class AbstractEmailWorker : EmailWorker {
+abstract class AbstractMailet : Mailet {
     @Autowired
     protected lateinit var registry: EmailMQConsumer
 

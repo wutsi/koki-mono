@@ -1,4 +1,4 @@
-package com.wutsi.koki.email.server.service
+package com.wutsi.koki.email.server.mq
 
 import com.wutsi.koki.platform.mq.Consumer
 import org.slf4j.LoggerFactory
@@ -10,21 +10,21 @@ class EmailMQConsumer : Consumer {
         private val LOGGER = LoggerFactory.getLogger(EmailMQConsumer::class.java)
     }
 
-    private val workers: MutableList<EmailWorker> = mutableListOf()
+    private val mailets: MutableList<Mailet> = mutableListOf()
 
-    fun register(worker: EmailWorker) {
-        LOGGER.info("Registering worker: ${worker::class.java.name}")
-        workers.add(worker)
+    fun register(mailet: Mailet) {
+        LOGGER.info("Registering mailet: ${mailet::class.java.name}")
+        mailets.add(mailet)
     }
 
-    fun unregister(worker: EmailWorker) {
-        LOGGER.info("Unregistering worker: ${worker::class.java.name}")
-        workers.remove(worker)
+    fun unregister(mailet: Mailet) {
+        LOGGER.info("Unregistering mailer: ${mailet::class.java.name}")
+        mailets.remove(mailet)
     }
 
     override fun consume(event: Any): Boolean {
-        workers.forEach { worker ->
-            if (worker.notify(event)) {
+        mailets.forEach { worker ->
+            if (worker.service(event)) {
                 return true
             }
         }

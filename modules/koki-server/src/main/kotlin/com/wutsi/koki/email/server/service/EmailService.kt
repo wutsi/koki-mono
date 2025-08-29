@@ -30,6 +30,7 @@ import java.io.FileOutputStream
 import java.net.URI
 import java.util.UUID
 
+@Deprecated("")
 @Service
 class EmailService(
     private val templatingEngine: TemplatingEngine,

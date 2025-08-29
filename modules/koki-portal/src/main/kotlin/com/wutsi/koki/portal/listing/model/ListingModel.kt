@@ -55,6 +55,8 @@ data class ListingModel(
     var sellerIdCountry: String? = null,
     val sellerAgentCommission: Double? = null,
     val buyerAgentCommission: Double? = null,
+    val sellerAgentCommissionMoney: MoneyModel? = null,
+    val buyerAgentCommissionMoney: MoneyModel? = null,
     val description: String? = null,
     val totalImages: Long? = null,
     val totalFiles: Long? = null,
@@ -75,7 +77,7 @@ data class ListingModel(
         }
 
     val readOnly: Boolean
-        get() = statusOffMarket
+        get() = !statusDraft
 
     val statusDraft: Boolean
         get() = status == ListingStatus.DRAFT

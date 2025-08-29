@@ -58,12 +58,12 @@ abstract class AbstractListingController : AbstractModulePageController() {
             publicRemarks = listing.publicRemarks,
             agentRemarks = listing.agentRemarks,
 
-            price = listing.price?.value?.toLong(),
-            visitFees = listing.visitFees?.value?.toLong(),
+            price = listing.price?.amount?.toLong(),
+            visitFees = listing.visitFees?.amount?.toLong(),
             buyerAgentCommission = listing.buyerAgentCommission,
             sellerAgentCommission = listing.sellerAgentCommission,
 
-            securityDeposit = listing.securityDeposit?.value?.toLong(),
+            securityDeposit = listing.securityDeposit?.amount?.toLong(),
             advanceRent = listing.advanceRent,
             leaseTerm = listing.leaseTerm,
             noticePeriod = listing.noticePeriod,

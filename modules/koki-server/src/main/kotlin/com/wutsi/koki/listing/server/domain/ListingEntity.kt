@@ -34,7 +34,7 @@ data class ListingEntity(
     @Column("buyer_agent_user_fk") var buyerAgentUserId: Long? = null,
     @Column("hero_image_fk") var heroImageId: Long? = null,
 
-    val status: ListingStatus = ListingStatus.UNKNOWN,
+    var status: ListingStatus = ListingStatus.UNKNOWN,
     val listingNumber: Long = -1,
     var listingType: ListingType? = null,
     var propertyType: PropertyType? = null,
@@ -92,7 +92,12 @@ data class ListingEntity(
     var sellerIdType: IDType? = null,
     var sellerIdCountry: String? = null,
 
+    var title: String? = null,
+    var summary: String? = null,
     var description: String? = null,
+    var titleFr: String? = null,
+    var summaryFr: String? = null,
+    var descriptionFr: String? = null,
 
     var totalImages: Long? = null,
     var totalFiles: Long? = null,

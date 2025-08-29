@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 @RequestMapping("/listings/publish/done")
 @RequiresPermission(["listing:manage", "listing:full_access"])
-class PublishDoneListingController : AbstractListingController() {
+class PublishDoneListingController : AbstractEditListingController() {
     @GetMapping
     fun publish(@RequestParam id: Long, model: Model): String {
         val listing = findListing(id)
