@@ -9,7 +9,7 @@ import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ListingPublishRule
 import jakarta.validation.ValidationException
 
-class ListingMustHaveImageRule(private val fileService: FileService) : ListingPublishRule {
+class ListingMustHaveApprovedImageRule(private val fileService: FileService) : ListingPublishRule {
     override fun validate(listing: ListingEntity) {
         val images = fileService.search(
             tenantId = listing.tenantId,

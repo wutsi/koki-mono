@@ -1,25 +1,25 @@
-package com.wutsi.koki.room.server.service.validation
+package com.wutsi.koki.listing.server.service.validation
 
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.room.server.domain.RoomEntity
+import com.wutsi.koki.listing.server.domain.ListingEntity
 import jakarta.validation.ValidationException
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class RoomMustHaveGeolocationRuleTest {
-    private val rule = RoomMustHaveGeolocationRule()
+class ListingMustHaveGeolocationRuleTest {
+    private val rule = ListingMustHaveGeolocationRule()
 
     @Test
     fun success() {
-        rule.validate(RoomEntity(longitude = 1.0, latitude = 3.0))
+        rule.validate(ListingEntity(longitude = 1.0, latitude = 3.0))
     }
 
     @Test
     fun failure() {
         val ex = assertThrows<ValidationException> {
-            rule.validate(RoomEntity())
+            rule.validate(ListingEntity())
         }
-        assertEquals(ErrorCode.ROOM_GEOLOCATION_MISSING, ex.message)
+        assertEquals(ErrorCode.LISTING_MISSING_GEOLOCATION, ex.message)
     }
 }

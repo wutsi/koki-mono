@@ -32,7 +32,10 @@
                                 <div th:text="#{page.listing.edit.address.description}">DESCRIPTION</div>
                             </div>
                             <div class="section-item">
-                                <label class="title" th:text="#{page.listing.country}">TYPE</label>
+                                <label class="title">
+                                    <span th:text="#{page.listing.country}">COUNTRY</span>
+                                    <span class="required">*</span>
+                                </label>
                                 <select required th:field="*{country}">
                                     <option value=""></option>
                                     <option th:each="country : ${countries}"
@@ -43,7 +46,10 @@
                                 </select>
                             </div>
                             <div class="section-item">
-                                <label class="title" th:text="#{page.listing.city}">TYPE</label>
+                                <label class="title">
+                                    <span th:text="#{page.listing.city}">TYPE</span>
+                                    <span class="required">*</span>
+                                </label>
                                 <div class="margin-top-small">
                                     <select required th:field="*{cityId}">
                                         <option selected
@@ -56,9 +62,12 @@
                                 </div>
                             </div>
                             <div class="section-item">
-                                <label class="title" th:text="#{page.listing.neighbourhood}">TYPE</label>
+                                <label class="title">
+                                    <span th:text="#{page.listing.neighbourhood}">TYPE</span>
+                                    <span class="required">*</span>
+                                </label>
                                 <div class="margin-top-small">
-                                    <select th:field="*{neighbourhoodId}">
+                                    <select required th:field="*{neighbourhoodId}">
                                         <option selected
                                                 th:if="${neighbourhood}"
                                                 th:text="${neighbourhoodName}"
@@ -69,8 +78,11 @@
                                 </div>
                             </div>
                             <div class="section-item">
-                                <label class="title" th:text="#{page.listing.street}">STREET</label>
-                                <input class="form-control" maxlength="100" th:field="*{street}"/>
+                                <label class="title">
+                                    <span th:text="#{page.listing.street}">STREET</span>
+                                    <span class="required">*</span>
+                                </label>
+                                <input class="form-control" maxlength="100" required th:field="*{street}"/>
                             </div>
 
                             <div class="section-item flex flex-space-between">

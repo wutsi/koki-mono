@@ -162,7 +162,7 @@
         <span th:replace="~{__components/listing :: listing-status-badge(${listing.status})}"></span>
     </div>
     <div class="margin-top-small">
-        <h1 class="margin-none listing-price">
+        <h1 class="margin-none listing-price" th:if="${listing.price}">
             <span th:text="${listing.price}">0000</span>
             <span th:if="${listing.listingType.name() == 'RENTAL'}"
                   th:text="#{page.listing.rental-price-suffix}">00</span>
@@ -175,7 +175,8 @@
                   th:text="#{'furniture-type.' + ${listing.furnitureType}}">
                                 FURNITURE_TYPE</span>
         </div>
-        <div class="text-larger" th:utext="${listing.address.toHtml(false)}">ADDRESS
+        <div class="text-larger" th:if="${listing.address}" th:utext="${listing.address.toHtml(false)}">
+            ADDRESS
         </div>
         <div class="text-small margin-top-small">
             <span th:text="#{page.listing.number}">#</span>:

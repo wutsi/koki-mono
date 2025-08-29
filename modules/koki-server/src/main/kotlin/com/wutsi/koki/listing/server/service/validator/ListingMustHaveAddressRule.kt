@@ -5,10 +5,15 @@ import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ListingPublishRule
 import jakarta.validation.ValidationException
 
-class ListingMustHaveGeolocationRule : ListingPublishRule {
+class ListingMustHaveAddressRule : ListingPublishRule {
     override fun validate(listing: ListingEntity) {
-        if (listing.longitude == null || listing.latitude == null) {
-            throw ValidationException(ErrorCode.LISTING_MISSING_GEOLOCATION)
+        if (
+            listing.country.isNullOrEmpty() ||
+            listing.cityId == null ||
+            listing.neighbourhoodId == null ||
+            listing.street.isNullOrEmpty()
+        ) {
+            throw ValidationException(ErrorCode.LISTING_MISSING_ADDRESS)
         }
     }
 }

@@ -7,9 +7,9 @@
 <div id="listing-general-section">
     <h4>
         <span th:text="#{page.listing.show.general}">GENERAL</span>
-        <a class="text-small"
+        <a class="text-small btn-section-edit"
            th:href="'/listings/edit?id=' + ${listing.id}"
-           th:if="${listing.canManage(user)}"
+           th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
            th:text="#{button.edit}"
         >EDIT</a>
     </h4>
@@ -88,12 +88,12 @@
     <hr/>
 </div>
 
-<div id="listing-amenity-section" th:if="!${amenityCategories.isEmpty()} OR ${listing.furnitureType}">
+<div id="listing-amenity-section">
     <h4>
-        <span th:text="#{page.listing.show.amenities}">GENERAL</span>
-        <a class="text-small"
+        <span th:text="#{page.listing.show.amenities}">AMENITIES</span>
+        <a class="text-small btn-section-edit"
            th:href="'/listings/edit/amenities?id=' + ${listing.id}"
-           th:if="${listing.canManage(user)}"
+           th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
            th:text="#{button.edit}"
         >EDIT</a>
     </h4>
@@ -121,12 +121,12 @@
     <hr/>
 </div>
 
-<div id="listing-address-section" th:if="${listing.address}">
+<div id="listing-address-section">
     <h4>
         <span th:text="#{page.listing.show.address}">ADDRESS</span>
-        <a class="text-small"
+        <a class="text-small btn-section-edit"
            th:href="'/listings/edit/address?id=' + ${listing.id}"
-           th:if="${listing.canManage(user)}"
+           th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
            th:text="#{button.edit}"
         >EDIT</a>
     </h4>
@@ -136,12 +136,32 @@
     <hr/>
 </div>
 
-<div id="listing-remarks-section" th:if="${listing.publicRemarks} OR ${listing.agentRemarks}">
+<div id="listing-geo-location-section">
+    <h4>
+        <span th:text="#{page.listing.show.geo-location}">GEO LOCATION</span>
+        <a class="text-small btn-section-edit"
+           th:href="'/listings/edit/geo-location?id=' + ${listing.id}"
+           th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
+           th:text="#{button.edit}"
+        >EDIT</a>
+    </h4>
+    <div class="row" th:if="${listing.geoLocation}">
+        <a target="_blank"
+           th:href="${listing.geoLocation.url}"
+           th:text="#{page.listing.show.view-map}">MAP</a>
+    </div>
+    <div class="row" th:if="!${listing.geoLocation}">
+        <i th:text="#{page.listing.show.no-geo-location}">NONE</i>
+    </div>
+    <hr/>
+</div>
+
+<div id="listing-remarks-section">
     <h4>
         <span th:text="#{page.listing.show.remarks}">REMARKS</span>
-        <a class="text-small"
+        <a class="text-small btn-section-edit"
            th:href="'/listings/edit/remarks?id=' + ${listing.id}"
-           th:if="${listing.canManage(user)}"
+           th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
            th:text="#{button.edit}"
         >EDIT</a>
     </h4>
@@ -167,9 +187,9 @@
 <div id="listing-price-section">
     <h4>
         <span th:text="#{page.listing.show.price}">PRICE</span>
-        <a class="text-small"
+        <a class="text-small btn-section-edit"
            th:href="'/listings/edit/price?id=' + ${listing.id}"
-           th:if="${listing.canManage(user)}"
+           th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
            th:text="#{button.edit}"
         >EDIT</a>
     </h4>
@@ -215,9 +235,9 @@
 <div id="listing-leasing-section" th:if="${listing.listingTypeRental}">
     <h4>
         <span th:text="#{page.listing.show.leasing}">LEASING</span>
-        <a class="text-small"
+        <a class="text-small btn-section-edit"
            th:href="'/listings/edit/leasing?id=' + ${listing.id}"
-           th:if="${listing.canManage(user)}"
+           th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
            th:text="#{button.edit}"
         >EDIT</a>
     </h4>
@@ -254,9 +274,9 @@
 <div id="listing-seller-section" th:if="${listing.canManage(user)}">
     <h4>
         <span th:text="#{page.listing.show.seller}">SELLER</span>
-        <a class="text-small"
+        <a class="text-small btn-section-edit"
            th:href="'/listings/edit/seller?id=' + ${listing.id}"
-           th:if="${listing.canManage(user)}"
+           th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
            th:text="#{button.edit}"
         >EDIT</a>
     </h4>

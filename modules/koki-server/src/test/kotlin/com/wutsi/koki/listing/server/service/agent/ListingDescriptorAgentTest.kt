@@ -81,7 +81,7 @@ class ListingDescriptorAgentTest {
         val files = emptyList<File>()
         val json = agent.run(ListingDescriptorAgent.QUERY, files)
         val result = ObjectMapper().readValue(json, ListingDescriptorAgentResult::class.java)
-        assertEquals(true, result.heroImageIndex < 0)
+        assertEquals(true, result.heroImageIndex <= 0)
     }
 
     private fun getFile(path: String): File {

@@ -172,6 +172,14 @@ abstract class AbstractPageController {
             ErrorCode.AUTHENTICATION_USER_NOT_ACTIVE -> getMessage("error.account-not-active")
             ErrorCode.AUTHENTICATION_FAILED -> getMessage("error.authentication-failed")
 
+            ErrorCode.LISTING_MISSING_ADDRESS -> getMessage("error.listing-missing-address")
+            ErrorCode.LISTING_MISSING_APPROVED_IMAGE -> getMessage("error.listing-missing-approved-image")
+            ErrorCode.LISTING_MISSING_GEOLOCATION -> getMessage("error.listing-missing-geolocation")
+            ErrorCode.LISTING_MISSING_PRICE -> getMessage("error.listing-missing-price")
+            ErrorCode.LISTING_MISSING_SELLER -> getMessage("error.listing-missing-seller")
+            ErrorCode.LISTING_MISSING_SELLER_COMMISSION -> getMessage("error.listing-missing-seller-commission")
+            ErrorCode.LISTING_INVALID_BUYER_COMMISSION -> getMessage("error.listing-invalid-buyer-commission")
+
             ErrorCode.PASSWORD_RESET_TOKEN_EXPIRED -> getMessage("error.password-reset-expired")
             ErrorCode.PASSWORD_RESET_TOKEN_NOT_FOUND -> getMessage("error.password-reset-not-found")
 

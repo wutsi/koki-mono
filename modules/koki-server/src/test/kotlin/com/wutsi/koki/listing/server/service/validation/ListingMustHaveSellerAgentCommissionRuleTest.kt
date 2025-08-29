@@ -7,7 +7,7 @@ import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ListingMustHaveSellerAgentCommissionTest {
+class ListingMustHaveSellerAgentCommissionRuleTest {
     private val rule = ListingMustHaveSellerAgentCommissionRule()
 
     @Test

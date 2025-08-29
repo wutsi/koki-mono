@@ -27,7 +27,8 @@
                             <div class="section-item">
                                 <h2 th:text="#{page.listing.edit.price.title}">TITLE</h2>
                                 <div th:if="${form.listingType.name() == 'RENTAL'}"
-                                     th:text="#{page.listing.edit.price-rental.description}">DESCRIPTION
+                                     th:text="#{page.listing.edit.price-rental.description}">
+                                    DESCRIPTION
                                 </div>
                                 <div th:if="${form.listingType.name() == 'SALE'}"
                                      th:text="#{page.listing.edit.price-sale.description}">DESCRIPTION
@@ -38,9 +39,12 @@
                                     <span th:if="${form.listingType.name() == 'SALE'}" th:text="#{page.listing.price}">PRICE</span>
                                     <span th:if="${form.listingType.name() == 'RENTAL'}"
                                           th:text="#{page.listing.rental-price}">PRICE</span>
+                                    <span th:if="${form.listingType.name() == 'RENTAL'}"
+                                          th:text="#{page.listing.rental-price-suffix} ">PER MONTH</span>
+                                    <span class="required">*</span>
                                 </label>
                                 <div class="input-group">
-                                    <input class="form-control" step="0" th:field="*{price}" type="number"/>
+                                    <input class="form-control" required step="0" th:field="*{price}" type="number"/>
                                     <div class="input-group-append">
                                         <div class="input-group-text">
                                             <span th:text="${tenant.currencySymbol}">XXX</span>
@@ -62,13 +66,16 @@
                                 </div>
                             </div>
                             <div class="section-item">
-                                <label class="title" th:text="#{page.listing.seller-agent-commission}">LEASE</label>
+                                <label class="title">
+                                    <span th:text="#{page.listing.seller-agent-commission}">SELLER_COMMISSION</span>
+                                    <span class="required">*</span>
+                                </label>
                                 <div class="text-small"
                                      th:text="#{page.listing.seller-agent-commission-help}">HELP
                                 </div>
                                 <div class="input-group">
                                     <input class="form-control"
-                                           step="0.01" th:field="*{sellerAgentCommission}" type="number"/>
+                                           required step="0.01" th:field="*{sellerAgentCommission}" type="number"/>
                                     <div class="input-group-append">
                                         <div class="input-group-text">
                                             <span>%</span>
@@ -77,12 +84,16 @@
                                 </div>
                             </div>
                             <div class="section-item">
-                                <label class="title" th:text="#{page.listing.buyer-agent-commission}">LEASE</label>
-                                <div class="text-small"
-                                     th:text="#{page.listing.buyer-agent-commission-help}">HELP
+                                <label class="title">
+                                    <span th:text="#{page.listing.buyer-agent-commission}">BUYER_COMMISSION</span>
+                                    <span class="required">*</span>
+
+                                </label>
+                                <div class="text-small" th:text="#{page.listing.buyer-agent-commission-help}">
+                                    HELP
                                 </div>
                                 <div class="input-group">
-                                    <input class="form-control"
+                                    <input class="form-control" required
                                            step="0.01" th:field="*{buyerAgentCommission}" type="number"/>
                                     <div class="input-group-append">
                                         <div class="input-group-text">
