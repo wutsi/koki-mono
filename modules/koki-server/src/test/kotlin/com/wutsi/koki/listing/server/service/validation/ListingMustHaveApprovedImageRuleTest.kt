@@ -1,4 +1,4 @@
-package com.wutsi.koki.room.server.service.validation
+package com.wutsi.koki.listing.server.service.validation
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
@@ -10,17 +10,17 @@ import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
-import com.wutsi.koki.room.server.domain.RoomEntity
+import com.wutsi.koki.listing.server.domain.ListingEntity
 import jakarta.validation.ValidationException
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class RoomMustHaveImageRuleTest {
+class ListingMustHaveApprovedImageRuleTest {
     private val fileService = mock<FileService>()
-    private val rule = RoomMustHaveImageRule(fileService, 5)
-    private val room = RoomEntity(id = 1, tenantId = 11L)
+    private val rule = ListingMustHaveApprovedImageRule(fileService)
+    private val listing = ListingEntity(id = 1, tenantId = 11L)
 
     @Test
     fun success() {
@@ -35,16 +35,16 @@ class RoomMustHaveImageRuleTest {
                 FileEntity(id = 7),
             )
         ).whenever(fileService).search(
-            room.tenantId,
+            listing.tenantId,
             emptyList(), // ids
-            room.id, // ownerId
-            ObjectType.ROOM, // ownerType
+            listing.id, // ownerId
+            ObjectType.LISTING, // ownerType
             FileType.IMAGE, // fileType
             FileStatus.APPROVED, // fileStatus
-            5, // limit
+            1, // limit
             0, // offset
         )
-        rule.validate(room)
+        rule.validate(listing)
     }
 
     @Test
@@ -63,33 +63,8 @@ class RoomMustHaveImageRuleTest {
         )
 
         val ex = assertThrows<ValidationException> {
-            rule.validate(room)
+            rule.validate(listing)
         }
-        assertEquals(ErrorCode.ROOM_IMAGE_MISSING, ex.message)
-    }
-
-    @Test
-    fun `few images`() {
-        doReturn(
-            listOf(
-                FileEntity(id = 1),
-                FileEntity(id = 2),
-                FileEntity(id = 3),
-            )
-        ).whenever(fileService).search(
-            any(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-        )
-
-        val ex = assertThrows<ValidationException> {
-            rule.validate(room)
-        }
-        assertEquals(ErrorCode.ROOM_IMAGE_THRESHOLD, ex.message)
+        assertEquals(ErrorCode.LISTING_MISSING_APPROVED_IMAGE, ex.message)
     }
 }

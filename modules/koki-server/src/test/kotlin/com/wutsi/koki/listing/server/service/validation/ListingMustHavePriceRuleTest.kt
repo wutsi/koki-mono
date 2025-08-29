@@ -7,19 +7,27 @@ import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ListingMustHaveGeolocationRuleTest {
-    private val rule = ListingMustHaveGeolocationRule()
+class ListingMustHavePriceRuleTest {
+    private val rule = ListingMustHavePriceRule()
 
     @Test
     fun success() {
-        rule.validate(ListingEntity(longitude = 1.0, latitude = 3.0))
+        rule.validate(ListingEntity(price = 300))
     }
 
     @Test
-    fun failure() {
+    fun free() {
         val ex = assertThrows<ValidationException> {
-            rule.validate(ListingEntity())
+            rule.validate(ListingEntity(price = 0L))
         }
-        assertEquals(ErrorCode.LISTING_MISSING_GEOLOCATION, ex.message)
+        assertEquals(ErrorCode.LISTING_MISSING_PRICE, ex.message)
+    }
+
+    @Test
+    fun `no price`() {
+        val ex = assertThrows<ValidationException> {
+            rule.validate(ListingEntity(price = null))
+        }
+        assertEquals(ErrorCode.LISTING_MISSING_PRICE, ex.message)
     }
 }

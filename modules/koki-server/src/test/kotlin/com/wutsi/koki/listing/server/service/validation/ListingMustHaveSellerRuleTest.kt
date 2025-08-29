@@ -7,27 +7,59 @@ import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ListingMustHavePriceRuleTest {
-    private val rule = ListingMustHavePriceRule()
+class ListingMustHaveSellerRuleTest {
+    private val rule = ListingMustHaveSellerRule()
 
     @Test
     fun success() {
-        rule.validate(ListingEntity(price = 300))
+        rule.validate(
+            ListingEntity(
+                sellerName = "Ray Sponsible",
+                sellerEmail = "ray.sponsible@gmail.com",
+                sellerPhone = "+15147580000"
+            )
+        )
     }
 
     @Test
-    fun free() {
+    fun `no name`() {
         val ex = assertThrows<ValidationException> {
-            rule.validate(ListingEntity(price = 0L))
+            rule.validate(
+                ListingEntity(
+                    sellerName = "",
+                    sellerEmail = "ray.sponsible@gmail.com",
+                    sellerPhone = "+15147580000"
+                )
+            )
         }
-        assertEquals(ErrorCode.LISTING_MISSING_PRICE, ex.message)
+        assertEquals(ErrorCode.LISTING_MISSING_SELLER, ex.message)
     }
 
     @Test
-    fun `no price`() {
+    fun `no email`() {
         val ex = assertThrows<ValidationException> {
-            rule.validate(ListingEntity(price = null))
+            rule.validate(
+                ListingEntity(
+                    sellerName = "Ray Sponsible",
+                    sellerEmail = null,
+                    sellerPhone = "+15147580000"
+                )
+            )
         }
-        assertEquals(ErrorCode.LISTING_MISSING_PRICE, ex.message)
+        assertEquals(ErrorCode.LISTING_MISSING_SELLER, ex.message)
+    }
+
+    @Test
+    fun `no phone`() {
+        val ex = assertThrows<ValidationException> {
+            rule.validate(
+                ListingEntity(
+                    sellerName = "Ray Sponsible",
+                    sellerEmail = "ray.sponsible@gmail.com",
+                    sellerPhone = null
+                )
+            )
+        }
+        assertEquals(ErrorCode.LISTING_MISSING_SELLER, ex.message)
     }
 }

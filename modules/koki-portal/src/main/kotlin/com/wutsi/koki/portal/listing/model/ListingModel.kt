@@ -87,16 +87,16 @@ data class ListingModel(
             status == ListingStatus.ACTIVE_WITH_OFFER ||
             status == ListingStatus.PENDING
 
-    val statusSuccessfulTransaction: Boolean
-        get() = status == ListingStatus.SOLD ||
-            status == ListingStatus.RENTED
-
     val statusOffMarket: Boolean
         get() = status == ListingStatus.SOLD ||
             status == ListingStatus.RENTED ||
             status == ListingStatus.EXPIRED ||
             status == ListingStatus.WITHDRAWN ||
             status == ListingStatus.CANCELLED
+
+    val statusSuccessfulTransaction: Boolean
+        get() = status == ListingStatus.SOLD ||
+            status == ListingStatus.RENTED
 
     val listingTypeRental: Boolean
         get() = listingType == ListingType.RENTAL

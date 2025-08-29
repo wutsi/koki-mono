@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.ListingFixtures.listing
 import com.wutsi.koki.listing.dto.GetListingResponse
+import com.wutsi.koki.listing.dto.Listing
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.portal.AbstractPageControllerTest
@@ -17,12 +18,15 @@ import kotlin.test.Test
 class ListingControllerTest : AbstractPageControllerTest() {
     @Test
     fun sale() {
+        setupListing(listingType = ListingType.SALE)
+
         navigateTo("/listings/${listing.id}")
         assertCurrentPageIs(PageName.LISTING)
         assertElementPresent("#listing-description-section")
         assertElementPresent("#listing-general-section")
         assertElementPresent("#listing-amenity-section")
         assertElementPresent("#listing-address-section")
+        assertElementPresent("#listing-geo-location-section")
         assertElementPresent("#listing-remarks-section")
         assertElementPresent("#listing-price-section")
         assertElementNotPresent("#listing-leasing-section")
@@ -32,16 +36,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun rental() {
-        doReturn(
-            ResponseEntity(
-                GetListingResponse(listing.copy(listingType = ListingType.RENTAL)),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetListingResponse::class.java)
-            )
+        setupListing(listingType = ListingType.RENTAL)
 
         navigateTo("/listings/${listing.id}")
         assertCurrentPageIs(PageName.LISTING)
@@ -49,6 +44,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#listing-general-section")
         assertElementPresent("#listing-amenity-section")
         assertElementPresent("#listing-address-section")
+        assertElementPresent("#listing-geo-location-section")
         assertElementPresent("#listing-remarks-section")
         assertElementPresent("#listing-price-section")
         assertElementPresent("#listing-leasing-section")
@@ -57,17 +53,53 @@ class ListingControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun `view DRAFT listing`() {
+        setupListing(status = ListingStatus.DRAFT)
+
+        navigateTo("/listings/${listing.id}")
+        assertCurrentPageIs(PageName.LISTING)
+
+        assertElementPresent("#btn-map")
+        assertElementNotPresent("#btn-share")
+        assertElementPresent("#btn-edit")
+        assertElementPresent("#btn-publish")
+        assertElementNotPresent("#btn-status")
+        assertElementCount(".btn-section-edit", 8)
+    }
+
+    @Test
+    fun `view ACTIVE listing`() {
+        setupListing(status = ListingStatus.ACTIVE)
+
+        navigateTo("/listings/${listing.id}")
+        assertCurrentPageIs(PageName.LISTING)
+
+        assertElementPresent("#btn-map")
+        assertElementNotPresent("#btn-share")
+        assertElementNotPresent("#btn-edit")
+        assertElementNotPresent("#btn-publish")
+        assertElementPresent("#btn-status")
+        assertElementCount(".btn-section-edit", 0)
+    }
+
+    @Test
+    fun `view CLOSED listing`() {
+        setupListing(status = ListingStatus.RENTED)
+
+        navigateTo("/listings/${listing.id}")
+        assertCurrentPageIs(PageName.LISTING)
+
+        assertElementPresent("#btn-map")
+        assertElementNotPresent("#btn-share")
+        assertElementNotPresent("#btn-edit")
+        assertElementNotPresent("#btn-publish")
+        assertElementNotPresent("#btn-status")
+        assertElementCount(".btn-section-edit", 0)
+    }
+
+    @Test
     fun `view another agent listing ACTIVE`() {
-        doReturn(
-            ResponseEntity(
-                GetListingResponse(listing.copy(sellerAgentUserId = 9999, status = ListingStatus.ACTIVE)),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetListingResponse::class.java)
-            )
+        setupListing(status = ListingStatus.ACTIVE, sellerAgentUserId = 9999L)
 
         navigateTo("/listings/${listing.id}")
         assertCurrentPageIs(PageName.LISTING)
@@ -75,23 +107,23 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#listing-general-section")
         assertElementPresent("#listing-amenity-section")
         assertElementPresent("#listing-remarks-section")
+        assertElementPresent("#listing-address-section")
+        assertElementPresent("#listing-geo-location-section")
         assertElementPresent("#listing-price-section")
         assertElementNotPresent("#seller-agent-commission")
         assertElementNotPresent("#listing-seller-section")
+
+        assertElementPresent("#btn-map")
+        assertElementNotPresent("#btn-share")
+        assertElementNotPresent("#btn-edit")
+        assertElementNotPresent("#btn-publish")
+        assertElementNotPresent("#btn-status")
+        assertElementCount(".btn-section-edit", 0)
     }
 
     @Test
     fun `view another agent listing DRAFT`() {
-        doReturn(
-            ResponseEntity(
-                GetListingResponse(listing.copy(sellerAgentUserId = 9999, status = ListingStatus.DRAFT)),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetListingResponse::class.java)
-            )
+        setupListing(status = ListingStatus.DRAFT, sellerAgentUserId = 9999L)
 
         navigateTo("/listings/${listing.id}")
         assertCurrentPageIs(PageName.ERROR_403)
@@ -103,5 +135,28 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/listings/${listing.id}")
         assertCurrentPageIs(PageName.ERROR_403)
+    }
+
+    private fun setupListing(
+        status: ListingStatus = ListingStatus.ACTIVE,
+        sellerAgentUserId: Long = USER_ID,
+        listingType: ListingType = ListingType.RENTAL,
+    ) {
+        doReturn(
+            ResponseEntity(
+                GetListingResponse(
+                    listing.copy(
+                        status = status,
+                        sellerAgentUserId = sellerAgentUserId,
+                        listingType = listingType,
+                    )
+                ),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetListingResponse::class.java)
+            )
     }
 }

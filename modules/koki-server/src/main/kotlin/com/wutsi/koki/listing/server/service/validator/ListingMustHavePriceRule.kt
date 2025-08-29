@@ -1,18 +1,14 @@
-package com.wutsi.koki.room.server.service.validation
+package com.wutsi.koki.listing.server.service.validation
 
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.room.server.domain.RoomEntity
-import com.wutsi.koki.room.server.service.PublishRule
+import com.wutsi.koki.listing.server.domain.ListingEntity
+import com.wutsi.koki.listing.server.service.ListingPublishRule
 import jakarta.validation.ValidationException
 
-class RoomMustHavePriceRule : PublishRule {
-    override fun validate(room: RoomEntity) {
-        if (!isAvailable(room.pricePerMonth) && !isAvailable(room.pricePerNight)) {
-            throw ValidationException(ErrorCode.ROOM_PRICE_MISSING)
+class ListingMustHavePriceRule : ListingPublishRule {
+    override fun validate(listing: ListingEntity) {
+        if (listing.price == null || listing.price == 0L) {
+            throw ValidationException(ErrorCode.LISTING_MISSING_PRICE)
         }
-    }
-
-    private fun isAvailable(price: Double?): Boolean {
-        return price != null && price > 0
     }
 }

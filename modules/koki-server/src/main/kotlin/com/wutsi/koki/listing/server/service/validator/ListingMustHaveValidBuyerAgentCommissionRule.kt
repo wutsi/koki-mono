@@ -5,10 +5,15 @@ import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ListingPublishRule
 import jakarta.validation.ValidationException
 
-class ListingMustHaveSellerAgentCommissionRule : ListingPublishRule {
+class ListingMustHaveValidBuyerAgentCommissionRule : ListingPublishRule {
     override fun validate(listing: ListingEntity) {
         if (listing.sellerAgentCommission == null || listing.sellerAgentCommission == 0.0) {
-            throw ValidationException(ErrorCode.LISTING_MISSING_SELLER_COMMISSION)
+            return // Will be handled by ListingMustHaveSellerAgentCommissionRule
+        } else if (
+            listing.buyerAgentCommission != null &&
+            listing.buyerAgentCommission!! >= listing.sellerAgentCommission!!
+        ) {
+            throw ValidationException(ErrorCode.LISTING_INVALID_BUYER_COMMISSION)
         }
     }
 }
