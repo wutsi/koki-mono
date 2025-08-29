@@ -5,5 +5,5 @@ data class GeoLocationModel(
     val longitude: Double = 0.0,
 ) {
     val url: String
-        get() = "https://maps.google.com/maps?t=m&z=13&q=loc:${latitude}+${longitude}"
+        get() = "https://maps.google.com/maps?t=m&z=13&q=loc:$latitude+$longitude"
 }
