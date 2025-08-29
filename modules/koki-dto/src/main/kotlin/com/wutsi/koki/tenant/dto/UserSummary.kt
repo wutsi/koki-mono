@@ -9,6 +9,8 @@ data class UserSummary(
     val email: String? = null,
     val displayName: String? = null,
     val photoUrl: String? = null,
+    val employer: String? = null,
+    val mobile: String? = null,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
 )
