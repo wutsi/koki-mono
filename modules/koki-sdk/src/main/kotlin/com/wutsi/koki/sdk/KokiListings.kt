@@ -1,6 +1,5 @@
 package com.wutsi.koki.sdk
 
-import com.wutsi.koki.listing.dto.ChangeListingStatusRequest
 import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.FurnitureType
@@ -16,9 +15,6 @@ import com.wutsi.koki.listing.dto.UpdateListingPriceRequest
 import com.wutsi.koki.listing.dto.UpdateListingRemarksRequest
 import com.wutsi.koki.listing.dto.UpdateListingRequest
 import com.wutsi.koki.listing.dto.UpdateListingSellerRequest
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.client.RestTemplate
 
 class KokiListings(
@@ -59,37 +55,31 @@ class KokiListings(
         rest.postForEntity(url, request, Any::class.java)
     }
 
-    @PostMapping("/{id}/leasing")
     fun updateLeasing(id: Long, request: UpdateListingLeasingRequest) {
         val url = urlBuilder.build("$PATH_PREFIX/$id/leasing")
         rest.postForEntity(url, request, Any::class.java)
     }
 
-    @PostMapping("/{id}/seller")
     fun updatePrice(id: Long, request: UpdateListingSellerRequest) {
         val url = urlBuilder.build("$PATH_PREFIX/$id/seller")
         rest.postForEntity(url, request, Any::class.java)
     }
 
-    @PostMapping("/{id}/remarks")
     fun updateRemarks(id: Long, request: UpdateListingRemarksRequest) {
         val url = urlBuilder.build("$PATH_PREFIX/$id/remarks")
         rest.postForEntity(url, request, Any::class.java)
     }
 
-    @PostMapping("/{id}/seller")
     fun updateSeller(id: Long, request: UpdateListingSellerRequest) {
         val url = urlBuilder.build("$PATH_PREFIX/$id/seller")
         rest.postForEntity(url, request, Any::class.java)
     }
 
-    @GetMapping("/{id}")
     fun get(id: Long): GetListingResponse {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
         return rest.getForEntity(url, GetListingResponse::class.java).body
     }
 
-    @GetMapping
     fun search(
         ids: List<Long> = emptyList(),
         listingNumber: Long? = null,
@@ -136,9 +126,8 @@ class KokiListings(
         return rest.getForEntity(url, SearchListingResponse::class.java).body
     }
 
-    @PostMapping("/{id}/status")
-    fun status(id: Long, @RequestBody request: ChangeListingStatusRequest) {
-        val url = urlBuilder.build("$PATH_PREFIX/$id/status")
-        rest.postForEntity(url, request, Any::class.java)
+    fun publish(id: Long) {
+        val url = urlBuilder.build("$PATH_PREFIX/$id/publish")
+        rest.postForEntity(url, emptyMap<String, Any>(), Any::class.java)
     }
 }
