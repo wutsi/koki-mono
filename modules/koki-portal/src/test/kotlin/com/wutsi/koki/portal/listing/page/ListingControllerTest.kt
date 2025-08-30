@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.ListingFixtures.listing
+import com.wutsi.koki.UserFixtures.users
 import com.wutsi.koki.listing.dto.GetListingResponse
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
@@ -31,6 +32,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("#listing-leasing-section")
         assertElementPresent("#seller-agent-commission")
         assertElementPresent("#listing-seller-section")
+        assertElementNotPresent("#listing-sale-section")
     }
 
     @Test
@@ -49,6 +51,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#listing-leasing-section")
         assertElementPresent("#seller-agent-commission")
         assertElementPresent("#listing-seller-section")
+        assertElementNotPresent("#listing-sale-section")
     }
 
     @Test
@@ -82,8 +85,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun `view CLOSED listing`() {
-        setupListing(status = ListingStatus.RENTED)
+    fun `view RENTED listing`() {
+        setupListing(status = ListingStatus.RENTED, listingType = ListingType.RENTAL)
 
         navigateTo("/listings/${listing.id}")
         assertCurrentPageIs(PageName.LISTING)
@@ -93,6 +96,47 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("#btn-edit")
         assertElementNotPresent("#btn-publish")
         assertElementNotPresent("#btn-status")
+
+        assertElementPresent("#listing-description-section")
+        assertElementPresent("#listing-general-section")
+        assertElementPresent("#listing-amenity-section")
+        assertElementPresent("#listing-address-section")
+        assertElementPresent("#listing-geo-location-section")
+        assertElementPresent("#listing-remarks-section")
+        assertElementPresent("#listing-price-section")
+        assertElementPresent("#listing-leasing-section")
+        assertElementPresent("#seller-agent-commission")
+        assertElementPresent("#listing-seller-section")
+        assertElementPresent("#listing-sale-section")
+        assertElementPresent("#listing-sale-section .buyer-contact-info")
+        assertElementCount(".btn-section-edit", 0)
+    }
+
+    @Test
+    fun `view SOLD listing from another agent`() {
+        setupListing(status = ListingStatus.SOLD, listingType = ListingType.SALE, sellerAgentUserId = users[1].id)
+
+        navigateTo("/listings/${listing.id}")
+        assertCurrentPageIs(PageName.LISTING)
+
+        assertElementPresent("#btn-map")
+        assertElementNotPresent("#btn-share")
+        assertElementNotPresent("#btn-edit")
+        assertElementNotPresent("#btn-publish")
+        assertElementNotPresent("#btn-status")
+
+        assertElementPresent("#listing-description-section")
+        assertElementPresent("#listing-general-section")
+        assertElementPresent("#listing-amenity-section")
+        assertElementPresent("#listing-address-section")
+        assertElementPresent("#listing-geo-location-section")
+        assertElementPresent("#listing-remarks-section")
+        assertElementPresent("#listing-price-section")
+        assertElementNotPresent("#listing-leasing-section")
+        assertElementNotPresent("#seller-agent-commission")
+        assertElementNotPresent("#listing-seller-section")
+        assertElementPresent("#listing-sale-section")
+        assertElementNotPresent("#listing-sale-section .buyer-contact-info")
         assertElementCount(".btn-section-edit", 0)
     }
 

@@ -63,6 +63,7 @@ data class ListingModel(
     val buyerPhone: String? = null,
     val buyerAgentUser: UserModel? = null,
     var transactionDate: Date? = null,
+    var transactionDateText: String? = null,
     var transactionPrice: MoneyModel? = null,
     val description: String? = null,
     val totalImages: Long? = null,
@@ -109,6 +110,9 @@ data class ListingModel(
 
     val listingTypeRental: Boolean
         get() = listingType == ListingType.RENTAL
+
+    val listingTypeSale: Boolean
+        get() = listingType == ListingType.SALE
 
     fun amenitiesByCategoryId(categoryId: Long): List<AmenityModel> {
         return amenities.filter { amenity -> amenity.categoryId == categoryId }

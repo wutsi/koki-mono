@@ -46,6 +46,14 @@
                                 </span>
                                 <span class="required">*</span>
                             </label>
+                            <div class="margin-top-small alert alert-warning flex">
+                                <div class="alert-icon-container">
+                                    <i class="fa-solid fa-lock"></i>
+                                </div>
+                                <div class="margin-left" th:utext="#{page.listing.status.buyer.privacy}">
+                                    PRIVACY
+                                </div>
+                            </div>
 
                             <input class="form-control" maxlength="100" required th:field="*{buyerName}"
                                    th:placeholder="#{page.listing.name}"/>

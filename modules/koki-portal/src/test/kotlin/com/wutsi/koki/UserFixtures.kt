@@ -21,7 +21,7 @@ object UserFixtures {
         cityId = RefDataFixtures.cities[0].id,
         mobile = "+15147580000",
         status = UserStatus.ACTIVE,
-        photoUrl = "https://picsum.photos/800/600"
+        photoUrl = "https://picsum.photos/800/600",
     )
 
     val users = listOf(
@@ -29,7 +29,10 @@ object UserFixtures {
             id = USER_ID,
             displayName = "Ray Sponsible",
             username = "ray.sponsible",
-            email = "ray.sponsible@gmail.com"
+            email = "ray.sponsible@gmail.com",
+            employer = "REIMAX",
+            photoUrl = "https://picsum.photos/800/600",
+            mobile = "+15147580000",
         ),
         UserSummary(
             id = 12L,
@@ -37,6 +40,9 @@ object UserFixtures {
             username = "roger.milla",
             email = "roger.milla@gmail.com",
             status = UserStatus.ACTIVE,
+            employer = "REALTOR",
+            photoUrl = "https://picsum.photos/800/600",
+            mobile = "+15147580011",
         ),
         UserSummary(
             id = 13L,
@@ -44,6 +50,9 @@ object UserFixtures {
             username = "ombiyick",
             email = "ombiyick@gmail.com",
             status = UserStatus.ACTIVE,
+            employer = "IMMO",
+            photoUrl = "https://picsum.photos/800/600",
+            mobile = "+15147580022",
         ),
         UserSummary(
             id = 14L,
@@ -51,6 +60,9 @@ object UserFixtures {
             username = "roger.mila",
             email = "roger.milla@gmail.com",
             status = UserStatus.SUSPENDED,
+            employer = null,
+            photoUrl = "https://picsum.photos/800/600",
+            mobile = null,
         ),
         UserSummary(
             id = 15L,

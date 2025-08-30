@@ -26,10 +26,14 @@
                             <div class="section-item">
                                 <h2 th:text="#{page.listing.edit.seller.title}">TITLE</h2>
                                 <div th:text="#{page.listing.edit.seller.description}">DESCRIPTION</div>
-                            </div>
-                            <div class="section-item">
-                                <h2 th:text="#{page.listing.edit.remarks.title}">TITLE</h2>
-                                <div th:text="#{page.listing.edit.remarks.description}">DESCRIPTION</div>
+                                <div class="margin-top-small alert alert-warning flex">
+                                    <div class="alert-icon-container">
+                                        <i class="fa-solid fa-lock"></i>
+                                    </div>
+                                    <div class="margin-left" th:utext="#{page.listing.edit.seller.privacy}">
+                                        PRIVACY
+                                    </div>
+                                </div>
                             </div>
                             <div class="section-item">
                                 <label class="title">
