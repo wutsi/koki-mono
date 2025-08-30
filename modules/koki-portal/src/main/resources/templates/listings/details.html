@@ -195,10 +195,7 @@
     </h4>
     <div class="flex flex-wrap">
         <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.price}">
-            <b class="text-small" th:if="${listing.listingType.name == 'RENTAL'}"
-               th:text="#{page.listing.rental-price}">KEY</b>
-            <b class="text-small" th:if="${listing.listingType.name != 'RENTAL'}"
-               th:text="#{page.listing.price}">KEY</b>
+            <b class="text-small" th:text="#{page.listing.price}">KEY</b>
             <div>
                 <span th:text="${listing.price.displayText}">00</span>
             </div>

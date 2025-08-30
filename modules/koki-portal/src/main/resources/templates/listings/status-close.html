@@ -69,13 +69,7 @@
                         </div>
                         <div class="section-item" th:if="${sale}">
                             <label class="title">
-                                <span th:if="${form.listingType.name() == 'SALE'}"
-                                      th:text="#{page.listing.transaction-price}">SALE</span>
-                                <span th:if="${form.listingType.name() == 'RENTAL'}"
-                                      th:text="#{page.listing.transaction-rental-price}">RENTAL</span>
-
-                                <span th:if="${form.listingType.name() == 'RENTAL'}"
-                                      th:text="#{page.listing.rental-price-suffix} ">PER MONTH</span>
+                                <span th:text="#{page.listing.transaction-price}">SALE</span>
                                 <span class="required">*</span>
                             </label>
                             <div class="input-group">
@@ -84,6 +78,8 @@
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span th:text="${tenant.currencySymbol}">XXX</span>
+                                        <span th:if="${form.listingType.name() == 'RENTAL'}"
+                                              th:text="#{page.listing.rental-price-suffix} ">PER MONTH</span>
                                     </div>
                                 </div>
                             </div>

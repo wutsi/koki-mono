@@ -167,7 +167,8 @@
             <span th:if="${listing.furnitureType}">-</span>
             <span th:if="${listing.furnitureType}"
                   th:text="#{'furniture-type.' + ${listing.furnitureType}}">
-                                FURNITURE_TYPE</span>
+                FURNITURE_TYPE
+            </span>
         </div>
         <div class="text-larger" th:if="${listing.address}" th:utext="${listing.address.toHtml(false)}">
             ADDRESS
