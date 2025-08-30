@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
-@RequestMapping("/listings/status/sold")
+@RequestMapping("/listings/status/closed")
 @RequiresPermission(["listing:manage", "listing:full_access"])
-class StatusSoldListingController : AbstractListingController() {
+class StatusClosedListingController : AbstractListingController() {
     @GetMapping
     fun sold(@RequestParam id: Long, @RequestParam status: ListingStatus, model: Model): String {
         val listing = findListing(id)
@@ -25,8 +25,8 @@ class StatusSoldListingController : AbstractListingController() {
             ListingForm(
                 id = id,
                 listingType = listing.listingType,
-                country = listing.address?.city?.country,
                 status = status,
+                country = listing.address?.city?.country,
             )
         )
 
@@ -37,7 +37,7 @@ class StatusSoldListingController : AbstractListingController() {
                 title = getMessage("page.listing.status.meta.title"),
             )
         )
-        return "listings/status-sold"
+        return "listings/status-closed"
     }
 
     @PostMapping

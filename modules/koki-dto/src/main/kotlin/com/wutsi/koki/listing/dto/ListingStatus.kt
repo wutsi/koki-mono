@@ -5,11 +5,9 @@ enum class ListingStatus {
     DRAFT,
     PUBLISHING,
     ACTIVE,
-    ACTIVE_WITH_OFFER,
-    PENDING,
     SOLD,
     RENTED,
     EXPIRED,
     WITHDRAWN,
-    CANCELLED
+    CANCELLED,
 }

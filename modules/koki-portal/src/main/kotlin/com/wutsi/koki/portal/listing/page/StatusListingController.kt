@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 @RequestMapping("/listings/status")
 @RequiresPermission(["listing:manage", "listing:full_access"])
-class StatusListingController : AbstractListingController() {
+class StatusListingController : AbstractEditListingController() {
     @GetMapping
     fun status(@RequestParam id: Long, model: Model): String {
         val listing = findListing(id)
@@ -29,20 +29,19 @@ class StatusListingController : AbstractListingController() {
             )
         )
 
-        model.addAttribute(
-            "statusesOnMarket",
-            ListingStatus.entries.filter { status -> isOnMarket(status) }
+        val statuses = mutableListOf(
+            ListingStatus.RENTED,
+            ListingStatus.SOLD,
+            ListingStatus.EXPIRED,
+            ListingStatus.WITHDRAWN,
+            ListingStatus.CANCELLED,
         )
-
-        model.addAttribute(
-            "statusesOffMarket",
-            ListingStatus.entries.filter { status -> isOffMarket(status) }
-                .filter { status ->
-                    (status == ListingStatus.RENTED && listing.listingType == ListingType.RENTAL) ||
-                        (status == ListingStatus.SOLD && listing.listingType == ListingType.SALE) ||
-                        (status != ListingStatus.SOLD && status != ListingStatus.RENTED)
-                }
-        )
+        if (listing.listingType == ListingType.RENTAL){
+            statuses.remove(ListingStatus.SOLD)
+        } else if (listing.listingType == ListingType.SALE){
+            statuses.remove(ListingStatus.RENTED)
+        }
+        model.addAttribute("statuses",statuses)
 
         model.addAttribute(
             "page",
@@ -68,12 +67,6 @@ class StatusListingController : AbstractListingController() {
     private fun isSuccessful(status: ListingStatus): Boolean {
         return status == ListingStatus.RENTED ||
             status == ListingStatus.SOLD
-    }
-
-    private fun isOnMarket(status: ListingStatus): Boolean {
-        return status == ListingStatus.ACTIVE ||
-            status == ListingStatus.ACTIVE_WITH_OFFER ||
-            status == ListingStatus.PENDING
     }
 
     private fun isOffMarket(status: ListingStatus): Boolean {
