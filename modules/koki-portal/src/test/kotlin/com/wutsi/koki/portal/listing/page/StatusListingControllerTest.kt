@@ -19,6 +19,7 @@ import com.wutsi.koki.portal.common.page.PageName
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import java.text.SimpleDateFormat
+import java.util.TimeZone
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -82,12 +83,15 @@ class StatusListingControllerTest : AbstractPageControllerTest() {
         click("#chk-confirm")
         click("#btn-next")
 
-        assertCurrentPageIs(PageName.LISTING_STATUS_DONE)
+        assertCurrentPageIs(PageName.LISTING_STATUS_CLOSE)
         assertElementPresent(".alert-danger")
     }
 
     @Test
     fun sale() {
+        val df = SimpleDateFormat("yyyy-MM-dd")
+        df.timeZone = TimeZone.getTimeZone("UTC")
+
         navigateTo("/listings/status?id=${listing.id}")
         assertCurrentPageIs(PageName.LISTING_STATUS)
         assertElementHasAttribute("#btn-next", "disabled")
@@ -101,8 +105,8 @@ class StatusListingControllerTest : AbstractPageControllerTest() {
         input("#buyerName", "Ray Sponsible")
         input("#buyerEmail", "Ray.Sponsible@gmail.com")
         input("#buyerPhone", "5147580011")
-        input("#transactionPrice", "150000")
         scrollToBottom()
+        input("#transactionPrice", "150000")
         input("#transactionDate", "2020\t0301")
         select2("#buyerAgentUserId", users[0].displayName)
         input("#comment", "My first TX")
@@ -120,7 +124,7 @@ class StatusListingControllerTest : AbstractPageControllerTest() {
         assertEquals("+15147580011", req.firstValue.buyerPhone)
         assertEquals(users[0].id, req.firstValue.buyerAgentUserId)
         assertEquals(150000L, req.firstValue.transactionPrice)
-        assertEquals("2020-03-01", SimpleDateFormat("yyyy-MM-dd").format(req.firstValue.transactionDate))
+        assertEquals("2020-03-01", df.format(req.firstValue.transactionDate))
         assertEquals("My first TX", req.firstValue.comment)
 
         assertCurrentPageIs(PageName.LISTING_STATUS_DONE)
