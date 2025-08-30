@@ -1,5 +1,6 @@
 package com.wutsi.koki.listing.server.endpoint
 
+import com.wutsi.koki.listing.dto.CloseListingRequest
 import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.FurnitureType
@@ -160,6 +161,22 @@ class ListingEndpoints(
         @PathVariable id: Long,
     ) {
         val listing = service.publish(id, tenantId)
+        publisher.publish(
+            ListingStatusChangedEvent(
+                listingId = id,
+                tenantId = tenantId,
+                status = listing.status
+            )
+        )
+    }
+
+    @PostMapping("/{id}/close")
+    fun close(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @RequestBody @Valid request: CloseListingRequest,
+        @PathVariable id: Long,
+    ) {
+        val listing = service.close(id, request, tenantId)
         publisher.publish(
             ListingStatusChangedEvent(
                 listingId = id,

@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.listing.service
 
+import com.wutsi.koki.listing.dto.CloseListingRequest
 import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.UpdateListingAddressRequest
 import com.wutsi.koki.listing.dto.UpdateListingAmenitiesRequest
@@ -24,6 +25,8 @@ import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.GeoLocation
 import com.wutsi.koki.sdk.KokiListings
 import org.springframework.stereotype.Service
+import java.text.SimpleDateFormat
+import java.util.Collections.emptyMap
 
 @Service
 class ListingService(
@@ -207,5 +210,23 @@ class ListingService(
 
     fun publish(id: Long) {
         koki.publish(id)
+    }
+
+    fun close(form: ListingForm) {
+        koki.close(
+            form.id,
+            CloseListingRequest(
+                status = form.status,
+                buyerEmail = form.buyerEmail,
+                buyerPhone = form.buyerPhoneFull,
+                buyerName = form.buyerName,
+                buyerAgentUserId = form.buyerAgentUserId,
+                transactionDate = form.transactionDate
+                    ?.ifEmpty { null }
+                    ?.let { date -> SimpleDateFormat("yyyy-MM-dd").parse(date) },
+                transactionPrice = form.transactionPrice,
+                comment = form.comment,
+            )
+        )
     }
 }

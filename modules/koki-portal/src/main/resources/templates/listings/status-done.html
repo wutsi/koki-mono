@@ -17,7 +17,7 @@
                         <i class="fa-solid fa-circle-check"></i>
                     </h1>
                     <div class="margin-top text-larger"
-                         th:utext="#{page.listing.status.done(${listing.id}, ${listing.listingNumber}, #{'listing-status.' + ${listing.status}})}">
+                         th:utext="#{page.listing.status.done(${listing.id}, ${listing.listingNumber})}">
                         DESCRIPTION
                     </div>
                     <div class="margin-top"
@@ -25,10 +25,17 @@
                          th:utext="#{page.listing.status.done.sold}">
                         CONGRATS
                     </div>
-                    <div class="margin-top"
-                         th:if="${listing.statusOffMarket}"
-                         th:utext="#{page.listing.status.done.off-market}">
+                    <div
+                        th:if="${listing.statusOffMarket}"
+                        th:utext="#{page.listing.status.done.off-market}">
                         OFF_MARKET
+                    </div>
+                    <div class="margin-top-2x">
+                        <a class="btn btn-primary w-100" href="/listings"
+                           id="btn-continue"
+                           th:text="#{button.continue}">
+                            CONTINUE
+                        </a>
                     </div>
                 </div>
             </div>
@@ -36,7 +43,7 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"
+<script id="script-confetti" src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"
         th:if="${listing.statusSuccessfulTransaction}"></script>
 <script th:if="${listing.statusSuccessfulTransaction}">
     const jsConfetti = new JSConfetti();

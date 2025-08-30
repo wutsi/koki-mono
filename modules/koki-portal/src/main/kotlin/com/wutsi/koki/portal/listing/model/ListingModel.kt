@@ -8,6 +8,7 @@ import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
+import com.wutsi.koki.platform.util.HtmlUtils
 import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.AmenityModel
 import com.wutsi.koki.portal.refdata.model.GeoLocationModel
@@ -57,6 +58,12 @@ data class ListingModel(
     val buyerAgentCommission: Double? = null,
     val sellerAgentCommissionMoney: MoneyModel? = null,
     val buyerAgentCommissionMoney: MoneyModel? = null,
+    val buyerName: String? = null,
+    val buyerEmail: String? = null,
+    val buyerPhone: String? = null,
+    val buyerAgentUser: UserModel? = null,
+    var transactionDate: Date? = null,
+    var transactionPrice: MoneyModel? = null,
     val description: String? = null,
     val totalImages: Long? = null,
     val totalFiles: Long? = null,
@@ -70,7 +77,11 @@ data class ListingModel(
     var modifiedAt: Date = Date(),
     var publishedAt: Date? = null,
     var closedAt: Date? = null,
-) {
+
+    ) {
+    val descriptionHtml: String?
+        get() = description?.let { str -> HtmlUtils.toHtml(str) }
+
     val geoLocationUrl: String?
         get() = geoLocation?.let { geo ->
             "https://www.google.com/maps/dir/?api=1&destination=${geo.longitude}%2c${geo.latitude}"
@@ -83,9 +94,7 @@ data class ListingModel(
         get() = status == ListingStatus.DRAFT
 
     val statusOnMarket: Boolean
-        get() = status == ListingStatus.ACTIVE ||
-            status == ListingStatus.ACTIVE_WITH_OFFER ||
-            status == ListingStatus.PENDING
+        get() = status == ListingStatus.ACTIVE
 
     val statusOffMarket: Boolean
         get() = status == ListingStatus.SOLD ||

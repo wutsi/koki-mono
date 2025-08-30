@@ -172,7 +172,7 @@ class ListListingController : AbstractListingController() {
 
             ListingModel(
                 id = 30,
-                status = ListingStatus.ACTIVE_WITH_OFFER,
+                status = ListingStatus.ACTIVE,
                 listingNumber = 24709709,
                 listingType = ListingType.SALE,
                 propertyType = PropertyType.HOUSE,
@@ -195,7 +195,7 @@ class ListListingController : AbstractListingController() {
 
             ListingModel(
                 id = 30,
-                status = ListingStatus.PENDING,
+                status = ListingStatus.ACTIVE,
                 listingNumber = 24709709,
                 listingType = ListingType.SALE,
                 propertyType = PropertyType.STUDIO,

@@ -76,6 +76,12 @@ class ListingMapper(private val moneyMapper: MoneyMapper) {
             agentRemarks = entity.agentRemarks,
             publicRemarks = entity.publicRemarks,
 
+            buyerName = entity.buyerName?.ifEmpty { null },
+            buyerPhone = entity.buyerPhone?.ifEmpty { null },
+            buyerEmail = entity.buyerEmail?.ifEmpty { null },
+            transactionDate = entity.transactionDate,
+            transactionPrice = entity.transactionPrice?.let { money -> moneyMapper.toMoneyModel(money) },
+
             description = if (lang == "fr") {
                 entity.descriptionFr ?: entity.description
             } else {

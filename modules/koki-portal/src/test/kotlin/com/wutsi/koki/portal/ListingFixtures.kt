@@ -74,7 +74,7 @@ object ListingFixtures {
             longitude = -73.62629065845323,
         ),
 
-        price = Money(1500.0, "CAD"),
+        price = Money(175000.0, "CAD"),
         visitFees = Money(10.0, "CAD"),
         sellerAgentCommission = 6.0,
         buyerAgentCommission = 3.0,
