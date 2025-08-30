@@ -132,10 +132,11 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#listing-geo-location-section")
         assertElementPresent("#listing-remarks-section")
         assertElementPresent("#listing-price-section")
+        assertElementPresent("#listing-sale-section")
+
         assertElementNotPresent("#listing-leasing-section")
         assertElementNotPresent("#seller-agent-commission")
         assertElementNotPresent("#listing-seller-section")
-        assertElementPresent("#listing-sale-section")
         assertElementNotPresent("#listing-sale-section .buyer-contact-info")
         assertElementCount(".btn-section-edit", 0)
     }
