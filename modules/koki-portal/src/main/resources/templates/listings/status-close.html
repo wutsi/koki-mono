@@ -81,8 +81,11 @@
                             </div>
                         </div>
                         <div class="section-item" th:if="${sale}">
-                            <label class="title" th:text="#{page.listing.transaction-date}">TX_DATE</label>
-                            <input class="form-control" th:field="*{transactionDate}" type="date"/>
+                            <label class="title">
+                                <span th:text="#{page.listing.transaction-date}">TX_DATE</span>
+                                <span class="required">*</span>
+                            </label>
+                            <input class="form-control" required th:field="*{transactionDate}" type="date"/>
                         </div>
 
                         <div class="section-item" th:if="${sale}">
