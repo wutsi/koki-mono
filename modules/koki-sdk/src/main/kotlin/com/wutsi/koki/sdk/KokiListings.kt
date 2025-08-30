@@ -1,5 +1,6 @@
 package com.wutsi.koki.sdk
 
+import com.wutsi.koki.listing.dto.CloseListingRequest
 import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.FurnitureType
@@ -129,5 +130,10 @@ class KokiListings(
     fun publish(id: Long) {
         val url = urlBuilder.build("$PATH_PREFIX/$id/publish")
         rest.postForEntity(url, emptyMap<String, Any>(), Any::class.java)
+    }
+
+    fun close(id: Long, request: CloseListingRequest) {
+        val url = urlBuilder.build("$PATH_PREFIX/$id/close")
+        rest.postForEntity(url, request, Any::class.java)
     }
 }
