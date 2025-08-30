@@ -67,9 +67,7 @@
                         <span th:text="'#' + ${listing.listingNumber}">00000</span>
                     </div>
                     <b class="text-nowrap listing-price d-block d-sm-none">
-                        <span th:text="${listing.price}">$$</span>
-                        <span th:if="${listing.listingType.name() == 'RENTAL'}"
-                              th:text="#{page.listing.rental-price-suffix}">00</span>
+                        <span th:text="${listing.price.displayText}">$$</span>
                     </b>
                 </div>
             </div>
@@ -140,9 +138,7 @@
     <td class="text-right text-nowrap d-none d-sm-table-cell">
         <a th:href="'/listings/' + ${listing.id}">
             <div class="text-nowrap listing-price">
-                <span th:text="${listing.price}">$$</span>
-                <span th:if="${listing.listingType.name() == 'RENTAL'}"
-                      th:text="#{page.listing.rental-price-suffix}">00</span>
+                <span th:text="${listing.price.displayText}">$$</span>
             </div>
         </a>
     </td>
@@ -163,9 +159,7 @@
     </div>
     <div class="margin-top-small">
         <h1 class="margin-none listing-price" th:if="${listing.price}">
-            <span th:text="${listing.price}">0000</span>
-            <span th:if="${listing.listingType.name() == 'RENTAL'}"
-                  th:text="#{page.listing.rental-price-suffix}">00</span>
+            <span th:text="${listing.price.displayText}">0000</span>
         </h1>
 
         <div class="margin-top-small">
@@ -173,7 +167,8 @@
             <span th:if="${listing.furnitureType}">-</span>
             <span th:if="${listing.furnitureType}"
                   th:text="#{'furniture-type.' + ${listing.furnitureType}}">
-                                FURNITURE_TYPE</span>
+                FURNITURE_TYPE
+            </span>
         </div>
         <div class="text-larger" th:if="${listing.address}" th:utext="${listing.address.toHtml(false)}">
             ADDRESS

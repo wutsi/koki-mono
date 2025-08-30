@@ -51,7 +51,7 @@ class ListingService(
             ).associateBy { location -> location.id }
         }
 
-        val userIds = listOf(listing.createdById, listing.sellerAgentUserId)
+        val userIds = listOf(listing.createdById, listing.sellerAgentUserId, listing.buyerAgentUserId)
             .filterNotNull()
             .distinct()
         val users = if (!fullGraph || userIds.isEmpty()) {

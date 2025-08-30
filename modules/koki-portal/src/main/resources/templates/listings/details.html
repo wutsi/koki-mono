@@ -195,14 +195,9 @@
     </h4>
     <div class="flex flex-wrap">
         <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.price}">
-            <b class="text-small" th:if="${listing.listingType.name == 'RENTAL'}"
-               th:text="#{page.listing.rental-price}">KEY</b>
-            <b class="text-small" th:if="${listing.listingType.name != 'RENTAL'}"
-               th:text="#{page.listing.price}">KEY</b>
+            <b class="text-small" th:text="#{page.listing.price}">KEY</b>
             <div>
-                <span th:text="${listing.price}">00</span>
-                <span th:if="${listing.listingType.name == 'RENTAL'}"
-                      th:text="#{page.listing.rental-price-suffix}">00</span>
+                <span th:text="${listing.price.displayText}">00</span>
             </div>
         </div>
         <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.visitFees}">
@@ -285,5 +280,46 @@
         <div th:text="${listing.sellerName}">RAY</div>
         <div th:if="${listing.sellerEmail}" th:text="${listing.sellerEmail}">EMAIL</div>
         <div th:if="${listing.sellerPhone}" th:text="${listing.sellerPhone}">PHONE</div>
+    </div>
+    <hr/>
+</div>
+
+<div id="listing-sale-section" th:if="${listing.statusSuccessfulTransaction}">
+    <h4 th:text="#{page.listing.show.sales-information}">SALES</h4>
+
+    <div class="margin-bottom-small buyer-contact-info" th:if="${listing.canManage(user)}">
+        <b class="text-small" th:if="${listing.listingTypeSale}" th:text="#{page.listing.buyer}">KEY</b>
+        <b class="text-small" th:if="${listing.listingTypeRental}" th:text="#{page.listing.tenant}">KEY</b>
+
+        <div th:text="${listing.buyerName}">RAY</div>
+        <div th:if="${listing.buyerEmail}" th:text="${listing.buyerEmail}">EMAIL</div>
+        <div th:if="${listing.buyerPhone}" th:text="${listing.buyerPhone}">PHONE</div>
+    </div>
+    <div class="flex flex-wrap margin-bottom-small">
+        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.transactionDate}">
+            <b class="text-small" th:text="#{page.listing.transaction-date}">DATE</b>
+            <div th:text="${listing.transactionDateText}">YYYY-MM-DD</div>
+        </div>
+        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.transactionPrice}">
+            <b class="text-small" th:if="${listing.listingTypeSale}" th:text="#{page.listing.transaction-price}">KEY</b>
+            <b class="text-small" th:if="${listing.listingTypeRental}"
+               th:text="#{page.listing.transaction-rental-price}">KEY</b>
+
+            <div class="listing-price">
+                <span th:text="${listing.transactionPrice.displayText}">$$</span>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.transactionPrice}">
+            <b class="text-small" th:text="#{page.listing.agent}">KEY</b>
+            <div class="flex">
+                <img height="32"
+                     th:src="${listing.buyerAgentUser.photoUrl} ? ${listing.buyerAgentUser.photoUrl} : '/image/no-photo.png'"
+                     width="32"/>
+                <div class="margin-left">
+                    <b class="margin-none" th:text="${listing.buyerAgentUser.displayName}">NAME</b>
+                    <div th:text="${listing.buyerAgentUser.employer}">EMPLOYER</div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

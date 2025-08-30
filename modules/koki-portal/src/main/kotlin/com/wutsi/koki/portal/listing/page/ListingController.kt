@@ -1,7 +1,5 @@
 package com.wutsi.koki.portal.listing.page
 
-import com.wutsi.koki.common.dto.ObjectType
-import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.refdata.model.CategoryModel
 import com.wutsi.koki.portal.refdata.service.CategoryService
@@ -25,17 +23,17 @@ class ListingController(
         val listing = findListing(id)
         model.addAttribute("listing", listing)
 
-        val user = getUser()
-        if (
-            listing.status != ListingStatus.DRAFT &&
-            listing.sellerAgentUser != null &&
-            listing.sellerAgentUser.id != user?.id
-        ) {
-            model.addAttribute(
-                "composeUrl",
-                "/message/compose&to-user-id=${listing.sellerAgentUser.id}&owner-id=$id&owner-type=${ObjectType.LISTING}"
-            )
-        }
+//        val user = getUser()
+//        if (
+//            listing.status != ListingStatus.DRAFT &&
+//            listing.sellerAgentUser != null &&
+//            listing.sellerAgentUser.id != user?.id
+//        ) {
+//            model.addAttribute(
+//                "composeUrl",
+//                "/message/compose&to-user-id=${listing.sellerAgentUser.id}&owner-id=$id&owner-type=${ObjectType.LISTING}"
+//            )
+//        }
 
         model.addAttribute(
             "page",

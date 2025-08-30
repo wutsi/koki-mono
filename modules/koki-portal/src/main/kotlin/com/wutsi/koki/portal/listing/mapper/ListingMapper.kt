@@ -2,21 +2,27 @@ package com.wutsi.koki.portal.listing.mapper
 
 import com.wutsi.blog.portal.common.model.MoneyModel
 import com.wutsi.koki.listing.dto.Listing
+import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.portal.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.listing.model.ListingModel
+import com.wutsi.koki.portal.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.AmenityModel
 import com.wutsi.koki.portal.refdata.model.GeoLocationModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.refdata.dto.Money
+import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
 import java.util.Locale
 
 @Service
-class ListingMapper(private val moneyMapper: MoneyMapper) {
+class ListingMapper(
+    private val moneyMapper: MoneyMapper,
+    private val messages: MessageSource,
+) : TenantAwareMapper() {
     fun toListingModel(
         entity: Listing,
         locations: Map<Long, LocationModel>,
@@ -24,8 +30,9 @@ class ListingMapper(private val moneyMapper: MoneyMapper) {
         amenities: Map<Long, AmenityModel>,
         images: Map<Long, FileModel>
     ): ListingModel {
-        val price = entity.price?.let { money -> moneyMapper.toMoneyModel(money) }
+        val price = toPrice(entity.price, entity)
         val lang = LocaleContextHolder.getLocale().language
+        val df = createDateFormat()
         return ListingModel(
             id = entity.id,
             status = entity.status,
@@ -79,8 +86,10 @@ class ListingMapper(private val moneyMapper: MoneyMapper) {
             buyerName = entity.buyerName?.ifEmpty { null },
             buyerPhone = entity.buyerPhone?.ifEmpty { null },
             buyerEmail = entity.buyerEmail?.ifEmpty { null },
+            buyerAgentUser = entity.buyerAgentUserId?.let { id -> users[id] },
             transactionDate = entity.transactionDate,
-            transactionPrice = entity.transactionPrice?.let { money -> moneyMapper.toMoneyModel(money) },
+            transactionDateText = entity.transactionDate?.let { date -> df.format(date) },
+            transactionPrice = toPrice(entity.transactionPrice, entity),
 
             description = if (lang == "fr") {
                 entity.descriptionFr ?: entity.description
@@ -121,6 +130,22 @@ class ListingMapper(private val moneyMapper: MoneyMapper) {
                 latitude = geo.latitude,
                 longitude = geo.longitude
             )
+        }
+    }
+
+    private fun toPrice(price: Money?, entity: Listing): MoneyModel? {
+        price ?: return null
+
+        val price = moneyMapper.toMoneyModel(price)
+        if (entity.listingType == ListingType.RENTAL) {
+            val locale = LocaleContextHolder.getLocale()
+            return price.copy(
+                displayText = price.text +
+                    " " +
+                    messages.getMessage("page.listing.rental-price-suffix", emptyArray(), locale)
+            )
+        } else {
+            return price
         }
     }
 

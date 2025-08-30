@@ -188,6 +188,7 @@ class CreateListingControllerTest : AbstractPageControllerTest() {
         input("#sellerName", "Ray Sponsible")
         input("#sellerEmail", "ray.sponsible@gmail.com")
         input("#sellerPhone", "5147580011")
+        scrollToBottom()
         input("#sellerIdNumber", "AAA001")
         select("#sellerIdType", 1)
         select("#sellerIdCountry", 3)
@@ -323,6 +324,7 @@ class CreateListingControllerTest : AbstractPageControllerTest() {
         input("#sellerPhone", "5147580011")
         input("#sellerIdNumber", "AAA001")
         select("#sellerIdType", 1)
+        scrollToBottom()
         select("#sellerIdCountry", 3)
         click("button[type=submit]")
 
