@@ -2,7 +2,6 @@ package com.wutsi.koki.portal.listing.page
 
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.listing.form.ListingForm
-import com.wutsi.koki.portal.listing.service.ListingService
 import com.wutsi.koki.portal.security.RequiresPermission
 import io.lettuce.core.KillArgs.Builder.id
 import org.springframework.stereotype.Controller
@@ -17,7 +16,7 @@ import org.springframework.web.client.HttpClientErrorException
 @Controller
 @RequestMapping("/listings/publish")
 @RequiresPermission(["listing:manage", "listing:full_access"])
-class PublishListingController(private val service: ListingService) : AbstractEditListingController() {
+class PublishListingController : AbstractEditListingController() {
     @GetMapping
     fun publish(@RequestParam id: Long, model: Model): String {
         val listing = findListing(id)
@@ -37,7 +36,7 @@ class PublishListingController(private val service: ListingService) : AbstractEd
     @PostMapping
     fun submit(@ModelAttribute form: ListingForm, model: Model): String {
         try {
-            service.publish(form.id)
+            listingService.publish(form.id)
             return "redirect:/listings/publish/done?id=${form.id}"
         } catch (ex: HttpClientErrorException) {
             loadError(ex, model)

@@ -61,8 +61,9 @@ data class ListingForm(
     val buyerName: String? = null,
     val buyerEmail: String? = null,
     val buyerPhone: String? = null,
+    val buyerPhoneFull: String? = null,
     val buyerAgentUserId: Long? = null,
-    val transactionDate: LocalDate? = null,
-    val transactionRemarks: String? = null,
-    val closureReason: String? = null,
+    val transactionDate: String? = null,
+    val transactionPrice: Long? = null,
+    val comment: String? = null,
 )

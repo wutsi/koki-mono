@@ -39,7 +39,7 @@ class PublishListingEndpointTest : AuthorizationAwareEndpointTest() {
     private lateinit var validator: ListingPublisherValidator
 
     @Test
-    fun update() {
+    fun publish() {
         val response = rest.postForEntity("/v1/listings/100/publish", request, Any::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)

@@ -3,7 +3,6 @@ package com.wutsi.koki.portal.listing.page
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.portal.common.page.PageName
-import com.wutsi.koki.portal.listing.model.ListingModel
 import com.wutsi.koki.portal.refdata.model.CategoryModel
 import com.wutsi.koki.portal.refdata.service.CategoryService
 import com.wutsi.koki.portal.security.RequiresPermission

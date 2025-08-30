@@ -54,12 +54,20 @@ CREATE TABLE T_LISTING(
   advance_rent              INT,
   lease_term                INT,
   notice_period             INT,
+
   seller_name               VARCHAR(50),
   seller_email              VARCHAR(255),
   seller_phone              VARCHAR(30),
   seller_id_number          VARCHAR(36),
   seller_id_type            INT,
   seller_id_country         VARCHAR(2),
+
+  buyer_name                VARCHAR(50),
+  buyer_email               VARCHAR(255),
+  buyer_phone               VARCHAR(30),
+  transaction_date          DATE,
+  transaction_price         BIGINT,
+
   agent_remarks             TEXT,
   public_remarks            TEXT,
 

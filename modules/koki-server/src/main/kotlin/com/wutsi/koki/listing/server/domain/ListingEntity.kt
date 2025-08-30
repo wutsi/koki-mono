@@ -30,8 +30,6 @@ data class ListingEntity(
     @Column(name = "tenant_fk") val tenantId: Long = -1,
     @Column(name = "created_by_fk") val createdById: Long? = null,
     @Column(name = "modified_by_fk") var modifiedById: Long? = null,
-    @Column("seller_agent_user_fk") var sellerAgentUserId: Long? = null,
-    @Column("buyer_agent_user_fk") var buyerAgentUserId: Long? = null,
     @Column("hero_image_fk") var heroImageId: Long? = null,
 
     var status: ListingStatus = ListingStatus.UNKNOWN,
@@ -91,6 +89,7 @@ data class ListingEntity(
     var sellerIdNumber: String? = null,
     var sellerIdType: IDType? = null,
     var sellerIdCountry: String? = null,
+    @Column("seller_agent_user_fk") var sellerAgentUserId: Long? = null,
 
     var title: String? = null,
     var summary: String? = null,
@@ -98,6 +97,13 @@ data class ListingEntity(
     var titleFr: String? = null,
     var summaryFr: String? = null,
     var descriptionFr: String? = null,
+
+    var buyerName: String? = null,
+    var buyerEmail: String? = null,
+    var buyerPhone: String? = null,
+    var transactionDate: Date? = null,
+    var transactionPrice: Long? = null,
+    @Column("buyer_agent_user_fk") var buyerAgentUserId: Long? = null,
 
     var totalImages: Long? = null,
     var totalFiles: Long? = null,

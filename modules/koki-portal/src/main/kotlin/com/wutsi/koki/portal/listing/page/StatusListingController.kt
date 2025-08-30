@@ -5,6 +5,7 @@ import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.listing.form.ListingForm
 import com.wutsi.koki.portal.security.RequiresPermission
+import io.lettuce.core.KillArgs.Builder.id
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -21,13 +22,7 @@ class StatusListingController : AbstractEditListingController() {
     fun status(@RequestParam id: Long, model: Model): String {
         val listing = findListing(id)
         model.addAttribute("listing", listing)
-        model.addAttribute(
-            "form",
-            ListingForm(
-                id = id,
-                status = listing.status,
-            )
-        )
+        model.addAttribute("form", ListingForm(id = id))
 
         val statuses = mutableListOf(
             ListingStatus.RENTED,
@@ -36,12 +31,12 @@ class StatusListingController : AbstractEditListingController() {
             ListingStatus.WITHDRAWN,
             ListingStatus.CANCELLED,
         )
-        if (listing.listingType == ListingType.RENTAL){
+        if (listing.listingType == ListingType.RENTAL) {
             statuses.remove(ListingStatus.SOLD)
-        } else if (listing.listingType == ListingType.SALE){
+        } else if (listing.listingType == ListingType.SALE) {
             statuses.remove(ListingStatus.RENTED)
         }
-        model.addAttribute("statuses",statuses)
+        model.addAttribute("statuses", statuses)
 
         model.addAttribute(
             "page",
@@ -54,26 +49,7 @@ class StatusListingController : AbstractEditListingController() {
     }
 
     @PostMapping
-    fun submit(@ModelAttribute form: ListingForm, model: Model): String {
-        if (isSuccessful(form.status)) {
-            return "redirect:/listings/status/sold?id=${form.id}&status=${form.status}"
-        } else if (isOffMarket(form.status)) {
-            return "redirect:/listings/status/closed?id=${form.id}&status=${form.status}"
-        } else {
-            return "redirect:/listings/status/done?id=${form.id}&status=${form.status}"
-        }
-    }
-
-    private fun isSuccessful(status: ListingStatus): Boolean {
-        return status == ListingStatus.RENTED ||
-            status == ListingStatus.SOLD
-    }
-
-    private fun isOffMarket(status: ListingStatus): Boolean {
-        return status == ListingStatus.RENTED ||
-            status == ListingStatus.SOLD ||
-            status == ListingStatus.EXPIRED ||
-            status == ListingStatus.WITHDRAWN ||
-            status == ListingStatus.CANCELLED
+    fun submit(@ModelAttribute form: ListingForm): String {
+        return "redirect:/listings/status/close?id=${form.id}&status=${form.status}"
     }
 }

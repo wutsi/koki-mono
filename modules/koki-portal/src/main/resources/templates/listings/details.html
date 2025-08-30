@@ -1,6 +1,6 @@
 <div id="listing-description-section" th:if="${listing.description}">
     <h4 th:text="#{page.listing.show.description}">NAME</h4>
-    <div th:text="${listing.description}">VALUE</div>
+    <div th:utext="${listing.descriptionHtml}">VALUE</div>
     <hr/>
 </div>
 

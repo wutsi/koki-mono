@@ -11,22 +11,7 @@
 <div class="container-fluid padding-bottom-8x">
     <div class="row">
         <div class="col-12">
-            <div class="widget">
-                <div class="widget-body">
-                    <h1 th:text="#{page.listing.status.title}">TITLE</h1>
-                    <div th:utext="#{page.listing.status.description}">DESCRIPTION</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12">
-            <div class="widget">
-                <div class="widget-body">
-                    <div th:replace="~{__components/listing :: listing-summary(${listing})}"></div>
-                </div>
-            </div>
+            <div th:replace="~{__components/listing :: listing-breadcrumb(${listing})}"></div>
         </div>
     </div>
 
@@ -38,32 +23,12 @@
                 <div class="section">
                     <div class="section-body">
                         <div class="section-item">
-                            <h5 th:text="#{page.listing.status.on-market-status}">TITLE</h5>
-                            <div th:text="#{page.listing.status.on-market-status-help}">HELP</div>
-
-                            <div class="form-check margin-top"
-                                 th:each="status : ${statusesOnMarket}"
-                                 th:if="${status} != ${form.status}"
-                            >
-                                <input class="form-check-input" required
-                                       th:field="*{status}"
-                                       th:id="'chk-status-' + ${status}"
-                                       th:value="${status}"
-                                       type="radio"
-                                />
-                                <label class="form-check-label" th:for="'chk-status-' + ${status}">
-                                    <b th:text="#{'listing-status.' + ${status}}">CONFIRMATION</b>
-                                </label>
-                                <div class="text-small" th:text="#{'listing-status.' + ${status} + '.help'}">HELP</div>
-                            </div>
+                            <h1 th:text="#{page.listing.status.title}">TITLE</h1>
+                            <div th:utext="#{page.listing.status.description}">DESCRIPTION</div>
                         </div>
                         <div class="section-item">
-                            <h5 th:text="#{page.listing.status.off-market-status}">TITLE</h5>
-                            <div class="margin-bottom" th:text="#{page.listing.status.off-market-status-help}">HELP
-                            </div>
-
                             <div class="form-check margin-top"
-                                 th:each="status : ${statusesOffMarket}"
+                                 th:each="status : ${statuses}"
                                  th:if="${status} != ${form.status}"
                             >
                                 <input class="form-check-input" required
@@ -79,8 +44,9 @@
                             </div>
                         </div>
 
-                        <div class="section-item">
-                            <button class="btn btn-primary w-100-mobile" th:text="#{button.next}" type="submit">
+                        <div class="section-item text-right">
+                            <button class="btn btn-primary w-100-mobile" disabled id="btn-next" th:text="#{button.next}"
+                                    type="submit">
                                 NEXT
                             </button>
                         </div>
@@ -91,5 +57,22 @@
     </div>
 </div>
 
+<script>
+    let listingType = 0;
+    let propertyType = 0;
+
+    document.querySelectorAll(".form-check-input")
+        .forEach((item) => {
+            item.addEventListener("change", on_change);
+        });
+
+    function on_change() {
+        console.log('on_change()');
+
+        const elt = event.target;
+        const btn = document.getElementById('btn-next');
+        btn.disabled = !elt.checked;
+    }
+</script>
 </body>
 </html>

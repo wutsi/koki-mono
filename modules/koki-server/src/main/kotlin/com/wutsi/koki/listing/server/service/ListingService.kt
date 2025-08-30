@@ -4,8 +4,10 @@ import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.listing.dto.CloseListingRequest
 import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.ListingStatus
+import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.UpdateListingAddressRequest
 import com.wutsi.koki.listing.dto.UpdateListingAmenitiesRequest
 import com.wutsi.koki.listing.dto.UpdateListingGeoLocationRequest
@@ -216,17 +218,25 @@ class ListingService(
     fun publish(id: Long, tenantId: Long): ListingEntity {
         val listing = get(id, tenantId)
         if (listing.status != ListingStatus.DRAFT) {
-            throw ConflictException(
-                Error(
-                    code = ErrorCode.LISTING_INVALID_STATUS,
-                    message = "Cannot publish a listing in status: ${listing.status}"
-                )
-            )
+            throwInvalidStatus("Cannot publish a listing in status: ${listing.status}")
         }
 
         try {
+            // Update the listing
             publisherValidator.validate(listing)
-            setStatus(listing, ListingStatus.PUBLISHING)
+            listing.status = ListingStatus.PUBLISHING
+            save(listing)
+
+            // Record the status
+            statusDao.save(
+                ListingStatusEntity(
+                    listing = listing,
+                    status = listing.status,
+                    createdAt = Date(),
+                    createdById = securityService.getCurrentUserIdOrNull(),
+                )
+            )
+
             return listing
         } catch (ex: ValidationException) {
             throw ConflictException(
@@ -237,34 +247,55 @@ class ListingService(
         }
     }
 
-    private fun setStatus(listing: ListingEntity, status: ListingStatus, comment: String? = null): ListingStatusEntity {
-        val now = Date()
+    @Transactional
+    fun close(id: Long, request: CloseListingRequest, tenantId: Long): ListingEntity {
+        val listing = get(id, tenantId)
+        if (listing.status != ListingStatus.ACTIVE) {
+            throwInvalidStatus("Cannot close a listing in status: ${listing.status}")
+        }
+
+        when (request.status) {
+            ListingStatus.RENTED -> {
+                if (listing.listingType != ListingType.RENTAL) {
+                    throwInvalidStatus("The listing is not a RENTAL. It's status cannot be RENTED")
+                }
+            }
+
+            ListingStatus.SOLD -> {
+                if (listing.listingType != ListingType.SALE) {
+                    throwInvalidStatus("The listing is not a SALE. It's status cannot be SOLD")
+                }
+            }
+
+            ListingStatus.WITHDRAWN, ListingStatus.EXPIRED, ListingStatus.CANCELLED -> {}
+
+            else -> throwInvalidStatus("Invalid status")
+        }
 
         // Update the listing
-        listing.status = status
-        if (status == ListingStatus.ACTIVE) {
-            listing.publishedAt = now
-        } else if (
-            status == ListingStatus.CANCELLED ||
-            status == ListingStatus.SOLD ||
-            status == ListingStatus.RENTED ||
-            status == ListingStatus.EXPIRED ||
-            status == ListingStatus.WITHDRAWN
-        ) {
-            listing.closedAt = now
-        }
+        val now = Date()
+        listing.status = request.status
+        listing.closedAt = now
+        listing.buyerName = request.buyerName?.ifEmpty { null }
+        listing.buyerEmail = request.buyerEmail?.lowercase()?.ifEmpty { null }
+        listing.buyerPhone = request.buyerPhone?.ifEmpty { null }
+        listing.buyerAgentUserId = request.buyerAgentUserId
+        listing.transactionDate = request.transactionDate
+        listing.transactionPrice = request.transactionPrice
         save(listing)
 
-        // Create status
-        return statusDao.save(
+        // Record the status
+        statusDao.save(
             ListingStatusEntity(
                 listing = listing,
-                status = status,
-                comment = comment,
+                status = request.status,
+                comment = request.comment,
                 createdAt = now,
                 createdById = securityService.getCurrentUserIdOrNull(),
             )
         )
+
+        return listing
     }
 
     private fun generateListingNumber(tenantId: Long): Long {
@@ -298,5 +329,14 @@ class ListingService(
             }
         }
         return start + seq.current
+    }
+
+    private fun throwInvalidStatus(message: String) {
+        throw ConflictException(
+            Error(
+                code = ErrorCode.LISTING_INVALID_STATUS,
+                message = message
+            )
+        )
     }
 }
