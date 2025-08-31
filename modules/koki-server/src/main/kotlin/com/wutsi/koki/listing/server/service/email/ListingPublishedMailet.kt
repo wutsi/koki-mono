@@ -61,7 +61,7 @@ class ListingPublishedMailet(
             listing.street,
             neighbourhood?.name,
             city?.name
-        ).filterNotNull().joinToString(",")
+        ).filterNotNull().joinToString(", ")
 
         val tenant = tenantService.get(event.tenantId)
 

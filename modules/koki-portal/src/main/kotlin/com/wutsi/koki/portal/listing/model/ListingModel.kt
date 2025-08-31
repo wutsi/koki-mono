@@ -47,6 +47,7 @@ data class ListingModel(
     val leaseTerm: Int? = null,
     val securityDeposit: MoneyModel? = null,
     var advanceRent: Int? = null,
+    var advanceRentMoney: MoneyModel? = null,
     var noticePeriod: Int? = null,
     val sellerName: String? = null,
     val sellerEmail: String? = null,
@@ -78,15 +79,9 @@ data class ListingModel(
     var modifiedAt: Date = Date(),
     var publishedAt: Date? = null,
     var closedAt: Date? = null,
-
-    ) {
+) {
     val descriptionHtml: String?
         get() = description?.let { str -> HtmlUtils.toHtml(str) }
-
-    val geoLocationUrl: String?
-        get() = geoLocation?.let { geo ->
-            "https://www.google.com/maps/dir/?api=1&destination=${geo.longitude}%2c${geo.latitude}"
-        }
 
     val readOnly: Boolean
         get() = !statusDraft

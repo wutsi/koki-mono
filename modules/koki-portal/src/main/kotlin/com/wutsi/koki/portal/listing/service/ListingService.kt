@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.listing.service
 
 import com.wutsi.koki.listing.dto.CloseListingRequest
 import com.wutsi.koki.listing.dto.CreateListingRequest
+import com.wutsi.koki.listing.dto.Listing
 import com.wutsi.koki.listing.dto.UpdateListingAddressRequest
 import com.wutsi.koki.listing.dto.UpdateListingAmenitiesRequest
 import com.wutsi.koki.listing.dto.UpdateListingGeoLocationRequest
@@ -74,7 +75,7 @@ class ListingService(
             emptyMap<Long, FileModel>()
         } else {
             mapOf(
-                listing.heroImageId!! to fileService.get(listing.heroImageId!!)
+                listing.heroImageId!! to findHeroImage(listing)
             )
         }
 
@@ -85,6 +86,14 @@ class ListingService(
             amenities = amenities,
             images = images
         )
+    }
+
+    private fun findHeroImage(listing: Listing): FileModel? {
+        return try {
+            listing.heroImageId?.let { id -> fileService.get(id) }
+        } catch (ex: Exception) {
+            null
+        }
     }
 
     fun create(form: ListingForm): Long {

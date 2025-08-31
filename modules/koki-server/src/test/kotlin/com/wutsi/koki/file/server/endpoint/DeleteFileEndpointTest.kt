@@ -3,6 +3,7 @@ package com.wutsi.koki.file.server.endpoint
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.koki.AuthorizationAwareEndpointTest
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.event.FileDeletedEvent
 import com.wutsi.koki.file.server.dao.FileRepository
 import com.wutsi.koki.platform.mq.Publisher
@@ -35,5 +36,7 @@ class DeleteFileEndpointTest : AuthorizationAwareEndpointTest() {
         verify(publisher).publish(event.capture())
         assertEquals(file.id, event.firstValue.fileId)
         assertEquals(file.tenantId, event.firstValue.tenantId)
+        assertEquals(111L, event.firstValue.owner?.id)
+        assertEquals(ObjectType.ACCOUNT, event.firstValue.owner?.type)
     }
 }

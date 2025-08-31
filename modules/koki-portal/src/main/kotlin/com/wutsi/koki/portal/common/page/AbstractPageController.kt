@@ -179,6 +179,8 @@ abstract class AbstractPageController {
             ErrorCode.LISTING_MISSING_SELLER -> getMessage("error.listing-missing-seller")
             ErrorCode.LISTING_MISSING_SELLER_COMMISSION -> getMessage("error.listing-missing-seller-commission")
             ErrorCode.LISTING_INVALID_BUYER_COMMISSION -> getMessage("error.listing-invalid-buyer-commission")
+            ErrorCode.LISTING_MISSING_GENERAL_INFORMATION_HOUSE -> getMessage("error.listing-missing-general-info-house")
+            ErrorCode.LISTING_MISSING_GENERAL_INFORMATION_LAND -> getMessage("error.listing-missing-general-info-land")
 
             ErrorCode.PASSWORD_RESET_TOKEN_EXPIRED -> getMessage("error.password-reset-expired")
             ErrorCode.PASSWORD_RESET_TOKEN_NOT_FOUND -> getMessage("error.password-reset-not-found")

@@ -191,12 +191,12 @@ class FileService(
     }
 
     @Transactional
-    fun delete(id: Long, tenantId: Long) {
+    fun delete(id: Long, tenantId: Long): FileEntity {
         val file = get(id, tenantId)
         file.deleted = true
         file.deletedAt = Date()
         file.deletedById = securityService.getCurrentUserIdOrNull()
-        dao.save(file)
+        return dao.save(file)
     }
 
     @Transactional
