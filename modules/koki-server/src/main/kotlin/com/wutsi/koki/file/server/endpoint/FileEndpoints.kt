@@ -86,7 +86,7 @@ class FileEndpoints(
             FileDeletedEvent(
                 fileId = id,
                 tenantId = tenantId,
-                owner = if (file.ownerId != null && file.ownerType != null){
+                owner = if (file.ownerId != null && file.ownerType != null) {
                     ObjectReference(file.ownerId, file.ownerType)
                 } else {
                     null

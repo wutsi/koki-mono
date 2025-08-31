@@ -130,5 +130,4 @@ class ListingFileDeletedEventHandlerTest {
             owner = ObjectReference(listing.id!!, ownerType),
         )
     }
-
 }
