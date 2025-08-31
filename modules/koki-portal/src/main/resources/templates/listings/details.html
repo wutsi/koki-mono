@@ -306,15 +306,12 @@
             <div th:text="${listing.transactionDateText}">YYYY-MM-DD</div>
         </div>
         <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.transactionPrice}">
-            <b class="text-small" th:if="${listing.listingTypeSale}" th:text="#{page.listing.transaction-price}">KEY</b>
-            <b class="text-small" th:if="${listing.listingTypeRental}"
-               th:text="#{page.listing.transaction-rental-price}">KEY</b>
-
+            <b class="text-small" th:text="#{page.listing.transaction-price}">KEY</b>
             <div class="listing-price">
                 <span th:text="${listing.transactionPrice.displayText}">$$</span>
             </div>
         </div>
-        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.transactionPrice}">
+        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.buyerAgentUser}">
             <b class="text-small" th:text="#{page.listing.agent}">KEY</b>
             <div class="flex">
                 <img height="32"
