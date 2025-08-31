@@ -121,7 +121,7 @@ class ListingPublishedMailetTest {
             """
                 Bonjour Ray Sponsible,<br/><br/>
 
-                Excellente nouvelle! Votre propriété située au <b>340 Pascal,Bastos,Yaounde</b> a été publiée avec succès!<br/>
+                Excellente nouvelle! Votre propriété située au <b>340 Pascal, Bastos, Yaounde</b> a été publiée avec succès!<br/>
                 Elle est maintenant visible par des tous les agents qui utilisent notre plateforme.<br/><br>
 
                 Nous vous aviserons de toute demande de visite ou de toute mise à jour concernant votre propriété.<br/><br>
@@ -184,7 +184,7 @@ class ListingPublishedMailetTest {
             """
                 Bonjour Ray Sponsible,<br/><br/>
 
-                Excellente nouvelle! Votre propriété située au <b>340 Pascal,Bastos,Yaounde</b> a été publiée avec succès!<br/>
+                Excellente nouvelle! Votre propriété située au <b>340 Pascal, Bastos, Yaounde</b> a été publiée avec succès!<br/>
                 Elle est maintenant visible par des tous les agents qui utilisent notre plateforme.<br/><br>
 
                 Nous vous aviserons de toute demande de visite ou de toute mise à jour concernant votre propriété.<br/><br>

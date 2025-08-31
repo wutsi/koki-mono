@@ -17,6 +17,7 @@ import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.security.dto.JWTDecoder
 import jakarta.servlet.http.HttpServletResponse
+import org.apache.poi.hssf.usermodel.HeaderFooter.file
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -80,11 +81,16 @@ class FileEndpoints(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
     ) {
-        service.delete(id, tenantId)
+        val file = service.delete(id, tenantId)
         publisher.publish(
             FileDeletedEvent(
                 fileId = id,
                 tenantId = tenantId,
+                owner = if (file.ownerId != null && file.ownerType != null) {
+                    ObjectReference(file.ownerId, file.ownerType)
+                } else {
+                    null
+                }
             )
         )
     }

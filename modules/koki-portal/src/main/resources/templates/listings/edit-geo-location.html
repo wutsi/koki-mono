@@ -88,6 +88,7 @@
                 on_lat_long_changed();
             }, function (error) {
                 // Handle errors here
+                alert('Unable to fetch the geo-location');
                 switch (error.code) {
                     case error.PERMISSION_DENIED:
                         console.error("User denied the request for Geolocation.");

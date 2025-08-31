@@ -146,9 +146,11 @@
         >EDIT</a>
     </h4>
     <div class="row" th:if="${listing.geoLocation}">
-        <a target="_blank"
-           th:href="${listing.geoLocation.url}"
-           th:text="#{page.listing.show.view-map}">MAP</a>
+        <div>
+            <a class="btn btn-sm btn-light" target="_blank"
+               th:href="${listing.geoLocation.url}"
+               th:text="#{button.view-map}">MAP</a>
+        </div>
     </div>
     <div class="row" th:if="!${listing.geoLocation}">
         <i th:text="#{page.listing.show.no-geo-location}">NONE</i>
@@ -250,6 +252,9 @@
                 <span th:text="${listing.advanceRent}">00</span>
                 <span th:text="#{page.listing.unit-months}">00</span>
             </div>
+            <div class="text-small" th:if="${listing.advanceRentMoney}" th:text="${listing.advanceRentMoney}">
+                $$$
+            </div>
         </div>
         <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.securityDeposit}">
             <b class="text-small" th:text="#{page.listing.security-deposit}">KEY</b>
@@ -281,7 +286,7 @@
         <div th:if="${listing.sellerEmail}" th:text="${listing.sellerEmail}">EMAIL</div>
         <div th:if="${listing.sellerPhone}" th:text="${listing.sellerPhone}">PHONE</div>
     </div>
-    <hr/>
+    <hr th:if="${listing.statusSuccessfulTransaction}"/>
 </div>
 
 <div id="listing-sale-section" th:if="${listing.statusSuccessfulTransaction}">

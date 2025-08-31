@@ -70,6 +70,7 @@ class ListingMapper(
 
             securityDeposit = entity.securityDeposit?.let { money -> moneyMapper.toMoneyModel(money) },
             advanceRent = entity.advanceRent,
+            advanceRentMoney = toAdvanceRentMoney(entity),
             leaseTerm = entity.leaseTerm,
             noticePeriod = entity.noticePeriod,
 
@@ -108,8 +109,8 @@ class ListingMapper(
         )
     }
 
-    private fun toAddress(listing: Listing, locations: Map<Long, LocationModel>): AddressModel? {
-        val address = listing.address ?: return null
+    private fun toAddress(entity: Listing, locations: Map<Long, LocationModel>): AddressModel? {
+        val address = entity.address ?: return null
         return AddressModel(
             country = address.country,
             city = address.cityId?.let { id -> locations[id] },
@@ -117,15 +118,15 @@ class ListingMapper(
             state = address.stateId?.let { id -> locations[id] },
             street = address.street,
             postalCode = address.postalCode,
-            countryName = listing.address?.country?.let { country ->
+            countryName = entity.address?.country?.let { country ->
                 Locale(LocaleContextHolder.getLocale().language, country).getDisplayCountry()
             }
 
         )
     }
 
-    private fun toGeoLocation(listing: Listing): GeoLocationModel? {
-        return listing.geoLocation?.let { geo ->
+    private fun toGeoLocation(entity: Listing): GeoLocationModel? {
+        return entity.geoLocation?.let { geo ->
             GeoLocationModel(
                 latitude = geo.latitude,
                 longitude = geo.longitude
@@ -157,6 +158,19 @@ class ListingMapper(
                     currency = price.currency
                 )
             )
+        }
+    }
+
+    private fun toAdvanceRentMoney(entity: Listing): MoneyModel? {
+        return entity.price?.let { price ->
+            entity.advanceRent?.let { advanceRent ->
+                moneyMapper.toMoneyModel(
+                    Money(
+                        amount = (price.amount.toDouble() * advanceRent).toDouble(),
+                        currency = price.currency
+                    )
+                )
+            }
         }
     }
 }

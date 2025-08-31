@@ -21,13 +21,13 @@
                 <div class="widget-body flex flex-space-between">
                     <div>&nbsp;</div>
                     <div class="flex flex-wrap">
-                        <div class="margin-top-small margin-right-small">
+                        <div>
                             <a class="btn btn-light btn-sm" id="btn-map" target="_blank"
-                               th:href="${listing.geoLocationUrl}"
-                               th:if="${listing.geoLocationUrl}"
+                               th:href="${listing.geoLocation.url}"
+                               th:if="${listing.geoLocation}"
                             >
                                 <i class="fa-regular fa-compass"></i>
-                                <span th:text="#{button.direction}">DIRECTION</span>
+                                <span th:text="#{button.view-map}">DIRECTION</span>
                             </a>
                             <button class="btn btn-light btn-sm" id="btn-share"
                                     th:data-share-message="#{page.listing.show.share-message}"
@@ -38,8 +38,7 @@
                                 <span th:text="#{button.share}">SHARE</span>
                             </button>
                         </div>
-                        <div class="margin-top-small margin-right-small margin-bottom-small"
-                             th:if="${listing.canManage(user)}">
+                        <div class="margin-left-small" th:if="${listing.canManage(user)}">
                             <a class="btn btn-light btn-sm" id="btn-edit"
                                th:href="'/listings/edit?id=' + ${listing.id}"
                                th:if="${listing.statusDraft}"
@@ -75,9 +74,9 @@
         <div class="col-12 col-md-4 d-none d-md-block" th:if="${listing.sellerAgentUser}">
             <div class="widget">
                 <div class="widget-body flex">
-                    <img height="128"
+                    <img height="64"
                          th:src="${listing.sellerAgentUser.photoUrl} ? ${listing.sellerAgentUser.photoUrl} : '/image/no-photo.png'"
-                         width="128"/>
+                         width="64"/>
                     <div class="margin-left">
                         <h5 class="margin-none" th:text="${listing.sellerAgentUser.displayName}">NAME</h5>
                         <div class="text-small">

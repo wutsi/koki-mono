@@ -1,100 +1,47 @@
 package com.wutsi.koki.listing.server.mq
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileType
-import com.wutsi.koki.file.dto.event.FileUploadedEvent
-import com.wutsi.koki.file.server.domain.FileEntity
+import com.wutsi.koki.file.dto.event.FileDeletedEvent
 import com.wutsi.koki.file.server.service.FileService
+import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ListingService
-import com.wutsi.koki.listing.server.service.agent.ListingAgentFactory
-import com.wutsi.koki.listing.server.service.agent.ListingImageReviewerAgent
-import com.wutsi.koki.listing.server.service.agent.ListingImageReviewerAgentResult
 import com.wutsi.koki.platform.logger.KVLogger
 import org.springframework.stereotype.Service
 
 @Service
-class ListingFileUploadedEventHandler(
-    private val agentFactory: ListingAgentFactory,
+class ListingFileDeletedEventHandler(
     private val fileService: FileService,
     private val listingService: ListingService,
-    private val objectMapper: ObjectMapper,
     private val logger: KVLogger,
 ) {
-    fun handle(event: FileUploadedEvent) {
+    fun handle(event: FileDeletedEvent) {
         if (!accept(event)) {
             return
         }
 
-        val file = fileService.get(event.fileId, event.tenantId)
-        if (file.type == FileType.IMAGE) {
-            reviewImage(file)
-        } else if (file.type == FileType.FILE) {
-            reviewFile(file)
+        val listing = listingService.get(event.owner!!.id, event.tenantId)
+        if (listing.heroImageId == event.fileId) {
+            changeHeroImage(listing)
         }
-
-        updateListing(event.owner!!.id, file)
     }
 
-    private fun accept(event: FileUploadedEvent): Boolean {
+    private fun accept(event: FileDeletedEvent): Boolean {
         return event.owner?.type == ObjectType.LISTING
     }
 
-    private fun reviewImage(image: FileEntity): FileEntity {
-        if (image.status != FileStatus.UNDER_REVIEW) {
-            logger.add("approved", false)
-            logger.add("error", "Invalid status")
-            logger.add("image_status", image.status)
-            return image
-        }
+    private fun changeHeroImage(listing: ListingEntity) {
+        val files = fileService.search(
+            tenantId = listing.tenantId,
+            status = FileStatus.APPROVED,
+            type = FileType.IMAGE,
+            limit = 1,
+        )
+        listing.heroImageId = files.firstOrNull()?.id
+        listingService.save(listing)
 
-        val agent = agentFactory.createImageReviewerAgent(image.tenantId)
-        val f = fileService.download(image)
-        val json = agent.run(ListingImageReviewerAgent.QUERY, listOf(f))
-        val result = objectMapper.readValue(json, ListingImageReviewerAgentResult::class.java)
-        image.status = if (result.valid) FileStatus.APPROVED else FileStatus.REJECTED
-        image.rejectionReason = if (result.valid) null else result.reason
-        image.title = result.title
-        image.titleFr = result.titleFr
-        image.description = result.description
-        image.descriptionFr = result.descriptionFr
-        image.imageQuality = result.quality
-
-        logger.add("approved", image.status == FileStatus.APPROVED)
-        logger.add("ai_agent", agent::class.java.simpleName)
-        logger.add("error", result.reason)
-
-        return fileService.save(image)
-    }
-
-    private fun updateListing(listingId: Long, file: FileEntity) {
-        if (file.status != FileStatus.APPROVED) {
-            return
-        }
-
-        val listing = listingService.get(listingId, file.tenantId)
-        if (file.type == FileType.IMAGE) {
-            if (listing.heroImageId == null) {
-                listing.heroImageId = file.id
-            }
-            listing.totalImages = fileService.countByTypeAndOwnerIdAndOwnerType(
-                file.type,
-                listingId,
-                ObjectType.LISTING
-            )
-        } else if (file.type == FileType.FILE) {
-            listing.totalFiles = fileService.countByTypeAndOwnerIdAndOwnerType(
-                file.type,
-                listingId,
-                ObjectType.LISTING
-            )
-        }
-        listingService.save(listing, file.createdById)
-    }
-
-    private fun reviewFile(file: FileEntity): FileEntity {
-        file.status = FileStatus.APPROVED
-        return fileService.save(file)
+        logger.add("listing_id", listing.id)
+        logger.add("listing_hero_image_id", listing.heroImageId)
     }
 }
