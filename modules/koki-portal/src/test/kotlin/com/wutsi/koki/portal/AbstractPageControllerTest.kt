@@ -47,6 +47,7 @@ import com.wutsi.koki.invoice.dto.SearchInvoiceResponse
 import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.GetListingResponse
+import com.wutsi.koki.listing.dto.SearchListingResponse
 import com.wutsi.koki.message.dto.GetMessageResponse
 import com.wutsi.koki.message.dto.SearchMessageResponse
 import com.wutsi.koki.message.dto.SendMessageRequest
@@ -1032,16 +1033,16 @@ abstract class AbstractPageControllerTest {
 
     fun setupListingModule() {
         // Listing
-//        doReturn(
-//            ResponseEntity(
-//                SearchListingResponse(listings = ListingFixtures.listings),
-//                HttpStatus.OK,
-//            )
-//        ).whenever(rest)
-//            .getForEntity(
-//                any<String>(),
-//                eq(SearchListingResponse::class.java)
-//            )
+        doReturn(
+            ResponseEntity(
+                SearchListingResponse(listings = ListingFixtures.listings, total = 23),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchListingResponse::class.java)
+            )
 
         doReturn(
             ResponseEntity(

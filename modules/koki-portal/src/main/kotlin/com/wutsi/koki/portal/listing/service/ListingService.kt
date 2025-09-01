@@ -2,7 +2,12 @@ package com.wutsi.koki.portal.listing.service
 
 import com.wutsi.koki.listing.dto.CloseListingRequest
 import com.wutsi.koki.listing.dto.CreateListingRequest
+import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.Listing
+import com.wutsi.koki.listing.dto.ListingSort
+import com.wutsi.koki.listing.dto.ListingStatus
+import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.UpdateListingAddressRequest
 import com.wutsi.koki.listing.dto.UpdateListingAmenitiesRequest
 import com.wutsi.koki.listing.dto.UpdateListingGeoLocationRequest
@@ -11,6 +16,7 @@ import com.wutsi.koki.listing.dto.UpdateListingPriceRequest
 import com.wutsi.koki.listing.dto.UpdateListingRemarksRequest
 import com.wutsi.koki.listing.dto.UpdateListingRequest
 import com.wutsi.koki.listing.dto.UpdateListingSellerRequest
+import com.wutsi.koki.portal.common.model.ResultSetModel
 import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.file.service.FileService
 import com.wutsi.koki.portal.listing.form.ListingForm
@@ -85,6 +91,103 @@ class ListingService(
             users = users,
             amenities = amenities,
             images = images
+        )
+    }
+
+    fun search(
+        ids: List<Long> = emptyList(),
+        listingNumber: Long? = null,
+        locationIds: List<Long> = emptyList(),
+        listingType: ListingType? = null,
+        propertyTypes: List<PropertyType> = emptyList(),
+        furnitureTypes: List<FurnitureType> = emptyList(),
+        statuses: List<ListingStatus> = emptyList(),
+        bedrooms: String? = null,
+        bathrooms: String? = null,
+        minPrice: Double? = null,
+        maxPrice: Double? = null,
+        minLotArea: Int? = null,
+        maxLotArea: Int? = null,
+        minPropertyArea: Int? = null,
+        maxPropertyArea: Int? = null,
+        sellerAgentUserId: Long? = null,
+        buyerAgentUserId: Long? = null,
+        agentUserId: Long? = null,
+        sortBy: ListingSort? = null,
+        limit: Int = 20,
+        offset: Int = 0,
+        fullGraph: Boolean = true,
+    ): ResultSetModel<ListingModel> {
+        val response = koki.search(
+            ids = ids,
+            listingNumber = listingNumber,
+            locationIds = locationIds,
+            listingType = listingType,
+            propertyTypes = propertyTypes,
+            furnitureTypes = furnitureTypes,
+            statuses = statuses,
+            bedrooms = bedrooms,
+            bathrooms = bathrooms,
+            minPrice = minPrice,
+            maxPrice = maxPrice,
+            minLotArea = minLotArea,
+            maxLotArea = maxLotArea,
+            minPropertyArea = minPropertyArea,
+            maxPropertyArea = maxPropertyArea,
+            sellerAgentUserId = sellerAgentUserId,
+            buyerAgentUserId = buyerAgentUserId,
+            agentUserId = agentUserId,
+            sortBy = sortBy,
+            limit = limit,
+            offset = offset,
+        )
+        val listings = response.listings
+        val locationIds = listings.flatMap { listing ->
+            listOf(listing.address?.cityId, listing.address?.stateId, listing.address?.neighborhoodId)
+        }
+            .filterNotNull()
+            .distinct()
+        val locations = if (!fullGraph || locationIds.isEmpty()) {
+            emptyMap<Long, LocationModel>()
+        } else {
+            locationService.search(
+                ids = locationIds, limit = locationIds.size
+            ).associateBy { location -> location.id }
+        }
+
+        val userIds = listings.flatMap { listing ->
+            listOf(listing.sellerAgentUserId, listing.buyerAgentUserId)
+        }
+            .filterNotNull()
+            .distinct()
+        val users = if (!fullGraph || userIds.isEmpty()) {
+            emptyMap<Long, UserModel>()
+        } else {
+            userService.users(
+                ids = userIds, limit = userIds.size
+            ).associateBy { user -> user.id }
+        }
+
+        val imageIds = listings.mapNotNull { listing -> listing.heroImageId }
+        val images = if (!fullGraph || imageIds.isEmpty()) {
+            emptyMap<Long, FileModel>()
+        } else {
+            fileService.search(
+                ids = imageIds,
+                limit = imageIds.size
+            ).associateBy { image -> image.id }
+        }
+
+        return ResultSetModel<ListingModel>(
+            total = response.total,
+            items = response.listings.map { listing ->
+                mapper.toListingModel(
+                    entity = listing,
+                    locations = locations,
+                    users = users,
+                    images = images
+                )
+            }
         )
     }
 

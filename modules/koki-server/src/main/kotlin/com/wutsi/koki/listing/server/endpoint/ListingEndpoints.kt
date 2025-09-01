@@ -5,6 +5,8 @@ import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.GetListingResponse
+import com.wutsi.koki.listing.dto.ListingSort
+import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.SearchListingResponse
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.net.URLDecoder
 
 @RestController
 @RequestMapping("/v1/listings")
@@ -136,23 +139,75 @@ class ListingEndpoints(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false, name = "id") ids: List<Long> = emptyList(),
         @RequestParam(required = false, name = "listing-number") listingNumber: Long? = null,
-        @RequestParam(required = false, name = "city-id") cityId: Long? = null,
-        @RequestParam(required = false, name = "neighbourhood-id") neighborhoodId: Long? = null,
+        @RequestParam(required = false, name = "location-id") locationIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "listing-type") listingType: ListingType? = null,
         @RequestParam(required = false, name = "property-type") propertyTypes: List<PropertyType> = emptyList(),
         @RequestParam(required = false, name = "furniture-type") furnitureTypes: List<FurnitureType> = emptyList(),
-        @RequestParam(required = false, name = "min-bedrooms") minBedrooms: Int? = null,
-        @RequestParam(required = false, name = "max-bedrooms") maxBedrooms: Int? = null,
-        @RequestParam(required = false, name = "min-bathrooms") minBathrooms: Int? = null,
-        @RequestParam(required = false, name = "max-bathrooms") maxBathrooms: Int? = null,
+        @RequestParam(required = false, name = "status") statuses: List<ListingStatus> = emptyList(),
+        @RequestParam(required = false, name = "bedrooms") bedrooms: String? = null,
+        @RequestParam(required = false, name = "bathrooms") bathrooms: String? = null,
         @RequestParam(required = false, name = "min-price") minPrice: Double? = null,
         @RequestParam(required = false, name = "max-price") maxPrice: Double? = null,
         @RequestParam(required = false, name = "min-lot-area") minLotArea: Int? = null,
         @RequestParam(required = false, name = "max-lot-area") maxLotArea: Int? = null,
         @RequestParam(required = false, name = "min-property-area") minPropertyArea: Int? = null,
         @RequestParam(required = false, name = "max-property-area") maxPropertyArea: Int? = null,
+        @RequestParam(required = false, name = "seller-agent-user-id") sellerAgentUserId: Long? = null,
+        @RequestParam(required = false, name = "buyer-agent-user-id") buyerAgentUserId: Long? = null,
+        @RequestParam(required = false, name = "agent-user-id") agentUserId: Long? = null,
+        @RequestParam(required = false, name = "sort-by") sortBy: ListingSort? = null,
+        @RequestParam(required = false, name = "limit") limit: Int = 20,
+        @RequestParam(required = false, name = "offset") offset: Int = 0
     ): SearchListingResponse {
-        TODO()
+        val listings = service.search(
+            tenantId = tenantId,
+            ids = ids,
+            listingNumber = listingNumber,
+            locationIds = locationIds,
+            listingType = listingType,
+            propertyTypes = propertyTypes,
+            furnitureTypes = furnitureTypes,
+            statuses = statuses,
+            bedrooms = bedrooms?.let { URLDecoder.decode(bedrooms, "utf-8") },
+            bathrooms = bathrooms?.let { URLDecoder.decode(bathrooms, "utf-8") },
+            minPrice = minPrice,
+            maxPrice = maxPrice,
+            minLotArea = minLotArea,
+            maxLotArea = maxLotArea,
+            minPropertyArea = minPropertyArea,
+            maxPropertyArea = maxPropertyArea,
+            sellerAgentUserId = sellerAgentUserId,
+            buyerAgentUserId = buyerAgentUserId,
+            agentUserId = agentUserId,
+            sortBy = sortBy,
+            limit = limit,
+            offset = offset,
+        )
+        val total = service.count(
+            tenantId = tenantId,
+            ids = ids,
+            listingNumber = listingNumber,
+            locationIds = locationIds,
+            listingType = listingType,
+            propertyTypes = propertyTypes,
+            furnitureTypes = furnitureTypes,
+            statuses = statuses,
+            bedrooms = bedrooms?.let { URLDecoder.decode(bedrooms, "utf-8") },
+            bathrooms = bathrooms?.let { URLDecoder.decode(bathrooms, "utf-8") },
+            minPrice = minPrice,
+            maxPrice = maxPrice,
+            minLotArea = minLotArea,
+            maxLotArea = maxLotArea,
+            minPropertyArea = minPropertyArea,
+            maxPropertyArea = maxPropertyArea,
+            sellerAgentUserId = sellerAgentUserId,
+            buyerAgentUserId = buyerAgentUserId,
+            agentUserId = agentUserId,
+        )
+        return SearchListingResponse(
+            total = total,
+            listings = listings.map { listing -> mapper.toListingSummary(listing) }
+        )
     }
 
     @PostMapping("/{id}/publish")
