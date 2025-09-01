@@ -5,6 +5,8 @@ import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.GetListingResponse
+import com.wutsi.koki.listing.dto.ListingSort
+import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.SearchListingResponse
@@ -84,44 +86,50 @@ class KokiListings(
     fun search(
         ids: List<Long> = emptyList(),
         listingNumber: Long? = null,
-        country: String? = null,
-        cityId: Long? = null,
-        neighborhoodIds: List<Long> = emptyList(),
+        locationIds: List<Long> = emptyList(),
         listingType: ListingType? = null,
         propertyTypes: List<PropertyType> = emptyList(),
         furnitureTypes: List<FurnitureType> = emptyList(),
-        minBedrooms: Int? = null,
-        maxBedrooms: Int? = null,
-        minBathrooms: Int? = null,
-        maxBathrooms: Int? = null,
+        statuses: List<ListingStatus> = emptyList(),
+        bedrooms: String? = null,
+        bathrooms: String? = null,
         minPrice: Double? = null,
         maxPrice: Double? = null,
         minLotArea: Int? = null,
         maxLotArea: Int? = null,
         minPropertyArea: Int? = null,
         maxPropertyArea: Int? = null,
+        sellerAgentUserId: Long? = null,
+        buyerAgentUserId: Long? = null,
+        agentUserId: Long? = null,
+        sortBy: ListingSort? = null,
+        limit: Int = 20,
+        offset: Int = 0,
     ): SearchListingResponse {
         val url = urlBuilder.build(
             PATH_PREFIX,
             mapOf(
                 "id" to ids,
                 "listing-number" to listingNumber,
-                "country" to country,
-                "city-id" to cityId,
-                "neighbourhood-id" to neighborhoodIds,
+                "location-id" to locationIds,
                 "listing-type" to listingType,
                 "property-type" to propertyTypes,
                 "furniture-type" to furnitureTypes,
-                "min-bedrooms" to minBedrooms,
-                "max-bedrooms" to maxBedrooms,
-                "min-bathrooms" to minBathrooms,
-                "max-bathrooms" to maxBathrooms,
+                "status" to statuses,
+                "bedrooms" to bedrooms,
+                "bathrooms" to bathrooms,
                 "min-price" to minPrice,
                 "max-price" to maxPrice,
                 "min-lot-area" to minLotArea,
                 "max-lot-area" to maxLotArea,
                 "min-property-area" to minPropertyArea,
                 "max-property-area" to maxPropertyArea,
+                "seller-agent-user-id" to sellerAgentUserId,
+                "buyer-agent-user-id" to buyerAgentUserId,
+                "agent-user-id" to agentUserId,
+                "sort-by" to sortBy,
+                "limit" to limit,
+                "offset" to offset,
             ),
         )
         return rest.getForEntity(url, SearchListingResponse::class.java).body

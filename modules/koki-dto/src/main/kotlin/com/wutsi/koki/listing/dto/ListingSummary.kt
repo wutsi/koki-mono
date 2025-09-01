@@ -2,6 +2,7 @@ package com.wutsi.koki.listing.dto
 
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.Money
+import java.util.Date
 
 data class ListingSummary(
     val id: Long = -1,
@@ -18,4 +19,9 @@ data class ListingSummary(
     val furnitureType: FurnitureType? = null,
     val address: Address? = null,
     val price: Money? = null,
+    val buyerAgentCommission: Double? = null,
+    val sellerAgentUserId: Long? = null,
+    val buyerAgentUserId: Long? = null,
+    val transactionDate: Date? = null,
+    val transactionPrice: Money? = null,
 )
