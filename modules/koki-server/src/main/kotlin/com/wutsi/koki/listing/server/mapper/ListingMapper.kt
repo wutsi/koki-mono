@@ -2,7 +2,9 @@ package com.wutsi.koki.listing.server.mapper
 
 import com.wutsi.koki.listing.dto.BasementType
 import com.wutsi.koki.listing.dto.FenceType
+import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.Listing
+import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
@@ -36,7 +38,7 @@ class ListingMapper {
             propertyArea = entity.propertyArea,
             year = entity.year,
 
-            furnitureType = entity.furnitureType,
+            furnitureType = entity.furnitureType?.takeIf { type -> type != FurnitureType.UNKNOWN },
             amenityIds = entity.amenities.map { amenity -> amenity.id },
 
             address = toAddress(entity),
@@ -68,6 +70,7 @@ class ListingMapper {
             buyerEmail = entity.buyerEmail?.ifEmpty { null },
             transactionDate = entity.transactionDate,
             transactionPrice = toMoney(entity.transactionPrice, entity.currency),
+            buyerAgentUserId = entity.buyerAgentUserId,
 
             title = entity.title?.ifEmpty { null },
             summary = entity.summary?.ifEmpty { null },
@@ -85,6 +88,35 @@ class ListingMapper {
             modifiedAt = entity.modifiedAt,
             publishedAt = entity.publishedAt,
             closedAt = entity.closedAt,
+        )
+    }
+
+    fun toListingSummary(entity: ListingEntity): ListingSummary {
+        return ListingSummary(
+            id = entity.id ?: -1,
+            heroImageId = entity.heroImageId,
+            status = entity.status,
+            listingNumber = entity.listingNumber,
+            listingType = entity.listingType?.takeIf { type -> type != ListingType.UNKNOWN },
+            propertyType = entity.propertyType?.takeIf { type -> type != PropertyType.UNKNOWN },
+            bedrooms = entity.bedrooms,
+            bathrooms = entity.bathrooms,
+            halfBathrooms = entity.halfBathrooms,
+            lotArea = entity.lotArea,
+            propertyArea = entity.propertyArea,
+
+            furnitureType = entity.furnitureType,
+
+            address = toAddress(entity),
+
+            price = toMoney(entity.price, entity.currency),
+            buyerAgentCommission = entity.buyerAgentCommission,
+
+            transactionDate = entity.transactionDate,
+            transactionPrice = toMoney(entity.transactionPrice, entity.currency),
+            buyerAgentUserId = entity.buyerAgentUserId,
+
+            sellerAgentUserId = entity.sellerAgentUserId,
         )
     }
 

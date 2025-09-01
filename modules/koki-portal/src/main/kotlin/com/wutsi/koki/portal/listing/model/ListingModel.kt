@@ -83,11 +83,20 @@ data class ListingModel(
     val descriptionHtml: String?
         get() = description?.let { str -> HtmlUtils.toHtml(str) }
 
+    val listingTypeRental: Boolean
+        get() = listingType == ListingType.RENTAL
+
+    val listingTypeSale: Boolean
+        get() = listingType == ListingType.SALE
+
     val readOnly: Boolean
         get() = !statusDraft
 
     val statusDraft: Boolean
         get() = status == ListingStatus.DRAFT
+
+    val statusActive: Boolean
+        get() = status == ListingStatus.ACTIVE
 
     val statusOnMarket: Boolean
         get() = status == ListingStatus.ACTIVE
@@ -103,11 +112,16 @@ data class ListingModel(
         get() = status == ListingStatus.SOLD ||
             status == ListingStatus.RENTED
 
-    val listingTypeRental: Boolean
-        get() = listingType == ListingType.RENTAL
+    fun isSeller(user: UserModel?): Boolean {
+        return user != null &&
+            user.id == sellerAgentUser?.id
+    }
 
-    val listingTypeSale: Boolean
-        get() = listingType == ListingType.SALE
+    fun isBuyer(user: UserModel?): Boolean {
+        return user != null &&
+            statusSuccessfulTransaction &&
+            user.id == buyerAgentUser?.id
+    }
 
     fun amenitiesByCategoryId(categoryId: Long): List<AmenityModel> {
         return amenities.filter { amenity -> amenity.categoryId == categoryId }

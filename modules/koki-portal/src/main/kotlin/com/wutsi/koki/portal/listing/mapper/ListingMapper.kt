@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.listing.mapper
 
 import com.wutsi.blog.portal.common.model.MoneyModel
 import com.wutsi.koki.listing.dto.Listing
+import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.portal.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.file.model.FileModel
@@ -12,6 +13,8 @@ import com.wutsi.koki.portal.refdata.model.AmenityModel
 import com.wutsi.koki.portal.refdata.model.GeoLocationModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.user.model.UserModel
+import com.wutsi.koki.refdata.dto.Address
+import com.wutsi.koki.refdata.dto.GeoLocation
 import com.wutsi.koki.refdata.dto.Money
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
@@ -30,7 +33,7 @@ class ListingMapper(
         amenities: Map<Long, AmenityModel>,
         images: Map<Long, FileModel>
     ): ListingModel {
-        val price = toPrice(entity.price, entity)
+        val price = toPrice(entity.price, entity.listingType)
         val lang = LocaleContextHolder.getLocale().language
         val df = createDateFormat()
         return ListingModel(
@@ -57,9 +60,9 @@ class ListingMapper(
             furnitureType = entity.furnitureType,
             amenities = entity.amenityIds.mapNotNull { id -> amenities[id] },
 
-            address = toAddress(entity, locations),
+            address = toAddress(entity.address, locations),
 
-            geoLocation = toGeoLocation(entity),
+            geoLocation = toGeoLocation(entity.geoLocation),
 
             price = price,
             visitFees = entity.visitFees?.let { money -> moneyMapper.toMoneyModel(money) },
@@ -90,7 +93,7 @@ class ListingMapper(
             buyerAgentUser = entity.buyerAgentUserId?.let { id -> users[id] },
             transactionDate = entity.transactionDate,
             transactionDateText = entity.transactionDate?.let { date -> df.format(date) },
-            transactionPrice = toPrice(entity.transactionPrice, entity),
+            transactionPrice = toPrice(entity.transactionPrice, entity.listingType),
 
             description = if (lang == "fr") {
                 entity.descriptionFr ?: entity.description
@@ -109,8 +112,41 @@ class ListingMapper(
         )
     }
 
-    private fun toAddress(entity: Listing, locations: Map<Long, LocationModel>): AddressModel? {
-        val address = entity.address ?: return null
+    fun toListingModel(
+        entity: ListingSummary,
+        locations: Map<Long, LocationModel>,
+        users: Map<Long, UserModel>,
+        images: Map<Long, FileModel>
+    ): ListingModel {
+        val price = toPrice(entity.price, entity.listingType)
+        val df = createDateFormat()
+        return ListingModel(
+            id = entity.id,
+            status = entity.status,
+            listingNumber = entity.listingNumber,
+            listingType = entity.listingType,
+            propertyType = entity.propertyType,
+            bedrooms = entity.bedrooms,
+            bathrooms = entity.bathrooms,
+            halfBathrooms = entity.halfBathrooms,
+            lotArea = entity.lotArea,
+            propertyArea = entity.propertyArea,
+            heroImageUrl = entity.heroImageId?.let { id -> images[id]?.contentUrl },
+            furnitureType = entity.furnitureType,
+            address = toAddress(entity.address, locations),
+            price = price,
+            buyerAgentUser = entity.buyerAgentUserId?.let { id -> users[id] },
+            buyerAgentCommission = entity.buyerAgentCommission,
+            buyerAgentCommissionMoney = entity.buyerAgentCommission?.let { pct -> applyPercentage(price, pct) },
+            sellerAgentUser = entity.sellerAgentUserId?.let { id -> users[id] },
+            transactionDate = entity.transactionDate,
+            transactionDateText = entity.transactionDate?.let { date -> df.format(date) },
+            transactionPrice = toPrice(entity.transactionPrice, entity.listingType),
+        )
+    }
+
+    private fun toAddress(address: Address?, locations: Map<Long, LocationModel>): AddressModel? {
+        address ?: return null
         return AddressModel(
             country = address.country,
             city = address.cityId?.let { id -> locations[id] },
@@ -118,15 +154,14 @@ class ListingMapper(
             state = address.stateId?.let { id -> locations[id] },
             street = address.street,
             postalCode = address.postalCode,
-            countryName = entity.address?.country?.let { country ->
+            countryName = address.country?.let { country ->
                 Locale(LocaleContextHolder.getLocale().language, country).getDisplayCountry()
             }
-
         )
     }
 
-    private fun toGeoLocation(entity: Listing): GeoLocationModel? {
-        return entity.geoLocation?.let { geo ->
+    private fun toGeoLocation(geoLocation: GeoLocation?): GeoLocationModel? {
+        return geoLocation?.let { geo ->
             GeoLocationModel(
                 latitude = geo.latitude,
                 longitude = geo.longitude
@@ -134,11 +169,11 @@ class ListingMapper(
         }
     }
 
-    private fun toPrice(price: Money?, entity: Listing): MoneyModel? {
+    private fun toPrice(price: Money?, listingType: ListingType?): MoneyModel? {
         price ?: return null
 
         val price = moneyMapper.toMoneyModel(price)
-        if (entity.listingType == ListingType.RENTAL) {
+        if (listingType == ListingType.RENTAL) {
             val locale = LocaleContextHolder.getLocale()
             return price.copy(
                 displayText = price.text +

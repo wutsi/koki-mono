@@ -98,6 +98,13 @@ CREATE INDEX city ON T_LISTING(city_fk);
 CREATE INDEX neighbourhood ON T_LISTING(neighbourhood_fk);
 CREATE INDEX bedrooms ON T_LISTING(bedrooms);
 CREATE INDEX bathrooms ON T_LISTING(bathrooms);
+CREATE INDEX price ON T_LISTING(price);
+CREATE INDEX lot_area ON T_LISTING(lot_area);
+CREATE INDEX property_area ON T_LISTING(property_area);
+CREATE INDEX published_at ON T_LISTING(published_at);
+CREATE INDEX transaction_date ON T_LISTING(transaction_date);
+CREATE INDEX seller_agent_user ON T_LISTING(seller_agent_user_fk);
+CREATE INDEX buyer_agent_user ON T_LISTING(buyer_agent_user_fk);
 
 CREATE TABLE T_LISTING_AMENITY(
   listing_fk                BIGINT NOT NULL REFERENCES T_LISTING(id),

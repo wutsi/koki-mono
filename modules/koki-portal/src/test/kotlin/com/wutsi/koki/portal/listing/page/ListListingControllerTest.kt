@@ -4,7 +4,7 @@ import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
 import kotlin.test.Test
 
-class SearchListingControllerTest : AbstractPageControllerTest() {
+class ListListingControllerTest : AbstractPageControllerTest() {
     @Test
     fun `my listings`() {
         navigateTo("/listings")

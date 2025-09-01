@@ -52,7 +52,29 @@
                         </a>
                     </div>
 
-                    <div th:replace="~{__components/listing :: listing-table(${listings})}"></div>
+                    <div class="margin-bottom-2x" id="for-sale-container" th:if="${forSale?.total > 0}">
+                        <h5 class="margin-none">
+                            <span th:text="#{page.listing.list.for-sale}">FOR_SALE</span>
+                            <span th:text="'(' + ${forSale.total} + ')'">000</span>
+                        </h5>
+                        <div th:replace="~{__components/listing :: listing-table(${forSale.items}, false)}"></div>
+                    </div>
+
+                    <div class="margin-bottom-2x" id="for-rent-container" th:if="${forRent?.total > 0}">
+                        <h5 class="margin-none">
+                            <span th:text="#{page.listing.list.for-rent}">FOR_RENT</span>
+                            <span th:text="'(' + ${forRent.total} + ')'">000</span>
+                        </h5>
+                        <div th:replace="~{__components/listing :: listing-table(${forRent.items}, false)}"></div>
+                    </div>
+
+                    <div class="margin-bottom-2x" id="sold-container" th:if="${sold?.total > 0}">
+                        <h5 class="margin-none">
+                            <span th:text="#{page.listing.list.sold}">FOR_RENT</span>
+                            <span th:text="'(' + ${sold.total} + ')'">000</span>
+                        </h5>
+                        <div th:replace="~{__components/listing :: listing-table(${sold.items}, true)}"></div>
+                    </div>
                 </div>
             </div>
         </div>

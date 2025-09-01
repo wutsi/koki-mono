@@ -130,7 +130,7 @@
            th:text="#{button.edit}"
         >EDIT</a>
     </h4>
-    <div class="row" th:if="${listing.furnitureType}">
+    <div class="row" th:if="${listing.address}">
         <div class="col-12 padding-bottom-small" th:utext="${listing.address.toHtml(true)}">COUNTRY</div>
     </div>
     <hr/>

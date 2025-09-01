@@ -5,6 +5,7 @@ import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.Listing
 import com.wutsi.koki.listing.dto.ListingStatus
+import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
@@ -112,5 +113,127 @@ object ListingFixtures {
         buyerPhone = "+237699505678",
         transactionPrice = Money(195000.0, "CAD"),
         transactionDate = DateUtils.addDays(Date(), -10)
+    )
+
+    val listings = listOf(
+        ListingSummary(
+            id = 1115,
+            listingNumber = 243001,
+            status = ListingStatus.ACTIVE,
+            listingType = ListingType.SALE,
+            propertyType = PropertyType.APARTMENT,
+            bedrooms = 3,
+            bathrooms = 2,
+            halfBathrooms = 1,
+            propertyArea = 1200,
+            lotArea = 850,
+            furnitureType = FurnitureType.FULLY_FURNISHED,
+            address = Address(
+                cityId = RefDataFixtures.cities[0].id,
+                country = RefDataFixtures.cities[0].country,
+                stateId = RefDataFixtures.cities[0].parentId,
+                neighborhoodId = RefDataFixtures.neighborhoods[0].id,
+                street = "3030 Linton",
+                postalCode = "H1X 1X1",
+            ),
+
+            price = Money(175000.0, "CAD"),
+            buyerAgentCommission = 3.0,
+
+            sellerAgentUserId = UserFixtures.USER_ID,
+            heroImageId = FileFixtures.images[0].id,
+
+            buyerAgentUserId = UserFixtures.users[2].id,
+            transactionPrice = Money(195000.0, "CAD"),
+            transactionDate = DateUtils.addDays(Date(), -10)
+        ),
+        ListingSummary(
+            id = 1116,
+            listingNumber = 243002,
+            status = ListingStatus.DRAFT,
+            listingType = ListingType.SALE,
+            propertyType = PropertyType.APARTMENT,
+            bedrooms = 3,
+            bathrooms = 2,
+            halfBathrooms = 1,
+            propertyArea = 1200,
+            lotArea = 850,
+            furnitureType = FurnitureType.FULLY_FURNISHED,
+            address = Address(
+                cityId = RefDataFixtures.cities[0].id,
+                country = RefDataFixtures.cities[0].country,
+                stateId = RefDataFixtures.cities[0].parentId,
+                neighborhoodId = RefDataFixtures.neighborhoods[1].id,
+                street = "340 Pascal",
+                postalCode = null,
+            ),
+
+            price = Money(375000.0, "CAD"),
+            buyerAgentCommission = 3.0,
+
+            sellerAgentUserId = UserFixtures.USER_ID,
+            heroImageId = FileFixtures.images[0].id,
+
+            buyerAgentUserId = UserFixtures.users[2].id,
+            transactionPrice = Money(195000.0, "CAD"),
+            transactionDate = DateUtils.addDays(Date(), -10)
+        ),
+        ListingSummary(
+            id = 1117,
+            listingNumber = 243003,
+            status = ListingStatus.PUBLISHING,
+            listingType = ListingType.RENTAL,
+            propertyType = PropertyType.APARTMENT,
+            bedrooms = 3,
+            bathrooms = 2,
+            halfBathrooms = 1,
+            propertyArea = 1200,
+            lotArea = 850,
+            furnitureType = FurnitureType.FULLY_FURNISHED,
+            address = Address(
+                cityId = RefDataFixtures.cities[0].id,
+                country = RefDataFixtures.cities[0].country,
+                stateId = RefDataFixtures.cities[0].parentId,
+                neighborhoodId = RefDataFixtures.neighborhoods[1].id,
+                street = "1111 Nicolet",
+                postalCode = null,
+            ),
+
+            price = Money(1000.0, "CAD"),
+            buyerAgentCommission = 3.0,
+
+            sellerAgentUserId = UserFixtures.USER_ID,
+            heroImageId = FileFixtures.images[0].id,
+
+            buyerAgentUserId = UserFixtures.users[2].id,
+            transactionPrice = Money(195000.0, "CAD"),
+            transactionDate = DateUtils.addDays(Date(), -1)
+        ),
+        ListingSummary(
+            id = 1117,
+            listingNumber = 243003,
+            status = ListingStatus.ACTIVE,
+            listingType = ListingType.SALE,
+            propertyType = PropertyType.LAND,
+            lotArea = 1200,
+            address = Address(
+                cityId = RefDataFixtures.cities[0].id,
+                country = RefDataFixtures.cities[0].country,
+                stateId = RefDataFixtures.cities[0].parentId,
+                neighborhoodId = RefDataFixtures.neighborhoods[1].id,
+                street = "1111 Nicolet",
+                postalCode = null,
+            ),
+
+            price = Money(1000.0, "CAD"),
+            buyerAgentCommission = 1.0,
+
+            sellerAgentUserId = UserFixtures.users[1].id,
+            heroImageId = FileFixtures.images[0].id,
+
+            buyerAgentUserId = UserFixtures.USER_ID,
+            transactionPrice = Money(195000.0, "CAD"),
+            transactionDate = DateUtils.addDays(Date(), -1)
+        )
     )
 }

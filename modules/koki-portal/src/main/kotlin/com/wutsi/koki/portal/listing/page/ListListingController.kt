@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.listing.page
 
 import com.wutsi.blog.portal.common.model.MoneyModel
+import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.PropertyType
@@ -24,11 +25,20 @@ import org.springframework.web.bind.annotation.RequestMapping
 class ListListingController : AbstractListingController() {
     @GetMapping
     fun list(@ModelAttribute form: ListingFilterForm, model: Model): String {
-        val listings = loadListings()
         if (!form.isEmpty()) {
             model.addAttribute("form", form)
+        } else {
+            loadMyListings(model)
         }
-        return list(listings, model)
+
+        model.addAttribute(
+            "page",
+            createPageModel(
+                name = PageName.LISTING_LIST,
+                title = getMessage("page.listing.list.meta.title"),
+            )
+        )
+        return "listings/list"
     }
 
     @GetMapping("/filter")
@@ -47,6 +57,45 @@ class ListListingController : AbstractListingController() {
 
         val listings = loadListings()
         return list(listings, model)
+    }
+
+    private fun loadMyListings(model: Model) {
+        val userId = userHolder.get()?.id
+
+        // ForSales
+        val forSale = listingService.search(
+            listingType = ListingType.SALE,
+            statuses = listOf(ListingStatus.DRAFT, ListingStatus.PUBLISHING, ListingStatus.ACTIVE),
+            sellerAgentUserId = userId,
+            limit = 5,
+            sortBy = ListingSort.NEWEST,
+        )
+        model.addAttribute(
+            "forSale",
+            forSale.copy(items = forSale.items.sortedBy { item -> item.status.ordinal })
+        )
+
+        // My Rentals
+        val forRent = listingService.search(
+            listingType = ListingType.RENTAL,
+            statuses = listOf(ListingStatus.DRAFT, ListingStatus.PUBLISHING, ListingStatus.ACTIVE),
+            sellerAgentUserId = userId,
+            limit = 5,
+            sortBy = ListingSort.MODIFIED_DATE,
+        )
+        model.addAttribute(
+            "forRent",
+            forRent.copy(items = forRent.items.sortedBy { item -> item.status.ordinal })
+        )
+
+        // Sold
+        val sold = listingService.search(
+            statuses = listOf(ListingStatus.SOLD, ListingStatus.RENTED),
+            agentUserId = userId,
+            limit = 5,
+            sortBy = ListingSort.TRANSACTION_DATE,
+        )
+        model.addAttribute("sold", sold)
     }
 
     private fun list(listings: List<ListingModel>, model: Model): String {

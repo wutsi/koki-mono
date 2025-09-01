@@ -6,8 +6,11 @@ import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.listing.dto.CloseListingRequest
 import com.wutsi.koki.listing.dto.CreateListingRequest
+import com.wutsi.koki.listing.dto.FurnitureType
+import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.UpdateListingAddressRequest
 import com.wutsi.koki.listing.dto.UpdateListingAmenitiesRequest
 import com.wutsi.koki.listing.dto.UpdateListingGeoLocationRequest
@@ -28,6 +31,7 @@ import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.service.ConfigurationService
+import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import jakarta.validation.ValidationException
 import org.slf4j.LoggerFactory
@@ -44,6 +48,7 @@ class ListingService(
     private val locationService: LocationService,
     private val configurationService: ConfigurationService,
     private val publisherValidator: ListingPublisherValidator,
+    private val em: EntityManager,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ListingService::class.java)
@@ -56,6 +61,326 @@ class ListingService(
             throw NotFoundException(Error(ErrorCode.LISTING_NOT_FOUND))
         }
         return room
+    }
+
+    fun search(
+        tenantId: Long,
+        ids: List<Long> = emptyList(),
+        listingNumber: Long? = null,
+        locationIds: List<Long> = emptyList(),
+        listingType: ListingType? = null,
+        propertyTypes: List<PropertyType> = emptyList(),
+        furnitureTypes: List<FurnitureType> = emptyList(),
+        statuses: List<ListingStatus> = emptyList(),
+        bedrooms: String? = null,
+        bathrooms: String? = null,
+        minPrice: Double? = null,
+        maxPrice: Double? = null,
+        minLotArea: Int? = null,
+        maxLotArea: Int? = null,
+        minPropertyArea: Int? = null,
+        maxPropertyArea: Int? = null,
+        sellerAgentUserId: Long? = null,
+        buyerAgentUserId: Long? = null,
+        agentUserId: Long? = null,
+        sortBy: ListingSort? = null,
+        limit: Int = 20,
+        offset: Int = 0,
+    ): List<ListingEntity> {
+        val jql = StringBuilder("SELECT L FROM ListingEntity L WHERE L.tenantId = :tenantId")
+
+        // WHERE
+        if (ids.isNotEmpty()) {
+            jql.append(" AND L.id IN :ids")
+        }
+        if (listingNumber != null) {
+            jql.append(" AND L.listingNumber = :listingNumber")
+        }
+        if (locationIds.isNotEmpty()) {
+            jql.append(" AND (L.cityId IN :locationIds OR L.neighbourhoodId IN :locationIds)")
+        }
+        if (listingType != null) {
+            jql.append(" AND L.listingType = :listingType")
+        }
+        if (propertyTypes.isNotEmpty()) {
+            jql.append(" AND L.propertyType IN :propertyTypes")
+        }
+        if (furnitureTypes.isNotEmpty()) {
+            jql.append(" AND L.furnitureType IN :furnitureTypes")
+        }
+        if (statuses.isNotEmpty()) {
+            jql.append(" AND L.status IN :statuses")
+        }
+        if (bedrooms != null) {
+            if (bedrooms.endsWith("+")) {
+                jql.append(" AND L.bedrooms >= :bedrooms")
+            } else {
+                jql.append(" AND L.bedrooms = :bedrooms")
+            }
+        }
+        if (bathrooms != null) {
+            if (bathrooms.endsWith("+")) {
+                jql.append(" AND L.bathrooms >= :bathrooms")
+            } else {
+                jql.append(" AND L.bathrooms = :bathrooms")
+            }
+        }
+        if (minPrice != null) {
+            jql.append(" AND L.price >= :minPrice")
+        }
+        if (maxPrice != null) {
+            jql.append(" AND L.price <= :maxPrice")
+        }
+        if (minLotArea != null) {
+            jql.append(" AND L.lotArea >= :minLotArea")
+        }
+        if (maxLotArea != null) {
+            jql.append(" AND L.lotArea <= :maxLotArea")
+        }
+        if (minPropertyArea != null) {
+            jql.append(" AND L.propertyArea >= :minPropertyArea")
+        }
+        if (maxPropertyArea != null) {
+            jql.append(" AND L.propertyArea <= :maxPropertyArea")
+        }
+        if (sellerAgentUserId != null) {
+            jql.append(" AND L.sellerAgentUserId = :sellerAgentUserId")
+        }
+        if (buyerAgentUserId != null) {
+            jql.append(" AND L.buyerAgentUserId = :buyerAgentUserId")
+        }
+        if (agentUserId != null) {
+            jql.append(" AND (L.sellerAgentUserId = :agentUserId OR L.buyerAgentUserId = :agentUserId)")
+        }
+
+        // ORDER BY
+        when (sortBy) {
+            ListingSort.NEWEST -> "ORDER BY L.publishedAt DESC, L.createdAt DESC"
+            ListingSort.OLDEST -> "ORDER BY L.publishedAt ASC, L.createdAt ASC"
+            ListingSort.PRICE_HIGH_LOW -> "ORDER BY L.price DESC"
+            ListingSort.PRICE_LOW_HIGH -> "ORDER BY L.price ASC"
+            ListingSort.TRANSACTION_DATE -> "ORDER BY L.transactionDate DESC"
+            ListingSort.MODIFIED_DATE -> "ORDER BY L.modifiedAt DESC"
+            else -> "ORDER BY L.price ASC"
+        }
+
+        // PARAMETERS
+        val query = em.createQuery(jql.toString(), ListingEntity::class.java)
+        query.setParameter("tenantId", tenantId)
+        if (ids.isNotEmpty()) {
+            query.setParameter("ids", ids)
+        }
+        if (listingNumber != null) {
+            query.setParameter("listingNumber", listingNumber)
+        }
+        if (locationIds.isNotEmpty()) {
+            query.setParameter("locationIds", locationIds)
+        }
+        if (listingType != null) {
+            query.setParameter("listingType", listingType)
+        }
+        if (propertyTypes.isNotEmpty()) {
+            query.setParameter("propertyTypes", propertyTypes)
+        }
+        if (furnitureTypes.isNotEmpty()) {
+            query.setParameter("furnitureTypes", furnitureTypes)
+        }
+        if (statuses.isNotEmpty()) {
+            query.setParameter("statuses", statuses)
+        }
+        if (bedrooms != null) {
+            query.setParameter("bedrooms", roomValue(bedrooms))
+        }
+        if (bathrooms != null) {
+            query.setParameter("bathrooms", roomValue(bathrooms))
+        }
+        if (minPrice != null) {
+            query.setParameter("minPrice", minPrice)
+        }
+        if (maxPrice != null) {
+            query.setParameter("maxPrice", maxPrice)
+        }
+        if (minLotArea != null) {
+            query.setParameter("minLotArea", minLotArea)
+        }
+        if (maxLotArea != null) {
+            query.setParameter("maxLotArea", maxLotArea)
+        }
+        if (minPropertyArea != null) {
+            query.setParameter("minPropertyArea", minPropertyArea)
+        }
+        if (maxPropertyArea != null) {
+            query.setParameter("maxPropertyArea", maxPropertyArea)
+        }
+        if (sellerAgentUserId != null) {
+            query.setParameter("sellerAgentUserId", sellerAgentUserId)
+        }
+        if (buyerAgentUserId != null) {
+            query.setParameter("buyerAgentUserId", buyerAgentUserId)
+        }
+        if (agentUserId != null) {
+            query.setParameter("agentUserId", agentUserId)
+        }
+
+        query.firstResult = offset
+        query.maxResults = limit
+        return query.resultList
+    }
+
+    fun count(
+        tenantId: Long,
+        ids: List<Long> = emptyList(),
+        listingNumber: Long? = null,
+        locationIds: List<Long> = emptyList(),
+        listingType: ListingType? = null,
+        propertyTypes: List<PropertyType> = emptyList(),
+        furnitureTypes: List<FurnitureType> = emptyList(),
+        statuses: List<ListingStatus> = emptyList(),
+        bedrooms: String? = null,
+        bathrooms: String? = null,
+        minPrice: Double? = null,
+        maxPrice: Double? = null,
+        minLotArea: Int? = null,
+        maxLotArea: Int? = null,
+        minPropertyArea: Int? = null,
+        maxPropertyArea: Int? = null,
+        sellerAgentUserId: Long? = null,
+        buyerAgentUserId: Long? = null,
+        agentUserId: Long? = null,
+    ): Long {
+        val jql = StringBuilder("SELECT COUNT(*) FROM ListingEntity L WHERE L.tenantId = :tenantId")
+
+        // WHERE
+        if (ids.isNotEmpty()) {
+            jql.append(" AND L.id IN :ids")
+        }
+        if (listingNumber != null) {
+            jql.append(" AND L.listingNumber = :listingNumber")
+        }
+        if (locationIds.isNotEmpty()) {
+            jql.append(" AND (L.cityId IN :locationIds OR L.neighbourhoodId IN :locationIds)")
+        }
+        if (listingType != null) {
+            jql.append(" AND L.listingType = :listingType")
+        }
+        if (propertyTypes.isNotEmpty()) {
+            jql.append(" AND L.propertyType IN :propertyTypes")
+        }
+        if (furnitureTypes.isNotEmpty()) {
+            jql.append(" AND L.furnitureType IN :furnitureTypes")
+        }
+        if (statuses.isNotEmpty()) {
+            jql.append(" AND L.status IN :statuses")
+        }
+        if (bedrooms != null) {
+            if (bedrooms.endsWith("+")) {
+                jql.append(" AND L.bedrooms >= :bedrooms")
+            } else {
+                jql.append(" AND L.bedrooms = :bedrooms")
+            }
+        }
+        if (bathrooms != null) {
+            if (bathrooms.endsWith("+")) {
+                jql.append(" AND L.bathrooms >= :bathrooms")
+            } else {
+                jql.append(" AND L.bathrooms = :bathrooms")
+            }
+        }
+        if (minPrice != null) {
+            jql.append(" AND L.price >= :minPrice")
+        }
+        if (maxPrice != null) {
+            jql.append(" AND L.price <= :maxPrice")
+        }
+        if (minLotArea != null) {
+            jql.append(" AND L.lotArea >= :minLotArea")
+        }
+        if (maxLotArea != null) {
+            jql.append(" AND L.lotArea <= :maxLotArea")
+        }
+        if (minPropertyArea != null) {
+            jql.append(" AND L.propertyArea >= :minPropertyArea")
+        }
+        if (maxPropertyArea != null) {
+            jql.append(" AND L.propertyArea <= :maxPropertyArea")
+        }
+        if (sellerAgentUserId != null) {
+            jql.append(" AND L.sellerAgentUserId = :sellerAgentUserId")
+        }
+        if (buyerAgentUserId != null) {
+            jql.append(" AND L.buyerAgentUserId = :buyerAgentUserId")
+        }
+        if (agentUserId != null) {
+            jql.append(" AND (L.sellerAgentUserId = :agentUserId OR L.buyerAgentUserId = :agentUserId)")
+        }
+
+        // PARAMETERS
+        val query = em.createQuery(jql.toString())
+        query.setParameter("tenantId", tenantId)
+        if (ids.isNotEmpty()) {
+            query.setParameter("ids", ids)
+        }
+        if (listingNumber != null) {
+            query.setParameter("listingNumber", listingNumber)
+        }
+        if (locationIds.isNotEmpty()) {
+            query.setParameter("locationIds", locationIds)
+        }
+        if (listingType != null) {
+            query.setParameter("listingType", listingType)
+        }
+        if (propertyTypes.isNotEmpty()) {
+            query.setParameter("propertyTypes", propertyTypes)
+        }
+        if (furnitureTypes.isNotEmpty()) {
+            query.setParameter("furnitureTypes", furnitureTypes)
+        }
+        if (statuses.isNotEmpty()) {
+            query.setParameter("statuses", statuses)
+        }
+        if (bedrooms != null) {
+            query.setParameter("bedrooms", roomValue(bedrooms))
+        }
+        if (bathrooms != null) {
+            query.setParameter("bathrooms", roomValue(bathrooms))
+        }
+        if (minPrice != null) {
+            query.setParameter("minPrice", minPrice)
+        }
+        if (maxPrice != null) {
+            query.setParameter("maxPrice", maxPrice)
+        }
+        if (minLotArea != null) {
+            query.setParameter("minLotArea", minLotArea)
+        }
+        if (maxLotArea != null) {
+            query.setParameter("maxLotArea", maxLotArea)
+        }
+        if (minPropertyArea != null) {
+            query.setParameter("minPropertyArea", minPropertyArea)
+        }
+        if (maxPropertyArea != null) {
+            query.setParameter("maxPropertyArea", maxPropertyArea)
+        }
+        if (sellerAgentUserId != null) {
+            query.setParameter("sellerAgentUserId", sellerAgentUserId)
+        }
+        if (buyerAgentUserId != null) {
+            query.setParameter("buyerAgentUserId", buyerAgentUserId)
+        }
+        if (agentUserId != null) {
+            query.setParameter("agentUserId", agentUserId)
+        }
+
+        return query.singleResult as Long
+    }
+
+    private fun roomValue(str: String): Int {
+        return if (str.endsWith("+")) {
+            str.substring(0, str.length - 1).toInt()
+        } else {
+            str.toInt()
+        }
     }
 
     @Transactional

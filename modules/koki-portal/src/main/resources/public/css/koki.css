@@ -173,6 +173,10 @@ body {
     margin-bottom: 1em;
 }
 
+.margin-bottom-2x {
+    margin-bottom: 2em;
+}
+
 .margin-bottom-small {
     margin-bottom: 0.5em;
 }
