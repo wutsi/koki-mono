@@ -89,6 +89,10 @@ body {
     padding: 0.5em;
 }
 
+.padding-x-small {
+    padding: 0.25em;
+}
+
 .padding-top {
     padding-top: 1em;
 }
@@ -724,7 +728,7 @@ table tr.entity td a {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1em;
+    padding: 0.5em;
     border-radius: 50%;
     border: 1px solid lightgray;
 }

@@ -13,14 +13,14 @@ class LocationSelectorController(private val service: LocationService) {
         @RequestParam(required = false, name = "q") keyword: String? = null,
         @RequestParam(required = false, name = "country") country: String? = null,
         @RequestParam(required = false, name = "parent-id") parentId: Long? = null,
-        @RequestParam(required = false) type: LocationType = LocationType.CITY,
+        @RequestParam(required = false, name = "type") types: List<LocationType> = emptyList(),
     ): List<Map<String, Any>> {
         // Find the location
         val locations = service.search(
             keyword = keyword,
             country = country,
             parentId = parentId,
-            type = type,
+            types = types,
             limit = 20,
         )
 

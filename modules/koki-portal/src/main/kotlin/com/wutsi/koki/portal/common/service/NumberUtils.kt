@@ -3,7 +3,7 @@ package com.wutsi.koki.portal.common.service
 import java.text.DecimalFormat
 import java.text.StringCharacterIterator
 
-object NumberUtil {
+object NumberUtils {
     fun shortText(value: Long, unit: String? = "", format: String = "#.#"): String {
         val fmt = DecimalFormat(format)
         var bytes = value
@@ -18,6 +18,6 @@ object NumberUtil {
             ci.next()
         }
 
-        return fmt.format(bytes / 1000.0) + " " + ci.current() + unit
+        return fmt.format(bytes / 1000.0) + ci.current() + unit
     }
 }

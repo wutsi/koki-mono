@@ -15,7 +15,7 @@ class LocationService(
         keyword: String? = null,
         ids: List<Long> = emptyList(),
         parentId: Long? = null,
-        type: LocationType? = null,
+        types: List<LocationType> = emptyList(),
         country: String? = null,
         limit: Int = 20,
         offset: Int = 0,
@@ -24,7 +24,7 @@ class LocationService(
             keyword = keyword,
             ids = ids,
             parentId = parentId,
-            type = type,
+            types = types,
             country = country,
             limit = limit,
             offset = offset

@@ -5,6 +5,7 @@ import com.wutsi.koki.listing.dto.Listing
 import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.portal.common.mapper.MoneyMapper
+import com.wutsi.koki.portal.common.service.Moment
 import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.listing.model.ListingModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
@@ -25,6 +26,7 @@ import java.util.Locale
 class ListingMapper(
     private val moneyMapper: MoneyMapper,
     private val messages: MessageSource,
+    private val moment: Moment,
 ) : TenantAwareMapper() {
     fun toListingModel(
         entity: Listing,
@@ -67,8 +69,8 @@ class ListingMapper(
             price = price,
             visitFees = entity.visitFees?.let { money -> moneyMapper.toMoneyModel(money) },
             sellerAgentCommission = entity.sellerAgentCommission,
-            buyerAgentCommission = entity.buyerAgentCommission,
             sellerAgentCommissionMoney = entity.sellerAgentCommission?.let { pct -> applyPercentage(price, pct) },
+            buyerAgentCommission = entity.buyerAgentCommission,
             buyerAgentCommissionMoney = entity.buyerAgentCommission?.let { pct -> applyPercentage(price, pct) },
 
             securityDeposit = entity.securityDeposit?.let { money -> moneyMapper.toMoneyModel(money) },
@@ -108,7 +110,9 @@ class ListingMapper(
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
             publishedAt = entity.publishedAt,
+            publishedAtMoment = entity.publishedAt?.let { date -> moment.format(date) },
             closedAt = entity.closedAt,
+            closedAtMoment = entity.closedAt?.let { date -> moment.format(date) },
         )
     }
 
@@ -135,6 +139,8 @@ class ListingMapper(
             furnitureType = entity.furnitureType,
             address = toAddress(entity.address, locations),
             price = price,
+            sellerAgentCommission = entity.sellerAgentCommission,
+            sellerAgentCommissionMoney = entity.sellerAgentCommission?.let { pct -> applyPercentage(price, pct) },
             buyerAgentUser = entity.buyerAgentUserId?.let { id -> users[id] },
             buyerAgentCommission = entity.buyerAgentCommission,
             buyerAgentCommissionMoney = entity.buyerAgentCommission?.let { pct -> applyPercentage(price, pct) },

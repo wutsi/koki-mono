@@ -78,7 +78,9 @@ data class ListingModel(
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
     var publishedAt: Date? = null,
+    var publishedAtMoment: String? = null,
     var closedAt: Date? = null,
+    var closedAtMoment: String? = null,
 ) {
     val descriptionHtml: String?
         get() = description?.let { str -> HtmlUtils.toHtml(str) }
@@ -121,6 +123,18 @@ data class ListingModel(
         return user != null &&
             statusSuccessfulTransaction &&
             user.id == buyerAgentUser?.id
+    }
+
+    fun computeAgentCommission(user: UserModel?): MoneyModel? {
+        return if (user == null) {
+            return null
+        } else {
+            if (user.id == sellerAgentUser?.id) {
+                sellerAgentCommissionMoney
+            } else {
+                buyerAgentCommissionMoney
+            }
+        }
     }
 
     fun amenitiesByCategoryId(categoryId: Long): List<AmenityModel> {

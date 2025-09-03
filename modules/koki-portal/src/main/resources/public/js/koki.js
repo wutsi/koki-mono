@@ -464,12 +464,7 @@ class ModalWidget {
                                 }
 
                                 // Set the title
-                                if (title && title.length > 0) {
-                                    document.querySelector("#koki-modal .modal-header").style.display = 'block';
-                                    document.getElementById("koki-modal-title").innerHTML = title;
-                                } else {
-                                    document.querySelector("#koki-modal .modal-header").style.display = 'none';
-                                }
+                                document.getElementById("koki-modal-title").innerHTML = title;
 
                                 // Show
                                 const modal = new bootstrap.Modal('#koki-modal');
@@ -555,7 +550,7 @@ class MapWidget {
                                 eval(onReady)(id, map);
                             }
                         },
-                        500);
+                        100);
                     count++
                 }
             });

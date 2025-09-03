@@ -1,106 +1,190 @@
-<form class="form" method="get" th:action="@{/listings}" th:object="${form}">
-    <div class="listing-search-filter-body">
-        <div>
-            <input class="form-control" th:field="*{listingNumber}" th:placeholder="#{page.listing.listing-number}"/>
-        </div>
+<form class="form" id="listing-filter-form" method="get" th:action="@{/listings}" th:object="${form}">
+    <input name="submitted" type="hidden" value="true"/>
 
-        <div class="margin-top">
-            <label th:text="#{page.listing.city_or_neighborhood}">CITY</label>
-            <div class="w-100">
-                <select th:field="*{locationId}"></select>
+    <div class="text-center section-item">
+        <div class="btn-group" role="group">
+            <div th:each="listingType : ${listingTypes}"
+                 th:if="${listingType.name() != 'UNKNOWN'}"
+                 th:remove="tag">
+                <input autocomplete="off" class="btn-check" name="listingType"
+                       th:field="*{listingType}"
+                       th:id="'chk-listing-type-' + ${listingType}"
+                       th:name="listingType"
+                       th:value="${listingType}"
+                       type="radio">
+                <label class="btn btn-outline-primary"
+                       th:for="'chk-listing-type-' + ${listingType}"
+                       th:id="'lbl-listing-type-' + ${listingType}"
+                       th:text="#{'listing-type.' + ${listingType}}"
+                >LISTING_TYPE</label>
             </div>
-        </div>
 
-        <div class="margin-top">
-            <label th:text="#{page.listing.listing-type}">LISTING_TYPE</label>
-            <div class="flex">
-                <div class="form-check margin-right"
-                     th:each="listingType : ${listingTypes}"
-                     th:if="${listingType.name() != 'UNKNOWN'}">
-                    <input class="form-check-input" th:field="*{listingType}"
-                           th:id="'chk-listing-type-' + ${listingType}"
-                           th:value="${listingType}"
-                           type="radio"/>
-                    <label class="form-check-label"
-                           th:for="'chk-listing-type-' + ${listingType}"
-                           th:text="#{'listing-type.' + ${listingType}}">LISTING_TYPE</label>
-                </div>
-            </div>
-        </div>
-
-        <div class="flex flex-wrap margin-top">
-            <label th:text="#{page.listing.property-type}" type="title">ROOMS</label>
-            <select class="form-select margin-right" th:field="*{propertyType}">
-                <option th:text="#{page.listing.search.filter.any}" value=""></option>
-                <option th:each="propertyType: ${propertyTypes}"
-                        th:if="${propertyType.name() != 'UNKNOWN'}"
-                        th:text="#{'property-type.' + ${propertyType}}"
-                        th:value="${propertyType}">
-                    1
-                </option>
-            </select>
-        </div>
-
-        <div class="flex flex-wrap margin-top">
-            <div class="col-6 col-md-4 padding-bottom-small padding-right-small">
-                <label th:text="#{page.listing.bedrooms}">ROOMS</label>
-                <select class="form-select margin-right" th:field="*{bedrooms}">
-                    <option th:text="#{page.listing.search.filter.any}" value=""></option>
-                    <option th:each="room: ${rooms}" th:text="${room}" th:value="${room}">1</option>
-                </select>
-            </div>
-            <div class="col-6 col-md-4 padding-bottom-small padding-right-small">
-                <label th:text="#{page.listing.bathrooms}">BATH</label>
-                <select class="form-select margin-right" th:field="*{bathrooms}">
-                    <option th:text="#{page.listing.search.filter.any}" value=""></option>
-                    <option th:each="room: ${rooms}" th:text="${room}" th:value="${room}">1</option>
-                </select>
-            </div>
-            <div class="col-12 col-md-4 padding-bottom-small padding-right-small">
-                <label th:text="#{page.listing.price}">PRICE</label>
-                <div class="flex flex-space-between">
-                    <input class="w-49 form-control" step="0"
-                           th:field="*{minPrice}"
-                           th:placeholder="#{page.listing.search.filter.min}"
-                           type="number"/>
-                    <input class="w-49 form-control" step="0"
-                           th:field="*{maxPrice}"
-                           th:placeholder="#{page.listing.search.filter.max}"
-                           type="number"/>
-                </div>
-            </div>
-            <div class="col-12 col-md-4 padding-bottom-small padding-right-small">
-                <label th:text="#{page.listing.lot-area}">LOT_AREA</label>
-                <div class="flex flex-space-between">
-                    <input class="w-49 form-control" step="0"
-                           th:field="*{minLotArea}"
-                           th:placeholder="#{page.listing.search.filter.min}"
-                           type="number"/>
-                    <input class="w-49 form-control" step="0"
-                           th:field="*{maxLotArea}"
-                           th:placeholder="#{page.listing.search.filter.max}"
-                           type="number"/>
-                </div>
-            </div>
-            <div class="col-12 col-md-4 padding-bottom-small padding-right-small">
-                <label th:text="#{page.listing.property-area}">PROPERTY_AREA</label>
-                <div class="flex flex-space-between">
-                    <input class="w-49 form-control" step="0"
-                           th:field="*{minPropertyArea}"
-                           th:placeholder="#{page.listing.search.filter.min}"
-                           type="number"/>
-                    <input class="w-49 form-control" step="0"
-                           th:field="*{maxPropertyArea}"
-                           th:placeholder="#{page.listing.search.filter.max}"
-                           type="number"/>
-                </div>
-            </div>
-        </div>
-
-        <div class="flex flex-space-between margin-top-2x">
-            <a class="btn btn-light w-49" href="#" id="btn-cancel" th:text="#{button.cancel}"></a>
-            <button class="btn btn-primary w-49" th:text="#{button.search}" type="submit"></button>
+            <input autocomplete="off" class="btn-check" id="chk-listing-type-SOLD"
+                   name="listingType"
+                   th:field="*{listingType}"
+                   type="radio"
+                   value="SOLD">
+            <label class="btn btn-outline-primary"
+                   for="chk-listing-type-SOLD"
+                   th:text="#{listing-status.SOLD}"
+            >SOLD</label>
         </div>
     </div>
 
+    <div class="section-item text-center">
+        <div data-toggle="buttons">
+            <div th:each="propertyType : ${propertyTypes}"
+                 th:if="${propertyType.name() != 'UNKNOWN'}"
+                 th:remove="tag">
+                <input autocomplete="off" class="btn-check" name="propertyType"
+                       th:checked="${form.containsPropertyType(propertyType)}"
+                       th:id="'chk-property-type-' + ${propertyType}"
+                       th:value="${propertyType}"
+                       type="checkbox">
+                <label class="btn btn-outline-primary margin-bottom-small"
+                       th:for="'chk-property-type-' + ${propertyType}"
+                       th:id="'lbl-property-type-' + ${propertyType}"
+                       th:text="#{'property-type.' + ${propertyType}}"
+                >Checkbox 1</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-item">
+        <label class="title" th:text="#{page.listing.city_or_neighborhood}">CITY</label>
+        <select id="locationIds" multiple name="locationIds">
+            <option selected="selected"
+                    th:each="location : ${locations}"
+                    th:text="${location.name}"
+                    th:value="${location.id}"
+            >TITLE
+            </option>
+        </select>
+    </div>
+
+    <div class="section-item flex flex-wrap">
+        <div class="col-12 col-lg-6 padding-bottom-small">
+            <label class="title" th:text="#{page.listing.bedrooms}">BED</label>
+            <div class="btn-group margin-top-small" role="group">
+                <input autocomplete="off" class="btn-check"
+                       id="chk-bedrooms-ANY"
+                       th:checked="!*{bedrooms}"
+                       th:field="*{bedrooms}"
+                       type="radio"
+                       value="">
+                <label class="btn btn-outline-primary" for="chk-bedrooms-ANY"
+                       th:text="#{page.listing.search.filter.any}"
+                >ANY</label>
+
+                <div th:each="room: ${rooms}" th:remove="tag">
+                    <input autocomplete="off" class="btn-check"
+                           th:field="*{bedrooms}"
+                           th:id="'chk-bedrooms-' + ${room}"
+                           th:value="${room}"
+                           type="radio">
+                    <label class="btn btn-outline-primary"
+                           th:for="'chk-bedrooms-' + ${room}" th:text="${room}"
+                           th:id="'lbl-bedrooms-' + ${room}"
+                    >
+                        ROOM
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <label class="title" th:text="#{page.listing.bathrooms}">BATH</label>
+            <div class="btn-group margin-top-small" role="group">
+                <input autocomplete="off" class="btn-check"
+                       id="chk-bathrooms-ANY"
+                       th:checked="!*{bathrooms}"
+                       th:field="*{bathrooms}"
+                       type="radio"
+                       value="">
+                <label class="btn btn-outline-primary" for="chk-bathrooms-ANY"
+                       th:text="#{page.listing.search.filter.any}"
+                >ANY</label>
+
+                <div th:each="room: ${rooms}" th:remove="tag">
+                    <input autocomplete="off" class="btn-check"
+                           th:field="*{bathrooms}"
+                           th:id="'chk-bathrooms-' + ${room}"
+                           th:value="${room}"
+                           type="radio">
+                    <label class="btn btn-outline-primary"
+                           th:for="'chk-bathrooms-' + ${room}" th:text="${room}"
+                           th:id="'lbl-bathrooms-' + ${room}">
+                        ROOM
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-item">
+        <label class="title" th:text="#{page.listing.price}">PRICE</label>
+        <div class="flex flex-wrap">
+            <div class="col-12 col-lg-6 padding-bottom-small">
+                <div class="input-group">
+                    <input class="form-control" step="0"
+                           th:field="*{minPrice}"
+                           th:placeholder="#{page.listing.search.filter.min}"
+                           type="number"/>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span th:text="${tenant.currencySymbol}">XXX</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="input-group">
+                    <input class="form-control" step="0"
+                           th:field="*{maxPrice}"
+                           th:placeholder="#{page.listing.search.filter.max}"
+                           type="number"/>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span th:text="${tenant.currencySymbol}">XXX</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-item flex flex-wrap">
+        <div class="col-12 col-lg-6 padding-bottom-small">
+            <label class="title" th:text="#{page.listing.lot-area}">LOT_AREA</label>
+            <div class="flex flex-wrap">
+                <input class="form-control margin-right margin-bottom-small" step="0"
+                       th:field="*{minLotArea}"
+                       th:placeholder="#{page.listing.search.filter.min}"
+                       type="number"/>
+                <input class="form-control  margin-bottom-small" step="0"
+                       th:field="*{maxLotArea}"
+                       th:placeholder="#{page.listing.search.filter.max}"
+                       type="number"/>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <label class="title" th:text="#{page.listing.property-area}">PROPERTY_AREA</label>
+            <div class="flex flex-wrap">
+                <input class=" form-control margin-right margin-bottom-small" step="0"
+                       th:field="*{minPropertyArea}"
+                       th:placeholder="#{page.listing.search.filter.min}"
+                       type="number"/>
+                <input class=" form-control margin-bottom-small" step="0"
+                       th:field="*{maxPropertyArea}"
+                       th:placeholder="#{page.listing.search.filter.max}"
+                       type="number"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-item text-center">
+        <button class="btn btn-primary w-100-mobile" th:text="#{button.search}" type="submit"></button>
+    </div>
 </form>
