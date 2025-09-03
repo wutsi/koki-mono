@@ -104,10 +104,11 @@ class CloseListingEndpointTest : AuthorizationAwareEndpointTest() {
             buyerEmail = "ray.sponsible@gmail.com",
             buyerPhone = "+15147580000",
             transactionDate = df.parse("2020-03-05"),
-            transactionPrice = 150000,
+            transactionPrice = 100000,
             buyerAgentUserId = 111L,
             comment = "Yeeesss!!"
         )
+
         val response = rest.postForEntity("/v1/listings/$id/close", request, Any::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
@@ -115,11 +116,23 @@ class CloseListingEndpointTest : AuthorizationAwareEndpointTest() {
         val listing = dao.findById(id).get()
         assertNotNull(listing.closedAt)
         assertEquals(request.status, listing.status)
-        assertEquals(request.buyerPhone, listing.buyerPhone)
-        assertEquals(request.buyerEmail, listing.buyerEmail)
-        assertEquals("2020-03-05", df.format(listing.transactionDate))
-        assertEquals(request.transactionPrice, listing.transactionPrice)
-        assertEquals(request.buyerAgentUserId, listing.buyerAgentUserId)
+        if (status == ListingStatus.RENTED || status == ListingStatus.SOLD) {
+            assertEquals(request.buyerPhone, listing.buyerPhone)
+            assertEquals(request.buyerEmail, listing.buyerEmail)
+            assertEquals("2020-03-05", df.format(listing.transactionDate))
+            assertEquals(request.transactionPrice, listing.transactionPrice)
+            assertEquals(request.buyerAgentUserId, listing.buyerAgentUserId)
+            assertEquals(2000, listing.finalBuyerAgentCommissionAmount)
+            assertEquals(5000, listing.finalSellerAgentCommissionAmount)
+        } else {
+            assertEquals(null, listing.buyerPhone)
+            assertEquals(null, listing.buyerEmail)
+            assertEquals(null, listing.transactionDate)
+            assertEquals(null, listing.transactionPrice)
+            assertEquals(null, listing.buyerAgentUserId)
+            assertEquals(null, listing.finalBuyerAgentCommissionAmount)
+            assertEquals(null, listing.finalSellerAgentCommissionAmount)
+        }
 
         val statuses = statusDao.findByListing(listing)
         assertEquals(1, statuses.size)

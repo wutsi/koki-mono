@@ -95,70 +95,7 @@ class ListingPublishedMailetTest {
     }
 
     @Test
-    fun rental() {
-        doReturn(listing.copy(listingType = ListingType.RENTAL)).whenever(listingService).get(any(), any())
-
-        val event = createEvent()
-        val result = mailet.service(event)
-
-        assertEquals(true, result)
-
-        val recipientArg = argumentCaptor<Party>()
-        val bodyArg = argumentCaptor<String>()
-        verify(sender).send(
-            recipientArg.capture(),
-            eq(ListingPublishedMailet.SUBJECT),
-            bodyArg.capture(),
-            eq(emptyList()),
-            eq(event.tenantId)
-        )
-
-        println(bodyArg.firstValue)
-        assertEquals(listing.sellerName, recipientArg.firstValue.displayName)
-        assertEquals(listing.sellerEmail, recipientArg.firstValue.email)
-
-        assertEquals(
-            """
-                Bonjour Ray Sponsible,<br/><br/>
-
-                Excellente nouvelle! Votre propriété située au <b>340 Pascal, Bastos, Yaounde</b> a été publiée avec succès!<br/>
-                Elle est maintenant visible par des tous les agents qui utilisent notre plateforme.<br/><br>
-
-                Nous vous aviserons de toute demande de visite ou de toute mise à jour concernant votre propriété.<br/><br>
-
-                Si vous avez des questions ou si vous avez besoin de modifier votre annonce,
-                n'hésitez pas à contacter votre agent, JOHN SMITH, par courriel ou par téléphone.<br/><br/>
-
-                Nous sommes ravis de vous accompagner dans la location de votre propriété!<br/><br/>
-
-                Cordialement,
-
-                <hr/>
-                <table border="0" cellpadding="10">
-                    <tr>
-                        <td valign="top" width="1">
-                            <img height="64" src="https://picsum.photos/200/200" width="64"/>
-                        </td>
-
-                        <td valign="top">
-                            <b>JOHN SMITH</b><br/>
-
-                            <div>REIMAX LAVAL</div>
-
-                            <div><a href="tel: +15147580011">+15147580011</a></div>
-
-                            <div><a href="email: john.smith@gmail.com">john.smith@gmail.com</a></div>
-                        </td>
-                    </tr>
-                </table>
-
-            """.trimIndent(),
-            bodyArg.firstValue,
-        )
-    }
-
-    @Test
-    fun sale() {
+    fun published() {
         doReturn(listing.copy(listingType = ListingType.SALE)).whenever(listingService).get(any(), any())
 
         val event = createEvent()
@@ -166,54 +103,26 @@ class ListingPublishedMailetTest {
 
         assertEquals(true, result)
 
-        val recipientArg = argumentCaptor<Party>()
         val bodyArg = argumentCaptor<String>()
         verify(sender).send(
-            recipientArg.capture(),
+            eq(agent),
             eq(ListingPublishedMailet.SUBJECT),
             bodyArg.capture(),
             eq(emptyList()),
             eq(event.tenantId)
         )
 
-        println(bodyArg.firstValue)
-        assertEquals(listing.sellerName, recipientArg.firstValue.displayName)
-        assertEquals(listing.sellerEmail, recipientArg.firstValue.email)
-
         assertEquals(
             """
-                Bonjour Ray Sponsible,<br/><br/>
+                Bonjour JOHN SMITH,<br/><br/>
 
-                Excellente nouvelle! Votre propriété située au <b>340 Pascal, Bastos, Yaounde</b> a été publiée avec succès!<br/>
-                Elle est maintenant visible par des tous les agents qui utilisent notre plateforme.<br/><br>
+                Excellente nouvelle! Votre listing <a href="/listings/111">#-1</a> situé au
+                &nbsp;<b>340 Pascal, Bastos, Yaounde</b> a été publiée avec succès!<br/>
+                Il est maintenant visible par des tous les agents qui utilisent notre plateforme.<br/><br>
 
-                Nous vous aviserons de toute demande de visite ou de toute mise à jour concernant votre propriété.<br/><br>
-
-                Si vous avez des questions ou si vous avez besoin de modifier votre annonce,
-                n'hésitez pas à contacter votre agent, JOHN SMITH, par courriel ou par téléphone.<br/><br/>
-
-                Nous sommes ravis de vous accompagner dans la vente de votre propriété!<br/><br/>
+                Nous vous aviserons de toute demande de visite ou autre requêtes concernant votre listing.<br/><br>
 
                 Cordialement,
-
-                <hr/>
-                <table border="0" cellpadding="10">
-                    <tr>
-                        <td valign="top" width="1">
-                            <img height="64" src="https://picsum.photos/200/200" width="64"/>
-                        </td>
-
-                        <td valign="top">
-                            <b>JOHN SMITH</b><br/>
-
-                            <div>REIMAX LAVAL</div>
-
-                            <div><a href="tel: +15147580011">+15147580011</a></div>
-
-                            <div><a href="email: john.smith@gmail.com">john.smith@gmail.com</a></div>
-                        </td>
-                    </tr>
-                </table>
 
             """.trimIndent(),
             bodyArg.firstValue,
@@ -232,17 +141,6 @@ class ListingPublishedMailetTest {
     @Test
     fun `listing not active`() {
         doReturn(listing.copy(status = ListingStatus.PUBLISHING)).whenever(listingService).get(any(), any())
-
-        val event = createEvent()
-        val result = mailet.service(event)
-
-        assertEquals(false, result)
-        verify(sender, never()).send(any<Party>(), any(), any(), any(), any())
-    }
-
-    @Test
-    fun `seller has no email`() {
-        doReturn(listing.copy(sellerEmail = null)).whenever(listingService).get(any(), any())
 
         val event = createEvent()
         val result = mailet.service(event)

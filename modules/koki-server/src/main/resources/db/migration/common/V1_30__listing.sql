@@ -50,6 +50,8 @@ CREATE TABLE T_LISTING(
   currency                  VARCHAR(3),
   seller_agent_commission   DECIMAL(5, 2),
   buyer_agent_commission    DECIMAL(5, 2),
+  seller_agent_commission_amount   BIGINT,
+  buyer_agent_commission_amount    BIGINT,
   security_deposit          BIGINT,
   advance_rent              INT,
   lease_term                INT,
@@ -67,6 +69,8 @@ CREATE TABLE T_LISTING(
   buyer_phone               VARCHAR(30),
   transaction_date          DATE,
   transaction_price         BIGINT,
+  actual_seller_agent_commission_amount   BIGINT,
+  actual_buyer_agent_commission_amount    BIGINT,
 
   agent_remarks             TEXT,
   public_remarks            TEXT,

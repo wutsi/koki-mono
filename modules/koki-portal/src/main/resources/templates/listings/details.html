@@ -209,21 +209,20 @@
             </div>
         </div>
         <div class="col-6 col-md-4" id="seller-agent-commission"
-             th:if="${listing.sellerAgentCommission} AND ${listing.canManage(user)}">
+             th:if="${listing.sellerAgentCommission} AND ${listing.canManage(user)} AND !${listing.statusSuccessfulTransaction}">
             <b class="text-small" th:text="#{page.listing.seller-agent-commission}">KEY</b>
             <div>
-                <span th:text="${listing.sellerAgentCommission}">0.0</span>
-                <span>%</span>
+                <span th:text="${listing.sellerAgentCommissionMoney}">$$</span>
+                <span th:text="'(' + ${listing.sellerAgentCommission} + '%)'">0.0</span>
             </div>
-            <div class="text-small" th:text="${listing.sellerAgentCommissionMoney}">$$</div>
         </div>
-        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.buyerAgentCommission}">
+        <div class="col-6 col-md-4 margin-bottom-small" id="buyer-agent-commission"
+             th:if="${listing.buyerAgentCommission} AND !${listing.statusSuccessfulTransaction}">
             <b class="text-small" th:text="#{page.listing.buyer-agent-commission}">KEY</b>
             <div>
-                <span th:text="${listing.buyerAgentCommission}">0.0</span>
-                <span>%</span>
+                <span th:text="${listing.buyerAgentCommissionMoney}">$$</span>
+                <span th:text="'(' + ${listing.buyerAgentCommission} + '%)'">0.0</span>
             </div>
-            <div class="text-small" th:text="${listing.buyerAgentCommissionMoney}">$$</div>
         </div>
     </div>
     <hr/>
@@ -249,11 +248,8 @@
         <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.advanceRent}">
             <b class="text-small" th:text="#{page.listing.advance-rent}">KEY</b>
             <div>
-                <span th:text="${listing.advanceRent}">00</span>
-                <span th:text="#{page.listing.unit-months}">00</span>
-            </div>
-            <div class="text-small" th:if="${listing.advanceRentMoney}" th:text="${listing.advanceRentMoney}">
-                $$$
+                <span th:text="${listing.advanceRentMoney}">$$$</span>
+                <span th:text="'(' + #{page.listing.unit-months} + ')'">00</span>
             </div>
         </div>
         <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.securityDeposit}">
@@ -292,7 +288,7 @@
 <div id="listing-sale-section" th:if="${listing.statusSuccessfulTransaction}">
     <h4 th:text="#{page.listing.show.sales-information}">SALES</h4>
 
-    <div class="margin-bottom-small buyer-contact-info" th:if="${listing.canManage(user)}">
+    <div class="margin-bottom-small" id="buyer-contact-info" th:if="${listing.canManage(user)}">
         <b class="text-small" th:if="${listing.listingTypeSale}" th:text="#{page.listing.buyer}">KEY</b>
         <b class="text-small" th:if="${listing.listingTypeRental}" th:text="#{page.listing.tenant}">KEY</b>
 
@@ -311,6 +307,23 @@
                 <span th:text="${listing.transactionPrice.displayText}">$$</span>
             </div>
         </div>
+        <div class="col-6 col-md-4" id="final-seller-agent-commission"
+             th:if="${listing.finalSellerAgentCommissionMoney} AND ${listing.canManage(user)}">
+            <b class="text-small" th:text="#{page.listing.seller-agent-commission}">KEY</b>
+            <div>
+                <span class="listing-price" th:text="${listing.finalSellerAgentCommissionMoney}">$$</span>
+                <span th:text="'(' + ${listing.sellerAgentCommission} + '%)'">0.0</span>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 margin-bottom-small" id="final-buyer-agent-commission"
+             th:if="${listing.finalBuyerAgentCommissionMoney}">
+            <b class="text-small" th:text="#{page.listing.buyer-agent-commission}">KEY</b>
+            <div>
+                <span class="listing-price" th:text="${listing.finalBuyerAgentCommissionMoney}">$$</span>
+                <span th:text="'(' + ${listing.buyerAgentCommission} + '%)'">0.0</span>
+            </div>
+        </div>
+
         <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.buyerAgentUser}">
             <b class="text-small" th:text="#{page.listing.agent}">KEY</b>
             <div class="flex">

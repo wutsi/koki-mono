@@ -77,6 +77,8 @@ data class ListingEntity(
     var currency: String? = null,
     var sellerAgentCommission: Double? = null,
     var buyerAgentCommission: Double? = null,
+    var sellerAgentCommissionAmount: Long? = null,
+    var buyerAgentCommissionAmount: Long? = null,
 
     var securityDeposit: Long? = null,
     var advanceRent: Int? = null,
@@ -104,6 +106,8 @@ data class ListingEntity(
     var transactionDate: Date? = null,
     var transactionPrice: Long? = null,
     @Column("buyer_agent_user_fk") var buyerAgentUserId: Long? = null,
+    var finalSellerAgentCommissionAmount: Long? = null,
+    var finalBuyerAgentCommissionAmount: Long? = null,
 
     var totalImages: Long? = null,
     var totalFiles: Long? = null,

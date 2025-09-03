@@ -69,9 +69,9 @@ class ListingMapper(
             price = price,
             visitFees = entity.visitFees?.let { money -> moneyMapper.toMoneyModel(money) },
             sellerAgentCommission = entity.sellerAgentCommission,
-            sellerAgentCommissionMoney = entity.sellerAgentCommission?.let { pct -> applyPercentage(price, pct) },
             buyerAgentCommission = entity.buyerAgentCommission,
-            buyerAgentCommissionMoney = entity.buyerAgentCommission?.let { pct -> applyPercentage(price, pct) },
+            sellerAgentCommissionMoney = entity.sellerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
+            buyerAgentCommissionMoney = entity.buyerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
 
             securityDeposit = entity.securityDeposit?.let { money -> moneyMapper.toMoneyModel(money) },
             advanceRent = entity.advanceRent,
@@ -96,6 +96,8 @@ class ListingMapper(
             transactionDate = entity.transactionDate,
             transactionDateText = entity.transactionDate?.let { date -> df.format(date) },
             transactionPrice = toPrice(entity.transactionPrice, entity.listingType),
+            finalSellerAgentCommissionMoney = entity.finalSellerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
+            finalBuyerAgentCommissionMoney = entity.finalBuyerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
 
             description = if (lang == "fr") {
                 entity.descriptionFr ?: entity.description
@@ -139,15 +141,17 @@ class ListingMapper(
             furnitureType = entity.furnitureType,
             address = toAddress(entity.address, locations),
             price = price,
-            sellerAgentCommission = entity.sellerAgentCommission,
-            sellerAgentCommissionMoney = entity.sellerAgentCommission?.let { pct -> applyPercentage(price, pct) },
             buyerAgentUser = entity.buyerAgentUserId?.let { id -> users[id] },
+            sellerAgentCommission = entity.sellerAgentCommission,
             buyerAgentCommission = entity.buyerAgentCommission,
-            buyerAgentCommissionMoney = entity.buyerAgentCommission?.let { pct -> applyPercentage(price, pct) },
+            sellerAgentCommissionMoney = entity.sellerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
+            buyerAgentCommissionMoney = entity.buyerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
             sellerAgentUser = entity.sellerAgentUserId?.let { id -> users[id] },
             transactionDate = entity.transactionDate,
             transactionDateText = entity.transactionDate?.let { date -> df.format(date) },
             transactionPrice = toPrice(entity.transactionPrice, entity.listingType),
+            finalSellerAgentCommissionMoney = entity.finalSellerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
+            finalBuyerAgentCommissionMoney = entity.finalBuyerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
         )
     }
 
@@ -188,17 +192,6 @@ class ListingMapper(
             )
         } else {
             return price
-        }
-    }
-
-    private fun applyPercentage(price: MoneyModel?, percent: Double): MoneyModel? {
-        return price?.let {
-            moneyMapper.toMoneyModel(
-                Money(
-                    amount = (price.amount.toDouble() * percent / 100.0).toDouble(),
-                    currency = price.currency
-                )
-            )
         }
     }
 

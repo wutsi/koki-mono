@@ -47,6 +47,8 @@ class PublishListingEndpointTest : AuthorizationAwareEndpointTest() {
         val id = 100L
         val listing = dao.findById(id).get()
         assertEquals(null, listing.publishedAt)
+        assertEquals(2000, listing.buyerAgentCommissionAmount)
+        assertEquals(5000, listing.sellerAgentCommissionAmount)
         assertEquals(ListingStatus.PUBLISHING, listing.status)
 
         val statuses = statusDao.findByListing(listing)

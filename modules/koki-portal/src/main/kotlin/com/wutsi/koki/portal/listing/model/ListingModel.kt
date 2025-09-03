@@ -66,6 +66,8 @@ data class ListingModel(
     var transactionDate: Date? = null,
     var transactionDateText: String? = null,
     var transactionPrice: MoneyModel? = null,
+    val finalSellerAgentCommissionMoney: MoneyModel? = null,
+    val finalBuyerAgentCommissionMoney: MoneyModel? = null,
     val description: String? = null,
     val totalImages: Long? = null,
     val totalFiles: Long? = null,

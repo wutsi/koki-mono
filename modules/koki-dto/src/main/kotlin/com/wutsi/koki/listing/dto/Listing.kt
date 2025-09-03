@@ -34,6 +34,8 @@ data class Listing(
     val visitFees: Money? = null,
     val sellerAgentCommission: Double? = null,
     val buyerAgentCommission: Double? = null,
+    val sellerAgentCommissionMoney: Money? = null,
+    val buyerAgentCommissionMoney: Money? = null,
     val securityDeposit: Money? = null,
     val advanceRent: Int? = null,
     val leaseTerm: Int? = null,
@@ -66,4 +68,6 @@ data class Listing(
     val modifiedAt: Date = Date(),
     val publishedAt: Date? = null,
     val closedAt: Date? = null,
+    val finalSellerAgentCommissionMoney: Money? = null,
+    val finalBuyerAgentCommissionMoney: Money? = null,
 )

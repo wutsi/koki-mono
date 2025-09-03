@@ -105,10 +105,13 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#listing-remarks-section")
         assertElementPresent("#listing-price-section")
         assertElementPresent("#listing-leasing-section")
-        assertElementPresent("#seller-agent-commission")
+        assertElementNotPresent("#seller-agent-commission")
+        assertElementNotPresent("#buyer-agent-commission")
         assertElementPresent("#listing-seller-section")
         assertElementPresent("#listing-sale-section")
-        assertElementPresent("#listing-sale-section .buyer-contact-info")
+        assertElementPresent("#buyer-contact-info")
+        assertElementPresent("#final-seller-agent-commission")
+        assertElementPresent("#final-buyer-agent-commission")
         assertElementCount(".btn-section-edit", 0)
     }
 
@@ -134,10 +137,11 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#listing-price-section")
         assertElementPresent("#listing-sale-section")
 
-        assertElementNotPresent("#listing-leasing-section")
         assertElementNotPresent("#seller-agent-commission")
+        assertElementNotPresent("#buyer-agent-commission")
         assertElementNotPresent("#listing-seller-section")
-        assertElementNotPresent("#listing-sale-section .buyer-contact-info")
+        assertElementNotPresent("#buyer-contact-info")
+        assertElementNotPresent("#final-seller-agent-commission")
         assertElementCount(".btn-section-edit", 0)
     }
 

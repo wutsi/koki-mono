@@ -38,11 +38,7 @@ class ListingPublishedMailet(
 
     private fun service(event: ListingStatusChangedEvent): Boolean {
         val listing = listingService.get(event.listingId, event.tenantId)
-        if (listing.sellerEmail.isNullOrEmpty()) {
-            logger.add("success", false)
-            logger.add("error", "Seller has no email")
-            return false
-        } else if (listing.status != ListingStatus.ACTIVE) {
+        if (listing.status != ListingStatus.ACTIVE) {
             logger.add("success", false)
             logger.add("error", "Listing is not active")
             return false
@@ -66,23 +62,14 @@ class ListingPublishedMailet(
         val tenant = tenantService.get(event.tenantId)
 
         val data = mapOf(
-            "recipient" to listing.sellerName,
+            "recipient" to (agent.displayName ?: ""),
             "address" to address,
             "listingNumber" to listing.listingNumber,
-            "rental" to (listing.listingType == ListingType.RENTAL),
-            "listingUrl" to "${tenant.clientPortalUrl}/l/${listing.id}",
-            "agentDisplayName" to agent.displayName,
-            "agentEmployer" to agent.employer,
-            "agentEmail" to agent.email,
-            "agentMobile" to agent.mobile,
-            "agentPhotoUrl" to agent.photoUrl,
-        ).filter { entry -> entry.value != null } as Map<String, Any>
+            "listingUrl" to "${tenant.portalUrl}/listings/${listing.id}",
+        )
         val body = templateResolver.resolve("/listing/email/published.html", data)
         sender.send(
-            recipient = Party(
-                displayName = listing.sellerName,
-                email = listing.sellerEmail!!,
-            ),
+            recipient = agent,
             subject = SUBJECT,
             body = body,
             attachments = emptyList(),

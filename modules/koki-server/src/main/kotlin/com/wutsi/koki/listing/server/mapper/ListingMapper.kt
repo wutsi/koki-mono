@@ -49,6 +49,8 @@ class ListingMapper {
             visitFees = toMoney(entity.visitFees, entity.currency),
             sellerAgentCommission = entity.sellerAgentCommission,
             buyerAgentCommission = entity.buyerAgentCommission,
+            sellerAgentCommissionMoney = toMoney(entity.sellerAgentCommissionAmount, entity.currency),
+            buyerAgentCommissionMoney = toMoney(entity.buyerAgentCommissionAmount, entity.currency),
 
             securityDeposit = toMoney(entity.securityDeposit, entity.currency),
             advanceRent = entity.advanceRent,
@@ -71,6 +73,8 @@ class ListingMapper {
             transactionDate = entity.transactionDate,
             transactionPrice = toMoney(entity.transactionPrice, entity.currency),
             buyerAgentUserId = entity.buyerAgentUserId,
+            finalSellerAgentCommissionMoney = toMoney(entity.finalSellerAgentCommissionAmount, entity.currency),
+            finalBuyerAgentCommissionMoney = toMoney(entity.finalBuyerAgentCommissionAmount, entity.currency),
 
             title = entity.title?.ifEmpty { null },
             summary = entity.summary?.ifEmpty { null },
@@ -110,14 +114,18 @@ class ListingMapper {
             address = toAddress(entity),
 
             price = toMoney(entity.price, entity.currency),
+            sellerAgentCommission = entity.sellerAgentCommission,
             buyerAgentCommission = entity.buyerAgentCommission,
+            sellerAgentCommissionMoney = toMoney(entity.sellerAgentCommissionAmount, entity.currency),
+            buyerAgentCommissionMoney = toMoney(entity.buyerAgentCommissionAmount, entity.currency),
 
             transactionDate = entity.transactionDate,
             transactionPrice = toMoney(entity.transactionPrice, entity.currency),
             buyerAgentUserId = entity.buyerAgentUserId,
 
             sellerAgentUserId = entity.sellerAgentUserId,
-            sellerAgentCommission = entity.sellerAgentCommission
+            finalSellerAgentCommissionMoney = toMoney(entity.finalSellerAgentCommissionAmount, entity.currency),
+            finalBuyerAgentCommissionMoney = toMoney(entity.finalBuyerAgentCommissionAmount, entity.currency),
         )
     }
 

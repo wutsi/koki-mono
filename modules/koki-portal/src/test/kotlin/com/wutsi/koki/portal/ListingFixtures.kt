@@ -81,6 +81,8 @@ object ListingFixtures {
         visitFees = Money(10.0, "CAD"),
         sellerAgentCommission = 6.0,
         buyerAgentCommission = 3.0,
+        sellerAgentCommissionMoney = Money(40000.0, "CAD"),
+        buyerAgentCommissionMoney = Money(20000.0, "CAD"),
 
         noticePeriod = 1,
         leaseTerm = 12,
@@ -112,7 +114,9 @@ object ListingFixtures {
         buyerEmail = "roger.milla@gmail.com",
         buyerPhone = "+237699505678",
         transactionPrice = Money(195000.0, "CAD"),
-        transactionDate = DateUtils.addDays(Date(), -10)
+        transactionDate = DateUtils.addDays(Date(), -10),
+        finalSellerAgentCommissionMoney = Money(50000.0, "CAD"),
+        finalBuyerAgentCommissionMoney = Money(22500.0, "CAD"),
     )
 
     val listings = listOf(

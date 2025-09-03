@@ -550,6 +550,8 @@ class ListingService(
             // Update the listing
             publisherValidator.validate(listing)
             listing.status = ListingStatus.PUBLISHING
+            listing.buyerAgentCommissionAmount = computeCommission(listing.price, listing.buyerAgentCommission)
+            listing.sellerAgentCommissionAmount = computeCommission(listing.price, listing.sellerAgentCommission)
             save(listing)
 
             // Record the status
@@ -601,12 +603,31 @@ class ListingService(
         val now = Date()
         listing.status = request.status
         listing.closedAt = now
-        listing.buyerName = request.buyerName?.ifEmpty { null }
-        listing.buyerEmail = request.buyerEmail?.lowercase()?.ifEmpty { null }
-        listing.buyerPhone = request.buyerPhone?.ifEmpty { null }
-        listing.buyerAgentUserId = request.buyerAgentUserId
-        listing.transactionDate = request.transactionDate
-        listing.transactionPrice = request.transactionPrice
+        if (request.status == ListingStatus.RENTED || request.status == ListingStatus.SOLD) {
+            listing.buyerName = request.buyerName?.ifEmpty { null }
+            listing.buyerEmail = request.buyerEmail?.lowercase()?.ifEmpty { null }
+            listing.buyerPhone = request.buyerPhone?.ifEmpty { null }
+            listing.buyerAgentUserId = request.buyerAgentUserId
+            listing.transactionDate = request.transactionDate
+            listing.transactionPrice = request.transactionPrice
+            listing.finalBuyerAgentCommissionAmount = computeCommission(
+                request.transactionPrice,
+                listing.buyerAgentCommission
+            )
+            listing.finalSellerAgentCommissionAmount = computeCommission(
+                request.transactionPrice,
+                listing.sellerAgentCommission
+            )
+        } else {
+            listing.buyerName = null
+            listing.buyerEmail = null
+            listing.buyerPhone = null
+            listing.buyerAgentUserId = null
+            listing.transactionDate = null
+            listing.transactionPrice = null
+            listing.finalBuyerAgentCommissionAmount = null
+            listing.finalSellerAgentCommissionAmount = null
+        }
         save(listing)
 
         // Record the status
@@ -621,6 +642,10 @@ class ListingService(
         )
 
         return listing
+    }
+
+    private fun computeCommission(price: Long?, percent: Double?): Long {
+        return ((price ?: 0) * (percent ?: 0.0) / 100.0).toLong()
     }
 
     private fun generateListingNumber(tenantId: Long): Long {
