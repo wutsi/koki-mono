@@ -112,7 +112,7 @@ data class ListingModel(
             status == ListingStatus.WITHDRAWN ||
             status == ListingStatus.CANCELLED
 
-    val statusSuccessfulTransaction: Boolean
+    val statusSold: Boolean
         get() = status == ListingStatus.SOLD ||
             status == ListingStatus.RENTED
 
@@ -123,7 +123,7 @@ data class ListingModel(
 
     fun isBuyer(user: UserModel?): Boolean {
         return user != null &&
-            statusSuccessfulTransaction &&
+            statusSold &&
             user.id == buyerAgentUser?.id
     }
 

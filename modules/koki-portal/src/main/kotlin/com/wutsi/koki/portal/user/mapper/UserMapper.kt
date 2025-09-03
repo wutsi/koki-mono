@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.user.mapper
 
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.refdata.model.CategoryModel
+import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.user.model.RoleModel
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.tenant.dto.User
@@ -12,7 +13,12 @@ import kotlin.collections.flatMap
 
 @Service
 class UserMapper : TenantAwareMapper() {
-    fun toUserModel(entity: User, roles: List<RoleModel>, category: CategoryModel?): UserModel {
+    fun toUserModel(
+        entity: User,
+        roles: List<RoleModel>,
+        category: CategoryModel?,
+        city: LocationModel?,
+    ): UserModel {
         val fmt = createDateTimeFormat()
         return UserModel(
             id = entity.id,
@@ -31,6 +37,7 @@ class UserMapper : TenantAwareMapper() {
             photoUrl = entity.photoUrl,
             mobile = entity.mobile,
             category = category,
+            city = city,
             permissionNames = roles.flatMap { role -> role.permissions }
                 .distinctBy { permission -> permission.id }
                 .map { permission -> permission.name }

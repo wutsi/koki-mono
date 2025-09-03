@@ -16,6 +16,7 @@ data class TenantModel(
     val locale: String = "",
     val numberFormat: String = "",
     val currency: String = "",
+    val country: String = "",
     val currencySymbol: String = "",
     val monetaryFormat: String = "",
     val dateFormat: String = "",
