@@ -19,6 +19,7 @@ data class ListingSummary(
     val furnitureType: FurnitureType? = null,
     val address: Address? = null,
     val price: Money? = null,
+    val sellerAgentCommission: Double? = null,
     val buyerAgentCommission: Double? = null,
     val sellerAgentUserId: Long? = null,
     val buyerAgentUserId: Long? = null,
