@@ -1,6 +1,6 @@
-INSERT INTO T_TENANT(id, name, domain_name, locale, currency, portal_url, client_portal_url)
-    VALUES (1, 'tenant-1', 'tenant-1.com', 'en_US', 'USD', 'https://tenant-1.com', 'https://client.test.com'),
-           (2, 'tenant-2', 'tenant-2.com', 'en_US', 'USD', 'https://tenant-1.com', 'https://client.test.com');
+INSERT INTO T_TENANT(id, name, domain_name, locale, country, currency, portal_url, client_portal_url)
+    VALUES (1, 'tenant-1', 'tenant-1.com', 'en_US', 'US', 'USD', 'https://tenant-1.com', 'https://client.test.com'),
+           (2, 'tenant-2', 'tenant-2.com', 'en_US', 'US', 'USD', 'https://tenant-1.com', 'https://client.test.com');
 
 INSERT T_MODULE(id, name, title, description, home_url, tab_url, settings_url)
     VALUES

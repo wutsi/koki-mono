@@ -1,5 +1,5 @@
-INSERT INTO T_TENANT(id, status, name, domain_name, locale, number_format, currency, currency_symbol, monetary_format, date_format, time_format, date_time_format, logo_url, icon_url, portal_url, client_portal_url) VALUES
-    (1, 1, 'test', 'localhost', 'CA', '#,###,##0.00', 'CAD', 'C$', 'C$ #,###,##0.00', 'yyyy-MM-dd', 'hh:mm a', 'yyyy-MM-dd hh:mm a', 'https://prod-wutsi.s3.amazonaws.com/static/wutsi-blog-web/assets/wutsi/img/logo/name-104x50.png', 'https://prod-wutsi.s3.amazonaws.com/static/wutsi-blog-web/assets/wutsi/img/logo/logo_512x512.png', 'http://localhost:8081', 'http://localhost:8082');
+INSERT INTO T_TENANT(id, status, name, domain_name, locale, country, number_format, currency, currency_symbol, monetary_format, date_format, time_format, date_time_format, logo_url, icon_url, portal_url, client_portal_url) VALUES
+    (1, 1, 'test', 'localhost', 'CA', 'CA', '#,###,##0.00', 'CAD', 'C$', 'C$ #,###,##0.00', 'yyyy-MM-dd', 'hh:mm a', 'yyyy-MM-dd hh:mm a', 'https://prod-wutsi.s3.amazonaws.com/static/wutsi-blog-web/assets/wutsi/img/logo/name-104x50.png', 'https://prod-wutsi.s3.amazonaws.com/static/wutsi-blog-web/assets/wutsi/img/logo/logo_512x512.png', 'http://localhost:8081', 'http://localhost:8082');
 
 INSERT INTO T_TENANT_MODULE(tenant_fk, module_fk)
     SELECT 1, id FROM T_MODULE;

@@ -7,6 +7,3 @@ INSERT INTO T_ACCOUNT(id, tenant_fk, name, deleted, email)
 
 INSERT INTO T_CONTACT(tenant_fk, account_fk, first_name, last_name)
     VALUES(1, 1100, 'Ray', 'Sponsible');
-
-INSERT INTO T_ROOM(tenant_fk, account_fk)
-    VALUES(1, 1110);

@@ -4,6 +4,7 @@ CREATE TABLE T_TENANT(
   name                    VARCHAR(100) NOT NULL,
   domain_name             VARCHAR(100) NOT NULL,
   locale                  VARCHAR(5) NOT NULL,
+  country                 VARCHAR(2) NOT NULL,
   number_format           VARCHAR(20) NOT NULL DEFAULT '#,###,###.00',
   currency                VARCHAR(3) NOT NULL  DEFAULT 'USD',
   currency_symbol         VARCHAR(20) NOT NULL DEFAULT '$',
