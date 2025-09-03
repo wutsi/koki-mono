@@ -66,7 +66,7 @@ class FileControllerTest : AbstractPageControllerTest() {
                 eq(GetFileResponse::class.java)
             )
 
-        navigateTo("/files/${FileFixtures.image.id}?owner-id=555&owner-type=ROOM")
+        navigateTo("/files/${FileFixtures.image.id}?owner-id=555&owner-type=ACCOUNT")
 
         click(".btn-delete")
 
@@ -77,7 +77,7 @@ class FileControllerTest : AbstractPageControllerTest() {
         Thread.sleep(1000)
         verify(rest).delete("$sdkBaseUrl/v1/files/${file.id}")
 
-        assertCurrentPageIs(PageName.ROOM)
+        assertCurrentPageIs(PageName.ACCOUNT)
     }
 
     @Test

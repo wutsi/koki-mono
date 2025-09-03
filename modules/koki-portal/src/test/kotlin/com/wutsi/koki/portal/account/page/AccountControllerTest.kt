@@ -138,17 +138,6 @@ class AccountControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun rooms() {
-        navigateTo("/accounts/${account.id}?tab=room")
-
-        Thread.sleep(1000)
-        assertElementCount(".tab-rooms tr.room", RoomFixtures.rooms.size)
-
-        click(".btn-add-room")
-        assertCurrentPageIs(PageName.ROOM_CREATE)
-    }
-
-    @Test
     fun files() {
         navigateTo("/accounts/${account.id}?tab=file")
 
