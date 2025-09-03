@@ -12,6 +12,8 @@ CREATE TABLE T_FILE(
   name                    VARCHAR(255) NOT NULL,
   title                   VARCHAR(100),
   description             TEXT,
+  title_fr                TEXT,
+  description_fr          TEXT,
   content_type            VARCHAR(255) NOT NULL,
   content_length          LONG NOT NULL,
   language                VARCHAR(2),

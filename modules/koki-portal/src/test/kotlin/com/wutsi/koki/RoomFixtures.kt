@@ -15,6 +15,7 @@ import com.wutsi.koki.room.dto.RoomUnitSummary
 import org.apache.commons.lang3.time.DateUtils
 import java.util.Date
 
+@Deprecated("")
 object RoomFixtures {
     val rooms = listOf(
         RoomSummary(

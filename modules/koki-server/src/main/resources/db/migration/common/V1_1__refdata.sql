@@ -75,7 +75,9 @@ CREATE TABLE T_CATEGORY(
   id             BIGINT NOT NULL,
 
   name           VARCHAR(255) NOT NULL ,
-  long_name      TEXT NOT NULL ,
+  long_name      TEXT NOT NULL,
+  name_fr        TEXT,
+  long_name_fr   TEXT,
   type           INT NOT NULL DEFAULT 0,
   level          INT NOT NULL DEFAULT 0,
   active         BOOLEAN NOT NULL DEFAULT true,
@@ -93,6 +95,7 @@ CREATE TABLE T_AMENITY(
 
   category_fk    BIGINT NOT NULL REFERENCES T_CATEGORY(id),
   name           TEXT NOT NULL,
+  name_fr        TEXT,
   icon           TEXT,
   active         BOOLEAN NOT NULL DEFAULT true,
 

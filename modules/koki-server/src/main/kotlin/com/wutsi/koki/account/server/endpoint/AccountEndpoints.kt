@@ -11,7 +11,6 @@ import com.wutsi.koki.contact.server.service.ContactService
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
-import com.wutsi.koki.room.server.service.RoomService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -29,7 +28,6 @@ class AccountEndpoints(
     private val service: AccountService,
     private val mapper: AccountMapper,
     private val contactService: ContactService,
-    private val roomService: RoomService,
 ) {
     @PostMapping
     fun create(
@@ -61,8 +59,7 @@ class AccountEndpoints(
     }
 
     private fun isUsed(id: Long, tenantId: Long): Boolean {
-        return contactService.search(tenantId = tenantId, accountIds = listOf(id), limit = 1).isNotEmpty() ||
-            roomService.search(tenantId = tenantId, accountIds = listOf(id), limit = 1).isNotEmpty()
+        return contactService.search(tenantId = tenantId, accountIds = listOf(id), limit = 1).isNotEmpty()
     }
 
     @GetMapping("/{id}")

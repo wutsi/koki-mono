@@ -1,13 +1,11 @@
 package com.wutsi.koki.portal.message.page
 
-import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.message.dto.MessageStatus
 import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.message.service.MessageService
-import com.wutsi.koki.portal.room.service.RoomService
 import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller
@@ -24,7 +22,6 @@ import org.springframework.web.client.HttpClientErrorException
 @RequiresPermission(["message"])
 class MessageController(
     private val service: MessageService,
-    private val roomService: RoomService,
 ) : AbstractPageController() {
     @GetMapping("/{id}")
     fun show(
@@ -72,12 +69,13 @@ class MessageController(
             throw HttpClientErrorException(HttpStatusCode.valueOf(404), "Message without phone number")
         }
 
-        if (message.owner?.type == ObjectType.ROOM) {
-            val room = roomService.room(message.owner.id, fullGraph = false)
-            val url = tenantHolder.get()?.clientPortalUrl + room.listingUrl
-            return "redirect:" + StringUtils.toWhatsappUrl(message.senderPhone, "$url\n")
-        } else {
-            return "redirect:" + StringUtils.toWhatsappUrl(message.senderPhone)
-        }
+//        if (message.owner?.type == ObjectType.ROOM) {
+//            val room = roomService.room(message.owner.id, fullGraph = false)
+//            val url = tenantHolder.get()?.clientPortalUrl + room.listingUrl
+//            return "redirect:" + StringUtils.toWhatsappUrl(message.senderPhone, "$url\n")
+//        } else {
+//            return "redirect:" + StringUtils.toWhatsappUrl(message.senderPhone)
+//        }
+        return "redirect:" + StringUtils.toWhatsappUrl(message.senderPhone)
     }
 }

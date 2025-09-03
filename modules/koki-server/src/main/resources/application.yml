@@ -114,10 +114,6 @@ springdoc:
             display-name: RefData API
             paths-to-match: /v1/amenities, /v1/amenities/**, /v1/categories, /v1/categories/**, /v1/juridictions, /v1/juridictions/**, /v1/locations, /v1/locations/*, /v1/refdata/**, /v1/sales-taxes, /v1/sales-taxes/**, /v1/units
 
-        -   group: rooms
-            display-name: Rooms API
-            paths-to-match: /v1/rooms, /v1/rooms/**, /v1/room-units, /v1/room-units/**
-
         -   group: tenant
             display-name: Tenant API
             paths-to-match: /v1/businesses, /v1/tenants, /v1/tenants/**, /v1/types, /v1/types/**, /v1/configurations, /v1/configurations/**
@@ -223,19 +219,6 @@ koki:
                 queue: koki-notification-queue
                 dlq: koki-notification-dlq
                 dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
-
-        room:
-            mq:
-                consumer-delay-seconds: ${koki.module.consumer-delay-seconds}
-                queue: koki-room-queue
-                dlq: koki-room-dlq
-                dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
-            metric:
-                location:
-                    cron: "0 0 0 * * *"  # Daily at midnight
-            validation:
-                publisher:
-                    min-images: 5
 
         security:
             access-token:
