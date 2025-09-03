@@ -16,7 +16,6 @@ table tr.listing td.hero-image img {
 
 .listing-price {
     color: darkblue;
-    font-weight: bold;
 }
 
 h1.listing-price {
@@ -45,6 +44,66 @@ h1.listing-price {
 .listing-search-filter-body .select2 {
     width: 100% !important;
 }
+
+#listing-filter-form {
+    margin: -1em;
+}
+
+.listing-card {
+    border: 1px solid lightgray;
+}
+
+.listing-card .listing-details a {
+    text-decoration: none;
+    color: #040404;
+}
+
+.listing-card .hero-image-container {
+    width: 302px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.listing-card img.hero-image {
+    max-width: 300px;
+    max-height: 200px;
+}
+
+a .listing-filter-container {
+    text-decoration: none !important;
+    color: #040404;
+}
+
+.listing-filter-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.listing-filter-container .listing-filter {
+    border: 1px solid gray;
+    font-size: small;
+    padding: 0.5em;
+    margin-right: 0.5em;
+    margin-bottom: 0.5em;
+    text-wrap: nowrap;
+}
+
+.listing-filter-container .listing-filter:last-child {
+    margin-right: 0;
+}
+
+.listing-filter-container .listing-filter .listing-filter-badge {
+    border: 1px solid gray;
+    padding: 0.25em;
+    margin-right: 0.25em;
+    background: #f8f8f8;
+}
+
+.listing-filter-container .listing-filter .listing-filter-badge:last-child {
+    margin-right: 0;
+}
+
 
 /* ======================================================================== */
 /*                                                                          */

@@ -5,6 +5,7 @@ import com.wutsi.koki.file.dto.FileSummary
 import com.wutsi.koki.file.dto.LabelSummary
 import com.wutsi.koki.portal.common.model.ObjectReferenceModel
 import com.wutsi.koki.portal.common.service.Moment
+import com.wutsi.koki.portal.common.service.NumberUtils
 import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.file.model.LabelModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
@@ -12,8 +13,6 @@ import com.wutsi.koki.portal.user.model.UserModel
 import org.apache.commons.io.FilenameUtils
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
-import java.text.DecimalFormat
-import java.text.StringCharacterIterator
 import java.util.Locale
 
 @Service
@@ -91,20 +90,7 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
     }
 
     private fun toFileSizeText(value: Long): String {
-        val fmt = DecimalFormat("#.#")
-        var bytes = value
-        if (bytes == 0L) {
-            return ""
-        } else if (-1000 < bytes && bytes < 1000) {
-            return bytes.toString()
-        }
-        val ci = StringCharacterIterator("KMGTPE")
-        while (bytes <= -999950 || bytes >= 999950) {
-            bytes /= 1000
-            ci.next()
-        }
-
-        return fmt.format(bytes / 1000.0) + " " + ci.current() + "b"
+        return NumberUtils.shortText(value, "#.#", "b")
     }
 
     private fun toLabelModel(entity: LabelSummary): LabelModel {

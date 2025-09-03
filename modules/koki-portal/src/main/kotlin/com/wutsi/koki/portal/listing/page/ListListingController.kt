@@ -12,6 +12,7 @@ import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.refdata.dto.LocationType
+import com.wutsi.koki.sdk.URLBuilder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -25,8 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 class ListListingController : AbstractListingController() {
     @GetMapping
     fun list(@ModelAttribute form: ListingFilterForm, model: Model): String {
-        if (!form.isEmpty()) {
-            model.addAttribute("form", form)
+        if (form.submitted) {
+            loadListings(form, model)
         } else {
             loadMyListings(model)
         }
@@ -38,15 +39,44 @@ class ListListingController : AbstractListingController() {
                 title = getMessage("page.listing.list.meta.title"),
             )
         )
+
+        val urlBuilder = URLBuilder("")
+        val params = mapOf(
+            "listingNumber" to form.listingNumber,
+            "propertyType" to form.propertyTypes,
+            "listingType" to form.listingType,
+            "locationId" to form.locationIds,
+            "bedrooms" to form.bedrooms,
+            "bathrooms" to form.bathrooms,
+            "minPrice" to form.minPrice,
+            "maxPrice" to form.maxPrice,
+            "minLotArea" to form.minLotArea,
+            "maxLotArea" to form.maxLotArea,
+            "minPropertyArea" to form.minPropertyArea,
+            "maxPropertyArea" to form.maxPropertyArea,
+            "sellerAgentUserId" to form.sellerAgentUserId,
+        )
+        model.addAttribute("filterUrl", urlBuilder.build("/listings/filter", params))
+
         return "listings/list"
     }
 
     @GetMapping("/filter")
-    fun filter(model: Model): String {
-        model.addAttribute("form", ListingFilterForm())
+    fun filter(@ModelAttribute form: ListingFilterForm, model: Model): String {
+        model.addAttribute("form", form)
+        if (form.locationIds.isNotEmpty()) {
+            val locations = locationService.search(
+                ids = form.locationIds,
+                limit = form.locationIds.size
+            )
+            if (locations.isNotEmpty()) {
+                model.addAttribute("locations", locations)
+            }
+        }
+
         model.addAttribute("listingTypes", ListingType.entries)
         model.addAttribute("propertyTypes", PropertyType.entries)
-        model.addAttribute("rooms", listOf("1", "1+", "2", "2+", "3", "3+", "4", "4+"))
+        model.addAttribute("rooms", listOf("1", "1+", "2", "2+", "3", "3+"))
 
         return "listings/filter"
     }
@@ -96,6 +126,46 @@ class ListListingController : AbstractListingController() {
             sortBy = ListingSort.TRANSACTION_DATE,
         )
         model.addAttribute("sold", sold)
+    }
+
+    private fun loadListings(form: ListingFilterForm, model: Model) {
+        val listings = listingService.search(
+            sortBy = when (form.listingType) {
+                ListingStatus.SOLD.name -> ListingSort.TRANSACTION_DATE
+                else -> ListingSort.NEWEST
+            },
+            listingType = when (form.listingType) {
+                ListingType.SALE.name -> ListingType.SALE
+                ListingType.RENTAL.name -> ListingType.RENTAL
+                else -> null
+            },
+            statuses = when (form.listingType) {
+                ListingStatus.SOLD.name -> listOf(ListingStatus.SOLD, ListingStatus.RENTED)
+                else -> listOf(ListingStatus.ACTIVE)
+            },
+            bedrooms = form.bedrooms.ifEmpty { null },
+            bathrooms = form.bathrooms.ifEmpty { null },
+            locationIds = form.locationIds,
+            minPrice = form.minPrice,
+            maxPrice = form.maxPrice,
+            minLotArea = form.minLotArea,
+            maxLotArea = form.maxLotArea,
+            minPropertyArea = form.minPropertyArea,
+            maxPropertyArea = form.maxPropertyArea,
+        )
+
+        if (form.locationIds.isNotEmpty()) {
+            val locations = locationService.search(
+                ids = form.locationIds,
+                limit = form.locationIds.size
+            )
+            if (locations.isNotEmpty()) {
+                model.addAttribute("locations", locations)
+            }
+        }
+
+        model.addAttribute("listings", listings)
+        model.addAttribute("form", form)
     }
 
     private fun list(listings: List<ListingModel>, model: Model): String {

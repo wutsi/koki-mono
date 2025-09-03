@@ -18,7 +18,6 @@
     </div>
 </div>
 
-
 <div th:fragment="listing-status-badge(status)" th:remove="tag">
     <span class="badge text-bg-secondary"
           th:if="${status.name() == 'DRAFT'}"
@@ -154,6 +153,7 @@
         m<sup>2</sup>
     </div>
 </div>
+
 <div th:fragment="listing-summary(listing)" th:remove="tag">
     <div>
         <span th:replace="~{__components/listing :: listing-type-badge(${listing.listingType})}"></span>
@@ -202,6 +202,129 @@
                 </div>
             </div>
             <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<div class="listing-card" th:data-id="${listing.id}" th:fragment="listing-card(listing)">
+    <div class="hero-image-container">
+        <a target="_new" th:href="'/listings/' + ${listing.id}">
+            <img class="hero-image" th:src="${listing.heroImageUrl}"/>
+        </a>
+    </div>
+    <div class="listing-details padding-small">
+        <a target="_new" th:href="'/listings/' + ${listing.id}">
+            <b class="listing-price" th:text="${listing.price.displayText}">$$$</b>
+            <div class="text-small">
+                <div th:replace="~{__components/listing :: listing-bed-bath-area(${listing})}"></div>
+            </div>
+            <div class="text-small" th:if="${listing.address}">
+                <span th:text="${listing.address?.neighbourhood?.name}">XXX</span>
+                <span>-</span>
+                <span th:text="${listing.address?.city?.name}">XXX</span>
+            </div>
+            <div class="margin-top-small flex" th:if="${listing.sellerAgentUser}">
+                <img height="32"
+                     th:src="${listing.sellerAgentUser.photoUrl} ? ${listing.sellerAgentUser.photoUrl}: '/image/no-photo.png'"
+                     width="32"/>
+                <div class="margin-left-small text-small">
+                    <div th:text="${listing.sellerAgentUser?.displayName}">AGENT</div>
+                    <div>
+                        <i class="fa-solid fa-coins"></i>
+                        <span class="listing-price" th:text="${listing.computeAgentCommission(user)}">XXX</span>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="listing-filter-container" th:fragment="listing-filters(form, locations)">
+    <!-- Listing Type -->
+    <div class="listing-filter">
+        <span th:if="${form.listingType == 'SALE'}" th:text="#{listing-type.SALE}">TYPE</span>
+        <span th:if="${form.listingType == 'RENTAL'}" th:text="#{listing-type.RENTAL}">TYPE</span>
+        <span th:if="${form.listingType == 'SOLD'}" th:text="#{listing-status.SOLD}">TYPE</span>
+    </div>
+
+    <!-- Location -->
+    <div class="listing-filter" th:if="${locations}">
+        <span class="listing-filter-badge" th:each="location : ${locations}" th:text="${location.name}">LOCATION</span>
+    </div>
+
+    <!-- Rooms -->
+    <div class="listing-filter" th:if="${form.bedrooms?.length() > 0}">
+        <b th:text="#{page.listing.bedrooms-short} + ':'">BEDROOM</b>
+        <span th:text="${form.bedrooms}">00</span>
+    </div>
+    <div class="listing-filter" th:if="${form.bathrooms?.length() > 0}">
+        <b th:text="#{page.listing.bathrooms-short} + ':'">BATHROOM</b>
+        <span th:text="${form.bathrooms}">00</span>
+    </div>
+
+    <!-- Property Types -->
+    <div class="listing-filter" th:if="!${form.propertyTypes.isEmpty()}">
+        <span class="listing-filter-badge"
+              th:each="propertyType : ${form.propertyTypes}"
+              th:text="#{'property-type.' + ${propertyType}}">
+            TYPE
+        </span>
+    </div>
+
+    <!-- Price -->
+    <div class="listing-filter" th:if="${form.minPrice} OR ${form.maxPrice}">
+        <b th:text="#{page.listing.price-short} + ':'">PRICE</b>
+        <div th:if="${form.minPrice} AND ${form.maxPrice}" th:remove="tag">
+            <span th:text="${form.minPriceText}">$$</span>
+            -
+            <span th:text="${form.maxPriceText}">$$</span>
+        </div>
+        <div th:if="!${form.maxPrice}" th:remove="tag">
+            <span th:text="${form.minPriceText} + '+'">$$</span>
+        </div>
+        <div th:if="!${form.minPrice}" th:remove="tag">
+            <span th:text="#{page.listing.list.up-to}">UP_TO</span>
+            <span th:text="${form.maxPriceText}">$$</span>
+        </div>
+    </div>
+
+    <!-- Lot -->
+    <div class="listing-filter" th:if="${form.minLotArea} OR ${form.maxLotArea}">
+        <b th:text="#{page.listing.lot} + ':'">PRICE</b>
+        <div th:if="${form.minLotArea} AND ${form.maxLotArea}" th:remove="tag">
+            <span th:text="${form.minLotAreaText}">$$</span>
+            -
+            <span th:text="${form.maxLotAreaText}">$$</span>
+            <span>m<sup>2</sup></span>
+        </div>
+        <div th:if="!${form.maxLotArea}" th:remove="tag">
+            <span th:text="${form.minLotAreaText} + '+'">$$</span>
+            <span>m<sup>2</sup></span>
+        </div>
+        <div th:if="!${form.minLotArea}" th:remove="tag">
+            <span th:text="#{page.listing.list.up-to}">UP_TO</span>
+            <span th:text="${form.maxPriceText}">$$</span>
+            <span>m<sup>2</sup></span>
+        </div>
+    </div>
+
+    <!-- Property -->
+    <div class="listing-filter" th:if="${form.minPropertyArea} OR ${form.maxPropertyArea}">
+        <b th:text="#{page.listing.lot} + ':'">PRICE</b>
+        <div th:if="${form.minPropertyArea} AND ${form.maxPropertyArea}" th:remove="tag">
+            <span th:text="${form.minPropertyAreaText}">$$</span>
+            -
+            <span th:text="${form.maxPropertyAreaText}">$$</span>
+            <span>m<sup>2</sup></span>
+        </div>
+        <div th:if="!${form.maxPropertyArea}" th:remove="tag">
+            <span th:text="${form.minPropertyAreaText} + '+'">$$</span>
+            <span>m<sup>2</sup></span>
+        </div>
+        <div th:if="!${form.minPropertyArea}" th:remove="tag">
+            <span th:text="#{page.listing.list.up-to}">UP_TO</span>
+            <span th:text="${form.maxPriceText}">$$</span>
+            <span>m<sup>2</sup></span>
         </div>
     </div>
 </div>

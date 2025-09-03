@@ -141,7 +141,7 @@ abstract class AbstractPageController {
                 locationService.search(
                     country = geo.countryCode,
                     keyword = geo.city,
-                    type = LocationType.CITY,
+                    types = listOf(LocationType.CITY),
                     limit = 1,
                 ).firstOrNull()
             } else {

@@ -117,6 +117,7 @@ class ListingMapper {
             buyerAgentUserId = entity.buyerAgentUserId,
 
             sellerAgentUserId = entity.sellerAgentUserId,
+            sellerAgentCommission = entity.sellerAgentCommission
         )
     }
 
