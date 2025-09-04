@@ -69,8 +69,8 @@ CREATE TABLE T_LISTING(
   buyer_phone               VARCHAR(30),
   transaction_date          DATE,
   transaction_price         BIGINT,
-  actual_seller_agent_commission_amount   BIGINT,
-  actual_buyer_agent_commission_amount    BIGINT,
+  final_seller_agent_commission_amount   BIGINT,
+  final_buyer_agent_commission_amount    BIGINT,
 
   agent_remarks             TEXT,
   public_remarks            TEXT,

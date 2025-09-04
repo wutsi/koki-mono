@@ -209,7 +209,7 @@
             </div>
         </div>
         <div class="col-6 col-md-4" id="seller-agent-commission"
-             th:if="${listing.sellerAgentCommission} AND ${listing.canManage(user)} AND !${listing.statusSuccessfulTransaction}">
+             th:if="${listing.sellerAgentCommission} AND ${listing.canManage(user)} AND !${listing.statusSold}">
             <b class="text-small" th:text="#{page.listing.seller-agent-commission}">KEY</b>
             <div>
                 <span th:text="${listing.sellerAgentCommissionMoney}">$$</span>
@@ -217,7 +217,7 @@
             </div>
         </div>
         <div class="col-6 col-md-4 margin-bottom-small" id="buyer-agent-commission"
-             th:if="${listing.buyerAgentCommission} AND !${listing.statusSuccessfulTransaction}">
+             th:if="${listing.buyerAgentCommission} AND !${listing.statusSold}">
             <b class="text-small" th:text="#{page.listing.buyer-agent-commission}">KEY</b>
             <div>
                 <span th:text="${listing.buyerAgentCommissionMoney}">$$</span>
@@ -282,10 +282,10 @@
         <div th:if="${listing.sellerEmail}" th:text="${listing.sellerEmail}">EMAIL</div>
         <div th:if="${listing.sellerPhone}" th:text="${listing.sellerPhone}">PHONE</div>
     </div>
-    <hr th:if="${listing.statusSuccessfulTransaction}"/>
+    <hr th:if="${listing.statusSold}"/>
 </div>
 
-<div id="listing-sale-section" th:if="${listing.statusSuccessfulTransaction}">
+<div id="listing-sale-section" th:if="${listing.statusSold}">
     <h4 th:text="#{page.listing.show.sales-information}">SALES</h4>
 
     <div class="margin-bottom-small" id="buyer-contact-info" th:if="${listing.canManage(user)}">

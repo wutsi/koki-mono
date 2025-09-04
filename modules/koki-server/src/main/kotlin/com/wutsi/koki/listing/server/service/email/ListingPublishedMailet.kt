@@ -4,11 +4,9 @@ import com.wutsi.koki.email.server.mq.AbstractMailet
 import com.wutsi.koki.email.server.service.EmailTemplateResolver
 import com.wutsi.koki.email.server.service.Sender
 import com.wutsi.koki.listing.dto.ListingStatus
-import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
 import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.platform.logger.KVLogger
-import com.wutsi.koki.platform.messaging.Party
 import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.tenant.server.service.TenantService
 import com.wutsi.koki.tenant.server.service.UserService

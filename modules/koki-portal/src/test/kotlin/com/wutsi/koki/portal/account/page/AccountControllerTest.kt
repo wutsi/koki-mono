@@ -12,7 +12,6 @@ import com.wutsi.koki.ContactFixtures
 import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.InvoiceFixtures
 import com.wutsi.koki.NoteFixtures
-import com.wutsi.koki.RoomFixtures
 import com.wutsi.koki.account.dto.GetAccountResponse
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.AbstractPageControllerTest

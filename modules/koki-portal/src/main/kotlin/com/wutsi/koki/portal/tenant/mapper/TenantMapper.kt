@@ -27,6 +27,7 @@ class TenantMapper(
             dateFormat = entity.dateFormat,
             timeFormat = entity.timeFormat,
             currencySymbol = entity.currencySymbol,
+            country = entity.country,
             createdAt = entity.createdAt,
             status = entity.status,
             name = entity.name,

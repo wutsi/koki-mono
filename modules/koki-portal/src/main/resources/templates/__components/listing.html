@@ -61,10 +61,12 @@
 </div>
 
 <tr th:fragment="listing-row(listing, sold)" th:remove="tag">
-    <td class="hero-image text-center">
-        <a th:href="'/listings/' + ${listing.id}">
-            <img th:if="${listing.heroImageUrl}" th:src="${listing.heroImageUrl}"/>
-        </a>
+    <td width="1%">
+        <div class="hero-image text-center">
+            <a th:href="'/listings/' + ${listing.id}">
+                <img th:if="${listing.heroImageUrl}" th:src="${listing.heroImageUrl}"/>
+            </a>
+        </div>
     </td>
     <td>
         <a th:href="'/listings/' + ${listing.id}">
@@ -224,12 +226,13 @@
                 <span th:text="${listing.address?.city?.name}">XXX</span>
             </div>
             <div class="margin-top-small flex" th:if="${listing.sellerAgentUser}">
-                <img height="32"
+                <img height="64"
                      th:src="${listing.sellerAgentUser.photoUrl} ? ${listing.sellerAgentUser.photoUrl}: '/image/no-photo.png'"
-                     width="32"/>
+                     width="64"/>
                 <div class="margin-left-small text-small">
                     <div th:text="${listing.sellerAgentUser?.displayName}">AGENT</div>
-                    <div>
+                    <div th:text="${listing.sellerAgentUser?.employer}">AGENT</div>
+                    <div th:if="!${listing.statusSold}">
                         <i class="fa-solid fa-coins"></i>
                         <span class="listing-price" th:text="${listing.computeAgentCommission(user)}">XXX</span>
                     </div>

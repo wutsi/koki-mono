@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.user.service
 
 import com.wutsi.koki.portal.refdata.service.CategoryService
+import com.wutsi.koki.portal.refdata.service.LocationService
 import com.wutsi.koki.portal.user.mapper.UserMapper
 import com.wutsi.koki.portal.user.model.UserForm
 import com.wutsi.koki.portal.user.model.UserModel
@@ -16,6 +17,7 @@ class UserService(
     private val mapper: UserMapper,
     private val roleService: RoleService,
     private val categoryService: CategoryService,
+    private val locationService: LocationService,
 ) {
     fun user(id: Long, fullGraph: Boolean = true): UserModel {
         val user = koki.user(id).user
@@ -29,7 +31,12 @@ class UserService(
         } else {
             categoryService.get(user.categoryId ?: -1)
         }
-        return mapper.toUserModel(user, roles, category)
+        val city = if (user.cityId == null || !fullGraph) {
+            null
+        } else {
+            locationService.get(user.cityId ?: -1)
+        }
+        return mapper.toUserModel(user, roles, category, city)
     }
 
     fun users(

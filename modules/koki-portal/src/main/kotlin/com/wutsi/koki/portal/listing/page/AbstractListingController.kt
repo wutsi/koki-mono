@@ -48,7 +48,7 @@ abstract class AbstractListingController : AbstractModulePageController() {
             furnitureType = listing.furnitureType,
             amenityIds = listing.amenities.map { amenity -> amenity.id },
 
-            country = (listing.address?.country ?: city?.country)?.uppercase(),
+            country = (listing.address?.country ?: city?.country ?: getTenant()?.country)?.uppercase(),
             cityId = listing.address?.city?.id ?: city?.id,
             neighbourhoodId = listing.address?.neighbourhood?.id,
             street = listing.address?.street,

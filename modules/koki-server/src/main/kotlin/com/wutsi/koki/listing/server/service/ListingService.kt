@@ -610,14 +610,19 @@ class ListingService(
             listing.buyerAgentUserId = request.buyerAgentUserId
             listing.transactionDate = request.transactionDate
             listing.transactionPrice = request.transactionPrice
-            listing.finalBuyerAgentCommissionAmount = computeCommission(
-                request.transactionPrice,
-                listing.buyerAgentCommission
-            )
             listing.finalSellerAgentCommissionAmount = computeCommission(
                 request.transactionPrice,
                 listing.sellerAgentCommission
             )
+            listing.finalBuyerAgentCommissionAmount =
+                if (listing.buyerAgentUserId != null && listing.buyerAgentUserId != listing.sellerAgentUserId) {
+                    computeCommission(
+                        request.transactionPrice,
+                        listing.buyerAgentCommission
+                    )
+                } else {
+                    null
+                }
         } else {
             listing.buyerName = null
             listing.buyerEmail = null

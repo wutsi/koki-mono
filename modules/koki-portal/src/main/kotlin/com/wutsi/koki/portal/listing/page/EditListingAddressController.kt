@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam
 class EditListingAddressController : AbstractEditListingController() {
     @GetMapping
     fun edit(@RequestParam id: Long, model: Model): String {
-        val defaultCity = resolveCity()
+        val defaultCity = userHolder.get()?.city ?: resolveCity()
         val listing = findListing(id)
         model.addAttribute("listing", listing)
         model.addAttribute("form", toListingForm(listing, defaultCity))
