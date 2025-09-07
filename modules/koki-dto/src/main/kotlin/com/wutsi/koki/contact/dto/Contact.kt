@@ -1,5 +1,6 @@
 package com.wutsi.koki.contact.dto
 
+import com.wutsi.koki.refdata.dto.Address
 import java.util.Date
 
 data class Contact(
@@ -13,9 +14,11 @@ data class Contact(
     val mobile: String? = null,
     val email: String? = null,
     val gender: Gender = Gender.UNKNOWN,
+    val preferredCommunicationMethod: PreferredCommunicationMethod = PreferredCommunicationMethod.UNKNOWN,
     val language: String? = null,
     val profession: String? = null,
     val employer: String? = null,
+    val address: Address? = null,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
     val createdById: Long? = null,

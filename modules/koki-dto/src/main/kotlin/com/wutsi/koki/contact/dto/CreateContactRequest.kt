@@ -17,5 +17,6 @@ data class CreateContactRequest(
     @get:Size(max = 100) val employer: String? = null,
 
     val gender: Gender = Gender.UNKNOWN,
+    val preferredCommunicationMethod: PreferredCommunicationMethod = PreferredCommunicationMethod.UNKNOWN,
     @get:Size(max = 2) val language: String? = null,
 )
