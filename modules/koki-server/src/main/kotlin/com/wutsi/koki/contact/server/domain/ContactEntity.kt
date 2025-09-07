@@ -1,6 +1,7 @@
 package com.wutsi.koki.contact.server.domain
 
 import com.wutsi.koki.contact.dto.Gender
+import com.wutsi.koki.contact.dto.PreferredCommunicationMethod
 import com.wutsi.koki.form.server.domain.AccountEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -45,12 +46,28 @@ data class ContactEntity(
     var mobile: String? = null,
     var email: String? = null,
     var gender: Gender = Gender.UNKNOWN,
+    var preferredCommunicationMethod: PreferredCommunicationMethod = PreferredCommunicationMethod.UNKNOWN,
     var language: String? = null,
     var profession: String? = null,
     var employer: String? = null,
+
+    @Column("city_fk") var cityId: Long? = null,
+    @Column("state_fk") var stateId: Long? = null,
+    var street: String? = null,
+    var postalCode: String? = null,
+    var country: String? = null,
 
     var deleted: Boolean = false,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
     var deletedAt: Date? = null,
-)
+){
+    fun hasAddress(): Boolean {
+        return cityId != null ||
+            stateId != null ||
+            !postalCode.isNullOrEmpty() ||
+            !street.isNullOrEmpty() ||
+            !country.isNullOrEmpty()
+    }
+
+}

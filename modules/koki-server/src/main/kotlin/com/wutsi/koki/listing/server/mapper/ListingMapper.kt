@@ -57,7 +57,12 @@ class ListingMapper {
             leaseTerm = entity.leaseTerm,
             noticePeriod = entity.noticePeriod,
 
-            sellerContactId = entity.sellerContactId,
+//            sellerName = entity.sellerName?.ifEmpty { null },
+//            sellerPhone = entity.sellerPhone?.ifEmpty { null },
+//            sellerEmail = entity.sellerEmail?.ifEmpty { null },
+//            sellerIdNumber = entity.sellerIdNumber?.ifEmpty { null },
+//            sellerIdType = entity.sellerIdType,
+//            sellerIdCountry = entity.sellerIdCountry?.ifEmpty { null },
 
             agentRemarks = entity.agentRemarks?.ifEmpty { null },
             publicRemarks = entity.publicRemarks?.ifEmpty { null },

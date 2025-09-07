@@ -185,13 +185,7 @@ class CreateListingControllerTest : AbstractPageControllerTest() {
 
         // Seller
         assertCurrentPageIs(PageName.LISTING_EDIT_SELLER)
-        input("#sellerName", "Ray Sponsible")
-        input("#sellerEmail", "ray.sponsible@gmail.com")
-        input("#sellerPhone", "5147580011")
-        scrollToBottom()
-        input("#sellerIdNumber", "AAA001")
-        select("#sellerIdType", 1)
-        select("#sellerIdCountry", 3)
+        select2("#sellerContactId", contacts[1].firstName + " " + contacts[1].lastName)
         click("button[type=submit]")
         val req8 = argumentCaptor<UpdateListingSellerRequest>()
         verify(rest).postForEntity(
@@ -199,12 +193,7 @@ class CreateListingControllerTest : AbstractPageControllerTest() {
             req8.capture(),
             eq(Any::class.java),
         )
-        assertEquals("Ray Sponsible", req8.firstValue.sellerName)
-        assertEquals("ray.sponsible@gmail.com", req8.firstValue.sellerEmail)
-        assertEquals("+15147580011", req8.firstValue.sellerPhone)
-        assertEquals("AAA001", req8.firstValue.sellerIdNumber)
-        assertEquals(IDType.CNI, req8.firstValue.sellerIdType)
-        assertEquals("DZ", req8.firstValue.sellerIdCountry)
+        assertEquals(contacts[1].id, req8.firstValue.sellerContactId)
 
         // DONE
         assertCurrentPageIs(PageName.LISTING_EDIT_DONE)

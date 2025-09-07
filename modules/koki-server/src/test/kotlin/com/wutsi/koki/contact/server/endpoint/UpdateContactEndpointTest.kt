@@ -2,6 +2,7 @@ package com.wutsi.koki.contact.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.contact.dto.Gender
+import com.wutsi.koki.contact.dto.PreferredCommunicationMethod
 import com.wutsi.koki.contact.dto.UpdateContactRequest
 import com.wutsi.koki.contact.server.dao.ContactRepository
 import com.wutsi.koki.error.dto.ErrorCode
@@ -31,7 +32,12 @@ class UpdateContactEndpointTest : AuthorizationAwareEndpointTest() {
         profession = "Director",
         employer = "Google",
         gender = Gender.MALE,
-        language = "fr"
+        language = "fr",
+        street = "340 Pascal",
+        postalCode = "123 111",
+        cityId = 111L,
+        country = "be",
+        preferredCommunicationMethod = PreferredCommunicationMethod.WHATSAPP,
     )
 
     @Test
@@ -57,6 +63,12 @@ class UpdateContactEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(USER_ID, contact.modifiedById)
         assertFalse(contact.deleted)
         assertNull(contact.deletedById)
+        assertEquals(request.cityId, contact.cityId)
+        assertEquals(333L, contact.stateId)
+        assertEquals("CA", contact.country)
+        assertEquals(request.street, contact.street)
+        assertEquals(request.postalCode, contact.postalCode)
+        assertEquals(request.preferredCommunicationMethod, contact.preferredCommunicationMethod)
     }
 
     @Test

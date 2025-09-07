@@ -8,6 +8,8 @@ import com.wutsi.koki.contact.server.domain.ContactEntity
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.refdata.dto.LocationType
+import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.security.server.service.SecurityService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
@@ -20,6 +22,7 @@ class ContactService(
     private val em: EntityManager,
     private val securityService: SecurityService,
     private val accountService: AccountService,
+    private val locationService: LocationService,
 ) {
     fun get(id: Long, tenantId: Long): ContactEntity {
         val account = dao.findById(id)
@@ -92,6 +95,8 @@ class ContactService(
     @Transactional
     fun create(request: CreateContactRequest, tenantId: Long): ContactEntity {
         val userId = securityService.getCurrentUserIdOrNull()
+        val city = request.cityId?.let { id -> locationService.get(id, LocationType.CITY) }
+
         return dao.save(
             ContactEntity(
                 tenantId = tenantId,
@@ -107,6 +112,12 @@ class ContactService(
                 mobile = request.mobile?.ifEmpty { null },
                 profession = request.profession?.ifEmpty { null },
                 employer = request.employer?.ifEmpty { null },
+                street = request.street?.ifEmpty { null },
+                cityId = city?.id,
+                stateId = city?.parentId,
+                country = (city?.country ?: request.country)?.uppercase()?.ifEmpty { null },
+                postalCode = request.postalCode?.ifEmpty { null },
+                preferredCommunicationMethod = request.preferredCommunicationMethod,
                 createdById = userId,
                 modifiedById = userId,
             )
@@ -116,6 +127,8 @@ class ContactService(
     @Transactional
     fun update(id: Long, request: UpdateContactRequest, tenantId: Long): ContactEntity {
         val contact = get(id, tenantId)
+        val city = request.cityId?.let { id -> locationService.get(id, LocationType.CITY) }
+
         contact.account = request.accountId?.let { id -> accountService.get(id, tenantId) }
         contact.contactTypeId = request.contactTypeId
         contact.firstName = request.firstName
@@ -128,6 +141,13 @@ class ContactService(
         contact.mobile = request.mobile?.ifEmpty { null }
         contact.profession = request.profession?.ifEmpty { null }
         contact.employer = request.employer?.ifEmpty { null }
+        contact.street = request.street?.ifEmpty { null }
+        contact.cityId = city?.id
+        contact.stateId = city?.parentId
+        contact.country = (city?.country ?: request.country)?.uppercase()?.ifEmpty { null }
+        contact.postalCode = request.postalCode?.ifEmpty { null }
+        contact.preferredCommunicationMethod = request.preferredCommunicationMethod
+
         contact.modifiedAt = Date()
         contact.modifiedById = securityService.getCurrentUserIdOrNull()
         return dao.save(contact)

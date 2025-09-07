@@ -14,10 +14,17 @@ CREATE TABLE T_CONTACT(
   profession              VARCHAR(100),
   employer                VARCHAR(100),
   gender                  INT NOT NULL DEFAULT 0,
+  preferred_communication_method INT NOT NULL DEFAULT 0,
   phone                   VARCHAR(30),
   mobile                  VARCHAR(30),
   email                   VARCHAR(255),
   language                VARCHAR(2),
+  street                  TEXT,
+  postal_code             VARCHAR(30),
+  city_fk                 BIGINT,
+  state_fk                BIGINT,
+  country                 VARCHAR(2),
+
   deleted                 BOOLEAN NOT NULL DEFAULT false,
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
@@ -26,9 +33,10 @@ CREATE TABLE T_CONTACT(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
-CREATE INDEX I_CONTACT_tenant ON T_CONTACT(tenant_fk);
-CREATE INDEX I_CONTACT_account ON T_CONTACT(account_fk);
-CREATE INDEX I_CONTACT_contact_type_fk ON T_CONTACT(contact_type_fk);
+CREATE INDEX tenant ON T_CONTACT(tenant_fk);
+CREATE INDEX account ON T_CONTACT(account_fk);
+CREATE INDEX contact_type ON T_CONTACT(contact_type_fk);
+CREATE INDEX created_by ON T_CONTACT(created_by_fk);
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url)
     VALUES (120, 2, 'contact', 'Contacts', '/contacts', '/contacts/tab', null, '/js/contacts.js');
