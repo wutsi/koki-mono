@@ -61,7 +61,7 @@ data class ContactEntity(
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
     var deletedAt: Date? = null,
-){
+) {
     fun hasAddress(): Boolean {
         return cityId != null ||
             stateId != null ||
@@ -69,5 +69,4 @@ data class ContactEntity(
             !street.isNullOrEmpty() ||
             !country.isNullOrEmpty()
     }
-
 }

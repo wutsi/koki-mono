@@ -15,9 +15,7 @@ import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 @RequiresPermission(["contact", "contact:full_access"])
-class ContactController(
-    private val service: ContactService
-) : AbstractContactDetailsController() {
+class ContactController : AbstractContactDetailsController() {
     @GetMapping("/contacts/{id}")
     fun show(
         @RequestHeader(required = false, name = "Referer") referer: String? = null,
@@ -27,10 +25,7 @@ class ContactController(
         model: Model
     ): String {
         // Check Permission
-        val contact = service.get(id)
-        if (!contact.viewedBy(userHolder.get())) {
-            throw HttpClientErrorException(HttpStatusCode.valueOf(403))
-        }
+        val contact = findContact(id)
 
         // Get
         if (toast == id && canShowToasts(timestamp, referer, listOf("/contacts/$id/edit", "/contacts/create"))) {
@@ -56,14 +51,14 @@ class ContactController(
     @RequiresPermission(["contact:delete", "contact:full_access"])
     fun delete(@PathVariable id: Long, model: Model): String {
         // Check Permission
-        val contact = service.get(id)
-        if (!contact.deletedBy(userHolder.get())) {
+        val contact = findContact(id)
+        if (!contact.canDelete(userHolder.get())) {
             throw HttpClientErrorException(HttpStatusCode.valueOf(403))
         }
 
         // Delete
         try {
-            service.delete(id)
+            contactService.delete(id)
             return "redirect:/contacts?_op=del&_toast=$id&_ts=" + System.currentTimeMillis()
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)

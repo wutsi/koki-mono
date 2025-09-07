@@ -27,12 +27,12 @@
                         <div>
                             <a class="btn-edit btn btn-light btn-sm"
                                th:href="'/contacts/' + ${contact.id} + '/edit'"
-                               th:if="${contact.managedBy(user)}">Edit</a>
+                               th:if="${contact.canManage(user)}">Edit</a>
 
                             <a class="btn-delete btn btn-danger btn-sm"
                                onclick="return confirm('Are you sure you want to delete the contact?')"
                                th:href="'/contacts/' + ${contact.id} + '/delete'"
-                               th:if="${contact.deletedBy(user)}">Delete</a>
+                               th:if="${contact.canDelete(user)}">Delete</a>
                         </div>
                     </div>
                     <div class="flex margin-top d-none d-md-flex">
@@ -130,6 +130,13 @@
                                        th:text="${contact.phoneFormatted}">PHONE</a>
                                 </td>
                             </tr>
+                            <tr th:if="${contact.phone}">
+                                <td><b>Contact me via</b></td>
+                                <td>
+                                    <span
+                                        th:text="#{'preferred-communication-method.' ${contact.preferredCommunicationMethod}}">METHOD</span>
+                                </td>
+                            </tr>
                             <tr th:if="${contact.profession}">
                                 <td><b>Profession</b></td>
                                 <td th:text="${contact.profession}">PROFESSION</td>
@@ -141,6 +148,10 @@
                             <tr th:if="${contact.language}">
                                 <td><b>Language</b></td>
                                 <td th:text="${contact.languageText}">LANGUAGE</td>
+                            </tr>
+                            <tr th:if="${contact.language}">
+                                <td><b>Address</b></td>
+                                <td th:text="${contact.address.toHtml()}">HTML</td>
                             </tr>
                             <tr>
                                 <td><b>Created</b></td>

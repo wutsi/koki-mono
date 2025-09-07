@@ -4,6 +4,8 @@ import com.wutsi.koki.AccountFixtures.accounts
 import com.wutsi.koki.contact.dto.Contact
 import com.wutsi.koki.contact.dto.ContactSummary
 import com.wutsi.koki.contact.dto.Gender
+import com.wutsi.koki.contact.dto.PreferredCommunicationMethod
+import com.wutsi.koki.refdata.dto.Address
 
 object ContactFixtures {
     // Contact
@@ -74,5 +76,14 @@ object ContactFixtures {
         salutation = "Mr.",
         gender = Gender.MALE,
         language = "fr",
-    )
+        preferredCommunicationMethod = PreferredCommunicationMethod.WHATSAPP,
+        address = Address(
+            street = "340 Pascal",
+            postalCode = "H7K 1C7",
+            cityId = RefDataFixtures.locations[2].id,
+            stateId = RefDataFixtures.locations[2].parentId,
+            country = "CA",
+        ),
+
+        )
 }

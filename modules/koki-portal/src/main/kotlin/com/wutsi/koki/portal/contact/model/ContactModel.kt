@@ -1,7 +1,9 @@
 package com.wutsi.koki.portal.contact.model
 
 import com.wutsi.koki.contact.dto.Gender
+import com.wutsi.koki.contact.dto.PreferredCommunicationMethod
 import com.wutsi.koki.portal.account.model.AccountModel
+import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.tenant.model.TypeModel
 import com.wutsi.koki.portal.user.model.UserModel
 import java.util.Date
@@ -30,22 +32,24 @@ data class ContactModel(
     val createdBy: UserModel? = null,
     val modifiedBy: UserModel? = null,
     val readOnly: Boolean = false,
+    val preferredCommunicationMethod: PreferredCommunicationMethod = PreferredCommunicationMethod.UNKNOWN,
+    val address: AddressModel? = null,
 ) {
     val name: String
         get() = ((salutation ?: "") + " $firstName $lastName").trim()
 
-    fun viewedBy(user: UserModel?): Boolean {
+    fun canAccess(user: UserModel?): Boolean {
         return user != null &&
-            (user.hasFullAccess("contact") || (user.canAccess("contact") == true && account?.managedBy?.id == user.id))
+            (user.hasFullAccess("contact") || (user.canAccess("contact") == true && account?.createdBy?.id == user.id))
     }
 
-    fun managedBy(user: UserModel?): Boolean {
+    fun canManage(user: UserModel?): Boolean {
         return user != null &&
-            (user.hasFullAccess("contact") || (user.canManage("contact") == true && account?.managedBy?.id == user.id))
+            (user.hasFullAccess("contact") || (user.canManage("contact") == true && account?.createdBy?.id == user.id))
     }
 
-    fun deletedBy(user: UserModel?): Boolean {
+    fun canDelete(user: UserModel?): Boolean {
         return user != null &&
-            (user.hasFullAccess("contact") || (user.canDelete("contact") == true && account?.managedBy?.id == user.id))
+            (user.hasFullAccess("contact") || (user.canDelete("contact") == true && account?.createdBy?.id == user.id))
     }
 }

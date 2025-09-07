@@ -166,6 +166,12 @@
             <version>3.2.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.wutsi.koki</groupId>
+            <artifactId>koki-dto</artifactId>
+            <version>0.0.251-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 

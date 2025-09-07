@@ -31,7 +31,7 @@ class EditContactController(
     ): String {
         // Check Permission
         val contact = service.get(id)
-        if (!contact.deletedBy(userHolder.get())) {
+        if (!contact.canDelete(userHolder.get())) {
             throw HttpClientErrorException(HttpStatusCode.valueOf(403))
         }
 
@@ -90,7 +90,7 @@ class EditContactController(
     ): String {
         // Check Permission
         val contact = service.get(id)
-        if (!contact.deletedBy(userHolder.get())) {
+        if (!contact.canDelete(userHolder.get())) {
             throw HttpClientErrorException(HttpStatusCode.valueOf(403))
         }
 
