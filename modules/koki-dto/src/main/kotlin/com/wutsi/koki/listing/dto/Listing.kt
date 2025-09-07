@@ -2,7 +2,6 @@ package com.wutsi.koki.listing.dto
 
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.GeoLocation
-import com.wutsi.koki.refdata.dto.IDType
 import com.wutsi.koki.refdata.dto.Money
 import java.util.Date
 
