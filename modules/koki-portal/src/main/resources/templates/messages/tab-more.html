@@ -1,0 +1,18 @@
+<div data-component-id="ajax-loader"
+     data-target-id="message-container"
+     th:data-url="'/messages/conversations/' + ${conversation.id}"
+     th:each="conversation: ${conversations}"
+     th:id="'conversation-' + ${conversation.id}"
+>
+    <div th:replace="~{__components/message :: conversation-bubble(${conversation})}"></div>
+</div>
+<div class="w-100 text-center" id="conversation-load-more" th:if="${moreUrl}">
+    <button
+        class="btn btn-sm btn-light w-100-mobile"
+        data-component-id='load-more'
+        data-container-id="conversation-load-more"
+        th:data-url="${moreUrl}"
+        th:text="#{button.load_more}">
+        Load more...
+    </button>
+</div>

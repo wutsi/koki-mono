@@ -11,6 +11,7 @@ data class UserSummary(
     val photoUrl: String? = null,
     val employer: String? = null,
     val mobile: String? = null,
+    val cityId: Long? = null,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
 )
