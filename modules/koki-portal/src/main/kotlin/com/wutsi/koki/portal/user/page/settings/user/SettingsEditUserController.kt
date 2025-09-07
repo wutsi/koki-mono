@@ -25,7 +25,7 @@ class SettingsEditUserController(
 ) : AbstractPageController() {
     @GetMapping("/{id}/edit")
     fun edit(@PathVariable id: Long, model: Model): String {
-        val user = service.user(id)
+        val user = service.get(id)
         val form = UserForm(
             displayName = user.displayName,
             username = user.username,

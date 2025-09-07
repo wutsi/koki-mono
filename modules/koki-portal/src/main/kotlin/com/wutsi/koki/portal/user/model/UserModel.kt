@@ -13,6 +13,7 @@ data class UserModel(
     val displayName: String? = null,
     val employer: String? = null,
     val mobile: String? = null,
+    val mobileText: String? = null,
     val photoUrl: String? = null,
     val status: UserStatus = UserStatus.ACTIVE,
     val roles: List<RoleModel> = emptyList(),

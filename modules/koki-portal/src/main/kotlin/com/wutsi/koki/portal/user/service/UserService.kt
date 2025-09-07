@@ -9,6 +9,7 @@ import com.wutsi.koki.sdk.KokiUsers
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
+import io.lettuce.core.KillArgs.Builder.user
 import org.springframework.stereotype.Service
 
 @Service
@@ -19,7 +20,7 @@ class UserService(
     private val categoryService: CategoryService,
     private val locationService: LocationService,
 ) {
-    fun user(id: Long, fullGraph: Boolean = true): UserModel {
+    fun get(id: Long, fullGraph: Boolean = true): UserModel {
         val user = koki.user(id).user
         val roles = if (user.roleIds.isEmpty() || !fullGraph) {
             emptyList()
@@ -60,7 +61,16 @@ class UserService(
             offset = offset
         ).users
 
-        return users.map { user -> mapper.toUserModel(user) }
+        val cityIds = users.mapNotNull { user -> user.cityId }.distinct()
+        val cities = if (cityIds.isEmpty()) {
+            emptyMap()
+        } else {
+            locationService.search(
+                ids = cityIds,
+                limit = cityIds.size
+            ).associateBy { city -> city.id }
+        }
+        return users.map { user -> mapper.toUserModel(user, cities) }
     }
 
     fun create(form: UserForm): Long {

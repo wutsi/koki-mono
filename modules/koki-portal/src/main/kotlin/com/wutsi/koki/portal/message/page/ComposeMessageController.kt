@@ -34,6 +34,10 @@ class ComposeMessageController : AbstractPageController() {
                 toUserId = toUserId,
                 ownerId = ownerId,
                 ownerType = ownerType,
+                body = when (ownerType) {
+                    ObjectType.LISTING -> getMessage("page.message.compose.message-body-listing")
+                    else -> null
+                }
             )
         )
         model.addAttribute("to", findUser(toUserId))

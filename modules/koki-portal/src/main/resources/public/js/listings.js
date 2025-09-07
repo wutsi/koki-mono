@@ -2,11 +2,12 @@ class KokiListing {
     open_search_modal(url) {
         console.log('do_search()');
 
-        koki.widgets.modal.open(
+        koki.w.modal.open(
             url,
             null,
             kokiListing._on_search_modal_opened,
-            null
+            null,
+            true
         );
 
     }

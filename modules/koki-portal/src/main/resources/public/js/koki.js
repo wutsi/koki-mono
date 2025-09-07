@@ -1,338 +1,4 @@
 /**
- * Address widget
- *
- * Attributes
- *  - data-country-id: ID of the dropdown that contains the countries
- *  - data-city-id: ID of the dropdown that contains the cities
- *  - data-neighborhood-id: ID of the dropdown that contains the countries
- */
-class AddressWidget {
-    init() {
-        let count = 0;
-        document.querySelectorAll('[data-component-id=address]')
-            .forEach((elt) => {
-                    const countryId = elt.getAttribute("data-country-id");
-                    const cityId = elt.getAttribute("data-city-id");
-                    const neighborhoodId = elt.getAttribute("data-neighborhood-id");
-
-                    $('#' + countryId).select2();
-                    $('#' + countryId).on('select2:select', function (e) {
-                        console.log('country changed....');
-                        $('#' + cityId).val('').trigger('change');
-                        if (neighborhoodId) {
-                            $('#' + neighborhoodId).val('').trigger('change');
-                        }
-                    });
-
-                    $('#' + cityId).select2({
-                            ajax: {
-                                url: function () {
-                                    return '/locations/selector/search?type=CITY&country=' + document.getElementById(countryId).value;
-                                },
-                                dataType: 'json',
-                                delay: 1000,
-                                processResults: function (item) {
-                                    const xitems = item.map(function (item) {
-                                        return {
-                                            id: item.id,
-                                            text: item.name,
-                                        }
-                                    });
-                                    return {
-                                        results: xitems
-                                    };
-                                }
-                            },
-                            placeholder: 'Select an city',
-                            allowClear: true,
-                            tokenSeparators: [','],
-                            minimumInputLength: 2,
-                        }
-                    );
-                    if (neighborhoodId) {
-                        $('#' + cityId).on('select2:select', function (e) {
-                            console.log('city changed....');
-                            $('#' + neighborhoodId).val('').trigger('change');
-                        });
-
-                        $('#' + neighborhoodId).select2({
-                                ajax: {
-                                    url: function () {
-                                        return '/locations/selector/search?type=NEIGHBORHOOD&' +
-                                            '&parent-id=' + document.getElementById(cityId).value +
-                                            '&country=' + document.getElementById(countryId).value;
-                                    },
-                                    dataType: 'json',
-                                    delay: 1000,
-                                    processResults: function (item) {
-                                        const xitems = item.map(function (item) {
-                                            return {
-                                                id: item.id,
-                                                text: item.name,
-                                            }
-                                        });
-                                        return {
-                                            results: xitems
-                                        };
-                                    }
-                                },
-                                placeholder: 'Select a neighbourhood',
-                                allowClear: true,
-                                tokenSeparators: [','],
-                                minimumInputLength: 2,
-                            }
-                        );
-                    }
-                    count++
-                }
-            );
-        console.log(count + ' address component(s) found');
-    }
-}
-
-
-/**
- * Widget for loading content asynchronously
- *
- * Attributes
- *  - data-url: URL of the fragment to load
- */
-class AjaxFragmentWidget {
-    init() {
-        let count = 0;
-        document.querySelectorAll('[data-component-id=ajax-fragment]')
-            .forEach((elt) => {
-                let url = elt.getAttribute('data-url');
-                if (url) {
-                    fetch(url).then(function (response) {
-                        response.text().then(function (html) {
-                            elt.innerHTML = html;
-
-                            let callback = elt.getAttribute('data-callback');
-                            if (callback) {
-                                eval(callback + "()");
-                            }
-                        });
-                    });
-
-                    count++
-                }
-            });
-        console.log(count + ' ajax-fragment component(s) found');
-    }
-}
-
-/**
- * Uploader widget
- *
- * Attributes
- * - data-upload-button-id: ID of the button to click for selecting the files
- * - data-upload-button-id: ID of the Upload button
- */
-class UploaderWidget {
-    init() {
-        let count = 0;
-        document.querySelectorAll('[data-component-id=uploader]')
-            .forEach((elt) => {
-                const fileId = elt.getAttribute("data-file-button-id");
-                const uploadId = elt.getAttribute("data-upload-button-id");
-
-                if (fileId) {
-                    const file = document.getElementById(fileId)
-                    if (file) {
-                        file.removeEventListener('change', koki.widgets.uploader.onUploaded);
-                        file.addEventListener('change', koki.widgets.uploader.onUploaded);
-                    }
-                }
-                if (uploadId) {
-                    const upload = document.getElementById(uploadId);
-                    if (upload) {
-                        upload.removeEventListener('click', koki.widgets.uploader.onClick);
-                        upload.addEventListener('click', koki.widgets.uploader.onClick);
-                    }
-                }
-
-                count++
-            });
-        console.log(count + ' uploader component(s) found');
-    }
-
-    _findUploaderParent(elt) {
-        return elt.closest('[data-component-id=uploader]');
-    }
-
-    onClick() {
-        const elt = window.event.target;
-        const uploader = koki.widgets.uploader._findUploaderParent(elt);
-        const fileId = uploader.getAttribute("data-file-button-id");
-        if (fileId) {
-            let file = document.getElementById(fileId);
-            if (file) {
-                file.click()
-            }
-        } else {
-            console.log('No file input <#' + fileId + '>');
-        }
-    }
-
-    async onUploaded() {
-        const elt = window.event.target;
-
-        // Init progress bar
-        const uploader = koki.widgets.uploader._findUploaderParent(elt);
-        const progressId = uploader.getAttribute("data-progress-id");
-        const progressBar = progressId ? document.querySelector('#' + progressId + ' .progress-bar') : null;
-        if (progressBar) {
-            progressBar.parentElement.style.display = 'flex';
-            progressBar.setAttribute("aria-valuenow", 0);
-            progressBar.setAttribute("aria-valuemax", elt.files.length);
-            progressBar.style.width = "0%";
-        } else {
-            console.log('No progress bar' + (progressId ? ' <#' + progressId + ' .progress-bar>' : ''))
-        }
-
-        // Upload
-        let uploadUrl = uploader.getAttribute('data-upload-url');
-        let maxMb = uploader.getAttribute('data-max-file-size');
-        if (!maxMb || maxMb.length === 0) {
-            maxMb = 1
-        }
-        for (var i = 0; i < elt.files.length; i++) {
-            // Uploading...
-            const file = elt.files[i];
-            if (file.size <= maxMb * 1024 * 1024) {
-                console.log('Uploading ', file);
-                const data = new FormData();
-                data.append('file', file);
-                const response = await fetch(uploadUrl, {
-                    method: 'POST',
-                    body: data
-                });
-                if (response.ok || response.status === 0) {
-                    console.log("SUCCESS - Uploading " + file.name);
-                } else {
-                    console.log("FAILED - Uploading " + file.name);
-                }
-            } else {
-                console.log("FAILED - " + file.name + " is too big. size=" + (file.size / (1024 * 1024)) + "Mb - max size=" + maxMb + "Mb");
-            }
-
-            // Progress
-            let now = i + 1
-            let percent = 100 * now / elt.files.length;
-            if (progressBar) {
-                console.log('Updating the progress bar. now=' + now + ' - percent=' + percent);
-                progressBar.setAttribute("aria-valuenow", now);
-                progressBar.style.width = percent + "%";
-            }
-        }
-
-        setTimeout(
-            function () {
-                // Refresh
-                if (progressBar) {
-                    progressBar.parentElement.style.display = 'none';
-                }
-                koki.widgets.ajaxButton.refresh(uploader);
-            },
-            2000
-        );
-    }
-}
-
-/**
- * AjaxButton
- * When this button is clicked:
- *  1. It will execute an action by calling the endpoint defined by attribute "data-action-url"
- *  2. IT will refresh a fragment of the page if the attributes "data-target-id" and "data-refresh-url" are  provided
- *
- * Attributes:
- *   - data-action-confirm: Confirmation message displayed before executing the action. The action is executed if user click OK
- *   - data-action-url: URL of the action to execute. This URL must return the json:
- *      {
- *          success: true | false
- *          error: Error (if success=false)
- *      }
- *   - data-target-id: ID of the element to refresh
- *   - data-refresh-url: URL where to load the data to refresh
- */
-class AjaxButtonWidget {
-    init() {
-        let count = 0;
-        let me = this;
-        document.querySelectorAll('[data-component-id=ajax-button]')
-            .forEach((elt) => {
-                    elt.removeEventListener('click', koki.widgets.ajaxButton.onClick);
-                    elt.addEventListener('click', koki.widgets.ajaxButton.onClick);
-
-                    count++
-                }
-            );
-        console.log(count + ' ajax-button component(s) found');
-    }
-
-    onClick() {
-        console.log('onClick()');
-        const elt = window.event.target;
-        const actionUrl = elt.getAttribute('data-action-url');
-        if (actionUrl) {
-            // Confirm
-            const confirmMsg = elt.getAttribute('data-action-confirm');
-            if (confirmMsg && !confirm(confirmMsg)) {
-                return
-            }
-
-            // Execute
-            koki.widgets.ajaxButton._execute(actionUrl, elt);
-        } else {
-            koki.widgets.ajaxButton.refresh(elt)
-        }
-    }
-
-    _execute(actionUrl, elt) {
-        console.log('Executing action ' + actionUrl);
-        fetch(actionUrl)
-            .then(response => {
-                if (response.ok) {
-                    response.json().then(json => {
-                        console.log('Executed', json);
-                        if (json.success) {
-                            koki.widgets.ajaxButton.refresh(elt);
-                        } else {
-                            alert('Failed: ' + json.error);
-                        }
-                    });
-                } else {
-                    console.log('Failed to submit to ' + form.action, response.statusText);
-                    alert('Failed');
-                }
-            });
-    }
-
-    refresh(elt) {
-        const targetId = elt.getAttribute('data-target-id');
-        const refreshUrl = elt.getAttribute('data-refresh-url');
-        console.log('Refreshing #' + targetId + ' from ' + refreshUrl, elt);
-
-        if (targetId && refreshUrl) {
-            const container = document.getElementById(targetId);
-            if (container) {
-                fetch(refreshUrl)
-                    .then(response => {
-                        response.text()
-                            .then(html => {
-                                container.innerHTML = html;
-                                koki.init();
-                            })
-                    });
-            } else {
-                console.log('#' + targetId + ' not found in the DOM')
-            }
-        }
-    }
-}
-
-/**
  * Ajax checkbox
  * When this button is clicked:
  * 1. It will execute an action by calling the endpoint defined by attribute "data-action-url"
@@ -394,91 +60,6 @@ class AjaxCheckboxWidget {
                     alert('Failed');
                 }
             });
-    }
-}
-
-/**
- * Button for loading additional data
- */
-class LoadMoreWidget {
-    init() {
-        let count = 0;
-        document.querySelectorAll('[data-component-id=load-more]')
-            .forEach((elt) => {
-                count++
-                elt.removeEventListener('click', this.onClick);
-                elt.addEventListener('click', this.onClick);
-            });
-        console.log(count + ' load-more component(s) found');
-    }
-
-    onClick() {
-        console.log('onLoadMore()');
-
-        const elt = window.event.target;
-        console.log('elt', elt);
-
-        const containerId = elt.getAttribute('data-container-id');
-        const container = document.querySelector('#' + containerId);
-        container.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></div>';
-
-        const url = elt.getAttribute('data-url');
-        console.log('Loading ' + url);
-        fetch(url).then(function (response) {
-            response.text().then(function (html) {
-                $('#' + containerId).replaceWith(html);
-                koki.init();
-            });
-        });
-    }
-}
-
-/**
- * Modal widget
- */
-class ModalWidget {
-    init() {
-        let count = 0;
-        document.querySelectorAll('[data-component-id=modal]')
-            .forEach((elt) => {
-                    count++
-                }
-            );
-        console.log(count + ' modal component(s) found');
-    }
-
-    open(url, title, open_callback, close_callback) {
-        const modal = document.getElementById('koki-modal');
-        if (modal) {
-            modal.addEventListener('hidden.bs.modal', close_callback);
-
-            fetch(url)
-                .then(response => {
-                    if (response.ok) {
-                        response.text()
-                            .then(html => {
-                                // Set the body
-                                document.getElementById("koki-modal-body").innerHTML = html;
-                                if (open_callback) {
-                                    open_callback();
-                                }
-
-                                // Set the title
-                                document.getElementById("koki-modal-title").innerHTML = title;
-
-                                // Show
-                                const modal = new bootstrap.Modal('#koki-modal');
-                                modal.show();
-                            })
-                    } else {
-                        console.log('Unable to fetch the modal', response.text());
-                    }
-                });
-        }
-    }
-
-    close() {
-        document.querySelector('#koki-modal .btn-close').click();
     }
 }
 
@@ -559,52 +140,31 @@ class MapWidget {
 }
 
 /**
- * IntlTel
- *
- * Attributes:
- *  - data-country: Default country
- */
-class IntlTel {
-    init() {
-        let count = 0;
-        document.querySelectorAll('input[type=tel]')
-            .forEach((elt) => {
-                    let country = elt.getAttribute("data-country");
-                    window.intlTelInput(elt, {
-                        initialCountry: (!country || country.length === 0 ? "auto" : country),
-                        strictMode: true,
-                        geoIpLookup: callback => {
-                            fetch("https://ipapi.co/json")
-                                .then(res => res.json())
-                                .then(data => callback(data.country_code))
-                                .catch(() => callback("us"));
-                        },
-                        hiddenInput: () => ({phone: elt.getAttribute("name") + "Full"}),
-                        loadUtils: () => import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/utils.js")
-                    });
-
-                    count++
-                }
-            );
-        console.log(count + ' intl-tel component(s) found');
-    }
-
-}
-
-/**
  * Widget container
  */
 class KokiWidgets {
     constructor() {
-        this.address = new AddressWidget();
-        this.ajaxButton = new AjaxButtonWidget();
         this.ajaxCheckbox = new AjaxCheckboxWidget();
-        this.ajaxFragment = new AjaxFragmentWidget();
-        this.loadMore = new LoadMoreWidget();
         this.map = new MapWidget();
-        this.modal = new ModalWidget();
-        this.uploader = new UploaderWidget();
-        this.intlTel = new IntlTel();
+        //this.uploader = new UploaderWidget();
+        //this.address = new AddressWidget();
+        // this.ajaxFragment = new AjaxFragmentWidget();
+        // this.intlTel = new IntlTel();
+        // this.ajaxButton = new AjaxButtonWidget();
+        // this.loadMore = new LoadMoreWidget();
+        // this.modal = new ModalWidget();
+        // this.modalButton = new ModalButtonWidget();
+
+        this.ajaxCheckbox.init();
+        this.map.init();
+        //this.uploader.init();
+        //this.address.init();
+        //this.ajaxFragment.init();
+        //this.intlTel.init();
+        //this.widgets.ajaxButton.init();
+        //this.widgets.loadMore.init();
+        //this.widgets.modal.init();
+        //this.widgets.modalButton.init();
     }
 }
 
@@ -614,28 +174,130 @@ class KokiWidgets {
 class Koki {
     constructor() {
         this.widgets = new KokiWidgets();
+        this.w = {};
     }
 
-    init() {
-        console.log('init()');
-        this.widgets.address.init();
-        this.widgets.ajaxButton.init();
-        this.widgets.ajaxCheckbox.init();
-        this.widgets.ajaxFragment.init();
-        this.widgets.loadMore.init();
-        this.widgets.map.init();
-        this.widgets.modal.init();
-        this.widgets.uploader.init();
-        this.widgets.intlTel.init();
+    init(root) {
+        console.log('init()', root);
+        for (const [key, value] of Object.entries(this.w)) {
+            value.init(root);
+        }
+    }
+
+    /**
+     * Load the content of a URL into an element of the DOM document
+     *
+     * @param url - URL where to fetch the content
+     * @param targetId - ID of the DOM element where to inject the content fetched from the URL
+     * @param successCallback - function to call on success
+     */
+    load(url, targetId, successCallback) {
+        const target = document.getElementById(targetId);
+        if (!target) {
+            console.error('Element #' + targetId + ' found');
+            return
+        }
+
+        if (url) {
+            target.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></div>';
+            fetch(url)
+                .then(response => {
+                    if (response.ok) {
+                        response.text().then(html => {
+                            target.innerHTML = html;
+                            if (successCallback) {
+                                successCallback();
+                            }
+
+                            // Reinitialize all widgets
+                            koki.init(target);
+                        });
+                    }
+                }).catch(() => {
+                target.innerHTML = 'Error';
+            });
+        } else {
+            console.error('No url provided to refresh from');
+        }
+    }
+
+    /**
+     * Load the content of a URL to replace a DOM element
+     *
+     * @param url - URL where to fetch the content
+     * @param targetId - ID of the DOM element where to inject the content fetched from the URL
+     */
+    replaceWith(url, targetId) {
+        const target = document.getElementById(targetId);
+        if (!target) {
+            console.error('Element #' + targetId + ' found');
+            return
+        }
+
+        if (url) {
+            const parent = target.parentElement;
+            target.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></div>';
+            fetch(url)
+                .then(response => {
+                    if (response.ok) {
+                        response.text().then(html => {
+                            $('#' + targetId).replaceWith(html);
+
+                            // Reinitialize all widgets
+                            koki.init(parent);
+                        });
+                    }
+                }).catch(() => {
+                target.innerHTML = 'Error';
+            });
+        } else {
+            console.error('No url provided to refresh from');
+        }
+    }
+
+    /**
+     *
+     * @param formId
+     * @param successCallback
+     * @param errorCallback
+     */
+    submit_form(formId, successCallback, errorCallback) {
+        const form = document.getElementById(formId);
+        if (form == null) {
+            console.log('FORM #' + formId + '> found');
+            return;
+        }
+        if (!form.checkValidity()) {
+            console.error('The form is not valid');
+            return;
+        }
+
+        event.preventDefault();
+        const data = new FormData(form);
+        const method = form.getAttribute("method");
+        fetch(
+            form.action,
+            {
+                method: method ? method : 'GET',
+                body: new URLSearchParams(data).toString(),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }).then(response => {
+            if (response.ok) {
+                response.json().then((json) => {
+                    if (successCallback) {
+                        successCallback(json);
+                    }
+                });
+            } else {
+                if (errorCallback) {
+                    errorCallback();
+                }
+            }
+        });
     }
 }
 
 const koki = new Koki();
-document.addEventListener(
-    'DOMContentLoaded',
-    function () {
-        koki.init();
-    },
-    false
-);
 

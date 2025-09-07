@@ -81,6 +81,12 @@ ul.amenities li {
     max-height: 200px;
 }
 
+.listing-card .address-street {
+    overflow: hidden;
+    height: 1.25em;
+}
+
+
 a .listing-filter-container {
     text-decoration: none !important;
     color: #040404;

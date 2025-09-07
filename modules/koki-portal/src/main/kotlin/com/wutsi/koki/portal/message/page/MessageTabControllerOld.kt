@@ -5,15 +5,12 @@ import com.wutsi.koki.message.dto.MessageStatus
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.message.service.MessageService
-import com.wutsi.koki.portal.security.RequiresPermission
-import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 
-@Controller
-@RequiresPermission(["message"])
-class MessageTabController(
+@Deprecated("")
+class MessageTabControllerOld(
     private val service: MessageService,
 ) : AbstractPageController() {
     @GetMapping("/messages/tab")

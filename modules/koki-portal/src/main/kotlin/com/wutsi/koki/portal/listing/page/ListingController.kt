@@ -1,5 +1,7 @@
 package com.wutsi.koki.portal.listing.page
 
+import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.refdata.model.CategoryModel
 import com.wutsi.koki.portal.refdata.service.CategoryService
@@ -23,17 +25,16 @@ class ListingController(
         val listing = findListing(id)
         model.addAttribute("listing", listing)
 
-//        val user = getUser()
-//        if (
-//            listing.status != ListingStatus.DRAFT &&
-//            listing.sellerAgentUser != null &&
-//            listing.sellerAgentUser.id != user?.id
-//        ) {
-//            model.addAttribute(
-//                "composeUrl",
-//                "/message/compose&to-user-id=${listing.sellerAgentUser.id}&owner-id=$id&owner-type=${ObjectType.LISTING}"
-//            )
-//        }
+        val user = getUser()
+        if (
+            listing.status != ListingStatus.DRAFT &&
+            listing.sellerAgentUser != null &&
+            listing.sellerAgentUser.id != user?.id
+        ) {
+            val userId = listing.sellerAgentUser.id
+            val type = ObjectType.LISTING
+            model.addAttribute("composeUrl", "/messages/compose?to-user-id=$userId&owner-id=$id&owner-type=$type")
+        }
 
         model.addAttribute(
             "page",
@@ -42,6 +43,16 @@ class ListingController(
                 title = getMessage("page.listing.show.meta.title", arrayOf(listing.listingNumber)),
             )
         )
+
+        if (listing.statusDraft) {
+            model.addAttribute(
+                "excludedTabs",
+                listOf(
+                    "message"
+                )
+            )
+        }
+
         return "listings/show"
     }
 

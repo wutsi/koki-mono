@@ -326,15 +326,7 @@
 
         <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.buyerAgentUser}">
             <b class="text-small" th:text="#{page.listing.agent}">KEY</b>
-            <div class="flex">
-                <img height="32"
-                     th:src="${listing.buyerAgentUser.photoUrl} ? ${listing.buyerAgentUser.photoUrl} : '/image/no-photo.png'"
-                     width="32"/>
-                <div class="margin-left">
-                    <b class="margin-none" th:text="${listing.buyerAgentUser.displayName}">NAME</b>
-                    <div th:text="${listing.buyerAgentUser.employer}">EMPLOYER</div>
-                </div>
-            </div>
+            <div th:replace="~{__components/user :: user-small-card(${listing.buyerAgentUser})}"></div>
         </div>
     </div>
 </div>

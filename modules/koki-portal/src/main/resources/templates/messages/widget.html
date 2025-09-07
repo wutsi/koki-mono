@@ -1,31 +1,12 @@
-<div class="tab-messages">
-    <div class="flex flex-space-between">
-        <div class="w-49 padding"
-             data-component-id="list-item"
-             data-item-class="conversation"
-             data-on-click="koki_message_conversation_selected"
-             id="conversation-container"
-        >
-            <div data-component-id="ajax-loader"
-                 data-target-id="message-container"
-                 th:data-url="'/messages/conversations/' + ${conversation.id}"
-                 th:each="conversation: ${conversations}"
-                 th:id="'conversation-' + ${conversation.id}"
-            >
+<div class="widget">
+    <div class="widget-header">
+        <div class="widget-title">Recent Messages</div>
+    </div>
+    <div class="widget-body" id="conversation-container">
+        <div th:each="conversation: ${conversations}" th:id="'conversation-' + ${conversation.id}">
+            <a th:href="${conversation.url}">
                 <div th:replace="~{__components/message :: conversation-bubble(${conversation})}"></div>
-            </div>
-            <div class="w-100 text-center" id="conversation-load-more" th:if="${moreUrl}">
-                <button
-                    class="btn btn-sm btn-light w-100-mobile"
-                    data-component-id='load-more'
-                    data-container-id="conversation-load-more"
-                    th:data-url="${moreUrl}"
-                    th:text="#{button.load_more}">
-                    Load more...
-                </button>
-            </div>
-        </div>
-        <div class="w-49" id="message-container">
+            </a>
         </div>
     </div>
 </div>
@@ -40,7 +21,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/koki.js"></script>
     <script src="/js/messages.js"></script>
-
-    <div th:replace="~{__components/bootstrap :: modal}"></div>
 </div>
 

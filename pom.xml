@@ -58,7 +58,7 @@
 
     <properties>
         <wutsi-chatbot.version>0.0.5</wutsi-chatbot.version>
-        <wutsi-dto.version>0.0.249</wutsi-dto.version>
+        <wutsi-dto.version>0.0.250</wutsi-dto.version>
         <wutsi-platform.version>0.0.43</wutsi-platform.version>
         <wutsi-sdk.version>0.0.38</wutsi-sdk.version>
 
@@ -79,7 +79,7 @@
         <maven-failsafe-plugin.version>3.5.3</maven-failsafe-plugin.version>
 
         <amqp-client.version>5.26.0</amqp-client.version>
-        <aws.version>1.12.788</aws.version>
+        <aws.version>1.12.791</aws.version>
         <commons-cli.version>1.9.0</commons-cli.version>
         <commons-codec.version>1.17.1</commons-codec.version>
         <commons-csv.version>1.14.1</commons-csv.version>
@@ -98,7 +98,7 @@
         <hikari-cp.version>7.0.2</hikari-cp.version>
         <jackson.version>2.17.2</jackson.version>
         <firebase-admin.version>9.3.0</firebase-admin.version>
-        <flying-saucer-pdf.version>9.13.3</flying-saucer-pdf.version>
+        <flying-saucer-pdf.version>10.0.0</flying-saucer-pdf.version>
         <graalvm.version>24.2.0</graalvm.version>
         <javax-activation.version>1.1.1</javax-activation.version>
         <javax-validation.version>2.0.1.Final</javax-validation.version>
@@ -122,7 +122,7 @@
         <kotlin-mockito.version>2.2.0</kotlin-mockito.version>
         <kotlinpoet.version>1.18.1</kotlinpoet.version>
         <ktlint.version>1.7.1</ktlint.version>
-        <lettuce.version>6.8.0.RELEASE</lettuce.version>
+        <lettuce.version>6.8.1.RELEASE</lettuce.version>
         <libphonenumber.version>9.0.13</libphonenumber.version>
         <mobiledetect.version>1.1.1</mobiledetect.version>
         <mustache.version>0.9.14</mustache.version>

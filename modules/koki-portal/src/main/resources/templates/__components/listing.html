@@ -45,13 +45,13 @@
 <div th:fragment="listing-table(items, sold)" th:if="!${items.isEmpty()}">
     <table class="table">
         <tr class="d-none d-md-table-row">
-            <th colspan="2" th:text="#{page.listing.address}" width="40%">ADDRESS</th>
+            <th colspan="2" th:text="#{page.listing.address}" width="30%">ADDRESS</th>
 
             <th th:if="${sold}" th:text="#{page.listing.agent}">AGENT</th>
             <th th:if="${sold}" th:text="#{page.listing.transaction-date}">DATE</th>
             <th class="text-right" th:if="${sold}" th:text="#{page.listing.transaction-price}">PRICE</th>
 
-            <th th:if="!${sold}" th:text="#{page.listing.description}" width="20%">DESCRIPTION</th>
+            <th th:if="!${sold}" th:text="#{page.listing.description}" width="40%">DESCRIPTION</th>
             <th class="text-right" th:if="!${sold}" th:text="#{page.listing.price}">PRICE</th>
         </tr>
         <tr class="listing" th:each="listing : ${items}">
@@ -97,7 +97,7 @@
                 </tr>
                 <tr th:if="${sold} AND ${listing.transactionDate}">
                     <th th:text="#{page.listing.transaction-date}">DATE</th>
-                    <td class="padding-left" th:text="${listing.transactionDateText}">$$$</td>
+                    <td class="padding-left" th:text="${listing.transactionDateText}">DATE</td>
                 </tr>
                 <tr th:if="${sold} AND ${listing.transactionPrice}">
                     <th th:text="#{page.listing.transaction-price}">PRICE</th>
@@ -117,10 +117,8 @@
         <a th:href="'/listings/' + ${listing.id}" th:text="${listing.transactionDateText}">YYYY-MM-DD</a>
     </td>
     <td class="text-right text-nowrap d-none d-md-table-cell" th:if="${sold}">
-        <a th:href="'/listings/' + ${listing.id}" th:if="${listing.transactionPrice}">
-            <div class="text-nowrap listing-price">
-                <span th:text="${listing.transactionPrice.displayText}">$$</span>
-            </div>
+        <a class="text-nowrap listing-price" th:href="'/listings/' + ${listing.id}" th:if="${listing.transactionPrice}">
+            <b th:text="${listing.transactionPrice.displayText}">$$</b>
         </a>
     </td>
 
@@ -130,24 +128,25 @@
         </a>
     </td>
     <td class="text-right text-nowrap d-none d-md-table-cell" th:if="!${sold}">
-        <a th:href="'/listings/' + ${listing.id}" th:if="${listing.price}">
-            <div class="text-nowrap listing-price">
-                <span th:text="${listing.price.displayText}">$$</span>
-            </div>
+        <a class="text-nowrap listing-price" th:href="'/listings/' + ${listing.id}" th:if="${listing.price}">
+            <b th:text="${listing.price.displayText}">$$</b>
         </a>
     </td>
 </tr>
 
 <div class="flex" th:fragment="listing-bed-bath-area(listing)">
-    <div class="margin-right-small"
-         th:if="${listing.bedrooms}"
-         th:text="${listing.bedrooms} + #{page.listing.bedrooms-abbreviation}">
-        00
+    <div th:if="${listing.bedrooms}">
+        <span th:text="${listing.bedrooms}">00</span>
+        <span th:text="#{page.listing.bedrooms-short}">BED</span>
     </div>
-    <div class="margin-right-small"
-         th:if="${listing.bathrooms}"
-         th:text="${listing.bathrooms} + #{page.listing.bathrooms-abbreviation}">
-        00
+    <div class="padding-left-small padding-right-small" th:if="${listing.bedrooms} AND ${listing.bathrooms}">-</div>
+    <div th:if="${listing.bathrooms}">
+        <span th:text="${listing.bathrooms}">00</span>
+        <span th:text="#{page.listing.bathrooms-short}">BED</span>
+    </div>
+    <div class="padding-left-small padding-right-small"
+         th:if="(${listing.bedrooms} OR ${listing.bathrooms}) AND (${listing.lotArea} OR ${listing.propertyArea})">
+        -
     </div>
     <div th:if="${listing.lotArea} OR ${listing.propertyArea}">
         <span th:if="${listing.lotArea}" th:text="${listing.lotArea}">00</span>
@@ -220,6 +219,7 @@
             <div class="text-small">
                 <div th:replace="~{__components/listing :: listing-bed-bath-area(${listing})}"></div>
             </div>
+            <div class="text-small address" th:if="${listing.address}" th:text="${listing.address?.street}">STREET</div>
             <div class="text-small" th:if="${listing.address}">
                 <span th:text="${listing.address?.neighbourhood?.name}">XXX</span>
                 <span>-</span>

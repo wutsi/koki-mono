@@ -36,5 +36,6 @@ class UserMapper {
         photoUrl = entity.photoUrl,
         createdAt = entity.createdAt,
         modifiedAt = entity.modifiedAt,
+        cityId = entity.cityId,
     )
 }

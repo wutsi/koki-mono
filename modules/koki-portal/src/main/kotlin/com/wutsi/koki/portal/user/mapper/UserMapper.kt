@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.user.mapper
 
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.refdata.model.CategoryModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
@@ -7,6 +8,7 @@ import com.wutsi.koki.portal.user.model.RoleModel
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.tenant.dto.User
 import com.wutsi.koki.tenant.dto.UserSummary
+import io.lettuce.core.KillArgs.Builder.id
 import org.springframework.stereotype.Service
 import java.util.Locale
 import kotlin.collections.flatMap
@@ -36,6 +38,7 @@ class UserMapper : TenantAwareMapper() {
             employer = entity.employer,
             photoUrl = entity.photoUrl,
             mobile = entity.mobile,
+            mobileText = formatPhone(entity.mobile, city?.country),
             category = category,
             city = city,
             permissionNames = roles.flatMap { role -> role.permissions }
@@ -44,8 +47,9 @@ class UserMapper : TenantAwareMapper() {
         )
     }
 
-    fun toUserModel(entity: UserSummary): UserModel {
+    fun toUserModel(entity: UserSummary, cities: Map<Long, LocationModel>): UserModel {
         val fmt = createDateTimeFormat()
+        val city = entity.cityId?.let { id -> cities[id] }
         return UserModel(
             id = entity.id,
             username = entity.username,
@@ -59,6 +63,28 @@ class UserMapper : TenantAwareMapper() {
             employer = entity.employer,
             photoUrl = entity.photoUrl,
             mobile = entity.mobile,
+            mobileText = formatPhone(entity.mobile, city?.country),
+            city = city
         )
+    }
+
+    private fun formatPhone(number: String?, country: String?): String? {
+        if (number == null) {
+            return null
+        } else if (country == null) {
+            return number
+        }
+
+        try {
+            val phoneUtil = PhoneNumberUtil.getInstance()
+            val phone = phoneUtil.parse(number, country)
+            return if (phoneUtil.isValidNumber(phone)) {
+                phoneUtil.format(phone, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL)
+            } else {
+                number
+            }
+        } catch (ex: Exception) {
+            return null
+        }
     }
 }
