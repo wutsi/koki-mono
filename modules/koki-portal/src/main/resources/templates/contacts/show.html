@@ -42,15 +42,15 @@
                         </div>
                         <div class="margin-right-2x" th:if="${contact.email}">
                             <b>Email</b><br/>
-                            <a th:href="'mailto:' + ${contact.email}" th:text="${contact.email}">EMAIL</a>
+                            <a th:href="${contact.emailUrl}" th:text="${contact.email}">EMAIL</a>
                         </div>
                         <div class="margin-right-2x" th:if="${contact.mobile}">
                             <b>Mobile</b><br/>
-                            <a th:href="'tel:' + ${contact.mobile}" th:text="${contact.mobileFormatted}">MOBILE</a>
+                            <a th:href="${contact.mobileUrl}" th:text="${contact.mobileFormatted}">MOBILE</a>
                         </div>
                         <div class="margin-right-2x" th:if="${contact.phone}">
                             <b>Phone</b><br/>
-                            <a th:href="'tel:' + ${contact.phone}" th:text="${contact.phoneFormatted}">PHONE</a>
+                            <a th:href="${contact.phoneUrl}" th:text="${contact.phoneFormatted}">PHONE</a>
                         </div>
                         <div class="margin-right-2x" th:if="${contact.account}">
                             <b>Account</b><br/>
@@ -112,29 +112,28 @@
                             <tr th:if="${contact.email}">
                                 <td><b>Email</b></td>
                                 <td>
-                                    <a th:href="'mailto:' + ${contact.email}"
+                                    <a th:href="${contact.emailUrl}"
                                        th:text="${contact.email}">EMAIL</a>
                                 </td>
                             </tr>
                             <tr th:if="${contact.mobile}">
                                 <td><b>Mobile</b></td>
                                 <td>
-                                    <a th:href="'tel:' + ${contact.mobile}"
+                                    <a th:href="${contact.mobileUrl}"
                                        th:text="${contact.mobileFormatted}">MOBILE</a>
                                 </td>
                             </tr>
                             <tr th:if="${contact.phone}">
                                 <td><b>Phone</b></td>
                                 <td>
-                                    <a th:href="'tel:' + ${contact.phone}"
+                                    <a th:href="${contact.phoneUrl}"
                                        th:text="${contact.phoneFormatted}">PHONE</a>
                                 </td>
                             </tr>
                             <tr th:if="${contact.phone}">
                                 <td><b>Contact me via</b></td>
-                                <td>
-                                    <span
-                                        th:text="#{'preferred-communication-method.' ${contact.preferredCommunicationMethod}}">METHOD</span>
+                                <td th:text="#{'preferred-communication-method.' + ${contact.preferredCommunicationMethod}}">
+                                    METHOD
                                 </td>
                             </tr>
                             <tr th:if="${contact.profession}">
@@ -151,7 +150,7 @@
                             </tr>
                             <tr th:if="${contact.language}">
                                 <td><b>Address</b></td>
-                                <td th:text="${contact.address.toHtml()}">HTML</td>
+                                <td th:utext="${contact.address.toHtml()}">HTML</td>
                             </tr>
                             <tr>
                                 <td><b>Created</b></td>

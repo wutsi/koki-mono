@@ -1,6 +1,7 @@
 package com.wutsi.koki
 
 import com.wutsi.koki.AccountFixtures.accounts
+import com.wutsi.koki.UserFixtures.USER_ID
 import com.wutsi.koki.contact.dto.Contact
 import com.wutsi.koki.contact.dto.ContactSummary
 import com.wutsi.koki.contact.dto.Gender
@@ -70,7 +71,7 @@ object ContactFixtures {
         phone = "+15147551122",
         mobile = "+15147551133",
         modifiedById = UserFixtures.users[1].id,
-        createdById = UserFixtures.users[1].id,
+        createdById = USER_ID,
         profession = "Engineer",
         employer = "Google",
         salutation = "Mr.",
@@ -84,6 +85,5 @@ object ContactFixtures {
             stateId = RefDataFixtures.locations[2].parentId,
             country = "CA",
         ),
-
-        )
+    )
 }

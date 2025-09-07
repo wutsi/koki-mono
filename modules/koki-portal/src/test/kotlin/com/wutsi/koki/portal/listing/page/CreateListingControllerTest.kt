@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.ContactFixtures.contacts
 import com.wutsi.koki.ListingFixtures.listing
 import com.wutsi.koki.RefDataFixtures.amenities
 import com.wutsi.koki.RefDataFixtures.cities

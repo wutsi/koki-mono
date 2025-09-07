@@ -1,16 +1,21 @@
 package com.wutsi.koki.portal.contact.page
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.ContactFixtures.contact
 import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.NoteFixtures
+import com.wutsi.koki.contact.dto.GetContactResponse
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import kotlin.test.Test
 
 class ContactControllerTest : AbstractPageControllerTest() {
@@ -32,6 +37,23 @@ class ContactControllerTest : AbstractPageControllerTest() {
 
         assertElementPresent(".btn-edit")
         assertElementPresent(".btn-delete")
+    }
+
+    @Test
+    fun `show - now_owner`() {
+        doReturn(
+            ResponseEntity(
+                GetContactResponse(contact.copy(createdById = 99999L)),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetContactResponse::class.java)
+            )
+
+        navigateTo("/contacts/${contact.id}")
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test

@@ -83,12 +83,15 @@
                                 <input maxlength="30" th:field="*{phone}" type="tel"/>
                             </div>
                             <div class="section-item">
-                                <label class="title">Profession</label>
-                                <input maxlength="100" th:field="*{profession}"/>
-                            </div>
-                            <div class="section-item">
-                                <label class="title">Employer</label>
-                                <input maxlength="100" th:field="*{employer}"/>
+                                <label class="title">Contact me via</label>
+                                <div class="text-small">Select your preferred communication method</div>
+                                <select th:field="*{preferredCommunicationMethod}">
+                                    <option th:each="method : ${communicationMethods}"
+                                            th:text="#{'preferred-communication-method.' + ${method}}"
+                                            th:value="${method}">
+                                        METHOD
+                                    </option>
+                                </select>
                             </div>
                             <div class="section-item">
                                 <label class="title">Language</label>
@@ -100,6 +103,35 @@
                                         LANGUAGE
                                     </option>
                                 </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Country</label>
+                                <select th:field="*{country}">
+                                    <option value=""></option>
+                                    <option th:each="country : ${countries}"
+                                            th:text="${country.displayCountry}"
+                                            th:value="${country.country}"
+                                    >COUNTRY
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">City</label>
+                                <select data-city-id="cityId"
+                                        data-component-id="address"
+                                        data-country-id="country"
+                                        th:field="*{cityId}"
+                                >
+                                    <option th:if="${city}" th:text="${cityName}" th:value="${city.id}"></option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Street</label>
+                                <input th:field="*{street}"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">Postal Code</label>
+                                <input maxlength="30" th:field="*{postalCode}"/>
                             </div>
                         </div>
                     </div>

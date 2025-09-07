@@ -166,6 +166,11 @@ class ContactService(
             profession = form.profession?.trim()?.ifEmpty { null },
             employer = form.employer?.trim()?.ifEmpty { null },
             language = form.language,
+            preferredCommunicationMethod = form.preferredCommunicationMethod,
+            cityId = form.cityId,
+            country = form.country,
+            street = form.street,
+            postalCode = form.postalCode,
         )
         return koki.create(request).contactId
     }
@@ -184,6 +189,11 @@ class ContactService(
             profession = form.profession?.trim()?.ifEmpty { null },
             employer = form.employer?.trim()?.ifEmpty { null },
             language = form.language,
+            preferredCommunicationMethod = form.preferredCommunicationMethod,
+            cityId = form.cityId,
+            country = form.country,
+            street = form.street,
+            postalCode = form.postalCode,
         )
         koki.update(id, request)
     }

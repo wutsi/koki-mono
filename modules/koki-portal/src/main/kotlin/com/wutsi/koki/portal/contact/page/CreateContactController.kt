@@ -1,12 +1,16 @@
 package com.wutsi.koki.portal.contact.page
 
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.contact.dto.PreferredCommunicationMethod
 import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.contact.form.ContactForm
 import com.wutsi.koki.portal.contact.service.ContactService
+import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.TypeService
+import io.lettuce.core.KillArgs.Builder.id
+import jdk.javadoc.internal.doclets.toolkit.util.DocPath.parent
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -39,15 +43,21 @@ class CreateContactController(
             }
         }
 
+        val city = resolveCity()
         val form = ContactForm(
             accountId = account?.id ?: -1,
-            language = account?.language ?: LocaleContextHolder.getLocale().language
+            language = account?.language ?: LocaleContextHolder.getLocale().language,
+            country = city?.country ?: tenantHolder.get()?.country,
+            cityId = city?.id,
+            preferredCommunicationMethod = PreferredCommunicationMethod.WHATSAPP,
         )
-        return create(form, model)
+        return create(form, model, city)
     }
 
-    fun create(form: ContactForm, model: Model): String {
+    fun create(form: ContactForm, model: Model, city: LocationModel?): String {
         loadLanguages(model)
+        loadCountries(model)
+        model.addAttribute("communicationMethods", PreferredCommunicationMethod.entries)
         model.addAttribute("form", form)
 
         model.addAttribute(
@@ -70,6 +80,12 @@ class CreateContactController(
             model.addAttribute("account", accountService.account(id = form.accountId, fullGraph = false))
         }
 
+        val xcity = city ?: form.cityId?.let { id -> locationService.get(id) }
+        if (xcity != null) {
+            val parent = resolveParent(xcity)
+            model.addAttribute("city", xcity)
+            model.addAttribute("cityName", parent?.let { "${xcity.name}, ${parent.name}" } ?: xcity.name)
+        }
         return "contacts/create"
     }
 
@@ -83,7 +99,7 @@ class CreateContactController(
         } catch (ex: HttpClientErrorException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)
-            return create(form, model)
+            return create(form, model, null)
         }
     }
 }

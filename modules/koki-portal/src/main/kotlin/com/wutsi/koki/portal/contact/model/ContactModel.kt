@@ -38,18 +38,32 @@ data class ContactModel(
     val name: String
         get() = ((salutation ?: "") + " $firstName $lastName").trim()
 
+    val phoneUrl: String?
+        get() = phone?.let { "tel:$phone" }
+
+    val mobileUrl: String?
+        get() = mobile?.let {
+            when (preferredCommunicationMethod) {
+                PreferredCommunicationMethod.WHATSAPP -> "https://wa.me/" + (mobile.substring(1))
+                else -> "tel:$phone"
+            }
+        }
+
+    val emailUrl: String?
+        get() = email?.let { "mailto:$email" }
+
     fun canAccess(user: UserModel?): Boolean {
         return user != null &&
-            (user.hasFullAccess("contact") || (user.canAccess("contact") == true && account?.createdBy?.id == user.id))
+            (user.hasFullAccess("contact") || (user.canAccess("contact") && createdBy?.id == user.id))
     }
 
     fun canManage(user: UserModel?): Boolean {
         return user != null &&
-            (user.hasFullAccess("contact") || (user.canManage("contact") == true && account?.createdBy?.id == user.id))
+            (user.hasFullAccess("contact") || (user.canManage("contact") && createdBy?.id == user.id))
     }
 
     fun canDelete(user: UserModel?): Boolean {
         return user != null &&
-            (user.hasFullAccess("contact") || (user.canDelete("contact") == true && account?.createdBy?.id == user.id))
+            (user.hasFullAccess("contact") || (user.canDelete("contact") && createdBy?.id == user.id))
     }
 }

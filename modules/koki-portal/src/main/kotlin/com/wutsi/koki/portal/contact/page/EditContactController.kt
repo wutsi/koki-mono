@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.contact.page
 
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.contact.dto.PreferredCommunicationMethod
 import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.contact.form.ContactForm
@@ -31,7 +32,7 @@ class EditContactController(
     ): String {
         // Check Permission
         val contact = service.get(id)
-        if (!contact.canDelete(userHolder.get())) {
+        if (!contact.canManage(userHolder.get())) {
             throw HttpClientErrorException(HttpStatusCode.valueOf(403))
         }
 
@@ -48,6 +49,11 @@ class EditContactController(
             firstName = contact.firstName,
             email = contact.email,
             accountId = contact.account?.id ?: -1,
+            preferredCommunicationMethod = contact.preferredCommunicationMethod,
+            street = contact.address?.street,
+            cityId = contact.address?.city?.id,
+            postalCode = contact.address?.postalCode,
+            country = contact.address?.country
         )
 
         return edit(contact, form, model)
@@ -55,6 +61,8 @@ class EditContactController(
 
     fun edit(contact: ContactModel, form: ContactForm, model: Model): String {
         loadLanguages(model)
+        loadCountries(model)
+        model.addAttribute("communicationMethods", PreferredCommunicationMethod.entries)
         model.addAttribute("contact", contact)
         model.addAttribute("form", form)
 
@@ -77,6 +85,13 @@ class EditContactController(
         }
         if (form.accountId > 0) {
             model.addAttribute("account", accountService.account(id = form.accountId, fullGraph = false))
+        }
+
+        val city = form.cityId?.let { id -> locationService.get(id) }
+        if (city != null) {
+            val parent = resolveParent(city)
+            model.addAttribute("city", city)
+            model.addAttribute("cityName", parent?.let { "${city.name}, ${parent.name}" } ?: city.name)
         }
 
         return "contacts/edit"
