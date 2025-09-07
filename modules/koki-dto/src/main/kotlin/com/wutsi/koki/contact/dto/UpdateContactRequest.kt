@@ -19,4 +19,9 @@ data class UpdateContactRequest(
     val gender: Gender = Gender.UNKNOWN,
     val preferredCommunicationMethod: PreferredCommunicationMethod = PreferredCommunicationMethod.UNKNOWN,
     @get:Size(max = 2) val language: String? = null,
+
+    @get:Size(max = 30) val postalCode: String? = null,
+    @get:Size(max = 2) val country: String? = null,
+    val street: String? = null,
+    val cityId: Long? = null,
 )
