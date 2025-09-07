@@ -1,25 +1,14 @@
-function koki_accounts_select2(id, parentId) {
-    $('#' + id).select2({
-        ajax: {
-            url: '/accounts/selector/search',
-            dataType: 'json',
-            delay: 1000,
-            processResults: function (item) {
-                const xitems = item.map(function (item) {
-                    return {
-                        id: item.id,
-                        text: item.name,
-                    }
-                });
-                return {
-                    results: xitems
-                };
-            }
-        },
-        placeholder: 'Select an account',
-        allowClear: true,
-        tokenSeparators: [','],
-        minimumInputLength: 3,
-        dropdownParent: parentId ? $('#' + parentId) : $(document.body),
+function koki_account_address_same_changed() {
+    console.log('koki_account_address_same_changed()');
+
+    const same = (document.getElementById('billingSameAsShippingAddress').value === 'true');
+    document.querySelectorAll('.billing-address select, .billing-address input').forEach((elt) => {
+        if (same) {
+            elt.setAttribute("disabled", "disabled");
+        } else {
+            elt.removeAttribute("disabled");
+        }
     });
+    document.getElementById('billingCountry').required = !same;
+    document.getElementById('billingCityId').required = !same;
 }

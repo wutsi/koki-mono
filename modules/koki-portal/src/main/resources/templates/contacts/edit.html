@@ -29,14 +29,17 @@
                                     Account
                                     <span class="required" th:if="!${user?.hasFullAccess('contact')}">*</span>
                                 </label>
-                                <select th:field="*{accountId}" th:required="!${user?.hasFullAccess('contact')}">
+                                <select data-component-id="select2"
+                                        data-url="/accounts/selector/search"
+                                        th:field="*{accountId}"
+                                        th:required="!${user?.hasFullAccess('contact')}"
+                                >
                                     <option th:if="${account}"
                                             th:text="${account.name}"
                                             th:value="${account.id}">
                                         ACCOUNT
                                     </option>
                                 </select>
-                                <script th:replace="~{__components/account :: account-selector('accountId')}"></script>
                             </div>
                             <div class="section-item" th:if="${contactTypes}">
                                 <label class="title">Contact Type <span class="required">*</span></label>

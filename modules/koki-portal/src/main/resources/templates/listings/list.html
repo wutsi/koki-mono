@@ -19,25 +19,16 @@
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
-                    <div class="flex flex-space-between">
-                        <div class="btn-group" role="group">&nbsp;</div>
-                        <div>
-                            <a class="btn btn-primary btn-sm" href="/listings/create" id="btn-create"
-                               th:if="${user?.canManage('listing')} OR ${user.hasFullAccess('listing')}">
-                                <i class="fa-solid fa-plus"></i>
-                                <span th:text="#{button.listing}">CREATE</span>
-                            </a>
-                        </div>
+                    <div class="margin-bottom">
+                        <a class="btn btn-primary btn-sm" href="/listings/create" id="btn-create"
+                           th:if="${user?.canManage('listing')} OR ${user.hasFullAccess('listing')}">
+                            <i class="fa-solid fa-plus"></i>
+                            <span th:text="#{button.listing}">CREATE</span>
+                        </a>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-12">
-            <div class="widget">
-                <div class="widget-body">
+                    <hr/>
+
                     <div class="btn-group margin-bottom" role="group">
                         <a class="btn btn-sm" href="/listings" id="btn-my-listings"
                            th:classappend="${form} ? 'btn-light' : 'btn-secondary'"
@@ -47,7 +38,6 @@
                         <button class="btn btn-sm"
                                 data-component-id="modal-button"
                                 data-modal-body-large="true"
-                                data-open-callback="koki_listing_filter_opened"
                                 id="btn-search"
                                 th:classappend="!${form} ? 'btn-light' : 'btn-secondary'"
                                 th:data-modal-body-url="${filterUrl}"
@@ -82,7 +72,10 @@
                     </div>
 
                     <div id="listing-container" th:if="${listings}">
-                        <a href="javascript: open_filter();">
+                        <a
+                            data-component-id="modal-button"
+                            data-modal-body-large="true"
+                            href="#">
                             <div th:replace="~{__components/listing :: listing-filters(${form}, ${locations})}"></div>
                         </a>
 
@@ -123,11 +116,5 @@
 </div>
 <div th:replace="~{__components/bootstrap :: modal}"></div>
 
-<script th:inline="javascript">
-    function open_filter() {
-        const url = /*[[${filterUrl}]]*/ '';
-        kokiListing.open_search_modal(url);
-    }
-</script>
 </body>
 </html>

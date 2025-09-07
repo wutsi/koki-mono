@@ -1,98 +1,58 @@
 /**
- * Address widget
+ * select2 widget
  *
  * Attributes
- *  - data-country-id: ID of the dropdown that contains the countries
- *  - data-city-id: ID of the dropdown that contains the cities
- *  - data-neighborhood-id: ID of the dropdown that contains the countries
+ *  - id: ID of the element
+ *  - data-placeholder: Placeholder
+ *  - data-url: URL from where to fetch the items - This is for fetching the items from JSON source
+ *  - data-parent-id: ID of the parent node. If not specified, it will be the document body - Must be provided in dropdown opened in modal
+ *  - data-minimum-input-length: Minimum length to fire the search. Default=3
  */
-class AddressWidget {
+class Select2Widget {
     init() {
         let count = 0;
-        document.querySelectorAll('[data-component-id=address]')
+        document.querySelectorAll('[data-component-id=select2]')
             .forEach((elt) => {
-                    const countryId = elt.getAttribute("data-country-id");
-                    const cityId = elt.getAttribute("data-city-id");
-                    const neighborhoodId = elt.getAttribute("data-neighborhood-id");
-
-                    $('#' + countryId).select2();
-                    $('#' + countryId).on('select2:select', function (e) {
-                        console.log('country changed....');
-                        $('#' + cityId).val('').trigger('change');
-                        if (neighborhoodId) {
-                            $('#' + neighborhoodId).val('').trigger('change');
-                        }
-                    });
-
-                    $('#' + cityId).select2({
-                            ajax: {
-                                url: function () {
-                                    return '/locations/selector/search?type=CITY&country=' + document.getElementById(countryId).value;
-                                },
-                                dataType: 'json',
-                                delay: 1000,
-                                processResults: function (item) {
-                                    const xitems = item.map(function (item) {
-                                        return {
-                                            id: item.id,
-                                            text: item.name,
-                                        }
-                                    });
-                                    return {
-                                        results: xitems
-                                    };
+                    const id = elt.getAttribute('id');
+                    const placeholder = elt.getAttribute('data-placeholder')
+                    const url = elt.getAttribute('data-url');
+                    const parentId = elt.getAttribute('data-parent-id');
+                    const minLength = elt.getAttribute('data-minimum-input-length');
+                    console.log('url=' + url + ' - parentId=' + parentId);
+                    const ajax = {
+                        url: url,
+                        dataType: 'json',
+                        delay: 1000,
+                        processResults: function (item) {
+                            const xitems = item.map(function (item) {
+                                return {
+                                    id: item.id,
+                                    text: item.name,
                                 }
-                            },
-                            placeholder: 'Select an city',
-                            allowClear: true,
-                            tokenSeparators: [','],
-                            minimumInputLength: 2,
+                            });
+                            return {
+                                results: xitems
+                            };
                         }
-                    );
-                    if (neighborhoodId) {
-                        $('#' + cityId).on('select2:select', function (e) {
-                            console.log('city changed....');
-                            $('#' + neighborhoodId).val('').trigger('change');
-                        });
-
-                        $('#' + neighborhoodId).select2({
-                                ajax: {
-                                    url: function () {
-                                        return '/locations/selector/search?type=NEIGHBORHOOD&' +
-                                            '&parent-id=' + document.getElementById(cityId).value +
-                                            '&country=' + document.getElementById(countryId).value;
-                                    },
-                                    dataType: 'json',
-                                    delay: 1000,
-                                    processResults: function (item) {
-                                        const xitems = item.map(function (item) {
-                                            return {
-                                                id: item.id,
-                                                text: item.name,
-                                            }
-                                        });
-                                        return {
-                                            results: xitems
-                                        };
-                                    }
-                                },
-                                placeholder: 'Select a neighbourhood',
-                                allowClear: true,
-                                tokenSeparators: [','],
-                                minimumInputLength: 2,
-                            }
-                        );
-                    }
+                    };
+                    $('#' + id).select2({
+                        ajax: url ? ajax : null,
+                        placeholder: placeholder,
+                        allowClear: true,
+                        tokenSeparators: [','],
+                        minimumInputLength: minLength ? minLength : 3,
+                        dropdownParent: parentId ? $('#' + parentId) : $(document.body)
+                    });
                     count++
                 }
             );
-        console.log(count + ' address component(s) found');
+        console.log(count + ' select2 component(s) found');
     }
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-        const widget = new AddressWidget();
-        koki.w['address'] = widget;
+        const widget = new Select2Widget();
+        koki.w['select2'] = widget;
         widget.init();
     }
 );

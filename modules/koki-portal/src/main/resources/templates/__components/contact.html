@@ -20,7 +20,24 @@
 
 <tr th:fragment="columns(contact, showAccount, showType)" th:remove="tag">
     <td>
-        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.name}">NAME</a>
+        <a th:href="'/contacts/' + ${contact.id}">
+            <div th:text="${contact.name}">NAME</div>
+
+            <table border="0" class="d-block d-md-none margin-top-small text-small">
+                <tr th:if="${contact.email}">
+                    <th>Email:</th>
+                    <td class="padding-left" th:text="${contact.email}">EMAIL</td>
+                </tr>
+                <tr th:if="${contact.mobile}">
+                    <th>Mobile:</th>
+                    <td class="padding-left" th:text="${contact.mobileFormatted}">EMAIL</td>
+                </tr>
+                <tr th:if="${contact.phone}">
+                    <th>Phone:</th>
+                    <td class="padding-left" th:text="${contact.phoneFormatted}">EMAIL</td>
+                </tr>
+            </table>
+        </a>
     </td>
     <td class="d-none d-lg-table-cell" th:if="${showType}">
         <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.contactType?.title}">
@@ -37,7 +54,7 @@
         <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.phoneFormatted}">PHONE</a>
     </td>
     <td class="d-none d-lg-table-cell" th:if="${showAccount}">
-        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.account.name}">ACCOUNT</a>
+        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.account?.name}">ACCOUNT</a>
     </td>
 </tr>
 
@@ -46,11 +63,5 @@
         <a href="javascript: koki_load_more('contact-load-more')" th:data-url="${moreUrl}">Load more...</a>
     </td>
 </tr>
-
-<script th:fragment="contact-selector(id)" th:inline="javascript">
-    document.addEventListener("DOMContentLoaded", function () {
-        koki_contacts_select2(/*[[${id}]]*/ '');
-    });
-</script>
 
 </body>

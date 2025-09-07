@@ -1,5 +1,6 @@
 package com.wutsi.koki
 
+import com.wutsi.koki.ContactFixtures.contacts
 import com.wutsi.koki.listing.dto.BasementType
 import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
@@ -11,7 +12,6 @@ import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.GeoLocation
-import com.wutsi.koki.refdata.dto.IDType
 import com.wutsi.koki.refdata.dto.Money
 import org.apache.commons.lang3.time.DateUtils
 import java.util.Date
@@ -89,12 +89,7 @@ object ListingFixtures {
         securityDeposit = Money(1500.0, "CAD"),
         advanceRent = 3,
 
-        sellerEmail = "ray.sponsible@gmail.com",
-        sellerName = "Ray Sponsible",
-        sellerIdCountry = "ca",
-        sellerIdNumber = "A4309540F",
-        sellerIdType = IDType.PASSPORT,
-        sellerPhone = "+15477580001",
+        sellerContactId = contacts[0].id,
 
         publicRemarks = """
             These are public remarks

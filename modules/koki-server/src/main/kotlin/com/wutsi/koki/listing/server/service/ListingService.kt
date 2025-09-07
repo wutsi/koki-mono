@@ -514,12 +514,7 @@ class ListingService(
     fun seller(id: Long, request: UpdateListingSellerRequest, tenantId: Long) {
         val listing = get(id, tenantId)
 
-        listing.sellerName = request.sellerName?.uppercase()?.ifEmpty { null }
-        listing.sellerEmail = request.sellerEmail?.lowercase()?.ifEmpty { null }
-        listing.sellerPhone = request.sellerPhone?.ifEmpty { null }
-        listing.sellerIdNumber = request.sellerIdNumber
-        listing.sellerIdType = request.sellerIdType
-        listing.sellerIdCountry = request.sellerIdCountry?.lowercase()?.ifEmpty { null }
+        listing.sellerContactId = request.sellerContactId
         save(listing)
     }
 

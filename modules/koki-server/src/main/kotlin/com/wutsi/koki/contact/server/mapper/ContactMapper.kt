@@ -10,7 +10,7 @@ class ContactMapper {
     fun toContact(entity: ContactEntity): Contact {
         return Contact(
             id = entity.id!!,
-            accountId = entity.account?.id ?: -1,
+            accountId = entity.account?.id,
             contactTypeId = entity.contactTypeId,
             firstName = entity.firstName,
             lastName = entity.lastName,

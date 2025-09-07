@@ -27,7 +27,7 @@ class ContactController(
         model: Model
     ): String {
         // Check Permission
-        val contact = service.contact(id)
+        val contact = service.get(id)
         if (!contact.viewedBy(userHolder.get())) {
             throw HttpClientErrorException(HttpStatusCode.valueOf(403))
         }
@@ -56,7 +56,7 @@ class ContactController(
     @RequiresPermission(["contact:delete", "contact:full_access"])
     fun delete(@PathVariable id: Long, model: Model): String {
         // Check Permission
-        val contact = service.contact(id)
+        val contact = service.get(id)
         if (!contact.deletedBy(userHolder.get())) {
             throw HttpClientErrorException(HttpStatusCode.valueOf(403))
         }

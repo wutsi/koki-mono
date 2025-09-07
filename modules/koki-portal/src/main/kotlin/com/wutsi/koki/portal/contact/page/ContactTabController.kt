@@ -59,7 +59,7 @@ class ContactTabController(
         )
 
         if (accountId != null) {
-            val contacts = service.contacts(
+            val contacts = service.search(
                 accountIds = listOf(accountId),
                 limit = limit,
                 offset = offset

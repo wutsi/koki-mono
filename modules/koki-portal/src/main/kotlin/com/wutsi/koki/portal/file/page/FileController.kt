@@ -68,7 +68,7 @@ class FileController(
             "ownerName",
             when (ownerType) {
                 ObjectType.ACCOUNT -> accountService.account(ownerId, fullGraph = false).name
-                ObjectType.CONTACT -> contactService.contact(ownerId, fullGraph = false).name
+                ObjectType.CONTACT -> contactService.get(ownerId, fullGraph = false).name
                 ObjectType.PRODUCT -> productService.product(ownerId, fullGraph = false).name
                 else -> null
             }

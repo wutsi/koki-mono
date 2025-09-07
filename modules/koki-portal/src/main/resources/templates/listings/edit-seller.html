@@ -25,62 +25,15 @@
                         <div class="section-body">
                             <div class="section-item">
                                 <h2 th:text="#{page.listing.edit.seller.title}">TITLE</h2>
-                                <div th:text="#{page.listing.edit.seller.description}">DESCRIPTION</div>
-                                <div class="margin-top-small alert alert-warning flex">
-                                    <div>
-                                        <div class="alert-icon-container">
-                                            <i class="fa-solid fa-lock"></i>
-                                        </div>
-                                    </div>
-                                    <div class="margin-left" th:utext="#{page.listing.edit.seller.privacy}">
-                                        PRIVACY
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="section-item">
-                                <label class="title">
-                                    <span th:text="#{page.listing.seller}">SELLER</span>
-                                    <span class="required">*</span>
-                                </label>
-                                <input class="form-control margin-bottom-small" maxlength="100" required
-                                       th:field="*{sellerName}"
-                                       th:placeholder="#{page.listing.name}"/>
 
-                                <input class="form-control margin-bottom-small" maxlength="255" required
-                                       th:field="*{sellerEmail}"
-                                       th:placeholder="#{page.listing.email}" type="email"/>
-
-                                <input class="form-control" required
-                                       th:data-country="${form.country}"
-                                       th:field="*{sellerPhone}"
-                                       type="tel"/>
-                            </div>
-                            <div class="section-item">
-                                <label class="title">
-                                    <span th:text="#{page.listing.id-card}">ID_CARD</span>
-                                    <span class="required">*</span>
-                                </label>
-
-                                <input class="form-control margin-bottom-small" maxlength="30" required
-                                       th:field="*{sellerIdNumber}"
-                                       th:placeholder="#{page.listing.id-card-number}"/>
-
-                                <select class="form-select margin-bottom-small" required th:field="*{sellerIdType}">
-                                    <option th:text="#{page.listing.id-card-type}" value=""></option>
-                                    <option th:each="idType : ${idTypes}"
-                                            th:if="${idType.name() != 'UNKNOWN'}"
-                                            th:text="#{'id-type.' + ${idType}}"
-                                            th:value="${idType}"
-                                    >TYPE
-                                    </option>
-                                </select>
-
-                                <select class="form-select" required th:field="*{sellerIdCountry}">
-                                    <option th:text="#{page.listing.id-card-country}" value=""></option>
-                                    <option th:each="country : ${countries}"
-                                            th:text="${country.displayCountry}"
-                                            th:value="${country.country}"
-                                    >COUNTRY
+                                <select
+                                    data-component-id="select2"
+                                    data-url="/contacts/selector/search"
+                                    th:field="*{sellerContactId}">
+                                    <option th:if="${seller}"
+                                            th:text="${seller.name}"
+                                            th:value="${seller.id}">
+                                        ACCOUNT
                                     </option>
                                 </select>
                             </div>

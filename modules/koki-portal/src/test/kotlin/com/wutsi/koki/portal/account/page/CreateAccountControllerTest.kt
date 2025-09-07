@@ -29,7 +29,7 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
         input("#email", "info@ray-construction.com")
         scroll(0.25)
         input("#website", "https://www.ray-construction.com")
-        select2("#language", "French")
+        select2("#language", "English")
         input("#description", "This is the description")
         select("#shippingCountry", 3)
         scroll(0.25)
@@ -58,7 +58,7 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
         assertEquals("+15147580011", request.firstValue.mobile)
         assertEquals("info@ray-construction.com", request.firstValue.email)
         assertEquals("https://www.ray-construction.com", request.firstValue.website)
-        assertEquals("fr", request.firstValue.language)
+        assertEquals("en", request.firstValue.language)
         assertEquals("This is the description", request.firstValue.description)
         assertEquals("340 Pascal", request.firstValue.shippingStreet)
         assertEquals("H0H 0H0", request.firstValue.shippingPostalCode)
@@ -129,6 +129,7 @@ class CreateAccountControllerTest : AbstractPageControllerTest() {
         assertEquals(locations[3].id, request.firstValue.shippingCityId)
         assertEquals("DZ", request.firstValue.shippingCountry)
         assertEquals(true, request.firstValue.billingSameAsShippingAddress)
+        scrollToBottom()
         attributes.forEach { attribute ->
             assertEquals("${attribute.id}11111", request.firstValue.attributes[attribute.id])
         }

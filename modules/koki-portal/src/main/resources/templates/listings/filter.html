@@ -52,7 +52,13 @@
 
     <div class="section-item">
         <label class="title" th:text="#{page.listing.city_or_neighborhood}">CITY</label>
-        <select id="locationIds" multiple name="locationIds">
+        <select data-component-id="select2"
+                data-parent-id="koki-modal"
+                data-url="/locations/selector/search?type=NEIGHBORHOOD&type=CITY"
+                id="locationIds"
+                multiple
+                name="locationIds"
+        >
             <option selected="selected"
                     th:each="location : ${locations}"
                     th:text="${location.name}"
@@ -83,8 +89,8 @@
                            th:value="${room}"
                            type="radio">
                     <label class="btn btn-outline-primary"
-                           th:for="'chk-bedrooms-' + ${room}" th:text="${room}"
-                           th:id="'lbl-bedrooms-' + ${room}"
+                           th:for="'chk-bedrooms-' + ${room}" th:id="'lbl-bedrooms-' + ${room}"
+                           th:text="${room}"
                     >
                         ROOM
                     </label>
@@ -112,8 +118,8 @@
                            th:value="${room}"
                            type="radio">
                     <label class="btn btn-outline-primary"
-                           th:for="'chk-bathrooms-' + ${room}" th:text="${room}"
-                           th:id="'lbl-bathrooms-' + ${room}">
+                           th:for="'chk-bathrooms-' + ${room}" th:id="'lbl-bathrooms-' + ${room}"
+                           th:text="${room}">
                         ROOM
                     </label>
                 </div>

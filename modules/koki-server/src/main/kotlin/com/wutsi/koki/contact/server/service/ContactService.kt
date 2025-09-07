@@ -100,13 +100,13 @@ class ContactService(
                 firstName = request.firstName,
                 lastName = request.lastName,
                 gender = request.gender,
-                language = request.language,
-                salutation = request.salutations,
-                phone = request.phone,
-                email = request.email,
-                mobile = request.mobile,
-                profession = request.profession,
-                employer = request.employer,
+                language = request.language?.ifEmpty { null },
+                salutation = request.salutations?.ifEmpty { null },
+                phone = request.phone?.ifEmpty { null },
+                email = request.email?.ifEmpty { null },
+                mobile = request.mobile?.ifEmpty { null },
+                profession = request.profession?.ifEmpty { null },
+                employer = request.employer?.ifEmpty { null },
                 createdById = userId,
                 modifiedById = userId,
             )
@@ -121,13 +121,13 @@ class ContactService(
         contact.firstName = request.firstName
         contact.lastName = request.lastName
         contact.gender = request.gender
-        contact.language = request.language
-        contact.salutation = request.salutations
-        contact.phone = request.phone
-        contact.email = request.email
-        contact.mobile = request.mobile
-        contact.profession = request.profession
-        contact.employer = request.employer
+        contact.language = request.language?.ifEmpty { null }
+        contact.salutation = request.salutations?.ifEmpty { null }
+        contact.phone = request.phone?.ifEmpty { null }
+        contact.email = request.email?.ifEmpty { null }
+        contact.mobile = request.mobile?.ifEmpty { null }
+        contact.profession = request.profession?.ifEmpty { null }
+        contact.employer = request.employer?.ifEmpty { null }
         contact.modifiedAt = Date()
         contact.modifiedById = securityService.getCurrentUserIdOrNull()
         return dao.save(contact)

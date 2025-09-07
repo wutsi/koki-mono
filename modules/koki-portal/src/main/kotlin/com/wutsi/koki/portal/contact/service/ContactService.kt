@@ -19,7 +19,7 @@ class ContactService(
     private val typeService: TypeService,
     private val accountService: AccountService,
 ) {
-    fun contact(id: Long, fullGraph: Boolean = true): ContactModel {
+    fun get(id: Long, fullGraph: Boolean = true): ContactModel {
         val contact = koki.contact(id).contact
 
         // Users
@@ -55,7 +55,7 @@ class ContactService(
         )
     }
 
-    fun contacts(
+    fun search(
         keyword: String? = null,
         ids: List<Long> = emptyList(),
         contactTypeIds: List<Long> = emptyList(),

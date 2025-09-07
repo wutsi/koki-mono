@@ -62,7 +62,7 @@ class ListContactController(
         )
 
         val user = userHolder.get()!!
-        val contacts = service.contacts(
+        val contacts = service.search(
             contactTypeIds = typeId?.let { listOf(typeId) } ?: emptyList(),
             accountManagerIds = if (user.hasFullAccess("contact")) emptyList() else listOf(user.id),
             limit = limit,
@@ -96,7 +96,7 @@ class ListContactController(
                 model.addAttribute("toast", "Deleted")
             } else {
                 try {
-                    val contact = service.contact(toast, fullGraph = false)
+                    val contact = service.get(toast, fullGraph = false)
                     model.addAttribute(
                         "toast",
                         "<a href='/contacts/${contact.id}'>${contact.name}</a> has been saved!"
