@@ -74,23 +74,27 @@
         <div class="col-12 col-md-4 d-none d-md-block" th:if="${listing.sellerAgentUser}">
             <div class="widget">
                 <div class="widget-body flex">
-                    <img height="64"
+                    <img class="user-photo"
                          th:src="${listing.sellerAgentUser.photoUrl} ? ${listing.sellerAgentUser.photoUrl} : '/image/no-photo.png'"
-                         width="64"/>
-                    <div class="margin-left">
+                    />
+                    <div class="margin-left-small w-100">
                         <h5 class="margin-none" th:text="${listing.sellerAgentUser.displayName}">NAME</h5>
-                        <div class="text-small">
-                            <span th:if="${listing.sellerAgentUser.employer}"
-                                  th:text="${listing.sellerAgentUser.employer}">EMPLOYER</span>
+                        <div th:if="${listing.sellerAgentUser.employer}"
+                             th:text="${listing.sellerAgentUser.employer}">EMPLOYER
                         </div>
-                        <div class="text-small margin-top-small" th:if="${listing.sellerAgentUser.mobile}">
-                            <i class="fa-solid fa-phone"></i>
-                            <span th:text="${listing.sellerAgentUser.mobile}">+1 (514) 7580000</span>
+                        <div th:if="${listing.sellerAgentUser?.mobile}">
+                            <a th:href="'tel:' + ${listing.sellerAgentUser.mobile}"
+                               th:text="${listing.sellerAgentUser.mobileText}">+1 (514) 7580000</a>
                         </div>
-                        <div class="margin-top">
-                            <button class="btn btn-primary" id="compose-message" th:if="${composeUrl}">
-                                <i class="fa-solid fa-envelope"></i>
-                                <span th:text="#{button.message}">MESSAGE</span>
+                        <div class="margin-top w-100">
+                            <button class="btn btn-primary w-100" data-component-id="modal-button"
+                                    id="compose-message"
+                                    th:data-modal-body-url="${composeUrl}"
+                                    th:data-modal-title="#{button.send_message}"
+                                    th:if="${composeUrl}"
+                                    th:text="#{button.send_message}"
+                            >
+                                SEND_MESSAGE
                             </button>
                         </div>
                     </div>
@@ -116,7 +120,7 @@
                                     th:aria-controls="'pills-' + ${tab.name}"
                                     th:data-bs-target="'#pills-' + ${tab.name}"
                                     th:id="'pills-' + ${tab.name} + '-tab'"
-                                    th:if="${tab.tabUrl}"
+                                    th:if="${tab.tabUrl} AND !${excludedTabs?.contains(tab.name)}"
                                     type="button">
                                 <span class="name" th:text="#{'module.' + ${tab.name}}">TAB</span>
                                 <div th:replace="~{__components/module :: tab-counter-badge(${listing}, ${tab})}"></div>
@@ -135,7 +139,7 @@
                              th:data-url="${tab.toTabUrl(listing.id, module, listing.readOnly)}"
                              th:each="tab : ${page.tabs.get('main')}"
                              th:id="'pills-' + ${tab.name}"
-                             th:if="${tab.tabUrl}"
+                             th:if="${tab.tabUrl} AND !${excludedTabs?.contains(tab.name)}"
                         >
                         </div>
                     </div>
@@ -146,34 +150,33 @@
 
     <div class="d-block d-md-none border contact-sticky-bar" th:if="${listing.sellerAgentUser}">
         <div class="flex padding-small">
-            <img height="64"
+            <img height="48"
                  th:src="${listing.sellerAgentUser.photoUrl} ? ${listing.sellerAgentUser.photoUrl} : '/image/no-photo.png'"
-                 width="64"/>
-            <div class="margin-left-small">
-                <b class="margin-none" th:text="${listing.sellerAgentUser.displayName}">NAME</b><br/>
-                <button class="btn btn-primary margin-top-small" id="compose-message-sticky" th:if="${composeUrl}">
-                    <i class="fa-solid fa-envelope"></i>
-                    <span th:text="#{button.message}">MESSAGE</span>
-                </button>
+                 width="48"/>
+            <div class="margin-left-small flex flex-space-between w-100">
+                <div class="text-right">
+                    <b th:text="${listing.sellerAgentUser.displayName}">NAME</b> <br/>
+                    <a th:href="'tel:' + ${listing.sellerAgentUser.mobile}"
+                       th:if="${listing.sellerAgentUser?.mobile}"
+                       th:text="${listing.sellerAgentUser.mobileText}">+1 (514) 7580000</a>
+                </div>
+                <div class="flex flex-center">
+                    <button class="btn btn-sm btn-primary margin-left-small" data-component-id="modal-button"
+                            id="compose-message-sticky"
+                            th:data-modal-body-url="${composeUrl}"
+                            th:data-modal-title="#{button.send_message}"
+                            th:if="${composeUrl}"
+                            th:text="#{button.message}"
+                    >
+                        <span th:text="#{button.send_message}">MESSAGE</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <div th:replace="~{__components/bootstrap :: modal}"></div>
-
-<script th:if="${composeUrl} AND ${listing.sellerAgentUser}" th:inline="javascript">
-    document.getElementById('compose-message').addEventListener('click', compose_message);
-    document.getElementById('compose-message-sticky').addEventListener('click', compose_message);
-
-    function compose_message() {
-        kokiMessage.compose(
-            /*[[${listing.sellerAgentUser.id}]]*/ '',
-            /*[[${listing.id}]]*/ '',
-            'LISTING',
-        );
-    }
-</script>
 
 <script>
     const btnShare = document.getElementById('btn-share');

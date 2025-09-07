@@ -18,7 +18,7 @@ class FileService(
 ) {
     fun get(id: Long): FileModel {
         val file = koki.file(id).file
-        val createdBy = file.createdById?.let { id -> userService.user(id) }
+        val createdBy = file.createdById?.let { id -> userService.get(id) }
 
         return mapper.toFileModel(
             entity = file,

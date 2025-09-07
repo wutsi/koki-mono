@@ -1,21 +1,14 @@
-<div class="padding-small" id="message-composer">
-    <form id="message-composer-form" method="POST" th:action="@{/messages/conversations/messages}" th:object="${form}">
-        <div th:each="participant : ${conversation.participants}" th:if="${participant.id != user?.id}" th:remove="tag">
-            <div th:replace="~{__components/user :: user-small-card(${participant})}"></div>
-        </div>
-        <textarea class="form-control margin-top-small w-100" maxlength="1000" required rows="2"
-                  th:field="*{body}"
-                  th:placeholder="#{page.message.conversation.message-placeholder}"></textarea>
-        <button class="btn btn-sm btn-primary margin-top w-100"
-                onclick="submit_composer_form()"
-                th:text="#{button.send}"
-        >SEND
-        </button>
-        <input th:field="*{conversationId}" type="hidden"/>
-    </form>
+<div th:each="message:${messages.items}" th:remove="tag">
+    <div th:replace="~{__components/message :: message-bubble(${message})}"></div>
 </div>
-<div class="padding" id="message-list">
-    <div class="padding-small margin-bottom border-light border-rounded message" th:each="message:${messages}">
-        <div th:replace="~{__components/message :: message-bubble(${message})}"></div>
-    </div>
+<div class="w-100 text-center" id="message-load-more" th:if="${moreUrl}">
+    <button
+        class="btn btn-sm btn-light w-100-mobile"
+        data-component-id="load-more"
+        data-container-id="message-load-more"
+        th:data-url="${moreUrl}"
+        th:text="#{button.load_more}"
+    >
+        Load more...
+    </button>
 </div>

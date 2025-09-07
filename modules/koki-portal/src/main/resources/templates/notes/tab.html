@@ -1,9 +1,15 @@
 <div class="tab-notes">
     <div th:if="!${readOnly}">
-        <a class="btn-create btn btn-light btn-sm" href="javascript: koki_notes_create()"
-           th:if="${user?.hasPermission('note:manage')}">
+        <button class="btn-create btn btn-light btn-sm"
+                data-close-callback="_koki_notes_on_modal_closed"
+                data-component-id="modal-button"
+                data-modal-body-large="true"
+                data-open-callback="_koki_notes_on_modal_opened"
+                th:data-modal-body-url="'/notes/create?owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}"
+                th:if="${user?.hasPermission('note:manage')}"
+        >
             Add New Note
-        </a>
+        </button>
     </div>
     <div id="note-list" th:data-owner-id="${ownerId}" th:data-owner-type="${ownerType}">
         <div class="border-top padding-top margin-top note" th:each="note : ${notes}" th:id="'note-' + ${note.id}">
@@ -17,13 +23,15 @@
     <link href="https://use.fontawesome.com/releases/v6.6.0/css/all.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="/css/koki-0.css" rel="stylesheet"/>
+    <link href="/css/koki.css" rel="stylesheet"/>
 
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/koki-0.js"></script>
     <script src="/js/notes.js"></script>
+    <script src="/js/koki.js"></script>
+    <script src="/js/widgets/koki-modal-button.js"></script>
+    <script src="/js/widgets/koki-modal.js"></script>
 
     <div th:replace="~{__components/bootstrap :: modal}"></div>
 </div>

@@ -14,6 +14,6 @@ abstract class AbstractSignupController : AbstractPageController() {
     protected lateinit var signupService: SignupService
 
     protected fun resolveUser(id: Long): UserModel {
-        return userService.user(id)
+        return userService.get(id)
     }
 }

@@ -2,41 +2,36 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<tr th:fragment="columns(message, showSubject)" th:remove="tag">
-    <td th:class="'message-status-' + ${message.status}">
-        <a th:href="'javascript: kokiMessage.show(' + ${message.id} + ')'">
-            <span th:text="${message.createdAtMoment}">DATE</span>
-        </a>
-    </td>
-    <td width="1%">
-        <img align="absmiddle" class="margin-left-small"
-             th:if="${message.country}"
-             th:src="${message.countryFlag}"
+<div class="message" th:fragment="message-bubble(message)">
+    <div class="text-small">
+        <b th:if="${message.sender.id != user?.id}" th:text="${message.sender.displayName}">SENDER</b>
+        <b th:if="${message.sender.id == user?.id}" th:text="#{page.message.you}">SENDER</b>
+        <span>-</span>
+        <span th:text="${message.createdAtMoment}">YYYY-MM-DD</span>
+    </div>
+    <div th:text="${message.body}">BODY</div>
+</div>
+
+<div class="conversation" th:fragment="conversation-bubble(message)">
+    <div class="flex w-100">
+        <img class="user-photo"
+             th:src="${conversation.interlocutor.photoUrl} ? ${conversation.interlocutor.photoUrl} : '/image/no-photo.ong'"
         />
-    </td>
-    <td th:class="'message-status-' + ${message.status}">
-        <a th:href="'javascript: kokiMessage.show(' + ${message.id} + ')'">
-            <span th:text="${message.senderName}">SENDER</span>
-        </a>
-    </td>
-    <td class="d-none d-sm-table-cell" th:classappend="'message-status-' + ${message.status}" th:if="${showSubject}">
-        <a th:href="'javascript: kokiMessage.show(' + ${message.id} + ')'" th:if="${message.owner}">
-            <span th:text="${message.owner.title}">TITLE</span>
-        </a>
-    </td>
-</tr>
-
-<tr id="message-load-more" th:fragment="load-more(moreUrl)" th:if="${moreUrl}">
-    <td class="text-center" colspan="3">
-        <button
-            class="btn btn-sm btn-light"
-            data-component-id="load-more"
-            data-container-id="message-load-more"
-            th:data-url="${moreUrl}"
-        >
-            Load more...
-        </button>
-    </td>
-</tr>
-
+        <div class="margin-left w-100">
+            <div class="flex flex-space-between">
+                <b th:text="${conversation.lastMessage.sender.displayName}">NAME</b>
+                <span th:text="${conversation.lastMessage.createdAtMoment}">YYYY-MM-DD</span>
+            </div>
+            <div class="flex flex-space-between">
+                <div class="body" th:text="${conversation.lastMessage.body}">BODY</div>
+                <div class="unread-messages padding-left-small">
+                    <span class="badge rounded-pill bg-success"
+                          th:if="${conversation.totalUnreadMessages > 0}"
+                          th:text="${conversation.totalUnreadMessagesText}"
+                    >00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>

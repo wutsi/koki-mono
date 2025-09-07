@@ -27,7 +27,6 @@ body {
     justify-content: space-evenly;
 }
 
-
 .hidden {
     display: none;
 }
@@ -545,6 +544,18 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
     font-size: 1.2em;
 }
 
+/* === USER ===== */
+.user-photo {
+    width: 64px;
+    height: 64px;
+    border-radius: 1em;
+}
+
+.user-photo-small {
+    width: 32px;
+    height: 32px;
+    border-radius: .5em;
+}
 
 /* ============================= */
 /* bootstrap                     */
@@ -553,16 +564,16 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
     border: 1px solid gray !important;
 }
 
+.border-light {
+    border: 1px solid lightgray !important;
+}
+
 .border-none {
     border: none;
 }
 
 .border-rounded {
     border-radius: 4px 4px 4px 4px;
-}
-
-.border-light {
-    border: 1px solid lightgray !important;
 }
 
 .border-right {
@@ -592,6 +603,10 @@ a.btn-back {
 .widget-body ol.breadcrumb {
     margin-bottom: 0;
     padding-bottom: 0
+}
+
+.modal-body .form {
+    margin: -1em;
 }
 
 .modal-dialog form input:not([type]),
@@ -732,6 +747,7 @@ table tr.entity td a {
     border-radius: 50%;
     border: 1px solid lightgray;
 }
+
 
 /* ============================= */
 /* highlightjs line-number       */

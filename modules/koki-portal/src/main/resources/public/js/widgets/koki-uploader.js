@@ -1,101 +1,15 @@
 /**
- * Address widget
- *
- * Attributes
- *  - data-country-id: ID of the dropdown that contains the countries
- *  - data-city-id: ID of the dropdown that contains the cities
- *  - data-neighborhood-id: ID of the dropdown that contains the countries
- */
-class AddressWidget {
-    init() {
-        let count = 0;
-        document.querySelectorAll('[data-component-id=address]')
-            .forEach((elt) => {
-                    const countryId = elt.getAttribute("data-country-id");
-                    const cityId = elt.getAttribute("data-city-id");
-                    const neighborhoodId = elt.getAttribute("data-neighborhood-id");
-
-                    $('#' + countryId).select2();
-                    $('#' + countryId).on('select2:select', function (e) {
-                        console.log('country changed....');
-                        $('#' + cityId).val('').trigger('change');
-                        if (neighborhoodId) {
-                            $('#' + neighborhoodId).val('').trigger('change');
-                        }
-                    });
-
-                    $('#' + cityId).select2({
-                            ajax: {
-                                url: function () {
-                                    return '/locations/selector/search?type=CITY&country=' + document.getElementById(countryId).value;
-                                },
-                                dataType: 'json',
-                                delay: 1000,
-                                processResults: function (item) {
-                                    const xitems = item.map(function (item) {
-                                        return {
-                                            id: item.id,
-                                            text: item.name,
-                                        }
-                                    });
-                                    return {
-                                        results: xitems
-                                    };
-                                }
-                            },
-                            placeholder: 'Select an city',
-                            allowClear: true,
-                            tokenSeparators: [','],
-                            minimumInputLength: 2,
-                        }
-                    );
-                    if (neighborhoodId) {
-                        $('#' + cityId).on('select2:select', function (e) {
-                            console.log('city changed....');
-                            $('#' + neighborhoodId).val('').trigger('change');
-                        });
-
-                        $('#' + neighborhoodId).select2({
-                                ajax: {
-                                    url: function () {
-                                        return '/locations/selector/search?type=NEIGHBORHOOD&' +
-                                            '&parent-id=' + document.getElementById(cityId).value +
-                                            '&country=' + document.getElementById(countryId).value;
-                                    },
-                                    dataType: 'json',
-                                    delay: 1000,
-                                    processResults: function (item) {
-                                        const xitems = item.map(function (item) {
-                                            return {
-                                                id: item.id,
-                                                text: item.name,
-                                            }
-                                        });
-                                        return {
-                                            results: xitems
-                                        };
-                                    }
-                                },
-                                placeholder: 'Select a neighbourhood',
-                                allowClear: true,
-                                tokenSeparators: [','],
-                                minimumInputLength: 2,
-                            }
-                        );
-                    }
-                    count++
-                }
-            );
-        console.log(count + ' address component(s) found');
-    }
-}
-
-/**
  * Uploader widget
  *
  * Attributes
  * - data-upload-button-id: ID of the button to click for selecting the files
  * - data-upload-button-id: ID of the Upload button
+ * - data-file-button-id: ID of the file button
+ * - data-progress-id: ID of the progress bar
+ * - data-upload-url: URL where to submit the files uploaded
+ * - data-max-file-size: Max size the the files to upload. Default=5Mb
+ * - data-refresh-url: URL to invoke to refresh the view after the upload is completed
+ * - data-target-id: ID of the element to refresh after the upload is completed
  */
 class UploaderWidget {
     init() {
@@ -108,15 +22,15 @@ class UploaderWidget {
                 if (fileId) {
                     const file = document.getElementById(fileId)
                     if (file) {
-                        file.removeEventListener('change', koki.widgets.uploader.onUploaded);
-                        file.addEventListener('change', koki.widgets.uploader.onUploaded);
+                        file.removeEventListener('change', this.on_uploaded);
+                        file.addEventListener('change', this.on_uploaded);
                     }
                 }
                 if (uploadId) {
                     const upload = document.getElementById(uploadId);
                     if (upload) {
-                        upload.removeEventListener('click', koki.widgets.uploader.onClick);
-                        upload.addEventListener('click', koki.widgets.uploader.onClick);
+                        upload.removeEventListener('click', this.on_click);
+                        upload.addEventListener('click', this.on_click);
                     }
                 }
 
@@ -125,13 +39,9 @@ class UploaderWidget {
         console.log(count + ' uploader component(s) found');
     }
 
-    _findUploaderParent(elt) {
-        return elt.closest('[data-component-id=uploader]');
-    }
-
-    onClick() {
+    on_click() {
         const elt = window.event.target;
-        const uploader = koki.widgets.uploader._findUploaderParent(elt);
+        const uploader = elt.closest('[data-component-id=uploader]');
         const fileId = uploader.getAttribute("data-file-button-id");
         if (fileId) {
             let file = document.getElementById(fileId);
@@ -139,15 +49,15 @@ class UploaderWidget {
                 file.click()
             }
         } else {
-            console.log('No file input <#' + fileId + '>');
+            console.error('No file input <#' + fileId + '>');
         }
     }
 
-    async onUploaded() {
+    async on_uploaded() {
         const elt = window.event.target;
 
         // Init progress bar
-        const uploader = koki.widgets.uploader._findUploaderParent(elt);
+        const uploader = elt.closest('[data-component-id=uploader]');
         const progressId = uploader.getAttribute("data-progress-id");
         const progressBar = progressId ? document.querySelector('#' + progressId + ' .progress-bar') : null;
         if (progressBar) {
@@ -163,7 +73,7 @@ class UploaderWidget {
         let uploadUrl = uploader.getAttribute('data-upload-url');
         let maxMb = uploader.getAttribute('data-max-file-size');
         if (!maxMb || maxMb.length === 0) {
-            maxMb = 1
+            maxMb = 5;
         }
         for (var i = 0; i < elt.files.length; i++) {
             // Uploading...
@@ -177,19 +87,19 @@ class UploaderWidget {
                     body: data
                 });
                 if (response.ok || response.status === 0) {
-                    console.log("SUCCESS - Uploading " + file.name);
+                    //console.log("SUCCESS - Uploading " + file.name);
                 } else {
-                    console.log("FAILED - Uploading " + file.name);
+                    console.error("FAILED - Uploading " + file.name);
                 }
             } else {
-                console.log("FAILED - " + file.name + " is too big. size=" + (file.size / (1024 * 1024)) + "Mb - max size=" + maxMb + "Mb");
+                console.error("FAILED - " + file.name + " is too big. size=" + (file.size / (1024 * 1024)) + "Mb - max size=" + maxMb + "Mb");
             }
 
             // Progress
             let now = i + 1
             let percent = 100 * now / elt.files.length;
             if (progressBar) {
-                console.log('Updating the progress bar. now=' + now + ' - percent=' + percent);
+                //console.log('Updating the progress bar. now=' + now + ' - percent=' + percent);
                 progressBar.setAttribute("aria-valuenow", now);
                 progressBar.style.width = percent + "%";
             }
@@ -201,313 +111,18 @@ class UploaderWidget {
                 if (progressBar) {
                     progressBar.parentElement.style.display = 'none';
                 }
-                koki.widgets.ajaxButton.refresh(uploader);
+                const targetId = uploader.getAttribute('data-target-id');
+                const refreshUrl = uploader.getAttribute('data-refresh-url');
+                koki.load(refreshUrl, targetId);
             },
             2000
         );
     }
 }
 
-/**
- * Ajax checkbox
- * When this button is clicked:
- * 1. It will execute an action by calling the endpoint defined by attribute "data-action-url"
- *
- * Attributes:
- *   - data-action-url: URL of the action to execute. The query parameter "checked" is appended to the query parameters of the URL
- *     This URL must return the json:
- *      {
- *          success: true | false
- *          error: Error (if success=false)
- *      }
- */
-class AjaxCheckboxWidget {
-    init() {
-        let count = 0;
-        let me = this;
-        document.querySelectorAll('[data-component-id=ajax-checkbox]')
-            .forEach((elt) => {
-                    elt.removeEventListener('click', koki.widgets.ajaxCheckbox.onClick);
-                    elt.addEventListener('click', koki.widgets.ajaxCheckbox.onClick);
-
-                    count++
-                }
-            );
-        console.log(count + ' ajax-checkbox component(s) found');
+document.addEventListener('DOMContentLoaded', function () {
+        const widget = new UploaderWidget();
+        koki.w['uploader'] = widget;
+        widget.init();
     }
-
-    onClick() {
-        console.log('onClick()');
-        const elt = window.event.target;
-        const actionUrl = elt.getAttribute('data-action-url');
-        if (actionUrl) {
-            // Confirm
-            const confirmMsg = elt.getAttribute('data-action-confirm');
-            if (confirmMsg && !confirm(confirmMsg)) {
-                return
-            }
-
-            // Execute
-            const separator = actionUrl.indexOf('?') > 0 ? '&' : '?';
-            const url = actionUrl + separator + 'checked=' + elt.checked
-            koki.widgets.ajaxCheckbox._execute(url);
-        }
-    }
-
-    _execute(actionUrl) {
-        console.log('Executing action ' + actionUrl);
-        fetch(actionUrl)
-            .then(response => {
-                if (response.ok) {
-                    response.json().then(json => {
-                        console.log('Executed', json);
-                        if (!json.success) {
-                            alert('Failed: ' + json.error);
-                        }
-                    });
-                } else {
-                    console.log('Failed to submit to ' + form.action, response.statusText);
-                    alert('Failed');
-                }
-            });
-    }
-}
-
-/**
- * Map widget based on https://leafletjs.com
- *
- * Attributes:
- *  - id: ID of the map
- *  - data-latitude, data-longitude: Lat/Long of the center of the map
- *  - data-zoom: Initial zoom of the map viewport (Default: 10)
- *  - data-max-zoom: Initial zoom of the map viewport (Default: 20)
- *  - data-show-marker: (true|false) Show marker in the center of the map? (Default: false)
- *  - data-on-click: Name of the callback called when user click. The callback will receive mouse event. See https://leafletjs.com/reference.html#mouseevent
- *  - data-on-ready: Name of the callback called when map is ready
- */
-class MapWidget {
-    init() {
-        let count = 0;
-        document.querySelectorAll('[data-component-id=map]')
-            .forEach((elt) => {
-                const id = elt.getAttribute("id");
-                if (id) {
-                    const latitude = elt.getAttribute("data-latitude");
-                    const longitude = elt.getAttribute("data-longitude");
-                    const zoom = elt.getAttribute("data-zoom");
-                    const center = latitude && longitude ? [latitude, longitude] : null;
-                    const mapOptions = {
-                        center: center,
-                        zoom: zoom && zoom.length > 0 ? zoom : 10,
-                    };
-
-                    // Kill previous instance - see https://stackoverflow.com/questions/19186428/refresh-leaflet-map-map-container-is-already-initialized
-                    var container = L.DomUtil.get(id);
-                    if (container != null) {
-                        container._leaflet_id = null;
-                    }
-
-                    // Create new map instance
-                    let map = L.map(id, mapOptions);
-
-                    const maxZoom = elt.getAttribute("data-max-zoom");
-                    let layer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        maxZoom: maxZoom && maxZoom.length > 0 ? zoom : 20,
-                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                    });
-                    map.addLayer(layer);
-
-                    const showMarker = elt.getAttribute("data-show-marker");
-                    if (showMarker === "true") {
-                        let marker = L.marker([latitude, longitude]);
-                        map.addLayer(marker);
-                    }
-
-                    setTimeout(
-                        function () {
-                            map.invalidateSize(true);
-
-                            // on-click
-                            let onclick = elt.getAttribute('data-on-click');
-                            if (onclick) {
-                                map.on('click', function (evt) {
-                                    eval(onclick)(evt);
-                                });
-                            }
-
-                            // on-ready
-                            let onReady = elt.getAttribute('data-on-ready');
-                            if (onReady) {
-                                eval(onReady)(id, map);
-                            }
-                        },
-                        100);
-                    count++
-                }
-            });
-        console.log(count + ' map component(s) found');
-    }
-}
-
-/**
- * Widget container
- */
-class KokiWidgets {
-    constructor() {
-        this.address = new AddressWidget();
-        this.ajaxCheckbox = new AjaxCheckboxWidget();
-        this.map = new MapWidget();
-        this.uploader = new UploaderWidget();
-        // this.ajaxFragment = new AjaxFragmentWidget();
-        // this.intlTel = new IntlTel();
-        // this.ajaxButton = new AjaxButtonWidget();
-        // this.loadMore = new LoadMoreWidget();
-        // this.modal = new ModalWidget();
-        // this.modalButton = new ModalButtonWidget();
-
-        this.address.init();
-        this.ajaxCheckbox.init();
-        this.map.init();
-        this.uploader.init();
-        // this.ajaxFragment.init();
-        // this.intlTel.init();
-        // this.widgets.ajaxButton.init();
-        // this.widgets.loadMore.init();
-        // this.widgets.modal.init();
-        // this.widgets.modalButton.init();
-    }
-}
-
-/**
- * Main Class
- */
-class Koki {
-    constructor() {
-        this.widgets = new KokiWidgets();
-        this.w = {};
-    }
-
-    init(root) {
-        console.log('init()', root);
-        for (const [key, value] of Object.entries(this.w)) {
-            value.init(root);
-        }
-    }
-
-    /**
-     * Load the content of a URL into an element of the DOM document
-     *
-     * @param url - URL where to fetch the content
-     * @param targetId - ID of the DOM element where to inject the content fetched from the URL
-     * @param successCallback - function to call on success
-     */
-    load(url, targetId, successCallback) {
-        const target = document.getElementById(targetId);
-        if (!target) {
-            console.error('Element #' + targetId + ' found');
-            return
-        }
-
-        if (url) {
-            target.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></div>';
-            fetch(url)
-                .then(response => {
-                    if (response.ok) {
-                        response.text().then(html => {
-                            target.innerHTML = html;
-                            if (successCallback) {
-                                successCallback();
-                            }
-
-                            // Reinitialize all widgets
-                            koki.init(target);
-                        });
-                    }
-                }).catch(() => {
-                target.innerHTML = 'Error';
-            });
-        } else {
-            console.error('No url provided to refresh from');
-        }
-    }
-
-    /**
-     * Load the content of a URL to replace a DOM element
-     *
-     * @param url - URL where to fetch the content
-     * @param targetId - ID of the DOM element where to inject the content fetched from the URL
-     */
-    replaceWith(url, targetId) {
-        const target = document.getElementById(targetId);
-        if (!target) {
-            console.error('Element #' + targetId + ' found');
-            return
-        }
-
-        if (url) {
-            const parent = target.parentElement;
-            target.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></div>';
-            fetch(url)
-                .then(response => {
-                    if (response.ok) {
-                        response.text().then(html => {
-                            $('#' + targetId).replaceWith(html);
-
-                            // Reinitialize all widgets
-                            koki.init(parent);
-                        });
-                    }
-                }).catch(() => {
-                target.innerHTML = 'Error';
-            });
-        } else {
-            console.error('No url provided to refresh from');
-        }
-    }
-
-    /**
-     *
-     * @param formId
-     * @param successCallback
-     * @param errorCallback
-     */
-    submit_form(formId, successCallback, errorCallback) {
-        const form = document.getElementById(formId);
-        if (form == null) {
-            console.log('FORM #' + formId + '> found');
-            return;
-        }
-        if (!form.checkValidity()) {
-            console.error('The form is not valid');
-            return;
-        }
-
-        event.preventDefault();
-        const data = new FormData(form);
-        const method = form.getAttribute("method");
-        fetch(
-            form.action,
-            {
-                method: method ? method : 'GET',
-                body: new URLSearchParams(data).toString(),
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }).then(response => {
-            if (response.ok) {
-                response.json().then((json) => {
-                    if (successCallback) {
-                        successCallback(json);
-                    }
-                });
-            } else {
-                if (errorCallback) {
-                    errorCallback();
-                }
-            }
-        });
-    }
-}
-
-const koki = new Koki();
-
+);

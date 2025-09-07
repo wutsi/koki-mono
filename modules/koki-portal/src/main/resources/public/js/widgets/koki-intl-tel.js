@@ -1,38 +1,38 @@
 /**
- * AjaxLoader
- * When this element is clicked it will refresh a fragment of the page.
+ * IntlTel
  *
  * Attributes:
- *   - data-target-id: ID of the element to refresh
- *   - data-url: URL where to load the data to refresh
+ *  - data-country: Default country
  */
-class AjaxLoaderWidget {
-    init(root) {
+class IntlTelWidget {
+    init() {
         let count = 0;
-        const base = root ? root : document;
-        base.querySelectorAll('[data-component-id=ajax-loader]')
+        document.querySelectorAll('input[type=tel]')
             .forEach((elt) => {
-                    elt.removeEventListener('click', this.on_click);
-                    elt.addEventListener('click', this.on_click);
+                    let country = elt.getAttribute("data-country");
+                    window.intlTelInput(elt, {
+                        initialCountry: (!country || country.length === 0 ? "auto" : country),
+                        strictMode: true,
+                        geoIpLookup: callback => {
+                            fetch("https://ipapi.co/json")
+                                .then(res => res.json())
+                                .then(data => callback(data.country_code))
+                                .catch(() => callback("us"));
+                        },
+                        hiddenInput: () => ({phone: elt.getAttribute("name") + "Full"}),
+                        loadUtils: () => import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/utils.js")
+                    });
 
                     count++
                 }
             );
-        console.log(count + ' ajax-loader component(s) found');
-    }
-
-    on_click() {
-        const elt = window.event.target.closest('[data-component-id=ajax-loader]');
-
-        const targetId = elt.getAttribute('data-target-id');
-        const url = elt.getAttribute('data-url');
-        koki.load(url, targetId);
+        console.log(count + ' intl-tel component(s) found');
     }
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-        const widget = new AjaxLoaderWidget();
-        koki.w['ajaxLoader'] = widget;
+        const widget = new IntlTelWidget();
+        koki.w['intlTel'] = widget;
         widget.init();
     }
 );

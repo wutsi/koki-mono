@@ -56,7 +56,7 @@ class CreateAccountController(
         }
 
         if (form.managedById != null) {
-            model.addAttribute("manager", userService.user(id = form.managedById, fullGraph = false))
+            model.addAttribute("manager", userService.get(id = form.managedById, fullGraph = false))
         }
 
         loadLanguages(model)

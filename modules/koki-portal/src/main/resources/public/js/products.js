@@ -8,18 +8,18 @@ function koki_prices_delete(id) {
     }
 }
 
-function koki_prices_create() {
-    console.log('Create Note');
-    const container = document.getElementById('price-list');
-    const productId = container.getAttribute("data-product-id");
-
-    koki_modal_open(
-        'Create Price',
-        '/prices/create?product-id=' + productId,
-        _koki_prices_on_modal_opened,
-        _koki_prices_on_modal_closed,
-    );
-}
+// function koki_prices_create() {
+//     console.log('Create Note');
+//     const container = document.getElementById('price-list');
+//     const productId = container.getAttribute("data-product-id");
+//
+//     koki_modal_open(
+//         'Create Price',
+//         '/prices/create?product-id=' + productId,
+//         _koki_prices_on_modal_opened,
+//         _koki_prices_on_modal_closed,
+//     );
+// }
 
 function koki_prices_edit(id) {
     console.log('Update Note');
@@ -85,7 +85,7 @@ function _koki_prices_on_modal_opened() {
     document.getElementById('price-form').addEventListener('submit', _koki_prices_on_form_submitted);
 
     /* Cancel */
-    document.getElementById('btn-price-cancel').addEventListener('click', koki_modal_close)
+    document.getElementById('btn-price-cancel').addEventListener('click', koki.w.modal.close)
 }
 
 function _koki_prices_on_modal_closed() {
@@ -93,7 +93,7 @@ function _koki_prices_on_modal_closed() {
 
     /* remove all event listeners */
     document.getElementById('price-form').removeEventListener('submit', _koki_prices_on_form_submitted);
-    document.getElementById("btn-price-cancel").removeEventListener('click', koki_modal_close)
+    document.getElementById("btn-price-cancel").removeEventListener('click', koki.w.modal.close)
 }
 
 function _koki_prices_on_form_submitted() {
@@ -113,7 +113,7 @@ function _koki_prices_on_form_submitted() {
             }
         }).then(response => {
         if (response.ok) {
-            koki_modal_close();
+            koki.w.modal.close();
             _koki_prices_refresh_parent_window(id);
         } else {
             console.log('Error', response.text());

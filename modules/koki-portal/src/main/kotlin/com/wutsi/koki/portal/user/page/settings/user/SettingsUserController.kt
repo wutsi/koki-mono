@@ -27,7 +27,7 @@ class SettingsUserController(
         @RequestParam(required = false, name = "_ts") timestamp: Long? = null,
         model: Model
     ): String {
-        val user = service.user(id)
+        val user = service.get(id)
         loadToast(id, referer, toast, timestamp, model)
         return show(user, model)
     }

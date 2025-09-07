@@ -121,7 +121,7 @@ class CreatePaymentController(
 
         model.addAttribute(
             "collectedBy",
-            form.collectedById?.let { id -> userService.user(id = id, fullGraph = false) }
+            form.collectedById?.let { id -> userService.get(id = id, fullGraph = false) }
         )
 
         return "payments/create-" + form.paymentMethodType.name.lowercase()

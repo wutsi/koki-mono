@@ -7,8 +7,6 @@ import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.user.form.SearchUserForm
 import com.wutsi.koki.portal.user.service.RoleService
 import com.wutsi.koki.portal.user.service.UserService
-import io.lettuce.core.KillArgs.Builder.user
-import io.micrometer.core.instrument.Metrics.more
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -94,7 +92,7 @@ class SettingsListUserController(
                 model.addAttribute("toast", "Deleted")
             } else {
                 try {
-                    val user = service.user(toast, fullGraph = false)
+                    val user = service.get(toast, fullGraph = false)
                     model.addAttribute(
                         "toast",
                         "<a href='/settings/users/${user.id}'>${user.displayName}</a> has been saved!"

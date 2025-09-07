@@ -33,7 +33,7 @@ class CurrentUserHolder(
             return model
         }
         try {
-            model = service.user(id)
+            model = service.get(id)
             return model
         } catch (ex: Exception) {
             loginService.logout()
