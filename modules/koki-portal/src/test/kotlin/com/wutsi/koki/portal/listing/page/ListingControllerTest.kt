@@ -151,6 +151,13 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/listings/${listing.id}")
         assertCurrentPageIs(PageName.LISTING)
+
+        assertElementPresent("#btn-map")
+        assertElementNotPresent("#btn-share")
+        assertElementNotPresent("#btn-edit")
+        assertElementNotPresent("#btn-publish")
+        assertElementNotPresent("#btn-status")
+
         assertElementPresent("#listing-description-section")
         assertElementPresent("#listing-general-section")
         assertElementPresent("#listing-amenity-section")
