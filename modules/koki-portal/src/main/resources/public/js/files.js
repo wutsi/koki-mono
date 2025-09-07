@@ -10,26 +10,11 @@ function koki_files_delete(id) {
     }
 }
 
-
-function koki_files_upload() {
-    console.log('Upload file');
-    const container = document.getElementById('file-list');
-    const ownerId = container.getAttribute("data-owner-id");
-    const ownerType = container.getAttribute("data-owner-type");
-
-    koki_modal_open(
-        'Upload Files',
-        '/files/upload?owner-id=' + ownerId + '&owner-type=' + ownerType,
-        _koki_files_open_modal,
-        _koki_files_close_modal
-    );
-}
-
 function _koki_files_open_modal() {
     console.log('_koki_files_open_modal');
 
     document.getElementById("btn-file-upload").addEventListener('click', _koki_files_on_upload);
-    document.getElementById("btn-file-close").addEventListener('click', koki_modal_close);
+    document.getElementById("btn-file-close").addEventListener('click', _koki_files_close_modal);
     document.getElementById("file-upload").addEventListener('change', _koki_files_on_selected);
 }
 
@@ -37,7 +22,7 @@ function _koki_files_close_modal() {
     console.log('_koki_files_close_modal');
 
     document.getElementById("btn-file-upload").removeEventListener('click', _koki_files_on_upload);
-    document.getElementById("btn-file-close").removeEventListener('click', koki_modal_close);
+    document.getElementById("btn-file-close").removeEventListener('click', _koki_files_close_modal);
     document.getElementById("file-upload").removeEventListener('change', _koki_files_on_selected);
 
     const files = document.querySelector('.file-entry');
@@ -49,16 +34,17 @@ function _koki_files_close_modal() {
 function _koki_files_refresh() {
     console.log('_koki_files_refresh');
 
-    const container = document.getElementById('file-list');
     const ownerId = container.getAttribute("data-owner-id");
     const ownerType = container.getAttribute("data-owner-type");
-    fetch('/files/tab/more?owner-id=' + ownerId + '&owner-type=' + ownerType)
-        .then(response => {
-            response.text()
-                .then(html => {
-                    container.innerHTML = html;
-                })
-        });
+    const url = '/files/tab/more?owner-id=' + ownerId + '&owner-type=' + ownerType;
+    koki.load(url, 'file-list');
+    // fetch('/files/tab/more?owner-id=' + ownerId + '&owner-type=' + ownerType)
+    //     .then(response => {
+    //         response.text()
+    //             .then(html => {
+    //                 container.innerHTML = html;
+    //             })
+    //     });
 }
 
 function _koki_files_on_upload() {

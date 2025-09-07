@@ -5,6 +5,8 @@
  *   - data-modal-body-url: URL of the body
  *   - data-modal-title (Optional): Title of the modal
  *   - data-modal-large (Optional): true | false. Large modal?
+ *   - data-open-callback (Optional):Callback to invoke after opening the modal
+ *   - data-close-callback (Optional):Callback to invoke after closing the modal
  *
  * Dependencies
  *   - ModalWidget
@@ -24,19 +26,29 @@ class ModalButtonWidget {
     }
 
     _on_click() {
-        // console.log('_on_click', event.target);
+        console.log('_on_click', event.target);
 
-        const elt = event.target;
+        const elt = event.target.closest('[data-component-id=modal-button]');
         const url = elt.getAttribute('data-modal-body-url');
         const title = elt.getAttribute('data-modal-body-title');
         const large = elt.getAttribute('data-modal-body-large');
+        const openCallback = elt.getAttribute('data-open-callback');
+        const closeCallback = elt.getAttribute('data-close-callback');
 
-        const modal = koki.w.modal;
-        if (!modal) {
-            console.log('Module koki-modal.js not loaded');
-        } else {
-            modal.open(url, title, null, null, large);
-        }
+        koki.w.modal.open(
+            url,
+            title,
+            function () {
+                if (openCallback) {
+                    eval(openCallback)()
+                }
+            },
+            function () {
+                if (closeCallback) {
+                    eval(closeCallback)()
+                }
+            },
+            large);
     }
 }
 

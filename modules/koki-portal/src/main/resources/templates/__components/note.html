@@ -14,9 +14,16 @@
     <div>
         <div class="note-subject">
             <span th:text="${note.modifiedAtMoment}">00:00</span>
-            <a class="subject entity-title" th:href="'javascript: koki_notes_view(' + ${note.id} + ')'">
+            <a class="subject entity-title"
+               data-close-callback="_koki_notes_on_viewer_closed"
+               data-component-id="modal-button"
+               data-modal-body-large="true"
+               data-open-callback="_koki_notes_on_viewer_opened"
+               th:data-modal-body-url="'/notes/' + ${note.id}"
+            >
                 <span th:replace="~{__components/note :: type-icon(${note.type})}"></span>
-                <b th:text="${note.subject}">SUBJECT</b></a>
+                <b th:text="${note.subject}">SUBJECT</b>
+            </a>
         </div>
         <div class="text-small" th:if="${note.modifiedBy}">
             By:
@@ -30,11 +37,26 @@
     </div>
     <div class="margin-top note-body" th:text="${note.summary}">SUMMARY</div>
     <div class="margin-top margin-bottom">
-        <a class="btn-view" th:href="'javascript: koki_notes_view(' + ${note.id} + ')'">View</a>
+        <a class="btn-view"
+           data-close-callback="_koki_notes_on_viewer_closed"
+           data-component-id="modal-button"
+           data-modal-body-large="true"
+           data-open-callback="_koki_notes_on_viewer_opened"
+           th:data-modal-body-url="'/notes/' + ${note.id}"
+        >
+            View
+        </a>
 
         <a class="btn-edit margin-left"
-           th:href="'javascript: koki_notes_edit(' + ${note.id} + ')'"
-           th:if="!${readOnly} AND ${user?.hasPermission('note:manage')}">Edit</a>
+           data-close-callback="_koki_notes_on_modal_closed"
+           data-component-id="modal-button"
+           data-modal-body-large="true"
+           data-open-callback="_koki_notes_on_modal_opened"
+           th:data-modal-body-url="'/notes/' + ${note.id} + '/edit'"
+           th:if="!${readOnly} AND ${user?.hasPermission('note:manage')}"
+        >
+            Edit
+        </a>
 
         <a class="btn-delete margin-left"
            th:href="'javascript: koki_notes_delete(' + ${note.id} + ')'"

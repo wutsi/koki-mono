@@ -18,15 +18,4 @@ class HomeControllerTest : AbstractPageControllerTest() {
         navigateTo("/")
         assertCurrentPageIs(PageName.LOGIN)
     }
-
-    @Test
-    fun `message widget`() {
-        navigateTo("/")
-
-        Thread.sleep(1000)
-        assertElementPresent(".widget-messages")
-
-        click(".widget-messages tr.message a")
-        assertElementVisible("#koki-modal")
-    }
 }

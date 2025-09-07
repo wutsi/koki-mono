@@ -8,39 +8,39 @@ function koki_notes_delete(id) {
     }
 }
 
-function koki_notes_create() {
-    console.log('Create Note');
-    const container = document.getElementById('note-list');
-    const ownerId = container.getAttribute("data-owner-id");
-    const ownerType = container.getAttribute("data-owner-type");
-
-    koki_modal_open(
-        'Create Note',
-        '/notes/create?owner-id=' + ownerId + '&owner-type=' + ownerType,
-        _koki_notes_on_modal_opened,
-        _koki_notes_on_modal_closed,
-    );
-}
-
-function koki_notes_edit(id) {
-    console.log('Editing Note#' + id);
-    koki_modal_open(
-        'Note',
-        '/notes/' + id + '/edit',
-        _koki_notes_on_modal_opened,
-        _koki_notes_on_modal_closed,
-    );
-}
-
-function koki_notes_view(id) {
-    console.log('View Note#' + id);
-    koki_modal_open(
-        'Note',
-        '/notes/' + id,
-        _koki_notes_on_viewer_opened,
-        _koki_notes_on_viewer_closed,
-    );
-}
+// function koki_notes_create() {
+//     console.log('Create Note');
+//     const container = document.getElementById('note-list');
+//     const ownerId = container.getAttribute("data-owner-id");
+//     const ownerType = container.getAttribute("data-owner-type");
+//
+//     koki_modal_open(
+//         'Create Note',
+//         '/notes/create?owner-id=' + ownerId + '&owner-type=' + ownerType,
+//         _koki_notes_on_modal_opened,
+//         _koki_notes_on_modal_closed,
+//     );
+// }
+//
+// function koki_notes_edit(id) {
+//     console.log('Editing Note#' + id);
+//     koki_modal_open(
+//         'Note',
+//         '/notes/' + id + '/edit',
+//         _koki_notes_on_modal_opened,
+//         _koki_notes_on_modal_closed,
+//     );
+// }
+//
+// function koki_notes_view(id) {
+//     console.log('View Note#' + id);
+//     koki_modal_open(
+//         'Note',
+//         '/notes/' + id,
+//         _koki_notes_on_viewer_opened,
+//         _koki_notes_on_viewer_closed,
+//     );
+// }
 
 
 /*===== callbacks =========*/
@@ -74,7 +74,7 @@ function _koki_notes_on_modal_opened() {
     document.getElementById("durationMinutes").addEventListener('change', _koki_notes_on_change);
 
     /* Cancel */
-    document.getElementById('btn-note-cancel').addEventListener('click', koki_modal_close)
+    document.getElementById('btn-note-cancel').addEventListener('click', _koki_notes_on_viewer_closed)
 }
 
 function _koki_notes_on_modal_closed() {
@@ -86,17 +86,17 @@ function _koki_notes_on_modal_closed() {
     document.getElementById("type").removeEventListener('change', _koki_notes_on_change);
     document.getElementById("durationHours").removeEventListener('change', _koki_notes_on_change);
     document.getElementById("durationMinutes").removeEventListener('change', _koki_notes_on_change);
-    document.getElementById("btn-note-cancel").removeEventListener('click', koki_modal_close)
+    document.getElementById("btn-note-cancel").removeEventListener('click', _koki_notes_on_viewer_closed)
 }
 
 function _koki_notes_on_viewer_opened() {
     console.log('_koki_notes_on_viewer_opened');
-    document.getElementById('btn-note-cancel').addEventListener('click', koki_modal_close)
+    document.getElementById('btn-note-cancel').addEventListener('click', koki.w.modal.close)
 }
 
 function _koki_notes_on_viewer_closed() {
     console.log('_koki_notes_on_viewer_opened');
-    document.getElementById("btn-note-cancel").removeEventListener('click', koki_modal_close)
+    document.getElementById("btn-note-cancel").removeEventListener('click', koki.w.modal.close)
 }
 
 function _koki_notes_on_form_submitted() {
@@ -116,7 +116,7 @@ function _koki_notes_on_form_submitted() {
             }
         }).then(response => {
         if (response.ok) {
-            koki_modal_close();
+            koki.w.modal.close();
             _koki_notes_refresh_parent_window(id);
         } else {
             console.log('Error', response.text());
