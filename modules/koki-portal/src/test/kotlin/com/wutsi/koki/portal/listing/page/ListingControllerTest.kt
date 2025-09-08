@@ -97,6 +97,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("#btn-publish")
         assertElementNotPresent("#btn-status")
 
+        Thread.sleep(1000)
         assertElementPresent("#listing-description-section")
         assertElementPresent("#listing-general-section")
         assertElementPresent("#listing-amenity-section")
@@ -128,6 +129,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("#btn-publish")
         assertElementNotPresent("#btn-status")
 
+        Thread.sleep(1000)
         assertElementPresent("#listing-description-section")
         assertElementPresent("#listing-general-section")
         assertElementPresent("#listing-amenity-section")
@@ -158,6 +160,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("#btn-publish")
         assertElementNotPresent("#btn-status")
 
+        Thread.sleep(1000)
         assertElementPresent("#listing-description-section")
         assertElementPresent("#listing-general-section")
         assertElementPresent("#listing-amenity-section")
