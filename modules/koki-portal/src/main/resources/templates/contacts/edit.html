@@ -24,7 +24,7 @@
                         <div class="section-body">
                             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
-                            <div class="section-item" th:if="${user?.hasAccess('account')}">
+                            <div class="section-item" th:if="${user?.hasPermission('account')}">
                                 <label class="title">Account</label>
                                 <select data-component-id="select2"
                                         data-url="/accounts/selector/search"

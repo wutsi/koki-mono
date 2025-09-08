@@ -76,7 +76,7 @@ class ContactMapper : TenantAwareMapper() {
             languageText = entity.language?.let { lang -> Locale(lang).displayName },
             preferredCommunicationMethod = entity.preferredCommunicationMethod,
             address = toAddress(entity.address, locations)
-            )
+        )
     }
 
     private fun toAddress(address: Address?, locations: Map<Long, LocationModel>): AddressModel? {

@@ -61,16 +61,16 @@ class ListContactController(
             typeService.types(objectType = ObjectType.CONTACT, active = true, limit = Integer.MAX_VALUE)
         )
 
-        val user = userHolder.get()!!
+        val user = userHolder.get()
         val contacts = service.search(
             contactTypeIds = typeId?.let { listOf(typeId) } ?: emptyList(),
-            accountManagerIds = if (user.hasFullAccess("contact")) emptyList() else listOf(user.id),
+            createdByIds = if (user?.hasFullAccess("contact") == true) emptyList() else listOf(user?.id ?: -1),
             limit = limit,
             offset = offset
         )
         if (contacts.isNotEmpty()) {
             model.addAttribute("contacts", contacts)
-            model.addAttribute("showAccount", showAccount)
+            model.addAttribute("showAccount", showAccount && (user?.hasPermission("account") == true))
             if (contacts.size >= limit) {
                 val nextOffset = offset + limit
                 var url = "/contacts/more?show-account=$showAccount&limit=$limit&offset=$nextOffset"

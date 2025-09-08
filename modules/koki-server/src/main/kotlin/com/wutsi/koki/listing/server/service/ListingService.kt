@@ -496,6 +496,8 @@ class ListingService(
         listing.currency = request.currency?.uppercase()?.ifEmpty { null }
         listing.sellerAgentCommission = request.sellerAgentCommission
         listing.buyerAgentCommission = request.buyerAgentCommission
+        listing.buyerAgentCommissionAmount = computeCommission(listing.price, listing.buyerAgentCommission)
+        listing.sellerAgentCommissionAmount = computeCommission(listing.price, listing.sellerAgentCommission)
         save(listing)
     }
 

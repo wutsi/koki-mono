@@ -48,13 +48,13 @@
                             <th class="d-none d-md-table-cell">Email</th>
                             <th class="d-none d-sm-table-cell">Mobile</th>
                             <th class="d-none d-md-table-cell">Phone</th>
-                            <th class="d-none d-lg-table-cell">Account</th>
+                            <th class="d-none d-lg-table-cell" th:if="${showAccount}">Account</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr class="contact entity" th:each="contact : ${contacts}" th:if="${contacts}">
                             <div
-                                th:replace="~{__components/contact :: columns(${contact}, true, !${types.isEmpty()})}"></div>
+                                th:replace="~{__components/contact :: columns(${contact}, ${showAccount}, !${types.isEmpty()})}"></div>
                         </tr>
                         <tr th:if="${contacts}"
                             th:replace="~{__components/contact :: load-more(${moreUrl})}"></tr>

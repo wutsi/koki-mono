@@ -28,7 +28,7 @@ class ContactMapper {
             salutation = entity.salutation,
             language = entity.language,
             preferredCommunicationMethod = entity.preferredCommunicationMethod,
-            address = if (!entity.hasAddress()) {
+            address = if (entity.hasAddress()) {
                 Address(
                     street = entity.street,
                     postalCode = entity.postalCode,

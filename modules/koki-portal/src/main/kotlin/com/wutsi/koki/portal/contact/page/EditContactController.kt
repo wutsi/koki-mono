@@ -53,7 +53,8 @@ class EditContactController(
             street = contact.address?.street,
             cityId = contact.address?.city?.id,
             postalCode = contact.address?.postalCode,
-            country = contact.address?.country
+            country = contact.address?.country,
+            language = contact.language,
         )
 
         return edit(contact, form, model)

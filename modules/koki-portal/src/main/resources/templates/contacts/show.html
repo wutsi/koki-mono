@@ -148,7 +148,7 @@
                                 <td><b>Language</b></td>
                                 <td th:text="${contact.languageText}">LANGUAGE</td>
                             </tr>
-                            <tr th:if="${contact.language}">
+                            <tr th:if="${contact.address}">
                                 <td><b>Address</b></td>
                                 <td th:utext="${contact.address.toHtml()}">HTML</td>
                             </tr>

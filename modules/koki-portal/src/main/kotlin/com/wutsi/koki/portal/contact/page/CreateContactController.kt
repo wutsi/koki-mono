@@ -49,7 +49,6 @@ class CreateContactController(
             language = account?.language ?: LocaleContextHolder.getLocale().language,
             country = city?.country ?: tenantHolder.get()?.country,
             cityId = city?.id,
-            preferredCommunicationMethod = PreferredCommunicationMethod.WHATSAPP,
         )
         return create(form, model, city)
     }
