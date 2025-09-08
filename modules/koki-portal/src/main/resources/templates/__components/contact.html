@@ -9,7 +9,6 @@
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
                 <li class="breadcrumb-item" th:if="${contact}"><a href="/contacts">Contacts</a></li>
                 <li class="breadcrumb-item active" th:if="${contact}">
-                    <img align="absmiddle" height="24" src="/image/contact.png" width="24"/>
                     <span th:text="${contact.name}">CONTACT</span>
                 </li>
                 <li class="breadcrumb-item active" th:if="!${contact}">Contacts</li>
@@ -23,7 +22,7 @@
         <a th:href="'/contacts/' + ${contact.id}">
             <div th:text="${contact.name}">NAME</div>
 
-            <table border="0" class="d-block d-md-none margin-top-small text-small">
+            <table border="0" class="d-block d-md-none text-small">
                 <tr th:if="${contact.email}">
                     <th>Email:</th>
                     <td class="padding-left" th:text="${contact.email}">EMAIL</td>
@@ -47,7 +46,7 @@
     <td class="d-none d-md-table-cell">
         <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.email}">EMAIL</a>
     </td>
-    <td class="d-none d-sm-table-cell">
+    <td class="d-none d-md-table-cell">
         <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.mobileFormatted}">MOBILE</a>
     </td>
     <td class="d-none d-md-table-cell">

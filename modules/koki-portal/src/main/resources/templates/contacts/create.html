@@ -24,7 +24,7 @@
                             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
                             <div class="section-item" th:if="${user?.hasPermission('account')}">
-                                <label class="title">Account</label>
+                                <label class="title" th:text="#{page.contact.account}">Account</label>
                                 <select
                                     data-component-id="select2"
                                     data-url="/accounts/selector/search"
@@ -38,7 +38,10 @@
                                 </select>
                             </div>
                             <div class="section-item" th:if="${contactTypes}">
-                                <label class="title">Contact Type <span class="required">*</span></label>
+                                <label class="title">
+                                    <span th:text="#{page.contact.contact_type}">Contact Type</span>
+                                    <span class="required">*</span>
+                                </label>
                                 <select id="contactTypeId" name="contactTypeId" required>
                                     <option value=""></option>
                                     <option th:each="contactType : ${contactTypes}"
@@ -50,37 +53,36 @@
                                 </select>
                             </div>
                             <div class="section-item">
-                                <label class="title">Salutation</label>
-                                <select th:field="*{salutation}">
-                                    <option value=""></option>
-                                    <option value="Mr.">Mr.</option>
-                                    <option value="Ms.">Ms.</option>
-                                    <option value="Dr.">Dr.</option>
-                                </select>
-                            </div>
-                            <div class="section-item">
-                                <label class="title">First Name <span class="required">*</span></label>
+                                <label class="title">
+                                    <span th:text="#{page.contact.first_name}">First Name</span>
+                                    <span class="required">*</span>
+                                </label>
                                 <input maxlength="100" required th:field="*{firstName}"/>
                             </div>
                             <div class="section-item">
-                                <label class="title">Last Name <span class="required">*</span></label>
+                                <label class="title">
+                                    <span th:text="#{page.contact.last_name}">Last Name</span>
+                                    <span class="required">*</span>
+                                </label>
                                 <input maxlength="100" required th:field="*{lastName}"/>
                             </div>
                             <div class="section-item">
-                                <label class="title">Email</label>
+                                <label class="title" th:text="#{page.contact.email}">Email</label>
                                 <input maxlength="100" th:field="*{email}" type="email"/>
                             </div>
                             <div class="section-item">
-                                <label class="title">Mobile</label>
+                                <label class="title" th:text="#{page.contact.mobile}">Mobile</label>
                                 <input maxlength="30" th:field="*{mobile}" type="tel"/>
                             </div>
                             <div class="section-item">
-                                <label class="title">Phone</label>
+                                <label class="title" th:text="#{page.contact.phone}">Phone</label>
                                 <input maxlength="30" th:field="*{phone}" type="tel"/>
                             </div>
                             <div class="section-item">
-                                <label class="title">Contact me via</label>
-                                <div class="text-small">Select your preferred communication method</div>
+                                <label class="title" th:text="#{page.contact.contact_via}">Contact me via</label>
+                                <div class="text-small" th:text="#{page.contact.contact_via.help}">
+                                    Select your preferred communication method
+                                </div>
                                 <select th:field="*{preferredCommunicationMethod}">
                                     <option th:each="method : ${communicationMethods}"
                                             th:text="#{'preferred-communication-method.' + ${method}}"
@@ -90,7 +92,7 @@
                                 </select>
                             </div>
                             <div class="section-item">
-                                <label class="title">Language</label>
+                                <label class="title" th:text="#{page.contact.language}">Language</label>
                                 <select th:field="*{language}">
                                     <option value=""></option>
                                     <option th:each="language : ${languages}"
@@ -101,7 +103,7 @@
                                 </select>
                             </div>
                             <div class="section-item">
-                                <label class="title">Country</label>
+                                <label class="title" th:text="#{page.contact.country}">Country</label>
                                 <select th:field="*{country}">
                                     <option value=""></option>
                                     <option th:each="country : ${countries}"
@@ -112,7 +114,7 @@
                                 </select>
                             </div>
                             <div class="section-item">
-                                <label class="title">City</label>
+                                <label class="title" th:text="#{page.contact.city}">City</label>
                                 <select data-city-id="cityId"
                                         data-component-id="address"
                                         data-country-id="country"
@@ -122,22 +124,21 @@
                                 </select>
                             </div>
                             <div class="section-item">
-                                <label class="title">Street</label>
+                                <label class="title" th:text="#{page.contact.street}">Street</label>
                                 <input th:field="*{street}"/>
                             </div>
                             <div class="section-item">
-                                <label class="title">Postal Code</label>
+                                <label class="title" th:text="#{page.contact.postal_code}">Postal Code</label>
                                 <input maxlength="30" th:field="*{postalCode}"/>
+                            </div>
+                            <div class="section-item text-right">
+                                <a class="btn-cancel btn btn-light" href="/contacts"
+                                   th:text="#{button.cancel}">Cancel</a>
+                                <button class="btn btn-primary" th:text="#{button.submit}" type="submit">Submit</button>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="form-footer">
-                    <button type="submit">Submit</button>
-                    <a class="btn-cancel" href="/contacts">Cancel</a>
-                </div>
-
             </form>
         </div>
 

@@ -76,7 +76,7 @@
                 <div th:replace="~{__components/listing :: listing-status-badge(${listing.status})}"></div>
             </div>
 
-            <table border="0" class="d-block d-md-none margin-top-small text-small">
+            <table border="0" class="d-block d-md-none text-small">
                 <tr th:if="!${sold}">
                     <th th:text="#{page.listing.description}">DESC</th>
                     <td class="padding-left">

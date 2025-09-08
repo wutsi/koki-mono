@@ -19,36 +19,32 @@
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
-                    <div class="flex flex-space-between margin-bottom">
+                    <div class="flex flex-space-between">
                         <div>
                             <a class="btn-create btn btn-primary btn-sm" href="/contacts/create"
                                th:if="${user?.hasPermission('contact:manage')} OR ${user.hasFullAccess('contact')}"
-                            >Create New Contact</a>
-                        </div>
-                        <div>
-                            <select class="btn btn-sm btn-light" id="filter-type-id"
-                                    onchange="koki_contacts_on_filter_changed()"
-                                    style="width: auto"
-                                    th:classappend="${types.isEmpty()} ? 'hidden'">
-                                <option value="">All Types</option>
-                                <option th:each="type : ${types}"
-                                        th:selected="${type.id} == ${typeId}"
-                                        th:text="${type.title}"
-                                        th:value="${type.id}">TYPE
-                                </option>
-                            </select>
+                            >
+                                <i class="fa-solid fa-plus"></i>
+                                <span th:text="#{button.contact}">Contact</span>
+                            </a>
                         </div>
                     </div>
 
+                    <hr/>
+
                     <table class="table table-striped">
                         <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th class="d-none d-lg-table-cell" th:if="!${types.isEmpty()}">Type</th>
-                            <th class="d-none d-md-table-cell">Email</th>
-                            <th class="d-none d-sm-table-cell">Mobile</th>
-                            <th class="d-none d-md-table-cell">Phone</th>
-                            <th class="d-none d-lg-table-cell" th:if="${showAccount}">Account</th>
+                        <tr class="d-none d-md-table-row">
+                            <th th:text="#{page.contact.name}">Name</th>
+                            <th class="d-none d-lg-table-cell" th:if="!${types.isEmpty()}"
+                                th:text="#{page.contact.contact_type}">Type
+                            </th>
+                            <th class="d-none d-md-table-cell" th:text="#{page.contact.email}">Email</th>
+                            <th class="d-none d-md-table-cell" th:text="#{page.contact.mobile}">Mobile</th>
+                            <th class="d-none d-md-table-cell" th:text="#{page.contact.phone}">Phone</th>
+                            <th class="d-none d-md-table-cell" th:if="${showAccount}" th:text="#{page.contact.account}">
+                                Account
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -68,13 +64,5 @@
 
 <div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
 
-<script>
-    function koki_contacts_on_filter_changed() {
-        const typeId = document.getElementById('filter-type-id').value;
-
-        document.location.href = '/contacts?' +
-            (typeId && typeId.length > 0 ? '&type-id=' + typeId : '');
-    }
-</script>
 </body>
 </html>
