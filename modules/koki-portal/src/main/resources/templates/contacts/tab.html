@@ -7,13 +7,17 @@
     </div>
     <table class="table table-striped">
         <thead>
-        <tr>
-            <th>Name</th>
-            <th class="d-none d-lg-table-cell" th:if="!${types.isEmpty()}">Type</th>
-            <th class="d-none d-md-table-cell">Email</th>
-            <th class="d-none d-sm-table-cell">Phone</th>
-            <th class="d-none d-md-table-cell">Mobile</th>
-            <th class="d-none d-lg-table-cell" th:if="${showAccount}">Account</th>
+        <tr class="d-none d-md-table-row">
+            <th th:text="#{page.contact.name}">Name</th>
+            <th class="d-none d-lg-table-cell" th:if="!${types.isEmpty()}"
+                th:text="#{page.contact.contact_type}">Type
+            </th>
+            <th class="d-none d-md-table-cell" th:text="#{page.contact.email}">Email</th>
+            <th class="d-none d-md-table-cell" th:text="#{page.contact.mobile}">Mobile</th>
+            <th class="d-none d-md-table-cell" th:text="#{page.contact.phone}">Phone</th>
+            <th class="d-none d-lg-table-cell" th:if="${showAccount}" th:text="#{page.contact.account}">
+                Account
+            </th>
         </tr>
         </thead>
         <tbody>
