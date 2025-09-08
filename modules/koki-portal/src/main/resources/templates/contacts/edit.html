@@ -24,15 +24,11 @@
                         <div class="section-body">
                             <div th:replace="~{__components/layout :: error-message(${error})}"></div>
 
-                            <div class="section-item">
-                                <label class="title">
-                                    Account
-                                    <span class="required" th:if="!${user?.hasFullAccess('contact')}">*</span>
-                                </label>
+                            <div class="section-item" th:if="${user?.hasAccess('account')}">
+                                <label class="title">Account</label>
                                 <select data-component-id="select2"
                                         data-url="/accounts/selector/search"
                                         th:field="*{accountId}"
-                                        th:required="!${user?.hasFullAccess('contact')}"
                                 >
                                     <option th:if="${account}"
                                             th:text="${account.name}"
