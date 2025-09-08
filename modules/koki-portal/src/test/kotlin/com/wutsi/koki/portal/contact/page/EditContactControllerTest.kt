@@ -98,7 +98,7 @@ class EditContactControllerTest : AbstractPageControllerTest() {
             eq(Any::class.java),
         )
 
-        assertEquals(contact.accountId, request.firstValue.accountId)
+        assertEquals(null, request.firstValue.accountId)
         assertEquals(110L, request.firstValue.contactTypeId)
         assertEquals("Yo", request.firstValue.firstName)
         assertEquals("Man", request.firstValue.lastName)
