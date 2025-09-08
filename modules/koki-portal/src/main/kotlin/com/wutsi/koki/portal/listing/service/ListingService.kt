@@ -17,6 +17,7 @@ import com.wutsi.koki.listing.dto.UpdateListingRemarksRequest
 import com.wutsi.koki.listing.dto.UpdateListingRequest
 import com.wutsi.koki.listing.dto.UpdateListingSellerRequest
 import com.wutsi.koki.portal.common.model.ResultSetModel
+import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.file.service.FileService
 import com.wutsi.koki.portal.listing.form.ListingForm
@@ -43,6 +44,7 @@ class ListingService(
     private val userService: UserService,
     private val amenityService: AmenityService,
     private val fileService: FileService,
+    private val contactService: ContactService,
 ) {
     fun get(id: Long, fullGraph: Boolean = true): ListingModel {
         val listing = koki.get(id).listing
@@ -85,12 +87,24 @@ class ListingService(
             )
         }
 
+        val contactIds = listOf(listing.sellerContactId).filterNotNull()
+        val contacts = if (contactIds.isEmpty() || !fullGraph) {
+            emptyMap()
+        } else {
+            contactService.search(
+                ids = contactIds,
+                limit = contactIds.size,
+                fullGraph = false
+            ).associateBy { contact -> contact.id }
+        }
+
         return mapper.toListingModel(
             entity = listing,
             locations = locations,
             users = users,
             amenities = amenities,
-            images = images
+            images = images,
+            contacts = contacts,
         )
     }
 
@@ -310,12 +324,7 @@ class ListingService(
         koki.updateSeller(
             form.id,
             UpdateListingSellerRequest(
-                sellerName = form.sellerName,
-                sellerEmail = form.sellerEmail,
-                sellerPhone = form.sellerPhoneFull,
-                sellerIdCountry = form.sellerIdCountry,
-                sellerIdNumber = form.sellerIdNumber,
-                sellerIdType = form.sellerIdType,
+                sellerContactId = form.sellerContactId,
             )
         )
     }

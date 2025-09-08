@@ -276,11 +276,13 @@
            th:text="#{button.edit}"
         >EDIT</a>
     </h4>
-    <div class="margin-bottom-small" th:if="${listing.sellerName}">
+    <div class="margin-bottom-small" th:if="${listing.seller}">
         <b class="text-small" th:text="#{page.listing.seller}">KEY</b>
-        <div th:text="${listing.sellerName}">RAY</div>
-        <div th:if="${listing.sellerEmail}" th:text="${listing.sellerEmail}">EMAIL</div>
-        <div th:if="${listing.sellerPhone}" th:text="${listing.sellerPhone}">PHONE</div>
+        <div>
+            <a th:href="'/contacts/' + ${listing.seller.id}" th:text="${listing.seller.name}">SELLER</a>
+        </div>
+        <div th:if="${listing.seller.email}" th:text="${listing.seller.email}">EMAIL</div>
+        <div th:if="${listing.seller.mobile}" th:text="${listing.seller.mobileFormatted}">MOBILE</div>
     </div>
     <hr th:if="${listing.statusSold}"/>
 </div>

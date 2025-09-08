@@ -69,12 +69,7 @@ abstract class AbstractListingController : AbstractModulePageController() {
             leaseTerm = listing.leaseTerm,
             noticePeriod = listing.noticePeriod,
 
-            sellerName = listing.sellerName,
-            sellerPhone = listing.sellerPhone,
-            sellerEmail = listing.sellerEmail,
-            sellerIdType = listing.sellerIdType,
-            sellerIdNumber = listing.sellerIdNumber,
-            sellerIdCountry = (listing.sellerIdCountry ?: listing.address?.country)?.uppercase(),
+            sellerContactId = listing.seller?.id,
 
             buyerName = listing.buyerName,
             buyerPhone = listing.buyerPhone,

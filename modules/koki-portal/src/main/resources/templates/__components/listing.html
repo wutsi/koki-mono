@@ -85,7 +85,7 @@
                 </tr>
                 <tr th:if="!${sold} AND ${listing.price}">
                     <th th:text="#{page.listing.price}">PRICE</th>
-                    <td class="padding-left" th:text="${listing.price.displayText}">$$$</td>
+                    <td class="padding-left listing-price" th:text="${listing.price.displayText}">$$$</td>
                 </tr>
 
                 <tr th:if="${sold} AND (${listing.sellerAgentUser} OR ${listing.buyerAgentUser})">
@@ -101,7 +101,7 @@
                 </tr>
                 <tr th:if="${sold} AND ${listing.transactionPrice}">
                     <th th:text="#{page.listing.transaction-price}">PRICE</th>
-                    <td class="padding-left" th:text="${listing.transactionPrice.displayText}">$$$</td>
+                    <td class="padding-left listing-price" th:text="${listing.transactionPrice.displayText}">$$$</td>
                 </tr>
             </table>
         </a>
@@ -118,7 +118,7 @@
     </td>
     <td class="text-right text-nowrap d-none d-md-table-cell" th:if="${sold}">
         <a class="text-nowrap listing-price" th:href="'/listings/' + ${listing.id}" th:if="${listing.transactionPrice}">
-            <b th:text="${listing.transactionPrice.displayText}">$$</b>
+            <b class="listing-price" th:text="${listing.transactionPrice.displayText}">$$</b>
         </a>
     </td>
 
@@ -129,7 +129,7 @@
     </td>
     <td class="text-right text-nowrap d-none d-md-table-cell" th:if="!${sold}">
         <a class="text-nowrap listing-price" th:href="'/listings/' + ${listing.id}" th:if="${listing.price}">
-            <b th:text="${listing.price.displayText}">$$</b>
+            <b class="listing-price" th:text="${listing.price.displayText}">$$</b>
         </a>
     </td>
 </tr>

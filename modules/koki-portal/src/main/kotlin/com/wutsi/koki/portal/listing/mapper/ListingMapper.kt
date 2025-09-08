@@ -6,6 +6,7 @@ import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.portal.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.common.service.Moment
+import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.listing.model.ListingModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
@@ -17,6 +18,7 @@ import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.GeoLocation
 import com.wutsi.koki.refdata.dto.Money
+import io.lettuce.core.KillArgs.Builder.id
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
@@ -33,7 +35,8 @@ class ListingMapper(
         locations: Map<Long, LocationModel>,
         users: Map<Long, UserModel>,
         amenities: Map<Long, AmenityModel>,
-        images: Map<Long, FileModel>
+        images: Map<Long, FileModel>,
+        contacts: Map<Long, ContactModel>,
     ): ListingModel {
         val price = toPrice(entity.price, entity.listingType)
         val lang = LocaleContextHolder.getLocale().language
@@ -79,12 +82,7 @@ class ListingMapper(
             leaseTerm = entity.leaseTerm,
             noticePeriod = entity.noticePeriod,
 
-            sellerName = entity.sellerName,
-            sellerPhone = entity.sellerPhone,
-            sellerEmail = entity.sellerEmail,
-            sellerIdNumber = entity.sellerIdNumber,
-            sellerIdType = entity.sellerIdType,
-            sellerIdCountry = entity.sellerIdCountry,
+            seller = entity.sellerContactId?.let { id -> contacts[id] },
 
             agentRemarks = entity.agentRemarks,
             publicRemarks = entity.publicRemarks,

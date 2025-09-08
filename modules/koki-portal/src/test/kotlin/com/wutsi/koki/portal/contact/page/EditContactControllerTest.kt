@@ -2,16 +2,22 @@ package com.wutsi.koki.portal.contact.page
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AccountFixtures.accounts
 import com.wutsi.koki.ContactFixtures.contact
+import com.wutsi.koki.RefDataFixtures.locations
+import com.wutsi.koki.contact.dto.GetContactResponse
+import com.wutsi.koki.contact.dto.PreferredCommunicationMethod
 import com.wutsi.koki.contact.dto.UpdateContactRequest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -28,12 +34,16 @@ class EditContactControllerTest : AbstractPageControllerTest() {
         input("#lastName", "Man")
         select("#salutation", 2)
         input("#phone", "5147580000")
-        scrollToBottom()
+        scroll(.33)
         input("#mobile", "5147580011")
         input("#email", "yo@gmail.com")
-        input("#profession", "XX")
-        input("#employer", "EG")
+        select("#preferredCommunicationMethod", 2)
         select2("#language", "French")
+        scrollToBottom()
+        select2("#country", "Cameroon")
+        select2("#cityId", "${locations[3].name}, ${locations[0].name}")
+        input("#street", "340 Pascal")
+        input("#postalCode", "H0H 0H0")
         click("button[type=submit]")
 
         val request = argumentCaptor<UpdateContactRequest>()
@@ -52,8 +62,11 @@ class EditContactControllerTest : AbstractPageControllerTest() {
         assertEquals("+15147580000", request.firstValue.phone)
         assertEquals("+15147580011", request.firstValue.mobile)
         assertEquals("yo@gmail.com", request.firstValue.email)
-        assertEquals("XX", request.firstValue.profession)
-        assertEquals("EG", request.firstValue.employer)
+        assertEquals("340 Pascal", request.firstValue.street)
+        assertEquals("H0H 0H0", request.firstValue.postalCode)
+        assertEquals(locations[3].id, request.firstValue.cityId)
+        assertEquals("CM", request.firstValue.country)
+        assertEquals(PreferredCommunicationMethod.MOBILE, request.firstValue.preferredCommunicationMethod)
 
         assertCurrentPageIs(PageName.CONTACT)
         assertElementVisible("#koki-toast")
@@ -71,12 +84,11 @@ class EditContactControllerTest : AbstractPageControllerTest() {
         input("#lastName", "Man")
         select("#salutation", 2)
         input("#phone", "5147580000")
-        scrollToBottom()
+        scroll(.33)
         input("#mobile", "5147580011")
         input("#email", "yo@gmail.com")
-        input("#profession", "XX")
-        input("#employer", "EG")
         select2("#language", "French")
+        scrollToBottom()
         click("button[type=submit]")
 
         val request = argumentCaptor<UpdateContactRequest>()
@@ -95,11 +107,26 @@ class EditContactControllerTest : AbstractPageControllerTest() {
         assertEquals("+15147580000", request.firstValue.phone)
         assertEquals("+15147580011", request.firstValue.mobile)
         assertEquals("yo@gmail.com", request.firstValue.email)
-        assertEquals("XX", request.firstValue.profession)
-        assertEquals("EG", request.firstValue.employer)
 
         assertCurrentPageIs(PageName.CONTACT)
         assertElementVisible("#koki-toast")
+    }
+
+    @Test
+    fun `edit - now_owner`() {
+        doReturn(
+            ResponseEntity(
+                GetContactResponse(contact.copy(createdById = 99999L)),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetContactResponse::class.java)
+            )
+
+        navigateTo("/contacts/${contact.id}/edit")
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test
@@ -113,12 +140,11 @@ class EditContactControllerTest : AbstractPageControllerTest() {
         input("#firstName", "Yo")
         input("#lastName", "Man")
         select("#salutation", 2)
-        scrollToBottom()
+        scroll(.33)
         input("#phone", "5147580000")
         input("#mobile", "5147580011")
         input("#email", "yo@gmail.com")
-        input("#profession", "XX")
-        input("#employer", "EG")
+        scrollToBottom()
         click(".btn-cancel")
 
         assertCurrentPageIs(PageName.CONTACT_LIST)
@@ -146,8 +172,6 @@ class EditContactControllerTest : AbstractPageControllerTest() {
         input("#phone", "5147580000")
         input("#mobile", "5147580011")
         input("#email", "yo@gmail.com")
-        input("#profession", "XX")
-        input("#employer", "EG")
         click("button[type=submit]")
 
         assertCurrentPageIs(PageName.CONTACT_EDIT)

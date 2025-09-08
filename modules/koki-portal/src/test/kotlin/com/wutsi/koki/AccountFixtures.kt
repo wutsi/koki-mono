@@ -107,6 +107,7 @@ object AccountFixtures {
             attributes[1].id to "0000011",
             attributes[2].id to "2020",
         ),
+        billingSameAsShippingAddress = true,
         billingAddress = Address(
             street = "340 Pascal",
             postalCode = "H7K 1C7",

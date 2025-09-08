@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.tenant.page.settings
 
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.verify
+import com.wutsi.koki.RefDataFixtures.cities
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.tenant.dto.SaveBusinessRequest
@@ -21,6 +22,8 @@ class SettingsEditBusinessControllerTest : AbstractPageControllerTest() {
         input("#email", "info@yo-man.com")
         input("#website", "https://yo-man.com")
         scrollToBottom()
+        select2("#addressCountry", "Cameroon")
+        select2("#addressCityId", "Montreal, Quebec")
         input("#addressStreet", "101010 Mimboman")
         input("#addressPostalCode", "123456")
         click("button[type=submit]")
@@ -32,6 +35,8 @@ class SettingsEditBusinessControllerTest : AbstractPageControllerTest() {
         assertEquals("5147580100", request.firstValue.fax)
         assertEquals("info@yo-man.com", request.firstValue.email)
         assertEquals("https://yo-man.com", request.firstValue.website)
+        assertEquals("CM", request.firstValue.addressCountry)
+        assertEquals(cities[0].id, request.firstValue.addressCityId)
         assertEquals("123456", request.firstValue.addressPostalCode)
         assertEquals("101010 Mimboman", request.firstValue.addressStreet)
     }

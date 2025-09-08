@@ -14,49 +14,17 @@ class ListingMustHaveSellerRuleTest {
     fun success() {
         rule.validate(
             ListingEntity(
-                sellerName = "Ray Sponsible",
-                sellerEmail = "ray.sponsible@gmail.com",
-                sellerPhone = "+15147580000"
+                sellerContactId = 111L
             )
         )
     }
 
     @Test
-    fun `no name`() {
+    fun failure() {
         val ex = assertThrows<ValidationException> {
             rule.validate(
                 ListingEntity(
-                    sellerName = "",
-                    sellerEmail = "ray.sponsible@gmail.com",
-                    sellerPhone = "+15147580000"
-                )
-            )
-        }
-        assertEquals(ErrorCode.LISTING_MISSING_SELLER, ex.message)
-    }
-
-    @Test
-    fun `no email`() {
-        val ex = assertThrows<ValidationException> {
-            rule.validate(
-                ListingEntity(
-                    sellerName = "Ray Sponsible",
-                    sellerEmail = null,
-                    sellerPhone = "+15147580000"
-                )
-            )
-        }
-        assertEquals(ErrorCode.LISTING_MISSING_SELLER, ex.message)
-    }
-
-    @Test
-    fun `no phone`() {
-        val ex = assertThrows<ValidationException> {
-            rule.validate(
-                ListingEntity(
-                    sellerName = "Ray Sponsible",
-                    sellerEmail = "ray.sponsible@gmail.com",
-                    sellerPhone = null
+                    sellerContactId = null
                 )
             )
         }

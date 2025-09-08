@@ -36,12 +36,6 @@ class ListListingControllerTest : AbstractPageControllerTest() {
         click("button[type=submit]")
 
         assertElementCount(".listing-card", ListingFixtures.listings.size)
-//
-//        val url = argumentCaptor<String>()
-//        verify(rest).getForEntity(
-//            url.capture(),
-//            eq(SearchListingResponse::class.java)
-//        )
-//        println(url.firstValue)
+        assertElementCount(".listing-filter", 6)
     }
 }

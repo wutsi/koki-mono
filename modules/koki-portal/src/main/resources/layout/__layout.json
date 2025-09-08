@@ -1,11 +1,6 @@
 {
   "tabs": [
-    "listing",
-    "account",
     "contact",
-    "room",
-    "product",
-    "invoice",
-    "payment"
+    "listing"
   ]
 }

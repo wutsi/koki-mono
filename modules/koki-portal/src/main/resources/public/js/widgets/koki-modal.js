@@ -24,14 +24,14 @@ class ModalWidget {
                     if (response.ok) {
                         response.text()
                             .then(html => {
-                                document.getElementById("koki-modal-title").innerHTML = title;
                                 document.getElementById("koki-modal-body").innerHTML = html;
                                 if (large) {
-                                    console.log('>>>LARGE MODAL');
                                     document.getElementById("koki-modal-dialog").classList.add('modal-xl');
                                 } else {
                                     document.getElementById("koki-modal-dialog").classList.remove('modal-xl');
                                 }
+
+                                document.getElementById("koki-modal-title").innerHTML = title;
 
                                 // Default close button
                                 const btnClose = document.querySelector("#koki-modal [data-close]");
@@ -55,6 +55,15 @@ class ModalWidget {
                                 // Show
                                 const modal = new bootstrap.Modal('#koki-modal');
                                 modal.show();
+
+                                // Init the components
+                                setTimeout(
+                                    function () {
+                                        const body = document.getElementById("koki-modal-body");
+                                        koki.init(body);
+                                    },
+                                    100
+                                )
                             })
                     } else {
                         console.log('Unable to fetch the modal', response.text());

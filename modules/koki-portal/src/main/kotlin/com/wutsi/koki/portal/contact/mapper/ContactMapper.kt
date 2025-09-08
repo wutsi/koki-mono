@@ -5,8 +5,12 @@ import com.wutsi.koki.contact.dto.ContactSummary
 import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
+import com.wutsi.koki.portal.refdata.model.AddressModel
+import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.tenant.model.TypeModel
 import com.wutsi.koki.portal.user.model.UserModel
+import com.wutsi.koki.refdata.dto.Address
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
 import java.util.Locale
 
@@ -44,6 +48,7 @@ class ContactMapper : TenantAwareMapper() {
         users: Map<Long, UserModel>,
         account: AccountModel?,
         contactType: TypeModel?,
+        locations: Map<Long, LocationModel>
     ): ContactModel {
         val fmt = createDateTimeFormat()
         return ContactModel(
@@ -69,6 +74,23 @@ class ContactMapper : TenantAwareMapper() {
             salutation = entity.salutation,
             language = entity.language,
             languageText = entity.language?.let { lang -> Locale(lang).displayName },
+            preferredCommunicationMethod = entity.preferredCommunicationMethod,
+            address = toAddress(entity.address, locations)
+            )
+    }
+
+    private fun toAddress(address: Address?, locations: Map<Long, LocationModel>): AddressModel? {
+        address ?: return null
+        return AddressModel(
+            country = address.country,
+            city = address.cityId?.let { id -> locations[id] },
+            neighbourhood = address.neighborhoodId?.let { id -> locations[id] },
+            state = address.stateId?.let { id -> locations[id] },
+            street = address.street,
+            postalCode = address.postalCode,
+            countryName = address.country?.let { country ->
+                Locale(LocaleContextHolder.getLocale().language, country).getDisplayCountry()
+            }
         )
     }
 }

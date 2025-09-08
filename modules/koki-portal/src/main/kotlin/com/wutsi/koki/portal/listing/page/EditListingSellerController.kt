@@ -21,6 +21,7 @@ class EditListingSellerController : AbstractEditListingController() {
         val listing = findListing(id)
         model.addAttribute("listing", listing)
         model.addAttribute("form", toListingForm(listing))
+        model.addAttribute("seller", listing.seller)
 
         loadCountries(model)
         model.addAttribute("idTypes", IDType.entries)

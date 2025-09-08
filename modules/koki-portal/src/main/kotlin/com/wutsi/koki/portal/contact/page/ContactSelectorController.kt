@@ -9,16 +9,16 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequiresPermission(["contact"])
+@RequiresPermission(["contact", "contact:full_access"])
 class ContactSelectorController(private val service: ContactService) : AbstractPageController() {
     @GetMapping("/contacts/selector/search")
     fun search(
         @RequestParam(required = false, name = "q") keyword: String? = null,
     ): List<ContactModel> {
         val user = userHolder.get()
-        return service.contacts(
+        return service.search(
             keyword = keyword,
-            accountManagerIds = if (user?.hasFullAccess("contact") == true) emptyList() else listOf(user?.id ?: -1),
+            createdByIds = user?.let { listOf(user.id) } ?: emptyList(),
             fullGraph = false,
         )
     }

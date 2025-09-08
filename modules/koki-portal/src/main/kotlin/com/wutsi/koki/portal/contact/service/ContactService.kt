@@ -6,6 +6,7 @@ import com.wutsi.koki.portal.account.service.AccountService
 import com.wutsi.koki.portal.contact.form.ContactForm
 import com.wutsi.koki.portal.contact.mapper.ContactMapper
 import com.wutsi.koki.portal.contact.model.ContactModel
+import com.wutsi.koki.portal.refdata.service.LocationService
 import com.wutsi.koki.portal.tenant.service.TypeService
 import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.sdk.KokiContacts
@@ -18,8 +19,9 @@ class ContactService(
     private val userService: UserService,
     private val typeService: TypeService,
     private val accountService: AccountService,
+    private val locationService: LocationService,
 ) {
-    fun contact(id: Long, fullGraph: Boolean = true): ContactModel {
+    fun get(id: Long, fullGraph: Boolean = true): ContactModel {
         val contact = koki.contact(id).contact
 
         // Users
@@ -47,15 +49,31 @@ class ContactService(
             accountService.account(contact.accountId!!)
         }
 
+        // Locations
+        val locationIds = listOf(
+            contact.address?.cityId,
+            contact.address?.stateId,
+            contact.address?.neighborhoodId,
+        ).filterNotNull().toSet()
+        val locations = if (locationIds.isEmpty() || !fullGraph) {
+            emptyMap()
+        } else {
+            locationService.search(
+                ids = locationIds.toList(),
+                limit = locationIds.size
+            ).associateBy { location -> location.id }
+        }
+
         return mapper.toContactModel(
             entity = contact,
             account = account,
             contactType = contactType,
-            users = userMap
+            users = userMap,
+            locations = locations,
         )
     }
 
-    fun contacts(
+    fun search(
         keyword: String? = null,
         ids: List<Long> = emptyList(),
         contactTypeIds: List<Long> = emptyList(),
@@ -148,6 +166,11 @@ class ContactService(
             profession = form.profession?.trim()?.ifEmpty { null },
             employer = form.employer?.trim()?.ifEmpty { null },
             language = form.language,
+            preferredCommunicationMethod = form.preferredCommunicationMethod,
+            cityId = form.cityId,
+            country = form.country,
+            street = form.street,
+            postalCode = form.postalCode,
         )
         return koki.create(request).contactId
     }
@@ -166,6 +189,11 @@ class ContactService(
             profession = form.profession?.trim()?.ifEmpty { null },
             employer = form.employer?.trim()?.ifEmpty { null },
             language = form.language,
+            preferredCommunicationMethod = form.preferredCommunicationMethod,
+            cityId = form.cityId,
+            country = form.country,
+            street = form.street,
+            postalCode = form.postalCode,
         )
         koki.update(id, request)
     }

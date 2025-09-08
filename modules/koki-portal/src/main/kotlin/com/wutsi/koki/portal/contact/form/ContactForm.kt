@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.contact.form
 
 import com.wutsi.koki.contact.dto.Gender
+import com.wutsi.koki.contact.dto.PreferredCommunicationMethod
 
 data class ContactForm(
     val accountId: Long = -1,
@@ -17,4 +18,9 @@ data class ContactForm(
     val profession: String? = null,
     val employer: String? = null,
     val language: String? = null,
+    val preferredCommunicationMethod: PreferredCommunicationMethod = PreferredCommunicationMethod.UNKNOWN,
+    val country: String? = null,
+    val cityId: Long? = null,
+    val street: String? = null,
+    val postalCode: String? = null,
 )

@@ -7,7 +7,6 @@ import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
-import com.wutsi.koki.refdata.dto.IDType
 import com.wutsi.koki.refdata.server.domain.AmenityEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -85,12 +84,7 @@ data class ListingEntity(
     var leaseTerm: Int? = null,
     var noticePeriod: Int? = null,
 
-    var sellerName: String? = null,
-    var sellerPhone: String? = null,
-    var sellerEmail: String? = null,
-    var sellerIdNumber: String? = null,
-    var sellerIdType: IDType? = null,
-    var sellerIdCountry: String? = null,
+    @Column("seller_contact_fk") var sellerContactId: Long? = null,
     @Column("seller_agent_user_fk") var sellerAgentUserId: Long? = null,
 
     var title: String? = null,

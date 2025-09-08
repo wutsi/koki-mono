@@ -71,7 +71,7 @@
 
                             <div class="section-item">
                                 <label class="title">Language</label>
-                                <select th:field="*{language}">
+                                <select th:field="*{language}" data-component-id="select2">
                                     <option th:each="language : ${languages}"
                                             th:text="${language.displayName}"
                                             th:value="${language.language}">
@@ -105,7 +105,11 @@
                         </div>
                         <div class="section-item">
                             <label class="title">City<span class="required">*</span></label>
-                            <select required th:field="*{shippingCityId}">
+                            <select required th:field="*{shippingCityId}"
+                                    data-city-id="shippingCityId"
+                                    data-component-id="address"
+                                    data-country-id="shippingCountry"
+                            >
                                 <option selected
                                         th:if="${account.shippingAddress?.city}"
                                         th:text="${account.shippingAddress?.city?.name}"
@@ -131,14 +135,17 @@
                     <div class="section-body">
                         <div class="section-item">
                             <label class="title">Same as shipping address?</label>
-                            <select th:field="*{billingSameAsShippingAddress}" onchange="return koki_address_same_changed()">
+                            <select th:field="*{billingSameAsShippingAddress}" onchange="return koki_account_address_same_changed()">
                                 <option value="true">Yes</option>
                                 <option value="false">No</option>
                             </select>
                         </div>
-                        <div class="section-item billing-address" th:classappend="${form.billingSameAsShippingAddress} ? 'hidden'">
+                        <div class="section-item billing-address">
                             <label class="title">Country<span class="required">*</span></label>
-                            <select th:field="*{billingCountry}" th:required="!${form.billingSameAsShippingAddress}">
+                            <select th:field="*{billingCountry}"
+                                    th:required="!${form.billingSameAsShippingAddress}"
+                                    th:disabled="!${form.billingSameAsShippingAddress}"
+                            >
                                 <option value=""></option>
                                 <option th:each="country : ${countries}"
                                         th:value="${country.country}"
@@ -146,17 +153,25 @@
                                 >COUNTRY</option>
                             </select>
                         </div>
-                        <div class="section-item billing-address" th:classappend="${form.billingSameAsShippingAddress} ? 'hidden'">
+                        <div class="section-item billing-address">
                             <label required class="title">City<span class="required">*</span></label>
-                            <select th:field="*{billingCityId}" th:required="!${form.billingSameAsShippingAddress}"></select>
+                            <select th:field="*{billingCityId}"
+                                    th:required="!${form.billingSameAsShippingAddress}"
+                                    th:disabled="!${form.billingSameAsShippingAddress}"
+                                    data-city-id="billingCityId"
+                                    data-component-id="address"
+                                    data-country-id="billingCountry"
+                            ></select>
                         </div>
-                        <div class="section-item billing-address" th:classappend="${form.billingSameAsShippingAddress} ? 'hidden'">
+                        <div class="section-item billing-address">
                             <label class="title">Street</label>
-                            <input th:field="*{billingStreet}" />
+                            <input th:field="*{billingStreet}" th:disabled="!${form.billingSameAsShippingAddress}"/>
                         </div>
-                        <div class="section-item billing-address" th:classappend="${form.billingSameAsShippingAddress} ? 'hidden'">
+                        <div class="section-item billing-address" >
                             <label class="title">Postal Code</label>
-                            <input maxlength="30" th:field="*{billingPostalCode}" />
+                            <input maxlength="30" th:field="*{billingPostalCode}"
+                                   th:disabled="!${form.billingSameAsShippingAddress}"
+                            />
                         </div>
                     </div>
                 </div>
@@ -213,33 +228,5 @@
     </div>
 </div>
 
-<script>
-    let billingAddressInitialized = false;
-    const same = document.querySelector('.billing-address').classList.contains('hidden');
-
-    $('#language').select2();
-    koki_address_editor('shippingCountry', 'shippingCityId');
-    if (!same){
-        koki_address_editor('billingCountry', 'billingCityId');
-        billingAddressInitialized = true
-    }
-
-    function koki_address_same_changed(){
-        const same = (document.getElementById('billingSameAsShippingAddress').value === 'true');
-        document.querySelectorAll('.billing-address').forEach((elt) => {
-            if (same) {
-                elt.classList.add('hidden');
-            } else {
-                elt.classList.remove('hidden');
-            }
-        });
-        if (!same && !billingAddressInitialized) {
-            koki_address_editor('billingCountry', 'billingCityId');
-            billingAddressInitialized = true
-        }
-        document.getElementById('billingCountry').required = !same;
-        document.getElementById('billingCityId').required = !same;
-    }
-</script>
 </body>
 </html>

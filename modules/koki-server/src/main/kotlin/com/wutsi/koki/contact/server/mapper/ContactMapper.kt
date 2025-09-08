@@ -3,6 +3,7 @@ package com.wutsi.koki.contact.server.mapper
 import com.wutsi.koki.contact.dto.Contact
 import com.wutsi.koki.contact.dto.ContactSummary
 import com.wutsi.koki.contact.server.domain.ContactEntity
+import com.wutsi.koki.refdata.dto.Address
 import org.springframework.stereotype.Service
 
 @Service
@@ -10,7 +11,7 @@ class ContactMapper {
     fun toContact(entity: ContactEntity): Contact {
         return Contact(
             id = entity.id!!,
-            accountId = entity.account?.id ?: -1,
+            accountId = entity.account?.id,
             contactTypeId = entity.contactTypeId,
             firstName = entity.firstName,
             lastName = entity.lastName,
@@ -26,6 +27,18 @@ class ContactMapper {
             modifiedById = entity.modifiedById,
             salutation = entity.salutation,
             language = entity.language,
+            preferredCommunicationMethod = entity.preferredCommunicationMethod,
+            address = if (!entity.hasAddress()) {
+                Address(
+                    street = entity.street,
+                    postalCode = entity.postalCode,
+                    cityId = entity.cityId,
+                    stateId = entity.stateId,
+                    country = entity.country,
+                )
+            } else {
+                null
+            },
         )
     }
 

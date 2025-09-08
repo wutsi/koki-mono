@@ -7,8 +7,10 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AccountFixtures.accounts
+import com.wutsi.koki.RefDataFixtures.locations
 import com.wutsi.koki.contact.dto.CreateContactRequest
 import com.wutsi.koki.contact.dto.CreateContactResponse
+import com.wutsi.koki.contact.dto.PreferredCommunicationMethod
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
@@ -27,12 +29,17 @@ class CreateContactControllerTest : AbstractPageControllerTest() {
         input("#lastName", "Man")
         select("#salutation", 2)
         input("#phone", "5147580000")
-        scrollToBottom()
+        scroll(.33)
         input("#mobile", "5147580011")
         input("#email", "yo@gmail.com")
-        input("#profession", "XX")
-        input("#employer", "EG")
+        select("#preferredCommunicationMethod", 2)
         select2("#language", "French")
+        scrollToBottom()
+        select2("#country", "Cameroon")
+        select2("#cityId", "${locations[3].name}, ${locations[0].name}")
+        input("#street", "340 Pascal")
+        input("#postalCode", "H0H 0H0")
+
         click("button[type=submit]")
 
         val request = argumentCaptor<CreateContactRequest>()
@@ -50,8 +57,11 @@ class CreateContactControllerTest : AbstractPageControllerTest() {
         assertEquals("+15147580000", request.firstValue.phone)
         assertEquals("+15147580011", request.firstValue.mobile)
         assertEquals("yo@gmail.com", request.firstValue.email)
-        assertEquals("XX", request.firstValue.profession)
-        assertEquals("EG", request.firstValue.employer)
+        assertEquals("340 Pascal", request.firstValue.street)
+        assertEquals("H0H 0H0", request.firstValue.postalCode)
+        assertEquals(locations[3].id, request.firstValue.cityId)
+        assertEquals("CM", request.firstValue.country)
+        assertEquals(PreferredCommunicationMethod.MOBILE, request.firstValue.preferredCommunicationMethod)
 
         assertCurrentPageIs(PageName.CONTACT_LIST)
         assertElementVisible("#koki-toast")
@@ -69,12 +79,11 @@ class CreateContactControllerTest : AbstractPageControllerTest() {
         input("#lastName", "Man")
         select("#salutation", 2)
         input("#phone", "5147580000")
-        scrollToBottom()
+        scroll(.33)
         input("#mobile", "5147580011")
         input("#email", "yo@gmail.com")
-        input("#profession", "XX")
-        input("#employer", "EG")
         select2("#language", "French")
+        scrollToBottom()
         click("button[type=submit]")
 
         val request = argumentCaptor<CreateContactRequest>()
@@ -92,8 +101,6 @@ class CreateContactControllerTest : AbstractPageControllerTest() {
         assertEquals("+15147580000", request.firstValue.phone)
         assertEquals("+15147580011", request.firstValue.mobile)
         assertEquals("yo@gmail.com", request.firstValue.email)
-        assertEquals("XX", request.firstValue.profession)
-        assertEquals("EG", request.firstValue.employer)
 
         assertCurrentPageIs(PageName.CONTACT_LIST)
         assertElementVisible("#koki-toast")
@@ -110,12 +117,11 @@ class CreateContactControllerTest : AbstractPageControllerTest() {
         input("#firstName", "Yo")
         input("#lastName", "Man")
         select("#salutation", 2)
-        scrollToBottom()
+        scroll(.33)
         input("#phone", "5147580000")
         input("#mobile", "5147580011")
         input("#email", "yo@gmail.com")
-        input("#profession", "XX")
-        input("#employer", "EG")
+        scrollToBottom()
         click(".btn-cancel")
 
         assertCurrentPageIs(PageName.CONTACT_LIST)
@@ -139,12 +145,11 @@ class CreateContactControllerTest : AbstractPageControllerTest() {
         input("#firstName", "Yo")
         input("#lastName", "Man")
         select("#salutation", 2)
-        scrollToBottom()
+        scroll(.33)
         input("#phone", "5147580000")
         input("#mobile", "5147580011")
         input("#email", "yo@gmail.com")
-        input("#profession", "XX")
-        input("#employer", "EG")
+        scrollToBottom()
         click("button[type=submit]")
 
         assertCurrentPageIs(PageName.CONTACT_CREATE)

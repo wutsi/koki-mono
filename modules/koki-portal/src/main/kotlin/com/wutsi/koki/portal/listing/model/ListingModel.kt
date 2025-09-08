@@ -9,11 +9,11 @@ import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.platform.util.HtmlUtils
+import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.AmenityModel
 import com.wutsi.koki.portal.refdata.model.GeoLocationModel
 import com.wutsi.koki.portal.user.model.UserModel
-import com.wutsi.koki.refdata.dto.IDType
 import java.util.Date
 
 data class ListingModel(
@@ -49,12 +49,7 @@ data class ListingModel(
     var advanceRent: Int? = null,
     var advanceRentMoney: MoneyModel? = null,
     var noticePeriod: Int? = null,
-    val sellerName: String? = null,
-    val sellerEmail: String? = null,
-    val sellerPhone: String? = null,
-    var sellerIdNumber: String? = null,
-    var sellerIdType: IDType? = null,
-    var sellerIdCountry: String? = null,
+    val seller: ContactModel? = null,
     val sellerAgentCommission: Double? = null,
     val buyerAgentCommission: Double? = null,
     val sellerAgentCommissionMoney: MoneyModel? = null,
