@@ -26,6 +26,7 @@ class ListContactController(
     fun list(
         @RequestHeader(required = false, name = "Referer") referer: String? = null,
         @RequestParam(required = false, name = "type-id") typeId: Long? = null,
+        @RequestParam(required = false, name = "q") keyword: String? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         @RequestParam(required = false, name = "_toast") toast: Long? = null,
@@ -41,9 +42,10 @@ class ListContactController(
             )
         )
         loadToast(referer, toast, timestamp, operation, model)
-        more(typeId, true, limit, offset, model)
+        more(typeId, true, keyword, limit, offset, model)
 
         model.addAttribute("typeId", typeId)
+        model.addAttribute("keyword", keyword)
 
         return "contacts/list"
     }
@@ -52,6 +54,7 @@ class ListContactController(
     fun more(
         @RequestParam(required = false, name = "type-id") typeId: Long? = null,
         @RequestParam(required = false, name = "show-account") showAccount: Boolean = true,
+        @RequestParam(required = false, name = "q") keyword: String? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model
@@ -65,6 +68,7 @@ class ListContactController(
         val contacts = service.search(
             contactTypeIds = typeId?.let { listOf(typeId) } ?: emptyList(),
             createdByIds = if (user?.hasFullAccess("contact") == true) emptyList() else listOf(user?.id ?: -1),
+            keyword = keyword?.trim()?.ifEmpty { null },
             limit = limit,
             offset = offset
         )
@@ -76,6 +80,9 @@ class ListContactController(
                 var url = "/contacts/more?show-account=$showAccount&limit=$limit&offset=$nextOffset"
                 if (typeId != null) {
                     url = "$url&type-id=$typeId"
+                }
+                if (keyword?.trim()?.isNullOrEmpty() == false) {
+                    url = "$url&q=${keyword.trim()}"
                 }
                 model.addAttribute("moreUrl", url)
             }

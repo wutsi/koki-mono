@@ -63,13 +63,13 @@
 <tr th:fragment="listing-row(listing, sold)" th:remove="tag">
     <td width="1%">
         <div class="hero-image text-center">
-            <a th:href="'/listings/' + ${listing.id}">
+            <a target="_blank" th:href="'/listings/' + ${listing.id}">
                 <img th:if="${listing.heroImageUrl}" th:src="${listing.heroImageUrl}"/>
             </a>
         </div>
     </td>
     <td>
-        <a th:href="'/listings/' + ${listing.id}">
+        <a target="_blank" th:href="'/listings/' + ${listing.id}">
             <div th:utext="${listing.address?.toHtml(false)}">ADDRESS</div>
 
             <div th:if="!${listing.statusActive} AND !${sold}">
@@ -108,27 +108,34 @@
     </td>
 
     <td class="d-none d-md-table-cell" th:if="${sold}">
-        <a th:href="'/listings/' + ${listing.id}" th:if="${listing.sellerAgentUser} OR ${listing.buyerAgentUser}">
+        <a target="_blank"
+           th:href="'/listings/' + ${listing.id}"
+           th:if="${listing.sellerAgentUser} OR ${listing.buyerAgentUser}">
             <span th:if="${listing.isSeller(user)}" th:text="#{page.listing.agent-seller}">SELLER</span>
             <span th:if="${listing.isBuyer(user)}" th:text="#{page.listing.agent-buyer}">BUYER</span>
         </a>
     </td>
     <td class="d-none d-md-table-cell" th:if="${sold}">
-        <a th:href="'/listings/' + ${listing.id}" th:text="${listing.transactionDateText}">YYYY-MM-DD</a>
+        <a target="_blank" th:href="'/listings/' + ${listing.id}"
+           th:text="${listing.transactionDateText}">YYYY-MM-DD</a>
     </td>
     <td class="text-right text-nowrap d-none d-md-table-cell" th:if="${sold}">
-        <a class="text-nowrap listing-price" th:href="'/listings/' + ${listing.id}" th:if="${listing.transactionPrice}">
+        <a class="text-nowrap listing-price" target="_blank"
+           th:href="'/listings/' + ${listing.id}"
+           th:if="${listing.transactionPrice}">
             <b class="listing-price" th:text="${listing.transactionPrice.displayText}">$$</b>
         </a>
     </td>
 
     <td class="d-none d-md-table-cell" th:if="!${sold}">
-        <a th:href="'/listings/' + ${listing.id}">
+        <a target="_blank" th:href="'/listings/' + ${listing.id}">
             <div th:replace="~{__components/listing :: listing-bed-bath-area(${listing})}"></div>
         </a>
     </td>
     <td class="text-right text-nowrap d-none d-md-table-cell" th:if="!${sold}">
-        <a class="text-nowrap listing-price" th:href="'/listings/' + ${listing.id}" th:if="${listing.price}">
+        <a class="text-nowrap listing-price" target="_blank"
+           th:href="'/listings/' + ${listing.id}"
+           th:if="${listing.price}">
             <b class="listing-price" th:text="${listing.price.displayText}">$$</b>
         </a>
     </td>
@@ -137,12 +144,14 @@
 <div class="flex" th:fragment="listing-bed-bath-area(listing)">
     <div th:if="${listing.bedrooms}">
         <span th:text="${listing.bedrooms}">00</span>
-        <span th:text="#{page.listing.bedrooms-short}">BED</span>
+        <span class="d-none d-sm-inline" th:text="#{page.listing.bedrooms-short}">BED</span>
+        <span class="d-inline d-sm-none" th:text="#{page.listing.bedrooms-abbreviation}">BED</span>
     </div>
     <div class="padding-left-small padding-right-small" th:if="${listing.bedrooms} AND ${listing.bathrooms}">-</div>
     <div th:if="${listing.bathrooms}">
         <span th:text="${listing.bathrooms}">00</span>
-        <span th:text="#{page.listing.bathrooms-short}">BED</span>
+        <span class="d-none d-sm-inline" th:text="#{page.listing.bathrooms-short}">BATH</span>
+        <span class="d-inline d-sm-none" th:text="#{page.listing.bathrooms-abbreviation}">BATH</span>
     </div>
     <div class="padding-left-small padding-right-small"
          th:if="(${listing.bedrooms} OR ${listing.bathrooms}) AND (${listing.lotArea} OR ${listing.propertyArea})">

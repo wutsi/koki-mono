@@ -19,6 +19,7 @@
             <div
                 data-component-id="ajax-fragment"
                 data-url="/messages/widget"
+                th:if="${user.hasPermission('message')}"
             >
             </div>
         </div>

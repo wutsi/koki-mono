@@ -59,4 +59,7 @@ data class UserModel(
     fun canAdmin(module: ModuleModel): Boolean {
         return hasPermission("${module.name}:admin")
     }
+
+    val mobileUrl: String?
+        get() = mobile?.let { "https://wa.me/" + (mobile.substring(1)) }
 }

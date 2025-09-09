@@ -82,20 +82,16 @@
                         <div th:if="${listing.sellerAgentUser.employer}"
                              th:text="${listing.sellerAgentUser.employer}">EMPLOYER
                         </div>
-                        <div th:if="${listing.sellerAgentUser?.mobile}">
-                            <a th:href="'tel:' + ${listing.sellerAgentUser.mobile}"
-                               th:text="${listing.sellerAgentUser.mobileText}">+1 (514) 7580000</a>
+                        <div th:if="${listing.sellerAgentUser?.mobile}" th:text="${listing.sellerAgentUser.mobileText}">
+                            +1 (514) 7580000
                         </div>
-                        <div class="margin-top w-100">
-                            <button class="btn btn-primary w-100" data-component-id="modal-button"
-                                    id="compose-message"
-                                    th:data-modal-body-url="${composeUrl}"
-                                    th:data-modal-title="#{button.send_message}"
-                                    th:if="${composeUrl}"
-                                    th:text="#{button.send_message}"
+                        <div class="margin-top w-100" th:if="${listing.sellerAgentUser?.mobile}">
+                            <a class="btn btn-primary w-100" target="_blank"
+                               th:href="${listing.sellerAgentUser.mobileText}"
+                               th:text="#{button.send_message}"
                             >
                                 SEND_MESSAGE
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -161,15 +157,12 @@
                        th:text="${listing.sellerAgentUser.mobileText}">+1 (514) 7580000</a>
                 </div>
                 <div class="flex flex-center">
-                    <button class="btn btn-sm btn-primary margin-left-small" data-component-id="modal-button"
-                            id="compose-message-sticky"
-                            th:data-modal-body-url="${composeUrl}"
-                            th:data-modal-title="#{button.send_message}"
-                            th:if="${composeUrl}"
-                            th:text="#{button.message}"
+                    <a class="btn btn-primary w-100" target="_blank"
+                       th:href="${listing.sellerAgentUser.mobileText}"
+                       th:text="#{button.send_message}"
                     >
-                        <span th:text="#{button.send_message}">MESSAGE</span>
-                    </button>
+                        SEND_MESSAGE
+                    </a>
                 </div>
             </div>
         </div>

@@ -34,6 +34,19 @@
 
                     <table class="table table-striped">
                         <thead>
+                        <tr>
+                            <th colspan="6">
+                                <form action="/contacts">
+                                    <div class="input-group" style="width:auto">
+                                        <input class="form-control" id="keyword" name="q" th:value="${keyword}"/>
+                                        <button class="btn btn-light btn-sm" id="btn-search" type="submit">
+                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                            <span th:text="#{button.search}">Search</span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </th>
+                        </tr>
                         <tr class="d-none d-md-table-row">
                             <th th:text="#{page.contact.name}">Name</th>
                             <th class="d-none d-lg-table-cell" th:if="!${types.isEmpty()}"
@@ -48,12 +61,17 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="contact entity" th:each="contact : ${contacts}" th:if="${contacts}">
+                        <tr class="contact entity" th:each="contact : ${contacts}">
                             <div
                                 th:replace="~{__components/contact :: columns(${contact}, ${showAccount}, !${types.isEmpty()})}"></div>
                         </tr>
                         <tr th:if="${contacts}"
-                            th:replace="~{__components/contact :: load-more(${moreUrl})}"></tr>
+                            th:replace="~{__components/contact :: load-more(${moreUrl})}">
+
+                        </tr>
+                        <tr th:if="!${contacts}">
+                            <td colspan="6" th:text="#{page.contact.list.empty}">EMPTY</td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
