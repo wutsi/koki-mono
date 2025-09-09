@@ -87,7 +87,7 @@
                         </div>
                         <div class="margin-top w-100" th:if="${listing.sellerAgentUser?.mobile}">
                             <a class="btn btn-primary w-100" target="_blank"
-                               th:href="${listing.sellerAgentUser.mobileText}"
+                               th:href="${listing.sellerAgentUser.mobileUrl}"
                                th:text="#{button.send_message}"
                             >
                                 SEND_MESSAGE
@@ -158,7 +158,7 @@
                 </div>
                 <div class="flex flex-center">
                     <a class="btn btn-primary w-100" target="_blank"
-                       th:href="${listing.sellerAgentUser.mobileText}"
+                       th:href="${listing.sellerAgentUser.mobileUrl}"
                        th:text="#{button.send_message}"
                     >
                         SEND_MESSAGE
