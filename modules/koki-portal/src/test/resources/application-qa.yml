@@ -1,12 +1,13 @@
-toggles:
-    modules:
-        account: true
-        contact: true
-        image: true
-        file: true
-        listing: true
-        message: true
-        offer: true
-        product: true
-        invoice: true
-        payment: true
+koki:
+    toggles:
+        modules:
+            account: true
+            contact: true
+            image: true
+            file: true
+            listing: true
+            message: true
+            offer: true
+            product: true
+            invoice: true
+            payment: true
