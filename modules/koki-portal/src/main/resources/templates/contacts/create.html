@@ -11,12 +11,6 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/contact :: contact-breadcrumb(null)}"></div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12">
             <form class="form" method="post" th:action="@{/contacts/add-new}" th:object="${form}">
                 <div class="form-body">
                     <div class="section">
@@ -131,10 +125,14 @@
                                 <label class="title" th:text="#{page.contact.postal_code}">Postal Code</label>
                                 <input maxlength="30" th:field="*{postalCode}"/>
                             </div>
-                            <div class="section-item text-right">
-                                <a class="btn-cancel btn btn-light" href="/contacts"
-                                   th:text="#{button.cancel}">Cancel</a>
-                                <button class="btn btn-primary" th:text="#{button.submit}" type="submit">Submit</button>
+                            <div class="section-item flex flex-space-between">
+                                <a class="btn-cancel btn btn-light w-49-mobile" href="/contacts"
+                                   th:text="#{button.cancel}">
+                                    Cancel
+                                </a>
+                                <button class="btn btn-primary w-49-mobile" th:text="#{button.submit}" type="submit">
+                                    Submit
+                                </button>
                             </div>
                         </div>
                     </div>

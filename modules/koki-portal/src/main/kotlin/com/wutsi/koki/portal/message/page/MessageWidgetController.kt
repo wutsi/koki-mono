@@ -17,9 +17,7 @@ import java.util.UUID
 @Controller
 @RequestMapping("/messages/widget")
 @RequiresPermission(["message"])
-class MessageWidgetController(
-    private val service: MessageService,
-) : AbstractPageController() {
+class MessageWidgetController : AbstractPageController() {
     @GetMapping
     fun show(
         @RequestParam(required = false, name = "test-mode") testMode: String? = null,

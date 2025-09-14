@@ -4,7 +4,7 @@
  * Parameters
  *   - data-modal-body-url: URL of the body
  *   - data-modal-title (Optional): Title of the modal
- *   - data-modal-large (Optional): true | false. Large modal?
+ *   - data-modal-body-large (Optional): true | false. Large modal?
  *   - data-open-callback (Optional):Callback to invoke after opening the modal
  *   - data-close-callback (Optional):Callback to invoke after closing the modal
  *

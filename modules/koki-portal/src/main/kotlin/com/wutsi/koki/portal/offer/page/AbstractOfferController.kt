@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.offer.page.page
+package com.wutsi.koki.portal.offer.page
 
 import com.wutsi.koki.portal.module.page.AbstractModulePageController
 

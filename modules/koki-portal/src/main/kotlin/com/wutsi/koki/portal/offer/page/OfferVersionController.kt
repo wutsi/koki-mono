@@ -8,85 +8,43 @@ import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import java.util.Date
 
 @Controller
 @RequestMapping("/offer-versions")
 @RequiresPermission(["offer"])
-class ListOfferVersionController : AbstractOfferDetailsController() {
-    @GetMapping
+class OfferVersionController : AbstractOfferDetailsController() {
+    @GetMapping("/{id}")
     fun list(
-        @RequestParam(name = "offerId") offerId: Long,
+        @PathVariable id: Long,
         model: Model
     ): String {
-        val offer = findOffer(offerId)
+        val version = findVersion(id)
+        model.addAttribute("version", version)
+
+        val offer = findOffer(version.offerId)
         model.addAttribute("offer", offer)
 
-        val versions = findVersions(offerId)
-        model.addAttribute("versions", versions)
-        return "offers/versions/list"
+        return "offers/versions/show"
     }
 
-    private fun findVersions(offerId: Long): List<OfferVersionModel> {
-        return listOf(
-            OfferVersionModel(
-                id = 1110,
-                price = MoneyModel(amount = 450000.0, currency = "CAD", displayText = "C$ 420,000"),
-                status = OfferStatus.SUBMITTED,
-                contingencies = """
+    private fun findVersion(id: Long): OfferVersionModel {
+        return OfferVersionModel(
+            id = id,
+            offerId = 1L,
+            price = MoneyModel(amount = 450000.0, currency = "CAD", displayText = "C$ 420,000"),
+            status = OfferStatus.SUBMITTED,
+            contingencies = """
                         - Inspection des lieux requises avant of 30 Oct. 2025
                         - Avance de loyer de 12 mois payer d'ici le 14 Septembre
                         - Preuve de financement
                     """.trimIndent(),
-                submittingParty = OfferParty.SELLER,
-                createdAtText = "2025/09/12",
-                expiresAt = Date(),
-                expiresAtText = "2025/09/14",
-            ),
-            OfferVersionModel(
-                id = 1110,
-                price = MoneyModel(amount = 450000.0, currency = "CAD", displayText = "C$ 430,000"),
-                status = OfferStatus.REJECTED,
-                contingencies = """
-                        - Inspection des lieux requises avant of 30 Oct. 2025
-                        - Avance de loyer de 12 mois payer d'ici le 14 Septembre
-                        - Preuve de financement
-                    """.trimIndent(),
-                submittingParty = OfferParty.BUYER,
-                createdAtText = "2025/09/12",
-                expiresAt = Date(),
-                expiresAtText = "2025/09/14",
-            ),
-            OfferVersionModel(
-                id = 1110,
-                price = MoneyModel(amount = 450000.0, currency = "CAD", displayText = "C$ 400,000"),
-                status = OfferStatus.REJECTED,
-                contingencies = """
-                        - Inspection des lieux requises avant of 30 Oct. 2025
-                        - Avance de loyer de 12 mois payer d'ici le 14 Septembre
-                        - Preuve de financement
-                    """.trimIndent(),
-                submittingParty = OfferParty.SELLER,
-                createdAtText = "2025/09/12",
-                expiresAt = Date(),
-                expiresAtText = "2025/09/14",
-            ),
-            OfferVersionModel(
-                id = 1110,
-                price = MoneyModel(amount = 450000.0, currency = "CAD", displayText = "C$ 450,000"),
-                status = OfferStatus.REJECTED,
-                contingencies = """
-                        - Inspection des lieux requises avant of 30 Oct. 2025
-                        - Avance de loyer de 12 mois payer d'ici le 14 Septembre
-                        - Preuve de financement
-                    """.trimIndent(),
-                submittingParty = OfferParty.BUYER,
-                createdAtText = "2025/09/12",
-                expiresAt = Date(),
-                expiresAtText = "2025/09/14",
-            ),
+            submittingParty = OfferParty.SELLER,
+            createdAtText = "2025/09/12",
+            expiresAt = Date(),
+            expiresAtText = "2025/09/14",
         )
     }
 }

@@ -1,37 +1,48 @@
 package com.wutsi.koki.portal.offer.page
 
 import com.wutsi.blog.portal.common.model.MoneyModel
-import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.offer.dto.OfferParty
 import com.wutsi.koki.offer.dto.OfferStatus
-import com.wutsi.koki.portal.contact.model.ContactModel
-import com.wutsi.koki.portal.offer.model.OfferModel
 import com.wutsi.koki.portal.offer.model.OfferVersionModel
 import com.wutsi.koki.portal.security.RequiresPermission
-import com.wutsi.koki.portal.user.model.UserModel
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import java.util.Date
 
 @Controller
-@RequestMapping("/offers")
+@RequestMapping("/offer-versions")
 @RequiresPermission(["offer"])
-class OfferVersionListController : AbstractOfferDetailsController() {
-    @GetMapping("/{id}/versions")
+class ListOfferVersionController : AbstractOfferDetailsController() {
+    @GetMapping
     fun list(
-        @PathVariable id: Long,
+        @RequestParam(name = "offer-id") offerId: Long,
         model: Model
     ): String {
-        val offer = findOffer(id)
+        more(offerId, model = model)
+        return "offers/versions/list"
+    }
+
+    @GetMapping("/more")
+    fun more(
+        @RequestParam(name = "offer-id") offerId: Long,
+        @RequestParam(name = "limit", required = false) limit: Int = 20,
+        @RequestParam(name = "offset", required = false) offset: Int = 0,
+        model: Model
+    ): String {
+        val offer = findOffer(offerId)
         model.addAttribute("offer", offer)
 
-        val versions = findVersions(id)
+        val versions = findVersions(offerId)
         model.addAttribute("versions", versions)
-        return "offers/versions/list"
+        model.addAttribute("moreUrl", buildMoreUrl(versions, offerId, limit, offset))
+        return "offers/versions/more"
+    }
+
+    private fun buildMoreUrl(versions: List<OfferVersionModel>, offerId: Long, limit: Int, offset: Int): String? {
+        return "/offer-versions/more?offer-id=$offerId&limit=$limit&offset=" + (offset + limit)
     }
 
     private fun findVersions(offerId: Long): List<OfferVersionModel> {

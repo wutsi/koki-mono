@@ -249,7 +249,7 @@
             <b class="text-small" th:text="#{page.listing.advance-rent}">KEY</b>
             <div>
                 <span th:text="${listing.advanceRentMoney}">$$$</span>
-                <span th:text="'(' + #{page.listing.unit-months} + ')'">00</span>
+                <span th:text="'(' + ${listing.advanceRent} + ' ' + #{page.listing.unit-months} + ')'">00</span>
             </div>
         </div>
         <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.securityDeposit}">

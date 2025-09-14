@@ -1,0 +1,291 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="offer-status-badge(status)" th:remove="tag">
+    <span class="badge text-bg-primary" th:if="${status.name() == 'SUBMITTED'}"
+          th:text="#{'offer-status.' + ${status}}">SUBMITTED</span>
+
+    <span class="badge text-bg-danger"
+          th:if="${status.name() == 'REJECTED'} OR ${status.name() == 'EXPIRED'} OR ${status.name() == 'WITHDRAWN'}"
+          th:text="#{'offer-status.' + ${status}}">REJECTED</span>
+
+    <span class="badge text-bg-success" th:if="${status.name() == 'ACCEPTED'}"
+          th:text="#{'offer-status.' + ${status}}">ACCEPTED</span>
+</div>
+
+<div th:fragment="offer-party-badge(party)" th:remove="tag">
+    <span class="badge text-bg-light border" th:text="#{'offer-party.' + ${party}}">PARTY</span>
+</div>
+
+<div th:fragment="offer-summary(offer)">
+    <h1 class="margin-none offer-price">
+        <span th:text="${offer.version.price.displayText}">0000</span>
+    </h1>
+    <div class="flex margin-top">
+        <div>
+            <b th:text="#{page.offer.status}">STATUS</b><br/>
+            <span
+                th:replace="~{__components/offer :: offer-status-badge(${offer.version.status})}"></span>
+        </div>
+        <div class="margin-left-2x" th:if="${offer.listing}">
+            <b th:text="#{page.listing.listing-number}">LISTING</b><br/>
+            <a th:href="'/listings/' + ${offer.listing.id}" th:text="${offer.listing.listingNumber}">0000</a>
+        </div>
+    </div>
+</div>
+
+<div class="widget" th:fragment="offer-breadcrumb(offer)">
+    <div class="widget-body">
+        <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/" th:text="#{module.home}">HOME</a>
+                </li>
+
+                <li class="breadcrumb-item active d-none d-md-inline" th:if="${offer?.listing}">
+                    <a th:href="'/listings/' + ${offer.listing.listingNumber}"
+                       th:text="#{page.listing.number} + ${offer.listing.listingNumber}">
+                        LISTING
+                    </a>
+                </li>
+
+                <li class="breadcrumb-item active" th:if="!${offer}" th:text="#{module.offer}">LISTINGS</li>
+                <li class="breadcrumb-item active" th:if="${offer}">
+                    <a href="/offers" th:text="#{module.offer}">OFFER</a>
+                </li>
+                <li class="breadcrumb-item active" th:if="${offer}" th:text="${offer.name}">OFFER</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<table class="table" th:fragment="offer-details(offer)">
+    <tr th:if="${offer.listing}">
+        <td>
+            <b th:text="#{page.offer.listing}">LISTING</b>
+        </td>
+        <td>
+            <div th:replace="~{__components/offer :: offer-listing(${offer.listing}, true)}"></div>
+        </td>
+    </tr>
+    <tr>
+        <td width="20%">
+            <b th:text="#{page.offer.status}">STATUS</b>
+        </td>
+        <td>
+            <span th:replace="~{__components/offer :: offer-status-badge(${offer.version.status})}"></span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b th:text="#{page.offer.amount}">AMOUNT</b>
+        </td>
+        <td>
+            <b class="offer-price" th:text="${offer.version.price.displayText}">$$$</b>
+        </td>
+    </tr>
+    <tr th:if="${offer.sellerAgentUser}">
+        <td>
+            <b th:text="#{page.offer.seller-agent}">SELLER AGENT</b>
+        </td>
+        <td>
+            <div th:replace="~{__components/user :: user-small-card(${offer.sellerAgentUser})}"></div>
+        </td>
+    </tr>
+    <tr th:if="${offer.buyerAgentUser}">
+        <td>
+            <b th:text="#{page.offer.buyer-agent}">BUYER AGENT</b>
+        </td>
+        <td>
+            <div th:replace="~{__components/user :: user-small-card(${offer.buyerAgentUser})}"></div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b th:text="#{page.offer.buyer}">BUYER</b>
+        </td>
+        <td>
+            <a th:href="'/contacts/' + ${offer.buyerContact.id}"
+               th:if="${offer.buyerContact.canAccess(user)}" th:text="${offer.buyerContact.name}">BUYER</a>
+            <span th:if="!${offer.buyerContact.canAccess(user)}" th:text="${offer.buyerContact.name}">BUYER</span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b th:text="#{page.offer.submitted-by}">SUBMITTED BY</b>
+        </td>
+        <td>
+            <div th:replace="~{__components/offer :: offer-party-badge(${offer.version.submittingParty})}"></div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b th:text="#{page.offer.submitted-at}">SUBMITTED</b>
+        </td>
+        <td th:text="${offer.version.expiresAtText}">YYYY-MM-DD</td>
+    </tr>
+    <tr th:if="${offer.version.expiresAt}">
+        <td>
+            <b th:text="#{page.offer.expires-at}">EXPIRES</b>
+        </td>
+        <td th:text="${offer.version.expiresAtText}">YYYY-MM-DD</td>
+    </tr>
+    <tr>
+        <td>
+            <b th:text="#{page.offer.contingencies}"></b>
+        </td>
+        <td th:utext="${offer.version.contingenciesHtml}">CONTINGENCIES</td>
+    </tr>
+</table>
+
+<div class="offer-listing flex" th:fragment="offer-listing(listing, hyperlinked)">
+    <div class="hero-image text-center">
+        <a th:href="'/listings/' + ${listing.id}" th:if="${hyperlinked}">
+            <img
+                th:src="${listing.heroImageUrl} ? ${listing.heroImageUrl} : '/image/no-image.png'"/>
+        </a>
+        <img th:if="!${hyperlinked}"
+             th:src="${listing.heroImageUrl} ? ${listing.heroImageUrl} : '/image/no-image.png'"/>
+    </div>
+    <div class="margin-left text-small">
+        <a th:href="'/listings/' + ${offer.listing.id}" th:if="${hyperlinked} AND ${listing.address}">
+            <div th:utext="${listing.address.toHtml()}">ADDRESS</div>
+        </a>
+        <div th:if="!${hyperlinked} AND ${listing.address}" th:utext="${listing.address.toHtml()}">ADDRESS</div>
+
+        <div>
+            <span th:text="#{page.listing.number}">#</span>
+            <span th:text="${listing.listingNumber}">###</span>
+        </div>
+        <div>
+            <div th:replace="~{__components/listing :: listing-bed-bath-area(${listing})}"></div>
+        </div>
+    </div>
+</div>
+
+<tr th:fragment="offer-row(offer)" th:remove="tag">
+    <td>
+        <a target="_blank" th:href="'/offers/' + ${offer.id}">
+            <span th:replace="~{__components/offer :: offer-status-badge(${offer.version.status})}"></span>
+
+            <table class="margin-top-small text-small d-block d-md-none">
+                <tr>
+                    <th th:text="#{page.offer.submitted-by}">SUBMITTED BY</th>
+                    <td class="padding-left-small">
+                        <span
+                            th:replace="~{__components/offer :: offer-party-badge(${offer.version.submittingParty})}"></span>
+                    </td>
+                </tr>
+                <tr th:if="${offer.version.expiresAt}">
+                    <th th:text="#{page.offer.expires-at}">EXPIRED_AT</th>
+                    <td class="padding-left-small" th:text="${offer.version.expiresAtText}">
+                        YYYY-MM-DD
+                    </td>
+                </tr>
+                <tr>
+                    <th th:text="#{page.offer.amount}">AMOUNT</th>
+                    <td class="padding-left-small">
+                        <span class="offer-price" th:text="${offer.version.price.displayText}">$$$</span>
+                    </td>
+                </tr>
+            </table>
+        </a>
+    </td>
+    <td class="d-none d-md-table-cell">
+        <a target="_blank" th:href="'/offers/' + ${offer.id}" th:text="${offer.version.createdAtText}">YYY/MM/DD</a>
+    </td>
+    <td class="d-none d-md-table-cell text-nowrap" width="1%">
+        <a target="_blank" th:href="'/offers/' + ${offer.id}">
+            <span th:replace="~{__components/offer :: offer-party-badge(${offer.version.submittingParty})}"></span>
+        </a>
+    </td>
+    <td class="d-none d-md-table-cell">
+        <a target="_blank" th:href="'/offers/' + ${offer.id}">
+                    <span th:if="${offer.version.submittedByBuyer}"
+                          th:text="${offer.buyerAgentUser?.displayName}">BUYER</span>
+            <span th:if="${offer.version.submittedBySeller}"
+                  th:text="${offer.sellerAgentUser?.displayName}">SELLER</span>
+        </a>
+    </td>
+    <td class="d-none d-md-table-cell">
+        <a target="_blank" th:href="'/offers/' + ${offer.id}" th:text="${offer.version.expiresAtText}">
+            YYYY-MM-DD
+        </a>
+    </td>
+    <td class="text-right d-none d-md-table-cell">
+        <a target="_blank" th:href="'/offers/' + ${offer.id}">
+            <b class="offer-price" th:text="${offer.version.price.displayText}">$$$</b>
+        </a>
+    </td>
+</tr>
+
+<tr th:fragment="offer-version-row(offer, version)" th:remove="tag">
+    <td>
+        <a data-component-id="modal-button" data-modal-body-large="true" href="#"
+           th:data-modal-body-url="'/offer-versions/' + ${version.id}">
+            <span th:replace="~{__components/offer :: offer-status-badge(${version.status})}"></span>
+
+            <table class="margin-top-small text-small d-block d-md-none">
+                <tr>
+                    <th th:text="#{page.offer.submitted-by}">SUBMITTED BY</th>
+                    <td class="padding-left-small">
+                                <span
+                                    th:replace="~{__components/offer :: offer-party-badge(${version.submittingParty})}"></span>
+                    </td>
+                </tr>
+                <tr th:if="${version.expiresAt}">
+                    <th th:text="#{page.offer.expires-at}">EXPIRED_AT</th>
+                    <td class="padding-left-small" th:text="${version.expiresAtText}">
+                        YYYY-MM-DD
+                    </td>
+                </tr>
+                <tr>
+                    <th th:text="#{page.offer.amount}">AMOUNT</th>
+                    <td class="padding-left-small">
+                        <span class="offer-price" th:text="${version.price.displayText}">$$$</span>
+                    </td>
+                </tr>
+            </table>
+        </a>
+    </td>
+    <td class="d-none d-md-table-cell">
+        <a data-component-id="modal-button" data-modal-body-large="true" href="#"
+           th:data-modal-body-url="'/offer-versions/' + ${version.id}"
+           th:text="${version.createdAtText}">YYY/MM/DD</a>
+    </td>
+    <td class="d-none d-md-table-cell text-nowrap" width="1%">
+        <a data-component-id="modal-button" data-modal-body-large="true"
+           href="#"
+           th:data-modal-body-url="'/offer-versions/' + ${version.id}">
+                    <span
+                        th:replace="~{__components/offer :: offer-party-badge(${version.submittingParty})}"></span>
+        </a>
+    </td>
+    <td class="d-none d-md-table-cell">
+        <a data-component-id="modal-button" data-modal-body-large="true"
+           href="#"
+           th:data-modal-body-url="'/offer-versions/' + ${version.id}">
+            <span th:if="${version.submittedByBuyer}" th:text="${offer.buyerAgentUser?.displayName}">BUYER</span>
+            <span th:if="${version.submittedBySeller}" th:text="${offer.sellerAgentUser?.displayName}">SELLER</span>
+        </a>
+    </td>
+    <td class="d-none d-md-table-cell">
+        <a data-component-id="modal-button" data-modal-body-large="true"
+           href="#"
+           th:data-modal-body-url="'/offer-versions/' + ${offer.id}"
+           th:text="${version.expiresAtText}">
+            YYYY-MM-DD
+        </a>
+    </td>
+    <td class="text-right d-none d-md-table-cell">
+        <a data-component-id="modal-button" data-modal-body-large="true"
+           href="#"
+           th:data-modal-body-url="'/offer-versions/' + ${version.id}">
+            <b class="offer-price" th:text="${version.price.displayText}">$$$</b>
+        </a>
+    </td>
+</tr>
+
+</body>
+</html>

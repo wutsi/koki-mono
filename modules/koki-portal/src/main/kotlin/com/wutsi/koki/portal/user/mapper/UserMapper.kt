@@ -38,7 +38,7 @@ class UserMapper : TenantAwareMapper() {
             employer = entity.employer,
             photoUrl = entity.photoUrl,
             mobile = entity.mobile,
-            mobileText = formatPhone(entity.mobile, city?.country),
+            mobileText = formatPhone(entity.mobile, city?.country ?: entity.country),
             category = category,
             city = city,
             permissionNames = roles.flatMap { role -> role.permissions }
@@ -63,8 +63,9 @@ class UserMapper : TenantAwareMapper() {
             employer = entity.employer,
             photoUrl = entity.photoUrl,
             mobile = entity.mobile,
-            mobileText = formatPhone(entity.mobile, city?.country),
-            city = city
+            mobileText = formatPhone(entity.mobile, city?.country ?: entity.country),
+            city = city,
+            country = entity.country,
         )
     }
 

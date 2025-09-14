@@ -15,7 +15,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div>
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body flex flex-space-between">
@@ -73,26 +73,24 @@
         </div>
         <div class="col-12 col-md-4" th:if="${listing.sellerAgentUser}">
             <div class="widget">
-                <div class="widget-body flex">
-                    <img class="user-photo"
-                         th:src="${listing.sellerAgentUser.photoUrl} ? ${listing.sellerAgentUser.photoUrl} : '/image/no-photo.png'"
-                    />
-                    <div class="margin-left-small w-100">
-                        <h5 class="margin-none" th:text="${listing.sellerAgentUser.displayName}">NAME</h5>
-                        <div th:if="${listing.sellerAgentUser.employer}"
-                             th:text="${listing.sellerAgentUser.employer}">EMPLOYER
-                        </div>
-                        <div th:if="${listing.sellerAgentUser?.mobile}" th:text="${listing.sellerAgentUser.mobileText}">
-                            +1 (514) 7580000
-                        </div>
-                        <div class="margin-top w-100" th:if="${listing.sellerAgentUser?.mobile}">
-                            <a class="btn btn-primary w-100" target="_blank"
-                               th:href="${listing.sellerAgentUser.mobileUrl}"
-                               th:text="#{button.send_message}"
-                            >
-                                SEND_MESSAGE
-                            </a>
-                        </div>
+                <div class="widget-body">
+                    <div th:replace="~{__components/user :: user-card(${listing.sellerAgentUser})}"></div>
+                    <div>
+                        <a class="btn btn-primary margin-top w-100" data-component-id="modal-button" id="btn-message"
+                           th:data-modal-body-url="${composeUrl}"
+                           th:if="${listing.canSendMessage(user)} AND ${composeUrl}"
+                           th:text="#{button.send_message}"
+                        >
+                            SEND_MESSAGE
+                        </a>
+
+                        <a class="btn btn-light margin-top w-100" id="btn-offer"
+                           th:href="'/offers/create?listing-id=' + ${listing.id}"
+                           th:if="${listing.canMakeOffer(user)}"
+                           th:text="#{button.make_offer}"
+                        >
+                            MAKE_OFFER
+                        </a>
                     </div>
                 </div>
             </div>
@@ -144,26 +142,25 @@
         </div>
     </div>
 
-    <div class="d-block d-md-none border contact-sticky-bar" th:if="${listing.sellerAgentUser}">
-        <div class="flex padding-small">
-            <img height="48"
-                 th:src="${listing.sellerAgentUser.photoUrl} ? ${listing.sellerAgentUser.photoUrl} : '/image/no-photo.png'"
-                 width="48"/>
-            <div class="margin-left-small flex flex-space-between w-100">
-                <div class="text-right">
-                    <b th:text="${listing.sellerAgentUser.displayName}">NAME</b> <br/>
-                    <a th:href="'tel:' + ${listing.sellerAgentUser.mobile}"
-                       th:if="${listing.sellerAgentUser?.mobile}"
-                       th:text="${listing.sellerAgentUser.mobileText}">+1 (514) 7580000</a>
-                </div>
-                <div class="flex flex-center">
-                    <a class="btn btn-primary w-100" target="_blank"
-                       th:href="${listing.sellerAgentUser.mobileUrl}"
-                       th:text="#{button.send_message}"
-                    >
-                        SEND_MESSAGE
-                    </a>
-                </div>
+    <div class="d-block d-md-none border sticky-bar-bottom"
+         th:if="(${listing.canSendMessage(user)} AND ${composeUrl}) OR ${listing.canMakeOffer(user)}">
+        <div class="flex flex-space-between">
+            <div class="w-100 padding-small" th:if="${listing.canSendMessage(user)}">
+                <a class="btn btn-primary w-100" data-component-id="modal-button"
+                   id="btn-message-sticky"
+                   th:data-modal-body-url="${composeUrl}"
+                   th:text="#{button.send_message}"
+                >
+                    SEND_MESSAGE
+                </a>
+            </div>
+            <div class="w-100 padding-small" th:if="${listing.canMakeOffer(user)}">
+                <a class="btn btn-light w-100" id="btn-offer-sticky"
+                   th:href="'/offers/create?listing-id=' + ${listing.id}"
+                   th:text="#{button.make_offer}"
+                >
+                    MAKE_OFFER
+                </a>
             </div>
         </div>
     </div>

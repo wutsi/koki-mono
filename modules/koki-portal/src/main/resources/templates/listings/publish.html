@@ -27,7 +27,7 @@
                     </div>
 
                     <hr/>
-                    
+
                     <div data-component-id="ajax-fragment"
                          th:data-url="'/listings/tab/details?id=' + ${listing.id} "></div>
                 </div>
@@ -51,13 +51,14 @@
                             </div>
                         </div>
 
-                        <div>
-                            <button class="btn btn-primary" disabled id="btn-publish" th:text="#{button.publish}"
+                        <div class="flex flex-space-between">
+                            <button class="btn btn-primary w-49-mobile" disabled id="btn-publish"
+                                    th:text="#{button.publish}"
                                     type="submit">
                                 PUBLISH
                             </button>
 
-                            <a class="btn btn-secondary margin-left" th:href="'/listings/' + ${listing.id}"
+                            <a class="btn btn-light margin-left w-49-mobile" th:href="'/listings/' + ${listing.id}"
                                th:text="#{button.cancel}">CANCEL</a>
                         </div>
                     </form>

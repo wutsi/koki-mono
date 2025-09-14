@@ -69,6 +69,18 @@ koki:
     toggles:
         paypal: true
         mobile-money: true
+        modules:
+            account: false
+            contact: true
+            image: true
+            file: false
+            listing: true
+            message: true
+            offer: true
+            product: false
+            invoice: false
+            payment: false
+
 wutsi:
     platform:
         ai:

@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
-@RequestMapping("/offers/accept")
+@RequestMapping("/offers/refuse")
 @RequiresPermission(["offer:manage", "offer:full_access"])
-class AcceptOfferController : AbstractEditOfferController() {
+class RefuseOfferController : AbstractEditOfferController() {
     @GetMapping
     fun accept(@RequestParam id: Long, model: Model): String {
         val offer = findOffer(id)
@@ -24,15 +24,15 @@ class AcceptOfferController : AbstractEditOfferController() {
         model.addAttribute(
             "page",
             createPageModel(
-                name = PageName.OFFER_ACCEPT,
-                title = offer.buyerContact.name,
+                name = PageName.OFFER_REFUSE,
+                title = getMessage("page.offer.show.meta.title", arrayOf(offer.id)),
             )
         )
-        return "offers/accept"
+        return "offers/refuse"
     }
 
     @PostMapping
     fun submit(@ModelAttribute form: OfferForm, model: Model): String {
-        return "redirect:/offers/accept/done?id=${form.id}"
+        return "redirect:/offers/refuse/done?id=${form.id}"
     }
 }

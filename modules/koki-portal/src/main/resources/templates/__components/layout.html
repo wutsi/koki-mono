@@ -100,14 +100,16 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <ul class="navbar-nav">
             <li class="nav-item padding-small" th:classappend="${current == 'home'} ? 'active'">
-                <a aria-current="page" class="nav-link" href="/">Home</a>
+                <a aria-current="page" class="nav-link" href="/" th:text="#{module.home}">Home</a>
             </li>
             <li class="nav-item padding-small"
                 th:classappend="${current == module.name} ? 'active'"
                 th:each="module : ${tenant.modules}"
                 th:if="${module.homeUrl} AND ${user?.canAccess(module)}"
             >
-                <a aria-current="page" class="nav-link" th:href="${module.homeUrl}" th:text="${module.title}">TITLE</a>
+                <a aria-current="page" class="nav-link"
+                   th:href="${module.homeUrl}"
+                   th:text="#{'module.' + ${module.name}}">TITLE</a>
             </li>
         </ul>
     </div>

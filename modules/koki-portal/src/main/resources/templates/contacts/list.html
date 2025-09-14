@@ -58,6 +58,10 @@
                             <th class="d-none d-md-table-cell" th:if="${showAccount}" th:text="#{page.contact.account}">
                                 Account
                             </th>
+                            <th class="d-none d-md-table-cell" th:if="${user?.hasFullAccess('contact')}"
+                                th:text="#{page.contact.owner}">
+                                Account
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -67,10 +71,9 @@
                         </tr>
                         <tr th:if="${contacts}"
                             th:replace="~{__components/contact :: load-more(${moreUrl})}">
-
                         </tr>
                         <tr th:if="!${contacts}">
-                            <td colspan="6" th:text="#{page.contact.list.empty}">EMPTY</td>
+                            <td colspan="7" th:text="#{page.contact.list.empty}">EMPTY</td>
                         </tr>
                         </tbody>
                     </table>

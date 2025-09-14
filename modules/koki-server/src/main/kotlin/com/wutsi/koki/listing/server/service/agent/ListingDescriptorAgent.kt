@@ -22,7 +22,7 @@ class ListingDescriptorAgent(
             {
               "title": "Title of the property in less than 100 characters",
               "summary": "Short SEO friendly summary in less than 160 characters",
-              "description": "A more comprehensive description in less than 1000 characters",
+              "description": "A more comprehensive description in less than 500 characters",
               "titleFr": "Title translated in french",
               "summaryFr": "Short summary translated in french",
               "descriptionFr": "Description  translated in french",

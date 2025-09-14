@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.module.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.koki.portal.common.service.TogglesHolder
 import com.wutsi.koki.portal.module.mapper.ModuleMapper
 import com.wutsi.koki.portal.module.model.LayoutDescriptor
 import com.wutsi.koki.portal.module.model.ModuleModel
@@ -14,7 +15,8 @@ import org.springframework.stereotype.Service
 class ModuleService(
     private val koki: KokiModules,
     private val mapper: ModuleMapper,
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
+    private val toggleHolder: TogglesHolder,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ModuleService::class.java)
@@ -38,7 +40,9 @@ class ModuleService(
 
     fun modules(): List<ModuleModel> {
         if (all == null) {
+            val toggles = toggleHolder.get()
             val modules = koki.modules().modules
+                .filter { module -> toggles.isModuleEnabled(module.name) }
             LOGGER.info("${modules.size} modules(s) loaded")
 
             val permissions = koki.permissions(

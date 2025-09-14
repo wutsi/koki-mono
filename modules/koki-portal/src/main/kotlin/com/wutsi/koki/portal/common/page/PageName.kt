@@ -16,6 +16,16 @@ object PageName {
     const val AI_SETTINGS = "page.settings.ai"
     const val AI_SETTINGS_EDIT = "page.settings.ai.edit"
 
+    const val OFFER = "page.offer"
+    const val OFFER_LIST = "page.offer.list"
+    const val OFFER_ACCEPT = "page.offer.accept"
+    const val OFFER_ACCEPT_DONE = "page.offer.accept.done"
+    const val OFFER_CREATE = "page.offer.create"
+    const val OFFER_REFUSE = "page.offer.refuse"
+    const val OFFER_REFUSE_DONE = "page.offer.refuse.done"
+    const val OFFER_COUNTER = "page.offer.counter"
+    const val OFFER_COUNTER_DONE = "page.offer.counter.done"
+
     const val PAYNOW = "page.paynow"
     const val PAYNOW_CONFIRMATION = "page.paynow.confirmation"
 

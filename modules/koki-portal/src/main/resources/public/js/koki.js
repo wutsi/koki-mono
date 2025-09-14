@@ -199,7 +199,7 @@ class Koki {
         }
 
         if (url) {
-            target.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></div>';
+            target.innerHTML = '<div class="text-center w-100"><i class="fas fa-spinner fa-spin"></div>';
             fetch(url)
                 .then(response => {
                     if (response.ok) {

@@ -1,0 +1,57 @@
+.offer-price {
+    color: darkblue;
+}
+
+h1.offer-price {
+    font-weight: normal;
+}
+
+.offer-listing .hero-image {
+    width: 96px;
+    height: 96px;
+}
+
+.offer-listing .hero-image img {
+    max-width: 92px;
+    max-height: 92px;
+}
+
+.widget .offer-listing .hero-image {
+    width: 64px;
+    height: 64px;
+}
+
+.widget .offer-listing .hero-image img {
+    max-width: 60px;
+    max-height: 60px;
+}
+
+
+/* ======================================================================== */
+/*                                                                          */
+/*  MEDIA QUERIES                                                           */
+/*                                                                          */
+/* ======================================================================== */
+/* Large */
+@media only screen and (max-width: 992px) and (orientation: portrait) {
+}
+
+/* Medium */
+@media only screen and (max-width: 768px) and (orientation: portrait) {
+
+}
+
+/* Small */
+@media only screen and (max-width: 576px) {
+    .offer-listing .hero-image {
+        width: 64px;
+        height: 64px;
+    }
+
+    .offer-listing .hero-image img {
+        max-width: 60px;
+        max-height: 60px;
+    }
+}
+
+

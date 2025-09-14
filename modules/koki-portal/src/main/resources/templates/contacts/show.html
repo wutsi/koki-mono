@@ -38,25 +38,27 @@
                             >Delete</a>
                         </div>
                     </div>
-                    <div class="flex margin-top d-none d-md-flex">
-                        <div class="margin-right-2x" th:if="${contact.contactType}">
-                            <b>Contact Type</b><br/>
+                    <div class="flex margin-top">
+                        <div class="margin-right-2x d-none d-md-block" th:if="${contact.contactType}">
+                            <b th:text="#{page.contact.contact_type}">Contact Type</b><br/>
                             <span th:text="${contact.contactType?.title}">CONTACT TYPE</span>
                         </div>
-                        <div class="margin-right-2x" th:if="${contact.email}">
-                            <b>Email</b><br/>
+                        <div class="margin-right-2x d-none d-md-block" th:if="${contact.email}">
+                            <b th:text="#{page.contact.email}">Email</b><br/>
                             <a th:href="${contact.emailUrl}" th:text="${contact.email}">EMAIL</a>
                         </div>
                         <div class="margin-right-2x" th:if="${contact.mobile}">
-                            <b>Mobile</b><br/>
-                            <a th:href="${contact.mobileUrl}" th:text="${contact.mobileFormatted}">MOBILE</a>
+                            <b th:text="#{page.contact.mobile}">Mobile</b><br/>
+                            <a target="_blank" th:href="${contact.mobileUrl}" th:text="${contact.mobileFormatted}">
+                                MOBILE
+                            </a>
                         </div>
                         <div class="margin-right-2x" th:if="${contact.phone}">
-                            <b>Phone</b><br/>
+                            <b th:text="#{page.contact.phone}">Phone</b><br/>
                             <a th:href="${contact.phoneUrl}" th:text="${contact.phoneFormatted}">PHONE</a>
                         </div>
-                        <div class="margin-right-2x" th:if="${contact.account}">
-                            <b>Account</b><br/>
+                        <div class="margin-right-2x d-none d-md-block" th:if="${contact.account}">
+                            <b th:text="#{page.contact.account}">Account</b><br/>
                             <a class="entity-title"
                                th:href="'/accounts/' + ${contact.account.id}"
                                th:if="${contact.account.viewedBy(user)}"
@@ -142,6 +144,10 @@
                             <tr th:if="${contact.address}">
                                 <td><b th:text="#{page.contact.address}">Address</b></td>
                                 <td th:utext="${contact.address.toHtml()}">HTML</td>
+                            </tr>
+                            <tr th:if="${user?.hasFullAccess('contact')}">
+                                <td><b th:text="#{page.contact.owner}">Address</b></td>
+                                <td th:text="${contact.createdBy.displayName}">OWNER</td>
                             </tr>
                         </table>
                     </div>

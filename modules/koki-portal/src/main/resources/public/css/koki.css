@@ -100,6 +100,10 @@ body {
     padding-top: 0.5em;
 }
 
+.padding-top-2x {
+    padding-top: 2em;
+}
+
 .padding-bottom {
     padding-bottom: 1em;
 }
@@ -192,6 +196,10 @@ body {
     margin-left: .5em;
 }
 
+.margin-left-2x {
+    margin-left: 2em;
+}
+
 .margin-right {
     margin-right: 1em;
 }
@@ -202,6 +210,17 @@ body {
 
 .margin-right-2x {
     margin-right: 2em;
+}
+
+.sticky-bar-bottom {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin-left: 0;
+    z-index: 1000;
+    background: white;
 }
 
 .w-49 {
@@ -811,6 +830,10 @@ div.CodeMirror {
 
 /* Medium */
 @media only screen and (max-width: 768px) and (orientation: portrait) {
+    .margin-bottom-mobile {
+        margin-bottom: .5em;
+    }
+
     .w-100-mobile {
         width: 100%;
     }

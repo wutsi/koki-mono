@@ -47,10 +47,6 @@
             <url>https://repo1.maven.org/maven2</url>
         </repository>
         <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/wutsi/wutsi-mono</url>
-        </repository>
-        <repository>
             <id>koki</id>
             <url>https://maven.pkg.github.com/wutsi/koki-mono</url>
         </repository>
@@ -58,9 +54,9 @@
 
     <properties>
         <wutsi-chatbot.version>0.0.5</wutsi-chatbot.version>
-        <wutsi-dto.version>0.0.252</wutsi-dto.version>
+        <wutsi-dto.version>0.0.254</wutsi-dto.version>
         <wutsi-platform.version>0.0.43</wutsi-platform.version>
-        <wutsi-sdk.version>0.0.38</wutsi-sdk.version>
+        <wutsi-sdk.version>0.0.39</wutsi-sdk.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -75,8 +71,8 @@
         <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
         <maven-exec-plugin.version>3.5.1</maven-exec-plugin.version>
         <maven.minify-maven-plugin.version>1.7.6</maven.minify-maven-plugin.version>
-        <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
-        <maven-failsafe-plugin.version>3.5.3</maven-failsafe-plugin.version>
+        <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>3.5.4</maven-failsafe-plugin.version>
 
         <amqp-client.version>5.26.0</amqp-client.version>
         <aws.version>1.12.791</aws.version>
@@ -123,7 +119,7 @@
         <kotlinpoet.version>1.18.1</kotlinpoet.version>
         <ktlint.version>1.7.1</ktlint.version>
         <lettuce.version>6.8.1.RELEASE</lettuce.version>
-        <libphonenumber.version>9.0.13</libphonenumber.version>
+        <libphonenumber.version>9.0.14</libphonenumber.version>
         <mobiledetect.version>1.1.1</mobiledetect.version>
         <mustache.version>0.9.14</mustache.version>
         <mysql.version>9.4.0</mysql.version>
@@ -136,7 +132,7 @@
         <scribe.version>8.3.3</scribe.version>
         <selenium.version>4.35.0</selenium.version>
         <slf4j.version>2.0.17</slf4j.version>
-        <spring.version>6.2.10</spring.version>
+        <spring.version>6.2.11</spring.version>
         <spring-boot.version>3.5.5</spring-boot.version>
         <spring-mobile-device.version>2.0.0.M3</spring-mobile-device.version>
         <spring-security.version>6.5.3</spring-security.version>
