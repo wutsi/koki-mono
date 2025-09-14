@@ -4,7 +4,6 @@ import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.message.model.ConversationModel
 import com.wutsi.koki.portal.message.model.MessageModel
-import com.wutsi.koki.portal.message.service.MessageService
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.user.model.UserModel
 import org.springframework.stereotype.Controller
@@ -17,9 +16,7 @@ import java.util.UUID
 @Controller
 @RequestMapping("/messages/widget")
 @RequiresPermission(["message"])
-class MessageWidgetController(
-    private val service: MessageService,
-) : AbstractPageController() {
+class MessageWidgetController : AbstractPageController() {
     @GetMapping
     fun show(
         @RequestParam(required = false, name = "test-mode") testMode: String? = null,

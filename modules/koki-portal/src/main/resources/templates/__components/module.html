@@ -18,7 +18,7 @@
                 th:data-bs-target="'#pills-' + ${tab.name}"
                 th:id="'pills-' + ${tab.name} + '-tab'"
                 th:if="${tab.tabUrl}"
-                th:text="${tab.title}"
+                th:text="#{'module.' + ${tab.name}}"
                 type="button">
             TAB
         </button>
@@ -58,15 +58,15 @@
     <span class="badge rounded-pill bg-secondary"
           th:if="${tab.name == 'file'} AND ${entity.totalFiles} AND ${entity.totalFiles > 0}"
           th:text="${entity.totalFiles}"
-    >
-        000
-    </span>
+    >000</span>
     <span class="badge rounded-pill bg-secondary"
           th:if="${tab.name == 'image'} AND ${entity.totalImages} AND ${entity.totalImages > 0}"
           th:text="${entity.totalImages}"
-    >
-        000
-    </span>
+    >000</span>
+    <span class="badge rounded-pill bg-secondary"
+          th:if="${tab.name == 'offer'} AND ${entity.totalOffers} AND ${entity.totalOffers > 0}"
+          th:text="${entity.totalOffers}"
+    >000</span>
 </div>
 
 </body>

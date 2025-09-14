@@ -19,7 +19,7 @@
 
 <tr th:fragment="columns(contact, showAccount, showType)" th:remove="tag">
     <td>
-        <a th:href="'/contacts/' + ${contact.id}">
+        <a target="_blank" th:href="'/contacts/' + ${contact.id}">
             <div th:text="${contact.name}">NAME</div>
 
             <table border="0" class="d-block d-md-none text-small">
@@ -39,21 +39,24 @@
         </a>
     </td>
     <td class="d-none d-lg-table-cell" th:if="${showType}">
-        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.contactType?.title}">
+        <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.contactType?.title}">
             TYPE
         </a>
     </td>
     <td class="d-none d-md-table-cell">
-        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.email}">EMAIL</a>
+        <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.email}">EMAIL</a>
     </td>
     <td class="d-none d-md-table-cell">
-        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.mobileFormatted}">MOBILE</a>
+        <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.mobileFormatted}">MOBILE</a>
     </td>
     <td class="d-none d-md-table-cell">
-        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.phoneFormatted}">PHONE</a>
+        <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.phoneFormatted}">PHONE</a>
     </td>
     <td class="d-none d-lg-table-cell" th:if="${showAccount}">
-        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.account?.name}">ACCOUNT</a>
+        <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.account?.name}">ACCOUNT</a>
+    </td>
+    <td class="d-none d-lg-table-cell" th:if="${user?.hasFullAccess('contact')}">
+        <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.createdBy?.displayName}">OWNER</a>
     </td>
 </tr>
 

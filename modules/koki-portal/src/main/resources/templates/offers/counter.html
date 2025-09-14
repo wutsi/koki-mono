@@ -11,124 +11,117 @@
 <div class="container-fluid padding-bottom-8x">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/offer :: offer-breadcrumb(${offer})}"></div>
-        </div>
-    </div>
-
-    <div class="row d-none d-md-block">
-        <div class="col-12">
-            <div class="widget">
-                <div class="widget-body flex flex-space-between">
-                    <a class="btn btn-success btn-sm" id="btn-accept"
-                       th:href="'/offers/accept?id=' + ${offer.id}"
-                    >
-                        <i class="fa-solid fa-check"></i>
-                        <span th:text="#{button.accept}">ACCEPT</span>
-                    </a>
-
-                    <a class="btn btn-danger btn-sm" id="btn-reject"
-                       th:href="'/offers/refuse?id=' + ${offer.id}"
-                    >
-                        <i class="fa-solid fa-xmark"></i>
-                        <span th:text="#{button.refuse}">REFUSE</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12 col-lg-7">
             <div class="widget">
                 <div class="widget-body">
-                    <div th:replace="~{__components/offer :: offer-summary(${offer})}"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-lg-5">
-            <div class="widget" th:if="${offer.sellerAgentUser}">
-                <div class="widget-body flex flex-space-between flex-wrap">
-                    <div class="w-49 w-100-mobile margin-bottom-mobile">
-                        <span class="badge text-bg-light border margin-bottom-small"
-                              th:text="#{'offer-party.SELLER'}">BUYER</span>
-                        <div th:replace="~{__components/user :: user-card(${offer.sellerAgentUser})}"></div>
-                    </div>
-                    <div class="w-49 w-100-mobile">
-                        <span class="badge text-bg-light border margin-bottom-small"
-                              th:text="#{'offer-party.BUYER'}">BUYER</span>
-                        <div th:replace="~{__components/user :: user-card(${offer.buyerAgentUser})}"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                    <h1 th:text="#{page.offer.counter.title}">TITLE</h1>
 
-    <div class="row">
-        <div class="col-12">
-            <div class="widget">
-                <div class="widget-body">
-                    <ul class="nav nav-pills mb-3" id="tab-main" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button aria-controls="pills-content" aria-selected="true" class="nav-link active"
-                                    data-bs-target="#pills-details" data-bs-toggle="pill" id="pills-details-tab"
-                                    role="tab" type="button">
-                                Details
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation" th:each="tab : ${page.tabs.get('main')}">
-                            <button aria-selected="false" class="nav-link" data-bs-toggle="pill" role="tab"
-                                    th:aria-controls="'pills-' + ${tab.name}"
-                                    th:data-bs-target="'#pills-' + ${tab.name}"
-                                    th:id="'pills-' + ${tab.name} + '-tab'"
-                                    th:if="${tab.tabUrl} AND !${excludedTabs?.contains(tab.name)}"
-                                    type="button">
-                                <span class="name" th:text="#{'module.' + ${tab.name}}">TAB</span>
-                            </button>
-                        </li>
-                    </ul>
-
-                    <div class="tab-content" th:id="'tab-' + ${name} + '-content'">
-                        <div aria-labelledby="pills-details-tab" class="tab-pane fade show active"
-                             id="pills-details"
-                             role="tabpanel">
-                            <div id="tab-details-content">
-                                <div th:replace="~{__components/offer :: offer-details(${offer})}"></div>
-                            </div>
-                        </div>
-
-                        <div class="tab-pane fade" role="tabpanel"
-                             th:aria-labelledby="'pills-' + ${tab.name} + '-tab'"
-                             th:data-url="${tab.toTabUrl(offer.id, module, offer.readOnly)}"
-                             th:each="tab : ${page.tabs.get('main')}"
-                             th:id="'pills-' + ${tab.name}"
-                             th:if="${tab.tabUrl} AND !${excludedTabs?.contains(tab.name)}"
-                        >
-                        </div>
+                    <div class="margin" th:if="${error}">
+                        <div class="alert alert-danger" th:utext="${error}">ERROR</div>
                     </div>
+
+                    <form class="form padding-top-2x" method="post" th:action="@{/offers/counter}" th:object="${form}">
+                        <input th:field="*{id}" type="hidden"/>
+                        <input th:field="*{submittingParty}" type="hidden"/>
+
+                        <table class="table">
+                            <tr th:if="${offer.listing}">
+                                <td>
+                                    <b th:text="#{page.offer.listing}">LISTING</b>
+                                </td>
+                                <td>
+                                    <div th:replace="~{__components/offer :: offer-listing(${offer.listing}, false)}">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b th:text="#{page.offer.submitted-by}">BY</b>
+                                </td>
+                                <td th:if="*{submittingParty.name() == 'BUYER'}">
+                                    <div th:replace="~{__components/user :: user-small-card(${offer.buyerAgentUser})}">
+                                    </div>
+                                </td>
+                                <td th:if="*{submittingParty.name() == 'SELLER'}">
+                                    <div th:replace="~{__components/user :: user-small-card(${offer.sellerAgentUser})}">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b th:text="#{page.offer.submitted-to}">TO</b>
+                                </td>
+                                <td th:if="*{submittingParty.name() == 'BUYER'}">
+                                    <div th:replace="~{__components/user :: user-small-card(${offer.sellerAgentUser})}">
+                                    </div>
+                                </td>
+                                <td th:if="*{submittingParty.name() == 'SELLER'}">
+                                    <div th:replace="~{__components/user :: user-small-card(${offer.buyerAgentUser})}">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b th:text="#{page.offer.amount}">AMOUNT</b>
+                                    <span class="required">*</span>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input class="form-control" required step="0" th:field="*{price}"
+                                               type="number"/>
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span th:text="${tenant.currencySymbol}">XXX</span>
+                                                <span class="margin-left-small"
+                                                      th:if="${form.pricePerMonth}"
+                                                      th:text="#{page.listing.rental-price-suffix} ">PER MONTH</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b th:text="#{page.offer.expires-at}">EXPIRES</b>
+                                    <span class="required">*</span>
+                                </td>
+                                <td>
+                                    <input class="form-control" required th:field="*{expiresAt}"
+                                           th:min="*{expiresAtMin}"
+                                           type="date"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b th:text="#{page.offer.contingencies}">CONTENGENGIES</b>
+                                </td>
+                                <td>
+                                    <textarea class="form-control" rows="5" th:field="*{contingencies}"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="flex-space-between flex">
+                                        <a class="btn btn-light margin-left w-49-mobile"
+                                           th:href="'/offers/' + ${offer.id}"
+                                           th:text="#{button.cancel}">
+                                            CANCEL
+                                        </a>
+
+                                        <button class="btn btn-primary w-49-mobile" id="btn-accept"
+                                                th:text="#{button.submit}"
+                                                type="submit">
+                                            SUBMIT
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="d-block d-md-none border sticky-bar-bottom">
-    <div class="widget-body flex flex-space-between">
-        <a class="btn btn-success btn-sm w-49-mobile" id="btn-accept-sticky"
-           th:href="'/offers/accept?id=' + ${offer.id}"
-        >
-            <i class="fa-solid fa-check"></i>
-            <span th:text="#{button.accept}">ACCEPT</span>
-        </a>
-
-        <a class="btn btn-danger btn-sm w-49-mobile" id="btn-reject-sticky"
-           th:href="'/offers/refuse?id=' + ${offer.id}"
-        >
-            <i class="fa-solid fa-xmark"></i>
-            <span th:text="#{button.refuse}">REFUSE</span>
-        </a>
-    </div>
-</div>
-
-<div th:replace="~{__components/bootstrap :: modal}"></div>
 </body>
 </html>

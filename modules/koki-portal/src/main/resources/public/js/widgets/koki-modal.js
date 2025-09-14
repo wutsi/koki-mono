@@ -41,10 +41,10 @@ class ModalWidget {
                                 }
 
                                 // Form submit
-                                const bthSubmit = document.querySelector("#koki-modal [type=submit]");
-                                if (bthSubmit && bthSubmit.getAttribute('data-async')) {
-                                    bthSubmit.removeEventListener('click', me._submit);
-                                    bthSubmit.addEventListener('click', me._submit);
+                                const btnSubmit = document.querySelector("#koki-modal [type=submit]");
+                                if (btnSubmit && btnSubmit.getAttribute('data-async')) {
+                                    btnSubmit.removeEventListener('click', me._submit);
+                                    btnSubmit.addEventListener('click', me._submit);
                                 }
 
                                 // Open callback

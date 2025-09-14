@@ -104,6 +104,7 @@ class ListingMapper(
             },
             totalFiles = entity.totalFiles,
             totalImages = entity.totalImages,
+            totalOffers = 5L,
 
             sellerAgentUser = entity.sellerAgentUserId?.let { id -> users[id] },
             createdBy = entity.createdById?.let { id -> users[id] },

@@ -86,7 +86,7 @@ springdoc:
             display-name: Invoice API
             paths-to-match: /v1/invoices, /v1/invoices/**
 
-        -   group: Listing
+        -   group: listing
             display-name: Listing API
             paths-to-match: /v1/listings, /v1/listings/**
 
@@ -101,6 +101,10 @@ springdoc:
         -   group: notes
             display-name: Note API
             paths-to-match: /v1/notes, /v1/notes/*
+
+        -   group: offer
+            display-name: Offer API
+            paths-to-match: /v1/offers, /v1/offers/**, /v1/offer-versions, /v1/offer-versions/**
 
         -   group: payments
             display-name: Payment API

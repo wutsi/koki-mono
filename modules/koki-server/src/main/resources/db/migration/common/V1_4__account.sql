@@ -79,5 +79,6 @@ INSERT INTO T_PERMISSION(id, module_fk, name, description)
     VALUES (1100, 110, 'account',        'View accounts profile'),
            (1101, 110, 'account:manage', 'Add/Edit accounts profile'),
            (1102, 110, 'account:delete', 'Delete accounts profile'),
-           (1103, 110, 'account:admin',  'Configure account module');
+           (1103, 110, 'account:admin',  'Configure account module'),
+           (1104, 110, 'account:full_access', 'Access to all accounts');
 

@@ -20,7 +20,6 @@ import com.wutsi.koki.PaymentFixtures
 import com.wutsi.koki.ProductFixtures
 import com.wutsi.koki.RefDataFixtures
 import com.wutsi.koki.RoleFixtures
-import com.wutsi.koki.RoomFixtures
 import com.wutsi.koki.TenantFixtures
 import com.wutsi.koki.UserFixtures
 import com.wutsi.koki.account.dto.CreateAccountRequest
@@ -81,14 +80,6 @@ import com.wutsi.koki.refdata.dto.SearchJuridictionResponse
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
 import com.wutsi.koki.refdata.dto.SearchSalesTaxResponse
 import com.wutsi.koki.refdata.dto.SearchUnitResponse
-import com.wutsi.koki.room.dto.CreateRoomRequest
-import com.wutsi.koki.room.dto.CreateRoomResponse
-import com.wutsi.koki.room.dto.CreateRoomUnitRequest
-import com.wutsi.koki.room.dto.CreateRoomUnitResponse
-import com.wutsi.koki.room.dto.GetRoomResponse
-import com.wutsi.koki.room.dto.GetRoomUnitResponse
-import com.wutsi.koki.room.dto.SearchRoomResponse
-import com.wutsi.koki.room.dto.SearchRoomUnitResponse
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
 import com.wutsi.koki.tenant.dto.Configuration
@@ -132,6 +123,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.test.annotation.DirtiesContext
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
@@ -147,6 +139,7 @@ import kotlin.test.assertTrue
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles(profiles = ["qa"])
 abstract class AbstractPageControllerTest {
     companion object {
         val USER_ID = UserFixtures.USER_ID
@@ -246,7 +239,6 @@ abstract class AbstractPageControllerTest {
         setupProductModule()
         setupInvoiceModule()
         setupPaymentModule()
-        setupRoomModule()
         setupListingModule()
     }
 
@@ -956,78 +948,6 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any<CreateInteracPaymentRequest>(),
                 eq(CreatePaymentResponse::class.java)
-            )
-    }
-
-    fun setupRoomModule() {
-        // Room
-        doReturn(
-            ResponseEntity(
-                SearchRoomResponse(RoomFixtures.rooms),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchRoomResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                GetRoomResponse(RoomFixtures.room),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetRoomResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                CreateRoomResponse(1111),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .postForEntity(
-                any<String>(),
-                any<CreateRoomRequest>(),
-                eq(CreateRoomResponse::class.java)
-            )
-
-        // RoomUnit
-        doReturn(
-            ResponseEntity(
-                SearchRoomUnitResponse(RoomFixtures.roomUnits),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchRoomUnitResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                GetRoomUnitResponse(RoomFixtures.roomUnit),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetRoomUnitResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                CreateRoomUnitResponse(1111),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .postForEntity(
-                any<String>(),
-                any<CreateRoomUnitRequest>(),
-                eq(CreateRoomUnitResponse::class.java)
             )
     }
 

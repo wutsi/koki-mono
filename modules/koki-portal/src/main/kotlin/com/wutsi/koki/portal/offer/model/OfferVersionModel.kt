@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.offer.page.model
+package com.wutsi.koki.portal.offer.model
 
 import com.wutsi.blog.portal.common.model.MoneyModel
 import com.wutsi.koki.offer.dto.OfferParty
@@ -22,4 +22,10 @@ data class OfferVersionModel(
 ) {
     val contingenciesHtml: String?
         get() = contingencies?.let { HtmlUtils.toHtml(contingencies) }
+
+    val submittedBySeller: Boolean
+        get() = submittingParty == OfferParty.SELLER
+
+    val submittedByBuyer: Boolean
+        get() = submittingParty == OfferParty.BUYER
 }

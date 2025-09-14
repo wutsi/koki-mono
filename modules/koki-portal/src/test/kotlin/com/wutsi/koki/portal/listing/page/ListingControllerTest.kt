@@ -22,6 +22,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/listings/${listing.id}")
         assertCurrentPageIs(PageName.LISTING)
+        Thread.sleep(1000)
+
         assertElementPresent("#listing-description-section")
         assertElementPresent("#listing-general-section")
         assertElementPresent("#listing-amenity-section")
@@ -41,6 +43,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/listings/${listing.id}")
         assertCurrentPageIs(PageName.LISTING)
+        Thread.sleep(1000)
+
         assertElementPresent("#listing-description-section")
         assertElementPresent("#listing-general-section")
         assertElementPresent("#listing-amenity-section")

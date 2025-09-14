@@ -1,45 +1,53 @@
-<div class="tab-messages">
-    <div class="flex flex-space-between">
-        <div class="w-49 padding"
-             data-component-id="list-item"
-             data-item-class="conversation"
-             data-on-click="koki_message_conversation_selected"
-             id="conversation-container"
+<div class="tab-offers">
+    <div th:if="!${readOnly}">
+        <a class="btn-upload btn btn-light btn-sm margin-bottom" href="/offers/create"
+           th:if="${user?.hasPermission('offer:manage')}"
         >
-            <div data-component-id="ajax-loader"
-                 data-target-id="message-container"
-                 th:data-url="'/messages/conversations/' + ${conversation.id}"
-                 th:each="conversation: ${conversations}"
-                 th:id="'conversation-' + ${conversation.id}"
-            >
-                <div th:replace="~{__components/message :: conversation-bubble(${conversation})}"></div>
-            </div>
-            <div class="w-100 text-center" id="conversation-load-more" th:if="${moreUrl}">
+            <i class="fa-solid fa-plus"></i>
+            <span>Offer</span>
+        </a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr class="d-none d-md-table-row">
+            <th th:text="#{page.offer.status}" width="1%">Statut</th>
+            <th th:text="#{page.offer.submitted-at}">Submitted</th>
+            <th colspan="2" th:text="#{page.offer.submitted-by}">Submitted By</th>
+            <th th:text="#{page.offer.expires-at}">Expires</th>
+            <th class="text-right" th:text="#{page.offer.amount}">Amount</th>
+        </tr>
+        </thead>
+        <tbody id="offer-list" th:data-owner-id="${ownerId}" th:data-owner-type="${ownerType}">
+        <tr class="offer entity" th:each="offer : ${offers}" th:id="'offer-' + ${offer.id}" th:if="${offers}">
+            <td th:replace="~{__components/offer :: offer-row(${offer})}"></td>
+        </tr>
+        <tr id="offer-load-more" th:if="${moreUrl}">
+            <td class="text-center" colspan="6">
                 <button
                     class="btn btn-sm btn-light w-100-mobile"
-                    data-component-id='load-more'
-                    data-container-id="conversation-load-more"
+                    data-component-id="load-more"
+                    data-container-id="offer-load-more"
                     th:data-url="${moreUrl}"
-                    th:text="#{button.load_more}">
+                    th:text="#{button.load_more}"
+                >
                     Load more...
                 </button>
-            </div>
-        </div>
-        <div class="w-49" id="message-container">
-        </div>
-    </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
-
 <div th:if="${testMode}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://use.fontawesome.com/releases/v6.6.0/css/all.css" rel="stylesheet"/>
     <link href="/css/koki.css" rel="stylesheet"/>
-    <link href="/css/messages.css" rel="stylesheet"/>
+    <link href="/css/offers.css" rel="stylesheet"/>
 
     <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/koki.js"></script>
-    <script src="/js/messages.js"></script>
+    <script src="/js/offers.js"></script>
 
     <div th:replace="~{__components/bootstrap :: modal}"></div>
 </div>

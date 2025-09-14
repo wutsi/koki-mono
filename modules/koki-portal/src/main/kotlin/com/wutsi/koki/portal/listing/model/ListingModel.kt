@@ -64,12 +64,9 @@ data class ListingModel(
     val finalSellerAgentCommissionMoney: MoneyModel? = null,
     val finalBuyerAgentCommissionMoney: MoneyModel? = null,
     val description: String? = null,
-    val totalImages: Long? = null,
-    val totalFiles: Long? = null,
     val published: Date? = null,
     val daysInMarket: Int? = null,
     val publicUrl: String? = null,
-    val totalActiveMessages: Int? = null,
     val sellerAgentUser: UserModel? = null,
     val createdBy: UserModel? = null,
     val createdAt: Date = Date(),
@@ -78,6 +75,11 @@ data class ListingModel(
     var publishedAtMoment: String? = null,
     var closedAt: Date? = null,
     var closedAtMoment: String? = null,
+
+    val totalImages: Long? = null,
+    val totalOffers: Long? = null,
+    val totalFiles: Long? = null,
+    val totalActiveMessages: Int? = null,
 ) {
     val descriptionHtml: String?
         get() = description?.let { str -> HtmlUtils.toHtml(str) }
@@ -136,6 +138,17 @@ data class ListingModel(
 
     fun amenitiesByCategoryId(categoryId: Long): List<AmenityModel> {
         return amenities.filter { amenity -> amenity.categoryId == categoryId }
+    }
+
+    fun canSendMessage(user: UserModel?): Boolean {
+        return (user != null) &&
+            (sellerAgentUser != null) &&
+            !sellerAgentUser.mobile.isNullOrEmpty() &&
+            (sellerAgentUser.id != user.id)
+    }
+
+    fun canMakeOffer(user: UserModel?): Boolean {
+        return (user != null) && (sellerAgentUser != null) && statusOnMarket
     }
 
     fun canManage(user: UserModel?): Boolean {

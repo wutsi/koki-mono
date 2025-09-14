@@ -44,7 +44,7 @@
         <dependency>
             <groupId>com.wutsi.koki</groupId>
             <artifactId>koki-sdk</artifactId>
-            <version>${wutsi-sdk.version}</version>
+            <version>0.0.38</version>
         </dependency>
 
         <dependency>

@@ -48,10 +48,18 @@
 </script>
 
 <div class="text-small flex" th:fragment="user-small-card(me)" th:if="${me}">
-    <img class="user-photo-small" th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.ong'"/>
+    <img class="user-photo-small" th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"/>
     <div class="margin-left-small">
         <b th:text="${me.displayName}">NAME</b><br/>
         <span th:text="${me.employer}">EMPLOYER</span>
+    </div>
+</div>
+
+<div class="flex" th:fragment="user-card(me)" th:if="${me}">
+    <img class="user-photo" th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"/>
+    <div class="margin-left-small w-100">
+        <h5 class="margin-none" th:text="${me.displayName}">NAME</h5>
+        <div th:text="${me.employer}">EMPLOYER</div>
     </div>
 </div>
 

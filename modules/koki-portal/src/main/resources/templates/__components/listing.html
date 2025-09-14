@@ -64,7 +64,7 @@
     <td width="1%">
         <div class="hero-image text-center">
             <a target="_blank" th:href="'/listings/' + ${listing.id}">
-                <img th:if="${listing.heroImageUrl}" th:src="${listing.heroImageUrl}"/>
+                <img th:src="${listing.heroImageUrl} ? ${listing.heroImageUrl} : '/image/no-image.png'"/>
             </a>
         </div>
     </td>
@@ -78,30 +78,29 @@
 
             <table border="0" class="d-block d-md-none text-small">
                 <tr th:if="!${sold}">
-                    <th th:text="#{page.listing.description}">DESC</th>
-                    <td class="padding-left">
+                    <td>
                         <div th:replace="~{__components/listing :: listing-bed-bath-area(${listing})}"></div>
                     </td>
                 </tr>
                 <tr th:if="!${sold} AND ${listing.price}">
-                    <th th:text="#{page.listing.price}">PRICE</th>
-                    <td class="padding-left listing-price" th:text="${listing.price.displayText}">$$$</td>
+                    <td class="listing-price">
+                        <b th:text="${listing.price.displayText}">$$$</b>
+                    </td>
                 </tr>
 
                 <tr th:if="${sold} AND (${listing.sellerAgentUser} OR ${listing.buyerAgentUser})">
-                    <th th:text="#{page.listing.agent}">AGENT</th>
-                    <td class="padding-left">
+                    <td>
                         <span th:if="${listing.isSeller(user)}" th:text="#{page.listing.agent-seller}">SELLER</span>
                         <span th:if="${listing.isBuyer(user)}" th:text="#{page.listing.agent-buyer}">BUYER</span>
                     </td>
                 </tr>
                 <tr th:if="${sold} AND ${listing.transactionDate}">
-                    <th th:text="#{page.listing.transaction-date}">DATE</th>
-                    <td class="padding-left" th:text="${listing.transactionDateText}">DATE</td>
+                    <td th:text="${listing.transactionDateText}">DATE</td>
                 </tr>
                 <tr th:if="${sold} AND ${listing.transactionPrice}">
-                    <th th:text="#{page.listing.transaction-price}">PRICE</th>
-                    <td class="padding-left listing-price" th:text="${listing.transactionPrice.displayText}">$$$</td>
+                    <td class="listing-price">
+                        <b th:text="${listing.transactionPrice.displayText}">$$$</b>
+                    </td>
                 </tr>
             </table>
         </a>
@@ -144,14 +143,12 @@
 <div class="flex" th:fragment="listing-bed-bath-area(listing)">
     <div th:if="${listing.bedrooms}">
         <span th:text="${listing.bedrooms}">00</span>
-        <span class="d-none d-sm-inline" th:text="#{page.listing.bedrooms-short}">BED</span>
-        <span class="d-inline d-sm-none" th:text="#{page.listing.bedrooms-abbreviation}">BED</span>
+        <span th:text="#{page.listing.bedrooms-short}">BED</span>
     </div>
     <div class="padding-left-small padding-right-small" th:if="${listing.bedrooms} AND ${listing.bathrooms}">-</div>
     <div th:if="${listing.bathrooms}">
         <span th:text="${listing.bathrooms}">00</span>
-        <span class="d-none d-sm-inline" th:text="#{page.listing.bathrooms-short}">BATH</span>
-        <span class="d-inline d-sm-none" th:text="#{page.listing.bathrooms-abbreviation}">BATH</span>
+        <span th:text="#{page.listing.bathrooms-short}">BATH</span>
     </div>
     <div class="padding-left-small padding-right-small"
          th:if="(${listing.bedrooms} OR ${listing.bathrooms}) AND (${listing.lotArea} OR ${listing.propertyArea})">
@@ -217,11 +214,11 @@
 </div>
 
 <div class="listing-card" th:data-id="${listing.id}" th:fragment="listing-card(listing)">
-    <div class="hero-image-container">
-        <a target="_new" th:href="'/listings/' + ${listing.id}">
-            <img class="hero-image" th:src="${listing.heroImageUrl}"/>
-        </a>
-    </div>
+    <a target="_new" th:href="'/listings/' + ${listing.id}">
+        <div class="hero-image-container flex flex-center">
+            <img class="hero-image" th:src="${listing.heroImageUrl} ? ${listing.heroImageUrl} : '/image/no-image.png'"/>
+        </div>
+    </a>
     <div class="listing-details padding-small">
         <a target="_new" th:href="'/listings/' + ${listing.id}">
             <b class="listing-price" th:text="${listing.price.displayText}">$$$</b>
@@ -234,18 +231,8 @@
                 <span>-</span>
                 <span th:text="${listing.address?.city?.name}">XXX</span>
             </div>
-            <div class="margin-top-small flex" th:if="${listing.sellerAgentUser}">
-                <img height="64"
-                     th:src="${listing.sellerAgentUser.photoUrl} ? ${listing.sellerAgentUser.photoUrl}: '/image/no-photo.png'"
-                     width="64"/>
-                <div class="margin-left-small text-small">
-                    <div th:text="${listing.sellerAgentUser?.displayName}">AGENT</div>
-                    <div th:text="${listing.sellerAgentUser?.employer}">AGENT</div>
-                    <div th:if="!${listing.statusSold}">
-                        <i class="fa-solid fa-coins"></i>
-                        <span class="listing-price" th:text="${listing.computeAgentCommission(user)}">XXX</span>
-                    </div>
-                </div>
+            <div class="margin-top-small" th:if="${listing.sellerAgentUser}">
+                <div th:replace="~{__components/user :: user-small-card(${listing.sellerAgentUser})}"></div>
             </div>
         </a>
     </div>

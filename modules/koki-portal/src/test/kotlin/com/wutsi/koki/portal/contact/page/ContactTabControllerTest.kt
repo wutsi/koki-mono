@@ -44,6 +44,8 @@ class ContactTabControllerTest : AbstractPageControllerTest() {
         navigateTo("/contacts/tab?test-mode=true&owner-id=111&owner-type=ACCOUNT")
         click("tr.contact a")
 
+        val windowHandles = driver.getWindowHandles().toList()
+        driver.switchTo().window(windowHandles[1])
         assertCurrentPageIs(PageName.CONTACT)
     }
 

@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('offer')}"></div>
+
+<div class="container-fluid padding-bottom-8x">
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <h1 th:text="#{page.offer.accept.title}">TITLE</h1>
+                    <div th:utext="#{page.offer.accept.description}">DESCRIPTION</div>
+
+                    <div class="margin" th:if="${error}">
+                        <div class="alert alert-danger" th:utext="${error}">ERROR</div>
+                    </div>
+
+                    <div class="padding-top-2x" id="tab-details-content">
+                        <div th:replace="~{__components/offer :: offer-details(${offer})}"></div>
+                    </div>
+
+                    <form class="form padding-top-2x" method="post" th:action="@{/offers/accept}" th:object="${form}">
+                        <input th:field="*{id}" type="hidden"/>
+
+                        <div class="alert alert-warning">
+                            <div class="form-check">
+                                <input class="form-check-input" id="chk-confirm" required type="checkbox"/>
+                                <label class="form-check-label" for="chk-confirm"
+                                       th:text="#{page.offer.accept.confirmation}">CONFIRMATION</label>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-space-between">
+                            <a class="btn btn-light margin-left w-49-mobile"
+                               th:href="'/offers/' + ${offer.id}"
+                               th:text="#{button.cancel}">
+                                CANCEL
+                            </a>
+
+                            <button class="btn btn-success w-49-mobile" disabled id="btn-accept"
+                                    th:text="#{button.accept}" type="submit">
+                                ACCEPT
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.getElementById("chk-confirm").addEventListener("click", on_approve);
+
+    function on_approve() {
+        console.log('on_approve()');
+
+        const elt = document.getElementById("chk-confirm");
+        const btn = document.getElementById('btn-accept');
+        btn.disabled = !elt.checked;
+    }
+</script>
+
+</body>
+</html>

@@ -37,5 +37,6 @@ class UserMapper {
         createdAt = entity.createdAt,
         modifiedAt = entity.modifiedAt,
         cityId = entity.cityId,
+        country = entity.country,
     )
 }

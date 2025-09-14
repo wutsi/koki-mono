@@ -139,38 +139,6 @@ object ModuleFixtures {
             jsUrl = null,
         ),
         Module(
-            id = 250,
-            objectType = ObjectType.ROOM,
-            name = "room",
-            title = "Rooms",
-            homeUrl = "/rooms",
-            tabUrl = "/rooms/tab",
-            settingsUrl = null,
-            jsUrl = "/js/rooms.js",
-            cssUrl = "/css/rooms.css",
-        ),
-        Module(
-            id = 251,
-            objectType = ObjectType.ROOM_UNIT,
-            name = "room-unit",
-            title = "Units",
-            homeUrl = null,
-            tabUrl = "/room-units/tab",
-            settingsUrl = null,
-            jsUrl = null,
-            cssUrl = null,
-        ),
-        Module(
-            id = 252,
-            name = "room-amenity",
-            title = "Amenities",
-            homeUrl = null,
-            tabUrl = "/room-amenities/tab",
-            settingsUrl = null,
-            jsUrl = null,
-            cssUrl = null,
-        ),
-        Module(
             id = 260,
             name = "message",
             title = "Messages",
@@ -189,6 +157,16 @@ object ModuleFixtures {
             settingsUrl = null,
             jsUrl = "/js/listings.js",
             cssUrl = "/css/listings.css",
+        ),
+        Module(
+            id = 280,
+            name = "offer",
+            title = "offer",
+            homeUrl = "/offer",
+            tabUrl = null,
+            settingsUrl = null,
+            jsUrl = "/js/offers.js",
+            cssUrl = "/css/offers.css",
         ),
     )
 
@@ -241,20 +219,15 @@ object ModuleFixtures {
 
         Permission(id = 2400, moduleId = 240, name = "translation:admin", description = "Configure Translation"),
 
-        Permission(id = 2500, moduleId = 250, name = "room", description = "View Properties"),
-        Permission(id = 2501, moduleId = 250, name = "room:manage", description = "Manage Properties"),
-        Permission(id = 2502, moduleId = 250, name = "room:delete", description = "Delete Properties"),
-        Permission(id = 2503, moduleId = 250, name = "room:full_access", description = "Full Access on Properties"),
-        Permission(id = 2510, moduleId = 251, name = "room-unit", description = "View Room Unit"),
-        Permission(id = 2511, moduleId = 251, name = "room-unit:manage", description = "Manage Room Units"),
-        Permission(id = 2520, moduleId = 252, name = "room-amenity", description = "View Amenities"),
-        Permission(id = 2521, moduleId = 252, name = "room-amenity:manage", description = "Manage Amenitires"),
-
         Permission(id = 2600, moduleId = 260, name = "message", description = "View Messages"),
         Permission(id = 2601, moduleId = 260, name = "message:manage", description = "Manage Messages"),
 
         Permission(id = 2700, moduleId = 270, name = "listing", description = "View Listings"),
         Permission(id = 2701, moduleId = 270, name = "listing:manage", description = "Manage Listings"),
         Permission(id = 2702, moduleId = 270, name = "listing:full_access", description = "Full access Listings"),
+
+        Permission(id = 2800, moduleId = 280, name = "offer", description = "View Offers"),
+        Permission(id = 2801, moduleId = 280, name = "offer:manage", description = "Manage Offers"),
+        Permission(id = 2802, moduleId = 280, name = "offer:full_access", description = "Full access Offers"),
     )
 }

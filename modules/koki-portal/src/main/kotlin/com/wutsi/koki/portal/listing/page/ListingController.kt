@@ -48,7 +48,8 @@ class ListingController(
             model.addAttribute(
                 "excludedTabs",
                 listOf(
-                    "message"
+                    "message",
+                    "offer"
                 )
             )
         }

@@ -6,93 +6,60 @@
 
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
-<div th:replace="~{__components/layout :: menubar('listing')}"></div>
+<div th:replace="~{__components/layout :: menubar('offer')}"></div>
 
 <div class="container-fluid padding-bottom-8x">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/listing :: listing-breadcrumb(${listing})}"></div>
+            <div th:replace="~{__components/offer :: offer-breadcrumb(${offer})}"></div>
         </div>
     </div>
 
-    <div class="row">
+    <div class="row d-none d-md-block" th:if="!${readOnly}">
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body flex flex-space-between">
-                    <div>&nbsp;</div>
-                    <div class="flex flex-wrap">
-                        <div>
-                            <a class="btn btn-light btn-sm" id="btn-map" target="_blank"
-                               th:href="${listing.geoLocation.url}"
-                               th:if="${listing.geoLocation}"
-                            >
-                                <i class="fa-regular fa-compass"></i>
-                                <span th:text="#{button.view-map}">DIRECTION</span>
-                            </a>
-                            <button class="btn btn-light btn-sm" id="btn-share"
-                                    th:data-share-message="#{page.listing.show.share-message}"
-                                    th:data-share-url="${listing.publicUrl}"
-                                    th:if="${listing.publicUrl}"
-                            >
-                                <i class="fa-solid fa-share-nodes"></i>
-                                <span th:text="#{button.share}">SHARE</span>
-                            </button>
-                        </div>
-                        <div class="margin-left-small" th:if="${listing.canManage(user)}">
-                            <a class="btn btn-light btn-sm" id="btn-edit"
-                               th:href="'/listings/edit?id=' + ${listing.id}"
-                               th:if="${listing.statusDraft}"
-                               th:text="#{button.edit}"
-                            >EDIT</a>
+                    <a class="btn btn-light btn-sm" id="btn-counter"
+                       th:href="'/offers/counter?id=' + ${offer.id}">
+                        <span th:text="#{button.make_counter_offer}">COUNTER</span>
+                    </a>
 
-                            <a class="btn btn-primary btn-sm" id="btn-publish"
-                               th:href="'/listings/publish?id=' + ${listing.id}"
-                               th:if="${listing.statusDraft}"
-                               th:text="#{button.publish}"
-                            >PUBLISH</a>
+                    <a class="btn btn-success btn-sm" id="btn-accept"
+                       th:href="'/offers/accept?id=' + ${offer.id}">
+                        <i class="fa-solid fa-check"></i>
+                        <span th:text="#{button.accept}">ACCEPT</span>
+                    </a>
 
-                            <a class="btn btn-danger btn-sm" id="btn-status"
-                               th:href="'/listings/status?id=' + ${listing.id}"
-                               th:if="${listing.statusOnMarket}"
-                               th:text="#{button.close}"
-                            >STATUS</a>
-                        </div>
-                    </div>
+                    <a class="btn btn-danger btn-sm" id="btn-reject"
+                       th:href="'/offers/refuse?id=' + ${offer.id}">
+                        <i class="fa-solid fa-xmark"></i>
+                        <span th:text="#{button.refuse}">REFUSE</span>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-12 col-md-8">
+        <div class="col-12 col-lg-7">
             <div class="widget">
                 <div class="widget-body">
-                    <div th:replace="~{__components/listing :: listing-summary(${listing})}"></div>
+                    <div th:replace="~{__components/offer :: offer-summary(${offer})}"></div>
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-4" th:if="${listing.sellerAgentUser}">
-            <div class="widget">
-                <div class="widget-body flex">
-                    <img class="user-photo"
-                         th:src="${listing.sellerAgentUser.photoUrl} ? ${listing.sellerAgentUser.photoUrl} : '/image/no-photo.png'"
-                    />
-                    <div class="margin-left-small w-100">
-                        <h5 class="margin-none" th:text="${listing.sellerAgentUser.displayName}">NAME</h5>
-                        <div th:if="${listing.sellerAgentUser.employer}"
-                             th:text="${listing.sellerAgentUser.employer}">EMPLOYER
-                        </div>
-                        <div th:if="${listing.sellerAgentUser?.mobile}" th:text="${listing.sellerAgentUser.mobileText}">
-                            +1 (514) 7580000
-                        </div>
-                        <div class="margin-top w-100" th:if="${listing.sellerAgentUser?.mobile}">
-                            <a class="btn btn-primary w-100" target="_blank"
-                               th:href="${listing.sellerAgentUser.mobileUrl}"
-                               th:text="#{button.send_message}"
-                            >
-                                SEND_MESSAGE
-                            </a>
-                        </div>
+        <div class="col-12 col-lg-5">
+            <div class="widget" th:if="${offer.sellerAgentUser}">
+                <div class="widget-body flex flex-space-between flex-wrap">
+                    <div class="w-49 w-100-mobile margin-bottom-mobile">
+                        <span class="badge text-bg-light border margin-bottom-small"
+                              th:text="#{'offer-party.SELLER'}">BUYER</span>
+                        <div th:replace="~{__components/user :: user-card(${offer.sellerAgentUser})}"></div>
+                    </div>
+                    <div class="w-49 w-100-mobile">
+                        <span class="badge text-bg-light border margin-bottom-small"
+                              th:text="#{'offer-party.BUYER'}">BUYER</span>
+                        <div th:replace="~{__components/user :: user-card(${offer.buyerAgentUser})}"></div>
                     </div>
                 </div>
             </div>
@@ -111,6 +78,14 @@
                                 Details
                             </button>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <button aria-controls="pills-content" aria-selected="true" class="nav-link"
+                                    data-bs-target="#pills-history" data-bs-toggle="pill" id="pills-history-tab"
+                                    role="tab" type="button">
+                                <span th:text="#{page.offer.show.history}">History</span>
+                                <span class="badge rounded-pill bg-secondary" th:text="${offer.totalVersions}">0</span>
+                            </button>
+                        </li>
                         <li class="nav-item" role="presentation" th:each="tab : ${page.tabs.get('main')}">
                             <button aria-selected="false" class="nav-link" data-bs-toggle="pill" role="tab"
                                     th:aria-controls="'pills-' + ${tab.name}"
@@ -119,7 +94,6 @@
                                     th:if="${tab.tabUrl} AND !${excludedTabs?.contains(tab.name)}"
                                     type="button">
                                 <span class="name" th:text="#{'module.' + ${tab.name}}">TAB</span>
-                                <div th:replace="~{__components/module :: tab-counter-badge(${listing}, ${tab})}"></div>
                             </button>
                         </li>
                     </ul>
@@ -127,12 +101,19 @@
                     <div class="tab-content" th:id="'tab-' + ${name} + '-content'">
                         <div aria-labelledby="pills-details-tab" class="tab-pane fade show active"
                              id="pills-details"
-                             role="tabpanel" th:data-url="'/listings/tab/details?id=' + ${listing.id}">
+                             role="tabpanel">
+                            <div id="tab-details-content">
+                                <div th:replace="~{__components/offer :: offer-details(${offer})}"></div>
+                            </div>
+                        </div>
+                        <div aria-labelledby="pills-history-tab" class="tab-pane fade show" id="pills-history"
+                             role="tabpanel"
+                             th:data-url="'/offer-versions?offer-id=' + ${offer.id}">
                         </div>
 
                         <div class="tab-pane fade" role="tabpanel"
                              th:aria-labelledby="'pills-' + ${tab.name} + '-tab'"
-                             th:data-url="${tab.toTabUrl(listing.id, module, listing.readOnly)}"
+                             th:data-url="${tab.toTabUrl(offer.id, module, offer.readOnly)}"
                              th:each="tab : ${page.tabs.get('main')}"
                              th:id="'pills-' + ${tab.name}"
                              th:if="${tab.tabUrl} AND !${excludedTabs?.contains(tab.name)}"
@@ -143,48 +124,33 @@
             </div>
         </div>
     </div>
+</div>
 
-    <div class="d-block d-md-none border contact-sticky-bar" th:if="${listing.sellerAgentUser}">
-        <div class="flex padding-small">
-            <img height="48"
-                 th:src="${listing.sellerAgentUser.photoUrl} ? ${listing.sellerAgentUser.photoUrl} : '/image/no-photo.png'"
-                 width="48"/>
-            <div class="margin-left-small flex flex-space-between w-100">
-                <div class="text-small">
-                    <b th:text="${listing.sellerAgentUser.displayName}">NAME</b> <br/>
-                    <a th:href="'tel:' + ${listing.sellerAgentUser.mobile}"
-                       th:if="${listing.sellerAgentUser?.mobile}"
-                       th:text="${listing.sellerAgentUser.mobileText}">+1 (514) 7580000</a>
-                </div>
-                <div class="flex flex-center">
-                    <a class="btn btn-primary w-100" target="_blank"
-                       th:href="${listing.sellerAgentUser.mobileUrl}"
-                       th:text="#{button.send_message}"
-                    >
-                        SEND_MESSAGE
-                    </a>
-                </div>
-            </div>
+<div class="d-block d-md-none border sticky-bar-bottom" th:if="!${readOnly}">
+    <div class="flex flex-space-between">
+        <div class="w-100 padding-small">
+            <a class="btn btn-light btn-sm w-100" id="btn-counter-sticky"
+               th:href="'/offers/counter?id=' + ${offer.id}">
+                <span th:text="#{button.make_counter_offer}">COUNTER</span>
+            </a>
+        </div>
+        <div class="w-100 padding-small">
+            <a class="btn btn-success btn-sm  w-100" id="btn-accept-sticky"
+               th:href="'/offers/accept?id=' + ${offer.id}">
+                <i class="fa-solid fa-check"></i>
+                <span th:text="#{button.accept}">ACCEPT</span>
+            </a>
+        </div>
+        <div class="w-100 padding-small">
+            <a class="btn btn-danger btn-sm w-100" id="btn-reject-sticky"
+               th:href="'/offers/refuse?id=' + ${offer.id}">
+                <i class="fa-solid fa-xmark"></i>
+                <span th:text="#{button.refuse}">REFUSE</span>
+            </a>
         </div>
     </div>
 </div>
 
 <div th:replace="~{__components/bootstrap :: modal}"></div>
-
-<script>
-    const btnShare = document.getElementById('btn-share');
-    if (btnShare) {
-        btnShare.addEventListener('click', share_listing);
-    }
-
-    function share_listing() {
-        if (navigator.share) {
-            navigator.share({
-                text: btnShare.getAttribute('data-share-message'),
-                url: btnShare.getAttribute('data-share-url')
-            });
-        }
-    }
-</script>
 </body>
 </html>

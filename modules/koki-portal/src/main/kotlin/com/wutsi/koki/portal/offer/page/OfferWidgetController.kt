@@ -1,69 +1,34 @@
 package com.wutsi.koki.portal.offer.page
 
 import com.wutsi.blog.portal.common.model.MoneyModel
-import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.offer.dto.OfferParty
 import com.wutsi.koki.offer.dto.OfferStatus
 import com.wutsi.koki.portal.contact.model.ContactModel
+import com.wutsi.koki.portal.listing.model.ListingModel
 import com.wutsi.koki.portal.offer.model.OfferModel
 import com.wutsi.koki.portal.offer.model.OfferVersionModel
+import com.wutsi.koki.portal.refdata.model.AddressModel
+import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.user.model.UserModel
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import java.util.Date
 
 @Controller
-@RequestMapping("/offers/tab")
-@RequiresPermission(["offer:manage", "offer:full_access"])
-class OfferTabController : AbstractOfferController() {
+@RequestMapping("/offers/widget")
+@RequiresPermission(["offer"])
+class OfferWidgetController : AbstractOfferController() {
     @GetMapping
-    fun list(
-        @RequestParam(name = "owner-id", required = false) ownerId: Long? = null,
-        @RequestParam(name = "owner-type", required = false) ownerType: ObjectType? = null,
-        @RequestParam(name = "read-only", required = false) readOnly: Boolean = false,
-        @RequestParam(name = "test-mode", required = false) testMode: Boolean = false,
-        model: Model
-    ): String {
-        model.addAttribute("ownerId", ownerId)
-        model.addAttribute("ownerType", ownerType)
-        model.addAttribute("readOnly", readOnly)
-        model.addAttribute("testMode", testMode)
-
-        more(ownerId, ownerType, readOnly, model = model)
-        return "offers/tab"
-    }
-
-    @GetMapping("/more")
-    fun more(
-        @RequestParam(name = "owner-id", required = false) ownerId: Long? = null,
-        @RequestParam(name = "owner-type", required = false) ownerType: ObjectType? = null,
-        @RequestParam(name = "read-only", required = false) readOnly: Boolean = false,
-        @RequestParam(name = "limit", required = false) limit: Int = 20,
-        @RequestParam(name = "offset", required = false) offset: Int = 0,
-        model: Model
-    ): String {
-        val offers = findOffers(ownerId, ownerType, limit, offset)
+    fun list(model: Model): String {
+        val offers = findOffers()
         model.addAttribute("offers", offers)
-        model.addAttribute("readOnly", readOnly)
-        model.addAttribute("moreUrl", buildMoreUrl(offers, ownerId, ownerType, limit, offset))
-        return "offers/more"
+        return "offers/widget"
     }
 
-    private fun buildMoreUrl(
-        offers: List<OfferModel>,
-        ownerId: Long?,
-        ownerType: ObjectType?,
-        limit: Int,
-        offset: Int
-    ): String? {
-        return "/offers/tab/more?owner-id=$ownerId&owner-type=$ownerType&limit=$limit&offset=" + (offset + limit)
-    }
-
-    private fun findOffers(ownerId: Long?, ownerType: ObjectType?, limit: Int, offset: Int): List<OfferModel> {
+    private fun findOffers(): List<OfferModel> {
         return listOf(
             OfferModel(
                 id = 111,
@@ -87,7 +52,17 @@ class OfferTabController : AbstractOfferController() {
                     createdAtText = "2025/09/12",
                     expiresAt = Date(),
                     expiresAtText = "2025/09/14",
-                )
+                ),
+                listing = ListingModel(
+                    listingNumber = 35000950,
+                    heroImageUrl = "https://picsum.photos/800/600",
+                    address = AddressModel(
+                        city = LocationModel(name = "Laval"),
+                        neighbourhood = LocationModel(name = "Auteuil"),
+                        country = "CA",
+                        street = "340 Pascal",
+                    ),
+                ),
             ),
 
             OfferModel(
@@ -112,7 +87,17 @@ class OfferTabController : AbstractOfferController() {
                     createdAtText = "2025/09/11",
                     expiresAt = Date(),
                     expiresAtText = "2025/09/14",
-                )
+                ),
+                listing = ListingModel(
+                    listingNumber = 35009111,
+                    heroImageUrl = "https://picsum.photos/800/600",
+                    address = AddressModel(
+                        city = LocationModel(name = "Laval"),
+                        neighbourhood = LocationModel(name = "Auteuil"),
+                        country = "CA",
+                        street = "340 Pascal",
+                    ),
+                ),
             ),
 
             OfferModel(
@@ -132,27 +117,17 @@ class OfferTabController : AbstractOfferController() {
                     createdAtText = "2025/10/11",
                     expiresAt = null,
                     expiresAtText = null,
-                )
-            ),
-
-            OfferModel(
-                id = 444,
-                buyerContact = ContactModel(
-                    firstName = "Omam",
-                    lastName = "Mbiyick",
                 ),
-                buyerAgentUser = UserModel(
-                    displayName = "Paul Atangana"
+                listing = ListingModel(
+                    listingNumber = 35000949,
+                    heroImageUrl = "https://picsum.photos/800/600",
+                    address = AddressModel(
+                        city = LocationModel(name = "Laval"),
+                        neighbourhood = LocationModel(name = "Auteuil"),
+                        country = "CA",
+                        street = "340 Pascal",
+                    ),
                 ),
-                version = OfferVersionModel(
-                    id = 4440,
-                    price = MoneyModel(amount = 400000.0, currency = "CAD", displayText = "C$ 400,000"),
-                    status = OfferStatus.EXPIRED,
-                    submittingParty = OfferParty.BUYER,
-                    createdAtText = "2025/09/09",
-                    expiresAt = Date(),
-                    expiresAtText = "2025/09/13",
-                )
             ),
         )
     }
