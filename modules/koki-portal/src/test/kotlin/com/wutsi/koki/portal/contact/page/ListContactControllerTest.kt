@@ -73,7 +73,7 @@ class ListContactControllerTest : AbstractPageControllerTest() {
         click("tr.contact a")
 
         val windowHandles = driver.getWindowHandles().toList()
-        driver.switchTo().window(windowHandles[1]);
+        driver.switchTo().window(windowHandles[1])
         assertCurrentPageIs(PageName.CONTACT)
     }
 
