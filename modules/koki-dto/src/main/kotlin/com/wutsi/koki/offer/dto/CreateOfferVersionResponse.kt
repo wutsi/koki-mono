@@ -1,6 +1,5 @@
 package com.wutsi.koki.offer.dto
 
-data class CounterOfferResponse(
-    val offerId: Long = -1,
+data class CreateOfferVersionResponse(
     val versionId: Long = -1,
 )

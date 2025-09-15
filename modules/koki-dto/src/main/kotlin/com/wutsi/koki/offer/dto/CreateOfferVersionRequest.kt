@@ -1,12 +1,13 @@
 package com.wutsi.koki.offer.dto
 
-import com.wutsi.koki.refdata.dto.Money
+import jakarta.validation.constraints.Size
 import java.util.Date
 
-data class CounterOfferRequest(
-    val status: OfferStatus = OfferStatus.UNKNOWN,
+data class CreateOfferVersionRequest(
+    val offerId: Long = -1,
     val submittingParty: OfferParty = OfferParty.UNKNOWN,
-    val price: Money = Money(),
+    val price: Long = 0,
+    @Size(min = 3, max = 3) val currency: String = "",
     val contingencies: String? = null,
     val expiresAt: Date? = null,
     val closingAt: Date? = null,
