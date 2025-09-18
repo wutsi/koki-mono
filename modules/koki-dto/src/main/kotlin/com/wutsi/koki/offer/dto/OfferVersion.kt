@@ -5,7 +5,9 @@ import java.util.Date
 
 data class OfferVersion(
     val id: Long = -1,
+    val offerId: Long = -1,
     val submittingParty: OfferParty = OfferParty.UNKNOWN,
+    val assigneeUserId: Long? = null,
     val price: Money = Money(),
     val status: OfferStatus = OfferStatus.UNKNOWN,
     val contingencies: String? = null,

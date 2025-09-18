@@ -5,6 +5,8 @@ enum class ListingStatus {
     DRAFT,
     PUBLISHING,
     ACTIVE,
+    ACTIVE_WITH_CONTINGENCIES,
+    PENDING,
     SOLD,
     RENTED,
     EXPIRED,

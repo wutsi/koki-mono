@@ -93,6 +93,7 @@ object ErrorCode {
     val NOTE_NOT_FOUND: String = "$PREFIX:note:not-found"
 
     val OFFER_NOT_FOUND: String = "$PREFIX:offer:not-found"
+    val OFFER_BAD_STATUS: String = "$PREFIX:offer:bad-status"
     val OFFER_VERSION_NOT_FOUND: String = "$PREFIX:offer:version-not-found"
 
     val PASSWORD_RESET_TOKEN_NOT_FOUND = "$PREFIX:password-reset-token:not-found"

@@ -5,10 +5,11 @@ import java.util.Date
 
 data class Offer(
     val id: Long = -1,
+    val offerId: Long = -1,
     val owner: ObjectReference? = null,
     val version: OfferVersion = OfferVersion(),
     val sellerAgentUserId: Long = -1,
-    val buyerAgentUserId: Long? = null,
+    val buyerAgentUserId: Long = -1,
     val buyerContactId: Long = -1,
     val status: OfferStatus = OfferStatus.UNKNOWN,
     val totalVersions: Int = 0,
