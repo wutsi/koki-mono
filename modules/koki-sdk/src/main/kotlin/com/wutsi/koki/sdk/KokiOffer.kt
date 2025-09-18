@@ -6,6 +6,7 @@ import com.wutsi.koki.offer.dto.CreateOfferResponse
 import com.wutsi.koki.offer.dto.GetOfferResponse
 import com.wutsi.koki.offer.dto.OfferStatus
 import com.wutsi.koki.offer.dto.SearchOfferResponse
+import com.wutsi.koki.offer.dto.UpdateOfferStatusRequest
 import org.springframework.web.client.RestTemplate
 import java.util.Collections.emptyList
 
@@ -32,6 +33,7 @@ class KokiOffer(
         ownerId: Long? = null,
         ownerType: ObjectType? = null,
         agentUserId: Long? = null,
+        assigneeUserId: Long? = null,
         statuses: List<OfferStatus> = emptyList(),
         limit: Int = 20,
         offset: Int = 0,
@@ -43,11 +45,17 @@ class KokiOffer(
                 "owner-id" to ownerId,
                 "owner-type" to ownerType,
                 "agent-user-id" to agentUserId,
+                "assignee-user-id" to assigneeUserId,
                 "status" to statuses,
                 "limit" to limit,
                 "offset" to offset,
             ),
         )
         return rest.getForEntity(url, SearchOfferResponse::class.java).body
+    }
+
+    fun updateStatus(id: Long, request: UpdateOfferStatusRequest) {
+        val url = urlBuilder.build("$PATH_PREFIX/$id/status")
+        rest.postForEntity(url, request, Any::class.java)
     }
 }
