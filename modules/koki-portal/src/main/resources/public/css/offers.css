@@ -6,6 +6,10 @@ h1.offer-price {
     font-weight: normal;
 }
 
+a.offer-listing {
+    text-decoration: none;
+}
+
 .offer-listing .hero-image {
     width: 96px;
     height: 96px;

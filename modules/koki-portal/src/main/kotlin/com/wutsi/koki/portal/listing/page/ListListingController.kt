@@ -95,7 +95,13 @@ class ListListingController : AbstractListingController() {
         // ForSales
         val forSale = listingService.search(
             listingType = ListingType.SALE,
-            statuses = listOf(ListingStatus.DRAFT, ListingStatus.PUBLISHING, ListingStatus.ACTIVE),
+            statuses = listOf(
+                ListingStatus.DRAFT,
+                ListingStatus.PUBLISHING,
+                ListingStatus.ACTIVE,
+                ListingStatus.ACTIVE_WITH_CONTINGENCIES,
+                ListingStatus.PENDING,
+            ),
             sellerAgentUserId = userId,
             limit = 5,
             sortBy = ListingSort.NEWEST,
@@ -108,7 +114,13 @@ class ListListingController : AbstractListingController() {
         // My Rentals
         val forRent = listingService.search(
             listingType = ListingType.RENTAL,
-            statuses = listOf(ListingStatus.DRAFT, ListingStatus.PUBLISHING, ListingStatus.ACTIVE),
+            statuses = listOf(
+                ListingStatus.DRAFT,
+                ListingStatus.PUBLISHING,
+                ListingStatus.ACTIVE,
+                ListingStatus.ACTIVE_WITH_CONTINGENCIES,
+                ListingStatus.PENDING,
+            ),
             sellerAgentUserId = userId,
             limit = 5,
             sortBy = ListingSort.MODIFIED_DATE,
@@ -141,7 +153,7 @@ class ListListingController : AbstractListingController() {
             },
             statuses = when (form.listingType) {
                 ListingStatus.SOLD.name -> listOf(ListingStatus.SOLD, ListingStatus.RENTED)
-                else -> listOf(ListingStatus.ACTIVE)
+                else -> listOf(ListingStatus.ACTIVE, ListingStatus.ACTIVE_WITH_CONTINGENCIES, ListingStatus.PENDING)
             },
             bedrooms = form.bedrooms.ifEmpty { null },
             bathrooms = form.bathrooms.ifEmpty { null },

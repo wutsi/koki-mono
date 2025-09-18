@@ -4,20 +4,24 @@
             <b th:text="#{page.offer.listing}">LISTING</b>
         </td>
         <td>
-            <div th:replace="~{__components/offer :: offer-listing(${offer.listing}, false)}">
-            </div>
+            <div th:replace="~{__components/offer :: offer-listing(${offer.listing})}"></div>
         </td>
     </tr>
     <tr>
         <td>
             <b th:text="#{page.offer.submitted-by}">BY</b>
         </td>
-        <td th:if="${version.submittingParty.name() == 'BUYER'}">
-            <div th:replace="~{__components/user :: user-small-card(${offer.buyerAgentUser})}">
-            </div>
-        </td>
-        <td th:if="${version.submittingParty.name() == 'SELLER'}">
-            <div th:replace="~{__components/user :: user-small-card(${offer.sellerAgentUser})}">
+        <td>
+            <div class="flex">
+                <div>
+                    <div th:replace="~{__components/offer :: offer-party-badge(${version.submittingParty})}"></div>
+                </div>
+                <div class="margin-left-small" th:if="${version.submittingParty.name() == 'BUYER'}">
+                    <div th:replace="~{__components/user :: user-small-card(${offer.buyerAgentUser})}"></div>
+                </div>
+                <div class="margin-left-small" th:if="${version.submittingParty.name() == 'SELLER'}">
+                    <div th:replace="~{__components/user :: user-small-card(${offer.sellerAgentUser})}"></div>
+                </div>
             </div>
         </td>
     </tr>
@@ -26,12 +30,10 @@
             <b th:text="#{page.offer.submitted-to}">TO</b>
         </td>
         <td th:if="${version.submittingParty.name() == 'BUYER'}">
-            <div th:replace="~{__components/user :: user-small-card(${offer.sellerAgentUser})}">
-            </div>
+            <div th:replace="~{__components/user :: user-small-card(${offer.sellerAgentUser})}"></div>
         </td>
         <td th:if="${version.submittingParty.name() == 'SELLER'}">
-            <div th:replace="~{__components/user :: user-small-card(${offer.buyerAgentUser})}">
-            </div>
+            <div th:replace="~{__components/user :: user-small-card(${offer.buyerAgentUser})}"></div>
         </td>
     </tr>
     <tr>
@@ -42,21 +44,27 @@
             <b th:text="${version.price.displayText}">YYYY</b>
         </td>
     </tr>
-    <tr th:if="${offer.version.expiresAt}">
+    <tr>
         <td>
             <b th:text="#{page.offer.submitted-at}">SUBMITTED</b>
         </td>
         <td th:text="${version.createdAtText}">YYYY-MM-DD</td>
     </tr>
-    <tr th:if="${offer.version.expiresAt}">
+    <tr th:if="${version.expiresAt}">
         <td>
             <b th:text="#{page.offer.expires-at}">EXPIRES</b>
         </td>
-        <td th:text="${version.expiresAt}">YYYY-MM-DD</td>
+        <td th:text="${version.expiresAtText}">YYYY-MM-DD</td>
     </tr>
-    <tr>
+    <tr th:if="${version.closingAt}">
         <td>
-            <b th:text="#{page.offer.contingencies}">CONTINGENGIES</b>
+            <b th:text="#{page.offer.closing-at}">CLOSING</b>
+        </td>
+        <td th:text="${version.closingAtText}">YYYY-MM-DD</td>
+    </tr>
+    <tr th:if="${version.contingencies}">
+        <td>
+            <b th:text="#{page.offer.contingencies}">CONTINGENCIES</b>
         </td>
         <td th:utext="${version.contingenciesHtml}">XXX</td>
     </tr>

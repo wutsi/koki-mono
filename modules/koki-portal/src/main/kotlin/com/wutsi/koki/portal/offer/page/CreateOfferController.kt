@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.client.HttpClientErrorException
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -35,12 +36,17 @@ class CreateOfferController(
             ownerId = listingId,
             ownerType = ObjectType.LISTING,
             price = listing.price?.amount?.toLong(),
+            currency = tenantHolder.get()?.currency,
             pricePerMonth = listing.listingTypeRental,
             expiresAtMin = df.format(DateUtils.addDays(Date(), 1)),
             submittingParty = OfferParty.BUYER,
-            sellerAgentUserId = listing.sellerAgentUser?.id,
-            buyerAgentUserId = getUser()?.id
+            sellerAgentUserId = listing.sellerAgentUser?.id ?: -1,
+            buyerAgentUserId = getUser()?.id ?: -1,
         )
+        return create(form, model)
+    }
+
+    fun create(form: OfferForm, model: Model): String {
         model.addAttribute("form", form)
 
         model.addAttribute(
@@ -55,7 +61,12 @@ class CreateOfferController(
 
     @PostMapping
     fun submit(form: OfferForm, model: Model): String {
-        val id = 111L
-        return "redirect:/offers/$id"
+        try {
+            val id = offerService.create(form)
+            return "redirect:/offers/create/done?id=$id"
+        } catch (ex: HttpClientErrorException) {
+            loadError(ex, model)
+            return create(form, model)
+        }
     }
 }

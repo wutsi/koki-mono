@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.offer.page
 
+import com.wutsi.koki.offer.dto.OfferStatus
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.offer.form.OfferForm
 import com.wutsi.koki.portal.security.RequiresPermission
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 @RequestMapping("/offers/accept")
@@ -33,6 +35,12 @@ class AcceptOfferController : AbstractEditOfferController() {
 
     @PostMapping
     fun submit(@ModelAttribute form: OfferForm, model: Model): String {
-        return "redirect:/offers/accept/done?id=${form.id}"
+        try {
+            offerService.updateStatus(form.copy(status = OfferStatus.ACCEPTED))
+            return "redirect:/offers/accept/done?id=${form.id}"
+        } catch (ex: HttpClientErrorException) {
+            loadError(ex, model)
+            return accept(form.id, model)
+        }
     }
 }

@@ -44,7 +44,7 @@ class InvoiceService(
         val users = if (userIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
-            userService.users(
+            userService.search(
                 ids = userIds, limit = userIds.size
             ).associateBy { user -> user.id }
         }
@@ -141,7 +141,7 @@ class InvoiceService(
         val users = if (userIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
-            userService.users(
+            userService.search(
                 ids = userIds, limit = userIds.size
             ).associateBy { user -> user.id }
         }

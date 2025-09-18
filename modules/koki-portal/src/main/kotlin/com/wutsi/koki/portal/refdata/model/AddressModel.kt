@@ -35,7 +35,7 @@ data class AddressModel(
             street?.ifEmpty { null },
             listOf(cityAndNeighborhood, stateAndPostal).filterNotNull().joinToString(", ").ifEmpty { null },
             if (includeCountry) countryName?.ifEmpty { null } else null,
-        ).filterNotNull().joinToString("\n")
+        ).filterNotNull().joinToString(", ")
     }
 
     override fun toString(): String {

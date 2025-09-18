@@ -8,7 +8,6 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.OfferFixtures.offer
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.offer.dto.CreateOfferResponse
 import com.wutsi.koki.offer.dto.OfferStatus
 import com.wutsi.koki.offer.dto.UpdateOfferStatusRequest
 import com.wutsi.koki.portal.AbstractPageControllerTest
@@ -16,27 +15,28 @@ import com.wutsi.koki.portal.common.page.PageName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class AcceptOfferControllerTest : AbstractPageControllerTest() {
+class RefuseOfferControllerTest : AbstractPageControllerTest() {
     @Test
-    fun accept() {
-        navigateTo("/offers/accept?id=${offer.id}")
-        assertCurrentPageIs(PageName.OFFER_ACCEPT)
+    fun refuse() {
+        navigateTo("/offers/refuse?id=${offer.id}")
+        assertCurrentPageIs(PageName.OFFER_REFUSE)
 
         assertElementNotPresent(".alert-danger")
         scrollToBottom()
+        input("#reason", "Beurk")
         click("#chk-confirm")
-        click("#btn-accept")
+        click("#btn-refuse")
         val req = argumentCaptor<UpdateOfferStatusRequest>()
         verify(rest).postForEntity(
             eq("$sdkBaseUrl/v1/offers/${offer.id}/status"),
             req.capture(),
             eq(Any::class.java),
         )
-        assertEquals(OfferStatus.ACCEPTED, req.firstValue.status)
-        assertEquals(null, req.firstValue.reason)
+        assertEquals(OfferStatus.REJECTED, req.firstValue.status)
+        assertEquals("Beurk", req.firstValue.comment)
 
         // Done
-        assertCurrentPageIs(PageName.OFFER_ACCEPT_DONE)
+        assertCurrentPageIs(PageName.OFFER_REFUSE_DONE)
         click("#btn-continue")
 
         assertCurrentPageIs(PageName.OFFER)
@@ -44,7 +44,7 @@ class AcceptOfferControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun error() {
-        doThrow(createHttpClientErrorException(409, ErrorCode.OFFER_NOT_FOUND))
+        doThrow(createHttpClientErrorException(409, ErrorCode.OFFER_BAD_STATUS))
             .whenever(rest)
             .postForEntity(
                 eq("$sdkBaseUrl/v1/offers/${offer.id}/status"),
@@ -52,16 +52,14 @@ class AcceptOfferControllerTest : AbstractPageControllerTest() {
                 eq(Any::class.java),
             )
 
-        navigateTo("/offers/accept?id=${offer.id}")
-        assertCurrentPageIs(PageName.OFFER_ACCEPT)
-
+        navigateTo("/offers/refuse?id=${offer.id}")
         assertElementNotPresent(".alert-danger")
         scrollToBottom()
         click("#chk-confirm")
-        click("#btn-accept")
+        click("#btn-refuse")
 
         // Done
-        assertCurrentPageIs(PageName.OFFER_ACCEPT)
+        assertCurrentPageIs(PageName.OFFER_REFUSE)
         assertElementPresent(".alert-danger")
     }
 }

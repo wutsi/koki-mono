@@ -44,12 +44,12 @@ class CloseListingEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Test
     fun sold() {
-        close(100, ListingStatus.SOLD)
+        invalidStatus(100, ListingStatus.SOLD)
     }
 
     @Test
     fun rented() {
-        close(101, ListingStatus.RENTED)
+        invalidStatus(101, ListingStatus.RENTED)
     }
 
     @Test

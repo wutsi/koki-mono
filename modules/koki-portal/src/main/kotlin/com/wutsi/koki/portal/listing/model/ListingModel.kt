@@ -76,9 +76,9 @@ data class ListingModel(
     var closedAt: Date? = null,
     var closedAtMoment: String? = null,
 
-    val totalImages: Long? = null,
-    val totalOffers: Long? = null,
-    val totalFiles: Long? = null,
+    val totalImages: Int? = null,
+    val totalOffers: Int? = null,
+    val totalFiles: Int? = null,
     val totalActiveMessages: Int? = null,
 ) {
     val descriptionHtml: String?
@@ -97,10 +97,10 @@ data class ListingModel(
         get() = status == ListingStatus.DRAFT
 
     val statusActive: Boolean
-        get() = status == ListingStatus.ACTIVE
+        get() = status == ListingStatus.ACTIVE || status == ListingStatus.ACTIVE_WITH_CONTINGENCIES
 
     val statusOnMarket: Boolean
-        get() = status == ListingStatus.ACTIVE
+        get() = status == ListingStatus.ACTIVE || status == ListingStatus.ACTIVE_WITH_CONTINGENCIES
 
     val statusOffMarket: Boolean
         get() = status == ListingStatus.SOLD ||
@@ -148,7 +148,9 @@ data class ListingModel(
     }
 
     fun canMakeOffer(user: UserModel?): Boolean {
-        return (user != null) && (sellerAgentUser != null) && statusOnMarket
+        return (user != null) &&
+            statusActive &&
+            (sellerAgentUser != null)
     }
 
     fun canManage(user: UserModel?): Boolean {

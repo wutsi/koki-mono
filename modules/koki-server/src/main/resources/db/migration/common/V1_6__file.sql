@@ -71,6 +71,6 @@ INSERT INTO T_PERMISSION(id, module_fk, name, description)
            (1302, 130, 'file:delete',  'Delete files'),
            (1303, 130, 'file:admin',   'Configure file module'),
 
-           (1310, 130, 'image',         'View images'),
-           (1311, 130, 'image:manage',  'Upload images');
+           (1310, 131, 'image',         'View images'),
+           (1311, 131, 'image:manage',  'Upload images');
 

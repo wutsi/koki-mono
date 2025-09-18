@@ -82,13 +82,13 @@ class ListingFileUploadedEventHandler(
                 file.type,
                 listingId,
                 ObjectType.LISTING
-            )
+            )?.toInt()
         } else if (file.type == FileType.FILE) {
             listing.totalFiles = fileService.countByTypeAndOwnerIdAndOwnerType(
                 file.type,
                 listingId,
                 ObjectType.LISTING
-            )
+            )?.toInt()
         }
         listingService.save(listing, file.createdById)
     }

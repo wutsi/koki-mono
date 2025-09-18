@@ -24,15 +24,21 @@
 
             <table border="0" class="d-block d-md-none text-small">
                 <tr th:if="${contact.email}">
-                    <th>Email:</th>
+                    <th>
+                        <i class="fa-regular fa-envelope"></i>
+                    </th>
                     <td class="padding-left" th:text="${contact.email}">EMAIL</td>
                 </tr>
                 <tr th:if="${contact.mobile}">
-                    <th>Mobile:</th>
+                    <th>
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+                    </th>
                     <td class="padding-left" th:text="${contact.mobileFormatted}">EMAIL</td>
                 </tr>
                 <tr th:if="${contact.phone}">
-                    <th>Phone:</th>
+                    <th>
+                        <i class="fa-solid fa-phone"></i>
+                    </th>
                     <td class="padding-left" th:text="${contact.phoneFormatted}">EMAIL</td>
                 </tr>
             </table>
@@ -52,10 +58,10 @@
     <td class="d-none d-md-table-cell">
         <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.phoneFormatted}">PHONE</a>
     </td>
-    <td class="d-none d-lg-table-cell" th:if="${showAccount}">
+    <td class="d-none d-md-table-cell" th:if="${showAccount}">
         <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.account?.name}">ACCOUNT</a>
     </td>
-    <td class="d-none d-lg-table-cell" th:if="${user?.hasFullAccess('contact')}">
+    <td class="d-none d-md-table-cell" th:if="${user?.hasFullAccess('contact')}">
         <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.createdBy?.displayName}">OWNER</a>
     </td>
 </tr>

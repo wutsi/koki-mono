@@ -1,8 +1,8 @@
 <tr class="offer entity" th:each="offer : ${offers}" th:id="'offer-' + ${offer.id}" th:if="${offers}">
-    <td th:replace="~{__components/offer :: offer-row(${offer})}"></td>
+    <td th:replace="~{__components/offer :: offer-row(${offer}, ${showOwner})}"></td>
 </tr>
 <tr id="offer-load-more" th:if="${moreUrl}">
-    <td class="text-center" colspan="6">
+    <td class="text-center" colspan="7">
         <button
             class="btn btn-sm btn-light w-100-mobile"
             data-component-id="load-more"

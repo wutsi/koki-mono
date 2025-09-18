@@ -45,7 +45,7 @@ class ListContactController(
         more(typeId, true, keyword, limit, offset, model)
 
         model.addAttribute("typeId", typeId)
-        model.addAttribute("keyword", keyword)
+        model.addAttribute("keyword", keyword?.trim()?.ifEmpty { null })
 
         return "contacts/list"
     }

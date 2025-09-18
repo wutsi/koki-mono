@@ -31,7 +31,7 @@ class ContactService(
         val userMap = if (userIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
-            userService.users(ids = userIds.toList(), limit = userIds.size)
+            userService.search(ids = userIds.toList(), limit = userIds.size)
                 .associateBy { user -> user.id }
         }
 
@@ -105,7 +105,7 @@ class ContactService(
         val userMap = if (userIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
-            userService.users(
+            userService.search(
                 ids = userIds.toList(),
                 limit = userIds.size
             )

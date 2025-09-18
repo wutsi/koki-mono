@@ -32,7 +32,7 @@
 
                     <hr/>
 
-                    <table class="table table-striped">
+                    <table class="table table-striped" th:if="${contacts} OR ${keyword}">
                         <thead>
                         <tr>
                             <th colspan="6">
@@ -60,7 +60,7 @@
                             </th>
                             <th class="d-none d-md-table-cell" th:if="${user?.hasFullAccess('contact')}"
                                 th:text="#{page.contact.owner}">
-                                Account
+                                Owner
                             </th>
                         </tr>
                         </thead>
@@ -73,10 +73,23 @@
                             th:replace="~{__components/contact :: load-more(${moreUrl})}">
                         </tr>
                         <tr th:if="!${contacts}">
-                            <td colspan="7" th:text="#{page.contact.list.empty}">EMPTY</td>
+                            <td colspan="7" th:text="#{page.contact.list.none-found}">EMPTY</td>
                         </tr>
                         </tbody>
                     </table>
+
+                    <div th:if="!${contacts} AND !${keyword}">
+                        <div class="alert alert-warning">
+                            <div th:text="#{page.contact.list.empty}">MESSAGE</div>
+                            <div class="margin-top"
+                                 th:if="${user?.hasPermission('contact:manage')} OR ${user.hasFullAccess('contact')}">
+                                <a class="btn-create btn btn-primary btn-sm" href="/contacts/create">
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span th:text="#{button.contact}">Contact</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

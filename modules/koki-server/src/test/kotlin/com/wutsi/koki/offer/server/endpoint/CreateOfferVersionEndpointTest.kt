@@ -3,13 +3,12 @@ package com.wutsi.koki.offer.server.endpoint
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
-import com.wutsi.koki.offer.dto.CreateOfferRequest
-import com.wutsi.koki.offer.dto.CreateOfferResponse
+import com.wutsi.koki.offer.dto.CreateOfferVersionRequest
+import com.wutsi.koki.offer.dto.CreateOfferVersionResponse
 import com.wutsi.koki.offer.dto.OfferParty
 import com.wutsi.koki.offer.dto.OfferStatus
-import com.wutsi.koki.offer.dto.event.OfferSubmittedEvent
+import com.wutsi.koki.offer.dto.event.OfferVersionCreatedEvent
 import com.wutsi.koki.offer.server.dao.OfferRepository
 import com.wutsi.koki.offer.server.dao.OfferVersionRepository
 import com.wutsi.koki.platform.mq.Publisher
@@ -23,10 +22,9 @@ import java.util.Date
 import java.util.TimeZone
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
-@Sql(value = ["/db/test/clean.sql"])
-class CreateOfferEndpointTest : AuthorizationAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/offer/CreateOfferVersionEndpoint.sql"])
+class CreateOfferVersionEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var offerDao: OfferRepository
 
@@ -38,35 +36,26 @@ class CreateOfferEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Test
     fun create() {
-        val request = CreateOfferRequest(
-            owner = ObjectReference(111, ObjectType.LISTING),
-            sellerAgentUserId = 111L,
-            buyerContactId = 300L,
-            buyerAgentUserId = 333L,
-            submittingParty = OfferParty.BUYER,
+        val request = CreateOfferVersionRequest(
+            offerId = 100,
+            submittingParty = OfferParty.SELLER,
             price = 400000,
             currency = "CAD",
             contingencies = "Contengencies...",
             expiresAt = DateUtils.addDays(Date(), 3),
             closingAt = DateUtils.addMonths(Date(), 3),
         )
-        val response = rest.postForEntity("/v1/offers", request, CreateOfferResponse::class.java)
+        val response = rest.postForEntity("/v1/offer-versions", request, CreateOfferVersionResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val fmt = SimpleDateFormat("yyyy-MM-dd")
         fmt.timeZone = TimeZone.getTimeZone("UTC")
 
-        val offer = offerDao.findById(response.body!!.offerId).get()
-        assertEquals(TENANT_ID, offer.tenantId)
-        assertEquals(USER_ID, offer.createdById)
-        assertEquals(request.sellerAgentUserId, offer.sellerAgentUserId)
-        assertEquals(request.buyerAgentUserId, offer.buyerAgentUserId)
-        assertEquals(request.buyerContactId, offer.buyerContactId)
-        assertEquals(OfferStatus.SUBMITTED, offer.status)
-        assertNotNull(offer.version)
+        val oldVersion = versionDao.findById(111L).get()
+        assertEquals(OfferStatus.REJECTED, oldVersion.status)
 
-        val version = versionDao.findById(offer.version!!.id).get()
+        val version = versionDao.findById(response.body!!.versionId).get()
         assertEquals(TENANT_ID, version.tenantId)
         assertEquals(USER_ID, version.createdById)
         assertEquals(request.submittingParty, version.submittingParty)
@@ -75,12 +64,21 @@ class CreateOfferEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(fmt.format(request.expiresAt), fmt.format(version.expiresAt))
         assertEquals(fmt.format(request.closingAt), fmt.format(version.closingAt))
         assertEquals(request.contingencies, version.contingencies)
+        assertEquals(OfferStatus.SUBMITTED, version.status)
+        assertEquals(22L, version.assigneeUserId)
 
-        val event = argumentCaptor<OfferSubmittedEvent>()
+        val offer = offerDao.findById(version.offer.id!!).get()
+        assertEquals(2, offer.totalVersions)
+        assertEquals(version.id, offer.version?.id)
+        assertEquals(OfferStatus.SUBMITTED, offer.status)
+        assertEquals(2, offer.totalVersions)
+
+        val event = argumentCaptor<OfferVersionCreatedEvent>()
         verify(publisher).publish(event.capture())
-        assertEquals(offer.id, event.firstValue.offerId)
+        assertEquals(100L, event.firstValue.offerId)
         assertEquals(version.id, event.firstValue.versionId)
         assertEquals(TENANT_ID, event.firstValue.tenantId)
+        assertEquals(111L, event.firstValue.owner?.id)
+        assertEquals(ObjectType.ACCOUNT, event.firstValue.owner?.type)
     }
-
 }

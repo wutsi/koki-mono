@@ -1,52 +1,64 @@
 package com.wutsi.koki.portal.offer.page
 
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
-import com.wutsi.koki.ContactFixtures.contact
-import com.wutsi.koki.ListingFixtures.listing
-import com.wutsi.koki.TenantFixtures
-import com.wutsi.koki.common.dto.ObjectType
-import com.wutsi.koki.offer.dto.CreateOfferRequest
-import com.wutsi.koki.offer.dto.CreateOfferResponse
-import com.wutsi.koki.offer.dto.OfferParty
+import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.OfferFixtures.offer
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.offer.dto.OfferStatus
+import com.wutsi.koki.offer.dto.UpdateOfferStatusRequest
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class CreateOfferControllerTest : AbstractPageControllerTest() {
+class AcceptOfferControllerTest : AbstractPageControllerTest() {
     @Test
-    fun create() {
-        navigateTo("/offers/create?listing-id=${listing.id}")
-        assertCurrentPageIs(PageName.OFFER_CREATE)
+    fun accept() {
+        navigateTo("/offers/accept?id=${offer.id}")
+        assertCurrentPageIs(PageName.OFFER_ACCEPT)
 
-        // Create
-        select2("#buyerContactId", "${contact.firstName} ${contact.lastName}")
-        input("#price", "300000")
+        assertElementNotPresent(".alert-danger")
         scrollToBottom()
-        input("#contingencies", "I love it!")
-        click("button[type=submit]")
-        val req = argumentCaptor<CreateOfferRequest>()
+        click("#chk-confirm")
+        click("#btn-accept")
+        val req = argumentCaptor<UpdateOfferStatusRequest>()
         verify(rest).postForEntity(
-            eq("$sdkBaseUrl/v1/offers"),
+            eq("$sdkBaseUrl/v1/offers/${offer.id}/status"),
             req.capture(),
-            eq(CreateOfferResponse::class.java),
+            eq(Any::class.java),
         )
-        assertEquals(listing.sellerAgentUserId, req.firstValue.sellerAgentUserId)
-        assertEquals(USER_ID, req.firstValue.buyerAgentUserId)
-        assertEquals(contact.id, req.firstValue.buyerContactId)
-        assertEquals(300000L, req.firstValue.price)
-        assertEquals(TenantFixtures.tenants[0].currency, req.firstValue.currency)
-        assertEquals("I love it!", req.firstValue.contingencies)
-        assertEquals(OfferParty.BUYER, req.firstValue.submittingParty)
-        assertEquals(listing.id, req.firstValue.owner?.id)
-        assertEquals(ObjectType.LISTING, req.firstValue.owner?.type)
+        assertEquals(OfferStatus.ACCEPTED, req.firstValue.status)
+        assertEquals(null, req.firstValue.comment)
 
         // Done
-        assertCurrentPageIs(PageName.OFFER_CREATE_DONE)
+        assertCurrentPageIs(PageName.OFFER_ACCEPT_DONE)
         click("#btn-continue")
 
         assertCurrentPageIs(PageName.OFFER)
+    }
+
+    @Test
+    fun error() {
+        doThrow(createHttpClientErrorException(409, ErrorCode.OFFER_NOT_FOUND))
+            .whenever(rest)
+            .postForEntity(
+                eq("$sdkBaseUrl/v1/offers/${offer.id}/status"),
+                any<UpdateOfferStatusRequest>(),
+                eq(Any::class.java),
+            )
+
+        navigateTo("/offers/accept?id=${offer.id}")
+        assertElementNotPresent(".alert-danger")
+        scrollToBottom()
+        click("#chk-confirm")
+        click("#btn-accept")
+
+        // Done
+        assertCurrentPageIs(PageName.OFFER_ACCEPT)
+        assertElementPresent(".alert-danger")
     }
 }

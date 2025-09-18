@@ -22,9 +22,9 @@
                     <table class="table table-striped">
                         <thead>
                         <tr class="d-none d-md-table-row">
+                            <th></th>
                             <th th:text="#{page.offer.status}" width="1%">Statut</th>
-                            <th th:text="#{page.offer.submitted-at}">Submitted</th>
-                            <th colspan="2" th:text="#{page.offer.submitted-by}">Submitted By</th>
+                            <th colspan="2" th:text="#{page.offer.submitted-by}">Submitted</th>
                             <th th:text="#{page.offer.expires-at}">Expires</th>
                             <th class="text-right" th:text="#{page.offer.amount}">Amount</th>
                         </tr>
@@ -32,7 +32,72 @@
                         <tbody id="offer-list" th:data-owner-id="${ownerId}" th:data-owner-type="${ownerType}">
                         <tr class="offer entity" th:each="offer : ${offers}" th:id="'offer-' + ${offer.id}"
                             th:if="${offers}">
-                            <td th:replace="~{__components/offer :: offer-row(${offer})}"></td>
+                            <td class="offer-listing">
+                                <a th:href="'/offers/' + ${offer.id}">
+                                    <div th:if="${offer.listing}" th:remove="tag">
+                                        <div
+                                            th:replace="~{__components/offer :: offer-listing(${offer.listing})}"></div>
+                                    </div>
+
+                                    <table class="margin-top-small text-small d-block d-md-none">
+                                        <tr>
+                                            <th th:text="#{page.offer.status}">STATUS</th>
+                                            <td class="padding-left">
+                                                <span
+                                                    th:replace="~{__components/offer :: offer-status-badge(${offer.version.status})}"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th th:text="#{page.offer.expires-at}">EXPIRY</th>
+                                            <td class="padding-left" th:text="${offer.version.expiresAtText}">
+                                                yyy-MM-dd
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th th:text="#{page.offer.amount}" valign="top">AMOUNT</th>
+                                            <td class="padding-left">
+                                                <b class="offer-price margin-right"
+                                                   th:text="${offer.version.price.displayText}">$$$</b>
+                                                <div th:if="${offer.version.priceDiff}" th:remove="tag">
+                                                    <span
+                                                        th:replace="~{__components/offer :: offer-version-price-diff(${offer.version})}">
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </a>
+                            </td>
+                            <td class="d-none d-md-table-cell">
+                                <span
+                                    th:replace="~{__components/offer :: offer-status-badge(${offer.version.status})}"></span>
+                            </td>
+                            <td class="d-none d-md-table-cell" width="1%">
+                                <span
+                                    th:replace="~{__components/offer :: offer-party-badge(${offer.version.submittingParty})}"></span>
+                            </td>
+                            <td class="d-none d-md-table-cell">
+                                <a target="_blank" th:href="'/offers/' + ${offer.id}">
+                                    <span th:if="${offer.version.submittedByBuyer}"
+                                          th:text="${offer.buyerAgentUser?.displayName}">BUYER</span>
+                                    <span th:if="${offer.version.submittedBySeller}"
+                                          th:text="${offer.sellerAgentUser?.displayName}">SELLER</span>
+                                </a>
+                            </td>
+                            <td class="d-none d-md-table-cell">
+                                <a target="_blank" th:href="'/offers/' + ${offer.id}"
+                                   th:text="${offer.version.expiresAtText}">
+                                    yyyy-MM-dd
+                                </a>
+                            </td>
+                            <td class="text-right d-none d-md-table-cell">
+                                <a target="_blank" th:href="'/offers/' + ${offer.id}">
+                                    <b class="offer-price" th:text="${offer.version.price.displayText}">$$$</b><br/>
+                                    <span
+                                        th:replace="~{__components/offer :: offer-version-price-diff(${offer.version})}">
+                                    </span>
+                                </a>
+                            </td>
                         </tr>
                         <tr id="offer-load-more" th:if="${moreUrl}">
                             <td class="text-center" colspan="6">

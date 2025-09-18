@@ -75,7 +75,7 @@ koki:
             image: true
             file: false
             listing: true
-            message: true
+            message: false
             offer: true
             product: false
             invoice: false

@@ -1,89 +1,59 @@
 package com.wutsi.koki.offer.server.endpoint
 
-import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
-import com.wutsi.koki.offer.dto.CreateOfferRequest
-import com.wutsi.koki.offer.dto.CreateOfferResponse
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.offer.dto.GetOfferResponse
 import com.wutsi.koki.offer.dto.OfferParty
 import com.wutsi.koki.offer.dto.OfferStatus
-import com.wutsi.koki.offer.dto.event.OfferSubmittedEvent
-import com.wutsi.koki.offer.server.dao.OfferRepository
-import com.wutsi.koki.offer.server.dao.OfferVersionRepository
-import com.wutsi.koki.platform.mq.Publisher
-import org.apache.commons.lang3.time.DateUtils
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
-import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.TimeZone
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
-@Sql(value = ["/db/test/clean.sql"])
-class CreateOfferEndpointTest : AuthorizationAwareEndpointTest() {
-    @Autowired
-    private lateinit var offerDao: OfferRepository
-
-    @Autowired
-    private lateinit var versionDao: OfferVersionRepository
-
-    @MockitoBean
-    private lateinit var publisher: Publisher
-
+@Sql(value = ["/db/test/clean.sql", "/db/test/offer/GetOfferEndpoint.sql"])
+class GetOfferEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
-    fun create() {
-        val request = CreateOfferRequest(
-            owner = ObjectReference(111, ObjectType.LISTING),
-            sellerAgentUserId = 111L,
-            buyerContactId = 300L,
-            buyerAgentUserId = 333L,
-            submittingParty = OfferParty.BUYER,
-            price = 400000,
-            currency = "CAD",
-            contingencies = "Contengencies...",
-            expiresAt = DateUtils.addDays(Date(), 3),
-            closingAt = DateUtils.addMonths(Date(), 3),
-        )
-        val response = rest.postForEntity("/v1/offers", request, CreateOfferResponse::class.java)
+    fun get() {
+        val response = rest.getForEntity("/v1/offers/100", GetOfferResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val fmt = SimpleDateFormat("yyyy-MM-dd")
         fmt.timeZone = TimeZone.getTimeZone("UTC")
 
-        val offer = offerDao.findById(response.body!!.offerId).get()
-        assertEquals(TENANT_ID, offer.tenantId)
-        assertEquals(USER_ID, offer.createdById)
-        assertEquals(request.sellerAgentUserId, offer.sellerAgentUserId)
-        assertEquals(request.buyerAgentUserId, offer.buyerAgentUserId)
-        assertEquals(request.buyerContactId, offer.buyerContactId)
+        val offer = response.body!!.offer
+        assertEquals(11L, offer.sellerAgentUserId)
+        assertEquals(22L, offer.buyerAgentUserId)
+        assertEquals(33L, offer.buyerContactId)
         assertEquals(OfferStatus.SUBMITTED, offer.status)
-        assertEquals(1, offer.totalVersions)
-        assertNotNull(offer.version)
-
-        val version = versionDao.findById(offer.version?.id!!).get()
-        assertEquals(TENANT_ID, version.tenantId)
-        assertEquals(USER_ID, version.createdById)
-        assertEquals(request.submittingParty, version.submittingParty)
-        assertEquals(request.price, version.price)
-        assertEquals(request.currency, version.currency)
-        assertEquals(fmt.format(request.expiresAt), fmt.format(version.expiresAt))
-        assertEquals(fmt.format(request.closingAt), fmt.format(version.closingAt))
-        assertEquals(request.contingencies, version.contingencies)
-
-        val event = argumentCaptor<OfferSubmittedEvent>()
-        verify(publisher).publish(event.capture())
-        assertEquals(offer.id, event.firstValue.offerId)
-        assertEquals(version.id, event.firstValue.versionId)
-        assertEquals(TENANT_ID, event.firstValue.tenantId)
-        assertEquals(request.owner?.id, event.firstValue.owner?.id)
-        assertEquals(request.owner?.type, event.firstValue.owner?.type)
+        assertEquals(3, offer.totalVersions)
+        assertEquals(333L, offer.owner?.id)
+        assertEquals(ObjectType.ACCOUNT, offer.owner?.type)
+        assertEquals(111L, offer.version.id)
+        assertEquals("Yo man", offer.version.contingencies)
+        assertEquals(OfferStatus.ACCEPTED, offer.version.status)
+        assertEquals(OfferParty.BUYER, offer.version.submittingParty)
+        assertEquals(10000.00, offer.version.price.amount)
+        assertEquals("CAD", offer.version.price.currency)
     }
 
+    @Test
+    fun notFound() {
+        val response = rest.getForEntity("/v1/offers/9999", ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertEquals(ErrorCode.OFFER_NOT_FOUND, response.body?.error?.code)
+    }
+
+    @Test
+    fun badTenant() {
+        val response = rest.getForEntity("/v1/offers/200", ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertEquals(ErrorCode.OFFER_NOT_FOUND, response.body?.error?.code)
+    }
 }

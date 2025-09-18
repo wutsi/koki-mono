@@ -337,6 +337,10 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
     color: darkorange;
 }
 
+.urgency {
+    color: red;
+}
+
 .required {
     color: darkred;
 }

@@ -10,35 +10,61 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.listing.dto.ListingStatus
+import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ListingService
-import com.wutsi.koki.offer.dto.event.OfferSubmittedEvent
+import com.wutsi.koki.offer.dto.OfferStatus
+import com.wutsi.koki.offer.dto.event.OfferStatusChangedEvent
+import com.wutsi.koki.offer.server.domain.OfferEntity
+import com.wutsi.koki.offer.server.domain.OfferVersionEntity
 import com.wutsi.koki.offer.server.service.OfferService
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
+import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class OfferSubmittedEventHandlerTest {
+class OfferStatusChangedEventHandlerTest {
     private val offerService = mock<OfferService>()
     private val listingService = mock<ListingService>()
     private val logger = DefaultKVLogger()
-    private val handler = OfferSubmittedEventHandler(offerService, listingService, logger)
+    private val handler = OfferStatusChangedEventHandler(offerService, listingService, logger)
 
     private val tenantId = 1L
     private val listing = ListingEntity(
         id = 333L,
         tenantId = tenantId,
         totalOffers = null,
-        status = ListingStatus.PUBLISHING
+        status = ListingStatus.ACTIVE,
+        sellerAgentUserId = 11L,
+        sellerAgentCommission = 5.0,
+        buyerAgentCommission = 2.5,
+        price = 90000L,
+        currency = "CAD",
+    )
+
+    private val offer = OfferEntity(
+        id = 555L,
+        ownerId = listing.id,
+        ownerType = ObjectType.LISTING,
+        status = OfferStatus.SUBMITTED,
+        buyerAgentUserId = 33L,
+        sellerAgentUserId = 55L,
+        version = OfferVersionEntity(
+            status = OfferStatus.SUBMITTED,
+            price = 100000L,
+            currency = "CAD",
+        )
     )
 
     @BeforeEach
     fun setUp() {
         doReturn(listing).whenever(listingService).get(any(), any())
         doReturn(listing).whenever(listingService).save(any(), anyOrNull())
+
+        doReturn(offer).whenever(offerService).get(any(), any())
     }
 
     @AfterEach
@@ -47,32 +73,271 @@ class OfferSubmittedEventHandlerTest {
     }
 
     @Test
-    fun handle() {
-        doReturn(77).whenever(offerService).countByOwnerIdAndOwnerTypeAndTenantId(any(), any(), any())
+    fun `offer accepted - active`() {
+        doReturn(listing.copy(status = ListingStatus.ACTIVE)).whenever(listingService)
+            .get(any(), any())
+        doReturn(offer.copy(status = OfferStatus.ACCEPTED)).whenever(offerService).get(any(), any())
 
-        val event = OfferSubmittedEvent(
+        val event = OfferStatusChangedEvent(
+            offerId = offer.id!!,
+            tenantId = tenantId,
             owner = ObjectReference(id = listing.id ?: -1, type = ObjectType.LISTING),
-            offerId = 333,
-            tenantId = -1,
+            status = OfferStatus.ACCEPTED,
         )
         handler.handle(event)
 
         var argListing = argumentCaptor<ListingEntity>()
         verify(listingService).save(argListing.capture(), anyOrNull())
-        assertEquals(77, argListing.firstValue.totalOffers)
+        assertEquals(ListingStatus.PENDING, argListing.firstValue.status)
     }
 
     @Test
-    fun notListingEvent() {
-        doReturn(77).whenever(offerService).countByOwnerIdAndOwnerTypeAndTenantId(any(), any(), any())
+    fun `offer accepted - active-with-contingencies`() {
+        doReturn(listing.copy(status = ListingStatus.ACTIVE_WITH_CONTINGENCIES)).whenever(listingService)
+            .get(any(), any())
+        doReturn(offer.copy(status = OfferStatus.ACCEPTED)).whenever(offerService).get(any(), any())
 
-        val event = OfferSubmittedEvent(
-            owner = ObjectReference(id = listing.id ?: -1, type = ObjectType.ACCOUNT),
-            offerId = 333,
-            tenantId = -1,
+        val event = OfferStatusChangedEvent(
+            offerId = offer.id!!,
+            tenantId = tenantId,
+            owner = ObjectReference(id = listing.id ?: -1, type = ObjectType.LISTING),
+            status = OfferStatus.ACCEPTED,
+        )
+        handler.handle(event)
+
+        var argListing = argumentCaptor<ListingEntity>()
+        verify(listingService).save(argListing.capture(), anyOrNull())
+        assertEquals(ListingStatus.PENDING, argListing.firstValue.status)
+    }
+
+    @Test
+    fun `offer accepted - not-active`() {
+        doReturn(listing.copy(status = ListingStatus.EXPIRED)).whenever(listingService)
+            .get(any(), any())
+        doReturn(offer.copy(status = OfferStatus.ACCEPTED)).whenever(offerService).get(any(), any())
+
+        val event = OfferStatusChangedEvent(
+            offerId = offer.id!!,
+            tenantId = tenantId,
+            owner = ObjectReference(id = listing.id ?: -1, type = ObjectType.LISTING),
+            status = OfferStatus.ACCEPTED,
         )
         handler.handle(event)
 
         verify(listingService, never()).save(any(), anyOrNull())
+    }
+
+    @Test
+    fun `offer accepted - status mismatch`() {
+        doReturn(offer.copy(status = OfferStatus.WITHDRAWN)).whenever(offerService).get(any(), any())
+
+        val event = OfferStatusChangedEvent(
+            offerId = offer.id!!,
+            tenantId = tenantId,
+            owner = ObjectReference(id = listing.id ?: -1, type = ObjectType.LISTING),
+            status = OfferStatus.ACCEPTED,
+        )
+        handler.handle(event)
+
+        verify(listingService, never()).save(any(), anyOrNull())
+    }
+
+    @Test
+    fun `offer closed - rental`() {
+        doReturn(listing.copy(listingType = ListingType.RENTAL, status = ListingStatus.PENDING))
+            .whenever(listingService).get(any(), any())
+
+        doReturn(offer.copy(status = OfferStatus.CLOSED))
+            .whenever(offerService).get(any(), any())
+
+        val event = OfferStatusChangedEvent(
+            offerId = offer.id!!,
+            tenantId = tenantId,
+            owner = ObjectReference(id = listing.id ?: -1, type = ObjectType.LISTING),
+            status = OfferStatus.CLOSED,
+        )
+        handler.handle(event)
+
+        var argListing = argumentCaptor<ListingEntity>()
+        verify(listingService).save(argListing.capture(), anyOrNull())
+        assertEquals(ListingStatus.RENTED, argListing.firstValue.status)
+        assertEquals(offer.id, argListing.firstValue.closedOfferId)
+        assertEquals(offer.buyerAgentUserId, argListing.firstValue.buyerAgentUserId)
+        assertEquals(offer.buyerContactId, argListing.firstValue.buyerContactId)
+        assertEquals(Date(event.timestamp), argListing.firstValue.transactionDate)
+        assertEquals(offer.version?.price, argListing.firstValue.transactionPrice)
+        assertEquals(5000, argListing.firstValue.finalSellerAgentCommissionAmount)
+        assertEquals(2500, argListing.firstValue.finalBuyerAgentCommissionAmount)
+    }
+
+    @Test
+    fun `offer closed - sale`() {
+        doReturn(listing.copy(listingType = ListingType.SALE, status = ListingStatus.PENDING))
+            .whenever(listingService).get(any(), any())
+
+        doReturn(offer.copy(status = OfferStatus.CLOSED, buyerAgentUserId = listing.sellerAgentUserId!!))
+            .whenever(offerService).get(any(), any())
+
+        val event = OfferStatusChangedEvent(
+            offerId = offer.id!!,
+            tenantId = tenantId,
+            owner = ObjectReference(id = listing.id ?: -1, type = ObjectType.LISTING),
+            status = OfferStatus.CLOSED,
+        )
+        handler.handle(event)
+
+        var argListing = argumentCaptor<ListingEntity>()
+        verify(listingService).save(argListing.capture(), anyOrNull())
+        assertEquals(ListingStatus.SOLD, argListing.firstValue.status)
+        assertEquals(offer.id, argListing.firstValue.closedOfferId)
+        assertEquals(listing.sellerAgentUserId, argListing.firstValue.buyerAgentUserId)
+        assertEquals(offer.buyerContactId, argListing.firstValue.buyerContactId)
+        assertEquals(Date(event.timestamp), argListing.firstValue.transactionDate)
+        assertEquals(offer.version?.price, argListing.firstValue.transactionPrice)
+        assertEquals(5000, argListing.firstValue.finalSellerAgentCommissionAmount)
+        assertEquals(null, argListing.firstValue.finalBuyerAgentCommissionAmount)
+    }
+
+    @Test
+    fun `offer closed - not-pending`() {
+        doReturn(listing.copy(status = ListingStatus.ACTIVE_WITH_CONTINGENCIES)).whenever(listingService)
+            .get(any(), any())
+        doReturn(offer.copy(status = OfferStatus.CLOSED, buyerAgentUserId = listing.sellerAgentUserId!!))
+            .whenever(offerService).get(any(), any())
+
+        val event = OfferStatusChangedEvent(
+            offerId = offer.id!!,
+            tenantId = tenantId,
+            owner = ObjectReference(id = listing.id ?: -1, type = ObjectType.LISTING),
+            status = OfferStatus.CLOSED,
+        )
+        handler.handle(event)
+
+        verify(listingService, never()).save(any(), anyOrNull())
+    }
+
+    @Test
+    fun `offer PENDING withdrawn`() {
+        doReturnOffers(emptyList())
+        doReturn(listing.copy(status = ListingStatus.PENDING)).whenever(listingService)
+            .get(any(), any())
+        doReturn(offer.copy(status = OfferStatus.WITHDRAWN, buyerAgentUserId = listing.sellerAgentUserId!!))
+            .whenever(offerService).get(any(), any())
+
+        val event = OfferStatusChangedEvent(
+            offerId = offer.id!!,
+            tenantId = tenantId,
+            owner = ObjectReference(id = listing.id ?: -1, type = ObjectType.LISTING),
+            status = OfferStatus.WITHDRAWN,
+        )
+        handler.handle(event)
+
+        var argListing = argumentCaptor<ListingEntity>()
+        verify(listingService).save(argListing.capture(), anyOrNull())
+        assertEquals(ListingStatus.ACTIVE, argListing.firstValue.status)
+    }
+
+    @Test
+    fun `offer ACTIVE_WITH_CONTENGENCY withdrawn`() {
+        doReturnOffers(emptyList())
+        doReturn(listing.copy(status = ListingStatus.ACTIVE_WITH_CONTINGENCIES)).whenever(listingService)
+            .get(any(), any())
+        doReturn(offer.copy(status = OfferStatus.WITHDRAWN, buyerAgentUserId = listing.sellerAgentUserId!!))
+            .whenever(offerService).get(any(), any())
+
+        val event = OfferStatusChangedEvent(
+            offerId = offer.id!!,
+            tenantId = tenantId,
+            owner = ObjectReference(id = listing.id ?: -1, type = ObjectType.LISTING),
+            status = OfferStatus.WITHDRAWN,
+        )
+        handler.handle(event)
+
+        var argListing = argumentCaptor<ListingEntity>()
+        verify(listingService).save(argListing.capture(), anyOrNull())
+        assertEquals(ListingStatus.ACTIVE, argListing.firstValue.status)
+    }
+
+    @Test
+    fun `offer SOLD withdrawn`() {
+        doReturnOffers(emptyList())
+        doReturn(listing.copy(status = ListingStatus.SOLD)).whenever(listingService)
+            .get(any(), any())
+        doReturn(offer.copy(status = OfferStatus.WITHDRAWN, buyerAgentUserId = listing.sellerAgentUserId!!))
+            .whenever(offerService).get(any(), any())
+
+        val event = OfferStatusChangedEvent(
+            offerId = offer.id!!,
+            tenantId = tenantId,
+            owner = ObjectReference(id = listing.id ?: -1, type = ObjectType.LISTING),
+            status = OfferStatus.WITHDRAWN,
+        )
+        handler.handle(event)
+
+        var argListing = argumentCaptor<ListingEntity>()
+        verify(listingService).save(argListing.capture(), anyOrNull())
+        assertEquals(ListingStatus.ACTIVE, argListing.firstValue.status)
+    }
+
+    @Test
+    fun `offer SOLD withdrawn - pending offers`() {
+        doReturnOffers(listOf(OfferEntity(), OfferEntity()))
+        doReturn(listing.copy(status = ListingStatus.SOLD)).whenever(listingService)
+            .get(any(), any())
+        doReturn(offer.copy(status = OfferStatus.WITHDRAWN, buyerAgentUserId = listing.sellerAgentUserId!!))
+            .whenever(offerService).get(any(), any())
+
+        val event = OfferStatusChangedEvent(
+            offerId = offer.id!!,
+            tenantId = tenantId,
+            owner = ObjectReference(id = listing.id ?: -1, type = ObjectType.LISTING),
+            status = OfferStatus.WITHDRAWN,
+        )
+        handler.handle(event)
+
+        verify(listingService, never()).save(any(), anyOrNull())
+    }
+
+    @Test
+    fun `offer EXPIRED withdrawn`() {
+        doReturnOffers(emptyList())
+        doReturn(listing.copy(status = ListingStatus.EXPIRED)).whenever(listingService)
+            .get(any(), any())
+        doReturn(offer.copy(status = OfferStatus.WITHDRAWN, buyerAgentUserId = listing.sellerAgentUserId!!))
+            .whenever(offerService).get(any(), any())
+
+        val event = OfferStatusChangedEvent(
+            offerId = offer.id!!,
+            tenantId = tenantId,
+            owner = ObjectReference(id = listing.id ?: -1, type = ObjectType.LISTING),
+            status = OfferStatus.WITHDRAWN,
+        )
+        handler.handle(event)
+
+        verify(listingService, never()).save(any(), anyOrNull())
+    }
+
+    @Test
+    fun `not listing event`() {
+        doReturn(77).whenever(offerService).countByOwnerIdAndOwnerTypeAndTenantId(any(), any(), any())
+
+        val event = OfferStatusChangedEvent(
+            offerId = offer.id!!,
+            tenantId = tenantId,
+            owner = ObjectReference(id = 555, type = ObjectType.ACCOUNT),
+        )
+        handler.handle(event)
+
+        verify(listingService, never()).save(any(), anyOrNull())
+    }
+
+    fun doReturnOffers(offers: List<OfferEntity>) {
+        doReturn(offers)
+            .whenever(offerService)
+            .search(
+                anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(),
+                anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(),
+                anyOrNull(),
+            )
     }
 }

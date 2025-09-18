@@ -41,7 +41,8 @@ class ModuleService(
     fun modules(): List<ModuleModel> {
         if (all == null) {
             val toggles = toggleHolder.get()
-            val modules = koki.modules().modules
+            val modules = koki.modules()
+                .modules
                 .filter { module -> toggles.isModuleEnabled(module.name) }
             LOGGER.info("${modules.size} modules(s) loaded")
 

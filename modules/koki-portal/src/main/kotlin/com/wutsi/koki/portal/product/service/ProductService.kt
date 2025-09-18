@@ -36,7 +36,7 @@ class ProductService(
         val users = if (userIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
-            userService.users(
+            userService.search(
                 ids = userIds.toList(),
                 limit = userIds.size,
             ).associateBy { user -> user.id }
@@ -86,7 +86,7 @@ class ProductService(
         val users = if (userIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
-            userService.users(
+            userService.search(
                 ids = userIds.toList(),
                 limit = userIds.size,
             ).associateBy { user -> user.id }

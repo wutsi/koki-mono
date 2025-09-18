@@ -66,7 +66,7 @@ class ListingService(
         val users = if (!fullGraph || userIds.isEmpty()) {
             emptyMap<Long, UserModel>()
         } else {
-            userService.users(
+            userService.search(
                 ids = userIds, limit = userIds.size
             ).associateBy { user -> user.id }
         }
@@ -177,7 +177,7 @@ class ListingService(
         val users = if (!fullGraph || userIds.isEmpty()) {
             emptyMap<Long, UserModel>()
         } else {
-            userService.users(
+            userService.search(
                 ids = userIds, limit = userIds.size
             ).associateBy { user -> user.id }
         }

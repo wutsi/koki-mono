@@ -11,117 +11,98 @@
 <div class="container padding-bottom-8x">
     <div class="row">
         <div class="col-12">
-            <div class="widget">
-                <div class="widget-body">
-                    <h1 th:text="#{page.offer.create.title}">TITLE</h1>
-
-                    <div class="margin" th:if="${error}">
-                        <div class="alert alert-danger" th:utext="${error}">ERROR</div>
-                    </div>
-
-                    <form class="form padding-top-2x" method="post" th:action="@{/offers/create}" th:object="${form}">
-                        <input th:field="*{id}" type="hidden"/>
-                        <input th:field="*{submittingParty}" type="hidden"/>
+            <form class="form padding-top-2x" method="post" th:action="@{/offers/create}" th:object="${form}">
+                <div class="section">
+                    <div class="section-body">
+                        <input th:field="*{ownerId}" type="hidden"/>
+                        <input th:field="*{ownerType}" type="hidden"/>
                         <input th:field="*{buyerAgentUserId}" type="hidden"/>
                         <input th:field="*{sellerAgentUserId}" type="hidden"/>
+                        <input th:field="*{currency}" type="hidden"/>
 
-                        <table class="table">
-                            <tr th:if="${listing}">
-                                <td>
-                                    <b th:text="#{page.offer.listing}">LISTING</b>
-                                </td>
-                                <td>
-                                    <div th:replace="~{__components/offer :: offer-listing(${listing}, false)}">
+                        <div class="section-item">
+                            <h1 th:text="#{page.offer.create.title}">TITLE</h1>
+                        </div>
+                        <div class="margin section-item" th:if="${error}">
+                            <div class="alert alert-danger" th:utext="${error}">ERROR</div>
+                        </div>
+                        <div class="section-item" th:if="${listing}">
+                            <div th:replace="~{__components/offer :: offer-listing(${listing})}"></div>
+                        </div>
+                        <div class="section-item">
+                            <label class="title" th:text="#{page.offer.submitted-to}">TO</label>
+                            <div th:replace="~{__components/user :: user-small-card(${listing.sellerAgentUser})}"></div>
+                        </div>
+                        <div class="section-item">
+                            <label class="title" th:text="#{page.offer.submitted-by}">BY</label>
+                            <div th:replace="~{__components/user :: user-small-card(${user})}"></div>
+                        </div>
+                        <div class="section-item">
+                            <label class="title">
+                                <span th:text="#{page.offer.buyer}">BUYER</span>
+                                <span class="required">*</span>
+                            </label>
+                            <select
+                                class="form-select"
+                                data-component-id="select2"
+                                data-url="/contacts/selector/search"
+                                required
+                                th:field="*{buyerContactId}">
+                                <option th:if="${seller}"
+                                        th:text="${seller.name}"
+                                        th:value="${seller.id}">
+                                    ACCOUNT
+                                </option>
+                            </select>
+                        </div>
+                        <div class="section-item">
+                            <label class="title">
+                                <span th:text="#{page.offer.amount}">ANOUNT</span>
+                                <span class="required">*</span>
+                            </label>
+                            <div class="input-group">
+                                <input class="form-control" required step="0" th:field="*{price}"
+                                       type="number"/>
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span th:text="${tenant.currencySymbol}">XXX</span>
+                                        <span class="margin-left-small"
+                                              th:if="${form.pricePerMonth}"
+                                              th:text="#{page.listing.rental-price-suffix} ">PER MONTH</span>
                                     </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <b th:text="#{page.offer.submitted-by}">BY</b>
-                                </td>
-                                <td>
-                                    <div th:replace="~{__components/user :: user-small-card(${user})}">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <b th:text="#{page.offer.submitted-to}">TO</b>
-                                </td>
-                                <td>
-                                    <select
-                                        class="form-select"
-                                        data-component-id="select2"
-                                        data-url="/contacts/selector/search"
-                                        th:field="*{buyerContactId}">
-                                        <option th:if="${seller}"
-                                                th:text="${seller.name}"
-                                                th:value="${seller.id}">
-                                            ACCOUNT
-                                        </option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <b th:text="#{page.offer.amount}">AMOUNT</b>
-                                    <span class="required">*</span>
-                                </td>
-                                <td>
-                                    <div class="input-group">
-                                        <input class="form-control" required step="0" th:field="*{price}"
-                                               type="number"/>
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <span th:text="${tenant.currencySymbol}">XXX</span>
-                                                <span class="margin-left-small"
-                                                      th:if="${form.pricePerMonth}"
-                                                      th:text="#{page.listing.rental-price-suffix} ">PER MONTH</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <b th:text="#{page.offer.expires-at}">EXPIRES</b>
-                                    <span class="required">*</span>
-                                </td>
-                                <td>
-                                    <input class="form-control" required th:field="*{expiresAt}"
-                                           th:min="*{expiresAtMin}"
-                                           type="date"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <b th:text="#{page.offer.contingencies}">CONTENGENGIES</b>
-                                </td>
-                                <td>
-                                    <textarea class="form-control" rows="5" th:field="*{contingencies}"></textarea>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <div class="flex-space-between flex">
-                                        <a class="btn btn-light margin-left w-49-mobile"
-                                           href="/offers"
-                                           th:text="#{button.cancel}">
-                                            CANCEL
-                                        </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="section-item">
+                            <label class="title" th:text="#{page.offer.expires-at}">EXPIRY</label>
+                            <div class="text-small" th:text="#{page.offer.expires-at.help}">HELP</div>
+                            <input class="form-control" th:field="*{expiresAt}" th:min="*{expiresAtMin}" type="date"/>
+                        </div>
+                        <div class="section-item">
+                            <label class="title" th:text="#{page.offer.closing-at}">CLOSING</label>
+                            <div class="text-small" th:text="#{page.offer.closing-at.help}">HELP</div>
+                            <input class="form-control" th:field="*{closingAt}" th:min="*{expiresAtMin}" type="date"/>
+                        </div>
+                        <div class="section-item">
+                            <label class="title" th:text="#{page.offer.contingencies}">CONTINGENCIES</label>
+                            <textarea class="form-control" rows="5" th:field="*{contingencies}"></textarea>
+                        </div>
+                        <div class="section-item flex-space-between flex">
+                            <a class="btn btn-light  w-49-mobile"
+                               href="/offers"
+                               th:text="#{button.cancel}">
+                                CANCEL
+                            </a>
 
-                                        <button class="btn btn-primary w-49-mobile" id="btn-accept"
-                                                th:text="#{button.submit}"
-                                                type="submit">
-                                            SUBMIT
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </form>
+                            <button class="btn btn-primary w-49-mobile" id="btn-accept"
+                                    th:text="#{button.submit}"
+                                    type="submit">
+                                SUBMIT
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>

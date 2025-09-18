@@ -9,7 +9,6 @@ import com.wutsi.koki.sdk.KokiUsers
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
-import io.lettuce.core.KillArgs.Builder.user
 import org.springframework.stereotype.Service
 
 @Service
@@ -40,7 +39,7 @@ class UserService(
         return mapper.toUserModel(user, roles, category, city)
     }
 
-    fun users(
+    fun search(
         keyword: String? = null,
         ids: List<Long> = emptyList(),
         roleIds: List<Long> = emptyList(),

@@ -217,6 +217,10 @@ koki:
                 dlq: koki-listing-dlq
                 dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
 
+        offer:
+            cron:
+                expire: "0 0 1 * * *"     # Every date at 1AM
+
         notification:
             mq:
                 consumer-delay-seconds: ${koki.module.consumer-delay-seconds}

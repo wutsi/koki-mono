@@ -52,7 +52,7 @@ class FileService(
         val userMap = if (userIds.isEmpty()) {
             emptyMap()
         } else {
-            userService.users(
+            userService.search(
                 ids = userIds.toList(),
                 limit = userIds.size
             ).associateBy { file -> file.id }

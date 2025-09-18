@@ -21,6 +21,7 @@ object PageName {
     const val OFFER_ACCEPT = "page.offer.accept"
     const val OFFER_ACCEPT_DONE = "page.offer.accept.done"
     const val OFFER_CREATE = "page.offer.create"
+    const val OFFER_CREATE_DONE = "page.offer.create.done"
     const val OFFER_REFUSE = "page.offer.refuse"
     const val OFFER_REFUSE_DONE = "page.offer.refuse.done"
     const val OFFER_COUNTER = "page.offer.counter"

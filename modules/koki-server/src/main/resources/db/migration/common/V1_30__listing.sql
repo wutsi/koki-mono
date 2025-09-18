@@ -59,6 +59,8 @@ CREATE TABLE T_LISTING(
 
   seller_contact_fk         BIGINT,
 
+  closed_offer_fk           BIGINT,
+  buyer_contact_fk          BIGINT,
   buyer_name                VARCHAR(50),
   buyer_email               VARCHAR(255),
   buyer_phone               VARCHAR(30),
@@ -77,8 +79,9 @@ CREATE TABLE T_LISTING(
   summary_fr                TEXT,
   description_fr            TEXT,
 
-  total_images              BIGINT,
-  total_files               BIGINT,
+  total_images              INT,
+  total_files               INT,
+  total_offers              INT,
 
   created_at                DATETIME DEFAULT NOW(),
   modified_at               DATETIME DEFAULT NOW(),

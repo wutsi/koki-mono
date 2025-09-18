@@ -12,6 +12,7 @@ import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.GeoLocation
 import com.wutsi.koki.refdata.dto.Money
+import io.micrometer.core.instrument.Metrics.summary
 import org.springframework.stereotype.Service
 
 @Service
@@ -68,6 +69,8 @@ class ListingMapper {
             transactionDate = entity.transactionDate,
             transactionPrice = toMoney(entity.transactionPrice, entity.currency),
             buyerAgentUserId = entity.buyerAgentUserId,
+            closedOfferId = entity.closedOfferId,
+
             finalSellerAgentCommissionMoney = toMoney(entity.finalSellerAgentCommissionAmount, entity.currency),
             finalBuyerAgentCommissionMoney = toMoney(entity.finalBuyerAgentCommissionAmount, entity.currency),
 
@@ -80,6 +83,7 @@ class ListingMapper {
 
             totalImages = entity.totalImages,
             totalFiles = entity.totalFiles,
+            totalOffers = entity.totalOffers,
 
             sellerAgentUserId = entity.sellerAgentUserId,
             createdById = entity.createdById,

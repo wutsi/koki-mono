@@ -25,7 +25,7 @@ class NoteService(
         val userMap = if (userIds.isEmpty()) {
             emptyMap()
         } else {
-            userService.users(
+            userService.search(
                 ids = userIds.toList(), limit = userIds.size
             ).associateBy { user -> user.id }
         }
@@ -53,7 +53,7 @@ class NoteService(
         val userMap = if (userIds.isEmpty()) {
             emptyMap()
         } else {
-            userService.users(
+            userService.search(
                 ids = userIds.toList(), limit = userIds.size
             ).associateBy { user -> user.id }
         }

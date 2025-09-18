@@ -1,65 +1,94 @@
 package com.wutsi.koki.portal.offer.page
 
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.OfferFixtures.offer
-import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.offer.dto.CreateOfferResponse
+import com.wutsi.koki.offer.dto.GetOfferResponse
+import com.wutsi.koki.offer.dto.OfferParty
 import com.wutsi.koki.offer.dto.OfferStatus
-import com.wutsi.koki.offer.dto.UpdateOfferStatusRequest
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
-class AcceptOfferControllerTest : AbstractPageControllerTest() {
+class OfferControllerTest : AbstractPageControllerTest() {
     @Test
-    fun accept() {
-        navigateTo("/offers/accept?id=${offer.id}")
-        assertCurrentPageIs(PageName.OFFER_ACCEPT)
+    fun `submitted BUYER`() {
+        setUpOffer(OfferStatus.SUBMITTED, USER_ID, 555L, OfferParty.BUYER)
 
-        assertElementNotPresent(".alert-danger")
-        scrollToBottom()
-        click("#chk-confirm")
-        click("#btn-accept")
-        val req = argumentCaptor<UpdateOfferStatusRequest>()
-        verify(rest).postForEntity(
-            eq("$sdkBaseUrl/v1/offers/${offer.id}/status"),
-            req.capture(),
-            eq(Any::class.java),
-        )
-        assertEquals(OfferStatus.ACCEPTED, req.firstValue.status)
-        assertEquals(null, req.firstValue.reason)
-
-        // Done
-        assertCurrentPageIs(PageName.OFFER_ACCEPT_DONE)
-        click("#btn-continue")
-
+        navigateTo("/offers/${offer.id}")
         assertCurrentPageIs(PageName.OFFER)
+
+        assertElementPresent("#btn-counter")
+        assertElementPresent("#btn-accept")
+        assertElementPresent("#btn-refuse")
+        assertElementNotPresent("#btn-withdraw")
     }
 
     @Test
-    fun error() {
-        doThrow(createHttpClientErrorException(409, ErrorCode.OFFER_NOT_FOUND))
-            .whenever(rest)
-            .postForEntity(
-                eq("$sdkBaseUrl/v1/offers/${offer.id}/status"),
-                any<UpdateOfferStatusRequest>(),
-                eq(Any::class.java),
+    fun `submitted SELLER`() {
+        setUpOffer(OfferStatus.SUBMITTED, 555L, USER_ID, OfferParty.SELLER)
+
+        navigateTo("/offers/${offer.id}")
+        assertCurrentPageIs(PageName.OFFER)
+
+        assertElementPresent("#btn-counter")
+        assertElementPresent("#btn-accept")
+        assertElementPresent("#btn-refuse")
+        assertElementNotPresent("#btn-withdraw")
+    }
+
+    @Test
+    fun submitted() {
+        setUpOffer(OfferStatus.SUBMITTED, USER_ID, 555L, OfferParty.SELLER)
+
+        navigateTo("/offers/${offer.id}")
+        assertCurrentPageIs(PageName.OFFER)
+
+        assertElementNotPresent("#btn-counter")
+        assertElementNotPresent("#btn-accept")
+        assertElementNotPresent("#btn-refuse")
+        assertElementPresent("#btn-withdraw")
+    }
+
+    @Test
+    fun accepted() {
+        setUpOffer(OfferStatus.ACCEPTED, USER_ID, 555L, OfferParty.SELLER)
+
+        navigateTo("/offers/${offer.id}")
+        assertCurrentPageIs(PageName.OFFER)
+
+        assertElementNotPresent("#btn-counter")
+        assertElementNotPresent("#btn-accept")
+        assertElementNotPresent("#btn-refuse")
+        assertElementNotPresent("#btn-withdraw")
+    }
+
+    private fun setUpOffer(
+        status: OfferStatus,
+        sellerAgentUserId: Long,
+        buyerAgentUserId: Long,
+        submittingParty: OfferParty,
+    ) {
+        doReturn(
+            ResponseEntity(
+                GetOfferResponse(
+                    offer.copy(
+                        sellerAgentUserId = sellerAgentUserId,
+                        buyerAgentUserId = buyerAgentUserId,
+                        status = status,
+                        version = offer.version.copy(submittingParty = submittingParty, status = status),
+                    )
+                ),
+                HttpStatus.OK,
             )
-
-        navigateTo("/offers/accept?id=${offer.id}")
-        assertElementNotPresent(".alert-danger")
-        scrollToBottom()
-        click("#chk-confirm")
-        click("#btn-accept")
-
-        // Done
-        assertCurrentPageIs(PageName.OFFER_ACCEPT)
-        assertElementPresent(".alert-danger")
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetOfferResponse::class.java)
+            )
     }
 }

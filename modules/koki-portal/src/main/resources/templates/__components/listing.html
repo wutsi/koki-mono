@@ -27,7 +27,7 @@
           th:text="#{'listing-status.' + ${status}}">PUBLISHING</span>
 
     <span class="badge text-bg-primary"
-          th:if="${status.name() == 'ACTIVE'} OR ${status.name() == 'ACTIVE_WITH_OFFER'} OR ${status.name() == 'PENDING'}"
+          th:if="${status.name() == 'ACTIVE'} OR ${status.name() == 'ACTIVE_WITH_CONTINGENCIES'} OR ${status.name() == 'PENDING'}"
           th:text="#{'listing-status.' + ${status}}">A LOUER</span>
 
     <span class="badge text-bg-success" th:if="${status.name() == 'RENTED'} OR ${status.name() == 'SOLD'}"

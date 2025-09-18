@@ -16,6 +16,7 @@ import com.wutsi.koki.ListingFixtures
 import com.wutsi.koki.MessageFixtures
 import com.wutsi.koki.ModuleFixtures
 import com.wutsi.koki.NoteFixtures
+import com.wutsi.koki.OfferFixtures
 import com.wutsi.koki.PaymentFixtures
 import com.wutsi.koki.ProductFixtures
 import com.wutsi.koki.RefDataFixtures
@@ -57,6 +58,14 @@ import com.wutsi.koki.note.dto.CreateNoteRequest
 import com.wutsi.koki.note.dto.CreateNoteResponse
 import com.wutsi.koki.note.dto.GetNoteResponse
 import com.wutsi.koki.note.dto.SearchNoteResponse
+import com.wutsi.koki.offer.dto.CreateOfferRequest
+import com.wutsi.koki.offer.dto.CreateOfferResponse
+import com.wutsi.koki.offer.dto.CreateOfferVersionRequest
+import com.wutsi.koki.offer.dto.CreateOfferVersionResponse
+import com.wutsi.koki.offer.dto.GetOfferResponse
+import com.wutsi.koki.offer.dto.GetOfferVersionResponse
+import com.wutsi.koki.offer.dto.SearchOfferResponse
+import com.wutsi.koki.offer.dto.SearchOfferVersionResponse
 import com.wutsi.koki.payment.dto.CreateCashPaymentRequest
 import com.wutsi.koki.payment.dto.CreateCheckPaymentRequest
 import com.wutsi.koki.payment.dto.CreateInteracPaymentRequest
@@ -234,12 +243,14 @@ abstract class AbstractPageControllerTest {
         setupFileUploads()
         setupMessageModule()
         setupNoteModule()
-        setupAccountModule()
         setupContactModule()
+        setupListingModule()
+        setupOfferModule()
+
+        setupAccountModule()
         setupProductModule()
         setupInvoiceModule()
         setupPaymentModule()
-        setupListingModule()
     }
 
     protected fun setupFileUploads() {
@@ -985,6 +996,78 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any<CreateListingRequest>(),
                 eq(CreateListingResponse::class.java)
+            )
+    }
+
+    fun setupOfferModule() {
+        // Offer
+        doReturn(
+            ResponseEntity(
+                SearchOfferResponse(offers = OfferFixtures.offers),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchOfferResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetOfferResponse(OfferFixtures.offer),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetOfferResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreateOfferResponse(1111),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateOfferRequest>(),
+                eq(CreateOfferResponse::class.java)
+            )
+
+        // OfferVersion
+        doReturn(
+            ResponseEntity(
+                SearchOfferVersionResponse(offerVersions = OfferFixtures.offerVersions),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchOfferVersionResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetOfferVersionResponse(OfferFixtures.offerVersion),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetOfferVersionResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreateOfferVersionResponse(2222),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateOfferVersionRequest>(),
+                eq(CreateOfferVersionResponse::class.java)
             )
     }
 

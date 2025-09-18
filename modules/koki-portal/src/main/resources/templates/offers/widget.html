@@ -1,19 +1,54 @@
-<div class="widget">
+<div class="widget" th:if="${offers}">
     <div class="widget-header">
-        <div class="widget-title">Offers</div>
+        <div class="widget-title" th:text="#{page.offer.widget.title}">Offers</div>
     </div>
     <div>
         <table class="table table-striped">
+            <thead>
+            <tr class="d-none d-md-table-row">
+                <th></th>
+                <th th:text="#{page.offer.expires-at}">EXPIRES</th>
+                <th class="text-right" th:text="#{page.offer.amount}">AMOUNT</th>
+            </tr>
+            </thead>
             <tbody>
-            <tr class="offer entity" th:each="offer : ${offers}" th:id="'offer-' + ${offer.id}" th:if="${offers}">
+            <tr class="offer entity" th:each="offer : ${offers}" th:id="'offer-' + ${offer.id}">
                 <td class="offer-listing">
                     <a th:href="'/offers/' + ${offer.id}" th:if="${offer.listing}">
-                        <div th:replace="~{__components/offer :: offer-listing(${offer.listing}, false)}"></div>
+                        <div th:replace="~{__components/offer :: offer-listing(${offer.listing})}"></div>
+
+                        <table class="margin-top-small text-small d-block d-md-none">
+                            <tr>
+                                <th th:text="#{page.offer.expires-at}">EXPIRY</th>
+                                <td class="padding-left" th:text="${offer.version.expiresAtText}">yyy-MM-dd</td>
+                            </tr>
+                            <tr>
+                                <th th:text="#{page.offer.amount}" valign="top">AMOUNT</th>
+                                <td class="padding-left">
+                                    <b class="offer-price" th:text="${offer.version.price.displayText}">$$$</b>
+                                    <div th:if="${offer.version.priceDiff}">
+                                        <span
+                                            th:replace="~{__components/offer :: offer-version-price-diff(${offer.version})}">
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                     </a>
                 </td>
-                <td class="text-right">
+                <td class="d-none d-md-table-cell">
+                    <a target="_blank" th:href="'/offers/' + ${offer.id}" th:text="${offer.version.expiresAtText}">
+                        yyyy-MM-dd
+                    </a>
+                </td>
+                <td class="text-right d-none d-md-table-cell">
                     <a target="_blank" th:href="'/offers/' + ${offer.id}">
                         <b class="offer-price" th:text="${offer.version.price.displayText}">$$$</b>
+                        <div class="margin-left-small"
+                             th:if="${offer.version.priceDiff} AND !${offer.version.priceDiff.free}">
+                            <span th:replace="~{__components/offer :: offer-version-price-diff(${offer.version})}">
+                            </span>
+                        </div>
                     </a>
                 </td>
             </tr>

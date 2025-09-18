@@ -27,6 +27,12 @@
                     <form class="form padding-top-2x" method="post" th:action="@{/offers/refuse}" th:object="${form}">
                         <input th:field="*{id}" type="hidden"/>
 
+                        <div class="padding-bottom">
+                            <textarea class="form-control" rows="3"
+                                      th:field="*{comment}"
+                                      th:placeholder="#{page.offer.reason-refusal}"></textarea>
+                        </div>
+
                         <div class="alert alert-warning">
                             <div class="form-check">
                                 <input class="form-check-input" id="chk-confirm" required type="checkbox"/>

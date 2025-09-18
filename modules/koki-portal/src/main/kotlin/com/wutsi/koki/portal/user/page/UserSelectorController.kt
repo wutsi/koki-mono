@@ -19,7 +19,7 @@ class UserSelectorController(
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
     ): List<UserModel> {
-        return service.users(
+        return service.search(
             keyword = keyword,
             roleIds = roleId,
             permissions = permissions,

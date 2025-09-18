@@ -11,12 +11,11 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 @RequestMapping("/offers/counter/done")
 @RequiresPermission(["offer:manage", "offer:full_access"])
-class CounterDoneOfferController : AbstractEditOfferController() {
+class CounterDoneOfferController : AbstractOfferDetailsController() {
     @GetMapping
     fun accept(@RequestParam id: Long, model: Model): String {
         val offer = findOffer(id)
         model.addAttribute("offer", offer)
-        model.addAttribute("form", toOfferForm(offer))
 
         model.addAttribute(
             "page",

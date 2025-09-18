@@ -33,7 +33,7 @@ class AccountService(
         } else if (!fullGraph) {
             userIds.map { id -> id to UserModel(id = id) }.toMap()
         } else {
-            userService.users(ids = userIds.toList(), limit = userIds.size)
+            userService.search(ids = userIds.toList(), limit = userIds.size)
                 .associateBy { user -> user.id }
         }
 
@@ -104,7 +104,7 @@ class AccountService(
         val userMap = if (userIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
-            userService.users(
+            userService.search(
                 ids = userIds.toList(),
                 limit = userIds.size
             )

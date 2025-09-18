@@ -59,7 +59,7 @@ class SettingsListUserController(
         model.addAttribute("form", form)
 
         if (!form.keyword.isNullOrEmpty()) {
-            val users = service.users(
+            val users = service.search(
                 keyword = form.keyword,
                 limit = limit,
                 offset = offset

@@ -24,11 +24,13 @@ abstract class AbstractEditOfferController : AbstractOfferDetailsController() {
             ownerId = offer.owner?.id,
             ownerType = offer.owner?.type,
             price = offer.version.price.amount.toLong(),
+            currency = offer.version.price.currency,
             pricePerMonth = offer.listing?.listingTypeRental == true,
             contingencies = offer.version.contingencies,
-            submittingParty = offer.version.submittingParty,
             expiresAt = offer.version.expiresAt?.let { date -> df.format(date) },
+            closingAt = offer.version.closingAt?.let { date -> df.format(date) },
             expiresAtMin = df.format(DateUtils.addDays(Date(), 1)),
+            submittingParty = offer.version.submittingParty,
         )
     }
 }

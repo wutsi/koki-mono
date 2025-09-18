@@ -579,19 +579,8 @@ class ListingService(
         }
 
         when (request.status) {
-            ListingStatus.RENTED -> {
-                if (listing.listingType != ListingType.RENTAL) {
-                    throwInvalidStatus("The listing is not a RENTAL. It's status cannot be RENTED")
-                }
+            ListingStatus.WITHDRAWN, ListingStatus.EXPIRED, ListingStatus.CANCELLED -> {
             }
-
-            ListingStatus.SOLD -> {
-                if (listing.listingType != ListingType.SALE) {
-                    throwInvalidStatus("The listing is not a SALE. It's status cannot be SOLD")
-                }
-            }
-
-            ListingStatus.WITHDRAWN, ListingStatus.EXPIRED, ListingStatus.CANCELLED -> {}
 
             else -> throwInvalidStatus("Invalid status")
         }
@@ -600,36 +589,6 @@ class ListingService(
         val now = Date()
         listing.status = request.status
         listing.closedAt = now
-        if (request.status == ListingStatus.RENTED || request.status == ListingStatus.SOLD) {
-            listing.buyerName = request.buyerName?.ifEmpty { null }
-            listing.buyerEmail = request.buyerEmail?.lowercase()?.ifEmpty { null }
-            listing.buyerPhone = request.buyerPhone?.ifEmpty { null }
-            listing.buyerAgentUserId = request.buyerAgentUserId
-            listing.transactionDate = request.transactionDate
-            listing.transactionPrice = request.transactionPrice
-            listing.finalSellerAgentCommissionAmount = computeCommission(
-                request.transactionPrice,
-                listing.sellerAgentCommission
-            )
-            listing.finalBuyerAgentCommissionAmount =
-                if (listing.buyerAgentUserId != null && listing.buyerAgentUserId != listing.sellerAgentUserId) {
-                    computeCommission(
-                        request.transactionPrice,
-                        listing.buyerAgentCommission
-                    )
-                } else {
-                    null
-                }
-        } else {
-            listing.buyerName = null
-            listing.buyerEmail = null
-            listing.buyerPhone = null
-            listing.buyerAgentUserId = null
-            listing.transactionDate = null
-            listing.transactionPrice = null
-            listing.finalBuyerAgentCommissionAmount = null
-            listing.finalSellerAgentCommissionAmount = null
-        }
         save(listing)
 
         // Record the status

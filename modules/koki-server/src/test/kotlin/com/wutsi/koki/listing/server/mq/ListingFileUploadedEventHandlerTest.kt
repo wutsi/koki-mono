@@ -113,7 +113,7 @@ class ListingFileUploadedEventHandlerTest {
 
         val listingArg = argumentCaptor<ListingEntity>()
         verify(listingService).save(listingArg.capture(), eq(fileArg.firstValue.createdById))
-        assertEquals(totalFiles, listingArg.firstValue.totalFiles)
+        assertEquals(totalFiles.toInt(), listingArg.firstValue.totalFiles)
         assertEquals(listing.totalImages, listingArg.firstValue.totalImages)
     }
 
@@ -139,7 +139,7 @@ class ListingFileUploadedEventHandlerTest {
         verify(listingService).save(listingArg.capture(), eq(imageArg.firstValue.createdById))
         assertEquals(imageArg.firstValue.id, listingArg.firstValue.heroImageId)
         assertEquals(listing.totalFiles, listingArg.firstValue.totalFiles)
-        assertEquals(totalImages, listingArg.firstValue.totalImages)
+        assertEquals(totalImages.toInt(), listingArg.firstValue.totalImages)
     }
 
     @Test
@@ -156,7 +156,7 @@ class ListingFileUploadedEventHandlerTest {
         verify(listingService).save(listingArg.capture(), eq(image.createdById))
         assertEquals(555L, listingArg.firstValue.heroImageId)
         assertEquals(listing.totalFiles, listingArg.firstValue.totalFiles)
-        assertEquals(totalImages, listingArg.firstValue.totalImages)
+        assertEquals(totalImages.toInt(), listingArg.firstValue.totalImages)
     }
 
     @Test
@@ -173,7 +173,7 @@ class ListingFileUploadedEventHandlerTest {
         verify(listingService).save(listingArg.capture(), eq(image.createdById))
         assertEquals(image.id, listingArg.firstValue.heroImageId)
         assertEquals(listing.totalFiles, listingArg.firstValue.totalFiles)
-        assertEquals(totalImages, listingArg.firstValue.totalImages)
+        assertEquals(totalImages.toInt(), listingArg.firstValue.totalImages)
     }
 
     @Test

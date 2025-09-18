@@ -78,19 +78,25 @@
                     <div>
                         <a class="btn btn-primary margin-top w-100" data-component-id="modal-button" id="btn-message"
                            th:data-modal-body-url="${composeUrl}"
-                           th:if="${listing.canSendMessage(user)} AND ${composeUrl}"
-                           th:text="#{button.send_message}"
-                        >
+                           th:if="${listing.canSendMessage(user)} AND ${composeUrl} AND ${toggles.modules.message}"
+                           th:text="#{button.send_message}">
                             SEND_MESSAGE
                         </a>
 
                         <a class="btn btn-light margin-top w-100" id="btn-offer"
                            th:href="'/offers/create?listing-id=' + ${listing.id}"
-                           th:if="${listing.canMakeOffer(user)}"
-                           th:text="#{button.make_offer}"
-                        >
+                           th:if="${listing.canMakeOffer(user)} AND ${toggles.modules.offer}"
+                           th:text="#{button.make_offer}">
                             MAKE_OFFER
                         </a>
+                        <div class="urgency text-small margin-top-small">
+                            <span th:if="${totalActiveOffers == 1}"
+                                  th:text="#{page.listing.show.1-active-offer}">000</span>
+                            <span th:if="${totalActiveOffers > 1} AND ${totalActiveOffers <= 9}"
+                                  th:text="#{page.listing.show.n-active-offers(${totalActiveOffers})}">000</span>
+                            <span th:if="${totalActiveOffers > 9}"
+                                  th:text="#{page.listing.show.n-plus-active-offers(${totalActiveOffers - 1})}">000</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -143,9 +149,9 @@
     </div>
 
     <div class="d-block d-md-none border sticky-bar-bottom"
-         th:if="(${listing.canSendMessage(user)} AND ${composeUrl}) OR ${listing.canMakeOffer(user)}">
+         th:if="(${toggles.modules.message} AND ${listing.canSendMessage(user)} AND ${composeUrl}) OR (${toggles.modules.offer} AND ${listing.canMakeOffer(user)})">
         <div class="flex flex-space-between">
-            <div class="w-100 padding-small" th:if="${listing.canSendMessage(user)}">
+            <div class="w-100 padding-small" th:if="${listing.canSendMessage(user)} AND ${toggles.modules.message}">
                 <a class="btn btn-primary w-100" data-component-id="modal-button"
                    id="btn-message-sticky"
                    th:data-modal-body-url="${composeUrl}"
@@ -154,7 +160,7 @@
                     SEND_MESSAGE
                 </a>
             </div>
-            <div class="w-100 padding-small" th:if="${listing.canMakeOffer(user)}">
+            <div class="w-100 padding-small" th:if="${listing.canMakeOffer(user)} AND ${toggles.modules.offer}">
                 <a class="btn btn-light w-100" id="btn-offer-sticky"
                    th:href="'/offers/create?listing-id=' + ${listing.id}"
                    th:text="#{button.make_offer}"
