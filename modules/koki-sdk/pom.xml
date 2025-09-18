@@ -12,6 +12,7 @@
     <artifactId>koki-sdk</artifactId>
     <version>0.0.40-SNAPSHOT</version>
     <packaging>jar</packaging>
+
     <scm>
         <developerConnection>scm:git:https://github.com/wutsi/koki-mono.git</developerConnection>
         <tag>HEAD</tag>
