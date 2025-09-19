@@ -8,7 +8,6 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.ListingFixtures.listing
-import com.wutsi.koki.UserFixtures.users
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.listing.dto.CloseListingRequest
 import com.wutsi.koki.listing.dto.GetListingResponse
@@ -18,8 +17,6 @@ import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import java.text.SimpleDateFormat
-import java.util.TimeZone
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -46,12 +43,6 @@ class ChangeListingStatusControllerTest : AbstractPageControllerTest() {
             eq(Any::class.java),
         )
         assertEquals(ListingStatus.CANCELLED, req.firstValue.status)
-        assertEquals(null, req.firstValue.buyerEmail)
-        assertEquals(null, req.firstValue.buyerPhone)
-        assertEquals(null, req.firstValue.buyerAgentUserId)
-        assertEquals(null, req.firstValue.transactionPrice)
-        assertEquals(null, req.firstValue.transactionPrice)
-        assertEquals(null, req.firstValue.transactionDate)
         assertEquals("Im done with this shit", req.firstValue.comment)
 
         assertCurrentPageIs(PageName.LISTING_STATUS_DONE)
@@ -85,52 +76,6 @@ class ChangeListingStatusControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.LISTING_STATUS_CLOSE)
         assertElementPresent(".alert-danger")
-    }
-
-    @Test
-    fun sale() {
-        val df = SimpleDateFormat("yyyy-MM-dd")
-        df.timeZone = TimeZone.getTimeZone("UTC")
-
-        navigateTo("/listings/status?id=${listing.id}")
-        assertCurrentPageIs(PageName.LISTING_STATUS)
-        assertElementHasAttribute("#btn-next", "disabled")
-        click("#chk-status-SOLD")
-        click("#btn-next")
-
-        setupListing(ListingStatus.SOLD)
-        assertCurrentPageIs(PageName.LISTING_STATUS_CLOSE)
-        assertElementNotPresent(".alert-danger")
-        assertElementHasAttribute("#btn-next", "disabled")
-        input("#buyerName", "Ray Sponsible")
-        input("#buyerEmail", "Ray.Sponsible@gmail.com")
-        input("#buyerPhone", "99505600")
-        scrollToBottom()
-        input("#transactionPrice", "150000")
-        input("#transactionDate", "2020\t0301")
-        select2("#buyerAgentUserId", users[0].displayName)
-        input("#comment", "My first TX")
-        click("#chk-confirm")
-        click("#btn-next")
-        val req = argumentCaptor<CloseListingRequest>()
-        verify(rest).postForEntity(
-            eq("$sdkBaseUrl/v1/listings/${listing.id}/close"),
-            req.capture(),
-            eq(Any::class.java),
-        )
-        assertEquals(ListingStatus.SOLD, req.firstValue.status)
-        assertEquals("Ray Sponsible", req.firstValue.buyerName)
-        assertEquals("Ray.Sponsible@gmail.com", req.firstValue.buyerEmail)
-        assertEquals("+23799505600", req.firstValue.buyerPhone)
-        assertEquals(users[0].id, req.firstValue.buyerAgentUserId)
-        assertEquals(150000L, req.firstValue.transactionPrice)
-//        assertEquals("2020-03-01", df.format(req.firstValue.transactionDate))
-        assertEquals("My first TX", req.firstValue.comment)
-
-        assertCurrentPageIs(PageName.LISTING_STATUS_DONE)
-        assertElementPresent("#script-confetti")
-        click("#btn-continue")
-        assertCurrentPageIs(PageName.LISTING_LIST)
     }
 
     private fun setupListing(

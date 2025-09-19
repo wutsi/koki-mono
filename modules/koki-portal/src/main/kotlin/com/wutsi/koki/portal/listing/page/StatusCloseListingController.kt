@@ -17,7 +17,7 @@ import org.springframework.web.client.HttpClientErrorException
 @Controller
 @RequestMapping("/listings/status/close")
 @RequiresPermission(["listing:manage", "listing:full_access"])
-class StatusCloseListingController : AbstractEditListingController() {
+class ChangeListingStatusCloseController : AbstractEditListingController() {
     @GetMapping
     fun close(@RequestParam id: Long, @RequestParam status: ListingStatus, model: Model): String {
         val listing = findListing(id)
@@ -29,7 +29,6 @@ class StatusCloseListingController : AbstractEditListingController() {
         model.addAttribute("listing", listing ?: findListing(form.id))
         model.addAttribute("form", form)
 
-        model.addAttribute("sale", form.status == ListingStatus.SOLD || form.status == ListingStatus.RENTED)
         model.addAttribute(
             "page",
             createPageModel(

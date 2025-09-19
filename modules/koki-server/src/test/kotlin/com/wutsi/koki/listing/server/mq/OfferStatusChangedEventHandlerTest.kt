@@ -11,6 +11,7 @@ import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.offer.dto.OfferStatus
@@ -19,6 +20,7 @@ import com.wutsi.koki.offer.server.domain.OfferEntity
 import com.wutsi.koki.offer.server.domain.OfferVersionEntity
 import com.wutsi.koki.offer.server.service.OfferService
 import com.wutsi.koki.platform.logger.DefaultKVLogger
+import com.wutsi.koki.platform.mq.Publisher
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
@@ -29,8 +31,14 @@ import kotlin.test.assertEquals
 class OfferStatusChangedEventHandlerTest {
     private val offerService = mock<OfferService>()
     private val listingService = mock<ListingService>()
+    private val publisher = mock<Publisher>()
     private val logger = DefaultKVLogger()
-    private val handler = OfferStatusChangedEventHandler(offerService, listingService, logger)
+    private val handler = OfferStatusChangedEventHandler(
+        offerService = offerService,
+        listingService = listingService,
+        publisher = publisher,
+        logger = logger,
+    )
 
     private val tenantId = 1L
     private val listing = ListingEntity(
@@ -89,6 +97,12 @@ class OfferStatusChangedEventHandlerTest {
         var argListing = argumentCaptor<ListingEntity>()
         verify(listingService).save(argListing.capture(), anyOrNull())
         assertEquals(ListingStatus.PENDING, argListing.firstValue.status)
+
+        val argEvent = argumentCaptor<ListingStatusChangedEvent>()
+        verify(publisher).publish(argEvent.capture())
+        assertEquals(argListing.firstValue.status, argEvent.firstValue.status)
+        assertEquals(argListing.firstValue.id, argEvent.firstValue.listingId)
+        assertEquals(tenantId, argEvent.firstValue.tenantId)
     }
 
     @Test
@@ -108,6 +122,12 @@ class OfferStatusChangedEventHandlerTest {
         var argListing = argumentCaptor<ListingEntity>()
         verify(listingService).save(argListing.capture(), anyOrNull())
         assertEquals(ListingStatus.PENDING, argListing.firstValue.status)
+
+        val argEvent = argumentCaptor<ListingStatusChangedEvent>()
+        verify(publisher).publish(argEvent.capture())
+        assertEquals(argListing.firstValue.status, argEvent.firstValue.status)
+        assertEquals(argListing.firstValue.id, argEvent.firstValue.listingId)
+        assertEquals(tenantId, argEvent.firstValue.tenantId)
     }
 
     @Test
@@ -125,6 +145,7 @@ class OfferStatusChangedEventHandlerTest {
         handler.handle(event)
 
         verify(listingService, never()).save(any(), anyOrNull())
+        verify(publisher, never()).publish(any())
     }
 
     @Test
@@ -140,6 +161,7 @@ class OfferStatusChangedEventHandlerTest {
         handler.handle(event)
 
         verify(listingService, never()).save(any(), anyOrNull())
+        verify(publisher, never()).publish(any())
     }
 
     @Test
@@ -168,6 +190,12 @@ class OfferStatusChangedEventHandlerTest {
         assertEquals(offer.version?.price, argListing.firstValue.transactionPrice)
         assertEquals(5000, argListing.firstValue.finalSellerAgentCommissionAmount)
         assertEquals(2500, argListing.firstValue.finalBuyerAgentCommissionAmount)
+
+        val argEvent = argumentCaptor<ListingStatusChangedEvent>()
+        verify(publisher).publish(argEvent.capture())
+        assertEquals(argListing.firstValue.status, argEvent.firstValue.status)
+        assertEquals(argListing.firstValue.id, argEvent.firstValue.listingId)
+        assertEquals(tenantId, argEvent.firstValue.tenantId)
     }
 
     @Test
@@ -196,6 +224,12 @@ class OfferStatusChangedEventHandlerTest {
         assertEquals(offer.version?.price, argListing.firstValue.transactionPrice)
         assertEquals(5000, argListing.firstValue.finalSellerAgentCommissionAmount)
         assertEquals(null, argListing.firstValue.finalBuyerAgentCommissionAmount)
+
+        val argEvent = argumentCaptor<ListingStatusChangedEvent>()
+        verify(publisher).publish(argEvent.capture())
+        assertEquals(argListing.firstValue.status, argEvent.firstValue.status)
+        assertEquals(argListing.firstValue.id, argEvent.firstValue.listingId)
+        assertEquals(tenantId, argEvent.firstValue.tenantId)
     }
 
     @Test
@@ -214,6 +248,7 @@ class OfferStatusChangedEventHandlerTest {
         handler.handle(event)
 
         verify(listingService, never()).save(any(), anyOrNull())
+        verify(publisher, never()).publish(any())
     }
 
     @Test
@@ -235,6 +270,12 @@ class OfferStatusChangedEventHandlerTest {
         var argListing = argumentCaptor<ListingEntity>()
         verify(listingService).save(argListing.capture(), anyOrNull())
         assertEquals(ListingStatus.ACTIVE, argListing.firstValue.status)
+
+        val argEvent = argumentCaptor<ListingStatusChangedEvent>()
+        verify(publisher).publish(argEvent.capture())
+        assertEquals(argListing.firstValue.status, argEvent.firstValue.status)
+        assertEquals(argListing.firstValue.id, argEvent.firstValue.listingId)
+        assertEquals(tenantId, argEvent.firstValue.tenantId)
     }
 
     @Test
@@ -277,6 +318,12 @@ class OfferStatusChangedEventHandlerTest {
         var argListing = argumentCaptor<ListingEntity>()
         verify(listingService).save(argListing.capture(), anyOrNull())
         assertEquals(ListingStatus.ACTIVE, argListing.firstValue.status)
+
+        val argEvent = argumentCaptor<ListingStatusChangedEvent>()
+        verify(publisher).publish(argEvent.capture())
+        assertEquals(argListing.firstValue.status, argEvent.firstValue.status)
+        assertEquals(argListing.firstValue.id, argEvent.firstValue.listingId)
+        assertEquals(tenantId, argEvent.firstValue.tenantId)
     }
 
     @Test
@@ -315,6 +362,7 @@ class OfferStatusChangedEventHandlerTest {
         handler.handle(event)
 
         verify(listingService, never()).save(any(), anyOrNull())
+        verify(publisher, never()).publish(any())
     }
 
     @Test
@@ -329,6 +377,7 @@ class OfferStatusChangedEventHandlerTest {
         handler.handle(event)
 
         verify(listingService, never()).save(any(), anyOrNull())
+        verify(publisher, never()).publish(any())
     }
 
     fun doReturnOffers(offers: List<OfferEntity>) {

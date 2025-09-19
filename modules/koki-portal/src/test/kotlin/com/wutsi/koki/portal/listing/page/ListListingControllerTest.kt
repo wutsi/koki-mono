@@ -37,5 +37,8 @@ class ListListingControllerTest : AbstractPageControllerTest() {
 
         assertElementCount(".listing-card", ListingFixtures.listings.size)
         assertElementCount(".listing-filter", 6)
+
+        click(".listing-filter:first-child")
+        assertElementVisible("#koki-modal")
     }
 }

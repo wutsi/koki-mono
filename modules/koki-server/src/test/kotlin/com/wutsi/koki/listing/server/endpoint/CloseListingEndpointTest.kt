@@ -100,12 +100,6 @@ class CloseListingEndpointTest : AuthorizationAwareEndpointTest() {
     private fun close(id: Long, status: ListingStatus) {
         val request = CloseListingRequest(
             status = status,
-            buyerName = "Ray Sponsible",
-            buyerEmail = "ray.sponsible@gmail.com",
-            buyerPhone = "+15147580000",
-            transactionDate = df.parse("2020-03-05"),
-            transactionPrice = 100000,
-            buyerAgentUserId = 111L,
             comment = "Yeeesss!!"
         )
 
@@ -116,23 +110,6 @@ class CloseListingEndpointTest : AuthorizationAwareEndpointTest() {
         val listing = dao.findById(id).get()
         assertNotNull(listing.closedAt)
         assertEquals(request.status, listing.status)
-        if (status == ListingStatus.RENTED || status == ListingStatus.SOLD) {
-            assertEquals(request.buyerPhone, listing.buyerPhone)
-            assertEquals(request.buyerEmail, listing.buyerEmail)
-            assertEquals("2020-03-05", df.format(listing.transactionDate))
-            assertEquals(request.transactionPrice, listing.transactionPrice)
-            assertEquals(request.buyerAgentUserId, listing.buyerAgentUserId)
-            assertEquals(2000, listing.finalBuyerAgentCommissionAmount)
-            assertEquals(5000, listing.finalSellerAgentCommissionAmount)
-        } else {
-            assertEquals(null, listing.buyerPhone)
-            assertEquals(null, listing.buyerEmail)
-            assertEquals(null, listing.transactionDate)
-            assertEquals(null, listing.transactionPrice)
-            assertEquals(null, listing.buyerAgentUserId)
-            assertEquals(null, listing.finalBuyerAgentCommissionAmount)
-            assertEquals(null, listing.finalSellerAgentCommissionAmount)
-        }
 
         val statuses = statusDao.findByListing(listing)
         assertEquals(1, statuses.size)
@@ -150,11 +127,6 @@ class CloseListingEndpointTest : AuthorizationAwareEndpointTest() {
     private fun invalidStatus(id: Long, status: ListingStatus) {
         val request = CloseListingRequest(
             status = status,
-            buyerName = "Ray Sponsible",
-            buyerEmail = "ray.sponsible@gmail.com",
-            buyerPhone = "+15147580000",
-            transactionDate = df.parse("2020-03-05"),
-            buyerAgentUserId = 111L,
             comment = "Yeeesss!!"
         )
         val response = rest.postForEntity("/v1/listings/$id/close", request, ErrorResponse::class.java)

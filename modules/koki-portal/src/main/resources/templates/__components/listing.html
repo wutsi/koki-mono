@@ -90,8 +90,8 @@
 
                 <tr th:if="${sold} AND (${listing.sellerAgentUser} OR ${listing.buyerAgentUser})">
                     <td>
-                        <span th:if="${listing.isSeller(user)}" th:text="#{page.listing.agent-seller}">SELLER</span>
-                        <span th:if="${listing.isBuyer(user)}" th:text="#{page.listing.agent-buyer}">BUYER</span>
+                        <span th:if="${listing.sellerAgent(user)}" th:text="#{page.listing.agent-seller}">SELLER</span>
+                        <span th:if="${listing.buyerAgent(user)}" th:text="#{page.listing.agent-buyer}">BUYER</span>
                     </td>
                 </tr>
                 <tr th:if="${sold} AND ${listing.transactionDate}">
@@ -110,8 +110,8 @@
         <a target="_blank"
            th:href="'/listings/' + ${listing.id}"
            th:if="${listing.sellerAgentUser} OR ${listing.buyerAgentUser}">
-            <span th:if="${listing.isSeller(user)}" th:text="#{page.listing.agent-seller}">SELLER</span>
-            <span th:if="${listing.isBuyer(user)}" th:text="#{page.listing.agent-buyer}">BUYER</span>
+            <span th:if="${listing.sellerAgent(user)}" th:text="#{page.listing.agent-seller}">SELLER</span>
+            <span th:if="${listing.buyerAgent(user)}" th:text="#{page.listing.agent-buyer}">BUYER</span>
         </a>
     </td>
     <td class="d-none d-md-table-cell" th:if="${sold}">

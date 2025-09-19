@@ -33,7 +33,6 @@ import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.GeoLocation
 import com.wutsi.koki.sdk.KokiListings
 import org.springframework.stereotype.Service
-import java.text.SimpleDateFormat
 import java.util.Collections.emptyMap
 
 @Service
@@ -87,7 +86,7 @@ class ListingService(
             )
         }
 
-        val contactIds = listOf(listing.sellerContactId).filterNotNull()
+        val contactIds = listOf(listing.sellerContactId, listing.buyerContactId).filterNotNull()
         val contacts = if (contactIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
@@ -338,14 +337,6 @@ class ListingService(
             form.id,
             CloseListingRequest(
                 status = form.status,
-                buyerEmail = form.buyerEmail,
-                buyerPhone = form.buyerPhoneFull,
-                buyerName = form.buyerName,
-                buyerAgentUserId = form.buyerAgentUserId,
-                transactionDate = form.transactionDate
-                    ?.ifEmpty { null }
-                    ?.let { date -> SimpleDateFormat("yyyy-MM-dd").parse(date) },
-                transactionPrice = form.transactionPrice,
                 comment = form.comment,
             )
         )

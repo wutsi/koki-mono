@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 @RequestMapping("/listings/status/done")
 @RequiresPermission(["listing:manage", "listing:full_access"])
-class StatusDoneListingController : AbstractEditListingController() {
+class ChangeListingStatusDoneController : AbstractEditListingController() {
     @GetMapping
     fun done(@RequestParam id: Long, model: Model): String {
         val listing = findListing(id)

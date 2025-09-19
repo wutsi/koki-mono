@@ -70,6 +70,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#btn-edit")
         assertElementPresent("#btn-publish")
         assertElementNotPresent("#btn-status")
+
+        Thread.sleep(1000)
         assertElementCount(".btn-section-edit", 8)
     }
 
@@ -85,6 +87,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("#btn-edit")
         assertElementNotPresent("#btn-publish")
         assertElementPresent("#btn-status")
+
+        Thread.sleep(1000)
         assertElementCount(".btn-section-edit", 0)
     }
 

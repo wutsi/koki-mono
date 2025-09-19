@@ -63,12 +63,10 @@ class ListingMapper {
             agentRemarks = entity.agentRemarks?.ifEmpty { null },
             publicRemarks = entity.publicRemarks?.ifEmpty { null },
 
-            buyerName = entity.buyerName?.ifEmpty { null },
-            buyerPhone = entity.buyerPhone?.ifEmpty { null },
-            buyerEmail = entity.buyerEmail?.ifEmpty { null },
             transactionDate = entity.transactionDate,
             transactionPrice = toMoney(entity.transactionPrice, entity.currency),
             buyerAgentUserId = entity.buyerAgentUserId,
+            buyerContactId = entity.buyerContactId,
             closedOfferId = entity.closedOfferId,
 
             finalSellerAgentCommissionMoney = toMoney(entity.finalSellerAgentCommissionAmount, entity.currency),

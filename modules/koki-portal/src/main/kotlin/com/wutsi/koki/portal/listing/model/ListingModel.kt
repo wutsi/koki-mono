@@ -49,15 +49,13 @@ data class ListingModel(
     var advanceRent: Int? = null,
     var advanceRentMoney: MoneyModel? = null,
     var noticePeriod: Int? = null,
-    val seller: ContactModel? = null,
+    val sellerContact: ContactModel? = null,
     val sellerAgentCommission: Double? = null,
     val buyerAgentCommission: Double? = null,
     val sellerAgentCommissionMoney: MoneyModel? = null,
     val buyerAgentCommissionMoney: MoneyModel? = null,
-    val buyerName: String? = null,
-    val buyerEmail: String? = null,
-    val buyerPhone: String? = null,
     val buyerAgentUser: UserModel? = null,
+    val buyerContact: ContactModel? = null,
     var transactionDate: Date? = null,
     var transactionDateText: String? = null,
     var transactionPrice: MoneyModel? = null,
@@ -113,29 +111,6 @@ data class ListingModel(
         get() = status == ListingStatus.SOLD ||
             status == ListingStatus.RENTED
 
-    fun isSeller(user: UserModel?): Boolean {
-        return user != null &&
-            user.id == sellerAgentUser?.id
-    }
-
-    fun isBuyer(user: UserModel?): Boolean {
-        return user != null &&
-            statusSold &&
-            user.id == buyerAgentUser?.id
-    }
-
-    fun computeAgentCommission(user: UserModel?): MoneyModel? {
-        return if (user == null) {
-            return null
-        } else {
-            if (user.id == sellerAgentUser?.id) {
-                sellerAgentCommissionMoney
-            } else {
-                buyerAgentCommissionMoney
-            }
-        }
-    }
-
     fun amenitiesByCategoryId(categoryId: Long): List<AmenityModel> {
         return amenities.filter { amenity -> amenity.categoryId == categoryId }
     }
@@ -169,5 +144,13 @@ data class ListingModel(
          */
         return ((user?.canAccess("listing") == true) && (user.id == sellerAgentUser?.id || !statusDraft)) ||
             (user?.hasFullAccess("listing") == true)
+    }
+
+    fun sellerAgent(user: UserModel?): Boolean {
+        return sellerAgentUser?.id == user?.id
+    }
+
+    fun buyerAgent(user: UserModel?): Boolean {
+        return buyerAgentUser?.id == user?.id
     }
 }

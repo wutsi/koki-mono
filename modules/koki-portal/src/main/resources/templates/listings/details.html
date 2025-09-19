@@ -276,13 +276,9 @@
            th:text="#{button.edit}"
         >EDIT</a>
     </h4>
-    <div class="margin-bottom-small" th:if="${listing.seller}">
+    <div class="margin-bottom-small" th:if="${listing.sellerContact}">
         <b class="text-small" th:text="#{page.listing.seller}">KEY</b>
-        <div>
-            <a th:href="'/contacts/' + ${listing.seller.id}" th:text="${listing.seller.name}">SELLER</a>
-        </div>
-        <div th:if="${listing.seller.email}" th:text="${listing.seller.email}">EMAIL</div>
-        <div th:if="${listing.seller.mobile}" th:text="${listing.seller.mobileFormatted}">MOBILE</div>
+        <div th:replace="~{__components/contact :: contact-card(${listing.sellerContact})}"></div>
     </div>
     <hr th:if="${listing.statusSold}"/>
 </div>
@@ -294,9 +290,7 @@
         <b class="text-small" th:if="${listing.listingTypeSale}" th:text="#{page.listing.buyer}">KEY</b>
         <b class="text-small" th:if="${listing.listingTypeRental}" th:text="#{page.listing.tenant}">KEY</b>
 
-        <div th:text="${listing.buyerName}">RAY</div>
-        <div th:if="${listing.buyerEmail}" th:text="${listing.buyerEmail}">EMAIL</div>
-        <div th:if="${listing.buyerPhone}" th:text="${listing.buyerPhone}">PHONE</div>
+        <div th:replace="~{__components/contact :: contact-card(${listing.buyerContact})}"></div>
     </div>
     <div class="flex flex-wrap margin-bottom-small">
         <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.transactionDate}">
