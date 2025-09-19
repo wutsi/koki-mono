@@ -72,10 +72,11 @@
                     </div>
 
                     <div id="listing-container" th:if="${listings}">
-                        <a
-                            data-component-id="modal-button"
-                            data-modal-body-large="true"
-                            href="#">
+                        <a data-component-id="modal-button"
+                           data-modal-body-large="true"
+                           href="#"
+                           th:data-modal-body-url="${filterUrl}"
+                        >
                             <div th:replace="~{__components/listing :: listing-filters(${form}, ${locations})}"></div>
                         </a>
 
@@ -88,7 +89,11 @@
                                 </div>
                                 <div class="margin-left">
                                     <div th:utext="#{page.listing.list.empty}">EMPTY</div>
-                                    <a class="btn btn-sm btn-light margin-top" href="javascript: open_filter();"
+                                    <a class="btn btn-sm btn-light margin-top"
+                                       data-component-id="modal-button"
+                                       data-modal-body-large="true"
+                                       href="#"
+                                       th:data-modal-body-url="${filterUrl}"
                                        th:text="#{button.filter}">
                                         FILTER
                                     </a>

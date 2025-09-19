@@ -8,7 +8,6 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.ListingFixtures.listing
-import com.wutsi.koki.UserFixtures.users
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.listing.dto.CloseListingRequest
 import com.wutsi.koki.listing.dto.GetListingResponse
@@ -18,8 +17,6 @@ import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import java.text.SimpleDateFormat
-import java.util.TimeZone
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

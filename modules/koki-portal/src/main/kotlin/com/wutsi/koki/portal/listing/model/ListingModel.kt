@@ -111,18 +111,6 @@ data class ListingModel(
         get() = status == ListingStatus.SOLD ||
             status == ListingStatus.RENTED
 
-    fun computeAgentCommission(user: UserModel?): MoneyModel? {
-        return if (user == null) {
-            return null
-        } else {
-            if (user.id == sellerAgentUser?.id) {
-                sellerAgentCommissionMoney
-            } else {
-                buyerAgentCommissionMoney
-            }
-        }
-    }
-
     fun amenitiesByCategoryId(categoryId: Long): List<AmenityModel> {
         return amenities.filter { amenity -> amenity.categoryId == categoryId }
     }
@@ -156,5 +144,13 @@ data class ListingModel(
          */
         return ((user?.canAccess("listing") == true) && (user.id == sellerAgentUser?.id || !statusDraft)) ||
             (user?.hasFullAccess("listing") == true)
+    }
+
+    fun sellerAgent(user: UserModel?): Boolean {
+        return sellerAgentUser?.id == user?.id
+    }
+
+    fun buyerAgent(user: UserModel?): Boolean {
+        return buyerAgentUser?.id == user?.id
     }
 }

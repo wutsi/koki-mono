@@ -3,12 +3,15 @@ package com.wutsi.koki.listing.server.mq
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
+import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.offer.dto.OfferStatus
 import com.wutsi.koki.offer.dto.event.OfferStatusChangedEvent
 import com.wutsi.koki.offer.server.domain.OfferEntity
 import com.wutsi.koki.offer.server.service.OfferService
 import com.wutsi.koki.platform.logger.KVLogger
+import com.wutsi.koki.platform.mq.Publisher
 import org.springframework.stereotype.Service
 import java.util.Date
 
@@ -17,6 +20,7 @@ class OfferStatusChangedEventHandler(
     private val offerService: OfferService,
     private val listingService: ListingService,
     private val logger: KVLogger,
+    private val publisher: Publisher,
 ) {
     fun handle(event: OfferStatusChangedEvent) {
         if (!accept(event)) {
@@ -51,10 +55,9 @@ class OfferStatusChangedEventHandler(
 
         if (listing.status == ListingStatus.ACTIVE || listing.status == ListingStatus.ACTIVE_WITH_CONTINGENCIES) {
             listing.status = ListingStatus.PENDING
-            listingService.save(listing)
 
-            logger.add("listing_status_changed", true)
             logger.add("listing_new_status", listing.status)
+            save(listing)
         } else {
             logger.add("ignored", true)
         }
@@ -73,9 +76,9 @@ class OfferStatusChangedEventHandler(
 
         if (changeStatus) {
             listing.status = ListingStatus.ACTIVE
-            listingService.save(listing)
 
             logger.add("listing_new_status", listing.status)
+            save(listing)
         }
         logger.add("ignored", !changeStatus)
     }
@@ -85,8 +88,8 @@ class OfferStatusChangedEventHandler(
         logger.add("listing_status", listing.status)
 
         if (listing.status == ListingStatus.PENDING) {
+            // Update the listing
             val finalPrice = offer.version!!.price
-
             listing.status = if (listing.listingType == ListingType.RENTAL) ListingStatus.RENTED else ListingStatus.SOLD
             listing.closedOfferId = offer.id
             listing.buyerAgentUserId = offer.buyerAgentUserId
@@ -99,12 +102,23 @@ class OfferStatusChangedEventHandler(
             } else {
                 null
             }
-            listingService.save(listing)
 
             logger.add("listing_new_status", listing.status)
+            save(listing)
         } else {
             logger.add("ignored", true)
         }
+    }
+
+    private fun save(listing: ListingEntity) {
+        listingService.save(listing)
+        publisher.publish(
+            ListingStatusChangedEvent(
+                status = listing.status,
+                listingId = listing.id ?: -1,
+                tenantId = listing.tenantId,
+            )
+        )
     }
 
     private fun accept(event: OfferStatusChangedEvent): Boolean {

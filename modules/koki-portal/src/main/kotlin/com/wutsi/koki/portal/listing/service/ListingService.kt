@@ -33,7 +33,6 @@ import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.GeoLocation
 import com.wutsi.koki.sdk.KokiListings
 import org.springframework.stereotype.Service
-import java.text.SimpleDateFormat
 import java.util.Collections.emptyMap
 
 @Service
