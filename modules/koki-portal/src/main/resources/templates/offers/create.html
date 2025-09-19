@@ -88,17 +88,16 @@
                             <textarea class="form-control" rows="5" th:field="*{contingencies}"></textarea>
                         </div>
                         <div class="section-item flex-space-between flex">
-                            <a class="btn btn-light  w-49-mobile"
-                               href="/offers"
-                               th:text="#{button.cancel}">
-                                CANCEL
-                            </a>
-
                             <button class="btn btn-primary w-49-mobile" id="btn-accept"
                                     th:text="#{button.submit}"
                                     type="submit">
                                 SUBMIT
                             </button>
+                            <a class="btn btn-light  w-49-mobile"
+                               href="/offers"
+                               th:text="#{button.cancel}">
+                                CANCEL
+                            </a>
                         </div>
                     </div>
                 </div>

@@ -25,6 +25,9 @@ data class OfferModel(
     val name: String
         get() = buyerAgentUser.displayName ?: buyerContact.name
 
+    val statusClosed: Boolean
+        get() = status == OfferStatus.CLOSED
+
     /**
      * - User can access AND user is the seller or byuer agent
      * - user has full access
@@ -50,6 +53,13 @@ data class OfferModel(
             !readOnly &&
             (status == OfferStatus.SUBMITTED) &&
             (user.id == version.assigneeUserId)
+    }
+
+    fun canCloseOrCancel(user: UserModel?): Boolean {
+        return (user?.canManage("offer") == true) &&
+            !readOnly &&
+            (status == OfferStatus.ACCEPTED) &&
+            (user.id == sellerAgentUser.id)
     }
 
     fun canWithdraw(user: UserModel?): Boolean {

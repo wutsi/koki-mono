@@ -36,16 +36,59 @@ class UpdateOfferStatusEndpointTest : AuthorizationAwareEndpointTest() {
     private lateinit var publisher: Publisher
 
     @Test
-    fun status() {
+    fun accepted() {
+        test(100, OfferStatus.ACCEPTED)
+    }
+
+    @Test
+    fun rejected() {
+        test(101, OfferStatus.REJECTED)
+    }
+
+    @Test
+    fun expired() {
+        test(102, OfferStatus.EXPIRED)
+    }
+
+    @Test
+    fun withdrawn() {
+        test(103, OfferStatus.WITHDRAWN)
+    }
+
+    @Test
+    fun closed() {
+        test(200, OfferStatus.CLOSED)
+    }
+
+    @Test
+    fun cancelled() {
+        test(201, OfferStatus.CANCELLED)
+    }
+
+    @Test
+    fun badStatus() {
         val request = UpdateOfferStatusRequest(
             status = OfferStatus.ACCEPTED,
             comment = "Oye!!!"
         )
-        val response = rest.postForEntity("/v1/offers/100/status", request, Any::class.java)
+        val response = rest.postForEntity("/v1/offers/110/status", request, ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.CONFLICT, response.statusCode)
+        assertEquals(ErrorCode.OFFER_BAD_STATUS, response.body?.error?.code)
+
+        verify(publisher, never()).publish(any())
+    }
+
+    private fun test(id: Long, status: OfferStatus) {
+        val request = UpdateOfferStatusRequest(
+            status = status,
+            comment = "Oye!!!"
+        )
+        val response = rest.postForEntity("/v1/offers/$id/status", request, Any::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val offer = offerDao.findById(100L).get()
+        val offer = offerDao.findById(id).get()
         assertEquals(request.status, offer.status)
 
         val version = versionDao.findById(offer.version?.id!!).get()
@@ -65,19 +108,5 @@ class UpdateOfferStatusEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(TENANT_ID, event.firstValue.tenantId)
         assertEquals(offer.ownerId, event.firstValue.owner?.id)
         assertEquals(offer.ownerType, event.firstValue.owner?.type)
-    }
-
-    @Test
-    fun badStatus() {
-        val request = UpdateOfferStatusRequest(
-            status = OfferStatus.ACCEPTED,
-            comment = "Oye!!!"
-        )
-        val response = rest.postForEntity("/v1/offers/110/status", request, ErrorResponse::class.java)
-
-        assertEquals(HttpStatus.CONFLICT, response.statusCode)
-        assertEquals(ErrorCode.OFFER_BAD_STATUS, response.body?.error?.code)
-
-        verify(publisher, never()).publish(any())
     }
 }

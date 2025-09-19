@@ -23,7 +23,7 @@ import java.util.TimeZone
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class StatusListingControllerTest : AbstractPageControllerTest() {
+class ChangeListingStatusControllerTest : AbstractPageControllerTest() {
     @Test
     fun cancel() {
         navigateTo("/listings/status?id=${listing.id}")

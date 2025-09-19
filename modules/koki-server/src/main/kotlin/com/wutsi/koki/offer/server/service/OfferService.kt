@@ -118,7 +118,7 @@ class OfferService(
                 sellerAgentUserId = request.sellerAgentUserId,
                 buyerAgentUserId = request.buyerAgentUserId,
                 buyerContactId = request.buyerContactId,
-                status = OfferStatus.SUBMITTED,
+                status = OfferStatus.UNKNOWN,
                 ownerType = request.owner?.type,
                 ownerId = request.owner?.id,
                 createdById = userId,
@@ -146,24 +146,13 @@ class OfferService(
             )
         )
 
-        // Persist status
-        statusDao.save(
-            OfferStatusEntity(
-                tenantId = tenantId,
-                offer = offer,
-                version = version,
-                status = version.status,
-                comment = null,
-                createdAt = now,
-                createdById = userId,
-            )
-        )
-
         // Update offer
         offer.version = version
         offer.totalVersions = 1
         offerDao.save(offer)
-        return offer
+
+        // Update status
+        return status(offer, UpdateOfferStatusRequest(status = OfferStatus.SUBMITTED))
     }
 
     @Transactional
@@ -188,7 +177,6 @@ class OfferService(
         }
 
         // Create new version
-        val userId = securityService.getCurrentUserIdOrNull()
         val offerVersion = versionDao.save(
             OfferVersionEntity(
                 tenantId = offer.tenantId,
@@ -220,16 +208,28 @@ class OfferService(
     fun status(id: Long, request: UpdateOfferStatusRequest, tenantId: Long): OfferEntity {
         // Check status
         val offer = get(id, tenantId)
+        return status(offer, request)
+    }
+
+    private fun status(offer: OfferEntity, request: UpdateOfferStatusRequest): OfferEntity {
+        // Check status
         when (request.status) {
+            OfferStatus.SUBMITTED -> checkStatus(OfferStatus.UNKNOWN, offer)
+
             OfferStatus.ACCEPTED,
             OfferStatus.REJECTED,
+            OfferStatus.WITHDRAWN,
             OfferStatus.EXPIRED -> checkStatus(OfferStatus.SUBMITTED, offer)
 
-            OfferStatus.CLOSED -> checkStatus(OfferStatus.ACCEPTED, offer)
+            OfferStatus.CLOSED,
+            OfferStatus.CANCELLED -> checkStatus(OfferStatus.ACCEPTED, offer)
 
-            OfferStatus.WITHDRAWN -> checkNotStatus(OfferStatus.CLOSED, offer)
-
-            else -> {}
+            else -> throw ConflictException(
+                error = Error(
+                    code = ErrorCode.OFFER_BAD_STATUS,
+                    message = "${request.status}",
+                )
+            )
         }
 
         // Update offer
@@ -249,7 +249,7 @@ class OfferService(
         // Persist status
         statusDao.save(
             OfferStatusEntity(
-                tenantId = tenantId,
+                tenantId = offer.tenantId,
                 offer = offer,
                 version = version,
                 status = request.status,
@@ -276,17 +276,6 @@ class OfferService(
                 error = Error(
                     code = ErrorCode.OFFER_BAD_STATUS,
                     message = "Offer status is ${offer.status}. It should be $expected",
-                )
-            )
-        }
-    }
-
-    private fun checkNotStatus(expected: OfferStatus, offer: OfferEntity) {
-        if (offer.status == expected) {
-            throw ConflictException(
-                error = Error(
-                    code = ErrorCode.OFFER_BAD_STATUS,
-                    message = "Offer status should not be $expected",
                 )
             )
         }

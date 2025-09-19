@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
-@RequestMapping("/offers/close/done")
+@RequestMapping("/offers/counter/done")
 @RequiresPermission(["offer:manage", "offer:full_access"])
-class CloseOfferDoneController : AbstractOfferDetailsController() {
+class CounterOfferDoneController : AbstractOfferDetailsController() {
     @GetMapping
     fun done(@RequestParam id: Long, model: Model): String {
         val offer = findOffer(id)
@@ -24,6 +24,6 @@ class CloseOfferDoneController : AbstractOfferDetailsController() {
                 title = getMessage("page.offer.counter.meta.title"),
             )
         )
-        return "status-done"
+        return "offers/counter-done"
     }
 }

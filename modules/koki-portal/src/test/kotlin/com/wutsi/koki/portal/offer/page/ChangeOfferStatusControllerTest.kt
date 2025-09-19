@@ -22,7 +22,7 @@ import org.springframework.http.ResponseEntity
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class StatusOfferControllerTest : AbstractPageControllerTest() {
+class ChangeOfferStatusControllerTest : AbstractPageControllerTest() {
     @BeforeEach
     override fun setUp() {
         super.setUp()
@@ -39,7 +39,7 @@ class StatusOfferControllerTest : AbstractPageControllerTest() {
                 eq(GetFileResponse::class.java)
             )
     }
-    
+
     @Test
     fun close() {
         setUpOffer(OfferStatus.ACCEPTED)
@@ -182,7 +182,7 @@ class StatusOfferControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent(".alert-danger")
         scrollToBottom()
         click("#chk-confirm")
-        click("#btn-cancel")
+        click("#btn-close")
 
         // Done
         assertCurrentPageIs(PageName.OFFER_STATUS)
