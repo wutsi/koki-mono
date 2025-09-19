@@ -8,4 +8,5 @@ enum class OfferStatus {
     WITHDRAWN,
     EXPIRED,
     CLOSED,
+    CANCELLED
 }

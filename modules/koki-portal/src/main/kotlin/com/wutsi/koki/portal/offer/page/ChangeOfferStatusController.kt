@@ -14,33 +14,46 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
-@RequestMapping("/offers/accept")
+@RequestMapping("/offers/status")
 @RequiresPermission(["offer:manage", "offer:full_access"])
-class AcceptOfferController : AbstractEditOfferController() {
+class StatusOfferController : AbstractEditOfferController() {
     @GetMapping
-    fun accept(@RequestParam id: Long, model: Model): String {
-        val offer = findOffer(id)
+    fun status(
+        @RequestParam id: Long,
+        @RequestParam status: OfferStatus,
+        model: Model
+    ): String {
+        return status(OfferForm(id = id, status = status), model)
+    }
+
+    private fun status(form: OfferForm, model: Model): String {
+        val offer = findOffer(form.id)
         model.addAttribute("offer", offer)
-        model.addAttribute("form", toOfferForm(offer))
+        model.addAttribute("form", form)
+
+        val status = form.status?.name?.lowercase()
+        model.addAttribute("title", getMessage("page.offer.status.$status.title"))
+        model.addAttribute("description", getMessage("page.offer.status.$status.description"))
+        model.addAttribute("confirmation", getMessage("page.offer.status.$status.confirmation"))
 
         model.addAttribute(
             "page",
             createPageModel(
-                name = PageName.OFFER_ACCEPT,
-                title = getMessage("page.offer.accept.meta.title"),
+                name = PageName.OFFER_STATUS,
+                title = getMessage("page.offer.status.$status.meta.title"),
             )
         )
-        return "offers/accept"
+        return "offers/status"
     }
 
     @PostMapping
     fun submit(@ModelAttribute form: OfferForm, model: Model): String {
         try {
-            offerService.updateStatus(form.copy(status = OfferStatus.ACCEPTED))
-            return "redirect:/offers/accept/done?id=${form.id}"
+            offerService.updateStatus(form)
+            return "redirect:/offers/status/done?id=${form.id}"
         } catch (ex: HttpClientErrorException) {
             loadError(ex, model)
-            return accept(form.id, model)
+            return status(form, model)
         }
     }
 }
