@@ -1,6 +1,8 @@
 package com.wutsi.koki
 
 import com.wutsi.koki.ContactFixtures.contacts
+import com.wutsi.koki.UserFixtures.USER_ID
+import com.wutsi.koki.UserFixtures.users
 import com.wutsi.koki.listing.dto.BasementType
 import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
@@ -98,16 +100,14 @@ object ListingFixtures {
             Agent remarks that are not public!
         """.trimIndent(),
 
-        sellerAgentUserId = UserFixtures.USER_ID,
-        createdById = UserFixtures.USER_ID,
+        sellerAgentUserId = USER_ID,
+        createdById = USER_ID,
         heroImageId = FileFixtures.images[0].id,
         totalFiles = 10,
         totalImages = 11,
 
-        buyerAgentUserId = UserFixtures.users[2].id,
-        buyerName = "Roger Milla",
-        buyerEmail = "roger.milla@gmail.com",
-        buyerPhone = "+237699505678",
+        buyerAgentUserId = users[2].id,
+        buyerContactId = contacts[1].id,
         transactionPrice = Money(195000.0, "CAD"),
         transactionDate = DateUtils.addDays(Date(), -10),
         finalSellerAgentCommissionMoney = Money(50000.0, "CAD"),

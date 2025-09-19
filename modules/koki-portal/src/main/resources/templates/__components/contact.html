@@ -72,4 +72,11 @@
     </td>
 </tr>
 
+<div th:fragment="contact-card(contact)">
+    <div>
+        <b th:text="${contact.name}">NAME</b>
+    </div>
+    <div th:if="${contact.email}" th:text="${contact.email}">EMAIL</div>
+    <div th:if="${contact.mobile}" th:text="${contact.mobileFormatted}">MOBILE</div>
+</div>
 </body>

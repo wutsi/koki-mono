@@ -5,7 +5,6 @@ import com.wutsi.koki.portal.listing.model.ListingModel
 import com.wutsi.koki.portal.listing.service.ListingService
 import com.wutsi.koki.portal.module.page.AbstractModulePageController
 import com.wutsi.koki.portal.refdata.model.LocationModel
-import io.lettuce.core.KillArgs.Builder.id
 import org.springframework.beans.factory.annotation.Autowired
 import java.text.SimpleDateFormat
 
@@ -69,11 +68,8 @@ abstract class AbstractListingController : AbstractModulePageController() {
             leaseTerm = listing.leaseTerm,
             noticePeriod = listing.noticePeriod,
 
-            sellerContactId = listing.seller?.id,
+            sellerContactId = listing.sellerContact?.id,
 
-            buyerName = listing.buyerName,
-            buyerPhone = listing.buyerPhone,
-            buyerEmail = listing.buyerEmail,
             transactionDate = listing.transactionDate?.let { date -> SimpleDateFormat("yyyy-MM-dd").format(date) },
             transactionPrice = (listing.transactionPrice ?: listing.price)?.amount?.toLong(),
         )

@@ -49,15 +49,13 @@ data class ListingModel(
     var advanceRent: Int? = null,
     var advanceRentMoney: MoneyModel? = null,
     var noticePeriod: Int? = null,
-    val seller: ContactModel? = null,
+    val sellerContact: ContactModel? = null,
     val sellerAgentCommission: Double? = null,
     val buyerAgentCommission: Double? = null,
     val sellerAgentCommissionMoney: MoneyModel? = null,
     val buyerAgentCommissionMoney: MoneyModel? = null,
-    val buyerName: String? = null,
-    val buyerEmail: String? = null,
-    val buyerPhone: String? = null,
     val buyerAgentUser: UserModel? = null,
+    val buyerContact: ContactModel? = null,
     var transactionDate: Date? = null,
     var transactionDateText: String? = null,
     var transactionPrice: MoneyModel? = null,
@@ -112,17 +110,6 @@ data class ListingModel(
     val statusSold: Boolean
         get() = status == ListingStatus.SOLD ||
             status == ListingStatus.RENTED
-
-    fun isSeller(user: UserModel?): Boolean {
-        return user != null &&
-            user.id == sellerAgentUser?.id
-    }
-
-    fun isBuyer(user: UserModel?): Boolean {
-        return user != null &&
-            statusSold &&
-            user.id == buyerAgentUser?.id
-    }
 
     fun computeAgentCommission(user: UserModel?): MoneyModel? {
         return if (user == null) {

@@ -23,19 +23,14 @@ class ChangeListingStatusController : AbstractEditListingController() {
         model.addAttribute("listing", listing)
         model.addAttribute("form", ListingForm(id = id))
 
-        val statuses = mutableListOf(
-            ListingStatus.RENTED,
-            ListingStatus.SOLD,
-            ListingStatus.EXPIRED,
-            ListingStatus.WITHDRAWN,
-            ListingStatus.CANCELLED,
+        model.addAttribute(
+            "statuses",
+            mutableListOf(
+                ListingStatus.EXPIRED,
+                ListingStatus.WITHDRAWN,
+                ListingStatus.CANCELLED,
+            ),
         )
-        if (listing.listingType == ListingType.RENTAL) {
-            statuses.remove(ListingStatus.SOLD)
-        } else if (listing.listingType == ListingType.SALE) {
-            statuses.remove(ListingStatus.RENTED)
-        }
-        model.addAttribute("statuses", statuses)
 
         model.addAttribute(
             "page",

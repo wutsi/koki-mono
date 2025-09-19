@@ -574,14 +574,14 @@ class ListingService(
     @Transactional
     fun close(id: Long, request: CloseListingRequest, tenantId: Long): ListingEntity {
         val listing = get(id, tenantId)
-        if (listing.status != ListingStatus.ACTIVE) {
-            throwInvalidStatus("Cannot close a listing in status: ${listing.status}")
-        }
-
         when (request.status) {
-            ListingStatus.WITHDRAWN, ListingStatus.EXPIRED, ListingStatus.CANCELLED -> {
+            ListingStatus.WITHDRAWN,
+            ListingStatus.EXPIRED,
+            ListingStatus.CANCELLED -> {
+                if (listing.status != ListingStatus.ACTIVE) {
+                    throwInvalidStatus("Cannot close a listing in status: ${listing.status}")
+                }
             }
-
             else -> throwInvalidStatus("Invalid status")
         }
 

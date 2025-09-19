@@ -61,9 +61,6 @@ CREATE TABLE T_LISTING(
 
   closed_offer_fk           BIGINT,
   buyer_contact_fk          BIGINT,
-  buyer_name                VARCHAR(50),
-  buyer_email               VARCHAR(255),
-  buyer_phone               VARCHAR(30),
   transaction_date          DATE,
   transaction_price         BIGINT,
   final_seller_agent_commission_amount   BIGINT,

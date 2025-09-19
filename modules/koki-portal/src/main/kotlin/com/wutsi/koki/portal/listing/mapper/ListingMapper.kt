@@ -18,7 +18,6 @@ import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.GeoLocation
 import com.wutsi.koki.refdata.dto.Money
-import io.lettuce.core.KillArgs.Builder.id
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
@@ -73,7 +72,11 @@ class ListingMapper(
             visitFees = entity.visitFees?.let { money -> moneyMapper.toMoneyModel(money) },
             sellerAgentCommission = entity.sellerAgentCommission,
             buyerAgentCommission = entity.buyerAgentCommission,
-            sellerAgentCommissionMoney = entity.sellerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
+            sellerAgentCommissionMoney = entity.sellerAgentCommissionMoney?.let { money ->
+                moneyMapper.toMoneyModel(
+                    money
+                )
+            },
             buyerAgentCommissionMoney = entity.buyerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
 
             securityDeposit = entity.securityDeposit?.let { money -> moneyMapper.toMoneyModel(money) },
@@ -82,20 +85,26 @@ class ListingMapper(
             leaseTerm = entity.leaseTerm,
             noticePeriod = entity.noticePeriod,
 
-            seller = entity.sellerContactId?.let { id -> contacts[id] },
+            sellerContact = entity.sellerContactId?.let { id -> contacts[id] },
 
             agentRemarks = entity.agentRemarks,
             publicRemarks = entity.publicRemarks,
 
-            buyerName = entity.buyerName?.ifEmpty { null },
-            buyerPhone = entity.buyerPhone?.ifEmpty { null },
-            buyerEmail = entity.buyerEmail?.ifEmpty { null },
             buyerAgentUser = entity.buyerAgentUserId?.let { id -> users[id] },
+            buyerContact = entity.buyerContactId?.let { id -> contacts[id] },
             transactionDate = entity.transactionDate,
             transactionDateText = entity.transactionDate?.let { date -> df.format(date) },
             transactionPrice = toPrice(entity.transactionPrice, entity.listingType),
-            finalSellerAgentCommissionMoney = entity.finalSellerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
-            finalBuyerAgentCommissionMoney = entity.finalBuyerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
+            finalSellerAgentCommissionMoney = entity.finalSellerAgentCommissionMoney?.let { money ->
+                moneyMapper.toMoneyModel(
+                    money
+                )
+            },
+            finalBuyerAgentCommissionMoney = entity.finalBuyerAgentCommissionMoney?.let { money ->
+                moneyMapper.toMoneyModel(
+                    money
+                )
+            },
 
             description = if (lang == "fr") {
                 entity.descriptionFr ?: entity.description
@@ -143,14 +152,26 @@ class ListingMapper(
             buyerAgentUser = entity.buyerAgentUserId?.let { id -> users[id] },
             sellerAgentCommission = entity.sellerAgentCommission,
             buyerAgentCommission = entity.buyerAgentCommission,
-            sellerAgentCommissionMoney = entity.sellerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
+            sellerAgentCommissionMoney = entity.sellerAgentCommissionMoney?.let { money ->
+                moneyMapper.toMoneyModel(
+                    money
+                )
+            },
             buyerAgentCommissionMoney = entity.buyerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
             sellerAgentUser = entity.sellerAgentUserId?.let { id -> users[id] },
             transactionDate = entity.transactionDate,
             transactionDateText = entity.transactionDate?.let { date -> df.format(date) },
             transactionPrice = toPrice(entity.transactionPrice, entity.listingType),
-            finalSellerAgentCommissionMoney = entity.finalSellerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
-            finalBuyerAgentCommissionMoney = entity.finalBuyerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
+            finalSellerAgentCommissionMoney = entity.finalSellerAgentCommissionMoney?.let { money ->
+                moneyMapper.toMoneyModel(
+                    money
+                )
+            },
+            finalBuyerAgentCommissionMoney = entity.finalBuyerAgentCommissionMoney?.let { money ->
+                moneyMapper.toMoneyModel(
+                    money
+                )
+            },
         )
     }
 

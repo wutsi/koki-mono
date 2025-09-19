@@ -11,57 +11,54 @@
 <div class="container-fluid padding-bottom-8x">
     <div class="row">
         <div class="col-12">
-            <div class="widget">
-                <div class="widget-body">
-                    <h1 th:text="${title}">TITLE</h1>
+            <div class="section">
+                <div class="section-body">
+                    <div class="section-item">
+                        <h1 th:text="${title}">TITLE</h1>
 
-                    <div class="alert alert-info flex">
-                        <div>
-                            <div class="alert-icon-container">
-                                <i class="fa-solid fa-circle-info fa-2x"></i>
+                        <div class="alert alert-info flex">
+                            <div>
+                                <div class="alert-icon-container">
+                                    <i class="fa-solid fa-circle-info fa-2x"></i>
+                                </div>
                             </div>
+                            <div class="padding-left" th:utext="${description}">DESCRIPTION</div>
                         </div>
-                        <div class="padding-left" th:utext="${description}">DESCRIPTION</div>
                     </div>
 
-                    <div th:utext="${description}">DESCRIPTION</div>
-
-                    <div class="margin" th:if="${error}">
+                    <div class="section-item" th:if="${error}">
                         <div class="alert alert-danger" th:utext="${error}">ERROR</div>
                     </div>
 
-                    <div class="padding-top-2x" id="tab-details-content">
+                    <div class="section-item" id="tab-details-content">
                         <div th:replace="~{__components/offer :: offer-details(${offer})}"></div>
                     </div>
 
-                    <form class="form padding-top-2x" method="post" th:action="@{/offers/status}" th:object="${form}">
+                    <form class="form" method="post" th:action="@{/offers/status}" th:object="${form}">
                         <input th:field="*{id}" type="hidden"/>
                         <input th:field="*{status}" type="hidden"/>
 
-                        <div class="padding-bottom">
-                            <label>
-                                <b>
-                                    <span th:text="#{page.offer.comment}">COMMENT</span>
-                                    <span class="required"
-                                          th:if="*{status.name() == 'CANCELLED'} OR *{status.name() == 'REJECTED'}">
-                                        *
-                                    </span>
-                                </b>
+                        <div class="section-item">
+                            <label class="title">
+                                <span th:text="#{page.offer.comment}">COMMENT</span>
+                                <span class="required"
+                                      th:if="*{status.name() == 'CANCELLED'} OR *{status.name() == 'REJECTED'}">*</span>
                             </label>
-                            <textarea class="form-control"
-                                      rows="3" th:field="*{comment}"
-                                      th:required="*{status.name() == 'CANCELLED'} OR *{status.name() == 'REJECTED'}"></textarea>
+                            <textarea class="form-control" rows="3"
+                                      th:field="*{comment}"
+                                      th:required="*{status.name() == 'CANCELLED'} OR *{status.name() == 'REJECTED'}">
+                            </textarea>
                         </div>
-
-                        <div class="alert alert-warning flex">
-                            <div class="form-check">
-                                <input class="form-check-input" id="chk-confirm" required type="checkbox"/>
-                                <label class="form-check-label" for="chk-confirm"
-                                       th:text="${confirmation}">CONFIRMATION</label>
+                        <div class="section-item">
+                            <div class="alert alert-warning flex">
+                                <div class="form-check">
+                                    <input class="form-check-input" id="chk-confirm" required type="checkbox"/>
+                                    <label class="form-check-label" for="chk-confirm"
+                                           th:text="${confirmation}">CONFIRMATION</label>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="flex">
+                        <div class="section-item flex">
                             <button class="btn btn-danger w-49-mobile" disabled id="btn-close"
                                     th:if="*{status.name() == 'CLOSED'}"
                                     type="submit">
