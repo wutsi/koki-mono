@@ -15,36 +15,41 @@
         </div>
     </div>
 
-    <div class="row d-none d-md-block" th:if="${offer.canAcceptOrRejectOrCounter(user)} OR ${offer.canWithdraw(user)}">
+    <div class="row d-none d-md-block"
+         th:if="${offer.canAcceptOrRejectOrCounter(user)} OR ${offer.canCloseOrCancel(user)}">
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
                     <div class="flex flex-space-between" th:if="${offer.canAcceptOrRejectOrCounter(user)}">
                         <div>
                             <a class="btn btn-success btn-sm" id="btn-accept"
-                               th:href="'/offers/accept?id=' + ${offer.id}">
+                               th:href="'/offers/status?status=ACCEPTED&id=' + ${offer.id}">
                                 <i class="fa-solid fa-check"></i>
                                 <span th:text="#{button.accept}">ACCEPT</span>
                             </a>
                             <a class="btn btn-light btn-sm" id="btn-counter"
                                th:href="'/offers/counter?id=' + ${offer.id}">
-                                <span th:text="#{button.make_counter_offer}">COUNTER</span>
+                                <span th:text="#{button.counter}">COUNTER</span>
                             </a>
                         </div>
                         <div>
-                            <a class="btn btn-danger btn-sm" id="btn-refuse"
-                               th:href="'/offers/refuse?id=' + ${offer.id}">
+                            <a class="btn btn-danger btn-sm" id="btn-reject"
+                               th:href="'/offers/status?status=REJECTED&id=' + ${offer.id}">
                                 <i class="fa-solid fa-xmark"></i>
-                                <span th:text="#{button.refuse}">REFUSE</span>
+                                <span th:text="#{button.reject}">REFUSE</span>
                             </a>
                         </div>
                     </div>
-                    <div class="flex flex-space-between" th:if="${offer.canWithdraw(user)}">
-                        <div></div>
+                    <div class="flex flex-space-between" th:if="${offer.canCloseOrCancel(user)}">
                         <div>
-                            <a class="btn btn-danger btn-sm" id="btn-withdraw"
-                               th:href="'/offers/withdraw?id=' + ${offer.id}">
-                                <span th:text="#{button.withdraw}">COUNTER</span>
+                            <a class="btn btn-success btn-sm" id="btn-close"
+                               th:href="'/offers/status?status=CLOSED&id=' + ${offer.id}">
+                                <i class="fa-solid fa-dollar-sign"></i>
+                                <span th:text="#{button.close_offer}">CLOSE</span>
+                            </a>
+                            <a class="btn btn-danger btn-sm" id="btn-cancel"
+                               th:href="'/offers/status?status=CANCELLED&id=' + ${offer.id}">
+                                <span th:text="#{button.cancel_offer}">CANCEL</span>
                             </a>
                         </div>
                     </div>
@@ -140,11 +145,11 @@
 </div>
 
 <div class="d-block d-md-none border sticky-bar-bottom"
-     th:if="${offer.canAcceptOrRejectOrCounter(user)} OR ${offer.canWithdraw(user)}">
+     th:if="${offer.canAcceptOrRejectOrCounter(user)} OR ${offer.canCloseOrCancel(user)}">
     <div class="flex flex-space-between" th:if="${offer.canAcceptOrRejectOrCounter(user)}">
         <div class="w-100 padding-small">
             <a class="btn btn-success btn-sm  w-100" id="btn-accept-sticky"
-               th:href="'/offers/accept?id=' + ${offer.id}">
+               th:href="'/offers/status?status=ACCEPTED&id=' + ${offer.id}">
                 <i class="fa-solid fa-check"></i>
                 <span th:text="#{button.accept}">ACCEPT</span>
             </a>
@@ -157,17 +162,24 @@
         </div>
         <div class="w-100 padding-small">
             <a class="btn btn-danger btn-sm w-100" id="btn-reject-sticky"
-               th:href="'/offers/refuse?id=' + ${offer.id}">
+               th:href="'/offers/status?status=REJECTED&id=' + ${offer.id}">
                 <i class="fa-solid fa-xmark"></i>
-                <span th:text="#{button.refuse}">REFUSE</span>
+                <span th:text="#{button.reject}">REFUSE</span>
             </a>
         </div>
     </div>
-    <div class="flex flex-space-between" th:if="${offer.canWithdraw(user)}">
+    <div class="flex flex-space-between" th:if="${offer.canCloseOrCancel(user)}">
         <div class="w-100 padding-small">
-            <a class="btn btn-danger btn-sm w-100" id="btn-withdraw-sticky"
-               th:href="'/offers/withdraw?id=' + ${offer.id}">
-                <span th:text="#{button.withdraw}">COUNTER</span>
+            <a class="btn btn-success btn-sm w-100" id="btn-close-sticky"
+               th:href="'/offers/status?status=CLOSED&id=' + ${offer.id}">
+                <i class="fa-solid fa-dollar-sign"></i>
+                <span th:text="#{button.close_offer}">CLOSE</span>
+            </a>
+        </div>
+        <div class="w-100 padding-small">
+            <a class="btn btn-sm btn-danger w-100" id="btn-cancel-sticky"
+               th:href="'/offers/status?status=CANCELLED&id=' + ${offer.id}">
+                <span th:text="#{button.cancel_offer}">CANCEL</span>
             </a>
         </div>
     </div>

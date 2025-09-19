@@ -1147,6 +1147,11 @@ abstract class AbstractPageControllerTest {
             assertEquals(value, driver.findElement(By.cssSelector(selector)).getDomAttribute(name))
         }
     }
+    protected fun assertElementsAttributeSame(selector1: String, selector2: String, name: String) {
+        val value1 = driver.findElement(By.cssSelector(selector1)).getDomAttribute(name)
+        val value2 = driver.findElement(By.cssSelector(selector2)).getDomAttribute(name)
+        assertEquals(value1, value2)
+    }
 
     protected fun assertElementHasAttribute(selector: String, name: String) {
         assertNotNull(driver.findElement(By.cssSelector(selector)).getDomAttribute(name))

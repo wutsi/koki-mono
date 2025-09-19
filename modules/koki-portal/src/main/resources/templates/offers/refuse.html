@@ -41,18 +41,17 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-space-between">
+                        <div class="flex">
+                            <button class="btn btn-danger w-49-mobile" disabled id="btn-refuse"
+                                    th:text="#{button.reject}"
+                                    type="submit">
+                                REFUSE
+                            </button>
                             <a class="btn btn-light margin-left w-49-mobile"
                                th:href="'/offers/' + ${offer.id}"
                                th:text="#{button.cancel}">
                                 CANCEL
                             </a>
-
-                            <button class="btn btn-danger w-49-mobile" disabled id="btn-refuse"
-                                    th:text="#{button.refuse}"
-                                    type="submit">
-                                REFUSE
-                            </button>
                         </div>
                     </form>
                 </div>

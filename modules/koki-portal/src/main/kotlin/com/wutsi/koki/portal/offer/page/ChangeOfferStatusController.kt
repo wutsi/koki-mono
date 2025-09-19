@@ -16,7 +16,7 @@ import org.springframework.web.client.HttpClientErrorException
 @Controller
 @RequestMapping("/offers/status")
 @RequiresPermission(["offer:manage", "offer:full_access"])
-class StatusOfferController : AbstractEditOfferController() {
+class ChangeOfferStatusController : AbstractEditOfferController() {
     @GetMapping
     fun status(
         @RequestParam id: Long,

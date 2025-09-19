@@ -13,7 +13,18 @@
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
-                    <h1 th:text="#{page.offer.cancel.title}">TITLE</h1>
+                    <h1 th:text="${title}">TITLE</h1>
+
+                    <div class="alert alert-info flex">
+                        <div>
+                            <div class="alert-icon-container">
+                                <i class="fa-solid fa-circle-info fa-2x"></i>
+                            </div>
+                        </div>
+                        <div class="padding-left" th:utext="${description}">DESCRIPTION</div>
+                    </div>
+
+                    <div th:utext="${description}">DESCRIPTION</div>
 
                     <div class="margin" th:if="${error}">
                         <div class="alert alert-danger" th:utext="${error}">ERROR</div>
@@ -23,29 +34,55 @@
                         <div th:replace="~{__components/offer :: offer-details(${offer})}"></div>
                     </div>
 
-                    <form class="form padding-top-2x" method="post" th:action="@{/offers/cancel}" th:object="${form}">
+                    <form class="form padding-top-2x" method="post" th:action="@{/offers/status}" th:object="${form}">
                         <input th:field="*{id}" type="hidden"/>
+                        <input th:field="*{status}" type="hidden"/>
 
                         <div class="padding-bottom">
-                            <textarea class="form-control" required rows="3"
-                                      th:field="*{comment}"
-                                      th:placeholder="#{page.offer.reason-cancellation}"></textarea>
+                            <label>
+                                <b>
+                                    <span th:text="#{page.offer.comment}">COMMENT</span>
+                                    <span class="required"
+                                          th:if="*{status.name() == 'CANCELLED'} OR *{status.name() == 'REJECTED'}">
+                                        *
+                                    </span>
+                                </b>
+                            </label>
+                            <textarea class="form-control"
+                                      rows="3" th:field="*{comment}"
+                                      th:required="*{status.name() == 'CANCELLED'} OR *{status.name() == 'REJECTED'}"></textarea>
                         </div>
 
                         <div class="alert alert-warning flex">
                             <div class="form-check">
                                 <input class="form-check-input" id="chk-confirm" required type="checkbox"/>
                                 <label class="form-check-label" for="chk-confirm"
-                                       th:text="#{page.offer.cancel.confirmation}">CONFIRMATION</label>
+                                       th:text="${confirmation}">CONFIRMATION</label>
                             </div>
                         </div>
 
                         <div class="flex">
-                            <button class="btn btn-danger w-49-mobile" disabled id="btn-cancel"
-                                    th:text="#{button.cancel_offer}"
+                            <button class="btn btn-danger w-49-mobile" disabled id="btn-close"
+                                    th:if="*{status.name() == 'CLOSED'}"
                                     type="submit">
-                                CANCEL
+                                <span th:text="#{button.close_offer}">CLOSE</span>
                             </button>
+                            <button class="btn btn-danger w-49-mobile" disabled id="btn-cancel"
+                                    th:if="*{status.name() == 'CANCELLED'}"
+                                    type="submit">
+                                <span th:text="#{button.cancel_offer}">CLOSE</span>
+                            </button>
+                            <button class="btn btn-danger w-49-mobile" disabled id="btn-reject"
+                                    th:if="*{status.name() == 'REJECTED'}"
+                                    type="submit">
+                                <span th:text="#{button.reject}">CLOSE</span>
+                            </button>
+                            <button class="btn btn-success w-49-mobile" disabled id="btn-accept"
+                                    th:if="*{status.name() == 'ACCEPTED'}"
+                                    type="submit">
+                                <span th:text="#{button.accept}">ACCEPT</span>
+                            </button>
+
                             <a class="btn btn-light margin-left w-49-mobile"
                                th:href="'/offers/' + ${offer.id}"
                                th:text="#{button.cancel}">
@@ -68,8 +105,8 @@
 
         const elt = document.getElementById("chk-confirm");
         const comment = document.getElementById("comment");
-        const btn = document.getElementById('btn-cancel');
-        btn.disabled = !elt.checked && (comment.value.trim().length > 0);
+        const btn = document.querySelector('button[type=submit]');
+        btn.disabled = !elt.checked && (!comment.hasAttribute("required") || comment.value.trim().length > 0);
     }
 </script>
 

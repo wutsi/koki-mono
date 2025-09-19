@@ -16,9 +16,7 @@
                     <h1 class="margin-none success">
                         <i class="fa-solid fa-circle-check"></i>
                     </h1>
-                    <div class="margin-top text-larger" th:utext="#{page.offer.cancel.done}">
-                        DESCRIPTION
-                    </div>
+                    <div class="margin-top text-larger" th:utext="${description}">DESCRIPTION</div>
                     <div class="margin-top-2x">
                         <a class="btn btn-primary w-100" id="btn-continue"
                            th:href="'/offers/' + ${offer.id}"
@@ -31,6 +29,13 @@
         </div>
     </div>
 </div>
+
+<script id="script-confetti" src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"
+        th:if="${offer.statusClosed}"></script>
+<script th:if="${offer.statusClosed}">
+    const jsConfetti = new JSConfetti();
+    jsConfetti.addConfetti();
+</script>
 
 </body>
 </html>
