@@ -159,6 +159,7 @@ class OfferService(
             UpdateOfferStatusRequest(
                 status = form.status!!,
                 comment = form.comment,
+                closedAt = form.closedAt?.let { date -> SimpleDateFormat("yyyy-MM-dd").parse(date) },
             ),
         )
     }

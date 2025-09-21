@@ -77,6 +77,20 @@ class OfferControllerTest : AbstractPageControllerTest() {
         assertElementsAttributeSame("#btn-close", "#btn-close-sticky", "href")
     }
 
+    @Test
+    fun closed() {
+        setUpOffer(OfferStatus.CLOSED, sellerAgentUserId = USER_ID)
+
+        navigateTo("/offers/${offer.id}")
+        assertCurrentPageIs(PageName.OFFER)
+
+        assertElementNotPresent("#btn-counter")
+        assertElementNotPresent("#btn-accept")
+        assertElementNotPresent("#btn-reject")
+        assertElementNotPresent("#btn-cancel")
+        assertElementNotPresent("#btn-close")
+    }
+
     private fun setUpOffer(
         status: OfferStatus,
         assigneeUserId: Long? = null,

@@ -1,14 +1,5 @@
 <div class="tab-offers">
-    <div th:if="!${readOnly}">
-        <a class="btn btn-light btn-sm margin-bottom" href="/offers/create" id="btn-create-offer"
-           th:if="${user?.canManage('offer')}"
-        >
-            <i class="fa-solid fa-plus"></i>
-            <span>Offer</span>
-        </a>
-    </div>
-
-    <table class="table table-striped">
+    <table class="table table-striped" th:if="${offers}">
         <thead>
         <tr class="d-none d-md-table-row">
             <th th:text="#{page.offer.status}" width="1%">Statut</th>
@@ -17,8 +8,8 @@
             <th class="text-right" colspan="2" th:text="#{page.offer.amount}">Amount</th>
         </tr>
         </thead>
-        <tbody id="offer-list" th:data-owner-id="${ownerId}" th:data-owner-type="${ownerType}">
-        <tr class="offer entity" th:each="offer : ${offers}" th:id="'offer-' + ${offer.id}" th:if="${offers}">
+        <tbody id="offer-list">
+        <tr class="offer entity" th:each="offer : ${offers}" th:id="'offer-' + ${offer.id}">
             <td th:replace="~{__components/offer :: offer-row(${offer}, false)}"></td>
         </tr>
         <tr id="offer-load-more" th:if="${moreUrl}">

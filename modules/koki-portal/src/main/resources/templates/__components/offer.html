@@ -7,10 +7,10 @@
           th:text="#{'offer-status.' + ${status}}">SUBMITTED</span>
 
     <span class="badge text-bg-danger"
-          th:if="${status.name() == 'REJECTED'} OR ${status.name() == 'EXPIRED'} OR ${status.name() == 'WITHDRAWN'}"
+          th:if="${status.name() == 'REJECTED'} OR ${status.name() == 'EXPIRED'} OR ${status.name() == 'WITHDRAWN'}  OR ${status.name() == 'CANCELLED'}"
           th:text="#{'offer-status.' + ${status}}">REJECTED</span>
 
-    <span class="badge text-bg-success" th:if="${status.name() == 'ACCEPTED'}"
+    <span class="badge text-bg-success" th:if="${status.name() == 'ACCEPTED'} OR ${status.name() == 'CLOSED'}"
           th:text="#{'offer-status.' + ${status}}">ACCEPTED</span>
 </div>
 
@@ -134,19 +134,37 @@
         <td>
             <b th:text="#{page.offer.submitted-at}">SUBMITTED</b>
         </td>
-        <td th:text="${offer.version.expiresAtText}">YYYY-MM-DD</td>
+        <td th:text="${offer.version.createdAtText}">YYYY-MM-DD</td>
     </tr>
-    <tr th:if="${offer.version.expiresAt}">
+    <tr th:if="${offer.version.expiresAt} AND ${offer.statusSubmitted}">
         <td>
             <b th:text="#{page.offer.expires-at}">EXPIRES</b>
         </td>
         <td th:text="${offer.version.expiresAtText}">YYYY-MM-DD</td>
     </tr>
-    <tr th:if="${offer.version.closingAt}">
+    <tr th:if="${offer.acceptedAt}">
         <td>
-            <b th:text="#{page.offer.closing-at}">EXPIRES</b>
+            <b th:text="#{page.offer.accepted-at}">CLOSED</b>
+        </td>
+        <td th:text="${offer.acceptedAtText}">YYYY-MM-DD</td>
+    </tr>
+    <tr th:if="${offer.rejectedAt}">
+        <td>
+            <b th:text="#{page.offer.rejected-at}">CLOSED</b>
+        </td>
+        <td th:text="${offer.rejectedAtText}">YYYY-MM-DD</td>
+    </tr>
+    <tr th:if="${offer.version.closingAt} AND !${offer.statusClosed}">
+        <td>
+            <b th:text="#{page.offer.closing-at}">CLOSING</b>
         </td>
         <td th:text="${offer.version.closingAtText}">YYYY-MM-DD</td>
+    </tr>
+    <tr th:if="${offer.closedAt} AND ${offer.statusClosed}">
+        <td>
+            <b th:text="#{page.offer.closed-at}">CLOSED</b>
+        </td>
+        <td th:text="${offer.closedAtText}">YYYY-MM-DD</td>
     </tr>
     <tr th:if="${offer.version.contingencies}">
         <td>

@@ -94,7 +94,7 @@ class OfferStatusChangedEventHandler(
             listing.closedOfferId = offer.id
             listing.buyerAgentUserId = offer.buyerAgentUserId
             listing.buyerContactId = offer.buyerContactId
-            listing.transactionDate = Date(event.timestamp)
+            listing.transactionDate = offer.closedAt ?: Date(event.timestamp)
             listing.transactionPrice = finalPrice
             listing.finalSellerAgentCommissionAmount = computeCommission(finalPrice, listing.sellerAgentCommission)
             listing.finalBuyerAgentCommissionAmount = if (offer.buyerAgentUserId != listing.sellerAgentUserId) {

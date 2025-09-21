@@ -236,6 +236,13 @@ class OfferService(
         val now = Date()
         offer.status = request.status
         offer.modifiedAt = now
+        if (request.status == OfferStatus.CLOSED) {
+            offer.closedAt = request.closedAt
+        } else if (request.status == OfferStatus.ACCEPTED) {
+            offer.acceptedAt = now
+        } else if (request.status == OfferStatus.REJECTED) {
+            offer.rejectedAt = now
+        }
         offerDao.save(offer)
 
         // Update version

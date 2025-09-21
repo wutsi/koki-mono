@@ -19,6 +19,7 @@ import com.wutsi.koki.portal.common.page.PageName
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import java.text.SimpleDateFormat
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -42,6 +43,7 @@ class ChangeOfferStatusControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun close() {
+        val fmt = SimpleDateFormat("yyyy-MM-dd")
         setUpOffer(OfferStatus.ACCEPTED)
 
         navigateTo("/offers/${offer.id}")
@@ -50,6 +52,7 @@ class ChangeOfferStatusControllerTest : AbstractPageControllerTest() {
 
         assertElementNotPresent(".alert-danger")
         scrollToBottom()
+        input("#closedAt", "2025\t11-10")
         input("#comment", "Yahoo!")
         click("#chk-confirm")
 
@@ -63,6 +66,7 @@ class ChangeOfferStatusControllerTest : AbstractPageControllerTest() {
         )
         assertEquals(OfferStatus.CLOSED, req.firstValue.status)
         assertEquals("Yahoo!", req.firstValue.comment)
+        assertEquals("2025-11-10", fmt.format(req.firstValue.closedAt))
 
         // Done
         assertCurrentPageIs(PageName.OFFER_STATUS_DONE)
@@ -95,6 +99,7 @@ class ChangeOfferStatusControllerTest : AbstractPageControllerTest() {
         )
         assertEquals(OfferStatus.CANCELLED, req.firstValue.status)
         assertEquals("Yahoo!", req.firstValue.comment)
+        assertEquals(null, req.firstValue.closedAt)
 
         // Done
         assertCurrentPageIs(PageName.OFFER_STATUS_DONE)
@@ -127,6 +132,7 @@ class ChangeOfferStatusControllerTest : AbstractPageControllerTest() {
         )
         assertEquals(OfferStatus.ACCEPTED, req.firstValue.status)
         assertEquals("Yahoo!", req.firstValue.comment)
+        assertEquals(null, req.firstValue.closedAt)
 
         // Done
         assertCurrentPageIs(PageName.OFFER_STATUS_DONE)
@@ -159,6 +165,7 @@ class ChangeOfferStatusControllerTest : AbstractPageControllerTest() {
         )
         assertEquals(OfferStatus.REJECTED, req.firstValue.status)
         assertEquals("Yahoo!", req.firstValue.comment)
+        assertEquals(null, req.firstValue.closedAt)
 
         // Done
         assertCurrentPageIs(PageName.OFFER_STATUS_DONE)
@@ -178,11 +185,12 @@ class ChangeOfferStatusControllerTest : AbstractPageControllerTest() {
                 eq(Any::class.java),
             )
 
-        navigateTo("/offers/status?status=CLOSED&id=${offer.id}")
+        navigateTo("/offers/status?status=REJECTED&id=${offer.id}")
         assertElementNotPresent(".alert-danger")
         scrollToBottom()
         click("#chk-confirm")
-        click("#btn-close")
+        input("#comment", "Yo")
+        click("#btn-reject")
 
         // Done
         assertCurrentPageIs(PageName.OFFER_STATUS)

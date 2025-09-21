@@ -26,6 +26,7 @@ class OfferMapper(
         contacts: Map<Long, ContactModel>,
         users: Map<Long, UserModel>,
     ): OfferModel {
+        val df = createDateFormat()
         return OfferModel(
             id = entity.id,
             version = toOfferVersionModel(entity.version, listing),
@@ -34,6 +35,12 @@ class OfferMapper(
             listing = listing,
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
+            closedAt = entity.closedAt,
+            closedAtText = entity.closedAt?.let { date -> df.format(date) },
+            acceptedAt = entity.acceptedAt,
+            acceptedAtText = entity.acceptedAt?.let { date -> df.format(date) },
+            rejectedAt = entity.rejectedAt,
+            rejectedAtText = entity.rejectedAt?.let { date -> df.format(date) },
             sellerAgentUser = users[entity.sellerAgentUserId] ?: UserModel(id = entity.sellerAgentUserId),
             buyerAgentUser = users[entity.buyerAgentUserId] ?: UserModel(id = entity.buyerAgentUserId),
             buyerContact = contacts[entity.buyerContactId] ?: ContactModel(id = entity.buyerContactId),
@@ -80,7 +87,7 @@ class OfferMapper(
         entity: OfferVersion,
         listing: ListingModel?,
     ): OfferVersionModel {
-        val df = createMediumDateFormat()
+        val df = createDateFormat()
         val priceDiff = listing?.price?.let { price ->
             Money(
                 amount = entity.price.amount - price.amount,
@@ -109,7 +116,7 @@ class OfferMapper(
         entity: OfferVersionSummary,
         listing: ListingModel?,
     ): OfferVersionModel {
-        val df = createMediumDateFormat()
+        val df = createDateFormat()
         val priceDiff = listing?.price?.let { price ->
             Money(
                 amount = entity.price.amount - price.amount,

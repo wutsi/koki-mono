@@ -132,13 +132,13 @@
                                 <input maxlength="30" th:field="*{postalCode}"/>
                             </div>
                             <div class="section-item flex flex-space-between">
+                                <button class="btn btn-primary w-49-mobile" th:text="#{button.submit}" type="submit">
+                                    Submit
+                                </button>
                                 <a class="btn-cancel btn btn-light w-49-mobile" href="/contacts"
                                    th:text="#{button.cancel}">
                                     Cancel
                                 </a>
-                                <button class="btn btn-primary w-49-mobile" th:text="#{button.submit}" type="submit">
-                                    Submit
-                                </button>
                             </div>
                         </div>
                     </div>
