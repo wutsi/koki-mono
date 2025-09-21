@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('listing')}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/listing :: listing-breadcrumb(null)}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div>
+                        <a class="btn btn-primary btn-sm" href="/listings/create" id="btn-create"
+                           th:if="${user?.canManage('listing')} OR ${user.hasFullAccess('listing')}">
+                            <i class="fa-solid fa-plus"></i>
+                            <span th:text="#{button.listing}">CREATE</span>
+                        </a>
+                    </div>
+
+                    <hr/>
+
+                    <div class="btn-group margin-bottom" role="group">
+                        <a class="btn btn-sm btn-secondary" href="/listings" id="btn-my-listings"
+                           th:text="#{button.my_listings}">
+                            BUTTON
+                        </a>
+                        <button class="btn btn-sm btn-light"
+                                data-component-id="modal-button"
+                                data-modal-body-large="true"
+                                id="btn-search"
+                                th:data-modal-body-url="${filterUrl}"
+                        >
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <span th:text="#{button.search}">SEARCH</span>
+                        </button>
+                    </div>
+
+                    <div class="margin-top">
+                        <form action="/listings" id="filter-form">
+                            <select class="btn btn-sm btn-light" name="filter" onchange="this.form.submit()">
+                                <option th:selected="${filter == 0}" th:text="#{page.listing.list.filter.0}" value="0">
+                                    A Vendre / A Louer
+                                </option>
+                                <option th:selected="${filter == 1}" th:text="#{page.listing.list.filter.1}" value="1">
+                                    Vendu
+                                </option>
+                                <option th:selected="${filter == 2}" th:text="#{page.listing.list.filter.2}" value="2">
+                                    Ferme
+                                </option>
+                            </select>
+                        </form>
+                    </div>
+
+                    <div class="margin-top" th:if="${listings?.total > 0}">
+                        <div class="border-bottom">
+                            <span th:if="${listings.total==1}" th:text="#{page.listing.list.1_listing}">1</span>
+                            <span th:if="${listings.total>1}"
+                                  th:text="#{page.listing.list.n_listing(${listings.total})}">n</span>
+                        </div>
+                        <div
+                            th:replace="~{__components/listing :: listing-table(${listings.items}, ${filter == 1}, ${filter == 1})}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{__components/bootstrap :: modal}"></div>
+
+</body>
+</html>

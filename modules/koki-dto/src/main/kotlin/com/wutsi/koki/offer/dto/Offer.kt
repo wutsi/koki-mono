@@ -15,4 +15,7 @@ data class Offer(
     val totalVersions: Int = 0,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
+    val closedAt: Date? = null,
+    val acceptedAt: Date? = null,
+    val rejectedAt: Date? = null,
 )
