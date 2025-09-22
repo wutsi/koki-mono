@@ -50,11 +50,12 @@
             <th th:if="${showAgent}" th:text="#{page.listing.agent}">AGENT</th>
             <th th:if="${sold}" th:text="#{page.listing.transaction-date}">DATE</th>
             <th class="text-right" th:if="${sold}" th:text="#{page.listing.transaction-price}">PRICE</th>
-
             <th class="text-right" th:if="!${sold}" th:text="#{page.listing.price}">PRICE</th>
+            <th class="text-right" th:text="#{page.listing.commission}">DATE</th>
         </tr>
         <tr class="listing" th:each="listing : ${items}">
-            <div th:replace="~{__components/listing :: listing-row(${listing}, ${sold}, ${showAgent})}"></div>
+            <div
+                th:replace="~{__components/listing :: listing-row(${listing}, ${sold}, ${showAgent})}"></div>
         </tr>
         <tr id="listing-load-more" th:if="${moreUrl}">
             <td class="text-center" colspan="7">
@@ -101,26 +102,32 @@
             </div>
 
             <table border="0" class="d-block d-md-none text-small margin-top-small">
+                <tr th:if="${sold} AND ${listing.transactionDate}">
+                    <th th:text="#{page.listing.transaction-date}">CLOSED</th>
+                    <td class="padding-left-small" th:text="${listing.transactionDateText}">DATE</td>
+                </tr>
+                <tr th:if="${sold} AND ${listing.transactionPrice}">
+                    <th th:text="#{page.listing.transaction-price}">CLOSED</th>
+                    <td class="listing-price padding-left-small">
+                        <b th:text="${listing.transactionPrice.displayText}">$$$</b>
+                    </td>
+                </tr>
                 <tr th:if="!${sold} AND ${listing.price}">
                     <th th:text="#{page.listing.price}">CLOSED</th>
                     <td class="listing-price padding-left-small">
                         <b th:text="${listing.price.displayText}">$$$</b>
                     </td>
                 </tr>
-                <tr th:if="${sold} AND ${listing.transactionDate}">
-                    <th th:text="#{page.listing.transaction-date}">CLOSED</th>
-                    <td class="padding-left-small" th:text="${listing.transactionDateText}">DATE</td>
+                <tr>
+                    <th th:text="#{page.listing.commission}">COMMISSION</th>
+                    <td class="padding-left-small">
+                        <span class="listing-price" th:text="${listing.commission(user)?.displayText}">$$$</span>
+                    </td>
                 </tr>
                 <tr th:if="${showAgent} AND ${listing.sellerAgentUser}">
                     <th th:text="#{page.listing.agent}" valign="top">AGENT</th>
                     <td class="padding-left-small">
                         <div th:replace="~{__components/user :: user-small-card(${listing.sellerAgentUser})}"></div>
-                    </td>
-                </tr>
-                <tr th:if="${sold} AND ${listing.transactionPrice}">
-                    <th th:text="#{page.listing.transaction-price}">CLOSED</th>
-                    <td class="listing-price padding-left-small">
-                        <b th:text="${listing.transactionPrice.displayText}">$$$</b>
                     </td>
                 </tr>
             </table>
@@ -148,6 +155,9 @@
            th:if="${listing.price}">
             <b class="listing-price" th:text="${listing.price.displayText}">$$</b>
         </a>
+    </td>
+    <td class="text-right text-nowrap d-none d-md-table-cell">
+        <span class="listing-price" th:text="${listing.commission(user)?.displayText}">$$$</span>
     </td>
 </tr>
 

@@ -14,6 +14,7 @@ import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.AmenityModel
 import com.wutsi.koki.portal.refdata.model.GeoLocationModel
 import com.wutsi.koki.portal.user.model.UserModel
+import io.lettuce.core.KillArgs.Builder.user
 import java.util.Date
 
 data class ListingModel(
@@ -106,6 +107,22 @@ data class ListingModel(
             status == ListingStatus.EXPIRED ||
             status == ListingStatus.WITHDRAWN ||
             status == ListingStatus.CANCELLED
+
+    fun commission(user: UserModel?): MoneyModel? {
+        return if (statusSold) {
+            if (user?.id == sellerAgentUser?.id) {
+                finalSellerAgentCommissionMoney
+            } else {
+                finalBuyerAgentCommissionMoney
+            }
+        } else {
+            if (user?.id == sellerAgentUser?.id) {
+                sellerAgentCommissionMoney
+            } else {
+                buyerAgentCommissionMoney
+            }
+        }
+    }
 
     val statusSold: Boolean
         get() = status == ListingStatus.SOLD ||

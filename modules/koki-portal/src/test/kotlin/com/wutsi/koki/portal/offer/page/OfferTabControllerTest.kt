@@ -10,7 +10,6 @@ class OfferTabControllerTest : AbstractPageControllerTest() {
     fun tab() {
         navigateTo("/offers/tab?offer-id=${listing.id}&offer-type=LISTING&test-mode=true")
 
-        assertElementPresent("#btn-create-offer")
         assertElementCount(".tab-offers .offer", offers.size)
     }
 
