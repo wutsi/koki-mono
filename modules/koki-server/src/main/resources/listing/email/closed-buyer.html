@@ -1,0 +1,35 @@
+Bonjour {{recipient}},<br/><br/>
+
+Je suis vraiment ravi(e) que nous ayons pu clôturer la transaction
+du listing <a href="{{{listingUrl}}}">#{{listingNumber}}</a> situé au <b>{{address}}</b>.
+Ce fut un plaisir de travailler avec vous.<br/><br/>
+
+Je voulais juste confirmer que votre commission pour cette transaction était de <b>{{commission}}</b>.
+Votre collaboration a rendu l'ensemble du processus incroyablement fluide.<br/><br/>
+
+J'espère avoir l'occasion de travailler à nouveau avec vous dans le futur.<br/><br/>
+
+Cordialement,<br/><br/>
+
+<hr/>
+<table border="0" cellpadding="10" cellspacing="0">
+    <tr>
+        {{#senderPhotoUrl}}
+        <td>
+            <img height="64" src="{{{senderPhotoUrl}}}" style="border-radius: 1em" width="64"/>
+        </td>
+        {{/senderPhotoUrl}}
+
+        <td>
+            <b>{{sender}}</b><br/>
+
+            {{#senderEmployer}}
+            <div>{{senderEmployer}}</div>
+            {{/senderEmployer}}
+
+            {{#senderMobile}}
+            <div>{{senderMobile}}</div>
+            {{/senderMobile}}
+        </td>
+    </tr>
+</table>
