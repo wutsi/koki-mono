@@ -99,7 +99,8 @@
                         <li class="nav-item" role="presentation">
                             <button aria-controls="pills-content" aria-selected="true" class="nav-link"
                                     data-bs-target="#pills-history" data-bs-toggle="pill" id="pills-history-tab"
-                                    role="tab" type="button">
+                                    role="tab" th:if="${offer.totalVersions > 1}"
+                                    type="button">
                                 <span th:text="#{page.offer.show.history}">History</span>
                                 <span class="badge rounded-pill bg-secondary" th:text="${offer.totalVersions}">0</span>
                             </button>
@@ -126,7 +127,8 @@
                         </div>
                         <div aria-labelledby="pills-history-tab" class="tab-pane fade show" id="pills-history"
                              role="tabpanel"
-                             th:data-url="'/offer-versions?offer-id=' + ${offer.id}">
+                             th:data-url="'/offer-versions?offer-id=' + ${offer.id}"
+                             th:if="${offer.totalVersions > 1}">
                         </div>
 
                         <div class="tab-pane fade" role="tabpanel"

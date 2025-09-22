@@ -38,6 +38,14 @@
                         <input th:field="*{id}" type="hidden"/>
                         <input th:field="*{status}" type="hidden"/>
 
+                        <div class="section-item" th:if="*{status.name() == 'CLOSED'}">
+                            <label class="title">
+                                <span th:text="#{page.offer.closed-at}">CLOSED</span>
+                                <span class="required">*</span>
+                            </label>
+                            <div class="text-small" th:text="#{page.offer.closed-at.help}"></div>
+                            <input th:field="*{closedAt}" type="date"/>
+                        </div>
                         <div class="section-item">
                             <label class="title">
                                 <span th:text="#{page.offer.comment}">COMMENT</span>
@@ -59,7 +67,7 @@
                             </div>
                         </div>
                         <div class="section-item flex">
-                            <button class="btn btn-danger w-49-mobile" disabled id="btn-close"
+                            <button class="btn btn-success w-49-mobile" disabled id="btn-close"
                                     th:if="*{status.name() == 'CLOSED'}"
                                     type="submit">
                                 <span th:text="#{button.close_offer}">CLOSE</span>
@@ -69,7 +77,7 @@
                                     type="submit">
                                 <span th:text="#{button.cancel_offer}">CLOSE</span>
                             </button>
-                            <button class="btn btn-danger w-49-mobile" disabled id="btn-reject"
+                            <button class="btn btn-success w-49-mobile" disabled id="btn-reject"
                                     th:if="*{status.name() == 'REJECTED'}"
                                     type="submit">
                                 <span th:text="#{button.reject}">CLOSE</span>

@@ -73,6 +73,9 @@ object OfferFixtures {
         totalVersions = 3,
         createdAt = Date(),
         modifiedAt = Date(),
+        acceptedAt = DateUtils.addMonths(Date(), 3),
+        rejectedAt = DateUtils.addMonths(Date(), 3),
+        closedAt = DateUtils.addMonths(Date(), 7),
         version = OfferVersion(
             id = 33L,
             submittingParty = OfferParty.BUYER,

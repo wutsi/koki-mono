@@ -13,5 +13,10 @@ interface FileRepository : CrudRepository<FileEntity, Long> {
     @Query("SELECT F.id, L FROM FileEntity F JOIN F.labels L WHERE F.id IN :ids")
     fun findLabelsByIds(@Param("ids") ids: List<Long>): List<Array<Any>>
 
-    fun countByTypeAndOwnerIdAndOwnerType(type: FileType, ownerId: Long, ownerType: ObjectType): Long?
+    fun countByTypeAndOwnerIdAndOwnerTypeAndDeleted(
+        type: FileType,
+        ownerId: Long,
+        ownerType: ObjectType,
+        deleted: Boolean,
+    ): Long?
 }

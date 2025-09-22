@@ -28,9 +28,9 @@ class ListingFileUploadedEventHandler(
         }
 
         val file = fileService.get(event.fileId, event.tenantId)
-        if (file.type == FileType.IMAGE) {
+        if (event.fileType == FileType.IMAGE) {
             reviewImage(file)
-        } else if (file.type == FileType.FILE) {
+        } else if (event.fileType == FileType.FILE) {
             reviewFile(file)
         }
 
@@ -69,25 +69,21 @@ class ListingFileUploadedEventHandler(
     }
 
     private fun updateListing(listingId: Long, file: FileEntity) {
-        if (file.status != FileStatus.APPROVED) {
-            return
-        }
-
         val listing = listingService.get(listingId, file.tenantId)
         if (file.type == FileType.IMAGE) {
-            if (listing.heroImageId == null) {
+            if (listing.heroImageId == null && file.status == FileStatus.APPROVED) {
                 listing.heroImageId = file.id
             }
             listing.totalImages = fileService.countByTypeAndOwnerIdAndOwnerType(
                 file.type,
                 listingId,
-                ObjectType.LISTING
+                ObjectType.LISTING,
             )?.toInt()
         } else if (file.type == FileType.FILE) {
             listing.totalFiles = fileService.countByTypeAndOwnerIdAndOwnerType(
                 file.type,
                 listingId,
-                ObjectType.LISTING
+                ObjectType.LISTING,
             )?.toInt()
         }
         listingService.save(listing, file.createdById)

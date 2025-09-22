@@ -47,4 +47,7 @@ data class OfferEntity(
     var totalVersions: Int = 0,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
+    var acceptedAt: Date? = null,
+    var rejectedAt: Date? = null,
+    var closedAt: Date? = null,
 )

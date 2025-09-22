@@ -23,11 +23,11 @@
           th:if="${status.name() == 'DRAFT'}"
           th:text="#{'listing-status.' + ${status}}">A LOUER</span>
 
-    <span class="badge text-bg-warning" th:if="${status.name() == 'PUBLISHING'}"
+    <span class="badge text-bg-warning" th:if="${status.name() == 'PUBLISHING'} OR ${status.name() == 'PENDING'}"
           th:text="#{'listing-status.' + ${status}}">PUBLISHING</span>
 
     <span class="badge text-bg-primary"
-          th:if="${status.name() == 'ACTIVE'} OR ${status.name() == 'ACTIVE_WITH_CONTINGENCIES'} OR ${status.name() == 'PENDING'}"
+          th:if="${status.name() == 'ACTIVE'} OR ${status.name() == 'ACTIVE_WITH_CONTINGENCIES'}"
           th:text="#{'listing-status.' + ${status}}">A LOUER</span>
 
     <span class="badge text-bg-success" th:if="${status.name() == 'RENTED'} OR ${status.name() == 'SOLD'}"
@@ -42,25 +42,38 @@
     <span class="badge text-bg-info margin-right" th:text="#{'listing-type.' + ${type}}">A LOUER</span>
 </div>
 
-<div th:fragment="listing-table(items, sold)" th:if="!${items.isEmpty()}">
+<div th:fragment="listing-table(items, sold, showAgent, moreUrl)" th:if="!${items.isEmpty()}">
     <table class="table">
         <tr class="d-none d-md-table-row">
-            <th colspan="2" th:text="#{page.listing.address}" width="30%">ADDRESS</th>
+            <th colspan="2" width="30%"></th>
 
-            <th th:if="${sold}" th:text="#{page.listing.agent}">AGENT</th>
+            <th th:if="${showAgent}" th:text="#{page.listing.agent}">AGENT</th>
             <th th:if="${sold}" th:text="#{page.listing.transaction-date}">DATE</th>
             <th class="text-right" th:if="${sold}" th:text="#{page.listing.transaction-price}">PRICE</th>
-
-            <th th:if="!${sold}" th:text="#{page.listing.description}" width="40%">DESCRIPTION</th>
             <th class="text-right" th:if="!${sold}" th:text="#{page.listing.price}">PRICE</th>
+            <th class="text-right" th:text="#{page.listing.commission}">DATE</th>
         </tr>
         <tr class="listing" th:each="listing : ${items}">
-            <div th:replace="~{__components/listing :: listing-row(${listing}, ${sold})}"></div>
+            <div
+                th:replace="~{__components/listing :: listing-row(${listing}, ${sold}, ${showAgent})}"></div>
+        </tr>
+        <tr id="listing-load-more" th:if="${moreUrl}">
+            <td class="text-center" colspan="7">
+                <button
+                    class="btn btn-sm btn-light w-100-mobile"
+                    data-component-id="load-more"
+                    data-container-id="listing-load-more"
+                    th:data-url="${moreUrl}"
+                    th:text="#{button.load_more}"
+                >
+                    Load more...
+                </button>
+            </td>
         </tr>
     </table>
 </div>
 
-<tr th:fragment="listing-row(listing, sold)" th:remove="tag">
+<tr th:fragment="listing-row(listing, sold, showAgent)" th:remove="tag">
     <td width="1%">
         <div class="hero-image text-center">
             <a target="_blank" th:href="'/listings/' + ${listing.id}">
@@ -71,47 +84,58 @@
     <td>
         <a target="_blank" th:href="'/listings/' + ${listing.id}">
             <div th:utext="${listing.address?.toHtml(false)}">ADDRESS</div>
-
-            <div th:if="!${listing.statusActive} AND !${sold}">
-                <div th:replace="~{__components/listing :: listing-status-badge(${listing.status})}"></div>
+            <div class="text-small">
+                <div>
+                    <span th:text="#{page.listing.listing-number}"></span>:
+                    <span th:text="${listing.listingNumber}">000</span>
+                </div>
+                <div th:replace="~{__components/listing :: listing-bed-bath-area(${listing})}"></div>
             </div>
 
-            <table border="0" class="d-block d-md-none text-small">
-                <tr th:if="!${sold}">
-                    <td>
-                        <div th:replace="~{__components/listing :: listing-bed-bath-area(${listing})}"></div>
+            <div class="margin-top-small flex">
+                <div class="margin-right-small" th:if="!${listing.statusSold}">
+                    <div th:replace="~{__components/listing :: listing-type-badge(${listing.listingType})}"></div>
+                </div>
+                <div>
+                    <div th:replace="~{__components/listing :: listing-status-badge(${listing.status})}"></div>
+                </div>
+            </div>
+
+            <table border="0" class="d-block d-md-none text-small margin-top-small">
+                <tr th:if="${sold} AND ${listing.transactionDate}">
+                    <th th:text="#{page.listing.transaction-date}">CLOSED</th>
+                    <td class="padding-left-small" th:text="${listing.transactionDateText}">DATE</td>
+                </tr>
+                <tr th:if="${sold} AND ${listing.transactionPrice}">
+                    <th th:text="#{page.listing.transaction-price}">CLOSED</th>
+                    <td class="listing-price padding-left-small">
+                        <b th:text="${listing.transactionPrice.displayText}">$$$</b>
                     </td>
                 </tr>
                 <tr th:if="!${sold} AND ${listing.price}">
-                    <td class="listing-price">
+                    <th th:text="#{page.listing.price}">CLOSED</th>
+                    <td class="listing-price padding-left-small">
                         <b th:text="${listing.price.displayText}">$$$</b>
                     </td>
                 </tr>
-
-                <tr th:if="${sold} AND (${listing.sellerAgentUser} OR ${listing.buyerAgentUser})">
-                    <td>
-                        <span th:if="${listing.sellerAgent(user)}" th:text="#{page.listing.agent-seller}">SELLER</span>
-                        <span th:if="${listing.buyerAgent(user)}" th:text="#{page.listing.agent-buyer}">BUYER</span>
+                <tr>
+                    <th th:text="#{page.listing.commission}">COMMISSION</th>
+                    <td class="padding-left-small">
+                        <span class="listing-price" th:text="${listing.commission(user)?.displayText}">$$$</span>
                     </td>
                 </tr>
-                <tr th:if="${sold} AND ${listing.transactionDate}">
-                    <td th:text="${listing.transactionDateText}">DATE</td>
-                </tr>
-                <tr th:if="${sold} AND ${listing.transactionPrice}">
-                    <td class="listing-price">
-                        <b th:text="${listing.transactionPrice.displayText}">$$$</b>
+                <tr th:if="${showAgent} AND ${listing.sellerAgentUser}">
+                    <th th:text="#{page.listing.agent}" valign="top">AGENT</th>
+                    <td class="padding-left-small">
+                        <div th:replace="~{__components/user :: user-small-card(${listing.sellerAgentUser})}"></div>
                     </td>
                 </tr>
             </table>
         </a>
     </td>
-
-    <td class="d-none d-md-table-cell" th:if="${sold}">
-        <a target="_blank"
-           th:href="'/listings/' + ${listing.id}"
-           th:if="${listing.sellerAgentUser} OR ${listing.buyerAgentUser}">
-            <span th:if="${listing.sellerAgent(user)}" th:text="#{page.listing.agent-seller}">SELLER</span>
-            <span th:if="${listing.buyerAgent(user)}" th:text="#{page.listing.agent-buyer}">BUYER</span>
+    <td class="d-none d-md-table-cell" th:if="${showAgent}">
+        <a target="_blank" th:href="'/listings/' + ${listing.id}">
+            <div th:replace="~{__components/user :: user-small-card(${listing.sellerAgentUser})}"></div>
         </a>
     </td>
     <td class="d-none d-md-table-cell" th:if="${sold}">
@@ -125,18 +149,15 @@
             <b class="listing-price" th:text="${listing.transactionPrice.displayText}">$$</b>
         </a>
     </td>
-
-    <td class="d-none d-md-table-cell" th:if="!${sold}">
-        <a target="_blank" th:href="'/listings/' + ${listing.id}">
-            <div th:replace="~{__components/listing :: listing-bed-bath-area(${listing})}"></div>
-        </a>
-    </td>
     <td class="text-right text-nowrap d-none d-md-table-cell" th:if="!${sold}">
         <a class="text-nowrap listing-price" target="_blank"
            th:href="'/listings/' + ${listing.id}"
            th:if="${listing.price}">
             <b class="listing-price" th:text="${listing.price.displayText}">$$</b>
         </a>
+    </td>
+    <td class="text-right text-nowrap d-none d-md-table-cell">
+        <span class="listing-price" th:text="${listing.commission(user)?.displayText}">$$$</span>
     </td>
 </tr>
 
@@ -162,8 +183,10 @@
 </div>
 
 <div th:fragment="listing-summary(listing)" th:remove="tag">
-    <div>
-        <span th:replace="~{__components/listing :: listing-type-badge(${listing.listingType})}"></span>
+    <div class="flex">
+        <div th:if="!${listing.statusSold}">
+            <span th:replace="~{__components/listing :: listing-type-badge(${listing.listingType})}"></span>
+        </div>
         <span th:replace="~{__components/listing :: listing-status-badge(${listing.status})}"></span>
     </div>
     <div class="margin-top-small">
@@ -186,29 +209,30 @@
             <span th:text="#{page.listing.number}">#</span>:
             <span th:text="${listing.listingNumber}">00000</span>
         </div>
-        <div class="margin-top-small">
-            <div class="float-right">
-                <div class="flex">
-                    <div class="text-center" th:if="${listing.bedrooms}">
-                        <b th:text="${listing.bedrooms}">00</b>
-                        <div class="text-small" th:text="#{page.listing.bedrooms}">BEDROOMS</div>
-                    </div>
-                    <div class="text-center margin-left" th:if="${listing.bathrooms}">
-                        <b th:text="${listing.bathrooms}">00</b>
-                        <div class="text-small" th:text="#{page.listing.bathrooms}">BATHROOMS</div>
-                    </div>
-                    <div class="text-center margin-left"
-                         th:if="${listing.lotArea} OR ${listing.propertyArea}">
-                        <b th:if="${listing.propertyArea}" th:text="${listing.propertyArea}">00</b>
-                        <b th:if="${listing.lotArea} AND !${listing.propertyArea}"
-                           th:text="${listing.lotArea}">
-                            00
-                        </b>
-                        <div class="text-small">m<sup>2</sup></div>
-                    </div>
+        <div class="margin-top-small flex flex-space-between">
+            <div>
+                <b class="text-small" th:text="#{page.listing.commission}">COMMISSION</b><br/>
+                <span class="listing-price" th:text="${listing.commission(user)}">$$$</span>
+            </div>
+            <div class="flex">
+                <div class="text-center" th:if="${listing.bedrooms}">
+                    <b th:text="${listing.bedrooms}">00</b>
+                    <div class="text-small" th:text="#{page.listing.bedrooms}">BEDROOMS</div>
+                </div>
+                <div class="text-center margin-left-small" th:if="${listing.bathrooms}">
+                    <b th:text="${listing.bathrooms}">00</b>
+                    <div class="text-small" th:text="#{page.listing.bathrooms}">BATHROOMS</div>
+                </div>
+                <div class="text-center margin-left-small"
+                     th:if="${listing.lotArea} OR ${listing.propertyArea}">
+                    <b th:if="${listing.propertyArea}" th:text="${listing.propertyArea}">00</b>
+                    <b th:if="${listing.lotArea} AND !${listing.propertyArea}"
+                       th:text="${listing.lotArea}">
+                        00
+                    </b>
+                    <div class="text-small">m<sup>2</sup></div>
                 </div>
             </div>
-            <div class="clearfix"></div>
         </div>
     </div>
 </div>

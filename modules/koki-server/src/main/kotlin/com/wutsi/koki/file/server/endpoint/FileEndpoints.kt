@@ -86,6 +86,7 @@ class FileEndpoints(
             FileDeletedEvent(
                 fileId = id,
                 tenantId = tenantId,
+                fileType = file.type,
                 owner = if (file.ownerId != null && file.ownerType != null) {
                     ObjectReference(file.ownerId, file.ownerType)
                 } else {
@@ -121,6 +122,7 @@ class FileEndpoints(
             FileUploadedEvent(
                 fileId = file.id!!,
                 tenantId = tenantId,
+                fileType = file.type,
                 owner = ownerId?.let { id ->
                     ownerType?.let { type -> ObjectReference(id, type) }
                 }

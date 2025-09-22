@@ -14,6 +14,9 @@ CREATE TABLE T_OFFER(
   total_versions            INT DEFAULT 0,
   created_at                DATETIME DEFAULT NOW(),
   modified_at               DATETIME DEFAULT NOW(),
+  accepted_at               DATE,
+  rejected_at               DATE,
+  closed_at                 DATE,
 
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;

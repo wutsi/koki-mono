@@ -14,10 +14,13 @@ import com.wutsi.koki.offer.server.dao.OfferRepository
 import com.wutsi.koki.offer.server.dao.OfferStatusRepository
 import com.wutsi.koki.offer.server.dao.OfferVersionRepository
 import com.wutsi.koki.platform.mq.Publisher
+import org.junit.jupiter.api.assertNull
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
+import java.text.SimpleDateFormat
+import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -80,9 +83,13 @@ class UpdateOfferStatusEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     private fun test(id: Long, status: OfferStatus) {
+        val fmt = SimpleDateFormat("yyyy-MM-dd")
+        val now = Date()
+        val closedAt = Date()
         val request = UpdateOfferStatusRequest(
             status = status,
-            comment = "Oye!!!"
+            comment = "Oye!!!",
+            closedAt = if (status == OfferStatus.CLOSED) closedAt else null
         )
         val response = rest.postForEntity("/v1/offers/$id/status", request, Any::class.java)
 
@@ -90,6 +97,21 @@ class UpdateOfferStatusEndpointTest : AuthorizationAwareEndpointTest() {
 
         val offer = offerDao.findById(id).get()
         assertEquals(request.status, offer.status)
+        if (status == OfferStatus.CLOSED) {
+            assertEquals(fmt.format(request.closedAt), fmt.format(offer.closedAt))
+        } else {
+            assertNull(offer.closedAt)
+        }
+        if (status == OfferStatus.ACCEPTED) {
+            assertEquals(fmt.format(now), fmt.format(offer.acceptedAt))
+        } else {
+            assertNull(offer.acceptedAt)
+        }
+        if (status == OfferStatus.REJECTED) {
+            assertEquals(fmt.format(now), fmt.format(offer.rejectedAt))
+        } else {
+            assertNull(offer.rejectedAt)
+        }
 
         val version = versionDao.findById(offer.version?.id!!).get()
         assertEquals(request.status, version.status)

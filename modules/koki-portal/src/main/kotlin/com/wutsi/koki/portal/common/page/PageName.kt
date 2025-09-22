@@ -83,6 +83,7 @@ object PageName {
     const val LISTING_LIST = "page.listing.list"
     const val LISTING_PUBLISH = "page.listing.publish"
     const val LISTING_PUBLISH_DONE = "page.listing.publish.done"
+    const val LISTING_SEARCH = "page.listing.search"
     const val LISTING_STATUS = "page.listing.status"
     const val LISTING_STATUS_CLOSE = "page.listing.status.close"
     const val LISTING_STATUS_DONE = "page.listing.status.done"

@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.offer.page
 
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.portal.listing.service.ListingService
 import com.wutsi.koki.portal.offer.model.OfferModel
 import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 @RequestMapping("/offers/tab")
 @RequiresPermission(["offer"])
-class OfferTabController : AbstractOfferController() {
+class OfferTabController(
+    private val listingService: ListingService
+) : AbstractOfferController() {
     @GetMapping
     fun list(
         @RequestParam(name = "owner-id", required = false) ownerId: Long? = null,
@@ -23,7 +26,6 @@ class OfferTabController : AbstractOfferController() {
     ): String {
         model.addAttribute("ownerId", ownerId)
         model.addAttribute("ownerType", ownerType)
-        model.addAttribute("readOnly", readOnly)
         model.addAttribute("testMode", testMode)
 
         more(ownerId, ownerType, readOnly, model = model)
@@ -40,10 +42,12 @@ class OfferTabController : AbstractOfferController() {
         model: Model
     ): String {
         val offers = findOffers(ownerId, ownerType, limit, offset)
-        model.addAttribute("offers", offers)
+        if (offers.isNotEmpty()) {
+            model.addAttribute("offers", offers)
+            model.addAttribute("moreUrl", buildMoreUrl(offers, ownerId, ownerType, limit, offset))
+        }
         model.addAttribute("readOnly", readOnly)
         model.addAttribute("showOwner", false)
-        model.addAttribute("moreUrl", buildMoreUrl(offers, ownerId, ownerType, limit, offset))
         return "offers/more"
     }
 

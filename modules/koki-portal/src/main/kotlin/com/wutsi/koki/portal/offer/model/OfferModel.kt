@@ -18,6 +18,12 @@ data class OfferModel(
     val listing: ListingModel? = null,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
+    val closedAt: Date? = null,
+    val closedAtText: String? = null,
+    val acceptedAt: Date? = null,
+    val acceptedAtText: String? = null,
+    val rejectedAt: Date? = null,
+    val rejectedAtText: String? = null,
     val totalVersions: Int = -1,
     val status: OfferStatus = OfferStatus.UNKNOWN,
     val readOnly: Boolean = false,
@@ -27,6 +33,9 @@ data class OfferModel(
 
     val statusClosed: Boolean
         get() = status == OfferStatus.CLOSED
+
+    val statusSubmitted: Boolean
+        get() = status == OfferStatus.SUBMITTED
 
     /**
      * - User can access AND user is the seller or byuer agent
@@ -50,21 +59,18 @@ data class OfferModel(
 
     fun canAcceptOrRejectOrCounter(user: UserModel?): Boolean {
         return (user?.canManage("offer") == true) &&
-            !readOnly &&
             (status == OfferStatus.SUBMITTED) &&
             (user.id == version.assigneeUserId)
     }
 
     fun canCloseOrCancel(user: UserModel?): Boolean {
         return (user?.canManage("offer") == true) &&
-            !readOnly &&
             (status == OfferStatus.ACCEPTED) &&
             (user.id == sellerAgentUser.id)
     }
 
     fun canWithdraw(user: UserModel?): Boolean {
         return (user?.canManage("offer") == true) &&
-            !readOnly &&
             (status == OfferStatus.SUBMITTED) &&
             (user.id == buyerAgentUser.id &&
                 version.submittingParty == OfferParty.BUYER ||

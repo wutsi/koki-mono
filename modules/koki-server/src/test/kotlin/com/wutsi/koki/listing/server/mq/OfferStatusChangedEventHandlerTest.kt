@@ -21,6 +21,7 @@ import com.wutsi.koki.offer.server.domain.OfferVersionEntity
 import com.wutsi.koki.offer.server.service.OfferService
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.mq.Publisher
+import org.apache.commons.lang3.time.DateUtils
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
@@ -64,7 +65,8 @@ class OfferStatusChangedEventHandlerTest {
             status = OfferStatus.SUBMITTED,
             price = 100000L,
             currency = "CAD",
-        )
+        ),
+        closedAt = DateUtils.addDays(Date(), -1)
     )
 
     @BeforeEach
@@ -186,7 +188,7 @@ class OfferStatusChangedEventHandlerTest {
         assertEquals(offer.id, argListing.firstValue.closedOfferId)
         assertEquals(offer.buyerAgentUserId, argListing.firstValue.buyerAgentUserId)
         assertEquals(offer.buyerContactId, argListing.firstValue.buyerContactId)
-        assertEquals(Date(event.timestamp), argListing.firstValue.transactionDate)
+        assertEquals(offer.closedAt, argListing.firstValue.transactionDate)
         assertEquals(offer.version?.price, argListing.firstValue.transactionPrice)
         assertEquals(5000, argListing.firstValue.finalSellerAgentCommissionAmount)
         assertEquals(2500, argListing.firstValue.finalBuyerAgentCommissionAmount)
@@ -220,7 +222,7 @@ class OfferStatusChangedEventHandlerTest {
         assertEquals(offer.id, argListing.firstValue.closedOfferId)
         assertEquals(listing.sellerAgentUserId, argListing.firstValue.buyerAgentUserId)
         assertEquals(offer.buyerContactId, argListing.firstValue.buyerContactId)
-        assertEquals(Date(event.timestamp), argListing.firstValue.transactionDate)
+        assertEquals(offer.closedAt, argListing.firstValue.transactionDate)
         assertEquals(offer.version?.price, argListing.firstValue.transactionPrice)
         assertEquals(5000, argListing.firstValue.finalSellerAgentCommissionAmount)
         assertEquals(null, argListing.firstValue.finalBuyerAgentCommissionAmount)

@@ -30,16 +30,14 @@
                     <hr/>
 
                     <div class="btn-group margin-bottom" role="group">
-                        <a class="btn btn-sm" href="/listings" id="btn-my-listings"
-                           th:classappend="${form} ? 'btn-light' : 'btn-secondary'"
+                        <a class="btn btn-sm btn-secondary" href="/listings" id="btn-my-listings"
                            th:text="#{button.my_listings}">
                             BUTTON
                         </a>
-                        <button class="btn btn-sm"
+                        <button class="btn btn-sm btn-light"
                                 data-component-id="modal-button"
                                 data-modal-body-large="true"
                                 id="btn-search"
-                                th:classappend="!${form} ? 'btn-light' : 'btn-secondary'"
                                 th:data-modal-body-url="${filterUrl}"
                         >
                             <i class="fa-solid fa-magnifying-glass"></i>
@@ -47,72 +45,28 @@
                         </button>
                     </div>
 
-                    <div class="margin-bottom-2x" id="for-sale-container" th:if="${forSale?.total > 0}">
-                        <h5 class="margin-none">
-                            <span th:text="#{page.listing.list.for-sale}">FOR_SALE</span>
-                            <span th:text="'(' + ${forSale.total} + ')'">000</span>
-                        </h5>
-                        <div th:replace="~{__components/listing :: listing-table(${forSale.items}, false)}"></div>
-                    </div>
+                    <form action="/listings" id="filter-form">
+                        <select class="btn btn-sm btn-light" name="filter" onchange="this.form.submit()">
+                            <option th:selected="${filter == 0}" th:text="#{page.listing.list.filter.0}" value="0">
+                                A Vendre / A Louer
+                            </option>
+                            <option th:selected="${filter == 1}" th:text="#{page.listing.list.filter.1}" value="1">
+                                Vendu
+                            </option>
+                            <option th:selected="${filter == 2}" th:text="#{page.listing.list.filter.2}" value="2">
+                                Ferme
+                            </option>
+                        </select>
+                    </form>
 
-                    <div class="margin-bottom-2x" id="for-rent-container" th:if="${forRent?.total > 0}">
-                        <h5 class="margin-none">
-                            <span th:text="#{page.listing.list.for-rent}">FOR_RENT</span>
-                            <span th:text="'(' + ${forRent.total} + ')'">000</span>
-                        </h5>
-                        <div th:replace="~{__components/listing :: listing-table(${forRent.items}, false)}"></div>
-                    </div>
-
-                    <div class="margin-bottom-2x" id="sold-container" th:if="${sold?.total > 0}">
-                        <h5 class="margin-none">
-                            <span th:text="#{page.listing.list.sold}">FOR_RENT</span>
-                            <span th:text="'(' + ${sold.total} + ')'">000</span>
-                        </h5>
-                        <div th:replace="~{__components/listing :: listing-table(${sold.items}, true)}"></div>
-                    </div>
-
-                    <div id="listing-container" th:if="${listings}">
-                        <a data-component-id="modal-button"
-                           data-modal-body-large="true"
-                           href="#"
-                           th:data-modal-body-url="${filterUrl}"
-                        >
-                            <div th:replace="~{__components/listing :: listing-filters(${form}, ${locations})}"></div>
-                        </a>
-
-                        <div th:if="${listings.isEmpty()}">
-                            <div class="alert alert-warning margin flex">
-                                <div>
-                                    <div class="alert-icon-container">
-                                        <i class="fa-solid fa-triangle-exclamation fa-2x"></i>
-                                    </div>
-                                </div>
-                                <div class="margin-left">
-                                    <div th:utext="#{page.listing.list.empty}">EMPTY</div>
-                                    <a class="btn btn-sm btn-light margin-top"
-                                       data-component-id="modal-button"
-                                       data-modal-body-large="true"
-                                       href="#"
-                                       th:data-modal-body-url="${filterUrl}"
-                                       th:text="#{button.filter}">
-                                        FILTER
-                                    </a>
-                                </div>
-                            </div>
+                    <div class="margin-top" th:if="${listings?.total > 0}">
+                        <div class="border-bottom">
+                            <span th:if="${listings.total==1}" th:text="#{page.listing.list.1_listing}">1</span>
+                            <span th:if="${listings.total>1}"
+                                  th:text="#{page.listing.list.n_listing(${listings.total})}">n</span>
                         </div>
-                        <div th:if="!${listings.isEmpty()}">
-                            <div class="margin-top-small"
-                                 th:text="${listings.total == 1} ? #{page.listing.list.1_listing} : #{page.listing.list.n_listing(${listings.total})}">
-                                N_LISTING
-                            </div>
-
-                            <div class="flex flex-wrap padding-top border-top">
-                                <div class="margin-right margin-bottom" target="_blank"
-                                     th:each="listing : ${listings.items}">
-                                    <div th:replace="~{__components/listing :: listing-card(${listing})}"></div>
-                                </div>
-                            </div>
-                        </div>
+                        <div
+                            th:replace="~{__components/listing :: listing-table(${listings.items}, ${filter == 1}, ${filter == 1}, ${moreUrl})}"></div>
                     </div>
                 </div>
             </div>
