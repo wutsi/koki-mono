@@ -8,6 +8,9 @@ import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.platform.logger.KVLogger
+import jdk.internal.agent.resources.agent
+import org.apache.poi.hssf.usermodel.HeaderFooter.file
+import org.apache.tika.mime.MediaType.image
 import org.springframework.stereotype.Service
 
 @Service
@@ -22,26 +25,36 @@ class ListingFileDeletedEventHandler(
         }
 
         val listing = listingService.get(event.owner!!.id, event.tenantId)
-        if (listing.heroImageId == event.fileId) {
-            changeHeroImage(listing)
+        if (event.fileType == FileType.IMAGE) {
+            if (listing.heroImageId == event.fileId) {
+                listing.heroImageId = findHeroImage(listing)
+            }
+            listing.totalImages = fileService.countByTypeAndOwnerIdAndOwnerType(
+                FileType.IMAGE,
+                listing.id ?: -1,
+                ObjectType.LISTING,
+            )?.toInt()
+        } else {
+            listing.totalFiles = fileService.countByTypeAndOwnerIdAndOwnerType(
+                FileType.FILE,
+                listing.id ?: -1,
+                ObjectType.LISTING,
+            )?.toInt()
         }
+        listingService.save(listing)
     }
 
     private fun accept(event: FileDeletedEvent): Boolean {
         return event.owner?.type == ObjectType.LISTING
     }
 
-    private fun changeHeroImage(listing: ListingEntity) {
+    private fun findHeroImage(listing: ListingEntity): Long? {
         val files = fileService.search(
             tenantId = listing.tenantId,
             status = FileStatus.APPROVED,
             type = FileType.IMAGE,
             limit = 1,
         )
-        listing.heroImageId = files.firstOrNull()?.id
-        listingService.save(listing)
-
-        logger.add("listing_id", listing.id)
-        logger.add("listing_hero_image_id", listing.heroImageId)
+        return files.firstOrNull()?.id
     }
 }

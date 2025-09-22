@@ -43,8 +43,12 @@ class FileService(
         return file
     }
 
-    fun countByTypeAndOwnerIdAndOwnerType(type: FileType, ownerId: Long, ownerType: ObjectType): Long? {
-        return dao.countByTypeAndOwnerIdAndOwnerType(type, ownerId, ownerType)
+    fun countByTypeAndOwnerIdAndOwnerType(
+        type: FileType,
+        ownerId: Long,
+        ownerType: ObjectType,
+    ): Long? {
+        return dao.countByTypeAndOwnerIdAndOwnerTypeAndDeleted(type, ownerId, ownerType, false)
     }
 
     fun search(

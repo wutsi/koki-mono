@@ -209,29 +209,30 @@
             <span th:text="#{page.listing.number}">#</span>:
             <span th:text="${listing.listingNumber}">00000</span>
         </div>
-        <div class="margin-top-small">
-            <div class="float-right">
-                <div class="flex">
-                    <div class="text-center" th:if="${listing.bedrooms}">
-                        <b th:text="${listing.bedrooms}">00</b>
-                        <div class="text-small" th:text="#{page.listing.bedrooms}">BEDROOMS</div>
-                    </div>
-                    <div class="text-center margin-left" th:if="${listing.bathrooms}">
-                        <b th:text="${listing.bathrooms}">00</b>
-                        <div class="text-small" th:text="#{page.listing.bathrooms}">BATHROOMS</div>
-                    </div>
-                    <div class="text-center margin-left"
-                         th:if="${listing.lotArea} OR ${listing.propertyArea}">
-                        <b th:if="${listing.propertyArea}" th:text="${listing.propertyArea}">00</b>
-                        <b th:if="${listing.lotArea} AND !${listing.propertyArea}"
-                           th:text="${listing.lotArea}">
-                            00
-                        </b>
-                        <div class="text-small">m<sup>2</sup></div>
-                    </div>
+        <div class="margin-top-small flex flex-space-between">
+            <div>
+                <b class="text-small" th:text="#{page.listing.commission}">COMMISSION</b><br/>
+                <span class="listing-price" th:text="${listing.commission(user)}">$$$</span>
+            </div>
+            <div class="flex">
+                <div class="text-center" th:if="${listing.bedrooms}">
+                    <b th:text="${listing.bedrooms}">00</b>
+                    <div class="text-small" th:text="#{page.listing.bedrooms}">BEDROOMS</div>
+                </div>
+                <div class="text-center margin-left-small" th:if="${listing.bathrooms}">
+                    <b th:text="${listing.bathrooms}">00</b>
+                    <div class="text-small" th:text="#{page.listing.bathrooms}">BATHROOMS</div>
+                </div>
+                <div class="text-center margin-left-small"
+                     th:if="${listing.lotArea} OR ${listing.propertyArea}">
+                    <b th:if="${listing.propertyArea}" th:text="${listing.propertyArea}">00</b>
+                    <b th:if="${listing.lotArea} AND !${listing.propertyArea}"
+                       th:text="${listing.lotArea}">
+                        00
+                    </b>
+                    <div class="text-small">m<sup>2</sup></div>
                 </div>
             </div>
-            <div class="clearfix"></div>
         </div>
     </div>
 </div>
