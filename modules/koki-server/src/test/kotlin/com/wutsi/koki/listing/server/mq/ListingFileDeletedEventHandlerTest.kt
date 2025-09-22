@@ -4,6 +4,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -40,8 +41,12 @@ class ListingFileDeletedEventHandlerTest {
         id = 333L,
         tenantId = tenantId,
         heroImageId = heroImageId,
+        totalFiles = null,
+        totalImages = null,
     )
 
+    private val totalImages = 11L
+    private val totalFiles = 7L
     private val file = FileEntity(
         id = 100L,
         tenantId = tenantId,
@@ -66,6 +71,11 @@ class ListingFileDeletedEventHandlerTest {
             anyOrNull(),
         )
 
+        doReturn(totalImages).whenever(fileService)
+            .countByTypeAndOwnerIdAndOwnerType(eq(FileType.IMAGE), any(), any())
+        doReturn(totalFiles).whenever(fileService)
+            .countByTypeAndOwnerIdAndOwnerType(eq(FileType.FILE), any(), any())
+
         doReturn(listing).whenever(listingService).get(any(), any())
     }
 
@@ -75,7 +85,7 @@ class ListingFileDeletedEventHandlerTest {
     }
 
     @Test
-    fun onFileDeleted() {
+    fun onImageDeleted() {
         doReturn(emptyList<FileEntity>()).whenever(fileService).search(
             anyOrNull(),
             anyOrNull(),
@@ -92,20 +102,24 @@ class ListingFileDeletedEventHandlerTest {
         val listingArg = argumentCaptor<ListingEntity>()
         verify(listingService).save(listingArg.capture(), anyOrNull())
         assertEquals(null, listingArg.firstValue.heroImageId)
+        assertEquals(totalImages.toInt(), listingArg.firstValue.totalImages)
+        assertEquals(null, listingArg.firstValue.totalFiles)
     }
 
     @Test
-    fun `onFileDeleted - no images`() {
+    fun `onImageDeleted - no images`() {
         val event = createFileEvent(fileId = heroImageId)
         handler.handle(event)
 
         val listingArg = argumentCaptor<ListingEntity>()
         verify(listingService).save(listingArg.capture(), anyOrNull())
-        assertEquals(file.id, listingArg.firstValue.heroImageId)
+        assertEquals(listing.heroImageId, listingArg.firstValue.heroImageId)
+        assertEquals(totalImages.toInt(), listingArg.firstValue.totalImages)
+        assertEquals(null, listingArg.firstValue.totalFiles)
     }
 
     @Test
-    fun `onFileDeleted - owner not LISTING`() {
+    fun `onImageDeleted - owner not LISTING`() {
         val event = createFileEvent(ownerType = ObjectType.ACCOUNT)
         handler.handle(event)
 
@@ -113,19 +127,37 @@ class ListingFileDeletedEventHandlerTest {
     }
 
     @Test
-    fun `onFileDeleted - not hero image`() {
+    fun `onImageDeleted - not hero image`() {
         val event = createFileEvent(fileId = heroImageId + 1)
         handler.handle(event)
 
-        verify(listingService, never()).save(any(), anyOrNull())
+        val listingArg = argumentCaptor<ListingEntity>()
+        verify(listingService).save(listingArg.capture(), anyOrNull())
+        assertEquals(listing.heroImageId, listingArg.firstValue.heroImageId)
+        assertEquals(totalImages.toInt(), listingArg.firstValue.totalImages)
+        assertEquals(null, listingArg.firstValue.totalFiles)
+    }
+
+    @Test
+    fun onFileDeleted() {
+        val event = createFileEvent(fileId = file.id!!, fileType = FileType.FILE)
+        handler.handle(event)
+
+        val listingArg = argumentCaptor<ListingEntity>()
+        verify(listingService).save(listingArg.capture(), anyOrNull())
+        assertEquals(listing.heroImageId, listingArg.firstValue.heroImageId)
+        assertEquals(null, listingArg.firstValue.totalImages)
+        assertEquals(totalFiles.toInt(), listingArg.firstValue.totalFiles)
     }
 
     private fun createFileEvent(
         fileId: Long = heroImageId,
         ownerType: ObjectType = ObjectType.LISTING,
+        fileType: FileType = FileType.IMAGE,
     ): FileDeletedEvent {
         return FileDeletedEvent(
             fileId = fileId,
+            fileType = fileType,
             tenantId = file.tenantId,
             owner = ObjectReference(listing.id!!, ownerType),
         )
